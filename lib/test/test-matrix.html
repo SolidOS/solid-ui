@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset='UTF-8'>Test matrix.js</title>
+<link type="text/css" rel="stylesheet" href="https://linkeddata.github.io/tabulator-firefox/content/tabbedtab.css" />
+<style>
+
+input { background-color: #eef; padding: 0.5em;  border: .5em solid white; font-size: 120%; };
+
+table  { border-collapse: collapse;}
+
+.matrix tr td { background-color: #eef;  border: 0.1em solid white;}
+
+h3 {color: black}
+
+/*  vertical-align: middle;  for from */
+.MatrixCorner { background-color: white; }
+table.matrix td { padding: 0.3em; } 
+tr.naviMenu  { background-color: white;}
+tr.naviMenu td { text-align: middle; vertical-align: middle; padding-top: 4em; };
+
+table.tbody.tr.td { padding: 1em; border: 0.1em solid gray;}
+
+</style>
+<!--
+<script type="text/javascript" src="/devel/www.w3.org/archive/code.jquery.com/jquery-1.8.3-min.js"></script>
+-->
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+
+<script type="text/javascript" src="../../../mashup/mashlib.js"></script>
+<!-- "https://linkeddata.github.io/app-schedule/schedule.js" -->
+<script type="text/javascript" src="test-matrix.js"></script>
+</head>
+<body>
+<div class="TabulatorOutline" id="DummyUUID">
+    <table id="outline"></table>
+</div>
+<div class="TabulatorOutline" id='UITestArea'>
+</div>
+<pre id='Prologue'>
+    @prefix foaf:  &lt;http://xmlns.com/foaf/0.1/>.
+    @prefix sched: &lt;http://www.w3.org/ns/pim/schedule#>.
+    @prefix cal:  &lt;http://www.w3.org/2002/12/cal/ical#>.
+    @prefix dc:    &lt;http://purl.org/dc/elements/1.1/>.
+</pre>
+<div>
+<table style='border-collapse: collapse; border: 0.1em solid gray;'>
+<tbody id='TestData'>
+
+<tr><td class='input'>
+ <pre>
+ 
+# questions:
+     :event1 dc:author :a0; 
+        a sched:YesNoMaybe;
+        sched:option 
+            [ cal:dtstart 2015-01-01 ],
+            [ cal:dtstart 2015-01-02 ],
+            [ cal:dtstart 2015-01-05].
+     :a0 foaf:name "zoe".
+     
+     
+# answers:
+
+#ends
+
+ </pre></td><td class='output'>
+ </td>
+ </tr>
+
+<tr><td class='input'>
+ <pre>
+ 
+# questions:
+     :event1 dc:author :a0; 
+        a sched:YesNoMaybe;
+        sched:option 
+            [ cal:dtstart 2015-01-01 ],
+            [ cal:dtstart 2015-01-02 ],
+            [ cal:dtstart 2015-01-05].
+     :a0 foaf:name "zoe".
+     
+     
+# answers:   INCOMPLETE ANSWERS
+    
+     :event1 sched:response :r1, :r2.
+     :r1 dc:author :a1; 
+        sched:cell 
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-01 ],
+            # [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-02 ],
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-05].
+     :a1 foaf:name "Alice".
+     
+     :r2 dc:author :a2; 
+        sched:cell 
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-01 ].
+            # [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-02 ],
+            # [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-05].
+     :a2 foaf:name "Bob".
+#ends
+
+ </pre></td><td class='output'>
+ </td>
+ </tr>
+
+ 
+<tr><td class='input'>
+ <pre>
+ 
+# questions:
+     :event1 dc:author :a0; 
+        a sched:YesNoMaybe;
+        sched:option 
+            [ cal:dtstart 2015-01-01 ],
+            [ cal:dtstart 2015-01-02 ],
+            [ cal:dtstart 2015-01-05].
+     :a0 foaf:name "zoe".
+     
+     
+# answers:  NOW COMPLETE
+    
+     :event1 sched:response :r1, :r2.
+     :r1 dc:author :a1; 
+        sched:cell 
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-01 ],
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-02 ],
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-05].
+     :a1 foaf:name "Alice".
+     
+     :r2 dc:author :a2; 
+        sched:cell 
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-01 ],
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-02 ],
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-05].
+     :a2 foaf:name "Bob".
+#ends
+
+ </pre></td><td class='output'>
+ </td>
+ </tr>
+
+
+<tr><td class='input'>
+ <pre>
+ 
+# questions:
+     :event1 dc:author :a0; 
+        a sched:YesNoMaybe;
+        sched:option 
+            [ cal:dtstart 2015-01-01 ],
+            [ cal:dtstart 2015-01-02 ],
+            [ cal:dtstart 2015-01-05].
+     :a0 foaf:name "zoe".
+     
+     
+# answers:   INCOMPLETE ANSWERS  AGIN -- do they disappear?
+    
+     :event1 sched:response :r1, :r2.
+     :r1 dc:author :a1; 
+        sched:cell 
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-01 ],
+            # [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-02 ],
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-05].
+     :a1 foaf:name "Alice".
+     
+     :r2 dc:author :a2; 
+        sched:cell 
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-01 ].
+            # [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-02 ],
+            # [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-05].
+     :a2 foaf:name "Bob".
+#ends
+
+ </pre></td><td class='output'>
+ </td>
+ </tr>
+
+
+ 
+<tr><td class='input'>
+ <pre>
+ 
+# questions:
+     :event1 dc:author :a0; 
+        a sched:YesNoMaybe;
+        sched:option 
+            [ cal:dtstart 2015-01-01 ],
+            [ cal:dtstart 2015-01-02 ],
+            [ cal:dtstart 2015-01-05].
+     :a0 foaf:name "zoe".
+     
+     
+# answers:
+    
+     :event1 sched:response :r1, :r2.
+     :r1 dc:author :a1; 
+        sched:cell 
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-01 ],
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-02 ],
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-05].
+     :a1 foaf:name "Alice".
+     
+     :r2 dc:author :a2; 
+        sched:cell 
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-01 ],
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-02 ],
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-05].
+     :a2 foaf:name "Bob".
+#ends
+
+ </pre></td><td class='output'>
+ </td>
+ </tr>
+
+
+<tr><td class='input'>
+ <pre>
+ 
+# questions:
+     :event1 dc:author :a0; 
+        a sched:YesNoMaybe;
+        sched:option 
+            [ cal:dtstart 2015-01-01 ],
+            [ cal:dtstart 2015-01-02 ],
+            [ cal:dtstart 2015-01-05].
+     :a0 foaf:name "zoe".
+     
+     
+# answers:   INCOMPLETE ANSWERS
+    
+     :event1 sched:response :r1, :r2.
+     :r1 dc:author :a1; 
+        sched:cell 
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-01 ],
+            # [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-02 ],
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-05].
+     :a1 foaf:name "Alice".
+     
+     :r2 dc:author :a2; 
+        sched:cell 
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-01 ].
+            # [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-02 ],
+            # [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-05].
+     :a2 foaf:name "Bob".
+#ends
+
+ </pre></td><td class='output'>
+ </td>
+ </tr>
+
+ 
+<tr><td class='input'>
+ <pre>
+ 
+# questions:
+     :event1 dc:author :a0; 
+        a sched:YesNoMaybe;
+        sched:option 
+            [ cal:dtstart 2015-01-01 ],
+            [ cal:dtstart 2015-01-02 ],
+            [ cal:dtstart 2015-01-05].
+     :a0 foaf:name "zoe".
+     
+     
+# answers:
+    
+     :event1 sched:response :r1, :r2.
+     :r1 dc:author :a1; 
+        sched:cell 
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-01 ],
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-02 ],
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-05].
+     :a1 foaf:name "Alice".
+     
+     :r2 dc:author :a2; 
+        sched:cell 
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-01 ],
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-02 ],
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-05].
+     :a2 foaf:name "Bob".
+#ends
+
+ </pre></td><td class='output'>
+ </td>
+ </tr>
+
+<tr><td class='input'>
+ <pre>
+ 
+# questions:
+     :event1 dc:author :a0; 
+        a sched:YesNoMaybe;
+        sched:option 
+            [ cal:dtstart 2015-01-01 ],
+  ##          [ cal:dtstart 2015-01-02 ],        ### *** remove a column
+            [ cal:dtstart 2015-01-05].
+     :a0 foaf:name "zoe".
+     
+ 
+
+# answers:
+    
+     :event1 sched:response :r1, :r2.
+     :r1 dc:author :a1; 
+        sched:cell 
+            [ sched:availabilty sched:Yes; cal:dtstart 2015-01-01 ],
+            [ sched:availabilty sched:No; cal:dtstart 2015-01-02 ],
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-05].
+     :a1 foaf:name "Alice".
+     
+     :r2 dc:author :a2; 
+        sched:cell 
+            [ sched:availabilty sched:No; cal:dtstart 2015-01-01 ],
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-02 ],
+            [ sched:availabilty sched:Yes; cal:dtstart 2015-01-05].
+     :a2 foaf:name "Bob".
+     
+#ends
+
+ </pre></td><td class='output'>
+ </td>
+ </tr>
+
+<tr><td class='input'>
+ <pre>
+ 
+# questions:
+     :event1 dc:author :a0; 
+        a sched:YesNoMaybe;
+        sched:option 
+            [ cal:dtstart 2015-01-01 ],
+  ##          [ cal:dtstart 2015-01-02 ],        ### *** remove a column
+            [ cal:dtstart 2015-01-05].
+     :a0 foaf:name "zoe".
+     
+     
+# answers:
+    
+     :event1 sched:response :r1, :r2.
+     :r1 dc:author :a1; 
+        sched:cell 
+            [ sched:availabilty sched:Yes; cal:dtstart 2015-01-01 ],
+            [ sched:availabilty sched:No; cal:dtstart 2015-01-02 ],
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-05].
+     :a1 foaf:name "Alice".
+     
+     :r2 dc:author :a2; 
+        sched:cell 
+            [ sched:availabilty sched:No; cal:dtstart 2015-01-01 ],
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-02 ],
+            [ sched:availabilty sched:Yes; cal:dtstart 2015-01-05].
+     :a2 foaf:name "Bob".
+#ends
+
+ </pre></td><td class='output'>
+ </td>
+ </tr>
+
+<tr><td class='input'>
+ <pre>
+ 
+# questions:
+     :event1 dc:author :a0; 
+        a sched:YesNoMaybe;
+        sched:option 
+            [ cal:dtstart 2015-01-01 ],
+            [ cal:dtstart 2015-01-02 ],        ### *** add a column
+            [ cal:dtstart 2015-01-03 ],        ### *** add a column
+            [ cal:dtstart 2015-01-05].
+     :a0 foaf:name "zoe".
+     
+     
+# answers:
+    
+     :event1 sched:response :r1, :r2, :r0.
+     :r1 dc:author :a1; 
+        sched:cell 
+            [ sched:availabilty sched:Yes; cal:dtstart 2015-01-01 ],
+            [ sched:availabilty sched:No; cal:dtstart 2015-01-02 ],
+            [ sched:availabilty sched:Yes; cal:dtstart 2015-01-03 ],
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-05].
+     :a1 foaf:name "Alice".
+     
+     :r2 dc:author :a2; 
+        sched:cell 
+            [ sched:availabilty sched:No; cal:dtstart 2015-01-01 ],
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-02 ],
+            [ sched:availabilty sched:Yes; cal:dtstart 2015-01-05].
+     :a2 foaf:name "Bob".
+
+     :r0 dc:author :a0; 
+        sched:cell 
+            [ sched:availabilty sched:Yes; cal:dtstart 2015-01-01 ],
+            [ sched:availabilty sched:No; cal:dtstart 2015-01-02 ],
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-05].
+
+#ends
+
+ </pre></td><td class='output'>
+ </td>
+ </tr>
+
+<tr><td class='input'>
+ <pre>
+ 
+# questions:
+     :event1 dc:author :a0; 
+        a sched:YesNoMaybe;
+        sched:option 
+            [ cal:dtstart 2015-01-01 ],
+            [ cal:dtstart 2015-01-03 ],        ### *** remove a column
+            [ cal:dtstart 2015-01-05].
+     :a0 foaf:name "zoe".
+     
+     
+# answers:
+    
+     :event1 sched:response :r1, :r2, :r0.
+     :r1 dc:author :a1; 
+        sched:cell 
+            [ sched:availabilty sched:Yes; cal:dtstart 2015-01-01 ],
+            [ sched:availabilty sched:No; cal:dtstart 2015-01-02 ],
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-05].
+     :a1 foaf:name "Alice".
+     
+     :r2 dc:author :a2; 
+        sched:cell 
+            [ sched:availabilty sched:No; cal:dtstart 2015-01-01 ],
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-02 ],
+            [ sched:availabilty sched:Yes; cal:dtstart 2015-01-05].
+     :a2 foaf:name "Bob".
+
+     :r0 dc:author :a0; 
+        sched:cell 
+            [ sched:availabilty sched:Yes; cal:dtstart 2015-01-01 ],
+            [ sched:availabilty sched:No; cal:dtstart 2015-01-02 ],
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-05].
+
+#ends
+
+ </pre></td><td class='output'>
+ </td>
+ </tr>
+
+<tr><td class='input'>
+ <pre>
+ 
+# questions:
+     :event1 dc:author :a0; 
+        a sched:YesNoMaybe;
+        sched:option 
+            [ cal:dtstart 2015-01-01 ],
+            [ cal:dtstart 2015-01-03 ],        ### *** remove 2015-01-02 entirelt
+            [ cal:dtstart 2015-01-05].
+     :a0 foaf:name "zoe".
+     
+     
+# answers:
+    
+     :event1 sched:response :r1, :r2, :r0.
+     :r1 dc:author :a1; 
+        sched:cell 
+            [ sched:availabilty sched:Yes; cal:dtstart 2015-01-01 ],
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-05].
+     :a1 foaf:name "Alice".
+     
+     :r2 dc:author :a2; 
+        sched:cell 
+            [ sched:availabilty sched:No; cal:dtstart 2015-01-01 ],
+            [ sched:availabilty sched:Yes; cal:dtstart 2015-01-05].
+     :a2 foaf:name "Bob".
+
+     :r0 dc:author :a0; 
+        sched:cell 
+            [ sched:availabilty sched:Yes; cal:dtstart 2015-01-01 ],
+            [ sched:availabilty sched:Maybe; cal:dtstart 2015-01-05].
+
+#ends
+
+ </pre></td><td class='output'>
+ </td>
+ </tr>
+ 
+ 
+ 
+ </tbody>
+ </table>
+</div>
+</body>
+</html>
