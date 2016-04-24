@@ -39,7 +39,6 @@ https://github.com/solid/solid
 var SolidUi = {
   acl: require('./lib/acl'),
   aclControl: require('./lib/acl-control'),
-  icons: require('./lib/icons'),
   matrix: require('./lib/matrix'),
   messageArea: require('./lib/messageArea'),
   pad: require('./lib/pad'),
