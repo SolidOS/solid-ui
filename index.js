@@ -36,17 +36,18 @@ https://github.com/solid/solid
  * @class SolidUi
  * @static
  */
-var SolidUi = {
+var UI = {
   acl: require('./lib/acl'),
   aclControl: require('./lib/acl-control'),
-  icons: require('./lib/icons'),
+  icons: require('./lib/iconBase.js'),
   matrix: require('./lib/matrix'),
   messageArea: require('./lib/messageArea'),
   pad: require('./lib/pad'),
   signin: require('./lib/signin'),
+  store: require('./lib/store'),
   table: require('./lib/table'),
-  utils: require('./lib/utils')
+  utils: require('./lib/utils'),
   widgets: require('./lib/widgets')
 }
 
-module.exports = SolidUi
+module.exports = UI
