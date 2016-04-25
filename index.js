@@ -36,6 +36,9 @@ https://github.com/solid/solid
  * @class SolidUi
  * @static
  */
+
+$rdf = require('rdflib');
+
 var UI = {
   acl: require('./lib/acl'),
   aclControl: require('./lib/acl-control'),
@@ -43,6 +46,7 @@ var UI = {
   matrix: require('./lib/matrix'),
   messageArea: require('./lib/messageArea'),
   pad: require('./lib/pad'),
+  rdf: $rdf,
   signin: require('./lib/signin'),
   store: require('./lib/store'),
   table: require('./lib/table'),
