@@ -10,3 +10,4 @@ s/tabulator\.sf/UI.store.fetcher/g
 s/tabulator\.fetcher/UI.store.fetcher/g
 s/tabulator\.lb.label/UI.utils.label/g
 s/tabulator\.log/UI.log/g
+s/tabulator\.rdf/UI.rdf/g
