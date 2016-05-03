@@ -37,16 +37,19 @@ https://github.com/solid/solid
  * @static
  */
 
-$rdf = require('rdflib');
+var rdf = require('rdflib') // pull in first avoid cross-refs
+var ns = require('./lib/ns.js')
 
 var UI = {
   acl: require('./lib/acl'),
   aclControl: require('./lib/acl-control'),
   icons: require('./lib/iconBase.js'),
+  log: require('./lib/log.js'),
   matrix: require('./lib/matrix'),
   messageArea: require('./lib/messageArea'),
+  ns: ns,
   pad: require('./lib/pad'),
-  rdf: $rdf,
+  rdf:  rdf,
   signin: require('./lib/signin'),
   store: require('./lib/store'),
   table: require('./lib/table'),

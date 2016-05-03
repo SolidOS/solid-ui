@@ -35,8 +35,8 @@
   },
   "homepage": "https://github.com/linkeddata/solid-ui",
   "dependencies": {
-    "solid": "^0.0.1",
-    "rdflib": "^0.5.0"
+    "solid-client": "",
+    "rdflib": ""
   },
   "devDependencies": {
     "browserify": "^13.0.0",
