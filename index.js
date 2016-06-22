@@ -53,6 +53,7 @@ var UI = {
   signin: require('./lib/signin'),
   store: require('./lib/store'),
   table: require('./lib/table'),
+  tabs: require('./lib/tabs'),
   utils: require('./lib/utils'),
   widgets: require('./lib/widgets')
 }

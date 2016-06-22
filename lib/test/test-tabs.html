@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset='UTF-8'>Test tabs.js</title>
+<link type="text/css" rel="stylesheet"
+ href="https://linkeddata.github.io/tabulator-firefox/content/tabbedtab.css" />
+<style>
+
+input { background-color: #eef; padding: 0.5em;  border: .5em solid white; font-size: 120%; };
+
+table  { border-collapse: collapse;}
+
+tr.naviMenu  { background-color: white;}
+tr.naviMenu td { text-align: middle; vertical-align: middle; padding-top: 4em; };
+
+table.tbody tr td { padding: 1em; border: 0.1em solid gray;}
+
+td.input {border-top: 0.1em solid gray;  border-right: 0.1em dotted gray; }
+td.restart {border-top: 0.3em solid black;  border-right: 0.1em dotted gray; }
+td.output {border-top: 0.1em solid gray;}
+
+</style>
+<script type="text/javascript" src="../../../mashlib/dist/mashlib-prealpha.js"></script>
+<!-- "https://linkeddata.github.io/app-schedule/schedule.js" -->
+<script type="text/javascript" src="test-tabs.js"></script>
+</head>
+<body>
+<div class="TabulatorOutline" id="DummyUUID">
+    <table id="outline"></table>
+</div>
+<div class="TabulatorOutline" id='UITestArea'>
+</div>
+
+<h2>Test Tabs widget</h2>
+
+<pre id='Prologue'>
+    @prefix foaf:  &lt;http://xmlns.com/foaf/0.1/>.
+    @prefix sched: &lt;http://www.w3.org/ns/pim/schedule#>.
+    @prefix cal:   &lt;http://www.w3.org/2002/12/cal/ical#>.
+    @prefix dc:    &lt;http://purl.org/dc/elements/1.1/>.
+    @prefix ui:    &lt;http://www.w3.org/ns/ui#>.
+    @prefix trip:  &lt;http://www.w3.org/ns/pim/trip#>.
+</pre>
+<div>
+<table style='border-collapse: collapse; border: 0.1em solid gray;'>
+<tbody id='TestData'>
+
+<tr><td class='restart'>
+ <pre>
+   # Initialize a basic set of 3 tabs
+&lt;#tabs> a ui:Tabs;
+  ui:predicate trip:attachmentList;
+  ui:orientation 0; ui:ordered true;
+  ui:subject &lt;#it>.
+&lt;#it>
+  trip:attachmentList ( &lt;http://aclu.org/> &lt;http://cnn.com/> &lt;https://webfoundation.org/> ) .
+
+#ends
+ </pre></td><td class='output'>
+ </td>
+ </tr>
+
+ <tr><td class='input'>
+  <pre>
+    # Remove the middle tab
+    &lt;#tabs> a ui:Tabs;
+      ui:predicate trip:attachmentList;
+      ui:orientation 0; ui:ordered true;
+      ui:subject &lt;#it>.
+    &lt;#it>
+      trip:attachmentList ( &lt;http://aclu.org/>  &lt;https://webfoundation.org/> ) .
+  </pre></td><td class='output'>
+  </td>
+  </tr>
+
+  <tr><td class='input'>
+   <pre>
+     #  Add three more in the middle
+     &lt;#tabs> a ui:Tabs;
+       ui:predicate trip:attachmentList;
+       ui:orientation 0; ui:ordered true;
+       ui:subject &lt;#it>.
+     &lt;#it>
+       trip:attachmentList ( &lt;http://aclu.org/>  &lt;http://bbc.co.uk/>  &lt;http://cbc.ca/>  &lt;http://dbp.de/>  &lt;https://webfoundation.org/> ) .
+   </pre></td><td class='output'>
+   </td>
+   </tr>
+
+   <tr><td class='input'>
+    <pre>
+      #  Add three more in the middle
+      &lt;#tabs> a ui:Tabs;
+        ui:predicate trip:attachmentList;
+        ui:orientation 0; ui:ordered true;
+        ui:subject &lt;#it>.
+      &lt;#it>
+        trip:attachmentList ( &lt;http://aclu.org/>  &lt;http://bbc.co.uk/>  &lt;http://cbc.ca/>  &lt;http://dbp.de/>  &lt;https://webfoundation.org/> ) .
+    </pre></td><td class='output'>
+    </td>
+    </tr>
+
+    <tr><td class='input'>
+     <pre>
+       #  Add one more on each end
+       &lt;#tabs> a ui:Tabs;
+         ui:predicate trip:attachmentList;
+         ui:orientation 0; ui:ordered true;
+         ui:subject &lt;#it>.
+       &lt;#it>
+         trip:attachmentList ( &lt;http://acm.org/>  &lt;http://aclu.org/>
+         &lt;http://bbc.co.uk/>  &lt;http://cbc.ca/>  &lt;http://dbp.de/>  &lt;https://webfoundation.org/>
+         &lt;http://www.zenith.org/> ) .
+     </pre></td><td class='output'>
+     </td>
+     </tr>
+
+     <tr><td class='input'>
+      <pre>
+        #  Reverse the list
+        &lt;#tabs> a ui:Tabs;
+          ui:predicate trip:attachmentList;
+          ui:orientation 0; ui:ordered true;
+          ui:subject &lt;#it>.
+        &lt;#it>
+          trip:attachmentList (
+          &lt;http://www.zenith.org/>
+          &lt;https://webfoundation.org/>
+          &lt;http://dbp.de/>
+          &lt;http://cbc.ca/>
+          &lt;http://bbc.co.uk/>
+          &lt;http://aclu.org/>
+          &lt;http://acm.org/>
+           ) .
+      </pre></td><td class='output'>
+      </td>
+      </tr>
+
+   <tr><td class='input'>
+    <pre>
+      # Remove all but one
+      &lt;#tabs> a ui:Tabs;
+        ui:predicate trip:attachmentList;
+        ui:orientation 0; ui:ordered true;
+        ui:subject &lt;#it>.
+      &lt;#it>
+        trip:attachmentList ( &lt;https://webfoundation.org/> ) .
+    </pre></td><td class='output'>
+    </td>
+    </tr>
+
+
+
+    <!--    1   ----->
+
+
+
+
+        <tr><td class='restart'>
+         <pre>
+           &lt;#tabs> a ui:Tabs;
+             ui:predicate trip:attachmentList;
+             ui:orientation 1; ui:ordered true;
+             ui:subject &lt;#it>.
+           &lt;#it>
+             trip:attachmentList ( &lt;http://aclu.org/>  &lt;https://webfoundation.org/> ) .
+         </pre></td><td class='output'>
+         </td>
+         </tr>
+
+
+          <tr><td class='input'>
+           <pre>
+             # Remove the middle tab
+             &lt;#tabs> a ui:Tabs;
+               ui:predicate trip:attachmentList;
+               ui:orientation 1; ui:ordered true;
+               ui:subject &lt;#it>.
+             &lt;#it>
+               trip:attachmentList ( &lt;http://aclu.org/>  &lt;https://webfoundation.org/> ) .
+           </pre></td><td class='output'>
+           </td>
+           </tr>
+
+           <tr><td class='input'>
+            <pre>
+              #  Add three more in the middle
+              &lt;#tabs> a ui:Tabs;
+                ui:predicate trip:attachmentList;
+                ui:orientation 1; ui:ordered true;
+                ui:subject &lt;#it>.
+              &lt;#it>
+                trip:attachmentList ( &lt;http://aclu.org/>  &lt;http://bbc.co.uk/>  &lt;http://cbc.ca/>  &lt;http://dbp.de/>  &lt;https://webfoundation.org/> ) .
+            </pre></td><td class='output'>
+            </td>
+            </tr>
+
+            <tr><td class='input'>
+             <pre>
+               #  Add three more in the middle
+               &lt;#tabs> a ui:Tabs;
+                 ui:predicate trip:attachmentList;
+                 ui:orientation 1; ui:ordered true;
+                 ui:subject &lt;#it>.
+               &lt;#it>
+                 trip:attachmentList ( &lt;http://aclu.org/>  &lt;http://bbc.co.uk/>  &lt;http://cbc.ca/>  &lt;http://dbp.de/>  &lt;https://webfoundation.org/> ) .
+             </pre></td><td class='output'>
+             </td>
+             </tr>
+
+             <tr><td class='input'>
+              <pre>
+                #  Add one more on each end
+                &lt;#tabs> a ui:Tabs;
+                  ui:predicate trip:attachmentList;
+                  ui:orientation 1; ui:ordered true;
+                  ui:subject &lt;#it>.
+                &lt;#it>
+                  trip:attachmentList ( &lt;http://acm.org/>  &lt;http://aclu.org/>
+                  &lt;http://bbc.co.uk/>  &lt;http://cbc.ca/>  &lt;http://dbp.de/>  &lt;https://webfoundation.org/>
+                  &lt;http://www.zenith.org/> ) .
+              </pre></td><td class='output'>
+              </td>
+              </tr>
+
+              <tr><td class='input'>
+               <pre>
+                 #  Reverse the list
+                 &lt;#tabs> a ui:Tabs;
+                   ui:predicate trip:attachmentList;
+                   ui:orientation 1; ui:ordered true;
+                   ui:subject &lt;#it>.
+                 &lt;#it>
+                   trip:attachmentList (
+                   &lt;http://www.zenith.org/>
+                   &lt;https://webfoundation.org/>
+                   &lt;http://dbp.de/>
+                   &lt;http://cbc.ca/>
+                   &lt;http://bbc.co.uk/>
+                   &lt;http://aclu.org/>
+                   &lt;http://acm.org/>
+                    ) .
+               </pre></td><td class='output'>
+               </td>
+               </tr>
+
+            <tr><td class='input'>
+             <pre>
+               # Remove all but one
+               &lt;#tabs> a ui:Tabs;
+                 ui:predicate trip:attachmentList;
+                 ui:orientation 1; ui:ordered true;
+                 ui:subject &lt;#it>.
+               &lt;#it>
+                 trip:attachmentList ( &lt;https://webfoundation.org/> ) .
+             </pre></td><td class='output'>
+             </td>
+             </tr>
+
+
+
+
+
+             <!--  2 ---->
+
+
+
+
+                 <tr><td class='restart'>
+                  <pre>
+                    &lt;#tabs> a ui:Tabs;
+                      ui:predicate trip:attachmentList;
+                      ui:orientation 2; ui:ordered true;
+                      ui:subject &lt;#it>.
+                    &lt;#it>
+                      trip:attachmentList ( &lt;http://aclu.org/>  &lt;https://webfoundation.org/> ) .
+                  </pre></td><td class='output'>
+                  </td>
+                  </tr>
+
+
+                   <tr><td class='input'>
+                    <pre>
+                      # Remove the middle tab
+                      &lt;#tabs> a ui:Tabs;
+                        ui:predicate trip:attachmentList;
+                        ui:orientation 2; ui:ordered true;
+                        ui:subject &lt;#it>.
+                      &lt;#it>
+                        trip:attachmentList ( &lt;http://aclu.org/>  &lt;https://webfoundation.org/> ) .
+                    </pre></td><td class='output'>
+                    </td>
+                    </tr>
+
+                    <tr><td class='input'>
+                     <pre>
+                       #  Add three more in the middle
+                       &lt;#tabs> a ui:Tabs;
+                         ui:predicate trip:attachmentList;
+                         ui:orientation 2; ui:ordered true;
+                         ui:subject &lt;#it>.
+                       &lt;#it>
+                         trip:attachmentList ( &lt;http://aclu.org/>  &lt;http://bbc.co.uk/>  &lt;http://cbc.ca/>  &lt;http://dbp.de/>  &lt;https://webfoundation.org/> ) .
+                     </pre></td><td class='output'>
+                     </td>
+                     </tr>
+
+                     <tr><td class='input'>
+                      <pre>
+                        #  Add three more in the middle
+                        &lt;#tabs> a ui:Tabs;
+                          ui:predicate trip:attachmentList;
+                          ui:orientation 2; ui:ordered true;
+                          ui:subject &lt;#it>.
+                        &lt;#it>
+                          trip:attachmentList ( &lt;http://aclu.org/>  &lt;http://bbc.co.uk/>  &lt;http://cbc.ca/>  &lt;http://dbp.de/>  &lt;https://webfoundation.org/> ) .
+                      </pre></td><td class='output'>
+                      </td>
+                      </tr>
+
+                      <tr><td class='input'>
+                       <pre>
+                         #  Add one more on each end
+                         &lt;#tabs> a ui:Tabs;
+                           ui:predicate trip:attachmentList;
+                           ui:orientation 2; ui:ordered true;
+                           ui:subject &lt;#it>.
+                         &lt;#it>
+                           trip:attachmentList ( &lt;http://acm.org/>  &lt;http://aclu.org/>
+                           &lt;http://bbc.co.uk/>  &lt;http://cbc.ca/>  &lt;http://dbp.de/>  &lt;https://webfoundation.org/>
+                           &lt;http://www.zenith.org/> ) .
+                       </pre></td><td class='output'>
+                       </td>
+                       </tr>
+
+                       <tr><td class='input'>
+                        <pre>
+                          #  Reverse the list
+                          &lt;#tabs> a ui:Tabs;
+                            ui:predicate trip:attachmentList;
+                            ui:orientation 2; ui:ordered true;
+                            ui:subject &lt;#it>.
+                          &lt;#it>
+                            trip:attachmentList (
+                            &lt;http://www.zenith.org/>
+                            &lt;https://webfoundation.org/>
+                            &lt;http://dbp.de/>
+                            &lt;http://cbc.ca/>
+                            &lt;http://bbc.co.uk/>
+                            &lt;http://aclu.org/>
+                            &lt;http://acm.org/>
+                             ) .
+                        </pre></td><td class='output'>
+                        </td>
+                        </tr>
+
+                     <tr><td class='input'>
+                      <pre>
+                        # Remove all but one
+                        &lt;#tabs> a ui:Tabs;
+                          ui:predicate trip:attachmentList;
+                          ui:orientation 2; ui:ordered true;
+                          ui:subject &lt;#it>.
+                        &lt;#it>
+                          trip:attachmentList ( &lt;https://webfoundation.org/> ) .
+                      </pre></td><td class='output'>
+                      </td>
+                      </tr>
+
+
+
+
+
+      <!--   3  -->
+
+
+
+
+          <tr><td class='restart'>
+           <pre>
+             &lt;#tabs> a ui:Tabs;
+               ui:predicate trip:attachmentList;
+               ui:orientation 3; ui:ordered true;
+               ui:subject &lt;#it>.
+             &lt;#it>
+               trip:attachmentList ( &lt;http://aclu.org/>  &lt;https://webfoundation.org/> ) .
+           </pre></td><td class='output'>
+           </td>
+           </tr>
+
+
+            <tr><td class='input'>
+             <pre>
+               # Remove the middle tab
+               &lt;#tabs> a ui:Tabs;
+                 ui:predicate trip:attachmentList;
+                 ui:orientation 3; ui:ordered true;
+                 ui:subject &lt;#it>.
+               &lt;#it>
+                 trip:attachmentList ( &lt;http://aclu.org/>  &lt;https://webfoundation.org/> ) .
+             </pre></td><td class='output'>
+             </td>
+             </tr>
+
+             <tr><td class='input'>
+              <pre>
+                #  Add three more in the middle
+                &lt;#tabs> a ui:Tabs;
+                  ui:predicate trip:attachmentList;
+                  ui:orientation 3; ui:ordered true;
+                  ui:subject &lt;#it>.
+                &lt;#it>
+                  trip:attachmentList ( &lt;http://aclu.org/>  &lt;http://bbc.co.uk/>  &lt;http://cbc.ca/>  &lt;http://dbp.de/>  &lt;https://webfoundation.org/> ) .
+              </pre></td><td class='output'>
+              </td>
+              </tr>
+
+              <tr><td class='input'>
+               <pre>
+                 #  Add three more in the middle
+                 &lt;#tabs> a ui:Tabs;
+                   ui:predicate trip:attachmentList;
+                   ui:orientation 3; ui:ordered true;
+                   ui:subject &lt;#it>.
+                 &lt;#it>
+                   trip:attachmentList ( &lt;http://aclu.org/>  &lt;http://bbc.co.uk/>  &lt;http://cbc.ca/>  &lt;http://dbp.de/>  &lt;https://webfoundation.org/> ) .
+               </pre></td><td class='output'>
+               </td>
+               </tr>
+
+               <tr><td class='input'>
+                <pre>
+                  #  Add one more on each end
+                  &lt;#tabs> a ui:Tabs;
+                    ui:predicate trip:attachmentList;
+                    ui:orientation 3; ui:ordered true;
+                    ui:subject &lt;#it>.
+                  &lt;#it>
+                    trip:attachmentList ( &lt;http://acm.org/>  &lt;http://aclu.org/>
+                    &lt;http://bbc.co.uk/>  &lt;http://cbc.ca/>  &lt;http://dbp.de/>  &lt;https://webfoundation.org/>
+                    &lt;http://www.zenith.org/> ) .
+                </pre></td><td class='output'>
+                </td>
+                </tr>
+
+                <tr><td class='input'>
+                 <pre>
+                   #  Reverse the list
+                   &lt;#tabs> a ui:Tabs;
+                     ui:predicate trip:attachmentList;
+                     ui:orientation 3; ui:ordered true;
+                     ui:subject &lt;#it>.
+                   &lt;#it>
+                     trip:attachmentList (
+                     &lt;http://www.zenith.org/>
+                     &lt;https://webfoundation.org/>
+                     &lt;http://dbp.de/>
+                     &lt;http://cbc.ca/>
+                     &lt;http://bbc.co.uk/>
+                     &lt;http://aclu.org/>
+                     &lt;http://acm.org/>
+                      ) .
+                 </pre></td><td class='output'>
+                 </td>
+                 </tr>
+
+              <tr><td class='input'>
+               <pre>
+                 # Remove all but one
+                 &lt;#tabs> a ui:Tabs;
+                   ui:predicate trip:attachmentList;
+                   ui:orientation 3; ui:ordered true;
+                   ui:subject &lt;#it>.
+                 &lt;#it>
+                   trip:attachmentList ( &lt;https://webfoundation.org/> ) .
+               </pre></td><td class='output'>
+               </td>
+               </tr>
+
+
+
+
+
+
+
+ </tbody>
+ </table>
+</div>
+</body>
+</html>
