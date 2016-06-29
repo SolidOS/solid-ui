@@ -1,0 +1,16 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix c: <https://www.w3.org/People/Berners-Lee/card#>.
+@prefix XML: <http://www.w3.org/2001/XMLSchema#>.
+@prefix p: <http://www.w3.org/ns/pim/pad#>.
+@prefix n: <http://rdfs.org/sioc/ns#>.
+
+<#thisPad>
+    dc:author
+       c:i;
+    dc:created
+       "2016-06-26T15:24:36Z"^^XML:dateTime;
+    a    p:Notepad;
+    p:next
+       <#id1466956084891>.
+   <#id1466956084891> dc:author c:i; n:content "Hmmmmmm"; p:next <#id1466957989616> .
+   <#id1466957989616> dc:author c:i; n:content "..."; p:next <#thisPad> .

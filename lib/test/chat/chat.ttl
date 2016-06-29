@@ -1,0 +1,42 @@
+@prefix c: <https://www.w3.org/People/Berners-Lee/card#>.
+@prefix XML: <http://www.w3.org/2001/XMLSchema#>.
+@prefix n: <http://rdfs.org/sioc/ns#>.
+@prefix flow: <http://www.w3.org/2005/01/wf/flow#>.
+@prefix terms: <http://purl.org/dc/terms/>.
+@prefix n0: <http://xmlns.com/foaf/0.1/>.
+
+<>
+    flow:message
+        <#Msg1466955763420>,
+        <#Msg1466956039969>,
+        <#Msg1467109795767>,
+        <#Msg1467148831853>.
+<#Msg1466955763420>
+    terms:created
+       "2016-06-26T15:42:43Z"^^XML:dateTime;
+    n:content
+        """Start a chat about the test meeting
+""";
+    n0:maker
+       c:i.
+<#Msg1466956039969>
+    terms:created
+       "2016-06-26T15:47:19Z"^^XML:dateTime;
+    n:content
+       "Continue chat ..\n";
+    n0:maker
+       c:i.
+<#Msg1467109795767>
+    terms:created
+       "2016-06-28T10:29:55Z"^^XML:dateTime;
+    n:content
+       "Testing\n";
+    n0:maker
+       c:i.
+<#Msg1467148831853>
+    terms:created
+       "2016-06-28T21:20:31Z"^^XML:dateTime;
+    n:content
+        "Suppose we add a long line of all kinds of stuff When they were close up with one another, Alexandrus came forward as champion on the Trojan side. On his shoulders he bore the skin of a panther, his bow, and his sword, and he brandished two spears shod with bronze as a challenge to the bravest of the Achaeans to meet him in single fight. Menelaus saw him thus stride out before the ranks, and was glad as a hungry lion that lights on the carcase of some goat or horned stag, and devours it there and then, though dogs and youths set upon him. Even thus was Menelaus glad when his eyes caught sight of Alexandrus, for he deemed that now he should be revenged. He sprang, therefore, from his chariot, clad in his suit of armour. ";
+    n0:maker
+       c:i.
