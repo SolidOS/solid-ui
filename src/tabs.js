@@ -12,7 +12,7 @@ var tabs = {}
 module.exports = tabs
 
 var UI = {
-  icons: require('./iconBase.js'),
+  icons: require('./iconBase'),
   log: require('./log'),
   ns: require('./ns'),
   store: require('./store'),

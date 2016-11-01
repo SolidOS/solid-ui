@@ -12,15 +12,26 @@
 
 // var aclModule = require('./acl.js')
 
-var widgetModule = module.exports = {}
+// Each widget should ideally live in its own file.  In order to break up this
+// monolithic widget index over time, we should add new widgets to the
+// 'lib/widgets/' directory, and re-export them like so:
+//
+// (In order to avoid name collisions, it is safely assumed that modules don't
+// export widgets with the same name)
+var widgets = module.exports = Object.assign(
+  {},
+  {
+    peoplePicker: require('./peoplePicker').default
+  }
+)
 
 var UI = {
-  icons: require('./iconBase.js'),
-  log: require('./log'),
-  ns: require('./ns'),
-  store: require('./store'),
-  utils: require('./utils'),
-  widgets: widgetModule
+  icons: require('../iconBase'),
+  log: require('../log'),
+  ns: require('../ns'),
+  store: require('../store'),
+  utils: require('../utils'),
+  widgets: widgets
 }
 //var UI.ns = require('./ns.js')
 // var utilsModule = require('./utils')
