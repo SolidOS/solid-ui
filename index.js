@@ -51,6 +51,7 @@ var UI = {
   pad: require('./lib/pad'),
   rdf:  rdf,
   signin: require('./lib/signin'),
+  solid: require('solid-client'),
   store: require('./lib/store'),
   table: require('./lib/table'),
   tabs: require('./lib/tabs'),
