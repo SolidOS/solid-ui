@@ -9,8 +9,8 @@
   ],
   "scripts": {
     "build-lib": "babel src -d lib",
-    "build-browserified": "browserify -r ./src/index.js:solid-ui -t babelify --exclude 'xhr2' --exclude 'rdflib' > dist/solid-ui.js",
-    "build-minified": "browserify -r ./src/index.js:solid-ui -t babelify --exclude 'xhr2' --exclude 'rdflib' -d -p [minifyify --no-map] > dist/solid.min.js",
+    "build-browserified": "browserify -r ./src/index.js:solid-ui -t babelify --exclude 'xhr2' > dist/solid-ui.js",
+    "build-minified": "browserify -r ./src/index.js:solid-ui -t babelify --exclude 'xhr2' -d -p [minifyify --no-map] > dist/solid.min.js",
     "prebuild": "npm run clean && mkdir -p dist",
     "build": "npm run build-lib && npm run build-browserified && npm run build-minified",
     "clean": "rm -rf dist/ && rm -rf lib/",
@@ -43,6 +43,7 @@
   },
   "homepage": "https://github.com/linkeddata/solid-ui",
   "dependencies": {
+    "escape-html": "^1.0.3",
     "rdflib": "^0.12.1",
     "solid-client": "^0.22.4"
   },

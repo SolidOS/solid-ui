@@ -21,7 +21,7 @@
 var widgets = module.exports = Object.assign(
   {},
   {
-    peoplePicker: require('./peoplePicker').default
+    PeoplePicker: require('./peoplePicker').default
   }
 )
 
