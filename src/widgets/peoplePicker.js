@@ -10,6 +10,7 @@
  */
 import escape from 'escape-html'
 
+import { makeDropTarget } from './dragAndDrop'
 import { iconBase } from '../iconBase'
 import ns from '../ns'
 import kb from '../store'
@@ -35,26 +36,8 @@ export default class PeoplePicker {
     dropContainer.style.minHeight = '200px'
     dropContainer.style.outline = '1px solid black'
 
-    dropContainer.addEventListener('dragOver', event => {
-      // This is required to allow a drop; the 'default' handling of a drop is
-      // to prevent it
-      event.preventDefault()
-      // One thing to do is to check the type of the thing being dragged
-      // and only prevent default if it's the type of thing we want to allow
-      // being dropped
-      console.log('drag over!')
-      console.log(event)
-    })
-
-    dropContainer.addEventListener('dragEnter', event => {
-      event.preventDefault()
-      console.log('drag enter!')
-      console.log(event)
-    })
-
-    dropContainer.addEventListener('drop', event => {
-      console.log('dropped!')
-      console.log(event)
+    makeDropTarget(dropContainer, uris => {
+      console.log('uris:', uris)
     })
 
     const peopleUl = document.createElement('ul')
