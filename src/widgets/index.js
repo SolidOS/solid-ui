@@ -23,7 +23,8 @@ var widgets = module.exports = Object.assign(
   {
     PeoplePicker: require('./peoplePicker').default
   },
-  require('./dragAndDrop')
+  require('./dragAndDrop'),
+  require('./error')
 )
 
 var UI = {
@@ -1093,14 +1094,6 @@ UI.widgets.fieldLabel = function (dom, property, form) {
 /*                      General purpose widgets
 **
 */
-
-UI.widgets.errorMessageBlock = function (dom, msg, backgroundColor) {
-  var div = dom.createElement('div')
-  div.setAttribute('style', 'margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; background-color: ' +
-    (backgroundColor || '#fee') + '; color:black;')
-  div.textContent = msg
-  return div
-}
 
 UI.widgets.bottomURI = function (x) {
   var kb = UI.store
