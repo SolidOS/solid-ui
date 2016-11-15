@@ -16,10 +16,16 @@ import rdf from 'rdflib'
 import kb from '../store'
 
 export default class PeoplePicker {
-  constructor (element, groupGraph, groupNode) {
+  constructor (element, groupGraph, groupNode, groupChangedCb) {
     this.element = element
     this.groupGraph = groupGraph
     this.groupNode = groupNode
+    this.onGroupChanged = (err, changeType, agent) => {
+      if (groupChangedCb) {
+        groupChangedCb(err, changeType, agent)
+      }
+    }
+    this.groupChangedCb = groupChangedCb
   }
 
   refresh () {
@@ -69,13 +75,14 @@ export default class PeoplePicker {
     return new Promise((resolve, reject) => {
       kb.fetcher.nowOrWhenFetched(webId, (ok, err) => {
         if (!ok) {
+          this.onGroupChanged(err)
           reject(err)
         } else {
           // make sure it's a valid person, group, or entity (for now just handle
           // webId)
           const webIdNode = rdf.namedNode(webId)
           const rdfClass = kb.any(webIdNode, ns.rdf('type'))
-          if (!rdfClass.equals(ns.foaf('Person'))) {
+          if (!rdfClass || !rdfClass.equals(ns.foaf('Person'))) {
             reject(new Error('Only people supported right now'))
           }
           // TODO: sync this back to the server
@@ -83,8 +90,9 @@ export default class PeoplePicker {
           if (kb.match(...statement).length < 1) {
             kb.add(...statement)
           }
-          this.render()
+          this.onGroupChanged(null, 'added', webIdNode)
           resolve(webIdNode)
+          this.render()
         }
       })
     })
@@ -92,7 +100,15 @@ export default class PeoplePicker {
 
   handleRemove (webIdNode) {
     return event => {
-      kb.remove(rdf.st(this.groupNode, ns.vcard('hasMember'), webIdNode, this.groupGraph))
+      try {
+        kb.remove(rdf.st(this.groupNode, ns.vcard('hasMember'), webIdNode, this.groupGraph))
+        this.onGroupChanged(null, 'removed', webIdNode)
+      } catch (err) {
+        const name = kb.any(webIdNode, ns.foaf('name'))
+        name && name.value
+          ? errorMessageBlock(document, `Could not remove ${name.value}`)
+          : errorMessageBlock(document, `Could not remove ${webIdNode.value}`)
+      }
       this.render()
       return true
     }
