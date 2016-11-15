@@ -16,10 +16,14 @@ import rdf from 'rdflib'
 import kb from '../store'
 
 export default class PeoplePicker {
-  constructor (element, handleDonePicking) {
+  constructor (element, groupGraph, groupNode) {
     this.element = element
-    this.handleDonePicking = handleDonePicking
-    this.pickedWebIdNodes = new Set()
+    this.groupGraph = groupGraph
+    this.groupNode = groupNode
+  }
+
+  refresh () {
+    // TODO: implement
   }
 
   render () {
@@ -32,7 +36,6 @@ export default class PeoplePicker {
     dropContainer.style.flexDirection = 'column'
 
     makeDropTarget(dropContainer, uris => {
-      console.log('uris:', uris)
       uris.map(uri => {
         this.add(uri)
           .then()
@@ -42,10 +45,11 @@ export default class PeoplePicker {
       })
     })
 
-    this.pickedWebIdNodes
-      .forEach(webIdNode => {
+    kb.match(this.groupNode, ns.vcard('hasMember'))
+      .forEach(statement => {
+        const webIdNode = statement.object
         const personDiv = document.createElement('div')
-        new Person(personDiv, webIdNode, () => { console.log('not yet handling remove') }).render()
+        new Person(personDiv, webIdNode, this.handleRemove(webIdNode)).render()
         dropContainer.appendChild(personDiv)
       })
 
@@ -54,14 +58,10 @@ export default class PeoplePicker {
     return this
   }
 
-  // TODO: make this handle URIs
-  // TODO: validate the webIds
-  //  - check the solid spec; pretty sure must at least be a foaf:person?
   add (webId) {
     return new Promise((resolve, reject) => {
       kb.fetcher.nowOrWhenFetched(webId, (ok, err) => {
         if (!ok) {
-          // TODO: render an error widget with the 'err' message
           reject(err)
         } else {
           // make sure it's a valid person, group, or entity (for now just handle
@@ -71,12 +71,24 @@ export default class PeoplePicker {
           if (!rdfClass.equals(ns.foaf('Person'))) {
             reject(new Error('Only people supported right now'))
           }
-          this.pickedWebIdNodes.add(webIdNode)
+          // TODO: sync this back to the server
+          const statement = [this.groupNode, ns.vcard('hasMember'), webIdNode, this.groupGraph]
+          if (kb.match(...statement).length < 1) {
+            kb.add(...statement)
+          }
           this.render()
           resolve(webIdNode)
         }
       })
     })
+  }
+
+  handleRemove (webIdNode) {
+    return event => {
+      kb.remove(rdf.st(this.groupNode, ns.vcard('hasMember'), webIdNode, this.groupGraph))
+      this.render()
+      return true
+    }
   }
 }
 
