@@ -27,7 +27,6 @@ export default class PeoplePicker {
   }
 
   render () {
-    // This could be more efficient and readable using a view library
     const dropContainer = document.createElement('div')
     dropContainer.style.maxWidth = '350px'
     dropContainer.style.minHeight = '200px'
@@ -45,13 +44,21 @@ export default class PeoplePicker {
       })
     })
 
-    kb.match(this.groupNode, ns.vcard('hasMember'))
-      .forEach(statement => {
-        const webIdNode = statement.object
-        const personDiv = document.createElement('div')
-        new Person(personDiv, webIdNode, this.handleRemove(webIdNode)).render()
-        dropContainer.appendChild(personDiv)
-      })
+    if (kb.any(this.groupNode, ns.vcard('hasMember'))) {
+      kb.match(this.groupNode, ns.vcard('hasMember'))
+        .forEach(statement => {
+          const webIdNode = statement.object
+          const personDiv = document.createElement('div')
+          new Person(personDiv, webIdNode, this.handleRemove(webIdNode)).render()
+          dropContainer.appendChild(personDiv)
+        })
+    } else {
+      const copy = document.createElement('p')
+      copy.textContent = escape`
+        To add someone to this group, drag and drop their WebID URL onto the box.
+      `
+      dropContainer.appendChild(copy)
+    }
 
     this.element.innerHTML = ''
     this.element.appendChild(dropContainer)
