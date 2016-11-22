@@ -20,9 +20,7 @@
 // export widgets with the same name)
 var widgets = module.exports = Object.assign(
   {},
-  {
-    PeoplePicker: require('./peoplePicker').default
-  },
+  require('./peoplePicker'),
   require('./dragAndDrop'),
   require('./error')
 )

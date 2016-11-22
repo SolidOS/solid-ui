@@ -5,6 +5,9 @@
  * This pane offers a mechanism for selecting a set of individuals, groups, or
  * organizations to take some action on.
  *
+ * Assumptions
+ *   - Assumes that the user has a type index entry for vcard:AddressBook.
+ *
  */
 import escape from 'escape-html'
 
@@ -15,7 +18,183 @@ import ns from '../ns'
 import rdf from 'rdflib'
 import kb from '../store'
 
-export default class PeoplePicker {
+export class PeoplePicker {
+  constructor (element, typeIndexUrl, groupPickedCb, selectedGroupNode) {
+    this.element = element
+    this.typeIndexUrl = typeIndexUrl
+    this.groupPickedCb = groupPickedCb
+    this.selectedGroupNode
+    this.onSelectGroup = this.onSelectGroup.bind(this)
+  }
+
+  render () {
+    const container = document.createElement('div')
+    container.style.maxWidth = '350px'
+    container.style.minHeight = '200px'
+    container.style.outline = '1px solid black'
+    container.style.display = 'flex'
+
+    if (this.selectedGroupNode) {
+      const selectedGroup = document.createElement('div')
+      new Group(selectedGroup, this.selectedGroupNode).render()
+      const changeGroupButton = document.createElement('button')
+      changeGroupButton.textContent = escape('Choose another group')
+      changeGroupButton.addEventListener('click', event => {
+        this.selectedGroupNode = null
+        this.render()
+      })
+      container.appendChild(selectedGroup)
+      container.appendChild(changeGroupButton)
+    } else {
+      this.findGroupIndex(this.typeIndexUrl)
+        .then(({bookBaseUrl, groupIndexUrl, groupContainerUrl}) => {
+          const chooseExistingGroupButton = document.createElement('button')
+          chooseExistingGroupButton.textContent = escape('Pick an existing group')
+          chooseExistingGroupButton.addEventListener('click', event => {
+            new GroupPicker(container, bookBaseUrl, groupIndexUrl, this.onSelectGroup).render()
+          })
+
+          const createNewGroupButton = document.createElement('button')
+          createNewGroupButton.textContent = escape('Create a new group')
+          createNewGroupButton.addEventListener('click', event => {
+            console.log('cannot yet render group builder')
+            // const groupBuilder = new GroupBuilder(
+            //   this.element,
+            // ).render()
+          })
+
+          container.appendChild(chooseExistingGroupButton)
+          container.appendChild(createNewGroupButton)
+
+          this.element.innerHTML = ''
+          this.element.appendChild(container)
+        })
+        .catch(err => {
+          this.element.appendChild(
+            errorMessageBlock(document, escape(`Could find your groups. (${err})`))
+          )
+        })
+    }
+
+    this.element.innerHTML = ''
+    this.element.appendChild(container)
+    return this
+  }
+
+  findGroupIndex (typeIndexUrl) {
+    // steps:
+    //   - load the type index
+    //   - find the location of the vcard:AddressBook (e.g.
+    //   /Contacts/book.ttl#this)
+    //   - groups are stored in container $bookURI/Group/
+    return new Promise((resolve, reject) => {
+      kb.fetcher.nowOrWhenFetched(typeIndexUrl, (ok, err) => {
+        if (!ok) {
+          return reject(err)
+        }
+        const bookRegistrations = kb.statementsMatching(null, ns.solid('forClass'), ns.vcard('AddressBook'))
+        if (bookRegistrations.length < 1) {
+          return reject(new Error('no address book registered in the solid type index'))
+        }
+        // According to vcard footprint (https://www.w3.org/2015/03/vcard-footprint/footprint.html),
+        // vcard:AddressBook should be listed in the the base URI $b/book.ttl
+        const registrationSubject = bookRegistrations[0].subject
+        const instance = kb.statementsMatching(
+          registrationSubject,
+          ns.solid('instance')
+        )
+        if (!instance.length) {
+          reject(new Error('incomplete address book registration'))
+        }
+        // We've found an address book
+        const bookUrl = instance[0].object.value
+        const bookBaseUrl = bookUrl.replace(/book\.ttl(#.*)?$/, '')
+        const groupIndexUrl = `${bookBaseUrl}groups.ttl`
+        const groupContainerUrl = `${bookBaseUrl}Group/`
+        return resolve({bookBaseUrl, groupIndexUrl, groupContainerUrl})
+      })
+    })
+  }
+
+  onSelectGroup (groupNode) {
+    this.selectedGroupNode = groupNode
+    this.render()
+  }
+}
+
+export class GroupPicker {
+  constructor (element, bookBaseUrl, groupIndexUrl, onSelectGroup) {
+    this.element = element
+    this.bookBaseUrl = bookBaseUrl
+    this.groupIndexUrl = groupIndexUrl
+    this.onSelectGroup = onSelectGroup
+  }
+
+  render () {
+    this.loadGroups()
+      .then(groupNodes => {
+        // render the groups
+        const container = document.createElement('div')
+        groupNodes.forEach(group => {
+          const groupContainer = document.createElement('div')
+          groupContainer.style.display = 'flex'
+          const groupButton = document.createElement('button')
+          groupButton.addEventListener('click', this.handleClickGroup(group))
+          const groupComponent = new Group(groupButton, group).render()
+          groupContainer.appendChild(groupButton)
+          container.appendChild(groupContainer)
+        })
+        this.element.innerHTML = ''
+        this.element.appendChild(container)
+      })
+      .catch(err => {
+        this.element.appendChild(
+          errorMessageBlock(document, escape(`There was an error loading your groups. (${err})`))
+        )
+      })
+    return this
+  }
+
+  loadGroups () {
+    return new Promise((resolve, reject) => {
+      kb.fetcher.nowOrWhenFetched(this.groupIndexUrl, (ok, err) => {
+        if (!ok) {
+          return reject(err)
+        }
+        const groupNodes = kb.match(
+          rdf.namedNode(`${this.bookBaseUrl}book.ttl#this`),
+          ns.vcard('includesGroup')
+        ).map(st => st.object)
+        return resolve(groupNodes)
+      })
+    })
+  }
+
+  handleClickGroup (group) {
+    return event => {
+      this.onSelectGroup(group)
+    }
+  }
+}
+
+export class Group {
+  constructor (element, groupNode) {
+    this.element = element
+    this.groupNode = groupNode
+  }
+
+  render () {
+    const container = document.createElement('div')
+    container.textContent = escape(
+      getWithDefault(this.groupNode, ns.vcard('fn'), `[${this.groupNode.value}]`)
+    )
+    this.element.innerHTML = ''
+    this.element.appendChild(container)
+    return this
+  }
+}
+
+export class GroupBuilder {
   constructor (element, groupGraph, groupNode, groupChangedCb) {
     this.element = element
     this.groupGraph = groupGraph
@@ -43,9 +222,10 @@ export default class PeoplePicker {
     makeDropTarget(dropContainer, uris => {
       uris.map(uri => {
         this.add(uri)
-          .then()
           .catch(err => {
-            errorMessageBlock(document, 'Could not load the given WebId')
+            this.element.appendChild(
+              errorMessageBlock(document, escape('Could not load the given WebId'))
+            )
           })
       })
     })
@@ -105,9 +285,11 @@ export default class PeoplePicker {
         this.onGroupChanged(null, 'removed', webIdNode)
       } catch (err) {
         const name = kb.any(webIdNode, ns.foaf('name'))
-        name && name.value
-          ? errorMessageBlock(document, `Could not remove ${name.value}`)
-          : errorMessageBlock(document, `Could not remove ${webIdNode.value}`)
+        this.element.appendChild(
+          name && name.value
+            ? errorMessageBlock(document, escape(`Could not remove ${name.value}`))
+            : errorMessageBlock(document, escape(`Could not remove ${webIdNode.value}`))
+        )
       }
       this.render()
       return true
@@ -127,7 +309,7 @@ class Person {
     container.style.display = 'flex'
 
     // TODO: take a look at UI.widgets.setName
-    const imgSrc = this.getWithDefault(ns.foaf('img'), iconBase + 'noun_15059.svg')
+    const imgSrc = getWithDefault(this.webIdNode, ns.foaf('img'), iconBase + 'noun_15059.svg')
     const profileImg = document.createElement('img')
     profileImg.src = escape(imgSrc)
     profileImg.width = '50'
@@ -135,7 +317,7 @@ class Person {
     profileImg.style.margin = '5px'
 
     // TODO: take a look at UI.widgets.setImage
-    const name = this.getWithDefault(ns.foaf('name'), `[${this.webIdNode}]`)
+    const name = getWithDefault(this.webIdNode, ns.foaf('name'), `[${this.webIdNode}]`)
     const nameSpan = document.createElement('span')
     nameSpan.innerHTML = escape(name)
     nameSpan.style.flexGrow = '1'
@@ -154,9 +336,9 @@ class Person {
     this.element.appendChild(container)
     return this
   }
+}
 
-  getWithDefault (predicate, defaultValue) {
-    const object = kb.any(this.webIdNode, predicate)
-    return object ? object.value : defaultValue
-  }
+function getWithDefault (subject, predicate, defaultValue) {
+  const object = kb.any(subject, predicate)
+  return object ? object.value : defaultValue
 }
