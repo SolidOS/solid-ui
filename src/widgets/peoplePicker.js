@@ -126,12 +126,12 @@ export class PeoplePicker {
   createNewGroup (bookBaseUrl) {
     const groupIndexNode = rdf.namedNode(`${bookBaseUrl}groups.ttl`)
     const graphUrl = `${bookBaseUrl}Group/${uuid.v4().slice(0, 8)}.ttl`
-    const groupGraphNode = rdf.namedNode(graphUrl)
+    const graphNode = rdf.namedNode(graphUrl)
     const groupNode = rdf.namedNode(`${graphUrl}#this`)
     // NOTE that order matters here.  Unfortunately this type of update is
     // non-atomic in that solid requires us to send two PATCHes, either of which
     // might fail.
-    const patchPromises = [groupGraphNode, groupIndexNode]
+    const patchPromises = [graphNode, groupIndexNode]
       .map(namedGraph => {
         const typeStatement = rdf.st(groupNode, ns.rdf('type'), ns.vcard('Group'), namedGraph)
         const nameStatement = rdf.st(groupNode, ns.vcard('fn'), 'Untitled Group', namedGraph)
@@ -139,7 +139,7 @@ export class PeoplePicker {
           .then(() => kb.add([typeStatement, nameStatement]))
       })
     return Promise.all(patchPromises)
-      .then(() => ({groupNode, groupGraphNode}))
+      .then(() => ({groupNode, graphNode}))
       .catch(err => {
         throw new Error(`Couldn't create new group.  PATCH failed for (${err.xhr.responseURL})`)
       })
@@ -252,9 +252,9 @@ export class GroupBuilder {
     makeDropTarget(dropContainer, uris => {
       uris.map(uri => {
         this.add(uri)
-          .catch(() => {
+          .catch(err => {
             this.element.appendChild(
-              errorMessageBlock(document, escape('Could not load the given WebId'))
+              errorMessageBlock(document, escape(`Could not add the given WebId. (${err})`))
             )
           })
       })
@@ -304,26 +304,28 @@ export class GroupBuilder {
       kb.fetcher.nowOrWhenFetched(webId, (ok, err) => {
         if (!ok) {
           this.onGroupChanged(err)
-          reject(err)
-        } else {
-          // make sure it's a valid person, group, or entity (for now just handle
-          // webId)
-          const webIdNode = rdf.namedNode(webId)
-          const rdfClass = kb.any(webIdNode, ns.rdf('type'))
-          if (!rdfClass || !rdfClass.equals(ns.foaf('Person'))) {
-            reject(new Error('Only people supported right now'))
-          }
-          // TODO: sync this back to the server
-          const statement = [this.groupNode, ns.vcard('hasMember'), webIdNode, this.groupGraph]
-          if (kb.match(...statement).length < 1) {
-            kb.add(...statement)
-            // TODO: sync
-          }
-          this.onGroupChanged(null, 'added', webIdNode)
-          resolve(webIdNode)
-          this.render()
+          return reject(err)
         }
+        // make sure it's a valid person, group, or entity (for now just handle
+        // webId)
+        const webIdNode = rdf.namedNode(webId)
+        const rdfClass = kb.any(webIdNode, ns.rdf('type'))
+        if (!rdfClass || !rdfClass.equals(ns.foaf('Person'))) {
+          return reject(new Error(`Only people supported right now. (tried to add something of type ${rdfClass.value})`))
+        }
+        return resolve(webIdNode)
       })
+    }).then(webIdNode => {
+      const statement = rdf.st(this.groupNode, ns.vcard('hasMember'), webIdNode, this.groupGraph)
+      if (kb.holdsStatement(statement)) {
+        return webIdNode
+      }
+      return webClient.patch(this.groupGraph.value, [], [statement])
+        .then(() => {
+          kb.add(statement)
+          this.onGroupChanged(null, 'added', webIdNode)
+          this.render()
+        })
     })
   }
 
