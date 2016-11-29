@@ -10,12 +10,14 @@
  *
  */
 import escape from 'escape-html'
+import uuid from 'node-uuid'
+import rdf from 'rdflib'
+const webClient = require('solid-web-client')(rdf)
 
 import { makeDropTarget } from './dragAndDrop'
 import { errorMessageBlock } from './error'
 import { iconBase } from '../iconBase'
 import ns from '../ns'
-import rdf from 'rdflib'
 import kb from '../store'
 
 export class PeoplePicker {
@@ -23,7 +25,7 @@ export class PeoplePicker {
     this.element = element
     this.typeIndexUrl = typeIndexUrl
     this.groupPickedCb = groupPickedCb
-    this.selectedGroupNode
+    this.selectedGroupNode = selectedGroupNode
     this.onSelectGroup = this.onSelectGroup.bind(this)
   }
 
@@ -38,7 +40,7 @@ export class PeoplePicker {
       const selectedGroup = document.createElement('div')
       new Group(selectedGroup, this.selectedGroupNode).render()
       const changeGroupButton = document.createElement('button')
-      changeGroupButton.textContent = escape('Choose another group')
+      changeGroupButton.textContent = escape('Change group')
       changeGroupButton.addEventListener('click', event => {
         this.selectedGroupNode = null
         this.render()
@@ -57,10 +59,20 @@ export class PeoplePicker {
           const createNewGroupButton = document.createElement('button')
           createNewGroupButton.textContent = escape('Create a new group')
           createNewGroupButton.addEventListener('click', event => {
-            console.log('cannot yet render group builder')
-            // const groupBuilder = new GroupBuilder(
-            //   this.element,
-            // ).render()
+            this.createNewGroup(bookBaseUrl)
+              .then(({groupNode, graphNode}) => {
+                new GroupBuilder(
+                  this.element,
+                  graphNode,
+                  groupNode,
+                  this.onSelectGroup
+                ).render()
+              })
+              .catch(errorBody => {
+                this.element.appendChild(
+                  errorMessageBlock(document, escape(`Error creating a new group. (${errorBody})`))
+                )
+              })
           })
 
           container.appendChild(chooseExistingGroupButton)
@@ -82,11 +94,6 @@ export class PeoplePicker {
   }
 
   findGroupIndex (typeIndexUrl) {
-    // steps:
-    //   - load the type index
-    //   - find the location of the vcard:AddressBook (e.g.
-    //   /Contacts/book.ttl#this)
-    //   - groups are stored in container $bookURI/Group/
     return new Promise((resolve, reject) => {
       kb.fetcher.nowOrWhenFetched(typeIndexUrl, (ok, err) => {
         if (!ok) {
@@ -116,6 +123,28 @@ export class PeoplePicker {
     })
   }
 
+  createNewGroup (bookBaseUrl) {
+    const groupIndexNode = rdf.namedNode(`${bookBaseUrl}groups.ttl`)
+    const graphUrl = `${bookBaseUrl}Group/${uuid.v4().slice(0, 8)}.ttl`
+    const groupGraphNode = rdf.namedNode(graphUrl)
+    const groupNode = rdf.namedNode(`${graphUrl}#this`)
+    // NOTE that order matters here.  Unfortunately this type of update is
+    // non-atomic in that solid requires us to send two PATCHes, either of which
+    // might fail.
+    const patchPromises = [groupGraphNode, groupIndexNode]
+      .map(namedGraph => {
+        const typeStatement = rdf.st(groupNode, ns.rdf('type'), ns.vcard('Group'), namedGraph)
+        const nameStatement = rdf.st(groupNode, ns.vcard('fn'), 'Untitled Group', namedGraph)
+        return webClient.patch(namedGraph.value, [], [typeStatement, nameStatement])
+          .then(() => kb.add([typeStatement, nameStatement]))
+      })
+    return Promise.all(patchPromises)
+      .then(() => ({groupNode, groupGraphNode}))
+      .catch(err => {
+        throw new Error(`Couldn't create new group.  PATCH failed for (${err.xhr.responseURL})`)
+      })
+  }
+
   onSelectGroup (groupNode) {
     this.selectedGroupNode = groupNode
     this.render()
@@ -140,7 +169,7 @@ export class GroupPicker {
           groupContainer.style.display = 'flex'
           const groupButton = document.createElement('button')
           groupButton.addEventListener('click', this.handleClickGroup(group))
-          const groupComponent = new Group(groupButton, group).render()
+          new Group(groupButton, group).render()
           groupContainer.appendChild(groupButton)
           container.appendChild(groupContainer)
         })
@@ -195,7 +224,7 @@ export class Group {
 }
 
 export class GroupBuilder {
-  constructor (element, groupGraph, groupNode, groupChangedCb) {
+  constructor (element, groupGraph, groupNode, doneBuildingCb, groupChangedCb) {
     this.element = element
     this.groupGraph = groupGraph
     this.groupNode = groupNode
@@ -205,6 +234,7 @@ export class GroupBuilder {
       }
     }
     this.groupChangedCb = groupChangedCb
+    this.doneBuildingCb = doneBuildingCb
   }
 
   refresh () {
@@ -222,13 +252,24 @@ export class GroupBuilder {
     makeDropTarget(dropContainer, uris => {
       uris.map(uri => {
         this.add(uri)
-          .catch(err => {
+          .catch(() => {
             this.element.appendChild(
               errorMessageBlock(document, escape('Could not load the given WebId'))
             )
           })
       })
     })
+
+    const groupNameInput = document.createElement('input')
+    groupNameInput.type = 'text'
+    groupNameInput.value = getWithDefault(this.groupNode, ns.vcard('fn'), 'Untitled Group')
+    groupNameInput.addEventListener('input', event => {
+      this.setGroupName(event.target.value)
+    })
+    const groupNameLabel = document.createElement('label')
+    groupNameLabel.textContent = escape('Group Name:')
+    groupNameLabel.appendChild(groupNameInput)
+    dropContainer.appendChild(groupNameLabel)
 
     if (kb.any(this.groupNode, ns.vcard('hasMember'))) {
       kb.match(this.groupNode, ns.vcard('hasMember'))
@@ -245,6 +286,13 @@ export class GroupBuilder {
       `
       dropContainer.appendChild(copy)
     }
+
+    const doneBuildingButton = document.createElement('button')
+    doneBuildingButton.textContent = escape('Done')
+    doneBuildingButton.addEventListener('click', event => {
+      this.doneBuildingCb(this.groupNode)
+    })
+    dropContainer.appendChild(doneBuildingButton)
 
     this.element.innerHTML = ''
     this.element.appendChild(dropContainer)
@@ -269,6 +317,7 @@ export class GroupBuilder {
           const statement = [this.groupNode, ns.vcard('hasMember'), webIdNode, this.groupGraph]
           if (kb.match(...statement).length < 1) {
             kb.add(...statement)
+            // TODO: sync
           }
           this.onGroupChanged(null, 'added', webIdNode)
           resolve(webIdNode)
@@ -282,6 +331,7 @@ export class GroupBuilder {
     return event => {
       try {
         kb.remove(rdf.st(this.groupNode, ns.vcard('hasMember'), webIdNode, this.groupGraph))
+        // TODO: sync
         this.onGroupChanged(null, 'removed', webIdNode)
       } catch (err) {
         const name = kb.any(webIdNode, ns.foaf('name'))
@@ -294,6 +344,14 @@ export class GroupBuilder {
       this.render()
       return true
     }
+  }
+
+  setGroupName (name) {
+    kb.match(this.groupNode, ns.vcard('fn')).forEach(st => {
+      kb.remove(st)
+      kb.add(this.groupNode, ns.vcard('fn'), rdf.literal(name), st.why)
+      // TODO: sync
+    })
   }
 }
 
