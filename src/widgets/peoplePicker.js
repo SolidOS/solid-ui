@@ -331,20 +331,21 @@ export class GroupBuilder {
 
   handleRemove (webIdNode) {
     return event => {
-      try {
-        kb.remove(rdf.st(this.groupNode, ns.vcard('hasMember'), webIdNode, this.groupGraph))
-        // TODO: sync
-        this.onGroupChanged(null, 'removed', webIdNode)
-      } catch (err) {
-        const name = kb.any(webIdNode, ns.foaf('name'))
-        this.element.appendChild(
-          name && name.value
-            ? errorMessageBlock(document, escape(`Could not remove ${name.value}`))
-            : errorMessageBlock(document, escape(`Could not remove ${webIdNode.value}`))
-        )
-      }
-      this.render()
-      return true
+      const statement = rdf.st(this.groupNode, ns.vcard('hasMember'), webIdNode, this.groupGraph)
+      return webClient.patch(this.groupGraph.value, [statement], [])
+        .then(() => {
+          kb.remove(statement)
+          this.onGroupChanged(null, 'removed', webIdNode)
+          this.render()
+          return true
+        })
+        .catch(err => {
+          const name = kb.any(webIdNode, ns.foaf('name'))
+          const errorMessage = name && name.value
+            ? `Could not remove ${name.value}. (${err})`
+            : `Could not remove ${webIdNode.value}. (${err})`
+          throw new Error(errorMessage)
+        })
     }
   }
 
@@ -385,7 +386,11 @@ class Person {
 
     const removeButton = document.createElement('button')
     removeButton.textContent = 'Remove'
-    removeButton.addEventListener('click', event => this.handleRemove())
+    removeButton.addEventListener('click', event => this.handleRemove().catch(err => {
+      this.element.appendChild(
+        errorMessageBlock(document, escape(`${err}`))
+      )
+    }))
     removeButton.style.margin = '5px'
 
     container.appendChild(profileImg)
