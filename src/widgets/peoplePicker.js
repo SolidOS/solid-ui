@@ -63,6 +63,7 @@ export class PeoplePicker {
               .then(({groupNode, graphNode}) => {
                 new GroupBuilder(
                   this.element,
+                  bookBaseUrl,
                   graphNode,
                   groupNode,
                   this.onSelectGroup
@@ -133,10 +134,19 @@ export class PeoplePicker {
     // might fail.
     const patchPromises = [graphNode, groupIndexNode]
       .map(namedGraph => {
-        const typeStatement = rdf.st(groupNode, ns.rdf('type'), ns.vcard('Group'), namedGraph)
-        const nameStatement = rdf.st(groupNode, ns.vcard('fn'), 'Untitled Group', namedGraph)
-        return webClient.patch(namedGraph.value, [], [typeStatement, nameStatement])
-          .then(() => kb.add([typeStatement, nameStatement]))
+        const typeStatement = rdf.st(groupNode, ns.rdf('type'), ns.vcard('Group'))
+        const nameStatement = rdf.st(groupNode, ns.vcard('fn'), rdf.literal('Untitled Group'))
+        const includesGroupStatement = rdf.st(rdf.namedNode(`${bookBaseUrl}book.ttl#this`), ns.vcard('includesGroup'), groupNode)
+        const toIns = namedGraph.equals(groupIndexNode)
+          ? [typeStatement, nameStatement, includesGroupStatement]
+          : [typeStatement, nameStatement]
+        return patch(namedGraph.value, {toIns})
+          .then(() => {
+            toIns.forEach(st => {
+              st.why = namedGraph
+              kb.add(st)
+            })
+          })
       })
     return Promise.all(patchPromises)
       .then(() => ({groupNode, graphNode}))
@@ -224,8 +234,9 @@ export class Group {
 }
 
 export class GroupBuilder {
-  constructor (element, groupGraph, groupNode, doneBuildingCb, groupChangedCb) {
+  constructor (element, bookBaseUrl, groupGraph, groupNode, doneBuildingCb, groupChangedCb) {
     this.element = element
+    this.bookBaseUrl = bookBaseUrl
     this.groupGraph = groupGraph
     this.groupNode = groupNode
     this.onGroupChanged = (err, changeType, agent) => {
@@ -263,8 +274,13 @@ export class GroupBuilder {
     const groupNameInput = document.createElement('input')
     groupNameInput.type = 'text'
     groupNameInput.value = getWithDefault(this.groupNode, ns.vcard('fn'), 'Untitled Group')
-    groupNameInput.addEventListener('input', event => {
+    groupNameInput.addEventListener('change', event => {
       this.setGroupName(event.target.value)
+        .catch(err => {
+          this.element.appendChild(
+            errorMessageBlock(document, `Error changing group name. (${err})`)
+          )
+        })
     })
     const groupNameLabel = document.createElement('label')
     groupNameLabel.textContent = escape('Group Name:')
@@ -316,12 +332,13 @@ export class GroupBuilder {
         return resolve(webIdNode)
       })
     }).then(webIdNode => {
-      const statement = rdf.st(this.groupNode, ns.vcard('hasMember'), webIdNode, this.groupGraph)
+      const statement = rdf.st(this.groupNode, ns.vcard('hasMember'), webIdNode)
       if (kb.holdsStatement(statement)) {
         return webIdNode
       }
-      return webClient.patch(this.groupGraph.value, [], [statement])
+      return patch(this.groupGraph.value, {toIns: [statement]})
         .then(() => {
+          statement.why = this.groupGraph
           kb.add(statement)
           this.onGroupChanged(null, 'added', webIdNode)
           this.render()
@@ -331,8 +348,8 @@ export class GroupBuilder {
 
   handleRemove (webIdNode) {
     return event => {
-      const statement = rdf.st(this.groupNode, ns.vcard('hasMember'), webIdNode, this.groupGraph)
-      return webClient.patch(this.groupGraph.value, [statement], [])
+      const statement = rdf.st(this.groupNode, ns.vcard('hasMember'), webIdNode)
+      return patch(this.groupGraph.value, {toDel: [statement]})
         .then(() => {
           kb.remove(statement)
           this.onGroupChanged(null, 'removed', webIdNode)
@@ -350,11 +367,20 @@ export class GroupBuilder {
   }
 
   setGroupName (name) {
-    kb.match(this.groupNode, ns.vcard('fn')).forEach(st => {
-      kb.remove(st)
-      kb.add(this.groupNode, ns.vcard('fn'), rdf.literal(name), st.why)
-      // TODO: sync
-    })
+    // TODO: refactor this bookmark footprint URL logic into a helper function, only pass `bookBaseUrl` between components
+    const groupIndexUrl = `${this.bookBaseUrl}groups.ttl`
+    const updatePromises = [this.groupGraph, rdf.namedNode(groupIndexUrl)]
+      .map(namedGraph => {
+        const oldNameStatements = kb.match(this.groupNode, ns.vcard('fn'), null, namedGraph)
+        const newNameStatement = rdf.st(this.groupNode, ns.vcard('fn'), rdf.literal(name))
+        return patch(namedGraph.value, {toDel: oldNameStatements, toIns: [newNameStatement]})
+          .then(solidResponse => {
+            kb.removeStatements(oldNameStatements)
+            newNameStatement.why = namedGraph
+            kb.add(newNameStatement)
+          })
+      })
+    return Promise.all(updatePromises)
   }
 }
 
@@ -406,4 +432,16 @@ class Person {
 function getWithDefault (subject, predicate, defaultValue) {
   const object = kb.any(subject, predicate)
   return object ? object.value : defaultValue
+}
+
+function patch (url, {toDel, toIns}) {
+  return webClient.patch(url, toDel, toIns)
+    .then(solidResponse => {
+      const status = solidResponse.xhr.status
+      if (status < 200 || status >= 400) {
+        const err = new Error(`PATCH failed for resource <${solidResponse.url}>`)
+        err.solidResponse = solidResponse
+        throw err
+      }
+    })
 }
