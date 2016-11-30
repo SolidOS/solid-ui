@@ -37,6 +37,7 @@ export class PeoplePicker {
     container.style.display = 'flex'
 
     if (this.selectedGroupNode) {
+      container.style.flexDirection = 'column'
       const selectedGroup = document.createElement('div')
       new Group(selectedGroup, this.selectedGroupNode).render()
       const changeGroupButton = document.createElement('button')
@@ -52,12 +53,14 @@ export class PeoplePicker {
         .then(({bookBaseUrl}) => {
           const chooseExistingGroupButton = document.createElement('button')
           chooseExistingGroupButton.textContent = escape('Pick an existing group')
+          chooseExistingGroupButton.style.margin = 'auto'
           chooseExistingGroupButton.addEventListener('click', event => {
             new GroupPicker(container, bookBaseUrl, this.onSelectGroup).render()
           })
 
           const createNewGroupButton = document.createElement('button')
           createNewGroupButton.textContent = escape('Create a new group')
+          createNewGroupButton.style.margin = 'auto'
           createNewGroupButton.addEventListener('click', event => {
             this.createNewGroup(bookBaseUrl)
               .then(({groupNode, graphNode}) => {
@@ -172,14 +175,13 @@ export class GroupPicker {
       .then(groupNodes => {
         // render the groups
         const container = document.createElement('div')
+        container.style.display = 'flex'
+        container.style.flexDirection = 'column'
         groupNodes.forEach(group => {
-          const groupContainer = document.createElement('div')
-          groupContainer.style.display = 'flex'
           const groupButton = document.createElement('button')
           groupButton.addEventListener('click', this.handleClickGroup(group))
           new Group(groupButton, group).render()
-          groupContainer.appendChild(groupButton)
-          container.appendChild(groupContainer)
+          container.appendChild(groupButton)
         })
         this.element.innerHTML = ''
         this.element.appendChild(container)
