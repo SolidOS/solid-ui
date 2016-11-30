@@ -49,11 +49,11 @@ export class PeoplePicker {
       container.appendChild(changeGroupButton)
     } else {
       this.findGroupIndex(this.typeIndexUrl)
-        .then(({bookBaseUrl, groupIndexUrl, groupContainerUrl}) => {
+        .then(({bookBaseUrl}) => {
           const chooseExistingGroupButton = document.createElement('button')
           chooseExistingGroupButton.textContent = escape('Pick an existing group')
           chooseExistingGroupButton.addEventListener('click', event => {
-            new GroupPicker(container, bookBaseUrl, groupIndexUrl, this.onSelectGroup).render()
+            new GroupPicker(container, bookBaseUrl, this.onSelectGroup).render()
           })
 
           const createNewGroupButton = document.createElement('button')
@@ -117,16 +117,15 @@ export class PeoplePicker {
         // We've found an address book
         const bookUrl = instance[0].object.value
         const bookBaseUrl = bookUrl.replace(/book\.ttl(#.*)?$/, '')
-        const groupIndexUrl = `${bookBaseUrl}groups.ttl`
-        const groupContainerUrl = `${bookBaseUrl}Group/`
-        return resolve({bookBaseUrl, groupIndexUrl, groupContainerUrl})
+        return resolve({bookBaseUrl})
       })
     })
   }
 
   createNewGroup (bookBaseUrl) {
-    const groupIndexNode = rdf.namedNode(`${bookBaseUrl}groups.ttl`)
-    const graphUrl = `${bookBaseUrl}Group/${uuid.v4().slice(0, 8)}.ttl`
+    const {groupIndexUrl, groupContainerUrl, bookIndexUrl} = bookUrls(bookBaseUrl)
+    const groupIndexNode = rdf.namedNode(groupIndexUrl)
+    const graphUrl = `${groupContainerUrl}${uuid.v4().slice(0, 8)}.ttl`
     const graphNode = rdf.namedNode(graphUrl)
     const groupNode = rdf.namedNode(`${graphUrl}#this`)
     // NOTE that order matters here.  Unfortunately this type of update is
@@ -136,7 +135,7 @@ export class PeoplePicker {
       .map(namedGraph => {
         const typeStatement = rdf.st(groupNode, ns.rdf('type'), ns.vcard('Group'))
         const nameStatement = rdf.st(groupNode, ns.vcard('fn'), rdf.literal('Untitled Group'))
-        const includesGroupStatement = rdf.st(rdf.namedNode(`${bookBaseUrl}book.ttl#this`), ns.vcard('includesGroup'), groupNode)
+        const includesGroupStatement = rdf.st(rdf.namedNode(`${bookIndexUrl}#this`), ns.vcard('includesGroup'), groupNode)
         const toIns = namedGraph.equals(groupIndexNode)
           ? [typeStatement, nameStatement, includesGroupStatement]
           : [typeStatement, nameStatement]
@@ -162,10 +161,9 @@ export class PeoplePicker {
 }
 
 export class GroupPicker {
-  constructor (element, bookBaseUrl, groupIndexUrl, onSelectGroup) {
+  constructor (element, bookBaseUrl, onSelectGroup) {
     this.element = element
     this.bookBaseUrl = bookBaseUrl
-    this.groupIndexUrl = groupIndexUrl
     this.onSelectGroup = onSelectGroup
   }
 
@@ -196,12 +194,13 @@ export class GroupPicker {
 
   loadGroups () {
     return new Promise((resolve, reject) => {
-      kb.fetcher.nowOrWhenFetched(this.groupIndexUrl, (ok, err) => {
+      const {bookIndexUrl, groupIndexUrl} = bookUrls(this.bookBaseUrl)
+      kb.fetcher.nowOrWhenFetched(groupIndexUrl, (ok, err) => {
         if (!ok) {
           return reject(err)
         }
         const groupNodes = kb.match(
-          rdf.namedNode(`${this.bookBaseUrl}book.ttl#this`),
+          rdf.namedNode(`${bookIndexUrl}#this`),
           ns.vcard('includesGroup')
         ).map(st => st.object)
         return resolve(groupNodes)
@@ -367,8 +366,7 @@ export class GroupBuilder {
   }
 
   setGroupName (name) {
-    // TODO: refactor this bookmark footprint URL logic into a helper function, only pass `bookBaseUrl` between components
-    const groupIndexUrl = `${this.bookBaseUrl}groups.ttl`
+    const {groupIndexUrl} = bookUrls(this.bookBaseUrl)
     const updatePromises = [this.groupGraph, rdf.namedNode(groupIndexUrl)]
       .map(namedGraph => {
         const oldNameStatements = kb.match(this.groupNode, ns.vcard('fn'), null, namedGraph)
@@ -444,4 +442,12 @@ function patch (url, {toDel, toIns}) {
         throw err
       }
     })
+}
+
+function bookUrls (bookBaseUrl) {
+  return {
+    bookIndexUrl: `${bookBaseUrl}book.ttl`,
+    groupIndexUrl: `${bookBaseUrl}groups.ttl`,
+    groupContainerUrl: `${bookBaseUrl}Group/`
+  }
 }
