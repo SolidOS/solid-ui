@@ -159,6 +159,7 @@ export class PeoplePicker {
 
   onSelectGroup (groupNode) {
     this.selectedGroupNode = groupNode
+    this.groupPickedCb(groupNode)
     this.render()
   }
 }
