@@ -38,25 +38,25 @@ https://github.com/solid/solid
  */
 
 var rdf = require('rdflib') // pull in first avoid cross-refs
-var ns = require('./lib/ns.js')
+var ns = require('./ns')
 
 var UI = {
-  acl: require('./lib/acl'),
-  aclControl: require('./lib/acl-control'),
-  icons: require('./lib/iconBase.js'),
-  log: require('./lib/log.js'),
-  matrix: require('./lib/matrix'),
-  messageArea: require('./lib/messageArea'),
+  acl: require('./acl'),
+  aclControl: require('./acl-control'),
+  icons: require('./iconBase'),
+  log: require('./log'),
+  matrix: require('./matrix'),
+  messageArea: require('./messageArea'),
   ns: ns,
-  pad: require('./lib/pad'),
+  pad: require('./pad'),
   rdf:  rdf,
-  signin: require('./lib/signin'),
+  signin: require('./signin'),
   solid: require('solid-client'),
-  store: require('./lib/store'),
-  table: require('./lib/table'),
-  tabs: require('./lib/tabs'),
-  utils: require('./lib/utils'),
-  widgets: require('./lib/widgets')
+  store: require('./store'),
+  table: require('./table'),
+  tabs: require('./tabs'),
+  utils: require('./utils'),
+  widgets: require('./widgets')
 }
 
 module.exports = UI

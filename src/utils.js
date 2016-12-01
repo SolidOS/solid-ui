@@ -8,10 +8,10 @@ var utilsModule = module.exports = {}
 
 var UI = {
   utils: utilsModule,
-  log: require('./log.js'),
-  ns: require('./ns.js'),
+  log: require('./log'),
+  ns: require('./ns'),
   rdf: require('rdflib'),
-  store: require('./store.js')
+  store: require('./store')
 }
 
 // Make pseudorandom color from a uri

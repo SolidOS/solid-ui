@@ -6,9 +6,9 @@
 // throwing away all the user's work.
 var UI = {}
 
-UI.acl = require('./acl.js')
-UI.ns = require('./ns.js')
-UI.widgets = require('./widgets.js')
+UI.acl = require('./acl')
+UI.ns = require('./ns')
+UI.widgets = require('./widgets')
 UI.utils = require('./utils')
 UI.aclControl = module.exports = {}
 
