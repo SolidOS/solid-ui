@@ -84,10 +84,6 @@ module.exports = function renderTableViewPane (doc, options) {
 
   var keyVariable = options.keyVariable || '?_row'
 
-  // Use queries to render the table, currently experimental:
-
-  var USE_QUERIES = true
-
   var subjectIdCounter = 0
   var allType, types
   var typeSelectorDiv, addColumnDiv
@@ -128,7 +124,7 @@ module.exports = function renderTableViewPane (doc, options) {
 
     mostCommonType = getMostCommonType(types)
 
-    if (mostCommonType != null) {
+    if (mostCommonType) {
       buildFilteredTable(mostCommonType)
     } else {
       buildFilteredTable(allType)
@@ -241,7 +237,7 @@ module.exports = function renderTableViewPane (doc, options) {
   function addWhereToQuery (query, rowVar, type) {
     var queryType = type.type
 
-    if (queryType == null) {
+    if (!queryType) {
       queryType = kb.variable('_any')
     }
 
@@ -300,7 +296,7 @@ module.exports = function renderTableViewPane (doc, options) {
   function updateTable (query, type) {
     // Stop the previous query from doing any updates.
 
-    if (lastQuery != null) {
+    if (lastQuery) {
       lastQuery.running = false
     }
 
@@ -347,7 +343,7 @@ module.exports = function renderTableViewPane (doc, options) {
       // The first time through, get a list of all the columns
       // and select only the six most popular columns.
 
-      if (this.columns == null) {
+      if (!this.columns) {
         var allColumns = this.getAllColumns()
         this.columns = allColumns.slice(0, 7)
       }
@@ -378,7 +374,7 @@ module.exports = function renderTableViewPane (doc, options) {
 
     this.removeColumn = function (column) {
       this.columns = this.columns.filter(function (x) {
-        return x != column
+        return x !== column
       })
     }
 
@@ -423,7 +419,7 @@ module.exports = function renderTableViewPane (doc, options) {
 
     this.checkValue = function (term) {
       var termType = term.termType
-      if (this.possiblyLiteral && termType != 'Literal' && termType != 'NamedNode') {
+      if (this.possiblyLiteral && termType !== 'Literal' && termType !== 'NamedNode') {
         this.possiblyNumber = false
         this.possiblyLiteral = false
       } else if (this.possiblyNumber) {
@@ -458,12 +454,12 @@ module.exports = function renderTableViewPane (doc, options) {
     }
 
     this.getLabel = function () {
-      if (this.predicate != null) {
+      if (this.predicate) {
         if (this.predicate.sameTerm(ns.rdf('type')) && this.superClass) {
           return UI.utils.label(this.superClass)
         }
         return UI.utils.label(this.predicate)
-      } else if (this.variable != null) {
+      } else if (this.variable) {
         return this.variable.toString()
       } else {
         return 'unlabeled column?'
@@ -475,7 +471,7 @@ module.exports = function renderTableViewPane (doc, options) {
         this.inverse = predicate
         this.constraints = this.constraints.concat(
           kb.each(predicate, UI.ns.rdfs('domain')))
-        if (predicate.sameTerm(ns.rdfs('subClassOf')) && (other.termType == 'NamedNode')) {
+        if (predicate.sameTerm(ns.rdfs('subClassOf')) && (other.termType === 'NamedNode')) {
           this.superClass = other
           this.alternatives = kb.each(undefined, ns.rdfs('subClassOf'), other)
         }
@@ -555,7 +551,7 @@ module.exports = function renderTableViewPane (doc, options) {
     dropdown.addEventListener('click', function () {
       var type
 
-      if (dropdown.value == 'null') {
+      if (dropdown.value === 'null') {
         type = allType
       } else {
         type = types[dropdown.value]
@@ -679,7 +675,7 @@ module.exports = function renderTableViewPane (doc, options) {
     for (var i = 0; i < subjectList.length; ++i) {
       var type = subjectList[i].object
 
-      if (type.termType != 'NamedNode') { // @@ no bnodes?
+      if (type.termType !== 'NamedNode') { // @@ no bnodes?
         continue
       }
 
@@ -827,7 +823,7 @@ module.exports = function renderTableViewPane (doc, options) {
 
       // We can only add a delete button if we are using the
       // proper interface and have a type to delete from:
-      if (type != null) {
+      if (type) {
         th.appendChild(renderColumnDeleteButton(type, column))
       }
 
@@ -936,10 +932,10 @@ module.exports = function renderTableViewPane (doc, options) {
 
   function literalSort (rows, column, reverse) {
     function literalToString (colValue) {
-      if (colValue != null) {
-        if (colValue.termType == 'Literal') {
+      if (colValue) {
+        if (colValue.termType === 'Literal') {
           return colValue.value.toLowerCase()
-        } else if (colValue.termType == 'NamedNode') {
+        } else if (colValue.termType === 'NamedNode') {
           return UI.utils.label(colValue).toLowerCase()
         }
         return colValue.value.toLowerCase()
@@ -995,16 +991,16 @@ module.exports = function renderTableViewPane (doc, options) {
     // substring in the specified column.
 
     column.filterFunction = function (colValue) {
-      if (substring == null) {
+      if (!substring) {
         return true
-      } else if (colValue == null) {
+      } else if (!colValue) {
         return false
       } else {
         var literalValue
 
-        if (colValue.termType == 'Literal') {
+        if (colValue.termType === 'Literal') {
           literalValue = colValue.value
-        } else if (colValue.termType == 'NamedNode') {
+        } else if (colValue.termType === 'NamedNode') {
           literalValue = UI.utils.label(colValue)
         } else {
           literalValue = ''
@@ -1015,7 +1011,7 @@ module.exports = function renderTableViewPane (doc, options) {
     }
 
     textBox.addEventListener('keyup', function () {
-      if (textBox.value != '') {
+      if (textBox.value !== '') {
         substring = textBox.value.toLowerCase()
       } else {
         substring = null
@@ -1064,8 +1060,8 @@ module.exports = function renderTableViewPane (doc, options) {
     // Select based on an enum value.
 
     column.filterFunction = function (colValue) {
-      return searchValue == null ||
-      (colValue != null && searchValue[colValue.uri])
+      return !searchValue ||
+      (colValue && searchValue[colValue.uri])
     }
 
     dropdown.addEventListener('click', function () {
@@ -1116,14 +1112,14 @@ module.exports = function renderTableViewPane (doc, options) {
     var max = null
 
     column.filterFunction = function (colValue) {
-      if (colValue != null) {
+      if (colValue) {
         colValue = new Number(colValue)
       }
 
-      if (min != null && (colValue == null || colValue < min)) {
+      if (min && (!colValue || colValue < min)) {
         return false
       }
-      if (max != null && (colValue == null || colValue > max)) {
+      if (max && (!colValue || colValue > max)) {
         return false
       }
 
@@ -1134,13 +1130,13 @@ module.exports = function renderTableViewPane (doc, options) {
     // displayed columns.
 
     function eventListener () {
-      if (minSelector.value == '') {
+      if (minSelector.value === '') {
         min = null
       } else {
         min = new Number(minSelector.value)
       }
 
-      if (maxSelector.value == '') {
+      if (maxSelector.value === '') {
         max = null
       } else {
         max = new Number(maxSelector.value)
@@ -1188,7 +1184,7 @@ module.exports = function renderTableViewPane (doc, options) {
 
     var cs = column.getConstraints()
     var range
-    for (i = 0; i < cs.length; i++) {
+    for (var i = 0; i < cs.length; i++) {
       range = cs[i]
 
       // Is this a number type?
@@ -1202,7 +1198,7 @@ module.exports = function renderTableViewPane (doc, options) {
 
       // rdf:Literal?  Assume a string at this point
 
-      if (range.uri == RDFS_LITERAL) {
+      if (range.uri === RDFS_LITERAL) {
         return renderLiteralSelector(rows, columns, column)
       }
 
@@ -1235,12 +1231,12 @@ module.exports = function renderTableViewPane (doc, options) {
 
       var selector = renderTableSelector(rows, columns, columns[i])
 
-      if (selector != null) {
+      if (selector) {
         td.appendChild(selector)
       }
       /*
                   // Useful debug: display URI of predicate in column header
-                  if (columns[i].predicate.uri != null) {
+                  if (columns[i].predicate.uri) {
                       td.appendChild(document.createTextNode(columns[i].predicate.uri))
                   }
       */
@@ -1276,7 +1272,7 @@ module.exports = function renderTableViewPane (doc, options) {
   function linkToObject (obj, hints) {
     var match = false
 
-    if (obj.uri != null) {
+    if (obj.uri) {
       match = obj.uri.match(/^mailto:(.*)/)
     }
 
@@ -1323,7 +1319,7 @@ module.exports = function renderTableViewPane (doc, options) {
 
       }
     } else {
-      if (obj.termType == 'Literal') {
+      if (obj.termType === 'Literal') {
         if (obj.datatype) {
           if (XSD_DATE_TYPES[obj.datatype.uri]) {
             return doc.createTextNode(UI.widgets.shortDate(obj.value))
@@ -1335,11 +1331,11 @@ module.exports = function renderTableViewPane (doc, options) {
           }
         }
         return doc.createTextNode(obj.value)
-      } else if (obj.termType == 'NamedNode' && column.isImageColumn()) {
+      } else if (obj.termType === 'NamedNode' && column.isImageColumn()) {
         return renderImage(obj)
-      } else if (obj.termType == 'NamedNode' || obj.termType == 'BlankNode') {
+      } else if (obj.termType === 'NamedNode' || obj.termType === 'BlankNode') {
         return linkToObject(obj, hints)
-      } else if (obj.termType == 'collection') {
+      } else if (obj.termType === 'collection') {
         var span = doc.createElement('span')
         span.appendChild(doc.createTextNode('['))
         obj.elements.map(function (x) {
@@ -1364,7 +1360,7 @@ module.exports = function renderTableViewPane (doc, options) {
 
     var linkTd = doc.createElement('td')
 
-    if (row._subject != null && 'uri' in row._subject) {
+    if (row._subject && 'uri' in row._subject) {
       linkTd.appendChild(linkTo(row._subject.uri, '\u2192'))
     }
 
@@ -1399,7 +1395,7 @@ module.exports = function renderTableViewPane (doc, options) {
           }
           td.appendChild(renderValue(obj, column))
 
-          if (j != objects.length - 1) {
+          if (j !== objects.length - 1) {
             td.appendChild(doc.createTextNode(',\n'))
           }
           if (different) {
@@ -1424,9 +1420,9 @@ module.exports = function renderTableViewPane (doc, options) {
   function valueInList (value, list) {
     var key = null
 
-    if (value.termType == 'Literal') {
+    if (value.termType === 'Literal') {
       key = 'value'
-    } else if (value.termType == 'NamedNode') {
+    } else if (value.termType === 'NamedNode') {
       key = 'uri'
     } else {
       return list.indexOf(value) >= 0
@@ -1437,8 +1433,8 @@ module.exports = function renderTableViewPane (doc, options) {
     var i
 
     for (i = 0; i < list.length; ++i) {
-      if (list[i].termType == value.termType
-        && list[i][key] == value[key]) {
+      if (list[i].termType === value.termType
+        && list[i][key] === value[key]) {
         return true
       }
     }
@@ -1549,7 +1545,7 @@ module.exports = function renderTableViewPane (doc, options) {
 
       // Create a new row?
 
-      if (row == null) {
+      if (!row) {
         var tr = doc.createElement('tr')
         table.appendChild(tr)
 
@@ -1560,7 +1556,7 @@ module.exports = function renderTableViewPane (doc, options) {
         }
         rows.push(row)
 
-        if (rowKey != null) {
+        if (rowKey) {
           rowsLookup[rowKeyId] = row
         }
       }
@@ -1620,16 +1616,16 @@ module.exports = function renderTableViewPane (doc, options) {
       // If so, we can use the predicate as the predicate for the
       // column used for the specified variable.
 
-      if (statement.predicate.termType == 'NamedNode'
-        && statement.object.termType == 'Variable') {
+      if (statement.predicate.termType === 'NamedNode'
+        && statement.object.termType === 'Variable') {
         var variable = statement.object.toString()
         if (variable in columns) {
           var column = columns[variable]
           column.setPredicate(statement.predicate, false, statement.subject)
         }
       }
-      if (statement.predicate.termType == 'NamedNode'
-        && statement.subject.termType == 'Variable') {
+      if (statement.predicate.termType === 'NamedNode'
+        && statement.subject.termType === 'Variable') {
         var variable = statement.subject.toString()
         if (variable in columns) {
           var column = columns[variable]
@@ -1676,7 +1672,7 @@ module.exports = function renderTableViewPane (doc, options) {
 
   function renderTableForQuery (query, type) {
     // infer columns from query, to allow generic queries
-
+    var columns
     if (!givenQuery) {
       columns = type.getColumns()
     } else {
