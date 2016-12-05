@@ -200,7 +200,7 @@ UI.widgets.ensureTypeIndexes = function(context) {
         if (context.index[visibility].length == 0) {
           newIndex = $rdf.sym(context.preferencesFile.dir().uri + visibility + 'TypeIndex.ttl');
           console.log("Linking to new fresh type index " + newIndex)
-          addMe = [ $rdf.st(me,  ns.solid(visibility + 'TypeIndex'), newIndex, relevant)]
+          var addMe = [ $rdf.st(me,  ns.solid(visibility + 'TypeIndex'), newIndex, relevant)]
           UI.store.updater.update([], addMe, function (uri, ok, body) {
             if (!ok) {
               reject('Error saving type index link saving back ' + uri + ': ' + body )
@@ -312,7 +312,7 @@ UI.widgets.registrationList = function(context, options) {
                 var table = box.firstChild
 
                 var ix = [], sts = []
-                vs = ['private', 'public']
+                var vs = ['private', 'public']
                 vs.forEach(function(visibility){
                   if (options[visibility]){
                     ix = ix.concat(context.index[visibility][0])
@@ -398,7 +398,7 @@ UI.widgets.setACLUserPublic = function(docURI, me, options, callback) {
             a = g.sym(aclURI + '#a2');
             g.add(a, UI.ns.rdf('type'), auth('Authorization'), acl);
             g.add(a, auth('accessTo'), doc, acl)
-            g.add(a, auth('agentClass'), ns.foaf('Agent'), acl);
+            g.add(a, auth('agentClass'), UI.ns.foaf('Agent'), acl);
             for (var p=0; p<optPublic.length; p++) {
                 g.add(a, auth('mode'), auth(optPublic[p]), acl); // Like 'Read' etc
             }
@@ -575,11 +575,11 @@ UI.widgets.checkUser = function(doc, setIt) {
 };
 
 // What ID does the user use to log into the given target?
-UI.widgets.checkUserForTarget = function(context) {
+UI.widgets.checkUserForTarget = function(context, setIt) {
     return new Promise(function(resolve, reject){
         var kb = UI.store
-        kb.fetcher.load(conext.target).then(function(xhr) {
-            kb.each(undefined, UI.ns.link('requestedURI'), $rdf.uri.docpart(userMirror.uri))
+        kb.fetcher.load(context.target).then(function(xhr) {
+            kb.each(undefined, UI.ns.link('requestedURI'), context.target.uri)
             .map(function(request){
                 var response = kb.any(request, UI.ns.link('response'));
                 if (response) {
@@ -602,7 +602,7 @@ UI.widgets.checkUserForTarget = function(context) {
                 }
                 resolve(context);
             });
-        }).catch(e)(function(e){reject(e)});
+        }).catch(function(e){reject(e)});
     });
 }
 
@@ -870,7 +870,7 @@ UI.widgets.selectWorkspace = function(dom, appDetails, callbackWS) {
             col1.setAttribute('style', 'vertical-align:middle;')
 
             // last line with "Make new workspace"
-            tr_last = dom.createElement('tr');
+            var tr_last = dom.createElement('tr');
             col2 = dom.createElement('td')
             col2.setAttribute('style', cellStyle);
             col2.textContent = "+ Make a new workspace";
