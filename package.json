@@ -2,17 +2,21 @@
   "name": "solid-ui",
   "version": "0.2.1",
   "description": "UI library for writing Solid read-write-web applications",
-  "main": "./index.js",
+  "main": "./lib/index.js",
+  "files": [
+    "lib",
+    "dist"
+  ],
   "scripts": {
-    "build-browserified": "browserify -r ./index.js:solid-ui --exclude 'xhr2' --exclude 'rdflib' > dist/solid-ui.js",
-    "build-minified": "browserify -r ./index.js:solid-ui --exclude 'xhr2' --exclude 'rdflib' -d -p [minifyify --no-map] > dist/solid.min.js",
-    "build": "npm run clean && mkdir -p dist/resources && npm run standard && npm run build-browserified && npm run build-minified",
-    "build-qunit-resources": "browserify -r ./test/resources/profile-ldnode.js:test-ldnode-profile --exclude 'xhr2' --exclude 'rdflib' > dist/resources/test-ldnode-profile.js",
-    "clean": "rm -rf dist/",
-    "standard": "standard lib/*",
-    "tape": "tape test/unit/*.js",
-    "test": "npm run standard && npm run tape",
-    "qunit": "npm run standard && npm run build-browserified && open test/integration/index.html"
+    "build-lib": "babel src -d lib",
+    "build-browserified": "browserify -r ./src/index.js:solid-ui -t babelify --exclude 'xhr2' > dist/solid-ui.js",
+    "build-minified": "browserify -r ./src/index.js:solid-ui -t babelify --exclude 'xhr2' -d -p [minifyify --no-map] > dist/solid.min.js",
+    "prebuild": "npm run clean && mkdir -p dist",
+    "build": "npm run build-lib && npm run build-browserified && npm run build-minified",
+    "clean": "rm -rf dist/ && rm -rf lib/",
+    "standard": "standard src/*",
+    "pretest": "npm run standard",
+    "test": "echo 'No test suite.  Add tests!' && exit 1"
   },
   "repository": {
     "type": "git",
@@ -21,7 +25,8 @@
   "keywords": [
     "solid",
     "decentralized",
-    "widgets", "ui",
+    "widgets",
+    "ui",
     "web",
     "rdf",
     "ldp",
@@ -29,16 +34,25 @@
     "data"
   ],
   "author": "Tim Berners-Lee <timbl@mit.edu>",
+  "contributors": [
+    "Daniel Friedman <danielf@mit.edu>"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/linkeddata/solid-ui/issues"
   },
   "homepage": "https://github.com/linkeddata/solid-ui",
   "dependencies": {
-    "solid-client": "",
-    "rdflib": ""
+    "escape-html": "^1.0.3",
+    "node-uuid": "^1.4.7",
+    "rdflib": "^0.12.1",
+    "solid-client": "^0.22.4",
+    "solid-web-client": "0.0.9"
   },
   "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babelify": "^7.3.0",
     "browserify": "^13.0.0",
     "minifyify": "^7.2.1",
     "qunit": "^0.9.0",

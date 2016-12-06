@@ -9,7 +9,7 @@
 var $rdf = require('rdflib')
 var padModule = module.exports = {}
 var UI = {
-  icons: require('./iconBase.js'),
+  icons: require('./iconBase'),
   log: require('./log'),
   ns: require('./ns'),
   pad: padModule,
@@ -31,9 +31,7 @@ UI.pad.lightColorHash = function(author){
 //
 //  This is more general tham the pad.
 //
-UI.pad.renderPartipants = function(dom, container, padDoc, subject, me, options){
-  var table = dom.createElement('table')
-  container.appendChild(table)
+UI.pad.renderPartipants = function(dom, table, padDoc, subject, me, options){
   var kb = UI.store, ns = UI.ns
   table.setAttribute('style', 'margin: 0.8em;')
 
@@ -71,9 +69,15 @@ UI.pad.manageParticipation = function(dom, container, padDoc, subject, me, optio
   if (!me) throw "Unknown user";
   var kb = UI.store, ns = UI.ns
 
+  var table = dom.createElement('table')
+  container.appendChild(table)
+
   var parps = kb.each(subject, ns.wf('participation')).filter(function(pn){
       return kb.holds(pn, ns.wf('participant'), me)});
-  if (parps.length > 1) throw "Multiple my participations";
+  if (parps.length > 1) {
+    container.appendChild(UI.widgets.errorMessageBlock(dom, "Multiple notes of my participation!")) // Clean up?
+    //throw "Multiple my participations";
+  }
   if (!parps.length) {
     var participation = UI.widgets.newThing(padDoc);
     var ins = [
@@ -88,11 +92,12 @@ UI.pad.manageParticipation = function(dom, container, padDoc, subject, me, optio
         console.log(container.textContent = 'Error recording your partipation: ' + error_body)
         return
       }
-      UI.pad.renderPartipants(dom, container, padDoc, subject, me, options)
+      UI.pad.renderPartipants(dom, table, padDoc, subject, me, options)
     })
   } else {
-    UI.pad.renderPartipants(dom, container, padDoc, subject, me, options)
+    UI.pad.renderPartipants(dom, table, padDoc, subject, me, options)
   }
+  return table // won't be set up yet
 }
 
 
@@ -199,7 +204,7 @@ UI.pad.notepad  = function (dom, padDoc, subject, me, options) {
             } else if (xhr.status === 409) { // Conflict
                 setPartStyle(part,'color: black;  background-color: #ffd;'); // yellow
                 part.state = 0; // Needs downstream refresh
-                UI.widgets.beep(0.5, 512); // Ooops clash with other person
+                UI.utils.beep(0.5, 512); // Ooops clash with other person
                 setTimeout(function(){
                     updater.requestDownstreamAction(padDoc, reloadAndSync);
                 }, 1000);
@@ -361,7 +366,7 @@ UI.pad.notepad  = function (dom, padDoc, subject, me, options) {
                     if (xhr.status === 409) { // Conflict -  @@ we assume someone else
                         setPartStyle(part,'color: black;  background-color: #fdd;');
                         part.state = 0; // Needs downstream refresh
-                        UI.widgets.beep(0.5, 512); // Ooops clash with other person
+                        UI.utils.beep(0.5, 512); // Ooops clash with other person
                         setTimeout(function(){
                             updater.requestDownstreamAction(padDoc, reloadAndSync);
                         }, 1000);
@@ -370,7 +375,7 @@ UI.pad.notepad  = function (dom, padDoc, subject, me, options) {
                         setPartStyle(part,'color: black;  background-color: #fdd;'); // failed pink
                         part.state = 0;
                         complain("    Error " + xhr.status + " sending data: " + error_body, true);
-                        UI.widgets.beep(1.0, 128); // Other
+                        UI.utils.beep(1.0, 128); // Other
                         // @@@   Do soemthing more serious with other errors eg auth, etc
                     }
                 } else {

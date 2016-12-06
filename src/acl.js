@@ -5,7 +5,7 @@ var acl = module.exports = {}
 
 var UI = {
   acl: acl,
-  icons: require('./iconBase.js'),
+  icons: require('./iconBase'),
   log: require('./log'),
   ns: require('./ns'),
   store: require('./store'),

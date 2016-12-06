@@ -6,9 +6,9 @@
 // throwing away all the user's work.
 var UI = {}
 
-UI.acl = require('./acl.js')
-UI.ns = require('./ns.js')
-UI.widgets = require('./widgets.js')
+UI.acl = require('./acl')
+UI.ns = require('./ns')
+UI.widgets = require('./widgets')
 UI.utils = require('./utils')
 UI.aclControl = module.exports = {}
 
@@ -396,12 +396,12 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
 
   UI.acl.getACLorDefault(doc, function (ok, p2, targetDoc, targetACLDoc, defaultHolder, defaultACLDoc) {
     var defa = !p2
-    box.isContainer = targetDoc.uri.slice(-1) === '/' // Give default for all directories
     // @@ Could also set from classes ldp:Container etc etc
     if (!ok) {
       statusBlock.textContent += 'Error reading ' + (defa ? ' default ' : '') + 'ACL.' +
         ' status ' + targetDoc + ': ' + targetACLDoc
     } else {
+      box.isContainer = targetDoc.uri.slice(-1) === '/' // Give default for all directories
       if (defa) {
         var defaults = kb.each(undefined, ACL('defaultForNew'), defaultHolder, defaultACLDoc)
         if (!defaults.length) {

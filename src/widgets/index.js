@@ -12,15 +12,26 @@
 
 // var aclModule = require('./acl.js')
 
-var widgetModule = module.exports = {}
+// Each widget should ideally live in its own file.  In order to break up this
+// monolithic widget index over time, we should add new widgets to the
+// 'lib/widgets/' directory, and re-export them like so:
+//
+// (In order to avoid name collisions, it is safely assumed that modules don't
+// export widgets with the same name)
+var widgets = module.exports = Object.assign(
+  {},
+  require('./peoplePicker'),
+  require('./dragAndDrop'),
+  require('./error')
+)
 
 var UI = {
-  icons: require('./iconBase.js'),
-  log: require('./log'),
-  ns: require('./ns'),
-  store: require('./store'),
-  utils: require('./utils'),
-  widgets: widgetModule
+  icons: require('../iconBase'),
+  log: require('../log'),
+  ns: require('../ns'),
+  store: require('../store'),
+  utils: require('../utils'),
+  widgets: widgets
 }
 //var UI.ns = require('./ns.js')
 // var utilsModule = require('./utils')
@@ -122,8 +133,7 @@ UI.widgets.setImage = function (element, x) {
   var kb = UI.store
   var ns = UI.ns
   var iconDir = UI.icons.iconBase
-  //var fallback = iconDir + 'noun_15059.svg' // Person
-  var fallback = iconDir + 'noun_10636.svg' // Circle
+  var fallback = iconDir + 'noun_10636_grey.svg' // Circle -  some thing
   var findImage = function (x) {
     if (x.sameTerm(ns.foaf('Agent')) || x.sameTerm(ns.rdf('Resource'))) {
       return iconDir + 'noun_98053.svg' // Globe
@@ -161,10 +171,25 @@ UI.widgets.setImage = function (element, x) {
     if (ns.vcard('AddressBook').uri in types) {
       return iconDir + 'noun_15695.svg'
     }
+    // http://www.w3.org/ns/pim/trip#Trip
+    if ("http://www.w3.org/ns/pim/trip#Trip" in types) {
+      return iconDir + 'noun_581629.svg' // Plane taking off
+    }
     if (ns.meeting('Meeting').uri in types) {
       return iconDir + 'noun_66617.svg'
     }
-    return fallback
+    // Non-HTTP URI types imply types
+    if (x.uri.startsWith('message:') || x.uri.startsWith('mid:')){ // message: is aapple bug-- should be mid:
+      return iconDir + 'noun_480183.svg' // envelope  noun_567486
+    }
+    if (x.uri.startsWith('mailto:')){
+      return iconDir + 'noun_567486.svg' // mailbox - an email desitination
+    }
+    // For HHTP(s) documents, we could look at teh MIME type if we know it.
+    if (x.uri.startsWith('http') && (x.uri.indexOf('#') < 0)){
+      return iconDir + 'noun_681601.svg' // document - under solid assumptions
+    }
+    return iconDir + 'noun_10636_grey.svg' // Circle -  some thing
   }
 
   var uri = findImage(x)
@@ -215,36 +240,64 @@ UI.widgets.deleteButtonWithCheck = function (dom, container, noun, deleteFunctio
   return delButton
 }
 
+//////////////////////////////////////// Frab a name for a new thing
 
-// Make and HTML element draggable as an RDF thing
-//
-// Possibly later set the drag image too?
-//
-UI.widgets.makeDraggable = function(tr, obj){
 
-  tr.setAttribute('draggable', 'true') // Stop the image being dragged instead - just the TR
 
-  tr.addEventListener('dragstart', function (e) {
-    tr.style.fontWeight = 'bold'
-    e.dataTransfer.setData('text/uri-list', obj.uri)
-    e.dataTransfer.setData('text/plain', obj.uri)
-    e.dataTransfer.setData('text/html', tr.outerHTML)
-    console.log('Dragstart: ' + tr + ' -> ' + obj + 'de: ' + e.dataTransfer.dropEffect)
-  }, false)
 
-  tr.addEventListener('drag', function (e) {
-    e.preventDefault()
-    e.stopPropagation()
-    // console.log('Drag: dropEffect: ' + e.dataTransfer.dropEffect)
-  }, false)
+// Form to get the name of a new thing before we create it
+// Returns a promise of (a name or null if cancelled)
+UI.widgets.askName = function (dom, kb, container, predicate, klass) {
+  return new Promise(function(resolve, reject){
+    var form = dom.createElement('div') // form is broken as HTML behaviour can resurface on js error
+    // classLabel = UI.utils.label(ns.vcard('Individual'))
+    predicate = predicate || UI.ns.foaf('name')
+    var prompt = klass ? UI.utils.label(klass) + '  ' : ''
+    prompt += UI.utils.label(predicate) + ': '
+    form.appendChild(dom.createElement('p')).textContent = prompt
+    var namefield = dom.createElement('input')
+    namefield.setAttribute('type', 'text')
+    namefield.setAttribute('size', '100')
+    namefield.setAttribute('maxLength', '2048') // No arbitrary limits
+    namefield.select() // focus next user input
+    form.appendChild(namefield)
+    container.appendChild(form)
 
-  tr.addEventListener('dragend', function (e) {
-    tr.style.fontWeight = 'normal'
-    console.log('Dragend dropeffect: ' + e.dataTransfer.dropEffect)
-    console.log('Dragend: ' + tr + ' -> ' + obj)
-  }, false)
+    var gotName = function () {
+      // namefield.setAttribute('class', 'pendingedit')
+      // namefield.disabled = true
+      form.parentNode.removeChild(form)
+      resolve(namefield.value)
+    }
+
+    namefield.addEventListener('keyup', function (e) {
+      if (e.keyCode == 13) {
+        gotName()
+      }
+    }, false)
+
+    var br = form.appendChild(dom.createElement('br'))
+
+    var cancel = form.appendChild(dom.createElement('button'))
+    cancel.setAttribute('type', 'button')
+    cancel.innerHTML = 'Cancel'
+    cancel.addEventListener('click', function (e) {
+      form.parentNode.removeChild(form)
+      resolve(null)
+    }, false)
+
+    var b = form.appendChild(dom.createElement('button'))
+    b.setAttribute('type', 'button')
+    b.innerHTML = 'Continue'
+    b.addEventListener('click', function (e) {
+      gotName()
+    }, false)
+
+  }) // Promise
 }
 
+
+//////////////////////////////////////////////////////////////////
 
 // A little link icon
 //
@@ -252,9 +305,12 @@ UI.widgets.makeDraggable = function(tr, obj){
 UI.widgets.linkIcon = function(dom, subject, iconURI){
   var anchor = dom.createElement('a')
   anchor.setAttribute('href', subject.uri)
-  var linkIcon = anchor.appendChild(dom.createElement('img'))
-  linkIcon.setAttribute('src', iconURI || (UI.icons.originalIconBase + 'go-to-this.png'))
-  linkIcon.setAttribute('style','margin: 0.3em;')
+  if (subject.uri.startsWith('http')){ // If diff web page
+    anchor.setAttribute('target', '_blank') // open in a new tab or window
+  } // as mailboxes and mail messages do not need new browser window
+  var img = anchor.appendChild(dom.createElement('img'))
+  img.setAttribute('src', iconURI || (UI.icons.originalIconBase + 'go-to-this.png'))
+  img.setAttribute('style','margin: 0.3em;')
   return anchor
 }
 
@@ -280,7 +336,7 @@ UI.widgets.personTR = function (dom, pred, obj, options) {
 
   UI.widgets.setName(td2, agent)
   if (options.deleteFunction) {
-    UI.widgets.deleteButtonWithCheck(dom, td3, 'person', options.deleteFunction)
+    UI.widgets.deleteButtonWithCheck(dom, td3, options.noun || 'one', options.deleteFunction)
   }
   if (options.link !== false) {
     var anchor = td3.appendChild(UI.widgets.linkIcon(dom, obj))
@@ -293,6 +349,66 @@ UI.widgets.personTR = function (dom, pred, obj, options) {
   }
   return tr
 }
+
+// List of attachments accepting drop
+
+UI.widgets.attachmentList = function(dom, subject, div){
+  var kb = UI.store
+  var ns = UI.ns
+  var attachmentOuter = div.appendChild(dom.createElement('table'))
+  attachmentOuter.setAttribute('style','margin-top: 1em; margin-bottom: 1em;')
+  var attachmentOne = attachmentOuter.appendChild(dom.createElement('tr'))
+  var attachmentLeft = attachmentOne.appendChild(dom.createElement('td'))
+  var attachmentRight = attachmentOne.appendChild(dom.createElement('td'))
+  var attachmentTable = attachmentRight.appendChild(dom.createElement('table'))
+  var attachmentTableTop = attachmentTable.appendChild(dom.createElement('tr'))
+
+  var paperclip = attachmentLeft.appendChild(dom.createElement('img'))
+  paperclip.setAttribute('src', UI.icons.iconBase +  'noun_25830.svg')
+  paperclip.setAttribute('style', 'width; 2em; height: 2em; margin: 0.5em;')
+  paperclip.setAttribute('draggable', 'false')
+
+  var deleteAttachment = function(target){
+    kb.updater.update($rdf.st(subject, UI.ns.wf('attachment'), target, subject.doc()), [], function(uri, ok, error_body, xhr){
+      if (ok){
+        refresh()
+      } else {
+        complain('Error deleting attachment: ' + error_body)
+      }
+    })
+  }
+  var createNewRow = function(target){
+    var options = { deleteFunction: function(){deleteAttachment(target)}, noun: "attachment"}
+    return UI.widgets.personTR(dom, ns.wf('attachment'), target, options)
+  }
+  var refresh = attachmentTable.refresh = function(){
+    var things = kb.each(subject, UI.ns.wf('attachment'))
+    things.sort()
+    UI.utils.syncTableToArray(attachmentTable, things, createNewRow)
+  }
+  refresh()
+
+  var droppedURIHandler = function(uris){
+    var ins = []
+    uris.map(function (u) {
+      var target = $rdf.sym(u) // Attachment needs text label to disinguish I think not icon.
+      console.log('Dropped on attachemnt ' + u) // icon was: UI.icons.iconBase + 'noun_25830.svg'
+      ins.push($rdf.st(subject, UI.ns.wf('attachment'), target, subject.doc()))
+    })
+    kb.updater.update([], ins, function(uri, ok, error_body, xhr){
+      if (ok){
+        refresh()
+      } else {
+        complain('Error adding attachment: ' + error_body)
+      }
+    })
+  }
+  UI.widgets.makeDropTarget(attachmentLeft, droppedURIHandler)
+  return attachmentOuter
+}
+
+
+
 
 // ///////////////////////////////////////////////////////////////////////
 
@@ -976,14 +1092,6 @@ UI.widgets.fieldLabel = function (dom, property, form) {
 /*                      General purpose widgets
 **
 */
-
-UI.widgets.errorMessageBlock = function (dom, msg, backgroundColor) {
-  var div = dom.createElement('div')
-  div.setAttribute('style', 'margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; background-color: ' +
-    (backgroundColor || '#fee') + '; color:black;')
-  div.textContent = msg
-  return div
-}
 
 UI.widgets.bottomURI = function (x) {
   var kb = UI.store
@@ -1790,12 +1898,26 @@ UI.widgets.addStyleSheet = function(dom, href) {
   dom.getElementsByTagName("head")[0].appendChild(link)
 }
 
-// Figure (or guess) whether this is an immage
-// In future, containers may give content type information about contents too.
+// Figure (or guess) whether this is an image, etc
 //
-UI.widgets.isImage = function(file){
-  var imageExtensions = {'jpg': 1, 'png':1, 'jpeg':1, 'gif':1}
-  return  (UI.ns.dct('Image') in UI.store.findTypeURIs(file)
-        || file.uri.split('.').slice(-1)[0].toLowerCase() in imageExtensions) // @@cheating
+UI.widgets.isAudio = function(file){
+  return UI.widgets.isImage(file, 'audio')
+}
+UI.widgets.isVideo = function(file){
+  return UI.widgets.isImage(file, 'video')
+}
+UI.widgets.isImage = function(file, kind){
+  var dcCLasses = { 'audio': 'http://purl.org/dc/dcmitype/Sound',
+    'image': 'http://purl.org/dc/dcmitype/Image',
+    'video': 'http://purl.org/dc/dcmitype/MovingImage'
+  }
+  var what = kind || 'image'
+  var typeURIs = UI.store.findTypeURIs(file)
+  var prefix = $rdf.Util.mediaTypeClass( what + '/*').uri.split('*')[0]
+  for (var t in typeURIs) {
+    if (t.startsWith(prefix)) return true
+  }
+  if (dcCLasses[what] in typeURIs) return true
+  return false
 }
 // ends

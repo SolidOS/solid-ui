@@ -12,7 +12,7 @@ var tabs = {}
 module.exports = tabs
 
 var UI = {
-  icons: require('./iconBase.js'),
+  icons: require('./iconBase'),
   log: require('./log'),
   ns: require('./ns'),
   store: require('./store'),
@@ -96,7 +96,7 @@ UI.tabs.tabWidget = function(options){
   margins = margins.concat(margins).slice(orientation, orientation + 4)
   margins = 'margin: ' + margins.join(' ') + ';'
 
-  var tabStyle = corners  + 'padding: 0.7em;' //  border: 0.05em 0 0.5em 0.05em; border-color: grey;
+  var tabStyle = corners  + 'padding: 0.7em; max-width: 20em;' //  border: 0.05em 0 0.5em 0.05em; border-color: grey;
   var unselectedStyle = tabStyle + 'opacity: 50%; margin: 0.3em; background-color: #ddc;' // @@ rotate border
   var selectedStyle = tabStyle + margins + ' background-color: #eed;'
   var shownStyle = ''

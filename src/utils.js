@@ -8,10 +8,10 @@ var utilsModule = module.exports = {}
 
 var UI = {
   utils: utilsModule,
-  log: require('./log.js'),
-  ns: require('./ns.js'),
+  log: require('./log'),
+  ns: require('./ns'),
   rdf: require('rdflib'),
-  store: require('./store.js')
+  store: require('./store')
 }
 
 // Make pseudorandom color from a uri
@@ -86,7 +86,7 @@ if (UI.utils.audioContext) {
         var ctx = new(UI.utils.audioContext)
         return function (duration, frequency, type, finishedCallback) {
 
-            duration = + (duration | 0.3)
+            duration = + (duration || 0.3)
 
             // Only 0-4 are valid types.
             type = type || 'sine'; // sine, square, sawtooth, triangle
