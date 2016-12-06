@@ -7,7 +7,7 @@ if (module.scriptURI) { // FF extension
     module.exports.originalIconBase  = '' +
       module.scriptURI.slice(0, module.scriptURI.lastIndexOf('/')) + '/originalIcons/'
 } else { // Node or browserify
-  var iconsOnGithub = 'https://linkeddata.github.io/solid-ui/static'
+  var iconsOnGithub = 'https://melvincarvalho.github.io/solid-ui/static'
 
   if (typeof $SolidTestEnvironment !== 'undefined' && $SolidTestEnvironment.iconBase ){
     module.exports.iconBase = $SolidTestEnvironment.iconBase
