@@ -20,10 +20,12 @@ import { iconBase } from '../iconBase'
 import ns from '../ns'
 import kb from '../store'
 
+const vcard = ns.vcard
+
 export class PeoplePicker {
-  constructor (element, typeIndexUrl, groupPickedCb, selectedGroupNode) {
+  constructor (element, typeIndex, groupPickedCb, selectedGroupNode) {
     this.element = element
-    this.typeIndexUrl = typeIndexUrl
+    this.typeIndex = typeIndex
     this.groupPickedCb = groupPickedCb
     this.selectedGroupNode = selectedGroupNode
     this.onSelectGroup = this.onSelectGroup.bind(this)
@@ -49,24 +51,24 @@ export class PeoplePicker {
       container.appendChild(selectedGroup)
       container.appendChild(changeGroupButton)
     } else {
-      this.findGroupIndex(this.typeIndexUrl)
-        .then(({bookBaseUrl}) => {
+      this.findGroupIndex(this.typeIndex)
+        .then(({book}) => {
           const chooseExistingGroupButton = document.createElement('button')
           chooseExistingGroupButton.textContent = escape('Pick an existing group')
           chooseExistingGroupButton.style.margin = 'auto'
           chooseExistingGroupButton.addEventListener('click', event => {
-            new GroupPicker(container, bookBaseUrl, this.onSelectGroup).render()
+            new GroupPicker(container, book, this.onSelectGroup).render()
           })
 
           const createNewGroupButton = document.createElement('button')
           createNewGroupButton.textContent = escape('Create a new group')
           createNewGroupButton.style.margin = 'auto'
           createNewGroupButton.addEventListener('click', event => {
-            this.createNewGroup(bookBaseUrl)
+            this.createNewGroup(book)
               .then(({groupNode, graphNode}) => {
                 new GroupBuilder(
                   this.element,
-                  bookBaseUrl,
+                  book,
                   graphNode,
                   groupNode,
                   this.onSelectGroup
@@ -97,9 +99,9 @@ export class PeoplePicker {
     return this
   }
 
-  findGroupIndex (typeIndexUrl) {
+  findGroupIndex (typeIndex) {
     return new Promise((resolve, reject) => {
-      kb.fetcher.nowOrWhenFetched(typeIndexUrl, (ok, err) => {
+      kb.fetcher.nowOrWhenFetched(typeIndex, (ok, err) => {
         if (!ok) {
           return reject(err)
         }
@@ -118,34 +120,31 @@ export class PeoplePicker {
           reject(new Error('incomplete address book registration'))
         }
         // We've found an address book
-        const bookUrl = instance[0].object.value
-        const bookBaseUrl = bookUrl.replace(/book\.ttl(#.*)?$/, '')
-        return resolve({bookBaseUrl})
+        const book = instance[0].object
+        // const bookBase = book.dir()
+        return resolve({book})
       })
     })
   }
 
-  createNewGroup (bookBaseUrl) {
-    const {groupIndexUrl, groupContainerUrl, bookIndexUrl} = bookUrls(bookBaseUrl)
-    const groupIndexNode = rdf.namedNode(groupIndexUrl)
-    const graphUrl = `${groupContainerUrl}${uuid.v4().slice(0, 8)}.ttl`
-    const graphNode = rdf.namedNode(graphUrl)
-    const groupNode = rdf.namedNode(`${graphUrl}#this`)
+  createNewGroup (book) {
+    const {groupIndexNode, groupContainer} = indexes(book)
+    const groupNode = rdf.sym(`${groupContainer.uri}${uuid.v4().slice(0, 8)}.ttl#this`)
+
     // NOTE that order matters here.  Unfortunately this type of update is
     // non-atomic in that solid requires us to send two PATCHes, either of which
     // might fail.
-    const patchPromises = [graphNode, groupIndexNode]
+    const patchPromises = [group.doc(), groupIndexNode]
       .map(namedGraph => {
-        const typeStatement = rdf.st(groupNode, ns.rdf('type'), ns.vcard('Group'))
-        const nameStatement = rdf.st(groupNode, ns.vcard('fn'), rdf.literal('Untitled Group'))
-        const includesGroupStatement = rdf.st(rdf.namedNode(`${bookIndexUrl}#this`), ns.vcard('includesGroup'), groupNode)
+        const typeStatement = rdf.st(groupNode, ns.rdf('type'), ns.vcard('Group'), namedGraph)
+        const nameStatement = rdf.st(groupNode, ns.vcard('fn'), rdf.literal('Untitled Group'), namedGraph)
+        const includesGroupStatement = rdf.st(book, ns.vcard('includesGroup'), groupNode, namedGraph)
         const toIns = namedGraph.equals(groupIndexNode)
           ? [typeStatement, nameStatement, includesGroupStatement]
           : [typeStatement, nameStatement]
         return patch(namedGraph.value, {toIns})
           .then(() => {
             toIns.forEach(st => {
-              st.why = namedGraph
               kb.add(st)
             })
           })
@@ -165,9 +164,9 @@ export class PeoplePicker {
 }
 
 export class GroupPicker {
-  constructor (element, bookBaseUrl, onSelectGroup) {
+  constructor (element, book, onSelectGroup) {
     this.element = element
-    this.bookBaseUrl = bookBaseUrl
+    this.book = book
     this.onSelectGroup = onSelectGroup
   }
 
@@ -197,13 +196,13 @@ export class GroupPicker {
 
   loadGroups () {
     return new Promise((resolve, reject) => {
-      const {bookIndexUrl, groupIndexUrl} = bookUrls(this.bookBaseUrl)
-      kb.fetcher.nowOrWhenFetched(groupIndexUrl, (ok, err) => {
+      const {groupIndex} = indexes(this.book)
+      kb.fetcher.nowOrWhenFetched(groupIndex, (ok, err) => {
         if (!ok) {
           return reject(err)
         }
         const groupNodes = kb.match(
-          rdf.namedNode(`${bookIndexUrl}#this`),
+          this.book,
           ns.vcard('includesGroup')
         ).map(st => st.object)
         return resolve(groupNodes)
@@ -236,9 +235,9 @@ export class Group {
 }
 
 export class GroupBuilder {
-  constructor (element, bookBaseUrl, groupGraph, groupNode, doneBuildingCb, groupChangedCb) {
+  constructor (element, book, groupGraph, groupNode, doneBuildingCb, groupChangedCb) {
     this.element = element
-    this.bookBaseUrl = bookBaseUrl
+    this.book = book
     this.groupGraph = groupGraph
     this.groupNode = groupNode
     this.onGroupChanged = (err, changeType, agent) => {
@@ -369,8 +368,8 @@ export class GroupBuilder {
   }
 
   setGroupName (name) {
-    const {groupIndexUrl} = bookUrls(this.bookBaseUrl)
-    const updatePromises = [this.groupGraph, rdf.namedNode(groupIndexUrl)]
+    const {groupIndex} = indexes(this.book)
+    const updatePromises = [this.groupGraph, groupIndex]
       .map(namedGraph => {
         const oldNameStatements = kb.match(this.groupNode, ns.vcard('fn'), null, namedGraph)
         const newNameStatement = rdf.st(this.groupNode, ns.vcard('fn'), rdf.literal(name))
@@ -447,10 +446,10 @@ function patch (url, {toDel, toIns}) {
     })
 }
 
-function bookUrls (bookBaseUrl) {
+function indexes (book) {
   return {
-    bookIndexUrl: `${bookBaseUrl}book.ttl`,
-    groupIndexUrl: `${bookBaseUrl}groups.ttl`,
-    groupContainerUrl: `${bookBaseUrl}Group/`
+    //bookIndex: book,
+    groupIndex: kb.any(book, ns.vcard('groupIndex')),
+    groupContainer: kb.sym(book.dir().uri + 'Group/')
   }
 }

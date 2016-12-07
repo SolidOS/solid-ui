@@ -143,7 +143,7 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
       var ns = UI.ns
       var obj = $rdf.sym(uri)
       var types = kb.findTypeURIs(obj)
-      for (ty in types) {
+      for (var ty in types) {
         console.log('    drop object type includes: ' + ty)
       }
       if (uri.split('/').length === 4 && !(uri.split('/')[1]) && !(uri.split('/')[3])) {

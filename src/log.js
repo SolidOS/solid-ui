@@ -70,8 +70,8 @@ var wrapper = function(){
   logger.clear = function(){
       var x = document.getElementById('status');
       if (!x) return;
-      //x.innerHTML = "";
-      emptyNode(x);
+      x.innerHTML = '';
+      // emptyNode(x);
   } //clearStatus
 
   /** set the logging level **/
@@ -79,23 +79,6 @@ var wrapper = function(){
       logger.level = TALL;
       logger.debug("Log level is now "+x);
       logger.level = x;
-  }
-
-  logger.dumpStore = function(){
-      var l = logger.level
-      if (1) { // For Henry Story
-          var sz = Serializer();
-          //sz.suggestNamespaces(kb.namespaces);
-          str = sz.statementsToN3(kb.statements);
-          logger.level = TALL;
-          logger.debug('\n'+str);
-      } else {  // crude
-          logger.level = TALL;
-          logger.debug("\nStore:\n" + kb + "__________________\n");
-          logger.debug("subject index: " + kb.subjectIndex[0] + kb.subjectIndex[1]);
-          logger.debug("object index: " + kb.objectIndex[0] + kb.objectIndex[1]);
-      }
-      logger.level = l;
   }
 
   logger.dumpHTML = function(){

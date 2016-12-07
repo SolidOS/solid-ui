@@ -1,6 +1,20 @@
 //  Common code for a discussion are a of messages about something
 //
 
+
+var UI = {
+  icons: require('./iconBase'),
+  log: require('./log'),
+  ns: require('./ns'),
+  pad: require('./'),
+  rdf: require('rdflib'),
+  store: require('./store'),
+  utils: require('./utils'),
+  widgets: require('./widgets')
+}
+
+var kb = UI.store
+
 module.exports = function (dom, kb, subject, messageStore, options) {
   kb = kb || UI.kb
   var ns = UI.ns

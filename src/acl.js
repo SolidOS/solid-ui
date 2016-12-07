@@ -13,7 +13,7 @@ var UI = {
   widgets: require('./widgets')
 }
 
-
+var kb = UI.store
 
 // //////////////////////////////////// Solid ACL non-UI functions
 //
@@ -144,7 +144,7 @@ UI.acl.loadUnionACL = function (subjectList, callback) {
   var aclList = []
   var doList = function (list) {
     if (list.length) {
-      doc = list.shift().doc()
+      var doc = list.shift().doc()
       UI.acl.getACLorDefault(doc, function (ok, p2, targetDoc, targetACLDoc, defaultHolder, defaultACLDoc) {
         var defa = !p2
         if (!ok) return callback(ok, targetACLDoc)
@@ -192,7 +192,7 @@ UI.acl.makeACLGraph = function (kb, x, ac, aclDoc) {
 //
 UI.acl.makeACLGraphbyCombo = function (kb, x, byCombo, aclDoc, main, defa) {
   var ACL = UI.ns.acl
-  for (combo in byCombo) {
+  for (var combo in byCombo) {
     var modeURIs = combo.split('\n')
     var short = modeURIs.map(function (u) {return u.split('#')[1]}).join('')
     if (defa && !main) short += 'Default'; // don't muddle authorizations
@@ -223,13 +223,13 @@ UI.acl.ACLToString = function (ac) {
     UI.widgets.ACLbyCombination(ac))
 }
 UI.acl.comboToString = function (byCombo) {
-  str = ''
-  for (combo in byCombo) {
+  var str = ''
+  for (var combo in byCombo) {
     var modeURIs = combo.split('\n')
     var initials = modeURIs.map(function (u) {return u.split('#')[1][0]}).join('')
     str += initials + ':'
     var pairs = byCombo[combo]
-    for (i = 0; i < pairs.length; i++) {
+    for (var i = 0; i < pairs.length; i++) {
       var pred = pairs[i][0], ag = $rdf.sym(pairs[i][1])
       str += (pred === 'agent') ? '@' : ''
       str += (ag.sameTerm(UI.ns.foaf('Agent')) ? '*'
@@ -320,7 +320,7 @@ UI.acl.setACL = function (docURI, aclText, callback) {
   var aclDoc = kb.any(kb.sym(docURI),
     kb.sym('http://www.iana.org/assignments/link-relations/acl')); // @@ check that this get set by web.js
   if (aclDoc) { // Great we already know where it is
-    webOperation('PUT', aclDoc.uri, { data: aclText, contentType: 'text/turtle'}, callback)
+    kb.fetcher.webOperation('PUT', aclDoc.uri, { data: aclText, contentType: 'text/turtle'}).then(callback) // @@@ check params
   } else {
     fetcher.nowOrWhenFetched(docURI, undefined, function (ok, body) {
       if (!ok) return callback(ok, 'Gettting headers for ACL: ' + body)
@@ -330,7 +330,7 @@ UI.acl.setACL = function (docURI, aclText, callback) {
         // complainIfBad(false, "No Link rel=ACL header for " + docURI)
         callback(false, 'No Link rel=ACL header for ' + docURI)
       } else {
-        webOperation('PUT', aclDoc.uri, { data: aclText, contentType: 'text/turtle'}, callback)
+        kb.fetcher.webOperation('PUT', aclDoc.uri, { data: aclText, contentType: 'text/turtle'}).then(callback)
       }
     })
   }

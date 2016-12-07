@@ -314,13 +314,13 @@ UI.utils.parse_headers = function (headers) {
   var lines = headers.split('\n')
   var headers = {}
   for (var i = 0; i < lines.length; i++) {
-    var line = webdav._strip(lines[i])
+    var line = lines[i].trim()
     if (line.length == 0) {
       continue
     }
     var chunks = line.split(':')
-    var hkey = webdav._strip(chunks.shift()).toLowerCase()
-    var hval = webdav._strip(chunks.join(':'))
+    var hkey = chunks.shift().trim().toLowerCase()
+    var hval = chunks.join(':')
     if (headers[hkey] !== undefined) {
       headers[hkey].push(hval)
     } else {
@@ -340,6 +340,17 @@ UI.utils.shortName = function (uri) {
     namespaces[this.prefixes[ns]] = ns // reverse index
   }
   var pok
+  function canUse(pp) {
+    //if (!__Serializer.prototype.validPrefix.test(pp)) return false; // bad format
+    if (pp === 'ns') return false; // boring
+    // if (pp in this.namespaces) return false; // already used
+    // this.prefixes[uri] = pp;
+    // this.namespaces[pp] = uri;
+    pok = pp;
+    return true;
+  }
+  canUse = canUse.bind(this);
+
   var hash = p.lastIndexOf('#')
   if (hash >= 0) p = p.slice(hash - 1) // lop off localid
   for (;;) {

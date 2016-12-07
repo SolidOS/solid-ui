@@ -39,8 +39,6 @@ function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
           text = e.dataTransfer.getData(type)
         } else if (type === 'Files' && droppedFileHandler) {
           var files = e.dataTransfer.files; // FileList object.
-          // files is a FileList of File objects. List some properties.
-          // https://www.html5rocks.com/en/tutorials/file/dndfiles/
           for (var i = 0, f; f = files[i]; i++) {
             console.log("Filename: " + f.name + ", type: " + (f.type || 'n/a') +
               " size: " + f.size + ' bytes, last modified: ' +
@@ -63,6 +61,7 @@ function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
     if (uris) {
       droppedURIHandler(uris)
     }
+    this.style.backgroundColor = 'white' // restore style
     return false
   } // dropListener
 

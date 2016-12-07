@@ -267,6 +267,7 @@ UI.pad.notepad  = function (dom, padDoc, subject, me, options) {
     var addListeners = function(part, chunk) {
 
         part.addEventListener('keydown', function(event){
+            var queueProperty, queue
             //  up 38; down 40; left 37; right 39     tab 9; shift 16; escape 27
             switch(event.keyCode) {
             case 13:                    // Return
@@ -343,10 +344,10 @@ UI.pad.notepad  = function (dom, padDoc, subject, me, options) {
 
         var updateStore = function(part) {
             var chunk = part.subject;
-            setPartStyle(part, undefined, true);
-            var old = kb.any(chunk, ns.sioc('content')).value, color;
-            del = [ $rdf.st(chunk, ns.sioc('content'), old, padDoc)];
-            ins = [ $rdf.st(chunk, ns.sioc('content'), part.value, padDoc)];
+            setPartStyle(part, undefined, true)
+            var old = kb.any(chunk, ns.sioc('content')).value
+            var del = [ $rdf.st(chunk, ns.sioc('content'), old, padDoc)]
+            var ins = [ $rdf.st(chunk, ns.sioc('content'), part.value, padDoc)]
             var newOne = part.value;
 
             // DEBUGGING ONLY
@@ -479,8 +480,8 @@ UI.pad.notepad  = function (dom, padDoc, subject, me, options) {
         var chunk = UI.widgets.newThing(padDoc);
         var label = chunk.uri.slice(-4)
 
-        del = [ $rdf.st(prev, PAD('next'), next, padDoc)];
-        ins = [ $rdf.st(prev, PAD('next'), chunk, padDoc),
+        var del = [ $rdf.st(prev, PAD('next'), next, padDoc)];
+        var ins = [ $rdf.st(prev, PAD('next'), chunk, padDoc),
                 $rdf.st(chunk, PAD('next'), next, padDoc),
                 $rdf.st(chunk, ns.dc('author'), me, padDoc),
                 $rdf.st(chunk, ns.sioc('content'), '', padDoc)];
@@ -689,7 +690,7 @@ UI.pad.notepad  = function (dom, padDoc, subject, me, options) {
 
         updater.update([], insertables, function(uri,ok,error_body){
             if (!ok) {
-                complainIfBad(ok, error_body);
+                complain(error_body);
             } else {
                 console.log("Initial pad created");
                 newChunk(); // Add a first chunck
