@@ -5,7 +5,8 @@
   "main": "./lib/index.js",
   "files": [
     "lib",
-    "dist"
+    "dist",
+    "static"
   ],
   "scripts": {
     "build-lib": "babel src -d lib",
