@@ -11,12 +11,12 @@ var $rdf = require('rdflib')
 // This used to be a faw function (no ".expand" but that caused the module exports all to be dropped)
 thisModule.expand = function (prefixed) {
   var pair = prefixed.split(':')
-  if (pair.length === 0) throw 'Prefixed name has no colon: ' + prefixed
-  if (!(pair[0] in thisModule)) throw 'Unregistered namespace prefix in: ' + prefixed
+  if (pair.length === 0) throw new Error('Prefixed name has no colon: ' + prefixed)
+  if (!(pair[0] in thisModule)) throw new Error('Unregistered namespace prefix in: ' + prefixed)
   return thisModule[pair[0]](pair[1])
 }
 
-thisModule.auth = $rdf.Namespace('http://www.w3.org/ns/auth/acl#'); // @@ obsolete - use acl:
+thisModule.auth = $rdf.Namespace('http://www.w3.org/ns/auth/acl#') // @@ obsolete - use acl:
 thisModule.acl = $rdf.Namespace('http://www.w3.org/ns/auth/acl#')
 thisModule.arg = $rdf.Namespace('http://www.w3.org/ns/pim/arg#')
 thisModule.cal = $rdf.Namespace('http://www.w3.org/2002/12/cal/ical#')
@@ -42,7 +42,7 @@ thisModule.rdf = $rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 thisModule.rdfs = $rdf.Namespace('http://www.w3.org/2000/01/rdf-schema#')
 thisModule.rss = $rdf.Namespace('http://purl.org/rss/1.0/')
 thisModule.sched = $rdf.Namespace('http://www.w3.org/ns/pim/schedule#')
-thisModule.schema = $rdf.Namespace('http:/schema.org/'); // @@ beware confusion with documents no 303
+thisModule.schema = $rdf.Namespace('http:/schema.org/') // @@ beware confusion with documents no 303
 thisModule.sioc = $rdf.Namespace('http://rdfs.org/sioc/ns#')
 // was - thisModule.xsd = $rdf.Namespace('http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#dt-')
 thisModule.solid = $rdf.Namespace('http://www.w3.org/ns/solid/terms#')
