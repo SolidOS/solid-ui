@@ -898,6 +898,7 @@ UI.widgets.field[UI.ns.ui('Choice').uri] = function (
   }
   var subForm = kb.any(form, ui('use')) // Optional
   var possible = []
+  var possibleProperties
   var opts = { 'multiple': multiple, 'nullLabel': np, 'disambiguate': false }
   possible = kb.each(undefined, ns.rdf('type'), from)
   for (var x in kb.findMembersNT(from)) {
@@ -1887,7 +1888,7 @@ UI.widgets.index.twoLine['http://www.w3.org/ns/pim/trip#Trip'] = function (dom, 
 // Stick a stylesheet link the document if not already there
 UI.widgets.addStyleSheet = function(dom, href) {
   var links = dom.querySelectorAll('link');
-  for (i=0; i<links.length; i++){
+  for (var i=0; i<links.length; i++){
     if ((links[i].getAttribute('rel') ||'') === 'stylesheet'
     && (links[i].getAttribute('href') ||'') === href ) return ;
   }

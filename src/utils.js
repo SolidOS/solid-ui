@@ -491,15 +491,27 @@ UI.utils.label = function (x, initialCap) { // x is an object
   }
   var s = x.uri
   if (typeof s == 'undefined') return x.toString(); // can't be a symbol
-  s = decodeURI(s)
-  if (s.slice(-5) == '#this') s = s.slice(0, -5)
-  else if (s.slice(-3) == '#me') s = s.slice(0, -3)
+  // s = decodeURI(s) // This can crash is random valid @ signs are presentation
+  // The idea was to clean up eg URIs encoded in query strings
+  // Also encoded character in what was filenames like @ [] {}
+  try{
+    s = s.split('/').map(decodeURIComponent).join('/') // If it is properly encoded
+  } catch(e){ // try individual decoding of ASCII code points
+    for (var i =s.length - 3; i > 0; i --) {
+      const hex = '0123456789abcefABCDEF' // The while upacks multiple layers of encoding
+      while (s[i] === '%' && hex.indexOf(s[i+1]) >=0 && hex.indexOf(s[i+2]) >=0 ) {
+        s = s.slice(0, i) +  String.fromCharCode(parseInt(s.slice(i+1, i+3), 16)) + s.slice(i+3)
+      }
+    }
+  }
+  if (s.slice(-5) === '#this') s = s.slice(0, -5)
+  else if (s.slice(-3) === '#me') s = s.slice(0, -3)
 
   var hash = s.indexOf('#')
   if (hash >= 0) return cleanUp(s.slice(hash + 1))
 
-  if (s.slice(-9) == '/foaf.rdf') s = s.slice(0, -9)
-  else if (s.slice(-5) == '/foaf') s = s.slice(0, -5)
+  if (s.slice(-9) === '/foaf.rdf') s = s.slice(0, -9)
+  else if (s.slice(-5) === '/foaf') s = s.slice(0, -5)
 
   if (1) { //   Eh? Why not do this? e.g. dc:title needs it only trim URIs, not rdfs:labels
     var slash = s.lastIndexOf('/', s.length - 2); // (len-2) excludes trailing slash
