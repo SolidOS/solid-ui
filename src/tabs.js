@@ -141,7 +141,7 @@ UI.tabs.tabWidget = function(options){
       } else {
         if (bodyDiv.asSetttings !== false){
           bodyDiv.innerHTML = 'loading item ...' + item
-          options.showMain(bodyDiv, ele.subject)
+          options.renderMain(bodyDiv, ele.subject)
           bodyDiv.asSetttings = false
         }
       }

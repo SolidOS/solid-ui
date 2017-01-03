@@ -239,7 +239,7 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
           }
         }
         var tr = middleTable.appendChild(
-          UI.widgets.personTR(dom, $rdf.sym(pred), $rdf.sym(obj), opt))
+          UI.widgets.personTR(dom, ACL(pred), $rdf.sym(obj), opt))
         tr.predObj = [pred.uri, obj.uri]
 
       }

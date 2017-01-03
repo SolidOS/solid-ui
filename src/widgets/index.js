@@ -33,7 +33,7 @@ var UI = {
   utils: require('../utils'),
   widgets: widgets
 }
-//var UI.ns = require('./ns.js')
+// var UI.ns = require('./ns.js')
 // var utilsModule = require('./utils')
 // var aclControlModule = require('./acl-control')
 
@@ -133,7 +133,6 @@ UI.widgets.setImage = function (element, x) {
   var kb = UI.store
   var ns = UI.ns
   var iconDir = UI.icons.iconBase
-  var fallback = iconDir + 'noun_10636_grey.svg' // Circle -  some thing
   var findImage = function (x) {
     if (x.sameTerm(ns.foaf('Agent')) || x.sameTerm(ns.rdf('Resource'))) {
       return iconDir + 'noun_98053.svg' // Globe
@@ -165,29 +164,32 @@ UI.widgets.setImage = function (element, x) {
       return iconDir + 'noun_143899.svg' // Org r or Com
     }
     if (ns.vcard('Individual').uri in types ||
-        ns.foaf('Person').uri in types) {
+      ns.foaf('Person').uri in types) {
       return iconDir + 'noun_15059.svg' // Person
     }
     if (ns.vcard('AddressBook').uri in types) {
       return iconDir + 'noun_15695.svg'
     }
     // http://www.w3.org/ns/pim/trip#Trip
-    if ("http://www.w3.org/ns/pim/trip#Trip" in types) {
+    if ('http://www.w3.org/ns/pim/trip#Trip' in types) {
       return iconDir + 'noun_581629.svg' // Plane taking off
     }
     if (ns.meeting('Meeting').uri in types) {
       return iconDir + 'noun_66617.svg'
     }
     // Non-HTTP URI types imply types
-    if (x.uri.startsWith('message:') || x.uri.startsWith('mid:')){ // message: is aapple bug-- should be mid:
+    if (x.uri.startsWith('message:') || x.uri.startsWith('mid:')) { // message: is aapple bug-- should be mid:
       return iconDir + 'noun_480183.svg' // envelope  noun_567486
     }
-    if (x.uri.startsWith('mailto:')){
+    if (x.uri.startsWith('mailto:')) {
       return iconDir + 'noun_567486.svg' // mailbox - an email desitination
     }
     // For HHTP(s) documents, we could look at teh MIME type if we know it.
-    if (x.uri.startsWith('http') && (x.uri.indexOf('#') < 0)){
-      return iconDir + 'noun_681601.svg' // document - under solid assumptions
+    if (x.uri.startsWith('http') && (x.uri.indexOf('#') < 0)) {
+      return x.site().uri + 'favicon.ico'
+      // Todo: make the docuent icon a fallback for if the favicon does not exist
+      // todo: pick up a possible favicon for the web page istelf from a link
+      // was: return iconDir + 'noun_681601.svg' // document - under solid assumptions
     }
     return iconDir + 'noun_10636_grey.svg' // Circle -  some thing
   }
@@ -201,6 +203,23 @@ UI.widgets.setImage = function (element, x) {
   }
 }
 
+// If a web page then a favicon with a fallback to
+// See eg http://stackoverflow.com/questions/980855/inputting-a-default-image
+var faviconOrDefault = function(dom, x){
+  var image = dom.createElement('img')
+  image.setAttribute('src',  UI.icons.iconBase + 'noun_681601.svg') // document
+  if (x.uri.startsWith('http') && (x.uri.indexOf('#') < 0)) {
+    var res = dom.createElement('object')
+    res.setAttribute('data', x.site().uri + 'favicon.ico')
+    res.setAttribute('type', 'image/x-icon')
+    res.appendChild(image) // fallback
+    return res
+  } else {
+    UI.widgets.setImage(image, obj)
+    return image
+  }
+}
+
 // Delete button with a check you really mean it
 //
 //   @@ Supress check if command key held down?
@@ -208,7 +227,7 @@ UI.widgets.setImage = function (element, x) {
 UI.widgets.deleteButtonWithCheck = function (dom, container, noun, deleteFunction) {
   var minusIconURI = UI.icons.iconBase + 'noun_2188_red.svg' // white minus in red #cc0000 circle
 
-  //var delButton = dom.createElement('button')
+  // var delButton = dom.createElement('button')
 
   var img = dom.createElement('img')
   img.setAttribute('src', minusIconURI) //  plus sign
@@ -240,15 +259,12 @@ UI.widgets.deleteButtonWithCheck = function (dom, container, noun, deleteFunctio
   return delButton
 }
 
-//////////////////////////////////////// Frab a name for a new thing
-
-
-
+// ////////////////////////////////////// Frab a name for a new thing
 
 // Form to get the name of a new thing before we create it
 // Returns a promise of (a name or null if cancelled)
 UI.widgets.askName = function (dom, kb, container, predicate, klass) {
-  return new Promise(function(resolve, reject){
+  return new Promise(function (resolve, reject) {
     var form = dom.createElement('div') // form is broken as HTML behaviour can resurface on js error
     // classLabel = UI.utils.label(ns.vcard('Individual'))
     predicate = predicate || UI.ns.foaf('name')
@@ -296,21 +312,20 @@ UI.widgets.askName = function (dom, kb, container, predicate, klass) {
   }) // Promise
 }
 
-
-//////////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////
 
 // A little link icon
 //
 //
-UI.widgets.linkIcon = function(dom, subject, iconURI){
+UI.widgets.linkIcon = function (dom, subject, iconURI) {
   var anchor = dom.createElement('a')
   anchor.setAttribute('href', subject.uri)
-  if (subject.uri.startsWith('http')){ // If diff web page
+  if (subject.uri.startsWith('http')) { // If diff web page
     anchor.setAttribute('target', '_blank') // open in a new tab or window
   } // as mailboxes and mail messages do not need new browser window
   var img = anchor.appendChild(dom.createElement('img'))
   img.setAttribute('src', iconURI || (UI.icons.originalIconBase + 'go-to-this.png'))
-  img.setAttribute('style','margin: 0.3em;')
+  img.setAttribute('style', 'margin: 0.3em;')
   return anchor
 }
 
@@ -326,15 +341,17 @@ UI.widgets.personTR = function (dom, pred, obj, options) {
   var td2 = tr.appendChild(dom.createElement('td'))
   var td3 = tr.appendChild(dom.createElement('td'))
 
-  var agent = obj
-  var image = td1.appendChild(dom.createElement('img'))
-  td1.setAttribute('style', 'vertical-align: middle; width:4em; padding:0.5em; height: 4em;')
+  // var image = td1.appendChild(dom.createElement('img'))
+  var image = faviconOrDefault(dom, obj)
+
+  td1.setAttribute('style', 'vertical-align: middle; width:2.5em; padding:0.5em; height: 2.5em;')
   td2.setAttribute('style', 'vertical-align: middle; text-align:left;')
   td3.setAttribute('style', 'vertical-align: middle; width:2em; padding:0.5em; height: 4em;')
   image.setAttribute('style', 'width: 3em; height: 3em; margin: 0.1em; border-radius: 1em;')
-  UI.widgets.setImage(image, agent)
+  td1.appendChild(image)
+  // UI.widgets.setImage(image, obj)
 
-  UI.widgets.setName(td2, agent)
+  UI.widgets.setName(td2, obj)
   if (options.deleteFunction) {
     UI.widgets.deleteButtonWithCheck(dom, td3, options.noun || 'one', options.deleteFunction)
   }
@@ -352,11 +369,16 @@ UI.widgets.personTR = function (dom, pred, obj, options) {
 
 // List of attachments accepting drop
 
-UI.widgets.attachmentList = function(dom, subject, div){
+UI.widgets.attachmentList = function (dom, subject, div, options) {
+  options = options || {}
+  var promptIcon = options.promptIcon || (UI.icons.iconBase + 'noun_748003.svg') //    target
+  // var promptIcon = options.promptIcon || (UI.icons.iconBase + 'noun_25830.svg') //  paperclip
+  var predicate = options.predicate || UI.ns.wf('attachment')
+  var noun = options.noun || 'attachment'
   var kb = UI.store
   var ns = UI.ns
   var attachmentOuter = div.appendChild(dom.createElement('table'))
-  attachmentOuter.setAttribute('style','margin-top: 1em; margin-bottom: 1em;')
+  attachmentOuter.setAttribute('style', 'margin-top: 1em; margin-bottom: 1em;')
   var attachmentOne = attachmentOuter.appendChild(dom.createElement('tr'))
   var attachmentLeft = attachmentOne.appendChild(dom.createElement('td'))
   var attachmentRight = attachmentOne.appendChild(dom.createElement('td'))
@@ -364,39 +386,40 @@ UI.widgets.attachmentList = function(dom, subject, div){
   var attachmentTableTop = attachmentTable.appendChild(dom.createElement('tr'))
 
   var paperclip = attachmentLeft.appendChild(dom.createElement('img'))
-  paperclip.setAttribute('src', UI.icons.iconBase +  'noun_25830.svg')
+  paperclip.setAttribute('src', promptIcon)
   paperclip.setAttribute('style', 'width; 2em; height: 2em; margin: 0.5em;')
   paperclip.setAttribute('draggable', 'false')
 
-  var deleteAttachment = function(target){
-    kb.updater.update($rdf.st(subject, UI.ns.wf('attachment'), target, subject.doc()), [], function(uri, ok, error_body, xhr){
-      if (ok){
+  var deleteAttachment = function (target) {
+    kb.updater.update($rdf.st(subject, predicate, target, subject.doc()), [], function (uri, ok, error_body, xhr) {
+      if (ok) {
         refresh()
       } else {
         complain('Error deleting attachment: ' + error_body)
       }
     })
   }
-  var createNewRow = function(target){
-    var options = { deleteFunction: function(){deleteAttachment(target)}, noun: "attachment"}
-    return UI.widgets.personTR(dom, ns.wf('attachment'), target, options)
+  var createNewRow = function (target) {
+    var theTarget = target
+    var opt = { deleteFunction: function () {deleteAttachment(theTarget)}, noun: noun}
+    return UI.widgets.personTR(dom, predicate, target, opt)
   }
-  var refresh = attachmentTable.refresh = function(){
-    var things = kb.each(subject, UI.ns.wf('attachment'))
+  var refresh = attachmentTable.refresh = function () {
+    var things = kb.each(subject, predicate)
     things.sort()
     UI.utils.syncTableToArray(attachmentTable, things, createNewRow)
   }
   refresh()
 
-  var droppedURIHandler = function(uris){
+  var droppedURIHandler = function (uris) {
     var ins = []
     uris.map(function (u) {
       var target = $rdf.sym(u) // Attachment needs text label to disinguish I think not icon.
       console.log('Dropped on attachemnt ' + u) // icon was: UI.icons.iconBase + 'noun_25830.svg'
-      ins.push($rdf.st(subject, UI.ns.wf('attachment'), target, subject.doc()))
+      ins.push($rdf.st(subject, predicate, target, subject.doc()))
     })
-    kb.updater.update([], ins, function(uri, ok, error_body, xhr){
-      if (ok){
+    kb.updater.update([], ins, function (uri, ok, error_body, xhr) {
+      if (ok) {
         refresh()
       } else {
         complain('Error adding attachment: ' + error_body)
@@ -406,9 +429,6 @@ UI.widgets.attachmentList = function(dom, subject, div){
   UI.widgets.makeDropTarget(attachmentLeft, droppedURIHandler)
   return attachmentOuter
 }
-
-
-
 
 // ///////////////////////////////////////////////////////////////////////
 
@@ -435,7 +455,7 @@ UI.widgets.field[UI.ns.ui('Form').uri] =
       UI.outline.appendPropertyTRs(box, plist)
       return box
     }
-    // box.appendChild(dom.createTextNode("Group: first time, key: "+key))
+    // box.appendChild(dom.createTextNode('Group: first time, key: '+key))
     var already2 = {}
     for (var x in already) already2[x] = 1
     already2[key] = 1
@@ -527,7 +547,7 @@ UI.widgets.field[UI.ns.ui('Options').uri] = function (
         var field = kb.the(c, ui('use'))
         if (!field) {
           box.appendChild(UI.widgets.errorMessageBlock(dom,
-            "No 'use' part for case in form " + form))
+            'No "use" part for case in form ' + form))
           return box
         } else {
           UI.widgets.appendForm(dom, box, already, subject, field, store, callback)
@@ -606,11 +626,11 @@ UI.widgets.field[UI.ns.ui('Multiple').uri] = function (
     var subField = fn(dom, body, already, object, element, store, itemDone)
 
     // delete button
-    var deleteItem = function(){
+    var deleteItem = function () {
       if (kb.holds(subject, property, object)) {
         var del = [$rdf.st(subject, property, object, store)]
-        kb.updater.update(del, [], function(uri, ok, message){
-          if(ok){
+        kb.updater.update(del, [], function (uri, ok, message) {
+          if (ok) {
             body.removeChild(subField)
           } else {
             body.appendChild(UI.widgets.errorMessageBlock(dom, 'Multiple: delete failed: ' + message))
@@ -627,8 +647,8 @@ UI.widgets.field[UI.ns.ui('Multiple').uri] = function (
 
   values.map(function (obj) { addItem(null, obj) })
   var extra = min - values.length
-  for (var j=0; j < extra; j++) {
-    console.log("Adding extra: min " + min )
+  for (var j = 0; j < extra; j++) {
+    console.log('Adding extra: min ' + min)
     addItem() // Add blanks if less than minimum
   }
 
@@ -680,8 +700,8 @@ UI.widgets.fieldParams[UI.ns.ui('FloatField').uri] = {
 UI.widgets.fieldParams[UI.ns.ui('FloatField').uri].pattern =
   /^\s*-?[0-9]*(\.[0-9]*)?((e|E)-?[0-9]*)?\s*$/
 
-  UI.widgets.fieldParams[UI.ns.ui('SingleLineTextField').uri] = { }
-  UI.widgets.fieldParams[UI.ns.ui('NamedNodeURIField').uri] = { namedNode: true}
+UI.widgets.fieldParams[UI.ns.ui('SingleLineTextField').uri] = { }
+UI.widgets.fieldParams[UI.ns.ui('NamedNodeURIField').uri] = { namedNode: true}
 UI.widgets.fieldParams[UI.ns.ui('TextField').uri] = { }
 
 UI.widgets.fieldParams[UI.ns.ui('PhoneField').uri] = { 'size': 20, 'uriPrefix': 'tel:' }
@@ -705,82 +725,82 @@ UI.widgets.field[UI.ns.ui('PhoneField').uri] =
                     UI.widgets.field[UI.ns.ui('TextField').uri] =
                       UI.widgets.field[UI.ns.ui('SingleLineTextField').uri] =
                         UI.widgets.field[UI.ns.ui('NamedNodeURIField').uri] = function (
-                        dom, container, already, subject, form, store, callback) {
-                        var ui = UI.ns.ui
-                        var kb = UI.store
+                          dom, container, already, subject, form, store, callback) {
+                          var ui = UI.ns.ui
+                          var kb = UI.store
 
-                        var box = dom.createElement('tr')
-                        container.appendChild(box)
-                        var lhs = dom.createElement('td')
-                        lhs.setAttribute('class', 'formFieldName')
-                        lhs.setAttribute('style', '  vertical-align: middle;')
-                        box.appendChild(lhs)
-                        var rhs = dom.createElement('td')
-                        rhs.setAttribute('class', 'formFieldValue')
-                        box.appendChild(rhs)
+                          var box = dom.createElement('tr')
+                          container.appendChild(box)
+                          var lhs = dom.createElement('td')
+                          lhs.setAttribute('class', 'formFieldName')
+                          lhs.setAttribute('style', '  vertical-align: middle;')
+                          box.appendChild(lhs)
+                          var rhs = dom.createElement('td')
+                          rhs.setAttribute('class', 'formFieldValue')
+                          box.appendChild(rhs)
 
-                        var property = kb.any(form, ui('property'))
-                        if (!property) {
-                          box.appendChild(dom.createTextNode('Error: No property given for text field: ' + form))
-                          return box
-                        }
-                        lhs.appendChild(UI.widgets.fieldLabel(dom, property, form))
-                        var uri = UI.widgets.bottomURI(form)
-                        var params = UI.widgets.fieldParams[uri]
-                        if (params === undefined) params = {} // non-bottom field types can do this
-                        var style = params.style || 'font-size: 100%; margin: 0.1em; padding: 0.1em;'
-                        // box.appendChild(dom.createTextNode(' uri='+uri+', pattern='+ params.pattern))
-                        var field = dom.createElement('input')
-                        rhs.appendChild(field)
-                        field.setAttribute('type', params.type ? params.type : 'text')
-
-                        var size = kb.any(form, ui('size')) // Form has precedence
-                        field.setAttribute('size', size ? '' + size : (params.size ? '' + params.size : '20'))
-                        var maxLength = kb.any(form, ui('maxLength'))
-                        field.setAttribute('maxLength', maxLength ? '' + maxLength : '4096')
-
-                        store = store || UI.widgets.fieldStore(subject, property, store)
-
-                        var obj = kb.any(subject, property, undefined, store)
-                        if (!obj) {
-                          obj = kb.any(form, ui('default'))
-                          if (obj) kb.add(subject, property, obj, store)
-                        }
-                        if (obj) {
-                          field.value = obj.value || obj.uri
-                        }
-                        field.setAttribute('style', style)
-                        field.addEventListener('keyup', function (e) {
-                          if (params.pattern) {
-                            field.setAttribute('style', style + (
-                              field.value.match(params.pattern)
-                                ? 'color: green;' : 'color: red;')) }
-                        }, true)
-                        field.addEventListener('change', function (e) { // i.e. lose focus with changed data
-                          if (params.pattern && !field.value.match(params.pattern)) return
-                          field.disabled = true // See if this stops getting two dates from fumbling e.g the chrome datepicker.
-                          field.setAttribute('style', style + 'color: gray;') // pending
-                          var ds = kb.statementsMatching(subject, property) // remove any multiple values
-                          // var newObj = params.uriPrefix ? kb.sym(params.uriPrefix + field.value.replace(/ /g, ''))
-                          //  : kb.literal(field.value, params.dt)
-                          var result
-                          if (params.namedNode) {
-                            result = kb.sym(field.value)
-                          } else {
-                            result = params.parse ? params.parse(field.value) : field.value
+                          var property = kb.any(form, ui('property'))
+                          if (!property) {
+                            box.appendChild(dom.createTextNode('Error: No property given for text field: ' + form))
+                            return box
                           }
-                          var is = $rdf.st(subject, property, result , store) // @@ Explicitly put the datatype in.
-                          kb.updater.update(ds, is, function (uri, ok, body) {
-                            if (ok) {
-                              field.disabled = false
-                              field.setAttribute('style', style)
+                          lhs.appendChild(UI.widgets.fieldLabel(dom, property, form))
+                          var uri = UI.widgets.bottomURI(form)
+                          var params = UI.widgets.fieldParams[uri]
+                          if (params === undefined) params = {} // non-bottom field types can do this
+                          var style = params.style || 'font-size: 100%; margin: 0.1em; padding: 0.1em;'
+                          // box.appendChild(dom.createTextNode(' uri='+uri+', pattern='+ params.pattern))
+                          var field = dom.createElement('input')
+                          rhs.appendChild(field)
+                          field.setAttribute('type', params.type ? params.type : 'text')
+
+                          var size = kb.any(form, ui('size')) // Form has precedence
+                          field.setAttribute('size', size ? '' + size : (params.size ? '' + params.size : '20'))
+                          var maxLength = kb.any(form, ui('maxLength'))
+                          field.setAttribute('maxLength', maxLength ? '' + maxLength : '4096')
+
+                          store = store || UI.widgets.fieldStore(subject, property, store)
+
+                          var obj = kb.any(subject, property, undefined, store)
+                          if (!obj) {
+                            obj = kb.any(form, ui('default'))
+                            if (obj) kb.add(subject, property, obj, store)
+                          }
+                          if (obj) {
+                            field.value = obj.value || obj.uri
+                          }
+                          field.setAttribute('style', style)
+                          field.addEventListener('keyup', function (e) {
+                            if (params.pattern) {
+                              field.setAttribute('style', style + (
+                                field.value.match(params.pattern)
+                                  ? 'color: green;' : 'color: red;')) }
+                          }, true)
+                          field.addEventListener('change', function (e) { // i.e. lose focus with changed data
+                            if (params.pattern && !field.value.match(params.pattern)) return
+                            field.disabled = true // See if this stops getting two dates from fumbling e.g the chrome datepicker.
+                            field.setAttribute('style', style + 'color: gray;') // pending
+                            var ds = kb.statementsMatching(subject, property) // remove any multiple values
+                            // var newObj = params.uriPrefix ? kb.sym(params.uriPrefix + field.value.replace(/ /g, ''))
+                            //  : kb.literal(field.value, params.dt)
+                            var result
+                            if (params.namedNode) {
+                              result = kb.sym(field.value)
                             } else {
-                              box.appendChild(UI.widgets.errorMessageBlock(dom, body))
+                              result = params.parse ? params.parse(field.value) : field.value
                             }
-                            callback(ok, body)
-                          })
-                        }, true)
-                        return box
+                            var is = $rdf.st(subject, property, result , store) // @@ Explicitly put the datatype in.
+                            kb.updater.update(ds, is, function (uri, ok, body) {
+                              if (ok) {
+                                field.disabled = false
+                                field.setAttribute('style', style)
+                              } else {
+                                box.appendChild(UI.widgets.errorMessageBlock(dom, body))
+                              }
+                              callback(ok, body)
+                            })
+                          }, true)
+                          return box
 }
 
 /*          Multiline Text field
@@ -919,7 +939,7 @@ UI.widgets.field[UI.ns.ui('Choice').uri] = function (
     for (p in possibleProperties.op) possible.push(kb.fromNT(p))
     opts.disambiguate = true
   } else if (from.sameTerm(ns.owl('DatatypeProperty'))) {
-    possibleProperties =  UI.widgets.propertyTriage()
+    possibleProperties = UI.widgets.propertyTriage()
     for (p in possibleProperties.dp) possible.push(kb.fromNT(p))
     opts.disambiguate = true
   }
@@ -993,14 +1013,14 @@ UI.widgets.openHrefInOutlineMode = function (e) {
   if (!uri) console.log('No href found \n')
   // subject term, expand, pane, solo, referrer
   // dump('click on link to:' +uri+'\n')
-  if (UI.outline){
+  if (UI.outline) {
     UI.outline.GotoSubject(UI.store.sym(uri), true, undefined, true, undefined)
-  } else if (window && window.UI && window.UI.outline ){
+  } else if (window && window.UI && window.UI.outline) {
     window.UI.outline.GotoSubject(UI.store.sym(uri), true, undefined, true, undefined)
   } else {
     console.log("ERROR: Can't access outline manager in this config")
   }
-  //UI.outline.GotoSubject(UI.store.sym(uri), true, undefined, true, undefined)
+// UI.outline.GotoSubject(UI.store.sym(uri), true, undefined, true, undefined)
 }
 
 // We make a URI in the annotation store out of the URI of the thing to be annotated.
@@ -1650,10 +1670,12 @@ UI.widgets.makeSelectForNestedCategory = function (
   return container
 }
 
-/*  Build a checkbox from a given statement
+/*  Build a checkbox from a given statement(s)
 **
 **  If the source document is editable, make the checkbox editable
 **
+**  ins and sel are either statements *or arrays of statements* which should be
+**  made if the checkbox is checed and unchecked respectively.
 */
 UI.widgets.buildCheckboxForm = function (dom, kb, lab, del, ins, form, store) {
   var box = dom.createElement('div')
@@ -1666,9 +1688,16 @@ UI.widgets.buildCheckboxForm = function (dom, kb, lab, del, ins, form, store) {
   input.setAttribute('type', 'checkbox')
   input.setAttribute('style', 'margin: 0.7em')
 
-  var state = kb.holds(ins.subject, ins.predicate, ins.object, store)
+  if (ins && ins.object && !ins.why) { // back-compatible
+    ins.why = store
+  }
+  if (del && del.object && !del.why) { // back-compatible
+    del.why = store
+  }
+
+  var state = kb.holds(ins)
   if (del) {
-    var negation = kb.holds(del.subject, del.predicate, del.object, store)
+    var negation = kb.holds(del)
     if (state && negation) {
       box.appendChild(UI.widgets.errorMessageBlock(dom,
         'Inconsistent data in store!\n' + ins + ' and\n' + del))
@@ -1688,7 +1717,7 @@ UI.widgets.buildCheckboxForm = function (dom, kb, lab, del, ins, form, store) {
     if (this.checked) {
       toInsert = ins
       toDelete = (del && negation) ? del : []
-      UI.store.updater.update(del && negation ? del : [], ins, function (uri, success, error_body) {
+      UI.store.updater.update(toDelete, toInsert, function (uri, success, error_body) {
         if (!success) {
           tx.style = 'color: #black; background-color: #fee;'
           box.appendChild(UI.widgets.errorMessageBlock(dom,
@@ -1703,14 +1732,14 @@ UI.widgets.buildCheckboxForm = function (dom, kb, lab, del, ins, form, store) {
       })
     } else { // unchecked
       toInsert = del
-      toDelete = kb.statementsMatching(ins.subject, ins.predicate, ins.object, store)
+      toDelete = ins // kb.statementsMatching(ins.subject, ins.predicate, ins.object, store)
       UI.store.updater.update(toDelete, toInsert, function (uri, success, error_body) {
         tx.className = 'question'
         if (!success) {
           tx.style = 'color: #black; background-color: #fee;'
           box.appendChild(UI.widgets.errorMessageBlock(dom,
             'Error updating store (unchecked):\n\n' + error_body))
-          input.checked = false // rollback UI
+          input.checked = true // rollback UI
           return
         } else {
           tx.style = 'color: #black;'
@@ -1886,35 +1915,35 @@ UI.widgets.index.twoLine['http://www.w3.org/ns/pim/trip#Trip'] = function (dom, 
 }
 
 // Stick a stylesheet link the document if not already there
-UI.widgets.addStyleSheet = function(dom, href) {
-  var links = dom.querySelectorAll('link');
-  for (var i=0; i<links.length; i++){
-    if ((links[i].getAttribute('rel') ||'') === 'stylesheet'
-    && (links[i].getAttribute('href') ||'') === href ) return ;
+UI.widgets.addStyleSheet = function (dom, href) {
+  var links = dom.querySelectorAll('link')
+  for (var i = 0; i < links.length; i++) {
+    if ((links[i].getAttribute('rel') || '') === 'stylesheet'
+      && (links[i].getAttribute('href') || '') === href) return
   }
-  var link = dom.createElement("link")
-  link.setAttribute("rel", "stylesheet")
-  link.setAttribute("type", "text/css")
-  link.setAttribute("href", href)
-  dom.getElementsByTagName("head")[0].appendChild(link)
+  var link = dom.createElement('link')
+  link.setAttribute('rel', 'stylesheet')
+  link.setAttribute('type', 'text/css')
+  link.setAttribute('href', href)
+  dom.getElementsByTagName('head')[0].appendChild(link)
 }
 
 // Figure (or guess) whether this is an image, etc
 //
-UI.widgets.isAudio = function(file){
+UI.widgets.isAudio = function (file) {
   return UI.widgets.isImage(file, 'audio')
 }
-UI.widgets.isVideo = function(file){
+UI.widgets.isVideo = function (file) {
   return UI.widgets.isImage(file, 'video')
 }
-UI.widgets.isImage = function(file, kind){
+UI.widgets.isImage = function (file, kind) {
   var dcCLasses = { 'audio': 'http://purl.org/dc/dcmitype/Sound',
     'image': 'http://purl.org/dc/dcmitype/Image',
     'video': 'http://purl.org/dc/dcmitype/MovingImage'
   }
   var what = kind || 'image'
   var typeURIs = UI.store.findTypeURIs(file)
-  var prefix = $rdf.Util.mediaTypeClass( what + '/*').uri.split('*')[0]
+  var prefix = $rdf.Util.mediaTypeClass(what + '/*').uri.split('*')[0]
   for (var t in typeURIs) {
     if (t.startsWith(prefix)) return true
   }
