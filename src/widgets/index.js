@@ -215,7 +215,7 @@ var faviconOrDefault = function(dom, x){
     res.appendChild(image) // fallback
     return res
   } else {
-    UI.widgets.setImage(image, obj)
+    UI.widgets.setImage(image, x)
     return image
   }
 }
