@@ -112,7 +112,7 @@ UI.widgets.setName = function (element, x) {
   element.textContent = name || UI.utils.label(x)
   if (!name && x.uri) { // Note this is only a fetch, not a lookUP of all sameAs etc
     kb.fetcher.nowOrWhenFetched(x, undefined, function (ok) {
-      element.textContent = (ok ? '' : '? ') + (findName(x) || UI.utils.label(x))
+      element.textContent = (findName(x) || UI.utils.label(x)) // had: (ok ? '' : '? ') +
     })
   }
 }
@@ -184,7 +184,7 @@ UI.widgets.setImage = function (element, x) {
     if (x.uri.startsWith('mailto:')) {
       return iconDir + 'noun_567486.svg' // mailbox - an email desitination
     }
-    // For HHTP(s) documents, we could look at teh MIME type if we know it.
+    // For HTTP(s) documents, we could look at the MIME type if we know it.
     if (x.uri.startsWith('http') && (x.uri.indexOf('#') < 0)) {
       return x.site().uri + 'favicon.ico'
       // Todo: make the docuent icon a fallback for if the favicon does not exist
@@ -666,7 +666,7 @@ UI.widgets.field[UI.ns.ui('Multiple').uri] = function (
 UI.widgets.fieldParams = {}
 
 UI.widgets.fieldParams[UI.ns.ui('ColorField').uri] = {
-'size': 9 }
+'size': 9, 'type': 'color', dt: 'color' } // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/color
 UI.widgets.fieldParams[UI.ns.ui('ColorField').uri].pattern =
   /^\s*#[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]([0-9a-f][0-9a-f])?\s*$/
 
