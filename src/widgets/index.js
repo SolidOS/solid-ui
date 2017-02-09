@@ -151,8 +151,24 @@ UI.widgets.setImage = function (element, x) {
     if (ns.solid('AppProvider').uri in types) {
       return iconDir + 'noun_15177.svg' // App
     }
-    if (x.uri && x.uri.split('/').length === 4 && !(x.uri.split('/')[1]) && !(x.uri.split('/')[3])) {
-      return iconDir + 'noun_15177.svg' // App -- this is an origin
+    if (x.uri){
+      if (x.uri.split('/').length === 4 && !(x.uri.split('/')[1]) && !(x.uri.split('/')[3])) {
+        return iconDir + 'noun_15177.svg' // App -- this is an origin
+      }
+      // Non-HTTP URI types imply types
+      if (x.uri.startsWith('message:') || x.uri.startsWith('mid:')) { // message: is aapple bug-- should be mid:
+        return iconDir + 'noun_480183.svg' // envelope  noun_567486
+      }
+      if (x.uri.startsWith('mailto:')) {
+        return iconDir + 'noun_567486.svg' // mailbox - an email desitination
+      }
+      // For HTTP(s) documents, we could look at the MIME type if we know it.
+      if (x.uri.startsWith('https:') && (x.uri.indexOf('#') < 0)) {
+        return x.site().uri + 'favicon.ico'
+        // Todo: make the docuent icon a fallback for if the favicon does not exist
+        // todo: pick up a possible favicon for the web page istelf from a link
+        // was: return iconDir + 'noun_681601.svg' // document - under solid assumptions
+      }
     }
     if (ns.solid('AppProviderClass').uri in types) {
       return iconDir + 'noun_144.svg' // App Whitelist @@@ ICON (three apps ?)
@@ -177,20 +193,6 @@ UI.widgets.setImage = function (element, x) {
     if (ns.meeting('Meeting').uri in types) {
       return iconDir + 'noun_66617.svg'
     }
-    // Non-HTTP URI types imply types
-    if (x.uri.startsWith('message:') || x.uri.startsWith('mid:')) { // message: is aapple bug-- should be mid:
-      return iconDir + 'noun_480183.svg' // envelope  noun_567486
-    }
-    if (x.uri.startsWith('mailto:')) {
-      return iconDir + 'noun_567486.svg' // mailbox - an email desitination
-    }
-    // For HTTP(s) documents, we could look at the MIME type if we know it.
-    if (x.uri.startsWith('http') && (x.uri.indexOf('#') < 0)) {
-      return x.site().uri + 'favicon.ico'
-      // Todo: make the docuent icon a fallback for if the favicon does not exist
-      // todo: pick up a possible favicon for the web page istelf from a link
-      // was: return iconDir + 'noun_681601.svg' // document - under solid assumptions
-    }
     return iconDir + 'noun_10636_grey.svg' // Circle -  some thing
   }
 
@@ -208,8 +210,8 @@ UI.widgets.setImage = function (element, x) {
 var faviconOrDefault = function(dom, x){
   var image = dom.createElement('img')
   image.setAttribute('src',  UI.icons.iconBase + 'noun_681601.svg') // document
-  if (x.uri.startsWith('http') && (x.uri.indexOf('#') < 0)) {
-    var res = dom.createElement('object')
+  if (x.uri && x.uri.startsWith('https:') && (x.uri.indexOf('#') < 0)) {
+    var res = dom.createElement('object') // favico with a fallback of a default image if no favicon
     res.setAttribute('data', x.site().uri + 'favicon.ico')
     res.setAttribute('type', 'image/x-icon')
     res.appendChild(image) // fallback
@@ -355,14 +357,16 @@ UI.widgets.personTR = function (dom, pred, obj, options) {
   if (options.deleteFunction) {
     UI.widgets.deleteButtonWithCheck(dom, td3, options.noun || 'one', options.deleteFunction)
   }
-  if (options.link !== false) {
-    var anchor = td3.appendChild(UI.widgets.linkIcon(dom, obj))
-    anchor.classList.add('HoverControlHide')
-    td3.appendChild(dom.createElement('br'))
-  }
-  if (options.draggable !== false) { // default is on
-    image.setAttribute('draggable', 'false') // Stop the image being dragged instead - just the TR
-    UI.widgets.makeDraggable(tr, obj)
+  if (obj.uri) { // blank nodes need not apply
+    if (options.link !== false) {
+      var anchor = td3.appendChild(UI.widgets.linkIcon(dom, obj))
+      anchor.classList.add('HoverControlHide')
+      td3.appendChild(dom.createElement('br'))
+    }
+    if (options.draggable !== false) { // default is on
+      image.setAttribute('draggable', 'false') // Stop the image being dragged instead - just the TR
+      UI.widgets.makeDraggable(tr, obj)
+    }
   }
   return tr
 }
@@ -460,13 +464,19 @@ UI.widgets.field[UI.ns.ui('Form').uri] =
     for (var x in already) already2[x] = 1
     already2[key] = 1
 
-    var parts = kb.each(form, ui('part'))
+    var parts = kb.any(form, ui('parts'))
+    var p2
+    if (parts){
+      p2 = parts.elements
+    } else {
+      var parts = kb.each(form, ui('part'))     //  Warning: unordered
+      p2 = UI.widgets.sortBySequence(parts)
+    }
     if (!parts) {
       box.appendChild(UI.widgets.errorMessageBlock(dom,
         'No parts to form! '))
       return dom
     }
-    var p2 = UI.widgets.sortBySequence(parts)
     var eles = []
     var original = []
     for (var i = 0; i < p2.length; i++) {
@@ -766,7 +776,11 @@ UI.widgets.field[UI.ns.ui('PhoneField').uri] =
                             obj = kb.any(form, ui('default'))
                             if (obj) kb.add(subject, property, obj, store)
                           }
-                          if (obj) {
+                          if (obj && obj.uri && params.uriPrefix){ // eg tel: or mailto:
+                            field.value = decodeURIComponent(obj.uri.replace(params.uriPrefix, '')) // should have no spaces but in case
+                              .replace(/ /g, '')
+                          }
+                          else if (obj) {
                             field.value = obj.value || obj.uri
                           }
                           field.setAttribute('style', style)
@@ -781,13 +795,18 @@ UI.widgets.field[UI.ns.ui('PhoneField').uri] =
                             field.disabled = true // See if this stops getting two dates from fumbling e.g the chrome datepicker.
                             field.setAttribute('style', style + 'color: gray;') // pending
                             var ds = kb.statementsMatching(subject, property) // remove any multiple values
-                            // var newObj = params.uriPrefix ? kb.sym(params.uriPrefix + field.value.replace(/ /g, ''))
-                            //  : kb.literal(field.value, params.dt)
                             var result
                             if (params.namedNode) {
                               result = kb.sym(field.value)
+                            } else if (params.uriPrefix) {
+                              result = encodeURIComponent(field.value.replace(/ /g, ''))
+                              result = kb.sym(params.uriPrefix + field.value)
                             } else {
-                              result = params.parse ? params.parse(field.value) : field.value
+                              if (params.dt){
+                                result = new $rdf.Literal(field.value.trim(), undefined, UI.ns.xsd(params.dt))
+                              } else {
+                                result = new $rdf.Literal(field.value)
+                              }
                             }
                             var is = $rdf.st(subject, property, result , store) // @@ Explicitly put the datatype in.
                             kb.updater.update(ds, is, function (uri, ok, body) {
