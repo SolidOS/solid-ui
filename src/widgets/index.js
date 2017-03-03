@@ -209,7 +209,13 @@ UI.widgets.setImage = function (element, x) {
 // See eg http://stackoverflow.com/questions/980855/inputting-a-default-image
 var faviconOrDefault = function(dom, x){
   var image = dom.createElement('img')
-  image.setAttribute('src',  UI.icons.iconBase + 'noun_681601.svg') // document
+  var isOrigin = function(x){
+    if (!x.uri) return false
+    var parts = x.uri.split('/')
+    return (parts.length === 3 || (parts.length === 4 && parts[3] === ''))
+  }
+  image.setAttribute('src', UI.icons.iconBase +
+      (isOrigin(x) ? 'noun_15177.svg' : 'noun_681601.svg'))
   if (x.uri && x.uri.startsWith('https:') && (x.uri.indexOf('#') < 0)) {
     var res = dom.createElement('object') // favico with a fallback of a default image if no favicon
     res.setAttribute('data', x.site().uri + 'favicon.ico')
@@ -261,7 +267,7 @@ UI.widgets.deleteButtonWithCheck = function (dom, container, noun, deleteFunctio
   return delButton
 }
 
-// ////////////////////////////////////// Frab a name for a new thing
+// ////////////////////////////////////// Grab a name for a new thing
 
 // Form to get the name of a new thing before we create it
 // Returns a promise of (a name or null if cancelled)
