@@ -147,7 +147,7 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
         console.log('    drop object type includes: ' + ty)
       }
       // An Origin URI is one like https://fred.github.io eith no trailing slash
-      if (uri.startsWith('http') && uri.split('/').length === 3)) {  // there is no third slash
+      if (uri.startsWith('http') && uri.split('/').length === 3) {  // there is no third slash
         return {pred: 'origin', obj: obj} // The only way to know an origin alas
       }
 
