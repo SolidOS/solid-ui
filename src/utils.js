@@ -491,7 +491,7 @@ UI.utils.label = function (x, initialCap) { // x is an object
   if (x.termType == 'BlankNode') {
     return '...'
   }
-  if (x.termType == 'collection') {
+  if (x.termType == 'Collection') {
     return '(' + x.elements.length + ')'
   }
   var s = x.uri
