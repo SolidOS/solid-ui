@@ -1335,7 +1335,7 @@ module.exports = function renderTableViewPane (doc, options) {
         return renderImage(obj)
       } else if (obj.termType === 'NamedNode' || obj.termType === 'BlankNode') {
         return linkToObject(obj, hints)
-      } else if (obj.termType === 'collection') {
+      } else if (obj.termType === 'Collection') {
         var span = doc.createElement('span')
         span.appendChild(doc.createTextNode('['))
         obj.elements.map(function (x) {

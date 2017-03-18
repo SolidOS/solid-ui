@@ -521,8 +521,17 @@ UI.pad.notepad  = function (dom, padDoc, subject, me, options) {
             complain2("No initial next pointer");
             return false; // can't do linked list
         }
-        for (var chunk = kb.the(subject, PAD('next')); ! chunk.sameTerm(subject);
-            chunk = kb.the(chunk, PAD('next'))) {
+        //var chunk = kb.the(subject, PAD('next'))
+        var prev = subject, chunk
+        for (;;) {
+            chunk = kb.the(prev, PAD('next'))
+            if (!chunk){
+              complain2('No next pointer from ' + prev)
+            }
+            if (chunk.sameTerm(subject)){
+              break;
+            }
+            prev = chunk;
             var label = chunk.uri.split('#')[1];
             if (found[chunk.uri]) {
                 complain2("Loop!");
@@ -629,9 +638,9 @@ UI.pad.notepad  = function (dom, padDoc, subject, me, options) {
         console.log("    reloaded OK")
         clearStatus();
         if (!consistencyCheck()) {
-            console.log("CONSITENCY CHECK FAILED");// Turn whole table pink??
+          complain("CONSITENCY CHECK FAILED")
         } else {
-            refreshTree(table);
+          refreshTree(table);
         }
     };
 

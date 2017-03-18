@@ -233,6 +233,8 @@ UI.widgets.ensureTypeIndexes = function(context) {
 // Returns promise of context with arrays of symbols
 //   context.instances
 //   context.containers
+// 2016-12-11 change to inclde forClass arc a la
+//  https://github.com/solid/solid/blob/master/proposals/data-discovery.md
 //
 UI.widgets.findAppInstances = function(context, klass) {
     return new Promise(function(resolve, reject){
@@ -240,8 +242,13 @@ UI.widgets.findAppInstances = function(context, klass) {
         UI.widgets.loadTypeIndexes(context)
         .then(function(indexes){
             var ix = context.index.private.concat(context.index.public);
-            var instances = kb.each(klass, ns.solid('instance'));
-            var containers = kb.each(klass, ns.solid('instanceContainer'));
+            var registrations = kb.each(undefined, ns.solid('forClass'), klass)
+            var instances = []
+            var containers = []
+            for (var r=0; r < registrations.length; r++) {
+              instances = instances.concat(kb.each(klass, ns.solid('instance')))
+              containers = containers.concat(kb.each(klass, ns.solid('instanceContainer')))
+            }
             if (containers.length) {
                 fetcher.load(containers).then(function(xhrs){
                     for (var i=0; i<containers.length; i++) {
@@ -276,18 +283,26 @@ UI.widgets.registrationControl = function(context, instance, klass) {
                 var tbody = box.children[0].children[0];
                 var form = kb.bnode();// @@ say for now
 
+                var registrationStatements = function(index){
+                  var registrations = kb.each(undefined, ns.solid('instance'), instance)
+                    .filter(function(r){return kb.holds(r, ns.solid('forClass'), klass)})
+                  var reg = registrations.length ? registrations[0] : UI.widgets.newThing(index)
+                  return [ $rdf.st(reg, ns.solid('instance'), instance, index),
+                          $rdf.st(reg, ns.solid('forClass'), klass, index),];
+                }
+
                 if (context.index.public && context.index.public.length >0) {
                     var index = context.index.public[0];
-                    var statement = $rdf.st(klass, ns.solid('instance'), instance, index);
+                    var statements = registrationStatements(index)
                     tbody.children[0].appendChild(UI.widgets.buildCheckboxForm(
-                        context.dom, UI.store, "Public link to this " + context.noun, null, statement, form, index));
+                        context.dom, UI.store, "Public link to this " + context.noun, null, statements, form, index));
                 }
 
                 if (context.index.private && context.index.private.length >0) {
                     var index = context.index.private[0];
-                    var statement = $rdf.st(klass, ns.solid('instance'), instance, index);
+                    var statements = registrationStatements(index)
                     tbody.children[1].appendChild(UI.widgets.buildCheckboxForm(
-                        context.dom, UI.store, "Personal note of this " + context.noun, null, statement, form, index));
+                        context.dom, UI.store, "Personal note of this " + context.noun, null, statements, form, index));
                 }
 
                 // UI.widgets.buildCheckboxForm(dom, kb, lab, del, ins, form, store)

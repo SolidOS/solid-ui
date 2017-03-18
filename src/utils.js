@@ -303,6 +303,11 @@ UI.utils.AJARImage = function (src, alt, tt, doc) {
   //  tt = tabulator.Icon.tooltips[src]
   var image = doc.createElement('img')
   image.setAttribute('src', src)
+  image.addEventListener('copy', function(e){
+    e.clipboardData.setData('text/plain', '');
+    e.clipboardData.setData('text/html', '');
+    e.preventDefault(); // We want no title data to be written to the clipboard
+  });
   //    if (typeof alt != 'undefined')      // Messes up cut-and-paste of text
   //        image.setAttribute('alt', alt)
   if (typeof tt != 'undefined')
@@ -486,7 +491,7 @@ UI.utils.label = function (x, initialCap) { // x is an object
   if (x.termType == 'BlankNode') {
     return '...'
   }
-  if (x.termType == 'collection') {
+  if (x.termType == 'Collection') {
     return '(' + x.elements.length + ')'
   }
   var s = x.uri

@@ -146,9 +146,11 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
       for (var ty in types) {
         console.log('    drop object type includes: ' + ty)
       }
-      if (uri.split('/').length === 4 && !(uri.split('/')[1]) && !(uri.split('/')[3])) {
+      // An Origin URI is one like https://fred.github.io eith no trailing slash
+      if (uri.startsWith('http') && uri.split('/').length === 3) {  // there is no third slash
         return {pred: 'origin', obj: obj} // The only way to know an origin alas
       }
+
       if (ns.vcard('WebID').uri in types) return {pred: 'agent', obj: obj}
 
       if (ns.vcard('Group').uri in types) {
@@ -239,7 +241,7 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
           }
         }
         var tr = middleTable.appendChild(
-          UI.widgets.personTR(dom, $rdf.sym(pred), $rdf.sym(obj), opt))
+          UI.widgets.personTR(dom, ACL(pred), $rdf.sym(obj), opt))
         tr.predObj = [pred.uri, obj.uri]
 
       }

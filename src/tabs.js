@@ -34,14 +34,48 @@ UI.tabs.tabWidget = function(options){
   var dom= options.dom
   var box = dom.createElement('div')
   var orientation = parseInt(options.orientation || "0")
+  var backgroundColor = options.backgroundColor || "#ddddcc"
+  var color
   var flipped = orientation & 2
   var vertical = orientation & 1
   var wholetable = box.appendChild(dom.createElement('table'))
 
   var tabContainer, tabElement, mainDiv, tabBar
-  //var bodyDiv = dom.createElement('div')
-  var bodyDivStyle = 'resize: both; overflow: scroll; margin:0; border: 0.5em; border-style: solid; border-color: #eed; padding: 1em;  min-width: 30em; min-height: 450px; width:100%;'
-  //bodyDiv.setAttribute('style', )
+
+  var isLight = function(x){
+    var total = 0
+    for (var i=0; i<3; i++){
+      total += parseInt(x.slice(i * 2 + 1, i * 2 + 3), 16)
+    }
+    return total > 128 * 3
+  }
+  var colorBlend = function(a, b, mix){
+    var ca, cb, res, str = '#'
+    const hex = '0123456789abcdef'
+    for (var i=0; i<3; i++){
+      ca = parseInt(a.slice(i * 2 + 1, i * 2 + 3), 16)
+      cb = parseInt(b.slice(i * 2 + 1, i * 2 + 3), 16)
+      res = ca * ( 1.0 - mix) + cb * mix // @@@ rounding
+      var res2 = parseInt(('' + res).split('.')[0]) // @@ ugh
+      var h = parseInt(('' + res2/16).split('.')[0]) // @@ ugh
+      var l = parseInt(('' + res2 % 16).split('.')[0]) // @@ ugh
+      str += hex[h] + hex[l]
+    }
+    console.log('Blending colors ' + a + ' with ' + mix + ' of ' + b + ' to give ' + str)
+    return str
+  }
+
+  var selectedColor
+  if (isLight(backgroundColor)) {
+    selectedColor = colorBlend(backgroundColor, "#ffffff", 0.3)
+    color = '#000000'
+  } else {
+    selectedColor = colorBlend(backgroundColor, "#000000", 0.3)
+    color = '#ffffff'
+  }
+  var bodyDivStyle = 'resize: both; overflow: scroll; margin:0; border: 0.5em; border-style: solid; border-color: '
+          + selectedColor + '; padding: 1em;  min-width: 30em; min-height: 450px; width:100%;'
+
   if (vertical){
     var onlyTR = wholetable.appendChild(dom.createElement('tr'))
     var mainTD = dom.createElement('td')
@@ -97,8 +131,9 @@ UI.tabs.tabWidget = function(options){
   margins = 'margin: ' + margins.join(' ') + ';'
 
   var tabStyle = corners  + 'padding: 0.7em; max-width: 20em;' //  border: 0.05em 0 0.5em 0.05em; border-color: grey;
-  var unselectedStyle = tabStyle + 'opacity: 50%; margin: 0.3em; background-color: #ddc;' // @@ rotate border
-  var selectedStyle = tabStyle + margins + ' background-color: #eed;'
+  tabStyle += 'color: ' + color + ';'
+  var unselectedStyle = tabStyle + 'opacity: 50%; margin: 0.3em; background-color: ' + backgroundColor + ';' // @@ rotate border
+  var selectedStyle = tabStyle + margins + ' background-color: ' + selectedColor + ';'
   var shownStyle = ''
   var hiddenStyle = shownStyle + 'display: none;'
 
@@ -141,7 +176,7 @@ UI.tabs.tabWidget = function(options){
       } else {
         if (bodyDiv.asSetttings !== false){
           bodyDiv.innerHTML = 'loading item ...' + item
-          options.showMain(bodyDiv, ele.subject)
+          options.renderMain(bodyDiv, ele.subject)
           bodyDiv.asSetttings = false
         }
       }
