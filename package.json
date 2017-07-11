@@ -63,7 +63,8 @@
     "globals": [
       "$rdf",
       "tabulator",
-      "QUnit"
+      "QUnit",
+      "$SolidTestEnvironment"
     ]
   }
 }
