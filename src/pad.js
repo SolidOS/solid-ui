@@ -65,20 +65,19 @@ UI.pad.renderPartipants = function(dom, table, padDoc, subject, me, options){
 
 // Record my participation and display participants
 //
-UI.pad.manageParticipation = function(dom, container, padDoc, subject, me, options) {
-  if (!me) throw "Unknown user";
+UI.pad.recordParticipation = function(subject, padDoc, refreshable) {
   var kb = UI.store, ns = UI.ns
 
-  var table = dom.createElement('table')
-  container.appendChild(table)
+  var webid = tabulator.preferences.get('me')
+  if (!webid) return // Not logged in
 
+  var me = kb.sym(webid)
   var parps = kb.each(subject, ns.wf('participation')).filter(function(pn){
       return kb.holds(pn, ns.wf('participant'), me)});
   if (parps.length > 1) {
-    container.appendChild(UI.widgets.errorMessageBlock(dom, "Multiple notes of my participation!")) // Clean up?
-    //throw "Multiple my participations";
+    throw "Multiple records of your participation";
   }
-  if (!parps.length) {
+  if (!parps.length) { // If I am not already recorded
     var participation = UI.widgets.newThing(padDoc);
     var ins = [
       UI.rdf.st(subject,  ns.wf('participation'), participation, padDoc),
@@ -89,15 +88,30 @@ UI.pad.manageParticipation = function(dom, container, padDoc, subject, me, optio
     ]
     kb. updater.update([], ins, function(uri, ok, error_body, xhr){
       if (!ok) {
-        console.log(container.textContent = 'Error recording your partipation: ' + error_body)
-        return
+        throw new Error('Error recording your partipation: ' + error_body)
       }
-      UI.pad.renderPartipants(dom, table, padDoc, subject, me, options)
+      if (refreshable && refreshable.refresh){
+        refreshable.refresh()
+      }
+      // UI.pad.renderPartipants(dom, table, padDoc, subject, me, options)
     })
-  } else {
-    UI.pad.renderPartipants(dom, table, padDoc, subject, me, options)
   }
-  return table // won't be set up yet
+  return
+}
+
+// Record my participation and display participants
+//
+UI.pad.manageParticipation = function(dom, container, padDoc, subject, me, options) {
+  var kb = UI.store, ns = UI.ns
+  var table = dom.createElement('table')
+  container.appendChild(table)
+  UI.pad.renderPartipants(dom, table, padDoc, subject, me, options)
+  try {
+    UI.pad.recordParticipation(subject, padDoc, table)
+  } catch (e) {
+    container.appendChild(UI.widgets.errorMessageBlock(dom, "Error recording your partipation: " + e)) // Clean up?
+  }
+  return table
 }
 
 

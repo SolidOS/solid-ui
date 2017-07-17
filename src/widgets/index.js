@@ -111,7 +111,7 @@ UI.widgets.setName = function (element, x) {
   var name = x.sameTerm(ns.foaf('Agent')) ? 'Everyone' : findName(x)
   element.textContent = name || UI.utils.label(x)
   if (!name && x.uri) { // Note this is only a fetch, not a lookUP of all sameAs etc
-    kb.fetcher.nowOrWhenFetched(x, undefined, function (ok) {
+    kb.fetcher.nowOrWhenFetched(x.doc(), undefined, function (ok) {
       element.textContent = (findName(x) || UI.utils.label(x)) // had: (ok ? '' : '? ') +
     })
   }
@@ -199,7 +199,7 @@ UI.widgets.setImage = function (element, x) {
   var uri = findImage(x)
   element.setAttribute('src', uri || findImageByClass(x))
   if (!uri && x.uri) {
-    kb.fetcher.nowOrWhenFetched(x, undefined, function (ok) {
+    kb.fetcher.nowOrWhenFetched(x.doc(), undefined, function (ok) {
       element.setAttribute('src', findImage(x) || findImageByClass(x))
     })
   }
@@ -377,14 +377,31 @@ UI.widgets.personTR = function (dom, pred, obj, options) {
   return tr
 }
 
+
+// Refresh a DOM tree recursively
+
+UI.widgets.refreshTree = function refreshTree (root){
+  if (root.refresh) {
+    root.refresh();
+    return;
+  }
+  for (var i = 0; i < root.children.length; i++) {
+    refreshTree(root.children[i]);
+  }
+}
+
 // List of attachments accepting drop
 
 UI.widgets.attachmentList = function (dom, subject, div, options) {
   options = options || {}
+  var doc = options.doc || subject.doc()
+  if (options.modify === undefined) options.modify = true
+  var modify = options.modify
   var promptIcon = options.promptIcon || (UI.icons.iconBase + 'noun_748003.svg') //    target
   // var promptIcon = options.promptIcon || (UI.icons.iconBase + 'noun_25830.svg') //  paperclip
   var predicate = options.predicate || UI.ns.wf('attachment')
   var noun = options.noun || 'attachment'
+
   var kb = UI.store
   var ns = UI.ns
   var attachmentOuter = div.appendChild(dom.createElement('table'))
@@ -395,23 +412,21 @@ UI.widgets.attachmentList = function (dom, subject, div, options) {
   var attachmentTable = attachmentRight.appendChild(dom.createElement('table'))
   var attachmentTableTop = attachmentTable.appendChild(dom.createElement('tr'))
 
-  var paperclip = attachmentLeft.appendChild(dom.createElement('img'))
-  paperclip.setAttribute('src', promptIcon)
-  paperclip.setAttribute('style', 'width; 2em; height: 2em; margin: 0.5em;')
-  paperclip.setAttribute('draggable', 'false')
-
   var deleteAttachment = function (target) {
-    kb.updater.update($rdf.st(subject, predicate, target, subject.doc()), [], function (uri, ok, error_body, xhr) {
+    kb.updater.update($rdf.st(subject, predicate, target, doc), [], function (uri, ok, error_body, xhr) {
       if (ok) {
         refresh()
       } else {
-        complain('Error deleting attachment: ' + error_body)
+        complain('Error deleting one: ' + error_body)
       }
     })
   }
   var createNewRow = function (target) {
     var theTarget = target
-    var opt = { deleteFunction: function () {deleteAttachment(theTarget)}, noun: noun}
+    var opt = {noun: noun}
+    if (modify) {
+      opt.deleteFunction = function () {deleteAttachment(theTarget)}
+    }
     return UI.widgets.personTR(dom, predicate, target, opt)
   }
   var refresh = attachmentTable.refresh = function () {
@@ -419,6 +434,7 @@ UI.widgets.attachmentList = function (dom, subject, div, options) {
     things.sort()
     UI.utils.syncTableToArray(attachmentTable, things, createNewRow)
   }
+  attachmentOuter.refresh = refresh // Participate in downstream changes
   refresh()
 
   var droppedURIHandler = function (uris) {
@@ -426,17 +442,24 @@ UI.widgets.attachmentList = function (dom, subject, div, options) {
     uris.map(function (u) {
       var target = $rdf.sym(u) // Attachment needs text label to disinguish I think not icon.
       console.log('Dropped on attachemnt ' + u) // icon was: UI.icons.iconBase + 'noun_25830.svg'
-      ins.push($rdf.st(subject, predicate, target, subject.doc()))
+      ins.push($rdf.st(subject, predicate, target, doc))
     })
     kb.updater.update([], ins, function (uri, ok, error_body, xhr) {
       if (ok) {
         refresh()
       } else {
-        complain('Error adding attachment: ' + error_body)
+        complain('Error adding one: ' + error_body)
       }
     })
   }
-  UI.widgets.makeDropTarget(attachmentLeft, droppedURIHandler)
+  if (modify){
+    var paperclip = attachmentLeft.appendChild(dom.createElement('img'))
+    paperclip.setAttribute('src', promptIcon)
+    paperclip.setAttribute('style', 'width; 2em; height: 2em; margin: 0.5em;')
+    paperclip.setAttribute('draggable', 'false')
+
+    UI.widgets.makeDropTarget(attachmentLeft, droppedURIHandler)
+  }
   return attachmentOuter
 }
 
