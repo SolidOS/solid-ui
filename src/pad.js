@@ -102,7 +102,6 @@ UI.pad.recordParticipation = function(subject, padDoc, refreshable) {
 // Record my participation and display participants
 //
 UI.pad.manageParticipation = function(dom, container, padDoc, subject, me, options) {
-  var kb = UI.store, ns = UI.ns
   var table = dom.createElement('table')
   container.appendChild(table)
   UI.pad.renderPartipants(dom, table, padDoc, subject, me, options)
@@ -121,18 +120,11 @@ UI.pad.notepad  = function (dom, padDoc, subject, me, options) {
     var exists = options.exists;
     var table = dom.createElement('table');
     var kb = UI.store;
-    // var mainRow = table.appendChild(dom.createElement('tr'));
-
-    var fetcher = kb.fetcher;
     var ns = UI.ns;
 
     var updater = UI.store.updater;
 
-    var waitingForLogin = false;
-
     var PAD = $rdf.Namespace('http://www.w3.org/ns/pim/pad#');
-
-    var currentNode, currentOffset;
 
     table.setAttribute('style', 'padding: 1em; overflow: auto; resize: horizontal; min-width: 40em;');
 
@@ -556,13 +548,13 @@ UI.pad.notepad  = function (dom, padDoc, subject, me, options) {
             var k = kb.each(chunk, PAD('next')).length
             if (k !== 1) complain2("Should be 1 not "+k+" next pointer for " + label);
 
-            var k = kb.each(chunk, PAD('indent')).length
+            k = kb.each(chunk, PAD('indent')).length
             if (k > 1) complain2("Should be 0 or 1 not "+k+" indent for " + label);
 
-            var k = kb.each(chunk, ns.sioc('content')).length
+            k = kb.each(chunk, ns.sioc('content')).length
             if (k !== 1) complain2("Should be 1 not "+k+" contents for " + label);
 
-            var k = kb.each(chunk, ns.dc('author')).length
+            k = kb.each(chunk, ns.dc('author')).length
             if (k !== 1) complain2("Should be 1 not "+k+" author for " + label);
 
             var sts = kb.statementsMatching(undefined, ns.sioc('contents'));
@@ -592,6 +584,7 @@ UI.pad.notepad  = function (dom, padDoc, subject, me, options) {
         // First see which of the logical chunks have existing physical manifestations
         var manif = [];
         // Find which lines correspond to existing chunks
+        var i
         for (var chunk = kb.the(subject, PAD('next'));
             !chunk.sameTerm(subject);
             chunk = kb.the(chunk, PAD('next'))) {
