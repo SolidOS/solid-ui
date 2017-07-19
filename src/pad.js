@@ -80,15 +80,15 @@ UI.pad.recordParticipation = function(subject, padDoc, refreshable) {
   if (!parps.length) { // If I am not already recorded
     var participation = UI.widgets.newThing(padDoc);
     var ins = [
-      UI.rdf.st(subject,  ns.wf('participation'), participation, padDoc),
+      UI.rdf.st(subject, ns.wf('participation'), participation, padDoc),
 
-      UI.rdf.st(participation,  ns.wf('participant'), me, padDoc),
-      UI.rdf.st(participation,  UI.ns.cal('dtstart'), new Date(), padDoc),
+      UI.rdf.st(participation, ns.wf('participant'), me, padDoc),
+      UI.rdf.st(participation, UI.ns.cal('dtstart'), new Date(), padDoc),
       UI.rdf.st(participation, ns.ui('backgroundColor'), UI.pad.lightColorHash(me), padDoc)
     ]
-    kb. updater.update([], ins, function(uri, ok, error_body, xhr){
+    kb.updater.update([], ins, function (uri, ok, errorMessage) {
       if (!ok) {
-        throw new Error('Error recording your partipation: ' + error_body)
+        throw new Error('Error recording your partipation: ' + errorMessage)
       }
       if (refreshable && refreshable.refresh){
         refreshable.refresh()
@@ -198,7 +198,7 @@ UI.pad.notepad  = function (dom, padDoc, subject, me, options) {
         var label = chunk.uri.slice(-4);
         console.log("Deleting line " + label)
 
-        updater.update(del, ins, function(uri, ok, error_body, xhr){
+        updater.update(del, ins, function (uri, ok, errorMessage, response){
             if (ok) {
                 var row = part.parentNode;
                 var before = row.previousSibling;
@@ -207,7 +207,7 @@ UI.pad.notepad  = function (dom, padDoc, subject, me, options) {
                 if (before && before.firstChild) {
                     before.firstChild.focus();
                 }
-            } else if (xhr.status === 409) { // Conflict
+            } else if (response.status === 409) { // Conflict
                 setPartStyle(part,'color: black;  background-color: #ffd;'); // yellow
                 part.state = 0; // Needs downstream refresh
                 UI.utils.beep(0.5, 512); // Ooops clash with other person
@@ -215,10 +215,10 @@ UI.pad.notepad  = function (dom, padDoc, subject, me, options) {
                     updater.requestDownstreamAction(padDoc, reloadAndSync);
                 }, 1000);
             } else {
-                console.log("    removePart FAILED " + chunk + ": " + error_body);
+                console.log("    removePart FAILED " + chunk + ": " + errorMessage);
                 console.log("    removePart was deleteing :'" + del);
                 setPartStyle(part, 'color: black;  background-color: #fdd;');// failed
-                complain("Error "+xhr.status+" saving changes: "+ error_body. true); // upstream,
+                complain("Error "+response.status+" saving changes: "+ errorMessage. true); // upstream,
                 // updater.requestDownstreamAction(padDoc, reloadAndSync);
             };
         })
@@ -232,7 +232,7 @@ UI.pad.notepad  = function (dom, padDoc, subject, me, options) {
         var ins = $rdf.st(chunk, PAD('indent'), newIndent, padDoc);
         updater.update(del, ins, function(uri, ok, error_body){
             if (!ok) {
-                console.log("Indent change FAILED '" + newIndent + "' for "+padDoc+": " + error_body);
+                console.log("Indent change FAILED '" + newIndent + "' for " + padDoc +": " + error_body);
                 setPartStyle(part, 'color: black;  background-color: #fdd;'); // failed
                 updater.requestDownstreamAction(padDoc, reloadAndSync);
             } else {
