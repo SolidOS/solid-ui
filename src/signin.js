@@ -23,37 +23,6 @@ UI.widgets.findOriginOwner = function (doc, callback) {
   return origin
 }
 
-// Note for a PUT which will not overwrite existing file
-// A la  https://tools.ietf.org/html/rfc7232#section-3.2
-// Use header   If-None-Match: *
-UI.widgets.webOperation = function (method, uri, options, callback) {
-  var xhr = $rdf.Util.XMLHTTPFactory()
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4) {
-      var ok = (!xhr.status || (xhr.status >= 200 && xhr.status < 300))
-            // @@@ Optionally  options.saveMetadata Save metadata to preseve headers
-      callback(uri, ok, xhr.responseText, xhr)
-    }
-  }
-  xhr.open(method, uri, true)
-  if (options.contentType) {
-    xhr.setRequestHeader('Content-type', options.contentType)
-  }
-  xhr.send(options.data ? options.data : undefined)
-}
-
-UI.widgets.webCopy = function (here, there, contentType, callback) {
-  UI.widgets.webOperation('GET', here, {}, function (uri, ok, body, xhr) {
-    if (ok) {
-      UI.widgets.webOperation('PUT',
-                there, { data: xhr.responseText, contentType: contentType },
-                callback)
-    } else {
-      callback(uri, ok, '(on read) ' + body, xhr)
-    }
-  })
-}
-
 UI.widgets.complain = function (context, err) {
   var ele = context.statusArea || context.div
   console.log('Complaint: ' + err)
