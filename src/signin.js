@@ -456,7 +456,7 @@ UI.widgets.setACLUserPublic = function (docURI, me, options, callback) {
         kb.sym('http://www.iana.org/assignments/link-relations/acl')) // @@ check that this get set by web.js
   if (aclDoc) { // Great we already know where it is
     var aclText = genACLtext(docURI, aclDoc.uri, options)
-    UI.widgets.webOperation('PUT', aclDoc.uri, { data: aclText, contentType: 'text/turtle' }, callback)
+    kb.fetcher.webOperation('PUT', aclDoc.uri, { data: aclText, contentType: 'text/turtle' }, callback)
   } else {
     kb.fetcher.nowOrWhenFetched(docURI, undefined, function (ok, body) {
       if (!ok) return callback(ok, 'Getting headers for ACL: ' + body)
@@ -467,7 +467,7 @@ UI.widgets.setACLUserPublic = function (docURI, me, options, callback) {
         callback(false, 'No Link rel=ACL header for ' + docURI)
       } else {
         var aclText = genACLtext(docURI, aclDoc.uri, options)
-        UI.widgets.webOperation('PUT', aclDoc.uri, { data: aclText, contentType: 'text/turtle' }, callback)
+        kb.fetcher.webOperation('PUT', aclDoc.uri, { data: aclText, contentType: 'text/turtle' }, callback)
       }
     })
   }
