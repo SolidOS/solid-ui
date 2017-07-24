@@ -1,6 +1,7 @@
 //  signin.js     Signing in, signing up, workspace selection, app spawning
 
-var Solid = require('solid-client')
+const Solid = require('solid-client')
+const $rdf = require('rdflib')
 
 var UI = {
   icons: require('./iconBase'),
@@ -537,30 +538,6 @@ UI.widgets.signInOrSignUpBox = function (myDocument, gotOne) {
   return box
 }
 
-//  Check user and set 'me' if found
-UI.widgets.checkUserSetMe = function (doc) {
-  return UI.widgets.checkUser(doc, (user) => {
-    user = user || '' // null means no login
-    var uri = user.uri || user
-
-    var meUri = tabulator.preferences.get('me')
-
-    if (uri === meUri) return null
-
-    var message
-    if (!uri) {
-            // message = "(Log in by auth with no URI - ignored)";
-      message = '(NOT logged in by authentication.)'
-            // This may be happen a http://localhost/ test enviroment
-    } else {
-      tabulator.preferences.set('me', uri)
-      message = '(Logged in as ' + uri + ' by authentication.)'
-    }
-
-    console.log(message)
-  })
-}
-
 // For a user authenticated using webid (or possibly other methods) it
 // is not immediately available to the client which person(a) it is.
 // The solid standard way is for the server to send the information back as a User: header.
@@ -569,11 +546,12 @@ UI.widgets.userCheckSite = 'https://databox.me/'
 
 /**
  * @param doc {NamedNode} Uri of a server to ask for the User: header
- * @param setUser {Function} Callback, `setUser(webId|null)`
- * @returns {*}
+ * @param [setUser] {Function} Optional callback, `setUser(webId|null)`
+ *
+ * @returns {Promise<string|null>} Resolves with web id, if no callback provided
  */
-UI.widgets.checkUser = function (doc, setUser) {
-  var kb = UI.store
+UI.widgets.checkUser = function checkUser (doc, setUser) {
+  const kb = UI.store
 
   // Check for offline mode override
   if (typeof $SolidTestEnvironment !== 'undefined' && $SolidTestEnvironment.username) { // Test setup
@@ -585,49 +563,85 @@ UI.widgets.checkUser = function (doc, setUser) {
   var meUri = tabulator.preferences.get('me')
   if (meUri) return setUser(meUri)
 
-  var userMirror = kb.any(doc, UI.ns.link('userMirror'))
-  if (!userMirror) userMirror = doc
+  doc = kb.any(doc, UI.ns.link('userMirror')) || doc
 
-  kb.fetcher.nowOrWhenFetched(userMirror.uri, undefined, function (ok, body) {
-    if (!ok) {
-      var message = 'checkUser: Unable to load ' + userMirror.uri + ': ' + body
-      console.log(message)
-      setUser(null)
-    } else {
-      var allUserHeaders = []
-      var requests = kb.each(undefined, UI.ns.link('requestedURI'), $rdf.uri.docpart(userMirror.uri))
-      requests.map(function (request) {
-        var response = kb.any(request, UI.ns.link('response'))
-        if (response !== undefined) {
-          var userHeaders = kb.each(response, UI.ns.httph('user'))
-          allUserHeaders = allUserHeaders.concat(userHeaders)
-        }
-      })
+  return fetchUsername(doc)
+    .catch(err => {
+      console.log('Error fetching username:', err)
+      return null
+    })
+    .then(webId => {
+      // if (webId.startsWith('dns:')) {  // legacy rww.io pseudo-users
+      //   webId = null
+      // }
+      tabulator.preferences.set('me', webId || '')
 
-      if (allUserHeaders.length === 0) {
-        if (userMirror.uri !== UI.widgets.userCheckSite) {
-          console.log('CheckUser: non-solid server' + userMirror + ': trying ' +
-            UI.widgets.userCheckSite)
-
-          UI.widgets.checkUser(kb.sym(UI.widgets.userCheckSite), setUser)
-          console.log('Fail to get username even from ' + UI.widgets.userCheckSite)
-        } else {
-          setUser(null) // Fail, we have even tried the userCheckSite
-        }
-      } else {
-        var username = allUserHeaders[0].value.trim()
-
-        if (username.slice(0, 4) !== 'dns:') {
-          // dns: are pseudo-usernames from rww.io and don't count
-          tabulator.preferences.set('me', username)
-          setUser(username)
-        } else {
-          tabulator.preferences.set('me', '')
-          setUser(null)
-        }
+      if (webId) {
+        console.log('(Logged in as ' + webId + ' by authentication.)')
       }
+
+      if (setUser) { return setUser(webId) }
+
+      return webId
+    })
+}
+
+/**
+ * @param doc {NamedNode}
+ *
+ * @returns {Promise<string|null>}
+ */
+function fetchUsername (doc) {
+  const kb = UI.store
+
+  if (!doc) {
+    return Promise.reject(new Error('Cannot fetch username for empty uri'))
+  }
+
+  return kb.fetcher.fetch(doc.uri)
+    .then(response => {
+      if (!response.ok) {
+        let message = 'fetchUsername: Unable to load ' + doc.uri + ': ' + response
+        console.log(message)
+        return null
+      }
+
+      let allUserHeaders = userHeadersFor(doc)
+
+      if (allUserHeaders.length) {
+        // have the username
+        return allUserHeaders[0].value.trim()
+      }
+
+      if (doc.uri !== UI.widgets.userCheckSite) {
+        let newDoc = UI.widgets.userCheckSite
+        console.log('fetchUsername: non-solid server' + doc + ': trying ' + newDoc)
+
+        return fetchUsername(kb.sym(newDoc))
+      }
+
+      return null
+    })
+}
+
+function userHeadersFor (doc) {
+  if (!doc) { return [] }
+
+  const kb = UI.store
+  let allUserHeaders = []
+
+  const requests = kb.each(null, UI.ns.link('requestedURI'), $rdf.uri.docpart(doc.uri))
+
+  requests.map((request) => {
+    let response = kb.any(request, UI.ns.link('response'))
+
+    if (response) {
+      let userHeaders = kb.each(response, UI.ns.httph('user'))
+      allUserHeaders = allUserHeaders.concat(userHeaders)
     }
   })
+
+  return allUserHeaders
 }
 
 /**
@@ -708,7 +722,7 @@ UI.widgets.loginStatusBox = function (myDocument, listener) {
       try {
         window.alert(message)
       } catch (e) {
-      };
+      }
     }
     box.refresh()
     if (listener) listener(null)
@@ -721,8 +735,8 @@ UI.widgets.loginStatusBox = function (myDocument, listener) {
                 UI.store.any(me, UI.ns.foaf('name'))
       if (nick) {
         logoutLabel = 'Logout ' + nick.value
-      };
-    };
+      }
+    }
     var signOutButton = myDocument.createElement('input')
     signOutButton.className = 'WebIDCancelButton'
     signOutButton.setAttribute('type', 'button')
@@ -740,7 +754,7 @@ UI.widgets.loginStatusBox = function (myDocument, listener) {
         box.appendChild(logoutButton(me))
       } else {
         box.appendChild(UI.widgets.signInOrSignUpBox(myDocument, setIt))
-      };
+      }
     }
     box.me = meUri
   }
