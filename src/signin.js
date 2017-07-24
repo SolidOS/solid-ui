@@ -645,48 +645,6 @@ function userHeadersFor (doc) {
 }
 
 /**
- * What ID does the user use to log into the given target?
- *
- * @param context
- * @param setUser
- *
- * @returns {Promise}
- */
-UI.widgets.checkUserForTarget = function (context, setUser) {
-  var kb = UI.store
-
-  return kb.fetcher.load(context.target)
-    .then(() => {
-      kb.each(undefined, UI.ns.link('requestedURI'), context.target.uri)
-        .map(function (request) {
-          var response = kb.any(request, UI.ns.link('response'))
-
-          if (response) {
-            var userHeaders = kb.each(response, UI.ns.httph('user'))
-            if (userHeaders.length === 0) {
-              console.log('CheckUser: non-solid server: trying ' +
-                UI.widgets.userCheckSite)
-
-              UI.widgets.checkUser(kb.sym(UI.widgets.userCheckSite), setUser)
-            } else {
-              userHeaders.map(function (userHeader) {
-                var username = userHeader.value.trim()
-
-                if (username.slice(0, 4) !== 'dns:') {
-                  // dns: are pseudo-usernames from rww.io and don't count
-                  context.me = $rdf.sym(username)
-                  tabulator.preferences.set('me', username)
-                }
-              })
-            }
-          }
-
-          return context
-        })
-    })
-}
-
-/**
  * Login status box
  *
  * A big sign-up/sign in box or a logout box depending on the state
