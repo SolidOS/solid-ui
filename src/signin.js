@@ -13,7 +13,7 @@ var UI = {
 }
 
 // Look for and load the User who has control over it
-UI.widgets.findOriginOwner = function (doc, callback) {
+UI.widgets.findOriginOwner = function findOriginOwner (doc, callback) {
   var uri = doc.uri || doc
   var i = uri.indexOf('://')
   if (i < 0) return false
@@ -23,11 +23,12 @@ UI.widgets.findOriginOwner = function (doc, callback) {
   return origin
 }
 
-UI.widgets.complain = function (context, err) {
+function complain (context, err) {
   var ele = context.statusArea || context.div
   console.log('Complaint: ' + err)
   return ele.appendChild(UI.widgets.errorMessageBlock(context.dom, err))
 }
+UI.widgets.complain = complain
 
 // Promises versions
 //
@@ -46,37 +47,90 @@ UI.widgets.complain = function (context, err) {
 //  div               A DOM element where UI can be displayed
 //  statusArea        A DOM element (opt) progress stuff can be displayed, or error messages
 
-UI.widgets.logInLoadProfile = function (context) {
-  if (context.publicProfile) return Promise.resolve(context) // already done
+/**
+ * @param webId {NamedNode}
+ * @param context {Object}
+ *
+ * @returns {NamedNode|null} Returns the Web ID, after setting it
+ */
+function setUser (webId, context) {
+  context.me = webId
 
-  var box = context.div
-  var uri = tabulator.preferences.get('me')
-  context.me = uri ? $rdf.sym(uri) : null
+  tabulator.preferences.set('me', webId ? webId.uri : '')
 
-  return new Promise(function (resolve, reject) {
-    var gotIDChange = function (meURI) {
-      if (!meURI) return
-      var me = $rdf.sym(meURI)
-      context.me = me
-      tabulator.preferences.set('me', me.uri)
-      UI.store.fetcher.nowOrWhenFetched(me.doc(), undefined, function (ok, body) {
-        if (!ok) {
-          var message = "Can't load profile file " + me.doc() + ': ' + body
-          box.appendChild(UI.widgets.errorMessageBlock(context.dom, message))
-          reject(message)
-        } else {
-          context.publicProfile = me.doc()
-          resolve(context)
-        }
-      })
-    }
-    box = UI.widgets.loginStatusBox(context.dom, gotIDChange)
+  return webId
+}
+
+/**
+ * @returns {NamedNode|null}
+ */
+function storedUser () {
+  let webId = tabulator.preferences.get('me')
+  return webId ? $rdf.sym(webId) : null
+}
+
+/**
+ * Resolves with the logged in user's Web ID
+ *
+ * @param context
+ *
+ * @returns {Promise<NamedNode|null>}
+ */
+function logIn (context) {
+  const kb = UI.store
+  let webId = storedUser()
+
+  if (webId) {
+    return Promise.resolve(setUser(webId, context))
+  }
+
+  return new Promise((resolve) => {
+    let box = loginStatusBox(context.dom, (webIdUri) => {
+      resolve(setUser(kb.sym(webIdUri), context))
+    })
+
     context.div.appendChild(box)
-    if (context.me) {
-      gotIDChange(context.me.uri) // trigger continuation if already set
-    }
   })
 }
+
+/**
+ * Logs the user in and loads their WebID profile document into the store
+ *
+ * @param context {Object}
+ *
+ * @returns {Promise<Object>} Resolves with the context after login / fetch
+ */
+function logInLoadProfile (context) {
+  if (context.publicProfile) { return Promise.resolve(context) } // already done
+
+  const fetcher = UI.store.fetcher
+  let profileUri
+
+  return logIn(context)
+    .then(webId => {
+      if (!webId) {
+        throw new Error('Could not log in')
+      }
+
+      profileUri = webId.doc()
+
+      // Load the profile into the knowledge base (fetcher.store)
+      return fetcher.fetch(profileUri)
+    })
+    .then(result => {
+      if (!result.ok) {
+        throw new Error(result.error)
+      }
+
+      context.publicProfile = profileUri
+      return context
+    })
+    .catch(err => {
+      let message = 'Cannot load profile ' + profileUri + ' : ' + err
+      context.div.appendChild(UI.widgets.errorMessageBlock(context.dom, message))
+    })
+}
+UI.widgets.logInLoadProfile = logInLoadProfile
 
 /**
  * Loads preferences file
@@ -86,18 +140,18 @@ UI.widgets.logInLoadProfile = function (context) {
  *
  * @returns {Promise<context>}
  */
-UI.widgets.loadPreferences = function (context) {
+function loadPreferences (context) {
   if (context.preferencesFile) return Promise.resolve(context) // already done
-  var kb = UI.store
-  var preferencesFile = kb.any(context.me, UI.ns.space('preferencesFile'))
-  var box = context.statusArea || context.div || null
-  var pending
+
+  const kb = UI.store
+  const box = context.statusArea || context.div || null
+  let preferencesFile = kb.any(context.me, UI.ns.space('preferencesFile'))
+  let pending
 
   return Promise.resolve()
     .then(() => {
-      var message
       if (!preferencesFile) {
-        message = "Can't find a preferences file for user: " + context.me
+        let message = "Can't find a preferences file for user: " + context.me
         UI.widgets.errorMessageBlock(context.dom, message)
         throw new Error(message)
       }
@@ -109,7 +163,7 @@ UI.widgets.loadPreferences = function (context) {
         box.appendChild(pending)
       }
 
-      return kb.fetcher.load(preferencesFile)
+      return kb.fetcher.fetch(preferencesFile)
     })
     .then(() => {
       if (pending) {
@@ -122,6 +176,7 @@ UI.widgets.loadPreferences = function (context) {
       throw new Error('Error loading preferences file. ' + err)
     })
 }
+UI.widgets.loadPreferences = loadPreferences
 
 /**
  * Resolves with the same context, outputting
@@ -133,12 +188,12 @@ UI.widgets.loadPreferences = function (context) {
  *
  * @returns {Promise<context>}
  */
-UI.widgets.loadTypeIndexes = function (context) {
+function loadTypeIndexes (context) {
   var ns = UI.ns
   var kb = UI.store
 
-  return UI.widgets.logInLoadProfile(context)
-    .then(UI.widgets.loadPreferences)
+  return logInLoadProfile(context)
+    .then(loadPreferences)
 
     .then((context) => {
       var me = context.me
@@ -156,11 +211,12 @@ UI.widgets.loadTypeIndexes = function (context) {
 
     .then(() => context)
 
-    .catch(function (e) {
-      UI.widgets.complain(context, e)
+    .catch((e) => {
+      complain(context, e)
       throw new Error('Error loading type indexes: ' + e)
     })
 }
+UI.widgets.loadTypeIndexes = loadTypeIndexes
 
 /**
  * Resolves with the same context, outputting
@@ -174,9 +230,9 @@ UI.widgets.loadTypeIndexes = function (context) {
  *
  * @returns {Promise}
  */
-UI.widgets.ensureTypeIndexes = function (context) {
+function ensureTypeIndexes (context) {
   return new Promise(function (resolve, reject) {
-    return UI.widgets.loadTypeIndexes(context)
+    return loadTypeIndexes(context)
       .then(function (context) {
         var ns = UI.ns
         var kb = UI.store
@@ -225,7 +281,8 @@ UI.widgets.ensureTypeIndexes = function (context) {
           })
       }) // .then
   }) // Promise
-} // ensureTypeIndexes
+}
+UI.widgets.ensureTypeIndexes = ensureTypeIndexes
 
 /**
  * Returns promise of context with arrays of symbols
@@ -239,7 +296,7 @@ UI.widgets.ensureTypeIndexes = function (context) {
  * @param klass
  * @returns {Promise.<TResult>}
  */
-UI.widgets.findAppInstances = function (context, klass) {
+function findAppInstances (context, klass) {
   var kb = UI.store
   var ns = UI.ns
   var fetcher = UI.store.fetcher
@@ -247,7 +304,7 @@ UI.widgets.findAppInstances = function (context, klass) {
   var instances = []
   var containers = []
 
-  return UI.widgets.loadTypeIndexes(context)
+  return loadTypeIndexes(context)
     .then((indexes) => {
       // var ix = context.index.private.concat(context.index.public)
 
@@ -278,6 +335,7 @@ UI.widgets.findAppInstances = function (context, klass) {
       throw new Error('Error looking for instances of ' + klass + ': ' + e)
     })
 }
+UI.widgets.findAppInstances = findAppInstances
 
 /**
  * UI to control registration of instance
@@ -288,7 +346,7 @@ UI.widgets.findAppInstances = function (context, klass) {
  *
  * @returns {Promise}
  */
-UI.widgets.registrationControl = function (context, instance, klass) {
+function registrationControl (context, instance, klass) {
   var kb = UI.store
   var ns = UI.ns
   var dom = context.dom
@@ -296,7 +354,7 @@ UI.widgets.registrationControl = function (context, instance, klass) {
   var box = dom.createElement('div')
   context.div.appendChild(box)
 
-  return UI.widgets.ensureTypeIndexes(context)
+  return ensureTypeIndexes(context)
     .then(function (context) {
       box.innerHTML = '<table><tbody><tr></tr><tr></tr></tbody></table>' // tbody will be inserted anyway
       box.setAttribute('style', 'font-size: 120%; text-align: right; padding: 1em; border: solid gray 0.05em;')
@@ -331,6 +389,7 @@ UI.widgets.registrationControl = function (context, instance, klass) {
       return context
     })
 }
+UI.widgets.registrationControl = registrationControl
 
 /**
  * UI to List at all registered things
@@ -339,74 +398,73 @@ UI.widgets.registrationControl = function (context, instance, klass) {
  *
  * @returns {Promise}
  */
-UI.widgets.registrationList = function (context, options) {
-  return new Promise(function (resolve, reject) {
-    var kb = UI.store
-    var ns = UI.ns
-    var dom = context.dom
+function registrationList (context, options) {
+  const kb = UI.store
+  const ns = UI.ns
+  const dom = context.dom
 
-    var box = dom.createElement('div')
-    context.div.appendChild(box)
+  var box = dom.createElement('div')
+  context.div.appendChild(box)
 
-    return UI.widgets.ensureTypeIndexes(context)
-      .then(function (indexes) {
-        box.innerHTML = '<table><tbody></tbody></table>' // tbody will be inserted anyway
-        box.setAttribute('style', 'font-size: 120%; text-align: right; padding: 1em; border: solid #eee 0.5em;')
-        var table = box.firstChild
+  return ensureTypeIndexes(context)
+    .then((indexes) => {
+      box.innerHTML = '<table><tbody></tbody></table>' // tbody will be inserted anyway
+      box.setAttribute('style', 'font-size: 120%; text-align: right; padding: 1em; border: solid #eee 0.5em;')
+      var table = box.firstChild
 
-        var ix = []
-        var sts = []
-        var vs = ['private', 'public']
-        vs.forEach(function (visibility) {
-          if (options[visibility]) {
-            ix = ix.concat(context.index[visibility][0])
-            sts = sts.concat(kb.statementsMatching(
-              undefined, ns.solid('instance'), undefined, context.index[visibility][0]))
-          }
-        })
-
-        for (var i = 0; i < sts.length; i++) {
-          var statement = sts[i]
-          // var cla = statement.subject
-          var inst = statement.object
-          // if (false) {
-          //   var tr = table.appendChild(dom.createElement('tr'))
-          //   var anchor = tr.appendChild(dom.createElement('a'))
-          //   anchor.setAttribute('href', inst.uri)
-          //   anchor.textContent = UI.utils.label(inst)
-          // } else {
-          // }
-
-          var deleteInstance = function (x) {
-            kb.updater.update([statement], [], function (uri, ok, errorBody) {
-              if (ok) {
-                console.log('Removed from index: ' + statement.subject)
-              } else {
-                console.log('Error: Cannot delete ' + statement + ': ' + errorBody)
-              }
-            })
-          }
-          var opts = { deleteFunction: deleteInstance }
-          var tr = UI.widgets.personTR(dom, ns.solid('instance'), inst, opts)
-          table.appendChild(tr)
+      var ix = []
+      var sts = []
+      var vs = ['private', 'public']
+      vs.forEach(function (visibility) {
+        if (options[visibility]) {
+          ix = ix.concat(context.index[visibility][0])
+          sts = sts.concat(kb.statementsMatching(
+            undefined, ns.solid('instance'), undefined, context.index[visibility][0]))
         }
-
-        /*
-         //var containers = kb.each(klass, ns.solid('instanceContainer'));
-         if (containers.length) {
-         fetcher.load(containers).then(function(xhrs){
-         for (var i=0; i<containers.length; i++) {
-         var cont = containers[i];
-         instances = instances.concat(kb.each(cont, ns.ldp('contains')));
-         }
-         });
-         }
-         */
-
-        resolve(context)
       })
-  })
+
+      for (var i = 0; i < sts.length; i++) {
+        var statement = sts[i]
+        // var cla = statement.subject
+        var inst = statement.object
+        // if (false) {
+        //   var tr = table.appendChild(dom.createElement('tr'))
+        //   var anchor = tr.appendChild(dom.createElement('a'))
+        //   anchor.setAttribute('href', inst.uri)
+        //   anchor.textContent = UI.utils.label(inst)
+        // } else {
+        // }
+
+        var deleteInstance = function (x) {
+          kb.updater.update([statement], [], function (uri, ok, errorBody) {
+            if (ok) {
+              console.log('Removed from index: ' + statement.subject)
+            } else {
+              console.log('Error: Cannot delete ' + statement + ': ' + errorBody)
+            }
+          })
+        }
+        var opts = { deleteFunction: deleteInstance }
+        var tr = UI.widgets.personTR(dom, ns.solid('instance'), inst, opts)
+        table.appendChild(tr)
+      }
+
+      /*
+       //var containers = kb.each(klass, ns.solid('instanceContainer'));
+       if (containers.length) {
+       fetcher.load(containers).then(function(xhrs){
+       for (var i=0; i<containers.length; i++) {
+       var cont = containers[i];
+       instances = instances.concat(kb.each(cont, ns.ldp('contains')));
+       }
+       });
+       }
+       */
+
+      return context
+    })
 }
+UI.widgets.registrationList = registrationList
 
 /**
  * Simple Access Control
@@ -419,80 +477,122 @@ UI.widgets.registrationList = function (context, options) {
  * @param docURI
  * @param me {NamedNode} WebID of user
  * @param options
- * @param options.public {Array<string>} eg [ 'Read', 'Write']
- * @param callback
+ * @param options.public {Array<string>} eg ['Read', 'Write']
+ *
+ * @returns {Promise<NamedNode>} Resolves with aclDoc uri on successful write
  */
-UI.widgets.setACLUserPublic = function (docURI, me, options, callback) {
-  var genACLtext = function (docURI, aclURI, options) {
-    options = options || {}
-    var optPublic = options.public || []
-    var g = $rdf.graph()
-    var auth = $rdf.Namespace('http://www.w3.org/ns/auth/acl#')
-    var a = g.sym(aclURI + '#a1')
-    var acl = g.sym(aclURI)
-    var doc = g.sym(docURI)
-    g.add(a, UI.ns.rdf('type'), auth('Authorization'), acl)
-    g.add(a, auth('accessTo'), doc, acl)
-    if (options.defaultForNew) {
-      g.add(a, auth('defaultForNew'), doc, acl)
-    }
-    g.add(a, auth('agent'), me, acl)
-    g.add(a, auth('mode'), auth('Read'), acl)
-    g.add(a, auth('mode'), auth('Write'), acl)
-    g.add(a, auth('mode'), auth('Control'), acl)
+function setACLUserPublic (docURI, me, options) {
+  const kb = UI.store
+  let aclDoc = kb.any(kb.sym(docURI),
+    kb.sym('http://www.iana.org/assignments/link-relations/acl'))
 
-    if (optPublic.length) {
-      a = g.sym(aclURI + '#a2')
-      g.add(a, UI.ns.rdf('type'), auth('Authorization'), acl)
-      g.add(a, auth('accessTo'), doc, acl)
-      g.add(a, auth('agentClass'), UI.ns.foaf('Agent'), acl)
-      for (var p = 0; p < optPublic.length; p++) {
-        g.add(a, auth('mode'), auth(optPublic[p]), acl) // Like 'Read' etc
-      }
-    }
-    return $rdf.serialize(acl, g, aclURI, 'text/turtle')
-  }
-  var kb = UI.store
-  var aclDoc = kb.any(kb.sym(docURI),
-        kb.sym('http://www.iana.org/assignments/link-relations/acl')) // @@ check that this get set by web.js
-  if (aclDoc) { // Great we already know where it is
-    var aclText = genACLtext(docURI, aclDoc.uri, options)
-    kb.fetcher.webOperation('PUT', aclDoc.uri, { data: aclText, contentType: 'text/turtle' }, callback)
-  } else {
-    kb.fetcher.nowOrWhenFetched(docURI, undefined, function (ok, body) {
-      if (!ok) return callback(ok, 'Getting headers for ACL: ' + body)
-      var aclDoc = kb.any(kb.sym(docURI),
-                kb.sym('http://www.iana.org/assignments/link-relations/acl')) // @@ check that this get set by web.js
-      if (!aclDoc) {
-                // complainIfBad(false, "No Link rel=ACL header for " + docURI);
-        callback(false, 'No Link rel=ACL header for ' + docURI)
-      } else {
-        var aclText = genACLtext(docURI, aclDoc.uri, options)
-        kb.fetcher.webOperation('PUT', aclDoc.uri, { data: aclText, contentType: 'text/turtle' }, callback)
-      }
+  return Promise.resolve()
+    .then(() => {
+      if (aclDoc) { return aclDoc }
+
+      return fetchACLRel(docURI)
+        .catch(err => {
+          throw new Error(`Error fetching rel=ACL header for ${docURI}: ${err}`)
+        })
     })
-  }
+    .then(aclDoc => {
+      let aclText = genACLText(docURI, me, aclDoc.uri, options)
+
+      return kb.fetcher.webOperation('PUT', aclDoc.uri,
+          { data: aclText, contentType: 'text/turtle' })
+        .then(result => {
+          if (!result.ok) {
+            throw new Error('Error writing ACL text: ' + result.error)
+          }
+
+          return aclDoc
+        })
+    })
+}
+UI.widgets.setACLUserPublic = setACLUserPublic
+
+/**
+ * @param docURI {string}
+ * @returns {Promise<NamedNode|null>}
+ */
+function fetchACLRel (docURI) {
+  const kb = UI.store
+  const fetcher = kb.fetcher
+
+  return fetcher.fetch(docURI)
+    .then(result => {
+      if (!result.ok) {
+        throw new Error('While fetching:' + result.error)
+      }
+
+      let aclDoc = kb.any(kb.sym(docURI),
+        kb.sym('http://www.iana.org/assignments/link-relations/acl'))
+
+      if (!aclDoc) {
+        throw new Error('No Link rel=ACL header for ' + docURI)
+      }
+
+      return aclDoc
+    })
 }
 
-UI.widgets.offlineTestID = function () {
+/**
+ * @param docURI {string}
+ * @param me {NamedNode}
+ * @param aclURI {string}
+ * @param options {Object}
+ *
+ * @returns {string} Serialized ACL
+ */
+function genACLText (docURI, me, aclURI, options = {}) {
+  var optPublic = options.public || []
+  var g = $rdf.graph()
+  var auth = $rdf.Namespace('http://www.w3.org/ns/auth/acl#')
+  var a = g.sym(aclURI + '#a1')
+  var acl = g.sym(aclURI)
+  var doc = g.sym(docURI)
+  g.add(a, UI.ns.rdf('type'), auth('Authorization'), acl)
+  g.add(a, auth('accessTo'), doc, acl)
+  if (options.defaultForNew) {
+    g.add(a, auth('defaultForNew'), doc, acl)
+  }
+  g.add(a, auth('agent'), me, acl)
+  g.add(a, auth('mode'), auth('Read'), acl)
+  g.add(a, auth('mode'), auth('Write'), acl)
+  g.add(a, auth('mode'), auth('Control'), acl)
+
+  if (optPublic.length) {
+    a = g.sym(aclURI + '#a2')
+    g.add(a, UI.ns.rdf('type'), auth('Authorization'), acl)
+    g.add(a, auth('accessTo'), doc, acl)
+    g.add(a, auth('agentClass'), UI.ns.foaf('Agent'), acl)
+    for (let p = 0; p < optPublic.length; p++) {
+      g.add(a, auth('mode'), auth(optPublic[p]), acl) // Like 'Read' etc
+    }
+  }
+  return $rdf.serialize(acl, g, aclURI, 'text/turtle')
+}
+
+function offlineTestID () {
   if (typeof $SolidTestEnvironment !== 'undefined' && $SolidTestEnvironment.username) { // Test setup
     console.log('Assuming the user is ' + $SolidTestEnvironment.username)
     return $rdf.sym($SolidTestEnvironment.username)
   }
 
   if (tabulator.mode === 'webapp' && typeof document !== 'undefined' &&
-        document.location && ('' + document.location).slice(0, 16) === 'http://localhost') {
+    document.location && ('' + document.location).slice(0, 16) === 'http://localhost') {
     var div = document.getElementById('appTarget')
     if (!div) return null
     var id = div.getAttribute('testID')
     if (!id) return null
-        /* me = kb.any(subject, UI.ns.acl('owner')); // when testing on plane with no webid
-        */
+    /* me = kb.any(subject, UI.ns.acl('owner')); // when testing on plane with no webid
+    */
     console.log('Assuming user is ' + id)
     return $rdf.sym(id)
   }
   return null
 }
+UI.widgets.offlineTestID = offlineTestID
 
 /**
  * Bootstrapping identity
@@ -502,7 +602,7 @@ UI.widgets.offlineTestID = function () {
  *
  * @returns {Element}
  */
-UI.widgets.signInOrSignUpBox = function (myDocument, gotOne) {
+function signInOrSignUpBox (myDocument, gotOne) {
   var box = myDocument.createElement('div')
   var p = myDocument.createElement('p')
   box.appendChild(p)
@@ -537,6 +637,7 @@ UI.widgets.signInOrSignUpBox = function (myDocument, gotOne) {
   }, false)
   return box
 }
+UI.widgets.signInOrSignUpBox = signInOrSignUpBox
 
 // For a user authenticated using webid (or possibly other methods) it
 // is not immediately available to the client which person(a) it is.
@@ -550,7 +651,7 @@ UI.widgets.userCheckSite = 'https://databox.me/'
  *
  * @returns {Promise<string|null>} Resolves with web id, if no callback provided
  */
-UI.widgets.checkUser = function checkUser (doc, setUser) {
+function checkUser (doc, setUser) {
   const kb = UI.store
 
   // Check for offline mode override
@@ -585,6 +686,7 @@ UI.widgets.checkUser = function checkUser (doc, setUser) {
       return webId
     })
 }
+UI.widgets.checkUser = checkUser
 
 /**
  * @param doc {NamedNode}
@@ -654,7 +756,7 @@ function userHeadersFor (doc) {
  *
  * @returns {Element}
  */
-UI.widgets.loginStatusBox = function (myDocument, listener) {
+function loginStatusBox (myDocument, listener) {
   var meUri = tabulator.preferences.get('me')
   var me = meUri && UI.store.sym(meUri)
 
@@ -690,7 +792,7 @@ UI.widgets.loginStatusBox = function (myDocument, listener) {
     var logoutLabel = 'Web ID logout'
     if (me) {
       var nick = UI.store.any(me, UI.ns.foaf('nick')) ||
-                UI.store.any(me, UI.ns.foaf('name'))
+        UI.store.any(me, UI.ns.foaf('name'))
       if (nick) {
         logoutLabel = 'Logout ' + nick.value
       }
@@ -722,6 +824,7 @@ UI.widgets.loginStatusBox = function (myDocument, listener) {
 
   return box
 }
+UI.widgets.loginStatusBox = loginStatusBox
 
 /**
  * Workspace selection etc
@@ -745,7 +848,7 @@ UI.widgets.loginStatusBox = function (myDocument, listener) {
  * @param callbackWS
  * @returns {Element}
  */
-UI.widgets.selectWorkspace = function (dom, appDetails, callbackWS) {
+function selectWorkspace (dom, appDetails, callbackWS) {
   var noun = appDetails.noun
   var appPathSegment = appDetails.appPathSegment
 
@@ -920,11 +1023,13 @@ UI.widgets.selectWorkspace = function (dom, appDetails, callbackWS) {
     }
   }
 
-  UI.widgets.logInLoadProfile(context)
-    .then(UI.widgets.loadPreferences)
+  logInLoadProfile(context)  // kick off async operation
+    .then(loadPreferences)
     .then(displayOptions)
-  return box
+
+  return box  // return the box element, while login proceeds
 } // selectWorkspace
+UI.widgets.selectWorkspace = selectWorkspace
 
 /**
  * Creates a new instance of an app.
@@ -938,9 +1043,9 @@ UI.widgets.selectWorkspace = function (dom, appDetails, callbackWS) {
  *
  * @returns {Element} A div with a button in it for making a new app instance
  */
-UI.widgets.newAppInstance = function (dom, appDetails, callback) {
+function newAppInstance (dom, appDetails, callback) {
   var gotWS = function (ws, base) {
-        // $rdf.log.debug("newAppInstance: Selected workspace = " + (ws? ws.uri : 'none'))
+    // $rdf.log.debug("newAppInstance: Selected workspace = " + (ws? ws.uri : 'none'))
     callback(ws, base)
   }
   var div = dom.createElement('div')
@@ -948,10 +1053,11 @@ UI.widgets.newAppInstance = function (dom, appDetails, callback) {
   b.setAttribute('type', 'button')
   div.appendChild(b)
   b.innerHTML = 'Make new ' + appDetails.noun
-    // b.setAttribute('style', 'float: right; margin: 0.5em 1em;'); // Caller should set
+  // b.setAttribute('style', 'float: right; margin: 0.5em 1em;'); // Caller should set
   b.addEventListener('click', function (e) {
-    div.appendChild(UI.widgets.selectWorkspace(dom, appDetails, gotWS))
+    div.appendChild(selectWorkspace(dom, appDetails, gotWS))
   }, false)
   div.appendChild(b)
   return div
 }
+UI.widgets.newAppInstance = newAppInstance
