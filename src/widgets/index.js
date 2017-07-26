@@ -23,8 +23,10 @@ var widgets = module.exports = Object.assign(
   require('./peoplePicker'),  // UI.widgets.PeoplePicker
   require('./dragAndDrop'),
   require('./error'),         // UI.widgets.errorMessageBlock
-  buildCheckboxForm,
-  complain
+  {
+    buildCheckboxForm,
+    complain
+  }
 )
 
 var UI = {
