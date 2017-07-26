@@ -18,10 +18,10 @@ var UI = {
   log: require('./log'),
   ns: require('./ns'),
   store: require('./store'),
-  utils: require('./utils'),
   widgets: require('./widgets')
 }
 
+const utils = require('./utils')
 
 // UI.widgets.renderTableViewPane
 module.exports = function renderTableViewPane (doc, options) {
@@ -379,7 +379,7 @@ module.exports = function renderTableViewPane (doc, options) {
     }
 
     this.getLabel = function () {
-      return UI.utils.label(this.type)
+      return utils.label(this.type)
     }
 
     this.addUse = function () {
@@ -456,9 +456,9 @@ module.exports = function renderTableViewPane (doc, options) {
     this.getLabel = function () {
       if (this.predicate) {
         if (this.predicate.sameTerm(ns.rdf('type')) && this.superClass) {
-          return UI.utils.label(this.superClass)
+          return utils.label(this.superClass)
         }
-        return UI.utils.label(this.predicate)
+        return utils.label(this.predicate)
       } else if (this.variable) {
         return this.variable.toString()
       } else {
@@ -936,7 +936,7 @@ module.exports = function renderTableViewPane (doc, options) {
         if (colValue.termType === 'Literal') {
           return colValue.value.toLowerCase()
         } else if (colValue.termType === 'NamedNode') {
-          return UI.utils.label(colValue).toLowerCase()
+          return utils.label(colValue).toLowerCase()
         }
         return colValue.value.toLowerCase()
       } else {
@@ -1001,7 +1001,7 @@ module.exports = function renderTableViewPane (doc, options) {
         if (colValue.termType === 'Literal') {
           literalValue = colValue.value
         } else if (colValue.termType === 'NamedNode') {
-          literalValue = UI.utils.label(colValue)
+          literalValue = utils.label(colValue)
         } else {
           literalValue = ''
         }
@@ -1051,7 +1051,7 @@ module.exports = function renderTableViewPane (doc, options) {
 
     for (var i = 0; i < list.length; ++i) {
       var value = list[i]
-      var ele = optionElement(UI.utils.label(value), i)
+      var ele = optionElement(utils.label(value), i)
       if (searchValue[value.uri]) ele.selected = true
       dropdown.appendChild(ele)
     }
@@ -1259,7 +1259,7 @@ module.exports = function renderTableViewPane (doc, options) {
       result.addEventListener('click', function (e) {
         e.preventDefault()
         e.stopPropagation()
-        var target = UI.utils.getTarget(e)
+        var target = utils.getTarget(e)
         var uri = target.getAttribute('href')
         if (!uri) console.log('No href found \n')
         linkFunction(uri)
@@ -1279,7 +1279,7 @@ module.exports = function renderTableViewPane (doc, options) {
     if (match) {
       return linkTo(obj.uri, match[1], hints)
     } else {
-      return linkTo(obj.uri, UI.utils.label(obj), hints)
+      return linkTo(obj.uri, utils.label(obj), hints)
     }
   }
 

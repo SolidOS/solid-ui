@@ -26,11 +26,11 @@ var UI = {
   pad: require('./'),
   rdf: require('rdflib'),
   store: require('./store'),
-  utils: require('./utils'),
   widgets: require('./widgets')
 }
 
-var kb = UI.store
+const utils = require('./utils')
+const kb = UI.store
 
 module.exports.matrixForQuery = function (dom, query, vx, vy, vvalue, options, whenDone) {
   var matrix = dom.createElement('table')
@@ -55,7 +55,7 @@ module.exports.matrixForQuery = function (dom, query, vx, vy, vvalue, options, w
     if (options.cellFunction) {
       options.cellFunction(cell, x, y, value)
     } else {
-      cell.textContent = UI.utils.label(value)
+      cell.textContent = utils.label(value)
       cell.setAttribute('style', 'padding: 0.3em')
     }
     delete cell.old
@@ -67,10 +67,10 @@ module.exports.matrixForQuery = function (dom, query, vx, vy, vvalue, options, w
     var tr = dom.createElement('tr')
     var header = tr.appendChild(dom.createElement('td'))
     header.setAttribute('style', 'padding: 0.3em;')
-    header.textContent = UI.utils.label(y1) // first approximation
+    header.textContent = utils.label(y1) // first approximation
     if (y1.termType = 'NamedNode') {
       kb.fetcher.nowOrWhenFetched(y1.uri.split('#')[0], undefined, function (uri, ok, body) {
-        header.textContent = UI.utils.label(y1)
+        header.textContent = utils.label(y1)
       })
     }
     for (var i = 0; i < columns.length; i++) {
@@ -115,7 +115,7 @@ module.exports.matrixForQuery = function (dom, query, vx, vy, vvalue, options, w
       var td = dom.createElement('td') // Add a new cell
       td.style.textAlign = 'center'
       if (row === matrix.firstChild) {
-        td.textContent = UI.utils.label(x1)
+        td.textContent = utils.label(x1)
       } else {
         setCell(td, x1, $rdf.fromNT(y), null)
       }

@@ -20,9 +20,10 @@
 // export widgets with the same name)
 var widgets = module.exports = Object.assign(
   {},
-  require('./peoplePicker'),
+  require('./peoplePicker'),  // UI.widgets.PeoplePicker
   require('./dragAndDrop'),
-  require('./error')
+  require('./error'),         // UI.widgets.errorMessageBlock
+  buildCheckboxForm
 )
 
 var UI = {
@@ -30,9 +31,11 @@ var UI = {
   log: require('../log'),
   ns: require('../ns'),
   store: require('../store'),
-  utils: require('../utils'),
   widgets: widgets
 }
+
+const utils = require('../utils')
+
 // var UI.ns = require('./ns.js')
 // var utilsModule = require('./utils')
 // var aclControlModule = require('./acl-control')
@@ -109,10 +112,10 @@ UI.widgets.setName = function (element, x) {
     return name ? name.value : null
   }
   var name = x.sameTerm(ns.foaf('Agent')) ? 'Everyone' : findName(x)
-  element.textContent = name || UI.utils.label(x)
+  element.textContent = name || utils.label(x)
   if (!name && x.uri) { // Note this is only a fetch, not a lookUP of all sameAs etc
     kb.fetcher.nowOrWhenFetched(x.doc(), undefined, function (ok) {
-      element.textContent = (findName(x) || UI.utils.label(x)) // had: (ok ? '' : '? ') +
+      element.textContent = (findName(x) || utils.label(x)) // had: (ok ? '' : '? ') +
     })
   }
 }
@@ -274,10 +277,10 @@ UI.widgets.deleteButtonWithCheck = function (dom, container, noun, deleteFunctio
 UI.widgets.askName = function (dom, kb, container, predicate, klass) {
   return new Promise(function (resolve, reject) {
     var form = dom.createElement('div') // form is broken as HTML behaviour can resurface on js error
-    // classLabel = UI.utils.label(ns.vcard('Individual'))
+    // classLabel = utils.label(ns.vcard('Individual'))
     predicate = predicate || UI.ns.foaf('name')
-    var prompt = klass ? UI.utils.label(klass) + '  ' : ''
-    prompt += UI.utils.label(predicate) + ': '
+    var prompt = klass ? utils.label(klass) + '  ' : ''
+    prompt += utils.label(predicate) + ': '
     form.appendChild(dom.createElement('p')).textContent = prompt
     var namefield = dom.createElement('input')
     namefield.setAttribute('type', 'text')
@@ -432,7 +435,7 @@ UI.widgets.attachmentList = function (dom, subject, div, options) {
   var refresh = attachmentTable.refresh = function () {
     var things = kb.each(subject, predicate)
     things.sort()
-    UI.utils.syncTableToArray(attachmentTable, things, createNewRow)
+    utils.syncTableToArray(attachmentTable, things, createNewRow)
   }
   attachmentOuter.refresh = refresh // Participate in downstream changes
   refresh()
@@ -638,7 +641,7 @@ UI.widgets.field[UI.ns.ui('Multiple').uri] = function (
   var img = tail.appendChild(dom.createElement('img'))
   img.setAttribute('src', plusIconURI) //  plus sign
   img.setAttribute('style', 'margin: 0.2em; width: 1em; height:1em')
-  img.title = 'Click to add one or more ' + UI.utils.label(property)
+  img.title = 'Click to add one or more ' + utils.label(property)
   var prompt = tail.appendChild(dom.createElement('span'))
 
   var addItem = function (e, object) {
@@ -677,12 +680,12 @@ UI.widgets.field[UI.ns.ui('Multiple').uri] = function (
         })
       }
     }
-    UI.widgets.deleteButtonWithCheck(dom, subField, UI.utils.label(property), deleteItem)
+    UI.widgets.deleteButtonWithCheck(dom, subField, utils.label(property), deleteItem)
   }
 
   var values = kb.each(subject, property)
   prompt.textContent = (values.length === 0 ? 'Add one or more ' : 'Add more ') +
-    UI.utils.label(property)
+    utils.label(property)
 
   values.map(function (obj) { addItem(null, obj) })
   var extra = min - values.length
@@ -886,14 +889,14 @@ UI.widgets.field[UI.ns.ui('BooleanField').uri] = function (
       'No property to boolean field: ' + form))
   }
   var lab = kb.any(form, ui('label'))
-  if (!lab) lab = UI.utils.label(property, true) // Init capital
+  if (!lab) lab = utils.label(property, true) // Init capital
   store = UI.widgets.fieldStore(subject, property, store)
   var state = kb.any(subject, property)
   if (state === undefined) { state = false } // @@ sure we want that -- or three-state?
   // UI.log.debug('store is '+store)
   var ins = $rdf.st(subject, property, true, store)
   var del = $rdf.st(subject, property, false, store)
-  var box = UI.widgets.buildCheckboxForm(dom, kb, lab, del, ins, form, store)
+  var box = buildCheckboxForm(dom, kb, lab, del, ins, form, store)
   container.appendChild(box)
   return box
 }
@@ -1000,7 +1003,7 @@ UI.widgets.field[UI.ns.ui('Choice').uri] = function (
   var multiple = false
   // box.appendChild(dom.createTextNode('Choice: subForm='+subForm))
   var possible2 = UI.widgets.sortByLabel(possible)
-  var np = '--' + UI.utils.label(property) + '-?'
+  var np = '--' + utils.label(property) + '-?'
   if (kb.any(form, ui('canMintNew'))) {
     opts['mint'] = '* New *' // @@ could be better
     opts['subForm'] = subForm
@@ -1056,7 +1059,7 @@ UI.widgets.field[UI.ns.ui('Comment').uri] =
 UI.widgets.openHrefInOutlineMode = function (e) {
   e.preventDefault()
   e.stopPropagation()
-  var target = UI.utils.getTarget(e)
+  var target = utils.getTarget(e)
   var uri = target.getAttribute('href')
   if (!uri) console.log('No href found \n')
   // subject term, expand, pane, solo, referrer
@@ -1149,7 +1152,7 @@ UI.widgets.propertyTriage = function () {
 
 UI.widgets.fieldLabel = function (dom, property, form) {
   var lab = UI.store.any(form, UI.ns.ui('label'))
-  if (!lab) lab = UI.utils.label(property, true) // Init capital
+  if (!lab) lab = utils.label(property, true) // Init capital
   if (property === undefined) { return dom.createTextNode('@@Internal error: undefined property') }
   var anchor = dom.createElement('a')
   if (property.uri) anchor.setAttribute('href', property.uri)
@@ -1192,7 +1195,7 @@ UI.widgets.fieldFunction = function (dom, field) {
 UI.widgets.editFormButton = function (dom, container, form, store, callback) {
   var b = dom.createElement('button')
   b.setAttribute('type', 'button')
-  b.innerHTML = 'Edit ' + UI.utils.label(UI.ns.ui('Form'))
+  b.innerHTML = 'Edit ' + utils.label(UI.ns.ui('Form'))
   b.addEventListener('click', function (e) {
     var ff = UI.widgets.appendForm(dom, container,
       {}, form, UI.ns.ui('FormForm'), store, callback)
@@ -1208,7 +1211,7 @@ UI.widgets.editFormButton = function (dom, container, form, store, callback) {
 UI.widgets.linkButton = function (dom, object) {
   var b = dom.createElement('button')
   b.setAttribute('type', 'button')
-  b.textContent = 'Goto ' + UI.utils.label(object)
+  b.textContent = 'Goto ' + utils.label(object)
   b.addEventListener('click', function (e) {
     // b.parentNode.removeChild(b)
     UI.outline.GotoSubject(object, true, undefined, true, undefined)
@@ -1311,7 +1314,7 @@ UI.widgets.sortBySequence = function (list) {
 }
 
 UI.widgets.sortByLabel = function (list) {
-  var p2 = list.map(function (p) { return [UI.utils.label(p).toLowerCase(), p] })
+  var p2 = list.map(function (p) { return [utils.label(p).toLowerCase(), p] })
   p2.sort()
   return p2.map(function (pair) { return pair[1]})
 }
@@ -1324,7 +1327,7 @@ UI.widgets.sortByLabel = function (list) {
 UI.widgets.newButton = function (dom, kb, subject, predicate, theClass, form, store, callback) {
   var b = dom.createElement('button')
   b.setAttribute('type', 'button')
-  b.innerHTML = 'New ' + UI.utils.label(theClass)
+  b.innerHTML = 'New ' + utils.label(theClass)
   b.addEventListener('click', function (e) {
     b.parentNode.appendChild(UI.widgets.promptForNew(
       dom, kb, subject, predicate, theClass, form, store, callback))
@@ -1354,11 +1357,11 @@ UI.widgets.promptForNew = function (dom, kb, subject, predicate, theClass, form,
     if (lists.length === 0) {
       var p = box.appendChild(dom.createElement('p'))
       p.textContent = 'I am sorry, you need to provide information about a ' +
-        UI.utils.label(theClass) + " but I don't know enough information about those to ask you."
+        utils.label(theClass) + " but I don't know enough information about those to ask you."
       var b = box.appendChild(dom.createElement('button'))
       b.setAttribute('type', 'button')
       b.setAttribute('style', 'float: right;')
-      b.innerHTML = 'Goto ' + UI.utils.label(theClass)
+      b.innerHTML = 'Goto ' + utils.label(theClass)
       b.addEventListener('click', function (e) {
         UI.outline.GotoSubject(theClass, true, undefined, true, undefined)
       }, false)
@@ -1369,7 +1372,7 @@ UI.widgets.promptForNew = function (dom, kb, subject, predicate, theClass, form,
   }
   UI.log.debug('form is ' + form)
   box.setAttribute('style', 'border: 0.05em solid brown; color: brown')
-  box.innerHTML = '<h3>New ' + UI.utils.label(theClass) + '</h3>'
+  box.innerHTML = '<h3>New ' + utils.label(theClass) + '</h3>'
 
   var formFunction = UI.widgets.fieldFunction(dom, form)
   var object = UI.widgets.newThing(store)
@@ -1437,7 +1440,7 @@ UI.widgets.makeDescription = function (dom, kb, subject, predicate, store, callb
     field.value = desc
   } else {
     // Unless you can make the predicate label disappear with the first click then this is over-cute
-    // field.value = UI.utils.label(predicate); // Was"enter a description here"
+    // field.value = utils.label(predicate); // Was"enter a description here"
     field.select() // Select it ready for user input -- doesn't work
   }
 
@@ -1455,7 +1458,7 @@ UI.widgets.makeDescription = function (dom, kb, subject, predicate, store, callb
   submit.setAttribute('type', 'submit')
   submit.disabled = true // until the filled has been modified
   submit.setAttribute('style', 'visibility: hidden; float: right;') // Keep UI clean
-  submit.value = 'Save ' + UI.utils.label(predicate) // @@ I18n
+  submit.value = 'Save ' + utils.label(predicate) // @@ I18n
   group.appendChild(submit)
 
   var saveChange = function (e) {
@@ -1621,9 +1624,9 @@ UI.widgets.makeSelectForOptions = function (dom, kb, subject, predicate,
     var c = kb.sym(uri)
     var option = dom.createElement('option')
     if (options.disambiguate) {
-      option.appendChild(dom.createTextNode(UI.utils.labelWithOntology(c, true))) // Init. cap
+      option.appendChild(dom.createTextNode(utils.labelWithOntology(c, true))) // Init. cap
     } else {
-      option.appendChild(dom.createTextNode(UI.utils.label(c, true))) // Init.
+      option.appendChild(dom.createTextNode(utils.label(c, true))) // Init.
     }
     var backgroundColor = kb.any(c, kb.sym('http://www.w3.org/ns/ui#backgroundColor'))
     if (backgroundColor) option.setAttribute('style', 'background-color: ' + backgroundColor.value + '; ')
@@ -1725,7 +1728,7 @@ UI.widgets.makeSelectForNestedCategory = function (
 **  ins and sel are either statements *or arrays of statements* which should be
 **  made if the checkbox is checed and unchecked respectively.
 */
-UI.widgets.buildCheckboxForm = function (dom, kb, lab, del, ins, form, store) {
+function buildCheckboxForm (dom, kb, lab, del, ins, form, store) {
   var box = dom.createElement('div')
   var tx = dom.createTextNode(lab)
   var editable = UI.store.updater.editable(store.uri)
@@ -1914,7 +1917,7 @@ UI.widgets.index.twoLine = {} // Approx 40em * 2.4em
 
 UI.widgets.index.twoLine[''] = function (dom, x) { // Default
   var box = dom.createElement('div')
-  box.textContent = (UI.utils.label(x))
+  box.textContent = (utils.label(x))
   return box
 }
 
@@ -1935,7 +1938,7 @@ UI.widgets.index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction'] =
   var enc = function (p) {
     var y = UI.store.any(x, UI.ns.qu(p))
     if (!y) failed += '@@ No value for ' + p + '! '
-    return y ? UI.utils.escapeForXML(y.value) : '?' // @@@@
+    return y ? utils.escapeForXML(y.value) : '?' // @@@@
   }
   var box = dom.createElement('table')
   box.innerHTML = '<tr><td colspan="2">' + enc('payee') +
@@ -1943,8 +1946,8 @@ UI.widgets.index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction'] =
     '</td><td style="text-align: right;">' + enc('amount') + '</td></tr>'
   if (failed) {
     box.innerHTML = '<tr><td><a href="' +
-      UI.utils.escapeForXML(x.uri) + '">' +
-      UI.utils.escapeForXML(failed) + '</a></td></tr>'
+      utils.escapeForXML(x.uri) + '">' +
+      utils.escapeForXML(failed) + '</a></td></tr>'
   }
   return box
 }
@@ -1952,7 +1955,7 @@ UI.widgets.index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction'] =
 UI.widgets.index.twoLine['http://www.w3.org/ns/pim/trip#Trip'] = function (dom, x) {
   var enc = function (p) {
     var y = UI.store.any(x, p)
-    return y ? UI.utils.escapeForXML(y.value) : '?'
+    return y ? utils.escapeForXML(y.value) : '?'
   }
   var box = dom.createElement('table')
   box.innerHTML = '<tr><td colspan="2">' + enc(UI.ns.dc('title')) +

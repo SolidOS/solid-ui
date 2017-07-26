@@ -9,11 +9,11 @@ var UI = {
   pad: require('./'),
   rdf: require('rdflib'),
   store: require('./store'),
-  utils: require('./utils'),
   widgets: require('./widgets')
 }
 
-var kb = UI.store
+const utils = require('./utils')
+const kb = UI.store
 
 module.exports = function (dom, kb, subject, messageStore, options) {
   kb = kb || UI.kb
@@ -132,7 +132,7 @@ module.exports = function (dom, kb, subject, messageStore, options) {
   var nick = function (person) {
     var s = UI.store.any(person, UI.ns.foaf('nick'))
     if (s) return '' + s.value
-    return '' + UI.utils.label(person)
+    return '' + utils.label(person)
   }
 
   // ///////////////////////////////////////////////////////////////////////

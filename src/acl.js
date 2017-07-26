@@ -9,11 +9,11 @@ var UI = {
   log: require('./log'),
   ns: require('./ns'),
   store: require('./store'),
-  utils: require('./utils'),
   widgets: require('./widgets')
 }
 
-var kb = UI.store
+const utils = require('./utils')
+const kb = UI.store
 
 // //////////////////////////////////// Solid ACL non-UI functions
 //
@@ -233,7 +233,7 @@ UI.acl.comboToString = function (byCombo) {
       var pred = pairs[i][0], ag = $rdf.sym(pairs[i][1])
       str += (pred === 'agent') ? '@' : ''
       str += (ag.sameTerm(UI.ns.foaf('Agent')) ? '*'
-        : UI.utils.label(ag))
+        : utils.label(ag))
       if (i < pairs.length - 1) str += ','
     }
     str += ';'
@@ -302,9 +302,9 @@ UI.acl.fixIndividualACL = function (item, subjects, log, callback) {
     UI.widgets.loadUnionACL(subjects, function (ok, union) {
       if (!ok) return callback(false, union)
       if (UI.widgets.sameACL(union, ac)) {
-        log('Nice - same ACL. no change ' + UI.utils.label(item) + ' ' + doc)
+        log('Nice - same ACL. no change ' + utils.label(item) + ' ' + doc)
       } else {
-        log('Group ACLs differ for ' + UI.utils.label(item) + ' ' + doc)
+        log('Group ACLs differ for ' + utils.label(item) + ' ' + doc)
 
         // log("Group ACLs: " + UI.widgets.makeACLString(targetDoc, union, targetACLDoc))
         // log((exists ? "Previous set" : "Default") + " ACLs: " +

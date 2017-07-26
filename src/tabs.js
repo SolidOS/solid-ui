@@ -16,10 +16,11 @@ var UI = {
   log: require('./log'),
   ns: require('./ns'),
   store: require('./store'),
-  utils: require('./utils'),
   tabs: tabs,
   widgets: require('./widgets')
 }
+
+const utils = require('./utils')
 
 // options.subject
 // options.orientation 0 top, 1 left, 2 bottom, 3 right
@@ -185,7 +186,7 @@ UI.tabs.tabWidget = function(options){
     if (options.renderTab){
       options.renderTab(div, item)
     } else {
-      div.textContent = UI.utils.label(item)
+      div.textContent = utils.label(item)
     }
     return ele
   }

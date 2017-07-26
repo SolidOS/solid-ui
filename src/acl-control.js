@@ -9,8 +9,8 @@ var UI = {}
 UI.acl = require('./acl')
 UI.ns = require('./ns')
 UI.widgets = require('./widgets')
-UI.utils = require('./utils')
 UI.aclControl = module.exports = {}
+const utils = require('./utils')
 
 // In apps which may use drag and drop, this utility takes care of the fact
 // by default in a browser, an uncuaght user drop into a browser window
@@ -72,7 +72,7 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
   var table = dom.createElement('table')
   table.setAttribute('style', 'margin: 1em; border: 0.1em #ccc ;')
   var headerRow = table.appendChild(dom.createElement('tr'))
-  headerRow.textContent = 'Sharing for ' + noun + ' ' + UI.utils.label(subject)
+  headerRow.textContent = 'Sharing for ' + noun + ' ' + utils.label(subject)
   headerRow.setAttribute('style', 'min-width: 20em; padding: 1em; font-size: 120%; border-bottom: 0.1em solid red; margin-bottom: 2em;')
 
   var statusRow = table.appendChild(dom.createElement('tr'))
@@ -439,9 +439,9 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
         var addDefaultButton = function (prospectiveDefaultHolder) {
           useDefault = bottomRow.appendChild(dom.createElement('button'))
           useDefault.textContent = 'Stop specific sharing for this ' + noun +
-            ' -- just use default' // + UI.utils.label(thisDefaultHolder)
+            ' -- just use default' // + utils.label(thisDefaultHolder)
           if (prospectiveDefaultHolder) {
-            useDefault.textContent += ' for ' + UI.utils.label(prospectiveDefaultHolder)
+            useDefault.textContent += ' for ' + utils.label(prospectiveDefaultHolder)
           }
           useDefault.style = bigButtonStyle
           useDefault.addEventListener('click', function (event) {
