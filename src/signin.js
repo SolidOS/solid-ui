@@ -8,6 +8,7 @@ const $rdf = require('rdflib')
 const error = require('./widgets/error')
 const widgets = require('./widgets/index')
 // const utils = require('./utils')
+const solidAuthClient = require('solid-auth-client')
 
 const UI = {
   log: require('./log'),
@@ -16,6 +17,7 @@ const UI = {
 }
 
 module.exports = {
+  checkCurrentUser,
   checkUser,
   findAppInstances,
   findOriginOwner,
@@ -26,7 +28,9 @@ module.exports = {
   registrationControl,
   registrationList,
   selectWorkspace,
-  setACLUserPublic
+  setACLUserPublic,
+  setUser,
+  solidAuthClient
 }
 
 // For a user authenticated using webid (or possibly other methods) it
@@ -70,7 +74,9 @@ function findOriginOwner (doc, callback) {
  * @returns {NamedNode|null} Returns the Web ID, after setting it
  */
 function setUser (webId, context) {
-  context.me = webId
+  if (context) {
+    context.me = webId
+  }
 
   tabulator.preferences.set('me', webId ? webId.uri : '')
 
@@ -623,37 +629,71 @@ function signInOrSignUpBox (myDocument, gotOne) {
   var p = myDocument.createElement('p')
   box.appendChild(p)
   box.className = 'mildNotice'
-  p.innerHTML = ('You need to log in with a Web ID')
+  p.innerHTML = 'Enter your Web ID or pod uri'
   console.log('widgets.signInOrSignUpBox')
 
+  // Provider uri textbox
+  let idpInput = myDocument.createElement('input')
+  box.appendChild(idpInput)
+  idpInput.setAttribute('type', 'text')
+  idpInput.setAttribute('id', 'idpInput')
+
   // Sign in button
-  var but = myDocument.createElement('input')
-  box.appendChild(but)
-  but.setAttribute('type', 'button')
-  but.setAttribute('value', 'Log in')
-  but.setAttribute('style', 'padding: 1em; border-radius:0.5em; margin: 2em;')
-  but.addEventListener('click', function (e) {
+  let signInButton = myDocument.createElement('input')
+  box.appendChild(signInButton)
+  signInButton.setAttribute('type', 'button')
+  signInButton.setAttribute('value', 'Log in')
+  signInButton.setAttribute('style',
+    'padding: 1em; border-radius:0.5em; margin: 2em;')
+
+  signInButton.addEventListener('click', () => {
     var offline = offlineTestID()
     if (offline) return gotOne(offline.uri)
-    Solid.tls.login().then(function (uri) {
-      console.log('signInOrSignUpBox logged in up ' + uri)
-      gotOne(uri)
-    })
+
+    let idpUri = document.getElementById('idpInput')
+    if (idpUri && idpUri.value !== '') {
+      return solidAuthClient.login(idpUri.value)
+        .then(initFromAuthResponse)
+    }
+
+    // Solid.tls.login().then(function (uri) {
+    //   console.log('signInOrSignUpBox logged in up ' + uri)
+    //   gotOne(uri)
+    // })
   }, false)
 
   // Sign up button
-  var but2 = myDocument.createElement('input')
-  box.appendChild(but2)
-  but2.setAttribute('type', 'button')
-  but2.setAttribute('value', 'Sign Up')
-  but2.setAttribute('style', 'padding: 1em; border-radius:0.5em; margin: 2em;')
-  but2.addEventListener('click', function (e) {
+  let signupButton = myDocument.createElement('input')
+  box.appendChild(signupButton)
+  signupButton.setAttribute('type', 'button')
+  signupButton.setAttribute('value', 'Sign Up')
+  signupButton.setAttribute('style',
+    'padding: 1em; border-radius:0.5em; margin: 2em;')
+
+  signupButton.addEventListener('click', function (e) {
     Solid.tls.signup().then(function (uri) {
       console.log('signInOrSignUpBox signed up ' + uri)
       gotOne(uri)
     })
   }, false)
   return box
+}
+
+function initFromAuthResponse (authResponse) {
+  UI.store.fetcher._fetch = authResponse.fetch
+  var session = authResponse.session || {}
+  var webId = session.webId
+  if (webId) {
+    setUser($rdf.namedNode(webId))
+  }
+  console.log(authResponse)
+
+  return authResponse
+}
+
+function checkCurrentUser () {
+  solidAuthClient.currentSession()
+    .then(initFromAuthResponse)
 }
 
 /**
