@@ -22,6 +22,7 @@ var UI = {
 }
 
 const utils = require('./utils')
+const $rdf = require('rdflib')
 
 // UI.widgets.renderTableViewPane
 module.exports = function renderTableViewPane (doc, options) {
@@ -269,7 +270,7 @@ module.exports = function renderTableViewPane (doc, options) {
   // object.
 
   function generateQuery (type) {
-    var query = new tabulator.rdf.Query()
+    var query = new $rdf.Query()
     var rowVar = kb.variable(keyVariable.slice(1)); // don't pass '?'
 
     addSelectToQuery(query, type)

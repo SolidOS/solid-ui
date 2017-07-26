@@ -1,5 +1,8 @@
-//  signin.js     Signing in, signing up, workspace selection, app spawning
-
+/**
+ * signin.js
+ *
+ * Signing in, signing up, workspace selection, app spawning
+ */
 const Solid = require('solid-client')
 const $rdf = require('rdflib')
 const error = require('./widgets/error')
@@ -77,7 +80,7 @@ function setUser (webId, context) {
 /**
  * @returns {NamedNode|null}
  */
-function storedUser () {
+function currentUser () {
   let webId = tabulator.preferences.get('me')
   return webId ? $rdf.sym(webId) : null
 }
@@ -91,7 +94,7 @@ function storedUser () {
  */
 function logIn (context) {
   const kb = UI.store
-  let webId = storedUser()
+  let webId = currentUser()
 
   if (webId) {
     return Promise.resolve(setUser(webId, context))
@@ -143,6 +146,7 @@ function logInLoadProfile (context) {
     .catch(err => {
       let message = 'Cannot load profile ' + profileUri + ' : ' + err
       context.div.appendChild(error.errorMessageBlock(context.dom, message))
+      return context
     })
 }
 
@@ -656,7 +660,7 @@ function signInOrSignUpBox (myDocument, gotOne) {
  * @param doc {NamedNode} Uri of a server to ask for the User: header
  * @param [setUser] {Function} Optional callback, `setUser(webId|null)`
  *
- * @returns {Promise<string|null>} Resolves with web id, if no callback provided
+ * @returns {Promise<string|null>} Resolves with web id uri, if no callback provided
  */
 function checkUser (doc, setUser) {
   const kb = UI.store
@@ -668,8 +672,8 @@ function checkUser (doc, setUser) {
   }
 
   // Check to see if already logged in / have the WebID
-  var meUri = tabulator.preferences.get('me')
-  if (meUri) return setUser(meUri)
+  var meUri = currentUser()
+  if (meUri) return setUser(meUri.uri)
 
   doc = kb.any(doc, UI.ns.link('userMirror')) || doc
 
@@ -763,8 +767,7 @@ function userHeadersFor (doc) {
  * @returns {Element}
  */
 function loginStatusBox (myDocument, listener) {
-  var meUri = tabulator.preferences.get('me')
-  var me = meUri && UI.store.sym(meUri)
+  var me = currentUser()
 
   var box = myDocument.createElement('div')
 
@@ -780,7 +783,6 @@ function loginStatusBox (myDocument, listener) {
   var zapIt = function () {
     tabulator.preferences.set('me', '')
     var message = 'Your Web ID was ' + me + '. It has been forgotten.'
-    meUri = ''
     me = null
     try {
       UI.log.alert(message)
@@ -812,8 +814,8 @@ function loginStatusBox (myDocument, listener) {
   }
 
   box.refresh = function () {
-    var meUri = tabulator.preferences.get('me') || ''
-    var me = meUri ? UI.store.sym(meUri) : null
+    let me = currentUser()
+    let meUri = me ? me.uri : ''
     if (box.me !== meUri) {
       widgets.clearElement(box)
       if (me) {
@@ -857,8 +859,7 @@ function selectWorkspace (dom, appDetails, callbackWS) {
   var noun = appDetails.noun
   var appPathSegment = appDetails.appPathSegment
 
-  var meUri = tabulator.preferences.get('me')
-  var me = meUri && UI.store.sym(meUri)
+  var me = currentUser()
   var kb = UI.store
   var box = dom.createElement('div')
   var context = { me: me, dom: dom, div: box }
