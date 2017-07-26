@@ -243,10 +243,10 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
         var tr = middleTable.appendChild(
           UI.widgets.personTR(dom, ACL(pred), $rdf.sym(obj), opt))
         tr.predObj = [pred.uri, obj.uri]
-
       }
 
       var syncCombo = function (combo) {
+        var i
         var arr = byCombo[combo]
         if (arr && arr.length) {
           var already = middleTable.children
@@ -269,7 +269,7 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
               addAgent(arr[a][0], arr[a][1])
             }
           }
-          for (var i = already.length - 1; i >= 0; i--) {
+          for (i = already.length - 1; i >= 0; i--) {
             if (already[i].trashme) {
               middleTable.removeChild(already[i])
             }
@@ -445,11 +445,8 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
           }
           useDefault.style = bigButtonStyle
           useDefault.addEventListener('click', function (event) {
-            kb.fetcher.webOperation('DELETE', targetACLDoc)
-              .then(function (xhr) {
-                kb.fetcher.requested[targetACLDoc.uri] = 404
-                kb.fetcher.nonexistant[xhr.resource.uri] = true
-                kb.fetcher.unload(targetACLDoc)
+            kb.fetcher.delete(targetACLDoc.uri)
+              .then(function () {
                 statusBlock.textContent = ' The sharing for this ' + noun + ' is now the default.'
                 bottomRow.removeChild(useDefault)
                 box.style = 'color: #777;'

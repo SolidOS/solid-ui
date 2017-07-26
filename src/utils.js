@@ -21,13 +21,13 @@ UI.utils.hashColor = function(who) {
     return '#' + ((hash(who) & 0xffffff) | 0xc0c0c0).toString(16); // c0c0c0 or 808080 forces pale
 }
 
-UI.utils.gen_uuid = function () { // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+UI.utils.genUuid = function () { // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8)
+    var r = Math.random() * 16 | 0
+    var v = c === 'x' ? r : (r & 0x3 | 0x8)
     return v.toString(16)
   })
 }
-
 
 // Sync a DOM table with an array of things
 //

@@ -417,7 +417,7 @@ UI.acl.getACL = function (doc, callback) {
     if (!aclDoc) {
       callback(false, 900, 'No Link rel=ACL header for ' + doc)
     } else {
-      if (UI.store.fetcher.nonexistant[aclDoc.uri]) {
+      if (UI.store.fetcher.nonexistent[aclDoc.uri]) {
         return callback(true, 404, aclDoc, 'ACL file ' + aclDoc + ' does not exist.')
       }
       UI.store.fetcher.nowOrWhenFetched(aclDoc, undefined, function (ok, message, xhr) {
