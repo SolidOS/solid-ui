@@ -23,7 +23,8 @@ var widgets = module.exports = Object.assign(
   require('./peoplePicker'),  // UI.widgets.PeoplePicker
   require('./dragAndDrop'),
   require('./error'),         // UI.widgets.errorMessageBlock
-  buildCheckboxForm
+  buildCheckboxForm,
+  complain
 )
 
 var UI = {
@@ -35,6 +36,12 @@ var UI = {
 }
 
 const utils = require('../utils')
+
+function complain (context, err) {
+  var ele = context.statusArea || context.div
+  console.log('Complaint: ' + err)
+  return ele.appendChild(error.errorMessageBlock(context.dom, err))
+}
 
 // var UI.ns = require('./ns.js')
 // var utilsModule = require('./utils')
