@@ -62,7 +62,8 @@
       "$rdf",
       "tabulator",
       "QUnit",
-      "$SolidTestEnvironment"
+      "$SolidTestEnvironment",
+      "AudioContext"
     ]
   }
 }

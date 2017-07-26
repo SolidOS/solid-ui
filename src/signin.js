@@ -2,18 +2,39 @@
 
 const Solid = require('solid-client')
 const $rdf = require('rdflib')
+const error = require('./widgets/error')
+const widgets = require('./widgets/index')
+// const utils = require('./utils')
 
 var UI = {
-  icons: require('./iconBase'),
   log: require('./log'),
   ns: require('./ns'),
-  store: require('./store'),
-  utils: require('./utils'),
-  widgets: require('./widgets')
+  store: require('./store')
 }
 
+module.exports = {
+  checkUser,
+  complain,
+  findAppInstances,
+  findOriginOwner,
+  loadTypeIndexes,
+  loginStatusBox,
+  newAppInstance,
+  offlineTestID,
+  registrationControl,
+  registrationList,
+  selectWorkspace,
+  setACLUserPublic
+}
+
+// For a user authenticated using webid (or possibly other methods) it
+// is not immediately available to the client which person(a) it is.
+// The solid standard way is for the server to send the information back as a User: header.
+
+var userCheckSite = 'https://databox.me/'
+
 // Look for and load the User who has control over it
-UI.widgets.findOriginOwner = function findOriginOwner (doc, callback) {
+function findOriginOwner (doc, callback) {
   var uri = doc.uri || doc
   var i = uri.indexOf('://')
   if (i < 0) return false
@@ -26,9 +47,8 @@ UI.widgets.findOriginOwner = function findOriginOwner (doc, callback) {
 function complain (context, err) {
   var ele = context.statusArea || context.div
   console.log('Complaint: ' + err)
-  return ele.appendChild(UI.widgets.errorMessageBlock(context.dom, err))
+  return ele.appendChild(error.errorMessageBlock(context.dom, err))
 }
-UI.widgets.complain = complain
 
 // Promises versions
 //
@@ -129,7 +149,7 @@ function logInLoadProfile (context) {
     })
     .catch(err => {
       let message = 'Cannot load profile ' + profileUri + ' : ' + err
-      context.div.appendChild(UI.widgets.errorMessageBlock(context.dom, message))
+      context.div.appendChild(error.errorMessageBlock(context.dom, message))
     })
 }
 
@@ -155,13 +175,13 @@ function loadPreferences (context) {
     .then(() => {
       if (!preferencesFile) {
         let message = "Can't find a preferences file for user: " + context.me
-        UI.widgets.errorMessageBlock(context.dom, message)
+        error.errorMessageBlock(context.dom, message)
         throw new Error(message)
       }
 
       context.preferencesFile = preferencesFile
       if (box) {
-        pending = UI.widgets.errorMessageBlock(context.dom,
+        pending = error.errorMessageBlock(context.dom,
           '(loading preferences ' + preferencesFile + ')', 'straw')
         box.appendChild(pending)
       }
@@ -218,7 +238,6 @@ function loadTypeIndexes (context) {
       throw new Error('Error loading type indexes: ' + e)
     })
 }
-UI.widgets.loadTypeIndexes = loadTypeIndexes
 
 /**
  * Resolves with the same context, outputting
@@ -297,7 +316,7 @@ function ensureTypeIndexes (context) {
  * @param context.instances
  * @param context.containers
  * @param klass
- * @returns {Promise.<TResult>}
+ * @returns {Promise}
  */
 function findAppInstances (context, klass) {
   var kb = UI.store
@@ -338,7 +357,6 @@ function findAppInstances (context, klass) {
       throw new Error('Error looking for instances of ' + klass + ': ' + e)
     })
 }
-UI.widgets.findAppInstances = findAppInstances
 
 /**
  * UI to control registration of instance
@@ -367,7 +385,7 @@ function registrationControl (context, instance, klass) {
       var registrationStatements = function (index) {
         var registrations = kb.each(undefined, ns.solid('instance'), instance)
           .filter(function (r) { return kb.holds(r, ns.solid('forClass'), klass) })
-        var reg = registrations.length ? registrations[0] : UI.widgets.newThing(index)
+        var reg = registrations.length ? registrations[0] : widgets.newThing(index)
         return [ $rdf.st(reg, ns.solid('instance'), instance, index),
           $rdf.st(reg, ns.solid('forClass'), klass, index) ]
       }
@@ -377,22 +395,21 @@ function registrationControl (context, instance, klass) {
       if (context.index.public && context.index.public.length > 0) {
         index = context.index.public[0]
         statements = registrationStatements(index)
-        tbody.children[0].appendChild(UI.widgets.buildCheckboxForm(
+        tbody.children[0].appendChild(widgets.buildCheckboxForm(
           context.dom, UI.store, 'Public link to this ' + context.noun, null, statements, form, index))
       }
 
       if (context.index.private && context.index.private.length > 0) {
         index = context.index.private[0]
         statements = registrationStatements(index)
-        tbody.children[1].appendChild(UI.widgets.buildCheckboxForm(
+        tbody.children[1].appendChild(widgets.buildCheckboxForm(
           context.dom, UI.store, 'Personal note of this ' + context.noun, null, statements, form, index))
       }
 
-      // UI.widgets.buildCheckboxForm(dom, kb, lab, del, ins, form, store)
+      // widgets.buildCheckboxForm(dom, kb, lab, del, ins, form, store)
       return context
     })
 }
-UI.widgets.registrationControl = registrationControl
 
 /**
  * UI to List at all registered things
@@ -434,7 +451,7 @@ function registrationList (context, options) {
         //   var tr = table.appendChild(dom.createElement('tr'))
         //   var anchor = tr.appendChild(dom.createElement('a'))
         //   anchor.setAttribute('href', inst.uri)
-        //   anchor.textContent = UI.utils.label(inst)
+        //   anchor.textContent = utils.label(inst)
         // } else {
         // }
 
@@ -448,7 +465,7 @@ function registrationList (context, options) {
           })
         }
         var opts = { deleteFunction: deleteInstance }
-        var tr = UI.widgets.personTR(dom, ns.solid('instance'), inst, opts)
+        var tr = widgets.personTR(dom, ns.solid('instance'), inst, opts)
         table.appendChild(tr)
       }
 
@@ -467,7 +484,6 @@ function registrationList (context, options) {
       return context
     })
 }
-UI.widgets.registrationList = registrationList
 
 /**
  * Simple Access Control
@@ -512,7 +528,6 @@ function setACLUserPublic (docURI, me, options) {
         })
     })
 }
-UI.widgets.setACLUserPublic = setACLUserPublic
 
 /**
  * @param docURI {string}
@@ -595,7 +610,6 @@ function offlineTestID () {
   }
   return null
 }
-UI.widgets.offlineTestID = offlineTestID
 
 /**
  * Bootstrapping identity
@@ -613,7 +627,7 @@ function signInOrSignUpBox (myDocument, gotOne) {
   box.appendChild(p)
   box.className = 'mildNotice'
   p.innerHTML = ('You need to log in with a Web ID')
-  console.log('UI.widgets.signInOrSignUpBox')
+  console.log('widgets.signInOrSignUpBox')
 
   // Sign in button
   var but = myDocument.createElement('input')
@@ -622,7 +636,7 @@ function signInOrSignUpBox (myDocument, gotOne) {
   but.setAttribute('value', 'Log in')
   but.setAttribute('style', 'padding: 1em; border-radius:0.5em; margin: 2em;')
   but.addEventListener('click', function (e) {
-    var offline = UI.widgets.offlineTestID()
+    var offline = offlineTestID()
     if (offline) return gotOne(offline.uri)
     Solid.auth.login().then(function (uri) {
       console.log('signInOrSignUpBox logged in up ' + uri)
@@ -644,12 +658,6 @@ function signInOrSignUpBox (myDocument, gotOne) {
   }, false)
   return box
 }
-
-// For a user authenticated using webid (or possibly other methods) it
-// is not immediately available to the client which person(a) it is.
-// The solid standard way is for the server to send the information back as a User: header.
-
-UI.widgets.userCheckSite = 'https://databox.me/'
 
 /**
  * @param doc {NamedNode} Uri of a server to ask for the User: header
@@ -692,7 +700,6 @@ function checkUser (doc, setUser) {
       return webId
     })
 }
-UI.widgets.checkUser = checkUser
 
 /**
  * @param doc {NamedNode}
@@ -721,8 +728,8 @@ function fetchUsername (doc) {
         return allUserHeaders[0].value.trim()
       }
 
-      if (doc.uri !== UI.widgets.userCheckSite) {
-        let newDoc = UI.widgets.userCheckSite
+      if (doc.uri !== userCheckSite) {
+        let newDoc = userCheckSite
         console.log('fetchUsername: non-solid server' + doc + ': trying ' + newDoc)
 
         return fetchUsername(kb.sym(newDoc))
@@ -815,7 +822,7 @@ function loginStatusBox (myDocument, listener) {
     var meUri = tabulator.preferences.get('me') || ''
     var me = meUri ? UI.store.sym(meUri) : null
     if (box.me !== meUri) {
-      UI.widgets.clearElement(box)
+      widgets.clearElement(box)
       if (me) {
         box.appendChild(logoutButton(me))
       } else {
@@ -830,7 +837,6 @@ function loginStatusBox (myDocument, listener) {
 
   return box
 }
-UI.widgets.loginStatusBox = loginStatusBox
 
 /**
  * Workspace selection etc
@@ -864,7 +870,7 @@ function selectWorkspace (dom, appDetails, callbackWS) {
   var box = dom.createElement('div')
   var context = { me: me, dom: dom, div: box }
 
-  var say = function (s) { box.appendChild(UI.widgets.errorMessageBlock(dom, s)) }
+  var say = function (s) { box.appendChild(error.errorMessageBlock(dom, s)) }
 
   var figureOutBase = function (ws) {
     var newBase = kb.any(ws, UI.ns.space('uriPrefix'))
@@ -1035,7 +1041,6 @@ function selectWorkspace (dom, appDetails, callbackWS) {
 
   return box  // return the box element, while login proceeds
 } // selectWorkspace
-UI.widgets.selectWorkspace = selectWorkspace
 
 /**
  * Creates a new instance of an app.
@@ -1066,4 +1071,3 @@ function newAppInstance (dom, appDetails, callback) {
   div.appendChild(b)
   return div
 }
-UI.widgets.newAppInstance = newAppInstance

@@ -6,7 +6,7 @@
 //
 //   See notepad for the main widget
 
-var $rdf = require('rdflib')
+const $rdf = require('rdflib')
 var padModule = module.exports = {}
 var UI = {
   icons: require('./iconBase'),
@@ -15,9 +15,10 @@ var UI = {
   pad: padModule,
   rdf: $rdf,
   store: require('./store'),
-  utils: require('./utils'),
   widgets: require('./widgets')
 }
+
+const utils = require('./utils')
 
 // Figure out a random color from my webid
 
@@ -56,7 +57,7 @@ UI.pad.renderPartipants = function(dom, table, padDoc, subject, me, options){
     })
     parps.sort() // List in order of joining
     var participations = parps.map(function(p){return p[1]})
-    UI.utils.syncTableToArray(table, participations, newRowForParticpation)
+    utils.syncTableToArray(table, participations, newRowForParticpation)
   }
   table.refresh = syncTable
   syncTable()
@@ -210,7 +211,7 @@ UI.pad.notepad  = function (dom, padDoc, subject, me, options) {
             } else if (response.status === 409) { // Conflict
                 setPartStyle(part,'color: black;  background-color: #ffd;'); // yellow
                 part.state = 0; // Needs downstream refresh
-                UI.utils.beep(0.5, 512); // Ooops clash with other person
+                utils.beep(0.5, 512); // Ooops clash with other person
                 setTimeout(function(){
                     updater.requestDownstreamAction(padDoc, reloadAndSync);
                 }, 1000);
@@ -373,7 +374,7 @@ UI.pad.notepad  = function (dom, padDoc, subject, me, options) {
                     if (xhr.status === 409) { // Conflict -  @@ we assume someone else
                         setPartStyle(part,'color: black;  background-color: #fdd;');
                         part.state = 0; // Needs downstream refresh
-                        UI.utils.beep(0.5, 512); // Ooops clash with other person
+                        utils.beep(0.5, 512); // Ooops clash with other person
                         setTimeout(function(){
                             updater.requestDownstreamAction(padDoc, reloadAndSync);
                         }, 1000);
@@ -382,7 +383,7 @@ UI.pad.notepad  = function (dom, padDoc, subject, me, options) {
                         setPartStyle(part,'color: black;  background-color: #fdd;'); // failed pink
                         part.state = 0;
                         complain("    Error " + xhr.status + " sending data: " + error_body, true);
-                        UI.utils.beep(1.0, 128); // Other
+                        utils.beep(1.0, 128); // Other
                         // @@@   Do soemthing more serious with other errors eg auth, etc
                     }
                 } else {

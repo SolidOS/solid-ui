@@ -4,24 +4,101 @@
 // This must load AFTER the rdflib.js and log-ext.js (or log.js).
 //
 
-var utilsModule = module.exports = {}
+module.exports = {
+  addLoadEvent,  // not used anywhere
+  AJARImage,
+  ancestor,
+  beep,
+  clearVariableNames,
+  emptyNode,
+  escapeForXML,
+  findPos,
+  genUuid,
+  getAbout,
+  getEyeFocus,
+  getTarget,
+  getTerm,
+  hashColor,
+  include,
+  label,
+  labelForXML,
+  labelWithOntology,
+  makeQueryRow,
+  newVariableName,
+  ontologyLabel,
+  predicateLabelForXML,
+  predParentOf,
+  RDFComparePredicateObject,
+  RDFComparePredicateSubject,
+  shortName,
+  stackString,
+  syncTableToArray
+}
 
 var UI = {
-  utils: utilsModule,
   log: require('./log'),
   ns: require('./ns'),
   rdf: require('rdflib'),
   store: require('./store')
 }
 
+var nextVariable = 0
+
+function newVariableName () {
+  return 'v' + nextVariable++
+}
+
+function clearVariableNames () {
+  nextVariable = 0
+}
+
+// http://stackoverflow.com/questions/879152/how-do-i-make-javascript-beep
+// http://www.tsheffler.com/blog/2013/05/14/audiocontext-noteonnoteoff-and-time-units/
+
+var audioContext
+
+if (typeof AudioContext !== 'undefined') {
+  audioContext = AudioContext
+} else if (typeof window !== 'undefined') {
+  audioContext = window.AudioContext || window.webkitAudioContext
+}
+
+function beep () {
+  if (!audioContext) { return }  // Safari 2015
+
+  let ContextClass = audioContext
+  let ctx = new ContextClass()
+
+  return function (duration, frequency, type, finishedCallback) {
+    duration = +(duration || 0.3)
+
+    // Only 0-4 are valid types.
+    type = type || 'sine' // sine, square, sawtooth, triangle
+
+    if (typeof finishedCallback !== 'function') {
+      finishedCallback = function () {}
+    }
+
+    var osc = ctx.createOscillator()
+
+    osc.type = type
+    osc.frequency.value = frequency || 256
+
+    osc.connect(ctx.destination)
+    osc.start(0)
+    osc.stop(duration)
+  }
+}
+
 // Make pseudorandom color from a uri
-UI.utils.hashColor = function (who) {
+// NOT USED ANYWHERE
+function hashColor (who) {
   who = who.uri || who
   var hash = function (x) { return x.split('').reduce(function (a, b) { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0) }
   return '#' + ((hash(who) & 0xffffff) | 0xc0c0c0).toString(16) // c0c0c0 or 808080 forces pale
 }
 
-UI.utils.genUuid = function () { // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+function genUuid () { // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
     var r = Math.random() * 16 | 0
     var v = c === 'x' ? r : (r & 0x3 | 0x8)
@@ -35,7 +112,7 @@ UI.utils.genUuid = function () { // http://stackoverflow.com/questions/105034/cr
 // things - ORDERED array of NamedNode objects
 // createNewRow(thing) returns a TR table row for that thing
 //
-UI.utils.syncTableToArray = function (table, things, createNewRow) {
+function syncTableToArray (table, things, createNewRow) {
   let foundOne
   let row
   let i
@@ -73,58 +150,11 @@ UI.utils.syncTableToArray = function (table, things, createNewRow) {
   }
 } // syncTableToArray
 
-// http://stackoverflow.com/questions/879152/how-do-i-make-javascript-beep
-// http://www.tsheffler.com/blog/2013/05/14/audiocontext-noteonnoteoff-and-time-units/
-
-if (!UI.utils.audioContext) {
-  if (typeof AudioContext !== 'undefined') {
-    UI.utils.audioContext = AudioContext
-  } else if (typeof window !== 'undefined') {
-    UI.utils.audioContext = window.AudioContext || window.webkitAudioContext
-  }
-}
-if (UI.utils.audioContext) {
-  UI.utils.beep = (function () {
-    let ContextClass = UI.utils.audioContext
-    let ctx = new ContextClass()
-    return function (duration, frequency, type, finishedCallback) {
-      duration = +(duration || 0.3)
-
-      // Only 0-4 are valid types.
-      type = type || 'sine' // sine, square, sawtooth, triangle
-
-      if (typeof finishedCallback !== 'function') {
-        finishedCallback = function () {}
-      }
-
-      var osc = ctx.createOscillator()
-
-      osc.type = type
-      osc.frequency.value = frequency || 256
-
-      osc.connect(ctx.destination)
-      osc.start(0)
-      osc.stop(duration)
-    }
-  })()
-} else { // Safari 2015
-  UI.utils.beep = function () {}
-}
-
-if (typeof UI.utils.nextVariable === 'undefined') UI.utils.nextVariable = 0
-UI.utils.newVariableName = function () {
-  return 'v' + UI.utils.nextVariable++
-}
-UI.utils.clearVariableNames = function () {
-  UI.utils.nextVariable = 0
-}
-
 /* Error stack to string for better diagnotsics
 **
 ** See  http://snippets.dzone.com/posts/show/6632
 */
-
-UI.utils.stackString = function (e) {
+function stackString (e) {
   let str = '' + e + '\n'
   let i
   if (!e.stack) {
@@ -152,24 +182,7 @@ UI.utils.stackString = function (e) {
   return str
 }
 
-// @@ This shoud be in rdf.uri (?)
-
-UI.utils.getURIQueryParameters = function (uri) {
-  var results = []
-  var getDataString = uri ? uri.toString() : window.location.href
-  var questionMarkLocation = getDataString.indexOf('?')
-  if (questionMarkLocation !== -1) {
-    getDataString = getDataString.substr(questionMarkLocation + 1)
-    var getDataArray = getDataString.split(/&/g)
-    for (var i = 0; i < getDataArray.length; i++) {
-      var nameValuePair = getDataArray[i].split(/=/)
-      results[decodeURIComponent(nameValuePair[0])] = decodeURIComponent(nameValuePair[1])
-    }
-  }
-  return results
-}
-
-UI.utils.emptyNode = function (node) {
+function emptyNode (node) {
   let nodes = node.childNodes
   let len = nodes.length
   let i
@@ -177,7 +190,7 @@ UI.utils.emptyNode = function (node) {
   return node
 }
 
-UI.utils.getTarget = function (e) {
+function getTarget (e) {
   var target
   e = e || window.event
   if (e.target) target = e.target
@@ -189,7 +202,7 @@ UI.utils.getTarget = function (e) {
   return target
 }
 
-UI.utils.ancestor = function (target, tagName) {
+function ancestor (target, tagName) {
   var level
   for (level = target; level; level = level.parentNode) {
     // UI.log.debug("looking for "+tagName+" Level: "+level+" "+level.tagName)
@@ -202,7 +215,7 @@ UI.utils.ancestor = function (target, tagName) {
   return undefined
 }
 
-UI.utils.getAbout = function (kb, target) {
+function getAbout (kb, target) {
   var level, aa
   for (level = target; level && (level.nodeType === 1); level = level.parentNode) {
     // UI.log.debug("Level "+level + ' '+level.nodeType + ': '+level.tagName)
@@ -218,7 +231,7 @@ UI.utils.getAbout = function (kb, target) {
   return undefined
 }
 
-UI.utils.getTerm = function (target) {
+function getTerm (target) {
   var statementTr = target.parentNode
   var st = statementTr ? statementTr.AJAR_statement : undefined
 
@@ -236,13 +249,13 @@ UI.utils.getTerm = function (target) {
       }
     case '':
     case 'selected': // header TD
-      return UI.utils.getAbout(UI.store, target) // kb to be changed
+      return getAbout(UI.store, target) // kb to be changed
     case 'undetermined selected':
       return (target.nextSibling) ? st.predicate : ((!statementTr.AJAR_inverse) ? st.object : st.subject)
   }
 }
 
-UI.utils.include = function (document, linkstr) {
+function include (document, linkstr) {
   var lnk = document.createElement('script')
   lnk.setAttribute('type', 'text/javascript')
   lnk.setAttribute('src', linkstr)
@@ -251,7 +264,7 @@ UI.utils.include = function (document, linkstr) {
   return lnk
 }
 
-UI.utils.addLoadEvent = function (func) {
+function addLoadEvent (func) {
   var oldonload = window.onload
   if (typeof window.onload !== 'function') {
     window.onload = func
@@ -264,17 +277,16 @@ UI.utils.addLoadEvent = function (func) {
 } // addLoadEvent
 
 // Find the position of an object relative to the window
-//
-UI.utils.findPos = function (obj) { // C&P from http://www.quirksmode.org/js/findpos.html
+function findPos (obj) { // C&P from http://www.quirksmode.org/js/findpos.html
   var myDocument = obj.ownerDocument
   var DocBox = myDocument.documentElement.getBoundingClientRect()
   var box = obj.getBoundingClientRect()
   return [box.left - DocBox.left, box.top - DocBox.top]
 }
 
-UI.utils.getEyeFocus = function (element, instantly, isBottom, myWindow) {
+function getEyeFocus (element, instantly, isBottom, myWindow) {
   if (!myWindow) myWindow = window
-  var elementPosY = UI.utils.findPos(element)[1]
+  var elementPosY = findPos(element)[1]
   var totalScroll = elementPosY - 52 - myWindow.scrollY // magic number 52 for web-based version
   if (instantly) {
     if (isBottom) {
@@ -295,7 +307,7 @@ UI.utils.getEyeFocus = function (element, instantly, isBottom, myWindow) {
   }
 }
 
-UI.utils.AJARImage = function (src, alt, tt, doc) {
+function AJARImage (src, alt, tt, doc) {
   if (!doc) {
     doc = document
   }
@@ -316,29 +328,9 @@ UI.utils.AJARImage = function (src, alt, tt, doc) {
   return image
 }
 
-UI.utils.parse_headers = function (headers) {
-  let lines = headers.split('\n')
-  let parsedHeaders = {}
-  for (var i = 0; i < lines.length; i++) {
-    var line = lines[i].trim()
-    if (line.length === 0) {
-      continue
-    }
-    var chunks = line.split(':')
-    var hkey = chunks.shift().trim().toLowerCase()
-    var hval = chunks.join(':')
-    if (parsedHeaders[hkey] !== undefined) {
-      parsedHeaders[hkey].push(hval)
-    } else {
-      parsedHeaders[hkey] = [hval]
-    }
-  }
-  return parsedHeaders
-}
-
 //  Make short name for ontology
 
-UI.utils.shortName = function (uri) {
+function shortName (uri) {
   let p = uri
   if ('#/'.indexOf(p[p.length - 1]) >= 0) p = p.slice(0, -1)
   let namespaces = []
@@ -378,8 +370,7 @@ UI.utils.shortName = function (uri) {
 }
 
 // Short name for an ontology
-//
-UI.utils.ontologyLabel = function (term) {
+function ontologyLabel (term) {
   if (term.uri === undefined) return '??'
   var s = term.uri
   var namespaces = []
@@ -395,7 +386,7 @@ UI.utils.ontologyLabel = function (term) {
       return term.uri + '?!' // strange should have # or /
     }
   }
-  for (var ns in UI.ns) {
+  for (let ns in UI.ns) {
     namespaces[UI.ns[ns]] = ns // reverse index
   }
   try {
@@ -418,14 +409,14 @@ UI.utils.ontologyLabel = function (term) {
   }
 }
 
-UI.utils.labelWithOntology = function (x, initialCap) {
-  var t = UI.store.findTypeURIs(x)
+function labelWithOntology (x, initialCap) {
+  let t = UI.store.findTypeURIs(x)
   if (t[UI.ns.rdf('Predicate').uri] ||
     t[UI.ns.rdfs('Class').uri]) {
-    return UI.utils.label(x, initialCap) +
-      ' (' + UI.utils.ontologyLabel(x) + ')'
+    return label(x, initialCap) +
+      ' (' + ontologyLabel(x) + ')'
   }
-  return UI.utils.label(x, initialCap)
+  return label(x, initialCap)
 }
 
 // This ubiquitous function returns the best label for a thing
@@ -434,7 +425,7 @@ UI.utils.labelWithOntology = function (x, initialCap) {
 //
 // @returns string
 //
-UI.utils.label = function (x, initialCap) { // x is an object
+function label (x, initialCap) { // x is an object
   function doCap (s) {
     // s = s.toString()
     if (initialCap) return s.slice(0, 1).toUpperCase() + s.slice(1)
@@ -528,25 +519,25 @@ UI.utils.label = function (x, initialCap) { // x is an object
   return doCap(decodeURIComponent(x.uri))
 }
 
-UI.utils.escapeForXML = function (str) {
+function escapeForXML (str) {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;')
 }
 
 //  As above but escaped for XML and chopped of contains a slash
-UI.utils.labelForXML = function (x) {
-  return UI.utils.escapeForXML(UI.utils.label(x))
+function labelForXML (x) {
+  return escapeForXML(label(x))
 }
 
 // As above but for predicate, possibly inverse
-UI.utils.predicateLabelForXML = function (p, inverse) {
+function predicateLabelForXML (p, inverse) {
   var lab
   if (inverse) { // If we know an inverse predicate, use its label
     var ip = UI.store.any(p, UI.ns.owl('inverseOf'))
     if (!ip) ip = UI.store.any(undefined, UI.ns.owl('inverseOf'), p)
-    if (ip) return UI.utils.labelForXML(ip)
+    if (ip) return labelForXML(ip)
   }
 
-  lab = UI.utils.labelForXML(p)
+  lab = labelForXML(p)
   if (inverse) {
     if (lab === 'type') return '...' // Not "is type of"
     return 'is ' + lab + ' of'
@@ -555,19 +546,20 @@ UI.utils.predicateLabelForXML = function (p, inverse) {
 }
 
 // Not a method. For use in sorts
-UI.utils.RDFComparePredicateObject = function (self, other) {
+function RDFComparePredicateObject (self, other) {
   var x = self.predicate.compareTerm(other.predicate)
   if (x !== 0) return x
   return self.object.compareTerm(other.object)
 }
-UI.utils.RDFComparePredicateSubject = function (self, other) {
+
+function RDFComparePredicateSubject (self, other) {
   var x = self.predicate.compareTerm(other.predicate)
   if (x !== 0) return x
   return self.subject.compareTerm(other.subject)
 }
 // ends
 
-UI.utils.predParentOf = function (node) {
+function predParentOf (node) {
   var n = node
   while (true) {
     if (n.getAttribute('predTR')) {
@@ -583,7 +575,7 @@ UI.utils.predParentOf = function (node) {
 var optionalSubqueriesIndex = []
 
 // TODO: Move to outline code !
-UI.utils.makeQueryRow = function (q, tr, constraint) {
+function makeQueryRow (q, tr, constraint) {
   var kb = UI.store
   // predtr = predParentOf(tr)
   // var nodes = tr.childNodes
@@ -610,10 +602,10 @@ UI.utils.makeQueryRow = function (q, tr, constraint) {
       if(level.parentNode.childNodes[c].AJAR_variable)
         level.AJAR_variable = level.parentNode.childNodes[c].AJAR_variable; */
       if (!level.AJAR_variable) {
-        UI.utils.makeQueryRow(q, level)
+        makeQueryRow(q, level)
       }
       parentVar = level.AJAR_variable
-      var predLevel = UI.utils.predParentOf(level)
+      var predLevel = predParentOf(level)
       if (predLevel.getAttribute('optionalSubqueriesIndex')) {
         optionalSubqueryIndex = predLevel.getAttribute('optionalSubqueriesIndex')
         pat = optionalSubqueriesIndex[optionalSubqueryIndex]
@@ -624,7 +616,7 @@ UI.utils.makeQueryRow = function (q, tr, constraint) {
 
   if (!pat) { pat = q.pat }
 
-  var predtr = UI.utils.predParentOf(tr)
+  var predtr = predParentOf(tr)
   // /////OPTIONAL KLUDGE///////////
   var opt = (predtr.getAttribute('optional'))
   if (!opt) {
@@ -654,10 +646,10 @@ UI.utils.makeQueryRow = function (q, tr, constraint) {
     parentVar = inverse ? st.object : st.subject // if there is no parents, uses the sub/obj
   }
   // UI.log.debug('Initial variable: '+tr.AJAR_variable)
-  v = tr.AJAR_variable ? tr.AJAR_variable : kb.variable(UI.utils.newVariableName())
+  v = tr.AJAR_variable ? tr.AJAR_variable : kb.variable(newVariableName())
   q.vars.push(v)
-  v.label = hasParent ? parentVar.label : UI.utils.label(parentVar)
-  v.label += ' ' + UI.utils.predicateLabelForXML(st.predicate, inverse)
+  v.label = hasParent ? parentVar.label : label(parentVar)
+  v.label += ' ' + predicateLabelForXML(st.predicate, inverse)
   pattern = makeRDFStatement(v, parentVar)
   // alert(pattern)
   v.label = v.label.slice(0, 1).toUpperCase() + v.label.slice(1) // init cap
