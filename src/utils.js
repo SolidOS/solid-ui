@@ -15,10 +15,10 @@ var UI = {
 }
 
 // Make pseudorandom color from a uri
-UI.utils.hashColor = function(who) {
-    who = who.uri || who;
-    var hash = function(x){ return x.split("").reduce(function(a,b){ a=((a<<5)-a)+b.charCodeAt(0);return a&a },0); }
-    return '#' + ((hash(who) & 0xffffff) | 0xc0c0c0).toString(16); // c0c0c0 or 808080 forces pale
+UI.utils.hashColor = function (who) {
+  who = who.uri || who
+  var hash = function (x) { return x.split('').reduce(function (a, b) { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0) }
+  return '#' + ((hash(who) & 0xffffff) | 0xc0c0c0).toString(16) // c0c0c0 or 808080 forces pale
 }
 
 UI.utils.genUuid = function () { // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
@@ -35,20 +35,22 @@ UI.utils.genUuid = function () { // http://stackoverflow.com/questions/105034/cr
 // things - ORDERED array of NamedNode objects
 // createNewRow(thing) returns a TR table row for that thing
 //
-UI.utils.syncTableToArray = function(table, things, createNewRow){
-  var foundOne, row
+UI.utils.syncTableToArray = function (table, things, createNewRow) {
+  let foundOne
+  let row
+  let i
 
   for (i = 0; i < table.children.length; i++) {
     row = table.children[i]
     row.trashMe = true
   }
 
-  for (var g = 0; g < things.length; g++) {
+  for (let g = 0; g < things.length; g++) {
     var thing = things[g]
     foundOne = false
 
-    for (var i = 0; i < table.children.length; i++) {
-      var row = table.children[i]
+    for (i = 0; i < table.children.length; i++) {
+      row = table.children[i]
       if (row.subject && row.subject.sameTerm(thing)) {
         row.trashMe = false
         foundOne = true
@@ -56,7 +58,7 @@ UI.utils.syncTableToArray = function(table, things, createNewRow){
       }
     }
     if (!foundOne) {
-      var newRow = createNewRow(thing)
+      let newRow = createNewRow(thing)
       table.appendChild(newRow)
       newRow.subject = thing
       // UI.widgets.makeDraggable(newRow, thing)
@@ -64,7 +66,7 @@ UI.utils.syncTableToArray = function(table, things, createNewRow){
   } // loop g
 
   for (i = 0; i < table.children.length; i++) {
-    var row = table.children[i]
+    row = table.children[i]
     if (row.trashMe) {
       table.removeChild(row)
     }
@@ -75,46 +77,41 @@ UI.utils.syncTableToArray = function(table, things, createNewRow){
 // http://www.tsheffler.com/blog/2013/05/14/audiocontext-noteonnoteoff-and-time-units/
 
 if (!UI.utils.audioContext) {
-    if (typeof AudioContext !== 'undefined') {
-        UI.utils.audioContext = AudioContext;
-    } else if (typeof window !== 'undefined') {
-       UI.utils.audioContext = window.AudioContext || window.webkitAudioContext;
-    }
+  if (typeof AudioContext !== 'undefined') {
+    UI.utils.audioContext = AudioContext
+  } else if (typeof window !== 'undefined') {
+    UI.utils.audioContext = window.AudioContext || window.webkitAudioContext
+  }
 }
 if (UI.utils.audioContext) {
-    UI.utils.beep = (function () {
-        var ctx = new(UI.utils.audioContext)
-        return function (duration, frequency, type, finishedCallback) {
+  UI.utils.beep = (function () {
+    let ContextClass = UI.utils.audioContext
+    let ctx = new ContextClass()
+    return function (duration, frequency, type, finishedCallback) {
+      duration = +(duration || 0.3)
 
-            duration = + (duration || 0.3)
+      // Only 0-4 are valid types.
+      type = type || 'sine' // sine, square, sawtooth, triangle
 
-            // Only 0-4 are valid types.
-            type = type || 'sine'; // sine, square, sawtooth, triangle
+      if (typeof finishedCallback !== 'function') {
+        finishedCallback = function () {}
+      }
 
-            if (typeof finishedCallback !== "function") {
-                finishedCallback = function () {}
-            }
+      var osc = ctx.createOscillator()
 
-            var osc = ctx.createOscillator()
+      osc.type = type
+      osc.frequency.value = frequency || 256
 
-            osc.type = type
-            osc.frequency.value = frequency || 256
-
-            osc.connect(ctx.destination)
-            osc.start(0)
-            osc.stop(duration)
-
-        }
-    })()
+      osc.connect(ctx.destination)
+      osc.start(0)
+      osc.stop(duration)
+    }
+  })()
 } else { // Safari 2015
-    UI.utils.beep  = function() {}
+  UI.utils.beep = function () {}
 }
 
-
-
-
-
-if (typeof UI.utils.nextVariable == 'undefined') UI.utils.nextVariable = 0
+if (typeof UI.utils.nextVariable === 'undefined') UI.utils.nextVariable = 0
 UI.utils.newVariableName = function () {
   return 'v' + UI.utils.nextVariable++
 }
@@ -128,28 +125,29 @@ UI.utils.clearVariableNames = function () {
 */
 
 UI.utils.stackString = function (e) {
-  var str = '' + e + '\n'
+  let str = '' + e + '\n'
+  let i
   if (!e.stack) {
     return str + 'No stack available.\n'
   }
-  var lines = e.stack.toString().split('\n')
-  var toprint = []
-  for (var i = 0; i < lines.length; i++) {
-    var line = lines[i]
+  let lines = e.stack.toString().split('\n')
+  let toPrint = []
+  for (i = 0; i < lines.length; i++) {
+    let line = lines[i]
     if (line.indexOf('ecmaunit.js') > -1) {
       // remove useless bit of traceback
       break
     }
-    if (line.charAt(0) == '(') {
+    if (line.charAt(0) === '(') {
       line = 'function' + line
     }
-    var chunks = line.split('@')
-    toprint.push(chunks)
+    let chunks = line.split('@')
+    toPrint.push(chunks)
   }
-  // toprint.reverse();  No - I prefer the latest at the top by the error message -tbl
+  // toPrint.reverse();  No - I prefer the latest at the top by the error message -tbl
 
-  for (var i = 0; i < toprint.length; i++) {
-    str += '  ' + toprint[i][1] + '\n    ' + toprint[i][0]
+  for (i = 0; i < toPrint.length; i++) {
+    str += '  ' + toPrint[i][1] + '\n    ' + toPrint[i][0]
   }
   return str
 }
@@ -158,12 +156,12 @@ UI.utils.stackString = function (e) {
 
 UI.utils.getURIQueryParameters = function (uri) {
   var results = []
-  var getDataString = uri ? uri.toString() : new String(window.location)
+  var getDataString = uri ? uri.toString() : window.location.href
   var questionMarkLocation = getDataString.indexOf('?')
-  if (questionMarkLocation != -1) {
+  if (questionMarkLocation !== -1) {
     getDataString = getDataString.substr(questionMarkLocation + 1)
     var getDataArray = getDataString.split(/&/g)
-    for (var i = 0;i < getDataArray.length;i++) {
+    for (var i = 0; i < getDataArray.length; i++) {
       var nameValuePair = getDataArray[i].split(/=/)
       results[decodeURIComponent(nameValuePair[0])] = decodeURIComponent(nameValuePair[1])
     }
@@ -172,18 +170,21 @@ UI.utils.getURIQueryParameters = function (uri) {
 }
 
 UI.utils.emptyNode = function (node) {
-  var nodes = node.childNodes, len = nodes.length, i
+  let nodes = node.childNodes
+  let len = nodes.length
+  let i
   for (i = len - 1; i >= 0; i--) node.removeChild(nodes[i])
   return node
 }
 
 UI.utils.getTarget = function (e) {
   var target
-  if (!e) var e = window.event
+  e = e || window.event
   if (e.target) target = e.target
   else if (e.srcElement) target = e.srcElement
-  if (target.nodeType == 3) // defeat Safari bug [sic]
+  if (target.nodeType === 3) { // defeat Safari bug [sic]
     target = target.parentNode
+  }
   // UI.log.debug("Click on: " + target.tagName)
   return target
 }
@@ -193,8 +194,8 @@ UI.utils.ancestor = function (target, tagName) {
   for (level = target; level; level = level.parentNode) {
     // UI.log.debug("looking for "+tagName+" Level: "+level+" "+level.tagName)
     try {
-      if (level.tagName == tagName) return level
-    } catch(e) { // can hit "TypeError: can't access dead object" in ffox
+      if (level.tagName === tagName) return level
+    } catch (e) { // can hit "TypeError: can't access dead object" in ffox
       return undefined
     }
   }
@@ -203,7 +204,7 @@ UI.utils.ancestor = function (target, tagName) {
 
 UI.utils.getAbout = function (kb, target) {
   var level, aa
-  for (level = target; level && (level.nodeType == 1); level = level.parentNode) {
+  for (level = target; level && (level.nodeType === 1); level = level.parentNode) {
     // UI.log.debug("Level "+level + ' '+level.nodeType + ': '+level.tagName)
     aa = level.getAttribute('about')
     if (aa) {
@@ -211,7 +212,6 @@ UI.utils.getAbout = function (kb, target) {
       return kb.fromNT(aa)
       //        } else {
       //            if (level.tagName=='TR') return undefined//this is to prevent literals passing through
-
     }
   }
   UI.log.debug('getAbout: No about found')
@@ -222,19 +222,18 @@ UI.utils.getTerm = function (target) {
   var statementTr = target.parentNode
   var st = statementTr ? statementTr.AJAR_statement : undefined
 
-  var className = st ? target.className : ''; // if no st then it's necessary to use getAbout
+  var className = st ? target.className : '' // if no st then it's necessary to use getAbout
   switch (className) {
     case 'pred':
     case 'pred selected':
       return st.predicate
-      break
     case 'obj':
     case 'obj selected':
-      if (!statementTr.AJAR_inverse)
+      if (!statementTr.AJAR_inverse) {
         return st.object
-      else
+      } else {
         return st.subject
-      break
+      }
     case '':
     case 'selected': // header TD
       return UI.utils.getAbout(UI.store, target) // kb to be changed
@@ -254,7 +253,7 @@ UI.utils.include = function (document, linkstr) {
 
 UI.utils.addLoadEvent = function (func) {
   var oldonload = window.onload
-  if (typeof window.onload != 'function') {
+  if (typeof window.onload !== 'function') {
     window.onload = func
   } else {
     window.onload = function () {
@@ -276,7 +275,7 @@ UI.utils.findPos = function (obj) { // C&P from http://www.quirksmode.org/js/fin
 UI.utils.getEyeFocus = function (element, instantly, isBottom, myWindow) {
   if (!myWindow) myWindow = window
   var elementPosY = UI.utils.findPos(element)[1]
-  var totalScroll = elementPosY - 52 - myWindow.scrollY; // magic number 52 for web-based version
+  var totalScroll = elementPosY - 52 - myWindow.scrollY // magic number 52 for web-based version
   if (instantly) {
     if (isBottom) {
       myWindow.scrollBy(0, elementPosY + element.clientHeight - (myWindow.scrollY + myWindow.innerHeight))
@@ -290,8 +289,9 @@ UI.utils.getEyeFocus = function (element, instantly, isBottom, myWindow) {
   function scrollAmount () {
     myWindow.scrollBy(0, totalScroll / 10)
     times++
-    if (times == 10)
+    if (times === 10) {
       myWindow.clearInterval(id)
+    }
   }
 }
 
@@ -299,71 +299,73 @@ UI.utils.AJARImage = function (src, alt, tt, doc) {
   if (!doc) {
     doc = document
   }
-  //if (!tt && tabulator.Icon.tooltips[src])    tooltip system discontinued 2016
+  // if (!tt && tabulator.Icon.tooltips[src])    tooltip system discontinued 2016
   //  tt = tabulator.Icon.tooltips[src]
   var image = doc.createElement('img')
   image.setAttribute('src', src)
-  image.addEventListener('copy', function(e){
-    e.clipboardData.setData('text/plain', '');
-    e.clipboardData.setData('text/html', '');
-    e.preventDefault(); // We want no title data to be written to the clipboard
-  });
+  image.addEventListener('copy', function (e) {
+    e.clipboardData.setData('text/plain', '')
+    e.clipboardData.setData('text/html', '')
+    e.preventDefault() // We want no title data to be written to the clipboard
+  })
   //    if (typeof alt != 'undefined')      // Messes up cut-and-paste of text
   //        image.setAttribute('alt', alt)
-  if (typeof tt != 'undefined')
+  if (typeof tt !== 'undefined') {
     image.setAttribute('title', tt)
+  }
   return image
 }
 
 UI.utils.parse_headers = function (headers) {
-  var lines = headers.split('\n')
-  var headers = {}
+  let lines = headers.split('\n')
+  let parsedHeaders = {}
   for (var i = 0; i < lines.length; i++) {
     var line = lines[i].trim()
-    if (line.length == 0) {
+    if (line.length === 0) {
       continue
     }
     var chunks = line.split(':')
     var hkey = chunks.shift().trim().toLowerCase()
     var hval = chunks.join(':')
-    if (headers[hkey] !== undefined) {
-      headers[hkey].push(hval)
+    if (parsedHeaders[hkey] !== undefined) {
+      parsedHeaders[hkey].push(hval)
     } else {
-      headers[hkey] = [hval]
+      parsedHeaders[hkey] = [hval]
     }
   }
-  return headers
+  return parsedHeaders
 }
 
 //  Make short name for ontology
 
 UI.utils.shortName = function (uri) {
-  var p = uri
+  let p = uri
   if ('#/'.indexOf(p[p.length - 1]) >= 0) p = p.slice(0, -1)
-  var namespaces = []
-  for (var ns in this.prefixes) {
+  let namespaces = []
+  for (let ns in this.prefixes) {
     namespaces[this.prefixes[ns]] = ns // reverse index
   }
-  var pok
-  function canUse(pp) {
-    //if (!__Serializer.prototype.validPrefix.test(pp)) return false; // bad format
-    if (pp === 'ns') return false; // boring
+  let pok
+  let canUse = function canUse (pp) {
+    // if (!__Serializer.prototype.validPrefix.test(pp)) return false; // bad format
+    if (pp === 'ns') return false // boring
     // if (pp in this.namespaces) return false; // already used
     // this.prefixes[uri] = pp;
     // this.namespaces[pp] = uri;
-    pok = pp;
-    return true;
+    pok = pp
+    return true
   }
-  canUse = canUse.bind(this);
 
-  var hash = p.lastIndexOf('#')
+  let i
+  let hash = p.lastIndexOf('#')
   if (hash >= 0) p = p.slice(hash - 1) // lop off localid
   for (;;) {
-    var slash = p.lastIndexOf('/')
+    let slash = p.lastIndexOf('/')
     if (slash >= 0) p = p.slice(slash + 1)
-    var i = 0
-    while (i < p.length)
-    if (this.prefixchars.indexOf(p[i])) i++; else break
+    i = 0
+    while (i < p.length) {
+      if (this.prefixchars.indexOf(p[i])) i++; else break
+    }
     p = p.slice(0, i)
     if (p.length < 6 && canUse(p)) return pok // exact i sbest
     if (canUse(p.slice(0, 3))) return pok
@@ -371,7 +373,7 @@ UI.utils.shortName = function (uri) {
     if (canUse(p.slice(0, 4))) return pok
     if (canUse(p.slice(0, 1))) return pok
     if (canUse(p.slice(0, 5))) return pok
-    for (var i = 0;; i++) if (canUse(p.slice(0, 3) + i)) return pok
+    for (i = 0; ; i++) if (canUse(p.slice(0, 3) + i)) return pok
   }
 }
 
@@ -390,7 +392,7 @@ UI.utils.ontologyLabel = function (term) {
     if (i >= 0) {
       s = s.slice(0, i + 1)
     } else {
-      return term.uri + '?!'; // strange should have # or /
+      return term.uri + '?!' // strange should have # or /
     }
   }
   for (var ns in UI.ns) {
@@ -400,15 +402,16 @@ UI.utils.ontologyLabel = function (term) {
     return namespaces[s]
   } catch (e) {}
 
-  s = s.slice(0, -1); // Chop off delimiter ... now have just
+  s = s.slice(0, -1) // Chop off delimiter ... now have just
 
-  while(s) {
+  while (s) {
     i = s.lastIndexOf('/')
     if (i >= 0) {
       part = s.slice(i + 1)
       s = s.slice(0, i)
-      if ((part !== 'ns') && ('0123456789'.indexOf(part[0]) < 0))
+      if ((part !== 'ns') && ('0123456789'.indexOf(part[0]) < 0)) {
         return part
+      }
     } else {
       return term.uri + '!?' // strange should have a nice part
     }
@@ -420,7 +423,7 @@ UI.utils.labelWithOntology = function (x, initialCap) {
   if (t[UI.ns.rdf('Predicate').uri] ||
     t[UI.ns.rdfs('Class').uri]) {
     return UI.utils.label(x, initialCap) +
-    ' (' + UI.utils.ontologyLabel(x) + ')'
+      ' (' + UI.utils.ontologyLabel(x) + ')'
   }
   return UI.utils.label(x, initialCap)
 }
@@ -441,25 +444,25 @@ UI.utils.label = function (x, initialCap) { // x is an object
     var s2 = ''
     if (s1.slice(-1) === '/') s1 = s1.slice(0, -1) // chop trailing slash
     for (var i = 0; i < s1.length; i++) {
-      if (s1[i] == '_' || s1[i] == '-') {
+      if (s1[i] === '_' || s1[i] === '-') {
         s2 += ' '
         continue
       }
       s2 += s1[i]
       if (i + 1 < s1.length &&
-        s1[i].toUpperCase() != s1[i] &&
-        s1[i + 1].toLowerCase() != s1[i + 1]) {
+        s1[i].toUpperCase() !== s1[i] &&
+        s1[i + 1].toLowerCase() !== s1[i + 1]) {
         s2 += ' '
       }
     }
-    if (s2.slice(0, 4) == 'has ') s2 = s2.slice(4)
+    if (s2.slice(0, 4) === 'has ') s2 = s2.slice(4)
     return doCap(s2)
   }
 
   // The tabulator labeler is more sophisticated if it exists
   // Todo: move it to a solid-ui option.
   var lab
-  if (typeof tabulator !== 'undefined' && tabulator.lb){
+  if (typeof tabulator !== 'undefined' && tabulator.lb) {
     lab = tabulator.lb.label(x)
     if (lab) {
       return doCap(lab.value)
@@ -471,41 +474,41 @@ UI.utils.label = function (x, initialCap) { // x is an object
 
   var kb = UI.store
   var lab1 = kb.any(x, UI.ns.link('message')) ||
-  kb.any(x, UI.ns.vcard('fn')) ||
-  kb.any(x, UI.ns.foaf('name')) ||
-  kb.any(x, UI.ns.dct('title')) ||
-  kb.any(x, UI.ns.dc('title')) ||
-  kb.any(x, UI.ns.rss('title')) ||
-  kb.any(x, UI.ns.contact('fullName')) ||
-  kb.any(x, kb.sym('http://www.w3.org/2001/04/roadmap/org#name')) ||
-  kb.any(x, UI.ns.cal('summary')) ||
-  kb.any(x, UI.ns.foaf('nick')) ||
-  kb.any(x, UI.ns.rdfs('label'))
+    kb.any(x, UI.ns.vcard('fn')) ||
+    kb.any(x, UI.ns.foaf('name')) ||
+    kb.any(x, UI.ns.dct('title')) ||
+    kb.any(x, UI.ns.dc('title')) ||
+    kb.any(x, UI.ns.rss('title')) ||
+    kb.any(x, UI.ns.contact('fullName')) ||
+    kb.any(x, kb.sym('http://www.w3.org/2001/04/roadmap/org#name')) ||
+    kb.any(x, UI.ns.cal('summary')) ||
+    kb.any(x, UI.ns.foaf('nick')) ||
+    kb.any(x, UI.ns.rdfs('label'))
 
-  if (lab1){
+  if (lab1) {
     return doCap(lab1.value)
   }
 
   // Default to label just generated from the URI
 
-  if (x.termType == 'BlankNode') {
+  if (x.termType === 'BlankNode') {
     return '...'
   }
-  if (x.termType == 'Collection') {
+  if (x.termType === 'Collection') {
     return '(' + x.elements.length + ')'
   }
   var s = x.uri
-  if (typeof s == 'undefined') return x.toString(); // can't be a symbol
+  if (typeof s === 'undefined') return x.toString() // can't be a symbol
   // s = decodeURI(s) // This can crash is random valid @ signs are presentation
   // The idea was to clean up eg URIs encoded in query strings
   // Also encoded character in what was filenames like @ [] {}
-  try{
+  try {
     s = s.split('/').map(decodeURIComponent).join('/') // If it is properly encoded
-  } catch(e){ // try individual decoding of ASCII code points
-    for (var i =s.length - 3; i > 0; i --) {
+  } catch (e) { // try individual decoding of ASCII code points
+    for (var i = s.length - 3; i > 0; i--) {
       const hex = '0123456789abcefABCDEF' // The while upacks multiple layers of encoding
-      while (s[i] === '%' && hex.indexOf(s[i+1]) >=0 && hex.indexOf(s[i+2]) >=0 ) {
-        s = s.slice(0, i) +  String.fromCharCode(parseInt(s.slice(i+1, i+3), 16)) + s.slice(i+3)
+      while (s[i] === '%' && hex.indexOf(s[i + 1]) >= 0 && hex.indexOf(s[i + 2]) >= 0) {
+        s = s.slice(0, i) + String.fromCharCode(parseInt(s.slice(i + 1, i + 3), 16)) + s.slice(i + 3)
       }
     }
   }
@@ -518,10 +521,10 @@ UI.utils.label = function (x, initialCap) { // x is an object
   if (s.slice(-9) === '/foaf.rdf') s = s.slice(0, -9)
   else if (s.slice(-5) === '/foaf') s = s.slice(0, -5)
 
-  if (1) { //   Eh? Why not do this? e.g. dc:title needs it only trim URIs, not rdfs:labels
-    var slash = s.lastIndexOf('/', s.length - 2); // (len-2) excludes trailing slash
-    if ((slash >= 0) && (slash < x.uri.length)) return cleanUp(s.slice(slash + 1))
-  }
+  // Eh? Why not do this? e.g. dc:title needs it only trim URIs, not rdfs:labels
+  var slash = s.lastIndexOf('/', s.length - 2) // (len-2) excludes trailing slash
+  if ((slash >= 0) && (slash < x.uri.length)) return cleanUp(s.slice(slash + 1))
+
   return doCap(decodeURIComponent(x.uri))
 }
 
@@ -545,7 +548,7 @@ UI.utils.predicateLabelForXML = function (p, inverse) {
 
   lab = UI.utils.labelForXML(p)
   if (inverse) {
-    if (lab == 'type') return '...'; // Not "is type of"
+    if (lab === 'type') return '...' // Not "is type of"
     return 'is ' + lab + ' of'
   }
   return lab
@@ -554,25 +557,26 @@ UI.utils.predicateLabelForXML = function (p, inverse) {
 // Not a method. For use in sorts
 UI.utils.RDFComparePredicateObject = function (self, other) {
   var x = self.predicate.compareTerm(other.predicate)
-  if (x != 0) return x
+  if (x !== 0) return x
   return self.object.compareTerm(other.object)
 }
 UI.utils.RDFComparePredicateSubject = function (self, other) {
   var x = self.predicate.compareTerm(other.predicate)
-  if (x != 0) return x
+  if (x !== 0) return x
   return self.subject.compareTerm(other.subject)
 }
 // ends
 
 UI.utils.predParentOf = function (node) {
   var n = node
-  while (true){
-    if (n.getAttribute('predTR'))
+  while (true) {
+    if (n.getAttribute('predTR')) {
       return n
-    else if (n.previousSibling && n.previousSibling.nodeName == 'TR') {
+    } else if (n.previousSibling && n.previousSibling.nodeName === 'TR') {
       n = n.previousSibling
     } else {
-      UI.log.error('Could not find predParent'); return node }
+      UI.log.error('Could not find predParent'); return node
+    }
   }
 }
 
@@ -582,27 +586,32 @@ var optionalSubqueriesIndex = []
 UI.utils.makeQueryRow = function (q, tr, constraint) {
   var kb = UI.store
   // predtr = predParentOf(tr)
-  var nodes = tr.childNodes, n = tr.childNodes.length, inverse = tr.AJAR_inverse,
-    i, hasVar = 0, pattern, v, c, parentVar = null, level, pat
+  // var nodes = tr.childNodes
+  // var n = tr.childNodes.length
+  var inverse = tr.AJAR_inverse
+  // var hasVar = 0
+  let pattern, v, parentVar, level, pat
 
   function makeRDFStatement (freeVar, parent) {
-    if (inverse)
+    if (inverse) {
       return new UI.rdf.Statement(freeVar, st.predicate, parent)
-    else
+    } else {
       return new UI.rdf.Statement(parent, st.predicate, freeVar)
+    }
   }
 
   var optionalSubqueryIndex = null
 
   for (level = tr.parentNode; level; level = level.parentNode) {
-    if (typeof level.AJAR_statement != 'undefined') { // level.AJAR_statement
+    if (typeof level.AJAR_statement !== 'undefined') { // level.AJAR_statement
       level.setAttribute('bla', level.AJAR_statement) // @@? -timbl
       // UI.log.debug("Parent TR statement="+level.AJAR_statement + ", var=" + level.AJAR_variable)
-      /*for(c=0;c<level.parentNode.childNodes.length;c++) //This makes sure the same variable is used for a subject
-      	if(level.parentNode.childNodes[c].AJAR_variable)
-      		level.AJAR_variable = level.parentNode.childNodes[c].AJAR_variable;*/
-      if (!level.AJAR_variable)
+      /* for(let c=0;c<level.parentNode.childNodes.length;c++) //This makes sure the same variable is used for a subject
+      if(level.parentNode.childNodes[c].AJAR_variable)
+        level.AJAR_variable = level.parentNode.childNodes[c].AJAR_variable; */
+      if (!level.AJAR_variable) {
         UI.utils.makeQueryRow(q, level)
+      }
       parentVar = level.AJAR_variable
       var predLevel = UI.utils.predParentOf(level)
       if (predLevel.getAttribute('optionalSubqueriesIndex')) {
@@ -613,17 +622,18 @@ UI.utils.makeQueryRow = function (q, tr, constraint) {
     }
   }
 
-  if (!pat)
-    var pat = q.pat
+  if (!pat) { pat = q.pat }
 
   var predtr = UI.utils.predParentOf(tr)
   // /////OPTIONAL KLUDGE///////////
   var opt = (predtr.getAttribute('optional'))
   if (!opt) {
-    if (optionalSubqueryIndex)
+    if (optionalSubqueryIndex) {
       predtr.setAttribute('optionalSubqueriesIndex', optionalSubqueryIndex)
-    else
-      predtr.removeAttribute('optionalSubqueriesIndex')}
+    } else {
+      predtr.removeAttribute('optionalSubqueriesIndex')
+    }
+  }
   if (opt) {
     var optForm = kb.formula()
     optionalSubqueriesIndex.push(optForm)
@@ -638,11 +648,10 @@ UI.utils.makeQueryRow = function (q, tr, constraint) {
 
   var constraintVar = tr.AJAR_inverse ? st.subject : st.object // this is only used for constraints
   var hasParent = true
-  if (constraintVar.isBlank && constraint)
-    alert('You cannot constrain a query with a blank node. No constraint will be added.')
+  if (constraintVar.isBlank && constraint) { window.alert('You cannot constrain a query with a blank node. No constraint will be added.') }
   if (!parentVar) {
     hasParent = false
-    parentVar = inverse ? st.object : st.subject; // if there is no parents, uses the sub/obj
+    parentVar = inverse ? st.object : st.subject // if there is no parents, uses the sub/obj
   }
   // UI.log.debug('Initial variable: '+tr.AJAR_variable)
   v = tr.AJAR_variable ? tr.AJAR_variable : kb.variable(UI.utils.newVariableName())
@@ -654,8 +663,8 @@ UI.utils.makeQueryRow = function (q, tr, constraint) {
   v.label = v.label.slice(0, 1).toUpperCase() + v.label.slice(1) // init cap
 
   // See ../rdf/sparql.js
-  function ConstraintEqualTo (value) // This should only work on literals but doesn't.
-  {
+  // This should only work on literals but doesn't.
+  function ConstraintEqualTo (value) {
     this.describe = function (varstr) { return varstr + ' = ' + value.toNT() }
     this.test = function (term) {
       return value.sameTerm(term)
