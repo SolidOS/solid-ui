@@ -96,6 +96,8 @@ function logIn (context) {
 /**
  * Logs the user in and loads their WebID profile document into the store
  *
+ * @private
+ *
  * @param context {Object}
  *
  * @returns {Promise<Object>} Resolves with the context after login / fetch
@@ -130,11 +132,12 @@ function logInLoadProfile (context) {
       context.div.appendChild(UI.widgets.errorMessageBlock(context.dom, message))
     })
 }
-UI.widgets.logInLoadProfile = logInLoadProfile
 
 /**
  * Loads preferences file
  * Do this after having done log in and load profile
+ *
+ * @private
  *
  * @param context
  *
@@ -176,7 +179,6 @@ function loadPreferences (context) {
       throw new Error('Error loading preferences file. ' + err)
     })
 }
-UI.widgets.loadPreferences = loadPreferences
 
 /**
  * Resolves with the same context, outputting
@@ -221,6 +223,8 @@ UI.widgets.loadTypeIndexes = loadTypeIndexes
 /**
  * Resolves with the same context, outputting
  * @see https://github.com/solid/solid/blob/master/proposals/data-discovery.md#discoverability
+ *
+ * @private
  *
  * @param context {Object}
  * @param context.me
@@ -282,7 +286,6 @@ function ensureTypeIndexes (context) {
       }) // .then
   }) // Promise
 }
-UI.widgets.ensureTypeIndexes = ensureTypeIndexes
 
 /**
  * Returns promise of context with arrays of symbols
@@ -596,6 +599,8 @@ UI.widgets.offlineTestID = offlineTestID
 
 /**
  * Bootstrapping identity
+ * (Called by `loginStatusBox()`)
+ * @private
  *
  * @param myDocument
  * @param gotOne
@@ -610,6 +615,7 @@ function signInOrSignUpBox (myDocument, gotOne) {
   p.innerHTML = ('You need to log in with a Web ID')
   console.log('UI.widgets.signInOrSignUpBox')
 
+  // Sign in button
   var but = myDocument.createElement('input')
   box.appendChild(but)
   but.setAttribute('type', 'button')
@@ -624,6 +630,7 @@ function signInOrSignUpBox (myDocument, gotOne) {
     })
   }, false)
 
+  // Sign up button
   var but2 = myDocument.createElement('input')
   box.appendChild(but2)
   but2.setAttribute('type', 'button')
@@ -637,7 +644,6 @@ function signInOrSignUpBox (myDocument, gotOne) {
   }, false)
   return box
 }
-UI.widgets.signInOrSignUpBox = signInOrSignUpBox
 
 // For a user authenticated using webid (or possibly other methods) it
 // is not immediately available to the client which person(a) it is.
@@ -813,7 +819,7 @@ function loginStatusBox (myDocument, listener) {
       if (me) {
         box.appendChild(logoutButton(me))
       } else {
-        box.appendChild(UI.widgets.signInOrSignUpBox(myDocument, setIt))
+        box.appendChild(signInOrSignUpBox(myDocument, setIt))
       }
     }
     box.me = meUri
