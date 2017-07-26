@@ -6,7 +6,7 @@ const error = require('./widgets/error')
 const widgets = require('./widgets/index')
 // const utils = require('./utils')
 
-var UI = {
+const UI = {
   log: require('./log'),
   ns: require('./ns'),
   store: require('./store')
@@ -14,7 +14,6 @@ var UI = {
 
 module.exports = {
   checkUser,
-  complain,
   findAppInstances,
   findOriginOwner,
   loadTypeIndexes,
@@ -31,7 +30,7 @@ module.exports = {
 // is not immediately available to the client which person(a) it is.
 // The solid standard way is for the server to send the information back as a User: header.
 
-var userCheckSite = 'https://databox.me/'
+const userCheckSite = 'https://databox.me/'
 
 // Look for and load the User who has control over it
 function findOriginOwner (doc, callback) {
@@ -42,12 +41,6 @@ function findOriginOwner (doc, callback) {
   if (j < 0) return false
   var origin = uri.slice(0, j + 1) // @@ TBC
   return origin
-}
-
-function complain (context, err) {
-  var ele = context.statusArea || context.div
-  console.log('Complaint: ' + err)
-  return ele.appendChild(error.errorMessageBlock(context.dom, err))
 }
 
 // Promises versions
@@ -234,7 +227,7 @@ function loadTypeIndexes (context) {
     .then(() => context)
 
     .catch((e) => {
-      complain(context, e)
+      widgets.complain(context, e)
       throw new Error('Error loading type indexes: ' + e)
     })
 }
