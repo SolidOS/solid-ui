@@ -635,7 +635,7 @@ function signInOrSignUpBox (myDocument, gotOne) {
   but.addEventListener('click', function (e) {
     var offline = offlineTestID()
     if (offline) return gotOne(offline.uri)
-    Solid.auth.login().then(function (uri) {
+    Solid.tls.login().then(function (uri) {
       console.log('signInOrSignUpBox logged in up ' + uri)
       gotOne(uri)
     })
@@ -648,7 +648,7 @@ function signInOrSignUpBox (myDocument, gotOne) {
   but2.setAttribute('value', 'Sign Up')
   but2.setAttribute('style', 'padding: 1em; border-radius:0.5em; margin: 2em;')
   but2.addEventListener('click', function (e) {
-    Solid.auth.signup().then(function (uri) {
+    Solid.tls.signup().then(function (uri) {
       console.log('signInOrSignUpBox signed up ' + uri)
       gotOne(uri)
     })
@@ -772,10 +772,11 @@ function loginStatusBox (myDocument, listener) {
   var box = myDocument.createElement('div')
 
   var setIt = function (newidURI) {
-    var uri = newidURI.uri || newidURI // Just in case
+    if (!newidURI) { return }
+
+    let uri = newidURI.uri || newidURI
     tabulator.preferences.set('me', uri)
     me = $rdf.sym(uri)
-    // var message = 'Your Web ID is now ' + me + ' .'
     box.refresh()
     if (listener) listener(me.uri)
   }
