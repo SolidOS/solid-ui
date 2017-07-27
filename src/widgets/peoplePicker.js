@@ -12,7 +12,7 @@
 import escape from 'escape-html'
 import uuid from 'node-uuid'
 import rdf from 'rdflib'
-const webClient = require('solid-web-client')(rdf)
+// const webClient = require('solid-web-client')(rdf)
 
 import { makeDropTarget } from './dragAndDrop'
 import { errorMessageBlock } from './error'
@@ -428,15 +428,23 @@ function getWithDefault (subject, predicate, defaultValue) {
 }
 
 function patch (url, {toDel, toIns}) {
-  return webClient.patch(url, toDel, toIns)
-    .then(solidResponse => {
-      const status = solidResponse.xhr.status
-      if (status < 200 || status >= 400) {
-        const err = new Error(`PATCH failed for resource <${solidResponse.url}>`)
-        err.solidResponse = solidResponse
-        throw err
+  return new Promise((resolve, reject) => {
+    kb.updater.update(toDel, toIns, (uri, success, errorMessage) => {
+      if (!success) {
+        return reject(new Error(`PATCH failed for resource <${uri}>: ${errorMessage}`))
       }
+      resolve()
     })
+  })
+  // return webClient.patch(url, toDel, toIns)
+  //   .then(solidResponse => {
+  //     const status = solidResponse.xhr.status
+  //     if (status < 200 || status >= 400) {
+  //       const err = new Error(`PATCH failed for resource <${solidResponse.url}>`)
+  //       err.solidResponse = solidResponse
+  //       throw err
+  //     }
+  //   })
 }
 
 function indexes (book) {
