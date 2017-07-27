@@ -47,7 +47,7 @@
     "escape-html": "^1.0.3",
     "node-uuid": "^1.4.7",
     "rdflib": "^0.15.0",
-    "solid-client": "^0.24.3"
+    "solid-auth-tls": "^0.1.2"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",

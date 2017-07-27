@@ -3,7 +3,8 @@
  *
  * Signing in, signing up, workspace selection, app spawning
  */
-const Solid = require('solid-client')
+// const Solid = require('solid-client')
+const SolidTls = require('solid-auth-tls')
 const $rdf = require('rdflib')
 const error = require('./widgets/error')
 const widgets = require('./widgets/index')
@@ -19,6 +20,7 @@ const UI = {
 module.exports = {
   checkCurrentUser,
   checkUser,
+  currentUser,
   findAppInstances,
   findOriginOwner,
   loadTypeIndexes,
@@ -620,11 +622,11 @@ function offlineTestID () {
  * @private
  *
  * @param myDocument
- * @param gotOne
+ * @param setUserCallback
  *
  * @returns {Element}
  */
-function signInOrSignUpBox (myDocument, gotOne) {
+function signInOrSignUpBox (myDocument, setUserCallback) {
   var box = myDocument.createElement('div')
   var p = myDocument.createElement('p')
   box.appendChild(p)
@@ -648,12 +650,14 @@ function signInOrSignUpBox (myDocument, gotOne) {
 
   signInButton.addEventListener('click', () => {
     var offline = offlineTestID()
-    if (offline) return gotOne(offline.uri)
+    if (offline) return setUserCallback(offline.uri)
 
     let idpUri = document.getElementById('idpInput')
+
     if (idpUri && idpUri.value !== '') {
       return solidAuthClient.login(idpUri.value)
         .then(initFromAuthResponse)
+        .then(webIdURI => setUserCallback(webIdURI))
     }
 
     // Solid.tls.login().then(function (uri) {
@@ -671,14 +675,18 @@ function signInOrSignUpBox (myDocument, gotOne) {
     'padding: 1em; border-radius:0.5em; margin: 2em;')
 
   signupButton.addEventListener('click', function (e) {
-    Solid.tls.signup().then(function (uri) {
+    let signupMgr = new SolidTls.Signup()
+    signupMgr.signup().then(function (uri) {
       console.log('signInOrSignUpBox signed up ' + uri)
-      gotOne(uri)
+      setUserCallback(uri)
     })
   }, false)
   return box
 }
 
+/**
+ * @returns {Promise<string|null>} Resolves with WebID URI or null
+ */
 function initFromAuthResponse (authResponse) {
   UI.store.fetcher._fetch = authResponse.fetch
   var session = authResponse.session || {}
@@ -686,11 +694,13 @@ function initFromAuthResponse (authResponse) {
   if (webId) {
     setUser($rdf.namedNode(webId))
   }
-  console.log(authResponse)
 
-  return authResponse
+  return webId
 }
 
+/**
+ * @returns {Promise<string|null>} Resolves with WebID URI or null
+ */
 function checkCurrentUser () {
   solidAuthClient.currentSession()
     .then(initFromAuthResponse)
