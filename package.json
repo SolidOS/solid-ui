@@ -15,9 +15,8 @@
     "build-old": "npm run build-lib && npm run build-browserified && npm run build-minified",
     "build": "npm run build-lib",
     "clean": "rm -rf dist/ && rm -rf lib/",
-    "standard": "standard src/*",
-    "pretest": "npm run standard",
-    "test": "echo 'No test suite.  Add tests!' && exit 1"
+    "standard": "standard src/signin.js src/utils.js",
+    "test": "npm run standard"
   },
   "repository": {
     "type": "git",
@@ -55,7 +54,8 @@
     "babelify": "^7.3.0",
     "browserify": "^14.4.0",
     "minifyify": "^7.2.1",
-    "solid-auth-client": "^0.3.4"
+    "solid-auth-client": "^0.3.4",
+    "standard": "^10.0.2"
   },
   "standard": {
     "globals": [
