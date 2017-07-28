@@ -723,7 +723,10 @@ function checkUser (doc, setUser) {
 
   // Check to see if already logged in / have the WebID
   var meUri = currentUser()
-  if (meUri) return setUser(meUri.uri)
+  if (meUri) {
+    let webId = meUri.uri
+    return setUser ? setUser(webId) : webId
+  }
 
   doc = kb.any(doc, UI.ns.link('userMirror')) || doc
 
@@ -739,12 +742,10 @@ function checkUser (doc, setUser) {
       tabulator.preferences.set('me', webId || '')
 
       if (webId) {
-        console.log('(Logged in as ' + webId + ' by authentication.)')
+        console.log('(Logged in as ' + webId + ' by authentication)')
       }
 
-      if (setUser) { return setUser(webId) }
-
-      return webId
+      return setUser ? setUser(webId) : webId
     })
 }
 
