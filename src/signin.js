@@ -31,15 +31,11 @@ module.exports = {
   registrationList,
   selectWorkspace,
   setACLUserPublic,
-  setUser,
+  saveUser,
   solidAuthClient
 }
 
-// For a user authenticated using webid (or possibly other methods) it
-// is not immediately available to the client which person(a) it is.
-// The solid standard way is for the server to send the information back as a User: header.
-
-const userCheckSite = 'https://databox.me/'
+// const userCheckSite = 'https://databox.me/'
 
 // Look for and load the User who has control over it
 function findOriginOwner (doc, callback) {
@@ -70,17 +66,23 @@ function findOriginOwner (doc, callback) {
 //  statusArea        A DOM element (opt) progress stuff can be displayed, or error messages
 
 /**
- * @param webId {NamedNode}
+ * @param webId {NamedNode|string}
  * @param context {Object}
  *
  * @returns {NamedNode|null} Returns the Web ID, after setting it
  */
-function setUser (webId, context) {
+function saveUser (webId, context) {
   if (context) {
-    context.me = webId
+    context.me = $rdf.namedNode(webId)
   }
 
-  tabulator.preferences.set('me', webId ? webId.uri : '')
+  let webIdUri
+
+  if (webId) {
+    webIdUri = webId.uri || webId
+  }
+
+  tabulator.preferences.set('me', webIdUri || '')
 
   return webId
 }
@@ -89,7 +91,15 @@ function setUser (webId, context) {
  * @returns {NamedNode|null}
  */
 function currentUser () {
+  // Check for offline override
+  let offlineId = offlineTestID()
+
+  if (offlineId) {
+    return offlineId
+  }
+
   let webId = tabulator.preferences.get('me')
+
   return webId ? $rdf.sym(webId) : null
 }
 
@@ -101,16 +111,15 @@ function currentUser () {
  * @returns {Promise<NamedNode|null>}
  */
 function logIn (context) {
-  const kb = UI.store
   let webId = currentUser()
 
   if (webId) {
-    return Promise.resolve(setUser(webId, context))
+    return Promise.resolve(webId)
   }
 
   return new Promise((resolve) => {
     let box = loginStatusBox(context.dom, (webIdUri) => {
-      resolve(setUser(kb.sym(webIdUri), context))
+      resolve(saveUser(webIdUri, context))
     })
 
     context.div.appendChild(box)
@@ -596,6 +605,9 @@ function genACLText (docURI, me, aclURI, options = {}) {
   return $rdf.serialize(acl, g, aclURI, 'text/turtle')
 }
 
+/**
+ * @returns {NamedNode|null}
+ */
 function offlineTestID () {
   if (typeof $SolidTestEnvironment !== 'undefined' && $SolidTestEnvironment.username) { // Test setup
     console.log('Assuming the user is ' + $SolidTestEnvironment.username)
@@ -691,8 +703,9 @@ function initFromAuthResponse (authResponse) {
   UI.store.fetcher._fetch = authResponse.fetch
   var session = authResponse.session || {}
   var webId = session.webId
+
   if (webId) {
-    setUser($rdf.namedNode(webId))
+    saveUser(webId)
   }
 
   return webId
@@ -702,109 +715,47 @@ function initFromAuthResponse (authResponse) {
  * @returns {Promise<string|null>} Resolves with WebID URI or null
  */
 function checkCurrentUser () {
-  solidAuthClient.currentSession()
-    .then(initFromAuthResponse)
+  return checkUser()
 }
 
 /**
- * @param doc {NamedNode} Uri of a server to ask for the User: header
- * @param [setUser] {Function} Optional callback, `setUser(webId|null)`
+ * @param [setUserCallback] {Function} Optional callback, `setUserCallback(webId|null)`
  *
  * @returns {Promise<string|null>} Resolves with web id uri, if no callback provided
  */
-function checkUser (doc, setUser) {
-  const kb = UI.store
-
-  // Check for offline mode override
-  if (typeof $SolidTestEnvironment !== 'undefined' && $SolidTestEnvironment.username) { // Test setup
-    tabulator.preferences.set('me', $SolidTestEnvironment.username)
-    return setUser($SolidTestEnvironment.username)
-  }
+function checkUser (setUserCallback) {
+  let webId
 
   // Check to see if already logged in / have the WebID
   var meUri = currentUser()
   if (meUri) {
-    let webId = meUri.uri
-    return setUser ? setUser(webId) : webId
+    webId = meUri.uri
+    return Promise.resolve(setUserCallback ? setUserCallback(webId) : webId)
   }
 
-  doc = kb.any(doc, UI.ns.link('userMirror')) || doc
+  // doc = kb.any(doc, UI.ns.link('userMirror')) || doc
 
-  return fetchUsername(doc)
+  return solidAuthClient.currentSession()
+
+    .then(initFromAuthResponse)
+
     .catch(err => {
-      console.log('Error fetching username:', err)
+      console.log('Error fetching currentSession:', err)
       return null
     })
+
     .then(webId => {
       // if (webId.startsWith('dns:')) {  // legacy rww.io pseudo-users
       //   webId = null
       // }
-      tabulator.preferences.set('me', webId || '')
+      saveUser(webId)
 
       if (webId) {
         console.log('(Logged in as ' + webId + ' by authentication)')
       }
 
-      return setUser ? setUser(webId) : webId
+      return setUserCallback ? setUserCallback(webId) : webId
     })
-}
-
-/**
- * @param doc {NamedNode}
- *
- * @returns {Promise<string|null>}
- */
-function fetchUsername (doc) {
-  const kb = UI.store
-
-  if (!doc) {
-    return Promise.reject(new Error('Cannot fetch username for empty uri'))
-  }
-
-  return kb.fetcher.fetch(doc.uri)
-    .then(response => {
-      if (!response.ok) {
-        let message = 'fetchUsername: Unable to load ' + doc.uri + ': ' + response
-        console.log(message)
-        return null
-      }
-
-      let allUserHeaders = userHeadersFor(doc)
-
-      if (allUserHeaders.length) {
-        // have the username
-        return allUserHeaders[0].value.trim()
-      }
-
-      if (doc.uri !== userCheckSite) {
-        let newDoc = userCheckSite
-        console.log('fetchUsername: non-solid server' + doc + ': trying ' + newDoc)
-
-        return fetchUsername(kb.sym(newDoc))
-      }
-
-      return null
-    })
-}
-
-function userHeadersFor (doc) {
-  if (!doc) { return [] }
-
-  const kb = UI.store
-  let allUserHeaders = []
-
-  const requests = kb.each(null, UI.ns.link('requestedURI'), $rdf.uri.docpart(doc.uri))
-
-  requests.map((request) => {
-    let response = kb.any(request, UI.ns.link('response'))
-
-    if (response) {
-      let userHeaders = kb.each(response, UI.ns.httph('user'))
-      allUserHeaders = allUserHeaders.concat(userHeaders)
-    }
-  })
-
-  return allUserHeaders
 }
 
 /**
@@ -1111,7 +1062,7 @@ function newAppInstance (dom, appDetails, callback) {
   div.appendChild(b)
   b.innerHTML = 'Make new ' + appDetails.noun
   // b.setAttribute('style', 'float: right; margin: 0.5em 1em;'); // Caller should set
-  b.addEventListener('click', function (e) {
+  b.addEventListener('click', (e) => {
     div.appendChild(selectWorkspace(dom, appDetails, gotWS))
   }, false)
   div.appendChild(b)
