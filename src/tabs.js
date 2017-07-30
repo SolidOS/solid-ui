@@ -62,7 +62,7 @@ UI.tabs.tabWidget = function(options){
       var l = parseInt(('' + res2 % 16).split('.')[0]) // @@ ugh
       str += hex[h] + hex[l]
     }
-    console.log('Blending colors ' + a + ' with ' + mix + ' of ' + b + ' to give ' + str)
+    // console.log('Blending colors ' + a + ' with ' + mix + ' of ' + b + ' to give ' + str)
     return str
   }
 
@@ -232,9 +232,9 @@ UI.tabs.tabWidget = function(options){
       if (left === tabContainer.children.length) { // None left of original on right
         tabContainer.appendChild(newSlot)
         bodyContainer.appendChild(newBodyTR)
-        console.log('   appending new ' + insertables[i])
+        // console.log('   appending new ' + insertables[i])
       } else {
-        console.log('   inserting at ' + (left + i) + ' new ' + insertables[i])
+        // console.log('   inserting at ' + (left + i) + ' new ' + insertables[i])
         tabContainer.insertBefore(newSlot, tabContainer.children[left + i])
         bodyContainer.insertBefore(newBodyTR, bodyContainer.children[left + i])
       }
