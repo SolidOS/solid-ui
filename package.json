@@ -45,7 +45,7 @@
   "dependencies": {
     "escape-html": "^1.0.3",
     "node-uuid": "^1.4.7",
-    "rdflib": "^0.15.0",
+    "rdflib": "^0.16.0",
     "solid-auth-tls": "^0.1.2"
   },
   "devDependencies": {
