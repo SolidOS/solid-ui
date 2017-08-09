@@ -416,11 +416,11 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
           a.textContent = UI.aclControl.shortNameForFolder(defaultHolder)
           var kb2 = UI.acl.adoptACLDefault(doc, targetACLDoc, defaultHolder, defaultACLDoc)
           ACLControlEditable(box, doc, targetACLDoc, kb2, {modify: false}) // Add btton to save them as actual
-          box.style = 'color: #777;'
+          box.style.cssText = 'color: #777;'
 
           var editPlease = bottomRow.appendChild(dom.createElement('button'))
           editPlease.textContent = 'Set specific sharing\nfor this ' + noun
-          editPlease.style = bigButtonStyle
+          editPlease.style.cssText = bigButtonStyle
           editPlease.addEventListener('click', function (event) {
             updater.put(targetACLDoc, kb2.statements,
               'text/turtle', function (uri, ok, message) {
@@ -428,7 +428,7 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
                   statusBlock.textContent += ' (Error writing back access control file: ' + message + ')'
                 } else {
                   statusBlock.textContent = ' (Now editing specific access for this ' + noun + ')'
-                  // box.style = 'color: black;'
+                  // box.style.cssText = 'color: black;'
                   bottomRow.removeChild(editPlease)
                 }
               })
@@ -443,13 +443,13 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
           if (prospectiveDefaultHolder) {
             useDefault.textContent += ' for ' + utils.label(prospectiveDefaultHolder)
           }
-          useDefault.style = bigButtonStyle
+          useDefault.style.cssText = bigButtonStyle
           useDefault.addEventListener('click', function (event) {
             kb.fetcher.delete(targetACLDoc.uri)
               .then(function () {
                 statusBlock.textContent = ' The sharing for this ' + noun + ' is now the default.'
                 bottomRow.removeChild(useDefault)
-                box.style = 'color: #777;'
+                box.style.cssText = 'color: #777;'
               })
               .catch(function (e) {
                 statusBlock.textContent += ' (Error deleting access control file: ' + targetACLDoc + ': ' + e + ')'
@@ -476,10 +476,10 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
 
         box.addControlForDefaults = function () {
           box.notice.textContent = 'Access to things within this folder:'
-          box.notice.style = 'font-size: 120%; color: black;'
+          box.notice.style.cssText = 'font-size: 120%; color: black;'
           var mergeButton = UI.widgets.clearElement(box.offer).appendChild(dom.createElement('button'))
           mergeButton.innerHTML = '<p>Set default for folder contents to<br />just track the sharing for the folder</p>'
-          mergeButton.style = bigButtonStyle
+          mergeButton.style.cssText = bigButtonStyle
           mergeButton.addEventListener('click', function (e) {
             delete box.defaultsDiffer
             delete box.defByCombo
@@ -495,10 +495,10 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
         box.removeControlForDefaults = function () {
           statusBlock.textContent = 'This is also the default for things in this folder.'
           box.notice.textContent = 'Sharing for things within the folder currently tracks sharing for the folder.'
-          box.notice.style = 'font-size: 80%; color: #888;'
+          box.notice.style.cssText = 'font-size: 80%; color: #888;'
           var splitButton = UI.widgets.clearElement(box.offer).appendChild(dom.createElement('button'))
           splitButton.innerHTML = '<p>Set the sharing of folder contets <br />separately from the sharing for the folder</p>'
-          splitButton.style = bigButtonStyle
+          splitButton.style.cssText = bigButtonStyle
           splitButton.addEventListener('click', function (e) {
             box.addControlForDefaults()
             statusBlock.textContent = ''
@@ -518,7 +518,7 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
         box.mainByCombo = ACLControlEditable(box, targetDoc, targetACLDoc, kb, {modify: true}) // yes can edit
         box.divider = box.appendChild(dom.createElement('tr'))
         box.notice = box.divider.appendChild(dom.createElement('td'))
-        box.notice.style = 'font-size: 80%; color: #888;'
+        box.notice.style.cssText = 'font-size: 80%; color: #888;'
         box.offer = box.divider.appendChild(dom.createElement('td'))
         box.notice.setAttribute('colspan', '2')
 

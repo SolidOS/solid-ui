@@ -20,8 +20,6 @@ import { iconBase } from '../iconBase'
 import ns from '../ns'
 import kb from '../store'
 
-const vcard = ns.vcard
-
 export class PeoplePicker {
   constructor (element, typeIndex, groupPickedCb, options) {
     this.options = options || {}
@@ -109,13 +107,13 @@ export class PeoplePicker {
         if (!bookRegistration) {
           return reject(new Error('no address book registered in the solid type index ' + typeIndex))
         }
-        const book = kb.any(bookRegistration,ns.solid('instance'))
+        const book = kb.any(bookRegistration, ns.solid('instance'))
         if (!book) {
           return reject(new Error('incomplete address book registration'))
         }
-        kb.fetcher.load(book).then(function(xhr){
+        kb.fetcher.load(book).then(function (xhr) {
           return resolve({book})
-        }).catch(function(err){
+        }).catch(function (err) {
           return reject(new Error('Could not load address book ' + err))
         })
       })
@@ -131,14 +129,14 @@ export class PeoplePicker {
     // non-atomic in that solid requires us to send two PATCHes, either of which
     // might fail.
     const patchPromises = [group.doc(), groupIndex]
-      .map(namedGraph => {
-        const typeStatement = rdf.st(group, ns.rdf('type'), ns.vcard('Group')) // , namedGraph ?
-        const nameStatement = rdf.st(group, ns.vcard('fn'), name)
-        const includesGroupStatement = rdf.st(book, ns.vcard('includesGroup'), group)
-        const toIns = namedGraph.equals(groupIndex)
+      .map(doc => {
+        const typeStatement = rdf.st(group, ns.rdf('type'), ns.vcard('Group'), doc)
+        const nameStatement = rdf.st(group, ns.vcard('fn'), name, group.doc(), doc)
+        const includesGroupStatement = rdf.st(book, ns.vcard('includesGroup'), group, doc)
+        const toIns = doc.equals(groupIndex)
           ? [typeStatement, nameStatement, includesGroupStatement]
           : [typeStatement, nameStatement]
-        return patch(namedGraph.value, {toIns})
+        return patch(doc.uri, {toIns})
           .then(() => {
             toIns.forEach(st => {
               kb.add(st)
@@ -149,7 +147,7 @@ export class PeoplePicker {
       .then(() => ({group}))
       .catch(err => {
         console.log('Could not create new group.  PATCH failed ' + err)
-        throw new Error(`Couldn't create new group.  PATCH failed for (${err.xhr? err.xhr.responseURL : ''})`)
+        throw new Error(`Couldn't create new group.  PATCH failed for (${ err.xhr ? err.xhr.responseURL : '' })`)
       })
   }
 
@@ -449,7 +447,7 @@ function patch (url, {toDel, toIns}) {
 
 function indexes (book) {
   return {
-    //bookIndex: book,
+    // bookIndex: book,
     groupIndex: kb.any(book, ns.vcard('groupIndex')),
     groupContainer: kb.sym(book.dir().uri + 'Group/')
   }
