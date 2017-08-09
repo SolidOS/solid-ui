@@ -46,6 +46,7 @@
     "escape-html": "^1.0.3",
     "node-uuid": "^1.4.7",
     "rdflib": "^0.16.0",
+    "solid-auth-client": "^0.3.4",
     "solid-auth-tls": "^0.1.2"
   },
   "devDependencies": {
@@ -54,7 +55,6 @@
     "babelify": "^7.3.0",
     "browserify": "^14.4.0",
     "minifyify": "^7.2.1",
-    "solid-auth-client": "^0.3.4",
     "standard": "^10.0.2"
   },
   "standard": {
