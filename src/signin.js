@@ -66,7 +66,7 @@ function findOriginOwner (doc, callback) {
 //  statusArea        A DOM element (opt) progress stuff can be displayed, or error messages
 
 /**
- * @param webId {NamedNode|string}
+ * @param webId {NamedNode}
  * @param context {Object}
  *
  * @returns {NamedNode|null} Returns the Web ID, after setting it
@@ -882,14 +882,14 @@ function selectWorkspace (dom, appDetails, callbackWS) {
     }
     var now = new Date()
     newBase += appPathSegment + '/id' + now.getTime() + '/' // unique id
-
-    callbackWS(ws, newBase)
+    return newBase
   }
 
   var displayOptions = function (context) {
     // var status = ''
     var id = context.me
     var preferencesFile = context.preferencesFile
+    var newBase = null
 
     // A workspace specifically defined in the private preferences file:
     var w = kb.statementsMatching(id, UI.ns.space('workspace'), // Only trust prefs file here
@@ -904,133 +904,135 @@ function selectWorkspace (dom, appDetails, callbackWS) {
     // if (pending !== undefined) pending.parentNode.removeChild(pending);
     if (w.length === 1) {
       say('Workspace used: ' + w[0].uri)  // @@ allow user to see URI
-      var newBase = figureOutBase(w[0])
-      callbackWS(w[0], newBase)
+      newBase = figureOutBase(w[0])
+      // callbackWS(w[0], newBase)
     } else if (w.length === 0) {
       say("You don't seem to have any workspaces. You have " + storages.length + ' storages.')
-      say('@@ code me: create new workspace.')
-    } else {
-      // Prompt for ws selection or creation
-      // say( w.length + " workspaces for " + id + "Chose one.");
-      var table = dom.createElement('table')
-      table.setAttribute('style', 'border-collapse:separate; border-spacing: 0.5em;')
+    }
 
-      // var popup = window.open(undefined, '_blank', { height: 300, width:400 }, false)
-      box.appendChild(table)
+    // Prompt for ws selection or creation
+    // say( w.length + " workspaces for " + id + "Chose one.");
+    var table = dom.createElement('table')
+    table.setAttribute('style', 'border-collapse:separate; border-spacing: 0.5em;')
 
-      //  Add a field for directly adding the URI yourself
+    // var popup = window.open(undefined, '_blank', { height: 300, width:400 }, false)
+    box.appendChild(table)
 
-      // var hr = box.appendChild(dom.createElement('hr')) // @@
-      box.appendChild(dom.createElement('hr')) // @@
+    //  Add a field for directly adding the URI yourself
 
-      var p = box.appendChild(dom.createElement('p'))
-      p.textContent = 'Where would you like to store the data for the ' + noun + '?  ' +
-        'Give the URL of the directory where you would like the data stored.'
-      var baseField = box.appendChild(dom.createElement('input'))
-      baseField.setAttribute('type', 'text')
-      baseField.size = 80 // really a string
-      baseField.label = 'base URL'
-      baseField.autocomplete = 'on'
+    // var hr = box.appendChild(dom.createElement('hr')) // @@
+    box.appendChild(dom.createElement('hr')) // @@
 
-      context.baseField = baseField
+    var p = box.appendChild(dom.createElement('p'))
+    p.textContent = 'Where would you like to store the data for the ' + noun + '?  ' +
+      'Give the URL of the directory where you would like the data stored.'
+    var baseField = box.appendChild(dom.createElement('input'))
+    baseField.setAttribute('type', 'text')
+    baseField.size = 80 // really a string
+    baseField.label = 'base URL'
+    baseField.autocomplete = 'on'
+    if (newBase){ // set to default
+      baseField.value = newBase
+    }
 
-      box.appendChild(dom.createElement('br')) // @@
+    context.baseField = baseField
 
-      var button = box.appendChild(dom.createElement('button'))
-      button.textContent = 'Start new ' + noun + ' at this URI'
-      button.addEventListener('click', function (e) {
-        var newBase = baseField.value
-        if (newBase.slice(-1) !== '/') {
-          newBase += '/'
-        }
-        callbackWS(null, newBase)
-      })
+    box.appendChild(dom.createElement('br')) // @@
 
-      // Now go set up the table of spaces
+    var button = box.appendChild(dom.createElement('button'))
+    button.textContent = 'Start new ' + noun + ' at this URI'
+    button.addEventListener('click', function (e) {
+      var newBase = baseField.value
+      if (newBase.slice(-1) !== '/') {
+        newBase += '/'
+      }
+      callbackWS(null, newBase)
+    })
 
-      // var row = 0
-      w = w.filter(function (x) {
-        return !(kb.holds(x, UI.ns.rdf('type'), // Ignore master workspaces
-          UI.ns.space('MasterWorkspace')))
-      })
-      var col1, col2, col3, tr, ws, style, comment
-      var cellStyle = 'height: 3em; margin: 1em; padding: 1em white; border-radius: 0.3em;'
-      var deselectedStyle = cellStyle + 'border: 0px;'
-      // var selectedStyle = cellStyle + 'border: 1px solid black;'
-      for (var i = 0; i < w.length; i++) {
-        ws = w[i]
-        tr = dom.createElement('tr')
-        if (i === 0) {
-          col1 = dom.createElement('td')
-          col1.setAttribute('rowspan', '' + w.length + 1)
-          tr.appendChild(col1)
-        }
-        col2 = dom.createElement('td')
-        style = kb.any(ws, UI.ns.ui('style'))
-        if (style) {
-          style = style.value
-        } else { // Otherise make up arbitrary colour
-          var hash = function (x) { return x.split('').reduce(function (a, b) { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0) }
-          var bgcolor = '#' + ((hash(ws.uri) & 0xffffff) | 0xc0c0c0).toString(16) // c0c0c0  forces pale
-          style = 'color: black ; background-color: ' + bgcolor + ';'
-        }
-        col2.setAttribute('style', deselectedStyle + style)
-        tr.target = ws.uri
-        var label = kb.any(ws, UI.ns.rdfs('label'))
-        if (!label) {
-          label = ws.uri.split('/').slice(-1)[0] || ws.uri.split('/').slice(-2)[0]
-        }
-        col2.textContent = label || '???'
-        tr.appendChild(col2)
-        if (i === 0) {
-          col3 = dom.createElement('td')
-          col3.setAttribute('rowspan', '' + w.length + 1)
-          // col3.textContent = '@@@@@ remove';
-          col3.setAttribute('style', 'width:50%;')
-          tr.appendChild(col3)
-        }
-        table.appendChild(tr)
+    // Now go set up the table of spaces
 
-        var addMyListener = function (container, detail, style, ws1) {
-          container.addEventListener('click', function (e) {
-            col3.textContent = detail
-            col3.setAttribute('style', style)
-            col3.appendChild(addContinueButton(ws1))
-          }, true) // capture vs bubble
-        }
+    // var row = 0
+    w = w.filter(function (x) {
+      return !(kb.holds(x, UI.ns.rdf('type'), // Ignore master workspaces
+        UI.ns.space('MasterWorkspace')))
+    })
+    var col1, col2, col3, tr, ws, style, comment
+    var cellStyle = 'height: 3em; margin: 1em; padding: 1em white; border-radius: 0.3em;'
+    var deselectedStyle = cellStyle + 'border: 0px;'
+    // var selectedStyle = cellStyle + 'border: 1px solid black;'
+    for (var i = 0; i < w.length; i++) {
+      ws = w[i]
+      tr = dom.createElement('tr')
+      if (i === 0) {
+        col1 = dom.createElement('td')
+        col1.setAttribute('rowspan', '' + w.length + 1)
+        col1.textContent = 'Chose a workspace for this:'
+        col1.setAttribute('style', 'vertical-align:middle;')
+        tr.appendChild(col1)
+      }
+      col2 = dom.createElement('td')
+      style = kb.any(ws, UI.ns.ui('style'))
+      if (style) {
+        style = style.value
+      } else { // Otherise make up arbitrary colour
+        var hash = function (x) { return x.split('').reduce(function (a, b) { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0) }
+        var bgcolor = '#' + ((hash(ws.uri) & 0xffffff) | 0xc0c0c0).toString(16) // c0c0c0  forces pale
+        style = 'color: black ; background-color: ' + bgcolor + ';'
+      }
+      col2.setAttribute('style', deselectedStyle + style)
+      tr.target = ws.uri
+      var label = kb.any(ws, UI.ns.rdfs('label'))
+      if (!label) {
+        label = ws.uri.split('/').slice(-1)[0] || ws.uri.split('/').slice(-2)[0]
+      }
+      col2.textContent = label || '???'
+      tr.appendChild(col2)
+      if (i === 0) {
+        col3 = dom.createElement('td')
+        col3.setAttribute('rowspan', '' + w.length + 1)
+        // col3.textContent = '@@@@@ remove';
+        col3.setAttribute('style', 'width:50%;')
+        tr.appendChild(col3)
+      }
+      table.appendChild(tr)
 
-        var addContinueButton = function (selectedWorkspace) {
-          var button = dom.createElement('button')
-          button.textContent = 'Continue'
-          // button.setAttribute('style', style);
-          var newBase = figureOutBase(selectedWorkspace)
-          // @@ show the user the URI
-          button.addEventListener('click', function (e) {
-            button.disabled = true
-            callbackWS(selectedWorkspace, newBase)
-            button.textContent = '---->'
-          }, true) // capture vs bubble
-          return button
-        }
-
-        comment = kb.any(ws, UI.ns.rdfs('comment'))
-        comment = comment ? comment.value : 'Use this workspace'
-        addMyListener(col2, comment ? comment.value : '', deselectedStyle + style, ws)
+      var addMyListener = function (container, detail, style, ws1) {
+        container.addEventListener('click', function (e) {
+          col3.textContent = detail
+          col3.setAttribute('style', style)
+          col3.appendChild(addContinueButton(ws1))
+        }, true) // capture vs bubble
       }
 
-      col1.textContent = 'Chose a workspace for this:'
-      col1.setAttribute('style', 'vertical-align:middle;')
+      var addContinueButton = function (selectedWorkspace) {
+        var button = dom.createElement('button')
+        button.textContent = 'Continue'
+        // button.setAttribute('style', style);
+        var newBase = figureOutBase(selectedWorkspace)
+        baseField.value = newBase // show user proposed URI
 
-      // last line with "Make new workspace"
-      var trLast = dom.createElement('tr')
-      col2 = dom.createElement('td')
-      col2.setAttribute('style', cellStyle)
-      col2.textContent = '+ Make a new workspace'
-      addMyListener(col2, 'Set up a new workspace', '')
-      trLast.appendChild(col2)
-      table.appendChild(trLast)
+        button.addEventListener('click', function (e) {
+          button.disabled = true
+          callbackWS(selectedWorkspace, newBase)
+          button.textContent = '---->'
+        }, true) // capture vs bubble
+        return button
+      }
+
+      comment = kb.any(ws, UI.ns.rdfs('comment'))
+      comment = comment ? comment.value : 'Use this workspace'
+      addMyListener(col2, comment ? comment.value : '', deselectedStyle + style, ws)
     }
-  }
+
+    // last line with "Make new workspace"
+    var trLast = dom.createElement('tr')
+    col2 = dom.createElement('td')
+    col2.setAttribute('style', cellStyle)
+    col2.textContent = '+ Make a new workspace'
+    // addMyListener(col2, 'Set up a new workspace', '') // @@ TBD
+    trLast.appendChild(col2)
+    table.appendChild(trLast)
+  } // displayOptions
 
   logInLoadProfile(context)  // kick off async operation
     .then(loadPreferences)
