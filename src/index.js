@@ -46,6 +46,7 @@ const UI = {
   acl: require('./acl'),
   aclControl: require('./acl-control'),
   authn: require('./signin'),
+  create: require('./create'),
   icons: require('./iconBase'),
   log: require('./log'),
   matrix: require('./matrix'),

@@ -36,7 +36,7 @@ var UI = {
   store: require('../store'),
   widgets: widgets
 }
-
+const error = require('./error')
 const utils = require('../utils')
 
 function complain (context, err) {
