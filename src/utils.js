@@ -112,6 +112,8 @@ function genUuid () { // http://stackoverflow.com/questions/105034/create-guid-u
 // things - ORDERED array of NamedNode objects
 // createNewRow(thing) returns a TR table row for that thing
 //
+// Tolerates out of order elements but puts new ones in order.
+//
 function syncTableToArray (table, things, createNewRow) {
   let foundOne
   let row
@@ -136,9 +138,14 @@ function syncTableToArray (table, things, createNewRow) {
     }
     if (!foundOne) {
       let newRow = createNewRow(thing)
-      table.appendChild(newRow)
+      // Insert new row in position g in the table to match array
+      if (g >= things.length){
+        table.appendChild(newRow)
+      } else {
+        let ele = table.children[g]
+        table.insertBefore(newRow, ele)
+      }
       newRow.subject = thing
-      // UI.widgets.makeDraggable(newRow, thing)
     } // if not foundOne
   } // loop g
 
