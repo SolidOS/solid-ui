@@ -18,6 +18,7 @@ const UI = {
   utils: require('./utils')
 }
 
+const kb = UI.store
 const buttonStyle = 'font-size: 100%; margin: 0.8em; padding:0.5em;'
 
 module.exports = {
@@ -34,7 +35,7 @@ module.exports = {
 function newThingUI(context, panes) {
   const dom = context.dom
   const div = context.div
-  var iconStyle = 'padding: 1em; width: 3em; height: 3em;'
+  var iconStyle = 'padding: 0.7em; width: 2em; height: 2em;' // was: 'padding: 1em; width: 3em; height: 3em;'
   var star = div.appendChild(dom.createElement('img'))
   var visible = false // the inividual tools tools
   //   noun_272948.svg = black star
@@ -62,28 +63,38 @@ function newThingUI(context, panes) {
   star.addEventListener('click', selectNewTool)
   var makeNewAppInstance = function (options) {
     return new Promise(function (resolve, reject) {
-      var selectUI
+      var selectUI, selectUIParent
       var callbackWS = function (ws, newBase) {
         var newPaneOptions = {
           newBase: newBase,
           workspace: ws,
-          pane: options.pane
         }
-        for (var opt in options) { // get div, dom, me
+        for (var opt in options) { // get div, dom, me, folder, pane, refreshTable
           newPaneOptions[opt] = options[opt]
         }
+        console.log("newThingUI: Minting new " + newPaneOptions.pane.name + " at " + newPaneOptions.newBase)
         options.pane.mintNew(newPaneOptions)
           .then(function (newPaneOptions) {
             if (!newPaneOptions || !newPaneOptions.newInstance) {
               throw new Error('Cannot mint new - missing newInstance')
             }
-            var p = options.div.appendChild(dom.createElement('p'))
-            p.setAttribute('style', 'font-size: 120%;')
-            // Make link to new thing
-            p.innerHTML =
-              "Your <a target='_blank' href='" + newPaneOptions.newInstance.uri + "'><b>new " + options.noun + '</b></a> is ready to be set up. ' +
-              "<br/><br/><a target='_blank' href='" + newPaneOptions.newInstance.uri + "'>Go to your new " + options.noun + '.</a>'
-            selectUI.parentNode.removeChild(selectUI) // Clean up
+            if (newPaneOptions.folder){
+              kb.add(newPaneOptions.folder, UI.ns.ldp('contains'), kb.sym(newPaneOptions.newBase),
+                newPaneOptions.folder.doc()) // Ping the patch system?
+              if (newPaneOptions.refreshTarget){
+                newPaneOptions.refreshTarget.refresh() // Refresh the cntaining display
+              }
+              selectUI.parentNode.removeChild(selectUI)
+            } else {
+              var p = options.div.appendChild(dom.createElement('p'))
+              p.setAttribute('style', 'font-size: 120%;')
+              // Make link to new thing
+              p.innerHTML =
+                "Your <a target='_blank' href='" + newPaneOptions.newInstance.uri + "'><b>new " + options.noun + '</b></a> is ready to be set up. ' +
+                "<br/><br/><a target='_blank' href='" + newPaneOptions.newInstance.uri + "'>Go to your new " + options.noun + '.</a>'
+                //selectUI.parentNode.removeChild(selectUI) // Clean up
+                selectUIParent.removeChild(selectUI) // Clean up
+            }
             selectNewTool() // toggle star to plain and menu vanish again
           })
           .catch(function (err) {
@@ -99,22 +110,25 @@ function newThingUI(context, panes) {
       if (!options.folder){ // No folder given? Ask user for full URI
         selectUI = UI.authn.selectWorkspace(dom, options, callbackWS)
         options.div.appendChild(selectUI)
+        selectUIParent = options.div
       } else {
         var gotName = function(ok, name){
           if (!ok){
-            form.parentNode.removeChild(form)
+            // selectUIParent.removeChild(selectUI)   itremves itself if cancelled
             selectNewTool() // toggle star to plain and menu vanish again
           } else {
             var uri = options.folder.uri
             if (!uri.endsWith('/')){
               uri = uri + '/'
             }
-            uri = uri + encodeURIComponent(name)
+            uri = uri + encodeURIComponent(name) + '/'
             callbackWS(null, uri)
           }
         }
         selectUI = getNameForm(dom, UI.store, options.noun, gotName)
         options.div.appendChild(selectUI)
+        selectUIParent = options.div
+
       }
     })
   } // makeNewAppInstance
@@ -145,7 +159,8 @@ function newThingUI(context, panes) {
               noIndexHTML: true, // do NOT @@ for now write a HTML file
               div: context.div,
               me: context.me,
-              dom: context.dom
+              dom: context.dom,
+              refreshTarget: context.refreshTarget
             }
             makeNewAppInstance(options)
           })
