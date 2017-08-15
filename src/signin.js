@@ -84,7 +84,7 @@ function saveUser (webId, context) {
 
   tabulator.preferences.set('me', webIdUri || '')
 
-  return webId
+  return webIdUri ? $rdf.namedNode(webIdUri) : null
 }
 
 /**
@@ -111,7 +111,7 @@ function currentUser () {
  * @returns {Promise<NamedNode|null>}
  */
 function logIn (context) {
-  let webId = currentUser()
+  let webId = currentUser()  // webId is a NamedNode or null
 
   if (webId) {
     return Promise.resolve(webId)
