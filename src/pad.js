@@ -24,8 +24,8 @@ const utils = require('./utils')
 
 UI.pad.lightColorHash = function(author){
   var hash = function(x){return x.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0); }
-  return '#' + ((hash(author.uri) & 0xffffff) | 0xc0c0c0).toString(16); // c0c0c0  forces pale
-}
+  return author && author.uri ? '#' + ((hash(author.uri) & 0xffffff) | 0xc0c0c0).toString(16) : '#ffffff' // c0c0c0  forces pale
+} // no id -> white
 
 
 // Manage participation in this session
@@ -167,8 +167,6 @@ UI.pad.notepad  = function (dom, padDoc, subject, me, options) {
         var author = kb.any(chunk, ns.dc('author'));
         if (!colors && author) { // Hash the user webid for now -- later allow user selection!
             var bgcolor = UI.pad.lightColorHash(author)
-            // var hash = function(x){return x.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0); }
-            // var bgcolor = '#' + ((hash(author.uri) & 0xffffff) | 0xc0c0c0).toString(16); // c0c0c0  forces pale
             colors = 'color: ' + (pending ? '#888' : 'black') +'; background-color: ' + bgcolor + ';'
         }
 
@@ -208,7 +206,7 @@ UI.pad.notepad  = function (dom, padDoc, subject, me, options) {
                 if (before && before.firstChild) {
                     before.firstChild.focus();
                 }
-            } else if (response.status === 409) { // Conflict
+            } else if (response && response.status === 409) { // Conflict
                 setPartStyle(part,'color: black;  background-color: #ffd;'); // yellow
                 part.state = 0; // Needs downstream refresh
                 utils.beep(0.5, 512); // Ooops clash with other person
@@ -219,7 +217,8 @@ UI.pad.notepad  = function (dom, padDoc, subject, me, options) {
                 console.log("    removePart FAILED " + chunk + ": " + errorMessage);
                 console.log("    removePart was deleteing :'" + del);
                 setPartStyle(part, 'color: black;  background-color: #fdd;');// failed
-                complain("Error "+response.status+" saving changes: "+ errorMessage. true); // upstream,
+                let res = response ? response.status : ' [no response field] '
+                complain('Error ' + res + ' saving changes: ' + errorMessage. true); // upstream,
                 // updater.requestDownstreamAction(padDoc, reloadAndSync);
             };
         })
@@ -270,16 +269,14 @@ UI.pad.notepad  = function (dom, padDoc, subject, me, options) {
         return (iCaretPos);
     }
 
-
     var addListeners = function(part, chunk) {
-
         part.addEventListener('keydown', function(event){
             var queueProperty, queue
             //  up 38; down 40; left 37; right 39     tab 9; shift 16; escape 27
             switch(event.keyCode) {
             case 13:                    // Return
                 var before = event.shiftKey;
-                console.log("enter");   // Shift-return inserts before -- only way to add to top of pad.
+                console.log('enter');   // Shift-return inserts before -- only way to add to top of pad.
                 if (before) {
                     queue =  kb.any(undefined, PAD('next'), chunk);
                     queueProperty = 'newlinesAfter';
@@ -290,7 +287,7 @@ UI.pad.notepad  = function (dom, padDoc, subject, me, options) {
                 queue[queueProperty] = queue[queueProperty]  || 0
                 queue[queueProperty]  += 1;
                 if (queue[queueProperty]  > 1) {
-                    console.log("    queueing newline queue = " + queue[queueProperty]);
+                    console.log('    queueing newline queue = ' + queue[queueProperty]);
                     return;
                 }
                 console.log("    go ahead line before " + queue[queueProperty]);
@@ -451,7 +448,6 @@ UI.pad.notepad  = function (dom, padDoc, subject, me, options) {
         addListeners(part, chunk);
         return part
     };
-
 
 
     var newChunk = function(ele, before) { // element of chunk being split
