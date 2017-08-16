@@ -33,6 +33,7 @@ module.exports = function (dom, kb, subject, messageStore, options) {
 
   var me_uri = tabulator.preferences.get('me')
   var me = me_uri ? kb.sym(me_uri) : null
+  if (!me) console.log('Message area: @@ Should be logged in at this point')
 
   var updater = UI.store.updater
 
