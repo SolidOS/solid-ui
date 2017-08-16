@@ -634,7 +634,7 @@ function offlineTestID () {
  * @private
  *
  * @param myDocument
- * @param setUserCallback
+ * @param setUserCallback(user: object)
  *
  * @returns {Element}
  */
@@ -724,13 +724,11 @@ function checkCurrentUser () {
  * @returns {Promise<string|null>} Resolves with web id uri, if no callback provided
  */
 function checkUser (setUserCallback) {
-  let webId
 
   // Check to see if already logged in / have the WebID
-  var meUri = currentUser()
-  if (meUri) {
-    webId = meUri.uri
-    return Promise.resolve(setUserCallback ? setUserCallback(webId) : webId)
+  var me = currentUser()
+  if (me) {
+    return Promise.resolve(setUserCallback ? setUserCallback(me) : me)
   }
 
   // doc = kb.any(doc, UI.ns.link('userMirror')) || doc
@@ -748,13 +746,13 @@ function checkUser (setUserCallback) {
       // if (webId.startsWith('dns:')) {  // legacy rww.io pseudo-users
       //   webId = null
       // }
-      saveUser(webId)
+      var me = saveUser(webId)
 
-      if (webId) {
-        console.log('(Logged in as ' + webId + ' by authentication)')
+      if (me) {
+        console.log('(Logged in as ' + me + ' by authentication)')
       }
 
-      return setUserCallback ? setUserCallback(webId) : webId
+      return setUserCallback ? setUserCallback(me) : me
     })
 }
 

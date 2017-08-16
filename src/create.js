@@ -35,6 +35,8 @@ module.exports = {
 function newThingUI(context, panes) {
   const dom = context.dom
   const div = context.div
+  if (context.me && !context.me.uri) throw new Error ('newThingUI:  Invalid userid ' + me)
+
   var iconStyle = 'padding: 0.7em; width: 2em; height: 2em;' // was: 'padding: 1em; width: 3em; height: 3em;'
   var star = div.appendChild(dom.createElement('img'))
   var visible = false // the inividual tools tools

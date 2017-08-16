@@ -123,6 +123,8 @@ UI.pad.notepad  = function (dom, padDoc, subject, me, options) {
     var kb = UI.store;
     var ns = UI.ns;
 
+    if (me && !me.uri) throw new Error ("UI.pad.notepad:  Invalid userid")
+
     var updater = UI.store.updater;
 
     var PAD = $rdf.Namespace('http://www.w3.org/ns/pim/pad#');
@@ -443,9 +445,14 @@ UI.pad.notepad  = function (dom, padDoc, subject, me, options) {
         var part = tr.appendChild(dom.createElement('input'));
         part.subject = chunk;
         part.setAttribute('type', 'text')
-        setPartStyle(part, '');
         part.value = text;
-        addListeners(part, chunk);
+        if (me){
+          setPartStyle(part, '');
+          addListeners(part, chunk);
+        } else {
+          setPartStyle(part, 'color: #222; background-color: #111;');
+          console.log("Note can't add listeners - not logged in")
+        }
         return part
     };
 
@@ -682,6 +689,8 @@ UI.pad.notepad  = function (dom, padDoc, subject, me, options) {
 
     table.refresh = sync; // Catch downward propagating refresh events
     table.reloadAndSync = reloadAndSync;
+
+    if (!me) console.log('Warning: must be logged in for pad to be edited')
 
     if (exists) {
         console.log("Existing pad.");
