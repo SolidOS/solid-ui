@@ -24,6 +24,7 @@ module.exports = {
   findAppInstances,
   findOriginOwner,
   loadTypeIndexes,
+  logIn,
   loginStatusBox,
   newAppInstance,
   offlineTestID,
@@ -114,12 +115,12 @@ function logIn (context) {
   let webId = currentUser()  // webId is a NamedNode or null
 
   if (webId) {
-    return Promise.resolve(webId)
+    return Promise.resolve({ me: webId})
   }
 
   return new Promise((resolve) => {
     let box = loginStatusBox(context.dom, (webIdUri) => {
-      resolve(saveUser(webIdUri, context))
+      resolve({ me: saveUser(webIdUri, context)})
     })
 
     context.div.appendChild(box)
@@ -139,29 +140,30 @@ function logInLoadProfile (context) {
   if (context.publicProfile) { return Promise.resolve(context) } // already done
 
   const fetcher = UI.store.fetcher
-  let profileUri
+  let profileDocument
 
   return logIn(context)
-    .then(webId => {
-      if (!webId) {
+    .then(context => {
+      let webID = context.me
+      if (!webID) {
         throw new Error('Could not log in')
       }
-
-      profileUri = webId.doc()
+      
+      profileDocument = webID.doc()
 
       // Load the profile into the knowledge base (fetcher.store)
-      return fetcher.fetch(profileUri)
+      return fetcher.fetch(profileDocument)
     })
     .then(result => {
       if (!result.ok) {
         throw new Error(result.error)
       }
 
-      context.publicProfile = profileUri
+      context.publicProfile = profileDocument
       return context
     })
     .catch(err => {
-      let message = 'Cannot load profile ' + profileUri + ' : ' + err
+      let message = 'Cannot load profile ' + profileDocument + ' : ' + err
       context.div.appendChild(error.errorMessageBlock(context.dom, message))
       return context
     })

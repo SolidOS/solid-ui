@@ -25,7 +25,7 @@ module.exports = function (dom, kb, subject, messageStore, options) {
 
   var newestFirst = !!options.newestFirst
 
-  var messageBodyStyle = 'width: 90%; font-size:100%; background-color: white; border: 0.07em solid #eee; padding: .2em 0.5em; margin: 0.1em 1em 0.1em 1em'
+  var messageBodyStyle = 'white-space: pre-wrap; width: 90%; font-size:100%; background-color: white; border: 0.07em solid #eee; padding: .2em 0.5em; margin: 0.1em 1em 0.1em 1em'
   // 'font-size: 100%; margin: 0.1em 1em 0.1em 1em;  background-color: white; white-space: pre-wrap; padding: 0.1em;'
 
   var div = dom.createElement('div')
