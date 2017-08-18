@@ -677,9 +677,7 @@ UI.pad.notepad  = function (dom, padDoc, subject, me, options) {
                         setTimeout(tryReload, retryTimeout)
                     } else {
                         complain("Error " + xhr.status + "refreshing the pad:" +
-                            message + ". Stopped");
-                        console.log("Error " + xhr.status + "refreshing the pad:" +
-                            message + ". Stopped" + padDoc);
+                            message + ". Stopped. " + padDoc);
                     }
                 }
             });

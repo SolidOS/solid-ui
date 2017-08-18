@@ -15,6 +15,8 @@ var UI = {
 const utils = require('./utils')
 const kb = UI.store
 
+var buttonStyle = 'font-size: 100%; margin: 0.8em; padding:0.5em; background-color: white;'
+
 module.exports = function (dom, kb, subject, messageStore, options) {
   kb = kb || UI.kb
   var ns = UI.ns
