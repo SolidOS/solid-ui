@@ -59,6 +59,17 @@ UI.widgets.clearElement = function (ele) {
   return ele
 }
 
+UI.widgets.refreshTree = function(root) {
+    if (root.refresh) {
+        root.refresh();
+        return;
+    }
+    for (var i=0; i < root.children.length; i++) {
+        UI.widgets.refreshTree(root.children[i]);
+    }
+}
+
+
 // To figure out the log URI from the full URI used to invoke the reasoner
 UI.widgets.extractLogURI = function (fullURI) {
   var logPos = fullURI.search(/logFile=/)
