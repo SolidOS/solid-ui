@@ -17,6 +17,8 @@ const UI = {
   store: require('./store')
 }
 
+const config = $SOLID_GLOBAL_config
+
 module.exports = {
   checkCurrentUser,
   checkUser,
@@ -148,7 +150,7 @@ function logInLoadProfile (context) {
       if (!webID) {
         throw new Error('Could not log in')
       }
-      
+
       profileDocument = webID.doc()
 
       // Load the profile into the knowledge base (fetcher.store)
@@ -648,17 +650,18 @@ function signInOrSignUpBox (myDocument, setUserCallback) {
   p.innerHTML = 'Enter your Web ID or pod uri'
   console.log('widgets.signInOrSignUpBox')
 
-  // Provider uri textbox
+  // Provider uri textbox (or data URI for TlS)
   let idpInput = myDocument.createElement('input')
   box.appendChild(idpInput)
   idpInput.setAttribute('type', 'text')
   idpInput.setAttribute('id', 'idpInput')
+  idpInput.size = 40
 
   // Sign in button
   let signInButton = myDocument.createElement('input')
   box.appendChild(signInButton)
   signInButton.setAttribute('type', 'button')
-  signInButton.setAttribute('value', 'Log in')
+  signInButton.setAttribute('value', 'Log in (old)')
   signInButton.setAttribute('style',
     'padding: 1em; border-radius:0.5em; margin: 2em;')
 
@@ -670,7 +673,11 @@ function signInOrSignUpBox (myDocument, setUserCallback) {
 
     if (idpUri && idpUri.value !== '') {
       return solidAuthClient.login(idpUri.value)
-        .then(initFromAuthResponse)
+        .then(webIdFromSession)
+        .then(webIdURI => setUserCallback(webIdURI))
+    } else if (window && window.location && window.location.href) {
+      return solidAuthClient.login(window.location.href) // Actually the URI bar often works
+        .then(webIdFromSession) // when using webid-tls
         .then(webIdURI => setUserCallback(webIdURI))
     }
 
@@ -678,6 +685,26 @@ function signInOrSignUpBox (myDocument, setUserCallback) {
     //   console.log('signInOrSignUpBox logged in up ' + uri)
     //   gotOne(uri)
     // })
+  }, false)
+
+  // Sign in button with PopUP
+  let signInPopUpButton = myDocument.createElement('input')
+  box.appendChild(signInPopUpButton)
+  signInPopUpButton.setAttribute('type', 'button')
+  signInPopUpButton.setAttribute('value', 'Log in')
+  signInPopUpButton.setAttribute('style',
+    'padding: 1em; border-radius:0.5em; margin: 2em;')
+
+  signInPopUpButton.addEventListener('click', () => {
+    var offline = offlineTestID()
+    if (offline) return setUserCallback(offline.uri)
+
+    let idpUri = document.getElementById('idpInput')
+
+    return solidAuthClient.popupLogin({ popupUri: config.popupUri})
+      .then(session => {
+        let webIdURI = session.webId
+        setUserCallback(webIdURI)})
   }, false)
 
   // Sign up button
@@ -701,10 +728,9 @@ function signInOrSignUpBox (myDocument, setUserCallback) {
 /**
  * @returns {Promise<string|null>} Resolves with WebID URI or null
  */
-function initFromAuthResponse (authResponse) {
-  UI.store.fetcher._fetch = authResponse.fetch
-  var session = authResponse.session || {}
-  var webId = session.webId
+function webIdFromSession (session) {
+
+  var webId = session ? session.webId : null
 
   if (webId) {
     saveUser(webId)
@@ -737,7 +763,7 @@ function checkUser (setUserCallback) {
 
   return solidAuthClient.currentSession()
 
-    .then(initFromAuthResponse)
+    .then(webIdFromSession)
 
     .catch(err => {
       console.log('Error fetching currentSession:', err)
