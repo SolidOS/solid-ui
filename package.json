@@ -9,12 +9,9 @@
   ],
   "scripts": {
     "build-lib": "babel src -d lib",
-    "build-browserified": "browserify -r ./src/index.js:solid-ui -t babelify --exclude 'xhr2' > dist/solid-ui.js",
-    "build-minified": "browserify -r ./src/index.js:solid-ui -t babelify --exclude 'xhr2' -d -p [minifyify --no-map] > dist/solid.min.js",
-    "prebuild": "npm run clean && mkdir -p dist",
-    "build-old": "npm run build-lib && npm run build-browserified && npm run build-minified",
     "build": "npm run build-lib",
-    "clean": "rm -rf dist/ && rm -rf lib/",
+    "postversion": "git push origin master --follow-tags",
+    "prepublish": "npm run build",
     "standard": "standard src/signin.js src/utils.js",
     "test": "npm run standard"
   },
