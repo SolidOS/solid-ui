@@ -702,9 +702,8 @@ function signInOrSignUpBox (myDocument, setUserCallback) {
     let idpUri = document.getElementById('idpInput')
 
     return solidAuthClient.popupLogin({ popupUri: config.popupUri})
-      .then(session => {
-        let webIdURI = session.webId
-        setUserCallback(webIdURI)})
+      .then(webIdFromSession)
+      .then(webIdURI => setUserCallback(webIdURI))
   }, false)
 
   // Sign up button

@@ -7,7 +7,6 @@ const $rdf = require('rdflib')
 // const error = require('./widgets/error')
 const widgets = require('./widgets/index')
 // const utils = require('./utils')
-const solidAuthClient = require('solid-auth-client')
 
 const UI = {
   authn: require('./signin'),
