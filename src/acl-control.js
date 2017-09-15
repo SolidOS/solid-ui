@@ -396,140 +396,147 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
     return byCombo
   } // ACLControlEditable
 
-  UI.acl.getACLorDefault(doc, function (ok, p2, targetDoc, targetACLDoc, defaultHolder, defaultACLDoc) {
-    var defa = !p2
-    // @@ Could also set from classes ldp:Container etc etc
-    if (!ok) {
-      statusBlock.textContent += 'Error reading ' + (defa ? ' default ' : '') + 'ACL.' +
-        ' status ' + targetDoc + ': ' + targetACLDoc
-    } else {
-      box.isContainer = targetDoc.uri.slice(-1) === '/' // Give default for all directories
-      if (defa) {
-        var defaults = kb.each(undefined, ACL('defaultForNew'), defaultHolder, defaultACLDoc)
-        if (!defaults.length) {
-          statusBlock.textContent += ' (No defaults given.)'
-        } else {
-          statusBlock.innerHTML = ''
-          statusBlock.textContent = 'The sharing for this ' + noun + ' is the default for folder '
-          var a = statusBlock.appendChild(dom.createElement('a'))
-          a.setAttribute('href', defaultHolder.uri)
-          a.textContent = UI.aclControl.shortNameForFolder(defaultHolder)
-          var kb2 = UI.acl.adoptACLDefault(doc, targetACLDoc, defaultHolder, defaultACLDoc)
-          ACLControlEditable(box, doc, targetACLDoc, kb2, {modify: false}) // Add btton to save them as actual
-          box.style.cssText = 'color: #777;'
+  var renderBox = function() {
+    box.innerHTML = ''
+    UI.acl.getACLorDefault(doc, function (ok, p2, targetDoc, targetACLDoc, defaultHolder, defaultACLDoc) {
+      var defa = !p2
+      // @@ Could also set from classes ldp:Container etc etc
+      if (!ok) {
+        statusBlock.textContent += 'Error reading ' + (defa ? ' default ' : '') + 'ACL.' +
+          ' status ' + targetDoc + ': ' + targetACLDoc
+      } else {
+        box.isContainer = targetDoc.uri.slice(-1) === '/' // Give default for all directories
+        if (defa) {
+          var defaults = kb.each(undefined, ACL('defaultForNew'), defaultHolder, defaultACLDoc)
+          if (!defaults.length) {
+            statusBlock.textContent += ' (No defaults given.)'
+          } else {
+            statusBlock.innerHTML = ''
+            statusBlock.textContent = 'The sharing for this ' + noun + ' is the default for folder '
+            var a = statusBlock.appendChild(dom.createElement('a'))
+            a.setAttribute('href', defaultHolder.uri)
+            a.textContent = UI.aclControl.shortNameForFolder(defaultHolder)
+            var kb2 = UI.acl.adoptACLDefault(doc, targetACLDoc, defaultHolder, defaultACLDoc)
+            ACLControlEditable(box, doc, targetACLDoc, kb2, {modify: false}) // Add btton to save them as actual
+            box.style.cssText = 'color: #777;'
 
-          var editPlease = bottomRow.appendChild(dom.createElement('button'))
-          editPlease.textContent = 'Set specific sharing\nfor this ' + noun
-          editPlease.style.cssText = bigButtonStyle
-          editPlease.addEventListener('click', function (event) {
-            updater.put(targetACLDoc, kb2.statements,
-              'text/turtle', function (uri, ok, message) {
-                if (!ok) {
-                  statusBlock.textContent += ' (Error writing back access control file: ' + message + ')'
-                } else {
-                  statusBlock.textContent = ' (Now editing specific access for this ' + noun + ')'
-                  // box.style.cssText = 'color: black;'
-                  bottomRow.removeChild(editPlease)
+            var editPlease = bottomRow.appendChild(dom.createElement('button'))
+            editPlease.textContent = 'Set specific sharing\nfor this ' + noun
+            editPlease.style.cssText = bigButtonStyle
+            editPlease.addEventListener('click', function (event) {
+              updater.put(targetACLDoc, kb2.statements,
+                'text/turtle', function (uri, ok, message) {
+                  if (!ok) {
+                    statusBlock.textContent += ' (Error writing back access control file: ' + message + ')'
+                  } else {
+                    kb.add(kb2.statements)
+                    statusBlock.textContent = ' (Now editing specific access for this ' + noun + ')'
+                    // box.style.cssText = 'color: black;'
+                    bottomRow.removeChild(editPlease)
+                    renderBox()
+                  }
+                })
+            })
+          } // defaults.length
+        } else { // Not using defaults
+          var useDefault
+          var addDefaultButton = function (prospectiveDefaultHolder) {
+            useDefault = bottomRow.appendChild(dom.createElement('button'))
+            useDefault.textContent = 'Stop specific sharing for this ' + noun +
+              ' -- just use default' // + utils.label(thisDefaultHolder)
+            if (prospectiveDefaultHolder) {
+              useDefault.textContent += ' for ' + utils.label(prospectiveDefaultHolder)
+            }
+            useDefault.style.cssText = bigButtonStyle
+            useDefault.addEventListener('click', function (event) {
+              kb.fetcher.delete(targetACLDoc.uri)
+                .then(function () {
+                  statusBlock.textContent = ' The sharing for this ' + noun + ' is now the default.'
+                  bottomRow.removeChild(useDefault)
+                  box.style.cssText = 'color: #777;'
+                  renderBox()
+                })
+                .catch(function (e) {
+                  statusBlock.textContent += ' (Error deleting access control file: ' + targetACLDoc + ': ' + e + ')'
+                })
+            })
+          }
+          var prospectiveDefaultHolder
+
+          var str = targetDoc.uri.split('#')[0]
+          var p = str.slice(0, -1).lastIndexOf('/')
+          var q = str.indexOf('//')
+          var targetDocDir = ((q >= 0 && p < q + 2) || p < 0) ? null : str.slice(0, p + 1)
+
+          if (targetDocDir) {
+            UI.acl.getACLorDefault($rdf.sym(targetDocDir), function (ok2, p22, targetDoc2, targetACLDoc2, defaultHolder2, defaultACLDoc2) {
+              if (ok2) {
+                prospectiveDefaultHolder = p22 ? targetDoc2 : defaultHolder2
+              }
+              addDefaultButton(prospectiveDefaultHolder)
+            })
+          } else {
+            addDefaultButton()
+          }
+
+          box.addControlForDefaults = function () {
+            box.notice.textContent = 'Access to things within this folder:'
+            box.notice.style.cssText = 'font-size: 120%; color: black;'
+            var mergeButton = UI.widgets.clearElement(box.offer).appendChild(dom.createElement('button'))
+            mergeButton.innerHTML = '<p>Set default for folder contents to<br />just track the sharing for the folder</p>'
+            mergeButton.style.cssText = bigButtonStyle
+            mergeButton.addEventListener('click', function (e) {
+              delete box.defaultsDiffer
+              delete box.defByCombo
+              box.saveBack(function (ok) {
+                if (ok) {
+                  box.removeControlForDefaults()
                 }
               })
-          })
-        } // defaults.length
-      } else { // Not using defaults
-        var useDefault
-        var addDefaultButton = function (prospectiveDefaultHolder) {
-          useDefault = bottomRow.appendChild(dom.createElement('button'))
-          useDefault.textContent = 'Stop specific sharing for this ' + noun +
-            ' -- just use default' // + utils.label(thisDefaultHolder)
-          if (prospectiveDefaultHolder) {
-            useDefault.textContent += ' for ' + utils.label(prospectiveDefaultHolder)
+            }, false)
+            box.defaultsDiffer = true
+            box.defByCombo = ACLControlEditable(box, targetDoc, targetACLDoc, kb, {modify: true, doingDefaults: true})
           }
-          useDefault.style.cssText = bigButtonStyle
-          useDefault.addEventListener('click', function (event) {
-            kb.fetcher.delete(targetACLDoc.uri)
-              .then(function () {
-                statusBlock.textContent = ' The sharing for this ' + noun + ' is now the default.'
-                bottomRow.removeChild(useDefault)
-                box.style.cssText = 'color: #777;'
-              })
-              .catch(function (e) {
-                statusBlock.textContent += ' (Error deleting access control file: ' + targetACLDoc + ': ' + e + ')'
-              })
-          })
-        }
-        var prospectiveDefaultHolder
-
-        var str = targetDoc.uri.split('#')[0]
-        var p = str.slice(0, -1).lastIndexOf('/')
-        var q = str.indexOf('//')
-        var targetDocDir = ((q >= 0 && p < q + 2) || p < 0) ? null : str.slice(0, p + 1)
-
-        if (targetDocDir) {
-          UI.acl.getACLorDefault($rdf.sym(targetDocDir), function (ok2, p22, targetDoc2, targetACLDoc2, defaultHolder2, defaultACLDoc2) {
-            if (ok2) {
-              prospectiveDefaultHolder = p22 ? targetDoc2 : defaultHolder2
-            }
-            addDefaultButton(prospectiveDefaultHolder)
-          })
-        } else {
-          addDefaultButton()
-        }
-
-        box.addControlForDefaults = function () {
-          box.notice.textContent = 'Access to things within this folder:'
-          box.notice.style.cssText = 'font-size: 120%; color: black;'
-          var mergeButton = UI.widgets.clearElement(box.offer).appendChild(dom.createElement('button'))
-          mergeButton.innerHTML = '<p>Set default for folder contents to<br />just track the sharing for the folder</p>'
-          mergeButton.style.cssText = bigButtonStyle
-          mergeButton.addEventListener('click', function (e) {
-            delete box.defaultsDiffer
-            delete box.defByCombo
-            box.saveBack(function (ok) {
-              if (ok) {
-                box.removeControlForDefaults()
-              }
+          box.removeControlForDefaults = function () {
+            statusBlock.textContent = 'This is also the default for things in this folder.'
+            box.notice.textContent = 'Sharing for things within the folder currently tracks sharing for the folder.'
+            box.notice.style.cssText = 'font-size: 80%; color: #888;'
+            var splitButton = UI.widgets.clearElement(box.offer).appendChild(dom.createElement('button'))
+            splitButton.innerHTML = '<p>Set the sharing of folder contets <br />separately from the sharing for the folder</p>'
+            splitButton.style.cssText = bigButtonStyle
+            splitButton.addEventListener('click', function (e) {
+              box.addControlForDefaults()
+              statusBlock.textContent = ''
             })
-          }, false)
-          box.defaultsDiffer = true
-          box.defByCombo = ACLControlEditable(box, targetDoc, targetACLDoc, kb, {modify: true, doingDefaults: true})
-        }
-        box.removeControlForDefaults = function () {
-          statusBlock.textContent = 'This is also the default for things in this folder.'
-          box.notice.textContent = 'Sharing for things within the folder currently tracks sharing for the folder.'
-          box.notice.style.cssText = 'font-size: 80%; color: #888;'
-          var splitButton = UI.widgets.clearElement(box.offer).appendChild(dom.createElement('button'))
-          splitButton.innerHTML = '<p>Set the sharing of folder contets <br />separately from the sharing for the folder</p>'
-          splitButton.style.cssText = bigButtonStyle
-          splitButton.addEventListener('click', function (e) {
-            box.addControlForDefaults()
-            statusBlock.textContent = ''
-          })
-          while (box.divider.nextSibling) {
-            box.removeChild(box.divider.nextSibling)
+            while (box.divider.nextSibling) {
+              box.removeChild(box.divider.nextSibling)
+            }
+            statusBlock.textContent = 'This is now also the default for things in this folder.'
           }
-          statusBlock.textContent = 'This is now also the default for things in this folder.'
-        }
 
-        if (box.isContainer) {
-          var ac = UI.acl.readACL(targetDoc, targetACLDoc, kb)
-          var acd = UI.acl.readACL(targetDoc, targetACLDoc, kb, true)
-          box.defaultsDiffer = !UI.acl.sameACL(ac, acd)
-          console.log('Defaults differ ACL: ' + box.defaultsDiffer)
-        }
-        box.mainByCombo = ACLControlEditable(box, targetDoc, targetACLDoc, kb, {modify: true}) // yes can edit
-        box.divider = box.appendChild(dom.createElement('tr'))
-        box.notice = box.divider.appendChild(dom.createElement('td'))
-        box.notice.style.cssText = 'font-size: 80%; color: #888;'
-        box.offer = box.divider.appendChild(dom.createElement('td'))
-        box.notice.setAttribute('colspan', '2')
+          box.mainByCombo = ACLControlEditable(box, targetDoc, targetACLDoc, kb, {modify: true}) // yes can edit
+          box.divider = box.appendChild(dom.createElement('tr'))
+          box.notice = box.divider.appendChild(dom.createElement('td'))
+          box.notice.style.cssText = 'font-size: 80%; color: #888;'
+          box.offer = box.divider.appendChild(dom.createElement('td'))
+          box.notice.setAttribute('colspan', '2')
 
-        if (box.defaultsDiffer) {
-          box.addControlForDefaults()
-        } else {
-          box.removeControlForDefaults()
-        }
-      } // Not using defaults
-    }
-  })
+          if (box.isContainer) {
+            var ac = UI.acl.readACL(targetDoc, targetACLDoc, kb)
+            var acd = UI.acl.readACL(targetDoc, targetACLDoc, kb, true)
+            box.defaultsDiffer = !UI.acl.sameACL(ac, acd)
+            console.log('Defaults differ ACL: ' + box.defaultsDiffer)
+            if (box.defaultsDiffer) {
+              box.addControlForDefaults()
+            } else {
+              box.removeControlForDefaults()
+            }
+          }
+        } // Not using defaults
+      }
+    })
+  }
+  renderBox()
   return table
 } // ACLControlBox
 // ends
