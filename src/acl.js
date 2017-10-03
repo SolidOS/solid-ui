@@ -420,9 +420,9 @@ UI.acl.getACL = function (doc, callback) {
       if (UI.store.fetcher.nonexistent[aclDoc.uri]) {
         return callback(true, 404, aclDoc, 'ACL file ' + aclDoc + ' does not exist.')
       }
-      UI.store.fetcher.nowOrWhenFetched(aclDoc, undefined, function (ok, message, xhr) {
+      UI.store.fetcher.nowOrWhenFetched(aclDoc, undefined, function (ok, message, response) {
         if (!ok) {
-          callback(true, xhr.status, aclDoc, "Can't read Access Control File " + aclDoc + ': ' + message)
+          callback(true, response.status, aclDoc, "Can't read Access Control File " + aclDoc + ': ' + message)
         } else {
           callback(true, 200, aclDoc)
         }

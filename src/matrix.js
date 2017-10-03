@@ -69,8 +69,8 @@ module.exports.matrixForQuery = function (dom, query, vx, vy, vvalue, options, w
     header.setAttribute('style', 'padding: 0.3em;')
     header.textContent = utils.label(y1) // first approximation
     if (y1.termType = 'NamedNode') {
-      kb.fetcher.nowOrWhenFetched(y1.uri.split('#')[0], undefined, function (uri, ok, body) {
-        header.textContent = utils.label(y1)
+      kb.fetcher.nowOrWhenFetched(y1.uri.split('#')[0], undefined, function (ok, body, response) {
+        if (ok) header.textContent = utils.label(y1)
       })
     }
     for (var i = 0; i < columns.length; i++) {

@@ -3,6 +3,8 @@
  *
  * Signing in, signing up, workspace selection, app spawning
  */
+ /* global $SOLID_GLOBAL_config */
+
 // const Solid = require('solid-client')
 const SolidTls = require('solid-auth-tls')
 const $rdf = require('rdflib')
@@ -117,12 +119,12 @@ function logIn (context) {
   let webId = currentUser()  // webId is a NamedNode or null
 
   if (webId) {
-    return Promise.resolve({ me: webId})
+    return Promise.resolve({me: webId})
   }
 
   return new Promise((resolve) => {
     let box = loginStatusBox(context.dom, (webIdUri) => {
-      resolve({ me: saveUser(webIdUri, context)})
+      resolve({ me: saveUser(webIdUri, context) })
     })
 
     context.div.appendChild(box)
@@ -204,7 +206,7 @@ function loadPreferences (context) {
         box.appendChild(pending)
       }
 
-      return kb.fetcher.fetch(preferencesFile)
+      return kb.fetcher.load(preferencesFile)
     })
     .then(() => {
       if (pending) {
@@ -698,13 +700,11 @@ function signInOrSignUpBox (myDocument, setUserCallback) {
   signInPopUpButton.addEventListener('click', () => {
     var offline = offlineTestID()
     if (offline) return setUserCallback(offline.uri)
-
-    let idpUri = document.getElementById('idpInput')
-
-    return solidAuthClient.popupLogin({ popupUri: config.popupUri})
+    return solidAuthClient.popupLogin({ popupUri: config.popupUri })
       .then(session => {
         let webIdURI = session.webId
-        setUserCallback(webIdURI)})
+        setUserCallback(webIdURI)
+      })
   }, false)
 
   // Sign up button
@@ -729,13 +729,10 @@ function signInOrSignUpBox (myDocument, setUserCallback) {
  * @returns {Promise<string|null>} Resolves with WebID URI or null
  */
 function webIdFromSession (session) {
-
   var webId = session ? session.webId : null
-
   if (webId) {
     saveUser(webId)
   }
-
   return webId
 }
 
@@ -752,7 +749,6 @@ function checkCurrentUser () {
  * @returns {Promise<string|null>} Resolves with web id uri, if no callback provided
  */
 function checkUser (setUserCallback) {
-
   // Check to see if already logged in / have the WebID
   var me = currentUser()
   if (me) {
@@ -957,7 +953,7 @@ function selectWorkspace (dom, appDetails, callbackWS) {
     baseField.size = 80 // really a string
     baseField.label = 'base URL'
     baseField.autocomplete = 'on'
-    if (newBase){ // set to default
+    if (newBase) { // set to default
       baseField.value = newBase
     }
 
