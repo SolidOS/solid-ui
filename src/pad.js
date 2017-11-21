@@ -9,6 +9,7 @@
 const $rdf = require('rdflib')
 var padModule = module.exports = {}
 var UI = {
+  authn: require('./signin'),
   icons: require('./iconBase'),
   log: require('./log'),
   ns: require('./ns'),
@@ -69,10 +70,9 @@ UI.pad.renderPartipants = function(dom, table, padDoc, subject, me, options){
 UI.pad.recordParticipation = function(subject, padDoc, refreshable) {
   var kb = UI.store, ns = UI.ns
 
-  var webid = tabulator.preferences.get('me')
-  if (!webid) return // Not logged in
+  var me = UI.authn.currentUser()
+  if (!me) return // Not logged in
 
-  var me = kb.sym(webid)
   var parps = kb.each(subject, ns.wf('participation')).filter(function(pn){
       return kb.holds(pn, ns.wf('participant'), me)});
   if (parps.length > 1) {
