@@ -3,6 +3,7 @@
 
 
 var UI = {
+  authn: require('./signin'),
   icons: require('./iconBase'),
   log: require('./log'),
   ns: require('./ns'),
@@ -33,9 +34,7 @@ module.exports = function (dom, kb, subject, messageStore, options) {
   var div = dom.createElement('div')
   var messageTable // Shared by initial build and addMessageFromBindings
 
-  var me_uri = tabulator.preferences.get('me')
-  var me = me_uri ? kb.sym(me_uri) : null
-  if (!me) console.log('Message area: @@ Should be logged in at this point')
+  var me
 
   var updater = UI.store.updater
 
@@ -112,22 +111,31 @@ module.exports = function (dom, kb, subject, messageStore, options) {
       }
       updater.update([], sts, sendComplete)
     }
-    // form.addEventListener('submit', sendMessage, false)
-    // form.setAttribute('onsubmit', "function xx(){return false;}")
     form.appendChild(dom.createElement('br'))
+    
+    var field, submit
+    var turnOnInput = function () {
+      field = dom.createElement('textarea')
+      middle.innerHTML = ''
+      middle.appendChild(field)
+      field.rows = 3
+      // field.cols = 40
+      field.setAttribute('style', messageBodyStyle)
 
-    var field = dom.createElement('textarea')
-    middle.appendChild(field)
-    field.rows = 3
-    // field.cols = 40
-    field.setAttribute('style', messageBodyStyle)
+      submit = dom.createElement('button')
+      // submit.disabled = true // until the text has been modified?
+      rhs.innerHTML = ''
+      submit.textContent = 'send' // @@ I18n
+      submit.setAttribute('style', 'float: right;')
+      submit.addEventListener('click', sendMessage, false)
+      rhs.appendChild(submit)
+    }
 
-    var submit = dom.createElement('button')
-    // submit.disabled = true // until the filled has been modified
-    submit.textContent = 'send' // @@ I18n
-    submit.setAttribute('style', 'float: right;')
-    submit.addEventListener('click', sendMessage, false)
-    rhs.appendChild(submit)
+    let context = {div: middle, dom: dom}
+    UI.authn.logIn(context).then(context => {
+      me = context.me
+      turnOnInput()
+    })
 
     return form
   }
@@ -269,13 +277,11 @@ module.exports = function (dom, kb, subject, messageStore, options) {
   div.appendChild(messageTable)
   messageTable.setAttribute('style', 'width: 100%;') // fill that div!
 
-  if (tabulator.preferences.get('me')) {
-    var tr = newMessageForm()
-    if (newestFirst) {
-      messageTable.insertBefore(tr, messageTable.firstChild) // If newestFirst
-    } else {
-      messageTable.appendChild(tr) // not newestFirst
-    }
+  var tr = newMessageForm()
+  if (newestFirst) {
+    messageTable.insertBefore(tr, messageTable.firstChild) // If newestFirst
+  } else {
+    messageTable.appendChild(tr) // not newestFirst
   }
 
   var query

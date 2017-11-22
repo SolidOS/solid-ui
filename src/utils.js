@@ -139,7 +139,7 @@ function syncTableToArray (table, things, createNewRow) {
     if (!foundOne) {
       let newRow = createNewRow(thing)
       // Insert new row in position g in the table to match array
-      if (g >= things.length){
+      if (g >= things.length) {
         table.appendChild(newRow)
       } else {
         let ele = table.children[g]
