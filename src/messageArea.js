@@ -1,7 +1,5 @@
 //  Common code for a discussion are a of messages about something
 //
-
-
 var UI = {
   authn: require('./signin'),
   icons: require('./iconBase'),
@@ -14,7 +12,6 @@ var UI = {
 }
 
 const utils = require('./utils')
-const kb = UI.store
 
 var buttonStyle = 'font-size: 100%; margin: 0.8em; padding:0.5em; background-color: white;'
 
@@ -40,7 +37,7 @@ module.exports = function (dom, kb, subject, messageStore, options) {
 
   var anchor = function (text, term) { // If there is no link return an element anyway
     var a = dom.createElement('a')
-    if (term.uri) {
+    if (term && term.uri) {
       a.setAttribute('href', term.uri)
       a.addEventListener('click', UI.widgets.openHrefInOutlineMode, true)
       a.setAttribute('style', 'color: #3B5998; text-decoration: none; ') // font-weight: bold
@@ -101,7 +98,7 @@ module.exports = function (dom, kb, subject, messageStore, options) {
           var bindings = { '?msg': message,
             '?content': kb.literal(field.value),
             '?date': dateStamp,
-          '?creator': me}
+            '?creator': me}
           renderMessage(bindings)
 
           field.value = '' // clear from out for reuse
@@ -112,9 +109,11 @@ module.exports = function (dom, kb, subject, messageStore, options) {
       updater.update([], sts, sendComplete)
     }
     form.appendChild(dom.createElement('br'))
-    
+
     var field, submit
     var turnOnInput = function () {
+      creatorAndDate(lhs, me, 'now', null)
+
       field = dom.createElement('textarea')
       middle.innerHTML = ''
       middle.appendChild(field)
@@ -122,7 +121,14 @@ module.exports = function (dom, kb, subject, messageStore, options) {
       // field.cols = 40
       field.setAttribute('style', messageBodyStyle)
 
+      field.addEventListener('keyup', function (e) { // User preference?
+        if (e.keyCode === 13) {
+          sendMessage()
+        }
+      }, false)
+
       submit = dom.createElement('button')
+      submit.style = buttonStyle
       // submit.disabled = true // until the text has been modified?
       rhs.innerHTML = ''
       submit.textContent = 'send' // @@ I18n
@@ -140,10 +146,21 @@ module.exports = function (dom, kb, subject, messageStore, options) {
     return form
   }
 
-  var nick = function (person) {
+  function nick (person) {
     var s = UI.store.any(person, UI.ns.foaf('nick'))
     if (s) return '' + s.value
     return '' + utils.label(person)
+  }
+
+  function creatorAndDate (td1, creator, date, message) {
+    var nickAnchor = td1.appendChild(anchor(nick(creator), creator))
+    if (creator.uri) {
+      UI.store.fetcher.nowOrWhenFetched(creator.doc(), undefined, function (ok, body) {
+        nickAnchor.textContent = nick(creator)
+      })
+    }
+    td1.appendChild(dom.createElement('br'))
+    td1.appendChild(anchor(date, message))
   }
 
   // ///////////////////////////////////////////////////////////////////////
@@ -208,7 +225,7 @@ module.exports = function (dom, kb, subject, messageStore, options) {
     tr.AJAR_subject = message
 
     var done = false
-    for (var ele = messageTable.firstChild;; ele = ele.nextSibling) {
+    for (var ele = messageTable.firstChild; ; ele = ele.nextSibling) {
       if (!ele) { // empty
         break
       }
@@ -225,15 +242,7 @@ module.exports = function (dom, kb, subject, messageStore, options) {
 
     var td1 = dom.createElement('td')
     tr.appendChild(td1)
-
-    var nickAnchor = td1.appendChild(anchor(nick(creator), creator))
-    if (creator.uri) {
-      UI.store.fetcher.nowOrWhenFetched(creator.doc(), undefined, function (ok, body) {
-        nickAnchor.textContent = nick(creator)
-      })
-    }
-    td1.appendChild(dom.createElement('br'))
-    td1.appendChild(anchor(UI.widgets.shortDate(dateString), message))
+    creatorAndDate(td1, creator, UI.widgets.shortDate(dateString), message)
 
     var td2 = dom.createElement('td')
     tr.appendChild(td2)
