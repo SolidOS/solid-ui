@@ -123,6 +123,7 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
           list += y[i]
         }
       }
+      return list
     }
 
     var removeAgentFromCombos = function (uri) {
@@ -367,7 +368,6 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
                     }
                   }
                 })
-                return
               } else {
                 saveAndRestoreUI()
               }
@@ -396,7 +396,7 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
     return byCombo
   } // ACLControlEditable
 
-  var renderBox = function() {
+  var renderBox = function () {
     box.innerHTML = ''
     UI.acl.getACLorDefault(doc, function (ok, p2, targetDoc, targetACLDoc, defaultHolder, defaultACLDoc) {
       var defa = !p2

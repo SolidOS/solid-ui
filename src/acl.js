@@ -1,5 +1,4 @@
-// var UI.acl = require('./acl.js')
-//var UI.ns = require('./ns.js')
+// Access control logic
 
 var acl = module.exports = {}
 
@@ -24,7 +23,6 @@ const kb = UI.store
 UI.acl.adoptACLDefault = function (doc, aclDoc, defaultResource, defaultACLdoc) {
   var kb = UI.store
   var ACL = UI.ns.acl
-  var ns = UI.ns
   var isContainer = doc.uri.slice(-1) === '/' // Give default for all directories
   var defaults = kb.each(undefined, ACL('defaultForNew'), defaultResource, defaultACLdoc)
   var proposed = []
@@ -40,38 +38,15 @@ UI.acl.adoptACLDefault = function (doc, aclDoc, defaultResource, defaultACLdoc) 
       proposed.push($rdf.st(da, ACL('defaultForNew'), doc, defaultACLdoc))
     }
   })
-  var kb2 = $rdf.graph(); // Potential - derived is kept apart
+  var kb2 = $rdf.graph() // Potential - derived is kept apart
   proposed.map(function (st) {
     var move = function (sym) {
       var y = defaultACLdoc.uri.length // The default ACL file
-      return $rdf.sym((sym.uri.slice(0, y) == defaultACLdoc.uri) ?
-        aclDoc.uri + sym.uri.slice(y) : sym.uri)
+      return $rdf.sym((sym.uri.slice(0, y) === defaultACLdoc.uri)
+        ? aclDoc.uri + sym.uri.slice(y) : sym.uri)
     }
     kb2.add(move(st.subject), move(st.predicate), move(st.object), $rdf.sym(aclDoc.uri))
   })
-
-  //   @@@@@ ADD TRIPLES TO ACCES CONTROL ACL FILE -- until servers fixed @@@@@
-
-  /*
-  var ccc = kb2.each(undefined, ACL('accessTo'), doc)
-    .filter(function (au) { return kb2.holds(au, ACL('mode'), ACL('Control'))})
-  ccc.map(function (au) {
-    var au2 = kb2.sym(au.uri + '__ACLACL')
-    kb2.add(au2, ns.rdf('type'), ACL('Authorization'), aclDoc)
-    kb2.add(au2, ACL('accessTo'), aclDoc, aclDoc)
-    kb2.add(au2, ACL('mode'), ACL('Read'), aclDoc)
-    kb2.add(au2, ACL('mode'), ACL('Write'), aclDoc)
-    kb2.each(au, ACL('agent')).map(function (who) {
-      kb2.add(au2, ACL('agent'), who, aclDoc)
-    })
-    kb2.each(au, ACL('agentClass')).map(function (who) {
-      kb2.add(au2, ACL('agentClass'), who, aclDoc)
-    })
-    kb2.each(au, ACL('agentGroup')).map(function (who) {
-      kb2.add(au2, ACL('agentGroup'), who, aclDoc)
-    })
-  })
-  */
 
   return kb2
 }
@@ -81,18 +56,18 @@ UI.acl.adoptACLDefault = function (doc, aclDoc, defaultResource, defaultACLdoc) 
 // Accumulate the access rights which each agent or class has
 //
 UI.acl.readACL = function (x, aclDoc, kb, getDefaults) {
-  var kb = kb || UI.store
+  kb = kb || UI.store
   var ns = UI.ns
   var predicate = getDefaults ? ns.acl('defaultForNew') : ns.acl('accessTo')
   var ACL = UI.ns.acl
   var ac = {'agent': [], 'agentClass': [], 'agentGroup': [], 'origin': [], 'originClass': []}
   var auths = kb.each(undefined, predicate, x)
-  for (var pred in {'agent': true,'agentClass': true,'agentGroup': true,'origin': true,'originClass': true}) {
+  for (var pred in {'agent': true, 'agentClass': true, 'agentGroup': true, 'origin': true, 'originClass': true}) {
     auths.map(function (a) {
       kb.each(a, ACL('mode')).map(function (mode) {
         kb.each(a, ACL(pred)).map(function (agent) {
           if (!ac[pred][agent.uri]) ac[pred][agent.uri] = []
-          ac[pred][agent.uri][mode.uri] = a; // could be "true" but leave pointer just in case
+          ac[pred][agent.uri][mode.uri] = a // could be "true" but leave pointer just in case
         })
       })
     })
@@ -103,7 +78,7 @@ UI.acl.readACL = function (x, aclDoc, kb, getDefaults) {
 // Compare two ACLs
 UI.acl.sameACL = function (a, b) {
   var contains = function (a, b) {
-    for (var pred in {'agent': true, 'agentClass': true,'agentGroup': true,'origin': true,'originClass': true}) {
+    for (var pred in {'agent': true, 'agentClass': true, 'agentGroup': true, 'origin': true, 'originClass': true}) {
       if (a[pred]) {
         for (var agent in a[pred]) {
           for (var mode in a[pred][agent]) {
@@ -121,7 +96,8 @@ UI.acl.sameACL = function (a, b) {
 
 // Union N ACLs
 UI.acl.ACLunion = function (list) {
-  var b = list[0], a, ag
+  var b = list[0]
+  var a, ag
   for (var k = 1; k < list.length; k++) {
     ['agent', 'agentClass', 'agentGroup', 'origin', 'originClass'].map(function (pred) {
       a = list[k]
@@ -140,20 +116,20 @@ UI.acl.ACLunion = function (list) {
 
 // Merge ACLs lists from things to form union
 
-UI.acl.loadUnionACL = function (subjectList, callback) {
+UI.acl.loadUnionACL = function (subjectList, callbackFunction) {
   var aclList = []
   var doList = function (list) {
     if (list.length) {
       var doc = list.shift().doc()
       UI.acl.getACLorDefault(doc, function (ok, p2, targetDoc, targetACLDoc, defaultHolder, defaultACLDoc) {
         var defa = !p2
-        if (!ok) return callback(ok, targetACLDoc)
-        aclList.push((defa) ? UI.widgets.readACL(defaultHolder, defaultACLDoc) :
-          UI.widgets.readACL(targetDoc, targetACLDoc))
+        if (!ok) return callbackFunction(ok, targetACLDoc)
+        aclList.push((defa) ? UI.widgets.readACL(defaultHolder, defaultACLDoc)
+          : UI.widgets.readACL(targetDoc, targetACLDoc))
         doList(list.slice(1))
       })
     } else { // all gone
-      callback(true, UI.widgets.ACLunion(aclList))
+      callbackFunction(true, UI.widgets.ACLunion(aclList))
     }
   }
   doList(subjectList)
@@ -194,8 +170,8 @@ UI.acl.makeACLGraphbyCombo = function (kb, x, byCombo, aclDoc, main, defa) {
   var ACL = UI.ns.acl
   for (var combo in byCombo) {
     var modeURIs = combo.split('\n')
-    var short = modeURIs.map(function (u) {return u.split('#')[1]}).join('')
-    if (defa && !main) short += 'Default'; // don't muddle authorizations
+    var short = modeURIs.map(function (u) { return u.split('#')[1] }).join('')
+    if (defa && !main) short += 'Default' // don't muddle authorizations
     var a = kb.sym(aclDoc.uri + '#' + short)
     kb.add(a, UI.ns.rdf('type'), ACL('Authorization'), aclDoc)
     if (main) {
@@ -209,7 +185,8 @@ UI.acl.makeACLGraphbyCombo = function (kb, x, byCombo, aclDoc, main, defa) {
     }
     var pairs = byCombo[combo]
     for (i = 0; i < pairs.length; i++) {
-      var pred = pairs[i][0], ag = pairs[i][1]
+      var pred = pairs[i][0]
+      var ag = pairs[i][1]
       kb.add(a, ACL(pred), kb.sym(ag), aclDoc)
     }
   }
@@ -226,11 +203,12 @@ UI.acl.comboToString = function (byCombo) {
   var str = ''
   for (var combo in byCombo) {
     var modeURIs = combo.split('\n')
-    var initials = modeURIs.map(function (u) {return u.split('#')[1][0]}).join('')
+    var initials = modeURIs.map(function (u) { return u.split('#')[1][0] }).join('')
     str += initials + ':'
     var pairs = byCombo[combo]
     for (var i = 0; i < pairs.length; i++) {
-      var pred = pairs[i][0], ag = $rdf.sym(pairs[i][1])
+      var pred = pairs[i][0]
+      var ag = $rdf.sym(pairs[i][1])
       str += (pred === 'agent') ? '@' : ''
       str += (ag.sameTerm(UI.ns.foaf('Agent')) ? '*'
         : utils.label(ag))
@@ -251,14 +229,14 @@ UI.acl.makeACLString = function (x, ac, aclDoc) {
 
 //    Write ACL graph to web
 //
-UI.acl.putACLObject = function (kb, x, ac, aclDoc, callback) {
+UI.acl.putACLObject = function (kb, x, ac, aclDoc, callbackFunction) {
   var byCombo = UI.widgets.ACLbyCombination(ac)
-  return UI.widgets.putACLbyCombo(kb, x, byCombo, aclDoc, callback)
+  return UI.widgets.putACLbyCombo(kb, x, byCombo, aclDoc, callbackFunction)
 }
 
 //    Write ACL graph to web from combo
 //
-UI.acl.putACLbyCombo = function (kb, x, byCombo, aclDoc, callback) {
+UI.acl.putACLbyCombo = function (kb, x, byCombo, aclDoc, callbackFunction) {
   var kb2 = $rdf.graph()
   UI.widgets.makeACLGraphbyCombo(kb2, x, byCombo, aclDoc, true)
 
@@ -266,12 +244,12 @@ UI.acl.putACLbyCombo = function (kb, x, byCombo, aclDoc, callback) {
   kb.updater.put(aclDoc, kb2.statementsMatching(undefined, undefined, undefined, aclDoc),
     'text/turtle', function (uri, ok, message) {
       if (!ok) {
-        callback(ok, message)
+        callbackFunction(ok, message)
       } else {
         kb.fetcher.unload(aclDoc)
         UI.widgets.makeACLGraphbyCombo(kb, x, byCombo, aclDoc, true)
-        kb.fetcher.requested[aclDoc.uri] = 'done'; // missing: save headers
-        callback(ok)
+        kb.fetcher.requested[aclDoc.uri] = 'done' // missing: save headers
+        callbackFunction(ok)
       }
     })
 }
@@ -281,26 +259,26 @@ UI.acl.putACLbyCombo = function (kb, x, byCombo, aclDoc, callback) {
 // All group files must be loaded first
 //
 
-UI.acl.fixIndividualCardACL = function (person, log, callback) {
+UI.acl.fixIndividualCardACL = function (person, log, callbackFunction) {
   var groups = UI.store.each(undefined, UI.ns.vcard('hasMember'), person)
-  var doc = person.doc()
+  // var doc = person.doc()
   if (groups) {
-    UI.widgets.fixIndividualACL(person, groups, log, callback)
+    UI.widgets.fixIndividualACL(person, groups, log, callbackFunction)
   } else {
     log('This card is in no groups')
-    callback(true); // fine, no requirements to access. default should be ok
+    callbackFunction(true) // fine, no requirements to access. default should be ok
   }
 // @@ if no groups, then use default for People container or the book top container.?
 }
 
-UI.acl.fixIndividualACL = function (item, subjects, log, callback) {
+UI.acl.fixIndividualACL = function (item, subjects, log, callbackFunction) {
   log = log || console.log
   var doc = item.doc()
   UI.acl.getACLorDefault(doc, function (ok, exists, targetDoc, targetACLDoc, defaultHolder, defaultACLDoc) {
-    if (!ok) return callback(false, targetACLDoc) // ie message
+    if (!ok) return callbackFunction(false, targetACLDoc) // ie message
     var ac = (exists) ? UI.widgets.readACL(targetDoc, targetACLDoc) : UI.widgets.readACL(defaultHolder, defaultACLDoc)
     UI.widgets.loadUnionACL(subjects, function (ok, union) {
-      if (!ok) return callback(false, union)
+      if (!ok) return callbackFunction(false, union)
       if (UI.widgets.sameACL(union, ac)) {
         log('Nice - same ACL. no change ' + utils.label(item) + ' ' + doc)
       } else {
@@ -310,27 +288,27 @@ UI.acl.fixIndividualACL = function (item, subjects, log, callback) {
         // log((exists ? "Previous set" : "Default") + " ACLs: " +
         // UI.widgets.makeACLString(targetDoc, ac, targetACLDoc))
 
-        UI.widgets.putACLObject(UI.store, targetDoc, union, targetACLDoc, callback)
+        UI.widgets.putACLObject(UI.store, targetDoc, union, targetACLDoc, callbackFunction)
       }
     })
   })
 }
 
-UI.acl.setACL = function (docURI, aclText, callback) {
+UI.acl.setACL = function (docURI, aclText, callbackFunction) {
   var aclDoc = kb.any(kb.sym(docURI),
-    kb.sym('http://www.iana.org/assignments/link-relations/acl')); // @@ check that this get set by web.js
+    kb.sym('http://www.iana.org/assignments/link-relations/acl')) // @@ check that this get set by web.js
   if (aclDoc) { // Great we already know where it is
-    kb.fetcher.webOperation('PUT', aclDoc.uri, { data: aclText, contentType: 'text/turtle'}).then(callback) // @@@ check params
+    kb.fetcher.webOperation('PUT', aclDoc.uri, {data: aclText, contentType: 'text/turtle'}).then(callbackFunction) // @@@ check params
   } else {
-    fetcher.nowOrWhenFetched(docURI, undefined, function (ok, body) {
-      if (!ok) return callback(ok, 'Gettting headers for ACL: ' + body)
+    kb.fetcher.nowOrWhenFetched(docURI, undefined, function (ok, body) {
+      if (!ok) return callbackFunction(ok, 'Gettting headers for ACL: ' + body)
       var aclDoc = kb.any(kb.sym(docURI),
-        kb.sym('http://www.iana.org/assignments/link-relations/acl')); // @@ check that this get set by web.js
+        kb.sym('http://www.iana.org/assignments/link-relations/acl')) // @@ check that this get set by web.js
       if (!aclDoc) {
         // complainIfBad(false, "No Link rel=ACL header for " + docURI)
-        callback(false, 'No Link rel=ACL header for ' + docURI)
+        callbackFunction(false, 'No Link rel=ACL header for ' + docURI)
       } else {
-        kb.fetcher.webOperation('PUT', aclDoc.uri, { data: aclText, contentType: 'text/turtle'}).then(callback)
+        kb.fetcher.webOperation('PUT', aclDoc.uri, {data: aclText, contentType: 'text/turtle'}).then(callbackFunction)
       }
     })
   }
@@ -338,17 +316,16 @@ UI.acl.setACL = function (docURI, aclText, callback) {
 
 //  Get ACL file or default if necessary
 //
-// callback(true, true, doc, aclDoc)   The ACL did exist
-// callback(true, false, doc, aclDoc, defaultHolder, defaultACLDoc)   ACL file did not exist but a default did
-// callback(false, false, status, message)  error getting original
-// callback(false, true, status, message)  error getting defualt
+// callbackFunction(true, true, doc, aclDoc)   The ACL did exist
+// callbackFunction(true, false, doc, aclDoc, defaultHolder, defaultACLDoc)   ACL file did not exist but a default did
+// callbackFunction(false, false, status, message)  error getting original
+// callbackFunction(false, true, status, message)  error getting defualt
 
-UI.acl.getACLorDefault = function (doc, callback) {
+UI.acl.getACLorDefault = function (doc, callbackFunction) {
   UI.acl.getACL(doc, function (ok, status, aclDoc, message) {
-    var i, row, left, right, a
     var kb = UI.store
     var ACL = UI.ns.acl
-    if (!ok) return callback(false, false, status, message)
+    if (!ok) return callbackFunction(false, false, status, message)
 
     // Recursively search for the ACL file which gives default access
     var tryParent = function (uri) {
@@ -361,17 +338,17 @@ UI.acl.getACLorDefault = function (doc, callback) {
       var doc2 = $rdf.sym(uri)
       UI.acl.getACL(doc2, function (ok, status, defaultACLDoc) {
         if (!ok) {
-          return callback(false, true, status, '( No ACL pointer ' + uri + ' ' + status + ')' + defaultACLDoc)
+          return callbackFunction(false, true, status, '( No ACL pointer ' + uri + ' ' + status + ')' + defaultACLDoc)
         } else if (status === 403) {
-          return callback(false, true, status, '( default ACL file FORBIDDEN. Stop.' + uri + ')')
+          return callbackFunction(false, true, status, '( default ACL file FORBIDDEN. Stop.' + uri + ')')
         } else if (status === 404) {
           if (left >= right) {
-            return callback(false, true, 499, 'Nothing to hold a default')
+            return callbackFunction(false, true, 499, 'Nothing to hold a default')
           } else {
             tryParent(uri)
           }
         } else if (status !== 200) {
-          return callback(false, true, status, "Error status '" + status + "' searching for default for " + doc2)
+          return callbackFunction(false, true, status, "Error status '" + status + "' searching for default for " + doc2)
         } else { // 200
           // statusBlock.textContent += (" ACCESS set at " + uri + ". End search.")
           var defaults = kb.each(undefined, ACL('defaultForNew'), kb.sym(uri), defaultACLDoc)
@@ -379,24 +356,24 @@ UI.acl.getACLorDefault = function (doc, callback) {
             tryParent(uri) // Keep searching
           } else {
             var defaultHolder = kb.sym(uri)
-            callback(true, false, doc, aclDoc, defaultHolder, defaultACLDoc)
+            callbackFunction(true, false, doc, aclDoc, defaultHolder, defaultACLDoc)
           }
         }
       })
     } // tryParent
 
     if (!ok) {
-      return callback(false, false, status ,
+      return callbackFunction(false, false, status,
         'Error accessing Access Control information for ' + doc + ') ' + message)
     } else if (status === 404) {
-      tryParent(doc.uri); //  @@ construct default one - the server should do that
+      tryParent(doc.uri) //  @@ construct default one - the server should do that
     } else if (status === 403) {
-      return callback(false, false, status, '(Sharing not available to you)' + message)
+      return callbackFunction(false, false, status, '(Sharing not available to you)' + message)
     } else if (status !== 200) {
-      return callback(false, false, status, 'Error ' + status +
+      return callbackFunction(false, false, status, 'Error ' + status +
         ' accessing Access Control information for ' + doc + ': ' + message)
     } else { // 200
-      return callback(true, true, doc, aclDoc)
+      return callbackFunction(true, true, doc, aclDoc)
     }
   }) // Call to getACL
 } // getACLorDefault
@@ -408,23 +385,23 @@ UI.acl.getACLorDefault = function (doc, callback) {
 //   (true, 404, documentSymbol, fileaccesserror) if does not exist
 //   (true, 200, documentSymbol)   if file exitss and read OK
 //
-UI.acl.getACL = function (doc, callback) {
+UI.acl.getACL = function (doc, callbackFunction) {
   UI.store.fetcher.nowOrWhenFetched(doc, undefined, function (ok, body) {
-    if (!ok) return callback(ok, "Can't get headers to find ACL for " + doc + ': ' + body)
+    if (!ok) return callbackFunction(ok, "Can't get headers to find ACL for " + doc + ': ' + body)
     var kb = UI.store
     var aclDoc = kb.any(doc,
-      kb.sym('http://www.iana.org/assignments/link-relations/acl')); // @@ check that this get set by web.js
+      kb.sym('http://www.iana.org/assignments/link-relations/acl')) // @@ check that this get set by web.js
     if (!aclDoc) {
-      callback(false, 900, 'No Link rel=ACL header for ' + doc)
+      callbackFunction(false, 900, 'No Link rel=ACL header for ' + doc)
     } else {
       if (UI.store.fetcher.nonexistent[aclDoc.uri]) {
-        return callback(true, 404, aclDoc, 'ACL file ' + aclDoc + ' does not exist.')
+        return callbackFunction(true, 404, aclDoc, 'ACL file ' + aclDoc + ' does not exist.')
       }
       UI.store.fetcher.nowOrWhenFetched(aclDoc, undefined, function (ok, message, response) {
         if (!ok) {
-          callback(true, response.status, aclDoc, "Can't read Access Control File " + aclDoc + ': ' + message)
+          callbackFunction(true, response.status, aclDoc, "Can't read Access Control File " + aclDoc + ': ' + message)
         } else {
-          callback(true, 200, aclDoc)
+          callbackFunction(true, 200, aclDoc)
         }
       })
     }

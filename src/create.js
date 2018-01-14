@@ -1,11 +1,8 @@
 /*   create.js     UI to craete new objects in the solid-app-set world
 **
 */
-
-//const SolidTls = require('solid-auth-tls')
-const $rdf = require('rdflib')
 // const error = require('./widgets/error')
-const widgets = require('./widgets/index')
+// const widgets = require('./widgets/index')
 // const utils = require('./utils')
 
 const UI = {
@@ -31,10 +28,10 @@ module.exports = {
 **                (suppresses asking for a full URI or workspace)
 **
 */
-function newThingUI(context, panes) {
+function newThingUI (context, panes) {
   const dom = context.dom
   const div = context.div
-  if (context.me && !context.me.uri) throw new Error ('newThingUI:  Invalid userid ' + me)
+  if (context.me && !context.me.uri) throw new Error('newThingUI:  Invalid userid: ' + context.me)
 
   var iconStyle = 'padding: 0.7em; width: 2em; height: 2em;' // was: 'padding: 1em; width: 3em; height: 3em;'
   var star = div.appendChild(dom.createElement('img'))
@@ -56,11 +53,13 @@ function newThingUI(context, panes) {
     star.setAttribute('style', iconStyle + (visible ? 'background-color: yellow;' : ''))
     styleTheIcons(visible ? '' : 'display: none;')
   }
-  var resetIconBar = function(){
-    visibile = false
+  /*
+  var resetIconBar = function () {
+    var visibile = false
     star.setAttribute('style', iconStyle + (visible ? 'background-color: yellow;' : ''))
     styleTheIcons('display: none;')
   }
+  */
   star.addEventListener('click', selectNewTool)
   var makeNewAppInstance = function (options) {
     return new Promise(function (resolve, reject) {
@@ -68,21 +67,21 @@ function newThingUI(context, panes) {
       var callbackWS = function (ws, newBase) {
         var newPaneOptions = {
           newBase: newBase,
-          workspace: ws,
+          workspace: ws
         }
         for (var opt in options) { // get div, dom, me, folder, pane, refreshTable
           newPaneOptions[opt] = options[opt]
         }
-        console.log("newThingUI: Minting new " + newPaneOptions.pane.name + " at " + newPaneOptions.newBase)
+        console.log('newThingUI: Minting new ' + newPaneOptions.pane.name + ' at ' + newPaneOptions.newBase)
         options.pane.mintNew(newPaneOptions)
           .then(function (newPaneOptions) {
             if (!newPaneOptions || !newPaneOptions.newInstance) {
               throw new Error('Cannot mint new - missing newInstance')
             }
-            if (newPaneOptions.folder){
+            if (newPaneOptions.folder) {
               kb.add(newPaneOptions.folder, UI.ns.ldp('contains'), kb.sym(newPaneOptions.newBase),
                 newPaneOptions.folder.doc()) // Ping the patch system?
-              if (newPaneOptions.refreshTarget){
+              if (newPaneOptions.refreshTarget) {
                 newPaneOptions.refreshTarget.refresh() // Refresh the cntaining display
               }
               selectUI.parentNode.removeChild(selectUI)
@@ -93,8 +92,8 @@ function newThingUI(context, panes) {
               p.innerHTML =
                 "Your <a target='_blank' href='" + newPaneOptions.newInstance.uri + "'><b>new " + options.noun + '</b></a> is ready to be set up. ' +
                 "<br/><br/><a target='_blank' href='" + newPaneOptions.newInstance.uri + "'>Go to your new " + options.noun + '.</a>'
-                //selectUI.parentNode.removeChild(selectUI) // Clean up
-                selectUIParent.removeChild(selectUI) // Clean up
+                // selectUI.parentNode.removeChild(selectUI) // Clean up
+              selectUIParent.removeChild(selectUI) // Clean up
             }
             selectNewTool() // toggle star to plain and menu vanish again
           })
@@ -108,18 +107,18 @@ function newThingUI(context, panes) {
       options.appPathSegment = 'edu.mit.solid.pane.' + pa.name
       options.noun = pa.mintClass ? UI.utils.label(pa.mintClass) : pa.name
 
-      if (!options.folder){ // No folder given? Ask user for full URI
+      if (!options.folder) { // No folder given? Ask user for full URI
         selectUI = UI.authn.selectWorkspace(dom, options, callbackWS)
         options.div.appendChild(selectUI)
         selectUIParent = options.div
       } else {
-        var gotName = function(ok, name){
-          if (!ok){
+        var gotName = function (ok, name) {
+          if (!ok) {
             // selectUIParent.removeChild(selectUI)   itremves itself if cancelled
             selectNewTool() // toggle star to plain and menu vanish again
           } else {
             var uri = options.folder.uri
-            if (!uri.endsWith('/')){
+            if (!uri.endsWith('/')) {
               uri = uri + '/'
             }
             uri = uri + encodeURIComponent(name) + '/'
@@ -129,7 +128,6 @@ function newThingUI(context, panes) {
         selectUI = getNameForm(dom, UI.store, options.noun, gotName)
         options.div.appendChild(selectUI)
         selectUIParent = options.div
-
       }
     })
   } // makeNewAppInstance
@@ -190,7 +188,7 @@ function newThingUI(context, panes) {
 //
 // Used in contacts for new groups, individuals.
 //
-function getNameForm(dom, kb, classLabel, gotNameCallback) {
+function getNameForm (dom, kb, classLabel, gotNameCallback) {
   var form = dom.createElement('div') // form is broken as HTML behaviour can resurface on js error
   form.innerHTML = '<p>Name of new ' + classLabel + ':</p>'
   var namefield = dom.createElement('input')
@@ -213,7 +211,7 @@ function getNameForm(dom, kb, classLabel, gotNameCallback) {
   }, false)
   form.appendChild(namefield)
 
-  var br = form.appendChild(dom.createElement('br'))
+  form.appendChild(dom.createElement('br'))
 
   var cancel = form.appendChild(dom.createElement('button'))
   cancel.setAttribute('type', 'button')

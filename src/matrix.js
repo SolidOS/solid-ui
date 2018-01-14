@@ -37,16 +37,13 @@ module.exports.matrixForQuery = function (dom, query, vx, vy, vvalue, options, w
   var header = dom.createElement('tr')
   var corner = header.appendChild(dom.createElement('td'))
   corner.setAttribute('class', 'MatrixCorner')
-  // corner.textContent = '*'; // @@ test only
   matrix.appendChild(header) // just one for now
   matrix.lastHeader = header // Element before data
-  var headerRows = 1
-  var headerColumns = 1
   var columns = [] // Vector
   var rows = [] // Associative array
 
   var setCell = function (cell, x, y, value) {
-    while(cell.firstChild) { // Empty any previous
+    while (cell.firstChild) { // Empty any previous
       cell.removeChild(cell.firstChild)
     }
     cell.setAttribute('style', '')
@@ -68,7 +65,7 @@ module.exports.matrixForQuery = function (dom, query, vx, vy, vvalue, options, w
     var header = tr.appendChild(dom.createElement('td'))
     header.setAttribute('style', 'padding: 0.3em;')
     header.textContent = utils.label(y1) // first approximation
-    if (y1.termType = 'NamedNode') {
+    if (y1.termType === 'NamedNode') {
       kb.fetcher.nowOrWhenFetched(y1.uri.split('#')[0], undefined, function (ok, body, response) {
         if (ok) header.textContent = utils.label(y1)
       })
@@ -157,9 +154,9 @@ module.exports.matrixForQuery = function (dom, query, vx, vy, vvalue, options, w
       }
     }
 
-    for (var i = 1; i < matrix.children.length; i++) {
+    for (let i = 1; i < matrix.children.length; i++) {
       row = matrix.children[i]
-      for (var j = 1; j < row.children.length; j++) {
+      for (let j = 1; j < row.children.length; j++) {
         cell = row.children[j]
         if (cell.old) {
           var y = $rdf.fromNT(row.dataValueNT)
@@ -172,14 +169,14 @@ module.exports.matrixForQuery = function (dom, query, vx, vy, vvalue, options, w
       }
     }
 
-    for (var i = 0; i < matrix.children.length; i++) {
+    for (let i = 0; i < matrix.children.length; i++) {
       row = matrix.children[i]
       if (i > 0 && !rowsUsed[row.dataValueNT]) {
         delete rows[row.dataValueNT]
         matrix.removeChild(row)
       } else {
-        for (var j = row.children.length - 1; j > 0;  j--) { // backwards
-          var cell = row.children[j]
+        for (var j = row.children.length - 1; j > 0; j--) { // backwards
+          let cell = row.children[j]
           if (!colsUsed[j]) {
             row.removeChild(cell)
           }
@@ -187,7 +184,7 @@ module.exports.matrixForQuery = function (dom, query, vx, vy, vvalue, options, w
       }
     }
     var newcolumns = []
-    for (var j = 0; j < columns.length; j++) {
+    for (let j = 0; j < columns.length; j++) {
       if (colsUsed[j + 1]) {
         newcolumns.push(columns[j])
       }
@@ -201,7 +198,9 @@ module.exports.matrixForQuery = function (dom, query, vx, vy, vvalue, options, w
   }
 
   var addCellFromBindings = function (bindings) {
-    var x = bindings[vx], y = bindings[vy], value = bindings[vvalue]
+    var x = bindings[vx]
+    var y = bindings[vy]
+    var value = bindings[vvalue]
     var row = rowFor(y)
     var colNo = columnNumberFor(x)
     var cell = row.children[colNo + 1] // number of Y axis headings
@@ -221,5 +220,4 @@ module.exports.matrixForQuery = function (dom, query, vx, vy, vvalue, options, w
 
   kb.query(query, addCellFromBindings, undefined, whenDone) // Populate the matrix
   return matrix
-
 }

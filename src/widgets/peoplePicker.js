@@ -147,7 +147,7 @@ export class PeoplePicker {
       .then(() => ({group}))
       .catch(err => {
         console.log('Could not create new group.  PATCH failed ' + err)
-        throw new Error(`Couldn't create new group.  PATCH failed for (${ err.xhr ? err.xhr.responseURL : '' })`)
+        throw new Error(`Couldn't create new group.  PATCH failed for (${err.xhr ? err.xhr.responseURL : ''} )`)
       })
   }
 

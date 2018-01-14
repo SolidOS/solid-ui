@@ -1,12 +1,13 @@
 // Log of diagnostics -- node module version
 
+/* global alert */
 var wrapper = function () {
   var logger = {}
 
   // ///////////////////////  Logging
   //
   // bitmask levels
-  var TNONE = 0
+  // var TNONE = 0
   var TERROR = 1
   var TWARN = 2
   var TMESG = 4
@@ -49,10 +50,12 @@ var wrapper = function () {
       }
     } else if (typeof console !== 'undefined') { // node.js
       console.log(str)
+      /*
     } else {
       var f = dump // || print
       if (!f) throw new Error('log: No way to output message: ' + str)
       f('Log: ' + str + '\n')
+      */
     }
   } // logger.msg
 
