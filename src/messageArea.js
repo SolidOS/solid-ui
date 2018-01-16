@@ -16,7 +16,8 @@ const utils = require('./utils')
 var buttonStyle = 'font-size: 100%; margin: 0.8em; padding:0.5em; background-color: white;'
 
 module.exports = function (dom, kb, subject, messageStore, options) {
-  kb = kb || UI.kb
+  kb = kb || UI.store
+  messageStore = messageStore.doc() // No hash
   var ns = UI.ns
   var WF = $rdf.Namespace('http://www.w3.org/2005/01/wf/flow#')
   var DCT = $rdf.Namespace('http://purl.org/dc/terms/')
@@ -112,7 +113,7 @@ module.exports = function (dom, kb, subject, messageStore, options) {
 
     var field, submit
     var turnOnInput = function () {
-      creatorAndDate(lhs, me, 'now', null)
+      creatorAndDate(lhs, me, '', null)
 
       field = dom.createElement('textarea')
       middle.innerHTML = ''
@@ -123,7 +124,9 @@ module.exports = function (dom, kb, subject, messageStore, options) {
 
       field.addEventListener('keyup', function (e) { // User preference?
         if (e.keyCode === 13) {
-          sendMessage()
+          if (!e.altKey) { // Alt-Enter just adds a new line
+            sendMessage()
+          }
         }
       }, false)
 
