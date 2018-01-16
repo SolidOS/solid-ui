@@ -25,7 +25,7 @@ The submodules at the moment include log, acl, acl-control, messageArea, etc
 
 The typical style of the widgets is to know what data it has been derived from,
 allow users to edit it, and to automatically sync with data as it changes in the future.
-TO see how these are  used, see the panes which use them within the solid-ap-set
+TO see how these are  used, see the panes which use them within the solid-app-set 
 
 The level of support for this varies.
 
