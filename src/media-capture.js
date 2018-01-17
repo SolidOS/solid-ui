@@ -1,5 +1,5 @@
 
-////////////////////////////////////////////////
+/// /////////////////////////////////////////////
 //
 //   Media input widget
 //
@@ -14,6 +14,7 @@
 // or access cemra roll (etc) OR to access solid cloud storage of favorite photo almbums.
 // (Especially latest taken ones)
 //
+/* global alert */
 var $rdf = require('rdflib')
 var media = module.exports = {}
 
@@ -32,35 +33,35 @@ var UI = {
 //  Put up a video stream and take a picture
 //  In: context.div, dom
 
-UI.media.camera = function(context, gotBlob){
-
-  function takeSnapshot() {
+UI.media.camera = function (context, gotBlob) {
+  function takeSnapshot () {
+    var dom = context.dom
     var img = dom.createElement('img')
-    var ctx;
+    var ctx
     var width = video.offsetWidth
-      , height = video.offsetHeight;
+    var height = video.offsetHeight
 
-    canvas = canvas || document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
+    var canvas = context.canvas || document.createElement('canvas')
+    canvas.width = width
+    canvas.height = height
 
-    ctx = canvas.getContext('2d');
-    ctx.drawImage(video, 0, 0, width, height);
+    ctx = canvas.getContext('2d')
+    ctx.drawImage(video, 0, 0, width, height)
 
-    img.src = canvas.toDataURL('image/png'); // @@@
-    context.div.appendChild(img);
+    img.src = canvas.toDataURL('image/png') // @@@
+    context.div.appendChild(img)
   }
 
   var video = context.dom.createElement('video')
   context.div.appendChild(video)
   // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob
-  navigator.mediaDevices.getUserMedia({video: true })
-  .then(function(stream){
-    video.src = window.URL.createObjectURL(stream);
-    video.addEventListener('click', takeSnapshot);
+  navigator.mediaDevices.getUserMedia({video: true})
+  .then(function (stream) {
+    video.src = window.URL.createObjectURL(stream)
+    video.addEventListener('click', takeSnapshot)
   })
-  .catch(function(error){
+  .catch(function (error) {
     alert('Could not access the camera. Error: ' + error.name)
   })
   return video

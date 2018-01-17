@@ -18,13 +18,13 @@ const UI = {
   ns: require('./ns'),
   store: require('./store')
 }
-
+/*
 if (typeof $SOLID_GLOBAL_config !== 'undefined') {
   const config = $SOLID_GLOBAL_config
 } else {
   const config = {}
 }
-
+*/
 module.exports = {
   checkUser,   // Async
   currentUser, // Sync

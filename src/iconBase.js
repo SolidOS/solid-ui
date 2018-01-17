@@ -2,14 +2,14 @@
 // Works in FF extension - what about browserify??
 
 if (module.scriptURI) { // FF extension
-  module.exports.iconBase  = '' +
+  module.exports.iconBase = '' +
     module.scriptURI.slice(0, module.scriptURI.lastIndexOf('/')) + '/icons/'
-    module.exports.originalIconBase  = '' +
+  module.exports.originalIconBase = '' +
       module.scriptURI.slice(0, module.scriptURI.lastIndexOf('/')) + '/originalIcons/'
 } else { // Node or browserify
-  var iconsOnGithub  = 'https://linkeddata.github.io/solid-ui/src'
+  var iconsOnGithub = 'https://linkeddata.github.io/solid-ui/src'
 
-  if (typeof $SolidTestEnvironment !== 'undefined' && $SolidTestEnvironment.iconBase ){
+  if (typeof $SolidTestEnvironment !== 'undefined' && $SolidTestEnvironment.iconBase) {
     module.exports.iconBase = $SolidTestEnvironment.iconBase
     module.exports.originalIconBase = $SolidTestEnvironment.originalIconBase
   } else {

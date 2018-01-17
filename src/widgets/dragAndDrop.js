@@ -4,7 +4,6 @@ module.exports = {
 }
 
 function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
-
   var dragoverListener = function (e) {
     e.preventDefault() // Neeed else drop does not work [sic]
     e.dataTransfer.dropEffect = 'copy'
@@ -28,7 +27,6 @@ function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
 
     var uris = null
     var text
-    var thisEle = this
     if (e.dataTransfer.types) {
       for (var t = 0; t < e.dataTransfer.types.length; t++) {
         var type = e.dataTransfer.types[t]
@@ -38,12 +36,13 @@ function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
         } else if (type === 'text/plain') {
           text = e.dataTransfer.getData(type)
         } else if (type === 'Files' && droppedFileHandler) {
-          var files = e.dataTransfer.files; // FileList object.
-          for (var i = 0, f; f = files[i]; i++) {
-            console.log("Filename: " + f.name + ", type: " + (f.type || 'n/a') +
-              " size: " + f.size + ' bytes, last modified: ' +
+          var files = e.dataTransfer.files // FileList object.
+          for (let i = 0; files[i]; i++) {
+            let f = files[i]
+            console.log('Filename: ' + f.name + ', type: ' + (f.type || 'n/a') +
+              ' size: ' + f.size + ' bytes, last modified: ' +
               (f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a')
-              );
+              )
           }
           droppedFileHandler(files)
         }
@@ -65,9 +64,9 @@ function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
     return false
   } // dropListener
 
-  var addTargetListeners = function(ele){
-    if (!ele){
-      console.log("@@@ addTargetListeners: ele " + ele)
+  var addTargetListeners = function (ele) {
+    if (!ele) {
+      console.log('@@@ addTargetListeners: ele ' + ele)
     }
     ele.addEventListener('dragover', dragoverListener)
     ele.addEventListener('dragenter', dragenterListener)
@@ -77,13 +76,11 @@ function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
   addTargetListeners(ele, droppedURIHandler)
 } // listen for dropped URIs
 
-
 // Make an HTML element draggable as a URI-identified thing
 //
 // Possibly later set the drag image too?
 //
 function makeDraggable (tr, obj) {
-
   tr.setAttribute('draggable', 'true') // Stop the image being dragged instead - just the TR
 
   tr.addEventListener('dragstart', function (e) {
