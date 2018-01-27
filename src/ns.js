@@ -1,10 +1,8 @@
-// thisModule = {}
-
+// Namespaces we commonly use and have acommon prefixes for around solid
+//
 var thisModule = {}
 
 module.exports = thisModule
-
-// tabulator.trace = thisModule // @@@@@@@@@@
 
 var $rdf = require('rdflib')
 
@@ -27,7 +25,7 @@ thisModule.doap = $rdf.Namespace('http://usefulinc.com/ns/doap#')
 thisModule.foaf = $rdf.Namespace('http://xmlns.com/foaf/0.1/')
 thisModule.http = $rdf.Namespace('http://www.w3.org/2007/ont/http#')
 thisModule.httph = $rdf.Namespace('http://www.w3.org/2007/ont/httph#')
-thisModule.ical = $rdf.Namespace('http://www.w3.org/2002/12/cal/icaltzd#')
+thisModule.icalTZ = $rdf.Namespace('http://www.w3.org/2002/12/cal/icaltzd#') // Beware: not cal:
 thisModule.ldp = $rdf.Namespace('http://www.w3.org/ns/ldp#')
 thisModule.link = thisModule.tab = thisModule.tabont = $rdf.Namespace('http://www.w3.org/2007/ont/link#')
 thisModule.log = $rdf.Namespace('http://www.w3.org/2000/10/swap/log#')

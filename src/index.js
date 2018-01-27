@@ -51,6 +51,7 @@ const UI = {
   matrix: require('./matrix'),
   messageArea: require('./messageArea'),
   pad: require('./pad'),
+  preferences: require('./preferences'),
   store: require('./store'),
   table: require('./table'),
   tabs: require('./tabs'),

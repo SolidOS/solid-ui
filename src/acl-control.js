@@ -17,9 +17,9 @@ const utils = require('./utils')
 // causes the bowser to lose all its work in tat window and navigate to another page
 UI.aclControl.preventBrowserDropEvents = function (document) {
   console.log('preventBrowserDropEvents called.')
-  if (typeof tabulator !== 'undefined') {
-    if (tabulator.preventBrowserDropEventsDone) return
-    tabulator.preventBrowserDropEventsDone = true
+  if (typeof window !== 'undefined') {
+    if (window.preventBrowserDropEventsDone) return
+    window.preventBrowserDropEventsDone = true
   }
 
   function preventDrag (e) {
