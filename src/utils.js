@@ -23,7 +23,6 @@ module.exports = {
   label,
   labelForXML,
   labelWithOntology,
-  makeQueryRow,
   newVariableName,
   ontologyLabel,
   predicateLabelForXML,
@@ -318,8 +317,6 @@ function AJARImage (src, alt, tt, doc) {
   if (!doc) {
     doc = document
   }
-  // if (!tt && tabulator.Icon.tooltips[src])    tooltip system discontinued 2016
-  //  tt = tabulator.Icon.tooltips[src]
   var image = doc.createElement('img')
   image.setAttribute('src', src)
   image.addEventListener('copy', function (e) {
