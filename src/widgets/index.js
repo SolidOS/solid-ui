@@ -39,6 +39,10 @@ var UI = {
 const error = require('./error')
 const utils = require('../utils')
 
+const cancelIconURI = UI.icons.iconBase + 'noun_1180156.svg' // black X
+const checkIconURI = UI.icons.iconBase + 'noun_1180158.svg' // green checkmark; Continue
+// const greenPlusIconURI = UI.icons.iconBase + 'noun_34653_green.svg' // green checkmark; Continue
+
 function complain (context, err) {
   var ele = context.statusArea || context.div
   console.log('Complaint: ' + err)
@@ -272,7 +276,11 @@ UI.widgets.deleteButtonWithCheck = function (dom, container, noun, deleteFunctio
   delButton.addEventListener('click', function (e) {
     container.removeChild(delButton) // Ask -- are you sure?
     var cancelButton = dom.createElement('button')
-    cancelButton.textContent = 'cancel'
+    // cancelButton.textContent = 'cancel'
+    cancelButton.setAttribute('style', UI.style.buttonStyle)
+    var img = cancelButton.appendChild(dom.createElement('img'))
+    img.setAttribute('src', cancelIconURI)
+
     container.appendChild(cancelButton).addEventListener('click', function (e) {
       container.removeChild(sureButton)
       container.removeChild(cancelButton)
@@ -280,6 +288,7 @@ UI.widgets.deleteButtonWithCheck = function (dom, container, noun, deleteFunctio
     }, false)
     var sureButton = dom.createElement('button')
     sureButton.textContent = 'Delete ' + noun
+    sureButton.setAttribute('style', UI.style.buttonStyle)
     container.appendChild(sureButton).addEventListener('click', function (e) {
       container.removeChild(sureButton)
       container.removeChild(cancelButton)
@@ -305,6 +314,7 @@ UI.widgets.askName = function (dom, kb, container, predicate, klass) {
     namefield.setAttribute('type', 'text')
     namefield.setAttribute('size', '100')
     namefield.setAttribute('maxLength', '2048') // No arbitrary limits
+    namefield.setAttribute('style', UI.style.textInputStyle)
     namefield.select() // focus next user input
     form.appendChild(namefield)
     container.appendChild(form)
@@ -326,7 +336,11 @@ UI.widgets.askName = function (dom, kb, container, predicate, klass) {
 
     var cancel = form.appendChild(dom.createElement('button'))
     cancel.setAttribute('type', 'button')
+    cancel.setAttribute('style', UI.style.buttonStyle)
     cancel.innerHTML = 'Cancel'
+    var img = cancel.appendChild(dom.createElement('img'))
+    img.setAttribute('src', cancelIconURI)
+
     cancel.addEventListener('click', function (e) {
       form.parentNode.removeChild(form)
       resolve(null)
@@ -334,7 +348,11 @@ UI.widgets.askName = function (dom, kb, container, predicate, klass) {
 
     var b = form.appendChild(dom.createElement('button'))
     b.setAttribute('type', 'button')
-    b.innerHTML = 'Continue'
+    b.setAttribute('style', UI.style.buttonStyle)
+    // b.innerHTML = 'Continue'
+    var img2 = cancel.appendChild(dom.createElement('img'))
+    img2.setAttribute('src', checkIconURI)
+
     b.addEventListener('click', function (e) {
       gotName()
     }, false)

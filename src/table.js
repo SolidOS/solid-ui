@@ -184,7 +184,7 @@ module.exports = function renderTableViewPane (doc, options) {
   function generateSparqlButton () {
     var image = doc.createElement('img')
     image.setAttribute('class', 'sparqlButton')
-    image.setAttribute('src', tabulator.iconPrefix + 'icons/1pt5a.gif')
+    image.setAttribute('src', UI.iconBase + 'icons/1pt5a.gif')
     image.setAttribute('alt', 'Edit SPARQL query')
 
     image.addEventListener('click', sparqlButtonPressed, false)
@@ -1250,7 +1250,6 @@ module.exports = function renderTableViewPane (doc, options) {
         var uri = target.getAttribute('href')
         if (!uri) console.log('No href found \n')
         linkFunction(uri)
-      // tabulator.outline.GotoSubject(UI.store.sym(uri), true, undefined, true, undefined)
       }, true)
     }
     return result
