@@ -3,6 +3,8 @@
  *
  * Signing in, signing up, workspace selection, app spawning
  */
+ /* global $SOLID_GLOBAL_config localStorage */
+
 // const Solid = require('solid-client')
 const SolidTls = require('solid-auth-tls')
 const $rdf = require('rdflib')
@@ -14,17 +16,19 @@ const solidAuthClient = require('solid-auth-client')
 const UI = {
   log: require('./log'),
   ns: require('./ns'),
-  preferences: require('./preferences'),
   store: require('./store')
 }
-/* eslint-disable camelcase */
-/* global $SOLID_GLOBAL_config */
-const config = $SOLID_GLOBAL_config
-/* eslint-ensable camelcase */
+/*
+if (typeof $SOLID_GLOBAL_config !== 'undefined') {
+  const config = $SOLID_GLOBAL_config
+} else {
+  const config = {}
+}
+*/
 module.exports = {
-  checkCurrentUser,
-  checkUser,
-  currentUser,
+  checkUser,   // Async
+  currentUser, // Sync
+  defaultTestUser, // Sync
   findAppInstances,
   findOriginOwner,
   loadTypeIndexes,
@@ -87,7 +91,7 @@ function saveUser (webId, context) {
     webIdUri = webId.uri || webId
   }
 
-  UI.preferences.set('me', webIdUri || '')
+  tabulator.preferences.set('me', webIdUri || '')
 
   return webIdUri ? $rdf.namedNode(webIdUri) : null
 }
@@ -95,7 +99,7 @@ function saveUser (webId, context) {
 /**
  * @returns {NamedNode|null}
  */
-function currentUser () {
+function defaultTestUser () {
   // Check for offline override
   let offlineId = offlineTestID()
 
@@ -103,9 +107,28 @@ function currentUser () {
     return offlineId
   }
 
-  let webId = UI.preferences.get('me')
-
+/*  Stop storing it in prefs now we have localStorage
+  let webId = tabulator.preferences.get('me')
   return webId ? $rdf.sym(webId) : null
+  */
+  return null
+}
+
+/** Checks syncronously whether user is logged in
+ *
+ * @returns Named Node or null
+*/
+function currentUser () {
+  let str = localStorage['solid-auth-client']
+  if (str) {
+    let da = JSON.parse(str)
+    if (da.session && da.session.webId) {
+      // @@ check has not expired
+      return $rdf.sym(da.session.webId)
+    }
+  }
+  return null
+  // JSON.parse(localStorage['solid-auth-client']).session.webId
 }
 
 /**
@@ -113,21 +136,30 @@ function currentUser () {
  *
  * @param context
  *
- * @returns {Promise<NamedNode|null>}
+ * @returns {Promise<context>}
  */
 function logIn (context) {
-  let webId = currentUser()  // webId is a NamedNode or null
+  let me = defaultTestUser()  // me is a NamedNode or null
 
-  if (webId) {
-    return Promise.resolve({ me: webId })
+  if (me) {
+    context.me = me
+    return Promise.resolve(context)
   }
 
   return new Promise((resolve) => {
-    let box = loginStatusBox(context.dom, (webIdUri) => {
-      resolve({ me: saveUser(webIdUri, context) })
+    checkUser().then(webId => { // Already logged in?
+      if (webId) {
+        context.me = $rdf.sym(webId)
+        console.log('logIn: Already logged in as ' + context.me)
+        resolve(context)
+        return
+      }
+      let box = loginStatusBox(context.dom, (webIdUri) => {
+        saveUser(webIdUri, context)
+        resolve(context) // always pass growing context
+      })
+      context.div.appendChild(box)
     })
-
-    context.div.appendChild(box)
   })
 }
 
@@ -206,7 +238,7 @@ function loadPreferences (context) {
         box.appendChild(pending)
       }
 
-      return kb.fetcher.fetch(preferencesFile)
+      return kb.fetcher.load(preferencesFile)
     })
     .then(() => {
       if (pending) {
@@ -620,6 +652,17 @@ function offlineTestID () {
     return $rdf.sym($SolidTestEnvironment.username)
   }
 
+  if (tabulator.mode === 'webapp' && typeof document !== 'undefined' &&
+    document.location && ('' + document.location).slice(0, 16) === 'http://localhost') {
+    var div = document.getElementById('appTarget')
+    if (!div) return null
+    var id = div.getAttribute('testID')
+    if (!id) return null
+    /* me = kb.any(subject, UI.ns.acl('owner')); // when testing on plane with no webid
+    */
+    console.log('Assuming user is ' + id)
+    return $rdf.sym(id)
+  }
   return null
 }
 
@@ -628,58 +671,20 @@ function offlineTestID () {
  * (Called by `loginStatusBox()`)
  * @private
  *
- * @param myDocument
+ * @param dom
  * @param setUserCallback(user: object)
  *
  * @returns {Element}
  */
-function signInOrSignUpBox (myDocument, setUserCallback) {
-  var box = myDocument.createElement('div')
-  var p = myDocument.createElement('p')
-  box.appendChild(p)
-  box.className = 'mildNotice'
-  p.innerHTML = 'Enter your Web ID or pod uri'
+function signInOrSignUpBox (dom, setUserCallback) {
+  var box = dom.createElement('div')
+  const magicClassName = 'SolidSignInOrSignUpBox'
   console.log('widgets.signInOrSignUpBox')
-
-  // Provider uri textbox (or data URI for TlS)
-  let idpInput = myDocument.createElement('input')
-  box.appendChild(idpInput)
-  idpInput.setAttribute('type', 'text')
-  idpInput.setAttribute('id', 'idpInput')
-  idpInput.size = 40
-
-  // Sign in button
-  let signInButton = myDocument.createElement('input')
-  box.appendChild(signInButton)
-  signInButton.setAttribute('type', 'button')
-  signInButton.setAttribute('value', 'Log in (old)')
-  signInButton.setAttribute('style',
-    'padding: 1em; border-radius:0.5em; margin: 2em;')
-
-  signInButton.addEventListener('click', () => {
-    var offline = offlineTestID()
-    if (offline) return setUserCallback(offline.uri)
-
-    let idpUri = document.getElementById('idpInput')
-
-    if (idpUri && idpUri.value !== '') {
-      return solidAuthClient.login(idpUri.value)
-        .then(webIdFromSession)
-        .then(webIdURI => setUserCallback(webIdURI))
-    } else if (window && window.location && window.location.href) {
-      return solidAuthClient.login(window.location.href) // Actually the URI bar often works
-        .then(webIdFromSession) // when using webid-tls
-        .then(webIdURI => setUserCallback(webIdURI))
-    }
-
-    // Solid.tls.login().then(function (uri) {
-    //   console.log('signInOrSignUpBox logged in up ' + uri)
-    //   gotOne(uri)
-    // })
-  }, false)
+  box.setUserCallback = setUserCallback
+  box.setAttribute('class', magicClassName)
 
   // Sign in button with PopUP
-  let signInPopUpButton = myDocument.createElement('input')
+  let signInPopUpButton = dom.createElement('input') // multi
   box.appendChild(signInPopUpButton)
   signInPopUpButton.setAttribute('type', 'button')
   signInPopUpButton.setAttribute('value', 'Log in')
@@ -689,16 +694,33 @@ function signInOrSignUpBox (myDocument, setUserCallback) {
   signInPopUpButton.addEventListener('click', () => {
     var offline = offlineTestID()
     if (offline) return setUserCallback(offline.uri)
-
-    return solidAuthClient.popupLogin({ popupUri: config.popupUri })
+    return solidAuthClient.popupLogin({ popupUri: $SOLID_GLOBAL_config.popupUri })
       .then(session => {
         let webIdURI = session.webId
-        setUserCallback(webIdURI)
+        // setUserCallback(webIdURI)
+        var divs = dom.getElementsByClassName(magicClassName)
+        console.log('Logged in, ' + divs.length + ' panels to be serviced')
+        // At the same time, satiffy all the other login boxes
+        for (let i = 0; i < divs.length; i++) {
+          let div = divs[i]
+          if (div.setUserCallback) {
+            try {
+              div.setUserCallback(webIdURI)
+              let parent = div.parentNode
+              if (parent) {
+                parent.removeChild(div)
+              }
+            } catch (e) {
+              console.log('## Error satisfying login box: ' + e)
+              div.appendChild(UI.error.errorMessageBlock(dom, e))
+            }
+          }
+        }
       })
   }, false)
 
   // Sign up button
-  let signupButton = myDocument.createElement('input')
+  let signupButton = dom.createElement('input')
   box.appendChild(signupButton)
   signupButton.setAttribute('type', 'button')
   signupButton.setAttribute('value', 'Sign Up')
@@ -729,9 +751,11 @@ function webIdFromSession (session) {
 /**
  * @returns {Promise<string|null>} Resolves with WebID URI or null
  */
+ /*
 function checkCurrentUser () {
   return checkUser()
 }
+*/
 
 /**
  * @param [setUserCallback] {Function} Optional callback, `setUserCallback(webId|null)`
@@ -740,10 +764,13 @@ function checkCurrentUser () {
  */
 function checkUser (setUserCallback) {
   // Check to see if already logged in / have the WebID
-  var me = currentUser()
+  var me = defaultTestUser()
   if (me) {
     return Promise.resolve(setUserCallback ? setUserCallback(me) : me)
   }
+
+  // doc = kb.any(doc, UI.ns.link('userMirror')) || doc
+
   return solidAuthClient.currentSession()
 
     .then(webIdFromSession)
@@ -772,28 +799,28 @@ function checkUser (setUserCallback) {
  *
  * A big sign-up/sign in box or a logout box depending on the state
  *
- * @param myDocument
+ * @param dom
  * @param listener
  *
  * @returns {Element}
  */
-function loginStatusBox (myDocument, listener) {
-  var me = currentUser()
+function loginStatusBox (dom, listener) {
+  var me = defaultTestUser()
 
-  var box = myDocument.createElement('div')
+  var box = dom.createElement('div')
 
   var setIt = function (newidURI) {
     if (!newidURI) { return }
 
     let uri = newidURI.uri || newidURI
-    UI.preferences.set('me', uri)
+    tabulator.preferences.set('me', uri)
     me = $rdf.sym(uri)
     box.refresh()
     if (listener) listener(me.uri)
   }
 
   var zapIt = function () {
-    UI.preferences.set('me', '')
+    tabulator.preferences.set('me', '')
     var message = 'Your Web ID was ' + me + '. It has been forgotten.'
     me = null
     try {
@@ -817,7 +844,7 @@ function loginStatusBox (myDocument, listener) {
         logoutLabel = 'Logout ' + nick.value
       }
     }
-    var signOutButton = myDocument.createElement('input')
+    var signOutButton = dom.createElement('input')
     signOutButton.className = 'WebIDCancelButton'
     signOutButton.setAttribute('type', 'button')
     signOutButton.setAttribute('value', logoutLabel)
@@ -826,14 +853,14 @@ function loginStatusBox (myDocument, listener) {
   }
 
   box.refresh = function () {
-    let me = currentUser()
+    let me = defaultTestUser()
     let meUri = me ? me.uri : ''
     if (box.me !== meUri) {
       widgets.clearElement(box)
       if (me) {
         box.appendChild(logoutButton(me))
       } else {
-        box.appendChild(signInOrSignUpBox(myDocument, setIt))
+        box.appendChild(signInOrSignUpBox(dom, setIt))
       }
     }
     box.me = meUri
@@ -871,7 +898,7 @@ function selectWorkspace (dom, appDetails, callbackWS) {
   var noun = appDetails.noun
   var appPathSegment = appDetails.appPathSegment
 
-  var me = currentUser()
+  var me = defaultTestUser()
   var kb = UI.store
   var box = dom.createElement('div')
   var context = { me: me, dom: dom, div: box }
