@@ -91,7 +91,7 @@ function saveUser (webId, context) {
     webIdUri = webId.uri || webId
   }
 
-  tabulator.preferences.set('me', webIdUri || '')
+  UI.preferences.set('me', webIdUri || '')
 
   return webIdUri ? $rdf.namedNode(webIdUri) : null
 }
@@ -108,7 +108,7 @@ function defaultTestUser () {
   }
 
 /*  Stop storing it in prefs now we have localStorage
-  let webId = tabulator.preferences.get('me')
+  let webId = UI.preferences.get('me')
   return webId ? $rdf.sym(webId) : null
   */
   return null
@@ -652,7 +652,7 @@ function offlineTestID () {
     return $rdf.sym($SolidTestEnvironment.username)
   }
 
-  if (tabulator.mode === 'webapp' && typeof document !== 'undefined' &&
+  if (typeof document !== 'undefined' &&
     document.location && ('' + document.location).slice(0, 16) === 'http://localhost') {
     var div = document.getElementById('appTarget')
     if (!div) return null
@@ -813,14 +813,14 @@ function loginStatusBox (dom, listener) {
     if (!newidURI) { return }
 
     let uri = newidURI.uri || newidURI
-    tabulator.preferences.set('me', uri)
+    UI.preferences.set('me', uri)
     me = $rdf.sym(uri)
     box.refresh()
     if (listener) listener(me.uri)
   }
 
   var zapIt = function () {
-    tabulator.preferences.set('me', '')
+    UI.preferences.set('me', '')
     var message = 'Your Web ID was ' + me + '. It has been forgotten.'
     me = null
     try {
