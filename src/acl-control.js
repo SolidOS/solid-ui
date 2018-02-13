@@ -4,13 +4,18 @@
 // See https://www.coshx.com/blog/2014/04/11/preventing-drag-and-drop-disasters-with-a-chrome-userscript/
 // Without this dropping anything onto a browser page will cause chrome etc to jump to diff page
 // throwing away all the user's work.
+
+/* global alert */
 var UI = {}
 
 UI.acl = require('./acl')
+UI.icons = require('./iconBase')
 UI.ns = require('./ns')
 UI.widgets = require('./widgets')
+UI.style = require('./style')
+UI.utils = require('./utils')
+
 UI.aclControl = module.exports = {}
-const utils = require('./utils')
 
 // In apps which may use drag and drop, this utility takes care of the fact
 // by default in a browser, an uncuaght user drop into a browser window
@@ -25,7 +30,6 @@ UI.aclControl.preventBrowserDropEvents = function (document) {
   function preventDrag (e) {
     e.stopPropagation()
     e.preventDefault()
-  // console.log("@@@@ document-level drag suppressed: " + e.dataTransfer.dropEffect)
   }
 
   function handleDrop (e) {
@@ -35,15 +39,6 @@ UI.aclControl.preventBrowserDropEvents = function (document) {
         e.stopPropagation()
         e.preventDefault()
         console.log('@@@@ document-level DROP suppressed: ' + e.dataTransfer.dropEffect)
-      /*
-              var file = e.dataTransfer.files[0]
-              var reader = new FileReader()
-
-              reader.onload = function (event) {
-                window.open(reader.result)
-              }
-              reader.readAsDataURL(file)
-      */
       }
     }
   }
@@ -72,19 +67,30 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
   var table = dom.createElement('table')
   table.setAttribute('style', 'margin: 1em; border: 0.1em #ccc ;')
   var headerRow = table.appendChild(dom.createElement('tr'))
-  headerRow.textContent = 'Sharing for ' + noun + ' ' + utils.label(subject)
+  headerRow.textContent = 'Sharing for ' + noun + ' ' + UI.utils.label(subject)
   headerRow.setAttribute('style', 'min-width: 20em; padding: 1em; font-size: 120%; border-bottom: 0.1em solid red; margin-bottom: 2em;')
 
   var statusRow = table.appendChild(dom.createElement('tr'))
-  var statusBlock = statusRow.appendChild(dom.createElement('div'))
+
+  var statusCell = statusRow.appendChild(dom.createElement('td'))
+  var statusBlock = statusCell.appendChild(dom.createElement('div'))
   statusBlock.setAttribute('style', 'padding: 2em;')
   var MainRow = table.appendChild(dom.createElement('tr'))
   var box = MainRow.appendChild(dom.createElement('table'))
   var bottomRow = table.appendChild(dom.createElement('tr'))
 
-  var bigButtonStyle = 'border-radius: 0.3em; background-color: white; border: 0.01em solid #888;'
+  // A world button can be dragged to gve public access.
+  // later, allow it to be pressed to make pubicly viewable?
+  var publicAccessCell = bottomRow.appendChild(dom.createElement('td'))
+  var publicAccessButton = publicAccessCell.appendChild(UI.widgets.button(dom, UI.icons.iconBase + 'noun_98053.svg', 'Public'))
+  UI.widgets.makeDraggable(publicAccessButton, UI.ns.foaf('Agent')) // Represent everyone
 
-  var ACLControlEditable = function (box, doc, aclDoc, kb, options) {
+  var bigButtonStyle = 'border-radius: 0.3em; background-color: white; border: 0.1em solid #888;'
+
+  // This is the main function which produces an editable access control.
+  // There are two of these in all iff the defaults are separate
+  //
+  function ACLControlEditable (box, doc, aclDoc, kb, options) {
     var defaultOrMain = options.doingDefault ? 'default' : 'main'
     options = options || {}
     var ac = UI.acl.readACL(doc, aclDoc, kb, options.doingDefaults) // Note kb might not be normal one
@@ -188,15 +194,17 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
       var updater = kb2.updater || new $rdf.UpdateManager(kb2)
       updater.put(aclDoc, kb2.statementsMatching(undefined, undefined, undefined, aclDoc),
         'text/turtle', function (uri, ok, message) {
+          var error = null
           if (!ok) {
-            console.log('ACL file save failed: ' + message)
+            error = 'ACL file save failed: ' + message
+            console.log(error)
           } else {
             kb.fetcher.unload(aclDoc)
             kb.add(kb2.statements)
             kb.fetcher.requested[aclDoc.uri] = 'done' // missing: save headers
             console.log('ACL modification: success!')
           }
-          callback(ok)
+          callback(ok, error)
         })
     }
 
@@ -234,10 +242,12 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
                 break
               }
             }
-            box.saveBack(function (ok) {
+            box.saveBack(function (ok, error) {
               if (ok) {
                 middleTable.removeChild(tr)
-              } // @@ else
+              } else {
+                alert(error)
+              }
             })
           }
         }
@@ -345,10 +355,12 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
                 removeAgentFromCombos(u) // Combos are mutually distinct
                 byCombo[combo].push([res.pred, res.obj.uri])
                 console.log('ACL: setting access to ' + subject + ' by ' + res.pred + ': ' + res.obj)
-                box.saveBack(function (ok) {
+                box.saveBack(function (ok, error) {
                   if (ok) {
                     thisEle.style.backgroundColor = 'white' // restore look to before drag
                     syncPanel()
+                  } else {
+                    alert(error)
                   }
                 })
               }
@@ -443,9 +455,9 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
           var addDefaultButton = function (prospectiveDefaultHolder) {
             useDefault = bottomRow.appendChild(dom.createElement('button'))
             useDefault.textContent = 'Stop specific sharing for this ' + noun +
-              ' -- just use default' // + utils.label(thisDefaultHolder)
+              ' -- just use default' // + UI.utils.label(thisDefaultHolder)
             if (prospectiveDefaultHolder) {
-              useDefault.textContent += ' for ' + utils.label(prospectiveDefaultHolder)
+              useDefault.textContent += ' for ' + UI.utils.label(prospectiveDefaultHolder)
             }
             useDefault.style.cssText = bigButtonStyle
             useDefault.addEventListener('click', function (event) {
@@ -488,9 +500,11 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
             mergeButton.addEventListener('click', function (e) {
               delete box.defaultsDiffer
               delete box.defByCombo
-              box.saveBack(function (ok) {
+              box.saveBack(function (ok, error) {
                 if (ok) {
                   box.removeControlForDefaults()
+                } else {
+                  alert(error)
                 }
               })
             }, false)

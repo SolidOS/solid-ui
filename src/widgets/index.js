@@ -34,15 +34,34 @@ var UI = {
   log: require('../log'),
   ns: require('../ns'),
   store: require('../store'),
+  style: require('../style'),
   widgets: widgets
 }
 const error = require('./error')
 const utils = require('../utils')
 
+const cancelIconURI = UI.icons.iconBase + 'noun_1180156.svg' // black X
+const checkIconURI = UI.icons.iconBase + 'noun_1180158.svg' // green checkmark; Continue
+// const greenPlusIconURI = UI.icons.iconBase + 'noun_34653_green.svg' // green checkmark; Continue
+
+function getStatusArea (context) {
+  var box = context.statusArea || context.div || null
+  if (box) return box
+  let dom = context.dom
+  if (context.dom) {
+    var body = dom.getElementsByTagName('body')[0]
+    box = dom.createEvent('div')
+    body.insertBefore(box, body.firstElementChild)
+    context.statusArea = box
+    return box
+  }
+  return null
+}
+
 function complain (context, err) {
-  var ele = context.statusArea || context.div
+  var ele = context.statusArea || context.div || getStatusArea(context)
   console.log('Complaint: ' + err)
-  return ele.appendChild(error.errorMessageBlock(context.dom, err))
+  if (ele) ele.appendChild(error.errorMessageBlock(context.dom, err))
 }
 
 // var UI.ns = require('./ns.js')
@@ -272,7 +291,11 @@ UI.widgets.deleteButtonWithCheck = function (dom, container, noun, deleteFunctio
   delButton.addEventListener('click', function (e) {
     container.removeChild(delButton) // Ask -- are you sure?
     var cancelButton = dom.createElement('button')
-    cancelButton.textContent = 'cancel'
+    // cancelButton.textContent = 'cancel'
+    cancelButton.setAttribute('style', UI.style.buttonStyle)
+    var img = cancelButton.appendChild(dom.createElement('img'))
+    img.setAttribute('src', cancelIconURI)
+
     container.appendChild(cancelButton).addEventListener('click', function (e) {
       container.removeChild(sureButton)
       container.removeChild(cancelButton)
@@ -280,6 +303,7 @@ UI.widgets.deleteButtonWithCheck = function (dom, container, noun, deleteFunctio
     }, false)
     var sureButton = dom.createElement('button')
     sureButton.textContent = 'Delete ' + noun
+    sureButton.setAttribute('style', UI.style.buttonStyle)
     container.appendChild(sureButton).addEventListener('click', function (e) {
       container.removeChild(sureButton)
       container.removeChild(cancelButton)
@@ -291,20 +315,39 @@ UI.widgets.deleteButtonWithCheck = function (dom, container, noun, deleteFunctio
 
 // ////////////////////////////////////// Grab a name for a new thing
 
+UI.widgets.button = function (dom, iconURI, text) {
+  var button = dom.createElement('button')
+  button.setAttribute('type', 'button')
+  button.setAttribute('style', UI.style.buttonStyle)
+  // button.innerHTML = text  // later, user preferences may make text preferred for some
+  var img = button.appendChild(dom.createElement('img'))
+  img.setAttribute('src', iconURI)
+  img.setAttribute('style', 'width: 2em; height: 2em;') // trial and error. 2em disappears
+  return button
+}
+
+UI.widgets.cancelButton = function (dom) {
+  return UI.widgets.button(dom, cancelIconURI, 'Cancel')
+}
+UI.widgets.continueButton = function (dom) {
+  return UI.widgets.button(dom, checkIconURI, 'Continue')
+}
+
 // Form to get the name of a new thing before we create it
 // Returns a promise of (a name or null if cancelled)
-UI.widgets.askName = function (dom, kb, container, predicate, klass) {
+UI.widgets.askName = function (dom, kb, container, predicate, klass, noun) {
   return new Promise(function (resolve, reject) {
     var form = dom.createElement('div') // form is broken as HTML behaviour can resurface on js error
     // classLabel = utils.label(ns.vcard('Individual'))
-    predicate = predicate || UI.ns.foaf('name')
-    var prompt = klass ? utils.label(klass) + '  ' : ''
-    prompt += utils.label(predicate) + ': '
+    predicate = predicate || UI.ns.foaf('name') // eg 'name' in user's language
+    noun = noun || (klass ? utils.label(klass) : '  ') // eg 'folder' in users's language
+    var prompt = noun + ' ' + utils.label(predicate) + ': '
     form.appendChild(dom.createElement('p')).textContent = prompt
     var namefield = dom.createElement('input')
     namefield.setAttribute('type', 'text')
     namefield.setAttribute('size', '100')
     namefield.setAttribute('maxLength', '2048') // No arbitrary limits
+    namefield.setAttribute('style', UI.style.textInputStyle)
     namefield.select() // focus next user input
     form.appendChild(namefield)
     container.appendChild(form)
@@ -324,18 +367,14 @@ UI.widgets.askName = function (dom, kb, container, predicate, klass) {
 
     form.appendChild(dom.createElement('br'))
 
-    var cancel = form.appendChild(dom.createElement('button'))
-    cancel.setAttribute('type', 'button')
-    cancel.innerHTML = 'Cancel'
+    var cancel = form.appendChild(UI.widgets.cancelButton(dom))
     cancel.addEventListener('click', function (e) {
       form.parentNode.removeChild(form)
       resolve(null)
     }, false)
 
-    var b = form.appendChild(dom.createElement('button'))
-    b.setAttribute('type', 'button')
-    b.innerHTML = 'Continue'
-    b.addEventListener('click', function (e) {
+    let continueButton = form.appendChild(UI.widgets.continueButton(dom))
+    continueButton.addEventListener('click', function (e) {
       gotName()
     }, false)
   }) // Promise

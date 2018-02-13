@@ -53,6 +53,7 @@ const UI = {
   pad: require('./pad'),
   preferences: require('./preferences'),
   store: require('./store'),
+  style: require('./style'),
   table: require('./table'),
   tabs: require('./tabs'),
   utils: require('./utils'),

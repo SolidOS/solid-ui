@@ -5,17 +5,20 @@
 // const widgets = require('./widgets/index')
 // const utils = require('./utils')
 
+// const UI = require('solid-ui')
+
 const UI = {
   authn: require('./signin'),
   icons: require('./iconBase'),
   log: require('./log'),
   ns: require('./ns'),
   store: require('./store'),
-  utils: require('./utils')
+  style: require('./style'),
+  utils: require('./utils'),
+  widgets: require('./widgets')
 }
 
 const kb = UI.store
-const buttonStyle = 'font-size: 100%; margin: 0.8em; padding:0.5em;'
 
 module.exports = {
   newThingUI
@@ -53,17 +56,12 @@ function newThingUI (context, panes) {
     star.setAttribute('style', iconStyle + (visible ? 'background-color: yellow;' : ''))
     styleTheIcons(visible ? '' : 'display: none;')
   }
-  /*
-  var resetIconBar = function () {
-    var visibile = false
-    star.setAttribute('style', iconStyle + (visible ? 'background-color: yellow;' : ''))
-    styleTheIcons('display: none;')
-  }
-  */
+
   star.addEventListener('click', selectNewTool)
-  var makeNewAppInstance = function (options) {
+
+  function makeNewAppInstance (options) {
     return new Promise(function (resolve, reject) {
-      var selectUI, selectUIParent
+      var selectUI // , selectUIParent
       var callbackWS = function (ws, newBase) {
         var newPaneOptions = {
           newBase: newBase,
@@ -84,7 +82,7 @@ function newThingUI (context, panes) {
               if (newPaneOptions.refreshTarget) {
                 newPaneOptions.refreshTarget.refresh() // Refresh the cntaining display
               }
-              selectUI.parentNode.removeChild(selectUI)
+              // selectUI.parentNode.removeChild(selectUI) It removes itself
             } else {
               var p = options.div.appendChild(dom.createElement('p'))
               p.setAttribute('style', 'font-size: 120%;')
@@ -93,7 +91,7 @@ function newThingUI (context, panes) {
                 "Your <a target='_blank' href='" + newPaneOptions.newInstance.uri + "'><b>new " + options.noun + '</b></a> is ready to be set up. ' +
                 "<br/><br/><a target='_blank' href='" + newPaneOptions.newInstance.uri + "'>Go to your new " + options.noun + '.</a>'
                 // selectUI.parentNode.removeChild(selectUI) // Clean up
-              selectUIParent.removeChild(selectUI) // Clean up
+              // selectUIParent.removeChild(selectUI) // Clean up
             }
             selectNewTool() // toggle star to plain and menu vanish again
           })
@@ -110,10 +108,10 @@ function newThingUI (context, panes) {
       if (!options.folder) { // No folder given? Ask user for full URI
         selectUI = UI.authn.selectWorkspace(dom, options, callbackWS)
         options.div.appendChild(selectUI)
-        selectUIParent = options.div
+        // selectUIParent = options.div
       } else {
-        var gotName = function (ok, name) {
-          if (!ok) {
+        var gotName = function (name) {
+          if (!name) {
             // selectUIParent.removeChild(selectUI)   itremves itself if cancelled
             selectNewTool() // toggle star to plain and menu vanish again
           } else {
@@ -125,9 +123,10 @@ function newThingUI (context, panes) {
             callbackWS(null, uri)
           }
         }
-        selectUI = getNameForm(dom, UI.store, options.noun, gotName)
-        options.div.appendChild(selectUI)
-        selectUIParent = options.div
+        UI.widgets.askName(dom, UI.store, options.div, UI.ns.foaf('name'), null, options.noun).then(gotName)
+        // selectUI = getNameForm(dom, UI.store, options.noun, gotName)
+        // options.div.appendChild(selectUI)
+        // selectUIParent = options.div
       }
     })
   } // makeNewAppInstance
@@ -188,19 +187,22 @@ function newThingUI (context, panes) {
 //
 // Used in contacts for new groups, individuals.
 //
+/*
 function getNameForm (dom, kb, classLabel, gotNameCallback) {
   var form = dom.createElement('div') // form is broken as HTML behaviour can resurface on js error
   form.innerHTML = '<p>Name of new ' + classLabel + ':</p>'
   var namefield = dom.createElement('input')
   namefield.setAttribute('type', 'text')
   namefield.setAttribute('size', '30')
-  namefield.setAttribute('style', buttonStyle)
+  namefield.setAttribute('style', UI.style.textInputStyle)
   namefield.setAttribute('maxLength', '2048') // No arbitrary limits
   namefield.select() // focus next user input
 
   var gotName = function () {
     namefield.setAttribute('class', 'pendingedit')
     namefield.disabled = true
+    continueButton.disabled = true
+    cancel.disabled = true
     gotNameCallback(true, namefield.value)
   }
 
@@ -213,22 +215,17 @@ function getNameForm (dom, kb, classLabel, gotNameCallback) {
 
   form.appendChild(dom.createElement('br'))
 
-  var cancel = form.appendChild(dom.createElement('button'))
-  cancel.setAttribute('type', 'button')
-  cancel.style.cssText = buttonStyle
-  cancel.innerHTML = 'Cancel'
+  var cancel = form.appendChild(UI.widgets.cancelButton(dom))
   cancel.addEventListener('click', function (e) {
     form.parentNode.removeChild(form)
     gotNameCallback(false)
   }, false)
 
-  var b = form.appendChild(dom.createElement('button'))
-  b.setAttribute('type', 'button')
-  b.innerHTML = 'Continue'
-  b.style.cssText = buttonStyle
-  b.addEventListener('click', function (e) {
+  var continueButton = form.appendChild(UI.widgets.continueButton(dom))
+  continueButton.addEventListener('click', function (e) {
     gotName()
   }, false)
 
   return form
 }
+*/

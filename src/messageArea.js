@@ -8,12 +8,13 @@ var UI = {
   pad: require('./'),
   rdf: require('rdflib'),
   store: require('./store'),
+  style: require('./style'),
   widgets: require('./widgets')
 }
 
 const utils = require('./utils')
 
-var buttonStyle = 'font-size: 100%; margin: 0.8em; padding:0.5em; background-color: white;'
+// var buttonStyle = 'font-size: 100%; margin: 0.8em; padding:0.5em; background-color: white;'
 
 module.exports = function (dom, kb, subject, messageStore, options) {
   kb = kb || UI.store
@@ -26,7 +27,7 @@ module.exports = function (dom, kb, subject, messageStore, options) {
 
   var newestFirst = !!options.newestFirst
 
-  var messageBodyStyle = 'white-space: pre-wrap; width: 90%; font-size:100%; background-color: white; border: 0.07em solid #eee; padding: .2em 0.5em; margin: 0.1em 1em 0.1em 1em'
+  var messageBodyStyle = 'white-space: pre-wrap; width: 90%; font-size:100%; border: 0.07em solid #eee; padding: .2em 0.5em; margin: 0.1em 1em 0.1em 1em;'
   // 'font-size: 100%; margin: 0.1em 1em 0.1em 1em;  background-color: white; white-space: pre-wrap; padding: 0.1em;'
 
   var div = dom.createElement('div')
@@ -100,7 +101,7 @@ module.exports = function (dom, kb, subject, messageStore, options) {
             '?content': kb.literal(field.value),
             '?date': dateStamp,
             '?creator': me}
-          renderMessage(bindings)
+          renderMessage(bindings, false) // not green
 
           field.value = '' // clear from out for reuse
           field.setAttribute('class', '')
@@ -111,7 +112,7 @@ module.exports = function (dom, kb, subject, messageStore, options) {
     }
     form.appendChild(dom.createElement('br'))
 
-    var field, submit
+    var field, sendButton
     var turnOnInput = function () {
       creatorAndDate(lhs, me, '', null)
 
@@ -120,7 +121,7 @@ module.exports = function (dom, kb, subject, messageStore, options) {
       middle.appendChild(field)
       field.rows = 3
       // field.cols = 40
-      field.setAttribute('style', messageBodyStyle)
+      field.setAttribute('style', messageBodyStyle + 'background-color: #eef;')
 
       field.addEventListener('keyup', function (e) { // User preference?
         if (e.keyCode === 13) {
@@ -130,14 +131,11 @@ module.exports = function (dom, kb, subject, messageStore, options) {
         }
       }, false)
 
-      submit = dom.createElement('button')
-      submit.style = buttonStyle
-      // submit.disabled = true // until the text has been modified?
       rhs.innerHTML = ''
-      submit.textContent = 'send' // @@ I18n
-      submit.setAttribute('style', 'float: right;')
-      submit.addEventListener('click', sendMessage, false)
-      rhs.appendChild(submit)
+      sendButton = UI.widgets.button(dom, UI.icons.iconBase + 'noun_383448.svg', 'Send')
+      sendButton.setAttribute('style', UI.style.buttonStyle + 'float: right;')
+      sendButton.addEventListener('click', sendMessage, false)
+      rhs.appendChild(sendButton)
     }
 
     let context = {div: middle, dom: dom}
@@ -168,7 +166,7 @@ module.exports = function (dom, kb, subject, messageStore, options) {
 
   // ///////////////////////////////////////////////////////////////////////
 
-  var syncMessages = function (about, messageTable) {
+  function syncMessages (about, messageTable) {
     var displayed = {}
     var ele, ele2
     for (ele = messageTable.firstChild; ele; ele = ele.nextSibling) {
@@ -213,10 +211,10 @@ module.exports = function (dom, kb, subject, messageStore, options) {
       '?date': kb.any(message, DCT('created')),
       '?content': kb.any(message, ns.sioc('content'))
     }
-    renderMessage(bindings)
+    renderMessage(bindings, true) // fresh from elsewhere
   }
 
-  var renderMessage = function (bindings) {
+  var renderMessage = function (bindings, fresh) {
     var creator = bindings['?creator']
     var message = bindings['?msg']
     var date = bindings['?date']
@@ -250,7 +248,8 @@ module.exports = function (dom, kb, subject, messageStore, options) {
     var td2 = dom.createElement('td')
     tr.appendChild(td2)
     var pre = dom.createElement('p')
-    pre.setAttribute('style', messageBodyStyle)
+    pre.setAttribute('style', messageBodyStyle +
+      (fresh ? 'background-color: #e8ffe8;' : 'background-color: #white;'))
     td2.appendChild(pre)
     pre.textContent = content.value
 
@@ -286,6 +285,7 @@ module.exports = function (dom, kb, subject, messageStore, options) {
   // Messages with date, author etc
 
   messageTable = dom.createElement('table')
+  messageTable.fresh = false
   div.appendChild(messageTable)
   messageTable.setAttribute('style', 'width: 100%;') // fill that div!
 
@@ -312,10 +312,13 @@ module.exports = function (dom, kb, subject, messageStore, options) {
     query.pat.add(v['msg'], ns.foaf('maker'), v['creator'])
     query.pat.add(v['msg'], ns.sioc('content'), v['content'])
   }
-
-  kb.query(query, renderMessage)
+  function doneQuery () {
+    messageTable.fresh = true // any new are fresh and so will be greenish
+  }
+  kb.query(query, renderMessage, undefined, doneQuery)
   div.refresh = function () {
     syncMessages(subject, messageTable)
   }
+  // syncMessages(subject, messageTable) // no the query will do this async
   return div
 }
