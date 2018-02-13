@@ -44,10 +44,24 @@ const cancelIconURI = UI.icons.iconBase + 'noun_1180156.svg' // black X
 const checkIconURI = UI.icons.iconBase + 'noun_1180158.svg' // green checkmark; Continue
 // const greenPlusIconURI = UI.icons.iconBase + 'noun_34653_green.svg' // green checkmark; Continue
 
+function getStatusArea (context) {
+  var box = context.statusArea || context.div || null
+  if (box) return box
+  let dom = context.dom
+  if (context.dom) {
+    var body = dom.getElementsByTagName('body')[0]
+    box = dom.createEvent('div')
+    body.insertBefore(box, body.firstElementChild)
+    context.statusArea = box
+    return box
+  }
+  return null
+}
+
 function complain (context, err) {
-  var ele = context.statusArea || context.div
+  var ele = context.statusArea || context.div || getStatusArea(context)
   console.log('Complaint: ' + err)
-  return ele.appendChild(error.errorMessageBlock(context.dom, err))
+  if (ele) ele.appendChild(error.errorMessageBlock(context.dom, err))
 }
 
 // var UI.ns = require('./ns.js')

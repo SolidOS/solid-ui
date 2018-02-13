@@ -30,7 +30,6 @@ UI.aclControl.preventBrowserDropEvents = function (document) {
   function preventDrag (e) {
     e.stopPropagation()
     e.preventDefault()
-  // console.log("@@@@ document-level drag suppressed: " + e.dataTransfer.dropEffect)
   }
 
   function handleDrop (e) {
@@ -40,15 +39,6 @@ UI.aclControl.preventBrowserDropEvents = function (document) {
         e.stopPropagation()
         e.preventDefault()
         console.log('@@@@ document-level DROP suppressed: ' + e.dataTransfer.dropEffect)
-      /*
-              var file = e.dataTransfer.files[0]
-              var reader = new FileReader()
-
-              reader.onload = function (event) {
-                window.open(reader.result)
-              }
-              reader.readAsDataURL(file)
-      */
       }
     }
   }
@@ -93,8 +83,6 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
   // later, allow it to be pressed to make pubicly viewable?
   var publicAccessCell = bottomRow.appendChild(dom.createElement('td'))
   var publicAccessButton = publicAccessCell.appendChild(UI.widgets.button(dom, UI.icons.iconBase + 'noun_98053.svg', 'Public'))
-  // publicAccessButton.setAttribute('src', UI.iconBase + 'noun_98053.svg') // World
-  // publicAccessButton.setAttribute('style', UI.style.buttonStyle)
   UI.widgets.makeDraggable(publicAccessButton, UI.ns.foaf('Agent')) // Represent everyone
 
   var bigButtonStyle = 'border-radius: 0.3em; background-color: white; border: 0.1em solid #888;'

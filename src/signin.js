@@ -91,7 +91,7 @@ function saveUser (webId, context) {
     webIdUri = webId.uri || webId
   }
 
-  UI.preferences.set('me', webIdUri || '')
+  // UI.preferences.set('me', webIdUri || '')
 
   return webIdUri ? $rdf.namedNode(webIdUri) : null
 }
@@ -107,10 +107,6 @@ function defaultTestUser () {
     return offlineId
   }
 
-/*  Stop storing it in prefs now we have localStorage
-  let webId = UI.preferences.get('me')
-  return webId ? $rdf.sym(webId) : null
-  */
   return null
 }
 
@@ -338,7 +334,9 @@ function ensureTypeIndexes (context) {
                       resolve(context)
                     })
                     .catch(function (e) {
-                      reject(new Error('Creating new index file ' + e))
+                      let msg = 'Creating new index file ' + e
+                      widgets.complain(context, msg)
+                      reject(new Error(msg))
                     })
                 }
               })
@@ -813,14 +811,14 @@ function loginStatusBox (dom, listener) {
     if (!newidURI) { return }
 
     let uri = newidURI.uri || newidURI
-    UI.preferences.set('me', uri)
+//    UI.preferences.set('me', uri)
     me = $rdf.sym(uri)
     box.refresh()
     if (listener) listener(me.uri)
   }
 
   var zapIt = function () {
-    UI.preferences.set('me', '')
+    // UI.preferences.set('me', '')
     var message = 'Your Web ID was ' + me + '. It has been forgotten.'
     me = null
     try {
