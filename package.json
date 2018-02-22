@@ -42,7 +42,7 @@
   "dependencies": {
     "escape-html": "^1.0.3",
     "node-uuid": "^1.4.7",
-    "rdflib": "^0.16.3",
+    "rdflib": ">=0.16.6",
     "solid-auth-client": "^1.0.0",
     "solid-auth-tls": "^0.1.2"
   },

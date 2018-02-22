@@ -326,54 +326,63 @@ function ensureTypeIndexes (context) {
   return new Promise(function (resolve, reject) {
     return loadTypeIndexes(context)
       .then(function (context) {
-        var ns = UI.ns
-        var kb = UI.store
-        var me = context.me
-        var newIndex
-
-        var makeIndex = function (context, visibility) {
-          return new Promise(function (resolve, reject) {
-            var relevant = {'private': context.preferencesFile, 'public': context.publicProfile}[visibility]
-
-            if (context.index[visibility].length === 0) {
-              newIndex = $rdf.sym(context.preferencesFile.dir().uri + visibility + 'TypeIndex.ttl')
-              console.log('Linking to new fresh type index ' + newIndex)
-              var addMe = [ $rdf.st(me, ns.solid(visibility + 'TypeIndex'), newIndex, relevant) ]
-
-              UI.store.updater.update([], addMe, function (uri, ok, body) {
-                if (!ok) {
-                  return reject(new Error('Error saving type index link saving back ' + uri + ': ' + body))
-                } else {
-                  context.index[visibility].push(newIndex)
-                  console.log('Creating new fresh type index ' + newIndex)
-                  if (!window.confirm('Creating new list of things  ' + newIndex)) {
-                    return reject(new Error('Cancelled by user: writing of ' + newIndex))
-                  }
-
-                  kb.fetcher.webOperation('PUT', newIndex, {data: '# ' + new Date() + ' Blank initial Type index\n'})
-                    .then(function (xhr) {
-                      resolve(context)
-                    })
-                    .catch(function (e) {
-                      let msg = 'Creating new index file ' + e
-                      widgets.complain(context, msg)
-                      reject(new Error(msg))
-                    })
-                }
-              })
-            } else {
-              resolve(context) // exists
-            }
-          }) // promise
-        } // makeIndex
-
-        var ps = [ makeIndex(context, 'private'), makeIndex(context, 'public') ]
-
-        return Promise.all(ps)
-          .then(() => {
-            resolve(context)
-          })
+        console.log('ensureTypeIndexes: Type indexes exist already')
+        resolve(context)
       }) // .then
+      .catch(function (error) {
+        if (confirm('You don\'t have, or you couldn\'t acess,  type indexes --lists of things of different types. Create new empty ones?' + error)) {
+          var ns = UI.ns
+          var kb = UI.store
+          var me = context.me
+          var newIndex
+
+          var makeIndex = function (context, visibility) {
+            return new Promise(function (resolve, reject) {
+              var relevant = {'private': context.preferencesFile, 'public': context.publicProfile}[visibility]
+
+              if (context.index[visibility].length === 0) {
+                newIndex = $rdf.sym(context.preferencesFile.dir().uri + visibility + 'TypeIndex.ttl')
+                console.log('Linking to new fresh type index ' + newIndex)
+                var addMe = [ $rdf.st(me, ns.solid(visibility + 'TypeIndex'), newIndex, relevant) ]
+
+                UI.store.updater.update([], addMe, function (uri, ok, body) {
+                  if (!ok) {
+                    return reject(new Error('Error saving type index link saving back ' + uri + ': ' + body))
+                  } else {
+                    context.index[visibility].push(newIndex)
+                    console.log('Creating new fresh type index ' + newIndex)
+                    if (!window.confirm('Creating new list of things  ' + newIndex)) {
+                      return reject(new Error('Cancelled by user: writing of ' + newIndex))
+                    }
+
+                    kb.fetcher.webOperation('PUT', newIndex, {data: '# ' + new Date() + ' Blank initial Type index\n'})
+                      .then(function (xhr) {
+                        resolve(context)
+                      })
+                      .catch(function (e) {
+                        let msg = 'Creating new index file ' + e
+                        widgets.complain(context, msg)
+                        reject(new Error(msg))
+                      })
+                  }
+                })
+              } else {
+                resolve(context) // exists
+              }
+            }) // promise
+          } // makeIndex
+
+          var ps = [ makeIndex(context, 'private'), makeIndex(context, 'public') ]
+
+          return Promise.all(ps)
+            .then(() => {
+              resolve(context)
+            })
+        } else { // user cancel
+          // @@ code me
+        }
+      }
+      )
   }) // Promise
 }
 
