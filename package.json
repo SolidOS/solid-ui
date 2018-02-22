@@ -11,7 +11,7 @@
     "build-lib": "babel src -d lib",
     "build": "npm run build-lib",
     "postversion": "git push origin master --follow-tags",
-    "prepublish": "npm run build",
+    "prepublishOnly": "npm run build",
     "standard": "standard",
     "test": "npm run standard"
   },
