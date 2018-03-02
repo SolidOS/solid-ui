@@ -31,7 +31,7 @@ module.exports = {
 **                (suppresses asking for a full URI or workspace)
 **
 */
-function newThingUI (context, panes) {
+function newThingUI (context, thePanes) {
   const dom = context.dom
   const div = context.div
   if (context.me && !context.me.uri) throw new Error('newThingUI:  Invalid userid: ' + context.me)
@@ -132,8 +132,8 @@ function newThingUI (context, panes) {
   } // makeNewAppInstance
 
   var iconArray = []
-  for (var pn in panes) {
-    var pane = panes[pn]
+  for (var pn in thePanes) {
+    var pane = thePanes[pn]
     if (pane.mintNew) {
       var icon = context.div.appendChild(dom.createElement('img'))
       icon.setAttribute('src', pane.icon)

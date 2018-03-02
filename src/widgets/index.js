@@ -543,7 +543,7 @@ UI.widgets.field[UI.ns.ui('Form').uri] =
     if (already[key]) { // been there done that
       box.appendChild(dom.createTextNode('Group: see above ' + key))
       var plist = [$rdf.st(subject, UI.ns.owl('sameAs'), subject)] // @@ need prev subject
-      UI.outline.appendPropertyTRs(box, plist)
+      dom.outlineManager.appendPropertyTRs(box, plist)
       return box
     }
     // box.appendChild(dom.createTextNode('Group: first time, key: '+key))
@@ -1111,17 +1111,16 @@ UI.widgets.openHrefInOutlineMode = function (e) {
   e.stopPropagation()
   var target = utils.getTarget(e)
   var uri = target.getAttribute('href')
-  if (!uri) console.log('No href found \n')
-  // subject term, expand, pane, solo, referrer
-  // dump('click on link to:' +uri+'\n')
-  if (UI.outline) {
-    UI.outline.GotoSubject(UI.store.sym(uri), true, undefined, true, undefined)
-  } else if (window && window.UI && window.UI.outline) {
-    window.UI.outline.GotoSubject(UI.store.sym(uri), true, undefined, true, undefined)
+  if (!uri) return console.log('openHrefInOutlineMode: No href found!\n')
+  const dom = window.document
+  if (dom.outlineManager) {
+    dom.outlineManager.GotoSubject(UI.store.sym(uri), true, undefined, true, undefined)
+  } else if (window && window.panes && window.panes.getOutliner) {
+    window.panes.getOutliner().GotoSubject(UI.store.sym(uri), true, undefined, true, undefined)
   } else {
     console.log("ERROR: Can't access outline manager in this config")
   }
-// UI.outline.GotoSubject(UI.store.sym(uri), true, undefined, true, undefined)
+// dom.outlineManager.GotoSubject(UI.store.sym(uri), true, undefined, true, undefined)
 }
 
 // We make a URI in the annotation store out of the URI of the thing to be annotated.
@@ -1264,7 +1263,7 @@ UI.widgets.linkButton = function (dom, object) {
   b.textContent = 'Goto ' + utils.label(object)
   b.addEventListener('click', function (e) {
     // b.parentNode.removeChild(b)
-    UI.outline.GotoSubject(object, true, undefined, true, undefined)
+    dom.outlineManager.GotoSubject(object, true, undefined, true, undefined)
   }, true)
   return b
 }
@@ -1413,7 +1412,7 @@ UI.widgets.promptForNew = function (dom, kb, subject, predicate, theClass, form,
       b.setAttribute('style', 'float: right;')
       b.innerHTML = 'Goto ' + utils.label(theClass)
       b.addEventListener('click', function (e) {
-        UI.outline.GotoSubject(theClass, true, undefined, true, undefined)
+        dom.outlineManager.GotoSubject(theClass, true, undefined, true, undefined)
       }, false)
       return box
     }
