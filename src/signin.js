@@ -75,19 +75,16 @@ function findOriginOwner (doc, callback) {
  * @returns {NamedNode|null} Returns the Web ID, after setting it
  */
 function saveUser (webId, context) {
-  if (context) {
-    context.me = $rdf.namedNode(webId)
-  }
-
-  let webIdUri
-
+  let webIdUri, me
   if (webId) {
     webIdUri = webId.uri || webId
+    let me = $rdf.namedNode(webIdUri)
+    if (context) {
+      context.me = me
+    }
+    return me
   }
-
-  // UI.preferences.set('me', webIdUri || '')
-
-  return webIdUri ? $rdf.namedNode(webIdUri) : null
+  return me || null
 }
 
 /**
@@ -164,35 +161,28 @@ function logIn (context) {
  */
 function logInLoadProfile (context) {
   if (context.publicProfile) { return Promise.resolve(context) } // already done
-
   const fetcher = UI.store.fetcher
-  let profileDocument
-
-  return logIn(context)
+  var profileDocument
+  return new Promise(function (resolve, reject) {
+    logIn(context)
     .then(context => {
       let webID = context.me
       if (!webID) {
         throw new Error('Could not log in')
       }
-
       profileDocument = webID.doc()
-
       // Load the profile into the knowledge base (fetcher.store)
-      return fetcher.fetch(profileDocument)
-    })
-    .then(result => {
-      if (!result.ok) {
-        throw new Error(result.error)
-      }
-
-      context.publicProfile = profileDocument
-      return context
-    })
-    .catch(err => {
-      let message = 'Cannot load profile ' + profileDocument + ' : ' + err
-      context.div.appendChild(error.errorMessageBlock(context.dom, message))
-      return context
-    })
+      fetcher.load(profileDocument).then(response => {
+        context.publicProfile = profileDocument
+        resolve(context)
+      }, err => {
+        let message = 'Logged in but cannot load profile ' + profileDocument + ' : ' + err
+        context.div.appendChild(error.errorMessageBlock(context.dom, message))
+        reject(message)
+      })
+    },
+    err => { reject(new Error("Can't log in: " + err)) })
+  })
 }
 
 /**
@@ -209,39 +199,35 @@ function loadPreferences (context) {
   if (context.preferencesFile) return Promise.resolve(context) // already done
 
   const kb = UI.store
-  const box = context.statusArea || context.div || null
+  const statusArea = context.statusArea || context.div || null
   var progressDisplay
-
   return new Promise(function (resolve, reject) {
-    let preferencesFile = kb.any(context.me, UI.ns.space('preferencesFile'))
-    function complain (message) {
-      message = 'loadPreferences: ' + message
-      if (box) {
-        box.innerHTML = ''
-        box.appendChild(error.errorMessageBlock(context.dom, message))
+    logInLoadProfile(context).then(context => {
+      let preferencesFile = kb.any(context.me, UI.ns.space('preferencesFile'))
+      function complain (message) {
+        message = 'loadPreferences: ' + message
+        if (statusArea) {
+          // statusArea.innerHTML = ''
+          statusArea.appendChild(error.errorMessageBlock(context.dom, message))
+        }
+        console.log(message)
+        reject(new Error(message))
       }
-      console.log(message)
-      reject(new Error(message))
-    }
-    if (!preferencesFile) {
-      let message = "Can't find a preferences file pointer in profile " + context.profile
-      return complain(message)
-    }
 
-    context.preferencesFile = preferencesFile
-    if (box) {
-      progressDisplay = error.errorMessageBlock(context.dom,
-          '(loading preferences ' + preferencesFile + ')', 'straw')
-      box.appendChild(progressDisplay)
-    }
-
-    kb.fetcher.load(preferencesFile).then(function () {
-      if (progressDisplay) {
-        progressDisplay.parentNode.removeChild(progressDisplay)
+      if (!preferencesFile) {
+        let message = "Can't find a preferences file pointer in profile " + context.profile
+        return reject(message)
       }
-      return resolve(context)
-    })
-      .catch(function (ok, message, response) { // Really important to look at why
+
+      // //// Load preferences file
+      kb.fetcher.load(preferencesFile)
+      .then(function () {
+        if (progressDisplay) {
+          progressDisplay.parentNode.removeChild(progressDisplay)
+        }
+        return resolve(context)
+      },
+      function (ok, message, response) { // Really important to look at why
         let status = response.status
         console.log('HTTP status ' + status + ' for pref file ' + preferencesFile)
         let m2
@@ -260,9 +246,30 @@ function loadPreferences (context) {
           m2 = 'Strange: Error ' + status + ' trying to read your preferences file.' + message
         }
         alert(m2)
-      })
+      }) // load prefs file then
+    }, err => { // Fail initial login load prefs
+      reject(new Error('(via loadPrefs) ' + err))
+    }, err => reject(err))
   })
 }
+
+/*  OLD CODE
+
+    if (!preferencesFile) {
+      let message = "Can't find a preferences file pointer in profile " + context.profile
+      return complain(message)
+    }
+
+    context.preferencesFile = preferencesFile
+    if (box) {
+      progressDisplay = error.errorMessageBlock(context.dom,
+          '(loading preferences ' + preferencesFile + ')', 'straw')
+      box.appendChild(progressDisplay)
+    }
+
+  })
+}
+*/
 
 /**
  * Resolves with the same context, outputting
@@ -278,34 +285,28 @@ function loadTypeIndexes (context) {
   var ns = UI.ns
   var kb = UI.store
 
-  return logInLoadProfile(context)
-    .then(loadPreferences)
-
-    .catch((e) => {
-      widgets.complain(context, e)
-      throw new Error('Error loading preferences (for type index): ' + e)
-    })
-
-    .then((context) => {
+  return new Promise(function (resolve, reject) {
+    loadPreferences.then(context => {
       var me = context.me
       context.index = context.index || {}
       context.index.private = kb.each(me, ns.solid('privateTypeIndex'), undefined, context.preferencesFile)
-      context.index.public = kb.each(me, ns.solid('publicTypeIndex'), undefined, context.publicProfile)
-
-      var ix = context.index.private.concat(context.index.public)
-      if (ix.length === 0) {
-        return context
-      } else {
-        return kb.fetcher.load(ix)
+      if (context.index.private.length === 0) {
+        return reject(new Error('Your preference file ' + context.preferencesFile + ' does not point to a private type index.'))
       }
+      context.index.public = kb.each(me, ns.solid('publicTypeIndex'), undefined, context.publicProfile)
+      if (context.index.public.length === 0) {
+        return reject(new Error('Your preference file ' + context.preferencesFile + ' does not point to a public type index.'))
+      }
+      var ix = context.index.private.concat(context.index.public)
+      kb.fetcher.load(ix).then(responses => {
+        resolve(context)
+      }, err => {
+        reject(new Error('Error loading type indexes: ' + err))
+      })
+    }, err => {
+      reject(new Error('(for type indexes) cant load prefs' + err))
     })
-
-    .then(() => context)
-
-    .catch((e) => {
-      widgets.complain(context, e)
-      throw new Error('Error loading type indexes: ' + e)
-    })
+  })
 }
 
 /**
@@ -328,21 +329,34 @@ function ensureTypeIndexes (context) {
       .then(function (context) {
         console.log('ensureTypeIndexes: Type indexes exist already')
         resolve(context)
-      }) // .then
-      .catch(function (error) {
+      }, function (error) {
         if (confirm('You don\'t have, or you couldn\'t acess,  type indexes --lists of things of different types. Create new empty ones?' + error)) {
           var ns = UI.ns
           var kb = UI.store
           var me = context.me
           var newIndex
 
-          var makeIndex = function (context, visibility) {
+          var makeIndexIfNecesary = function (context, visibility) {
             return new Promise(function (resolve, reject) {
               var relevant = {'private': context.preferencesFile, 'public': context.publicProfile}[visibility]
 
+              function putIndex (newIndex) {
+                kb.fetcher.webOperation('PUT', newIndex, {data: '# ' + new Date() + ' Blank initial Type index\n'})
+                  .then(function (xhr) {
+                    resolve(context)
+                  }, function (e) {
+                    let msg = 'Creating new index file ' + e
+                    widgets.complain(context, msg)
+                    reject(new Error(msg))
+                  })
+              }
+
               if (context.index[visibility].length === 0) {
-                newIndex = $rdf.sym(context.preferencesFile.dir().uri + visibility + 'TypeIndex.ttl')
+                newIndex = $rdf.sym(relevant.dir().uri + visibility + 'TypeIndex.ttl')
                 console.log('Linking to new fresh type index ' + newIndex)
+                if (!confirm('Ok to create a new empty index file at ' + newIndex + ', overwriting anything that was there?')) {
+                  reject(new Error('cancelled by user'))
+                }
                 var addMe = [ $rdf.st(me, ns.solid(visibility + 'TypeIndex'), newIndex, relevant) ]
 
                 UI.store.updater.update([], addMe, function (uri, ok, body) {
@@ -351,28 +365,28 @@ function ensureTypeIndexes (context) {
                   } else {
                     context.index[visibility].push(newIndex)
                     console.log('Creating new fresh type index ' + newIndex)
-                    if (!window.confirm('Creating new list of things  ' + newIndex)) {
-                      return reject(new Error('Cancelled by user: writing of ' + newIndex))
-                    }
-
-                    kb.fetcher.webOperation('PUT', newIndex, {data: '# ' + new Date() + ' Blank initial Type index\n'})
-                      .then(function (xhr) {
-                        resolve(context)
-                      })
-                      .catch(function (e) {
-                        let msg = 'Creating new index file ' + e
-                        widgets.complain(context, msg)
-                        reject(new Error(msg))
-                      })
+                    putIndex(newIndex)
                   }
                 })
-              } else {
-                resolve(context) // exists
+              } else {  // officially exists
+                var ix = context.index[visibility][0]
+                kb.fetcher.load(ix).then(response => { //  physically exists
+                  resolve(context)
+                }, err => {
+                  if (err.status === 404) {
+                    if (!confirm('Ok to create a new empty index file at ' + ix + ', overwriting anything that was there?')) {
+                      reject(new Error('cancelled by user'))
+                    }
+                    putIndex(ix)
+                  } else {
+                    reject(new Error('You should have a type index file ' + ix + ', but ' + err))
+                  }
+                })
               }
             }) // promise
-          } // makeIndex
+          } // makeIndexIfNecesary
 
-          var ps = [ makeIndex(context, 'private'), makeIndex(context, 'public') ]
+          var ps = [ makeIndexIfNecesary(context, 'private'), makeIndexIfNecesary(context, 'public') ]
 
           return Promise.all(ps)
             .then(() => {
@@ -432,8 +446,7 @@ function findAppInstances (context, klass) {
       context.containers = containers
 
       return context
-    })
-    .catch((e) => {
+    }, e => {
       throw new Error('Error looking for instances of ' + klass + ': ' + e)
     })
 }
@@ -456,11 +469,6 @@ function registrationControl (context, instance, klass) {
   context.div.appendChild(box)
 
   return ensureTypeIndexes(context)
-    .catch(function (e) {
-      var msg = 'registrationControl: Type indexes not available: ' + e
-      context.div.appendChild(UI.error.errorMessageBlock(context.dom, e))
-      console.log(msg)
-    })
     .then(function (context) {
       box.innerHTML = '<table><tbody><tr></tr><tr></tr></tbody></table>' // tbody will be inserted anyway
       box.setAttribute('style', 'font-size: 120%; text-align: right; padding: 1em; border: solid gray 0.05em;')
@@ -493,6 +501,11 @@ function registrationControl (context, instance, klass) {
 
       // widgets.buildCheckboxForm(dom, kb, lab, del, ins, form, store)
       return context
+    },
+    function (e) {
+      var msg = 'registrationControl: Type indexes not available: ' + e
+      context.div.appendChild(UI.error.errorMessageBlock(context.dom, e))
+      console.log(msg)
     })
     .catch(function (e) {
       var msg = 'registrationControl: Error making panel:' + e
@@ -811,12 +824,11 @@ function checkUser (setUserCallback) {
 
   return solidAuthClient.currentSession()
 
-    .then(webIdFromSession)
-
-    .catch(err => {
-      console.log('Error fetching currentSession:', err)
-      return null
-    })
+    .then(webIdFromSession,
+      err => {
+        console.log('Error fetching currentSession:', err)
+        return null
+      })
 
     .then(webId => {
       // if (webId.startsWith('dns:')) {  // legacy rww.io pseudo-users
