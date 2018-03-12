@@ -172,7 +172,9 @@ function logInLoadProfile (context) {
       }
       profileDocument = webID.doc()
       // Load the profile into the knowledge base (fetcher.store)
-      fetcher.load(profileDocument).then(response => {
+      // creds: Web arch should let us just load by turning off creds helps CORS
+      // reload: Gets around a specifc old Chrome bug caching/origin/cors
+      fetcher.load(profileDocument, {withCredentials: false, cache: 'reload'}).then(response => {
         context.publicProfile = profileDocument
         resolve(context)
       }, err => {
@@ -215,16 +217,17 @@ function loadPreferences (context) {
       }
 
       if (!preferencesFile) {
-        let message = "Can't find a preferences file pointer in profile " + context.profile
-        return reject(message)
+        let message = "Can't find a preferences file pointer in profile " + context.publicProfile
+        return reject(new Error(message))
       }
 
       // //// Load preferences file
-      kb.fetcher.load(preferencesFile)
+      kb.fetcher.load(preferencesFile,  {withCredentials: true})
       .then(function () {
         if (progressDisplay) {
           progressDisplay.parentNode.removeChild(progressDisplay)
         }
+        context.preferencesFile = preferencesFile
         return resolve(context)
       },
       function (ok, message, response) { // Really important to look at why
@@ -253,24 +256,6 @@ function loadPreferences (context) {
   })
 }
 
-/*  OLD CODE
-
-    if (!preferencesFile) {
-      let message = "Can't find a preferences file pointer in profile " + context.profile
-      return complain(message)
-    }
-
-    context.preferencesFile = preferencesFile
-    if (box) {
-      progressDisplay = error.errorMessageBlock(context.dom,
-          '(loading preferences ' + preferencesFile + ')', 'straw')
-      box.appendChild(progressDisplay)
-    }
-
-  })
-}
-*/
-
 /**
  * Resolves with the same context, outputting
  * output: index.public, index.private
@@ -286,7 +271,7 @@ function loadTypeIndexes (context) {
   var kb = UI.store
 
   return new Promise(function (resolve, reject) {
-    loadPreferences.then(context => {
+    loadPreferences(context).then(context => {
       var me = context.me
       context.index = context.index || {}
       context.index.private = kb.each(me, ns.solid('privateTypeIndex'), undefined, context.preferencesFile)
@@ -304,7 +289,7 @@ function loadTypeIndexes (context) {
         reject(new Error('Error loading type indexes: ' + err))
       })
     }, err => {
-      reject(new Error('(for type indexes) cant load prefs' + err))
+      reject(new Error('[LTI] ' + err))
     })
   })
 }
@@ -330,7 +315,7 @@ function ensureTypeIndexes (context) {
         console.log('ensureTypeIndexes: Type indexes exist already')
         resolve(context)
       }, function (error) {
-        if (confirm('You don\'t have, or you couldn\'t acess,  type indexes --lists of things of different types. Create new empty ones?' + error)) {
+        if (confirm('You don\'t have, or you couldn\'t acess,  type indexes --lists of things of different types. Create new empty ones? ' + error)) {
           var ns = UI.ns
           var kb = UI.store
           var me = context.me
@@ -351,6 +336,8 @@ function ensureTypeIndexes (context) {
                   })
               }
 
+              context.index = context.index || {}
+              context.index[visibility] = context.index[visibility] || []
               if (context.index[visibility].length === 0) {
                 newIndex = $rdf.sym(relevant.dir().uri + visibility + 'TypeIndex.ttl')
                 console.log('Linking to new fresh type index ' + newIndex)
@@ -1119,9 +1106,10 @@ function selectWorkspace (dom, appDetails, callbackWS) {
     table.appendChild(trLast)
   } // displayOptions
 
-  logInLoadProfile(context)  // kick off async operation
-    .then(loadPreferences)
-    .then(displayOptions)
+  loadPreferences(context)  // kick off async operation
+    .then(displayOptions, err => {
+      box.appendChild(UI.utils.errorMessageBlock(err))
+    })
 
   return box  // return the box element, while login proceeds
 } // selectWorkspace
