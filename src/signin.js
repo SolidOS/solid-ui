@@ -1,7 +1,10 @@
 /**
  * signin.js
  *
- * Signing in, signing up, workspace selection, app spawning
+ * Signing in, signing up, profile and preferences reloading
+ * Type index management
+ *
+ *  Many functions in this module take a context object, add to it, and return a promise of it.
  */
  /* global $SOLID_GLOBAL_config localStorage confirm alert */
 
