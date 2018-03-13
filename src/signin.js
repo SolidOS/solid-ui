@@ -172,8 +172,8 @@ function logInLoadProfile (context) {
       }
       profileDocument = webID.doc()
       // Load the profile into the knowledge base (fetcher.store)
-      // creds: Web arch should let us just load by turning off creds helps CORS
-      // reload: Gets around a specifc old Chrome bug caching/origin/cors
+      //   withCredentials: Web arch should let us just load by turning off creds helps CORS
+      //   reload: Gets around a specifc old Chrome bug caching/origin/cors
       fetcher.load(profileDocument, {withCredentials: false, cache: 'reload'}).then(response => {
         context.publicProfile = profileDocument
         resolve(context)
@@ -222,7 +222,7 @@ function loadPreferences (context) {
       }
 
       // //// Load preferences file
-      kb.fetcher.load(preferencesFile,  {withCredentials: true})
+      kb.fetcher.load(preferencesFile, {withCredentials: true})
       .then(function () {
         if (progressDisplay) {
           progressDisplay.parentNode.removeChild(progressDisplay)
@@ -230,8 +230,9 @@ function loadPreferences (context) {
         context.preferencesFile = preferencesFile
         return resolve(context)
       },
-      function (ok, message, response) { // Really important to look at why
-        let status = response.status
+      function (err) { // Really important to look at why
+        let status = err.status
+        let message = err.message
         console.log('HTTP status ' + status + ' for pref file ' + preferencesFile)
         let m2
         if (status === 401) {
@@ -397,45 +398,41 @@ function ensureTypeIndexes (context) {
  * @param context.instances
  * @param context.containers
  * @param klass
- * @returns {Promise}
+ * @returns {Promise}  of context
  */
 function findAppInstances (context, klass) {
   var kb = UI.store
   var ns = UI.ns
   var fetcher = UI.store.fetcher
-  var registrations = kb.each(undefined, ns.solid('forClass'), klass)
-  var instances = []
-  var containers = []
 
-  return loadTypeIndexes(context)
-    .then((indexes) => {
-      // var ix = context.index.private.concat(context.index.public)
-
+  return new Promise(function (resolve, reject) {
+    loadTypeIndexes(context).then(indexes => {
+      var registrations = kb.each(undefined, ns.solid('forClass'), klass)
+      var instances = []
+      var containers = []
       for (var r = 0; r < registrations.length; r++) {
         instances = instances.concat(kb.each(klass, ns.solid('instance')))
         containers = containers.concat(kb.each(klass, ns.solid('instanceContainer')))
       }
-
       if (!containers.length) {
-        return
+        context.instances = []
+        context.containers = []
+        resolve(context)
       }
-
-      return fetcher.load(containers)
-        .then(() => {
+      fetcher.load(containers)
+        .then(responses => {
           for (var i = 0; i < containers.length; i++) {
             var cont = containers[i]
             instances = instances.concat(kb.each(cont, ns.ldp('contains')))
           }
+          context.instances = instances
+          context.containers = containers
+          resolve(context)
+        }, err => {
+          reject(new Error('[FAI] Unable to load containers' + err))
         })
-    })
-    .then(() => {
-      context.instances = instances
-      context.containers = containers
-
-      return context
-    }, e => {
-      throw new Error('Error looking for instances of ' + klass + ': ' + e)
-    })
+    }, err => reject(new Error('Error looking for instances of ' + klass + ': ' + err)))
+  })
 }
 
 /**
