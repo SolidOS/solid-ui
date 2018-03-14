@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/linkeddata/solid-ui"
+    "url": "https://github.com/solid/solid-ui"
   },
   "keywords": [
     "solid",
@@ -36,9 +36,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/linkeddata/solid-ui/issues"
+    "url": "https://github.com/solid/solid-ui/issues"
   },
-  "homepage": "https://github.com/linkeddata/solid-ui",
+  "homepage": "https://github.com/solid/solid-ui",
   "dependencies": {
     "escape-html": "^1.0.3",
     "node-uuid": "^1.4.7",
