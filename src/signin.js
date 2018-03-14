@@ -30,6 +30,8 @@ module.exports = {
   findOriginOwner,
   loadTypeIndexes,
   logIn,
+  logInLoadProfile,
+  logInLoadPreferences,
   loginStatusBox,
   newAppInstance,
   offlineTestID,
@@ -200,7 +202,7 @@ function logInLoadProfile (context) {
  *
  * @returns {Promise<context>}
  */
-function loadPreferences (context) {
+function logInLoadPreferences (context) {
   if (context.preferencesFile) return Promise.resolve(context) // already done
 
   const kb = UI.store
@@ -210,7 +212,7 @@ function loadPreferences (context) {
     logInLoadProfile(context).then(context => {
       let preferencesFile = kb.any(context.me, UI.ns.space('preferencesFile'))
       function complain (message) {
-        message = 'loadPreferences: ' + message
+        message = 'logInLoadPreferences: ' + message
         if (statusArea) {
           // statusArea.innerHTML = ''
           statusArea.appendChild(error.errorMessageBlock(context.dom, message))
@@ -275,7 +277,7 @@ function loadTypeIndexes (context) {
   var kb = UI.store
 
   return new Promise(function (resolve, reject) {
-    loadPreferences(context).then(context => {
+    logInLoadPreferences(context).then(context => {
       var me = context.me
       context.index = context.index || {}
       context.index.private = kb.each(me, ns.solid('privateTypeIndex'), undefined, context.preferencesFile)
@@ -1106,7 +1108,7 @@ function selectWorkspace (dom, appDetails, callbackWS) {
     table.appendChild(trLast)
   } // displayOptions
 
-  loadPreferences(context)  // kick off async operation
+  logInLoadPreferences(context)  // kick off async operation
     .then(displayOptions, err => {
       box.appendChild(UI.utils.errorMessageBlock(err))
     })
