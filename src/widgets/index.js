@@ -295,6 +295,7 @@ UI.widgets.deleteButtonWithCheck = function (dom, container, noun, deleteFunctio
     cancelButton.setAttribute('style', UI.style.buttonStyle)
     var img = cancelButton.appendChild(dom.createElement('img'))
     img.setAttribute('src', cancelIconURI)
+    img.setAttribute('style', UI.style.buttonStyle)
 
     container.appendChild(cancelButton).addEventListener('click', function (e) {
       container.removeChild(sureButton)
