@@ -1115,8 +1115,10 @@ UI.widgets.openHrefInOutlineMode = function (e) {
   const dom = window.document
   if (dom.outlineManager) {
     dom.outlineManager.GotoSubject(UI.store.sym(uri), true, undefined, true, undefined)
+    if (window.history.pushState) window.history.pushState({}, uri, uri)
   } else if (window && window.panes && window.panes.getOutliner) {
     window.panes.getOutliner().GotoSubject(UI.store.sym(uri), true, undefined, true, undefined)
+    if (window.history.pushState) window.history.pushState({}, uri, uri)
   } else {
     console.log("ERROR: Can't access outline manager in this config")
   }
