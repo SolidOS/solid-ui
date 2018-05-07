@@ -1110,7 +1110,7 @@ function selectWorkspace (dom, appDetails, callbackWS) {
 
   logInLoadPreferences(context)  // kick off async operation
     .then(displayOptions, err => {
-      box.appendChild(UI.utils.errorMessageBlock(err))
+      box.appendChild(UI.widgets.errorMessageBlock(err))
     })
 
   return box  // return the box element, while login proceeds
