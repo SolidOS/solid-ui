@@ -20,9 +20,8 @@ const utils = require('./utils')
 
 // var buttonStyle = 'font-size: 100%; margin: 0.8em; padding:0.5em; background-color: white;'
 
-module.exports = function (dom, kb, subject, messageStore, options) {
+module.exports = function (dom, kb, subject, options) {
   kb = kb || UI.store
-  messageStore = messageStore.doc() // No hash
   var ns = UI.ns
   var WF = $rdf.Namespace('http://www.w3.org/2005/01/wf/flow#')
   var DCT = $rdf.Namespace('http://purl.org/dc/terms/')
@@ -87,14 +86,15 @@ module.exports = function (dom, kb, subject, messageStore, options) {
       var now = new Date()
       var timestamp = '' + now.getTime()
       var dateStamp = $rdf.term(now)
-      // http://www.w3schools.com/jsref/jsref_obj_date.asp
-      var message = kb.sym(messageStore.uri + '#' + 'Msg' + timestamp)
+      let chatDocument = chatDocumentFromDate(now)
 
-      sts.push(new $rdf.Statement(subject, ns.wf('message'), message, messageStore))
-      // sts.push(new $rdf.Statement(message, ns.dc('title'), kb.literal(titlefield.value), messageStore))
-      sts.push(new $rdf.Statement(message, ns.sioc('content'), kb.literal(field.value), messageStore))
-      sts.push(new $rdf.Statement(message, DCT('created'), dateStamp, messageStore))
-      if (me) sts.push(new $rdf.Statement(message, ns.foaf('maker'), me, messageStore))
+      var message = kb.sym(chatDocument.uri + '#' + 'Msg' + timestamp)
+
+      sts.push(new $rdf.Statement(subject, ns.wf('message'), message, chatDocument))
+      // sts.push(new $rdf.Statement(message, ns.dc('title'), kb.literal(titlefield.value), chatDocument))
+      sts.push(new $rdf.Statement(message, ns.sioc('content'), kb.literal(field.value), chatDocument))
+      sts.push(new $rdf.Statement(message, DCT('created'), dateStamp, chatDocument))
+      if (me) sts.push(new $rdf.Statement(message, ns.foaf('maker'), me, chatDocument))
 
       var sendComplete = function (uri, success, body) {
         if (!success) {
@@ -286,9 +286,8 @@ module.exports = function (dom, kb, subject, messageStore, options) {
     }, false)
   }
 
-
-  function insertPreviousMessages(event) {
-    let date = new Date (earliestDate.getTime() - 86400000 ) // day in mssecs
+  function insertPreviousMessages (event) {
+    let date = new Date(earliestDate.getTime() - 86400000) // day in mssecs
     let newMessageTable = createMessageTable(date, false) // not live
     if (newestFirst) { // put on bottom
       div.appendChild(newMessageTable)
@@ -299,7 +298,7 @@ module.exports = function (dom, kb, subject, messageStore, options) {
     earliestDate = date
   }
 
-  function loadMessageTable(messageTable, chatDocument) {
+  function loadMessageTable (messageTable, chatDocument) {
     var query
     // Do this with a live query to pull in messages from web
     if (options.query) {
@@ -319,21 +318,25 @@ module.exports = function (dom, kb, subject, messageStore, options) {
     function doneQuery () {
       messageTable.fresh = true // any new are fresh and so will be greenish
     }
-    function renderMessageHere(bindings) {
+    function renderMessageHere (bindings) {
       renderMessage(messageTable, bindings)
     }
     kb.query(query, renderMessageHere, undefined, doneQuery)
   }
 
-  function createMessageTable(date, live) {
+  function chatDocumentFromDate (date) {
+    let isoDate = date.toISOString() // Like "2018-05-07T17:42:46.576Z"
+    var path = isoDate.split('T')[0].replace('-', '/') //  Like "2018/05/07"
+    path = subject.dir().uri + path + '/chat.ttl'
+    return $rdf.sym(path)
+  }
+
+  function createMessageTable (date, live) {
     var messageTable = dom.createElement('table')
     messageTable.fresh = false
     messageTable.setAttribute('style', 'width: 100%;') // fill that div!
 
-    let isoDate = date.toISOString() // Like "2018-05-07T17:42:46.576Z"
-    var path = isoDate.split('T')[0].replace('-', '/') //  Like "2018/05/07"
-    path = subject.dir().uri + path  + '/chat.ttl'
-    let chatDocument = $rdf.sym(path)
+    let chatDocument = chatDocumentFromDate(date)
 
     if (live) {
       var tr = newMessageForm()
@@ -344,12 +347,12 @@ module.exports = function (dom, kb, subject, messageStore, options) {
       }
     }
 
-    //////// Infinite scroll
+    /// ///// Infinite scroll
     //
     // @@ listen for swipe past end event not just button
     if (options.infiniteScroll) {
       let moreButtonTR = dom.createElement('tr')
-      let moreIcon = newestFirst ?  'noun_1180164.svg' :  'noun_1180164.svg' // @@ Find   down and up arrows respoctively
+      let moreIcon = newestFirst ? 'noun_1180164.svg' : 'noun_1180164.svg' // @@ Find   down and up arrows respoctively
       let moreButton = UI.widgets.button(dom, UI.icons.iconBase + moreIcon, 'Previous messages ...')
       moreButton.setAttribute('style', UI.style.buttonStyle + 'float: center;')
       moreButton.addEventListener('click', insertPreviousMessages, false)
@@ -370,10 +373,9 @@ module.exports = function (dom, kb, subject, messageStore, options) {
   var earliestMessageTable = messageTable
   var earliestDate = now
 
-
   div.refresh = function () { // only the last messageTable is live
     syncMessages(subject, messageTable)
-  }
-  // syncMessages(subject, messageTable) // no the query will do this async
+  }// The short chat version fors live update in the pane but we do it in the widget
+  kb.updater.addDownstreamChangeListener(chatDocument, div.refresh) // Live update
   return div
 }
