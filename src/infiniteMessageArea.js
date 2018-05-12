@@ -34,8 +34,7 @@ module.exports = function (dom, kb, subject, options) {
   // 'font-size: 100%; margin: 0.1em 1em 0.1em 1em;  background-color: white; white-space: pre-wrap; padding: 0.1em;'
 
   var div = dom.createElement('div')
-  var messageTable // Shared by initial build and addMessageFromBindings
-
+  // var messageTable // Shared by initial build and addMessageFromBindings
   var me
 
   var updater = UI.store.updater
@@ -294,7 +293,7 @@ module.exports = function (dom, kb, subject, options) {
     } else { // put on top as we scroll back
       div.insertBefore(newMessageTable, div.firstChild)
     }
-    earliestMessageTable = newMessageTable
+    // earliestMessageTable = newMessageTable
     earliestDate = date
   }
 
@@ -333,10 +332,10 @@ module.exports = function (dom, kb, subject, options) {
 
   function createMessageTable (date, live) {
     var messageTable = dom.createElement('table')
+    var chatDocument = chatDocumentFromDate(date)
+
     messageTable.fresh = false
     messageTable.setAttribute('style', 'width: 100%;') // fill that div!
-
-    let chatDocument = chatDocumentFromDate(date)
 
     if (live) {
       var tr = newMessageForm()
@@ -356,7 +355,7 @@ module.exports = function (dom, kb, subject, options) {
       let moreButton = UI.widgets.button(dom, UI.icons.iconBase + moreIcon, 'Previous messages ...')
       moreButton.setAttribute('style', UI.style.buttonStyle + 'float: center;')
       moreButton.addEventListener('click', insertPreviousMessages, false)
-      rhs.appendChild(sendButton)
+      moreButtonTR.appendChild(moreButton)
 
       if (!newestFirst) { // opposite end from the entry field
         messageTable.insertBefore(moreButtonTR, messageTable.firstChild) // If not newestFirst
@@ -365,17 +364,18 @@ module.exports = function (dom, kb, subject, options) {
       }
     }
     loadMessageTable(messageTable, chatDocument)
-  }
+    return messageTable
+  } // createMessageTable
 
   var now = new Date()
   var messageTable = createMessageTable(now, true)
   div.appendChild(messageTable)
-  var earliestMessageTable = messageTable
+  // var earliestMessageTable = messageTable
   var earliestDate = now
 
   div.refresh = function () { // only the last messageTable is live
     syncMessages(subject, messageTable)
   }// The short chat version fors live update in the pane but we do it in the widget
-  kb.updater.addDownstreamChangeListener(chatDocument, div.refresh) // Live update
+  kb.updater.addDownstreamChangeListener(chatDocumentFromDate(now), div.refresh) // Live update
   return div
 }
