@@ -18,8 +18,6 @@ var UI = {
 
 const utils = require('./utils')
 
-// var buttonStyle = 'font-size: 100%; margin: 0.8em; padding:0.5em; background-color: white;'
-
 module.exports = function (dom, kb, subject, options) {
   kb = kb || UI.store
   var ns = UI.ns
@@ -232,7 +230,7 @@ module.exports = function (dom, kb, subject, options) {
       '?date': kb.any(message, DCT('created')),
       '?content': kb.any(message, ns.sioc('content'))
     }
-    renderMessage(messageTable, bindings, true) // fresh from elsewhere
+    renderMessage(messageTable, bindings, messageTable.fresh) // fresh from elsewhere
   }
 
   var renderMessage = function (messageTable, bindings, fresh) {
@@ -303,44 +301,27 @@ module.exports = function (dom, kb, subject, options) {
     }, false)
   }
 
-  function insertPreviousMessages (event) {
-    let date = new Date(earliestDate.getTime() - 86400000) // day in mssecs
+  function insertPreviousMessages (event, messageTable) {
+    let date = new Date(messageTable.date.getTime() - 86400000) // day in mssecs
     let newMessageTable = createMessageTable(date, false) // not live
     if (newestFirst) { // put on bottom
       div.appendChild(newMessageTable)
     } else { // put on top as we scroll back
       div.insertBefore(newMessageTable, div.firstChild)
     }
-    // earliestMessageTable = newMessageTable
-    earliestDate = date
   }
-/*
-  function loadMessageTable (messageTable, chatDocument) {
-    var query
-    // Do this with a live query to pull in messages from web
-    if (options.query) {
-      query = options.query
-    } else {
-      query = new $rdf.Query('Messages')
-      var v = {}
-      var vs = ['msg', 'date', 'creator', 'content']
-      vs.map(function (x) {
-        query.vars.push(v[x] = $rdf.variable(x))
-      })
-      query.pat.add(subject, WF('message'), v['msg'], chatDocument)
-      query.pat.add(v['msg'], ns.dct('created'), v['date'], chatDocument)
-      query.pat.add(v['msg'], ns.foaf('maker'), v['creator'], chatDocument)
-      query.pat.add(v['msg'], ns.sioc('content'), v['content'], chatDocument)
+  function removePreviousMessages (event, messageTable) {
+    if (newestFirst) { // it was put on bottom
+      while (messageTable.nextSibling) {
+        div.removeChild(messageTable.nextSibling)
+      }
+    } else { // it was put on top as we scroll back
+      while (messageTable.previousSibling) {
+        div.removeChild(messageTable.previousSibling)
+      }
     }
-    function doneQuery () {
-      messageTable.fresh = true // any new are fresh and so will be greenish
-    }
-    function renderMessageHere (bindings) {
-      renderMessage(messageTable, bindings)
-    }
-    kb.query(query, renderMessageHere, undefined, doneQuery)
   }
-*/
+
   function loadMessageTable2 (messageTable, chatDocument) {
     kb.fetcher.load(chatDocument).then(response => {
       let sts = kb.statementsMatching(null, WF('message'), null, chatDocument)
@@ -350,7 +331,11 @@ module.exports = function (dom, kb, subject, options) {
       messageTable.fresh = true
     }, err => {
       let statusTR = messageTable.appendChild(dom.createElement('tr'))
-      statusTR.appendChild(UI.widgets.errorMessageBlock(dom, err, 'pink'))
+      if (err.response && err.response.status && err.response.status === 404) {
+        statusTR.appendChild(UI.widgets.errorMessageBlock(dom, 'no messages', 'white'))
+      } else {
+        statusTR.appendChild(UI.widgets.errorMessageBlock(dom, err, 'pink'))
+      }
     })
   }
 
@@ -362,7 +347,20 @@ module.exports = function (dom, kb, subject, options) {
   }
 
   function createMessageTable (date, live) {
+    var moreButton
+    function moreButtonHandler (event) {
+      let sense = messageTable.extended ^ newestFirst
+      let moreIcon = !sense ? 'noun_1369241.svg' : 'noun_1369237.svg'
+      moreButton.firstChild.setAttribute('src', UI.icons.iconBase + moreIcon)
+      if (messageTable.extended) {
+        removePreviousMessages(event, messageTable)
+      } else {
+        insertPreviousMessages(event, messageTable)
+      }
+      messageTable.extended = !messageTable.extended // Toggle
+    }
     var messageTable = dom.createElement('table')
+    messageTable.date = date
     var chatDocument = chatDocumentFromDate(date)
 
     messageTable.fresh = false
@@ -384,26 +382,28 @@ module.exports = function (dom, kb, subject, options) {
       let moreButtonTR = dom.createElement('tr')
       // up traingles: noun_1369237.svg
       // down triangles: noun_1369241.svg
-      let moreIcon = newestFirst ? 'noun_1369241.svg' : 'noun_1369237.svg' // @@ Find   down and up arrows respoctively
-      let moreButton = UI.widgets.button(dom, UI.icons.iconBase + moreIcon, 'Previous messages ...')
+      let moreIcon = newestFirst ? 'noun_1369241.svg' : 'noun_1369237.svg' // down and up arrows respoctively
+      moreButton = UI.widgets.button(dom, UI.icons.iconBase + moreIcon, 'Previous messages ...')
       // moreButton.setAttribute('style', UI.style.buttonStyle)
-      moreButton.addEventListener('click', insertPreviousMessages, false)
       let moreButtonCell = moreButtonTR.appendChild(dom.createElement('td'))
       moreButtonCell.appendChild(moreButton)
       moreButtonCell.style = 'width:3em; height:3em;'
 
       let dateCell = moreButtonTR.appendChild(dom.createElement('td'))
-      dateCell.style = 'text-align: center; color: #888; font-style: italic;'
+      dateCell.style = 'text-align: center; vertical-align: middle; color: #888; font-style: italic;'
       dateCell.textContent = UI.widgets.shortDate(date.toISOString())
 
-      let menuIcon = 'noun_897914.svg' // or maybe dots noun_243787.svg
-      let menuButton = UI.widgets.button(dom, UI.icons.iconBase + menuIcon, 'Menu ...')
-      // menuButton.setAttribute('style', UI.style.buttonStyle)
-      menuButton.addEventListener('click', insertPreviousMessages, false)
-      let menuButtonCell = moreButtonTR.appendChild(dom.createElement('td'))
-      menuButtonCell.appendChild(menuButton)
-      menuButtonCell.style = 'width:3em; height:3em;'
-
+      if (options.menuHandler) { // A high level handles calls for a menu
+        let menuIcon = 'noun_897914.svg' // or maybe dots noun_243787.svg
+        let menuButton = UI.widgets.button(dom, UI.icons.iconBase + menuIcon, 'Menu ...')
+        // menuButton.setAttribute('style', UI.style.buttonStyle)
+        menuButton.addEventListener('click', options.menuHandler, false) // control side menu
+        let menuButtonCell = moreButtonTR.appendChild(dom.createElement('td'))
+        menuButtonCell.appendChild(menuButton)
+        menuButtonCell.style = 'width:3em; height:3em;'
+      }
+      moreButton.addEventListener('click', moreButtonHandler, false)
+      messageTable.extended = false
       if (!newestFirst) { // opposite end from the entry field
         messageTable.insertBefore(moreButtonTR, messageTable.firstChild) // If not newestFirst
       } else {
@@ -411,18 +411,16 @@ module.exports = function (dom, kb, subject, options) {
       }
     }
     loadMessageTable2(messageTable, chatDocument)
+    messageTable.fresh = false
     return messageTable
   } // createMessageTable
 
   var now = new Date()
-  var messageTable, earliestDate
+  var messageTable
   var chatDocument = chatDocumentFromDate(now)
   createIfNotExists(chatDocument).then(respopnse => {
     messageTable = createMessageTable(now, true)
     div.appendChild(messageTable)
-    // var earliestMessageTable = messageTable
-    earliestDate = now
-
     div.refresh = function () { // only the last messageTable is live
       syncMessages(subject, messageTable)
     }// The short chat version fors live update in the pane but we do it in the widget
