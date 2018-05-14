@@ -341,7 +341,7 @@ module.exports = function (dom, kb, subject, options) {
 
   function chatDocumentFromDate (date) {
     let isoDate = date.toISOString() // Like "2018-05-07T17:42:46.576Z"
-    var path = isoDate.split('T')[0].replace('-', '/') //  Like "2018/05/07"
+    var path = isoDate.split('T')[0].replace(/-/g, '/') //  Like "2018/05/07"
     path = subject.dir().uri + path + '/chat.ttl'
     return $rdf.sym(path)
   }
