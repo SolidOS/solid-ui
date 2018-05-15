@@ -50,6 +50,7 @@ const UI = {
   log: require('./log'),
   matrix: require('./matrix'),
   messageArea: require('./messageArea'),
+  infiniteMessageArea: require('./infiniteMessageArea'),
   pad: require('./pad'),
   preferences: require('./preferences'),
   store: require('./store'),
