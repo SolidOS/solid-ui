@@ -144,7 +144,8 @@ module.exports = function (dom, kb, subject, options) {
       // field.cols = 40
       field.setAttribute('style', messageBodyStyle + 'background-color: #eef;')
 
-      field.addEventListener('keyup', function (e) { // User preference?
+      // Trap the Enter BEFORE it is used ti make a newline
+      field.addEventListener('keydown', function (e) { // User preference?
         if (e.keyCode === 13) {
           if (!e.altKey) { // Alt-Enter just adds a new line
             sendMessage()
@@ -237,6 +238,18 @@ module.exports = function (dom, kb, subject, options) {
     renderMessage(messageTable, bindings, messageTable.fresh) // fresh from elsewhere
   }
 
+  function elementForImageURI (imageUri) {
+    let img = dom.createElement('img')
+    img.setAttribute('style', 'max-height: 10em; border-radius: 1em; margin: 0.7em;')
+    // UI.widgets.makeDropTarget(img, handleURIsDroppedOnMugshot, droppedFileHandler)
+    if (imageUri) img.setAttribute('src', imageUri)
+    let anchor = dom.createElement('a')
+    anchor.setAttribute('href', imageUri)
+    anchor.setAttribute('target', 'images')
+    anchor.appendChild(img)
+    return anchor
+  }
+
   var renderMessage = function (messageTable, bindings, fresh) {
     var creator = bindings['?creator']
     var message = bindings['?msg']
@@ -269,12 +282,19 @@ module.exports = function (dom, kb, subject, options) {
     creatorAndDate(td1, creator, UI.widgets.shortDate(dateString), message)
 
     var td2 = dom.createElement('td')
+    let text = content.value
     tr.appendChild(td2)
-    var pre = dom.createElement('p')
-    pre.setAttribute('style', messageBodyStyle +
-      (fresh ? 'background-color: #e8ffe8;' : 'background-color: #white;'))
-    td2.appendChild(pre)
-    pre.textContent = content.value
+    var isImage   = (/\.(gif|jpg|jpeg|tiff|png|svg)$/i).test(text) // @@ Should use content-type not URI
+    if (isImage) {
+      let img = elementForImageURI(text)
+      td2.appendChild(img)
+    } else { // text
+      var pre = dom.createElement('p')
+      pre.setAttribute('style', messageBodyStyle +
+        (fresh ? 'background-color: #e8ffe8;' : 'background-color: #white;'))
+      td2.appendChild(pre)
+      pre.textContent = text
+    }
 
     var td3 = dom.createElement('td')
     tr.appendChild(td3)
