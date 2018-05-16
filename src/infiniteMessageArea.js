@@ -95,10 +95,12 @@ module.exports = function (dom, kb, subject, options) {
     var sendMessage = function () {
       // titlefield.setAttribute('class','pendingedit')
       // titlefield.disabled = true
+
+      var now = addNewTableIfNeeded()
+
       field.setAttribute('class', 'pendingedit')
       field.disabled = true
       var sts = []
-      var now = new Date()
       var timestamp = '' + now.getTime()
       var dateStamp = $rdf.term(now)
       let chatDocument = chatDocumentFromDate(now)
@@ -415,20 +417,35 @@ module.exports = function (dom, kb, subject, options) {
     return messageTable
   } // createMessageTable
 
-  var now = new Date()
   var messageTable
-  var chatDocument = chatDocumentFromDate(now)
-  createIfNotExists(chatDocument).then(respopnse => {
-    messageTable = createMessageTable(now, true)
-    div.appendChild(messageTable)
-    div.refresh = function () { // only the last messageTable is live
-      syncMessages(subject, messageTable)
-    }// The short chat version fors live update in the pane but we do it in the widget
-    kb.updater.addDownstreamChangeListener(chatDocument, div.refresh) // Live update
-  }, err => {
-    div.appendChild(UI.widgets.errorMessageBlock(
-      dom, 'Problem accessing chat log file: ' + err))
-  })
+  var chatDocument
 
+  function addNewTableIfNeeded () {
+    let now = new Date()
+    let newChatDocument = chatDocumentFromDate(now)
+    if (!newChatDocument.sameTerm(chatDocument)) {
+      appendCurrentMessages()
+      // @@ How to ping other clients and let them add one too? Add link to old message file?
+    }
+    return now
+  }
+
+  function appendCurrentMessages () {
+    var now = new Date()
+    chatDocument = chatDocumentFromDate(now)
+    createIfNotExists(chatDocument).then(respopnse => {
+      messageTable = createMessageTable(now, true)
+      div.appendChild(messageTable)
+      div.refresh = function () { // only the last messageTable is live
+        addNewTableIfNeeded()
+        syncMessages(subject, messageTable)
+      }// The short chat version fors live update in the pane but we do it in the widget
+      kb.updater.addDownstreamChangeListener(chatDocument, div.refresh) // Live update
+    }, err => {
+      div.appendChild(UI.widgets.errorMessageBlock(
+        dom, 'Problem accessing chat log file: ' + err))
+    })
+  }
+  appendCurrentMessages()
   return div
 }
