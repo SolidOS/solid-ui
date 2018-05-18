@@ -95,10 +95,12 @@ module.exports = function (dom, kb, subject, options) {
     var sendMessage = function () {
       // titlefield.setAttribute('class','pendingedit')
       // titlefield.disabled = true
+
+      var now = addNewTableIfNeeded()
+
       field.setAttribute('class', 'pendingedit')
       field.disabled = true
       var sts = []
-      var now = new Date()
       var timestamp = '' + now.getTime()
       var dateStamp = $rdf.term(now)
       let chatDocument = chatDocumentFromDate(now)
@@ -142,7 +144,8 @@ module.exports = function (dom, kb, subject, options) {
       // field.cols = 40
       field.setAttribute('style', messageBodyStyle + 'background-color: #eef;')
 
-      field.addEventListener('keyup', function (e) { // User preference?
+      // Trap the Enter BEFORE it is used ti make a newline
+      field.addEventListener('keydown', function (e) { // User preference?
         if (e.keyCode === 13) {
           if (!e.altKey) { // Alt-Enter just adds a new line
             sendMessage()
@@ -193,7 +196,9 @@ module.exports = function (dom, kb, subject, options) {
         displayed[ele.AJAR_subject.uri] = true
       }
     }
-    var messages = kb.each(about, ns.wf('message'))
+
+    var messages = kb.statementsMatching(
+      about, ns.wf('message'), null, messageTable.chatDocument).map( st => { return st.object})
     var stored = {}
     messages.map(function (m) {
       stored[m.uri] = true
@@ -233,6 +238,18 @@ module.exports = function (dom, kb, subject, options) {
     renderMessage(messageTable, bindings, messageTable.fresh) // fresh from elsewhere
   }
 
+  function elementForImageURI (imageUri) {
+    let img = dom.createElement('img')
+    img.setAttribute('style', 'max-height: 10em; border-radius: 1em; margin: 0.7em;')
+    // UI.widgets.makeDropTarget(img, handleURIsDroppedOnMugshot, droppedFileHandler)
+    if (imageUri) img.setAttribute('src', imageUri)
+    let anchor = dom.createElement('a')
+    anchor.setAttribute('href', imageUri)
+    anchor.setAttribute('target', 'images')
+    anchor.appendChild(img)
+    return anchor
+  }
+
   var renderMessage = function (messageTable, bindings, fresh) {
     var creator = bindings['?creator']
     var message = bindings['?msg']
@@ -265,12 +282,19 @@ module.exports = function (dom, kb, subject, options) {
     creatorAndDate(td1, creator, UI.widgets.shortDate(dateString), message)
 
     var td2 = dom.createElement('td')
+    let text = content.value
     tr.appendChild(td2)
-    var pre = dom.createElement('p')
-    pre.setAttribute('style', messageBodyStyle +
-      (fresh ? 'background-color: #e8ffe8;' : 'background-color: #white;'))
-    td2.appendChild(pre)
-    pre.textContent = content.value
+    var isImage   = (/\.(gif|jpg|jpeg|tiff|png|svg)$/i).test(text) // @@ Should use content-type not URI
+    if (isImage) {
+      let img = elementForImageURI(text)
+      td2.appendChild(img)
+    } else { // text
+      var pre = dom.createElement('p')
+      pre.setAttribute('style', messageBodyStyle +
+        (fresh ? 'background-color: #e8ffe8;' : 'background-color: #white;'))
+      td2.appendChild(pre)
+      pre.textContent = text
+    }
 
     var td3 = dom.createElement('td')
     tr.appendChild(td3)
@@ -362,6 +386,7 @@ module.exports = function (dom, kb, subject, options) {
     var messageTable = dom.createElement('table')
     messageTable.date = date
     var chatDocument = chatDocumentFromDate(date)
+    messageTable.chatDocument = chatDocument
 
     messageTable.fresh = false
     messageTable.setAttribute('style', 'width: 100%;') // fill that div!
@@ -415,20 +440,45 @@ module.exports = function (dom, kb, subject, options) {
     return messageTable
   } // createMessageTable
 
-  var now = new Date()
   var messageTable
-  var chatDocument = chatDocumentFromDate(now)
-  createIfNotExists(chatDocument).then(respopnse => {
-    messageTable = createMessageTable(now, true)
-    div.appendChild(messageTable)
-    div.refresh = function () { // only the last messageTable is live
-      syncMessages(subject, messageTable)
-    }// The short chat version fors live update in the pane but we do it in the widget
-    kb.updater.addDownstreamChangeListener(chatDocument, div.refresh) // Live update
-  }, err => {
-    div.appendChild(UI.widgets.errorMessageBlock(
-      dom, 'Problem accessing chat log file: ' + err))
-  })
+  var chatDocument
 
+  function addNewTableIfNeeded () {
+    let now = new Date()
+    let newChatDocument = chatDocumentFromDate(now)
+    if (!newChatDocument.sameTerm(chatDocument)) { // It is a new day
+      var oldChatDocument = chatDocument
+      appendCurrentMessages()
+      // Adding a link in the document will ping listeners to add the new block too
+      if (!kb.holds(oldChatDocument, ns.rdfs('seeAlso'), newChatDocument, oldChatDocument)) {
+        let sts = [ $rdf.st(oldChatDocument, ns.rdfs('seeAlso'), newChatDocument, oldChatDocument)]
+        updater.update([], sts, function (ok, body) {
+          if (!ok) {
+            alert('Unable to link old message block to new one.' + body)
+          }
+        })
+      }
+    }
+    return now
+  }
+
+  function appendCurrentMessages () {
+    var now = new Date()
+    chatDocument = chatDocumentFromDate(now)
+    createIfNotExists(chatDocument).then(respopnse => {
+      messageTable = createMessageTable(now, true)
+      div.appendChild(messageTable)
+      div.refresh = function () { // only the last messageTable is live
+        addNewTableIfNeeded()
+        syncMessages(subject, messageTable)
+      } // The short chat version fors live update in the pane but we do it in the widget
+      kb.updater.addDownstreamChangeListener(chatDocument, div.refresh) // Live update
+      // @@ Remove listener from previous table as it is now static
+    }, err => {
+      div.appendChild(UI.widgets.errorMessageBlock(
+        dom, 'Problem accessing chat log file: ' + err))
+    })
+  }
+  appendCurrentMessages()
   return div
 }

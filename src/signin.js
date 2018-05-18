@@ -629,17 +629,17 @@ function fetchACLRel (docURI) {
   const kb = UI.store
   const fetcher = kb.fetcher
 
-  return fetcher.fetch(docURI)
+  return fetcher.load(docURI)
     .then(result => {
       if (!result.ok) {
-        throw new Error('While fetching:' + result.error)
+        throw new Error('fetchACLRel: While loading:' + result.error)
       }
 
       let aclDoc = kb.any(kb.sym(docURI),
         kb.sym('http://www.iana.org/assignments/link-relations/acl'))
 
       if (!aclDoc) {
-        throw new Error('No Link rel=ACL header for ' + docURI)
+        throw new Error('fetchACLRel: No Link rel=ACL header for ' + docURI)
       }
 
       return aclDoc
