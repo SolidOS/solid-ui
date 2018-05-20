@@ -27,6 +27,7 @@ module.exports = function (dom, kb, subject, options) {
   options = options || {}
 
   var newestFirst = !!options.newestFirst
+  var menuButton
 
   var messageBodyStyle = 'white-space: pre-wrap; width: 90%; font-size:100%; border: 0.07em solid #eee; padding: .2em 0.5em; margin: 0.1em 1em 0.1em 1em;'
   // 'font-size: 100%; margin: 0.1em 1em 0.1em 1em;  background-color: white; white-space: pre-wrap; padding: 0.1em;'
@@ -135,6 +136,11 @@ module.exports = function (dom, kb, subject, options) {
 
     var field, sendButton
     var turnOnInput = function () {
+      if (options.menuHandler && menuButton) {
+        let menuOptions = { me, dom, div, newBase: messageTable.chatDocument.dir().uri }
+        menuButton.addEventListener('click',
+          event => { options.menuHandler(event, subject, menuOptions)}, false) // control side menu
+      }
       creatorAndDate(lhs, me, '', null)
 
       field = dom.createElement('textarea')
@@ -384,6 +390,7 @@ module.exports = function (dom, kb, subject, options) {
       messageTable.extended = !messageTable.extended // Toggle
     }
     var messageTable = dom.createElement('table')
+    var messageButton
     messageTable.date = date
     var chatDocument = chatDocumentFromDate(date)
     messageTable.chatDocument = chatDocument
@@ -418,11 +425,11 @@ module.exports = function (dom, kb, subject, options) {
       dateCell.style = 'text-align: center; vertical-align: middle; color: #888; font-style: italic;'
       dateCell.textContent = UI.widgets.shortDate(date.toISOString())
 
-      if (options.menuHandler) { // A high level handles calls for a menu
+      if (options.menuHandler && live) { // A high level handles calls for a menu
         let menuIcon = 'noun_897914.svg' // or maybe dots noun_243787.svg
-        let menuButton = UI.widgets.button(dom, UI.icons.iconBase + menuIcon, 'Menu ...')
+        menuButton = UI.widgets.button(dom, UI.icons.iconBase + menuIcon, 'Menu ...') // wider var
         // menuButton.setAttribute('style', UI.style.buttonStyle)
-        menuButton.addEventListener('click', options.menuHandler, false) // control side menu
+        // menuButton.addEventListener('click', event => { menuHandler(event, menuOptions)}, false) // control side menu
         let menuButtonCell = moreButtonTR.appendChild(dom.createElement('td'))
         menuButtonCell.appendChild(menuButton)
         menuButtonCell.style = 'width:3em; height:3em;'
