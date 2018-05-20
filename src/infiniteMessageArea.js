@@ -4,6 +4,7 @@
 //  Parameters for the whole chat like its title are stred on
 //  index.ttl#this and the chats messages are stored in YYYY/MM/DD/chat.ttl
 //
+/* global alert */
 var UI = {
   authn: require('./signin'),
   icons: require('./iconBase'),
@@ -81,9 +82,10 @@ module.exports = function (dom, kb, subject, options) {
       })
     })
   }
+
   //       Form for a new message
   //
-  var newMessageForm = function () {
+  function newMessageForm () {
     var form = dom.createElement('tr')
     var lhs = dom.createElement('td')
     var middle = dom.createElement('td')
@@ -92,14 +94,12 @@ module.exports = function (dom, kb, subject, options) {
     form.appendChild(middle)
     form.appendChild(rhs)
     form.AJAR_date = '9999-01-01T00:00:00Z' // ISO format for field sort
+    var field, sendButton
 
-    var sendMessage = function () {
-      // titlefield.setAttribute('class','pendingedit')
-      // titlefield.disabled = true
-
+    function sendMessage (text) {
       var now = addNewTableIfNeeded()
 
-      field.setAttribute('class', 'pendingedit')
+      field.setAttribute('style', messageBodyStyle + 'color: #bbb;') // pendingedit
       field.disabled = true
       var sts = []
       var timestamp = '' + now.getTime()
@@ -107,10 +107,10 @@ module.exports = function (dom, kb, subject, options) {
       let chatDocument = chatDocumentFromDate(now)
 
       var message = kb.sym(chatDocument.uri + '#' + 'Msg' + timestamp)
+      var content = text || kb.literal(field.value)
 
       sts.push(new $rdf.Statement(subject, ns.wf('message'), message, chatDocument))
-      // sts.push(new $rdf.Statement(message, ns.dc('title'), kb.literal(titlefield.value), chatDocument))
-      sts.push(new $rdf.Statement(message, ns.sioc('content'), kb.literal(field.value), chatDocument))
+      sts.push(new $rdf.Statement(message, ns.sioc('content'), content, chatDocument))
       sts.push(new $rdf.Statement(message, DCT('created'), dateStamp, chatDocument))
       if (me) sts.push(new $rdf.Statement(message, ns.foaf('maker'), me, chatDocument))
 
@@ -120,7 +120,7 @@ module.exports = function (dom, kb, subject, options) {
             dom, 'Error writing message: ' + body))
         } else {
           var bindings = { '?msg': message,
-            '?content': kb.literal(field.value),
+            '?content': content,
             '?date': dateStamp,
             '?creator': me}
           renderMessage(messageTable, bindings, false) // not green
@@ -134,12 +134,34 @@ module.exports = function (dom, kb, subject, options) {
     }
     form.appendChild(dom.createElement('br'))
 
-    var field, sendButton
-    var turnOnInput = function () {
+    //    DRAG AND DROP
+    function droppedFileHandler (files) {
+      UI.widgets.uploadFiles(kb.fetcher, files, chatDocument.dir().uri + 'Files', chatDocument.dir().uri + 'Pictures',
+        function (theFile, destURI) { // @@@@@@ Wait for eachif several
+          sendMessage(destURI)
+        })
+    }
+
+    // When a set of URIs are dropped on the field
+    var droppedURIHandler = function (uris) {
+      sendMessage(uris[0]) // @@@@@ wait
+      /*
+      Promise.all(uris.map(function (u) {
+        return sendMessage(u) // can add to meetingDoc but must be sync
+      })).then(function (a) {
+        saveBackMeetingDoc()
+      })
+      */
+    }
+
+    // When we are actually logged on
+    function turnOnInput () {
+      UI.widgets.makeDropTarget(field, droppedURIHandler, droppedFileHandler)
       if (options.menuHandler && menuButton) {
         let menuOptions = { me, dom, div, newBase: messageTable.chatDocument.dir().uri }
         menuButton.addEventListener('click',
-          event => { options.menuHandler(event, subject, menuOptions)}, false) // control side menu
+          event => { options.menuHandler(event, subject, menuOptions) }
+          , false)
       }
       creatorAndDate(lhs, me, '', null)
 
@@ -204,7 +226,7 @@ module.exports = function (dom, kb, subject, options) {
     }
 
     var messages = kb.statementsMatching(
-      about, ns.wf('message'), null, messageTable.chatDocument).map( st => { return st.object})
+      about, ns.wf('message'), null, messageTable.chatDocument).map(st => { return st.object })
     var stored = {}
     messages.map(function (m) {
       stored[m.uri] = true
@@ -290,7 +312,7 @@ module.exports = function (dom, kb, subject, options) {
     var td2 = dom.createElement('td')
     let text = content.value
     tr.appendChild(td2)
-    var isImage   = (/\.(gif|jpg|jpeg|tiff|png|svg)$/i).test(text) // @@ Should use content-type not URI
+    var isImage = (/\.(gif|jpg|jpeg|tiff|png|svg)$/i).test(text) // @@ Should use content-type not URI
     if (isImage) {
       let img = elementForImageURI(text)
       td2.appendChild(img)
@@ -390,7 +412,7 @@ module.exports = function (dom, kb, subject, options) {
       messageTable.extended = !messageTable.extended // Toggle
     }
     var messageTable = dom.createElement('table')
-    var messageButton
+    // var messageButton
     messageTable.date = date
     var chatDocument = chatDocumentFromDate(date)
     messageTable.chatDocument = chatDocument
@@ -458,7 +480,7 @@ module.exports = function (dom, kb, subject, options) {
       appendCurrentMessages()
       // Adding a link in the document will ping listeners to add the new block too
       if (!kb.holds(oldChatDocument, ns.rdfs('seeAlso'), newChatDocument, oldChatDocument)) {
-        let sts = [ $rdf.st(oldChatDocument, ns.rdfs('seeAlso'), newChatDocument, oldChatDocument)]
+        let sts = [$rdf.st(oldChatDocument, ns.rdfs('seeAlso'), newChatDocument, oldChatDocument)]
         updater.update([], sts, function (ok, body) {
           if (!ok) {
             alert('Unable to link old message block to new one.' + body)

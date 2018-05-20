@@ -18,10 +18,11 @@
 //
 // (In order to avoid name collisions, it is safely assumed that modules don't
 // export widgets with the same name)
+/* global Document */
 var widgets = module.exports = Object.assign(
   {},
   require('./peoplePicker'),  // UI.widgets.PeoplePicker
-  require('./dragAndDrop'),
+  require('./dragAndDrop'),   // uploadFiles etc
   require('./error'),         // UI.widgets.errorMessageBlock
   {
     buildCheckboxForm,
@@ -48,7 +49,10 @@ function getStatusArea (context) {
   var box = context.statusArea || context.div || null
   if (box) return box
   let dom = context.dom
-  if (context.dom) {
+  if (!dom && typeof Document !== 'undefined') {
+    dom = Document
+  }
+  if (dom) {
     var body = dom.getElementsByTagName('body')[0]
     box = dom.createEvent('div')
     body.insertBefore(box, body.firstElementChild)
