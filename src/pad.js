@@ -79,7 +79,9 @@ UI.pad.recordParticipation = function (subject, padDoc, refreshable) {
   if (parps.length > 1) {
     throw new Error('Multiple records of your participation')
   }
-  if (!parps.length) { // If I am not already recorded
+  if (parps.length) { // If I am not already recorded
+    return parps[0] // returns the particpation object
+  } else {
     var participation = UI.widgets.newThing(padDoc)
     var ins = [
       UI.rdf.st(subject, ns.wf('participation'), participation, padDoc),
@@ -97,6 +99,7 @@ UI.pad.recordParticipation = function (subject, padDoc, refreshable) {
       }
       // UI.pad.renderPartipants(dom, table, padDoc, subject, me, options)
     })
+    return participation
   }
 }
 

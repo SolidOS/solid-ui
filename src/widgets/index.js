@@ -18,7 +18,7 @@
 //
 // (In order to avoid name collisions, it is safely assumed that modules don't
 // export widgets with the same name)
-/* global Document */
+/* global document */
 var widgets = module.exports = Object.assign(
   {},
   require('./peoplePicker'),  // UI.widgets.PeoplePicker
@@ -49,8 +49,8 @@ function getStatusArea (context) {
   var box = context.statusArea || context.div || null
   if (box) return box
   let dom = context.dom
-  if (!dom && typeof Document !== 'undefined') {
-    dom = Document
+  if (!dom && typeof document !== 'undefined') {
+    dom = document
   }
   if (dom) {
     var body = dom.getElementsByTagName('body')[0]

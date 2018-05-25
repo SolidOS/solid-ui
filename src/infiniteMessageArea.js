@@ -29,6 +29,7 @@ module.exports = function (dom, kb, subject, options) {
 
   var newestFirst = !!options.newestFirst
   var menuButton
+  // var participation // An object tracking users use and prefs
 
   var messageBodyStyle = 'white-space: pre-wrap; width: 90%; font-size:100%; border: 0.07em solid #eee; padding: .2em 0.5em; margin: 0.1em 1em 0.1em 1em;'
   // 'font-size: 100%; margin: 0.1em 1em 0.1em 1em;  background-color: white; white-space: pre-wrap; padding: 0.1em;'
@@ -99,15 +100,18 @@ module.exports = function (dom, kb, subject, options) {
     function sendMessage (text) {
       var now = addNewTableIfNeeded()
 
-      field.setAttribute('style', messageBodyStyle + 'color: #bbb;') // pendingedit
-      field.disabled = true
+      if (!text) {
+        field.setAttribute('style', messageBodyStyle + 'color: #bbb;') // pendingedit
+        field.disabled = true
+      }
       var sts = []
       var timestamp = '' + now.getTime()
       var dateStamp = $rdf.term(now)
       let chatDocument = chatDocumentFromDate(now)
 
       var message = kb.sym(chatDocument.uri + '#' + 'Msg' + timestamp)
-      var content = text || kb.literal(field.value)
+      var content = kb.literal(text || field.value)
+      // if (text) field.value = text  No - don't destroy half-finsihed user input
 
       sts.push(new $rdf.Statement(subject, ns.wf('message'), message, chatDocument))
       sts.push(new $rdf.Statement(message, ns.sioc('content'), content, chatDocument))
@@ -125,9 +129,11 @@ module.exports = function (dom, kb, subject, options) {
             '?creator': me}
           renderMessage(messageTable, bindings, false) // not green
 
-          field.value = '' // clear from out for reuse
-          field.setAttribute('class', '')
-          field.disabled = false
+          if (!text) {
+            field.value = '' // clear from out for reuse
+            field.setAttribute('style', messageBodyStyle)
+            field.disabled = false
+          }
         }
       }
       updater.update([], sts, sendComplete)
@@ -156,7 +162,6 @@ module.exports = function (dom, kb, subject, options) {
 
     // When we are actually logged on
     function turnOnInput () {
-      UI.widgets.makeDropTarget(field, droppedURIHandler, droppedFileHandler)
       if (options.menuHandler && menuButton) {
         let menuOptions = { me, dom, div, newBase: messageTable.chatDocument.dir().uri }
         menuButton.addEventListener('click',
@@ -180,13 +185,16 @@ module.exports = function (dom, kb, subject, options) {
           }
         }
       }, false)
+      UI.widgets.makeDropTarget(field, droppedURIHandler, droppedFileHandler)
 
       rhs.innerHTML = ''
       sendButton = UI.widgets.button(dom, UI.icons.iconBase + 'noun_383448.svg', 'Send')
       sendButton.setAttribute('style', UI.style.buttonStyle + 'float: right;')
-      sendButton.addEventListener('click', sendMessage, false)
+      sendButton.addEventListener('click', ev => sendMessage(), false)
       rhs.appendChild(sendButton)
-    }
+
+      UI.pad.recordParticipation(subject, subject.doc()) // participation =
+    } // turn on inpuut
 
     let context = {div: middle, dom: dom}
     UI.authn.logIn(context).then(context => {
@@ -275,10 +283,11 @@ module.exports = function (dom, kb, subject, options) {
     anchor.setAttribute('href', imageUri)
     anchor.setAttribute('target', 'images')
     anchor.appendChild(img)
+    UI.widgets.makeDraggable(img, $rdf.sym(imageUri))
     return anchor
   }
 
-  var renderMessage = function (messageTable, bindings, fresh) {
+  function renderMessage (messageTable, bindings, fresh) {
     var creator = bindings['?creator']
     var message = bindings['?msg']
     var date = bindings['?date']
