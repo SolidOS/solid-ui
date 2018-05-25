@@ -60,7 +60,7 @@ function recordPersonalDefaults (klass, context) {
       var ins = []
       var prefs
       var reg
-      if (regs) { // Use existing node is we can
+      if (regs.length) { // Use existing node is we can
         regs.forEach(r => {
           prefs = prefs || kb.any(r, ns.solid('personalDefaults'))
         })
@@ -78,7 +78,7 @@ function recordPersonalDefaults (klass, context) {
       }
       prefs = widgets.newThing(context.preferencesFile)
       ins.push($rdf.st(reg, ns.solid('personalDefaults'), prefs, context.preferencesFile))
-      kb.updater.update([], ins, function (ok, errm) {
+      kb.updater.update([], ins, function (uri, ok, errm) {
         if (!ok) {
           reject(new Error('Setting preferences for ' + klass + ': ' + errm))
         } else {
@@ -109,9 +109,9 @@ function renderPreferencesForm (subject, klass, preferencesForm, context) {
       widgets.appendForm(dom, prefContainer, {}, sharedPreferences, preferencesForm, subject.doc(),
       (ok, mes) => { if (!ok) widgets.complain(context, mes) })
 
+      heading('My default view of any ' + context.noun)
       recordPersonalDefaults(klass, context).then(context => {
-        heading('My default view of any ' + context.noun)
-        widgets.appendForm(dom, prefContainer, {}, context.personalDefaults, preferencesForm, context.preferncesFile,
+        widgets.appendForm(dom, prefContainer, {}, context.personalDefaults, preferencesForm, context.preferencesFile,
         (ok, mes) => { if (!ok) widgets.complain(context, mes) })
       }, err => {
         widgets.complain(context, err)
@@ -123,6 +123,9 @@ function renderPreferencesForm (subject, klass, preferencesForm, context) {
   return prefContainer
 }
 
+// This is the function which acuakly reads and combines the preferences
+//
+//  @@ make it much more tolerant of missing buts of prefernces
 function getPreferencesForClass (subject, klass, predicates, context) {
   return new Promise(function (resolve, reject) {
     pad.participationObject(subject, subject.doc(), context.me).then(participation => {

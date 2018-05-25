@@ -18,7 +18,7 @@
 //
 // (In order to avoid name collisions, it is safely assumed that modules don't
 // export widgets with the same name)
-/* global document */
+/* global document alert */
 var widgets = module.exports = Object.assign(
   {},
   require('./peoplePicker'),  // UI.widgets.PeoplePicker
@@ -63,9 +63,11 @@ function getStatusArea (context) {
 }
 
 function complain (context, err) {
+  if (!err) return // only if error
   var ele = context.statusArea || context.div || getStatusArea(context)
   console.log('Complaint: ' + err)
   if (ele) ele.appendChild(error.errorMessageBlock(context.dom, err))
+  else alert(err)
 }
 
 // var UI.ns = require('./ns.js')
@@ -100,16 +102,16 @@ UI.widgets.extractLogURI = function (fullURI) {
 }
 
 // @@@ This needs to be changed to local timee
-UI.widgets.shortDate = function (str) {
-  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
+//  noTime  - only give date, no time,
+UI.widgets.shortDate = function (str, noTime) {
   if (!str) return '???'
   var month = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ]
   try {
-    var now = new Date()
-    var nowZ = $rdf.term(now).value
+    var nowZ = new Date().toISOString()
+    // var nowZ = $rdf.term(now).value
     // var n = now.getTimezoneOffset() // Minutes
-    if (str.slice(0, 10) === nowZ.slice(0, 10)) return str.slice(11, 16)
+    if (str.slice(0, 10) === nowZ.slice(0, 10) && !noTime) return str.slice(11, 16)
     if (str.slice(0, 4) === nowZ.slice(0, 4)) {
       return (month[parseInt(str.slice(5, 7), 10) - 1] + ' ' + parseInt(str.slice(8, 10), 10))
     }

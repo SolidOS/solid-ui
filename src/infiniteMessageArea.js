@@ -10,7 +10,7 @@ var UI = {
   icons: require('./iconBase'),
   log: require('./log'),
   ns: require('./ns'),
-  pad: require('./'),
+  pad: require('./pad'),
   rdf: require('rdflib'),
   store: require('./store'),
   style: require('./style'),
@@ -436,6 +436,7 @@ module.exports = function (dom, kb, subject, options) {
       } else {
         messageTable.appendChild(tr) // not newestFirst
       }
+      messageTable.inputRow = tr
     }
 
     /// ///// Infinite scroll
@@ -454,7 +455,7 @@ module.exports = function (dom, kb, subject, options) {
 
       let dateCell = moreButtonTR.appendChild(dom.createElement('td'))
       dateCell.style = 'text-align: center; vertical-align: middle; color: #888; font-style: italic;'
-      dateCell.textContent = UI.widgets.shortDate(date.toISOString())
+      dateCell.textContent = UI.widgets.shortDate(date.toISOString(), true) // no time, only date
 
       if (options.menuHandler && live) { // A high level handles calls for a menu
         let menuIcon = 'noun_897914.svg' // or maybe dots noun_243787.svg
@@ -485,6 +486,10 @@ module.exports = function (dom, kb, subject, options) {
     let now = new Date()
     let newChatDocument = chatDocumentFromDate(now)
     if (!newChatDocument.sameTerm(chatDocument)) { // It is a new day
+      if (messageTable.inputRow) {
+        messageTable.removeChild(messageTable.inputRow)
+        delete messageTable.inputRow
+      }
       var oldChatDocument = chatDocument
       appendCurrentMessages()
       // Adding a link in the document will ping listeners to add the new block too
