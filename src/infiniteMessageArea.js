@@ -27,7 +27,8 @@ module.exports = function (dom, kb, subject, options) {
 
   options = options || {}
 
-  var newestFirst = !!options.newestFirst
+  var newestFirst = options.newestFirst === "1" || options.newestFirst === true // hack for now
+  var colorizeByAuthor = options.colorizeByAuthor === "1" || options.colorizeByAuthor === true
   var menuButton
   // var participation // An object tracking users use and prefs
 
@@ -274,9 +275,13 @@ module.exports = function (dom, kb, subject, options) {
     renderMessage(messageTable, bindings, messageTable.fresh) // fresh from elsewhere
   }
 
-  function elementForImageURI (imageUri) {
+  function elementForImageURI (imageUri, options) {
     let img = dom.createElement('img')
-    img.setAttribute('style', 'max-height: 10em; border-radius: 1em; margin: 0.7em;')
+    let height = '10'
+    if (options.inlineImageHeightEms) (
+      height = ('' + options.inlineImageHeightEms).trim()
+    )
+    img.setAttribute('style', 'max-height: ' + height + 'em; border-radius: 1em; margin: 0.7em;')
     // UI.widgets.makeDropTarget(img, handleURIsDroppedOnMugshot, droppedFileHandler)
     if (imageUri) img.setAttribute('src', imageUri)
     let anchor = dom.createElement('a')
@@ -322,13 +327,15 @@ module.exports = function (dom, kb, subject, options) {
     let text = content.value
     tr.appendChild(td2)
     var isImage = (/\.(gif|jpg|jpeg|tiff|png|svg)$/i).test(text) // @@ Should use content-type not URI
-    if (isImage) {
-      let img = elementForImageURI(text)
+    if (isImage && options.expandImagesInline) {
+      let img = elementForImageURI(text, options)
       td2.appendChild(img)
     } else { // text
       var pre = dom.createElement('p')
-      pre.setAttribute('style', messageBodyStyle +
-        (fresh ? 'background-color: #e8ffe8;' : 'background-color: #white;'))
+      var bgcolor = colorizeByAuthor
+          ? UI.pad.lightColorHash(creator)
+          : (fresh ? '#e8ffe8' : 'white')
+      pre.setAttribute('style', messageBodyStyle + 'background-color: ' + bgcolor + ';')
       td2.appendChild(pre)
       pre.textContent = text
     }
