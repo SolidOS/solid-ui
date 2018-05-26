@@ -1,6 +1,12 @@
+/* Drag and drop common functionality
+*/
+const mime = require('mime-types')
+
+/* global FileReader */
 module.exports = {
   makeDropTarget: makeDropTarget,
-  makeDraggable: makeDraggable
+  makeDraggable: makeDraggable,
+  uploadFiles: uploadFiles
 }
 
 function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
@@ -102,4 +108,52 @@ function makeDraggable (tr, obj) {
     console.log('Dragend dropeffect: ' + e.dataTransfer.dropEffect)
     console.log('Dragend: ' + tr + ' -> ' + obj)
   }, false)
+}
+
+/* uploadFiles
+**
+**  Generic uploader of local files to the web
+**   typically called from dropped file handler
+** Params
+**  fetcher   instance of class Fetcher as in kb.fetcher
+**  files      Array of file objects
+**  fileBase   URI of folder in which to put files (except images) (no trailing slash)
+**  imageBase  URI of folder in which to put images
+**  successHandler(file, uploadedURI)    Called after each success upload
+**                              With file object an final URI as params
+*/
+function uploadFiles (fetcher, files, fileBase, imageBase, successHandler) {
+  for (var i = 0; files[i]; i++) {
+    let f = files[i]
+    console.log(' dropped: Filename: ' + f.name + ', type: ' + (f.type || 'n/a') +
+      ' size: ' + f.size + ' bytes, last modified: ' +
+      (f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a')
+    ) // See e.g. https://www.html5rocks.com/en/tutorials/file/dndfiles/
+
+    // @@ Add: progress bar(s)
+    var reader = new FileReader()
+    reader.onload = (function (theFile) {
+      return function (e) {
+        var data = e.target.result
+        console.log(' File read byteLength : ' + data.byteLength)
+        var folderName = theFile.type.startsWith('image/') ? imageBase || fileBase : fileBase
+        var destURI = folderName + '/' + encodeURIComponent(theFile.name)
+        var extension = mime.extension(theFile.type)
+        if (theFile.type !== mime.lookup(theFile.name)) {
+          destURI += '_.' + extension
+          console.log('MIME TYPE MISMATCH -- adding extension: ' + destURI)
+        }
+
+        fetcher.webOperation('PUT', destURI, { data: data, contentType: theFile.type })
+          .then(response => {
+            console.log(' Upload: put OK: ' + destURI)
+            successHandler(theFile, destURI)
+          },
+            error => {
+              console.log(' Upload: FAIL ' + destURI + ', Error: ' + error)
+            })
+      }
+    })(f)
+    reader.readAsArrayBuffer(f)
+  }
 }

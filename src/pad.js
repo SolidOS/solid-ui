@@ -17,6 +17,8 @@ var UI = {
   store: require('./store'),
   widgets: require('./widgets')
 }
+const kb = UI.store
+const ns = UI.ns
 
 const utils = require('./utils')
 
@@ -32,8 +34,6 @@ UI.pad.lightColorHash = function (author) {
 //  This is more general tham the pad.
 //
 UI.pad.renderPartipants = function (dom, table, padDoc, subject, me, options) {
-  var kb = UI.store
-  var ns = UI.ns
   table.setAttribute('style', 'margin: 0.8em;')
 
   var newRowForParticpation = function (parp) {
@@ -64,12 +64,46 @@ UI.pad.renderPartipants = function (dom, table, padDoc, subject, me, options) {
   return table
 }
 
+// Record or find an old Particpation objects
+UI.pad.participationObject = function (subject, padDoc, me) {
+  return new Promise(function (resolve, reject) {
+    if (!me) {
+      throw new Error('Not user id')
+    }
+
+    var parps = kb.each(subject, ns.wf('participation')).filter(function (pn) {
+      return kb.holds(pn, ns.wf('participant'), me)
+    })
+    if (parps.length > 1) {
+      throw new Error('Multiple records of your participation')
+    }
+    if (parps.length) { // If I am not already recorded
+      resolve(parps[0]) // returns the particpation object
+    } else {
+      var participation = UI.widgets.newThing(padDoc)
+      var ins = [
+        UI.rdf.st(subject, ns.wf('participation'), participation, padDoc),
+
+        UI.rdf.st(participation, ns.wf('participant'), me, padDoc),
+        UI.rdf.st(participation, ns.cal('dtstart'), new Date(), padDoc),
+        UI.rdf.st(participation, ns.ui('backgroundColor'), UI.pad.lightColorHash(me), padDoc)
+      ]
+      kb.updater.update([], ins, function (uri, ok, errorMessage) {
+        if (!ok) {
+          reject(new Error('Error recording your partipation: ' + errorMessage))
+        } else {
+          resolve(participation)
+        }
+        // UI.pad.renderPartipants(dom, table, padDoc, subject, me, options)
+      })
+      resolve(participation)
+    }
+  })
+}
+
 // Record my participation and display participants
 //
 UI.pad.recordParticipation = function (subject, padDoc, refreshable) {
-  var kb = UI.store
-  var ns = UI.ns
-
   var me = UI.authn.currentUser()
   if (!me) return // Not logged in
 
@@ -79,7 +113,9 @@ UI.pad.recordParticipation = function (subject, padDoc, refreshable) {
   if (parps.length > 1) {
     throw new Error('Multiple records of your participation')
   }
-  if (!parps.length) { // If I am not already recorded
+  if (parps.length) { // If I am not already recorded
+    return parps[0] // returns the particpation object
+  } else {
     var participation = UI.widgets.newThing(padDoc)
     var ins = [
       UI.rdf.st(subject, ns.wf('participation'), participation, padDoc),
@@ -97,6 +133,7 @@ UI.pad.recordParticipation = function (subject, padDoc, refreshable) {
       }
       // UI.pad.renderPartipants(dom, table, padDoc, subject, me, options)
     })
+    return participation
   }
 }
 
