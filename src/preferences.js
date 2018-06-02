@@ -150,6 +150,7 @@ function toJS (term) {
 function getPreferencesForClass (subject, klass, predicates, context) {
   return new Promise(function (resolve, reject) {
     recordSharedPreferences(subject, context).then(context => {
+      var sharedPreferences = context.sharedPreferences
       if (context.me) {
         pad.participationObject(subject, subject.doc(), context.me).then(participation => {
           recordPersonalDefaults(klass, context).then(context => {
@@ -157,7 +158,7 @@ function getPreferencesForClass (subject, klass, predicates, context) {
             var personalDefaults = context.personalDefaults
             predicates.forEach(pred => {
               // Order of preference: My settings on object, Global settings on object, my settings on class
-              let v1 = kb.any(participation, pred) || kb.any(subject, pred) || kb.any(personalDefaults, pred)
+              let v1 = kb.any(participation, pred) || kb.any(sharedPreferences, pred) || kb.any(personalDefaults, pred)
               if (v1) {
                 results[pred.uri] = toJS(v1)
               }
@@ -168,7 +169,7 @@ function getPreferencesForClass (subject, klass, predicates, context) {
       } else { // no user defined, just use common prefs
         var results = []
         predicates.forEach(pred => {
-          let v1 = kb.any(subject, pred)
+          let v1 = kb.any(sharedPreferences, pred)
           if (v1) {
             results[pred.uri] = toJS(v1)
           }
