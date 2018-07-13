@@ -2,7 +2,7 @@
 */
 const mime = require('mime-types')
 
-/* global FileReader */
+/* global FileReader alert */
 module.exports = {
   makeDropTarget: makeDropTarget,
   makeDraggable: makeDraggable,
@@ -135,22 +135,37 @@ function uploadFiles (fetcher, files, fileBase, imageBase, successHandler) {
     reader.onload = (function (theFile) {
       return function (e) {
         var data = e.target.result
+        var suffix = ''
         console.log(' File read byteLength : ' + data.byteLength)
-        var folderName = theFile.type.startsWith('image/') ? imageBase || fileBase : fileBase
-        var destURI = folderName + '/' + encodeURIComponent(theFile.name)
-        var extension = mime.extension(theFile.type)
-        if (theFile.type !== mime.lookup(theFile.name)) {
-          destURI += '_.' + extension
-          console.log('MIME TYPE MISMATCH -- adding extension: ' + destURI)
+        var contentType = theFile.type
+        if (!theFile.type || theFile.type === '') { // Not known by browser
+          contentType = mime.lookup(theFile.name)
+          if (!contentType) {
+            let msg = 'Filename needs to have an extension which gives a type we know: ' + theFile.name
+            console.log(msg)
+            alert(msg)
+            throw new Error(msg)
+          }
+        } else {
+          var extension = mime.extension(theFile.type)
+          if (theFile.type !== mime.lookup(theFile.name)) {
+            suffix = '_.' + extension
+            console.log('MIME TYPE MISMATCH -- adding extension: ' + suffix)
+          }
         }
+        var folderName = theFile.type.startsWith('image/') ? imageBase || fileBase : fileBase
+        var destURI = folderName + '/' + encodeURIComponent(theFile.name) + suffix
 
-        fetcher.webOperation('PUT', destURI, { data: data, contentType: theFile.type })
+        fetcher.webOperation('PUT', destURI, { data: data, contentType: contentType })
           .then(response => {
             console.log(' Upload: put OK: ' + destURI)
             successHandler(theFile, destURI)
           },
             error => {
-              console.log(' Upload: FAIL ' + destURI + ', Error: ' + error)
+              let msg = ' Upload: FAIL ' + destURI + ', Error: ' + error
+              console.log(msg)
+              alert(msg)
+              throw new Error(msg)
             })
       }
     })(f)

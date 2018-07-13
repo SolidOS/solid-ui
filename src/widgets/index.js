@@ -1841,13 +1841,13 @@ function buildCheckboxForm (dom, kb, lab, del, ins, form, store, tristate) {
     var toDelete = (input.state === true ? ins : input.state === false ? del : [])
     input.newState = input.state === null ? true : input.state === true ? false : tristate ? null : true
     var toInsert = (input.newState === true ? ins : input.newState === false ? del : [])
-    console.log(`  Deleting  ${toDelete} @ ${ toDelete.why }`)
-    console.log(`  Inserting ${toInsert} @ ${ toInsert.why }`)
+    console.log(`  Deleting  ${toDelete} @ ${toDelete.why}`)
+    console.log(`  Inserting ${toInsert} @ ${toInsert.why}`)
     UI.store.updater.update(toDelete, toInsert, function (uri, success, errorBody) {
       if (!success) {
         if (toDelete.why) {
           var hmmm = kb.holds(toDelete.subject, toDelete.predicate, toDelete.object, toDelete.why)
-          if (hmmm){
+          if (hmmm) {
             console.log(' @@@@@ weird if 409 - does hold statement')
           }
         }
