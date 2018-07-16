@@ -27,8 +27,8 @@ module.exports = function (dom, kb, subject, options) {
 
   options = options || {}
 
-  var newestFirst = options.newestFirst === "1" || options.newestFirst === true // hack for now
-  var colorizeByAuthor = options.colorizeByAuthor === "1" || options.colorizeByAuthor === true
+  var newestFirst = options.newestFirst === '1' || options.newestFirst === true // hack for now
+  var colorizeByAuthor = options.colorizeByAuthor === '1' || options.colorizeByAuthor === true
   var menuButton
   // var participation // An object tracking users use and prefs
 
@@ -278,9 +278,9 @@ module.exports = function (dom, kb, subject, options) {
   function elementForImageURI (imageUri, options) {
     let img = dom.createElement('img')
     let height = '10'
-    if (options.inlineImageHeightEms) (
+    if (options.inlineImageHeightEms) {
       height = ('' + options.inlineImageHeightEms).trim()
-    )
+    }
     img.setAttribute('style', 'max-height: ' + height + 'em; border-radius: 1em; margin: 0.7em;')
     // UI.widgets.makeDropTarget(img, handleURIsDroppedOnMugshot, droppedFileHandler)
     if (imageUri) img.setAttribute('src', imageUri)

@@ -41,6 +41,9 @@ var UI = {
 const error = require('./error')
 const utils = require('../utils')
 
+const checkMarkCharacter = '\u2713'
+const cancelCharacter = '\u2715'
+const dashCharacter = '-'
 const cancelIconURI = UI.icons.iconBase + 'noun_1180156.svg' // black X
 const checkIconURI = UI.icons.iconBase + 'noun_1180158.svg' // green checkmark; Continue
 // const greenPlusIconURI = UI.icons.iconBase + 'noun_34653_green.svg' // green checkmark; Continue
@@ -708,7 +711,7 @@ UI.widgets.field[UI.ns.ui('Multiple').uri] = function (
     var tr = box.insertBefore(dom.createElement('tr'), tail)
     var itemDone = function (uri, ok, message) {
       if (ok) { // @@@ Check IT hasnt alreday been written in
-        if (!kb.holds(subject, property, object)) {
+        if (!kb.holds(subject, property, object, store)) {
           var ins = [$rdf.st(subject, property, object, store)]
           kb.updater.update([], ins, linkDone)
         }
@@ -932,12 +935,11 @@ UI.widgets.field[UI.ns.ui('MultiLineTextField').uri] = function (
   return box
 }
 
-/*          Boolean field
+/*          Boolean field  and Tri-state version (true/false/null)
 **
 */
-
-UI.widgets.field[UI.ns.ui('BooleanField').uri] = function (
-  dom, container, already, subject, form, store, callbackFunction) {
+function booleanField (
+  dom, container, already, subject, form, store, callbackFunction, tristate) {
   var ui = UI.ns.ui
   var kb = UI.store
   var property = kb.any(form, ui('property'))
@@ -953,9 +955,18 @@ UI.widgets.field[UI.ns.ui('BooleanField').uri] = function (
   // UI.log.debug('store is '+store)
   var ins = $rdf.st(subject, property, true, store)
   var del = $rdf.st(subject, property, false, store)
-  var box = buildCheckboxForm(dom, kb, lab, del, ins, form, store)
+  var box = buildCheckboxForm(dom, kb, lab, del, ins, form, store, tristate)
   container.appendChild(box)
   return box
+}
+UI.widgets.field[UI.ns.ui('BooleanField').uri] = function (
+  dom, container, already, subject, form, store, callbackFunction, tristate) {
+  return booleanField(dom, container, already, subject, form, store, callbackFunction, false)
+}
+
+UI.widgets.field[UI.ns.ui('TristateField').uri] = function (
+  dom, container, already, subject, form, store, callbackFunction) {
+  return booleanField(dom, container, already, subject, form, store, callbackFunction, true)
 }
 
 /*          Classifier field
@@ -1783,17 +1794,20 @@ UI.widgets.makeSelectForNestedCategory = function (
 **
 **  ins and sel are either statements *or arrays of statements* which should be
 **  made if the checkbox is checed and unchecked respectively.
+**  tristate: Allow ins, or del, or neither
 */
-function buildCheckboxForm (dom, kb, lab, del, ins, form, store) {
+function buildCheckboxForm (dom, kb, lab, del, ins, form, store, tristate) {
+  if (del && del.length && del.length === 0) del = null // to fail an if
   var box = dom.createElement('div')
   var tx = dom.createTextNode(lab)
   var editable = UI.store.updater.editable(store.uri)
   tx.style = 'colour: black; font-size: 100%; padding-left: 0.5 em; padding-right: 0.5 em;'
   box.appendChild(tx)
-  var input = dom.createElement('input')
+  var input
+  input = dom.createElement('button')
+
+  input.setAttribute('style', 'font-size: 150%; height: 1.2em; width: 1.2em; background-color: #eef; margin: 0.1em')
   box.appendChild(input)
-  input.setAttribute('type', 'checkbox')
-  input.setAttribute('style', 'margin: 0.7em')
 
   if (ins && ins.object && !ins.why) { // back-compatible
     ins.why = store
@@ -1801,58 +1815,51 @@ function buildCheckboxForm (dom, kb, lab, del, ins, form, store) {
   if (del && del.object && !del.why) { // back-compatible
     del.why = store
   }
-
-  var state = kb.holds(ins)
-  if (del) {
-    var negation = kb.holds(del)
-    if (state && negation) {
-      box.appendChild(UI.widgets.errorMessageBlock(dom,
-        'Inconsistent data in store!\n' + ins + ' and\n' + del))
-      return box
+  function refresh () {
+    var state = kb.holds(ins.subject, ins.predicate, ins.object, ins.why)
+    if (del) {
+      var negation = kb.holds(del.subject, del.predicate, del.object, del.why)
+      if (state && negation) {
+        box.appendChild(UI.widgets.errorMessageBlock(dom,
+          'Inconsistent data in store!\n' + ins + ' and\n' + del))
+        return box
+      }
+      if (!state && !negation) {
+        let defa = kb.any(form, UI.ns.ui('default'))
+        state = defa ? defa.value === '1' : tristate ? null : false
+      }
     }
-    if (!state && !negation) {
-      state = !!kb.any(form, UI.ns.ui('default'))
-    }
+    input.state = state
+    input.textContent = {true: checkMarkCharacter, false: cancelCharacter, null: dashCharacter}[input.state]
   }
 
-  input.checked = state
+  refresh()
   if (!editable) return box
 
   var boxHandler = function (e) {
     tx.style = 'color: #bbb;'
-    var toInsert, toDelete
-    if (this.checked) {
-      toInsert = ins
-      toDelete = (del && negation) ? del : []
-      UI.store.updater.update(toDelete, toInsert, function (uri, success, errorBody) {
-        if (!success) {
-          tx.style = 'color: #black; background-color: #fee;'
-          box.appendChild(UI.widgets.errorMessageBlock(dom,
-            'Error updating store (setting boolean, checked) :\n\n' + errorBody))
-          input.checked = false // rollback UI
-        } else {
-          tx.style = 'color: #black;'
-          state = true
-          negation = false
+    var toDelete = (input.state === true ? ins : input.state === false ? del : [])
+    input.newState = input.state === null ? true : input.state === true ? false : tristate ? null : true
+    var toInsert = (input.newState === true ? ins : input.newState === false ? del : [])
+    console.log(`  Deleting  ${toDelete} @ ${toDelete.why}`)
+    console.log(`  Inserting ${toInsert} @ ${toInsert.why}`)
+    UI.store.updater.update(toDelete, toInsert, function (uri, success, errorBody) {
+      if (!success) {
+        if (toDelete.why) {
+          var hmmm = kb.holds(toDelete.subject, toDelete.predicate, toDelete.object, toDelete.why)
+          if (hmmm) {
+            console.log(' @@@@@ weird if 409 - does hold statement')
+          }
         }
-      })
-    } else { // unchecked
-      toInsert = del
-      toDelete = ins // kb.statementsMatching(ins.subject, ins.predicate, ins.object, store)
-      UI.store.updater.update(toDelete, toInsert, function (uri, success, errorBody) {
-        tx.className = 'question'
-        if (!success) {
-          tx.style = 'color: #black; background-color: #fee;'
-          box.appendChild(UI.widgets.errorMessageBlock(dom,
-            'Error updating store (unchecked):\n\n' + errorBody))
-          input.checked = true // rollback UI
-        } else {
-          tx.style = 'color: #black;'
-          state = false
-          negation = !!del
-        }
-      })
-    }
+        tx.style = 'color: #black; background-color: #fee;'
+        box.appendChild(UI.widgets.errorMessageBlock(dom,
+          `Checkbox: Error updating store from ${input.state} to ${input.newState}:\n\n${errorBody}`))
+      } else {
+        tx.style = 'color: #black;'
+        input.state = input.newState
+        input.textContent = {true: checkMarkCharacter, false: cancelCharacter, null: dashCharacter}[input.state] // @@
+      }
+    })
   }
   input.addEventListener('click', boxHandler, false)
   return box

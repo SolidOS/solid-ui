@@ -332,11 +332,11 @@ function ensureTypeIndexes (context) {
               var relevant = {'private': context.preferencesFile, 'public': context.publicProfile}[visibility]
 
               function putIndex (newIndex) {
-                kb.fetcher.webOperation('PUT', newIndex, {data: '# ' + new Date() + ' Blank initial Type index\n'})
+                kb.fetcher.webOperation('PUT', newIndex.uri, {data: '# ' + new Date() + ' Blank initial Type index\n'})
                   .then(function (xhr) {
                     resolve(context)
                   }, function (e) {
-                    let msg = 'Creating new index file ' + e
+                    let msg = 'Error creating new index ' + e
                     widgets.complain(context, msg)
                     reject(new Error(msg))
                   })
