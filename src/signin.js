@@ -332,7 +332,9 @@ function ensureTypeIndexes (context) {
               var relevant = {'private': context.preferencesFile, 'public': context.publicProfile}[visibility]
 
               function putIndex (newIndex) {
-                kb.fetcher.webOperation('PUT', newIndex.uri, {data: '# ' + new Date() + ' Blank initial Type index\n'})
+                kb.fetcher.webOperation('PUT', newIndex.uri, {
+                  data: '# ' + new Date() + ' Blank initial Type index\n',
+                  contentType: 'text/turtle'})
                   .then(function (xhr) {
                     resolve(context)
                   }, function (e) {
