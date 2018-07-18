@@ -62,44 +62,48 @@ function newThingUI (context, thePanes) {
   function makeNewAppInstance (options) {
     return new Promise(function (resolve, reject) {
       var selectUI // , selectUIParent
-      var callbackWS = function (ws, newBase) {
-        var newPaneOptions = {
-          newBase: newBase,
-          workspace: ws
-        }
-        for (var opt in options) { // get div, dom, me, folder, pane, refreshTable
-          newPaneOptions[opt] = options[opt]
-        }
-        console.log('newThingUI: Minting new ' + newPaneOptions.pane.name + ' at ' + newPaneOptions.newBase)
-        options.pane.mintNew(newPaneOptions)
-          .then(function (newPaneOptions) {
-            if (!newPaneOptions || !newPaneOptions.newInstance) {
-              throw new Error('Cannot mint new - missing newInstance')
-            }
-            if (newPaneOptions.folder) {
-              kb.add(newPaneOptions.folder, UI.ns.ldp('contains'), kb.sym(newPaneOptions.newBase),
-                newPaneOptions.folder.doc()) // Ping the patch system?
-              if (newPaneOptions.refreshTarget) {
-                newPaneOptions.refreshTarget.refresh() // Refresh the cntaining display
+      function callbackWS (ws, newBase) {
+        UI.authn.logInLoadProfile(context).then(context => {
+          var newPaneOptions = {
+            newBase: newBase,
+            workspace: ws
+          }
+          for (var opt in options) { // get div, dom, me, folder, pane, refreshTable
+            newPaneOptions[opt] = options[opt]
+          }
+          console.log('newThingUI: Minting new ' + newPaneOptions.pane.name + ' at ' + newPaneOptions.newBase)
+          options.pane.mintNew(newPaneOptions)
+            .then(function (newPaneOptions) {
+              if (!newPaneOptions || !newPaneOptions.newInstance) {
+                throw new Error('Cannot mint new - missing newInstance')
               }
-              // selectUI.parentNode.removeChild(selectUI) It removes itself
-            } else {
-              var p = options.div.appendChild(dom.createElement('p'))
-              p.setAttribute('style', 'font-size: 120%;')
-              // Make link to new thing
-              p.innerHTML =
-                "Your <a target='_blank' href='" + newPaneOptions.newInstance.uri + "'><b>new " + options.noun + '</b></a> is ready to be set up. ' +
-                "<br/><br/><a target='_blank' href='" + newPaneOptions.newInstance.uri + "'>Go to your new " + options.noun + '.</a>'
-                // selectUI.parentNode.removeChild(selectUI) // Clean up
-              // selectUIParent.removeChild(selectUI) // Clean up
-            }
-            selectNewTool() // toggle star to plain and menu vanish again
-          })
-          .catch(function (err) {
-            complain(err)
-            reject(err)
-          })
-      }
+              if (newPaneOptions.folder) {
+                kb.add(newPaneOptions.folder, UI.ns.ldp('contains'), kb.sym(newPaneOptions.newBase),
+                  newPaneOptions.folder.doc()) // Ping the patch system?
+                if (newPaneOptions.refreshTarget) {
+                  newPaneOptions.refreshTarget.refresh() // Refresh the cntaining display
+                }
+                // selectUI.parentNode.removeChild(selectUI) It removes itself
+              } else {
+                var p = options.div.appendChild(dom.createElement('p'))
+                p.setAttribute('style', 'font-size: 120%;')
+                // Make link to new thing
+                p.innerHTML =
+                  "Your <a target='_blank' href='" + newPaneOptions.newInstance.uri + "'><b>new " + options.noun + '</b></a> is ready to be set up. ' +
+                  "<br/><br/><a target='_blank' href='" + newPaneOptions.newInstance.uri + "'>Go to your new " + options.noun + '.</a>'
+                  // selectUI.parentNode.removeChild(selectUI) // Clean up
+                // selectUIParent.removeChild(selectUI) // Clean up
+              }
+              selectNewTool() // toggle star to plain and menu vanish again
+            })
+            .catch(function (err) {
+              complain(err)
+              reject(err)
+            })
+        }, err => { // login fails
+          complain('Error logging on: ' + err)
+        })
+      } // callbackWS
 
       var pa = options.pane
       options.appPathSegment = 'edu.mit.solid.pane.' + pa.name
@@ -128,7 +132,8 @@ function newThingUI (context, thePanes) {
         // options.div.appendChild(selectUI)
         // selectUIParent = options.div
       }
-    })
+    }
+  )
   } // makeNewAppInstance
 
   var iconArray = []

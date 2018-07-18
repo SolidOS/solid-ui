@@ -841,7 +841,7 @@ function checkUser (setUserCallback) {
  * A big sign-up/sign in box or a logout box depending on the state
  *
  * @param dom
- * @param listener
+ * @param listener(uri)
  *
  * @returns {Element}
  */
@@ -862,18 +862,20 @@ function loginStatusBox (dom, listener) {
 
   var zapIt = function () {
     // UI.preferences.set('me', '')
-    var message = 'Your Web ID was ' + me + '. It has been forgotten.'
-    me = null
-    try {
-      UI.log.alert(message)
-    } catch (e) {
+    solidAuthClient.logout().then(function() {
+      var message = 'Your Web ID was ' + me + '. It has been forgotten.'
+      me = null
       try {
-        window.alert(message)
+        UI.log.alert(message)
       } catch (e) {
+        try {
+          window.alert(message)
+        } catch (e) {
+        }
       }
-    }
-    box.refresh()
-    if (listener) listener(null)
+      box.refresh()
+      if (listener) listener(null)      
+    })
   }
 
   var logoutButton = function (me) {
