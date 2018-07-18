@@ -73,7 +73,7 @@ function recordPersonalDefaults (klass, context) {
         }
       } else { // no regs fo class
         reg = widgets.newThing(context.preferencesFile)
-        ins = [ $rdf.st(reg, ns.rdf('type'), ns.solid('Regsitration'), context.preferencesFile),
+        ins = [ $rdf.st(reg, ns.rdf('type'), ns.solid('Registration'), context.preferencesFile),
           $rdf.st(reg, ns.solid('forClass'), klass, context.preferencesFile)]
       }
       prefs = widgets.newThing(context.preferencesFile)
