@@ -862,7 +862,7 @@ function loginStatusBox (dom, listener) {
 
   var zapIt = function () {
     // UI.preferences.set('me', '')
-    solidAuthClient.logout().then(function() {
+    solidAuthClient.logout().then(function () {
       var message = 'Your Web ID was ' + me + '. It has been forgotten.'
       me = null
       try {
@@ -874,7 +874,7 @@ function loginStatusBox (dom, listener) {
         }
       }
       box.refresh()
-      if (listener) listener(null)      
+      if (listener) listener(null)
     })
   }
 
