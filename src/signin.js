@@ -17,9 +17,14 @@ const widgets = require('./widgets/index')
 const solidAuthClient = require('solid-auth-client')
 
 const UI = {
+  authn: require('./signin'),
+  icons: require('./iconBase'),
   log: require('./log'),
   ns: require('./ns'),
-  store: require('./store')
+  store: require('./store'),
+  style: require('./style'),
+  utils: require('./utils'),
+  widgets: require('./widgets') // 2018-07-31
 }
 
 module.exports = {
@@ -847,10 +852,9 @@ function checkUser (setUserCallback) {
  */
 function loginStatusBox (dom, listener) {
   var me = defaultTestUser()
-
   var box = dom.createElement('div')
 
-  var setIt = function (newidURI) {
+  function setIt (newidURI) {
     if (!newidURI) { return }
 
     let uri = newidURI.uri || newidURI
@@ -860,7 +864,7 @@ function loginStatusBox (dom, listener) {
     if (listener) listener(me.uri)
   }
 
-  var zapIt = function () {
+  function logoutButtonHandler (event) {
     // UI.preferences.set('me', '')
     solidAuthClient.logout().then(function () {
       var message = 'Your Web ID was ' + me + '. It has been forgotten.'
@@ -875,6 +879,8 @@ function loginStatusBox (dom, listener) {
       }
       box.refresh()
       if (listener) listener(null)
+    }, err => {
+      alert('Fail to log out:' + err)
     })
   }
 
@@ -891,27 +897,44 @@ function loginStatusBox (dom, listener) {
     signOutButton.className = 'WebIDCancelButton'
     signOutButton.setAttribute('type', 'button')
     signOutButton.setAttribute('value', logoutLabel)
-    signOutButton.addEventListener('click', zapIt, false)
+    signOutButton.addEventListener('click', logoutButtonHandler, false)
     return signOutButton
   }
 
   box.refresh = function () {
-    let me = defaultTestUser()
-    let meUri = me ? me.uri : ''
-    if (box.me !== meUri) {
-      widgets.clearElement(box)
-      if (me) {
-        box.appendChild(logoutButton(me))
+    solidAuthClient.currentSession().then(session => {
+      if (session && session.webId) {
+        me = $rdf.sym(session.webId)
       } else {
-        box.appendChild(signInOrSignUpBox(dom, setIt))
+        me = null
       }
-    }
-    box.me = meUri
+      if (box.me !== me.uri) {
+        widgets.clearElement(box)
+        if (me) {
+          box.appendChild(logoutButton(me))
+        } else {
+          box.appendChild(signInOrSignUpBox(dom, setIt))
+        }
+      }
+      box.me = me.uri
+    }, err => {
+      alert('loginStatusBox: ' + err)
+    })
+  }
+
+  if (solidAuthClient.trackSession) {
+    solidAuthClient.trackSession(session => {
+      if (session && session.webId) {
+        me = $rdf.sym(session.webId)
+      } else {
+        me = null
+      }
+      box.refresh()
+    })
   }
 
   box.me = '99999'  // Force refresh
   box.refresh()
-
   return box
 }
 
