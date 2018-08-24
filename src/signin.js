@@ -908,7 +908,7 @@ function loginStatusBox (dom, listener) {
       } else {
         me = null
       }
-      if (box.me !== me.uri) {
+      if ((me && box.me !== me.uri ) || (!me && box.me) || ) {
         widgets.clearElement(box)
         if (me) {
           box.appendChild(logoutButton(me))
@@ -916,7 +916,7 @@ function loginStatusBox (dom, listener) {
           box.appendChild(signInOrSignUpBox(dom, setIt))
         }
       }
-      box.me = me.uri
+      box.me = me ? me.uri : null
     }, err => {
       alert('loginStatusBox: ' + err)
     })
