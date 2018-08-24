@@ -48,6 +48,8 @@ module.exports = {
   solidAuthClient
 }
 
+const signInButtonStyle = 'padding: 1em; border-radius:0.5em; margin: 2em;'
+
 // const userCheckSite = 'https://databox.me/'
 
 // Look for and load the User who has control over it
@@ -735,8 +737,7 @@ function signInOrSignUpBox (dom, setUserCallback) {
   box.appendChild(signInPopUpButton)
   signInPopUpButton.setAttribute('type', 'button')
   signInPopUpButton.setAttribute('value', 'Log in')
-  signInPopUpButton.setAttribute('style',
-    'padding: 1em; border-radius:0.5em; margin: 2em;')
+  signInPopUpButton.setAttribute('style', signInButtonStyle + 'background-color: #fef;')
 
   signInPopUpButton.addEventListener('click', () => {
     var offline = offlineTestID()
@@ -771,8 +772,7 @@ function signInOrSignUpBox (dom, setUserCallback) {
   box.appendChild(signupButton)
   signupButton.setAttribute('type', 'button')
   signupButton.setAttribute('value', 'Sign Up')
-  signupButton.setAttribute('style',
-    'padding: 1em; border-radius:0.5em; margin: 2em;')
+  signupButton.setAttribute('style',  signInButtonStyle + 'background-color: #efe;')
 
   signupButton.addEventListener('click', function (e) {
     let signupMgr = new SolidTls.Signup()
@@ -897,6 +897,7 @@ function loginStatusBox (dom, listener) {
     signOutButton.className = 'WebIDCancelButton'
     signOutButton.setAttribute('type', 'button')
     signOutButton.setAttribute('value', logoutLabel)
+    signOutButton.setAttribute('stye',  signInButtonStyle + 'background-color: #eee;')
     signOutButton.addEventListener('click', logoutButtonHandler, false)
     return signOutButton
   }

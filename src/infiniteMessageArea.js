@@ -337,6 +337,7 @@ module.exports = function (dom, kb, subject, options) {
         para = anc.appendChild(dom.createElement('p'))
         anc.href = text
         para.textContent = text
+        td2.appendChild(anc)
       }
     } else { // text
       para = dom.createElement('p')
