@@ -48,7 +48,7 @@ module.exports = {
   solidAuthClient
 }
 
-const signInButtonStyle = 'padding: 1em; border-radius:0.5em; margin: 2em;'
+const signInButtonStyle = 'padding: 1em; border-radius:0.5em; margin: 2em; font-size: 100%;'
 
 // const userCheckSite = 'https://databox.me/'
 
@@ -737,7 +737,7 @@ function signInOrSignUpBox (dom, setUserCallback) {
   box.appendChild(signInPopUpButton)
   signInPopUpButton.setAttribute('type', 'button')
   signInPopUpButton.setAttribute('value', 'Log in')
-  signInPopUpButton.setAttribute('style', signInButtonStyle + 'background-color: #fef;')
+  signInPopUpButton.setAttribute('style', signInButtonStyle + 'background-color: #eef;')
 
   signInPopUpButton.addEventListener('click', () => {
     var offline = offlineTestID()
@@ -894,10 +894,10 @@ function loginStatusBox (dom, listener) {
       }
     }
     var signOutButton = dom.createElement('input')
-    signOutButton.className = 'WebIDCancelButton'
+    // signOutButton.className = 'WebIDCancelButton'
     signOutButton.setAttribute('type', 'button')
     signOutButton.setAttribute('value', logoutLabel)
-    signOutButton.setAttribute('stye',  signInButtonStyle + 'background-color: #eee;')
+    signOutButton.setAttribute('style',  signInButtonStyle + 'background-color: #eee;')
     signOutButton.addEventListener('click', logoutButtonHandler, false)
     return signOutButton
   }
