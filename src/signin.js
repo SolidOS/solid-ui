@@ -908,7 +908,7 @@ function loginStatusBox (dom, listener) {
       } else {
         me = null
       }
-      if ((me && box.me !== me.uri ) || (!me && box.me) || ) {
+      if ((me && box.me !== me.uri) || (!me && box.me)) {
         widgets.clearElement(box)
         if (me) {
           box.appendChild(logoutButton(me))
