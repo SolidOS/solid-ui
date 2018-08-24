@@ -771,7 +771,7 @@ function signInOrSignUpBox (dom, setUserCallback) {
   let signupButton = dom.createElement('input')
   box.appendChild(signupButton)
   signupButton.setAttribute('type', 'button')
-  signupButton.setAttribute('value', 'Sign Up')
+  signupButton.setAttribute('value', 'Sign Up for Solid')
   signupButton.setAttribute('style',  signInButtonStyle + 'background-color: #efe;')
 
   signupButton.addEventListener('click', function (e) {
