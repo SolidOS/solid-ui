@@ -6,7 +6,7 @@
  *
  *  Many functions in this module take a context object, add to it, and return a promise of it.
  */
- /* global $SOLID_GLOBAL_config localStorage confirm alert */
+ /* global  localStorage confirm alert */
 
 // const Solid = require('solid-client')
 const SolidTls = require('solid-auth-tls')
@@ -742,7 +742,8 @@ function signInOrSignUpBox (dom, setUserCallback) {
   signInPopUpButton.addEventListener('click', () => {
     var offline = offlineTestID()
     if (offline) return setUserCallback(offline.uri)
-    return solidAuthClient.popupLogin({ popupUri: $SOLID_GLOBAL_config.popupUri })
+    // return solidAuthClient.popupLogin({ popupUri: $SOLID_GLOBAL_config.popupUri })
+    return solidAuthClient.popupLogin()
       .then(session => {
         let webIdURI = session.webId
         // setUserCallback(webIdURI)
@@ -772,7 +773,7 @@ function signInOrSignUpBox (dom, setUserCallback) {
   box.appendChild(signupButton)
   signupButton.setAttribute('type', 'button')
   signupButton.setAttribute('value', 'Sign Up for Solid')
-  signupButton.setAttribute('style',  signInButtonStyle + 'background-color: #efe;')
+  signupButton.setAttribute('style', signInButtonStyle + 'background-color: #efe;')
 
   signupButton.addEventListener('click', function (e) {
     let signupMgr = new SolidTls.Signup()
@@ -897,7 +898,7 @@ function loginStatusBox (dom, listener) {
     // signOutButton.className = 'WebIDCancelButton'
     signOutButton.setAttribute('type', 'button')
     signOutButton.setAttribute('value', logoutLabel)
-    signOutButton.setAttribute('style',  signInButtonStyle + 'background-color: #eee;')
+    signOutButton.setAttribute('style', signInButtonStyle + 'background-color: #eee;')
     signOutButton.addEventListener('click', logoutButtonHandler, false)
     return signOutButton
   }
