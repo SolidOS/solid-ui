@@ -140,10 +140,12 @@ UI.widgets.shortTime = function () {
   return UI.widgets.formatDateTime(new Date(), '{Hours}:{Minutes}:{Seconds}.{Milliseconds}')
 }
 
-UI.widgets.newThing = function (store) {
+/** Mint local ID using timestamp
+ * @param {NamedNode} doc - the document in which the ID is to be generated
+ */
+UI.widgets.newThing = function (doc) {
   var now = new Date()
-  // http://www.w3schools.com/jsref/jsref_obj_date.asp
-  return $rdf.sym(store.uri + '#' + 'id' + ('' + now.getTime()))
+  return $rdf.sym(doc.uri + '#' + 'id' + ('' + now.getTime()))
 }
 
 // ///////////////////// Handy UX widgets
@@ -921,7 +923,7 @@ UI.widgets.field[UI.ns.ui('PhoneField').uri] =
                                 }
                               }
                             }
-                            
+
                             updateMany(ds, is, function (uri, ok, body) {
                             // kb.updater.update(ds, is, function (uri, ok, body) {
                               if (ok) {

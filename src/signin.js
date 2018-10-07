@@ -228,6 +228,14 @@ function logInLoadPreferences (context) {
         reject(new Error(message))
       }
 
+      /** Are we working cross-origin?
+      *
+      * @returns {Boolean} True if we are in a webapp at an origin, and the file origin is different
+      */
+      function differentOrigin () {
+        return window.location && (window.location.origin + '/' !== preferencesFile.site().uri)
+      }
+
       if (!preferencesFile) {
         let message = "Can't find a preferences file pointer in profile " + context.publicProfile
         return reject(new Error(message))
@@ -250,6 +258,11 @@ function logInLoadPreferences (context) {
         if (status === 401) {
           m2 = 'Strange - you are not authenticated (properly logged on) to read preferences file.'
         } else if (status === 403) {
+          if (differentOrigin()) {
+            m2 = 'Unauthorized: Assuming prefs file blocked for origin ' + window.location.origin
+            context.preferencesFileError = m2
+            return resolve(context)
+          }
           m2 = 'Strange - you are not authorized to read your preferences file.'
         } else if (status === 404) {
           if (confirm('You do not currently have a Preferences file. Ok for me to create an empty one? ' + preferencesFile)) {
@@ -287,13 +300,15 @@ function loadTypeIndexes (context) {
     logInLoadPreferences(context).then(context => {
       var me = context.me
       context.index = context.index || {}
-      context.index.private = kb.each(me, ns.solid('privateTypeIndex'), undefined, context.preferencesFile)
-      if (context.index.private.length === 0) {
-        return reject(new Error('Your preference file ' + context.preferencesFile + ' does not point to a private type index.'))
+      if (!context.preferencesFileError) {
+        context.index.private = kb.each(me, ns.solid('privateTypeIndex'), undefined, context.preferencesFile)
+        if (context.index.private.length === 0) {
+          return reject(new Error('Your preference file ' + context.preferencesFile + ' does not point to a private type index.'))
+        }
       }
       context.index.public = kb.each(me, ns.solid('publicTypeIndex'), undefined, context.publicProfile)
       if (context.index.public.length === 0) {
-        return reject(new Error('Your preference file ' + context.preferencesFile + ' does not point to a public type index.'))
+        return reject(new Error('Your profile ' + context.publicProfile + ' does not point to a public type index.'))
       }
       var ix = context.index.private.concat(context.index.public)
       kb.fetcher.load(ix).then(responses => {
@@ -316,6 +331,7 @@ function loadTypeIndexes (context) {
  * @param context {Object}
  * @param context.me
  * @param context.preferencesFile
+ * @param context.preferencesFileError - Set if preferences file is blocked at theis origin so don't use it
  * @param context.publicProfile
  * @param context.index
  *
@@ -496,13 +512,17 @@ function registrationControl (context, instance, klass) {
         tbody.children[1].appendChild(widgets.buildCheckboxForm(
           context.dom, UI.store, 'Personal note of this ' + context.noun, null, statements, form, index))
       }
-
-      // widgets.buildCheckboxForm(dom, kb, lab, del, ins, form, store)
       return context
     },
     function (e) {
-      var msg = 'registrationControl: Type indexes not available: ' + e
-      context.div.appendChild(UI.error.errorMessageBlock(context.dom, e))
+      var msg
+      if (content.preferencesFileError) {
+        msg = '(Preferences not available)'
+        context.div.appendChild(dom.createElement('p')).textContent = msg
+      } else {
+        var msg = 'registrationControl: Type indexes not available: ' + e
+        context.div.appendChild(UI.error.errorMessageBlock(context.dom, e))
+      }
       console.log(msg)
     })
     .catch(function (e) {
