@@ -904,16 +904,18 @@ UI.widgets.field[UI.ns.ui('PhoneField').uri] =
                             }
                             var is = ds.map(st => $rdf.st(st.subject, st.predicate, result, st.why)) // cqn include >1 doc
 
-                            function updateMany(ds, is, callback) {
+                            function updateMany (ds, is, callback) {
                               var docs = []
-                              is.forEach(st => if (!docs.includes(st.why.uri) docs.push(st.why.uri))
+                              is.forEach(st => {
+                                if (!docs.includes(st.why.uri)) docs.push(st.why.uri)
+                              })
                               if (docs.length === 1) return kb.updater.update(ds, is, callback)
                               console.log('Update many: ' + docs)
                               let doc = docs.pop()
-                              is1 = is.filter(st => st.why.uri === doc)
-                              is2 = is.filter(st => st.why.uri !== doc)
-                              ds1 = ds.filter(st => st.why.uri === doc)
-                              ds2 = ds.filter(st => st.why.uri !== doc)
+                              let is1 = is.filter(st => st.why.uri === doc)
+                              let is2 = is.filter(st => st.why.uri !== doc)
+                              let ds1 = ds.filter(st => st.why.uri === doc)
+                              let ds2 = ds.filter(st => st.why.uri !== doc)
                               kb.update.update(ds1, is1, function (uri, ok, body) {
                                 if (ok) {
                                   updateMany(ds2, is2, callback)
@@ -921,7 +923,7 @@ UI.widgets.field[UI.ns.ui('PhoneField').uri] =
                                   console.log('Update many failed on: ' + doc)
                                   callback(uri, ok, body)
                                 }
-                              }
+                              })
                             }
 
                             updateMany(ds, is, function (uri, ok, body) {
