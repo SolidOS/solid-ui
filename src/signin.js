@@ -762,7 +762,6 @@ function signInOrSignUpBox (dom, setUserCallback) {
   signInPopUpButton.addEventListener('click', () => {
     var offline = offlineTestID()
     if (offline) return setUserCallback(offline.uri)
-    // return solidAuthClient.popupLogin({ popupUri: $SOLID_GLOBAL_config.popupUri })
     return solidAuthClient.popupLogin()
       .then(session => {
         let webIdURI = session.webId
