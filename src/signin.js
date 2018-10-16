@@ -516,11 +516,11 @@ function registrationControl (context, instance, klass) {
     },
     function (e) {
       var msg
-      if (content.preferencesFileError) {
+      if (context.preferencesFileError) {
         msg = '(Preferences not available)'
         context.div.appendChild(dom.createElement('p')).textContent = msg
       } else {
-        var msg = 'registrationControl: Type indexes not available: ' + e
+        msg = 'registrationControl: Type indexes not available: ' + e
         context.div.appendChild(UI.error.errorMessageBlock(context.dom, e))
       }
       console.log(msg)

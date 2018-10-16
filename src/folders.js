@@ -80,13 +80,13 @@ module.exports.deleteFolder = function (folder, store, dom) {
   const div = dom.createElement('div')
   const table = div.appendChild(dom.createElement('table'))
   const mainTR = table.appendChild(dom.createElement('tr'))
-  const mainTD = mainTR.appendChild(dom.createElement('td'))
+  mainTR.appendChild(dom.createElement('td')) // mainTD
 
   const p = mainTR.appendChild(dom.createElement('p'))
   p.textContent = `Are you sure you want to delete the folder ${folder}? This cannot be undone.`
   const buttonsTR = table.appendChild(dom.createElement('tr'))
   const buttonsTD1 = buttonsTR.appendChild(dom.createElement('td'))
-  const buttonsTD2 = buttonsTR.appendChild(dom.createElement('td'))
+  buttonsTR.appendChild(dom.createElement('td')) // buttonsTD2
   const buttonsTD3 = buttonsTR.appendChild(dom.createElement('td'))
 
   let cancel = buttonsTD1.appendChild(UI.widgets.cancelButton)
