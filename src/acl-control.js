@@ -121,7 +121,7 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
 
     var kToColor = {13: 'purple', 9: 'blue', 5: 'red', 3: 'orange', 2: '#cc0', 1: 'green'}
 
-    var ktToList = function (k) {
+    function ktToList (k) {
       var list = ''
       var y = ['Read', 'Append', 'Write', 'Control']
       for (var i = 0; i < 4; i++) {
@@ -145,8 +145,7 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
       }
     }
 
-    //
-    var agentTriage = function (uri) {
+    function agentTriage (uri) {
       var ns = UI.ns
       var obj = $rdf.sym(uri)
       var types = kb.findTypeURIs(obj)
@@ -208,7 +207,7 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
         })
     }
 
-    var renderCombo = function (byCombo, combo) {
+    function renderCombo (byCombo, combo) {
       var row = box.appendChild(dom.createElement('tr'))
       row.combo = combo
       row.setAttribute('style', 'color: ' +
@@ -299,95 +298,47 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
         syncCombo(combo)
       }
 
-      if (options.modify) {
-        // see http://html5demos.com/drag-anything
-        row.addEventListener('dragover', function (e) {
-          e.preventDefault() // Neeed else drop does not work [sic]
-          e.dataTransfer.dropEffect = 'copy'
-        // console.log('dragover event') // millions of them
-        })
-
-        row.addEventListener('dragenter', function (e) {
-          console.log('dragenter event dropEffect: ' + e.dataTransfer.dropEffect)
-          this.style.backgroundColor = '#ccc'
-          e.dataTransfer.dropEffect = 'link'
-          console.log('dragenter event dropEffect 2: ' + e.dataTransfer.dropEffect)
-        })
-        row.addEventListener('dragleave', function (e) {
-          console.log('dragleave event dropEffect: ' + e.dataTransfer.dropEffect)
-          this.style.backgroundColor = 'white'
-        })
-
-        row.addEventListener('drop', function (e) {
-          if (e.preventDefault) e.preventDefault() // stops the browser from redirecting off to the text.
-          console.log('Drop event. dropEffect: ' + e.dataTransfer.dropEffect)
-          console.log('Drop event. types: ' + (e.dataTransfer.types ? e.dataTransfer.types.join(', ') : 'NOPE'))
-
-          var uris = null
-          var text
-          var thisEle = this
-          if (e.dataTransfer.types) {
-            for (var t = 0; t < e.dataTransfer.types.length; t++) {
-              var type = e.dataTransfer.types[t]
-              if (type === 'text/uri-list') {
-                uris = e.dataTransfer.getData(type).split('\n') // @ ignore those starting with #
-                console.log('Dropped text/uri-list: ' + uris)
-              } else if (type === 'text/plain') {
-                text = e.dataTransfer.getData(type)
-              }
-            }
-            if (uris === null && text && text.slice(0, 4) === 'http') {
-              uris = text
-              console.log("Waring: Poor man's drop: using text for URI") // chrome disables text/uri-list??
-            }
-          } else {
-            // ... however, if we're IE, we don't have the .types property, so we'll just get the Text value
-            uris = [ e.dataTransfer.getData('Text') ]
-            console.log('@@ WARNING non-standrad drop event: ' + uris[0])
+      function handleDroppedURI (u) {
+        var saveAndRestoreUI = function () {
+          if (!(combo in byCombo)) {
+            byCombo[combo] = []
           }
-          console.log('Dropped URI list (2): ' + uris)
-          if (uris) {
-            uris.map(function (u) {
-              var saveAndRestoreUI = function () {
-                if (!(combo in byCombo)) {
-                  byCombo[combo] = []
-                }
-                removeAgentFromCombos(u) // Combos are mutually distinct
-                byCombo[combo].push([res.pred, res.obj.uri])
-                console.log('ACL: setting access to ' + subject + ' by ' + res.pred + ': ' + res.obj)
-                box.saveBack(function (ok, error) {
-                  if (ok) {
-                    thisEle.style.backgroundColor = 'white' // restore look to before drag
-                    syncPanel()
-                  } else {
-                    alert(error)
-                  }
-                })
-              }
+          removeAgentFromCombos(u) // Combos are mutually distinct
+          byCombo[combo].push([res.pred, res.obj.uri])
+          console.log('ACL: setting access to ' + subject + ' by ' + res.pred + ': ' + res.obj)
+          box.saveBack(function (ok, error) {
+            if (ok) {
+              row.style.backgroundColor = 'white' // restore look to before drag
+              syncPanel()
+            } else {
+              alert(error)
+            }
+          })
+        }
 
-              var res = agentTriage(u) // eg 'agent', 'origin', agentClass'
+        var res = agentTriage(u) // eg 'agent', 'origin', agentClass'
+        if (!res) {
+          console.log('   looking up dropped thing ' + u)
+          kb.fetcher.nowOrWhenFetched(u, function (ok, mess) {
+            if (!ok) {
+              console.log('Error looking up dropped thing ' + u + ': ' + mess)
+            } else {
+              res = agentTriage(u)
               if (!res) {
-                console.log('   looking up dropped thing ' + u)
-                kb.fetcher.nowOrWhenFetched(u, function (ok, mess) {
-                  if (!ok) {
-                    console.log('Error looking up dropped thing ' + u + ': ' + mess)
-                  } else {
-                    res = agentTriage(u)
-                    if (!res) {
-                      console.log('Error: Drop fails to drop appropriate thing! ' + u)
-                    } else {
-                      saveAndRestoreUI()
-                    }
-                  }
-                })
+                console.log('Error: Drop fails to drop appropriate thing! ' + u)
               } else {
                 saveAndRestoreUI()
               }
-            })
-          }
-          return false
-        })
-      } // if modify
+            }
+          })
+        } else {
+          saveAndRestoreUI()
+        }
+      }// handleDroppedURI
+
+      if (options.modify) {
+        UI.widgets.makeDropTarget(row, handleDroppedURI)
+      }
     }
     var syncPanel = function () {
       var kids = box.children
