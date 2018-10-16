@@ -33,10 +33,10 @@ var UI = {
 /** A control to capture a picture using camera
  * @param {Docuemnt} dom - The Document object
  * @param {IndexedForumla} store - The quadstore to store data in
- * @param {NamedNode} destination - NN of the image file to be created
+ * @param {NamedNode} getImageDoc() - NN of the image file to be created
  * @param {function} doneCallback - Called when a picture has been taken
  */
-function cameraCaptureControl (dom, store, destination, doneCallback) {
+function cameraCaptureControl (dom, store, getImageDoc, doneCallback) {
   const div = dom.createElement('div')
   const player = div.appendChild(dom.createElement('video'))
   const controlStyle = 'border-radius: 0.5em; margin: 0.8em; width: 320; height:240;'
@@ -70,8 +70,9 @@ function cameraCaptureControl (dom, store, destination, doneCallback) {
     canvas.toBlob(blob => {
       let msg = `got blob type ${blob.type} size ${blob.size}`
       console.log(msg)
+      let destination = getImageDoc()
       saveBlob(blob, destination)
-      alert(msg)
+      // alert(msg)
     }, contentType) // toBlob
   }
 
@@ -81,6 +82,7 @@ function cameraCaptureControl (dom, store, destination, doneCallback) {
     console.log('Putting ' + blob.size + ' bytes of ' + contentType + ' to ' + destination)
     store.fetcher.webOperation('PUT', destination.uri, {data: blob, contentType: contentType}).then(resp => {
       console.log('ok saved ' + destination)
+      doneCallback(destination)
       alert('saved ok: ' + destination)
     }, err => {
       alert(err)
@@ -100,23 +102,25 @@ function cameraCaptureControl (dom, store, destination, doneCallback) {
 /** A button to capture a picture using camera
  * @param {Docuemnt} dom - The Document object
  * @param {IndexedForumla} store - The quadstore to store data in
- * @param {NamedNode} destination - NN of the image file to be created
+ * @param {fuunction} getImageDoc - returns NN of the image file to be created
+ * @param {function<Node>} doneCallback - called with the image taken
  * @returns {DomElement} - A div element with the buton in it
  *
  * This expacts the buttton to a large control when it is pressed
  */
-function cameraButton (dom, store, destination) {
+function cameraButton (dom, store, getImageDoc, doneCallback) {
   const div = dom.createElement('div')
   const but = UI.widgets.button(dom, UI.icons.iconBase + 'noun_383448.svg', 'Take picture')
   var control
-  function restoreButton () {
+  function restoreButton (imageDoc) {
     div.removeChild(control)
     div.appendChild(but)
+    doneCallback(imageDoc)
   }
   div.appendChild(but)
   but.addEventListener('click', event => {
     div.removeChild(but)
-    control = control || cameraCaptureControl(dom, store, destination, restoreButton)
+    control = control || cameraCaptureControl(dom, store, getImageDoc, restoreButton)
     div.appendChild(control)
   })
   return div

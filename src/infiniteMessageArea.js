@@ -194,6 +194,17 @@ module.exports = function (dom, kb, subject, options) {
       sendButton.addEventListener('click', ev => sendMessage(), false)
       rhs.appendChild(sendButton)
 
+      const chatDocument = chatDocumentFromDate(new Date())
+      var imageDoc
+      function getImageDoc () {
+        imageDoc = kb.sym(chatDocument.dir().uri + 'Image_' + Date.now() + '.png')
+        return imageDoc
+      }
+      function tookPicture () {
+        sendMessage(imageDoc.uri)
+      }
+      rhs.appendChild(UI.media.cameraButton(dom, kb, getImageDoc, tookPicture))
+
       UI.pad.recordParticipation(subject, subject.doc()) // participation =
     } // turn on inpuut
 
