@@ -10,6 +10,7 @@ var UI = {
   icons: require('./iconBase'),
   log: require('./log'),
   ns: require('./ns'),
+  media: require('./media-capture'),
   pad: require('./pad'),
   rdf: require('rdflib'),
   store: require('./store'),
@@ -200,10 +201,12 @@ module.exports = function (dom, kb, subject, options) {
         imageDoc = kb.sym(chatDocument.dir().uri + 'Image_' + Date.now() + '.png')
         return imageDoc
       }
-      function tookPicture () {
-        sendMessage(imageDoc.uri)
+      function tookPicture (imageDoc) {
+        if (imageDoc) {
+          sendMessage(imageDoc.uri)
+        }
       }
-      rhs.appendChild(UI.media.cameraButton(dom, kb, getImageDoc, tookPicture))
+      middle.appendChild(UI.media.cameraButton(dom, kb, getImageDoc, tookPicture))
 
       UI.pad.recordParticipation(subject, subject.doc()) // participation =
     } // turn on inpuut
@@ -336,7 +339,7 @@ module.exports = function (dom, kb, subject, options) {
 
     var td2 = tr.appendChild(dom.createElement('td'))
     let text = content.value.trim()
-    let isURI = (/^https?:\/\[^ <>]*$/i).test(text)
+    let isURI = (/^https?:\/[^ <>]*$/i).test(text)
     let para = null
     if (isURI) {
       var isImage = (/\.(gif|jpg|jpeg|tiff|png|svg)$/i).test(text) // @@ Should use content-type not URI

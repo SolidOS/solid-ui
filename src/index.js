@@ -49,6 +49,7 @@ const UI = {
   icons: require('./iconBase'),
   log: require('./log'),
   matrix: require('./matrix'),
+  media: require('./media-capture'),
   messageArea: require('./messageArea'),
   infiniteMessageArea: require('./infiniteMessageArea'),
   pad: require('./pad'),
