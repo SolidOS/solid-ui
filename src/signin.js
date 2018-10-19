@@ -6,7 +6,7 @@
  *
  *  Many functions in this module take a context object, add to it, and return a promise of it.
  */
- /* global $SOLID_GLOBAL_config localStorage confirm alert */
+ /* global  localStorage confirm alert */
 
 // const Solid = require('solid-client')
 const SolidTls = require('solid-auth-tls')
@@ -17,9 +17,14 @@ const widgets = require('./widgets/index')
 const solidAuthClient = require('solid-auth-client')
 
 const UI = {
+  authn: require('./signin'),
+  icons: require('./iconBase'),
   log: require('./log'),
   ns: require('./ns'),
-  store: require('./store')
+  store: require('./store'),
+  style: require('./style'),
+  utils: require('./utils'),
+  widgets: require('./widgets') // 2018-07-31
 }
 
 module.exports = {
@@ -42,6 +47,8 @@ module.exports = {
   saveUser,
   solidAuthClient
 }
+
+const signInButtonStyle = 'padding: 1em; border-radius:0.5em; margin: 2em; font-size: 100%;'
 
 // const userCheckSite = 'https://databox.me/'
 
@@ -221,6 +228,14 @@ function logInLoadPreferences (context) {
         reject(new Error(message))
       }
 
+      /** Are we working cross-origin?
+      *
+      * @returns {Boolean} True if we are in a webapp at an origin, and the file origin is different
+      */
+      function differentOrigin () {
+        return window.location && (window.location.origin + '/' !== preferencesFile.site().uri)
+      }
+
       if (!preferencesFile) {
         let message = "Can't find a preferences file pointer in profile " + context.publicProfile
         return reject(new Error(message))
@@ -243,6 +258,11 @@ function logInLoadPreferences (context) {
         if (status === 401) {
           m2 = 'Strange - you are not authenticated (properly logged on) to read preferences file.'
         } else if (status === 403) {
+          if (differentOrigin()) {
+            m2 = 'Unauthorized: Assuming prefs file blocked for origin ' + window.location.origin
+            context.preferencesFileError = m2
+            return resolve(context)
+          }
           m2 = 'Strange - you are not authorized to read your preferences file.'
         } else if (status === 404) {
           if (confirm('You do not currently have a Preferences file. Ok for me to create an empty one? ' + preferencesFile)) {
@@ -269,6 +289,7 @@ function logInLoadPreferences (context) {
  * @see https://github.com/solid/solid/blob/master/proposals/data-discovery.md#discoverability
  *
  * @param context
+ * @param context.div - place to put UI
  *
  * @returns {Promise<context>}
  */
@@ -280,13 +301,15 @@ function loadTypeIndexes (context) {
     logInLoadPreferences(context).then(context => {
       var me = context.me
       context.index = context.index || {}
-      context.index.private = kb.each(me, ns.solid('privateTypeIndex'), undefined, context.preferencesFile)
-      if (context.index.private.length === 0) {
-        return reject(new Error('Your preference file ' + context.preferencesFile + ' does not point to a private type index.'))
+      if (!context.preferencesFileError) {
+        context.index.private = kb.each(me, ns.solid('privateTypeIndex'), undefined, context.preferencesFile)
+        if (context.index.private.length === 0) {
+          return reject(new Error('Your preference file ' + context.preferencesFile + ' does not point to a private type index.'))
+        }
       }
       context.index.public = kb.each(me, ns.solid('publicTypeIndex'), undefined, context.publicProfile)
       if (context.index.public.length === 0) {
-        return reject(new Error('Your preference file ' + context.preferencesFile + ' does not point to a public type index.'))
+        return reject(new Error('Your profile ' + context.publicProfile + ' does not point to a public type index.'))
       }
       var ix = context.index.private.concat(context.index.public)
       kb.fetcher.load(ix).then(responses => {
@@ -309,6 +332,7 @@ function loadTypeIndexes (context) {
  * @param context {Object}
  * @param context.me
  * @param context.preferencesFile
+ * @param context.preferencesFileError - Set if preferences file is blocked at theis origin so don't use it
  * @param context.publicProfile
  * @param context.index
  *
@@ -401,9 +425,9 @@ function ensureTypeIndexes (context) {
  * 2016-12-11 change to include forClass arc a la
  * https://github.com/solid/solid/blob/master/proposals/data-discovery.md
  *
- * @param context
- * @param context.instances
- * @param context.containers
+ * @param context.div - inuput - Place to put UI for login
+ * @param context.instances - output - array of instances
+ * @param context.containers - output - array of containers to look in
  * @param klass
  * @returns {Promise}  of context
  */
@@ -413,8 +437,14 @@ function findAppInstances (context, klass) {
   var fetcher = UI.store.fetcher
 
   return new Promise(function (resolve, reject) {
-    loadTypeIndexes(context).then(indexes => {
-      var registrations = kb.each(undefined, ns.solid('forClass'), klass)
+    loadTypeIndexes(context).then(context => {
+      var registrations = []
+      if (context.indexes.public) {
+        registrations = kb.each(undefined, ns.solid('forClass'), klass, context.indexes.public)
+      }
+      if (context.indexes.private) {
+        registrations = registrations.concat(kb.each(undefined, ns.solid('forClass'), klass, context.indexes.private))
+      }
       var instances = []
       var containers = []
       for (var r = 0; r < registrations.length; r++) {
@@ -422,7 +452,7 @@ function findAppInstances (context, klass) {
         containers = containers.concat(kb.each(klass, ns.solid('instanceContainer')))
       }
       if (!containers.length) {
-        context.instances = []
+        context.instances = instances
         context.containers = []
         resolve(context)
       }
@@ -489,13 +519,17 @@ function registrationControl (context, instance, klass) {
         tbody.children[1].appendChild(widgets.buildCheckboxForm(
           context.dom, UI.store, 'Personal note of this ' + context.noun, null, statements, form, index))
       }
-
-      // widgets.buildCheckboxForm(dom, kb, lab, del, ins, form, store)
       return context
     },
     function (e) {
-      var msg = 'registrationControl: Type indexes not available: ' + e
-      context.div.appendChild(UI.error.errorMessageBlock(context.dom, e))
+      var msg
+      if (context.preferencesFileError) {
+        msg = '(Preferences not available)'
+        context.div.appendChild(dom.createElement('p')).textContent = msg
+      } else {
+        msg = 'registrationControl: Type indexes not available: ' + e
+        context.div.appendChild(UI.error.errorMessageBlock(context.dom, e))
+      }
       console.log(msg)
     })
     .catch(function (e) {
@@ -730,8 +764,7 @@ function signInOrSignUpBox (dom, setUserCallback) {
   box.appendChild(signInPopUpButton)
   signInPopUpButton.setAttribute('type', 'button')
   signInPopUpButton.setAttribute('value', 'Log in')
-  signInPopUpButton.setAttribute('style',
-    'padding: 1em; border-radius:0.5em; margin: 2em;')
+  signInPopUpButton.setAttribute('style', signInButtonStyle + 'background-color: #eef;')
 
   signInPopUpButton.addEventListener('click', () => {
     var offline = offlineTestID()
@@ -765,9 +798,8 @@ function signInOrSignUpBox (dom, setUserCallback) {
   let signupButton = dom.createElement('input')
   box.appendChild(signupButton)
   signupButton.setAttribute('type', 'button')
-  signupButton.setAttribute('value', 'Sign Up')
-  signupButton.setAttribute('style',
-    'padding: 1em; border-radius:0.5em; margin: 2em;')
+  signupButton.setAttribute('value', 'Sign Up for Solid')
+  signupButton.setAttribute('style', signInButtonStyle + 'background-color: #efe;')
 
   signupButton.addEventListener('click', function (e) {
     let signupMgr = new SolidTls.Signup()
@@ -847,10 +879,9 @@ function checkUser (setUserCallback) {
  */
 function loginStatusBox (dom, listener) {
   var me = defaultTestUser()
-
   var box = dom.createElement('div')
 
-  var setIt = function (newidURI) {
+  function setIt (newidURI) {
     if (!newidURI) { return }
 
     let uri = newidURI.uri || newidURI
@@ -860,7 +891,7 @@ function loginStatusBox (dom, listener) {
     if (listener) listener(me.uri)
   }
 
-  var zapIt = function () {
+  function logoutButtonHandler (event) {
     // UI.preferences.set('me', '')
     solidAuthClient.logout().then(function () {
       var message = 'Your Web ID was ' + me + '. It has been forgotten.'
@@ -875,6 +906,8 @@ function loginStatusBox (dom, listener) {
       }
       box.refresh()
       if (listener) listener(null)
+    }, err => {
+      alert('Fail to log out:' + err)
     })
   }
 
@@ -888,30 +921,48 @@ function loginStatusBox (dom, listener) {
       }
     }
     var signOutButton = dom.createElement('input')
-    signOutButton.className = 'WebIDCancelButton'
+    // signOutButton.className = 'WebIDCancelButton'
     signOutButton.setAttribute('type', 'button')
     signOutButton.setAttribute('value', logoutLabel)
-    signOutButton.addEventListener('click', zapIt, false)
+    signOutButton.setAttribute('style', signInButtonStyle + 'background-color: #eee;')
+    signOutButton.addEventListener('click', logoutButtonHandler, false)
     return signOutButton
   }
 
   box.refresh = function () {
-    let me = defaultTestUser()
-    let meUri = me ? me.uri : ''
-    if (box.me !== meUri) {
-      widgets.clearElement(box)
-      if (me) {
-        box.appendChild(logoutButton(me))
+    solidAuthClient.currentSession().then(session => {
+      if (session && session.webId) {
+        me = $rdf.sym(session.webId)
       } else {
-        box.appendChild(signInOrSignUpBox(dom, setIt))
+        me = null
       }
-    }
-    box.me = meUri
+      if ((me && box.me !== me.uri) || (!me && box.me)) {
+        widgets.clearElement(box)
+        if (me) {
+          box.appendChild(logoutButton(me))
+        } else {
+          box.appendChild(signInOrSignUpBox(dom, setIt))
+        }
+      }
+      box.me = me ? me.uri : null
+    }, err => {
+      alert('loginStatusBox: ' + err)
+    })
+  }
+
+  if (solidAuthClient.trackSession) {
+    solidAuthClient.trackSession(session => {
+      if (session && session.webId) {
+        me = $rdf.sym(session.webId)
+      } else {
+        me = null
+      }
+      box.refresh()
+    })
   }
 
   box.me = '99999'  // Force refresh
   box.refresh()
-
   return box
 }
 

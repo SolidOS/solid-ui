@@ -105,14 +105,14 @@ function genUuid () { // http://stackoverflow.com/questions/105034/create-guid-u
   })
 }
 
-// Sync a DOM table with an array of things
-//
-// table - will have a tr for each thing
-// things - ORDERED array of NamedNode objects
-// createNewRow(thing) returns a TR table row for that thing
-//
-// Tolerates out of order elements but puts new ones in order.
-//
+/** Sync a DOM table with an array of things
+ *
+ * @param {DomElement} table - will have a tr for each thing
+ * @param {Array<NamedNode>} things - ORDERED array of NamedNode objects
+ * @param {function({NamedNode})} createNewRow(thing) returns a TR table row for a new thing
+ *
+ * Tolerates out of order elements but puts new ones in order.
+*/
 function syncTableToArray (table, things, createNewRow) {
   let foundOne
   let row

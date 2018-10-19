@@ -10,6 +10,7 @@ var UI = {
   icons: require('./iconBase'),
   log: require('./log'),
   ns: require('./ns'),
+  media: require('./media-capture'),
   pad: require('./pad'),
   rdf: require('rdflib'),
   store: require('./store'),
@@ -194,6 +195,19 @@ module.exports = function (dom, kb, subject, options) {
       sendButton.addEventListener('click', ev => sendMessage(), false)
       rhs.appendChild(sendButton)
 
+      const chatDocument = chatDocumentFromDate(new Date())
+      var imageDoc
+      function getImageDoc () {
+        imageDoc = kb.sym(chatDocument.dir().uri + 'Image_' + Date.now() + '.png')
+        return imageDoc
+      }
+      function tookPicture (imageDoc) {
+        if (imageDoc) {
+          sendMessage(imageDoc.uri)
+        }
+      }
+      middle.appendChild(UI.media.cameraButton(dom, kb, getImageDoc, tookPicture))
+
       UI.pad.recordParticipation(subject, subject.doc()) // participation =
     } // turn on inpuut
 
@@ -323,21 +337,32 @@ module.exports = function (dom, kb, subject, options) {
     tr.appendChild(td1)
     creatorAndDate(td1, creator, UI.widgets.shortDate(dateString), message)
 
-    var td2 = dom.createElement('td')
-    let text = content.value
-    tr.appendChild(td2)
-    var isImage = (/\.(gif|jpg|jpeg|tiff|png|svg)$/i).test(text) // @@ Should use content-type not URI
-    if (isImage && options.expandImagesInline) {
-      let img = elementForImageURI(text, options)
-      td2.appendChild(img)
+    var td2 = tr.appendChild(dom.createElement('td'))
+    let text = content.value.trim()
+    let isURI = (/^https?:\/[^ <>]*$/i).test(text)
+    let para = null
+    if (isURI) {
+      var isImage = (/\.(gif|jpg|jpeg|tiff|png|svg)$/i).test(text) // @@ Should use content-type not URI
+      if (isImage && options.expandImagesInline) {
+        let img = elementForImageURI(text, options)
+        td2.appendChild(img)
+      } else { // Link but not Image
+        let anc = td2.appendChild(dom.createElement('a'))
+        para = anc.appendChild(dom.createElement('p'))
+        anc.href = text
+        para.textContent = text
+        td2.appendChild(anc)
+      }
     } else { // text
-      var pre = dom.createElement('p')
+      para = dom.createElement('p')
+      td2.appendChild(para)
+      para.textContent = text
+    }
+    if (para) {
       var bgcolor = colorizeByAuthor
           ? UI.pad.lightColorHash(creator)
           : (fresh ? '#e8ffe8' : 'white')
-      pre.setAttribute('style', messageBodyStyle + 'background-color: ' + bgcolor + ';')
-      td2.appendChild(pre)
-      pre.textContent = text
+      para.setAttribute('style', messageBodyStyle + 'background-color: ' + bgcolor + ';')
     }
 
     var td3 = dom.createElement('td')
@@ -489,6 +514,27 @@ module.exports = function (dom, kb, subject, options) {
   var messageTable
   var chatDocument
 
+  function loadDayList (subject, chatDocument) {
+
+  }
+/*
+  function moveDays(from, delta) {
+    const to = new Date(from)
+    to.setDate(to.getDate() + delta) // this works -- see
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/setDate
+    if (delta < 0 && 0 + to < 0 + dateCreated) {
+      return null // passed start of chat archive
+    }
+    if (delta > 0 && 0 + to > 0 + new Date()) {
+      return null // Can't go into future
+    }
+    var monthFolder = chatDocumentFromDate(to).dir().dir()
+    kb.fetcher.load(monthFolder).then( response => {
+      var days = kb.each(monthFolder, ns.ldp('contains'))
+    }, err => { complain('can\'t load month folder')})
+    // @@@@
+  }
+*/
   function addNewTableIfNeeded () {
     let now = new Date()
     let newChatDocument = chatDocumentFromDate(now)
@@ -529,6 +575,9 @@ module.exports = function (dom, kb, subject, options) {
         dom, 'Problem accessing chat log file: ' + err))
     })
   }
+  // var dateCreated = kb.any(subject, ns.dc('created'))
+  // dateCreated = dateCreated ? dateCreated.toJS() : new Date('2018-01-01') // Lower bound on date
+  // if (!dateCreated) throw new Error('Chat should have creation date: ' + subject)
   appendCurrentMessages()
   return div
 }

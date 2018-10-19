@@ -140,10 +140,12 @@ UI.widgets.shortTime = function () {
   return UI.widgets.formatDateTime(new Date(), '{Hours}:{Minutes}:{Seconds}.{Milliseconds}')
 }
 
-UI.widgets.newThing = function (store) {
+/** Mint local ID using timestamp
+ * @param {NamedNode} doc - the document in which the ID is to be generated
+ */
+UI.widgets.newThing = function (doc) {
   var now = new Date()
-  // http://www.w3schools.com/jsref/jsref_obj_date.asp
-  return $rdf.sym(store.uri + '#' + 'id' + ('' + now.getTime()))
+  return $rdf.sym(doc.uri + '#' + 'id' + ('' + now.getTime()))
 }
 
 // ///////////////////// Handy UX widgets
@@ -900,8 +902,32 @@ UI.widgets.field[UI.ns.ui('PhoneField').uri] =
                                 result = new $rdf.Literal(field.value)
                               }
                             }
-                            var is = $rdf.st(subject, property, result, store) // @@ Explicitly put the datatype in.
-                            kb.updater.update(ds, is, function (uri, ok, body) {
+                            var is = ds.map(st => $rdf.st(st.subject, st.predicate, result, st.why)) // cqn include >1 doc
+
+                            function updateMany (ds, is, callback) {
+                              var docs = []
+                              is.forEach(st => {
+                                if (!docs.includes(st.why.uri)) docs.push(st.why.uri)
+                              })
+                              if (docs.length === 1) return kb.updater.update(ds, is, callback)
+                              console.log('Update many: ' + docs)
+                              let doc = docs.pop()
+                              let is1 = is.filter(st => st.why.uri === doc)
+                              let is2 = is.filter(st => st.why.uri !== doc)
+                              let ds1 = ds.filter(st => st.why.uri === doc)
+                              let ds2 = ds.filter(st => st.why.uri !== doc)
+                              kb.update.update(ds1, is1, function (uri, ok, body) {
+                                if (ok) {
+                                  updateMany(ds2, is2, callback)
+                                } else {
+                                  console.log('Update many failed on: ' + doc)
+                                  callback(uri, ok, body)
+                                }
+                              })
+                            }
+
+                            updateMany(ds, is, function (uri, ok, body) {
+                            // kb.updater.update(ds, is, function (uri, ok, body) {
                               if (ok) {
                                 field.disabled = false
                                 field.setAttribute('style', style)

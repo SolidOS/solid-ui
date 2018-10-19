@@ -1,9 +1,10 @@
 
-/// /////////////////////////////////////////////
-//
-//   The pad widget
-//
-//   See notepad for the main widget
+/** **************
+*   Notepad Widget
+*/
+
+/** @module UI.pad
+*/
 
 const $rdf = require('rdflib')
 var padModule = module.exports = {}
@@ -22,8 +23,11 @@ const ns = UI.ns
 
 const utils = require('./utils')
 
-// Figure out a random color from my webid
-
+/** Figure out a random color from my webid
+*
+* @param {NamedNode} author - The author of text being displayed
+* @returns {String} The CSS color generated, constrained to be light for a background color
+*/
 UI.pad.lightColorHash = function (author) {
   var hash = function (x) { return x.split('').reduce(function (a, b) { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0) }
   return author && author.uri ? '#' + ((hash(author.uri) & 0xffffff) | 0xc0c0c0).toString(16) : '#ffffff' // c0c0c0  forces pale
@@ -64,7 +68,15 @@ UI.pad.renderPartipants = function (dom, table, padDoc, subject, me, options) {
   return table
 }
 
-// Record or find an old Particpation objects
+/** Record, or find old, Particpation object
+*
+* A particpaption object is a place to record things specifically about
+* subject and the user, such as preferences, start of membership, etc
+* @param {Node} subject - The thing in which the participation is happening
+* @param {NamedNode} document -  Where to record the data
+* @param {NamedNode} me - The logged in user
+*
+*/
 UI.pad.participationObject = function (subject, padDoc, me) {
   return new Promise(function (resolve, reject) {
     if (!me) {
@@ -94,15 +106,19 @@ UI.pad.participationObject = function (subject, padDoc, me) {
         } else {
           resolve(participation)
         }
-        // UI.pad.renderPartipants(dom, table, padDoc, subject, me, options)
       })
       resolve(participation)
     }
   })
 }
 
-// Record my participation and display participants
-//
+/** Record my participation and display participants
+ *
+ * @param {NamedNode} subject - the thing in which participation is happening
+ * @param {NamedNode} padDoc - The document into which the particpation should be recorded
+ * @param {DOMNode} refreshable - A DOM element whose refresh() is to be called if the change works
+ *
+*/
 UI.pad.recordParticipation = function (subject, padDoc, refreshable) {
   var me = UI.authn.currentUser()
   if (!me) return // Not logged in
