@@ -17,14 +17,16 @@ function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
 
   var dragenterListener = function (e) {
     console.log('dragenter event dropEffect: ' + e.dataTransfer.dropEffect)
-    this.savedStyle = {}
-    this.savedStye.border = this.style.border
-    this.savedStyle.backgroundColor = this.style.backgroundColor
-    this.savedStyle.borderRadius = this.style.borderRadius
+    if (this.style) { //  necessary not sure when
+      this.savedStyle = {}
+      this.savedStye.border = this.style.border
+      this.savedStyle.backgroundColor = this.style.backgroundColor
+      this.savedStyle.borderRadius = this.style.borderRadius
 
-    this.style.backgroundColor = '#ccc'
-    this.style.border = "0.25em dashed black"
-    this.style.borderRadius = "0.3em"
+      this.style.backgroundColor = '#ccc'
+      this.style.border = "0.25em dashed black"
+      this.style.borderRadius = "0.3em"
+    }
 
     e.dataTransfer.dropEffect = 'link'
     console.log('dragenter event dropEffect 2: ' + e.dataTransfer.dropEffect)

@@ -289,6 +289,7 @@ function logInLoadPreferences (context) {
  * @see https://github.com/solid/solid/blob/master/proposals/data-discovery.md#discoverability
  *
  * @param context
+ * @param context.div - place to put UI
  *
  * @returns {Promise<context>}
  */
@@ -424,9 +425,9 @@ function ensureTypeIndexes (context) {
  * 2016-12-11 change to include forClass arc a la
  * https://github.com/solid/solid/blob/master/proposals/data-discovery.md
  *
- * @param context
- * @param context.instances
- * @param context.containers
+ * @param context.div - inuput - Place to put UI for login
+ * @param context.instances - output - array of instances
+ * @param context.containers - output - array of containers to look in
  * @param klass
  * @returns {Promise}  of context
  */
@@ -436,8 +437,14 @@ function findAppInstances (context, klass) {
   var fetcher = UI.store.fetcher
 
   return new Promise(function (resolve, reject) {
-    loadTypeIndexes(context).then(indexes => {
-      var registrations = kb.each(undefined, ns.solid('forClass'), klass)
+    loadTypeIndexes(context).then(context => {
+      var registrations = []
+      if (context.indexes.public) {
+        registrations = kb.each(undefined, ns.solid('forClass'), klass, context.indexes.public)
+      }
+      if (context.indexes.private) {
+        registrations = registrations.concat(kb.each(undefined, ns.solid('forClass'), klass, context.indexes.private))
+      }
       var instances = []
       var containers = []
       for (var r = 0; r < registrations.length; r++) {
@@ -445,7 +452,7 @@ function findAppInstances (context, klass) {
         containers = containers.concat(kb.each(klass, ns.solid('instanceContainer')))
       }
       if (!containers.length) {
-        context.instances = []
+        context.instances = instances
         context.containers = []
         resolve(context)
       }

@@ -62,4 +62,7 @@ const UI = {
   widgets: require('./widgets')
 }
 
+if (typeof window !== 'undefined') {
+  window.UI = UI  // Simpler access by non-node scripts
+}
 module.exports = UI

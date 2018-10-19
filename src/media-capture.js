@@ -32,8 +32,9 @@ var UI = {
   widgets: require('./widgets')
 }
 
-const cameraIcon = require('./noun_Camera_1618446_000000') // load it in JS
-// const cameraIcon = UI.icons.iconBase + 'noun_479395.svg' // Get it from github
+// const cameraIcon = require('./noun_Camera_1618446_000000') // load it in JS
+const cameraIcon = UI.icons.iconBase + 'noun_Camera_1618446_000000.svg' // Get it from github
+const retakeIcon = UI.icons.iconBase + 'noun_479395.svg' // Get it from github
 
 const canvasWidth = '640'
 const canvasHeight = '480'
@@ -66,21 +67,24 @@ module.exports.cameraCaptureControl = function cameraCaptureControl (dom, store,
     doneCallback(null)
   })
 
-  buttons.appendChild(dom.createElement('td')) // Retake button
-  .appendChild(UI.widgets.button(dom, cameraIcon, 'Retake'))
-  .addEventListener('click', e => {
+  const retakeButton = buttons.appendChild(dom.createElement('td')) // Retake button
+  .appendChild(UI.widgets.button(dom, retakeIcon, 'Retake'))
+  retakeButton.addEventListener('click', e => {
     retake()
   })
+  retakeButton.style.visibility = 'collapse' // Hide for now
 
-  buttons.appendChild(dom.createElement('td')) // Trigger capture button
+  const shutterButton = buttons.appendChild(dom.createElement('td')) // Trigger capture button
   .appendChild(UI.widgets.button(dom, UI.icons.iconBase + 'noun_10636.svg', 'Snap'))
-  .addEventListener('click', grabCanvas)
+  shutterButton.addEventListener('click', grabCanvas)
+  shutterButton.style.visibility = 'collapse' // Hide for now
 
-  buttons.appendChild(dom.createElement('td')) // Confirm and save button
+  const sendButton = buttons.appendChild(dom.createElement('td')) // Confirm and save button
   .appendChild(UI.widgets.continueButton(dom)) // @@ or send icon??
-  .addEventListener('click', e => {
+  sendButton.addEventListener('click', e => {
     saveBlob(imageBlob, destination)
   })
+  sendButton.style.visibility = 'collapse' // Hide for now
 
   function displayPlayer () {
     player = main.appendChild(dom.createElement('video'))
@@ -90,6 +94,9 @@ module.exports.cameraCaptureControl = function cameraCaptureControl (dom, store,
     navigator.mediaDevices.getUserMedia(constraints)
       .then((stream) => {
         player.srcObject = stream
+        shutterButton.style.visibility = 'visible' // Enable
+        sendButton.style.visibility = 'collapse'
+        retakeButton.style.visibility = 'collapse'
       })
   }
 
@@ -126,8 +133,9 @@ module.exports.cameraCaptureControl = function cameraCaptureControl (dom, store,
   }
 
   function reviewImage () {
-    // @@ Enable continue button
-    // @@ Enable retake button
+    sendButton.style.visibility = 'visible'
+    retakeButton.style.visibility = 'visible'
+    shutterButton.style.visibility = 'collapse' // Hide for now
   }
 
   function stopVideo () {
@@ -166,7 +174,7 @@ module.exports.cameraCaptureControl = function cameraCaptureControl (dom, store,
 
 module.exports.cameraButton = function cameraButton (dom, store, getImageDoc, doneCallback) {
   const div = dom.createElement('div')
-  const but = UI.widgets.button(dom, UI.icons.iconBase + 'noun_Camera_1618446_000000.svg', 'Take picture')
+  const but = UI.widgets.button(dom, cameraIcon, 'Take picture')
   var control
   function restoreButton (imageDoc) {
     div.removeChild(control)

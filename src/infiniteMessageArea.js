@@ -514,6 +514,9 @@ module.exports = function (dom, kb, subject, options) {
   var messageTable
   var chatDocument
 
+  function loadDayList (subject, chatDocument) {
+
+  }
 /*
   function moveDays(from, delta) {
     const to = new Date(from)
