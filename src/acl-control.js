@@ -298,7 +298,8 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
         syncCombo(combo)
       }
 
-      function handleDroppedURI (u) {
+      function handleDroppedURIs (uris) {
+        let u = uris[0] // @@ Handle all of them - TBD
         var saveAndRestoreUI = function () {
           if (!(combo in byCombo)) {
             byCombo[combo] = []
@@ -334,10 +335,10 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
         } else {
           saveAndRestoreUI()
         }
-      }// handleDroppedURI
+      }// handleDroppedURIs
 
       if (options.modify) {
-        UI.widgets.makeDropTarget(row, handleDroppedURI)
+        UI.widgets.makeDropTarget(row, handleDroppedURIs)
       }
     }
     var syncPanel = function () {
