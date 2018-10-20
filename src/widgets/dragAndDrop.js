@@ -19,13 +19,13 @@ function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
     console.log('dragenter event dropEffect: ' + e.dataTransfer.dropEffect)
     if (this.style) { //  necessary not sure when
       this.savedStyle = {}
-      this.savedStye.border = this.style.border
+      this.savedStyle.border = this.style.border
       this.savedStyle.backgroundColor = this.style.backgroundColor
       this.savedStyle.borderRadius = this.style.borderRadius
 
       this.style.backgroundColor = '#ccc'
-      this.style.border = "0.25em dashed black"
-      this.style.borderRadius = "0.3em"
+      this.style.border = '0.25em dashed black'
+      this.style.borderRadius = '0.3em'
     }
 
     e.dataTransfer.dropEffect = 'link'
@@ -34,9 +34,9 @@ function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
   var dragleaveListener = function (e) {
     console.log('dragleave event dropEffect: ' + e.dataTransfer.dropEffect)
     if (this.savedStyle) {
-      this.style.border = this.savedStye.border
+      this.style.border = this.savedStyle.border
       this.style.backgroundColor = this.savedStyle.backgroundColor
-      this.style.borderRadius =  this.savedStyle.borderRadius
+      this.style.borderRadius = this.savedStyle.borderRadius
     } else {
       this.style.backgroundColor = 'white'
     }
