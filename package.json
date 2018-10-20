@@ -8,7 +8,7 @@
     "dist"
   ],
   "scripts": {
-    "build-lib": "babel src -d lib",
+    "build-lib": "babel --no-babelrc src -d lib",
     "build": "npm run build-lib",
     "postversion": "git push origin master --follow-tags",
     "prepublishOnly": "npm run build",
