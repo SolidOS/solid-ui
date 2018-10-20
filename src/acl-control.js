@@ -298,47 +298,52 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
         syncCombo(combo)
       }
 
-      function handleDroppedURIs (uris) {
-        let u = uris[0] // @@ Handle all of them - TBD
-        var saveAndRestoreUI = function () {
+      function saveAndRestoreUI () {
+        box.saveBack(function (ok, error) {
+          if (ok) {
+            row.style.backgroundColor = 'white' // restore look to before drag
+            syncPanel()
+          } else {
+            alert(error)
+          }
+        })
+      }
+
+      function handleManyDroppedURIs (uris) {
+        Promise.all(uris.map(function (u) {
+          return handleOneDroppedURI(u) // can add to meetingDoc but must be sync
+        })).then(function (a) {
+          saveAndRestoreUI()
+        })
+      }
+
+      async function handleOneDroppedURI (u) {
+        function setACLCombo () {
           if (!(combo in byCombo)) {
             byCombo[combo] = []
           }
           removeAgentFromCombos(u) // Combos are mutually distinct
           byCombo[combo].push([res.pred, res.obj.uri])
           console.log('ACL: setting access to ' + subject + ' by ' + res.pred + ': ' + res.obj)
-          box.saveBack(function (ok, error) {
-            if (ok) {
-              row.style.backgroundColor = 'white' // restore look to before drag
-              syncPanel()
-            } else {
-              alert(error)
-            }
-          })
         }
 
         var res = agentTriage(u) // eg 'agent', 'origin', agentClass'
         if (!res) {
           console.log('   looking up dropped thing ' + u)
-          kb.fetcher.nowOrWhenFetched(u, function (ok, mess) {
-            if (!ok) {
-              console.log('Error looking up dropped thing ' + u + ': ' + mess)
-            } else {
-              res = agentTriage(u)
-              if (!res) {
-                console.log('Error: Drop fails to drop appropriate thing! ' + u)
-              } else {
-                saveAndRestoreUI()
-              }
-            }
-          })
+          await kb.fetcher.load(u)
+          res = agentTriage(u)
+          if (!res) {
+            console.log('   Error: Drop fails to drop appropriate thing! ' + u)
+          } else {
+            setACLCombo()
+          }
         } else {
-          saveAndRestoreUI()
+          setACLCombo()
         }
-      }// handleDroppedURIs
+      }// handleOneDroppedURI
 
       if (options.modify) {
-        UI.widgets.makeDropTarget(row, handleDroppedURIs)
+        UI.widgets.makeDropTarget(row, handleManyDroppedURIs)
       }
     }
     var syncPanel = function () {
