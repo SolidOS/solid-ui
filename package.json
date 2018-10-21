@@ -1,6 +1,6 @@
 {
   "name": "solid-ui",
-  "version": "0.11.9",
+  "version": "0.11.10",
   "description": "UI library for writing Solid read-write-web applications",
   "main": "./lib/index.js",
   "files": [
