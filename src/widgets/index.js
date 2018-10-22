@@ -916,7 +916,7 @@ UI.widgets.field[UI.ns.ui('PhoneField').uri] =
                               let is2 = is.filter(st => st.why.uri !== doc)
                               let ds1 = ds.filter(st => st.why.uri === doc)
                               let ds2 = ds.filter(st => st.why.uri !== doc)
-                              kb.update.update(ds1, is1, function (uri, ok, body) {
+                              kb.updater.update(ds1, is1, function (uri, ok, body) {
                                 if (ok) {
                                   updateMany(ds2, is2, callback)
                                 } else {
