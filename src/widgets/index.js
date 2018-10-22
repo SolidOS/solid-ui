@@ -902,13 +902,20 @@ UI.widgets.field[UI.ns.ui('PhoneField').uri] =
                                 result = new $rdf.Literal(field.value)
                               }
                             }
-                            var is = ds.map(st => $rdf.st(st.subject, st.predicate, result, st.why)) // cqn include >1 doc
+                            var is = ds.map(st => $rdf.st(st.subject, st.predicate, result, st.why)) // can include >1 doc
+                            if (is.length === 0) {  // or none
+                              is = [ $rdf.st(subject, property, result, store)]
+                            }
 
                             function updateMany (ds, is, callback) {
                               var docs = []
                               is.forEach(st => {
                                 if (!docs.includes(st.why.uri)) docs.push(st.why.uri)
                               })
+                              ds.forEach(st => {
+                                if (!docs.includes(st.why.uri)) docs.push(st.why.uri)
+                              })
+                              if (docs.length === 0) throw new Error ('updateMany has no docs to patch')
                               if (docs.length === 1) return kb.updater.update(ds, is, callback)
                               console.log('Update many: ' + docs)
                               let doc = docs.pop()
