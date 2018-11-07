@@ -495,7 +495,7 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
       setPartStyle(part, '')
       addListeners(part, chunk)
     } else {
-      setPartStyle(part, 'color: #222; background-color: #111;')
+      setPartStyle(part, 'color: #222;')
       console.log("Note can't add listeners - not logged in")
     }
     return part
