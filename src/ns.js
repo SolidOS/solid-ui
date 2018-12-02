@@ -1,54 +1,9 @@
-// Namespaces we commonly use and have acommon prefixes for around solid
+// Namespaces we commonly use and have common prefixes for around Solid
 //
-var thisModule = {}
 
-module.exports = thisModule
+const solidNamespace = require('solid-namespace') // Delegate to this which takes RDFlib as param.
+const $rdf = require('rdflib')
 
-var $rdf = require('rdflib')
+export solidNamespace($rdf)
 
-// This used to be a faw function (no ".expand" but that caused the module exports all to be dropped)
-thisModule.expand = function (prefixed) {
-  var pair = prefixed.split(':')
-  if (pair.length === 0) throw new Error('Prefixed name has no colon: ' + prefixed)
-  if (!(pair[0] in thisModule)) throw new Error('Unregistered namespace prefix in: ' + prefixed)
-  return thisModule[pair[0]](pair[1])
-}
-
-thisModule.auth = $rdf.Namespace('http://www.w3.org/ns/auth/acl#') // @@ obsolete - use acl:
-thisModule.acl = $rdf.Namespace('http://www.w3.org/ns/auth/acl#')
-thisModule.arg = $rdf.Namespace('http://www.w3.org/ns/pim/arg#')
-thisModule.cal = $rdf.Namespace('http://www.w3.org/2002/12/cal/ical#')
-thisModule.contact = $rdf.Namespace('http://www.w3.org/2000/10/swap/pim/contact#')
-thisModule.dc = $rdf.Namespace('http://purl.org/dc/elements/1.1/')
-thisModule.dct = $rdf.Namespace('http://purl.org/dc/terms/')
-thisModule.doap = $rdf.Namespace('http://usefulinc.com/ns/doap#')
-thisModule.foaf = $rdf.Namespace('http://xmlns.com/foaf/0.1/')
-thisModule.http = $rdf.Namespace('http://www.w3.org/2007/ont/http#')
-thisModule.httph = $rdf.Namespace('http://www.w3.org/2007/ont/httph#')
-thisModule.icalTZ = $rdf.Namespace('http://www.w3.org/2002/12/cal/icaltzd#') // Beware: not cal:
-thisModule.ldp = $rdf.Namespace('http://www.w3.org/ns/ldp#')
-thisModule.link = thisModule.tab = thisModule.tabont = $rdf.Namespace('http://www.w3.org/2007/ont/link#')
-thisModule.log = $rdf.Namespace('http://www.w3.org/2000/10/swap/log#')
-thisModule.meeting = $rdf.Namespace('http://www.w3.org/ns/pim/meeting#')
-thisModule.mo = $rdf.Namespace('http://purl.org/ontology/mo/')
-thisModule.owl = $rdf.Namespace('http://www.w3.org/2002/07/owl#')
-thisModule.pad = $rdf.Namespace('http://www.w3.org/ns/pim/pad#')
-thisModule.patch = $rdf.Namespace('http://www.w3.org/ns/pim/patch#')
-thisModule.qu = $rdf.Namespace('http://www.w3.org/2000/10/swap/pim/qif#')
-thisModule.trip = $rdf.Namespace('http://www.w3.org/ns/pim/trip#')
-thisModule.rdf = $rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
-thisModule.rdfs = $rdf.Namespace('http://www.w3.org/2000/01/rdf-schema#')
-thisModule.rss = $rdf.Namespace('http://purl.org/rss/1.0/')
-thisModule.sched = $rdf.Namespace('http://www.w3.org/ns/pim/schedule#')
-thisModule.schema = $rdf.Namespace('http:/schema.org/') // @@ beware confusion with documents no 303
-thisModule.sioc = $rdf.Namespace('http://rdfs.org/sioc/ns#')
-// was - thisModule.xsd = $rdf.Namespace('http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#dt-')
-thisModule.solid = $rdf.Namespace('http://www.w3.org/ns/solid/terms#')
-thisModule.space = $rdf.Namespace('http://www.w3.org/ns/pim/space#')
-thisModule.stat = $rdf.Namespace('http://www.w3.org/ns/posix/stat#')
-thisModule.ui = $rdf.Namespace('http://www.w3.org/ns/ui#')
-thisModule.vcard = $rdf.Namespace('http://www.w3.org/2006/vcard/ns#')
-thisModule.wf = $rdf.Namespace('http://www.w3.org/2005/01/wf/flow#')
-thisModule.xsd = $rdf.Namespace('http://www.w3.org/2001/XMLSchema#')
-
-//  ends
+// ends
