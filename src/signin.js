@@ -439,11 +439,11 @@ function findAppInstances (context, klass) {
   return new Promise(function (resolve, reject) {
     loadTypeIndexes(context).then(context => {
       var registrations = []
-      if (context.indexes.public) {
-        registrations = kb.each(undefined, ns.solid('forClass'), klass, context.indexes.public)
+      if (context.index.public) {
+        registrations = kb.each(undefined, ns.solid('forClass'), klass, context.index.public)
       }
-      if (context.indexes.private) {
-        registrations = registrations.concat(kb.each(undefined, ns.solid('forClass'), klass, context.indexes.private))
+      if (context.index.private) {
+        registrations = registrations.concat(kb.each(undefined, ns.solid('forClass'), klass, context.index.private))
       }
       var instances = []
       var containers = []
