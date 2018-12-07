@@ -45,7 +45,8 @@
     "node-uuid": "^1.4.7",
     "rdflib": "^0.19.1",
     "solid-auth-client": "^2.2.13",
-    "solid-auth-tls": "^0.1.2"
+    "solid-auth-tls": "^0.1.2",
+    "solid-namespace": "*"
   },
   "dependenciesBackup": {
     "ajv": "^6.5.5",
@@ -53,14 +54,16 @@
     "node-uuid": "^1.4.7",
     "rdflib": "^0.19.1",
     "solid-auth-client": "^2.2.6",
-    "solid-auth-tls": "^0.1.2"
+    "solid-auth-tls": "^0.1.2",
+    "solid-namespace": "*"
   },
   "dependenciesFile": {
     "escape-html": "^1.0.3",
     "node-uuid": "^1.4.7",
     "rdflib": "file://../../linkeddata/rdflib.js",
     "solid-auth-client": "^2.2.6",
-    "solid-auth-tls": "^0.1.2"
+    "solid-auth-tls": "^0.1.2",
+    "solid-namespace": "*"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
