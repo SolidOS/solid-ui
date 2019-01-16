@@ -1829,8 +1829,7 @@ UI.widgets.makeSelectForNestedCategory = function (
 **  made if the checkbox is checed and unchecked respectively.
 **  tristate: Allow ins, or del, or neither
 */
-function buildCheckboxForm (dom, kb, lab, del, ins, form, store, tristate) {
-  if (del && del.length && del.length === 0) del = null // to fail an if
+function buildCheckboxForm (dom, kb, lab, del, ins, form, store, tristate) { // 20190115
   var box = dom.createElement('div')
   var tx = dom.createTextNode(lab)
   var editable = UI.store.updater.editable(store.uri)
@@ -1856,14 +1855,14 @@ function buildCheckboxForm (dom, kb, lab, del, ins, form, store, tristate) {
   ins = fix(ins)
   del = fix(del)
 
-  function holdsAll (kb, a) {
+  function holdsAll (a) {
     let missing = a.filter(st => !kb.holds(st.subject, st.predicate, st.object, st.why))
     return missing.length === 0
   }
   function refresh () {
-    var state = holdsAll(kb, ins)
+    var state = holdsAll(ins)
     if (del.length) {
-      var negation = holdsAll(kb, del)
+      var negation = holdsAll(del)
       if (state && negation) {
         box.appendChild(UI.widgets.errorMessageBlock(dom,
           'Inconsistent data in store!\n' + ins + ' and\n' + del))
