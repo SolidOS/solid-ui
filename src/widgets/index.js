@@ -915,7 +915,7 @@ UI.widgets.field[UI.ns.ui('PhoneField').uri] =
                               ds.forEach(st => {
                                 if (!docs.includes(st.why.uri)) docs.push(st.why.uri)
                               })
-                              if (docs.length === 0) throw new Error ('updateMany has no docs to patch')
+                              if (docs.length === 0) throw new Error('updateMany has no docs to patch')
                               if (docs.length === 1) return kb.updater.update(ds, is, callback)
                               console.log('Update many: ' + docs)
                               let doc = docs.pop()
@@ -1842,16 +1842,28 @@ function buildCheckboxForm (dom, kb, lab, del, ins, form, store, tristate) {
   input.setAttribute('style', 'font-size: 150%; height: 1.2em; width: 1.2em; background-color: #eef; margin: 0.1em')
   box.appendChild(input)
 
-  if (ins && ins.object && !ins.why) { // back-compatible
-    ins.why = store
+  function fix (x) {
+    if (!x) return [] // no statements
+    if (x.object) {
+      if (!x.why) {
+        x.why = store // be back-compaitible  with old code
+      }
+      return [ x ] // one statements
+    }
+    if (x instanceof Array) return x
+    throw new Error('buildCheckboxForm: bad param ' + x)
   }
-  if (del && del.object && !del.why) { // back-compatible
-    del.why = store
+  ins = fix(ins)
+  del = fix(del)
+
+  function holdsAll (kb, a) {
+    let missing = a.filter(st => !kb.holds(st.subject, st.predicate, st.object, st.why))
+    return missing.length === 0
   }
   function refresh () {
-    var state = kb.holds(ins.subject, ins.predicate, ins.object, ins.why)
-    if (del) {
-      var negation = kb.holds(del.subject, del.predicate, del.object, del.why)
+    var state = holdsAll(kb, ins)
+    if (del.length) {
+      var negation = holdsAll(kb, del)
       if (state && negation) {
         box.appendChild(UI.widgets.errorMessageBlock(dom,
           'Inconsistent data in store!\n' + ins + ' and\n' + del))
@@ -1870,7 +1882,7 @@ function buildCheckboxForm (dom, kb, lab, del, ins, form, store, tristate) {
   if (!editable) return box
 
   var boxHandler = function (e) {
-    tx.style = 'color: #bbb;'
+    tx.style = 'color: #bbb;' // grey -- not saved yet
     var toDelete = (input.state === true ? ins : input.state === false ? del : [])
     input.newState = input.state === null ? true : input.state === true ? false : tristate ? null : true
     var toInsert = (input.newState === true ? ins : input.newState === false ? del : [])

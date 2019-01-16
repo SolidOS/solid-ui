@@ -262,8 +262,9 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
         setPartStyle(part, 'color: black;  background-color: #ffd;') // yellow
         part.state = 0 // Needs downstream refresh
         utils.beep(0.5, 512) // Ooops clash with other person
-        setTimeout(function () {
-          updater.requestDownstreamAction(padDoc, reloadAndSync)
+        setTimeout(function () { // Ideally, beep! @@
+          reloadAndSync()  // Throw away our changes and
+          // updater.requestDownstreamAction(padDoc, reloadAndSync)
         }, 1000)
       } else {
         console.log('    removePart FAILED ' + chunk + ': ' + errorMessage)
