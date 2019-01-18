@@ -460,7 +460,10 @@ module.exports = function (dom, kb, subject, options) {
         removePreviousMessages(event, messageTable)
       } else {
         insertPreviousMessages(event, messageTable).then(done => {
-          if (done)
+          if (done) {
+            moreButton.firstChild.setAttribute('src', UI.icons.iconBase + 'noun_T-Block_1114655_000000.svg')
+            moreButton.disabled = true
+          }
         })
       }
       messageTable.extended = !messageTable.extended // Toggle
