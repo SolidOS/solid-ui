@@ -394,14 +394,17 @@ module.exports = function (dom, kb, subject, options) {
     }, false)
   }
 
-  function insertPreviousMessages (event, messageTable) {
+  async function insertPreviousMessages (event, messageTable) {
     let date = new Date(messageTable.date.getTime() - 86400000) // day in mssecs
+    date = await loadPrevious(date)
+    if (!date) return true // done
     let newMessageTable = createMessageTable(date, false) // not live
     if (newestFirst) { // put on bottom
       div.appendChild(newMessageTable)
     } else { // put on top as we scroll back
       div.insertBefore(newMessageTable, div.firstChild)
     }
+    return false // not done
   }
   function removePreviousMessages (event, messageTable) {
     if (newestFirst) { // it was put on bottom
@@ -439,6 +442,14 @@ module.exports = function (dom, kb, subject, options) {
     return $rdf.sym(path)
   }
 
+  function dateFromChatDocument (doc) {
+    const head = subject.dir().uri.length
+    const str = doc.uri.slice(head, head + 10).replace(/\//g, '-')
+    let date = new Date(str + 'Z') // GMT
+    console.log('Date for ' + doc + ':' + date.toISOString())
+    return date
+  }
+
   function createMessageTable (date, live) {
     var moreButton
     function moreButtonHandler (event) {
@@ -448,7 +459,9 @@ module.exports = function (dom, kb, subject, options) {
       if (messageTable.extended) {
         removePreviousMessages(event, messageTable)
       } else {
-        insertPreviousMessages(event, messageTable)
+        insertPreviousMessages(event, messageTable).then(done => {
+          if (done)
+        })
       }
       messageTable.extended = !messageTable.extended // Toggle
     }
@@ -514,9 +527,70 @@ module.exports = function (dom, kb, subject, options) {
   var messageTable
   var chatDocument
 
-  function loadDayList (subject, chatDocument) {
+  async function loadPrevious (date) {
+    /*
+    async function checkAbove (file, level) {
+      let folder = file.dir()
+      if (level > 0) {
+        let x = await checkAbove(folder, level - 1)
+        if (!x) return null
+        if (!kb.holds(folder, ns.ldp('contains'), file)) {
+          return null
+        }
+        return file
+      }
+    }
+    */
 
+    // Track back through the YYYY/MM/DD tree to find the last day
+    //
+    async function findPrevious (file, level) {
+      function suitable (x) {
+        let tail = x.uri.slice(0,-1).split('/').slice(-1)[0]
+        if (!'0123456789'.includes(tail[0])) return false // not numeric
+        if (x.uri >= file.uri) return false // later than we want or same -- looking for different
+        return true
+      }
+      const folder = file.dir()
+      if (level === 0) return [true, null]
+
+      let [exact, earlier] = await findPrevious(folder, level - 1)
+      if (!exact && !earlier) return [false, null]
+      // let exact = found.sameTerm(folder)
+
+      async function findFallback (folder) {
+        console.log('Loading ' + folder)
+        await kb.fetcher.load(folder)
+        let possible = kb.each(folder, ns.ldp('contains'))
+        possible = possible.filter(suitable) // only ones before this
+        possible.sort() // RDF oibjects should sort by URI hence by date
+        let fallback = (possible.length === 0) ? null : possible.slice(-1)[0]
+        return fallback
+      }
+      var hit = exact && kb.holds(folder, ns.ldp('contains'), file) // the one you wanted
+
+      if (exact) { // This folder exists - otherwise gets read eror
+        let fallback = await findFallback(folder)
+        if (fallback) return [hit, fallback]
+      }
+      if (earlier) {
+        let fallback = await findFallback(earlier)
+        if (fallback) return [hit, fallback]
+      }
+
+      return [hit, null]
+    }
+
+    let folder = chatDocumentFromDate(date).dir()
+    let [hit, fallback] = await findPrevious(folder, 3)
+    let found = hit ? folder : fallback
+    if (found) {
+      let doc = kb.sym(found.uri + 'chat.ttl')
+      return dateFromChatDocument(doc)
+    }
+    return null
   }
+
 /*
   function moveDays(from, delta) {
     const to = new Date(from)
