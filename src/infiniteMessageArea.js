@@ -22,9 +22,9 @@ const utils = require('./utils')
 
 module.exports = function (dom, kb, subject, options) {
   kb = kb || UI.store
-  var ns = UI.ns
-  var WF = $rdf.Namespace('http://www.w3.org/2005/01/wf/flow#')
-  var DCT = $rdf.Namespace('http://purl.org/dc/terms/')
+  const ns = UI.ns
+  const WF = $rdf.Namespace('http://www.w3.org/2005/01/wf/flow#')
+  const DCT = $rdf.Namespace('http://purl.org/dc/terms/')
 
   options = options || {}
 
@@ -37,7 +37,6 @@ module.exports = function (dom, kb, subject, options) {
   // 'font-size: 100%; margin: 0.1em 1em 0.1em 1em;  background-color: white; white-space: pre-wrap; padding: 0.1em;'
 
   var div = dom.createElement('div')
-  // var messageTable // Shared by initial build and addMessageFromBindings
   var me
 
   var updater = UI.store.updater
@@ -88,7 +87,7 @@ module.exports = function (dom, kb, subject, options) {
 
   //       Form for a new message
   //
-  function newMessageForm () {
+  function newMessageForm (messageTable) {
     var form = dom.createElement('tr')
     var lhs = dom.createElement('td')
     var middle = dom.createElement('td')
@@ -100,46 +99,48 @@ module.exports = function (dom, kb, subject, options) {
     var field, sendButton
 
     function sendMessage (text) {
-      var now = addNewTableIfNeeded()
+      var now = new Date()
+      addNewTableIfNeeded(now).then(() => {
+        if (!text) {
+          field.setAttribute('style', messageBodyStyle + 'color: #bbb;') // pendingedit
+          field.disabled = true
+        }
+        var sts = []
+        var timestamp = '' + now.getTime()
+        var dateStamp = $rdf.term(now)
+        let chatDocument = chatDocumentFromDate(now)
 
-      if (!text) {
-        field.setAttribute('style', messageBodyStyle + 'color: #bbb;') // pendingedit
-        field.disabled = true
-      }
-      var sts = []
-      var timestamp = '' + now.getTime()
-      var dateStamp = $rdf.term(now)
-      let chatDocument = chatDocumentFromDate(now)
+        var message = kb.sym(chatDocument.uri + '#' + 'Msg' + timestamp)
+        var content = kb.literal(text || field.value)
+        // if (text) field.value = text  No - don't destroy half-finsihed user input
 
-      var message = kb.sym(chatDocument.uri + '#' + 'Msg' + timestamp)
-      var content = kb.literal(text || field.value)
-      // if (text) field.value = text  No - don't destroy half-finsihed user input
+        sts.push(new $rdf.Statement(subject, ns.wf('message'), message, chatDocument))
+        sts.push(new $rdf.Statement(message, ns.sioc('content'), content, chatDocument))
+        sts.push(new $rdf.Statement(message, DCT('created'), dateStamp, chatDocument))
+        if (me) sts.push(new $rdf.Statement(message, ns.foaf('maker'), me, chatDocument))
 
-      sts.push(new $rdf.Statement(subject, ns.wf('message'), message, chatDocument))
-      sts.push(new $rdf.Statement(message, ns.sioc('content'), content, chatDocument))
-      sts.push(new $rdf.Statement(message, DCT('created'), dateStamp, chatDocument))
-      if (me) sts.push(new $rdf.Statement(message, ns.foaf('maker'), me, chatDocument))
+        var sendComplete = function (uri, success, body) {
+          if (!success) {
+            form.appendChild(UI.widgets.errorMessageBlock(
+              dom, 'Error writing message: ' + body))
+          } else {
+            var bindings = { '?msg': message,
+              '?content': content,
+              '?date': dateStamp,
+              '?creator': me}
+            renderMessage(liveMessageTable, bindings, false) // not green
 
-      var sendComplete = function (uri, success, body) {
-        if (!success) {
-          form.appendChild(UI.widgets.errorMessageBlock(
-            dom, 'Error writing message: ' + body))
-        } else {
-          var bindings = { '?msg': message,
-            '?content': content,
-            '?date': dateStamp,
-            '?creator': me}
-          renderMessage(messageTable, bindings, false) // not green
-
-          if (!text) {
-            field.value = '' // clear from out for reuse
-            field.setAttribute('style', messageBodyStyle)
-            field.disabled = false
+            if (!text) {
+              field.value = '' // clear from out for reuse
+              field.setAttribute('style', messageBodyStyle)
+              field.disabled = false
+            }
           }
         }
-      }
-      updater.update([], sts, sendComplete)
-    }
+        updater.update([], sts, sendComplete)
+      }) // then
+    } // sendMessage
+
     form.appendChild(dom.createElement('br'))
 
     //    DRAG AND DROP
@@ -274,7 +275,7 @@ module.exports = function (dom, kb, subject, options) {
       if (!ok) {
         announce.error('Cant delete messages:' + body)
       } else {
-        syncMessages(subject, messageTable)
+        syncMessages(subject, liveMessageTable)
       }
     })
   }
@@ -394,11 +395,14 @@ module.exports = function (dom, kb, subject, options) {
     }, false)
   }
 
-  async function insertPreviousMessages (messageTable) {
-    let date = new Date(messageTable.date.getTime() - 86400000) // day in mssecs
+  /* Add a new messageTable at the top
+  */
+  async function insertPreviousMessages () {
+    let date = new Date(earliestMessageTable.date.getTime() - 86400000) // day in mssecs
     date = await loadPrevious(date)
     if (!date) return true // done
-    let newMessageTable = createMessageTable(date, false) // not live
+    let newMessageTable = await createMessageTable(date, false) // not live
+    earliestMessageTable = newMessageTable // move pointer to earliest
     if (newestFirst) { // put on bottom
       div.appendChild(newMessageTable)
     } else { // put on top as we scroll back
@@ -406,6 +410,8 @@ module.exports = function (dom, kb, subject, options) {
     }
     return false // not done
   }
+  /* Remove message tables earlier than this one
+  */
   function removePreviousMessages (event, messageTable) {
     if (newestFirst) { // it was put on bottom
       while (messageTable.nextSibling) {
@@ -416,9 +422,10 @@ module.exports = function (dom, kb, subject, options) {
         div.removeChild(messageTable.previousSibling)
       }
     }
+    earliestMessageTable = messageTable
   }
-
-  function loadMessageTable2 (messageTable, chatDocument) {
+/*
+  function loadMessageTable (messageTable, chatDocument) {
     kb.fetcher.load(chatDocument).then(response => {
       let sts = kb.statementsMatching(null, WF('message'), null, chatDocument)
       sts.forEach(st => {
@@ -434,7 +441,7 @@ module.exports = function (dom, kb, subject, options) {
       }
     })
   }
-
+*/
   function chatDocumentFromDate (date) {
     let isoDate = date.toISOString() // Like "2018-05-07T17:42:46.576Z"
     var path = isoDate.split('T')[0].replace(/-/g, '/') //  Like "2018/05/07"
@@ -450,25 +457,59 @@ module.exports = function (dom, kb, subject, options) {
     return date
   }
 
-  function createMessageTable (date, live) {
+  /* LOad and render message table
+  ** @returns DOM element generates
+  */
+  async function createMessageTable (date, live) {
+    const chatDocument = chatDocumentFromDate(date)
+    try {
+      await kb.fetcher.load(chatDocument)
+    } catch (err) {
+      let messageTable = (dom.createElement('table'))
+      let statusTR = messageTable.appendChild(dom.createElement('tr')) // ### find status in exception
+      if (err.response && err.response.status && err.response.status === 404) {
+        statusTR.appendChild(UI.widgets.errorMessageBlock(dom, 'no messages', 'white'))
+      } else {
+        statusTR.appendChild(UI.widgets.errorMessageBlock(dom, err, 'pink'))
+      }
+      return statusTR
+    }
+    return renderMessageTable(date, live)
+  }
+
+  function renderMessageTable (date, live) {
     var moreButton
-    function moreButtonHandler (event) {
+
+    async function extend () {
+      let done = await insertPreviousMessages()
+      if (done) {
+        moreButton.firstChild.setAttribute('src', UI.icons.iconBase + 'noun_T-Block_1114655_000000.svg')
+        moreButton.disabled = true
+        messageTable.initial = true
+      } else {
+        messageTable.extended = true
+      }
+      setIcon()
+      return done
+    }
+    function setIcon () {
       let sense = messageTable.extended ^ newestFirst
-      let moreIcon = !sense ? 'noun_1369241.svg' : 'noun_1369237.svg'
+      let moreIcon = messageTable.initial ? 'noun_T-Block_1114655_000000.svg'
+        : (sense ? 'noun_1369241.svg' : 'noun_1369237.svg')
       moreButton.firstChild.setAttribute('src', UI.icons.iconBase + moreIcon)
+    }
+    function moreButtonHandler (event) {
       if (messageTable.extended) {
         removePreviousMessages(event, messageTable)
+        messageTable.extended = false
+        setIcon()
       } else {
-        insertPreviousMessages(messageTable).then(done => {
-          if (done) {
-            moreButton.firstChild.setAttribute('src', UI.icons.iconBase + 'noun_T-Block_1114655_000000.svg')
-            moreButton.disabled = true
-          }
-        })
+        extend() // async
       }
-      messageTable.extended = !messageTable.extended // Toggle
     }
+
     var messageTable = dom.createElement('table')
+    messageTable.extend = extend // Make function available to scroll stuff
     // var messageButton
     messageTable.date = date
     var chatDocument = chatDocumentFromDate(date)
@@ -478,7 +519,7 @@ module.exports = function (dom, kb, subject, options) {
     messageTable.setAttribute('style', 'width: 100%;') // fill that div!
 
     if (live) {
-      var tr = newMessageForm()
+      var tr = newMessageForm(messageTable)
       if (newestFirst) {
         messageTable.insertBefore(tr, messageTable.firstChild) // If newestFirst
       } else {
@@ -522,13 +563,21 @@ module.exports = function (dom, kb, subject, options) {
         messageTable.appendChild(moreButtonTR) //  newestFirst
       }
     }
-    loadMessageTable2(messageTable, chatDocument)
+
+    let sts = kb.statementsMatching(null, WF('message'), null, chatDocument)
+    if (!live && sts.length === 0) { // not todays
+      // no need buttomns at the moment
+      // messageTable.style.visibility = 'collapse' // Hide files with no messages
+    }
+    sts.forEach(st => {
+      addMessage(st.object, messageTable)
+    })
+    messageTable.fresh = true
+
+    // loadMessageTable(messageTable, chatDocument)
     messageTable.fresh = false
     return messageTable
-  } // createMessageTable
-
-  var messageTable
-  var chatDocument
+  } // renderMessageTable
 
 /* Track back through the YYYY/MM/DD tree to find the previous day
 **
@@ -581,16 +630,16 @@ module.exports = function (dom, kb, subject, options) {
     return null
   }
 
-  function addNewTableIfNeeded () {
-    let now = new Date()
+  async function addNewTableIfNeeded (now) {
+    // let now = new Date()
     let newChatDocument = chatDocumentFromDate(now)
     if (!newChatDocument.sameTerm(chatDocument)) { // It is a new day
-      if (messageTable.inputRow) {
-        messageTable.removeChild(messageTable.inputRow)
-        delete messageTable.inputRow
+      if (liveMessageTable.inputRow) {
+        liveMessageTable.removeChild(liveMessageTable.inputRow)
+        delete liveMessageTable.inputRow
       }
       var oldChatDocument = chatDocument
-      appendCurrentMessages()
+      liveMessageTable = await appendCurrentMessages()
       // Adding a link in the document will ping listeners to add the new block too
       if (!kb.holds(oldChatDocument, ns.rdfs('seeAlso'), newChatDocument, oldChatDocument)) {
         let sts = [$rdf.st(oldChatDocument, ns.rdfs('seeAlso'), newChatDocument, oldChatDocument)]
@@ -601,49 +650,62 @@ module.exports = function (dom, kb, subject, options) {
         })
       }
     }
-    return now
   }
 
-  function messageCount (div) {
+  function messageCount () {
     var n = 0
-    div.children.forEach(table => {
-      n += table.children.length
-    })
+    const tables = div.children
+    for (let i = 0; i < tables.length; i++) {
+      n += tables[i].children.length - 1
+      // console.log('    table length:' + tables[i].children.length)
+    }
     return n
   }
 
-  function appendCurrentMessages () {
+  async function appendCurrentMessages () {
     var now = new Date()
     chatDocument = chatDocumentFromDate(now)
-    createIfNotExists(chatDocument).then(respopnse => {
-      messageTable = createMessageTable(now, true)
-      div.appendChild(messageTable)
-      div.refresh = function () { // only the last messageTable is live
-        addNewTableIfNeeded()
-        syncMessages(subject, messageTable)
-      } // The short chat version fors live update in the pane but we do it in the widget
-      kb.updater.addDownstreamChangeListener(chatDocument, div.refresh) // Live update
-      // @@ Remove listener from previous table as it is now static
-    }, err => {
+    try {
+      await createIfNotExists(chatDocument)
+    } catch (e) {
       div.appendChild(UI.widgets.errorMessageBlock(
-        dom, 'Problem accessing chat log file: ' + err))
-    })
+        dom, 'Problem accessing chat file: ' + e))
+      return
+    }
+    const messageTable = await createMessageTable(now, true)
+    div.appendChild(messageTable)
+    div.refresh = function () { // only the last messageTable is live
+      addNewTableIfNeeded(new Date()).then(() => { syncMessages(subject, messageTable) })
+    } // The short chat version fors live update in the pane but we do it in the widget
+    kb.updater.addDownstreamChangeListener(chatDocument, div.refresh) // Live update
+    // @@ Remove listener from previous table as it is now static
+    return messageTable
   }
   // var dateCreated = kb.any(subject, ns.dc('created'))
   // dateCreated = dateCreated ? dateCreated.toJS() : new Date('2018-01-01') // Lower bound on date
   // if (!dateCreated) throw new Error('Chat should have creation date: ' + subject)
-  appendCurrentMessages()
-
-  const messageCountLimit = 50
 
   function getMoreIfSpace () {
-    console.log('message count ... ' + messageCount(div))
+    console.log('message count ... ' + messageCount())
     if (messageCount(div) < messageCountLimit) {
-      insertPreviousMessages(messageTable).then(done => {
+      earliestMessageTable.extend().then(done => {
+        console.log('message count ... ' + messageCount())
         if (!done) getMoreIfSpace()
       })
     }
   }
-  getMoreIfSpace()
+
+  const messageCountLimit = 50
+  // var messageTable
+  var chatDocument
+  var liveMessageTable
+  var earliestMessageTable
+
+  async function go () {
+    liveMessageTable = await appendCurrentMessages()
+    earliestMessageTable = liveMessageTable
+    getMoreIfSpace()
+  }
+  go()
   return div
 }
