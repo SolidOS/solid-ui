@@ -394,7 +394,7 @@ module.exports = function (dom, kb, subject, options) {
     }, false)
   }
 
-  async function insertPreviousMessages (event, messageTable) {
+  async function insertPreviousMessages (messageTable) {
     let date = new Date(messageTable.date.getTime() - 86400000) // day in mssecs
     date = await loadPrevious(date)
     if (!date) return true // done
@@ -459,7 +459,7 @@ module.exports = function (dom, kb, subject, options) {
       if (messageTable.extended) {
         removePreviousMessages(event, messageTable)
       } else {
-        insertPreviousMessages(event, messageTable).then(done => {
+        insertPreviousMessages(messageTable).then(done => {
           if (done) {
             moreButton.firstChild.setAttribute('src', UI.icons.iconBase + 'noun_T-Block_1114655_000000.svg')
             moreButton.disabled = true
@@ -530,26 +530,13 @@ module.exports = function (dom, kb, subject, options) {
   var messageTable
   var chatDocument
 
+/* Track back through the YYYY/MM/DD tree to find the previous day
+**
+*/
   async function loadPrevious (date) {
-    /*
-    async function checkAbove (file, level) {
-      let folder = file.dir()
-      if (level > 0) {
-        let x = await checkAbove(folder, level - 1)
-        if (!x) return null
-        if (!kb.holds(folder, ns.ldp('contains'), file)) {
-          return null
-        }
-        return file
-      }
-    }
-    */
-
-    // Track back through the YYYY/MM/DD tree to find the last day
-    //
     async function findPrevious (file, level) {
       function suitable (x) {
-        let tail = x.uri.slice(0,-1).split('/').slice(-1)[0]
+        let tail = x.uri.slice(0, -1).split('/').slice(-1)[0]
         if (!'0123456789'.includes(tail[0])) return false // not numeric
         if (x.uri >= file.uri) return false // later than we want or same -- looking for different
         return true
@@ -594,24 +581,6 @@ module.exports = function (dom, kb, subject, options) {
     return null
   }
 
-/*
-  function moveDays(from, delta) {
-    const to = new Date(from)
-    to.setDate(to.getDate() + delta) // this works -- see
-    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/setDate
-    if (delta < 0 && 0 + to < 0 + dateCreated) {
-      return null // passed start of chat archive
-    }
-    if (delta > 0 && 0 + to > 0 + new Date()) {
-      return null // Can't go into future
-    }
-    var monthFolder = chatDocumentFromDate(to).dir().dir()
-    kb.fetcher.load(monthFolder).then( response => {
-      var days = kb.each(monthFolder, ns.ldp('contains'))
-    }, err => { complain('can\'t load month folder')})
-    // @@@@
-  }
-*/
   function addNewTableIfNeeded () {
     let now = new Date()
     let newChatDocument = chatDocumentFromDate(now)
@@ -635,6 +604,14 @@ module.exports = function (dom, kb, subject, options) {
     return now
   }
 
+  function messageCount (div) {
+    var n = 0
+    div.children.forEach(table => {
+      n += table.children.length
+    })
+    return n
+  }
+
   function appendCurrentMessages () {
     var now = new Date()
     chatDocument = chatDocumentFromDate(now)
@@ -656,5 +633,17 @@ module.exports = function (dom, kb, subject, options) {
   // dateCreated = dateCreated ? dateCreated.toJS() : new Date('2018-01-01') // Lower bound on date
   // if (!dateCreated) throw new Error('Chat should have creation date: ' + subject)
   appendCurrentMessages()
+
+  const messageCountLimit = 50
+
+  function getMoreIfSpace () {
+    console.log('message count ... ' + messageCount(div))
+    if (messageCount(div) < messageCountLimit) {
+      insertPreviousMessages(messageTable).then(done => {
+        if (!done) getMoreIfSpace()
+      })
+    }
+  }
+  getMoreIfSpace()
   return div
 }
