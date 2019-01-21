@@ -680,7 +680,7 @@ module.exports = function (dom, kb, subject, options) {
     if (messageCount(div) < messageCountLimit) {
       earliestMessageTable.extend().then(done => {
         console.log('message count ... ' + messageCount())
-        liveMessageTable.scrollIntoView(false) // allign bottoms
+        liveMessageTable.scrollIntoView(newestFirst) // allign tops or bopttoms
         if (!done) getMoreIfSpace()
       })
     }
