@@ -424,24 +424,10 @@ module.exports = function (dom, kb, subject, options) {
     }
     earliestMessageTable = messageTable
   }
-/*
-  function loadMessageTable (messageTable, chatDocument) {
-    kb.fetcher.load(chatDocument).then(response => {
-      let sts = kb.statementsMatching(null, WF('message'), null, chatDocument)
-      sts.forEach(st => {
-        addMessage(st.object, messageTable)
-      })
-      messageTable.fresh = true
-    }, err => {
-      let statusTR = messageTable.appendChild(dom.createElement('tr'))
-      if (err.response && err.response.status && err.response.status === 404) {
-        statusTR.appendChild(UI.widgets.errorMessageBlock(dom, 'no messages', 'white'))
-      } else {
-        statusTR.appendChild(UI.widgets.errorMessageBlock(dom, err, 'pink'))
-      }
-    })
-  }
-*/
+
+  /* Generate the chat document (rdf object) from date
+  * @returns: <NamedNode> - document
+  */
   function chatDocumentFromDate (date) {
     let isoDate = date.toISOString() // Like "2018-05-07T17:42:46.576Z"
     var path = isoDate.split('T')[0].replace(/-/g, '/') //  Like "2018/05/07"
@@ -449,10 +435,14 @@ module.exports = function (dom, kb, subject, options) {
     return $rdf.sym(path)
   }
 
+  /* Generate a date object from the chat file name
+  */
   function dateFromChatDocument (doc) {
     const head = subject.dir().uri.length
     const str = doc.uri.slice(head, head + 10).replace(/\//g, '-')
-    let date = new Date(str + 'Z') // GMT
+    // let date = new Date(str + 'Z') // GMT - but fails in FF - invalid format :-(
+    let date = new Date(str) // not explicitly UTC but is assumed so in spec
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse
     console.log('Date for ' + doc + ':' + date.toISOString())
     return date
   }
@@ -690,6 +680,7 @@ module.exports = function (dom, kb, subject, options) {
     if (messageCount(div) < messageCountLimit) {
       earliestMessageTable.extend().then(done => {
         console.log('message count ... ' + messageCount())
+        liveMessageTable.scrollIntoView(false) // allign bottoms
         if (!done) getMoreIfSpace()
       })
     }
