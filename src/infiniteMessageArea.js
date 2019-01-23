@@ -25,6 +25,7 @@ module.exports = function (dom, kb, subject, options) {
   const ns = UI.ns
   const WF = $rdf.Namespace('http://www.w3.org/2005/01/wf/flow#')
   const DCT = $rdf.Namespace('http://purl.org/dc/terms/')
+  // const POSIX = $rdf.Namespace('http://www.w3.org/ns/posix/stat#')
 
   options = options || {}
 
@@ -398,8 +399,10 @@ module.exports = function (dom, kb, subject, options) {
   /* Add a new messageTable at the top
   */
   async function insertPreviousMessages () {
-    let date = new Date(earliestMessageTable.date.getTime() - 86400000) // day in mssecs
+    // let date = new Date(earliestMessageTable.date.getTime() - 86400000) // day in mssecs
+    let date = earliestMessageTable.date// day in mssecs
     date = await loadPrevious(date)
+    console.log('insertPreviousMessages: from loasdprevious: ' + date)
     if (!date) return true // done
     let newMessageTable = await createMessageTable(date, false) // not live
     earliestMessageTable = newMessageTable // move pointer to earliest
@@ -573,46 +576,51 @@ module.exports = function (dom, kb, subject, options) {
 **
 */
   async function loadPrevious (date) {
-    async function findPrevious (file, level) {
-      function suitable (x) {
-        let tail = x.uri.slice(0, -1).split('/').slice(-1)[0]
-        if (!'0123456789'.includes(tail[0])) return false // not numeric
+    async function previousPeriod (file, level) {
+      function younger (x) {
         if (x.uri >= file.uri) return false // later than we want or same -- looking for different
         return true
       }
-      const folder = file.dir()
-      if (level === 0) return [true, null]
-
-      let [exact, earlier] = await findPrevious(folder, level - 1)
-      if (!exact && !earlier) return [false, null]
-      // let exact = found.sameTerm(folder)
-
-      async function findFallback (folder) {
-        console.log('Loading ' + folder)
-        await kb.fetcher.load(folder)
-        let possible = kb.each(folder, ns.ldp('contains'))
-        possible = possible.filter(suitable) // only ones before this
-        possible.sort() // RDF oibjects should sort by URI hence by date
-        let fallback = (possible.length === 0) ? null : possible.slice(-1)[0]
-        return fallback
+      function suitable (x) {
+        let tail = x.uri.slice(0, -1).split('/').slice(-1)[0]
+        if (!'0123456789'.includes(tail[0])) return false // not numeric
+        return true
+        // return kb.anyValue(chatDocument, POSIX('size')) !== 0 // empty file?
       }
-      var hit = exact && kb.holds(folder, ns.ldp('contains'), file) // the one you wanted
-
-      if (exact) { // This folder exists - otherwise gets read eror
-        let fallback = await findFallback(folder)
-        if (fallback) return [hit, fallback]
+      async function lastNonEmpty (siblings) {
+        siblings = siblings.filter(suitable)
+        siblings.sort() // chronological order
+        if (level !== 3) return siblings.pop() // only length chck final leverl
+        while (siblings.length) {
+          let folder = siblings.pop()
+          let chatDocument = kb.sym(folder.uri + 'chat.ttl')
+          await kb.fetcher.load(chatDocument)
+          if (kb.statementsMatching(null, null, null, chatDocument).length > 0) { // skip empty files
+            return folder
+          }
+        }
+        return null
       }
-      if (earlier) {
-        let fallback = await findFallback(earlier)
-        if (fallback) return [hit, fallback]
-      }
+      console.log('  previousPeriod level' + level + ' file ' + file)
+      const parent = file.dir()
+      await kb.fetcher.load(parent)
+      var siblings = kb.each(parent, ns.ldp('contains'))
+      siblings = siblings.filter(younger)
+      let folder = await lastNonEmpty(siblings)
+      if (folder) return folder
 
-      return [hit, null]
-    }
+      if (level === 0) return null // 3:day, 2:month, 1: year  0: no
+
+      const uncle = await previousPeriod(parent, level - 1)
+      if (!uncle) return null // reached first ever
+      await kb.fetcher.load(uncle)
+      var cousins = kb.each(uncle, ns.ldp('contains'))
+      let result = await lastNonEmpty(cousins)
+      return result
+    } // previousPeriod
 
     let folder = chatDocumentFromDate(date).dir()
-    let [hit, fallback] = await findPrevious(folder, 3)
-    let found = hit ? folder : fallback
+    let found = await previousPeriod(folder, 3)
     if (found) {
       let doc = kb.sym(found.uri + 'chat.ttl')
       return dateFromChatDocument(doc)
