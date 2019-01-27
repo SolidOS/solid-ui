@@ -20,24 +20,37 @@ var UI = {
 
 const utils = require('./utils')
 
+// THE UNUSED ICONS are here as reminders for possible future functionality
+const BOOKMARK_ICON = 'noun_45961.svg'
+// const HEART_ICON = 'noun_130259.svg'
+// const MENU_ICON = 'noun_897914.svg'
+// const PAPERCLIP_ICON = 'noun_25830.svg'
+// const PIN_ICON = 'noun_562340.svg'
+// const PENCIL_ICON = 'noun_253504.svg'
+const SPANNER_ICON = 'noun_344563.svg'
+
 module.exports = function (dom, kb, subject, options) {
   kb = kb || UI.store
   const ns = UI.ns
   const WF = $rdf.Namespace('http://www.w3.org/2005/01/wf/flow#')
   const DCT = $rdf.Namespace('http://purl.org/dc/terms/')
+  const BOOK = $rdf.Namespace('http://www.w3.org/2002/01/bookmark#')
   // const POSIX = $rdf.Namespace('http://www.w3.org/ns/posix/stat#')
 
   options = options || {}
 
   var newestFirst = options.newestFirst === '1' || options.newestFirst === true // hack for now
   var colorizeByAuthor = options.colorizeByAuthor === '1' || options.colorizeByAuthor === true
-  var menuButton
+
   // var participation // An object tracking users use and prefs
 
   var messageBodyStyle = 'white-space: pre-wrap; width: 90%; font-size:100%; border: 0.07em solid #eee; padding: .2em 0.5em; margin: 0.1em 1em 0.1em 1em;'
   // 'font-size: 100%; margin: 0.1em 1em 0.1em 1em;  background-color: white; white-space: pre-wrap; padding: 0.1em;'
 
   var div = dom.createElement('div')
+  var menuButton
+  const statusArea = div.appendChild(dom.createElement('div'))
+  var userContext = {dom, statusArea, div: statusArea} // logged on state, pointers to user's stuff
   var me
 
   var updater = UI.store.updater
@@ -55,10 +68,9 @@ module.exports = function (dom, kb, subject, options) {
 
   var mention = function mention (message, style) {
     var pre = dom.createElement('pre')
-    pre.setAttribute('style', style || 'color: grey')
-    div.appendChild(pre)
+    pre.setAttribute('style', style || 'color: grey;')
     pre.appendChild(dom.createTextNode(message))
-    return pre
+    statusArea.appendChild(pre)
   }
 
   var announce = {
@@ -86,8 +98,115 @@ module.exports = function (dom, kb, subject, options) {
     })
   }
 
-  //       Form for a new message
-  //
+ /*         Bookmarking
+ */
+/* Find a user's bookmarks
+*/
+  async function findBookmarkDocument (context) {
+    await UI.authn.findAppInstances(context, BOOK('Bookmark'))
+    if (context.instances && context.instances.length > 0) {
+      context.bookmarkDocument = context.instances[0]
+    } else {
+      if (userContext.preferencesFile) {
+        var newBookmarkFile = $rdf.sym(userContext.preferencesFile.dir().uri + 'bookmarks.ttl')
+        try {
+          await createIfNotExists(newBookmarkFile)
+        } catch (e) {
+          announce.error('Can\'t make fresh bookmark file:' + e)
+          return context
+        }
+        await UI.authn.registerInTypeIndex(userContext, newBookmarkFile, BOOK('Bookmark'), true) // public
+        context.bookmarkDocument = newBookmarkFile
+      } else {
+        alert('You seem to have no bookmark file and not even a preferences file.')
+      }
+    }
+    return context
+  }
+
+  async function addBookmark (context, subject) {
+   /* like
+@prefix terms: <http://purl.org/dc/terms/>.
+@prefix bookm: <http://www.w3.org/2002/01/bookmark#>.
+@prefix n0: <http://xmlns.com/foaf/0.1/>.
+<> terms:references <#0.5534145389246576>.
+<#0.5534145389246576>
+    a bookm:Bookmark;
+    terms:created "2019-01-26T20:26:44.374Z"^^XML:dateTime;
+    terms:title "Herons";
+    bookm:recalls wiki:Heron;
+    n0:maker c:me.
+   */
+    var title = ''
+    var author = kb.any(subject, ns.foaf('maker'))
+    title = UI.utils.label(author) + ': ' +
+            kb.anyValue(subject, ns.sioc('content')).slice(0, 80) // @@ add chat title too?
+    const bookmarkDoc = context.bookmarkDocument
+    const bookmark = UI.widgets.newThing(bookmarkDoc, title)
+    const ins = [
+      $rdf.st(bookmarkDoc, UI.ns.dct('references'), bookmark, bookmarkDoc),
+      $rdf.st(bookmark, UI.ns.rdf('type'), BOOK('Bookmark'), bookmarkDoc),
+      $rdf.st(bookmark, UI.ns.dct('created'), new Date(), bookmarkDoc),
+      $rdf.st(bookmark, BOOK('recalls'), subject, bookmarkDoc),
+      $rdf.st(bookmark, UI.ns.foaf('maker'), me, bookmarkDoc),
+      $rdf.st(bookmark, UI.ns.dct('title'), title, bookmarkDoc)
+    ]
+    kb.updater.update([], ins, function (uri, ok, errorBody) {
+      if (ok) {
+
+      } else {
+
+      }
+     // @@@
+    })
+  }
+
+ /*    Tools for doing things with a message
+  *  Let is be cretiev here.  Allow all sorts of things to
+  * be done to a message - linking to new or old objects in an open way
+  *
+  * Ideas: Bookmark, Like, star, pin at top of chat, reply as new thread,
+  * If you made it originally:  edit, delete, attach
+ */
+  function messageTools (message) {
+    const div = dom.createElement('div')
+    function closeToolbar () {
+      div.parentElement.parentElement.removeChild(div.parentElement) // remive the TR
+    }
+
+    function setColor () {
+      var bookmark = kb.any(null, ns.dct('recalls'), message, userContext.bookmarkDocument)
+      bookmarkButton.style = bookmark ? UI.style.inputStyle : UI.style.inputStyle + 'background-color: #efe;'
+    }
+
+    // Things only the original author can do
+    if (me && kb.holds(message, ns.foaf('maker'), me)) {
+      // button to delete the message
+      const deleteButton = UI.widgets.deleteButtonWithCheck(dom, div, 'message', function () {
+        deleteMessage(message)
+        closeToolbar()
+      })
+      div.appendChild(deleteButton)
+    } // if mine
+
+    // Things anyone can do if they have a bookmark list
+    var bookmarkButton
+    if (userContext.bookmarkDocument) {
+      bookmarkButton = UI.widgets.button(dom, UI.icons.iconBase + BOOKMARK_ICON,
+         UI.utils.label(BOOK('Bookmark')), () => {
+           addBookmark(userContext, message)
+           setColor()
+         })
+      setColor()
+    }
+
+    // X button to remove the tool UI itself
+    const cancelButton = div.appendChild(UI.widgets.cancelButton(dom))
+    cancelButton.addEventListener('click', closeToolbar)
+    return div
+  }
+  /*       Form for a new message
+  */
   function newMessageForm (messageTable) {
     var form = dom.createElement('tr')
     var lhs = dom.createElement('td')
@@ -172,6 +291,8 @@ module.exports = function (dom, kb, subject, options) {
           event => { options.menuHandler(event, subject, menuOptions) }
           , false)
       }
+
+      // Turn on message input
       creatorAndDate(lhs, me, '', null)
 
       field = dom.createElement('textarea')
@@ -217,6 +338,10 @@ module.exports = function (dom, kb, subject, options) {
     UI.authn.logIn(context).then(context => {
       me = context.me
       turnOnInput()
+      userContext = context
+      findBookmarkDocument(context).then(context => {
+        console.log('Bookmark file: ' + context.bookmarkDocument)
+      })
     })
 
     return form
@@ -370,30 +495,30 @@ module.exports = function (dom, kb, subject, options) {
     var td3 = dom.createElement('td')
     tr.appendChild(td3)
 
-    var delButton = dom.createElement('button')
-    td3.appendChild(delButton)
-    delButton.textContent = '-'
+    // Message tool bar button
 
-    tr.setAttribute('class', 'hoverControl') // See tabbedtab.css (sigh global CSS)
-    delButton.setAttribute('class', 'hoverControlHide')
-    delButton.setAttribute('style', 'color: red;')
-    delButton.addEventListener('click', function (e) {
-      td3.removeChild(delButton) // Ask -- are you sure?
-      var cancelButton = dom.createElement('button')
-      cancelButton.textContent = 'cancel'
-      td3.appendChild(cancelButton).addEventListener('click', function (e) {
-        td3.removeChild(sureButton)
-        td3.removeChild(cancelButton)
-        td3.appendChild(delButton)
-      }, false)
-      var sureButton = dom.createElement('button')
-      sureButton.textContent = 'Delete message'
-      td3.appendChild(sureButton).addEventListener('click', function (e) {
-        td3.removeChild(sureButton)
-        td3.removeChild(cancelButton)
-        deleteMessage(message)
-      }, false)
-    }, false)
+    var toolsButton = UI.widgets.button(dom, UI.icons.iconBase + 'noun_243787.svg', '...')
+    td3.appendChild(toolsButton)
+    toolsButton.addEventListener('click', function (e) {
+      if (tr.toolTR) { // already got a toolbar? Toogle
+        tr.parentNode.removeChild(tr.toolTR)
+        delete tr.toolTR
+        return
+      }
+      const toolsTR = dom.createElement('tr')
+      const tools = messageTools(message)
+      tools.style = 'border: 0.1em solid #888; border-radius: 0 0 0.7em 0.7em;  border-top: 0; height:3.5em; background-color: #fff;' // @@ fix
+      if (tr.nextSibling) {
+        tr.parentElement.insertBefore(toolsTR, tr.nextSibling)
+      } else {
+        tr.parentElement.appendChild(toolsTR)
+      }
+      tr.toolTR = toolsTR
+      toolsTR.appendChild(dom.createElement('td')) // left
+      const toolsTD = toolsTR.appendChild(dom.createElement('td'))
+      toolsTR.appendChild(dom.createElement('td')) // right
+      toolsTD.appendChild(tools)
+    })
   }
 
   /* Add a new messageTable at the top
@@ -540,10 +665,8 @@ module.exports = function (dom, kb, subject, options) {
       dateCell.textContent = UI.widgets.shortDate(date.toISOString(), true) // no time, only date
 
       if (options.menuHandler && live) { // A high level handles calls for a menu
-        let menuIcon = 'noun_897914.svg' // or maybe dots noun_243787.svg
+        let menuIcon = SPANNER_ICON  // 'noun_897914.svg' menu bars // or maybe dots noun_243787.svg
         menuButton = UI.widgets.button(dom, UI.icons.iconBase + menuIcon, 'Menu ...') // wider var
-        // menuButton.setAttribute('style', UI.style.buttonStyle)
-        // menuButton.addEventListener('click', event => { menuHandler(event, menuOptions)}, false) // control side menu
         let menuButtonCell = moreButtonTR.appendChild(dom.createElement('td'))
         menuButtonCell.appendChild(menuButton)
         menuButtonCell.style = 'width:3em; height:3em;'

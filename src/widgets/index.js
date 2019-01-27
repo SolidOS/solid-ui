@@ -325,9 +325,16 @@ UI.widgets.deleteButtonWithCheck = function (dom, container, noun, deleteFunctio
   return delButton
 }
 
-// ////////////////////////////////////// Grab a name for a new thing
-
-UI.widgets.button = function (dom, iconURI, text) {
+/*  Make a button
+ *
+ * @param dom - the DOM document object
+ * @Param iconURI - the URI of theb icon to use
+ * @param text - the tooltip text or possibly button contents text
+ * @param handler <function> - A handler to called when button is clicked
+ *
+ * @returns <dDomElement> - the button
+*/
+UI.widgets.button = function (dom, iconURI, text, handler) {
   var button = dom.createElement('button')
   button.setAttribute('type', 'button')
   button.setAttribute('style', UI.style.buttonStyle)
@@ -335,18 +342,24 @@ UI.widgets.button = function (dom, iconURI, text) {
   var img = button.appendChild(dom.createElement('img'))
   img.setAttribute('src', iconURI)
   img.setAttribute('style', 'width: 2em; height: 2em;') // trial and error. 2em disappears
+  if (handler) {
+    button.addEventListener('click', handler)
+  }
   return button
 }
 
-UI.widgets.cancelButton = function (dom) {
-  return UI.widgets.button(dom, cancelIconURI, 'Cancel')
+UI.widgets.cancelButton = function (dom, handler) {
+  return UI.widgets.button(dom, cancelIconURI, 'Cancel', handler)
 }
-UI.widgets.continueButton = function (dom) {
-  return UI.widgets.button(dom, checkIconURI, 'Continue')
+UI.widgets.continueButton = function (dom, handler) {
+  return UI.widgets.button(dom, checkIconURI, 'Continue', handler)
 }
 
-// Form to get the name of a new thing before we create it
-// Returns a promise of (a name or null if cancelled)
+/* Grab a name for a new thing
+ *
+ * Form to get the name of a new thing before we create it
+ * @returns: a promise of (a name or null if cancelled)
+*/
 UI.widgets.askName = function (dom, kb, container, predicate, klass, noun) {
   return new Promise(function (resolve, reject) {
     var form = dom.createElement('div') // form is broken as HTML behaviour can resurface on js error

@@ -40,6 +40,7 @@ module.exports = {
   loginStatusBox,
   newAppInstance,
   offlineTestID,
+  registerInTypeIndex,
   registrationControl,
   registrationList,
   selectWorkspace,
@@ -470,6 +471,39 @@ function findAppInstances (context, klass) {
         })
     }, err => reject(new Error('Error looking for instances of ' + klass + ': ' + err)))
   })
+}
+
+function updatePromise (updater, del, ins) {
+  return new Promise(function (resolve, reject) {
+    updater.update([], ins, function (uri, ok, errorBody) {
+      if (!ok) {
+        reject(new Error(errorBody))
+      } else {
+        resolve()
+      }
+    }) // callback
+  }) // promise
+}
+/* Register a new app in a type index
+*/
+async function registerInTypeIndex (context, instance, klass, isPublic) {
+  var kb = UI.store
+  var ns = UI.ns
+  await ensureTypeIndexes(context)
+  const index = isPublic ? context.index.public : context.index.private
+  const registration = UI.utils.newThing(index)
+  const ins = [
+    $rdf.st(registration, ns.rdf('type'), ns.solid('Rehgistration'), index),
+    $rdf.st(registration, ns.solid('forClass'), klass, index),
+    $rdf.st(registration, ns.solid('instance'), instance, index)
+  ]
+  try {
+    await updatePromise(kb.updater, [], ins)
+  } catch (e) {
+    console.log(e)
+    alert(e)
+  }
+  return context
 }
 
 /**
