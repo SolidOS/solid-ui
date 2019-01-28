@@ -4,7 +4,7 @@
 //  Parameters for the whole chat like its title are stred on
 //  index.ttl#this and the chats messages are stored in YYYY/MM/DD/chat.ttl
 //
-/* global alert */
+/* global alert confirm */
 var UI = {
   authn: require('./signin'),
   icons: require('./iconBase'),
@@ -15,10 +15,12 @@ var UI = {
   rdf: require('rdflib'),
   store: require('./store'),
   style: require('./style'),
+  utils: require('./utils'),
   widgets: require('./widgets')
 }
 
-const utils = require('./utils')
+// const utils = require('./utils')
+const label = UI.utils.label
 
 // THE UNUSED ICONS are here as reminders for possible future functionality
 const BOOKMARK_ICON = 'noun_45961.svg'
@@ -67,6 +69,7 @@ module.exports = function (dom, kb, subject, options) {
   }
 
   var mention = function mention (message, style) {
+    console.log(message)
     var pre = dom.createElement('pre')
     pre.setAttribute('style', style || 'color: grey;')
     pre.appendChild(dom.createTextNode(message))
@@ -77,6 +80,19 @@ module.exports = function (dom, kb, subject, options) {
     log: function (message) { mention(message, 'color: #111;') },
     warn: function (message) { mention(message, 'color: #880;') },
     error: function (message) { mention(message, 'color: #800;') }
+  }
+
+  // @@@@ use the one in rdflib.js when it is avaiable and delete this
+  function updatePromise (del, ins) {
+    return new Promise(function (resolve, reject) {
+      kb.updater.update(del, ins, function (uri, ok, errorBody) {
+        if (!ok) {
+          reject(new Error(errorBody))
+        } else {
+          resolve()
+        }
+      }) // callback
+    }) // promise
   }
 
   function createIfNotExists (doc) {
@@ -106,10 +122,14 @@ module.exports = function (dom, kb, subject, options) {
     await UI.authn.findAppInstances(context, BOOK('Bookmark'))
     if (context.instances && context.instances.length > 0) {
       context.bookmarkDocument = context.instances[0]
+      if (context.instances.length > 1) {
+        alert('More than one bookmark file! ' +  context.instances)
+      }
     } else {
-      if (userContext.preferencesFile) {
-        var newBookmarkFile = $rdf.sym(userContext.preferencesFile.dir().uri + 'bookmarks.ttl')
+      if (userContext.publicProfile) { // publicProfile or preferencesFile
+        var newBookmarkFile = $rdf.sym(userContext.publicProfile.dir().uri + 'bookmarks.ttl')
         try {
+          console.log('Creating new bookmark file ' + newBookmarkFile)
           await createIfNotExists(newBookmarkFile)
         } catch (e) {
           announce.error('Can\'t make fresh bookmark file:' + e)
@@ -139,7 +159,7 @@ module.exports = function (dom, kb, subject, options) {
    */
     var title = ''
     var author = kb.any(subject, ns.foaf('maker'))
-    title = UI.utils.label(author) + ': ' +
+    title = label(author) + ': ' +
             kb.anyValue(subject, ns.sioc('content')).slice(0, 80) // @@ add chat title too?
     const bookmarkDoc = context.bookmarkDocument
     const bookmark = UI.widgets.newThing(bookmarkDoc, title)
@@ -151,14 +171,14 @@ module.exports = function (dom, kb, subject, options) {
       $rdf.st(bookmark, UI.ns.foaf('maker'), me, bookmarkDoc),
       $rdf.st(bookmark, UI.ns.dct('title'), title, bookmarkDoc)
     ]
-    kb.updater.update([], ins, function (uri, ok, errorBody) {
-      if (ok) {
-
-      } else {
-
-      }
-     // @@@
-    })
+    try {
+      await updatePromise([], ins) // 20190118A
+    } catch (e) {
+      let msg = 'Making bookmark: ' + e
+      announce.error(msg)
+      return null
+    }
+    return bookmark
   }
 
  /*    Tools for doing things with a message
@@ -174,9 +194,37 @@ module.exports = function (dom, kb, subject, options) {
       div.parentElement.parentElement.removeChild(div.parentElement) // remive the TR
     }
 
-    function setColor () {
-      var bookmark = kb.any(null, ns.dct('recalls'), message, userContext.bookmarkDocument)
-      bookmarkButton.style = bookmark ? UI.style.inputStyle : UI.style.inputStyle + 'background-color: #efe;'
+    async function setBookmarkButtonColor () {
+      await kb.fetcher.load(userContext.bookmarkDocument)
+      let bookmarked = kb.any(null, BOOK('recalls'), message, userContext.bookmarkDocument)
+      bookmarkButton.style = UI.style.buttonStyle
+      if (bookmarked) bookmarkButton.style.backgroundColor = 'yellow'
+    }
+
+    async function deleteThingThen (x) {
+      let sts = kb.connectedStatements(x)
+      await updatePromise(sts, [])
+    }
+
+    async function toggleBookmark (userContext, message) {
+      await kb.fetcher.load(userContext.bookmarkDocument)
+      let bookmarks = kb.each(null, BOOK('recalls'), message, userContext.bookmarkDocument)
+      if (bookmarks.length) { // delete
+        if (!confirm('Delete bookmark on this message?' + bookmarks.length)) return
+        for (let i = 0; i < bookmarks.length; i++) {
+          try {
+            await deleteThingThen(bookmarks[i])
+            bookmarkButton.style.backgroundColor = 'white'
+            console.log('Bookmark deleted: ' + bookmarks[i])
+          } catch (e) {
+            announce.error('Cant delete bookmark:' + e)
+          }
+        }
+      } else {
+        let bookmark = await addBookmark(userContext, message)
+        bookmarkButton.style.backgroundColor = 'yellow'
+        console.log('Bookmark added: ' + bookmark)
+      }
     }
 
     // Things only the original author can do
@@ -193,11 +241,11 @@ module.exports = function (dom, kb, subject, options) {
     var bookmarkButton
     if (userContext.bookmarkDocument) {
       bookmarkButton = UI.widgets.button(dom, UI.icons.iconBase + BOOKMARK_ICON,
-         UI.utils.label(BOOK('Bookmark')), () => {
-           addBookmark(userContext, message)
-           setColor()
+         label(BOOK('Bookmark')), () => {
+           toggleBookmark(userContext, message)
          })
-      setColor()
+      setBookmarkButtonColor()
+      div.appendChild(bookmarkButton)
     }
 
     // X button to remove the tool UI itself
@@ -350,7 +398,7 @@ module.exports = function (dom, kb, subject, options) {
   function nick (person) {
     var s = UI.store.any(person, UI.ns.foaf('nick'))
     if (s) return '' + s.value
-    return '' + utils.label(person)
+    return '' + label(person)
   }
 
   function creatorAndDate (td1, creator, date, message) {
@@ -808,7 +856,7 @@ module.exports = function (dom, kb, subject, options) {
 
   function getMoreIfSpace () {
     console.log('message count ... ' + messageCount())
-    if (messageCount(div) < messageCountLimit) {
+    if (earliestMessageTable && earliestMessageTable.extend && messageCount(div) < messageCountLimit) {
       earliestMessageTable.extend().then(done => {
         console.log('message count ... ' + messageCount())
         liveMessageTable.scrollIntoView(newestFirst) // allign tops or bopttoms

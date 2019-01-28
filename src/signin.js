@@ -441,17 +441,15 @@ function findAppInstances (context, klass) {
     loadTypeIndexes(context).then(context => {
       var registrations = []
       if (context.index.public) {
-        registrations = kb.each(undefined, ns.solid('forClass'), klass, context.index.public)
+        registrations = context.index.public.map(ix => kb.each(undefined, ns.solid('forClass'), klass, ix)).flat()
       }
       if (context.index.private) {
-        registrations = registrations.concat(kb.each(undefined, ns.solid('forClass'), klass, context.index.private))
+        let privateRegistrations = context.index.private.map(ix => kb.each(undefined, ns.solid('forClass'), klass, ix)).flat()
+        registrations = registrations.concat(privateRegistrations)
       }
-      var instances = []
-      var containers = []
-      for (var r = 0; r < registrations.length; r++) {
-        instances = instances.concat(kb.each(klass, ns.solid('instance')))
-        containers = containers.concat(kb.each(klass, ns.solid('instanceContainer')))
-      }
+      var instances = registrations.map(reg => kb.each(reg, ns.solid('instance'))).flat()
+      var containers = registrations.map(reg => kb.each(reg, ns.solid('instanceContainer'))).flat()
+
       if (!containers.length) {
         context.instances = instances
         context.containers = []
@@ -473,9 +471,10 @@ function findAppInstances (context, klass) {
   })
 }
 
+// @@@@ use teh one in rdflib.js when it is avaiable and delete this
 function updatePromise (updater, del, ins) {
   return new Promise(function (resolve, reject) {
-    updater.update([], ins, function (uri, ok, errorBody) {
+    updater.update(del, ins, function (uri, ok, errorBody) {
       if (!ok) {
         reject(new Error(errorBody))
       } else {
@@ -487,13 +486,15 @@ function updatePromise (updater, del, ins) {
 /* Register a new app in a type index
 */
 async function registerInTypeIndex (context, instance, klass, isPublic) {
-  var kb = UI.store
-  var ns = UI.ns
+  const kb = UI.store
+  const ns = UI.ns
   await ensureTypeIndexes(context)
-  const index = isPublic ? context.index.public : context.index.private
-  const registration = UI.utils.newThing(index)
-  const ins = [
-    $rdf.st(registration, ns.rdf('type'), ns.solid('Rehgistration'), index),
+  const indexes = isPublic ? context.index.public : context.index.private
+  if (!indexes.length) throw new Error('registerInTypeIndex: What no type index?')
+  const index = indexes[0]
+  const registration = UI.widgets.newThing(index)
+  const ins = [ // See https://github.com/solid/solid/blob/master/proposals/data-discovery.md
+    $rdf.st(registration, ns.rdf('type'), ns.solid('TypeRegistration'), index),
     $rdf.st(registration, ns.solid('forClass'), klass, index),
     $rdf.st(registration, ns.solid('instance'), instance, index)
   ]

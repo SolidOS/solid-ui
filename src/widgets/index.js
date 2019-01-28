@@ -342,6 +342,7 @@ UI.widgets.button = function (dom, iconURI, text, handler) {
   var img = button.appendChild(dom.createElement('img'))
   img.setAttribute('src', iconURI)
   img.setAttribute('style', 'width: 2em; height: 2em;') // trial and error. 2em disappears
+  img.title = text
   if (handler) {
     button.addEventListener('click', handler)
   }
