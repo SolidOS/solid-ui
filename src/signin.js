@@ -325,11 +325,28 @@ function loadTypeIndexes (context) {
 }
 
 
+/**
+ * Resolves with the same context, outputting
+ * output: index.public, index.private
+ *
+ * @see https://github.com/solid/solid/blob/master/proposals/data-discovery.md#discoverability
+ *
+ * @param context
+ * @param context.div - place to put UI
+ *
+ * @returns {Promise<context>}
+ */
+async function loadTypeIndexes (context) {
+  await loadPublicTypeIndex(context)
+  await loadPrivateTypeIndex(context)
+  return
+}
+
 async function loadPublicTypeIndex (context) {
-  return await loadPubicIndexex (context, ns.solid('publicTypeIndex'), true)
+  return await loadIndex (context, ns.solid('publicTypeIndex'), true)
 }
 async function loadPrivateTypeIndex (context) {
-  return await loadPrivateIndex (context, ns.solid('privateTypeIndex'), false)
+  return await loadIndex (context, ns.solid('privateTypeIndex'), false)
 }
 async function loadIndex (context, predicate, isPublic) {
   var ns = UI.ns
@@ -369,41 +386,6 @@ async function loadIndex (context, predicate, isPublic) {
   return context
 }
 
-async function loadPrivateIndex (context, predicate, ) {
-  var ns = UI.ns
-  var kb = UI.store
-
-  try {
-    await logInLoadProfile(context)
-  } catch (err) {
-    UI.utils.complain(context, 'loadPubicIndex: loading profile ' +err)
-  }
-  var me = context.me
-  context.index = context.index || {}
-
-
-  if (!context.preferencesFileError) {
-    context.index.private = kb.each(me, ns.solid('privateTypeIndex'), undefined, context.preferencesFile)
-    if (context.index.private.length === 0) {
-      return reject(new Error('Your preference file ' + context.preferencesFile + ' does not point to a private type index.'))
-    }
-  }
-
-  var ix = kb.each(me, ns.solid('publicTypeIndex'), undefined, context.publicProfile)
-  context.index.public = ix
-  /*
-  if (context.index.public.length === 0) {
-    return reject(new Error('Your profile ' + context.publicProfile + ' does not point to a public type index.'))
-  }
-  */
-  try {
-    let responses = await kb.fetcher.load(ix)
-  } catch (err) {
-    UI.utils.complain(context, 'loadPubicIndex: loading public type index ' +err)
-  }
-  return context
-}
-
 /**
  * Resolves with the same context, outputting
  * @see https://github.com/solid/solid/blob/master/proposals/data-discovery.md#discoverability
@@ -419,85 +401,10 @@ async function loadPrivateIndex (context, predicate, ) {
  *
  * @returns {Promise}
  */
-function ensureTypeIndexes (context) {
-  return new Promise(function (resolve, reject) {
-    return loadTypeIndexes(context)
-      .then(function (context) {
-        console.log('ensureTypeIndexes: Type indexes exist already')
-        resolve(context)
-      }, function (error) {
-        if (confirm('You don\'t have, or you couldn\'t acess,  type indexes --lists of things of different types. Create new empty ones? ' + error)) {
-          var ns = UI.ns
-          var kb = UI.store
-          var me = context.me
-          var newIndex
-
-          var makeIndexIfNecesary = function (context, visibility) {
-            return new Promise(function (resolve, reject) {
-              var relevant = {'private': context.preferencesFile, 'public': context.publicProfile}[visibility]
-
-              function putIndex (newIndex) {
-                kb.fetcher.webOperation('PUT', newIndex.uri, {
-                  data: '# ' + new Date() + ' Blank initial Type index\n',
-                  contentType: 'text/turtle'})
-                  .then(function (xhr) {
-                    resolve(context)
-                  }, function (e) {
-                    let msg = 'Error creating new index ' + e
-                    widgets.complain(context, msg)
-                    reject(new Error(msg))
-                  })
-              }
-
-              context.index = context.index || {}
-              context.index[visibility] = context.index[visibility] || []
-              if (context.index[visibility].length === 0) {
-                newIndex = $rdf.sym(relevant.dir().uri + visibility + 'TypeIndex.ttl')
-                console.log('Linking to new fresh type index ' + newIndex)
-                if (!confirm('Ok to create a new empty index file at ' + newIndex + ', overwriting anything that was there?')) {
-                  reject(new Error('cancelled by user'))
-                }
-                var addMe = [ $rdf.st(me, ns.solid(visibility + 'TypeIndex'), newIndex, relevant) ]
-
-                UI.store.updater.update([], addMe, function (uri, ok, body) {
-                  if (!ok) {
-                    return reject(new Error('Error saving type index link saving back ' + uri + ': ' + body))
-                  } else {
-                    context.index[visibility].push(newIndex)
-                    console.log('Creating new fresh type index ' + newIndex)
-                    putIndex(newIndex)
-                  }
-                })
-              } else {  // officially exists
-                var ix = context.index[visibility][0]
-                kb.fetcher.load(ix).then(response => { //  physically exists
-                  resolve(context)
-                }, err => {
-                  if (err.status === 404) {
-                    if (!confirm('Ok to create a new empty index file at ' + ix + ', overwriting anything that was there?')) {
-                      reject(new Error('cancelled by user'))
-                    }
-                    putIndex(ix)
-                  } else {
-                    reject(new Error('You should have a type index file ' + ix + ', but ' + err))
-                  }
-                })
-              }
-            }) // promise
-          } // makeIndexIfNecesary
-
-          var ps = [ makeIndexIfNecesary(context, 'private'), makeIndexIfNecesary(context, 'public') ]
-
-          return Promise.all(ps)
-            .then(() => {
-              resolve(context)
-            })
-        } else { // user cancel
-          // @@ code me
-        }
-      }
-      )
-  }) // Promise
+async function ensureTypeIndexes (context) {
+  await ensureOneTypeIndex (context, true)
+  await ensureOneTypeIndex (context, false)
+  // return context
 }
 
 /* Load or create ONE type index
