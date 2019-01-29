@@ -324,6 +324,86 @@ function loadTypeIndexes (context) {
   })
 }
 
+
+async function loadPublicTypeIndex (context) {
+  return await loadPubicIndexex (context, ns.solid('publicTypeIndex'), true)
+}
+async function loadPrivateTypeIndex (context) {
+  return await loadPrivateIndex (context, ns.solid('privateTypeIndex'), false)
+}
+async function loadIndex (context, predicate, isPublic) {
+  var ns = UI.ns
+  var kb = UI.store
+
+ // Loading preferences is more than loading profile
+  try {
+    await isPublic ? logInLoadProfile(context) : logInLoadPreferences(context)
+  } catch (err) {
+    UI.utils.complain(context, 'loadPubicIndex: login and load problem ' +err)
+  }
+  var me = context.me
+  var ix
+  context.index = context.index || {}
+
+  if (isPublic) {
+    ixs = kb.each(me, predicate, undefined, context.publicProfile)
+    context.index.public = ixs
+  } else {
+    if (!context.preferencesFileError) {
+      ixs = kb.each(me, ns.solid('privateTypeIndex'), undefined, context.preferencesFile)
+      context.index.private = ixs
+      if (ixs.length === 0) {
+        UI.utils.complain('Your preference file ' + context.preferencesFile + ' does not point to a private type index.')
+        return context
+      }
+    } else {
+      console.log('We know your preferences file is noty available, so not bothering with private type indexes.')
+    }
+  }
+
+  try {
+    let responses = await kb.fetcher.load(ixs)
+  } catch (err) {
+    UI.utils.complain(context, 'loadPubicIndex: loading public type index ' +err)
+  }
+  return context
+}
+
+async function loadPrivateIndex (context, predicate, ) {
+  var ns = UI.ns
+  var kb = UI.store
+
+  try {
+    await logInLoadProfile(context)
+  } catch (err) {
+    UI.utils.complain(context, 'loadPubicIndex: loading profile ' +err)
+  }
+  var me = context.me
+  context.index = context.index || {}
+
+
+  if (!context.preferencesFileError) {
+    context.index.private = kb.each(me, ns.solid('privateTypeIndex'), undefined, context.preferencesFile)
+    if (context.index.private.length === 0) {
+      return reject(new Error('Your preference file ' + context.preferencesFile + ' does not point to a private type index.'))
+    }
+  }
+
+  var ix = kb.each(me, ns.solid('publicTypeIndex'), undefined, context.publicProfile)
+  context.index.public = ix
+  /*
+  if (context.index.public.length === 0) {
+    return reject(new Error('Your profile ' + context.publicProfile + ' does not point to a public type index.'))
+  }
+  */
+  try {
+    let responses = await kb.fetcher.load(ix)
+  } catch (err) {
+    UI.utils.complain(context, 'loadPubicIndex: loading public type index ' +err)
+  }
+  return context
+}
+
 /**
  * Resolves with the same context, outputting
  * @see https://github.com/solid/solid/blob/master/proposals/data-discovery.md#discoverability
@@ -420,6 +500,111 @@ function ensureTypeIndexes (context) {
   }) // Promise
 }
 
+/* Load or create ONE type index
+ * Find one or mke one or fail
+ * Many reasons for filing including script not having permission etc
+ *
+*/
+/**
+ *  Adds it output to the context
+ * @see https://github.com/solid/solid/blob/master/proposals/data-discovery.md#discoverability
+ *
+ * @private
+ *
+ * @param context {Object}
+ * @param context.me
+ * @param context.preferencesFile
+ * @param context.preferencesFileError - Set if preferences file is blocked at theis origin so don't use it
+ * @param context.publicProfile
+ * @param context.index
+ *
+ * @returns {Promise}
+ */
+
+async function ensureOneTypeIndex (context, isPublic) {
+  try {
+    await loadOneTypeIndex(context, isPublic)
+    console.log('ensureOneTypeIndex: Type index exists already')
+    return context
+  } catch (error) {
+    UI.utils.complain(context, message)
+    return v
+  }
+  if (confirm('You don\'t have, or you couldn\'t acess,  type indexes --lists of things of different types. Create new empty ones? ' + error)) {
+    var ns = UI.ns
+    var kb = UI.store
+    var me = context.me
+    var newIndex
+    const visibility = isPublic ? 'public' : 'private'
+    const relevant = isPublic ? context.publicProfile : context.preferencesFile
+
+    async function makeIndexIfNecesary (context, isPublic) {
+      var relevant = isPublic ? 'public': context.publicProfile : context.preferencesFile
+      const visibility = isPublic ? 'public' : 'private'
+        async function putIndex (newIndex) {
+          try {
+            await kb.fetcher.webOperation('PUT', newIndex.uri, {
+            data: '# ' + new Date() + ' Blank initial Type index\n',
+            contentType: 'text/turtle'})
+            return context
+          } catch (e) {
+            let msg = 'Error creating new index ' + e
+            widgets.complain(context, msg)
+          }
+        }
+
+        context.index = context.index || {}
+        context.index[visibility] = context.index[visibility] || []
+        if (context.index[visibility].length === 0) {
+          newIndex = $rdf.sym(relevant.dir().uri + visibility + 'TypeIndex.ttl')
+          console.log('Linking to new fresh type index ' + newIndex)
+          if (!confirm('Ok to create a new empty index file at ' + newIndex + ', overwriting anything that was there?')) {
+            reject(new Error('cancelled by user'))
+          }
+          console.log('Linking to new fresh type index ' + newIndex)
+          var addMe = [ $rdf.st(me, ns.solid(visibility + 'TypeIndex'), newIndex, relevant) ]
+          try {
+            await updatePromise([], addMe)
+          } catch (err) {
+            let msg = 'Error saving type index link saving back ' + newIndex + ': ' + err))
+            UI.utils.complain(context, msg)
+            return context
+          }
+
+          console.log('Creating new fresh type index file' + newIndex)
+          await putIndex(newIndex)
+          context.index[visibility].push(newIndex) // @@ wait
+        } else {  // officially exists
+          var ix = context.index[visibility][0]
+          try {
+            await kb.fetcher.load(ix)
+          } catch (err) {
+
+          }
+          .then(response => { //  physically exists
+            resolve(context)
+          }, err => {
+            if (err.status === 404) {
+              if (!confirm('Ok to create a new empty index file at ' + ix + ', overwriting anything that was there?')) {
+                reject(new Error('cancelled by user'))
+              }
+              putIndex(ix)
+            } else {
+              reject(new Error('You should have a type index file ' + ix + ', but ' + err))
+            }
+          })
+        }
+      }) // promise
+    } // makeIndexIfNecesary
+
+    await makeIndexIfNecesary(context, isPublic)
+  } else { // user cancel
+    console.log('Type index creation cancelled by user')
+  }
+}
+
+
+
 /**
  * Returns promise of context with arrays of symbols
  *
@@ -432,43 +617,45 @@ function ensureTypeIndexes (context) {
  * @param klass
  * @returns {Promise}  of context
  */
-function findAppInstances (context, klass) {
+async function findAppInstances (context, klass, isPublic) {
   var kb = UI.store
   var ns = UI.ns
   var fetcher = UI.store.fetcher
+  if (isPublic === undefined) { // Then both public and private
+    await findAppInstances (context, klass, true)
+    await findAppInstances (context, klass, false)
+    return context
+  }
 
-  return new Promise(function (resolve, reject) {
-    loadTypeIndexes(context).then(context => {
-      var registrations = []
-      if (context.index.public) {
-        registrations = context.index.public.map(ix => kb.each(undefined, ns.solid('forClass'), klass, ix)).flat()
-      }
-      if (context.index.private) {
-        let privateRegistrations = context.index.private.map(ix => kb.each(undefined, ns.solid('forClass'), klass, ix)).flat()
-        registrations = registrations.concat(privateRegistrations)
-      }
-      var instances = registrations.map(reg => kb.each(reg, ns.solid('instance'))).flat()
-      var containers = registrations.map(reg => kb.each(reg, ns.solid('instanceContainer'))).flat()
+  const visibility = isPublic ? 'public' : 'private'
+  await loadTypeIndexes(context, isPublic)
 
-      if (!containers.length) {
-        context.instances = instances
-        context.containers = []
-        resolve(context)
-      }
-      fetcher.load(containers)
-        .then(responses => {
-          for (var i = 0; i < containers.length; i++) {
-            var cont = containers[i]
-            instances = instances.concat(kb.each(cont, ns.ldp('contains')))
-          }
-          context.instances = instances
-          context.containers = containers
-          resolve(context)
-        }, err => {
-          reject(new Error('[FAI] Unable to load containers' + err))
-        })
-    }, err => reject(new Error('Error looking for instances of ' + klass + ': ' + err)))
-  })
+  var thisIndex = isPubcontext.index[visibility]
+  var newRegistrations = thisIndex.map(ix => kb.each(undefined, ns.solid('forClass'), klass, ix)).flat()
+
+  registrations = registrations.concat(newRegistrations)
+  var instances = registrations.map(reg => kb.each(reg, ns.solid('instance'))).flat()
+  var containers = registrations.map(reg => kb.each(reg, ns.solid('instanceContainer'))).flat()
+
+  context.instances = context.instances || new Array()
+  context.instances = context.instances.concat(instances)
+
+  context.containers = context.containers || new Array()
+  context.containers = context.containers.concat(containers)
+  if (!containers.length) {
+    return(context)
+  }
+  // If the index gives containers, then look up all things within them
+  try {
+    let resp = fetcher.load(containers)
+  } catch (err) {
+    var e = new Error('[FAI] Unable to load containers' + err)
+  }
+  for (var i = 0; i < containers.length; i++) {
+    var cont = containers[i]
+    context.instances = context.instances.concat(kb.each(cont, ns.ldp('contains')))
+  }
+  return context
 }
 
 // @@@@ use teh one in rdflib.js when it is avaiable and delete this
@@ -488,7 +675,7 @@ function updatePromise (updater, del, ins) {
 async function registerInTypeIndex (context, instance, klass, isPublic) {
   const kb = UI.store
   const ns = UI.ns
-  await ensureTypeIndexes(context)
+  await ensureOneTypeIndex(context, isPublic)
   const indexes = isPublic ? context.index.public : context.index.private
   if (!indexes.length) throw new Error('registerInTypeIndex: What no type index?')
   const index = indexes[0]
