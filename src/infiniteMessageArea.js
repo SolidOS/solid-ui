@@ -45,8 +45,9 @@ module.exports = function (dom, kb, subject, options) {
   var colorizeByAuthor = options.colorizeByAuthor === '1' || options.colorizeByAuthor === true
 
   // var participation // An object tracking users use and prefs
+  const messageBodyStyle = UI.style.messageBodyStyle
 
-  var messageBodyStyle = 'white-space: pre-wrap; width: 90%; font-size:100%; border: 0.07em solid #eee; padding: .2em 0.5em; margin: 0.1em 1em 0.1em 1em;'
+  // var messageBodyStyle = 'white-space: pre-wrap; width: 90%; font-size:100%; border: 0.07em solid #eee; padding: .2em 0.5em; margin: 0.1em 1em 0.1em 1em;'
   // 'font-size: 100%; margin: 0.1em 1em 0.1em 1em;  background-color: white; white-space: pre-wrap; padding: 0.1em;'
 
   var div = dom.createElement('div')
@@ -103,6 +104,8 @@ module.exports = function (dom, kb, subject, options) {
       }, err => {
         if (err.response.status === 404) {
           kb.fetcher.webOperation('PUT', doc.uri, {data: '', contentType: 'text/turtle'}).then(response => {
+            // fetcher.requested[doc.uri] = 'done' // do not need to read ??  but no headers
+            delete fetcher.requested[doc.uri] // delete cached 404 error
             resolve(response)
           }, err => {
             reject(err)
@@ -119,15 +122,18 @@ module.exports = function (dom, kb, subject, options) {
 /* Find a user's bookmarks
 */
   async function findBookmarkDocument (context) {
-    await UI.authn.findAppInstances(context, BOOK('Bookmark'))
+    const klass = BOOK('Bookmark')
+    const fileTail = 'bookmarks.ttl'
+    const isPublic = true
+    await UI.authn.findAppInstances(context, klass, isPublic) // public -- only look for public links
     if (context.instances && context.instances.length > 0) {
       context.bookmarkDocument = context.instances[0]
       if (context.instances.length > 1) {
-        alert('More than one bookmark file! ' +  context.instances)
+        alert('More than one bookmark file! ' + context.instances)
       }
     } else {
       if (userContext.publicProfile) { // publicProfile or preferencesFile
-        var newBookmarkFile = $rdf.sym(userContext.publicProfile.dir().uri + 'bookmarks.ttl')
+        var newBookmarkFile = $rdf.sym(userContext.publicProfile.dir().uri + fileTail)
         try {
           console.log('Creating new bookmark file ' + newBookmarkFile)
           await createIfNotExists(newBookmarkFile)
@@ -135,7 +141,7 @@ module.exports = function (dom, kb, subject, options) {
           announce.error('Can\'t make fresh bookmark file:' + e)
           return context
         }
-        await UI.authn.registerInTypeIndex(userContext, newBookmarkFile, BOOK('Bookmark'), true) // public
+        await UI.authn.registerInTypeIndex(userContext, newBookmarkFile, klass, true) // public
         context.bookmarkDocument = newBookmarkFile
       } else {
         alert('You seem to have no bookmark file and not even a preferences file.')

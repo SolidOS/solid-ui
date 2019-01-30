@@ -310,7 +310,8 @@ async function loadPrivateTypeIndex (context) {
   return loadIndex(context, ns.solid('privateTypeIndex'), false)
 }
 async function loadOneTypeIndex (context, isPublic) {
-  return loadIndex(context, ns.solid('privateTypeIndex'), isPublic)
+  let predicate = isPublic ? ns.solid('publicTypeIndex') : ns.solid('privateTypeIndex')
+  return loadIndex(context, predicate, isPublic)
 }
 
 async function loadIndex (context, predicate, isPublic) {
