@@ -67,6 +67,7 @@ function recordPersonalDefaults (klass, context) {
         if (prefs) {
           context.personalDefaults = prefs // Found one
           resolve(context)
+          return
         } else {
           prefs = widgets.newThing(context.preferencesFile)
           reg = regs[0]

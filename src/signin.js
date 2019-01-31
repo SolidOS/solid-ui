@@ -130,7 +130,7 @@ function currentUser () {
       return $rdf.sym(da.session.webId)
     }
   }
-  return null
+  return offlineTestID() // null unless testing
   // JSON.parse(localStorage['solid-auth-client']).session.webId
 }
 
@@ -195,7 +195,7 @@ function logInLoadProfile (context) {
         resolve(context)
       }, err => {
         let message = 'Logged in but cannot load profile ' + profileDocument + ' : ' + err
-        context.div.appendChild(error.errorMessageBlock(context.dom, message))
+        context.div.appendChild(UI.widgets.errorMessageBlock(context.dom, message))
         reject(message)
       })
     },
@@ -226,7 +226,7 @@ function logInLoadPreferences (context) {
         message = 'logInLoadPreferences: ' + message
         if (statusArea) {
           // statusArea.innerHTML = ''
-          statusArea.appendChild(error.errorMessageBlock(context.dom, message))
+          statusArea.appendChild(UI.widgets.errorMessageBlock(context.dom, message))
         }
         console.log(message)
         reject(new Error(message))
@@ -563,7 +563,7 @@ function registrationControl (context, instance, klass) {
   context.div.appendChild(box)
 
   return ensureTypeIndexes(context)
-    .then(function (context) {
+    .then(function () {
       box.innerHTML = '<table><tbody><tr></tr><tr></tr></tbody></table>' // tbody will be inserted anyway
       box.setAttribute('style', 'font-size: 120%; text-align: right; padding: 1em; border: solid gray 0.05em;')
       var tbody = box.children[0].children[0]
@@ -601,13 +601,13 @@ function registrationControl (context, instance, klass) {
         context.div.appendChild(dom.createElement('p')).textContent = msg
       } else {
         msg = 'registrationControl: Type indexes not available: ' + e
-        context.div.appendChild(UI.error.errorMessageBlock(context.dom, e))
+        context.div.appendChild(UI.widgets.errorMessageBlock(context.dom, e))
       }
       console.log(msg)
     })
     .catch(function (e) {
       var msg = 'registrationControl: Error making panel:' + e
-      context.div.appendChild(UI.error.errorMessageBlock(context.dom, e))
+      context.div.appendChild(UI.widgets.errorMessageBlock(context.dom, e))
       console.log(msg)
     })
 }
@@ -860,7 +860,7 @@ function signInOrSignUpBox (dom, setUserCallback) {
               }
             } catch (e) {
               console.log('## Error satisfying login box: ' + e)
-              div.appendChild(UI.error.errorMessageBlock(dom, e))
+              div.appendChild(UI.widgets.errorMessageBlock(dom, e))
             }
           }
         }
@@ -1070,7 +1070,7 @@ function selectWorkspace (dom, appDetails, callbackWS) {
   var box = dom.createElement('div')
   var context = { me: me, dom: dom, div: box }
 
-  var say = function (s) { box.appendChild(error.errorMessageBlock(dom, s)) }
+  var say = function (s) { box.appendChild(UI.widgets.errorMessageBlock(dom, s)) }
 
   var figureOutBase = function (ws) {
     var newBase = kb.any(ws, UI.ns.space('uriPrefix'))

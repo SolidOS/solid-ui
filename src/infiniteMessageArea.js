@@ -105,7 +105,7 @@ module.exports = function (dom, kb, subject, options) {
         if (err.response.status === 404) {
           kb.fetcher.webOperation('PUT', doc.uri, {data: '', contentType: 'text/turtle'}).then(response => {
             // fetcher.requested[doc.uri] = 'done' // do not need to read ??  but no headers
-            delete fetcher.requested[doc.uri] // delete cached 404 error
+            delete kb.fetcher.requested[doc.uri] // delete cached 404 error
             resolve(response)
           }, err => {
             reject(err)
@@ -125,6 +125,7 @@ module.exports = function (dom, kb, subject, options) {
     const klass = BOOK('Bookmark')
     const fileTail = 'bookmarks.ttl'
     const isPublic = true
+
     await UI.authn.findAppInstances(context, klass, isPublic) // public -- only look for public links
     if (context.instances && context.instances.length > 0) {
       context.bookmarkDocument = context.instances[0]
@@ -144,7 +145,7 @@ module.exports = function (dom, kb, subject, options) {
         await UI.authn.registerInTypeIndex(userContext, newBookmarkFile, klass, true) // public
         context.bookmarkDocument = newBookmarkFile
       } else {
-        alert('You seem to have no bookmark file and not even a preferences file.')
+        alert('You seem to have no bookmark file and not even a profile file.')
       }
     }
     return context
