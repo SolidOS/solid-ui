@@ -322,7 +322,7 @@ async function loadIndex (context, predicate, isPublic) {
   try {
     await isPublic ? logInLoadProfile(context) : logInLoadPreferences(context)
   } catch (err) {
-    UI.utils.complain(context, 'loadPubicIndex: login and load problem ' + err)
+    UI.widgets.complain(context, 'loadPubicIndex: login and load problem ' + err)
   }
   var me = context.me
   var ixs
@@ -336,7 +336,7 @@ async function loadIndex (context, predicate, isPublic) {
       ixs = kb.each(me, ns.solid('privateTypeIndex'), undefined, context.preferencesFile)
       context.index.private = ixs
       if (ixs.length === 0) {
-        UI.utils.complain('Your preference file ' + context.preferencesFile + ' does not point to a private type index.')
+        UI.widgets.complain('Your preference file ' + context.preferencesFile + ' does not point to a private type index.')
         return context
       }
     } else {
@@ -347,7 +347,7 @@ async function loadIndex (context, predicate, isPublic) {
   try {
     await kb.fetcher.load(ixs)
   } catch (err) {
-    UI.utils.complain(context, 'loadPubicIndex: loading public type index ' + err)
+    UI.widgets.complain(context, 'loadPubicIndex: loading public type index ' + err)
   }
   return context
 }
@@ -426,7 +426,7 @@ async function ensureOneTypeIndex (context, isPublic) {
         await updatePromise([], addMe)
       } catch (err) {
         let msg = 'Error saving type index link saving back ' + newIndex + ': ' + err
-        UI.utils.complain(context, msg)
+        UI.widgets.complain(context, msg)
         return context
       }
 
@@ -438,18 +438,18 @@ async function ensureOneTypeIndex (context, isPublic) {
       try {
         await kb.fetcher.load(ixs)
       } catch (err) {
-        UI.utils.complain(context, 'ensureOneTypeIndex: loading indexes ' + err)
+        UI.widgets.complain(context, 'ensureOneTypeIndex: loading indexes ' + err)
       }
     }
   } // makeIndexIfNecesary
 
   try {
     await loadOneTypeIndex(context, isPublic)
-    console.log('ensureOneTypeIndex: Type index exists already')
+    console.log('ensureOneTypeIndex: Type index exists already ' + isPublic ? context.index.public[0] : context.index.private[0] )
     return context
   } catch (error) {
     await makeIndexIfNecesary(context, isPublic)
-    // UI.utils.complain(context, 'calling loadOneTypeIndex:' + error)
+    // UI.widgets.complain(context, 'calling loadOneTypeIndex:' + error)
   }
 }
 
@@ -500,7 +500,10 @@ async function findAppInstances (context, klass, isPublic) {
     await fetcher.load(containers)
   } catch (err) {
     var e = new Error('[FAI] Unable to load containers' + err)
-    throw new Error(e)
+    console.log(e) // complain
+    UI.widgets.complain(context, `Error looking for ${UI.utils.label(klass)}:  ${err}`)
+    // but then ignoire it
+    // throw new Error(e)
   }
   for (var i = 0; i < containers.length; i++) {
     var cont = containers[i]
