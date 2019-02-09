@@ -421,6 +421,7 @@ module.exports = function (dom, kb, chatChannel, options) {
               field.value = '' // clear from out for reuse
               field.setAttribute('style', messageBodyStyle)
               field.disabled = false
+              field.scrollIntoView(newestFirst) // allign bottom (top)
               field.focus() // Start typing next line immediately
               field.select()
             }
@@ -899,15 +900,6 @@ module.exports = function (dom, kb, chatChannel, options) {
       messageTable.extendedForward = false
       setScrollForwardButtonIcon()
 
-      /*  This used to be a way to have  setting button for external things ...
-      if (options.menuHandler && live) { // A high level handles calls for a menu
-        let menuIcon = SPANNER_ICON  // 'noun_897914.svg' menu bars // or maybe dots noun_243787.svg
-        menuButton = UI.widgets.button(dom, UI.icons.iconBase + menuIcon, 'Menu ...') // wider var
-        let menuButtonCell = scrollBackButtonTR.appendChild(dom.createElement('td'))
-        menuButtonCell.appendChild(menuButton)
-        menuButtonCell.style = 'width:3em; height:3em;'
-      }
-      */
       messageTable.extendedForwards = false
 
       if (!newestFirst) { // opposite end from the entry field
@@ -1012,7 +1004,7 @@ module.exports = function (dom, kb, chatChannel, options) {
       }
     }
   }
-
+/*
   function messageCount () {
     var n = 0
     const tables = div.children
@@ -1022,7 +1014,7 @@ module.exports = function (dom, kb, chatChannel, options) {
     }
     return n
   }
-
+*/
 /* Add the live message block with entry field for today
 */
   async function appendCurrentMessages () {
@@ -1045,57 +1037,46 @@ module.exports = function (dom, kb, chatChannel, options) {
     latest.messageTable = liveMessageTable
     return messageTable
   }
-  // var dateCreated = kb.any(chatChannel, ns.dc('created'))
-  // dateCreated = dateCreated ? dateCreated.toJS() : new Date('2018-01-01') // Lower bound on date
-  // if (!dateCreated) throw new Error('Chat should have creation date: ' + chatChannel)
 
-  async function getMoreIfSpace () {
-    console.log('message count ... ' + messageCount())
-    if (earliest.messageTable && earliest.messageTable.extendBackwards) {
-      while (messageCount(div) < messageCountLimit) {
-        var done = await earliest.messageTable.extendBackwards()
-        if (options.selectedElement) {
-          options.selectedElement.scrollIntoView({block: 'center'}) // allign tops or bopttoms
-        } else {
-          liveMessageTable.scrollIntoView(newestFirst) // allign tops or bopttoms
-        }
-        console.log('message count ... ' + messageCount())
-        if (done) break
-      }
-    }
-  }
-
-  const messageCountLimit = 50
-  // var messageTable
-  // var chatDocument
   var liveMessageTable
   var earliest = {messageTable: null}  // Stuff about each end of the loaded days
   var latest = {messageTable: null}
 
   var lock = false
-  async function loadMoreWhereNeeded (event) {
+  async function loadMoreWhereNeeded (event, fixScroll) {
     if (lock) return
     lock = true
+    const freeze = !fixScroll
     const magicZone = 150
     // const top = div.scrollTop
     // const bottom = div.scrollHeight - top - div.clientHeight
     var done
 
     while (div.scrollTop < magicZone &&
-      earliest.messageTable &&
-      !earliest.messageTable.initial &&
-      earliest.messageTable.extendBackwards) {
+        earliest.messageTable &&
+        !earliest.messageTable.initial &&
+        earliest.messageTable.extendBackwards) {
+      let scrollBottom = div.scrollHeight - div.scrollTop
       console.log('infinite scroll: adding above: top ' + div.scrollTop)
       done = await earliest.messageTable.extendBackwards()
+      if (freeze) {
+        div.scrollTop = div.scrollHeight - scrollBottom
+      }
+      if (fixScroll) fixScroll()
       if (done) break
     }
     while (options.selectedMessage && // we started in the middle not at the bottom
-      div.scrollHeight - div.scrollTop - div.clientHeight < magicZone && // we are scrolled right to the bottom
-      latest.messageTable &&
-      !latest.messageTable.final && // there is more data to come
-      latest.messageTable.extendForwards) {
+        div.scrollHeight - div.scrollTop - div.clientHeight < magicZone && // we are scrolled right to the bottom
+        latest.messageTable &&
+        !latest.messageTable.final && // there is more data to come
+        latest.messageTable.extendForwards) {
+      let scrollTop = div.scrollTop
       console.log('infinite scroll: adding below: bottom: ' + (div.scrollHeight - div.scrollTop - div.clientHeight))
       done = await latest.messageTable.extendForwards() // then add more data on the bottom
+      if (freeze) {
+        div.scrollTop = scrollTop // while adding below keep same things in view
+      }
+      if (fixScroll) fixScroll()
       if (done) break
     }
     lock = false
@@ -1105,6 +1086,16 @@ module.exports = function (dom, kb, chatChannel, options) {
     function yank () {
       selectedMessageTable.selectedElement.scrollIntoView({block: 'center'})
     }
+
+    // During initial load ONLY keep scroll to selected thing or bottom
+    function fixScroll () {
+      if (options.selectedElement) {
+        options.selectedElement.scrollIntoView({block: 'center'}) // allign tops or bopttoms
+      } else {
+        liveMessageTable.inputRow.scrollIntoView(newestFirst) // allign tops or bopttoms
+      }
+    }
+
     var live
     if (options.selectedMessage) {
       var selectedDocument = options.selectedMessage.doc()
@@ -1124,9 +1115,9 @@ module.exports = function (dom, kb, chatChannel, options) {
       await appendCurrentMessages()
       earliest.messageTable = liveMessageTable
       latest.messageTable = liveMessageTable
-      // getMoreIfSpace()
     }
-    await loadMoreWhereNeeded()
+
+    await loadMoreWhereNeeded(null, fixScroll)
     div.addEventListener('scroll', loadMoreWhereNeeded)
     if (options.solo) {
       document.body.addEventListener('scroll', loadMoreWhereNeeded)
