@@ -46,6 +46,8 @@ module.exports = function (dom, kb, chatChannel, options) {
   var newestFirst = options.newestFirst === '1' || options.newestFirst === true // hack for now
   var colorizeByAuthor = options.colorizeByAuthor === '1' || options.colorizeByAuthor === true
 
+  options.authorAboveContent = true
+
   // var participation // An object tracking users use and prefs
   const messageBodyStyle = UI.style.messageBodyStyle
 
@@ -204,20 +206,55 @@ module.exports = function (dom, kb, chatChannel, options) {
     return bookmark
   }
 
+  /* Emoji in Unicode
+  */
+
+  var emoji = {}
+  emoji[ns.schema('AgreeAction')] = '👍'
+  emoji[ns.schema('DisagreeAction')] = '👎'
+  emoji[ns.schema('EndorseAction')] = '⭐️'
+  emoji[ns.schema('LikeAction')] = '❤️'
+
   /*  Strip of sentiments expressed
   */
   function sentimentStrip (target, doc) {
-    var emoji = {}
-    emoji[ns.schema('AgreeAction')] = '👍'
-    emoji[ns.schema('DisagreeAction')] = '👎'
-    emoji[ns.schema('EndorseAction')] = '⭐️'
-    emoji[ns.schema('LikeAction')] = '❤️'
-
     const actions = kb.each(null, ns.schema('target'), target, doc)
     const sentiments = actions.map(a => kb.any(a, ns.rdf('type'), null, doc))
     sentiments.sort()
     const strings = sentiments.map(x => emoji[x] || '')
-    return strings.join(' ')
+    return dom.createTextNode(strings.join(' '))
+  }
+  /**  Strip of sentiments expressed
+   *
+   * @param target {NamedNode} - The thing about which they are expressed
+   * @param doc {NamedNode} - The document iun which they are expressed
+  */
+
+  function sentimentStripLinked (target, doc) {
+    var strip = dom.createElement('span')
+    function refresh () {
+      strip.innerHTML = ''
+      const actions = kb.each(null, ns.schema('target'), target, doc)
+      const sentiments = actions.map(a => [
+        kb.any(a, ns.rdf('type'), null, doc),
+        kb.any(a, ns.schema('agent'), null, doc)])
+      sentiments.sort()
+      sentiments.forEach(ss => {
+        let [klass, agent] = ss
+        var res
+        if (agent) {
+          res = dom.createElement('a')
+          res.setAttribute('href', agent.uri)
+        } else {
+          res = dom.createTextNode('')
+        }
+        res.textContent = emoji[klass] || '*'
+        strip.appendChild(res)
+      })
+    }
+    refresh()
+    strip.refresh = refresh
+    return strip
   }
 
  /*    Tools for doing things with a message
@@ -227,7 +264,7 @@ module.exports = function (dom, kb, chatChannel, options) {
   * Ideas: Bookmark, Like, star, pin at top of chat, reply as new thread,
   * If you made it originally:  edit, delete, attach
  */
-  function messageTools (message) {
+  function messageTools (message, messageRow) {
     const div = dom.createElement('div')
     function closeToolbar () {
       div.parentElement.parentElement.removeChild(div.parentElement) // remive the TR
@@ -528,6 +565,19 @@ module.exports = function (dom, kb, chatChannel, options) {
     td1.appendChild(anchor(date, message))
   }
 
+  function creatorAndDateHorizontal (td1, creator, date, message) {
+    var nickAnchor = td1.appendChild(anchor(label(creator), creator))
+    if (creator.uri) {
+      UI.store.fetcher.nowOrWhenFetched(creator.doc(), undefined, function (ok, body) {
+        nickAnchor.textContent = nick(creator)
+      })
+    }
+    const dateBit = td1.appendChild(anchor(date, message))
+    dateBit.style.fontSize = '80%'
+    dateBit.style.marginLeft = '1em'
+    td1.appendChild(dom.createElement('br'))
+  }
+
   // ///////////////////////////////////////////////////////////////////////
 
   function syncMessages (about, messageTable) {
@@ -556,7 +606,12 @@ module.exports = function (dom, kb, chatChannel, options) {
       }
       ele = ele2
     }
-  }
+    for (ele = messageTable.firstChild; ele; ele = ele.nextSibling) {
+      if (ele.AJAR_subject) {   // Refresh thumbs up etc
+        UI.widgets.refreshTree(ele) // Things inside may have changed too
+      }
+    }
+  } // syncMessages
 
   var deleteMessage = function (message) {
     var deletions = kb.statementsMatching(message).concat(
@@ -604,14 +659,14 @@ module.exports = function (dom, kb, chatChannel, options) {
     var content = bindings['?content']
 
     var dateString = date.value
-    var tr = dom.createElement('tr')
-    tr.AJAR_date = dateString
-    tr.AJAR_subject = message
+    var messageRow = dom.createElement('tr')
+    messageRow.AJAR_date = dateString
+    messageRow.AJAR_subject = message
 
     if (options.selectedMessage && options.selectedMessage.sameTerm(message)) {
-      tr.style.backgroundColor = 'yellow'
-      options.selectedElement = tr
-      messageTable.selectedElement = tr
+      messageRow.style.backgroundColor = 'yellow'
+      options.selectedElement = messageRow
+      messageTable.selectedElement = messageRow
     }
 
     var done = false
@@ -621,20 +676,32 @@ module.exports = function (dom, kb, chatChannel, options) {
       }
       if (((dateString > ele.AJAR_date) && newestFirst) ||
         ((dateString < ele.AJAR_date) && !newestFirst)) {
-        messageTable.insertBefore(tr, ele)
+        messageTable.insertBefore(messageRow, ele)
         done = true
         break
       }
     }
     if (!done) {
-      messageTable.appendChild(tr)
+      messageTable.appendChild(messageRow)
     }
 
     var td1 = dom.createElement('td')
-    tr.appendChild(td1)
-    creatorAndDate(td1, creator, UI.widgets.shortDate(dateString), message)
+    messageRow.appendChild(td1)
+    if (options.authorAboveContent) {
+      let img = dom.createElement('img')
+      img.setAttribute('style', 'max-height: 2.5em; max-width: 2.5em; border-radius: 0.5em; margin: auto;')
+      UI.widgets.setImage(img, creator)
+      td1.appendChild(img)
+    } else {
+      creatorAndDate(td1, creator, UI.widgets.shortDate(dateString), message)
+    }
 
-    var td2 = tr.appendChild(dom.createElement('td'))
+    // Render the content ot the message itself
+    var td2 = messageRow.appendChild(dom.createElement('td'))
+
+    if (options.authorAboveContent) {
+      creatorAndDateHorizontal(td2, creator, UI.widgets.shortDate(dateString), message)
+    }
     let text = content.value.trim()
     let isURI = (/^https?:\/[^ <>]*$/i).test(text)
     let para = null
@@ -661,30 +728,33 @@ module.exports = function (dom, kb, chatChannel, options) {
           : (fresh ? '#e8ffe8' : 'white')
       para.setAttribute('style', messageBodyStyle + 'background-color: ' + bgcolor + ';')
     }
-
-    var td3 = dom.createElement('td')
-    tr.appendChild(td3)
+    // Sentiment strip
+    const strip = sentimentStripLinked(message, message.doc())
+    if (strip.children.length) {
+      td2.appendChild(dom.createElement('br'))
+      td2.appendChild(strip)
+    }
 
     // Message tool bar button
-
+    var td3 = dom.createElement('td')
+    messageRow.appendChild(td3)
     var toolsButton = UI.widgets.button(dom, UI.icons.iconBase + 'noun_243787.svg', '...')
     td3.appendChild(toolsButton)
-    td3.appendChild(dom.createTextNode(sentimentStrip(message, message.doc())))
     toolsButton.addEventListener('click', function (e) {
-      if (tr.toolTR) { // already got a toolbar? Toogle
-        tr.parentNode.removeChild(tr.toolTR)
-        delete tr.toolTR
+      if (messageRow.toolTR) { // already got a toolbar? Toogle
+        messageRow.parentNode.removeChild(messageRow.toolTR)
+        delete messageRow.toolTR
         return
       }
       const toolsTR = dom.createElement('tr')
-      const tools = messageTools(message)
-      tools.style = 'border: 0.1em solid #888; border-radius: 0 0 0.7em 0.7em;  border-top: 0; height:3.5em; background-color: #fff;' // @@ fix
-      if (tr.nextSibling) {
-        tr.parentElement.insertBefore(toolsTR, tr.nextSibling)
+      const tools = messageTools(message, messageRow)
+      tools.style = 'border: 0.05em solid #888; border-radius: 0 0 0.7em 0.7em;  border-top: 0; height:3.5em; background-color: #fff;' // @@ fix
+      if (messageRow.nextSibling) {
+        messageRow.parentElement.insertBefore(toolsTR, messageRow.nextSibling)
       } else {
-        tr.parentElement.appendChild(toolsTR)
+        messageRow.parentElement.appendChild(toolsTR)
       }
-      tr.toolTR = toolsTR
+      messageRow.toolTR = toolsTR
       toolsTR.appendChild(dom.createElement('td')) // left
       const toolsTD = toolsTR.appendChild(dom.createElement('td'))
       toolsTR.appendChild(dom.createElement('td')) // right
@@ -769,8 +839,10 @@ module.exports = function (dom, kb, chatChannel, options) {
       let messageTable = (dom.createElement('table'))
       let statusTR = messageTable.appendChild(dom.createElement('tr')) // ### find status in exception
       if (err.response && err.response.status && err.response.status === 404) {
+        console.log('Error 404 for chat file ' + chatDocument)
         statusTR.appendChild(UI.widgets.errorMessageBlock(dom, 'no messages', 'white'))
       } else {
+        console.log('*** Error NON 404 for chat file ' + chatDocument)
         statusTR.appendChild(UI.widgets.errorMessageBlock(dom, err, 'pink'))
       }
       return statusTR
@@ -875,11 +947,11 @@ module.exports = function (dom, kb, chatChannel, options) {
     // @@ listen for swipe past end event not just button
     if (options.infinite) {
       let scrollBackButtonTR = dom.createElement('tr')
+      let scrollBackButtonCell = scrollBackButtonTR.appendChild(dom.createElement('td'))
       // up traingles: noun_1369237.svg
       // down triangles: noun_1369241.svg
       let scrollBackIcon = newestFirst ? 'noun_1369241.svg' : 'noun_1369237.svg' // down and up arrows respoctively
       scrollBackButton = UI.widgets.button(dom, UI.icons.iconBase + scrollBackIcon, 'Previous messages ...')
-      let scrollBackButtonCell = scrollBackButtonTR.appendChild(dom.createElement('td'))
       scrollBackButtonCell.style = 'width:3em; height:3em;'
       scrollBackButton.addEventListener('click', scrollBackButtonHandler, false)
       messageTable.extendedBack = false
