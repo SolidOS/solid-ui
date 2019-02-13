@@ -362,7 +362,8 @@ module.exports = function (dom, kb, chatChannel, options) {
               }
             }
             if (dirty) {
-              UI.widgets.refreshTree(button.parentNode) // requires them all to be immediate siblings
+              // UI.widgets.refreshTree(button.parentNode) // requires them all to be immediate siblings
+              UI.widgets.refreshTree(messageRow) // requires them all to be immediate siblings
             }
           }
         }
