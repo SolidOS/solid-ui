@@ -60,20 +60,21 @@ function recordPersonalDefaults (klass, context) {
       var ins = []
       var prefs
       var reg
-      if (regs.length) { // Use existing node is we can
+      if (regs.length) { // Use existing node if we can
         regs.forEach(r => {
           prefs = prefs || kb.any(r, ns.solid('personalDefaults'))
         })
         if (prefs) {
           context.personalDefaults = prefs // Found one
           resolve(context)
+          return
         } else {
           prefs = widgets.newThing(context.preferencesFile)
           reg = regs[0]
         }
       } else { // no regs fo class
         reg = widgets.newThing(context.preferencesFile)
-        ins = [ $rdf.st(reg, ns.rdf('type'), ns.solid('Registration'), context.preferencesFile),
+        ins = [ $rdf.st(reg, ns.rdf('type'), ns.solid('TypeRegistration'), context.preferencesFile),
           $rdf.st(reg, ns.solid('forClass'), klass, context.preferencesFile)]
       }
       prefs = widgets.newThing(context.preferencesFile)

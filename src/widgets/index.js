@@ -325,9 +325,16 @@ UI.widgets.deleteButtonWithCheck = function (dom, container, noun, deleteFunctio
   return delButton
 }
 
-// ////////////////////////////////////// Grab a name for a new thing
-
-UI.widgets.button = function (dom, iconURI, text) {
+/*  Make a button
+ *
+ * @param dom - the DOM document object
+ * @Param iconURI - the URI of theb icon to use
+ * @param text - the tooltip text or possibly button contents text
+ * @param handler <function> - A handler to called when button is clicked
+ *
+ * @returns <dDomElement> - the button
+*/
+UI.widgets.button = function (dom, iconURI, text, handler) {
   var button = dom.createElement('button')
   button.setAttribute('type', 'button')
   button.setAttribute('style', UI.style.buttonStyle)
@@ -335,18 +342,25 @@ UI.widgets.button = function (dom, iconURI, text) {
   var img = button.appendChild(dom.createElement('img'))
   img.setAttribute('src', iconURI)
   img.setAttribute('style', 'width: 2em; height: 2em;') // trial and error. 2em disappears
+  img.title = text
+  if (handler) {
+    button.addEventListener('click', handler)
+  }
   return button
 }
 
-UI.widgets.cancelButton = function (dom) {
-  return UI.widgets.button(dom, cancelIconURI, 'Cancel')
+UI.widgets.cancelButton = function (dom, handler) {
+  return UI.widgets.button(dom, cancelIconURI, 'Cancel', handler)
 }
-UI.widgets.continueButton = function (dom) {
-  return UI.widgets.button(dom, checkIconURI, 'Continue')
+UI.widgets.continueButton = function (dom, handler) {
+  return UI.widgets.button(dom, checkIconURI, 'Continue', handler)
 }
 
-// Form to get the name of a new thing before we create it
-// Returns a promise of (a name or null if cancelled)
+/* Grab a name for a new thing
+ *
+ * Form to get the name of a new thing before we create it
+ * @returns: a promise of (a name or null if cancelled)
+*/
 UI.widgets.askName = function (dom, kb, container, predicate, klass, noun) {
   return new Promise(function (resolve, reject) {
     var form = dom.createElement('div') // form is broken as HTML behaviour can resurface on js error
@@ -915,7 +929,7 @@ UI.widgets.field[UI.ns.ui('PhoneField').uri] =
                               ds.forEach(st => {
                                 if (!docs.includes(st.why.uri)) docs.push(st.why.uri)
                               })
-                              if (docs.length === 0) throw new Error ('updateMany has no docs to patch')
+                              if (docs.length === 0) throw new Error('updateMany has no docs to patch')
                               if (docs.length === 1) return kb.updater.update(ds, is, callback)
                               console.log('Update many: ' + docs)
                               let doc = docs.pop()
@@ -1829,8 +1843,7 @@ UI.widgets.makeSelectForNestedCategory = function (
 **  made if the checkbox is checed and unchecked respectively.
 **  tristate: Allow ins, or del, or neither
 */
-function buildCheckboxForm (dom, kb, lab, del, ins, form, store, tristate) {
-  if (del && del.length && del.length === 0) del = null // to fail an if
+function buildCheckboxForm (dom, kb, lab, del, ins, form, store, tristate) { // 20190115
   var box = dom.createElement('div')
   var tx = dom.createTextNode(lab)
   var editable = UI.store.updater.editable(store.uri)
@@ -1842,16 +1855,28 @@ function buildCheckboxForm (dom, kb, lab, del, ins, form, store, tristate) {
   input.setAttribute('style', 'font-size: 150%; height: 1.2em; width: 1.2em; background-color: #eef; margin: 0.1em')
   box.appendChild(input)
 
-  if (ins && ins.object && !ins.why) { // back-compatible
-    ins.why = store
+  function fix (x) {
+    if (!x) return [] // no statements
+    if (x.object) {
+      if (!x.why) {
+        x.why = store // be back-compaitible  with old code
+      }
+      return [ x ] // one statements
+    }
+    if (x instanceof Array) return x
+    throw new Error('buildCheckboxForm: bad param ' + x)
   }
-  if (del && del.object && !del.why) { // back-compatible
-    del.why = store
+  ins = fix(ins)
+  del = fix(del)
+
+  function holdsAll (a) {
+    let missing = a.filter(st => !kb.holds(st.subject, st.predicate, st.object, st.why))
+    return missing.length === 0
   }
   function refresh () {
-    var state = kb.holds(ins.subject, ins.predicate, ins.object, ins.why)
-    if (del) {
-      var negation = kb.holds(del.subject, del.predicate, del.object, del.why)
+    var state = holdsAll(ins)
+    if (del.length) {
+      var negation = holdsAll(del)
       if (state && negation) {
         box.appendChild(UI.widgets.errorMessageBlock(dom,
           'Inconsistent data in store!\n' + ins + ' and\n' + del))
@@ -1870,7 +1895,7 @@ function buildCheckboxForm (dom, kb, lab, del, ins, form, store, tristate) {
   if (!editable) return box
 
   var boxHandler = function (e) {
-    tx.style = 'color: #bbb;'
+    tx.style = 'color: #bbb;' // grey -- not saved yet
     var toDelete = (input.state === true ? ins : input.state === false ? del : [])
     input.newState = input.state === null ? true : input.state === true ? false : tristate ? null : true
     var toInsert = (input.newState === true ? ins : input.newState === false ? del : [])

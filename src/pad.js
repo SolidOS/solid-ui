@@ -42,11 +42,17 @@ UI.pad.renderPartipants = function (dom, table, padDoc, subject, me, options) {
 
   var newRowForParticpation = function (parp) {
     var person = kb.any(parp, ns.wf('participant'))
+    var tr
+    if (!person) {
+      tr = dom.createElement('tr')
+      tr.textContent = '???' // Don't crash - invalid part'n entry
+      return tr
+    }
     var bg = kb.anyValue(parp, ns.ui('backgroundColor')) || 'white'
 
     var block = dom.createElement('div')
     block.setAttribute('style', 'height: 1.5em; width: 1.5em; margin: 0.3em; border 0.01em solid #888; background-color: ' + bg)
-    var tr = UI.widgets.personTR(dom, null, person, options)
+    tr = UI.widgets.personTR(dom, null, person, options)
     table.appendChild(tr)
     var td = dom.createElement('td')
     td.setAttribute('style', 'vertical-align: middle;')
@@ -262,8 +268,9 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
         setPartStyle(part, 'color: black;  background-color: #ffd;') // yellow
         part.state = 0 // Needs downstream refresh
         utils.beep(0.5, 512) // Ooops clash with other person
-        setTimeout(function () {
-          updater.requestDownstreamAction(padDoc, reloadAndSync)
+        setTimeout(function () { // Ideally, beep! @@
+          reloadAndSync()  // Throw away our changes and
+          // updater.requestDownstreamAction(padDoc, reloadAndSync)
         }, 1000)
       } else {
         console.log('    removePart FAILED ' + chunk + ': ' + errorMessage)
