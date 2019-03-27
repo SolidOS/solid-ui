@@ -52,7 +52,7 @@ function infiniteMessageArea (dom, kb, chatChannel, options) {
   var me
 
   var updater = UI.store.updater
-
+/*
   var mention = function mention (message, style) {
     console.log(message)
     var pre = dom.createElement('pre')
@@ -66,7 +66,7 @@ function infiniteMessageArea (dom, kb, chatChannel, options) {
     warn: function (message) { mention(message, 'color: #880;') },
     error: function (message) { mention(message, 'color: #800;') }
   }
-
+*/
  /** Create a resource if it really does not exist
   *  Be absolutely sure something does not exist before creating a new empty file
   * as otherwise existing could  be deleted.
@@ -142,7 +142,7 @@ function infiniteMessageArea (dom, kb, chatChannel, options) {
               '?content': content,
               '?date': dateStamp,
               '?creator': me}
-            renderMessage(dom, kb, liveMessageTable, bindings, false) // not green
+            renderMessage(liveMessageTable, bindings, false, options, userContext) // not green
 
             if (!text) {
               field.value = '' // clear from out for reuse
@@ -229,7 +229,7 @@ function infiniteMessageArea (dom, kb, chatChannel, options) {
     UI.authn.logIn(context).then(context => {
       me = context.me
       turnOnInput()
-      // userContext = context
+      Object.assign(context, userContext)
       bookmarks.findBookmarkDocument(context).then(context => {
         console.log('Bookmark file: ' + context.bookmarkDocument)
       })
@@ -280,7 +280,7 @@ function infiniteMessageArea (dom, kb, chatChannel, options) {
       '?date': kb.any(message, DCT('created')),
       '?content': kb.any(message, ns.sioc('content'))
     }
-    renderMessage(dom, kb, messageTable, bindings, messageTable.fresh) // fresh from elsewhere
+    renderMessage(dom, kb, messageTable, bindings, messageTable.fresh, options, userContext) // fresh from elsewhere
   }
 
 // ////////
