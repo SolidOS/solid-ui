@@ -13,9 +13,11 @@ const UI = {
   widgets: require('./widgets')
 }
 const dom = UI.dom || window.document
-const kb = UI.store
+// const kb = UI.store
 
-module.exports = { renderMessage, creatorAndDate, creatorAndDateHorizontal}
+module.exports = { renderMessage, creatorAndDate, creatorAndDateHorizontal }
+
+const messageBodyStyle = UI.style.messageBodyStyle
 
 const { messageTools, sentimentStripLinked } = require('./messageTools').messageTools
 const label = UI.utils.label
@@ -80,7 +82,7 @@ function creatorAndDateHorizontal (td1, creator, date, message) {
 
 // BODY of renderMessage
 
-function renderMessage (dom, kb, messageTable, bindings, fresh, options) {
+function renderMessage (messageTable, bindings, fresh, options, userContext) {
   var colorizeByAuthor = options.colorizeByAuthor === '1' || options.colorizeByAuthor === true
 
   var creator = bindings['?creator']
@@ -104,7 +106,7 @@ function renderMessage (dom, kb, messageTable, bindings, fresh, options) {
     if (!ele) { // empty
       break
     }
-    newestfirst = options.newestfirst === true
+    var newestFirst = options.newestfirst === true
     if (((dateString > ele.AJAR_date) && newestFirst) ||
       ((dateString < ele.AJAR_date) && !newestFirst)) {
       messageTable.insertBefore(messageRow, ele)
