@@ -78,8 +78,16 @@ function newThingUI (context, thePanes) {
                 throw new Error('Cannot mint new - missing newInstance')
               }
               if (newPaneOptions.folder) {
-                kb.add(newPaneOptions.folder, UI.ns.ldp('contains'), kb.sym(newPaneOptions.newBase),
-                  newPaneOptions.folder.doc()) // Ping the patch system?
+                var tail = newPaneOptions.newInstance.uri.slice(newPaneOptions.folder.uri.length)
+                const isPackage = tail.includes('/')
+                console.log('  new thing is packge? ' + isPackage)
+                if (isPackage) {
+                  kb.add(newPaneOptions.folder, UI.ns.ldp('contains'), kb.sym(newPaneOptions.newBase),
+                    newPaneOptions.folder.doc())
+                } else { // single file
+                  kb.add(newPaneOptions.folder, UI.ns.ldp('contains'), newPaneOptions.newInstance,
+                    newPaneOptions.folder.doc()) // Ping the patch system?
+                }
                 if (newPaneOptions.refreshTarget) {
                   newPaneOptions.refreshTarget.refresh() // Refresh the cntaining display
                 }

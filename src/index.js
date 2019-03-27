@@ -46,6 +46,7 @@ const UI = {
   aclControl: require('./acl-control'),
   authn: require('./signin'),
   create: require('./create'),
+  dom: window.document, // Idea that UI.dom can be adapted in non-browser environments
   icons: require('./iconBase'),
   log: require('./log'),
   matrix: require('./matrix'),
