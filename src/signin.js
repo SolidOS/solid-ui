@@ -261,13 +261,15 @@ function logInLoadPreferences (context) {
         let m2
         if (status === 401) {
           m2 = 'Strange - you are not authenticated (properly logged on) to read preferences file.'
+          alert(m2)
         } else if (status === 403) {
           if (differentOrigin()) {
             m2 = 'Unauthorized: Assuming prefs file blocked for origin ' + window.location.origin
             context.preferencesFileError = m2
             return resolve(context)
           }
-          m2 = 'Strange - you are not authorized to read your preferences file.'
+          m2 = 'You are not authot=rized to read your prefernces file. This may be because you are using an trusted web app.'
+          console.warn(m2)
         } else if (status === 404) {
           if (confirm('You do not currently have a Preferences file. Ok for me to create an empty one? ' + preferencesFile)) {
             // @@@ code me  ... weird to have a name o fthe file but no file
@@ -278,8 +280,8 @@ function logInLoadPreferences (context) {
           }
         } else {
           m2 = 'Strange: Error ' + status + ' trying to read your preferences file.' + message
+          alert(m2)
         }
-        alert(m2)
       }) // load prefs file then
     }, err => { // Fail initial login load prefs
       reject(new Error('(via loadPrefs) ' + err))
