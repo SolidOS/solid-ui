@@ -5,6 +5,8 @@
 //  index.ttl#this and the chats messages are stored in YYYY/MM/DD/chat.ttl
 //
 /* global alert  */
+import DateFolder from './dateFolder'
+
 const UI = {
   authn: require('./signin'),
   icons: require('./iconBase'),
@@ -20,7 +22,6 @@ const UI = {
 }
 
 // const utils = require('./utils')
-
 const { renderMessage, creatorAndDate } = require('./renderMessage')
 const bookmarks = require('./bookmarks')
 
@@ -36,6 +37,8 @@ function infiniteMessageArea (dom, kb, chatChannel, options) {
   options = options || {}
 
   var newestFirst = options.newestFirst === '1' || options.newestFirst === true // hack for now
+
+  const dateFolder = new DateFolder(chatChannel, 'chat.ttl')
 
   options.authorAboveContent = true
 
@@ -122,7 +125,7 @@ function infiniteMessageArea (dom, kb, chatChannel, options) {
         var sts = []
         var timestamp = '' + now.getTime()
         var dateStamp = $rdf.term(now)
-        let chatDocument = chatDocumentFromDate(now)
+        let chatDocument = dateFolder.leafDocumentFromDate(now)
 
         var message = kb.sym(chatDocument.uri + '#' + 'Msg' + timestamp)
         var content = kb.literal(text || field.value)
@@ -142,7 +145,12 @@ function infiniteMessageArea (dom, kb, chatChannel, options) {
               '?content': content,
               '?date': dateStamp,
               '?creator': me}
-            renderMessage(liveMessageTable, bindings, false, options, userContext) // not green
+            var tr = renderMessage(liveMessageTable, bindings, false, options, userContext) // not green
+            if (options.newestFirst === true) {
+              messageTable.insertBefore(tr, messageTable.firstChild) // If newestFirst
+            } else {
+              messageTable.appendChild(tr) // not newestFirst
+            }
 
             if (!text) {
               field.value = '' // clear from out for reuse
@@ -209,7 +217,7 @@ function infiniteMessageArea (dom, kb, chatChannel, options) {
       sendButton.addEventListener('click', ev => sendMessage(), false)
       rhs.appendChild(sendButton)
 
-      const chatDocument = chatDocumentFromDate(new Date())
+      const chatDocument = dateFolder.leafDocumentFromDate(new Date())
       var imageDoc
       function getImageDoc () {
         imageDoc = kb.sym(chatDocument.dir().uri + 'Image_' + Date.now() + '.png')
@@ -280,7 +288,12 @@ function infiniteMessageArea (dom, kb, chatChannel, options) {
       '?date': kb.any(message, DCT('created')),
       '?content': kb.any(message, ns.sioc('content'))
     }
-    renderMessage(dom, kb, messageTable, bindings, messageTable.fresh, options, userContext) // fresh from elsewhere
+    var tr = renderMessage(dom, kb, messageTable, bindings, messageTable.fresh, options, userContext) // fresh from elsewhere
+    if (options.newestFirst === true) {
+      messageTable.insertBefore(tr, messageTable.firstChild) // If newestFirst
+    } else {
+      messageTable.appendChild(tr) // not newestFirst
+    }
   }
 
 // ////////
@@ -291,7 +304,7 @@ function infiniteMessageArea (dom, kb, chatChannel, options) {
     let extremity = backwards ? earliest : latest
     let date = extremity.messageTable.date// day in mssecs
 
-    date = await loadPrevious(date, backwards) // backwards
+    date = await dateFolder.loadPrevious(date, backwards) // backwards
     console.log(`insertPreviousMessages: from ${backwards ? 'backwards' : 'forwards'} loadPrevious: ${date}`)
     if (!date && !backwards && !liveMessageTable) {
       await appendCurrentMessages()  // If necessary skip to today and add that
@@ -299,8 +312,8 @@ function infiniteMessageArea (dom, kb, chatChannel, options) {
     if (!date) return true // done
     var live = false
     if (!backwards) {
-      let todayDoc = chatDocumentFromDate(new Date())
-      let doc = chatDocumentFromDate(date)
+      let todayDoc = dateFolder.leafDocumentFromDate(new Date())
+      let doc = dateFolder.leafDocumentFromDate(date)
       live = doc.sameTerm(todayDoc) // Is this todays?
     }
     let newMessageTable = await createMessageTable(date, live)
@@ -355,7 +368,7 @@ function infiniteMessageArea (dom, kb, chatChannel, options) {
   */
   async function createMessageTable (date, live) {
     console.log('   createMessageTable for  ' + date)
-    const chatDocument = chatDocumentFromDate(date)
+    const chatDocument = dateFolder.leafDocumentFromDate(date)
     try {
       await kb.fetcher.load(chatDocument)
     } catch (err) {
@@ -446,7 +459,7 @@ function infiniteMessageArea (dom, kb, chatChannel, options) {
     messageTable.extendForwards = extendForwards // Make function available to scroll stuff
     // var messageButton
     messageTable.date = date
-    var chatDocument = chatDocumentFromDate(date)
+    var chatDocument = dateFolder.leafDocumentFromDate(date)
     messageTable.chatDocument = chatDocument
 
     messageTable.fresh = false
@@ -568,11 +581,11 @@ function infiniteMessageArea (dom, kb, chatChannel, options) {
       return result
     } // previousPeriod
 
-    let folder = chatDocumentFromDate(date).dir()
+    let folder = dateFolder.leafDocumentFromDate(date).dir()
     let found = await previousPeriod(folder, 3)
     if (found) {
       let doc = kb.sym(found.uri + 'chat.ttl')
-      return dateFromChatDocument(doc)
+      return dateFolder.dateFromLeafDocument(doc)
     }
     return null
   }
@@ -580,7 +593,7 @@ function infiniteMessageArea (dom, kb, chatChannel, options) {
   async function addNewTableIfNewDay (now) {
     // let now = new Date()
     // @@ Remove listener from previous table as it is now static
-    let newChatDocument = chatDocumentFromDate(now)
+    let newChatDocument = dateFolder.leafDocumentFromDate(now)
     if (!newChatDocument.sameTerm(latest.messageTable.chatDocument)) { // It is a new day
       if (liveMessageTable.inputRow) {
         liveMessageTable.removeChild(liveMessageTable.inputRow)
@@ -614,7 +627,8 @@ function infiniteMessageArea (dom, kb, chatChannel, options) {
 */
   async function appendCurrentMessages () {
     var now = new Date()
-    var chatDocument = chatDocumentFromDate(now)
+    var chatDocument = dateFolder.leafDocumentFromDate(now)
+    /*   Don't actually make the documemnt until a message is sent
     try {
       await createIfNotExists(chatDocument)
     } catch (e) {
@@ -622,6 +636,7 @@ function infiniteMessageArea (dom, kb, chatChannel, options) {
         dom, 'Problem accessing chat file: ' + e))
       return
     }
+    */
     const messageTable = await createMessageTable(now, true)
     div.appendChild(messageTable)
     div.refresh = function () { // only the last messageTable is live
@@ -695,11 +710,11 @@ function infiniteMessageArea (dom, kb, chatChannel, options) {
     if (options.selectedMessage) {
       var selectedDocument = options.selectedMessage.doc()
       var now = new Date()
-      var todayDocument = chatDocumentFromDate(now)
+      var todayDocument = dateFolder.leafDocumentFromDate(now)
       live = todayDocument.sameTerm(selectedDocument)
     }
     if (options.selectedMessage && !live) {
-      var selectedDate = dateFromChatDocument(selectedDocument)
+      var selectedDate = dateFolder.dateFromLeafDocument(selectedDocument)
       var selectedMessageTable = await createMessageTable(selectedDate, live)
       div.appendChild(selectedMessageTable)
       earliest.messageTable = selectedMessageTable

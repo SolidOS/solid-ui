@@ -2,25 +2,28 @@
 **
 */
 
-import { store as kb } from '../store'
-import ns from '../ns'
+const kb = require ('../store.js')
+// import store from '../store'
+// import ns from '../ns'
 // const kb = store
-
-export class DateFolder {
-  constructor (root, leafFileName) {
-    this.root = root
-    this.rootFolder = root.dir()
+const ns = require('../ns.js')
+module.exports = class DateFolder {
+  constructor (rootThing, leafFileName, membershipProperty) {
+    this.root = rootThing
+    this.rootFolder = rootThing.dir()
     this.leafFileName = leafFileName
+    this.membershipProperty = membershipProperty|| ns.wf('leafObject')
   }
 
   /* Generate the leaf document (rdf object) from date
   * @returns: <NamedNode> - document
   */
   leafDocumentFromDate (date) {
+    // console.log('incoming date: ' + date)
     let isoDate = date.toISOString() // Like "2018-05-07T17:42:46.576Z"
     var path = isoDate.split('T')[0].replace(/-/g, '/') //  Like "2018/05/07"
-    path = root.dir().uri + path + '/' + this.leafFileName
-    return $rdf.sym(path)
+    path = this.root.dir().uri + path + '/' + this.leafFileName
+    return kb.sym(path)
   }
 
   /* Generate a date object from the leaf file name
@@ -29,7 +32,7 @@ export class DateFolder {
     const head = this.rootFolder.uri.length
     const str = doc.uri.slice(head, head + 10).replace(/\//g, '-')
     // let date = new Date(str + 'Z') // GMT - but fails in FF - invalid format :-(
-    let date = new Date(str) // not explicitly UTC but is assumed so in spec
+    var date = new Date(str) // not explicitly UTC but is assumed so in spec
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse
     console.log('Date for ' + doc + ':' + date.toISOString())
     return date
@@ -56,7 +59,7 @@ export class DateFolder {
           let folder = siblings.pop()
           let leafDocument = kb.sym(folder.uri + 'this.leafFileName')
           await kb.fetcher.load(leafDocument)
-          // files can have seealso links. skip ones with no messages with a date
+          // files can have seealso links. skip ones with no leafObjects with a date
           if (kb.statementsMatching(null, ns.dct('created'), null, leafDocument).length > 0) {
             return folder
           }
@@ -89,4 +92,45 @@ export class DateFolder {
     }
     return null
   } // loadPrevious
+
+
+  async firstLeaf (backwards) { // backwards -> last leafObject
+    var folderStore = $rdf.graph()
+    var folderFetcher = new $rdf.Fetcher(folderStore)
+    async function earliestSubfolder (parent) {
+      console.log('            parent ' + parent)
+      delete folderFetcher.requested[parent.uri]
+      var resp = await folderFetcher.load(parent, clone(forcingOptions)) // Force fetch as will have changed
+
+      var kids = folderStore.each(parent, ns.ldp('contains'))
+      kids = kids.filter(suitable)
+      if (kids.length === 0) {
+        throw new Error(' @@@  No children to         parent2 ' + parent)
+      }
+
+      kids.sort()
+      if (backwards) kids.reverse()
+      return kids[0]
+    }
+    let y = await earliestSubfolder(this.root.dir())
+    let month = await earliestSubfolder(y)
+    let d = await earliestSubfolder(month)
+    let leafDocument = $rdf.sym(d.uri + 'chat.ttl')
+    await folderFetcher.load(leafDocument)
+    let leafObjects = folderStore.each(this.root, this.membershipProperty), null, leafDocument)
+    if (leafObjects.length === 0) {
+      let msg = '  INCONSISTENCY -- no chat leafObject in file ' + leafDocument
+      console.trace(msg)
+      throw new Error(msg)
+    }
+    let sortMe = leafObjects.map(leafObject => [folderStore.any(leafObject, ns.dct('created')), leafObject])
+    sortMe.sort()
+    if (backwards) sortMe.reverse()
+    console.log((backwards ? 'Latest' : 'Earliest') + ' leafObject is ' + sortMe[0][1])
+    return sortMe[0][1]
+  } // firstleafObject
+
+
+
+
 } // class
