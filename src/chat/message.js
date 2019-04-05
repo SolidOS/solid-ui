@@ -1,28 +1,29 @@
 
 const UI = {
-  authn: require('./signin'),
-  icons: require('./iconBase'),
-  log: require('./log'),
-  ns: require('./ns'),
-  media: require('./media-capture'),
-  pad: require('./pad'),
+  authn: require('../signin'),
+  icons: require('../iconBase'),
+  log: require('../log'),
+  ns: require('../ns'),
+  media: require('../media-capture'),
+  pad: require('../pad'),
   rdf: require('rdflib'),
-  store: require('./store'),
-  style: require('./style'),
-  utils: require('./utils'),
-  widgets: require('./widgets')
+  store: require('../store'),
+  style: require('../style'),
+  utils: require('../utils'),
+  widgets: require('../widgets')
 }
 const dom = UI.dom || window.document
 // const kb = UI.store
 
-module.exports = { renderMessage, creatorAndDate, creatorAndDateHorizontal }
+// module.exports = { renderMessage, creatorAndDate, creatorAndDateHorizontal }
 
 const messageBodyStyle = UI.style.messageBodyStyle
 
-const { messageTools, sentimentStripLinked } = require('./messageTools').messageTools
+// const { messageToolbar, sentimentStripLinked } = require('./messageTools')
+import { messageToolbar, sentimentStripLinked } from './messageTools'
 const label = UI.utils.label
 
-function elementForImageURI (imageUri, options) {
+export function elementForImageURI (imageUri, options) {
   let img = dom.createElement('img')
   let height = '10'
   if (options.inlineImageHeightEms) {
@@ -56,7 +57,7 @@ function nick (person) {
   return '' + label(person)
 }
 
-function creatorAndDate (td1, creator, date, message) {
+export function creatorAndDate (td1, creator, date, message) {
   var nickAnchor = td1.appendChild(anchor(nick(creator), creator))
   if (creator.uri) {
     UI.store.fetcher.nowOrWhenFetched(creator.doc(), undefined, function (ok, body) {
@@ -67,7 +68,7 @@ function creatorAndDate (td1, creator, date, message) {
   td1.appendChild(anchor(date, message))
 }
 
-function creatorAndDateHorizontal (td1, creator, date, message) {
+export function creatorAndDateHorizontal (td1, creator, date, message) {
   var nickAnchor = td1.appendChild(anchor(label(creator), creator))
   if (creator.uri) {
     UI.store.fetcher.nowOrWhenFetched(creator.doc(), undefined, function (ok, body) {
@@ -82,7 +83,7 @@ function creatorAndDateHorizontal (td1, creator, date, message) {
 
 // BODY of renderMessage
 
-function renderMessage (messageTable, bindings, fresh, options, userContext) {
+export function renderMessage (messageTable, bindings, fresh, options, userContext) {
   var colorizeByAuthor = options.colorizeByAuthor === '1' || options.colorizeByAuthor === true
 
   var creator = bindings['?creator']
@@ -180,7 +181,7 @@ function renderMessage (messageTable, bindings, fresh, options, userContext) {
       return
     }
     const toolsTR = dom.createElement('tr')
-    const tools = messageTools(message, messageRow, userContext)
+    const tools = messageToolbar(message, messageRow, userContext)
     tools.style = 'border: 0.05em solid #888; border-radius: 0 0 0.7em 0.7em;  border-top: 0; height:3.5em; background-color: #fff;' // @@ fix
     if (messageRow.nextSibling) {
       messageRow.parentElement.insertBefore(toolsTR, messageRow.nextSibling)
@@ -193,4 +194,5 @@ function renderMessage (messageTable, bindings, fresh, options, userContext) {
     toolsTR.appendChild(dom.createElement('td')) // right
     toolsTD.appendChild(tools)
   })
+  return messageRow
 }

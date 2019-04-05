@@ -2,18 +2,19 @@
 /* global alert confirm */
 
 const UI = {
-  authn: require('./signin'),
-  icons: require('./iconBase'),
-  log: require('./log'),
-  ns: require('./ns'),
-  media: require('./media-capture'),
-  pad: require('./pad'),
+  authn: require('../signin'),
+  icons: require('../iconBase'),
+  log: require('../log'),
+  ns: require('../ns'),
+  media: require('../media-capture'),
+  pad: require('../pad'),
   rdf: require('rdflib'),
-  store: require('./store'),
-  style: require('./style'),
-  utils: require('./utils'),
-  widgets: require('./widgets')
+  store: require('../store'),
+  style: require('../style'),
+  utils: require('../utils'),
+  widgets: require('../widgets')
 }
+const $rdf = UI.rdf
 
 const BOOK = $rdf.Namespace('http://www.w3.org/2002/01/bookmark#')
 const BOOKMARK_ICON = 'noun_45961.svg'

@@ -7,27 +7,30 @@
 /* global alert  */
 import DateFolder from './dateFolder'
 
+const SERVER_MKDIRP_BUG = true
+
 const UI = {
-  authn: require('./signin'),
-  icons: require('./iconBase'),
-  log: require('./log'),
-  ns: require('./ns'),
-  media: require('./media-capture'),
-  pad: require('./pad'),
+  authn: require('../signin'),
+  icons: require('../iconBase'),
+  log: require('../log'),
+  ns: require('../ns'),
+  media: require('../media-capture'),
+  pad: require('../pad'),
   rdf: require('rdflib'),
-  store: require('./store'),
-  style: require('./style'),
-  utils: require('./utils'),
-  widgets: require('./widgets')
+  store: require('../store'),
+  style: require('../style'),
+  utils: require('../utils'),
+  widgets: require('../widgets')
 }
 
 // const utils = require('./utils')
-const { renderMessage, creatorAndDate } = require('./renderMessage')
+const { renderMessage, creatorAndDate } = require('./message')
 const bookmarks = require('./bookmarks')
 
-module.exports = { infiniteMessageArea }
+// module.exports = module.exports || {}
+// module.exports.infiniteMessageArea =
 
-function infiniteMessageArea (dom, kb, chatChannel, options) {
+export function infiniteMessageArea (dom, kb, chatChannel, options) {
   kb = kb || UI.store
   const ns = UI.ns
   const WF = $rdf.Namespace('http://www.w3.org/2005/01/wf/flow#')
@@ -288,7 +291,7 @@ function infiniteMessageArea (dom, kb, chatChannel, options) {
       '?date': kb.any(message, DCT('created')),
       '?content': kb.any(message, ns.sioc('content'))
     }
-    var tr = renderMessage(dom, kb, messageTable, bindings, messageTable.fresh, options, userContext) // fresh from elsewhere
+    var tr = renderMessage(messageTable, bindings, messageTable.fresh, options, userContext) // fresh from elsewhere
     if (options.newestFirst === true) {
       messageTable.insertBefore(tr, messageTable.firstChild) // If newestFirst
     } else {
@@ -341,29 +344,7 @@ function infiniteMessageArea (dom, kb, chatChannel, options) {
     extr.messageTable = messageTable
   }
 
-  /* Generate the chat document (rdf object) from date
-  * @returns: <NamedNode> - document
-  */
-  function chatDocumentFromDate (date) {
-    let isoDate = date.toISOString() // Like "2018-05-07T17:42:46.576Z"
-    var path = isoDate.split('T')[0].replace(/-/g, '/') //  Like "2018/05/07"
-    path = chatChannel.dir().uri + path + '/chat.ttl'
-    return $rdf.sym(path)
-  }
-
-  /* Generate a date object from the chat file name
-  */
-  function dateFromChatDocument (doc) {
-    const head = chatChannel.dir().uri.length
-    const str = doc.uri.slice(head, head + 10).replace(/\//g, '-')
-    // let date = new Date(str + 'Z') // GMT - but fails in FF - invalid format :-(
-    let date = new Date(str) // not explicitly UTC but is assumed so in spec
-    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse
-    console.log('Date for ' + doc + ':' + date.toISOString())
-    return date
-  }
-
-  /* LOad and render message table
+  /* Load and render message table
   ** @returns DOM element generates
   */
   async function createMessageTable (date, live) {
@@ -376,7 +357,8 @@ function infiniteMessageArea (dom, kb, chatChannel, options) {
       let statusTR = messageTable.appendChild(dom.createElement('tr')) // ### find status in exception
       if (err.response && err.response.status && err.response.status === 404) {
         console.log('Error 404 for chat file ' + chatDocument)
-        statusTR.appendChild(UI.widgets.errorMessageBlock(dom, 'no messages', 'white'))
+        return renderMessageTable(date, live) // no mssage file is fine.. will be craeted later
+        // statusTR.appendChild(UI.widgets.errorMessageBlock(dom, 'no message file', 'white'))
       } else {
         console.log('*** Error NON 404 for chat file ' + chatDocument)
         statusTR.appendChild(UI.widgets.errorMessageBlock(dom, err, 'pink'))
@@ -390,7 +372,7 @@ function infiniteMessageArea (dom, kb, chatChannel, options) {
     var scrollBackButton
     var scrollForwardButton
 
-/// /////////////////   Scrooll down adding more above
+/// /////////////////   Scroll down adding more above
 
     async function extendBackwards () {
       let done = await insertPreviousMessages(true)
@@ -532,64 +514,6 @@ function infiniteMessageArea (dom, kb, chatChannel, options) {
     return messageTable
   } // renderMessageTable
 
-/* Track back through the YYYY/MM/DD tree to find the previous/next day
-**
-*/
-  async function loadPrevious (date, backwards) {
-    async function previousPeriod (file, level) {
-      function younger (x) {
-        if (backwards ? x.uri >= file.uri : x.uri <= file.uri) return false // later than we want or same -- looking for different
-        return true
-      }
-      function suitable (x) {
-        let tail = x.uri.slice(0, -1).split('/').slice(-1)[0]
-        if (!'0123456789'.includes(tail[0])) return false // not numeric
-        return true
-        // return kb.anyValue(chatDocument, POSIX('size')) !== 0 // empty file?
-      }
-      async function lastNonEmpty (siblings) {
-        siblings = siblings.filter(suitable)
-        siblings.sort() // chronological order
-        if (!backwards) siblings.reverse()
-        if (level !== 3) return siblings.pop() // only length chck final leverl
-        while (siblings.length) {
-          let folder = siblings.pop()
-          let chatDocument = kb.sym(folder.uri + 'chat.ttl')
-          await kb.fetcher.load(chatDocument)
-          // files can have seealso links. skip ones with no messages with a date
-          if (kb.statementsMatching(null, DCT('created'), null, chatDocument).length > 0) {
-            return folder
-          }
-        }
-        return null
-      }
-      // console.log('  previousPeriod level' + level + ' file ' + file)
-      const parent = file.dir()
-      await kb.fetcher.load(parent)
-      var siblings = kb.each(parent, ns.ldp('contains'))
-      siblings = siblings.filter(younger)
-      let folder = await lastNonEmpty(siblings)
-      if (folder) return folder
-
-      if (level === 0) return null // 3:day, 2:month, 1: year  0: no
-
-      const uncle = await previousPeriod(parent, level - 1)
-      if (!uncle) return null // reached first ever
-      await kb.fetcher.load(uncle)
-      var cousins = kb.each(uncle, ns.ldp('contains'))
-      let result = await lastNonEmpty(cousins)
-      return result
-    } // previousPeriod
-
-    let folder = dateFolder.leafDocumentFromDate(date).dir()
-    let found = await previousPeriod(folder, 3)
-    if (found) {
-      let doc = kb.sym(found.uri + 'chat.ttl')
-      return dateFolder.dateFromLeafDocument(doc)
-    }
-    return null
-  }
-
   async function addNewTableIfNewDay (now) {
     // let now = new Date()
     // @@ Remove listener from previous table as it is now static
@@ -628,15 +552,20 @@ function infiniteMessageArea (dom, kb, chatChannel, options) {
   async function appendCurrentMessages () {
     var now = new Date()
     var chatDocument = dateFolder.leafDocumentFromDate(now)
-    /*   Don't actually make the documemnt until a message is sent
-    try {
-      await createIfNotExists(chatDocument)
-    } catch (e) {
-      div.appendChild(UI.widgets.errorMessageBlock(
-        dom, 'Problem accessing chat file: ' + e))
-      return
-    }
+
+    /*   Don't actually make the documemnt until a message is sent  @@@@@ WHEN SERVER FIXED
+     * currently server won't patch to a file ina non-existent directory
     */
+    if (SERVER_MKDIRP_BUG) {
+      try {
+        await createIfNotExists(chatDocument)
+      } catch (e) {
+        div.appendChild(UI.widgets.errorMessageBlock(
+          dom, 'Problem accessing chat file: ' + e))
+        return
+      }
+    }
+    /// ///////////////////////////////////////////////////////////
     const messageTable = await createMessageTable(now, true)
     div.appendChild(messageTable)
     div.refresh = function () { // only the last messageTable is live
