@@ -2,7 +2,7 @@
 **
 */
 
-const kb = require ('../store.js')
+const kb = require('../store.js')
 // import store from '../store'
 // import ns from '../ns'
 // const kb = store
@@ -12,7 +12,7 @@ module.exports = class DateFolder {
     this.root = rootThing
     this.rootFolder = rootThing.dir()
     this.leafFileName = leafFileName
-    this.membershipProperty = membershipProperty|| ns.wf('leafObject')
+    this.membershipProperty = membershipProperty || ns.wf('leafObject')
   }
 
   /* Generate the leaf document (rdf object) from date
@@ -48,8 +48,8 @@ module.exports = class DateFolder {
         let tail = x.uri.slice(0, -1).split('/').slice(-1)[0]
         if (!'0123456789'.includes(tail[0])) return false // not numeric
         return true
-        // return kb.anyValue(leafDocument, POSIX('size')) !== 0 // empty file?
       }
+
       async function lastNonEmpty (siblings) {
         siblings = siblings.filter(suitable)
         siblings.sort() // chronological order
@@ -93,14 +93,21 @@ module.exports = class DateFolder {
     return null
   } // loadPrevious
 
-
   async firstLeaf (backwards) { // backwards -> last leafObject
     var folderStore = $rdf.graph()
     var folderFetcher = new $rdf.Fetcher(folderStore)
     async function earliestSubfolder (parent) {
+      function suitable (x) {
+        let tail = x.uri.slice(0, -1).split('/').slice(-1)[0]
+        if (!'0123456789'.includes(tail[0])) return false // not numeric
+        return true
+      }
       console.log('            parent ' + parent)
       delete folderFetcher.requested[parent.uri]
-      var resp = await folderFetcher.load(parent, clone(forcingOptions)) // Force fetch as will have changed
+      // try {
+      await folderFetcher.load(parent, {force: true}) // Force fetch as will have changed
+      // }catch (err) {
+      // }
 
       var kids = folderStore.each(parent, ns.ldp('contains'))
       kids = kids.filter(suitable)
@@ -117,7 +124,7 @@ module.exports = class DateFolder {
     let d = await earliestSubfolder(month)
     let leafDocument = $rdf.sym(d.uri + 'chat.ttl')
     await folderFetcher.load(leafDocument)
-    let leafObjects = folderStore.each(this.root, this.membershipProperty), null, leafDocument)
+    let leafObjects = folderStore.each(this.root, this.membershipProperty, null, leafDocument)
     if (leafObjects.length === 0) {
       let msg = '  INCONSISTENCY -- no chat leafObject in file ' + leafDocument
       console.trace(msg)
@@ -129,8 +136,4 @@ module.exports = class DateFolder {
     console.log((backwards ? 'Latest' : 'Earliest') + ' leafObject is ' + sortMe[0][1])
     return sortMe[0][1]
   } // firstleafObject
-
-
-
-
 } // class

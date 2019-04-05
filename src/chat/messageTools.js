@@ -7,17 +7,17 @@
 */
 
 const UI = {
-  authn: require('./signin'),
-  icons: require('./iconBase'),
-  log: require('./log'),
-  ns: require('./ns'),
-  media: require('./media-capture'),
-  pad: require('./pad'),
+  authn: require('../signin'),
+  icons: require('../iconBase'),
+  log: require('../log'),
+  ns: require('../ns'),
+  media: require('../media-capture'),
+  pad: require('../pad'),
   rdf: require('rdflib'),
-  store: require('./store'),
-  style: require('./style'),
-  utils: require('./utils'),
-  widgets: require('./widgets')
+  store: require('../store'),
+  style: require('../style'),
+  utils: require('../utils'),
+  widgets: require('../widgets')
 }
 
 const bookmarks = require('./bookmarks')
@@ -39,7 +39,7 @@ const ns = UI.ns
 const THUMBS_UP_ICON = 'noun_1384132.svg'
 const THUMBS_DOWN_ICON = 'noun_1384135.svg'
 
-module.export = { messageTools, sentimentStripLinked, sentimentStrip }
+// module.export = { messageTools, sentimentStripLinked, sentimentStrip }
 
 // @@@@ use the one in rdflib.js when it is avaiable and delete this
 function updatePromise (del, ins) {
@@ -65,7 +65,7 @@ emoji[ns.schema('LikeAction')] = '❤️'
 
 /*  Strip of sentiments expressed
 */
-function sentimentStrip (target, doc) {
+export function sentimentStrip (target, doc) {
   const actions = kb.each(null, ns.schema('target'), target, doc)
   const sentiments = actions.map(a => kb.any(a, ns.rdf('type'), null, doc))
   sentiments.sort()
@@ -78,7 +78,7 @@ function sentimentStrip (target, doc) {
  * @param doc {NamedNode} - The document iun which they are expressed
 */
 
-function sentimentStripLinked (target, doc) {
+export function sentimentStripLinked (target, doc) {
   var strip = dom.createElement('span')
   function refresh () {
     strip.innerHTML = ''
@@ -105,7 +105,7 @@ function sentimentStripLinked (target, doc) {
   return strip
 }
 
-function messageTools (message, messageRow, userContext) {
+export function messageToolbar (message, messageRow, userContext) {
   const div = dom.createElement('div')
   function closeToolbar () {
     div.parentElement.parentElement.removeChild(div.parentElement) // remive the TR
