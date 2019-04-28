@@ -126,11 +126,18 @@ export function messageToolbar (message, messageRow, userContext) {
     div.appendChild(deleteButton)
   } // if mine
 
-   // Things anyone can do if they have a bookmark list
-  var bookmarkButton = bookmarks.renderBookmarksButton(userContext)
-  if (bookmarkButton) {
-    div.appendChild(bookmarkButton)
-  }
+  // Things anyone can do if they have a bookmark list async
+  /*
+ var bookmarkButton = await bookmarks.renderBookmarksButton(userContext)
+ if (bookmarkButton) {
+   div.appendChild(bookmarkButton)
+ }
+ */
+ // Things anyone can do if they have a bookmark list
+
+  bookmarks.renderBookmarksButton(userContext).then((bookmarkButton) => {
+    if (bookmarkButton) div.appendChild(bookmarkButton)
+  })
 
    /**   Button to allow user to express a sentiment (like, endorse, etc) about a target
     *
