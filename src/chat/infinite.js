@@ -7,6 +7,8 @@
 /* global alert  */
 import DateFolder from './dateFolder'
 
+// @@ trace20190428T1745
+
 const SERVER_MKDIRP_BUG = true
 
 const UI = {
@@ -29,6 +31,42 @@ const bookmarks = require('./bookmarks')
 
 // module.exports = module.exports || {}
 // module.exports.infiniteMessageArea =
+
+
+
+
+async function createIfNotExists (doc, contentType = 'text/turtle', data = '') {
+  const fetcher = UI.store.fetcher
+  try {
+    var response = await fetcher.load(doc)
+  } catch (err) {
+    if (err.response.status === 404) {
+      console.log('createIfNotExists: doc does NOT exist, will create... ' + doc)
+      try {
+        response = await fetcher.webOperation('PUT', doc.uri, {data, contentType})
+      } catch (err) {
+        console.log('createIfNotExists doc FAILED: ' + doc + ': ' + err)
+        throw err
+      }
+      delete fetcher.requested[doc.uri] // delete cached 404 error
+      // console.log('createIfNotExists doc created ok ' + doc)
+      return response
+    } else {
+      console.log('createIfNotExists doc load error NOT 404:  ' + doc + ': ' + err)
+      throw err
+    }
+  }
+  // console.log('createIfNotExists: doc exists, all good: ' + doc)
+  return response
+}
+
+
+
+
+
+
+
+
 
 export function infiniteMessageArea (dom, kb, chatChannel, options) {
   kb = kb || UI.store
@@ -58,51 +96,22 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
   var me
 
   var updater = UI.store.updater
-/*
-  var mention = function mention (message, style) {
-    console.log(message)
-    var pre = dom.createElement('pre')
-    pre.setAttribute('style', style || 'color: grey;')
-    pre.appendChild(dom.createTextNode(message))
-    statusArea.appendChild(pre)
-  }
 
-  var announce = {
-    log: function (message) { mention(message, 'color: #111;') },
-    warn: function (message) { mention(message, 'color: #880;') },
-    error: function (message) { mention(message, 'color: #800;') }
-  }
-*/
- /** Create a resource if it really does not exist
-  *  Be absolutely sure something does not exist before creating a new empty file
-  * as otherwise existing could  be deleted.
-  * @param doc {NamedNode} - The resource
- */
-  function createIfNotExists (doc) {
-    return new Promise(function (resolve, reject) {
-      kb.fetcher.load(doc).then(response => {
-        console.log('createIfNotExists doc exists, all good ' + doc)
-      // kb.fetcher.webOperation('HEAD', doc.uri).then(response => {
-        resolve(response)
-      }, err => {
-        if (err.response.status === 404) {
-          console.log('createIfNotExists doc does NOT exist, will create... ' + doc)
-
-          kb.fetcher.webOperation('PUT', doc.uri, {data: '', contentType: 'text/turtle'}).then(response => {
-            // fetcher.requested[doc.uri] = 'done' // do not need to read ??  but no headers
-            delete kb.fetcher.requested[doc.uri] // delete cached 404 error
-            console.log('createIfNotExists doc created ok ' + doc)
-            resolve(response)
-          }, err => {
-            console.log('createIfNotExists doc FAILED: ' + doc + ': ' + err)
-            reject(err)
-          })
-        } else {
-          console.log('createIfNotExists doc load error NOT 404:  ' + doc + ': ' + err)
-          reject(err)
-        }
-      })
-    })
+  /** Does a file exist on the web?
+   * @returns {Boolean}
+  */
+  async function documentExists (doc) {
+    try {
+        await kb.fetcher.load(doc)
+    } catch (err) {
+      if (err.response.status === 404) {
+        return false
+      } else {
+        console.log('documentExists: doc load error NOT 404:  ' + doc + ': ' + err)
+        throw err
+      }
+    }
+    return true
   }
 
   /*       Form for a new message
@@ -118,55 +127,55 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     form.AJAR_date = '9999-01-01T00:00:00Z' // ISO format for field sort
     var field, sendButton
 
-    function sendMessage (text) {
+    async function sendMessage (text) {
       var now = new Date()
-      addNewTableIfNewDay(now).then(() => {
+      await addNewTableIfNewDay(now)
+
+      if (!text) {
+        field.setAttribute('style', messageBodyStyle + 'color: #bbb;') // pendingedit
+        field.disabled = true
+      }
+      var sts = []
+      var timestamp = '' + now.getTime()
+      var dateStamp = $rdf.term(now)
+      let chatDocument = dateFolder.leafDocumentFromDate(now)
+
+      var message = kb.sym(chatDocument.uri + '#' + 'Msg' + timestamp)
+      var content = kb.literal(text || field.value)
+      // if (text) field.value = text  No - don't destroy half-finsihed user input
+
+      sts.push(new $rdf.Statement(chatChannel, ns.wf('message'), message, chatDocument))
+      sts.push(new $rdf.Statement(message, ns.sioc('content'), content, chatDocument))
+      sts.push(new $rdf.Statement(message, DCT('created'), dateStamp, chatDocument))
+      if (me) sts.push(new $rdf.Statement(message, ns.foaf('maker'), me, chatDocument))
+
+      function sendComplete  () {
+        var bindings = { '?msg': message,
+          '?content': content,
+          '?date': dateStamp,
+          '?creator': me}
+        var tr = renderMessage(liveMessageTable, bindings, false, options, userContext) // not green
+
         if (!text) {
-          field.setAttribute('style', messageBodyStyle + 'color: #bbb;') // pendingedit
-          field.disabled = true
-        }
-        var sts = []
-        var timestamp = '' + now.getTime()
-        var dateStamp = $rdf.term(now)
-        let chatDocument = dateFolder.leafDocumentFromDate(now)
-
-        var message = kb.sym(chatDocument.uri + '#' + 'Msg' + timestamp)
-        var content = kb.literal(text || field.value)
-        // if (text) field.value = text  No - don't destroy half-finsihed user input
-
-        sts.push(new $rdf.Statement(chatChannel, ns.wf('message'), message, chatDocument))
-        sts.push(new $rdf.Statement(message, ns.sioc('content'), content, chatDocument))
-        sts.push(new $rdf.Statement(message, DCT('created'), dateStamp, chatDocument))
-        if (me) sts.push(new $rdf.Statement(message, ns.foaf('maker'), me, chatDocument))
-
-        var sendComplete = function (uri, success, body) {
-          if (!success) {
-            form.appendChild(UI.widgets.errorMessageBlock(
-              dom, 'Error writing message: ' + body))
-          } else {
-            var bindings = { '?msg': message,
-              '?content': content,
-              '?date': dateStamp,
-              '?creator': me}
-            var tr = renderMessage(liveMessageTable, bindings, false, options, userContext) // not green
-            if (options.newestFirst === true) {
-              messageTable.insertBefore(tr, messageTable.firstChild) // If newestFirst
-            } else {
-              messageTable.appendChild(tr) // not newestFirst
-            }
-
-            if (!text) {
-              field.value = '' // clear from out for reuse
-              field.setAttribute('style', messageBodyStyle)
-              field.disabled = false
-              field.scrollIntoView(newestFirst) // allign bottom (top)
-              field.focus() // Start typing next line immediately
-              field.select()
-            }
+          field.value = '' // clear from out for reuse
+          field.setAttribute('style', messageBodyStyle)
+          field.disabled = false
+          field.scrollIntoView(newestFirst) // allign bottom (top)
+          field.focus() // Start typing next line immediately
+          field.select()
           }
-        }
-        updater.update([], sts, sendComplete)
-      }) // then
+      }
+      if (SERVER_MKDIRP_BUG && (kb.fetcher.requested[chatDocument.uri] === undefined || kb.fetcher.requested[chatDocument.uri] === 404)) {
+        console.log('@@@ SERVER_MKDIRP_BUG: Should only happen once: create chat file: ' + chatDocument)
+        await createIfNotExists(chatDocument)
+      }
+      try {
+        await updater.update([], sts)
+      } catch (err) {
+        form.appendChild(UI.widgets.errorMessageBlock(dom, 'Error writing message: ' + err))
+        return
+      }
+      sendComplete()
     } // sendMessage
 
     form.appendChild(dom.createElement('br'))
@@ -175,14 +184,16 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     function droppedFileHandler (files) {
       let base = messageTable.chatDocument.dir().uri
       UI.widgets.uploadFiles(kb.fetcher, files, base + 'Files', base + 'Pictures',
-        function (theFile, destURI) { // @@@@@@ Wait for eachif several
-          sendMessage(destURI)
+        async function (theFile, destURI) { // @@@@@@ Wait for eachif several
+          await sendMessage(destURI)
         })
     }
 
     // When a set of URIs are dropped on the field
-    var droppedURIHandler = function (uris) {
-      sendMessage(uris[0]) // @@@@@ wait
+    var droppedURIHandler = async function (uris) {
+      for (var uri of uris) {
+        await sendMessage(uri)
+      }
     }
 
     // When we are actually logged on
@@ -205,10 +216,10 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       field.setAttribute('style', messageBodyStyle + 'background-color: #eef;')
 
       // Trap the Enter BEFORE it is used ti make a newline
-      field.addEventListener('keydown', function (e) { // User preference?
+      field.addEventListener('keydown', async function (e) { // User preference?
         if (e.keyCode === 13) {
           if (!e.altKey) { // Alt-Enter just adds a new line
-            sendMessage()
+            await sendMessage()
           }
         }
       }, false)
@@ -226,9 +237,9 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
         imageDoc = kb.sym(chatDocument.dir().uri + 'Image_' + Date.now() + '.png')
         return imageDoc
       }
-      function tookPicture (imageDoc) {
+      async function tookPicture (imageDoc) {
         if (imageDoc) {
-          sendMessage(imageDoc.uri)
+          await sendMessage(imageDoc.uri)
         }
       }
       middle.appendChild(UI.media.cameraButton(dom, kb, getImageDoc, tookPicture))
@@ -292,11 +303,6 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       '?content': kb.any(message, ns.sioc('content'))
     }
     var tr = renderMessage(messageTable, bindings, messageTable.fresh, options, userContext) // fresh from elsewhere
-    if (options.newestFirst === true) {
-      messageTable.insertBefore(tr, messageTable.firstChild) // If newestFirst
-    } else {
-      messageTable.appendChild(tr) // not newestFirst
-    }
   }
 
 // ////////
@@ -556,6 +562,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     /*   Don't actually make the documemnt until a message is sent  @@@@@ WHEN SERVER FIXED
      * currently server won't patch to a file ina non-existent directory
     */
+    /*
     if (SERVER_MKDIRP_BUG) {
       try {
         await createIfNotExists(chatDocument)
@@ -565,6 +572,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
         return
       }
     }
+    */
     /// ///////////////////////////////////////////////////////////
     const messageTable = await createMessageTable(now, true)
     div.appendChild(messageTable)
