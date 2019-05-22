@@ -72,7 +72,7 @@ function newThingUI (context, thePanes) {
             newPaneOptions[opt] = options[opt]
           }
           console.log('newThingUI: Minting new ' + newPaneOptions.pane.name + ' at ' + newPaneOptions.newBase)
-          options.pane.mintNew(newPaneOptions)
+          options.pane.mintNew(newPaneOptions, UI.store)
             .then(function (newPaneOptions) {
               if (!newPaneOptions || !newPaneOptions.newInstance) {
                 throw new Error('Cannot mint new - missing newInstance')
