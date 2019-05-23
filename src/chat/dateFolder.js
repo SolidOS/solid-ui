@@ -1,17 +1,15 @@
-/* Track back through the YYYY/MM/DD tree to find the previous/next day
+/** Track back through the YYYY/MM/DD tree to find the previous/next day
 **
 */
 
 const kb = require('../store.js')
-// import store from '../store'
-// import ns from '../ns'
-// const kb = store
 const ns = require('../ns.js')
+
 module.exports = class DateFolder {
   constructor (rootThing, leafFileName, membershipProperty) {
     this.root = rootThing
     this.rootFolder = rootThing.dir()
-    this.leafFileName = leafFileName
+    this.leafFileName = leafFileName || 'index.ttl' // typically chat.ttl
     this.membershipProperty = membershipProperty || ns.wf('leafObject')
   }
 
@@ -39,6 +37,7 @@ module.exports = class DateFolder {
   }
 
   async loadPrevious (date, backwards) {
+    const thisDateFolder = this
     async function previousPeriod (file, level) {
       function younger (x) {
         if (backwards ? x.uri >= file.uri : x.uri <= file.uri) return false // later than we want or same -- looking for different
@@ -57,7 +56,7 @@ module.exports = class DateFolder {
         if (level !== 3) return siblings.pop() // only length chck final leverl
         while (siblings.length) {
           let folder = siblings.pop()
-          let leafDocument = kb.sym(folder.uri + 'this.leafFileName')
+          let leafDocument = kb.sym(folder.uri + thisDateFolder.leafFileName)
           await kb.fetcher.load(leafDocument)
           // files can have seealso links. skip ones with no leafObjects with a date
           if (kb.statementsMatching(null, ns.dct('created'), null, leafDocument).length > 0) {
@@ -87,8 +86,8 @@ module.exports = class DateFolder {
     let folder = this.leafDocumentFromDate(date).dir()
     let found = await previousPeriod(folder, 3)
     if (found) {
-      let doc = kb.sym(found.uri + 'this.leafFileName')
-      return this.dateFromleafDocument(doc)
+      let doc = kb.sym(found.uri + this.leafFileNam)
+      return this.dateFromLeafDocument(doc)
     }
     return null
   } // loadPrevious
