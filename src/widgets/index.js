@@ -181,10 +181,68 @@ UI.widgets.imagesOf = function (x, kb) {
 // Best logo or avater or photo etc to represent someone or some group etc
 //
 
+UI.widgets.iconForClass = { // Potentially extendable by other apps, panes, etc
+                           // Relative URIs to the iconBase
+  'solid:AppProviderClass': 'noun_144.svg', //  @@ classs name should not contain 'Class'
+  'solid:AppProvider': 'noun_15177.svg', // @@
+  'vcard:Group': 'noun_339237.svg',
+  'rdfs:Class': 'noun_339237.svg', // @@ Make different from group! Icon???
+  'vcard:Organization': 'noun_143899.svg',
+  'vcard:Individual': 'noun_15059.svg',
+  'schema:Person': 'noun_15059.svg',
+  'foaf:Person': 'noun_15059.svg',
+  'vcard:AddressBook': 'noun_15695.svg',
+  'trip:Trip': 'noun_581629.svg',
+  'meeting:Meeting': 'noun_66617.svg',
+  'meeting:LongChat': 'noun_1689339.svg',
+  'ui:Form': 'noun_122196.svg'
+}
+
+UI.widgets.findImageByClass = function findImageByClass (x) {
+  const kb = UI.store
+  const ns = UI.ns
+  const iconDir = UI.icons.iconBase
+  const types = kb.findTypeURIs(x)
+  if (ns.solid('AppProvider').uri in types) {
+    return iconDir + 'noun_15177.svg' // App
+  }
+  if (x.uri) {
+    if (x.uri.split('/').length === 4 && !(x.uri.split('/')[1]) && !(x.uri.split('/')[3])) {
+      return iconDir + 'noun_15177.svg' // App -- this is an origin
+    }
+    // Non-HTTP URI types imply types
+    if (x.uri.startsWith('message:') || x.uri.startsWith('mid:')) { // message: is aapple bug-- should be mid:
+      return iconDir + 'noun_480183.svg' // envelope  noun_567486
+    }
+    if (x.uri.startsWith('mailto:')) {
+      return iconDir + 'noun_567486.svg' // mailbox - an email desitination
+    }
+    // For HTTP(s) documents, we could look at the MIME type if we know it.
+    if (x.uri.startsWith('https:') && (x.uri.indexOf('#') < 0)) {
+      return x.site().uri + 'favicon.ico'
+      // Todo: make the docuent icon a fallback for if the favicon does not exist
+      // todo: pick up a possible favicon for the web page istelf from a link
+      // was: return iconDir + 'noun_681601.svg' // document - under solid assumptions
+    }
+  }
+
+  for (var k in UI.widgets.iconForClass) {
+    let pref = k.split(':')[0]
+    let id = k.split(':')[1]
+    let klass = ns[pref](id)
+    if (klass.uri in types) { // Allow full URI in new additions
+      return $rdf.uri.join(UI.widgets.iconForClass[k], UI.icons.iconBase)
+    }
+  }
+  return iconDir + 'noun_10636_grey.svg' // Gret Circle -  some thing
+}
+
+// @@ Also add icons for *properties* like  home, work, email, range, domain, comment,
+
 UI.widgets.setImage = function (element, x) {
-  var kb = UI.store
-  var ns = UI.ns
-  var iconDir = UI.icons.iconBase
+  const kb = UI.store
+  const ns = UI.ns
+  const iconDir = UI.icons.iconBase
   var findImage = function (x) {
     if (x.sameTerm(ns.foaf('Agent')) || x.sameTerm(ns.rdf('Resource'))) {
       return iconDir + 'noun_98053.svg' // Globe
@@ -198,61 +256,11 @@ UI.widgets.setImage = function (element, x) {
     return image ? image.uri : null
   }
 
-  var findImageByClass = function (x) {
-    var types = kb.findTypeURIs(x)
-    if (ns.solid('AppProvider').uri in types) {
-      return iconDir + 'noun_15177.svg' // App
-    }
-    if (x.uri) {
-      if (x.uri.split('/').length === 4 && !(x.uri.split('/')[1]) && !(x.uri.split('/')[3])) {
-        return iconDir + 'noun_15177.svg' // App -- this is an origin
-      }
-      // Non-HTTP URI types imply types
-      if (x.uri.startsWith('message:') || x.uri.startsWith('mid:')) { // message: is aapple bug-- should be mid:
-        return iconDir + 'noun_480183.svg' // envelope  noun_567486
-      }
-      if (x.uri.startsWith('mailto:')) {
-        return iconDir + 'noun_567486.svg' // mailbox - an email desitination
-      }
-      // For HTTP(s) documents, we could look at the MIME type if we know it.
-      if (x.uri.startsWith('https:') && (x.uri.indexOf('#') < 0)) {
-        return x.site().uri + 'favicon.ico'
-        // Todo: make the docuent icon a fallback for if the favicon does not exist
-        // todo: pick up a possible favicon for the web page istelf from a link
-        // was: return iconDir + 'noun_681601.svg' // document - under solid assumptions
-      }
-    }
-    if (ns.solid('AppProviderClass').uri in types) {
-      return iconDir + 'noun_144.svg' // App Whitelist @@@ ICON (three apps ?)
-    }
-    if (ns.vcard('Group').uri in types || ns.rdfs('Class').uri in types) {
-      return iconDir + 'noun_339237.svg' // Group of people
-    }
-    if (ns.vcard('Organization').uri in types || ns.rdfs('Class').uri in types) {
-      return iconDir + 'noun_143899.svg' // Org r or Com
-    }
-    if (ns.vcard('Individual').uri in types ||
-      ns.foaf('Person').uri in types) {
-      return iconDir + 'noun_15059.svg' // Person
-    }
-    if (ns.vcard('AddressBook').uri in types) {
-      return iconDir + 'noun_15695.svg'
-    }
-    // http://www.w3.org/ns/pim/trip#Trip
-    if ('http://www.w3.org/ns/pim/trip#Trip' in types) {
-      return iconDir + 'noun_581629.svg' // Plane taking off
-    }
-    if (ns.meeting('Meeting').uri in types) {
-      return iconDir + 'noun_66617.svg'
-    }
-    return iconDir + 'noun_10636_grey.svg' // Circle -  some thing
-  }
-
   var uri = findImage(x)
-  element.setAttribute('src', uri || findImageByClass(x))
+  element.setAttribute('src', uri || UI.widgets.findImageByClass(x))
   if (!uri && x.uri) {
     kb.fetcher.nowOrWhenFetched(x.doc(), undefined, function (ok) {
-      element.setAttribute('src', findImage(x) || findImageByClass(x))
+      element.setAttribute('src', findImage(x) || UI.widgets.findImageByClass(x))
     })
   }
 }
@@ -460,6 +468,7 @@ UI.widgets.personTR = function (dom, pred, obj, options) {
       UI.widgets.makeDraggable(tr, obj)
     }
   }
+  tr.subject = obj
   return tr
 }
 
@@ -918,7 +927,7 @@ UI.widgets.field[UI.ns.ui('PhoneField').uri] =
                             }
                             var is = ds.map(st => $rdf.st(st.subject, st.predicate, result, st.why)) // can include >1 doc
                             if (is.length === 0) {  // or none
-                              is = [ $rdf.st(subject, property, result, store)]
+                              is = [$rdf.st(subject, property, result, store)]
                             }
 
                             function updateMany (ds, is, callback) {
