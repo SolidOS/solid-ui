@@ -13,7 +13,8 @@
     "postversion": "git push origin master --follow-tags",
     "prepublishOnly": "npm run build",
     "standard": "standard src",
-    "test": "npm run standard"
+    "test": "npm run standard",
+    "watch": "babel --no-babelrc src -d lib -w"
   },
   "repository": {
     "type": "git",
