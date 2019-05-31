@@ -824,7 +824,7 @@ UI.widgets.fieldParams[UI.ns.ui('TextField').uri] = { }
 
 UI.widgets.fieldParams[UI.ns.ui('PhoneField').uri] = { 'size': 20, 'uriPrefix': 'tel:' }
 UI.widgets.fieldParams[UI.ns.ui('PhoneField').uri].pattern =
-  /^\s*\+?[ 0-9-]+[0-9]\s*$/
+  /^\s*\+?[0-9-]+[0-9]\s*$/
 
 UI.widgets.fieldParams[UI.ns.ui('EmailField').uri] = { 'size': 30, 'uriPrefix': 'mailto:' }
 UI.widgets.fieldParams[UI.ns.ui('EmailField').uri].pattern =
