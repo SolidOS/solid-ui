@@ -14,7 +14,7 @@
     "prepublishOnly": "npm run build",
     "standard": "standard src",
     "test": "npm run standard",
-    "watch": "babel --no-babelrc src -d lib -w"
+    "watch": "babel --no-babelrc src --out-dir lib --watch"
   },
   "repository": {
     "type": "git",
