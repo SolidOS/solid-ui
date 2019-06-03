@@ -191,12 +191,28 @@ UI.widgets.iconForClass = { // Potentially extendable by other apps, panes, etc
   'vcard:Individual': 'noun_15059.svg',
   'schema:Person': 'noun_15059.svg',
   'foaf:Person': 'noun_15059.svg',
+  'foaf:Agent': 'noun_98053.svg',
+  'acl:AuthenticatedAgent': 'noun_99101.svg',
+  'prov:SoftwareAgent': 'noun_Robot_849764.svg', // Bot
   'vcard:AddressBook': 'noun_15695.svg',
   'trip:Trip': 'noun_581629.svg',
   'meeting:Meeting': 'noun_66617.svg',
   'meeting:LongChat': 'noun_1689339.svg',
   'ui:Form': 'noun_122196.svg'
 }
+
+var tempSite = function (x) { // use only while one in rdflib fails with origins 2019
+   var str = x.uri.split('#')[0]
+   var p = str.indexOf('//')
+   if (p < 0) throw new Error('This URI does not have a web site part (origin)')
+   var q = str.indexOf('/', p+2)
+   if (q < 0) { // no third slash?
+     return str.slice(0) + '/'   // Add slash to a bare origin
+   } else {
+     return str.slice(0, q + 1)
+   }
+ }
+
 
 UI.widgets.findImageByClass = function findImageByClass (x) {
   const kb = UI.store
@@ -219,22 +235,23 @@ UI.widgets.findImageByClass = function findImageByClass (x) {
     }
     // For HTTP(s) documents, we could look at the MIME type if we know it.
     if (x.uri.startsWith('https:') && (x.uri.indexOf('#') < 0)) {
-      return x.site().uri + 'favicon.ico'
+      return tempSite(x) + 'favicon.ico' // was x.site().uri + ...
       // Todo: make the docuent icon a fallback for if the favicon does not exist
       // todo: pick up a possible favicon for the web page istelf from a link
       // was: return iconDir + 'noun_681601.svg' // document - under solid assumptions
     }
   }
 
+  ns['prov'] = $rdf.Namespace('http://www.w3.org/ns/prov#') // In case not yet there
   for (var k in UI.widgets.iconForClass) {
     let pref = k.split(':')[0]
     let id = k.split(':')[1]
     let klass = ns[pref](id)
-    if (klass.uri in types) { // Allow full URI in new additions
+    if (klass.uri in types  || klass.uri === x.uri) { // Allow full URI in new additions
       return $rdf.uri.join(UI.widgets.iconForClass[k], UI.icons.iconBase)
     }
   }
-  return iconDir + 'noun_10636_grey.svg' // Gret Circle -  some thing
+  return iconDir + 'noun_10636_grey.svg' // Grey Circle -  some thing
 }
 
 // @@ Also add icons for *properties* like  home, work, email, range, domain, comment,
@@ -278,7 +295,7 @@ var faviconOrDefault = function (dom, x) {
       (isOrigin(x) ? 'noun_15177.svg' : 'noun_681601.svg'))
   if (x.uri && x.uri.startsWith('https:') && (x.uri.indexOf('#') < 0)) {
     var res = dom.createElement('object') // favico with a fallback of a default image if no favicon
-    res.setAttribute('data', x.site().uri + 'favicon.ico')
+    res.setAttribute('data',  tempSite(x) + 'favicon.ico')
     res.setAttribute('type', 'image/x-icon')
     res.appendChild(image) // fallback
     return res
@@ -390,7 +407,7 @@ UI.widgets.askName = function (dom, kb, container, predicate, klass, noun) {
       // namefield.setAttribute('class', 'pendingedit')
       // namefield.disabled = true
       form.parentNode.removeChild(form)
-      resolve(namefield.value)
+      resolve(namefield.value.trim())
     }
 
     namefield.addEventListener('keyup', function (e) {

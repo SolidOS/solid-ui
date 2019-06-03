@@ -81,11 +81,14 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
 
   // A world button can be dragged to gve public access.
   // later, allow it to be pressed to make pubicly viewable?
-  var publicAccessCell = bottomRow.appendChild(dom.createElement('td'))
-  var publicAccessButton = publicAccessCell.appendChild(UI.widgets.button(dom, UI.icons.iconBase + 'noun_98053.svg', 'Public'))
-  UI.widgets.makeDraggable(publicAccessButton, UI.ns.foaf('Agent')) // Represent everyone
+  var bottomLeftCell = bottomRow.appendChild(dom.createElement('td'))
+  // var bottomMiddleCell = bottomRow.appendChild(dom.createElement('td'))
+  var bottomRightCell = bottomRow.appendChild(dom.createElement('td'))
 
-  var bigButtonStyle = 'border-radius: 0.3em; background-color: white; border: 0.1em solid #888;'
+  // var publicAccessButton = bottomLeftCell.appendChild(UI.widgets.button(dom, UI.icons.iconBase + 'noun_98053.svg', 'Public'))
+
+  const bigButtonStyle = 'border-radius: 0.3em; background-color: white; border: 0.1em solid #888;'
+
 
   // This is the main function which produces an editable access control.
   // There are two of these in all iff the defaults are separate
@@ -162,7 +165,7 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
       if (ns.vcard('Group').uri in types) {
         return {pred: 'agentGroup', obj: obj} // @@ note vcard membership not RDFs
       }
-      if (obj.sameTerm(ns.foaf('Agent')) ||
+      if (obj.sameTerm(ns.foaf('Agent')) || obj.sameTerm(ns.acl('AuthenticatedAgent')) || // AuthenticatedAgent
         obj.sameTerm(ns.rdf('Resource')) || obj.sameTerm(ns.owl('Thing'))) {
         return {pred: 'agentClass', obj: obj}
       }
@@ -328,9 +331,14 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
         }
 
         var res = agentTriage(u) // eg 'agent', 'origin', agentClass'
+        const thing = $rdf.sym(u)
         if (!res) {
-          console.log('   looking up dropped thing ' + u)
-          await kb.fetcher.load(u)
+          console.log('   Not obvious: looking up dropped thing ' + thing)
+          try {
+            await kb.fetcher.load(thing.doc())
+          } catch (err) {
+            console.log('Ignore error looking up dropped thing: ' + err)
+          }
           res = agentTriage(u)
           if (!res) {
             console.log('   Error: Drop fails to drop appropriate thing! ' + u)
@@ -342,10 +350,18 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
         }
       }// handleOneDroppedURI
 
+      async function addNewUIRI (uri) {
+        await handleOneDroppedURI(uri)
+        saveAndRestoreUI()
+      }
+
       if (options.modify) {
+        row.addNewURI = addNewUIRI
         UI.widgets.makeDropTarget(row, handleManyDroppedURIs)
       }
-    }
+      return row
+    } // renderCombo
+
     var syncPanel = function () {
       var kids = box.children
       for (var i = 0; i < kids.length; i++) {
@@ -355,13 +371,84 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
       } // @@ later -- need to addd combos not in the box?
     }
 
-    var k, combo
+
+    function renderAdditionTool (ele, lastRow) {
+      const ns = UI.ns
+      function removeBar () {
+        ele.removeChild(ele.bar)
+        ele.bar = null
+      }
+      if (ele.bar) { // toggle
+        return removeBar()
+      }
+      const bar = ele.appendChild(dom.createElement('div'))
+      ele.bar = bar
+
+      var personButton = UI.widgets.button(dom, UI.icons.iconBase + UI.widgets.iconForClass['vcard:Individual'], 'Add Person')
+      bar.appendChild(personButton)
+
+      var groupButton = UI.widgets.button(dom, UI.icons.iconBase + UI.widgets.iconForClass['vcard:Group'], 'Add Group')
+      bar.appendChild(groupButton)
+
+      bar.appendChild(UI.widgets.button(dom, UI.icons.iconBase + UI.widgets.iconForClass['foaf:Agent'], 'Add Everyone', async event => {
+        statusBlock.textContent = 'Adding the general public to those who can read. Drag the globe to a different level to give them more access.'
+        await lastRow.addNewURI(ns.foaf('Agent').uri)
+      }))
+
+      // AuthenticatedAgent
+      bar.appendChild(UI.widgets.button(dom, UI.icons.iconBase + 'noun_99101.svg', 'Anyone logged In', async event => {
+        statusBlock.textContent = 'Adding the anyone logged in to those who can read. Drag the ID icon to a different level to give them more access.'
+        await lastRow.addNewURI(ns.acl('AuthenticatedAgent').uri)
+      }))
+
+      // Bots
+      bar.appendChild(UI.widgets.button(dom, UI.icons.iconBase + 'noun_Robot_849764.svg', 'A Software Agent (bot)', async event => {
+        let name = await UI.widgets.askName(dom, kb, bar, null , ns.schema('WebApplication'), 'webapp')
+        if (!name) return removeBar() // user cancelled
+        const domainNameRegexp = /^https?:/i
+        if (!name.match(domainNameRegexp)) { // @@ enforce in user input live like a form element
+          return alert('Not a http URI')
+        }
+        // @@ check it actually is a bot and has an owner who agrees they own it
+        console.log('Adding to ACL bot: ' + name)
+        await lastRow.addNewURI(name)
+      }))
+
+      // Web Apps
+      bar.appendChild(UI.widgets.button(dom, UI.icons.iconBase + 'noun_15177.svg', 'A Web App (origin)', async event => {
+        console.log('@@ AppButton')
+        let name = await UI.widgets.askName(dom, kb, bar, null , ns.schema('WebApplication'), 'webapp')
+        if (!name) return removeBar() // user cancelled
+        const domainNameRegexp = /^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/i
+        // https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch08s15.html
+        if (!name.match(domainNameRegexp)) { // @@ enforce in user input live like a form element
+          return alert('Not a domain name')
+        }
+        const origin = 'https://' + name
+        console.log('Adding to ACL origin: ' + origin)
+        await lastRow.addNewURI(origin)
+      }))
+    }
+
+    function renderAddToolBar (box, lastRow) {
+      const toolRow = box.appendChild(dom.createElement('tr'))
+      var addButton = bottomLeftCell.appendChild(UI.widgets.button(dom, UI.icons.iconBase + 'noun_34653_green.svg', 'Add ...', event => {
+        renderAdditionTool(bottomLeftCell, lastRow)
+      }))
+    }
+
+    var k, combo, lastRow
     for (k = 15; k > 0; k--) {
       combo = kToCombo(k)
       if ((options.modify && recommended[k]) || byCombo[combo]) {
-        renderCombo(byCombo, combo)
+        lastRow = renderCombo(byCombo, combo)
       } // if
     } // for
+
+    if (options.modify) {
+      renderAddToolBar(box, lastRow)
+    }
+
     return byCombo
   } // ACLControlEditable
 
@@ -389,7 +476,7 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
             ACLControlEditable(box, doc, targetACLDoc, kb2, {modify: false}) // Add btton to save them as actual
             box.style.cssText = 'color: #777;'
 
-            var editPlease = bottomRow.appendChild(dom.createElement('button'))
+            var editPlease = bottomRightCell.appendChild(dom.createElement('button'))
             editPlease.textContent = 'Set specific sharing\nfor this ' + noun
             editPlease.style.cssText = bigButtonStyle
             editPlease.addEventListener('click', function (event) {
@@ -399,11 +486,11 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
                     statusBlock.textContent += ' (Error writing back access control file: ' + message + ')'
                   } else {
                     kb.add(kb2.statements)
-                    fetcher.requested[targetACLDoc.uri] === 'done' // cheat
+                    kb.fetcher.requested[targetACLDoc.uri] = 'done' // cheat
                     // kb.fetcher.load(targetACLDoc, {force: true})
                     statusBlock.textContent = ' (Now editing specific access for this ' + noun + ')'
                     // box.style.cssText = 'color: black;'
-                    bottomRow.removeChild(editPlease)
+                    bottomRightCell.removeChild(editPlease)
                     renderBox()
                   }
                 })
@@ -412,7 +499,7 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
         } else { // Not using defaults
           var useDefault
           var addDefaultButton = function (prospectiveDefaultHolder) {
-            useDefault = bottomRow.appendChild(dom.createElement('button'))
+            useDefault = bottomRightCell.appendChild(dom.createElement('button'))
             useDefault.textContent = 'Stop specific sharing for this ' + noun +
               ' -- just use default' // + UI.utils.label(thisDefaultHolder)
             if (prospectiveDefaultHolder) {
@@ -475,7 +562,7 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
             box.notice.textContent = 'Sharing for things within the folder currently tracks sharing for the folder.'
             box.notice.style.cssText = 'font-size: 80%; color: #888;'
             var splitButton = UI.widgets.clearElement(box.offer).appendChild(dom.createElement('button'))
-            splitButton.innerHTML = '<p> the sharing of folder contets <br />separately from the sharing for the folder</p>'
+            splitButton.innerHTML = '<p>Set the sharing of folder contets <br />separately from the sharing for the folder</p>'
             splitButton.style.cssText = bigButtonStyle
             splitButton.addEventListener('click', function (e) {
               box.addControlForDefaults()
