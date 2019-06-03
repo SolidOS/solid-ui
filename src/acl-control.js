@@ -89,7 +89,6 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
 
   const bigButtonStyle = 'border-radius: 0.3em; background-color: white; border: 0.1em solid #888;'
 
-
   // This is the main function which produces an editable access control.
   // There are two of these in all iff the defaults are separate
   //
@@ -371,7 +370,6 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
       } // @@ later -- need to addd combos not in the box?
     }
 
-
     function renderAdditionTool (ele, lastRow) {
       const ns = UI.ns
       function removeBar () {
@@ -384,26 +382,48 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
       const bar = ele.appendChild(dom.createElement('div'))
       ele.bar = bar
 
-      var personButton = UI.widgets.button(dom, UI.icons.iconBase + UI.widgets.iconForClass['vcard:Individual'], 'Add Person')
-      bar.appendChild(personButton)
+      bar.appendChild(UI.widgets.button(dom, UI.icons.iconBase + UI.widgets.iconForClass['vcard:Individual'], 'Add Person', async event => {
+        let name = await UI.widgets.askName(dom, kb, bar, null, ns.schema('WebApplication'), 'webapp')
+        if (!name) return removeBar() // user cancelled
+        const domainNameRegexp = /^https?:/i
+        if (!name.match(domainNameRegexp)) { // @@ enforce in user input live like a form element
+          return alert('Not a http URI')
+        }
+        // @@ check it actually is a person and has an owner who agrees they own it
+        console.log('Adding to ACL person: ' + name)
+        await lastRow.addNewURI(name)
+        removeBar()
+      }))
 
-      var groupButton = UI.widgets.button(dom, UI.icons.iconBase + UI.widgets.iconForClass['vcard:Group'], 'Add Group')
-      bar.appendChild(groupButton)
+      bar.appendChild(UI.widgets.button(dom, UI.icons.iconBase + UI.widgets.iconForClass['vcard:Group'], 'Add Group', async event => {
+        let name = await UI.widgets.askName(dom, kb, bar, null, ns.schema('WebApplication'), 'webapp')
+        if (!name) return removeBar() // user cancelled
+        const domainNameRegexp = /^https?:/i
+        if (!name.match(domainNameRegexp)) { // @@ enforce in user input live like a form element
+          return alert('Not a http URI')
+        }
+        // @@ check it actually is a group and has an owner who agrees they own it
+        console.log('Adding to ACL group: ' + name)
+        await lastRow.addNewURI(name)
+        removeBar()
+      }))
 
       bar.appendChild(UI.widgets.button(dom, UI.icons.iconBase + UI.widgets.iconForClass['foaf:Agent'], 'Add Everyone', async event => {
         statusBlock.textContent = 'Adding the general public to those who can read. Drag the globe to a different level to give them more access.'
         await lastRow.addNewURI(ns.foaf('Agent').uri)
+        removeBar()
       }))
 
       // AuthenticatedAgent
       bar.appendChild(UI.widgets.button(dom, UI.icons.iconBase + 'noun_99101.svg', 'Anyone logged In', async event => {
         statusBlock.textContent = 'Adding the anyone logged in to those who can read. Drag the ID icon to a different level to give them more access.'
         await lastRow.addNewURI(ns.acl('AuthenticatedAgent').uri)
+        removeBar()
       }))
 
       // Bots
       bar.appendChild(UI.widgets.button(dom, UI.icons.iconBase + 'noun_Robot_849764.svg', 'A Software Agent (bot)', async event => {
-        let name = await UI.widgets.askName(dom, kb, bar, null , ns.schema('WebApplication'), 'webapp')
+        let name = await UI.widgets.askName(dom, kb, bar, null, ns.schema('WebApplication'), 'webapp')
         if (!name) return removeBar() // user cancelled
         const domainNameRegexp = /^https?:/i
         if (!name.match(domainNameRegexp)) { // @@ enforce in user input live like a form element
@@ -412,12 +432,13 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
         // @@ check it actually is a bot and has an owner who agrees they own it
         console.log('Adding to ACL bot: ' + name)
         await lastRow.addNewURI(name)
+        removeBar()
       }))
 
       // Web Apps
       bar.appendChild(UI.widgets.button(dom, UI.icons.iconBase + 'noun_15177.svg', 'A Web App (origin)', async event => {
         console.log('@@ AppButton')
-        let name = await UI.widgets.askName(dom, kb, bar, null , ns.schema('WebApplication'), 'webapp')
+        let name = await UI.widgets.askName(dom, kb, bar, null, ns.schema('WebApplication'), 'webapp')
         if (!name) return removeBar() // user cancelled
         const domainNameRegexp = /^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/i
         // https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch08s15.html
@@ -427,12 +448,13 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
         const origin = 'https://' + name
         console.log('Adding to ACL origin: ' + origin)
         await lastRow.addNewURI(origin)
+        removeBar()
       }))
     }
 
     function renderAddToolBar (box, lastRow) {
-      const toolRow = box.appendChild(dom.createElement('tr'))
-      var addButton = bottomLeftCell.appendChild(UI.widgets.button(dom, UI.icons.iconBase + 'noun_34653_green.svg', 'Add ...', event => {
+      // const toolRow = box.appendChild(dom.createElement('tr'))
+      bottomLeftCell.appendChild(UI.widgets.button(dom, UI.icons.iconBase + 'noun_34653_green.svg', 'Add ...', event => {
         renderAdditionTool(bottomLeftCell, lastRow)
       }))
     }
