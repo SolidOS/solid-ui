@@ -31,13 +31,15 @@ https://github.com/solid/solid
  * @main solidUi.js
  */
 
+
+import rdf from 'rdflib'
+import ns from './ns'
+import style from './style'
+
 /**
  * @class SolidUi
  * @static
  */
-
-const rdf = require('rdflib') // pull in first avoid cross-refs
-const ns = require('./ns')
 
 const UI = {
   ns,
@@ -55,7 +57,7 @@ const UI = {
   pad: require('./pad'),
   preferences: require('./preferences'),
   store: require('./store'),
-  style: require('./style'),
+  style: style,
   table: require('./table'),
   tabs: require('./tabs'),
   utils: require('./utils'),
@@ -66,3 +68,5 @@ if (typeof window !== 'undefined') {
   (window as any).UI = UI  // Simpler access by non-node scripts
 }
 module.exports = UI
+// `module.exports` is not listed in the generated type definitions, so also export it as default:
+export default UI

@@ -12,4 +12,4 @@ const styles = {
   pendingeditModifier: 'color: #bbb;'
 
 }
-module.exports = styles
+export default styles
