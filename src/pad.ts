@@ -6,8 +6,15 @@
 /** @module UI.pad
 */
 
-const $rdf = require('rdflib')
-var padModule = module.exports = {}
+import $rdf from 'rdflib'
+const padModule = module.exports = {
+  lightColorHash,
+  renderPartipants,
+  participationObject,
+  recordParticipation,
+  manageParticipation,
+  notepad,
+}
 var UI = {
   authn: require('./signin'),
   icons: require('./iconBase'),
@@ -21,14 +28,14 @@ var UI = {
 const kb = UI.store
 const ns = UI.ns
 
-const utils = require('./utils')
+import utils from './utils'
 
 /** Figure out a random color from my webid
 *
 * @param {NamedNode} author - The author of text being displayed
 * @returns {String} The CSS color generated, constrained to be light for a background color
 */
-UI.pad.lightColorHash = function (author) {
+function lightColorHash (author: $rdf.NamedNode) {
   var hash = function (x) { return x.split('').reduce(function (a, b) { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0) }
   return author && author.uri ? '#' + ((hash(author.uri) & 0xffffff) | 0xc0c0c0).toString(16) : '#ffffff' // c0c0c0  forces pale
 } // no id -> white
@@ -37,7 +44,14 @@ UI.pad.lightColorHash = function (author) {
 //
 //  This is more general tham the pad.
 //
-UI.pad.renderPartipants = function (dom, table, padDoc, subject, me, options) {
+function renderPartipants (
+  dom: HTMLDocument,
+  table: HTMLTableElement,
+  padDoc: unknown,
+  subject: $rdf.Node,
+  me: unknown,
+  options: unknown
+) {
   table.setAttribute('style', 'margin: 0.8em;')
 
   var newRowForParticpation = function (parp) {
@@ -68,8 +82,8 @@ UI.pad.renderPartipants = function (dom, table, padDoc, subject, me, options) {
     parps.sort() // List in order of joining
     var participations = parps.map(function (p) { return p[1] })
     utils.syncTableToArray(table, participations, newRowForParticpation)
-  }
-  table.refresh = syncTable
+  };
+  (table as any).refresh = syncTable
   syncTable()
   return table
 }
@@ -83,7 +97,7 @@ UI.pad.renderPartipants = function (dom, table, padDoc, subject, me, options) {
 * @param {NamedNode} me - The logged in user
 *
 */
-UI.pad.participationObject = function (subject, padDoc, me) {
+function participationObject  (subject: $rdf.Node, padDoc: $rdf.NamedNode, me: $rdf.NamedNode) {
   return new Promise(function (resolve, reject) {
     if (!me) {
       throw new Error('Not user id')
@@ -104,7 +118,7 @@ UI.pad.participationObject = function (subject, padDoc, me) {
 
         UI.rdf.st(participation, ns.wf('participant'), me, padDoc),
         UI.rdf.st(participation, ns.cal('dtstart'), new Date(), padDoc),
-        UI.rdf.st(participation, ns.ui('backgroundColor'), UI.pad.lightColorHash(me), padDoc)
+        UI.rdf.st(participation, ns.ui('backgroundColor'), lightColorHash(me), padDoc)
       ]
       kb.updater.update([], ins, function (uri, ok, errorMessage) {
         if (!ok) {
@@ -125,7 +139,7 @@ UI.pad.participationObject = function (subject, padDoc, me) {
  * @param {DOMNode} refreshable - A DOM element whose refresh() is to be called if the change works
  *
 */
-UI.pad.recordParticipation = function (subject, padDoc, refreshable) {
+function recordParticipation  (subject: $rdf.NamedNode, padDoc: $rdf.NamedNode, refreshable?: HTMLElement) {
   var me = UI.authn.currentUser()
   if (!me) return // Not logged in
 
@@ -143,17 +157,19 @@ UI.pad.recordParticipation = function (subject, padDoc, refreshable) {
       UI.rdf.st(subject, ns.wf('participation'), participation, padDoc),
 
       UI.rdf.st(participation, ns.wf('participant'), me, padDoc),
-      UI.rdf.st(participation, UI.ns.cal('dtstart'), new Date(), padDoc),
-      UI.rdf.st(participation, ns.ui('backgroundColor'), UI.pad.lightColorHash(me), padDoc)
+      // TODO: Remove `as any` after using updated type definitions of rdflib.
+      //       See https://github.com/DefinitelyTyped/DefinitelyTyped/pull/35783
+      UI.rdf.st(participation, UI.ns.cal('dtstart'), new Date() as any, padDoc),
+      UI.rdf.st(participation, ns.ui('backgroundColor'), lightColorHash(me) as any, padDoc)
     ]
     kb.updater.update([], ins, function (uri, ok, errorMessage) {
       if (!ok) {
         throw new Error('Error recording your partipation: ' + errorMessage)
       }
-      if (refreshable && refreshable.refresh) {
-        refreshable.refresh()
+      if (refreshable && (refreshable as any).refresh) {
+        (refreshable as any).refresh()
       }
-      // UI.pad.renderPartipants(dom, table, padDoc, subject, me, options)
+      // renderPartipants(dom, table, padDoc, subject, me, options)
     })
     return participation
   }
@@ -161,19 +177,32 @@ UI.pad.recordParticipation = function (subject, padDoc, refreshable) {
 
 // Record my participation and display participants
 //
-UI.pad.manageParticipation = function (dom, container, padDoc, subject, me, options) {
+function manageParticipation (
+  dom: HTMLDocument,
+  container: HTMLElement,
+  padDoc: $rdf.NamedNode,
+  subject: $rdf.NamedNode,
+  me: $rdf.NamedNode,
+  options
+) {
   var table = dom.createElement('table')
   container.appendChild(table)
-  UI.pad.renderPartipants(dom, table, padDoc, subject, me, options)
+  renderPartipants(dom, table, padDoc, subject, me, options)
   try {
-    UI.pad.recordParticipation(subject, padDoc, table)
+    recordParticipation(subject, padDoc, table)
   } catch (e) {
     container.appendChild(UI.widgets.errorMessageBlock(dom, 'Error recording your partipation: ' + e)) // Clean up?
   }
   return table
 }
 
-UI.pad.notepad = function (dom, padDoc, subject, me, options) {
+function notepad  (
+  dom: HTMLDocument,
+  padDoc: $rdf.NamedNode,
+  subject: $rdf.Node,
+  me: $rdf.NamedNode,
+  options
+) {
   options = options || {}
   var exists = options.exists
   var table = dom.createElement('table')
@@ -188,33 +217,37 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
 
   table.setAttribute('style', 'padding: 1em; overflow: auto; resize: horizontal; min-width: 40em;')
 
-  var upstreamStatus = null
-  var downstreamStatus = null
+  var upstreamStatus: null | HTMLTableDataCellElement = null
+  var downstreamStatus: null | HTMLTableDataCellElement = null
 
   if (options.statusArea) {
     var t = options.statusArea.appendChild(dom.createElement('table'))
-    var tr = t.appendChild(dom.createElement('tr'))
+    var tr: HTMLTableRowElement = t.appendChild(dom.createElement('tr'))
     upstreamStatus = tr.appendChild(dom.createElement('td'))
     downstreamStatus = tr.appendChild(dom.createElement('td'))
     upstreamStatus.setAttribute('style', 'width:50%')
     downstreamStatus.setAttribute('style', 'width:50%')
   }
 
-  var complain = function (message, upstream) {
+  var complain = function (message: string, upstream?: boolean) {
     console.log(message)
     if (options.statusArea) {
-      (upstream ? upstreamStatus : downstreamStatus).appendChild(
+      (upstream ? upstreamStatus! : downstreamStatus!).appendChild(
             UI.widgets.errorMessageBlock(dom, message, 'pink'))
     }
   }
 
-  var clearStatus = function (upsteam) {
+  var clearStatus = function (upstream?: boolean) {
     if (options.statusArea) {
       options.statusArea.innerHTML = ''
     }
   }
 
-  var setPartStyle = function (part, colors, pending) {
+  var setPartStyle = function (
+    part: HTMLElement & { subject?: $rdf.Node },
+    colors?: string,
+    pending?: boolean
+  ) {
     var chunk = part.subject
     colors = colors || ''
     var baseStyle = 'font-size: 100%; font-family: monospace; width: 100%; border: none; white-space: pre-wrap;'
@@ -225,7 +258,7 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
 
     var author = kb.any(chunk, ns.dc('author'))
     if (!colors && author) { // Hash the user webid for now -- later allow user selection!
-      var bgcolor = UI.pad.lightColorHash(author)
+      var bgcolor = lightColorHash(author)
       colors = 'color: ' + (pending ? '#888' : 'black') + '; background-color: ' + bgcolor + ';'
     }
 
@@ -267,7 +300,7 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
       } else if (response && response.status === 409) { // Conflict
         setPartStyle(part, 'color: black;  background-color: #ffd;') // yellow
         part.state = 0 // Needs downstream refresh
-        utils.beep(0.5, 512) // Ooops clash with other person
+        utils.beep()(0.5, 512) // Ooops clash with other person
         setTimeout(function () { // Ideally, beep! @@
           reloadAndSync()  // Throw away our changes and
           // updater.requestDownstreamAction(padDoc, reloadAndSync)
@@ -428,7 +461,7 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
           if (xhr.status === 409) { // Conflict -  @@ we assume someone else
             setPartStyle(part, 'color: black;  background-color: #fdd;')
             part.state = 0 // Needs downstream refresh
-            utils.beep(0.5, 512) // Ooops clash with other person
+            utils.beep()(0.5, 512) // Ooops clash with other person
             setTimeout(function () {
               updater.requestDownstreamAction(padDoc, reloadAndSync)
             }, 1000)
@@ -436,7 +469,7 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
             setPartStyle(part, 'color: black;  background-color: #fdd;') // failed pink
             part.state = 0
             complain('    Error ' + xhr.status + ' sending data: ' + errorBody, true)
-            utils.beep(1.0, 128) // Other
+            utils.beep()(1.0, 128) // Other
                         // @@@   Do soemthing more serious with other errors eg auth, etc
           }
         } else {
@@ -494,7 +527,7 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
         table.appendChild(tr)
       }
     }
-    var part = tr.appendChild(dom.createElement('input'))
+    var part: HTMLInputElement & { subject?: $rdf.Node } = tr.appendChild(dom.createElement('input'))
     part.subject = chunk
     part.setAttribute('type', 'text')
     part.value = text
@@ -508,10 +541,10 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
     return part
   }
 
-  var newChunk = function (ele, before) { // element of chunk being split
+  var newChunk = function (ele?: HTMLElement & { subject?: $rdf.Node }, before?: boolean) { // element of chunk being split
     var kb = UI.store
     var indent = 0
-    var queueProperty = null
+    var queueProperty: null | string = null
     var here, prev, next, queue, tr1
 
     if (ele) {
@@ -519,8 +552,8 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
         console.log('return pressed when current document is: ' + ele.tagName)
       }
       here = ele.subject
-      indent = kb.any(here, PAD('indent'))
-      indent = indent ? Number(indent.value) : 0
+      var kbIndent = kb.any(here, PAD('indent'))
+      indent = kbIndent ? Number(kbIndent.value) : 0
       if (before) {
         prev = kb.any(undefined, PAD('next'), here)
         next = here
@@ -573,7 +606,7 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
   }
 
   var consistencyCheck = function () {
-    var found = []
+    var found: boolean[] = []
     var failed = 0
     function complain2 (msg) {
       complain(msg)
@@ -642,7 +675,7 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
     var row
 
         // First see which of the logical chunks have existing physical manifestations
-    var manif = []
+    var manif: Array<ChildNode | null> = []
         // Find which lines correspond to existing chunks
 
     for (let chunk = kb.the(subject, PAD('next'));
@@ -650,7 +683,7 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
             chunk = kb.the(chunk, PAD('next'))) {
       for (let i = 0; i < table.children.length; i++) {
         var tr = table.children[i]
-        if (tr.firstChild.subject.sameTerm(chunk)) {
+        if ((tr.firstChild as any).subject.sameTerm(chunk)) {
           manif[chunk.uri] = tr.firstChild
         }
       }
@@ -738,10 +771,10 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
       })
     }
     tryReload()
-  }
+  };
 
-  table.refresh = sync // Catch downward propagating refresh events
-  table.reloadAndSync = reloadAndSync
+  (table as any).refresh = sync; // Catch downward propagating refresh events
+  (table as any).reloadAndSync = reloadAndSync
 
   if (!me) console.log('Warning: must be logged in for pad to be edited')
 
