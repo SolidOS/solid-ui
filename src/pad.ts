@@ -117,8 +117,10 @@ function participationObject  (subject: $rdf.Node, padDoc: $rdf.NamedNode, me: $
         UI.rdf.st(subject, ns.wf('participation'), participation, padDoc),
 
         UI.rdf.st(participation, ns.wf('participant'), me, padDoc),
-        UI.rdf.st(participation, ns.cal('dtstart'), new Date(), padDoc),
-        UI.rdf.st(participation, ns.ui('backgroundColor'), lightColorHash(me), padDoc)
+        // TODO: Remove `as any` after using updated type definitions of rdflib.
+        //       See https://github.com/DefinitelyTyped/DefinitelyTyped/pull/35783
+        UI.rdf.st(participation, ns.cal('dtstart'), new Date() as any, padDoc),
+        UI.rdf.st(participation, ns.ui('backgroundColor'), lightColorHash(me) as any, padDoc)
       ]
       kb.updater.update([], ins, function (uri, ok, errorMessage) {
         if (!ok) {
@@ -579,9 +581,11 @@ function notepad  (
     var ins = [$rdf.st(prev, PAD('next'), chunk, padDoc),
       $rdf.st(chunk, PAD('next'), next, padDoc),
       $rdf.st(chunk, ns.dc('author'), me, padDoc),
-      $rdf.st(chunk, ns.sioc('content'), '', padDoc)]
+      // TODO: Remove `as any` after using updated type definitions of rdflib.
+      //       See https://github.com/DefinitelyTyped/DefinitelyTyped/pull/35783
+      $rdf.st(chunk, ns.sioc('content'), '' as any, padDoc)]
     if (indent > 0) { // Do not inherit
-      ins.push($rdf.st(chunk, PAD('indent'), indent, padDoc))
+      ins.push($rdf.st(chunk, PAD('indent'), indent as any, padDoc))
     }
 
     console.log('    Fresh chunk ' + label + ' proposed')
@@ -793,7 +797,9 @@ function notepad  (
     var insertables = [
       $rdf.st(subject, ns.rdf('type'), PAD('Notepad'), padDoc),
       $rdf.st(subject, ns.dc('author'), me, padDoc),
-      $rdf.st(subject, ns.dc('created'), new Date(), padDoc),
+      // TODO: Remove `as any` after using updated type definitions of rdflib.
+      //       See https://github.com/DefinitelyTyped/DefinitelyTyped/pull/35783
+      $rdf.st(subject, ns.dc('created'), new Date() as any, padDoc),
       $rdf.st(subject, PAD('next'), subject, padDoc)]
 
     updater.update([], insertables, function (uri, ok, errorBody) {
