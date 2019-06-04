@@ -35,6 +35,7 @@ https://github.com/solid/solid
 import rdf from 'rdflib'
 import ns from './ns'
 import style from './style'
+import pad from './pad'
 
 /**
  * @class SolidUi
@@ -54,7 +55,7 @@ const UI = {
   media: require('./media-capture'),
   messageArea: require('./messageArea'),
   infiniteMessageArea: require('./infiniteMessageArea'),
-  pad: require('./pad'),
+  pad: pad,
   preferences: require('./preferences'),
   store: require('./store'),
   style: style,

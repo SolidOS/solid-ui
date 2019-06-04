@@ -15,6 +15,7 @@ const padModule = module.exports = {
   manageParticipation,
   notepad,
 }
+export default padModule
 var UI = {
   authn: require('./signin'),
   icons: require('./iconBase'),
