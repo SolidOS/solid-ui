@@ -3,18 +3,22 @@
   "version": "0.12.1",
   "description": "UI library for writing Solid read-write-web applications",
   "main": "./lib/index.js",
+  "types": "./lib/index.d.js",
   "files": [
     "lib",
     "dist"
   ],
   "scripts": {
-    "build-lib": "babel --no-babelrc src -d lib",
-    "build": "npm run build-lib",
+    "build-babel": "babel src --extensions \".js,.mjs,.ts\" --out-dir lib",
+    "build-typescript": "tsc --emitDeclarationOnly",
+    "build": "rimraf lib; concurrently \"npm:build-*\"",
     "postversion": "git push origin master --follow-tags",
     "prepublishOnly": "npm run build",
     "standard": "standard src",
     "test": "npm run standard",
-    "watch": "babel --no-babelrc src --out-dir lib --watch"
+    "watch-babel": "npm run build-babel -- --watch",
+    "watch-typescript": "npm run build-typescript -- --watch",
+    "watch": "rimraf lib; concurrently \"npm:watch-*\""
   },
   "repository": {
     "type": "git",
@@ -67,9 +71,16 @@
     "solid-namespace": "0.2.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.18.0",
-    "babel-preset-env": ">=1.7.0",
-    "standard": "^10.0.2"
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-typescript": "^7.3.3",
+    "@types/node": "^12.0.4",
+    "@types/rdflib": "^0.17.1",
+    "concurrently": "^4.1.0",
+    "rimraf": "^2.6.3",
+    "standard": "^10.0.2",
+    "typescript": "^3.5.1"
   },
   "standard": {
     "globals": [

@@ -63,6 +63,6 @@ const UI = {
 }
 
 if (typeof window !== 'undefined') {
-  window.UI = UI  // Simpler access by non-node scripts
+  (window as any).UI = UI  // Simpler access by non-node scripts
 }
 module.exports = UI

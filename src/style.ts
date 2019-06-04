@@ -4,7 +4,7 @@
 
 // These must all end with semicolon so they can be appended to.
 
-module.exports = {
+const styles = {
   textInputStyle: 'background-color: #eef; padding: 0.5em;  border: .5em solid white; font-size: 100%;',
   buttonStyle: 'background-color: #fff; padding: 0.5em;  border: .01em solid white; font-size: 100%;', // 'background-color: #eef;
 // The width of the text field must bot be 100% or it switches to overlapping
@@ -12,3 +12,4 @@ module.exports = {
   pendingeditModifier: 'color: #bbb;'
 
 }
+module.exports = styles
