@@ -37,7 +37,7 @@ import utils from './utils'
 * @returns {String} The CSS color generated, constrained to be light for a background color
 */
 function lightColorHash (author: $rdf.NamedNode) {
-  var hash = function (x) { return x.split('').reduce(function (a, b) { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0) }
+  var hash = function (x: string) { return x.split('').reduce(function (a, b) { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0) }
   return author && author.uri ? '#' + ((hash(author.uri) & 0xffffff) | 0xc0c0c0).toString(16) : '#ffffff' // c0c0c0  forces pale
 } // no id -> white
 
@@ -55,7 +55,7 @@ function renderPartipants (
 ) {
   table.setAttribute('style', 'margin: 0.8em;')
 
-  var newRowForParticpation = function (parp) {
+  var newRowForParticpation = function (parp: $rdf.Node) {
     var person = kb.any(parp, ns.wf('participant'))
     var tr
     if (!person) {
@@ -77,11 +77,11 @@ function renderPartipants (
   }
 
   var syncTable = function () {
-    var parps = kb.each(subject, ns.wf('participation')).map(function (parp) {
+    var parps = kb.each(subject, ns.wf('participation')).map(function (parp: $rdf.Node) {
       return [kb.anyValue(parp, UI.ns.cal('dtstart')) || '9999-12-31', parp]
     })
     parps.sort() // List in order of joining
-    var participations = parps.map(function (p) { return p[1] })
+    var participations = parps.map(function (p: any) { return p[1] })
     utils.syncTableToArray(table, participations, newRowForParticpation)
   };
   (table as any).refresh = syncTable
@@ -104,7 +104,7 @@ function participationObject  (subject: $rdf.Node, padDoc: $rdf.NamedNode, me: $
       throw new Error('Not user id')
     }
 
-    var parps = kb.each(subject, ns.wf('participation')).filter(function (pn) {
+    var parps = kb.each(subject, ns.wf('participation')).filter(function (pn: $rdf.Node) {
       return kb.holds(pn, ns.wf('participant'), me)
     })
     if (parps.length > 1) {
@@ -123,7 +123,7 @@ function participationObject  (subject: $rdf.Node, padDoc: $rdf.NamedNode, me: $
         UI.rdf.st(participation, ns.cal('dtstart'), new Date() as any, padDoc),
         UI.rdf.st(participation, ns.ui('backgroundColor'), lightColorHash(me) as any, padDoc)
       ]
-      kb.updater.update([], ins, function (uri, ok, errorMessage) {
+      kb.updater.update([], ins, function (uri: string, ok: boolean, errorMessage: string) {
         if (!ok) {
           reject(new Error('Error recording your partipation: ' + errorMessage))
         } else {
@@ -146,7 +146,7 @@ function recordParticipation  (subject: $rdf.NamedNode, padDoc: $rdf.NamedNode, 
   var me = UI.authn.currentUser()
   if (!me) return // Not logged in
 
-  var parps = kb.each(subject, ns.wf('participation')).filter(function (pn) {
+  var parps = kb.each(subject, ns.wf('participation')).filter(function (pn: $rdf.Node) {
     return kb.holds(pn, ns.wf('participant'), me)
   })
   if (parps.length > 1) {
@@ -165,7 +165,7 @@ function recordParticipation  (subject: $rdf.NamedNode, padDoc: $rdf.NamedNode, 
       UI.rdf.st(participation, UI.ns.cal('dtstart'), new Date() as any, padDoc),
       UI.rdf.st(participation, ns.ui('backgroundColor'), lightColorHash(me) as any, padDoc)
     ]
-    kb.updater.update([], ins, function (uri, ok, errorMessage) {
+    kb.updater.update([], ins, function (uri: string, ok: boolean, errorMessage: string) {
       if (!ok) {
         throw new Error('Error recording your partipation: ' + errorMessage)
       }
@@ -186,7 +186,7 @@ function manageParticipation (
   padDoc: $rdf.NamedNode,
   subject: $rdf.NamedNode,
   me: $rdf.NamedNode,
-  options
+  options: unknown
 ) {
   var table = dom.createElement('table')
   container.appendChild(table)
@@ -204,7 +204,7 @@ function notepad  (
   padDoc: $rdf.NamedNode,
   subject: $rdf.Node,
   me: $rdf.NamedNode,
-  options
+  options: Partial<{ exists: boolean, statusArea: HTMLElement }>
 ) {
   options = options || {}
   var exists = options.exists
@@ -275,7 +275,7 @@ function notepad  (
     part.setAttribute('style', style + colors)
   }
 
-  var removePart = function (part) {
+  var removePart = function (part: $rdf.Statement & HTMLInputElement) {
     var chunk = part.subject
     if (!chunk) throw new Error('No chunk for line to be deleted!') // just in case
     var prev = kb.any(undefined, PAD('next'), chunk)
@@ -288,22 +288,23 @@ function notepad  (
     var del = kb.statementsMatching(chunk, undefined, undefined, padDoc)
                 .concat(kb.statementsMatching(undefined, undefined, chunk, padDoc))
     var ins = [ $rdf.st(prev, PAD('next'), next, padDoc) ]
-    var label = chunk.uri.slice(-4)
+    var label = (chunk as $rdf.NamedNode).uri.slice(-4)
     console.log('Deleting line ' + label)
 
-    updater.update(del, ins, function (uri, ok, errorMessage, response) {
+    updater.update(del, ins, function (uri: string, ok: boolean, errorMessage: string, response: { status: number }) {
       if (ok) {
-        var row = part.parentNode
+        var row = part.parentNode as HTMLElement
         var before = row.previousSibling
-        row.parentNode.removeChild(row)
+        row.parentNode!.removeChild(row)
         console.log('    deleted line ' + label + ' ok ' + part.value)
         if (before && before.firstChild) {
-          before.firstChild.focus()
+          (before.firstChild as HTMLElement).focus()
         }
       } else if (response && response.status === 409) { // Conflict
-        setPartStyle(part, 'color: black;  background-color: #ffd;') // yellow
-        part.state = 0 // Needs downstream refresh
-        utils.beep()(0.5, 512) // Ooops clash with other person
+        setPartStyle(part, 'color: black;  background-color: #ffd;'); // yellow
+        (part as any).state = 0 // Needs downstream refresh
+        const beeper = utils.beep()
+        if (beeper) { beeper(0.5, 512) } // Ooops clash with other person
         setTimeout(function () { // Ideally, beep! @@
           reloadAndSync()  // Throw away our changes and
           // updater.requestDownstreamAction(padDoc, reloadAndSync)
@@ -313,19 +314,19 @@ function notepad  (
         console.log("    removePart was deleteing :'" + del)
         setPartStyle(part, 'color: black;  background-color: #fdd;')// failed
         let res = response ? response.status : ' [no response field] '
-        complain('Error ' + res + ' saving changes: ' + errorMessage.true) // upstream,
+        complain('Error ' + res + ' saving changes: ' + (errorMessage as any).true) // upstream,
                 // updater.requestDownstreamAction(padDoc, reloadAndSync);
       };
     })
   }// removePart
 
-  var changeIndent = function (part, chunk, delta) {
+  var changeIndent = function (part: HTMLElement, chunk: $rdf.Node, delta: number) {
     var del = kb.statementsMatching(chunk, PAD('indent'))
     var current = del.length ? Number(del[0].object.value) : 0
     if (current + delta < -3) return //  limit negative indent
     var newIndent = current + delta
-    var ins = $rdf.st(chunk, PAD('indent'), newIndent, padDoc)
-    updater.update(del, ins, function (uri, ok, errorBody) {
+    var ins = $rdf.st(chunk, PAD('indent'), newIndent as any, padDoc)
+    updater.update(del, ins, function (uri: string, ok: boolean, errorBody: string) {
       if (!ok) {
         console.log("Indent change FAILED '" + newIndent + "' for " + padDoc + ': ' + errorBody)
         setPartStyle(part, 'color: black;  background-color: #fdd;') // failed
@@ -362,7 +363,10 @@ function notepad  (
     return (iCaretPos)
   }
 */
-  var addListeners = function (part, chunk) {
+  var addListeners = function (
+    part: HTMLInputElement & $rdf.Statement & { state: number },
+    chunk: $rdf.NamedNode
+  ) {
     part.addEventListener('keydown', function (event) {
       var queueProperty, queue
             //  up 38; down 40; left 37; right 39     tab 9; shift 16; escape 27
@@ -422,15 +426,15 @@ function notepad  (
           break
 
         case 38: // Up
-          if (part.parentNode.previousSibling) {
-            part.parentNode.previousSibling.firstChild.focus()
+          if (part.parentNode!.previousSibling) {
+            (part.parentNode!.previousSibling.firstChild as HTMLElement).focus()
             event.preventDefault()
           }
           break
 
         case 40: // Down
-          if (part.parentNode.nextSibling) {
-            part.parentNode.nextSibling.firstChild.focus()
+          if (part.parentNode!.nextSibling) {
+            (part.parentNode!.nextSibling.firstChild as HTMLElement).focus()
             event.preventDefault()
           }
           break
@@ -439,12 +443,12 @@ function notepad  (
       }
     })
 
-    var updateStore = function (part) {
-      var chunk = part.subject
+    var updateStore = function (part: HTMLInputElement & $rdf.Statement & { state: number, lastSent?: string }) {
+      var chunk = part.subject as $rdf.NamedNode
       setPartStyle(part, undefined, true)
       var old = kb.any(chunk, ns.sioc('content')).value
       var del = [ $rdf.st(chunk, ns.sioc('content'), old, padDoc) ]
-      var ins = [ $rdf.st(chunk, ns.sioc('content'), part.value, padDoc) ]
+      var ins = [ $rdf.st(chunk, ns.sioc('content'), part.value as any, padDoc) ]
       var newOne = part.value
 
             // DEBUGGING ONLY
@@ -457,14 +461,15 @@ function notepad  (
       part.lastSent = newOne
 
       console.log(' Patch proposed to ' + chunk.uri.slice(-4) + " '" + old + "' -> '" + newOne + "' ")
-      updater.update(del, ins, function (uri, ok, errorBody, xhr) {
+      updater.update(del, ins, function (uri: string, ok: boolean, errorBody: string, xhr: XMLHttpRequest) {
         if (!ok) {
                     // alert("clash " + errorBody);
           console.log('    patch FAILED ' + xhr.status + " for '" + old + "' -> '" + newOne + "': " + errorBody)
           if (xhr.status === 409) { // Conflict -  @@ we assume someone else
             setPartStyle(part, 'color: black;  background-color: #fdd;')
             part.state = 0 // Needs downstream refresh
-            utils.beep()(0.5, 512) // Ooops clash with other person
+            const beeper = utils.beep()
+            if (beeper) { beeper(0.5, 512) } // Ooops clash with other person
             setTimeout(function () {
               updater.requestDownstreamAction(padDoc, reloadAndSync)
             }, 1000)
@@ -472,7 +477,8 @@ function notepad  (
             setPartStyle(part, 'color: black;  background-color: #fdd;') // failed pink
             part.state = 0
             complain('    Error ' + xhr.status + ' sending data: ' + errorBody, true)
-            utils.beep()(1.0, 128) // Other
+            const beeper = utils.beep()
+            if (beeper) { beeper(1.0, 128) } // Other
                         // @@@   Do soemthing more serious with other errors eg auth, etc
           }
         } else {
@@ -517,7 +523,7 @@ function notepad  (
     }) // listener
   } // addlisteners
 
-  var newPartAfter = function (tr1, chunk, before) { // @@ take chunk and add listeners
+  var newPartAfter = function (tr1: HTMLTableRowElement, chunk: $rdf.NamedNode, before?: boolean) { // @@ take chunk and add listeners
     var text = kb.any(chunk, ns.sioc('content'))
     text = text ? text.value : ''
     var tr = dom.createElement('tr')
@@ -536,7 +542,7 @@ function notepad  (
     part.value = text
     if (me) {
       setPartStyle(part, '')
-      addListeners(part, chunk)
+      addListeners(part as any, chunk)
     } else {
       setPartStyle(part, 'color: #222; background-color: #fff')
       console.log("Note can't add listeners - not logged in")
@@ -548,13 +554,13 @@ function notepad  (
     var kb = UI.store
     var indent = 0
     var queueProperty: null | string = null
-    var here, prev, next, queue, tr1
+    var here: $rdf.Node, prev: $rdf.Node, next: $rdf.Node, queue: $rdf.Node, tr1: HTMLTableRowElement | undefined
 
     if (ele) {
       if (ele.tagName.toLowerCase() !== 'input') {
         console.log('return pressed when current document is: ' + ele.tagName)
       }
-      here = ele.subject
+      here = ele.subject!
       var kbIndent = kb.any(here, PAD('indent'))
       indent = kbIndent ? Number(kbIndent.value) : 0
       if (before) {
@@ -568,7 +574,7 @@ function notepad  (
         queue = next
         queueProperty = 'newlinesBefore'
       }
-      tr1 = ele.parentNode
+      tr1 = ele.parentNode as HTMLTableRowElement
     } else {
       prev = subject
       next = subject
@@ -590,19 +596,22 @@ function notepad  (
     }
 
     console.log('    Fresh chunk ' + label + ' proposed')
-    updater.update(del, ins, function (uri, ok, errorBody, xhr) {
+    updater.update(del, ins, function (uri: string, ok: boolean, errorBody: string, xhr: XMLHttpRequest) {
       if (!ok) {
                 // alert("Error writing new line " + label + ": " + errorBody);
         console.log('    ERROR writing new line ' + label + ': ' + errorBody)
       } else {
-        var newPart = newPartAfter(tr1, chunk, before)
+        var newPart = newPartAfter(tr1!, chunk, before)
         setPartStyle(newPart)
         newPart.focus() // Note this is delayed
+        // It's not quite clear how this code can ever have worked, given that queue is set to a
+        // single node rather than an object above, so to preserve the current behaviour,
+        // it's cast to `any`:
         if (queueProperty) {
-          console.log('    Fresh chunk ' + label + ' updated, queue = ' + queue[queueProperty])
-          queue[queueProperty] -= 1
-          if (queue[queueProperty] > 0) {
-            console.log('    Implementing queued newlines = ' + next.newLinesBefore)
+          console.log('    Fresh chunk ' + label + ' updated, queue = ' + (queue as any)[queueProperty]);
+          (queue as any)[queueProperty] -= 1
+          if ((queue as any)[queueProperty] > 0) {
+            console.log('    Implementing queued newlines = ' + (next as any).newLinesBefore)
             newChunk(newPart, before)
           }
         }
@@ -613,7 +622,7 @@ function notepad  (
   var consistencyCheck = function () {
     var found: boolean[] = []
     var failed = 0
-    function complain2 (msg) {
+    function complain2 (msg: string) {
       complain(msg)
       failed++
     }
@@ -654,7 +663,7 @@ function notepad  (
       if (k !== 1) complain2('Should be 1 not ' + k + ' author for ' + label)
 
       var sts = kb.statementsMatching(undefined, ns.sioc('contents'))
-      sts.map(function (st) {
+      sts.map(function (st: any) {
         if (!found[st.subject.uri]) {
           complain2('Loose chunk! ' + st.subject.uri)
         }
@@ -670,7 +679,7 @@ function notepad  (
       var msg = 'Pad: Inconsistent data - NEXT pointers: ' +
                 (kb.each(subject, PAD('next')).length)
       console.log(msg)
-      if (options.statusAra) {
+      if (options.statusArea) {
         options.statusArea.textContent += msg
       }
       return
@@ -697,7 +706,7 @@ function notepad  (
         // Remove any deleted lines
     for (let i = table.children.length - 1; i >= 0; i--) {
       row = table.children[i]
-      if (!manif[row.firstChild.subject.uri]) {
+      if (!manif[(row.firstChild as any).subject.uri]) {
         table.removeChild(row)
       }
     }
@@ -711,28 +720,28 @@ function notepad  (
             // which may be selected by the user
       if (row && manif[chunk.uri]) {
         var part = row.firstChild
-        if (text !== part.value) {
-          part.value = text
+        if (text !== (part as any).value) {
+          (part as any).value = text
         }
-        setPartStyle(part)
-        part.state = 0 // Clear the state machine
-        delete part.lastSent // DEBUG ONLY
+        setPartStyle(part as any);
+        (part as any).state = 0 // Clear the state machine
+        delete (part as any).lastSent // DEBUG ONLY
         row = row.nextSibling
       } else {
-        newPartAfter(row, chunk, true) // actually before
+        newPartAfter(row as HTMLTableRowElement, chunk, true) // actually before
       }
     };
   }
 
     // Refresh the DOM tree
 
-  var refreshTree = function (root) {
+  var refreshTree = function (root: HTMLElement & { refresh: Function }) {
     if (root.refresh) {
       root.refresh()
       return
     }
     for (var i = 0; i < root.children.length; i++) {
-      refreshTree(root.children[i])
+      refreshTree(root.children[i] as any)
     }
   }
 
@@ -744,7 +753,7 @@ function notepad  (
     if (!consistencyCheck()) {
       complain('CONSITENCY CHECK FAILED')
     } else {
-      refreshTree(table)
+      refreshTree(table as any)
     }
   }
 
@@ -757,7 +766,7 @@ function notepad  (
     var retryTimeout = 1000 // ms
     var tryReload = function () {
       console.log('try reload - timeout = ' + retryTimeout)
-      updater.reload(updater.store, padDoc, function (ok, message, xhr) {
+      updater.reload(updater.store, padDoc, function (ok: boolean, message: string, xhr: XMLHttpRequest) {
         reloading = false
         if (ok) {
           checkAndSync()
@@ -803,7 +812,7 @@ function notepad  (
       $rdf.st(subject, ns.dc('created'), new Date() as any, padDoc),
       $rdf.st(subject, PAD('next'), subject, padDoc)]
 
-    updater.update([], insertables, function (uri, ok, errorBody) {
+    updater.update([], insertables, function (uri: string, ok: boolean, errorBody: string) {
       if (!ok) {
         complain(errorBody)
       } else {
