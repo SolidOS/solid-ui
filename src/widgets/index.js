@@ -402,10 +402,9 @@ UI.widgets.askName = function (dom, kb, container, predicate, klass, noun) {
     namefield.select() // focus next user input
     form.appendChild(namefield)
     container.appendChild(form)
+    // namefield.focus()
 
-    var gotName = function () {
-      // namefield.setAttribute('class', 'pendingedit')
-      // namefield.disabled = true
+    function gotName () {
       form.parentNode.removeChild(form)
       resolve(namefield.value.trim())
     }
@@ -418,16 +417,18 @@ UI.widgets.askName = function (dom, kb, container, predicate, klass, noun) {
 
     form.appendChild(dom.createElement('br'))
 
-    var cancel = form.appendChild(UI.widgets.cancelButton(dom))
+    const cancel = form.appendChild(UI.widgets.cancelButton(dom))
     cancel.addEventListener('click', function (e) {
       form.parentNode.removeChild(form)
       resolve(null)
     }, false)
 
-    let continueButton = form.appendChild(UI.widgets.continueButton(dom))
+    const continueButton = form.appendChild(UI.widgets.continueButton(dom))
     continueButton.addEventListener('click', function (e) {
       gotName()
     }, false)
+    namefield.focus()
+
   }) // Promise
 }
 
