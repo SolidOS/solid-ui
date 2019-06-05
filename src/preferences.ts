@@ -1,20 +1,21 @@
 //                  Solid-UI temporary preferences
 //                  ==============================
 //
+import $rdf from 'rdflib'
 const kb = require('./store')
-const ns = require('./ns')
+import ns from './ns'
 const authn = require('./signin')
 const widgets = require('./widgets')
-const pad = require('./pad')
+import pad from './pad'
 
 // This was tabulator . preferences in the tabulator
 //
-module.exports = { // used for storing user name
-  value: [],
-  get: function (k) { // original
+const preferences = { // used for storing user name
+  value: [] as string[],
+  get: function (k: number) { // original
     return this.value[k]
   },
-  set: function (k, v) {
+  set: function (k: number, v: string) {
     if (typeof v !== 'string') {
       console.log('Non-string value of preference ' + k + ': ' + v)
       throw new Error('Non-string value of preference ' + k + ': ' + v)
@@ -29,14 +30,14 @@ module.exports = { // used for storing user name
 //
 // Make an RDF node for recording the common view preferences for any object
 // (maybe make it in a separate file?)
-function recordSharedPreferences (subject, context) {
+function recordSharedPreferences (subject: $rdf.NamedNode, context: { sharedPreferences: unknown }) {
   return new Promise(function (resolve, reject) {
     var sharedPreferences = kb.any(subject, ns.ui('sharedPreferences'))
     if (!sharedPreferences) {
       let sp = $rdf.sym(subject.doc().uri + '#SharedPreferences')
       let ins = [$rdf.st(subject, ns.ui('sharedPreferences'), sp, subject.doc())]
       console.log('Creating shared preferences ' + sp)
-      kb.updater.update([], ins, function (uri, ok, errorMessage) {
+      kb.updater.update([], ins, function (uri: string, ok: boolean, errorMessage: string) {
         if (!ok) {
           reject(new Error('create shard prefs: ' + errorMessage))
         } else {
@@ -53,15 +54,22 @@ function recordSharedPreferences (subject, context) {
 
 // Construct a personal defaults node in the preferences file for a given class of object
 //
-function recordPersonalDefaults (klass, context) {
+interface PersonalDefaultsContext {
+  preferencesFile: $rdf.Node;
+  personalDefaults: unknown;
+}
+function recordPersonalDefaults (
+  klass: $rdf.Node,
+  context: PersonalDefaultsContext
+) {
   return new Promise(function (resolve, reject) {
-    authn.logInLoadPreferences(context).then(context => {
+    authn.logInLoadPreferences(context).then((context: PersonalDefaultsContext) => {
       var regs = kb.each(null, ns.solid('forClass'), klass)
-      var ins = []
-      var prefs
+      var ins: $rdf.Statement[] = []
+      var prefs: $rdf.Node | undefined = undefined
       var reg
       if (regs.length) { // Use existing node if we can
-        regs.forEach(r => {
+        regs.forEach((r: $rdf.Node) => {
           prefs = prefs || kb.any(r, ns.solid('personalDefaults'))
         })
         if (prefs) {
@@ -78,8 +86,8 @@ function recordPersonalDefaults (klass, context) {
           $rdf.st(reg, ns.solid('forClass'), klass, context.preferencesFile)]
       }
       prefs = widgets.newThing(context.preferencesFile)
-      ins.push($rdf.st(reg, ns.solid('personalDefaults'), prefs, context.preferencesFile))
-      kb.updater.update([], ins, function (uri, ok, errm) {
+      ins.push($rdf.st(reg, ns.solid('personalDefaults'), prefs!, context.preferencesFile))
+      kb.updater.update([], ins, function (uri: string, ok: boolean, errm: string) {
         if (!ok) {
           reject(new Error('Setting preferences for ' + klass + ': ' + errm))
         } else {
@@ -87,33 +95,38 @@ function recordPersonalDefaults (klass, context) {
           resolve(context)
         }
       })
-    }, err => {
+    }, (err: Error) => {
       reject(err)
     })
   })
 }
 
-function renderPreferencesForm (subject, klass, preferencesForm, context) {
+function renderPreferencesForm (
+  subject: $rdf.NamedNode,
+  klass: $rdf.Node,
+  preferencesForm: unknown,
+  context: any
+) {
   var prefContainer = context.dom.createElement('div')
   pad.participationObject(subject, subject.doc(), context.me).then(participation => {
     let dom = context.dom
-    function heading (text) {
+    function heading (text: string) {
       prefContainer.appendChild(dom.createElement('h5')).textContent = text
     }
     heading('My view of this ' + context.noun)
     widgets.appendForm(dom, prefContainer, {}, participation, preferencesForm, subject.doc(),
-      (ok, mes) => { if (!ok) widgets.complain(context, mes) })
+      (ok: boolean, mes: string) => { if (!ok) widgets.complain(context, mes) })
 
     heading('Everyone\'s  view of this ' + context.noun)
-    recordSharedPreferences(subject, context).then(context => {
+    recordSharedPreferences(subject, context).then((context: any) => {
       var sharedPreferences = context.sharedPreferences
       widgets.appendForm(dom, prefContainer, {}, sharedPreferences, preferencesForm, subject.doc(),
-      (ok, mes) => { if (!ok) widgets.complain(context, mes) })
+      (ok: boolean, mes: string) => { if (!ok) widgets.complain(context, mes) })
 
       heading('My default view of any ' + context.noun)
-      recordPersonalDefaults(klass, context).then(context => {
+      recordPersonalDefaults(klass, context).then((context: any) => {
         widgets.appendForm(dom, prefContainer, {}, context.personalDefaults, preferencesForm, context.preferencesFile,
-        (ok, mes) => { if (!ok) widgets.complain(context, mes) })
+        (ok: boolean, mes: string) => { if (!ok) widgets.complain(context, mes) })
       }, err => {
         widgets.complain(context, err)
       })
@@ -126,7 +139,7 @@ function renderPreferencesForm (subject, klass, preferencesForm, context) {
 
 // This should be part of rdflib.js ad part of the RDFJS Standard!!
 
-function toJS (term) {
+function toJS (term: any) {
   if (!term.datatype) return term // Objects remain objects
   if (term.datatype.equals(ns.xsd('boolean'))) {
     return term.value === '1'
@@ -148,14 +161,19 @@ function toJS (term) {
 // This is the function which acuakly reads and combines the preferences
 //
 //  @@ make it much more tolerant of missing buts of prefernces
-function getPreferencesForClass (subject, klass, predicates, context) {
+function getPreferencesForClass (
+  subject: $rdf.NamedNode,
+  klass: $rdf.Node,
+  predicates: $rdf.NamedNode[],
+  context: any
+) {
   return new Promise(function (resolve, reject) {
-    recordSharedPreferences(subject, context).then(context => {
+    recordSharedPreferences(subject, context).then((context: any) => {
       var sharedPreferences = context.sharedPreferences
       if (context.me) {
         pad.participationObject(subject, subject.doc(), context.me).then(participation => {
-          recordPersonalDefaults(klass, context).then(context => {
-            var results = []
+          recordPersonalDefaults(klass, context).then((context: any) => {
+            var results: {[index: string]: any} = {};
             var personalDefaults = context.personalDefaults
             predicates.forEach(pred => {
               // Order of preference: My settings on object, Global settings on object, my settings on class
@@ -168,7 +186,7 @@ function getPreferencesForClass (subject, klass, predicates, context) {
           }, reject)
         }, reject)
       } else { // no user defined, just use common prefs
-        var results = []
+        var results: {[index: string]: any} = {};
         predicates.forEach(pred => {
           let v1 = kb.any(sharedPreferences, pred)
           if (v1) {
@@ -182,3 +200,6 @@ function getPreferencesForClass (subject, klass, predicates, context) {
 }
 
 // ends
+
+module.exports = preferences
+export default preferences
