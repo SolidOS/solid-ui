@@ -34,8 +34,9 @@ https://github.com/solid/solid
 
 import rdf from 'rdflib'
 import ns from './ns'
-import style from './style'
 import pad from './pad'
+import style from './style'
+import utils from './utils'
 
 /**
  * @class SolidUi
@@ -61,7 +62,7 @@ const UI = {
   style: style,
   table: require('./table'),
   tabs: require('./tabs'),
-  utils: require('./utils'),
+  utils: utils,
   widgets: require('./widgets')
 }
 

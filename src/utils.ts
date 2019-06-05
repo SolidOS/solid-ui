@@ -3,8 +3,9 @@
 //
 // This must load AFTER the rdflib.js and log-ext.js (or log.js).
 //
+import $rdf from 'rdflib'
 
-module.exports = {
+const utils = {
   addLoadEvent,  // not used anywhere
   AJARImage,
   ancestor,
@@ -33,6 +34,8 @@ module.exports = {
   stackString,
   syncTableToArray
 }
+module.exports = utils
+export default utils
 
 var UI = {
   log: require('./log'),
@@ -54,12 +57,12 @@ function clearVariableNames () {
 // http://stackoverflow.com/questions/879152/how-do-i-make-javascript-beep
 // http://www.tsheffler.com/blog/2013/05/14/audiocontext-noteonnoteoff-and-time-units/
 
-var audioContext
+var audioContext: typeof AudioContext
 
 if (typeof AudioContext !== 'undefined') {
   audioContext = AudioContext
 } else if (typeof window !== 'undefined') {
-  audioContext = window.AudioContext || window.webkitAudioContext
+  audioContext = (window as any).AudioContext || (window as any).webkitAudioContext
 }
 
 function beep () {
@@ -68,7 +71,12 @@ function beep () {
   let ContextClass = audioContext
   let ctx = new ContextClass()
 
-  return function (duration, frequency, type, finishedCallback) {
+  return function (
+    duration: number,
+    frequency: number,
+    type?: 'sine' | 'square' | 'sawtooth' | 'triangle',
+    finishedCallback?: Function
+  ) {
     duration = +(duration || 0.3)
 
     // Only 0-4 are valid types.
@@ -91,10 +99,10 @@ function beep () {
 
 // Make pseudorandom color from a uri
 // NOT USED ANYWHERE
-function hashColor (who) {
-  who = who.uri || who
-  var hash = function (x) { return x.split('').reduce(function (a, b) { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0) }
-  return '#' + ((hash(who) & 0xffffff) | 0xc0c0c0).toString(16) // c0c0c0 or 808080 forces pale
+function hashColor (who: $rdf.NamedNode | string) {
+  const uri = (who as $rdf.NamedNode).uri || (who as string)
+  var hash = function (x: string) { return x.split('').reduce(function (a, b) { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0) }
+  return '#' + ((hash(uri) & 0xffffff) | 0xc0c0c0).toString(16) // c0c0c0 or 808080 forces pale
 }
 
 function genUuid () { // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
@@ -113,9 +121,13 @@ function genUuid () { // http://stackoverflow.com/questions/105034/create-guid-u
  *
  * Tolerates out of order elements but puts new ones in order.
 */
-function syncTableToArray (table, things, createNewRow) {
+function syncTableToArray (
+  table: HTMLTableElement,
+  things: $rdf.NamedNode[],
+  createNewRow: (thing: $rdf.NamedNode) => HTMLTableRowElement
+) {
   let foundOne
-  let row
+  let row: any
   let i
 
   for (i = 0; i < table.children.length; i++) {
@@ -144,7 +156,7 @@ function syncTableToArray (table, things, createNewRow) {
         let ele = table.children[g]
         table.insertBefore(newRow, ele)
       }
-      newRow.subject = thing
+      (newRow as any).subject = thing
     } // if not foundOne
   } // loop g
 
@@ -160,14 +172,14 @@ function syncTableToArray (table, things, createNewRow) {
 **
 ** See  http://snippets.dzone.com/posts/show/6632
 */
-function stackString (e) {
+function stackString (e: Error) {
   let str = '' + e + '\n'
   let i
   if (!e.stack) {
     return str + 'No stack available.\n'
   }
-  let lines = e.stack.toString().split('\n')
-  let toPrint = []
+  let lines: string[] = e.stack.toString().split('\n')
+  let toPrint: string[][] = []
   for (i = 0; i < lines.length; i++) {
     let line = lines[i]
     if (line.indexOf('ecmaunit.js') > -1) {
@@ -188,7 +200,7 @@ function stackString (e) {
   return str
 }
 
-function emptyNode (node) {
+function emptyNode (node: Node) {
   let nodes = node.childNodes
   let len = nodes.length
   let i
@@ -196,8 +208,8 @@ function emptyNode (node) {
   return node
 }
 
-function getTarget (e) {
-  var target
+function getTarget (e: Event) {
+  var target: any
   e = e || window.event
   if (e.target) target = e.target
   else if (e.srcElement) target = e.srcElement
@@ -208,12 +220,12 @@ function getTarget (e) {
   return target
 }
 
-function ancestor (target, tagName) {
+function ancestor (target: HTMLElement, tagName: string) {
   var level
   for (level = target; level; level = level.parentNode) {
     // UI.log.debug("looking for "+tagName+" Level: "+level+" "+level.tagName)
     try {
-      if (level.tagName === tagName) return level
+      if ((level as HTMLElement).tagName === tagName) return level
     } catch (e) { // can hit "TypeError: can't access dead object" in ffox
       return undefined
     }
@@ -221,11 +233,11 @@ function ancestor (target, tagName) {
   return undefined
 }
 
-function getAbout (kb, target) {
+function getAbout (kb: $rdf.IndexedFormula, target: HTMLElement) {
   var level, aa
   for (level = target; level && (level.nodeType === 1); level = level.parentNode) {
     // UI.log.debug("Level "+level + ' '+level.nodeType + ': '+level.tagName)
-    aa = level.getAttribute('about')
+    aa = (level as HTMLElement).getAttribute('about')
     if (aa) {
       // UI.log.debug("kb.fromNT(aa) = " + kb.fromNT(aa))
       return kb.fromNT(aa)
@@ -237,8 +249,8 @@ function getAbout (kb, target) {
   return undefined
 }
 
-function getTerm (target) {
-  var statementTr = target.parentNode
+function getTerm (target: HTMLElement) {
+  var statementTr: any = target.parentNode
   var st = statementTr ? statementTr.AJAR_statement : undefined
 
   var className = st ? target.className : '' // if no st then it's necessary to use getAbout
@@ -261,7 +273,7 @@ function getTerm (target) {
   }
 }
 
-function include (document, linkstr) {
+function include (document: HTMLDocument, linkstr: string) {
   var lnk = document.createElement('script')
   lnk.setAttribute('type', 'text/javascript')
   lnk.setAttribute('src', linkstr)
@@ -270,58 +282,66 @@ function include (document, linkstr) {
   return lnk
 }
 
-function addLoadEvent (func) {
+function addLoadEvent (func: typeof window.onload) {
   var oldonload = window.onload
   if (typeof window.onload !== 'function') {
     window.onload = func
   } else {
     window.onload = function () {
-      oldonload()
-      func()
+      (oldonload as any)()
+      (func as any)()
     }
   }
 } // addLoadEvent
 
 // Find the position of an object relative to the window
-function findPos (obj) { // C&P from http://www.quirksmode.org/js/findpos.html
+function findPos (obj: HTMLElement) { // C&P from http://www.quirksmode.org/js/findpos.html
   var myDocument = obj.ownerDocument
-  var DocBox = myDocument.documentElement.getBoundingClientRect()
+  var DocBox = myDocument!.documentElement.getBoundingClientRect()
   var box = obj.getBoundingClientRect()
   return [box.left - DocBox.left, box.top - DocBox.top]
 }
 
-function getEyeFocus (element, instantly, isBottom, myWindow) {
-  if (!myWindow) myWindow = window
+function getEyeFocus (
+  element: HTMLElement,
+  instantly?: boolean,
+  isBottom?: boolean,
+  myWindow?: Window
+) {
+  const givenWindow = (myWindow) ? myWindow : window
   var elementPosY = findPos(element)[1]
-  var totalScroll = elementPosY - 52 - myWindow.scrollY // magic number 52 for web-based version
+  var totalScroll = elementPosY - 52 - givenWindow.scrollY // magic number 52 for web-based version
   if (instantly) {
     if (isBottom) {
-      myWindow.scrollBy(0, elementPosY + element.clientHeight - (myWindow.scrollY + myWindow.innerHeight))
+      givenWindow.scrollBy(0, elementPosY + element.clientHeight - (givenWindow.scrollY + givenWindow.innerHeight))
       return
     }
-    myWindow.scrollBy(0, totalScroll)
+    givenWindow.scrollBy(0, totalScroll)
     return
   }
-  var id = myWindow.setInterval(scrollAmount, 50)
+  var id = givenWindow.setInterval(scrollAmount, 50)
   var times = 0
   function scrollAmount () {
-    myWindow.scrollBy(0, totalScroll / 10)
+    givenWindow.scrollBy(0, totalScroll / 10)
     times++
     if (times === 10) {
-      myWindow.clearInterval(id)
+      givenWindow.clearInterval(id)
     }
   }
 }
 
-function AJARImage (src, alt, tt, doc) {
-  if (!doc) {
-    doc = document
-  }
+function AJARImage (
+  src: string,
+  alt?: string,
+  tt?: string,
+  myDoc?: HTMLDocument
+) {
+  const doc = myDoc ? myDoc : document
   var image = doc.createElement('img')
   image.setAttribute('src', src)
   image.addEventListener('copy', function (e) {
-    e.clipboardData.setData('text/plain', '')
-    e.clipboardData.setData('text/html', '')
+    e.clipboardData!.setData('text/plain', '')
+    e.clipboardData!.setData('text/html', '')
     e.preventDefault() // We want no title data to be written to the clipboard
   })
   //    if (typeof alt != 'undefined')      // Messes up cut-and-paste of text
@@ -334,15 +354,15 @@ function AJARImage (src, alt, tt, doc) {
 
 //  Make short name for ontology
 
-function shortName (uri) {
+function shortName (this: any, uri: string) {
   let p = uri
   if ('#/'.indexOf(p[p.length - 1]) >= 0) p = p.slice(0, -1)
-  let namespaces = []
+  let namespaces: string[] = []
   for (let ns in this.prefixes) {
     namespaces[this.prefixes[ns]] = ns // reverse index
   }
   let pok
-  let canUse = function canUse (pp) {
+  let canUse = function canUse (pp: string) {
     // if (!__Serializer.prototype.validPrefix.test(pp)) return false; // bad format
     if (pp === 'ns') return false // boring
     // if (pp in this.namespaces) return false; // already used
@@ -374,10 +394,10 @@ function shortName (uri) {
 }
 
 // Short name for an ontology
-function ontologyLabel (term) {
+function ontologyLabel (term: $rdf.NamedNode) {
   if (term.uri === undefined) return '??'
   var s = term.uri
-  var namespaces = []
+  var namespaces: {[namespace: string]: string} = {}
   var i = s.lastIndexOf('#')
   var part
   if (i >= 0) {
@@ -413,7 +433,7 @@ function ontologyLabel (term) {
   }
 }
 
-function labelWithOntology (x, initialCap) {
+function labelWithOntology (x: $rdf.NamedNode, initialCap?: boolean) {
   let t = UI.store.findTypeURIs(x)
   if (t[UI.ns.rdf('Predicate').uri] ||
     t[UI.ns.rdfs('Class').uri]) {
@@ -429,13 +449,13 @@ function labelWithOntology (x, initialCap) {
 //
 // @returns string
 //
-function label (x, initialCap) { // x is an object
-  function doCap (s) {
+function label (x: $rdf.NamedNode, initialCap?: boolean) { // x is an object
+  function doCap (s: string) {
     // s = s.toString()
     if (initialCap) return s.slice(0, 1).toUpperCase() + s.slice(1)
     return s
   }
-  function cleanUp (s1) {
+  function cleanUp (s1: string) {
     var s2 = ''
     if (s1.slice(-1) === '/') s1 = s1.slice(0, -1) // chop trailing slash
     for (var i = 0; i < s1.length; i++) {
@@ -457,8 +477,8 @@ function label (x, initialCap) { // x is an object
   // The tabulator labeler is more sophisticated if it exists
   // Todo: move it to a solid-ui option.
   var lab
-  if (typeof tabulator !== 'undefined' && tabulator.lb) {
-    lab = tabulator.lb.label(x)
+  if (typeof (window as any).tabulator !== 'undefined' && (window as any).tabulator.lb) {
+    lab = (window as any).tabulator.lb.label(x)
     if (lab) {
       return doCap(lab.value)
     }
@@ -490,7 +510,7 @@ function label (x, initialCap) { // x is an object
     return '...'
   }
   if (x.termType === 'Collection') {
-    return '(' + x.elements.length + ')'
+    return '(' + (x as any).elements.length + ')'
   }
   var s = x.uri
   if (typeof s === 'undefined') return x.toString() // can't be a symbol
@@ -523,17 +543,17 @@ function label (x, initialCap) { // x is an object
   return doCap(decodeURIComponent(x.uri))
 }
 
-function escapeForXML (str) {
+function escapeForXML (str: string) {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;')
 }
 
 //  As above but escaped for XML and chopped of contains a slash
-function labelForXML (x) {
+function labelForXML (x: $rdf.NamedNode) {
   return escapeForXML(label(x))
 }
 
 // As above but for predicate, possibly inverse
-function predicateLabelForXML (p, inverse) {
+function predicateLabelForXML (p: $rdf.NamedNode, inverse?: boolean) {
   var lab
   if (inverse) { // If we know an inverse predicate, use its label
     var ip = UI.store.any(p, UI.ns.owl('inverseOf'))
@@ -550,26 +570,26 @@ function predicateLabelForXML (p, inverse) {
 }
 
 // Not a method. For use in sorts
-function RDFComparePredicateObject (self, other) {
+function RDFComparePredicateObject (self: any, other: any) {
   var x = self.predicate.compareTerm(other.predicate)
   if (x !== 0) return x
   return self.object.compareTerm(other.object)
 }
 
-function RDFComparePredicateSubject (self, other) {
+function RDFComparePredicateSubject (self: any, other: any) {
   var x = self.predicate.compareTerm(other.predicate)
   if (x !== 0) return x
   return self.subject.compareTerm(other.subject)
 }
 // ends
 
-function predParentOf (node) {
+function predParentOf (node: HTMLElement) {
   var n = node
   while (true) {
     if (n.getAttribute('predTR')) {
       return n
     } else if (n.previousSibling && n.previousSibling.nodeName === 'TR') {
-      n = n.previousSibling
+      n = n.previousSibling as HTMLElement
     } else {
       UI.log.error('Could not find predParent'); return node
     }
