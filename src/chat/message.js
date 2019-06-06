@@ -1,4 +1,5 @@
 
+import { messageToolbar, sentimentStripLinked } from './messageTools'
 const UI = {
   authn: require('../signin'),
   icons: require('../iconBase'),
@@ -20,7 +21,6 @@ const dom = UI.dom || window.document
 const messageBodyStyle = UI.style.messageBodyStyle
 
 // const { messageToolbar, sentimentStripLinked } = require('./messageTools')
-import { messageToolbar, sentimentStripLinked } from './messageTools'
 const label = UI.utils.label
 
 export function elementForImageURI (imageUri, options) {

@@ -32,9 +32,6 @@ const bookmarks = require('./bookmarks')
 // module.exports = module.exports || {}
 // module.exports.infiniteMessageArea =
 
-
-
-
 async function createIfNotExists (doc, contentType = 'text/turtle', data = '') {
   const fetcher = UI.store.fetcher
   try {
@@ -59,14 +56,6 @@ async function createIfNotExists (doc, contentType = 'text/turtle', data = '') {
   // console.log('createIfNotExists: doc exists, all good: ' + doc)
   return response
 }
-
-
-
-
-
-
-
-
 
 export function infiniteMessageArea (dom, kb, chatChannel, options) {
   kb = kb || UI.store
@@ -100,9 +89,10 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
   /** Does a file exist on the web?
    * @returns {Boolean}
   */
+  /*
   async function documentExists (doc) {
     try {
-        await kb.fetcher.load(doc)
+      await kb.fetcher.load(doc)
     } catch (err) {
       if (err.response.status === 404) {
         return false
@@ -113,7 +103,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     }
     return true
   }
-
+*/
   /*       Form for a new message
   */
   function newMessageForm (messageTable) {
@@ -149,12 +139,12 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       sts.push(new $rdf.Statement(message, DCT('created'), dateStamp, chatDocument))
       if (me) sts.push(new $rdf.Statement(message, ns.foaf('maker'), me, chatDocument))
 
-      function sendComplete  () {
+      function sendComplete () {
         var bindings = { '?msg': message,
           '?content': content,
           '?date': dateStamp,
           '?creator': me}
-        var tr = renderMessage(liveMessageTable, bindings, false, options, userContext) // not green
+        renderMessage(liveMessageTable, bindings, false, options, userContext) // not green
 
         if (!text) {
           field.value = '' // clear from out for reuse
@@ -163,7 +153,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
           field.scrollIntoView(newestFirst) // allign bottom (top)
           field.focus() // Start typing next line immediately
           field.select()
-          }
+        }
       }
       if (SERVER_MKDIRP_BUG && (kb.fetcher.requested[chatDocument.uri] === undefined || kb.fetcher.requested[chatDocument.uri] === 404)) {
         console.log('@@@ SERVER_MKDIRP_BUG: Should only happen once: create chat file: ' + chatDocument)
@@ -302,7 +292,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       '?date': kb.any(message, DCT('created')),
       '?content': kb.any(message, ns.sioc('content'))
     }
-    var tr = renderMessage(messageTable, bindings, messageTable.fresh, options, userContext) // fresh from elsewhere
+    renderMessage(messageTable, bindings, messageTable.fresh, options, userContext) // fresh from elsewhere
   }
 
 // ////////
