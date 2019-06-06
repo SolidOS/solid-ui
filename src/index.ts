@@ -33,6 +33,7 @@ https://github.com/solid/solid
 
 
 import rdf from 'rdflib'
+import * as matrix from './matrix'
 import ns from './ns'
 import pad from './pad'
 import preferences from './preferences'
@@ -53,7 +54,7 @@ const UI = {
   create: require('./create'),
   icons: require('./iconBase'),
   log: require('./log'),
-  matrix: require('./matrix'),
+  matrix: matrix,
   media: require('./media-capture'),
   messageArea: require('./messageArea'),
   infiniteMessageArea: require('./infiniteMessageArea'),

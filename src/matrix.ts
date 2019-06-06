@@ -19,30 +19,55 @@
 //   Extra rows and columns are inserted as needed to hold new data points
 //   matrix.refresh() will re-run the query and adjust the display
 
+import ns from './ns'
+import $rdf from 'rdflib'
 var UI = {
   icons: require('./iconBase'),
   log: require('./log'),
-  ns: require('./ns'),
+  ns: ns,
   pad: require('./'),
   rdf: require('rdflib'),
   store: require('./store'),
   widgets: require('./widgets')
 }
 
-const utils = require('./utils')
+import utils from './utils'
 const kb = UI.store
 
-module.exports.matrixForQuery = function (dom, query, vx, vy, vvalue, options, whenDone) {
-  var matrix = dom.createElement('table')
+type RefreshFunction = () => void
+type MatrixOptions = {
+  cellFunction: (td: HTMLTableCellElement, x: any, y: any, value: any) => void;
+  yDecreasing: boolean;
+  xDecreasing: boolean;
+  set_y: any[];
+  set_x: any[];
+};
+
+export const matrixForQuery = function (
+  dom: HTMLDocument,
+  // The rdflib typings do not yet export the Query class
+  query: any,
+  vx: string | number,
+  vy: string | number,
+  vvalue: string | number,
+  options: MatrixOptions,
+  whenDone: any
+) {
+  var matrix: HTMLTableElement & {lastHeader?: HTMLTableRowElement, refresh?: RefreshFunction} = dom.createElement('table')
   var header = dom.createElement('tr')
   var corner = header.appendChild(dom.createElement('td'))
   corner.setAttribute('class', 'MatrixCorner')
   matrix.appendChild(header) // just one for now
   matrix.lastHeader = header // Element before data
-  var columns = [] // Vector
-  var rows = [] // Associative array
+  var columns: any[] = [] // Vector
+  var rows: any[] = [] // Associative array
 
-  var setCell = function (cell, x, y, value) {
+  var setCell = function (
+    cell: HTMLTableCellElement & { old?: boolean },
+    x: any,
+    y: any,
+    value: any
+  ) {
     while (cell.firstChild) { // Empty any previous
       cell.removeChild(cell.firstChild)
     }
@@ -58,33 +83,33 @@ module.exports.matrixForQuery = function (dom, query, vx, vy, vvalue, options, w
     delete cell.old
   }
 
-  var rowFor = function (y1) {
+  var rowFor = function (y1: $rdf.NamedNode) {
     var y = y1.toNT()
-    if (rows[y]) return rows[y]
+    if (rows[y as any]) return rows[y as any]
     var tr = dom.createElement('tr')
     var header = tr.appendChild(dom.createElement('td'))
     header.setAttribute('style', 'padding: 0.3em;')
     header.textContent = utils.label(y1) // first approximation
     if (y1.termType === 'NamedNode') {
-      kb.fetcher.nowOrWhenFetched(y1.uri.split('#')[0], undefined, function (ok, body, response) {
+      kb.fetcher.nowOrWhenFetched(y1.uri.split('#')[0], undefined, function (ok: boolean, body: string, response: any) {
         if (ok) header.textContent = utils.label(y1)
       })
     }
     for (var i = 0; i < columns.length; i++) {
       setCell(tr.appendChild(dom.createElement('td')), $rdf.fromNT(columns[i]), y1, null)
     }
-    tr.dataValueNT = y
-    rows[y] = tr
-    for (var ele = matrix.lastHeader.nextSibling; ele; ele = ele.nextSibling) { // skip header
-      if (((y > ele.dataValueNT) && options && options.yDecreasing) ||
-        ((y < ele.dataValueNT) && !(options && options.yDecreasing))) {
+    (tr as any).dataValueNT = y
+    rows[y as any] = tr
+    for (var ele = matrix.lastHeader!.nextSibling; ele; ele = ele.nextSibling) { // skip header
+      if (((y > (ele as any).dataValueNT) && options && options.yDecreasing) ||
+        ((y < (ele as any).dataValueNT) && !(options && options.yDecreasing))) {
         return matrix.insertBefore(tr, ele) // return the tr
       }
     }
     return matrix.appendChild(tr) // return the tr
   }
 
-  var columnNumberFor = function (x1) {
+  var columnNumberFor = function (x1: $rdf.NamedNode) {
     var xNT = x1.toNT() // xNT is a NT string
     var col = null
     // These are data columns (not headings)
@@ -108,7 +133,7 @@ module.exports.matrixForQuery = function (dom, query, vx, vy, vvalue, options, w
 
     // col is the number of the new column, starting from 0
     for (var row = matrix.firstChild; row; row = row.nextSibling) { // For every row header or not
-      var y = row.dataValueNT
+      var y = (row as any).dataValueNT
       var td = dom.createElement('td') // Add a new cell
       td.style.textAlign = 'center'
       if (row === matrix.firstChild) {
@@ -121,7 +146,7 @@ module.exports.matrixForQuery = function (dom, query, vx, vy, vvalue, options, w
       } else {
         var t = row.firstChild
         for (var j = 0; j < col + 1; j++) { // Skip header col too
-          t = t.nextSibling
+          t = t!.nextSibling
         }
         row.insertBefore(td, t)
       }
@@ -133,7 +158,7 @@ module.exports.matrixForQuery = function (dom, query, vx, vy, vvalue, options, w
     for (var i = 1; i < matrix.children.length; i++) {
       var row = matrix.children[i]
       for (var j = 1; j < row.children.length; j++) {
-        row.children[j].old = true
+        (row.children[j] as any).old = true
       }
     }
   }
@@ -158,12 +183,12 @@ module.exports.matrixForQuery = function (dom, query, vx, vy, vvalue, options, w
       row = matrix.children[i]
       for (let j = 1; j < row.children.length; j++) {
         cell = row.children[j]
-        if (cell.old) {
-          var y = $rdf.fromNT(row.dataValueNT)
+        if ((cell as any).old) {
+          var y = $rdf.fromNT((row as any).dataValueNT)
           var x = $rdf.fromNT(columns[j - 1])
-          setCell(cell, x, y, null)
+          setCell(cell as any, x, y, null)
         } else {
-          rowsUsed[row.dataValueNT] = true
+          rowsUsed[(row as any).dataValueNT] = true
           colsUsed[j] = true
         }
       }
@@ -171,8 +196,8 @@ module.exports.matrixForQuery = function (dom, query, vx, vy, vvalue, options, w
 
     for (let i = 0; i < matrix.children.length; i++) {
       row = matrix.children[i]
-      if (i > 0 && !rowsUsed[row.dataValueNT]) {
-        delete rows[row.dataValueNT]
+      if (i > 0 && !rowsUsed[(row as any).dataValueNT]) {
+        delete rows[(row as any).dataValueNT]
         matrix.removeChild(row)
       } else {
         for (var j = row.children.length - 1; j > 0; j--) { // backwards
@@ -197,7 +222,7 @@ module.exports.matrixForQuery = function (dom, query, vx, vy, vvalue, options, w
     kb.query(query, addCellFromBindings, undefined, clearOldCells)
   }
 
-  var addCellFromBindings = function (bindings) {
+  var addCellFromBindings = function (bindings: any) {
     var x = bindings[vx]
     var y = bindings[vy]
     var value = bindings[vvalue]
@@ -219,5 +244,5 @@ module.exports.matrixForQuery = function (dom, query, vx, vy, vvalue, options, w
   }
 
   kb.query(query, addCellFromBindings, undefined, whenDone) // Populate the matrix
-  return matrix
+  return matrix as HTMLTableElement & { refresh: RefreshFunction }
 }
