@@ -38,7 +38,7 @@ function recordSharedPreferences (subject, context) {
       console.log('Creating shared preferences ' + sp)
       kb.updater.update([], ins, function (uri, ok, errorMessage) {
         if (!ok) {
-          reject(new Error('create shard prefs: ' + errorMessage))
+          reject(new Error('Error creating shared prefs: ' + errorMessage))
         } else {
           context.sharedPreferences = sp
           resolve(context)
@@ -56,7 +56,11 @@ function recordSharedPreferences (subject, context) {
 function recordPersonalDefaults (klass, context) {
   return new Promise(function (resolve, reject) {
     authn.logInLoadPreferences(context).then(context => {
-      var regs = kb.each(null, ns.solid('forClass'), klass)
+      if (!context.preferencesFile) {
+        console.log('Not doing private class preferences as no access to preferences file. ' + context.preferencesFileError)
+        return
+      }
+      var regs = kb.each(null, ns.solid('forClass'), klass, context.preferencesFile)
       var ins = []
       var prefs
       var reg
