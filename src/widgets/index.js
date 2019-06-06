@@ -202,17 +202,16 @@ UI.widgets.iconForClass = { // Potentially extendable by other apps, panes, etc
 }
 
 var tempSite = function (x) { // use only while one in rdflib fails with origins 2019
-   var str = x.uri.split('#')[0]
-   var p = str.indexOf('//')
-   if (p < 0) throw new Error('This URI does not have a web site part (origin)')
-   var q = str.indexOf('/', p+2)
-   if (q < 0) { // no third slash?
-     return str.slice(0) + '/'   // Add slash to a bare origin
-   } else {
-     return str.slice(0, q + 1)
-   }
- }
-
+  var str = x.uri.split('#')[0]
+  var p = str.indexOf('//')
+  if (p < 0) throw new Error('This URI does not have a web site part (origin)')
+  var q = str.indexOf('/', p + 2)
+  if (q < 0) { // no third slash?
+    return str.slice(0) + '/'   // Add slash to a bare origin
+  } else {
+    return str.slice(0, q + 1)
+  }
+}
 
 UI.widgets.findImageByClass = function findImageByClass (x) {
   const kb = UI.store
@@ -247,7 +246,7 @@ UI.widgets.findImageByClass = function findImageByClass (x) {
     let pref = k.split(':')[0]
     let id = k.split(':')[1]
     let klass = ns[pref](id)
-    if (klass.uri in types  || klass.uri === x.uri) { // Allow full URI in new additions
+    if (klass.uri in types || klass.uri === x.uri) { // Allow full URI in new additions
       return $rdf.uri.join(UI.widgets.iconForClass[k], UI.icons.iconBase)
     }
   }
@@ -295,7 +294,7 @@ var faviconOrDefault = function (dom, x) {
       (isOrigin(x) ? 'noun_15177.svg' : 'noun_681601.svg'))
   if (x.uri && x.uri.startsWith('https:') && (x.uri.indexOf('#') < 0)) {
     var res = dom.createElement('object') // favico with a fallback of a default image if no favicon
-    res.setAttribute('data',  tempSite(x) + 'favicon.ico')
+    res.setAttribute('data', tempSite(x) + 'favicon.ico')
     res.setAttribute('type', 'image/x-icon')
     res.appendChild(image) // fallback
     return res
@@ -428,7 +427,6 @@ UI.widgets.askName = function (dom, kb, container, predicate, klass, noun) {
       gotName()
     }, false)
     namefield.focus()
-
   }) // Promise
 }
 

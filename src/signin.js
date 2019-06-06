@@ -11,7 +11,7 @@
 // const Solid = require('solid-client')
 const SolidTls = require('solid-auth-tls')
 const $rdf = require('rdflib')
-const error = require('./widgets/error')
+// const error = require('./widgets/error')
 const widgets = require('./widgets/index')
 // const utils = require('./utils')
 const solidAuthClient = require('solid-auth-client')
@@ -447,7 +447,7 @@ async function ensureOneTypeIndex (context, isPublic) {
 
   try {
     await loadOneTypeIndex(context, isPublic)
-    console.log('ensureOneTypeIndex: Type index exists already ' + isPublic ? context.index.public[0] : context.index.private[0] )
+    console.log('ensureOneTypeIndex: Type index exists already ' + isPublic ? context.index.public[0] : context.index.private[0])
     return context
   } catch (error) {
     await makeIndexIfNecesary(context, isPublic)
