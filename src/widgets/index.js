@@ -913,7 +913,7 @@ UI.widgets.field[UI.ns.ui('PhoneField').uri] =
                             field.value = decodeURIComponent(obj.uri.replace(params.uriPrefix, '')) // should have no spaces but in case
                               .replace(/ /g, '')
                           } else if (obj) {
-                            field.value = obj.value || obj.uri
+                            field.value = obj.value || obj.uri || ''
                           }
                           field.setAttribute('style', style)
                           field.addEventListener('keyup', function (e) {
