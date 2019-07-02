@@ -842,6 +842,7 @@ function signInOrSignUpBox (dom, setUserCallback, options) {
   console.log('widgets.signInOrSignUpBox')
   box.setUserCallback = setUserCallback
   box.setAttribute('class', magicClassName)
+  box.style = 'display:flex;'
 
   // Sign in button with PopUP
   let signInPopUpButton = dom.createElement('input') // multi
@@ -1278,7 +1279,6 @@ function newAppInstance (dom, appDetails, callback) {
   b.setAttribute('type', 'button')
   div.appendChild(b)
   b.innerHTML = 'Make new ' + appDetails.noun
-  // b.setAttribute('style', 'float: right; margin: 0.5em 1em;'); // Caller should set
   b.addEventListener('click', (e) => {
     div.appendChild(selectWorkspace(dom, appDetails, gotWS))
   }, false)
