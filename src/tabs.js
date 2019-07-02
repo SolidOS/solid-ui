@@ -114,7 +114,8 @@ UI.tabs.tabWidget = function (options) {
   box.bodyContainer = bodyContainer
 
   var getItems = function () {
-    if (options.ordered) {
+    if (options.items) return options.items
+    if (options.ordered !== false) { // default to true
       var list = kb.the(subject, options.predicate)
       return list.elements
     } else {
