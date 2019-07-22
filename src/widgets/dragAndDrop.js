@@ -6,7 +6,32 @@ const mime = require('mime-types')
 module.exports = {
   makeDropTarget: makeDropTarget,
   makeDraggable: makeDraggable,
-  uploadFiles: uploadFiles
+  uploadFiles: uploadFiles,
+  fileUploadButtonDiv: fileUploadButtonDiv
+}
+
+const UI = {widgets: require('./index')}
+
+/** File upload button
+**
+ * @param dom The DOM aka document
+ * @param  display:none - Same handler function as drop, takes array of file objects
+ * @returns {Element} - a div with a button and a inout in it
+ * The input is hidden, as it is uglky - the user clicks on the nice icons and fires the input.
+ */
+// See https://developer.mozilla.org/en-US/docs/Web/API/File/Using_files_from_web_applications
+function fileUploadButtonDiv (dom, droppedFileHandler) {
+  const div = dom.createElement('div')
+  const input = div.appendChild(dom.createElement('input'))
+  input.setAttribute('type', 'file')
+  input.setAttribute('multiple', 'true')
+  input.addListener('change', event => droppedFileHandler(event.files), false)
+  input.style = 'display:none'
+  const button = div.appendChild(UI.widgets.button(dom, UI.icons.iconBase + 'noun_Upload_76574_000000.svg', 'Upload files', event => {
+    input.click()
+  }))
+  UI.widgets.makeDropTarget(button, null, droppedFileHandler) // Can also just drop on button
+  return div
 }
 
 function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {

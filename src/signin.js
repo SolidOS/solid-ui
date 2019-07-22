@@ -52,8 +52,6 @@ module.exports = {
   solidAuthClient
 }
 
-const signInButtonStyle = 'padding: 1em; border-radius:0.5em; margin: 2em; font-size: 100%;'
-
 // const userCheckSite = 'https://databox.me/'
 
 // Look for and load the User who has control over it
@@ -830,12 +828,21 @@ function offlineTestID () {
  *
  * @returns {Element}
  */
-function signInOrSignUpBox (dom, setUserCallback) {
+
+function getDefaultSignInButtonStyle () {
+  return 'padding: 1em; border-radius:0.5em; margin: 2em; font-size: 100%;'
+}
+
+function signInOrSignUpBox (dom, setUserCallback, options) {
+  options = options || {}
+  const signInButtonStyle = options.buttonStyle || getDefaultSignInButtonStyle()
+
   var box = dom.createElement('div')
   const magicClassName = 'SolidSignInOrSignUpBox'
   console.log('widgets.signInOrSignUpBox')
   box.setUserCallback = setUserCallback
   box.setAttribute('class', magicClassName)
+  box.style = 'display:flex;'
 
   // Sign in button with PopUP
   let signInPopUpButton = dom.createElement('input') // multi
@@ -955,7 +962,7 @@ function checkUser (setUserCallback) {
  *
  * @returns {Element}
  */
-function loginStatusBox (dom, listener) {
+function loginStatusBox (dom, listener, options) { // 20190630
   var me = defaultTestUser()
   var box = dom.createElement('div')
 
@@ -989,7 +996,8 @@ function loginStatusBox (dom, listener) {
     })
   }
 
-  var logoutButton = function (me) {
+  var logoutButton = function (me, options) {
+    const signInButtonStyle = options.buttonStyle || getDefaultSignInButtonStyle()
     var logoutLabel = 'Web ID logout'
     if (me) {
       var nick = UI.store.any(me, UI.ns.foaf('nick')) ||
@@ -1017,9 +1025,9 @@ function loginStatusBox (dom, listener) {
       if ((me && box.me !== me.uri) || (!me && box.me)) {
         widgets.clearElement(box)
         if (me) {
-          box.appendChild(logoutButton(me))
+          box.appendChild(logoutButton(me, options))
         } else {
-          box.appendChild(signInOrSignUpBox(dom, setIt))
+          box.appendChild(signInOrSignUpBox(dom, setIt, options))
         }
       }
       box.me = me ? me.uri : null
@@ -1271,7 +1279,6 @@ function newAppInstance (dom, appDetails, callback) {
   b.setAttribute('type', 'button')
   div.appendChild(b)
   b.innerHTML = 'Make new ' + appDetails.noun
-  // b.setAttribute('style', 'float: right; margin: 0.5em 1em;'); // Caller should set
   b.addEventListener('click', (e) => {
     div.appendChild(selectWorkspace(dom, appDetails, gotWS))
   }, false)

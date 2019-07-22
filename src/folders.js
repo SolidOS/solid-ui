@@ -89,7 +89,7 @@ module.exports.deleteFolder = function (folder, store, dom) {
   buttonsTR.appendChild(dom.createElement('td')) // buttonsTD2
   const buttonsTD3 = buttonsTR.appendChild(dom.createElement('td'))
 
-  let cancel = buttonsTD1.appendChild(UI.widgets.cancelButton)
+  let cancel = buttonsTD1.appendChild(UI.widgets.cancelButton(dom))
   cancel.addEventListener('click', function (e) {
     div.parentNode.removeChild(div)
   }, false)
