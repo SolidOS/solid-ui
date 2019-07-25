@@ -25,6 +25,7 @@ UI.acl.adoptACLDefault = function (doc, aclDoc, defaultResource, defaultACLdoc) 
   var ACL = UI.ns.acl
   var isContainer = doc.uri.slice(-1) === '/' // Give default for all directories
   var defaults = kb.each(undefined, ACL('defaultForNew'), defaultResource, defaultACLdoc)
+    .concat(kb.each(undefined, ACL('default'), defaultResource, defaultACLdoc))
   var proposed = []
   defaults.map(function (da) {
     proposed = proposed.concat(kb.statementsMatching(da, ACL('agent'), undefined, defaultACLdoc))
@@ -35,7 +36,7 @@ UI.acl.adoptACLDefault = function (doc, aclDoc, defaultResource, defaultACLdoc) 
       .concat(kb.statementsMatching(da, ACL('mode'), undefined, defaultACLdoc))
     proposed.push($rdf.st(da, ACL('accessTo'), doc, defaultACLdoc)) // Suppose
     if (isContainer) { // By default, make this apply to folder contents too
-      proposed.push($rdf.st(da, ACL('defaultForNew'), doc, defaultACLdoc))
+      proposed.push($rdf.st(da, ACL('default'), doc, defaultACLdoc))
     }
   })
   var kb2 = $rdf.graph() // Potential - derived is kept apart
@@ -58,10 +59,12 @@ UI.acl.adoptACLDefault = function (doc, aclDoc, defaultResource, defaultACLdoc) 
 UI.acl.readACL = function (x, aclDoc, kb, getDefaults) {
   kb = kb || UI.store
   var ns = UI.ns
-  var predicate = getDefaults ? ns.acl('defaultForNew') : ns.acl('accessTo')
+  var predicates = getDefaults
+    ? [ns.acl('default'), ns.acl('defaultForNew')]
+    : [ns.acl('accessTo')]
   var ACL = UI.ns.acl
   var ac = {'agent': [], 'agentClass': [], 'agentGroup': [], 'origin': [], 'originClass': []}
-  var auths = kb.each(undefined, predicate, x)
+  var auths = predicates.reduce((triples, predicate) => triples.concat(kb.each(undefined, predicate, x)), [])
   for (var pred in {'agent': true, 'agentClass': true, 'agentGroup': true, 'origin': true, 'originClass': true}) {
     auths.map(function (a) {
       kb.each(a, ACL('mode')).map(function (mode) {
@@ -178,7 +181,7 @@ UI.acl.makeACLGraphbyCombo = function (kb, x, byCombo, aclDoc, main, defa) {
       kb.add(a, ACL('accessTo'), x, aclDoc)
     }
     if (defa) {
-      kb.add(a, ACL('defaultForNew'), x, aclDoc)
+      kb.add(a, ACL('default'), x, aclDoc)
     }
     for (var i = 0; i < modeURIs.length; i++) {
       kb.add(a, ACL('mode'), kb.sym(modeURIs[i]), aclDoc)
@@ -352,6 +355,7 @@ UI.acl.getACLorDefault = function (doc, callbackFunction) {
         } else { // 200
           // statusBlock.textContent += (" ACCESS set at " + uri + ". End search.")
           var defaults = kb.each(undefined, ACL('defaultForNew'), kb.sym(uri), defaultACLDoc)
+            .concat(kb.each(undefined, ACL('default'), kb.sym(uri), defaultACLDoc))
           if (!defaults.length) {
             tryParent(uri) // Keep searching
           } else {

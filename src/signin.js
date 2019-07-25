@@ -776,7 +776,7 @@ function genACLText (docURI, me, aclURI, options = {}) {
   g.add(a, UI.ns.rdf('type'), auth('Authorization'), acl)
   g.add(a, auth('accessTo'), doc, acl)
   if (options.defaultForNew) {
-    g.add(a, auth('defaultForNew'), doc, acl)
+    g.add(a, auth('default'), doc, acl)
   }
   g.add(a, auth('agent'), me, acl)
   g.add(a, auth('mode'), auth('Read'), acl)
