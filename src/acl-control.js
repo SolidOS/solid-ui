@@ -560,21 +560,22 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
             var editPlease = bottomRightCell.appendChild(dom.createElement('button'))
             editPlease.textContent = 'Set specific sharing\nfor this ' + noun
             editPlease.style.cssText = bigButtonStyle
-            editPlease.addEventListener('click', function (event) {
-              updater.put(targetACLDoc, kb2.statements,
-                'text/turtle', function (uri, ok, message) {
-                  if (!ok) {
-                    statusBlock.textContent += ' (Error writing back access control file: ' + message + ')'
-                  } else {
-                    kb.add(kb2.statements)
-                    kb.fetcher.requested[targetACLDoc.uri] = 'done' // cheat
-                    // kb.fetcher.load(targetACLDoc, {force: true})
-                    statusBlock.textContent = ' (Now editing specific access for this ' + noun + ')'
-                    // box.style.cssText = 'color: black;'
-                    bottomRightCell.removeChild(editPlease)
-                    renderBox()
-                  }
-                })
+            editPlease.addEventListener('click', async function (event) {
+              kb2.forEach(st => {
+                kb.add(st.subject, st.predicate, st.object, targetACLDoc)
+              })
+              try {
+                fetcher.putBack(targetACLDoc)
+              } catch (e) {
+                let msg = ' Error writing back access control file! ' + e
+                console.error(msg)
+                statusBlock.textContent += msg
+                return
+              }
+              kb.fetcher.requested[targetACLDoc.uri] = 'done' // cheat - say cache is now in sync
+              statusBlock.textContent = ' (Now editing specific access for this ' + noun + ')'
+              bottomRightCell.removeChild(editPlease)
+              renderBox()
             })
           } // defaults.length
         } else { // Not using defaults
