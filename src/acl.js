@@ -327,7 +327,6 @@ UI.acl.setACL = function (docURI, aclText, callbackFunction) {
 UI.acl.getACLorDefault = function (doc, callbackFunction) {
   UI.acl.getACL(doc, function (ok, status, aclDoc, message) {
     var kb = UI.store
-    var ACL = UI.ns.acl
     if (!ok) return callbackFunction(false, false, status, message)
 
     // Recursively search for the ACL file which gives default access
@@ -352,17 +351,11 @@ UI.acl.getACLorDefault = function (doc, callbackFunction) {
           }
         } else if (status !== 200) {
           return callbackFunction(false, true, status, "Error status '" + status + "' searching for default for " + doc2)
-        } else { // 200
-          // statusBlock.textContent += (" ACCESS set at " + uri + ". End search.")
-          var defaults = kb.each(undefined, ACL('default'), kb.sym(uri), defaultACLDoc)
-              .concat(kb.each(undefined, ACL('defaultForNew'), kb.sym(uri), defaultACLDoc))
-          if (!defaults.length) {
-            tryParent(uri) // Keep searching
-          } else {
-            var defaultHolder = kb.sym(uri)
-            callbackFunction(true, false, doc, aclDoc, defaultHolder, defaultACLDoc)
-          }
         }
+        // 200
+        // statusBlock.textContent += (" ACCESS set at " + uri + ". End search.")
+        var defaultHolder = kb.sym(uri)
+        callbackFunction(true, false, doc, aclDoc, defaultHolder, defaultACLDoc)
       })
     } // tryParent
 
