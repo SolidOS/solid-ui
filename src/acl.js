@@ -356,8 +356,10 @@ UI.acl.getACLorDefault = function (doc, callbackFunction) {
           // statusBlock.textContent += (" ACCESS set at " + uri + ". End search.")
           var defaults = kb.each(undefined, ACL('default'), kb.sym(uri), defaultACLDoc)
               .concat(kb.each(undefined, ACL('defaultForNew'), kb.sym(uri), defaultACLDoc))
-          if (!defaults.length) {
+          if (!defaults.length && left < right) {
             tryParent(uri) // Keep searching
+          } else if (left >= right) {
+            callbackFunction(false, true, 404, 'Found no ACL resource')
           } else {
             var defaultHolder = kb.sym(uri)
             callbackFunction(true, false, doc, aclDoc, defaultHolder, defaultACLDoc)
