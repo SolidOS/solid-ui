@@ -562,11 +562,11 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
             editPlease.textContent = 'Set specific sharing\nfor this ' + noun
             editPlease.style.cssText = bigButtonStyle
             editPlease.addEventListener('click', async function (event) {
-              kb2.forEach(st => {
+              kb2.statements.forEach(st => {
                 kb.add(st.subject, st.predicate, st.object, targetACLDoc)
               })
               try {
-                fetcher.putBack(targetACLDoc)
+                kb.fetcher.putBack(targetACLDoc)
               } catch (e) {
                 let msg = ' Error writing back access control file! ' + e
                 console.error(msg)
