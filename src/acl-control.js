@@ -544,7 +544,8 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
       } else {
         box.isContainer = targetDoc.uri.slice(-1) === '/' // Give default for all directories
         if (defa) {
-          var defaults = kb.each(undefined, ACL('defaultForNew'), defaultHolder, defaultACLDoc)
+          var defaults = kb.each(undefined, ACL('default'), defaultHolder, defaultACLDoc)
+            .concat(kb.each(undefined, ACL('defaultForNew'), defaultHolder, defaultACLDoc))
           if (!defaults.length) {
             statusBlock.textContent += ' (No defaults given.)'
           } else {
