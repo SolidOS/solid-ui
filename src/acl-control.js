@@ -597,7 +597,6 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
                   statusBlock.textContent = ' The sharing for this ' + noun + ' is now the default.'
                   bottomRightCell.removeChild(useDefault)
                   box.style.cssText = 'color: #777;'
-                  bottomLeftCell.innerHTML = ''
                   renderBox()
                 })
                 .catch(function (e) {
