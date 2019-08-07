@@ -544,7 +544,8 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
       } else {
         box.isContainer = targetDoc.uri.slice(-1) === '/' // Give default for all directories
         if (defa) {
-          var defaults = kb.each(undefined, ACL('defaultForNew'), defaultHolder, defaultACLDoc)
+          var defaults = kb.each(undefined, ACL('default'), defaultHolder, defaultACLDoc)
+            .concat(kb.each(undefined, ACL('defaultForNew'), defaultHolder, defaultACLDoc))
           if (!defaults.length) {
             statusBlock.textContent += ' (No defaults given.)'
           } else {
@@ -561,11 +562,11 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
             editPlease.textContent = 'Set specific sharing\nfor this ' + noun
             editPlease.style.cssText = bigButtonStyle
             editPlease.addEventListener('click', async function (event) {
-              kb2.forEach(st => {
+              kb2.statements.forEach(st => {
                 kb.add(st.subject, st.predicate, st.object, targetACLDoc)
               })
               try {
-                fetcher.putBack(targetACLDoc)
+                kb.fetcher.putBack(targetACLDoc)
               } catch (e) {
                 let msg = ' Error writing back access control file! ' + e
                 console.error(msg)

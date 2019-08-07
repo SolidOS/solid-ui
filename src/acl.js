@@ -337,6 +337,9 @@ UI.acl.getACLorDefault = function (doc, callbackFunction) {
       }
       var right = uri.lastIndexOf('/')
       var left = uri.indexOf('/', uri.indexOf('//') + 2)
+      if (left >= right) {
+        return callbackFunction(false, true, 404, 'Found no ACL resource')
+      }
       uri = uri.slice(0, right + 1)
       var doc2 = $rdf.sym(uri)
       UI.acl.getACL(doc2, function (ok, status, defaultACLDoc) {
@@ -345,24 +348,19 @@ UI.acl.getACLorDefault = function (doc, callbackFunction) {
         } else if (status === 403) {
           return callbackFunction(false, true, status, '( default ACL file FORBIDDEN. Stop.' + uri + ')')
         } else if (status === 404) {
-          if (left >= right) {
-            return callbackFunction(false, true, 499, 'Nothing to hold a default')
-          } else {
-            tryParent(uri)
-          }
+          return tryParent(uri)
         } else if (status !== 200) {
           return callbackFunction(false, true, status, "Error status '" + status + "' searching for default for " + doc2)
-        } else { // 200
-          // statusBlock.textContent += (" ACCESS set at " + uri + ". End search.")
-          var defaults = kb.each(undefined, ACL('default'), kb.sym(uri), defaultACLDoc)
-              .concat(kb.each(undefined, ACL('defaultForNew'), kb.sym(uri), defaultACLDoc))
-          if (!defaults.length) {
-            tryParent(uri) // Keep searching
-          } else {
-            var defaultHolder = kb.sym(uri)
-            callbackFunction(true, false, doc, aclDoc, defaultHolder, defaultACLDoc)
-          }
         }
+        // 200
+        // statusBlock.textContent += (" ACCESS set at " + uri + ". End search.")
+        var defaults = kb.each(undefined, ACL('default'), kb.sym(uri), defaultACLDoc)
+          .concat(kb.each(undefined, ACL('defaultForNew'), kb.sym(uri), defaultACLDoc))
+        if (!defaults.length) {
+          return tryParent(uri) // Keep searching
+        }
+        var defaultHolder = kb.sym(uri)
+        return callbackFunction(true, false, doc, aclDoc, defaultHolder, defaultACLDoc)
       })
     } // tryParent
 
