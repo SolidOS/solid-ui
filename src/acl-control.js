@@ -567,16 +567,18 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
               })
               try {
                 kb.fetcher.putBack(targetACLDoc)
+                  .then(function () {
+                    statusBlock.textContent = ' (Now editing specific access for this ' + noun + ')'
+                    bottomRightCell.removeChild(editPlease)
+                    renderBox()
+                  })
               } catch (e) {
                 let msg = ' Error writing back access control file! ' + e
                 console.error(msg)
                 statusBlock.textContent += msg
                 return
               }
-              kb.fetcher.requested[targetACLDoc.uri] = 'done' // cheat - say cache is now in sync
-              statusBlock.textContent = ' (Now editing specific access for this ' + noun + ')'
-              bottomRightCell.removeChild(editPlease)
-              renderBox()
+              // kb.fetcher.requested[targetACLDoc.uri] = 'done' // cheat - say cache is now in sync
             })
           } // defaults.length
         } else { // Not using defaults
@@ -593,8 +595,9 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
               kb.fetcher.delete(targetACLDoc.uri)
                 .then(function () {
                   statusBlock.textContent = ' The sharing for this ' + noun + ' is now the default.'
-                  bottomRow.removeChild(useDefault)
+                  bottomRightCell.removeChild(useDefault)
                   box.style.cssText = 'color: #777;'
+                  bottomLeftCell.innerHTML = ''
                   renderBox()
                 })
                 .catch(function (e) {
