@@ -544,7 +544,8 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
       } else {
         box.isContainer = targetDoc.uri.slice(-1) === '/' // Give default for all directories
         if (defa) {
-          var defaults = kb.each(undefined, ACL('defaultForNew'), defaultHolder, defaultACLDoc)
+          var defaults = kb.each(undefined, ACL('default'), defaultHolder, defaultACLDoc)
+            .concat(kb.each(undefined, ACL('defaultForNew'), defaultHolder, defaultACLDoc))
           if (!defaults.length) {
             statusBlock.textContent += ' (No defaults given.)'
           } else {
@@ -561,21 +562,23 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
             editPlease.textContent = 'Set specific sharing\nfor this ' + noun
             editPlease.style.cssText = bigButtonStyle
             editPlease.addEventListener('click', async function (event) {
-              kb2.forEach(st => {
+              kb2.statements.forEach(st => {
                 kb.add(st.subject, st.predicate, st.object, targetACLDoc)
               })
               try {
-                fetcher.putBack(targetACLDoc)
+                kb.fetcher.putBack(targetACLDoc)
+                  .then(function () {
+                    statusBlock.textContent = ' (Now editing specific access for this ' + noun + ')'
+                    bottomRightCell.removeChild(editPlease)
+                    renderBox()
+                  })
               } catch (e) {
                 let msg = ' Error writing back access control file! ' + e
                 console.error(msg)
                 statusBlock.textContent += msg
                 return
               }
-              kb.fetcher.requested[targetACLDoc.uri] = 'done' // cheat - say cache is now in sync
-              statusBlock.textContent = ' (Now editing specific access for this ' + noun + ')'
-              bottomRightCell.removeChild(editPlease)
-              renderBox()
+              // kb.fetcher.requested[targetACLDoc.uri] = 'done' // cheat - say cache is now in sync
             })
           } // defaults.length
         } else { // Not using defaults
@@ -592,8 +595,9 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
               kb.fetcher.delete(targetACLDoc.uri)
                 .then(function () {
                   statusBlock.textContent = ' The sharing for this ' + noun + ' is now the default.'
-                  bottomRow.removeChild(useDefault)
+                  bottomRightCell.removeChild(useDefault)
                   box.style.cssText = 'color: #777;'
+                  bottomLeftCell.innerHTML = ''
                   renderBox()
                 })
                 .catch(function (e) {

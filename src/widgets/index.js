@@ -904,11 +904,8 @@ UI.widgets.field[UI.ns.ui('PhoneField').uri] =
 
                           store = store || UI.widgets.fieldStore(subject, property, store)
 
-                          var obj = kb.any(subject, property, undefined, store)
-                          if (!obj) {
-                            obj = kb.any(form, ui('default'))
-                            if (obj) kb.add(subject, property, obj, store)
-                          }
+                          var obj = kb.any(subject, property, undefined, store) ||
+                            kb.any(form, ui('default'))
                           if (obj && obj.uri && params.uriPrefix) { // eg tel: or mailto:
                             field.value = decodeURIComponent(obj.uri.replace(params.uriPrefix, '')) // should have no spaces but in case
                               .replace(/ /g, '')

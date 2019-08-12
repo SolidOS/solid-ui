@@ -9,6 +9,7 @@ module.exports = {
   buttonStyle: 'background-color: #fff; padding: 0.5em;  border: .01em solid white; font-size: 100%;', // 'background-color: #eef;
 // The width of the text field must bot be 100% or it switches to overlapping
   messageBodyStyle: 'white-space: pre-wrap; width: 99%; font-size:100%; border: 0.07em solid #eee; padding: .3em 0.5em; margin: 0.1em;',
-  pendingeditModifier: 'color: #bbb;'
+  pendingeditModifier: 'color: #bbb;',
+  highlightColor: '#7C4DFF' // Solid lavendar https://design.inrupt.com/atomic-core/?cat=Core
 
 }

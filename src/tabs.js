@@ -292,7 +292,21 @@ UI.tabs.tabWidget = function (options) {
   box.refresh = sync
   sync()
 
-  if (!options.startEmpty && tabContainer.children.length) {
+// From select-tabs branch by hand
+  if (!options.startEmpty && tabContainer.children.length && options.selectedTab) {
+    var tab
+    var found = false
+    for (var i = 0; i < tabContainer.children.length; i++) {
+      tab = tabContainer.children[i]
+      if (tab.firstChild && tab.firstChild.dataset.name === options.selectedTab) {
+        tab.firstChild.click()
+        found = true
+      }
+    }
+    if (!found) {
+      tabContainer.children[0].firstChild.click() // Open first tab
+    }
+  } else if (!options.startEmpty && tabContainer.children.length) {
     tabContainer.children[0].firstChild.click() // Open first tab
   }
   return box
