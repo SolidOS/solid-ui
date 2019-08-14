@@ -9,9 +9,12 @@ module.exports = {
   uploadFiles: uploadFiles,
   fileUploadButtonDiv: fileUploadButtonDiv
 }
-
-const UI = {widgets: require('./index')}
-
+const UI = require('../index.js') // this package
+/*
+const UI = {widgets: require('./index'),
+ icons: require('../iconBase')
+}
+*/
 /** File upload button
 **
  * @param dom The DOM aka document
@@ -30,7 +33,7 @@ function fileUploadButtonDiv (dom, droppedFileHandler) {
   const button = div.appendChild(UI.widgets.button(dom, UI.icons.iconBase + 'noun_Upload_76574_000000.svg', 'Upload files', event => {
     input.click()
   }))
-  UI.widgets.makeDropTarget(button, null, droppedFileHandler) // Can also just drop on button
+  makeDropTarget(button, null, droppedFileHandler) // Can also just drop on button
   return div
 }
 
