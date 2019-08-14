@@ -25,7 +25,7 @@ function fileUploadButtonDiv (dom, droppedFileHandler) {
   const input = div.appendChild(dom.createElement('input'))
   input.setAttribute('type', 'file')
   input.setAttribute('multiple', 'true')
-  input.addListener('change', event => droppedFileHandler(event.files), false)
+  input.addEventListener('change', event => droppedFileHandler(event.files), false)
   input.style = 'display:none'
   const button = div.appendChild(UI.widgets.button(dom, UI.icons.iconBase + 'noun_Upload_76574_000000.svg', 'Upload files', event => {
     input.click()
