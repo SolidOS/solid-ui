@@ -144,42 +144,43 @@ function newThingUI (context, thePanes) {
   )
   } // makeNewAppInstance
 
-  var iconArray = []
-  for (var pn in thePanes) {
-    var pane = thePanes[pn]
-    if (pane.mintNew) {
-      var icon = context.div.appendChild(dom.createElement('img'))
-      icon.setAttribute('src', pane.icon)
-      var noun = pane.mintClass ? UI.utils.label(pane.mintClass) : (pane.name + ' @@')
-      icon.setAttribute('title', 'Make new ' + noun)
-      icon.setAttribute('style', iconStyle + 'display: none;')
-      iconArray.push(icon)
-      var foo = function (pane, icon, noun) {
-        var iconEle = icon
-        var thisPane = pane
-        var thisNoun = noun
-        if (!icon.disabled) {
-          icon.addEventListener('click', function (e) {
-            selectTool(iconEle)
-            var options = {
-              event: e,
-              folder: context.folder,
-              iconEle: iconEle,
-              pane: thisPane,
-              noun: thisNoun,
-              noIndexHTML: true, // do NOT @@ for now write a HTML file
-              div: context.div,
-              me: context.me,
-              dom: context.dom,
-              refreshTarget: context.refreshTarget
-            }
-            makeNewAppInstance(options)
-          })
-        }
-      } // foo
-      foo(pane, icon, noun)
+  const iconArray = []
+  const mintingPanes = Object.values(thePanes).filter(pane => pane.mintNew)
+  const mintingClassMap = mintingPanes.reduce((classMap, pane) => {
+    if (pane.mintClass) {
+      classMap[pane.mintClass] = (classMap[pane.mintClass] || 0) + 1
     }
-  }
+    return classMap
+  }, {})
+  mintingPanes.forEach(pane => {
+    const icon = context.div.appendChild(dom.createElement('img'))
+    icon.setAttribute('src', pane.icon)
+    const noun = pane.mintClass
+      ? (mintingClassMap[pane.mintClass] > 1
+        ? `${UI.utils.label(pane.mintClass)} (using ${pane.name} pane)`
+        : UI.utils.label(pane.mintClass))
+      : (pane.name + ' @@')
+    icon.setAttribute('title', 'Make new ' + noun)
+    icon.setAttribute('style', iconStyle + 'display: none;')
+    iconArray.push(icon)
+    if (!icon.disabled) {
+      icon.addEventListener('click', function (e) {
+        selectTool(icon)
+        makeNewAppInstance({
+          event: e,
+          folder: context.folder,
+          iconEle: icon,
+          pane,
+          noun,
+          noIndexHTML: true, // do NOT @@ for now write a HTML file
+          div: context.div,
+          me: context.me,
+          dom: context.dom,
+          refreshTarget: context.refreshTarget
+        })
+      })
+    }
+  })
 
   var styleTheIcons = function (style) {
     for (var i = 0; i < iconArray.length; i++) {
