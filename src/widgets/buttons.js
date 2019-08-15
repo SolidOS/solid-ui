@@ -18,7 +18,7 @@ var UI = {
 const utils = require('../utils')
 
 const error = require('./error')
-// const widgets = require('./forms')
+const dragAndDrop = require('./dragAndDrop')
 
 const cancelIconURI = UI.icons.iconBase + 'noun_1180156.svg' // black X
 const checkIconURI = UI.icons.iconBase + 'noun_1180158.svg' // green checkmark; Continue
@@ -541,7 +541,7 @@ buttons.attachmentList = function (dom, subject, div, options) {
     paperclip.setAttribute('style', 'width; 2em; height: 2em; margin: 0.5em;')
     paperclip.setAttribute('draggable', 'false')
 
-    buttons.makeDropTarget(attachmentLeft, droppedURIHandler)
+    dragAndDrop.makeDropTarget(attachmentLeft, droppedURIHandler)
   }
   return attachmentOuter
 }
@@ -587,15 +587,6 @@ buttons.defaultAnnotationStore = function (subject) {
     s = s.slice(0, slash)
   }
   return UI.store.sym('http://tabulator.org/wiki/annnotation/' + s)
-}
-
-buttons.fieldStore = function (subject, predicate, def) {
-  var sts = UI.store.statementsMatching(subject, predicate)
-  if (sts.length === 0) return def // can used default as no data yet
-  if (sts.length > 0 && sts[0].why.uri && UI.store.updater.editable(sts[0].why.uri, UI.store)) {
-    return UI.store.sym(sts[0].why.uri)
-  }
-  return null // Can't edit
 }
 
 buttons.allClassURIs = function () {
@@ -644,17 +635,6 @@ buttons.propertyTriage = function () {
   possibleProperties.dp = dp
   UI.log.info('propertyTriage: ' + no + ' non-lit, ' + nd + ' literal. ' + nu + ' unknown.')
   return possibleProperties
-}
-
-buttons.fieldLabel = function (dom, property, form) {
-  var lab = UI.store.any(form, UI.ns.ui('label'))
-  if (!lab) lab = utils.label(property, true) // Init capital
-  if (property === undefined) { return dom.createTextNode('@@Internal error: undefined property') }
-  var anchor = dom.createElement('a')
-  if (property.uri) anchor.setAttribute('href', property.uri)
-  anchor.setAttribute('style', 'color: #3B5998; text-decoration: none;') // Not too blue and no underline
-  anchor.textContent = lab
-  return anchor
 }
 
 /*                      General purpose widgets
@@ -891,6 +871,38 @@ buttons.isImage = function (file, kind) {
   }
   if (dcCLasses[what] in typeURIs) return true
   return false
+}
+
+/** File upload button
+**
+ * @param dom The DOM aka document
+ * @param  display:none - Same handler function as drop, takes array of file objects
+ * @returns {Element} - a div with a button and a inout in it
+ * The input is hidden, as it is uglky - the user clicks on the nice icons and fires the input.
+ */
+// See https://developer.mozilla.org/en-US/docs/Web/API/File/Using_files_from_web_applications
+buttons.fileUploadButtonDiv = function fileUploadButtonDiv (dom, droppedFileHandler) {
+  const div = dom.createElement('div')
+  const input = div.appendChild(dom.createElement('input'))
+  input.setAttribute('type', 'file')
+  input.setAttribute('multiple', 'true')
+  input.addEventListener('change', event => {
+    console.log('File drop event: ', event)
+    if (event.files) {
+      droppedFileHandler(event.files)
+    } else if (event.target && event.target.files) {
+      droppedFileHandler(event.target.files)
+    } else {
+      alert('Sorry no files .. internal error?')
+    }
+  }, false)
+
+  input.style = 'display:none'
+  const button = div.appendChild(buttons.button(dom, UI.icons.iconBase + 'noun_Upload_76574_000000.svg', 'Upload files', event => {
+    input.click()
+  }))
+  dragAndDrop.makeDropTarget(button, null, droppedFileHandler) // Can also just drop on button
+  return div
 }
 
 module.exports = buttons

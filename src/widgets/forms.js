@@ -746,15 +746,14 @@ forms.formsFor = function (subject) {
   var t1
   for (t1 in t) { UI.log.debug('   type: ' + t1) }
   var bottom = kb.bottomTypeURIs(t) // most specific
-  var forms = []
+  var candidates = []
   for (var b in bottom) {
     // Find the most specific
-    UI.log.debug('formsFor: trying bottom type =' + b)
-    forms = forms.concat(forms.findClosest(kb, b, ns.ui('creationForm')))
-    forms = forms.concat(forms.findClosest(kb, b, ns.ui('annotationForm')))
+    UI.log.debug('candidatesFor: trying bottom type =' + b)
+    candidates = candidates.concat(forms.findClosest(kb, b, ns.ui('creationForm')))
+    candidates = candidates.concat(forms.findClosest(kb, b, ns.ui('annotationForm')))
   }
-  UI.log.debug('formsFor: subject=' + subject + ', forms=')
-  return forms
+  return candidates
 }
 
 forms.sortBySequence = function (list) {
@@ -1251,4 +1250,24 @@ function buildCheckboxForm (dom, kb, lab, del, ins, form, store, tristate) { // 
   return box
 }
 
-module.export = forms
+forms.fieldLabel = function (dom, property, form) {
+  var lab = UI.store.any(form, UI.ns.ui('label'))
+  if (!lab) lab = utils.label(property, true) // Init capital
+  if (property === undefined) { return dom.createTextNode('@@Internal error: undefined property') }
+  var anchor = dom.createElement('a')
+  if (property.uri) anchor.setAttribute('href', property.uri)
+  anchor.setAttribute('style', 'color: #3B5998; text-decoration: none;') // Not too blue and no underline
+  anchor.textContent = lab
+  return anchor
+}
+
+forms.fieldStore = function (subject, predicate, def) {
+  var sts = UI.store.statementsMatching(subject, predicate)
+  if (sts.length === 0) return def // can used default as no data yet
+  if (sts.length > 0 && sts[0].why.uri && UI.store.updater.editable(sts[0].why.uri, UI.store)) {
+    return UI.store.sym(sts[0].why.uri)
+  }
+  return null // Can't edit
+}
+
+module.exports = forms
