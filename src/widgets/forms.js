@@ -1202,20 +1202,22 @@ function buildCheckboxForm (dom, kb, lab, del, ins, form, store, tristate) { // 
   }
   function refresh () {
     var state = holdsAll(ins)
+    var displayState = state
     if (del.length) {
       var negation = holdsAll(del)
       if (state && negation) {
-        box.appendChild(error.errorMessageBlock(dom,
+        box.appendChild(UI.widgets.errorMessageBlock(dom,
           'Inconsistent data in store!\n' + ins + ' and\n' + del))
         return box
       }
       if (!state && !negation) {
+        state = null
         let defa = kb.any(form, UI.ns.ui('default'))
-        state = defa ? defa.value === '1' : tristate ? null : false
+        displayState = defa ? defa.value === '1' : tristate ? null : false
       }
     }
     input.state = state
-    input.textContent = {true: checkMarkCharacter, false: cancelCharacter, null: dashCharacter}[input.state]
+    input.textContent = {true: checkMarkCharacter, false: cancelCharacter, null: dashCharacter}[displayState]
   }
 
   refresh()
