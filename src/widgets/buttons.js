@@ -114,14 +114,6 @@ buttons.shortTime = function () {
   return buttons.formatDateTime(new Date(), '{Hours}:{Minutes}:{Seconds}.{Milliseconds}')
 }
 
-/** Mint local ID using timestamp
- * @param {NamedNode} doc - the document in which the ID is to be generated
- */
-buttons.newThing = function (doc) {
-  var now = new Date()
-  return $rdf.sym(doc.uri + '#' + 'id' + ('' + now.getTime()))
-}
-
 // ///////////////////// Handy UX widgets
 
 // Sets the best name we have and looks up a better one

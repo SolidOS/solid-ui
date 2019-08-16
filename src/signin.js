@@ -998,6 +998,7 @@ function loginStatusBox (dom, listener, options) { // 20190630
   }
 
   var logoutButton = function (me, options) {
+    options = options || {}
     const signInButtonStyle = options.buttonStyle || getDefaultSignInButtonStyle()
     var logoutLabel = 'Web ID logout'
     if (me) {

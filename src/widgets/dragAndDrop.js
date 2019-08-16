@@ -8,7 +8,7 @@ module.exports = {
   makeDraggable: makeDraggable,
   uploadFiles: uploadFiles
 }
-const UI = require('../index.js') // this package
+// const UI = require('../index.js') // this package
 
 function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
   var dragoverListener = function (e) {
