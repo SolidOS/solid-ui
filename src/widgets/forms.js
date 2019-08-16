@@ -16,6 +16,7 @@ var UI = {
   widgets: forms
 }
 const error = require('./error')
+const buttons = require('./buttons')
 const utils = require('../utils')
 
 const checkMarkCharacter = '\u2713'
@@ -190,6 +191,7 @@ forms.field[UI.ns.ui('Multiple').uri] = function (
   var body = box.appendChild(dom.createElement('tr'))
   var tail = box.appendChild(dom.createElement('tr'))
 
+
   var addItem = function (e, object) {
     UI.log.debug('Multiple add: ' + object)
     // ++count
@@ -227,7 +229,7 @@ forms.field[UI.ns.ui('Multiple').uri] = function (
       }
     }
     if (kb.updater.editable(store.uri)) {
-      forms.deleteButtonWithCheck(dom, subField, utils.label(property), deleteItem)
+      buttons.deleteButtonWithCheck(dom, subField, utils.label(property), deleteItem)
     }
   }
 
@@ -369,6 +371,13 @@ forms.field[UI.ns.ui('PhoneField').uri] =
                             field.value = obj.value || obj.uri || ''
                           }
                           field.setAttribute('style', style)
+
+                          if (!kb.updater.editable(store.uri)) {
+                            field.disabled = true
+                            return box
+                          }
+                          ///////// read-write:
+
                           field.addEventListener('keyup', function (e) {
                             if (params.pattern) {
                               field.setAttribute('style', style + (
@@ -397,10 +406,6 @@ forms.field[UI.ns.ui('PhoneField').uri] =
                             var is = ds.map(st => $rdf.st(st.subject, st.predicate, result, st.why)) // can include >1 doc
                             if (is.length === 0) {  // or none
                               is = [$rdf.st(subject, property, result, store)]
-                            }
-                            if (!kb.updater.editable(store.uri)) {
-                              field.disabled = true
-                              return box
                             }
 
                             function updateMany (ds, is, callback) {
@@ -1280,7 +1285,7 @@ forms.fieldStore = function (subject, predicate, def) {
   if (sts.length > 0 && sts[0].why.uri && UI.store.updater.editable(sts[0].why.uri, UI.store)) {
     return UI.store.sym(sts[0].why.uri)
   }
-  return null // Can't edit
+  return def
 }
 
 /** Mint local ID using timestamp
