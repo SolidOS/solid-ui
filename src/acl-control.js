@@ -612,6 +612,8 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
           var q = str.indexOf('//')
           var targetDocDir = ((q >= 0 && p < q + 2) || p < 0) ? null : str.slice(0, p + 1)
 
+          // @@ TODO: The methods used for targetIsStorage are HACKs - it should not be relied upon, and work is
+          // @@ underway to standardize a behavior that does not rely upon this hack
           // eslint-disable-next-line no-undef
           const targetIsStorage = kb.holds(targetDoc, UI.ns.rdf('type'), UI.ns.space('Storage'), targetACLDoc) || (location && location.pathname === '/')
 
