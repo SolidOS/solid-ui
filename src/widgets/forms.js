@@ -16,6 +16,7 @@ var UI = {
   widgets: forms
 }
 const error = require('./error')
+const buttons = require('./buttons')
 const utils = require('../utils')
 
 const checkMarkCharacter = '\u2713'
@@ -189,11 +190,7 @@ forms.field[UI.ns.ui('Multiple').uri] = function (
   // box.appendChild(dom.createElement('h3')).textContent = "Fields:".
   var body = box.appendChild(dom.createElement('tr'))
   var tail = box.appendChild(dom.createElement('tr'))
-  var img = tail.appendChild(dom.createElement('img'))
-  img.setAttribute('src', plusIconURI) //  plus sign
-  img.setAttribute('style', 'margin: 0.2em; width: 1em; height:1em')
-  img.title = 'Click to add one or more ' + utils.label(property)
-  var prompt = tail.appendChild(dom.createElement('span'))
+
 
   var addItem = function (e, object) {
     UI.log.debug('Multiple add: ' + object)
@@ -231,12 +228,22 @@ forms.field[UI.ns.ui('Multiple').uri] = function (
         })
       }
     }
-    forms.deleteButtonWithCheck(dom, subField, utils.label(property), deleteItem)
+    if (kb.updater.editable(store.uri)) {
+      buttons.deleteButtonWithCheck(dom, subField, utils.label(property), deleteItem)
+    }
   }
 
   var values = kb.each(subject, property)
-  prompt.textContent = (values.length === 0 ? 'Add one or more ' : 'Add more ') +
-    utils.label(property)
+  if (kb.updater.editable(store.uri)) {
+    var img = tail.appendChild(dom.createElement('img'))
+    img.setAttribute('src', plusIconURI) //  plus sign
+    img.setAttribute('style', 'margin: 0.2em; width: 1em; height:1em')
+    img.title = 'Click to add one or more ' + utils.label(property)
+    var prompt = tail.appendChild(dom.createElement('span'))
+    prompt.textContent = (values.length === 0 ? 'Add one or more ' : 'Add more ') +
+      utils.label(property)
+    tail.addEventListener('click', addItem, true) // img.addEventListener('click', addItem, true)
+  }
 
   values.map(function (obj) { addItem(null, obj) })
   var extra = min - values.length
@@ -244,8 +251,6 @@ forms.field[UI.ns.ui('Multiple').uri] = function (
     console.log('Adding extra: min ' + min)
     addItem() // Add blanks if less than minimum
   }
-
-  tail.addEventListener('click', addItem, true) // img.addEventListener('click', addItem, true)
   return box
 }
 
@@ -366,6 +371,13 @@ forms.field[UI.ns.ui('PhoneField').uri] =
                             field.value = obj.value || obj.uri || ''
                           }
                           field.setAttribute('style', style)
+
+                          if (!kb.updater.editable(store.uri)) {
+                            field.disabled = true
+                            return box
+                          }
+                          ///////// read-write:
+
                           field.addEventListener('keyup', function (e) {
                             if (params.pattern) {
                               field.setAttribute('style', style + (
@@ -892,17 +904,7 @@ forms.makeDescription = function (dom, kb, subject, predicate, store, callbackFu
     // @@ this is the place to color the field from the user who chanaged it
     }
   }
-
-  var br = dom.createElement('br')
-  group.appendChild(br)
-  var submit = dom.createElement('input')
-  submit.setAttribute('type', 'submit')
-  submit.disabled = true // until the filled has been modified
-  submit.setAttribute('style', 'visibility: hidden; float: right;') // Keep UI clean
-  submit.value = 'Save ' + utils.label(predicate) // @@ I18n
-  group.appendChild(submit)
-
-  var saveChange = function (e) {
+  function saveChange (e) {
     submit.disabled = true
     submit.setAttribute('style', 'visibility: hidden; float: right;') // Keep UI clean
     field.disabled = true
@@ -921,18 +923,30 @@ forms.makeDescription = function (dom, kb, subject, predicate, store, callbackFu
     })
   }
 
-  field.addEventListener('keyup', function (e) { // Green means has been changed, not saved yet
-    field.setAttribute('style', style + 'color: green;')
-    if (submit) {
-      submit.disabled = false
-      submit.setAttribute('style', 'float: right;') // Remove visibility: hidden
-    }
-  }, true)
+  var br = dom.createElement('br')
+  group.appendChild(br)
 
-  field.addEventListener('change', saveChange, true)
+  var editable = UI.store.updater.editable(store.uri)
+  if (editable) {
+    var submit = dom.createElement('input')
+    submit.setAttribute('type', 'submit')
+    submit.disabled = true // until the filled has been modified
+    submit.setAttribute('style', 'visibility: hidden; float: right;') // Keep UI clean
+    submit.value = 'Save ' + utils.label(predicate) // @@ I18n
+    group.appendChild(submit)
 
-  submit.addEventListener('click', saveChange, false)
-
+    field.addEventListener('keyup', function (e) { // Green means has been changed, not saved yet
+      field.setAttribute('style', style + 'color: green;')
+      if (submit) {
+        submit.disabled = false
+        submit.setAttribute('style', 'float: right;') // Remove visibility: hidden
+      }
+    }, true)
+    field.addEventListener('change', saveChange, true)
+    submit.addEventListener('click', saveChange, false)
+  } else {
+    field.disabled = true
+  }
   return group
 }
 
@@ -954,6 +968,8 @@ forms.makeSelectForOptions = function (dom, kb, subject, predicate,
   UI.log.debug('Select list length now ' + possible.length)
   var n = 0
   var uris = {} // Count them
+  var editable = UI.store.updater.editable(store.uri)
+
   for (var i = 0; i < possible.length; i++) {
     var sub = possible[i]
     // UI.log.debug('Select element: '+ sub)
@@ -1079,7 +1095,7 @@ forms.makeSelectForOptions = function (dom, kb, subject, predicate,
     }
     select.appendChild(option)
   }
-  if (options.mint) {
+  if (editable && options.mint) {
     var mint = dom.createElement('option')
     mint.appendChild(dom.createTextNode(options.mint))
     mint.AJAR_mint = true // Flag it
@@ -1091,7 +1107,9 @@ forms.makeSelectForOptions = function (dom, kb, subject, predicate,
     select.insertBefore(prompt, select.firstChild)
     prompt.selected = true
   }
-  select.addEventListener('change', onChange, false)
+  if (editable) {
+    select.addEventListener('change', onChange, false)
+  }
   return select
 } // makeSelectForOptions
 
@@ -1269,7 +1287,15 @@ forms.fieldStore = function (subject, predicate, def) {
   if (sts.length > 0 && sts[0].why.uri && UI.store.updater.editable(sts[0].why.uri, UI.store)) {
     return UI.store.sym(sts[0].why.uri)
   }
-  return null // Can't edit
+  return def
+}
+
+/** Mint local ID using timestamp
+ * @param {NamedNode} doc - the document in which the ID is to be generated
+ */
+forms.newThing = function (doc) {
+  var now = new Date()
+  return $rdf.sym(doc.uri + '#' + 'id' + ('' + now.getTime()))
 }
 
 module.exports = forms
