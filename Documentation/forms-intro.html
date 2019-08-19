@@ -1,0 +1,194 @@
+<html>
+<head>
+<title>solid-ui: Introduction using forms</title>
+<style type="text/css">
+body {
+font-family: Trebuchet MS, Palatino, sans-serif;
+color: black;
+background: white;
+}
+p , ul, ol { text-indent : 0em ;
+margin-left: 4em  ; /* a bit of white space */ }
+pre { margin-left: 5em; background-color: #eee; padding: 0.5em;}
+
+li { text-indent: 0; }
+h1 { text-align: center }
+h2 { font-style: bold;  margin-left: 1em; }
+h3 { font-style: bold;  margin-left: 2em; }
+h4 { font-style: italic;  margin-left: 3em; }
+
+address { text-align: right }
+a:link, a:active { color: #00e; background: transparent; text-decoration: none; }
+
+a:visited {color: #529; background: transparent;}
+div.intro {margin-left: 5%; margin-right: 5%; font-style: italic}
+pre { font-family: monospace }
+a:link img, a:visited img { border-style: none }
+UL.toc { list-style: disc; list-style: none;}
+div.issue { padding: 0.5em; border: none; margin-right: 5%; }
+table: { border: collapse; }
+td: { background-color: #eee; }
+</style>
+</head>
+<body>
+<h2>Using solid-ui Forms</h2>
+
+<p>The form system allows you to define a user interface
+  declaratively in RDF.
+  Then in your web app, you:
+  <ol>
+    <li>make sure the onology files are loaded,</li>
+    <li>load the file with the fom itself, then</li>
+    <li>call <tt>UI.widgets.appendForm(dom, container, {}, subject, form, doc, callback)</tt></li>
+  </ol>
+</p>
+<p>
+  where
+  <table>
+    <tr><td>dom</td><td>if the DOM HTMLDocument object, aka document</td></tr>
+    <tr><td>container</td><td>is a DOM element to contain the form</td></tr>
+    <tr><td>{}</td><td>are unused at present</td></tr>
+    <tr><td>subject</td><td>if the RDF thing about which data will be stored</td></tr>
+    <tr><td>form</td><td>the an RDF object in the store for the form. </td></tr>
+    <tr><td>doc</td><td>The RDF document oin the web where the dat awill be stored. Often, <tt>subject.doc()</tt></td></tr>
+    <tr><td>callback</td><td>is a function taking an errors flag and a message (if the error flag is true)</td></tr>
+  </table>
+  If the form is a complex form, as the user adds more data, more form UI will be created.
+  The data is saved back to the web the moment the users has entered it, in each field. There is no general Save Button.
+</p>
+<p>
+There is a form form for editing forms.
+It is in the form onology itsef.
+</p>
+
+<p>
+You can of course go and write other implementatioons of the form system using
+your favorite user interface language.
+</p>
+<h4>References</h4><p>
+<ul>
+  <li><a href="https://www.w3.org/ns/ui.n3">The ontology (source file)</a></li>
+  <li><a href="https://github.com/solid/solid-ui/blob/master/src/widgets/forms.js">The implementation code</a>
+</ul>
+<h2>Form field types</h2>
+<p>Form fields may be named nodes in your file,
+or blank nodes... the form system does not mind.
+It is often useful to name them to keep track of them.
+</p>
+
+<h3>Form</h3>
+<p>The form itself has a collection of fields.
+The <tt>parts</tt> property gives an order list of
+the fields in each form.
+For each part, declare its type, and the extra data that type requires, as below.
+</p>
+  <h3>Group</h3>
+<p>Group is a field which is just a collection of other fields.
+  It is in fact interchangable with Form.
+
+
+<h3>Single Value fields - Numeric</h3>
+
+</p>These prompt the user for a  single value.  They typically take default values,
+and min and max values.</p>
+
+<h4>BooleanField</h4>
+<p>A checkbox on the form, stored an RDF boolean true or false value.</p>
+
+<h4>TriStateField</h4>
+<p>A checkbox on the form, stores an RDF boolean true or false value,
+  or no value if the box is left in its third, blank state.</p>
+
+<h4>IntegerField</h4>
+<p>An RDF integer value</p>
+
+<h4>DecimalField</h4>
+<p>An RDF decimal value. Useful for montary amounts</p>
+
+<h4>FloatField</h4>
+<p>A floatinhg point number</p>
+
+
+<h3>Single Value fields: Special Types </h3>
+
+<h4>ColorField</h4>
+<p>A color picker is used, and genertes a string which is a CSS_compatible color in
+a string like <tt>#ffeebb</tt></p>
+
+<h4>DateField</h4>
+
+<p>Uses a date picker on a good browser.
+  Leaves an RDF date literal as is vale.
+<h4>DateTimeField</h4>
+<p></p>
+
+Leaves an RDF dateTime literal as is value.
+<h4>PhoneField</h4>
+<p></p>
+
+Leaves as its value a named now with a uri which starts 'tel:'
+<h4>EmailField</h4>
+<p></p>
+
+Leaves as its value a named now with a uri which starts 'mailto:'
+
+<h3>Single Value fields - Text</h3>
+
+ <h4>SingleLineTextField</h4>
+<p></p>
+
+   <h4>MultiLineTextField</h4>
+<p></p>
+
+<h3>Complex fields</h3>
+<h4>Group</h4>
+<p></p>
+
+A group is simply a static set of fields of any type.
+It is in fact a nested form.
+<h4>Multiple</h4>
+<p></p>
+
+<p>When the subject can have several of the same thing,
+like friends, ro phone numers, then  the Multiple field
+allows this.  The user clicks on the grren plus icon, and is prompted
+for a subform for the related thing.
+The user can also delete existing ones.</p>
+<p>For each new thing, the system generatees an arbitrary (timestamp) URI within the file
+where the data is being stored.  The subform is then about that thing: the subject of the subform is not
+the subject of the original form. It is the fielnd, or the address, and so on.
+</p>
+<h4>Classifier</h4>
+<p></p>
+
+<p>The classifier pops a menu to allow the user to select a set of valued to classify the subject.
+</p>
+<h4>Options</h4>
+<p></p>
+
+<p>And Optioons field is the 'case statement' of the form system.
+  It will chose at runtime a subfield depending
+  on a propwrty, often the type, of the subject.   Often used after a classifier.
+</p>
+
+
+
+<h3>Documentation fields</h3>
+<h4>Heading</h4>
+<p>Help the user find arts of a oong form, or just for a titke of a short form.</p>
+
+<h4>Comment</h4>
+<p>Use comments inthe form to help usres understand what is going on,
+what their options are, and what the fields mean.</p>
+
+
+<h2>Conclusion</h2>
+<p>The form language and the form implementaionin solid-ui
+  can't do everyhing, but it can handle
+  a pretty wide selection of tasks in common
+daily life at home and at work.
+It can be vary efficneint as dev elopers can resuse mterial between forms.
+Users can even generate their own forms.
+
+</body>
+</html>
