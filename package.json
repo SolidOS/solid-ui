@@ -44,7 +44,7 @@
     "escape-html": "^1.0.3",
     "mime-types": "^2.1.20",
     "node-uuid": "^1.4.7",
-    "rdflib": "^1.0.1",
+    "rdflib": "^1.0.2",
     "solid-auth-client": "^2.2.13",
     "solid-auth-tls": "^0.1.2",
     "solid-namespace": "0.2.0"
