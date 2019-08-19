@@ -612,14 +612,17 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
           var q = str.indexOf('//')
           var targetDocDir = ((q >= 0 && p < q + 2) || p < 0) ? null : str.slice(0, p + 1)
 
-          if (targetDocDir) {
+          // eslint-disable-next-line no-undef
+          const targetIsStorage = kb.holds(targetDoc, UI.ns.rdf('type'), UI.ns.space('Storage'), targetACLDoc) || (location && location.pathname === '/')
+
+          if (!targetIsStorage && targetDocDir) {
             UI.acl.getACLorDefault($rdf.sym(targetDocDir), function (ok2, p22, targetDoc2, targetACLDoc2, defaultHolder2, defaultACLDoc2) {
               if (ok2) {
                 prospectiveDefaultHolder = p22 ? targetDoc2 : defaultHolder2
               }
               addDefaultButton(prospectiveDefaultHolder)
             })
-          } else {
+          } else if (!targetIsStorage) {
             addDefaultButton()
           }
 
