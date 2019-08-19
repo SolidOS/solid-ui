@@ -447,7 +447,7 @@ buttons.personTR = function (dom, pred, obj, options) {
     }
     if (options.draggable !== false) { // default is on
       image.setAttribute('draggable', 'false') // Stop the image being dragged instead - just the TR
-      buttons.makeDraggable(tr, obj)
+      dragAndDrop.makeDraggable(tr, obj)
     }
   }
   tr.subject = obj
