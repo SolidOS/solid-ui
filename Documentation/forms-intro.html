@@ -16,18 +16,21 @@ h1 { text-align: center }
 h2 { font-style: bold;  margin-left: 1em; }
 h3 { font-style: bold;  margin-left: 2em; }
 h4 { font-style: italic;  margin-left: 3em; }
-
+h4.class {color: #070;}
 address { text-align: right }
 a:link, a:active { color: #00e; background: transparent; text-decoration: none; }
 
 a:visited {color: #529; background: transparent;}
 div.intro {margin-left: 5%; margin-right: 5%; font-style: italic}
 pre { font-family: monospace }
+tt { font-family: monospace; font-size: 120%; }
 a:link img, a:visited img { border-style: none }
 UL.toc { list-style: disc; list-style: none;}
 div.issue { padding: 0.5em; border: none; margin-right: 5%; }
-table: { border: collapse; }
-td: { background-color: #eee; }
+table { border-collapse: collapse; margin: 1em;}
+table.parameters {background-color: #dddddd;} /*  background-color: #ddddff; */
+table.properties {background-color: #ddddff;} /*  background-color: #ddddff; */
+td {padding: 0.5em; border: 0.1em solid white; margin: 0;}
 </style>
 </head>
 <body>
@@ -44,7 +47,7 @@ td: { background-color: #eee; }
 </p>
 <p>
   where
-  <table>
+  <table class="parameters">
     <tr><td>dom</td><td>if the DOM HTMLDocument object, aka document</td></tr>
     <tr><td>container</td><td>is a DOM element to contain the form</td></tr>
     <tr><td>{}</td><td>are unused at present</td></tr>
@@ -65,24 +68,50 @@ It is in the form onology itsef.
 You can of course go and write other implementatioons of the form system using
 your favorite user interface language.
 </p>
-<h4>References</h4><p>
+<h4>Go to the source</h4><p>
 <ul>
   <li><a href="https://www.w3.org/ns/ui.n3">The ontology (source file)</a></li>
   <li><a href="https://github.com/solid/solid-ui/blob/master/src/widgets/forms.js">The implementation code</a>
 </ul>
+
 <h2>Form field types</h2>
 <p>Form fields may be named nodes in your file,
 or blank nodes... the form system does not mind.
 It is often useful to name them to keep track of them.
 </p>
-
-<h3>Form</h3>
+<p>Below, all Field Classes and Properties are in the UI namespace,
+  <tt><a href="http://www.w3.org/ns/ui#">http://www.w3.org/ns/ui#</a></tt>, except
+  the data types like Integer are in the normal <a href="http://www.w3.org/2001/XMLSchema#">XSD</a> namespace.
+</p>
+<p>
+  Here are some properries which you can use with any field (except the documentations fields).
+  <table class="properties">
+    <tr><td>label</td><td>String</td><td>A label for the form field.  This is the prompt for the user, Eg "Name", "Exmployers"</td></tr>
+    <tr><td>property</td><td>rdf:Property</td><td>When the user enters the data, it is stored in the web as a triple with this property as its predicate..</td></tr>
+    <tr><td>default</td><td>[according to field type] Optional</td><td>The input control is by default set to this value.
+      It is easiest for the user to enter this value.  (This value is <b>not</b> stored by the forms syetm automatically if the udser does not select or enter it in some way.</td></tr>
+  </table>
+Other propertiues are given for each field type.
+</p>
+<h4 class="class">Form</h4>
 <p>The form itself has a collection of fields.
 The <tt>parts</tt> property gives an order list of
 the fields in each form.
+
+<table class="properties">
+  <tr><td>parts</td><td>rdf:Collection (aka List, Array) of Field</td><td>The parts of the form in the order in which they are </td></tr>
+  <tr><td><i>part</i></td><td>Field (Obsolete)</td><td>A field which is a part of the form or group.  This property is obsolete. Use parts.</td></tr>
+</table>
+If you use the obsolete "part" methid for listing the parts of a form, then
+each field needs an additional propery:
+
+<table class="properties">
+  <tr><td>sequence</td><td>Integer</td><td>The parts of the form in the order in which they are </td></tr>
+</table>
+
 For each part, declare its type, and the extra data that type requires, as below.
 </p>
-  <h3>Group</h3>
+<h4 class="class">Group</h4>
 <p>Group is a field which is just a collection of other fields.
   It is in fact interchangable with Form.
 
@@ -92,61 +121,73 @@ For each part, declare its type, and the extra data that type requires, as below
 </p>These prompt the user for a  single value.  They typically take default values,
 and min and max values.</p>
 
-<h4>BooleanField</h4>
+<h4 class="class"> BooleanField</h4>
 <p>A checkbox on the form, stored an RDF boolean true or false value.</p>
 
-<h4>TriStateField</h4>
+<h4 class="class"> TriStateField</h4>
 <p>A checkbox on the form, stores an RDF boolean true or false value,
   or no value if the box is left in its third, blank state.</p>
 
-<h4>IntegerField</h4>
+<h4 class="class"> IntegerField</h4>
 <p>An RDF integer value</p>
 
-<h4>DecimalField</h4>
+<h4 class="class"> DecimalField</h4>
 <p>An RDF decimal value. Useful for montary amounts</p>
 
-<h4>FloatField</h4>
+<h4 class="class"> FloatField</h4>
 <p>A floatinhg point number</p>
 
 
 <h3>Single Value fields: Special Types </h3>
 
-<h4>ColorField</h4>
+<h4 class="class"> ColorField</h4>
 <p>A color picker is used, and genertes a string which is a CSS_compatible color in
 a string like <tt>#ffeebb</tt></p>
 
-<h4>DateField</h4>
+<h4 class="class"> DateField</h4>
 
 <p>Uses a date picker on a good browser.
-  Leaves an RDF date literal as is vale.
-<h4>DateTimeField</h4>
-<p></p>
+  Leaves an RDF date literal as is value.</p>
+<h4 class="class"> DateTimeField</h4>
+<p>
 
-Leaves an RDF dateTime literal as is value.
-<h4>PhoneField</h4>
-<p></p>
-
-Leaves as its value a named now with a uri which starts 'tel:'
-<h4>EmailField</h4>
-<p></p>
+Leaves an RDF dateTime literal as is value.</p>
+<h4 class="class"> PhoneField</h4>
+<p>
+Leaves as its value a named node with a uri which starts 'tel:'</p>
+<h4 class="class"> EmailField</h4>
+<p>
 
 Leaves as its value a named now with a uri which starts 'mailto:'
-
+</p>
 <h3>Single Value fields - Text</h3>
 
- <h4>SingleLineTextField</h4>
+ <h4 class="class"> SingleLineTextField</h4>
 <p></p>
 
-   <h4>MultiLineTextField</h4>
+   <h4 class="class"> MultiLineTextField</h4>
 <p></p>
 
 <h3>Complex fields</h3>
-<h4>Group</h4>
-<p></p>
+<h4 class="class"> Group</h4>
+<p>
 
 A group is simply a static set of fields of any type.
-It is in fact a nested form.
-<h4>Multiple</h4>
+Its properties are the same as for Form.
+</p>
+<h4 class="class"> Choice</h4>
+<p>The user choses an item from a class.
+
+
+  <table class="properties">
+    <tr><td>from</td><td>rdfs:Class</td><td>The selected thing must be a member of this class. E.g. Person.</td></tr>
+    <tr><td>property</td><td>rdf:Property</td><td>When the item is found, the new data links it from the subject with tis property. E.g. friend.</td></tr>
+    <tr><td>canMintNew</td><td>xsd:Boolean</td><td>If the user doesn't find the thing they want, can they introduce a item of that class by filling in a form about it? [Boolean]</td></tr>
+  </table>
+If a new thing is minted, that will be done with a form which is a <tt>ui:creationForm</tt> for the class.
+</p>
+
+<h4 class="class"> Multiple</h4>
 <p></p>
 
 <p>When the subject can have several of the same thing,
@@ -158,28 +199,64 @@ The user can also delete existing ones.</p>
 where the data is being stored.  The subform is then about that thing: the subject of the subform is not
 the subject of the original form. It is the fielnd, or the address, and so on.
 </p>
-<h4>Classifier</h4>
-<p></p>
+<h4 class="class"> Classifier</h4>
+<p>
+  <table class="properties">
+    <tr><td>category</td><td>rdfs:Class</td><td>The object will already be in this class.
+      The user will select subclasses of this class.</td></tr>
+  </table>
+  This form field leverages the ontology heavily.
+  It pulls the subclasses of the given class, and makes a pop-up menu
+for the useer to chose one.
+If and only if the ontology says that the class is  a disjoint union  (owl:disjointUnionOf) of the subclasses, then the
+user interface will only allow the user to pick one.
+If the user picks a subclass, and the ontolog shows that that  subclass has its own subclassdes, then the
+user will be prompted to pick one of those, to (if they like) further refine the selection. And so on.
+</p>
 
 <p>The classifier pops a menu to allow the user to select a set of valued to classify the subject.
 </p>
-<h4>Options</h4>
-<p></p>
+<h4 class="class"> Options</h4>
 
-<p>And Optioons field is the 'case statement' of the form system.
+<p>And Options field is the 'case statement' of the form system.
   It will chose at runtime a subfield depending
-  on a propwrty, often the type, of the subject.   Often used after a classifier.
+  on a property, often the type, of the subject.   Often used after a classifier.
+</p>
+<p>
+
+  <table class="properties">
+    <tr><th>Options property</th><th>range</th><th>significance</th></tr>
+    <tr><td>dependingOn</td><td>rdf:Property</td><td>The predicate in the data used to select the case.</td></tr>
+    <tr><td>case</td><td>Case</td><td>A case object, with for x use y.  (2 or more cases) </td></tr>
+  </table>
+and for each case:
+<table class="properties">
+  <tr><th>Case property</th><th>range</th><th>significance</th></tr>
+  <tr><td>for</td><td>[The range of the dependingOn property]</td><td>The value this case applies to</td></tr>
+  <tr><td>use</td><td>Field</td><td>sub form to be used in case the value matches the "for"</td></tr>
+</table>
+
 </p>
 
 
-
 <h3>Documentation fields</h3>
-<h4>Heading</h4>
-<p>Help the user find arts of a oong form, or just for a titke of a short form.</p>
+<h4 class="class"> Heading</h4>
+<p>Help the user find parts of a long form, or just for a title of a short form.
+  <table class="properties">
+    <tr><td>contents</td><td>String</td><td>The text content of the heading</td></tr>
+  </table>
 
-<h4>Comment</h4>
-<p>Use comments inthe form to help usres understand what is going on,
-what their options are, and what the fields mean.</p>
+</p>
+
+<h4 class="class"> Comment</h4>
+<p>Use comments in the form to help users understand what is going on,
+what their options are, and what the fields mean.
+
+<table class="properties">
+  <tr><td>contents</td><td>String</td><td>The text content of the comment.
+    (This should be displayed by form systems as <tt>pre-wrap</tt> mode)</td></tr>
+</table>
+</p>
 
 
 <h2>Conclusion</h2>
@@ -192,3 +269,8 @@ Users can even generate their own forms.
 
 </body>
 </html>
+
+<table class="properties">
+  <tr><td></td><td>@@</td><td></td></tr>
+  <tr><td></td><td>@@</td><td></td></tr>
+</table>
