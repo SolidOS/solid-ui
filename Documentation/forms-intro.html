@@ -43,34 +43,34 @@ td {padding: 0.5em; border: 0.1em solid white; margin: 0;}
 
 <p>The form system allows you to define a user interface
   declaratively in RDF.
-  Then in your web app, you:
+  In your web app, you then:
   <ol>
-    <li>make sure the onology files are loaded,</li>
-    <li>load the file with the fom itself, then</li>
+    <li>make sure the ontology files are loaded</li>
+    <li>load the file with the form itself</li>
     <li>call <tt>UI.widgets.appendForm(dom, container, {}, subject, form, doc, callback)</tt></li>
   </ol>
 </p>
 <p>
   where
   <table class="parameters">
-    <tr><td>dom</td><td>if the DOM HTMLDocument object, aka document</td></tr>
+    <tr><td>dom</td><td>is the DOM HTMLDocument object, a/k/a document</td></tr>
     <tr><td>container</td><td>is a DOM element to contain the form</td></tr>
     <tr><td>{}</td><td>are unused at present</td></tr>
-    <tr><td>subject</td><td>if the RDF thing about which data will be stored</td></tr>
-    <tr><td>form</td><td>the an RDF object in the store for the form. </td></tr>
-    <tr><td>doc</td><td>The RDF document oin the web where the dat awill be stored. Often, <tt>subject.doc()</tt></td></tr>
-    <tr><td>callback</td><td>is a function taking an errors flag and a message (if the error flag is true)</td></tr>
+    <tr><td>subject</td><td>is the RDF thing about which data will be stored</td></tr>
+    <tr><td>form</td><td>is the RDF object in the store for the form</td></tr>
+    <tr><td>doc</td><td>is the RDF document on the web where the data will be stored. Often, <tt>subject.doc()</tt></td></tr>
+    <tr><td>callback</td><td>is a function taking an error flag and a message (if the error flag is true)</td></tr>
   </table>
   If the form is a complex form, as the user adds more data, more form UI will be created.
-  The data is saved back to the web the moment the users has entered it, in each field. There is no general Save Button.
+  The data in each field is saved back to the web the moment the user has entered it. There is no general Save Button.
 </p>
 <p>
 There is a form form for editing forms.
-It is in the form onology itsef.
+It is in the form ontology itself.
 </p>
 
 <p>
-You can of course go and write other implementatioons of the form system using
+You can of course go and write other implementations of the form system using
 your favorite user interface language.
 </p>
 <h4>Go to the source</h4><p>
@@ -80,23 +80,23 @@ your favorite user interface language.
 </ul>
 
 <h2>Form field types</h2>
-<p>Form fields may be named nodes in your file,
-or blank nodes... the form system does not mind.
+<p>Form fields may be named or blank nodes in your file;
+the form system does not care.
 It is often useful to name them to keep track of them.
 </p>
 <p>Below, all Field Classes and Properties are in the UI namespace,
   <tt><a href="http://www.w3.org/ns/ui#">http://www.w3.org/ns/ui#</a></tt>, except
-  the data types like Integer are in the normal <a href="http://www.w3.org/2001/XMLSchema#">XSD</a> namespace.
+  the data types, like Integer, which are in the normal <a href="http://www.w3.org/2001/XMLSchema#">XSD</a> namespace.
 </p>
 <p>
-  Here are some properries which you can use with any field (except the documentations fields).
+  Here are some properties which you can use with any field (except the documentation fields).
   <table class="properties">
-    <tr><td>label</td><td>String</td><td>A label for the form field.  This is the prompt for the user, Eg "Name", "Exmployers"</td></tr>
-    <tr><td>property</td><td>rdf:Property</td><td>When the user enters the data, it is stored in the web as a triple with this property as its predicate..</td></tr>
-    <tr><td>default</td><td>[according to field type] Optional</td><td>The input control is by default set to this value.
-      It is easiest for the user to enter this value.  (This value is <b>not</b> stored by the forms syetm automatically if the udser does not select or enter it in some way.</td></tr>
+    <tr><td>label</td><td>String</td><td>A label for the form field.  This is the prompt for the user, e.g., "Name", "Employer".</td></tr>
+    <tr><td>property</td><td>rdf:Property</td><td>When the user enters the data, it is stored in the web as a triple with this property as its predicate.</td></tr>
+    <tr><td>default</td><td>[according to field type] Optional</td><td>The input control is set to this value by default.
+      It is easiest for the user to enter this value.  (This value is <b>not</b> automatically stored by the form system if the user does not select or enter it in some way.</td></tr>
   </table>
-Other propertiues are given for each field type.
+Other properties are given for each field type.
 </p>
 <h4 class="class">Form</h4>
 <p>The form itself has a collection of fields.
@@ -107,8 +107,8 @@ the fields in each form.
   <tr><td>parts</td><td>rdf:Collection (aka List, Array) of Field</td><td>The parts of the form in the order in which they are </td></tr>
   <tr><td><i>part</i></td><td>Field (Obsolete)</td><td>A field which is a part of the form or group.  This property is obsolete. Use parts.</td></tr>
 </table>
-If you use the obsolete "part" methid for listing the parts of a form, then
-each field needs an additional propery:
+If you use the obsolete "part" method for listing the parts of a form, then
+each field needs an additional property:
 
 <table class="properties">
   <tr><td>sequence</td><td>Integer</td><td>The parts of the form in the order in which they are </td></tr>
@@ -118,7 +118,7 @@ For each part, declare its type, and the extra data that type requires, as below
 </p>
 <h4 class="class">Group</h4>
 <p>Group is a field which is just a collection of other fields.
-  It is in fact interchangable with Form.
+  It is in fact interchangeable with Form.
 
 
 <h3>Single Value fields - Numeric</h3>
@@ -137,10 +137,10 @@ and min and max values.</p>
 <p>An RDF integer value</p>
 
 <h4 class="class"> DecimalField</h4>
-<p>An RDF decimal value. Useful for montary amounts</p>
+<p>An RDF decimal value. Useful for monetary amounts</p>
 
 <h4 class="class"> FloatField</h4>
-<p>A floatinhg point number</p>
+<p>A floating point number</p>
 
 
 <h3>Single Value fields: Special Types </h3>
@@ -196,13 +196,13 @@ If a new thing is minted, that will be done with a form which is a <tt>ui:creati
 <p></p>
 
 <p>When the subject can have several of the same thing,
-like friends, ro phone numers, then  the Multiple field
-allows this.  The user clicks on the grren plus icon, and is prompted
+like friends, ro phone numbers, then  the Multiple field
+allows this.  The user clicks on the green plus icon, and is prompted
 for a subform for the related thing.
 The user can also delete existing ones.</p>
-<p>For each new thing, the system generatees an arbitrary (timestamp) URI within the file
+<p>For each new thing, the system generates an arbitrary (timestamp) URI within the file
 where the data is being stored.  The subform is then about that thing: the subject of the subform is not
-the subject of the original form. It is the fielnd, or the address, and so on.
+the subject of the original form. It is the field, or the address, and so on.
 </p>
 <h4 class="class"> Classifier</h4>
 <p>
@@ -212,10 +212,10 @@ the subject of the original form. It is the fielnd, or the address, and so on.
   </table>
   This form field leverages the ontology heavily.
   It pulls the subclasses of the given class, and makes a pop-up menu
-for the useer to chose one.
+for the user to chose one.
 If and only if the ontology says that the class is  a disjoint union  (owl:disjointUnionOf) of the subclasses, then the
 user interface will only allow the user to pick one.
-If the user picks a subclass, and the ontolog shows that that  subclass has its own subclassdes, then the
+If the user picks a subclass, and the ontology shows that that  subclass has its own subclasses, then the
 user will be prompted to pick one of those, to (if they like) further refine the selection. And so on.
 </p>
 
@@ -265,16 +265,16 @@ what their options are, and what the fields mean.
 
 
 <h2>Conclusion</h2>
-<p>The form language and the form implementaionin solid-ui
-  can't do everyhing, but it can handle
+<p>The form language and the form implementation in solid-ui
+  can't do everything, but it can handle
   a pretty wide selection of tasks in common
 daily life at home and at work.
-It can be vary efficneint as dev elopers can resuse mterial between forms.
+It can be vary efficient as developers can reuse material between forms.
 Users can even generate their own forms.
 </p>
 Future directions include separate implementations of the form UI code in
 for various platforms, and using various UI frameworks.
-There may also be extention of the system with new field types,
+There may also be extension of the system with new field types,
 more options for setting style from various sources, 
 <p>
 
