@@ -614,8 +614,9 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
 
           // @@ TODO: The methods used for targetIsStorage are HACKs - it should not be relied upon, and work is
           // @@ underway to standardize a behavior that does not rely upon this hack
-          // eslint-disable-next-line no-undef
-          const targetIsStorage = kb.holds(targetDoc, UI.ns.rdf('type'), UI.ns.space('Storage'), targetACLDoc) || (location && location.pathname === '/')
+          // @@ hopefully fixed as part of https://github.com/solid/data-interoperability-panel/issues/10
+          const targetIsStorage = kb.holds(targetDoc, UI.ns.rdf('type'), UI.ns.space('Storage'), targetACLDoc) ||
+            (window.location && window.location.pathname === '/')
 
           if (!targetIsStorage && targetDocDir) {
             UI.acl.getACLorDefault($rdf.sym(targetDocDir), function (ok2, p22, targetDoc2, targetACLDoc2, defaultHolder2, defaultACLDoc2) {
