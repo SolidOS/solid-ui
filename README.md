@@ -33,7 +33,7 @@ TO see how these are  used, see the panes which use them within the solid-app-se
 
 The level of support for this varies.
 
-See also: [A short intoduction to the Form system](https://solid.github.io/solid-ui/DDocumentation/forms-intro.html)
+See also: [A short intoduction to the Form system](https://solid.github.io/solid-ui/Documentation/forms-intro.html)
 
 Contributions of bug fixes and new functionality, documentation, and tests are
 always appreciated.
