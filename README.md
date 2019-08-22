@@ -18,7 +18,7 @@ The submodules at the moment include log, acl, acl-control, messageArea, etc
 - A login widget
 - A chat widget: add discussion to any object.
 - A people picker widget for choosing a set of people or an existing group
-- A [form system](Documentation/forms-intro.html): Forms are defined in RDF, and create/edit RDF data, including form definitions
+- A [form system](https://solid.github.io/solid-ui/Documentation/forms-intro.html): Forms are defined in RDF, and create/edit RDF data, including form definitions
 - A general purpose table display with built-in facetted browsing
 - An Access Control List widget for Solid ACL system
 - A two-dimentional matrix of editable live data
@@ -33,7 +33,7 @@ TO see how these are  used, see the panes which use them within the solid-app-se
 
 The level of support for this varies.
 
-See also: [A short intoduction to the Form system](Documentation/forms-intro.html)
+See also: [A short intoduction to the Form system](https://solid.github.io/solid-ui/DDocumentation/forms-intro.html)
 
 Contributions of bug fixes and new functionality, documentation, and tests are
 always appreciated.
