@@ -11,7 +11,7 @@
  */
 import escape from 'escape-html'
 import uuid from 'node-uuid'
-import rdf from 'rdflib'
+import * as rdf from 'rdflib'
 // const webClient = require('solid-web-client')(rdf)
 
 import { makeDropTarget } from './dragAndDrop'
