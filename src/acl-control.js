@@ -615,17 +615,18 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
           // @@ TODO: The methods used for targetIsStorage are HACKs - it should not be relied upon, and work is
           // @@ underway to standardize a behavior that does not rely upon this hack
           // @@ hopefully fixed as part of https://github.com/solid/data-interoperability-panel/issues/10
-          const targetIsStorage = kb.holds(targetDoc, UI.ns.rdf('type'), UI.ns.space('Storage'), targetACLDoc) ||
-            (window.location && window.location.pathname === '/')
+          const targetIsStorage = kb.holds(targetDoc, UI.ns.rdf('type'), UI.ns.space('Storage'), targetACLDoc)
+          const targetAclIsProtected = hasProtectedAcl(targetDoc)
+          const targetIsProtected = targetIsStorage || targetAclIsProtected
 
-          if (!targetIsStorage && targetDocDir) {
+          if (!targetIsProtected && targetDocDir) {
             UI.acl.getACLorDefault($rdf.sym(targetDocDir), function (ok2, p22, targetDoc2, targetACLDoc2, defaultHolder2, defaultACLDoc2) {
               if (ok2) {
                 prospectiveDefaultHolder = p22 ? targetDoc2 : defaultHolder2
               }
               addDefaultButton(prospectiveDefaultHolder)
             })
-          } else if (!targetIsStorage) {
+          } else if (!targetIsProtected) {
             addDefaultButton()
           }
 
@@ -691,4 +692,10 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
   renderBox()
   return table
 } // ACLControlBox
+
+function hasProtectedAcl (targetDoc) {
+  // @@ TODO: This is hacky way of knowing whether or not a certain ACL file can be removed
+  // Hopefully we'll find a better, standardized solution to this - https://github.com/solid/specification/issues/37
+  return targetDoc.uri === targetDoc.site().uri
+}
 // ends
