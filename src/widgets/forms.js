@@ -23,6 +23,14 @@ const checkMarkCharacter = '\u2713'
 const cancelCharacter = '\u2715'
 const dashCharacter = '-'
 
+/** Mint local ID using timestamp
+ * @param {NamedNode} doc - the document in which the ID is to be generated
+ */
+forms.newThing = function (doc) {
+  var now = new Date()
+  return $rdf.sym(doc.uri + '#' + 'id' + ('' + now.getTime()))
+}
+
 // ///////////////////////////////////////////////////////////////////////
 
 /*                                  Form Field implementations
