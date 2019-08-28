@@ -48,7 +48,8 @@ document.addEventListener('DOMContentLoaded', function () {
       options.subject = kb.the(target, UI.ns.ui('subject'))
       options.ordered = kb.the(target, UI.ns.ui('ordered')).value === '1'
       options.orientation = kb.the(target, UI.ns.ui('orientation')).value
-
+      options.onClose = function(e) {}  // Test it can make a close button is a good place
+        // todo: test both cases
       var tabs = div.appendChild(UI.tabs.tabWidget(options))
       return tabs
     }
