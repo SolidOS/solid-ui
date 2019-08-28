@@ -325,9 +325,11 @@ UI.tabs.tabWidget = function (options) {
   return box
 
   function addCancelButton (tabContainer) {
-    const extraTab = dom.createElement('td')
+    const extraTab = dom.createElement(tabElement)
     extraTab.classList.add('unstyled')
-    extraTab.style.textAlign = 'right'
+    if (tabElement === 'td') {
+      extraTab.style.textAlign = 'right'
+    }
     const cancelButton = UI.widgets.cancelButton(dom, onClose)
     extraTab.appendChild(cancelButton)
     tabContainer.appendChild(extraTab)
