@@ -26,6 +26,7 @@ const utils = require('./utils')
 // options.showMain(div, subject) function to show subject in div when tab selected
 // options.renderTabSettings  function(subject, domContainer)
 // options.renderTabSettings  like showMain but when user has held Alt down
+// options.onClose            if given, will present a cancelButton next to tabs that calls this optional method
 //
 
 UI.tabs.tabWidget = function (options) {
@@ -41,6 +42,7 @@ UI.tabs.tabWidget = function (options) {
   var wholetable = box.appendChild(dom.createElement('table'))
   var mainTR, mainTD, tabTR
   var tabContainer, tabElement
+  var onClose = options.onClose
 
   var isLight = function (x) {
     var total = 0
@@ -140,7 +142,11 @@ UI.tabs.tabWidget = function (options) {
 
   var resetTabStyle = function () {
     for (var i = 0; i < tabContainer.children.length; i++) {
-      tabContainer.children[i].firstChild.setAttribute('style', unselectedStyle)
+      const tab = tabContainer.children[i]
+      if (tab.classList.contains('unstyled')) {
+        continue
+      }
+      tab.firstChild.setAttribute('style', unselectedStyle)
     }
   }
   var resetBodyStyle = function () {
@@ -193,7 +199,7 @@ UI.tabs.tabWidget = function (options) {
   var orderedSync = function () {
     var items = getItems()
     if (!vertical) {
-      mainTD.setAttribute('colspan', items.length)
+      mainTD.setAttribute('colspan', items.length + (onClose ? 1 : 0))
     }
     var slot, i, j, left, right
     var differ = false
@@ -238,13 +244,16 @@ UI.tabs.tabWidget = function (options) {
         bodyContainer.insertBefore(newBodyTR, bodyContainer.children[left + i])
       }
     }
+    if (onClose) {
+      addCancelButton(tabContainer)
+    }
   }
 
-// UNMAINTAINED
+  // UNMAINTAINED
   var unorderedSync = function () {
     var items = getItems()
     if (!vertical) {
-      mainTD.setAttribute('colspan', items.length)
+      mainTD.setAttribute('colspan', items.length + (onClose ? 1 : 0))
     }
     var slot, i, j, found, pair
     var missing = []
@@ -280,6 +289,10 @@ UI.tabs.tabWidget = function (options) {
         tabContainer.removeChild(slot)
       }
     }
+
+    if (onClose) {
+      addCancelButton(tabContainer)
+    }
   }
 
   var sync = function () {
@@ -310,4 +323,13 @@ UI.tabs.tabWidget = function (options) {
     tabContainer.children[0].firstChild.click() // Open first tab
   }
   return box
+
+  function addCancelButton (tabContainer) {
+    const extraTab = dom.createElement('td')
+    extraTab.classList.add('unstyled')
+    extraTab.style.textAlign = 'right'
+    const cancelButton = UI.widgets.cancelButton(dom, onClose)
+    extraTab.appendChild(cancelButton)
+    tabContainer.appendChild(extraTab)
+  }
 }
