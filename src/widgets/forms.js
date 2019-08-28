@@ -362,7 +362,6 @@ forms.field[UI.ns.ui('PhoneField').uri] =
                           var obj = kb.any(subject, property, undefined, store)
                           if (!obj) {
                             obj = kb.any(form, ui('default'))
-                            if (obj) kb.add(subject, property, obj, store)
                           }
                           if (obj && obj.uri && params.uriPrefix) { // eg tel: or mailto:
                             field.value = decodeURIComponent(obj.uri.replace(params.uriPrefix, '')) // should have no spaces but in case
