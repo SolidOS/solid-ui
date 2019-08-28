@@ -337,7 +337,7 @@ UI.acl.getACLorDefault = function (doc, callbackFunction) {
       }
       var right = uri.lastIndexOf('/')
       var left = uri.indexOf('/', uri.indexOf('//') + 2)
-      if (left >= right) {
+      if (left > right) {
         return callbackFunction(false, true, 404, 'Found no ACL resource')
       }
       uri = uri.slice(0, right + 1)
