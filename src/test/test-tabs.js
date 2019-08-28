@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     /// ///////////////////////////////////////////
 
-  var UI = require('mashlib')
+  var UI = panes.UI
   var kb = UI.store
   var dom = document
 
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var tabContentCache = []
 
-    options.showMain = function (container, subject) {
+    options.renderMain = function (container, subject) {
       container.innerHTML = ''
       if (tabContentCache[subject.uri]) {
         container.appendChild(tabContentCache[subject.uri])
