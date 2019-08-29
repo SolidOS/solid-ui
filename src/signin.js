@@ -1306,9 +1306,9 @@ async function getUserRoles () {
 async function filterAvailablePanes (panes) {
   const userRoles = await getUserRoles()
   return Object.values(panes).filter(pane => isMatchingAudience(pane, userRoles))
+}
 
-  function isMatchingAudience (pane, userRoles) {
-    const audience = pane.audience || []
-    return audience.reduce((isMatch, audience) => isMatch && userRoles.find(role => role.equals(audience)), true)
-  }
+function isMatchingAudience (pane, userRoles) {
+  const audience = pane.audience || []
+  return audience.reduce((isMatch, audienceRole) => isMatch && userRoles.find(role => role.equals(audienceRole)), true)
 }
