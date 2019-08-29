@@ -34,8 +34,10 @@ module.exports = {
   checkUser,   // Async
   currentUser, // Sync
   defaultTestUser, // Sync
+  filterAvailablePanes, // Async
   findAppInstances,
   findOriginOwner,
+  getUserRoles, // Async
   loadTypeIndexes,
   logIn,
   logInLoadProfile,
@@ -1286,4 +1288,27 @@ function newAppInstance (dom, appDetails, callback) {
   }, false)
   div.appendChild(b)
   return div
+}
+
+async function getUserRoles () {
+  const profile = await checkUser()
+  if (!profile) {
+    return []
+  }
+  const preferencesFile = UI.store.any(profile, ns.space('preferencesFile'), null, profile.doc())
+  if (!preferencesFile) {
+    return []
+  }
+  await UI.store.fetcher.load(preferencesFile)
+  return UI.store.each(profile, ns.rdf('type'), null, preferencesFile.doc())
+}
+
+async function filterAvailablePanes (panes) {
+  const userRoles = await getUserRoles()
+  return Object.values(panes).filter(pane => isMatchingAudience(pane, userRoles))
+}
+
+function isMatchingAudience (pane, userRoles) {
+  const audience = pane.audience || []
+  return audience.reduce((isMatch, audienceRole) => isMatch && userRoles.find(role => role.equals(audienceRole)), true)
 }
