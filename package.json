@@ -42,10 +42,10 @@
   "homepage": "https://github.com/solid/solid-ui",
   "dependencies": {
     "escape-html": "^1.0.3",
-    "mime-types": "^2.1.20",
+    "mime-types": "^2.1.24",
     "node-uuid": "^1.4.7",
-    "rdflib": "^1.0.3",
-    "solid-auth-client": "^2.2.13",
+    "rdflib": "^1.0.4",
+    "solid-auth-client": "^2.3.1",
     "solid-auth-tls": "^0.1.2",
     "solid-namespace": "0.2.0"
   },
