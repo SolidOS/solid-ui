@@ -206,7 +206,7 @@ UI.tabs.tabWidget = function (options) {
     // Find how many match at each end
     for (left = 0; left < tabContainer.children.length; left++) {
       slot = tabContainer.children[left]
-      if (left >= items.length || !slot.subject.sameTerm(items[left])) {
+      if (left >= items.length || (slot.subject && !slot.subject.sameTerm(items[left]))) {
         differ = true
         break
       }
@@ -217,7 +217,7 @@ UI.tabs.tabWidget = function (options) {
     for (right = tabContainer.children.length - 1; right >= 0; right--) {
       slot = tabContainer.children[right]
       j = right - tabContainer.children.length + items.length
-      if (!slot.subject.sameTerm(items[j])) {
+      if (slot.subject && !slot.subject.sameTerm(items[j])) {
         break
       }
     }
@@ -325,6 +325,12 @@ UI.tabs.tabWidget = function (options) {
   return box
 
   function addCancelButton (tabContainer) {
+    if (tabContainer.dataset.onCloseSet) {
+      // @@ TODO: this is only here to make the tests work
+      // Discussion at https://github.com/solid/solid-ui/pull/110#issuecomment-527080663
+      const existingCancelButton = tabContainer.querySelector('.unstyled')
+      tabContainer.removeChild(existingCancelButton)
+    }
     const extraTab = dom.createElement(tabElement)
     extraTab.classList.add('unstyled')
     if (tabElement === 'td') {
@@ -333,5 +339,6 @@ UI.tabs.tabWidget = function (options) {
     const cancelButton = UI.widgets.cancelButton(dom, onClose)
     extraTab.appendChild(cancelButton)
     tabContainer.appendChild(extraTab)
+    tabContainer.dataset.onCloseSet = 'true'
   }
 }
