@@ -648,7 +648,7 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
             box.notice.textContent = 'Sharing for things within the folder currently tracks sharing for the folder.'
             box.notice.style.cssText = 'font-size: 80%; color: #888;'
             var splitButton = UI.widgets.clearElement(box.offer).appendChild(dom.createElement('button'))
-            splitButton.innerHTML = '<p>Set the sharing of folder contets <br />separately from the sharing for the folder</p>'
+            splitButton.innerHTML = '<p>Set the sharing of folder contents <br />separately from the sharing for the folder</p>'
             splitButton.style.cssText = bigButtonStyle
             splitButton.addEventListener('click', function (e) {
               box.addControlForDefaults()
