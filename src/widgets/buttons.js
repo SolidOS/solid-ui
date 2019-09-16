@@ -2,6 +2,8 @@
 */
 /* global alert */
 
+const { findProfileImage } = require('../signin')
+
 module.exports = {}
 
 var buttons = {}
@@ -221,28 +223,13 @@ buttons.findImageByClass = function findImageByClass (x) {
 
 // @@ Also add icons for *properties* like  home, work, email, range, domain, comment,
 
-buttons.setImage = function (element, x) {
+buttons.setImage = function (element, profile) {
   const kb = UI.store
-  const ns = UI.ns
-  const iconDir = UI.icons.iconBase
-  var findImage = function (x) {
-    if (x.sameTerm(ns.foaf('Agent')) || x.sameTerm(ns.rdf('Resource'))) {
-      return iconDir + 'noun_98053.svg' // Globe
-    }
-    var image = kb.any(x, ns.sioc('avatar')) ||
-      kb.any(x, ns.foaf('img')) ||
-      kb.any(x, ns.vcard('logo')) ||
-      kb.any(x, ns.vcard('hasPhoto')) ||
-      kb.any(x, ns.vcard('photo')) ||
-      kb.any(x, ns.foaf('depiction'))
-    return image ? image.uri : null
-  }
-
-  var uri = findImage(x)
-  element.setAttribute('src', uri || buttons.findImageByClass(x))
-  if (!uri && x.uri) {
-    kb.fetcher.nowOrWhenFetched(x.doc(), undefined, function (ok) {
-      element.setAttribute('src', findImage(x) || buttons.findImageByClass(x))
+  const uri = findProfileImage(profile)
+  element.setAttribute('src', uri || buttons.findImageByClass(profile))
+  if (!uri && profile.uri) {
+    kb.fetcher.nowOrWhenFetched(profile.doc(), undefined, () => {
+      element.setAttribute('src', findProfileImage(profile) || buttons.findImageByClass(profile))
     })
   }
 }
