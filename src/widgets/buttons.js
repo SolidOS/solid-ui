@@ -2,8 +2,6 @@
 */
 /* global alert */
 
-const { findProfileImage } = require('../signin')
-
 module.exports = {}
 
 var buttons = {}
@@ -24,6 +22,9 @@ const dragAndDrop = require('./dragAndDrop')
 
 const cancelIconURI = UI.icons.iconBase + 'noun_1180156.svg' // black X
 const checkIconURI = UI.icons.iconBase + 'noun_1180158.svg' // green checkmark; Continue
+
+const ns = UI.ns
+const kb = UI.store
 
 function getStatusArea (context) {
   var box = context.statusArea || context.div || null
@@ -221,15 +222,29 @@ buttons.findImageByClass = function findImageByClass (x) {
   return iconDir + 'noun_10636_grey.svg' // Grey Circle -  some thing
 }
 
+buttons.findImage = (thing) => {
+  const iconDir = UI.icons.iconBase
+  if (thing.sameTerm(ns.foaf('Agent')) || thing.sameTerm(ns.rdf('Resource'))) {
+    return iconDir + 'noun_98053.svg' // Globe
+  }
+  const image = kb.any(thing, ns.sioc('avatar')) ||
+    kb.any(thing, ns.foaf('img')) ||
+    kb.any(thing, ns.vcard('logo')) ||
+    kb.any(thing, ns.vcard('hasPhoto')) ||
+    kb.any(thing, ns.vcard('photo')) ||
+    kb.any(thing, ns.foaf('depiction'))
+  return image ? image.uri : null
+}
+
 // @@ Also add icons for *properties* like  home, work, email, range, domain, comment,
 
 buttons.setImage = function (element, profile) {
   const kb = UI.store
-  const uri = findProfileImage(profile)
+  const uri = buttons.findImage(profile)
   element.setAttribute('src', uri || buttons.findImageByClass(profile))
   if (!uri && profile.uri) {
     kb.fetcher.nowOrWhenFetched(profile.doc(), undefined, () => {
-      element.setAttribute('src', findProfileImage(profile) || buttons.findImageByClass(profile))
+      element.setAttribute('src', buttons.findImage(profile) || buttons.findImageByClass(profile))
     })
   }
 }

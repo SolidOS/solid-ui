@@ -37,7 +37,6 @@ module.exports = {
   filterAvailablePanes, // Async
   findAppInstances,
   findOriginOwner,
-  findProfileImage, // Sync
   getUserRoles, // Async
   loadTypeIndexes,
   logIn,
@@ -1304,19 +1303,6 @@ async function getUserRoles () {
   return UI.store.each(profile, ns.rdf('type'), null, preferencesFile.doc())
 }
 
-function findProfileImage (profile) {
-  const iconDir = UI.icons.iconBase
-  if (profile.sameTerm(ns.foaf('Agent')) || profile.sameTerm(ns.rdf('Resource'))) {
-    return iconDir + 'noun_98053.svg' // Globe
-  }
-  const image = kb.any(profile, ns.sioc('avatar')) ||
-    kb.any(profile, ns.foaf('img')) ||
-    kb.any(profile, ns.vcard('logo')) ||
-    kb.any(profile, ns.vcard('hasPhoto')) ||
-    kb.any(profile, ns.vcard('photo')) ||
-    kb.any(profile, ns.foaf('depiction'))
-  return image ? image.uri : null
-}
 async function filterAvailablePanes (panes) {
   const userRoles = await getUserRoles()
   return Object.values(panes).filter(pane => isMatchingAudience(pane, userRoles))
