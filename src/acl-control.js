@@ -526,7 +526,7 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
       } // if
     } // for
 
-    if (options.modify) {
+    if (options.modify && !options.doingDefaults) {
       renderAddToolBar(box, lastRow)
     }
 
