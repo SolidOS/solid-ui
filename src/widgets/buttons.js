@@ -23,9 +23,6 @@ const dragAndDrop = require('./dragAndDrop')
 const cancelIconURI = UI.icons.iconBase + 'noun_1180156.svg' // black X
 const checkIconURI = UI.icons.iconBase + 'noun_1180158.svg' // green checkmark; Continue
 
-const ns = UI.ns
-const kb = UI.store
-
 function getStatusArea (context) {
   var box = context.statusArea || context.div || null
   if (box) return box
@@ -223,6 +220,8 @@ buttons.findImageByClass = function findImageByClass (x) {
 }
 
 buttons.findImage = (thing) => {
+  const kb = UI.store
+  const ns = UI.ns
   const iconDir = UI.icons.iconBase
   if (thing.sameTerm(ns.foaf('Agent')) || thing.sameTerm(ns.rdf('Resource'))) {
     return iconDir + 'noun_98053.svg' // Globe
