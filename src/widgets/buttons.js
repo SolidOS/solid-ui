@@ -23,6 +23,9 @@ const dragAndDrop = require('./dragAndDrop')
 const cancelIconURI = UI.icons.iconBase + 'noun_1180156.svg' // black X
 const checkIconURI = UI.icons.iconBase + 'noun_1180158.svg' // green checkmark; Continue
 
+const ns = UI.ns
+const kb = UI.store
+
 function getStatusArea (context) {
   var box = context.statusArea || context.div || null
   if (box) return box
@@ -219,30 +222,29 @@ buttons.findImageByClass = function findImageByClass (x) {
   return iconDir + 'noun_10636_grey.svg' // Grey Circle -  some thing
 }
 
+buttons.findImage = (thing) => {
+  const iconDir = UI.icons.iconBase
+  if (thing.sameTerm(ns.foaf('Agent')) || thing.sameTerm(ns.rdf('Resource'))) {
+    return iconDir + 'noun_98053.svg' // Globe
+  }
+  const image = kb.any(thing, ns.sioc('avatar')) ||
+    kb.any(thing, ns.foaf('img')) ||
+    kb.any(thing, ns.vcard('logo')) ||
+    kb.any(thing, ns.vcard('hasPhoto')) ||
+    kb.any(thing, ns.vcard('photo')) ||
+    kb.any(thing, ns.foaf('depiction'))
+  return image ? image.uri : null
+}
+
 // @@ Also add icons for *properties* like  home, work, email, range, domain, comment,
 
-buttons.setImage = function (element, x) {
+buttons.setImage = function (element, profile) {
   const kb = UI.store
-  const ns = UI.ns
-  const iconDir = UI.icons.iconBase
-  var findImage = function (x) {
-    if (x.sameTerm(ns.foaf('Agent')) || x.sameTerm(ns.rdf('Resource'))) {
-      return iconDir + 'noun_98053.svg' // Globe
-    }
-    var image = kb.any(x, ns.sioc('avatar')) ||
-      kb.any(x, ns.foaf('img')) ||
-      kb.any(x, ns.vcard('logo')) ||
-      kb.any(x, ns.vcard('hasPhoto')) ||
-      kb.any(x, ns.vcard('photo')) ||
-      kb.any(x, ns.foaf('depiction'))
-    return image ? image.uri : null
-  }
-
-  var uri = findImage(x)
-  element.setAttribute('src', uri || buttons.findImageByClass(x))
-  if (!uri && x.uri) {
-    kb.fetcher.nowOrWhenFetched(x.doc(), undefined, function (ok) {
-      element.setAttribute('src', findImage(x) || buttons.findImageByClass(x))
+  const uri = buttons.findImage(profile)
+  element.setAttribute('src', uri || buttons.findImageByClass(profile))
+  if (!uri && profile.uri) {
+    kb.fetcher.nowOrWhenFetched(profile.doc(), undefined, () => {
+      element.setAttribute('src', buttons.findImage(profile) || buttons.findImageByClass(profile))
     })
   }
 }
