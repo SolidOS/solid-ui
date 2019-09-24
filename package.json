@@ -3,18 +3,20 @@
   "version": "1.2.1",
   "description": "UI library for writing Solid read-write-web applications",
   "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "files": [
     "lib",
     "dist"
   ],
   "scripts": {
-    "build-lib": "babel --no-babelrc src -d lib",
-    "build": "npm run build-lib",
+    "build": "npm run build-lib && npm run build-types",
+    "build-lib": "babel src -d lib --source-maps",
+    "build-types": "tsc --emitDeclarationOnly",
     "postversion": "git push origin master --follow-tags",
     "prepublishOnly": "npm run build",
     "standard": "standard src",
     "test": "npm run standard",
-    "watch": "babel --no-babelrc src --out-dir lib --watch"
+    "watch": "babel src --out-dir lib --watch --source-maps"
   },
   "repository": {
     "type": "git",
@@ -41,6 +43,7 @@
   },
   "homepage": "https://github.com/solid/solid-ui",
   "dependencies": {
+    "@babel/runtime": "^7.6.2",
     "escape-html": "^1.0.3",
     "mime-types": "^2.1.24",
     "node-uuid": "^1.4.7",
@@ -50,9 +53,15 @@
     "solid-namespace": "0.2.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.18.0",
-    "babel-preset-env": ">=1.7.0",
-    "standard": "^10.0.2"
+    "@babel/cli": "^7.6.2",
+    "@babel/core": "^7.6.2",
+    "@babel/plugin-transform-async-to-generator": "^7.5.0",
+    "@babel/plugin-transform-runtime": "^7.6.2",
+    "@babel/preset-env": "^7.6.2",
+    "@babel/preset-typescript": "^7.6.0",
+    "@types/rdflib": "^0.20.1",
+    "standard": "^10.0.2",
+    "typescript": "^3.6.3"
   },
   "standard": {
     "globals": [
