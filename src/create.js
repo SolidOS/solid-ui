@@ -80,7 +80,7 @@ function newThingUI (context, thePanes) {
               if (newPaneOptions.folder) {
                 var tail = newPaneOptions.newInstance.uri.slice(newPaneOptions.folder.uri.length)
                 const isPackage = tail.includes('/')
-                console.log('  new thing is packge? ' + isPackage)
+                console.log('  new thing is package? ' + isPackage)
                 if (isPackage) {
                   kb.add(newPaneOptions.folder, UI.ns.ldp('contains'), kb.sym(newPaneOptions.newBase),
                     newPaneOptions.folder.doc())
@@ -122,20 +122,24 @@ function newThingUI (context, thePanes) {
         options.div.appendChild(selectUI)
         // selectUIParent = options.div
       } else {
-        var gotName = function (name) {
+        UI.widgets.askName(dom, UI.store, options.div, UI.ns.foaf('name'), null, options.noun).then(name => {
+          const isValidName = validatePathname(name)
+          if (!isValidName) {
+            window.alert('Invalid characters in name, please do not use any of the following characters: # :')
+            return selectNewTool() // toggle star to plain and menu vanish again
+          }
           if (!name) {
             // selectUIParent.removeChild(selectUI)   itremves itself if cancelled
-            selectNewTool() // toggle star to plain and menu vanish again
-          } else {
-            var uri = options.folder.uri
-            if (!uri.endsWith('/')) {
-              uri = uri + '/'
-            }
-            uri = uri + encodeURIComponent(name) + '/'
-            callbackWS(null, uri)
+            return selectNewTool() // toggle star to plain and menu vanish again
           }
-        }
-        UI.widgets.askName(dom, UI.store, options.div, UI.ns.foaf('name'), null, options.noun).then(gotName)
+
+          let uri = options.folder.uri
+          if (!uri.endsWith('/')) {
+            uri = uri + '/'
+          }
+          uri = uri + encodeURIComponent(name) + '/'
+          callbackWS(null, uri)
+        })
         // selectUI = getNameForm(dom, UI.store, options.noun, gotName)
         // options.div.appendChild(selectUI)
         // selectUIParent = options.div
@@ -195,6 +199,10 @@ function newThingUI (context, thePanes) {
     styleTheIcons('display: none;') // 'background-color: #ccc;'
     icon.setAttribute('style', iconStyle + 'background-color: yellow;')
   }
+}
+
+function validatePathname (pathname) {
+  return !(/[#:]/g).test(pathname)
 }
 
 // Form to get the name of a new thing before we create it
