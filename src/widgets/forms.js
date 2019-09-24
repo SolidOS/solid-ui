@@ -1268,6 +1268,7 @@ function buildCheckboxForm (dom, kb, lab, del, ins, form, store, tristate) { // 
   input.addEventListener('click', boxHandler, false)
   return box
 }
+forms.buildCheckboxForm = buildCheckboxForm
 
 forms.fieldLabel = function (dom, property, form) {
   var lab = UI.store.any(form, UI.ns.ui('label'))
