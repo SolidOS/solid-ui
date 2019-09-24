@@ -47,6 +47,7 @@ function complain (context, err) {
   if (ele) ele.appendChild(error.errorMessageBlock(context.dom, err))
   else alert(err)
 }
+buttons.complain = complain
 
 // var UI.ns = require('./ns.js')
 // var utilsModule = require('./utils')
