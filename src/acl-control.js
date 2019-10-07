@@ -94,11 +94,8 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
   // There are two of these in all iff the defaults are separate
   //
   function ACLControlEditable (box, doc, aclDoc, kb, options) {
-    var defaultOrMain = options.doingDefaults ? 'default' : 'main'
     options = options || {}
-    var ac = UI.acl.readACL(doc, aclDoc, kb, options.doingDefaults) // Note kb might not be normal one
     var byCombo
-    box[defaultOrMain] = byCombo = UI.acl.ACLbyCombination(ac)
     var kToCombo = function (k) {
       var y = ['Read', 'Append', 'Write', 'Control']
       var combo = []
