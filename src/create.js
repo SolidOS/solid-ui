@@ -202,7 +202,7 @@ function newThingUI (context, thePanes) {
 }
 
 function validatePathname (pathname) {
-  return !(/[#:]/g).test(pathname)
+  return pathname.indexOf('#') === -1 && pathname.indexOf(':') === -1
 }
 
 // Form to get the name of a new thing before we create it
