@@ -36,35 +36,72 @@ https://github.com/solid/solid
  * @static
  */
 
-const rdf = require('rdflib') // pull in first avoid cross-refs
-const ns = require('./ns')
+// REMOVE @ts-ignore as you migrate files to TypeScript
+import * as rdf from 'rdflib' // pull in first avoid cross-refs
+// @ts-ignore
+import * as ns from './ns'
+// @ts-ignore
+import * as acl from './acl'
+// @ts-ignore
+import * as aclControl from './acl-control'
+// @ts-ignore
+import * as authn from "./signin"
+// @ts-ignore
+import * as create from "./create"
+// @ts-ignore
+import * as icons from "./iconBase"
+// @ts-ignore
+import * as log from "./log"
+// @ts-ignore
+import * as matrix from "./matrix"
+// @ts-ignore
+import * as media from "./media-capture"
+// @ts-ignore
+import * as messageArea from "./messageArea"
+// @ts-ignore
+import { infiniteMessageArea } from "./chat/infinite"
+// @ts-ignore
+import * as pad from "./pad"
+// @ts-ignore
+import * as preferences from "./preferences"
+// @ts-ignore
+import * as store from "./store"
+// @ts-ignore
+import * as style from "./style"
+// @ts-ignore
+import * as table from "./table"
+// @ts-ignore
+import * as tabs from "./tabs"
+// @ts-ignore
+import * as utils from "./utils"
+// @ts-ignore
+import * as widgets from "./widgets"
 
 const UI = {
   ns,
   rdf,
-  acl: require('./acl'),
-  aclControl: require('./acl-control'),
-  authn: require('./signin'),
-  create: require('./create'),
+  acl,
+  aclControl,
+  authn,
+  create,
   dom: window.document, // Idea that UI.dom can be adapted in non-browser environments
-  icons: require('./iconBase'),
-  log: require('./log'),
-  matrix: require('./matrix'),
-  media: require('./media-capture'),
-  messageArea: require('./messageArea'),
-  infiniteMessageArea: require('./chat/infinite').infiniteMessageArea,
-  // infiniteMessageArea: require('./infiniteMessageArea'),
-  pad: require('./pad'),
-  preferences: require('./preferences'),
-  store: require('./store'),
-  style: require('./style'),
-  table: require('./table'),
-  tabs: require('./tabs'),
-  utils: require('./utils'),
-  widgets: require('./widgets')
+  icons,
+  log,
+  matrix,
+  media,
+  messageArea,
+  infiniteMessageArea,
+  pad,
+  preferences,
+  store,
+  style,
+  table,
+  tabs,
+  utils,
+  widgets
 }
 
 if (typeof window !== 'undefined') {
-  window.UI = UI  // Simpler access by non-node scripts
+  (<any>window).UI = UI  // Simpler access by non-node scripts
 }
-module.exports = UI
+export default UI
