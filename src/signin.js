@@ -1291,16 +1291,13 @@ function newAppInstance (dom, appDetails, callback) {
 }
 
 async function getUserRoles () {
-  const profile = await checkUser()
-  if (!profile) {
-    return []
+  try {
+    const { me, preferencesFile } = await logInLoadPreferences({})
+    return UI.store.each(me, ns.rdf('type'), null, preferencesFile.doc())
+  } catch (error) {
+    console.warn('Unable to fetch your preferences - this was the error: ', error)
   }
-  const preferencesFile = UI.store.any(profile, ns.space('preferencesFile'), null, profile.doc())
-  if (!preferencesFile) {
-    return []
-  }
-  await UI.store.fetcher.load(preferencesFile)
-  return UI.store.each(profile, ns.rdf('type'), null, preferencesFile.doc())
+  return []
 }
 
 async function filterAvailablePanes (panes) {
