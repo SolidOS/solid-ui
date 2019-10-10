@@ -28,8 +28,19 @@ const dashCharacter = '-'
 /*                                  Form Field implementations
 **
 */
-/*          Group of different fields
+/**          Group of different fields
 **
+**  One type of form field is an ordered Group of other fields.
+**  A Form is actually just the same as a group.
+**
+** @param {Element?} container  If present, the created widget will be appended to this
+** @param {Map} already A hash table of (form, suject) kept to prevent recusive forms looping
+** @param {Node} subject The thing about which the form displays/edits data
+** @param {Node} form The form or field to be rendered
+** @param {Node} store The web document in which the data is
+** @param {function(ok, errorMessage)} callbackFunction Called when data is changed?
+**
+** @returns {Element} The HTML widget created
 */
 forms.field[UI.ns.ui('Form').uri] =
   forms.field[UI.ns.ui('Group').uri] = function (
@@ -38,7 +49,7 @@ forms.field[UI.ns.ui('Form').uri] =
     var box = dom.createElement('div')
     box.setAttribute('style', 'padding-left: 2em; border: 0.05em solid brown;') // Indent a group
     var ui = UI.ns.ui
-    container.appendChild(box)
+    if (container) container.appendChild(box)
 
     // Prevent loops
     var key = subject.toNT() + '|' + form.toNT()
@@ -103,14 +114,23 @@ forms.field[UI.ns.ui('Form').uri] =
 
 /*          Options: Select one or more cases
 **
+** @param {Element?} container  If present, the created widget will be appended to this
+** @param {Map} already A hash table of (form, suject) kept to prevent recusive forms looping
+** @param {Node} subject The thing about which the form displays/edits data
+** @param {Node} form The form or field to be rendered
+** @param {Node} store The web document in which the data is
+** @param {function(ok, errorMessage)} callbackFunction Called when data is changed?
+**
+** @returns {Element} The HTML widget created
 */
+
 forms.field[UI.ns.ui('Options').uri] = function (
   dom, container, already, subject, form, store, callbackFunction) {
   var kb = UI.store
   var box = dom.createElement('div')
   // box.setAttribute('style', 'padding-left: 2em; border: 0.05em dotted purple;')  // Indent Options
   var ui = UI.ns.ui
-  container.appendChild(box)
+  if (container) container.appendChild(box)
 
   var dependingOn = kb.any(form, ui('dependingOn'))
   if (!dependingOn) {
@@ -169,7 +189,7 @@ forms.field[UI.ns.ui('Multiple').uri] = function (
   // We don't indent multiple as it is a sort of a prefix o fthe next field and has contents of one.
   // box.setAttribute('style', 'padding-left: 2em; border: 0.05em solid green;')  // Indent a multiple
   var ui = UI.ns.ui
-  container.appendChild(box)
+  if (container) container.appendChild(box)
   var property = kb.any(form, ui('property'))
   if (!property) {
     box.appendChild(error.errorMessageBlock(dom,
@@ -190,7 +210,6 @@ forms.field[UI.ns.ui('Multiple').uri] = function (
   // box.appendChild(dom.createElement('h3')).textContent = "Fields:".
   var body = box.appendChild(dom.createElement('tr'))
   var tail = box.appendChild(dom.createElement('tr'))
-
 
   var addItem = function (e, object) {
     UI.log.debug('Multiple add: ' + object)
@@ -310,142 +329,158 @@ forms.fieldParams[UI.ns.ui('EmailField').uri] = { 'size': 30, 'uriPrefix': 'mail
 forms.fieldParams[UI.ns.ui('EmailField').uri].pattern =
   /^\s*.*@.*\..*\s*$/ // @@ Get the right regexp here
 
-forms.field[UI.ns.ui('PhoneField').uri] =
-  forms.field[UI.ns.ui('EmailField').uri] =
-    forms.field[UI.ns.ui('ColorField').uri] =
-      forms.field[UI.ns.ui('DateField').uri] =
-        forms.field[UI.ns.ui('DateTimeField').uri] =
-          forms.field[UI.ns.ui('TimeField').uri] =
-            forms.field[UI.ns.ui('NumericField').uri] =
-              forms.field[UI.ns.ui('IntegerField').uri] =
-                forms.field[UI.ns.ui('DecimalField').uri] =
-                  forms.field[UI.ns.ui('FloatField').uri] =
-                    forms.field[UI.ns.ui('TextField').uri] =
-                      forms.field[UI.ns.ui('SingleLineTextField').uri] =
-                        forms.field[UI.ns.ui('NamedNodeURIField').uri] = function (
-                          dom, container, already, subject, form, store, callbackFunction) {
-                          var ui = UI.ns.ui
-                          var kb = UI.store
+/** Render a basic form field
+*
+** @param {Element?} container  If present, the created widget will be appended to this
+** @param {Map} already A hash table of (form, suject) kept to prevent recusive forms looping
+** @param {Node} subject The thing about which the form displays/edits data
+** @param {Node} form The form or field to be rendered
+** @param {Node} store The web document in which the data is
+** @param {function(ok, errorMessage)} callbackFunction Called when data is changed?
+**
+** @returns {Element} The HTML widget created
+**
+** The same function is used for many similar one-value fields, with different
+** regexps used to validate.
+*/
+function basicField (
+  dom, container, already, subject, form, store, callbackFunction) {
+  var ui = UI.ns.ui
+  var kb = UI.store
 
-                          var box = dom.createElement('tr')
-                          container.appendChild(box)
-                          var lhs = dom.createElement('td')
-                          lhs.setAttribute('class', 'formFieldName')
-                          lhs.setAttribute('style', '  vertical-align: middle;')
-                          box.appendChild(lhs)
-                          var rhs = dom.createElement('td')
-                          rhs.setAttribute('class', 'formFieldValue')
-                          box.appendChild(rhs)
+  var box = dom.createElement('tr')
+  if (container) container.appendChild(box)
+  var lhs = dom.createElement('td')
+  lhs.setAttribute('class', 'formFieldName')
+  lhs.setAttribute('style', '  vertical-align: middle;')
+  box.appendChild(lhs)
+  var rhs = dom.createElement('td')
+  rhs.setAttribute('class', 'formFieldValue')
+  box.appendChild(rhs)
 
-                          var property = kb.any(form, ui('property'))
-                          if (!property) {
-                            box.appendChild(dom.createTextNode('Error: No property given for text field: ' + form))
-                            return box
-                          }
-                          lhs.appendChild(forms.fieldLabel(dom, property, form))
-                          var uri = forms.bottomURI(form)
-                          var params = forms.fieldParams[uri]
-                          if (params === undefined) params = {} // non-bottom field types can do this
-                          var style = params.style || 'font-size: 100%; margin: 0.1em; padding: 0.1em;'
-                          // box.appendChild(dom.createTextNode(' uri='+uri+', pattern='+ params.pattern))
-                          var field = dom.createElement('input')
-                          rhs.appendChild(field)
-                          field.setAttribute('type', params.type ? params.type : 'text')
+  var property = kb.any(form, ui('property'))
+  if (!property) {
+    box.appendChild(dom.createTextNode('Error: No property given for text field: ' + form))
+    return box
+  }
+  lhs.appendChild(forms.fieldLabel(dom, property, form))
+  var uri = forms.bottomURI(form)
+  var params = forms.fieldParams[uri]
+  if (params === undefined) params = {} // non-bottom field types can do this
+  var style = params.style || 'font-size: 100%; margin: 0.1em; padding: 0.1em;'
+  // box.appendChild(dom.createTextNode(' uri='+uri+', pattern='+ params.pattern))
+  var field = dom.createElement('input')
+  rhs.appendChild(field)
+  field.setAttribute('type', params.type ? params.type : 'text')
 
-                          var size = kb.any(form, ui('size')) // Form has precedence
-                          field.setAttribute('size', size ? '' + size : (params.size ? '' + params.size : '20'))
-                          var maxLength = kb.any(form, ui('maxLength'))
-                          field.setAttribute('maxLength', maxLength ? '' + maxLength : '4096')
+  var size = kb.any(form, ui('size')) // Form has precedence
+  field.setAttribute('size', size ? '' + size : (params.size ? '' + params.size : '20'))
+  var maxLength = kb.any(form, ui('maxLength'))
+  field.setAttribute('maxLength', maxLength ? '' + maxLength : '4096')
 
-                          store = store || forms.fieldStore(subject, property, store)
+  store = store || forms.fieldStore(subject, property, store)
 
-                          var obj = kb.any(subject, property, undefined, store)
-                          if (!obj) {
-                            obj = kb.any(form, ui('default'))
-                          }
-                          if (obj && obj.uri && params.uriPrefix) { // eg tel: or mailto:
-                            field.value = decodeURIComponent(obj.uri.replace(params.uriPrefix, '')) // should have no spaces but in case
-                              .replace(/ /g, '')
-                          } else if (obj) {
-                            field.value = obj.value || obj.uri || ''
-                          }
-                          field.setAttribute('style', style)
+  var obj = kb.any(subject, property, undefined, store)
+  if (!obj) {
+    obj = kb.any(form, ui('default'))
+  }
+  if (obj && obj.uri && params.uriPrefix) { // eg tel: or mailto:
+    field.value = decodeURIComponent(obj.uri.replace(params.uriPrefix, '')) // should have no spaces but in case
+      .replace(/ /g, '')
+  } else if (obj) {
+    field.value = obj.value || obj.uri || ''
+  }
+  field.setAttribute('style', style)
 
-                          if (!kb.updater.editable(store.uri)) {
-                            field.disabled = true
-                            return box
-                          }
-                          ///////// read-write:
+  if (!kb.updater.editable(store.uri)) {
+    field.readonly = true // was: disabled. readonly is better
+    return box
+  }
+  
+  // read-write:
+  field.addEventListener('keyup', function (e) {
+    if (params.pattern) {
+      field.setAttribute('style', style + (
+        field.value.match(params.pattern)
+          ? 'color: green;' : 'color: red;'))
+    }
+  }, true)
+  field.addEventListener('change', function (e) { // i.e. lose focus with changed data
+    if (params.pattern && !field.value.match(params.pattern)) return
+    field.disabled = true // See if this stops getting two dates from fumbling e.g the chrome datepicker.
+    field.setAttribute('style', style + 'color: gray;') // pending
+    var ds = kb.statementsMatching(subject, property) // remove any multiple values
+    var result
+    if (params.namedNode) {
+      result = kb.sym(field.value)
+    } else if (params.uriPrefix) {
+      result = encodeURIComponent(field.value.replace(/ /g, ''))
+      result = kb.sym(params.uriPrefix + field.value)
+    } else {
+      if (params.dt) {
+        result = new $rdf.Literal(field.value.trim(), undefined, UI.ns.xsd(params.dt))
+      } else {
+        result = new $rdf.Literal(field.value)
+      }
+    }
+    var is = ds.map(st => $rdf.st(st.subject, st.predicate, result, st.why)) // can include >1 doc
+    if (is.length === 0) {  // or none
+      is = [$rdf.st(subject, property, result, store)]
+    }
 
-                          field.addEventListener('keyup', function (e) {
-                            if (params.pattern) {
-                              field.setAttribute('style', style + (
-                                field.value.match(params.pattern)
-                                  ? 'color: green;' : 'color: red;'))
-                            }
-                          }, true)
-                          field.addEventListener('change', function (e) { // i.e. lose focus with changed data
-                            if (params.pattern && !field.value.match(params.pattern)) return
-                            field.disabled = true // See if this stops getting two dates from fumbling e.g the chrome datepicker.
-                            field.setAttribute('style', style + 'color: gray;') // pending
-                            var ds = kb.statementsMatching(subject, property) // remove any multiple values
-                            var result
-                            if (params.namedNode) {
-                              result = kb.sym(field.value)
-                            } else if (params.uriPrefix) {
-                              result = encodeURIComponent(field.value.replace(/ /g, ''))
-                              result = kb.sym(params.uriPrefix + field.value)
-                            } else {
-                              if (params.dt) {
-                                result = new $rdf.Literal(field.value.trim(), undefined, UI.ns.xsd(params.dt))
-                              } else {
-                                result = new $rdf.Literal(field.value)
-                              }
-                            }
-                            var is = ds.map(st => $rdf.st(st.subject, st.predicate, result, st.why)) // can include >1 doc
-                            if (is.length === 0) {  // or none
-                              is = [$rdf.st(subject, property, result, store)]
-                            }
+    function updateMany (ds, is, callback) {
+      var docs = []
+      is.forEach(st => {
+        if (!docs.includes(st.why.uri)) docs.push(st.why.uri)
+      })
+      ds.forEach(st => {
+        if (!docs.includes(st.why.uri)) docs.push(st.why.uri)
+      })
+      if (docs.length === 0) throw new Error('updateMany has no docs to patch')
+      if (docs.length === 1) return kb.updater.update(ds, is, callback)
+      console.log('Update many: ' + docs)
+      let doc = docs.pop()
+      let is1 = is.filter(st => st.why.uri === doc)
+      let is2 = is.filter(st => st.why.uri !== doc)
+      let ds1 = ds.filter(st => st.why.uri === doc)
+      let ds2 = ds.filter(st => st.why.uri !== doc)
+      kb.updater.update(ds1, is1, function (uri, ok, body) {
+        if (ok) {
+          updateMany(ds2, is2, callback)
+        } else {
+          console.log('Update many failed on: ' + doc)
+          callback(uri, ok, body)
+        }
+      })
+    }
 
-                            function updateMany (ds, is, callback) {
-                              var docs = []
-                              is.forEach(st => {
-                                if (!docs.includes(st.why.uri)) docs.push(st.why.uri)
-                              })
-                              ds.forEach(st => {
-                                if (!docs.includes(st.why.uri)) docs.push(st.why.uri)
-                              })
-                              if (docs.length === 0) throw new Error('updateMany has no docs to patch')
-                              if (docs.length === 1) return kb.updater.update(ds, is, callback)
-                              console.log('Update many: ' + docs)
-                              let doc = docs.pop()
-                              let is1 = is.filter(st => st.why.uri === doc)
-                              let is2 = is.filter(st => st.why.uri !== doc)
-                              let ds1 = ds.filter(st => st.why.uri === doc)
-                              let ds2 = ds.filter(st => st.why.uri !== doc)
-                              kb.updater.update(ds1, is1, function (uri, ok, body) {
-                                if (ok) {
-                                  updateMany(ds2, is2, callback)
-                                } else {
-                                  console.log('Update many failed on: ' + doc)
-                                  callback(uri, ok, body)
-                                }
-                              })
-                            }
+    updateMany(ds, is, function (uri, ok, body) {
+    // kb.updater.update(ds, is, function (uri, ok, body) {
+      if (ok) {
+        field.disabled = false
+        field.setAttribute('style', style)
+      } else {
+        box.appendChild(error.errorMessageBlock(dom, body))
+      }
+      callbackFunction(ok, body)
+    })
+  }, true)
+  return box
+}
 
-                            updateMany(ds, is, function (uri, ok, body) {
-                            // kb.updater.update(ds, is, function (uri, ok, body) {
-                              if (ok) {
-                                field.disabled = false
-                                field.setAttribute('style', style)
-                              } else {
-                                box.appendChild(error.errorMessageBlock(dom, body))
-                              }
-                              callbackFunction(ok, body)
-                            })
-                          }, true)
-                          return box
-                        }
+forms.field[UI.ns.ui('PhoneField').uri] = basicField
+forms.field[UI.ns.ui('EmailField').uri] = basicField
+forms.field[UI.ns.ui('ColorField').uri] = basicField
+forms.field[UI.ns.ui('DateField').uri] = basicField
+forms.field[UI.ns.ui('DateTimeField').uri] = basicField
+forms.field[UI.ns.ui('TimeField').uri] = basicField
+forms.field[UI.ns.ui('NumericField').uri] = basicField
+forms.field[UI.ns.ui('IntegerField').uri] = basicField
+forms.field[UI.ns.ui('DecimalField').uri] = basicField
+forms.field[UI.ns.ui('FloatField').uri] = basicField
+forms.field[UI.ns.ui('TextField').uri] = basicField
+forms.field[UI.ns.ui('SingleLineTextField').uri] = basicField
+forms.field[UI.ns.ui('NamedNodeURIField').uri] = basicField
 
 /*          Multiline Text field
 **
@@ -460,11 +495,13 @@ forms.field[UI.ns.ui('MultiLineTextField').uri] = function (
     return error.errorMessageBlock(dom,
       'No property to text field: ' + form)
   }
-  container.appendChild(forms.fieldLabel(dom, property, form))
+  let box = dom.createElement('div')
+  box.appendChild(forms.fieldLabel(dom, property, form))
   store = forms.fieldStore(subject, property, store)
-  var box = forms.makeDescription(dom, kb, subject, property, store, callbackFunction)
+  var field = forms.makeDescription(dom, kb, subject, property, store, callbackFunction)
   // box.appendChild(dom.createTextNode('<-@@ subj:'+subject+', prop:'+property))
-  container.appendChild(box)
+  box.appendChild(field)
+  if (container) container.appendChild(box)
   return box
 }
 
@@ -477,8 +514,9 @@ function booleanField (
   var kb = UI.store
   var property = kb.any(form, ui('property'))
   if (!property) {
-    return container.appendChild(error.errorMessageBlock(dom,
-      'No property to boolean field: ' + form))
+    let errorBlock = error.errorMessageBlock(dom, 'No property to boolean field: ' + form)
+    if (container) container.appendChild(errorBlock)
+    return errorBlock
   }
   var lab = kb.any(form, ui('label'))
   if (!lab) lab = utils.label(property, true) // Init capital
@@ -489,7 +527,7 @@ function booleanField (
   var ins = $rdf.st(subject, property, true, store)
   var del = $rdf.st(subject, property, false, store)
   var box = buildCheckboxForm(dom, kb, lab, del, ins, form, store, tristate)
-  container.appendChild(box)
+  if (container) container.appendChild(box)
   return box
 }
 forms.field[UI.ns.ui('BooleanField').uri] = function (
@@ -531,7 +569,7 @@ forms.field[UI.ns.ui('Classifier').uri] = function (
     return callbackFunction(ok, body)
   }
   var box = forms.makeSelectForNestedCategory(dom, kb, subject, category, store, checkOptions)
-  container.appendChild(box)
+  if (container) container.appendChild(box)
   return box
 }
 
@@ -555,7 +593,7 @@ forms.field[UI.ns.ui('Choice').uri] = function (
   var multiple = false
   var p
   var box = dom.createElement('tr')
-  container.appendChild(box)
+  if (container) container.appendChild(box)
   var lhs = dom.createElement('td')
   box.appendChild(lhs)
   var rhs = dom.createElement('td')
@@ -639,7 +677,7 @@ forms.field[UI.ns.ui('Comment').uri] =
     if (params === undefined) { params = {} }; // non-bottom field types can do this
 
     var box = dom.createElement('div')
-    container.appendChild(box)
+    if (container) container.appendChild(box)
     var p = box.appendChild(dom.createElement(params['element']))
     p.textContent = contents
 
@@ -688,7 +726,7 @@ forms.editFormButton = function (dom, container, form, store, callbackFunction) 
       {}, form, UI.ns.ui('FormForm'), store, callbackFunction)
     ff.setAttribute('style', UI.ns.ui('FormForm').sameTerm(form)
       ? 'background-color: #fee;' : 'background-color: #ffffe7;')
-    container.removeChild(b)
+    b.parentNode.removeChild(b)
   }, true)
   return b
 }
