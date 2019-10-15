@@ -164,7 +164,7 @@ function uploadFiles (fetcher, files, fileBase, imageBase, successHandler) {
             alert(msg)
             throw new Error(msg)
           }
-        }        }
+        }
         var folderName = theFile.type.startsWith('image/') ? imageBase || fileBase : fileBase
         var destURI = folderName + (folderName.endsWith('/') ? '' : '/') + encodeURIComponent(theFile.name)
 
