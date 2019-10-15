@@ -154,7 +154,6 @@ function uploadFiles (fetcher, files, fileBase, imageBase, successHandler) {
     reader.onload = (function (theFile) {
       return function (e) {
         var data = e.target.result
-        var suffix = ''
         console.log(' File read byteLength : ' + data.byteLength)
         var contentType = theFile.type
         if (!theFile.type || theFile.type === '') { // Not known by browser
@@ -165,15 +164,9 @@ function uploadFiles (fetcher, files, fileBase, imageBase, successHandler) {
             alert(msg)
             throw new Error(msg)
           }
-        } else {
-          var extension = mime.extension(theFile.type)
-          if (theFile.type !== mime.lookup(theFile.name)) {
-            suffix = '_.' + extension
-            console.log('MIME TYPE MISMATCH -- adding extension: ' + suffix)
-          }
-        }
+        }        }
         var folderName = theFile.type.startsWith('image/') ? imageBase || fileBase : fileBase
-        var destURI = folderName + (folderName.endsWith('/') ? '' : '/') + encodeURIComponent(theFile.name) + suffix
+        var destURI = folderName + (folderName.endsWith('/') ? '' : '/') + encodeURIComponent(theFile.name)
 
         fetcher.webOperation('PUT', destURI, { data: data, contentType: contentType })
           .then(response => {
