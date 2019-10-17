@@ -1295,7 +1295,7 @@ async function getUserRoles () {
     const { me, preferencesFile } = await logInLoadPreferences({})
     return UI.store.each(me, ns.rdf('type'), null, preferencesFile.doc())
   } catch (error) {
-    console.warn('Unable to fetch your preferences - this was the error: ', error)
+    console.warn('Unable to fetch your preferences. This was the error: ', error)
   }
   return []
 }
