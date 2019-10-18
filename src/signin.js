@@ -979,7 +979,6 @@ function loginStatusBox (dom, listener, options) { // 20190630
   var box = dom.createElement('div')
 
   function setIt (newidURI) {
-    debugger
     if (!newidURI) { return }
 
     let uri = newidURI.uri || newidURI
