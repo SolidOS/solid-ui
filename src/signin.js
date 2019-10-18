@@ -281,7 +281,7 @@ function logInLoadPreferences (context) {
             } else if (status === 404) {
               if (confirm('You do not currently have a Preferences file. Ok for me to create an empty one? ' + preferencesFile)) {
                 // @@@ code me  ... weird to have a name o fthe file but no file
-                alert('Sorry I am not prepared to do this ... please  create an empty file at ' + preferencesFile)
+                alert('Sorry; I am not prepared to do this. Please create an empty file at ' + preferencesFile)
                 return complain(new Error('Sorry No code yet to craete a preferences fille at '))
               } else {
                 reject(new Error('User declined to create a preferences file at ' + preferencesFile))
