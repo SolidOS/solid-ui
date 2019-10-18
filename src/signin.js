@@ -284,7 +284,7 @@ function logInLoadPreferences (context) {
                 alert('Sorry I am not prepared to do this ... please  create an empty file at ' + preferencesFile)
                 return complain(new Error('Sorry No code yet to craete a preferences fille at '))
               } else {
-                reject(new Error('User declined to craete a preferences fille at ' + preferencesFile))
+                reject(new Error('User declined to create a preferences file at ' + preferencesFile))
               }
             } else {
               m2 = 'Strange: Error ' + status + ' trying to read your preferences file.' + message
