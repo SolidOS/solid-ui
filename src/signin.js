@@ -276,7 +276,7 @@ function logInLoadPreferences (context) {
                 context.preferencesFileError = m2
                 return resolve(context)
               }
-              m2 = 'You are not authothorized to read your preferences file. This may be because you are using an untrusted web app.'
+              m2 = 'You are not authorized to read your preferences file. This may be because you are using an untrusted web app.'
               console.warn(m2)
             } else if (status === 404) {
               if (confirm('You do not currently have a Preferences file. Ok for me to create an empty one? ' + preferencesFile)) {
