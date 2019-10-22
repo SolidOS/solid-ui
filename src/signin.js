@@ -1299,7 +1299,10 @@ function newAppInstance (dom, appDetails, callback) {
 
 async function getUserRoles () {
   try {
-    const { me, preferencesFile } = await logInLoadPreferences({})
+    const { me, preferencesFile, preferencesFileError } = await logInLoadPreferences({})
+    if (preferencesFileError) {
+      throw new Error(preferencesFileError)
+    }
     return UI.store.each(me, ns.rdf('type'), null, preferencesFile.doc())
   } catch (error) {
     console.warn('Unable to fetch your preferences - this was the error: ', error)
