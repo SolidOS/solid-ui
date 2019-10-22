@@ -154,10 +154,12 @@ function logIn (context) {
       if (webId) {
         context.me = $rdf.sym(webId)
         console.log('logIn: Already logged in as ' + context.me)
-        resolve(context)
-        return
+        return resolve(context)
       }
-      let box = loginStatusBox(context.dom, (webIdUri) => {
+      if (!context.div || !context.dom) {
+        return resolve(context)
+      }
+      const box = loginStatusBox(context.dom, (webIdUri) => {
         saveUser(webIdUri, context)
         resolve(context) // always pass growing context
       })
@@ -180,26 +182,30 @@ function logInLoadProfile (context) {
   const fetcher = UI.store.fetcher
   var profileDocument
   return new Promise(function (resolve, reject) {
-    logIn(context)
-    .then(context => {
-      let webID = context.me
-      if (!webID) {
-        throw new Error('Could not log in')
-      }
-      profileDocument = webID.doc()
-      // Load the profile into the knowledge base (fetcher.store)
-      //   withCredentials: Web arch should let us just load by turning off creds helps CORS
-      //   reload: Gets around a specifc old Chrome bug caching/origin/cors
-      fetcher.load(profileDocument, {withCredentials: false, cache: 'reload'}).then(response => {
-        context.publicProfile = profileDocument
-        resolve(context)
-      }, err => {
-        let message = 'Logged in but cannot load profile ' + profileDocument + ' : ' + err
-        context.div.appendChild(UI.widgets.errorMessageBlock(context.dom, message))
-        reject(message)
+    return logIn(context)
+      .then(context => {
+        let webID = context.me
+        if (!webID) {
+          return reject(new Error('Could not log in'))
+        }
+        profileDocument = webID.doc()
+        // Load the profile into the knowledge base (fetcher.store)
+        //   withCredentials: Web arch should let us just load by turning off creds helps CORS
+        //   reload: Gets around a specifc old Chrome bug caching/origin/cors
+        fetcher.load(profileDocument, {withCredentials: false, cache: 'reload'})
+          .then(response => {
+            context.publicProfile = profileDocument
+            resolve(context)
+          })
+          .catch(err => {
+            let message = 'Logged in but cannot load profile ' + profileDocument + ' : ' + err
+            if (context.div && context.dom) {
+              context.div.appendChild(UI.widgets.errorMessageBlock(context.dom, message))
+            }
+            reject(message)
+          })
       })
-    },
-    err => { reject(new Error("Can't log in: " + err)) })
+      .catch(err => { reject(new Error("Can't log in: " + err)) })
   })
 }
 
@@ -220,72 +226,75 @@ function logInLoadPreferences (context) {
   const statusArea = context.statusArea || context.div || null
   var progressDisplay
   return new Promise(function (resolve, reject) {
-    logInLoadProfile(context).then(context => {
-      let preferencesFile = kb.any(context.me, UI.ns.space('preferencesFile'))
-      function complain (message) {
-        message = 'logInLoadPreferences: ' + message
-        if (statusArea) {
-          // statusArea.innerHTML = ''
-          statusArea.appendChild(UI.widgets.errorMessageBlock(context.dom, message))
+    return logInLoadProfile(context)
+      .then(context => {
+        let preferencesFile = kb.any(context.me, UI.ns.space('preferencesFile'))
+        function complain (message) {
+          message = 'logInLoadPreferences: ' + message
+          if (statusArea) {
+            // statusArea.innerHTML = ''
+            statusArea.appendChild(UI.widgets.errorMessageBlock(context.dom, message))
+          }
+          console.log(message)
+          reject(new Error(message))
         }
-        console.log(message)
-        reject(new Error(message))
-      }
 
-      /** Are we working cross-origin?
-      *
-      * @returns {Boolean} True if we are in a webapp at an origin, and the file origin is different
-      */
-      function differentOrigin () {
-        return window.location && (window.location.origin + '/' !== preferencesFile.site().uri)
-      }
-
-      if (!preferencesFile) {
-        let message = "Can't find a preferences file pointer in profile " + context.publicProfile
-        return reject(new Error(message))
-      }
-
-      // //// Load preferences file
-      kb.fetcher.load(preferencesFile, {withCredentials: true})
-      .then(function () {
-        if (progressDisplay) {
-          progressDisplay.parentNode.removeChild(progressDisplay)
+        /** Are we working cross-origin?
+        *
+        * @returns {Boolean} True if we are in a webapp at an origin, and the file origin is different
+        */
+        function differentOrigin () {
+          return window.location && (window.location.origin + '/' !== preferencesFile.site().uri)
         }
-        context.preferencesFile = preferencesFile
-        return resolve(context)
-      },
-      function (err) { // Really important to look at why
-        let status = err.status
-        let message = err.message
-        console.log('HTTP status ' + status + ' for pref file ' + preferencesFile)
-        let m2
-        if (status === 401) {
-          m2 = 'Strange - you are not authenticated (properly logged on) to read preferences file.'
-          alert(m2)
-        } else if (status === 403) {
-          if (differentOrigin()) {
-            m2 = 'Unauthorized: Assuming prefs file blocked for origin ' + window.location.origin
-            context.preferencesFileError = m2
+
+        if (!preferencesFile) {
+          let message = "Can't find a preferences file pointer in profile " + context.publicProfile
+          return reject(new Error(message))
+        }
+
+        // //// Load preferences file
+        return kb.fetcher
+          .load(preferencesFile, {withCredentials: true})
+          .then(function () {
+            if (progressDisplay) {
+              progressDisplay.parentNode.removeChild(progressDisplay)
+            }
+            context.preferencesFile = preferencesFile
             return resolve(context)
-          }
-          m2 = 'You are not authot=rized to read your prefernces file. This may be because you are using an trusted web app.'
-          console.warn(m2)
-        } else if (status === 404) {
-          if (confirm('You do not currently have a Preferences file. Ok for me to create an empty one? ' + preferencesFile)) {
-            // @@@ code me  ... weird to have a name o fthe file but no file
-            alert('Sorry I am not prepared to do this ... please  create an empty file at ' + preferencesFile)
-            return complain(new Error('Sorry No code yet to craete a preferences fille at '))
-          } else {
-            reject(new Error('User declined to craete a preferences fille at ' + preferencesFile))
-          }
-        } else {
-          m2 = 'Strange: Error ' + status + ' trying to read your preferences file.' + message
-          alert(m2)
-        }
-      }) // load prefs file then
-    }, err => { // Fail initial login load prefs
-      reject(new Error('(via loadPrefs) ' + err))
-    }, err => reject(err))
+          })
+          .catch(function (err) { // Really important to look at why
+            let status = err.status
+            let message = err.message
+            console.log('HTTP status ' + status + ' for pref file ' + preferencesFile)
+            let m2
+            if (status === 401) {
+              m2 = 'Strange - you are not authenticated (properly logged on) to read preferences file.'
+              alert(m2)
+            } else if (status === 403) {
+              if (differentOrigin()) {
+                m2 = 'Unauthorized: Assuming prefs file blocked for origin ' + window.location.origin
+                context.preferencesFileError = m2
+                return resolve(context)
+              }
+              m2 = 'You are not authorized to read your preferences file. This may be because you are using an untrusted web app.'
+              console.warn(m2)
+            } else if (status === 404) {
+              if (confirm('You do not currently have a Preferences file. Ok for me to create an empty one? ' + preferencesFile)) {
+                // @@@ code me  ... weird to have a name o fthe file but no file
+                alert('Sorry; I am not prepared to do this. Please create an empty file at ' + preferencesFile)
+                return complain(new Error('Sorry; no code yet to create a preferences file at '))
+              } else {
+                reject(new Error('User declined to create a preferences file at ' + preferencesFile))
+              }
+            } else {
+              m2 = 'Strange: Error ' + status + ' trying to read your preferences file.' + message
+              alert(m2)
+            }
+          }) // load prefs file then
+      })
+      .catch(err => { // Fail initial login load prefs
+        reject(new Error('(via loadPrefs) ' + err))
+      })
   })
 }
 
@@ -987,10 +996,7 @@ function loginStatusBox (dom, listener, options) { // 20190630
       try {
         UI.log.alert(message)
       } catch (e) {
-        try {
-          window.alert(message)
-        } catch (e) {
-        }
+        window.alert(message)
       }
       box.refresh()
       if (listener) listener(null)
@@ -1254,7 +1260,8 @@ function selectWorkspace (dom, appDetails, callbackWS) {
   } // displayOptions
 
   logInLoadPreferences(context)  // kick off async operation
-    .then(displayOptions, err => {
+    .then(displayOptions)
+    .catch(err => {
       box.appendChild(UI.widgets.errorMessageBlock(err))
     })
 
@@ -1291,16 +1298,16 @@ function newAppInstance (dom, appDetails, callback) {
 }
 
 async function getUserRoles () {
-  const profile = await checkUser()
-  if (!profile) {
-    return []
+  try {
+    const { me, preferencesFile, preferencesFileError } = await logInLoadPreferences({})
+    if (preferencesFileError) {
+      throw new Error(preferencesFileError)
+    }
+    return UI.store.each(me, ns.rdf('type'), null, preferencesFile.doc())
+  } catch (error) {
+    console.warn('Unable to fetch your preferences - this was the error: ', error)
   }
-  const preferencesFile = UI.store.any(profile, ns.space('preferencesFile'), null, profile.doc())
-  if (!preferencesFile) {
-    return []
-  }
-  await UI.store.fetcher.load(preferencesFile)
-  return UI.store.each(profile, ns.rdf('type'), null, preferencesFile.doc())
+  return []
 }
 
 async function filterAvailablePanes (panes) {
