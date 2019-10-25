@@ -10,13 +10,13 @@
   ],
   "scripts": {
     "build": "npm run build-lib && npm run build-types",
-    "build-lib": "babel src -d lib --source-maps",
+    "build-lib": "babel src -d lib --source-maps --extensions '.ts,.js'",
     "build-types": "tsc --emitDeclarationOnly",
     "postversion": "git push origin master --follow-tags",
     "prepublishOnly": "npm run build",
     "standard": "standard src",
     "test": "npm run standard",
-    "watch": "babel src --out-dir lib --watch --source-maps"
+    "watch": "babel src --out-dir lib --watch --source-maps --extensions '.ts,.js'"
   },
   "repository": {
     "type": "git",
