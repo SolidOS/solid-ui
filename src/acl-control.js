@@ -93,9 +93,10 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
   // This is the main function which produces an editable access control.
   // There are two of these in all iff the defaults are separate
   //
-  function ACLControlEditable (box, doc, aclDoc, kb, options) {
-    options = options || {}
-    var byCombo
+  function ACLControlEditable (box, doc, aclDoc, kb, options = {}) {
+    var ac = UI.acl.readACL(doc, aclDoc, kb, options.doingDefaults) // Note kb might not be normal one
+    var byCombo = UI.acl.ACLbyCombination(ac) // important to keep this, as removal will trigger bugs like https://github.com/solid/solid-panes/issues/193#issuecomment-549777549
+
     var kToCombo = function (k) {
       var y = ['Read', 'Append', 'Write', 'Control']
       var combo = []
@@ -108,6 +109,7 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
       combo = combo.join('\n')
       return combo
     }
+
     var colloquial = {13: 'Owners', 9: 'Owners (write locked)', 5: 'Editors', 3: 'Posters', 2: 'Submitters', 1: 'Viewers'}
     var recommended = {13: true, 5: true, 3: true, 2: true, 1: true}
     var explanation = {
