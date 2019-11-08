@@ -11,9 +11,9 @@ deploy:
   provider: npm
   # Do not throw away the updated package.json we generated in `before_deploy`:
   skip_cleanup: true
-  email: "$NPM_EMAIL"
-  api_key: "$NPM_TOKEN"
+  email: '$NPM_EMAIL'
+  api_key: '$NPM_TOKEN'
   # Note: do not deploy on pull request, because $TRAVIS_BRANCH will be the target branch.
-  tag: "$TRAVIS_BRANCH"
+  tag: '$TRAVIS_BRANCH'
   on:
     all_branches: true

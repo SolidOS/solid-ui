@@ -45,37 +45,37 @@ import * as acl from './acl'
 // @ts-ignore
 import * as aclControl from './acl-control'
 // @ts-ignore
-import * as authn from "./signin"
+import * as authn from './signin'
 // @ts-ignore
-import * as create from "./create"
+import * as create from './create'
 // @ts-ignore
-import * as icons from "./iconBase"
+import * as icons from './iconBase'
 // @ts-ignore
-import * as log from "./log"
+import * as log from './log'
 // @ts-ignore
-import * as matrix from "./matrix"
+import * as matrix from './matrix'
 // @ts-ignore
-import * as media from "./media-capture"
+import * as media from './media-capture'
 // @ts-ignore
-import * as messageArea from "./messageArea"
+import * as messageArea from './messageArea'
 // @ts-ignore
-import { infiniteMessageArea } from "./chat/infinite"
+import { infiniteMessageArea } from './chat/infinite'
 // @ts-ignore
-import * as pad from "./pad"
+import * as pad from './pad'
 // @ts-ignore
-import * as preferences from "./preferences"
+import * as preferences from './preferences'
 // @ts-ignore
-import * as store from "./store"
+import * as store from './store'
 // @ts-ignore
-import * as style from "./style"
+import * as style from './style'
 // @ts-ignore
-import * as table from "./table"
+import * as table from './table'
 // @ts-ignore
-import * as tabs from "./tabs"
+import * as tabs from './tabs'
 // @ts-ignore
-import * as utils from "./utils"
+import * as utils from './utils'
 // @ts-ignore
-import * as widgets from "./widgets"
+import * as widgets from './widgets'
 
 const UI = {
   ns,
@@ -102,6 +102,6 @@ const UI = {
 }
 
 if (typeof window !== 'undefined') {
-  (<any>window).UI = UI  // Simpler access by non-node scripts
+  ;(<any>window).UI = UI // Simpler access by non-node scripts
 }
 export default UI
