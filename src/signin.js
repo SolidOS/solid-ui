@@ -27,6 +27,8 @@ const UI = {
   widgets: require('./widgets') // 2018-07-31
 }
 
+const cachedResponses = {}
+
 const ns = UI.ns
 const kb = UI.store
 
@@ -1311,8 +1313,12 @@ async function getUserRoles () {
 }
 
 async function filterAvailablePanes (panes) {
-  const userRoles = await getUserRoles()
-  return Object.values(panes).filter(pane => isMatchingAudience(pane, userRoles))
+  // On successful results the profile and settings is cached by the browser, but that's not the case when you're
+  // authenticated on a Pod which origin is not trusted (it returns 403 Forbidden). This will cache the user roles in
+  // memory, so that we don't continue to spam requests to profile and settings (which might happen when you navigate
+  // the folder view)
+  cachedResponses['userRoles'] = cachedResponses['userRoles'] || await getUserRoles()
+  return Object.values(panes).filter(pane => isMatchingAudience(pane, cachedResponses['userRoles']))
 }
 
 function isMatchingAudience (pane, userRoles) {
