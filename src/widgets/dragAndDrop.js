@@ -1,5 +1,5 @@
 /* Drag and drop common functionality
-*/
+ */
 const mime = require('mime-types')
 
 /* global FileReader alert */
@@ -18,7 +18,8 @@ function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
 
   var dragenterListener = function (e) {
     console.log('dragenter event dropEffect: ' + e.dataTransfer.dropEffect)
-    if (this.style) { //  necessary not sure when
+    if (this.style) {
+      //  necessary not sure when
       if (!this.savedStyle) {
         this.savedStyle = {}
         this.savedStyle.border = this.style.border
@@ -48,7 +49,10 @@ function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
   var dropListener = function (e) {
     if (e.preventDefault) e.preventDefault() // stops the browser from redirecting off to the text.
     console.log('Drop event. dropEffect: ' + e.dataTransfer.dropEffect)
-    console.log('Drop event. types: ' + (e.dataTransfer.types ? e.dataTransfer.types.join(', ') : 'NOPE'))
+    console.log(
+      'Drop event. types: ' +
+        (e.dataTransfer.types ? e.dataTransfer.types.join(', ') : 'NOPE')
+    )
 
     var uris = null
     var text
@@ -63,11 +67,19 @@ function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
         } else if (type === 'Files' && droppedFileHandler) {
           var files = e.dataTransfer.files // FileList object.
           for (let i = 0; files[i]; i++) {
-            let f = files[i]
-            console.log('Filename: ' + f.name + ', type: ' + (f.type || 'n/a') +
-              ' size: ' + f.size + ' bytes, last modified: ' +
-              (f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a')
-              )
+            const f = files[i]
+            console.log(
+              'Filename: ' +
+                f.name +
+                ', type: ' +
+                (f.type || 'n/a') +
+                ' size: ' +
+                f.size +
+                ' bytes, last modified: ' +
+                (f.lastModifiedDate
+                  ? f.lastModifiedDate.toLocaleDateString()
+                  : 'n/a')
+            )
           }
           droppedFileHandler(files)
         }
@@ -78,7 +90,7 @@ function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
       }
     } else {
       // ... however, if we're IE, we don't have the .types property, so we'll just get the Text value
-      uris = [ e.dataTransfer.getData('Text') ]
+      uris = [e.dataTransfer.getData('Text')]
       console.log('WARNING non-standard drop event: ' + uris[0])
     }
     console.log('Dropped URI list (2): ' + uris)
@@ -108,45 +120,65 @@ function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
 function makeDraggable (tr, obj) {
   tr.setAttribute('draggable', 'true') // Stop the image being dragged instead - just the TR
 
-  tr.addEventListener('dragstart', function (e) {
-    tr.style.fontWeight = 'bold'
-    e.dataTransfer.setData('text/uri-list', obj.uri)
-    e.dataTransfer.setData('text/plain', obj.uri)
-    e.dataTransfer.setData('text/html', tr.outerHTML)
-    console.log('Dragstart: ' + tr + ' -> ' + obj + 'de: ' + e.dataTransfer.dropEffect)
-  }, false)
+  tr.addEventListener(
+    'dragstart',
+    function (e) {
+      tr.style.fontWeight = 'bold'
+      e.dataTransfer.setData('text/uri-list', obj.uri)
+      e.dataTransfer.setData('text/plain', obj.uri)
+      e.dataTransfer.setData('text/html', tr.outerHTML)
+      console.log(
+        'Dragstart: ' + tr + ' -> ' + obj + 'de: ' + e.dataTransfer.dropEffect
+      )
+    },
+    false
+  )
 
-  tr.addEventListener('drag', function (e) {
-    e.preventDefault()
-    e.stopPropagation()
-    // console.log('Drag: dropEffect: ' + e.dataTransfer.dropEffect)
-  }, false)
+  tr.addEventListener(
+    'drag',
+    function (e) {
+      e.preventDefault()
+      e.stopPropagation()
+      // console.log('Drag: dropEffect: ' + e.dataTransfer.dropEffect)
+    },
+    false
+  )
 
-  tr.addEventListener('dragend', function (e) {
-    tr.style.fontWeight = 'normal'
-    console.log('Dragend dropeffect: ' + e.dataTransfer.dropEffect)
-    console.log('Dragend: ' + tr + ' -> ' + obj)
-  }, false)
+  tr.addEventListener(
+    'dragend',
+    function (e) {
+      tr.style.fontWeight = 'normal'
+      console.log('Dragend dropeffect: ' + e.dataTransfer.dropEffect)
+      console.log('Dragend: ' + tr + ' -> ' + obj)
+    },
+    false
+  )
 }
 
 /* uploadFiles
-**
-**  Generic uploader of local files to the web
-**   typically called from dropped file handler
-** Params
-**  fetcher   instance of class Fetcher as in kb.fetcher
-**  files      Array of file objects
-**  fileBase   URI of folder in which to put files (except images) (no trailing slash)
-**  imageBase  URI of folder in which to put images
-**  successHandler(file, uploadedURI)    Called after each success upload
-**                              With file object an final URI as params
-*/
+ **
+ **  Generic uploader of local files to the web
+ **   typically called from dropped file handler
+ ** Params
+ **  fetcher   instance of class Fetcher as in kb.fetcher
+ **  files      Array of file objects
+ **  fileBase   URI of folder in which to put files (except images) (no trailing slash)
+ **  imageBase  URI of folder in which to put images
+ **  successHandler(file, uploadedURI)    Called after each success upload
+ **                              With file object an final URI as params
+ */
 function uploadFiles (fetcher, files, fileBase, imageBase, successHandler) {
   for (var i = 0; files[i]; i++) {
-    let f = files[i]
-    console.log(' dropped: Filename: ' + f.name + ', type: ' + (f.type || 'n/a') +
-      ' size: ' + f.size + ' bytes, last modified: ' +
-      (f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a')
+    const f = files[i]
+    console.log(
+      ' dropped: Filename: ' +
+        f.name +
+        ', type: ' +
+        (f.type || 'n/a') +
+        ' size: ' +
+        f.size +
+        ' bytes, last modified: ' +
+        (f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a')
     ) // See e.g. https://www.html5rocks.com/en/tutorials/file/dndfiles/
 
     // @@ Add: progress bar(s)
@@ -157,10 +189,13 @@ function uploadFiles (fetcher, files, fileBase, imageBase, successHandler) {
         var suffix = ''
         console.log(' File read byteLength : ' + data.byteLength)
         var contentType = theFile.type
-        if (!theFile.type || theFile.type === '') { // Not known by browser
+        if (!theFile.type || theFile.type === '') {
+          // Not known by browser
           contentType = mime.lookup(theFile.name)
           if (!contentType) {
-            let msg = 'Filename needs to have an extension which gives a type we know: ' + theFile.name
+            const msg =
+              'Filename needs to have an extension which gives a type we know: ' +
+              theFile.name
             console.log(msg)
             alert(msg)
             throw new Error(msg)
@@ -172,20 +207,32 @@ function uploadFiles (fetcher, files, fileBase, imageBase, successHandler) {
             console.log('MIME TYPE MISMATCH -- adding extension: ' + suffix)
           }
         }
-        var folderName = theFile.type.startsWith('image/') ? imageBase || fileBase : fileBase
-        var destURI = folderName + (folderName.endsWith('/') ? '' : '/') + encodeURIComponent(theFile.name) + suffix
+        var folderName = theFile.type.startsWith('image/')
+          ? imageBase || fileBase
+          : fileBase
+        var destURI =
+          folderName +
+          (folderName.endsWith('/') ? '' : '/') +
+          encodeURIComponent(theFile.name) +
+          suffix
 
-        fetcher.webOperation('PUT', destURI, { data: data, contentType: contentType })
-          .then(response => {
-            console.log(' Upload: put OK: ' + destURI)
-            successHandler(theFile, destURI)
-          },
+        fetcher
+          .webOperation('PUT', destURI, {
+            data: data,
+            contentType: contentType
+          })
+          .then(
+            _response => {
+              console.log(' Upload: put OK: ' + destURI)
+              successHandler(theFile, destURI)
+            },
             error => {
-              let msg = ' Upload: FAIL ' + destURI + ', Error: ' + error
+              const msg = ' Upload: FAIL ' + destURI + ', Error: ' + error
               console.log(msg)
               alert(msg)
               throw new Error(msg)
-            })
+            }
+          )
       }
     })(f)
     reader.readAsArrayBuffer(f)

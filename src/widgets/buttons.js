@@ -1,6 +1,8 @@
 /* UI Widgets such as buttons
-*/
+ */
 /* global alert */
+
+const $rdf = require('rdflib')
 
 module.exports = {}
 
@@ -83,15 +85,33 @@ buttons.extractLogURI = function (fullURI) {
 //  noTime  - only give date, no time,
 buttons.shortDate = function (str, noTime) {
   if (!str) return '???'
-  var month = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ]
+  var month = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec'
+  ]
   try {
     var nowZ = new Date().toISOString()
     // var nowZ = $rdf.term(now).value
     // var n = now.getTimezoneOffset() // Minutes
-    if (str.slice(0, 10) === nowZ.slice(0, 10) && !noTime) return str.slice(11, 16)
+    if (str.slice(0, 10) === nowZ.slice(0, 10) && !noTime) {
+      return str.slice(11, 16)
+    }
     if (str.slice(0, 4) === nowZ.slice(0, 4)) {
-      return (month[parseInt(str.slice(5, 7), 10) - 1] + ' ' + parseInt(str.slice(8, 10), 10))
+      return (
+        month[parseInt(str.slice(5, 7), 10) - 1] +
+        ' ' +
+        parseInt(str.slice(8, 10), 10)
+      )
     }
     return str.slice(0, 10)
   } catch (e) {
@@ -100,19 +120,31 @@ buttons.shortDate = function (str, noTime) {
 }
 
 buttons.formatDateTime = function (date, format) {
-  return format.split('{').map(function (s) {
-    var k = s.split('}')[0]
-    var width = {'Milliseconds': 3, 'FullYear': 4}
-    var d = {'Month': 1}
-    return s ? ('000' + (date['get' + k]() + (d[k] || 0))).slice(-(width[k] || 2)) + s.split('}')[1] : ''
-  }).join('')
+  return format
+    .split('{')
+    .map(function (s) {
+      var k = s.split('}')[0]
+      var width = { Milliseconds: 3, FullYear: 4 }
+      var d = { Month: 1 }
+      return s
+        ? ('000' + (date['get' + k]() + (d[k] || 0))).slice(-(width[k] || 2)) +
+            s.split('}')[1]
+        : ''
+    })
+    .join('')
 }
 
 buttons.timestamp = function () {
-  return buttons.formatDateTime(new Date(), '{FullYear}-{Month}-{Date}T{Hours}:{Minutes}:{Seconds}.{Milliseconds}')
+  return buttons.formatDateTime(
+    new Date(),
+    '{FullYear}-{Month}-{Date}T{Hours}:{Minutes}:{Seconds}.{Milliseconds}'
+  )
 }
 buttons.shortTime = function () {
-  return buttons.formatDateTime(new Date(), '{Hours}:{Minutes}:{Seconds}.{Milliseconds}')
+  return buttons.formatDateTime(
+    new Date(),
+    '{Hours}:{Minutes}:{Seconds}.{Milliseconds}'
+  )
 }
 
 // ///////////////////// Handy UX widgets
@@ -123,15 +155,18 @@ buttons.setName = function (element, x) {
   var kb = UI.store
   var ns = UI.ns
   var findName = function (x) {
-    var name = kb.any(x, ns.vcard('fn')) || kb.any(x, ns.foaf('name')) ||
+    var name =
+      kb.any(x, ns.vcard('fn')) ||
+      kb.any(x, ns.foaf('name')) ||
       kb.any(x, ns.vcard('organization-name'))
     return name ? name.value : null
   }
   var name = x.sameTerm(ns.foaf('Agent')) ? 'Everyone' : findName(x)
   element.textContent = name || utils.label(x)
-  if (!name && x.uri) { // Note this is only a fetch, not a lookUP of all sameAs etc
-    kb.fetcher.nowOrWhenFetched(x.doc(), undefined, function (ok) {
-      element.textContent = (findName(x) || utils.label(x)) // had: (ok ? '' : '? ') +
+  if (!name && x.uri) {
+    // Note this is only a fetch, not a lookUP of all sameAs etc
+    kb.fetcher.nowOrWhenFetched(x.doc(), undefined, function (_ok) {
+      element.textContent = findName(x) || utils.label(x) // had: (ok ? '' : '? ') +
     })
   }
 }
@@ -139,17 +174,19 @@ buttons.setName = function (element, x) {
 // Set of suitable images
 buttons.imagesOf = function (x, kb) {
   var ns = UI.ns
-  return (kb.each(x, ns.sioc('avatar'))
+  return kb
+    .each(x, ns.sioc('avatar'))
     .concat(kb.each(x, ns.foaf('img')))
     .concat(kb.each(x, ns.vcard('logo')))
     .concat(kb.each(x, ns.vcard('photo')))
-    .concat(kb.each(x, ns.foaf('depiction'))))
+    .concat(kb.each(x, ns.foaf('depiction')))
 }
 // Best logo or avater or photo etc to represent someone or some group etc
 //
 
-buttons.iconForClass = { // Potentially extendable by other apps, panes, etc
-                           // Relative URIs to the iconBase
+buttons.iconForClass = {
+  // Potentially extendable by other apps, panes, etc
+  // Relative URIs to the iconBase
   'solid:AppProviderClass': 'noun_144.svg', //  @@ classs name should not contain 'Class'
   'solid:AppProvider': 'noun_15177.svg', // @@
   'vcard:Group': 'noun_339237.svg',
@@ -168,13 +205,15 @@ buttons.iconForClass = { // Potentially extendable by other apps, panes, etc
   'ui:Form': 'noun_122196.svg'
 }
 
-var tempSite = function (x) { // use only while one in rdflib fails with origins 2019
+var tempSite = function (x) {
+  // use only while one in rdflib fails with origins 2019
   var str = x.uri.split('#')[0]
   var p = str.indexOf('//')
   if (p < 0) throw new Error('This URI does not have a web site part (origin)')
   var q = str.indexOf('/', p + 2)
-  if (q < 0) { // no third slash?
-    return str.slice(0) + '/'   // Add slash to a bare origin
+  if (q < 0) {
+    // no third slash?
+    return str.slice(0) + '/' // Add slash to a bare origin
   } else {
     return str.slice(0, q + 1)
   }
@@ -189,18 +228,23 @@ buttons.findImageByClass = function findImageByClass (x) {
     return iconDir + 'noun_15177.svg' // App
   }
   if (x.uri) {
-    if (x.uri.split('/').length === 4 && !(x.uri.split('/')[1]) && !(x.uri.split('/')[3])) {
+    if (
+      x.uri.split('/').length === 4 &&
+      !x.uri.split('/')[1] &&
+      !x.uri.split('/')[3]
+    ) {
       return iconDir + 'noun_15177.svg' // App -- this is an origin
     }
     // Non-HTTP URI types imply types
-    if (x.uri.startsWith('message:') || x.uri.startsWith('mid:')) { // message: is aapple bug-- should be mid:
+    if (x.uri.startsWith('message:') || x.uri.startsWith('mid:')) {
+      // message: is aapple bug-- should be mid:
       return iconDir + 'noun_480183.svg' // envelope  noun_567486
     }
     if (x.uri.startsWith('mailto:')) {
       return iconDir + 'noun_567486.svg' // mailbox - an email desitination
     }
     // For HTTP(s) documents, we could look at the MIME type if we know it.
-    if (x.uri.startsWith('https:') && (x.uri.indexOf('#') < 0)) {
+    if (x.uri.startsWith('https:') && x.uri.indexOf('#') < 0) {
       return tempSite(x) + 'favicon.ico' // was x.site().uri + ...
       // Todo: make the docuent icon a fallback for if the favicon does not exist
       // todo: pick up a possible favicon for the web page istelf from a link
@@ -208,26 +252,28 @@ buttons.findImageByClass = function findImageByClass (x) {
     }
   }
 
-  ns['prov'] = $rdf.Namespace('http://www.w3.org/ns/prov#') // In case not yet there
+  ns.prov = $rdf.Namespace('http://www.w3.org/ns/prov#') // In case not yet there
   for (var k in buttons.iconForClass) {
-    let pref = k.split(':')[0]
-    let id = k.split(':')[1]
-    let klass = ns[pref](id)
-    if (klass.uri in types || klass.uri === x.uri) { // Allow full URI in new additions
+    const pref = k.split(':')[0]
+    const id = k.split(':')[1]
+    const klass = ns[pref](id)
+    if (klass.uri in types || klass.uri === x.uri) {
+      // Allow full URI in new additions
       return $rdf.uri.join(buttons.iconForClass[k], UI.icons.iconBase)
     }
   }
   return iconDir + 'noun_10636_grey.svg' // Grey Circle -  some thing
 }
 
-buttons.findImage = (thing) => {
+buttons.findImage = thing => {
   const kb = UI.store
   const ns = UI.ns
   const iconDir = UI.icons.iconBase
   if (thing.sameTerm(ns.foaf('Agent')) || thing.sameTerm(ns.rdf('Resource'))) {
     return iconDir + 'noun_98053.svg' // Globe
   }
-  const image = kb.any(thing, ns.sioc('avatar')) ||
+  const image =
+    kb.any(thing, ns.sioc('avatar')) ||
     kb.any(thing, ns.foaf('img')) ||
     kb.any(thing, ns.vcard('logo')) ||
     kb.any(thing, ns.vcard('hasPhoto')) ||
@@ -244,7 +290,10 @@ buttons.setImage = function (element, profile) {
   element.setAttribute('src', uri || buttons.findImageByClass(profile))
   if (!uri && profile.uri) {
     kb.fetcher.nowOrWhenFetched(profile.doc(), undefined, () => {
-      element.setAttribute('src', buttons.findImage(profile) || buttons.findImageByClass(profile))
+      element.setAttribute(
+        'src',
+        buttons.findImage(profile) || buttons.findImageByClass(profile)
+      )
     })
   }
 }
@@ -256,11 +305,13 @@ var faviconOrDefault = function (dom, x) {
   var isOrigin = function (x) {
     if (!x.uri) return false
     var parts = x.uri.split('/')
-    return (parts.length === 3 || (parts.length === 4 && parts[3] === ''))
+    return parts.length === 3 || (parts.length === 4 && parts[3] === '')
   }
-  image.setAttribute('src', UI.icons.iconBase +
-      (isOrigin(x) ? 'noun_15177.svg' : 'noun_681601.svg'))
-  if (x.uri && x.uri.startsWith('https:') && (x.uri.indexOf('#') < 0)) {
+  image.setAttribute(
+    'src',
+    UI.icons.iconBase + (isOrigin(x) ? 'noun_15177.svg' : 'noun_681601.svg')
+  )
+  if (x.uri && x.uri.startsWith('https:') && x.uri.indexOf('#') < 0) {
     var res = dom.createElement('object') // favico with a fallback of a default image if no favicon
     res.setAttribute('data', tempSite(x) + 'favicon.ico')
     res.setAttribute('type', 'image/x-icon')
@@ -276,7 +327,12 @@ var faviconOrDefault = function (dom, x) {
 //
 //   @@ Supress check if command key held down?
 //
-buttons.deleteButtonWithCheck = function (dom, container, noun, deleteFunction) {
+buttons.deleteButtonWithCheck = function (
+  dom,
+  container,
+  noun,
+  deleteFunction
+) {
   var minusIconURI = UI.icons.iconBase + 'noun_2188_red.svg' // white minus in red #cc0000 circle
 
   // var delButton = dom.createElement('button')
@@ -291,29 +347,41 @@ buttons.deleteButtonWithCheck = function (dom, container, noun, deleteFunction) 
   container.setAttribute('class', 'hoverControl') // See tabbedtab.css (sigh global CSS)
   delButton.setAttribute('class', 'hoverControlHide')
   // delButton.setAttribute('style', 'color: red; margin-right: 0.3em; foat:right; text-align:right')
-  delButton.addEventListener('click', function (e) {
-    container.removeChild(delButton) // Ask -- are you sure?
-    var cancelButton = dom.createElement('button')
-    // cancelButton.textContent = 'cancel'
-    cancelButton.setAttribute('style', UI.style.buttonStyle)
-    var img = cancelButton.appendChild(dom.createElement('img'))
-    img.setAttribute('src', cancelIconURI)
-    img.setAttribute('style', UI.style.buttonStyle)
+  delButton.addEventListener(
+    'click',
+    function (_event) {
+      container.removeChild(delButton) // Ask -- are you sure?
+      var cancelButton = dom.createElement('button')
+      // cancelButton.textContent = 'cancel'
+      cancelButton.setAttribute('style', UI.style.buttonStyle)
+      var img = cancelButton.appendChild(dom.createElement('img'))
+      img.setAttribute('src', cancelIconURI)
+      img.setAttribute('style', UI.style.buttonStyle)
 
-    container.appendChild(cancelButton).addEventListener('click', function (e) {
-      container.removeChild(sureButton)
-      container.removeChild(cancelButton)
-      container.appendChild(delButton)
-    }, false)
-    var sureButton = dom.createElement('button')
-    sureButton.textContent = 'Delete ' + noun
-    sureButton.setAttribute('style', UI.style.buttonStyle)
-    container.appendChild(sureButton).addEventListener('click', function (e) {
-      container.removeChild(sureButton)
-      container.removeChild(cancelButton)
-      deleteFunction()
-    }, false)
-  }, false)
+      container.appendChild(cancelButton).addEventListener(
+        'click',
+        function (_event) {
+          container.removeChild(sureButton)
+          container.removeChild(cancelButton)
+          container.appendChild(delButton)
+        },
+        false
+      )
+      var sureButton = dom.createElement('button')
+      sureButton.textContent = 'Delete ' + noun
+      sureButton.setAttribute('style', UI.style.buttonStyle)
+      container.appendChild(sureButton).addEventListener(
+        'click',
+        function (_event) {
+          container.removeChild(sureButton)
+          container.removeChild(cancelButton)
+          deleteFunction()
+        },
+        false
+      )
+    },
+    false
+  )
   return delButton
 }
 
@@ -325,7 +393,7 @@ buttons.deleteButtonWithCheck = function (dom, container, noun, deleteFunction) 
  * @param handler <function> - A handler to called when button is clicked
  *
  * @returns <dDomElement> - the button
-*/
+ */
 buttons.button = function (dom, iconURI, text, handler) {
   var button = dom.createElement('button')
   button.setAttribute('type', 'button')
@@ -352,9 +420,10 @@ buttons.continueButton = function (dom, handler) {
  *
  * Form to get the name of a new thing before we create it
  * @returns: a promise of (a name or null if cancelled)
-*/
+ */
 buttons.askName = function (dom, kb, container, predicate, klass, noun) {
-  return new Promise(function (resolve, reject) {
+  // eslint-disable-next-line promise/param-names
+  return new Promise(function (resolve, _reject) {
     var form = dom.createElement('div') // form is broken as HTML behaviour can resurface on js error
     // classLabel = utils.label(ns.vcard('Individual'))
     predicate = predicate || UI.ns.foaf('name') // eg 'name' in user's language
@@ -376,24 +445,36 @@ buttons.askName = function (dom, kb, container, predicate, klass, noun) {
       resolve(namefield.value.trim())
     }
 
-    namefield.addEventListener('keyup', function (e) {
-      if (e.keyCode === 13) {
-        gotName()
-      }
-    }, false)
+    namefield.addEventListener(
+      'keyup',
+      function (e) {
+        if (e.keyCode === 13) {
+          gotName()
+        }
+      },
+      false
+    )
 
     form.appendChild(dom.createElement('br'))
 
     const cancel = form.appendChild(buttons.cancelButton(dom))
-    cancel.addEventListener('click', function (e) {
-      form.parentNode.removeChild(form)
-      resolve(null)
-    }, false)
+    cancel.addEventListener(
+      'click',
+      function (_event) {
+        form.parentNode.removeChild(form)
+        resolve(null)
+      },
+      false
+    )
 
     const continueButton = form.appendChild(buttons.continueButton(dom))
-    continueButton.addEventListener('click', function (e) {
-      gotName()
-    }, false)
+    continueButton.addEventListener(
+      'click',
+      function (_event) {
+        gotName()
+      },
+      false
+    )
     namefield.focus()
   }) // Promise
 }
@@ -406,11 +487,15 @@ buttons.askName = function (dom, kb, container, predicate, klass, noun) {
 buttons.linkIcon = function (dom, subject, iconURI) {
   var anchor = dom.createElement('a')
   anchor.setAttribute('href', subject.uri)
-  if (subject.uri.startsWith('http')) { // If diff web page
+  if (subject.uri.startsWith('http')) {
+    // If diff web page
     anchor.setAttribute('target', '_blank') // open in a new tab or window
   } // as mailboxes and mail messages do not need new browser window
   var img = anchor.appendChild(dom.createElement('img'))
-  img.setAttribute('src', iconURI || (UI.icons.originalIconBase + 'go-to-this.png'))
+  img.setAttribute(
+    'src',
+    iconURI || UI.icons.originalIconBase + 'go-to-this.png'
+  )
   img.setAttribute('style', 'margin: 0.3em;')
   return anchor
 }
@@ -430,24 +515,40 @@ buttons.personTR = function (dom, pred, obj, options) {
   // var image = td1.appendChild(dom.createElement('img'))
   var image = faviconOrDefault(dom, obj)
 
-  td1.setAttribute('style', 'vertical-align: middle; width:2.5em; padding:0.5em; height: 2.5em;')
+  td1.setAttribute(
+    'style',
+    'vertical-align: middle; width:2.5em; padding:0.5em; height: 2.5em;'
+  )
   td2.setAttribute('style', 'vertical-align: middle; text-align:left;')
-  td3.setAttribute('style', 'vertical-align: middle; width:2em; padding:0.5em; height: 4em;')
-  image.setAttribute('style', 'width: 3em; height: 3em; margin: 0.1em; border-radius: 1em;')
+  td3.setAttribute(
+    'style',
+    'vertical-align: middle; width:2em; padding:0.5em; height: 4em;'
+  )
+  image.setAttribute(
+    'style',
+    'width: 3em; height: 3em; margin: 0.1em; border-radius: 1em;'
+  )
   td1.appendChild(image)
   // buttons.setImage(image, obj)
 
   buttons.setName(td2, obj)
   if (options.deleteFunction) {
-    buttons.deleteButtonWithCheck(dom, td3, options.noun || 'one', options.deleteFunction)
+    buttons.deleteButtonWithCheck(
+      dom,
+      td3,
+      options.noun || 'one',
+      options.deleteFunction
+    )
   }
-  if (obj.uri) { // blank nodes need not apply
+  if (obj.uri) {
+    // blank nodes need not apply
     if (options.link !== false) {
       var anchor = td3.appendChild(buttons.linkIcon(dom, obj))
       anchor.classList.add('HoverControlHide')
       td3.appendChild(dom.createElement('br'))
     }
-    if (options.draggable !== false) { // default is on
+    if (options.draggable !== false) {
+      // default is on
       image.setAttribute('draggable', 'false') // Stop the image being dragged instead - just the TR
       dragAndDrop.makeDraggable(tr, obj)
     }
@@ -475,7 +576,7 @@ buttons.attachmentList = function (dom, subject, div, options) {
   var doc = options.doc || subject.doc()
   if (options.modify === undefined) options.modify = true
   var modify = options.modify
-  var promptIcon = options.promptIcon || (UI.icons.iconBase + 'noun_748003.svg') //    target
+  var promptIcon = options.promptIcon || UI.icons.iconBase + 'noun_748003.svg' //    target
   // var promptIcon = options.promptIcon || (UI.icons.iconBase + 'noun_25830.svg') //  paperclip
   var predicate = options.predicate || UI.ns.wf('attachment')
   var noun = options.noun || 'attachment'
@@ -490,7 +591,12 @@ buttons.attachmentList = function (dom, subject, div, options) {
   attachmentTable.appendChild(dom.createElement('tr')) // attachmentTableTop
 
   var deleteAttachment = function (target) {
-    kb.updater.update($rdf.st(subject, predicate, target, doc), [], function (uri, ok, errorBody, xhr) {
+    kb.updater.update($rdf.st(subject, predicate, target, doc), [], function (
+      uri,
+      ok,
+      errorBody,
+      _xhr
+    ) {
       if (ok) {
         refresh()
       } else {
@@ -500,17 +606,19 @@ buttons.attachmentList = function (dom, subject, div, options) {
   }
   var createNewRow = function (target) {
     var theTarget = target
-    var opt = {noun: noun}
+    var opt = { noun: noun }
     if (modify) {
-      opt.deleteFunction = function () { deleteAttachment(theTarget) }
+      opt.deleteFunction = function () {
+        deleteAttachment(theTarget)
+      }
     }
     return buttons.personTR(dom, predicate, target, opt)
   }
-  var refresh = attachmentTable.refresh = function () {
+  var refresh = (attachmentTable.refresh = function () {
     var things = kb.each(subject, predicate)
     things.sort()
     utils.syncTableToArray(attachmentTable, things, createNewRow)
-  }
+  })
   attachmentOuter.refresh = refresh // Participate in downstream changes
   refresh()
 
@@ -521,7 +629,7 @@ buttons.attachmentList = function (dom, subject, div, options) {
       console.log('Dropped on attachemnt ' + u) // icon was: UI.icons.iconBase + 'noun_25830.svg'
       ins.push($rdf.st(subject, predicate, target, doc))
     })
-    kb.updater.update([], ins, function (uri, ok, errorBody, xhr) {
+    kb.updater.update([], ins, function (uri, ok, errorBody, _xhr) {
       if (ok) {
         refresh()
       } else {
@@ -555,13 +663,21 @@ buttons.openHrefInOutlineMode = function (e) {
   if (!uri) return console.log('openHrefInOutlineMode: No href found!\n')
   const dom = window.document
   if (dom.outlineManager) {
-    dom.outlineManager.GotoSubject(UI.store.sym(uri), true, undefined, true, undefined)
+    dom.outlineManager.GotoSubject(
+      UI.store.sym(uri),
+      true,
+      undefined,
+      true,
+      undefined
+    )
   } else if (window && window.panes && window.panes.getOutliner) {
-    window.panes.getOutliner().GotoSubject(UI.store.sym(uri), true, undefined, true, undefined)
+    window.panes
+      .getOutliner()
+      .GotoSubject(UI.store.sym(uri), true, undefined, true, undefined)
   } else {
     console.log("ERROR: Can't access outline manager in this config")
   }
-// dom.outlineManager.GotoSubject(UI.store.sym(uri), true, undefined, true, undefined)
+  // dom.outlineManager.GotoSubject(UI.store.sym(uri), true, undefined, true, undefined)
 }
 
 // We make a URI in the annotation store out of the URI of the thing to be annotated.
@@ -574,7 +690,8 @@ buttons.defaultAnnotationStore = function (subject) {
   if (s.slice(0, 7) !== 'http://') return undefined
   s = s.slice(7) // Remove
   var hash = s.indexOf('#')
-  if (hash >= 0) s = s.slice(0, hash) // Strip trailing
+  if (hash >= 0) s = s.slice(0, hash)
+  // Strip trailing
   else {
     var slash = s.lastIndexOf('/')
     if (slash < 0) return undefined
@@ -585,15 +702,22 @@ buttons.defaultAnnotationStore = function (subject) {
 
 buttons.allClassURIs = function () {
   var set = {}
-  UI.store.statementsMatching(undefined, UI.ns.rdf('type'), undefined)
-    .map(function (st) { if (st.object.uri) set[st.object.uri] = true })
-  UI.store.statementsMatching(undefined, UI.ns.rdfs('subClassOf'), undefined)
+  UI.store
+    .statementsMatching(undefined, UI.ns.rdf('type'), undefined)
+    .map(function (st) {
+      if (st.object.uri) set[st.object.uri] = true
+    })
+  UI.store
+    .statementsMatching(undefined, UI.ns.rdfs('subClassOf'), undefined)
     .map(function (st) {
       if (st.object.uri) set[st.object.uri] = true
       if (st.subject.uri) set[st.subject.uri] = true
     })
-  UI.store.each(undefined, UI.ns.rdf('type'), UI.ns.rdfs('Class'))
-    .map(function (c) { if (c.uri) set[c.uri] = true })
+  UI.store
+    .each(undefined, UI.ns.rdf('type'), UI.ns.rdfs('Class'))
+    .map(function (c) {
+      if (c.uri) set[c.uri] = true
+    })
   return set
 }
 
@@ -623,17 +747,29 @@ buttons.propertyTriage = function () {
   for (var i = 0; i < ps.length; i++) {
     p = ps[i].toNT()
     UI.log.debug('propertyTriage: unknown: ' + p)
-    if (!op[p] && !dp[p]) { dp[p] = true; op[p] = true; nu++ }
+    if (!op[p] && !dp[p]) {
+      dp[p] = true
+      op[p] = true
+      nu++
+    }
   }
   possibleProperties.op = op
   possibleProperties.dp = dp
-  UI.log.info('propertyTriage: ' + no + ' non-lit, ' + nd + ' literal. ' + nu + ' unknown.')
+  UI.log.info(
+    'propertyTriage: ' +
+      no +
+      ' non-lit, ' +
+      nd +
+      ' literal. ' +
+      nu +
+      ' unknown.'
+  )
   return possibleProperties
 }
 
 /*                      General purpose widgets
-**
-*/
+ **
+ */
 
 // A button for jumping
 //
@@ -641,10 +777,14 @@ buttons.linkButton = function (dom, object) {
   var b = dom.createElement('button')
   b.setAttribute('type', 'button')
   b.textContent = 'Goto ' + utils.label(object)
-  b.addEventListener('click', function (e) {
-    // b.parentNode.removeChild(b)
-    dom.outlineManager.GotoSubject(object, true, undefined, true, undefined)
-  }, true)
+  b.addEventListener(
+    'click',
+    function (_event) {
+      // b.parentNode.removeChild(b)
+      dom.outlineManager.GotoSubject(object, true, undefined, true, undefined)
+    },
+    true
+  )
   return b
 }
 
@@ -652,9 +792,13 @@ buttons.removeButton = function (dom, element) {
   var b = dom.createElement('button')
   b.setAttribute('type', 'button')
   b.textContent = '✕' // MULTIPLICATION X
-  b.addEventListener('click', function (e) {
-    element.parentNode.removeChild(element)
-  }, true)
+  b.addEventListener(
+    'click',
+    function (_event) {
+      element.parentNode.removeChild(element)
+    },
+    true
+  )
   return b
 }
 
@@ -695,26 +839,61 @@ buttons.headerButtons = function (dom, kb, name, words) {
 //
 //   @param inverse means this is the object rather than the subject
 //
-buttons.selectorPanel = function (dom, kb, type,
-  predicate, inverse, possible, options, callbackFunction, linkCallback) {
-  return buttons.selectorPanelRefresh(dom.createElement('div'),
-    dom, kb, type, predicate, inverse, possible, options, callbackFunction, linkCallback)
+buttons.selectorPanel = function (
+  dom,
+  kb,
+  type,
+  predicate,
+  inverse,
+  possible,
+  options,
+  callbackFunction,
+  linkCallback
+) {
+  return buttons.selectorPanelRefresh(
+    dom.createElement('div'),
+    dom,
+    kb,
+    type,
+    predicate,
+    inverse,
+    possible,
+    options,
+    callbackFunction,
+    linkCallback
+  )
 }
 
-buttons.selectorPanelRefresh = function (list, dom, kb, type,
-  predicate, inverse, possible, options, callbackFunction, linkCallback) {
-  var style0 = 'border: 0.1em solid #ddd; border-bottom: none; width: 95%; height: 2em; padding: 0.5em;'
+buttons.selectorPanelRefresh = function (
+  list,
+  dom,
+  kb,
+  type,
+  predicate,
+  inverse,
+  possible,
+  options,
+  callbackFunction,
+  linkCallback
+) {
+  var style0 =
+    'border: 0.1em solid #ddd; border-bottom: none; width: 95%; height: 2em; padding: 0.5em;'
   var selected = null
   list.innerHTML = ''
 
-  var refreshItem = function (box, x) { // Scope to hold item and x
+  var refreshItem = function (box, x) {
+    // Scope to hold item and x
     var item, image
 
     var setStyle = function () {
-      var already = (inverse) ? kb.each(undefined, predicate, x)
+      var already = inverse
+        ? kb.each(undefined, predicate, x)
         : kb.each(x, predicate)
       iconDiv.setAttribute('class', already.length === 0 ? 'hideTillHover' : '') // See tabbedtab.css
-      image.setAttribute('src', options.connectIcon || (UI.icons.iconBase + 'noun_25830.svg'))
+      image.setAttribute(
+        'src',
+        options.connectIcon || UI.icons.iconBase + 'noun_25830.svg'
+      )
       image.setAttribute('title', already.length ? already.length : 'attach')
     }
     var f = buttons.index.twoLine.widgetForClass(type)
@@ -732,28 +911,43 @@ buttons.selectorPanelRefresh = function (list, dom, kb, type,
     box.appendChild(nav)
 
     var iconDiv = dom.createElement('div')
-    iconDiv.setAttribute('style', (inverse ? 'float:left;' : 'float:right;') + ' width:30px;')
+    iconDiv.setAttribute(
+      'style',
+      (inverse ? 'float:left;' : 'float:right;') + ' width:30px;'
+    )
     image = dom.createElement('img')
     setStyle()
     iconDiv.appendChild(image)
     box.appendChild(iconDiv)
 
-    item.addEventListener('click', function (event) {
-      if (selected === item) { // deselect
-        item.setAttribute('style', style0)
-        selected = null
-      } else {
-        if (selected) selected.setAttribute('style', style0)
-        item.setAttribute('style', style0 + 'background-color: #ccc; color:black;')
-        selected = item
-      }
-      callbackFunction(x, event, selected === item)
-      setStyle()
-    }, false)
+    item.addEventListener(
+      'click',
+      function (event) {
+        if (selected === item) {
+          // deselect
+          item.setAttribute('style', style0)
+          selected = null
+        } else {
+          if (selected) selected.setAttribute('style', style0)
+          item.setAttribute(
+            'style',
+            style0 + 'background-color: #ccc; color:black;'
+          )
+          selected = item
+        }
+        callbackFunction(x, event, selected === item)
+        setStyle()
+      },
+      false
+    )
 
-    image.addEventListener('click', function (event) {
-      linkCallback(x, event, inverse, setStyle)
-    }, false)
+    image.addEventListener(
+      'click',
+      function (event) {
+        linkCallback(x, event, inverse, setStyle)
+      },
+      false
+    )
 
     box.appendChild(item)
     return box
@@ -780,9 +974,10 @@ buttons.index.twoLine = {} // Approx 40em * 2.4em
 //
 // These should be moved to type-dependeent UI code. Related panes maybe
 
-buttons.index.twoLine[''] = function (dom, x) { // Default
+buttons.index.twoLine[''] = function (dom, x) {
+  // Default
   var box = dom.createElement('div')
-  box.textContent = (utils.label(x))
+  box.textContent = utils.label(x)
   return box
 }
 
@@ -798,7 +993,9 @@ buttons.index.twoLine.widgetForClass = function (c) {
   return buttons.index.twoLine['']
 }
 
-buttons.index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction'] = function (dom, x) {
+buttons.index.twoLine[
+  'http://www.w3.org/2000/10/swap/pim/qif#Transaction'
+] = function (dom, x) {
   var failed = ''
   var enc = function (p) {
     var y = UI.store.any(x, UI.ns.qu(p))
@@ -806,26 +1003,41 @@ buttons.index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction'] = fu
     return y ? utils.escapeForXML(y.value) : '?' // @@@@
   }
   var box = dom.createElement('table')
-  box.innerHTML = '<tr><td colspan="2">' + enc('payee') +
-    '</td></tr>\n<tr><td><td>' + enc('date').slice(0, 10) +
-    '</td><td style="text-align: right;">' + enc('amount') + '</td></tr>'
+  box.innerHTML =
+    '<tr><td colspan="2">' +
+    enc('payee') +
+    '</td></tr>\n<tr><td><td>' +
+    enc('date').slice(0, 10) +
+    '</td><td style="text-align: right;">' +
+    enc('amount') +
+    '</td></tr>'
   if (failed) {
-    box.innerHTML = '<tr><td><a href="' +
-      utils.escapeForXML(x.uri) + '">' +
-      utils.escapeForXML(failed) + '</a></td></tr>'
+    box.innerHTML =
+      '<tr><td><a href="' +
+      utils.escapeForXML(x.uri) +
+      '">' +
+      utils.escapeForXML(failed) +
+      '</a></td></tr>'
   }
   return box
 }
 
-buttons.index.twoLine['http://www.w3.org/ns/pim/trip#Trip'] = function (dom, x) {
+buttons.index.twoLine['http://www.w3.org/ns/pim/trip#Trip'] = function (
+  dom,
+  x
+) {
   var enc = function (p) {
     var y = UI.store.any(x, p)
     return y ? utils.escapeForXML(y.value) : '?'
   }
   var box = dom.createElement('table')
-  box.innerHTML = '<tr><td colspan="2">' + enc(UI.ns.dc('title')) +
+  box.innerHTML =
+    '<tr><td colspan="2">' +
+    enc(UI.ns.dc('title')) +
     '</td></tr>\n<tr style="color: #777"><td><td>' +
-    enc(UI.ns.cal('dtstart')) + '</td><td>' + enc(UI.ns.cal('dtend')) +
+    enc(UI.ns.cal('dtstart')) +
+    '</td><td>' +
+    enc(UI.ns.cal('dtend')) +
     '</td></tr>'
   return box
 }
@@ -834,8 +1046,12 @@ buttons.index.twoLine['http://www.w3.org/ns/pim/trip#Trip'] = function (dom, x) 
 buttons.addStyleSheet = function (dom, href) {
   var links = dom.querySelectorAll('link')
   for (var i = 0; i < links.length; i++) {
-    if ((links[i].getAttribute('rel') || '') === 'stylesheet' &&
-      (links[i].getAttribute('href') || '') === href) return
+    if (
+      (links[i].getAttribute('rel') || '') === 'stylesheet' &&
+      (links[i].getAttribute('href') || '') === href
+    ) {
+      return
+    }
   }
   var link = dom.createElement('link')
   link.setAttribute('rel', 'stylesheet')
@@ -853,9 +1069,10 @@ buttons.isVideo = function (file) {
   return buttons.isImage(file, 'video')
 }
 buttons.isImage = function (file, kind) {
-  var dcCLasses = { 'audio': 'http://purl.org/dc/dcmitype/Sound',
-    'image': 'http://purl.org/dc/dcmitype/Image',
-    'video': 'http://purl.org/dc/dcmitype/MovingImage'
+  var dcCLasses = {
+    audio: 'http://purl.org/dc/dcmitype/Sound',
+    image: 'http://purl.org/dc/dcmitype/Image',
+    video: 'http://purl.org/dc/dcmitype/MovingImage'
   }
   var what = kind || 'image'
   var typeURIs = UI.store.findTypeURIs(file)
@@ -868,33 +1085,47 @@ buttons.isImage = function (file, kind) {
 }
 
 /** File upload button
-**
+ **
  * @param dom The DOM aka document
  * @param  display:none - Same handler function as drop, takes array of file objects
  * @returns {Element} - a div with a button and a inout in it
  * The input is hidden, as it is uglky - the user clicks on the nice icons and fires the input.
  */
 // See https://developer.mozilla.org/en-US/docs/Web/API/File/Using_files_from_web_applications
-buttons.fileUploadButtonDiv = function fileUploadButtonDiv (dom, droppedFileHandler) {
+buttons.fileUploadButtonDiv = function fileUploadButtonDiv (
+  dom,
+  droppedFileHandler
+) {
   const div = dom.createElement('div')
   const input = div.appendChild(dom.createElement('input'))
   input.setAttribute('type', 'file')
   input.setAttribute('multiple', 'true')
-  input.addEventListener('change', event => {
-    console.log('File drop event: ', event)
-    if (event.files) {
-      droppedFileHandler(event.files)
-    } else if (event.target && event.target.files) {
-      droppedFileHandler(event.target.files)
-    } else {
-      alert('Sorry no files .. internal error?')
-    }
-  }, false)
+  input.addEventListener(
+    'change',
+    event => {
+      console.log('File drop event: ', event)
+      if (event.files) {
+        droppedFileHandler(event.files)
+      } else if (event.target && event.target.files) {
+        droppedFileHandler(event.target.files)
+      } else {
+        alert('Sorry no files .. internal error?')
+      }
+    },
+    false
+  )
 
   input.style = 'display:none'
-  const button = div.appendChild(buttons.button(dom, UI.icons.iconBase + 'noun_Upload_76574_000000.svg', 'Upload files', event => {
-    input.click()
-  }))
+  const button = div.appendChild(
+    buttons.button(
+      dom,
+      UI.icons.iconBase + 'noun_Upload_76574_000000.svg',
+      'Upload files',
+      _event => {
+        input.click()
+      }
+    )
+  )
   dragAndDrop.makeDropTarget(button, null, droppedFileHandler) // Can also just drop on button
   return div
 }

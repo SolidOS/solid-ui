@@ -28,27 +28,38 @@ var wrapper = function () {
     if (!(logger.level & type)) return // bitmask
 
     if (typeof document !== 'undefined') {
-// Not AJAX environment
+      // Not AJAX environment
 
       var logArea = document.getElementById('status')
       if (!logArea) return
 
       // Local version to reduce dependencies
-      var escapeForXML = function (str) { // don't use library one in case ithasn't been loaded yet
+      var escapeForXML = function (str) {
+        // don't use library one in case ithasn't been loaded yet
         return str.replace(/&/g, '&amp;').replace(/</g, '&lt;')
       }
 
       var addendum = document.createElement('span')
       addendum.setAttribute('class', typestr)
       var now = new Date()
-      addendum.innerHTML = now.getHours() + ':' + now.getMinutes() + ':' +
-        now.getSeconds() + ' [' + typestr + '] ' + escapeForXML(str) + '<br/>'
+      addendum.innerHTML =
+        now.getHours() +
+        ':' +
+        now.getMinutes() +
+        ':' +
+        now.getSeconds() +
+        ' [' +
+        typestr +
+        '] ' +
+        escapeForXML(str) +
+        '<br/>'
       if (!logger.ascending) {
         logArea.appendChild(addendum)
       } else {
         logArea.insertBefore(addendum, logArea.firstChild)
       }
-    } else if (typeof console !== 'undefined') { // node.js
+    } else if (typeof console !== 'undefined') {
+      // node.js
       console.log(str)
       /*
     } else {
@@ -59,11 +70,21 @@ var wrapper = function () {
     }
   } // logger.msg
 
-  logger.warn = function (msg) { logger.msg(msg, TWARN, 'warn') }
-  logger.debug = function (msg) { logger.msg(msg, TDEBUG, 'dbug') }
-  logger.info = function (msg) { logger.msg(msg, TINFO, 'info') }
-  logger.error = function (msg) { logger.msg(msg, TERROR, 'eror') }
-  logger.success = function (msg) { logger.msg(msg, TSUCCESS, 'good') }
+  logger.warn = function (msg) {
+    logger.msg(msg, TWARN, 'warn')
+  }
+  logger.debug = function (msg) {
+    logger.msg(msg, TDEBUG, 'dbug')
+  }
+  logger.info = function (msg) {
+    logger.msg(msg, TINFO, 'info')
+  }
+  logger.error = function (msg) {
+    logger.msg(msg, TERROR, 'eror')
+  }
+  logger.success = function (msg) {
+    logger.msg(msg, TSUCCESS, 'good')
+  }
 
   if (typeof alert !== 'undefined') {
     logger.alert = alert
@@ -93,6 +114,6 @@ var wrapper = function () {
     logger.level = l
   }
   return logger
-}// wrapper
+} // wrapper
 
 module.exports = wrapper()

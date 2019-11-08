@@ -1,4 +1,3 @@
-
 // SOLID-compaible Tabs widget
 //
 // - Any Orientation = top, left, bottom, right
@@ -61,7 +60,7 @@ UI.tabs.tabWidget = function (options) {
       res = ca * (1.0 - mix) + cb * mix // @@@ rounding
       var res2 = parseInt(('' + res).split('.')[0]) // @@ ugh
       var h = parseInt(('' + res2 / 16).split('.')[0]) // @@ ugh
-      var l = parseInt(('' + res2 % 16).split('.')[0]) // @@ ugh
+      var l = parseInt(('' + (res2 % 16)).split('.')[0]) // @@ ugh
       str += hex[h] + hex[l]
     }
     // console.log('Blending colors ' + a + ' with ' + mix + ' of ' + b + ' to give ' + str)
@@ -76,8 +75,10 @@ UI.tabs.tabWidget = function (options) {
     selectedColor = colorBlend(backgroundColor, '#000000', 0.3)
     color = '#ffffff'
   }
-  var bodyDivStyle = 'resize: both; overflow: scroll; margin:0; border: 0.5em; border-style: solid; border-color: ' +
-          selectedColor + '; padding: 1em;  min-width: 30em; min-height: 450px; width:100%;'
+  var bodyDivStyle =
+    'resize: both; overflow: scroll; margin:0; border: 0.5em; border-style: solid; border-color: ' +
+    selectedColor +
+    '; padding: 1em;  min-width: 30em; min-height: 450px; width:100%;'
 
   if (vertical) {
     var onlyTR = wholetable.appendChild(dom.createElement('tr'))
@@ -96,7 +97,8 @@ UI.tabs.tabWidget = function (options) {
     tabElement = 'tr'
     // tabBar = tabTD // drop zone
     // mainTD.appendChild(bodyDiv)
-  } else { // horizontal
+  } else {
+    // horizontal
     tabContainer = dom.createElement('tr')
     mainTR = wholetable.appendChild(dom.createElement('tr'))
     if (flipped) {
@@ -117,7 +119,8 @@ UI.tabs.tabWidget = function (options) {
 
   var getItems = function () {
     if (options.items) return options.items
-    if (options.ordered !== false) { // default to true
+    if (options.ordered !== false) {
+      // default to true
       var list = kb.the(subject, options.predicate)
       return list.elements
     } else {
@@ -135,8 +138,13 @@ UI.tabs.tabWidget = function (options) {
 
   var tabStyle = corners + 'padding: 0.7em; max-width: 20em;' //  border: 0.05em 0 0.5em 0.05em; border-color: grey;
   tabStyle += 'color: ' + color + ';'
-  var unselectedStyle = tabStyle + 'opacity: 50%; margin: 0.3em; background-color: ' + backgroundColor + ';' // @@ rotate border
-  var selectedStyle = tabStyle + margins + ' background-color: ' + selectedColor + ';'
+  var unselectedStyle =
+    tabStyle +
+    'opacity: 50%; margin: 0.3em; background-color: ' +
+    backgroundColor +
+    ';' // @@ rotate border
+  var selectedStyle =
+    tabStyle + margins + ' background-color: ' + selectedColor + ';'
   var shownStyle = ''
   var hiddenStyle = shownStyle + 'display: none;'
 
@@ -206,7 +214,10 @@ UI.tabs.tabWidget = function (options) {
     // Find how many match at each end
     for (left = 0; left < tabContainer.children.length; left++) {
       slot = tabContainer.children[left]
-      if (left >= items.length || (slot.subject && !slot.subject.sameTerm(items[left]))) {
+      if (
+        left >= items.length ||
+        (slot.subject && !slot.subject.sameTerm(items[left]))
+      ) {
         differ = true
         break
       }
@@ -222,8 +233,12 @@ UI.tabs.tabWidget = function (options) {
       }
     }
     // The elements left ... right in tabContainer.children do not match
-    var insertables = items.slice(left, right - tabContainer.children.length + items.length + 1)
-    while (right >= left) { // remove extra
+    var insertables = items.slice(
+      left,
+      right - tabContainer.children.length + items.length + 1
+    )
+    while (right >= left) {
+      // remove extra
       tabContainer.removeChild(tabContainer.children[left])
       bodyContainer.removeChild(bodyContainer.children[left])
       right -= 1
@@ -234,7 +249,8 @@ UI.tabs.tabWidget = function (options) {
       // var newBodyDiv = newBodyTR.appendChild(dom.createElement('div'))
       newSlot.bodyTR = newBodyTR
       dom.createElement('tr')
-      if (left === tabContainer.children.length) { // None left of original on right
+      if (left === tabContainer.children.length) {
+        // None left of original on right
         tabContainer.appendChild(newSlot)
         bodyContainer.appendChild(newBodyTR)
         // console.log('   appending new ' + insertables[i])
@@ -305,13 +321,20 @@ UI.tabs.tabWidget = function (options) {
   box.refresh = sync
   sync()
 
-// From select-tabs branch by hand
-  if (!options.startEmpty && tabContainer.children.length && options.selectedTab) {
+  // From select-tabs branch by hand
+  if (
+    !options.startEmpty &&
+    tabContainer.children.length &&
+    options.selectedTab
+  ) {
     var tab
     var found = false
     for (var i = 0; i < tabContainer.children.length; i++) {
       tab = tabContainer.children[i]
-      if (tab.firstChild && tab.firstChild.dataset.name === options.selectedTab) {
+      if (
+        tab.firstChild &&
+        tab.firstChild.dataset.name === options.selectedTab
+      ) {
         tab.firstChild.click()
         found = true
       }

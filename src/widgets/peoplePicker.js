@@ -43,7 +43,7 @@ export class PeoplePicker {
       new Group(selectedGroup, this.selectedgroup).render()
       const changeGroupButton = document.createElement('button')
       changeGroupButton.textContent = escape('Change group')
-      changeGroupButton.addEventListener('click', event => {
+      changeGroupButton.addEventListener('click', _event => {
         this.selectedgroup = null
         this.render()
       })
@@ -51,20 +51,22 @@ export class PeoplePicker {
       container.appendChild(changeGroupButton)
     } else {
       this.findAddressBook(this.typeIndex)
-        .then(({book}) => {
+        .then(({ book }) => {
           const chooseExistingGroupButton = document.createElement('button')
-          chooseExistingGroupButton.textContent = escape('Pick an existing group')
+          chooseExistingGroupButton.textContent = escape(
+            'Pick an existing group'
+          )
           chooseExistingGroupButton.style.margin = 'auto'
-          chooseExistingGroupButton.addEventListener('click', event => {
+          chooseExistingGroupButton.addEventListener('click', _event => {
             new GroupPicker(container, book, this.onSelectGroup).render()
           })
 
           const createNewGroupButton = document.createElement('button')
           createNewGroupButton.textContent = escape('Create a new group')
           createNewGroupButton.style.margin = 'auto'
-          createNewGroupButton.addEventListener('click', event => {
+          createNewGroupButton.addEventListener('click', _event => {
             this.createNewGroup(book)
-              .then(({group}) => {
+              .then(({ group }) => {
                 new GroupBuilder(
                   this.element,
                   book,
@@ -74,7 +76,10 @@ export class PeoplePicker {
               })
               .catch(errorBody => {
                 this.element.appendChild(
-                  errorMessageBlock(document, escape(`Error creating a new group. (${errorBody})`))
+                  errorMessageBlock(
+                    document,
+                    escape(`Error creating a new group. (${errorBody})`)
+                  )
                 )
               })
           })
@@ -87,7 +92,10 @@ export class PeoplePicker {
         })
         .catch(err => {
           this.element.appendChild(
-            errorMessageBlock(document, escape(`Could find your groups. (${err})`))
+            errorMessageBlock(
+              document,
+              escape(`Could find your groups. (${err})`)
+            )
           )
         })
     }
@@ -103,51 +111,82 @@ export class PeoplePicker {
         if (!ok) {
           return reject(err)
         }
-        const bookRegistration = kb.any(null, ns.solid('forClass'), ns.vcard('AddressBook'))
+        const bookRegistration = kb.any(
+          null,
+          ns.solid('forClass'),
+          ns.vcard('AddressBook')
+        )
         if (!bookRegistration) {
-          return reject(new Error('no address book registered in the solid type index ' + typeIndex))
+          return reject(
+            new Error(
+              'no address book registered in the solid type index ' + typeIndex
+            )
+          )
         }
         const book = kb.any(bookRegistration, ns.solid('instance'))
         if (!book) {
           return reject(new Error('incomplete address book registration'))
         }
-        kb.fetcher.load(book).then(function (xhr) {
-          return resolve({book})
-        }).catch(function (err) {
-          return reject(new Error('Could not load address book ' + err))
-        })
+        kb.fetcher
+          .load(book)
+          .then(function (_xhr) {
+            return resolve({ book })
+          })
+          .catch(function (err) {
+            return reject(new Error('Could not load address book ' + err))
+          })
       })
     })
   }
 
   createNewGroup (book) {
-    const {groupIndex, groupContainer} = indexes(book)
-    const group = rdf.sym(`${groupContainer.uri}${uuid.v4().slice(0, 8)}.ttl#this`)
+    const { groupIndex, groupContainer } = indexes(book)
+    const group = rdf.sym(
+      `${groupContainer.uri}${uuid.v4().slice(0, 8)}.ttl#this`
+    )
     const name = this.options.defaultNewGroupName || 'Untitled Group'
 
     // NOTE that order matters here.  Unfortunately this type of update is
     // non-atomic in that solid requires us to send two PATCHes, either of which
     // might fail.
-    const patchPromises = [group.doc(), groupIndex]
-      .map(doc => {
-        const typeStatement = rdf.st(group, ns.rdf('type'), ns.vcard('Group'), doc)
-        const nameStatement = rdf.st(group, ns.vcard('fn'), name, group.doc(), doc)
-        const includesGroupStatement = rdf.st(book, ns.vcard('includesGroup'), group, doc)
-        const toIns = doc.equals(groupIndex)
-          ? [typeStatement, nameStatement, includesGroupStatement]
-          : [typeStatement, nameStatement]
-        return patch(doc.uri, {toIns})
-          .then(() => {
-            toIns.forEach(st => {
-              kb.add(st)
-            })
-          })
+    const patchPromises = [group.doc(), groupIndex].map(doc => {
+      const typeStatement = rdf.st(
+        group,
+        ns.rdf('type'),
+        ns.vcard('Group'),
+        doc
+      )
+      const nameStatement = rdf.st(
+        group,
+        ns.vcard('fn'),
+        name,
+        group.doc(),
+        doc
+      )
+      const includesGroupStatement = rdf.st(
+        book,
+        ns.vcard('includesGroup'),
+        group,
+        doc
+      )
+      const toIns = doc.equals(groupIndex)
+        ? [typeStatement, nameStatement, includesGroupStatement]
+        : [typeStatement, nameStatement]
+      return patch(doc.uri, { toIns }).then(() => {
+        toIns.forEach(st => {
+          kb.add(st)
+        })
       })
+    })
     return Promise.all(patchPromises)
-      .then(() => ({group}))
+      .then(() => ({ group }))
       .catch(err => {
         console.log('Could not create new group.  PATCH failed ' + err)
-        throw new Error(`Couldn't create new group.  PATCH failed for (${err.xhr ? err.xhr.responseURL : ''} )`)
+        throw new Error(
+          `Couldn't create new group.  PATCH failed for (${
+            err.xhr ? err.xhr.responseURL : ''
+          } )`
+        )
       })
   }
 
@@ -183,7 +222,10 @@ export class GroupPicker {
       })
       .catch(err => {
         this.element.appendChild(
-          errorMessageBlock(document, escape(`There was an error loading your groups. (${err})`))
+          errorMessageBlock(
+            document,
+            escape(`There was an error loading your groups. (${err})`)
+          )
         )
       })
     return this
@@ -191,7 +233,7 @@ export class GroupPicker {
 
   loadGroups () {
     return new Promise((resolve, reject) => {
-      const {groupIndex} = indexes(this.book)
+      const { groupIndex } = indexes(this.book)
       kb.fetcher.nowOrWhenFetched(groupIndex, (ok, err) => {
         if (!ok) {
           return reject(err)
@@ -203,7 +245,7 @@ export class GroupPicker {
   }
 
   handleClickGroup (group) {
-    return event => {
+    return _event => {
       this.onSelectGroup(group)
     }
   }
@@ -217,7 +259,8 @@ export class Group {
 
   render () {
     const container = document.createElement('div')
-    container.textContent = escape( // @@@@@ need to escape??
+    container.textContent = escape(
+      // @@@@@ need to escape??
       getWithDefault(this.group, ns.vcard('fn'), `[${this.group.value}]`)
     )
     this.element.innerHTML = ''
@@ -254,25 +297,30 @@ export class GroupBuilder {
 
     makeDropTarget(dropContainer, uris => {
       uris.map(uri => {
-        this.add(uri)
-          .catch(err => {
-            this.element.appendChild(
-              errorMessageBlock(document, escape(`Could not add the given WebId. (${err})`))
+        this.add(uri).catch(err => {
+          this.element.appendChild(
+            errorMessageBlock(
+              document,
+              escape(`Could not add the given WebId. (${err})`)
             )
-          })
+          )
+        })
       })
     })
 
     const groupNameInput = document.createElement('input')
     groupNameInput.type = 'text'
-    groupNameInput.value = getWithDefault(this.group, ns.vcard('fn'), 'Untitled Group')
+    groupNameInput.value = getWithDefault(
+      this.group,
+      ns.vcard('fn'),
+      'Untitled Group'
+    )
     groupNameInput.addEventListener('change', event => {
-      this.setGroupName(event.target.value)
-        .catch(err => {
-          this.element.appendChild(
-            errorMessageBlock(document, `Error changing group name. (${err})`)
-          )
-        })
+      this.setGroupName(event.target.value).catch(err => {
+        this.element.appendChild(
+          errorMessageBlock(document, `Error changing group name. (${err})`)
+        )
+      })
     })
     const groupNameLabel = document.createElement('label')
     groupNameLabel.textContent = escape('Group Name:')
@@ -280,13 +328,12 @@ export class GroupBuilder {
     dropContainer.appendChild(groupNameLabel)
 
     if (kb.any(this.group, ns.vcard('hasMember'))) {
-      kb.match(this.group, ns.vcard('hasMember'))
-        .forEach(statement => {
-          const webIdNode = statement.object
-          const personDiv = document.createElement('div')
-          new Person(personDiv, webIdNode, this.handleRemove(webIdNode)).render()
-          dropContainer.appendChild(personDiv)
-        })
+      kb.match(this.group, ns.vcard('hasMember')).forEach(statement => {
+        const webIdNode = statement.object
+        const personDiv = document.createElement('div')
+        new Person(personDiv, webIdNode, this.handleRemove(webIdNode)).render()
+        dropContainer.appendChild(personDiv)
+      })
     } else {
       const copy = document.createElement('p')
       copy.textContent = escape`
@@ -297,7 +344,7 @@ export class GroupBuilder {
 
     const doneBuildingButton = document.createElement('button')
     doneBuildingButton.textContent = escape('Done')
-    doneBuildingButton.addEventListener('click', event => {
+    doneBuildingButton.addEventListener('click', _event => {
       this.doneBuildingCb(this.group)
     })
     dropContainer.appendChild(doneBuildingButton)
@@ -319,7 +366,13 @@ export class GroupBuilder {
         const webIdNode = rdf.namedNode(webId)
         const rdfClass = kb.any(webIdNode, ns.rdf('type'))
         if (!rdfClass || !rdfClass.equals(ns.foaf('Person'))) {
-          return reject(new Error(`Only people supported right now. (tried to add something of type ${rdfClass.value})`))
+          return reject(
+            new Error(
+              `Only people supported right now. (tried to add something of type ${
+                rdfClass.value
+              })`
+            )
+          )
         }
         return resolve(webIdNode)
       })
@@ -328,20 +381,19 @@ export class GroupBuilder {
       if (kb.holdsStatement(statement)) {
         return webIdNode
       }
-      return patch(this.group.doc().uri, {toIns: [statement]})
-        .then(() => {
-          statement.why = this.group.doc()
-          kb.add(statement)
-          this.onGroupChanged(null, 'added', webIdNode)
-          this.render()
-        })
+      return patch(this.group.doc().uri, { toIns: [statement] }).then(() => {
+        statement.why = this.group.doc()
+        kb.add(statement)
+        this.onGroupChanged(null, 'added', webIdNode)
+        this.render()
+      })
     })
   }
 
   handleRemove (webIdNode) {
-    return event => {
+    return _event => {
       const statement = rdf.st(this.group, ns.vcard('hasMember'), webIdNode)
-      return patch(this.group.doc().uri, {toDel: [statement]})
+      return patch(this.group.doc().uri, { toDel: [statement] })
         .then(() => {
           kb.remove(statement)
           this.onGroupChanged(null, 'removed', webIdNode)
@@ -350,27 +402,38 @@ export class GroupBuilder {
         })
         .catch(err => {
           const name = kb.any(webIdNode, ns.foaf('name'))
-          const errorMessage = name && name.value
-            ? `Could not remove ${name.value}. (${err})`
-            : `Could not remove ${webIdNode.value}. (${err})`
+          const errorMessage =
+            name && name.value
+              ? `Could not remove ${name.value}. (${err})`
+              : `Could not remove ${webIdNode.value}. (${err})`
           throw new Error(errorMessage)
         })
     }
   }
 
   setGroupName (name) {
-    const {groupIndex} = indexes(this.book)
-    const updatePromises = [this.group.doc(), groupIndex]
-      .map(namedGraph => {
-        const oldNameStatements = kb.match(this.group, ns.vcard('fn'), null, namedGraph)
-        const newNameStatement = rdf.st(this.group, ns.vcard('fn'), rdf.literal(name))
-        return patch(namedGraph.value, {toDel: oldNameStatements, toIns: [newNameStatement]})
-          .then(solidResponse => {
-            kb.removeStatements(oldNameStatements)
-            newNameStatement.why = namedGraph
-            kb.add(newNameStatement)
-          })
+    const { groupIndex } = indexes(this.book)
+    const updatePromises = [this.group.doc(), groupIndex].map(namedGraph => {
+      const oldNameStatements = kb.match(
+        this.group,
+        ns.vcard('fn'),
+        null,
+        namedGraph
+      )
+      const newNameStatement = rdf.st(
+        this.group,
+        ns.vcard('fn'),
+        rdf.literal(name)
+      )
+      return patch(namedGraph.value, {
+        toDel: oldNameStatements,
+        toIns: [newNameStatement]
+      }).then(_solidResponse => {
+        kb.removeStatements(oldNameStatements)
+        newNameStatement.why = namedGraph
+        kb.add(newNameStatement)
       })
+    })
     return Promise.all(updatePromises)
   }
 }
@@ -387,7 +450,11 @@ class Person {
     container.style.display = 'flex'
 
     // TODO: take a look at UI.widgets.setName
-    const imgSrc = getWithDefault(this.webIdNode, ns.foaf('img'), iconBase + 'noun_15059.svg')
+    const imgSrc = getWithDefault(
+      this.webIdNode,
+      ns.foaf('img'),
+      iconBase + 'noun_15059.svg'
+    )
     const profileImg = document.createElement('img')
     profileImg.src = escape(imgSrc)
     profileImg.width = '50'
@@ -395,7 +462,11 @@ class Person {
     profileImg.style.margin = '5px'
 
     // TODO: take a look at UI.widgets.setImage
-    const name = getWithDefault(this.webIdNode, ns.foaf('name'), `[${this.webIdNode}]`)
+    const name = getWithDefault(
+      this.webIdNode,
+      ns.foaf('name'),
+      `[${this.webIdNode}]`
+    )
     const nameSpan = document.createElement('span')
     nameSpan.innerHTML = escape(name)
     nameSpan.style.flexGrow = '1'
@@ -403,11 +474,11 @@ class Person {
 
     const removeButton = document.createElement('button')
     removeButton.textContent = 'Remove'
-    removeButton.addEventListener('click', event => this.handleRemove().catch(err => {
-      this.element.appendChild(
-        errorMessageBlock(document, escape(`${err}`))
-      )
-    }))
+    removeButton.addEventListener('click', _event =>
+      this.handleRemove().catch(err => {
+        this.element.appendChild(errorMessageBlock(document, escape(`${err}`)))
+      })
+    )
     removeButton.style.margin = '5px'
 
     container.appendChild(profileImg)
@@ -425,11 +496,13 @@ function getWithDefault (subject, predicate, defaultValue) {
   return object ? object.value : defaultValue
 }
 
-function patch (url, {toDel, toIns}) {
+function patch (url, { toDel, toIns }) {
   return new Promise((resolve, reject) => {
     kb.updater.update(toDel, toIns, (uri, success, errorMessage) => {
       if (!success) {
-        return reject(new Error(`PATCH failed for resource <${uri}>: ${errorMessage}`))
+        return reject(
+          new Error(`PATCH failed for resource <${uri}>: ${errorMessage}`)
+        )
       }
       resolve()
     })

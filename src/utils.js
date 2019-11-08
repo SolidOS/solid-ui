@@ -1,3 +1,4 @@
+/* global tabulator */
 //                  Solid-UI general Utilities
 //                  ==========================
 //
@@ -5,7 +6,7 @@
 //
 
 module.exports = {
-  addLoadEvent,  // not used anywhere
+  addLoadEvent, // not used anywhere
   AJARImage,
   ancestor,
   beep,
@@ -63,10 +64,12 @@ if (typeof AudioContext !== 'undefined') {
 }
 
 function beep () {
-  if (!audioContext) { return }  // Safari 2015
+  if (!audioContext) {
+    return
+  } // Safari 2015
 
-  let ContextClass = audioContext
-  let ctx = new ContextClass()
+  const ContextClass = audioContext
+  const ctx = new ContextClass()
 
   return function (duration, frequency, type, finishedCallback) {
     duration = +(duration || 0.3)
@@ -93,14 +96,20 @@ function beep () {
 // NOT USED ANYWHERE
 function hashColor (who) {
   who = who.uri || who
-  var hash = function (x) { return x.split('').reduce(function (a, b) { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0) }
+  var hash = function (x) {
+    return x.split('').reduce(function (a, b) {
+      a = (a << 5) - a + b.charCodeAt(0)
+      return a & a
+    }, 0)
+  }
   return '#' + ((hash(who) & 0xffffff) | 0xc0c0c0).toString(16) // c0c0c0 or 808080 forces pale
 }
 
-function genUuid () { // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+function genUuid () {
+  // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-    var r = Math.random() * 16 | 0
-    var v = c === 'x' ? r : (r & 0x3 | 0x8)
+    var r = (Math.random() * 16) | 0
+    var v = c === 'x' ? r : (r & 0x3) | 0x8
     return v.toString(16)
   })
 }
@@ -112,7 +121,7 @@ function genUuid () { // http://stackoverflow.com/questions/105034/create-guid-u
  * @param {function({NamedNode})} createNewRow(thing) returns a TR table row for a new thing
  *
  * Tolerates out of order elements but puts new ones in order.
-*/
+ */
 function syncTableToArray (table, things, createNewRow) {
   let foundOne
   let row
@@ -136,12 +145,12 @@ function syncTableToArray (table, things, createNewRow) {
       }
     }
     if (!foundOne) {
-      let newRow = createNewRow(thing)
+      const newRow = createNewRow(thing)
       // Insert new row in position g in the table to match array
       if (g >= table.children.length) {
         table.appendChild(newRow)
       } else {
-        let ele = table.children[g]
+        const ele = table.children[g]
         table.insertBefore(newRow, ele)
       }
       newRow.subject = thing
@@ -157,17 +166,17 @@ function syncTableToArray (table, things, createNewRow) {
 } // syncTableToArray
 
 /* Error stack to string for better diagnotsics
-**
-** See  http://snippets.dzone.com/posts/show/6632
-*/
+ **
+ ** See  http://snippets.dzone.com/posts/show/6632
+ */
 function stackString (e) {
   let str = '' + e + '\n'
   let i
   if (!e.stack) {
     return str + 'No stack available.\n'
   }
-  let lines = e.stack.toString().split('\n')
-  let toPrint = []
+  const lines = e.stack.toString().split('\n')
+  const toPrint = []
   for (i = 0; i < lines.length; i++) {
     let line = lines[i]
     if (line.indexOf('ecmaunit.js') > -1) {
@@ -177,7 +186,7 @@ function stackString (e) {
     if (line.charAt(0) === '(') {
       line = 'function' + line
     }
-    let chunks = line.split('@')
+    const chunks = line.split('@')
     toPrint.push(chunks)
   }
   // toPrint.reverse();  No - I prefer the latest at the top by the error message -tbl
@@ -189,8 +198,8 @@ function stackString (e) {
 }
 
 function emptyNode (node) {
-  let nodes = node.childNodes
-  let len = nodes.length
+  const nodes = node.childNodes
+  const len = nodes.length
   let i
   for (i = len - 1; i >= 0; i--) node.removeChild(nodes[i])
   return node
@@ -201,7 +210,8 @@ function getTarget (e) {
   e = e || window.event
   if (e.target) target = e.target
   else if (e.srcElement) target = e.srcElement
-  if (target.nodeType === 3) { // defeat Safari bug [sic]
+  if (target.nodeType === 3) {
+    // defeat Safari bug [sic]
     target = target.parentNode
   }
   // UI.log.debug("Click on: " + target.tagName)
@@ -214,7 +224,8 @@ function ancestor (target, tagName) {
     // UI.log.debug("looking for "+tagName+" Level: "+level+" "+level.tagName)
     try {
       if (level.tagName === tagName) return level
-    } catch (e) { // can hit "TypeError: can't access dead object" in ffox
+    } catch (e) {
+      // can hit "TypeError: can't access dead object" in ffox
       return undefined
     }
   }
@@ -223,7 +234,11 @@ function ancestor (target, tagName) {
 
 function getAbout (kb, target) {
   var level, aa
-  for (level = target; level && (level.nodeType === 1); level = level.parentNode) {
+  for (
+    level = target;
+    level && level.nodeType === 1;
+    level = level.parentNode
+  ) {
     // UI.log.debug("Level "+level + ' '+level.nodeType + ': '+level.tagName)
     aa = level.getAttribute('about')
     if (aa) {
@@ -257,8 +272,14 @@ function getTerm (target) {
     case 'selected': // header TD
       return getAbout(UI.store, target) // kb to be changed
     case 'undetermined selected':
-      return (target.nextSibling) ? st.predicate : ((!statementTr.AJAR_inverse) ? st.object : st.subject)
+      return target.nextSibling
+        ? st.predicate
+        : getUndeterminedSelection(statementTr, st)
   }
+}
+
+function getUndeterminedSelection (statementTr, st) {
+  return !statementTr.AJAR_inverse ? st.object : st.subject
 }
 
 function include (document, linkstr) {
@@ -283,7 +304,8 @@ function addLoadEvent (func) {
 } // addLoadEvent
 
 // Find the position of an object relative to the window
-function findPos (obj) { // C&P from http://www.quirksmode.org/js/findpos.html
+function findPos (obj) {
+  // C&P from http://www.quirksmode.org/js/findpos.html
   var myDocument = obj.ownerDocument
   var DocBox = myDocument.documentElement.getBoundingClientRect()
   var box = obj.getBoundingClientRect()
@@ -296,7 +318,12 @@ function getEyeFocus (element, instantly, isBottom, myWindow) {
   var totalScroll = elementPosY - 52 - myWindow.scrollY // magic number 52 for web-based version
   if (instantly) {
     if (isBottom) {
-      myWindow.scrollBy(0, elementPosY + element.clientHeight - (myWindow.scrollY + myWindow.innerHeight))
+      myWindow.scrollBy(
+        0,
+        elementPosY +
+          element.clientHeight -
+          (myWindow.scrollY + myWindow.innerHeight)
+      )
       return
     }
     myWindow.scrollBy(0, totalScroll)
@@ -337,12 +364,12 @@ function AJARImage (src, alt, tt, doc) {
 function shortName (uri) {
   let p = uri
   if ('#/'.indexOf(p[p.length - 1]) >= 0) p = p.slice(0, -1)
-  let namespaces = []
-  for (let ns in this.prefixes) {
+  const namespaces = []
+  for (const ns in this.prefixes) {
     namespaces[this.prefixes[ns]] = ns // reverse index
   }
   let pok
-  let canUse = function canUse (pp) {
+  const canUse = function canUse (pp) {
     // if (!__Serializer.prototype.validPrefix.test(pp)) return false; // bad format
     if (pp === 'ns') return false // boring
     // if (pp in this.namespaces) return false; // already used
@@ -353,14 +380,15 @@ function shortName (uri) {
   }
 
   let i
-  let hash = p.lastIndexOf('#')
+  const hash = p.lastIndexOf('#')
   if (hash >= 0) p = p.slice(hash - 1) // lop off localid
   for (;;) {
-    let slash = p.lastIndexOf('/')
+    const slash = p.lastIndexOf('/')
     if (slash >= 0) p = p.slice(slash + 1)
     i = 0
     while (i < p.length) {
-      if (this.prefixchars.indexOf(p[i])) i++; else break
+      if (this.prefixchars.indexOf(p[i])) i++
+      else break
     }
     p = p.slice(0, i)
     if (p.length < 6 && canUse(p)) return pok // exact i sbest
@@ -390,7 +418,7 @@ function ontologyLabel (term) {
       return term.uri + '?!' // strange should have # or /
     }
   }
-  for (let ns in UI.ns) {
+  for (const ns in UI.ns) {
     namespaces[UI.ns[ns]] = ns // reverse index
   }
   try {
@@ -404,7 +432,7 @@ function ontologyLabel (term) {
     if (i >= 0) {
       part = s.slice(i + 1)
       s = s.slice(0, i)
-      if ((part !== 'ns') && ('0123456789'.indexOf(part[0]) < 0)) {
+      if (part !== 'ns' && '0123456789'.indexOf(part[0]) < 0) {
         return part
       }
     } else {
@@ -414,11 +442,9 @@ function ontologyLabel (term) {
 }
 
 function labelWithOntology (x, initialCap) {
-  let t = UI.store.findTypeURIs(x)
-  if (t[UI.ns.rdf('Predicate').uri] ||
-    t[UI.ns.rdfs('Class').uri]) {
-    return label(x, initialCap) +
-      ' (' + ontologyLabel(x) + ')'
+  const t = UI.store.findTypeURIs(x)
+  if (t[UI.ns.rdf('Predicate').uri] || t[UI.ns.rdfs('Class').uri]) {
+    return label(x, initialCap) + ' (' + ontologyLabel(x) + ')'
   }
   return label(x, initialCap)
 }
@@ -429,7 +455,8 @@ function labelWithOntology (x, initialCap) {
 //
 // @returns string
 //
-function label (x, initialCap) { // x is an object
+function label (x, initialCap) {
+  // x is an object
   function doCap (s) {
     // s = s.toString()
     if (initialCap) return s.slice(0, 1).toUpperCase() + s.slice(1)
@@ -444,9 +471,11 @@ function label (x, initialCap) { // x is an object
         continue
       }
       s2 += s1[i]
-      if (i + 1 < s1.length &&
+      if (
+        i + 1 < s1.length &&
         s1[i].toUpperCase() !== s1[i] &&
-        s1[i + 1].toLowerCase() !== s1[i + 1]) {
+        s1[i + 1].toLowerCase() !== s1[i + 1]
+      ) {
         s2 += ' '
       }
     }
@@ -468,7 +497,8 @@ function label (x, initialCap) { // x is an object
   //  @@ TBD: Add subproperties of rdfs:label
 
   var kb = UI.store
-  var lab1 = kb.any(x, UI.ns.link('message')) ||
+  var lab1 =
+    kb.any(x, UI.ns.link('message')) ||
     kb.any(x, UI.ns.vcard('fn')) ||
     kb.any(x, UI.ns.foaf('name')) ||
     kb.any(x, UI.ns.dct('title')) ||
@@ -498,12 +528,23 @@ function label (x, initialCap) { // x is an object
   // The idea was to clean up eg URIs encoded in query strings
   // Also encoded character in what was filenames like @ [] {}
   try {
-    s = s.split('/').map(decodeURIComponent).join('/') // If it is properly encoded
-  } catch (e) { // try individual decoding of ASCII code points
+    s = s
+      .split('/')
+      .map(decodeURIComponent)
+      .join('/') // If it is properly encoded
+  } catch (e) {
+    // try individual decoding of ASCII code points
     for (var i = s.length - 3; i > 0; i--) {
       const hex = '0123456789abcefABCDEF' // The while upacks multiple layers of encoding
-      while (s[i] === '%' && hex.indexOf(s[i + 1]) >= 0 && hex.indexOf(s[i + 2]) >= 0) {
-        s = s.slice(0, i) + String.fromCharCode(parseInt(s.slice(i + 1, i + 3), 16)) + s.slice(i + 3)
+      while (
+        s[i] === '%' &&
+        hex.indexOf(s[i + 1]) >= 0 &&
+        hex.indexOf(s[i + 2]) >= 0
+      ) {
+        s =
+          s.slice(0, i) +
+          String.fromCharCode(parseInt(s.slice(i + 1, i + 3), 16)) +
+          s.slice(i + 3)
       }
     }
   }
@@ -518,7 +559,7 @@ function label (x, initialCap) { // x is an object
 
   // Eh? Why not do this? e.g. dc:title needs it only trim URIs, not rdfs:labels
   var slash = s.lastIndexOf('/', s.length - 2) // (len-2) excludes trailing slash
-  if ((slash >= 0) && (slash < x.uri.length)) return cleanUp(s.slice(slash + 1))
+  if (slash >= 0 && slash < x.uri.length) return cleanUp(s.slice(slash + 1))
 
   return doCap(decodeURIComponent(x.uri))
 }
@@ -535,7 +576,8 @@ function labelForXML (x) {
 // As above but for predicate, possibly inverse
 function predicateLabelForXML (p, inverse) {
   var lab
-  if (inverse) { // If we know an inverse predicate, use its label
+  if (inverse) {
+    // If we know an inverse predicate, use its label
     var ip = UI.store.any(p, UI.ns.owl('inverseOf'))
     if (!ip) ip = UI.store.any(undefined, UI.ns.owl('inverseOf'), p)
     if (ip) return labelForXML(ip)
@@ -571,7 +613,8 @@ function predParentOf (node) {
     } else if (n.previousSibling && n.previousSibling.nodeName === 'TR') {
       n = n.previousSibling
     } else {
-      UI.log.error('Could not find predParent'); return node
+      UI.log.error('Could not find predParent')
+      return node
     }
   }
 }

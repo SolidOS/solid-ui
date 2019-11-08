@@ -1,20 +1,21 @@
+/* global panes, $rdf */
 
 document.addEventListener('DOMContentLoaded', function () {
-    /// ///////////////////////////////////////////
+  /// ///////////////////////////////////////////
 
   var UI = panes.UI
   var kb = UI.store
   var dom = document
 
   var uri = window.location.href
-  var base = window.document.title = uri.slice(0, uri.lastIndexOf('/') + 1)
+  var base = (window.document.title = uri.slice(0, uri.lastIndexOf('/') + 1))
   var testDocURI = base + 'test.ttl' // imaginary doc - just use its URL
   var testDoc = $rdf.sym(testDocURI)
   // var subject_uri = testDocURI + '#event1'
   // var me_uri = testDocURI + '#a0'
   // var me = kb.sym(me_uri)
 
-//    var forms_uri = window.document.title = base+ 'forms.ttl';
+  //    var forms_uri = window.document.title = base+ 'forms.ttl';
 
   // var subject = kb.sym(subject_uri)
   var div = dom.getElementById('UITestArea')
@@ -48,13 +49,13 @@ document.addEventListener('DOMContentLoaded', function () {
       options.subject = kb.the(target, UI.ns.ui('subject'))
       options.ordered = kb.the(target, UI.ns.ui('ordered')).value === '1'
       options.orientation = kb.the(target, UI.ns.ui('orientation')).value
-      options.onClose = function(e) {}  // Test it can make a close button is a good place
-        // todo: test both cases
+      options.onClose = function (_event) {} // Test it can make a close button is a good place
+      // todo: test both cases
       var tabs = div.appendChild(UI.tabs.tabWidget(options))
       return tabs
     }
 
-        // @@ Give other combos too-- see schedule ontology
+    // @@ Give other combos too-- see schedule ontology
 
     // var dataPointForNT = []
     // var doc = testDoc
@@ -70,7 +71,10 @@ document.addEventListener('DOMContentLoaded', function () {
       }
       var iframe = container.appendChild(dom.createElement('iframe'))
       iframe.setAttribute('src', subject.uri)
-      iframe.setAttribute('style', 'border: 1em solid pink; margin: 2em; padding: 2em; padding-color: green;')
+      iframe.setAttribute(
+        'style',
+        'border: 1em solid pink; margin: 2em; padding: 2em; padding-color: green;'
+      )
       tabContentCache[subject.uri] = iframe
     }
 
@@ -79,16 +83,21 @@ document.addEventListener('DOMContentLoaded', function () {
     var agenda = []
 
     var nextTest = function nextTest () {
-            // First take a copy of the DOM the klast test produced
+      // First take a copy of the DOM the klast test produced
       output(tests[t]).appendChild(tabs.cloneNode(true))
 
       t += 1
       var test = tests[t]
       if (!test) return
       // var tClass =
-      kb.removeMany(undefined, undefined, undefined, testDoc)  // Flush out previous test data
+      kb.removeMany(undefined, undefined, undefined, testDoc) // Flush out previous test data
       try {
-        $rdf.parse(prologue + inputText(tests[t]), kb, testDocURI, 'text/turtle')
+        $rdf.parse(
+          prologue + inputText(tests[t]),
+          kb,
+          testDocURI,
+          'text/turtle'
+        )
       } catch (e) {
         output(test).textContent = e
       }
@@ -104,7 +113,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     agenda.push(nextTest)
 
-    setTimeout(function () { agenda.shift()() }, 2000)
+    setTimeout(function () {
+      agenda.shift()()
+    }, 2000)
   } // showResults
 
   showResults()
