@@ -33,6 +33,7 @@ const dashCharacter = '-'
 **  One type of form field is an ordered Group of other fields.
 **  A Form is actually just the same as a group.
 **
+** @param {Document} dom The HTML Document object aka Document Object Model
 ** @param {Element?} container  If present, the created widget will be appended to this
 ** @param {Map} already A hash table of (form, suject) kept to prevent recusive forms looping
 ** @param {Node} subject The thing about which the form displays/edits data
@@ -112,8 +113,9 @@ forms.field[UI.ns.ui('Form').uri] =
     return box
   }
 
-/*          Options: Select one or more cases
+/**          Options field: Select one or more cases
 **
+** @param {Document} dom The HTML Document object aka Document Object Model
 ** @param {Element?} container  If present, the created widget will be appended to this
 ** @param {Map} already A hash table of (form, suject) kept to prevent recusive forms looping
 ** @param {Node} subject The thing about which the form displays/edits data
@@ -175,21 +177,33 @@ forms.field[UI.ns.ui('Options').uri] = function (
   return box
 }
 
-/*          Multiple similar fields (unordered)
+/**          Multiple field: zero or more similar subfields
 **
+** @param {Document} dom The HTML Document object aka Document Object Model
+** @param {Element?} container  If present, the created widget will be appended to this
+** @param {Map} already A hash table of (form, suject) kept to prevent recusive forms looping
+** @param {Node} subject The thing about which the form displays/edits data
+** @param {Node} form The form or field to be rendered
+** @param {Node} store The web document in which the data is
+** @param {function(ok, errorMessage)} callbackFunction Called when data is changed?
+**
+** @returns {Element} The HTML widget created
 */
 forms.field[UI.ns.ui('Multiple').uri] = function (
   dom, container, already, subject, form, store, callbackFunction) {
-  // var plusIcon = UI.icons.originalIconBase + 'tango/22-list-add.png' // blue plus
   var plusIconURI = UI.icons.iconBase + 'noun_19460_green.svg' // white plus in green circle
 
   var kb = UI.store
   kb.updater = kb.updater || new $rdf.UpdateManager(kb)
   var box = dom.createElement('table')
-  // We don't indent multiple as it is a sort of a prefix o fthe next field and has contents of one.
+  // We don't indent multiple as it is a sort of a prefix of the next field and has contents of one.
   // box.setAttribute('style', 'padding-left: 2em; border: 0.05em solid green;')  // Indent a multiple
   var ui = UI.ns.ui
   if (container) container.appendChild(box)
+
+  var ordered = kb.any(form, ui('ordered'))
+  ordered = ordered ? $rdf.Node.toJS(ordered) : false
+
   var property = kb.any(form, ui('property'))
   if (!property) {
     box.appendChild(error.errorMessageBlock(dom,
@@ -197,7 +211,7 @@ forms.field[UI.ns.ui('Multiple').uri] = function (
     return box
   }
   var min = kb.any(form, ui('min')) // This is the minimum number -- default 0
-  min = min ? min.value : 0
+  min = min ? 0 + min.value : 0
   // var max = kb.any(form, ui('max')) // This is the minimum number
   // max = max ? max.value : 99999999
 
@@ -207,20 +221,36 @@ forms.field[UI.ns.ui('Multiple').uri] = function (
     return box
   }
 
-  // box.appendChild(dom.createElement('h3')).textContent = "Fields:".
   var body = box.appendChild(dom.createElement('tr'))
   var tail = box.appendChild(dom.createElement('tr'))
+  var list // The RDF collection which keeps the ordered version
+  var values // Initial values
 
-  var addItem = function (e, object) {
-    UI.log.debug('Multiple add: ' + object)
-    // ++count
+  var addItem = function (anyEvent, object) { // can be used as a event handler
     if (!object) object = forms.newThing(store)
+    UI.log.debug('Multiple: add: ' + object)
     var tr = box.insertBefore(dom.createElement('tr'), tail)
+    var ins = []
+    var del = []
     var itemDone = function (uri, ok, message) {
       if (ok) { // @@@ Check IT hasnt alreday been written in
-        if (!kb.holds(subject, property, object, store)) {
-          var ins = [$rdf.st(subject, property, object, store)]
-          kb.updater.update([], ins, linkDone)
+        if (ordered) {
+          list = kb.any(subject, property, null, store)
+          if (!list) {
+            list = new $rdf.Collecion([object])
+            // list.append(object)
+            ins = [$rdf.st(subject, property, list)]
+          } else {
+            let oldList = new $rdf.Collecion(list.elments.slice())
+            list.append(object)
+            del = [$rdf.st(subject, property, oldList)] // If this doesn't work, kb.saveBack(store)
+            ins = [$rdf.st(subject, property, list)]
+          }
+        } else {
+          if (!kb.holds(subject, property, object, store)) {
+            ins = [$rdf.st(subject, property, object, store)]
+          }
+          kb.updater.update(del, ins, linkDone)
         }
       } else {
         tr.appendChild(error.errorMessageBlock(dom, 'Multiple: item failed: ' + body))
@@ -252,7 +282,17 @@ forms.field[UI.ns.ui('Multiple').uri] = function (
     }
   }
 
-  var values = kb.each(subject, property)
+  if (ordered) {
+    list = kb.any(subject, property)
+    if (!list) {
+      list = new $rdf.Collection()
+      // @@ save {subject property list} triple @@
+    }
+    values = list.elements
+  } else {
+    values = kb.each(subject, property)
+    list = null
+  }
   if (kb.updater.editable(store.uri)) {
     var img = tail.appendChild(dom.createElement('img'))
     img.setAttribute('src', plusIconURI) //  plus sign
@@ -261,10 +301,10 @@ forms.field[UI.ns.ui('Multiple').uri] = function (
     var prompt = tail.appendChild(dom.createElement('span'))
     prompt.textContent = (values.length === 0 ? 'Add one or more ' : 'Add more ') +
       utils.label(property)
-    tail.addEventListener('click', addItem, true) // img.addEventListener('click', addItem, true)
+    tail.addEventListener('click', addItem, true)
   }
 
-  values.map(function (obj) { addItem(null, obj) })
+  values.forEach(function (obj) { addItem(null, obj) })
   var extra = min - values.length
   for (var j = 0; j < extra; j++) {
     console.log('Adding extra: min ' + min)
@@ -331,6 +371,7 @@ forms.fieldParams[UI.ns.ui('EmailField').uri].pattern =
 
 /** Render a basic form field
 *
+** @param {Document} dom The HTML Document object aka Document Object Model
 ** @param {Element?} container  If present, the created widget will be appended to this
 ** @param {Map} already A hash table of (form, suject) kept to prevent recusive forms looping
 ** @param {Node} subject The thing about which the form displays/edits data
@@ -396,7 +437,7 @@ function basicField (
     field.readonly = true // was: disabled. readonly is better
     return box
   }
-  
+
   // read-write:
   field.addEventListener('keyup', function (e) {
     if (params.pattern) {
@@ -507,6 +548,7 @@ forms.field[UI.ns.ui('MultiLineTextField').uri] = function (
 
 /*          Boolean field  and Tri-state version (true/false/null)
 **
+** @@ todo: remove tristate param
 */
 function booleanField (
   dom, container, already, subject, form, store, callbackFunction, tristate) {
