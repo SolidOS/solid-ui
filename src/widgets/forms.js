@@ -1,5 +1,9 @@
-/*
+/*       F O R M S
+*
+*      A Vanilla Dom implementation of the form language
 */
+
+/* global alert */
 
 module.exports = {}
 
@@ -177,7 +181,7 @@ forms.field[UI.ns.ui('Options').uri] = function (
   return box
 }
 
-/**          Multiple field: zero or more similar subfields
+/**          Multiple field: zero or more similar subFields
 **
 ** @param {Document} dom The HTML Document object aka Document Object Model
 ** @param {Element?} container  If present, the created widget will be appended to this
@@ -191,6 +195,114 @@ forms.field[UI.ns.ui('Options').uri] = function (
 */
 forms.field[UI.ns.ui('Multiple').uri] = function (
   dom, container, already, subject, form, store, callbackFunction) {
+  /** Add an item to the control
+   * @param {Event} anyEvent if used as an event handler
+   * @param {Node} object The RDF object to be represented by this item.
+  */
+  function addItem (object) { // can be used as a event handler
+    async function deleteItem () {
+      if (ordered) {
+        for (let i = 0; i < list.elements.length; i++) {
+          if (list.elements[i].sameTerm(object)) {
+            list.elements.splice(i, 1)
+            saveListThenRefresh()
+            return
+          }
+        }
+      } else { // unordered
+        if (kb.holds(subject, property, object)) {
+          var del = [$rdf.st(subject, property, object, store)]
+          kb.updater.update(del, [], function (uri, ok, message) {
+            if (ok) {
+              body.removeChild(subField)
+            } else {
+              body.appendChild(error.errorMessageBlock(dom, 'Multiple: delete failed: ' + message))
+            }
+          })
+        }
+      }
+    }
+
+    /** Move the object up or down in the ordered list
+     * @param {Event} anyEvent if used as an event handler
+     * @param {Boolean} upwards Move this up (true) or down (false).
+    */
+    async function move (event, upwards) { // @@ possibly, allow shift+click to do move to top or bottom?
+      for (var i = 0; i < list.elements.length; i++) { // Find object in array
+        if (list.elements[i].sameTerm(object)) {
+          break
+        }
+      }
+      if (i === list.elements.length) {
+        alert('list move: not found element for ' + object)
+      }
+      if (upwards) {
+        if (i === 0) {
+          alert('@@ boop - already at top   -temp message')  // @@ make boop sound
+          return
+        }
+        list.elements.splice(i - 1, 2, list.elements[i], list.elements[i - 1])
+      } else { // downwards
+        if (i === list.elements.length - 1) {
+          alert('@@ boop - already at bottom   -temp message')   // @@ make boop sound
+          return
+        }
+        list.elements.splice(i, 2, list.elements[i + 1], list.elements[i])
+      }
+      saveListThenRefresh()
+    }
+    /* A subField has been filled in
+    */
+    function itemDone (uri, ok, message) {
+      if (ok) { // @@@ Check IT hasnt alreday been written in
+        if (ordered) {
+          list = kb.any(subject, property, null, store)
+          if (!list) {
+            list = new $rdf.Collecion([object])
+            // list.append(object)
+            ins = [$rdf.st(subject, property, list)] // Will this work?
+          } else {
+            let oldList = new $rdf.Collecion(list.elments)
+            list.append(object)
+            del = [$rdf.st(subject, property, oldList)] // If this doesn't work, kb.saveBack(store)
+            ins = [$rdf.st(subject, property, list)]
+          }
+        } else {
+          if (!kb.holds(subject, property, object, store)) {
+            ins = [$rdf.st(subject, property, object, store)]
+          }
+          kb.updater.update(del, ins, linkDone)
+        }
+      } else {
+        tr.appendChild(error.errorMessageBlock(dom, 'Multiple: item failed: ' + body))
+        callbackFunction(ok, message)
+      }
+    }
+    var linkDone = function (uri, ok, message) {
+      return callbackFunction(ok, message)
+    }
+
+    if (!object) object = forms.newThing(store)
+    UI.log.debug('Multiple: add: ' + object)
+    var tr = box.insertBefore(dom.createElement('tr'), tail)
+    var ins = []
+    var del = []
+
+    var fn = forms.fieldFunction(dom, element)
+    var subField = fn(dom, null, already, object, element, store, itemDone) // p2 was: body.  moving to not passing that
+    subField.subject = object // Keep a back pointer between the DOM array and the RDF objects
+
+    // delete button and move buttons
+    if (kb.updater.editable(store.uri)) {
+      buttons.deleteButtonWithCheck(dom, subField, utils.label(property), deleteItem)
+      if (ordered) {
+        subField.appendChild(UI.widgets.button(dom, UI.icons.iconBase.noun_1369237.svg, 'Move Up'), async event => move(event, true))
+        subField.appendChild(UI.widgets.button(dom, UI.icons.iconBase.noun_1369241.svg, 'Move Down'), async event => move(event, false))
+      }
+    }
+    return subField // unused
+  } // addItem
+
   var plusIconURI = UI.icons.iconBase + 'noun_19460_green.svg' // white plus in green circle
 
   var kb = UI.store
@@ -226,69 +338,17 @@ forms.field[UI.ns.ui('Multiple').uri] = function (
   var list // The RDF collection which keeps the ordered version
   var values // Initial values
 
-  var addItem = function (anyEvent, object) { // can be used as a event handler
-    if (!object) object = forms.newThing(store)
-    UI.log.debug('Multiple: add: ' + object)
-    var tr = box.insertBefore(dom.createElement('tr'), tail)
-    var ins = []
-    var del = []
-    var itemDone = function (uri, ok, message) {
-      if (ok) { // @@@ Check IT hasnt alreday been written in
-        if (ordered) {
-          list = kb.any(subject, property, null, store)
-          if (!list) {
-            list = new $rdf.Collecion([object])
-            // list.append(object)
-            ins = [$rdf.st(subject, property, list)]
-          } else {
-            let oldList = new $rdf.Collecion(list.elments.slice())
-            list.append(object)
-            del = [$rdf.st(subject, property, oldList)] // If this doesn't work, kb.saveBack(store)
-            ins = [$rdf.st(subject, property, list)]
-          }
-        } else {
-          if (!kb.holds(subject, property, object, store)) {
-            ins = [$rdf.st(subject, property, object, store)]
-          }
-          kb.updater.update(del, ins, linkDone)
-        }
-      } else {
-        tr.appendChild(error.errorMessageBlock(dom, 'Multiple: item failed: ' + body))
-        callbackFunction(ok, message)
-      }
-    }
-    var linkDone = function (uri, ok, message) {
-      return callbackFunction(ok, message)
-    }
-
-    var fn = forms.fieldFunction(dom, element)
-    var subField = fn(dom, body, already, object, element, store, itemDone)
-
-    // delete button
-    var deleteItem = function () {
-      if (kb.holds(subject, property, object)) {
-        var del = [$rdf.st(subject, property, object, store)]
-        kb.updater.update(del, [], function (uri, ok, message) {
-          if (ok) {
-            body.removeChild(subField)
-          } else {
-            body.appendChild(error.errorMessageBlock(dom, 'Multiple: delete failed: ' + message))
-          }
-        })
-      }
-    }
-    if (kb.updater.editable(store.uri)) {
-      buttons.deleteButtonWithCheck(dom, subField, utils.label(property), deleteItem)
-    }
-  }
-
+  var unsavedList = false // Flag that
   if (ordered) {
     list = kb.any(subject, property)
     if (!list) {
-      list = new $rdf.Collection()
+      unsavedList = true
+      values = []
+      // list = new $rdf.Collection()
       // @@ save {subject property list} triple @@
+    } else {
+      values = list.elements
     }
-    values = list.elements
   } else {
     values = kb.each(subject, property)
     list = null
@@ -301,14 +361,54 @@ forms.field[UI.ns.ui('Multiple').uri] = function (
     var prompt = tail.appendChild(dom.createElement('span'))
     prompt.textContent = (values.length === 0 ? 'Add one or more ' : 'Add more ') +
       utils.label(property)
-    tail.addEventListener('click', addItem, true)
+    tail.addEventListener('click', async e => addItem(), true)
   }
 
-  values.forEach(function (obj) { addItem(null, obj) })
+  function createListIfNecessary () {
+    if (unsavedList) {
+      list = new $rdf.Collection()
+      kb.add(subject, property, list, store)
+    }
+    unsavedList = false
+  }
+
+  async function saveListThenRefresh () {
+    createListIfNecessary()
+    try {
+      await kb.fetcher.putBack(store)
+    } catch (err) {
+      box.appendChild(error.errorMessageBlock(dom, 'Error trying to put back a list: ' + err))
+      return
+    }
+    refresh()
+  }
+
+  // values.forEach(function (obj) { addItem(obj) })
+  function refresh () {
+    if (ordered) {
+      list = kb.any(subject, property)
+      if (!list) {
+        unsavedList = true
+        values = []
+      } else {
+        values = list.elements
+      }
+    } else {
+      values = kb.each(subject, property)
+      list = null
+    }
+    UI.utils.syncTableToArrayReOrdered(body, values, addItem)
+  }
+  body.refresh = refresh // Allow live update
+  refresh()
+
   var extra = min - values.length
-  for (var j = 0; j < extra; j++) {
-    console.log('Adding extra: min ' + min)
-    addItem() // Add blanks if less than minimum
+  if (extra > 0) {
+    for (var j = 0; j < extra; j++) {
+      console.log('Adding extra: min ' + min)
+      addItem() // Add blanks if less than minimum
+    }
+    saveListThenRefresh() // async
   }
   return box
 }
