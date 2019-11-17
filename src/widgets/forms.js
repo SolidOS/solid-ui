@@ -1,7 +1,9 @@
-/*
+/*       F O R M S
+ *
+ *      A Vanilla Dom implementation of the form language
  */
 
-const $rdf = require('rdflib')
+/* global alert */
 
 module.exports = {}
 
@@ -17,6 +19,7 @@ var UI = {
   style: require('../style'),
   widgets: forms
 }
+const $rdf = require('rdflib')
 const error = require('./error')
 const buttons = require('./buttons')
 const utils = require('../utils')
@@ -30,8 +33,20 @@ const dashCharacter = '-'
 /*                                  Form Field implementations
  **
  */
-/*          Group of different fields
+/**          Group of different fields
  **
+ **  One type of form field is an ordered Group of other fields.
+ **  A Form is actually just the same as a group.
+ **
+ ** @param {Document} dom The HTML Document object aka Document Object Model
+ ** @param {Element?} container  If present, the created widget will be appended to this
+ ** @param {Map} already A hash table of (form, suject) kept to prevent recusive forms looping
+ ** @param {Node} subject The thing about which the form displays/edits data
+ ** @param {Node} form The form or field to be rendered
+ ** @param {Node} store The web document in which the data is
+ ** @param {function(ok, errorMessage)} callbackFunction Called when data is changed?
+ **
+ ** @returns {Element} The HTML widget created
  */
 forms.field[UI.ns.ui('Form').uri] = forms.field[
   UI.ns.ui('Group').uri
@@ -40,7 +55,7 @@ forms.field[UI.ns.ui('Form').uri] = forms.field[
   var box = dom.createElement('div')
   box.setAttribute('style', 'padding-left: 2em; border: 0.05em solid brown;') // Indent a group
   var ui = UI.ns.ui
-  container.appendChild(box)
+  if (container) container.appendChild(box)
 
   // Prevent loops
   var key = subject.toNT() + '|' + form.toNT()
@@ -112,9 +127,19 @@ forms.field[UI.ns.ui('Form').uri] = forms.field[
   return box
 }
 
-/*          Options: Select one or more cases
+/**          Options field: Select one or more cases
  **
+ ** @param {Document} dom The HTML Document object aka Document Object Model
+ ** @param {Element?} container  If present, the created widget will be appended to this
+ ** @param {Map} already A hash table of (form, suject) kept to prevent recusive forms looping
+ ** @param {Node} subject The thing about which the form displays/edits data
+ ** @param {Node} form The form or field to be rendered
+ ** @param {Node} store The web document in which the data is
+ ** @param {function(ok, errorMessage)} callbackFunction Called when data is changed?
+ **
+ ** @returns {Element} The HTML widget created
  */
+
 forms.field[UI.ns.ui('Options').uri] = function (
   dom,
   container,
@@ -128,7 +153,7 @@ forms.field[UI.ns.ui('Options').uri] = function (
   var box = dom.createElement('div')
   // box.setAttribute('style', 'padding-left: 2em; border: 0.05em dotted purple;')  // Indent Options
   var ui = UI.ns.ui
-  container.appendChild(box)
+  if (container) container.appendChild(box)
 
   var dependingOn = kb.any(form, ui('dependingOn'))
   if (!dependingOn) {
@@ -188,8 +213,17 @@ forms.field[UI.ns.ui('Options').uri] = function (
   return box
 }
 
-/*          Multiple similar fields (unordered)
+/**          Multiple field: zero or more similar subFields
  **
+ ** @param {Document} dom The HTML Document object aka Document Object Model
+ ** @param {Element?} container  If present, the created widget will be appended to this
+ ** @param {Map} already A hash table of (form, suject) kept to prevent recusive forms looping
+ ** @param {Node} subject The thing about which the form displays/edits data
+ ** @param {Node} form The form or field to be rendered
+ ** @param {Node} store The web document in which the data is
+ ** @param {function(ok, errorMessage)} callbackFunction Called when data is changed?
+ **
+ ** @returns {Element} The HTML widget created
  */
 forms.field[UI.ns.ui('Multiple').uri] = function (
   dom,
@@ -200,51 +234,94 @@ forms.field[UI.ns.ui('Multiple').uri] = function (
   store,
   callbackFunction
 ) {
-  // var plusIcon = UI.icons.originalIconBase + 'tango/22-list-add.png' // blue plus
-  var plusIconURI = UI.icons.iconBase + 'noun_19460_green.svg' // white plus in green circle
+  /** Add an item to the control
+   * @param {Event} anyEvent if used as an event handler
+   * @param {Node} object The RDF object to be represented by this item.
+   */
+  function addItem (object) {
+    // can be used as a event handler
+    async function deleteItem () {
+      if (ordered) {
+        for (let i = 0; i < list.elements.length; i++) {
+          if (list.elements[i].sameTerm(object)) {
+            list.elements.splice(i, 1)
+            saveListThenRefresh()
+            return
+          }
+        }
+      } else {
+        // unordered
+        if (kb.holds(subject, property, object)) {
+          var del = [$rdf.st(subject, property, object, store)]
+          kb.updater.update(del, [], function (uri, ok, message) {
+            if (ok) {
+              body.removeChild(subField)
+            } else {
+              body.appendChild(
+                error.errorMessageBlock(
+                  dom,
+                  'Multiple: delete failed: ' + message
+                )
+              )
+            }
+          })
+        }
+      }
+    }
 
-  var kb = UI.store
-  kb.updater = kb.updater || new $rdf.UpdateManager(kb)
-  var box = dom.createElement('table')
-  // We don't indent multiple as it is a sort of a prefix o fthe next field and has contents of one.
-  // box.setAttribute('style', 'padding-left: 2em; border: 0.05em solid green;')  // Indent a multiple
-  var ui = UI.ns.ui
-  container.appendChild(box)
-  var property = kb.any(form, ui('property'))
-  if (!property) {
-    box.appendChild(
-      error.errorMessageBlock(dom, 'No property to multiple: ' + form)
-    ) // used for arcs in the data
-    return box
-  }
-  var min = kb.any(form, ui('min')) // This is the minimum number -- default 0
-  min = min ? min.value : 0
-  // var max = kb.any(form, ui('max')) // This is the minimum number
-  // max = max ? max.value : 99999999
-
-  var element = kb.any(form, ui('part')) // This is the form to use for each one
-  if (!element) {
-    box.appendChild(
-      error.errorMessageBlock(dom, 'No part to multiple: ' + form)
-    )
-    return box
-  }
-
-  // box.appendChild(dom.createElement('h3')).textContent = "Fields:".
-  var body = box.appendChild(dom.createElement('tr'))
-  var tail = box.appendChild(dom.createElement('tr'))
-
-  var addItem = function (e, object) {
-    UI.log.debug('Multiple add: ' + object)
-    // ++count
-    if (!object) object = forms.newThing(store)
-    var tr = box.insertBefore(dom.createElement('tr'), tail)
-    var itemDone = function (uri, ok, message) {
+    /** Move the object up or down in the ordered list
+     * @param {Event} anyEvent if used as an event handler
+     * @param {Boolean} upwards Move this up (true) or down (false).
+     */
+    async function move (event, upwards) {
+      // @@ possibly, allow shift+click to do move to top or bottom?
+      for (var i = 0; i < list.elements.length; i++) {
+        // Find object in array
+        if (list.elements[i].sameTerm(object)) {
+          break
+        }
+      }
+      if (i === list.elements.length) {
+        alert('list move: not found element for ' + object)
+      }
+      if (upwards) {
+        if (i === 0) {
+          alert('@@ boop - already at top   -temp message') // @@ make boop sound
+          return
+        }
+        list.elements.splice(i - 1, 2, list.elements[i], list.elements[i - 1])
+      } else {
+        // downwards
+        if (i === list.elements.length - 1) {
+          alert('@@ boop - already at bottom   -temp message') // @@ make boop sound
+          return
+        }
+        list.elements.splice(i, 2, list.elements[i + 1], list.elements[i])
+      }
+      saveListThenRefresh()
+    }
+    /* A subField has been filled in
+     */
+    function itemDone (uri, ok, message) {
       if (ok) {
         // @@@ Check IT hasnt alreday been written in
-        if (!kb.holds(subject, property, object, store)) {
-          var ins = [$rdf.st(subject, property, object, store)]
-          kb.updater.update([], ins, linkDone)
+        if (ordered) {
+          list = kb.any(subject, property, null, store)
+          if (!list) {
+            list = new $rdf.Collecion([object])
+            // list.append(object)
+            ins = [$rdf.st(subject, property, list)] // Will this work?
+          } else {
+            const oldList = new $rdf.Collecion(list.elments)
+            list.append(object)
+            del = [$rdf.st(subject, property, oldList)] // If this doesn't work, kb.saveBack(store)
+            ins = [$rdf.st(subject, property, list)]
+          }
+        } else {
+          if (!kb.holds(subject, property, object, store)) {
+            ins = [$rdf.st(subject, property, object, store)]
+          }
+          kb.updater.update(del, ins, linkDone)
         }
       } else {
         tr.appendChild(
@@ -257,27 +334,17 @@ forms.field[UI.ns.ui('Multiple').uri] = function (
       return callbackFunction(ok, message)
     }
 
-    var fn = forms.fieldFunction(dom, element)
-    var subField = fn(dom, body, already, object, element, store, itemDone)
+    if (!object) object = forms.newThing(store)
+    UI.log.debug('Multiple: add: ' + object)
+    var tr = box.insertBefore(dom.createElement('tr'), tail)
+    var ins = []
+    var del = []
 
-    // delete button
-    var deleteItem = function () {
-      if (kb.holds(subject, property, object)) {
-        var del = [$rdf.st(subject, property, object, store)]
-        kb.updater.update(del, [], function (uri, ok, message) {
-          if (ok) {
-            body.removeChild(subField)
-          } else {
-            body.appendChild(
-              error.errorMessageBlock(
-                dom,
-                'Multiple: delete failed: ' + message
-              )
-            )
-          }
-        })
-      }
-    }
+    var fn = forms.fieldFunction(dom, element)
+    var subField = fn(dom, null, already, object, element, store, itemDone) // p2 was: body.  moving to not passing that
+    subField.subject = object // Keep a back pointer between the DOM array and the RDF objects
+
+    // delete button and move buttons
     if (kb.updater.editable(store.uri)) {
       buttons.deleteButtonWithCheck(
         dom,
@@ -285,10 +352,77 @@ forms.field[UI.ns.ui('Multiple').uri] = function (
         utils.label(property),
         deleteItem
       )
+      if (ordered) {
+        subField.appendChild(
+          UI.widgets.button(dom, UI.icons.iconBase.noun_1369237.svg, 'Move Up'),
+          async event => move(event, true)
+        )
+        subField.appendChild(
+          UI.widgets.button(
+            dom,
+            UI.icons.iconBase.noun_1369241.svg,
+            'Move Down'
+          ),
+          async event => move(event, false)
+        )
+      }
     }
+    return subField // unused
+  } // addItem
+
+  var plusIconURI = UI.icons.iconBase + 'noun_19460_green.svg' // white plus in green circle
+
+  var kb = UI.store
+  kb.updater = kb.updater || new $rdf.UpdateManager(kb)
+  var box = dom.createElement('table')
+  // We don't indent multiple as it is a sort of a prefix of the next field and has contents of one.
+  // box.setAttribute('style', 'padding-left: 2em; border: 0.05em solid green;')  // Indent a multiple
+  var ui = UI.ns.ui
+  if (container) container.appendChild(box)
+
+  var ordered = kb.any(form, ui('ordered'))
+  ordered = ordered ? $rdf.Node.toJS(ordered) : false
+
+  var property = kb.any(form, ui('property'))
+  if (!property) {
+    box.appendChild(
+      error.errorMessageBlock(dom, 'No property to multiple: ' + form)
+    ) // used for arcs in the data
+    return box
+  }
+  var min = kb.any(form, ui('min')) // This is the minimum number -- default 0
+  min = min ? 0 + min.value : 0
+  // var max = kb.any(form, ui('max')) // This is the minimum number
+  // max = max ? max.value : 99999999
+
+  var element = kb.any(form, ui('part')) // This is the form to use for each one
+  if (!element) {
+    box.appendChild(
+      error.errorMessageBlock(dom, 'No part to multiple: ' + form)
+    )
+    return box
   }
 
-  var values = kb.each(subject, property)
+  var body = box.appendChild(dom.createElement('tr'))
+  var tail = box.appendChild(dom.createElement('tr'))
+  var list // The RDF collection which keeps the ordered version
+  var values // Initial values
+
+  var unsavedList = false // Flag that
+  if (ordered) {
+    list = kb.any(subject, property)
+    if (!list) {
+      unsavedList = true
+      values = []
+      // list = new $rdf.Collection()
+      // @@ save {subject property list} triple @@
+    } else {
+      values = list.elements
+    }
+  } else {
+    values = kb.each(subject, property)
+    list = null
+  }
   if (kb.updater.editable(store.uri)) {
     var img = tail.appendChild(dom.createElement('img'))
     img.setAttribute('src', plusIconURI) //  plus sign
@@ -298,16 +432,56 @@ forms.field[UI.ns.ui('Multiple').uri] = function (
     prompt.textContent =
       (values.length === 0 ? 'Add one or more ' : 'Add more ') +
       utils.label(property)
-    tail.addEventListener('click', addItem, true) // img.addEventListener('click', addItem, true)
+    tail.addEventListener('click', async _eventNotUsed => addItem(), true)
   }
 
-  values.map(function (obj) {
-    addItem(null, obj)
-  })
+  function createListIfNecessary () {
+    if (unsavedList) {
+      list = new $rdf.Collection()
+      kb.add(subject, property, list, store)
+    }
+    unsavedList = false
+  }
+
+  async function saveListThenRefresh () {
+    createListIfNecessary()
+    try {
+      await kb.fetcher.putBack(store)
+    } catch (err) {
+      box.appendChild(
+        error.errorMessageBlock(dom, 'Error trying to put back a list: ' + err)
+      )
+      return
+    }
+    refresh()
+  }
+
+  // values.forEach(function (obj) { addItem(obj) })
+  function refresh () {
+    if (ordered) {
+      list = kb.any(subject, property)
+      if (!list) {
+        unsavedList = true
+        values = []
+      } else {
+        values = list.elements
+      }
+    } else {
+      values = kb.each(subject, property)
+      list = null
+    }
+    UI.utils.syncTableToArrayReOrdered(body, values, addItem)
+  }
+  body.refresh = refresh // Allow live update
+  refresh()
+
   var extra = min - values.length
-  for (var j = 0; j < extra; j++) {
-    console.log('Adding extra: min ' + min)
-    addItem() // Add blanks if less than minimum
+  if (extra > 0) {
+    for (var j = 0; j < extra; j++) {
+      console.log('Adding extra: min ' + min)
+      addItem() // Add blanks if less than minimum
+    }
+    saveListThenRefresh() // async
   }
   return box
 }
@@ -395,19 +569,22 @@ forms.fieldParams[UI.ns.ui('EmailField').uri] = {
 }
 forms.fieldParams[UI.ns.ui('EmailField').uri].pattern = /^\s*.*@.*\..*\s*$/ // @@ Get the right regexp here
 
-forms.field[UI.ns.ui('PhoneField').uri] = forms.field[
-  UI.ns.ui('EmailField').uri
-] = forms.field[UI.ns.ui('ColorField').uri] = forms.field[
-  UI.ns.ui('DateField').uri
-] = forms.field[UI.ns.ui('DateTimeField').uri] = forms.field[
-  UI.ns.ui('TimeField').uri
-] = forms.field[UI.ns.ui('NumericField').uri] = forms.field[
-  UI.ns.ui('IntegerField').uri
-] = forms.field[UI.ns.ui('DecimalField').uri] = forms.field[
-  UI.ns.ui('FloatField').uri
-] = forms.field[UI.ns.ui('TextField').uri] = forms.field[
-  UI.ns.ui('SingleLineTextField').uri
-] = forms.field[UI.ns.ui('NamedNodeURIField').uri] = function (
+/** Render a basic form field
+ *
+ ** @param {Document} dom The HTML Document object aka Document Object Model
+ ** @param {Element?} container  If present, the created widget will be appended to this
+ ** @param {Map} already A hash table of (form, suject) kept to prevent recusive forms looping
+ ** @param {Node} subject The thing about which the form displays/edits data
+ ** @param {Node} form The form or field to be rendered
+ ** @param {Node} store The web document in which the data is
+ ** @param {function(ok, errorMessage)} callbackFunction Called when data is changed?
+ **
+ ** @returns {Element} The HTML widget created
+ **
+ ** The same function is used for many similar one-value fields, with different
+ ** regexps used to validate.
+ */
+function basicField (
   dom,
   container,
   already,
@@ -420,7 +597,7 @@ forms.field[UI.ns.ui('PhoneField').uri] = forms.field[
   var kb = UI.store
 
   var box = dom.createElement('tr')
-  container.appendChild(box)
+  if (container) container.appendChild(box)
   var lhs = dom.createElement('td')
   lhs.setAttribute('class', 'formFieldName')
   lhs.setAttribute('style', '  vertical-align: middle;')
@@ -470,14 +647,14 @@ forms.field[UI.ns.ui('PhoneField').uri] = forms.field[
   field.setAttribute('style', style)
 
   if (!kb.updater.editable(store.uri)) {
-    field.disabled = true
+    field.readonly = true // was: disabled. readonly is better
     return box
   }
-  // read-write:
 
+  // read-write:
   field.addEventListener(
     'keyup',
-    function (_event) {
+    function (_e) {
       if (params.pattern) {
         field.setAttribute(
           'style',
@@ -492,7 +669,7 @@ forms.field[UI.ns.ui('PhoneField').uri] = forms.field[
   )
   field.addEventListener(
     'change',
-    function (_event) {
+    function (_e) {
       // i.e. lose focus with changed data
       if (params.pattern && !field.value.match(params.pattern)) return
       field.disabled = true // See if this stops getting two dates from fumbling e.g the chrome datepicker.
@@ -524,14 +701,10 @@ forms.field[UI.ns.ui('PhoneField').uri] = forms.field[
       function updateMany (ds, is, callback) {
         var docs = []
         is.forEach(st => {
-          if (!docs.includes(st.why.uri)) {
-            docs.push(st.why.uri)
-          }
+          if (!docs.includes(st.why.uri)) docs.push(st.why.uri)
         })
         ds.forEach(st => {
-          if (!docs.includes(st.why.uri)) {
-            docs.push(st.why.uri)
-          }
+          if (!docs.includes(st.why.uri)) docs.push(st.why.uri)
         })
         if (docs.length === 0) {
           throw new Error('updateMany has no docs to patch')
@@ -539,7 +712,8 @@ forms.field[UI.ns.ui('PhoneField').uri] = forms.field[
         if (docs.length === 1) {
           return kb.updater.update(ds, is, callback)
         }
-        console.log('Update many: ' + docs)
+        // return kb.updater.update(ds, is, callback)
+
         const doc = docs.pop()
         const is1 = is.filter(st => st.why.uri === doc)
         const is2 = is.filter(st => st.why.uri !== doc)
@@ -571,6 +745,20 @@ forms.field[UI.ns.ui('PhoneField').uri] = forms.field[
   return box
 }
 
+forms.field[UI.ns.ui('PhoneField').uri] = basicField
+forms.field[UI.ns.ui('EmailField').uri] = basicField
+forms.field[UI.ns.ui('ColorField').uri] = basicField
+forms.field[UI.ns.ui('DateField').uri] = basicField
+forms.field[UI.ns.ui('DateTimeField').uri] = basicField
+forms.field[UI.ns.ui('TimeField').uri] = basicField
+forms.field[UI.ns.ui('NumericField').uri] = basicField
+forms.field[UI.ns.ui('IntegerField').uri] = basicField
+forms.field[UI.ns.ui('DecimalField').uri] = basicField
+forms.field[UI.ns.ui('FloatField').uri] = basicField
+forms.field[UI.ns.ui('TextField').uri] = basicField
+forms.field[UI.ns.ui('SingleLineTextField').uri] = basicField
+forms.field[UI.ns.ui('NamedNodeURIField').uri] = basicField
+
 /*          Multiline Text field
  **
  */
@@ -590,9 +778,10 @@ forms.field[UI.ns.ui('MultiLineTextField').uri] = function (
   if (!property) {
     return error.errorMessageBlock(dom, 'No property to text field: ' + form)
   }
-  container.appendChild(forms.fieldLabel(dom, property, form))
+  const box = dom.createElement('div')
+  box.appendChild(forms.fieldLabel(dom, property, form))
   store = forms.fieldStore(subject, property, store)
-  var box = forms.makeDescription(
+  var field = forms.makeDescription(
     dom,
     kb,
     subject,
@@ -601,12 +790,14 @@ forms.field[UI.ns.ui('MultiLineTextField').uri] = function (
     callbackFunction
   )
   // box.appendChild(dom.createTextNode('<-@@ subj:'+subject+', prop:'+property))
-  container.appendChild(box)
+  box.appendChild(field)
+  if (container) container.appendChild(box)
   return box
 }
 
 /*          Boolean field  and Tri-state version (true/false/null)
  **
+ ** @@ todo: remove tristate param
  */
 function booleanField (
   dom,
@@ -622,9 +813,12 @@ function booleanField (
   var kb = UI.store
   var property = kb.any(form, ui('property'))
   if (!property) {
-    return container.appendChild(
-      error.errorMessageBlock(dom, 'No property to boolean field: ' + form)
+    const errorBlock = error.errorMessageBlock(
+      dom,
+      'No property to boolean field: ' + form
     )
+    if (container) container.appendChild(errorBlock)
+    return errorBlock
   }
   var lab = kb.any(form, ui('label'))
   if (!lab) lab = utils.label(property, true) // Init capital
@@ -637,7 +831,7 @@ function booleanField (
   var ins = $rdf.st(subject, property, true, store)
   var del = $rdf.st(subject, property, false, store)
   var box = buildCheckboxForm(dom, kb, lab, del, ins, form, store, tristate)
-  container.appendChild(box)
+  if (container) container.appendChild(box)
   return box
 }
 forms.field[UI.ns.ui('BooleanField').uri] = function (
@@ -647,8 +841,7 @@ forms.field[UI.ns.ui('BooleanField').uri] = function (
   subject,
   form,
   store,
-  callbackFunction,
-  _tristate
+  callbackFunction
 ) {
   return booleanField(
     dom,
@@ -726,7 +919,7 @@ forms.field[UI.ns.ui('Classifier').uri] = function (
     store,
     checkOptions
   )
-  container.appendChild(box)
+  if (container) container.appendChild(box)
   return box
 }
 
@@ -757,7 +950,7 @@ forms.field[UI.ns.ui('Choice').uri] = function (
   var multiple = false
   var p
   var box = dom.createElement('tr')
-  container.appendChild(box)
+  if (container) container.appendChild(box)
   var lhs = dom.createElement('td')
   box.appendChild(lhs)
   var rhs = dom.createElement('td')
@@ -800,7 +993,7 @@ forms.field[UI.ns.ui('Choice').uri] = function (
     opts.disambiguate = true
   }
   var object = kb.any(subject, property)
-  function addSubForm (_ok, _body) {
+  function addSubForm () {
     object = kb.any(subject, property)
     forms.fieldFunction(dom, subForm)(
       dom,
@@ -829,7 +1022,7 @@ forms.field[UI.ns.ui('Choice').uri] = function (
     callbackFunction
   )
   rhs.appendChild(selector)
-  if (object && subForm) addSubForm(true, '')
+  if (object && subForm) addSubForm()
   return box
 }
 
@@ -868,7 +1061,7 @@ forms.field[UI.ns.ui('Comment').uri] = forms.field[
   } // non-bottom field types can do this
 
   var box = dom.createElement('div')
-  container.appendChild(box)
+  if (container) container.appendChild(box)
   var p = box.appendChild(dom.createElement(params.element))
   p.textContent = contents
 
@@ -927,7 +1120,7 @@ forms.editFormButton = function (
   b.innerHTML = 'Edit ' + utils.label(UI.ns.ui('Form'))
   b.addEventListener(
     'click',
-    function (_event) {
+    function (_e) {
       var ff = forms.appendForm(
         dom,
         container,
@@ -943,7 +1136,7 @@ forms.editFormButton = function (
           ? 'background-color: #fee;'
           : 'background-color: #ffffe7;'
       )
-      container.removeChild(b)
+      b.parentNode.removeChild(b)
     },
     true
   )
@@ -1096,7 +1289,7 @@ forms.newButton = function (
   b.innerHTML = 'New ' + utils.label(theClass)
   b.addEventListener(
     'click',
-    function (_event) {
+    function (_e) {
       b.parentNode.appendChild(
         forms.promptForNew(
           dom,
@@ -1155,7 +1348,7 @@ forms.promptForNew = function (
       b.innerHTML = 'Goto ' + utils.label(theClass)
       b.addEventListener(
         'click',
-        function (_event) {
+        function (_e) {
           dom.outlineManager.GotoSubject(
             theClass,
             true,
@@ -1250,7 +1443,7 @@ forms.makeDescription = function (
       // @@ this is the place to color the field from the user who chanaged it
     }
   }
-  function saveChange (_event) {
+  function saveChange (_e) {
     submit.disabled = true
     submit.setAttribute('style', 'visibility: hidden; float: right;') // Keep UI clean
     field.disabled = true
@@ -1289,7 +1482,7 @@ forms.makeDescription = function (
 
     field.addEventListener(
       'keyup',
-      function (_event) {
+      function (_e) {
         // Green means has been changed, not saved yet
         field.setAttribute('style', style + 'color: green;')
         if (submit) {
@@ -1369,7 +1562,7 @@ forms.makeSelectForOptions = function (
 
   // var newObject = null
 
-  var onChange = function (_event) {
+  var onChange = function (_e) {
     select.disabled = true // until data written back - gives user feedback too
     var ds = []
     var is = []
@@ -1705,15 +1898,18 @@ function buildCheckboxForm (dom, kb, lab, del, ins, form, store, tristate) {
   refresh()
   if (!editable) return box
 
-  var boxHandler = function (_event) {
+  var boxHandler = function (_e) {
     tx.style = 'color: #bbb;' // grey -- not saved yet
     var toDelete = input.state === true ? ins : input.state === false ? del : []
+    input.newState =
+      input.state === null
+        ? true
+        : input.state === true
+          ? false
+          : tristate
+            ? null
+            : true
 
-    function getState (input, tristate) {
-      return input.state === true ? false : tristate ? null : true
-    }
-
-    input.newState = input.state === null ? true : getState(input, tristate)
     var toInsert =
       input.newState === true ? ins : input.newState === false ? del : []
     console.log(`  Deleting  ${toDelete}`)

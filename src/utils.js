@@ -1,4 +1,3 @@
-/* global tabulator */
 //                  Solid-UI general Utilities
 //                  ==========================
 //
@@ -32,7 +31,8 @@ module.exports = {
   RDFComparePredicateSubject,
   shortName,
   stackString,
-  syncTableToArray
+  syncTableToArray,
+  syncTableToArrayReOrdered
 }
 
 var UI = {
@@ -121,6 +121,7 @@ function genUuid () {
  * @param {function({NamedNode})} createNewRow(thing) returns a TR table row for a new thing
  *
  * Tolerates out of order elements but puts new ones in order.
+ * Can be used in fact for any element type - does not have to be a table and tr.
  */
 function syncTableToArray (table, things, createNewRow) {
   let foundOne
@@ -165,6 +166,49 @@ function syncTableToArray (table, things, createNewRow) {
   }
 } // syncTableToArray
 
+/** Sync a DOM table with an array of things
+ *
+ * @param {DomElement} table - will have a tr for each thing
+ * @param {Array<NamedNode>} things - ORDERED array of UNIQUE NamedNode objects. No duplicates
+ * @param {function({NamedNode})} createNewRow(thing) returns a TR table row for a new thing
+ *
+ * Ensures order matches exacly.  We will re-rder existing elements if necessary
+ * Can be used in fact for any element type - does not have to be a table and tr.
+ * Any RDF node value can only appear ONCE in the array
+ */
+function syncTableToArrayReOrdered (table, things, createNewRow) {
+  const elementMap = {}
+
+  for (let i = 0; i < table.children.length; i++) {
+    const row = table.children[i]
+    row.trashMe = true
+    elementMap[row.subject.toNT()] = row // More sophisticaed would be to have a bag of duplicates
+  }
+
+  for (let g = 0; g < things.length; g++) {
+    var thing = things[g]
+    const row = table.children[g]
+    if (!row.subject.sameTerm(thing)) {
+      const existingRow = elementMap[thing.toNT()]
+      if (existingRow) {
+        table.remove(existingRow)
+        row.before(existingRow) // Insert existing ro in place of this one
+      } else {
+        const newRow = createNewRow(thing)
+        row.before(newRow) // Insert existing ro in place of this one
+        newRow.subject = thing
+      }
+    }
+  } // loop g
+
+  for (let i = 0; i < table.children.length; i++) {
+    const row = table.children[i]
+    if (row.trashMe) {
+      table.removeChild(row)
+    }
+  }
+} // syncTableToArrayReOrdered
+
 /* Error stack to string for better diagnotsics
  **
  ** See  http://snippets.dzone.com/posts/show/6632
@@ -200,8 +244,7 @@ function stackString (e) {
 function emptyNode (node) {
   const nodes = node.childNodes
   const len = nodes.length
-  let i
-  for (i = len - 1; i >= 0; i--) node.removeChild(nodes[i])
+  for (let i = len - 1; i >= 0; i--) node.removeChild(nodes[i])
   return node
 }
 
@@ -274,12 +317,10 @@ function getTerm (target) {
     case 'undetermined selected':
       return target.nextSibling
         ? st.predicate
-        : getUndeterminedSelection(statementTr, st)
+        : !statementTr.AJAR_inverse
+          ? st.object
+          : st.subject
   }
-}
-
-function getUndeterminedSelection (statementTr, st) {
-  return !statementTr.AJAR_inverse ? st.object : st.subject
 }
 
 function include (document, linkstr) {
@@ -485,6 +526,7 @@ function label (x, initialCap) {
 
   // The tabulator labeler is more sophisticated if it exists
   // Todo: move it to a solid-ui option.
+  /*
   var lab
   if (typeof tabulator !== 'undefined' && tabulator.lb) {
     lab = tabulator.lb.label(x)
@@ -492,7 +534,7 @@ function label (x, initialCap) {
       return doCap(lab.value)
     }
   }
-
+  */
   // Hard coded known label predicates
   //  @@ TBD: Add subproperties of rdfs:label
 
