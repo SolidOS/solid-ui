@@ -20,7 +20,7 @@
 // export widgets with the same name)
 var widgets = Object.assign(
   {},
-  { PeoplePicker: require('./peoplePicker') },
+  require('./peoplePicker'),
   require('./dragAndDrop'), // uploadFiles etc
   require('./error'), // UI.widgets.errorMessageBlock
   require('./buttons'),
