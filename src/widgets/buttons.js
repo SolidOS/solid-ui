@@ -663,6 +663,7 @@ buttons.openHrefInOutlineMode = function (e) {
   if (!uri) return console.log('openHrefInOutlineMode: No href found!\n')
   const dom = window.document
   if (dom.outlineManager) {
+    // @@ TODO Remove the use of document as a global object
     dom.outlineManager.GotoSubject(
       UI.store.sym(uri),
       true,
@@ -671,6 +672,7 @@ buttons.openHrefInOutlineMode = function (e) {
       undefined
     )
   } else if (window && window.panes && window.panes.getOutliner) {
+    // @@ TODO Remove the use of window as a global object
     window.panes
       .getOutliner()
       .GotoSubject(UI.store.sym(uri), true, undefined, true, undefined)

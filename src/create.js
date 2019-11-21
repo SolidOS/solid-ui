@@ -85,7 +85,7 @@ function newThingUI (context, thePanes) {
                 newPaneOptions.newBase
             )
             options.pane
-              .mintNew(newPaneOptions)
+              .mintNew(context, newPaneOptions)
               .then(function (newPaneOptions) {
                 if (!newPaneOptions || !newPaneOptions.newInstance) {
                   throw new Error('Cannot mint new - missing newInstance')
