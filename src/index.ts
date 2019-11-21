@@ -39,52 +39,79 @@ https://github.com/solid/solid
 // REMOVE @ts-ignore as you migrate files to TypeScript
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
 // @ts-ignore
-import * as ns from './ns'
+import ns from './ns'
 // @ts-ignore
-import * as acl from './acl'
+import acl from './acl'
 // @ts-ignore
-import * as aclControl from './acl-control'
+import aclControl from './acl-control'
 // @ts-ignore
-import * as authn from './signin'
+import authn from './signin'
 // @ts-ignore
-import * as create from './create'
+import create from './create'
 // @ts-ignore
-import * as icons from './iconBase'
+import icons from './iconBase'
 // @ts-ignore
-import * as log from './log'
+import log from './log'
 // @ts-ignore
-import * as matrix from './matrix'
+import matrix from './matrix'
 // @ts-ignore
-import * as media from './media-capture'
+import media from './media-capture'
 // @ts-ignore
-import * as messageArea from './messageArea'
+import messageArea from './messageArea'
 // @ts-ignore
 import { infiniteMessageArea } from './chat/infinite'
 // @ts-ignore
-import * as pad from './pad'
+import pad from './pad'
 // @ts-ignore
-import * as preferences from './preferences'
+import preferences from './preferences'
 // @ts-ignore
-import * as store from './store'
+import store from './store'
 // @ts-ignore
-import * as style from './style'
+import style from './style'
 // @ts-ignore
-import * as table from './table'
+import table from './table'
 // @ts-ignore
-import * as tabs from './tabs'
+import tabs from './tabs'
 // @ts-ignore
-import * as utils from './utils'
-// @ts-ignore
-import * as widgets from './widgets'
+import utils from './utils'
+import widgets from './widgets'
 
-const UI = {
+const dom = window ? window.document : null // Idea that UI.dom can be adapted in non-browser environments
+
+if (typeof window !== 'undefined') {
+  ;(<any>window).UI = {
+    ns,
+    rdf,
+    acl,
+    aclControl,
+    authn,
+    create,
+    dom,
+    icons,
+    log,
+    matrix,
+    media,
+    messageArea,
+    infiniteMessageArea,
+    pad,
+    preferences,
+    store,
+    style,
+    table,
+    tabs,
+    utils,
+    widgets
+  } // Simpler access by non-node scripts
+}
+
+export {
   ns,
   rdf,
   acl,
   aclControl,
   authn,
   create,
-  dom: window.document, // Idea that UI.dom can be adapted in non-browser environments
+  dom,
   icons,
   log,
   matrix,
@@ -100,8 +127,3 @@ const UI = {
   utils,
   widgets
 }
-
-if (typeof window !== 'undefined') {
-  ;(<any>window).UI = UI // Simpler access by non-node scripts
-}
-export default UI
