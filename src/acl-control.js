@@ -66,7 +66,8 @@ UI.aclControl.shortNameForFolder = function (x) {
   return str || '/'
 }
 
-UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
+UI.aclControl.ACLControlBox5 = function (subject, context, noun, kb, callback) {
+  const dom = context.dom
   var updater = kb.updater || new $rdf.UpdateManager(kb)
   var ACL = UI.ns.acl
   var doc = subject.doc() // The ACL is actually to the doc describing the thing
@@ -603,9 +604,9 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
           'A Web App (origin)',
           async event => {
             removeOthers(event.target)
-            var context = { div: bar, dom }
-            await UI.authn.logInLoadProfile(context)
-            var trustedApps = kb.each(context.me, ns.acl('trustedApp'))
+            var eventContext = { div: bar, dom }
+            await UI.authn.logInLoadProfile(eventContext)
+            var trustedApps = kb.each(eventContext.me, ns.acl('trustedApp'))
             var trustedOrigins = trustedApps.flatMap(app =>
               kb.each(app, ns.acl('origin'))
             )
@@ -640,10 +641,12 @@ UI.aclControl.ACLControlBox5 = function (subject, dom, noun, kb, callback) {
             table.style = 'margin: em; background-color: #eee;'
 
             // Add the Trusted App pane for managing you set of apps
-            var trustedAppControl = window.panes.trustedApplications.render(
-              context.me,
-              dom,
-              {}
+            const trustedApplications = context.session.paneRegistry.byName(
+              'trustedApplications'
+            )
+            const trustedAppControl = trustedApplications.render(
+              eventContext.me,
+              context
             )
             trustedAppControl.style.borderColor = 'orange'
             trustedAppControl.style.borderWidth = '0.1em'
