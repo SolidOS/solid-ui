@@ -66,9 +66,8 @@ UI.aclControl.shortNameForFolder = function (x) {
   return str || '/'
 }
 
-UI.aclControl.ACLControlBox5 = function (subject, context, noun, kb, callback) {
+UI.aclControl.ACLControlBox5 = function (subject, context, noun, kb, _callback) {
   const dom = context.dom
-  var updater = kb.updater || new $rdf.UpdateManager(kb)
   var ACL = UI.ns.acl
   var doc = subject.doc() // The ACL is actually to the doc describing the thing
 
@@ -387,7 +386,7 @@ UI.aclControl.ACLControlBox5 = function (subject, context, noun, kb, callback) {
           uris.map(function (u) {
             return handleOneDroppedURI(u) // can add to meetingDoc but must be sync
           })
-        ).then(function (a) {
+        ).then(function (_a) {
           saveAndRestoreUI()
         })
       }
@@ -542,7 +541,7 @@ UI.aclControl.ACLControlBox5 = function (subject, context, noun, kb, callback) {
           dom,
           UI.icons.iconBase + UI.widgets.iconForClass['foaf:Agent'],
           'Add Everyone',
-          async event => {
+          async _event => {
             statusBlock.textContent =
               'Adding the general public to those who can read. Drag the globe to a different level to give them more access.'
             await lastRow.addNewURI(ns.foaf('Agent').uri)
@@ -557,7 +556,7 @@ UI.aclControl.ACLControlBox5 = function (subject, context, noun, kb, callback) {
           dom,
           UI.icons.iconBase + 'noun_99101.svg',
           'Anyone logged In',
-          async event => {
+          async _event => {
             statusBlock.textContent =
               'Adding the anyone logged in to those who can read. Drag the ID icon to a different level to give them more access.'
             await lastRow.addNewURI(ns.acl('AuthenticatedAgent').uri)
@@ -632,7 +631,7 @@ UI.aclControl.ACLControlBox5 = function (subject, context, noun, kb, callback) {
               innerMiddle.textContent =
                 'Give access to ' + noun + ' ' + UI.utils.label(subject) + '?'
               innerRight.appendChild(
-                UI.widgets.continueButton(dom, async event => {
+                UI.widgets.continueButton(dom, async _event => {
                   await lastRow.addNewURI(origin.uri)
                 })
               )
@@ -689,7 +688,7 @@ UI.aclControl.ACLControlBox5 = function (subject, context, noun, kb, callback) {
           dom,
           UI.icons.iconBase + 'noun_34653_green.svg',
           'Add ...',
-          event => {
+          _event => {
             renderAdditionTool(bottomLeftCell, lastRow)
           }
         )
@@ -768,7 +767,7 @@ UI.aclControl.ACLControlBox5 = function (subject, context, noun, kb, callback) {
             )
             editPlease.textContent = 'Set specific sharing\nfor this ' + noun
             editPlease.style.cssText = bigButtonStyle
-            editPlease.addEventListener('click', async function (event) {
+            editPlease.addEventListener('click', async function (_event) {
               kb2.statements.forEach(st => {
                 kb.add(st.subject, st.predicate, st.object, targetACLDoc)
               })
@@ -801,7 +800,7 @@ UI.aclControl.ACLControlBox5 = function (subject, context, noun, kb, callback) {
                 ' for ' + UI.utils.label(prospectiveDefaultHolder)
             }
             useDefault.style.cssText = bigButtonStyle
-            useDefault.addEventListener('click', function (event) {
+            useDefault.addEventListener('click', function (_event) {
               kb.fetcher
                 .delete(targetACLDoc.uri)
                 .then(function () {
@@ -849,7 +848,7 @@ UI.aclControl.ACLControlBox5 = function (subject, context, noun, kb, callback) {
               targetDoc2,
               targetACLDoc2,
               defaultHolder2,
-              defaultACLDoc2
+              _defaultACLDoc2
             ) {
               if (ok2) {
                 prospectiveDefaultHolder = p22 ? targetDoc2 : defaultHolder2
