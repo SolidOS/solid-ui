@@ -14,7 +14,8 @@
     "build-types": "tsc --emitDeclarationOnly",
     "postversion": "git push origin master --follow-tags",
     "prepublishOnly": "npm run build",
-    "lint": "prettier-standard --lint 'src/**/*.js' 'src/**/*.ts'",
+    "lint": "eslint 'src/**/*.js' 'src/**/*.ts'",
+    "lint-fix": "eslint 'src/**/*.js' 'src/**/*.ts' --fix",
     "test": "npm run lint",
     "watch": "babel src --out-dir lib --watch --source-maps --extensions '.ts,.js'"
   },
@@ -62,9 +63,9 @@
     "@types/rdflib": "^0.20.1",
     "@typescript-eslint/eslint-plugin": "^2.6.1",
     "@typescript-eslint/parser": "^2.6.1",
+    "eslint": "^6.6.0",
     "husky": "^3.0.9",
     "lint-staged": "^10.0.0-1",
-    "prettier-standard": "^15.0.1",
     "standard": "^14.3.1",
     "typescript": "^3.6.3"
   },
@@ -74,9 +75,8 @@
     }
   },
   "lint-staged": {
-    "*": [
-      "prettier-standard --lint",
-      "git add"
+    "src/**/*.(js|ts)": [
+      "eslint"
     ]
   }
 }
