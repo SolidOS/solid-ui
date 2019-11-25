@@ -9,15 +9,17 @@
     "dist"
   ],
   "scripts": {
-    "build": "npm run build-lib && npm run build-types",
+    "build": "npm run clean && npm run build-version && npm run build-lib && npm run build-types",
     "build-lib": "babel src -d lib --source-maps --extensions '.ts,.js'",
     "build-types": "tsc --emitDeclarationOnly",
-    "postversion": "git push origin master --follow-tags",
-    "prepublishOnly": "npm run build",
+    "build-version": "./timestamp.sh > src/versionInfo.ts  && eslint 'src/versionInfo.ts' --fix",
+    "watch": "babel src --out-dir lib --watch --source-maps --extensions '.ts,.js'",
+    "clean": "rm -rf lib",
     "lint": "eslint 'src/**/*.js' 'src/**/*.ts'",
     "lint-fix": "eslint 'src/**/*.js' 'src/**/*.ts' --fix",
     "test": "npm run lint",
-    "watch": "babel src --out-dir lib --watch --source-maps --extensions '.ts,.js'"
+    "prepublishOnly": "npm test && npm run build",
+    "postpublish": "git push origin master --follow-tags"
   },
   "repository": {
     "type": "git",
@@ -71,7 +73,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged",
+      "pre-push": "npm test"
     }
   },
   "lint-staged": {

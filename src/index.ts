@@ -75,6 +75,7 @@ import tabs from './tabs'
 // @ts-ignore
 import utils from './utils'
 import widgets from './widgets'
+import versionInfo from './versionInfo'
 
 const dom = window ? window.document : null // Idea that UI.dom can be adapted in non-browser environments
 
@@ -100,7 +101,8 @@ if (typeof window !== 'undefined') {
     table,
     tabs,
     utils,
-    widgets
+    widgets,
+    versionInfo
   } // Simpler access by non-node scripts
 }
 
@@ -125,5 +127,6 @@ export {
   table,
   tabs,
   utils,
-  widgets
+  widgets,
+  versionInfo
 }
