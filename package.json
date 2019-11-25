@@ -13,7 +13,7 @@
     "build-lib": "babel src -d lib --source-maps --extensions '.ts,.js'",
     "build-types": "tsc --emitDeclarationOnly",
     "build-version": "./timestamp.sh > src/versionInfo.ts  && eslint 'src/versionInfo.ts' --fix",
-    "watch": "npm run version && babel src --out-dir lib --watch --source-maps --extensions '.ts,.js'",
+    "watch": "npm run build-version && babel src --out-dir lib --watch --source-maps --extensions '.ts,.js'",
     "clean": "rm -rf lib",
     "lint": "eslint 'src/**/*.js' 'src/**/*.ts'",
     "lint-fix": "eslint 'src/**/*.js' 'src/**/*.ts' --fix",
