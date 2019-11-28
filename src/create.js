@@ -31,11 +31,11 @@ module.exports = {
  **                (suppresses asking for a full URI or workspace)
  **
  */
-function newThingUI (context, thePanes) {
-  const dom = context.dom
-  const div = context.div
-  if (context.me && !context.me.uri) {
-    throw new Error('newThingUI:  Invalid userid: ' + context.me)
+function newThingUI (createContext, dataBrowserContext, thePanes) {
+  const dom = createContext.dom
+  const div = createContext.div
+  if (createContext.me && !createContext.me.uri) {
+    throw new Error('newThingUI:  Invalid userid: ' + createContext.me)
   }
 
   var iconStyle = 'padding: 0.7em; width: 2em; height: 2em;' // was: 'padding: 1em; width: 3em; height: 3em;'
@@ -68,7 +68,7 @@ function newThingUI (context, thePanes) {
     return new Promise(function (resolve, reject) {
       var selectUI // , selectUIParent
       function callbackWS (ws, newBase) {
-        UI.authn.logInLoadProfile(context).then(
+        UI.authn.logInLoadProfile(createContext).then(
           _context => {
             var newPaneOptions = {
               newBase: newBase,
@@ -85,7 +85,7 @@ function newThingUI (context, thePanes) {
                 newPaneOptions.newBase
             )
             options.pane
-              .mintNew(context, newPaneOptions)
+              .mintNew(dataBrowserContext, newPaneOptions)
               .then(function (newPaneOptions) {
                 if (!newPaneOptions || !newPaneOptions.newInstance) {
                   throw new Error('Cannot mint new - missing newInstance')
@@ -197,7 +197,7 @@ function newThingUI (context, thePanes) {
     return classMap
   }, {})
   mintingPanes.forEach(pane => {
-    const icon = context.div.appendChild(dom.createElement('img'))
+    const icon = createContext.div.appendChild(dom.createElement('img'))
     icon.setAttribute('src', pane.icon)
     const noun = pane.mintClass
       ? mintingClassMap[pane.mintClass] > 1
@@ -212,15 +212,15 @@ function newThingUI (context, thePanes) {
         selectTool(icon)
         makeNewAppInstance({
           event: e,
-          folder: context.folder,
+          folder: createContext.folder,
           iconEle: icon,
           pane,
           noun,
           noIndexHTML: true, // do NOT @@ for now write a HTML file
-          div: context.div,
-          me: context.me,
-          dom: context.dom,
-          refreshTarget: context.refreshTarget
+          div: createContext.div,
+          me: createContext.me,
+          dom: createContext.dom,
+          refreshTarget: createContext.refreshTarget
         })
       })
     }
