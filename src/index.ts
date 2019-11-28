@@ -42,8 +42,7 @@ import * as rdf from 'rdflib' // pull in first avoid cross-refs
 import ns from './ns'
 import { acl, aclControl } from './acl/index'
 import { authn } from './authn/index'
-// @ts-ignore
-import create from './create'
+import { create } from './create/index'
 // @ts-ignore
 import icons from './iconBase'
 // @ts-ignore
