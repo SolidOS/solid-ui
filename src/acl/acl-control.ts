@@ -400,20 +400,14 @@ export function ACLControlBox5 (
       }
 
       async function handleOneDroppedURI (u) {
-        function setACLCombo (res?) {
+        function setACLCombo () {
           if (!(combo in byCombo)) {
             byCombo[combo] = []
           }
           removeAgentFromCombos(u) // Combos are mutually distinct
-          byCombo[combo].push([res.pred, res.obj.uri])
-          console.log(
-            'ACL: setting access to ' +
-            subject +
-            ' by ' +
-            res.pred +
-            ': ' +
-            res.obj
-          )
+          // @@ TODO Remove the need for bang (!) syntax
+          byCombo[combo].push([res!.pred, res!.obj.uri])
+          console.log(`ACL: setting access to ${subject} by ${res!.pred}: ${res!.obj}`)
         }
 
         let res = agentTriage(u) // eg 'agent', 'origin', agentClass'
@@ -429,7 +423,7 @@ export function ACLControlBox5 (
           if (!res) {
             console.log('   Error: Drop fails to drop appropriate thing! ' + u)
           } else {
-            setACLCombo(res)
+            setACLCombo()
           }
         } else {
           setACLCombo()
@@ -730,7 +724,7 @@ export function ACLControlBox5 (
     ) {
       const defa = !p2
       // @@ Could also set from classes ldp:Container etc etc
-      if (!ok || !defaultHolder || !defaultACLDoc) {
+      if (!ok) {
         statusBlock.textContent += `Error reading ${defa ? ' default ' : ''}ACL. status ${targetDoc}: ${targetACLDoc}`
       } else {
         box.isContainer = (targetDoc as NamedNode).uri.slice(-1) === '/' // Give default for all directories
@@ -752,13 +746,15 @@ export function ACLControlBox5 (
             statusBlock.textContent =
               'The sharing for this ' + noun + ' is the default for folder '
             const a = statusBlock.appendChild(dom.createElement('a'))
-            a.setAttribute('href', defaultHolder.uri)
-            a.textContent = shortNameForFolder(defaultHolder)
+            const defaultHolder2 = defaultHolder as NamedNode
+            const defaultACLDoc2 = defaultACLDoc as NamedNode
+            a.setAttribute('href', defaultHolder2.uri)
+            a.textContent = shortNameForFolder(defaultHolder2)
             const kb2 = adoptACLDefault(
               doc,
               targetACLDoc as NamedNode,
-              defaultHolder,
-              defaultACLDoc
+              defaultHolder2,
+              defaultACLDoc2
             )
             ACLControlEditable(box, doc, targetACLDoc, kb2, { modify: false }) // Add btton to save them as actual
             box.style.cssText = 'color: #777;'
