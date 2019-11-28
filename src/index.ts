@@ -47,8 +47,7 @@ import { create } from './create/index'
 import icons from './iconBase'
 // @ts-ignore
 import log from './log'
-// @ts-ignore
-import matrix from './matrix'
+import { matrix } from './matrix/index'
 // @ts-ignore
 import media from './media-capture'
 // @ts-ignore

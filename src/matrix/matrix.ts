@@ -1,4 +1,3 @@
-/* global $rdf */
 //      Build a 2D matrix of values
 //
 //  dom      AKA document
@@ -10,8 +9,8 @@
 //
 // Options:
 //     cellFunction(td, x, y, value)  fill the TD element of a single cell
-//     xDecreasing  set true for x axis to be in decreasiong order.
-//     yDecreasing  set true for y axis to be in decreasiong order.
+//     xDecreasing  set true for x axis to be in decreasing order.
+//     yDecreasing  set true for y axis to be in decreasing order.
 //     set_x        array of X values to be define initial rows (order irrelevant)
 //     set_y        array of Y values to be define initial columns
 //
@@ -20,38 +19,31 @@
 //   Extra rows and columns are inserted as needed to hold new data points
 //   matrix.refresh() will re-run the query and adjust the display
 
-var UI = {
-  icons: require('./iconBase'),
-  log: require('./log'),
-  ns: require('./ns'),
-  pad: require('./'),
-  rdf: require('rdflib'),
-  store: require('./store'),
-  widgets: require('./widgets')
-}
+import utils from '../utils'
+import kb from '../store'
+import * as $rdf from 'rdflib'
+import { MatrixOptions } from './types'
 
-const utils = require('./utils')
-const kb = UI.store
-
-module.exports.matrixForQuery = function (
-  dom,
-  query,
-  vx,
-  vy,
-  vvalue,
-  options,
-  whenDone
+export function matrixForQuery (
+  dom: HTMLDocument,
+  query: $rdf.Query,
+  vx: $rdf.Variable,
+  vy: $rdf.Variable,
+  vvalue: $rdf.Variable,
+  options: MatrixOptions,
+  whenDone: Function
 ) {
-  var matrix = dom.createElement('table')
-  var header = dom.createElement('tr')
-  var corner = header.appendChild(dom.createElement('td'))
+  // @@ TODO Remove need to cast to any
+  const matrix: any = dom.createElement('table')
+  const header = dom.createElement('tr')
+  const corner = header.appendChild(dom.createElement('td'))
   corner.setAttribute('class', 'MatrixCorner')
   matrix.appendChild(header) // just one for now
   matrix.lastHeader = header // Element before data
-  var columns = [] // Vector
-  var rows = [] // Associative array
+  let columns: any[] = [] // Vector
+  const rows: any[] = [] // Associative array
 
-  var setCell = function (cell, x, y, value) {
+  const setCell = function (cell, x, y, value) {
     while (cell.firstChild) {
       // Empty any previous
       cell.removeChild(cell.firstChild)
@@ -68,11 +60,12 @@ module.exports.matrixForQuery = function (
     delete cell.old
   }
 
-  var rowFor = function (y1) {
-    var y = y1.toNT()
+  const rowFor = function (y1) {
+    const y = y1.toNT()
     if (rows[y]) return rows[y]
-    var tr = dom.createElement('tr')
-    var header = tr.appendChild(dom.createElement('td'))
+    // @@ TODO Remove need for casting to any
+    const tr: any = dom.createElement('tr')
+    const header = tr.appendChild(dom.createElement('td'))
     header.setAttribute('style', 'padding: 0.3em;')
     header.textContent = utils.label(y1) // first approximation
     if (y1.termType === 'NamedNode') {
@@ -84,7 +77,7 @@ module.exports.matrixForQuery = function (
         if (ok) header.textContent = utils.label(y1)
       })
     }
-    for (var i = 0; i < columns.length; i++) {
+    for (let i = 0; i < columns.length; i++) {
       setCell(
         tr.appendChild(dom.createElement('td')),
         $rdf.fromNT(columns[i]),
@@ -94,7 +87,7 @@ module.exports.matrixForQuery = function (
     }
     tr.dataValueNT = y
     rows[y] = tr
-    for (var ele = matrix.lastHeader.nextSibling; ele; ele = ele.nextSibling) {
+    for (let ele = matrix.lastHeader.nextSibling; ele; ele = ele.nextSibling) {
       // skip header
       if (
         (y > ele.dataValueNT && options && options.yDecreasing) ||
@@ -106,11 +99,11 @@ module.exports.matrixForQuery = function (
     return matrix.appendChild(tr) // return the tr
   }
 
-  var columnNumberFor = function (x1) {
-    var xNT = x1.toNT() // xNT is a NT string
-    var col = null
+  const columnNumberFor = function (x1): number {
+    const xNT: any = x1.toNT() // xNT is a NT string
+    let col: any = null
     // These are data columns (not headings)
-    for (var i = 0; i < columns.length; i++) {
+    for (let i = 0; i < columns.length; i++) {
       if (columns[i] === xNT) {
         return i
       }
@@ -134,10 +127,10 @@ module.exports.matrixForQuery = function (
     }
 
     // col is the number of the new column, starting from 0
-    for (var row = matrix.firstChild; row; row = row.nextSibling) {
+    for (let row = matrix.firstChild; row; row = row.nextSibling) {
       // For every row header or not
-      var y = row.dataValueNT
-      var td = dom.createElement('td') // Add a new cell
+      const y = row.dataValueNT
+      const td = dom.createElement('td') // Add a new cell
       td.style.textAlign = 'center'
       if (row === matrix.firstChild) {
         td.textContent = utils.label(x1)
@@ -147,8 +140,8 @@ module.exports.matrixForQuery = function (
       if (col === columns.length - 1) {
         row.appendChild(td)
       } else {
-        var t = row.firstChild
-        for (var j = 0; j < col + 1; j++) {
+        let t = row.firstChild
+        for (let j = 0; j < col + 1; j++) {
           // Skip header col too
           t = t.nextSibling
         }
@@ -158,28 +151,28 @@ module.exports.matrixForQuery = function (
     return col
   }
 
-  var markOldCells = function () {
-    for (var i = 1; i < matrix.children.length; i++) {
-      var row = matrix.children[i]
-      for (var j = 1; j < row.children.length; j++) {
+  const markOldCells = function () {
+    for (let i = 1; i < matrix.children.length; i++) {
+      const row = matrix.children[i]
+      for (let j = 1; j < row.children.length; j++) {
         row.children[j].old = true
       }
     }
   }
 
-  var clearOldCells = function () {
-    var row, cell
-    var colsUsed = []
-    var rowsUsed = []
+  const clearOldCells = function () {
+    let row, cell
+    const colsUsed: any[] = []
+    const rowsUsed: any[] = []
 
     if (options.set_y) {
       // Knows y values create rows
-      for (var k = 0; k < options.set_y.length; k++) {
+      for (let k = 0; k < options.set_y.length; k++) {
         rowsUsed[options.set_y[k]] = true
       }
     }
     if (options.set_x) {
-      for (k = 0; k < options.set_x.length; k++) {
+      for (let k = 0; k < options.set_x.length; k++) {
         colsUsed[columnNumberFor(options.set_x[k]) + 1] = true
       }
     }
@@ -189,8 +182,8 @@ module.exports.matrixForQuery = function (
       for (let j = 1; j < row.children.length; j++) {
         cell = row.children[j]
         if (cell.old) {
-          var y = $rdf.fromNT(row.dataValueNT)
-          var x = $rdf.fromNT(columns[j - 1])
+          const y = $rdf.fromNT(row.dataValueNT)
+          const x = $rdf.fromNT(columns[j - 1])
           setCell(cell, x, y, null)
         } else {
           rowsUsed[row.dataValueNT] = true
@@ -205,7 +198,7 @@ module.exports.matrixForQuery = function (
         delete rows[row.dataValueNT]
         matrix.removeChild(row)
       } else {
-        for (var j = row.children.length - 1; j > 0; j--) {
+        for (let j = row.children.length - 1; j > 0; j--) {
           // backwards
           const cell = row.children[j]
           if (!colsUsed[j]) {
@@ -214,7 +207,7 @@ module.exports.matrixForQuery = function (
         }
       }
     }
-    var newcolumns = []
+    const newcolumns: any[] = []
     for (let j = 0; j < columns.length; j++) {
       if (colsUsed[j + 1]) {
         newcolumns.push(columns[j])
@@ -228,24 +221,24 @@ module.exports.matrixForQuery = function (
     kb.query(query, addCellFromBindings, undefined, clearOldCells)
   }
 
-  var addCellFromBindings = function (bindings) {
-    var x = bindings[vx]
-    var y = bindings[vy]
-    var value = bindings[vvalue]
-    var row = rowFor(y)
-    var colNo = columnNumberFor(x)
-    var cell = row.children[colNo + 1] // number of Y axis headings
+  const addCellFromBindings = function (bindings) {
+    const x = bindings[vx.toString()]
+    const y = bindings[vy.toString()]
+    const value = bindings[(vvalue.toString())]
+    const row = rowFor(y)
+    const colNo = columnNumberFor(x)
+    const cell = row.children[colNo + 1] // number of Y axis headings
     setCell(cell, x, y, value)
   }
 
   if (options.set_y) {
     // Knows y values create rows
-    for (var k = 0; k < options.set_y.length; k++) {
+    for (let k = 0; k < options.set_y.length; k++) {
       rowFor(options.set_y[k])
     }
   }
   if (options.set_x) {
-    for (k = 0; k < options.set_x.length; k++) {
+    for (let k = 0; k < options.set_x.length; k++) {
       columnNumberFor(options.set_x[k])
     }
   }
