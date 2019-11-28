@@ -40,10 +40,7 @@ https://github.com/solid/solid
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
 // @ts-ignore
 import ns from './ns'
-// @ts-ignore
-import acl from './acl'
-// @ts-ignore
-import aclControl from './acl-control'
+import { acl, aclControl } from './acl'
 // @ts-ignore
 import authn from './signin'
 // @ts-ignore
