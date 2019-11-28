@@ -15,7 +15,8 @@ import {
   putACLbyCombo,
   putACLObject,
   readACL,
-  sameACL, setACL
+  sameACL,
+  setACL
 } from './acl'
 import {
   ACLControlBox5,
