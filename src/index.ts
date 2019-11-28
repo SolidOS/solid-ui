@@ -48,8 +48,7 @@ import icons from './iconBase'
 // @ts-ignore
 import log from './log'
 import { matrix } from './matrix/index'
-// @ts-ignore
-import media from './media-capture'
+import { media } from './media/index'
 // @ts-ignore
 import messageArea from './messageArea'
 // @ts-ignore

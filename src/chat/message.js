@@ -6,7 +6,7 @@ const UI = {
   icons: require('../iconBase'),
   log: require('../log'),
   ns: require('../ns'),
-  media: require('../media-capture'),
+  media: require('../media/media-capture'),
   pad: require('../pad'),
   rdf: require('rdflib'),
   store: require('../store'),
