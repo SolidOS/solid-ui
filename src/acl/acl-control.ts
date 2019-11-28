@@ -11,7 +11,7 @@ import widgets from '../widgets'
 import icons from '../iconBase.js'
 import authn from '../signin.js'
 import { graph, IndexedFormula, NamedNode, sym, UpdateManager } from 'rdflib'
-import { DataBrowserContext } from '../../../pane-registry'
+import { DataBrowserContext } from 'pane-registry'
 
 // In apps which may use drag and drop, this utility takes care of the fact
 // by default in a browser, an uncuaght user drop into a browser window
