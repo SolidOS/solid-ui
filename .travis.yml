@@ -1,6 +1,15 @@
 language: node_js
+node_js:
+  - "8.10"
+  - "8"
+  - "10.3"
+  - "10"
+  - "12.0"
+  - "12"
+  - "lts/*"
+  - "node"
 install:
-  - npm install
+  - npm ci
 script:
   - npm test
   # Make sure it still builds successfully - the build isn't actually used yet:
