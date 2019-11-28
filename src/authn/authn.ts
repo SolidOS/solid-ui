@@ -6,64 +6,29 @@
  *
  *  Many functions in this module take a context object, add to it, and return a promise of it.
  */
-/* global  localStorage confirm alert $SolidTestEnvironment */
+import SolidTls from 'solid-auth-tls'
+import * as $rdf from 'rdflib'
+import widgets from '../widgets'
+import solidAuthClient from 'solid-auth-client'
+import ns from '../ns.js'
+import kb from '../store.js'
+import utils from '../utils.js'
+import log from '../log.js'
+import { AppDetails, AuthenticationContext } from './types'
+import { PaneDefinition } from 'pane-registry'
 
-// const Solid = require('solid-client')
-const SolidTls = require('solid-auth-tls')
-const $rdf = require('rdflib')
-// const error = require('./widgets/error')
-const widgets = require('./widgets/index')
-// const utils = require('./utils')
-const solidAuthClient = require('solid-auth-client')
-
-const UI = {
-  authn: require('./signin'),
-  icons: require('./iconBase'),
-  log: require('./log'),
-  ns: require('./ns'),
-  store: require('./store'),
-  style: require('./style'),
-  utils: require('./utils'),
-  widgets: require('./widgets') // 2018-07-31
-}
-
-const ns = UI.ns
-const kb = UI.store
-
-module.exports = {
-  checkUser, // Async
-  currentUser, // Sync
-  defaultTestUser, // Sync
-  filterAvailablePanes, // Async
-  findAppInstances,
-  findOriginOwner,
-  getUserRoles, // Async
-  loadTypeIndexes,
-  logIn,
-  logInLoadProfile,
-  logInLoadPreferences,
-  loginStatusBox,
-  newAppInstance,
-  offlineTestID,
-  registerInTypeIndex,
-  registrationControl,
-  registrationList,
-  selectWorkspace,
-  setACLUserPublic,
-  saveUser,
-  solidAuthClient
-}
+export { solidAuthClient }
 
 // const userCheckSite = 'https://databox.me/'
 
 // Look for and load the User who has control over it
-function findOriginOwner (doc, _callback) {
-  var uri = doc.uri || doc
-  var i = uri.indexOf('://')
+export function findOriginOwner (doc: $rdf.NamedNode | string): string | boolean {
+  const uri = (doc as $rdf.NamedNode).uri || doc as string
+  const i = uri.indexOf('://')
   if (i < 0) return false
-  var j = uri.indexOf('/', i + 3)
+  const j = uri.indexOf('/', i + 3)
   if (j < 0) return false
-  var origin = uri.slice(0, j + 1) // @@ TBC
+  const origin = uri.slice(0, j + 1) // @@ TBC
   return origin
 }
 
@@ -90,23 +55,27 @@ function findOriginOwner (doc, _callback) {
  *
  * @returns {NamedNode|null} Returns the Web ID, after setting it
  */
-function saveUser (webId, context) {
-  let webIdUri, me
+export function saveUser (
+  webId: $rdf.NamedNode | string,
+  context?: AuthenticationContext
+): $rdf.NamedNode | null {
+  // @@ TODO Remove the need for having context as output argument
+  let webIdUri: string
   if (webId) {
-    webIdUri = webId.uri || webId
+    webIdUri = (webId as $rdf.NamedNode).uri || webId as string
     const me = $rdf.namedNode(webIdUri)
     if (context) {
       context.me = me
     }
     return me
   }
-  return me || null
+  return null
 }
 
 /**
  * @returns {NamedNode|null}
  */
-function defaultTestUser () {
+export function defaultTestUser (): $rdf.NamedNode | null {
   // Check for offline override
   const offlineId = offlineTestID()
 
@@ -121,7 +90,7 @@ function defaultTestUser () {
  *
  * @returns Named Node or null
  */
-function currentUser () {
+export function currentUser (): $rdf.NamedNode | null {
   const str = localStorage['solid-auth-client']
   if (str) {
     const da = JSON.parse(str)
@@ -141,7 +110,7 @@ function currentUser () {
  *
  * @returns {Promise<context>}
  */
-function logIn (context) {
+export async function logIn (context: AuthenticationContext): Promise<AuthenticationContext> {
   const me = defaultTestUser() // me is a NamedNode or null
 
   if (me) {
@@ -153,8 +122,8 @@ function logIn (context) {
     checkUser().then(webId => {
       // Already logged in?
       if (webId) {
-        context.me = $rdf.sym(webId)
-        console.log('logIn: Already logged in as ' + context.me)
+        context.me = $rdf.sym(webId as string)
+        console.log(`logIn: Already logged in as ${context.me}`)
         return resolve(context)
       }
       if (!context.div || !context.dom) {
@@ -178,12 +147,12 @@ function logIn (context) {
  *
  * @returns {Promise<Object>} Resolves with the context after login / fetch
  */
-function logInLoadProfile (context) {
+export async function logInLoadProfile (context: AuthenticationContext): Promise<AuthenticationContext> {
   if (context.publicProfile) {
     return Promise.resolve(context)
   } // already done
-  const fetcher = UI.store.fetcher
-  var profileDocument
+  const fetcher = kb.fetcher
+  let profileDocument
   return new Promise(function (resolve, reject) {
     return logIn(context)
       .then(context => {
@@ -209,14 +178,14 @@ function logInLoadProfile (context) {
               err
             if (context.div && context.dom) {
               context.div.appendChild(
-                UI.widgets.errorMessageBlock(context.dom, message)
+                widgets.errorMessageBlock(context.dom, message)
               )
             }
             reject(message)
           })
       })
       .catch(err => {
-        reject(new Error("Can't log in: " + err))
+        reject(new Error('Can\'t log in: ' + err))
       })
   })
 }
@@ -231,25 +200,25 @@ function logInLoadProfile (context) {
  *
  * @returns {Promise<context>}
  */
-function logInLoadPreferences (context) {
+export function logInLoadPreferences (context: AuthenticationContext): Promise<AuthenticationContext> {
   if (context.preferencesFile) return Promise.resolve(context) // already done
 
-  const kb = UI.store
   const statusArea = context.statusArea || context.div || null
-  var progressDisplay
+  let progressDisplay
   return new Promise(function (resolve, reject) {
     return logInLoadProfile(context)
       .then(context => {
         const preferencesFile = kb.any(
           context.me,
-          UI.ns.space('preferencesFile')
+          ns.space('preferencesFile')
         )
+
         function complain (message) {
           message = 'logInLoadPreferences: ' + message
           if (statusArea) {
             // statusArea.innerHTML = ''
             statusArea.appendChild(
-              UI.widgets.errorMessageBlock(context.dom, message)
+              widgets.errorMessageBlock(context.dom, message)
             )
           }
           console.log(message)
@@ -269,7 +238,7 @@ function logInLoadPreferences (context) {
 
         if (!preferencesFile) {
           const message =
-            "Can't find a preferences file pointer in profile " +
+            'Can\'t find a preferences file pointer in profile ' +
             context.publicProfile
           return reject(new Error(message))
         }
@@ -311,13 +280,13 @@ function logInLoadPreferences (context) {
               if (
                 confirm(
                   'You do not currently have a Preferences file. Ok for me to create an empty one? ' +
-                    preferencesFile
+                  preferencesFile
                 )
               ) {
                 // @@@ code me  ... weird to have a name o fthe file but no file
                 alert(
                   'Sorry; I am not prepared to do this. Please create an empty file at ' +
-                    preferencesFile
+                  preferencesFile
                 )
                 return complain(
                   new Error(
@@ -328,7 +297,7 @@ function logInLoadPreferences (context) {
                 reject(
                   new Error(
                     'User declined to create a preferences file at ' +
-                      preferencesFile
+                    preferencesFile
                   )
                 )
               }
@@ -360,41 +329,44 @@ function logInLoadPreferences (context) {
  *
  * @returns {Promise<context>}
  */
-async function loadTypeIndexes (context) {
+export async function loadTypeIndexes (context: AuthenticationContext): Promise<void> {
   await loadPublicTypeIndex(context)
   await loadPrivateTypeIndex(context)
 }
 
-async function loadPublicTypeIndex (context) {
+async function loadPublicTypeIndex (context: AuthenticationContext): Promise<AuthenticationContext> {
   return loadIndex(context, ns.solid('publicTypeIndex'), true)
 }
-async function loadPrivateTypeIndex (context) {
+
+async function loadPrivateTypeIndex (context: AuthenticationContext): Promise<AuthenticationContext> {
   return loadIndex(context, ns.solid('privateTypeIndex'), false)
 }
-async function loadOneTypeIndex (context, isPublic) {
+
+async function loadOneTypeIndex (context: AuthenticationContext, isPublic: boolean): Promise<AuthenticationContext> {
   const predicate = isPublic
     ? ns.solid('publicTypeIndex')
     : ns.solid('privateTypeIndex')
   return loadIndex(context, predicate, isPublic)
 }
 
-async function loadIndex (context, predicate, isPublic) {
-  var ns = UI.ns
-  var kb = UI.store
-
+async function loadIndex (
+  context: AuthenticationContext,
+  predicate: $rdf.NamedNode,
+  isPublic: boolean
+): Promise<AuthenticationContext> {
   // Loading preferences is more than loading profile
   try {
     ;(await isPublic)
       ? logInLoadProfile(context)
       : logInLoadPreferences(context)
   } catch (err) {
-    UI.widgets.complain(
+    widgets.complain(
       context,
       'loadPubicIndex: login and load problem ' + err
     )
   }
-  var me = context.me
-  var ixs
+  const me = context.me
+  let ixs
   context.index = context.index || {}
 
   if (isPublic) {
@@ -410,10 +382,10 @@ async function loadIndex (context, predicate, isPublic) {
       )
       context.index.private = ixs
       if (ixs.length === 0) {
-        UI.widgets.complain(
+        widgets.complain(
           'Your preference file ' +
-            context.preferencesFile +
-            ' does not point to a private type index.'
+          context.preferencesFile +
+          ' does not point to a private type index.'
         )
         return context
       }
@@ -427,7 +399,7 @@ async function loadIndex (context, predicate, isPublic) {
   try {
     await kb.fetcher.load(ixs)
   } catch (err) {
-    UI.widgets.complain(
+    widgets.complain(
       context,
       'loadPubicIndex: loading public type index ' + err
     )
@@ -450,7 +422,7 @@ async function loadIndex (context, predicate, isPublic) {
  *
  * @returns {Promise}
  */
-async function ensureTypeIndexes (context) {
+async function ensureTypeIndexes (context: AuthenticationContext): Promise<void> {
   await ensureOneTypeIndex(context, true)
   await ensureOneTypeIndex(context, false)
   // return context
@@ -477,9 +449,9 @@ async function ensureTypeIndexes (context) {
  * @returns {Promise}
  */
 
-async function ensureOneTypeIndex (context, isPublic) {
+async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boolean): Promise<AuthenticationContext | void> {
   async function makeIndexIfNecesary (context, isPublic) {
-    var relevant = isPublic ? context.publicProfile : context.preferencesFile
+    const relevant = isPublic ? context.publicProfile : context.preferencesFile
     const visibility = isPublic ? 'public' : 'private'
 
     async function putIndex (newIndex) {
@@ -497,21 +469,21 @@ async function ensureOneTypeIndex (context, isPublic) {
 
     context.index = context.index || {}
     context.index[visibility] = context.index[visibility] || []
-    var newIndex
+    let newIndex
     if (context.index[visibility].length === 0) {
       newIndex = $rdf.sym(relevant.dir().uri + visibility + 'TypeIndex.ttl')
       console.log('Linking to new fresh type index ' + newIndex)
       if (
         !confirm(
           'Ok to create a new empty index file at ' +
-            newIndex +
-            ', overwriting anything that was there?'
+          newIndex +
+          ', overwriting anything that was there?'
         )
       ) {
         throw new Error('cancelled by user')
       }
       console.log('Linking to new fresh type index ' + newIndex)
-      var addMe = [
+      const addMe = [
         $rdf.st(
           context.me,
           ns.solid(visibility + 'TypeIndex'),
@@ -520,11 +492,11 @@ async function ensureOneTypeIndex (context, isPublic) {
         )
       ]
       try {
-        await updatePromise([], addMe)
+        await updatePromise(kb.updater, [], addMe)
       } catch (err) {
         const msg =
           'Error saving type index link saving back ' + newIndex + ': ' + err
-        UI.widgets.complain(context, msg)
+        widgets.complain(context, msg)
         return context
       }
 
@@ -533,11 +505,11 @@ async function ensureOneTypeIndex (context, isPublic) {
       context.index[visibility].push(newIndex) // @@ wait
     } else {
       // officially exists
-      var ixs = context.index[visibility]
+      const ixs = context.index[visibility]
       try {
         await kb.fetcher.load(ixs)
       } catch (err) {
-        UI.widgets.complain(
+        widgets.complain(
           context,
           'ensureOneTypeIndex: loading indexes ' + err
         )
@@ -547,15 +519,17 @@ async function ensureOneTypeIndex (context, isPublic) {
 
   try {
     await loadOneTypeIndex(context, isPublic)
-    console.log(
-      'ensureOneTypeIndex: Type index exists already ' + isPublic
-        ? context.index.public[0]
-        : context.index.private[0]
-    )
+    if (context.index) {
+      console.log(
+        `ensureOneTypeIndex: Type index exists already ${isPublic}`
+          ? context.index.public[0]
+          : context.index.private[0]
+      )
+    }
     return context
   } catch (error) {
     await makeIndexIfNecesary(context, isPublic)
-    // UI.widgets.complain(context, 'calling loadOneTypeIndex:' + error)
+    // widgets.complain(context, 'calling loadOneTypeIndex:' + error)
   }
 }
 
@@ -571,10 +545,12 @@ async function ensureOneTypeIndex (context, isPublic) {
  * @param klass
  * @returns {Promise}  of context
  */
-async function findAppInstances (context, klass, isPublic) {
-  var kb = UI.store
-  var ns = UI.ns
-  var fetcher = UI.store.fetcher
+export async function findAppInstances (
+  context: AuthenticationContext,
+  klass: $rdf.NamedNode,
+  isPublic: boolean
+): Promise<AuthenticationContext> {
+  const fetcher = kb.fetcher
   if (isPublic === undefined) {
     // Then both public and private
     await findAppInstances(context, klass, true)
@@ -585,16 +561,17 @@ async function findAppInstances (context, klass, isPublic) {
   const visibility = isPublic ? 'public' : 'private'
   try {
     await loadOneTypeIndex(context, isPublic)
-  } catch (err) {}
-
-  var thisIndex = context.index[visibility]
-  var registrations = thisIndex
+  } catch (err) {
+  }
+  const index = context.index as { [key: string]: Array<$rdf.NamedNode> }
+  const thisIndex = index[visibility]
+  const registrations = thisIndex
     .map(ix => kb.each(undefined, ns.solid('forClass'), klass, ix))
     .flat()
-  var instances = registrations
+  const instances = registrations
     .map(reg => kb.each(reg, ns.solid('instance')))
     .flat()
-  var containers = registrations
+  const containers = registrations
     .map(reg => kb.each(reg, ns.solid('instanceContainer')))
     .flat()
 
@@ -610,17 +587,17 @@ async function findAppInstances (context, klass, isPublic) {
   try {
     await fetcher.load(containers)
   } catch (err) {
-    var e = new Error('[FAI] Unable to load containers' + err)
+    const e = new Error('[FAI] Unable to load containers' + err)
     console.log(e) // complain
-    UI.widgets.complain(
+    widgets.complain(
       context,
-      `Error looking for ${UI.utils.label(klass)}:  ${err}`
+      `Error looking for ${utils.label(klass)}:  ${err}`
     )
     // but then ignoire it
     // throw new Error(e)
   }
-  for (var i = 0; i < containers.length; i++) {
-    var cont = containers[i]
+  for (let i = 0; i < containers.length; i++) {
+    const cont = containers[i]
     context.instances = context.instances.concat(
       kb.each(cont, ns.ldp('contains'))
     )
@@ -629,7 +606,11 @@ async function findAppInstances (context, klass, isPublic) {
 }
 
 // @@@@ use teh one in rdflib.js when it is avaiable and delete this
-function updatePromise (updater, del, ins) {
+function updatePromise (
+  updater: $rdf.UpdateManager,
+  del: Array<$rdf.Statement>,
+  ins: Array<$rdf.Statement> = []
+): Promise<void> {
   return new Promise(function (resolve, reject) {
     updater.update(del, ins, function (uri, ok, errorBody) {
       if (!ok) {
@@ -640,18 +621,25 @@ function updatePromise (updater, del, ins) {
     }) // callback
   }) // promise
 }
+
 /* Register a new app in a type index
  */
-async function registerInTypeIndex (context, instance, klass, isPublic) {
-  const kb = UI.store
-  const ns = UI.ns
+export async function registerInTypeIndex (
+  context: AuthenticationContext,
+  instance: $rdf.NamedNode,
+  klass: $rdf.NamedNode,
+  isPublic: boolean
+): Promise<AuthenticationContext> {
   await ensureOneTypeIndex(context, isPublic)
+  if (!context.index) {
+    throw new Error('registerInTypeIndex: No type index found')
+  }
   const indexes = isPublic ? context.index.public : context.index.private
   if (!indexes.length) {
     throw new Error('registerInTypeIndex: What no type index?')
   }
   const index = indexes[0]
-  const registration = UI.widgets.newThing(index)
+  const registration = widgets.newThing(index)
   const ins = [
     // See https://github.com/solid/solid/blob/master/proposals/data-discovery.md
     $rdf.st(registration, ns.rdf('type'), ns.solid('TypeRegistration'), index),
@@ -676,90 +664,95 @@ async function registerInTypeIndex (context, instance, klass, isPublic) {
  *
  * @returns {Promise}
  */
-function registrationControl (context, instance, klass) {
-  var kb = UI.store
-  var ns = UI.ns
-  var dom = context.dom
-
-  var box = dom.createElement('div')
+export function registrationControl (
+  context: AuthenticationContext,
+  instance,
+  klass
+): Promise<AuthenticationContext | void> {
+  const dom = context.dom
+  if (!dom || !context.div) {
+    return Promise.resolve()
+  }
+  const box = dom.createElement('div')
   context.div.appendChild(box)
 
   return ensureTypeIndexes(context)
-    .then(
-      function () {
-        box.innerHTML = '<table><tbody><tr></tr><tr></tr></tbody></table>' // tbody will be inserted anyway
-        box.setAttribute(
-          'style',
-          'font-size: 120%; text-align: right; padding: 1em; border: solid gray 0.05em;'
-        )
-        var tbody = box.children[0].children[0]
-        var form = kb.bnode() // @@ say for now
+    .then(function () {
+      box.innerHTML = '<table><tbody><tr></tr><tr></tr></tbody></table>' // tbody will be inserted anyway
+      box.setAttribute(
+        'style',
+        'font-size: 120%; text-align: right; padding: 1em; border: solid gray 0.05em;'
+      )
+      const tbody = box.children[0].children[0]
+      const form = kb.bnode() // @@ say for now
 
-        var registrationStatements = function (index) {
-          var registrations = kb
-            .each(undefined, ns.solid('instance'), instance)
-            .filter(function (r) {
-              return kb.holds(r, ns.solid('forClass'), klass)
-            })
-          var reg = registrations.length
-            ? registrations[0]
-            : widgets.newThing(index)
-          return [
-            $rdf.st(reg, ns.solid('instance'), instance, index),
-            $rdf.st(reg, ns.solid('forClass'), klass, index)
-          ]
-        }
-
-        var index, statements
-
-        if (context.index.public && context.index.public.length > 0) {
-          index = context.index.public[0]
-          statements = registrationStatements(index)
-          tbody.children[0].appendChild(
-            widgets.buildCheckboxForm(
-              context.dom,
-              UI.store,
-              'Public link to this ' + context.noun,
-              null,
-              statements,
-              form,
-              index
-            )
-          )
-        }
-
-        if (context.index.private && context.index.private.length > 0) {
-          index = context.index.private[0]
-          statements = registrationStatements(index)
-          tbody.children[1].appendChild(
-            widgets.buildCheckboxForm(
-              context.dom,
-              UI.store,
-              'Personal note of this ' + context.noun,
-              null,
-              statements,
-              form,
-              index
-            )
-          )
-        }
-        return context
-      },
-      function (e) {
-        var msg
-        if (context.preferencesFileError) {
-          msg = '(Preferences not available)'
-          context.div.appendChild(dom.createElement('p')).textContent = msg
-        } else {
-          msg = 'registrationControl: Type indexes not available: ' + e
-          context.div.appendChild(UI.widgets.errorMessageBlock(context.dom, e))
-        }
-        console.log(msg)
+      const registrationStatements = function (index) {
+        const registrations = kb
+          .each(undefined, ns.solid('instance'), instance)
+          .filter(function (r) {
+            return kb.holds(r, ns.solid('forClass'), klass)
+          })
+        const reg = registrations.length
+          ? registrations[0]
+          : widgets.newThing(index)
+        return [
+          $rdf.st(reg, ns.solid('instance'), instance, index),
+          $rdf.st(reg, ns.solid('forClass'), klass, index)
+        ]
       }
+
+      let index, statements
+
+      if (context.index && context.index.public && context.index.public.length > 0) {
+        index = context.index.public[0]
+        statements = registrationStatements(index)
+        tbody.children[0].appendChild(
+          widgets.buildCheckboxForm(
+            context.dom,
+            kb,
+            'Public link to this ' + context.noun,
+            null,
+            statements,
+            form,
+            index
+          )
+        )
+      }
+
+      if (context.index && context.index.private && context.index.private.length > 0) {
+        index = context.index.private[0]
+        statements = registrationStatements(index)
+        tbody.children[1].appendChild(
+          widgets.buildCheckboxForm(
+            context.dom,
+            kb,
+            'Personal note of this ' + context.noun,
+            null,
+            statements,
+            form,
+            index
+          )
+        )
+      }
+      return context
+    },
+    function (e) {
+      let msg
+      if (context.div && context.preferencesFileError) {
+        msg = '(Preferences not available)'
+        context.div.appendChild(dom.createElement('p')).textContent = msg
+      } else if (context.div) {
+        msg = 'registrationControl: Type indexes not available: ' + e
+        context.div.appendChild(widgets.errorMessageBlock(context.dom, e))
+      }
+      console.log(msg)
+    }
     )
     .catch(function (e) {
-      var msg = 'registrationControl: Error making panel:' + e
-      context.div.appendChild(UI.widgets.errorMessageBlock(context.dom, e))
+      const msg = 'registrationControl: Error making panel:' + e
+      if (context.div) {
+        context.div.appendChild(widgets.errorMessageBlock(context.dom, e))
+      }
       console.log(msg)
     })
 }
@@ -771,13 +764,15 @@ function registrationControl (context, instance, klass) {
  *
  * @returns {Promise}
  */
-function registrationList (context, options) {
-  const kb = UI.store
-  const ns = UI.ns
-  const dom = context.dom
+export function registrationList (context: AuthenticationContext, options: {
+  private?: boolean
+  public?: boolean
+}): Promise<AuthenticationContext> {
+  const dom = context.dom as HTMLDocument
+  const div = context.div as HTMLElement
 
-  var box = dom.createElement('div')
-  context.div.appendChild(box)
+  const box = dom.createElement('div')
+  div.appendChild(box)
 
   return ensureTypeIndexes(context).then(_indexes => {
     box.innerHTML = '<table><tbody></tbody></table>' // tbody will be inserted anyway
@@ -785,13 +780,13 @@ function registrationList (context, options) {
       'style',
       'font-size: 120%; text-align: right; padding: 1em; border: solid #eee 0.5em;'
     )
-    var table = box.firstChild
+    const table = box.firstChild as HTMLElement
 
-    var ix = []
-    var sts = []
-    var vs = ['private', 'public']
+    let ix: Array<$rdf.NamedNode> = []
+    let sts = []
+    const vs = ['private', 'public']
     vs.forEach(function (visibility) {
-      if (options[visibility]) {
+      if (context.index && options[visibility]) {
         ix = ix.concat(context.index[visibility][0])
         sts = sts.concat(
           kb.statementsMatching(
@@ -804,19 +799,19 @@ function registrationList (context, options) {
       }
     })
 
-    for (var i = 0; i < sts.length; i++) {
-      var statement = sts[i]
-      // var cla = statement.subject
-      var inst = statement.object
+    for (let i = 0; i < sts.length; i++) {
+      const statement: $rdf.Statement = sts[i]
+      // const cla = statement.subject
+      const inst = statement.object
       // if (false) {
-      //   var tr = table.appendChild(dom.createElement('tr'))
-      //   var anchor = tr.appendChild(dom.createElement('a'))
+      //   const tr = table.appendChild(dom.createElement('tr'))
+      //   const anchor = tr.appendChild(dom.createElement('a'))
       //   anchor.setAttribute('href', inst.uri)
       //   anchor.textContent = utils.label(inst)
       // } else {
       // }
 
-      var deleteInstance = function (_x) {
+      const deleteInstance = function (_x) {
         kb.updater.update([statement], [], function (uri, ok, errorBody) {
           if (ok) {
             console.log('Removed from index: ' + statement.subject)
@@ -825,17 +820,17 @@ function registrationList (context, options) {
           }
         })
       }
-      var opts = { deleteFunction: deleteInstance }
-      var tr = widgets.personTR(dom, ns.solid('instance'), inst, opts)
+      const opts = { deleteFunction: deleteInstance }
+      const tr = widgets.personTR(dom, ns.solid('instance'), inst, opts)
       table.appendChild(tr)
     }
 
     /*
-       //var containers = kb.each(klass, ns.solid('instanceContainer'));
+       //const containers = kb.each(klass, ns.solid('instanceContainer'));
        if (containers.length) {
        fetcher.load(containers).then(function(xhrs){
-       for (var i=0; i<containers.length; i++) {
-       var cont = containers[i];
+       for (const i=0; i<containers.length; i++) {
+       const cont = containers[i];
        instances = instances.concat(kb.each(cont, ns.ldp('contains')));
        }
        });
@@ -861,8 +856,14 @@ function registrationList (context, options) {
  *
  * @returns {Promise<NamedNode>} Resolves with aclDoc uri on successful write
  */
-function setACLUserPublic (docURI, me, options) {
-  const kb = UI.store
+export function setACLUserPublic (
+  docURI: $rdf.NamedNode,
+  me: $rdf.NamedNode,
+  options: {
+    defaultForNew?: boolean,
+    public?: []
+  }
+): Promise<$rdf.NamedNode> {
   const aclDoc = kb.any(
     kb.sym(docURI),
     kb.sym('http://www.iana.org/assignments/link-relations/acl')
@@ -900,8 +901,7 @@ function setACLUserPublic (docURI, me, options) {
  * @param docURI {string}
  * @returns {Promise<NamedNode|null>}
  */
-function fetchACLRel (docURI) {
-  const kb = UI.store
+function fetchACLRel (docURI: $rdf.NamedNode): Promise<$rdf.NamedNode> {
   const fetcher = kb.fetcher
 
   return fetcher.load(docURI).then(result => {
@@ -930,14 +930,22 @@ function fetchACLRel (docURI) {
  *
  * @returns {string} Serialized ACL
  */
-function genACLText (docURI, me, aclURI, options = {}) {
-  var optPublic = options.public || []
-  var g = $rdf.graph()
-  var auth = $rdf.Namespace('http://www.w3.org/ns/auth/acl#')
-  var a = g.sym(aclURI + '#a1')
-  var acl = g.sym(aclURI)
-  var doc = g.sym(docURI)
-  g.add(a, UI.ns.rdf('type'), auth('Authorization'), acl)
+function genACLText (
+  docURI: $rdf.NamedNode,
+  me: $rdf.NamedNode,
+  aclURI: $rdf.NamedNode,
+  options: {
+    defaultForNew?: boolean,
+    public?: []
+  } = {}
+): string {
+  const optPublic = options.public || []
+  const g = $rdf.graph()
+  const auth = $rdf.Namespace('http://www.w3.org/ns/auth/acl#')
+  let a = g.sym(aclURI + '#a1')
+  const acl = g.sym(aclURI)
+  const doc = g.sym(docURI)
+  g.add(a, ns.rdf('type'), auth('Authorization'), acl)
   g.add(a, auth('accessTo'), doc, acl)
   if (options.defaultForNew) {
     // TODO: Should this be auth('default') instead?
@@ -950,20 +958,22 @@ function genACLText (docURI, me, aclURI, options = {}) {
 
   if (optPublic.length) {
     a = g.sym(aclURI + '#a2')
-    g.add(a, UI.ns.rdf('type'), auth('Authorization'), acl)
+    g.add(a, ns.rdf('type'), auth('Authorization'), acl)
     g.add(a, auth('accessTo'), doc, acl)
-    g.add(a, auth('agentClass'), UI.ns.foaf('Agent'), acl)
+    g.add(a, auth('agentClass'), ns.foaf('Agent'), acl)
     for (let p = 0; p < optPublic.length; p++) {
       g.add(a, auth('mode'), auth(optPublic[p]), acl) // Like 'Read' etc
     }
   }
-  return $rdf.serialize(acl, g, aclURI, 'text/turtle')
+  // @@ TODO Remove casting of $rdf
+  return ($rdf as any).serialize(acl, g, aclURI, 'text/turtle')
 }
 
 /**
  * @returns {NamedNode|null}
  */
-function offlineTestID () {
+export function offlineTestID (): $rdf.NamedNode | null {
+  const { $SolidTestEnvironment }: any = window
   if (
     typeof $SolidTestEnvironment !== 'undefined' &&
     $SolidTestEnvironment.username
@@ -978,11 +988,11 @@ function offlineTestID () {
     document.location &&
     ('' + document.location).slice(0, 16) === 'http://localhost'
   ) {
-    var div = document.getElementById('appTarget')
+    const div = document.getElementById('appTarget')
     if (!div) return null
-    var id = div.getAttribute('testID')
+    const id = div.getAttribute('testID')
     if (!id) return null
-    /* me = kb.any(subject, UI.ns.acl('owner')); // when testing on plane with no webid
+    /* me = kb.any(subject, ns.acl('owner')); // when testing on plane with no webid
      */
     console.log('Assuming user is ' + id)
     return $rdf.sym(id)
@@ -1001,15 +1011,22 @@ function offlineTestID () {
  * @returns {Element}
  */
 
-function getDefaultSignInButtonStyle () {
+function getDefaultSignInButtonStyle (): string {
   return 'padding: 1em; border-radius:0.5em; margin: 2em; font-size: 100%;'
 }
 
-function signInOrSignUpBox (dom, setUserCallback, options) {
+function signInOrSignUpBox (
+  dom: HTMLDocument,
+  setUserCallback: Function,
+  options: {
+    buttonStyle?: string
+  } = {}
+): HTMLElement {
   options = options || {}
   const signInButtonStyle = options.buttonStyle || getDefaultSignInButtonStyle()
 
-  var box = dom.createElement('div')
+  // @@ TODO Remove the need to cast HTML element to any
+  const box: any = dom.createElement('div')
   const magicClassName = 'SolidSignInOrSignUpBox'
   console.log('widgets.signInOrSignUpBox')
   box.setUserCallback = setUserCallback
@@ -1029,16 +1046,17 @@ function signInOrSignUpBox (dom, setUserCallback, options) {
   signInPopUpButton.addEventListener(
     'click',
     () => {
-      var offline = offlineTestID()
+      const offline = offlineTestID()
       if (offline) return setUserCallback(offline.uri)
       return solidAuthClient.popupLogin().then(session => {
         const webIdURI = session.webId
         // setUserCallback(webIdURI)
-        var divs = dom.getElementsByClassName(magicClassName)
+        const divs = dom.getElementsByClassName(magicClassName)
         console.log('Logged in, ' + divs.length + ' panels to be serviced')
         // At the same time, satiffy all the other login boxes
         for (let i = 0; i < divs.length; i++) {
-          const div = divs[i]
+          const div: any = divs[i]
+          // @@ TODO Remove the need to manipulate HTML elements
           if (div.setUserCallback) {
             try {
               div.setUserCallback(webIdURI)
@@ -1048,7 +1066,7 @@ function signInOrSignUpBox (dom, setUserCallback, options) {
               }
             } catch (e) {
               console.log('## Error satisfying login box: ' + e)
-              div.appendChild(UI.widgets.errorMessageBlock(dom, e))
+              div.appendChild(widgets.errorMessageBlock(dom, e))
             }
           }
         }
@@ -1084,8 +1102,8 @@ function signInOrSignUpBox (dom, setUserCallback, options) {
 /**
  * @returns {Promise<string|null>} Resolves with WebID URI or null
  */
-function webIdFromSession (session) {
-  var webId = session ? session.webId : null
+function webIdFromSession (session?: { webId: string }): string | null {
+  const webId = session ? session.webId : null
   if (webId) {
     saveUser(webId)
   }
@@ -1095,6 +1113,7 @@ function webIdFromSession (session) {
 /**
  * @returns {Promise<string|null>} Resolves with WebID URI or null
  */
+
 /*
 function checkCurrentUser () {
   return checkUser()
@@ -1106,28 +1125,28 @@ function checkCurrentUser () {
  *
  * @returns {Promise<string|null>} Resolves with web id uri, if no callback provided
  */
-function checkUser (setUserCallback) {
+export function checkUser<T> (
+  setUserCallback?: (me: $rdf.NamedNode | null) => T
+): Promise<$rdf.NamedNode | T> {
   // Check to see if already logged in / have the WebID
-  var me = defaultTestUser()
+  const me = defaultTestUser()
   if (me) {
     return Promise.resolve(setUserCallback ? setUserCallback(me) : me)
   }
 
-  // doc = kb.any(doc, UI.ns.link('userMirror')) || doc
+  // doc = kb.any(doc, ns.link('userMirror')) || doc
 
   return solidAuthClient
     .currentSession()
-
-    .then(webIdFromSession, err => {
+    .then(webIdFromSession)
+    .catch(err => {
       console.log('Error fetching currentSession:', err)
-      return null
     })
-
     .then(webId => {
       // if (webId.startsWith('dns:')) {  // legacy rww.io pseudo-users
       //   webId = null
       // }
-      var me = saveUser(webId)
+      const me = saveUser(webId)
 
       if (me) {
         console.log('(Logged in as ' + me + ' by authentication)')
@@ -1147,10 +1166,17 @@ function checkUser (setUserCallback) {
  *
  * @returns {Element}
  */
-function loginStatusBox (dom, listener, options) {
+export function loginStatusBox (
+  dom: HTMLDocument,
+  listener: Function | null = null,
+  options: {
+    buttonStyle?: string
+  } = {}
+): HTMLElement {
   // 20190630
-  var me = defaultTestUser()
-  var box = dom.createElement('div')
+  let me = defaultTestUser()
+  // @@ TODO Remove the need to cast HTML element to any
+  const box: any = dom.createElement('div')
 
   function setIt (newidURI) {
     if (!newidURI) {
@@ -1168,10 +1194,10 @@ function loginStatusBox (dom, listener, options) {
     // UI.preferences.set('me', '')
     solidAuthClient.logout().then(
       function () {
-        var message = 'Your Web ID was ' + me + '. It has been forgotten.'
+        const message = 'Your Web ID was ' + me + '. It has been forgotten.'
         me = null
         try {
-          UI.log.alert(message)
+          log.alert(message)
         } catch (e) {
           window.alert(message)
         }
@@ -1184,20 +1210,18 @@ function loginStatusBox (dom, listener, options) {
     )
   }
 
-  var logoutButton = function (me, options) {
-    options = options || {}
-    const signInButtonStyle =
-      options.buttonStyle || getDefaultSignInButtonStyle()
-    var logoutLabel = 'Web ID logout'
+  const logoutButton = function (me, options) {
+    const signInButtonStyle = options.buttonStyle || getDefaultSignInButtonStyle()
+    let logoutLabel = 'Web ID logout'
     if (me) {
-      var nick =
-        UI.store.any(me, UI.ns.foaf('nick')) ||
-        UI.store.any(me, UI.ns.foaf('name'))
+      const nick =
+        kb.any(me, ns.foaf('nick')) ||
+        kb.any(me, ns.foaf('name'))
       if (nick) {
         logoutLabel = 'Logout ' + nick.value
       }
     }
-    var signOutButton = dom.createElement('input')
+    const signOutButton = dom.createElement('input')
     // signOutButton.className = 'WebIDCancelButton'
     signOutButton.setAttribute('type', 'button')
     signOutButton.setAttribute('value', logoutLabel)
@@ -1271,21 +1295,24 @@ function loginStatusBox (dom, listener, options) {
  * @param callbackWS
  * @returns {Element}
  */
-function selectWorkspace (dom, appDetails, callbackWS) {
-  var noun = appDetails.noun
-  var appPathSegment = appDetails.appPathSegment
+export function selectWorkspace (
+  dom: HTMLDocument,
+  appDetails: AppDetails,
+  callbackWS: (workspace: string | null, newBase: string) => void
+): HTMLElement {
+  const noun = appDetails.noun
+  const appPathSegment = appDetails.appPathSegment
 
-  var me = defaultTestUser()
-  var kb = UI.store
-  var box = dom.createElement('div')
-  var context = { me: me, dom: dom, div: box }
+  const me = defaultTestUser()
+  const box = dom.createElement('div')
+  const context: AuthenticationContext = { me: me, dom: dom, div: box }
 
-  var say = function (s) {
-    box.appendChild(UI.widgets.errorMessageBlock(dom, s))
+  const say = function (s) {
+    box.appendChild(widgets.errorMessageBlock(dom, s))
   }
 
-  var figureOutBase = function (ws) {
-    var newBase = kb.any(ws, UI.ns.space('uriPrefix'))
+  const figureOutBase = function (ws) {
+    let newBase = kb.any(ws, ns.space('uriPrefix'))
     if (!newBase) {
       newBase = ws.uri.split('#')[0]
     } else {
@@ -1295,22 +1322,22 @@ function selectWorkspace (dom, appDetails, callbackWS) {
       console.log(appPathSegment + ': No / at end of uriPrefix ' + newBase) // @@ paramater?
       newBase = newBase + '/'
     }
-    var now = new Date()
+    const now = new Date()
     newBase += appPathSegment + '/id' + now.getTime() + '/' // unique id
     return newBase
   }
 
-  var displayOptions = function (context) {
-    // var status = ''
-    var id = context.me
-    var preferencesFile = context.preferencesFile
-    var newBase = null
+  const displayOptions = function (context) {
+    // const status = ''
+    const id = context.me
+    const preferencesFile = context.preferencesFile
+    let newBase = null
 
     // A workspace specifically defined in the private preferences file:
-    var w = kb
+    let w = kb
       .statementsMatching(
         id,
-        UI.ns.space('workspace'), // Only trust prefs file here
+        ns.space('workspace'), // Only trust prefs file here
         undefined,
         preferencesFile
       )
@@ -1319,9 +1346,9 @@ function selectWorkspace (dom, appDetails, callbackWS) {
       })
 
     // A workspace in a storage in the public profile:
-    var storages = kb.each(id, UI.ns.space('storage')) // @@ No provenance requirement at the moment
+    const storages = kb.each(id, ns.space('storage')) // @@ No provenance requirement at the moment
     storages.map(function (s) {
-      w = w.concat(kb.each(s, UI.ns.ldp('contains')))
+      w = w.concat(kb.each(s, ns.ldp('contains')))
     })
 
     if (w.length === 1) {
@@ -1330,35 +1357,32 @@ function selectWorkspace (dom, appDetails, callbackWS) {
       // callbackWS(w[0], newBase)
     } else if (w.length === 0) {
       say(
-        "You don't seem to have any workspaces. You have " +
-          storages.length +
-          ' storages.'
+        'You don\'t seem to have any workspaces. You have ' +
+        storages.length +
+        ' storages.'
       )
     }
 
     // Prompt for ws selection or creation
     // say( w.length + " workspaces for " + id + "Chose one.");
-    var table = dom.createElement('table')
+    const table = dom.createElement('table')
     table.setAttribute(
       'style',
       'border-collapse:separate; border-spacing: 0.5em;'
     )
 
-    // var popup = window.open(undefined, '_blank', { height: 300, width:400 }, false)
+    // const popup = window.open(undefined, '_blank', { height: 300, width:400 }, false)
     box.appendChild(table)
 
     //  Add a field for directly adding the URI yourself
 
-    // var hr = box.appendChild(dom.createElement('hr')) // @@
+    // const hr = box.appendChild(dom.createElement('hr')) // @@
     box.appendChild(dom.createElement('hr')) // @@
 
-    var p = box.appendChild(dom.createElement('p'))
-    p.textContent =
-      'Where would you like to store the data for the ' +
-      noun +
-      '?  ' +
-      'Give the URL of the directory where you would like the data stored.'
-    var baseField = box.appendChild(dom.createElement('input'))
+    const p = box.appendChild(dom.createElement('p'))
+    p.textContent = `Where would you like to store the data for the ${noun}?  Give the URL of the directory where you would like the data stored.`
+    // @@ TODO Remove the need to cast baseField to any
+    const baseField: any = box.appendChild(dom.createElement('input'))
     baseField.setAttribute('type', 'text')
     baseField.size = 80 // really a string
     baseField.label = 'base URL'
@@ -1372,10 +1396,10 @@ function selectWorkspace (dom, appDetails, callbackWS) {
 
     box.appendChild(dom.createElement('br')) // @@
 
-    var button = box.appendChild(dom.createElement('button'))
+    const button = box.appendChild(dom.createElement('button'))
     button.textContent = 'Start new ' + noun + ' at this URI'
     button.addEventListener('click', function (_event) {
-      var newBase = baseField.value
+      let newBase = baseField.value
       if (newBase.slice(-1) !== '/') {
         newBase += '/'
       }
@@ -1384,20 +1408,20 @@ function selectWorkspace (dom, appDetails, callbackWS) {
 
     // Now go set up the table of spaces
 
-    // var row = 0
+    // const row = 0
     w = w.filter(function (x) {
       return !kb.holds(
         x,
-        UI.ns.rdf('type'), // Ignore master workspaces
-        UI.ns.space('MasterWorkspace')
+        ns.rdf('type'), // Ignore master workspaces
+        ns.space('MasterWorkspace')
       )
     })
-    var col1, col2, col3, tr, ws, style, comment
-    var cellStyle =
+    let col1, col2, col3, tr, ws, style, comment
+    const cellStyle =
       'height: 3em; margin: 1em; padding: 1em white; border-radius: 0.3em;'
-    var deselectedStyle = cellStyle + 'border: 0px;'
-    // var selectedStyle = cellStyle + 'border: 1px solid black;'
-    for (var i = 0; i < w.length; i++) {
+    const deselectedStyle = cellStyle + 'border: 0px;'
+    // const selectedStyle = cellStyle + 'border: 1px solid black;'
+    for (let i = 0; i < w.length; i++) {
       ws = w[i]
       tr = dom.createElement('tr')
       if (i === 0) {
@@ -1408,23 +1432,23 @@ function selectWorkspace (dom, appDetails, callbackWS) {
         tr.appendChild(col1)
       }
       col2 = dom.createElement('td')
-      style = kb.any(ws, UI.ns.ui('style'))
+      style = kb.any(ws, ns.ui('style'))
       if (style) {
         style = style.value
       } else {
         // Otherise make up arbitrary colour
-        var hash = function (x) {
+        const hash = function (x) {
           return x.split('').reduce(function (a, b) {
             a = (a << 5) - a + b.charCodeAt(0)
             return a & a
           }, 0)
         }
-        var bgcolor = '#' + ((hash(ws.uri) & 0xffffff) | 0xc0c0c0).toString(16) // c0c0c0  forces pale
+        const bgcolor = '#' + ((hash(ws.uri) & 0xffffff) | 0xc0c0c0).toString(16) // c0c0c0  forces pale
         style = 'color: black ; background-color: ' + bgcolor + ';'
       }
       col2.setAttribute('style', deselectedStyle + style)
       tr.target = ws.uri
-      var label = kb.any(ws, UI.ns.rdfs('label'))
+      let label = kb.any(ws, ns.rdfs('label'))
       if (!label) {
         label = ws.uri.split('/').slice(-1)[0] || ws.uri.split('/').slice(-2)[0]
       }
@@ -1439,7 +1463,7 @@ function selectWorkspace (dom, appDetails, callbackWS) {
       }
       table.appendChild(tr)
 
-      var addMyListener = function (container, detail, style, ws1) {
+      const addMyListener = function (container, detail, style, ws1) {
         container.addEventListener(
           'click',
           function (_event) {
@@ -1451,11 +1475,11 @@ function selectWorkspace (dom, appDetails, callbackWS) {
         ) // capture vs bubble
       }
 
-      var addContinueButton = function (selectedWorkspace) {
-        var button = dom.createElement('button')
+      const addContinueButton = function (selectedWorkspace) {
+        const button = dom.createElement('button')
         button.textContent = 'Continue'
         // button.setAttribute('style', style);
-        var newBase = figureOutBase(selectedWorkspace)
+        const newBase = figureOutBase(selectedWorkspace)
         baseField.value = newBase // show user proposed URI
 
         button.addEventListener(
@@ -1470,7 +1494,7 @@ function selectWorkspace (dom, appDetails, callbackWS) {
         return button
       }
 
-      comment = kb.any(ws, UI.ns.rdfs('comment'))
+      comment = kb.any(ws, ns.rdfs('comment'))
       comment = comment ? comment.value : 'Use this workspace'
       addMyListener(
         col2,
@@ -1481,7 +1505,7 @@ function selectWorkspace (dom, appDetails, callbackWS) {
     }
 
     // last line with "Make new workspace"
-    var trLast = dom.createElement('tr')
+    const trLast = dom.createElement('tr')
     col2 = dom.createElement('td')
     col2.setAttribute('style', cellStyle)
     col2.textContent = '+ Make a new workspace'
@@ -1493,7 +1517,7 @@ function selectWorkspace (dom, appDetails, callbackWS) {
   logInLoadPreferences(context) // kick off async operation
     .then(displayOptions)
     .catch(err => {
-      box.appendChild(UI.widgets.errorMessageBlock(err))
+      box.appendChild(widgets.errorMessageBlock(err))
     })
 
   return box // return the box element, while login proceeds
@@ -1511,13 +1535,17 @@ function selectWorkspace (dom, appDetails, callbackWS) {
  *
  * @returns {Element} A div with a button in it for making a new app instance
  */
-function newAppInstance (dom, appDetails, callback) {
-  var gotWS = function (ws, base) {
+export function newAppInstance (
+  dom: HTMLDocument,
+  appDetails: AppDetails,
+  callback: (workspace: string | null, newBase: string) => void
+): HTMLElement {
+  const gotWS = function (ws, base) {
     // $rdf.log.debug("newAppInstance: Selected workspace = " + (ws? ws.uri : 'none'))
     callback(ws, base)
   }
-  var div = dom.createElement('div')
-  var b = dom.createElement('button')
+  const div = dom.createElement('div')
+  const b = dom.createElement('button')
   b.setAttribute('type', 'button')
   div.appendChild(b)
   b.innerHTML = 'Make new ' + appDetails.noun
@@ -1532,17 +1560,17 @@ function newAppInstance (dom, appDetails, callback) {
   return div
 }
 
-async function getUserRoles () {
+export async function getUserRoles (): Promise<Array<$rdf.NamedNode>> {
   try {
     const {
       me,
       preferencesFile,
       preferencesFileError
     } = await logInLoadPreferences({})
-    if (preferencesFileError) {
+    if (!preferencesFile || preferencesFileError) {
       throw new Error(preferencesFileError)
     }
-    return UI.store.each(me, ns.rdf('type'), null, preferencesFile.doc())
+    return kb.each(me, ns.rdf('type'), null, preferencesFile.doc())
   } catch (error) {
     console.warn(
       'Unable to fetch your preferences - this was the error: ',
@@ -1552,18 +1580,15 @@ async function getUserRoles () {
   return []
 }
 
-async function filterAvailablePanes (panes) {
+export async function filterAvailablePanes (panes: Array<PaneDefinition>): Promise<Array<PaneDefinition>> {
   const userRoles = await getUserRoles()
-  return Object.values(panes).filter(pane =>
-    isMatchingAudience(pane, userRoles)
-  )
+  return panes.filter(pane => isMatchingAudience(pane, userRoles))
 }
 
-function isMatchingAudience (pane, userRoles) {
+function isMatchingAudience (pane: PaneDefinition, userRoles: Array<$rdf.NamedNode>): boolean {
   const audience = pane.audience || []
   return audience.reduce(
-    (isMatch, audienceRole) =>
-      isMatch && userRoles.find(role => role.equals(audienceRole)),
+    (isMatch, audienceRole) => isMatch && userRoles.find(role => role.equals(audienceRole)),
     true
   )
 }
