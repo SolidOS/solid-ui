@@ -1588,7 +1588,7 @@ export async function filterAvailablePanes (panes: Array<PaneDefinition>): Promi
 function isMatchingAudience (pane: PaneDefinition, userRoles: Array<$rdf.NamedNode>): boolean {
   const audience = pane.audience || []
   return audience.reduce(
-    (isMatch, audienceRole) => isMatch && userRoles.find(role => role.equals(audienceRole)),
-    true
+    (isMatch, audienceRole) => isMatch && !!userRoles.find(role => role.equals(audienceRole)),
+    true as boolean
   )
 }
