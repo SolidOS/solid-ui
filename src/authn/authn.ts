@@ -171,11 +171,7 @@ export async function logInLoadProfile (context: AuthenticationContext): Promise
             resolve(context)
           })
           .catch(err => {
-            const message =
-              'Logged in but cannot load profile ' +
-              profileDocument +
-              ' : ' +
-              err
+            const message = `Logged in but cannot load profile ${profileDocument} : ${err}`
             if (context.div && context.dom) {
               context.div.appendChild(
                 widgets.errorMessageBlock(context.dom, message)
@@ -185,7 +181,7 @@ export async function logInLoadProfile (context: AuthenticationContext): Promise
           })
       })
       .catch(err => {
-        reject(new Error('Can\'t log in: ' + err))
+        reject(new Error(`Can't log in: ${err}`))
       })
   })
 }
@@ -208,13 +204,10 @@ export function logInLoadPreferences (context: AuthenticationContext): Promise<A
   return new Promise(function (resolve, reject) {
     return logInLoadProfile(context)
       .then(context => {
-        const preferencesFile = kb.any(
-          context.me,
-          ns.space('preferencesFile')
-        )
+        const preferencesFile = kb.any(context.me, ns.space('preferencesFile'))
 
         function complain (message) {
-          message = 'logInLoadPreferences: ' + message
+          message = `logInLoadPreferences: ${message}`
           if (statusArea) {
             // statusArea.innerHTML = ''
             statusArea.appendChild(
@@ -231,16 +224,12 @@ export function logInLoadPreferences (context: AuthenticationContext): Promise<A
          */
         function differentOrigin () {
           return (
-            window.location &&
-            window.location.origin + '/' !== preferencesFile.site().uri
+            window.location && `${window.location.origin}/` !== preferencesFile.site().uri
           )
         }
 
         if (!preferencesFile) {
-          const message =
-            'Can\'t find a preferences file pointer in profile ' +
-            context.publicProfile
-          return reject(new Error(message))
+          return reject(new Error(`Can't find a preferences file pointer in profile ${context.publicProfile}`))
         }
 
         // //// Load preferences file
@@ -258,62 +247,43 @@ export function logInLoadPreferences (context: AuthenticationContext): Promise<A
             const status = err.status
             const message = err.message
             console.log(
-              'HTTP status ' + status + ' for pref file ' + preferencesFile
+              `HTTP status ${status} for pref file ${preferencesFile}`
             )
             let m2
             if (status === 401) {
-              m2 =
-                'Strange - you are not authenticated (properly logged on) to read preferences file.'
+              m2 = 'Strange - you are not authenticated (properly logged on) to read preferences file.'
               alert(m2)
             } else if (status === 403) {
               if (differentOrigin()) {
-                m2 =
-                  'Unauthorized: Assuming prefs file blocked for origin ' +
-                  window.location.origin
+                m2 = `Unauthorized: Assuming prefs file blocked for origin ${window.location.origin}`
                 context.preferencesFileError = m2
                 return resolve(context)
               }
-              m2 =
-                'You are not authorized to read your preferences file. This may be because you are using an untrusted web app.'
+              m2 = 'You are not authorized to read your preferences file. This may be because you are using an untrusted web app.'
               console.warn(m2)
             } else if (status === 404) {
               if (
-                confirm(
-                  'You do not currently have a Preferences file. Ok for me to create an empty one? ' +
-                  preferencesFile
-                )
+                confirm(`You do not currently have a Preferences file. Ok for me to create an empty one? ${preferencesFile}`)
               ) {
                 // @@@ code me  ... weird to have a name o fthe file but no file
-                alert(
-                  'Sorry; I am not prepared to do this. Please create an empty file at ' +
-                  preferencesFile
-                )
+                alert(`Sorry; I am not prepared to do this. Please create an empty file at ${preferencesFile}`)
                 return complain(
-                  new Error(
-                    'Sorry; no code yet to create a preferences file at '
-                  )
+                  new Error('Sorry; no code yet to create a preferences file at ')
                 )
               } else {
                 reject(
-                  new Error(
-                    'User declined to create a preferences file at ' +
-                    preferencesFile
-                  )
+                  new Error(`User declined to create a preferences file at ${preferencesFile}`)
                 )
               }
             } else {
-              m2 =
-                'Strange: Error ' +
-                status +
-                ' trying to read your preferences file.' +
-                message
+              m2 = `Strange: Error ${status} trying to read your preferences file.${message}`
               alert(m2)
             }
           }) // load prefs file then
       })
       .catch(err => {
         // Fail initial login load prefs
-        reject(new Error('(via loadPrefs) ' + err))
+        reject(new Error(`(via loadPrefs) ${err}`))
       })
   })
 }
@@ -360,10 +330,7 @@ async function loadIndex (
       ? logInLoadProfile(context)
       : logInLoadPreferences(context)
   } catch (err) {
-    widgets.complain(
-      context,
-      'loadPubicIndex: login and load problem ' + err
-    )
+    widgets.complain(context, `loadPubicIndex: login and load problem ${err}`)
   }
   const me = context.me
   let ixs
@@ -382,11 +349,7 @@ async function loadIndex (
       )
       context.index.private = ixs
       if (ixs.length === 0) {
-        widgets.complain(
-          'Your preference file ' +
-          context.preferencesFile +
-          ' does not point to a private type index.'
-        )
+        widgets.complain(`Your preference file ${context.preferencesFile} does not point to a private type index.`)
         return context
       }
     } else {
@@ -399,10 +362,7 @@ async function loadIndex (
   try {
     await kb.fetcher.load(ixs)
   } catch (err) {
-    widgets.complain(
-      context,
-      'loadPubicIndex: loading public type index ' + err
-    )
+    widgets.complain(context, `loadPubicIndex: loading public type index ${err}`)
   }
   return context
 }
@@ -457,12 +417,13 @@ async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boo
     async function putIndex (newIndex) {
       try {
         await kb.fetcher.webOperation('PUT', newIndex.uri, {
-          data: '# ' + new Date() + ' Blank initial Type index\n',
+          data: `# ${new Date()} Blank initial Type index
+`,
           contentType: 'text/turtle'
         })
         return context
       } catch (e) {
-        const msg = 'Error creating new index ' + e
+        const msg = `Error creating new index ${e}`
         widgets.complain(context, msg)
       }
     } // putIndex
@@ -471,36 +432,24 @@ async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boo
     context.index[visibility] = context.index[visibility] || []
     let newIndex
     if (context.index[visibility].length === 0) {
-      newIndex = $rdf.sym(relevant.dir().uri + visibility + 'TypeIndex.ttl')
-      console.log('Linking to new fresh type index ' + newIndex)
-      if (
-        !confirm(
-          'Ok to create a new empty index file at ' +
-          newIndex +
-          ', overwriting anything that was there?'
-        )
-      ) {
+      newIndex = $rdf.sym(`${relevant.dir().uri + visibility}TypeIndex.ttl`)
+      console.log(`Linking to new fresh type index ${newIndex}`)
+      if (!confirm(`Ok to create a new empty index file at ${newIndex}, overwriting anything that was there?`)) {
         throw new Error('cancelled by user')
       }
-      console.log('Linking to new fresh type index ' + newIndex)
+      console.log(`Linking to new fresh type index ${newIndex}`)
       const addMe = [
-        $rdf.st(
-          context.me,
-          ns.solid(visibility + 'TypeIndex'),
-          newIndex,
-          relevant
-        )
+        $rdf.st(context.me, ns.solid(`${visibility}TypeIndex`), newIndex, relevant)
       ]
       try {
         await updatePromise(kb.updater, [], addMe)
       } catch (err) {
-        const msg =
-          'Error saving type index link saving back ' + newIndex + ': ' + err
+        const msg = `Error saving type index link saving back ${newIndex}: ${err}`
         widgets.complain(context, msg)
         return context
       }
 
-      console.log('Creating new fresh type index file' + newIndex)
+      console.log(`Creating new fresh type index file${newIndex}`)
       await putIndex(newIndex)
       context.index[visibility].push(newIndex) // @@ wait
     } else {
@@ -509,10 +458,7 @@ async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boo
       try {
         await kb.fetcher.load(ixs)
       } catch (err) {
-        widgets.complain(
-          context,
-          'ensureOneTypeIndex: loading indexes ' + err
-        )
+        widgets.complain(context, `ensureOneTypeIndex: loading indexes ${err}`)
       }
     }
   } // makeIndexIfNecesary
@@ -587,13 +533,10 @@ export async function findAppInstances (
   try {
     await fetcher.load(containers)
   } catch (err) {
-    const e = new Error('[FAI] Unable to load containers' + err)
+    const e = new Error(`[FAI] Unable to load containers${err}`)
     console.log(e) // complain
-    widgets.complain(
-      context,
-      `Error looking for ${utils.label(klass)}:  ${err}`
-    )
-    // but then ignoire it
+    widgets.complain(context, `Error looking for ${utils.label(klass)}:  ${err}`)
+    // but then ignore it
     // throw new Error(e)
   }
   for (let i = 0; i < containers.length; i++) {
@@ -679,10 +622,7 @@ export function registrationControl (
   return ensureTypeIndexes(context)
     .then(function () {
       box.innerHTML = '<table><tbody><tr></tr><tr></tr></tbody></table>' // tbody will be inserted anyway
-      box.setAttribute(
-        'style',
-        'font-size: 120%; text-align: right; padding: 1em; border: solid gray 0.05em;'
-      )
+      box.setAttribute('style', 'font-size: 120%; text-align: right; padding: 1em; border: solid gray 0.05em;')
       const tbody = box.children[0].children[0]
       const form = kb.bnode() // @@ say for now
 
@@ -710,7 +650,7 @@ export function registrationControl (
           widgets.buildCheckboxForm(
             context.dom,
             kb,
-            'Public link to this ' + context.noun,
+            `Public link to this ${context.noun}`,
             null,
             statements,
             form,
@@ -726,7 +666,7 @@ export function registrationControl (
           widgets.buildCheckboxForm(
             context.dom,
             kb,
-            'Personal note of this ' + context.noun,
+            `Personal note of this ${context.noun}`,
             null,
             statements,
             form,
@@ -742,14 +682,14 @@ export function registrationControl (
         msg = '(Preferences not available)'
         context.div.appendChild(dom.createElement('p')).textContent = msg
       } else if (context.div) {
-        msg = 'registrationControl: Type indexes not available: ' + e
+        msg = `registrationControl: Type indexes not available: ${e}`
         context.div.appendChild(widgets.errorMessageBlock(context.dom, e))
       }
       console.log(msg)
     }
     )
     .catch(function (e) {
-      const msg = 'registrationControl: Error making panel:' + e
+      const msg = `registrationControl: Error making panel: ${e}`
       if (context.div) {
         context.div.appendChild(widgets.errorMessageBlock(context.dom, e))
       }
@@ -776,10 +716,7 @@ export function registrationList (context: AuthenticationContext, options: {
 
   return ensureTypeIndexes(context).then(_indexes => {
     box.innerHTML = '<table><tbody></tbody></table>' // tbody will be inserted anyway
-    box.setAttribute(
-      'style',
-      'font-size: 120%; text-align: right; padding: 1em; border: solid #eee 0.5em;'
-    )
+    box.setAttribute('style', 'font-size: 120%; text-align: right; padding: 1em; border: solid #eee 0.5em;')
     const table = box.firstChild as HTMLElement
 
     let ix: Array<$rdf.NamedNode> = []
@@ -811,18 +748,17 @@ export function registrationList (context: AuthenticationContext, options: {
       // } else {
       // }
 
-      const deleteInstance = function (_x) {
-        kb.updater.update([statement], [], function (uri, ok, errorBody) {
-          if (ok) {
-            console.log('Removed from index: ' + statement.subject)
-          } else {
-            console.log('Error: Cannot delete ' + statement + ': ' + errorBody)
-          }
-        })
-      }
-      const opts = { deleteFunction: deleteInstance }
-      const tr = widgets.personTR(dom, ns.solid('instance'), inst, opts)
-      table.appendChild(tr)
+      table.appendChild(widgets.personTR(dom, ns.solid('instance'), inst, {
+        deleteFunction: function (_x) {
+          kb.updater.update([statement], [], function (uri, ok, errorBody) {
+            if (ok) {
+              console.log(`Removed from index: ${statement.subject}`)
+            } else {
+              console.log(`Error: Cannot delete ${statement}: ${errorBody}`)
+            }
+          })
+        }
+      }))
     }
 
     /*
@@ -942,7 +878,7 @@ function genACLText (
   const optPublic = options.public || []
   const g = $rdf.graph()
   const auth = $rdf.Namespace('http://www.w3.org/ns/auth/acl#')
-  let a = g.sym(aclURI + '#a1')
+  let a = g.sym(`${aclURI}#a1`)
   const acl = g.sym(aclURI)
   const doc = g.sym(docURI)
   g.add(a, ns.rdf('type'), auth('Authorization'), acl)
@@ -957,7 +893,7 @@ function genACLText (
   g.add(a, auth('mode'), auth('Control'), acl)
 
   if (optPublic.length) {
-    a = g.sym(aclURI + '#a2')
+    a = g.sym(`${aclURI}#a2`)
     g.add(a, ns.rdf('type'), auth('Authorization'), acl)
     g.add(a, auth('accessTo'), doc, acl)
     g.add(a, auth('agentClass'), ns.foaf('Agent'), acl)
@@ -1038,64 +974,50 @@ function signInOrSignUpBox (
   box.appendChild(signInPopUpButton)
   signInPopUpButton.setAttribute('type', 'button')
   signInPopUpButton.setAttribute('value', 'Log in')
-  signInPopUpButton.setAttribute(
-    'style',
-    signInButtonStyle + 'background-color: #eef;'
-  )
+  signInPopUpButton.setAttribute('style', `${signInButtonStyle}background-color: #eef;`)
 
-  signInPopUpButton.addEventListener(
-    'click',
-    () => {
-      const offline = offlineTestID()
-      if (offline) return setUserCallback(offline.uri)
-      return solidAuthClient.popupLogin().then(session => {
-        const webIdURI = session.webId
-        // setUserCallback(webIdURI)
-        const divs = dom.getElementsByClassName(magicClassName)
-        console.log('Logged in, ' + divs.length + ' panels to be serviced')
-        // At the same time, satiffy all the other login boxes
-        for (let i = 0; i < divs.length; i++) {
-          const div: any = divs[i]
-          // @@ TODO Remove the need to manipulate HTML elements
-          if (div.setUserCallback) {
-            try {
-              div.setUserCallback(webIdURI)
-              const parent = div.parentNode
-              if (parent) {
-                parent.removeChild(div)
-              }
-            } catch (e) {
-              console.log('## Error satisfying login box: ' + e)
-              div.appendChild(widgets.errorMessageBlock(dom, e))
+  signInPopUpButton.addEventListener('click', () => {
+    const offline = offlineTestID()
+    if (offline) return setUserCallback(offline.uri)
+    return solidAuthClient.popupLogin().then(session => {
+      const webIdURI = session.webId
+      // setUserCallback(webIdURI)
+      const divs = dom.getElementsByClassName(magicClassName)
+      console.log(`Logged in, ${divs.length} panels to be serviced`)
+      // At the same time, satiffy all the other login boxes
+      for (let i = 0; i < divs.length; i++) {
+        const div: any = divs[i]
+        // @@ TODO Remove the need to manipulate HTML elements
+        if (div.setUserCallback) {
+          try {
+            div.setUserCallback(webIdURI)
+            const parent = div.parentNode
+            if (parent) {
+              parent.removeChild(div)
             }
+          } catch (e) {
+            console.log(`## Error satisfying login box: ${e}`)
+            div.appendChild(widgets.errorMessageBlock(dom, e))
           }
         }
-      })
-    },
-    false
-  )
+      }
+    })
+  }, false)
 
   // Sign up button
   const signupButton = dom.createElement('input')
   box.appendChild(signupButton)
   signupButton.setAttribute('type', 'button')
   signupButton.setAttribute('value', 'Sign Up for Solid')
-  signupButton.setAttribute(
-    'style',
-    signInButtonStyle + 'background-color: #efe;'
-  )
+  signupButton.setAttribute('style', `${signInButtonStyle}background-color: #efe;`)
 
-  signupButton.addEventListener(
-    'click',
-    function (_event) {
-      const signupMgr = new SolidTls.Signup()
-      signupMgr.signup().then(function (uri) {
-        console.log('signInOrSignUpBox signed up ' + uri)
-        setUserCallback(uri)
-      })
-    },
-    false
-  )
+  signupButton.addEventListener('click', function (_event) {
+    const signupMgr = new SolidTls.Signup()
+    signupMgr.signup().then(function (uri) {
+      console.log('signInOrSignUpBox signed up ' + uri)
+      setUserCallback(uri)
+    })
+  }, false)
   return box
 }
 
@@ -1149,7 +1071,7 @@ export function checkUser<T> (
       const me = saveUser(webId)
 
       if (me) {
-        console.log('(Logged in as ' + me + ' by authentication)')
+        console.log(`(Logged in as ${me} by authentication)`)
       }
 
       return setUserCallback ? setUserCallback(me) : me
@@ -1194,7 +1116,7 @@ export function loginStatusBox (
     // UI.preferences.set('me', '')
     solidAuthClient.logout().then(
       function () {
-        const message = 'Your Web ID was ' + me + '. It has been forgotten.'
+        const message = `Your Web ID was ${me}. It has been forgotten.`
         me = null
         try {
           log.alert(message)
@@ -1210,7 +1132,7 @@ export function loginStatusBox (
     )
   }
 
-  const logoutButton = function (me, options) {
+  function logoutButton (me, options) {
     const signInButtonStyle = options.buttonStyle || getDefaultSignInButtonStyle()
     let logoutLabel = 'Web ID logout'
     if (me) {
@@ -1225,10 +1147,7 @@ export function loginStatusBox (
     // signOutButton.className = 'WebIDCancelButton'
     signOutButton.setAttribute('type', 'button')
     signOutButton.setAttribute('value', logoutLabel)
-    signOutButton.setAttribute(
-      'style',
-      signInButtonStyle + 'background-color: #eee;'
-    )
+    signOutButton.setAttribute('style', `${signInButtonStyle}background-color: #eee;`)
     signOutButton.addEventListener('click', logoutButtonHandler, false)
     return signOutButton
   }
@@ -1252,7 +1171,7 @@ export function loginStatusBox (
         box.me = me ? me.uri : null
       },
       err => {
-        alert('loginStatusBox: ' + err)
+        alert(`loginStatusBox: ${err}`)
       }
     )
   }
@@ -1307,11 +1226,11 @@ export function selectWorkspace (
   const box = dom.createElement('div')
   const context: AuthenticationContext = { me: me, dom: dom, div: box }
 
-  const say = function (s) {
+  function say (s) {
     box.appendChild(widgets.errorMessageBlock(dom, s))
   }
 
-  const figureOutBase = function (ws) {
+  function figureOutBase (ws) {
     let newBase = kb.any(ws, ns.space('uriPrefix'))
     if (!newBase) {
       newBase = ws.uri.split('#')[0]
@@ -1319,15 +1238,15 @@ export function selectWorkspace (
       newBase = newBase.value
     }
     if (newBase.slice(-1) !== '/') {
-      console.log(appPathSegment + ': No / at end of uriPrefix ' + newBase) // @@ paramater?
-      newBase = newBase + '/'
+      console.log(`${appPathSegment}: No / at end of uriPrefix ${newBase}`) // @@ paramater?
+      newBase = `${newBase}/`
     }
     const now = new Date()
-    newBase += appPathSegment + '/id' + now.getTime() + '/' // unique id
+    newBase += `${appPathSegment}/id${now.getTime()}/` // unique id
     return newBase
   }
 
-  const displayOptions = function (context) {
+  function displayOptions (context) {
     // const status = ''
     const id = context.me
     const preferencesFile = context.preferencesFile
@@ -1352,24 +1271,17 @@ export function selectWorkspace (
     })
 
     if (w.length === 1) {
-      say('Workspace used: ' + w[0].uri) // @@ allow user to see URI
+      say(`Workspace used: ${w[0].uri}`) // @@ allow user to see URI
       newBase = figureOutBase(w[0])
       // callbackWS(w[0], newBase)
     } else if (w.length === 0) {
-      say(
-        'You don\'t seem to have any workspaces. You have ' +
-        storages.length +
-        ' storages.'
-      )
+      say(`You don't seem to have any workspaces. You have ${storages.length} storages.`)
     }
 
     // Prompt for ws selection or creation
     // say( w.length + " workspaces for " + id + "Chose one.");
     const table = dom.createElement('table')
-    table.setAttribute(
-      'style',
-      'border-collapse:separate; border-spacing: 0.5em;'
-    )
+    table.setAttribute('style', 'border-collapse:separate; border-spacing: 0.5em;')
 
     // const popup = window.open(undefined, '_blank', { height: 300, width:400 }, false)
     box.appendChild(table)
@@ -1397,7 +1309,7 @@ export function selectWorkspace (
     box.appendChild(dom.createElement('br')) // @@
 
     const button = box.appendChild(dom.createElement('button'))
-    button.textContent = 'Start new ' + noun + ' at this URI'
+    button.textContent = `Start new ${noun} at this URI`
     button.addEventListener('click', function (_event) {
       let newBase = baseField.value
       if (newBase.slice(-1) !== '/') {
@@ -1417,16 +1329,15 @@ export function selectWorkspace (
       )
     })
     let col1, col2, col3, tr, ws, style, comment
-    const cellStyle =
-      'height: 3em; margin: 1em; padding: 1em white; border-radius: 0.3em;'
-    const deselectedStyle = cellStyle + 'border: 0px;'
+    const cellStyle = 'height: 3em; margin: 1em; padding: 1em white; border-radius: 0.3em;'
+    const deselectedStyle = `${cellStyle}border: 0px;`
     // const selectedStyle = cellStyle + 'border: 1px solid black;'
     for (let i = 0; i < w.length; i++) {
       ws = w[i]
       tr = dom.createElement('tr')
       if (i === 0) {
         col1 = dom.createElement('td')
-        col1.setAttribute('rowspan', '' + w.length + 1)
+        col1.setAttribute('rowspan', `${w.length}1`)
         col1.textContent = 'Chose a workspace for this:'
         col1.setAttribute('style', 'vertical-align:middle;')
         tr.appendChild(col1)
@@ -1436,15 +1347,15 @@ export function selectWorkspace (
       if (style) {
         style = style.value
       } else {
-        // Otherise make up arbitrary colour
+        // Otherwise make up arbitrary colour
         const hash = function (x) {
           return x.split('').reduce(function (a, b) {
             a = (a << 5) - a + b.charCodeAt(0)
             return a & a
           }, 0)
         }
-        const bgcolor = '#' + ((hash(ws.uri) & 0xffffff) | 0xc0c0c0).toString(16) // c0c0c0  forces pale
-        style = 'color: black ; background-color: ' + bgcolor + ';'
+        const bgcolor = `#${((hash(ws.uri) & 0xffffff) | 0xc0c0c0).toString(16)}` // c0c0c0  forces pale
+        style = `color: black ; background-color: ${bgcolor};`
       }
       col2.setAttribute('style', deselectedStyle + style)
       tr.target = ws.uri
@@ -1456,52 +1367,31 @@ export function selectWorkspace (
       tr.appendChild(col2)
       if (i === 0) {
         col3 = dom.createElement('td')
-        col3.setAttribute('rowspan', '' + w.length + 1)
+        col3.setAttribute('rowspan', `${w.length}1`)
         // col3.textContent = '@@@@@ remove';
         col3.setAttribute('style', 'width:50%;')
         tr.appendChild(col3)
       }
       table.appendChild(tr)
 
-      const addMyListener = function (container, detail, style, ws1) {
-        container.addEventListener(
-          'click',
-          function (_event) {
-            col3.textContent = detail
-            col3.setAttribute('style', style)
-            col3.appendChild(addContinueButton(ws1))
-          },
-          true
-        ) // capture vs bubble
-      }
-
-      const addContinueButton = function (selectedWorkspace) {
+      comment = kb.any(ws, ns.rdfs('comment'))
+      comment = comment ? comment.value : 'Use this workspace'
+      col2.addEventListener('click', function (_event) {
+        col3.textContent = comment ? comment.value : ''
+        col3.setAttribute('style', deselectedStyle + style)
         const button = dom.createElement('button')
         button.textContent = 'Continue'
         // button.setAttribute('style', style);
-        const newBase = figureOutBase(selectedWorkspace)
+        const newBase = figureOutBase(ws)
         baseField.value = newBase // show user proposed URI
 
-        button.addEventListener(
-          'click',
-          function (_event) {
-            button.disabled = true
-            callbackWS(selectedWorkspace, newBase)
-            button.textContent = '---->'
-          },
-          true
-        ) // capture vs bubble
-        return button
-      }
-
-      comment = kb.any(ws, ns.rdfs('comment'))
-      comment = comment ? comment.value : 'Use this workspace'
-      addMyListener(
-        col2,
-        comment ? comment.value : '',
-        deselectedStyle + style,
-        ws
-      )
+        button.addEventListener('click', function (_event) {
+          button.disabled = true
+          callbackWS(ws, newBase)
+          button.textContent = '---->'
+        }, true) // capture vs bubble
+        col3.appendChild(button)
+      }, true) // capture vs bubble
     }
 
     // last line with "Make new workspace"
@@ -1548,14 +1438,10 @@ export function newAppInstance (
   const b = dom.createElement('button')
   b.setAttribute('type', 'button')
   div.appendChild(b)
-  b.innerHTML = 'Make new ' + appDetails.noun
-  b.addEventListener(
-    'click',
-    _event => {
-      div.appendChild(selectWorkspace(dom, appDetails, gotWS))
-    },
-    false
-  )
+  b.innerHTML = `Make new ${appDetails.noun}`
+  b.addEventListener('click', _event => {
+    div.appendChild(selectWorkspace(dom, appDetails, gotWS))
+  }, false)
   div.appendChild(b)
   return div
 }
@@ -1572,10 +1458,7 @@ export async function getUserRoles (): Promise<Array<$rdf.NamedNode>> {
     }
     return kb.each(me, ns.rdf('type'), null, preferencesFile.doc())
   } catch (error) {
-    console.warn(
-      'Unable to fetch your preferences - this was the error: ',
-      error
-    )
+    console.warn('Unable to fetch your preferences - this was the error: ', error)
   }
   return []
 }
