@@ -99,8 +99,7 @@ export function ACLControlBox5 (
 
   // const publicAccessButton = bottomLeftCell.appendChild(widgets.button(dom, icons.iconBase + 'noun_98053.svg', 'Public'))
 
-  const bigButtonStyle =
-    'border-radius: 0.3em; background-color: white; border: 0.1em solid #888;'
+  const bigButtonStyle = 'border-radius: 0.3em; background-color: white; border: 0.1em solid #888;'
 
   // This is the main function which produces an editable access control.
   // There are two of these in all iff the defaults are separate
@@ -115,9 +114,9 @@ export function ACLControlBox5 (
       modify?: boolean
     } = {}) {
     const ac = readACL(doc, aclDoc, kb, options.doingDefaults) // Note kb might not be normal one
-    const byCombo = ACLbyCombination(ac) // important to keep this, as removal will trigger bugs like https://github.com/solid/solid-panes/issues/193#issuecomment-549777549
+    const byCombo = ACLbyCombination(ac)
 
-    const kToCombo = function (k) {
+    function kToCombo (k) {
       const y = ['Read', 'Append', 'Write', 'Control']
       const combo: string[] = []
       for (let i = 0; i < 4; i++) {
@@ -167,7 +166,7 @@ export function ACLControlBox5 (
       return list
     }
 
-    const removeAgentFromCombos = function (uri) {
+    function removeAgentFromCombos (uri) {
       for (let k = 0; k < 16; k++) {
         const a = byCombo[kToCombo(k)]
         if (a) {
@@ -303,7 +302,7 @@ export function ACLControlBox5 (
       right.textContent = explanation[k] || 'Unusual combination'
       right.setAttribute('style', 'max-width: 30%;')
 
-      const addAgent = function (pred, obj) {
+      function addAgent (pred, obj) {
         if (middleTable.NoneTR) {
           middleTable.removeChild(middleTable.NoneTR)
           delete middleTable.NoneTR
@@ -333,7 +332,7 @@ export function ACLControlBox5 (
         tr.predObj = [pred.uri, obj.uri]
       }
 
-      const syncCombo = function (combo) {
+      function syncCombo (combo) {
         let i
         const arr = byCombo[combo]
         if (arr && arr.length) {
@@ -442,7 +441,7 @@ export function ACLControlBox5 (
       return row
     } // renderCombo
 
-    const syncPanel = function () {
+    function syncPanel () {
       const kids = box.children
       for (let i = 0; i < kids.length; i++) {
         if (kids[i].refresh) {
@@ -639,7 +638,7 @@ export function ACLControlBox5 (
               )
               table.appendChild(innerTable)
             })
-            table.style = 'margin: em; background-color: #eee;'
+            table.style.backgroundColor = '#eee'
 
             // Add the Trusted App pane for managing you set of apps
             const trustedApplications = context.session.paneRegistry.byName(
@@ -712,7 +711,7 @@ export function ACLControlBox5 (
     return byCombo
   } // ACLControlEditable
 
-  const renderBox = function () {
+  function renderBox () {
     box.innerHTML = ''
     getACLorDefault(doc, function (
       ok,
@@ -942,6 +941,7 @@ export function ACLControlBox5 (
       }
     })
   }
+
   renderBox()
   return table
 } // ACLControlBox
