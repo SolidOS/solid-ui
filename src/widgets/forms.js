@@ -403,7 +403,7 @@ forms.field[UI.ns.ui('Multiple').uri] = function (
     return box
   }
 
-  var body = box.appendChild(dom.createElement('tr'))
+  var body = box.appendChild(dom.createElement('tr')) // 20191207
   var tail = box.appendChild(dom.createElement('tr'))
   var list // The RDF collection which keeps the ordered version
   var values // Initial values
