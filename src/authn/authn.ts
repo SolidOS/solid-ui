@@ -23,7 +23,7 @@ export { solidAuthClient }
 
 // Look for and load the User who has control over it
 export function findOriginOwner (doc: $rdf.NamedNode | string): string | boolean {
-  const uri = (doc as $rdf.NamedNode).uri || doc as string
+  const uri = (typeof doc === 'string') ? doc : doc.uri
   const i = uri.indexOf('://')
   if (i < 0) return false
   const j = uri.indexOf('/', i + 3)
