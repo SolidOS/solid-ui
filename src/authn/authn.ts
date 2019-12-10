@@ -32,29 +32,6 @@ export function findOriginOwner (doc: $rdf.NamedNode | string): string | boolean
   return origin
 }
 
-// Promises versions
-//
-// These pass a context object which hold various RDF symbols
-// as they become available
-//
-//  me               RDF symbol for the users' webid
-//  publicProfile    The user's public profile, iff loaded
-//  preferencesFile  The user's personal preferences file, iff loaded
-//  index.public     The user's public type index file
-//  index.private     The user's private type index file
-//   not RDF symbols:
-//  noun              A string in english for the type of thing -- like "address book"
-//  instance          An array of nodes which are existing instances
-//  containers        An array of nodes of containers of instances
-//  div               A DOM element where UI can be displayed
-//  statusArea        A DOM element (opt) progress stuff can be displayed, or error messages
-
-/**
- * @param webId {NamedNode}
- * @param context {Object}
- *
- * @returns {NamedNode|null} Returns the Web ID, after setting it
- */
 export function saveUser (
   webId: $rdf.NamedNode | string,
   context?: AuthenticationContext
@@ -72,9 +49,6 @@ export function saveUser (
   return null
 }
 
-/**
- * @returns {NamedNode|null}
- */
 export function defaultTestUser (): $rdf.NamedNode | null {
   // Check for offline override
   const offlineId = offlineTestID()
@@ -86,9 +60,8 @@ export function defaultTestUser (): $rdf.NamedNode | null {
   return null
 }
 
-/** Checks syncronously whether user is logged in
- *
- * @returns Named Node or null
+/**
+ * Checks synchronously whether user is logged in
  */
 export function currentUser (): $rdf.NamedNode | null {
   const str = localStorage['solid-auth-client']
@@ -105,10 +78,6 @@ export function currentUser (): $rdf.NamedNode | null {
 
 /**
  * Resolves with the logged in user's Web ID
- *
- * @param context
- *
- * @returns {Promise<context>}
  */
 export function logIn (context: AuthenticationContext): Promise<AuthenticationContext> {
   const me = defaultTestUser() // me is a NamedNode or null
@@ -140,12 +109,6 @@ export function logIn (context: AuthenticationContext): Promise<AuthenticationCo
 
 /**
  * Logs the user in and loads their WebID profile document into the store
- *
- * @private
- *
- * @param context {Object}
- *
- * @returns {Promise<Object>} Resolves with the context after login / fetch
  */
 export function logInLoadProfile (context: AuthenticationContext): Promise<AuthenticationContext> {
   if (context.publicProfile) {
@@ -189,12 +152,6 @@ export function logInLoadProfile (context: AuthenticationContext): Promise<Authe
 /**
  * Loads preferences file
  * Do this after having done log in and load profile
- *
- * @private
- *
- * @param context
- *
- * @returns {Promise<context>}
  */
 export function logInLoadPreferences (context: AuthenticationContext): Promise<AuthenticationContext> {
   if (context.preferencesFile) return Promise.resolve(context) // already done
@@ -218,14 +175,12 @@ export function logInLoadPreferences (context: AuthenticationContext): Promise<A
           reject(new Error(message))
         }
 
-        /** Are we working cross-origin?
-         *
-         * @returns {Boolean} True if we are in a webapp at an origin, and the file origin is different
+        /**
+         * Are we working cross-origin?
+         * Returns True if we are in a webapp at an origin, and the file origin is different
          */
-        function differentOrigin () {
-          return (
-            window.location && `${window.location.origin}/` !== preferencesFile.site().uri
-          )
+        function differentOrigin (): boolean {
+          return `${window.location.origin}/` !== preferencesFile.site().uri
         }
 
         if (!preferencesFile) {
@@ -293,15 +248,11 @@ export function logInLoadPreferences (context: AuthenticationContext): Promise<A
  * output: index.public, index.private
  *
  * @see https://github.com/solid/solid/blob/master/proposals/data-discovery.md#discoverability
- *
- * @param context
- * @param context.div - place to put UI
- *
- * @returns {Promise<context>}
  */
-export async function loadTypeIndexes (context: AuthenticationContext): Promise<void> {
+export async function loadTypeIndexes (context: AuthenticationContext): Promise<AuthenticationContext> {
   await loadPublicTypeIndex(context)
   await loadPrivateTypeIndex(context)
+  return context
 }
 
 async function loadPublicTypeIndex (context: AuthenticationContext): Promise<AuthenticationContext> {
@@ -370,22 +321,11 @@ async function loadIndex (
 /**
  * Resolves with the same context, outputting
  * @see https://github.com/solid/solid/blob/master/proposals/data-discovery.md#discoverability
- *
- * @private
- *
- * @param context {Object}
- * @param context.me
- * @param context.preferencesFile
- * @param context.preferencesFileError - Set if preferences file is blocked at theis origin so don't use it
- * @param context.publicProfile
- * @param context.index
- *
- * @returns {Promise}
  */
-async function ensureTypeIndexes (context: AuthenticationContext): Promise<void> {
+async function ensureTypeIndexes (context: AuthenticationContext): Promise<AuthenticationContext> {
   await ensureOneTypeIndex(context, true)
   await ensureOneTypeIndex(context, false)
-  // return context
+  return context
 }
 
 /* Load or create ONE type index
@@ -394,19 +334,8 @@ async function ensureTypeIndexes (context: AuthenticationContext): Promise<void>
  *
  */
 /**
- *  Adds it output to the context
+ * Adds it output to the context
  * @see https://github.com/solid/solid/blob/master/proposals/data-discovery.md#discoverability
- *
- * @private
- *
- * @param context {Object}
- * @param context.me
- * @param context.preferencesFile
- * @param context.preferencesFileError - Set if preferences file is blocked at theis origin so don't use it
- * @param context.publicProfile
- * @param context.index
- *
- * @returns {Promise}
  */
 
 async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boolean): Promise<AuthenticationContext | void> {
@@ -484,12 +413,6 @@ async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boo
  *
  * 2016-12-11 change to include forClass arc a la
  * https://github.com/solid/solid/blob/master/proposals/data-discovery.md
- *
- * @param context.div - inuput - Place to put UI for login
- * @param context.instances - output - array of instances
- * @param context.containers - output - array of containers to look in
- * @param klass
- * @returns {Promise}  of context
  */
 export async function findAppInstances (
   context: AuthenticationContext,
@@ -600,12 +523,6 @@ export async function registerInTypeIndex (
 
 /**
  * UI to control registration of instance
- *
- * @param context
- * @param instance
- * @param klass
- *
- * @returns {Promise}
  */
 export function registrationControl (
   context: AuthenticationContext,
@@ -699,10 +616,6 @@ export function registrationControl (
 
 /**
  * UI to List at all registered things
- * @param context
- * @param options
- *
- * @returns {Promise}
  */
 export function registrationList (context: AuthenticationContext, options: {
   private?: boolean
@@ -784,13 +697,6 @@ export function registrationList (context: AuthenticationContext, options: {
  * RWC for the owner, and a specified access (default none) for the public.
  * In all cases owner has read write control.
  * Parameter lists modes allowed to public
- *
- * @param docURI
- * @param me {NamedNode} WebID of user
- * @param options
- * @param options.public {Array<string>} eg ['Read', 'Write']
- *
- * @returns {Promise<NamedNode>} Resolves with aclDoc uri on successful write
  */
 export function setACLUserPublic (
   docURI: $rdf.NamedNode,
@@ -833,10 +739,6 @@ export function setACLUserPublic (
     })
 }
 
-/**
- * @param docURI {string}
- * @returns {Promise<NamedNode|null>}
- */
 function fetchACLRel (docURI: $rdf.NamedNode): Promise<$rdf.NamedNode> {
   const fetcher = kb.fetcher
 
@@ -858,14 +760,6 @@ function fetchACLRel (docURI: $rdf.NamedNode): Promise<$rdf.NamedNode> {
   })
 }
 
-/**
- * @param docURI {string}
- * @param me {NamedNode}
- * @param aclURI {string}
- * @param options {Object}
- *
- * @returns {string} Serialized ACL
- */
 function genACLText (
   docURI: $rdf.NamedNode,
   me: $rdf.NamedNode,
@@ -935,17 +829,6 @@ export function offlineTestID (): $rdf.NamedNode | null {
   }
   return null
 }
-
-/**
- * Bootstrapping identity
- * (Called by `loginStatusBox()`)
- * @private
- *
- * @param dom
- * @param setUserCallback(user: object)
- *
- * @returns {Element}
- */
 
 function getDefaultSignInButtonStyle (): string {
   return 'padding: 1em; border-radius:0.5em; margin: 2em; font-size: 100%;'
@@ -1042,11 +925,6 @@ function checkCurrentUser () {
 }
 */
 
-/**
- * @param [setUserCallback] {Function} Optional callback, `setUserCallback(webId|null)`
- *
- * @returns {Promise<string|null>} Resolves with web id uri, if no callback provided
- */
 export function checkUser<T> (
   setUserCallback?: (me: $rdf.NamedNode | null) => T
 ): Promise<$rdf.NamedNode | T> {
@@ -1082,11 +960,6 @@ export function checkUser<T> (
  * Login status box
  *
  * A big sign-up/sign in box or a logout box depending on the state
- *
- * @param dom
- * @param listener(uri)
- *
- * @returns {Element}
  */
 export function loginStatusBox (
   dom: HTMLDocument,
@@ -1208,11 +1081,6 @@ export function loginStatusBox (
  *   - Allows the user to just type in a URI by hand
  *
  * Calls back with the ws and the base URI
- *
- * @param dom
- * @param appDetails
- * @param callbackWS
- * @returns {Element}
  */
 export function selectWorkspace (
   dom: HTMLDocument,
@@ -1418,12 +1286,6 @@ export function selectWorkspace (
  *
  * An instance of an app could be e.g. an issue tracker for a given project,
  * or a chess game, or calendar, or a health/fitness record for a person.
- *
- * @param dom
- * @param appDetails
- * @param callback
- *
- * @returns {Element} A div with a button in it for making a new app instance
  */
 export function newAppInstance (
   dom: HTMLDocument,
