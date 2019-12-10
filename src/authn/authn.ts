@@ -147,7 +147,7 @@ export function logIn (context: AuthenticationContext): Promise<AuthenticationCo
  *
  * @returns {Promise<Object>} Resolves with the context after login / fetch
  */
-export async function logInLoadProfile (context: AuthenticationContext): Promise<AuthenticationContext> {
+export function logInLoadProfile (context: AuthenticationContext): Promise<AuthenticationContext> {
   if (context.publicProfile) {
     return Promise.resolve(context)
   } // already done
