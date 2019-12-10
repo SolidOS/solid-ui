@@ -110,7 +110,7 @@ export function currentUser (): $rdf.NamedNode | null {
  *
  * @returns {Promise<context>}
  */
-export async function logIn (context: AuthenticationContext): Promise<AuthenticationContext> {
+export function logIn (context: AuthenticationContext): Promise<AuthenticationContext> {
   const me = defaultTestUser() // me is a NamedNode or null
 
   if (me) {
