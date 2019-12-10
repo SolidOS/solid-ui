@@ -32,6 +32,29 @@ export function findOriginOwner (doc: $rdf.NamedNode | string): string | boolean
   return origin
 }
 
+// Promises versions
+//
+// These pass a context object which hold various RDF symbols
+// as they become available
+//
+//  me               RDF symbol for the users' webid
+//  publicProfile    The user's public profile, iff loaded
+//  preferencesFile  The user's personal preferences file, iff loaded
+//  index.public     The user's public type index file
+//  index.private     The user's private type index file
+//   not RDF symbols:
+//  noun              A string in english for the type of thing -- like "address book"
+//  instance          An array of nodes which are existing instances
+//  containers        An array of nodes of containers of instances
+//  div               A DOM element where UI can be displayed
+//  statusArea        A DOM element (opt) progress stuff can be displayed, or error messages
+
+/**
+ * @param webId
+ * @param context
+ *
+ * @returns Returns the Web ID, after setting it
+ */
 export function saveUser (
   webId: $rdf.NamedNode | string,
   context?: AuthenticationContext
@@ -49,6 +72,9 @@ export function saveUser (
   return null
 }
 
+/**
+ * @returns {NamedNode|null}
+ */
 export function defaultTestUser (): $rdf.NamedNode | null {
   // Check for offline override
   const offlineId = offlineTestID()
@@ -60,8 +86,9 @@ export function defaultTestUser (): $rdf.NamedNode | null {
   return null
 }
 
-/**
- * Checks synchronously whether user is logged in
+/** Checks syncronously whether user is logged in
+ *
+ * @returns Named Node or null
  */
 export function currentUser (): $rdf.NamedNode | null {
   const str = localStorage['solid-auth-client']
@@ -78,6 +105,8 @@ export function currentUser (): $rdf.NamedNode | null {
 
 /**
  * Resolves with the logged in user's Web ID
+ *
+ * @param context
  */
 export function logIn (context: AuthenticationContext): Promise<AuthenticationContext> {
   const me = defaultTestUser() // me is a NamedNode or null
@@ -109,6 +138,10 @@ export function logIn (context: AuthenticationContext): Promise<AuthenticationCo
 
 /**
  * Logs the user in and loads their WebID profile document into the store
+ *
+ * @param context
+ *
+ * @returns Resolves with the context after login / fetch
  */
 export function logInLoadProfile (context: AuthenticationContext): Promise<AuthenticationContext> {
   if (context.publicProfile) {
@@ -152,6 +185,10 @@ export function logInLoadProfile (context: AuthenticationContext): Promise<Authe
 /**
  * Loads preferences file
  * Do this after having done log in and load profile
+ *
+ * @private
+ *
+ * @param context
  */
 export function logInLoadPreferences (context: AuthenticationContext): Promise<AuthenticationContext> {
   if (context.preferencesFile) return Promise.resolve(context) // already done
@@ -697,6 +734,11 @@ export function registrationList (context: AuthenticationContext, options: {
  * RWC for the owner, and a specified access (default none) for the public.
  * In all cases owner has read write control.
  * Parameter lists modes allowed to public
+ *
+ * @param options
+ * @param options.public eg ['Read', 'Write']
+ *
+ * @returns Resolves with aclDoc uri on successful write
  */
 export function setACLUserPublic (
   docURI: $rdf.NamedNode,
@@ -739,6 +781,10 @@ export function setACLUserPublic (
     })
 }
 
+/**
+ * @param docURI
+ * @returns
+ */
 function fetchACLRel (docURI: $rdf.NamedNode): Promise<$rdf.NamedNode> {
   const fetcher = kb.fetcher
 
@@ -760,6 +806,14 @@ function fetchACLRel (docURI: $rdf.NamedNode): Promise<$rdf.NamedNode> {
   })
 }
 
+/**
+ * @param docURI
+ * @param me
+ * @param aclURI
+ * @param options
+ *
+ * @returns Serialized ACL
+ */
 function genACLText (
   docURI: $rdf.NamedNode,
   me: $rdf.NamedNode,
@@ -834,9 +888,18 @@ function getDefaultSignInButtonStyle (): string {
   return 'padding: 1em; border-radius:0.5em; margin: 2em; font-size: 100%;'
 }
 
+/**
+ * Bootstrapping identity
+ * (Called by `loginStatusBox()`)
+ *
+ * @param dom
+ * @param setUserCallback
+ *
+ * @returns
+ */
 function signInOrSignUpBox (
   dom: HTMLDocument,
-  setUserCallback: Function,
+  setUserCallback: (user: string) => void,
   options: {
     buttonStyle?: string
   } = {}
@@ -925,6 +988,11 @@ function checkCurrentUser () {
 }
 */
 
+/**
+ * @param [setUserCallback] Optional callback
+ *
+ * @returns Resolves with web id uri, if no callback provided
+ */
 export function checkUser<T> (
   setUserCallback?: (me: $rdf.NamedNode | null) => T
 ): Promise<$rdf.NamedNode | T> {
@@ -960,10 +1028,15 @@ export function checkUser<T> (
  * Login status box
  *
  * A big sign-up/sign in box or a logout box depending on the state
+ *
+ * @param dom
+ * @param listener
+ *
+ * @returns
  */
 export function loginStatusBox (
   dom: HTMLDocument,
-  listener: Function | null = null,
+  listener: ((uri: string) => void) | null = null,
   options: {
     buttonStyle?: string
   } = {}
@@ -1081,6 +1154,10 @@ export function loginStatusBox (
  *   - Allows the user to just type in a URI by hand
  *
  * Calls back with the ws and the base URI
+ *
+ * @param dom
+ * @param appDetails
+ * @param callbackWS
  */
 export function selectWorkspace (
   dom: HTMLDocument,
@@ -1286,6 +1363,12 @@ export function selectWorkspace (
  *
  * An instance of an app could be e.g. an issue tracker for a given project,
  * or a chess game, or calendar, or a health/fitness record for a person.
+ *
+ * @param dom
+ * @param appDetails
+ * @param callback
+ *
+ * @returns A div with a button in it for making a new app instance
  */
 export function newAppInstance (
   dom: HTMLDocument,
