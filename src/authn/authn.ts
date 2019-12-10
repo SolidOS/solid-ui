@@ -62,7 +62,7 @@ export function saveUser (
   // @@ TODO Remove the need for having context as output argument
   let webIdUri: string
   if (webId) {
-    webIdUri = (webId as $rdf.NamedNode).uri || webId as string
+    webIdUri = (typeof webId === 'string') ? webId : webId.uri
     const me = $rdf.namedNode(webIdUri)
     if (context) {
       context.me = me
