@@ -52,10 +52,10 @@ const dashCharacter = '-'
 forms.field[ns.ui('Form').uri] = forms.field[
   ns.ui('Group').uri
 ] = function (dom, container, already, subject, form, store, callbackFunction) {
-  var kb = UI.store
+  const kb = UI.store
   var box = dom.createElement('div')
   box.setAttribute('style', `padding-left: 2em; border: 0.05em solid ${UI.style.formBorderColor};`) // Indent a group
-  var ui = ns.ui
+  const ui = UI.ns.ui
   if (container) container.appendChild(box)
 
   // Prevent loops
@@ -150,10 +150,10 @@ forms.field[ns.ui('Options').uri] = function (
   store,
   callbackFunction
 ) {
-  var kb = UI.store
+  const kb = UI.store
   var box = dom.createElement('div')
   // box.setAttribute('style', 'padding-left: 2em; border: 0.05em dotted purple;')  // Indent Options
-  var ui = ns.ui
+  const ui = UI.ns.ui
   if (container) container.appendChild(box)
 
   var dependingOn = kb.any(form, ui('dependingOn'))
@@ -411,12 +411,12 @@ forms.field[ns.ui('Multiple').uri] = function (
 
   var plusIconURI = UI.icons.iconBase + 'noun_19460_green.svg' // white plus in green circle
 
-  var kb = UI.store
+  const kb = UI.store
   kb.updater = kb.updater || new $rdf.UpdateManager(kb)
   var box = dom.createElement('table')
   // We don't indent multiple as it is a sort of a prefix of the next field and has contents of one.
   // box.setAttribute('style', 'padding-left: 2em; border: 0.05em solid green;')  // Indent a multiple
-  var ui = ns.ui
+  const ui = UI.ns.ui
   if (container) container.appendChild(box)
 
   const orderedNode = kb.any(form, ui('ordered'))
@@ -640,8 +640,8 @@ function basicField (
   store,
   callbackFunction
 ) {
-  var ui = ns.ui
-  var kb = UI.store
+  const ui = UI.ns.ui
+  const kb = UI.store
 
   var box = dom.createElement('tr')
   if (container) container.appendChild(box)
@@ -820,8 +820,8 @@ forms.field[ns.ui('MultiLineTextField').uri] = function (
   store,
   callbackFunction
 ) {
-  var ui = ns.ui
-  var kb = UI.store
+  const ui = UI.ns.ui
+  const kb = UI.store
   var property = kb.any(form, ui('property'))
   if (!property) {
     return error.errorMessageBlock(dom, 'No property to text field: ' + form)
@@ -857,8 +857,8 @@ function booleanField (
   callbackFunction,
   tristate
 ) {
-  var ui = ns.ui
-  var kb = UI.store
+  const ui = UI.ns.ui
+  const kb = UI.store
   var property = kb.any(form, ui('property'))
   if (!property) {
     const errorBlock = error.errorMessageBlock(
@@ -940,8 +940,8 @@ forms.field[ns.ui('Classifier').uri] = function (
   store,
   callbackFunction
 ) {
-  var kb = UI.store
-  var ui = ns.ui
+  const kb = UI.store
+  const ui = UI.ns.ui
   var category = kb.any(form, ui('category'))
   if (!category) {
     return error.errorMessageBlock(dom, 'No category for classifier: ' + form)
@@ -993,8 +993,8 @@ forms.field[ns.ui('Choice').uri] = function (
   callbackFunction
 ) {
   var ns = UI.ns
-  var ui = ns.ui
-  var kb = UI.store
+  const ui = UI.ns.ui
+  const kb = UI.store
   var multiple = false
   var p
   var box = dom.createElement('tr')
@@ -1097,8 +1097,8 @@ forms.field[ns.ui('Comment').uri] = forms.field[
   _store,
   _callbackFunction
 ) {
-  var ui = ns.ui
-  var kb = UI.store
+  const ui = UI.ns.ui
+  const kb = UI.store
   var contents = kb.any(form, ui('contents'))
   if (!contents) contents = 'Error: No contents in comment field.'
 
@@ -1130,7 +1130,7 @@ forms.field[ns.ui('Comment').uri] = forms.field[
  */
 
 forms.mostSpecificClassURI = function (x) {
-  var kb = UI.store
+  const kb = UI.store
   var ft = kb.findTypeURIs(x)
   var bot = kb.bottomTypeURIs(ft) // most specific
   var bots = []
@@ -1280,7 +1280,7 @@ forms.findClosest = function findClosest (kb, cla, prop) {
 
 forms.formsFor = function (subject) {
   var ns = UI.ns
-  var kb = UI.store
+  const kb = UI.store
 
   UI.log.debug('formsFor: subject=' + subject)
   var t = kb.findTypeURIs(subject)
