@@ -22,6 +22,7 @@ var UI = {
 const $rdf = require('rdflib')
 const error = require('./error')
 const buttons = require('./buttons')
+const ns = require('../ns')
 const utils = require('../utils')
 
 const checkMarkCharacter = '\u2713'
@@ -48,13 +49,13 @@ const dashCharacter = '-'
  **
  ** @returns {Element} The HTML widget created
  */
-forms.field[UI.ns.ui('Form').uri] = forms.field[
-  UI.ns.ui('Group').uri
+forms.field[ns.ui('Form').uri] = forms.field[
+  ns.ui('Group').uri
 ] = function (dom, container, already, subject, form, store, callbackFunction) {
   var kb = UI.store
   var box = dom.createElement('div')
-  box.setAttribute('style', 'padding-left: 2em; border: 0.05em solid brown;') // Indent a group
-  var ui = UI.ns.ui
+  box.setAttribute('style', `padding-left: 2em; border: 0.05em solid ${UI.style.formBorderColor};`) // Indent a group
+  var ui = ns.ui
   if (container) container.appendChild(box)
 
   // Prevent loops
@@ -62,7 +63,7 @@ forms.field[UI.ns.ui('Form').uri] = forms.field[
   if (already[key]) {
     // been there done that
     box.appendChild(dom.createTextNode('Group: see above ' + key))
-    var plist = [$rdf.st(subject, UI.ns.owl('sameAs'), subject)] // @@ need prev subject
+    var plist = [$rdf.st(subject, ns.owl('sameAs'), subject)] // @@ need prev subject
     dom.outlineManager.appendPropertyTRs(box, plist)
     return box
   }
@@ -140,7 +141,7 @@ forms.field[UI.ns.ui('Form').uri] = forms.field[
  ** @returns {Element} The HTML widget created
  */
 
-forms.field[UI.ns.ui('Options').uri] = function (
+forms.field[ns.ui('Options').uri] = function (
   dom,
   container,
   already,
@@ -152,19 +153,19 @@ forms.field[UI.ns.ui('Options').uri] = function (
   var kb = UI.store
   var box = dom.createElement('div')
   // box.setAttribute('style', 'padding-left: 2em; border: 0.05em dotted purple;')  // Indent Options
-  var ui = UI.ns.ui
+  var ui = ns.ui
   if (container) container.appendChild(box)
 
   var dependingOn = kb.any(form, ui('dependingOn'))
   if (!dependingOn) {
-    dependingOn = UI.ns.rdf('type')
+    dependingOn = ns.rdf('type')
   } // @@ default to type (do we want defaults?)
   var cases = kb.each(form, ui('case'))
   if (!cases) {
     box.appendChild(error.errorMessageBlock(dom, 'No cases to Options form. '))
   }
   var values
-  if (dependingOn.sameTerm(UI.ns.rdf('type'))) {
+  if (dependingOn.sameTerm(ns.rdf('type'))) {
     values = kb.findTypeURIs(subject)
   } else {
     var value = kb.any(subject, dependingOn)
@@ -225,7 +226,7 @@ forms.field[UI.ns.ui('Options').uri] = function (
  **
  ** @returns {Element} The HTML widget created
  */
-forms.field[UI.ns.ui('Multiple').uri] = function (
+forms.field[ns.ui('Multiple').uri] = function (
   dom,
   container,
   already,
@@ -415,7 +416,7 @@ forms.field[UI.ns.ui('Multiple').uri] = function (
   var box = dom.createElement('table')
   // We don't indent multiple as it is a sort of a prefix of the next field and has contents of one.
   // box.setAttribute('style', 'padding-left: 2em; border: 0.05em solid green;')  // Indent a multiple
-  var ui = UI.ns.ui
+  var ui = ns.ui
   if (container) container.appendChild(box)
 
   const orderedNode = kb.any(form, ui('ordered'))
@@ -541,79 +542,79 @@ forms.field[UI.ns.ui('Multiple').uri] = function (
 
 forms.fieldParams = {}
 
-forms.fieldParams[UI.ns.ui('ColorField').uri] = {
+forms.fieldParams[ns.ui('ColorField').uri] = {
   size: 9,
   type: 'color',
   dt: 'color'
 } // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/color
 forms.fieldParams[
-  UI.ns.ui('ColorField').uri
+  ns.ui('ColorField').uri
 ].pattern = /^\s*#[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]([0-9a-f][0-9a-f])?\s*$/
 
-forms.fieldParams[UI.ns.ui('DateField').uri] = {
+forms.fieldParams[ns.ui('DateField').uri] = {
   size: 20,
   type: 'date',
   dt: 'date'
 }
 forms.fieldParams[
-  UI.ns.ui('DateField').uri
+  ns.ui('DateField').uri
 ].pattern = /^\s*[0-9][0-9][0-9][0-9](-[0-1]?[0-9]-[0-3]?[0-9])?Z?\s*$/
 
-forms.fieldParams[UI.ns.ui('DateTimeField').uri] = {
+forms.fieldParams[ns.ui('DateTimeField').uri] = {
   size: 20,
   type: 'date',
   dt: 'dateTime'
 }
 forms.fieldParams[
-  UI.ns.ui('DateTimeField').uri
+  ns.ui('DateTimeField').uri
 ].pattern = /^\s*[0-9][0-9][0-9][0-9](-[0-1]?[0-9]-[0-3]?[0-9])?(T[0-2][0-9]:[0-5][0-9](:[0-5][0-9])?)?Z?\s*$/
 
-forms.fieldParams[UI.ns.ui('TimeField').uri] = {
+forms.fieldParams[ns.ui('TimeField').uri] = {
   size: 10,
   type: 'time',
   dt: 'time'
 }
 forms.fieldParams[
-  UI.ns.ui('TimeField').uri
+  ns.ui('TimeField').uri
 ].pattern = /^\s*([0-2]?[0-9]:[0-5][0-9](:[0-5][0-9])?)\s*$/
 
-forms.fieldParams[UI.ns.ui('IntegerField').uri] = {
+forms.fieldParams[ns.ui('IntegerField').uri] = {
   size: 12,
   style: 'text-align: right',
   dt: 'integer'
 }
-forms.fieldParams[UI.ns.ui('IntegerField').uri].pattern = /^\s*-?[0-9]+\s*$/
+forms.fieldParams[ns.ui('IntegerField').uri].pattern = /^\s*-?[0-9]+\s*$/
 
-forms.fieldParams[UI.ns.ui('DecimalField').uri] = {
+forms.fieldParams[ns.ui('DecimalField').uri] = {
   size: 12,
   style: 'text-align: right',
   dt: 'decimal'
 }
 forms.fieldParams[
-  UI.ns.ui('DecimalField').uri
+  ns.ui('DecimalField').uri
 ].pattern = /^\s*-?[0-9]*(\.[0-9]*)?\s*$/
 
-forms.fieldParams[UI.ns.ui('FloatField').uri] = {
+forms.fieldParams[ns.ui('FloatField').uri] = {
   size: 12,
   style: 'text-align: right',
   dt: 'float'
 }
 forms.fieldParams[
-  UI.ns.ui('FloatField').uri
+  ns.ui('FloatField').uri
 ].pattern = /^\s*-?[0-9]*(\.[0-9]*)?((e|E)-?[0-9]*)?\s*$/
 
-forms.fieldParams[UI.ns.ui('SingleLineTextField').uri] = {}
-forms.fieldParams[UI.ns.ui('NamedNodeURIField').uri] = { namedNode: true }
-forms.fieldParams[UI.ns.ui('TextField').uri] = {}
+forms.fieldParams[ns.ui('SingleLineTextField').uri] = {}
+forms.fieldParams[ns.ui('NamedNodeURIField').uri] = { namedNode: true }
+forms.fieldParams[ns.ui('TextField').uri] = {}
 
-forms.fieldParams[UI.ns.ui('PhoneField').uri] = { size: 20, uriPrefix: 'tel:' }
-forms.fieldParams[UI.ns.ui('PhoneField').uri].pattern = /^\+?[\d-]+[\d]*$/
+forms.fieldParams[ns.ui('PhoneField').uri] = { size: 20, uriPrefix: 'tel:' }
+forms.fieldParams[ns.ui('PhoneField').uri].pattern = /^\+?[\d-]+[\d]*$/
 
-forms.fieldParams[UI.ns.ui('EmailField').uri] = {
+forms.fieldParams[ns.ui('EmailField').uri] = {
   size: 30,
   uriPrefix: 'mailto:'
 }
-forms.fieldParams[UI.ns.ui('EmailField').uri].pattern = /^\s*.*@.*\..*\s*$/ // @@ Get the right regexp here
+forms.fieldParams[ns.ui('EmailField').uri].pattern = /^\s*.*@.*\..*\s*$/ // @@ Get the right regexp here
 
 /** Render a basic form field
  *
@@ -639,7 +640,7 @@ function basicField (
   store,
   callbackFunction
 ) {
-  var ui = UI.ns.ui
+  var ui = ns.ui
   var kb = UI.store
 
   var box = dom.createElement('tr')
@@ -663,9 +664,10 @@ function basicField (
   var uri = forms.mostSpecificClassURI(form)
   var params = forms.fieldParams[uri]
   if (params === undefined) params = {} // non-bottom field types can do this
-  var style = params.style || 'font-size: 100%; margin: 0.1em; padding: 0.1em;'
+  var style = params.style || UI.style.textInputStyle || 'font-size: 100%; margin: 0.1em; padding: 0.1em;'
   // box.appendChild(dom.createTextNode(' uri='+uri+', pattern='+ params.pattern))
   var field = dom.createElement('input')
+  field.style = UI.style.textInputStyle // Do we have to override length etc?
   rhs.appendChild(field)
   field.setAttribute('type', params.type ? params.type : 'text')
 
@@ -732,7 +734,7 @@ function basicField (
           result = new $rdf.Literal(
             field.value.trim(),
             undefined,
-            UI.ns.xsd(params.dt)
+            ns.xsd(params.dt)
           )
         } else {
           result = new $rdf.Literal(field.value)
@@ -791,25 +793,25 @@ function basicField (
   return box
 }
 
-forms.field[UI.ns.ui('PhoneField').uri] = basicField
-forms.field[UI.ns.ui('EmailField').uri] = basicField
-forms.field[UI.ns.ui('ColorField').uri] = basicField
-forms.field[UI.ns.ui('DateField').uri] = basicField
-forms.field[UI.ns.ui('DateTimeField').uri] = basicField
-forms.field[UI.ns.ui('TimeField').uri] = basicField
-forms.field[UI.ns.ui('NumericField').uri] = basicField
-forms.field[UI.ns.ui('IntegerField').uri] = basicField
-forms.field[UI.ns.ui('DecimalField').uri] = basicField
-forms.field[UI.ns.ui('FloatField').uri] = basicField
-forms.field[UI.ns.ui('TextField').uri] = basicField
-forms.field[UI.ns.ui('SingleLineTextField').uri] = basicField
-forms.field[UI.ns.ui('NamedNodeURIField').uri] = basicField
+forms.field[ns.ui('PhoneField').uri] = basicField
+forms.field[ns.ui('EmailField').uri] = basicField
+forms.field[ns.ui('ColorField').uri] = basicField
+forms.field[ns.ui('DateField').uri] = basicField
+forms.field[ns.ui('DateTimeField').uri] = basicField
+forms.field[ns.ui('TimeField').uri] = basicField
+forms.field[ns.ui('NumericField').uri] = basicField
+forms.field[ns.ui('IntegerField').uri] = basicField
+forms.field[ns.ui('DecimalField').uri] = basicField
+forms.field[ns.ui('FloatField').uri] = basicField
+forms.field[ns.ui('TextField').uri] = basicField
+forms.field[ns.ui('SingleLineTextField').uri] = basicField
+forms.field[ns.ui('NamedNodeURIField').uri] = basicField
 
 /*          Multiline Text field
  **
  */
 
-forms.field[UI.ns.ui('MultiLineTextField').uri] = function (
+forms.field[ns.ui('MultiLineTextField').uri] = function (
   dom,
   container,
   already,
@@ -818,7 +820,7 @@ forms.field[UI.ns.ui('MultiLineTextField').uri] = function (
   store,
   callbackFunction
 ) {
-  var ui = UI.ns.ui
+  var ui = ns.ui
   var kb = UI.store
   var property = kb.any(form, ui('property'))
   if (!property) {
@@ -855,7 +857,7 @@ function booleanField (
   callbackFunction,
   tristate
 ) {
-  var ui = UI.ns.ui
+  var ui = ns.ui
   var kb = UI.store
   var property = kb.any(form, ui('property'))
   if (!property) {
@@ -880,7 +882,7 @@ function booleanField (
   if (container) container.appendChild(box)
   return box
 }
-forms.field[UI.ns.ui('BooleanField').uri] = function (
+forms.field[ns.ui('BooleanField').uri] = function (
   dom,
   container,
   already,
@@ -901,7 +903,7 @@ forms.field[UI.ns.ui('BooleanField').uri] = function (
   )
 }
 
-forms.field[UI.ns.ui('TristateField').uri] = function (
+forms.field[ns.ui('TristateField').uri] = function (
   dom,
   container,
   already,
@@ -929,7 +931,7 @@ forms.field[UI.ns.ui('TristateField').uri] = function (
  ** @@ To do: If a classification changes, then change any dependent Options fields.
  */
 
-forms.field[UI.ns.ui('Classifier').uri] = function (
+forms.field[ns.ui('Classifier').uri] = function (
   dom,
   container,
   already,
@@ -939,7 +941,7 @@ forms.field[UI.ns.ui('Classifier').uri] = function (
   callbackFunction
 ) {
   var kb = UI.store
-  var ui = UI.ns.ui
+  var ui = ns.ui
   var category = kb.any(form, ui('category'))
   if (!category) {
     return error.errorMessageBlock(dom, 'No category for classifier: ' + form)
@@ -981,7 +983,7 @@ forms.field[UI.ns.ui('Classifier').uri] = function (
  ** Todo: Deal with multiple.  Maybe merge with multiple code.
  */
 
-forms.field[UI.ns.ui('Choice').uri] = function (
+forms.field[ns.ui('Choice').uri] = function (
   dom,
   container,
   already,
@@ -990,8 +992,8 @@ forms.field[UI.ns.ui('Choice').uri] = function (
   store,
   callbackFunction
 ) {
-  var ui = UI.ns.ui
   var ns = UI.ns
+  var ui = ns.ui
   var kb = UI.store
   var multiple = false
   var p
@@ -1075,17 +1077,17 @@ forms.field[UI.ns.ui('Choice').uri] = function (
 //          Documentation - non-interactive fields
 //
 
-forms.fieldParams[UI.ns.ui('Comment').uri] = {
+forms.fieldParams[ns.ui('Comment').uri] = {
   element: 'p',
-  style: 'padding: 0.1em 1.5em; color: brown; white-space: pre-wrap;'
+  style: `padding: 0.1em 1.5em; color: ${UI.style.formHeadingColor}; white-space: pre-wrap;`
 }
-forms.fieldParams[UI.ns.ui('Heading').uri] = {
+forms.fieldParams[ns.ui('Heading').uri] = {
   element: 'h3',
-  style: 'font-size: 110%; color: brown;'
+  style: `font-size: 110%; color: ${UI.style.formHeadingColor};`
 }
 
-forms.field[UI.ns.ui('Comment').uri] = forms.field[
-  UI.ns.ui('Heading').uri
+forms.field[ns.ui('Comment').uri] = forms.field[
+  ns.ui('Heading').uri
 ] = function (
   dom,
   container,
@@ -1095,7 +1097,7 @@ forms.field[UI.ns.ui('Comment').uri] = forms.field[
   _store,
   _callbackFunction
 ) {
-  var ui = UI.ns.ui
+  var ui = ns.ui
   var kb = UI.store
   var contents = kb.any(form, ui('contents'))
   if (!contents) contents = 'Error: No contents in comment field.'
@@ -1169,7 +1171,7 @@ forms.editFormButton = function (
 ) {
   var b = dom.createElement('button')
   b.setAttribute('type', 'button')
-  b.innerHTML = 'Edit ' + utils.label(UI.ns.ui('Form'))
+  b.innerHTML = 'Edit ' + utils.label(ns.ui('Form'))
   b.addEventListener(
     'click',
     function (_e) {
@@ -1178,13 +1180,13 @@ forms.editFormButton = function (
         container,
         {},
         form,
-        UI.ns.ui('FormForm'),
+        ns.ui('FormForm'),
         store,
         callbackFunction
       )
       ff.setAttribute(
         'style',
-        UI.ns.ui('FormForm').sameTerm(form)
+        ns.ui('FormForm').sameTerm(form)
           ? 'background-color: #fee;'
           : 'background-color: #ffffe7;'
       )
@@ -1265,7 +1267,7 @@ forms.findClosest = function findClosest (kb, cla, prop) {
     var lists = kb.each(c, prop)
     UI.log.debug('Lists for ' + c + ', ' + prop + ': ' + lists.length)
     if (lists.length !== 0) return lists
-    var supers = kb.each(c, UI.ns.rdfs('subClassOf'))
+    var supers = kb.each(c, ns.rdfs('subClassOf'))
     for (var i = 0; i < supers.length; i++) {
       agenda.push(supers[i])
       UI.log.debug('findClosest: add super: ' + supers[i])
@@ -1303,7 +1305,7 @@ forms.formsFor = function (subject) {
 
 forms.sortBySequence = function (list) {
   var p2 = list.map(function (p) {
-    var k = UI.store.any(p, UI.ns.ui('sequence'))
+    var k = UI.store.any(p, ns.ui('sequence'))
     return [k || 9999, p]
   })
   p2.sort(function (a, b) {
@@ -1389,7 +1391,7 @@ forms.promptForNew = function (
   var box = dom.createElement('form')
 
   if (!form) {
-    var lists = forms.findClosest(kb, theClass.uri, ns.ui('creationForm'))
+    var lists = forms.findClosest(kb, theClass.uri, UI.ns.ui('creationForm'))
     if (lists.length === 0) {
       var p = box.appendChild(dom.createElement('p'))
       p.textContent =
@@ -1419,7 +1421,7 @@ forms.promptForNew = function (
     form = lists[0] // Pick any one
   }
   UI.log.debug('form is ' + form)
-  box.setAttribute('style', 'border: 0.05em solid brown; color: brown')
+  box.setAttribute('style', `border: 0.05em solid ${UI.style.formBorderColor}; color: ${UI.style.formBorderColor}`) // @@color?
   box.innerHTML = '<h3>New ' + utils.label(theClass) + '</h3>'
 
   var formFunction = forms.fieldFunction(dom, form)
@@ -1478,7 +1480,7 @@ forms.makeDescription = function (
   group.appendChild(field)
   field.rows = desc ? desc.split('\n').length + 2 : 2
   field.cols = 80
-  var style =
+  var style = UI.style.multilineTextInputStyle ||
     'font-size:100%; white-space: pre-wrap; background-color: white;' +
     ' border: 0.07em solid gray; padding: 1em 0.5em; margin: 1em 1em;'
   field.setAttribute('style', style)
@@ -1603,7 +1605,7 @@ forms.makeSelectForOptions = function (
 
   var getActual = function () {
     actual = {}
-    if (predicate.sameTerm(UI.ns.rdf('type'))) {
+    if (predicate.sameTerm(ns.rdf('type'))) {
       actual = kb.findTypeURIs(subject)
     } else {
       kb.each(subject, predicate, null, store).map(function (x) {
@@ -1777,11 +1779,11 @@ forms.makeSelectForCategory = function (
   callbackFunction
 ) {
   var log = UI.log
-  var du = kb.any(category, UI.ns.owl('disjointUnionOf'))
+  var du = kb.any(category, ns.owl('disjointUnionOf'))
   var subs
   var multiple = false
   if (!du) {
-    subs = kb.each(undefined, UI.ns.rdfs('subClassOf'), category)
+    subs = kb.each(undefined, ns.rdfs('subClassOf'), category)
     multiple = true
   } else {
     subs = du.elements
@@ -1811,7 +1813,7 @@ forms.makeSelectForCategory = function (
     dom,
     kb,
     subject,
-    UI.ns.rdf('type'),
+    ns.rdf('type'),
     subs,
     { multiple: multiple, nullPrompt: '--classify--' },
     store,
@@ -1858,7 +1860,7 @@ forms.makeSelectForNestedCategory = function (
     }
     if (
       select.currentURI &&
-      kb.any(kb.sym(select.currentURI), UI.ns.owl('disjointUnionOf'))
+      kb.any(kb.sym(select.currentURI), ns.owl('disjointUnionOf'))
     ) {
       child = forms.makeSelectForNestedCategory(
         dom,
@@ -1938,7 +1940,7 @@ function buildCheckboxForm (dom, kb, lab, del, ins, form, store, tristate) {
       }
       if (!state && !negation) {
         state = null
-        const defa = kb.any(form, UI.ns.ui('default'))
+        const defa = kb.any(form, ns.ui('default'))
         displayState = defa ? defa.value === '1' : tristate ? null : false
       }
     }
@@ -2012,7 +2014,7 @@ function buildCheckboxForm (dom, kb, lab, del, ins, form, store, tristate) {
 forms.buildCheckboxForm = buildCheckboxForm
 
 forms.fieldLabel = function (dom, property, form) {
-  var lab = UI.store.any(form, UI.ns.ui('label'))
+  var lab = UI.store.any(form, ns.ui('label'))
   if (!lab) lab = utils.label(property, true) // Init capital
   if (property === undefined) {
     return dom.createTextNode('@@Internal error: undefined property')
