@@ -170,7 +170,7 @@ function syncTableToArray (table, things, createNewRow) {
  *
  * @param {DomElement} table - will have a tr for each thing
  * @param {Array<NamedNode>} things - ORDERED array of UNIQUE NamedNode objects. No duplicates
- * @param {function({NamedNode})} createNewRow(thing) returns a TR table row for a new thing
+ * @param {function({NamedNode})} createNewRow(thing) returns a rendering of a new thing
  *
  * Ensures order matches exacly.  We will re-rder existing elements if necessary
  * Can be used in fact for any element type - does not have to be a table and tr.
@@ -181,31 +181,34 @@ function syncTableToArrayReOrdered (table, things, createNewRow) {
 
   for (let i = 0; i < table.children.length; i++) {
     const row = table.children[i]
-    row.trashMe = true
     elementMap[row.subject.toNT()] = row // More sophisticaed would be to have a bag of duplicates
   }
 
   for (let g = 0; g < things.length; g++) {
     var thing = things[g]
-    const row = table.children[g]
-    if (!row.subject.sameTerm(thing)) {
-      const existingRow = elementMap[thing.toNT()]
-      if (existingRow) {
-        table.remove(existingRow)
-        row.before(existingRow) // Insert existing ro in place of this one
+    if (g >= table.children.length) { // table needs extending
+      const newRow = createNewRow(thing)
+      newRow.subject = thing
+      table.appendChild(newRow)
+    } else {
+      const row = table.children[g]
+      if (row.subject.sameTerm(thing)) {
       } else {
-        const newRow = createNewRow(thing)
-        row.before(newRow) // Insert existing ro in place of this one
-        newRow.subject = thing
+        const existingRow = elementMap[thing.toNT()]
+        if (existingRow) {
+          table.removeChild(existingRow)
+          table.insertBefore(existingRow, row) // Insert existing ro in place of this one
+        } else {
+          const newRow = createNewRow(thing)
+          row.before(newRow) // Insert existing ro in place of this one
+          newRow.subject = thing
+        }
       }
     }
   } // loop g
-
-  for (let i = 0; i < table.children.length; i++) {
-    const row = table.children[i]
-    if (row.trashMe) {
-      table.removeChild(row)
-    }
+  // Lop off any we don't need any more:
+  while (table.children.length > things.length) {
+    table.removeChild(table.children[table.children.length - 1])
   }
 } // syncTableToArrayReOrdered
 

@@ -404,7 +404,7 @@ buttons.button = function (dom, iconURI, text, handler) {
   img.setAttribute('style', 'width: 2em; height: 2em;') // trial and error. 2em disappears
   img.title = text
   if (handler) {
-    button.addEventListener('click', handler)
+    button.addEventListener('click', handler, false)
   }
   return button
 }
@@ -723,12 +723,21 @@ buttons.allClassURIs = function () {
   return set
 }
 
-//  Figuring which propertites could by be used
-//
-buttons.propertyTriage = function () {
+/**  Figuring which propertites we know about
+*
+* When the user is inputs an RDF property, like foir a form field
+* or when specifying the relationshiip bteween two arbitrary things,
+* then er can prompt them with poperties the session knows about
+*
+* TODO: Look again ay caching tis somewhere. (On the kb?)
+* TODO: move to diff module? Not really a button.
+* @param {Store} kb The quadstore to be searchhed.
+*/
+
+buttons.propertyTriage = function (kb) {
   var possibleProperties = {}
   // if (possibleProperties === undefined) possibleProperties = {}
-  var kb = UI.store
+  // var kb = UI.store
   var dp = {}
   var op = {}
   var no = 0
@@ -748,7 +757,7 @@ buttons.propertyTriage = function () {
   var ps = kb.each(undefined, UI.ns.rdf('type'), UI.ns.rdf('Property'))
   for (var i = 0; i < ps.length; i++) {
     p = ps[i].toNT()
-    UI.log.debug('propertyTriage: unknown: ' + p)
+    // UI.log.debug('propertyTriage: unknown: ' + p)
     if (!op[p] && !dp[p]) {
       dp[p] = true
       op[p] = true
