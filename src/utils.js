@@ -121,7 +121,7 @@ function genUuid () {
  * @param {function({NamedNode})} createNewRow(thing) returns a TR table row for a new thing
  *
  * Tolerates out of order elements but puts new ones in order.
- * Can be used in fact for any element type - does not have to be a table and tr.
+ * Can be used for any element type; does not have to be a table and tr.
  */
 function syncTableToArray (table, things, createNewRow) {
   let foundOne
