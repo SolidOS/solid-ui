@@ -41,7 +41,7 @@ const dashCharacter = '-'
  **
  ** @param {Document} dom The HTML Document object aka Document Object Model
  ** @param {Element?} container  If present, the created widget will be appended to this
- ** @param {Map} already A hash table of (form, suject) kept to prevent recusive forms looping
+ ** @param {Map} already A hash table of (form, subject) kept to prevent recursive forms looping
  ** @param {Node} subject The thing about which the form displays/edits data
  ** @param {Node} form The form or field to be rendered
  ** @param {Node} store The web document in which the data is
@@ -132,7 +132,7 @@ forms.field[ns.ui('Form').uri] = forms.field[
  **
  ** @param {Document} dom The HTML Document object aka Document Object Model
  ** @param {Element?} container  If present, the created widget will be appended to this
- ** @param {Map} already A hash table of (form, suject) kept to prevent recusive forms looping
+ ** @param {Map} already A hash table of (form, subject) kept to prevent recursive forms looping
  ** @param {Node} subject The thing about which the form displays/edits data
  ** @param {Node} form The form or field to be rendered
  ** @param {Node} store The web document in which the data is
@@ -218,7 +218,7 @@ forms.field[ns.ui('Options').uri] = function (
  **
  ** @param {Document} dom The HTML Document object aka Document Object Model
  ** @param {Element?} container  If present, the created widget will be appended to this
- ** @param {Map} already A hash table of (form, suject) kept to prevent recusive forms looping
+ ** @param {Map} already A hash table of (form, subject) kept to prevent recursive forms looping
  ** @param {Node} subject The thing about which the form displays/edits data
  ** @param {Node} form The form or field to be rendered
  ** @param {Node} store The web document in which the data is
@@ -334,11 +334,11 @@ forms.field[ns.ui('Multiple').uri] = function (
     /* A subField has been filled in
     *
     * One possibility is to not actually make the link to the thing until
-    * this callback happsn to avoid widow links
+    * this callback happens to avoid widow links
      */
     function itemDone (uri, ok, message) {
       console.log(`Item ${uri} done callback for item ${object.uri.slice(-7)}`)
-      if (!ok) { // when does this happen? errrs typically deal with upstream
+      if (!ok) { // when does this happen? errors typically deal with upstream
         console.error('  Item done callback: Error: ' + message)
       } else {
         linkDone(uri, ok, message)
@@ -505,7 +505,7 @@ forms.field[ns.ui('Multiple').uri] = function (
       vals = li ? li.elements : []
     } else {
       vals = kb.each(subject, property)
-      vals.sort() // acheive consistency on each refresh
+      vals.sort() // achieve consistency on each refresh
     }
     utils.syncTableToArrayReOrdered(body, vals, renderItem)
   }
@@ -620,7 +620,7 @@ forms.fieldParams[ns.ui('EmailField').uri].pattern = /^\s*.*@.*\..*\s*$/ // @@ G
  *
  ** @param {Document} dom The HTML Document object aka Document Object Model
  ** @param {Element?} container  If present, the created widget will be appended to this
- ** @param {Map} already A hash table of (form, suject) kept to prevent recusive forms looping
+ ** @param {Map} already A hash table of (form, subject) kept to prevent recursive forms looping
  ** @param {Node} subject The thing about which the form displays/edits data
  ** @param {Node} form The form or field to be rendered
  ** @param {Node} store The web document in which the data is
@@ -1221,7 +1221,7 @@ forms.appendForm = function (
 //
 // Three possible sources: Those mentioned in schemas, which exludes many
 // those which occur in the data we already have, and those predicates we
-// have come across anywahere and which are not explicitly excluded from
+// have come across anywhere and which are not explicitly excluded from
 // being used with this class.
 */
 
