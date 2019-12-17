@@ -727,7 +727,7 @@ buttons.allClassURIs = function () {
 *
 * When the user is inputs an RDF property, like foir a form field
 * or when specifying the relationshiip bteween two arbitrary things,
-* then er can prompt them with poperties the session knows about
+* then er can prompt them with properties the session knows about
 *
 * TODO: Look again by catching this somewhere. (On the kb?)
 * TODO: move to diff module? Not really a button.
