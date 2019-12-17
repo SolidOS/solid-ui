@@ -723,15 +723,15 @@ buttons.allClassURIs = function () {
   return set
 }
 
-/**  Figuring which propertites we know about
+/**  Figuring which properties we know about
 *
-* When the user is inputs an RDF property, like foir a form field
-* or when specifying the relationshiip bteween two arbitrary things,
+* When the user inputs an RDF property, like for a form field
+* or when specifying the relationship between two arbitrary things,
 * then er can prompt them with properties the session knows about
 *
 * TODO: Look again by catching this somewhere. (On the kb?)
 * TODO: move to diff module? Not really a button.
-* @param {Store} kb The quadstore to be searchhed.
+* @param {Store} kb The quadstore to be searched.
 */
 
 buttons.propertyTriage = function (kb) {

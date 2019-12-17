@@ -173,7 +173,7 @@ function syncTableToArray (table, things, createNewRow) {
  * @param {function({NamedNode})} createNewRow(thing) returns a rendering of a new thing
  *
  * Ensures order matches exacly.  We will re-rder existing elements if necessary
- * Can be used in fact for any element type - does not have to be a table and tr.
+ * Can be used for any element type; does not have to be a table and tr.
  * Any RDF node value can only appear ONCE in the array
  */
 function syncTableToArrayReOrdered (table, things, createNewRow) {
@@ -197,10 +197,10 @@ function syncTableToArrayReOrdered (table, things, createNewRow) {
         const existingRow = elementMap[thing.toNT()]
         if (existingRow) {
           table.removeChild(existingRow)
-          table.insertBefore(existingRow, row) // Insert existing ro in place of this one
+          table.insertBefore(existingRow, row) // Insert existing row in place of this one
         } else {
           const newRow = createNewRow(thing)
-          row.before(newRow) // Insert existing ro in place of this one
+          row.before(newRow) // Insert existing row in place of this one
           newRow.subject = thing
         }
       }
