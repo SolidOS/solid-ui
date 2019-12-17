@@ -729,7 +729,7 @@ buttons.allClassURIs = function () {
 * or when specifying the relationshiip bteween two arbitrary things,
 * then er can prompt them with poperties the session knows about
 *
-* TODO: Look again ay caching tis somewhere. (On the kb?)
+* TODO: Look again by catching this somewhere. (On the kb?)
 * TODO: move to diff module? Not really a button.
 * @param {Store} kb The quadstore to be searchhed.
 */
