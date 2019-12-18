@@ -56,7 +56,7 @@ export function findOriginOwner (doc: $rdf.NamedNode | string): string | boolean
  * @returns Returns the Web ID, after setting it
  */
 export function saveUser (
-  webId: $rdf.NamedNode | string,
+  webId: $rdf.NamedNode | string | null,
   context?: AuthenticationContext
 ): $rdf.NamedNode | null {
   // @@ TODO Remove the need for having context as output argument
@@ -1036,7 +1036,7 @@ export function checkUser<T> (
  */
 export function loginStatusBox (
   dom: HTMLDocument,
-  listener: ((uri: string) => void) | null = null,
+  listener: ((uri: string | null) => void) | null = null,
   options: {
     buttonStyle?: string
   } = {}
