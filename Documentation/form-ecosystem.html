@@ -115,20 +115,24 @@
       <tt><a href="https://github.com/solid/solid-ui">solid-ui</a></tt> project
       provides functions to use these forms within your web application to
       create a quick user interface solution. <a href="forms-intro.html">An introduction</a>
-      basically describes how forms work.  This document describes how forms fit into the ecosystem of  apps
-      and views and panes databrowsers and stuff.
+      basically describes how forms work. This document describes how forms fit into the ecosystem of apps,
+      views/panes, and data browsers and stuff.
     </p>
 
     <p>How to forms end up getting used? How do form end up getting created, copied, and modified?<p>
 
-    <p>The simplest way is for a developer of a web app to included the mashlib, and then insert a form
+    <p>
+      The simplest way is for a developer of a web app to included the mashlib, and then insert a form
       into the web page as a control, specifying the form and the subject, and the place he data is to be
       stored.  This is a good way of building workflow quickly. It also separates out the
-     logic of the form from the presentation details of style.
-     A solid-ui form is not just a set of components, it is a binding to the underlying linked data.
-   So no more code is needed by the developer.</p>
-   <p>Now look at other ways in which forms can be used within connected data system like the mashlib and the databrowser.
-   </p>s
+      logic of the form from the presentation details of style.
+      A solid-ui form is not just a set of components, it is a binding to the underlying linked data.
+      So no more code is needed by the developer.
+    </p>
+    <p>
+     Now look at other ways in which forms can be used within connected data system like the mashlib and
+     the databrowser.
+    </p>
 <h2>Forms and classes</h2>
 
 <p>Forms create graphs of information starting off a root node, a seed node, if you like.
@@ -161,17 +165,17 @@
  </table>
 <p>A creation form must have enough in it to make a record which makes sense.
   Just having height and weight, for example, produces a node with nothing to identify
-  what the thing is. a creation form may have say name, address, phone number
+  what the thing is. A creation form may have say name, address, phone number
   so that the record is useful in apps. Once you have made something using a creation form, then you can
-  later add more data with an annotation form.   You can also use any creation form
-  as an annotation form later to edit the data. </p>
+  later add more data with an annotation form. You can also use any creation form
+  as an annotation form later to edit the data.</p>
   <p>So in the form ecosystem, when a user wants to create
   something new, it is reasonable to give them a list of creation forms,
   for whatever classes they may be interested in.  But then when they are looking in the UI at
   an object of a particular class, then it is reasonable to offer them those forms (of either type) relate to that Class of the object, if they
   want to record more things.
 </p>
-<p>Using RDFS inference is useful here.  If there are forms  declared as being for Person class,
+<p>Using RDFS inference is useful here. If there are forms declared as being for Person class,
   and the user is looking at something which is of class Student, then it follows that
   the subject is also of type Person, and can so those forms may be used.
   One trick is to present first the forms of the most specific type (Student) before the ones for the more generic type (Person)
@@ -179,16 +183,15 @@
 
 </p>
 <p>How to find out forms for a given class?  A simple way is to include the link to the
-  form in the ontology.  This obviously gives it a pretty definitive status.
-  Many existing ontologies
-</p>
+  form in the ontology. This obviously gives it a pretty definitive status.</p>
+    <h3>Many existing ontologies</h3>
 <p>Communities, projects, organizations and groups may want to share sets of forms they use, and
   so community-based indexes of these are interesting.
 </p>
 
 <h2>Forms from shapes</h2>
 <p>
-  Forms are very simpler to shapes, as noted elsewhere.  Forms can be generated from shapes.
+  Forms are very simpler to shapes, as noted elsewhere. Forms can be generated from shapes.
 </p>
 
 <h2>Creating forms</h2>
@@ -207,9 +210,9 @@
 <p>Maybe they want to edit an existing form.</p>
 <ul>
 <li>
- A user is looking at a firm someone else has made.
+ A user is looking at a form someone else has made.
  They find a way in the UI to look at the form itself.
- (An "See this form" button etc, or a peeling-back-the corner icon, say).
+ (A "See this form" button etc, or a peeling-back-the corner icon, say).
  This takes them to the form itself.
 </li>
 <li>
@@ -226,13 +229,13 @@
 
 <h2>Forms and Ontologies</h2>
 <p>If you are using the form form to create a form, then for each field you will have to supply a
-  predicate.  The solid-ui system will give you a selector  to
+  predicate.  The solid-ui system will give you a selector to
   chose from all the predicates it knows about.
   For this reason it is good to load in ontologies you want to use
   before you start editing.
-  The for playground has tools to do that.
+  The form playground has tools to do that.
 </p>
-<p>Some days, the user finds that the good old vocabularies the solid project has been using
+<p>Some days, the user finds that the good old vocabularies the Solid project has been using
   provide all the concepts they need.  Some days, they will have to look further afield and find
   an existing ontology just new to them.  Some days they will find one almost perfect and want to imagine
    of suggest
@@ -242,7 +245,7 @@
   get people to  adopt or link to from their own ontologies.</p>
   <p>
   So one way or another  users will  become ontology users,
-  and then will become ontology editors and creators.  We need tools to enable these workflows,
+  and then will become ontology editors and creators. We need tools to enable these workflows,
   particularly the social collaborative parts. These tools are not covered here.
   It is worth saying that the power of systems in a big world depends on wide  interop, and you get
   interop from shared vocabularies, and you get shared vocabularies from hard work, where there is much glory
