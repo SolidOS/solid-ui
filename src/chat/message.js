@@ -2,7 +2,7 @@
 
 import { messageToolbar, sentimentStripLinked } from './messageTools'
 const UI = {
-  authn: require('../signin'),
+  authn: require('../authn/authn'),
   icons: require('../iconBase'),
   log: require('../log'),
   ns: require('../ns'),

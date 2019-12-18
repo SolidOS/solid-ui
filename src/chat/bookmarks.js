@@ -1,7 +1,7 @@
 /* global alert confirm */
 
 const UI = {
-  authn: require('../signin'),
+  authn: require('../authn/authn'),
   icons: require('../iconBase'),
   log: require('../log'),
   ns: require('../ns'),
