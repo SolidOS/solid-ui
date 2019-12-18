@@ -4,7 +4,7 @@
 //
 const kb = require('./store')
 const ns = require('./ns')
-const authn = require('./signin')
+const authn = require('./authn/authn')
 const widgets = require('./widgets')
 const pad = require('./pad')
 

@@ -2,7 +2,7 @@
 //  Common code for a discussion are a of messages about something
 //
 var UI = {
-  authn: require('../signin'),
+  authn: require('../authn/authn'),
   icons: require('../iconBase'),
   log: require('../log'),
   ns: require('../ns'),

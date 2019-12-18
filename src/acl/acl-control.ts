@@ -9,9 +9,9 @@ import utils from '../utils.js'
 import { ACLbyCombination, adoptACLDefault, getACLorDefault, makeACLGraphbyCombo, readACL, sameACL } from './acl'
 import widgets from '../widgets'
 import icons from '../iconBase.js'
-import authn from '../signin.js'
 import { graph, IndexedFormula, NamedNode, sym, UpdateManager } from 'rdflib'
 import { DataBrowserContext } from 'pane-registry'
+import { logInLoadProfile } from '../authn/authn'
 
 // In apps which may use drag and drop, this utility takes care of the fact
 // by default in a browser, an uncuaght user drop into a browser window
@@ -605,7 +605,7 @@ export function ACLControlBox5 (
           async event => {
             removeOthers(event.target)
             const eventContext: any = { div: bar, dom }
-            await authn.logInLoadProfile(eventContext)
+            await logInLoadProfile(eventContext)
             const trustedApps = kb.each(eventContext.me, ns.acl('trustedApp'))
             const trustedOrigins = trustedApps.flatMap(app =>
               kb.each(app, ns.acl('origin'))
