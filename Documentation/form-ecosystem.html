@@ -119,21 +119,21 @@
       and views and panes databrowsers and stuff.
     </p>
 
-    <p>How to forms end up getting used? How do form end up getting created, cpied, and modified?<p>
+    <p>How to forms end up getting used? How do form end up getting created, copied, and modified?<p>
 
-    <p>The simnplest way is for a developer of a web app to inclued the mashlib, and then insert a form
-      into the web page as a control, specfifying the form and the subject, and the place he data is to be
-      stored.  This is a good way of building workflow quickly. It also separtes out the
-     logic of the form from the prsentation details of style.
+    <p>The simplest way is for a developer of a web app to included the mashlib, and then insert a form
+      into the web page as a control, specifying the form and the subject, and the place he data is to be
+      stored.  This is a good way of building workflow quickly. It also separates out the
+     logic of the form from the presentation details of style.
      A solid-ui form is not just a set of components, it is a binding to the underlying linked data.
-   So no more code is needed by the developper.</p>
-   <p>Now look at other ways in which forms can be used within connected daat system like the mashlib and the databrowser.
+   So no more code is needed by the developer.</p>
+   <p>Now look at other ways in which forms can be used within connected data system like the mashlib and the databrowser.
    </p>s
 <h2>Forms and classes</h2>
 
-<p>Forms create graphs of informatioons starting off a root node, a seed node, if you like.
-  They are made for redording information about things of particular types,
-  in particular RFDS Classes.  Theer are two relationships:
+<p>Forms create graphs of information starting off a root node, a seed node, if you like.
+  They are made for recording information about things of particular types,
+  in particular RFDS Classes.  There are two relationships:
 </p>
   <table class="properties">
     <tr>
@@ -152,7 +152,7 @@
       <td>Annotation form</td>
 
       <td>
-        A form which may be used to add <b>more</b> infromation to an <b>existing</b>
+        A form which may be used to add <b>more</b> information to an <b>existing</b>
     instance of this class which we know something about.  Anything from
     adding just add one more fact, to adding a whole lot of information about a specific
     facet of the thing.
@@ -160,30 +160,35 @@
     </tr>
  </table>
 <p>A creation form must have enough in it to make a record which makes sense.
-  Just having height and weight, for example, produces a node wiht nothing to identify
+  Just having height and weight, for example, produces a node with nothing to identify
   what the thing is. a creation form may have say name, address, phone number
   so that the record is useful in apps. Once you have made something using a creation form, then you can
   later add more data with an annotation form.   You can also use any creation form
-  as an anootation form later to edit the data. </p>
+  as an annotation form later to edit the data. </p>
   <p>So in the form ecosystem, when a user wants to create
   something new, it is reasonable to give them a list of creation forms,
-  for whatever classes they may be interested in.  But then when gthey are looking in the UI at
-  an object of a particular class, then it is reasable to offer them those forms (of either type) relate to thet Class of te object, if they
+  for whatever classes they may be interested in.  But then when they are looking in the UI at
+  an object of a particular class, then it is reasonable to offer them those forms (of either type) relate to that Class of the object, if they
   want to record more things.
 </p>
-<p>Using RDFS inferece is useful here.  If there are forms  declared as being for Person class,
+<p>Using RDFS inference is useful here.  If there are forms  declared as being for Person class,
   and the user is looking at something which is of class Student, then it follows that
   the subject is also of type Person, and can so those forms may be used.
-  One trick is to present first the fomrs of the most speific type (Student) before the ones for the more generic type (Person)
+  One trick is to present first the forms of the most specific type (Student) before the ones for the more generic type (Person)
   as they may at a guess be more relevant.
 
 </p>
 <p>How to find out forms for a given class?  A simple way is to include the link to the
   form in the ontology.  This obviously gives it a pretty definitive status.
-  Many existing ontologues
+  Many existing ontologies
 </p>
-<p>Communities, projects, organizations and groups may want to share sets of fomrs they use, and
+<p>Communities, projects, organizations and groups may want to share sets of forms they use, and
   so community-based indexes of these are interesting.
+</p>
+
+<h2>Forms from shapes</h2>
+<p>
+  Forms are very simpler to shapes, as noted elsewhere.  Forms can be generated from shapes.
 </p>
 
 <h2>Creating forms</h2>
@@ -205,7 +210,7 @@
  A user is looking at a firm someone else has made.
  They find a way in the UI to look at the form itself.
  (An "See this form" button etc, or a peeling-back-the corner icon, say).
- This takes them to the form istelf.
+ This takes them to the form itself.
 </li>
 <li>
  They then edit it if they have permission
@@ -223,17 +228,17 @@
 <p>If you are using the form form to create a form, then for each field you will have to supply a
   predicate.  The solid-ui system will give you a selector  to
   chose from all the predicates it knows about.
-  For thios reason it is good to load in ontologies you want to use
+  For this reason it is good to load in ontologies you want to use
   before you start editing.
   The for playground has tools to do that.
 </p>
-<p>Some days, the user finds that the good old vocabularies the solid projet has been using
-  provide all the concepts they need.  Some days, they will have to look further affield and find
+<p>Some days, the user finds that the good old vocabularies the solid project has been using
+  provide all the concepts they need.  Some days, they will have to look further afield and find
   an existing ontology just new to them.  Some days they will find one almost perfect and want to imagine
    of suggest
-  friendly ammendment to it.   Some days they will decide to just create a new ontology,
+  friendly amendment to it.   Some days they will decide to just create a new ontology,
   for speed, for control, or for fun.
-  Some days they will find the ad hoc onology they created at one point is now one they want to
+  Some days they will find the ad hoc ontology they created at one point is now one they want to
   get people to  adopt or link to from their own ontologies.</p>
   <p>
   So one way or another  users will  become ontology users,
@@ -245,7 +250,7 @@
 </p>
   <p>So if ontology editing becomes a practical part of these workflows,
     can we use forms as one way of editing an ontology?
-    It seems reasonable, though a cutom engineered UI may be much nicer.
+    It seems reasonable, though a custom engineered UI may be much nicer.
   </p>
 <p>
 <table>
