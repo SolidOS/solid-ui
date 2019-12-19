@@ -393,7 +393,7 @@ export function ACLControlBox5 (
           uris.map(function (u) {
             return handleOneDroppedURI(u) // can add to meetingDoc but must be sync
           })
-        ).then(function (_a) {
+        ).then(function () {
           saveAndRestoreUI()
         })
       }

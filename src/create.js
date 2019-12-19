@@ -32,14 +32,15 @@ module.exports = {
  **
  */
 function newThingUI (createContext, dataBrowserContext, thePanes) {
+  if (!thePanes) throw new Error('@@ newThingUI: update API') // phase out
   const dom = createContext.dom
   const div = createContext.div
   if (createContext.me && !createContext.me.uri) {
     throw new Error('newThingUI:  Invalid userid: ' + createContext.me)
   }
 
-  var iconStyle = 'padding: 0.7em; width: 2em; height: 2em;' // was: 'padding: 1em; width: 3em; height: 3em;'
-  var star = div.appendChild(dom.createElement('img'))
+  const iconStyle = 'padding: 0.7em; width: 2em; height: 2em;' // was: 'padding: 1em; width: 3em; height: 3em;'
+  const star = div.appendChild(dom.createElement('img'))
   var visible = false // the inividual tools tools
   //   noun_272948.svg = black star
   // noun_34653_green.svg = green plus
@@ -53,7 +54,23 @@ function newThingUI (createContext, dataBrowserContext, thePanes) {
     pre.appendChild(dom.createTextNode(message))
   }
 
-  var selectNewTool = function (_event) {
+  function styleTheIcons (style) {
+    for (var i = 0; i < iconArray.length; i++) {
+      var st = iconStyle + style
+      if (iconArray[i].disabled) {
+        // @@ unused
+        st += 'opacity: 0.3;'
+      }
+      iconArray[i].setAttribute('style', st) // eg 'background-color: #ccc;'
+    }
+  }
+
+  function selectTool (icon) {
+    styleTheIcons('display: none;') // 'background-color: #ccc;'
+    icon.setAttribute('style', iconStyle + 'background-color: yellow;')
+  }
+
+  function selectNewTool (_event) {
     visible = !visible
     star.setAttribute(
       'style',
@@ -225,21 +242,6 @@ function newThingUI (createContext, dataBrowserContext, thePanes) {
       })
     }
   })
-
-  var styleTheIcons = function (style) {
-    for (var i = 0; i < iconArray.length; i++) {
-      var st = iconStyle + style
-      if (iconArray[i].disabled) {
-        // @@ unused
-        st += 'opacity: 0.3;'
-      }
-      iconArray[i].setAttribute('style', st) // eg 'background-color: #ccc;'
-    }
-  }
-  var selectTool = function (icon) {
-    styleTheIcons('display: none;') // 'background-color: #ccc;'
-    icon.setAttribute('style', iconStyle + 'background-color: yellow;')
-  }
 }
 
 // Form to get the name of a new thing before we create it
