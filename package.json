@@ -78,10 +78,6 @@
       "pre-push": "npm test"
     }
   },
-  "eslintignore": [
-    "package.json",
-    "*.html"
-  ],
   "lint-staged": {
     "src/**/*.(js|ts)": [
       "eslint"

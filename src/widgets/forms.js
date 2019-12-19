@@ -343,7 +343,7 @@ forms.field[ns.ui('Multiple').uri] = function (
       } else {
         linkDone(uri, ok, message)
       }
-      /*
+      /*  Put this as a function and call it from only one place
       var ins, del
       // alert('Multiple: item calklback.' + uri)
       if (ok) {

@@ -4,3 +4,4 @@ lib
 *.json
 Documentation
 Documentation/forms-intro.html
+package.json
