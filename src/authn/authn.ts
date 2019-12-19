@@ -42,7 +42,7 @@ export function findOriginOwner (doc: $rdf.NamedNode | string): string | boolean
 //  preferencesFile   The user's personal preference file, iff loaded
 //  index.public      The user's public type index file
 //  index.private     The user's private type index file
-// 
+//
 //  not RDF symbols:
 //    noun            A string in english for the type of thing -- like "address book"
 //    instance        An array of nodes which are existing instances
