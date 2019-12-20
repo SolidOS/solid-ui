@@ -34,26 +34,27 @@ export function findOriginOwner (doc: $rdf.NamedNode | string): string | boolean
 
 // Promises versions
 //
-// These pass a context object which hold various RDF symbols
+// These pass a context object which holds various RDF symbols
 // as they become available
 //
-//  me               RDF symbol for the users' webid
-//  publicProfile    The user's public profile, iff loaded
-//  preferencesFile  The user's personal preferences file, iff loaded
-//  index.public     The user's public type index file
+//  me                RDF symbol for the user's WebID
+//  publicProfile     The user's public profile, iff loaded
+//  preferencesFile   The user's personal preference file, iff loaded
+//  index.public      The user's public type index file
 //  index.private     The user's private type index file
-//   not RDF symbols:
-//  noun              A string in english for the type of thing -- like "address book"
-//  instance          An array of nodes which are existing instances
-//  containers        An array of nodes of containers of instances
-//  div               A DOM element where UI can be displayed
-//  statusArea        A DOM element (opt) progress stuff can be displayed, or error messages
+//
+//  not RDF symbols:
+//    noun            A string in english for the type of thing -- like "address book"
+//    instance        An array of nodes which are existing instances
+//    containers      An array of nodes of containers of instances
+//    div             A DOM element where UI can be displayed
+//    statusArea      A DOM element (opt) progress stuff can be displayed, or error messages
 
 /**
  * @param webId
  * @param context
  *
- * @returns Returns the Web ID, after setting it
+ * @returns Returns the WebID, after setting it
  */
 export function saveUser (
   webId: $rdf.NamedNode | string | null,
@@ -86,7 +87,7 @@ export function defaultTestUser (): $rdf.NamedNode | null {
   return null
 }
 
-/** Checks syncronously whether user is logged in
+/** Checks synchronously whether user is logged in
  *
  * @returns Named Node or null
  */
@@ -104,7 +105,7 @@ export function currentUser (): $rdf.NamedNode | null {
 }
 
 /**
- * Resolves with the logged in user's Web ID
+ * Resolves with the logged in user's WebID
  *
  * @param context
  */
@@ -159,7 +160,7 @@ export function logInLoadProfile (context: AuthenticationContext): Promise<Authe
         profileDocument = webID.doc()
         // Load the profile into the knowledge base (fetcher.store)
         //   withCredentials: Web arch should let us just load by turning off creds helps CORS
-        //   reload: Gets around a specifc old Chrome bug caching/origin/cors
+        //   reload: Gets around a specific old Chrome bug caching/origin/cors
         fetcher
           .load(profileDocument, { withCredentials: false, cache: 'reload' })
           .then(_response => {
@@ -183,7 +184,7 @@ export function logInLoadProfile (context: AuthenticationContext): Promise<Authe
 }
 
 /**
- * Loads preferences file
+ * Loads preference file
  * Do this after having done log in and load profile
  *
  * @private
@@ -221,10 +222,10 @@ export function logInLoadPreferences (context: AuthenticationContext): Promise<A
         }
 
         if (!preferencesFile) {
-          return reject(new Error(`Can't find a preferences file pointer in profile ${context.publicProfile}`))
+          return reject(new Error(`Can't find a preference file pointer in profile ${context.publicProfile}`))
         }
 
-        // //// Load preferences file
+        // //// Load preference file
         return kb.fetcher
           .load(preferencesFile, { withCredentials: true })
           .then(function () {
@@ -239,42 +240,42 @@ export function logInLoadPreferences (context: AuthenticationContext): Promise<A
             const status = err.status
             const message = err.message
             console.log(
-              `HTTP status ${status} for pref file ${preferencesFile}`
+              `HTTP status ${status} for preference file ${preferencesFile}`
             )
             let m2
             if (status === 401) {
-              m2 = 'Strange - you are not authenticated (properly logged on) to read preferences file.'
+              m2 = 'Strange - you are not authenticated (properly logged in) to read preference file.'
               alert(m2)
             } else if (status === 403) {
               if (differentOrigin()) {
-                m2 = `Unauthorized: Assuming prefs file blocked for origin ${window.location.origin}`
+                m2 = `Unauthorized: Assuming preference file blocked for origin ${window.location.origin}`
                 context.preferencesFileError = m2
                 return resolve(context)
               }
-              m2 = 'You are not authorized to read your preferences file. This may be because you are using an untrusted web app.'
+              m2 = 'You are not authorized to read your preference file. This may be because you are using an untrusted web app.'
               console.warn(m2)
             } else if (status === 404) {
               if (
-                confirm(`You do not currently have a Preferences file. Ok for me to create an empty one? ${preferencesFile}`)
+                confirm(`You do not currently have a preference file. OK for me to create an empty one? ${preferencesFile}`)
               ) {
-                // @@@ code me  ... weird to have a name o fthe file but no file
+                // @@@ code me  ... weird to have a name of the file but no file
                 alert(`Sorry; I am not prepared to do this. Please create an empty file at ${preferencesFile}`)
                 return complain(
-                  new Error('Sorry; no code yet to create a preferences file at ')
+                  new Error('Sorry; no code yet to create a preference file at ')
                 )
               } else {
                 reject(
-                  new Error(`User declined to create a preferences file at ${preferencesFile}`)
+                  new Error(`User declined to create a preference file at ${preferencesFile}`)
                 )
               }
             } else {
-              m2 = `Strange: Error ${status} trying to read your preferences file.${message}`
+              m2 = `Strange: Error ${status} trying to read your preference file.${message}`
               alert(m2)
             }
-          }) // load prefs file then
+          }) // load preference file then
       })
       .catch(err => {
-        // Fail initial login load prefs
+        // Fail initial login load preferences
         reject(new Error(`(via loadPrefs) ${err}`))
       })
   })
@@ -342,7 +343,7 @@ async function loadIndex (
       }
     } else {
       console.log(
-        'We know your preferences file is noty available, so not bothering with private type indexes.'
+        'We know your preference file is not available, so we are not bothering with private type indexes.'
       )
     }
   }
@@ -366,7 +367,7 @@ async function ensureTypeIndexes (context: AuthenticationContext): Promise<Authe
 }
 
 /* Load or create ONE type index
- * Find one or mke one or fail
+ * Find one or make one or fail
  * Many reasons for filing including script not having permission etc
  *
  */
@@ -376,7 +377,7 @@ async function ensureTypeIndexes (context: AuthenticationContext): Promise<Authe
  */
 
 async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boolean): Promise<AuthenticationContext | void> {
-  async function makeIndexIfNecesary (context, isPublic) {
+  async function makeIndexIfNecessary (context, isPublic) {
     const relevant = isPublic ? context.publicProfile : context.preferencesFile
     const visibility = isPublic ? 'public' : 'private'
 
@@ -400,7 +401,7 @@ async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boo
     if (context.index[visibility].length === 0) {
       newIndex = $rdf.sym(`${relevant.dir().uri + visibility}TypeIndex.ttl`)
       console.log(`Linking to new fresh type index ${newIndex}`)
-      if (!confirm(`Ok to create a new empty index file at ${newIndex}, overwriting anything that was there?`)) {
+      if (!confirm(`OK to create a new empty index file at ${newIndex}, overwriting anything that is now there?`)) {
         throw new Error('cancelled by user')
       }
       console.log(`Linking to new fresh type index ${newIndex}`)
@@ -427,7 +428,7 @@ async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boo
         widgets.complain(context, `ensureOneTypeIndex: loading indexes ${err}`)
       }
     }
-  } // makeIndexIfNecesary
+  } // makeIndexIfNecessary
 
   try {
     await loadOneTypeIndex(context, isPublic)
@@ -440,7 +441,7 @@ async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boo
     }
     return context
   } catch (error) {
-    await makeIndexIfNecesary(context, isPublic)
+    await makeIndexIfNecessary(context, isPublic)
     // widgets.complain(context, 'calling loadOneTypeIndex:' + error)
   }
 }
@@ -508,7 +509,7 @@ export async function findAppInstances (
   return context
 }
 
-// @@@@ use teh one in rdflib.js when it is avaiable and delete this
+// @@@@ use the one in rdflib.js when it is available and delete this
 function updatePromise (
   updater: $rdf.UpdateManager,
   del: Array<$rdf.Statement>,
@@ -876,7 +877,7 @@ export function offlineTestID (): $rdf.NamedNode | null {
     if (!div) return null
     const id = div.getAttribute('testID')
     if (!id) return null
-    /* me = kb.any(subject, ns.acl('owner')); // when testing on plane with no webid
+    /* me = kb.any(subject, ns.acl('owner')); // when testing on plane with no WebID
      */
     console.log('Assuming user is ' + id)
     return $rdf.sym(id)
@@ -930,7 +931,7 @@ function signInOrSignUpBox (
       // setUserCallback(webIdURI)
       const divs = dom.getElementsByClassName(magicClassName)
       console.log(`Logged in, ${divs.length} panels to be serviced`)
-      // At the same time, satiffy all the other login boxes
+      // At the same time, satisfy all the other login boxes
       for (let i = 0; i < divs.length; i++) {
         const div: any = divs[i]
         // @@ TODO Remove the need to manipulate HTML elements
@@ -1062,7 +1063,7 @@ export function loginStatusBox (
     // UI.preferences.set('me', '')
     solidAuthClient.logout().then(
       function () {
-        const message = `Your Web ID was ${me}. It has been forgotten.`
+        const message = `Your WebID was ${me}. It has been forgotten.`
         me = null
         try {
           log.alert(message)
@@ -1080,7 +1081,7 @@ export function loginStatusBox (
 
   function logoutButton (me, options) {
     const signInButtonStyle = options.buttonStyle || getDefaultSignInButtonStyle()
-    let logoutLabel = 'Web ID logout'
+    let logoutLabel = 'WebID logout'
     if (me) {
       const nick =
         kb.any(me, ns.foaf('nick')) ||
@@ -1146,10 +1147,10 @@ export function loginStatusBox (
  * Returns a UI object which, if it selects a workspace,
  * will callback(workspace, newBase).
  *
- * If necessary, will get an account, preferences file, etc. In sequence:
+ * If necessary, will get an account, preference file, etc. In sequence:
  *
  *   - If not logged in, log in.
- *   - Load preferences file
+ *   - Load preference file
  *   - Prompt user for workspaces
  *   - Allows the user to just type in a URI by hand
  *
@@ -1197,11 +1198,11 @@ export function selectWorkspace (
     const preferencesFile = context.preferencesFile
     let newBase = null
 
-    // A workspace specifically defined in the private preferences file:
+    // A workspace specifically defined in the private preference file:
     let w = kb
       .statementsMatching(
         id,
-        ns.space('workspace'), // Only trust prefs file here
+        ns.space('workspace'), // Only trust preference file here
         undefined,
         preferencesFile
       )
@@ -1220,11 +1221,11 @@ export function selectWorkspace (
       newBase = figureOutBase(w[0])
       // callbackWS(w[0], newBase)
     } else if (w.length === 0) {
-      say(`You don't seem to have any workspaces. You have ${storages.length} storages.`)
+      say(`You don't seem to have any workspaces. You have ${storages.length} storage spaces.`)
     }
 
     // Prompt for ws selection or creation
-    // say( w.length + " workspaces for " + id + "Chose one.");
+    // say( w.length + " workspaces for " + id + "Choose one.");
     const table = dom.createElement('table')
     table.setAttribute('style', 'border-collapse:separate; border-spacing: 0.5em;')
 
@@ -1283,7 +1284,7 @@ export function selectWorkspace (
       if (i === 0) {
         col1 = dom.createElement('td')
         col1.setAttribute('rowspan', `${w.length}1`)
-        col1.textContent = 'Chose a workspace for this:'
+        col1.textContent = 'Choose a workspace for this:'
         col1.setAttribute('style', 'vertical-align:middle;')
         tr.appendChild(col1)
       }
