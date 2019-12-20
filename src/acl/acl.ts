@@ -1,10 +1,11 @@
 // Access control logic
 
-import * as $rdf from 'rdflib'
 import ns from '../ns'
-import kb from '../store.js'
+import kb from '../store'
 import utils from '../utils'
 import { AgentMapMap, ComboList } from './types'
+import { graph, NamedNode, Statement, serialize, st, Store, sym } from 'rdflib'
+import { LiveStore } from 'pane-registry'
 
 // //////////////////////////////////// Solid ACL non-UI functions
 //
@@ -13,38 +14,40 @@ import { AgentMapMap, ComboList } from './types'
 // which the resource would have had.  Return it as a new separate store.
 
 export function adoptACLDefault (
-  doc: $rdf.NamedNode,
-  aclDoc: $rdf.NamedNode,
-  defaultResource: $rdf.NamedNode,
-  defaultACLdoc: $rdf.NamedNode
-): $rdf.IndexedFormula {
+  doc: NamedNode,
+  aclDoc: NamedNode,
+  defaultResource: NamedNode,
+  defaultACLdoc: NamedNode
+): Store {
   const ACL = ns.acl
   const isContainer = doc.uri.slice(-1) === '/' // Give default for all directories
+  // @@ TODO Remove casting to Array<NamedNode> https://github.com/linkeddata/rdflib.js/issues/376
   const defaults = kb
     .each(undefined, ACL('default'), defaultResource, defaultACLdoc)
     .concat(
       kb.each(undefined, ACL('defaultForNew'), defaultResource, defaultACLdoc)
-    )
-  let proposed: Array<$rdf.Statement> = []
+    ) as Array<NamedNode>
+  let proposed: Array<Statement> = []
   defaults.map(function (da) {
+    // @@ TODO Remove casting to Array<Statement> https://github.com/linkeddata/rdflib.js/issues/376
     proposed = proposed
-      .concat(kb.statementsMatching(da, ACL('agent'), undefined, defaultACLdoc))
-      .concat(kb.statementsMatching(da, ACL('agentClass'), undefined, defaultACLdoc))
-      .concat(kb.statementsMatching(da, ACL('agentGroup'), undefined, defaultACLdoc))
-      .concat(kb.statementsMatching(da, ACL('origin'), undefined, defaultACLdoc))
-      .concat(kb.statementsMatching(da, ACL('originClass'), undefined, defaultACLdoc))
-      .concat(kb.statementsMatching(da, ACL('mode'), undefined, defaultACLdoc))
-    proposed.push($rdf.st(da, ACL('accessTo'), doc, defaultACLdoc)) // Suppose
+      .concat(kb.statementsMatching(da, ACL('agent'), undefined, defaultACLdoc) as Array<Statement>)
+      .concat(kb.statementsMatching(da, ACL('agentClass'), undefined, defaultACLdoc) as Array<Statement>)
+      .concat(kb.statementsMatching(da, ACL('agentGroup'), undefined, defaultACLdoc) as Array<Statement>)
+      .concat(kb.statementsMatching(da, ACL('origin'), undefined, defaultACLdoc) as Array<Statement>)
+      .concat(kb.statementsMatching(da, ACL('originClass'), undefined, defaultACLdoc) as Array<Statement>)
+      .concat(kb.statementsMatching(da, ACL('mode'), undefined, defaultACLdoc) as Array<Statement>)
+    proposed.push(st(da, ACL('accessTo'), doc, defaultACLdoc)) // Suppose
     if (isContainer) {
       // By default, make this apply to folder contents too
-      proposed.push($rdf.st(da, ACL('default'), doc, defaultACLdoc))
+      proposed.push(st(da, ACL('default'), doc, defaultACLdoc))
     }
   })
-  const kb2 = $rdf.graph() // Potential - derived is kept apart
+  const kb2 = graph([], {}) // Potential - derived is kept apart
   proposed.map(function (st) {
     const move = function (sym) {
       const y = defaultACLdoc.uri.length // The default ACL file
-      return $rdf.sym(
+      return sym(
         sym.uri.slice(0, y) === defaultACLdoc.uri
           ? aclDoc.uri + sym.uri.slice(y)
           : sym.uri
@@ -54,7 +57,7 @@ export function adoptACLDefault (
       move(st.subject),
       move(st.predicate),
       move(st.object),
-      $rdf.sym(aclDoc.uri)
+      sym(aclDoc.uri)
     )
   })
 
@@ -66,12 +69,12 @@ export function adoptACLDefault (
 // Accumulate the access rights which each agent or class has
 
 export function readACL (
-  x: $rdf.NamedNode,
-  aclDoc: $rdf.NamedNode,
-  kb2: $rdf.IndexedFormula = kb,
+  x: NamedNode,
+  aclDoc: NamedNode,
+  kb2: LiveStore = kb,
   getDefaults?: boolean
 ): AgentMapMap {
-  const auths: Array<$rdf.NamedNode> = getDefaults
+  const auths: Array<NamedNode> = getDefaults
     ? getDefaultsFallback(kb2, ns)
     : kb2.each(undefined, ns.acl('accessTo'), x)
 
@@ -85,8 +88,8 @@ export function readACL (
   }
   Object.keys(ac).forEach(pred => {
     auths.forEach(function (a) {
-      (kb2.each(a, ACL('mode')) as Array<$rdf.NamedNode>).forEach(function (mode) {
-        (kb2.each(a, ACL(pred)) as Array<$rdf.NamedNode>).forEach(function (agent) {
+      (kb2.each(a, ACL('mode')) as Array<NamedNode>).forEach(function (mode) {
+        (kb2.each(a, ACL(pred)) as Array<NamedNode>).forEach(function (agent) {
           ac[pred][agent.uri] = ac[pred][agent.uri] || {}
           ac[pred][agent.uri][mode.uri] = a // could be "true" but leave pointer just in case
         })
@@ -151,7 +154,7 @@ export function ACLunion (list: Array<AgentMapMap>): AgentMapMap {
 
 // Merge ACLs lists from things to form union
 
-export function loadUnionACL (subjectList: Array<$rdf.NamedNode>, callbackFunction: Function): void {
+export function loadUnionACL (subjectList: Array<NamedNode>, callbackFunction: Function): void {
   const aclList: Array<AgentMapMap> = []
   const doList = function (list) {
     if (list.length) {
@@ -168,7 +171,7 @@ export function loadUnionACL (subjectList: Array<$rdf.NamedNode>, callbackFuncti
         if (!ok || !defaultHolder || !defaultACLDoc) return callbackFunction(ok, targetACLDoc)
         const acl = defa
           ? readACL(defaultHolder, defaultACLDoc)
-          : readACL(targetDoc as $rdf.NamedNode, targetACLDoc as $rdf.NamedNode)
+          : readACL(targetDoc as NamedNode, targetACLDoc as NamedNode)
         aclList.push(acl)
         doList(list.slice(1))
       })
@@ -204,7 +207,7 @@ export function ACLbyCombination (ac: AgentMapMap): ComboList {
 
 //    Write ACL graph to store from AC
 //
-export function makeACLGraph (kb: $rdf.IndexedFormula, x: $rdf.NamedNode, ac: AgentMapMap, aclDoc: $rdf.NamedNode): void {
+export function makeACLGraph (kb: LiveStore, x: NamedNode, ac: AgentMapMap, aclDoc: NamedNode): void {
   const byCombo = ACLbyCombination(ac)
   return makeACLGraphbyCombo(kb, x, byCombo, aclDoc)
 }
@@ -212,10 +215,10 @@ export function makeACLGraph (kb: $rdf.IndexedFormula, x: $rdf.NamedNode, ac: Ag
 //    Write ACL graph to store from combo
 //
 export function makeACLGraphbyCombo (
-  kb: $rdf.IndexedFormula,
-  x: $rdf.NamedNode,
+  kb: LiveStore,
+  x: NamedNode,
   byCombo: ComboList,
-  aclDoc: $rdf.NamedNode,
+  aclDoc: NamedNode,
   main?: boolean,
   defa?: boolean
 ): void {
@@ -268,7 +271,8 @@ export function comboToString (byCombo: ComboList): string {
     const pairs = byCombo[combo]
     for (let i = 0; i < pairs.length; i++) {
       const pred = pairs[i][0]
-      const ag = $rdf.sym(pairs[i][1])
+      // @@ TODO Remove casting to NamedNode https://github.com/linkeddata/rdflib.js/issues/376
+      const ag = sym(pairs[i][1]) as NamedNode
       str += pred === 'agent' ? '@' : ''
       str += ag.sameTerm(ns.foaf('Agent')) ? '*' : utils.label(ag)
       if (i < pairs.length - 1) str += ','
@@ -280,20 +284,21 @@ export function comboToString (byCombo: ComboList): string {
 
 //    Write ACL graph to string
 //
-export function makeACLString (x: $rdf.NamedNode, ac: AgentMapMap, aclDoc: $rdf.NamedNode): string {
-  const kb2 = $rdf.graph()
+export function makeACLString (x: NamedNode, ac: AgentMapMap, aclDoc: NamedNode): string | undefined {
+  // @@ TODO Simplify call to graph https://github.com/linkeddata/rdflib.js/issues/376
+  const kb2 = new LiveStore()
   makeACLGraph(kb2, x, ac, aclDoc)
   // @@ TODO Remove casting
-  return ($rdf as any).serialize(aclDoc, kb2, aclDoc.uri, 'text/turtle')
+  return serialize(aclDoc, kb2, aclDoc.uri, 'text/turtle')
 }
 
 //    Write ACL graph to web
 //
 export function putACLObject (
-  kb: $rdf.IndexedFormula,
-  x: $rdf.NamedNode,
+  kb: LiveStore,
+  x: NamedNode,
   ac: AgentMapMap,
-  aclDoc: $rdf.NamedNode,
+  aclDoc: NamedNode,
   callbackFunction
 ): void {
   const byCombo = ACLbyCombination(ac)
@@ -303,18 +308,17 @@ export function putACLObject (
 //    Write ACL graph to web from combo
 //
 export function putACLbyCombo (
-  kb: $rdf.IndexedFormula,
-  x: $rdf.NamedNode,
+  kb: LiveStore,
+  x: NamedNode,
   byCombo: ComboList,
-  aclDoc: $rdf.NamedNode,
+  aclDoc: NamedNode,
   callbackFunction: (ok: boolean, message?: string) => void
 ): void {
-  const kb2 = $rdf.graph()
+  const kb2 = new LiveStore()
   makeACLGraphbyCombo(kb2, x, byCombo, aclDoc, true)
 
   // const str = makeACLString = function(x, ac, aclDoc)
-  // @@ TODO Remove casting of kb.updater and kb.fetcher
-  ;(kb.updater as $rdf.UpdateManager).put(
+  kb.updater.put(
     aclDoc,
     kb2.statementsMatching(undefined, undefined, undefined, aclDoc),
     'text/turtle',
@@ -336,8 +340,9 @@ export function putACLbyCombo (
 // All group files must be loaded first
 //
 
-export function fixIndividualCardACL (person: $rdf.NamedNode, log: Function, callbackFunction: Function): void {
-  const groups = kb.each(undefined, ns.vcard('hasMember'), person)
+export function fixIndividualCardACL (person: NamedNode, log: Function, callbackFunction: Function): void {
+  // @@ TODO Remove casting to Array<NamedNode> https://github.com/linkeddata/rdflib.js/issues/376
+  const groups = kb.each(undefined, ns.vcard('hasMember'), person) as Array<NamedNode>
   // const doc = person.doc()
   if (groups) {
     fixIndividualACL(person, groups, log, callbackFunction)
@@ -348,7 +353,7 @@ export function fixIndividualCardACL (person: $rdf.NamedNode, log: Function, cal
   // @@ if no groups, then use default for People container or the book top container.?
 }
 
-export function fixIndividualACL (item: $rdf.NamedNode, subjects: Array<$rdf.NamedNode>, log: Function, callbackFunction: Function): void {
+export function fixIndividualACL (item: NamedNode, subjects: Array<NamedNode>, log: Function, callbackFunction: Function): void {
   log = log || console.log
   const doc = item.doc()
   getACLorDefault(doc, function (
@@ -361,7 +366,7 @@ export function fixIndividualACL (item: $rdf.NamedNode, subjects: Array<$rdf.Nam
   ) {
     if (!ok || !defaultHolder || !defaultACLDoc) return callbackFunction(false, targetACLDoc) // ie message
     const ac = exists
-      ? readACL(targetDoc as $rdf.NamedNode, targetACLDoc as $rdf.NamedNode)
+      ? readACL(targetDoc as NamedNode, targetACLDoc as NamedNode)
       : readACL(defaultHolder, defaultACLDoc)
     loadUnionACL(subjects, function (ok, union) {
       if (!ok) return callbackFunction(false, union)
@@ -376,9 +381,9 @@ export function fixIndividualACL (item: $rdf.NamedNode, subjects: Array<$rdf.Nam
 
         putACLObject(
           kb,
-          targetDoc as $rdf.NamedNode,
+          targetDoc as NamedNode,
           union,
-          targetACLDoc as $rdf.NamedNode,
+          targetACLDoc as NamedNode,
           callbackFunction
         )
       }
@@ -387,14 +392,12 @@ export function fixIndividualACL (item: $rdf.NamedNode, subjects: Array<$rdf.Nam
 }
 
 export function setACL (
-  docURI: $rdf.NamedNode,
+  docURI: NamedNode,
   aclText: string,
   callbackFunction: (ok: boolean, message: string) => void
 ): void {
-  const aclDoc = kb.any(
-    kb.sym(docURI),
-    kb.sym('http://www.iana.org/assignments/link-relations/acl')
-  ) // @@ check that this get set by web.js
+  // @@ TODO Remove casting to NamedNode https://github.com/linkeddata/rdflib.js/issues/376
+  const aclDoc = kb.any(kb.sym(docURI), kb.sym('http://www.iana.org/assignments/link-relations/acl')) as NamedNode // @@ check that this get set by web.js
   if (aclDoc) {
     // Great we already know where it is
     kb.fetcher
@@ -402,14 +405,13 @@ export function setACL (
         data: aclText,
         contentType: 'text/turtle'
       })
-      .then(callbackFunction) // @@@ check params
+      .then(() => callbackFunction(true, '')) // @@@ check params
+      .catch(reason => callbackFunction(false, reason.toString()))
   } else {
     kb.fetcher.nowOrWhenFetched(docURI, undefined, function (ok, body) {
       if (!ok) return callbackFunction(ok, 'Gettting headers for ACL: ' + body)
-      const aclDoc = kb.any(
-        kb.sym(docURI),
-        kb.sym('http://www.iana.org/assignments/link-relations/acl')
-      ) // @@ check that this get set by web.js
+      // @@ TODO Remove casting to NamedNode https://github.com/linkeddata/rdflib.js/issues/376
+      const aclDoc = kb.any(kb.sym(docURI), kb.sym('http://www.iana.org/assignments/link-relations/acl')) as NamedNode // @@ check that this get set by web.js
       if (!aclDoc) {
         // complainIfBad(false, "No Link rel=ACL header for " + docURI)
         callbackFunction(false, 'No Link rel=ACL header for ' + docURI)
@@ -419,7 +421,8 @@ export function setACL (
             data: aclText,
             contentType: 'text/turtle'
           })
-          .then(callbackFunction)
+          .then(() => callbackFunction(true, ''))
+          .catch(reason => callbackFunction(false, reason.toString()))
       }
     })
   }
@@ -433,14 +436,14 @@ export function setACL (
 // callbackFunction(false, true, status, message)  error getting default
 
 export function getACLorDefault (
-  doc: $rdf.NamedNode,
+  doc: NamedNode,
   callbackFunction: (
     a: boolean,
     b: boolean,
-    statusOrMessage: number | $rdf.NamedNode,
-    message: string | $rdf.NamedNode,
-    c?: $rdf.NamedNode,
-    d?: $rdf.NamedNode
+    statusOrMessage: number | NamedNode,
+    message: string | NamedNode,
+    c?: NamedNode,
+    d?: NamedNode
   ) => void
 ): void {
   getACL(doc, function (ok, status, aclDoc, message) {
@@ -458,51 +461,28 @@ export function getACLorDefault (
         return callbackFunction(false, true, 404, 'Found no ACL resource')
       }
       uri = uri.slice(0, right + 1)
-      const doc2 = $rdf.sym(uri)
+      // @@ TODO Remove casting to NamedNode https://github.com/linkeddata/rdflib.js/issues/376
+      const doc2 = sym(uri) as NamedNode
       getACL(doc2, function (ok, status, defaultACLDoc) {
         if (!ok) {
-          return callbackFunction(
-            false,
-            true,
-            status as number,
-            `( No ACL pointer ${uri} ${status})${defaultACLDoc}`
-          )
+          return callbackFunction(false, true, status as number, `( No ACL pointer ${uri} ${status})${defaultACLDoc}`)
         } else if (status === 403) {
-          return callbackFunction(
-            false,
-            true,
-            status,
-            `( default ACL file FORBIDDEN. Stop.${uri})`
-          )
+          return callbackFunction(false, true, status, `( default ACL file FORBIDDEN. Stop.${uri})`)
         } else if (status === 404) {
           return tryParent(uri)
         } else if (status !== 200) {
-          return callbackFunction(
-            false,
-            true,
-            status as number,
-            `Error status '${status}' searching for default for ${doc2}`
-          )
+          return callbackFunction(false, true, status as number, `Error status '${status}' searching for default for ${doc2}`)
         }
         // 200
         // statusBlock.textContent += (" ACCESS set at " + uri + ". End search.")
         const defaults = kb
-          .each(undefined, ACL('default'), kb.sym(uri), defaultACLDoc)
-          .concat(
-            kb.each(undefined, ACL('defaultForNew'), kb.sym(uri), defaultACLDoc)
-          )
+          .each(undefined, ACL('default'), kb.sym(uri), defaultACLDoc as NamedNode)
+          .concat(kb.each(undefined, ACL('defaultForNew'), kb.sym(uri), defaultACLDoc as NamedNode))
         if (!defaults.length) {
           return tryParent(uri) // Keep searching
         }
         const defaultHolder = kb.sym(uri)
-        return callbackFunction(
-          true,
-          false,
-          doc,
-          aclDoc as $rdf.NamedNode,
-          defaultHolder,
-          defaultACLDoc as $rdf.NamedNode
-        )
+        return callbackFunction(true, false, doc, aclDoc as NamedNode, defaultHolder, defaultACLDoc as NamedNode)
       })
     } // tryParent
 
@@ -531,7 +511,7 @@ export function getACLorDefault (
       )
     } else {
       // 200
-      return callbackFunction(true, true, doc, aclDoc as $rdf.NamedNode)
+      return callbackFunction(true, true, doc, aclDoc as NamedNode)
     }
   }) // Call to getACL
 } // getACLorDefault
@@ -544,11 +524,11 @@ export function getACLorDefault (
 //   (true, 200, documentSymbol)   if file exitss and read OK
 //
 export function getACL (
-  doc: $rdf.NamedNode,
+  doc: NamedNode,
   callbackFunction: (
     ok: boolean,
     messageOrStatus: number | string,
-    messageOrDoc?: $rdf.NamedNode | string,
+    messageOrDoc?: NamedNode | string,
     message?: string
   ) => void
 ): void {
@@ -556,10 +536,8 @@ export function getACL (
     if (!ok) {
       return callbackFunction(ok, `Can't get headers to find ACL for ${doc}: ${body}`)
     }
-    const aclDoc = kb.any(
-      doc,
-      kb.sym('http://www.iana.org/assignments/link-relations/acl')
-    ) // @@ check that this get set by web.js
+    // @@ TODO Remove casting to NamedNode https://github.com/linkeddata/rdflib.js/issues/376
+    const aclDoc = kb.any(doc, kb.sym('http://www.iana.org/assignments/link-relations/acl')) as NamedNode // @@ check that this get set by web.js
     if (!aclDoc) {
       callbackFunction(false, 900, `No Link rel=ACL header for ${doc}`)
     } else {
@@ -571,18 +549,9 @@ export function getACL (
           `ACL file ${aclDoc} does not exist.`
         )
       }
-      kb.fetcher.nowOrWhenFetched(aclDoc, undefined, function (
-        ok,
-        message,
-        response
-      ) {
+      kb.fetcher.nowOrWhenFetched(aclDoc, undefined, (ok, message, response) => {
         if (!ok) {
-          callbackFunction(
-            true,
-            response.status,
-            aclDoc,
-            `Can't read Access Control File ${aclDoc}: ${message}`
-          )
+          callbackFunction(true, response.status, aclDoc, `Can't read Access Control File ${aclDoc}: ${message}`)
         } else {
           callbackFunction(true, 200, aclDoc)
         }

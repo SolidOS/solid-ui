@@ -11,7 +11,6 @@
  */
 import escape from 'escape-html'
 import uuid from 'node-uuid'
-import * as rdf from 'rdflib'
 // const webClient = require('solid-web-client')(rdf)
 
 import { makeDropTarget } from './dragAndDrop'
@@ -19,6 +18,7 @@ import { errorMessageBlock } from './error'
 import { iconBase } from '../iconBase'
 import ns from '../ns'
 import kb from '../store'
+import { literal, namedNode, st, sym } from 'rdflib'
 
 export class PeoplePicker {
   constructor (element, typeIndex, groupPickedCb, options) {
@@ -141,7 +141,7 @@ export class PeoplePicker {
 
   createNewGroup (book) {
     const { groupIndex, groupContainer } = indexes(book)
-    const group = rdf.sym(
+    const group = sym(
       `${groupContainer.uri}${uuid.v4().slice(0, 8)}.ttl#this`
     )
     const name = this.options.defaultNewGroupName || 'Untitled Group'
@@ -150,20 +150,20 @@ export class PeoplePicker {
     // non-atomic in that solid requires us to send two PATCHes, either of which
     // might fail.
     const patchPromises = [group.doc(), groupIndex].map(doc => {
-      const typeStatement = rdf.st(
+      const typeStatement = st(
         group,
         ns.rdf('type'),
         ns.vcard('Group'),
         doc
       )
-      const nameStatement = rdf.st(
+      const nameStatement = st(
         group,
         ns.vcard('fn'),
         name,
         group.doc(),
         doc
       )
-      const includesGroupStatement = rdf.st(
+      const includesGroupStatement = st(
         book,
         ns.vcard('includesGroup'),
         group,
@@ -363,7 +363,7 @@ export class GroupBuilder {
         }
         // make sure it's a valid person, group, or entity (for now just handle
         // webId)
-        const webIdNode = rdf.namedNode(webId)
+        const webIdNode = namedNode(webId)
         const rdfClass = kb.any(webIdNode, ns.rdf('type'))
         if (!rdfClass || !rdfClass.equals(ns.foaf('Person'))) {
           return reject(
@@ -377,7 +377,7 @@ export class GroupBuilder {
         return resolve(webIdNode)
       })
     }).then(webIdNode => {
-      const statement = rdf.st(this.group, ns.vcard('hasMember'), webIdNode)
+      const statement = st(this.group, ns.vcard('hasMember'), webIdNode)
       if (kb.holdsStatement(statement)) {
         return webIdNode
       }
@@ -392,7 +392,7 @@ export class GroupBuilder {
 
   handleRemove (webIdNode) {
     return _event => {
-      const statement = rdf.st(this.group, ns.vcard('hasMember'), webIdNode)
+      const statement = st(this.group, ns.vcard('hasMember'), webIdNode)
       return patch(this.group.doc().uri, { toDel: [statement] })
         .then(() => {
           kb.remove(statement)
@@ -420,10 +420,10 @@ export class GroupBuilder {
         null,
         namedGraph
       )
-      const newNameStatement = rdf.st(
+      const newNameStatement = st(
         this.group,
         ns.vcard('fn'),
-        rdf.literal(name)
+        literal(name)
       )
       return patch(namedGraph.value, {
         toDel: oldNameStatements,

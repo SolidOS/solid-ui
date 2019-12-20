@@ -3,7 +3,7 @@
  **
  */
 
-const kb = require('../store.js')
+const kb = require('../store')
 const ns = require('../ns.js')
 
 module.exports = class DateFolder {

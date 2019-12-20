@@ -9,8 +9,8 @@ import utils from '../utils.js'
 import { ACLbyCombination, adoptACLDefault, getACLorDefault, makeACLGraphbyCombo, readACL, sameACL } from './acl'
 import widgets from '../widgets'
 import icons from '../iconBase.js'
-import { graph, IndexedFormula, NamedNode, sym, UpdateManager } from 'rdflib'
-import { DataBrowserContext } from 'pane-registry'
+import { graph, NamedNode, sym, UpdateManager } from 'rdflib'
+import { DataBrowserContext, LiveStore } from 'pane-registry'
 import { logInLoadProfile } from '../authn/authn'
 
 // In apps which may use drag and drop, this utility takes care of the fact
@@ -67,7 +67,7 @@ export function ACLControlBox5 (
   subject: NamedNode,
   context: DataBrowserContext,
   noun: string,
-  kb: IndexedFormula
+  kb: LiveStore
 ): HTMLElement {
   const dom = context.dom
   const ACL = ns.acl
@@ -180,7 +180,8 @@ export function ACLControlBox5 (
     }
 
     function agentTriage (uri) {
-      const obj = sym(uri)
+      // @@ TODO Remove casting to NamedNode https://github.com/linkeddata/rdflib.js/issues/376
+      const obj = sym(uri) as NamedNode
       const types = kb.findTypeURIs(obj)
       for (const ty in types) {
         console.log('    drop object type includes: ' + ty)
@@ -197,10 +198,9 @@ export function ACLControlBox5 (
         uri.endsWith('/')
       ) {
         // there  IS third slash
-        console.log(
-          'Assuming final slash on dragged origin URI was unintended!'
-        )
-        return { pred: 'origin', obj: sym(uri.slice(0, -1)) } // Fix a URI where the drag and drop system has added a spurious slash
+        console.log('Assuming final slash on dragged origin URI was unintended!')
+        // @@ TODO Remove casting to NamedNode https://github.com/linkeddata/rdflib.js/issues/376
+        return { pred: 'origin', obj: sym(uri.slice(0, -1)) as NamedNode } // Fix a URI where the drag and drop system has added a spurious slash
       }
 
       if (ns.vcard('WebID').uri in types) return { pred: 'agent', obj: obj }
@@ -222,7 +222,7 @@ export function ACLControlBox5 (
         ns.foaf('Agent').uri in types
       ) {
         const pref = kb.any(obj, ns.foaf('preferredURI'))
-        if (pref) return { pred: 'agent', obj: sym(pref) }
+        if (pref) return { pred: 'agent', obj: sym(pref) as NamedNode }
         return { pred: 'agent', obj: obj }
       }
       if (ns.solid('AppProvider').uri in types) {
@@ -235,30 +235,17 @@ export function ACLControlBox5 (
     }
 
     box.saveBack = function (callback) {
-      const kb2 = graph()
+      // @@ TODO Simplify call to graph https://github.com/linkeddata/rdflib.js/issues/376
+      const kb2 = new LiveStore()
       if (!box.isContainer) {
         makeACLGraphbyCombo(kb2, doc, box.mainByCombo, aclDoc, true)
       } else if (box.defaultsDiffer) {
         // Pair of controls
         makeACLGraphbyCombo(kb2, doc, box.mainByCombo, aclDoc, true)
-        makeACLGraphbyCombo(
-          kb2,
-          doc,
-          box.defByCombo,
-          aclDoc,
-          false,
-          true
-        )
+        makeACLGraphbyCombo(kb2, doc, box.defByCombo, aclDoc, false, true)
       } else {
         // Linked controls
-        makeACLGraphbyCombo(
-          kb2,
-          doc,
-          box.mainByCombo,
-          aclDoc,
-          true,
-          true
-        )
+        makeACLGraphbyCombo(kb2, doc, box.mainByCombo, aclDoc, true, true)
       }
       const updater = kb2.updater || new UpdateManager(kb2)
       updater.put(
@@ -410,7 +397,8 @@ export function ACLControlBox5 (
         }
 
         let res = agentTriage(u) // eg 'agent', 'origin', agentClass'
-        const thing = sym(u)
+        // @@ TODO Remove casting to NamedNode https://github.com/linkeddata/rdflib.js/issues/376
+        const thing = sym(u) as NamedNode
         if (!res) {
           console.log('   Not obvious: looking up dropped thing ' + thing)
           try {
@@ -799,8 +787,8 @@ export function ACLControlBox5 (
             useDefault.style.cssText = bigButtonStyle
             useDefault.addEventListener('click', function (_event) {
               // @@ TODO Remove casting of kb
-              (kb as any).fetcher
-                .delete((targetACLDoc as NamedNode).uri)
+              kb.fetcher
+                .delete((targetACLDoc as NamedNode).uri, {})
                 .then(function () {
                   statusBlock.textContent =
                     ' The sharing for this ' + noun + ' is now the default.'
@@ -840,7 +828,8 @@ export function ACLControlBox5 (
           const targetIsProtected = targetIsStorage || targetAclIsProtected
 
           if (!targetIsProtected && targetDocDir) {
-            getACLorDefault(sym(targetDocDir), function (
+            // @@ TODO Remove casting to NamedNode https://github.com/linkeddata/rdflib.js/issues/376
+            getACLorDefault(sym(targetDocDir) as NamedNode, function (
               ok2,
               p22,
               targetDoc2,

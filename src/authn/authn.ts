@@ -7,22 +7,22 @@
  *  Many functions in this module take a context object, add to it, and return a promise of it.
  */
 import SolidTls from 'solid-auth-tls'
-import * as $rdf from 'rdflib'
 import widgets from '../widgets'
 import solidAuthClient from 'solid-auth-client'
 import ns from '../ns.js'
-import kb from '../store.js'
+import kb from '../store'
 import utils from '../utils.js'
 import log from '../log.js'
 import { AppDetails, AuthenticationContext } from './types'
 import { PaneDefinition } from 'pane-registry'
+import { graph, namedNode, NamedNode, Namespace, st, Statement, sym, UpdateManager, serialize } from 'rdflib'
 
 export { solidAuthClient }
 
 // const userCheckSite = 'https://databox.me/'
 
 // Look for and load the User who has control over it
-export function findOriginOwner (doc: $rdf.NamedNode | string): string | boolean {
+export function findOriginOwner (doc: NamedNode | string): string | boolean {
   const uri = (typeof doc === 'string') ? doc : doc.uri
   const i = uri.indexOf('://')
   if (i < 0) return false
@@ -57,14 +57,14 @@ export function findOriginOwner (doc: $rdf.NamedNode | string): string | boolean
  * @returns Returns the WebID, after setting it
  */
 export function saveUser (
-  webId: $rdf.NamedNode | string | null,
+  webId: NamedNode | string | null,
   context?: AuthenticationContext
-): $rdf.NamedNode | null {
+): NamedNode | null {
   // @@ TODO Remove the need for having context as output argument
   let webIdUri: string
   if (webId) {
     webIdUri = (typeof webId === 'string') ? webId : webId.uri
-    const me = $rdf.namedNode(webIdUri)
+    const me = namedNode(webIdUri) as NamedNode
     if (context) {
       context.me = me
     }
@@ -76,7 +76,7 @@ export function saveUser (
 /**
  * @returns {NamedNode|null}
  */
-export function defaultTestUser (): $rdf.NamedNode | null {
+export function defaultTestUser (): NamedNode | null {
   // Check for offline override
   const offlineId = offlineTestID()
 
@@ -91,13 +91,13 @@ export function defaultTestUser (): $rdf.NamedNode | null {
  *
  * @returns Named Node or null
  */
-export function currentUser (): $rdf.NamedNode | null {
+export function currentUser (): NamedNode | null {
   const str = localStorage['solid-auth-client']
   if (str) {
     const da = JSON.parse(str)
     if (da.session && da.session.webId) {
       // @@ check has not expired
-      return $rdf.sym(da.session.webId)
+      return sym(da.session.webId) as NamedNode
     }
   }
   return offlineTestID() // null unless testing
@@ -121,7 +121,7 @@ export function logIn (context: AuthenticationContext): Promise<AuthenticationCo
     checkUser().then(webId => {
       // Already logged in?
       if (webId) {
-        context.me = $rdf.sym(webId as string)
+        context.me = sym(webId as string) as NamedNode
         console.log(`logIn: Already logged in as ${context.me}`)
         return resolve(context)
       }
@@ -161,9 +161,9 @@ export function logInLoadProfile (context: AuthenticationContext): Promise<Authe
         // Load the profile into the knowledge base (fetcher.store)
         //   withCredentials: Web arch should let us just load by turning off creds helps CORS
         //   reload: Gets around a specific old Chrome bug caching/origin/cors
-        fetcher
-          .load(profileDocument, { withCredentials: false, cache: 'reload' })
-          .then(_response => {
+        // @@ TODO: Remove casting https://github.com/linkeddata/rdflib.js/issues/376
+        ;(fetcher.load(profileDocument, { withCredentials: false, cache: 'reload' }) as Promise<any>)
+          .then(() => {
             context.publicProfile = profileDocument
             resolve(context)
           })
@@ -199,7 +199,7 @@ export function logInLoadPreferences (context: AuthenticationContext): Promise<A
   return new Promise(function (resolve, reject) {
     return logInLoadProfile(context)
       .then(context => {
-        const preferencesFile = kb.any(context.me, ns.space('preferencesFile'))
+        const preferencesFile = kb.any(context.me, ns.space('preferencesFile')) as NamedNode
 
         function complain (message) {
           message = `logInLoadPreferences: ${message}`
@@ -218,7 +218,7 @@ export function logInLoadPreferences (context: AuthenticationContext): Promise<A
          * Returns True if we are in a webapp at an origin, and the file origin is different
          */
         function differentOrigin (): boolean {
-          return `${window.location.origin}/` !== preferencesFile.site().uri
+          return `${window.location.origin}/` !== preferencesFile.site().value
         }
 
         if (!preferencesFile) {
@@ -226,8 +226,8 @@ export function logInLoadPreferences (context: AuthenticationContext): Promise<A
         }
 
         // //// Load preference file
-        return kb.fetcher
-          .load(preferencesFile, { withCredentials: true })
+        // @@ TODO: Remove casting https://github.com/linkeddata/rdflib.js/issues/376
+        return (kb.fetcher.load(preferencesFile, { withCredentials: true }) as Promise<any>)
           .then(function () {
             if (progressDisplay) {
               progressDisplay.parentNode.removeChild(progressDisplay)
@@ -310,7 +310,7 @@ async function loadOneTypeIndex (context: AuthenticationContext, isPublic: boole
 
 async function loadIndex (
   context: AuthenticationContext,
-  predicate: $rdf.NamedNode,
+  predicate: NamedNode,
   isPublic: boolean
 ): Promise<AuthenticationContext> {
   // Loading preferences is more than loading profile
@@ -399,14 +399,14 @@ async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boo
     context.index[visibility] = context.index[visibility] || []
     let newIndex
     if (context.index[visibility].length === 0) {
-      newIndex = $rdf.sym(`${relevant.dir().uri + visibility}TypeIndex.ttl`)
+      newIndex = sym(`${relevant.dir().uri + visibility}TypeIndex.ttl`)
       console.log(`Linking to new fresh type index ${newIndex}`)
       if (!confirm(`OK to create a new empty index file at ${newIndex}, overwriting anything that is now there?`)) {
         throw new Error('cancelled by user')
       }
       console.log(`Linking to new fresh type index ${newIndex}`)
       const addMe = [
-        $rdf.st(context.me, ns.solid(`${visibility}TypeIndex`), newIndex, relevant)
+        st(context.me, ns.solid(`${visibility}TypeIndex`), newIndex, relevant)
       ]
       try {
         await updatePromise(kb.updater, [], addMe)
@@ -454,7 +454,7 @@ async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boo
  */
 export async function findAppInstances (
   context: AuthenticationContext,
-  klass: $rdf.NamedNode,
+  klass: NamedNode,
   isPublic: boolean
 ): Promise<AuthenticationContext> {
   const fetcher = kb.fetcher
@@ -470,17 +470,19 @@ export async function findAppInstances (
     await loadOneTypeIndex(context, isPublic)
   } catch (err) {
   }
-  const index = context.index as { [key: string]: Array<$rdf.NamedNode> }
+  const index = context.index as { [key: string]: Array<NamedNode> }
   const thisIndex = index[visibility]
+
+  // @@ TODO Remove casting to Array<NamedNode> https://github.com/linkeddata/rdflib.js/issues/376
   const registrations = thisIndex
     .map(ix => kb.each(undefined, ns.solid('forClass'), klass, ix))
-    .flat()
+    .flat() as Array<NamedNode>
   const instances = registrations
     .map(reg => kb.each(reg, ns.solid('instance')))
-    .flat()
+    .flat() as Array<NamedNode>
   const containers = registrations
     .map(reg => kb.each(reg, ns.solid('instanceContainer')))
-    .flat()
+    .flat() as Array<NamedNode>
 
   context.instances = context.instances || []
   context.instances = context.instances.concat(instances)
@@ -503,7 +505,7 @@ export async function findAppInstances (
   for (let i = 0; i < containers.length; i++) {
     const cont = containers[i]
     context.instances = context.instances.concat(
-      kb.each(cont, ns.ldp('contains'))
+      kb.each(cont, ns.ldp('contains')) as Array<NamedNode>
     )
   }
   return context
@@ -511,9 +513,9 @@ export async function findAppInstances (
 
 // @@@@ use the one in rdflib.js when it is available and delete this
 function updatePromise (
-  updater: $rdf.UpdateManager,
-  del: Array<$rdf.Statement>,
-  ins: Array<$rdf.Statement> = []
+  updater: UpdateManager,
+  del: Array<Statement>,
+  ins: Array<Statement> = []
 ): Promise<void> {
   return new Promise(function (resolve, reject) {
     updater.update(del, ins, function (uri, ok, errorBody) {
@@ -530,8 +532,8 @@ function updatePromise (
  */
 export async function registerInTypeIndex (
   context: AuthenticationContext,
-  instance: $rdf.NamedNode,
-  klass: $rdf.NamedNode,
+  instance: NamedNode,
+  klass: NamedNode,
   isPublic: boolean
 ): Promise<AuthenticationContext> {
   await ensureOneTypeIndex(context, isPublic)
@@ -546,9 +548,9 @@ export async function registerInTypeIndex (
   const registration = widgets.newThing(index)
   const ins = [
     // See https://github.com/solid/solid/blob/master/proposals/data-discovery.md
-    $rdf.st(registration, ns.rdf('type'), ns.solid('TypeRegistration'), index),
-    $rdf.st(registration, ns.solid('forClass'), klass, index),
-    $rdf.st(registration, ns.solid('instance'), instance, index)
+    st(registration, ns.rdf('type'), ns.solid('TypeRegistration'), index),
+    st(registration, ns.solid('forClass'), klass, index),
+    st(registration, ns.solid('instance'), instance, index)
   ]
   try {
     await updatePromise(kb.updater, [], ins)
@@ -591,8 +593,8 @@ export function registrationControl (
           ? registrations[0]
           : widgets.newThing(index)
         return [
-          $rdf.st(reg, ns.solid('instance'), instance, index),
-          $rdf.st(reg, ns.solid('forClass'), klass, index)
+          st(reg, ns.solid('instance'), instance, index),
+          st(reg, ns.solid('forClass'), klass, index)
         ]
       }
 
@@ -630,8 +632,8 @@ export function registrationControl (
         )
       }
       return context
-    },
-    function (e) {
+    })
+    .catch(function (e) {
       let msg
       if (context.div && context.preferencesFileError) {
         msg = '(Preferences not available)'
@@ -641,8 +643,7 @@ export function registrationControl (
         context.div.appendChild(widgets.errorMessageBlock(context.dom, e))
       }
       console.log(msg)
-    }
-    )
+    })
     .catch(function (e) {
       const msg = `registrationControl: Error making panel: ${e}`
       if (context.div) {
@@ -670,25 +671,21 @@ export function registrationList (context: AuthenticationContext, options: {
     box.setAttribute('style', 'font-size: 120%; text-align: right; padding: 1em; border: solid #eee 0.5em;')
     const table = box.firstChild as HTMLElement
 
-    let ix: Array<$rdf.NamedNode> = []
-    let sts = []
+    let ix: Array<NamedNode> = []
+    let sts: Array<Statement> = []
     const vs = ['private', 'public']
     vs.forEach(function (visibility) {
       if (context.index && options[visibility]) {
         ix = ix.concat(context.index[visibility][0])
+        // @@ TODO Remove casting to Array<Statement> https://github.com/linkeddata/rdflib.js/issues/376
         sts = sts.concat(
-          kb.statementsMatching(
-            undefined,
-            ns.solid('instance'),
-            undefined,
-            context.index[visibility][0]
-          )
+          kb.statementsMatching(undefined, ns.solid('instance'), undefined, context.index[visibility][0]) as Array<Statement>
         )
       }
     })
 
     for (let i = 0; i < sts.length; i++) {
-      const statement: $rdf.Statement = sts[i]
+      const statement: Statement = sts[i]
       // const cla = statement.subject
       const inst = statement.object
       // if (false) {
@@ -742,17 +739,18 @@ export function registrationList (context: AuthenticationContext, options: {
  * @returns Resolves with aclDoc uri on successful write
  */
 export function setACLUserPublic (
-  docURI: $rdf.NamedNode,
-  me: $rdf.NamedNode,
+  docURI: NamedNode,
+  me: NamedNode,
   options: {
     defaultForNew?: boolean,
     public?: []
   }
-): Promise<$rdf.NamedNode> {
+): Promise<NamedNode> {
+  // @@ TODO Remove casting to NamedNode https://github.com/linkeddata/rdflib.js/issues/376
   const aclDoc = kb.any(
     kb.sym(docURI),
     kb.sym('http://www.iana.org/assignments/link-relations/acl')
-  )
+  ) as NamedNode
 
   return Promise.resolve()
     .then(() => {
@@ -765,7 +763,7 @@ export function setACLUserPublic (
       })
     })
     .then(aclDoc => {
-      const aclText = genACLText(docURI, me, aclDoc.uri, options)
+      const aclText = genACLText(docURI, me, aclDoc, options)
 
       return kb.fetcher
         .webOperation('PUT', aclDoc.uri, {
@@ -786,18 +784,20 @@ export function setACLUserPublic (
  * @param docURI
  * @returns
  */
-function fetchACLRel (docURI: $rdf.NamedNode): Promise<$rdf.NamedNode> {
+function fetchACLRel (docURI: NamedNode): Promise<NamedNode> {
   const fetcher = kb.fetcher
 
-  return fetcher.load(docURI).then(result => {
+  // @@ TODO Remove casting to Promise<any> https://github.com/linkeddata/rdflib.js/issues/376
+  return (fetcher.load(docURI) as Promise<any>).then(result => {
     if (!result.ok) {
       throw new Error('fetchACLRel: While loading:' + result.error)
     }
 
+    // @@ TODO Remove casting to NamedNode https://github.com/linkeddata/rdflib.js/issues/376
     const aclDoc = kb.any(
       kb.sym(docURI),
       kb.sym('http://www.iana.org/assignments/link-relations/acl')
-    )
+    ) as NamedNode
 
     if (!aclDoc) {
       throw new Error('fetchACLRel: No Link rel=ACL header for ' + docURI)
@@ -816,17 +816,18 @@ function fetchACLRel (docURI: $rdf.NamedNode): Promise<$rdf.NamedNode> {
  * @returns Serialized ACL
  */
 function genACLText (
-  docURI: $rdf.NamedNode,
-  me: $rdf.NamedNode,
-  aclURI: $rdf.NamedNode,
+  docURI: NamedNode,
+  me: NamedNode,
+  aclURI: NamedNode,
   options: {
     defaultForNew?: boolean,
     public?: []
   } = {}
-): string {
+): string | undefined {
   const optPublic = options.public || []
-  const g = $rdf.graph()
-  const auth = $rdf.Namespace('http://www.w3.org/ns/auth/acl#')
+  // @@ TODO Simplify graph https://github.com/linkeddata/rdflib.js/issues/376
+  const g = graph([], {})
+  const auth = Namespace('http://www.w3.org/ns/auth/acl#')
   let a = g.sym(`${aclURI}#a1`)
   const acl = g.sym(aclURI)
   const doc = g.sym(docURI)
@@ -851,13 +852,13 @@ function genACLText (
     }
   }
   // @@ TODO Remove casting of $rdf
-  return ($rdf as any).serialize(acl, g, aclURI, 'text/turtle')
+  return serialize(acl, g, aclURI, 'text/turtle')
 }
 
 /**
  * @returns {NamedNode|null}
  */
-export function offlineTestID (): $rdf.NamedNode | null {
+export function offlineTestID (): NamedNode | null {
   const { $SolidTestEnvironment }: any = window
   if (
     typeof $SolidTestEnvironment !== 'undefined' &&
@@ -865,7 +866,8 @@ export function offlineTestID (): $rdf.NamedNode | null {
   ) {
     // Test setup
     console.log('Assuming the user is ' + $SolidTestEnvironment.username)
-    return $rdf.sym($SolidTestEnvironment.username)
+    // @@ TODO Remove casting to NamedNode https://github.com/linkeddata/rdflib.js/issues/376
+    return sym($SolidTestEnvironment.username) as NamedNode
   }
 
   if (
@@ -880,7 +882,8 @@ export function offlineTestID (): $rdf.NamedNode | null {
     /* me = kb.any(subject, ns.acl('owner')); // when testing on plane with no WebID
      */
     console.log('Assuming user is ' + id)
-    return $rdf.sym(id)
+    // @@ TODO Remove casting to NamedNode https://github.com/linkeddata/rdflib.js/issues/376
+    return sym(id) as NamedNode
   }
   return null
 }
@@ -995,8 +998,8 @@ function checkCurrentUser () {
  * @returns Resolves with web id uri, if no callback provided
  */
 export function checkUser<T> (
-  setUserCallback?: (me: $rdf.NamedNode | null) => T
-): Promise<$rdf.NamedNode | T> {
+  setUserCallback?: (me: NamedNode | null) => T
+): Promise<NamedNode | T> {
   // Check to see if already logged in / have the WebID
   const me = defaultTestUser()
   if (me) {
@@ -1054,7 +1057,8 @@ export function loginStatusBox (
 
     const uri = newidURI.uri || newidURI
     //    UI.preferences.set('me', uri)
-    me = $rdf.sym(uri)
+    // @@ TODO Remove casting to NamedNode https://github.com/linkeddata/rdflib.js/issues/376
+    me = sym(uri) as NamedNode
     box.refresh()
     if (listener) listener(me.uri)
   }
@@ -1103,7 +1107,8 @@ export function loginStatusBox (
     solidAuthClient.currentSession().then(
       session => {
         if (session && session.webId) {
-          me = $rdf.sym(session.webId)
+          // @@ TODO Remove casting to NamedNode https://github.com/linkeddata/rdflib.js/issues/376
+          me = sym(session.webId) as NamedNode
         } else {
           me = null
         }
@@ -1126,7 +1131,8 @@ export function loginStatusBox (
   if (solidAuthClient.trackSession) {
     solidAuthClient.trackSession(session => {
       if (session && session.webId) {
-        me = $rdf.sym(session.webId)
+        // @@ TODO Remove casting to Promise<any> https://github.com/linkeddata/rdflib.js/issues/376
+        me = sym(session.webId) as NamedNode
       } else {
         me = null
       }
@@ -1177,12 +1183,8 @@ export function selectWorkspace (
   }
 
   function figureOutBase (ws) {
-    let newBase = kb.any(ws, ns.space('uriPrefix'))
-    if (!newBase) {
-      newBase = ws.uri.split('#')[0]
-    } else {
-      newBase = newBase.value
-    }
+    const newBaseNode = kb.any(ws, ns.space('uriPrefix'))
+    let newBase = newBaseNode ? newBaseNode.value : ws.uri.split('#')[0]
     if (newBase.slice(-1) !== '/') {
       console.log(`${appPathSegment}: No / at end of uriPrefix ${newBase}`) // @@ paramater?
       newBase = `${newBase}/`
@@ -1199,28 +1201,28 @@ export function selectWorkspace (
     let newBase = null
 
     // A workspace specifically defined in the private preference file:
-    let w = kb
+    // @@ TODO Remove casting to Array<NamedNode> https://github.com/linkeddata/rdflib.js/issues/376
+    let workspaces = kb
       .statementsMatching(
         id,
         ns.space('workspace'), // Only trust preference file here
         undefined,
         preferencesFile
       )
-      .map(function (st) {
-        return st.object
-      })
+      .map((st) => st.object) as Array<NamedNode>
 
     // A workspace in a storage in the public profile:
-    const storages = kb.each(id, ns.space('storage')) // @@ No provenance requirement at the moment
-    storages.map(function (s) {
-      w = w.concat(kb.each(s, ns.ldp('contains')))
+    // @@ TODO Remove casting to Array<NamedNode> https://github.com/linkeddata/rdflib.js/issues/376
+    const storages = kb.each(id, ns.space('storage')) as Array<NamedNode> // @@ No provenance requirement at the moment
+    storages.map(function (storage) {
+      workspaces = workspaces.concat(kb.each(storage, ns.ldp('contains')) as Array<NamedNode>)
     })
 
-    if (w.length === 1) {
-      say(`Workspace used: ${w[0].uri}`) // @@ allow user to see URI
-      newBase = figureOutBase(w[0])
+    if (workspaces.length === 1) {
+      say(`Workspace used: ${workspaces[0].uri}`) // @@ allow user to see URI
+      newBase = figureOutBase(workspaces[0])
       // callbackWS(w[0], newBase)
-    } else if (w.length === 0) {
+    } else if (workspaces.length === 0) {
       say(`You don't seem to have any workspaces. You have ${storages.length} storage spaces.`)
     }
 
@@ -1267,7 +1269,7 @@ export function selectWorkspace (
     // Now go set up the table of spaces
 
     // const row = 0
-    w = w.filter(function (x) {
+    workspaces = workspaces.filter(function (x) {
       return !kb.holds(
         x,
         ns.rdf('type'), // Ignore master workspaces
@@ -1278,12 +1280,12 @@ export function selectWorkspace (
     const cellStyle = 'height: 3em; margin: 1em; padding: 1em white; border-radius: 0.3em;'
     const deselectedStyle = `${cellStyle}border: 0px;`
     // const selectedStyle = cellStyle + 'border: 1px solid black;'
-    for (let i = 0; i < w.length; i++) {
-      ws = w[i]
+    for (let i = 0; i < workspaces.length; i++) {
+      ws = workspaces[i]
       tr = dom.createElement('tr')
       if (i === 0) {
         col1 = dom.createElement('td')
-        col1.setAttribute('rowspan', `${w.length}1`)
+        col1.setAttribute('rowspan', `${workspaces.length}1`)
         col1.textContent = 'Choose a workspace for this:'
         col1.setAttribute('style', 'vertical-align:middle;')
         tr.appendChild(col1)
@@ -1313,7 +1315,7 @@ export function selectWorkspace (
       tr.appendChild(col2)
       if (i === 0) {
         col3 = dom.createElement('td')
-        col3.setAttribute('rowspan', `${w.length}1`)
+        col3.setAttribute('rowspan', `${workspaces.length}1`)
         // col3.textContent = '@@@@@ remove';
         col3.setAttribute('style', 'width:50%;')
         tr.appendChild(col3)
@@ -1377,7 +1379,7 @@ export function newAppInstance (
   callback: (workspace: string | null, newBase: string) => void
 ): HTMLElement {
   const gotWS = function (ws, base) {
-    // $rdf.log.debug("newAppInstance: Selected workspace = " + (ws? ws.uri : 'none'))
+    // log.debug("newAppInstance: Selected workspace = " + (ws? ws.uri : 'none'))
     callback(ws, base)
   }
   const div = dom.createElement('div')
@@ -1392,7 +1394,7 @@ export function newAppInstance (
   return div
 }
 
-export async function getUserRoles (): Promise<Array<$rdf.NamedNode>> {
+export async function getUserRoles (): Promise<Array<NamedNode>> {
   try {
     const {
       me,
@@ -1402,7 +1404,8 @@ export async function getUserRoles (): Promise<Array<$rdf.NamedNode>> {
     if (!preferencesFile || preferencesFileError) {
       throw new Error(preferencesFileError)
     }
-    return kb.each(me, ns.rdf('type'), null, preferencesFile.doc())
+    // @@ TODO Remove casting to Array<NamedNode> https://github.com/linkeddata/rdflib.js/issues/376
+    return kb.each(me, ns.rdf('type'), null, preferencesFile.doc()) as Array<NamedNode>
   } catch (error) {
     console.warn('Unable to fetch your preferences - this was the error: ', error)
   }
@@ -1414,7 +1417,7 @@ export async function filterAvailablePanes (panes: Array<PaneDefinition>): Promi
   return panes.filter(pane => isMatchingAudience(pane, userRoles))
 }
 
-function isMatchingAudience (pane: PaneDefinition, userRoles: Array<$rdf.NamedNode>): boolean {
+function isMatchingAudience (pane: PaneDefinition, userRoles: Array<NamedNode>): boolean {
   const audience = pane.audience || []
   return audience.reduce(
     (isMatch, audienceRole) => isMatch && !!userRoles.find(role => role.equals(audienceRole)),

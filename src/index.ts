@@ -60,7 +60,6 @@ import { infiniteMessageArea } from './chat/infinite'
 import pad from './pad'
 // @ts-ignore
 import preferences from './preferences'
-// @ts-ignore
 import store from './store'
 // @ts-ignore
 import style from './style'

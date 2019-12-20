@@ -2,7 +2,7 @@ import { NamedNode } from 'rdflib'
 
 export type AppDetails = {
   noun: string
-  appPathSegment: string
+  appPathSegment?: string
 }
 
 export type AuthenticationContext = {
