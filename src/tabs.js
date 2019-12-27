@@ -122,6 +122,9 @@ UI.tabs.tabWidget = function (options) {
     if (options.ordered !== false) {
       // default to true
       var list = kb.the(subject, options.predicate)
+      if (!list) {
+        return []
+      }
       return list.elements
     } else {
       return kb.each(subject, options.predicate)
