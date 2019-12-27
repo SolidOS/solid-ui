@@ -189,8 +189,8 @@ buttons.iconForClass = {
   // Relative URIs to the iconBase
   'solid:AppProviderClass': 'noun_144.svg', //  @@ classs name should not contain 'Class'
   'solid:AppProvider': 'noun_15177.svg', // @@
+  'solid:Pod': 'noun_Cabinet_1434380.svg',
   'vcard:Group': 'noun_339237.svg',
-  'rdfs:Class': 'noun_339237.svg', // @@ Make different from group! Icon???
   'vcard:Organization': 'noun_143899.svg',
   'vcard:Individual': 'noun_15059.svg',
   'schema:Person': 'noun_15059.svg',
@@ -202,7 +202,10 @@ buttons.iconForClass = {
   'trip:Trip': 'noun_581629.svg',
   'meeting:Meeting': 'noun_66617.svg',
   'meeting:LongChat': 'noun_1689339.svg',
-  'ui:Form': 'noun_122196.svg'
+  'ui:Form': 'noun_122196.svg',
+  'rdfs:Class': 'class-rectangle.svg', // For RDF developers
+  'rdf:Property': 'property-diamond.svg',
+  'owl:Ontology': 'noun_classification_1479198.svg'
 }
 
 var tempSite = function (x) {
@@ -1004,9 +1007,7 @@ buttons.index.twoLine.widgetForClass = function (c) {
   return buttons.index.twoLine['']
 }
 
-buttons.index.twoLine[
-  'http://www.w3.org/2000/10/swap/pim/qif#Transaction'
-] = function (dom, x) {
+buttons.index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction'] = function (dom, x) {
   var failed = ''
   var enc = function (p) {
     var y = UI.store.any(x, UI.ns.qu(p))
