@@ -189,8 +189,8 @@ buttons.iconForClass = {
   // Relative URIs to the iconBase
   'solid:AppProviderClass': 'noun_144.svg', //  @@ classs name should not contain 'Class'
   'solid:AppProvider': 'noun_15177.svg', // @@
+  'solid:Pod': 'noun_Cabinet_1434380.svg',
   'vcard:Group': 'noun_339237.svg',
-  'rdfs:Class': 'noun_339237.svg', // @@ Make different from group! Icon???
   'vcard:Organization': 'noun_143899.svg',
   'vcard:Individual': 'noun_15059.svg',
   'schema:Person': 'noun_15059.svg',
@@ -202,7 +202,10 @@ buttons.iconForClass = {
   'trip:Trip': 'noun_581629.svg',
   'meeting:Meeting': 'noun_66617.svg',
   'meeting:LongChat': 'noun_1689339.svg',
-  'ui:Form': 'noun_122196.svg'
+  'ui:Form': 'noun_122196.svg',
+  'rdfs:Class': 'class-rectangle.svg', // For RDF developers
+  'rdf:Property': 'property-diamond.svg',
+  'owl:Ontology': 'noun_classification_1479198.svg'
 }
 
 var tempSite = function (x) {
@@ -219,14 +222,12 @@ var tempSite = function (x) {
   }
 }
 
-buttons.findImageByClass = function findImageByClass (x) {
-  const kb = UI.store
-  const ns = UI.ns
+/** Find an image for this thing as a classs
+*/
+buttons.findImageFromURI = function findImageFromURI (x) {
   const iconDir = UI.icons.iconBase
-  const types = kb.findTypeURIs(x)
-  if (ns.solid('AppProvider').uri in types) {
-    return iconDir + 'noun_15177.svg' // App
-  }
+
+  // Special cases from URI scheme:
   if (x.uri) {
     if (
       x.uri.split('/').length === 4 &&
@@ -250,21 +251,14 @@ buttons.findImageByClass = function findImageByClass (x) {
       // todo: pick up a possible favicon for the web page istelf from a link
       // was: return iconDir + 'noun_681601.svg' // document - under solid assumptions
     }
+    return null
   }
 
-  ns.prov = $rdf.Namespace('http://www.w3.org/ns/prov#') // In case not yet there
-  for (var k in buttons.iconForClass) {
-    const pref = k.split(':')[0]
-    const id = k.split(':')[1]
-    const klass = ns[pref](id)
-    if (klass.uri in types || klass.uri === x.uri) {
-      // Allow full URI in new additions
-      return $rdf.uri.join(buttons.iconForClass[k], UI.icons.iconBase)
-    }
-  }
   return iconDir + 'noun_10636_grey.svg' // Grey Circle -  some thing
 }
 
+/* Find something we have as explict image data for the thing
+*/
 buttons.findImage = thing => {
   const kb = UI.store
   const ns = UI.ns
@@ -282,18 +276,67 @@ buttons.findImage = thing => {
   return image ? image.uri : null
 }
 
-// @@ Also add icons for *properties* like  home, work, email, range, domain, comment,
-
-buttons.setImage = function (element, profile) {
+/** Do the best you can with the data available
+**
+** @return {Boolean} Are we happy with this icon?
+** Sets src AND STYLE of the image.
+*/
+buttons._trySetImage = function _trySetImage (element, thing, iconForClassMap) {
   const kb = UI.store
-  const uri = buttons.findImage(profile)
-  element.setAttribute('src', uri || buttons.findImageByClass(profile))
-  if (!uri && profile.uri) {
-    kb.fetcher.nowOrWhenFetched(profile.doc(), undefined, () => {
-      element.setAttribute(
-        'src',
-        buttons.findImage(profile) || buttons.findImageByClass(profile)
-      )
+
+  const explitImage = buttons.findImage(thing)
+  if (explitImage) {
+    element.setAttribute('src', explitImage)
+    return true
+  }
+  // This is one of the classes we know about - the class itself?
+  const typeIcon = iconForClassMap[thing.uri]
+  if (typeIcon) {
+    element.setAttribute('src', typeIcon)
+    element.style = UI.style.classIconStyle
+    // element.style.border = '0.1em solid green;'
+    // element.style.backgroundColor = '#eeffee' // pale green
+    return true
+  }
+  const schemeIcon = buttons.findImageFromURI(thing)
+  if (schemeIcon) {
+    element.setAttribute('src', schemeIcon)
+    return true // happy with this -- don't look it up
+  }
+
+  // Do we have a generic icon for something in any class its in?
+  const types = kb.findTypeURIs(thing)
+  for (var typeURI in types) {
+    if (iconForClassMap[typeURI]) {
+      element.setAttribute('src', iconForClassMap[typeURI])
+      return false // maybe we can do better
+    }
+  }
+  element.setAttribute('src', UI.icons.iconBase + 'noun_10636_grey.svg') // Grey Circle -  some thing
+  return false // we can do better
+}
+
+// ToDo: Also add icons for *properties* like  home, work, email, range, domain, comment,
+//
+
+buttons.setImage = function (element, thing) { // 20191230a
+  const kb = UI.store
+  const ns = UI.ns
+
+  var iconForClassMap = {}
+  for (var k in buttons.iconForClass) {
+    const pref = k.split(':')[0]
+    const id = k.split(':')[1]
+    const klass = ns[pref](id)
+    iconForClassMap[klass.uri] = $rdf.uri.join(buttons.iconForClass[k], UI.icons.iconBase)
+  }
+
+  const happy = buttons._trySetImage(element, thing, iconForClassMap)
+  if (!happy && thing.uri) {
+    kb.fetcher.nowOrWhenFetched(thing.doc(), undefined, (ok) => {
+      if (ok) {
+        buttons._trySetImage(element, thing, iconForClassMap)
+      }
     })
   }
 }
@@ -302,6 +345,7 @@ buttons.setImage = function (element, profile) {
 // See eg http://stackoverflow.com/questions/980855/inputting-a-default-image
 var faviconOrDefault = function (dom, x) {
   var image = dom.createElement('img')
+  image.style = UI.style.iconStyle
   var isOrigin = function (x) {
     if (!x.uri) return false
     var parts = x.uri.split('/')
@@ -309,7 +353,7 @@ var faviconOrDefault = function (dom, x) {
   }
   image.setAttribute(
     'src',
-    UI.icons.iconBase + (isOrigin(x) ? 'noun_15177.svg' : 'noun_681601.svg')
+    UI.icons.iconBase + (isOrigin(x) ? 'noun_15177.svg' : 'noun_681601.svg') // App symbol vs document
   )
   if (x.uri && x.uri.startsWith('https:') && x.uri.indexOf('#') < 0) {
     var res = dom.createElement('object') // favico with a fallback of a default image if no favicon
@@ -524,12 +568,7 @@ buttons.personTR = function (dom, pred, obj, options) {
     'style',
     'vertical-align: middle; width:2em; padding:0.5em; height: 4em;'
   )
-  image.setAttribute(
-    'style',
-    'width: 3em; height: 3em; margin: 0.1em; border-radius: 1em;'
-  )
   td1.appendChild(image)
-  // buttons.setImage(image, obj)
 
   buttons.setName(td2, obj)
   if (options.deleteFunction) {
@@ -1004,9 +1043,7 @@ buttons.index.twoLine.widgetForClass = function (c) {
   return buttons.index.twoLine['']
 }
 
-buttons.index.twoLine[
-  'http://www.w3.org/2000/10/swap/pim/qif#Transaction'
-] = function (dom, x) {
+buttons.index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction'] = function (dom, x) {
   var failed = ''
   var enc = function (p) {
     var y = UI.store.any(x, UI.ns.qu(p))
