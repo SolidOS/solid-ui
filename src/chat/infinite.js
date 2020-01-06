@@ -64,6 +64,29 @@ async function createIfNotExists (doc, contentType = 'text/turtle', data = '') {
   return response
 }
 
+function desktopNotification (str) {
+  // Let's check if the browser supports notifications
+  if (!('Notification' in window)) {
+    alert('This browser does not support desktop notification')
+  } else if (Notification.permission === 'granted') {
+    // Let's check whether notification permissions have already been granted
+    // eslint-disable-next-line no-new
+    new Notification(str)
+  } else if (Notification.permission !== 'denied') {
+    // Otherwise, we need to ask the user for permission
+    Notification.requestPermission().then(function (permission) {
+      // If the user accepts, let's create a notification
+      if (permission === 'granted') {
+        // eslint-disable-next-line no-new
+        new Notification(str)
+      }
+    })
+  }
+
+  // At last, if the user has denied notifications, and you
+  // want to be respectful there is no need to bother them any more.
+}
+
 export function infiniteMessageArea (dom, kb, chatChannel, options) {
   kb = kb || UI.store
   const ns = UI.ns
@@ -711,6 +734,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       // only the last messageTable is live
       addNewTableIfNewDay(new Date()).then(() => {
         syncMessages(chatChannel, messageTable)
+        desktopNotification(chatChannel)
       })
     } // The short chat version fors live update in the pane but we do it in the widget
     kb.updater.addDownstreamChangeListener(chatDocument, div.refresh) // Live update
