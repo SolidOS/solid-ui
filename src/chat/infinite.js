@@ -67,7 +67,7 @@ async function createIfNotExists (doc, contentType = 'text/turtle', data = '') {
 function desktopNotification (str) {
   // Let's check if the browser supports notifications
   if (!('Notification' in window)) {
-    alert('This browser does not support desktop notification')
+    console.warn('This browser does not support desktop notification')
   } else if (Notification.permission === 'granted') {
     // Let's check whether notification permissions have already been granted
     // eslint-disable-next-line no-new
