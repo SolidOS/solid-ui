@@ -49,6 +49,7 @@ function complain (context, err) {
   if (ele) ele.appendChild(error.errorMessageBlock(context.dom, err))
   else alert(err)
 }
+
 buttons.complain = complain
 
 // var UI.ns = require('./ns.js')
@@ -127,8 +128,7 @@ buttons.formatDateTime = function (date, format) {
       var width = { Milliseconds: 3, FullYear: 4 }
       var d = { Month: 1 }
       return s
-        ? ('000' + (date['get' + k]() + (d[k] || 0))).slice(-(width[k] || 2)) +
-            s.split('}')[1]
+        ? ('000' + (date['get' + k]() + (d[k] || 0))).slice(-(width[k] || 2)) + s.split('}')[1]
         : ''
     })
     .join('')
@@ -222,8 +222,9 @@ var tempSite = function (x) {
   }
 }
 
-/** Find an image for this thing as a classs
-*/
+/**
+ * Find an image for this thing as a class
+ */
 buttons.findImageFromURI = function findImageFromURI (x) {
   const iconDir = UI.icons.iconBase
 
@@ -276,11 +277,12 @@ buttons.findImage = thing => {
   return image ? image.uri : null
 }
 
-/** Do the best you can with the data available
-**
-** @return {Boolean} Are we happy with this icon?
-** Sets src AND STYLE of the image.
-*/
+/**
+ * Do the best you can with the data available
+ *
+ * @return {Boolean} Are we happy with this icon?
+ * Sets src AND STYLE of the image.
+ */
 buttons._trySetImage = function _trySetImage (element, thing, iconForClassMap) {
   const kb = UI.store
 
@@ -482,6 +484,7 @@ buttons.askName = function (dom, kb, container, predicate, klass, noun) {
     namefield.select() // focus next user input
     form.appendChild(namefield)
     container.appendChild(form)
+
     // namefield.focus()
 
     function gotName () {
@@ -489,36 +492,24 @@ buttons.askName = function (dom, kb, container, predicate, klass, noun) {
       resolve(namefield.value.trim())
     }
 
-    namefield.addEventListener(
-      'keyup',
-      function (e) {
-        if (e.keyCode === 13) {
-          gotName()
-        }
-      },
-      false
-    )
+    namefield.addEventListener('keyup', function (e) {
+      if (e.keyCode === 13) {
+        gotName()
+      }
+    }, false)
 
     form.appendChild(dom.createElement('br'))
 
     const cancel = form.appendChild(buttons.cancelButton(dom))
-    cancel.addEventListener(
-      'click',
-      function (_event) {
-        form.parentNode.removeChild(form)
-        resolve(null)
-      },
-      false
-    )
+    cancel.addEventListener('click', function (_event) {
+      form.parentNode.removeChild(form)
+      resolve(null)
+    }, false)
 
     const continueButton = form.appendChild(buttons.continueButton(dom))
-    continueButton.addEventListener(
-      'click',
-      function (_event) {
-        gotName()
-      },
-      false
-    )
+    continueButton.addEventListener('click', function (_event) {
+      gotName()
+    }, false)
     namefield.focus()
   }) // Promise
 }
@@ -559,25 +550,14 @@ buttons.personTR = function (dom, pred, obj, options) {
   // var image = td1.appendChild(dom.createElement('img'))
   var image = faviconOrDefault(dom, obj)
 
-  td1.setAttribute(
-    'style',
-    'vertical-align: middle; width:2.5em; padding:0.5em; height: 2.5em;'
-  )
+  td1.setAttribute('style', 'vertical-align: middle; width:2.5em; padding:0.5em; height: 2.5em;')
   td2.setAttribute('style', 'vertical-align: middle; text-align:left;')
-  td3.setAttribute(
-    'style',
-    'vertical-align: middle; width:2em; padding:0.5em; height: 4em;'
-  )
+  td3.setAttribute('style', 'vertical-align: middle; width:2em; padding:0.5em; height: 4em;')
   td1.appendChild(image)
 
   buttons.setName(td2, obj)
   if (options.deleteFunction) {
-    buttons.deleteButtonWithCheck(
-      dom,
-      td3,
-      options.noun || 'one',
-      options.deleteFunction
-    )
+    buttons.deleteButtonWithCheck(dom, td3, options.noun || 'one', options.deleteFunction)
   }
   if (obj.uri) {
     // blank nodes need not apply
@@ -703,20 +683,14 @@ buttons.openHrefInOutlineMode = function (e) {
   const dom = window.document
   if (dom.outlineManager) {
     // @@ TODO Remove the use of document as a global object
-    dom.outlineManager.GotoSubject(
-      UI.store.sym(uri),
-      true,
-      undefined,
-      true,
-      undefined
-    )
+    dom.outlineManager.GotoSubject(UI.store.sym(uri), true, undefined, true, undefined)
   } else if (window && window.panes && window.panes.getOutliner) {
     // @@ TODO Remove the use of window as a global object
     window.panes
       .getOutliner()
       .GotoSubject(UI.store.sym(uri), true, undefined, true, undefined)
   } else {
-    console.log("ERROR: Can't access outline manager in this config")
+    console.log('ERROR: Can\'t access outline manager in this config')
   }
   // dom.outlineManager.GotoSubject(UI.store.sym(uri), true, undefined, true, undefined)
 }
@@ -762,16 +736,17 @@ buttons.allClassURIs = function () {
   return set
 }
 
-/**  Figuring which properties we know about
-*
-* When the user inputs an RDF property, like for a form field
-* or when specifying the relationship between two arbitrary things,
-* then er can prompt them with properties the session knows about
-*
-* TODO: Look again by catching this somewhere. (On the kb?)
-* TODO: move to diff module? Not really a button.
-* @param {Store} kb The quadstore to be searched.
-*/
+/**
+ * Figuring which properties we know about
+ *
+ * When the user inputs an RDF property, like for a form field
+ * or when specifying the relationship between two arbitrary things,
+ * then er can prompt them with properties the session knows about
+ *
+ * TODO: Look again by catching this somewhere. (On the kb?)
+ * TODO: move to diff module? Not really a button.
+ * @param {Store} kb The quadstore to be searched.
+ */
 
 buttons.propertyTriage = function (kb) {
   var possibleProperties = {}
@@ -805,20 +780,12 @@ buttons.propertyTriage = function (kb) {
   }
   possibleProperties.op = op
   possibleProperties.dp = dp
-  UI.log.info(
-    'propertyTriage: ' +
-      no +
-      ' non-lit, ' +
-      nd +
-      ' literal. ' +
-      nu +
-      ' unknown.'
-  )
+  UI.log.info(`propertyTriage: ${no} non-lit, ${nd} literal. ${nu} unknown.`)
   return possibleProperties
 }
 
-/*                      General purpose widgets
- **
+/**
+ * General purpose widgets
  */
 
 // A button for jumping
@@ -827,14 +794,10 @@ buttons.linkButton = function (dom, object) {
   var b = dom.createElement('button')
   b.setAttribute('type', 'button')
   b.textContent = 'Goto ' + utils.label(object)
-  b.addEventListener(
-    'click',
-    function (_event) {
-      // b.parentNode.removeChild(b)
-      dom.outlineManager.GotoSubject(object, true, undefined, true, undefined)
-    },
-    true
-  )
+  b.addEventListener('click', function (_event) {
+    // b.parentNode.removeChild(b)
+    dom.outlineManager.GotoSubject(object, true, undefined, true, undefined)
+  }, true)
   return b
 }
 
@@ -842,13 +805,9 @@ buttons.removeButton = function (dom, element) {
   var b = dom.createElement('button')
   b.setAttribute('type', 'button')
   b.textContent = '✕' // MULTIPLICATION X
-  b.addEventListener(
-    'click',
-    function (_event) {
-      element.parentNode.removeChild(element)
-    },
-    true
-  )
+  b.addEventListener('click', function (_event) {
+    element.parentNode.removeChild(element)
+  }, true)
   return b
 }
 
@@ -970,34 +929,26 @@ buttons.selectorPanelRefresh = function (
     iconDiv.appendChild(image)
     box.appendChild(iconDiv)
 
-    item.addEventListener(
-      'click',
-      function (event) {
-        if (selected === item) {
-          // deselect
-          item.setAttribute('style', style0)
-          selected = null
-        } else {
-          if (selected) selected.setAttribute('style', style0)
-          item.setAttribute(
-            'style',
-            style0 + 'background-color: #ccc; color:black;'
-          )
-          selected = item
-        }
-        callbackFunction(x, event, selected === item)
-        setStyle()
-      },
-      false
-    )
+    item.addEventListener('click', function (event) {
+      if (selected === item) {
+        // deselect
+        item.setAttribute('style', style0)
+        selected = null
+      } else {
+        if (selected) selected.setAttribute('style', style0)
+        item.setAttribute(
+          'style',
+          style0 + 'background-color: #ccc; color:black;'
+        )
+        selected = item
+      }
+      callbackFunction(x, event, selected === item)
+      setStyle()
+    }, false)
 
-    image.addEventListener(
-      'click',
-      function (event) {
-        linkCallback(x, event, inverse, setStyle)
-      },
-      false
-    )
+    image.addEventListener('click', function (event) {
+      linkCallback(x, event, inverse, setStyle)
+    }, false)
 
     box.appendChild(item)
     return box
@@ -1051,21 +1002,19 @@ buttons.index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction'] = fu
     return y ? utils.escapeForXML(y.value) : '?' // @@@@
   }
   var box = dom.createElement('table')
-  box.innerHTML =
-    '<tr><td colspan="2">' +
-    enc('payee') +
-    '</td></tr>\n<tr><td><td>' +
-    enc('date').slice(0, 10) +
-    '</td><td style="text-align: right;">' +
-    enc('amount') +
-    '</td></tr>'
+  box.innerHTML = `
+    <tr>
+      <td colspan="2">${enc('payee')}</td>
+    </tr>
+    <tr>
+      <td>${enc('date').slice(0, 10)}</td>
+      <td style="text-align: right;">${enc('amount')}</td>
+    </tr>`
   if (failed) {
-    box.innerHTML =
-      '<tr><td><a href="' +
-      utils.escapeForXML(x.uri) +
-      '">' +
-      utils.escapeForXML(failed) +
-      '</a></td></tr>'
+    box.innerHTML = `
+      <tr>
+        <td><a href="${utils.escapeForXML(x.uri)}">${utils.escapeForXML(failed)}</a></td>
+      </tr>`
   }
   return box
 }
@@ -1079,14 +1028,14 @@ buttons.index.twoLine['http://www.w3.org/ns/pim/trip#Trip'] = function (
     return y ? utils.escapeForXML(y.value) : '?'
   }
   var box = dom.createElement('table')
-  box.innerHTML =
-    '<tr><td colspan="2">' +
-    enc(UI.ns.dc('title')) +
-    '</td></tr>\n<tr style="color: #777"><td><td>' +
-    enc(UI.ns.cal('dtstart')) +
-    '</td><td>' +
-    enc(UI.ns.cal('dtend')) +
-    '</td></tr>'
+  box.innerHTML = `
+    <tr>
+      <td colspan="2">${enc(UI.ns.dc('title'))}</td>
+    </tr>
+    <tr style="color: #777">
+      <td>${enc(UI.ns.cal('dtstart'))}</td>
+      <td>${enc(UI.ns.cal('dtend'))}</td>
+    </tr>`
   return box
 }
 
@@ -1132,8 +1081,8 @@ buttons.isImage = function (file, kind) {
   return false
 }
 
-/** File upload button
- **
+/**
+ * File upload button
  * @param dom The DOM aka document
  * @param  display:none - Same handler function as drop, takes array of file objects
  * @returns {Element} - a div with a button and a inout in it
