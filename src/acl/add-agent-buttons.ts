@@ -65,7 +65,7 @@ export class AddAgentButtons {
         this.renderNameForm(ns.vcard('Individual'), 'person')
           .then(name => this.addPerson(name))
           .then(() => this.renderCleanup())
-          .catch(error => this.groupList.controller.setStatus(error))
+          .catch(error => this.groupList.controller.renderStatus(error))
       }
     )
   }
@@ -80,7 +80,7 @@ export class AddAgentButtons {
         this.renderNameForm(ns.vcard('Group'), 'group')
           .then(name => this.addGroup(name))
           .then(() => this.renderCleanup())
-          .catch(error => this.groupList.controller.setStatus(error))
+          .catch(error => this.groupList.controller.renderStatus(error))
       }
     )
   }
@@ -141,7 +141,7 @@ export class AddAgentButtons {
           dom: this.groupList.controller.dom
         }
         const existingApps = this.renderAppsTable(eventContext)
-          .catch(error => this.groupList.controller.setStatus(error))
+          .catch(error => this.groupList.controller.renderStatus(error))
         this.renderAppsView()
         const newApp = this.renderNameForm(ns.schema('WebApplication'), 'webapp domain')
           .then(name => this.getOriginFromName(name))

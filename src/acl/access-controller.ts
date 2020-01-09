@@ -36,14 +36,6 @@ export class AccessController {
     this.isContainer = targetDoc.uri.slice(-1) === '/' // Give default for all directories
     if (defaultHolder && defaultACLDoc) {
       this.isUsingDefaults = true
-      const defaults = this.store
-        .each(null, ACL('default'), defaultHolder, defaultACLDoc)
-        .concat(this.store.each(null, ACL('defaultForNew'), defaultHolder, defaultACLDoc))
-      if (!defaults.length) {
-        this.status.innerText = ' (No defaults given.)'
-      } else {
-        this.status.innerText = ''
-      }
       const aclDefaultStore = adoptACLDefault(this.targetDoc, targetACLDoc, defaultHolder, defaultACLDoc)
       this.mainCombo = new AccessGroups(targetDoc, targetACLDoc, this, aclDefaultStore, { defaults: true })
       this.defaultsCombo = null
@@ -63,16 +55,16 @@ export class AccessController {
   public render (): HTMLElement {
     this.root.innerHTML = ''
     if (this.isUsingDefaults) {
-      this.setStatus(`The sharing for this ${this.noun} is the default for folder `)
+      this.renderStatus(`The sharing for this ${this.noun} is the default for folder `)
       if (this.defaultHolder) {
         const defaultHolderLink = this.status.appendChild(this.dom.createElement('a'))
         defaultHolderLink.href = this.defaultHolder.uri
         defaultHolderLink.innerText = shortNameForFolder(this.defaultHolder)
       }
     } else if (!this.defaultsDiffer) {
-      this.setStatus('This is also the default for things in this folder.')
+      this.renderStatus('This is also the default for things in this folder.')
     } else {
-      this.setStatus('')
+      this.renderStatus('')
     }
     this.root.appendChild(this.mainCombo.render())
     if (this.defaultsCombo && this.defaultsDiffer) {
@@ -95,7 +87,7 @@ export class AccessController {
     useDefaultButton.classList.add(this.classes.bigButton)
     useDefaultButton.addEventListener('click', () => this.removeAcls()
       .then(() => this.render())
-      .catch(error => this.setStatus(error)))
+      .catch(error => this.renderStatus(error)))
     return useDefaultButton
   }
 
@@ -105,7 +97,7 @@ export class AccessController {
     addAclButton.classList.add(this.classes.bigButton)
     addAclButton.addEventListener('click', () => this.addAcls()
       .then(() => this.render())
-      .catch(error => this.setStatus(error)))
+      .catch(error => this.renderStatus(error)))
     return addAclButton
   }
 
@@ -138,7 +130,7 @@ export class AccessController {
     button.classList.add(this.classes.bigButton)
     button.addEventListener('click', () => this.removeDefaults()
       .then(() => this.render())
-      .catch(error => this.setStatus(error)))
+      .catch(error => this.renderStatus(error)))
     return removeDefaults
   }
 
@@ -155,7 +147,7 @@ export class AccessController {
     }, 5000)
   }
 
-  public setStatus (message: string): void {
+  public renderStatus (message: string): void {
     // @@ TODO Introduce better system for error notification to user https://github.com/solid/mashlib/issues/87
     this.status.classList.toggle(this.classes.aclControlBoxStatusRevealed, !!message)
     this.status.innerText = message

@@ -85,7 +85,7 @@ export class AccessGroups {
     groupRow.classList.add(this.controller.classes.accessGroupListItem)
     widgets.makeDropTarget(groupRow, (uris) => this.handleDroppedUris(uris, combo)
       .then(() => this.controller.render())
-      .catch(error => this.controller.setStatus(error)))
+      .catch(error => this.controller.renderStatus(error)))
     const groupColumns = this.renderGroupElements(comboIndex, combo)
     groupColumns.forEach(column => groupRow.appendChild(column))
     return groupRow
@@ -118,7 +118,7 @@ export class AccessGroups {
     const personRow = widgets.personTR(this.controller.dom, ACL(pred), sym(obj), this.controller.isEditable ? {
       deleteFunction: () => this.deleteAgent(combo, pred, obj)
         .then(() => groupAgentsTable.removeChild(personRow))
-        .catch(error => this.controller.setStatus(error))
+        .catch(error => this.controller.renderStatus(error))
     } : {})
     return personRow
   }
@@ -141,7 +141,6 @@ export class AccessGroups {
   public async addNewURI (uri: string): Promise<void> {
     await this.handleDroppedUri(uri, kToCombo(1))
     await this.controller.save()
-    // this.render()
   }
 
   private async handleDroppedUris (uris: string[], combo: string): Promise<void> {
