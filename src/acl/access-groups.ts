@@ -43,41 +43,53 @@ export class AccessGroups {
   public byCombo: ComboList
   public aclMap: AgentMapMap
   private readonly addAgentButton: AddAgentButtons
-  private readonly root: HTMLElement
+  private readonly rootElement: HTMLElement
+  private _store: IndexedFormula
 
   constructor (
     private doc: NamedNode,
     private aclDoc: NamedNode,
     public controller: AccessController,
-    public store: IndexedFormula,
+    store: IndexedFormula,
     private options: AccessGroupsOptions = {}
   ) {
     this.defaults = options.defaults || false
+    this._store = store
     this.aclMap = readACL(doc, aclDoc, store, this.defaults)
     this.byCombo = ACLbyCombination(this.aclMap)
     this.addAgentButton = new AddAgentButtons(this)
-    this.root = this.controller.dom.createElement('div')
-    this.root.classList.add(this.controller.classes.accessGroupList)
+    this.rootElement = this.controller.dom.createElement('div')
+    this.rootElement.classList.add(this.controller.classes.accessGroupList)
+  }
+
+  public get store () {
+    return this._store
+  }
+
+  public set store (store) {
+    this._store = store
+    this.aclMap = readACL(this.doc, this.aclDoc, store, this.defaults)
+    this.byCombo = ACLbyCombination(this.aclMap)
   }
 
   public render (): HTMLElement {
-    this.root.innerHTML = ''
-    this.renderGroups().forEach(group => this.root.appendChild(group))
+    this.rootElement.innerHTML = ''
+    this.renderGroups().forEach(group => this.rootElement.appendChild(group))
     if (this.controller.isEditable) {
-      this.root.appendChild(this.addAgentButton.render())
+      this.rootElement.appendChild(this.addAgentButton.render())
     }
-    return this.root
+    return this.rootElement
   }
 
   private renderGroups (): HTMLElement[] {
-    const groups: HTMLElement[] = []
+    const groupElements: HTMLElement[] = []
     for (let comboIndex = 15; comboIndex > 0; comboIndex--) {
       const combo = kToCombo(comboIndex)
       if ((this.controller.isEditable && RECOMMENDED[comboIndex]) || this.byCombo[combo]) {
-        groups.push(this.renderGroup(comboIndex, combo))
+        groupElements.push(this.renderGroup(comboIndex, combo))
       }
     }
-    return groups
+    return groupElements
   }
 
   private renderGroup (comboIndex: number, combo: string): HTMLElement {
@@ -92,26 +104,26 @@ export class AccessGroups {
   }
 
   private renderGroupElements (comboIndex, combo): HTMLElement[] {
-    const groupName = this.controller.dom.createElement('div')
-    groupName.classList.add(this.controller.classes.group)
-    groupName.classList.toggle(this.controller.classes[`group-${comboIndex}`], this.controller.isEditable)
-    groupName.innerText = COLLOQUIAL[comboIndex] || ktToList(comboIndex)
+    const groupNameColumn = this.controller.dom.createElement('div')
+    groupNameColumn.classList.add(this.controller.classes.group)
+    groupNameColumn.classList.toggle(this.controller.classes[`group-${comboIndex}`], this.controller.isEditable)
+    groupNameColumn.innerText = COLLOQUIAL[comboIndex] || ktToList(comboIndex)
 
-    const groupAgents = this.controller.dom.createElement('div')
-    groupAgents.classList.add(this.controller.classes.group)
-    groupAgents.classList.toggle(this.controller.classes[`group-${comboIndex}`], this.controller.isEditable)
-    const groupAgentsTable = groupAgents.appendChild(this.controller.dom.createElement('table'))
+    const groupAgentsColumn = this.controller.dom.createElement('div')
+    groupAgentsColumn.classList.add(this.controller.classes.group)
+    groupAgentsColumn.classList.toggle(this.controller.classes[`group-${comboIndex}`], this.controller.isEditable)
+    const groupAgentsTable = groupAgentsColumn.appendChild(this.controller.dom.createElement('table'))
     const combos = this.byCombo[combo] || []
     combos
       .map(([pred, obj]) => this.renderAgent(groupAgentsTable, combo, pred, obj))
       .forEach(agentElement => groupAgentsTable.appendChild(agentElement))
 
-    const groupDescription = this.controller.dom.createElement('div')
-    groupDescription.classList.add(this.controller.classes.group)
-    groupDescription.classList.toggle(this.controller.classes[`group-${comboIndex}`], this.controller.isEditable)
-    groupDescription.innerText = EXPLANATION[comboIndex] || 'Unusual combination'
+    const groupDescriptionElement = this.controller.dom.createElement('div')
+    groupDescriptionElement.classList.add(this.controller.classes.group)
+    groupDescriptionElement.classList.toggle(this.controller.classes[`group-${comboIndex}`], this.controller.isEditable)
+    groupDescriptionElement.innerText = EXPLANATION[comboIndex] || 'Unusual combination'
 
-    return [groupName, groupAgents, groupDescription]
+    return [groupNameColumn, groupAgentsColumn, groupDescriptionElement]
   }
 
   private renderAgent (groupAgentsTable, combo, pred, obj): HTMLElement {
@@ -130,12 +142,6 @@ export class AccessGroups {
       combos.splice(combos.indexOf(comboToRemove), 1)
     }
     await this.controller.save()
-  }
-
-  public updateStore (store: IndexedFormula): void {
-    this.store = store
-    this.aclMap = readACL(this.doc, this.aclDoc, store, this.defaults)
-    this.byCombo = ACLbyCombination(this.aclMap)
   }
 
   public async addNewURI (uri: string): Promise<void> {

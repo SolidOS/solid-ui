@@ -1,26 +1,23 @@
 import { adoptACLDefault, getProspectiveHolder, makeACLGraphbyCombo, sameACL } from './acl'
 import { graph, NamedNode, UpdateManager } from 'rdflib'
-import ns from '../ns'
 import { AccessGroups } from './access-groups'
 import { DataBrowserContext } from 'pane-registry'
 import { shortNameForFolder } from './acl-control'
 import utils from '../utils.js'
-
-const ACL = ns.acl
 
 export class AccessController {
   public mainCombo: AccessGroups
   public defaultsCombo: AccessGroups | null
   private readonly isContainer: boolean
   private defaultsDiffer: boolean
-  private readonly root: HTMLElement
+  private readonly rootElement: HTMLElement
   private isUsingDefaults: boolean
 
   constructor (
     public subject: NamedNode,
     public noun: string,
     public context: DataBrowserContext,
-    private status: HTMLElement,
+    private statusElement: HTMLElement,
     public classes: Record<string, string>,
     public targetIsProtected: boolean,
     private targetDoc: NamedNode,
@@ -31,8 +28,8 @@ export class AccessController {
     public store,
     public dom
   ) {
-    this.root = dom.createElement('div')
-    this.root.classList.add(classes.aclGroupContent)
+    this.rootElement = dom.createElement('div')
+    this.rootElement.classList.add(classes.aclGroupContent)
     this.isContainer = targetDoc.uri.slice(-1) === '/' // Give default for all directories
     if (defaultHolder && defaultACLDoc) {
       this.isUsingDefaults = true
@@ -53,11 +50,11 @@ export class AccessController {
   }
 
   public render (): HTMLElement {
-    this.root.innerHTML = ''
+    this.rootElement.innerHTML = ''
     if (this.isUsingDefaults) {
       this.renderStatus(`The sharing for this ${this.noun} is the default for folder `)
       if (this.defaultHolder) {
-        const defaultHolderLink = this.status.appendChild(this.dom.createElement('a'))
+        const defaultHolderLink = this.statusElement.appendChild(this.dom.createElement('a'))
         defaultHolderLink.href = this.defaultHolder.uri
         defaultHolderLink.innerText = shortNameForFolder(this.defaultHolder)
       }
@@ -66,19 +63,19 @@ export class AccessController {
     } else {
       this.renderStatus('')
     }
-    this.root.appendChild(this.mainCombo.render())
+    this.rootElement.appendChild(this.mainCombo.render())
     if (this.defaultsCombo && this.defaultsDiffer) {
-      this.root.appendChild(this.renderRemoveDefaultsController())
-      this.root.appendChild(this.defaultsCombo.render())
+      this.rootElement.appendChild(this.renderRemoveDefaultsController())
+      this.rootElement.appendChild(this.defaultsCombo.render())
     } else if (this.isEditable) {
-      this.root.appendChild(this.renderAddDefaultsController())
+      this.rootElement.appendChild(this.renderAddDefaultsController())
     }
     if (!this.targetIsProtected && this.isUsingDefaults) {
-      this.root.appendChild(this.renderAddAclsController())
+      this.rootElement.appendChild(this.renderAddAclsController())
     } else if (!this.targetIsProtected) {
-      this.root.appendChild(this.renderRemoveAclsController())
+      this.rootElement.appendChild(this.renderRemoveAclsController())
     }
-    return this.root
+    return this.rootElement
   }
 
   private renderRemoveAclsController (): HTMLElement {
@@ -102,55 +99,55 @@ export class AccessController {
   }
 
   private renderAddDefaultsController (): HTMLElement {
-    const addDefaults = this.dom.createElement('div')
-    addDefaults.classList.add(this.classes.defaultsController)
+    const containerElement = this.dom.createElement('div')
+    containerElement.classList.add(this.classes.defaultsController)
 
-    const notice = addDefaults.appendChild(this.dom.createElement('div'))
-    notice.innerText = 'Sharing for things within the folder currently tracks sharing for the folder.'
-    notice.classList.add(this.classes.defaultsControllerNotice)
+    const noticeElement = containerElement.appendChild(this.dom.createElement('div'))
+    noticeElement.innerText = 'Sharing for things within the folder currently tracks sharing for the folder.'
+    noticeElement.classList.add(this.classes.defaultsControllerNotice)
 
-    const button = addDefaults.appendChild(this.dom.createElement('button'))
+    const button = containerElement.appendChild(this.dom.createElement('button'))
     button.innerText = 'Set the sharing of folder contents separately from the sharing for the folder'
     button.classList.add(this.classes.bigButton)
     button.addEventListener('click', () => this.addDefaults()
       .then(() => this.render()))
-    return addDefaults
+    return containerElement
   }
 
   private renderRemoveDefaultsController (): HTMLElement {
-    const removeDefaults = this.dom.createElement('div')
-    removeDefaults.classList.add(this.classes.defaultsController)
+    const containerElement = this.dom.createElement('div')
+    containerElement.classList.add(this.classes.defaultsController)
 
-    const notice = removeDefaults.appendChild(this.dom.createElement('div'))
-    notice.innerText = 'Access to things within this folder:'
-    notice.classList.add(this.classes.defaultsControllerNotice)
+    const noticeElement = containerElement.appendChild(this.dom.createElement('div'))
+    noticeElement.innerText = 'Access to things within this folder:'
+    noticeElement.classList.add(this.classes.defaultsControllerNotice)
 
-    const button = removeDefaults.appendChild(this.dom.createElement('button'))
+    const button = containerElement.appendChild(this.dom.createElement('button'))
     button.innerText = 'Set default for folder contents to just track the sharing for the folder'
     button.classList.add(this.classes.bigButton)
     button.addEventListener('click', () => this.removeDefaults()
       .then(() => this.render())
       .catch(error => this.renderStatus(error)))
-    return removeDefaults
+    return containerElement
   }
 
   public renderTemporaryStatus (message: string): void {
     // @@ TODO Introduce better system for error notification to user https://github.com/solid/mashlib/issues/87
-    this.status.classList.add(this.classes.aclControlBoxStatusRevealed)
-    this.status.innerText = message
-    this.status.classList.add(this.classes.temporaryStatusInit)
+    this.statusElement.classList.add(this.classes.aclControlBoxStatusRevealed)
+    this.statusElement.innerText = message
+    this.statusElement.classList.add(this.classes.temporaryStatusInit)
     setTimeout(() => {
-      this.status.classList.add(this.classes.temporaryStatusEnd)
+      this.statusElement.classList.add(this.classes.temporaryStatusEnd)
     })
     setTimeout(() => {
-      this.status.innerText = ''
+      this.statusElement.innerText = ''
     }, 5000)
   }
 
   public renderStatus (message: string): void {
     // @@ TODO Introduce better system for error notification to user https://github.com/solid/mashlib/issues/87
-    this.status.classList.toggle(this.classes.aclControlBoxStatusRevealed, !!message)
-    this.status.innerText = message
+    this.statusElement.classList.toggle(this.classes.aclControlBoxStatusRevealed, !!message)
+    this.statusElement.innerText = message
   }
 
   private async addAcls (): Promise<void> {
@@ -160,7 +157,7 @@ export class AccessController {
       return Promise.reject(message)
     }
     const aclGraph = adoptACLDefault(this.targetDoc, this.targetACLDoc, this.defaultHolder, this.defaultACLDoc)
-    aclGraph.statements.forEach(st => this.store.add(st.subject, st.predicate as NamedNode, st.object, this.targetACLDoc))
+    aclGraph.statements.forEach(st => this.store.add(st.subject, st.predicate, st.object, this.targetACLDoc))
     try {
       await this.store.fetcher.putBack(this.targetACLDoc)
       this.isUsingDefaults = false
@@ -232,9 +229,9 @@ export class AccessController {
         this.store.fetcher.unload(this.targetACLDoc)
         this.store.add(newAClGraph.statements)
         this.store.fetcher.requested[this.targetACLDoc.uri] = 'done' // missing: save headers
-        this.mainCombo.updateStore(this.store)
+        this.mainCombo.store = this.store
         if (this.defaultsCombo) {
-          this.defaultsCombo.updateStore(this.store)
+          this.defaultsCombo.store = this.store
         }
         this.defaultsDiffer = !!this.defaultsCombo && !sameACL(this.mainCombo.aclMap, this.defaultsCombo.aclMap)
         console.log('ACL modification: success!')

@@ -8,20 +8,20 @@ import { NamedNode } from 'rdflib'
 import { AuthenticationContext } from '../authn/types'
 
 export class AddAgentButtons {
-  private readonly root: HTMLElement
-  private readonly bar: HTMLElement
+  private readonly rootElement: HTMLElement
+  private readonly barElement: HTMLElement
   private isExpanded: boolean = false
 
   constructor (private groupList: AccessGroups) {
-    this.root = groupList.controller.dom.createElement('div')
-    this.bar = groupList.controller.dom.createElement('div')
+    this.rootElement = groupList.controller.dom.createElement('div')
+    this.barElement = groupList.controller.dom.createElement('div')
   }
 
   public render (): HTMLElement {
-    this.root.innerHTML = ''
-    this.root.appendChild(this.renderAddButton())
-    this.root.appendChild(this.bar)
-    return this.root
+    this.rootElement.innerHTML = ''
+    this.rootElement.appendChild(this.renderAddButton())
+    this.rootElement.appendChild(this.barElement)
+    return this.rootElement
   }
 
   private renderAddButton (): HTMLElement {
@@ -37,22 +37,22 @@ export class AddAgentButtons {
   }
 
   private renderBar (): void {
-    this.bar.innerHTML = ''
+    this.barElement.innerHTML = ''
     if (!this.isExpanded) {
       return
     }
-    this.bar.appendChild(this.renderPersonButton())
-    this.bar.appendChild(this.renderGroupButton())
-    this.bar.appendChild(this.renderPublicButton())
-    this.bar.appendChild(this.renderAuthenticatedAgentButton())
-    this.bar.appendChild(this.renderBotButton())
-    this.bar.appendChild(this.renderAppsButton())
+    this.barElement.appendChild(this.renderPersonButton())
+    this.barElement.appendChild(this.renderGroupButton())
+    this.barElement.appendChild(this.renderPublicButton())
+    this.barElement.appendChild(this.renderAuthenticatedAgentButton())
+    this.barElement.appendChild(this.renderBotButton())
+    this.barElement.appendChild(this.renderAppsButton())
   }
 
   private renderSimplifiedBar (button: EventTarget | null) {
-    Array.from(this.bar.children)
+    Array.from(this.barElement.children)
       .filter(element => element !== button)
-      .forEach(element => this.bar.removeChild(element))
+      .forEach(element => this.barElement.removeChild(element))
   }
 
   private renderPersonButton (): HTMLElement {
@@ -89,7 +89,7 @@ export class AddAgentButtons {
     return widgets.askName(
       this.groupList.controller.dom,
       this.groupList.store,
-      this.bar,
+      this.barElement,
       ns.vcard('URI'),
       type,
       noun
@@ -137,7 +137,7 @@ export class AddAgentButtons {
       event => {
         this.renderSimplifiedBar(event.target)
         const eventContext = {
-          div: this.bar,
+          div: this.barElement,
           dom: this.groupList.controller.dom
         }
         const existingApps = this.renderAppsTable(eventContext)
@@ -162,14 +162,14 @@ export class AddAgentButtons {
   private renderAppsView (): void {
     const trustedApplications = this.groupList.controller.context.session.paneRegistry.byName('trustedApplications')
     if (trustedApplications) {
-      const trustedAppControl = trustedApplications.render(null, this.groupList.controller.context)
-      trustedAppControl.classList.add(this.groupList.controller.classes.trustedAppController)
+      const trustedApplicationsElement = trustedApplications.render(null, this.groupList.controller.context)
+      trustedApplicationsElement.classList.add(this.groupList.controller.classes.trustedAppController)
 
-      const cancel = widgets.cancelButton(this.groupList.controller.dom, () => this.renderCleanup())
-      cancel.classList.add(this.groupList.controller.classes.trustedAppCancelButton)
-      trustedAppControl.insertBefore(cancel, trustedAppControl.firstChild)
+      const cancelButton = widgets.cancelButton(this.groupList.controller.dom, () => this.renderCleanup())
+      cancelButton.classList.add(this.groupList.controller.classes.trustedAppCancelButton)
+      trustedApplicationsElement.insertBefore(cancelButton, trustedApplicationsElement.firstChild)
 
-      this.bar.appendChild(trustedAppControl)
+      this.barElement.appendChild(trustedApplicationsElement)
     }
   }
 
@@ -178,10 +178,10 @@ export class AddAgentButtons {
     const trustedApps = this.groupList.store.each(eventContext.me, ns.acl('trustedApp'))
     const trustedOrigins = trustedApps.flatMap(app => this.groupList.store.each(app, ns.acl('origin')))
 
-    this.bar.appendChild(this.groupList.controller.dom.createElement('p')).textContent = `You have ${trustedOrigins.length} selected web apps.`
+    this.barElement.appendChild(this.groupList.controller.dom.createElement('p')).textContent = `You have ${trustedOrigins.length} selected web apps.`
     return new Promise((resolve, reject) => {
-      const table = this.bar.appendChild(this.groupList.controller.dom.createElement('table'))
-      table.classList.add(this.groupList.controller.classes.trustedAppAddApplicationsTable)
+      const appsTable = this.barElement.appendChild(this.groupList.controller.dom.createElement('table'))
+      appsTable.classList.add(this.groupList.controller.classes.trustedAppAddApplicationsTable)
       trustedApps.forEach(app => {
         const origin = this.groupList.store.any(app, ns.acl('origin'))
         if (!origin) {
@@ -190,13 +190,17 @@ export class AddAgentButtons {
         const thingTR = widgets.personTR(this.groupList.controller.dom, ns.acl('origin'), origin, {})
         const innerTable = this.groupList.controller.dom.createElement('table')
         const innerRow = innerTable.appendChild(this.groupList.controller.dom.createElement('tr'))
-        const innerLeft = innerRow.appendChild(this.groupList.controller.dom.createElement('td'))
-        const innerMiddle = innerRow.appendChild(this.groupList.controller.dom.createElement('td'))
-        const innerRight = innerRow.appendChild(this.groupList.controller.dom.createElement('td'))
-        innerLeft.appendChild(thingTR)
-        innerMiddle.textContent = `Give access to ${this.groupList.controller.noun} ${utils.label(this.groupList.controller.subject)}?`
-        innerRight.appendChild(widgets.continueButton(this.groupList.controller.dom, () => resolve(origin!.value)))
-        table.appendChild(innerTable)
+
+        const innerLeftColumn = innerRow.appendChild(this.groupList.controller.dom.createElement('td'))
+        innerLeftColumn.appendChild(thingTR)
+
+        const innerMiddleColumn = innerRow.appendChild(this.groupList.controller.dom.createElement('td'))
+        innerMiddleColumn.textContent = `Give access to ${this.groupList.controller.noun} ${utils.label(this.groupList.controller.subject)}?`
+
+        const innerRightColumn = innerRow.appendChild(this.groupList.controller.dom.createElement('td'))
+        innerRightColumn.appendChild(widgets.continueButton(this.groupList.controller.dom, () => resolve(origin!.value)))
+
+        appsTable.appendChild(innerTable)
       })
     })
   }
