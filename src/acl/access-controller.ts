@@ -80,7 +80,7 @@ export class AccessController {
 
   private renderRemoveAclsController (): HTMLElement {
     const useDefaultButton = this.dom.createElement('button')
-    useDefaultButton.innerText = `Stop specific sharing for this ${this.noun} -- just use default${this.prospectiveDefaultHolder ? ` for ${utils.label(this.prospectiveDefaultHolder)}` : ''}`
+    useDefaultButton.innerText = `Remove custom sharing settings for this ${this.noun} -- just use default${this.prospectiveDefaultHolder ? ` for ${utils.label(this.prospectiveDefaultHolder)}` : ''}`
     useDefaultButton.classList.add(this.classes.bigButton)
     useDefaultButton.addEventListener('click', () => this.removeAcls()
       .then(() => this.render())
