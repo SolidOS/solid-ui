@@ -186,7 +186,7 @@ export function loadUnionACL (subjectList: Array<$rdf.NamedNode>, callbackFuncti
 // Combos are like full control, read append, read only etc.
 //
 export function ACLbyCombination (ac: AgentMapMap): ComboList {
-  const byCombo = []
+  const byCombo = {}
   ;['agent', 'agentClass', 'agentGroup', 'origin', 'originClass'].map(function (pred) {
     for (const agent in ac[pred]) {
       const combo: string[] = []
@@ -591,4 +591,17 @@ export function getACL (
   })
 }
 
-// /////////////////////////////////////////  End of ACL stuff
+export async function getProspectiveHolder (targetDirectory: string): Promise<$rdf.NamedNode | undefined> {
+  return new Promise((resolve, reject) => getACLorDefault($rdf.sym(targetDirectory), (
+    ok,
+    isDirectACL,
+    targetDoc,
+    targetACLDoc,
+    defaultHolder
+  ) => {
+    if (ok) {
+      return resolve((isDirectACL ? targetDoc : defaultHolder) as $rdf.NamedNode)
+    }
+    return reject(new Error(`Error loading ${targetDirectory}`))
+  }))
+}

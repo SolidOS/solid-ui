@@ -14,4 +14,9 @@ export type AgentMap = {
   }
 }
 
-export type ComboList = Array<NamedNode[]>
+export type ComboList = { [key: string]: Array<string[]> }
+
+export type PartialAgentTriple = {
+  pred: string,
+  obj: NamedNode
+}
