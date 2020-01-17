@@ -75,16 +75,16 @@ UI.tabs.tabWidget = function (options) {
     selectedColor = colorBlend(backgroundColor, '#000000', 0.3)
     color = '#ffffff'
   }
-  var bodyMainStyle = `flex: 2; border: 0.1em; border-style: solid; border-color: ${selectedColor}; padding: 1em;`
+  var bodyMainStyle = `flex: 2; width:100%; height: 100%; border: 0.1em; border-style: solid; border-color: ${selectedColor}; padding: 1em;`
 
   /*
     'resize: both; overflow: scroll; margin:0; border: 0.1em; border-style: solid; border-color: ' +
     selectedColor +
     '; padding: 1em;  min-width: 30em; min-height: 450px; width:100%;'
 */
-  const rootElement = dom.createElement('div') // 20200113c
+  const rootElement = dom.createElement('div') // 20200117a
 
-  rootElement.style = 'display: flex; height: 100%; flex-direction: ' +
+  rootElement.style = 'display: flex; height: 100%; width: 100%; flex-direction: ' +
       (vertical ? 'row' : 'column') + (flipped ? '-reverse;' : ';')
 
   navElement = rootElement.appendChild(dom.createElement('nav'))
@@ -92,8 +92,10 @@ UI.tabs.tabWidget = function (options) {
 
   mainElement = rootElement.appendChild(dom.createElement('main'))
 
-  mainElement.setAttribute('style', 'margin: 0;') // override tabbedtab.css
+  mainElement.setAttribute('style', 'margin: 0; width:100%; height: 100%;') // override tabbedtab.css
   tabContainer = navElement.appendChild(dom.createElement('ul'))
+  tabContainer.style = 'list-style-type: none;' // No bullet please
+
   tabElement = 'li'
 
   var bodyContainer = mainElement // .appendChild(dom.createElement('table'))
@@ -128,7 +130,7 @@ UI.tabs.tabWidget = function (options) {
     ';' // @@ rotate border
   var selectedStyle =
     tabStyle + margins + ' background-color: ' + selectedColor + ';'
-  var shownStyle = ''
+  var shownStyle = 'height: 100%; width: 100%;'
   var hiddenStyle = shownStyle + 'display: none;'
 
   var resetTabStyle = function () {
@@ -229,19 +231,18 @@ UI.tabs.tabWidget = function (options) {
     }
     for (i = 0; i < insertables.length; i++) {
       var newSlot = makeNewSlot(insertables[i])
-      var newBodyTR = dom.createElement('tr')
-      // var newBodyDiv = newBodyTR.appendChild(dom.createElement('div'))
-      newSlot.bodyTR = newBodyTR
-      dom.createElement('tr')
+      var newBodyDiv = dom.createElement('div')
+      // var newBodyDiv = newBodyDiv.appendChild(dom.createElement('div'))
+      newSlot.bodyTR = newBodyDiv
       if (left === tabContainer.children.length) {
         // None left of original on right
         tabContainer.appendChild(newSlot)
-        bodyContainer.appendChild(newBodyTR)
+        bodyContainer.appendChild(newBodyDiv)
         // console.log('   appending new ' + insertables[i])
       } else {
         // console.log('   inserting at ' + (left + i) + ' new ' + insertables[i])
         tabContainer.insertBefore(newSlot, tabContainer.children[left + i])
-        bodyContainer.insertBefore(newBodyTR, bodyContainer.children[left + i])
+        bodyContainer.insertBefore(newBodyDiv, bodyContainer.children[left + i])
       }
     }
     if (onClose) {
