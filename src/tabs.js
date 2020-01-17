@@ -75,7 +75,7 @@ UI.tabs.tabWidget = function (options) {
     selectedColor = colorBlend(backgroundColor, '#000000', 0.3)
     color = '#ffffff'
   }
-  var bodyMainStyle = `flex: 2; width:100%; height: 100%; border: 0.1em; border-style: solid; border-color: ${selectedColor}; padding: 1em;`
+  var bodyMainStyle = `flex: 2; width: auto; height: 100%; border: 0.1em; border-style: solid; border-color: ${selectedColor}; padding: 1em;`
 
   /*
     'resize: both; overflow: scroll; margin:0; border: 0.1em; border-style: solid; border-color: ' +
