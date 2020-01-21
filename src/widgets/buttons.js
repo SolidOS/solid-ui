@@ -200,8 +200,9 @@ buttons.iconForClass = {
   'prov:SoftwareAgent': 'noun_Robot_849764.svg', // Bot
   'vcard:AddressBook': 'noun_15695.svg',
   'trip:Trip': 'noun_581629.svg',
-  'meeting:Meeting': 'noun_66617.svg',
   'meeting:LongChat': 'noun_1689339.svg',
+  'meeting:Meeting': 'noun_66617.svg',
+  'meeting:Project': 'noun_1036577.svg',
   'ui:Form': 'noun_122196.svg',
   'rdfs:Class': 'class-rectangle.svg', // For RDF developers
   'rdf:Property': 'property-diamond.svg',

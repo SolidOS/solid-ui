@@ -5,6 +5,7 @@
 // - Multiple tab select with Alt key
 //
 // written 2016-05-27
+// See https://github.com/solid/solid-ui/issues/183 for styles
 
 var tabs = {}
 module.exports = tabs
@@ -32,14 +33,13 @@ UI.tabs.tabWidget = function (options) {
   var kb = UI.store
   var subject = options.subject
   var dom = options.dom
-  var box = dom.createElement('div')
   var orientation = parseInt(options.orientation || '0')
   var backgroundColor = options.backgroundColor || '#ddddcc'
   var color
   var flipped = orientation & 2
   var vertical = orientation & 1
-  var wholetable = box.appendChild(dom.createElement('table'))
-  var mainTR, mainTD, tabTR
+
+  var mainElement, navElement
   var tabContainer, tabElement
   var onClose = options.onClose
 
@@ -75,47 +75,32 @@ UI.tabs.tabWidget = function (options) {
     selectedColor = colorBlend(backgroundColor, '#000000', 0.3)
     color = '#ffffff'
   }
-  var bodyDivStyle =
-    'resize: both; overflow: scroll; margin:0; border: 0.5em; border-style: solid; border-color: ' +
+  var bodyMainStyle = `flex: 2; width: auto; height: 100%; border: 0.1em; border-style: solid; border-color: ${selectedColor}; padding: 1em;`
+
+  /*
+    'resize: both; overflow: scroll; margin:0; border: 0.1em; border-style: solid; border-color: ' +
     selectedColor +
     '; padding: 1em;  min-width: 30em; min-height: 450px; width:100%;'
+*/
+  const rootElement = dom.createElement('div') // 20200117a
 
-  if (vertical) {
-    var onlyTR = wholetable.appendChild(dom.createElement('tr'))
-    mainTD = dom.createElement('td')
-    mainTD.setAttribute('style', 'margin: 0;') // override tabbedtab.css
-    var tabTD = dom.createElement('td')
-    tabTD.setAttribute('style', 'margin: 0;')
-    if (flipped) {
-      onlyTR.appendChild(mainTD)
-      onlyTR.appendChild(tabTD)
-    } else {
-      onlyTR.appendChild(tabTD)
-      onlyTR.appendChild(mainTD)
-    }
-    tabContainer = tabTD.appendChild(dom.createElement('table'))
-    tabElement = 'tr'
-    // tabBar = tabTD // drop zone
-    // mainTD.appendChild(bodyDiv)
-  } else {
-    // horizontal
-    tabContainer = dom.createElement('tr')
-    mainTR = wholetable.appendChild(dom.createElement('tr'))
-    if (flipped) {
-      mainTR = wholetable.appendChild(dom.createElement('tr'))
-      tabTR = wholetable.appendChild(dom.createElement('tr'))
-    } else {
-      tabTR = wholetable.appendChild(dom.createElement('tr'))
-      mainTR = wholetable.appendChild(dom.createElement('tr'))
-    }
-    tabContainer = tabTR
-    mainTD = mainTR.appendChild(dom.createElement('td'))
-    tabElement = 'td'
-    // mainTD.appendChild(bodyDiv)
-  }
-  var bodyContainer = mainTD.appendChild(dom.createElement('table'))
-  box.tabContainer = tabContainer
-  box.bodyContainer = bodyContainer
+  rootElement.style = 'display: flex; height: 100%; width: 100%; flex-direction: ' +
+      (vertical ? 'row' : 'column') + (flipped ? '-reverse;' : ';')
+
+  navElement = rootElement.appendChild(dom.createElement('nav'))
+  navElement.setAttribute('style', 'margin: 0;')
+
+  mainElement = rootElement.appendChild(dom.createElement('main'))
+
+  mainElement.setAttribute('style', 'margin: 0; width:100%; height: 100%;') // override tabbedtab.css
+  tabContainer = navElement.appendChild(dom.createElement('ul'))
+  tabContainer.style = 'list-style-type: none;' // No bullet please
+
+  tabElement = 'li'
+
+  var bodyContainer = mainElement // .appendChild(dom.createElement('table'))
+  rootElement.tabContainer = tabContainer // ussed by caller
+  rootElement.bodyContainer = bodyContainer
 
   var getItems = function () {
     if (options.items) return options.items
@@ -145,7 +130,7 @@ UI.tabs.tabWidget = function (options) {
     ';' // @@ rotate border
   var selectedStyle =
     tabStyle + margins + ' background-color: ' + selectedColor + ';'
-  var shownStyle = ''
+  var shownStyle = 'height: 100%; width: 100%;'
   var hiddenStyle = shownStyle + 'display: none;'
 
   var resetTabStyle = function () {
@@ -176,22 +161,22 @@ UI.tabs.tabWidget = function (options) {
       }
       div.setAttribute('style', selectedStyle)
       ele.bodyTR.setAttribute('style', shownStyle)
-      var bodyDiv = ele.bodyTR.firstChild
-      if (!bodyDiv) {
-        bodyDiv = ele.bodyTR.appendChild(dom.createElement('div'))
-        bodyDiv.setAttribute('style', bodyDivStyle)
+      var bodyMain = ele.bodyTR.firstChild
+      if (!bodyMain) {
+        bodyMain = ele.bodyTR.appendChild(dom.createElement('main'))
+        bodyMain.setAttribute('style', bodyMainStyle)
       }
       if (options.renderTabSettings && e.altKey) {
-        if (bodyDiv.asSetttings !== true) {
-          bodyDiv.innerHTML = 'loading settings ...' + item
-          options.renderTabSettings(bodyDiv, ele.subject)
-          bodyDiv.asSetttings = true
+        if (bodyMain.asSetttings !== true) {
+          bodyMain.innerHTML = 'loading settings ...' + item
+          options.renderTabSettings(bodyMain, ele.subject)
+          bodyMain.asSetttings = true
         }
       } else {
-        if (bodyDiv.asSetttings !== false) {
-          bodyDiv.innerHTML = 'loading item ...' + item
-          options.renderMain(bodyDiv, ele.subject)
-          bodyDiv.asSetttings = false
+        if (bodyMain.asSetttings !== false) {
+          bodyMain.innerHTML = 'loading item ...' + item
+          options.renderMain(bodyMain, ele.subject)
+          bodyMain.asSetttings = false
         }
       }
     })
@@ -204,10 +189,11 @@ UI.tabs.tabWidget = function (options) {
     return ele
   }
 
+  // @@ Use common one from utils?
   var orderedSync = function () {
     var items = getItems()
     if (!vertical) {
-      mainTD.setAttribute('colspan', items.length + (onClose ? 1 : 0))
+      // mainElement.setAttribute('colspan', items.length + (onClose ? 1 : 0))
     }
     var slot, i, j, left, right
     var differ = false
@@ -245,67 +231,20 @@ UI.tabs.tabWidget = function (options) {
     }
     for (i = 0; i < insertables.length; i++) {
       var newSlot = makeNewSlot(insertables[i])
-      var newBodyTR = dom.createElement('tr')
-      // var newBodyDiv = newBodyTR.appendChild(dom.createElement('div'))
-      newSlot.bodyTR = newBodyTR
-      dom.createElement('tr')
+      var newBodyDiv = dom.createElement('div')
+      // var newBodyDiv = newBodyDiv.appendChild(dom.createElement('div'))
+      newSlot.bodyTR = newBodyDiv
       if (left === tabContainer.children.length) {
         // None left of original on right
         tabContainer.appendChild(newSlot)
-        bodyContainer.appendChild(newBodyTR)
+        bodyContainer.appendChild(newBodyDiv)
         // console.log('   appending new ' + insertables[i])
       } else {
         // console.log('   inserting at ' + (left + i) + ' new ' + insertables[i])
         tabContainer.insertBefore(newSlot, tabContainer.children[left + i])
-        bodyContainer.insertBefore(newBodyTR, bodyContainer.children[left + i])
+        bodyContainer.insertBefore(newBodyDiv, bodyContainer.children[left + i])
       }
     }
-    if (onClose) {
-      addCancelButton(tabContainer)
-    }
-  }
-
-  // UNMAINTAINED
-  var unorderedSync = function () {
-    var items = getItems()
-    if (!vertical) {
-      mainTD.setAttribute('colspan', items.length + (onClose ? 1 : 0))
-    }
-    var slot, i, j, found, pair
-    var missing = []
-    for (i = 0; i < tabContainer.children.length; i++) {
-      slot = tabContainer.children[i]
-      slot.deleteMe = true
-    }
-    for (j = 0; j < items.length; j++) {
-      found = false
-      for (i = 0; i < tabContainer.children.length; i++) {
-        if (tabContainer.children[i].subject === items[j]) {
-          found = true
-        }
-      }
-      if (!found) {
-        missing.push([j, items[j]])
-      }
-    }
-    for (j = 0; j < missing.length; j++) {
-      pair = missing[j]
-      i = pair[0]
-      slot = makeNewSlot(pair[1])
-      if (i >= tabContainer.length) {
-        tabContainer.appendChild(slot)
-      } else {
-        tabContainer.insertBefore(slot, tabContainer.children[i + 1])
-      }
-    }
-
-    for (i = 0; i < tabContainer.children.length; i++) {
-      slot = tabContainer.children[i]
-      if (slot.deleteMe) {
-        tabContainer.removeChild(slot)
-      }
-    }
-
     if (onClose) {
       addCancelButton(tabContainer)
     }
@@ -315,10 +254,11 @@ UI.tabs.tabWidget = function (options) {
     if (options.ordered) {
       orderedSync()
     } else {
-      unorderedSync()
+      // @@ SORT THE values
+      orderedSync()
     }
   }
-  box.refresh = sync
+  rootElement.refresh = sync
   sync()
 
   // From select-tabs branch by hand
@@ -345,7 +285,7 @@ UI.tabs.tabWidget = function (options) {
   } else if (!options.startEmpty && tabContainer.children.length) {
     tabContainer.children[0].firstChild.click() // Open first tab
   }
-  return box
+  return rootElement
 
   function addCancelButton (tabContainer) {
     if (tabContainer.dataset.onCloseSet) {
