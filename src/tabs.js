@@ -88,13 +88,16 @@ UI.tabs.tabWidget = function (options) {
       (vertical ? 'row' : 'column') + (flipped ? '-reverse;' : ';')
 
   navElement = rootElement.appendChild(dom.createElement('nav'))
-  navElement.setAttribute('style', 'margin: 0;')
+  navElement.style = 'margin: 0;'
 
   mainElement = rootElement.appendChild(dom.createElement('main'))
 
   mainElement.setAttribute('style', 'margin: 0; width:100%; height: 100%;') // override tabbedtab.css
   tabContainer = navElement.appendChild(dom.createElement('ul'))
-  tabContainer.style = 'list-style-type: none;' // No bullet please
+  tabContainer.style = 'list-style-type: none;' + // No bullet please ...
+  'display: flex; height: 100%; width: 100%; flex-direction: ' +
+     (vertical ? 'column' : 'row') // + (flipped ? '-reverse;' : ';')
+     // Never flip the direction of readuing the tabs, assuming people read left to right and top to bottom
 
   tabElement = 'li'
 
