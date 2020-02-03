@@ -142,13 +142,36 @@ describe('index', () => {
   it('exists', () => {
     expect(index).toBeInstanceOf(Object)
   })
-  
-  // buttons.index.line = {} // Approx 80em
-  // buttons.index.twoLine = {} // Approx 40em * 2.4em
-  // buttons.index.twoLine[''] = function (dom, x) {
-  // buttons.index.twoLine.widgetForClass = function (c) {
-  // buttons.index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction'] = function (dom, x) {
-  // buttons.index.twoLine['http://www.w3.org/ns/pim/trip#Trip'] = function (
+})
+describe('index.line', () => {
+  it('exists', () => {
+    expect(index.line).toBeInstanceOf(Object)
+  })
+})
+describe('index.twoLine', () => {
+  it('exists', () => {
+    expect(index.twoLine).toBeInstanceOf(Object)
+  })
+})
+describe('index.twoLine[\'\']', () => {
+  it('exists', () => {
+    expect(index.twoLine['']).toBeInstanceOf(Object)
+  })
+})
+describe('index.twoLine[\'http://www.w3.org/2000/10/swap/pim/qif#Transaction\']', () => {
+  it('exists', () => {
+    expect(index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction']).toBeInstanceOf(Object)
+  })
+})
+describe('index.twoLine[\'http://www.w3.org/ns/pim/trip#Trip\']', () => {
+  it('exists', () => {
+    expect(index.twoLine['http://www.w3.org/ns/pim/trip#Trip']).toBeInstanceOf(Object)
+  })
+})
+describe('index.twoLine.widgetForClass', () => {
+  it('exists', () => {
+    expect(index.twoLine.widgetForClass).toBeInstanceOf(Object)
+  })
 })
 
 describe('isAudio', () => {
