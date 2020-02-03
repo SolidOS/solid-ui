@@ -15,6 +15,7 @@
     "build-version": "./timestamp.sh > src/versionInfo.ts  && eslint 'src/versionInfo.ts' --fix",
     "watch": "npm run build-version && babel src --out-dir lib --watch --source-maps --extensions '.ts,.js'",
     "clean": "rm -rf lib",
+    "coverage": "jest --coverage --collectCoverageFrom=src/**/*.[jt]s",
     "lint": "eslint 'src/**/*.js' 'src/**/*.ts'",
     "lint-fix": "eslint 'src/**/*.js' 'src/**/*.ts' --fix",
     "jest": "jest",
