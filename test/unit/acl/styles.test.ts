@@ -1,4 +1,4 @@
-import * as Styles from '../../../src/acl/Styles'
+import * as Styles from '../../../src/acl/styles'
 
 
 describe('Styles', () => {
