@@ -1,5 +1,20 @@
 import { makeDropTarget, makeDraggable, uploadFiles } from '../../../src/widgets/dragAndDrop'
 
-test('makeDropTarget exists', () => {
-  expect(makeDropTarget).toBeInstanceOf(Function)
+describe('makeDropTarget', () => {
+  it('exists', () => {
+    expect(makeDropTarget).toBeInstanceOf(Function)
+  })
+})
+
+describe('makeDraggable', () => {
+  it('exists', () => {
+    expect(makeDraggable).toBeInstanceOf(Function)
+  })
+})
+
+
+describe('updloadFiles', () => {
+  it('exists', () => {
+    expect(uploadFiles).toBeInstanceOf(Function)
+  })
 })
