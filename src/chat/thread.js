@@ -13,7 +13,7 @@ var UI = {
   widgets: require('../widgets')
 }
 
-const utils = require('./utils')
+const utils = require('../utils')
 
 // var buttonStyle = 'font-size: 100%; margin: 0.8em; padding:0.5em; background-color: white;'
 
