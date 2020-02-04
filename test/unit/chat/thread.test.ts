@@ -27,7 +27,6 @@ describe('Thread', () => {
     }
     const options = {}
 
-    // eslint-ignore-next-line: no-unused-vars
     ;(window as any).$rdf = {
       Namespace: () => {
         return () => ''
