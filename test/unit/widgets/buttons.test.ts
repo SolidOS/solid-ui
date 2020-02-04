@@ -40,17 +40,58 @@ describe('addStyleSheet', () => {
   it('exists', () => {
     expect(addStyleSheet).toBeInstanceOf(Function)
   })
+  it('runs', () => {
+    const dom = {
+      querySelectorAll: () => [],
+      createElement: () => {
+        return {
+          setAttribute: () => {}
+        }
+      },
+      getElementsByTagName: () => [
+        {
+          appendChild: () => {}
+        }
+      ]
+    }
+    const href = ''
+    expect(addStyleSheet(dom, href)).toEqual(undefined)
+  })
 })
 
 describe('allClassURIs', () => {
   it('exists', () => {
     expect(allClassURIs).toBeInstanceOf(Function)
   })
+  it('runs', () => {
+    expect(allClassURIs()).toEqual({})
+  })
+
 })
 
 describe('askName', () => {
   it('exists', () => {
     expect(askName).toBeInstanceOf(Function)
+  })
+  it.skip('runs', async () => {
+    const element = {
+      appendChild: () => {
+        return element
+      },
+      setAttribute: () => {},
+      select: () => {},
+      focus: () => {},
+      addEventListener: () => {}
+    }
+    const dom = {
+      createElement: () => element
+    }
+    const kb = {}
+    const container = element
+    const predicate = {}
+    const klass = {}
+    const noun = {}
+    expect(await askName(dom, kb, container, predicate, klass, noun)).toEqual({})
   })
 })
 
