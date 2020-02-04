@@ -34,18 +34,52 @@ describe('creatorAndDate', () => {
     const message = ''
     expect(creatorAndDate(td1, creator, date, message)).toEqual(undefined)
   })
-
 })
 
 describe('creatorAndDateHorizontal', () => {
   it('exists', () => {
     expect(creatorAndDateHorizontal).toBeInstanceOf(Function)
   })
+  it('runs', () => {
+    const td1 = {
+      appendChild: () => {
+        return {
+          style: {}
+        }
+      }
+    }
+    const creator = {}
+    const date = {}
+    const message = ''
+    expect(creatorAndDateHorizontal(td1, creator, date, message)).toEqual(undefined)
+  })
 })
 
 describe('renderMessage', () => {
   it('exists', () => {
-    expect(renderMessage).toBeInstanceOf(Function)
+    const messageTable = {
+      appendChild: () => {}
+    }
+    const bindings = {
+      '?creator': {
+        value: {
+          termType: ''
+        }
+      },
+      '?date': {
+        value: ''
+      },
+      '?msg': {
+        doc: () => ''
+      },
+      '?content': {
+        value: ''
+      }
+    }
+    const fresh = {}
+    const options = {}
+    const userContext = {}
+    expect(renderMessage(messageTable, bindings, fresh, options, userContext)).toBeInstanceOf(HTMLTableRowElement)
   })
 })
 
