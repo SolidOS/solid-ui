@@ -186,7 +186,8 @@ function syncTableToArrayReOrdered (table, things, createNewRow) {
 
   for (let g = 0; g < things.length; g++) {
     var thing = things[g]
-    if (g >= table.children.length) { // table needs extending
+    if (g >= table.children.length) {
+      // table needs extending
       const newRow = createNewRow(thing)
       newRow.subject = thing
       table.appendChild(newRow)
@@ -412,15 +413,13 @@ function shortName (uri) {
   for (const ns in this.prefixes) {
     namespaces[this.prefixes[ns]] = ns // reverse index
   }
-  let pok
+
   const canUse = function canUse (pp) {
     // if (!__Serializer.prototype.validPrefix.test(pp)) return false; // bad format
-    if (pp === 'ns') return false // boring
+    return pp === 'ns'
     // if (pp in this.namespaces) return false; // already used
     // this.prefixes[uri] = pp;
     // this.namespaces[pp] = uri;
-    pok = pp
-    return true
   }
 
   let i
@@ -435,13 +434,14 @@ function shortName (uri) {
       else break
     }
     p = p.slice(0, i)
-    if (p.length < 6 && canUse(p)) return pok // exact i sbest
-    if (canUse(p.slice(0, 3))) return pok
-    if (canUse(p.slice(0, 2))) return pok
-    if (canUse(p.slice(0, 4))) return pok
-    if (canUse(p.slice(0, 1))) return pok
-    if (canUse(p.slice(0, 5))) return pok
-    for (i = 0; ; i++) if (canUse(p.slice(0, 3) + i)) return pok
+    if (p.length < 6 && canUse(p)) {
+      return p
+    } else {
+      for (let j = 0; j < 6; j++) {
+        if (canUse(p.slice(0, j))) return p.slice(0, j)
+      }
+    }
+    for (i = 0; ; i++) if (canUse(p.slice(0, 3) + i)) return p.slice(0, 3) + i
   }
 }
 
@@ -499,12 +499,52 @@ function labelWithOntology (x, initialCap) {
 //
 // @returns string
 //
+
+function decodeAsciiPoints (s) {
+  for (var i = s.length - 3; i > 0; i--) {
+    const hex = '0123456789abcefABCDEF' // The while upacks multiple layers of encoding
+    while (
+      s[i] === '%' &&
+      hex.indexOf(s[i + 1]) >= 0 &&
+      hex.indexOf(s[i + 2]) >= 0
+    ) {
+      s =
+        s.slice(0, i) +
+        String.fromCharCode(parseInt(s.slice(i + 1, i + 3), 16)) +
+        s.slice(i + 3)
+    }
+  }
+  return s
+}
+function trimS (s) {
+  if (s.slice(-5) === '#this') s = s.slice(0, -5)
+  else if (s.slice(-3) === '#me') s = s.slice(0, -3)
+  // these were below the hash check.  not sure if this makes a difference
+  // but something to test to make sure
+  if (s.slice(-9) === '/foaf.rdf') s = s.slice(0, -9)
+  else if (s.slice(-5) === '/foaf') s = s.slice(0, -5)
+  return s
+}
+function getLab1 (x, kb) {
+  return (
+    kb.any(x, UI.ns.link('message')) ||
+    kb.any(x, UI.ns.vcard('fn')) ||
+    kb.any(x, UI.ns.foaf('name')) ||
+    kb.any(x, UI.ns.dct('title')) ||
+    kb.any(x, UI.ns.dc('title')) ||
+    kb.any(x, UI.ns.rss('title')) ||
+    kb.any(x, UI.ns.contact('fullName')) ||
+    kb.any(x, kb.sym('http://www.w3.org/2001/04/roadmap/org#name')) ||
+    kb.any(x, UI.ns.cal('summary')) ||
+    kb.any(x, UI.ns.foaf('nick')) ||
+    kb.any(x, UI.ns.rdfs('label'))
+  )
+}
 function label (x, initialCap) {
   // x is an object
   function doCap (s) {
     // s = s.toString()
-    if (initialCap) return s.slice(0, 1).toUpperCase() + s.slice(1)
-    return s
+    return initialCap ? s.slice(0, 1).toUpperCase() + s.slice(1) : s
   }
   function cleanUp (s1) {
     var s2 = ''
@@ -512,7 +552,6 @@ function label (x, initialCap) {
     for (var i = 0; i < s1.length; i++) {
       if (s1[i] === '_' || s1[i] === '-') {
         s2 += ' '
-        continue
       }
       s2 += s1[i]
       if (
@@ -542,18 +581,7 @@ function label (x, initialCap) {
   //  @@ TBD: Add subproperties of rdfs:label
 
   var kb = UI.store
-  var lab1 =
-    kb.any(x, UI.ns.link('message')) ||
-    kb.any(x, UI.ns.vcard('fn')) ||
-    kb.any(x, UI.ns.foaf('name')) ||
-    kb.any(x, UI.ns.dct('title')) ||
-    kb.any(x, UI.ns.dc('title')) ||
-    kb.any(x, UI.ns.rss('title')) ||
-    kb.any(x, UI.ns.contact('fullName')) ||
-    kb.any(x, kb.sym('http://www.w3.org/2001/04/roadmap/org#name')) ||
-    kb.any(x, UI.ns.cal('summary')) ||
-    kb.any(x, UI.ns.foaf('nick')) ||
-    kb.any(x, UI.ns.rdfs('label'))
+  var lab1 = getLab1(x, kb)
 
   if (lab1) {
     return doCap(lab1.value)
@@ -579,28 +607,15 @@ function label (x, initialCap) {
       .join('/') // If it is properly encoded
   } catch (e) {
     // try individual decoding of ASCII code points
-    for (var i = s.length - 3; i > 0; i--) {
-      const hex = '0123456789abcefABCDEF' // The while upacks multiple layers of encoding
-      while (
-        s[i] === '%' &&
-        hex.indexOf(s[i + 1]) >= 0 &&
-        hex.indexOf(s[i + 2]) >= 0
-      ) {
-        s =
-          s.slice(0, i) +
-          String.fromCharCode(parseInt(s.slice(i + 1, i + 3), 16)) +
-          s.slice(i + 3)
-      }
-    }
+    s = decodeAsciiPoints(s)
   }
-  if (s.slice(-5) === '#this') s = s.slice(0, -5)
-  else if (s.slice(-3) === '#me') s = s.slice(0, -3)
+  s = trimS()
 
   var hash = s.indexOf('#')
   if (hash >= 0) return cleanUp(s.slice(hash + 1))
 
-  if (s.slice(-9) === '/foaf.rdf') s = s.slice(0, -9)
-  else if (s.slice(-5) === '/foaf') s = s.slice(0, -5)
+  /* put this in trimS function if (s.slice(-9) === '/foaf.rdf') s = s.slice(0, -9)
+  else if (s.slice(-5) === '/foaf') s = s.slice(0, -5) */
 
   // Eh? Why not do this? e.g. dc:title needs it only trim URIs, not rdfs:labels
   var slash = s.lastIndexOf('/', s.length - 2) // (len-2) excludes trailing slash
