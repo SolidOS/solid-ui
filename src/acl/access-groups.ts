@@ -85,7 +85,10 @@ export class AccessGroups {
     const groupElements: HTMLElement[] = []
     for (let comboIndex = 15; comboIndex > 0; comboIndex--) {
       const combo = kToCombo(comboIndex)
-      if ((this.controller.isEditable && RECOMMENDED[comboIndex]) || this.byCombo[combo]) {
+      if (
+        (this.controller.isEditable && RECOMMENDED[comboIndex]) ||
+        this.byCombo[combo]
+      ) {
         groupElements.push(this.renderGroup(comboIndex, combo))
       }
     }
@@ -95,9 +98,11 @@ export class AccessGroups {
   private renderGroup (comboIndex: number, combo: string): HTMLElement {
     const groupRow = this.controller.dom.createElement('div')
     groupRow.classList.add(this.controller.classes.accessGroupListItem)
-    widgets.makeDropTarget(groupRow, (uris) => this.handleDroppedUris(uris, combo)
-      .then(() => this.controller.render())
-      .catch(error => this.controller.renderStatus(error)))
+    widgets.makeDropTarget(groupRow, uris =>
+      this.handleDroppedUris(uris, combo)
+        .then(() => this.controller.render())
+        .catch(error => this.controller.renderStatus(error))
+    )
     const groupColumns = this.renderGroupElements(comboIndex, combo)
     groupColumns.forEach(column => groupRow.appendChild(column))
     return groupRow
@@ -106,38 +111,62 @@ export class AccessGroups {
   private renderGroupElements (comboIndex, combo): HTMLElement[] {
     const groupNameColumn = this.controller.dom.createElement('div')
     groupNameColumn.classList.add(this.controller.classes.group)
-    groupNameColumn.classList.toggle(this.controller.classes[`group-${comboIndex}`], this.controller.isEditable)
+    groupNameColumn.classList.toggle(
+      this.controller.classes[`group-${comboIndex}`],
+      this.controller.isEditable
+    )
     groupNameColumn.innerText = COLLOQUIAL[comboIndex] || ktToList(comboIndex)
 
     const groupAgentsColumn = this.controller.dom.createElement('div')
     groupAgentsColumn.classList.add(this.controller.classes.group)
-    groupAgentsColumn.classList.toggle(this.controller.classes[`group-${comboIndex}`], this.controller.isEditable)
-    const groupAgentsTable = groupAgentsColumn.appendChild(this.controller.dom.createElement('table'))
+    groupAgentsColumn.classList.toggle(
+      this.controller.classes[`group-${comboIndex}`],
+      this.controller.isEditable
+    )
+    const groupAgentsTable = groupAgentsColumn.appendChild(
+      this.controller.dom.createElement('table')
+    )
     const combos = this.byCombo[combo] || []
     combos
-      .map(([pred, obj]) => this.renderAgent(groupAgentsTable, combo, pred, obj))
+      .map(([pred, obj]) =>
+        this.renderAgent(groupAgentsTable, combo, pred, obj)
+      )
       .forEach(agentElement => groupAgentsTable.appendChild(agentElement))
 
     const groupDescriptionElement = this.controller.dom.createElement('div')
     groupDescriptionElement.classList.add(this.controller.classes.group)
-    groupDescriptionElement.classList.toggle(this.controller.classes[`group-${comboIndex}`], this.controller.isEditable)
-    groupDescriptionElement.innerText = EXPLANATION[comboIndex] || 'Unusual combination'
+    groupDescriptionElement.classList.toggle(
+      this.controller.classes[`group-${comboIndex}`],
+      this.controller.isEditable
+    )
+    groupDescriptionElement.innerText =
+      EXPLANATION[comboIndex] || 'Unusual combination'
 
     return [groupNameColumn, groupAgentsColumn, groupDescriptionElement]
   }
 
   private renderAgent (groupAgentsTable, combo, pred, obj): HTMLElement {
-    const personRow = widgets.personTR(this.controller.dom, ACL(pred), sym(obj), this.controller.isEditable ? {
-      deleteFunction: () => this.deleteAgent(combo, pred, obj)
-        .then(() => groupAgentsTable.removeChild(personRow))
-        .catch(error => this.controller.renderStatus(error))
-    } : {})
+    const personRow = widgets.personTR(
+      this.controller.dom,
+      ACL(pred),
+      sym(obj),
+      this.controller.isEditable
+        ? {
+          deleteFunction: () =>
+            this.deleteAgent(combo, pred, obj)
+              .then(() => groupAgentsTable.removeChild(personRow))
+              .catch(error => this.controller.renderStatus(error))
+        }
+        : {}
+    )
     return personRow
   }
 
   private async deleteAgent (combo, pred, obj): Promise<void> {
     const combos = this.byCombo[combo] || []
-    const comboToRemove = combos.find(([comboPred, comboObj]) => comboPred === pred && comboObj === obj)
+    const comboToRemove = combos.find(
+      ([comboPred, comboObj]) => comboPred === pred && comboObj === obj
+    )
     if (comboToRemove) {
       combos.splice(combos.indexOf(comboToRemove), 1)
     }
@@ -149,7 +178,10 @@ export class AccessGroups {
     await this.controller.save()
   }
 
-  private async handleDroppedUris (uris: string[], combo: string): Promise<void> {
+  private async handleDroppedUris (
+    uris: string[],
+    combo: string
+  ): Promise<void> {
     try {
       await Promise.all(uris.map(uri => this.handleDroppedUri(uri, combo)))
       await this.controller.save()
@@ -158,7 +190,11 @@ export class AccessGroups {
     }
   }
 
-  private async handleDroppedUri (uri: string, combo: string, secondAttempt: boolean = false): Promise<void> {
+  private async handleDroppedUri (
+    uri: string,
+    combo: string,
+    secondAttempt: boolean = false
+  ): Promise<void> {
     const agent = findAgent(uri, this.store) // eg 'agent', 'origin', agentClass'
     const thing = sym(uri)
     if (!agent && !secondAttempt) {
@@ -179,7 +215,12 @@ export class AccessGroups {
     this.setACLCombo(combo, uri, agent, this.controller.subject)
   }
 
-  private setACLCombo (combo: string, uri: string, res: PartialAgentTriple, subject: NamedNode): void {
+  private setACLCombo (
+    combo: string,
+    uri: string,
+    res: PartialAgentTriple,
+    subject: NamedNode
+  ): void {
     if (!(combo in this.byCombo)) {
       this.byCombo[combo] = []
     }
@@ -224,7 +265,26 @@ function ktToList (k: number): string {
   }
   return list
 }
-
+function isOriginWithSlashes (uri) {
+  return (
+    uri.startsWith('http') && uri.split('/').length === 4 && uri.endsWith('/')
+  )
+}
+function isAgentClass (obj) {
+  return (
+    obj.sameTerm(ns.foaf('Agent')) ||
+    obj.sameTerm(ns.acl('AuthenticatedAgent')) || // AuthenticatedAgent
+    obj.sameTerm(ns.rdf('Resource')) ||
+    obj.sameTerm(ns.owl('Thing'))
+  )
+}
+function isAgent (ns, types) {
+  return (
+    ns.vcard('Individual').uri in types ||
+    ns.foaf('Person').uri in types ||
+    ns.foaf('Agent').uri in types
+  )
+}
 function findAgent (uri, kb): PartialAgentTriple | null {
   const obj = sym(uri)
   const types = kb.findTypeURIs(obj)
@@ -237,11 +297,7 @@ function findAgent (uri, kb): PartialAgentTriple | null {
     return { pred: 'origin', obj: obj } // The only way to know an origin alas
   }
   // @@ This is an almighty kludge needed because drag and drop adds extra slashes to origins
-  if (
-    uri.startsWith('http') &&
-    uri.split('/').length === 4 &&
-    uri.endsWith('/')
-  ) {
+  if (isOriginWithSlashes(uri)) {
     // there  IS third slash
     console.log('Assuming final slash on dragged origin URI was unintended!')
     return { pred: 'origin', obj: sym(uri.slice(0, -1)) } // Fix a URI where the drag and drop system has added a spurious slash
@@ -252,19 +308,10 @@ function findAgent (uri, kb): PartialAgentTriple | null {
   if (ns.vcard('Group').uri in types) {
     return { pred: 'agentGroup', obj: obj } // @@ note vcard membership not RDFs
   }
-  if (
-    obj.sameTerm(ns.foaf('Agent')) ||
-    obj.sameTerm(ns.acl('AuthenticatedAgent')) || // AuthenticatedAgent
-    obj.sameTerm(ns.rdf('Resource')) ||
-    obj.sameTerm(ns.owl('Thing'))
-  ) {
+  if (isAgentClass(obj)) {
     return { pred: 'agentClass', obj: obj }
   }
-  if (
-    ns.vcard('Individual').uri in types ||
-    ns.foaf('Person').uri in types ||
-    ns.foaf('Agent').uri in types
-  ) {
+  if (isAgent(ns, types)) {
     const pref = kb.any(obj, ns.foaf('preferredURI'))
     if (pref) return { pred: 'agent', obj: sym(pref) }
     return { pred: 'agent', obj: obj }
