@@ -653,6 +653,9 @@ describe('mostSpecificClassURI', () => {
   it('exists', () => {
     expect(mostSpecificClassURI).toBeInstanceOf(Function)
   })
+  it('runs', () => {
+    expect(mostSpecificClassURI(null)).toEqual(undefined)
+  })
 })
 
 describe('fieldFunction', () => {
