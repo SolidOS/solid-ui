@@ -55,6 +55,14 @@ describe('PeoplePicker.onSelectGroup', () => {
   it('exists', () => {
     expect(new PeoplePicker().onSelectGroup).toBeInstanceOf(Function)
   })
+  it('runs', () => {
+    const typeIndex = {}
+    const groupPickedCb = () => {}
+    const options = {}
+    const peoplePicker = new PeoplePicker(element, typeIndex, groupPickedCb, options)
+    expect(peoplePicker.onSelectGroup(RdfLib.sym(''))).toBeTruthy()
+  })
+
 })
 
 describe('GroupPicker', () => {
