@@ -1,12 +1,24 @@
-function sym () {
+export const Util =  {
+  mediaTypeClass: sym
+}
+
+export function sym () {
   return {
-    dir: sym
-  }
+    dir: sym,
+    uri: 'uri',
+    value: '',
+    doc: () => {},
+    sameTerm: () => false
+  }  
+}  
+
+export const uri = {
+  join: () => {}
 }
 export function graph() {
   return {
     any: () => {
-      return []
+      return sym()
     },
     each: () => {
       return []
@@ -15,7 +27,17 @@ export function graph() {
       return []
     },
     fetcher: {
-      load: () => {}
+      load: () => {},
+      nowOrWhenFetched: () => Promise.resolve()
+    },
+    findTypeURIs: () => {
+      return []
+    },
+    findSuperClassesNT: () => {
+      return []
+    },
+    statementsMatching: () => {
+      return []
     },
     sym
   }

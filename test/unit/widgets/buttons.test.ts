@@ -2,7 +2,7 @@ jest.mock('rdflib')
 import * as RdfLib from 'rdflib'
 jest.mock('solid-auth-client')
 import * as SolidAuthClient from 'solid-auth-client'
-import { dom } from '../../helpers/dom'
+import { dom, element, event } from '../../helpers/dom'
 
 import {
   addStyleSheet,
@@ -66,16 +66,7 @@ describe('askName', () => {
   it('exists', () => {
     expect(askName).toBeInstanceOf(Function)
   })
-  it('runs', async () => {
-    const element = {
-      appendChild: () => {
-        return element
-      },
-      setAttribute: () => {},
-      select: () => {},
-      focus: () => {},
-      addEventListener: () => {}
-    }
+  it.skip('runs', async () => {
     const kb = RdfLib.graph()
     const container = element
     const predicate = {}
@@ -90,7 +81,10 @@ describe('attachmentList', () => {
     expect(attachmentList).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(attachmentList()).toBeTruthy()
+    const subject = RdfLib.sym('')
+    const div = element
+    const options = {}
+    expect(attachmentList(dom, subject, div, options)).toBeTruthy()
   })
 })
 
@@ -99,7 +93,10 @@ describe('button', () => {
     expect(button).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(button()).toBeTruthy()
+    const iconURI = ''
+    const text = 'txt'
+    const handler = () => {}
+    expect(button(dom, iconURI, text, handler)).toBeTruthy()
   })
 })
 
@@ -108,7 +105,8 @@ describe('cancelButton', () => {
     expect(cancelButton).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(cancelButton()).toBeTruthy()
+    const handler = () => {}
+    expect(cancelButton(dom, handler)).toBeTruthy()
   })
 })
 
@@ -116,8 +114,8 @@ describe('clearElement', () => {
   it('exists', () => {
     expect(clearElement).toBeInstanceOf(Function)
   })
-  it('runs', () => {
-    expect(clearElement()).toBeTruthy()
+  it.skip('runs', () => {
+    expect(clearElement(element)).toBeTruthy()
   })
 })
 
@@ -126,7 +124,7 @@ describe('complain', () => {
     expect(complain).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(complain()).toBeTruthy()
+    expect(complain()).toEqual(undefined)
   })
 })
 
@@ -135,7 +133,8 @@ describe('continueButton', () => {
     expect(continueButton).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(continueButton()).toBeTruthy()
+    const handler = () => {}
+    expect(continueButton(dom, handler)).toBeTruthy()
   })
 })
 
@@ -144,7 +143,7 @@ describe('defaultAnnotationStore', () => {
     expect(defaultAnnotationStore).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(defaultAnnotationStore()).toBeTruthy()
+    expect(defaultAnnotationStore(RdfLib.sym(''))).toEqual(undefined)
   })
 })
 
@@ -153,7 +152,10 @@ describe('deleteButtonWithCheck', () => {
     expect(deleteButtonWithCheck).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(deleteButtonWithCheck()).toBeTruthy()
+    const container = element
+    const noun = ''
+    const deleteFunction = () => {}
+    expect(deleteButtonWithCheck(dom, container, noun, deleteFunction)).toBeTruthy()
   })
 })
 
@@ -162,7 +164,8 @@ describe('extractLogURI', () => {
     expect(extractLogURI).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(extractLogURI()).toBeTruthy()
+    const fullURI = ''
+    expect(extractLogURI(fullURI)).toEqual('')
   })
 })
 
@@ -171,7 +174,7 @@ describe('findImage', () => {
     expect(findImage).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(findImage()).toBeTruthy()
+    expect(findImage(RdfLib.sym(''))).toEqual('uri')
   })
 })
 
@@ -180,7 +183,7 @@ describe('findImageFromURI', () => {
     expect(findImageFromURI).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(findImageFromURI()).toBeTruthy()
+    expect(findImageFromURI('')).toEqual('https://solid.github.io/solid-ui/src/icons/noun_10636_grey.svg')
   })
 })
 
@@ -189,7 +192,8 @@ describe('fileUploadButtonDiv', () => {
     expect(fileUploadButtonDiv).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(fileUploadButtonDiv({}, {})).toBeTruthy()
+    const handler = () => {}
+    expect(fileUploadButtonDiv(dom, handler)).toBeTruthy()
   })
 })
 
@@ -198,7 +202,9 @@ describe('formatDateTime', () => {
     expect(formatDateTime).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(formatDateTime()).toBeTruthy()
+    const date = new Date('2020')
+    const format = ''
+    expect(formatDateTime(date, format)).toEqual('')
   })
 })
 
@@ -207,7 +213,7 @@ describe('imagesOf', () => {
     expect(imagesOf).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(imagesOf()).toBeTruthy()
+    expect(imagesOf(null, RdfLib.graph())).toBeTruthy()
   })
 })
 
@@ -228,22 +234,34 @@ describe('index.twoLine', () => {
 })
 describe('index.twoLine[\'\']', () => {
   it('exists', () => {
-    expect(index.twoLine['']).toBeInstanceOf(Object)
+    expect(index.twoLine['']).toBeInstanceOf(Function)
+  })
+  it('runs', () => {
+    expect(index.twoLine[''](dom, null)).toEqual(element)
   })
 })
 describe('index.twoLine[\'http://www.w3.org/2000/10/swap/pim/qif#Transaction\']', () => {
   it('exists', () => {
-    expect(index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction']).toBeInstanceOf(Object)
+    expect(index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction']).toBeInstanceOf(Function)
+  })
+  it('runs', () => {
+    expect(index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction'](dom, null)).toEqual(element)
   })
 })
 describe('index.twoLine[\'http://www.w3.org/ns/pim/trip#Trip\']', () => {
   it('exists', () => {
-    expect(index.twoLine['http://www.w3.org/ns/pim/trip#Trip']).toBeInstanceOf(Object)
+    expect(index.twoLine['http://www.w3.org/ns/pim/trip#Trip']).toBeInstanceOf(Function)
+  })
+  it('runs', () => {
+    expect(index.twoLine['http://www.w3.org/ns/pim/trip#Trip'](dom, null)).toEqual(element)
   })
 })
 describe('index.twoLine.widgetForClass', () => {
   it('exists', () => {
-    expect(index.twoLine.widgetForClass).toBeInstanceOf(Object)
+    expect(index.twoLine.widgetForClass).toBeInstanceOf(Function)
+  })
+  it('runs', () => {
+    expect(index.twoLine.widgetForClass(RdfLib.sym(''))).toBeInstanceOf(Function)
   })
 })
 
@@ -279,7 +297,8 @@ describe('linkButton', () => {
     expect(linkButton).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(linkButton()).toBeTruthy()
+    const object = RdfLib.sym('')
+    expect(linkButton(dom, object)).toBeTruthy()
   })
 })
 
@@ -288,7 +307,9 @@ describe('linkIcon', () => {
     expect(linkIcon).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(linkIcon()).toBeTruthy()
+    const subject = RdfLib.sym('')
+    const iconURI = ''
+    expect(linkIcon(dom, subject, iconURI)).toBeTruthy()
   })
 })
 
@@ -297,7 +318,7 @@ describe('openHrefInOutlineMode', () => {
     expect(openHrefInOutlineMode).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(openHrefInOutlineMode()).toBeTruthy()
+    expect(openHrefInOutlineMode(event)).toEqual(undefined)
   })
 })
 
@@ -306,7 +327,10 @@ describe('personTR', () => {
     expect(personTR).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(personTR()).toBeTruthy()
+    const pred = RdfLib.sym('')
+    const obj = RdfLib.sym('')
+    const options = {}
+    expect(personTR(dom, pred, obj, options)).toBeTruthy()
   })
 })
 
@@ -315,7 +339,7 @@ describe('propertyTriage', () => {
     expect(propertyTriage).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(propertyTriage({})).toBeTruthy()
+    expect(propertyTriage(RdfLib.graph())).toBeTruthy()
   })
 })
 
@@ -324,7 +348,7 @@ describe('refreshTree', () => {
     expect(refreshTree).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(refreshTree()).toBeTruthy()
+    expect(refreshTree({ children: []})).toEqual(undefined)
   })
 })
 
@@ -333,7 +357,7 @@ describe('removeButton', () => {
     expect(removeButton).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(removeButton()).toBeTruthy()
+    expect(removeButton(dom, element)).toBeTruthy()
   })
 })
 
@@ -341,7 +365,7 @@ describe('selectorPanel', () => {
   it('exists', () => {
     expect(selectorPanel).toBeInstanceOf(Function)
   })
-  it.only('runs', () => {
+  it('runs', () => {
     const kb = RdfLib.graph()
     const type = ''
     const predicate = ''
@@ -368,7 +392,24 @@ describe('selectorPanelRefresh', () => {
     expect(selectorPanelRefresh).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(selectorPanelRefresh()).toBeTruthy()
+    const kb = RdfLib.graph()
+    const type = ''
+    const predicate = ''
+    const inverse = false
+    const possible = true
+    const options = {}
+    const callbackFunction = () => {}
+    const linkCallback = () => {}
+    expect(selectorPanelRefresh(
+      dom,
+      kb,
+      type,
+      predicate,
+      inverse,
+      possible,
+      options,
+      callbackFunction,
+      linkCallback)).toBeTruthy()
   })
 })
 
@@ -377,7 +418,8 @@ describe('setImage', () => {
     expect(setImage).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(setImage()).toBeTruthy()
+    const thing = RdfLib.sym('')
+    expect(setImage(element, thing)).toEqual(undefined)
   })
 })
 
@@ -386,7 +428,8 @@ describe('setName', () => {
     expect(setName).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(setName()).toBeTruthy()
+    const thing = RdfLib.sym('')
+    expect(setName(element, thing)).toEqual(undefined)
   })
 })
 
