@@ -18,7 +18,8 @@
     "coverage": "jest --coverage --collectCoverageFrom=src/**/*.[jt]s",
     "lint": "eslint \"src/**/*.js\" \"src/**/*.ts\"",
     "lint-fix": "eslint \"src/**/*.js\" \"src/**/*.ts\" --fix",
-    "test": "npm run lint",
+    "jest": "jest",
+    "test": "npm run build; npm run lint; npm run jest",
     "doc": "typedoc --out ./Documentation/api/ ./src/",
     "prepublishOnly": "npm test && npm run build",
     "postpublish": "git push origin master --follow-tags"
