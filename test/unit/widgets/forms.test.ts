@@ -19,7 +19,7 @@ import {
   promptForNew,
   propertiesForClass,
   sortByLabel,
-  sortBySequence,
+  sortBySequence
 } from '../../../src/widgets/forms'
 import * as ns from '../../../src/ns'
 
@@ -124,7 +124,6 @@ describe('EmailField params', () => {
     expect(fieldParams[ns.ui('EmailField').uri]).toBeInstanceOf(Object)
   })
 })
-
 
 describe('PhoneField', () => {
   it('exists', () => {
@@ -352,17 +351,31 @@ describe('fieldLabel', () => {
   it('exists', () => {
     expect(fieldLabel).toBeInstanceOf(Object)
   })
+  it(' ...', () => {
+    expect(fieldLabel('dom', undefined, 'form').toBe())
+  })
 })
 
 describe('fieldStore', () => {
   it('exists', () => {
     expect(fieldStore).toBeInstanceOf(Object)
   })
-})
-
-describe('newThing', () => {
-  it('exists', () => {
-    expect(newThing).toBeInstanceOf(Object)
+  it('returns def when there is no matching statement', () => {
+    const statementMatching = jest.fn()
+    statementMatching.mockReturnValueOnce(null)
+    expect(fieldStore('subject', 'predicate', 'def')).toBe('def')
   })
 })
 
+describe('newThing', () => {
+  console.log(window)
+  it('exists', () => {
+    expect(newThing).toBeInstanceOf(Object)
+  })
+  /* need to also mock or figure out doc - which is a NamedNode
+  it('returns the correct .', () => {
+    const Date = jest.fn()
+    Date.mockReturnValueOnce('Thu Feb 06 2020 19:42:59 GMT+1100')
+    expect(newThing('doc').toBe('')) 
+  }) */
+})
