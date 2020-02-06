@@ -78,7 +78,7 @@ describe('askName', () => {
   it('exists', () => {
     expect(askName).toBeInstanceOf(Function)
   })
-  it.skip('runs', async () => {
+  it('runs', async () => {
     const element = {
       appendChild: () => {
         return element

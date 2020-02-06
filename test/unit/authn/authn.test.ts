@@ -148,7 +148,7 @@ describe('saveUser', () => {
 })
 
 describe('solidAuthClient', () => {
-  it.skip('exists', () => {
-    expect(solidAuthClient).toBeInstanceOf(Function)
+  it('exists', () => {
+    expect(solidAuthClient).toBeTruthy()
   })
 })

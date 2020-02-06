@@ -15,14 +15,16 @@ describe('DateFolder#leafDocumentFromDate', () => {
   it('exists', () => {
     expect(new DateFolder({ dir: () => {} }).leafDocumentFromDate).toBeInstanceOf(Function)
   })
-  it.skip('runs', () => {
+  it('runs', () => {
     const dateFolder = new DateFolder({ dir: () => {
-      uri: ''
-    } });
+      return {
+        uri: ''
+      }
+    } })
     const result = dateFolder.leafDocumentFromDate({
       toISOString: () => ''
     })
-    expect(result).toEqual({})
+    expect(result).toBeTruthy()
   })
 })
 
@@ -30,14 +32,18 @@ describe('DateFolder#dateFromLeafDocument', () => {
   it('exists', () => {
     expect(new DateFolder({ dir: () => {} }).dateFromLeafDocument).toBeInstanceOf(Function)
   })
-  it.skip('runs', () => {
+  it('runs', () => {
     const dateFolder = new DateFolder({ dir: () => {
-      uri: ''
-    } });
+      return {
+        uri: ''
+      }
+    } })
     const result = dateFolder.dateFromLeafDocument({
-      toISOString: () => ''
+      uri: {
+        slice: () => '2020'
+      }
     })
-    expect(result).toEqual({})
+    expect(result).toEqual(new Date('2020'))
   })
 
 })
@@ -46,14 +52,16 @@ describe('DateFolder#loadPrevious', () => {
   it('exists', () => {
     expect(new DateFolder({ dir: () => {} }).loadPrevious).toBeInstanceOf(Function)
   })
-  it.skip('runs', async () => {
+  it('runs', async () => {
     const dateFolder = new DateFolder({ dir: () => {
-      uri: ''
-    } });
+      return {
+        uri: ''
+      }
+    } })
     const result = await dateFolder.loadPrevious({
-      toISOString: ''
+      toISOString: () => ''
     })
-    expect(result).toEqual({})
+    expect(result).toEqual(null)
   })
 
 })
@@ -62,15 +70,13 @@ describe('DateFolder#firstLeaf', () => {
   it('exists', () => {
     expect(new DateFolder({ dir: () => {} }).firstLeaf).toBeInstanceOf(Function)
   })
-  it.skip('runs', async () => {
+  it('runs', async () => {
     const dateFolder = new DateFolder({ dir: () => {
-      uri: ''
-    } });
-    ;(window as any).$rdf = {
-      graph: () => {},
-      Fetcher: function () {}
-    }
-    const result = await dateFolder.firstLeaf()
-    expect(result).toEqual({})
+      return {
+        uri: ''
+      }
+    } })
+    ;(window as any).$rdf = RdfLib
+    await expect(dateFolder.firstLeaf()).rejects.toThrow(' No children to         parent2 [object Object]')
   })
 })

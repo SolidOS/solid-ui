@@ -10,7 +10,7 @@ describe('Thread', () => {
     expect(thread).toBeInstanceOf(Function)
   })
 
-  it.skip('runs', () => {
+  it('runs', () => {
     const dom = {
       createElement: () => {
         return {
