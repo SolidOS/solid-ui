@@ -8,7 +8,10 @@ export function sym () {
     uri: 'uri',
     value: '',
     doc: () => {
-      equals: () => {}
+      return {
+        equals: () => {},
+        value: ''
+      }
     },
     sameTerm: () => false
   }  
@@ -18,7 +21,9 @@ export const uri = {
   join: () => {}
 }
 export function st() {
+}
 
+export function literal() {
 }
 export function graph() {
   return {
@@ -26,6 +31,9 @@ export function graph() {
       return sym()
     },
     each: () => {
+      return []
+    },
+    match: () => {
       return []
     },
     query: () => {
