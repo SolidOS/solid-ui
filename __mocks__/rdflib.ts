@@ -15,6 +15,9 @@ export function sym () {
 export const uri = {
   join: () => {}
 }
+export function st() {
+
+}
 export function graph() {
   return {
     any: () => {
