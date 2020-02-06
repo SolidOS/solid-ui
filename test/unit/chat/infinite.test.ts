@@ -1,3 +1,8 @@
+jest.mock('rdflib')
+import * as RdfLib from 'rdflib'
+jest.mock('solid-auth-client')
+import * as SolidAuthClient from 'solid-auth-client'
+
 import { infiniteMessageArea } from '../../../src/chat/infinite'
 
 describe('infiniteMessageArea', () => {

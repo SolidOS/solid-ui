@@ -1,4 +1,8 @@
-import * as rdf from 'rdflib'
+jest.mock('rdflib')
+import * as RdfLib from 'rdflib'
+jest.mock('solid-auth-client')
+import * as SolidAuthClient from 'solid-auth-client'
+
 import { findBookmarkDocument, toggleBookmark, renderBookmarksButton } from '../../../src/chat/bookmarks'
 
 describe('findBookmarkDocument', () => {
@@ -31,8 +35,8 @@ describe('toggleBookmark', () => {
   })
   it.skip('runs', async () => {
     const userContext = {
-      me: new rdf.NamedNode('http://example.com'),
-      bookmarkDocument: new rdf.NamedNode('http://example.com')
+      me: new RdfLib.NamedNode('http://example.com'),
+      bookmarkDocument: new RdfLib.NamedNode('http://example.com')
     }
     const target = {}
     const bookmarkButton = {}
@@ -50,8 +54,8 @@ describe('renderBookmarksButton', () => {
   })
   it.skip('runs', async () => {
     const userContext = {
-      me: new rdf.NamedNode('http://example.com'),
-      bookmarkDocument: new rdf.NamedNode('http://example.com')
+      me: new RdfLib.NamedNode('http://example.com'),
+      bookmarkDocument: new RdfLib.NamedNode('http://example.com')
     }
     const target = {}
     const result = await renderBookmarksButton(userContext, target)
