@@ -11,6 +11,9 @@ export function graph() {
     each: () => {
       return []
     },
+    query: () => {
+      return []
+    },
     fetcher: {
       load: () => {}
     },

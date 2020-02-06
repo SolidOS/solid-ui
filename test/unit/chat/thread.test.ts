@@ -2,6 +2,7 @@ jest.mock('rdflib')
 import * as RdfLib from 'rdflib'
 jest.mock('solid-auth-client')
 import * as SolidAuthClient from 'solid-auth-client'
+import { dom } from '../../helpers/dom'
 
 import { default as thread } from '../../../src/chat/thread'
   
@@ -11,19 +12,7 @@ describe('Thread', () => {
   })
 
   it('runs', () => {
-    const dom = {
-      createElement: () => {
-        return {
-          appendChild: () => {},
-          setAttribute: () => {},
-        }
-      }
-    }
-    const kb = {
-      query: () => {
-        return {}
-      }
-    }
+    const kb = RdfLib.graph()
     const subject = ''
     const messageStore = {
       doc: () => {

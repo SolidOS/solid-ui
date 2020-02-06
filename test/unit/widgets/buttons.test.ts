@@ -47,19 +47,6 @@ describe('addStyleSheet', () => {
     expect(addStyleSheet).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const dom = {
-      querySelectorAll: () => [],
-      createElement: () => {
-        return {
-          setAttribute: () => {}
-        }
-      },
-      getElementsByTagName: () => [
-        {
-          appendChild: () => {}
-        }
-      ]
-    }
     const href = ''
     expect(addStyleSheet(dom, href)).toEqual(undefined)
   })
