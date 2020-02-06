@@ -76,10 +76,7 @@ describe('askName', () => {
       focus: () => {},
       addEventListener: () => {}
     }
-    const dom = {
-      createElement: () => element
-    }
-    const kb = {}
+    const kb = RdfLib.graph()
     const container = element
     const predicate = {}
     const klass = {}
