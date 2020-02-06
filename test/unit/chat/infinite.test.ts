@@ -1,3 +1,9 @@
+jest.mock('rdflib')
+import { graph } from 'rdflib'
+jest.mock('solid-auth-client')
+import * as SolidAuthClient from 'solid-auth-client'
+import { dom, element } from '../../helpers/dom'
+
 import { infiniteMessageArea } from '../../../src/chat/infinite'
 
 describe('infiniteMessageArea', () => {
@@ -5,20 +11,7 @@ describe('infiniteMessageArea', () => {
     expect(infiniteMessageArea).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const element = {
-      appendChild: () => {},
-      setAttribute: () => {},
-    }
-    const dom = {
-      createElement: () => {
-        return element
-      }
-    }
-    const kb = {
-      query: () => {
-        return {}
-      }
-    }
+    const kb = graph()
     const chatChannel = { dir: () => {
       uri: ''
     } }

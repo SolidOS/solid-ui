@@ -19,6 +19,8 @@ module.exports = class DateFolder {
    */
   leafDocumentFromDate (date) {
     // console.log('incoming date: ' + date)
+    console.log('typeof date is now', typeof date)
+    console.log('typeof date.toISOString is now', typeof date.toISOString)
     const isoDate = date.toISOString() // Like "2018-05-07T17:42:46.576Z"
     var path = isoDate.split('T')[0].replace(/-/g, '/') //  Like "2018/05/07"
     path = this.root.dir().uri + path + '/' + this.leafFileName
@@ -89,11 +91,11 @@ module.exports = class DateFolder {
       const result = await lastNonEmpty(cousins)
       return result
     } // previousPeriod
-
+    console.log('date is now', date)
     const folder = this.leafDocumentFromDate(date).dir()
     const found = await previousPeriod(folder, 3)
     if (found) {
-      const doc = kb.sym(found.uri + this.leafFileNam)
+      const doc = kb.sym(found.uri + this.leafFileName)
       return this.dateFromLeafDocument(doc)
     }
     return null
@@ -104,6 +106,7 @@ module.exports = class DateFolder {
     var folderStore = $rdf.graph()
     var folderFetcher = new $rdf.Fetcher(folderStore)
     async function earliestSubfolder (parent) {
+      console.log('earliestSubfolder', parent)
       function suitable (x) {
         const tail = x.uri
           .slice(0, -1)
@@ -113,6 +116,8 @@ module.exports = class DateFolder {
         return true
       }
       console.log('            parent ' + parent)
+      console.log(parent.uri)
+      console.log(folderFetcher)
       delete folderFetcher.requested[parent.uri]
       // try {
       await folderFetcher.load(parent, { force: true }) // Force fetch as will have changed

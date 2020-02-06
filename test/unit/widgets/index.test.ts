@@ -1,3 +1,8 @@
+jest.mock('rdflib')
+import * as RdfLib from 'rdflib'
+jest.mock('solid-auth-client')
+import * as SolidAuthClient from 'solid-auth-client'
+
 import * as DragAndDrop from '../../../src/widgets/dragAndDrop'
 import * as Error from '../../../src/widgets/error'
 import * as Buttons from '../../../src/widgets/buttons'

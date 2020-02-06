@@ -1,3 +1,8 @@
+jest.mock('rdflib')
+import * as RdfLib from 'rdflib'
+jest.mock('solid-auth-client')
+import * as SolidAuthClient from 'solid-auth-client'
+
 import {
   appendForm,
   buildCheckboxForm,
@@ -22,6 +27,7 @@ import {
   sortBySequence
 } from '../../../src/widgets/forms'
 import * as ns from '../../../src/ns'
+import { dom, element } from '../../helpers/dom'
 
 describe('field', () => {
   it('exists', () => {
@@ -33,17 +39,68 @@ describe('Form field', () => {
   it('exists', () => {
     expect(field[ns.ui('Form').uri]).toBeInstanceOf(Object)
   })
+  it('runs', () => {
+    const container = element
+    const already = {}
+    const subject = RdfLib.sym('')
+    const form = element
+    const store = RdfLib.graph()
+    const callbackFunction = () => {}
+    expect(field[ns.ui('Form').uri](
+      dom,
+      container,
+      already,
+      subject,
+      form,
+      store,
+      callbackFunction
+    )).toEqual(element)
+  })
 })
 
 describe('Options field', () => {
   it('exists', () => {
     expect(field[ns.ui('Options').uri]).toBeInstanceOf(Object)
   })
+  it('runs', () => {
+    const container = element
+    const already = {}
+    const subject = RdfLib.sym('')
+    const form = element
+    const store = RdfLib.graph()
+    const callbackFunction = () => {}
+    expect(field[ns.ui('Options').uri](
+      dom,
+      container,
+      already,
+      subject,
+      form,
+      store,
+      callbackFunction
+    )).toEqual(element)
+  })
 })
 
 describe('Multiple field', () => {
   it('exists', () => {
     expect(field[ns.ui('Multiple').uri]).toBeInstanceOf(Object)
+  })
+ it('runs', () => {
+    const container = element
+    const already = {}
+    const subject = RdfLib.sym('')
+    const form = element
+    const store = RdfLib.graph()
+    const callbackFunction = () => {}
+    expect(field[ns.ui('Multiple').uri](
+      dom,
+      container,
+      already,
+      subject,
+      form,
+      store,
+      callbackFunction
+    )).toEqual(element)
   })
 })
 
@@ -129,11 +186,45 @@ describe('PhoneField', () => {
   it('exists', () => {
     expect(field[ns.ui('PhoneField').uri]).toBeInstanceOf(Object)
   })
+  it('runs', () => {
+    const container = element
+    const already = {}
+    const subject = RdfLib.sym('')
+    const form = element
+    const store = RdfLib.graph()
+    const callbackFunction = () => {}
+    expect(field[ns.ui('PhoneField').uri](
+      dom,
+      container,
+      already,
+      subject,
+      form,
+      store,
+      callbackFunction
+    )).toEqual(element)
+  })
 })
 
 describe('EmailField', () => {
   it('exists', () => {
     expect(field[ns.ui('EmailField').uri]).toBeInstanceOf(Object)
+  })
+  it('runs', () => {
+    const container = element
+    const already = {}
+    const subject = RdfLib.sym('')
+    const form = element
+    const store = RdfLib.graph()
+    const callbackFunction = () => {}
+    expect(field[ns.ui('EmailField').uri](
+      dom,
+      container,
+      already,
+      subject,
+      form,
+      store,
+      callbackFunction
+    )).toEqual(element)
   })
 })
 
@@ -141,11 +232,45 @@ describe('ColorField', () => {
   it('exists', () => {
     expect(field[ns.ui('ColorField').uri]).toBeInstanceOf(Object)
   })
+  it('runs', () => {
+    const container = element
+    const already = {}
+    const subject = RdfLib.sym('')
+    const form = element
+    const store = RdfLib.graph()
+    const callbackFunction = () => {}
+    expect(field[ns.ui('ColorField').uri](
+      dom,
+      container,
+      already,
+      subject,
+      form,
+      store,
+      callbackFunction
+    )).toEqual(element)
+  })
 })
 
 describe('DateField', () => {
   it('exists', () => {
     expect(field[ns.ui('DateField').uri]).toBeInstanceOf(Object)
+  })
+  it('runs', () => {
+    const container = element
+    const already = {}
+    const subject = RdfLib.sym('')
+    const form = element
+    const store = RdfLib.graph()
+    const callbackFunction = () => {}
+    expect(field[ns.ui('DateField').uri](
+      dom,
+      container,
+      already,
+      subject,
+      form,
+      store,
+      callbackFunction
+    )).toEqual(element)
   })
 })
 
@@ -153,11 +278,45 @@ describe('DateTimeField', () => {
   it('exists', () => {
     expect(field[ns.ui('DateTimeField').uri]).toBeInstanceOf(Object)
   })
+  it('runs', () => {
+    const container = element
+    const already = {}
+    const subject = RdfLib.sym('')
+    const form = element
+    const store = RdfLib.graph()
+    const callbackFunction = () => {}
+    expect(field[ns.ui('DateTimeField').uri](
+      dom,
+      container,
+      already,
+      subject,
+      form,
+      store,
+      callbackFunction
+    )).toEqual(element)
+  })
 })
 
 describe('TimeField', () => {
   it('exists', () => {
     expect(field[ns.ui('TimeField').uri]).toBeInstanceOf(Object)
+  })
+  it('runs', () => {
+    const container = element
+    const already = {}
+    const subject = RdfLib.sym('')
+    const form = element
+    const store = RdfLib.graph()
+    const callbackFunction = () => {}
+    expect(field[ns.ui('TimeField').uri](
+      dom,
+      container,
+      already,
+      subject,
+      form,
+      store,
+      callbackFunction
+    )).toEqual(element)
   })
 })
 
@@ -165,11 +324,45 @@ describe('NumericField', () => {
   it('exists', () => {
     expect(field[ns.ui('NumericField').uri]).toBeInstanceOf(Object)
   })
+  it('runs', () => {
+    const container = element
+    const already = {}
+    const subject = RdfLib.sym('')
+    const form = element
+    const store = RdfLib.graph()
+    const callbackFunction = () => {}
+    expect(field[ns.ui('NumericField').uri](
+      dom,
+      container,
+      already,
+      subject,
+      form,
+      store,
+      callbackFunction
+    )).toEqual(element)
+  })
 })
 
 describe('IntegerField', () => {
   it('exists', () => {
     expect(field[ns.ui('IntegerField').uri]).toBeInstanceOf(Object)
+  })
+  it('runs', () => {
+    const container = element
+    const already = {}
+    const subject = RdfLib.sym('')
+    const form = element
+    const store = RdfLib.graph()
+    const callbackFunction = () => {}
+    expect(field[ns.ui('IntegerField').uri](
+      dom,
+      container,
+      already,
+      subject,
+      form,
+      store,
+      callbackFunction
+    )).toEqual(element)
   })
 })
 
@@ -177,11 +370,45 @@ describe('DecimalField', () => {
   it('exists', () => {
     expect(field[ns.ui('DecimalField').uri]).toBeInstanceOf(Object)
   })
+  it('runs', () => {
+    const container = element
+    const already = {}
+    const subject = RdfLib.sym('')
+    const form = element
+    const store = RdfLib.graph()
+    const callbackFunction = () => {}
+    expect(field[ns.ui('DecimalField').uri](
+      dom,
+      container,
+      already,
+      subject,
+      form,
+      store,
+      callbackFunction
+    )).toEqual(element)
+  })
 })
 
 describe('FloatField]', () => {
   it('exists', () => {
     expect(field[ns.ui('FloatField').uri]).toBeInstanceOf(Object)
+  })
+  it('runs', () => {
+    const container = element
+    const already = {}
+    const subject = RdfLib.sym('')
+    const form = element
+    const store = RdfLib.graph()
+    const callbackFunction = () => {}
+    expect(field[ns.ui('FloatField').uri](
+      dom,
+      container,
+      already,
+      subject,
+      form,
+      store,
+      callbackFunction
+    )).toEqual(element)
   })
 })
 
@@ -189,11 +416,45 @@ describe('TextField', () => {
   it('exists', () => {
     expect(field[ns.ui('TextField').uri]).toBeInstanceOf(Object)
   })
+  it('runs', () => {
+    const container = element
+    const already = {}
+    const subject = RdfLib.sym('')
+    const form = element
+    const store = RdfLib.graph()
+    const callbackFunction = () => {}
+    expect(field[ns.ui('TextField').uri](
+      dom,
+      container,
+      already,
+      subject,
+      form,
+      store,
+      callbackFunction
+    )).toEqual(element)
+  })
 })
 
 describe('SingleLineTextField', () => {
   it('exists', () => {
     expect(field[ns.ui('SingleLineTextField').uri]).toBeInstanceOf(Object)
+  })
+  it('runs', () => {
+    const container = element
+    const already = {}
+    const subject = RdfLib.sym('')
+    const form = element
+    const store = RdfLib.graph()
+    const callbackFunction = () => {}
+    expect(field[ns.ui('SingleLineTextField').uri](
+      dom,
+      container,
+      already,
+      subject,
+      form,
+      store,
+      callbackFunction
+    )).toEqual(element)
   })
 })
 
@@ -201,11 +462,45 @@ describe('NamedNodeURIField', () => {
   it('exists', () => {
     expect(field[ns.ui('NamedNodeURIField').uri]).toBeInstanceOf(Object)
   })
+  it('runs', () => {
+    const container = element
+    const already = {}
+    const subject = RdfLib.sym('')
+    const form = element
+    const store = RdfLib.graph()
+    const callbackFunction = () => {}
+    expect(field[ns.ui('NamedNodeURIField').uri](
+      dom,
+      container,
+      already,
+      subject,
+      form,
+      store,
+      callbackFunction
+    )).toEqual(element)
+  })
 })
 
 describe('MultiLineTextField', () => {
   it('exists', () => {
     expect(field[ns.ui('MultiLineTextField').uri]).toBeInstanceOf(Object)
+  })
+  it('runs', () => {
+    const container = element
+    const already = {}
+    const subject = RdfLib.sym('')
+    const form = element
+    const store = RdfLib.graph()
+    const callbackFunction = () => {}
+    expect(field[ns.ui('MultiLineTextField').uri](
+      dom,
+      container,
+      already,
+      subject,
+      form,
+      store,
+      callbackFunction
+    )).toEqual(element)
   })
 })
 
@@ -213,11 +508,45 @@ describe('BooleanField', () => {
   it('exists', () => {
     expect(field[ns.ui('BooleanField').uri]).toBeInstanceOf(Object)
   })
+  it('runs', () => {
+    const container = element
+    const already = {}
+    const subject = RdfLib.sym('')
+    const form = element
+    const store = RdfLib.graph()
+    const callbackFunction = () => {}
+    expect(field[ns.ui('BooleanField').uri](
+      dom,
+      container,
+      already,
+      subject,
+      form,
+      store,
+      callbackFunction
+    )).toEqual(element)
+  })
 })
 
 describe('TristateField', () => {
   it('exists', () => {
     expect(field[ns.ui('TristateField').uri]).toBeInstanceOf(Object)
+  })
+  it('runs', () => {
+    const container = element
+    const already = {}
+    const subject = RdfLib.sym('')
+    const form = element
+    const store = RdfLib.graph()
+    const callbackFunction = () => {}
+    expect(field[ns.ui('TristateField').uri](
+      dom,
+      container,
+      already,
+      subject,
+      form,
+      store,
+      callbackFunction
+    )).toEqual(element)
   })
 })
 
@@ -225,12 +554,46 @@ describe('Classifier', () => {
   it('exists', () => {
     expect(field[ns.ui('Classifier').uri]).toBeInstanceOf(Object)
   })
+  it('runs', () => {
+    const container = element
+    const already = {}
+    const subject = RdfLib.sym('')
+    const form = element
+    const store = RdfLib.graph()
+    const callbackFunction = () => {}
+    expect(field[ns.ui('Classifier').uri](
+      dom,
+      container,
+      already,
+      subject,
+      form,
+      store,
+      callbackFunction
+    )).toEqual(element)
+  })
 })
 
 describe('Choice', () => {
   it('exists', () => {
     expect(field[ns.ui('Choice').uri]).toBeInstanceOf(Object)
   })
+  it('runs', () => {
+    const container = element
+    const already = {}
+    const subject = RdfLib.sym('')
+    const form = element
+    const store = RdfLib.graph()
+    const callbackFunction = () => {}
+    expect(field[ns.ui('Choice').uri](
+      dom,
+      container,
+      already,
+      subject,
+      form,
+      store,
+      callbackFunction
+    )).toEqual(element)
+  })  
 })
 
 describe('Comment params', () => {
@@ -243,17 +606,54 @@ describe('Heading', () => {
   it('exists', () => {
     expect(field[ns.ui('Heading').uri]).toBeInstanceOf(Object)
   })
+  it('runs', () => {
+    const container = element
+    const already = {}
+    const subject = RdfLib.sym('')
+    const form = element
+    const store = RdfLib.graph()
+    const callbackFunction = () => {}
+    expect(field[ns.ui('Heading').uri](
+      dom,
+      container,
+      already,
+      subject,
+      form,
+      store,
+      callbackFunction
+    )).toEqual(element)
+  })
 })
 
 describe('Comment]', () => {
   it('exists', () => {
-    expect(field[ns.ui('Choice').uri]).toBeInstanceOf(Object)
+    expect(field[ns.ui('Comment').uri]).toBeInstanceOf(Object)
+  })
+  it('runs', () => {
+    const container = element
+    const already = {}
+    const subject = RdfLib.sym('')
+    const form = element
+    const store = RdfLib.graph()
+    const callbackFunction = () => {}
+    expect(field[ns.ui('Comment').uri](
+      dom,
+      container,
+      already,
+      subject,
+      form,
+      store,
+      callbackFunction
+    )).toEqual(element)
   })
 })
 
 describe('mostSpecificClassURI', () => {
   it('exists', () => {
     expect(mostSpecificClassURI).toBeInstanceOf(Function)
+  })
+  it('runs', () => {
+    expect(mostSpecificClassURI(null)).toEqual(undefined)
   })
 })
 
