@@ -42,7 +42,7 @@ import {
 } from '../../../src/widgets/buttons'
 
 describe('addStyleSheet', () => {
-  it('exists', () => {
+  it.only('exists', () => {
     expect(addStyleSheet).toBeInstanceOf(Function)
   })
   it('runs', () => {
