@@ -49,6 +49,9 @@ export function graph() {
     findSuperClassesNT: () => {
       return []
     },
+    bottomTypeURIs: () => {
+      return []
+    },
     statementsMatching: () => {
       return []
     },
