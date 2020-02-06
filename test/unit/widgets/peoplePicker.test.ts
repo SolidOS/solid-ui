@@ -4,6 +4,7 @@ jest.mock('solid-auth-client')
 import * as SolidAuthClient from 'solid-auth-client'
 
 import { PeoplePicker, GroupPicker, Group, GroupBuilder } from '../../../src/widgets/peoplePicker'
+import { element } from '../../helpers/dom'
 
 describe('PeoplePicker', () => {
   it('exists', () => {
@@ -14,6 +15,13 @@ describe('PeoplePicker', () => {
 describe('PeoplePicker.render', () => {
   it('exists', () => {
     expect(new PeoplePicker().render).toBeInstanceOf(Function)
+  })
+  it('runs', () => {
+    const typeIndex = {}
+    const groupPickedCb = () => {}
+    const options = {}
+    const peoplePicker = new PeoplePicker(element, typeIndex, groupPickedCb, options)
+    expect(peoplePicker.render()).toEqual(element)
   })
 })
 
