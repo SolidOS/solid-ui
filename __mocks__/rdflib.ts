@@ -7,7 +7,9 @@ export function sym () {
     dir: sym,
     uri: 'uri',
     value: '',
-    doc: () => {},
+    doc: () => {
+      equals: () => {}
+    },
     sameTerm: () => false
   }  
 }  
