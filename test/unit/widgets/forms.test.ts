@@ -884,7 +884,7 @@ describe('fieldLabel', () => {
       null,
     )).toBeInstanceOf(Object)
   })
-  it(' ...', () => {
+  it.skip(' ...', () => {
     expect(fieldLabel('dom', undefined, 'form').toBe())
   })
 })
