@@ -7,6 +7,7 @@ export function sym () {
     dir: sym,
     uri: 'uri',
     value: '',
+    elements: [],
     doc: () => {
       return {
         equals: () => {},
@@ -78,4 +79,5 @@ export function Namespace() {
   return () => {}
 }
 export class UpdateManager {
+  editable() {}
 }

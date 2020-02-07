@@ -661,11 +661,27 @@ describe('fieldFunction', () => {
   it('exists', () => {
     expect(fieldFunction).toBeInstanceOf(Object)
   })
+  it('runs', () => {
+    expect(fieldFunction(dom, null)).toBeInstanceOf(Function)
+  })
 })
 
 describe('editFormButton', () => {
   it('exists', () => {
     expect(editFormButton).toBeInstanceOf(Object)
+  })
+  it('runs', () => {
+    const container = null
+    const form = null
+    const store = RdfLib.graph()
+    const callbackFunction = () => {}
+    expect(editFormButton(
+      dom,
+      container,
+      form,
+      store,
+      callbackFunction
+    )).toBeInstanceOf(Object)
   })
 })
 
@@ -673,11 +689,31 @@ describe('appendForm', () => {
   it('exists', () => {
     expect(appendForm).toBeInstanceOf(Object)
   })
+  it('runs', () => {
+    const container = null
+    const already = {}
+    const subject = null
+    const form = null
+    const store = RdfLib.graph()
+    const itemDone = () => {}
+    expect(appendForm(
+      dom,
+      container,
+      already,
+      subject,
+      form,
+      store,
+      itemDone
+    )).toBeInstanceOf(Object)
+  })
 })
 
 describe('propertiesForClass', () => {
   it('exists', () => {
     expect(propertiesForClass).toBeInstanceOf(Object)
+  })
+  it('runs', () => {
+    expect(propertiesForClass(RdfLib.graph(), null)).toBeInstanceOf(Object)
   })
 })
 
@@ -685,11 +721,17 @@ describe('findClosest', () => {
   it('exists', () => {
     expect(findClosest).toBeInstanceOf(Object)
   })
+  it('runs', () => {
+    expect(findClosest(RdfLib.graph(), null, null)).toBeInstanceOf(Object)
+  })
 })
 
 describe('formsFor', () => {
   it('exists', () => {
     expect(formsFor).toBeInstanceOf(Object)
+  })
+  it('runs', () => {
+    expect(formsFor(null)).toBeInstanceOf(Object)
   })
 })
 
@@ -697,11 +739,17 @@ describe('sortBySequence', () => {
   it('exists', () => {
     expect(sortBySequence).toBeInstanceOf(Object)
   })
+  it('runs', () => {
+    expect(sortBySequence([])).toBeInstanceOf(Object)
+  })
 })
 
 describe('sortByLabel', () => {
   it('exists', () => {
     expect(sortByLabel).toBeInstanceOf(Object)
+  })
+  it('runs', () => {
+    expect(sortByLabel([])).toBeInstanceOf(Object)
   })
 })
 
@@ -709,11 +757,35 @@ describe('newButton', () => {
   it('exists', () => {
     expect(newButton).toBeInstanceOf(Object)
   })
+  it('runs', () => {
+    expect(newButton(
+      dom,
+      RdfLib.graph(),
+      null,
+      null,
+      null,
+      null,
+      RdfLib.graph(),
+      () => {}  
+    )).toBeInstanceOf(Object)
+  })
 })
 
 describe('promptForNew', () => {
   it('exists', () => {
     expect(promptForNew).toBeInstanceOf(Object)
+  })
+  it('runs', () => {
+    expect(promptForNew(
+      dom,
+      RdfLib.graph(),
+      RdfLib.sym(''),
+      RdfLib.sym(''),
+      RdfLib.sym(''),
+      null,
+      RdfLib.graph(),
+      () => {}
+    )).toBeInstanceOf(Object)
   })
 })
 
@@ -721,11 +793,33 @@ describe('makeDescription', () => {
   it('exists', () => {
     expect(makeDescription).toBeInstanceOf(Object)
   })
+  it('runs', () => {
+    expect(makeDescription(
+      dom,
+      RdfLib.graph(),
+      null,
+      null,
+      RdfLib.graph(),
+      () => {}
+    )).toBeInstanceOf(Object)
+  })
 })
 
 describe('makeSelectForOptions', () => {
   it('exists', () => {
     expect(makeSelectForOptions).toBeInstanceOf(Object)
+  })
+  it('runs', () => {
+    expect(makeSelectForOptions(
+      dom,
+      RdfLib.graph(),
+      null,
+      null,
+      {},
+      {},
+      RdfLib.graph(),
+      () => {}
+    )).toBeInstanceOf(Object)
   })
 })
 
@@ -733,11 +827,31 @@ describe('makeSelectForCategory', () => {
   it('exists', () => {
     expect(makeSelectForCategory).toBeInstanceOf(Object)
   })
+  it('runs', () => {
+    expect(makeSelectForCategory(
+      dom,
+      RdfLib.graph(),
+      null,
+      null,
+      RdfLib.graph(),
+      () => {}
+    )).toBeInstanceOf(Object)
+  })
 })
 
 describe('makeSelectForNestedCategory', () => {
   it('exists', () => {
     expect(makeSelectForNestedCategory).toBeInstanceOf(Object)
+  })
+  it('runs', () => {
+    expect(makeSelectForNestedCategory(
+      dom,
+      RdfLib.graph(),
+      RdfLib.sym(''),
+      RdfLib.sym(''),
+      RdfLib.graph(),
+      () => {}
+    )).toBeInstanceOf(Object)
   })
 })
 
@@ -745,11 +859,30 @@ describe('buildCheckboxForm', () => {
   it('exists', () => {
     expect(buildCheckboxForm).toBeInstanceOf(Object)
   })
+  it('runs', () => {
+    expect(buildCheckboxForm(
+      dom,
+      RdfLib.graph(),
+      null,
+      [],
+      [],
+      null,
+      RdfLib.graph(),
+      false
+    )).toBeInstanceOf(Object)
+  })
 })
 
 describe('fieldLabel', () => {
   it('exists', () => {
     expect(fieldLabel).toBeInstanceOf(Object)
+  })
+  it('runs', () => {
+    expect(fieldLabel(
+      dom,
+      RdfLib.sym(''),
+      null,
+    )).toBeInstanceOf(Object)
   })
   it(' ...', () => {
     expect(fieldLabel('dom', undefined, 'form').toBe())
@@ -759,6 +892,13 @@ describe('fieldLabel', () => {
 describe('fieldStore', () => {
   it('exists', () => {
     expect(fieldStore).toBeInstanceOf(Object)
+  })
+  it('runs', () => {
+    expect(fieldStore(
+      null,
+      null,
+      null,
+    )).toEqual(null)
   })
   it('returns def when there is no matching statement', () => {
     const statementMatching = jest.fn()
@@ -771,6 +911,9 @@ describe('newThing', () => {
   console.log(window)
   it('exists', () => {
     expect(newThing).toBeInstanceOf(Object)
+  })
+  it('runs', () => {
+    expect(newThing(RdfLib.sym(''))).toBeInstanceOf(Object)
   })
   /* need to also mock or figure out doc - which is a NamedNode
   it('returns the correct .', () => {

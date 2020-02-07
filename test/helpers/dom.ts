@@ -23,6 +23,9 @@ export const dom = {
   createElement() {
     return element
   },
+  createTextNode() {
+    return element
+  },
   // setAttribute() {
   // },
   querySelectorAll() {

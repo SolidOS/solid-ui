@@ -8,7 +8,7 @@ import {
   currentUser, // Sync
   defaultTestUser, // Sync
   filterAvailablePanes, // Async
-  findAppInstances,
+  findAppInstances, // Async?
   findOriginOwner,
   getUserRoles, // Async
   loadTypeIndexes,
@@ -31,11 +31,17 @@ describe('checkUser', () => {
   it('exists', () => {
     expect(checkUser).toBeInstanceOf(Function)
   })
+  it('runs', async () => {
+    expect(await checkUser()).toEqual(null)
+  })
 })
 
 describe('currentUser', () => {
   it('exists', () => {
     expect(currentUser).toBeInstanceOf(Function)
+  })
+  it('runs', async () => {
+    expect(await currentUser()).toEqual(null)
   })
 })
 
@@ -43,11 +49,17 @@ describe('defaultTestUser', () => {
   it('exists', () => {
     expect(defaultTestUser).toBeInstanceOf(Function)
   })
+  it('runs', async () => {
+    expect(await defaultTestUser()).toEqual(null)
+  })
 })
 
 describe('filterAvailablePanes', () => {
   it('exists', () => {
     expect(filterAvailablePanes).toBeInstanceOf(Function)
+  })
+  it('runs', async () => {
+    expect(await filterAvailablePanes([])).toEqual([])
   })
 })
 
@@ -55,6 +67,10 @@ describe('findAppInstances', () => {
   it('exists', () => {
     expect(findAppInstances).toBeInstanceOf(Function)
   })
+  it('runs', async () => {
+    expect(await findAppInstances({}, RdfLib.sym(''), false)).toBeInstanceOf(Object)
+  })
+
 })
 
 describe('findOriginOwner', () => {
