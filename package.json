@@ -19,6 +19,7 @@
     "lint": "eslint \"src/**/*.js\" \"src/**/*.ts\"",
     "lint-fix": "eslint \"src/**/*.js\" \"src/**/*.ts\" --fix",
     "jest": "jest",
+    "test:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --runInBand --watch",
     "test": "npm run build; npm run lint; npm run jest",
     "doc": "typedoc --out ./Documentation/api/ ./src/",
     "prepublishOnly": "npm test && npm run build",
