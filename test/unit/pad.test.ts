@@ -1,5 +1,5 @@
+import * as RdfLib from 'rdflib'
 import { dom } from '../helpers/dom'
-import { NamedNode } from 'rdflib'
 const pad = require('../../src/pad')
 import { currentSession } from '../../__mocks__/solid-auth-client'
 
@@ -30,7 +30,7 @@ describe('renderPartipants', () => {
   it('runs', () => {
     const table = dom.createElement()
     const padDoc = null
-    const subject = null
+    const subject = RdfLib.sym('')
     const me = webId
     const options = {}
     expect(
