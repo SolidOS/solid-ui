@@ -6,7 +6,7 @@ import { currentSession } from '../../__mocks__/solid-auth-client'
 export async function getMyWebId(): Promise<string | null> {
   return currentSession()
 }
-const webId = getMyWebId()
+
 describe('lightColorHash', () => {
   it('exists', () => {
     expect(pad.lightColorHash).toBeInstanceOf(Function)
@@ -23,6 +23,8 @@ describe('lightColorHash', () => {
   */
 })
 describe('renderPartipants', () => {
+  const webId = getMyWebId()
+
   it('exists', () => {
     expect(pad.renderPartipants).toBeInstanceOf(Function)
   })
