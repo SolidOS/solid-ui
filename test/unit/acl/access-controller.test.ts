@@ -10,9 +10,7 @@ describe('AccessController', () => {
   it('exists', () => {
     expect(AccessController).toBeTruthy()
   })
-  // leaving this for now
-
-  
+  /* leaving this for now
   const subject = new RdfLib.NamedNode('testing')
   const noun = 'noun'
   const  context = new DataBrowserContext()

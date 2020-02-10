@@ -27,9 +27,9 @@ const utils = require('./utils')
  * @param {NamedNode} author - The author of text being displayed
  * @returns {String} The CSS color generated, constrained to be light for a background color
  */
-UI.pad.lightColorHash = function(author) {
-  var hash = function(x) {
-    return x.split('').reduce(function(a, b) {
+UI.pad.lightColorHash = function (author) {
+  var hash = function (x) {
+    return x.split('').reduce(function (a, b) {
       a = (a << 5) - a + b.charCodeAt(0)
       return a & a
     }, 0)
@@ -43,10 +43,10 @@ UI.pad.lightColorHash = function(author) {
 //
 //  This is more general tham the pad.
 //
-UI.pad.renderPartipants = function(dom, table, padDoc, subject, me, options) {
+UI.pad.renderPartipants = function (dom, table, padDoc, subject, me, options) {
   table.setAttribute('style', 'margin: 0.8em;')
 
-  var newRowForParticpation = function(parp) {
+  var newRowForParticpation = function (parp) {
     var person = kb.any(parp, ns.wf('participant'))
     var tr
     if (!person) {
@@ -71,12 +71,12 @@ UI.pad.renderPartipants = function(dom, table, padDoc, subject, me, options) {
     return tr
   }
 
-  var syncTable = function() {
-    var parps = kb.each(subject, ns.wf('participation')).map(function(parp) {
+  var syncTable = function () {
+    var parps = kb.each(subject, ns.wf('participation')).map(function (parp) {
       return [kb.anyValue(parp, UI.ns.cal('dtstart')) || '9999-12-31', parp]
     })
     parps.sort() // List in order of joining
-    var participations = parps.map(function(p) {
+    var participations = parps.map(function (p) {
       return p[1]
     })
     utils.syncTableToArray(table, participations, newRowForParticpation)
@@ -95,13 +95,13 @@ UI.pad.renderPartipants = function(dom, table, padDoc, subject, me, options) {
  * @param {NamedNode} me - The logged in user
  *
  */
-UI.pad.participationObject = function(subject, padDoc, me) {
-  return new Promise(function(resolve, reject) {
+UI.pad.participationObject = function (subject, padDoc, me) {
+  return new Promise(function (resolve, reject) {
     if (!me) {
       throw new Error('Not user id')
     }
 
-    var parps = kb.each(subject, ns.wf('participation')).filter(function(pn) {
+    var parps = kb.each(subject, ns.wf('participation')).filter(function (pn) {
       return kb.holds(pn, ns.wf('participant'), me)
     })
     if (parps.length > 1) {
@@ -124,7 +124,7 @@ UI.pad.participationObject = function(subject, padDoc, me) {
           padDoc
         )
       ]
-      kb.updater.update([], ins, function(uri, ok, errorMessage) {
+      kb.updater.update([], ins, function (uri, ok, errorMessage) {
         if (!ok) {
           reject(new Error('Error recording your partipation: ' + errorMessage))
         } else {
@@ -143,11 +143,11 @@ UI.pad.participationObject = function(subject, padDoc, me) {
  * @param {DOMNode} refreshable - A DOM element whose refresh() is to be called if the change works
  *
  */
-UI.pad.recordParticipation = function(subject, padDoc, refreshable) {
+UI.pad.recordParticipation = function (subject, padDoc, refreshable) {
   var me = UI.authn.currentUser()
   if (!me) return // Not logged in
 
-  var parps = kb.each(subject, ns.wf('participation')).filter(function(pn) {
+  var parps = kb.each(subject, ns.wf('participation')).filter(function (pn) {
     return kb.holds(pn, ns.wf('participant'), me)
   })
   if (parps.length > 1) {
@@ -170,7 +170,7 @@ UI.pad.recordParticipation = function(subject, padDoc, refreshable) {
         padDoc
       )
     ]
-    kb.updater.update([], ins, function(uri, ok, errorMessage) {
+    kb.updater.update([], ins, function (uri, ok, errorMessage) {
       if (!ok) {
         throw new Error('Error recording your partipation: ' + errorMessage)
       }
@@ -185,7 +185,7 @@ UI.pad.recordParticipation = function(subject, padDoc, refreshable) {
 
 // Record my participation and display participants
 //
-UI.pad.manageParticipation = function(
+UI.pad.manageParticipation = function (
   dom,
   container,
   padDoc,
@@ -209,7 +209,7 @@ UI.pad.manageParticipation = function(
   return table
 }
 
-UI.pad.notepad = function(dom, padDoc, subject, me, options) {
+UI.pad.notepad = function (dom, padDoc, subject, me, options) {
   options = options || {}
   var exists = options.exists
   var table = dom.createElement('table')
@@ -239,7 +239,7 @@ UI.pad.notepad = function(dom, padDoc, subject, me, options) {
     downstreamStatus.setAttribute('style', 'width:50%')
   }
 
-  var complain = function(message, upstream) {
+  var complain = function (message, upstream) {
     console.log(message)
     if (options.statusArea) {
       ;(upstream ? upstreamStatus : downstreamStatus).appendChild(
@@ -248,13 +248,13 @@ UI.pad.notepad = function(dom, padDoc, subject, me, options) {
     }
   }
 
-  var clearStatus = function(_upsteam) {
+  var clearStatus = function (_upsteam) {
     if (options.statusArea) {
       options.statusArea.innerHTML = ''
     }
   }
 
-  var setPartStyle = function(part, colors, pending) {
+  var setPartStyle = function (part, colors, pending) {
     var chunk = part.subject
     colors = colors || ''
     var baseStyle =
@@ -290,7 +290,7 @@ UI.pad.notepad = function(dom, padDoc, subject, me, options) {
     part.setAttribute('style', style + colors)
   }
 
-  var removePart = function(part) {
+  var removePart = function (part) {
     var chunk = part.subject
     if (!chunk) throw new Error('No chunk for line to be deleted!') // just in case
     var prev = kb.any(undefined, PAD('next'), chunk)
@@ -308,7 +308,7 @@ UI.pad.notepad = function(dom, padDoc, subject, me, options) {
     var label = chunk.uri.slice(-4)
     console.log('Deleting line ' + label)
 
-    updater.update(del, ins, function(uri, ok, errorMessage, response) {
+    updater.update(del, ins, function (uri, ok, errorMessage, response) {
       if (ok) {
         var row = part.parentNode
         var before = row.previousSibling
@@ -322,7 +322,7 @@ UI.pad.notepad = function(dom, padDoc, subject, me, options) {
         setPartStyle(part, 'color: black;  background-color: #ffd;') // yellow
         part.state = 0 // Needs downstream refresh
         utils.beep(0.5, 512) // Ooops clash with other person
-        setTimeout(function() {
+        setTimeout(function () {
           // Ideally, beep! @@
           reloadAndSync() // Throw away our changes and
           // updater.requestDownstreamAction(padDoc, reloadAndSync)
@@ -338,13 +338,13 @@ UI.pad.notepad = function(dom, padDoc, subject, me, options) {
     })
   } // removePart
 
-  var changeIndent = function(part, chunk, delta) {
+  var changeIndent = function (part, chunk, delta) {
     var del = kb.statementsMatching(chunk, PAD('indent'))
     var current = del.length ? Number(del[0].object.value) : 0
     if (current + delta < -3) return //  limit negative indent
     var newIndent = current + delta
     var ins = $rdf.st(chunk, PAD('indent'), newIndent, padDoc)
-    updater.update(del, ins, function(uri, ok, errorBody) {
+    updater.update(del, ins, function (uri, ok, errorBody) {
       if (!ok) {
         console.log(
           "Indent change FAILED '" +
@@ -388,8 +388,8 @@ UI.pad.notepad = function(dom, padDoc, subject, me, options) {
     return (iCaretPos)
   }
 */
-  var addListeners = function(part, chunk) {
-    part.addEventListener('keydown', function(event) {
+  var addListeners = function (part, chunk) {
+    part.addEventListener('keydown', function (event) {
       var queueProperty, queue
       //  up 38; down 40; left 37; right 39     tab 9; shift 16; escape 27
       switch (event.keyCode) {
@@ -467,7 +467,7 @@ UI.pad.notepad = function(dom, padDoc, subject, me, options) {
       }
     })
 
-    var updateStore = function(part) {
+    var updateStore = function (part) {
       var chunk = part.subject
       setPartStyle(part, undefined, true)
       var old = kb.any(chunk, ns.sioc('content')).value
@@ -498,7 +498,7 @@ UI.pad.notepad = function(dom, padDoc, subject, me, options) {
           newOne +
           "' "
       )
-      updater.update(del, ins, function(uri, ok, errorBody, xhr) {
+      updater.update(del, ins, function (uri, ok, errorBody, xhr) {
         if (!ok) {
           // alert("clash " + errorBody);
           console.log(
@@ -516,7 +516,7 @@ UI.pad.notepad = function(dom, padDoc, subject, me, options) {
             setPartStyle(part, 'color: black;  background-color: #fdd;')
             part.state = 0 // Needs downstream refresh
             utils.beep(0.5, 512) // Ooops clash with other person
-            setTimeout(function() {
+            setTimeout(function () {
               updater.requestDownstreamAction(padDoc, reloadAndSync)
             }, 1000)
           } else {
@@ -551,7 +551,7 @@ UI.pad.notepad = function(dom, padDoc, subject, me, options) {
       })
     }
 
-    part.addEventListener('input', function inputChangeListener(_event) {
+    part.addEventListener('input', function inputChangeListener (_event) {
       // console.log("input changed "+part.value);
       setPartStyle(part, undefined, true) // grey out - not synced
       console.log(
@@ -575,7 +575,7 @@ UI.pad.notepad = function(dom, padDoc, subject, me, options) {
     }) // listener
   } // addlisteners
 
-  var newPartAfter = function(tr1, chunk, before) {
+  var newPartAfter = function (tr1, chunk, before) {
     // @@ take chunk and add listeners
     var text = kb.any(chunk, ns.sioc('content'))
     text = text ? text.value : ''
@@ -604,7 +604,7 @@ UI.pad.notepad = function(dom, padDoc, subject, me, options) {
     return part
   }
 
-  var newChunk = function(ele, before) {
+  var newChunk = function (ele, before) {
     // element of chunk being split
     var kb = UI.store
     var indent = 0
@@ -652,7 +652,7 @@ UI.pad.notepad = function(dom, padDoc, subject, me, options) {
     }
 
     console.log('    Fresh chunk ' + label + ' proposed')
-    updater.update(del, ins, function(uri, ok, errorBody, _xhr) {
+    updater.update(del, ins, function (uri, ok, errorBody, _xhr) {
       if (!ok) {
         // alert("Error writing new line " + label + ": " + errorBody);
         console.log('    ERROR writing new line ' + label + ': ' + errorBody)
@@ -679,10 +679,10 @@ UI.pad.notepad = function(dom, padDoc, subject, me, options) {
     })
   }
 
-  var consistencyCheck = function() {
+  var consistencyCheck = function () {
     var found = []
     var failed = 0
-    function complain2(msg) {
+    function complain2 (msg) {
       complain(msg)
       failed++
     }
@@ -731,7 +731,7 @@ UI.pad.notepad = function(dom, padDoc, subject, me, options) {
       }
 
       var sts = kb.statementsMatching(undefined, ns.sioc('contents'))
-      sts.map(function(st) {
+      sts.map(function (st) {
         if (!found[st.subject.uri]) {
           complain2('Loose chunk! ' + st.subject.uri)
         }
@@ -741,7 +741,7 @@ UI.pad.notepad = function(dom, padDoc, subject, me, options) {
   }
 
   // Ensure that the display matches the current state of the
-  var sync = function() {
+  var sync = function () {
     // var first = kb.the(subject, PAD('next'))
     if (kb.each(subject, PAD('next')).length !== 1) {
       var msg =
@@ -808,7 +808,7 @@ UI.pad.notepad = function(dom, padDoc, subject, me, options) {
 
   // Refresh the DOM tree
 
-  var refreshTree = function(root) {
+  var refreshTree = function (root) {
     if (root.refresh) {
       root.refresh()
       return
@@ -820,7 +820,7 @@ UI.pad.notepad = function(dom, padDoc, subject, me, options) {
 
   var reloading = false
 
-  var checkAndSync = function() {
+  var checkAndSync = function () {
     console.log('    reloaded OK')
     clearStatus()
     if (!consistencyCheck()) {
@@ -830,16 +830,16 @@ UI.pad.notepad = function(dom, padDoc, subject, me, options) {
     }
   }
 
-  var reloadAndSync = function() {
+  var reloadAndSync = function () {
     if (reloading) {
       console.log('   Already reloading - stop')
       return // once only needed
     }
     reloading = true
     var retryTimeout = 1000 // ms
-    var tryReload = function() {
+    var tryReload = function () {
       console.log('try reload - timeout = ' + retryTimeout)
-      updater.reload(updater.store, padDoc, function(ok, message, xhr) {
+      updater.reload(updater.store, padDoc, function (ok, message, xhr) {
         reloading = false
         if (ok) {
           checkAndSync()
@@ -894,7 +894,7 @@ UI.pad.notepad = function(dom, padDoc, subject, me, options) {
       $rdf.st(subject, PAD('next'), subject, padDoc)
     ]
 
-    updater.update([], insertables, function(uri, ok, errorBody) {
+    updater.update([], insertables, function (uri, ok, errorBody) {
       if (!ok) {
         complain(errorBody)
       } else {
