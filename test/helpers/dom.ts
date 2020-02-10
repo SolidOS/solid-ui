@@ -7,7 +7,8 @@ export const element = {
   select: () => {},
   focus: () => {},
   classList: {
-    add: () => {}
+    add: () => {},
+    toggle: () => {}
   },
   children: [],
   firstChild: {}

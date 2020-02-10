@@ -1,31 +1,91 @@
 jest.mock('rdflib')
-// import * as RdfLib from 'rdflib'
+import * as RdfLib from 'rdflib'
 jest.mock('solid-auth-client')
-// import * as SolidAuthClient from 'solid-auth-client'
-// import { DataBrowserContext } from 'pane-registry'
-const AccessController = require('../../../src/acl/access-controller')
-// just a note that the only public functions are isEditable, render, and save
+import * as SolidAuthClient from 'solid-auth-client'
+import { element, dom } from '../../helpers/dom'
+
+import { AccessController } from '../../../src/acl/access-controller'
+import { DataBrowserContext } from 'pane-registry'
+
+function instantiateAccessController() {
+  const subject = RdfLib.sym('')
+  const noun = ''
+  const context = {} as DataBrowserContext
+  const statusElement = element as unknown as HTMLElement
+  const classes = {}
+  const targetIsProtected = false
+  const targetDoc = RdfLib.sym('')
+  const targetACLDoc = RdfLib.sym('')
+  const defaultHolder = RdfLib.sym('')
+  const defaultACLDoc = RdfLib.sym('')
+  const prospectiveDefaultHolder = RdfLib.sym('')
+  const store = {}
+  return new AccessController(
+    subject,
+    noun,
+    context,
+    statusElement,
+    classes,
+    targetIsProtected,
+    targetDoc,
+    targetACLDoc,
+    defaultHolder,
+    defaultACLDoc,
+    prospectiveDefaultHolder,
+    store,
+    dom
+  )
+}
 describe('AccessController', () => {
-  debugger
   it('exists', () => {
     expect(AccessController).toBeTruthy()
   })
-  /* leaving this for now
-  const subject = new RdfLib.NamedNode('testing')
-  const noun = 'noun'
-  const  context = new DataBrowserContext()
-  const  statusElement = HTMLElement
-  const  classes = new Record<'test','test'>
-  const targetIsProtected= false
-  const targetDoc = new RdfLib.NamedNode('testing')
-  const targetACLDoc = new RdfLib.NamedNode('testing')
-  const  defaultHolder = null
-  const   defaultACLDoc = null
-  const  prospectiveDefaultHolder = undefined
-  const  store
-  const  dom
-  const controller = new AccessController(subject, noun, context, statusElement, classes, targetIsProtected, targetDoc, targetACLDoc, defaultHolder, defaultACLDoc, prospectiveDefaultHolder, store, dom);
-  it('exists', () => {
-    expect(controller.isEditable()).
-  }) */
+  it('runs', () => {
+    expect(instantiateAccessController()).toBeInstanceOf(AccessController)
+  })
 })
+
+describe('AccessController#isEditable', () => {
+  it('exists', () => {
+    expect(instantiateAccessController().isEditable).toEqual(false)
+  })
+})
+
+describe('AccessController#render', () => {
+  it('exists', () => {
+    expect(instantiateAccessController().render).toBeInstanceOf(Function)
+  })
+  it('runs', () => {
+    expect(instantiateAccessController().render()).toEqual(element)
+  })
+})
+
+describe('AccessController#renderTemporaryStatus', () => {
+  it('exists', () => {
+    expect(instantiateAccessController().renderTemporaryStatus).toBeInstanceOf(Function)
+  })
+  it('runs', () => {
+    expect(instantiateAccessController().renderTemporaryStatus('')).toEqual(undefined)
+  })
+})
+
+
+describe('AccessController#renderStatus', () => {
+  it('exists', () => {
+    expect(instantiateAccessController().renderStatus).toBeInstanceOf(Function)
+  })
+  it('runs', () => {
+    expect(instantiateAccessController().renderStatus('')).toEqual(undefined)
+  })
+})
+
+
+describe('AccessController#save', () => {
+  it('exists', () => {
+    expect(instantiateAccessController().save).toBeInstanceOf(Function)
+  })
+  it('runs', async () => {
+    expect(instantiateAccessController().save()).resolves.toEqual(undefined)
+  })
+})
+
