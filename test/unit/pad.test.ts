@@ -77,8 +77,18 @@ describe('notepad', () => {
   it('runs', () => {
     const padDoc = null
     const subject = null
-    const me = null
+    const me = RdfLib.sym('')
     const options = {}
     expect((pad as any).notepad(dom, padDoc, subject, me, options)).toBe(element)
+  })
+
+  it('should log error that you need to be logged in for pad to be edited', () => {
+    const padDoc = null
+    const subject = null
+    const me = null
+    const options = {}
+    ;(window as any).console = { log: jest.fn() }
+    expect((pad as any).notepad(dom, padDoc, subject, me, options)).toBe(element)
+    expect(console.log).toBeCalledWith('Warning: must be logged in for pad to be edited')
   })
 })
