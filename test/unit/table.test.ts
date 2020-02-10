@@ -1,7 +1,13 @@
-const table = require('../../src/table')
+const renderTableViewPane = require('../../src/table')
 
 describe('renderTableViewPane', () => {
   it('exists', () => {
-    expect(table.renderTableViewPane).toBeInstanceOf(Function)
+    expect(renderTableViewPane).toBeInstanceOf(Function)
   })
+  /* 
+  it('runs', () => {
+    const doc = null
+    const options = {}
+    expect(renderTableViewPane(doc, options))
+  }) */
 })
