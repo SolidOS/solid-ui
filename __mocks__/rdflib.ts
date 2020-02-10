@@ -80,4 +80,5 @@ export function Namespace() {
 }
 export class UpdateManager {
   editable() {}
+  update() {}
 }
