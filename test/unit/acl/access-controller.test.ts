@@ -47,7 +47,7 @@ describe('AccessController', () => {
 })
 
 describe('AccessController#isEditable', () => {
-  it('exists', () => {
+  it('has a getter', () => {
     expect(instantiateAccessController().isEditable).toEqual(false)
   })
 })
