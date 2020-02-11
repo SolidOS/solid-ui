@@ -1,6 +1,7 @@
+import { JSDOM } from 'jsdom'
+
 jest.mock('rdflib')
 jest.mock('solid-auth-client')
-import { JSDOM } from 'jsdom'
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 import {

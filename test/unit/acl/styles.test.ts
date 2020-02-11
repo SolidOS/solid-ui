@@ -1,10 +1,7 @@
-jest.mock('rdflib')
-jest.mock('solid-auth-client')
-import { JSDOM } from 'jsdom'
-const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
-
 import * as Styles from '../../../src/acl/styles'
 
+jest.mock('rdflib')
+jest.mock('solid-auth-client')
 
 describe('Styles', () => {
   it('exists', () => {

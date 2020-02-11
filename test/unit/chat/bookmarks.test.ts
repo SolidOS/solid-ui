@@ -1,8 +1,8 @@
-jest.mock('rdflib')
 import * as RdfLib from 'rdflib'
-jest.mock('solid-auth-client')
-
 import { findBookmarkDocument, toggleBookmark, renderBookmarksButton } from '../../../src/chat/bookmarks'
+
+jest.mock('rdflib')
+jest.mock('solid-auth-client')
 
 describe('findBookmarkDocument', () => {
   it('exists', () => {

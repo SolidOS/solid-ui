@@ -1,10 +1,11 @@
-jest.mock('rdflib')
-jest.mock('solid-auth-client')
 import { JSDOM } from 'jsdom'
-const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
-
 import { AddAgentButtons } from '../../../src/acl/add-agent-buttons'
 import { AccessGroups } from '../../../src/acl/access-groups'
+
+jest.mock('rdflib')
+jest.mock('solid-auth-client')
+const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
+
 
 function instantiateAddAgentButtons() {
   return new AddAgentButtons({

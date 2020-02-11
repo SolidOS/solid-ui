@@ -1,11 +1,10 @@
-jest.mock('rdflib')
-jest.mock('solid-auth-client')
-import { JSDOM } from 'jsdom'
-const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
-
 import * as Acl from '../../../src/acl/acl'
 import * as AclControl from '../../../src/acl/acl-control'
 import { acl, aclControl } from '../../../src/acl/index'
+import { JSDOM } from 'jsdom'
+
+jest.mock('rdflib')
+jest.mock('solid-auth-client')
 
 describe('acl/index:acl', () => {
   it('exports all of acl/acl', () => {

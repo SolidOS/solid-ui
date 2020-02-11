@@ -1,10 +1,7 @@
-jest.mock('rdflib')
-jest.mock('solid-auth-client')
-import { JSDOM } from 'jsdom'
-const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
-
 import * as Authn from '../../../src/authn/authn'
 import * as Index from '../../../src/authn/authn'
+jest.mock('rdflib')
+jest.mock('solid-auth-client')
 
 describe('authn/index', () => {
   it('exports all of authn/authn', () => {
