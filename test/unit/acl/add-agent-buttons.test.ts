@@ -27,4 +27,7 @@ describe('AddAgentButtons#render', () => {
   it('exists', () => {
     expect(instantiateAddAgentButtons().render).toBeInstanceOf(Function)
   })
+  it('runs', () => {
+    expect(instantiateAddAgentButtons().render()).toBeInstanceOf(Object)
+  })
 })
