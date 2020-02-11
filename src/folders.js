@@ -105,7 +105,7 @@ module.exports.deleteFolder = function (folder, store, dom) {
   )
 
   const doit = buttonsTD3.appendChild(
-    UI.widgets.button(UI.icons.iconBase + 'noun_925021.svg', 'Yes, delete')
+    UI.widgets.button(dom, UI.icons.iconBase + 'noun_925021.svg', 'Yes, delete')
   )
   doit.addEventListener(
     'click',
