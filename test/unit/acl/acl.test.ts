@@ -20,7 +20,7 @@ import {
   setACL
 } from '../../../src/acl/acl'
 import { AgentMapMap, ComboList } from '../../../src/acl/types'
-import RdfLib, { sym, graph, UpdateManager, Fetcher } from 'rdflib'
+import * as RdfLib from 'rdflib'
 
 jest.mock('rdflib')
 jest.mock('solid-auth-client')
@@ -58,10 +58,10 @@ describe('adoptACLDefault', () => {
   })
   it('exists', () => {
     expect(adoptACLDefault(
-      sym(''),
-      sym(''),
-      sym(''),
-      sym(''))).toBeInstanceOf(Object)
+      RdfLib.sym(''),
+      RdfLib.sym(''),
+      RdfLib.sym(''),
+      RdfLib.sym(''))).toBeInstanceOf(Object)
   })
 })
 
@@ -79,7 +79,7 @@ describe('fixIndividualACL', () => {
     expect(fixIndividualACL).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(fixIndividualACL(sym(''), [], () => {}, () => {})).toEqual(undefined)
+    expect(fixIndividualACL(RdfLib.sym(''), [], () => {}, () => {})).toEqual(undefined)
   })
 })
 
@@ -88,7 +88,7 @@ describe('fixIndividualCardACL', () => {
     expect(fixIndividualCardACL).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(fixIndividualCardACL(sym(''), () => {}, () => {})).toEqual(undefined)
+    expect(fixIndividualCardACL(RdfLib.sym(''), () => {}, () => {})).toEqual(undefined)
   })
 })
 
@@ -97,7 +97,7 @@ describe('getACL', () => {
     expect(getACL).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(getACL(sym(''), () => {})).toEqual(undefined)
+    expect(getACL(RdfLib.sym(''), () => {})).toEqual(undefined)
   })
 })
 
@@ -106,7 +106,7 @@ describe('getACLorDefault', () => {
     expect(getACLorDefault).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(getACLorDefault(sym(''), () => {})).toEqual(undefined)
+    expect(getACLorDefault(RdfLib.sym(''), () => {})).toEqual(undefined)
   })
 })
 
@@ -134,10 +134,10 @@ describe('makeACLGraph', () => {
   })
   it('runs', () => {
     expect(makeACLGraph(
-      graph(),
-      sym(''),
+      RdfLib.graph(),
+      RdfLib.sym(''),
       {} as AgentMapMap,
-      sym('')
+      RdfLib.sym('')
     )).toEqual(undefined)
   })
 })
@@ -148,10 +148,10 @@ describe('makeACLGraphbyCombo', () => {
   })
   it('runs', () => {
     expect(makeACLGraphbyCombo(
-      graph(),
-      sym(''),
+      RdfLib.graph(),
+      RdfLib.sym(''),
       {} as ComboList,
-      sym(''),
+      RdfLib.sym(''),
       false,
       false
     )).toEqual(undefined)
@@ -165,9 +165,9 @@ describe('makeACLString', () => {
   it.skip('runs', () => {
     ;(window as any).$rdf = RdfLib
     expect(makeACLString(
-      sym(''),
+      RdfLib.sym(''),
       {} as AgentMapMap,
-      sym('')
+      RdfLib.sym('')
     )).toEqual(undefined)
   })
 })
@@ -178,13 +178,13 @@ describe('putACLbyCombo', () => {
   })
   it.skip('runs', () => {
     ;(window as any).$rdf = RdfLib
-    ;(window as any).$rdf.updater = new UpdateManager()
+    ;(window as any).$rdf.updater = new RdfLib.UpdateManager()
 
     expect(putACLbyCombo(
-      graph(),
-      sym(''),
+      RdfLib.graph(),
+      RdfLib.sym(''),
       {} as ComboList,
-      sym(''),
+      RdfLib.sym(''),
       () => {}
     )).toEqual(undefined)
   })
@@ -196,10 +196,10 @@ describe('putACLObject', () => {
   })
   it.skip('runs', () => {
     expect(putACLObject(
-      graph(),
-      sym(''),
+      RdfLib.graph(),
+      RdfLib.sym(''),
       {} as AgentMapMap,
-      sym(''),
+      RdfLib.sym(''),
       () => {}
     )).toEqual(undefined)
   })
@@ -211,9 +211,9 @@ describe('readACL', () => {
   })
   it('runs', () => {
     expect(readACL(
-      sym(''),
-      sym(''),
-      graph(),
+      RdfLib.sym(''),
+      RdfLib.sym(''),
+      RdfLib.graph(),
       false
     )).toBeTruthy()
   })
@@ -237,9 +237,9 @@ describe('setACL', () => {
   })
   it.skip('runs', () => {
     ;(window as any).$rdf = RdfLib
-    ;(window as any).$rdf.fetcher = new Fetcher((window as any).$rdf, {})
+    ;(window as any).$rdf.fetcher = new RdfLib.Fetcher((window as any).$rdf, {})
     expect(setACL(
-      sym(''),
+      RdfLib.sym(''),
       '',
       () => {}
     )).toEqual(true)
