@@ -93,7 +93,7 @@ module.exports = class DateFolder {
     const folder = this.leafDocumentFromDate(date).dir()
     const found = await previousPeriod(folder, 3)
     if (found) {
-      const doc = kb.sym(found.uri + this.leafFileNam)
+      const doc = kb.sym(found.uri + this.leafFileName)
       return this.dateFromLeafDocument(doc)
     }
     return null
