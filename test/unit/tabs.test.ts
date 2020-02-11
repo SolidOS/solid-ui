@@ -1,6 +1,6 @@
-import tabs from '../../src/tabs'
-jest.mock('rdflib')
-jest.mock('solid-auth-client')
+import * as RdfLib from 'rdflib'
+import { dom } from '../helpers/dom'
+const tabs = require('../../src/tabs')
 
 describe('tabWidget', () => {
   it('exists', () => {

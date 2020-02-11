@@ -101,9 +101,6 @@ module.exports.cameraCaptureControl = function cameraCaptureControl (
     player.setAttribute('controls', '1')
     player.setAttribute('autoplay', '1')
     player.setAttribute('style', controlStyle)
-    if (!navigator.mediaDevices) {
-      throw new Error('navigator.mediaDevices not available')
-    }
     navigator.mediaDevices.getUserMedia(constraints).then(stream => {
       player.srcObject = stream
       shutterButton.style.visibility = 'visible' // Enable

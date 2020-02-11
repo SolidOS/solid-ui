@@ -28,6 +28,6 @@ var widgets = Object.assign(
 )
 
 module.exports = widgets
-console.log('@@@ widgets: ', widgets)
+// console.log('@@@ widgets: ', widgets)
 
 // ends
