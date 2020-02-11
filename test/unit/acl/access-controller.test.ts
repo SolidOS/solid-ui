@@ -1,13 +1,13 @@
 import * as RdfLib from 'rdflib'
 import { JSDOM } from 'jsdom'
-
 import { AccessController } from '../../../src/acl/access-controller'
 import { DataBrowserContext } from 'pane-registry'
+
 jest.mock('rdflib')
 jest.mock('solid-auth-client')
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
-function instantiateAccessController () {
+export function instantiateAccessController () {
   const subject = RdfLib.sym('')
   const noun = ''
   const context = {} as DataBrowserContext

@@ -34,7 +34,7 @@ const EXPLANATION = {
   1: 'can read but not change information'
 }
 
-interface AccessGroupsOptions {
+export interface AccessGroupsOptions {
   defaults?: boolean
 }
 
