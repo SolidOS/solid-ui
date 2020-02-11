@@ -66,7 +66,7 @@ describe('Logger.clear', () => {
     expect(Logger.clear).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(Logger.clear('')).toEqual(undefined)
+    expect(Logger.clear()).toEqual(undefined)
   })
 })
 

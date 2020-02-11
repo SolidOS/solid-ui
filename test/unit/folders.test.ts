@@ -1,6 +1,6 @@
 import { JSDOM } from 'jsdom'
 import { deleteRecursive, deleteFolder } from '../../src/folders'
-import RdfLib, { graph, Fetcher } from 'rdflib'
+import * as RdfLib from 'rdflib'
 
 jest.mock('rdflib')
 jest.mock('solid-auth-client')
@@ -12,7 +12,7 @@ describe('deleteRecursive', () => {
   })
   it.skip('runs', async () => {
     ;(window as any).$rdf = RdfLib
-    ;(window as any).$rdf.fetcher = new Fetcher((window as any).$rdf, {})
+    ;(window as any).$rdf.fetcher = new RdfLib.Fetcher((window as any).$rdf, {})
     expect(await deleteRecursive()).toEqual(undefined)
   })
 })
@@ -22,6 +22,6 @@ describe('deleteFolder', () => {
     expect(deleteFolder).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(deleteFolder({}, graph(), dom)).toBeTruthy()
+    expect(deleteFolder({}, RdfLib.graph(), dom)).toBeTruthy()
   })
 })
