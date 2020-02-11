@@ -59,6 +59,9 @@ describe('creatorAndDateHorizontal', () => {
 
 describe('renderMessage', () => {
   it('exists', () => {
+    expect(renderMessage).toBeInstanceOf(Function)
+  })
+  it('exists', () => {
     const messageTable = {
       appendChild: () => {}
     }

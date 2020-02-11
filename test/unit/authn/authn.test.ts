@@ -101,7 +101,6 @@ describe('loadTypeIndexes', () => {
   it('runs', () => {
     expect(loadTypeIndexes({})).toBeInstanceOf(Object)
   })
-
 })
 
 describe('logIn', () => {
@@ -229,7 +228,7 @@ describe('saveUser', () => {
   })
   it('runs', () => {
     expect(saveUser(
-      '',      
+      '',
       {} as AuthenticationContext
     )).toEqual(null)
   })
