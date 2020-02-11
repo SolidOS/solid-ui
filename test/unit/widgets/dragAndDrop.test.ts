@@ -1,10 +1,11 @@
-jest.mock('rdflib')
 import * as RdfLib from 'rdflib'
-jest.mock('solid-auth-client')
-import * as SolidAuthClient from 'solid-auth-client'
-import { element } from '../../helpers/dom'
+import { JSDOM } from 'jsdom'
 
 import { makeDropTarget, makeDraggable, uploadFiles } from '../../../src/widgets/dragAndDrop'
+jest.mock('rdflib')
+jest.mock('solid-auth-client')
+const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
+const element = dom.createElement('div')
 
 describe('makeDropTarget', () => {
   it('exists', () => {
@@ -26,7 +27,6 @@ describe('makeDraggable', () => {
     expect(makeDraggable(tr, obj)).toEqual(undefined)
   })
 })
-
 
 describe('uploadFiles', () => {
   it('exists', () => {

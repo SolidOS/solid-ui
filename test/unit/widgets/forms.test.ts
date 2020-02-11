@@ -1,7 +1,5 @@
-jest.mock('rdflib')
 import * as RdfLib from 'rdflib'
-jest.mock('solid-auth-client')
-
+import * as ns from '../../../src/ns'
 import {
   appendForm,
   buildCheckboxForm,
@@ -25,7 +23,9 @@ import {
   sortByLabel,
   sortBySequence
 } from '../../../src/widgets/forms'
-import * as ns from '../../../src/ns'
+
+jest.mock('rdflib')
+jest.mock('solid-auth-client')
 
 describe('field', () => {
   it('exists', () => {
@@ -67,7 +67,7 @@ describe('Form field', () => {
   // @@ TODO check this further what test could I use to make sure
   // to test that the form gets added but obviously not in the container passed in
   it('still returns an element if the container is null', () => {
-    debugger
+    // debugger
     const container = null
     const already = {}
     const subject = RdfLib.sym('')
@@ -1203,6 +1203,6 @@ describe('newThing', () => {
   it('returns the correct .', () => {
     const Date = jest.fn()
     Date.mockReturnValueOnce('Thu Feb 06 2020 19:42:59 GMT+1100')
-    expect(newThing('doc').toBe('')) 
+    expect(newThing('doc').toBe(''))
   }) */
 })

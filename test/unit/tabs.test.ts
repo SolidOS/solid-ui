@@ -1,5 +1,3 @@
-import * as RdfLib from 'rdflib'
-import { dom } from '../helpers/dom'
 const tabs = require('../../src/tabs')
 
 describe('tabWidget', () => {

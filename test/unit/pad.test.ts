@@ -1,10 +1,13 @@
-jest.mock('rdflib')
+import { JSDOM } from 'jsdom'
 import * as RdfLib from 'rdflib'
-jest.mock('solid-auth-client')
-import * as SolidAuthClient from 'solid-auth-client'
-import { dom, element } from '../helpers/dom'
 
 import * as pad from '../../src/pad'
+
+jest.mock('rdflib')
+jest.mock('solid-auth-client')
+const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
+const dom = window.document
+const element = dom.createElement('div')
 
 describe('lightColorHash', () => {
   it('exists', () => {

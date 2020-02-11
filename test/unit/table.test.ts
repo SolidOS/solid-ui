@@ -1,5 +1,8 @@
-import { default as renderTableViewPane } from '../../src/table'
-import { dom } from '../helpers/dom'
+import { JSDOM } from 'jsdom'
+import renderTableViewPane from '../../src/table'
+
+const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
+const dom = window.document
 
 describe('renderTableViewPane', () => {
   it('exists', () => {
