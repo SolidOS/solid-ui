@@ -8,6 +8,6 @@ import * as AddAgentButtons from '../../../src/acl/add-agent-buttons'
 
 describe('AddAgentButtons', () => {
   it('exists', () => {
-    expect(AddAgentButtons).toBeTruthy()
+    expect(AddAgentButtons).toBeInstanceOf(Function)
   })
 })

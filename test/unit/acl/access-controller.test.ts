@@ -38,7 +38,8 @@ function instantiateAccessController() {
 }
 describe('AccessController', () => {
   it('exists', () => {
-    expect(AccessController).toBeTruthy()
+    // FIXME: how can we test that it's actually a constructor?
+    expect(AccessController).toBeInstanceOf(Function)
   })
   it('runs', () => {
     expect(instantiateAccessController()).toBeInstanceOf(AccessController)
