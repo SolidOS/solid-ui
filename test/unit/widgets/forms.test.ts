@@ -626,7 +626,7 @@ describe('Heading', () => {
   })
 })
 
-describe('Comment]', () => {
+describe('Comment', () => {
   it('exists', () => {
     expect(field[ns.ui('Comment').uri]).toBeInstanceOf(Object)
   })
@@ -916,10 +916,4 @@ describe('newThing', () => {
   it('runs', () => {
     expect(newThing(RdfLib.sym(''))).toBeInstanceOf(Object)
   })
-  /* need to also mock or figure out doc - which is a NamedNode
-  it('returns the correct .', () => {
-    const Date = jest.fn()
-    Date.mockReturnValueOnce('Thu Feb 06 2020 19:42:59 GMT+1100')
-    expect(newThing('doc').toBe(''))
-  }) */
 })
