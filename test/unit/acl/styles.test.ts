@@ -8,6 +8,6 @@ import * as Styles from '../../../src/acl/styles'
 
 describe('Styles', () => {
   it('exists', () => {
-    expect(Styles).toBeInstanceOf(Object)
+    expect(typeof Styles).toEqual('object')
   })
 })
