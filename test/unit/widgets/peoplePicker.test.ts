@@ -1,11 +1,11 @@
-jest.mock('rdflib')
 import * as RdfLib from 'rdflib'
-jest.mock('solid-auth-client')
 import { JSDOM } from 'jsdom'
-const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
-const element = dom.createElement('div')
 
 import { PeoplePicker, GroupPicker, Group, GroupBuilder } from '../../../src/widgets/peoplePicker'
+jest.mock('rdflib')
+jest.mock('solid-auth-client')
+const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
+const element = dom.createElement('div')
 
 describe('PeoplePicker', () => {
   it('exists', () => {
@@ -63,7 +63,6 @@ describe('PeoplePicker.onSelectGroup', () => {
     const peoplePicker = new PeoplePicker(element, typeIndex, groupPickedCb, options)
     expect(peoplePicker.onSelectGroup(RdfLib.sym(''))).toEqual(undefined)
   })
-
 })
 
 describe('GroupPicker', () => {
@@ -96,7 +95,6 @@ describe('GroupPicker.loadGroups', () => {
     const groupPicker = new GroupPicker(container, book, handler)
     expect(groupPicker.loadGroups()).toBeTruthy()
   })
-
 })
 
 describe('GroupPicker.handleClickGroup', () => {
@@ -110,7 +108,6 @@ describe('GroupPicker.handleClickGroup', () => {
     const groupPicker = new GroupPicker(container, book, handler)
     expect(groupPicker.handleClickGroup()).toBeTruthy()
   })
-
 })
 
 describe('Group', () => {
@@ -173,7 +170,6 @@ describe('GroupBuilder.add', () => {
     const groupBuilder = new GroupBuilder(element, book, groupArg, handler, handler)
     expect(groupBuilder.add()).toBeTruthy()
   })
-
 })
 
 describe('GroupBuilder.handleRemove', () => {

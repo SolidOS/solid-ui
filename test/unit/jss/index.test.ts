@@ -1,9 +1,9 @@
-jest.mock('rdflib')
-jest.mock('solid-auth-client')
 import { JSDOM } from 'jsdom'
-const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 import { getClasses, getStylesheet } from '../../../src/jss/index'
+jest.mock('rdflib')
+jest.mock('solid-auth-client')
+const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 describe('getClasses', () => {
   it('exists', () => {
@@ -25,5 +25,3 @@ describe('getStylesheet', () => {
     expect(getStylesheet(insertionPoint)).toBeInstanceOf(Object)
   })
 })
-
-

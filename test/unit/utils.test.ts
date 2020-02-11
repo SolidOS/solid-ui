@@ -1,7 +1,4 @@
-jest.mock('rdflib')
-jest.mock('solid-auth-client')
 import { JSDOM } from 'jsdom'
-const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 import {
   addLoadEvent, // not used anywhere
@@ -34,6 +31,9 @@ import {
   syncTableToArrayReOrdered
 } from '../../src/utils'
 import { on } from 'cluster'
+jest.mock('rdflib')
+jest.mock('solid-auth-client')
+const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 describe('addLoadEvent', () => {
   it('exists', () => {

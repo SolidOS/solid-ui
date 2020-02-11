@@ -1,14 +1,14 @@
 import { JSDOM } from 'jsdom'
 
-jest.mock('rdflib')
-jest.mock('solid-auth-client')
-const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
-
 import {
   ACLControlBox5,
   preventBrowserDropEvents,
   shortNameForFolder
 } from '../../../src/acl/acl-control'
+
+jest.mock('rdflib')
+jest.mock('solid-auth-client')
+const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 describe('ACLControlBox5', () => {
   it('exists', () => {

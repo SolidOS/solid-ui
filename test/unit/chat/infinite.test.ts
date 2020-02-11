@@ -1,11 +1,11 @@
-jest.mock('rdflib')
 import * as RdfLib from 'rdflib'
-jest.mock('solid-auth-client')
 import { JSDOM } from 'jsdom'
-const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
-const element = dom.createElement('div')
 
 import { infiniteMessageArea } from '../../../src/chat/infinite'
+jest.mock('rdflib')
+jest.mock('solid-auth-client')
+const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
+const element = dom.createElement('div')
 
 describe('infiniteMessageArea', () => {
   it('exists', () => {
@@ -13,9 +13,11 @@ describe('infiniteMessageArea', () => {
   })
   it('runs', () => {
     const kb = RdfLib.graph()
-    const chatChannel = { dir: () => {
-      uri: ''
-    } }
+    const chatChannel = {
+      dir: () => {
+        uri: ''
+      }
+    }
     const options = {}
     ;(window as any).$rdf = {
       Namespace: () => {

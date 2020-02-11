@@ -1,12 +1,5 @@
-jest.mock('rdflib')
 import * as RdfLib from 'rdflib'
-jest.mock('solid-auth-client')
 import { JSDOM } from 'jsdom'
-const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
-const dom = window.document
-const element = dom.createElement('div')
-const event = new window.Event('test')
-dom.dispatchEvent(event)
 
 import {
   addStyleSheet,
@@ -42,9 +35,16 @@ import {
   setImage,
   setName,
   shortDate,
-  shortTime,  
-  timestamp,
+  shortTime,
+  timestamp
 } from '../../../src/widgets/buttons'
+jest.mock('rdflib')
+jest.mock('solid-auth-client')
+const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
+const dom = window.document
+const element = dom.createElement('div')
+const event = new window.Event('test')
+dom.dispatchEvent(event)
 
 describe('addStyleSheet', () => {
   it('exists', () => {
@@ -63,7 +63,6 @@ describe('allClassURIs', () => {
   it('runs', () => {
     expect(allClassURIs()).toBeTruthy()
   })
-
 })
 
 describe('askName', () => {
@@ -352,7 +351,7 @@ describe('refreshTree', () => {
     expect(refreshTree).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(refreshTree({ children: []})).toEqual(undefined)
+    expect(refreshTree({ children: [] })).toEqual(undefined)
   })
 })
 
@@ -463,4 +462,3 @@ describe('timestamp', () => {
     expect(timestamp()).toBeTruthy()
   })
 })
-

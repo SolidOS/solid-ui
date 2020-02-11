@@ -1,8 +1,8 @@
-jest.mock('rdflib')
 import * as RdfLib from 'rdflib'
-jest.mock('solid-auth-client')
 
 import { default as DateFolder } from '../../../src/chat/dateFolder'
+jest.mock('rdflib')
+jest.mock('solid-auth-client')
 
 describe('DateFolder', () => {
   it('exists', () => {
@@ -15,11 +15,13 @@ describe('DateFolder#leafDocumentFromDate', () => {
     expect(new DateFolder({ dir: () => {} }).leafDocumentFromDate).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const dateFolder = new DateFolder({ dir: () => {
-      return {
-        uri: ''
+    const dateFolder = new DateFolder({
+      dir: () => {
+        return {
+          uri: ''
+        }
       }
-    } })
+    })
     const result = dateFolder.leafDocumentFromDate({
       toISOString: () => ''
     })
@@ -32,11 +34,13 @@ describe('DateFolder#dateFromLeafDocument', () => {
     expect(new DateFolder({ dir: () => {} }).dateFromLeafDocument).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const dateFolder = new DateFolder({ dir: () => {
-      return {
-        uri: ''
+    const dateFolder = new DateFolder({
+      dir: () => {
+        return {
+          uri: ''
+        }
       }
-    } })
+    })
     const result = dateFolder.dateFromLeafDocument({
       uri: {
         slice: () => '2020'
@@ -44,7 +48,6 @@ describe('DateFolder#dateFromLeafDocument', () => {
     })
     expect(result).toEqual(new Date('2020'))
   })
-
 })
 
 describe('DateFolder#loadPrevious', () => {
@@ -52,17 +55,18 @@ describe('DateFolder#loadPrevious', () => {
     expect(new DateFolder({ dir: () => {} }).loadPrevious).toBeInstanceOf(Function)
   })
   it('runs', async () => {
-    const dateFolder = new DateFolder({ dir: () => {
-      return {
-        uri: ''
+    const dateFolder = new DateFolder({
+      dir: () => {
+        return {
+          uri: ''
+        }
       }
-    } })
+    })
     const result = await dateFolder.loadPrevious({
       toISOString: () => ''
     })
     expect(result).toEqual(null)
   })
-
 })
 
 describe('DateFolder#firstLeaf', () => {
@@ -70,11 +74,13 @@ describe('DateFolder#firstLeaf', () => {
     expect(new DateFolder({ dir: () => {} }).firstLeaf).toBeInstanceOf(Function)
   })
   it('runs', async () => {
-    const dateFolder = new DateFolder({ dir: () => {
-      return {
-        uri: ''
+    const dateFolder = new DateFolder({
+      dir: () => {
+        return {
+          uri: ''
+        }
       }
-    } })
+    })
     ;(window as any).$rdf = RdfLib
     await expect(dateFolder.firstLeaf()).rejects.toThrow(' No children to         parent2 [object Object]')
   })

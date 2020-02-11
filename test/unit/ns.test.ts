@@ -1,10 +1,10 @@
-jest.mock('rdflib')
-jest.mock('solid-auth-client')
 import { JSDOM } from 'jsdom'
-const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 import { default as SolidNamespace } from '../../src/ns'
-  
+jest.mock('rdflib')
+jest.mock('solid-auth-client')
+const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
+
 describe('SolidNamespace', () => {
   it('exists', () => {
     expect(SolidNamespace).toBeInstanceOf(Object)

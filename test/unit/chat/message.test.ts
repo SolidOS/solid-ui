@@ -1,7 +1,4 @@
-jest.mock('rdflib')
-jest.mock('solid-auth-client')
 import { JSDOM } from 'jsdom'
-const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 import {
   elementForImageURI,
@@ -9,6 +6,9 @@ import {
   creatorAndDateHorizontal,
   renderMessage
 } from '../../../src/chat/message'
+jest.mock('rdflib')
+jest.mock('solid-auth-client')
+const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 describe('elementForImageURI', () => {
   it('exists', () => {
@@ -87,5 +87,3 @@ describe('renderMessage', () => {
     expect(renderMessage(messageTable, bindings, fresh, options, userContext)).toBeInstanceOf(HTMLTableRowElement)
   })
 })
-
-

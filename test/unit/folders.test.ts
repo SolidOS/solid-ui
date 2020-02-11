@@ -1,9 +1,9 @@
-jest.mock('rdflib')
-jest.mock('solid-auth-client')
 import { JSDOM } from 'jsdom'
-const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 import { deleteRecursive, deleteFolder } from '../../src/folders'
+jest.mock('rdflib')
+jest.mock('solid-auth-client')
+const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 describe('deleteRecursive', () => {
   it('exists', () => {

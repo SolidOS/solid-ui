@@ -17,13 +17,13 @@ describe('findBookmarkDocument', () => {
     }
     window.alert = () => {}
 
-    const result = await findBookmarkDocument(context);
+    const result = await findBookmarkDocument(context)
     expect(result).toEqual({
       containers: [],
       index: {
-        public: [],
+        public: []
       },
-      instances: [],
+      instances: []
     })
   })
 })
@@ -41,9 +41,9 @@ describe('toggleBookmark', () => {
     const bookmarkButton = {}
     try {
       const result = await toggleBookmark(userContext, target, bookmarkButton)
-    } catch(e) {
+    } catch (e) {
       expect(e.message).toEqual('Must be logged on to add Bookmark')
-    } 
+    }
   })
 })
 
@@ -58,6 +58,6 @@ describe('renderBookmarksButton', () => {
     }
     const target = {}
     const result = await renderBookmarksButton(userContext, target)
-    expect(typeof result).toEqual('object') 
+    expect(typeof result).toEqual('object')
   })
 })

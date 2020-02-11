@@ -1,14 +1,14 @@
-jest.mock('rdflib')
-jest.mock('solid-auth-client')
 import { JSDOM } from 'jsdom'
-const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 import {
   sentimentStrip,
   sentimentStripLinked,
   messageToolbar
 } from '../../../src/chat/messageTools'
-  
+jest.mock('rdflib')
+jest.mock('solid-auth-client')
+const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
+
 describe('sentimentStrip', () => {
   it('exists', () => {
     expect(sentimentStrip).toBeInstanceOf(Function)
@@ -36,5 +36,4 @@ describe('messageToolbar', () => {
   it('runs', () => {
     expect(messageToolbar()).toBeInstanceOf(HTMLDivElement)
   })
-
 })

@@ -1,7 +1,4 @@
-jest.mock('rdflib')
-jest.mock('solid-auth-client')
 import { JSDOM } from 'jsdom'
-const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 import {
   textInputStyle,
@@ -18,6 +15,9 @@ import {
   formTextInput,
   multilineTextInputStyle
 } from '../../src/style'
+jest.mock('rdflib')
+jest.mock('solid-auth-client')
+const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 describe('textInputStyle', () => {
   it('exists', () => {

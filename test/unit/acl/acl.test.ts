@@ -1,9 +1,5 @@
 import { JSDOM } from 'jsdom'
 
-jest.mock('rdflib')
-jest.mock('solid-auth-client')
-const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
-
 import {
   ACLbyCombination,
   ACLToString,
@@ -25,6 +21,10 @@ import {
   sameACL,
   setACL
 } from '../../../src/acl/acl'
+
+jest.mock('rdflib')
+jest.mock('solid-auth-client')
+const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 describe('ACLbyCombination', () => {
   it('exists', () => {

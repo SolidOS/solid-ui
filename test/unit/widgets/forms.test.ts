@@ -1,9 +1,5 @@
-jest.mock('rdflib')
 import * as RdfLib from 'rdflib'
-jest.mock('solid-auth-client')
 import { JSDOM } from 'jsdom'
-const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
-const element = dom.createElement('div')
 
 import {
   appendForm,
@@ -29,6 +25,10 @@ import {
   sortBySequence
 } from '../../../src/widgets/forms'
 import * as ns from '../../../src/ns'
+jest.mock('rdflib')
+jest.mock('solid-auth-client')
+const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
+const element = dom.createElement('div')
 
 describe('field', () => {
   it('exists', () => {
@@ -86,7 +86,7 @@ describe('Multiple field', () => {
   it('exists', () => {
     expect(field[ns.ui('Multiple').uri]).toBeInstanceOf(Object)
   })
- it('runs', () => {
+  it('runs', () => {
     const container = element
     const already = {}
     const subject = RdfLib.sym('')
@@ -594,7 +594,7 @@ describe('Choice', () => {
       store,
       callbackFunction
     )).toBeTruthy()
-  })  
+  })
 })
 
 describe('Comment params', () => {
@@ -767,7 +767,7 @@ describe('newButton', () => {
       null,
       null,
       RdfLib.graph(),
-      () => {}  
+      () => {}
     )).toBeInstanceOf(Object)
   })
 })
@@ -882,7 +882,7 @@ describe('fieldLabel', () => {
     expect(fieldLabel(
       dom,
       RdfLib.sym(''),
-      null,
+      null
     )).toBeInstanceOf(Object)
   })
   it.skip(' ...', () => {
@@ -898,7 +898,7 @@ describe('fieldStore', () => {
     expect(fieldStore(
       null,
       null,
-      null,
+      null
     )).toEqual(null)
   })
   it('returns def when there is no matching statement', () => {
@@ -920,6 +920,6 @@ describe('newThing', () => {
   it('returns the correct .', () => {
     const Date = jest.fn()
     Date.mockReturnValueOnce('Thu Feb 06 2020 19:42:59 GMT+1100')
-    expect(newThing('doc').toBe('')) 
+    expect(newThing('doc').toBe(''))
   }) */
 })

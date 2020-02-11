@@ -1,6 +1,6 @@
 
 import * as Index from '../../src/index'
-  
+
 describe('Index', () => {
   it('exists', () => {
     expect(Object.keys(Index)).toEqual([
@@ -25,7 +25,7 @@ describe('Index', () => {
       'widgets',
       'versionInfo',
       'dom',
-      'rdf',
+      'rdf'
     ])
   })
 })

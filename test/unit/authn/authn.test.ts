@@ -1,8 +1,5 @@
 import * as RdfLib from 'rdflib'
 
-jest.mock('rdflib')
-jest.mock('solid-auth-client')
-
 import {
   checkUser, // Async
   currentUser, // Sync
@@ -26,6 +23,9 @@ import {
   saveUser,
   solidAuthClient
 } from '../../../src/authn/authn'
+
+jest.mock('rdflib')
+jest.mock('solid-auth-client')
 
 describe('checkUser', () => {
   it('exists', () => {
@@ -70,7 +70,6 @@ describe('findAppInstances', () => {
   it('runs', async () => {
     expect(await findAppInstances({}, RdfLib.sym(''), false)).toBeInstanceOf(Object)
   })
-
 })
 
 describe('findOriginOwner', () => {

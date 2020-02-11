@@ -8,14 +8,14 @@ jest.mock('solid-auth-client')
 
 describe('acl/index:acl', () => {
   it('exports all of acl/acl', () => {
-    for (let k in Acl) {
+    for (const k in Acl) {
       if (k !== 'getProspectiveHolder') {
         expect(acl[k]).toEqual(Acl[k])
       }
     }
   })
   it('exports all of acl/acl-control', () => {
-    for (let k in AclControl) {
+    for (const k in AclControl) {
       expect(aclControl[k]).toEqual(AclControl[k])
     }
   })
