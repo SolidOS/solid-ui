@@ -48,7 +48,7 @@ describe('ACLunion', () => {
     expect(ACLunion).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(ACLunion([ {} as AgentMapMap ])).toBeInstanceOf(Object)
+    expect(ACLunion([{} as AgentMapMap])).toBeInstanceOf(Object)
   })
 })
 
@@ -72,7 +72,6 @@ describe('comboToString', () => {
   it('runs', () => {
     expect(comboToString({} as ComboList)).toEqual('{}')
   })
-
 })
 
 describe('fixIndividualACL', () => {
@@ -98,7 +97,7 @@ describe('getACL', () => {
     expect(getACL).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(getACL(sym(''),() => {})).toEqual(undefined)
+    expect(getACL(sym(''), () => {})).toEqual(undefined)
   })
 })
 
@@ -107,9 +106,8 @@ describe('getACLorDefault', () => {
     expect(getACLorDefault).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(getACLorDefault(sym(''),() => {})).toEqual(undefined)
+    expect(getACLorDefault(sym(''), () => {})).toEqual(undefined)
   })
-
 })
 
 describe('getProspectiveHolder', () => {
@@ -119,7 +117,6 @@ describe('getProspectiveHolder', () => {
   it.skip('runs', async () => {
     expect(await getProspectiveHolder('')).toEqual(undefined)
   })
-
 })
 
 describe('loadUnionACL', () => {
