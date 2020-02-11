@@ -1,8 +1,8 @@
 jest.mock('rdflib')
 import * as RdfLib from 'rdflib'
 jest.mock('solid-auth-client')
-import * as SolidAuthClient from 'solid-auth-client'
-import { dom } from '../../helpers/dom'
+import { JSDOM } from 'jsdom'
+const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 import { default as thread } from '../../../src/chat/thread'
   

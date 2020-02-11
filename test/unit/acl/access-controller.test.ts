@@ -1,8 +1,8 @@
 jest.mock('rdflib')
 import * as RdfLib from 'rdflib'
 jest.mock('solid-auth-client')
-import * as SolidAuthClient from 'solid-auth-client'
-import { element, dom } from '../../helpers/dom'
+import { JSDOM } from 'jsdom'
+const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 import { AccessController } from '../../../src/acl/access-controller'
 import { DataBrowserContext } from 'pane-registry'
@@ -11,7 +11,7 @@ function instantiateAccessController() {
   const subject = RdfLib.sym('')
   const noun = ''
   const context = {} as DataBrowserContext
-  const statusElement = element as unknown as HTMLElement
+  const statusElement = dom.createElement('div')
   const classes = {}
   const targetIsProtected = false
   const targetDoc = RdfLib.sym('')
@@ -56,7 +56,7 @@ describe('AccessController#render', () => {
     expect(instantiateAccessController().render).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(instantiateAccessController().render()).toEqual(element)
+    expect(instantiateAccessController().render()).toBeTruthy()
   })
 })
 

@@ -1,8 +1,8 @@
 jest.mock('rdflib')
-import * as RdfLib from 'rdflib'
 jest.mock('solid-auth-client')
-import * as SolidAuthClient from 'solid-auth-client'
-import { dom, element } from '../../helpers/dom'
+import { JSDOM } from 'jsdom'
+const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
+const element = dom.createElement('div')
 
 import { errorMessageBlock } from '../../../src/widgets/error'
 
@@ -11,6 +11,6 @@ describe('button', () => {
     expect(errorMessageBlock).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(errorMessageBlock(dom, '', undefined)).toEqual(element)
+    expect(errorMessageBlock(dom, '', undefined)).toBeTruthy()
   })
 })
