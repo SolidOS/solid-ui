@@ -26,6 +26,20 @@ export function st() {
 
 export function literal() {
 }
+export class Query {
+  vars: any
+  pat: any
+  constructor () {
+    this.vars = []
+    this.pat = {
+      add() {}
+    }
+  }
+}
+
+export function variable () {
+}
+
 export function graph() {
   return {
     any: () => {
