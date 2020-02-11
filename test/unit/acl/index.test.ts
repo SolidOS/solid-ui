@@ -1,7 +1,6 @@
 import * as Acl from '../../../src/acl/acl'
 import * as AclControl from '../../../src/acl/acl-control'
 import { acl, aclControl } from '../../../src/acl/index'
-import { JSDOM } from 'jsdom'
 
 jest.mock('rdflib')
 jest.mock('solid-auth-client')

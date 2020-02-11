@@ -1,5 +1,3 @@
-import { JSDOM } from 'jsdom'
-
 import {
   ACLbyCombination,
   ACLToString,
@@ -24,7 +22,6 @@ import {
 
 jest.mock('rdflib')
 jest.mock('solid-auth-client')
-const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 describe('ACLbyCombination', () => {
   it('exists', () => {

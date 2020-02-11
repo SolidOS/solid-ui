@@ -1,5 +1,3 @@
-import { JSDOM } from 'jsdom'
-
 import {
   sentimentStrip,
   sentimentStripLinked,
@@ -7,7 +5,6 @@ import {
 } from '../../../src/chat/messageTools'
 jest.mock('rdflib')
 jest.mock('solid-auth-client')
-const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 describe('sentimentStrip', () => {
   it('exists', () => {

@@ -1,6 +1,6 @@
 import * as RdfLib from 'rdflib'
 
-import { default as DateFolder } from '../../../src/chat/dateFolder'
+import DateFolder from '../../../src/chat/dateFolder'
 jest.mock('rdflib')
 jest.mock('solid-auth-client')
 

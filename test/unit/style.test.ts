@@ -1,5 +1,3 @@
-import { JSDOM } from 'jsdom'
-
 import {
   textInputStyle,
   buttonStyle,
@@ -17,7 +15,6 @@ import {
 } from '../../src/style'
 jest.mock('rdflib')
 jest.mock('solid-auth-client')
-const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 describe('textInputStyle', () => {
   it('exists', () => {

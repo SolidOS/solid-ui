@@ -4,7 +4,6 @@ import { errorMessageBlock } from '../../../src/widgets/error'
 jest.mock('rdflib')
 jest.mock('solid-auth-client')
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
-const element = dom.createElement('div')
 
 describe('button', () => {
   it('exists', () => {

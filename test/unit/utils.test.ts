@@ -1,5 +1,3 @@
-import { JSDOM } from 'jsdom'
-
 import {
   addLoadEvent, // not used anywhere
   AJARImage,
@@ -30,10 +28,9 @@ import {
   syncTableToArray,
   syncTableToArrayReOrdered
 } from '../../src/utils'
-import { on } from 'cluster'
+
 jest.mock('rdflib')
 jest.mock('solid-auth-client')
-const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 describe('addLoadEvent', () => {
   it('exists', () => {

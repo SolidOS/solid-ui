@@ -40,7 +40,7 @@ describe('toggleBookmark', () => {
     const target = {}
     const bookmarkButton = {}
     try {
-      const result = await toggleBookmark(userContext, target, bookmarkButton)
+      await toggleBookmark(userContext, target, bookmarkButton)
     } catch (e) {
       expect(e.message).toEqual('Must be logged on to add Bookmark')
     }

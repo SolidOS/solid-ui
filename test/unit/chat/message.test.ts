@@ -1,5 +1,3 @@
-import { JSDOM } from 'jsdom'
-
 import {
   elementForImageURI,
   creatorAndDate,
@@ -8,7 +6,6 @@ import {
 } from '../../../src/chat/message'
 jest.mock('rdflib')
 jest.mock('solid-auth-client')
-const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 describe('elementForImageURI', () => {
   it('exists', () => {

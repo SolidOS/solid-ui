@@ -1,5 +1,3 @@
-import { JSDOM } from 'jsdom'
-
 import * as DragAndDrop from '../../../src/widgets/dragAndDrop'
 import * as Error from '../../../src/widgets/error'
 import * as Buttons from '../../../src/widgets/buttons'
@@ -8,7 +6,6 @@ import * as PeoplePicker from '../../../src/widgets/peoplePicker'
 import * as Index from '../../../src/widgets/index'
 jest.mock('rdflib')
 jest.mock('solid-auth-client')
-const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 describe('index', () => {
   it('contains all exports from DragAndDrop', () => {

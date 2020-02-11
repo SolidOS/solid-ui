@@ -5,7 +5,6 @@ import { infiniteMessageArea } from '../../../src/chat/infinite'
 jest.mock('rdflib')
 jest.mock('solid-auth-client')
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
-const element = dom.createElement('div')
 
 describe('infiniteMessageArea', () => {
   it('exists', () => {
@@ -14,8 +13,10 @@ describe('infiniteMessageArea', () => {
   it('runs', () => {
     const kb = RdfLib.graph()
     const chatChannel = {
-      dir: () => {
-        uri: ''
+      dir () {
+        return {
+          uri: ''
+        }
       }
     }
     const options = {}

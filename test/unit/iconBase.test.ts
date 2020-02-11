@@ -1,9 +1,6 @@
-import { JSDOM } from 'jsdom'
-
 import { iconBase, originalIconBase } from '../../src/iconBase'
 jest.mock('rdflib')
 jest.mock('solid-auth-client')
-const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 describe('iconBase', () => {
   it('exists', () => {

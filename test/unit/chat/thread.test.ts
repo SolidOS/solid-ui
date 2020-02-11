@@ -1,7 +1,7 @@
 import * as RdfLib from 'rdflib'
 import { JSDOM } from 'jsdom'
 
-import { default as thread } from '../../../src/chat/thread'
+import thread from '../../../src/chat/thread'
 jest.mock('rdflib')
 jest.mock('solid-auth-client')
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document

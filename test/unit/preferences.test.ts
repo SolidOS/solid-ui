@@ -1,9 +1,6 @@
-import { JSDOM } from 'jsdom'
-
-import { default as Preferences } from '../../src/preferences'
+import Preferences from '../../src/preferences'
 jest.mock('rdflib')
 jest.mock('solid-auth-client')
-const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 describe('Preferences', () => {
   it('exists', () => {
