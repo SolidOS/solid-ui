@@ -51,6 +51,7 @@
   "homepage": "https://github.com/solid/solid-ui",
   "dependencies": {
     "@babel/runtime": "^7.6.2",
+    "@types/node": "^13.7.0",
     "escape-html": "^1.0.3",
     "jss": "^10.0.3",
     "jss-preset-default": "^10.0.3",
@@ -79,6 +80,7 @@
     "husky": "^3.0.9",
     "jest": "^25.1.0",
     "lint-staged": "^10.0.0-1",
+    "prettier": "^1.19.1",
     "standard": "^14.3.1",
     "typedoc": "^0.16.9",
     "typescript": "^3.6.3"
