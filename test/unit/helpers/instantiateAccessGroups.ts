@@ -1,6 +1,6 @@
-import { NamedNode, graph, IndexedFormula } from "rdflib";
-import { AccessGroups, AccessGroupsOptions } from "../../../src/acl/access-groups";
-import { instantiateAccessController } from "./instantiateAccessController";
+import { NamedNode, graph, IndexedFormula } from 'rdflib'
+import { AccessGroups, AccessGroupsOptions } from '../../../src/acl/access-groups'
+import { instantiateAccessController } from './instantiateAccessController'
 
 export function instantiateAccessGroups () {
   return new AccessGroups(
