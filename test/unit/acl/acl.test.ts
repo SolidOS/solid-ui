@@ -21,6 +21,8 @@ import {
 } from '../../../src/acl/acl'
 import { AgentMapMap, ComboList } from '../../../src/acl/types'
 import * as RdfLib from 'rdflib'
+import kb from '../../../src/store'
+import ns from '../../../src/ns'
 
 jest.mock('rdflib')
 jest.mock('solid-auth-client')
@@ -56,12 +58,22 @@ describe('adoptACLDefault', () => {
   it('exists', () => {
     expect(adoptACLDefault).toBeInstanceOf(Function)
   })
-  it('exists', () => {
+  it('runs', () => {
     expect(adoptACLDefault(
       RdfLib.sym(''),
       RdfLib.sym(''),
       RdfLib.sym(''),
       RdfLib.sym(''))).toBeInstanceOf(Object)
+  })
+  it.only('returns default ACL values', () => {
+    ;(kb as any).mockStatements = [
+      { s: 'some', p: ns.acl('default'), o: RdfLib.sym('defaultResource'), g: RdfLib.sym('defaultACLDoc')}
+    ]
+    expect(adoptACLDefault(
+      RdfLib.sym('doc'),
+      RdfLib.sym('aclDoc'),
+      RdfLib.sym('defaultResource'),
+      RdfLib.sym('defaultACLDoc'))).toBeInstanceOf(Object)
   })
 })
 
