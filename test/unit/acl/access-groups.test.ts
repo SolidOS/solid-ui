@@ -1,18 +1,11 @@
 import { AccessGroups, AccessGroupsOptions } from '../../../src/acl/access-groups'
 import { NamedNode, IndexedFormula, graph } from 'rdflib'
 import { instantiateAccessController } from './access-controller.test'
+import { instantiateAccessGroups } from '../helpers/instantiateAccessGroups'
 
 jest.mock('rdflib')
 jest.mock('solid-auth-client')
 
-function instantiateAccessGroups () {
-  return new AccessGroups(
-    {} as NamedNode,
-    {} as NamedNode,
-    instantiateAccessController(),
-    graph() as IndexedFormula,
-    {} as AccessGroupsOptions)
-}
 describe('AccessGroups', () => {
   it('exists', () => {
     expect(AccessGroups).toBeInstanceOf(Function)
