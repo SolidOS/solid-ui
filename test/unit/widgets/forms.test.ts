@@ -24,8 +24,8 @@ import {
   sortBySequence
 } from '../../../src/widgets/forms'
 
-jest.mock('rdflib')
-jest.mock('solid-auth-client')
+// jest.mock('rdflib')
+// jest.mock('solid-auth-client')
 
 describe('field', () => {
   it('exists', () => {
@@ -41,9 +41,21 @@ describe('Form field', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = RdfLib.sym('')
+    debugger
     const form = document.createElement('form')
     const store = RdfLib.graph()
     const callbackFunction = () => {}
+    console.log(ns.ui('Form').uri)
+    field[ns.ui('Form').uri](
+      document,
+      container,
+      already,
+      subject,
+      form,
+      store,
+      callbackFunction
+    )
+    // @@ TODO goes to comment instead of Form...
     expect(
       field[ns.ui('Form').uri](
         document,
