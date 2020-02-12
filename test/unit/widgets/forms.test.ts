@@ -37,7 +37,7 @@ describe('Form field', () => {
   it('exists', () => {
     expect(field[ns.ui('Form').uri]).toBeInstanceOf(Object)
   })
-  it('runs', () => {
+  it.only('runs', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = RdfLib.sym('')
@@ -45,7 +45,8 @@ describe('Form field', () => {
     const form = document.createElement('form')
     const store = RdfLib.graph()
     const callbackFunction = () => {}
-    console.log(ns.ui('Form').uri)
+    console.log(ns.ui('Form').uri, field[ns.ui('Form').uri])
+    console.log(ns.ui('Comment').uri, field[ns.ui('Comment').uri])
     field[ns.ui('Form').uri](
       document,
       container,

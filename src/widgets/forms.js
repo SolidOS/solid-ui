@@ -58,6 +58,7 @@ forms.field[ns.ui('Form').uri] = forms.field[ns.ui('Group').uri] = function(
   store,
   callbackFunction
 ) {
+  console.log('in Form field function!')
   const kb = UI.store
   var box = dom.createElement('div')
   box.setAttribute(
@@ -1132,6 +1133,7 @@ forms.field[ns.ui('Comment').uri] = forms.field[
   _store,
   _callbackFunction
 ) {
+  console.log('in Comment field function!')
   const ui = UI.ns.ui
   const kb = UI.store
   var contents = kb.any(form, ui('contents'))
