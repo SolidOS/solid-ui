@@ -84,8 +84,10 @@ export class Fetcher {
   load () {
   }
 }
-export function namedNode() {
-  return {}
+export function namedNode(str: string) {
+  return {
+    uri: str
+  }
 }
 export function NamedNode() {
 }
@@ -94,4 +96,5 @@ export function Namespace() {
 }
 export class UpdateManager {
   editable() {}
+  update() {}
 }
