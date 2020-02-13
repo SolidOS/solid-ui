@@ -12,12 +12,13 @@ describe('lightColorHash', () => {
   it('exists', () => {
     expect((pad as any).lightColorHash).toBeInstanceOf(Function)
   })
-  // #ffffff is specifically stated in the code to be returned
-  // when there is no author
   it('returns #ffffff when an author is not provided', () => {
+    // #ffffff is specifically stated in the code to be returned
+    // when there is no author
     expect((pad as any).lightColorHash(null)).toBe('#ffffff')
   })
   it('returns a value when given an author', () => {
+    // #dac2dc is the hash of 'https://sharonstrats.inrupt.net/profile/card#me'
     const author = { uri: 'https://sharonstrats.inrupt.net/profile/card#me' }
     expect((pad as any).lightColorHash(author)).toBe('#dac2dc')
   })
