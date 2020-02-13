@@ -37,7 +37,6 @@ describe('Form field', () => {
   it('exists', () => {
     expect(field[ns.ui('Form').uri]).toBeInstanceOf(Object)
   })
-
   it.skip('runs', () => {
     const container = document.createElement('div')
     const already = {}
@@ -45,8 +44,6 @@ describe('Form field', () => {
     const form = document.createElement('form')
     const store = RdfLib.graph()
     const callbackFunction = () => {}
-    console.log(ns.ui('Form').uri, field[ns.ui('Form').uri])
-    console.log(ns.ui('Comment').uri, field[ns.ui('Comment').uri])
     field[ns.ui('Form').uri](
       document,
       container,
@@ -159,7 +156,7 @@ describe('Options field', () => {
         store,
         callbackFunction
       )
-    ).toMatchInlineSnapshot(`<div />`)
+    ).toMatchInlineSnapshot('<div />')
   })
 })
 
@@ -167,7 +164,6 @@ describe('Multiple field', () => {
   it('exists', () => {
     expect(field[ns.ui('Multiple').uri]).toBeInstanceOf(Object)
   })
-
   it.skip('runs', () => {
     const container = document.createElement('div')
     const already = {}
@@ -1060,7 +1056,6 @@ describe('Choice', () => {
   it('exists', () => {
     expect(field[ns.ui('Choice').uri]).toBeInstanceOf(Object)
   })
-
   it.skip('runs', () => {
     const container = document.createElement('div')
     const already = {}
@@ -1430,6 +1425,6 @@ describe('newThing', () => {
   it.skip('returns the correct .', () => {
     const Date = jest.fn()
     Date.mockReturnValueOnce('Thu Feb 06 2020 19:42:59 GMT+1100')
-    expect(newThing('doc').toBe(''))
+    expect(newThing('doc')).toBe('')
   })
 })

@@ -35,7 +35,6 @@ describe('PeoplePicker.render', () => {
       groupPickedCb,
       options
     )
-    // debugger
     peoplePicker.render()
     expect(peoplePicker.render()).toMatchInlineSnapshot(`
       PeoplePicker {
@@ -80,7 +79,6 @@ describe('PeoplePicker.render', () => {
       groupPickedCb,
       options
     )
-
     expect(peoplePicker.render()).toMatchInlineSnapshot(`
       PeoplePicker {
         "element": <p>
@@ -367,7 +365,7 @@ describe('GroupBuilder.handleRemove', () => {
       handler,
       handler
     )
-    expect(groupBuilder.handleRemove()).toMatchInlineSnapshot(`[Function]`)
+    expect(groupBuilder.handleRemove()).toMatchInlineSnapshot('[Function]')
   })
 })
 
@@ -387,6 +385,6 @@ describe('GroupBuilder.setGroupName', () => {
       handler,
       handler
     )
-    expect(groupBuilder.setGroupName()).toMatchInlineSnapshot(`Promise {}`)
+    expect(groupBuilder.setGroupName()).toMatchInlineSnapshot('Promise {}')
   })
 })

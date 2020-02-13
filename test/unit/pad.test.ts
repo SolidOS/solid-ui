@@ -45,7 +45,6 @@ describe('renderPartipants', () => {
     // kb is a store
     const table = dom.createElement('table')
     const padDoc = null
-
     const subject = RdfLib.sym('participation')
     const me = 'webId'
     const options = {}
