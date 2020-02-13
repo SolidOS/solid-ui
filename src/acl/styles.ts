@@ -1,3 +1,8 @@
+/**
+ * Contains CSS styles for the Sharing pane,
+ * see https://github.com/solid/userguide/blob/master/views/sharing/userguide.md
+ * @packageDocumentation
+ */
 export const styles = {
   aclControlBoxContainer: {
     margin: '1em'

@@ -1,5 +1,5 @@
 /**
- * src/acl/access-controller.ts contains the [[AccessController]] class
+ * Contains the [[AccessController]] class
  * @packageDocumentation
  */
 

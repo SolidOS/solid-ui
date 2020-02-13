@@ -1,5 +1,5 @@
 /**
- * src/acl/access-groups.ts contains the [[AccessGroups]]
+ * Contains the [[AccessGroups]]
  * and [[AccessGroupsOptions]] classes
  * @packageDocumentation
  */

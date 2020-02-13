@@ -1,4 +1,9 @@
-// Access control logic
+/**
+ * Non-UI functions for access control.
+ * See https://github.com/solid/web-access-control-spec
+ * for the spec that defines how ACL documents work.
+ * @packageDocumentation
+ */
 
 import * as $rdf from 'rdflib'
 import ns from '../ns'
@@ -6,12 +11,12 @@ import kb from '../store.js'
 import utils from '../utils'
 import { AgentMapMap, ComboList } from './types'
 
-// //////////////////////////////////// Solid ACL non-UI functions
-//
-
-// Take the "defaultForNew" ACL and convert it into the equivlent ACL
-// which the resource would have had. Return it as a new separate store.
-
+/**
+ * Take the "default" ACL and convert it into the equivlent ACL
+ * which the resource would have had. Return it as a new separate store.
+ * The "defaultForNew" predicate is also accepted, as a deprecated
+ * synonym for "default".
+ */
 export function adoptACLDefault (
   doc: $rdf.NamedNode,
   aclDoc: $rdf.NamedNode,
@@ -63,10 +68,11 @@ export function adoptACLDefault (
   return kb2
 }
 
-// Read and canonicalize the ACL for x in aclDoc
-//
-// Accumulate the access rights which each agent or class has
-
+/**
+ * Read and canonicalize the ACL for x in aclDoc
+ *
+ * Accumulate the access rights which each agent or class has
+ */
 export function readACL (
   x: $rdf.NamedNode,
   aclDoc: $rdf.NamedNode,
@@ -104,7 +110,9 @@ export function readACL (
   }
 }
 
-// Compare two ACLs
+/**
+ * Compare two ACLs
+ */
 export function sameACL (a: AgentMapMap, b: AgentMapMap): boolean {
   const contains = function (a, b) {
     for (const pred in {
@@ -129,7 +137,9 @@ export function sameACL (a: AgentMapMap, b: AgentMapMap): boolean {
   return contains(a, b) && contains(b, a)
 }
 
-// Union N ACLs
+/**
+ * Union N ACLs
+ */
 export function ACLunion (list: Array<AgentMapMap>): AgentMapMap {
   const b = list[0]
   let a, ag
@@ -151,8 +161,9 @@ export function ACLunion (list: Array<AgentMapMap>): AgentMapMap {
   return b
 }
 
-// Merge ACLs lists from things to form union
-
+/**
+ * Merge ACLs lists from things to form union
+ */
 export function loadUnionACL (subjectList: Array<$rdf.NamedNode>, callbackFunction: Function): void {
   const aclList: Array<AgentMapMap> = []
   const doList = function (list) {
@@ -182,11 +193,12 @@ export function loadUnionACL (subjectList: Array<$rdf.NamedNode>, callbackFuncti
   doList(subjectList)
 }
 
-// Represents these as a RDF graph by combination of modes
-//
-// Each agent can only be in one place in this model, one combination of modes.
-// Combos are like full control, read append, read only etc.
-//
+/**
+ * Represents these as an RDF graph by combination of modes
+ *
+ * Each agent can only be in one place in this model, one combination of modes.
+ * Combos are like full control, read append, read only etc.
+ */
 export function ACLbyCombination (ac: AgentMapMap): ComboList {
   const byCombo = {}
   ;['agent', 'agentClass', 'agentGroup', 'origin', 'originClass'].map(function (pred) {
@@ -204,15 +216,17 @@ export function ACLbyCombination (ac: AgentMapMap): ComboList {
   return byCombo
 }
 
-//    Write ACL graph to store from AC
-//
+/**
+ * Write ACL graph to store from AC
+ */
 export function makeACLGraph (kb: $rdf.IndexedFormula, x: $rdf.NamedNode, ac: AgentMapMap, aclDoc: $rdf.NamedNode): void {
   const byCombo = ACLbyCombination(ac)
   return makeACLGraphbyCombo(kb, x, byCombo, aclDoc)
 }
 
-//    Write ACL graph to store from combo
-//
+/**
+ * Write ACL graph to store from combo
+ */
 export function makeACLGraphbyCombo (
   kb: $rdf.IndexedFormula,
   x: $rdf.NamedNode,
@@ -250,13 +264,17 @@ export function makeACLGraphbyCombo (
   }
 }
 
-// Debugging short strings for dumping ACL
-// and who knows maybe in the UI
-//
+/**
+ * Debugging short strings for dumping ACL
+ * and possibly in the UI
+ */
 export function ACLToString (ac: AgentMapMap): string {
   return comboToString(ACLbyCombination(ac))
 }
 
+/**
+ * Convert a [[ComboList]] to a string
+ */
 export function comboToString (byCombo: ComboList): string {
   let str = ''
   for (const combo in byCombo) {
@@ -280,8 +298,9 @@ export function comboToString (byCombo: ComboList): string {
   return '{' + str.slice(0, -1) + '}' // drop extra semicolon
 }
 
-//    Write ACL graph to string
-//
+/**
+ * Write ACL graph as Turtle
+ */
 export function makeACLString (x: $rdf.NamedNode, ac: AgentMapMap, aclDoc: $rdf.NamedNode): string {
   const kb2 = $rdf.graph()
   makeACLGraph(kb2, x, ac, aclDoc)
@@ -289,8 +308,9 @@ export function makeACLString (x: $rdf.NamedNode, ac: AgentMapMap, aclDoc: $rdf.
   return ($rdf as any).serialize(aclDoc, kb2, aclDoc.uri, 'text/turtle')
 }
 
-//    Write ACL graph to web
-//
+/**
+ * Write ACL graph to web
+ */
 export function putACLObject (
   kb: $rdf.IndexedFormula,
   x: $rdf.NamedNode,
@@ -302,8 +322,9 @@ export function putACLObject (
   return putACLbyCombo(kb, x, byCombo, aclDoc, callbackFunction)
 }
 
-//    Write ACL graph to web from combo
-//
+/**
+ * Write ACL graph to web from a [[ComboList]]
+ */
 export function putACLbyCombo (
   kb: $rdf.IndexedFormula,
   x: $rdf.NamedNode,
@@ -333,11 +354,11 @@ export function putACLbyCombo (
   )
 }
 
-// Fix the ACl for an individual card as a function of the groups it is in
-//
-// All group files must be loaded first
-//
-
+/**
+ * Fix the ACl for an individual card as a function of the groups it is in
+ *
+ * All group files must be loaded first
+ */
 export function fixIndividualCardACL (person: $rdf.NamedNode, log: Function, callbackFunction: Function): void {
   const groups = kb.each(undefined, ns.vcard('hasMember'), person)
   // const doc = person.doc()
@@ -350,6 +371,9 @@ export function fixIndividualCardACL (person: $rdf.NamedNode, log: Function, cal
   // @@ if no groups, then use default for People container or the book top container.?
 }
 
+/**
+ * This function is used by [[fixIndividualCardACL]]
+ */
 export function fixIndividualACL (item: $rdf.NamedNode, subjects: Array<$rdf.NamedNode>, log: Function, callbackFunction: Function): void {
   log = log || console.log
   const doc = item.doc()
@@ -388,6 +412,9 @@ export function fixIndividualACL (item: $rdf.NamedNode, subjects: Array<$rdf.Nam
   })
 }
 
+/**
+ * Set an ACL
+ */
 export function setACL (
   docURI: $rdf.NamedNode,
   aclText: string,
@@ -427,13 +454,15 @@ export function setACL (
   }
 }
 
-//  Get ACL file or default if necessary
-//
-// callbackFunction(true, true, doc, aclDoc)   The ACL did exist
-// callbackFunction(true, false, doc, aclDoc, defaultHolder, defaultACLDoc)   ACL file did not exist but a default did
-// callbackFunction(false, false, status, message)  error getting original
-// callbackFunction(false, true, status, message)  error getting default
-
+/**
+ * Get ACL file or default if necessary
+ *
+ * @param callbackFunction  Will be called in the following ways, in the following cases:
+ * * `callbackFunction(true, true, doc, aclDoc)` if the ACL did exist
+ * * `callbackFunction(true, false, doc, aclDoc, defaultHolder, defaultACLDoc)` if the ACL file did not exist but a default did
+ * * `callbackFunction(false, false, status, message)` when there was an error getting the original
+ * * `callbackFunction(false, true, status, message)` when there was an error getting the default
+ */
 export function getACLorDefault (
   doc: $rdf.NamedNode,
   callbackFunction: (
@@ -536,15 +565,16 @@ export function getACLorDefault (
       return callbackFunction(true, true, doc, aclDoc as $rdf.NamedNode)
     }
   }) // Call to getACL
-} // getACLorDefault
+}
 
-//    Calls back (ok, status, acldoc, message)
-//
-//   (false, 900, errormessage)        no link header
-//   (true, 403, documentSymbol, fileaccesserror) not authorized
-//   (true, 404, documentSymbol, fileaccesserror) if does not exist
-//   (true, 200, documentSymbol)   if file exitss and read OK
-//
+/**
+ * Calls back `(ok, status, acldoc, message)` as follows
+ *
+ * * `(false, 900, errormessage)` if no link header
+ * * `(true, 403, documentSymbol, fileaccesserror)` if not authorized
+ * * `(true, 404, documentSymbol, fileaccesserror)` if does not exist
+ * * `(true, 200, documentSymbol)` if file exists and read OK
+ */
 export function getACL (
   doc: $rdf.NamedNode,
   callbackFunction: (
@@ -593,6 +623,9 @@ export function getACL (
   })
 }
 
+/**
+ * Calls [[getACLorDefault]] and then (?)
+ */
 export async function getProspectiveHolder (targetDirectory: string): Promise<$rdf.NamedNode | undefined> {
   return new Promise((resolve, reject) => getACLorDefault($rdf.sym(targetDirectory), (
     ok,

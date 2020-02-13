@@ -116,7 +116,10 @@ export function shortNameForFolder (x: NamedNode): string {
 /**
  * A wrapper that retrieves ACL data and uses it
  * to render an [[AccessController]] component.
- * Presumably the '5' is a version number?
+ * Presumably the '5' is a version number of some sort,
+ * but all we know is it was already called ACLControlBox5
+ * when it was introduced into solid-ui in
+ * https://github.com/solid/solid-ui/commit/948b874bd93e7bf5160e6e224821b888f07d15f3#diff-4192a29f38a0ababd563b36b47eba5bbR54
  */
 export function ACLControlBox5 (
   subject: NamedNode,
