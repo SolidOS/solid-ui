@@ -97,14 +97,14 @@ describe('Form field', () => {
         callbackFunction
       )
     ).toMatchInlineSnapshot(`
-<div>
-  <h3
-    style="[object Object]"
-  >
-    [object Object]
-  </h3>
-</div>
-`)
+      <div>
+        <h3
+          style="[object Object]"
+        >
+          [object Object]
+        </h3>
+      </div>
+    `)
   })
   // @@ TODO need to double check proper subjects and what gets returned
   it('returns.. if the subject has already been processed...', () => {
@@ -158,15 +158,7 @@ describe('Options field', () => {
         store,
         callbackFunction
       )
-    ).toMatchInlineSnapshot(`
-      <div>
-        <h3
-          style="[object Object]"
-        >
-          [object Object]
-        </h3>
-      </div>
-    `)
+    ).toMatchInlineSnapshot(`<div />`)
   })
 })
 
@@ -303,13 +295,29 @@ describe('PhoneField', () => {
         callbackFunction
       )
     ).toMatchInlineSnapshot(`
-      <div>
-        <h3
-          style="[object Object]"
+      <tr>
+        <td
+          class="formFieldName"
+          style="  vertical-align: middle;"
         >
-          [object Object]
-        </h3>
-      </div>
+          <a
+            href="uri"
+            style="color: #3B5998; text-decoration: none;"
+          >
+            [object Object]
+          </a>
+        </td>
+        <td
+          class="formFieldValue"
+        >
+          <input
+            maxlength="[object Object]"
+            size="[object Object]"
+            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+            type="text"
+          />
+        </td>
+      </tr>
     `)
   })
 })
@@ -336,13 +344,29 @@ describe('EmailField', () => {
         callbackFunction
       )
     ).toMatchInlineSnapshot(`
-      <div>
-        <h3
-          style="[object Object]"
+      <tr>
+        <td
+          class="formFieldName"
+          style="  vertical-align: middle;"
         >
-          [object Object]
-        </h3>
-      </div>
+          <a
+            href="uri"
+            style="color: #3B5998; text-decoration: none;"
+          >
+            [object Object]
+          </a>
+        </td>
+        <td
+          class="formFieldValue"
+        >
+          <input
+            maxlength="[object Object]"
+            size="[object Object]"
+            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+            type="text"
+          />
+        </td>
+      </tr>
     `)
   })
 })
@@ -369,14 +393,30 @@ describe('ColorField', () => {
         callbackFunction
       )
     ).toMatchInlineSnapshot(`
-<div>
-  <h3
-    style="[object Object]"
-  >
-    [object Object]
-  </h3>
-</div>
-`)
+      <tr>
+        <td
+          class="formFieldName"
+          style="  vertical-align: middle;"
+        >
+          <a
+            href="uri"
+            style="color: #3B5998; text-decoration: none;"
+          >
+            [object Object]
+          </a>
+        </td>
+        <td
+          class="formFieldValue"
+        >
+          <input
+            maxlength="[object Object]"
+            size="[object Object]"
+            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+            type="text"
+          />
+        </td>
+      </tr>
+    `)
   })
 })
 
@@ -402,14 +442,30 @@ describe('DateField', () => {
         callbackFunction
       )
     ).toMatchInlineSnapshot(`
-<div>
-  <h3
-    style="[object Object]"
-  >
-    [object Object]
-  </h3>
-</div>
-`)
+      <tr>
+        <td
+          class="formFieldName"
+          style="  vertical-align: middle;"
+        >
+          <a
+            href="uri"
+            style="color: #3B5998; text-decoration: none;"
+          >
+            [object Object]
+          </a>
+        </td>
+        <td
+          class="formFieldValue"
+        >
+          <input
+            maxlength="[object Object]"
+            size="[object Object]"
+            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+            type="text"
+          />
+        </td>
+      </tr>
+    `)
   })
 })
 
@@ -435,14 +491,30 @@ describe('DateTimeField', () => {
         callbackFunction
       )
     ).toMatchInlineSnapshot(`
-<div>
-  <h3
-    style="[object Object]"
-  >
-    [object Object]
-  </h3>
-</div>
-`)
+      <tr>
+        <td
+          class="formFieldName"
+          style="  vertical-align: middle;"
+        >
+          <a
+            href="uri"
+            style="color: #3B5998; text-decoration: none;"
+          >
+            [object Object]
+          </a>
+        </td>
+        <td
+          class="formFieldValue"
+        >
+          <input
+            maxlength="[object Object]"
+            size="[object Object]"
+            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+            type="text"
+          />
+        </td>
+      </tr>
+    `)
   })
 })
 
@@ -468,13 +540,29 @@ describe('TimeField', () => {
         callbackFunction
       )
     ).toMatchInlineSnapshot(`
-      <div>
-        <h3
-          style="[object Object]"
+      <tr>
+        <td
+          class="formFieldName"
+          style="  vertical-align: middle;"
         >
-          [object Object]
-        </h3>
-      </div>
+          <a
+            href="uri"
+            style="color: #3B5998; text-decoration: none;"
+          >
+            [object Object]
+          </a>
+        </td>
+        <td
+          class="formFieldValue"
+        >
+          <input
+            maxlength="[object Object]"
+            size="[object Object]"
+            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+            type="text"
+          />
+        </td>
+      </tr>
     `)
   })
 })
@@ -501,13 +589,29 @@ describe('NumericField', () => {
         callbackFunction
       )
     ).toMatchInlineSnapshot(`
-      <div>
-        <h3
-          style="[object Object]"
+      <tr>
+        <td
+          class="formFieldName"
+          style="  vertical-align: middle;"
         >
-          [object Object]
-        </h3>
-      </div>
+          <a
+            href="uri"
+            style="color: #3B5998; text-decoration: none;"
+          >
+            [object Object]
+          </a>
+        </td>
+        <td
+          class="formFieldValue"
+        >
+          <input
+            maxlength="[object Object]"
+            size="[object Object]"
+            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+            type="text"
+          />
+        </td>
+      </tr>
     `)
   })
 })
@@ -534,13 +638,29 @@ describe('IntegerField', () => {
         callbackFunction
       )
     ).toMatchInlineSnapshot(`
-      <div>
-        <h3
-          style="[object Object]"
+      <tr>
+        <td
+          class="formFieldName"
+          style="  vertical-align: middle;"
         >
-          [object Object]
-        </h3>
-      </div>
+          <a
+            href="uri"
+            style="color: #3B5998; text-decoration: none;"
+          >
+            [object Object]
+          </a>
+        </td>
+        <td
+          class="formFieldValue"
+        >
+          <input
+            maxlength="[object Object]"
+            size="[object Object]"
+            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+            type="text"
+          />
+        </td>
+      </tr>
     `)
   })
 })
@@ -567,13 +687,29 @@ describe('DecimalField', () => {
         callbackFunction
       )
     ).toMatchInlineSnapshot(`
-      <div>
-        <h3
-          style="[object Object]"
+      <tr>
+        <td
+          class="formFieldName"
+          style="  vertical-align: middle;"
         >
-          [object Object]
-        </h3>
-      </div>
+          <a
+            href="uri"
+            style="color: #3B5998; text-decoration: none;"
+          >
+            [object Object]
+          </a>
+        </td>
+        <td
+          class="formFieldValue"
+        >
+          <input
+            maxlength="[object Object]"
+            size="[object Object]"
+            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+            type="text"
+          />
+        </td>
+      </tr>
     `)
   })
 })
@@ -600,13 +736,29 @@ describe('FloatField]', () => {
         callbackFunction
       )
     ).toMatchInlineSnapshot(`
-      <div>
-        <h3
-          style="[object Object]"
+      <tr>
+        <td
+          class="formFieldName"
+          style="  vertical-align: middle;"
         >
-          [object Object]
-        </h3>
-      </div>
+          <a
+            href="uri"
+            style="color: #3B5998; text-decoration: none;"
+          >
+            [object Object]
+          </a>
+        </td>
+        <td
+          class="formFieldValue"
+        >
+          <input
+            maxlength="[object Object]"
+            size="[object Object]"
+            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+            type="text"
+          />
+        </td>
+      </tr>
     `)
   })
 })
@@ -633,13 +785,29 @@ describe('TextField', () => {
         callbackFunction
       )
     ).toMatchInlineSnapshot(`
-      <div>
-        <h3
-          style="[object Object]"
+      <tr>
+        <td
+          class="formFieldName"
+          style="  vertical-align: middle;"
         >
-          [object Object]
-        </h3>
-      </div>
+          <a
+            href="uri"
+            style="color: #3B5998; text-decoration: none;"
+          >
+            [object Object]
+          </a>
+        </td>
+        <td
+          class="formFieldValue"
+        >
+          <input
+            maxlength="[object Object]"
+            size="[object Object]"
+            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+            type="text"
+          />
+        </td>
+      </tr>
     `)
   })
 })
@@ -666,13 +834,29 @@ describe('SingleLineTextField', () => {
         callbackFunction
       )
     ).toMatchInlineSnapshot(`
-      <div>
-        <h3
-          style="[object Object]"
+      <tr>
+        <td
+          class="formFieldName"
+          style="  vertical-align: middle;"
         >
-          [object Object]
-        </h3>
-      </div>
+          <a
+            href="uri"
+            style="color: #3B5998; text-decoration: none;"
+          >
+            [object Object]
+          </a>
+        </td>
+        <td
+          class="formFieldValue"
+        >
+          <input
+            maxlength="[object Object]"
+            size="[object Object]"
+            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+            type="text"
+          />
+        </td>
+      </tr>
     `)
   })
 })
@@ -699,13 +883,29 @@ describe('NamedNodeURIField', () => {
         callbackFunction
       )
     ).toMatchInlineSnapshot(`
-      <div>
-        <h3
-          style="[object Object]"
+      <tr>
+        <td
+          class="formFieldName"
+          style="  vertical-align: middle;"
         >
-          [object Object]
-        </h3>
-      </div>
+          <a
+            href="uri"
+            style="color: #3B5998; text-decoration: none;"
+          >
+            [object Object]
+          </a>
+        </td>
+        <td
+          class="formFieldValue"
+        >
+          <input
+            maxlength="[object Object]"
+            size="[object Object]"
+            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+            type="text"
+          />
+        </td>
+      </tr>
     `)
   })
 })
@@ -733,11 +933,21 @@ describe('MultiLineTextField', () => {
       )
     ).toMatchInlineSnapshot(`
       <div>
-        <h3
-          style="[object Object]"
+        <a
+          href="uri"
+          style="color: #3B5998; text-decoration: none;"
         >
           [object Object]
-        </h3>
+        </a>
+        <div>
+          <textarea
+            cols="80"
+            disabled=""
+            rows="2"
+            style="font-size:100%; white-space: pre-wrap; background-color: #eef; border: 0.07em solid gray; padding: 1em 0.5em; margin: 1em 1em;"
+          />
+          <br />
+        </div>
       </div>
     `)
   })
@@ -766,11 +976,12 @@ describe('BooleanField', () => {
       )
     ).toMatchInlineSnapshot(`
       <div>
-        <h3
-          style="[object Object]"
+        [object Object]
+        <button
+          style="font-size: 150%; height: 1.2em; width: 1.2em; background-color: #eef; margin: 0.1em"
         >
-          [object Object]
-        </h3>
+          ✓
+        </button>
       </div>
     `)
   })
@@ -798,14 +1009,15 @@ describe('TristateField', () => {
         callbackFunction
       )
     ).toMatchInlineSnapshot(`
-      <div>
-        <h3
-          style="[object Object]"
-        >
-          [object Object]
-        </h3>
-      </div>
-    `)
+<div>
+  [object Object]
+  <button
+    style="font-size: 150%; height: 1.2em; width: 1.2em; background-color: #eef; margin: 0.1em"
+  >
+    ✓
+  </button>
+</div>
+`)
   })
 })
 
@@ -831,14 +1043,14 @@ describe('Classifier', () => {
         callbackFunction
       )
     ).toMatchInlineSnapshot(`
-      <div>
-        <h3
-          style="[object Object]"
-        >
-          [object Object]
-        </h3>
-      </div>
-    `)
+<span>
+  <div
+    style="margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; background-color: #fee; color:black;"
+  >
+    Can't do selector with no subclasses of category: [object Object]
+  </div>
+</span>
+`)
   })
 })
 
@@ -903,14 +1115,14 @@ describe('Heading', () => {
         callbackFunction
       )
     ).toMatchInlineSnapshot(`
-      <div>
-        <h3
-          style="[object Object]"
-        >
-          [object Object]
-        </h3>
-      </div>
-    `)
+<div>
+  <undefined
+    style="[object Object]"
+  >
+    [object Object]
+  </undefined>
+</div>
+`)
   })
 })
 
@@ -937,11 +1149,11 @@ describe('Comment]', () => {
       )
     ).toMatchInlineSnapshot(`
 <div>
-  <h3
+  <undefined
     style="[object Object]"
   >
     [object Object]
-  </h3>
+  </undefined>
 </div>
 `)
   })
