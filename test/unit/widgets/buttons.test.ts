@@ -37,7 +37,8 @@ import {
   shortDate,
   shortTime,
   timestamp
-} from '../../../src/widgets/buttons'
+} from '../../../src/widgenpm rts/buttons'
+
 jest.mock('rdflib')
 jest.mock('solid-auth-client')
 const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
