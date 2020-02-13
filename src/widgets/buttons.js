@@ -1,5 +1,8 @@
-/* UI Widgets such as buttons
+/**
+ * UI Widgets such as buttons
+ * @packageDocumentation
  */
+
 /* global alert */
 
 const $rdf = require('rdflib')
@@ -42,6 +45,9 @@ function getStatusArea (context) {
   return null
 }
 
+/**
+ * Display an error message block
+ */
 function complain (context, err) {
   if (!err) return // only if error
   var ele = context.statusArea || context.div || getStatusArea(context)
@@ -58,6 +64,9 @@ buttons.complain = complain
 
 // paneUtils = {}
 
+/**
+ * Remove all the children of an HTML element
+ */
 buttons.clearElement = function (ele) {
   while (ele.firstChild) {
     ele.removeChild(ele.firstChild)
@@ -65,15 +74,19 @@ buttons.clearElement = function (ele) {
   return ele
 }
 
-// To figure out the log URI from the full URI used to invoke the reasoner
+/**
+ * To figure out the log URI from the full URI used to invoke the reasoner
+ */
 buttons.extractLogURI = function (fullURI) {
   var logPos = fullURI.search(/logFile=/)
   var rulPos = fullURI.search(/&rulesFile=/)
   return fullURI.substring(logPos + 8, rulPos)
 }
 
-// @@@ This needs to be changed to local timee
-//  noTime  - only give date, no time,
+/**
+ * @@@ TODO This needs to be changed to local time
+ * noTime  - only give date, no time
+ */
 buttons.shortDate = function (str, noTime) {
   if (!str) return '???'
   var month = [
@@ -110,6 +123,12 @@ buttons.shortDate = function (str, noTime) {
   }
 }
 
+/**
+ * Format a date and time
+ * @param date for instance `new Date()`
+ * @param format  for instance '{FullYear}-{Month}-{Date}T{Hours}:{Minutes}:{Seconds}.{Milliseconds}'
+ * @returns for instance '2000-01-15T23:14:23.002'
+ */
 buttons.formatDateTime = function (date, format) {
   return format
     .split('{')
@@ -124,12 +143,21 @@ buttons.formatDateTime = function (date, format) {
     .join('')
 }
 
+/**
+ * Get a string representation of the current time
+ * @returns for instance '2000-01-15T23:14:23.002'
+ */
 buttons.timestamp = function () {
   return buttons.formatDateTime(
     new Date(),
     '{FullYear}-{Month}-{Date}T{Hours}:{Minutes}:{Seconds}.{Milliseconds}'
   )
 }
+
+/**
+ * Get a short string representation of the current time
+ * @returns for instance '23:14:23.002'
+ */
 buttons.shortTime = function () {
   return buttons.formatDateTime(
     new Date(),
@@ -139,8 +167,9 @@ buttons.shortTime = function () {
 
 // ///////////////////// Handy UX widgets
 
-// Sets the best name we have and looks up a better one
-//
+/**
+ * Sets the best name we have and looks up a better one
+ */
 buttons.setName = function (element, x) {
   var kb = UI.store
   var ns = UI.ns
