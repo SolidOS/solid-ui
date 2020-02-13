@@ -989,7 +989,6 @@ buttons.index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction'] = fu
   var failed = ''
   var enc = function (p) {
     var y = UI.store.any(x, UI.ns.qu(p))
-    console.log('got x y!', x, y)
     if (!y) failed += '@@ No value for ' + p + '! '
     return y ? utils.escapeForXML(y.value) : '?' // @@@@
   }

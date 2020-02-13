@@ -49,31 +49,17 @@ const dashCharacter = '-'
  **
  ** @returns {Element} The HTML widget created
  */
-forms.field[ns.ui('Form').uri] = forms.field[ns.ui('Group').uri] = function (
-  dom,
-  container,
-  already,
-  subject,
-  form,
-  store,
-  callbackFunction
-) {
-  console.log('in Form field function!')
+forms.field[ns.ui('Form').uri] = forms.field[
+  ns.ui('Group').uri
+] = function (dom, container, already, subject, form, store, callbackFunction) {
   const kb = UI.store
   var box = dom.createElement('div')
-  box.setAttribute(
-    'style',
-    `padding-left: 2em; border: 0.05em solid ${UI.style.formBorderColor};`
-  ) // Indent a group
+  box.setAttribute('style', `padding-left: 2em; border: 0.05em solid ${UI.style.formBorderColor};`) // Indent a group
   const ui = UI.ns.ui
-  console.log(ui)
   if (container) container.appendChild(box)
 
   // Prevent loops
   var key = subject.toNT() + '|' + form.toNT()
-  console.log(subject.toNT())
-  console.log(form.toNT())
-  console.log('key ' + key)
   if (already[key]) {
     // been there done that
     box.appendChild(dom.createTextNode('Group: see above ' + key))
@@ -250,13 +236,13 @@ forms.field[ns.ui('Multiple').uri] = function (
   callbackFunction
 ) {
   /** Diagnostic function
-   */
+  */
   function debugString (values) {
-    return values.map((x) => x.toString().slice(-7)).join(', ')
+    return values.map(x => x.toString().slice(-7)).join(', ')
   }
 
   /** Add an item to the local quadstore not the UI or the web
-   *
+  *
    * @param {Node} object The RDF object to be represented by this item.
    */
   async function addItem (object) {
@@ -346,14 +332,13 @@ forms.field[ns.ui('Multiple').uri] = function (
       await saveListThenRefresh()
     }
     /* A subField has been filled in
-     *
-     * One possibility is to not actually make the link to the thing until
-     * this callback happens to avoid widow links
+    *
+    * One possibility is to not actually make the link to the thing until
+    * this callback happens to avoid widow links
      */
     function itemDone (uri, ok, message) {
       console.log(`Item ${uri} done callback for item ${object.uri.slice(-7)}`)
-      if (!ok) {
-        // when does this happen? errors typically deal with upstream
+      if (!ok) { // when does this happen? errors typically deal with upstream
         console.error('  Item done callback: Error: ' + message)
       } else {
         linkDone(uri, ok, message)
@@ -404,28 +389,18 @@ forms.field[ns.ui('Multiple').uri] = function (
 
     // delete button and move buttons
     if (kb.updater.editable(store.uri)) {
-      buttons.deleteButtonWithCheck(
-        dom,
-        subField,
-        utils.label(property),
-        deleteThisItem
-      )
+      buttons.deleteButtonWithCheck(dom, subField, utils.label(property),
+        deleteThisItem)
       if (ordered) {
         subField.appendChild(
           buttons.button(
-            dom,
-            UI.icons.iconBase + 'noun_1369237.svg',
-            'Move Up',
-            async (event) => moveThisItem(event, true)
-          )
+            dom, UI.icons.iconBase + 'noun_1369237.svg', 'Move Up',
+            async event => moveThisItem(event, true))
         )
         subField.appendChild(
           buttons.button(
-            dom,
-            UI.icons.iconBase + 'noun_1369241.svg',
-            'Move Down',
-            async (event) => moveThisItem(event, false)
-          )
+            dom, UI.icons.iconBase + 'noun_1369241.svg', 'Move Down',
+            async event => moveThisItem(event, false))
         )
       }
     }
@@ -496,13 +471,9 @@ forms.field[ns.ui('Multiple').uri] = function (
     prompt.textContent =
       (values.length === 0 ? 'Add one or more ' : 'Add more ') +
       utils.label(property)
-    tail.addEventListener(
-      'click',
-      async (_eventNotUsed) => {
-        await addItem()
-      },
-      true
-    )
+    tail.addEventListener('click', async _eventNotUsed => {
+      await addItem()
+    }, true)
   }
 
   function createListIfNecessary () {
@@ -555,12 +526,8 @@ forms.field[ns.ui('Multiple').uri] = function (
     // }
   }
   asyncStuff().then(
-    () => {
-      console.log(' Multiple render: async stuff ok')
-    },
-    (err) => {
-      console.error(' Multiple render: async stuff fails. #### ', err)
-    }
+    () => { console.log(' Multiple render: async stuff ok') },
+    (err) => { console.error(' Multiple render: async stuff fails. #### ', err) }
   ) // async
 
   return box
@@ -697,10 +664,7 @@ function basicField (
   var uri = forms.mostSpecificClassURI(form)
   var params = forms.fieldParams[uri]
   if (params === undefined) params = {} // non-bottom field types can do this
-  var style =
-    params.style ||
-    UI.style.textInputStyle ||
-    'font-size: 100%; margin: 0.1em; padding: 0.1em;'
+  var style = params.style || UI.style.textInputStyle || 'font-size: 100%; margin: 0.1em; padding: 0.1em;'
   // box.appendChild(dom.createTextNode(' uri='+uri+', pattern='+ params.pattern))
   var field = dom.createElement('input')
   field.style = UI.style.textInputStyle // Do we have to override length etc?
@@ -776,7 +740,7 @@ function basicField (
           result = new $rdf.Literal(field.value)
         }
       }
-      var is = ds.map((st) => $rdf.st(st.subject, st.predicate, result, st.why)) // can include >1 doc
+      var is = ds.map(st => $rdf.st(st.subject, st.predicate, result, st.why)) // can include >1 doc
       if (is.length === 0) {
         // or none
         is = [$rdf.st(subject, property, result, store)]
@@ -784,10 +748,10 @@ function basicField (
 
       function updateMany (ds, is, callback) {
         var docs = []
-        is.forEach((st) => {
+        is.forEach(st => {
           if (!docs.includes(st.why.uri)) docs.push(st.why.uri)
         })
-        ds.forEach((st) => {
+        ds.forEach(st => {
           if (!docs.includes(st.why.uri)) docs.push(st.why.uri)
         })
         if (docs.length === 0) {
@@ -799,10 +763,10 @@ function basicField (
         // return kb.updater.update(ds, is, callback)
 
         const doc = docs.pop()
-        const is1 = is.filter((st) => st.why.uri === doc)
-        const is2 = is.filter((st) => st.why.uri !== doc)
-        const ds1 = ds.filter((st) => st.why.uri === doc)
-        const ds2 = ds.filter((st) => st.why.uri !== doc)
+        const is1 = is.filter(st => st.why.uri === doc)
+        const is2 = is.filter(st => st.why.uri !== doc)
+        const ds1 = ds.filter(st => st.why.uri === doc)
+        const ds2 = ds.filter(st => st.why.uri !== doc)
         kb.updater.update(ds1, is1, function (uri, ok, body) {
           if (ok) {
             updateMany(ds2, is2, callback)
@@ -1133,7 +1097,6 @@ forms.field[ns.ui('Comment').uri] = forms.field[
   _store,
   _callbackFunction
 ) {
-  console.log('in Comment field function!')
   const ui = UI.ns.ui
   const kb = UI.store
   var contents = kb.any(form, ui('contents'))
@@ -1199,7 +1162,13 @@ forms.fieldFunction = function (dom, field) {
 //  When editing forms, make it yellow, when editing thr form form, pink
 // Help people understand how many levels down they are.
 //
-forms.editFormButton = function (dom, container, form, store, callbackFunction) {
+forms.editFormButton = function (
+  dom,
+  container,
+  form,
+  store,
+  callbackFunction
+) {
   var b = dom.createElement('button')
   b.setAttribute('type', 'button')
   b.innerHTML = 'Edit ' + utils.label(ns.ui('Form'))
@@ -1286,10 +1255,10 @@ forms.propertiesForClass = function (kb, c) {
 }
 
 /** Find the closest class
- * @param kb The store
- * @param cla - the URI of the class
- * @param prop
- */
+* @param kb The store
+* @param cla - the URI of the class
+* @param prop
+*/
 forms.findClosest = function findClosest (kb, cla, prop) {
   var agenda = [kb.sym(cla)] // ordered - this is breadth first search
   while (agenda.length > 0) {
@@ -1452,10 +1421,7 @@ forms.promptForNew = function (
     form = lists[0] // Pick any one
   }
   UI.log.debug('form is ' + form)
-  box.setAttribute(
-    'style',
-    `border: 0.05em solid ${UI.style.formBorderColor}; color: ${UI.style.formBorderColor}`
-  ) // @@color?
+  box.setAttribute('style', `border: 0.05em solid ${UI.style.formBorderColor}; color: ${UI.style.formBorderColor}`) // @@color?
   box.innerHTML = '<h3>New ' + utils.label(theClass) + '</h3>'
 
   var formFunction = forms.fieldFunction(dom, form)
@@ -1514,10 +1480,9 @@ forms.makeDescription = function (
   group.appendChild(field)
   field.rows = desc ? desc.split('\n').length + 2 : 2
   field.cols = 80
-  var style =
-    UI.style.multilineTextInputStyle ||
+  var style = UI.style.multilineTextInputStyle ||
     'font-size:100%; white-space: pre-wrap; background-color: white;' +
-      ' border: 0.07em solid gray; padding: 1em 0.5em; margin: 1em 1em;'
+    ' border: 0.07em solid gray; padding: 1em 0.5em; margin: 1em 1em;'
   field.setAttribute('style', style)
   if (sts.length) {
     field.value = desc
@@ -1621,11 +1586,7 @@ forms.makeSelectForOptions = function (
 
   for (var i = 0; i < possible.length; i++) {
     var sub = possible[i] // @@ Maybe; make this so it works with blank nodes too
-    if (!sub.uri) {
-      console.warn(
-        `makeSelectForOptions: option does not have an uri: ${sub}, with predicate: ${predicate}`
-      )
-    }
+    if (!sub.uri) console.warn(`makeSelectForOptions: option does not have an uri: ${sub}, with predicate: ${predicate}`)
     if (!sub.uri || sub.uri in uris) continue
     uris[sub.uri] = true
     n++
@@ -1959,7 +1920,7 @@ function buildCheckboxForm (dom, kb, lab, del, ins, form, store, tristate) {
 
   function holdsAll (a) {
     const missing = a.filter(
-      (st) => !kb.holds(st.subject, st.predicate, st.object, st.why)
+      st => !kb.holds(st.subject, st.predicate, st.object, st.why)
     )
     return missing.length === 0
   }
@@ -2031,7 +1992,9 @@ function buildCheckboxForm (dom, kb, lab, del, ins, form, store, tristate) {
         box.appendChild(
           error.errorMessageBlock(
             dom,
-            `Checkbox: Error updating store from ${input.state} to ${input.newState}:\n\n${errorBody}`
+            `Checkbox: Error updating store from ${input.state} to ${
+              input.newState
+            }:\n\n${errorBody}`
           )
         )
       } else {

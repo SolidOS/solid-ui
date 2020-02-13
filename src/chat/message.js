@@ -93,23 +93,7 @@ export function creatorAndDateHorizontal (td1, creator, date, message) {
 }
 
 // BODY of renderMessage
-function shouldInsertBefore (dateString, ele, newestFirst) {
-  return (
-    (dateString > ele.AJAR_date && newestFirst) ||
-    (dateString < ele.AJAR_date && !newestFirst)
-  )
-}
-// not sure about this one...
-function processAuthorAboveContent (td1, creator) {
-  const img = dom.createElement('img')
-  img.setAttribute(
-    'style',
-    'max-height: 2.5em; max-width: 2.5em; border-radius: 0.5em; margin: auto;'
-  )
-  UI.widgets.setImage(img, creator)
-  td1.appendChild(img)
-}
-function renderMessageContent () {}
+
 export function renderMessage (
   messageTable,
   bindings,
@@ -143,7 +127,10 @@ export function renderMessage (
       break
     }
     var newestFirst = options.newestfirst === true
-    if (shouldInsertBefore(dateString, ele, newestFirst)) {
+    if (
+      (dateString > ele.AJAR_date && newestFirst) ||
+      (dateString < ele.AJAR_date && !newestFirst)
+    ) {
       messageTable.insertBefore(messageRow, ele)
       done = true
       break
@@ -156,7 +143,13 @@ export function renderMessage (
   var td1 = dom.createElement('td')
   messageRow.appendChild(td1)
   if (options.authorAboveContent) {
-    processAuthorAboveContent(td1, creator)
+    const img = dom.createElement('img')
+    img.setAttribute(
+      'style',
+      'max-height: 2.5em; max-width: 2.5em; border-radius: 0.5em; margin: auto;'
+    )
+    UI.widgets.setImage(img, creator)
+    td1.appendChild(img)
   } else {
     creatorAndDate(td1, creator, UI.widgets.shortDate(dateString), message)
   }

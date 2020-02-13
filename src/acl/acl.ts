@@ -9,8 +9,8 @@ import { AgentMapMap, ComboList } from './types'
 // //////////////////////////////////// Solid ACL non-UI functions
 //
 
-// Take the "defaltForNew" ACL and convert it into the equivlent ACL
-// which the resource would have had.  Return it as a new separate store.
+// Take the "defaultForNew" ACL and convert it into the equivlent ACL
+// which the resource would have had. Return it as a new separate store.
 
 export function adoptACLDefault (
   doc: $rdf.NamedNode,
@@ -248,7 +248,7 @@ export function makeACLGraphbyCombo (
   }
 }
 
-// Debugguing short strings for dumping ACL
+// Debugging short strings for dumping ACL
 // and who knows maybe in the UI
 //
 export function ACLToString (ac: AgentMapMap): string {
