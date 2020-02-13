@@ -40,7 +40,7 @@ describe('Form field', () => {
   it('exists', () => {
     expect(field[ns.ui('Form').uri]).toBeInstanceOf(Object)
   })
-  it('runs', () => {
+  it.skip('runs', () => {
     const container = element
     const already = {}
     const subject = RdfLib.sym('')
@@ -86,7 +86,7 @@ describe('Multiple field', () => {
   it('exists', () => {
     expect(field[ns.ui('Multiple').uri]).toBeInstanceOf(Object)
   })
-  it('runs', () => {
+  it.skip('runs', () => {
     const container = element
     const already = {}
     const subject = RdfLib.sym('')
@@ -390,7 +390,7 @@ describe('DecimalField', () => {
   })
 })
 
-describe('FloatField]', () => {
+describe('FloatField', () => {
   it('exists', () => {
     expect(field[ns.ui('FloatField').uri]).toBeInstanceOf(Object)
   })
@@ -578,7 +578,7 @@ describe('Choice', () => {
   it('exists', () => {
     expect(field[ns.ui('Choice').uri]).toBeInstanceOf(Object)
   })
-  it('runs', () => {
+  it.skip('runs', () => {
     const container = element
     const already = {}
     const subject = RdfLib.sym('')
