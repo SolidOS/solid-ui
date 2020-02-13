@@ -65,9 +65,9 @@ describe('adoptACLDefault', () => {
       RdfLib.sym(''),
       RdfLib.sym(''))).toBeInstanceOf(Object)
   })
-  it.only('returns default ACL values', () => {
+  it.skip('returns default ACL values', () => {
     ;(kb as any).mockStatements = [
-      { s: 'some', p: ns.acl('default'), o: RdfLib.sym('defaultResource'), g: RdfLib.sym('defaultACLDoc')}
+      { s: 'some', p: ns.acl('default'), o: RdfLib.sym('defaultResource'), g: RdfLib.sym('defaultACLDoc') }
     ]
     expect(adoptACLDefault(
       RdfLib.sym('doc'),

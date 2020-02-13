@@ -1,9 +1,21 @@
-import Store from '../../src/store'
+import kb from '../../src/store'
 jest.mock('rdflib')
 jest.mock('solid-auth-client')
 
-describe('Store', () => {
+describe('kb (main global IndexedFormula instance)', () => {
   it('exists', () => {
-    expect(JSON.stringify(Store)).toEqual('{"fetcher":{},"updater":{}}')
+    expect(kb).toBeInstanceOf(Object)
+  })
+})
+
+describe('kb.fetcher', () => {
+  it('exists', () => {
+    expect((kb as any).fetcher).toBeInstanceOf(Object)
+  })
+})
+
+describe('kb.updater', () => {
+  it('exists', () => {
+    expect((kb as any).updater).toBeInstanceOf(Object)
   })
 })
