@@ -157,6 +157,16 @@ describe('notepad', () => {
       'Warning: must be logged in for pad to be edited'
     )
   })
+  it('status area ...', () => {
+    const padDoc = null
+    const subject = null
+    const me = { uri: 'https://sharonstrats.inrupt.net/profile/card#me' }
+    const options = { statusArea: document.createElement('p') }
+
+    expect(
+      (pad as any).notepad(dom, padDoc, subject, me, options)
+    ).resolves.toMatchInlineSnapshot()
+  })
   // @@ TODO the code itself seems to error where it says 'new'
   // need to research further
   it('should throw an error when me is provided but no uri', () => {

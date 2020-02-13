@@ -8,9 +8,9 @@ describe('renderTableViewPane', () => {
   it('exists', () => {
     expect(renderTableViewPane).toBeInstanceOf(Function)
   })
-  it.skip('runs', () => {
-    const doc = null
+  /*
+  it('runs', () => {
     const options = { sourceDocument: null, tableClass: null, query: null }
-    expect(renderTableViewPane(dom, options)).toEqual(undefined)
-  })
+    expect(renderTableViewPane(document, options)).toEqual(undefined)
+  }) */
 })
