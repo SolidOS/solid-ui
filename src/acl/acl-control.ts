@@ -5,10 +5,6 @@
  * @packageDocumentation
  */
 
-// See https://coshx.com/preventing-drag-and-drop-disasters-with-a-chrome-userscript
-// Without this dropping anything onto a browser page will cause chrome etc to jump to diff page
-// throwing away all the user's work.
-
 import ns from '../ns'
 import utils from '../utils.js'
 import { getACLorDefault, getProspectiveHolder } from './acl'
@@ -111,9 +107,17 @@ export function shortNameForFolder (x: NamedNode): string {
     str = str.slice(slash + 1)
   }
   // Return the folder's filename, or '/' if nothing found
+  // (but see https://github.com/solid/solid-ui/issues/196
+  // regarding whether this happens at the domain root or
+  // not)
   return str || '/'
 }
 
+/**
+ * A wrapper that retrieves ACL data and uses it
+ * to render an [[AccessController]] component.
+ * Presumably the '5' is a version number?
+ */
 export function ACLControlBox5 (
   subject: NamedNode,
   context: DataBrowserContext,

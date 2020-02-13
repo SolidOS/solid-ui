@@ -10,6 +10,9 @@ import { DataBrowserContext } from 'pane-registry'
 import { shortNameForFolder } from './acl-control'
 import utils from '../utils.js'
 
+/**
+ * Rendered HTML component used in the databrowser's Sharing pane.
+ */
 export class AccessController {
   public mainCombo: AccessGroups
   public defaultsCombo: AccessGroups | null
