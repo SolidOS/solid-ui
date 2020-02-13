@@ -1004,7 +1004,7 @@ export function checkUser<T> (
   }
 
   // doc = kb.any(doc, ns.link('userMirror')) || doc
-  console.log(solidAuthClient)
+
   return solidAuthClient
     .currentSession()
     .then(webIdFromSession)

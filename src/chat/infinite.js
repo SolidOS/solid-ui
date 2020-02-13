@@ -1,7 +1,7 @@
 //  Common code for a discussion are a of messages about something
 //   This version runs over a series of files for different time periods
 //
-//  Parameters for the whole chat like its title are stored on
+//  Parameters for the whole chat like its title are stred on
 //  index.ttl#this and the chats messages are stored in YYYY/MM/DD/chat.ttl
 //
 /* global alert $rdf */
@@ -165,12 +165,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       // if (text) field.value = text  No - don't destroy half-finsihed user input
 
       sts.push(
-        new $rdf.Statement(
-          chatChannel,
-          ns.wf('message'),
-          message,
-          chatDocument
-        )
+        new $rdf.Statement(chatChannel, ns.wf('message'), message, chatDocument)
       )
       sts.push(
         new $rdf.Statement(message, ns.sioc('content'), content, chatDocument)
@@ -209,7 +204,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       ) {
         console.log(
           '@@@ SERVER_MKDIRP_BUG: Should only happen once: create chat file: ' +
-          chatDocument
+            chatDocument
         )
         await createIfNotExists(chatDocument)
       }
@@ -365,7 +360,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     })
 
     // eslint-disable-next-line space-in-parens
-    for (ele = messageTable.firstChild; ele;) {
+    for (ele = messageTable.firstChild; ele; ) {
       ele2 = ele.nextSibling
       if (ele.AJAR_subject && !stored[ele.AJAR_subject.uri]) {
         messageTable.removeChild(ele)
@@ -407,7 +402,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     date = await dateFolder.loadPrevious(date, backwards) // backwards
     console.log(
       `insertPreviousMessages: from ${
-      backwards ? 'backwards' : 'forwards'
+        backwards ? 'backwards' : 'forwards'
       } loadPrevious: ${date}`
     )
     if (!date && !backwards && !liveMessageTable) {
@@ -753,20 +748,6 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
   var latest = { messageTable: null }
 
   var lock = false
-
-  function loadBackwardsMessages (magicZone) {
-    return (div.scrollTop < magicZone &&
-      earliest.messageTable &&
-      !earliest.messageTable.initial &&
-      earliest.messageTable.extendBackwards)
-  }
-  function loadForwardMessages (magicZone) {
-    return (options.selectedMessage && // we started in the middle not at the bottom
-      div.scrollHeight - div.scrollTop - div.clientHeight < magicZone && // we are scrolled right to the bottom
-      latest.messageTable &&
-      !latest.messageTable.final && // there is more data to come
-      latest.messageTable.extendForwards)
-  }
   async function loadMoreWhereNeeded (event, fixScroll) {
     if (lock) return
     lock = true
@@ -777,7 +758,10 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     var done
 
     while (
-      loadBackwardsMessages(magicZone)
+      div.scrollTop < magicZone &&
+      earliest.messageTable &&
+      !earliest.messageTable.initial &&
+      earliest.messageTable.extendBackwards
     ) {
       const scrollBottom = div.scrollHeight - div.scrollTop
       console.log('infinite scroll: adding above: top ' + div.scrollTop)
@@ -789,12 +773,16 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       if (done) break
     }
     while (
-      loadForwardMessages(magicZone)
+      options.selectedMessage && // we started in the middle not at the bottom
+      div.scrollHeight - div.scrollTop - div.clientHeight < magicZone && // we are scrolled right to the bottom
+      latest.messageTable &&
+      !latest.messageTable.final && // there is more data to come
+      latest.messageTable.extendForwards
     ) {
       const scrollTop = div.scrollTop
       console.log(
         'infinite scroll: adding below: bottom: ' +
-        (div.scrollHeight - div.scrollTop - div.clientHeight)
+          (div.scrollHeight - div.scrollTop - div.clientHeight)
       )
       done = await latest.messageTable.extendForwards() // then add more data on the bottom
       if (freeze) {
