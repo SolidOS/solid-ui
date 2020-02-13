@@ -1,5 +1,5 @@
 import { DataBrowserContext } from 'pane-registry'
-import { sym, graph } from 'rdflib'
+import { sym, graph, namedNode } from 'rdflib'
 import { JSDOM } from 'jsdom'
 import {
   ACLControlBox5,
@@ -40,5 +40,27 @@ describe('shortNameForFolder', () => {
   })
   it('runs', () => {
     expect(shortNameForFolder(sym(''))).toEqual('uri')
+  })
+  it('works with trailing slashes', () => {
+    expect(shortNameForFolder(namedNode('http://example.com/some/folder/'))).toEqual('folder')
+  })
+
+  it('works without trailing slashes', () => {
+    expect(shortNameForFolder(namedNode('http://example.com/some/folder'))).toEqual('folder')
+  })
+
+  it('works with domain root with trailing slash', () => {
+    expect(shortNameForFolder(namedNode('http://example.com/'))).toEqual('example.com')
+  })
+
+  it('works with domain root without trailing slash', () => {
+    expect(shortNameForFolder(namedNode('http://example.com'))).toEqual('example.com')
+  })
+
+  it('works with protocol root', () => {
+    // Note: I'm not certain this is actually by design, it might be
+    // that the intended behaviour was that the domain root would get
+    // labeled '/'. See https://github.com/solid/solid-ui/issues/196
+    expect(shortNameForFolder(namedNode('http://'))).toEqual('/')
   })
 })

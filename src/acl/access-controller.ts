@@ -1,3 +1,8 @@
+/**
+ * src/acl/access-controller.ts contains the [[AccessController]] class
+ * @packageDocumentation
+ */
+
 import { adoptACLDefault, getProspectiveHolder, makeACLGraphbyCombo, sameACL } from './acl'
 import { graph, NamedNode, UpdateManager } from 'rdflib'
 import { AccessGroups } from './access-groups'

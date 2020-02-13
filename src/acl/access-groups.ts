@@ -1,3 +1,9 @@
+/**
+ * src/acl/access-groups.ts contains the [[AccessGroups]]
+ * and [[AccessGroupsOptions]] classes
+ * @packageDocumentation
+ */
+
 import { IndexedFormula, NamedNode, sym } from 'rdflib'
 import { ACLbyCombination, readACL } from './acl'
 import widgets from '../widgets'
