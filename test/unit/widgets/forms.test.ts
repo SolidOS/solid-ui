@@ -37,8 +37,8 @@ describe('Form field', () => {
   it('exists', () => {
     expect(field[ns.ui('Form').uri]).toBeInstanceOf(Object)
   })
-  /*
-  it('runs', () => {
+
+  it.skip('runs', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = RdfLib.sym('')
@@ -55,7 +55,7 @@ describe('Form field', () => {
       form,
       store,
       callbackFunction
-    ) 
+    )
     // @@ TODO goes to comment instead of Form...
     expect(
       field[ns.ui('Form').uri](
@@ -79,7 +79,7 @@ describe('Form field', () => {
   })
   // @@ TODO check this further what test could I use to make sure
   // to test that the form gets added but obviously not in the container passed in
- /* it('still returns an element if the container is null', () => {
+  it.skip('still returns an element if the container is null', () => {
     // debugger
     const container = null
     const already = {}
@@ -106,9 +106,9 @@ describe('Form field', () => {
         </h3>
       </div>
     `)
-  }) */
+  })
   // @@ TODO need to double check proper subjects and what gets returned
-  /* it('returns.. if the subject has already been processed...', () => {
+  it.skip('returns.. if the subject has already been processed...', () => {
     const dubSubject = RdfLib.sym('subject')
     const container = document.createElement('container')
     const already = { dubSubject }
@@ -135,7 +135,7 @@ describe('Form field', () => {
         </h3>
       </div>
     `)
-  }) */
+  })
 })
 
 describe('Options field', () => {
@@ -167,8 +167,8 @@ describe('Multiple field', () => {
   it('exists', () => {
     expect(field[ns.ui('Multiple').uri]).toBeInstanceOf(Object)
   })
-  /*
-  it('runs', () => {
+
+  it.skip('runs', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = RdfLib.sym('')
@@ -194,7 +194,7 @@ describe('Multiple field', () => {
         </h3>
       </div>
     `)
-  }) */
+  })
 })
 
 describe('fieldParams', () => {
@@ -1060,8 +1060,8 @@ describe('Choice', () => {
   it('exists', () => {
     expect(field[ns.ui('Choice').uri]).toBeInstanceOf(Object)
   })
-  /*
-  it('runs', () => {
+
+  it.skip('runs', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = RdfLib.sym('')
@@ -1087,7 +1087,7 @@ describe('Choice', () => {
         </h3>
       </div>
     `)
-  }) */
+  })
 })
 
 describe('Comment params', () => {
@@ -1426,10 +1426,10 @@ describe('newThing', () => {
   it('runs', () => {
     expect(newThing(RdfLib.sym(''))).toBeInstanceOf(Object)
   })
-  /* need to also mock or figure out doc - which is a NamedNode
-  it('returns the correct .', () => {
+  // need to also mock or figure out doc - which is a NamedNode
+  it.skip('returns the correct .', () => {
     const Date = jest.fn()
     Date.mockReturnValueOnce('Thu Feb 06 2020 19:42:59 GMT+1100')
     expect(newThing('doc').toBe(''))
-  }) */
+  })
 })

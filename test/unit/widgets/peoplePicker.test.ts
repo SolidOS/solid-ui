@@ -66,7 +66,6 @@ describe('PeoplePicker.render', () => {
       groupPickedCb,
       options
     )
-    debugger
     peoplePicker.render()
     expect(spy).toHaveBeenCalledTimes(2)
   })
@@ -81,8 +80,7 @@ describe('PeoplePicker.render', () => {
       groupPickedCb,
       options
     )
-    // debugger
-    // peoplePicker.render()
+
     expect(peoplePicker.render()).toMatchInlineSnapshot(`
       PeoplePicker {
         "element": <p>

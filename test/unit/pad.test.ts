@@ -2,7 +2,6 @@ import { JSDOM } from 'jsdom'
 import * as RdfLib from 'rdflib'
 import * as pad from '../../src/pad'
 const widgets = require('../../src/widgets')
-const store = require('../../src/store')
 
 jest.mock('rdflib')
 jest.mock('solid-auth-client')
@@ -13,6 +12,8 @@ describe('lightColorHash', () => {
   it('exists', () => {
     expect((pad as any).lightColorHash).toBeInstanceOf(Function)
   })
+  // #ffffff is specifically stated in the code to be returned
+  // when there is no author
   it('returns #ffffff when an author is not provided', () => {
     expect((pad as any).lightColorHash(null)).toBe('#ffffff')
   })
@@ -44,7 +45,7 @@ describe('renderPartipants', () => {
     // kb is a store
     const table = dom.createElement('table')
     const padDoc = null
-    debugger
+
     const subject = RdfLib.sym('participation')
     const me = 'webId'
     const options = {}
@@ -140,8 +141,8 @@ describe('notepad', () => {
       />
     `)
   })
-  /*
-  it('should log error that you need to be logged in for pad to be edited', () => {
+
+  it.skip('should log error that you need to be logged in for pad to be edited', () => {
     const padDoc = null
     const subject = null
     const me = null
@@ -156,9 +157,9 @@ describe('notepad', () => {
     expect(console.log).toBeCalledWith(
       'Warning: must be logged in for pad to be edited'
     )
-  }) */
-  /*
-  it('status area ...', () => {
+  })
+
+  it.skip('status area ...', () => {
     const padDoc = null
     const subject = null
     const me = { uri: 'https://sharonstrats.inrupt.net/profile/card#me' }
@@ -168,11 +169,11 @@ describe('notepad', () => {
       (pad as any).notepad(dom, padDoc, subject, me, options)
     ).resolves.toMatchInlineSnapshot()
   })
-  */
+
   // @@ TODO the code itself seems to error where it says 'new'
   // need to research further
-  /*
-  it('should throw an error when me is provided but no uri', () => {
+
+  it.skip('should throw an error when me is provided but no uri', () => {
     const padDoc = null
     const subject = null
     const me = {}
@@ -181,5 +182,5 @@ describe('notepad', () => {
     expect(
       (pad as any).notepad(dom, padDoc, subject, me, options)
     ).resolves.toBe({})
-  }) */
+  })
 })
