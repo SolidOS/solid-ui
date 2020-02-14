@@ -46,7 +46,7 @@ function newThingUI (createContext, dataBrowserContext, thePanes) {
   // noun_34653_green.svg = green plus
   star.setAttribute('src', UI.icons.iconBase + 'noun_34653_green.svg')
   star.setAttribute('style', iconStyle)
-  star.setAttribute('title', 'Add another tool to the meeting')
+  star.setAttribute('title', 'Add another tool')
 
   var complain = function complain (message) {
     var pre = div.appendChild(dom.createElement('pre'))
