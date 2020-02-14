@@ -7,12 +7,23 @@ import {
   Group,
   GroupBuilder
 } from '../../../src/widgets/peoplePicker'
+import { resolve } from 'dns'
+import { SolidAuth } from 'solid-auth-client'
 jest.mock('rdflib')
 jest.mock('solid-auth-client')
+const kb = require('../../../src/store')
 // jest.mock('../../../src/store')
 
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 const element = dom.createElement('div')
+
+async function getMyWebId(): Promise<string | null> {
+  const currentSession = await SolidAuth.currentSession()
+  if (!currentSession) {
+    return null
+  }
+  return currentSession.webId
+}
 
 describe('PeoplePicker', () => {
   it('exists', () => {
@@ -35,7 +46,6 @@ describe('PeoplePicker.render', () => {
       groupPickedCb,
       options
     )
-    peoplePicker.render()
     expect(peoplePicker.render()).toMatchInlineSnapshot(`
       PeoplePicker {
         "element": <p>
@@ -53,6 +63,50 @@ describe('PeoplePicker.render', () => {
       }
     `)
   })
+  // @@ TODO can't seem to get the findAddressBook to return anything even
+  // when giving a typeIndex.  I am certain the typeIndex would be incorrect however
+  // I'm not sure of the correct one
+  // I also added getMyWebId to attempt to login this was just scrambling though
+  // not sure if this is what I should be doing
+  it.skip('.. type index ...', () => {
+    const webId = getMyWebId()
+
+    const typeIndex = 'publicTypeIndex'
+    const groupPickedCb = () => {}
+    const options = { selectedGroup: false }
+    const element = document.createElement('p')
+    const peoplePicker = new PeoplePicker(
+      element,
+      typeIndex,
+      groupPickedCb,
+      options
+    )
+    const spyAny = jest.spyOn(kb, 'any').mockImplementation(() => {
+      return resolve('book', () => {
+        return 'error'
+      })
+    })
+    // const spyLoad = jest.spyOn(kb, 'fetcher.load').mockResolvedValue('book')
+    expect(peoplePicker.render()).toMatchInlineSnapshot(`
+PeoplePicker {
+  "element": <p>
+    <div
+      style="max-width: 350px; min-height: 200px; outline: 1px solid black; display: flex;"
+    />
+  </p>,
+  "groupPickedCb": [Function],
+  "onSelectGroup": [Function],
+  "options": Object {
+    "selectedGroup": false,
+  },
+  "selectedgroup": undefined,
+  "typeIndex": "publicTypeIndex",
+}
+`)
+    expect(spyAny).toBeCalled()
+    //  expect(spyLoad).toBeCalled()
+  })
+
   it('create Element is called .. ', () => {
     const spy = jest.spyOn(document, 'createElement')
     const typeIndex = {}

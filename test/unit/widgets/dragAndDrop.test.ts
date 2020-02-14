@@ -1,7 +1,11 @@
 import * as RdfLib from 'rdflib'
 import { JSDOM } from 'jsdom'
 
-import { makeDropTarget, makeDraggable, uploadFiles } from '../../../src/widgets/dragAndDrop'
+import {
+  makeDropTarget,
+  makeDraggable,
+  uploadFiles
+} from '../../../src/widgets/dragAndDrop'
 jest.mock('rdflib')
 jest.mock('solid-auth-client')
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
@@ -14,6 +18,23 @@ describe('makeDropTarget', () => {
   it('runs', () => {
     const handler = () => {}
     expect(makeDropTarget(element, handler, handler)).toEqual(undefined)
+  })
+  it('returns undefined when given an element ', () => {
+    const element = document.createElement('textarea')
+    const handler = () => {}
+    makeDropTarget(element, handler, handler)
+    const event = document.createEvent('HTMLEvents')
+    console.log(event)
+    event.initEvent('dragover', true, true)
+    // event.dataTransfer = () => {}
+    // element.dispatchEvent(event)
+    expect(element.dispatchEvent(event)).toReturn()
+    debugger
+    // const event = new window.DragEvent
+    //  window.dispatchEvent(event)
+    expect(makeDropTarget(element, handler, handler)).toMatchInlineSnapshot(
+      `undefined`
+    )
   })
 })
 
@@ -37,6 +58,8 @@ describe('uploadFiles', () => {
     const fileBase = ''
     const imageBase = ''
     const successHandler = () => {}
-    expect(uploadFiles(RdfLib.fetcher, files, fileBase, imageBase, successHandler)).toEqual(undefined)
+    expect(
+      uploadFiles(RdfLib.fetcher, files, fileBase, imageBase, successHandler)
+    ).toEqual(undefined)
   })
 })

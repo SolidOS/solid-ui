@@ -1,4 +1,5 @@
 module.exports = {
   verbose: true,
-  prettierPath: 'prettier'
+  prettierPath: 'prettier',
+  coveragePathIgnorePatterns: ['src/test/*.js']
 }
