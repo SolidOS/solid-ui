@@ -314,7 +314,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
         UI.media.cameraButton(dom, kb, getImageDoc, tookPicture)
       )
 
-      UI.pad.recordParticipation(chatChannel, chatChannel.doc()) // participation =
+      UI.participation.recordParticipation(chatChannel, chatChannel.doc()) // participation =
     } // turn on inpuut
 
     const context = { div: middle, dom: dom }
