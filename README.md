@@ -14,12 +14,13 @@ Use:
 } from 'solid-ui'
 
 ```
+See the ['examples' folder](https://github.com/solid/solid-ui/tree/examples/examples)
 
 This has been a place to put any functionality from solid views which has been generalized to be usable in other views.
 
 - Authentication UI: manage the user's logged in/out state.
-- Discovery: finding the users stuff, and leaving records of new things
-- Preferences: UI fo rmanaging a user's preefrences with two axes of defaults
+- Discovery: finding the user's stuff, and leaving records of new things
+- Preferences: UI for managing a user's preferences with two axes of defaults
 - An Access Control List widget for Solid ACL system
 - Acess Control Logic
 - Create a new object from modules/extensions which have registered their ability to create things
@@ -31,11 +32,11 @@ This has been a place to put any functionality from solid views which has been g
 
 Some of the larger controls include:
 
-- A chat widget: add discussion to any object. Infinte scroll, embedded images, social reactions, etc etc
+- A chat widget: add discussion to any object. Infinite scroll, embedded images, social reactions, etc etc
 - A people picker widget for choosing a set of people or an existing group
-- A general purpose table display with built-in facetted browsing
-- A two-dimentional matrix of editable live data extends in both domension.
-- A notepad of shared notes for real-time collaboration.
+- A general purpose table display with built-in faceted browsing
+- A two-dimentional matrix of editable live data that extends in both dimensions.
+- A notepad of shared notes for real-time collaboration
 - Drag and drop code for linking things and uploading files
 - A set of tabs for holding other widgets and arbitrary UI elements
 
