@@ -1,11 +1,10 @@
-import { JSDOM } from 'jsdom'
 import { AddAgentButtons } from '../../../src/acl/add-agent-buttons'
 import { instantiateAccessGroups } from '../helpers/instantiateAccessGroups'
 // import { button } from '../../../src/widgets'
 
 jest.mock('rdflib')
 jest.mock('solid-auth-client')
-const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
+
 // jest.mock('../../../src/widgets')
 // button.mockReturnValue(document.createElement('button'))
 

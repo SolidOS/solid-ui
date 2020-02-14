@@ -1,5 +1,5 @@
-import { AccessGroups, AccessGroupsOptions } from '../../../src/acl/access-groups'
-import { NamedNode, IndexedFormula, graph } from 'rdflib'
+import { AccessGroups } from '../../../src/acl/access-groups'
+import { IndexedFormula, graph } from 'rdflib'
 import { instantiateAccessGroups } from '../helpers/instantiateAccessGroups'
 
 jest.mock('rdflib')

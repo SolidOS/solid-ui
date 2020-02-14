@@ -400,40 +400,40 @@ function deleteButtonWithCheck (
   img.setAttribute('src', minusIconURI) //  plus sign
   img.setAttribute('style', 'margin: 0.2em; width: 1em; height:1em')
   img.title = 'Remove this ' + noun
-  var delButton = img
+  var deleteButtonElt = img
 
-  container.appendChild(delButton)
+  container.appendChild(deleteButtonElt)
   container.setAttribute('class', 'hoverControl') // See tabbedtab.css (sigh global CSS)
-  delButton.setAttribute('class', 'hoverControlHide')
+  deleteButtonElt.setAttribute('class', 'hoverControlHide')
   // delButton.setAttribute('style', 'color: red; margin-right: 0.3em; foat:right; text-align:right')
-  delButton.addEventListener(
+  deleteButtonElt.addEventListener(
     'click',
     function (_event) {
-      container.removeChild(delButton) // Ask -- are you sure?
-      var cancelButton = dom.createElement('button')
+      container.removeChild(deleteButtonElt) // Ask -- are you sure?
+      var cancelButtonElt = dom.createElement('button')
       // cancelButton.textContent = 'cancel'
-      cancelButton.setAttribute('style', UI.style.buttonStyle)
-      var img = cancelButton.appendChild(dom.createElement('img'))
+      cancelButtonElt.setAttribute('style', UI.style.buttonStyle)
+      var img = cancelButtonElt.appendChild(dom.createElement('img'))
       img.setAttribute('src', cancelIconURI)
       img.setAttribute('style', UI.style.buttonStyle)
 
-      container.appendChild(cancelButton).addEventListener(
+      container.appendChild(cancelButtonElt).addEventListener(
         'click',
         function (_event) {
-          container.removeChild(sureButton)
-          container.removeChild(cancelButton)
-          container.appendChild(delButton)
+          container.removeChild(sureButtonElt)
+          container.removeChild(cancelButtonElt)
+          container.appendChild(deleteButtonElt)
         },
         false
       )
-      var sureButton = dom.createElement('button')
-      sureButton.textContent = 'Delete ' + noun
-      sureButton.setAttribute('style', UI.style.buttonStyle)
-      container.appendChild(sureButton).addEventListener(
+      var sureButtonElt = dom.createElement('button')
+      sureButtonElt.textContent = 'Delete ' + noun
+      sureButtonElt.setAttribute('style', UI.style.buttonStyle)
+      container.appendChild(sureButtonElt).addEventListener(
         'click',
         function (_event) {
-          container.removeChild(sureButton)
-          container.removeChild(cancelButton)
+          container.removeChild(sureButtonElt)
+          container.removeChild(cancelButtonElt)
           deleteFunction()
         },
         false
@@ -441,7 +441,7 @@ function deleteButtonWithCheck (
     },
     false
   )
-  return delButton
+  return deleteButtonElt
 }
 
 /*  Make a button
@@ -514,16 +514,14 @@ function askName (dom, kb, container, predicate, klass, noun) {
 
     form.appendChild(dom.createElement('br'))
 
-    const cancelButtonElt = form.appendChild(cancelButton(dom))
-    cancelButtonElt.addEventListener('click', function (_event) {
+    form.appendChild(cancelButton(dom, function (_event) {
       form.parentNode.removeChild(form)
       resolve(null)
-    }, false)
+    }))
 
-    const continueButtonElt = form.appendChild(continueButton(dom))
-    continueButtonElt.addEventListener('click', function (_event) {
+    form.appendChild(continueButton(dom, function (_event) {
       gotName()
-    }, false)
+    }))
     namefield.focus()
   }) // Promise
 }
@@ -533,7 +531,7 @@ function askName (dom, kb, container, predicate, klass, noun) {
 // A little link icon
 //
 //
-function linkIcon (dom, subject, iconURI) {
+function linkIcon (dom, subject, iconURI?) {
   var anchor = dom.createElement('a')
   anchor.setAttribute('href', subject.uri)
   if (subject.uri.startsWith('http')) {
@@ -632,13 +630,13 @@ function attachmentList (dom, subject, div, options) {
       if (ok) {
         refresh()
       } else {
-        complain('Error deleting one: ' + errorBody)
+        complain(undefined, 'Error deleting one: ' + errorBody)
       }
     })
   }
   var createNewRow = function (target) {
     var theTarget = target
-    var opt = { noun: noun }
+    var opt: any = { noun: noun }
     if (modify) {
       opt.deleteFunction = function () {
         deleteAttachment(theTarget)
@@ -655,7 +653,7 @@ function attachmentList (dom, subject, div, options) {
   refresh()
 
   var droppedURIHandler = function (uris) {
-    var ins = []
+    var ins: any = []
     uris.map(function (u) {
       var target = $rdf.sym(u) // Attachment needs text label to disinguish I think not icon.
       console.log('Dropped on attachemnt ' + u) // icon was: UI.icons.iconBase + 'noun_25830.svg'
@@ -665,7 +663,7 @@ function attachmentList (dom, subject, div, options) {
       if (ok) {
         refresh()
       } else {
-        complain('Error adding one: ' + errorBody)
+        complain(undefined, 'Error adding one: ' + errorBody)
       }
     })
   }
@@ -694,12 +692,12 @@ function openHrefInOutlineMode (e) {
   var uri = target.getAttribute('href')
   if (!uri) return console.log('openHrefInOutlineMode: No href found!\n')
   const dom = window.document
-  if (dom.outlineManager) {
+  if ((dom as any).outlineManager) {
     // @@ TODO Remove the use of document as a global object
-    dom.outlineManager.GotoSubject(UI.store.sym(uri), true, undefined, true, undefined)
-  } else if (window && window.panes && window.panes.getOutliner) {
+    ;(dom as any).outlineManager.GotoSubject(UI.store.sym(uri), true, undefined, true, undefined)
+  } else if (window && (window as any).panes && (window as any).panes.getOutliner) {
     // @@ TODO Remove the use of window as a global object
-    window.panes
+    ;(window as any).panes
       .getOutliner()
       .GotoSubject(UI.store.sym(uri), true, undefined, true, undefined)
   } else {
@@ -762,7 +760,7 @@ function allClassURIs () {
  */
 
 function propertyTriage (kb) {
-  var possibleProperties = {}
+  var possibleProperties: any = {}
   // if (possibleProperties === undefined) possibleProperties = {}
   // var kb = UI.store
   var dp = {}
@@ -900,7 +898,7 @@ function selectorPanelRefresh (
 ) {
   var style0 =
     'border: 0.1em solid #ddd; border-bottom: none; width: 95%; height: 2em; padding: 0.5em;'
-  var selected = null
+  var selected: any = null
   list.innerHTML = ''
 
   var refreshItem = function (box, x) {
@@ -979,23 +977,20 @@ function selectorPanelRefresh (
 //
 //      Small compact views of things
 //
-const index = {}
-index.line = {} // Approx 80em
-index.twoLine = {} // Approx 40em * 2.4em
-
+let index: any = {}
 // ///////////////////////////////////////////////////////////////////////////
 // We need these for anything which is a subject of an attachment.
 //
 // These should be moved to type-dependeent UI code. Related panes maybe
 
-index.twoLine[''] = function (dom, x) {
+function twoLineDefault (dom, x) {
   // Default
   var box = dom.createElement('div')
   box.textContent = utils.label(x)
   return box
 }
 
-index.twoLine.widgetForClass = function (c) {
+function twoLineWidgetForClass (c) {
   var widget = index.twoLine[c.uri]
   var kb = UI.store
   if (widget) return widget
@@ -1007,7 +1002,7 @@ index.twoLine.widgetForClass = function (c) {
   return index.twoLine['']
 }
 
-index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction'] = function (dom, x) {
+function twoLineTransaction (dom, x) {
   var failed = ''
   var enc = function (p) {
     var y = UI.store.any(x, UI.ns.qu(p))
@@ -1032,7 +1027,7 @@ index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction'] = function (
   return box
 }
 
-index.twoLine['http://www.w3.org/ns/pim/trip#Trip'] = function (
+function twoLineTrip (
   dom,
   x
 ) {
@@ -1138,6 +1133,17 @@ function fileUploadButtonDiv (
   )
   dragAndDrop.makeDropTarget(buttonElt, null, droppedFileHandler) // Can also just drop on button
   return div
+}
+
+index = {
+  line: { // Approx 80em
+  },
+  twoLine: { // Approx 40em * 2.4em
+    '': twoLineDefault,
+    'http://www.w3.org/2000/10/swap/pim/qif#Transaction': twoLineTransaction,
+    'http://www.w3.org/ns/pim/trip#Trip': twoLineTrip,
+    widgetForClass: twoLineWidgetForClass
+  }
 }
 
 module.exports = {
