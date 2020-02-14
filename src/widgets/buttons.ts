@@ -16,13 +16,14 @@ var UI = {
   // widgets: widgets // @@
 }
 
+const utils = require('../utils')
+
 const error = require('./error')
 const dragAndDrop = require('./dragAndDrop')
 
 const cancelIconURI = UI.icons.iconBase + 'noun_1180156.svg' // black X
 const checkIconURI = UI.icons.iconBase + 'noun_1180158.svg' // green checkmark; Continue
 
-const utils = require('../utils')
 function getStatusArea (context) {
   var box = context.statusArea || context.div || null
   if (box) return box
