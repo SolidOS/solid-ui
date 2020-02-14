@@ -1,11 +1,13 @@
-/* global $rdf */
+if (!window.UI) {
+  window.alert('Please run "npm install && npm run build" in your repo root first.')
+}
+window.$rdf = UI.rdf
 
 document.addEventListener('DOMContentLoaded', function () {
   /// ///////////////////////////////////////////
 
   var kb = UI.store
   var dom = document
-  window.$rdf = UI.rdf
 
   var ICAL = $rdf.Namespace('http://www.w3.org/2002/12/cal/ical#')
   var SCHED = $rdf.Namespace('http://www.w3.org/ns/pim/schedule#')

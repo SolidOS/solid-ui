@@ -6,7 +6,9 @@ User Interface widgets and utilities for Solid
 
 These are HTML5 widgets which connect to a solid store. Building blocks for solid-based apps.
 
-Use:
+## Getting started
+### In npm-based projects
+When including solid-ui in an npm-based project, you can use it with:
 
 ```
   import { ns, rdf,  acl, aclControl, authn, create, dom, icons, log, matrix, media,
@@ -14,8 +16,18 @@ Use:
 } from 'solid-ui'
 
 ```
-See the ['examples' folder](https://github.com/solid/solid-ui/tree/examples/examples)
+### Directly in a webpage
+Clone this repo, and in the repo root run:
 
+* npm install
+* npm run build
+
+This will generate a `lib/` folder containing, among other artifacts, `lib/webpack-bundle.js`.
+Now run `npx serve` and go to http://localhost:5000/examples/ with your browser to see some examples.
+See the ['examples' folder](https://github.com/solid/solid-ui/tree/examples/examples) for the
+source code of those examples.
+
+## Overview
 This has been a place to put any functionality from solid views which has been generalized to be usable in other views.
 
 - Authentication UI: manage the user's logged in/out state.
