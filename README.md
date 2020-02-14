@@ -31,13 +31,25 @@ While viewing one of those examples, you can open the web console in your browse
 try how you can create a button:
 ```js
 const solidLogo = 'https://solidproject.org/assets/img/solid-emblem.svg'
-const exampleFolder = 'https://example-user.inrupt.net/public/public-control/'
 const myButton = UI.widgets.button(document, solidLogo, 'test', () => window.alert('clicked!'))
 UI.widgets.clearElement(document.body)
 document.body.appendChild(myButton)
+```
+
+Or a chat widget:
+```js
+const chatChannel = 'https://example-user.inrupt.net/public/example-chat/index.ttl#this'
+const chat = UI.infiniteMessageArea(document, UI.store, UI.rdf.namedNode(chatChannel))
+document.body.appendChild(chat)
+```
+
+Or a full ACL Control Box:
+```js
+const exampleFolder = 'https://example-user.inrupt.net/public/public-control/'
 const aclControlBox = UI.aclControl.ACLControlBox5(UI.rdf.namedNode(exampleFolder), { dom: document }, '', UI.store)
 document.body.appendChild(aclControlBox)
 ```
+
 See https://solid.github.io/solid-ui/Documentation/api/ for the API documentation.
 
 ## Overview
