@@ -27,6 +27,15 @@ Now run `npx serve` and go to http://localhost:5000/examples/ with your browser 
 See the ['examples' folder](https://github.com/solid/solid-ui/tree/examples/examples) for the
 source code of those examples.
 
+You can open the web console in your browser and try some of the following commands:
+```js
+const solidLogo = 'https://solidproject.org/assets/img/solid-emblem.svg'
+const myButton = UI.widgets.button(document, solidLogo, 'test', () => window.alert('clicked!'))
+UI.widgets.clearElement(document.body)
+document.body.appendChild(myButton)
+```
+See https://solid.github.io/solid-ui/Documentation/api/ for the API documentation.
+
 ## Overview
 This has been a place to put any functionality from solid views which has been generalized to be usable in other views.
 
