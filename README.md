@@ -15,6 +15,8 @@ Use:
 
 ```
 
+Please refer to the [API documentation](http://solid.github.io/solid-ui//Documentation/api/).
+
 This has been a place to put any functionality from solid views which has been generalized to be usable in other views.
 
 - Authentication UI: manage the user's logged in/out state.
