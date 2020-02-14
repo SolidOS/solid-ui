@@ -10,7 +10,7 @@ These are HTML5 widgets which connect to a solid store. Building blocks for soli
 ### In npm-based projects
 When including solid-ui in an npm-based project, you can use it with:
 
-```
+```js
   import { ns, rdf,  acl, aclControl, authn, create, dom, icons, log, matrix, media,
   messageArea, infiniteMessageArea, pad, preferences, store, style, table, tabs, utils, widgets, versionInfo
 } from 'solid-ui'
@@ -19,8 +19,8 @@ When including solid-ui in an npm-based project, you can use it with:
 ### Directly in a webpage
 Clone this repo, and in the repo root run:
 
-* npm install
-* npm run build
+* `npm install`
+* `npm run build`
 
 This will generate a `lib/` folder containing, among other artifacts, `lib/webpack-bundle.js`.
 Now run `npx serve` and go to http://localhost:5000/examples/ with your browser to see some examples.
