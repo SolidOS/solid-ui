@@ -27,12 +27,16 @@ Now run `npx serve` and go to http://localhost:5000/examples/ with your browser 
 See the ['examples' folder](https://github.com/solid/solid-ui/tree/examples/examples) for the
 source code of those examples.
 
-You can open the web console in your browser and try some of the following commands:
+While viewing one of those examples, you can open the web console in your browser and for instance
+try how you can create a button:
 ```js
 const solidLogo = 'https://solidproject.org/assets/img/solid-emblem.svg'
+const exampleFolder = 'https://example-user.inrupt.net/public/public-control/'
 const myButton = UI.widgets.button(document, solidLogo, 'test', () => window.alert('clicked!'))
 UI.widgets.clearElement(document.body)
 document.body.appendChild(myButton)
+const aclControlBox = UI.aclControl.ACLControlBox5(UI.rdf.namedNode(exampleFolder), { dom: document }, '', UI.store)
+document.body.appendChild(aclControlBox)
 ```
 See https://solid.github.io/solid-ui/Documentation/api/ for the API documentation.
 
