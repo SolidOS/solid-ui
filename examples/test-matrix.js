@@ -3,9 +3,9 @@
 document.addEventListener('DOMContentLoaded', function () {
   /// ///////////////////////////////////////////
 
-  var UI = require('mashlib')
   var kb = UI.store
   var dom = document
+  window.$rdf = UI.rdf
 
   var ICAL = $rdf.Namespace('http://www.w3.org/2002/12/cal/ical#')
   var SCHED = $rdf.Namespace('http://www.w3.org/ns/pim/schedule#')
