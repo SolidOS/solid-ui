@@ -120,6 +120,7 @@ export {
   messageArea,
   infiniteMessageArea,
   pad,
+  participation,
   preferences,
   store,
   style,

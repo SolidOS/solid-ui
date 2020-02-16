@@ -7,9 +7,6 @@
  * privacy level, nick name for the space, and so on.
  */
 
-/** @module UI.participation
- */
-
 const $rdf = require('rdflib')
 var participationModule = (module.exports = {})
 var UI = {
@@ -82,7 +79,7 @@ participationModule.renderPartipants = function (dom, table, padDoc, subject, me
  * @param {NamedNode} me - The logged in user
  *
  */
-UI.participationparticipationObject = function (subject, padDoc, me) {
+participationModule.participationObject = function (subject, padDoc, me) {
   return new Promise(function (resolve, reject) {
     if (!me) {
       throw new Error('Not user id')
@@ -100,11 +97,11 @@ UI.participationparticipationObject = function (subject, padDoc, me) {
     } else {
       var participation = UI.widgets.newThing(padDoc)
       var ins = [
-        UI.rdf.st(subject, ns.wf('participation'), participation, padDoc),
+        $rdf.st(subject, ns.wf('participation'), participation, padDoc),
 
-        UI.rdf.st(participation, ns.wf('participant'), me, padDoc),
-        UI.rdf.st(participation, ns.cal('dtstart'), new Date(), padDoc),
-        UI.rdf.st(
+        $rdf.st(participation, ns.wf('participant'), me, padDoc),
+        $rdf.st(participation, ns.cal('dtstart'), new Date(), padDoc),
+        $rdf.st(
           participation,
           ns.ui('backgroundColor'),
           UI.pad.lightColorHash(me),
@@ -130,7 +127,7 @@ UI.participationparticipationObject = function (subject, padDoc, me) {
  * @param {DOMNode} refreshable - A DOM element whose refresh() is to be called if the change works
  *
  */
-UI.participationrecordParticipation = function (subject, padDoc, refreshable) {
+participationModule.recordParticipation = function (subject, padDoc, refreshable) {
   var me = UI.authn.currentUser()
   if (!me) return // Not logged in
 
@@ -146,11 +143,11 @@ UI.participationrecordParticipation = function (subject, padDoc, refreshable) {
   } else {
     var participation = UI.widgets.newThing(padDoc)
     var ins = [
-      UI.rdf.st(subject, ns.wf('participation'), participation, padDoc),
+      $rdf.st(subject, ns.wf('participation'), participation, padDoc),
 
-      UI.rdf.st(participation, ns.wf('participant'), me, padDoc),
-      UI.rdf.st(participation, UI.ns.cal('dtstart'), new Date(), padDoc),
-      UI.rdf.st(
+      $rdf.st(participation, ns.wf('participant'), me, padDoc),
+      $rdf.st(participation, UI.ns.cal('dtstart'), new Date(), padDoc),
+      $rdf.st(
         participation,
         ns.ui('backgroundColor'),
         UI.pad.lightColorHash(me),
