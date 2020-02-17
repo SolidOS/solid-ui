@@ -1,3 +1,9 @@
+/**
+ * Contains the [[AccessGroups]]
+ * and [[AccessGroupsOptions]] classes
+ * @packageDocumentation
+ */
+
 import { IndexedFormula, NamedNode, sym } from 'rdflib'
 import { ACLbyCombination, readACL } from './acl'
 import widgets from '../widgets'
@@ -34,10 +40,17 @@ const EXPLANATION = {
   1: 'can read but not change information'
 }
 
+/**
+ * Type for the options parameter of [[AccessGroups]]
+ */
 export interface AccessGroupsOptions {
   defaults?: boolean
 }
 
+/**
+ * Renders the table of Owners, Editors, Posters, Submitters, Viewers
+ * for https://github.com/solid/userguide/blob/master/views/sharing/userguide.md
+ */
 export class AccessGroups {
   private readonly defaults: boolean
   public byCombo: ComboList

@@ -1,5 +1,9 @@
-/* global alert confirm */
+/**
+ * Functions related to chat and bookmarks
+ * @packageDocumentation
+ */
 
+/* global alert confirm */
 const UI = {
   authn: require('../authn/authn'),
   icons: require('../iconBase'),

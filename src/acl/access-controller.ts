@@ -1,3 +1,8 @@
+/**
+ * Contains the [[AccessController]] class
+ * @packageDocumentation
+ */
+
 import { adoptACLDefault, getProspectiveHolder, makeACLGraphbyCombo, sameACL } from './acl'
 import { graph, NamedNode, UpdateManager } from 'rdflib'
 import { AccessGroups } from './access-groups'
@@ -5,6 +10,9 @@ import { DataBrowserContext } from 'pane-registry'
 import { shortNameForFolder } from './acl-control'
 import utils from '../utils.js'
 
+/**
+ * Rendered HTML component used in the databrowser's Sharing pane.
+ */
 export class AccessController {
   public mainCombo: AccessGroups
   public defaultsCombo: AccessGroups | null

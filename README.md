@@ -50,6 +50,8 @@ const aclControlBox = UI.aclControl.ACLControlBox5(UI.rdf.namedNode(exampleFolde
 document.body.appendChild(aclControlBox)
 ```
 
+
+## Documentation
 See https://solid.github.io/solid-ui/Documentation/api/ for the API documentation.
 
 ## Overview

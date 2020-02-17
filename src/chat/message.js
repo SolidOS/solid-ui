@@ -1,3 +1,10 @@
+/**
+ * Contains the [[renderMessage]] function,
+ * along with [[elementForImageURI]],
+ * [[creatorAndDate]], and [[creatorAndDateHorizontal]]
+ * @packageDocumentation
+ */
+
 /* global $rdf */
 
 import { messageToolbar, sentimentStripLinked } from './messageTools'
@@ -24,6 +31,9 @@ const messageBodyStyle = UI.style.messageBodyStyle
 // const { messageToolbar, sentimentStripLinked } = require('./messageTools')
 const label = UI.utils.label
 
+/**
+ * HTML component for an image
+ */
 export function elementForImageURI (imageUri, options) {
   const img = dom.createElement('img')
   let height = '10'
@@ -62,6 +72,10 @@ function nick (person) {
   return '' + label(person)
 }
 
+/**
+ * Displays creator and date for a chat message
+ * inside the `td1` element
+ */
 export function creatorAndDate (td1, creator, date, message) {
   var nickAnchor = td1.appendChild(anchor(nick(creator), creator))
   if (creator.uri) {
@@ -76,6 +90,10 @@ export function creatorAndDate (td1, creator, date, message) {
   td1.appendChild(anchor(date, message))
 }
 
+/**
+ * Horizontally displays creator and date for a chat message
+ * inside the `td1` element
+ */
 export function creatorAndDateHorizontal (td1, creator, date, message) {
   var nickAnchor = td1.appendChild(anchor(label(creator), creator))
   if (creator.uri) {
@@ -92,8 +110,9 @@ export function creatorAndDateHorizontal (td1, creator, date, message) {
   td1.appendChild(dom.createElement('br'))
 }
 
-// BODY of renderMessage
-
+/**
+ * Renders a chat message inside a `messageTable`
+ */
 export function renderMessage (
   messageTable,
   bindings,

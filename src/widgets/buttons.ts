@@ -1,12 +1,11 @@
-/* UI Widgets such as buttons
+/**
+ * UI Widgets such as buttons
+ * @packageDocumentation
  */
+
 /* global alert */
 
 const $rdf = require('rdflib')
-
-module.exports = {}
-
-var buttons = {}
 
 var UI = {
   icons: require('../iconBase'),
@@ -42,6 +41,9 @@ function getStatusArea (context) {
   return null
 }
 
+/**
+ * Display an error message block
+ */
 function complain (context, err) {
   if (!err) return // only if error
   var ele = context.statusArea || context.div || getStatusArea(context)
@@ -50,31 +52,36 @@ function complain (context, err) {
   else alert(err)
 }
 
-buttons.complain = complain
-
 // var UI.ns = require('./ns.js')
 // var utilsModule = require('./utils')
 // var aclControlModule = require('./acl-control')
 
 // paneUtils = {}
 
-buttons.clearElement = function (ele) {
+/**
+ * Remove all the children of an HTML element
+ */
+function clearElement (ele) {
   while (ele.firstChild) {
     ele.removeChild(ele.firstChild)
   }
   return ele
 }
 
-// To figure out the log URI from the full URI used to invoke the reasoner
-buttons.extractLogURI = function (fullURI) {
+/**
+ * To figure out the log URI from the full URI used to invoke the reasoner
+ */
+function extractLogURI (fullURI) {
   var logPos = fullURI.search(/logFile=/)
   var rulPos = fullURI.search(/&rulesFile=/)
   return fullURI.substring(logPos + 8, rulPos)
 }
 
-// @@@ This needs to be changed to local timee
-//  noTime  - only give date, no time,
-buttons.shortDate = function (str, noTime) {
+/**
+ * @@@ TODO This needs to be changed to local time
+ * noTime  - only give date, no time
+ */
+function shortDate (str, noTime) {
   if (!str) return '???'
   var month = [
     'Jan',
@@ -110,7 +117,13 @@ buttons.shortDate = function (str, noTime) {
   }
 }
 
-buttons.formatDateTime = function (date, format) {
+/**
+ * Format a date and time
+ * @param date for instance `new Date()`
+ * @param format  for instance '{FullYear}-{Month}-{Date}T{Hours}:{Minutes}:{Seconds}.{Milliseconds}'
+ * @returns for instance '2000-01-15T23:14:23.002'
+ */
+function formatDateTime (date, format) {
   return format
     .split('{')
     .map(function (s) {
@@ -124,14 +137,23 @@ buttons.formatDateTime = function (date, format) {
     .join('')
 }
 
-buttons.timestamp = function () {
-  return buttons.formatDateTime(
+/**
+ * Get a string representation of the current time
+ * @returns for instance '2000-01-15T23:14:23.002'
+ */
+function timestamp () {
+  return formatDateTime(
     new Date(),
     '{FullYear}-{Month}-{Date}T{Hours}:{Minutes}:{Seconds}.{Milliseconds}'
   )
 }
-buttons.shortTime = function () {
-  return buttons.formatDateTime(
+
+/**
+ * Get a short string representation of the current time
+ * @returns for instance '23:14:23.002'
+ */
+function shortTime () {
+  return formatDateTime(
     new Date(),
     '{Hours}:{Minutes}:{Seconds}.{Milliseconds}'
   )
@@ -139,9 +161,10 @@ buttons.shortTime = function () {
 
 // ///////////////////// Handy UX widgets
 
-// Sets the best name we have and looks up a better one
-//
-buttons.setName = function (element, x) {
+/**
+ * Sets the best name we have and looks up a better one
+ */
+function setName (element, x) {
   var kb = UI.store
   var ns = UI.ns
   var findName = function (x) {
@@ -162,7 +185,7 @@ buttons.setName = function (element, x) {
 }
 
 // Set of suitable images
-buttons.imagesOf = function (x, kb) {
+function imagesOf (x, kb) {
   var ns = UI.ns
   return kb
     .each(x, ns.sioc('avatar'))
@@ -174,7 +197,7 @@ buttons.imagesOf = function (x, kb) {
 // Best logo or avater or photo etc to represent someone or some group etc
 //
 
-buttons.iconForClass = {
+const iconForClass = {
   // Potentially extendable by other apps, panes, etc
   // Relative URIs to the iconBase
   'solid:AppProviderClass': 'noun_144.svg', //  @@ classs name should not contain 'Class'
@@ -199,7 +222,7 @@ buttons.iconForClass = {
   'owl:Ontology': 'noun_classification_1479198.svg'
 }
 
-var tempSite = function (x) {
+function tempSite (x) {
   // use only while one in rdflib fails with origins 2019
   var str = x.uri.split('#')[0]
   var p = str.indexOf('//')
@@ -216,7 +239,7 @@ var tempSite = function (x) {
 /**
  * Find an image for this thing as a class
  */
-buttons.findImageFromURI = function findImageFromURI (x) {
+function findImageFromURI (x) {
   const iconDir = UI.icons.iconBase
 
   // Special cases from URI scheme:
@@ -251,7 +274,7 @@ buttons.findImageFromURI = function findImageFromURI (x) {
 
 /* Find something we have as explict image data for the thing
 */
-buttons.findImage = thing => {
+function findImage (thing) {
   const kb = UI.store
   const ns = UI.ns
   const iconDir = UI.icons.iconBase
@@ -274,10 +297,10 @@ buttons.findImage = thing => {
  * @return {Boolean} Are we happy with this icon?
  * Sets src AND STYLE of the image.
  */
-buttons._trySetImage = function _trySetImage (element, thing, iconForClassMap) {
+function trySetImage (element, thing, iconForClassMap) {
   const kb = UI.store
 
-  const explitImage = buttons.findImage(thing)
+  const explitImage = findImage(thing)
   if (explitImage) {
     element.setAttribute('src', explitImage)
     return true
@@ -291,7 +314,7 @@ buttons._trySetImage = function _trySetImage (element, thing, iconForClassMap) {
     // element.style.backgroundColor = '#eeffee' // pale green
     return true
   }
-  const schemeIcon = buttons.findImageFromURI(thing)
+  const schemeIcon = findImageFromURI(thing)
   if (schemeIcon) {
     element.setAttribute('src', schemeIcon)
     return true // happy with this -- don't look it up
@@ -312,23 +335,23 @@ buttons._trySetImage = function _trySetImage (element, thing, iconForClassMap) {
 // ToDo: Also add icons for *properties* like  home, work, email, range, domain, comment,
 //
 
-buttons.setImage = function (element, thing) { // 20191230a
+function setImage (element, thing) { // 20191230a
   const kb = UI.store
   const ns = UI.ns
 
   var iconForClassMap = {}
-  for (var k in buttons.iconForClass) {
+  for (var k in iconForClass) {
     const pref = k.split(':')[0]
     const id = k.split(':')[1]
     const klass = ns[pref](id)
-    iconForClassMap[klass.uri] = $rdf.uri.join(buttons.iconForClass[k], UI.icons.iconBase)
+    iconForClassMap[klass.uri] = $rdf.uri.join(iconForClass[k], UI.icons.iconBase)
   }
 
-  const happy = buttons._trySetImage(element, thing, iconForClassMap)
+  const happy = trySetImage(element, thing, iconForClassMap)
   if (!happy && thing.uri) {
     kb.fetcher.nowOrWhenFetched(thing.doc(), undefined, (ok) => {
       if (ok) {
-        buttons._trySetImage(element, thing, iconForClassMap)
+        trySetImage(element, thing, iconForClassMap)
       }
     })
   }
@@ -336,7 +359,7 @@ buttons.setImage = function (element, thing) { // 20191230a
 
 // If a web page then a favicon with a fallback to
 // See eg http://stackoverflow.com/questions/980855/inputting-a-default-image
-var faviconOrDefault = function (dom, x) {
+function faviconOrDefault (dom, x) {
   var image = dom.createElement('img')
   image.style = UI.style.iconStyle
   var isOrigin = function (x) {
@@ -355,7 +378,7 @@ var faviconOrDefault = function (dom, x) {
     res.appendChild(image) // fallback
     return res
   } else {
-    buttons.setImage(image, x)
+    setImage(image, x)
     return image
   }
 }
@@ -364,7 +387,7 @@ var faviconOrDefault = function (dom, x) {
 //
 //   @@ Supress check if command key held down?
 //
-buttons.deleteButtonWithCheck = function (
+function deleteButtonWithCheck (
   dom,
   container,
   noun,
@@ -378,40 +401,40 @@ buttons.deleteButtonWithCheck = function (
   img.setAttribute('src', minusIconURI) //  plus sign
   img.setAttribute('style', 'margin: 0.2em; width: 1em; height:1em')
   img.title = 'Remove this ' + noun
-  var delButton = img
+  var deleteButtonElt = img
 
-  container.appendChild(delButton)
+  container.appendChild(deleteButtonElt)
   container.setAttribute('class', 'hoverControl') // See tabbedtab.css (sigh global CSS)
-  delButton.setAttribute('class', 'hoverControlHide')
+  deleteButtonElt.setAttribute('class', 'hoverControlHide')
   // delButton.setAttribute('style', 'color: red; margin-right: 0.3em; foat:right; text-align:right')
-  delButton.addEventListener(
+  deleteButtonElt.addEventListener(
     'click',
     function (_event) {
-      container.removeChild(delButton) // Ask -- are you sure?
-      var cancelButton = dom.createElement('button')
+      container.removeChild(deleteButtonElt) // Ask -- are you sure?
+      var cancelButtonElt = dom.createElement('button')
       // cancelButton.textContent = 'cancel'
-      cancelButton.setAttribute('style', UI.style.buttonStyle)
-      var img = cancelButton.appendChild(dom.createElement('img'))
+      cancelButtonElt.setAttribute('style', UI.style.buttonStyle)
+      var img = cancelButtonElt.appendChild(dom.createElement('img'))
       img.setAttribute('src', cancelIconURI)
       img.setAttribute('style', UI.style.buttonStyle)
 
-      container.appendChild(cancelButton).addEventListener(
+      container.appendChild(cancelButtonElt).addEventListener(
         'click',
         function (_event) {
-          container.removeChild(sureButton)
-          container.removeChild(cancelButton)
-          container.appendChild(delButton)
+          container.removeChild(sureButtonElt)
+          container.removeChild(cancelButtonElt)
+          container.appendChild(deleteButtonElt)
         },
         false
       )
-      var sureButton = dom.createElement('button')
-      sureButton.textContent = 'Delete ' + noun
-      sureButton.setAttribute('style', UI.style.buttonStyle)
-      container.appendChild(sureButton).addEventListener(
+      var sureButtonElt = dom.createElement('button')
+      sureButtonElt.textContent = 'Delete ' + noun
+      sureButtonElt.setAttribute('style', UI.style.buttonStyle)
+      container.appendChild(sureButtonElt).addEventListener(
         'click',
         function (_event) {
-          container.removeChild(sureButton)
-          container.removeChild(cancelButton)
+          container.removeChild(sureButtonElt)
+          container.removeChild(cancelButtonElt)
           deleteFunction()
         },
         false
@@ -419,7 +442,7 @@ buttons.deleteButtonWithCheck = function (
     },
     false
   )
-  return delButton
+  return deleteButtonElt
 }
 
 /*  Make a button
@@ -431,7 +454,7 @@ buttons.deleteButtonWithCheck = function (
  *
  * @returns <dDomElement> - the button
  */
-buttons.button = function (dom, iconURI, text, handler) {
+function button (dom, iconURI, text, handler) {
   var button = dom.createElement('button')
   button.setAttribute('type', 'button')
   button.setAttribute('style', UI.style.buttonStyle)
@@ -446,11 +469,12 @@ buttons.button = function (dom, iconURI, text, handler) {
   return button
 }
 
-buttons.cancelButton = function (dom, handler) {
-  return buttons.button(dom, cancelIconURI, 'Cancel', handler)
+function cancelButton (dom, handler) {
+  return button(dom, cancelIconURI, 'Cancel', handler)
 }
-buttons.continueButton = function (dom, handler) {
-  return buttons.button(dom, checkIconURI, 'Continue', handler)
+
+function continueButton (dom, handler) {
+  return button(dom, checkIconURI, 'Continue', handler)
 }
 
 /* Grab a name for a new thing
@@ -458,7 +482,7 @@ buttons.continueButton = function (dom, handler) {
  * Form to get the name of a new thing before we create it
  * @returns: a promise of (a name or null if cancelled)
  */
-buttons.askName = function (dom, kb, container, predicate, klass, noun) {
+function askName (dom, kb, container, predicate, klass, noun) {
   // eslint-disable-next-line promise/param-names
   return new Promise(function (resolve, _reject) {
     var form = dom.createElement('div') // form is broken as HTML behaviour can resurface on js error
@@ -491,16 +515,14 @@ buttons.askName = function (dom, kb, container, predicate, klass, noun) {
 
     form.appendChild(dom.createElement('br'))
 
-    const cancel = form.appendChild(buttons.cancelButton(dom))
-    cancel.addEventListener('click', function (_event) {
+    form.appendChild(cancelButton(dom, function (_event) {
       form.parentNode.removeChild(form)
       resolve(null)
-    }, false)
+    }))
 
-    const continueButton = form.appendChild(buttons.continueButton(dom))
-    continueButton.addEventListener('click', function (_event) {
+    form.appendChild(continueButton(dom, function (_event) {
       gotName()
-    }, false)
+    }))
     namefield.focus()
   }) // Promise
 }
@@ -510,7 +532,7 @@ buttons.askName = function (dom, kb, container, predicate, klass, noun) {
 // A little link icon
 //
 //
-buttons.linkIcon = function (dom, subject, iconURI) {
+function linkIcon (dom, subject, iconURI?) {
   var anchor = dom.createElement('a')
   anchor.setAttribute('href', subject.uri)
   if (subject.uri.startsWith('http')) {
@@ -530,7 +552,7 @@ buttons.linkIcon = function (dom, subject, iconURI) {
 //
 // pred is unused param at the moment
 //
-buttons.personTR = function (dom, pred, obj, options) {
+function personTR (dom, pred, obj, options) {
   var tr = dom.createElement('tr')
   options = options || {}
   // tr.predObj = [pred.uri, obj.uri]   moved to acl-control
@@ -546,14 +568,14 @@ buttons.personTR = function (dom, pred, obj, options) {
   td3.setAttribute('style', 'vertical-align: middle; width:2em; padding:0.5em; height: 4em;')
   td1.appendChild(image)
 
-  buttons.setName(td2, obj)
+  setName(td2, obj)
   if (options.deleteFunction) {
-    buttons.deleteButtonWithCheck(dom, td3, options.noun || 'one', options.deleteFunction)
+    deleteButtonWithCheck(dom, td3, options.noun || 'one', options.deleteFunction)
   }
   if (obj.uri) {
     // blank nodes need not apply
     if (options.link !== false) {
-      var anchor = td3.appendChild(buttons.linkIcon(dom, obj))
+      var anchor = td3.appendChild(linkIcon(dom, obj))
       anchor.classList.add('HoverControlHide')
       td3.appendChild(dom.createElement('br'))
     }
@@ -569,7 +591,7 @@ buttons.personTR = function (dom, pred, obj, options) {
 
 // Refresh a DOM tree recursively
 
-buttons.refreshTree = function refreshTree (root) {
+function refreshTree (root) {
   if (root.refresh) {
     root.refresh()
     return
@@ -580,8 +602,7 @@ buttons.refreshTree = function refreshTree (root) {
 }
 
 // List of attachments accepting drop
-
-buttons.attachmentList = function (dom, subject, div, options) {
+function attachmentList (dom, subject, div, options) {
   options = options || {}
   var doc = options.doc || subject.doc()
   if (options.modify === undefined) options.modify = true
@@ -610,19 +631,19 @@ buttons.attachmentList = function (dom, subject, div, options) {
       if (ok) {
         refresh()
       } else {
-        complain('Error deleting one: ' + errorBody)
+        complain(undefined, 'Error deleting one: ' + errorBody)
       }
     })
   }
   var createNewRow = function (target) {
     var theTarget = target
-    var opt = { noun: noun }
+    var opt: any = { noun: noun }
     if (modify) {
       opt.deleteFunction = function () {
         deleteAttachment(theTarget)
       }
     }
-    return buttons.personTR(dom, predicate, target, opt)
+    return personTR(dom, predicate, target, opt)
   }
   var refresh = (attachmentTable.refresh = function () {
     var things = kb.each(subject, predicate)
@@ -633,7 +654,7 @@ buttons.attachmentList = function (dom, subject, div, options) {
   refresh()
 
   var droppedURIHandler = function (uris) {
-    var ins = []
+    var ins: any = []
     uris.map(function (u) {
       var target = $rdf.sym(u) // Attachment needs text label to disinguish I think not icon.
       console.log('Dropped on attachemnt ' + u) // icon was: UI.icons.iconBase + 'noun_25830.svg'
@@ -643,7 +664,7 @@ buttons.attachmentList = function (dom, subject, div, options) {
       if (ok) {
         refresh()
       } else {
-        complain('Error adding one: ' + errorBody)
+        complain(undefined, 'Error adding one: ' + errorBody)
       }
     })
   }
@@ -665,19 +686,19 @@ buttons.attachmentList = function (dom, subject, div, options) {
 // Note that native links have consraints in Firefox, they
 // don't work with local files for instance (2011)
 //
-buttons.openHrefInOutlineMode = function (e) {
+function openHrefInOutlineMode (e) {
   e.preventDefault()
   e.stopPropagation()
   var target = utils.getTarget(e)
   var uri = target.getAttribute('href')
   if (!uri) return console.log('openHrefInOutlineMode: No href found!\n')
   const dom = window.document
-  if (dom.outlineManager) {
+  if ((dom as any).outlineManager) {
     // @@ TODO Remove the use of document as a global object
-    dom.outlineManager.GotoSubject(UI.store.sym(uri), true, undefined, true, undefined)
-  } else if (window && window.panes && window.panes.getOutliner) {
+    ;(dom as any).outlineManager.GotoSubject(UI.store.sym(uri), true, undefined, true, undefined)
+  } else if (window && (window as any).panes && (window as any).panes.getOutliner) {
     // @@ TODO Remove the use of window as a global object
-    window.panes
+    ;(window as any).panes
       .getOutliner()
       .GotoSubject(UI.store.sym(uri), true, undefined, true, undefined)
   } else {
@@ -690,7 +711,7 @@ buttons.openHrefInOutlineMode = function (e) {
 //
 // @@ Todo: make it a personal preference.
 //
-buttons.defaultAnnotationStore = function (subject) {
+function defaultAnnotationStore (subject) {
   if (subject.uri === undefined) return undefined
   var s = subject.uri
   if (s.slice(0, 7) !== 'http://') return undefined
@@ -706,7 +727,7 @@ buttons.defaultAnnotationStore = function (subject) {
   return UI.store.sym('http://tabulator.org/wiki/annnotation/' + s)
 }
 
-buttons.allClassURIs = function () {
+function allClassURIs () {
   var set = {}
   UI.store
     .statementsMatching(undefined, UI.ns.rdf('type'), undefined)
@@ -739,8 +760,8 @@ buttons.allClassURIs = function () {
  * @param {Store} kb The quadstore to be searched.
  */
 
-buttons.propertyTriage = function (kb) {
-  var possibleProperties = {}
+function propertyTriage (kb) {
+  var possibleProperties: any = {}
   // if (possibleProperties === undefined) possibleProperties = {}
   // var kb = UI.store
   var dp = {}
@@ -781,7 +802,7 @@ buttons.propertyTriage = function (kb) {
 
 // A button for jumping
 //
-buttons.linkButton = function (dom, object) {
+function linkButton (dom, object) {
   var b = dom.createElement('button')
   b.setAttribute('type', 'button')
   b.textContent = 'Goto ' + utils.label(object)
@@ -792,7 +813,7 @@ buttons.linkButton = function (dom, object) {
   return b
 }
 
-buttons.removeButton = function (dom, element) {
+function removeButton (dom, element) {
   var b = dom.createElement('button')
   b.setAttribute('type', 'button')
   b.textContent = '✕' // MULTIPLICATION X
@@ -839,7 +860,7 @@ buttons.headerButtons = function (dom, kb, name, words) {
 //
 //   @param inverse means this is the object rather than the subject
 //
-buttons.selectorPanel = function (
+function selectorPanel (
   dom,
   kb,
   type,
@@ -850,7 +871,7 @@ buttons.selectorPanel = function (
   callbackFunction,
   linkCallback
 ) {
-  return buttons.selectorPanelRefresh(
+  return selectorPanelRefresh(
     dom.createElement('div'),
     dom,
     kb,
@@ -864,7 +885,7 @@ buttons.selectorPanel = function (
   )
 }
 
-buttons.selectorPanelRefresh = function (
+function selectorPanelRefresh (
   list,
   dom,
   kb,
@@ -878,7 +899,7 @@ buttons.selectorPanelRefresh = function (
 ) {
   var style0 =
     'border: 0.1em solid #ddd; border-bottom: none; width: 95%; height: 2em; padding: 0.5em;'
-  var selected = null
+  var selected: any = null
   list.innerHTML = ''
 
   var refreshItem = function (box, x) {
@@ -896,7 +917,7 @@ buttons.selectorPanelRefresh = function (
       )
       image.setAttribute('title', already.length ? already.length : 'attach')
     }
-    var f = buttons.index.twoLine.widgetForClass(type)
+    var f = index.twoLine.widgetForClass(type)
     item = f(dom, x)
     item.setAttribute('style', style0)
 
@@ -957,35 +978,32 @@ buttons.selectorPanelRefresh = function (
 //
 //      Small compact views of things
 //
-buttons.index = {}
-buttons.index.line = {} // Approx 80em
-buttons.index.twoLine = {} // Approx 40em * 2.4em
-
+let index: any = {}
 // ///////////////////////////////////////////////////////////////////////////
 // We need these for anything which is a subject of an attachment.
 //
 // These should be moved to type-dependeent UI code. Related panes maybe
 
-buttons.index.twoLine[''] = function (dom, x) {
+function twoLineDefault (dom, x) {
   // Default
   var box = dom.createElement('div')
   box.textContent = utils.label(x)
   return box
 }
 
-buttons.index.twoLine.widgetForClass = function (c) {
-  var widget = buttons.index.twoLine[c.uri]
+function twoLineWidgetForClass (c) {
+  var widget = index.twoLine[c.uri]
   var kb = UI.store
   if (widget) return widget
   var sup = kb.findSuperClassesNT(c)
   for (var cl in sup) {
-    widget = buttons.index.twoLine[kb.fromNT(cl).uri]
+    widget = index.twoLine[kb.fromNT(cl).uri]
     if (widget) return widget
   }
-  return buttons.index.twoLine['']
+  return index.twoLine['']
 }
 
-buttons.index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction'] = function (dom, x) {
+function twoLineTransaction (dom, x) {
   var failed = ''
   var enc = function (p) {
     var y = UI.store.any(x, UI.ns.qu(p))
@@ -1010,7 +1028,7 @@ buttons.index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction'] = fu
   return box
 }
 
-buttons.index.twoLine['http://www.w3.org/ns/pim/trip#Trip'] = function (
+function twoLineTrip (
   dom,
   x
 ) {
@@ -1031,7 +1049,7 @@ buttons.index.twoLine['http://www.w3.org/ns/pim/trip#Trip'] = function (
 }
 
 // Stick a stylesheet link the document if not already there
-buttons.addStyleSheet = function (dom, href) {
+function addStyleSheet (dom, href) {
   var links = dom.querySelectorAll('link')
   for (var i = 0; i < links.length; i++) {
     if (
@@ -1050,13 +1068,13 @@ buttons.addStyleSheet = function (dom, href) {
 
 // Figure (or guess) whether this is an image, etc
 //
-buttons.isAudio = function (file) {
-  return buttons.isImage(file, 'audio')
+function isAudio (file) {
+  return isImage(file, 'audio')
 }
-buttons.isVideo = function (file) {
-  return buttons.isImage(file, 'video')
+function isVideo (file) {
+  return isImage(file, 'video')
 }
-buttons.isImage = function (file, kind) {
+function isImage (file, kind) {
   var dcCLasses = {
     audio: 'http://purl.org/dc/dcmitype/Sound',
     image: 'http://purl.org/dc/dcmitype/Image',
@@ -1080,7 +1098,7 @@ buttons.isImage = function (file, kind) {
  * The input is hidden, as it is uglky - the user clicks on the nice icons and fires the input.
  */
 // See https://developer.mozilla.org/en-US/docs/Web/API/File/Using_files_from_web_applications
-buttons.fileUploadButtonDiv = function fileUploadButtonDiv (
+function fileUploadButtonDiv (
   dom,
   droppedFileHandler
 ) {
@@ -1104,8 +1122,8 @@ buttons.fileUploadButtonDiv = function fileUploadButtonDiv (
   )
 
   input.style = 'display:none'
-  const button = div.appendChild(
-    buttons.button(
+  const buttonElt = div.appendChild(
+    button(
       dom,
       UI.icons.iconBase + 'noun_Upload_76574_000000.svg',
       'Upload files',
@@ -1114,8 +1132,59 @@ buttons.fileUploadButtonDiv = function fileUploadButtonDiv (
       }
     )
   )
-  dragAndDrop.makeDropTarget(button, null, droppedFileHandler) // Can also just drop on button
+  dragAndDrop.makeDropTarget(buttonElt, null, droppedFileHandler) // Can also just drop on button
   return div
 }
 
-module.exports = buttons
+index = {
+  line: { // Approx 80em
+  },
+  twoLine: { // Approx 40em * 2.4em
+    '': twoLineDefault,
+    'http://www.w3.org/2000/10/swap/pim/qif#Transaction': twoLineTransaction,
+    'http://www.w3.org/ns/pim/trip#Trip': twoLineTrip,
+    widgetForClass: twoLineWidgetForClass
+  }
+}
+
+module.exports = {
+  complain,
+  clearElement,
+  extractLogURI,
+  shortDate,
+  formatDateTime,
+  timestamp,
+  shortTime,
+  setName,
+  imagesOf,
+  iconForClass,
+  tempSite,
+  findImageFromURI,
+  findImage,
+  // _trySetImage: trySetImage,
+  setImage,
+  faviconOrDefault,
+  deleteButtonWithCheck,
+  button,
+  cancelButton,
+  continueButton,
+  askName,
+  linkIcon,
+  personTR,
+  refreshTree,
+  attachmentList,
+  openHrefInOutlineMode,
+  defaultAnnotationStore,
+  allClassURIs,
+  propertyTriage,
+  linkButton,
+  removeButton,
+  selectorPanel,
+  selectorPanelRefresh,
+  index,
+  addStyleSheet,
+  isAudio,
+  isVideo,
+  isImage,
+  fileUploadButtonDiv
+}

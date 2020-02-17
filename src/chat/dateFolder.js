@@ -1,11 +1,16 @@
-/* global $rdf */
-/** Track back through the YYYY/MM/DD tree to find the previous/next day
- **
+/**
+ * Contains the [[DateFolder]] class
+ * @packageDocumentation
  */
+
+/* global $rdf */
 
 const kb = require('../store.js')
 const ns = require('../ns.js')
 
+/**
+ * Track back through the YYYY/MM/DD tree to find the previous/next day
+ */
 module.exports = class DateFolder {
   constructor (rootThing, leafFileName, membershipProperty) {
     this.root = rootThing

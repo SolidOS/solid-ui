@@ -1,3 +1,8 @@
+/**
+ * Re-exports all the exports from the various files in the src/acl/ folder
+ * @packageDocumentation
+ */
+
 import {
   ACLbyCombination,
   ACLToString,

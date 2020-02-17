@@ -1,3 +1,8 @@
+/**
+ * Contains the [[AddAgentButtons]] class
+ * @packageDocumentation
+ */
+
 import { AccessGroups } from './access-groups'
 import icons from '../iconBase'
 import widgets from '../widgets'
@@ -7,6 +12,10 @@ import utils from '../utils'
 import { NamedNode } from 'rdflib'
 import { AuthenticationContext } from '../authn/types'
 
+/**
+ * Renders the Sharing pane's "+" button and the menus behind it,
+ * see https://github.com/solid/userguide/blob/master/views/sharing/userguide.md#add
+ */
 export class AddAgentButtons {
   private readonly rootElement: HTMLElement
   private readonly barElement: HTMLElement

@@ -1,9 +1,8 @@
-//  Common code for a discussion are a of messages about something
-//   This version runs over a series of files for different time periods
-//
-//  Parameters for the whole chat like its title are stred on
-//  index.ttl#this and the chats messages are stored in YYYY/MM/DD/chat.ttl
-//
+/**
+ * Contains the [[infiniteMessageArea]] class
+ * @packageDocumentation
+ */
+
 /* global alert $rdf */
 import DateFolder from './dateFolder'
 
@@ -87,6 +86,13 @@ function desktopNotification (str) {
   // want to be respectful there is no need to bother them any more.
 }
 
+/**
+ * Common code for a chat (discussion area of messages about something)
+ * This version runs over a series of files for different time periods
+ *
+ * Parameters for the whole chat like its title are stored on
+ * index.ttl#this and the chats messages are stored in YYYY/MM/DD/chat.ttl
+ */
 export function infiniteMessageArea (dom, kb, chatChannel, options) {
   kb = kb || UI.store
   const ns = UI.ns
