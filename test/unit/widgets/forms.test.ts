@@ -1,6 +1,5 @@
 import * as RdfLib from 'rdflib'
-import { JSDOM } from 'jsdom'
-
+import * as ns from '../../../src/ns'
 import {
   appendForm,
   buildCheckboxForm,
@@ -24,11 +23,9 @@ import {
   sortByLabel,
   sortBySequence
 } from '../../../src/widgets/forms'
-import * as ns from '../../../src/ns'
-jest.mock('rdflib')
-jest.mock('solid-auth-client')
-const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
-const element = dom.createElement('div')
+
+// jest.mock('rdflib')
+// jest.mock('solid-auth-client')
 
 describe('field', () => {
   it('exists', () => {
@@ -41,21 +38,100 @@ describe('Form field', () => {
     expect(field[ns.ui('Form').uri]).toBeInstanceOf(Object)
   })
   it.skip('runs', () => {
-    const container = element
+    const container = document.createElement('div')
     const already = {}
     const subject = RdfLib.sym('')
-    const form = element
+    const form = document.createElement('form')
     const store = RdfLib.graph()
     const callbackFunction = () => {}
-    expect(field[ns.ui('Form').uri](
-      dom,
+    field[ns.ui('Form').uri](
+      document,
       container,
       already,
       subject,
       form,
       store,
       callbackFunction
-    )).toBeTruthy()
+    )
+    // @@ TODO goes to comment instead of Form...
+    expect(
+      field[ns.ui('Form').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        callbackFunction
+      )
+    ).toMatchInlineSnapshot(`
+      <div>
+        <h3
+          style="[object Object]"
+        >
+          [object Object]
+        </h3>
+      </div>
+    `)
+  })
+  // @@ TODO check this further what test could I use to make sure
+  // to test that the form gets added but obviously not in the container passed in
+  it.skip('still returns an element if the container is null', () => {
+    // debugger
+    const container = null
+    const already = {}
+    const subject = RdfLib.sym('')
+    const form = document.createElement('div')
+    const store = RdfLib.graph()
+    const callbackFunction = () => {}
+    expect(
+      field[ns.ui('Form').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        callbackFunction
+      )
+    ).toMatchInlineSnapshot(`
+      <div>
+        <h3
+          style="[object Object]"
+        >
+          [object Object]
+        </h3>
+      </div>
+    `)
+  })
+  // @@ TODO need to double check proper subjects and what gets returned
+  it.skip('returns.. if the subject has already been processed...', () => {
+    const dubSubject = RdfLib.sym('subject')
+    const container = document.createElement('container')
+    const already = { dubSubject }
+    const subject = dubSubject
+    const form = document.createElement('div')
+    const store = RdfLib.graph()
+    const callbackFunction = () => {}
+    expect(
+      field[ns.ui('Form').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        callbackFunction
+      )
+    ).toMatchInlineSnapshot(`
+      <div>
+        <h3
+          style="[object Object]"
+        >
+          [object Object]
+        </h3>
+      </div>
+    `)
   })
 })
 
@@ -64,21 +140,23 @@ describe('Options field', () => {
     expect(field[ns.ui('Options').uri]).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    const container = element
+    const container = document.createElement('div')
     const already = {}
     const subject = RdfLib.sym('')
-    const form = element
+    const form = document.createElement('form')
     const store = RdfLib.graph()
     const callbackFunction = () => {}
-    expect(field[ns.ui('Options').uri](
-      dom,
-      container,
-      already,
-      subject,
-      form,
-      store,
-      callbackFunction
-    )).toBeTruthy()
+    expect(
+      field[ns.ui('Options').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        callbackFunction
+      )
+    ).toMatchInlineSnapshot('<div />')
   })
 })
 
@@ -87,21 +165,31 @@ describe('Multiple field', () => {
     expect(field[ns.ui('Multiple').uri]).toBeInstanceOf(Object)
   })
   it.skip('runs', () => {
-    const container = element
+    const container = document.createElement('div')
     const already = {}
     const subject = RdfLib.sym('')
-    const form = element
+    const form = document.createElement('form')
     const store = RdfLib.graph()
     const callbackFunction = () => {}
-    expect(field[ns.ui('Multiple').uri](
-      dom,
-      container,
-      already,
-      subject,
-      form,
-      store,
-      callbackFunction
-    )).toBeTruthy()
+    expect(
+      field[ns.ui('Multiple').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        callbackFunction
+      )
+    ).toMatchInlineSnapshot(`
+      <div>
+        <h3
+          style="[object Object]"
+        >
+          [object Object]
+        </h3>
+      </div>
+    `)
   })
 })
 
@@ -188,21 +276,47 @@ describe('PhoneField', () => {
     expect(field[ns.ui('PhoneField').uri]).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    const container = element
+    const container = document.createElement('div')
     const already = {}
     const subject = RdfLib.sym('')
-    const form = element
+    const form = document.createElement('form')
     const store = RdfLib.graph()
     const callbackFunction = () => {}
-    expect(field[ns.ui('PhoneField').uri](
-      dom,
-      container,
-      already,
-      subject,
-      form,
-      store,
-      callbackFunction
-    )).toBeTruthy()
+    expect(
+      field[ns.ui('PhoneField').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        callbackFunction
+      )
+    ).toMatchInlineSnapshot(`
+      <tr>
+        <td
+          class="formFieldName"
+          style="  vertical-align: middle;"
+        >
+          <a
+            href="uri"
+            style="color: #3B5998; text-decoration: none;"
+          >
+            [object Object]
+          </a>
+        </td>
+        <td
+          class="formFieldValue"
+        >
+          <input
+            maxlength="[object Object]"
+            size="[object Object]"
+            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+            type="text"
+          />
+        </td>
+      </tr>
+    `)
   })
 })
 
@@ -211,21 +325,47 @@ describe('EmailField', () => {
     expect(field[ns.ui('EmailField').uri]).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    const container = element
+    const container = document.createElement('div')
     const already = {}
     const subject = RdfLib.sym('')
-    const form = element
+    const form = document.createElement('form')
     const store = RdfLib.graph()
     const callbackFunction = () => {}
-    expect(field[ns.ui('EmailField').uri](
-      dom,
-      container,
-      already,
-      subject,
-      form,
-      store,
-      callbackFunction
-    )).toBeTruthy()
+    expect(
+      field[ns.ui('EmailField').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        callbackFunction
+      )
+    ).toMatchInlineSnapshot(`
+      <tr>
+        <td
+          class="formFieldName"
+          style="  vertical-align: middle;"
+        >
+          <a
+            href="uri"
+            style="color: #3B5998; text-decoration: none;"
+          >
+            [object Object]
+          </a>
+        </td>
+        <td
+          class="formFieldValue"
+        >
+          <input
+            maxlength="[object Object]"
+            size="[object Object]"
+            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+            type="text"
+          />
+        </td>
+      </tr>
+    `)
   })
 })
 
@@ -234,21 +374,47 @@ describe('ColorField', () => {
     expect(field[ns.ui('ColorField').uri]).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    const container = element
+    const container = document.createElement('div')
     const already = {}
     const subject = RdfLib.sym('')
-    const form = element
+    const form = document.createElement('form')
     const store = RdfLib.graph()
     const callbackFunction = () => {}
-    expect(field[ns.ui('ColorField').uri](
-      dom,
-      container,
-      already,
-      subject,
-      form,
-      store,
-      callbackFunction
-    )).toBeTruthy()
+    expect(
+      field[ns.ui('ColorField').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        callbackFunction
+      )
+    ).toMatchInlineSnapshot(`
+      <tr>
+        <td
+          class="formFieldName"
+          style="  vertical-align: middle;"
+        >
+          <a
+            href="uri"
+            style="color: #3B5998; text-decoration: none;"
+          >
+            [object Object]
+          </a>
+        </td>
+        <td
+          class="formFieldValue"
+        >
+          <input
+            maxlength="[object Object]"
+            size="[object Object]"
+            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+            type="text"
+          />
+        </td>
+      </tr>
+    `)
   })
 })
 
@@ -257,21 +423,47 @@ describe('DateField', () => {
     expect(field[ns.ui('DateField').uri]).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    const container = element
+    const container = document.createElement('div')
     const already = {}
     const subject = RdfLib.sym('')
-    const form = element
+    const form = document.createElement('form')
     const store = RdfLib.graph()
     const callbackFunction = () => {}
-    expect(field[ns.ui('DateField').uri](
-      dom,
-      container,
-      already,
-      subject,
-      form,
-      store,
-      callbackFunction
-    )).toBeTruthy()
+    expect(
+      field[ns.ui('DateField').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        callbackFunction
+      )
+    ).toMatchInlineSnapshot(`
+      <tr>
+        <td
+          class="formFieldName"
+          style="  vertical-align: middle;"
+        >
+          <a
+            href="uri"
+            style="color: #3B5998; text-decoration: none;"
+          >
+            [object Object]
+          </a>
+        </td>
+        <td
+          class="formFieldValue"
+        >
+          <input
+            maxlength="[object Object]"
+            size="[object Object]"
+            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+            type="text"
+          />
+        </td>
+      </tr>
+    `)
   })
 })
 
@@ -280,21 +472,47 @@ describe('DateTimeField', () => {
     expect(field[ns.ui('DateTimeField').uri]).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    const container = element
+    const container = document.createElement('div')
     const already = {}
     const subject = RdfLib.sym('')
-    const form = element
+    const form = document.createElement('form')
     const store = RdfLib.graph()
     const callbackFunction = () => {}
-    expect(field[ns.ui('DateTimeField').uri](
-      dom,
-      container,
-      already,
-      subject,
-      form,
-      store,
-      callbackFunction
-    )).toBeTruthy()
+    expect(
+      field[ns.ui('DateTimeField').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        callbackFunction
+      )
+    ).toMatchInlineSnapshot(`
+      <tr>
+        <td
+          class="formFieldName"
+          style="  vertical-align: middle;"
+        >
+          <a
+            href="uri"
+            style="color: #3B5998; text-decoration: none;"
+          >
+            [object Object]
+          </a>
+        </td>
+        <td
+          class="formFieldValue"
+        >
+          <input
+            maxlength="[object Object]"
+            size="[object Object]"
+            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+            type="text"
+          />
+        </td>
+      </tr>
+    `)
   })
 })
 
@@ -303,21 +521,47 @@ describe('TimeField', () => {
     expect(field[ns.ui('TimeField').uri]).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    const container = element
+    const container = document.createElement('div')
     const already = {}
     const subject = RdfLib.sym('')
-    const form = element
+    const form = document.createElement('form')
     const store = RdfLib.graph()
     const callbackFunction = () => {}
-    expect(field[ns.ui('TimeField').uri](
-      dom,
-      container,
-      already,
-      subject,
-      form,
-      store,
-      callbackFunction
-    )).toBeTruthy()
+    expect(
+      field[ns.ui('TimeField').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        callbackFunction
+      )
+    ).toMatchInlineSnapshot(`
+      <tr>
+        <td
+          class="formFieldName"
+          style="  vertical-align: middle;"
+        >
+          <a
+            href="uri"
+            style="color: #3B5998; text-decoration: none;"
+          >
+            [object Object]
+          </a>
+        </td>
+        <td
+          class="formFieldValue"
+        >
+          <input
+            maxlength="[object Object]"
+            size="[object Object]"
+            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+            type="text"
+          />
+        </td>
+      </tr>
+    `)
   })
 })
 
@@ -326,21 +570,47 @@ describe('NumericField', () => {
     expect(field[ns.ui('NumericField').uri]).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    const container = element
+    const container = document.createElement('div')
     const already = {}
     const subject = RdfLib.sym('')
-    const form = element
+    const form = document.createElement('form')
     const store = RdfLib.graph()
     const callbackFunction = () => {}
-    expect(field[ns.ui('NumericField').uri](
-      dom,
-      container,
-      already,
-      subject,
-      form,
-      store,
-      callbackFunction
-    )).toBeTruthy()
+    expect(
+      field[ns.ui('NumericField').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        callbackFunction
+      )
+    ).toMatchInlineSnapshot(`
+      <tr>
+        <td
+          class="formFieldName"
+          style="  vertical-align: middle;"
+        >
+          <a
+            href="uri"
+            style="color: #3B5998; text-decoration: none;"
+          >
+            [object Object]
+          </a>
+        </td>
+        <td
+          class="formFieldValue"
+        >
+          <input
+            maxlength="[object Object]"
+            size="[object Object]"
+            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+            type="text"
+          />
+        </td>
+      </tr>
+    `)
   })
 })
 
@@ -349,21 +619,47 @@ describe('IntegerField', () => {
     expect(field[ns.ui('IntegerField').uri]).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    const container = element
+    const container = document.createElement('div')
     const already = {}
     const subject = RdfLib.sym('')
-    const form = element
+    const form = document.createElement('form')
     const store = RdfLib.graph()
     const callbackFunction = () => {}
-    expect(field[ns.ui('IntegerField').uri](
-      dom,
-      container,
-      already,
-      subject,
-      form,
-      store,
-      callbackFunction
-    )).toBeTruthy()
+    expect(
+      field[ns.ui('IntegerField').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        callbackFunction
+      )
+    ).toMatchInlineSnapshot(`
+      <tr>
+        <td
+          class="formFieldName"
+          style="  vertical-align: middle;"
+        >
+          <a
+            href="uri"
+            style="color: #3B5998; text-decoration: none;"
+          >
+            [object Object]
+          </a>
+        </td>
+        <td
+          class="formFieldValue"
+        >
+          <input
+            maxlength="[object Object]"
+            size="[object Object]"
+            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+            type="text"
+          />
+        </td>
+      </tr>
+    `)
   })
 })
 
@@ -372,44 +668,96 @@ describe('DecimalField', () => {
     expect(field[ns.ui('DecimalField').uri]).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    const container = element
+    const container = document.createElement('div')
     const already = {}
     const subject = RdfLib.sym('')
-    const form = element
+    const form = document.createElement('form')
     const store = RdfLib.graph()
     const callbackFunction = () => {}
-    expect(field[ns.ui('DecimalField').uri](
-      dom,
-      container,
-      already,
-      subject,
-      form,
-      store,
-      callbackFunction
-    )).toBeTruthy()
+    expect(
+      field[ns.ui('DecimalField').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        callbackFunction
+      )
+    ).toMatchInlineSnapshot(`
+      <tr>
+        <td
+          class="formFieldName"
+          style="  vertical-align: middle;"
+        >
+          <a
+            href="uri"
+            style="color: #3B5998; text-decoration: none;"
+          >
+            [object Object]
+          </a>
+        </td>
+        <td
+          class="formFieldValue"
+        >
+          <input
+            maxlength="[object Object]"
+            size="[object Object]"
+            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+            type="text"
+          />
+        </td>
+      </tr>
+    `)
   })
 })
 
-describe('FloatField', () => {
+describe('FloatField]', () => {
   it('exists', () => {
     expect(field[ns.ui('FloatField').uri]).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    const container = element
+    const container = document.createElement('div')
     const already = {}
     const subject = RdfLib.sym('')
-    const form = element
+    const form = document.createElement('form')
     const store = RdfLib.graph()
     const callbackFunction = () => {}
-    expect(field[ns.ui('FloatField').uri](
-      dom,
-      container,
-      already,
-      subject,
-      form,
-      store,
-      callbackFunction
-    )).toBeTruthy()
+    expect(
+      field[ns.ui('FloatField').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        callbackFunction
+      )
+    ).toMatchInlineSnapshot(`
+      <tr>
+        <td
+          class="formFieldName"
+          style="  vertical-align: middle;"
+        >
+          <a
+            href="uri"
+            style="color: #3B5998; text-decoration: none;"
+          >
+            [object Object]
+          </a>
+        </td>
+        <td
+          class="formFieldValue"
+        >
+          <input
+            maxlength="[object Object]"
+            size="[object Object]"
+            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+            type="text"
+          />
+        </td>
+      </tr>
+    `)
   })
 })
 
@@ -418,21 +766,47 @@ describe('TextField', () => {
     expect(field[ns.ui('TextField').uri]).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    const container = element
+    const container = document.createElement('div')
     const already = {}
     const subject = RdfLib.sym('')
-    const form = element
+    const form = document.createElement('form')
     const store = RdfLib.graph()
     const callbackFunction = () => {}
-    expect(field[ns.ui('TextField').uri](
-      dom,
-      container,
-      already,
-      subject,
-      form,
-      store,
-      callbackFunction
-    )).toBeTruthy()
+    expect(
+      field[ns.ui('TextField').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        callbackFunction
+      )
+    ).toMatchInlineSnapshot(`
+      <tr>
+        <td
+          class="formFieldName"
+          style="  vertical-align: middle;"
+        >
+          <a
+            href="uri"
+            style="color: #3B5998; text-decoration: none;"
+          >
+            [object Object]
+          </a>
+        </td>
+        <td
+          class="formFieldValue"
+        >
+          <input
+            maxlength="[object Object]"
+            size="[object Object]"
+            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+            type="text"
+          />
+        </td>
+      </tr>
+    `)
   })
 })
 
@@ -441,21 +815,47 @@ describe('SingleLineTextField', () => {
     expect(field[ns.ui('SingleLineTextField').uri]).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    const container = element
+    const container = document.createElement('div')
     const already = {}
     const subject = RdfLib.sym('')
-    const form = element
+    const form = document.createElement('form')
     const store = RdfLib.graph()
     const callbackFunction = () => {}
-    expect(field[ns.ui('SingleLineTextField').uri](
-      dom,
-      container,
-      already,
-      subject,
-      form,
-      store,
-      callbackFunction
-    )).toBeTruthy()
+    expect(
+      field[ns.ui('SingleLineTextField').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        callbackFunction
+      )
+    ).toMatchInlineSnapshot(`
+      <tr>
+        <td
+          class="formFieldName"
+          style="  vertical-align: middle;"
+        >
+          <a
+            href="uri"
+            style="color: #3B5998; text-decoration: none;"
+          >
+            [object Object]
+          </a>
+        </td>
+        <td
+          class="formFieldValue"
+        >
+          <input
+            maxlength="[object Object]"
+            size="[object Object]"
+            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+            type="text"
+          />
+        </td>
+      </tr>
+    `)
   })
 })
 
@@ -464,21 +864,47 @@ describe('NamedNodeURIField', () => {
     expect(field[ns.ui('NamedNodeURIField').uri]).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    const container = element
+    const container = document.createElement('div')
     const already = {}
     const subject = RdfLib.sym('')
-    const form = element
+    const form = document.createElement('div')
     const store = RdfLib.graph()
     const callbackFunction = () => {}
-    expect(field[ns.ui('NamedNodeURIField').uri](
-      dom,
-      container,
-      already,
-      subject,
-      form,
-      store,
-      callbackFunction
-    )).toBeTruthy()
+    expect(
+      field[ns.ui('NamedNodeURIField').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        callbackFunction
+      )
+    ).toMatchInlineSnapshot(`
+      <tr>
+        <td
+          class="formFieldName"
+          style="  vertical-align: middle;"
+        >
+          <a
+            href="uri"
+            style="color: #3B5998; text-decoration: none;"
+          >
+            [object Object]
+          </a>
+        </td>
+        <td
+          class="formFieldValue"
+        >
+          <input
+            maxlength="[object Object]"
+            size="[object Object]"
+            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+            type="text"
+          />
+        </td>
+      </tr>
+    `)
   })
 })
 
@@ -487,21 +913,41 @@ describe('MultiLineTextField', () => {
     expect(field[ns.ui('MultiLineTextField').uri]).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    const container = element
+    const container = document.createElement('div')
     const already = {}
     const subject = RdfLib.sym('')
-    const form = element
+    const form = document.createElement('form')
     const store = RdfLib.graph()
     const callbackFunction = () => {}
-    expect(field[ns.ui('MultiLineTextField').uri](
-      dom,
-      container,
-      already,
-      subject,
-      form,
-      store,
-      callbackFunction
-    )).toBeTruthy()
+    expect(
+      field[ns.ui('MultiLineTextField').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        callbackFunction
+      )
+    ).toMatchInlineSnapshot(`
+      <div>
+        <a
+          href="uri"
+          style="color: #3B5998; text-decoration: none;"
+        >
+          [object Object]
+        </a>
+        <div>
+          <textarea
+            cols="80"
+            disabled=""
+            rows="2"
+            style="font-size:100%; white-space: pre-wrap; background-color: #eef; border: 0.07em solid gray; padding: 1em 0.5em; margin: 1em 1em;"
+          />
+          <br />
+        </div>
+      </div>
+    `)
   })
 })
 
@@ -510,21 +956,32 @@ describe('BooleanField', () => {
     expect(field[ns.ui('BooleanField').uri]).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    const container = element
+    const container = document.createElement('div')
     const already = {}
     const subject = RdfLib.sym('')
-    const form = element
+    const form = document.createElement('form')
     const store = RdfLib.graph()
     const callbackFunction = () => {}
-    expect(field[ns.ui('BooleanField').uri](
-      dom,
-      container,
-      already,
-      subject,
-      form,
-      store,
-      callbackFunction
-    )).toBeTruthy()
+    expect(
+      field[ns.ui('BooleanField').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        callbackFunction
+      )
+    ).toMatchInlineSnapshot(`
+      <div>
+        [object Object]
+        <button
+          style="font-size: 150%; height: 1.2em; width: 1.2em; background-color: #eef; margin: 0.1em"
+        >
+          ✓
+        </button>
+      </div>
+    `)
   })
 })
 
@@ -533,21 +990,32 @@ describe('TristateField', () => {
     expect(field[ns.ui('TristateField').uri]).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    const container = element
+    const container = document.createElement('div')
     const already = {}
     const subject = RdfLib.sym('')
-    const form = element
+    const form = document.createElement('form')
     const store = RdfLib.graph()
     const callbackFunction = () => {}
-    expect(field[ns.ui('TristateField').uri](
-      dom,
-      container,
-      already,
-      subject,
-      form,
-      store,
-      callbackFunction
-    )).toBeTruthy()
+    expect(
+      field[ns.ui('TristateField').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        callbackFunction
+      )
+    ).toMatchInlineSnapshot(`
+<div>
+  [object Object]
+  <button
+    style="font-size: 150%; height: 1.2em; width: 1.2em; background-color: #eef; margin: 0.1em"
+  >
+    ✓
+  </button>
+</div>
+`)
   })
 })
 
@@ -556,21 +1024,31 @@ describe('Classifier', () => {
     expect(field[ns.ui('Classifier').uri]).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    const container = element
+    const container = document.createElement('div')
     const already = {}
     const subject = RdfLib.sym('')
-    const form = element
+    const form = document.createElement('form')
     const store = RdfLib.graph()
     const callbackFunction = () => {}
-    expect(field[ns.ui('Classifier').uri](
-      dom,
-      container,
-      already,
-      subject,
-      form,
-      store,
-      callbackFunction
-    )).toBeTruthy()
+    expect(
+      field[ns.ui('Classifier').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        callbackFunction
+      )
+    ).toMatchInlineSnapshot(`
+<span>
+  <div
+    style="margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; background-color: #fee; color:black;"
+  >
+    Can't do selector with no subclasses of category: [object Object]
+  </div>
+</span>
+`)
   })
 })
 
@@ -579,21 +1057,31 @@ describe('Choice', () => {
     expect(field[ns.ui('Choice').uri]).toBeInstanceOf(Object)
   })
   it.skip('runs', () => {
-    const container = element
+    const container = document.createElement('div')
     const already = {}
     const subject = RdfLib.sym('')
-    const form = element
+    const form = document.createElement('form')
     const store = RdfLib.graph()
     const callbackFunction = () => {}
-    expect(field[ns.ui('Choice').uri](
-      dom,
-      container,
-      already,
-      subject,
-      form,
-      store,
-      callbackFunction
-    )).toBeTruthy()
+    expect(
+      field[ns.ui('Choice').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        callbackFunction
+      )
+    ).toMatchInlineSnapshot(`
+      <div>
+        <h3
+          style="[object Object]"
+        >
+          [object Object]
+        </h3>
+      </div>
+    `)
   })
 })
 
@@ -608,44 +1096,64 @@ describe('Heading', () => {
     expect(field[ns.ui('Heading').uri]).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    const container = element
+    const container = document.createElement('div')
     const already = {}
     const subject = RdfLib.sym('')
-    const form = element
+    const form = document.createElement('form')
     const store = RdfLib.graph()
     const callbackFunction = () => {}
-    expect(field[ns.ui('Heading').uri](
-      dom,
-      container,
-      already,
-      subject,
-      form,
-      store,
-      callbackFunction
-    )).toBeTruthy()
+    expect(
+      field[ns.ui('Heading').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        callbackFunction
+      )
+    ).toMatchInlineSnapshot(`
+<div>
+  <undefined
+    style="[object Object]"
+  >
+    [object Object]
+  </undefined>
+</div>
+`)
   })
 })
 
-describe('Comment', () => {
+describe('Comment]', () => {
   it('exists', () => {
     expect(field[ns.ui('Comment').uri]).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    const container = element
+    const container = document.createElement('div')
     const already = {}
     const subject = RdfLib.sym('')
-    const form = element
+    const form = document.createElement('form')
     const store = RdfLib.graph()
     const callbackFunction = () => {}
-    expect(field[ns.ui('Comment').uri](
-      dom,
-      container,
-      already,
-      subject,
-      form,
-      store,
-      callbackFunction
-    )).toBeTruthy()
+    expect(
+      field[ns.ui('Comment').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        callbackFunction
+      )
+    ).toMatchInlineSnapshot(`
+<div>
+  <undefined
+    style="[object Object]"
+  >
+    [object Object]
+  </undefined>
+</div>
+`)
   })
 })
 
@@ -663,7 +1171,7 @@ describe('fieldFunction', () => {
     expect(fieldFunction).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    expect(fieldFunction(dom, null)).toBeInstanceOf(Function)
+    expect(fieldFunction(document, null)).toBeInstanceOf(Function)
   })
 })
 
@@ -676,13 +1184,9 @@ describe('editFormButton', () => {
     const form = null
     const store = RdfLib.graph()
     const callbackFunction = () => {}
-    expect(editFormButton(
-      dom,
-      container,
-      form,
-      store,
-      callbackFunction
-    )).toBeInstanceOf(Object)
+    expect(
+      editFormButton(document, container, form, store, callbackFunction)
+    ).toBeInstanceOf(HTMLButtonElement)
   })
 })
 
@@ -697,15 +1201,9 @@ describe('appendForm', () => {
     const form = null
     const store = RdfLib.graph()
     const itemDone = () => {}
-    expect(appendForm(
-      dom,
-      container,
-      already,
-      subject,
-      form,
-      store,
-      itemDone
-    )).toBeInstanceOf(Object)
+    expect(
+      appendForm(document, container, already, subject, form, store, itemDone)
+    ).toBeInstanceOf(HTMLDivElement)
   })
 })
 
@@ -759,16 +1257,18 @@ describe('newButton', () => {
     expect(newButton).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    expect(newButton(
-      dom,
-      RdfLib.graph(),
-      null,
-      null,
-      null,
-      null,
-      RdfLib.graph(),
-      () => {}
-    )).toBeInstanceOf(Object)
+    expect(
+      newButton(
+        document,
+        RdfLib.graph(),
+        null,
+        null,
+        null,
+        null,
+        RdfLib.graph(),
+        () => {}
+      )
+    ).toBeInstanceOf(HTMLButtonElement)
   })
 })
 
@@ -777,16 +1277,18 @@ describe('promptForNew', () => {
     expect(promptForNew).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    expect(promptForNew(
-      dom,
-      RdfLib.graph(),
-      RdfLib.sym(''),
-      RdfLib.sym(''),
-      RdfLib.sym(''),
-      null,
-      RdfLib.graph(),
-      () => {}
-    )).toBeInstanceOf(Object)
+    expect(
+      promptForNew(
+        document,
+        RdfLib.graph(),
+        RdfLib.sym(''),
+        RdfLib.sym(''),
+        RdfLib.sym(''),
+        null,
+        RdfLib.graph(),
+        () => {}
+      )
+    ).toBeInstanceOf(HTMLFormElement)
   })
 })
 
@@ -795,14 +1297,16 @@ describe('makeDescription', () => {
     expect(makeDescription).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    expect(makeDescription(
-      dom,
-      RdfLib.graph(),
-      null,
-      null,
-      RdfLib.graph(),
-      () => {}
-    )).toBeInstanceOf(Object)
+    expect(
+      makeDescription(
+        document,
+        RdfLib.graph(),
+        null,
+        null,
+        RdfLib.graph(),
+        () => {}
+      )
+    ).toBeInstanceOf(HTMLDivElement)
   })
 })
 
@@ -811,16 +1315,18 @@ describe('makeSelectForOptions', () => {
     expect(makeSelectForOptions).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    expect(makeSelectForOptions(
-      dom,
-      RdfLib.graph(),
-      null,
-      null,
-      {},
-      {},
-      RdfLib.graph(),
-      () => {}
-    )).toBeInstanceOf(Object)
+    expect(
+      makeSelectForOptions(
+        document,
+        RdfLib.graph(),
+        null,
+        null,
+        {},
+        {},
+        RdfLib.graph(),
+        () => {}
+      )
+    ).toBeInstanceOf(HTMLDivElement)
   })
 })
 
@@ -829,14 +1335,16 @@ describe('makeSelectForCategory', () => {
     expect(makeSelectForCategory).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    expect(makeSelectForCategory(
-      dom,
-      RdfLib.graph(),
-      null,
-      null,
-      RdfLib.graph(),
-      () => {}
-    )).toBeInstanceOf(Object)
+    expect(
+      makeSelectForCategory(
+        document,
+        RdfLib.graph(),
+        null,
+        null,
+        RdfLib.graph(),
+        () => {}
+      )
+    ).toBeInstanceOf(HTMLDivElement)
   })
 })
 
@@ -845,14 +1353,16 @@ describe('makeSelectForNestedCategory', () => {
     expect(makeSelectForNestedCategory).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    expect(makeSelectForNestedCategory(
-      dom,
-      RdfLib.graph(),
-      RdfLib.sym(''),
-      RdfLib.sym(''),
-      RdfLib.graph(),
-      () => {}
-    )).toBeInstanceOf(Object)
+    expect(
+      makeSelectForNestedCategory(
+        document,
+        RdfLib.graph(),
+        RdfLib.sym(''),
+        RdfLib.sym(''),
+        RdfLib.graph(),
+        () => {}
+      )
+    ).toBeInstanceOf(HTMLSpanElement)
   })
 })
 
@@ -861,16 +1371,18 @@ describe('buildCheckboxForm', () => {
     expect(buildCheckboxForm).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    expect(buildCheckboxForm(
-      dom,
-      RdfLib.graph(),
-      null,
-      [],
-      [],
-      null,
-      RdfLib.graph(),
-      false
-    )).toBeInstanceOf(Object)
+    expect(
+      buildCheckboxForm(
+        document,
+        RdfLib.graph(),
+        null,
+        [],
+        [],
+        null,
+        RdfLib.graph(),
+        false
+      )
+    ).toBeInstanceOf(HTMLDivElement)
   })
 })
 
@@ -879,14 +1391,12 @@ describe('fieldLabel', () => {
     expect(fieldLabel).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    expect(fieldLabel(
-      dom,
-      RdfLib.sym(''),
-      null
-    )).toBeInstanceOf(Object)
+    expect(fieldLabel(document, RdfLib.sym(''), null)).toBeInstanceOf(
+      HTMLAnchorElement
+    )
   })
   it.skip(' ...', () => {
-    expect(fieldLabel('dom', undefined, 'form').toBe())
+    expect(fieldLabel('document', undefined, 'form').toBe())
   })
 })
 
@@ -895,11 +1405,7 @@ describe('fieldStore', () => {
     expect(fieldStore).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    expect(fieldStore(
-      null,
-      null,
-      null
-    )).toEqual(null)
+    expect(fieldStore(null, null, null)).toEqual(null)
   })
   it('returns def when there is no matching statement', () => {
     const statementMatching = jest.fn()
@@ -909,11 +1415,16 @@ describe('fieldStore', () => {
 })
 
 describe('newThing', () => {
-  console.log(window)
   it('exists', () => {
     expect(newThing).toBeInstanceOf(Object)
   })
   it('runs', () => {
     expect(newThing(RdfLib.sym(''))).toBeInstanceOf(Object)
+  })
+  // need to also mock or figure out doc - which is a NamedNode
+  it.skip('returns the correct .', () => {
+    const Date = jest.fn()
+    Date.mockReturnValueOnce('Thu Feb 06 2020 19:42:59 GMT+1100')
+    expect(newThing('doc')).toBe('')
   })
 })

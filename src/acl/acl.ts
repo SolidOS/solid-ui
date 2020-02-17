@@ -30,10 +30,8 @@ export function adoptACLDefault (
     .concat(
       kb.each(undefined, ACL('defaultForNew'), defaultResource, defaultACLdoc)
     )
-  console.log(defaults)
   let proposed: Array<$rdf.Statement> = []
   defaults.map(function (da) {
-    console.log('got da!', da)
     proposed = proposed
       .concat(kb.statementsMatching(da, ACL('agent'), undefined, defaultACLdoc))
       .concat(kb.statementsMatching(da, ACL('agentClass'), undefined, defaultACLdoc))

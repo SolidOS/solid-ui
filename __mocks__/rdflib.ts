@@ -55,9 +55,7 @@ class Graph {
   }
   // see https://linkeddata.github.io/rdflib.js/doc/classes/indexedformula.html#each
   each (s, p, o, g) {
-    console.log('each', s, p, o, g, this.mockStatements)
     if (s === undefined) {
-      console.log('getting subjects')
       return this.mockStatements
         .filter(statement => p.uri === statement.p.uri)
         .filter(statement => o.uri === statement.o.uri)
