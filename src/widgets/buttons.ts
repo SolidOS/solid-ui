@@ -727,7 +727,12 @@ function defaultAnnotationStore (subject) {
   return UI.store.sym('http://tabulator.org/wiki/annnotation/' + s)
 }
 
-function allClassURIs () {
+/**
+ * Retrieve all RDF class URIs from solid-ui's RDF store
+ * @returns an object `ret` such that `Object.keys(ret)` is
+ * the list of all class URIs.
+ */
+function allClassURIs (): { [uri: string]: boolean } {
   var set = {}
   UI.store
     .statementsMatching(undefined, UI.ns.rdf('type'), undefined)
@@ -1048,8 +1053,10 @@ function twoLineTrip (
   return box
 }
 
-// Stick a stylesheet link the document if not already there
-function addStyleSheet (dom, href) {
+/**
+ * Stick a stylesheet link the document if not already there
+ */
+function addStyleSheet (dom: HTMLDocument, href: string): void {
   var links = dom.querySelectorAll('link')
   for (var i = 0; i < links.length; i++) {
     if (
@@ -1148,43 +1155,42 @@ index = {
 }
 
 module.exports = {
-  complain,
-  clearElement,
-  extractLogURI,
-  shortDate,
-  formatDateTime,
-  timestamp,
-  shortTime,
-  setName,
-  imagesOf,
-  iconForClass,
-  tempSite,
-  findImageFromURI,
-  findImage,
-  // _trySetImage: trySetImage,
-  setImage,
-  faviconOrDefault,
-  deleteButtonWithCheck,
+  addStyleSheet,
+  allClassURIs,
+  askName,
+  attachmentList,
   button,
   cancelButton,
+  clearElement,
+  complain,
   continueButton,
-  askName,
-  linkIcon,
-  personTR,
-  refreshTree,
-  attachmentList,
-  openHrefInOutlineMode,
   defaultAnnotationStore,
-  allClassURIs,
-  propertyTriage,
+  deleteButtonWithCheck,
+  extractLogURI,
+  formatDateTime,
+  faviconOrDefault,
+  fileUploadButtonDiv,
+  findImage,
+  findImageFromURI,
+  iconForClass,
+  imagesOf,
+  index,
+  isAudio,
+  isImage,
+  isVideo,
   linkButton,
+  linkIcon,
+  openHrefInOutlineMode,
+  personTR,
+  propertyTriage,
+  refreshTree,
   removeButton,
+  shortDate,
+  shortTime,
   selectorPanel,
   selectorPanelRefresh,
-  index,
-  addStyleSheet,
-  isAudio,
-  isVideo,
-  isImage,
-  fileUploadButtonDiv
+  setImage,
+  setName,
+  tempSite,
+  timestamp
 }

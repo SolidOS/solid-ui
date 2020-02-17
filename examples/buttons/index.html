@@ -1,0 +1,131 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset='UTF-8'>
+    <title>solid-ui UI.widgets.buttons examples page</title>
+    <script type="text/javascript" src="../../lib/webpack-bundle.js"></script>
+    <script>
+      const $ = document.querySelector.bind(document)
+    </script>
+  </head>
+<body>
+  <h2>addStyleSheet</h2>
+    <script id="script-addStyleSheet">
+      window.addEventListener('DOMContentLoaded', (event) => {
+        UI.widgets.addStyleSheet(document, 'https://linkeddata.github.io/tabulator-firefox/content/tabbedtab.css')
+      })
+    </script>
+    <pre id="viewSource-addStyleSheet"></pre><script>$('#viewSource-addStyleSheet').innerHTML = $('#script-addStyleSheet').innerText</script>
+
+  <h2>allClassURIs</h2>
+  <script id="script-allClassURIs">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      UI.store.add(
+        UI.rdf.namedNode('http://example.com/#some-thing'),
+        UI.rdf.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+        UI.rdf.namedNode('http://example.com/#some-class')
+      )
+      UI.store.add(
+        UI.rdf.namedNode('http://example.com/#some-other-thing'),
+        UI.rdf.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+        UI.rdf.namedNode('http://example.com/#some-other-class')
+      )
+      const list = Object.keys(UI.widgets.allClassURIs())
+      const ul = $('#ul-allClassURIs')
+      list.map((uri) => {
+        const li = document.createElement('li')
+        li.appendChild(document.createTextNode(uri))
+        ul.appendChild(li)
+      })
+    })
+  </script>
+  <pre id="viewSource-allClassURIs"></pre><script>$('#viewSource-allClassURIs').innerHTML = $('#script-allClassURIs').innerText</script>
+
+  <ul id="ul-allClassURIs"></ul>
+
+  <h2>askName</h2>
+  <div id="askName"></div>
+
+  <h2>attachmentList</h2>
+  <div id="attachmentList"></div>
+
+  <h2>button</h2>
+    <script id="script-button">
+      window.addEventListener('DOMContentLoaded', (event) => {
+        const solidLogo = 'https://solidproject.org/assets/img/solid-emblem.svg'
+        $('#button').appendChild(
+          UI.widgets.button(document, solidLogo, 'test', () => window.alert('clicked!'))
+        )
+      })
+    </script>
+    <pre id="viewSource-button"></pre><script>$('#viewSource-button').innerHTML = $('#script-button').innerText</script>
+    <div id="button"></div>
+
+  <h2>cancelButton</h2>
+  <div id="cancelButton"></div>
+  <h2>clearElement</h2>
+  <div id="clearElement"></div>
+  <h2>complain</h2>
+  <div id="complain"></div>
+  <h2>continueButton</h2>
+  <div id="continueButton"></div>
+  <h2>defaultAnnotationStore</h2>
+  <div id="defaultAnnotationStore"></div>
+  <h2>deleteButtonWithCheck</h2>
+  <div id="deleteButtonWithCheck"></div>
+  <h2>extractLogURI</h2>
+  <div id="extractLogURI"></div>
+  <h2>formatDateTime</h2>
+  <div id="formatDateTime"></div>
+  <h2>faviconOrDefault</h2>
+  <div id="faviconOrDefault"></div>
+  <h2>fileUploadButtonDiv</h2>
+  <div id="fileUploadButtonDiv"></div>
+  <h2>findImage</h2>
+  <div id="findImage"></div>
+  <h2>findImageFromURI</h2>
+  <div id="findImageFromURI"></div>
+  <h2>iconForClass</h2>
+  <div id="iconForClass"></div>
+  <h2>imagesOf</h2>
+  <div id="imagesOf"></div>
+  <h2>index</h2>
+  <div id="index"></div>
+  <h2>isAudio</h2>
+  <div id="isAudio"></div>
+  <h2>isImage</h2>
+  <div id="isImage"></div>
+  <h2>isVideo</h2>
+  <div id="isVideo"></div>
+  <h2>linkButton</h2>
+  <div id="linkButton"></div>
+  <h2>linkIcon</h2>
+  <div id="linkIcon"></div>
+  <h2>openHrefInOutlineMode</h2>
+  <div id="openHrefInOutlineMode"></div>
+  <h2>personTR</h2>
+  <div id="personTR"></div>
+  <h2>propertyTriage</h2>
+  <div id="propertyTriage"></div>
+  <h2>refreshTree</h2>
+  <div id="refreshTree"></div>
+  <h2>removeButton</h2>
+  <div id="removeButton"></div>
+  <h2>shortDate</h2>
+  <div id="shortDate"></div>
+  <h2>shortTime</h2>
+  <div id="shortTime"></div>
+  <h2>selectorPanel</h2>
+  <div id="selectorPanel"></div>
+  <h2>selectorPanelRefresh</h2>
+  <div id="selectorPanelRefresh"></div>
+  <h2>setImage</h2>
+  <div id="setImage"></div>
+  <h2>setName</h2>
+  <div id="setName"></div>
+  <h2>tempSite</h2>
+  <div id="tempSite"></div>
+  <h2>timestamp</h2>
+  <div id="timestamp"></div>
+</body>
+</html>
