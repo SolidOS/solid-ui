@@ -44,31 +44,95 @@
   <ul id="ul-allClassURIs"></ul>
 
   <h2>askName</h2>
-  <div id="askName"></div>
+  <script id="script-askName">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const promise = UI.widgets.askName(document, UI.store, $('#div-askName'))
+      promise
+        .then((name) => window.alert(`You picked "${name}"`))
+        .catch((err) => window.alert(`Error asking name`))
+    })
+  </script>
+  <pre id="viewSource-askName"></pre><script>$('#viewSource-askName').innerHTML = $('#script-askName').innerText</script>
+  <div id="div-askName"></div>
 
   <h2>attachmentList</h2>
-  <div id="attachmentList"></div>
+  <script id="script-attachmentList">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      UI.store.add(
+        UI.rdf.namedNode('http://example.com/#some-message'),
+        UI.ns.wf('attachment'),
+        UI.rdf.namedNode('http://example.com/#some-attachment')
+      )
+      UI.widgets.attachmentList(document, UI.rdf.namedNode('https://example-user.inrupt.net/public/some-message.ttl'), $('#div-attachmentList'))
+    })
+  </script>
+  <pre id="viewSource-attachmentList"></pre><script>$('#viewSource-attachmentList').innerHTML = $('#script-attachmentList').innerText</script>
+  <div id="div-attachmentList"></div>
 
   <h2>button</h2>
     <script id="script-button">
       window.addEventListener('DOMContentLoaded', (event) => {
         const solidLogo = 'https://solidproject.org/assets/img/solid-emblem.svg'
-        $('#button').appendChild(
-          UI.widgets.button(document, solidLogo, 'test', () => window.alert('clicked!'))
+        $('#div-button').appendChild(
+          UI.widgets.button(document, solidLogo, 'test', () => {
+            window.alert('clicked!')
+          })
         )
       })
     </script>
     <pre id="viewSource-button"></pre><script>$('#viewSource-button').innerHTML = $('#script-button').innerText</script>
-    <div id="button"></div>
+    <div id="div-button"></div>
 
   <h2>cancelButton</h2>
-  <div id="cancelButton"></div>
+    <script id="script-cancelButton">
+      window.addEventListener('DOMContentLoaded', (event) => {
+        $('#div-cancelButton').appendChild(
+          UI.widgets.cancelButton(document, () => {
+            window.alert('clicked!')
+          })
+        )
+      })
+    </script>
+    <pre id="viewSource-cancelButton"></pre><script>$('#viewSource-cancelButton').innerHTML = $('#script-cancelButton').innerText</script>
+    <div id="div-cancelButton"></div>
+
   <h2>clearElement</h2>
-  <div id="clearElement"></div>
+    <script id="script-clearElement">
+      window.addEventListener('DOMContentLoaded', (event) => {
+        let counter = 0
+        setInterval(() => {
+          if (counter++ %2 === 0) {
+            const text = document.createTextNode('Now you see me')
+            $('#div-clearElement').appendChild(text)
+          } else {
+            UI.widgets.clearElement($('#div-clearElement'))
+          }
+        }, 1000)
+      })
+    </script>
+    <pre id="viewSource-clearElement"></pre><script>$('#viewSource-clearElement').innerHTML = $('#script-clearElement').innerText</script>
+    <div id="div-clearElement" style="height: 2em;"></div>
+
   <h2>complain</h2>
-  <div id="complain"></div>
+    <script id="script-complain">
+      window.addEventListener('DOMContentLoaded', (event) => {
+        UI.widgets.complain({ div: $('#div-complain'), dom: document }, 'not good!')
+      })
+    </script>
+    <pre id="viewSource-complain"></pre><script>$('#viewSource-complain').innerHTML = $('#script-complain').innerText</script>
+    <div id="div-complain" style="height: 2em;"></div>
+
   <h2>continueButton</h2>
-  <div id="continueButton"></div>
+    <script id="script-continueButton">
+      window.addEventListener('DOMContentLoaded', (event) => {
+        $('#div-continueButton').appendChild(
+          UI.widgets.continueButton(document, () => window.alert('clicked!'))
+        )
+      })
+    </script>
+    <pre id="viewSource-continueButton"></pre><script>$('#viewSource-continueButton').innerHTML = $('#script-continueButton').innerText</script>
+    <div id="div-continueButton"></div>
+
   <h2>defaultAnnotationStore</h2>
   <div id="defaultAnnotationStore"></div>
   <h2>deleteButtonWithCheck</h2>

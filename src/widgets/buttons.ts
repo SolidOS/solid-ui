@@ -1,3 +1,5 @@
+import { IndexedFormula, NamedNode } from 'rdflib'
+
 /**
  * UI Widgets such as buttons
  * @packageDocumentation
@@ -24,18 +26,25 @@ const dragAndDrop = require('./dragAndDrop')
 const cancelIconURI = UI.icons.iconBase + 'noun_1180156.svg' // black X
 const checkIconURI = UI.icons.iconBase + 'noun_1180158.svg' // green checkmark; Continue
 
-function getStatusArea (context) {
-  var box = context.statusArea || context.div || null
+export type StatusAreaContext = {
+  statusArea?: HTMLElement
+  div?: HTMLElement
+  dom?: HTMLDocument
+}
+function getStatusArea (context?: StatusAreaContext) {
+  var box = (context && context.statusArea) || (context && context.div) || null
   if (box) return box
-  let dom = context.dom
+  let dom = context && context.dom
   if (!dom && typeof document !== 'undefined') {
     dom = document
   }
   if (dom) {
     var body = dom.getElementsByTagName('body')[0]
-    box = dom.createEvent('div')
-    body.insertBefore(box, body.firstElementChild)
-    context.statusArea = box
+    ;(box as unknown as HTMLElement) = dom.createElement('div')
+    body.insertBefore((box as unknown as HTMLElement), body.firstElementChild)
+    if (context) {
+      context.statusArea = (box as unknown as HTMLElement)
+    }
     return box
   }
   return null
@@ -44,11 +53,11 @@ function getStatusArea (context) {
 /**
  * Display an error message block
  */
-function complain (context, err) {
+function complain (context: StatusAreaContext | undefined, err: string) {
   if (!err) return // only if error
-  var ele = context.statusArea || context.div || getStatusArea(context)
+  var ele = getStatusArea(context)
   console.log('Complaint: ' + err)
-  if (ele) ele.appendChild(error.errorMessageBlock(context.dom, err))
+  if (ele) ele.appendChild(error.errorMessageBlock((context && context.dom) || document, err))
   else alert(err)
 }
 
@@ -61,7 +70,7 @@ function complain (context, err) {
 /**
  * Remove all the children of an HTML element
  */
-function clearElement (ele) {
+function clearElement (ele: HTMLElement) {
   while (ele.firstChild) {
     ele.removeChild(ele.firstChild)
   }
@@ -454,7 +463,7 @@ function deleteButtonWithCheck (
  *
  * @returns <dDomElement> - the button
  */
-function button (dom, iconURI, text, handler) {
+function button (dom: HTMLDocument, iconURI: string, text: string, handler: (event: any) => void) {
   var button = dom.createElement('button')
   button.setAttribute('type', 'button')
   button.setAttribute('style', UI.style.buttonStyle)
@@ -469,20 +478,41 @@ function button (dom, iconURI, text, handler) {
   return button
 }
 
-function cancelButton (dom, handler) {
+/*  Make a cancel button
+ *
+ * @param dom - the DOM document object
+ * @param handler <function> - A handler to called when button is clicked
+ *
+ * @returns <dDomElement> - the button
+ */
+function cancelButton (dom: HTMLDocument, handler: (event: any) => void) {
   return button(dom, cancelIconURI, 'Cancel', handler)
 }
 
-function continueButton (dom, handler) {
+/*  Make a continue button
+ *
+ * @param dom - the DOM document object
+ * @param handler <function> - A handler to called when button is clicked
+ *
+ * @returns <dDomElement> - the button
+ */
+function continueButton (dom: HTMLDocument, handler: (event: any) => void) {
   return button(dom, checkIconURI, 'Continue', handler)
 }
 
 /* Grab a name for a new thing
  *
  * Form to get the name of a new thing before we create it
+ * @params klass  Misspelt to avoid clashing with the JavaScript keyword
  * @returns: a promise of (a name or null if cancelled)
  */
-function askName (dom, kb, container, predicate, klass, noun) {
+function askName (
+  dom: HTMLDocument,
+  kb: IndexedFormula,
+  container: HTMLDocument,
+  predicate?: NamedNode,
+  klass?: NamedNode,
+  noun?: string) {
   // eslint-disable-next-line promise/param-names
   return new Promise(function (resolve, _reject) {
     var form = dom.createElement('div') // form is broken as HTML behaviour can resurface on js error
@@ -503,7 +533,7 @@ function askName (dom, kb, container, predicate, klass, noun) {
     // namefield.focus()
 
     function gotName () {
-      form.parentNode.removeChild(form)
+      ((form as HTMLElement).parentNode as HTMLElement).removeChild(form)
       resolve(namefield.value.trim())
     }
 
@@ -516,7 +546,7 @@ function askName (dom, kb, container, predicate, klass, noun) {
     form.appendChild(dom.createElement('br'))
 
     form.appendChild(cancelButton(dom, function (_event) {
-      form.parentNode.removeChild(form)
+      ((form as HTMLElement).parentNode as HTMLElement).removeChild(form)
       resolve(null)
     }))
 
@@ -601,13 +631,29 @@ function refreshTree (root) {
   }
 }
 
-// List of attachments accepting drop
-function attachmentList (dom, subject, div, options) {
+/**
+ * Options argument for [[attachmentList]] function
+ */
+export type attachmentListOptions = {
+  doc?: NamedNode
+  modify?: boolean
+  promptIcon?: string
+  predicate?: NamedNode
+  noun?: string
+}
+
+/**
+ * Component that displays a list of resources, for instance
+ * the attachments of a message, or the various documents related
+ * to a meeting.
+ * Accepts dropping URLs onto it to add attachments to it.
+ */
+function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTMLElement, options?: attachmentListOptions) {
   options = options || {}
   var doc = options.doc || subject.doc()
   if (options.modify === undefined) options.modify = true
   var modify = options.modify
-  var promptIcon = options.promptIcon || UI.icons.iconBase + 'noun_748003.svg' //    target
+  var promptIcon: string = options.promptIcon || (UI.icons.iconBase + 'noun_748003.svg' as string) //    target
   // var promptIcon = options.promptIcon || (UI.icons.iconBase + 'noun_25830.svg') //  paperclip
   var predicate = options.predicate || UI.ns.wf('attachment')
   var noun = options.noun || 'attachment'
@@ -645,12 +691,12 @@ function attachmentList (dom, subject, div, options) {
     }
     return personTR(dom, predicate, target, opt)
   }
-  var refresh = (attachmentTable.refresh = function () {
+  var refresh = ((attachmentTable as any).refresh = function () {
     var things = kb.each(subject, predicate)
     things.sort()
     utils.syncTableToArray(attachmentTable, things, createNewRow)
   })
-  attachmentOuter.refresh = refresh // Participate in downstream changes
+  ;(attachmentOuter as any).refresh = refresh // Participate in downstream changes
   refresh()
 
   var droppedURIHandler = function (uris) {
