@@ -55,7 +55,7 @@ export function notePadToHTML (pad, kb) {
     const content = xmlEncode(rawContent)
     if (indent < 0) { // negative indent levels represenmt heading levels
       decreaseLevel(0)
-      const h = indent >= -4 ? 5 + indent : 1 // -1 -> h4, -2 -> h3
+      const h = indent >= -3 ? 4 + indent : 1 // -1 -> h4, -2 -> h3
       html += `\n<h${h}>${content}</h${h}>\n`
     } else { // >= 0
       if (indent > 0) { // Lists

@@ -1,12 +1,13 @@
-/* global $rdf */
 //                  Solid-UI temporary preferences
 //                  ==============================
 //
+const $rdf = require('rdflib')
 const kb = require('./store')
 const ns = require('./ns')
 const authn = require('./authn/authn')
 const widgets = require('./widgets')
 const pad = require('./pad')
+const participation = require('./participation')
 
 // This was tabulator . preferences in the tabulator
 //
@@ -131,7 +132,7 @@ function recordPersonalDefaults (klass, context) {
 
 function renderPreferencesForm (subject, klass, preferencesForm, context) {
   var prefContainer = context.dom.createElement('div')
-  pad.participationObject(subject, subject.doc(), context.me).then(
+  participation.participationObject(subject, subject.doc(), context.me).then(
     participation => {
       const dom = context.dom
       function heading (text) {
