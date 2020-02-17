@@ -23,6 +23,12 @@ var UI = {
 
 const utils = require('./utils')
 
+// For back-compatiuble API only until next major release: @@ todo: remove these three
+UI.pad.renderPartipants = UI.participation.renderPartipants
+UI.pad.participationObject = UI.participation.participationObject
+UI.pad.recordParticipation = UI.participation.recordParticipation
+// ///////////////////////////////
+
 UI.pad.notePadToHTML = notePadToHTML // export for pane etc
 
 /** Figure out a random color from my webid
