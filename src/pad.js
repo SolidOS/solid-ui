@@ -236,7 +236,7 @@ function xmlEncode (str) {
 /**
  * Convert a notepad to HTML
  */
-export function notePadToHTML (pad, kb) {
+UI.pad.notePadToHTML = function (pad, kb) {
   const chunks = getChunks(pad, kb)
   var html = '<html>\n  <head>\n'
   const title = kb.anyValue(pad, ns.dct('title'))
