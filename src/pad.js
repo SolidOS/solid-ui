@@ -210,11 +210,11 @@ UI.pad.manageParticipation = function (
   return table
 }
 
-/* Get the chunbks of the noepad
-*
-* They are stored in a RDF linked list
-*/
-export function getChunks (subject, kb) {
+/**
+ * Get the chunks of the notepad
+ * They are stored in a RDF linked list
+ */
+function getChunks (subject, kb) {
   var chunks = []
   for (
     let chunk = kb.the(subject, PAD('next'));
@@ -226,9 +226,10 @@ export function getChunks (subject, kb) {
   return chunks
 }
 
-/** Encode content to be put in XML or HTML elements
-*/
-export function xmlEncode (str) {
+/**
+ *  Encode content to be put in XML or HTML elements
+ */
+function xmlEncode (str) {
   return str.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
 }
 
@@ -259,7 +260,7 @@ export function notePadToHTML (pad, kb) {
     const rawContent = kb.anyJS(chunk, ns.sioc('content'))
     if (!rawContent) return // seed chunk is dummy
     const content = xmlEncode(rawContent)
-    if (indent < 0) { // negative indent levels represenmt heading levels
+    if (indent < 0) { // negative indent levels represent heading levels
       decreaseLevel(0)
       const h = indent >= -3 ? 4 + indent : 1 // -1 -> h4, -2 -> h3
       html += `\n<h${h}>${content}</h${h}>\n`
