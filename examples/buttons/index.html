@@ -186,7 +186,7 @@
   <script id="script-faviconOrDefault">
     window.addEventListener('DOMContentLoaded', (event) => {
       const result = UI.widgets.faviconOrDefault(document, UI.rdf.namedNode('https://solidproject.org/'))
-      $('#div-faviconOrDefault').appendChild(document.createTextNode(result))
+      $('#div-faviconOrDefault').appendChild(result)
     })
   </script>
   <pre id="viewSource-faviconOrDefault"></pre><script>$('#viewSource-faviconOrDefault').innerHTML = $('#script-faviconOrDefault').innerText</script>
