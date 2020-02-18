@@ -126,7 +126,7 @@ function shortDate (str, noTime) {
  * @param format  for instance '{FullYear}-{Month}-{Date}T{Hours}:{Minutes}:{Seconds}.{Milliseconds}'
  * @returns for instance '2000-01-15T23:14:23.002'
  */
-function formatDateTime (date, format) {
+function formatDateTime (date: Date, format: string): string {
   return format
     .split('{')
     .map(function (s) {
@@ -144,7 +144,7 @@ function formatDateTime (date, format) {
  * Get a string representation of the current time
  * @returns for instance '2000-01-15T23:14:23.002'
  */
-function timestamp () {
+function timestamp (): string {
   return formatDateTime(
     new Date(),
     '{FullYear}-{Month}-{Date}T{Hours}:{Minutes}:{Seconds}.{Milliseconds}'
@@ -155,7 +155,7 @@ function timestamp () {
  * Get a short string representation of the current time
  * @returns for instance '23:14:23.002'
  */
-function shortTime () {
+function shortTime (): string {
   return formatDateTime(
     new Date(),
     '{Hours}:{Minutes}:{Seconds}.{Milliseconds}'
@@ -362,9 +362,9 @@ function setImage (element, thing) { // 20191230a
 
 // If a web page then a favicon with a fallback to
 // See eg http://stackoverflow.com/questions/980855/inputting-a-default-image
-function faviconOrDefault (dom, x) {
+function faviconOrDefault (dom: HTMLDocument, x: NamedNode) {
   var image = dom.createElement('img')
-  image.style = UI.style.iconStyle
+  ;(image as any).style = UI.style.iconStyle
   var isOrigin = function (x) {
     if (!x.uri) return false
     var parts = x.uri.split('/')
