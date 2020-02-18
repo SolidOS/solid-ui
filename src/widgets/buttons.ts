@@ -61,12 +61,6 @@ function complain (context: StatusAreaContext | undefined, err: string) {
   else alert(err)
 }
 
-// var UI.ns = require('./ns.js')
-// var utilsModule = require('./utils')
-// var aclControlModule = require('./acl-control')
-
-// paneUtils = {}
-
 /**
  * Remove all the children of an HTML element
  */
@@ -392,15 +386,15 @@ function faviconOrDefault (dom, x) {
   }
 }
 
-// Delete button with a check you really mean it
-//
-//   @@ Supress check if command key held down?
-//
+/**
+ * Delete button with a check you really mean it
+ * @@ Supress check if command key held down?
+ */
 function deleteButtonWithCheck (
-  dom,
-  container,
-  noun,
-  deleteFunction
+  dom: HTMLDocument,
+  container: HTMLElement,
+  noun: string,
+  deleteFunction: () => any
 ) {
   var minusIconURI = UI.icons.iconBase + 'noun_2188_red.svg' // white minus in red #cc0000 circle
 
@@ -753,10 +747,11 @@ function openHrefInOutlineMode (e) {
   // dom.outlineManager.GotoSubject(UI.store.sym(uri), true, undefined, true, undefined)
 }
 
-// We make a URI in the annotation store out of the URI of the thing to be annotated.
-//
-// @@ Todo: make it a personal preference.
-//
+/**
+ * Make a URI in the Tabulator.org annotation store out of the URI of the thing to be annotated.
+ *
+ * @@ Todo: make it a personal preference.
+ */
 function defaultAnnotationStore (subject) {
   if (subject.uri === undefined) return undefined
   var s = subject.uri

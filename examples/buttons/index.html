@@ -10,12 +10,12 @@
   </head>
 <body>
   <h2>addStyleSheet</h2>
-    <script id="script-addStyleSheet">
-      window.addEventListener('DOMContentLoaded', (event) => {
-        UI.widgets.addStyleSheet(document, 'https://linkeddata.github.io/tabulator-firefox/content/tabbedtab.css')
-      })
-    </script>
-    <pre id="viewSource-addStyleSheet"></pre><script>$('#viewSource-addStyleSheet').innerHTML = $('#script-addStyleSheet').innerText</script>
+  <script id="script-addStyleSheet">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      UI.widgets.addStyleSheet(document, 'https://linkeddata.github.io/tabulator-firefox/content/tabbedtab.css')
+    })
+  </script>
+  <pre id="viewSource-addStyleSheet"></pre><script>$('#viewSource-addStyleSheet').innerHTML = $('#script-addStyleSheet').innerText</script>
 
   <h2>allClassURIs</h2>
   <script id="script-allClassURIs">
@@ -70,126 +70,364 @@
   <div id="div-attachmentList"></div>
 
   <h2>button</h2>
-    <script id="script-button">
-      window.addEventListener('DOMContentLoaded', (event) => {
-        const solidLogo = 'https://solidproject.org/assets/img/solid-emblem.svg'
-        $('#div-button').appendChild(
-          UI.widgets.button(document, solidLogo, 'test', () => {
-            window.alert('clicked!')
-          })
-        )
-      })
-    </script>
-    <pre id="viewSource-button"></pre><script>$('#viewSource-button').innerHTML = $('#script-button').innerText</script>
-    <div id="div-button"></div>
+  <script id="script-button">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const solidLogo = 'https://solidproject.org/assets/img/solid-emblem.svg'
+      $('#div-button').appendChild(
+        UI.widgets.button(document, solidLogo, 'test', () => {
+          window.alert('clicked!')
+        })
+      )
+    })
+  </script>
+  <pre id="viewSource-button"></pre><script>$('#viewSource-button').innerHTML = $('#script-button').innerText</script>
+  <div id="div-button"></div>
 
   <h2>cancelButton</h2>
-    <script id="script-cancelButton">
-      window.addEventListener('DOMContentLoaded', (event) => {
-        $('#div-cancelButton').appendChild(
-          UI.widgets.cancelButton(document, () => {
-            window.alert('clicked!')
-          })
-        )
-      })
-    </script>
-    <pre id="viewSource-cancelButton"></pre><script>$('#viewSource-cancelButton').innerHTML = $('#script-cancelButton').innerText</script>
-    <div id="div-cancelButton"></div>
+  <script id="script-cancelButton">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      $('#div-cancelButton').appendChild(
+        UI.widgets.cancelButton(document, () => {
+          window.alert('clicked!')
+        })
+      )
+    })
+  </script>
+  <pre id="viewSource-cancelButton"></pre><script>$('#viewSource-cancelButton').innerHTML = $('#script-cancelButton').innerText</script>
+  <div id="div-cancelButton"></div>
 
   <h2>clearElement</h2>
-    <script id="script-clearElement">
-      window.addEventListener('DOMContentLoaded', (event) => {
-        let counter = 0
-        setInterval(() => {
-          if (counter++ %2 === 0) {
-            const text = document.createTextNode('Now you see me')
-            $('#div-clearElement').appendChild(text)
-          } else {
-            UI.widgets.clearElement($('#div-clearElement'))
-          }
-        }, 1000)
-      })
-    </script>
-    <pre id="viewSource-clearElement"></pre><script>$('#viewSource-clearElement').innerHTML = $('#script-clearElement').innerText</script>
-    <div id="div-clearElement" style="height: 2em;"></div>
+  <script id="script-clearElement">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      let counter = 0
+      setInterval(() => {
+        if (counter++ %2 === 0) {
+          const text = document.createTextNode('Now you see me')
+          $('#div-clearElement').appendChild(text)
+        } else {
+          UI.widgets.clearElement($('#div-clearElement'))
+        }
+      }, 1000)
+    })
+  </script>
+  <pre id="viewSource-clearElement"></pre><script>$('#viewSource-clearElement').innerHTML = $('#script-clearElement').innerText</script>
+  <div id="div-clearElement" style="height: 2em;"></div>
 
   <h2>complain</h2>
-    <script id="script-complain">
-      window.addEventListener('DOMContentLoaded', (event) => {
-        UI.widgets.complain({ div: $('#div-complain'), dom: document }, 'not good!')
-      })
-    </script>
-    <pre id="viewSource-complain"></pre><script>$('#viewSource-complain').innerHTML = $('#script-complain').innerText</script>
-    <div id="div-complain" style="height: 2em;"></div>
+  <script id="script-complain">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      UI.widgets.complain({ div: $('#div-complain'), dom: document }, 'not good!')
+    })
+  </script>
+  <pre id="viewSource-complain"></pre><script>$('#viewSource-complain').innerHTML = $('#script-complain').innerText</script>
+  <div id="div-complain" style="height: 2em;"></div>
 
   <h2>continueButton</h2>
-    <script id="script-continueButton">
-      window.addEventListener('DOMContentLoaded', (event) => {
-        $('#div-continueButton').appendChild(
-          UI.widgets.continueButton(document, () => window.alert('clicked!'))
-        )
-      })
-    </script>
-    <pre id="viewSource-continueButton"></pre><script>$('#viewSource-continueButton').innerHTML = $('#script-continueButton').innerText</script>
-    <div id="div-continueButton"></div>
+  <script id="script-continueButton">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      $('#div-continueButton').appendChild(
+        UI.widgets.continueButton(document, () => window.alert('clicked!'))
+      )
+    })
+  </script>
+  <pre id="viewSource-continueButton"></pre><script>$('#viewSource-continueButton').innerHTML = $('#script-continueButton').innerText</script>
+  <div id="div-continueButton"></div>
 
   <h2>defaultAnnotationStore</h2>
-  <div id="defaultAnnotationStore"></div>
+    <script id="script-defaultAnnotationStore">
+      window.addEventListener('DOMContentLoaded', (event) => {
+        const url = 'http://example.com/a/b.html'
+        const result = UI.widgets.defaultAnnotationStore(UI.rdf.namedNode(url))
+        $('#div-defaultAnnotationStore').appendChild(document.createTextNode(result.uri))
+      })
+    </script>
+    <pre id="viewSource-defaultAnnotationStore"></pre><script>$('#viewSource-defaultAnnotationStore').innerHTML = $('#script-defaultAnnotationStore').innerText</script>
+    <div id="div-defaultAnnotationStore"></div>
+
   <h2>deleteButtonWithCheck</h2>
-  <div id="deleteButtonWithCheck"></div>
+  <script id="script-deleteButtonWithCheck">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const result = UI.widgets.deleteButtonWithCheck(
+        document,
+        $('#div-deleteButtonWithCheck'),
+        'something',
+        () => window.alert('irreversible!'))
+      $('#div-deleteButtonWithCheck').appendChild(result)
+    })
+  </script>
+  <pre id="viewSource-deleteButtonWithCheck"></pre><script>$('#viewSource-deleteButtonWithCheck').innerHTML = $('#script-deleteButtonWithCheck').innerText</script>
+  <div id="div-deleteButtonWithCheck"></div>
+
   <h2>extractLogURI</h2>
-  <div id="extractLogURI"></div>
+  <script id="script-extractLogURI">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const url = 'https://example.com/logFile=http%3A%2F%2Fexample.org%2Flogs.ttl&rulesFile=ttp%3A%2F%2Fexample.org%2Frules.ttl'
+      const extracted = decodeURIComponent(UI.widgets.extractLogURI(url))
+      $('#div-extractLogURI').appendChild(document.createTextNode(extracted))
+    })
+  </script>
+  <pre id="viewSource-extractLogURI"></pre><script>$('#viewSource-extractLogURI').innerHTML = $('#script-extractLogURI').innerText</script>
+  <div id="div-extractLogURI"></div>
+
   <h2>formatDateTime</h2>
-  <div id="formatDateTime"></div>
+  <script id="script-formatDateTime">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const result = UI.widgets.formatDateTime()
+      $('#div-formatDateTime').appendChild(document.createTextNode(result))
+    })
+  </script>
+  <pre id="viewSource-formatDateTime"></pre><script>$('#viewSource-formatDateTime').innerHTML = $('#script-formatDateTime').innerText</script>
+  <div id="div-formatDateTime"></div>
+
   <h2>faviconOrDefault</h2>
-  <div id="faviconOrDefault"></div>
+  <script id="script-faviconOrDefault">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const result = UI.widgets.faviconOrDefault()
+      $('#div-faviconOrDefault').appendChild(document.createTextNode(result))
+    })
+  </script>
+  <pre id="viewSource-faviconOrDefault"></pre><script>$('#viewSource-faviconOrDefault').innerHTML = $('#script-faviconOrDefault').innerText</script>
+  <div id="div-faviconOrDefault"></div>
+
   <h2>fileUploadButtonDiv</h2>
-  <div id="fileUploadButtonDiv"></div>
+  <script id="script-fileUploadButtonDiv">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const result = UI.widgets.fileUploadButtonDiv()
+      $('#div-fileUploadButtonDiv').appendChild(document.createTextNode(result))
+    })
+  </script>
+  <pre id="viewSource-fileUploadButtonDiv"></pre><script>$('#viewSource-fileUploadButtonDiv').innerHTML = $('#script-fileUploadButtonDiv').innerText</script>
+  <div id="div-fileUploadButtonDiv"></div>
+
   <h2>findImage</h2>
-  <div id="findImage"></div>
+  <script id="script-findImage">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const result = UI.widgets.findImage()
+      $('#div-findImage').appendChild(document.createTextNode(result))
+    })
+  </script>
+  <pre id="viewSource-findImage"></pre><script>$('#viewSource-findImage').innerHTML = $('#script-findImage').innerText</script>
+  <div id="div-findImage"></div>
+
   <h2>findImageFromURI</h2>
-  <div id="findImageFromURI"></div>
+  <script id="script-findImageFromURI">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const result = UI.widgets.findImageFromURI()
+      $('#div-findImageFromURI').appendChild(document.createTextNode(result))
+    })
+  </script>
+  <pre id="viewSource-findImageFromURI"></pre><script>$('#viewSource-findImageFromURI').innerHTML = $('#script-findImageFromURI').innerText</script>
+  <div id="div-findImageFromURI"></div>
+
   <h2>iconForClass</h2>
-  <div id="iconForClass"></div>
+  <script id="script-iconForClass">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const result = UI.widgets.iconForClass()
+      $('#div-iconForClass').appendChild(document.createTextNode(result))
+    })
+  </script>
+  <pre id="viewSource-iconForClass"></pre><script>$('#viewSource-iconForClass').innerHTML = $('#script-iconForClass').innerText</script>
+  <div id="div-iconForClass"></div>
+
   <h2>imagesOf</h2>
-  <div id="imagesOf"></div>
+  <script id="script-imagesOf">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const result = UI.widgets.imagesOf()
+      $('#div-imagesOf').appendChild(document.createTextNode(result))
+    })
+  </script>
+  <pre id="viewSource-imagesOf"></pre><script>$('#viewSource-imagesOf').innerHTML = $('#script-imagesOf').innerText</script>
+  <div id="div-imagesOf"></div>
+
   <h2>index</h2>
-  <div id="index"></div>
+  <script id="script-index">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const result = UI.widgets.index()
+      $('#div-index').appendChild(document.createTextNode(result))
+    })
+  </script>
+  <pre id="viewSource-index"></pre><script>$('#viewSource-index').innerHTML = $('#script-index').innerText</script>
+  <div id="div-index"></div>
+
   <h2>isAudio</h2>
-  <div id="isAudio"></div>
+  <script id="script-isAudio">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const result = UI.widgets.isAudio()
+      $('#div-isAudio').appendChild(document.createTextNode(result))
+    })
+  </script>
+  <pre id="viewSource-isAudio"></pre><script>$('#viewSource-isAudio').innerHTML = $('#script-isAudio').innerText</script>
+  <div id="div-isAudio"></div>
+
   <h2>isImage</h2>
-  <div id="isImage"></div>
+  <script id="script-isImage">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const result = UI.widgets.isImage()
+      $('#div-isImage').appendChild(document.createTextNode(result))
+    })
+  </script>
+  <pre id="viewSource-isImage"></pre><script>$('#viewSource-isImage').innerHTML = $('#script-isImage').innerText</script>
+  <div id="div-isImage"></div>
+
   <h2>isVideo</h2>
-  <div id="isVideo"></div>
+  <script id="script-isVideo">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const result = UI.widgets.isVideo()
+      $('#div-isVideo').appendChild(document.createTextNode(result))
+    })
+  </script>
+  <pre id="viewSource-isVideo"></pre><script>$('#viewSource-isVideo').innerHTML = $('#script-isVideo').innerText</script>
+  <div id="div-isVideo"></div>
+
   <h2>linkButton</h2>
-  <div id="linkButton"></div>
+  <script id="script-linkButton">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const result = UI.widgets.linkButton()
+      $('#div-linkButton').appendChild(document.createTextNode(result))
+    })
+  </script>
+  <pre id="viewSource-linkButton"></pre><script>$('#viewSource-linkButton').innerHTML = $('#script-linkButton').innerText</script>
+  <div id="div-linkButton"></div>
+
   <h2>linkIcon</h2>
-  <div id="linkIcon"></div>
+  <script id="script-linkIcon">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const result = UI.widgets.linkIcon()
+      $('#div-linkIcon').appendChild(document.createTextNode(result))
+    })
+  </script>
+  <pre id="viewSource-linkIcon"></pre><script>$('#viewSource-linkIcon').innerHTML = $('#script-linkIcon').innerText</script>
+  <div id="div-linkIcon"></div>
+
   <h2>openHrefInOutlineMode</h2>
-  <div id="openHrefInOutlineMode"></div>
+  <script id="script-openHrefInOutlineMode">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const result = UI.widgets.openHrefInOutlineMode()
+      $('#div-openHrefInOutlineMode').appendChild(document.createTextNode(result))
+    })
+  </script>
+  <pre id="viewSource-openHrefInOutlineMode"></pre><script>$('#viewSource-openHrefInOutlineMode').innerHTML = $('#script-openHrefInOutlineMode').innerText</script>
+  <div id="div-openHrefInOutlineMode"></div>
+
   <h2>personTR</h2>
-  <div id="personTR"></div>
+  <script id="script-personTR">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const result = UI.widgets.personTR()
+      $('#div-personTR').appendChild(document.createTextNode(result))
+    })
+  </script>
+  <pre id="viewSource-personTR"></pre><script>$('#viewSource-personTR').innerHTML = $('#script-personTR').innerText</script>
+  <div id="div-personTR"></div>
+
   <h2>propertyTriage</h2>
-  <div id="propertyTriage"></div>
+  <script id="script-propertyTriage">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const result = UI.widgets.propertyTriage()
+      $('#div-propertyTriage').appendChild(document.createTextNode(result))
+    })
+  </script>
+  <pre id="viewSource-propertyTriage"></pre><script>$('#viewSource-propertyTriage').innerHTML = $('#script-propertyTriage').innerText</script>
+  <div id="div-propertyTriage"></div>
+
   <h2>refreshTree</h2>
-  <div id="refreshTree"></div>
+  <script id="script-refreshTree">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const result = UI.widgets.refreshTree()
+      $('#div-refreshTree').appendChild(document.createTextNode(result))
+    })
+  </script>
+  <pre id="viewSource-refreshTree"></pre><script>$('#viewSource-refreshTree').innerHTML = $('#script-refreshTree').innerText</script>
+  <div id="div-refreshTree"></div>
+
   <h2>removeButton</h2>
-  <div id="removeButton"></div>
+  <script id="script-removeButton">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const result = UI.widgets.removeButton()
+      $('#div-removeButton').appendChild(document.createTextNode(result))
+    })
+  </script>
+  <pre id="viewSource-removeButton"></pre><script>$('#viewSource-removeButton').innerHTML = $('#script-removeButton').innerText</script>
+  <div id="div-removeButton"></div>
+
   <h2>shortDate</h2>
-  <div id="shortDate"></div>
+  <script id="script-shortDate">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const result = UI.widgets.shortDate()
+      $('#div-shortDate').appendChild(document.createTextNode(result))
+    })
+  </script>
+  <pre id="viewSource-shortDate"></pre><script>$('#viewSource-shortDate').innerHTML = $('#script-shortDate').innerText</script>
+  <div id="div-shortDate"></div>
+
   <h2>shortTime</h2>
-  <div id="shortTime"></div>
+  <script id="script-shortTime">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const result = UI.widgets.shortTime()
+      $('#div-shortTime').appendChild(document.createTextNode(result))
+    })
+  </script>
+  <pre id="viewSource-shortTime"></pre><script>$('#viewSource-shortTime').innerHTML = $('#script-shortTime').innerText</script>
+  <div id="div-shortTime"></div>
+
   <h2>selectorPanel</h2>
-  <div id="selectorPanel"></div>
+  <script id="script-selectorPanel">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const result = UI.widgets.selectorPanel()
+      $('#div-selectorPanel').appendChild(document.createTextNode(result))
+    })
+  </script>
+  <pre id="viewSource-selectorPanel"></pre><script>$('#viewSource-selectorPanel').innerHTML = $('#script-selectorPanel').innerText</script>
+  <div id="div-selectorPanel"></div>
+
   <h2>selectorPanelRefresh</h2>
-  <div id="selectorPanelRefresh"></div>
+  <script id="script-selectorPanelRefresh">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const result = UI.widgets.selectorPanelRefresh()
+      $('#div-selectorPanelRefresh').appendChild(document.createTextNode(result))
+    })
+  </script>
+  <pre id="viewSource-selectorPanelRefresh"></pre><script>$('#viewSource-selectorPanelRefresh').innerHTML = $('#script-selectorPanelRefresh').innerText</script>
+  <div id="div-selectorPanelRefresh"></div>
+
   <h2>setImage</h2>
-  <div id="setImage"></div>
+  <script id="script-setImage">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const result = UI.widgets.setImage()
+      $('#div-setImage').appendChild(document.createTextNode(result))
+    })
+  </script>
+  <pre id="viewSource-setImage"></pre><script>$('#viewSource-setImage').innerHTML = $('#script-setImage').innerText</script>
+  <div id="div-setImage"></div>
+
   <h2>setName</h2>
-  <div id="setName"></div>
+  <script id="script-setName">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const result = UI.widgets.setName()
+      $('#div-setName').appendChild(document.createTextNode(result))
+    })
+  </script>
+  <pre id="viewSource-setName"></pre><script>$('#viewSource-setName').innerHTML = $('#script-setName').innerText</script>
+  <div id="div-setName"></div>
+
   <h2>tempSite</h2>
-  <div id="tempSite"></div>
+  <script id="script-tempSite">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const result = UI.widgets.tempSite()
+      $('#div-tempSite').appendChild(document.createTextNode(result))
+    })
+  </script>
+  <pre id="viewSource-tempSite"></pre><script>$('#viewSource-tempSite').innerHTML = $('#script-tempSite').innerText</script>
+  <div id="div-tempSite"></div>
+
   <h2>timestamp</h2>
-  <div id="timestamp"></div>
+  <script id="script-timestamp">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const result = UI.widgets.timestamp()
+      $('#div-timestamp').appendChild(document.createTextNode(result))
+    })
+  </script>
+  <pre id="viewSource-timestamp"></pre><script>$('#viewSource-timestamp').innerHTML = $('#script-timestamp').innerText</script>
+  <div id="div-timestamp"></div>
+
 </body>
 </html>
