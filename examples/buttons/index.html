@@ -442,8 +442,14 @@
  <h2 id="refreshTree"><a href="#refreshTree">refreshTree</a></h2>
   <script id="script-refreshTree">
     window.addEventListener('DOMContentLoaded', (event) => {
-      // const result = UI.widgets.refreshTree()
-      // $('#div-refreshTree').appendChild(document.createTextNode(result))
+      setInterval(() => {
+        UI.widgets.refreshTree(document.body)
+      }, 1000)
+      const refreshable = document.createElement('p')
+      refreshable.refresh = () => {
+        refreshable.innerText = new Date().getTime()
+      }
+      $('#div-refreshTree').appendChild(refreshable)
     })
   </script>
   <pre id="viewSource-refreshTree"></pre><script>$('#viewSource-refreshTree').innerHTML = $('#script-refreshTree').innerText</script>
