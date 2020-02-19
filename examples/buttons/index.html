@@ -17,13 +17,13 @@
     </script>
   </head>
 <body>
- <!-- <h2 id="addStyleSheet"><a href="#addStyleSheet">addStyleSheet</a></h2>
+ <h2 id="addStyleSheet"><a href="#addStyleSheet">addStyleSheet</a></h2>
   <script id="script-addStyleSheet">
     window.addEventListener('DOMContentLoaded', (event) => {
       UI.widgets.addStyleSheet(document, 'https://linkeddata.github.io/tabulator-firefox/content/tabbedtab.css')
     })
   </script>
-  <pre id="viewSource-addStyleSheet"></pre><script>$('#viewSource-addStyleSheet').innerHTML = $('#script-addStyleSheet').innerText</script>
+  <pre id="viewSource-addStyleSheet"></pre><script>showSource('addStyleSheet')</script>
 
  <h2 id="allClassURIs"><a href="#allClassURIs">allClassURIs</a></h2>
   <script id="script-allClassURIs">
@@ -47,7 +47,7 @@
       })
     })
   </script>
-  <pre id="viewSource-allClassURIs"></pre><script>$('#viewSource-allClassURIs').innerHTML = $('#script-allClassURIs').innerText</script>
+  <pre id="viewSource-allClassURIs"></pre><script>showSource('allClassURIs')</script>
 
   <ul id="ul-allClassURIs"></ul>
 
@@ -60,7 +60,7 @@
         .catch((err) => window.alert(`Error asking name`))
     })
   </script>
-  <pre id="viewSource-askName"></pre><script>$('#viewSource-askName').innerHTML = $('#script-askName').innerText</script>
+  <pre id="viewSource-askName"></pre><script>showSource('askName')</script>
   <div id="div-askName"></div>
 
  <h2 id="attachmentList"><a href="#attachmentList">attachmentList</a></h2>
@@ -75,7 +75,7 @@
       UI.widgets.attachmentList(document, UI.rdf.namedNode('https://example-user.inrupt.net/public/some-message.ttl'), $('#div-attachmentList'))
     })
   </script>
-  <pre id="viewSource-attachmentList"></pre><script>$('#viewSource-attachmentList').innerHTML = $('#script-attachmentList').innerText</script>
+  <pre id="viewSource-attachmentList"></pre><script>showSource('attachmentList')</script>
   <div id="div-attachmentList"></div>
 
  <h2 id="button"><a href="#button">button</a></h2>
@@ -89,7 +89,7 @@
       )
     })
   </script>
-  <pre id="viewSource-button"></pre><script>$('#viewSource-button').innerHTML = $('#script-button').innerText</script>
+  <pre id="viewSource-button"></pre><script>showSource('button')</script>
   <div id="div-button"></div>
 
  <h2 id="cancelButton"><a href="#cancelButton">cancelButton</a></h2>
@@ -102,7 +102,7 @@
       )
     })
   </script>
-  <pre id="viewSource-cancelButton"></pre><script>$('#viewSource-cancelButton').innerHTML = $('#script-cancelButton').innerText</script>
+  <pre id="viewSource-cancelButton"></pre><script>showSource('cancelButton')</script>
   <div id="div-cancelButton"></div>
 
  <h2 id="clearElement"><a href="#clearElement">clearElement</a></h2>
@@ -119,7 +119,7 @@
       }, 1000)
     })
   </script>
-  <pre id="viewSource-clearElement"></pre><script>$('#viewSource-clearElement').innerHTML = $('#script-clearElement').innerText</script>
+  <pre id="viewSource-clearElement"></pre><script>showSource('clearElement')</script>
   <div id="div-clearElement" style="height: 2em;"></div>
 
  <h2 id="complain"><a href="#complain">complain</a></h2>
@@ -128,7 +128,7 @@
       UI.widgets.complain({ div: $('#div-complain'), dom: document }, 'not good!')
     })
   </script>
-  <pre id="viewSource-complain"></pre><script>$('#viewSource-complain').innerHTML = $('#script-complain').innerText</script>
+  <pre id="viewSource-complain"></pre><script>showSource('complain')</script>
   <div id="div-complain" style="height: 2em;"></div>
 
  <h2 id="continueButton"><a href="#continueButton">continueButton</a></h2>
@@ -139,7 +139,7 @@
       )
     })
   </script>
-  <pre id="viewSource-continueButton"></pre><script>$('#viewSource-continueButton').innerHTML = $('#script-continueButton').innerText</script>
+  <pre id="viewSource-continueButton"></pre><script>showSource('continueButton')</script>
   <div id="div-continueButton"></div>
 
  <h2 id="defaultAnnotationStore"><a href="#defaultAnnotationStore">defaultAnnotationStore</a></h2>
@@ -150,7 +150,7 @@
         $('#div-defaultAnnotationStore').appendChild(document.createTextNode(result.uri))
       })
     </script>
-    <pre id="viewSource-defaultAnnotationStore"></pre><script>$('#viewSource-defaultAnnotationStore').innerHTML = $('#script-defaultAnnotationStore').innerText</script>
+    <pre id="viewSource-defaultAnnotationStore"></pre><script>showSource('defaultAnnotationStore')</script>
     <div id="div-defaultAnnotationStore"></div>
 
  <h2 id="deleteButtonWithCheck"><a href="#deleteButtonWithCheck">deleteButtonWithCheck</a></h2>
@@ -164,7 +164,7 @@
       $('#div-deleteButtonWithCheck').appendChild(result)
     })
   </script>
-  <pre id="viewSource-deleteButtonWithCheck"></pre><script>$('#viewSource-deleteButtonWithCheck').innerHTML = $('#script-deleteButtonWithCheck').innerText</script>
+  <pre id="viewSource-deleteButtonWithCheck"></pre><script>showSource('deleteButtonWithCheck')</script>
   <div id="div-deleteButtonWithCheck"></div>
 
  <h2 id="extractLogURI"><a href="#extractLogURI">extractLogURI</a></h2>
@@ -175,7 +175,7 @@
       $('#div-extractLogURI').appendChild(document.createTextNode(extracted))
     })
   </script>
-  <pre id="viewSource-extractLogURI"></pre><script>$('#viewSource-extractLogURI').innerHTML = $('#script-extractLogURI').innerText</script>
+  <pre id="viewSource-extractLogURI"></pre><script>showSource('extractLogURI')</script>
   <div id="div-extractLogURI"></div>
 
  <h2 id="formatDateTime"><a href="#formatDateTime">formatDateTime</a></h2>
@@ -188,7 +188,7 @@
       $('#div-formatDateTime').appendChild(document.createTextNode(result))
     })
   </script>
-  <pre id="viewSource-formatDateTime"></pre><script>$('#viewSource-formatDateTime').innerHTML = $('#script-formatDateTime').innerText</script>
+  <pre id="viewSource-formatDateTime"></pre><script>showSource('formatDateTime')</script>
   <div id="div-formatDateTime"></div>
 
 <h2 id="faviconOrDefault"><a href="#faviconOrDefault"><a href="#faviconOrDefault">faviconOrDefault</a></a></h2>
@@ -198,7 +198,7 @@
       $('#div-faviconOrDefault').appendChild(result)
     })
   </script>
-  <pre id="viewSource-faviconOrDefault"></pre><script>$('#viewSource-faviconOrDefault').innerHTML = $('#script-faviconOrDefault').innerText</script>
+  <pre id="viewSource-faviconOrDefault"></pre><script>showSource('faviconOrDefault')</script>
   <div id="div-faviconOrDefault"></div>
 
 <h2 id="fileUploadButtonDiv"><a href="#fileUploadButtonDiv"><a href="#fileUploadButtonDiv">fileUploadButtonDiv</a></a></h2>
@@ -210,7 +210,7 @@
       $('#div-fileUploadButtonDiv').appendChild(result)
     })
   </script>
-  <pre id="viewSource-fileUploadButtonDiv"></pre><script>$('#viewSource-fileUploadButtonDiv').innerHTML = $('#script-fileUploadButtonDiv').innerText</script>
+  <pre id="viewSource-fileUploadButtonDiv"></pre><script>showSource('fileUploadButtonDiv')</script>
   <div id="div-fileUploadButtonDiv"></div>
 
  <h2 id="findImage"><a href="#findImage">findImage</a></h2>
@@ -232,7 +232,7 @@
       displayFindImageResult(michiel)
     })
   </script>
-  <pre id="viewSource-findImage"></pre><script>$('#viewSource-findImage').innerHTML = $('#script-findImage').innerText</script>
+  <pre id="viewSource-findImage"></pre><script>showSource('findImage')</script>
   <div id="div-findImage"></div>
 
  <h2 id="findImageFromURI"><a href="#findImageFromURI">findImageFromURI</a></h2>
@@ -252,7 +252,7 @@
       displayFindImageFromURIResult('mailto:user@example.com')
     })
   </script>
-  <pre id="viewSource-findImageFromURI"></pre><script>$('#viewSource-findImageFromURI').innerHTML = $('#script-findImageFromURI').innerText</script>
+  <pre id="viewSource-findImageFromURI"></pre><script>showSource('findImageFromURI')</script>
   <div id="div-findImageFromURI"></div>
 
  <h2 id="iconForClass"><a href="#iconForClass">iconForClass</a></h2>
@@ -284,7 +284,7 @@
       })
     })
   </script>
-  <pre id="viewSource-imagesOf"></pre><script>$('#viewSource-imagesOf').innerHTML = $('#script-imagesOf').innerText</script>
+  <pre id="viewSource-imagesOf"></pre><script>showSource('imagesOf')</script>
   <div id="div-imagesOf"></div>
 
   <h2 id="twoLineTransaction"><a href="#twoLineTransaction">twoLineTransaction</a></h2>
@@ -299,7 +299,7 @@
       $('#div-twoLineTransaction').appendChild(result)
     })
   </script>
-  <pre id="viewSource-twoLineTransaction"></pre><script>$('#viewSource-twoLineTransaction').innerHTML = $('#script-twoLineTransaction').innerText</script>
+  <pre id="viewSource-twoLineTransaction"></pre><script>showSource('twoLineTransaction')</script>
   <div id="div-twoLineTransaction"></div>
 
   <h2 id="twoLineTrip"><a href="#twoLineTrip">twoLineTrip</a></h2>
@@ -314,8 +314,8 @@
       $('#div-twoLineTrip').appendChild(result)
     })
   </script>
-  <pre id="viewSource-twoLineTrip"></pre><script>$('#viewSource-twoLineTrip').innerHTML = $('#script-twoLineTrip').innerText</script>
-  <div id="div-twoLineTrip"></div> -->
+  <pre id="viewSource-twoLineTrip"></pre><script>showSource('twoLineTrip')</script>
+  <div id="div-twoLineTrip"></div>
 
  <h2 id="twoLineWidgetForClass"><a href="#twoLineWidgetForClass">twoLineWidgetForClass</a></h2>
   <script id="script-twoLineWidgetForClass">
@@ -327,7 +327,7 @@
       $('#div-twoLineWidgetForClass').appendChild(widget)
     })
   </script>
-  <pre id="viewSource-twoLineWidgetForClass"></pre><script>$('#viewSource-twoLineWidgetForClass').innerHTML = $('#script-twoLineWidgetForClass').innerText</script>
+  <pre id="viewSource-twoLineWidgetForClass"></pre><script>showSource('twoLineWidgetForClass')</script>
   <div id="div-twoLineWidgetForClass"></div>
 
  <h2 id="isAudio"><a href="#isAudio">isAudio</a></h2>
@@ -338,7 +338,7 @@
       $('#div-isAudio').appendChild(document.createTextNode(result))
     })
   </script>
-  <pre id="viewSource-isAudio"></pre><script>$('#viewSource-isAudio').innerHTML = $('#script-isAudio').innerText</script>
+  <pre id="viewSource-isAudio"></pre><script>showSource('isAudio')</script>
   <div id="div-isAudio"></div>
 
  <h2 id="isImage"><a href="#isImage">isImage</a></h2>
@@ -349,7 +349,7 @@
       $('#div-isImage').appendChild(document.createTextNode(result))
     })
   </script>
-  <pre id="viewSource-isImage"></pre><script>$('#viewSource-isImage').innerHTML = $('#script-isImage').innerText</script>
+  <pre id="viewSource-isImage"></pre><script>showSource('isImage')</script>
   <div id="div-isImage"></div>
 
  <h2 id="isVideo"><a href="#isVideo">isVideo</a></h2>
@@ -360,7 +360,7 @@
       $('#div-isVideo').appendChild(document.createTextNode(result))
     })
   </script>
-  <pre id="viewSource-isVideo"></pre><script>$('#viewSource-isVideo').innerHTML = $('#script-isVideo').innerText</script>
+  <pre id="viewSource-isVideo"></pre><script>showSource('isVideo')</script>
   <div id="div-isVideo"></div>
 
  <h2 id="linkButton"><a href="#linkButton">linkButton</a></h2>
@@ -375,7 +375,7 @@
       $('#div-linkButton').appendChild(result)
     })
   </script>
-  <pre id="viewSource-linkButton"></pre><script>$('#viewSource-linkButton').innerHTML = $('#script-linkButton').innerText</script>
+  <pre id="viewSource-linkButton"></pre><script>showSource('linkButton')</script>
   <div id="div-linkButton"></div>
 
  <h2 id="linkIcon"><a href="#linkIcon">linkIcon</a></h2>
@@ -392,7 +392,7 @@
       )
     })
   </script>
-  <pre id="viewSource-linkIcon"></pre><script>$('#viewSource-linkIcon').innerHTML = $('#script-linkIcon').innerText</script>
+  <pre id="viewSource-linkIcon"></pre><script>showSource('linkIcon')</script>
   <div id="div-linkIcon"></div>
 
  <h2 id="openHrefInOutlineMode"><a href="#openHrefInOutlineMode">openHrefInOutlineMode</a></h2>
@@ -413,7 +413,7 @@
       $('#div-openHrefInOutlineMode').appendChild(anchor)
     })
   </script>
-  <pre id="viewSource-openHrefInOutlineMode"></pre><script>$('#viewSource-openHrefInOutlineMode').innerHTML = $('#script-openHrefInOutlineMode').innerText</script>
+  <pre id="viewSource-openHrefInOutlineMode"></pre><script>showSource('openHrefInOutlineMode')</script>
   <div id="div-openHrefInOutlineMode"></div>
 
  <h2 id="personTR"><a href="#personTR">personTR</a></h2>
@@ -424,7 +424,7 @@
       $('#div-personTR').appendChild(result)
     })
   </script>
-  <pre id="viewSource-personTR"></pre><script>$('#viewSource-personTR').innerHTML = $('#script-personTR').innerText</script>
+  <pre id="viewSource-personTR"></pre><script>showSource('personTR')</script>
   <div id="div-personTR"></div>
 
  <h2 id="propertyTriage"><a href="#propertyTriage">propertyTriage</a></h2>
@@ -436,7 +436,7 @@
       $('#div-propertyTriage').appendChild(document.createTextNode(JSON.stringify(result)))
     })
   </script>
-  <pre id="viewSource-propertyTriage"></pre><script>$('#viewSource-propertyTriage').innerHTML = $('#script-propertyTriage').innerText</script>
+  <pre id="viewSource-propertyTriage"></pre><script>showSource('propertyTriage')</script>
   <div id="div-propertyTriage"></div>
 
  <h2 id="refreshTree"><a href="#refreshTree">refreshTree</a></h2>
@@ -452,27 +452,35 @@
       $('#div-refreshTree').appendChild(refreshable)
     })
   </script>
-  <pre id="viewSource-refreshTree"></pre><script>$('#viewSource-refreshTree').innerHTML = $('#script-refreshTree').innerText</script>
+  <pre id="viewSource-refreshTree"></pre><script>showSource('refreshTree')</script>
   <div id="div-refreshTree"></div>
 
  <h2 id="removeButton"><a href="#removeButton">removeButton</a></h2>
   <script id="script-removeButton">
     window.addEventListener('DOMContentLoaded', (event) => {
-      // const result = UI.widgets.removeButton()
-      // $('#div-removeButton').appendChild(document.createTextNode(result))
+      const p = document.createElement('p')
+      p.appendChild(document.createTextNode('click x to remove me'))
+      const button = UI.widgets.removeButton(document, p)
+      $('#div-removeButton').appendChild(p)
+      $('#div-removeButton').appendChild(button)
     })
   </script>
-  <pre id="viewSource-removeButton"></pre><script>$('#viewSource-removeButton').innerHTML = $('#script-removeButton').innerText</script>
+  <pre id="viewSource-removeButton"></pre><script>showSource('removeButton')</script>
   <div id="div-removeButton"></div>
 
  <h2 id="shortDate"><a href="#shortDate">shortDate</a></h2>
   <script id="script-shortDate">
-    window.addEventListener('DOMContentLoaded', (event) => {
-      const result = UI.widgets.shortDate()
-      $('#div-shortDate').appendChild(document.createTextNode(result))
+    window.addEventListener('DOMContentLoaded', (event) => {  
+      const results = [
+        UI.widgets.shortDate('2020-01-01T15:43', true),
+        UI.widgets.shortDate('2020-01-01T15:43', false),
+        UI.widgets.shortDate(new Date().toISOString(), true),
+        UI.widgets.shortDate(new Date().toISOString(), false)
+      ]
+      $('#div-shortDate').innerHTML = `<ul><li>${results.join('</li><li>')}</li></ul>`
     })
   </script>
-  <pre id="viewSource-shortDate"></pre><script>$('#viewSource-shortDate').innerHTML = $('#script-shortDate').innerText</script>
+  <pre id="viewSource-shortDate"></pre><script>showSource('shortDate')</script>
   <div id="div-shortDate"></div>
 
  <h2 id="shortTime"><a href="#shortTime">shortTime</a></h2>
@@ -482,57 +490,127 @@
       $('#div-shortTime').appendChild(document.createTextNode(result))
     })
   </script>
-  <pre id="viewSource-shortTime"></pre><script>$('#viewSource-shortTime').innerHTML = $('#script-shortTime').innerText</script>
+  <pre id="viewSource-shortTime"></pre><script>showSource('shortTime')</script>
   <div id="div-shortTime"></div>
 
  <h2 id="selectorPanel"><a href="#selectorPanel">selectorPanel</a></h2>
   <script id="script-selectorPanel">
     window.addEventListener('DOMContentLoaded', (event) => {
-      // const result = UI.widgets.selectorPanel()
-      // $('#div-selectorPanel').appendChild(document.createTextNode(result))
+      const dom = document
+      const kb = UI.rdf.graph()
+      const type = UI.rdf.namedNode('http://example.com/#type')
+      const predicate = UI.rdf.namedNode('http://example.com/#pred')
+      const inverse = false
+      const possible = [
+        UI.rdf.namedNode('http://example.com/#blue'),
+        UI.rdf.namedNode('http://example.com/#green'),
+        UI.rdf.namedNode('http://example.com/#yellow')
+      ]
+      const options = {}
+      function callbackFunction (thing, event, selected) {
+        if (selected) {
+          window.alert(`${thing.uri} selected!`)
+        } else {
+          window.alert(`${thing.uri} de-selected!`)
+        }
+      }
+      function linkCallback (thing, event, inverse, setStyleFunction) {
+        window.alert('link clicked? ' + thing.uri)
+      }
+      const result = UI.widgets.selectorPanel(
+        dom,
+        kb,
+        type,
+        predicate,
+        inverse,
+        possible,
+        options,
+        callbackFunction,
+        linkCallback
+      )
+      $('#div-selectorPanel').appendChild(result)
     })
   </script>
-  <pre id="viewSource-selectorPanel"></pre><script>$('#viewSource-selectorPanel').innerHTML = $('#script-selectorPanel').innerText</script>
+  <pre id="viewSource-selectorPanel"></pre><script>showSource('selectorPanel')</script>
   <div id="div-selectorPanel"></div>
 
  <h2 id="selectorPanelRefresh"><a href="#selectorPanelRefresh">selectorPanelRefresh</a></h2>
   <script id="script-selectorPanelRefresh">
     window.addEventListener('DOMContentLoaded', (event) => {
-      // const result = UI.widgets.selectorPanelRefresh()
-      // $('#div-selectorPanelRefresh').appendChild(document.createTextNode(result))
+      const list = document.createElement('div')
+      const dom = document
+      const kb = UI.rdf.graph()
+      const type = UI.rdf.namedNode('http://example.com/#type')
+      const predicate = UI.rdf.namedNode('http://example.com/#pred')
+      const inverse = false
+      const possible = [
+        UI.rdf.namedNode('http://example.com/#blue'),
+        UI.rdf.namedNode('http://example.com/#green'),
+        UI.rdf.namedNode('http://example.com/#yellow')
+      ]
+      const options = {}
+      function callbackFunction (thing, event, selected) {
+        if (selected) {
+          window.alert(`${thing.uri} selected!`)
+        } else {
+          window.alert(`${thing.uri} de-selected!`)
+        }
+      }
+      function linkCallback (thing, event, inverse, setStyleFunction) {
+        window.alert('link clicked? ' + thing.uri)
+      }
+      const result = UI.widgets.selectorPanelRefresh(
+        list,
+        dom,
+        kb,
+        type,
+        predicate,
+        inverse,
+        possible,
+        options,
+        callbackFunction,
+        linkCallback
+      )
+      $('#div-selectorPanelRefresh').appendChild(result)
     })
   </script>
-  <pre id="viewSource-selectorPanelRefresh"></pre><script>$('#viewSource-selectorPanelRefresh').innerHTML = $('#script-selectorPanelRefresh').innerText</script>
+  <pre id="viewSource-selectorPanelRefresh"></pre><script>showSource('selectorPanelRefresh')</script>
   <div id="div-selectorPanelRefresh"></div>
 
  <h2 id="setImage"><a href="#setImage">setImage</a></h2>
   <script id="script-setImage">
     window.addEventListener('DOMContentLoaded', (event) => {
-      // const result = UI.widgets.setImage()
-      // $('#div-setImage').appendChild(document.createTextNode(result))
+      const myTrip = UI.rdf.namedNode('http://example.com/#trip')
+      UI.store.add(myTrip, UI.ns.rdf('type'), UI.ns.trip('Trip'))
+      const img = document.createElement('img')
+      img.setAttribute('style', 'height:50px;width:50px;')
+      UI.widgets.setImage(img, myTrip)
+      $('#div-setImage').appendChild(img)
     })
   </script>
-  <pre id="viewSource-setImage"></pre><script>$('#viewSource-setImage').innerHTML = $('#script-setImage').innerText</script>
+  <pre id="viewSource-setImage"></pre><script>showSource('setImage')</script>
   <div id="div-setImage"></div>
 
  <h2 id="setName"><a href="#setName">setName</a></h2>
   <script id="script-setName">
     window.addEventListener('DOMContentLoaded', (event) => {
-      // const result = UI.widgets.setName()
-      // $('#div-setName').appendChild(document.createTextNode(result))
+      const myTrip = UI.rdf.namedNode('http://example.com/#trip')
+      UI.store.add(myTrip, UI.ns.foaf('name'), 'My Trip')
+      UI.widgets.setName($('#div-setName'), myTrip)
     })
   </script>
-  <pre id="viewSource-setName"></pre><script>$('#viewSource-setName').innerHTML = $('#script-setName').innerText</script>
+  <pre id="viewSource-setName"></pre><script>showSource('setName')</script>
   <div id="div-setName"></div>
 
  <h2 id="tempSite"><a href="#tempSite">tempSite</a></h2>
   <script id="script-tempSite">
     window.addEventListener('DOMContentLoaded', (event) => {
-      // const result = UI.widgets.tempSite()
-      // $('#div-tempSite').appendChild(document.createTextNode(result))
+      const myTrip = UI.rdf.namedNode('http://example.com/#trip')
+      const result = UI.widgets.tempSite(myTrip)
+      $('#div-tempSite').appendChild(document.createTextNode(result))
     })
   </script>
-  <pre id="viewSource-tempSite"></pre><script>$('#viewSource-tempSite').innerHTML = $('#script-tempSite').innerText</script>
+  <pre id="viewSource-tempSite"></pre><script>showSource('tempSite')</script>
   <div id="div-tempSite"></div>
 
  <h2 id="timestamp"><a href="#timestamp">timestamp</a></h2>
@@ -542,7 +620,7 @@
       $('#div-timestamp').appendChild(document.createTextNode(result))
     })
   </script>
-  <pre id="viewSource-timestamp"></pre><script>$('#viewSource-timestamp').innerHTML = $('#script-timestamp').innerText</script>
+  <pre id="viewSource-timestamp"></pre><script>showSource('timestamp')</script>
   <div id="div-timestamp"></div>
 
 </body>

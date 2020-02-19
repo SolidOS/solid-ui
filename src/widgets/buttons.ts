@@ -81,10 +81,12 @@ function extractLogURI (fullURI) {
 }
 
 /**
+ * By default, converts e.g. '2020-02-19T19:35:28.557Z' to '19:35'
+ * if today is 19 Feb 2020, and to 'Feb 19' if not.
  * @@@ TODO This needs to be changed to local time
- * noTime  - only give date, no time
+ * @param noTime Return a string like 'Feb 19' even if it's today.
  */
-function shortDate (str, noTime) {
+function shortDate (str: string, noTime: boolean): string {
   if (!str) return '???'
   var month = [
     'Jan',
@@ -167,7 +169,7 @@ function shortTime (): string {
 /**
  * Sets the best name we have and looks up a better one
  */
-function setName (element, x) {
+function setName (element: HTMLElement, x: NamedNode) {
   var kb = UI.store
   var ns = UI.ns
   var findName = function (x) {
@@ -243,7 +245,10 @@ const iconForClass = {
   'owl:Ontology': 'noun_classification_1479198.svg'
 }
 
-function tempSite (x) {
+/**
+ * Returns the origin of the URI of a NamedNode
+ */
+function tempSite (x: NamedNode) {
   // use only while one in rdflib fails with origins 2019
   var str = x.uri.split('#')[0]
   var p = str.indexOf('//')
@@ -368,10 +373,10 @@ function trySetImage (element, thing, iconForClassMap) {
   return false // we can do better
 }
 
-// ToDo: Also add icons for *properties* like  home, work, email, range, domain, comment,
-//
-
-function setImage (element, thing) { // 20191230a
+/**
+ * ToDo: Also add icons for *properties* like  home, work, email, range, domain, comment,
+ */
+function setImage (element: HTMLElement, thing: NamedNode) { // 20191230a
   const kb = UI.store
   const ns = UI.ns
 
@@ -647,9 +652,10 @@ function personTR (dom: HTMLDocument, pred: NamedNode, obj: NamedNode, options: 
   return tr
 }
 
-// Refresh a DOM tree recursively
-
-function refreshTree (root) {
+/**
+ * Refresh a DOM tree recursively
+ */
+function refreshTree (root: any): void {
   if (root.refresh) {
     root.refresh()
     return
@@ -895,12 +901,15 @@ function linkButton (dom: HTMLDocument, object: NamedNode): HTMLElement {
   return b
 }
 
-function removeButton (dom, element) {
+/**
+ * A button to remove some other element from the page
+ */
+function removeButton (dom: HTMLDocument, element: HTMLElement) {
   var b = dom.createElement('button')
   b.setAttribute('type', 'button')
   b.textContent = '✕' // MULTIPLICATION X
   b.addEventListener('click', function (_event) {
-    element.parentNode.removeChild(element)
+    ;(element as any).parentNode.removeChild(element)
   }, true)
   return b
 }
@@ -943,15 +952,15 @@ buttons.headerButtons = function (dom, kb, name, words) {
 //   @param inverse means this is the object rather than the subject
 //
 function selectorPanel (
-  dom,
-  kb,
-  type,
-  predicate,
-  inverse,
-  possible,
-  options,
-  callbackFunction,
-  linkCallback
+  dom: HTMLDocument,
+  kb: IndexedFormula,
+  type: NamedNode,
+  predicate: NamedNode,
+  inverse: boolean,
+  possible: NamedNode[],
+  options: { connectIcon?: string },
+  callbackFunction: (x: NamedNode, e: Event, selected: boolean) => void,
+  linkCallback: (x: NamedNode, e: Event, inverse: boolean, setStyleFunction: () => void) => void
 ) {
   return selectorPanelRefresh(
     dom.createElement('div'),
@@ -968,23 +977,23 @@ function selectorPanel (
 }
 
 function selectorPanelRefresh (
-  list,
-  dom,
-  kb,
-  type,
-  predicate,
-  inverse,
-  possible,
-  options,
-  callbackFunction,
-  linkCallback
+  list: HTMLElement,
+  dom: HTMLDocument,
+  kb: IndexedFormula,
+  type: NamedNode,
+  predicate: NamedNode,
+  inverse: boolean,
+  possible: NamedNode[],
+  options: { connectIcon?: string },
+  callbackFunction: (x: NamedNode, e: Event, selected: boolean) => void,
+  linkCallback: (x: NamedNode, e: Event, inverse: boolean, setStyleFunction: () => void) => void
 ) {
   var style0 =
     'border: 0.1em solid #ddd; border-bottom: none; width: 95%; height: 2em; padding: 0.5em;'
   var selected: any = null
   list.innerHTML = ''
 
-  var refreshItem = function (box, x) {
+  var refreshItem = function (box: HTMLElement, x: NamedNode) {
     // Scope to hold item and x
     var item, image
 
