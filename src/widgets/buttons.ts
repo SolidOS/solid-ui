@@ -586,10 +586,10 @@ function askName (
 
 // ////////////////////////////////////////////////////////////////
 
-// A little link icon
-//
-//
-function linkIcon (dom, subject, iconURI?) {
+/**
+ * A little link icon
+ */
+function linkIcon (dom: HTMLDocument, subject: NamedNode, iconURI?: string): HTMLElement {
   var anchor = dom.createElement('a')
   anchor.setAttribute('href', subject.uri)
   if (subject.uri.startsWith('http')) {
@@ -605,11 +605,12 @@ function linkIcon (dom, subject, iconURI?) {
   return anchor
 }
 
-// A TR to repreent a draggable person, etc in a list
-//
-// pred is unused param at the moment
-//
-function personTR (dom, pred, obj, options) {
+/**
+ * A TR to repreent a draggable person, etc in a list
+ *
+ * pred is unused param at the moment
+ */
+function personTR (dom: HTMLDocument, pred: NamedNode, obj: NamedNode, options: any): HTMLTableRowElement {
   var tr = dom.createElement('tr')
   options = options || {}
   // tr.predObj = [pred.uri, obj.uri]   moved to acl-control
@@ -642,7 +643,7 @@ function personTR (dom, pred, obj, options) {
       dragAndDrop.makeDraggable(tr, obj)
     }
   }
-  tr.subject = obj
+  ;(tr as any).subject = obj
   return tr
 }
 
@@ -754,12 +755,13 @@ function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTMLElement
 
 // /////////////////////////////////////////////////////////////////////////////
 
-// Event Handler for links within solid apps.
-//
-// Note that native links have consraints in Firefox, they
-// don't work with local files for instance (2011)
-//
-function openHrefInOutlineMode (e) {
+/**
+ * Event Handler for links within solid apps.
+ *
+ * Note that native links have constraints in Firefox, they
+ * don't work with local files for instance (2011)
+ */
+function openHrefInOutlineMode (e: Event) {
   e.preventDefault()
   e.stopPropagation()
   var target = utils.getTarget(e)
@@ -839,7 +841,7 @@ function allClassURIs (): { [uri: string]: boolean } {
  * @param {Store} kb The quadstore to be searched.
  */
 
-function propertyTriage (kb) {
+function propertyTriage (kb: IndexedFormula): any {
   var possibleProperties: any = {}
   // if (possibleProperties === undefined) possibleProperties = {}
   // var kb = UI.store
@@ -848,7 +850,7 @@ function propertyTriage (kb) {
   var no = 0
   var nd = 0
   var nu = 0
-  var pi = kb.predicateIndex // One entry for each pred
+  var pi = (kb as any).predicateIndex // One entry for each pred
   for (var p in pi) {
     var object = pi[p][0].object
     if (object.termType === 'Literal') {
@@ -879,15 +881,16 @@ function propertyTriage (kb) {
  * General purpose widgets
  */
 
-// A button for jumping
-//
-function linkButton (dom, object) {
+/**
+ * A button for jumping
+ */
+function linkButton (dom: HTMLDocument, object: NamedNode): HTMLElement {
   var b = dom.createElement('button')
   b.setAttribute('type', 'button')
   b.textContent = 'Goto ' + utils.label(object)
   b.addEventListener('click', function (_event) {
     // b.parentNode.removeChild(b)
-    dom.outlineManager.GotoSubject(object, true, undefined, true, undefined)
+    ;(dom as any).outlineManager.GotoSubject(object, true, undefined, true, undefined)
   }, true)
   return b
 }
