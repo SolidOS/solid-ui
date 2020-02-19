@@ -333,8 +333,9 @@
  <h2 id="isAudio"><a href="#isAudio">isAudio</a></h2>
   <script id="script-isAudio">
     window.addEventListener('DOMContentLoaded', (event) => {
-      // const result = UI.widgets.isAudio()
-      // $('#div-isAudio').appendChild(document.createTextNode(result))
+      UI.store.add(UI.rdf.namedNode('http://example.com/audio.mpeg'), UI.ns.rdf('type'), UI.rdf.namedNode('http://www.w3.org/ns/iana/media-types/audio'))
+      const result = UI.widgets.isAudio(UI.rdf.namedNode('http://example.com/audio.mpeg'))
+      $('#div-isAudio').appendChild(document.createTextNode(result))
     })
   </script>
   <pre id="viewSource-isAudio"></pre><script>$('#viewSource-isAudio').innerHTML = $('#script-isAudio').innerText</script>
@@ -343,8 +344,9 @@
  <h2 id="isImage"><a href="#isImage">isImage</a></h2>
   <script id="script-isImage">
     window.addEventListener('DOMContentLoaded', (event) => {
-      // const result = UI.widgets.isImage()
-      // $('#div-isImage').appendChild(document.createTextNode(result))
+      UI.store.add(UI.rdf.namedNode('http://example.com/image.jpeg'), UI.ns.rdf('type'), UI.rdf.namedNode('http://www.w3.org/ns/iana/media-types/image'))
+      const result = UI.widgets.isImage(UI.rdf.namedNode('http://example.com/image.jpeg'))
+      $('#div-isImage').appendChild(document.createTextNode(result))
     })
   </script>
   <pre id="viewSource-isImage"></pre><script>$('#viewSource-isImage').innerHTML = $('#script-isImage').innerText</script>
@@ -353,8 +355,9 @@
  <h2 id="isVideo"><a href="#isVideo">isVideo</a></h2>
   <script id="script-isVideo">
     window.addEventListener('DOMContentLoaded', (event) => {
-      // const result = UI.widgets.isVideo()
-      // $('#div-isVideo').appendChild(document.createTextNode(result))
+      UI.store.add(UI.rdf.namedNode('http://example.com/video.mov'), UI.ns.rdf('type'), UI.rdf.namedNode('http://www.w3.org/ns/iana/media-types/video'))
+      const result = UI.widgets.isImage(UI.rdf.namedNode('http://example.com/video.mov'))
+      $('#div-isVideo').appendChild(document.createTextNode(result))
     })
   </script>
   <pre id="viewSource-isVideo"></pre><script>$('#viewSource-isVideo').innerHTML = $('#script-isVideo').innerText</script>

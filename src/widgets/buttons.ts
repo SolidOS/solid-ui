@@ -1167,24 +1167,28 @@ function addStyleSheet (dom: HTMLDocument, href: string): void {
 
 // Figure (or guess) whether this is an image, etc
 //
-function isAudio (file: string) {
+function isAudio (file: NamedNode) {
   return isImage(file, 'audio')
 }
-function isVideo (file: string) {
+function isVideo (file: NamedNode) {
   return isImage(file, 'video')
 }
 /**
  *
  */
-function isImage (file: string, kind: string): boolean {
+function isImage (file: NamedNode, kind: string | undefined): boolean {
   var dcCLasses = {
     audio: 'http://purl.org/dc/dcmitype/Sound',
     image: 'http://purl.org/dc/dcmitype/Image',
     video: 'http://purl.org/dc/dcmitype/MovingImage'
   }
   var what = kind || 'image'
+  // See https://github.com/linkeddata/rdflib.js/blob/e367d5088c/src/formula.ts#L554
+  //
   var typeURIs = UI.store.findTypeURIs(file)
-  var prefix = $rdf.Util.mediaTypeClass(what + '/*').uri.split('*')[0]
+  // See https://github.com/linkeddata/rdflib.js/blob/d5000f/src/utils-js.js#L14
+  // e.g.'http://www.w3.org/ns/iana/media-types/audio'
+  var prefix: string = $rdf.Util.mediaTypeClass(what + '/*').uri.split('*')[0]
   for (var t in typeURIs) {
     if (t.startsWith(prefix)) return true
   }
