@@ -1141,14 +1141,14 @@ function isImage (file, kind) {
 /**
  * File upload button
  * @param dom The DOM aka document
- * @param  display:none - Same handler function as drop, takes array of file objects
+ * @param  droppedFileHandler Same handler function as drop, takes array of file objects
  * @returns {Element} - a div with a button and a inout in it
  * The input is hidden, as it is uglky - the user clicks on the nice icons and fires the input.
  */
 // See https://developer.mozilla.org/en-US/docs/Web/API/File/Using_files_from_web_applications
 function fileUploadButtonDiv (
-  dom,
-  droppedFileHandler
+  dom: HTMLDocument,
+  droppedFileHandler: (files: FileList) => void
 ) {
   const div = dom.createElement('div')
   const input = div.appendChild(dom.createElement('input'))
@@ -1156,7 +1156,7 @@ function fileUploadButtonDiv (
   input.setAttribute('multiple', 'true')
   input.addEventListener(
     'change',
-    event => {
+    (event: any) => {
       console.log('File drop event: ', event)
       if (event.files) {
         droppedFileHandler(event.files)
@@ -1169,7 +1169,7 @@ function fileUploadButtonDiv (
     false
   )
 
-  input.style = 'display:none'
+  ;(input as any).style = 'display:none'
   const buttonElt = div.appendChild(
     button(
       dom,
