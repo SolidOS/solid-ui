@@ -430,6 +430,7 @@
  <h2 id="propertyTriage"><a href="#propertyTriage">propertyTriage</a></h2>
   <script id="script-propertyTriage">
     window.addEventListener('DOMContentLoaded', (event) => {
+      // FIXME: make this example return actual possible properties
       const kb = UI.rdf.graph()
       const result = UI.widgets.propertyTriage(kb)
       $('#div-propertyTriage').appendChild(document.createTextNode(JSON.stringify(result)))
