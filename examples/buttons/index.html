@@ -211,7 +211,7 @@
     })
   </script>
   <pre id="viewSource-fileUploadButtonDiv"></pre><script>$('#viewSource-fileUploadButtonDiv').innerHTML = $('#script-fileUploadButtonDiv').innerText</script>
-  <div id="div-fileUploadButtonDiv"></div> -->
+  <div id="div-fileUploadButtonDiv"></div>
 
  <h2 id="findImage"><a href="#findImage">findImage</a></h2>
   <script id="script-findImage">
@@ -287,15 +287,48 @@
   <pre id="viewSource-imagesOf"></pre><script>$('#viewSource-imagesOf').innerHTML = $('#script-imagesOf').innerText</script>
   <div id="div-imagesOf"></div>
 
- <h2 id="index"><a href="#index">index</a></h2>
-  <script id="script-index">
+  <h2 id="twoLineTransaction"><a href="#twoLineTransaction">twoLineTransaction</a></h2>
+  <script id="script-twoLineTransaction">
     window.addEventListener('DOMContentLoaded', (event) => {
-      // const result = UI.widgets.index()
-      // $('#div-index').appendChild(document.createTextNode(result))
+      const twoLineTransaction = UI.widgets.index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction']
+      const thing = UI.rdf.namedNode('http://example.com/#transaction')
+      UI.store.add(thing, UI.ns.qu('payee'), UI.rdf.namedNode('https://payee.com/#me'))
+      UI.store.add(thing, UI.ns.qu('date'), UI.rdf.literal('2020-01-01'))
+      UI.store.add(thing, UI.ns.qu('amount'), UI.rdf.literal('20 USD'))
+      const result = twoLineTransaction(document, thing)
+      $('#div-twoLineTransaction').appendChild(result)
     })
   </script>
-  <pre id="viewSource-index"></pre><script>$('#viewSource-index').innerHTML = $('#script-index').innerText</script>
-  <div id="div-index"></div>
+  <pre id="viewSource-twoLineTransaction"></pre><script>$('#viewSource-twoLineTransaction').innerHTML = $('#script-twoLineTransaction').innerText</script>
+  <div id="div-twoLineTransaction"></div>
+
+  <h2 id="twoLineTrip"><a href="#twoLineTrip">twoLineTrip</a></h2>
+  <script id="script-twoLineTrip">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const twoLineTrip = UI.widgets.index.twoLine['http://www.w3.org/ns/pim/trip#Trip']
+      const thing = UI.rdf.namedNode('http://example.com/#trip')
+      UI.store.add(thing, UI.ns.dc('title'), 'Some trip')
+      UI.store.add(thing, UI.ns.cal('dtstart'), UI.rdf.literal('2020-01-01'))
+      UI.store.add(thing, UI.ns.cal('dtend'), UI.rdf.literal('2020-02-02'))
+      const result = twoLineTrip(document, thing)
+      $('#div-twoLineTrip').appendChild(result)
+    })
+  </script>
+  <pre id="viewSource-twoLineTrip"></pre><script>$('#viewSource-twoLineTrip').innerHTML = $('#script-twoLineTrip').innerText</script>
+  <div id="div-twoLineTrip"></div> -->
+
+ <h2 id="twoLineWidgetForClass"><a href="#twoLineWidgetForClass">twoLineWidgetForClass</a></h2>
+  <script id="script-twoLineWidgetForClass">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const rdfClass = UI.ns.foaf('Person')
+      const thing = UI.rdf.namedNode('https://michielbdejong.inrupt.net/profile/card#me')
+      const widgetFunction = UI.widgets.index.twoLine.widgetForClass(rdfClass)
+      const widget = widgetFunction(document, thing)
+      $('#div-twoLineWidgetForClass').appendChild(widget)
+    })
+  </script>
+  <pre id="viewSource-twoLineWidgetForClass"></pre><script>$('#viewSource-twoLineWidgetForClass').innerHTML = $('#script-twoLineWidgetForClass').innerText</script>
+  <div id="div-twoLineWidgetForClass"></div>
 
  <h2 id="isAudio"><a href="#isAudio">isAudio</a></h2>
   <script id="script-isAudio">

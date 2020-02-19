@@ -1063,14 +1063,18 @@ let index: any = {}
 //
 // These should be moved to type-dependeent UI code. Related panes maybe
 
-function twoLineDefault (dom, x) {
+function twoLineDefault (dom: HTMLDocument, x: NamedNode): HTMLElement {
   // Default
   var box = dom.createElement('div')
   box.textContent = utils.label(x)
   return box
 }
 
-function twoLineWidgetForClass (c) {
+/**
+ * Find a function that can create a widget for a given class
+ * @param c The RDF class for which we want a widget generator function
+ */
+function twoLineWidgetForClass (c: NamedNode): (dom: HTMLDocument, x: NamedNode) => HTMLElement {
   var widget = index.twoLine[c.uri]
   var kb = UI.store
   if (widget) return widget
@@ -1082,7 +1086,14 @@ function twoLineWidgetForClass (c) {
   return index.twoLine['']
 }
 
-function twoLineTransaction (dom, x) {
+/**
+ * Display a transaction
+ * @param x Should have attributes through triples in UI.store:
+ *          * ns.qu('payee') -> a named node
+ *          * ns.qu('date) -> a literal
+ *          * ns.qu('amount') -> a literal
+ */
+function twoLineTransaction (dom: HTMLDocument, x: NamedNode): HTMLElement {
   var failed = ''
   var enc = function (p) {
     var y = UI.store.any(x, UI.ns.qu(p))
@@ -1107,10 +1118,17 @@ function twoLineTransaction (dom, x) {
   return box
 }
 
+/**
+ * Display a trip
+ * @param x Should have attributes through triples in UI.store:
+ *          * ns.dc('title') -> a literal
+ *          * ns.cal('dtstart') -> a literal
+ *          * ns.cal('dtend') -> a literal
+ */
 function twoLineTrip (
-  dom,
-  x
-) {
+  dom: HTMLDocument,
+  x: NamedNode
+): HTMLElement {
   var enc = function (p) {
     var y = UI.store.any(x, p)
     return y ? utils.escapeForXML(y.value) : '?'
@@ -1149,13 +1167,16 @@ function addStyleSheet (dom: HTMLDocument, href: string): void {
 
 // Figure (or guess) whether this is an image, etc
 //
-function isAudio (file) {
+function isAudio (file: string) {
   return isImage(file, 'audio')
 }
-function isVideo (file) {
+function isVideo (file: string) {
   return isImage(file, 'video')
 }
-function isImage (file, kind) {
+/**
+ *
+ */
+function isImage (file: string, kind: string): boolean {
   var dcCLasses = {
     audio: 'http://purl.org/dc/dcmitype/Sound',
     image: 'http://purl.org/dc/dcmitype/Image',
