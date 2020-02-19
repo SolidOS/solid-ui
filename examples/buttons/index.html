@@ -6,6 +6,14 @@
     <script type="text/javascript" src="../../lib/webpack-bundle.js"></script>
     <script>
       const $ = document.querySelector.bind(document)
+      function showSource(widgetName) {
+      $(`#viewSource-${widgetName}`).innerHTML = $(`#script-${widgetName}`).innerText
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;")
+    }
     </script>
   </head>
 <body>
@@ -207,9 +215,7 @@
 
  <h2 id="findImage"><a href="#findImage">findImage</a></h2>
   <script id="script-findImage">
-    // FIXME: not sure why agentNode.sameTerm(UI.ns.foaf('Agent')) is false
-    function displayFindImageResult(url) {
-      const node = UI.rdf.namedNode(url)
+    function displayFindImageResult(node) {
       const result = UI.widgets.findImage(node)
       const image = document.createElement('img')
       image.setAttribute('src', result)
@@ -217,9 +223,13 @@
       $('#div-findImage').appendChild(image)
     }
     window.addEventListener('DOMContentLoaded', (event) => {
-      const agentNode = UI.rdf.namedNode('https://example.com/#agent')
-      UI.store.add(agentNode, UI.ns.rdf('type'), UI.ns.foaf('Agent'))
-      displayFindImageResult(agentNode)
+      displayFindImageResult(UI.ns.foaf('Agent'))
+      displayFindImageResult(UI.ns.rdf('Resource'))
+
+      const michiel = UI.rdf.namedNode('https://michielbdejong.inrupt.net/profile/card#me')
+      const michielPhoto = UI.rdf.namedNode('https://michielbdejong.com/img/me.jpg')
+      UI.store.add(michiel, UI.ns.vcard('hasPhoto'), michielPhoto)
+      displayFindImageResult(michiel)
     })
   </script>
   <pre id="viewSource-findImage"></pre><script>$('#viewSource-findImage').innerHTML = $('#script-findImage').innerText</script>
@@ -248,18 +258,30 @@
  <h2 id="iconForClass"><a href="#iconForClass">iconForClass</a></h2>
   <script id="script-iconForClass">
     window.addEventListener('DOMContentLoaded', (event) => {
-      // const result = UI.widgets.iconForClass()
-      // $('#div-iconForClass').appendChild(document.createTextNode(result))
+      const lines = []
+      Object.keys(UI.widgets.iconForClass).map((key) => {
+        lines.push(`<li><img src="${UI.icons.iconBase}${UI.widgets.iconForClass[key]}" style="width:20px;height:20px;"> ${key}</li>`)
+      })
+      $('#div-iconForClass').innerHTML = `<ul>${lines.join('')}</ul>`
     })
   </script>
-  <pre id="viewSource-iconForClass"></pre><script>$('#viewSource-iconForClass').innerHTML = $('#script-iconForClass').innerText</script>
+  <pre id="viewSource-iconForClass"></pre><script>showSource('iconForClass')</script>
   <div id="div-iconForClass"></div>
 
  <h2 id="imagesOf"><a href="#imagesOf">imagesOf</a></h2>
   <script id="script-imagesOf">
     window.addEventListener('DOMContentLoaded', (event) => {
-      // const result = UI.widgets.imagesOf()
-      // $('#div-imagesOf').appendChild(document.createTextNode(result))
+      const store = UI.rdf.graph()
+      const tajMahal = UI.rdf.namedNode('http://dbpedia.org/page/Taj_Mahal')
+      const tajMahalPhoto = 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Taj_Mahal_%28Edited%29.jpeg/1200px-Taj_Mahal_%28Edited%29.jpeg'
+      store.add(tajMahal, UI.ns.sioc('avatar'), tajMahalPhoto)
+      const result = UI.widgets.imagesOf(tajMahal, store)
+      result.map((imageUrl) => {
+        const image = document.createElement('img')
+        image.setAttribute('src', imageUrl)
+        image.setAttribute('style', 'width: 100px; height: 100px;')
+        $('#div-imagesOf').appendChild(image)
+      })
     })
   </script>
   <pre id="viewSource-imagesOf"></pre><script>$('#viewSource-imagesOf').innerHTML = $('#script-imagesOf').innerText</script>

@@ -187,19 +187,37 @@ function setName (element, x) {
   }
 }
 
-// Set of suitable images
-function imagesOf (x, kb) {
+/**
+ * Set of suitable images
+ * See also [[findImage]]
+ * @param x The thing for which we want to find an image
+ * @param kb The RDF store to look in
+ * @returns It goes looking for triples in `kb`,
+ *          `(subject: x), (predicate: see list below) (object: image-url)`
+ *          to find any image linked from the thing with one of the following
+ *          predicates (in order):
+ *          * ns.sioc('avatar')
+ *          * ns.foaf('img')
+ *          * ns.vcard('logo')
+ *          * ns.vcard('hasPhoto')
+ *          * ns.vcard('photo')
+ *          * ns.foaf('depiction')
+
+ */
+function imagesOf (x: NamedNode, kb: IndexedFormula): any[] {
   var ns = UI.ns
   return kb
     .each(x, ns.sioc('avatar'))
     .concat(kb.each(x, ns.foaf('img')))
     .concat(kb.each(x, ns.vcard('logo')))
+    .concat(kb.each(x, ns.vcard('hasPhoto')))
     .concat(kb.each(x, ns.vcard('photo')))
     .concat(kb.each(x, ns.foaf('depiction')))
 }
-// Best logo or avater or photo etc to represent someone or some group etc
-//
 
+/**
+ * Best logo or avatar or photo etc to represent someone or some group etc
+ */
 const iconForClass = {
   // Potentially extendable by other apps, panes, etc
   // Relative URIs to the iconBase
@@ -277,8 +295,22 @@ function findImageFromURI (x: NamedNode): string | null {
 
 /**
  * Find something we have as explicit image data for the thing
+ * See also [[imagesOf]]
+ * @param thing The thing for which we want to find an image
+ * @returns The URL of a globe icon if thing equals `ns.foaf('Agent')`
+ *          or `ns.rdf('Resource')`. Otherwise, it goes looking for
+ *          triples in `UI.store`,
+ *          `(subject: thing), (predicate: see list below) (object: image-url)`
+ *          to find any image linked from the thing with one of the following
+ *          predicates (in order):
+ *          * ns.sioc('avatar')
+ *          * ns.foaf('img')
+ *          * ns.vcard('logo')
+ *          * ns.vcard('hasPhoto')
+ *          * ns.vcard('photo')
+ *          * ns.foaf('depiction')
  */
-function findImage (thing: NamedNode) {
+function findImage (thing: NamedNode): string {
   const kb = UI.store
   const ns = UI.ns
   const iconDir = UI.icons.iconBase
