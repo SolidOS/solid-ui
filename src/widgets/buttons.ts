@@ -242,7 +242,7 @@ function tempSite (x) {
 /**
  * Find an image for this thing as a class
  */
-function findImageFromURI (x) {
+function findImageFromURI (x: NamedNode): string | null {
   const iconDir = UI.icons.iconBase
 
   // Special cases from URI scheme:
@@ -256,7 +256,7 @@ function findImageFromURI (x) {
     }
     // Non-HTTP URI types imply types
     if (x.uri.startsWith('message:') || x.uri.startsWith('mid:')) {
-      // message: is aapple bug-- should be mid:
+      // message: is apple bug-- should be mid:
       return iconDir + 'noun_480183.svg' // envelope  noun_567486
     }
     if (x.uri.startsWith('mailto:')) {
@@ -265,8 +265,8 @@ function findImageFromURI (x) {
     // For HTTP(s) documents, we could look at the MIME type if we know it.
     if (x.uri.startsWith('https:') && x.uri.indexOf('#') < 0) {
       return tempSite(x) + 'favicon.ico' // was x.site().uri + ...
-      // Todo: make the docuent icon a fallback for if the favicon does not exist
-      // todo: pick up a possible favicon for the web page istelf from a link
+      // Todo: make the document icon a fallback for if the favicon does not exist
+      // todo: pick up a possible favicon for the web page itself from a link
       // was: return iconDir + 'noun_681601.svg' // document - under solid assumptions
     }
     return null
@@ -275,9 +275,10 @@ function findImageFromURI (x) {
   return iconDir + 'noun_10636_grey.svg' // Grey Circle -  some thing
 }
 
-/* Find something we have as explict image data for the thing
-*/
-function findImage (thing) {
+/**
+ * Find something we have as explicit image data for the thing
+ */
+function findImage (thing: NamedNode) {
   const kb = UI.store
   const ns = UI.ns
   const iconDir = UI.icons.iconBase

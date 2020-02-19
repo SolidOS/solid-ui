@@ -9,7 +9,7 @@
     </script>
   </head>
 <body>
- <h2 id="addStyleSheet"><a href="#addStyleSheet">addStyleSheet</a></h2>
+ <!-- <h2 id="addStyleSheet"><a href="#addStyleSheet">addStyleSheet</a></h2>
   <script id="script-addStyleSheet">
     window.addEventListener('DOMContentLoaded', (event) => {
       UI.widgets.addStyleSheet(document, 'https://linkeddata.github.io/tabulator-firefox/content/tabbedtab.css')
@@ -203,13 +203,23 @@
     })
   </script>
   <pre id="viewSource-fileUploadButtonDiv"></pre><script>$('#viewSource-fileUploadButtonDiv').innerHTML = $('#script-fileUploadButtonDiv').innerText</script>
-  <div id="div-fileUploadButtonDiv"></div>
+  <div id="div-fileUploadButtonDiv"></div> -->
 
  <h2 id="findImage"><a href="#findImage">findImage</a></h2>
   <script id="script-findImage">
+    // FIXME: not sure why agentNode.sameTerm(UI.ns.foaf('Agent')) is false
+    function displayFindImageResult(url) {
+      const node = UI.rdf.namedNode(url)
+      const result = UI.widgets.findImage(node)
+      const image = document.createElement('img')
+      image.setAttribute('src', result)
+      image.setAttribute('style', 'width: 100px; height: 100px;')
+      $('#div-findImage').appendChild(image)
+    }
     window.addEventListener('DOMContentLoaded', (event) => {
-      // const result = UI.widgets.findImage()
-      // $('#div-findImage').appendChild(document.createTextNode(result))
+      const agentNode = UI.rdf.namedNode('https://example.com/#agent')
+      UI.store.add(agentNode, UI.ns.rdf('type'), UI.ns.foaf('Agent'))
+      displayFindImageResult(agentNode)
     })
   </script>
   <pre id="viewSource-findImage"></pre><script>$('#viewSource-findImage').innerHTML = $('#script-findImage').innerText</script>
@@ -217,9 +227,19 @@
 
  <h2 id="findImageFromURI"><a href="#findImageFromURI">findImageFromURI</a></h2>
   <script id="script-findImageFromURI">
+    function displayFindImageFromURIResult(url) {
+      const node = UI.rdf.namedNode(url)
+      const result = UI.widgets.findImageFromURI(node)
+      const image = document.createElement('img')
+      image.setAttribute('src', result)
+      image.setAttribute('style', 'width: 100px; height: 100px;')
+      $('#div-findImageFromURI').appendChild(image)
+    }
     window.addEventListener('DOMContentLoaded', (event) => {
-      // const result = UI.widgets.findImageFromURI()
-      // $('#div-findImageFromURI').appendChild(document.createTextNode(result))
+      displayFindImageFromURIResult('https://example.com/')
+      displayFindImageFromURIResult('https://solidproject.org/some/file.html')
+      displayFindImageFromURIResult('mid:asdf')
+      displayFindImageFromURIResult('mailto:user@example.com')
     })
   </script>
   <pre id="viewSource-findImageFromURI"></pre><script>$('#viewSource-findImageFromURI').innerHTML = $('#script-findImageFromURI').innerText</script>
