@@ -9,7 +9,7 @@ import {
   Person,
   findAddressBook
 } from '../../../src/widgets/peoplePicker'
-
+import ns from '../../../src/ns'
 jest.mock('rdflib')
 jest.mock('solid-auth-client')
 const kb = require('../../../src/store')
@@ -519,7 +519,52 @@ describe('GroupBuilder.add', () => {
       handler,
       handler
     )
-    expect(groupBuilder.add()).toBeTruthy()
+    expect(groupBuilder.add()).toMatchInlineSnapshot(`Promise {}`)
+  })
+  // need to to nowOrWhenFetched
+  it('not okay it returns an error -- callback false', () => {
+    const spyOnNowOrWhenFetched = jest.spyOn(fetcher, 'nowOrWhenFetched')
+
+    const groupArg = RdfLib.sym('')
+    const book = RdfLib.sym('')
+    const handler = () => {}
+    const groupBuilder = new GroupBuilder(
+      element,
+      book,
+      groupArg,
+      handler,
+      handler
+    )
+
+    groupBuilder.add('webId')
+    const callback: any = spyOnNowOrWhenFetched.mock.calls[0][1]
+    callback(false, undefined)
+    expect(spyOnNowOrWhenFetched).toBeCalled()
+    // expect .. an error
+  })
+  // an error is happening with kb.any doesn't seem to be mocked..
+  it.skip('not okay it returns an error', () => {
+    jest.clearAllMocks()
+    const spyOnNowOrWhenFetched = jest.spyOn(fetcher, 'nowOrWhenFetched')
+
+    const groupArg = RdfLib.sym('')
+    const book = RdfLib.sym('')
+    const handler = () => {}
+    const groupBuilder = new GroupBuilder(
+      element,
+      book,
+      groupArg,
+      handler,
+      handler
+    )
+    // the spy doesn't seem to be working
+    const spyAny = jest.spyOn(kb, 'any').mockReturnValueOnce(ns.foaf('Person'))
+    groupBuilder.add('webId')
+    const callback: any = spyOnNowOrWhenFetched.mock.calls[0][1]
+    callback(true, undefined)
+    expect(spyOnNowOrWhenFetched).toBeCalled()
+    expect(spyAny).toBeCalled()
+    // expect .. an error
   })
 })
 
