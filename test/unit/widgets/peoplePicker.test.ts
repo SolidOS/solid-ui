@@ -6,11 +6,10 @@ import {
   GroupPicker,
   Group,
   GroupBuilder,
+  Person,
   findAddressBook
 } from '../../../src/widgets/peoplePicker'
-import { resolve } from 'dns'
-import { SolidAuth } from 'solid-auth-client'
-import { callbackify } from 'util'
+
 jest.mock('rdflib')
 jest.mock('solid-auth-client')
 const kb = require('../../../src/store')
@@ -57,7 +56,7 @@ describe('FindAddressBook', () => {
     const spyOnNowOrWhenFetched = jest.spyOn(fetcher, 'nowOrWhenFetched')
     const spyAny = jest
       .spyOn(kb, 'any')
-      .mockReturnValue(null)
+      .mockReturnValue('book')
       .mockReturnValueOnce('book')
     const spyLoad = jest.spyOn(fetcher, 'load').mockResolvedValue('book')
     findAddressBook('typeIndex')
@@ -65,11 +64,24 @@ describe('FindAddressBook', () => {
     callback(false, undefined)
     // expect(spyOnNowOrWhenFetched).toThrowError()
   })
-  it('should return an error if it does not return a book', () => {
+  it('should return an error if it does not return a book registration', () => {
     const spyOnNowOrWhenFetched = jest.spyOn(fetcher, 'nowOrWhenFetched')
     const spyAny = jest
       .spyOn(kb, 'any')
-      .mockReturnValue('book')
+      .mockReturnValueOnce(null)
+      .mockReturnValueOnce('book')
+    const spyLoad = jest.spyOn(fetcher, 'load').mockResolvedValue('book')
+    findAddressBook('typeIndex')
+    const callback: any = spyOnNowOrWhenFetched.mock.calls[0][1]
+    callback(true, undefined)
+    // expect(spyOnNowOrWhenFetched).toThrowError()
+  })
+
+  it('should throw an error when there is no book', () => {
+    const spyOnNowOrWhenFetched = jest.spyOn(fetcher, 'nowOrWhenFetched')
+    const spyAny = jest
+      .spyOn(kb, 'any')
+      .mockReturnValueOnce('bookregs')
       .mockReturnValueOnce(null)
     const spyLoad = jest.spyOn(fetcher, 'load').mockResolvedValue('book')
     findAddressBook('typeIndex')
@@ -77,13 +89,16 @@ describe('FindAddressBook', () => {
     callback(true, undefined)
     // expect(spyOnNowOrWhenFetched).toThrowError()
   })
-  it('should ....', () => {
+  it('should throw an error when there an error with the load', () => {
+    // this was working before I changed the above to mockReturnValueOnce
+    // which I needed to do in order to get that test to take affect...
+    // need to research
     const spyOnNowOrWhenFetched = jest.spyOn(fetcher, 'nowOrWhenFetched')
     const spyAny = jest
       .spyOn(kb, 'any')
-      .mockReturnValue(null)
-      .mockReturnValueOnce('book')
-    const spyLoad = jest.spyOn(fetcher, 'load').mockResolvedValue('book')
+      .mockReturnValue('book')
+      .mockReturnValue('book')
+    const spyLoad = jest.spyOn(fetcher, 'load').mockRejectedValue(new Error())
     findAddressBook('typeIndex')
     const callback: any = spyOnNowOrWhenFetched.mock.calls[0][1]
     callback(true, undefined)
@@ -127,20 +142,7 @@ describe('PeoplePicker.render', () => {
       }
     `)
   })
-  // THIS IS THE ONE I AM WORKING ON.
-  // IF YOU CHECK THE CODE IN PEOPLEPICKER.JS YOU WILL SEE THAT IT CALLS
-  // FINDADDRESSBOOK ..  HOW CAN I REACH THE CODE IN THE .THEN
-  // SO I WAS THINKING BY RESOLVING KB.FETCHER.NOWORWHENFETCHED..  THIS
-  // SHOUDLD RETURN A BOOK SO THAT THE CODE IN THIS SECTION CAN BE
-  // EXECUTED AND TESTED. I CAN'T SEEM TO MOCK NOWORWHENFETCHED.  I'VE GOTTEN CLOSER
-  // I THINK BY ADDING THIS CODE ABOVE const fetcher = kb.fetcher.  THIS AT
-  // LEAST LET ME NOW WRITE THE MOCK WITHOUT ERROR, BUT IT STILL ISN'T USING IT
-  // @@ TODO can't seem to get the findAddressBook to return anything even
-  // when giving a typeIndex.  I am certain the typeIndex would be incorrect however
-  // I'm not sure of the correct one
-  /* ways I have tried     const spyOnNowOrWhenFetched = jest
-      .spyOn(fetcher, 'nowOrWhenFetched')
-      .mockReturnValueOnce(Promise.resolve('book')) */
+
   it('.. type index ...', () => {
     const typeIndex = 'publicTypeIndex'
     const groupPickedCb = () => {}
@@ -153,13 +155,6 @@ describe('PeoplePicker.render', () => {
       options
     )
 
-    /* const mockFindAddressBook: jest.Mock = require.requireMock(
-      '../../../src/widgets/peoplePicker'
-    ).findAddressBook
-    mockFindAddressBook.mockResolvedValueOnce('book')  */
-    /* jest.mock('rdflib', () => {
-      nowOrWhenFetched: jest.fn(() => Promise.resolve('book'))
-    }) */
     const spyAny = jest
       .spyOn(kb, 'any')
       .mockReturnValueOnce('book')
@@ -434,6 +429,7 @@ describe('GroupBuilder.render', () => {
     expect(new GroupBuilder().render).toBeInstanceOf(Function)
   })
   it('runs', () => {
+    jest.clearAllMocks()
     const groupArg = RdfLib.sym('')
     const book = RdfLib.sym('')
     const handler = () => {}
@@ -469,11 +465,6 @@ GroupBuilder {
           type="text"
         />
       </label>
-      <p>
-        
-        To add someone to this group, drag and drop their WebID URL onto the box.
-      
-      </p>
       <button>
         Done
       </button>
@@ -572,5 +563,51 @@ describe('GroupBuilder.setGroupName', () => {
       handler
     )
     expect(groupBuilder.setGroupName()).toMatchInlineSnapshot('Promise {}')
+  })
+})
+
+describe('Person', () => {
+  it('exists', () => {
+    expect(new Person()).toBeInstanceOf(Person)
+  })
+})
+describe('Person.render', () => {
+  it('exists', () => {
+    expect(new Person().render).toBeInstanceOf(Function)
+  })
+  it('runs', () => {
+    // @@ TODO Ask Michiel or Vince about what a proper WebIdNode should be
+    const webIdNode = document.createElement('div')
+    const element = document.createElement('div')
+    const handleRemove = true
+    const person = new Person(webIdNode, element, handleRemove)
+    expect(person.render()).toMatchInlineSnapshot(`
+Person {
+  "element": <div>
+    <div
+      style="display: flex;"
+    >
+      <img
+        height="50"
+        src="undefined"
+        style="margin: 5px;"
+        width="50"
+      />
+      <span
+        style="flex-grow: 1; margin: auto 0px;"
+      >
+        undefined
+      </span>
+      <button
+        style="margin: 5px;"
+      >
+        Remove
+      </button>
+    </div>
+  </div>,
+  "handleRemove": true,
+  "webIdNode": <div />,
+}
+`)
   })
 })
