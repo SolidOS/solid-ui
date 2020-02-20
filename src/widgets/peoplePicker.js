@@ -401,8 +401,10 @@ export class GroupBuilder {
     return Promise.all(updatePromises)
   }
 }
-
-class Person {
+// @ignore exporting this only for the unit test
+// @@ TODO maybe I should move this down at end, but for
+// now I will leave it where it was
+export class Person {
   constructor(element, webIdNode, handleRemove) {
     this.webIdNode = webIdNode
     this.element = element
