@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset='UTF-8'>
+    <title>solid-ui UI.pad examples page</title>
+    <script type="text/javascript" src="../../lib/webpack-bundle.js"></script>
+    <script>
+      const $ = document.querySelector.bind(document)
+    </script>
+  </head>
+  <body>
+    <h2>notepadToHTML</h2>
+    <script id="script-notepadToHTML">
+      window.addEventListener('DOMContentLoaded', (event) => {
+        const PAD = UI.rdf.Namespace('http://www.w3.org/ns/pim/pad#')
+        const pad = UI.rdf.namedNode('http://example.com/pad.ttl#this')
+        const line1 = UI.rdf.namedNode('http://example.com/pad.ttl#line1')
+        const line2 = UI.rdf.namedNode('http://example.com/pad.ttl#line2')
+        const line3 = UI.rdf.namedNode('http://example.com/pad.ttl#line3')
+
+        const kb = UI.store
+        kb.add(pad, UI.ns.dct('title'), 'example notepad')
+        kb.add(pad, PAD('next'), line1)
+
+        // link from each line to the next
+        kb.add(line1, PAD('indent'), 1)
+        kb.add(line1, UI.ns.sioc('content'), 'line 1')
+        kb.add(line1, PAD('next'), line2)
+
+        // link from each line to the next
+        kb.add(line2, PAD('indent'), 2)
+        kb.add(line2, UI.ns.sioc('content'), 'line 2')
+        kb.add(line2, PAD('next'), line3)
+
+        // to indicate last line, loop back to the top
+        kb.add(line3, PAD('indent'), -2) // H2 header
+        kb.add(line3, UI.ns.sioc('content'), 'line 3')
+        kb.add(line3, PAD('next'), pad)
+
+        const htmlStr = UI.pad.notepadToHTML(pad, kb)
+        const doc = $('#iframe-notepadToHTML').contentWindow.document;
+        doc.open()
+        doc.write(htmlStr)
+        doc.close()
+        $('#div-notepadToHTML').appendChild(document.createTextNode(htmlStr))
+      })
+    </script>
+    <pre id="viewSource-notepadToHTML"></pre><script>$('#viewSource-notepadToHTML').innerHTML = $('#script-notepadToHTML').innerText</script>
+    <iframe id="iframe-notepadToHTML" src="about:blank"></iframe>
+    <div id="div-notepadToHTML"></div>
+  </body>
+</html>
