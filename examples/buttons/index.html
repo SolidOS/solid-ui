@@ -65,14 +65,13 @@
 
  <h2 id="attachmentList"><a href="#attachmentList">attachmentList</a></h2>
   <script id="script-attachmentList">
-    // FIXME: https://github.com/solid/solid-ui/issues/212
     window.addEventListener('DOMContentLoaded', (event) => {
       UI.store.add(
         UI.rdf.namedNode('http://example.com/#some-message'),
         UI.ns.wf('attachment'),
         UI.rdf.namedNode('http://example.com/#some-attachment')
       )
-      UI.widgets.attachmentList(document, UI.rdf.namedNode('https://example-user.inrupt.net/public/some-message.ttl'), $('#div-attachmentList'))
+      UI.widgets.attachmentList(document, UI.rdf.namedNode('http://example.com/#some-message'), $('#div-attachmentList'))
     })
   </script>
   <pre id="viewSource-attachmentList"></pre><script>showSource('attachmentList')</script>
