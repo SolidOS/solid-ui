@@ -489,6 +489,8 @@ function indexes(book) {
     groupContainer: kb.sym(book.dir().uri + 'Group/')
   }
 }
+// Below are functions that are exported to make testing easier
+// @ignore exporting this only for the unit test
 export function findAddressBook(typeIndex) {
   return new Promise((resolve, reject) => {
     kb.fetcher.nowOrWhenFetched(typeIndex, (ok, err) => {
