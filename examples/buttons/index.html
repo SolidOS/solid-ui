@@ -67,11 +67,11 @@
   <script id="script-attachmentList">
     window.addEventListener('DOMContentLoaded', (event) => {
       UI.store.add(
-        UI.rdf.namedNode('http://example.com/#some-message'),
+        UI.rdf.namedNode('https://example-user.inrupt.net/public/some-message.ttl#this'),
         UI.ns.wf('attachment'),
         UI.rdf.namedNode('http://example.com/#some-attachment')
       )
-      UI.widgets.attachmentList(document, UI.rdf.namedNode('http://example.com/#some-message'), $('#div-attachmentList'))
+      UI.widgets.attachmentList(document, UI.rdf.namedNode('https://example-user.inrupt.net/public/some-message.ttl#this'), $('#div-attachmentList'))
     })
   </script>
   <pre id="viewSource-attachmentList"></pre><script>showSource('attachmentList')</script>

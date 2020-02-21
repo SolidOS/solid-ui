@@ -40,7 +40,7 @@ function getStatusArea (context?: StatusAreaContext) {
   }
   if (dom) {
     var body = dom.getElementsByTagName('body')[0]
-    ;(box as unknown as HTMLElement) = dom.createElement('div')
+    box = dom.createElement('div')
     body.insertBefore((box as unknown as HTMLElement), body.firstElementChild)
     if (context) {
       context.statusArea = (box as unknown as HTMLElement)
