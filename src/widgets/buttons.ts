@@ -1,3 +1,5 @@
+import { IndexedFormula, NamedNode } from 'rdflib'
+
 /**
  * UI Widgets such as buttons
  * @packageDocumentation
@@ -24,18 +26,25 @@ const dragAndDrop = require('./dragAndDrop')
 const cancelIconURI = UI.icons.iconBase + 'noun_1180156.svg' // black X
 const checkIconURI = UI.icons.iconBase + 'noun_1180158.svg' // green checkmark; Continue
 
-function getStatusArea (context) {
-  var box = context.statusArea || context.div || null
+export type StatusAreaContext = {
+  statusArea?: HTMLElement
+  div?: HTMLElement
+  dom?: HTMLDocument
+}
+function getStatusArea (context?: StatusAreaContext) {
+  var box = (context && context.statusArea) || (context && context.div) || null
   if (box) return box
-  let dom = context.dom
+  let dom = context && context.dom
   if (!dom && typeof document !== 'undefined') {
     dom = document
   }
   if (dom) {
     var body = dom.getElementsByTagName('body')[0]
-    box = dom.createEvent('div')
-    body.insertBefore(box, body.firstElementChild)
-    context.statusArea = box
+    box = dom.createElement('div')
+    body.insertBefore((box as unknown as HTMLElement), body.firstElementChild)
+    if (context) {
+      context.statusArea = (box as unknown as HTMLElement)
+    }
     return box
   }
   return null
@@ -44,24 +53,18 @@ function getStatusArea (context) {
 /**
  * Display an error message block
  */
-function complain (context, err) {
+function complain (context: StatusAreaContext | undefined, err: string) {
   if (!err) return // only if error
-  var ele = context.statusArea || context.div || getStatusArea(context)
+  var ele = getStatusArea(context)
   console.log('Complaint: ' + err)
-  if (ele) ele.appendChild(error.errorMessageBlock(context.dom, err))
+  if (ele) ele.appendChild(error.errorMessageBlock((context && context.dom) || document, err))
   else alert(err)
 }
-
-// var UI.ns = require('./ns.js')
-// var utilsModule = require('./utils')
-// var aclControlModule = require('./acl-control')
-
-// paneUtils = {}
 
 /**
  * Remove all the children of an HTML element
  */
-function clearElement (ele) {
+function clearElement (ele: HTMLElement) {
   while (ele.firstChild) {
     ele.removeChild(ele.firstChild)
   }
@@ -78,10 +81,12 @@ function extractLogURI (fullURI) {
 }
 
 /**
+ * By default, converts e.g. '2020-02-19T19:35:28.557Z' to '19:35'
+ * if today is 19 Feb 2020, and to 'Feb 19' if not.
  * @@@ TODO This needs to be changed to local time
- * noTime  - only give date, no time
+ * @param noTime Return a string like 'Feb 19' even if it's today.
  */
-function shortDate (str, noTime) {
+function shortDate (str: string, noTime: boolean): string {
   if (!str) return '???'
   var month = [
     'Jan',
@@ -123,7 +128,7 @@ function shortDate (str, noTime) {
  * @param format  for instance '{FullYear}-{Month}-{Date}T{Hours}:{Minutes}:{Seconds}.{Milliseconds}'
  * @returns for instance '2000-01-15T23:14:23.002'
  */
-function formatDateTime (date, format) {
+function formatDateTime (date: Date, format: string): string {
   return format
     .split('{')
     .map(function (s) {
@@ -141,7 +146,7 @@ function formatDateTime (date, format) {
  * Get a string representation of the current time
  * @returns for instance '2000-01-15T23:14:23.002'
  */
-function timestamp () {
+function timestamp (): string {
   return formatDateTime(
     new Date(),
     '{FullYear}-{Month}-{Date}T{Hours}:{Minutes}:{Seconds}.{Milliseconds}'
@@ -152,7 +157,7 @@ function timestamp () {
  * Get a short string representation of the current time
  * @returns for instance '23:14:23.002'
  */
-function shortTime () {
+function shortTime (): string {
   return formatDateTime(
     new Date(),
     '{Hours}:{Minutes}:{Seconds}.{Milliseconds}'
@@ -164,7 +169,7 @@ function shortTime () {
 /**
  * Sets the best name we have and looks up a better one
  */
-function setName (element, x) {
+function setName (element: HTMLElement, x: NamedNode) {
   var kb = UI.store
   var ns = UI.ns
   var findName = function (x) {
@@ -184,19 +189,37 @@ function setName (element, x) {
   }
 }
 
-// Set of suitable images
-function imagesOf (x, kb) {
+/**
+ * Set of suitable images
+ * See also [[findImage]]
+ * @param x The thing for which we want to find an image
+ * @param kb The RDF store to look in
+ * @returns It goes looking for triples in `kb`,
+ *          `(subject: x), (predicate: see list below) (object: image-url)`
+ *          to find any image linked from the thing with one of the following
+ *          predicates (in order):
+ *          * ns.sioc('avatar')
+ *          * ns.foaf('img')
+ *          * ns.vcard('logo')
+ *          * ns.vcard('hasPhoto')
+ *          * ns.vcard('photo')
+ *          * ns.foaf('depiction')
+
+ */
+function imagesOf (x: NamedNode, kb: IndexedFormula): any[] {
   var ns = UI.ns
   return kb
     .each(x, ns.sioc('avatar'))
     .concat(kb.each(x, ns.foaf('img')))
     .concat(kb.each(x, ns.vcard('logo')))
+    .concat(kb.each(x, ns.vcard('hasPhoto')))
     .concat(kb.each(x, ns.vcard('photo')))
     .concat(kb.each(x, ns.foaf('depiction')))
 }
-// Best logo or avater or photo etc to represent someone or some group etc
-//
 
+/**
+ * Best logo or avatar or photo etc to represent someone or some group etc
+ */
 const iconForClass = {
   // Potentially extendable by other apps, panes, etc
   // Relative URIs to the iconBase
@@ -222,7 +245,10 @@ const iconForClass = {
   'owl:Ontology': 'noun_classification_1479198.svg'
 }
 
-function tempSite (x) {
+/**
+ * Returns the origin of the URI of a NamedNode
+ */
+function tempSite (x: NamedNode) {
   // use only while one in rdflib fails with origins 2019
   var str = x.uri.split('#')[0]
   var p = str.indexOf('//')
@@ -239,7 +265,7 @@ function tempSite (x) {
 /**
  * Find an image for this thing as a class
  */
-function findImageFromURI (x) {
+function findImageFromURI (x: NamedNode): string | null {
   const iconDir = UI.icons.iconBase
 
   // Special cases from URI scheme:
@@ -253,7 +279,7 @@ function findImageFromURI (x) {
     }
     // Non-HTTP URI types imply types
     if (x.uri.startsWith('message:') || x.uri.startsWith('mid:')) {
-      // message: is aapple bug-- should be mid:
+      // message: is apple bug-- should be mid:
       return iconDir + 'noun_480183.svg' // envelope  noun_567486
     }
     if (x.uri.startsWith('mailto:')) {
@@ -262,8 +288,8 @@ function findImageFromURI (x) {
     // For HTTP(s) documents, we could look at the MIME type if we know it.
     if (x.uri.startsWith('https:') && x.uri.indexOf('#') < 0) {
       return tempSite(x) + 'favicon.ico' // was x.site().uri + ...
-      // Todo: make the docuent icon a fallback for if the favicon does not exist
-      // todo: pick up a possible favicon for the web page istelf from a link
+      // Todo: make the document icon a fallback for if the favicon does not exist
+      // todo: pick up a possible favicon for the web page itself from a link
       // was: return iconDir + 'noun_681601.svg' // document - under solid assumptions
     }
     return null
@@ -272,9 +298,24 @@ function findImageFromURI (x) {
   return iconDir + 'noun_10636_grey.svg' // Grey Circle -  some thing
 }
 
-/* Find something we have as explict image data for the thing
-*/
-function findImage (thing) {
+/**
+ * Find something we have as explicit image data for the thing
+ * See also [[imagesOf]]
+ * @param thing The thing for which we want to find an image
+ * @returns The URL of a globe icon if thing equals `ns.foaf('Agent')`
+ *          or `ns.rdf('Resource')`. Otherwise, it goes looking for
+ *          triples in `UI.store`,
+ *          `(subject: thing), (predicate: see list below) (object: image-url)`
+ *          to find any image linked from the thing with one of the following
+ *          predicates (in order):
+ *          * ns.sioc('avatar')
+ *          * ns.foaf('img')
+ *          * ns.vcard('logo')
+ *          * ns.vcard('hasPhoto')
+ *          * ns.vcard('photo')
+ *          * ns.foaf('depiction')
+ */
+function findImage (thing: NamedNode): string {
   const kb = UI.store
   const ns = UI.ns
   const iconDir = UI.icons.iconBase
@@ -332,10 +373,10 @@ function trySetImage (element, thing, iconForClassMap) {
   return false // we can do better
 }
 
-// ToDo: Also add icons for *properties* like  home, work, email, range, domain, comment,
-//
-
-function setImage (element, thing) { // 20191230a
+/**
+ * ToDo: Also add icons for *properties* like  home, work, email, range, domain, comment,
+ */
+function setImage (element: HTMLElement, thing: NamedNode) { // 20191230a
   const kb = UI.store
   const ns = UI.ns
 
@@ -359,9 +400,9 @@ function setImage (element, thing) { // 20191230a
 
 // If a web page then a favicon with a fallback to
 // See eg http://stackoverflow.com/questions/980855/inputting-a-default-image
-function faviconOrDefault (dom, x) {
+function faviconOrDefault (dom: HTMLDocument, x: NamedNode) {
   var image = dom.createElement('img')
-  image.style = UI.style.iconStyle
+  ;(image as any).style = UI.style.iconStyle
   var isOrigin = function (x) {
     if (!x.uri) return false
     var parts = x.uri.split('/')
@@ -383,15 +424,15 @@ function faviconOrDefault (dom, x) {
   }
 }
 
-// Delete button with a check you really mean it
-//
-//   @@ Supress check if command key held down?
-//
+/**
+ * Delete button with a check you really mean it
+ * @@ Supress check if command key held down?
+ */
 function deleteButtonWithCheck (
-  dom,
-  container,
-  noun,
-  deleteFunction
+  dom: HTMLDocument,
+  container: HTMLElement,
+  noun: string,
+  deleteFunction: () => any
 ) {
   var minusIconURI = UI.icons.iconBase + 'noun_2188_red.svg' // white minus in red #cc0000 circle
 
@@ -454,7 +495,7 @@ function deleteButtonWithCheck (
  *
  * @returns <dDomElement> - the button
  */
-function button (dom, iconURI, text, handler) {
+function button (dom: HTMLDocument, iconURI: string, text: string, handler: (event: any) => void) {
   var button = dom.createElement('button')
   button.setAttribute('type', 'button')
   button.setAttribute('style', UI.style.buttonStyle)
@@ -469,20 +510,41 @@ function button (dom, iconURI, text, handler) {
   return button
 }
 
-function cancelButton (dom, handler) {
+/*  Make a cancel button
+ *
+ * @param dom - the DOM document object
+ * @param handler <function> - A handler to called when button is clicked
+ *
+ * @returns <dDomElement> - the button
+ */
+function cancelButton (dom: HTMLDocument, handler: (event: any) => void) {
   return button(dom, cancelIconURI, 'Cancel', handler)
 }
 
-function continueButton (dom, handler) {
+/*  Make a continue button
+ *
+ * @param dom - the DOM document object
+ * @param handler <function> - A handler to called when button is clicked
+ *
+ * @returns <dDomElement> - the button
+ */
+function continueButton (dom: HTMLDocument, handler: (event: any) => void) {
   return button(dom, checkIconURI, 'Continue', handler)
 }
 
 /* Grab a name for a new thing
  *
  * Form to get the name of a new thing before we create it
+ * @params klass  Misspelt to avoid clashing with the JavaScript keyword
  * @returns: a promise of (a name or null if cancelled)
  */
-function askName (dom, kb, container, predicate, klass, noun) {
+function askName (
+  dom: HTMLDocument,
+  kb: IndexedFormula,
+  container: HTMLDocument,
+  predicate?: NamedNode,
+  klass?: NamedNode,
+  noun?: string) {
   // eslint-disable-next-line promise/param-names
   return new Promise(function (resolve, _reject) {
     var form = dom.createElement('div') // form is broken as HTML behaviour can resurface on js error
@@ -503,7 +565,7 @@ function askName (dom, kb, container, predicate, klass, noun) {
     // namefield.focus()
 
     function gotName () {
-      form.parentNode.removeChild(form)
+      ((form as HTMLElement).parentNode as HTMLElement).removeChild(form)
       resolve(namefield.value.trim())
     }
 
@@ -516,7 +578,7 @@ function askName (dom, kb, container, predicate, klass, noun) {
     form.appendChild(dom.createElement('br'))
 
     form.appendChild(cancelButton(dom, function (_event) {
-      form.parentNode.removeChild(form)
+      ((form as HTMLElement).parentNode as HTMLElement).removeChild(form)
       resolve(null)
     }))
 
@@ -529,10 +591,10 @@ function askName (dom, kb, container, predicate, klass, noun) {
 
 // ////////////////////////////////////////////////////////////////
 
-// A little link icon
-//
-//
-function linkIcon (dom, subject, iconURI?) {
+/**
+ * A little link icon
+ */
+function linkIcon (dom: HTMLDocument, subject: NamedNode, iconURI?: string): HTMLElement {
   var anchor = dom.createElement('a')
   anchor.setAttribute('href', subject.uri)
   if (subject.uri.startsWith('http')) {
@@ -548,11 +610,12 @@ function linkIcon (dom, subject, iconURI?) {
   return anchor
 }
 
-// A TR to repreent a draggable person, etc in a list
-//
-// pred is unused param at the moment
-//
-function personTR (dom, pred, obj, options) {
+/**
+ * A TR to repreent a draggable person, etc in a list
+ *
+ * pred is unused param at the moment
+ */
+function personTR (dom: HTMLDocument, pred: NamedNode, obj: NamedNode, options: any): HTMLTableRowElement {
   var tr = dom.createElement('tr')
   options = options || {}
   // tr.predObj = [pred.uri, obj.uri]   moved to acl-control
@@ -585,13 +648,14 @@ function personTR (dom, pred, obj, options) {
       dragAndDrop.makeDraggable(tr, obj)
     }
   }
-  tr.subject = obj
+  ;(tr as any).subject = obj
   return tr
 }
 
-// Refresh a DOM tree recursively
-
-function refreshTree (root) {
+/**
+ * Refresh a DOM tree recursively
+ */
+function refreshTree (root: any): void {
   if (root.refresh) {
     root.refresh()
     return
@@ -601,13 +665,29 @@ function refreshTree (root) {
   }
 }
 
-// List of attachments accepting drop
-function attachmentList (dom, subject, div, options) {
+/**
+ * Options argument for [[attachmentList]] function
+ */
+export type attachmentListOptions = {
+  doc?: NamedNode
+  modify?: boolean
+  promptIcon?: string
+  predicate?: NamedNode
+  noun?: string
+}
+
+/**
+ * Component that displays a list of resources, for instance
+ * the attachments of a message, or the various documents related
+ * to a meeting.
+ * Accepts dropping URLs onto it to add attachments to it.
+ */
+function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTMLElement, options?: attachmentListOptions) {
   options = options || {}
   var doc = options.doc || subject.doc()
   if (options.modify === undefined) options.modify = true
   var modify = options.modify
-  var promptIcon = options.promptIcon || UI.icons.iconBase + 'noun_748003.svg' //    target
+  var promptIcon: string = options.promptIcon || (UI.icons.iconBase + 'noun_748003.svg' as string) //    target
   // var promptIcon = options.promptIcon || (UI.icons.iconBase + 'noun_25830.svg') //  paperclip
   var predicate = options.predicate || UI.ns.wf('attachment')
   var noun = options.noun || 'attachment'
@@ -645,12 +725,12 @@ function attachmentList (dom, subject, div, options) {
     }
     return personTR(dom, predicate, target, opt)
   }
-  var refresh = (attachmentTable.refresh = function () {
+  var refresh = ((attachmentTable as any).refresh = function () {
     var things = kb.each(subject, predicate)
     things.sort()
     utils.syncTableToArray(attachmentTable, things, createNewRow)
   })
-  attachmentOuter.refresh = refresh // Participate in downstream changes
+  ;(attachmentOuter as any).refresh = refresh // Participate in downstream changes
   refresh()
 
   var droppedURIHandler = function (uris) {
@@ -681,12 +761,13 @@ function attachmentList (dom, subject, div, options) {
 
 // /////////////////////////////////////////////////////////////////////////////
 
-// Event Handler for links within solid apps.
-//
-// Note that native links have consraints in Firefox, they
-// don't work with local files for instance (2011)
-//
-function openHrefInOutlineMode (e) {
+/**
+ * Event Handler for links within solid apps.
+ *
+ * Note that native links have constraints in Firefox, they
+ * don't work with local files for instance (2011)
+ */
+function openHrefInOutlineMode (e: Event) {
   e.preventDefault()
   e.stopPropagation()
   var target = utils.getTarget(e)
@@ -707,10 +788,11 @@ function openHrefInOutlineMode (e) {
   // dom.outlineManager.GotoSubject(UI.store.sym(uri), true, undefined, true, undefined)
 }
 
-// We make a URI in the annotation store out of the URI of the thing to be annotated.
-//
-// @@ Todo: make it a personal preference.
-//
+/**
+ * Make a URI in the Tabulator.org annotation store out of the URI of the thing to be annotated.
+ *
+ * @@ Todo: make it a personal preference.
+ */
 function defaultAnnotationStore (subject) {
   if (subject.uri === undefined) return undefined
   var s = subject.uri
@@ -727,7 +809,12 @@ function defaultAnnotationStore (subject) {
   return UI.store.sym('http://tabulator.org/wiki/annnotation/' + s)
 }
 
-function allClassURIs () {
+/**
+ * Retrieve all RDF class URIs from solid-ui's RDF store
+ * @returns an object `ret` such that `Object.keys(ret)` is
+ * the list of all class URIs.
+ */
+function allClassURIs (): { [uri: string]: boolean } {
   var set = {}
   UI.store
     .statementsMatching(undefined, UI.ns.rdf('type'), undefined)
@@ -760,7 +847,7 @@ function allClassURIs () {
  * @param {Store} kb The quadstore to be searched.
  */
 
-function propertyTriage (kb) {
+function propertyTriage (kb: IndexedFormula): any {
   var possibleProperties: any = {}
   // if (possibleProperties === undefined) possibleProperties = {}
   // var kb = UI.store
@@ -769,7 +856,7 @@ function propertyTriage (kb) {
   var no = 0
   var nd = 0
   var nu = 0
-  var pi = kb.predicateIndex // One entry for each pred
+  var pi = (kb as any).predicateIndex // One entry for each pred
   for (var p in pi) {
     var object = pi[p][0].object
     if (object.termType === 'Literal') {
@@ -800,25 +887,29 @@ function propertyTriage (kb) {
  * General purpose widgets
  */
 
-// A button for jumping
-//
-function linkButton (dom, object) {
+/**
+ * A button for jumping
+ */
+function linkButton (dom: HTMLDocument, object: NamedNode): HTMLElement {
   var b = dom.createElement('button')
   b.setAttribute('type', 'button')
   b.textContent = 'Goto ' + utils.label(object)
   b.addEventListener('click', function (_event) {
     // b.parentNode.removeChild(b)
-    dom.outlineManager.GotoSubject(object, true, undefined, true, undefined)
+    ;(dom as any).outlineManager.GotoSubject(object, true, undefined, true, undefined)
   }, true)
   return b
 }
 
-function removeButton (dom, element) {
+/**
+ * A button to remove some other element from the page
+ */
+function removeButton (dom: HTMLDocument, element: HTMLElement) {
   var b = dom.createElement('button')
   b.setAttribute('type', 'button')
   b.textContent = '✕' // MULTIPLICATION X
   b.addEventListener('click', function (_event) {
-    element.parentNode.removeChild(element)
+    ;(element as any).parentNode.removeChild(element)
   }, true)
   return b
 }
@@ -861,15 +952,15 @@ buttons.headerButtons = function (dom, kb, name, words) {
 //   @param inverse means this is the object rather than the subject
 //
 function selectorPanel (
-  dom,
-  kb,
-  type,
-  predicate,
-  inverse,
-  possible,
-  options,
-  callbackFunction,
-  linkCallback
+  dom: HTMLDocument,
+  kb: IndexedFormula,
+  type: NamedNode,
+  predicate: NamedNode,
+  inverse: boolean,
+  possible: NamedNode[],
+  options: { connectIcon?: string },
+  callbackFunction: (x: NamedNode, e: Event, selected: boolean) => void,
+  linkCallback: (x: NamedNode, e: Event, inverse: boolean, setStyleFunction: () => void) => void
 ) {
   return selectorPanelRefresh(
     dom.createElement('div'),
@@ -886,23 +977,23 @@ function selectorPanel (
 }
 
 function selectorPanelRefresh (
-  list,
-  dom,
-  kb,
-  type,
-  predicate,
-  inverse,
-  possible,
-  options,
-  callbackFunction,
-  linkCallback
+  list: HTMLElement,
+  dom: HTMLDocument,
+  kb: IndexedFormula,
+  type: NamedNode,
+  predicate: NamedNode,
+  inverse: boolean,
+  possible: NamedNode[],
+  options: { connectIcon?: string },
+  callbackFunction: (x: NamedNode, e: Event, selected: boolean) => void,
+  linkCallback: (x: NamedNode, e: Event, inverse: boolean, setStyleFunction: () => void) => void
 ) {
   var style0 =
     'border: 0.1em solid #ddd; border-bottom: none; width: 95%; height: 2em; padding: 0.5em;'
   var selected: any = null
   list.innerHTML = ''
 
-  var refreshItem = function (box, x) {
+  var refreshItem = function (box: HTMLElement, x: NamedNode) {
     // Scope to hold item and x
     var item, image
 
@@ -984,14 +1075,18 @@ let index: any = {}
 //
 // These should be moved to type-dependeent UI code. Related panes maybe
 
-function twoLineDefault (dom, x) {
+function twoLineDefault (dom: HTMLDocument, x: NamedNode): HTMLElement {
   // Default
   var box = dom.createElement('div')
   box.textContent = utils.label(x)
   return box
 }
 
-function twoLineWidgetForClass (c) {
+/**
+ * Find a function that can create a widget for a given class
+ * @param c The RDF class for which we want a widget generator function
+ */
+function twoLineWidgetForClass (c: NamedNode): (dom: HTMLDocument, x: NamedNode) => HTMLElement {
   var widget = index.twoLine[c.uri]
   var kb = UI.store
   if (widget) return widget
@@ -1003,7 +1098,14 @@ function twoLineWidgetForClass (c) {
   return index.twoLine['']
 }
 
-function twoLineTransaction (dom, x) {
+/**
+ * Display a transaction
+ * @param x Should have attributes through triples in UI.store:
+ *          * ns.qu('payee') -> a named node
+ *          * ns.qu('date) -> a literal
+ *          * ns.qu('amount') -> a literal
+ */
+function twoLineTransaction (dom: HTMLDocument, x: NamedNode): HTMLElement {
   var failed = ''
   var enc = function (p) {
     var y = UI.store.any(x, UI.ns.qu(p))
@@ -1028,10 +1130,17 @@ function twoLineTransaction (dom, x) {
   return box
 }
 
+/**
+ * Display a trip
+ * @param x Should have attributes through triples in UI.store:
+ *          * ns.dc('title') -> a literal
+ *          * ns.cal('dtstart') -> a literal
+ *          * ns.cal('dtend') -> a literal
+ */
 function twoLineTrip (
-  dom,
-  x
-) {
+  dom: HTMLDocument,
+  x: NamedNode
+): HTMLElement {
   var enc = function (p) {
     var y = UI.store.any(x, p)
     return y ? utils.escapeForXML(y.value) : '?'
@@ -1048,8 +1157,10 @@ function twoLineTrip (
   return box
 }
 
-// Stick a stylesheet link the document if not already there
-function addStyleSheet (dom, href) {
+/**
+ * Stick a stylesheet link the document if not already there
+ */
+function addStyleSheet (dom: HTMLDocument, href: string): void {
   var links = dom.querySelectorAll('link')
   for (var i = 0; i < links.length; i++) {
     if (
@@ -1068,21 +1179,28 @@ function addStyleSheet (dom, href) {
 
 // Figure (or guess) whether this is an image, etc
 //
-function isAudio (file) {
+function isAudio (file: NamedNode) {
   return isImage(file, 'audio')
 }
-function isVideo (file) {
+function isVideo (file: NamedNode) {
   return isImage(file, 'video')
 }
-function isImage (file, kind) {
+/**
+ *
+ */
+function isImage (file: NamedNode, kind: string | undefined): boolean {
   var dcCLasses = {
     audio: 'http://purl.org/dc/dcmitype/Sound',
     image: 'http://purl.org/dc/dcmitype/Image',
     video: 'http://purl.org/dc/dcmitype/MovingImage'
   }
   var what = kind || 'image'
+  // See https://github.com/linkeddata/rdflib.js/blob/e367d5088c/src/formula.ts#L554
+  //
   var typeURIs = UI.store.findTypeURIs(file)
-  var prefix = $rdf.Util.mediaTypeClass(what + '/*').uri.split('*')[0]
+  // See https://github.com/linkeddata/rdflib.js/blob/d5000f/src/utils-js.js#L14
+  // e.g.'http://www.w3.org/ns/iana/media-types/audio'
+  var prefix: string = $rdf.Util.mediaTypeClass(what + '/*').uri.split('*')[0]
   for (var t in typeURIs) {
     if (t.startsWith(prefix)) return true
   }
@@ -1093,14 +1211,14 @@ function isImage (file, kind) {
 /**
  * File upload button
  * @param dom The DOM aka document
- * @param  display:none - Same handler function as drop, takes array of file objects
+ * @param  droppedFileHandler Same handler function as drop, takes array of file objects
  * @returns {Element} - a div with a button and a inout in it
  * The input is hidden, as it is uglky - the user clicks on the nice icons and fires the input.
  */
 // See https://developer.mozilla.org/en-US/docs/Web/API/File/Using_files_from_web_applications
 function fileUploadButtonDiv (
-  dom,
-  droppedFileHandler
+  dom: HTMLDocument,
+  droppedFileHandler: (files: FileList) => void
 ) {
   const div = dom.createElement('div')
   const input = div.appendChild(dom.createElement('input'))
@@ -1108,7 +1226,7 @@ function fileUploadButtonDiv (
   input.setAttribute('multiple', 'true')
   input.addEventListener(
     'change',
-    event => {
+    (event: any) => {
       console.log('File drop event: ', event)
       if (event.files) {
         droppedFileHandler(event.files)
@@ -1121,7 +1239,7 @@ function fileUploadButtonDiv (
     false
   )
 
-  input.style = 'display:none'
+  ;(input as any).style = 'display:none'
   const buttonElt = div.appendChild(
     button(
       dom,
@@ -1148,43 +1266,42 @@ index = {
 }
 
 module.exports = {
-  complain,
-  clearElement,
-  extractLogURI,
-  shortDate,
-  formatDateTime,
-  timestamp,
-  shortTime,
-  setName,
-  imagesOf,
-  iconForClass,
-  tempSite,
-  findImageFromURI,
-  findImage,
-  // _trySetImage: trySetImage,
-  setImage,
-  faviconOrDefault,
-  deleteButtonWithCheck,
+  addStyleSheet,
+  allClassURIs,
+  askName,
+  attachmentList,
   button,
   cancelButton,
+  clearElement,
+  complain,
   continueButton,
-  askName,
-  linkIcon,
-  personTR,
-  refreshTree,
-  attachmentList,
-  openHrefInOutlineMode,
   defaultAnnotationStore,
-  allClassURIs,
-  propertyTriage,
+  deleteButtonWithCheck,
+  extractLogURI,
+  formatDateTime,
+  faviconOrDefault,
+  fileUploadButtonDiv,
+  findImage,
+  findImageFromURI,
+  iconForClass,
+  imagesOf,
+  index,
+  isAudio,
+  isImage,
+  isVideo,
   linkButton,
+  linkIcon,
+  openHrefInOutlineMode,
+  personTR,
+  propertyTriage,
+  refreshTree,
   removeButton,
+  shortDate,
+  shortTime,
   selectorPanel,
   selectorPanelRefresh,
-  index,
-  addStyleSheet,
-  isAudio,
-  isVideo,
-  isImage,
-  fileUploadButtonDiv
+  setImage,
+  setName,
+  tempSite,
+  timestamp
 }
