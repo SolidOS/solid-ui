@@ -7,7 +7,8 @@ import {
   Group,
   GroupBuilder,
   Person,
-  findAddressBook
+  findAddressBook,
+  createNewGroup
 } from '../../../src/widgets/peoplePicker'
 import ns from '../../../src/ns'
 jest.mock('rdflib')
@@ -105,6 +106,25 @@ describe('FindAddressBook', () => {
     // expect(spyOnNowOrWhenFetched).toThrowError()
   })
 })
+describe('createNewGroup', () => {
+  it('exists', () => {
+    expect(createNewGroup).toBeInstanceOf(Function)
+  })
+  // @@ TODO something about doc within the function has a problem
+  it.skip('runs', () => {
+    const typeIndex = {}
+    const groupPickedCb = () => {}
+    const options = {}
+    const element = document.createElement('p')
+    const peoplePicker = new PeoplePicker(
+      element,
+      typeIndex,
+      groupPickedCb,
+      options
+    )
+    expect(createNewGroup(RdfLib.sym(''))).toBeTruthy()
+  })
+})
 describe('PeoplePicker', () => {
   it('exists', () => {
     expect(new PeoplePicker()).toBeInstanceOf(PeoplePicker)
@@ -154,19 +174,25 @@ describe('PeoplePicker.render', () => {
       groupPickedCb,
       options
     )
-
+    jest.clearAllMocks()
+    const spyOnNowOrWhenFetched = jest
+      .spyOn(fetcher, 'nowOrWhenFetched')
+      .mockImplementationOnce(() => {
+        return Promise.resolve('book')
+      })
+    /*
     const spyAny = jest
       .spyOn(kb, 'any')
       .mockReturnValueOnce('book')
-      .mockRejectedValueOnce('book')
+      .mockReturnValueOnce('book')
     const spyLoad = jest.spyOn(fetcher, 'load').mockResolvedValue('book')
 
-    const spyEle = jest.spyOn(document, 'createElement')
-
+    const spyEle = jest.spyOn(document, 'createElement') */
+    debugger
     peoplePicker.render()
     // expect(spyOnNowOrWhenFetched).toBeCalled()
     // expect(spyOnNowOrWhenFetched).toReturnWith('book')
-    expect(spyEle).toBeCalledTimes(1)
+    expect(spyOnNowOrWhenFetched).toBeCalledTimes(1)
     // expect(spyAny).toBeCalled() // not getting called.
     // expect(spySecondAny).toBeCalled()
     // expect(spyLoad).toBeCalled()
@@ -190,6 +216,7 @@ describe('PeoplePicker.render', () => {
   })
 
   it('create Element is called .. ', () => {
+    jest.clearAllMocks()
     const spy = jest.spyOn(document, 'createElement')
     const typeIndex = {}
     const groupPickedCb = () => {}
@@ -202,7 +229,7 @@ describe('PeoplePicker.render', () => {
       options
     )
     peoplePicker.render()
-    expect(spy).toHaveBeenCalledTimes(4)
+    expect(spy).toHaveBeenCalledTimes(2)
   })
   it('runs 2', () => {
     const typeIndex = {}
@@ -279,26 +306,6 @@ describe('PeoplePicker.findAddressBook', () => {
       options
     )
     expect(peoplePicker.findAddressBook()).toBeTruthy()
-  })
-})
-
-describe('PeoplePicker.createNewGroup', () => {
-  it('exists', () => {
-    expect(new PeoplePicker().createNewGroup).toBeInstanceOf(Function)
-  })
-  // @@ TODO something about doc within the function has a problem
-  it.skip('runs', () => {
-    const typeIndex = {}
-    const groupPickedCb = () => {}
-    const options = {}
-    const element = document.createElement('p')
-    const peoplePicker = new PeoplePicker(
-      element,
-      typeIndex,
-      groupPickedCb,
-      options
-    )
-    expect(peoplePicker.createNewGroup(RdfLib.sym(''))).toBeTruthy()
   })
 })
 
