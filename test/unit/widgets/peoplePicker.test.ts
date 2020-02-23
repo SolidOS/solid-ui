@@ -15,18 +15,9 @@ jest.mock('rdflib')
 jest.mock('solid-auth-client')
 const kb = require('../../../src/store')
 const fetcher = kb.fetcher
-// jest.mock('../../../src/store')
 
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 const element = dom.createElement('div')
-
-/* async function getMyWebId(): Promise<string | null> {
-  const currentSession = await SolidAuth.currentSession()
-  if (!currentSession) {
-    return null
-  }
-  return currentSession.webId
-} */
 
 describe('FindAddressBook', () => {
   it('exists', () => {
@@ -112,17 +103,7 @@ describe('createNewGroup', () => {
   })
   // @@ TODO something about doc within the function has a problem
   it.skip('runs', () => {
-    const typeIndex = {}
-    const groupPickedCb = () => {}
-    const options = {}
-    const element = document.createElement('p')
-    const peoplePicker = new PeoplePicker(
-      element,
-      typeIndex,
-      groupPickedCb,
-      options
-    )
-    expect(createNewGroup(RdfLib.sym(''))).toBeTruthy()
+    expect(createNewGroup(RdfLib.sym('book'))).toMatchInlineSnapshot()
   })
 })
 describe('PeoplePicker', () => {
@@ -180,15 +161,7 @@ describe('PeoplePicker.render', () => {
       .mockImplementationOnce(() => {
         return Promise.resolve('book')
       })
-    /*
-    const spyAny = jest
-      .spyOn(kb, 'any')
-      .mockReturnValueOnce('book')
-      .mockReturnValueOnce('book')
-    const spyLoad = jest.spyOn(fetcher, 'load').mockResolvedValue('book')
 
-    const spyEle = jest.spyOn(document, 'createElement') */
-    debugger
     peoplePicker.render()
     // expect(spyOnNowOrWhenFetched).toBeCalled()
     // expect(spyOnNowOrWhenFetched).toReturnWith('book')
