@@ -105,7 +105,7 @@ export class PeoplePicker {
     return this
   }
 
-  findAddressBook (typeIndex) {
+  findAddressBookOops (typeIndex) {
     return new Promise((resolve, reject) => {
       kb.fetcher.nowOrWhenFetched(typeIndex, (ok, err) => {
         if (!ok) {
