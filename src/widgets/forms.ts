@@ -7,7 +7,7 @@
 
 module.exports = {}
 
-var forms = {}
+var forms: any = {}
 
 forms.field = {} // Form field functions by URI of field type.
 
@@ -91,7 +91,7 @@ forms.field[ns.ui('Form').uri] = forms.field[
     var t = forms.mostSpecificClassURI(field) // Field type
     if (t === ui('Options').uri) {
       var dep = kb.any(field, ui('dependingOn'))
-      if (dep && kb.any(subject, dep)) original[i] = kb.any(subject, dep).toNT()
+      if (dep && kb.any(subject, dep)) (original as any)[i] = kb.any(subject, dep).toNT()
     }
 
     var fn = forms.fieldFunction(dom, field)
@@ -116,14 +116,14 @@ forms.field[ns.ui('Form').uri] = forms.field[
             box.removeChild(newOne)
             box.insertBefore(newOne, eles[j])
             box.removeChild(eles[j])
-            original[j] = kb.any(subject, dep).toNT()
-            eles[j] = newOne
+            ;(original as any)[j] = kb.any(subject, dep).toNT()
+            ;(eles as any)[j] = newOne
           }
         }
       }
       callbackFunction(ok, body)
     }
-    eles.push(fn(dom, box, already2, subject, field, store, itemChanged))
+    ;(eles as any).push(fn(dom, box, already2, subject, field, store, itemChanged))
   }
   return box
 }
@@ -245,7 +245,7 @@ forms.field[ns.ui('Multiple').uri] = function (
   *
    * @param {Node} object The RDF object to be represented by this item.
    */
-  async function addItem (object) {
+  async function addItem (object?) {
     if (!object) object = forms.newThing(store) // by default just add new nodes
     if (ordered) {
       createListIfNecessary() // Sets list and unsavedList
@@ -746,8 +746,8 @@ function basicField (
         is = [$rdf.st(subject, property, result, store)]
       }
 
-      function updateMany (ds, is, callback) {
-        var docs = []
+      function updateMany (ds, is: { why: { uri: string } }[], callback) {
+        var docs: any[] = []
         is.forEach(st => {
           if (!docs.includes(st.why.uri)) docs.push(st.why.uri)
         })
@@ -1013,10 +1013,10 @@ forms.field[ns.ui('Choice').uri] = function (
     return error.errorMessageBlock(dom, "No 'from' for Choice: " + form)
   }
   var subForm = kb.any(form, ui('use')) // Optional
-  var possible = []
+  var possible: any[] = []
   var possibleProperties
   var np = '--' + utils.label(property) + '-?'
-  var opts = { multiple: multiple, nullLabel: np, disambiguate: false }
+  var opts: any = { multiple: multiple, nullLabel: np, disambiguate: false }
   possible = kb.each(undefined, ns.rdf('type'), from)
   for (var x in kb.findMembersNT(from)) {
     possible.push(kb.fromNT(x))
@@ -1133,7 +1133,7 @@ forms.mostSpecificClassURI = function (x) {
   const kb = UI.store
   var ft = kb.findTypeURIs(x)
   var bot = kb.bottomTypeURIs(ft) // most specific
-  var bots = []
+  var bots: any[] = []
   for (var b in bot) bots.push(b)
   // if (bots.length > 1) throw "Didn't expect "+x+" to have multiple bottom types: "+bots
   return bots[0]
@@ -1247,7 +1247,7 @@ forms.propertiesForClass = function (kb, c) {
   explicit.map(function (p) {
     used[p.uri] = true
   })
-  var result = []
+  var result: any[] = []
   for (var uri in used) {
     result.push(kb.sym(uri))
   }
@@ -1429,7 +1429,7 @@ forms.promptForNew = function (
   var gotButton = false
   var itemDone = function (ok, body) {
     if (!ok) return callbackFunction(ok, body)
-    var insertMe = []
+    var insertMe: any[] = []
     if (subject && !kb.holds(subject, predicate, object, store)) {
       insertMe.push($rdf.st(subject, predicate, object, store))
     }
@@ -1620,8 +1620,8 @@ forms.makeSelectForOptions = function (
 
   var onChange = function (_e) {
     select.disabled = true // until data written back - gives user feedback too
-    var ds = []
-    var is = []
+    var ds: any[] = []
+    var is: any[] = []
     var removeValue = function (t) {
       if (kb.holds(subject, predicate, t, store)) {
         ds.push($rdf.st(subject, predicate, t, store))
@@ -1837,7 +1837,7 @@ forms.makeSelectForNestedCategory = function (
   callbackFunction
 ) {
   var container = dom.createElement('span') // Container
-  var child = null
+  var child: any = null
   var select
   var onChange = function (ok, body) {
     if (ok) update()
@@ -1925,7 +1925,7 @@ function buildCheckboxForm (dom, kb, lab, del, ins, form, store, tristate) {
     return missing.length === 0
   }
   function refresh () {
-    var state = holdsAll(ins)
+    var state: any = holdsAll(ins)
     var displayState = state
     if (del.length) {
       var negation = holdsAll(del)
