@@ -22,7 +22,7 @@ function makeDropTarget(
     }
   }
 
-  const dragenterListener = function(this: HTMLElement, e: DragEvent) {
+  const dragenterListener = function(e: DragEvent) {
     if (this.style) {
       //  necessary not sure when
       if (!this.savedStyle) {
