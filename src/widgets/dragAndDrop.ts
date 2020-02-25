@@ -17,11 +17,12 @@ function makeDropTarget(
 ) {
   var dragoverListener = function(e: DragEvent) {
     e.preventDefault() // Need else drop does not work [sic]
-    e.dataTransfer.dropEffect = 'copy'
+    if (e.dataTransfer) {
+      e.dataTransfer.dropEffect = 'copy'
+    }
   }
 
-  var dragenterListener = function(e: DragEvent) {
-    console.log('dragenter event dropEffect: ' + e.dataTransfer.dropEffect)
+  const dragenterListener = function(this: HTMLElement, e: DragEvent) {
     if (this.style) {
       //  necessary not sure when
       if (!this.savedStyle) {
@@ -34,12 +35,11 @@ function makeDropTarget(
       this.style.border = '0.25em dashed black'
       this.style.borderRadius = '0.3em'
     }
-
-    e.dataTransfer.dropEffect = 'link'
-    console.log('dragenter event dropEffect 2: ' + e.dataTransfer.dropEffect)
+    if (e.dataTransfer) {
+      e.dataTransfer.dropEffect = 'link'
+    }
   }
-  var dragleaveListener = function(e: DragEvent) {
-    console.log('dragleave event dropEffect: ' + e.dataTransfer.dropEffect)
+  var dragleaveListener = (e: DragEvent) => {
     if (this.savedStyle) {
       this.style.border = this.savedStyle.border
       this.style.backgroundColor = this.savedStyle.backgroundColor
@@ -52,57 +52,59 @@ function makeDropTarget(
 
   var dropListener = function(e: DragEvent) {
     if (e.preventDefault) e.preventDefault() // stops the browser from redirecting off to the text.
-    console.log('Drop event. dropEffect: ' + e.dataTransfer.dropEffect)
-    console.log(
-      'Drop event. types: ' +
-        (e.dataTransfer.types ? e.dataTransfer.types.join(', ') : 'NOPE')
-    )
+    if (e.dataTransfer) {
+      console.log('Drop event. dropEffect: ' + e.dataTransfer.dropEffect)
+      console.log(
+        'Drop event. types: ' +
+          (e.dataTransfer.types ? e.dataTransfer.types.join(', ') : 'NOPE')
+      )
 
-    var uris = null
-    var text
-    if (e.dataTransfer.types) {
-      for (var t = 0; t < e.dataTransfer.types.length; t++) {
-        var type = e.dataTransfer.types[t]
-        if (type === 'text/uri-list') {
-          uris = e.dataTransfer.getData(type).split('\n') // @ ignore those starting with #
-          console.log('Dropped text/uri-list: ' + uris)
-        } else if (type === 'text/plain') {
-          text = e.dataTransfer.getData(type)
-        } else if (type === 'Files' && droppedFileHandler) {
-          var files = e.dataTransfer.files // FileList object.
-          for (let i = 0; files[i]; i++) {
-            const f = files[i]
-            console.log(
-              'Filename: ' +
-                f.name +
-                ', type: ' +
-                (f.type || 'n/a') +
-                ' size: ' +
-                f.size +
-                ' bytes, last modified: ' +
-                (f.lastModifiedDate
-                  ? f.lastModifiedDate.toLocaleDateString()
-                  : 'n/a')
-            )
+      var uris: string[] | null = null
+      var text
+      if (e.dataTransfer.types) {
+        for (var t = 0; t < e.dataTransfer.types.length; t++) {
+          var type = e.dataTransfer.types[t]
+          if (type === 'text/uri-list') {
+            uris = e.dataTransfer.getData(type).split('\n') // @ ignore those starting with #
+            console.log('Dropped text/uri-list: ' + uris)
+          } else if (type === 'text/plain') {
+            text = e.dataTransfer.getData(type)
+          } else if (type === 'Files' && droppedFileHandler) {
+            var files = e.dataTransfer.files // FileList object.
+            for (let i = 0; files[i]; i++) {
+              const f = files[i]
+              console.log(
+                'Filename: ' +
+                  f.name +
+                  ', type: ' +
+                  (f.type || 'n/a') +
+                  ' size: ' +
+                  f.size +
+                  ' bytes, last modified: ' +
+                  (f.lastModifiedDate
+                    ? f.lastModifiedDate.toLocaleDateString()
+                    : 'n/a')
+              )
+            }
+            droppedFileHandler(files)
           }
-          droppedFileHandler(files)
         }
+        if (uris === null && text && text.slice(0, 4) === 'http') {
+          uris = text
+          console.log("Waring: Poor man's drop: using text for URI") // chrome disables text/uri-list??
+        }
+      } else {
+        // ... however, if we're IE, we don't have the .types property, so we'll just get the Text value
+        uris = [e.dataTransfer.getData('Text')]
+        console.log('WARNING non-standard drop event: ' + uris[0])
       }
-      if (uris === null && text && text.slice(0, 4) === 'http') {
-        uris = text
-        console.log("Waring: Poor man's drop: using text for URI") // chrome disables text/uri-list??
+      console.log('Dropped URI list (2): ' + uris)
+      if (uris) {
+        droppedURIHandler(uris)
       }
-    } else {
-      // ... however, if we're IE, we don't have the .types property, so we'll just get the Text value
-      uris = [e.dataTransfer.getData('Text')]
-      console.log('WARNING non-standard drop event: ' + uris[0])
+      this.style.backgroundColor = 'white' // restore style
+      return false
     }
-    console.log('Dropped URI list (2): ' + uris)
-    if (uris) {
-      droppedURIHandler(uris)
-    }
-    this.style.backgroundColor = 'white' // restore style
-    return false
   } // dropListener
 
   var addTargetListeners = function(ele: HTMLElement) {
@@ -134,12 +136,14 @@ function makeDraggable(tr: HTMLElement, obj: any) {
     'dragstart',
     function(e: DragEvent) {
       tr.style.fontWeight = 'bold'
-      e.dataTransfer.setData('text/uri-list', obj.uri)
-      e.dataTransfer.setData('text/plain', obj.uri)
-      e.dataTransfer.setData('text/html', tr.outerHTML)
-      console.log(
-        'Dragstart: ' + tr + ' -> ' + obj + 'de: ' + e.dataTransfer.dropEffect
-      )
+      if (e.dataTransfer) {
+        e.dataTransfer.setData('text/uri-list', obj.uri)
+        e.dataTransfer.setData('text/plain', obj.uri)
+        e.dataTransfer.setData('text/html', tr.outerHTML)
+        console.log(
+          'Dragstart: ' + tr + ' -> ' + obj + 'de: ' + e.dataTransfer.dropEffect
+        )
+      }
     },
     false
   )
@@ -158,8 +162,10 @@ function makeDraggable(tr: HTMLElement, obj: any) {
     'dragend',
     function(e: DragEvent) {
       tr.style.fontWeight = 'normal'
-      console.log('Dragend dropeffect: ' + e.dataTransfer.dropEffect)
-      console.log('Dragend: ' + tr + ' -> ' + obj)
+      if (e.dataTransfer) {
+        console.log('Dragend dropeffect: ' + e.dataTransfer.dropEffect)
+        console.log('Dragend: ' + tr + ' -> ' + obj)
+      }
     },
     false
   )
