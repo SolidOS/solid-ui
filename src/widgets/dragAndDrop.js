@@ -10,14 +10,13 @@ module.exports = {
 }
 // const UI = require('../index.js') // this package
 
-function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
-  var dragoverListener = function (e) {
-    e.preventDefault() // Neeed else drop does not work [sic]
-    console.log(e)
+function makeDropTarget(ele, droppedURIHandler, droppedFileHandler) {
+  var dragoverListener = function(e) {
+    e.preventDefault() // Need else drop does not work [sic]
     e.dataTransfer.dropEffect = 'copy'
   }
 
-  var dragenterListener = function (e) {
+  var dragenterListener = function(e) {
     console.log('dragenter event dropEffect: ' + e.dataTransfer.dropEffect)
     if (this.style) {
       //  necessary not sure when
@@ -35,7 +34,7 @@ function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
     e.dataTransfer.dropEffect = 'link'
     console.log('dragenter event dropEffect 2: ' + e.dataTransfer.dropEffect)
   }
-  var dragleaveListener = function (e) {
+  var dragleaveListener = function(e) {
     console.log('dragleave event dropEffect: ' + e.dataTransfer.dropEffect)
     if (this.savedStyle) {
       this.style.border = this.savedStyle.border
@@ -47,7 +46,7 @@ function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
     }
   }
 
-  var dropListener = function (e) {
+  var dropListener = function(e) {
     if (e.preventDefault) e.preventDefault() // stops the browser from redirecting off to the text.
     console.log('Drop event. dropEffect: ' + e.dataTransfer.dropEffect)
     console.log(
@@ -102,7 +101,7 @@ function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
     return false
   } // dropListener
 
-  var addTargetListeners = function (ele) {
+  var addTargetListeners = function(ele) {
     if (!ele) {
       console.log('@@@ addTargetListeners: ele ' + ele)
     }
@@ -118,12 +117,12 @@ function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
 //
 // Possibly later set the drag image too?
 //
-function makeDraggable (tr, obj) {
+function makeDraggable(tr, obj) {
   tr.setAttribute('draggable', 'true') // Stop the image being dragged instead - just the TR
 
   tr.addEventListener(
     'dragstart',
-    function (e) {
+    function(e) {
       tr.style.fontWeight = 'bold'
       e.dataTransfer.setData('text/uri-list', obj.uri)
       e.dataTransfer.setData('text/plain', obj.uri)
@@ -137,7 +136,7 @@ function makeDraggable (tr, obj) {
 
   tr.addEventListener(
     'drag',
-    function (e) {
+    function(e) {
       e.preventDefault()
       e.stopPropagation()
       // console.log('Drag: dropEffect: ' + e.dataTransfer.dropEffect)
@@ -147,7 +146,7 @@ function makeDraggable (tr, obj) {
 
   tr.addEventListener(
     'dragend',
-    function (e) {
+    function(e) {
       tr.style.fontWeight = 'normal'
       console.log('Dragend dropeffect: ' + e.dataTransfer.dropEffect)
       console.log('Dragend: ' + tr + ' -> ' + obj)
@@ -168,7 +167,7 @@ function makeDraggable (tr, obj) {
  **  successHandler(file, uploadedURI)    Called after each success upload
  **                              With file object an final URI as params
  */
-function uploadFiles (fetcher, files, fileBase, imageBase, successHandler) {
+function uploadFiles(fetcher, files, fileBase, imageBase, successHandler) {
   for (var i = 0; files[i]; i++) {
     const f = files[i]
     console.log(
@@ -184,8 +183,8 @@ function uploadFiles (fetcher, files, fileBase, imageBase, successHandler) {
 
     // @@ Add: progress bar(s)
     var reader = new FileReader()
-    reader.onload = (function (theFile) {
-      return function (e) {
+    reader.onload = (function(theFile) {
+      return function(e) {
         var data = e.target.result
         var suffix = ''
         console.log(' File read byteLength : ' + data.byteLength)

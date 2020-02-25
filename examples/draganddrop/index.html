@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>solid-ui UI.widgets.draganddrop examples page</title>
+    <script type="text/javascript" src="../../lib/webpack-bundle.js"></script>
+    <script>
+      const $ = document.querySelector.bind(document)
+      function showSource(widgetName) {
+        $(`#viewSource-${widgetName}`).innerHTML = $(`#script-${widgetName}`)
+          .innerText.replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;')
+      }
+    </script>
+  </head>
+  <body>
+    <h2 id="makeDropTarget"><a href="#makeDropTarget">makeDropTarget</a></h2>
+    <p id="drag" draggable="true">This element is draggable.</p>
+    <script id="script-makeDropTarget">
+      const ele = document.querySelector('#drag')
+      UI.widgets.makeDropTarget(ele)
+    </script>
+    <pre id="viewSource-makeDropTarget"></pre>
+    <script>
+      showSource('makeDropTarget')
+    </script>
+  </body>
+</html>

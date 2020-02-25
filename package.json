@@ -10,11 +10,11 @@
   ],
   "scripts": {
     "build": "npm run clean && npm run build-version && npm run build-lib && npm run build-types && npm run build-webpack",
-    "build-lib": "babel src -d lib --source-maps --extensions '.ts,.js'",
+    "build-lib": "babel src -d lib --source-maps --extensions \".ts,.js\"",
     "build-types": "tsc --emitDeclarationOnly",
     "build-version": "sh ./timestamp.sh > src/versionInfo.ts  && eslint \"src/versionInfo.ts\" --fix",
     "build-webpack": "webpack",
-    "watch": "npm run build-version && babel src --out-dir lib --watch --source-maps --extensions '.ts,.js'",
+    "watch": "npm run build-version && babel src --out-dir lib --watch --source-maps --extensions \".ts,.js\"",
     "clean": "rm -rf lib",
     "coverage": "jest --coverage --collectCoverageFrom=src/**/*.[jt]s",
     "lint": "eslint \"src/**/*.js\" \"src/**/*.ts\" \"test/**/*.ts\"",
