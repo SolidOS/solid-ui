@@ -37,6 +37,20 @@ describe('makeDropTarget', () => {
     )
   })
 })
+describe('makeDropTarget.dragoverListener', () => {
+  it('should be a function', () => {
+    const event = new Event('dragover')
+    const ele = document.createElement('p')
+    ele.innerHTML = 'I can be dragged'
+    ele.setAttribute('draggable', 'true')
+    console.dir(ele)
+    debugger
+    makeDropTarget(ele)
+    ele.dispatchEvent(event)
+    // expect(makeDropTarget().dragoverListener).toBeInstanceOf(Function)
+  })
+})
+describe('makeDropTarget.dragenterListener', () => {})
 
 describe('makeDraggable', () => {
   it('exists', () => {
