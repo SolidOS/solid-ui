@@ -10,13 +10,17 @@ module.exports = {
 }
 // const UI = require('../index.js') // this package
 
-function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
-  var dragoverListener = function (e) {
-    e.preventDefault() // Neeed else drop does not work [sic]
+function makeDropTarget(
+  ele: HTMLElement,
+  droppedURIHandler: any,
+  droppedFileHandler: any
+) {
+  var dragoverListener = function(e: DragEvent) {
+    e.preventDefault() // Need else drop does not work [sic]
     e.dataTransfer.dropEffect = 'copy'
   }
 
-  var dragenterListener = function(e) {
+  var dragenterListener = function(e: DragEvent) {
     console.log('dragenter event dropEffect: ' + e.dataTransfer.dropEffect)
     if (this.style) {
       //  necessary not sure when
@@ -34,7 +38,7 @@ function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
     e.dataTransfer.dropEffect = 'link'
     console.log('dragenter event dropEffect 2: ' + e.dataTransfer.dropEffect)
   }
-  var dragleaveListener = function(e) {
+  var dragleaveListener = function(e: DragEvent) {
     console.log('dragleave event dropEffect: ' + e.dataTransfer.dropEffect)
     if (this.savedStyle) {
       this.style.border = this.savedStyle.border
@@ -46,7 +50,7 @@ function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
     }
   }
 
-  var dropListener = function(e) {
+  var dropListener = function(e: DragEvent) {
     if (e.preventDefault) e.preventDefault() // stops the browser from redirecting off to the text.
     console.log('Drop event. dropEffect: ' + e.dataTransfer.dropEffect)
     console.log(
@@ -101,7 +105,7 @@ function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
     return false
   } // dropListener
 
-  var addTargetListeners = function(ele) {
+  var addTargetListeners = function(ele: HTMLElement) {
     if (!ele) {
       console.log('@@@ addTargetListeners: ele ' + ele)
     }
@@ -110,19 +114,25 @@ function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
     ele.addEventListener('dragleave', dragleaveListener)
     ele.addEventListener('drop', dropListener)
   }
-  addTargetListeners(ele, droppedURIHandler)
+
+  /* @@ TODO The function call below passes in two arguments, however
+   * the function itself is defined with only one.  The droppedURIHandler
+   * does not appear to be used in the function so I am removing it.
+   */
+  // addTargetListeners(ele, droppedURIHandler)
+  addTargetListeners(ele)
 } // listen for dropped URIs
 
 // Make an HTML element draggable as a URI-identified thing
 //
 // Possibly later set the drag image too?
 //
-function makeDraggable(tr, obj) {
+function makeDraggable(tr: HTMLElement, obj: any) {
   tr.setAttribute('draggable', 'true') // Stop the image being dragged instead - just the TR
 
   tr.addEventListener(
     'dragstart',
-    function(e) {
+    function(e: DragEvent) {
       tr.style.fontWeight = 'bold'
       e.dataTransfer.setData('text/uri-list', obj.uri)
       e.dataTransfer.setData('text/plain', obj.uri)
@@ -136,7 +146,7 @@ function makeDraggable(tr, obj) {
 
   tr.addEventListener(
     'drag',
-    function(e) {
+    function(e: Event) {
       e.preventDefault()
       e.stopPropagation()
       // console.log('Drag: dropEffect: ' + e.dataTransfer.dropEffect)
@@ -146,7 +156,7 @@ function makeDraggable(tr, obj) {
 
   tr.addEventListener(
     'dragend',
-    function(e) {
+    function(e: DragEvent) {
       tr.style.fontWeight = 'normal'
       console.log('Dragend dropeffect: ' + e.dataTransfer.dropEffect)
       console.log('Dragend: ' + tr + ' -> ' + obj)
@@ -167,7 +177,16 @@ function makeDraggable(tr, obj) {
  **  successHandler(file, uploadedURI)    Called after each success upload
  **                              With file object an final URI as params
  */
-function uploadFiles(fetcher, files, fileBase, imageBase, successHandler) {
+/* @@ TODO I think we can define the fetcher type at the top of the file
+ * also we can do this for files.
+ */
+function uploadFiles(
+  fetcher: any,
+  files: any,
+  fileBase: string,
+  imageBase: string,
+  successHandler: any
+) {
   for (var i = 0; files[i]; i++) {
     const f = files[i]
     console.log(
@@ -184,7 +203,7 @@ function uploadFiles(fetcher, files, fileBase, imageBase, successHandler) {
     // @@ Add: progress bar(s)
     var reader = new FileReader()
     reader.onload = (function(theFile) {
-      return function(e) {
+      return function(e: any) {
         var data = e.target.result
         var suffix = ''
         console.log(' File read byteLength : ' + data.byteLength)
@@ -222,11 +241,11 @@ function uploadFiles(fetcher, files, fileBase, imageBase, successHandler) {
             contentType: contentType
           })
           .then(
-            _response => {
+            (_response) => {
               console.log(' Upload: put OK: ' + destURI)
               successHandler(theFile, destURI)
             },
-            error => {
+            (error) => {
               const msg = ' Upload: FAIL ' + destURI + ', Error: ' + error
               console.log(msg)
               alert(msg)
