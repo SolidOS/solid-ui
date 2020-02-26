@@ -7,7 +7,6 @@ import {
   Group,
   GroupBuilder,
   Person,
-  findAddressBook,
   createNewGroup
 } from '../../../src/widgets/peoplePicker'
 import ns from '../../../src/ns'
@@ -21,10 +20,10 @@ const element = dom.createElement('div')
 
 describe('FindAddressBook', () => {
   it('exists', () => {
-    expect(findAddressBook).toBeInstanceOf(Function)
+    expect(new PeoplePicker().findAddressBook).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(findAddressBook('typeIndex')).toMatchObject({})
+    expect(new PeoplePicker().findAddressBook('typeIndex')).toMatchObject({})
   })
 
   it('should call kb.any and spy load when callback is successful ', () => {
@@ -35,7 +34,7 @@ describe('FindAddressBook', () => {
       .mockReturnValueOnce('book')
       .mockReturnValueOnce('book')
     const spyLoad = jest.spyOn(fetcher, 'load').mockResolvedValue('book')
-    findAddressBook('typeIndex')
+    new PeoplePicker().findAddressBook('typeIndex')
     const callback: any = spyOnNowOrWhenFetched.mock.calls[0][1]
 
     callback(true, undefined)
@@ -51,7 +50,7 @@ describe('FindAddressBook', () => {
       .mockReturnValue('book')
       .mockReturnValueOnce('book')
     const spyLoad = jest.spyOn(fetcher, 'load').mockResolvedValue('book')
-    findAddressBook('typeIndex')
+    new PeoplePicker().findAddressBook('typeIndex')
     const callback: any = spyOnNowOrWhenFetched.mock.calls[0][1]
     callback(false, undefined)
     // expect(spyOnNowOrWhenFetched).toThrowError()
@@ -63,7 +62,7 @@ describe('FindAddressBook', () => {
       .mockReturnValueOnce(null)
       .mockReturnValueOnce('book')
     const spyLoad = jest.spyOn(fetcher, 'load').mockResolvedValue('book')
-    findAddressBook('typeIndex')
+    new PeoplePicker().findAddressBook('typeIndex')
     const callback: any = spyOnNowOrWhenFetched.mock.calls[0][1]
     callback(true, undefined)
     // expect(spyOnNowOrWhenFetched).toThrowError()
@@ -76,7 +75,7 @@ describe('FindAddressBook', () => {
       .mockReturnValueOnce('bookregs')
       .mockReturnValueOnce(null)
     const spyLoad = jest.spyOn(fetcher, 'load').mockResolvedValue('book')
-    findAddressBook('typeIndex')
+    new PeoplePicker().findAddressBook('typeIndex')
     const callback: any = spyOnNowOrWhenFetched.mock.calls[0][1]
     callback(true, undefined)
     // expect(spyOnNowOrWhenFetched).toThrowError()
@@ -91,7 +90,7 @@ describe('FindAddressBook', () => {
       .mockReturnValue('book')
       .mockReturnValue('book')
     const spyLoad = jest.spyOn(fetcher, 'load').mockRejectedValue(new Error())
-    findAddressBook('typeIndex')
+    new PeoplePicker().findAddressBook('typeIndex')
     const callback: any = spyOnNowOrWhenFetched.mock.calls[0][1]
     callback(true, undefined)
     // expect(spyOnNowOrWhenFetched).toThrowError()
@@ -118,7 +117,7 @@ describe('PeoplePicker.render', () => {
   // skipping snapshots for now until decision is made about prettier
   it.skip('runs', () => {
     const typeIndex = {}
-    const groupPickedCb = () => {}
+    const groupPickedCb = () => { }
     const options = { selectedGroup: false }
     const element = document.createElement('p')
     const peoplePicker = new PeoplePicker(
@@ -147,7 +146,7 @@ describe('PeoplePicker.render', () => {
   // skipping snapshots for now until decision is made about prettier
   it.skip('.. type index ...', () => {
     const typeIndex = 'publicTypeIndex'
-    const groupPickedCb = () => {}
+    const groupPickedCb = () => { }
     const options = { selectedGroup: {} }
     const element = document.createElement('p')
     const peoplePicker = new PeoplePicker(
@@ -193,7 +192,7 @@ describe('PeoplePicker.render', () => {
     jest.clearAllMocks()
     const spy = jest.spyOn(document, 'createElement')
     const typeIndex = {}
-    const groupPickedCb = () => {}
+    const groupPickedCb = () => { }
     const options = { selectedGroup: true }
     const element = document.createElement('button')
     const peoplePicker = new PeoplePicker(
@@ -208,7 +207,7 @@ describe('PeoplePicker.render', () => {
   // skipping snapshots for now until decision is made about prettier
   it.skip('runs 2', () => {
     const typeIndex = {}
-    const groupPickedCb = () => {}
+    const groupPickedCb = () => { }
     const options = { selectedGroup: true }
     const element = document.createElement('p')
     const peoplePicker = new PeoplePicker(
@@ -238,7 +237,7 @@ describe('PeoplePicker.render', () => {
     const mockKbAny: jest.SpyInstance = require('../../../src/store').any
     mockKbAny.mockReturnValueOnce(null)
     const typeIndex = {}
-    const groupPickedCb = () => {}
+    const groupPickedCb = () => { }
     const options = { selectedGroup: true }
     const element = document.createElement('p')
     const peoplePicker = new PeoplePicker(
@@ -272,7 +271,7 @@ describe('PeoplePicker.findAddressBook', () => {
   })
   it.skip('runs', () => {
     const typeIndex = {}
-    const groupPickedCb = () => {}
+    const groupPickedCb = () => { }
     const options = {}
     const peoplePicker = new PeoplePicker(
       element,
@@ -290,7 +289,7 @@ describe('PeoplePicker.onSelectGroup', () => {
   })
   it('runs', () => {
     const typeIndex = {}
-    const groupPickedCb = () => {}
+    const groupPickedCb = () => { }
     const options = {}
     const element = document.createElement('p')
     const peoplePicker = new PeoplePicker(
@@ -316,7 +315,7 @@ describe('GroupPicker.render', () => {
   it('runs', () => {
     const container = RdfLib.sym('')
     const book = RdfLib.sym('')
-    const handler = () => {}
+    const handler = () => { }
     const groupPicker = new GroupPicker(container, book, handler)
     expect(groupPicker.render()).toBeTruthy()
   })
@@ -329,14 +328,14 @@ describe('GroupPicker.loadGroups', () => {
   it('runs', () => {
     const container = RdfLib.sym('')
     const book = RdfLib.sym('')
-    const handler = () => {}
+    const handler = () => { }
     const groupPicker = new GroupPicker(container, book, handler)
     expect(groupPicker.loadGroups()).toBeTruthy()
   })
   it('should....', () => {
     const container = RdfLib.sym('')
     const book = RdfLib.sym('book')
-    const handler = () => {}
+    const handler = () => { }
     const groupPicker = new GroupPicker(container, book, handler)
     jest.clearAllMocks() // have to clear otherwise not the correct indices below
     const spyOnNowOrWhenFetched = jest.spyOn(fetcher, 'nowOrWhenFetched')
@@ -352,7 +351,7 @@ describe('GroupPicker.loadGroups', () => {
   it('should error if not okay', () => {
     const container = RdfLib.sym('')
     const book = RdfLib.sym('book')
-    const handler = () => {}
+    const handler = () => { }
     const groupPicker = new GroupPicker(container, book, handler)
     jest.clearAllMocks() // have to clear otherwise not the correct indices below
     const spyOnNowOrWhenFetched = jest.spyOn(fetcher, 'nowOrWhenFetched')
@@ -372,7 +371,7 @@ describe('GroupPicker.handleClickGroup', () => {
   it('runs', () => {
     const container = RdfLib.sym('')
     const book = RdfLib.sym('')
-    const handler = () => {}
+    const handler = () => { }
     const groupPicker = new GroupPicker(container, book, handler)
     const event = groupPicker.handleClickGroup()
     expect(groupPicker.handleClickGroup()).toBeTruthy()
@@ -415,7 +414,7 @@ describe('GroupBuilder.render', () => {
     jest.clearAllMocks()
     const groupArg = RdfLib.sym('')
     const book = RdfLib.sym('')
-    const handler = () => {}
+    const handler = () => { }
     const element = document.createElement('p')
     const groupBuilder = new GroupBuilder(
       element,
@@ -475,7 +474,7 @@ describe('GroupBuilder.refresh', () => {
   it('runs', () => {
     const groupArg = RdfLib.sym('')
     const book = RdfLib.sym('')
-    const handler = () => {}
+    const handler = () => { }
     const groupBuilder = new GroupBuilder(
       element,
       book,
@@ -494,7 +493,7 @@ describe('GroupBuilder.add', () => {
   it('runs', () => {
     const groupArg = RdfLib.sym('')
     const book = RdfLib.sym('')
-    const handler = () => {}
+    const handler = () => { }
     const groupBuilder = new GroupBuilder(
       element,
       book,
@@ -510,7 +509,7 @@ describe('GroupBuilder.add', () => {
 
     const groupArg = RdfLib.sym('')
     const book = RdfLib.sym('')
-    const handler = () => {}
+    const handler = () => { }
     const groupBuilder = new GroupBuilder(
       element,
       book,
@@ -532,7 +531,7 @@ describe('GroupBuilder.add', () => {
 
     const groupArg = RdfLib.sym('')
     const book = RdfLib.sym('')
-    const handler = () => {}
+    const handler = () => { }
     const groupBuilder = new GroupBuilder(
       element,
       book,
@@ -559,7 +558,7 @@ describe('GroupBuilder.handleRemove', () => {
   it.skip('runs', () => {
     const groupArg = RdfLib.sym('')
     const book = RdfLib.sym('')
-    const handler = () => {}
+    const handler = () => { }
     const element = document.createElement('p')
     const groupBuilder = new GroupBuilder(
       element,
@@ -582,7 +581,7 @@ describe('GroupBuilder.setGroupName', () => {
   it.skip('runs', () => {
     const groupArg = RdfLib.sym('testing')
     const book = RdfLib.sym('')
-    const handler = () => {}
+    const handler = () => { }
     const element = document.createElement('p')
     const groupBuilder = new GroupBuilder(
       element,
