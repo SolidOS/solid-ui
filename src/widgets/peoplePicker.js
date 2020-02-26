@@ -21,7 +21,7 @@ import ns from '../ns'
 import kb from '../store'
 
 export class PeoplePicker {
-  constructor (element, typeIndex, groupPickedCb, options) {
+  constructor(element, typeIndex, groupPickedCb, options) {
     this.options = options || {}
     this.element = element
     this.typeIndex = typeIndex
@@ -30,7 +30,7 @@ export class PeoplePicker {
     this.onSelectGroup = this.onSelectGroup.bind(this)
   }
 
-  render () {
+  render() {
     const container = document.createElement('div')
     container.style.maxWidth = '350px'
     container.style.minHeight = '200px'
@@ -43,7 +43,7 @@ export class PeoplePicker {
       new Group(selectedGroup, this.selectedgroup).render()
       const changeGroupButton = document.createElement('button')
       changeGroupButton.textContent = escape('Change group')
-      changeGroupButton.addEventListener('click', (_event) => {
+      changeGroupButton.addEventListener('click', _event => {
         this.selectedgroup = null
         this.render()
       })
@@ -57,14 +57,14 @@ export class PeoplePicker {
             'Pick an existing group'
           )
           chooseExistingGroupButton.style.margin = 'auto'
-          chooseExistingGroupButton.addEventListener('click', (_event) => {
+          chooseExistingGroupButton.addEventListener('click', _event => {
             new GroupPicker(container, book, this.onSelectGroup).render()
           })
 
           const createNewGroupButton = document.createElement('button')
           createNewGroupButton.textContent = escape('Create a new group')
           createNewGroupButton.style.margin = 'auto'
-          createNewGroupButton.addEventListener('click', (_event) => {
+          createNewGroupButton.addEventListener('click', _event => {
             createNewGroup(book, this.options.defaultNewGroupName)
               .then(({ group }) => {
                 new GroupBuilder(
@@ -74,7 +74,7 @@ export class PeoplePicker {
                   this.onSelectGroup
                 ).render()
               })
-              .catch((errorBody) => {
+              .catch(errorBody => {
                 this.element.appendChild(
                   errorMessageBlock(
                     document,
@@ -90,7 +90,7 @@ export class PeoplePicker {
           this.element.innerHTML = ''
           this.element.appendChild(container)
         })
-        .catch((err) => {
+        .catch(err => {
           this.element.appendChild(
             errorMessageBlock(
               document,
@@ -105,7 +105,7 @@ export class PeoplePicker {
     return this
   }
 
-  onSelectGroup (group) {
+  onSelectGroup(group) {
     this.selectedgroup = group
     this.groupPickedCb(group)
     this.render()
@@ -113,20 +113,20 @@ export class PeoplePicker {
 }
 
 export class GroupPicker {
-  constructor (element, book, onSelectGroup) {
+  constructor(element, book, onSelectGroup) {
     this.element = element
     this.book = book
     this.onSelectGroup = onSelectGroup
   }
 
-  render () {
+  render() {
     this.loadGroups()
-      .then((groups) => {
+      .then(groups => {
         // render the groups
         const container = document.createElement('div')
         container.style.display = 'flex'
         container.style.flexDirection = 'column'
-        groups.forEach((group) => {
+        groups.forEach(group => {
           const groupButton = document.createElement('button')
           groupButton.addEventListener('click', this.handleClickGroup(group))
           new Group(groupButton, group).render()
@@ -135,7 +135,7 @@ export class GroupPicker {
         this.element.innerHTML = ''
         this.element.appendChild(container)
       })
-      .catch((err) => {
+      .catch(err => {
         this.element.appendChild(
           errorMessageBlock(
             document,
@@ -146,7 +146,7 @@ export class GroupPicker {
     return this
   }
 
-  loadGroups () {
+  loadGroups() {
     return new Promise((resolve, reject) => {
       const { groupIndex } = indexes(this.book)
       kb.fetcher.nowOrWhenFetched(groupIndex, (ok, err) => {
@@ -159,20 +159,20 @@ export class GroupPicker {
     })
   }
 
-  handleClickGroup (group) {
-    return (_event) => {
+  handleClickGroup(group) {
+    return _event => {
       this.onSelectGroup(group)
     }
   }
 }
 
 export class Group {
-  constructor (element, group) {
+  constructor(element, group) {
     this.element = element
     this.group = group
   }
 
-  render () {
+  render() {
     const container = document.createElement('div')
     container.textContent = escape(
       // @@@@@ need to escape??
@@ -185,7 +185,7 @@ export class Group {
 }
 
 export class GroupBuilder {
-  constructor (element, book, group, doneBuildingCb, groupChangedCb) {
+  constructor(element, book, group, doneBuildingCb, groupChangedCb) {
     this.element = element
     this.book = book
     this.group = group
@@ -198,11 +198,11 @@ export class GroupBuilder {
     this.doneBuildingCb = doneBuildingCb
   }
 
-  refresh () {
+  refresh() {
     // TODO: implement
   }
 
-  render () {
+  render() {
     const dropContainer = document.createElement('div')
     dropContainer.style.maxWidth = '350px'
     dropContainer.style.minHeight = '200px'
@@ -210,9 +210,9 @@ export class GroupBuilder {
     dropContainer.style.display = 'flex'
     dropContainer.style.flexDirection = 'column'
 
-    makeDropTarget(dropContainer, (uris) => {
-      uris.map((uri) => {
-        this.add(uri).catch((err) => {
+    makeDropTarget(dropContainer, uris => {
+      uris.map(uri => {
+        this.add(uri).catch(err => {
           this.element.appendChild(
             errorMessageBlock(
               document,
@@ -230,8 +230,8 @@ export class GroupBuilder {
       ns.vcard('fn'),
       'Untitled Group'
     )
-    groupNameInput.addEventListener('change', (event) => {
-      this.setGroupName(event.target.value).catch((err) => {
+    groupNameInput.addEventListener('change', event => {
+      this.setGroupName(event.target.value).catch(err => {
         this.element.appendChild(
           errorMessageBlock(document, `Error changing group name. (${err})`)
         )
@@ -243,7 +243,7 @@ export class GroupBuilder {
     dropContainer.appendChild(groupNameLabel)
 
     if (kb.any(this.group, ns.vcard('hasMember'))) {
-      kb.match(this.group, ns.vcard('hasMember')).forEach((statement) => {
+      kb.match(this.group, ns.vcard('hasMember')).forEach(statement => {
         const webIdNode = statement.object
         const personDiv = document.createElement('div')
         new Person(personDiv, webIdNode, this.handleRemove(webIdNode)).render()
@@ -259,7 +259,7 @@ export class GroupBuilder {
 
     const doneBuildingButton = document.createElement('button')
     doneBuildingButton.textContent = escape('Done')
-    doneBuildingButton.addEventListener('click', (_event) => {
+    doneBuildingButton.addEventListener('click', _event => {
       this.doneBuildingCb(this.group)
     })
     dropContainer.appendChild(doneBuildingButton)
@@ -269,7 +269,7 @@ export class GroupBuilder {
     return this
   }
 
-  add (webId) {
+  add(webId) {
     return new Promise((resolve, reject) => {
       kb.fetcher.nowOrWhenFetched(webId, (ok, err) => {
         if (!ok) {
@@ -289,7 +289,7 @@ export class GroupBuilder {
         }
         return resolve(webIdNode)
       })
-    }).then((webIdNode) => {
+    }).then(webIdNode => {
       const statement = rdf.st(this.group, ns.vcard('hasMember'), webIdNode)
       if (kb.holdsStatement(statement)) {
         return webIdNode
@@ -303,8 +303,8 @@ export class GroupBuilder {
     })
   }
 
-  handleRemove (webIdNode) {
-    return (_event) => {
+  handleRemove(webIdNode) {
+    return _event => {
       const statement = rdf.st(this.group, ns.vcard('hasMember'), webIdNode)
       return patch(this.group.doc().uri, { toDel: [statement] })
         .then(() => {
@@ -313,7 +313,7 @@ export class GroupBuilder {
           this.render()
           return true
         })
-        .catch((err) => {
+        .catch(err => {
           const name = kb.any(webIdNode, ns.foaf('name'))
           const errorMessage =
             name && name.value
@@ -324,9 +324,9 @@ export class GroupBuilder {
     }
   }
 
-  setGroupName (name) {
+  setGroupName(name) {
     const { groupIndex } = indexes(this.book)
-    const updatePromises = [this.group.doc(), groupIndex].map((namedGraph) => {
+    const updatePromises = [this.group.doc(), groupIndex].map(namedGraph => {
       const oldNameStatements = kb.match(
         this.group,
         ns.vcard('fn'),
@@ -341,7 +341,7 @@ export class GroupBuilder {
       return patch(namedGraph.value, {
         toDel: oldNameStatements,
         toIns: [newNameStatement]
-      }).then((_solidResponse) => {
+      }).then(_solidResponse => {
         kb.removeStatements(oldNameStatements)
         newNameStatement.why = namedGraph
         kb.add(newNameStatement)
@@ -354,13 +354,13 @@ export class GroupBuilder {
 // @@ TODO maybe I should move this down at end, but for
 // now I will leave it where it was
 export class Person {
-  constructor (element, webIdNode, handleRemove) {
+  constructor(element, webIdNode, handleRemove) {
     this.webIdNode = webIdNode
     this.element = element
     this.handleRemove = handleRemove
   }
 
-  render () {
+  render() {
     const container = document.createElement('div')
     container.style.display = 'flex'
 
@@ -389,8 +389,8 @@ export class Person {
 
     const removeButton = document.createElement('button')
     removeButton.textContent = 'Remove'
-    removeButton.addEventListener('click', (_event) =>
-      this.handleRemove().catch((err) => {
+    removeButton.addEventListener('click', _event =>
+      this.handleRemove().catch(err => {
         this.element.appendChild(errorMessageBlock(document, escape(`${err}`)))
       })
     )
@@ -406,12 +406,12 @@ export class Person {
   }
 }
 
-function getWithDefault (subject, predicate, defaultValue) {
+function getWithDefault(subject, predicate, defaultValue) {
   const object = kb.any(subject, predicate)
   return object ? object.value : defaultValue
 }
 
-function patch (url, { toDel, toIns }) {
+function patch(url, { toDel, toIns }) {
   return new Promise((resolve, reject) => {
     kb.updater.update(toDel, toIns, (uri, success, errorMessage) => {
       if (!success) {
@@ -433,7 +433,7 @@ function patch (url, { toDel, toIns }) {
   //   })
 }
 
-function indexes (book) {
+function indexes(book) {
   return {
     // bookIndex: book,
     groupIndex: kb.any(book, ns.vcard('groupIndex')),
@@ -442,7 +442,7 @@ function indexes (book) {
 }
 // Below are functions that are exported to make testing easier
 // @ignore exporting this only for the unit test
-export function findAddressBook (typeIndex) {
+export function findAddressBook(typeIndex) {
   return new Promise((resolve, reject) => {
     kb.fetcher.nowOrWhenFetched(typeIndex, (ok, err) => {
       if (!ok) {
@@ -466,17 +466,17 @@ export function findAddressBook (typeIndex) {
       }
       kb.fetcher
         .load(book)
-        .then(function (_xhr) {
+        .then(function(_xhr) {
           return resolve({ book })
         })
-        .catch(function (err) {
+        .catch(function(err) {
           return reject(new Error('Could not load address book ' + err))
         })
     })
   })
 }
 
-export function createNewGroup (book, defaultNewGroupName) {
+export function createNewGroup(book, defaultNewGroupName) {
   const { groupIndex, groupContainer } = indexes(book)
   const group = rdf.sym(
     `${groupContainer.uri}${uuid.v4().slice(0, 8)}.ttl#this`
@@ -486,7 +486,7 @@ export function createNewGroup (book, defaultNewGroupName) {
   // NOTE that order matters here.  Unfortunately this type of update is
   // non-atomic in that solid requires us to send two PATCHes, either of which
   // might fail.
-  const patchPromises = [group.doc(), groupIndex].map((doc) => {
+  const patchPromises = [group.doc(), groupIndex].map(doc => {
     const typeStatement = rdf.st(group, ns.rdf('type'), ns.vcard('Group'), doc)
     const nameStatement = rdf.st(group, ns.vcard('fn'), name, group.doc(), doc)
     const includesGroupStatement = rdf.st(
@@ -499,14 +499,14 @@ export function createNewGroup (book, defaultNewGroupName) {
       ? [typeStatement, nameStatement, includesGroupStatement]
       : [typeStatement, nameStatement]
     return patch(doc.uri, { toIns }).then(() => {
-      toIns.forEach((st) => {
+      toIns.forEach(st => {
         kb.add(st)
       })
     })
   })
   return Promise.all(patchPromises)
     .then(() => ({ group }))
-    .catch((err) => {
+    .catch(err => {
       console.log('Could not create new group.  PATCH failed ' + err)
       throw new Error(
         `Couldn't create new group.  PATCH failed for (${

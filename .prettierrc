@@ -1,5 +1,5 @@
 {
-  "arrowParens": "always",
+  "arrowParens": "avoid",
   "bracketSpacing": true,
   "htmlWhitespaceSensitivity": "css",
   "insertPragma": false,
@@ -13,5 +13,6 @@
   "singleQuote": true,
   "tabWidth": 2,
   "useTabs": false,
-  "vueIndentScriptAndStyle": false
+  "vueIndentScriptAndStyle": false,
+  "space-before-fuction-paren": "always"
 }

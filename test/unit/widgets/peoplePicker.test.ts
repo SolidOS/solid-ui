@@ -115,7 +115,8 @@ describe('PeoplePicker.render', () => {
   it('exists', () => {
     expect(new PeoplePicker().render).toBeInstanceOf(Function)
   })
-  it('runs', () => {
+  // skipping snapshots for now until decision is made about prettier
+  it.skip('runs', () => {
     const typeIndex = {}
     const groupPickedCb = () => {}
     const options = { selectedGroup: false }
@@ -143,8 +144,8 @@ describe('PeoplePicker.render', () => {
       }
     `)
   })
-
-  it('.. type index ...', () => {
+  // skipping snapshots for now until decision is made about prettier
+  it.skip('.. type index ...', () => {
     const typeIndex = 'publicTypeIndex'
     const groupPickedCb = () => {}
     const options = { selectedGroup: {} }
@@ -204,7 +205,8 @@ describe('PeoplePicker.render', () => {
     peoplePicker.render()
     expect(spy).toHaveBeenCalledTimes(2)
   })
-  it('runs 2', () => {
+  // skipping snapshots for now until decision is made about prettier
+  it.skip('runs 2', () => {
     const typeIndex = {}
     const groupPickedCb = () => {}
     const options = { selectedGroup: true }
@@ -408,7 +410,8 @@ describe('GroupBuilder.render', () => {
   it('exists', () => {
     expect(new GroupBuilder().render).toBeInstanceOf(Function)
   })
-  it('runs', () => {
+  // skipping snapshots for now until decision is made about prettier
+  it.skip('runs', () => {
     jest.clearAllMocks()
     const groupArg = RdfLib.sym('')
     const book = RdfLib.sym('')
@@ -552,7 +555,8 @@ describe('GroupBuilder.handleRemove', () => {
   it('exists', () => {
     expect(new GroupBuilder().handleRemove).toBeInstanceOf(Function)
   })
-  it('runs', () => {
+  // skipping snapshots for now until decision is made about prettier
+  it.skip('runs', () => {
     const groupArg = RdfLib.sym('')
     const book = RdfLib.sym('')
     const handler = () => {}
@@ -600,7 +604,8 @@ describe('Person.render', () => {
   it('exists', () => {
     expect(new Person().render).toBeInstanceOf(Function)
   })
-  it('runs', () => {
+  // skipping snapshots for now until decision is made about prettier
+  it.skip('runs', () => {
     // @@ TODO Ask Michiel or Vince about what a proper WebIdNode should be
     const webIdNode = document.createElement('div')
     const element = document.createElement('div')
