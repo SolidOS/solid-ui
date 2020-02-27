@@ -84,8 +84,8 @@ function makeDropTarget (
                 ' size: ' +
                 f.size +
                 ' bytes, last modified: ' +
-                (f.lastModifiedDate
-                  ? f.lastModifiedDate.toLocaleDateString()
+                ((f as any).lastModifiedDate
+                  ? (f as any).lastModifiedDate.toLocaleDateString()
                   : 'n/a')
               )
             }
