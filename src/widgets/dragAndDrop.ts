@@ -73,9 +73,9 @@ function makeDropTarget (
           } else if (type === 'text/plain') {
             text = e.dataTransfer.getData(type)
           } else if (type === 'Files' && droppedFileHandler) {
-            var files: any = e.dataTransfer.files // FileList object.
+            var files = e.dataTransfer.files // FileList object.
             for (let i = 0; files[i]; i++) {
-              const f = files[i]
+              const f: any = files[i]
               console.log(
                 'Filename: ' +
                 f.name +
