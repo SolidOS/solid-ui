@@ -8,38 +8,41 @@ module.exports = {
   makeDraggable: makeDraggable,
   uploadFiles: uploadFiles
 }
+
 // const UI = require('../index.js') // this package
 
-function makeDropTarget(
+function makeDropTarget (
   ele: HTMLElement,
   droppedURIHandler: any,
   droppedFileHandler: any
 ) {
-  var dragoverListener = function(e: DragEvent) {
+  var dragoverListener = function (e: DragEvent) {
     e.preventDefault() // Need else drop does not work [sic]
     if (e.dataTransfer) {
       e.dataTransfer.dropEffect = 'copy'
     }
   }
 
-  const dragenterListener = function(e: DragEvent) {
+  const dragenterListener = function (this: any, e: DragEvent) {
     if (this.style) {
       //  necessary not sure when
+
       if (!this.savedStyle) {
         this.savedStyle = {}
         this.savedStyle.border = this.style.border
         this.savedStyle.backgroundColor = this.style.backgroundColor
         this.savedStyle.borderRadius = this.style.borderRadius
       }
-      this.style.backgroundColor = '#ccc'
-      this.style.border = '0.25em dashed black'
-      this.style.borderRadius = '0.3em'
     }
+    this.style.backgroundColor = '#ccc'
+    this.style.border = '0.25em dashed black'
+    this.style.borderRadius = '0.3em'
+
     if (e.dataTransfer) {
       e.dataTransfer.dropEffect = 'link'
     }
   }
-  var dragleaveListener = (e: DragEvent) => {
+  var dragleaveListener = function (this: any, e: DragEvent) {
     if (this.savedStyle) {
       this.style.border = this.savedStyle.border
       this.style.backgroundColor = this.savedStyle.backgroundColor
@@ -50,13 +53,13 @@ function makeDropTarget(
     }
   }
 
-  var dropListener = function(e: DragEvent) {
+  var dropListener = function (this: any, e: DragEvent) {
     if (e.preventDefault) e.preventDefault() // stops the browser from redirecting off to the text.
     if (e.dataTransfer) {
       console.log('Drop event. dropEffect: ' + e.dataTransfer.dropEffect)
       console.log(
         'Drop event. types: ' +
-          (e.dataTransfer.types ? e.dataTransfer.types.join(', ') : 'NOPE')
+        (e.dataTransfer.types ? e.dataTransfer.types.join(', ') : 'NOPE')
       )
 
       var uris: string[] | null = null
@@ -70,20 +73,20 @@ function makeDropTarget(
           } else if (type === 'text/plain') {
             text = e.dataTransfer.getData(type)
           } else if (type === 'Files' && droppedFileHandler) {
-            var files = e.dataTransfer.files // FileList object.
+            var files: any = e.dataTransfer.files // FileList object.
             for (let i = 0; files[i]; i++) {
               const f = files[i]
               console.log(
                 'Filename: ' +
-                  f.name +
-                  ', type: ' +
-                  (f.type || 'n/a') +
-                  ' size: ' +
-                  f.size +
-                  ' bytes, last modified: ' +
-                  (f.lastModifiedDate
-                    ? f.lastModifiedDate.toLocaleDateString()
-                    : 'n/a')
+                f.name +
+                ', type: ' +
+                (f.type || 'n/a') +
+                ' size: ' +
+                f.size +
+                ' bytes, last modified: ' +
+                (f.lastModifiedDate
+                  ? f.lastModifiedDate.toLocaleDateString()
+                  : 'n/a')
               )
             }
             droppedFileHandler(files)
@@ -107,7 +110,7 @@ function makeDropTarget(
     }
   } // dropListener
 
-  var addTargetListeners = function(ele: HTMLElement) {
+  var addTargetListeners = function (ele: HTMLElement) {
     if (!ele) {
       console.log('@@@ addTargetListeners: ele ' + ele)
     }
@@ -129,12 +132,12 @@ function makeDropTarget(
 //
 // Possibly later set the drag image too?
 //
-function makeDraggable(tr: HTMLElement, obj: any) {
+function makeDraggable (tr: HTMLElement, obj: any) {
   tr.setAttribute('draggable', 'true') // Stop the image being dragged instead - just the TR
 
   tr.addEventListener(
     'dragstart',
-    function(e: DragEvent) {
+    function (e: DragEvent) {
       tr.style.fontWeight = 'bold'
       if (e.dataTransfer) {
         e.dataTransfer.setData('text/uri-list', obj.uri)
@@ -150,7 +153,7 @@ function makeDraggable(tr: HTMLElement, obj: any) {
 
   tr.addEventListener(
     'drag',
-    function(e: Event) {
+    function (e: Event) {
       e.preventDefault()
       e.stopPropagation()
       // console.log('Drag: dropEffect: ' + e.dataTransfer.dropEffect)
@@ -160,7 +163,7 @@ function makeDraggable(tr: HTMLElement, obj: any) {
 
   tr.addEventListener(
     'dragend',
-    function(e: DragEvent) {
+    function (e: DragEvent) {
       tr.style.fontWeight = 'normal'
       if (e.dataTransfer) {
         console.log('Dragend dropeffect: ' + e.dataTransfer.dropEffect)
@@ -186,7 +189,7 @@ function makeDraggable(tr: HTMLElement, obj: any) {
 /* @@ TODO I think we can define the fetcher type at the top of the file
  * also we can do this for files.
  */
-function uploadFiles(
+function uploadFiles (
   fetcher: any,
   files: any,
   fileBase: string,
@@ -197,19 +200,19 @@ function uploadFiles(
     const f = files[i]
     console.log(
       ' dropped: Filename: ' +
-        f.name +
-        ', type: ' +
-        (f.type || 'n/a') +
-        ' size: ' +
-        f.size +
-        ' bytes, last modified: ' +
-        (f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a')
+      f.name +
+      ', type: ' +
+      (f.type || 'n/a') +
+      ' size: ' +
+      f.size +
+      ' bytes, last modified: ' +
+      (f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a')
     ) // See e.g. https://www.html5rocks.com/en/tutorials/file/dndfiles/
 
     // @@ Add: progress bar(s)
     var reader = new FileReader()
-    reader.onload = (function(theFile) {
-      return function(e: any) {
+    reader.onload = (function (theFile) {
+      return function (e: any) {
         var data = e.target.result
         var suffix = ''
         console.log(' File read byteLength : ' + data.byteLength)
