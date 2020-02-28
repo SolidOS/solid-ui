@@ -7,3 +7,5 @@ The original code was not written with testing in mind. In order to make testing
 
 There will also be times that even exporting the function isn't enough to enable proper tests to be developed. In this case follow the commenting procedures in the Code Readme.md, which is to add the comment
 ` \* @@ TODO and desribe the problem.
+
+You can reference https://github.com/solid/solid-ui/issues/215 in your TODO comment if the code is hard to test due to DOM manipulation.
