@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "build": "npm run clean && npm run build-version && npm run build-lib && npm run build-types && npm run build-webpack",
-    "build-lib": "babel src -d lib --source-maps --extensions '.ts,.js'",
+    "build-lib": "babel src -d lib --source-maps --extensions \".ts,.js\"",
     "build-types": "tsc --emitDeclarationOnly",
     "build-version": "sh ./timestamp.sh > src/versionInfo.ts  && eslint \"src/versionInfo.ts\" --fix",
     "build-webpack": "webpack",
@@ -21,7 +21,7 @@
     "lint-fix": "eslint \"src/**/*.js\" \"src/**/*.ts\" --fix",
     "jest": "jest",
     "test:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --runInBand --watch",
-    "test": "npm run build; npm run lint; npm run jest",
+    "test": "npm run build && npm run lint && npm run jest",
     "doc": "typedoc --out ./Documentation/api/ ./src/",
     "prepublishOnly": "npm test && npm run build",
     "postpublish": "git push origin master --follow-tags"
