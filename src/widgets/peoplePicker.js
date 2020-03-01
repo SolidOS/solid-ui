@@ -65,7 +65,7 @@ export class PeoplePicker {
           createNewGroupButton.textContent = escape('Create a new group')
           createNewGroupButton.style.margin = 'auto'
           createNewGroupButton.addEventListener('click', _event => {
-            this.createNewGroup(book)
+            this.createNewGroup(book, this.options.defaultNewGroupName)
               .then(({ group }) => {
                 new GroupBuilder(
                   this.element,
@@ -139,30 +139,19 @@ export class PeoplePicker {
     })
   }
 
-  createNewGroup (book) {
+  createNewGroup (book, defaultNewGroupName) {
     const { groupIndex, groupContainer } = indexes(book)
     const group = rdf.sym(
       `${groupContainer.uri}${uuid.v4().slice(0, 8)}.ttl#this`
     )
-    const name = this.options.defaultNewGroupName || 'Untitled Group'
+    const name = defaultNewGroupName || 'Untitled Group'
 
     // NOTE that order matters here.  Unfortunately this type of update is
     // non-atomic in that solid requires us to send two PATCHes, either of which
     // might fail.
     const patchPromises = [group.doc(), groupIndex].map(doc => {
-      const typeStatement = rdf.st(
-        group,
-        ns.rdf('type'),
-        ns.vcard('Group'),
-        doc
-      )
-      const nameStatement = rdf.st(
-        group,
-        ns.vcard('fn'),
-        name,
-        group.doc(),
-        doc
-      )
+      const typeStatement = rdf.st(group, ns.rdf('type'), ns.vcard('Group'), doc)
+      const nameStatement = rdf.st(group, ns.vcard('fn'), name, group.doc(), doc)
       const includesGroupStatement = rdf.st(
         book,
         ns.vcard('includesGroup'),
@@ -184,7 +173,7 @@ export class PeoplePicker {
         console.log('Could not create new group.  PATCH failed ' + err)
         throw new Error(
           `Couldn't create new group.  PATCH failed for (${
-            err.xhr ? err.xhr.responseURL : ''
+          err.xhr ? err.xhr.responseURL : ''
           } )`
         )
       })
@@ -368,9 +357,7 @@ export class GroupBuilder {
         if (!rdfClass || !rdfClass.equals(ns.foaf('Person'))) {
           return reject(
             new Error(
-              `Only people supported right now. (tried to add something of type ${
-                rdfClass.value
-              })`
+              `Only people supported right now. (tried to add something of type ${rdfClass.value})`
             )
           )
         }
@@ -437,8 +424,10 @@ export class GroupBuilder {
     return Promise.all(updatePromises)
   }
 }
-
-class Person {
+// @ignore exporting this only for the unit test
+// @@ TODO maybe I should move this down at end, but for
+// now I will leave it where it was
+export class Person {
   constructor (element, webIdNode, handleRemove) {
     this.webIdNode = webIdNode
     this.element = element

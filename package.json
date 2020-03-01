@@ -14,7 +14,7 @@
     "build-types": "tsc --emitDeclarationOnly",
     "build-version": "sh ./timestamp.sh > src/versionInfo.ts  && eslint \"src/versionInfo.ts\" --fix",
     "build-webpack": "webpack",
-    "watch": "npm run build-version && babel src --out-dir lib --watch --source-maps --extensions '.ts,.js'",
+    "watch": "npm run build-version && babel src --out-dir lib --watch --source-maps --extensions \".ts,.js\"",
     "clean": "rm -rf lib",
     "coverage": "jest --coverage --collectCoverageFrom=src/**/*.[jt]s",
     "lint": "eslint \"src/**/*.js\" \"src/**/*.ts\" \"test/**/*.ts\"",
