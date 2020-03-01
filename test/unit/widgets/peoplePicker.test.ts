@@ -271,7 +271,7 @@ describe('GroupPicker.loadGroups', () => {
     const groupPicker = new GroupPicker(container, book, handler)
     expect(groupPicker.loadGroups()).toBeTruthy()
   })
-  it('should....', () => {
+  it('should call nowOrWhenFetched and Each', () => {
     const container = RdfLib.sym('')
     const book = RdfLib.sym('book')
     const handler = () => { }
