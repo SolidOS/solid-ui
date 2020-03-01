@@ -1,0 +1,23 @@
+@prefix : <#>.
+@prefix pad: <http://www.w3.org/ns/pim/pad#>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix sioc: <http://rdfs.org/sioc/ns#>.
+
+:this
+  dct:title "example notepad";
+  pad:next :line1.
+
+:line1
+  pad:indent 1;
+  sioc:content "line 1";
+  pad:next :line2.
+
+:line2
+  pad:indent 2;
+  sioc:content "line 2";
+  pad:next :line3.
+
+:line3
+  pad:indent -2;
+  sioc:content "line 3";
+  pad:next :this.
