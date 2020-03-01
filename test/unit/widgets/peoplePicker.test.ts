@@ -114,8 +114,8 @@ describe('PeoplePicker.render', () => {
   it('exists', () => {
     expect(new PeoplePicker().render).toBeInstanceOf(Function)
   })
-  // skipping snapshots for now until decision is made about prettier
-  it.skip('runs', () => {
+
+  it('runs', () => {
     const typeIndex = {}
     const groupPickedCb = () => { }
     const options = { selectedGroup: false }
@@ -126,7 +126,7 @@ describe('PeoplePicker.render', () => {
       groupPickedCb,
       options
     )
-    expect(peoplePicker.render()).toMatchInlineSnapshot(`
+    expect(peoplePicker.render()).toMatchSnapshot(`
       PeoplePicker {
         "element": <p>
           <div
@@ -143,8 +143,8 @@ describe('PeoplePicker.render', () => {
       }
     `)
   })
-  // skipping snapshots for now until decision is made about prettier
-  it.skip('.. type index ...', () => {
+
+  it('.. type index ...', () => {
     const typeIndex = 'publicTypeIndex'
     const groupPickedCb = () => { }
     const options = { selectedGroup: {} }
@@ -170,7 +170,7 @@ describe('PeoplePicker.render', () => {
     // expect(spySecondAny).toBeCalled()
     // expect(spyLoad).toBeCalled()
 
-    expect(peoplePicker.render()).toMatchInlineSnapshot(`
+    expect(peoplePicker.render()).toMatchSnapshot(`
       PeoplePicker {
         "element": <p>
           <div
@@ -205,7 +205,7 @@ describe('PeoplePicker.render', () => {
     expect(spy).toHaveBeenCalledTimes(2)
   })
   // skipping snapshots for now until decision is made about prettier
-  it.skip('runs 2', () => {
+  it('runs 2', () => {
     const typeIndex = {}
     const groupPickedCb = () => { }
     const options = { selectedGroup: true }
@@ -216,7 +216,7 @@ describe('PeoplePicker.render', () => {
       groupPickedCb,
       options
     )
-    expect(peoplePicker.render()).toMatchInlineSnapshot(`
+    expect(peoplePicker.render()).toMatchSnapshot(`
       PeoplePicker {
         "element": <p>
           <div
@@ -233,7 +233,7 @@ describe('PeoplePicker.render', () => {
       }
     `)
   })
-  it.skip('mocking kb any for book', () => {
+  it('mocking kb any for book', () => {
     const mockKbAny: jest.SpyInstance = require('../../../src/store').any
     mockKbAny.mockReturnValueOnce(null)
     const typeIndex = {}
@@ -246,7 +246,7 @@ describe('PeoplePicker.render', () => {
       groupPickedCb,
       options
     )
-    expect(peoplePicker.render()).toMatchInlineSnapshot(`
+    expect(peoplePicker.render()).toMatchSnapshot(`
 PeoplePicker {
   "element": <p>
     <div
@@ -409,8 +409,8 @@ describe('GroupBuilder.render', () => {
   it('exists', () => {
     expect(new GroupBuilder().render).toBeInstanceOf(Function)
   })
-  // skipping snapshots for now until decision is made about prettier
-  it.skip('runs', () => {
+
+  it('runs', () => {
     jest.clearAllMocks()
     const groupArg = RdfLib.sym('')
     const book = RdfLib.sym('')
@@ -426,7 +426,7 @@ describe('GroupBuilder.render', () => {
     // @@ TODO just trying to touch the code at this point.  I want
     // to make the test better than toBe(undefined)
     expect(groupBuilder.onGroupChanged()).toBe(undefined)
-    expect(groupBuilder.render()).toMatchInlineSnapshot(`
+    expect(groupBuilder.render()).toMatchSnapshot(`
 GroupBuilder {
   "book": Object {
     "dir": [Function],
@@ -501,7 +501,7 @@ describe('GroupBuilder.add', () => {
       handler,
       handler
     )
-    expect(groupBuilder.add()).toMatchInlineSnapshot(`Promise {}`)
+    expect(groupBuilder.add()).toMatchSnapshot(`Promise {}`)
   })
   // need to to nowOrWhenFetched
   it('not okay it returns an error -- callback false', () => {
@@ -554,8 +554,8 @@ describe('GroupBuilder.handleRemove', () => {
   it('exists', () => {
     expect(new GroupBuilder().handleRemove).toBeInstanceOf(Function)
   })
-  // skipping snapshots for now until decision is made about prettier
-  it.skip('runs', () => {
+
+  it('runs', () => {
     const groupArg = RdfLib.sym('')
     const book = RdfLib.sym('')
     const handler = () => { }
@@ -567,7 +567,7 @@ describe('GroupBuilder.handleRemove', () => {
       handler,
       handler
     )
-    expect(groupBuilder.handleRemove()).toMatchInlineSnapshot('[Function]')
+    expect(groupBuilder.handleRemove()).toMatchSnapshot('[Function]')
   })
 })
 
@@ -578,7 +578,7 @@ describe('GroupBuilder.setGroupName', () => {
   // @@ TODO once I added the code for findAddressBook, a namedGraph
   // error is popping up on line 392 Need to look into this
   // think groupArg may need to be adjusted
-  it.skip('runs', () => {
+  it('runs', () => {
     const groupArg = RdfLib.sym('testing')
     const book = RdfLib.sym('')
     const handler = () => { }
@@ -590,7 +590,7 @@ describe('GroupBuilder.setGroupName', () => {
       handler,
       handler
     )
-    expect(groupBuilder.setGroupName()).toMatchInlineSnapshot('Promise {}')
+    expect(groupBuilder.setGroupName()).toMatchSnapshot('Promise {}')
   })
 })
 
@@ -603,14 +603,14 @@ describe('Person.render', () => {
   it('exists', () => {
     expect(new Person().render).toBeInstanceOf(Function)
   })
-  // skipping snapshots for now until decision is made about prettier
-  it.skip('runs', () => {
+
+  it('runs', () => {
     // @@ TODO Ask Michiel or Vince about what a proper WebIdNode should be
     const webIdNode = document.createElement('div')
     const element = document.createElement('div')
     const handleRemove = true
     const person = new Person(webIdNode, element, handleRemove)
-    expect(person.render()).toMatchInlineSnapshot(`
+    expect(person.render()).toMatchSnapshot(`
 Person {
   "element": <div>
     <div
