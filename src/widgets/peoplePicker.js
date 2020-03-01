@@ -21,17 +21,16 @@ import ns from '../ns'
 import kb from '../store'
 
 export class PeoplePicker {
-  constructor(element, typeIndex, groupPickedCb, options) {
+  constructor (element, typeIndex, groupPickedCb, options) {
     this.options = options || {}
     this.element = element
     this.typeIndex = typeIndex
     this.groupPickedCb = groupPickedCb
     this.selectedgroup = this.options.selectedgroup // current selected group if any
     this.onSelectGroup = this.onSelectGroup.bind(this)
-
   }
 
-  render() {
+  render () {
     const container = document.createElement('div')
     container.style.maxWidth = '350px'
     container.style.minHeight = '200px'
@@ -66,7 +65,7 @@ export class PeoplePicker {
           createNewGroupButton.textContent = escape('Create a new group')
           createNewGroupButton.style.margin = 'auto'
           createNewGroupButton.addEventListener('click', _event => {
-            createNewGroup(book, this.options.defaultNewGroupName)
+            this.createNewGroup(book, this.options.defaultNewGroupName)
               .then(({ group }) => {
                 new GroupBuilder(
                   this.element,
@@ -106,7 +105,7 @@ export class PeoplePicker {
     return this
   }
 
-  findAddressBook(typeIndex) {
+  findAddressBook (typeIndex) {
     return new Promise((resolve, reject) => {
       kb.fetcher.nowOrWhenFetched(typeIndex, (ok, err) => {
         if (!ok) {
@@ -140,7 +139,47 @@ export class PeoplePicker {
     })
   }
 
-  onSelectGroup(group) {
+  createNewGroup (book, defaultNewGroupName) {
+    const { groupIndex, groupContainer } = indexes(book)
+    const group = rdf.sym(
+      `${groupContainer.uri}${uuid.v4().slice(0, 8)}.ttl#this`
+    )
+    const name = defaultNewGroupName || 'Untitled Group'
+
+    // NOTE that order matters here.  Unfortunately this type of update is
+    // non-atomic in that solid requires us to send two PATCHes, either of which
+    // might fail.
+    const patchPromises = [group.doc(), groupIndex].map(doc => {
+      const typeStatement = rdf.st(group, ns.rdf('type'), ns.vcard('Group'), doc)
+      const nameStatement = rdf.st(group, ns.vcard('fn'), name, group.doc(), doc)
+      const includesGroupStatement = rdf.st(
+        book,
+        ns.vcard('includesGroup'),
+        group,
+        doc
+      )
+      const toIns = doc.equals(groupIndex)
+        ? [typeStatement, nameStatement, includesGroupStatement]
+        : [typeStatement, nameStatement]
+      return patch(doc.uri, { toIns }).then(() => {
+        toIns.forEach(st => {
+          kb.add(st)
+        })
+      })
+    })
+    return Promise.all(patchPromises)
+      .then(() => ({ group }))
+      .catch(err => {
+        console.log('Could not create new group.  PATCH failed ' + err)
+        throw new Error(
+          `Couldn't create new group.  PATCH failed for (${
+          err.xhr ? err.xhr.responseURL : ''
+          } )`
+        )
+      })
+  }
+
+  onSelectGroup (group) {
     this.selectedgroup = group
     this.groupPickedCb(group)
     this.render()
@@ -148,13 +187,13 @@ export class PeoplePicker {
 }
 
 export class GroupPicker {
-  constructor(element, book, onSelectGroup) {
+  constructor (element, book, onSelectGroup) {
     this.element = element
     this.book = book
     this.onSelectGroup = onSelectGroup
   }
 
-  render() {
+  render () {
     this.loadGroups()
       .then(groups => {
         // render the groups
@@ -181,7 +220,7 @@ export class GroupPicker {
     return this
   }
 
-  loadGroups() {
+  loadGroups () {
     return new Promise((resolve, reject) => {
       const { groupIndex } = indexes(this.book)
       kb.fetcher.nowOrWhenFetched(groupIndex, (ok, err) => {
@@ -194,7 +233,7 @@ export class GroupPicker {
     })
   }
 
-  handleClickGroup(group) {
+  handleClickGroup (group) {
     return _event => {
       this.onSelectGroup(group)
     }
@@ -202,12 +241,12 @@ export class GroupPicker {
 }
 
 export class Group {
-  constructor(element, group) {
+  constructor (element, group) {
     this.element = element
     this.group = group
   }
 
-  render() {
+  render () {
     const container = document.createElement('div')
     container.textContent = escape(
       // @@@@@ need to escape??
@@ -220,7 +259,7 @@ export class Group {
 }
 
 export class GroupBuilder {
-  constructor(element, book, group, doneBuildingCb, groupChangedCb) {
+  constructor (element, book, group, doneBuildingCb, groupChangedCb) {
     this.element = element
     this.book = book
     this.group = group
@@ -233,11 +272,11 @@ export class GroupBuilder {
     this.doneBuildingCb = doneBuildingCb
   }
 
-  refresh() {
+  refresh () {
     // TODO: implement
   }
 
-  render() {
+  render () {
     const dropContainer = document.createElement('div')
     dropContainer.style.maxWidth = '350px'
     dropContainer.style.minHeight = '200px'
@@ -304,7 +343,7 @@ export class GroupBuilder {
     return this
   }
 
-  add(webId) {
+  add (webId) {
     return new Promise((resolve, reject) => {
       kb.fetcher.nowOrWhenFetched(webId, (ok, err) => {
         if (!ok) {
@@ -338,7 +377,7 @@ export class GroupBuilder {
     })
   }
 
-  handleRemove(webIdNode) {
+  handleRemove (webIdNode) {
     return _event => {
       const statement = rdf.st(this.group, ns.vcard('hasMember'), webIdNode)
       return patch(this.group.doc().uri, { toDel: [statement] })
@@ -359,7 +398,7 @@ export class GroupBuilder {
     }
   }
 
-  setGroupName(name) {
+  setGroupName (name) {
     const { groupIndex } = indexes(this.book)
     const updatePromises = [this.group.doc(), groupIndex].map(namedGraph => {
       const oldNameStatements = kb.match(
@@ -389,13 +428,13 @@ export class GroupBuilder {
 // @@ TODO maybe I should move this down at end, but for
 // now I will leave it where it was
 export class Person {
-  constructor(element, webIdNode, handleRemove) {
+  constructor (element, webIdNode, handleRemove) {
     this.webIdNode = webIdNode
     this.element = element
     this.handleRemove = handleRemove
   }
 
-  render() {
+  render () {
     const container = document.createElement('div')
     container.style.display = 'flex'
 
@@ -441,12 +480,12 @@ export class Person {
   }
 }
 
-function getWithDefault(subject, predicate, defaultValue) {
+function getWithDefault (subject, predicate, defaultValue) {
   const object = kb.any(subject, predicate)
   return object ? object.value : defaultValue
 }
 
-function patch(url, { toDel, toIns }) {
+function patch (url, { toDel, toIns }) {
   return new Promise((resolve, reject) => {
     kb.updater.update(toDel, toIns, (uri, success, errorMessage) => {
       if (!success) {
@@ -468,50 +507,10 @@ function patch(url, { toDel, toIns }) {
   //   })
 }
 
-function indexes(book) {
+function indexes (book) {
   return {
     // bookIndex: book,
     groupIndex: kb.any(book, ns.vcard('groupIndex')),
     groupContainer: kb.sym(book.dir().uri + 'Group/')
   }
-}
-
-export function createNewGroup(book, defaultNewGroupName) {
-  const { groupIndex, groupContainer } = indexes(book)
-  const group = rdf.sym(
-    `${groupContainer.uri}${uuid.v4().slice(0, 8)}.ttl#this`
-  )
-  const name = defaultNewGroupName || 'Untitled Group'
-
-  // NOTE that order matters here.  Unfortunately this type of update is
-  // non-atomic in that solid requires us to send two PATCHes, either of which
-  // might fail.
-  const patchPromises = [group.doc(), groupIndex].map(doc => {
-    const typeStatement = rdf.st(group, ns.rdf('type'), ns.vcard('Group'), doc)
-    const nameStatement = rdf.st(group, ns.vcard('fn'), name, group.doc(), doc)
-    const includesGroupStatement = rdf.st(
-      book,
-      ns.vcard('includesGroup'),
-      group,
-      doc
-    )
-    const toIns = doc.equals(groupIndex)
-      ? [typeStatement, nameStatement, includesGroupStatement]
-      : [typeStatement, nameStatement]
-    return patch(doc.uri, { toIns }).then(() => {
-      toIns.forEach(st => {
-        kb.add(st)
-      })
-    })
-  })
-  return Promise.all(patchPromises)
-    .then(() => ({ group }))
-    .catch(err => {
-      console.log('Could not create new group.  PATCH failed ' + err)
-      throw new Error(
-        `Couldn't create new group.  PATCH failed for (${
-        err.xhr ? err.xhr.responseURL : ''
-        } )`
-      )
-    })
 }

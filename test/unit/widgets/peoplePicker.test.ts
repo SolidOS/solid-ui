@@ -6,8 +6,7 @@ import {
   GroupPicker,
   Group,
   GroupBuilder,
-  Person,
-  createNewGroup
+  Person
 } from '../../../src/widgets/peoplePicker'
 import ns from '../../../src/ns'
 jest.mock('rdflib')
@@ -96,13 +95,13 @@ describe('FindAddressBook', () => {
     // expect(spyOnNowOrWhenFetched).toThrowError()
   })
 })
-describe('createNewGroup', () => {
+describe('PeoplePicker.createNewGroup', () => {
   it('exists', () => {
-    expect(createNewGroup).toBeInstanceOf(Function)
+    expect(new PeoplePicker().createNewGroup).toBeInstanceOf(Function)
   })
   // @@ TODO something about doc within the function has a problem
   it.skip('runs', () => {
-    expect(createNewGroup(RdfLib.sym('book'))).toMatchInlineSnapshot()
+    expect(new PeoplePicker().createNewGroup(RdfLib.sym('book'))).toMatchSnapshot()
   })
 })
 describe('PeoplePicker', () => {
@@ -126,22 +125,7 @@ describe('PeoplePicker.render', () => {
       groupPickedCb,
       options
     )
-    expect(peoplePicker.render()).toMatchSnapshot(`
-      PeoplePicker {
-        "element": <p>
-          <div
-            style="max-width: 350px; min-height: 200px; outline: 1px solid black; display: flex;"
-          />
-        </p>,
-        "groupPickedCb": [Function],
-        "onSelectGroup": [Function],
-        "options": Object {
-          "selectedGroup": false,
-        },
-        "selectedgroup": undefined,
-        "typeIndex": Object {},
-      }
-    `)
+    expect(peoplePicker.render()).toMatchSnapshot()
   })
 
   it('.. type index ...', () => {
@@ -170,22 +154,7 @@ describe('PeoplePicker.render', () => {
     // expect(spySecondAny).toBeCalled()
     // expect(spyLoad).toBeCalled()
 
-    expect(peoplePicker.render()).toMatchSnapshot(`
-      PeoplePicker {
-        "element": <p>
-          <div
-            style="max-width: 350px; min-height: 200px; outline: 1px solid black; display: flex;"
-          />
-        </p>,
-        "groupPickedCb": [Function],
-        "onSelectGroup": [Function],
-        "options": Object {
-          "selectedGroup": Object {},
-        },
-        "selectedgroup": undefined,
-        "typeIndex": "publicTypeIndex",
-      }
-    `)
+    expect(peoplePicker.render()).toMatchSnapshot()
   })
 
   it('create Element is called .. ', () => {
@@ -216,22 +185,7 @@ describe('PeoplePicker.render', () => {
       groupPickedCb,
       options
     )
-    expect(peoplePicker.render()).toMatchSnapshot(`
-      PeoplePicker {
-        "element": <p>
-          <div
-            style="max-width: 350px; min-height: 200px; outline: 1px solid black; display: flex;"
-          />
-        </p>,
-        "groupPickedCb": [Function],
-        "onSelectGroup": [Function],
-        "options": Object {
-          "selectedGroup": true,
-        },
-        "selectedgroup": undefined,
-        "typeIndex": Object {},
-      }
-    `)
+    expect(peoplePicker.render()).toMatchSnapshot()
   })
   it('mocking kb any for book', () => {
     const mockKbAny: jest.SpyInstance = require('../../../src/store').any
@@ -246,22 +200,7 @@ describe('PeoplePicker.render', () => {
       groupPickedCb,
       options
     )
-    expect(peoplePicker.render()).toMatchSnapshot(`
-PeoplePicker {
-  "element": <p>
-    <div
-      style="max-width: 350px; min-height: 200px; outline: 1px solid black; display: flex;"
-    />
-  </p>,
-  "groupPickedCb": [Function],
-  "onSelectGroup": [Function],
-  "options": Object {
-    "selectedGroup": true,
-  },
-  "selectedgroup": undefined,
-  "typeIndex": Object {},
-}
-`)
+    expect(peoplePicker.render()).toMatchSnapshot()
   })
 })
 
@@ -426,44 +365,7 @@ describe('GroupBuilder.render', () => {
     // @@ TODO just trying to touch the code at this point.  I want
     // to make the test better than toBe(undefined)
     expect(groupBuilder.onGroupChanged()).toBe(undefined)
-    expect(groupBuilder.render()).toMatchSnapshot(`
-GroupBuilder {
-  "book": Object {
-    "dir": [Function],
-    "doc": [Function],
-    "elements": Array [],
-    "sameTerm": [Function],
-    "uri": "uri",
-    "value": "",
-  },
-  "doneBuildingCb": [Function],
-  "element": <p>
-    <div
-      style="max-width: 350px; min-height: 200px; outline: 1px solid black; display: flex; flex-direction: column;"
-    >
-      <label>
-        Group Name:
-        <input
-          type="text"
-        />
-      </label>
-      <button>
-        Done
-      </button>
-    </div>
-  </p>,
-  "group": Object {
-    "dir": [Function],
-    "doc": [Function],
-    "elements": Array [],
-    "sameTerm": [Function],
-    "uri": "uri",
-    "value": "",
-  },
-  "groupChangedCb": [Function],
-  "onGroupChanged": [Function],
-}
-`)
+    expect(groupBuilder.render()).toMatchSnapshot()
   })
 })
 
@@ -501,7 +403,7 @@ describe('GroupBuilder.add', () => {
       handler,
       handler
     )
-    expect(groupBuilder.add()).toMatchSnapshot(`Promise {}`)
+    expect(groupBuilder.add()).toMatchSnapshot()
   })
   // need to to nowOrWhenFetched
   it('not okay it returns an error -- callback false', () => {
@@ -567,7 +469,7 @@ describe('GroupBuilder.handleRemove', () => {
       handler,
       handler
     )
-    expect(groupBuilder.handleRemove()).toMatchSnapshot('[Function]')
+    expect(groupBuilder.handleRemove()).toMatchSnapshot()
   })
 })
 
@@ -590,7 +492,7 @@ describe('GroupBuilder.setGroupName', () => {
       handler,
       handler
     )
-    expect(groupBuilder.setGroupName()).toMatchSnapshot('Promise {}')
+    expect(groupBuilder.setGroupName()).toMatchSnapshot()
   })
 })
 
@@ -610,33 +512,6 @@ describe('Person.render', () => {
     const element = document.createElement('div')
     const handleRemove = true
     const person = new Person(webIdNode, element, handleRemove)
-    expect(person.render()).toMatchSnapshot(`
-Person {
-  "element": <div>
-    <div
-      style="display: flex;"
-    >
-      <img
-        height="50"
-        src="undefined"
-        style="margin: 5px;"
-        width="50"
-      />
-      <span
-        style="flex-grow: 1; margin: auto 0px;"
-      >
-        undefined
-      </span>
-      <button
-        style="margin: 5px;"
-      >
-        Remove
-      </button>
-    </div>
-  </div>,
-  "handleRemove": true,
-  "webIdNode": <div />,
-}
-`)
+    expect(person.render()).toMatchSnapshot()
   })
 })
