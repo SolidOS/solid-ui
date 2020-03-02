@@ -16,7 +16,7 @@ function makeDropTarget (
   droppedURIHandler: any,
   droppedFileHandler: any
 ) {
-  var dragoverListener = function (e: DragEvent) {
+  const dragoverListener = function (e: DragEvent) {
     e.preventDefault() // Need else drop does not work [sic]
     if (e.dataTransfer) {
       e.dataTransfer.dropEffect = 'copy'
@@ -42,7 +42,7 @@ function makeDropTarget (
       e.dataTransfer.dropEffect = 'link'
     }
   }
-  var dragleaveListener = function (this: any, e: DragEvent) {
+  const dragleaveListener = function (this: any, e: DragEvent) {
     if (this.savedStyle) {
       this.style.border = this.savedStyle.border
       this.style.backgroundColor = this.savedStyle.backgroundColor
@@ -53,7 +53,7 @@ function makeDropTarget (
     }
   }
 
-  var dropListener = function (this: any, e: DragEvent) {
+  const dropListener = function (this: any, e: DragEvent) {
     if (e.preventDefault) e.preventDefault() // stops the browser from redirecting off to the text.
     if (e.dataTransfer) {
       console.log('Drop event. dropEffect: ' + e.dataTransfer.dropEffect)
@@ -62,18 +62,18 @@ function makeDropTarget (
         (e.dataTransfer.types ? e.dataTransfer.types.join(', ') : 'NOPE')
       )
 
-      var uris: string[] | null = null
-      var text
+      let uris: string[] | null = null
+      let text
       if (e.dataTransfer.types) {
-        for (var t = 0; t < e.dataTransfer.types.length; t++) {
-          var type = e.dataTransfer.types[t]
+        for (let t = 0; t < e.dataTransfer.types.length; t++) {
+          const type = e.dataTransfer.types[t]
           if (type === 'text/uri-list') {
             uris = e.dataTransfer.getData(type).split('\n') // @ ignore those starting with #
             console.log('Dropped text/uri-list: ' + uris)
           } else if (type === 'text/plain') {
             text = e.dataTransfer.getData(type)
           } else if (type === 'Files' && droppedFileHandler) {
-            var files = e.dataTransfer.files // FileList object.
+            const files = e.dataTransfer.files // FileList object.
             for (let i = 0; files[i]; i++) {
               const f: any = files[i]
               console.log(
@@ -110,7 +110,7 @@ function makeDropTarget (
     }
   } // dropListener
 
-  var addTargetListeners = function (ele: HTMLElement) {
+  const addTargetListeners = function (ele: HTMLElement) {
     if (!ele) {
       console.log('@@@ addTargetListeners: ele ' + ele)
     }
@@ -196,7 +196,7 @@ function uploadFiles (
   imageBase: string,
   successHandler: any
 ) {
-  for (var i = 0; files[i]; i++) {
+  for (let i = 0; files[i]; i++) {
     const f = files[i]
     console.log(
       ' dropped: Filename: ' +
@@ -210,13 +210,13 @@ function uploadFiles (
     ) // See e.g. https://www.html5rocks.com/en/tutorials/file/dndfiles/
 
     // @@ Add: progress bar(s)
-    var reader = new FileReader()
+    const reader = new FileReader()
     reader.onload = (function (theFile) {
       return function (e: any) {
-        var data = e.target.result
-        var suffix = ''
+        const data = e.target.result
+        let suffix = ''
         console.log(' File read byteLength : ' + data.byteLength)
-        var contentType = theFile.type
+        let contentType = theFile.type
         if (!theFile.type || theFile.type === '') {
           // Not known by browser
           contentType = mime.lookup(theFile.name)
@@ -229,16 +229,16 @@ function uploadFiles (
             throw new Error(msg)
           }
         } else {
-          var extension = mime.extension(theFile.type)
+          const extension = mime.extension(theFile.type)
           if (theFile.type !== mime.lookup(theFile.name)) {
             suffix = '_.' + extension
             console.log('MIME TYPE MISMATCH -- adding extension: ' + suffix)
           }
         }
-        var folderName = theFile.type.startsWith('image/')
+        const folderName = theFile.type.startsWith('image/')
           ? imageBase || fileBase
           : fileBase
-        var destURI =
+        const destURI =
           folderName +
           (folderName.endsWith('/') ? '' : '/') +
           encodeURIComponent(theFile.name) +
