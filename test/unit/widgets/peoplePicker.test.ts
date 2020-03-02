@@ -512,7 +512,6 @@ describe('Person.render', () => {
     const element = document.createElement('div')
     const handleRemove = true
     const person = new Person(webIdNode, element, handleRemove)
-
     expect(person.render()).toMatchSnapshot()
   })
 })
