@@ -1,4 +1,3 @@
-import * as RdfLib from 'rdflib'
 import { JSDOM } from 'jsdom'
 
 import {
@@ -38,6 +37,7 @@ import {
   shortTime,
   timestamp
 } from '../../../src/widgets/buttons'
+import { graph, namedNode, NamedNode, sym } from 'rdflib'
 
 jest.mock('rdflib')
 jest.mock('solid-auth-client')
@@ -71,11 +71,11 @@ describe('askName', () => {
     expect(askName).toBeInstanceOf(Function)
   })
   it.skip('runs', async () => {
-    const kb = RdfLib.graph()
+    const kb = graph()
     const container = element
-    const predicate = {}
-    const klass = {}
-    const noun = {}
+    const predicate = {} as NamedNode
+    const klass = {} as NamedNode
+    const noun = ''
     expect(await askName(dom, kb, container, predicate, klass, noun)).toBeTruthy()
   })
 })
@@ -85,7 +85,7 @@ describe('attachmentList', () => {
     expect(attachmentList).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const subject = RdfLib.sym('')
+    const subject = sym('')
     const div = element
     const options = {}
     expect(attachmentList(dom, subject, div, options)).toBeTruthy()
@@ -99,7 +99,8 @@ describe('button', () => {
   it('runs', () => {
     const iconURI = ''
     const text = 'txt'
-    const handler = () => {}
+    const handler = () => {
+    }
     expect(button(dom, iconURI, text, handler)).toBeTruthy()
   })
 })
@@ -109,7 +110,8 @@ describe('cancelButton', () => {
     expect(cancelButton).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const handler = () => {}
+    const handler = () => {
+    }
     expect(cancelButton(dom, handler)).toBeTruthy()
   })
 })
@@ -137,7 +139,8 @@ describe('continueButton', () => {
     expect(continueButton).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const handler = () => {}
+    const handler = () => {
+    }
     expect(continueButton(dom, handler)).toBeTruthy()
   })
 })
@@ -147,7 +150,7 @@ describe('defaultAnnotationStore', () => {
     expect(defaultAnnotationStore).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(defaultAnnotationStore(RdfLib.sym(''))).toEqual(undefined)
+    expect(defaultAnnotationStore(sym(''))).toEqual(undefined)
   })
 })
 
@@ -158,7 +161,8 @@ describe('deleteButtonWithCheck', () => {
   it('runs', () => {
     const container = element
     const noun = ''
-    const deleteFunction = () => {}
+    const deleteFunction = () => {
+    }
     expect(deleteButtonWithCheck(dom, container, noun, deleteFunction)).toBeTruthy()
   })
 })
@@ -178,7 +182,7 @@ describe('findImage', () => {
     expect(findImage).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(findImage(RdfLib.sym(''))).toEqual('uri')
+    expect(findImage(sym(''))).toEqual('uri')
   })
 })
 
@@ -196,7 +200,8 @@ describe('fileUploadButtonDiv', () => {
     expect(fileUploadButtonDiv).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const handler = () => {}
+    const handler = () => {
+    }
     expect(fileUploadButtonDiv(dom, handler)).toBeTruthy()
   })
 })
@@ -217,7 +222,7 @@ describe('imagesOf', () => {
     expect(imagesOf).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(imagesOf(null, RdfLib.graph())).toBeTruthy()
+    expect(imagesOf(null, graph())).toBeTruthy()
   })
 })
 
@@ -265,7 +270,7 @@ describe('index.twoLine.widgetForClass', () => {
     expect(index.twoLine.widgetForClass).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(index.twoLine.widgetForClass(RdfLib.sym(''))).toBeInstanceOf(Function)
+    expect(index.twoLine.widgetForClass(sym(''))).toBeInstanceOf(Function)
   })
 })
 
@@ -301,7 +306,7 @@ describe('linkButton', () => {
     expect(linkButton).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const object = RdfLib.sym('')
+    const object = sym('')
     expect(linkButton(dom, object)).toBeTruthy()
   })
 })
@@ -311,7 +316,7 @@ describe('linkIcon', () => {
     expect(linkIcon).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const subject = RdfLib.sym('')
+    const subject = sym('')
     const iconURI = ''
     expect(linkIcon(dom, subject, iconURI)).toBeTruthy()
   })
@@ -331,8 +336,8 @@ describe('personTR', () => {
     expect(personTR).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const pred = RdfLib.sym('')
-    const obj = RdfLib.sym('')
+    const pred = sym('')
+    const obj = sym('')
     const options = {}
     expect(personTR(dom, pred, obj, options)).toBeTruthy()
   })
@@ -343,7 +348,7 @@ describe('propertyTriage', () => {
     expect(propertyTriage).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(propertyTriage(RdfLib.graph())).toBeTruthy()
+    expect(propertyTriage(graph())).toBeTruthy()
   })
 })
 
@@ -370,14 +375,16 @@ describe('selectorPanel', () => {
     expect(selectorPanel).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const kb = RdfLib.graph()
-    const type = ''
-    const predicate = ''
+    const kb = graph()
+    const type = namedNode('test')
+    const predicate = namedNode('test')
     const inverse = false
-    const possible = true
+    const possible = [namedNode('test')]
     const options = {}
-    const callbackFunction = () => {}
-    const linkCallback = () => {}
+    const callbackFunction = () => {
+    }
+    const linkCallback = () => {
+    }
     expect(selectorPanel(
       dom,
       kb,
@@ -396,15 +403,17 @@ describe('selectorPanelRefresh', () => {
     expect(selectorPanelRefresh).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const kb = RdfLib.graph()
-    const type = ''
-    const predicate = ''
+    const list = dom.createElement('ul')
+    const kb = graph()
+    const type = namedNode('test')
+    const predicate = namedNode('test')
     const inverse = false
-    const possible = true
+    const possible = [namedNode('test')]
     const options = {}
     const callbackFunction = () => {}
     const linkCallback = () => {}
     expect(selectorPanelRefresh(
+      list,
       dom,
       kb,
       type,
@@ -413,7 +422,8 @@ describe('selectorPanelRefresh', () => {
       possible,
       options,
       callbackFunction,
-      linkCallback)).toBeTruthy()
+      linkCallback
+    )).toBeTruthy()
   })
 })
 
@@ -422,7 +432,7 @@ describe('setImage', () => {
     expect(setImage).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const thing = RdfLib.sym('')
+    const thing = sym('')
     expect(setImage(element, thing)).toEqual(undefined)
   })
 })
@@ -432,7 +442,7 @@ describe('setName', () => {
     expect(setName).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const thing = RdfLib.sym('')
+    const thing = sym('')
     expect(setName(element, thing)).toEqual(undefined)
   })
 })
