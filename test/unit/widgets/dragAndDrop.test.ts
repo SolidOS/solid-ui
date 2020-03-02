@@ -33,7 +33,7 @@ describe('makeDropTarget', () => {
     // const event = new window.DragEvent
     //  window.dispatchEvent(event)
     expect(makeDropTarget(element, handler, handler)).toMatchInlineSnapshot(
-      'undefined'
+      `undefined`
     )
   })
 })
