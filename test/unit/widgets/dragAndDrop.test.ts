@@ -16,12 +16,12 @@ describe('makeDropTarget', () => {
     expect(makeDropTarget).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const handler = () => {}
+    const handler = () => { }
     expect(makeDropTarget(element, handler, handler)).toEqual(undefined)
   })
   it.skip('returns undefined when given an element ', () => {
     const element = document.createElement('textarea')
-    const handler = () => {}
+    const handler = () => { }
     makeDropTarget(element, handler, handler)
     const event = document.createEvent('HTMLEvents')
     console.log(event)
@@ -32,9 +32,7 @@ describe('makeDropTarget', () => {
     // debugger
     // const event = new window.DragEvent
     //  window.dispatchEvent(event)
-    expect(makeDropTarget(element, handler, handler)).toMatchInlineSnapshot(
-      `undefined`
-    )
+    expect(makeDropTarget(element, handler, handler)).toMatchSnapshot()
   })
 })
 describe('makeDropTarget.dragoverListener', () => {
@@ -43,14 +41,12 @@ describe('makeDropTarget.dragoverListener', () => {
     const ele = document.createElement('p')
     ele.innerHTML = 'I can be dragged'
     ele.setAttribute('draggable', 'true')
-    console.dir(ele)
-    debugger
     makeDropTarget(ele)
     ele.dispatchEvent(event)
     // expect(makeDropTarget().dragoverListener).toBeInstanceOf(Function)
   })
 })
-describe('makeDropTarget.dragenterListener', () => {})
+describe('makeDropTarget.dragenterListener', () => { })
 
 describe('makeDraggable', () => {
   it('exists', () => {
@@ -71,7 +67,7 @@ describe('uploadFiles', () => {
     const files = []
     const fileBase = ''
     const imageBase = ''
-    const successHandler = () => {}
+    const successHandler = () => { }
     expect(
       uploadFiles(RdfLib.fetcher, files, fileBase, imageBase, successHandler)
     ).toEqual(undefined)
