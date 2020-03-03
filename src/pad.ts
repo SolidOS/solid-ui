@@ -6,7 +6,7 @@
  */
 import store from './store'
 import ns from './ns'
-import { Namespace, st } from 'rdflib'
+import { Namespace, NamedNode, st } from 'rdflib'
 import { currentUser } from './authn/authn'
 // import log from './log'
 import { personTR, newThing, errorMessageBlock } from './widgets'
@@ -22,7 +22,7 @@ const utils = require('./utils')
  * @param {NamedNode} author - The author of text being displayed
  * @returns {String} The CSS color generated, constrained to be light for a background color
  */
-export function lightColorHash (author) {
+export function lightColorHash (author: NamedNode): string {
   const hash = function (x) {
     return x.split('').reduce(function (a, b) {
       a = (a << 5) - a + b.charCodeAt(0)
@@ -34,11 +34,16 @@ export function lightColorHash (author) {
     : '#ffffff' // c0c0c0  forces pale
 } // no id -> white
 
-// Manage participation in this session
-//
-//  This is more general tham the pad.
-//
-export function renderPartipants (dom, table, padDoc, subject, me, options) {
+/**  Manage participation in this session
+*
+*  @param {Document} dom - The web page loaded into the browser
+*  @param {?} table
+*  @param {NamedNode} document The document to render
+*  @param {NamedNode} subject
+*  @param {NamedNode} me User that is logged into the pod
+*  @param { ?} options
+*/
+export function renderPartipants (dom: Document, table: any, padDoc: NamedNode, subject: NamedNode, me: NamedNode, options: any) {
   table.setAttribute('style', 'margin: 0.8em;')
 
   const newRowForParticpation = function (parp) {
@@ -85,12 +90,12 @@ export function renderPartipants (dom, table, padDoc, subject, me, options) {
  *
  * A particpaption object is a place to record things specifically about
  * subject and the user, such as preferences, start of membership, etc
- * @param {Node} subject - The thing in which the participation is happening
+ * @param {NamedNode} subject - The thing in which the participation is happening
  * @param {NamedNode} document -  Where to record the data
  * @param {NamedNode} me - The logged in user
  *
  */
-export function participationObject (subject, padDoc, me) {
+export function participationObject (subject: NamedNode, padDoc: NamedNode, me: NamedNode) {
   return new Promise(function (resolve, reject) {
     if (!me) {
       throw new Error('Not user id')
@@ -119,7 +124,7 @@ export function participationObject (subject, padDoc, me) {
           padDoc
         )
       ]
-      kb.updater.update([], ins, function (uri, ok, errorMessage) {
+      kb.updater.update([], ins, function (uri: string, ok: boolean, errorMessage: string) {
         if (!ok) {
           reject(new Error('Error recording your partipation: ' + errorMessage))
         } else {
@@ -138,7 +143,7 @@ export function participationObject (subject, padDoc, me) {
  * @param {DOMNode} refreshable - A DOM element whose refresh() is to be called if the change works
  *
  */
-export function recordParticipation (subject, padDoc, refreshable) {
+export function recordParticipation (subject: NamedNode, padDoc: NamedNode, refreshable: any) {
   const me = currentUser()
   if (!me) return // Not logged in
 
@@ -165,7 +170,7 @@ export function recordParticipation (subject, padDoc, refreshable) {
         padDoc
       )
     ]
-    kb.updater.update([], ins, function (uri, ok, errorMessage) {
+    kb.updater.update([], ins, function (uri: string, ok: boolean, errorMessage: string) {
       if (!ok) {
         throw new Error('Error recording your partipation: ' + errorMessage)
       }
@@ -178,15 +183,23 @@ export function recordParticipation (subject, padDoc, refreshable) {
   }
 }
 
-// Record my participation and display participants
-//
+/**  Record my participation and display participants
+*
+*   @param {Document} dom  - the web page loaded into the browser
+*   @param {HTMLDivElement} container - the container element where the participants should be displayed
+*   @param {NamedNode} document - the document into which the particpation should be shown
+*   @param {NamedNode} subject - the thing in which participation is happening
+*   @param {NamedNode} me
+*   @param {?} options
+*
+*/
 export function manageParticipation (
-  dom,
-  container,
-  padDoc,
-  subject,
-  me,
-  options
+  dom: Document,
+  container: HTMLDivElement,
+  padDoc: NamedNode,
+  subject: NamedNode,
+  me: NamedNode,
+  options: any
 ) {
   const table = dom.createElement('table')
   container.appendChild(table)
@@ -232,7 +245,7 @@ export function xmlEncode (str) {
 /**
  * Convert a notepad to HTML
  */
-export function notepadToHTML (pad, kb) {
+export function notepadToHTML (pad, kb: store) {
   const chunks = getChunks(pad, kb)
   let html = '<html>\n  <head>\n'
   const title = kb.anyValue(pad, ns.dct('title'))
@@ -278,11 +291,19 @@ export function notepadToHTML (pad, kb) {
   html += '  </body>\n</html>\n'
   return html
 }
+/**  notepad
+ *
+ * @param {Document} dom - the web page of the browser
+ * @param {NamedNode} padDoc - the document into which the particpation should be shown
+ * @param {NamedNode} subject - the thing in which participation is happening
+ * @param {NamedNode} me - person who is logged into the pod
+ * @param {?} options -
+ */
 
-export function notepad (dom, padDoc, subject, me, options) {
+export function notepad (dom: Document, padDoc: NamedNode, subject: NamedNode, me: NamedNode, options: any) {
   options = options || {}
   const exists = options.exists
-  const table = dom.createElement('table')
+  const table: any = dom.createElement('table')
   const kb = store
 
   if (me && !me.uri) throw new Error('UI.pad.notepad:  Invalid userid')
@@ -468,7 +489,7 @@ export function notepad (dom, padDoc, subject, me, options) {
     return (iCaretPos)
   }
 */
-  const addListeners = function (part, chunk) {
+  const addListeners = function (part: any, chunk: any) {
     part.addEventListener('keydown', function (event) {
       let queueProperty, queue
       //  up 38; down 40; left 37; right 39     tab 9; shift 16; escape 27
@@ -550,7 +571,7 @@ export function notepad (dom, padDoc, subject, me, options) {
       }
     })
 
-    const updateStore = function (part) {
+    const updateStore = function (part: any) {
       const chunk = part.subject
       setPartStyle(part, undefined, true)
       const old = kb.any(chunk, ns.sioc('content')).value
@@ -673,7 +694,7 @@ export function notepad (dom, padDoc, subject, me, options) {
         table.appendChild(tr)
       }
     }
-    const part = tr.appendChild(dom.createElement('input'))
+    const part: any = tr.appendChild(dom.createElement('input'))
     part.subject = chunk
     part.setAttribute('type', 'text')
     part.value = text
@@ -689,7 +710,7 @@ export function notepad (dom, padDoc, subject, me, options) {
 
   /* @@ TODO we need to look at indent, it can be a Number or an Object this doesn't seem correct.
   */
-  const newChunk = function (ele?, before?) {
+  const newChunk = function (ele?: any, before?: any) {
     // element of chunk being split
     const kb = store
     let indent: any = 0
@@ -852,9 +873,11 @@ export function notepad (dom, padDoc, subject, me, options) {
       chunk = kb.the(chunk, PAD('next'))
     ) {
       for (let i = 0; i < table.children.length; i++) {
-        const tr = table.children[i]
-        if (tr.firstChild.subject.sameTerm(chunk)) {
-          manif[chunk.uri] = tr.firstChild
+        const tr: any = table.children[i]
+        if (tr.firstChild) {
+          if (tr.firstChild.subject.sameTerm(chunk)) {
+            manif[chunk.uri] = tr.firstChild
+          }
         }
       }
     }
