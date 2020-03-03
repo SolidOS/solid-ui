@@ -2,24 +2,18 @@
  *   Notepad Widget
  */
 
-/** @module UI.pad
+/** @module pad
  */
+import store from './store'
+import ns from './ns'
+import { Namespace, st } from 'rdflib'
+import { currentUser } from './authn/authn'
+// import log from './log'
+import { personTR, newThing, errorMessageBlock } from './widgets'
+// import { } from './iconBase'
 
-const $rdf = require('rdflib')
-var padModule = (module.exports = {})
-var UI = {
-  authn: require('./authn/authn'),
-  icons: require('./iconBase'),
-  log: require('./log'),
-  ns: require('./ns'),
-  pad: padModule,
-  rdf: $rdf,
-  store: require('./store'),
-  widgets: require('./widgets')
-}
-const kb = UI.store
-const ns = UI.ns
-const PAD = $rdf.Namespace('http://www.w3.org/ns/pim/pad#')
+const kb = store
+const PAD = Namespace('http://www.w3.org/ns/pim/pad#')
 
 const utils = require('./utils')
 
@@ -28,8 +22,8 @@ const utils = require('./utils')
  * @param {NamedNode} author - The author of text being displayed
  * @returns {String} The CSS color generated, constrained to be light for a background color
  */
-UI.pad.lightColorHash = function (author) {
-  var hash = function (x) {
+export function lightColorHash (author) {
+  const hash = function (x) {
     return x.split('').reduce(function (a, b) {
       a = (a << 5) - a + b.charCodeAt(0)
       return a & a
@@ -44,40 +38,40 @@ UI.pad.lightColorHash = function (author) {
 //
 //  This is more general tham the pad.
 //
-UI.pad.renderPartipants = function (dom, table, padDoc, subject, me, options) {
+export function renderPartipants (dom, table, padDoc, subject, me, options) {
   table.setAttribute('style', 'margin: 0.8em;')
 
-  var newRowForParticpation = function (parp) {
-    var person = kb.any(parp, ns.wf('participant'))
-    var tr
+  const newRowForParticpation = function (parp) {
+    const person = kb.any(parp, ns.wf('participant'))
+    let tr
     if (!person) {
       tr = dom.createElement('tr')
       tr.textContent = '???' // Don't crash - invalid part'n entry
       return tr
     }
-    var bg = kb.anyValue(parp, ns.ui('backgroundColor')) || 'white'
+    const bg = kb.anyValue(parp, ns.ui('backgroundColor')) || 'white'
 
-    var block = dom.createElement('div')
+    const block = dom.createElement('div')
     block.setAttribute(
       'style',
       'height: 1.5em; width: 1.5em; margin: 0.3em; border 0.01em solid #888; background-color: ' +
-        bg
+      bg
     )
-    tr = UI.widgets.personTR(dom, null, person, options)
+    tr = personTR(dom, null, person, options)
     table.appendChild(tr)
-    var td = dom.createElement('td')
+    const td = dom.createElement('td')
     td.setAttribute('style', 'vertical-align: middle;')
     td.appendChild(block)
     tr.insertBefore(td, tr.firstChild)
     return tr
   }
 
-  var syncTable = function () {
-    var parps = kb.each(subject, ns.wf('participation')).map(function (parp) {
-      return [kb.anyValue(parp, UI.ns.cal('dtstart')) || '9999-12-31', parp]
+  const syncTable = function () {
+    const parps = kb.each(subject, ns.wf('participation')).map(function (parp) {
+      return [kb.anyValue(parp, ns.cal('dtstart')) || '9999-12-31', parp]
     })
     parps.sort() // List in order of joining
-    var participations = parps.map(function (p) {
+    const participations = parps.map(function (p) {
       return p[1]
     })
     utils.syncTableToArray(table, participations, newRowForParticpation)
@@ -96,13 +90,13 @@ UI.pad.renderPartipants = function (dom, table, padDoc, subject, me, options) {
  * @param {NamedNode} me - The logged in user
  *
  */
-UI.pad.participationObject = function (subject, padDoc, me) {
+export function participationObject (subject, padDoc, me) {
   return new Promise(function (resolve, reject) {
     if (!me) {
       throw new Error('Not user id')
     }
 
-    var parps = kb.each(subject, ns.wf('participation')).filter(function (pn) {
+    const parps = kb.each(subject, ns.wf('participation')).filter(function (pn) {
       return kb.holds(pn, ns.wf('participant'), me)
     })
     if (parps.length > 1) {
@@ -112,16 +106,16 @@ UI.pad.participationObject = function (subject, padDoc, me) {
       // If I am not already recorded
       resolve(parps[0]) // returns the particpation object
     } else {
-      var participation = UI.widgets.newThing(padDoc)
-      var ins = [
-        UI.rdf.st(subject, ns.wf('participation'), participation, padDoc),
+      const participation = newThing(padDoc)
+      const ins = [
+        st(subject, ns.wf('participation'), participation, padDoc),
 
-        UI.rdf.st(participation, ns.wf('participant'), me, padDoc),
-        UI.rdf.st(participation, ns.cal('dtstart'), new Date(), padDoc),
-        UI.rdf.st(
+        st(participation, ns.wf('participant'), me, padDoc),
+        st(participation, ns.cal('dtstart'), new Date(), padDoc),
+        st(
           participation,
           ns.ui('backgroundColor'),
-          UI.pad.lightColorHash(me),
+          lightColorHash(me),
           padDoc
         )
       ]
@@ -144,11 +138,11 @@ UI.pad.participationObject = function (subject, padDoc, me) {
  * @param {DOMNode} refreshable - A DOM element whose refresh() is to be called if the change works
  *
  */
-UI.pad.recordParticipation = function (subject, padDoc, refreshable) {
-  var me = UI.authn.currentUser()
+export function recordParticipation (subject, padDoc, refreshable) {
+  const me = currentUser()
   if (!me) return // Not logged in
 
-  var parps = kb.each(subject, ns.wf('participation')).filter(function (pn) {
+  const parps = kb.each(subject, ns.wf('participation')).filter(function (pn) {
     return kb.holds(pn, ns.wf('participant'), me)
   })
   if (parps.length > 1) {
@@ -158,16 +152,16 @@ UI.pad.recordParticipation = function (subject, padDoc, refreshable) {
     // If I am not already recorded
     return parps[0] // returns the particpation object
   } else {
-    var participation = UI.widgets.newThing(padDoc)
-    var ins = [
-      UI.rdf.st(subject, ns.wf('participation'), participation, padDoc),
+    const participation = newThing(padDoc)
+    const ins = [
+      st(subject, ns.wf('participation'), participation, padDoc),
 
-      UI.rdf.st(participation, ns.wf('participant'), me, padDoc),
-      UI.rdf.st(participation, UI.ns.cal('dtstart'), new Date(), padDoc),
-      UI.rdf.st(
+      st(participation, ns.wf('participant'), me, padDoc),
+      st(participation, ns.cal('dtstart'), new Date(), padDoc),
+      st(
         participation,
         ns.ui('backgroundColor'),
-        UI.pad.lightColorHash(me),
+        lightColorHash(me),
         padDoc
       )
     ]
@@ -186,7 +180,7 @@ UI.pad.recordParticipation = function (subject, padDoc, refreshable) {
 
 // Record my participation and display participants
 //
-UI.pad.manageParticipation = function (
+export function manageParticipation (
   dom,
   container,
   padDoc,
@@ -194,14 +188,14 @@ UI.pad.manageParticipation = function (
   me,
   options
 ) {
-  var table = dom.createElement('table')
+  const table = dom.createElement('table')
   container.appendChild(table)
-  UI.pad.renderPartipants(dom, table, padDoc, subject, me, options)
+  renderPartipants(dom, table, padDoc, subject, me, options)
   try {
-    UI.pad.recordParticipation(subject, padDoc, table)
+    recordParticipation(subject, padDoc, table)
   } catch (e) {
     container.appendChild(
-      UI.widgets.errorMessageBlock(
+      errorMessageBlock(
         dom,
         'Error recording your partipation: ' + e
       )
@@ -214,8 +208,9 @@ UI.pad.manageParticipation = function (
  * Get the chunks of the notepad
  * They are stored in a RDF linked list
  */
-function getChunks (subject, kb) {
-  var chunks = []
+// @ignore exporting this only for the unit test
+export function getChunks (subject, kb) {
+  const chunks: any[] = []
   for (
     let chunk = kb.the(subject, PAD('next'));
     !chunk.sameTerm(subject);
@@ -229,27 +224,30 @@ function getChunks (subject, kb) {
 /**
  *  Encode content to be put in XML or HTML elements
  */
-function xmlEncode (str) {
+// @ignore exporting this only for the unit test
+export function xmlEncode (str) {
   return str.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
 }
 
 /**
  * Convert a notepad to HTML
  */
-UI.pad.notepadToHTML = function (pad, kb) {
+export function notepadToHTML (pad, kb) {
   const chunks = getChunks(pad, kb)
-  var html = '<html>\n  <head>\n'
+  let html = '<html>\n  <head>\n'
   const title = kb.anyValue(pad, ns.dct('title'))
   if (title) {
     html += `    <title>${xmlEncode(title)}</title>\n`
   }
   html += '  </head>\n  <body>\n'
-  var level = 0
+  let level = 0
+
   function increaseLevel (indent) {
     for (; level < indent; level++) {
       html += '<ul>\n'
     }
   }
+
   function decreaseLevel (indent) {
     for (; level > indent; level--) {
       html += '</ul>\n'
@@ -281,68 +279,78 @@ UI.pad.notepadToHTML = function (pad, kb) {
   return html
 }
 
-UI.pad.notepad = function (dom, padDoc, subject, me, options) {
+export function notepad (dom, padDoc, subject, me, options) {
   options = options || {}
-  var exists = options.exists
-  var table = dom.createElement('table')
-  var kb = UI.store
-  var ns = UI.ns
+  const exists = options.exists
+  const table = dom.createElement('table')
+  const kb = store
 
   if (me && !me.uri) throw new Error('UI.pad.notepad:  Invalid userid')
 
-  var updater = UI.store.updater
+  const updater = store.updater
 
-  var PAD = $rdf.Namespace('http://www.w3.org/ns/pim/pad#')
+  const PAD = Namespace('http://www.w3.org/ns/pim/pad#')
 
   table.setAttribute(
     'style',
     'padding: 1em; overflow: auto; resize: horizontal; min-width: 40em;'
   )
 
-  var upstreamStatus = null
-  var downstreamStatus = null
+  let upstreamStatus: HTMLElement | null = null
+  let downstreamStatus: HTMLElement | null = null
 
   if (options.statusArea) {
-    var t = options.statusArea.appendChild(dom.createElement('table'))
-    var tr = t.appendChild(dom.createElement('tr'))
+    const t = options.statusArea.appendChild(dom.createElement('table'))
+    const tr = t.appendChild(dom.createElement('tr'))
     upstreamStatus = tr.appendChild(dom.createElement('td'))
     downstreamStatus = tr.appendChild(dom.createElement('td'))
-    upstreamStatus.setAttribute('style', 'width:50%')
-    downstreamStatus.setAttribute('style', 'width:50%')
+    if (upstreamStatus) {
+      upstreamStatus.setAttribute('style', 'width:50%')
+    }
+    if (downstreamStatus) {
+      downstreamStatus.setAttribute('style', 'width:50%')
+    }
   }
-
-  var complain = function (message, upstream) {
+  /* @@ TODO want to look into this, it seems upstream should be a boolean and default to false ?
+  *
+  */
+  const complain = function (message: string, upstream: boolean = false) {
     console.log(message)
     if (options.statusArea) {
-      ;(upstream ? upstreamStatus : downstreamStatus).appendChild(
-        UI.widgets.errorMessageBlock(dom, message, 'pink')
-      )
+      if (upstream && upstreamStatus) {
+        upstreamStatus.appendChild(
+          errorMessageBlock(dom, message, 'pink')
+        )
+      } else if (upstream && downstreamStatus) {
+        downstreamStatus.appendChild(
+          errorMessageBlock(dom, message, 'pink'))
+      }
     }
   }
 
-  var clearStatus = function (_upsteam) {
+  const clearStatus = function (_upsteam?: any) {
     if (options.statusArea) {
       options.statusArea.innerHTML = ''
     }
   }
 
-  var setPartStyle = function (part, colors, pending) {
-    var chunk = part.subject
+  const setPartStyle = function (part: any, colors?: string, pending?: any) {
+    const chunk = part.subject
     colors = colors || ''
-    var baseStyle =
+    const baseStyle =
       'font-size: 100%; font-family: monospace; width: 100%; border: none; white-space: pre-wrap;'
-    var headingCore =
+    const headingCore =
       'font-family: sans-serif; font-weight: bold;  border: none;'
-    var headingStyle = [
+    const headingStyle = [
       'font-size: 110%;  padding-top: 0.5em; padding-bottom: 0.5em; width: 100%;',
       'font-size: 120%; padding-top: 1em; padding-bottom: 1em; width: 100%;',
       'font-size: 150%; padding-top: 1em; padding-bottom: 1em; width: 100%;'
     ]
 
-    var author = kb.any(chunk, ns.dc('author'))
+    const author = kb.any(chunk, ns.dc('author'))
     if (!colors && author) {
       // Hash the user webid for now -- later allow user selection!
-      var bgcolor = UI.pad.lightColorHash(author)
+      const bgcolor = lightColorHash(author)
       colors =
         'color: ' +
         (pending ? '#888' : 'black') +
@@ -351,10 +359,10 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
         ';'
     }
 
-    var indent = kb.any(chunk, PAD('indent'))
+    let indent = kb.any(chunk, PAD('indent'))
 
     indent = indent ? indent.value : 0
-    var style =
+    const style =
       indent >= 0
         ? baseStyle + 'text-indent: ' + indent * 3 + 'em;'
         : headingCore + headingStyle[-1 - indent]
@@ -362,28 +370,28 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
     part.setAttribute('style', style + colors)
   }
 
-  var removePart = function (part) {
-    var chunk = part.subject
+  const removePart = function (part) {
+    const chunk = part.subject
     if (!chunk) throw new Error('No chunk for line to be deleted!') // just in case
-    var prev = kb.any(undefined, PAD('next'), chunk)
-    var next = kb.any(chunk, PAD('next'))
+    const prev = kb.any(undefined, PAD('next'), chunk)
+    const next = kb.any(chunk, PAD('next'))
     if (prev.sameTerm(subject) && next.sameTerm(subject)) {
       // Last one
       console.log("You can't delete the only line.")
       return
     }
 
-    var del = kb
+    const del = kb
       .statementsMatching(chunk, undefined, undefined, padDoc)
       .concat(kb.statementsMatching(undefined, undefined, chunk, padDoc))
-    var ins = [$rdf.st(prev, PAD('next'), next, padDoc)]
-    var label = chunk.uri.slice(-4)
+    const ins = [st(prev, PAD('next'), next, padDoc)]
+    const label = chunk.uri.slice(-4)
     console.log('Deleting line ' + label)
 
     updater.update(del, ins, function (uri, ok, errorMessage, response) {
       if (ok) {
-        var row = part.parentNode
-        var before = row.previousSibling
+        const row = part.parentNode
+        const before = row.previousSibling
         row.parentNode.removeChild(row)
         console.log('    deleted line ' + label + ' ok ' + part.value)
         if (before && before.firstChild) {
@@ -410,21 +418,21 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
     })
   } // removePart
 
-  var changeIndent = function (part, chunk, delta) {
-    var del = kb.statementsMatching(chunk, PAD('indent'))
-    var current = del.length ? Number(del[0].object.value) : 0
+  const changeIndent = function (part, chunk, delta) {
+    const del = kb.statementsMatching(chunk, PAD('indent'))
+    const current = del.length ? Number(del[0].object.value) : 0
     if (current + delta < -3) return //  limit negative indent
-    var newIndent = current + delta
-    var ins = $rdf.st(chunk, PAD('indent'), newIndent, padDoc)
+    const newIndent = current + delta
+    const ins = st(chunk, PAD('indent'), newIndent, padDoc)
     updater.update(del, ins, function (uri, ok, errorBody) {
       if (!ok) {
         console.log(
           "Indent change FAILED '" +
-            newIndent +
-            "' for " +
-            padDoc +
-            ': ' +
-            errorBody
+          newIndent +
+          "' for " +
+          padDoc +
+          ': ' +
+          errorBody
         )
         setPartStyle(part, 'color: black;  background-color: #fdd;') // failed
         updater.requestDownstreamAction(padDoc, reloadAndSync)
@@ -460,13 +468,14 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
     return (iCaretPos)
   }
 */
-  var addListeners = function (part, chunk) {
+  const addListeners = function (part, chunk) {
     part.addEventListener('keydown', function (event) {
-      var queueProperty, queue
+      let queueProperty, queue
       //  up 38; down 40; left 37; right 39     tab 9; shift 16; escape 27
       switch (event.keyCode) {
         case 13: // Return
-          var before = event.shiftKey
+        {
+          const before: any = event.shiftKey
           console.log('enter') // Shift-return inserts before -- only way to add to top of pad.
           if (before) {
             queue = kb.any(undefined, PAD('next'), chunk)
@@ -484,7 +493,7 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
           console.log('    go ahead line before ' + queue[queueProperty])
           newChunk(part, before) // was document.activeElement
           break
-
+        }
         case 8: // Delete
           if (part.value.length === 0) {
             console.log(
@@ -511,10 +520,12 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
           }
           break
         case 9: // Tab
-          var delta = event.shiftKey ? -1 : 1
+        {
+          const delta = event.shiftKey ? -1 : 1
           changeIndent(part, chunk, delta)
           event.preventDefault() // default is to highlight next field
           break
+        }
         case 27: // ESC
           console.log('escape')
           updater.requestDownstreamAction(padDoc, reloadAndSync)
@@ -539,23 +550,23 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
       }
     })
 
-    var updateStore = function (part) {
-      var chunk = part.subject
+    const updateStore = function (part) {
+      const chunk = part.subject
       setPartStyle(part, undefined, true)
-      var old = kb.any(chunk, ns.sioc('content')).value
-      var del = [$rdf.st(chunk, ns.sioc('content'), old, padDoc)]
-      var ins = [$rdf.st(chunk, ns.sioc('content'), part.value, padDoc)]
-      var newOne = part.value
+      const old = kb.any(chunk, ns.sioc('content')).value
+      const del = [st(chunk, ns.sioc('content'), old, padDoc)]
+      const ins = [st(chunk, ns.sioc('content'), part.value, padDoc)]
+      const newOne = part.value
 
       // DEBUGGING ONLY
       if (part.lastSent) {
         if (old !== part.lastSent) {
           throw new Error(
             "Out of order, last sent expected '" +
-              old +
-              "' but found '" +
-              part.lastSent +
-              "'"
+            old +
+            "' but found '" +
+            part.lastSent +
+            "'"
           )
         }
       }
@@ -563,25 +574,25 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
 
       console.log(
         ' Patch proposed to ' +
-          chunk.uri.slice(-4) +
-          " '" +
-          old +
-          "' -> '" +
-          newOne +
-          "' "
+        chunk.uri.slice(-4) +
+        " '" +
+        old +
+        "' -> '" +
+        newOne +
+        "' "
       )
       updater.update(del, ins, function (uri, ok, errorBody, xhr) {
         if (!ok) {
           // alert("clash " + errorBody);
           console.log(
             '    patch FAILED ' +
-              xhr.status +
-              " for '" +
-              old +
-              "' -> '" +
-              newOne +
-              "': " +
-              errorBody
+            xhr.status +
+            " for '" +
+            old +
+            "' -> '" +
+            newOne +
+            "': " +
+            errorBody
           )
           if (xhr.status === 409) {
             // Conflict -  @@ we assume someone else
@@ -647,11 +658,11 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
     }) // listener
   } // addlisteners
 
-  var newPartAfter = function (tr1, chunk, before) {
+  const newPartAfter = function (tr1, chunk, before) {
     // @@ take chunk and add listeners
-    var text = kb.any(chunk, ns.sioc('content'))
+    let text = kb.any(chunk, ns.sioc('content'))
     text = text ? text.value : ''
-    var tr = dom.createElement('tr')
+    const tr = dom.createElement('tr')
     if (before) {
       table.insertBefore(tr, tr1)
     } else {
@@ -662,7 +673,7 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
         table.appendChild(tr)
       }
     }
-    var part = tr.appendChild(dom.createElement('input'))
+    const part = tr.appendChild(dom.createElement('input'))
     part.subject = chunk
     part.setAttribute('type', 'text')
     part.value = text
@@ -676,12 +687,14 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
     return part
   }
 
-  var newChunk = function (ele, before) {
+  /* @@ TODO we need to look at indent, it can be a Number or an Object this doesn't seem correct.
+  */
+  const newChunk = function (ele?, before?) {
     // element of chunk being split
-    var kb = UI.store
-    var indent = 0
-    var queueProperty = null
-    var here, prev, next, queue, tr1
+    const kb = store
+    let indent: any = 0
+    let queueProperty: string | null = null
+    let here, prev, next, queue, tr1: any
 
     if (ele) {
       if (ele.tagName.toLowerCase() !== 'input') {
@@ -708,19 +721,19 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
       tr1 = undefined
     }
 
-    var chunk = UI.widgets.newThing(padDoc)
-    var label = chunk.uri.slice(-4)
+    const chunk = newThing(padDoc)
+    const label = chunk.uri.slice(-4)
 
-    var del = [$rdf.st(prev, PAD('next'), next, padDoc)]
-    var ins = [
-      $rdf.st(prev, PAD('next'), chunk, padDoc),
-      $rdf.st(chunk, PAD('next'), next, padDoc),
-      $rdf.st(chunk, ns.dc('author'), me, padDoc),
-      $rdf.st(chunk, ns.sioc('content'), '', padDoc)
+    const del = [st(prev, PAD('next'), next, padDoc)]
+    const ins = [
+      st(prev, PAD('next'), chunk, padDoc),
+      st(chunk, PAD('next'), next, padDoc),
+      st(chunk, ns.dc('author'), me, padDoc),
+      st(chunk, ns.sioc('content'), '', padDoc)
     ]
     if (indent > 0) {
       // Do not inherit
-      ins.push($rdf.st(chunk, PAD('indent'), indent, padDoc))
+      ins.push(st(chunk, PAD('indent'), indent, padDoc))
     }
 
     console.log('    Fresh chunk ' + label + ' proposed')
@@ -729,15 +742,15 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
         // alert("Error writing new line " + label + ": " + errorBody);
         console.log('    ERROR writing new line ' + label + ': ' + errorBody)
       } else {
-        var newPart = newPartAfter(tr1, chunk, before)
+        const newPart = newPartAfter(tr1, chunk, before)
         setPartStyle(newPart)
         newPart.focus() // Note this is delayed
         if (queueProperty) {
           console.log(
             '    Fresh chunk ' +
-              label +
-              ' updated, queue = ' +
-              queue[queueProperty]
+            label +
+            ' updated, queue = ' +
+            queue[queueProperty]
           )
           queue[queueProperty] -= 1
           if (queue[queueProperty] > 0) {
@@ -751,9 +764,9 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
     })
   }
 
-  var consistencyCheck = function () {
-    var found = []
-    var failed = 0
+  const consistencyCheck = function () {
+    const found: any = []
+    let failed = 0
     function complain2 (msg) {
       complain(msg)
       failed++
@@ -764,9 +777,9 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
       return false // can't do linked list
     }
     // var chunk = kb.the(subject, PAD('next'))
-    var prev = subject
-    var chunk
-    for (;;) {
+    let prev = subject
+    let chunk
+    for (; ;) {
       chunk = kb.the(prev, PAD('next'))
       if (!chunk) {
         complain2('No next pointer from ' + prev)
@@ -775,14 +788,14 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
         break
       }
       prev = chunk
-      var label = chunk.uri.split('#')[1]
+      const label = chunk.uri.split('#')[1]
       if (found[chunk.uri]) {
         complain2('Loop!')
         return false
       }
 
       found[chunk.uri] = true
-      var k = kb.each(chunk, PAD('next')).length
+      let k = kb.each(chunk, PAD('next')).length
       if (k !== 1) {
         complain2('Should be 1 not ' + k + ' next pointer for ' + label)
       }
@@ -802,7 +815,7 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
         complain2('Should be 1 not ' + k + ' author for ' + label)
       }
 
-      var sts = kb.statementsMatching(undefined, ns.sioc('contents'))
+      const sts = kb.statementsMatching(undefined, ns.sioc('contents'))
       sts.map(function (st) {
         if (!found[st.subject.uri]) {
           complain2('Loose chunk! ' + st.subject.uri)
@@ -813,10 +826,10 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
   }
 
   // Ensure that the display matches the current state of the
-  var sync = function () {
+  const sync = function () {
     // var first = kb.the(subject, PAD('next'))
     if (kb.each(subject, PAD('next')).length !== 1) {
-      var msg =
+      const msg =
         'Pad: Inconsistent data - NEXT pointers: ' +
         kb.each(subject, PAD('next')).length
       console.log(msg)
@@ -827,10 +840,10 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
     }
     // var last = kb.the(undefined, PAD('previous'), subject)
     // var chunk = first //  = kb.the(subject, PAD('next'));
-    var row
+    let row
 
     // First see which of the logical chunks have existing physical manifestations
-    var manif = []
+    const manif: any = []
     // Find which lines correspond to existing chunks
 
     for (
@@ -839,7 +852,7 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
       chunk = kb.the(chunk, PAD('next'))
     ) {
       for (let i = 0; i < table.children.length; i++) {
-        var tr = table.children[i]
+        const tr = table.children[i]
         if (tr.firstChild.subject.sameTerm(chunk)) {
           manif[chunk.uri] = tr.firstChild
         }
@@ -860,11 +873,11 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
       !chunk.sameTerm(subject);
       chunk = kb.the(chunk, PAD('next'))
     ) {
-      var text = kb.any(chunk, ns.sioc('content')).value
+      const text = kb.any(chunk, ns.sioc('content')).value
       // superstitious -- don't mess with unchanged input fields
       // which may be selected by the user
       if (row && manif[chunk.uri]) {
-        var part = row.firstChild
+        const part = row.firstChild
         if (text !== part.value) {
           part.value = text
         }
@@ -880,19 +893,19 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
 
   // Refresh the DOM tree
 
-  var refreshTree = function (root) {
+  const refreshTree = function (root) {
     if (root.refresh) {
       root.refresh()
       return
     }
-    for (var i = 0; i < root.children.length; i++) {
+    for (let i = 0; i < root.children.length; i++) {
       refreshTree(root.children[i])
     }
   }
 
-  var reloading = false
+  let reloading = false
 
-  var checkAndSync = function () {
+  const checkAndSync = function () {
     console.log('    reloaded OK')
     clearStatus()
     if (!consistencyCheck()) {
@@ -902,14 +915,14 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
     }
   }
 
-  var reloadAndSync = function () {
+  const reloadAndSync = function () {
     if (reloading) {
       console.log('   Already reloading - stop')
       return // once only needed
     }
     reloading = true
-    var retryTimeout = 1000 // ms
-    var tryReload = function () {
+    let retryTimeout = 1000 // ms
+    const tryReload = function () {
       console.log('try reload - timeout = ' + retryTimeout)
       updater.reload(updater.store, padDoc, function (ok, message, xhr) {
         reloading = false
@@ -919,7 +932,7 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
           if (xhr.status === 0) {
             complain(
               'Network error refreshing the pad. Retrying in ' +
-                retryTimeout / 1000
+              retryTimeout / 1000
             )
             reloading = true
             retryTimeout = retryTimeout * 2
@@ -927,11 +940,11 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
           } else {
             complain(
               'Error ' +
-                xhr.status +
-                'refreshing the pad:' +
-                message +
-                '. Stopped. ' +
-                padDoc
+              xhr.status +
+              'refreshing the pad:' +
+              message +
+              '. Stopped. ' +
+              padDoc
             )
           }
         }
@@ -959,14 +972,14 @@ UI.pad.notepad = function (dom, padDoc, subject, me, options) {
   } else {
     // Make new pad
     console.log('No pad exists - making new one.')
-    var insertables = [
-      $rdf.st(subject, ns.rdf('type'), PAD('Notepad'), padDoc),
-      $rdf.st(subject, ns.dc('author'), me, padDoc),
-      $rdf.st(subject, ns.dc('created'), new Date(), padDoc),
-      $rdf.st(subject, PAD('next'), subject, padDoc)
+    const insertables = [
+      st(subject, ns.rdf('type'), PAD('Notepad'), padDoc),
+      st(subject, ns.dc('author'), me, padDoc),
+      st(subject, ns.dc('created'), new Date(), padDoc),
+      st(subject, PAD('next'), subject, padDoc)
     ]
 
-    updater.update([], insertables, function (uri, ok, errorBody) {
+    updater.update([], insertables, function (uri: string, ok: boolean, errorBody: string) {
       if (!ok) {
         complain(errorBody)
       } else {
