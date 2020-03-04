@@ -1,5 +1,5 @@
 import { IndexedFormula, NamedNode, st, sym, uri, Util } from 'rdflib'
-import icons from '../iconBase'
+import { iconBase, originalIconBase } from '../iconBase'
 import store from '../store'
 import ns from '../ns'
 import style from '../style'
@@ -17,8 +17,8 @@ const utils = require('../utils')
 const error = require('./error')
 const dragAndDrop = require('./dragAndDrop')
 
-const cancelIconURI = icons.iconBase + 'noun_1180156.svg' // black X
-const checkIconURI = icons.iconBase + 'noun_1180158.svg' // green checkmark; Continue
+const cancelIconURI = iconBase + 'noun_1180156.svg' // black X
+const checkIconURI = iconBase + 'noun_1180158.svg' // green checkmark; Continue
 
 export type StatusAreaContext = {
   statusArea?: HTMLElement
@@ -212,7 +212,7 @@ export function imagesOf (x: NamedNode | null, kb: IndexedFormula): any[] {
 /**
  * Best logo or avatar or photo etc to represent someone or some group etc
  */
-const iconForClass = {
+export const iconForClass = {
   // Potentially extendable by other apps, panes, etc
   // Relative URIs to the iconBase
   'solid:AppProviderClass': 'noun_144.svg', //  @@ classs name should not contain 'Class'
@@ -258,7 +258,7 @@ function tempSite (x: NamedNode) {
  * Find an image for this thing as a class
  */
 export function findImageFromURI (x: NamedNode | string): string | null {
-  const iconDir = icons.iconBase
+  const iconDir = iconBase
 
   // Special cases from URI scheme:
   if (typeof x !== 'string' && x.uri) {
@@ -309,7 +309,7 @@ export function findImageFromURI (x: NamedNode | string): string | null {
  */
 export function findImage (thing: NamedNode): string {
   const kb = store
-  const iconDir = icons.iconBase
+  const iconDir = iconBase
   if (thing.sameTerm(ns.foaf('Agent')) || thing.sameTerm(ns.rdf('Resource'))) {
     return iconDir + 'noun_98053.svg' // Globe
   }
@@ -360,7 +360,7 @@ function trySetImage (element, thing, iconForClassMap) {
       return false // maybe we can do better
     }
   }
-  element.setAttribute('src', icons.iconBase + 'noun_10636_grey.svg') // Grey Circle -  some thing
+  element.setAttribute('src', iconBase + 'noun_10636_grey.svg') // Grey Circle -  some thing
   return false // we can do better
 }
 
@@ -375,7 +375,7 @@ export function setImage (element: HTMLElement, thing: NamedNode) { // 20191230a
     const pref = k.split(':')[0]
     const id = k.split(':')[1]
     const klass = ns[pref](id)
-    iconForClassMap[klass.uri] = uri.join(iconForClass[k], icons.iconBase)
+    iconForClassMap[klass.uri] = uri.join(iconForClass[k], iconBase)
   }
 
   const happy = trySetImage(element, thing, iconForClassMap)
@@ -400,7 +400,7 @@ function faviconOrDefault (dom: HTMLDocument, x: NamedNode) {
   }
   image.setAttribute(
     'src',
-    icons.iconBase + (isOrigin(x) ? 'noun_15177.svg' : 'noun_681601.svg') // App symbol vs document
+    iconBase + (isOrigin(x) ? 'noun_15177.svg' : 'noun_681601.svg') // App symbol vs document
   )
   if (x.uri && x.uri.startsWith('https:') && x.uri.indexOf('#') < 0) {
     var res = dom.createElement('object') // favico with a fallback of a default image if no favicon
@@ -424,7 +424,7 @@ export function deleteButtonWithCheck (
   noun: string,
   deleteFunction: () => any
 ) {
-  var minusIconURI = icons.iconBase + 'noun_2188_red.svg' // white minus in red #cc0000 circle
+  var minusIconURI = iconBase + 'noun_2188_red.svg' // white minus in red #cc0000 circle
 
   // var delButton = dom.createElement('button')
 
@@ -594,7 +594,7 @@ export function linkIcon (dom: HTMLDocument, subject: NamedNode, iconURI?: strin
   var img = anchor.appendChild(dom.createElement('img'))
   img.setAttribute(
     'src',
-    iconURI || icons.originalIconBase + 'go-to-this.png'
+    iconURI || originalIconBase + 'go-to-this.png'
   )
   img.setAttribute('style', 'margin: 0.3em;')
   return anchor
@@ -677,8 +677,8 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
   var doc = options.doc || subject.doc()
   if (options.modify === undefined) options.modify = true
   var modify = options.modify
-  var promptIcon: string = options.promptIcon || (icons.iconBase + 'noun_748003.svg' as string) //    target
-  // var promptIcon = options.promptIcon || (icons.iconBase + 'noun_25830.svg') //  paperclip
+  var promptIcon: string = options.promptIcon || (iconBase + 'noun_748003.svg' as string) //    target
+  // var promptIcon = options.promptIcon || (iconBase + 'noun_25830.svg') //  paperclip
   var predicate = options.predicate || ns.wf('attachment')
   var noun = options.noun || 'attachment'
 
@@ -727,7 +727,7 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
     var ins: any = []
     uris.map(function (u) {
       var target = sym(u) // Attachment needs text label to disinguish I think not icon.
-      console.log('Dropped on attachemnt ' + u) // icon was: icons.iconBase + 'noun_25830.svg'
+      console.log('Dropped on attachemnt ' + u) // icon was: iconBase + 'noun_25830.svg'
       ins.push(st(subject, predicate, target, doc))
     })
     kb.updater.update([], ins, function (uri, ok, errorBody, _xhr) {
@@ -994,7 +994,7 @@ export function selectorPanelRefresh (
       iconDiv.setAttribute('class', already.length === 0 ? 'hideTillHover' : '') // See tabbedtab.css
       image.setAttribute(
         'src',
-        options.connectIcon || icons.iconBase + 'noun_25830.svg'
+        options.connectIcon || iconBase + 'noun_25830.svg'
       )
       image.setAttribute('title', already.length ? already.length : 'attach')
     }
@@ -1233,7 +1233,7 @@ export function fileUploadButtonDiv (
   const buttonElt = div.appendChild(
     button(
       dom,
-      icons.iconBase + 'noun_Upload_76574_000000.svg',
+      iconBase + 'noun_Upload_76574_000000.svg',
       'Upload files',
       _event => {
         input.click()
