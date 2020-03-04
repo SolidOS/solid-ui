@@ -1,5 +1,7 @@
-import { sym, graph, IndexedFormula } from 'rdflib'
+import { namedNode, graph } from 'rdflib'
 import ns from '../../../src/ns'
+import uiStore from '../../../src/store'
+
 import {
   appendForm,
   buildCheckboxForm,
@@ -40,15 +42,15 @@ describe('Form field', () => {
   it('runs', () => {
     const container = document.createElement('div')
     const already = {}
-    const subject = sym('http://example.com/#this')
-    const form = sym('http://example.com/#form')
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
 
     // FIXME: https://github.com/solid/solid-ui/issues/239
     ;(document as any).outlineManager = {
       appendPropertyTRs: () => {}
-    };
+    }
     field[ns.ui('Form').uri](
       document,
       container,
@@ -81,7 +83,7 @@ describe('Form field', () => {
     // debugger
     const container = null
     const already = {}
-    const subject = sym('http://example.com/#this')
+    const subject = namedNode('http://example.com/#this')
     const form = document.createElement('div')
     const store = graph()
     const callbackFunction = () => {}
@@ -107,7 +109,7 @@ describe('Form field', () => {
   })
   // @@ TODO need to double check proper subjects and what gets returned
   it.skip('returns.. if the subject has already been processed...', () => {
-    const dubSubject = sym('subject')
+    const dubSubject = namedNode('subject')
     const container = document.createElement('container')
     const already = { dubSubject }
     const subject = dubSubject
@@ -143,8 +145,8 @@ describe('Options field', () => {
   it('runs', () => {
     const container = document.createElement('div')
     const already = {}
-    const subject = sym('http://example.com/#this')
-    const form = sym('http://example.com/#form')
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -168,8 +170,8 @@ describe('Multiple field', () => {
   it.skip('runs', () => {
     const container = document.createElement('div')
     const already = {}
-    const subject = sym('http://example.com/#this')
-    const form = sym('http://example.com/#form')
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -276,11 +278,12 @@ describe('PhoneField', () => {
   it('exists', () => {
     expect(field[ns.ui('PhoneField').uri]).toBeInstanceOf(Object)
   })
-  it.only('runs', () => {
+  it('runs', () => {
     const container = document.createElement('div')
     const already = {}
-    const subject = sym('http://example.com/#this')
-    const form = sym('http://example.com/#form')
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
+    uiStore.add(form, ns.ui('property'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -300,18 +303,18 @@ describe('PhoneField', () => {
           style="  vertical-align: middle;"
         >
           <a
-            href="uri"
+            href="http://example.com/#bla"
             style="color: #3B5998; text-decoration: none;"
           >
-            [object Object]
+            Bla
           </a>
         </td>
         <td
           class="formFieldValue"
         >
           <input
-            maxlength="[object Object]"
-            size="[object Object]"
+            maxlength="4096"
+            size="20"
             style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
             type="text"
           />
@@ -328,8 +331,8 @@ describe('EmailField', () => {
   it('runs', () => {
     const container = document.createElement('div')
     const already = {}
-    const subject = sym('http://example.com/#this')
-    const form = sym('http://example.com/#form')
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -377,8 +380,8 @@ describe('ColorField', () => {
   it('runs', () => {
     const container = document.createElement('div')
     const already = {}
-    const subject = sym('http://example.com/#this')
-    const form = sym('http://example.com/#form')
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -426,8 +429,8 @@ describe('DateField', () => {
   it('runs', () => {
     const container = document.createElement('div')
     const already = {}
-    const subject = sym('http://example.com/#this')
-    const form = sym('http://example.com/#form')
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -475,8 +478,8 @@ describe('DateTimeField', () => {
   it('runs', () => {
     const container = document.createElement('div')
     const already = {}
-    const subject = sym('http://example.com/#this')
-    const form = sym('http://example.com/#form')
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -524,8 +527,8 @@ describe('TimeField', () => {
   it('runs', () => {
     const container = document.createElement('div')
     const already = {}
-    const subject = sym('http://example.com/#this')
-    const form = sym('http://example.com/#form')
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -573,8 +576,8 @@ describe('NumericField', () => {
   it('runs', () => {
     const container = document.createElement('div')
     const already = {}
-    const subject = sym('http://example.com/#this')
-    const form = sym('http://example.com/#form')
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -622,8 +625,8 @@ describe('IntegerField', () => {
   it('runs', () => {
     const container = document.createElement('div')
     const already = {}
-    const subject = sym('http://example.com/#this')
-    const form = sym('http://example.com/#form')
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -671,8 +674,8 @@ describe('DecimalField', () => {
   it('runs', () => {
     const container = document.createElement('div')
     const already = {}
-    const subject = sym('http://example.com/#this')
-    const form = sym('http://example.com/#form')
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -720,8 +723,8 @@ describe('FloatField]', () => {
   it('runs', () => {
     const container = document.createElement('div')
     const already = {}
-    const subject = sym('http://example.com/#this')
-    const form = sym('http://example.com/#form')
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -769,8 +772,8 @@ describe('TextField', () => {
   it('runs', () => {
     const container = document.createElement('div')
     const already = {}
-    const subject = sym('http://example.com/#this')
-    const form = sym('http://example.com/#form')
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -818,8 +821,8 @@ describe('SingleLineTextField', () => {
   it('runs', () => {
     const container = document.createElement('div')
     const already = {}
-    const subject = sym('http://example.com/#this')
-    const form = sym('http://example.com/#form')
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -867,7 +870,7 @@ describe('NamedNodeURIField', () => {
   it('runs', () => {
     const container = document.createElement('div')
     const already = {}
-    const subject = sym('http://example.com/#this')
+    const subject = namedNode('http://example.com/#this')
     const form = document.createElement('div')
     const store = graph()
     const callbackFunction = () => {}
@@ -916,8 +919,8 @@ describe('MultiLineTextField', () => {
   it('runs', () => {
     const container = document.createElement('div')
     const already = {}
-    const subject = sym('http://example.com/#this')
-    const form = sym('http://example.com/#form')
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -959,8 +962,8 @@ describe('BooleanField', () => {
   it('runs', () => {
     const container = document.createElement('div')
     const already = {}
-    const subject = sym('http://example.com/#this')
-    const form = sym('http://example.com/#form')
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -993,8 +996,8 @@ describe('TristateField', () => {
   it('runs', () => {
     const container = document.createElement('div')
     const already = {}
-    const subject = sym('http://example.com/#this')
-    const form = sym('http://example.com/#form')
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -1027,8 +1030,8 @@ describe('Classifier', () => {
   it('runs', () => {
     const container = document.createElement('div')
     const already = {}
-    const subject = sym('http://example.com/#this')
-    const form = sym('http://example.com/#form')
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -1060,8 +1063,8 @@ describe('Choice', () => {
   it.skip('runs', () => {
     const container = document.createElement('div')
     const already = {}
-    const subject = sym('http://example.com/#this')
-    const form = sym('http://example.com/#form')
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -1099,8 +1102,8 @@ describe('Heading', () => {
   it('runs', () => {
     const container = document.createElement('div')
     const already = {}
-    const subject = sym('http://example.com/#this')
-    const form = sym('http://example.com/#form')
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -1125,17 +1128,18 @@ describe('Heading', () => {
   })
 })
 
-describe('Comment]', () => {
+describe('Comment', () => {
   it('exists', () => {
     expect(field[ns.ui('Comment').uri]).toBeInstanceOf(Object)
   })
-  it('runs', () => {
+  it.only('runs', () => {
     const container = document.createElement('div')
     const already = {}
-    const subject = sym('http://example.com/#this')
-    const form = sym('http://example.com/#form')
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
+    uiStore.add(form, ns.ui('property'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
     expect(
       field[ns.ui('Comment').uri](
         document,
@@ -1196,11 +1200,11 @@ describe('appendForm', () => {
     expect(appendForm).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    const container = null
+    const container = document.createElement('div')
     const already = {}
-    const subject = null
-    const form = null
-    const store = graph()
+    const subject = namedNode('http://example.com/#subject')
+    const form = namedNode('http://example.com/#form')
+    const store = namedNode('http://example.com/#store')
     const itemDone = () => {}
     expect(
       appendForm(document, container, already, subject, form, store, itemDone)
@@ -1222,7 +1226,9 @@ describe('findClosest', () => {
     expect(findClosest).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    expect(findClosest(graph(), null, null)).toBeInstanceOf(Object)
+    const kb = graph()
+    kb.sym = namedNode
+    expect(findClosest(kb, 'http://example.com/#cla', namedNode('http://example.com/#prop'))).toBeInstanceOf(Object)
   })
 })
 
@@ -1262,10 +1268,10 @@ describe('newButton', () => {
       newButton(
         document,
         graph(),
-        null,
-        null,
-        null,
-        null,
+        namedNode('http://example.com/#subject'),
+        namedNode('http://example.com/#predicate'),
+        namedNode('http://example.com/#class'),
+        namedNode('http://example.com/#store'),
         graph(),
         () => {}
       )
@@ -1282,9 +1288,9 @@ describe('promptForNew', () => {
       promptForNew(
         document,
         graph(),
-        sym('http://example.com/#this'),
-        sym('http://example.com/#this'),
-        sym('http://example.com/#this'),
+        namedNode('http://example.com/#this'),
+        namedNode('http://example.com/#this'),
+        namedNode('http://example.com/#this'),
         null,
         graph(),
         () => {}
@@ -1302,9 +1308,9 @@ describe('makeDescription', () => {
       makeDescription(
         document,
         graph(),
-        null,
-        null,
-        graph(),
+        namedNode('http://example.com/#subject'),
+        namedNode('http://example.com/#predicate'),
+        namedNode('http://example.com/#store'),
         () => {}
       )
     ).toBeInstanceOf(HTMLDivElement)
@@ -1358,8 +1364,8 @@ describe('makeSelectForNestedCategory', () => {
       makeSelectForNestedCategory(
         document,
         graph(),
-        sym('http://example.com/#this'),
-        sym('http://example.com/#this'),
+        namedNode('http://example.com/#this'),
+        namedNode('http://example.com/#this'),
         graph(),
         () => {}
       )
@@ -1392,7 +1398,7 @@ describe('fieldLabel', () => {
     expect(fieldLabel).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    expect(fieldLabel(document, sym('http://example.com/#this'), null)).toBeInstanceOf(
+    expect(fieldLabel(document, namedNode('http://example.com/#this'), null)).toBeInstanceOf(
       HTMLAnchorElement
     )
   })
@@ -1406,7 +1412,10 @@ describe('fieldStore', () => {
     expect(fieldStore).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    expect(fieldStore(null, null, null)).toEqual(null)
+    expect(fieldStore(null, null, null)).toEqual({
+      termType: 'NamedNode',
+      value: 'http://example.com/'
+    })
   })
   it('returns def when there is no matching statement', () => {
     const statementMatching = jest.fn()
@@ -1420,7 +1429,7 @@ describe('newThing', () => {
     expect(newThing).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    expect(newThing(sym('http://example.com/#this'))).toBeInstanceOf(Object)
+    expect(newThing(namedNode('http://example.com/#this'))).toBeInstanceOf(Object)
   })
   // need to also mock or figure out doc - which is a NamedNode
   it.skip('returns the correct .', () => {

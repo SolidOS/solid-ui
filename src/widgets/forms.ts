@@ -5,7 +5,7 @@
 
 /* global alert */
 
-import { st, sym, UpdateManager, Collection, Literal, NamedNode } from 'rdflib'
+import { st, sym, UpdateManager, Collection, Literal, NamedNode, IndexedFormula } from 'rdflib'
 import { iconBase } from '../iconBase'
 import uiStore from '../store'
 import ns from '../ns'
@@ -621,13 +621,13 @@ fieldParams[ns.ui('EmailField').uri].pattern = /^\s*.*@.*\..*\s*$/ // @@ Get the
  ** regexps used to validate.
  */
 function basicField (
-  dom,
-  container,
+  dom: HTMLDocument,
+  container: HTMLElement | undefined,
   already,
-  subject,
-  form,
-  store,
-  callbackFunction
+  subject: NamedNode,
+  form: NamedNode,
+  store: NamedNode,
+  callbackFunction: (ok: boolean, errorMessage: string) => void
 ) {
   const kb = uiStore
 
@@ -1181,13 +1181,13 @@ export function editFormButton (
 }
 
 export function appendForm (
-  dom,
-  container,
+  dom: HTMLDocument,
+  container: HTMLElement,
   already,
-  subject,
-  form,
-  store,
-  itemDone
+  subject: NamedNode,
+  form: NamedNode,
+  store: NamedNode,
+  itemDone: () => void
 ) {
   return fieldFunction(dom, form)(
     dom,
@@ -1241,7 +1241,7 @@ export function propertiesForClass (kb, c) {
 * @param cla - the URI of the class
 * @param prop
 */
-export function findClosest (kb, cla, prop) {
+export function findClosest (kb: IndexedFormula, cla: string, prop: NamedNode) {
   var agenda = [kb.sym(cla)] // ordered - this is breadth first search
   while (agenda.length > 0) {
     var c = agenda.shift() // first
@@ -1313,13 +1313,13 @@ export function sortByLabel (list) {
 // @param store - optional store else will prompt for one (unimplemented)
 */
 export function newButton (
-  dom,
-  kb,
-  subject,
-  predicate,
-  theClass,
-  form,
-  store,
+  dom: HTMLDocument,
+  kb: IndexedFormula,
+  subject: NamedNode,
+  predicate: NamedNode,
+  theClass: NamedNode,
+  form: NamedNode,
+  store: NamedNode,
   callbackFunction
 ) {
   var b = dom.createElement('button')
@@ -1438,12 +1438,12 @@ export function promptForNew (
 }
 
 export function makeDescription (
-  dom,
-  kb,
-  subject,
-  predicate,
-  store,
-  callbackFunction
+  dom: HTMLDocument,
+  kb: IndexedFormula,
+  subject: NamedNode,
+  predicate: NamedNode,
+  store: NamedNode,
+  callbackFunction: (ok: boolean, errorMessage: string) => void
 ) {
   var group = dom.createElement('div')
 
