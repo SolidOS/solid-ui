@@ -1,4 +1,3 @@
-import * as RdfLib from 'rdflib'
 import { JSDOM } from 'jsdom'
 
 import {
@@ -6,6 +5,7 @@ import {
   makeDraggable,
   uploadFiles
 } from '../../../src/widgets/dragAndDrop'
+import { fetcher } from 'rdflib'
 
 jest.mock('solid-auth-client')
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
@@ -59,7 +59,7 @@ describe('uploadFiles', () => {
     const imageBase = ''
     const successHandler = () => {}
     expect(
-      uploadFiles(RdfLib.fetcher, files, fileBase, imageBase, successHandler)
+      uploadFiles(fetcher, files, fileBase, imageBase, successHandler)
     ).toEqual(undefined)
   })
 })

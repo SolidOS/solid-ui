@@ -1,5 +1,5 @@
-import * as RdfLib from 'rdflib'
 import { findBookmarkDocument, toggleBookmark, renderBookmarksButton } from '../../../src/chat/bookmarks'
+import { NamedNode } from 'rdflib'
 
 jest.mock('solid-auth-client')
 
@@ -33,8 +33,8 @@ describe('toggleBookmark', () => {
   })
   it('runs', async () => {
     const userContext = {
-      me: new RdfLib.NamedNode('http://example.com'),
-      bookmarkDocument: new RdfLib.NamedNode('http://example.com')
+      me: new NamedNode('http://example.com'),
+      bookmarkDocument: new NamedNode('http://example.com')
     }
     const target = {}
     const bookmarkButton = {}
@@ -52,8 +52,8 @@ describe('renderBookmarksButton', () => {
   })
   it('runs', async () => {
     const userContext = {
-      me: new RdfLib.NamedNode('http://example.com'),
-      bookmarkDocument: new RdfLib.NamedNode('http://example.com')
+      me: new NamedNode('http://example.com'),
+      bookmarkDocument: new NamedNode('http://example.com')
     }
     const target = {}
     const result = await renderBookmarksButton(userContext, target)

@@ -1,6 +1,6 @@
 import { JSDOM } from 'jsdom'
-import * as RdfLib from 'rdflib'
 import Preferences from '../../src/preferences'
+import { sym } from 'rdflib'
 
 jest.mock('solid-auth-client')
 const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
@@ -41,7 +41,7 @@ describe('Preferences.renderPreferencesForm', () => {
     expect(Preferences.renderPreferencesForm).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const subject = RdfLib.sym('https://test.test')
+    const subject = sym('https://test.test')
     const klass = {}
     const preferencesForm = {}
     const context = { dom }
