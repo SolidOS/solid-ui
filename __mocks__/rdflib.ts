@@ -1,7 +1,5 @@
 // @@ TODO: Remove currently untyped methods as they are added
 
-import { IndexedFormula } from 'rdflib'
-
 export {
   BlankNode,
   Collection,
