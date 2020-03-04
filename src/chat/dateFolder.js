@@ -3,10 +3,9 @@
  * @packageDocumentation
  */
 
-/* global $rdf */
-
 const kb = require('../store.js')
 const ns = require('../ns.js')
+const $rdf = require('rdflib')
 
 /**
  * Track back through the YYYY/MM/DD tree to find the previous/next day
