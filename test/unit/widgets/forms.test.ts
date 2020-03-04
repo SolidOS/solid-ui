@@ -1,4 +1,4 @@
-import { sym, graph } from 'rdflib'
+import { sym, graph, IndexedFormula } from 'rdflib'
 import ns from '../../../src/ns'
 import {
   appendForm,
@@ -37,13 +37,18 @@ describe('Form field', () => {
   it('exists', () => {
     expect(field[ns.ui('Form').uri]).toBeInstanceOf(Object)
   })
-  it.skip('runs', () => {
+  it('runs', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = sym('http://example.com/#this')
-    const form = document.createElement('form')
+    const form = sym('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
+
+    // FIXME: https://github.com/solid/solid-ui/issues/239
+    ;(document as any).outlineManager = {
+      appendPropertyTRs: () => {}
+    };
     field[ns.ui('Form').uri](
       document,
       container,
@@ -53,7 +58,7 @@ describe('Form field', () => {
       store,
       callbackFunction
     )
-    // @@ TODO goes to comment instead of Form...
+
     expect(
       field[ns.ui('Form').uri](
         document,
@@ -65,13 +70,9 @@ describe('Form field', () => {
         callbackFunction
       )
     ).toMatchInlineSnapshot(`
-      <div>
-        <h3
-          style="[object Object]"
-        >
-          [object Object]
-        </h3>
-      </div>
+     <div
+       style="padding-left: 2em; border: 0.05em solid #888888;"
+     />
     `)
   })
   // @@ TODO check this further what test could I use to make sure
@@ -143,7 +144,7 @@ describe('Options field', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = sym('http://example.com/#this')
-    const form = document.createElement('form')
+    const form = sym('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -168,7 +169,7 @@ describe('Multiple field', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = sym('http://example.com/#this')
-    const form = document.createElement('form')
+    const form = sym('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -275,11 +276,11 @@ describe('PhoneField', () => {
   it('exists', () => {
     expect(field[ns.ui('PhoneField').uri]).toBeInstanceOf(Object)
   })
-  it('runs', () => {
+  it.only('runs', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = sym('http://example.com/#this')
-    const form = document.createElement('form')
+    const form = sym('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -328,7 +329,7 @@ describe('EmailField', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = sym('http://example.com/#this')
-    const form = document.createElement('form')
+    const form = sym('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -377,7 +378,7 @@ describe('ColorField', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = sym('http://example.com/#this')
-    const form = document.createElement('form')
+    const form = sym('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -426,7 +427,7 @@ describe('DateField', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = sym('http://example.com/#this')
-    const form = document.createElement('form')
+    const form = sym('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -475,7 +476,7 @@ describe('DateTimeField', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = sym('http://example.com/#this')
-    const form = document.createElement('form')
+    const form = sym('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -524,7 +525,7 @@ describe('TimeField', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = sym('http://example.com/#this')
-    const form = document.createElement('form')
+    const form = sym('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -573,7 +574,7 @@ describe('NumericField', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = sym('http://example.com/#this')
-    const form = document.createElement('form')
+    const form = sym('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -622,7 +623,7 @@ describe('IntegerField', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = sym('http://example.com/#this')
-    const form = document.createElement('form')
+    const form = sym('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -671,7 +672,7 @@ describe('DecimalField', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = sym('http://example.com/#this')
-    const form = document.createElement('form')
+    const form = sym('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -720,7 +721,7 @@ describe('FloatField]', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = sym('http://example.com/#this')
-    const form = document.createElement('form')
+    const form = sym('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -769,7 +770,7 @@ describe('TextField', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = sym('http://example.com/#this')
-    const form = document.createElement('form')
+    const form = sym('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -818,7 +819,7 @@ describe('SingleLineTextField', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = sym('http://example.com/#this')
-    const form = document.createElement('form')
+    const form = sym('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -916,7 +917,7 @@ describe('MultiLineTextField', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = sym('http://example.com/#this')
-    const form = document.createElement('form')
+    const form = sym('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -959,7 +960,7 @@ describe('BooleanField', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = sym('http://example.com/#this')
-    const form = document.createElement('form')
+    const form = sym('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -993,7 +994,7 @@ describe('TristateField', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = sym('http://example.com/#this')
-    const form = document.createElement('form')
+    const form = sym('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -1027,7 +1028,7 @@ describe('Classifier', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = sym('http://example.com/#this')
-    const form = document.createElement('form')
+    const form = sym('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -1060,7 +1061,7 @@ describe('Choice', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = sym('http://example.com/#this')
-    const form = document.createElement('form')
+    const form = sym('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -1099,7 +1100,7 @@ describe('Heading', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = sym('http://example.com/#this')
-    const form = document.createElement('form')
+    const form = sym('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(
@@ -1132,7 +1133,7 @@ describe('Comment]', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = sym('http://example.com/#this')
-    const form = document.createElement('form')
+    const form = sym('http://example.com/#form')
     const store = graph()
     const callbackFunction = () => {}
     expect(

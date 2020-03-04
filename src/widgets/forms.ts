@@ -5,7 +5,7 @@
 
 /* global alert */
 
-import { st, sym, UpdateManager, Collection, Literal } from 'rdflib'
+import { st, sym, UpdateManager, Collection, Literal, NamedNode } from 'rdflib'
 import { iconBase } from '../iconBase'
 import uiStore from '../store'
 import ns from '../ns'
@@ -45,7 +45,7 @@ export const fieldParams = {}
  */
 field[ns.ui('Form').uri] = field[
   ns.ui('Group').uri
-] = function (dom, container, already, subject, form, store, callbackFunction) {
+] = function (dom: HTMLDocument, container: Element | undefined, already: { }, subject: NamedNode, form: NamedNode, store: NamedNode, callbackFunction: (ok: boolean, errorMessage: string) => void) {
   const kb = uiStore
   var box = dom.createElement('div')
   box.setAttribute('style', `padding-left: 2em; border: 0.05em solid ${formBorderColor};`) // Indent a group
@@ -57,7 +57,7 @@ field[ns.ui('Form').uri] = field[
     // been there done that
     box.appendChild(dom.createTextNode('Group: see above ' + key))
     var plist = [(st as any)(subject, ns.owl('sameAs'), subject)] // @@ need prev subject
-    dom.outlineManager.appendPropertyTRs(box, plist)
+    ;(dom as any).outlineManager.appendPropertyTRs(box, plist)
     return box
   }
   // box.appendChild(dom.createTextNode('Group: first time, key: '+key))
