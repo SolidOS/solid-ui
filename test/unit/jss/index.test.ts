@@ -1,5 +1,5 @@
 import { getClasses, getStylesheet } from '../../../src/jss/index'
-jest.mock('rdflib')
+
 jest.mock('solid-auth-client')
 
 describe('getClasses', () => {

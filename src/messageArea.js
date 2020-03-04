@@ -1,4 +1,3 @@
-/* global $rdf */
 //  Common code for a discussion are a of messages about something
 //
 var UI = {
@@ -13,6 +12,7 @@ var UI = {
   widgets: require('./widgets')
 }
 
+const $rdf = require('rdflib')
 const utils = require('./utils')
 
 // var buttonStyle = 'font-size: 100%; margin: 0.8em; padding:0.5em; background-color: white;'

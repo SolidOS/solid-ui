@@ -1,8 +1,7 @@
-import * as RdfLib from 'rdflib'
 import { JSDOM } from 'jsdom'
-
 import { infiniteMessageArea } from '../../../src/chat/infinite'
-jest.mock('rdflib')
+import { graph, sym } from 'rdflib'
+
 jest.mock('solid-auth-client')
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
@@ -11,27 +10,9 @@ describe('infiniteMessageArea', () => {
     expect(infiniteMessageArea).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const kb = RdfLib.graph()
-    const chatChannel = {
-      dir () {
-        return {
-          uri: ''
-        }
-      }
-    }
+    const kb = graph()
+    const chatChannel = sym('https://domain.tld/chat')
     const options = {}
-    ;(window as any).$rdf = {
-      Namespace: () => {
-        return () => ''
-      },
-      Query: function () {
-        this.vars = []
-        this.pat = {
-          add: () => {}
-        }
-      },
-      variable: () => {}
-    }
     ;(window as any).alert = () => {}
 
     const result = infiniteMessageArea(dom, kb, chatChannel, options)

@@ -13,7 +13,7 @@ import {
   formTextInput,
   multilineTextInputStyle
 } from '../../src/style'
-jest.mock('rdflib')
+
 jest.mock('solid-auth-client')
 
 describe('textInputStyle', () => {

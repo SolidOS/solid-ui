@@ -1,6 +1,6 @@
 import * as Authn from '../../../src/authn/authn'
 import * as Index from '../../../src/authn/index'
-jest.mock('rdflib')
+
 jest.mock('solid-auth-client')
 
 describe('authn/index', () => {

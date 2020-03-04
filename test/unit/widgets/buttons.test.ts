@@ -1,5 +1,4 @@
 import { JSDOM } from 'jsdom'
-
 import {
   addStyleSheet,
   allClassURIs,
@@ -38,8 +37,11 @@ import {
   timestamp
 } from '../../../src/widgets/buttons'
 import { graph, namedNode, NamedNode, sym } from 'rdflib'
+import { foaf, rdf, sioc, vcard } from '../../../src/ns'
+import { iconBase } from '../../../src/iconBase'
+import store from '../../../src/store'
+import { clearStore } from '../helpers/clearStore'
 
-jest.mock('rdflib')
 jest.mock('solid-auth-client')
 const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
 const dom = window.document
@@ -85,7 +87,7 @@ describe('attachmentList', () => {
     expect(attachmentList).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const subject = sym('')
+    const subject = sym('https://test.test#')
     const div = element
     const options = {}
     expect(attachmentList(dom, subject, div, options)).toBeTruthy()
@@ -150,7 +152,7 @@ describe('defaultAnnotationStore', () => {
     expect(defaultAnnotationStore).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(defaultAnnotationStore(sym(''))).toEqual(undefined)
+    expect(defaultAnnotationStore(sym('https://test.test#'))).toEqual(undefined)
   })
 })
 
@@ -178,12 +180,41 @@ describe('extractLogURI', () => {
 })
 
 describe('findImage', () => {
+  const subject = sym('https://domain.tld/#test')
+  const imageObject = sym('https://domain.tld/#image')
+
+  afterEach(() => clearStore())
+
   it('exists', () => {
     expect(findImage).toBeInstanceOf(Function)
   })
-  it('runs', () => {
-    expect(findImage(sym(''))).toEqual('uri')
+  it('handles foaf(Agent)', () => expect(findImage(foaf('Agent'))).toEqual(iconBase + 'noun_98053.svg'))
+  it('handles rdf(Resource)', () => expect(findImage(rdf('Resource'))).toEqual(iconBase + 'noun_98053.svg'))
+  it('handles sioc(avatar)', () => {
+    store.add(subject, sioc('avatar'), imageObject, subject.doc())
+    expect(findImage(subject)).toEqual(imageObject.uri)
   })
+  it('handles sioc(avatar)', () => {
+    store.add(subject, foaf('img'), imageObject, subject.doc())
+    expect(findImage(subject)).toEqual(imageObject.uri)
+  })
+  it('handles vcard(logo)', () => {
+    store.add(subject, vcard('logo'), imageObject, subject.doc())
+    expect(findImage(subject)).toEqual(imageObject.uri)
+  })
+  it('handles vcard(hasPhoto)', () => {
+    store.add(subject, vcard('hasPhoto'), imageObject, subject.doc())
+    expect(findImage(subject)).toEqual(imageObject.uri)
+  })
+  it('handles vcard(photo)', () => {
+    store.add(subject, vcard('photo'), imageObject, subject.doc())
+    expect(findImage(subject)).toEqual(imageObject.uri)
+  })
+  it('handles foaf(depiction)', () => {
+    store.add(subject, foaf('depiction'), imageObject, subject.doc())
+    expect(findImage(subject)).toEqual(imageObject.uri)
+  })
+  it('returns null when nothing is found', () => expect(findImage(subject)).toBeNull())
 })
 
 describe('findImageFromURI', () => {
@@ -246,7 +277,7 @@ describe('index.twoLine[\'\']', () => {
     expect(index.twoLine['']).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(index.twoLine[''](dom, null)).toBeTruthy()
+    expect(index.twoLine[''](dom, sym('https://domain.tld/#test'))).toBeTruthy()
   })
 })
 describe('index.twoLine[\'http://www.w3.org/2000/10/swap/pim/qif#Transaction\']', () => {
@@ -254,7 +285,7 @@ describe('index.twoLine[\'http://www.w3.org/2000/10/swap/pim/qif#Transaction\']'
     expect(index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction']).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction'](dom, null)).toBeTruthy()
+    expect(index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction'](dom, sym('https://domain.tld/#test'))).toBeTruthy()
   })
 })
 describe('index.twoLine[\'http://www.w3.org/ns/pim/trip#Trip\']', () => {
@@ -270,7 +301,7 @@ describe('index.twoLine.widgetForClass', () => {
     expect(index.twoLine.widgetForClass).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(index.twoLine.widgetForClass(sym(''))).toBeInstanceOf(Function)
+    expect(index.twoLine.widgetForClass(sym('https://test.test#'))).toBeInstanceOf(Function)
   })
 })
 
@@ -306,7 +337,7 @@ describe('linkButton', () => {
     expect(linkButton).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const object = sym('')
+    const object = sym('https://test.test#')
     expect(linkButton(dom, object)).toBeTruthy()
   })
 })
@@ -316,7 +347,7 @@ describe('linkIcon', () => {
     expect(linkIcon).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const subject = sym('')
+    const subject = sym('https://test.test#')
     const iconURI = ''
     expect(linkIcon(dom, subject, iconURI)).toBeTruthy()
   })
@@ -336,8 +367,8 @@ describe('personTR', () => {
     expect(personTR).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const pred = sym('')
-    const obj = sym('')
+    const pred = sym('https://test.test#')
+    const obj = sym('https://test.test#')
     const options = {}
     expect(personTR(dom, pred, obj, options)).toBeTruthy()
   })
@@ -376,10 +407,10 @@ describe('selectorPanel', () => {
   })
   it('runs', () => {
     const kb = graph()
-    const type = namedNode('test')
-    const predicate = namedNode('test')
+    const type = namedNode('https://domain.tld/#test')
+    const predicate = namedNode('https://domain.tld/#test')
     const inverse = false
-    const possible = [namedNode('test')]
+    const possible = [namedNode('https://domain.tld/#test')]
     const options = {}
     const callbackFunction = () => {
     }
@@ -405,10 +436,10 @@ describe('selectorPanelRefresh', () => {
   it('runs', () => {
     const list = dom.createElement('ul')
     const kb = graph()
-    const type = namedNode('test')
-    const predicate = namedNode('test')
+    const type = namedNode('https://domain.tld/#test')
+    const predicate = namedNode('https://domain.tld/#test')
     const inverse = false
-    const possible = [namedNode('test')]
+    const possible = [namedNode('https://domain.tld/#test')]
     const options = {}
     const callbackFunction = () => {}
     const linkCallback = () => {}
@@ -432,7 +463,7 @@ describe('setImage', () => {
     expect(setImage).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const thing = sym('')
+    const thing = sym('https://test.test#')
     expect(setImage(element, thing)).toEqual(undefined)
   })
 })
@@ -442,7 +473,7 @@ describe('setName', () => {
     expect(setName).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const thing = sym('')
+    const thing = sym('https://test.test#')
     expect(setName(element, thing)).toEqual(undefined)
   })
 })

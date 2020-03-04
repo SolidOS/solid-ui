@@ -1,4 +1,3 @@
-import * as RdfLib from 'rdflib'
 import { JSDOM } from 'jsdom'
 
 import {
@@ -25,8 +24,8 @@ import {
   solidAuthClient
 } from '../../../src/authn/authn'
 import { AppDetails, AuthenticationContext } from '../../../src/authn/types'
+import { sym } from 'rdflib'
 
-jest.mock('rdflib')
 jest.mock('solid-auth-client')
 const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
 const dom = window.document
@@ -72,7 +71,7 @@ describe('findAppInstances', () => {
     expect(findAppInstances).toBeInstanceOf(Function)
   })
   it('runs', async () => {
-    expect(await findAppInstances({}, RdfLib.sym(''), false)).toBeInstanceOf(Object)
+    expect(await findAppInstances({}, sym('https://test.test#'), false)).toBeInstanceOf(Object)
   })
 })
 
@@ -164,8 +163,8 @@ describe('registerInTypeIndex', () => {
   it.skip('runs', async () => {
     expect(await registerInTypeIndex(
       {} as AuthenticationContext,
-      RdfLib.sym(''),
-      RdfLib.sym(''),
+      sym('https://test.test#'),
+      sym('https://test.test#'),
       false
     )).toEqual(undefined)
   })
@@ -178,8 +177,8 @@ describe('registrationControl', () => {
   it('runs', async () => {
     expect(await registrationControl(
       {} as AuthenticationContext,
-      RdfLib.sym(''),
-      RdfLib.sym('')
+      sym('https://test.test#'),
+      sym('https://test.test#')
     )).toEqual(undefined)
   })
 })
@@ -215,8 +214,8 @@ describe('setACLUserPublic', () => {
   })
   it.skip('runs', async () => {
     expect(await setACLUserPublic(
-      RdfLib.sym(''),
-      RdfLib.sym(''),
+      sym('https://test.test#'),
+      sym('https://test.test#'),
       {}
     )).toEqual({})
   })
