@@ -34,9 +34,9 @@ describe('FindAddressBook', () => {
       .mockReturnValueOnce('book')
     const spyLoad = jest.spyOn(fetcher, 'load').mockResolvedValue('book')
     new PeoplePicker().findAddressBook('typeIndex')
-    const callback: any = spyOnNowOrWhenFetched.mock.calls[0][1]
+    const mockTest: any = spyOnNowOrWhenFetched.mock.calls[0][1]
 
-    callback(null, undefined)
+    mockTest(true, undefined)
 
     expect(spyOnNowOrWhenFetched).toBeCalled()
     expect(spyAny).toBeCalled()
@@ -50,8 +50,8 @@ describe('FindAddressBook', () => {
       .mockReturnValueOnce('book')
     const spyLoad = jest.spyOn(fetcher, 'load').mockResolvedValue('book')
     new PeoplePicker().findAddressBook('typeIndex')
-    const callback: any = spyOnNowOrWhenFetched.mock.calls[0][1]
-    callback(null, undefined)
+    const mockTest: any = spyOnNowOrWhenFetched.mock.calls[0][1]
+    mockTest(false, undefined)
     // expect(spyOnNowOrWhenFetched).toThrowError()
   })
   it('should return an error if it does not return a book registration', () => {
@@ -62,8 +62,8 @@ describe('FindAddressBook', () => {
       .mockReturnValueOnce('book')
     const spyLoad = jest.spyOn(fetcher, 'load').mockResolvedValue('book')
     new PeoplePicker().findAddressBook('typeIndex')
-    const callback: any = spyOnNowOrWhenFetched.mock.calls[0][1]
-    callback(null, undefined)
+    const mockTest: any = spyOnNowOrWhenFetched.mock.calls[0][1]
+    mockTest(true, undefined)
     // expect(spyOnNowOrWhenFetched).toThrowError()
   })
 
@@ -75,8 +75,8 @@ describe('FindAddressBook', () => {
       .mockReturnValueOnce(null)
     const spyLoad = jest.spyOn(fetcher, 'load').mockResolvedValue('book')
     new PeoplePicker().findAddressBook('typeIndex')
-    const callback: any = spyOnNowOrWhenFetched.mock.calls[0][1]
-    callback(null, undefined)
+    const mockTest: any = spyOnNowOrWhenFetched.mock.calls[0][1]
+    mockTest(true, undefined)
     // expect(spyOnNowOrWhenFetched).toThrowError()
   })
   it('should throw an error when there an error with the load', () => {
@@ -90,8 +90,8 @@ describe('FindAddressBook', () => {
       .mockReturnValue('book')
     const spyLoad = jest.spyOn(fetcher, 'load').mockRejectedValue(new Error())
     new PeoplePicker().findAddressBook('typeIndex')
-    const callback: any = spyOnNowOrWhenFetched.mock.calls[0][1]
-    callback(null, undefined)
+    const mockTest: any = spyOnNowOrWhenFetched.mock.calls[0][1]
+    mockTest(true, undefined)
     // expect(spyOnNowOrWhenFetched).toThrowError()
   })
 })
@@ -281,8 +281,8 @@ describe('GroupPicker.loadGroups', () => {
     const spyEach = jest.spyOn(kb, 'each').mockResolvedValue(['group1'])
 
     groupPicker.loadGroups()
-    const callback: any = spyOnNowOrWhenFetched.mock.calls[0][1]
-    callback(null, undefined)
+    const mockTest: any = spyOnNowOrWhenFetched.mock.calls[0][1]
+    mockTest(true, undefined)
 
     expect(spyOnNowOrWhenFetched).toBeCalled()
     expect(spyEach).toBeCalled()
@@ -296,8 +296,8 @@ describe('GroupPicker.loadGroups', () => {
     const spyOnNowOrWhenFetched = jest.spyOn(fetcher, 'nowOrWhenFetched')
 
     groupPicker.loadGroups()
-    const callback: any = spyOnNowOrWhenFetched.mock.calls[0][1]
-    callback(null, undefined)
+    const mockTest: any = spyOnNowOrWhenFetched.mock.calls[0][1]
+    mockTest(false, undefined)
     // @@ TODO need to figure out how to properly test for errors
     // expect(callback(null, undefined)).toThrowError()
   })
@@ -421,8 +421,8 @@ describe('GroupBuilder.add', () => {
     )
 
     groupBuilder.add('webId')
-    const callback: any = spyOnNowOrWhenFetched.mock.calls[0][1]
-    callback(null, undefined)
+    const mockTest: any = spyOnNowOrWhenFetched.mock.calls[0][1]
+    mockTest(false, undefined)
     expect(spyOnNowOrWhenFetched).toBeCalled()
     // expect .. an error
   })
@@ -444,8 +444,8 @@ describe('GroupBuilder.add', () => {
     // the spy doesn't seem to be working
     const spyAny = jest.spyOn(kb, 'any').mockReturnValueOnce(ns.foaf('Person'))
     groupBuilder.add('webId')
-    const callback: any = spyOnNowOrWhenFetched.mock.calls[0][1]
-    callback(null, undefined)
+    const mockTest: any = spyOnNowOrWhenFetched.mock.calls[0][1]
+    mockTest(true, undefined)
     expect(spyOnNowOrWhenFetched).toBeCalled()
     expect(spyAny).toBeCalled()
     // expect .. an error
