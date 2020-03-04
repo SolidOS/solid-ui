@@ -11,11 +11,10 @@ import { currentUser } from './authn/authn'
 // import log from './log'
 import { personTR, newThing, errorMessageBlock } from './widgets'
 // import { } from './iconBase'
+import { syncTableToArray, beep } from './utils'
 
 const kb = store
 const PAD = Namespace('http://www.w3.org/ns/pim/pad#')
-
-const utils = require('./utils')
 
 /** Figure out a random color from my webid
  *
@@ -79,7 +78,7 @@ export function renderPartipants (dom: Document, table: any, padDoc: NamedNode, 
     const participations = parps.map(function (p) {
       return p[1]
     })
-    utils.syncTableToArray(table, participations, newRowForParticpation)
+    syncTableToArray(table, participations, newRowForParticpation)
   }
   table.refresh = syncTable
   syncTable()
@@ -244,6 +243,8 @@ export function xmlEncode (str) {
 
 /**
  * Convert a notepad to HTML
+ *   @param {?} pad
+ *   @param {store} kb...
  */
 export function notepadToHTML (pad, kb: store) {
   const chunks = getChunks(pad, kb)
@@ -422,7 +423,7 @@ export function notepad (dom: Document, padDoc: NamedNode, subject: NamedNode, m
         // Conflict
         setPartStyle(part, 'color: black;  background-color: #ffd;') // yellow
         part.state = 0 // Needs downstream refresh
-        utils.beep(0.5, 512) // Ooops clash with other person
+        beep(0.5, 512) // Ooops clash with other person
         setTimeout(function () {
           // Ideally, beep! @@
           reloadAndSync() // Throw away our changes and
@@ -619,7 +620,7 @@ export function notepad (dom: Document, padDoc: NamedNode, subject: NamedNode, m
             // Conflict -  @@ we assume someone else
             setPartStyle(part, 'color: black;  background-color: #fdd;')
             part.state = 0 // Needs downstream refresh
-            utils.beep(0.5, 512) // Ooops clash with other person
+            beep(0.5, 512) // Ooops clash with other person
             setTimeout(function () {
               updater.requestDownstreamAction(padDoc, reloadAndSync)
             }, 1000)
@@ -630,7 +631,7 @@ export function notepad (dom: Document, padDoc: NamedNode, subject: NamedNode, m
               '    Error ' + xhr.status + ' sending data: ' + errorBody,
               true
             )
-            utils.beep(1.0, 128) // Other
+            beep(1.0, 128) // Other
             // @@@   Do soemthing more serious with other errors eg auth, etc
           }
         } else {
