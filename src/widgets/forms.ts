@@ -49,7 +49,6 @@ field[ns.ui('Form').uri] = field[
   const kb = uiStore
   var box = dom.createElement('div')
   box.setAttribute('style', `padding-left: 2em; border: 0.05em solid ${formBorderColor};`) // Indent a group
-  const ui = ns.ui
   if (container) container.appendChild(box)
 
   // Prevent loops
@@ -147,7 +146,6 @@ field[ns.ui('Options').uri] = function (
   const kb = uiStore
   var box = dom.createElement('div')
   // box.setAttribute('style', 'padding-left: 2em; border: 0.05em dotted purple;')  // Indent Options
-  const ui = ns.ui
   if (container) container.appendChild(box)
 
   var dependingOn = kb.any(form, ns.ui('dependingOn'))
@@ -410,7 +408,6 @@ field[ns.ui('Multiple').uri] = function (
   var box = dom.createElement('table')
   // We don't indent multiple as it is a sort of a prefix of the next field and has contents of one.
   // box.setAttribute('style', 'padding-left: 2em; border: 0.05em solid green;')  // Indent a multiple
-  const ui = ns.ui
   if (container) container.appendChild(box)
 
   const orderedNode = kb.any(form, ns.ui('ordered'))
@@ -472,7 +469,7 @@ field[ns.ui('Multiple').uri] = function (
 
   function createListIfNecessary () {
     if (!list) {
-      list = new Collection()
+      list = new Collection([])
       kb.add(subject, property, list, store)
     }
   }
@@ -632,7 +629,6 @@ function basicField (
   store,
   callbackFunction
 ) {
-  const ui = ns.ui
   const kb = uiStore
 
   var box = dom.createElement('tr')
@@ -812,7 +808,6 @@ field[ns.ui('MultiLineTextField').uri] = function (
   store,
   callbackFunction
 ) {
-  const ui = ns.ui
   const kb = uiStore
   var property = kb.any(form, ns.ui('property'))
   if (!property) {
@@ -849,7 +844,6 @@ function booleanField (
   callbackFunction,
   tristate
 ) {
-  const ui = ns.ui
   const kb = uiStore
   var property = kb.any(form, ns.ui('property'))
   if (!property) {
@@ -933,7 +927,7 @@ field[ns.ui('Classifier').uri] = function (
   callbackFunction
 ) {
   const kb = uiStore
-  const ui = ns.ui
+
   var category = kb.any(form, ns.ui('category'))
   if (!category) {
     return errorMessageBlock(dom, 'No category for classifier: ' + form)
@@ -1087,7 +1081,6 @@ field[ns.ui('Comment').uri] = field[
   _store,
   _callbackFunction
 ) {
-  const ui = ns.ui
   const kb = uiStore
   var contents = kb.any(form, ns.ui('contents'))
   if (!contents) contents = 'Error: No contents in comment field.'
