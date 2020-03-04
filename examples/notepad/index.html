@@ -47,6 +47,38 @@
   <script>$('#viewSource-lightColorHash').innerHTML = $('#script-lightColorHash').innerText</script>
   <iframe id="iframe-lightColorHash" src="about:blank"></iframe>
   <div id="div-lightColorHash"></div>
+
+  <h2>renderPartipants</h2>
+  <script id="script-renderPartipants">
+    window.addEventListener('DOMContentLoaded', async (event) => {
+      const doc = $('#iframe-renderPartipants').contentWindow.document;
+      const table = document.createElement('table');
+      const kb = UI.store
+      const fetcher = UI.rdf.fetcher(kb)
+      const pad = kb.sym(
+        document.location.href.replace(/\/[^\/]*$/, "/pad.ttl#this")
+      )
+      await fetcher.load(pad.doc())
+      // subject = new NamedNode('test') // this i think the page where a list.. ns.ws('participants') are stored
+      subject = null
+      options = {} // what to put in options
+      //options are used in the button personTR there are the following properties can be defined deleteFunction, link, draggable
+      const htmlStr = UI.pad.renderPartipants(doc, table, pad, subject, new UI.rdf.NamedNode('https://sharonstrats.inrupt.net/profile/card#me'), options)
+
+      doc.open()
+      doc.write(htmlStr)
+      doc.close()
+    })
+  </script>
+  <pre id="viewSource-renderPartipants"></pre>
+  <script>$('#viewSource-renderPartipants').innerHTML = $('#script-renderPartipants').innerText</script>
+  <iframe id="iframe-renderPartipants" src="about:blank"></iframe>
+  <div id="div-renderPartipants"></div>
+
+  <h2> participationObject </h2>
+  <h2>recordParticipation</h2>
+  <h2>manageParticipation</h2>
+  <h2>notepad </h2>
 </body>
 
 </html>
