@@ -2,7 +2,6 @@ import { JSDOM } from 'jsdom'
 import MessageArea from '../../src/messageArea'
 import * as RdfLib from 'rdflib'
 
-jest.mock('rdflib')
 jest.mock('solid-auth-client')
 const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
 const dom = window.document
@@ -16,8 +15,8 @@ describe('MessageArea', () => {
     expect(MessageArea(
       dom,
       RdfLib.graph(),
-      RdfLib.sym(''),
-      RdfLib.sym(''),
+      RdfLib.sym('https://test.test'),
+      RdfLib.sym('https://test.test'),
       {}
     )).toBeTruthy()
   })

@@ -1,7 +1,6 @@
 import * as RdfLib from 'rdflib'
 import { findBookmarkDocument, toggleBookmark, renderBookmarksButton } from '../../../src/chat/bookmarks'
 
-jest.mock('rdflib')
 jest.mock('solid-auth-client')
 
 describe('findBookmarkDocument', () => {

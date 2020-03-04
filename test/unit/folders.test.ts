@@ -2,7 +2,6 @@ import { JSDOM } from 'jsdom'
 import { deleteRecursive, deleteFolder } from '../../src/folders'
 import * as RdfLib from 'rdflib'
 
-jest.mock('rdflib')
 jest.mock('solid-auth-client')
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 

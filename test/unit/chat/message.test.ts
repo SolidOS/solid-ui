@@ -4,7 +4,7 @@ import {
   creatorAndDateHorizontal,
   renderMessage
 } from '../../../src/chat/message'
-jest.mock('rdflib')
+
 jest.mock('solid-auth-client')
 
 describe('elementForImageURI', () => {

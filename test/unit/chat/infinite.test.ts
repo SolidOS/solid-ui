@@ -2,7 +2,7 @@ import * as RdfLib from 'rdflib'
 import { JSDOM } from 'jsdom'
 
 import { infiniteMessageArea } from '../../../src/chat/infinite'
-jest.mock('rdflib')
+
 jest.mock('solid-auth-client')
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
