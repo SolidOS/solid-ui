@@ -20,7 +20,7 @@
         document.location.href.replace(/\/[^\/]*$/, "/pad.ttl#this")
       )
       await fetcher.load(pad.doc())
-      const htmlStr = notepadToHTML(pad, kb)
+      const htmlStr = UI.pad.notepadToHTML(pad, kb)
       const doc = $('#iframe-notepadToHTML').contentWindow.document;
       doc.open()
       doc.write(htmlStr)
@@ -32,6 +32,21 @@
   <script>$('#viewSource-notepadToHTML').innerHTML = $('#script-notepadToHTML').innerText</script>
   <iframe id="iframe-notepadToHTML" src="about:blank"></iframe>
   <div id="div-notepadToHTML"></div>
+
+  <h2>lightColorHash</h2>
+  <script id="script-lightColorHash">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const htmlStr = UI.pad.lightColorHash(new UI.rdf.NamedNode('https://sharonstrats.inrupt.net/profile/card#me'))
+      const doc = $('#iframe-lightColorHash').contentWindow.document;
+      doc.open()
+      doc.write(htmlStr)
+      doc.close()
+    })
+  </script>
+  <pre id="viewSource-lightColorHash"></pre>
+  <script>$('#viewSource-lightColorHash').innerHTML = $('#script-lightColorHash').innerText</script>
+  <iframe id="iframe-lightColorHash" src="about:blank"></iframe>
+  <div id="div-lightColorHash"></div>
 </body>
 
 </html>
