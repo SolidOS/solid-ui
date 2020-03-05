@@ -148,17 +148,17 @@ describe('tabWidget', () => {
     })
 
     it('can position tabs on right', () => {
-      tabWidgetElement = tabs.tabWidget({ orientation: 1, ...minimalOptions })
+      tabWidgetElement = tabs.tabWidget({ orientation: '1', ...minimalOptions })
       expect(tabWidgetElement.style['flex-direction']).toEqual('row')
     })
 
     it('can position tabs on bottom', () => {
-      tabWidgetElement = tabs.tabWidget({ orientation: 2, ...minimalOptions })
+      tabWidgetElement = tabs.tabWidget({ orientation: '2', ...minimalOptions })
       expect(tabWidgetElement.style['flex-direction']).toEqual('column-reverse')
     })
 
     it('can position tabs on left', () => {
-      tabWidgetElement = tabs.tabWidget({ orientation: 3, ...minimalOptions })
+      tabWidgetElement = tabs.tabWidget({ orientation: '3', ...minimalOptions })
       expect(tabWidgetElement.style['flex-direction']).toEqual('row-reverse')
     })
   })

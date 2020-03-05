@@ -22,7 +22,7 @@
     "jest": "jest",
     "test:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --runInBand --watch",
     "test": "npm run build && npm run lint && npm run jest",
-    "doc": "typedoc --out ./Documentation/api/ ./src/",
+    "doc": "typedoc --out ./Documentation/api/ ./src/ --stripInternal",
     "prepublishOnly": "npm test && npm run build",
     "postpublish": "git push origin master --follow-tags"
   },
