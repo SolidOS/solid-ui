@@ -44,7 +44,7 @@ describe('Form field', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = graph()
+    const store = namedNode('http://example.com/#store')
     const callbackFunction = () => {}
 
     // FIXME: https://github.com/solid/solid-ui/issues/239
@@ -85,7 +85,7 @@ describe('Form field', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = document.createElement('div')
-    const store = graph()
+    const store = namedNode('http://example.com/#store')
     const callbackFunction = () => {}
     expect(
       field[ns.ui('Form').uri](
@@ -114,7 +114,7 @@ describe('Form field', () => {
     const already = { dubSubject }
     const subject = dubSubject
     const form = document.createElement('div')
-    const store = graph()
+    const store = namedNode('http://example.com/#store')
     const callbackFunction = () => {}
     expect(
       field[ns.ui('Form').uri](
@@ -147,7 +147,7 @@ describe('Options field', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = graph()
+    const store = namedNode('http://example.com/#store')
     const callbackFunction = () => {}
     expect(
       field[ns.ui('Options').uri](
@@ -172,7 +172,7 @@ describe('Multiple field', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = graph()
+    const store = namedNode('http://example.com/#store')
     const callbackFunction = () => {}
     expect(
       field[ns.ui('Multiple').uri](
@@ -284,7 +284,7 @@ describe('PhoneField', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     uiStore.add(form, ns.ui('property'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
-    const store = graph()
+    const store = namedNode('http://example.com/#store')
     const callbackFunction = () => {}
     expect(
       field[ns.ui('PhoneField').uri](
@@ -333,7 +333,7 @@ describe('EmailField', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = graph()
+    const store = namedNode('http://example.com/#store')
     const callbackFunction = () => {}
     expect(
       field[ns.ui('EmailField').uri](
@@ -382,7 +382,7 @@ describe('ColorField', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = graph()
+    const store = namedNode('http://example.com/#store')
     const callbackFunction = () => {}
     expect(
       field[ns.ui('ColorField').uri](
@@ -431,7 +431,7 @@ describe('DateField', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = graph()
+    const store = namedNode('http://example.com/#store')
     const callbackFunction = () => {}
     expect(
       field[ns.ui('DateField').uri](
@@ -480,7 +480,7 @@ describe('DateTimeField', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = graph()
+    const store = namedNode('http://example.com/#store')
     const callbackFunction = () => {}
     expect(
       field[ns.ui('DateTimeField').uri](
@@ -529,7 +529,7 @@ describe('TimeField', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = graph()
+    const store = namedNode('http://example.com/#store')
     const callbackFunction = () => {}
     expect(
       field[ns.ui('TimeField').uri](
@@ -578,7 +578,7 @@ describe('NumericField', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = graph()
+    const store = namedNode('http://example.com/#store')
     const callbackFunction = () => {}
     expect(
       field[ns.ui('NumericField').uri](
@@ -627,7 +627,7 @@ describe('IntegerField', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = graph()
+    const store = namedNode('http://example.com/#store')
     const callbackFunction = () => {}
     expect(
       field[ns.ui('IntegerField').uri](
@@ -676,7 +676,7 @@ describe('DecimalField', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = graph()
+    const store = namedNode('http://example.com/#store')
     const callbackFunction = () => {}
     expect(
       field[ns.ui('DecimalField').uri](
@@ -725,7 +725,7 @@ describe('FloatField]', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = graph()
+    const store = namedNode('http://example.com/#store')
     const callbackFunction = () => {}
     expect(
       field[ns.ui('FloatField').uri](
@@ -774,7 +774,7 @@ describe('TextField', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = graph()
+    const store = namedNode('http://example.com/#store')
     const callbackFunction = () => {}
     uiStore.add(form, ns.rdf('type'), namedNode('http://example.com/#type'), namedNode('http://example.com/'))
     uiStore.add(form, ns.ui('property'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
@@ -826,7 +826,7 @@ describe('SingleLineTextField', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = graph()
+    const store = namedNode('http://example.com/#store')
     const callbackFunction = () => {}
     uiStore.add(form, ns.rdf('type'), namedNode('http://example.com/#type'), namedNode('http://example.com/'))
     uiStore.add(form, ns.ui('property'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
@@ -878,7 +878,7 @@ describe('NamedNodeURIField', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = document.createElement('div')
-    const store = graph()
+    const store = namedNode('http://example.com/#store')
     const callbackFunction = () => {}
     uiStore.add(form, ns.rdf('type'), namedNode('http://example.com/#type'), namedNode('http://example.com/'))
     uiStore.add(form, ns.ui('property'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
@@ -931,7 +931,7 @@ describe('MultiLineTextField', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = graph()
+    const store = namedNode('http://example.com/#store')
     const callbackFunction = () => {}
     expect(
       field[ns.ui('MultiLineTextField').uri](
@@ -979,7 +979,7 @@ describe('BooleanField', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = graph()
+    const store = namedNode('http://example.com/#store')
     const callbackFunction = () => {}
     expect(
       field[ns.ui('BooleanField').uri](
@@ -1013,7 +1013,7 @@ describe('TristateField', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = graph()
+    const store = namedNode('http://example.com/#store')
     const callbackFunction = () => {}
     expect(
       field[ns.ui('TristateField').uri](
@@ -1047,7 +1047,7 @@ describe('Classifier', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = graph()
+    const store = namedNode('http://example.com/#store')
     uiStore.add(form, ns.ui('category'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
     
     const callbackFunction = () => {}
@@ -1082,7 +1082,7 @@ describe('Choice', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = graph()
+    const store = namedNode('http://example.com/#store')
     const callbackFunction = () => {}
     expect(
       field[ns.ui('Choice').uri](
@@ -1121,7 +1121,7 @@ describe('Heading', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = graph()
+    const store = namedNode('http://example.com/#store')
     uiStore.add(form, ns.ui('contents'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
     const callbackFunction = () => {}
     expect(
@@ -1153,7 +1153,7 @@ describe('Comment', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = graph()
+    const store = namedNode('http://example.com/#store')
     const callbackFunction = () => {}
     uiStore.add(form, ns.ui('contents'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
     expect(
@@ -1203,7 +1203,7 @@ describe('editFormButton', () => {
   it('runs', () => {
     const container = null
     const form = null
-    const store = graph()
+    const store = namedNode('http://example.com/#store')
     const callbackFunction = () => {}
     expect(
       editFormButton(document, container, form, store, callbackFunction)
