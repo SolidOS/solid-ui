@@ -3,15 +3,10 @@
 const mime = require('mime-types')
 
 /* global FileReader alert */
-module.exports = {
-  makeDropTarget: makeDropTarget,
-  makeDraggable: makeDraggable,
-  uploadFiles: uploadFiles
-}
 
 // const UI = require('../index.js') // this package
 
-function makeDropTarget (
+export function makeDropTarget (
   ele: HTMLElement,
   droppedURIHandler: any,
   droppedFileHandler: any
@@ -132,7 +127,7 @@ function makeDropTarget (
 //
 // Possibly later set the drag image too?
 //
-function makeDraggable (tr: HTMLElement, obj: any) {
+export function makeDraggable (tr: HTMLElement, obj: any) {
   tr.setAttribute('draggable', 'true') // Stop the image being dragged instead - just the TR
 
   tr.addEventListener(
@@ -189,7 +184,7 @@ function makeDraggable (tr: HTMLElement, obj: any) {
 /* @@ TODO I think we can define the fetcher type at the top of the file
  * also we can do this for files.
  */
-function uploadFiles (
+export function uploadFiles (
   fetcher: any,
   files: any,
   fileBase: string,
