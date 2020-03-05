@@ -1,11 +1,14 @@
-/* global $rdf */
-/*    Tools for doing things with a message
- *  Let is be cretiev here.  Allow all sorts of things to
+/**
+ * Tools for doing things with a message
+ * Let us be creative here.  Allow all sorts of things to
  * be done to a message - linking to new or old objects in an open way
  *
  * Ideas: Bookmark, Like, star, pin at top of chat, reply as new thread,
- * If you made it originally:  edit, delete, attach
+ * If you made it originally: edit, delete, attach
+ * @packageDocumentation
  */
+
+/* global $rdf */
 
 const UI = {
   authn: require('../authn/authn'),
@@ -55,7 +58,8 @@ function updatePromise (del, ins) {
   }) // promise
 }
 
-/* Emoji in Unicode
+/**
+ * Emoji in Unicode
  */
 
 var emoji = {}
@@ -64,7 +68,8 @@ emoji[ns.schema('DisagreeAction')] = '👎'
 emoji[ns.schema('EndorseAction')] = '⭐️'
 emoji[ns.schema('LikeAction')] = '❤️'
 
-/*  Strip of sentiments expressed
+/**
+ * Create strip of sentiments expressed
  */
 export function sentimentStrip (target, doc) {
   const actions = kb.each(null, ns.schema('target'), target, doc)
@@ -73,12 +78,12 @@ export function sentimentStrip (target, doc) {
   const strings = sentiments.map(x => emoji[x] || '')
   return dom.createTextNode(strings.join(' '))
 }
-/**  Strip of sentiments expressed
+/**
+ * Create strip of sentiments expressed, with hyperlinks
  *
  * @param target {NamedNode} - The thing about which they are expressed
- * @param doc {NamedNode} - The document iun which they are expressed
+ * @param doc {NamedNode} - The document in which they are expressed
  */
-
 export function sentimentStripLinked (target, doc) {
   var strip = dom.createElement('span')
   function refresh () {
@@ -107,6 +112,9 @@ export function sentimentStripLinked (target, doc) {
   return strip
 }
 
+/**
+ * Creates a message toolbar component
+ */
 export function messageToolbar (message, messageRow, userContext) {
   const div = dom.createElement('div')
   function closeToolbar () {
@@ -225,12 +233,12 @@ export function messageToolbar (message, messageRow, userContext) {
   // https://schema.org/AgreeAction
   me = UI.authn.currentUser() // If already logged on
   if (me) {
-    // Things yo mnust be logged in fo
+    // Things you mnust be logged in for
     var context1 = { me, dom, div }
     div.appendChild(
       sentimentButton(
         context1,
-        message, // @@ use UI.widgets.sentimentButton
+        message, // @@ TODO use UI.widgets.sentimentButton
         UI.icons.iconBase + THUMBS_UP_ICON,
         ns.schema('AgreeAction'),
         message.doc(),

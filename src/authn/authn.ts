@@ -1,10 +1,23 @@
 /**
- * signin.js
- *
  * Signing in, signing up, profile and preferences reloading
  * Type index management
  *
- *  Many functions in this module take a context object, add to it, and return a promise of it.
+ * Many functions in this module take a context object which
+ * holds various RDF symbols, add to it, and return a promise of it.
+ *
+ * * `me`                RDF symbol for the user's WebID
+ * * `publicProfile`     The user's public profile, iff loaded
+ * * `preferencesFile`   The user's personal preference file, iff loaded
+ * * `index.public`      The user's public type index file
+ * * `index.private`     The user's private type index file
+ *
+ * Not RDF symbols:
+ * * `noun`            A string in english for the type of thing -- like "address book"
+ * * `instance`        An array of nodes which are existing instances
+ * * `containers`      An array of nodes of containers of instances
+ * * `div`             A DOM element where UI can be displayed
+ * * `statusArea`      A DOM element (opt) progress stuff can be displayed, or error messages
+ * @packageDocumentation
  */
 import SolidTls from 'solid-auth-tls'
 import * as $rdf from 'rdflib'
@@ -21,7 +34,9 @@ export { solidAuthClient }
 
 // const userCheckSite = 'https://databox.me/'
 
-// Look for and load the User who has control over it
+/**
+ * Look for and load the User who has control over it
+ */
 export function findOriginOwner (doc: $rdf.NamedNode | string): string | boolean {
   const uri = (typeof doc === 'string') ? doc : doc.uri
   const i = uri.indexOf('://')
@@ -32,25 +47,8 @@ export function findOriginOwner (doc: $rdf.NamedNode | string): string | boolean
   return origin
 }
 
-// Promises versions
-//
-// These pass a context object which holds various RDF symbols
-// as they become available
-//
-//  me                RDF symbol for the user's WebID
-//  publicProfile     The user's public profile, iff loaded
-//  preferencesFile   The user's personal preference file, iff loaded
-//  index.public      The user's public type index file
-//  index.private     The user's private type index file
-//
-//  not RDF symbols:
-//    noun            A string in english for the type of thing -- like "address book"
-//    instance        An array of nodes which are existing instances
-//    containers      An array of nodes of containers of instances
-//    div             A DOM element where UI can be displayed
-//    statusArea      A DOM element (opt) progress stuff can be displayed, or error messages
-
 /**
+ * Saves `webId` in `context.me`
  * @param webId
  * @param context
  *
@@ -74,6 +72,7 @@ export function saveUser (
 }
 
 /**
+ * Wrapper around [[offlineTestID]]
  * @returns {NamedNode|null}
  */
 export function defaultTestUser (): $rdf.NamedNode | null {
@@ -87,7 +86,8 @@ export function defaultTestUser (): $rdf.NamedNode | null {
   return null
 }
 
-/** Checks synchronously whether user is logged in
+/**
+ * Checks synchronously whether user is logged in
  *
  * @returns Named Node or null
  */
@@ -96,7 +96,7 @@ export function currentUser (): $rdf.NamedNode | null {
   if (str) {
     const da = JSON.parse(str)
     if (da.session && da.session.webId) {
-      // @@ check has not expired
+      // @@ TODO check has not expired
       return $rdf.sym(da.session.webId)
     }
   }
@@ -366,16 +366,14 @@ async function ensureTypeIndexes (context: AuthenticationContext): Promise<Authe
   return context
 }
 
-/* Load or create ONE type index
- * Find one or make one or fail
- * Many reasons for filing including script not having permission etc
- *
- */
 /**
- * Adds it output to the context
+ * Load or create ONE type index
+ * Find one or make one or fail
+ * Many reasons for failing including script not having permission etc
+ *
+ * Adds its output to the context
  * @see https://github.com/solid/solid/blob/master/proposals/data-discovery.md#discoverability
  */
-
 async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boolean): Promise<AuthenticationContext | void> {
   async function makeIndexIfNecessary (context, isPublic) {
     const relevant = isPublic ? context.publicProfile : context.preferencesFile
@@ -526,7 +524,8 @@ function updatePromise (
   }) // promise
 }
 
-/* Register a new app in a type index
+/**
+ * Register a new app in a type index
  */
 export async function registerInTypeIndex (
   context: AuthenticationContext,
@@ -855,6 +854,8 @@ function genACLText (
 }
 
 /**
+ * Returns `$rdf.sym($SolidTestEnvironment.username)` if
+ * `$SolidTestEnvironment.username` is defined as a global
  * @returns {NamedNode|null}
  */
 export function offlineTestID (): $rdf.NamedNode | null {
@@ -990,9 +991,11 @@ function checkCurrentUser () {
 */
 
 /**
+ * Retrieves currently logged in webId from either
+ * defaultTestUser or SolidAuthClient
  * @param [setUserCallback] Optional callback
  *
- * @returns Resolves with web id uri, if no callback provided
+ * @returns Resolves with webId uri, if no callback provided
  */
 export function checkUser<T> (
   setUserCallback?: (me: $rdf.NamedNode | null) => T
@@ -1141,11 +1144,13 @@ export function loginStatusBox (
 
 /**
  * Workspace selection etc
+ * See https://github.com/solid/userguide/issues/16
  */
 
 /**
  * Returns a UI object which, if it selects a workspace,
  * will callback(workspace, newBase).
+ * See https://github.com/solid/userguide/issues/16 for more info on workspaces.
  *
  * If necessary, will get an account, preference file, etc. In sequence:
  *
@@ -1154,7 +1159,7 @@ export function loginStatusBox (
  *   - Prompt user for workspaces
  *   - Allows the user to just type in a URI by hand
  *
- * Calls back with the ws and the base URI
+ * Calls back with the workspace and the base URI
  *
  * @param dom
  * @param appDetails
@@ -1365,6 +1370,10 @@ export function selectWorkspace (
  * An instance of an app could be e.g. an issue tracker for a given project,
  * or a chess game, or calendar, or a health/fitness record for a person.
  *
+ * Note that this use of the term 'app' refers more to entries in the user's
+ * type index than to actual software applications that use the personal data
+ * to which these entries point.
+ *
  * @param dom
  * @param appDetails
  * @param callback
@@ -1392,6 +1401,10 @@ export function newAppInstance (
   return div
 }
 
+/**
+ * Retrieves whether the currently logged in user is a power user
+ * and/or a developer
+ */
 export async function getUserRoles (): Promise<Array<$rdf.NamedNode>> {
   try {
     const {
@@ -1409,6 +1422,9 @@ export async function getUserRoles (): Promise<Array<$rdf.NamedNode>> {
   return []
 }
 
+/**
+ * Filters which panes should be available, based on the result of [[getUserRoles]]
+ */
 export async function filterAvailablePanes (panes: Array<PaneDefinition>): Promise<Array<PaneDefinition>> {
   const userRoles = await getUserRoles()
   return panes.filter(pane => isMatchingAudience(pane, userRoles))

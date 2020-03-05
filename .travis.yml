@@ -1,9 +1,7 @@
 language: node_js
 node_js:
-  - "8.12"
-  - "8"
-  - "10.3"
-  - "10"
+  # see https://github.com/solid/solid-ui/issues/193 for discussion
+  # of node versions supported for Travis.
   - "12.0"
   - "12"
   - "lts/*"
@@ -11,9 +9,8 @@ node_js:
 install:
   - npm ci
 script:
+  # This includes build, lint, and jest:
   - npm test
-  # Make sure it still builds successfully - the build isn't actually used yet:
-  - npm run build
 before_deploy:
   - node ./travis/bumpversion.js
 deploy:

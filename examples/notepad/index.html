@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset='UTF-8'>
+    <title>solid-ui UI.pad examples page</title>
+    <script type="text/javascript" src="../../lib/webpack-bundle.js"></script>
+    <script>
+      const $ = document.querySelector.bind(document)
+    </script>
+  </head>
+  <body>
+    <h2>notepadToHTML</h2>
+    <script id="script-notepadToHTML">
+      window.addEventListener('DOMContentLoaded', async (event) => {
+        const kb = UI.store
+        const fetcher = UI.rdf.fetcher(kb)
+        const pad = kb.sym(
+          document.location.href.replace(/\/[^\/]*$/,"/pad.ttl#this")
+        )
+        await fetcher.load(pad.doc())
+        const htmlStr = UI.pad.notepadToHTML(pad, kb)
+        const doc = $('#iframe-notepadToHTML').contentWindow.document;
+        doc.open()
+        doc.write(htmlStr)
+        doc.close()
+        $('#div-notepadToHTML').appendChild(document.createTextNode(htmlStr))
+      })
+    </script>
+    <pre id="viewSource-notepadToHTML"></pre><script>$('#viewSource-notepadToHTML').innerHTML = $('#script-notepadToHTML').innerText</script>
+    <iframe id="iframe-notepadToHTML" src="about:blank"></iframe>
+    <div id="div-notepadToHTML"></div>
+  </body>
+</html>

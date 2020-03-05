@@ -1,6 +1,8 @@
-/* global $rdf */
-//  Common code for a discussion are a of messages about something
-//
+/**
+ * Contains the [[thread]] function
+ * @packageDocumentation
+ */
+
 var UI = {
   authn: require('../authn/authn'),
   icons: require('../iconBase'),
@@ -13,11 +15,15 @@ var UI = {
   widgets: require('../widgets')
 }
 
-const utils = require('./utils')
+const utils = require('../utils')
+const $rdf = require('rdflib')
 
 // var buttonStyle = 'font-size: 100%; margin: 0.8em; padding:0.5em; background-color: white;'
 
-module.exports = function (dom, kb, subject, messageStore, options) {
+/**
+ * HTML component for a chat thread
+ */
+module.exports = function thread (dom, kb, subject, messageStore, options) {
   kb = kb || UI.store
   messageStore = messageStore.doc() // No hash
   var ns = UI.ns
@@ -71,8 +77,9 @@ module.exports = function (dom, kb, subject, messageStore, options) {
     }
   }
 
-  //       Form for a new message
-  //
+  /**
+   * Form for a new message
+   */
   var newMessageForm = function () {
     var form = dom.createElement('tr')
     var lhs = dom.createElement('td')
@@ -232,7 +239,6 @@ module.exports = function (dom, kb, subject, messageStore, options) {
       ele = ele2
     }
   }
-
   var deleteMessage = function (message) {
     var deletions = kb
       .statementsMatching(message)
@@ -372,6 +378,7 @@ module.exports = function (dom, kb, subject, messageStore, options) {
     query.pat.add(v.msg, ns.foaf('maker'), v.creator)
     query.pat.add(v.msg, ns.sioc('content'), v.content)
   }
+
   function doneQuery () {
     messageTable.fresh = true // any new are fresh and so will be greenish
   }

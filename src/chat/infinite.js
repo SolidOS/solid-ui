@@ -1,11 +1,11 @@
-//  Common code for a discussion are a of messages about something
-//   This version runs over a series of files for different time periods
-//
-//  Parameters for the whole chat like its title are stred on
-//  index.ttl#this and the chats messages are stored in YYYY/MM/DD/chat.ttl
-//
-/* global alert $rdf */
-import DateFolder from './dateFolder'
+/**
+ * Contains the [[infiniteMessageArea]] class
+ * @packageDocumentation
+ */
+
+/* global alert */
+const $rdf = require('rdflib')
+const DateFolder = require('./dateFolder')
 
 // @@ trace20190428T1745
 
@@ -64,6 +64,36 @@ async function createIfNotExists (doc, contentType = 'text/turtle', data = '') {
   return response
 }
 
+function desktopNotification (str) {
+  // Let's check if the browser supports notifications
+  if (!('Notification' in window)) {
+    console.warn('This browser does not support desktop notification')
+  } else if (Notification.permission === 'granted') {
+    // Let's check whether notification permissions have already been granted
+    // eslint-disable-next-line no-new
+    new Notification(str)
+  } else if (Notification.permission !== 'denied') {
+    // Otherwise, we need to ask the user for permission
+    Notification.requestPermission().then(function (permission) {
+      // If the user accepts, let's create a notification
+      if (permission === 'granted') {
+        // eslint-disable-next-line no-new
+        new Notification(str)
+      }
+    })
+  }
+
+  // At last, if the user has denied notifications, and you
+  // want to be respectful there is no need to bother them any more.
+}
+
+/**
+ * Common code for a chat (discussion area of messages about something)
+ * This version runs over a series of files for different time periods
+ *
+ * Parameters for the whole chat like its title are stored on
+ * index.ttl#this and the chats messages are stored in YYYY/MM/DD/chat.ttl
+ */
 export function infiniteMessageArea (dom, kb, chatChannel, options) {
   kb = kb || UI.store
   const ns = UI.ns
@@ -111,6 +141,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     return true
   }
 */
+
   /*       Form for a new message
    */
   function newMessageForm (messageTable) {
@@ -174,6 +205,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
           field.select()
         }
       }
+
       if (
         SERVER_MKDIRP_BUG &&
         (kb.fetcher.requested[chatDocument.uri] === undefined ||
@@ -181,7 +213,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       ) {
         console.log(
           '@@@ SERVER_MKDIRP_BUG: Should only happen once: create chat file: ' +
-            chatDocument
+          chatDocument
         )
         await createIfNotExists(chatDocument)
       }
@@ -276,17 +308,20 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
 
       const chatDocument = dateFolder.leafDocumentFromDate(new Date())
       var imageDoc
+
       function getImageDoc () {
         imageDoc = kb.sym(
           chatDocument.dir().uri + 'Image_' + Date.now() + '.png'
         )
         return imageDoc
       }
+
       async function tookPicture (imageDoc) {
         if (imageDoc) {
           await sendMessage(imageDoc.uri)
         }
       }
+
       middle.appendChild(
         UI.media.cameraButton(dom, kb, getImageDoc, tookPicture)
       )
@@ -337,7 +372,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     })
 
     // eslint-disable-next-line space-in-parens
-    for (ele = messageTable.firstChild; ele; ) {
+    for (ele = messageTable.firstChild; ele;) {
       ele2 = ele.nextSibling
       if (ele.AJAR_subject && !stored[ele.AJAR_subject.uri]) {
         messageTable.removeChild(ele)
@@ -403,6 +438,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     }
     return live // not done
   }
+
   /* Remove message tables earlier than this one
    */
   function removePreviousMessages (backwards, messageTable) {
@@ -466,6 +502,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       setScrollBackButtonIcon()
       return done
     }
+
     function setScrollBackButtonIcon () {
       const sense = messageTable.extendedBack ? !newestFirst : newestFirst
       const scrollBackIcon = messageTable.initial
@@ -480,6 +517,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
         return sense ? 'noun_1369241.svg' : 'noun_1369237.svg'
       }
     }
+
     async function scrollBackButtonHandler (_event) {
       if (messageTable.extendedBack) {
         removePreviousMessages(true, messageTable)
@@ -507,6 +545,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       setScrollForwardButtonIcon()
       return done
     }
+
     function setScrollForwardButtonIcon () {
       const sense = messageTable.extendedForwards ? !newestFirst : newestFirst // noun_T-Block_1114657_000000.svg
       const scrollForwardIcon = messageTable.final
@@ -521,6 +560,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
         return !sense ? 'noun_1369241.svg' : 'noun_1369237.svg'
       }
     }
+
     async function scrollForwardButtonHandler (_event) {
       if (messageTable.extendedForwards) {
         removePreviousMessages(false, messageTable)
@@ -673,6 +713,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       }
     }
   }
+
   /*
   function messageCount () {
     var n = 0
@@ -684,6 +725,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     return n
   }
 */
+
   /* Add the live message block with entry field for today
    */
   async function appendCurrentMessages () {
@@ -711,6 +753,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       // only the last messageTable is live
       addNewTableIfNewDay(new Date()).then(() => {
         syncMessages(chatChannel, messageTable)
+        desktopNotification(chatChannel)
       })
     } // The short chat version fors live update in the pane but we do it in the widget
     kb.updater.addDownstreamChangeListener(chatDocument, div.refresh) // Live update
@@ -724,6 +767,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
   var latest = { messageTable: null }
 
   var lock = false
+
   async function loadMoreWhereNeeded (event, fixScroll) {
     if (lock) return
     lock = true
@@ -758,7 +802,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       const scrollTop = div.scrollTop
       console.log(
         'infinite scroll: adding below: bottom: ' +
-          (div.scrollHeight - div.scrollTop - div.clientHeight)
+        (div.scrollHeight - div.scrollTop - div.clientHeight)
       )
       done = await latest.messageTable.extendForwards() // then add more data on the bottom
       if (freeze) {
@@ -812,6 +856,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       document.body.addEventListener('scroll', loadMoreWhereNeeded)
     }
   }
+
   go()
   return div
 }

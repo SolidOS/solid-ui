@@ -1,9 +1,11 @@
-/* global $rdf */
+if (!window.UI) {
+  window.alert('Please run "npm install && npm run build" in your repo root first.')
+}
+window.$rdf = UI.rdf
 
 document.addEventListener('DOMContentLoaded', function () {
   /// ///////////////////////////////////////////
 
-  var UI = require('mashlib')
   var kb = UI.store
   var dom = document
 

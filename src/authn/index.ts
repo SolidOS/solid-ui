@@ -1,3 +1,8 @@
+/**
+ * Re-exports all the exports from the various files in the src/authn/ folder
+ * @packageDocumentation
+ */
+
 import {
   checkUser, // Async
   currentUser, // Sync

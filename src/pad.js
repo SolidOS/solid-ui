@@ -17,6 +17,7 @@ var UI = {
   store: require('./store'),
   widgets: require('./widgets')
 }
+
 const utils = require('./utils')
 
 /** Figure out a random color from my webid
