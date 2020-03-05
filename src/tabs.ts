@@ -148,23 +148,23 @@ export function tabWidget (options: TabWidgetOptions) {
       div.setAttribute('style', selectedStyle)
       if (!ele.bodyTR) return
       ele.bodyTR.setAttribute('style', shownStyle)
-      let bodyMain = ele.bodyTR.children[0] as ContainerElement
-      if (!bodyMain) {
+      const bodyMain = getOrCreateContainerElement(ele)
+      if (options.renderTabSettings && e.altKey && ele.subject && bodyMain.asSettings !== true) {
         bodyMain = ele.bodyTR.appendChild(dom.createElement('main'))
         bodyMain.setAttribute('style', bodyMainStyle)
       }
       if (options.renderTabSettings && e.altKey && ele.subject) {
         if (bodyMain.asSettings !== true) {
-          bodyMain.innerHTML = 'loading settings ...' + item
-          options.renderTabSettings(bodyMain, ele.subject)
-          bodyMain.asSettings = true
-        }
+        bodyMain.innerHTML = 'loading settings ...' + item
+        options.renderTabSettings(bodyMain, ele.subject)
+        bodyMain.asSettings = true
+      } else if (options.renderMain && ele.subject && bodyMain.asSettings !== false) {
       } else if (options.renderMain && ele.subject) {
         if (bodyMain.asSettings !== false) {
-          bodyMain.innerHTML = 'loading item ...' + item
-          options.renderMain(bodyMain, ele.subject)
-          bodyMain.asSettings = false
-        }
+        bodyMain.innerHTML = 'loading item ...' + item
+        options.renderMain(bodyMain, ele.subject)
+        bodyMain.asSettings = false
+      }
       }
     })
 
@@ -174,6 +174,14 @@ export function tabWidget (options: TabWidgetOptions) {
       div.textContent = label(item)
     }
     return ele
+
+    function getOrCreateContainerElement (ele: TabElement): ContainerElement {
+      const bodyMain = ele.bodyTR?.children[0] as ContainerElement
+      if (bodyMain) return bodyMain
+      const newBodyMain = ele.bodyTR!.appendChild(dom.createElement('main'))
+      newBodyMain.setAttribute('style', bodyMainStyle)
+      return newBodyMain
+    }
   }
 
   // @@ Use common one from utils?
