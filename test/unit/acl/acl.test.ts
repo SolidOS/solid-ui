@@ -20,11 +20,9 @@ import {
   setACL
 } from '../../../src/acl/acl'
 import { AgentMapMap, ComboList } from '../../../src/acl/types'
-import * as RdfLib from 'rdflib'
-import kb from '../../../src/store'
-import ns from '../../../src/ns'
+import { sym } from 'rdflib'
+import { createLiveStore } from '../helpers/createLiveStore'
 
-jest.mock('rdflib')
 jest.mock('solid-auth-client')
 
 describe('ACLbyCombination', () => {
@@ -60,20 +58,20 @@ describe('adoptACLDefault', () => {
   })
   it('runs', () => {
     expect(adoptACLDefault(
-      RdfLib.sym(''),
-      RdfLib.sym(''),
-      RdfLib.sym(''),
-      RdfLib.sym(''))).toBeInstanceOf(Object)
+      sym('https://test.test'),
+      sym('https://test.test'),
+      sym('https://test.test'),
+      sym('https://test.test'))).toBeInstanceOf(Object)
   })
   it.skip('returns default ACL values', () => {
-    ;(kb as any).mockStatements = [
-      { s: 'some', p: ns.acl('default'), o: RdfLib.sym('defaultResource'), g: RdfLib.sym('defaultACLDoc') }
-    ]
+    // ;(kb as any).mockStatements = [
+    //   { s: 'some', p: ns.acl('default'), o: sym('defaultResource'), g: sym('defaultACLDoc') }
+    // ]
     expect(adoptACLDefault(
-      RdfLib.sym('doc'),
-      RdfLib.sym('aclDoc'),
-      RdfLib.sym('defaultResource'),
-      RdfLib.sym('defaultACLDoc'))).toBeInstanceOf(Object)
+      sym('https://test.test#doc'),
+      sym('https://test.test#aclDoc'),
+      sym('https://test.test#defaultResource'),
+      sym('https://test.test#defaultACLDoc'))).toBeInstanceOf(Object)
   })
 })
 
@@ -91,7 +89,7 @@ describe('fixIndividualACL', () => {
     expect(fixIndividualACL).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(fixIndividualACL(RdfLib.sym(''), [], () => {}, () => {})).toEqual(undefined)
+    expect(fixIndividualACL(sym('https://test.test#'), [], () => {}, () => {})).toEqual(undefined)
   })
 })
 
@@ -100,7 +98,7 @@ describe('fixIndividualCardACL', () => {
     expect(fixIndividualCardACL).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(fixIndividualCardACL(RdfLib.sym(''), () => {}, () => {})).toEqual(undefined)
+    expect(fixIndividualCardACL(sym('https://test.test#'), () => {}, () => {})).toEqual(undefined)
   })
 })
 
@@ -109,7 +107,7 @@ describe('getACL', () => {
     expect(getACL).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(getACL(RdfLib.sym(''), () => {})).toEqual(undefined)
+    expect(getACL(sym('https://test.test#'), () => {})).toEqual(undefined)
   })
 })
 
@@ -118,7 +116,7 @@ describe('getACLorDefault', () => {
     expect(getACLorDefault).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(getACLorDefault(RdfLib.sym(''), () => {})).toEqual(undefined)
+    expect(getACLorDefault(sym('https://test.test#'), () => {})).toEqual(undefined)
   })
 })
 
@@ -146,10 +144,10 @@ describe('makeACLGraph', () => {
   })
   it('runs', () => {
     expect(makeACLGraph(
-      RdfLib.graph(),
-      RdfLib.sym(''),
+      createLiveStore(),
+      sym('https://test.test#'),
       {} as AgentMapMap,
-      RdfLib.sym('')
+      sym('https://test.test#')
     )).toEqual(undefined)
   })
 })
@@ -160,10 +158,10 @@ describe('makeACLGraphbyCombo', () => {
   })
   it('runs', () => {
     expect(makeACLGraphbyCombo(
-      RdfLib.graph(),
-      RdfLib.sym(''),
+      createLiveStore(),
+      sym('https://test.test#'),
       {} as ComboList,
-      RdfLib.sym(''),
+      sym('https://test.test#'),
       false,
       false
     )).toEqual(undefined)
@@ -174,12 +172,11 @@ describe('makeACLString', () => {
   it('exists', () => {
     expect(makeACLString).toBeInstanceOf(Function)
   })
-  it.skip('runs', () => {
-    ;(window as any).$rdf = RdfLib
+  it.skip('runs', () => { // skipping this until serialize is typed correctly
     expect(makeACLString(
-      RdfLib.sym(''),
+      sym('https://test.test#'),
       {} as AgentMapMap,
-      RdfLib.sym('')
+      sym('https://test.test#')
     )).toEqual(undefined)
   })
 })
@@ -188,15 +185,12 @@ describe('putACLbyCombo', () => {
   it('exists', () => {
     expect(putACLbyCombo).toBeInstanceOf(Function)
   })
-  it.skip('runs', () => {
-    ;(window as any).$rdf = RdfLib
-    ;(window as any).$rdf.updater = new RdfLib.UpdateManager()
-
+  it('runs', () => {
     expect(putACLbyCombo(
-      RdfLib.graph(),
-      RdfLib.sym(''),
+      createLiveStore(),
+      sym('https://test.test#'),
       {} as ComboList,
-      RdfLib.sym(''),
+      sym('https://test.test#'),
       () => {}
     )).toEqual(undefined)
   })
@@ -206,12 +200,12 @@ describe('putACLObject', () => {
   it('exists', () => {
     expect(putACLObject).toBeInstanceOf(Function)
   })
-  it.skip('runs', () => {
+  it('runs', () => {
     expect(putACLObject(
-      RdfLib.graph(),
-      RdfLib.sym(''),
+      createLiveStore(),
+      sym('https://test.test#'),
       {} as AgentMapMap,
-      RdfLib.sym(''),
+      sym('https://test.test#'),
       () => {}
     )).toEqual(undefined)
   })
@@ -223,9 +217,9 @@ describe('readACL', () => {
   })
   it('runs', () => {
     expect(readACL(
-      RdfLib.sym(''),
-      RdfLib.sym(''),
-      RdfLib.graph(),
+      sym('https://test.test#'),
+      sym('https://test.test#'),
+      createLiveStore(),
       false
     )).toBeTruthy()
   })
@@ -247,13 +241,11 @@ describe('setACL', () => {
   it('exists', () => {
     expect(setACL).toBeInstanceOf(Function)
   })
-  it.skip('runs', () => {
-    ;(window as any).$rdf = RdfLib
-    ;(window as any).$rdf.fetcher = new RdfLib.Fetcher((window as any).$rdf, {})
+  it('runs', () => {
     expect(setACL(
-      RdfLib.sym(''),
+      sym('https://test.test#'),
       '',
       () => {}
-    )).toEqual(true)
+    )).toBeUndefined()
   })
 })

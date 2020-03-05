@@ -1,7 +1,6 @@
 import { JSDOM } from 'jsdom'
 import { newThingUI } from '../../src/create'
 
-jest.mock('rdflib')
 jest.mock('solid-auth-client')
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 const div = dom.createElement('div')

@@ -3,8 +3,9 @@
  * @packageDocumentation
  */
 
-/* global alert $rdf */
-import DateFolder from './dateFolder'
+/* global alert */
+const $rdf = require('rdflib')
+const DateFolder = require('./dateFolder')
 
 // @@ trace20190428T1745
 
@@ -140,6 +141,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     return true
   }
 */
+
   /*       Form for a new message
    */
   function newMessageForm (messageTable) {
@@ -203,6 +205,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
           field.select()
         }
       }
+
       if (
         SERVER_MKDIRP_BUG &&
         (kb.fetcher.requested[chatDocument.uri] === undefined ||
@@ -210,7 +213,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       ) {
         console.log(
           '@@@ SERVER_MKDIRP_BUG: Should only happen once: create chat file: ' +
-            chatDocument
+          chatDocument
         )
         await createIfNotExists(chatDocument)
       }
@@ -305,17 +308,20 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
 
       const chatDocument = dateFolder.leafDocumentFromDate(new Date())
       var imageDoc
+
       function getImageDoc () {
         imageDoc = kb.sym(
           chatDocument.dir().uri + 'Image_' + Date.now() + '.png'
         )
         return imageDoc
       }
+
       async function tookPicture (imageDoc) {
         if (imageDoc) {
           await sendMessage(imageDoc.uri)
         }
       }
+
       middle.appendChild(
         UI.media.cameraButton(dom, kb, getImageDoc, tookPicture)
       )
@@ -366,7 +372,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     })
 
     // eslint-disable-next-line space-in-parens
-    for (ele = messageTable.firstChild; ele; ) {
+    for (ele = messageTable.firstChild; ele;) {
       ele2 = ele.nextSibling
       if (ele.AJAR_subject && !stored[ele.AJAR_subject.uri]) {
         messageTable.removeChild(ele)
@@ -432,6 +438,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     }
     return live // not done
   }
+
   /* Remove message tables earlier than this one
    */
   function removePreviousMessages (backwards, messageTable) {
@@ -495,6 +502,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       setScrollBackButtonIcon()
       return done
     }
+
     function setScrollBackButtonIcon () {
       const sense = messageTable.extendedBack ? !newestFirst : newestFirst
       const scrollBackIcon = messageTable.initial
@@ -509,6 +517,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
         return sense ? 'noun_1369241.svg' : 'noun_1369237.svg'
       }
     }
+
     async function scrollBackButtonHandler (_event) {
       if (messageTable.extendedBack) {
         removePreviousMessages(true, messageTable)
@@ -536,6 +545,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       setScrollForwardButtonIcon()
       return done
     }
+
     function setScrollForwardButtonIcon () {
       const sense = messageTable.extendedForwards ? !newestFirst : newestFirst // noun_T-Block_1114657_000000.svg
       const scrollForwardIcon = messageTable.final
@@ -550,6 +560,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
         return !sense ? 'noun_1369241.svg' : 'noun_1369237.svg'
       }
     }
+
     async function scrollForwardButtonHandler (_event) {
       if (messageTable.extendedForwards) {
         removePreviousMessages(false, messageTable)
@@ -702,6 +713,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       }
     }
   }
+
   /*
   function messageCount () {
     var n = 0
@@ -713,6 +725,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     return n
   }
 */
+
   /* Add the live message block with entry field for today
    */
   async function appendCurrentMessages () {
@@ -754,6 +767,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
   var latest = { messageTable: null }
 
   var lock = false
+
   async function loadMoreWhereNeeded (event, fixScroll) {
     if (lock) return
     lock = true
@@ -788,7 +802,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       const scrollTop = div.scrollTop
       console.log(
         'infinite scroll: adding below: bottom: ' +
-          (div.scrollHeight - div.scrollTop - div.clientHeight)
+        (div.scrollHeight - div.scrollTop - div.clientHeight)
       )
       done = await latest.messageTable.extendForwards() // then add more data on the bottom
       if (freeze) {
@@ -842,6 +856,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       document.body.addEventListener('scroll', loadMoreWhereNeeded)
     }
   }
+
   go()
   return div
 }

@@ -1,8 +1,7 @@
-import * as RdfLib from 'rdflib'
 import { JSDOM } from 'jsdom'
-
 import thread from '../../../src/chat/thread'
-jest.mock('rdflib')
+import { graph, sym } from 'rdflib'
+
 jest.mock('solid-auth-client')
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
@@ -12,12 +11,11 @@ describe('Thread', () => {
   })
 
   it.skip('runs', () => {
-    const kb = RdfLib.graph()
+    const kb = graph()
     const subject = ''
-    const messageStore = RdfLib.sym('')
+    const messageStore = sym('https://test.test#')
     const options = {}
 
-    ;(window as any).$rdf = RdfLib
     ;(window as any).alert = () => {}
     expect(thread(dom, kb, subject, messageStore, options)).toBeInstanceOf(Object)
   })

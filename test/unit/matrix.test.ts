@@ -1,7 +1,6 @@
 import { matrixForQuery } from '../../src/matrix'
 import { JSDOM } from 'jsdom'
 
-jest.mock('rdflib')
 jest.mock('solid-auth-client')
 const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
 const dom = window.document

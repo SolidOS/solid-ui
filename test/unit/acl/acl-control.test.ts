@@ -7,7 +7,6 @@ import {
   shortNameForFolder
 } from '../../../src/acl/acl-control'
 
-jest.mock('rdflib')
 jest.mock('solid-auth-client')
 const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
 const dom = window.document
@@ -18,7 +17,7 @@ describe('ACLControlBox5', () => {
   })
   it.skip('runs', () => {
     expect(ACLControlBox5(
-      sym(''),
+      sym('https://test.test'),
       { dom } as DataBrowserContext,
       {} as any,
       graph())).toBeInstanceOf(HTMLElement)
@@ -39,7 +38,7 @@ describe('shortNameForFolder', () => {
     expect(shortNameForFolder).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(shortNameForFolder(sym(''))).toEqual('uri')
+    expect(shortNameForFolder(sym('https://test.test/uri'))).toEqual('uri')
   })
   it('works with trailing slashes', () => {
     expect(shortNameForFolder(namedNode('http://example.com/some/folder/'))).toEqual('folder')

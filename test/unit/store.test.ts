@@ -1,5 +1,5 @@
 import kb from '../../src/store'
-jest.mock('rdflib')
+
 jest.mock('solid-auth-client')
 
 describe('kb (main global IndexedFormula instance)', () => {

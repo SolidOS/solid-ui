@@ -1,5 +1,5 @@
 import { iconBase, originalIconBase } from '../../src/iconBase'
-jest.mock('rdflib')
+
 jest.mock('solid-auth-client')
 
 describe('iconBase', () => {
