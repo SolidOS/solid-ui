@@ -41,7 +41,7 @@ describe('makeDropTarget.dragoverListener', () => {
     const ele = document.createElement('p')
     ele.innerHTML = 'I can be dragged'
     ele.setAttribute('draggable', 'true')
-    makeDropTarget(ele)
+    makeDropTarget(ele, () => { }, () => { })
     ele.dispatchEvent(event)
     // expect(makeDropTarget().dragoverListener).toBeInstanceOf(Function)
   })
