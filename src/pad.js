@@ -17,9 +17,6 @@ var UI = {
   store: require('./store'),
   widgets: require('./widgets')
 }
-const kb = UI.store
-const ns = UI.ns
-
 const utils = require('./utils')
 
 /** Figure out a random color from my webid
@@ -39,6 +36,7 @@ UI.pad.lightColorHash = function (author) {
     : '#ffffff' // c0c0c0  forces pale
 } // no id -> white
 
+/*
 // Manage participation in this session
 //
 //  This is more general tham the pad.
@@ -85,7 +83,7 @@ UI.pad.renderPartipants = function (dom, table, padDoc, subject, me, options) {
   syncTable()
   return table
 }
-
+*/
 /** Record, or find old, Particpation object
  *
  * A particpaption object is a place to record things specifically about
@@ -95,6 +93,7 @@ UI.pad.renderPartipants = function (dom, table, padDoc, subject, me, options) {
  * @param {NamedNode} me - The logged in user
  *
  */
+ /*
 UI.pad.participationObject = function (subject, padDoc, me) {
   return new Promise(function (resolve, reject) {
     if (!me) {
@@ -135,7 +134,7 @@ UI.pad.participationObject = function (subject, padDoc, me) {
     }
   })
 }
-
+*/
 /** Record my participation and display participants
  *
  * @param {NamedNode} subject - the thing in which participation is happening
@@ -143,6 +142,7 @@ UI.pad.participationObject = function (subject, padDoc, me) {
  * @param {DOMNode} refreshable - A DOM element whose refresh() is to be called if the change works
  *
  */
+ /*
 UI.pad.recordParticipation = function (subject, padDoc, refreshable) {
   var me = UI.authn.currentUser()
   if (!me) return // Not logged in
@@ -157,7 +157,7 @@ UI.pad.recordParticipation = function (subject, padDoc, refreshable) {
     // If I am not already recorded
     return parps[0] // returns the particpation object
   } else {
-    var participation = UI.widgets.newThing(padDoc)
+    var q = UI.widgets.newThing(padDoc)
     var ins = [
       UI.rdf.st(subject, ns.wf('participation'), participation, padDoc),
 
@@ -208,7 +208,7 @@ UI.pad.manageParticipation = function (
   }
   return table
 }
-
+*/
 UI.pad.notepad = function (dom, padDoc, subject, me, options) {
   options = options || {}
   var exists = options.exists
