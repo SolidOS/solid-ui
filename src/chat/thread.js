@@ -3,7 +3,6 @@
  * @packageDocumentation
  */
 
-/* global $rdf */
 var UI = {
   authn: require('../authn/authn'),
   icons: require('../iconBase'),
@@ -17,6 +16,7 @@ var UI = {
 }
 
 const utils = require('../utils')
+const $rdf = require('rdflib')
 
 // var buttonStyle = 'font-size: 100%; margin: 0.8em; padding:0.5em; background-color: white;'
 

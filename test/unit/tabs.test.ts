@@ -1,5 +1,4 @@
-const tabs = require('../../src/tabs')
-const RdfLib = require('rdflib')
+import tabs from '../../src/tabs'
 
 describe('tabWidget', () => {
   it('exists', () => {

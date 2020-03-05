@@ -1,6 +1,4 @@
-import * as RdfLib from 'rdflib'
 import { JSDOM } from 'jsdom'
-
 import {
   addStyleSheet,
   allClassURIs,
@@ -38,8 +36,12 @@ import {
   shortTime,
   timestamp
 } from '../../../src/widgets/buttons'
+import { graph, namedNode, NamedNode, sym } from 'rdflib'
+import { foaf, rdf, sioc, vcard } from '../../../src/ns'
+import { iconBase } from '../../../src/iconBase'
+import store from '../../../src/store'
+import { clearStore } from '../helpers/clearStore'
 
-jest.mock('rdflib')
 jest.mock('solid-auth-client')
 const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
 const dom = window.document
@@ -71,11 +73,11 @@ describe('askName', () => {
     expect(askName).toBeInstanceOf(Function)
   })
   it.skip('runs', async () => {
-    const kb = RdfLib.graph()
+    const kb = graph()
     const container = element
-    const predicate = {}
-    const klass = {}
-    const noun = {}
+    const predicate = {} as NamedNode
+    const klass = {} as NamedNode
+    const noun = ''
     expect(await askName(dom, kb, container, predicate, klass, noun)).toBeTruthy()
   })
 })
@@ -85,7 +87,7 @@ describe('attachmentList', () => {
     expect(attachmentList).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const subject = RdfLib.sym('')
+    const subject = sym('https://test.test#')
     const div = element
     const options = {}
     expect(attachmentList(dom, subject, div, options)).toBeTruthy()
@@ -99,7 +101,8 @@ describe('button', () => {
   it('runs', () => {
     const iconURI = ''
     const text = 'txt'
-    const handler = () => {}
+    const handler = () => {
+    }
     expect(button(dom, iconURI, text, handler)).toBeTruthy()
   })
 })
@@ -109,7 +112,8 @@ describe('cancelButton', () => {
     expect(cancelButton).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const handler = () => {}
+    const handler = () => {
+    }
     expect(cancelButton(dom, handler)).toBeTruthy()
   })
 })
@@ -137,7 +141,8 @@ describe('continueButton', () => {
     expect(continueButton).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const handler = () => {}
+    const handler = () => {
+    }
     expect(continueButton(dom, handler)).toBeTruthy()
   })
 })
@@ -147,7 +152,7 @@ describe('defaultAnnotationStore', () => {
     expect(defaultAnnotationStore).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(defaultAnnotationStore(RdfLib.sym(''))).toEqual(undefined)
+    expect(defaultAnnotationStore(sym('https://test.test#'))).toEqual(undefined)
   })
 })
 
@@ -158,7 +163,8 @@ describe('deleteButtonWithCheck', () => {
   it('runs', () => {
     const container = element
     const noun = ''
-    const deleteFunction = () => {}
+    const deleteFunction = () => {
+    }
     expect(deleteButtonWithCheck(dom, container, noun, deleteFunction)).toBeTruthy()
   })
 })
@@ -174,12 +180,41 @@ describe('extractLogURI', () => {
 })
 
 describe('findImage', () => {
+  const subject = sym('https://domain.tld/#test')
+  const imageObject = sym('https://domain.tld/#image')
+
+  afterEach(() => clearStore())
+
   it('exists', () => {
     expect(findImage).toBeInstanceOf(Function)
   })
-  it('runs', () => {
-    expect(findImage(RdfLib.sym(''))).toEqual('uri')
+  it('handles foaf(Agent)', () => expect(findImage(foaf('Agent'))).toEqual(iconBase + 'noun_98053.svg'))
+  it('handles rdf(Resource)', () => expect(findImage(rdf('Resource'))).toEqual(iconBase + 'noun_98053.svg'))
+  it('handles sioc(avatar)', () => {
+    store.add(subject, sioc('avatar'), imageObject, subject.doc())
+    expect(findImage(subject)).toEqual(imageObject.uri)
   })
+  it('handles sioc(avatar)', () => {
+    store.add(subject, foaf('img'), imageObject, subject.doc())
+    expect(findImage(subject)).toEqual(imageObject.uri)
+  })
+  it('handles vcard(logo)', () => {
+    store.add(subject, vcard('logo'), imageObject, subject.doc())
+    expect(findImage(subject)).toEqual(imageObject.uri)
+  })
+  it('handles vcard(hasPhoto)', () => {
+    store.add(subject, vcard('hasPhoto'), imageObject, subject.doc())
+    expect(findImage(subject)).toEqual(imageObject.uri)
+  })
+  it('handles vcard(photo)', () => {
+    store.add(subject, vcard('photo'), imageObject, subject.doc())
+    expect(findImage(subject)).toEqual(imageObject.uri)
+  })
+  it('handles foaf(depiction)', () => {
+    store.add(subject, foaf('depiction'), imageObject, subject.doc())
+    expect(findImage(subject)).toEqual(imageObject.uri)
+  })
+  it('returns null when nothing is found', () => expect(findImage(subject)).toBeNull())
 })
 
 describe('findImageFromURI', () => {
@@ -196,7 +231,8 @@ describe('fileUploadButtonDiv', () => {
     expect(fileUploadButtonDiv).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const handler = () => {}
+    const handler = () => {
+    }
     expect(fileUploadButtonDiv(dom, handler)).toBeTruthy()
   })
 })
@@ -217,7 +253,7 @@ describe('imagesOf', () => {
     expect(imagesOf).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(imagesOf(null, RdfLib.graph())).toBeTruthy()
+    expect(imagesOf(null, graph())).toBeTruthy()
   })
 })
 
@@ -241,7 +277,7 @@ describe('index.twoLine[\'\']', () => {
     expect(index.twoLine['']).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(index.twoLine[''](dom, null)).toBeTruthy()
+    expect(index.twoLine[''](dom, sym('https://domain.tld/#test'))).toBeTruthy()
   })
 })
 describe('index.twoLine[\'http://www.w3.org/2000/10/swap/pim/qif#Transaction\']', () => {
@@ -249,7 +285,7 @@ describe('index.twoLine[\'http://www.w3.org/2000/10/swap/pim/qif#Transaction\']'
     expect(index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction']).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction'](dom, null)).toBeTruthy()
+    expect(index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction'](dom, sym('https://domain.tld/#test'))).toBeTruthy()
   })
 })
 describe('index.twoLine[\'http://www.w3.org/ns/pim/trip#Trip\']', () => {
@@ -265,7 +301,7 @@ describe('index.twoLine.widgetForClass', () => {
     expect(index.twoLine.widgetForClass).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(index.twoLine.widgetForClass(RdfLib.sym(''))).toBeInstanceOf(Function)
+    expect(index.twoLine.widgetForClass(sym('https://test.test#'))).toBeInstanceOf(Function)
   })
 })
 
@@ -301,7 +337,7 @@ describe('linkButton', () => {
     expect(linkButton).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const object = RdfLib.sym('')
+    const object = sym('https://test.test#')
     expect(linkButton(dom, object)).toBeTruthy()
   })
 })
@@ -311,7 +347,7 @@ describe('linkIcon', () => {
     expect(linkIcon).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const subject = RdfLib.sym('')
+    const subject = sym('https://test.test#')
     const iconURI = ''
     expect(linkIcon(dom, subject, iconURI)).toBeTruthy()
   })
@@ -331,8 +367,8 @@ describe('personTR', () => {
     expect(personTR).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const pred = RdfLib.sym('')
-    const obj = RdfLib.sym('')
+    const pred = sym('https://test.test#')
+    const obj = sym('https://test.test#')
     const options = {}
     expect(personTR(dom, pred, obj, options)).toBeTruthy()
   })
@@ -343,7 +379,7 @@ describe('propertyTriage', () => {
     expect(propertyTriage).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(propertyTriage(RdfLib.graph())).toBeTruthy()
+    expect(propertyTriage(graph())).toBeTruthy()
   })
 })
 
@@ -370,14 +406,16 @@ describe('selectorPanel', () => {
     expect(selectorPanel).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const kb = RdfLib.graph()
-    const type = ''
-    const predicate = ''
+    const kb = graph()
+    const type = namedNode('https://domain.tld/#test')
+    const predicate = namedNode('https://domain.tld/#test')
     const inverse = false
-    const possible = true
+    const possible = [namedNode('https://domain.tld/#test')]
     const options = {}
-    const callbackFunction = () => {}
-    const linkCallback = () => {}
+    const callbackFunction = () => {
+    }
+    const linkCallback = () => {
+    }
     expect(selectorPanel(
       dom,
       kb,
@@ -396,15 +434,17 @@ describe('selectorPanelRefresh', () => {
     expect(selectorPanelRefresh).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const kb = RdfLib.graph()
-    const type = ''
-    const predicate = ''
+    const list = dom.createElement('ul')
+    const kb = graph()
+    const type = namedNode('https://domain.tld/#test')
+    const predicate = namedNode('https://domain.tld/#test')
     const inverse = false
-    const possible = true
+    const possible = [namedNode('https://domain.tld/#test')]
     const options = {}
     const callbackFunction = () => {}
     const linkCallback = () => {}
     expect(selectorPanelRefresh(
+      list,
       dom,
       kb,
       type,
@@ -413,7 +453,8 @@ describe('selectorPanelRefresh', () => {
       possible,
       options,
       callbackFunction,
-      linkCallback)).toBeTruthy()
+      linkCallback
+    )).toBeTruthy()
   })
 })
 
@@ -422,7 +463,7 @@ describe('setImage', () => {
     expect(setImage).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const thing = RdfLib.sym('')
+    const thing = sym('https://test.test#')
     expect(setImage(element, thing)).toEqual(undefined)
   })
 })
@@ -432,7 +473,7 @@ describe('setName', () => {
     expect(setName).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const thing = RdfLib.sym('')
+    const thing = sym('https://test.test#')
     expect(setName(element, thing)).toEqual(undefined)
   })
 })

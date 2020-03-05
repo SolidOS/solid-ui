@@ -3,7 +3,7 @@ import {
   sentimentStripLinked,
   messageToolbar
 } from '../../../src/chat/messageTools'
-jest.mock('rdflib')
+
 jest.mock('solid-auth-client')
 
 describe('sentimentStrip', () => {

@@ -1,137 +1,84 @@
-export const Util =  {
-  mediaTypeClass: sym
+// @@ TODO: Remove currently untyped methods as they are added
+
+export {
+  BlankNode,
+  Collection,
+  convert,
+  DataFactory,
+  Empty,
+  Formula,
+  // Store, // Not currently supported in @types/rdflib
+  // jsonParser, // Not currently supported in @types/rdflib
+  Literal,
+  log,
+  // N3Parser, // Not currently supported in @types/rdflib
+  NamedNode,
+  Namespace,
+  Node,
+  parse,
+  Query,
+  // queryToSPARQL, // Not currently supported in @types/rdflib
+  // RDFaProcessor, // Not currently supported in @types/rdflib
+  // RDFParser, // Not currently supported in @types/rdflib
+  // serialize, // Not currently supported in @types/rdflib
+  // Serializer, // Not currently supported in @types/rdflib
+  // SPARQLToQuery, // Not currently supported in @types/rdflib
+  // sparqlUpdateParser, // Not currently supported in @types/rdflib
+  Statement,
+  term,
+  // UpdatesSocket, // Not currently supported in @types/rdflib
+  // UpdatesVia, // Not currently supported in @types/rdflib
+  uri,
+  Util,
+  Variable,
+  NextId,
+  fromNT,
+  graph,
+  lit,
+  st,
+  namedNode as sym,
+  blankNode,
+  defaultGraph,
+  literal,
+  namedNode,
+  quad,
+  triple,
+  variable
+} from 'rdflib'
+
+export function fetcher (store: any) {
+  const fetcher = new Fetcher()
+  store.fetcher = fetcher
+  return fetcher
 }
 
-export function sym () {
-  return {
-    dir: sym,
-    uri: 'uri',
-    value: '',
-    elements: [],
-    doc: () => {
-      return {
-        equals: () => {},
-        value: ''
-      }
-    },
-    sameTerm: () => false
-  }  
-}  
-
-export const uri = {
-  join: () => {}
-}
-export function st() {
-}
-
-export function literal() {
-}
-export class Query {
-  vars: any
-  pat: any
-  constructor () {
-    this.vars = []
-    this.pat = {
-      add() {}
-    }
-  }
-}
-
-export function variable () {
-}
-
-export function graph() {
-  return new Graph()
-}
-class Graph {
-  mockStatements
-  fetcher
-  constructor() {
-    this.mockStatements = []
-    this.fetcher = new Fetcher()
-  }
-  any () {
-    return sym()
-  }
-  // see https://linkeddata.github.io/rdflib.js/doc/classes/indexedformula.html#each
-  each (s, p, o, g) {
-    if (s === undefined) {
-      return this.mockStatements
-        .filter(statement => p.uri === statement.p.uri)
-        .filter(statement => o.uri === statement.o.uri)
-        .filter(statement => g.uri === statement.g.uri)
-        .map(statement => statement.s)
-    }
-    if (p === undefined) {
-      return this.mockStatements
-        .filter(statement => s.uri === statement.s.uri)
-        .filter(statement => o.uri === statement.o.uri)
-        .filter(statement => g.uri === statement.g.uri)
-        .map(statement => statement.p)
-    }
-    if (o === undefined) {
-      return this.mockStatements
-        .filter(statement => s.uri === statement.s.uri)
-        .filter(statement => p.uri === statement.p.uri)
-        .filter(statement => g.uri === statement.g.uri)
-        .map(statement => statement.o)
-    }
-    if (g === undefined) {
-      return this.mockStatements
-        .filter(statement => s.uri === statement.s.uri)
-        .filter(statement => p.uri === statement.p.uri)
-        .filter(statement => o.uri === statement.o.uri)
-        .map(statement => statement.g)
-    }
-  }
-  match () {
-    return []
-  }
-  query () {
-    return []
-  }
-  findTypeURIs () {
-    return []
-  }
-  findSuperClassesNT () {
-    return []
-  }
-  bottomTypeURIs () {
-    return []
-  }
-  statementsMatching () {
-    return []
-  }
-  sym () {
-    return sym()
-  }
-}
-
-export function fetcher() {
-  return new Fetcher()
-}
 export class Fetcher {
   requested: any
-  constructor() {
+
+  constructor () {
     this.requested = {}
   }
+
   load () {
   }
+
   nowOrWhenFetched () {
     return Promise.resolve()
   }
 }
-export function namedNode(str: string) {
-  return {
-    uri: str
-  }
-}
-export function NamedNode() {
-}
-export function Namespace() {
-  return () => {}
-}
+
 export class UpdateManager {
-  editable() {}
-  update() {}
+  // mock as needed
+
+  editable () {
+    return Promise.resolve()
+  }
+
+  put () {
+    return Promise.resolve()
+  }
+
+  update () {
+    return Promise.resolve()
+  }
 }

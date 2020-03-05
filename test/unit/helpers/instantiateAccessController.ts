@@ -1,25 +1,19 @@
-import * as RdfLib from 'rdflib'
-import { JSDOM } from 'jsdom'
-import { DataBrowserContext } from 'pane-registry'
 import { AccessController } from '../../../src/acl/access-controller'
+import { createDataBrowserContext } from './createDataBrowserContext'
+import { IndexedFormula, sym } from 'rdflib'
 
-jest.mock('rdflib')
-jest.mock('solid-auth-client')
-const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
-
-export function instantiateAccessController () {
-  const subject = RdfLib.sym('')
+export function instantiateAccessController (dom: HTMLDocument, store: IndexedFormula) {
+  const subject = sym('https://test.test#')
   const noun = ''
-  const context = {} as DataBrowserContext
+  const context = createDataBrowserContext(dom, store)
   const statusElement = dom.createElement('div')
   const classes = {}
   const targetIsProtected = false
-  const targetDoc = RdfLib.sym('')
-  const targetACLDoc = RdfLib.sym('')
-  const defaultHolder = RdfLib.sym('')
-  const defaultACLDoc = RdfLib.sym('')
-  const prospectiveDefaultHolder = RdfLib.sym('')
-  const store = {}
+  const targetDoc = sym('https://test.test#')
+  const targetACLDoc = sym('https://test.test#')
+  const defaultHolder = sym('https://test.test#')
+  const defaultACLDoc = sym('https://test.test#')
+  const prospectiveDefaultHolder = sym('https://test.test#')
   return new AccessController(
     subject,
     noun,

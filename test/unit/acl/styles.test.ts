@@ -1,6 +1,5 @@
 import * as Styles from '../../../src/acl/styles'
 
-jest.mock('rdflib')
 jest.mock('solid-auth-client')
 
 describe('Styles', () => {
