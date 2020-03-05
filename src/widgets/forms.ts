@@ -655,7 +655,7 @@ function basicField (
   var style = params.style || textInputStyle || 'font-size: 100%; margin: 0.1em; padding: 0.1em;'
   // box.appendChild(dom.createTextNode(' uri='+uri+', pattern='+ params.pattern))
   var field = dom.createElement('input')
-  field.style = textInputStyle // Do we have to override length etc?
+  ;(field as any).style = textInputStyle // Do we have to override length etc?
   rhs.appendChild(field)
   field.setAttribute('type', params.type ? params.type : 'text')
 
@@ -683,7 +683,7 @@ function basicField (
   field.setAttribute('style', style)
 
   if (!kb.updater.editable(store.uri)) {
-    field.readonly = true // was: disabled. readonly is better
+    field.readOnly = true // was: disabled. readOnly is better
     return box
   }
 
@@ -1241,17 +1241,17 @@ export function propertiesForClass (kb, c) {
 * @param cla - the URI of the class
 * @param prop
 */
-export function findClosest (kb: IndexedFormula, cla: string, prop: NamedNode) {
-  var agenda = [kb.sym(cla)] // ordered - this is breadth first search
+export function findClosest (kb: IndexedFormula, cla: NamedNode | string, prop: NamedNode): NamedNode[] {
+  var agenda: NamedNode[] = [kb.sym(cla)] // ordered - this is breadth first search
   while (agenda.length > 0) {
     var c = agenda.shift() // first
     // if (c.uri && (c.uri == ns.owl('Thing').uri || c.uri == ns.rdf('Resource').uri )) continue
-    var lists = kb.each(c, prop)
+    var lists: NamedNode[] = kb.each(c, prop) as NamedNode[]
     debug('Lists for ' + c + ', ' + prop + ': ' + lists.length)
     if (lists.length !== 0) return lists
     var supers = kb.each(c, ns.rdfs('subClassOf'))
     for (var i = 0; i < supers.length; i++) {
-      agenda.push(supers[i])
+      agenda.push(supers[i] as NamedNode)
       debug('findClosest: add super: ' + supers[i])
     }
   }
@@ -1270,7 +1270,7 @@ export function formsFor (subject) {
     debug('   type: ' + t1)
   }
   var bottom = kb.bottomTypeURIs(t) // most specific
-  var candidates = []
+  var candidates: any[] = []
   for (var b in bottom) {
     // Find the most specific
     debug('candidatesFor: trying bottom type =' + b)
@@ -1328,7 +1328,7 @@ export function newButton (
   b.addEventListener(
     'click',
     function (_e) {
-      b.parentNode.appendChild(
+      ;(b.parentNode as HTMLElement).appendChild(
         promptForNew(
           dom,
           kb,
@@ -1465,14 +1465,14 @@ export function makeDescription (
     ' border: 0.07em solid gray; padding: 1em 0.5em; margin: 1em 1em;'
   field.setAttribute('style', style)
   if (sts.length) {
-    field.value = desc
+    field.value = desc as string
   } else {
     // Unless you can make the predicate label disappear with the first click then this is over-cute
     // field.value = label(predicate); // Was"enter a description here"
     field.select() // Select it ready for user input -- doesn't work
   }
 
-  group.refresh = function () {
+  ;(group as any).refresh = function () {
     var v = kb.any(subject, predicate, null, store)
     if (v && v.value !== field.value) {
       field.value = v.value // don't touch widget if no change

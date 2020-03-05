@@ -883,7 +883,6 @@ describe('NamedNodeURIField', () => {
     uiStore.add(form, ns.rdf('type'), namedNode('http://example.com/#type'), namedNode('http://example.com/'))
     uiStore.add(form, ns.ui('property'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
 
-
     expect(
       field[ns.ui('NamedNodeURIField').uri](
         document,
@@ -1049,7 +1048,7 @@ describe('Classifier', () => {
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
     uiStore.add(form, ns.ui('category'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
-    
+
     const callbackFunction = () => {}
     expect(
       field[ns.ui('Classifier').uri](
@@ -1287,8 +1286,8 @@ describe('newButton', () => {
         namedNode('http://example.com/#subject'),
         namedNode('http://example.com/#predicate'),
         namedNode('http://example.com/#class'),
+        namedNode('http://example.com/#form'),
         namedNode('http://example.com/#store'),
-        graph(),
         () => {}
       )
     ).toBeInstanceOf(HTMLButtonElement)
