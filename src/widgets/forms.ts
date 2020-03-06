@@ -7,7 +7,7 @@
 
 import { st, sym, UpdateManager, Collection, Literal, NamedNode, IndexedFormula } from 'rdflib'
 import { iconBase } from '../iconBase'
-import uiStore from '../store'
+import store from '../store'
 import ns from '../ns'
 import { formBorderColor, formHeadingColor, textInputStyle, multilineTextInputStyle } from '../style'
 import { debug, info } from '../log'
@@ -46,7 +46,7 @@ export const fieldParams = {}
 field[ns.ui('Form').uri] = field[
   ns.ui('Group').uri
 ] = function (dom: HTMLDocument, container: Element | undefined, already: { }, subject: NamedNode, form: NamedNode, doc: NamedNode, callbackFunction: (ok: boolean, errorMessage: string) => void) {
-  const kb = uiStore
+  const kb = store
   var box = dom.createElement('div')
   box.setAttribute('style', `padding-left: 2em; border: 0.05em solid ${formBorderColor};`) // Indent a group
   if (container) container.appendChild(box)
@@ -148,7 +148,7 @@ field[ns.ui('Options').uri] = function (
   doc,
   callbackFunction
 ) {
-  const kb = uiStore
+  const kb = store
   var box = dom.createElement('div')
   // box.setAttribute('style', 'padding-left: 2em; border: 0.05em dotted purple;')  // Indent Options
   if (container) container.appendChild(box)
@@ -408,7 +408,7 @@ field[ns.ui('Multiple').uri] = function (
 
   var plusIconURI = iconBase + 'noun_19460_green.svg' // white plus in green circle
 
-  const kb = uiStore
+  const kb = store
   kb.updater = kb.updater || new UpdateManager(kb)
   var box = dom.createElement('table')
   // We don't indent multiple as it is a sort of a prefix of the next field and has contents of one.
@@ -634,7 +634,7 @@ function basicField (
   doc: NamedNode,
   callbackFunction: (ok: boolean, errorMessage: string) => void
 ) {
-  const kb = uiStore
+  const kb = store
 
   var box = dom.createElement('tr')
   if (container) container.appendChild(box)
@@ -813,7 +813,7 @@ field[ns.ui('MultiLineTextField').uri] = function (
   doc,
   callbackFunction
 ) {
-  const kb = uiStore
+  const kb = store
   var property = kb.any(form, ns.ui('property'))
   if (!property) {
     return errorMessageBlock(dom, 'No property to text field: ' + form)
@@ -849,7 +849,7 @@ function booleanField (
   callbackFunction,
   tristate
 ) {
-  const kb = uiStore
+  const kb = store
   var property = kb.any(form, ns.ui('property'))
   if (!property) {
     const errorBlock = errorMessageBlock(
@@ -931,7 +931,7 @@ field[ns.ui('Classifier').uri] = function (
   doc,
   callbackFunction
 ) {
-  const kb = uiStore
+  const kb = store
 
   var category = kb.any(form, ns.ui('category'))
   if (!category) {
@@ -983,7 +983,7 @@ field[ns.ui('Choice').uri] = function (
   doc,
   callbackFunction
 ) {
-  const kb = uiStore
+  const kb = store
   var multiple = false
   var p
   var box = dom.createElement('tr')
@@ -1086,7 +1086,7 @@ field[ns.ui('Comment').uri] = field[
   _doc,
   _callbackFunction
 ) {
-  const kb = uiStore
+  const kb = store
   var contents = kb.any(form, ns.ui('contents'))
   if (!contents) contents = 'Error: No contents in comment field.'
 
@@ -1118,7 +1118,7 @@ field[ns.ui('Comment').uri] = field[
  */
 
 export function mostSpecificClassURI (x) {
-  const kb = uiStore
+  const kb = store
   var ft = kb.findTypeURIs(x)
   var bot = kb.bottomTypeURIs(ft) // most specific
   var bots: any[] = []
@@ -1266,7 +1266,7 @@ export function findClosest (kb: IndexedFormula, cla: NamedNode | string, prop: 
 // Which forms apply to a given existing subject?
 
 export function formsFor (subject) {
-  const kb = uiStore
+  const kb = store
 
   debug('formsFor: subject=' + subject)
   var t = kb.findTypeURIs(subject)
@@ -1291,7 +1291,7 @@ export function formsFor (subject) {
 
 export function sortBySequence (list) {
   var p2 = list.map(function (p) {
-    var k = uiStore.any(p, ns.ui('sequence'))
+    var k = store.any(p, ns.ui('sequence'))
     return [k || 9999, p]
   })
   p2.sort(function (a, b) {
@@ -1422,7 +1422,7 @@ export function promptForNew (
       insertMe.push(st(object, ns.rdf('type'), theClass, doc))
     }
     if (insertMe.length) {
-      uiStore.updater.update([], insertMe, linkDone)
+      store.updater.update([], insertMe, linkDone)
     } else {
       callbackFunction(true, body)
     }
@@ -1491,7 +1491,7 @@ export function makeDescription (
     field.setAttribute('style', style + 'color: gray;') // pending
     var ds = kb.statementsMatching(subject, predicate, null, doc)
     var is = st(subject, predicate, field.value, doc)
-    uiStore.updater.update(ds, is, function (uri, ok, body) {
+    store.updater.update(ds, is, function (uri, ok, body) {
       if (ok) {
         field.setAttribute('style', style + 'color: black;')
         field.disabled = false
@@ -1512,7 +1512,7 @@ export function makeDescription (
   var br = dom.createElement('br')
   group.appendChild(br)
 
-  var editable = uiStore.updater.editable(doc.uri)
+  var editable = store.updater.editable(doc.uri)
   if (editable) {
     var submit = dom.createElement('input')
     submit.setAttribute('type', 'submit')
@@ -1567,7 +1567,7 @@ export function makeSelectForOptions (
   debug('Select list length now ' + possible.length)
   var n = 0
   var uris = {} // Count them
-  var editable = uiStore.updater.editable(doc.uri)
+  var editable = store.updater.editable(doc.uri)
 
   for (var i = 0; i < possible.length; i++) {
     var sub = possible[i] // @@ Maybe; make this so it works with blank nodes too
@@ -1667,7 +1667,7 @@ export function makeSelectForOptions (
       callbackFunction(ok, body)
     }
     info('selectForOptions: doc = ' + doc)
-    uiStore.updater.update(ds, is, function (uri, ok, body) {
+    store.updater.update(ds, is, function (uri, ok, body) {
       actual = getActual() // refresh
       // kb.each(subject, predicate, null, doc).map(function(x){actual[x.uri] = true})
       if (ok) {
@@ -1875,7 +1875,7 @@ export function buildCheckboxForm (dom, kb, lab, del, ins, form, doc, tristate) 
   // 20190115
   var box = dom.createElement('div')
   var tx = dom.createTextNode(lab)
-  var editable = uiStore.updater.editable(doc.uri)
+  var editable = store.updater.editable(doc.uri)
   tx.style =
     'colour: black; font-size: 100%; padding-left: 0.5 em; padding-right: 0.5 em;'
   box.appendChild(tx)
@@ -1955,7 +1955,7 @@ export function buildCheckboxForm (dom, kb, lab, del, ins, form, doc, tristate) 
       input.newState === true ? ins : input.newState === false ? del : []
     console.log(`  Deleting  ${toDelete}`)
     console.log(`  Inserting ${toInsert}`)
-    uiStore.updater.update(toDelete, toInsert, function (
+    store.updater.update(toDelete, toInsert, function (
       uri,
       success,
       errorBody
@@ -1997,7 +1997,7 @@ export function buildCheckboxForm (dom, kb, lab, del, ins, form, doc, tristate) 
 }
 
 export function fieldLabel (dom, property, form) {
-  var lab = uiStore.any(form, ns.ui('label'))
+  var lab = store.any(form, ns.ui('label'))
   if (!lab) lab = label(property, true) // Init capital
   if (property === undefined) {
     return dom.createTextNode('@@Internal error: undefined property')
@@ -2010,14 +2010,14 @@ export function fieldLabel (dom, property, form) {
 }
 
 export function fieldStore (subject, predicate, def) {
-  var sts = uiStore.statementsMatching(subject, predicate)
+  var sts = store.statementsMatching(subject, predicate)
   if (sts.length === 0) return def // can used default as no data yet
   if (
     sts.length > 0 &&
     sts[0].why.uri &&
-    uiStore.updater.editable(sts[0].why.uri, uiStore)
+    store.updater.editable(sts[0].why.uri, store)
   ) {
-    return uiStore.sym(sts[0].why.uri)
+    return store.sym(sts[0].why.uri)
   }
   return def
 }
