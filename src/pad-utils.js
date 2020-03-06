@@ -1,6 +1,8 @@
 
 const $rdf = require('rdflib')
 const ns = require('./ns')
+const utils = require('./utils')
+
 const PAD = $rdf.Namespace('http://www.w3.org/ns/pim/pad#')
 
 /* Get the chunbks of the noepad
@@ -19,24 +21,18 @@ export function getChunks (subject, kb) {
   return chunks
 }
 
-/** Encode content to be put in XML or HTML elements
-*/
-export function xmlEncode (str) {
-  return str.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
-}
-
 /** Export a HTML string version of a notepad
 * @@ no style at the moment
 *
 */
 export function notePadToHTML (pad, kb) {
   const chunks = getChunks(pad, kb)
-  var html = '<html>\n  <head>\n'
-  const title = kb.anyValue(pad, ns.dct('title'))
+  var html = '<html>\n<head>\n'
+  const title = kb.anyValue(pad, ns.dct('title')) || kb.anyValue(pad, ns.dc('title'))
   if (title) {
-    html += `    <title>${xmlEncode(title)}</title>\n`
+    html += `  <title>${utils.escapeForXML(title)}</title>\n`
   }
-  html += '  </head>\n  <body>\n'
+  html += '</head>\n<body>\n'
   var level = 0
   function increaseLevel (indent) {
     for (; level < indent; level++) {
@@ -52,7 +48,7 @@ export function notePadToHTML (pad, kb) {
     const indent = kb.anyJS(chunk, PAD('indent'))
     const rawContent = kb.anyJS(chunk, ns.sioc('content'))
     if (!rawContent) return // seed chunk is dummy
-    const content = xmlEncode(rawContent)
+    const content = utils.escapeForXML(rawContent)
     if (indent < 0) { // negative indent levels represenmt heading levels
       decreaseLevel(0)
       const h = indent >= -3 ? 4 + indent : 1 // -1 -> h4, -2 -> h3
@@ -70,6 +66,6 @@ export function notePadToHTML (pad, kb) {
   }) // foreach chunk
   // At the end decreaseLevel any open ULs
   decreaseLevel(0)
-  html += '  </body>\n</html>\n'
+  html += '</body>\n</html>\n'
   return html
 }
