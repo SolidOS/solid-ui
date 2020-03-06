@@ -38,8 +38,11 @@
       const callbackFunction = (ok, errorMessage) => {
         console.log(ok, errorMessage, $('#div-formField').innerHTML);
       }
-      UI.store.add(form, UI.ns.ui('parts'), UI.rdf.namedNode('http://example.com/#bla'), UI.rdf.namedNode('http://example.com/'))
-    
+      UI.store.add(form, UI.ns.ui('parts'), new UI.rdf.Collection([
+        UI.rdf.namedNode('http://example.com/#part1'),
+        UI.rdf.namedNode('http://example.com/#part2')
+      ]), UI.rdf.namedNode('http://example.com/'))
+
       // FIXME: https://github.com/solid/solid-ui/issues/239
       document.outlineManager = {
         appendPropertyTRs: () => {}
@@ -77,8 +80,11 @@
       const callbackFunction = (ok, errorMessage) => {
         console.log(ok, errorMessage, $('#div-groupField').innerHTML);
       }
-      UI.store.add(form, UI.ns.ui('parts'), UI.rdf.namedNode('http://example.com/#bla'), UI.rdf.namedNode('http://example.com/'))
-    
+      UI.store.add(form, UI.ns.ui('parts'), new UI.rdf.Collection([
+        UI.rdf.namedNode('http://example.com/#part1'),
+        UI.rdf.namedNode('http://example.com/#part2')
+      ]), UI.rdf.namedNode('http://example.com/'))
+
       // FIXME: https://github.com/solid/solid-ui/issues/239
       document.outlineManager = {
         appendPropertyTRs: () => {}
@@ -97,6 +103,41 @@
   </script>
   <pre id="viewSource-groupField"></pre><script>showSource('groupField')</script>
   <div id="div-groupField"></div>
+
+  <h2 id="optionsField"><a href="#optionsField">UI.widgets.field[UI.ns.ui('Options').uri]</a></h2>
+  <script id="script-optionsField">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const container = $('#div-optionsField')
+      const subject = UI.rdf.namedNode('http://example.com/#this')
+      const form = UI.rdf.namedNode('http://example.com/#form')
+      const store = UI.rdf.namedNode('http://example.com/#store')
+      const key = subject.toNT() + '|' + form.toNT()
+      const already = {
+        [key]: true
+      }
+      const callbackFunction = (ok, errorMessage) => {
+        console.log(ok, errorMessage, $('#div-optionsField').innerHTML);
+      }
+      UI.store.add(form, UI.ns.ui('dependingOn'), UI.rdf.namedNode('http://example.com/#bla'), UI.rdf.namedNode('http://example.com/'))
+
+      // FIXME: https://github.com/solid/solid-ui/issues/239
+      document.outlineManager = {
+        appendPropertyTRs: () => {}
+      }
+      UI.widgets.field[UI.ns.ui('Group').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        callbackFunction
+      )
+      console.log('HTML that was generated:', $('#div-optionsField').innerHTML)
+    })
+  </script>
+  <pre id="viewSource-optionsField"></pre><script>showSource('optionsField')</script>
+  <div id="div-optionsField"></div>
 
 </body>
 </html>

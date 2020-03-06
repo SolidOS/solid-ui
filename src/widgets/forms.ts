@@ -53,7 +53,7 @@ field[ns.ui('Form').uri] = field[
 
   // Prevent loops
   var key = subject.toNT() + '|' + form.toNT()
-  console.log('looking for already', already, key)
+
   if (already[key]) {
     // been there done that
     box.appendChild(dom.createTextNode('Group: see above ' + key))
@@ -66,21 +66,17 @@ field[ns.ui('Form').uri] = field[
   for (var x in already) already2[x] = 1
   already2[key] = 1
 
-  // Commenting this code out to work around
-  // https://github.com/solid/solid-ui/issues/243
-  // Please remove this commented-out code
-  // once that issue is closed.
-  // var parts = kb.any(form, ns.ui('parts'))
-  // var p2
-  // if (parts) {
-  //   p2 = parts.elements
-  // } else {
-  //   parts = kb.each(form, ns.ui('part')) //  Warning: unordered
-  //   p2 = sortBySequence(parts)
-  // }
-
-  const parts = kb.each(form, ns.ui('part')) //  Warning: unordered
-  const p2 = sortBySequence(parts)
+  var parts = kb.any(form, ns.ui('parts'))
+  var p2
+  if (parts) {
+    if (!parts.elements) {
+      throw new Error('Form parts should be an RDF collection, see https://solid.github.io/solid-ui/examples/forms/')
+    }
+    p2 = parts.elements
+  } else {
+    parts = kb.each(form, ns.ui('part')) //  Warning: unordered
+    p2 = sortBySequence(parts)
+  }
 
   if (!parts) {
     box.appendChild(errorMessageBlock(dom, 'No parts to form! '))
