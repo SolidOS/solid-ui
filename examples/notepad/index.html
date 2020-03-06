@@ -97,25 +97,61 @@
   <div id="div-participationObject"></div>
   <h2>recordParticipation</h2>
   <script id='script-recordParticipation'>
-// recordParticipation (subject: NamedNode, padDoc: NamedNode, refreshable: any)
-
+    window.addEventListener('DOMContentLoaded', async (event) => {
+      const doc = $('#iframe-recordParticipation').contentWindow.document;
+      const kb = UI.store
+      const subject = kb.sym('https://test.test#');
+      const fetcher = UI.rdf.fetcher(kb)
+      const padDoc = kb.sym(
+        document.location.href.replace(/\/[^\/]*$/, "/pad.ttl#this")
+      )
+      await fetcher.load(padDoc.doc())
+      const htmlStr = UI.pad.recordParticipation(subject, padDoc, false);
+    })
   </script>
   <pre id="viewSource-recordParticipation"></pre>
   <script>$('#viewSource-recordParticipation').innerHTML = $('#script-recordParticipation').innerText</script>
   <iframe id='iframe-recordParticipation' src="about:blank"></iframe>
-  <div id="div-recordPatricipation"></div>
+  <div id="div-recordParticipation"></div>
 
   <h2>manageParticipation</h2>
-  <!-- manageParticipation (
-  dom: Document,
-  container: HTMLDivElement,
-  padDoc: NamedNode,
-  subject: NamedNode,
-  me: NamedNode,
-  options: any
-)-->
+  <script id='script-manageParticipation'>
+    window.addEventListener('DOMContentLoaded', async (event) => {
+      const doc = $('#frame-manageParticipation').contentWindow.document;
+      const kb = UI.store
+      const me = new UI.rdf.NamedNode('https://sharonstrats.inrupt.net/profile/card#me')
+      const container = createElement(HTMLDivElement)
+      const subject = kb.sym('https://test.test#');
+      const padDoc = kb.sym(document.location.href.replace(/\/[^\/]*$/, "/pad.ttl#this"))
+      await fetcher.load(padDoc.doc())
+      options = {}
+      const htmlStr = UI.pad.manageParticipation(Document, container, padDoc, subject, me, options)
+    })
+  </script>
+
+  <pre id="viewSource-manageParticipation"></pre>
+  <script>$('#viewSource-manageParticipation').innerHTML = $('#script-manageParticipation').innerText</script>
+  <iframe id='iframe-manageParticipation' src="about:blank"></iframe>
+  <div id="div-manageParticipation"></div>
   <h2>notepad </h2>
-  <!--   notepad (dom: Document, padDoc: NamedNode, subject: NamedNode, me: NamedNode, options: any)-->
+  <script id='script-notepad'>
+    window.addEventListener('DOMContentLoaded', async (event) => {
+      const doc = $('#frame-notepad').contentWindow.document;
+      const kb = UI.store
+      const me = new UI.rdf.NamedNode('https://sharonstrats.inrupt.net/profile/card#me')
+      const container = createElement(HTMLDivElement)
+      const subject = kb.sym('https://test.test#');
+      const padDoc = kb.sym(document.location.href.replace(/\/[^\/]*$/, "/pad.ttl#this"))
+      await fetcher.load(padDoc.doc())
+      options = {}
+      const htmlStr = notepad(Document, padDoc, subject, me, options)
+    })
+  </script>
+  <pre id="viewSource-notepad"></pre>
+  <script>$('#viewSource-notepad').innerHTML = $('#script-notepad').innerText</script>
+  <iframe id='iframe-notepad' src="about:blank"></iframe>
+  <div id="div-notepad"></div>
+
 </body>
 
 </html>
