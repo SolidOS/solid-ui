@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset='UTF-8'>
+    <title>solid-ui UI.widgets.forms examples page</title>
+    <script type="text/javascript" src="../../lib/webpack-bundle.js"></script>
+    <script>
+      const $ = document.querySelector.bind(document)
+      
+      function showSource(widgetName) {
+      $(`#viewSource-${widgetName}`).innerHTML = $(`#script-${widgetName}`).innerText
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;")
+    }
+    </script>
+  </head>
+<body>
+  <!-- <h2 id="templateTitle"><a href="#templateTitle">templateTitle</a></h2>
+  <script id="script-templateTitle">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      UI.widgets.templateTitle()
+    })
+  </script>
+  <pre id="viewSource-templateTitle"></pre><script>showSource('templateTitle')</script>
+  <div id="div-templateTitle"></div> -->
+
+  <h2 id="formField"><a href="#formField">UI.widgets.field[UI.ns.ui('Form').uri] / xUI.widgets.field[UI.ns.ui('Group').uri], no already</a></h2>
+  <script id="script-formField">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const container = $('#div-formField')
+      const already = {}
+      const subject = UI.rdf.namedNode('http://example.com/#this')
+      const form = UI.rdf.namedNode('http://example.com/#form')
+      const store = UI.rdf.namedNode('http://example.com/#store')
+      const callbackFunction = (ok, errorMessage) => {
+        console.log(ok, errorMessage, $('#div-formField').innerHTML);
+      }
+      UI.store.add(form, UI.ns.ui('parts'), UI.rdf.namedNode('http://example.com/#bla'), UI.rdf.namedNode('http://example.com/'))
+    
+      // FIXME: https://github.com/solid/solid-ui/issues/239
+      document.outlineManager = {
+        appendPropertyTRs: () => {}
+      }
+      UI.widgets.field[UI.ns.ui('Form').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        callbackFunction
+      );
+      console.log('HTML that was generated:', $('#div-formField').innerHTML);
+    })
+  </script>
+  <pre id="viewSource-formField"></pre><script>showSource('formField')</script>
+  <div id="div-formField"></div>
+
+  <h2 id="groupField"><a href="#groupField">UI.widgets.field[UI.ns.ui('Form').uri] / xUI.widgets.field[UI.ns.ui('Group').uri], with already</a></h2>
+  <script id="script-groupField">
+    // UI.widgets.field[UI.ns.ui('Group').uri] is currently synonymous with
+    // UI.widgets.field[UI.ns.ui('Form').uri], but this additional example
+    // shows the use of `already`.
+
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const container = $('#div-groupField')
+      const subject = UI.rdf.namedNode('http://example.com/#this')
+      const form = UI.rdf.namedNode('http://example.com/#form')
+      const store = UI.rdf.namedNode('http://example.com/#store')
+      const key = subject.toNT() + '|' + form.toNT()
+      const already = {
+        [key]: true
+      }
+      const callbackFunction = (ok, errorMessage) => {
+        console.log(ok, errorMessage, $('#div-groupField').innerHTML);
+      }
+      UI.store.add(form, UI.ns.ui('parts'), UI.rdf.namedNode('http://example.com/#bla'), UI.rdf.namedNode('http://example.com/'))
+    
+      // FIXME: https://github.com/solid/solid-ui/issues/239
+      document.outlineManager = {
+        appendPropertyTRs: () => {}
+      }
+      UI.widgets.field[UI.ns.ui('Group').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        callbackFunction
+      )
+      console.log('HTML that was generated:', $('#div-groupField').innerHTML)
+    })
+  </script>
+  <pre id="viewSource-groupField"></pre><script>showSource('groupField')</script>
+  <div id="div-groupField"></div>
+
+</body>
+</html>

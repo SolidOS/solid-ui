@@ -53,6 +53,7 @@ field[ns.ui('Form').uri] = field[
 
   // Prevent loops
   var key = subject.toNT() + '|' + form.toNT()
+  console.log('looking for already', already, key)
   if (already[key]) {
     // been there done that
     box.appendChild(dom.createTextNode('Group: see above ' + key))
@@ -65,14 +66,22 @@ field[ns.ui('Form').uri] = field[
   for (var x in already) already2[x] = 1
   already2[key] = 1
 
-  var parts = kb.any(form, ns.ui('parts'))
-  var p2
-  if (parts) {
-    p2 = parts.elements
-  } else {
-    parts = kb.each(form, ns.ui('part')) //  Warning: unordered
-    p2 = sortBySequence(parts)
-  }
+  // Commenting this code out to work around
+  // https://github.com/solid/solid-ui/issues/243
+  // Please remove this commented-out code
+  // once that issue is closed.
+  // var parts = kb.any(form, ns.ui('parts'))
+  // var p2
+  // if (parts) {
+  //   p2 = parts.elements
+  // } else {
+  //   parts = kb.each(form, ns.ui('part')) //  Warning: unordered
+  //   p2 = sortBySequence(parts)
+  // }
+
+  const parts = kb.each(form, ns.ui('part')) //  Warning: unordered
+  const p2 = sortBySequence(parts)
+
   if (!parts) {
     box.appendChild(errorMessageBlock(dom, 'No parts to form! '))
     return dom
