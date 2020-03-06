@@ -37,12 +37,13 @@ export function lightColorHash (author: NamedNode): string {
 *
 *  @param {Document} dom - The web page loaded into the browser
 *  @param {?} table
-*  @param {NamedNode} document The document to render
+*  @param {NamedNode} unused1/document The document to render (this argument is no longer used, but left in for backwards compatibility)
 *  @param {NamedNode} subject
-*  @param {NamedNode} me User that is logged into the pod
-*  @param { ?} options
+*  @param {NamedNode} unused2/me User that is logged into the pod (this argument is no longer used, but left in for backwards compatibility)
+*  @param { } options - The options that can be passed in are deleteFunction, link, and draggable these are used by the personTR button
 */
-export function renderPartipants (dom: Document, table: any, padDoc: NamedNode, subject: NamedNode, me: NamedNode, options: any) {
+
+export function renderPartipants (dom: Document, table: any, unused1: NamedNode, subject: NamedNode, unused2: NamedNode, options: any) {
   table.setAttribute('style', 'margin: 0.8em;')
 
   const newRowForParticpation = function (parp) {
@@ -326,6 +327,7 @@ export function notepad (dom: Document, padDoc: NamedNode, subject: NamedNode, m
     const tr = t.appendChild(dom.createElement('tr'))
     upstreamStatus = tr.appendChild(dom.createElement('td'))
     downstreamStatus = tr.appendChild(dom.createElement('td'))
+
     if (upstreamStatus) {
       upstreamStatus.setAttribute('style', 'width:50%')
     }
@@ -339,14 +341,7 @@ export function notepad (dom: Document, padDoc: NamedNode, subject: NamedNode, m
   const complain = function (message: string, upstream: boolean = false) {
     console.log(message)
     if (options.statusArea) {
-      if (upstream && upstreamStatus) {
-        upstreamStatus.appendChild(
-          errorMessageBlock(dom, message, 'pink')
-        )
-      } else if (upstream && downstreamStatus) {
-        downstreamStatus.appendChild(
-          errorMessageBlock(dom, message, 'pink'))
-      }
+      ; (upstream ? upstreamStatus as HTMLElement : downstreamStatus as HTMLElement).appendChild(errorMessageBlock(dom, message, 'pink'))
     }
   }
 
@@ -381,6 +376,8 @@ export function notepad (dom: Document, padDoc: NamedNode, subject: NamedNode, m
         ';'
     }
 
+    // @@ TODO Need to research when this can be an object with the indent stored in value
+    // and when the indent is stored as a Number itself, not in an object.
     let indent = kb.any(chunk, PAD('indent'))
 
     indent = indent ? indent.value : 0

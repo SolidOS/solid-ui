@@ -60,7 +60,7 @@
       )
       await fetcher.load(pad.doc())
       // subject = new NamedNode('test') // this i think the page where a list.. ns.ws('participants') are stored
-      subject = null
+      subject = kb.sym('https://test.test#')
       options = {} // what to put in options
       //options are used in the button personTR there are the following properties can be defined deleteFunction, link, draggable
       const htmlStr = UI.pad.renderPartipants(doc, table, pad, subject, new UI.rdf.NamedNode('https://sharonstrats.inrupt.net/profile/card#me'), options)
@@ -76,9 +76,46 @@
   <div id="div-renderPartipants"></div>
 
   <h2> participationObject </h2>
+  <script id="script-participationObject">
+    window.addEventListener('DOMContentLoaded', async (event) => {
+      const doc = $('#iframe-participationObject').contentWindow.document;
+
+      const kb = UI.store
+      const subject = kb.sym('https://test.test#');
+      const fetcher = UI.rdf.fetcher(kb)
+      const padDoc = kb.sym(
+        document.location.href.replace(/\/[^\/]*$/, "/pad.ttl#this")
+      )
+      await fetcher.load(padDoc.doc())
+      const me = new UI.rdf.NamedNode('https://sharonstrats.inrupt.net/profile/card#me')
+      const htmlStr = UI.pad.participationObject(subject, padDoc, me);
+    })
+  </script>
+  <pre id="viewSource-participationObject"></pre>
+  <script>$('#viewSource-participationObject').innerHTML = $('#script-participationObject').innerText</script>
+  <iframe id="iframe-participationObject" src="about:blank"></iframe>
+  <div id="div-participationObject"></div>
   <h2>recordParticipation</h2>
+  <script id='script-recordParticipation'>
+// recordParticipation (subject: NamedNode, padDoc: NamedNode, refreshable: any)
+
+  </script>
+  <pre id="viewSource-recordParticipation"></pre>
+  <script>$('#viewSource-recordParticipation').innerHTML = $('#script-recordParticipation').innerText</script>
+  <iframe id='iframe-recordParticipation' src="about:blank"></iframe>
+  <div id="div-recordPatricipation"></div>
+
   <h2>manageParticipation</h2>
+  <!-- manageParticipation (
+  dom: Document,
+  container: HTMLDivElement,
+  padDoc: NamedNode,
+  subject: NamedNode,
+  me: NamedNode,
+  options: any
+)-->
   <h2>notepad </h2>
+  <!--   notepad (dom: Document, padDoc: NamedNode, subject: NamedNode, me: NamedNode, options: any)-->
 </body>
 
 </html>
