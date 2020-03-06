@@ -38,14 +38,14 @@ export const fieldParams = {}
  ** @param {Map} already A hash table of (form, subject) kept to prevent recursive forms looping
  ** @param {Node} subject The thing about which the form displays/edits data
  ** @param {Node} form The form or field to be rendered
- ** @param {Node} store The web document in which the data is
+ ** @param {Node} doc The web document in which the data is
  ** @param {function(ok, errorMessage)} callbackFunction Called when data is changed?
  **
  ** @returns {Element} The HTML widget created
  */
 field[ns.ui('Form').uri] = field[
   ns.ui('Group').uri
-] = function (dom: HTMLDocument, container: Element | undefined, already: { }, subject: NamedNode, form: NamedNode, store: NamedNode, callbackFunction: (ok: boolean, errorMessage: string) => void) {
+] = function (dom: HTMLDocument, container: Element | undefined, already: { }, subject: NamedNode, form: NamedNode, doc: NamedNode, callbackFunction: (ok: boolean, errorMessage: string) => void) {
   const kb = uiStore
   var box = dom.createElement('div')
   box.setAttribute('style', `padding-left: 2em; border: 0.05em solid ${formBorderColor};`) // Indent a group
@@ -108,7 +108,7 @@ field[ns.ui('Form').uri] = field[
               already,
               subject,
               field,
-              store,
+              doc,
               callbackFunction
             )
             box.removeChild(newOne)
@@ -121,7 +121,7 @@ field[ns.ui('Form').uri] = field[
       }
       callbackFunction(ok, body)
     }
-    ;(eles as any).push(fn(dom, box, already2, subject, field, store, itemChanged))
+    ;(eles as any).push(fn(dom, box, already2, subject, field, doc, itemChanged))
   }
   return box
 }
@@ -133,7 +133,7 @@ field[ns.ui('Form').uri] = field[
  ** @param {Map} already A hash table of (form, subject) kept to prevent recursive forms looping
  ** @param {Node} subject The thing about which the form displays/edits data
  ** @param {Node} form The form or field to be rendered
- ** @param {Node} store The web document in which the data is
+ ** @param {Node} doc The web document in which the data is
  ** @param {function(ok, errorMessage)} callbackFunction Called when data is changed?
  **
  ** @returns {Element} The HTML widget created
@@ -145,7 +145,7 @@ field[ns.ui('Options').uri] = function (
   already,
   subject,
   form,
-  store,
+  doc,
   callbackFunction
 ) {
   const kb = uiStore
@@ -200,7 +200,7 @@ field[ns.ui('Options').uri] = function (
             already,
             subject,
             field,
-            store,
+            doc,
             callbackFunction
           )
         }
@@ -218,7 +218,7 @@ field[ns.ui('Options').uri] = function (
  ** @param {Map} already A hash table of (form, subject) kept to prevent recursive forms looping
  ** @param {Node} subject The thing about which the form displays/edits data
  ** @param {Node} form The form or field to be rendered
- ** @param {Node} store The web document in which the data is
+ ** @param {Node} doc The web document in which the data is
  ** @param {function(ok, errorMessage)} callbackFunction Called when data is changed?
  **
  ** @returns {Element} The HTML widget created
@@ -229,7 +229,7 @@ field[ns.ui('Multiple').uri] = function (
   already,
   subject,
   form,
-  store,
+  doc,
   callbackFunction
 ) {
   /** Diagnostic function
@@ -243,13 +243,13 @@ field[ns.ui('Multiple').uri] = function (
    * @param {Node} object The RDF object to be represented by this item.
    */
   async function addItem (object?) {
-    if (!object) object = newThing(store) // by default just add new nodes
+    if (!object) object = newThing(doc) // by default just add new nodes
     if (ordered) {
       createListIfNecessary() // Sets list and unsavedList
       list.elements.push(object)
       await saveListThenRefresh()
     } else {
-      const toBeInserted = [st(subject, property, object, store)]
+      const toBeInserted = [st(subject, property, object, doc)]
       try {
         await kb.updater.update([], toBeInserted)
       } catch (err) {
@@ -279,7 +279,7 @@ field[ns.ui('Multiple').uri] = function (
       } else {
         // unordered
         if (kb.holds(subject, property, object)) {
-          var del = [st(subject, property, object, store)]
+          var del = [st(subject, property, object, doc)]
           kb.updater.update(del, [], function (uri, ok, message) {
             if (ok) {
               body.removeChild(subField)
@@ -346,19 +346,19 @@ field[ns.ui('Multiple').uri] = function (
       if (ok) {
         // @@@ Check IT hasnt alreday been written in
         if (ordered) {
-          list = kb.any(subject, property, null, store)
+          list = kb.any(subject, property, null, doc)
           if (!list) {
             list = new Collection([object])
             ins = [st(subject, property, list)] // Will this work?
           } else {
             const oldList = new Collection(list.elments)
             list.append(object)
-            del = [st(subject, property, oldList)] // If this doesn't work, kb.saveBack(store)
+            del = [st(subject, property, oldList)] // If this doesn't work, kb.saveBack(doc)
             ins = [st(subject, property, list)]
           }
         } else {
-          if (!kb.holds(subject, property, object, store)) {
-            ins = [st(subject, property, object, store)]
+          if (!kb.holds(subject, property, object, doc)) {
+            ins = [st(subject, property, object, doc)]
           }
           kb.updater.update(del, ins, linkDone)
         }
@@ -374,18 +374,18 @@ field[ns.ui('Multiple').uri] = function (
       return callbackFunction(ok, message)
     }
 
-    // if (!object) object = newThing(store)
+    // if (!object) object = newThing(doc)
     debug('Multiple: render object: ' + object)
     // var tr = box.insertBefore(dom.createElement('tr'), tail)
     // var ins = []
     // var del = []
 
     var fn = fieldFunction(dom, element)
-    var subField = fn(dom, null, already, object, element, store, itemDone) // p2 was: body.  moving to not passing that
+    var subField = fn(dom, null, already, object, element, doc, itemDone) // p2 was: body.  moving to not passing that
     subField.subject = object // Keep a back pointer between the DOM array and the RDF objects
 
     // delete button and move buttons
-    if (kb.updater.editable(store.uri)) {
+    if (kb.updater.editable(doc.uri)) {
       deleteButtonWithCheck(dom, subField, label(property),
         deleteThisItem)
       if (ordered) {
@@ -456,7 +456,7 @@ field[ns.ui('Multiple').uri] = function (
     list = null
   }
   // Add control on the bottom for adding more items
-  if (kb.updater.editable(store.uri)) {
+  if (kb.updater.editable(doc.uri)) {
     var tail = box.appendChild(dom.createElement('tr'))
     tail.style.padding = '0.5em'
     var img = tail.appendChild(dom.createElement('img'))
@@ -475,7 +475,7 @@ field[ns.ui('Multiple').uri] = function (
   function createListIfNecessary () {
     if (!list) {
       list = new Collection([])
-      kb.add(subject, property, list, store)
+      kb.add(subject, property, list, doc)
     }
   }
 
@@ -484,7 +484,7 @@ field[ns.ui('Multiple').uri] = function (
 
     createListIfNecessary()
     try {
-      await kb.fetcher.putBack(store)
+      await kb.fetcher.putBack(doc)
     } catch (err) {
       box.appendChild(
         errorMessageBlock(dom, 'Error trying to put back a list: ' + err)
@@ -617,7 +617,7 @@ fieldParams[ns.ui('EmailField').uri].pattern = /^\s*.*@.*\..*\s*$/ // @@ Get the
  ** @param {Map} already A hash table of (form, subject) kept to prevent recursive forms looping
  ** @param {Node} subject The thing about which the form displays/edits data
  ** @param {Node} form The form or field to be rendered
- ** @param {Node} store The web document in which the data is
+ ** @param {Node} doc The web document in which the data is
  ** @param {function(ok, errorMessage)} callbackFunction Called when data is changed?
  **
  ** @returns {Element} The HTML widget created
@@ -631,7 +631,7 @@ function basicField (
   already,
   subject: NamedNode,
   form: NamedNode,
-  store: NamedNode,
+  doc: NamedNode,
   callbackFunction: (ok: boolean, errorMessage: string) => void
 ) {
   const kb = uiStore
@@ -672,9 +672,9 @@ function basicField (
   var maxLength = kb.any(form, ns.ui('maxLength'))
   field.setAttribute('maxLength', maxLength ? '' + maxLength : '4096')
 
-  store = store || fieldStore(subject, property, store)
+  doc = doc || fieldStore(subject, property, doc)
 
-  var obj = kb.any(subject, property, undefined, store)
+  var obj = kb.any(subject, property, undefined, doc)
   if (!obj) {
     obj = kb.any(form, ns.ui('default'))
   }
@@ -687,7 +687,7 @@ function basicField (
   }
   field.setAttribute('style', style)
 
-  if (!kb.updater.editable(store.uri)) {
+  if (!kb.updater.editable(doc.uri)) {
     field.readOnly = true // was: disabled. readOnly is better
     return box
   }
@@ -736,7 +736,7 @@ function basicField (
       var is = ds.map(st => st(st.subject, st.predicate, result, st.why)) // can include >1 doc
       if (is.length === 0) {
         // or none
-        is = [st(subject, property, result, store)]
+        is = [st(subject, property, result, doc)]
       }
 
       function updateMany (ds, is: { why: { uri: string } }[], callback) {
@@ -810,7 +810,7 @@ field[ns.ui('MultiLineTextField').uri] = function (
   already,
   subject,
   form,
-  store,
+  doc,
   callbackFunction
 ) {
   const kb = uiStore
@@ -820,13 +820,13 @@ field[ns.ui('MultiLineTextField').uri] = function (
   }
   const box = dom.createElement('div')
   box.appendChild(fieldLabel(dom, property, form))
-  store = fieldStore(subject, property, store)
+  doc = fieldStore(subject, property, doc)
   var field = makeDescription(
     dom,
     kb,
     subject,
     property,
-    store,
+    doc,
     callbackFunction
   )
   // box.appendChild(dom.createTextNode('<-@@ subj:'+subject+', prop:'+property))
@@ -845,7 +845,7 @@ function booleanField (
   already,
   subject,
   form,
-  store,
+  doc,
   callbackFunction,
   tristate
 ) {
@@ -861,15 +861,15 @@ function booleanField (
   }
   var lab = kb.any(form, ns.ui('label'))
   if (!lab) lab = label(property, true) // Init capital
-  store = fieldStore(subject, property, store)
+  doc = fieldStore(subject, property, doc)
   var state = kb.any(subject, property)
   if (state === undefined) {
     state = false
   } // @@ sure we want that -- or three-state?
-  // debug('store is '+store)
-  var ins = (st as any)(subject, property, true, store)
-  var del = (st as any)(subject, property, false, store)
-  var box = buildCheckboxForm(dom, kb, lab, del, ins, form, store, tristate)
+  // debug('doc is '+doc)
+  var ins = (st as any)(subject, property, true, doc)
+  var del = (st as any)(subject, property, false, doc)
+  var box = buildCheckboxForm(dom, kb, lab, del, ins, form, doc, tristate)
   if (container) container.appendChild(box)
   return box
 }
@@ -879,7 +879,7 @@ field[ns.ui('BooleanField').uri] = function (
   already,
   subject,
   form,
-  store,
+  doc,
   callbackFunction
 ) {
   return booleanField(
@@ -888,7 +888,7 @@ field[ns.ui('BooleanField').uri] = function (
     already,
     subject,
     form,
-    store,
+    doc,
     callbackFunction,
     false
   )
@@ -900,7 +900,7 @@ field[ns.ui('TristateField').uri] = function (
   already,
   subject,
   form,
-  store,
+  doc,
   callbackFunction
 ) {
   return booleanField(
@@ -909,7 +909,7 @@ field[ns.ui('TristateField').uri] = function (
     already,
     subject,
     form,
-    store,
+    doc,
     callbackFunction,
     true
   )
@@ -928,7 +928,7 @@ field[ns.ui('Classifier').uri] = function (
   already,
   subject,
   form,
-  store,
+  doc,
   callbackFunction
 ) {
   const kb = uiStore
@@ -937,7 +937,7 @@ field[ns.ui('Classifier').uri] = function (
   if (!category) {
     return errorMessageBlock(dom, 'No category for classifier: ' + form)
   }
-  debug('Classifier: store=' + store)
+  debug('Classifier: doc=' + doc)
   var checkOptions = function (ok, body) {
     if (!ok) return callbackFunction(ok, body)
 
@@ -955,7 +955,7 @@ field[ns.ui('Classifier').uri] = function (
     kb,
     subject,
     category,
-    store,
+    doc,
     checkOptions
   )
   if (container) container.appendChild(box)
@@ -980,7 +980,7 @@ field[ns.ui('Choice').uri] = function (
   already,
   subject,
   form,
-  store,
+  doc,
   callbackFunction
 ) {
   const kb = uiStore
@@ -1038,7 +1038,7 @@ field[ns.ui('Choice').uri] = function (
       already,
       object,
       subForm,
-      store,
+      doc,
       callbackFunction
     )
   }
@@ -1055,7 +1055,7 @@ field[ns.ui('Choice').uri] = function (
     property,
     possible2,
     opts,
-    store,
+    doc,
     callbackFunction
   )
   rhs.appendChild(selector)
@@ -1083,7 +1083,7 @@ field[ns.ui('Comment').uri] = field[
   already,
   subject,
   form,
-  _store,
+  _doc,
   _callbackFunction
 ) {
   const kb = uiStore
@@ -1154,7 +1154,7 @@ export function editFormButton (
   dom,
   container,
   form,
-  store,
+  doc,
   callbackFunction
 ) {
   var b = dom.createElement('button')
@@ -1169,7 +1169,7 @@ export function editFormButton (
         {},
         form,
         ns.ui('FormForm'),
-        store,
+        doc,
         callbackFunction
       )
       ff.setAttribute(
@@ -1191,7 +1191,7 @@ export function appendForm (
   already,
   subject: NamedNode,
   form: NamedNode,
-  store: NamedNode,
+  doc: NamedNode,
   itemDone: () => void
 ) {
   return fieldFunction(dom, form)(
@@ -1200,7 +1200,7 @@ export function appendForm (
     already,
     subject,
     form,
-    store,
+    doc,
     itemDone
   )
 }
@@ -1315,7 +1315,7 @@ export function sortByLabel (list) {
 /** Button to add a new whatever using a form
 //
 // @param form - optional form , else will look for one
-// @param store - optional store else will prompt for one (unimplemented)
+// @param doc - optional doc else will prompt for one (unimplemented)
 */
 export function newButton (
   dom: HTMLDocument,
@@ -1324,7 +1324,7 @@ export function newButton (
   predicate: NamedNode,
   theClass: NamedNode,
   form: NamedNode,
-  store: NamedNode,
+  doc: NamedNode,
   callbackFunction
 ) {
   var b = dom.createElement('button')
@@ -1341,7 +1341,7 @@ export function newButton (
           predicate,
           theClass,
           form,
-          store,
+          doc,
           callbackFunction
         )
       )
@@ -1359,7 +1359,7 @@ export function newButton (
 // @param predicate - a term, the relationship for the subject link. Optional.
 // @param theClass - an RDFS class containng the object about which the new information is.
 // @param form  - the form to be used when a new one. null means please find one.
-// @param store - The web document being edited
+// @param doc - The web document being edited
 // @param callbackFunction - takes (boolean ok, string errorBody)
 // @returns a dom object with the form DOM
 */
@@ -1370,7 +1370,7 @@ export function promptForNew (
   predicate,
   theClass,
   form,
-  store,
+  doc,
   callbackFunction
 ) {
   var box = dom.createElement('form')
@@ -1410,16 +1410,16 @@ export function promptForNew (
   box.innerHTML = '<h3>New ' + label(theClass) + '</h3>'
 
   var formFunction = fieldFunction(dom, form)
-  var object = newThing(store)
+  var object = newThing(doc)
   var gotButton = false
   var itemDone = function (ok, body) {
     if (!ok) return callbackFunction(ok, body)
     var insertMe: any[] = []
-    if (subject && !kb.holds(subject, predicate, object, store)) {
-      insertMe.push(st(subject, predicate, object, store))
+    if (subject && !kb.holds(subject, predicate, object, doc)) {
+      insertMe.push(st(subject, predicate, object, doc))
     }
-    if (subject && !kb.holds(object, ns.rdf('type'), theClass, store)) {
-      insertMe.push(st(object, ns.rdf('type'), theClass, store))
+    if (subject && !kb.holds(object, ns.rdf('type'), theClass, doc)) {
+      insertMe.push(st(object, ns.rdf('type'), theClass, doc))
     }
     if (insertMe.length) {
       uiStore.updater.update([], insertMe, linkDone)
@@ -1435,7 +1435,7 @@ export function promptForNew (
     return callbackFunction(ok, body)
   }
   info('paneUtils Object is ' + object)
-  var f = formFunction(dom, box, {}, object, form, store, itemDone)
+  var f = formFunction(dom, box, {}, object, form, doc, itemDone)
   var rb = removeButton(dom, f)
   rb.setAttribute('style', 'float: right;')
   box.AJAR_subject = object
@@ -1447,12 +1447,12 @@ export function makeDescription (
   kb: IndexedFormula,
   subject: NamedNode,
   predicate: NamedNode,
-  store: NamedNode,
+  doc: NamedNode,
   callbackFunction: (ok: boolean, errorMessage: string) => void
 ) {
   var group = dom.createElement('div')
 
-  var sts = kb.statementsMatching(subject, predicate, null, store) // Only one please
+  var sts = kb.statementsMatching(subject, predicate, null, doc) // Only one please
   if (sts.length > 1) {
     return errorMessageBlock(
       dom,
@@ -1478,7 +1478,7 @@ export function makeDescription (
   }
 
   ;(group as any).refresh = function () {
-    var v = kb.any(subject, predicate, null, store)
+    var v = kb.any(subject, predicate, null, doc)
     if (v && v.value !== field.value) {
       field.value = v.value // don't touch widget if no change
       // @@ this is the place to color the field from the user who chanaged it
@@ -1489,8 +1489,8 @@ export function makeDescription (
     submit.setAttribute('style', 'visibility: hidden; float: right;') // Keep UI clean
     field.disabled = true
     field.setAttribute('style', style + 'color: gray;') // pending
-    var ds = kb.statementsMatching(subject, predicate, null, store)
-    var is = st(subject, predicate, field.value, store)
+    var ds = kb.statementsMatching(subject, predicate, null, doc)
+    var is = st(subject, predicate, field.value, doc)
     uiStore.updater.update(ds, is, function (uri, ok, body) {
       if (ok) {
         field.setAttribute('style', style + 'color: black;')
@@ -1499,7 +1499,7 @@ export function makeDescription (
         group.appendChild(
           errorMessageBlock(
             dom,
-            'Error (while saving change to ' + store.uri + '): ' + body
+            'Error (while saving change to ' + doc.uri + '): ' + body
           )
         )
       }
@@ -1512,7 +1512,7 @@ export function makeDescription (
   var br = dom.createElement('br')
   group.appendChild(br)
 
-  var editable = uiStore.updater.editable(store.uri)
+  var editable = uiStore.updater.editable(doc.uri)
   if (editable) {
     var submit = dom.createElement('input')
     submit.setAttribute('type', 'submit')
@@ -1551,7 +1551,7 @@ export function makeDescription (
 //                        option for none selected (for non multiple)
 // @param options.mint - User may create thing if this sent to the prompt string eg "New foo"
 // @param options.subForm - If mint, then the form to be used for minting the new thing
-// @param store - The web document being edited
+// @param doc - The web document being edited
 // @param callbackFunction - takes (boolean ok, string errorBody)
 */
 export function makeSelectForOptions (
@@ -1561,13 +1561,13 @@ export function makeSelectForOptions (
   predicate,
   possible,
   options,
-  store,
+  doc,
   callbackFunction
 ) {
   debug('Select list length now ' + possible.length)
   var n = 0
   var uris = {} // Count them
-  var editable = uiStore.updater.editable(store.uri)
+  var editable = uiStore.updater.editable(doc.uri)
 
   for (var i = 0; i < possible.length; i++) {
     var sub = possible[i] // @@ Maybe; make this so it works with blank nodes too
@@ -1586,14 +1586,14 @@ export function makeSelectForOptions (
         '.'
     )
   }
-  debug('makeSelectForOptions: store=' + store)
+  debug('makeSelectForOptions: doc=' + doc)
 
   var getActual = function () {
     actual = {}
     if (predicate.sameTerm(ns.rdf('type'))) {
       actual = kb.findTypeURIs(subject)
     } else {
-      kb.each(subject, predicate, null, store).map(function (x) {
+      kb.each(subject, predicate, null, doc).map(function (x) {
         actual[x.uri] = true
       })
     }
@@ -1608,8 +1608,8 @@ export function makeSelectForOptions (
     var ds: any[] = []
     var is: any[] = []
     var removeValue = function (t) {
-      if (kb.holds(subject, predicate, t, store)) {
-        ds.push(st(subject, predicate, t, store))
+      if (kb.holds(subject, predicate, t, doc)) {
+        ds.push(st(subject, predicate, t, doc))
       }
     }
     for (var i = 0; i < select.options.length; i++) {
@@ -1624,7 +1624,7 @@ export function makeSelectForOptions (
             predicate,
             options.mintClass,
             null,
-            store,
+            doc,
             function (ok, body) {
               if (!ok) {
                 callbackFunction(ok, body) // @@ if ok, need some form of refresh of the select for the new thing
@@ -1634,9 +1634,9 @@ export function makeSelectForOptions (
           select.parentNode.appendChild(thisForm)
           newObject = thisForm.AJAR_subject
         } else {
-          newObject = newThing(store)
+          newObject = newThing(doc)
         }
-        is.push(st(subject, predicate, newObject, store))
+        is.push(st(subject, predicate, newObject, doc))
         if (options.mintStatementsFun) {
           is = is.concat(options.mintStatementsFun(newObject))
         }
@@ -1644,12 +1644,12 @@ export function makeSelectForOptions (
       if (!opt.AJAR_uri) continue // a prompt or mint
       if (opt.selected && !(opt.AJAR_uri in actual)) {
         // new class
-        is.push(st(subject, predicate, kb.sym(opt.AJAR_uri), store))
+        is.push(st(subject, predicate, kb.sym(opt.AJAR_uri), doc))
       }
       if (!opt.selected && opt.AJAR_uri in actual) {
         // old class
         removeValue(kb.sym(opt.AJAR_uri))
-        // ds.push(st(subject, predicate, kb.sym(opt.AJAR_uri), store ))
+        // ds.push(st(subject, predicate, kb.sym(opt.AJAR_uri), doc ))
       }
       if (opt.selected) select.currentURI = opt.AJAR_uri
     }
@@ -1666,10 +1666,10 @@ export function makeSelectForOptions (
     function doneNew (ok, body) {
       callbackFunction(ok, body)
     }
-    info('selectForOptions: stote = ' + store)
+    info('selectForOptions: doc = ' + doc)
     uiStore.updater.update(ds, is, function (uri, ok, body) {
       actual = getActual() // refresh
-      // kb.each(subject, predicate, null, store).map(function(x){actual[x.uri] = true})
+      // kb.each(subject, predicate, null, doc).map(function(x){actual[x.uri] = true})
       if (ok) {
         select.disabled = false // data written back
         if (newObject) {
@@ -1680,7 +1680,7 @@ export function makeSelectForOptions (
             {},
             newObject,
             options.subForm,
-            store,
+            doc,
             doneNew
           )
         }
@@ -1760,7 +1760,7 @@ export function makeSelectForCategory (
   kb,
   subject,
   category,
-  store,
+  doc,
   callbackFunction
 ) {
   var du = kb.any(category, ns.owl('disjointUnionOf'))
@@ -1800,7 +1800,7 @@ export function makeSelectForCategory (
     ns.rdf('type'),
     subs,
     { multiple: multiple, nullPrompt: '--classify--' },
-    store,
+    doc,
     callbackFunction
   )
 }
@@ -1817,7 +1817,7 @@ export function makeSelectForNestedCategory (
   kb,
   subject,
   category,
-  store,
+  doc,
   callbackFunction
 ) {
   var container = dom.createElement('span') // Container
@@ -1832,7 +1832,7 @@ export function makeSelectForNestedCategory (
     kb,
     subject,
     category,
-    store,
+    doc,
     onChange
   )
   container.appendChild(select)
@@ -1851,7 +1851,7 @@ export function makeSelectForNestedCategory (
         kb,
         subject,
         kb.sym(select.currentURI),
-        store,
+        doc,
         callbackFunction
       )
       select.subSelect = child.firstChild
@@ -1871,11 +1871,11 @@ export function makeSelectForNestedCategory (
  **  made if the checkbox is checed and unchecked respectively.
  **  tristate: Allow ins, or del, or neither
  */
-export function buildCheckboxForm (dom, kb, lab, del, ins, form, store, tristate) {
+export function buildCheckboxForm (dom, kb, lab, del, ins, form, doc, tristate) {
   // 20190115
   var box = dom.createElement('div')
   var tx = dom.createTextNode(lab)
-  var editable = uiStore.updater.editable(store.uri)
+  var editable = uiStore.updater.editable(doc.uri)
   tx.style =
     'colour: black; font-size: 100%; padding-left: 0.5 em; padding-right: 0.5 em;'
   box.appendChild(tx)
@@ -1892,7 +1892,7 @@ export function buildCheckboxForm (dom, kb, lab, del, ins, form, store, tristate
     if (!x) return [] // no statements
     if (x.object) {
       if (!x.why) {
-        x.why = store // be back-compaitible  with old code
+        x.why = doc // be back-compaitible  with old code
       }
       return [x] // one statements
     }
@@ -1976,7 +1976,7 @@ export function buildCheckboxForm (dom, kb, lab, del, ins, form, store, tristate
         box.appendChild(
           errorMessageBlock(
             dom,
-            `Checkbox: Error updating store from ${input.state} to ${
+            `Checkbox: Error updating doc from ${input.state} to ${
               input.newState
             }:\n\n${errorBody}`
           )
