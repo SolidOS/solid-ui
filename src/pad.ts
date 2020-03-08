@@ -7,13 +7,11 @@
 import store from './store'
 import ns from './ns'
 import { Namespace, NamedNode, st } from 'rdflib'
-import { currentUser } from './authn/authn'
 // import log from './log'
-import { personTR, newThing, errorMessageBlock } from './widgets'
+import { newThing, errorMessageBlock } from './widgets'
 // import { } from './iconBase'
-import { syncTableToArray, beep } from './utils'
+import { beep } from './utils'
 
-const kb = store
 const PAD = Namespace('http://www.w3.org/ns/pim/pad#')
 
 /** Figure out a random color from my webid
@@ -43,179 +41,6 @@ export function lightColorHash (author: NamedNode): string {
 *  @param { } options - The options that can be passed in are deleteFunction, link, and draggable these are used by the personTR button
 */
 
-export function renderPartipants (dom: Document, table: any, unused1: NamedNode, subject: NamedNode, unused2: NamedNode, options: any) {
-  table.setAttribute('style', 'margin: 0.8em;')
-
-  const newRowForParticpation = function (parp) {
-    const person = kb.any(parp, ns.wf('participant'))
-    let tr
-    if (!person) {
-      tr = dom.createElement('tr')
-      tr.textContent = '???' // Don't crash - invalid part'n entry
-      return tr
-    }
-    const bg = kb.anyValue(parp, ns.ui('backgroundColor')) || 'white'
-
-    const block = dom.createElement('div')
-    block.setAttribute(
-      'style',
-      'height: 1.5em; width: 1.5em; margin: 0.3em; border 0.01em solid #888; background-color: ' +
-      bg
-    )
-    tr = personTR(dom, null, person, options)
-    table.appendChild(tr)
-    const td = dom.createElement('td')
-    td.setAttribute('style', 'vertical-align: middle;')
-    td.appendChild(block)
-    tr.insertBefore(td, tr.firstChild)
-    return tr
-  }
-
-  const syncTable = function () {
-    const parps = kb.each(subject, ns.wf('participation')).map(function (parp) {
-      return [kb.anyValue(parp, ns.cal('dtstart')) || '9999-12-31', parp]
-    })
-    parps.sort() // List in order of joining
-    const participations = parps.map(function (p) {
-      return p[1]
-    })
-    syncTableToArray(table, participations, newRowForParticpation)
-  }
-  table.refresh = syncTable
-  syncTable()
-  return table
-}
-
-/** Record, or find old, Particpation object
- *
- * A particpaption object is a place to record things specifically about
- * subject and the user, such as preferences, start of membership, etc
- * @param {NamedNode} subject - The thing in which the participation is happening
- * @param {NamedNode} document -  Where to record the data
- * @param {NamedNode} me - The logged in user
- *
- */
-export function participationObject (subject: NamedNode, padDoc: NamedNode, me: NamedNode) {
-  return new Promise(function (resolve, reject) {
-    if (!me) {
-      throw new Error('Not user id')
-    }
-
-    const parps = kb.each(subject, ns.wf('participation')).filter(function (pn) {
-      return kb.holds(pn, ns.wf('participant'), me)
-    })
-    if (parps.length > 1) {
-      throw new Error('Multiple records of your participation')
-    }
-    if (parps.length) {
-      // If I am not already recorded
-      resolve(parps[0]) // returns the particpation object
-    } else {
-      const participation = newThing(padDoc)
-      const ins = [
-        st(subject, ns.wf('participation'), participation, padDoc),
-
-        st(participation, ns.wf('participant'), me, padDoc),
-        st(participation, ns.cal('dtstart'), new Date(), padDoc),
-        st(
-          participation,
-          ns.ui('backgroundColor'),
-          lightColorHash(me),
-          padDoc
-        )
-      ]
-      kb.updater.update([], ins, function (uri: string, ok: boolean, errorMessage: string) {
-        if (!ok) {
-          reject(new Error('Error recording your partipation: ' + errorMessage))
-        } else {
-          resolve(participation)
-        }
-      })
-      resolve(participation)
-    }
-  })
-}
-
-/** Record my participation and display participants
- *
- * @param {NamedNode} subject - the thing in which participation is happening
- * @param {NamedNode} padDoc - The document into which the particpation should be recorded
- * @param {DOMNode} refreshable - A DOM element whose refresh() is to be called if the change works
- *
- */
-export function recordParticipation (subject: NamedNode, padDoc: NamedNode, refreshable: any) {
-  const me = currentUser()
-  if (!me) return // Not logged in
-
-  const parps = kb.each(subject, ns.wf('participation')).filter(function (pn) {
-    return kb.holds(pn, ns.wf('participant'), me)
-  })
-  if (parps.length > 1) {
-    throw new Error('Multiple records of your participation')
-  }
-  if (parps.length) {
-    // If I am not already recorded
-    return parps[0] // returns the particpation object
-  } else {
-    const participation = newThing(padDoc)
-    const ins = [
-      st(subject, ns.wf('participation'), participation, padDoc),
-
-      st(participation, ns.wf('participant'), me, padDoc),
-      st(participation, ns.cal('dtstart'), new Date(), padDoc),
-      st(
-        participation,
-        ns.ui('backgroundColor'),
-        lightColorHash(me),
-        padDoc
-      )
-    ]
-    kb.updater.update([], ins, function (uri: string, ok: boolean, errorMessage: string) {
-      if (!ok) {
-        throw new Error('Error recording your partipation: ' + errorMessage)
-      }
-      if (refreshable && refreshable.refresh) {
-        refreshable.refresh()
-      }
-      // UI.pad.renderPartipants(dom, table, padDoc, subject, me, options)
-    })
-    return participation
-  }
-}
-
-/**  Record my participation and display participants
-*
-*   @param {Document} dom  - the web page loaded into the browser
-*   @param {HTMLDivElement} container - the container element where the participants should be displayed
-*   @param {NamedNode} document - the document into which the particpation should be shown
-*   @param {NamedNode} subject - the thing in which participation is happening
-*   @param {NamedNode} me
-*   @param {?} options
-*
-*/
-export function manageParticipation (
-  dom: Document,
-  container: HTMLDivElement,
-  padDoc: NamedNode,
-  subject: NamedNode,
-  me: NamedNode,
-  options: any
-) {
-  const table = dom.createElement('table')
-  container.appendChild(table)
-  renderPartipants(dom, table, padDoc, subject, me, options)
-  try {
-    recordParticipation(subject, padDoc, table)
-  } catch (e) {
-    container.appendChild(
-      errorMessageBlock(
-        dom,
-        'Error recording your partipation: ' + e
-      )
-    ) // Clean up?
-  }
-  return table
-}
 
 /**
  * Get the chunks of the notepad
@@ -493,26 +318,26 @@ export function notepad (dom: Document, padDoc: NamedNode, subject: NamedNode, m
       //  up 38; down 40; left 37; right 39     tab 9; shift 16; escape 27
       switch (event.keyCode) {
         case 13: // Return
-        {
-          const before: any = event.shiftKey
-          console.log('enter') // Shift-return inserts before -- only way to add to top of pad.
-          if (before) {
-            queue = kb.any(undefined, PAD('next'), chunk)
-            queueProperty = 'newlinesAfter'
-          } else {
-            queue = kb.any(chunk, PAD('next'))
-            queueProperty = 'newlinesBefore'
+          {
+            const before: any = event.shiftKey
+            console.log('enter') // Shift-return inserts before -- only way to add to top of pad.
+            if (before) {
+              queue = kb.any(undefined, PAD('next'), chunk)
+              queueProperty = 'newlinesAfter'
+            } else {
+              queue = kb.any(chunk, PAD('next'))
+              queueProperty = 'newlinesBefore'
+            }
+            queue[queueProperty] = queue[queueProperty] || 0
+            queue[queueProperty] += 1
+            if (queue[queueProperty] > 1) {
+              console.log('    queueing newline queue = ' + queue[queueProperty])
+              return
+            }
+            console.log('    go ahead line before ' + queue[queueProperty])
+            newChunk(part, before) // was document.activeElement
+            break
           }
-          queue[queueProperty] = queue[queueProperty] || 0
-          queue[queueProperty] += 1
-          if (queue[queueProperty] > 1) {
-            console.log('    queueing newline queue = ' + queue[queueProperty])
-            return
-          }
-          console.log('    go ahead line before ' + queue[queueProperty])
-          newChunk(part, before) // was document.activeElement
-          break
-        }
         case 8: // Delete
           if (part.value.length === 0) {
             console.log(
@@ -539,12 +364,12 @@ export function notepad (dom: Document, padDoc: NamedNode, subject: NamedNode, m
           }
           break
         case 9: // Tab
-        {
-          const delta = event.shiftKey ? -1 : 1
-          changeIndent(part, chunk, delta)
-          event.preventDefault() // default is to highlight next field
-          break
-        }
+          {
+            const delta = event.shiftKey ? -1 : 1
+            changeIndent(part, chunk, delta)
+            event.preventDefault() // default is to highlight next field
+            break
+          }
         case 27: // ESC
           console.log('escape')
           updater.requestDownstreamAction(padDoc, reloadAndSync)

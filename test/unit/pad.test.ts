@@ -1,10 +1,6 @@
-// SHARON IS WORKING ON THIS FILE
-// NOT DOING ANYTHING FOR NOW AS SHE WILL CLEAN IT UP LATER
-
 import { JSDOM } from 'jsdom'
 import * as RdfLib from 'rdflib'
 import * as pad from '../../src/pad'
-import widgets from '../../src/widgets'
 
 // jest.mock('rdflib')
 // jest.mock('solid-auth-client')
@@ -26,97 +22,7 @@ describe('lightColorHash', () => {
     expect((pad as any).lightColorHash(author)).toBe('#dac2dc')
   })
 })
-describe('renderPartipants', () => {
-  it('exists', () => {
-    expect((pad as any).renderPartipants).toBeInstanceOf(Function)
-  })
-  it('runs', () => {
-    const table = dom.createElement('table')
-    const padDoc = null
-    // const subject = new RdfLib.NamedNode('test')
-    const subject = null
-    const me = 'webId'
-    const options = {}
-    expect(
-      (pad as any).renderPartipants(dom, table, padDoc, subject, me, options)
-    ).toMatchSnapshot()
-  })
-  it('returns without crashing when a person is not returned', () => {
-    // @@ TODO need to mock kb.any and kb.each - not working for some reason
-    // kb is a store
-    const table = dom.createElement('table')
-    const padDoc = null
-    // const subject = new RdfLib.NamedNode('participation')
-    const subject = null
-    const me = 'webId'
-    const options = {}
-    expect(
-      (pad as any).renderPartipants(dom, table, padDoc, subject, me, options)
-    ).toMatchSnapshot()
-  })
-})
-describe('participationObject', () => {
-  it('exists', () => {
-    expect((pad as any).participationObject).toBeInstanceOf(Function)
-  })
 
-  it('runs', () => {
-    // TODO: check on arguments
-
-    const subject = null
-    const padDoc = null
-    const me = null
-    expect((pad as any).participationObject(subject, padDoc, me)).resolves.toBe(
-      {}
-    )
-  })
-  it('runs 2', () => {
-    // TODO: check on arguments
-    const spy = jest.spyOn(widgets, 'newThing')
-    const subject = null
-    const padDoc = document
-    const me = 'https://sharonstrats.inrupt.net/profile/card#me'
-    expect((pad as any).participationObject(subject, padDoc, me)).resolves.toBe(
-      {}
-    )
-    expect(spy).toBeCalled()
-  })
-})
-describe('recordParticipation', () => {
-  it('exists', () => {
-    expect((pad as any).recordParticipation).toBeInstanceOf(Function)
-  })
-  const subject = null
-  const padDoc = null
-  const refreshable = true
-  it('runs', () => {
-    expect((pad as any).recordParticipation(subject, padDoc, refreshable)).toBe(
-      undefined
-    )
-  })
-})
-describe('manageParticipation', () => {
-  it('exists', () => {
-    expect((pad as any).manageParticipation).toBeInstanceOf(Function)
-  })
-  const container = dom.createElement('div')
-  const padDoc = null
-  const subject = null
-  const me = null
-  const options = {}
-  it('runs', () => {
-    expect(
-      (pad as any).manageParticipation(
-        dom,
-        container,
-        padDoc,
-        subject,
-        me,
-        options
-      )
-    ).toMatchSnapshot()
-  })
-})
 describe('notepad', () => {
   it('exists', () => {
     expect((pad as any).notepad).toBeInstanceOf(Function)
