@@ -31,17 +31,6 @@ export function lightColorHash (author: NamedNode): string {
     : '#ffffff' // c0c0c0  forces pale
 } // no id -> white
 
-/**  Manage participation in this session
-*
-*  @param {Document} dom - The web page loaded into the browser
-*  @param {?} table
-*  @param {NamedNode} unused1/document The document to render (this argument is no longer used, but left in for backwards compatibility)
-*  @param {NamedNode} subject
-*  @param {NamedNode} unused2/me User that is logged into the pod (this argument is no longer used, but left in for backwards compatibility)
-*  @param { } options - The options that can be passed in are deleteFunction, link, and draggable these are used by the personTR button
-*/
-
-
 /**
  * Get the chunks of the notepad
  * They are stored in a RDF linked list

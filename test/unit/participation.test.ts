@@ -6,7 +6,7 @@ const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
 const dom = window.document
 describe('renderPartipants', () => {
   it('exists', () => {
-    expect((pad as any).renderPartipants).toBeInstanceOf(Function)
+    expect((participation as any).renderPartipants).toBeInstanceOf(Function)
   })
   it('runs', () => {
     const table = dom.createElement('table')
@@ -16,7 +16,7 @@ describe('renderPartipants', () => {
     const me = 'webId'
     const options = {}
     expect(
-      (pad as any).renderPartipants(dom, table, padDoc, subject, me, options)
+      (participation as any).renderPartipants(dom, table, padDoc, subject, me, options)
     ).toMatchSnapshot()
   })
   it('returns without crashing when a person is not returned', () => {
@@ -29,7 +29,7 @@ describe('renderPartipants', () => {
     const me = 'webId'
     const options = {}
     expect(
-      (pad as any).renderPartipants(dom, table, padDoc, subject, me, options)
+      (participation as any).renderPartipants(dom, table, padDoc, subject, me, options)
     ).toMatchSnapshot()
   })
 })
