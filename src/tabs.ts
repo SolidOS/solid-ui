@@ -202,6 +202,7 @@ export function tabWidget (options: TabWidgetOptions) {
     display: flex; 
     height: 100%; 
     width: 100%;
+    margin: 0;
     padding: 0; 
     flex-direction: ${(vertical ? 'column' : 'row')}
   `)
@@ -214,15 +215,17 @@ export function tabWidget (options: TabWidgetOptions) {
 
   const corners = ['2em', '2em', '0', '0'] // top left, TR, BR, BL
   const cornersPrepped = corners.concat(corners).slice(orientation, orientation + 4)
-  const cornersStyle = 'border-radius: ' + cornersPrepped.join(' ') + ';'
+  const cornersStyle = `border-radius: ${cornersPrepped.join(' ')};`
 
   const margins = ['0.3em', '0.3em', '0', '0.3em'] // top, right, bottom, left
   const marginsPrepped = margins.concat(margins).slice(orientation, orientation + 4)
-  const marginsStyle = 'margin: ' + marginsPrepped.join(' ') + ';'
+  const marginsStyle = `margin: ${marginsPrepped.join(' ')};`
 
-  const tabStyle = cornersStyle + `padding: 0.7em; max-width: 20em;color: ${color};` //  border: 0.05em 0 0.5em 0.05em; border-color: grey;
-  const unselectedStyle = `${tabStyle}opacity: 50%; margin: 0.3em; background-color: ${backgroundColor};` // @@ rotate border
-  const selectedStyle = tabStyle + marginsStyle + ' background-color: ' + selectedColor + ';'
+  const paddingStyle = `padding: ${marginsPrepped.join(' ')};`
+
+  const tabStyle = cornersStyle + `padding: 0.7em; max-width: 20em; color: ${color};` //  border: 0.05em 0 0.5em 0.05em; border-color: grey;
+  const unselectedStyle = `${tabStyle + marginsStyle}opacity: 50%; background-color: ${backgroundColor};` // @@ rotate border
+  const selectedStyle = `${tabStyle + marginsStyle}background-color: ${selectedColor};`
   const shownStyle = 'height: 100%; width: 100%;'
   const hiddenStyle = shownStyle + 'display: none;'
   rootElement.refresh = sync
@@ -250,6 +253,7 @@ export function tabWidget (options: TabWidgetOptions) {
     const extraTab = dom.createElement(tabElement)
     extraTab.classList.add('unstyled')
     const tabCancelButton = cancelButton(dom, onClose)
+    tabCancelButton.setAttribute('style', tabCancelButton.getAttribute('style') + paddingStyle)
     extraTab.appendChild(tabCancelButton)
     tabContainer.appendChild(extraTab)
     tabContainer.dataset.onCloseSet = 'true'
