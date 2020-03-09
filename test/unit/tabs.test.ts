@@ -68,6 +68,35 @@ describe('tabWidget', () => {
       tabWidgetElement.tabContainer.children[1].children[0].click()
       expect(tabWidgetElement.bodyContainer).not.toEqual(firstBody)
     })
+
+    describe('bodyContainer', () => {
+      it('adds property bodyContainer', () => {
+        expect(tabWidgetElement.bodyContainer).toBe(tabWidgetElement.querySelector('main'))
+      })
+    })
+
+    describe('refresh', () => {
+      it('adds method refresh on element', () => {
+        expect(tabWidgetElement.refresh).toBeInstanceOf(Function)
+      })
+
+      it('sorts tabs if needed', () => {
+        const reversedTabs = Array.from(tabWidgetElement.tabContainer.children).reverse()
+        tabWidgetElement.tabContainer.innerHTML = ''
+        reversedTabs.forEach(tab => tabWidgetElement.tabContainer.appendChild(tab))
+        expect(tabWidgetElement.tabContainer.children[0]).toBe(reversedTabs[0])
+
+        tabWidgetElement.refresh()
+
+        expect(tabWidgetElement.tabContainer.children[0]).not.toBe(reversedTabs[0])
+      })
+    })
+
+    describe('tabContainer', () => {
+      it('adds property tabContainer', () => {
+        expect(tabWidgetElement.tabContainer).toBe(tabWidgetElement.querySelector('nav > ul'))
+      })
+    })
   })
 
   describe('option items', () => {

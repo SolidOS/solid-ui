@@ -228,8 +228,8 @@ export function tabWidget (options: TabWidgetOptions) {
   const selectedStyle = `${tabStyle + marginsStyle}background-color: ${selectedColor};`
   const shownStyle = 'height: 100%; width: 100%;'
   const hiddenStyle = shownStyle + 'display: none;'
-  rootElement.refresh = sync
-  sync()
+  rootElement.refresh = orderedSync
+  orderedSync()
 
   // From select-tabs branch by hand
   if (!options.startEmpty && tabContainer.children.length && options.selectedTab) {
@@ -384,15 +384,6 @@ export function tabWidget (options: TabWidgetOptions) {
   function resetBodyStyle () {
     for (let i = 0; i < bodyContainer.children.length; i++) {
       bodyContainer.children[i].setAttribute('style', hiddenStyle)
-    }
-  }
-
-  function sync () {
-    if (options.ordered) {
-      orderedSync()
-    } else {
-      // @@ SORT THE values
-      orderedSync()
     }
   }
 }
