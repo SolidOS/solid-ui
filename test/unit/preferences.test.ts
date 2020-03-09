@@ -1,5 +1,5 @@
 import { JSDOM } from 'jsdom'
-import { Preferences } from '../../src/preferences'
+import Preferences from '../../src/preferences'
 import { sym } from 'rdflib'
 
 jest.mock('solid-auth-client')
@@ -8,44 +8,44 @@ const dom = window.document
 
 describe('Preferences', () => {
   it.skip('exists', () => {
-    expect(new Preferences()).toBeInstanceOf(Object)
+    expect(Preferences).toBeInstanceOf(Function)
   })
 })
 
 describe('Preferences.value', () => {
   it('exists', () => {
-    expect(new Preferences().get('t')).toEqual([])
+    expect(Preferences.value).toEqual([])
   })
 })
 
 describe('Preferences.get', () => {
   it('exists', () => {
-    expect(new Preferences().get).toBeInstanceOf(Function)
+    expect(Preferences.get).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(new Preferences().get(10)).toEqual(undefined)
+    expect(Preferences.get(10)).toEqual(undefined)
   })
 })
 
 describe('Preferences.set', () => {
   it('exists', () => {
-    expect(new Preferences().set).toBeInstanceOf(Function)
+    expect(Preferences.set).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(new Preferences().set(10, 'a')).toEqual(undefined)
+    expect(Preferences.set(10, 'a')).toEqual(undefined)
   })
 })
 
 describe('Preferences.renderPreferencesForm', () => {
   it('exists', () => {
-    expect(new Preferences().renderPreferencesForm).toBeInstanceOf(Function)
+    expect(Preferences.renderPreferencesForm).toBeInstanceOf(Function)
   })
   it('runs', () => {
     const subject = sym('https://test.test')
     const theClass = {}
     const preferencesForm = {}
     const context = { dom }
-    expect(new Preferences().renderPreferencesForm(
+    expect(Preferences.renderPreferencesForm(
       subject, theClass, preferencesForm, context
     )).toBeTruthy()
   })
@@ -53,24 +53,24 @@ describe('Preferences.renderPreferencesForm', () => {
 
 describe('Preferences.recordSharedPreferences', () => {
   it('exists', () => {
-    expect(new Preferences().recordSharedPreferences).toBeInstanceOf(Function)
+    expect(Preferences.recordSharedPreferences).toBeInstanceOf(Function)
   })
   it('runs', () => {
     const subject = null
     const context = null
-    expect(new Preferences().recordSharedPreferences(subject, context).then())
+    expect(Preferences.recordSharedPreferences(subject, context).then())
   })
 })
 
 describe('Preferences.getPreferencesForClass', () => {
   it('exists', () => {
-    expect(new Preferences().getPreferencesForClass).toBeInstanceOf(Function)
+    expect(Preferences.getPreferencesForClass).toBeInstanceOf(Function)
   })
   it('runs', () => {
     const subject = null
     const theClass = null
     const predicates = null
     const context = null
-    expect(new Preferences().getPreferencesForClass(subject, theClass, predicates, context)).toBeTruthy()
+    expect(Preferences.getPreferencesForClass(subject, theClass, predicates, context)).toBeTruthy()
   })
 })
