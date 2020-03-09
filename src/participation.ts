@@ -9,12 +9,12 @@ import { lightColorHash } from './pad'
 const kb = store
 /**  Manage participation in this session
 *
-*  @param {Document} dom - The web page loaded into the browser
-*  @param {?} table
-*  @param {NamedNode} unused1/document The document to render (this argument is no longer used, but left in for backwards compatibility)
+*  @param {Document} dom - the web page loaded into the browser
+*  @param { HTMLTableElement } table - the table element
+*  @param {NamedNode} unused1/document - the document to render (this argument is no longer used, but left in for backwards compatibility)
 *  @param {NamedNode} subject
-*  @param {NamedNode} unused2/me User that is logged into the pod (this argument is no longer used, but left in for backwards compatibility)
-*  @param { } options - The options that can be passed in are deleteFunction, link, and draggable these are used by the personTR button
+*  @param {NamedNode} unused2/me - user that is logged into the pod (this argument is no longer used, but left in for backwards compatibility)
+*  @param { } options - the options that can be passed in are deleteFunction, link, and draggable these are used by the personTR button
 */
 export function renderPartipants (dom: Document, table: any, unused1: NamedNode, subject: NamedNode, unused2: NamedNode, options: any) {
   table.setAttribute('style', 'margin: 0.8em;')
@@ -63,9 +63,9 @@ export function renderPartipants (dom: Document, table: any, unused1: NamedNode,
  *
  * A particpaption object is a place to record things specifically about
  * subject and the user, such as preferences, start of membership, etc
- * @param {NamedNode} subject - The thing in which the participation is happening
- * @param {NamedNode} document -  Where to record the data
- * @param {NamedNode} me - The logged in user
+ * @param {NamedNode} subject - the thing in which the participation is happening
+ * @param {NamedNode} document -  where to record the data
+ * @param {NamedNode} me - the logged in user
  *
  */
 export function participationObject (subject: NamedNode, padDoc: NamedNode, me: NamedNode) {
@@ -112,8 +112,8 @@ export function participationObject (subject: NamedNode, padDoc: NamedNode, me: 
 /** Record my participation and display participants
  *
  * @param {NamedNode} subject - the thing in which participation is happening
- * @param {NamedNode} padDoc - The document into which the particpation should be recorded
- * @param {DOMNode} refreshable - A DOM element whose refresh() is to be called if the change works
+ * @param {NamedNode} padDoc - the document into which the particpation should be recorded
+ * @param {DOMNode} refreshable - a DOM element whose refresh() is to be called if the change works
  *
  */
 export function recordParticipation (subject: NamedNode, padDoc: NamedNode, refreshable: any) {
@@ -162,8 +162,8 @@ export function recordParticipation (subject: NamedNode, padDoc: NamedNode, refr
 *   @param {HTMLDivElement} container - the container element where the participants should be displayed
 *   @param {NamedNode} document - the document into which the particpation should be shown
 *   @param {NamedNode} subject - the thing in which participation is happening
-*   @param {NamedNode} me
-*   @param {?} options
+*   @param {NamedNode} me - the logged in user
+*   @param { } options - the options that can be passed in are deleteFunction, link, and draggable these are used by the personTR button
 *
 */
 export function manageParticipation (

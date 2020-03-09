@@ -31,10 +31,10 @@ export function xmlEncode (str) {
 
 /**
  * Convert a notepad to HTML
- *   @param {?} pad
- *   @param {store} kb...
+ *   @param { } pad - the notepad
+ *   @param {store} pad - the data store
  */
-export function notepadToHTML (pad, kb: store) {
+export function notepadToHTML (pad: any, kb: store) {
   const chunks = getChunks(pad, kb)
   let html = '<html>\n  <head>\n'
   const title = kb.anyValue(pad, ns.dct('title'))

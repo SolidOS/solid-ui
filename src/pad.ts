@@ -35,7 +35,7 @@ export function lightColorHash (author: NamedNode): string {
  * @param {NamedNode} padDoc - the document into which the particpation should be shown
  * @param {NamedNode} subject - the thing in which participation is happening
  * @param {NamedNode} me - person who is logged into the pod
- * @param {?} options -
+ * @param { } options - the options that can be passed in consist of statusArea, exists
  */
 
 export function notepad (dom: Document, padDoc: NamedNode, subject: NamedNode, me: NamedNode, options: any) {
