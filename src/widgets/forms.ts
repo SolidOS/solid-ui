@@ -161,12 +161,13 @@ field[ns.ui('Options').uri] = function (
   if (!cases) {
     box.appendChild(errorMessageBlock(dom, 'No cases to Options form. '))
   }
-  let values
+  let values: { [uri: string]: any }
   if (dependingOn.sameTerm(ns.rdf('type'))) {
     values = kb.findTypeURIs(subject)
   } else {
-    const value = kb.any(subject, dependingOn)
-    if (value === undefined) {
+    values = {}
+    const matches = kb.each(subject, dependingOn)
+    if (!matches.length) {
       box.appendChild(
         errorMessageBlock(
           dom,
@@ -174,8 +175,9 @@ field[ns.ui('Options').uri] = function (
         )
       )
     } else {
-      values = {}
-      values[value.uri] = true
+      matches.forEach((match: NamedNode) => {
+        values[match.value] = true
+      })
     }
   }
   // @@ Add box.refresh() to sync fields with values

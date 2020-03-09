@@ -263,7 +263,6 @@
       UI.store.add(UI.rdf.namedNode('http://example.com/#ui-for-power-users'), UI.ns.ui('contents'), '[UI for power users]')
 
       // Subject is both a developer and a power user, so it should display both [UI for developers] and [UI for power users]
-      // but see https://github.com/solid/solid-ui/issues/248
       UI.store.add(subject, UI.rdf.namedNode('http://example.com/#persona'), UI.rdf.namedNode('http://example.com/#developer'), UI.rdf.namedNode('http://example.com/'))
       UI.store.add(subject, UI.rdf.namedNode('http://example.com/#persona'), UI.rdf.namedNode('http://example.com/#power-user'), UI.rdf.namedNode('http://example.com/'))
       
