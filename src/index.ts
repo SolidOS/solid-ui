@@ -74,6 +74,7 @@ import tabs from './tabs'
 import utils from './utils'
 import widgets from './widgets'
 import versionInfo from './versionInfo'
+import { notepadToHTML } from './pad-utils'
 
 const dom = window ? window.document : null // Idea that UI.dom can be adapted in non-browser environments
 
@@ -101,7 +102,9 @@ if (typeof window !== 'undefined') {
     tabs,
     utils,
     widgets,
-    versionInfo
+    versionInfo,
+    notepadToHTML
+
   } // Simpler access by non-node scripts
 }
 
@@ -128,5 +131,6 @@ export {
   tabs,
   utils,
   widgets,
-  versionInfo
+  versionInfo,
+  notepadToHTML
 }

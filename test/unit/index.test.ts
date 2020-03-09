@@ -23,6 +23,7 @@ describe('Index', () => {
       'utils',
       'widgets',
       'versionInfo',
+      'notepadToHTML',
       'dom',
       'rdf',
       'pad',
