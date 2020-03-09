@@ -246,25 +246,26 @@
       }
 
       // This form depends on colour:
-      UI.store.add(exampleOptionsField, UI.ns.ui('dependingOn'), UI.rdf.namedNode('http://example.com/#colour'), UI.rdf.namedNode('http://example.com/'))
+      UI.store.add(exampleOptionsField, UI.ns.ui('dependingOn'), UI.rdf.namedNode('http://example.com/#persona'), UI.rdf.namedNode('http://example.com/'))
       
       // UI to display in case subject is blue:
-      UI.store.add(exampleOptionsField, UI.ns.ui('case'), UI.rdf.namedNode('http://example.com/#if-subject-is-blue'), UI.rdf.namedNode('http://example.com/'))
-      UI.store.add(UI.rdf.namedNode('http://example.com/#if-subject-is-blue'), UI.ns.ui('for'), UI.rdf.namedNode('http://example.com/#red'), UI.rdf.namedNode('http://example.com/'))
-      UI.store.add(UI.rdf.namedNode('http://example.com/#if-subject-is-blue'), UI.ns.ui('use'), UI.rdf.namedNode('http://example.com/#ui-for-blue-things'), UI.rdf.namedNode('http://example.com/'))
-      UI.store.add(UI.rdf.namedNode('http://example.com/#ui-for-blue-things'), UI.ns.rdf('type'), UI.ns.ui('Comment'))
-      UI.store.add(UI.rdf.namedNode('http://example.com/#ui-for-blue-things'), UI.ns.ui('contents'), '[UI for blue things]')
+      UI.store.add(exampleOptionsField, UI.ns.ui('case'), UI.rdf.namedNode('http://example.com/#if-subject-is-developer'), UI.rdf.namedNode('http://example.com/'))
+      UI.store.add(UI.rdf.namedNode('http://example.com/#if-subject-is-developer'), UI.ns.ui('for'), UI.rdf.namedNode('http://example.com/#developer'), UI.rdf.namedNode('http://example.com/'))
+      UI.store.add(UI.rdf.namedNode('http://example.com/#if-subject-is-developer'), UI.ns.ui('use'), UI.rdf.namedNode('http://example.com/#ui-for-developers'), UI.rdf.namedNode('http://example.com/'))
+      UI.store.add(UI.rdf.namedNode('http://example.com/#ui-for-developers'), UI.ns.rdf('type'), UI.ns.ui('Comment'))
+      UI.store.add(UI.rdf.namedNode('http://example.com/#ui-for-developers'), UI.ns.ui('contents'), '[UI for developers]')
       
       // UI to display in case subject is red:
-      UI.store.add(exampleOptionsField, UI.ns.ui('case'), UI.rdf.namedNode('http://example.com/#if-subject-is-red'), UI.rdf.namedNode('http://example.com/'))
-      UI.store.add(UI.rdf.namedNode('http://example.com/#if-subject-is-red'), UI.ns.ui('for'), UI.rdf.namedNode('http://example.com/#blue'), UI.rdf.namedNode('http://example.com/'))
-      UI.store.add(UI.rdf.namedNode('http://example.com/#if-subject-is-red'), UI.ns.ui('use'), UI.rdf.namedNode('http://example.com/#ui-for-red-things'), UI.rdf.namedNode('http://example.com/'))
-      UI.store.add(UI.rdf.namedNode('http://example.com/#ui-for-red-things'), UI.ns.rdf('type'), UI.ns.ui('Comment'))
-      UI.store.add(UI.rdf.namedNode('http://example.com/#ui-for-red-things'), UI.ns.ui('contents'), '[UI for red things]')
+      UI.store.add(exampleOptionsField, UI.ns.ui('case'), UI.rdf.namedNode('http://example.com/#if-subject-is-power-user'), UI.rdf.namedNode('http://example.com/'))
+      UI.store.add(UI.rdf.namedNode('http://example.com/#if-subject-is-power-user'), UI.ns.ui('for'), UI.rdf.namedNode('http://example.com/#power-user'), UI.rdf.namedNode('http://example.com/'))
+      UI.store.add(UI.rdf.namedNode('http://example.com/#if-subject-is-power-user'), UI.ns.ui('use'), UI.rdf.namedNode('http://example.com/#ui-for-power-users'), UI.rdf.namedNode('http://example.com/'))
+      UI.store.add(UI.rdf.namedNode('http://example.com/#ui-for-power-users'), UI.ns.rdf('type'), UI.ns.ui('Comment'))
+      UI.store.add(UI.rdf.namedNode('http://example.com/#ui-for-power-users'), UI.ns.ui('contents'), '[UI for power users]')
 
-      // Subject is red, so it should display [UI for reds]
-      UI.store.add(subject, UI.rdf.namedNode('http://example.com/#colour'), UI.rdf.namedNode('http://example.com/#red'), UI.rdf.namedNode('http://example.com/'))
-
+      // Subject is both a developer and a power user, so it should display both [UI for developers] and [UI for power users]
+      // but see https://github.com/solid/solid-ui/issues/248
+      UI.store.add(subject, UI.rdf.namedNode('http://example.com/#persona'), UI.rdf.namedNode('http://example.com/#developer'), UI.rdf.namedNode('http://example.com/'))
+      UI.store.add(subject, UI.rdf.namedNode('http://example.com/#persona'), UI.rdf.namedNode('http://example.com/#power-user'), UI.rdf.namedNode('http://example.com/'))
       
       // FIXME: https://github.com/solid/solid-ui/issues/239
       document.outlineManager = {

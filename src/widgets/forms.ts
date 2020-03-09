@@ -186,7 +186,6 @@ field[ns.ui('Options').uri] = function (
   for (let i = 0; i < cases.length; i++) {
     const c = cases[i]
     const tests = kb.each(c, ns.ui('for')) // There can be multiple 'for'
-    console.log('tests for case', c.uri, tests)
     for (let j = 0; j < tests.length; j++) {
       if (values[tests[j].uri]) {
         const fieldToAppend = kb.the(c, ns.ui('use'))
