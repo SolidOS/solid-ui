@@ -155,18 +155,15 @@ field[ns.ui('Options').uri] = function (
 
   let dependingOn = kb.any(form, ns.ui('dependingOn'))
   if (!dependingOn) {
-    console.log('depending on type')
     dependingOn = ns.rdf('type')
   } // @@ default to type (do we want defaults?)
   const cases = kb.each(form, ns.ui('case'))
   if (!cases) {
     box.appendChild(errorMessageBlock(dom, 'No cases to Options form. '))
   }
-  console.log('cases', cases)
   let values
   if (dependingOn.sameTerm(ns.rdf('type'))) {
     values = kb.findTypeURIs(subject)
-    console.log('values on type', values)
   } else {
     const value = kb.any(subject, dependingOn)
     if (value === undefined) {
@@ -179,7 +176,6 @@ field[ns.ui('Options').uri] = function (
     } else {
       values = {}
       values[value.uri] = true
-      console.log('values dependingOn', values)
     }
   }
   // @@ Add box.refresh() to sync fields with values
@@ -198,7 +194,6 @@ field[ns.ui('Options').uri] = function (
           )
           return box
         } else {
-          console.log('appending form for test', j, values[tests[j].uri], fieldToAppend)
           appendForm(
             dom,
             box,
