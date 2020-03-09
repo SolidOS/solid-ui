@@ -1,12 +1,3 @@
-// SOLID-compaible Tabs widget
-//
-// - Any Orientation = top, left, bottom, right
-// - Selected bodies are hidden not deleted
-// - Multiple tab select with Alt key
-//
-// written 2016-05-27
-// See https://github.com/solid/solid-ui/issues/183 for styles
-
 import store from './store'
 import { cancelButton } from './widgets'
 import { label } from './utils'
@@ -209,8 +200,8 @@ export function tabWidget (options: TabWidgetOptions) {
 
   const tabElement = 'li'
 
-  const bodyContainer = mainElement // .appendChild(dom.createElement('table'))
-  rootElement.tabContainer = tabContainer // ussed by caller
+  const bodyContainer = mainElement
+  rootElement.tabContainer = tabContainer
   rootElement.bodyContainer = bodyContainer
 
   const corners = ['2em', '2em', '0', '0'] // top left, TR, BR, BL
@@ -223,15 +214,14 @@ export function tabWidget (options: TabWidgetOptions) {
 
   const paddingStyle = `padding: ${marginsPrepped.join(' ')};`
 
-  const tabStyle = cornersStyle + `padding: 0.7em; max-width: 20em; color: ${color};` //  border: 0.05em 0 0.5em 0.05em; border-color: grey;
-  const unselectedStyle = `${tabStyle + marginsStyle}opacity: 50%; background-color: ${backgroundColor};` // @@ rotate border
+  const tabStyle = cornersStyle + `padding: 0.7em; max-width: 20em; color: ${color};`
+  const unselectedStyle = `${tabStyle + marginsStyle}opacity: 50%; background-color: ${backgroundColor};`
   const selectedStyle = `${tabStyle + marginsStyle}background-color: ${selectedColor};`
   const shownStyle = 'height: 100%; width: 100%;'
   const hiddenStyle = shownStyle + 'display: none;'
   rootElement.refresh = orderedSync
   orderedSync()
 
-  // From select-tabs branch by hand
   if (!options.startEmpty && tabContainer.children.length && options.selectedTab) {
     const selectedTab = Array.from(tabContainer.children)
       .map(tab => tab.firstChild as HTMLElement)
@@ -245,7 +235,7 @@ export function tabWidget (options: TabWidgetOptions) {
 
   function addCancelButton (tabContainer) {
     if (tabContainer.dataset.onCloseSet) {
-      // @@ TODO: this is only here to make the tests work
+      // @@ TODO: this is only here to make the browser tests work
       // Discussion at https://github.com/solid/solid-ui/pull/110#issuecomment-527080663
       const existingCancelButton = tabContainer.querySelector('.unstyled')
       tabContainer.removeChild(existingCancelButton)
@@ -262,7 +252,7 @@ export function tabWidget (options: TabWidgetOptions) {
   function getItems (): Array<NamedNode> {
     if (options.items) return options.items
     if (options.ordered !== false) {
-      // default to true
+      // options.ordered defaults to true
       return store.the(subject, options.predicate).elements
     } else {
       return store.each(subject, options.predicate)
@@ -314,9 +304,6 @@ export function tabWidget (options: TabWidgetOptions) {
   // @@ Use common one from utils?
   function orderedSync () {
     const items = getItems()
-    if (!vertical) {
-      // mainElement.setAttribute('colspan', items.length + (onClose ? 1 : 0))
-    }
     let slot: TabElement, i, j, left, right
     let differ = false
     // Find how many match at each end
@@ -351,15 +338,12 @@ export function tabWidget (options: TabWidgetOptions) {
     for (i = 0; i < insertables.length; i++) {
       const newSlot = makeNewSlot(insertables[i])
       const newBodyDiv = dom.createElement('div')
-      // const newBodyDiv = newBodyDiv.appendChild(dom.createElement('div'))
       newSlot.bodyTR = newBodyDiv
       if (left === tabContainer.children.length) {
         // None left of original on right
         tabContainer.appendChild(newSlot)
         bodyContainer.appendChild(newBodyDiv)
-        // console.log('   appending new ' + insertables[i])
       } else {
-        // console.log('   inserting at ' + (left + i) + ' new ' + insertables[i])
         tabContainer.insertBefore(newSlot, tabContainer.children[left + i])
         bodyContainer.insertBefore(newBodyDiv, bodyContainer.children[left + i])
       }
@@ -413,7 +397,6 @@ function colorBlend (a: string, b: string, mix: number): string {
     const l = parseInt(('' + (res2 % 16)).split('.')[0]) // @@ ugh
     str += hex[h] + hex[l]
   }
-  // console.log('Blending colors ' + a + ' with ' + mix + ' of ' + b + ' to give ' + str)
   return str
 }
 
