@@ -1,6 +1,6 @@
 import { JSDOM } from 'jsdom'
 import * as RdfLib from 'rdflib'
-import { getChunks, notepadToHTML } from '../../src/pad-utils'
+import { getChunks, notepadToHTML, xmlEncode } from '../../src/pad-utils'
 
 describe('getChunks', () => {
   it('exists', () => {
@@ -11,5 +11,10 @@ describe('getChunks', () => {
 describe('notepadToHTML', () => {
   it('exists', () => {
     expect(notepadToHTML).toBeInstanceOf(Function)
+  })
+  describe('xmlEncode', () => {
+    it('exists', () => {
+      expect(xmlEncode).toBeInstanceOf(Function)
+    })
   })
 })
