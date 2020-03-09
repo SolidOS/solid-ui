@@ -76,7 +76,7 @@ import versionInfo from './versionInfo'
 const dom = window ? window.document : null // Idea that UI.dom can be adapted in non-browser environments
 
 if (typeof window !== 'undefined') {
-  ; (<any>window).UI = {
+  ;(<any>window).UI = {
     ns,
     rdf,
     acl,
