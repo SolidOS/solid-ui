@@ -47,27 +47,27 @@ field[ns.ui('Form').uri] = field[
   ns.ui('Group').uri
 ] = function (dom: HTMLDocument, container: Element | undefined, already: { }, subject: NamedNode, form: NamedNode, doc: NamedNode, callbackFunction: (ok: boolean, errorMessage: string) => void) {
   const kb = store
-  var box = dom.createElement('div')
+  const box = dom.createElement('div')
   box.setAttribute('style', `padding-left: 2em; border: 0.05em solid ${formBorderColor};`) // Indent a group
   if (container) container.appendChild(box)
 
   // Prevent loops
-  var key = subject.toNT() + '|' + form.toNT()
+  const key = subject.toNT() + '|' + form.toNT()
 
   if (already[key]) {
     // been there done that
     box.appendChild(dom.createTextNode('Group: see above ' + key))
-    var plist = [(st as any)(subject, ns.owl('sameAs'), subject)] // @@ need prev subject
+    const plist = [(st as any)(subject, ns.owl('sameAs'), subject)] // @@ need prev subject
     ;(dom as any).outlineManager.appendPropertyTRs(box, plist)
     return box
   }
   // box.appendChild(dom.createTextNode('Group: first time, key: '+key))
-  var already2 = {}
-  for (var x in already) already2[x] = 1
+  const already2 = {}
+  for (const x in already) already2[x] = 1
   already2[key] = 1
 
-  var parts = kb.any(form, ns.ui('parts'))
-  var p2
+  let parts = kb.any(form, ns.ui('parts'))
+  let p2
   if (parts) {
     if (!parts.elements) {
       throw new Error('Form parts should be an RDF collection, see https://solid.github.io/solid-ui/examples/forms/')
@@ -82,27 +82,27 @@ field[ns.ui('Form').uri] = field[
     box.appendChild(errorMessageBlock(dom, 'No parts to form! '))
     return dom
   }
-  var eles = []
-  var original = []
-  for (var i = 0; i < p2.length; i++) {
-    var formField = p2[i]
-    var t = mostSpecificClassURI(formField) // Field type
+  const eles = []
+  const original = []
+  for (let i = 0; i < p2.length; i++) {
+    const formField = p2[i]
+    const t = mostSpecificClassURI(formField) // Field type
     if (t === ns.ui('Options').uri) {
-      var dep = kb.any(formField, ns.ui('dependingOn'))
+      const dep = kb.any(formField, ns.ui('dependingOn'))
       if (dep && kb.any(subject, dep)) (original as any)[i] = kb.any(subject, dep).toNT()
     }
 
-    var fn = fieldFunction(dom, formField)
+    const fn = fieldFunction(dom, formField)
 
-    var itemChanged = function (ok, body) {
+    const itemChanged = function (ok, body) {
       if (ok) {
-        for (var j = 0; j < p2.length; j++) {
+        for (let j = 0; j < p2.length; j++) {
           // This is really messy.
-          var formPart = p2[j]
-          var t = mostSpecificClassURI(formPart) // Field type
+          const formPart = p2[j]
+          const t = mostSpecificClassURI(formPart) // Field type
           if (t === ns.ui('Options').uri) {
-            var dep = kb.any(formPart, ns.ui('dependingOn'))
-            var newOne = fn(
+            const dep = kb.any(formPart, ns.ui('dependingOn'))
+            const newOne = fn(
               dom,
               box,
               already,
@@ -149,23 +149,23 @@ field[ns.ui('Options').uri] = function (
   callbackFunction
 ) {
   const kb = store
-  var box = dom.createElement('div')
+  const box = dom.createElement('div')
   // box.setAttribute('style', 'padding-left: 2em; border: 0.05em dotted purple;')  // Indent Options
   if (container) container.appendChild(box)
 
-  var dependingOn = kb.any(form, ns.ui('dependingOn'))
+  let dependingOn = kb.any(form, ns.ui('dependingOn'))
   if (!dependingOn) {
     dependingOn = ns.rdf('type')
   } // @@ default to type (do we want defaults?)
-  var cases = kb.each(form, ns.ui('case'))
+  const cases = kb.each(form, ns.ui('case'))
   if (!cases) {
     box.appendChild(errorMessageBlock(dom, 'No cases to Options form. '))
   }
-  var values
+  let values
   if (dependingOn.sameTerm(ns.rdf('type'))) {
     values = kb.findTypeURIs(subject)
   } else {
-    var value = kb.any(subject, dependingOn)
+    const value = kb.any(subject, dependingOn)
     if (value === undefined) {
       box.appendChild(
         errorMessageBlock(
@@ -179,12 +179,12 @@ field[ns.ui('Options').uri] = function (
     }
   }
   // @@ Add box.refresh() to sync fields with values
-  for (var i = 0; i < cases.length; i++) {
-    var c = cases[i]
-    var tests = kb.each(c, ns.ui('for')) // There can be multiple 'for'
-    for (var j = 0; j < tests.length; j++) {
+  for (let i = 0; i < cases.length; i++) {
+    const c = cases[i]
+    const tests = kb.each(c, ns.ui('for')) // There can be multiple 'for'
+    for (let j = 0; j < tests.length; j++) {
       if (values[tests[j].uri]) {
-        var field = kb.the(c, ns.ui('use'))
+        const field = kb.the(c, ns.ui('use'))
         if (!field) {
           box.appendChild(
             errorMessageBlock(
@@ -279,7 +279,7 @@ field[ns.ui('Multiple').uri] = function (
       } else {
         // unordered
         if (kb.holds(subject, property, object)) {
-          var del = [st(subject, property, object, doc)]
+          const del = [st(subject, property, object, doc)]
           kb.updater.update(del, [], function (uri, ok, message) {
             if (ok) {
               body.removeChild(subField)
@@ -303,7 +303,8 @@ field[ns.ui('Multiple').uri] = function (
     async function moveThisItem (event, upwards) {
       // @@ possibly, allow shift+click to do move to top or bottom?
       console.log('pre move: ' + debugString(list.elements))
-      for (var i = 0; i < list.elements.length; i++) {
+      let i
+      for (i = 0; i < list.elements.length; i++) {
         // Find object in array
         if (list.elements[i].sameTerm(object)) {
           break
@@ -341,7 +342,7 @@ field[ns.ui('Multiple').uri] = function (
         linkDone(uri, ok, message)
       }
       /*  Put this as a function and call it from only one place
-      var ins, del
+      const ins, del
       // alert('Multiple: item calklback.' + uri)
       if (ok) {
         // @@@ Check IT hasnt alreday been written in
@@ -370,18 +371,18 @@ field[ns.ui('Multiple').uri] = function (
       }
       */
     }
-    var linkDone = function (uri, ok, message) {
+    const linkDone = function (uri, ok, message) {
       return callbackFunction(ok, message)
     }
 
     // if (!object) object = newThing(doc)
     debug('Multiple: render object: ' + object)
-    // var tr = box.insertBefore(dom.createElement('tr'), tail)
-    // var ins = []
-    // var del = []
+    // const tr = box.insertBefore(dom.createElement('tr'), tail)
+    // const ins = []
+    // const del = []
 
-    var fn = fieldFunction(dom, element)
-    var subField = fn(dom, null, already, object, element, doc, itemDone) // p2 was: body.  moving to not passing that
+    const fn = fieldFunction(dom, element)
+    const subField = fn(dom, null, already, object, element, doc, itemDone) // p2 was: body.  moving to not passing that
     subField.subject = object // Keep a back pointer between the DOM array and the RDF objects
 
     // delete button and move buttons
@@ -406,11 +407,11 @@ field[ns.ui('Multiple').uri] = function (
 
   /// ///////// Body of form field implementation
 
-  var plusIconURI = iconBase + 'noun_19460_green.svg' // white plus in green circle
+  const plusIconURI = iconBase + 'noun_19460_green.svg' // white plus in green circle
 
   const kb = store
   kb.updater = kb.updater || new UpdateManager(kb)
-  var box = dom.createElement('table')
+  const box = dom.createElement('table')
   // We don't indent multiple as it is a sort of a prefix of the next field and has contents of one.
   // box.setAttribute('style', 'padding-left: 2em; border: 0.05em solid green;')  // Indent a multiple
   if (container) container.appendChild(box)
@@ -418,19 +419,19 @@ field[ns.ui('Multiple').uri] = function (
   const orderedNode = kb.any(form, ns.ui('ordered'))
   const ordered = orderedNode ? (Node as any).toJS(orderedNode) : false
 
-  var property = kb.any(form, ns.ui('property'))
+  const property = kb.any(form, ns.ui('property'))
   if (!property) {
     box.appendChild(
       errorMessageBlock(dom, 'No property to multiple: ' + form)
     ) // used for arcs in the data
     return box
   }
-  var min = kb.any(form, ns.ui('min')) // This is the minimum number -- default 0
+  let min = kb.any(form, ns.ui('min')) // This is the minimum number -- default 0
   min = min ? 0 + min.value : 0
-  // var max = kb.any(form, ns.ui('max')) // This is the minimum number
+  // const max = kb.any(form, ns.ui('max')) // This is the minimum number
   // max = max ? max.value : 99999999
 
-  var element = kb.any(form, ns.ui('part')) // This is the form to use for each one
+  const element = kb.any(form, ns.ui('part')) // This is the form to use for each one
   if (!element) {
     box.appendChild(
       errorMessageBlock(dom, 'No part to multiple: ' + form)
@@ -438,11 +439,11 @@ field[ns.ui('Multiple').uri] = function (
     return box
   }
 
-  var body = box.appendChild(dom.createElement('tr')) // 20191207
-  var list // The RDF collection which keeps the ordered version
-  var values // Initial values - an array.  Even when no list yet.
+  const body = box.appendChild(dom.createElement('tr')) // 20191207
+  let list // The RDF collection which keeps the ordered version
+  let values // Initial values - an array.  Even when no list yet.
 
-  // var unsavedList = false // Flag that
+  // const unsavedList = false // Flag that
   if (ordered) {
     list = kb.any(subject, property)
     if (list) {
@@ -457,13 +458,13 @@ field[ns.ui('Multiple').uri] = function (
   }
   // Add control on the bottom for adding more items
   if (kb.updater.editable(doc.uri)) {
-    var tail = box.appendChild(dom.createElement('tr'))
+    const tail = box.appendChild(dom.createElement('tr'))
     tail.style.padding = '0.5em'
-    var img = tail.appendChild(dom.createElement('img'))
+    const img = tail.appendChild(dom.createElement('img'))
     img.setAttribute('src', plusIconURI) //  plus sign
     img.setAttribute('style', 'margin: 0.2em; width: 1.5em; height:1.5em')
     img.title = 'Click to add one or more ' + label(property)
-    var prompt = tail.appendChild(dom.createElement('span'))
+    const prompt = tail.appendChild(dom.createElement('span'))
     prompt.textContent =
       (values.length === 0 ? 'Add one or more ' : 'Add more ') +
       label(property)
@@ -509,9 +510,9 @@ field[ns.ui('Multiple').uri] = function (
   refresh()
 
   async function asyncStuff () {
-    var extra = min - values.length
+    const extra = min - values.length
     if (extra > 0) {
-      for (var j = 0; j < extra; j++) {
+      for (let j = 0; j < extra; j++) {
         console.log('Adding extra: min ' + min)
         await addItem() // Add blanks if less than minimum
       }
@@ -636,17 +637,17 @@ function basicField (
 ) {
   const kb = store
 
-  var box = dom.createElement('tr')
+  const box = dom.createElement('tr')
   if (container) container.appendChild(box)
-  var lhs = dom.createElement('td')
+  const lhs = dom.createElement('td')
   lhs.setAttribute('class', 'formFieldName')
   lhs.setAttribute('style', '  vertical-align: middle;')
   box.appendChild(lhs)
-  var rhs = dom.createElement('td')
+  const rhs = dom.createElement('td')
   rhs.setAttribute('class', 'formFieldValue')
   box.appendChild(rhs)
 
-  var property = kb.any(form, ns.ui('property'))
+  const property = kb.any(form, ns.ui('property'))
   if (!property) {
     box.appendChild(
       dom.createTextNode('Error: No property given for text field: ' + form)
@@ -654,27 +655,27 @@ function basicField (
     return box
   }
   lhs.appendChild(fieldLabel(dom, property, form))
-  var uri = mostSpecificClassURI(form)
-  var params = fieldParams[uri]
+  const uri = mostSpecificClassURI(form)
+  let params = fieldParams[uri]
   if (params === undefined) params = {} // non-bottom field types can do this
-  var style = params.style || textInputStyle || 'font-size: 100%; margin: 0.1em; padding: 0.1em;'
+  const style = params.style || textInputStyle || 'font-size: 100%; margin: 0.1em; padding: 0.1em;'
   // box.appendChild(dom.createTextNode(' uri='+uri+', pattern='+ params.pattern))
-  var field = dom.createElement('input')
+  const field = dom.createElement('input')
   ;(field as any).style = textInputStyle // Do we have to override length etc?
   rhs.appendChild(field)
   field.setAttribute('type', params.type ? params.type : 'text')
 
-  var size = kb.any(form, ns.ui('size')) // Form has precedence
+  const size = kb.any(form, ns.ui('size')) // Form has precedence
   field.setAttribute(
     'size',
     size ? '' + size : params.size ? '' + params.size : '20'
   )
-  var maxLength = kb.any(form, ns.ui('maxLength'))
+  const maxLength = kb.any(form, ns.ui('maxLength'))
   field.setAttribute('maxLength', maxLength ? '' + maxLength : '4096')
 
   doc = doc || fieldStore(subject, property, doc)
 
-  var obj = kb.any(subject, property, undefined, doc)
+  let obj = kb.any(subject, property, undefined, doc)
   if (!obj) {
     obj = kb.any(form, ns.ui('default'))
   }
@@ -715,8 +716,8 @@ function basicField (
       if (params.pattern && !field.value.match(params.pattern)) return
       field.disabled = true // See if this stops getting two dates from fumbling e.g the chrome datepicker.
       field.setAttribute('style', style + 'color: gray;') // pending
-      var ds = kb.statementsMatching(subject, property) // remove any multiple values
-      var result
+      const ds = kb.statementsMatching(subject, property) // remove any multiple values
+      let result
       if (params.namedNode) {
         result = kb.sym(field.value)
       } else if (params.uriPrefix) {
@@ -733,14 +734,14 @@ function basicField (
           result = new Literal(field.value)
         }
       }
-      var is = ds.map(st => st(st.subject, st.predicate, result, st.why)) // can include >1 doc
+      let is = ds.map(st => st(st.subject, st.predicate, result, st.why)) // can include >1 doc
       if (is.length === 0) {
         // or none
         is = [st(subject, property, result, doc)]
       }
 
       function updateMany (ds, is: { why: { uri: string } }[], callback) {
-        var docs: any[] = []
+        const docs: any[] = []
         is.forEach(st => {
           if (!docs.includes(st.why.uri)) docs.push(st.why.uri)
         })
@@ -814,14 +815,14 @@ field[ns.ui('MultiLineTextField').uri] = function (
   callbackFunction
 ) {
   const kb = store
-  var property = kb.any(form, ns.ui('property'))
+  const property = kb.any(form, ns.ui('property'))
   if (!property) {
     return errorMessageBlock(dom, 'No property to text field: ' + form)
   }
   const box = dom.createElement('div')
   box.appendChild(fieldLabel(dom, property, form))
   doc = fieldStore(subject, property, doc)
-  var field = makeDescription(
+  const field = makeDescription(
     dom,
     kb,
     subject,
@@ -850,7 +851,7 @@ function booleanField (
   tristate
 ) {
   const kb = store
-  var property = kb.any(form, ns.ui('property'))
+  const property = kb.any(form, ns.ui('property'))
   if (!property) {
     const errorBlock = errorMessageBlock(
       dom,
@@ -859,17 +860,17 @@ function booleanField (
     if (container) container.appendChild(errorBlock)
     return errorBlock
   }
-  var lab = kb.any(form, ns.ui('label'))
+  let lab = kb.any(form, ns.ui('label'))
   if (!lab) lab = label(property, true) // Init capital
   doc = fieldStore(subject, property, doc)
-  var state = kb.any(subject, property)
+  let state = kb.any(subject, property)
   if (state === undefined) {
     state = false
   } // @@ sure we want that -- or three-state?
   // debug('doc is '+doc)
-  var ins = (st as any)(subject, property, true, doc)
-  var del = (st as any)(subject, property, false, doc)
-  var box = buildCheckboxForm(dom, kb, lab, del, ins, form, doc, tristate)
+  const ins = (st as any)(subject, property, true, doc)
+  const del = (st as any)(subject, property, false, doc)
+  const box = buildCheckboxForm(dom, kb, lab, del, ins, form, doc, tristate)
   if (container) container.appendChild(box)
   return box
 }
@@ -933,24 +934,24 @@ field[ns.ui('Classifier').uri] = function (
 ) {
   const kb = store
 
-  var category = kb.any(form, ns.ui('category'))
+  const category = kb.any(form, ns.ui('category'))
   if (!category) {
     return errorMessageBlock(dom, 'No category for classifier: ' + form)
   }
   debug('Classifier: doc=' + doc)
-  var checkOptions = function (ok, body) {
+  const checkOptions = function (ok, body) {
     if (!ok) return callbackFunction(ok, body)
 
     /*
-    var parent = kb.any(undefined, ns.ui('part'), form)
+    const parent = kb.any(undefined, ns.ui('part'), form)
     if (!parent) return callbackFunction(ok, body)
-    var kids = kb.each(parent, ns.ui('part')); // @@@@@@@@@ Garbage
+    const kids = kb.each(parent, ns.ui('part')); // @@@@@@@@@ Garbage
     kids = kids.filter(function(k){return kb.any(k, ns.rdf('type'), ns.ui('Options'))})
     if (kids.length) debug('Yes, found related options: '+kids[0])
     */
     return callbackFunction(ok, body)
   }
-  var box = makeSelectForNestedCategory(
+  const box = makeSelectForNestedCategory(
     dom,
     kb,
     subject,
@@ -984,30 +985,30 @@ field[ns.ui('Choice').uri] = function (
   callbackFunction
 ) {
   const kb = store
-  var multiple = false
-  var p
-  var box = dom.createElement('tr')
+  const multiple = false
+  let p
+  const box = dom.createElement('tr')
   if (container) container.appendChild(box)
-  var lhs = dom.createElement('td')
+  const lhs = dom.createElement('td')
   box.appendChild(lhs)
-  var rhs = dom.createElement('td')
+  const rhs = dom.createElement('td')
   box.appendChild(rhs)
-  var property = kb.any(form, ns.ui('property'))
+  const property = kb.any(form, ns.ui('property'))
   if (!property) {
     return errorMessageBlock(dom, 'No property for Choice: ' + form)
   }
   lhs.appendChild(fieldLabel(dom, property, form))
-  var from = kb.any(form, ns.ui('from'))
+  const from = kb.any(form, ns.ui('from'))
   if (!from) {
     return errorMessageBlock(dom, "No 'from' for Choice: " + form)
   }
-  var subForm = kb.any(form, ns.ui('use')) // Optional
-  var possible: any[] = []
-  var possibleProperties
-  var np = '--' + label(property) + '-?'
-  var opts: any = { multiple: multiple, nullLabel: np, disambiguate: false }
+  const subForm = kb.any(form, ns.ui('use')) // Optional
+  let possible: any[] = []
+  let possibleProperties
+  const np = '--' + label(property) + '-?'
+  const opts: any = { multiple: multiple, nullLabel: np, disambiguate: false }
   possible = kb.each(undefined, ns.rdf('type'), from)
-  for (var x in kb.findMembersNT(from)) {
+  for (const x in kb.findMembersNT(from)) {
     possible.push(kb.fromNT(x))
     // box.appendChild(dom.createTextNode("RDFS: adding "+x))
   } // Use rdfs
@@ -1029,7 +1030,7 @@ field[ns.ui('Choice').uri] = function (
     for (p in possibleProperties.dp) possible.push(kb.fromNT(p))
     opts.disambiguate = true
   }
-  var object = kb.any(subject, property)
+  let object = kb.any(subject, property)
   function addSubForm () {
     object = kb.any(subject, property)
     fieldFunction(dom, subForm)(
@@ -1043,12 +1044,12 @@ field[ns.ui('Choice').uri] = function (
     )
   }
   // box.appendChild(dom.createTextNode('Choice: subForm='+subForm))
-  var possible2 = sortByLabel(possible)
+  const possible2 = sortByLabel(possible)
   if (kb.any(form, ns.ui('canMintNew'))) {
     opts.mint = '* New *' // @@ could be better
     opts.subForm = subForm
   }
-  var selector = makeSelectForOptions(
+  const selector = makeSelectForOptions(
     dom,
     kb,
     subject,
@@ -1087,21 +1088,21 @@ field[ns.ui('Comment').uri] = field[
   _callbackFunction
 ) {
   const kb = store
-  var contents = kb.any(form, ns.ui('contents'))
+  let contents = kb.any(form, ns.ui('contents'))
   if (!contents) contents = 'Error: No contents in comment field.'
 
-  var uri = mostSpecificClassURI(form)
-  var params = fieldParams[uri]
+  const uri = mostSpecificClassURI(form)
+  let params = fieldParams[uri]
   if (params === undefined) {
     params = {}
   } // non-bottom field types can do this
 
-  var box = dom.createElement('div')
+  const box = dom.createElement('div')
   if (container) container.appendChild(box)
-  var p = box.appendChild(dom.createElement(params.element))
+  const p = box.appendChild(dom.createElement(params.element))
   p.textContent = contents
 
-  var style = kb.any(form, ns.ui('style'))
+  let style = kb.any(form, ns.ui('style'))
   if (style === undefined) {
     style = params.style ? params.style : ''
   }
@@ -1119,10 +1120,10 @@ field[ns.ui('Comment').uri] = field[
 
 export function mostSpecificClassURI (x) {
   const kb = store
-  var ft = kb.findTypeURIs(x)
-  var bot = kb.bottomTypeURIs(ft) // most specific
-  var bots: any[] = []
-  for (var b in bot) bots.push(b)
+  const ft = kb.findTypeURIs(x)
+  const bot = kb.bottomTypeURIs(ft) // most specific
+  const bots: any[] = []
+  for (const b in bot) bots.push(b)
   // if (bots.length > 1) throw "Didn't expect "+x+" to have multiple bottom types: "+bots
   return bots[0]
 }
@@ -1130,7 +1131,7 @@ export function mostSpecificClassURI (x) {
 export function fieldFunction (dom, fieldInQuestion) {
   const uri = mostSpecificClassURI(fieldInQuestion) // What type
   // const uri = field.uri
-  var fun = field[uri]
+  const fun = field[uri]
 
   debug(
     'paneUtils: Going to implement field ' + fieldInQuestion + ' of type ' + uri
@@ -1158,13 +1159,13 @@ export function editFormButton (
   doc,
   callbackFunction
 ) {
-  var b = dom.createElement('button')
+  const b = dom.createElement('button')
   b.setAttribute('type', 'button')
   b.innerHTML = 'Edit ' + label(ns.ui('Form'))
   b.addEventListener(
     'click',
     function (_e) {
-      var ff = appendForm(
+      const ff = appendForm(
         dom,
         container,
         {},
@@ -1215,7 +1216,7 @@ export function appendForm (
 */
 
 export function propertiesForClass (kb, c) {
-  var explicit = kb.each(undefined, ns.rdf('range'), c)
+  const explicit = kb.each(undefined, ns.rdf('range'), c)
   ;[
     ns.rdfs('comment'),
     ns.dc('title'), // Generic things
@@ -1224,10 +1225,10 @@ export function propertiesForClass (kb, c) {
   ].map(function (x) {
     explicit.push(x)
   })
-  var members = kb.each(undefined, ns.rdf('type'), c)
+  let members = kb.each(undefined, ns.rdf('type'), c)
   if (members.length > 60) members = members.slice(0, 60) // Array supports slice?
-  var used = {}
-  for (var i = 0; i < (members.length > 60 ? 60 : members.length); i++) {
+  const used = {}
+  for (let i = 0; i < (members.length > 60 ? 60 : members.length); i++) {
     kb.statementsMatching(members[i], undefined, undefined).map(function (st) {
       used[st.predicate.uri] = true
     })
@@ -1235,8 +1236,8 @@ export function propertiesForClass (kb, c) {
   explicit.map(function (p) {
     used[p.uri] = true
   })
-  var result: any[] = []
-  for (var uri in used) {
+  const result: any[] = []
+  for (const uri in used) {
     result.push(kb.sym(uri))
   }
   return result
@@ -1248,15 +1249,15 @@ export function propertiesForClass (kb, c) {
 * @param prop
 */
 export function findClosest (kb: IndexedFormula, cla: NamedNode | string, prop: NamedNode): NamedNode[] {
-  var agenda: NamedNode[] = [kb.sym(cla)] // ordered - this is breadth first search
+  const agenda: NamedNode[] = [kb.sym(cla)] // ordered - this is breadth first search
   while (agenda.length > 0) {
-    var c = agenda.shift() // first
+    const c = agenda.shift() // first
     // if (c.uri && (c.uri == ns.owl('Thing').uri || c.uri == ns.rdf('Resource').uri )) continue
-    var lists: NamedNode[] = kb.each(c, prop) as NamedNode[]
+    const lists: NamedNode[] = kb.each(c, prop) as NamedNode[]
     debug('Lists for ' + c + ', ' + prop + ': ' + lists.length)
     if (lists.length !== 0) return lists
-    var supers = kb.each(c, ns.rdfs('subClassOf'))
-    for (var i = 0; i < supers.length; i++) {
+    const supers = kb.each(c, ns.rdfs('subClassOf'))
+    for (let i = 0; i < supers.length; i++) {
       agenda.push(supers[i] as NamedNode)
       debug('findClosest: add super: ' + supers[i])
     }
@@ -1270,14 +1271,14 @@ export function formsFor (subject) {
   const kb = store
 
   debug('formsFor: subject=' + subject)
-  var t = kb.findTypeURIs(subject)
-  var t1
+  const t = kb.findTypeURIs(subject)
+  let t1
   for (t1 in t) {
     debug('   type: ' + t1)
   }
-  var bottom = kb.bottomTypeURIs(t) // most specific
-  var candidates: any[] = []
-  for (var b in bottom) {
+  const bottom = kb.bottomTypeURIs(t) // most specific
+  let candidates: any[] = []
+  for (const b in bottom) {
     // Find the most specific
     debug('candidatesFor: trying bottom type =' + b)
     candidates = candidates.concat(
@@ -1291,8 +1292,8 @@ export function formsFor (subject) {
 }
 
 export function sortBySequence (list) {
-  var p2 = list.map(function (p) {
-    var k = store.any(p, ns.ui('sequence'))
+  const p2 = list.map(function (p) {
+    const k = store.any(p, ns.ui('sequence'))
     return [k || 9999, p]
   })
   p2.sort(function (a, b) {
@@ -1304,7 +1305,7 @@ export function sortBySequence (list) {
 }
 
 export function sortByLabel (list) {
-  var p2 = list.map(function (p) {
+  const p2 = list.map(function (p) {
     return [label(p).toLowerCase(), p]
   })
   p2.sort()
@@ -1328,7 +1329,7 @@ export function newButton (
   doc: NamedNode,
   callbackFunction
 ) {
-  var b = dom.createElement('button')
+  const b = dom.createElement('button')
   b.setAttribute('type', 'button')
   b.innerHTML = 'New ' + label(theClass)
   b.addEventListener(
@@ -1374,17 +1375,17 @@ export function promptForNew (
   doc,
   callbackFunction
 ) {
-  var box = dom.createElement('form')
+  const box = dom.createElement('form')
 
   if (!form) {
-    var lists = findClosest(kb, theClass.uri, ns.ui('creationForm'))
+    const lists = findClosest(kb, theClass.uri, ns.ui('creationForm'))
     if (lists.length === 0) {
-      var p = box.appendChild(dom.createElement('p'))
+      const p = box.appendChild(dom.createElement('p'))
       p.textContent =
         'I am sorry, you need to provide information about a ' +
         label(theClass) +
         " but I don't know enough information about those to ask you."
-      var b = box.appendChild(dom.createElement('button'))
+      const b = box.appendChild(dom.createElement('button'))
       b.setAttribute('type', 'button')
       b.setAttribute('style', 'float: right;')
       b.innerHTML = 'Goto ' + label(theClass)
@@ -1410,12 +1411,12 @@ export function promptForNew (
   box.setAttribute('style', `border: 0.05em solid ${formBorderColor}; color: ${formBorderColor}`) // @@color?
   box.innerHTML = '<h3>New ' + label(theClass) + '</h3>'
 
-  var formFunction = fieldFunction(dom, form)
-  var object = newThing(doc)
-  var gotButton = false
-  var itemDone = function (ok, body) {
+  const formFunction = fieldFunction(dom, form)
+  const object = newThing(doc)
+  let gotButton = false
+  const itemDone = function (ok, body) {
     if (!ok) return callbackFunction(ok, body)
-    var insertMe: any[] = []
+    const insertMe: any[] = []
     if (subject && !kb.holds(subject, predicate, object, doc)) {
       insertMe.push(st(subject, predicate, object, doc))
     }
@@ -1436,8 +1437,8 @@ export function promptForNew (
     return callbackFunction(ok, body)
   }
   info('paneUtils Object is ' + object)
-  var f = formFunction(dom, box, {}, object, form, doc, itemDone)
-  var rb = removeButton(dom, f)
+  const f = formFunction(dom, box, {}, object, form, doc, itemDone)
+  const rb = removeButton(dom, f)
   rb.setAttribute('style', 'float: right;')
   box.AJAR_subject = object
   return box
@@ -1451,22 +1452,22 @@ export function makeDescription (
   doc: NamedNode,
   callbackFunction: (ok: boolean, errorMessage: string) => void
 ) {
-  var group = dom.createElement('div')
+  const group = dom.createElement('div')
 
-  var sts = kb.statementsMatching(subject, predicate, null, doc) // Only one please
+  const sts = kb.statementsMatching(subject, predicate, null, doc) // Only one please
   if (sts.length > 1) {
     return errorMessageBlock(
       dom,
       'Should not be ' + sts.length + ' i.e. >1 ' + predicate + ' of ' + subject
     )
   }
-  var desc = sts.length ? sts[0].object.value : undefined
+  const desc = sts.length ? sts[0].object.value : undefined
 
-  var field = dom.createElement('textarea')
+  const field = dom.createElement('textarea')
   group.appendChild(field)
   field.rows = desc ? desc.split('\n').length + 2 : 2
   field.cols = 80
-  var style = multilineTextInputStyle ||
+  const style = multilineTextInputStyle ||
     'font-size:100%; white-space: pre-wrap; background-color: white;' +
     ' border: 0.07em solid gray; padding: 1em 0.5em; margin: 1em 1em;'
   field.setAttribute('style', style)
@@ -1479,19 +1480,20 @@ export function makeDescription (
   }
 
   ;(group as any).refresh = function () {
-    var v = kb.any(subject, predicate, null, doc)
+    const v = kb.any(subject, predicate, null, doc)
     if (v && v.value !== field.value) {
       field.value = v.value // don't touch widget if no change
       // @@ this is the place to color the field from the user who chanaged it
     }
   }
+  let submit
   function saveChange (_e) {
     submit.disabled = true
     submit.setAttribute('style', 'visibility: hidden; float: right;') // Keep UI clean
     field.disabled = true
     field.setAttribute('style', style + 'color: gray;') // pending
-    var ds = kb.statementsMatching(subject, predicate, null, doc)
-    var is = st(subject, predicate, field.value, doc)
+    const ds = kb.statementsMatching(subject, predicate, null, doc)
+    const is = st(subject, predicate, field.value, doc)
     store.updater.update(ds, is, function (uri, ok, body) {
       if (ok) {
         field.setAttribute('style', style + 'color: black;')
@@ -1510,12 +1512,12 @@ export function makeDescription (
     })
   }
 
-  var br = dom.createElement('br')
+  const br = dom.createElement('br')
   group.appendChild(br)
 
-  var editable = store.updater.editable(doc.uri)
+  const editable = store.updater.editable(doc.uri)
   if (editable) {
-    var submit = dom.createElement('input')
+    submit = dom.createElement('input')
     submit.setAttribute('type', 'submit')
     submit.disabled = true // until the filled has been modified
     submit.setAttribute('style', 'visibility: hidden; float: right;') // Keep UI clean
@@ -1566,12 +1568,12 @@ export function makeSelectForOptions (
   callbackFunction
 ) {
   debug('Select list length now ' + possible.length)
-  var n = 0
-  var uris = {} // Count them
-  var editable = store.updater.editable(doc.uri)
+  let n = 0
+  const uris = {} // Count them
+  const editable = store.updater.editable(doc.uri)
 
-  for (var i = 0; i < possible.length; i++) {
-    var sub = possible[i] // @@ Maybe; make this so it works with blank nodes too
+  for (let i = 0; i < possible.length; i++) {
+    const sub = possible[i] // @@ Maybe; make this so it works with blank nodes too
     if (!sub.uri) console.warn(`makeSelectForOptions: option does not have an uri: ${sub}, with predicate: ${predicate}`)
     if (!sub.uri || sub.uri in uris) continue
     uris[sub.uri] = true
@@ -1589,36 +1591,37 @@ export function makeSelectForOptions (
   }
   debug('makeSelectForOptions: doc=' + doc)
 
-  var getActual = function () {
-    actual = {}
+  const getActual = function () {
+    let ret = {}
     if (predicate.sameTerm(ns.rdf('type'))) {
-      actual = kb.findTypeURIs(subject)
+      ret = kb.findTypeURIs(subject)
     } else {
       kb.each(subject, predicate, null, doc).map(function (x) {
-        actual[x.uri] = true
+        ret[x.uri] = true
       })
     }
-    return actual
+    return ret
   }
-  var actual = getActual()
+  let actual = getActual()
 
-  // var newObject = null
+  // const newObject = null
 
-  var onChange = function (_e) {
+  const onChange = function (_e) {
+    let newObject
     select.disabled = true // until data written back - gives user feedback too
-    var ds: any[] = []
-    var is: any[] = []
-    var removeValue = function (t) {
+    const ds: any[] = []
+    let is: any[] = []
+    const removeValue = function (t) {
       if (kb.holds(subject, predicate, t, doc)) {
         ds.push(st(subject, predicate, t, doc))
       }
     }
-    for (var i = 0; i < select.options.length; i++) {
-      var opt = select.options[i]
+    for (let i = 0; i < select.options.length; i++) {
+      const opt = select.options[i]
       if (opt.selected && opt.AJAR_mint) {
-        var newObject
+        let newObject
         if (options.mintClass) {
-          var thisForm = promptForNew(
+          const thisForm = promptForNew(
             dom,
             kb,
             subject,
@@ -1654,7 +1657,7 @@ export function makeSelectForOptions (
       }
       if (opt.selected) select.currentURI = opt.AJAR_uri
     }
-    var sel = select.subSelect // All subclasses must also go
+    let sel = select.subSelect // All subclasses must also go
     while (sel && sel.currentURI) {
       removeValue(kb.sym(sel.currentURI))
       sel = sel.subSelect
@@ -1674,7 +1677,7 @@ export function makeSelectForOptions (
       if (ok) {
         select.disabled = false // data written back
         if (newObject) {
-          var fn = fieldFunction(dom, options.subForm)
+          const fn = fieldFunction(dom, options.subForm)
           fn(
             dom,
             select.parentNode,
@@ -1690,15 +1693,15 @@ export function makeSelectForOptions (
     })
   }
 
-  var select = dom.createElement('select')
+  const select = dom.createElement('select')
   select.setAttribute('style', 'margin: 0.6em 1.5em;')
   if (options.multiple) select.setAttribute('multiple', 'true')
   select.currentURI = null
 
   select.refresh = function () {
     actual = getActual() // refresh
-    for (var i = 0; i < select.children.length; i++) {
-      var option = select.children[i]
+    for (let i = 0; i < select.children.length; i++) {
+      const option = select.children[i]
       if (option.AJAR_uri) {
         option.selected = option.AJAR_uri in actual
       }
@@ -1706,15 +1709,15 @@ export function makeSelectForOptions (
     select.disabled = false // unlocked any conflict we had got into
   }
 
-  for (var uri in uris) {
-    var c = kb.sym(uri)
-    var option = dom.createElement('option')
+  for (const uri in uris) {
+    const c = kb.sym(uri)
+    const option = dom.createElement('option')
     if (options.disambiguate) {
       option.appendChild(dom.createTextNode(labelWithOntology(c, true))) // Init. cap
     } else {
       option.appendChild(dom.createTextNode(label(c, true))) // Init.
     }
-    var backgroundColor = kb.any(
+    const backgroundColor = kb.any(
       c,
       kb.sym('http://www.w3.org/ns/ui#backgroundColor')
     )
@@ -1733,13 +1736,13 @@ export function makeSelectForOptions (
     select.appendChild(option)
   }
   if (editable && options.mint) {
-    var mint = dom.createElement('option')
+    const mint = dom.createElement('option')
     mint.appendChild(dom.createTextNode(options.mint))
     mint.AJAR_mint = true // Flag it
     select.insertBefore(mint, select.firstChild)
   }
   if (select.currentURI == null && !options.multiple) {
-    var prompt = dom.createElement('option')
+    const prompt = dom.createElement('option')
     prompt.appendChild(dom.createTextNode(options.nullLabel))
     select.insertBefore(prompt, select.firstChild)
     prompt.selected = true
@@ -1764,9 +1767,9 @@ export function makeSelectForCategory (
   doc,
   callbackFunction
 ) {
-  var du = kb.any(category, ns.owl('disjointUnionOf'))
-  var subs
-  var multiple = false
+  const du = kb.any(category, ns.owl('disjointUnionOf'))
+  let subs
+  let multiple = false
   if (!du) {
     subs = kb.each(undefined, ns.rdfs('subClassOf'), category)
     multiple = true
@@ -1821,14 +1824,13 @@ export function makeSelectForNestedCategory (
   doc,
   callbackFunction
 ) {
-  var container = dom.createElement('span') // Container
-  var child: any = null
-  var select
-  var onChange = function (ok, body) {
+  const container = dom.createElement('span') // Container
+  let child: any = null
+  const onChange = function (ok, body) {
     if (ok) update()
     callbackFunction(ok, body)
   }
-  select = makeSelectForCategory(
+  const select = makeSelectForCategory(
     dom,
     kb,
     subject,
@@ -1837,7 +1839,7 @@ export function makeSelectForNestedCategory (
     onChange
   )
   container.appendChild(select)
-  var update = function () {
+  const update = function () {
     // info("Selected is now: "+select.currentURI)
     if (child) {
       container.removeChild(child)
@@ -1874,14 +1876,13 @@ export function makeSelectForNestedCategory (
  */
 export function buildCheckboxForm (dom, kb, lab, del, ins, form, doc, tristate) {
   // 20190115
-  var box = dom.createElement('div')
-  var tx = dom.createTextNode(lab)
-  var editable = store.updater.editable(doc.uri)
+  const box = dom.createElement('div')
+  const tx = dom.createTextNode(lab)
+  const editable = store.updater.editable(doc.uri)
   tx.style =
     'colour: black; font-size: 100%; padding-left: 0.5 em; padding-right: 0.5 em;'
   box.appendChild(tx)
-  var input
-  input = dom.createElement('button')
+  const input = dom.createElement('button')
 
   input.setAttribute(
     'style',
@@ -1910,10 +1911,10 @@ export function buildCheckboxForm (dom, kb, lab, del, ins, form, doc, tristate) 
     return missing.length === 0
   }
   function refresh () {
-    var state: any = holdsAll(ins)
-    var displayState = state
+    let state: any = holdsAll(ins)
+    let displayState = state
     if (del.length) {
-      var negation = holdsAll(del)
+      const negation = holdsAll(del)
       if (state && negation) {
         box.appendChild(
           errorMessageBlock(
@@ -1940,9 +1941,9 @@ export function buildCheckboxForm (dom, kb, lab, del, ins, form, doc, tristate) 
   refresh()
   if (!editable) return box
 
-  var boxHandler = function (_e) {
+  const boxHandler = function (_e) {
     tx.style = 'color: #bbb;' // grey -- not saved yet
-    var toDelete = input.state === true ? ins : input.state === false ? del : []
+    const toDelete = input.state === true ? ins : input.state === false ? del : []
     input.newState =
       input.state === null
         ? true
@@ -1952,7 +1953,7 @@ export function buildCheckboxForm (dom, kb, lab, del, ins, form, doc, tristate) 
             ? null
             : true
 
-    var toInsert =
+    const toInsert =
       input.newState === true ? ins : input.newState === false ? del : []
     console.log(`  Deleting  ${toDelete}`)
     console.log(`  Inserting ${toInsert}`)
@@ -1963,7 +1964,7 @@ export function buildCheckboxForm (dom, kb, lab, del, ins, form, doc, tristate) 
     ) {
       if (!success) {
         if (toDelete.why) {
-          var hmmm = kb.holds(
+          const hmmm = kb.holds(
             toDelete.subject,
             toDelete.predicate,
             toDelete.object,
@@ -1998,12 +1999,12 @@ export function buildCheckboxForm (dom, kb, lab, del, ins, form, doc, tristate) 
 }
 
 export function fieldLabel (dom, property, form) {
-  var lab = store.any(form, ns.ui('label'))
+  let lab = store.any(form, ns.ui('label'))
   if (!lab) lab = label(property, true) // Init capital
   if (property === undefined) {
     return dom.createTextNode('@@Internal error: undefined property')
   }
-  var anchor = dom.createElement('a')
+  const anchor = dom.createElement('a')
   if (property.uri) anchor.setAttribute('href', property.uri)
   anchor.setAttribute('style', 'color: #3B5998; text-decoration: none;') // Not too blue and no underline
   anchor.textContent = lab
@@ -2011,7 +2012,7 @@ export function fieldLabel (dom, property, form) {
 }
 
 export function fieldStore (subject, predicate, def) {
-  var sts = store.statementsMatching(subject, predicate)
+  const sts = store.statementsMatching(subject, predicate)
   if (sts.length === 0) return def // can used default as no data yet
   if (
     sts.length > 0 &&
@@ -2027,6 +2028,6 @@ export function fieldStore (subject, predicate, def) {
  * @param {NamedNode} doc - the document in which the ID is to be generated
  */
 export function newThing (doc) {
-  var now = new Date()
+  const now = new Date()
   return sym(doc.uri + '#' + 'id' + ('' + now.getTime()))
 }
