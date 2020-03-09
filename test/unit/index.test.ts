@@ -25,7 +25,8 @@ describe('Index', () => {
       'versionInfo',
       'dom',
       'rdf',
-      'pad'
+      'pad',
+      'participation'
     ])
   })
 })

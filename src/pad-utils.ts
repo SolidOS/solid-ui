@@ -7,6 +7,7 @@ const PAD = Namespace('http://www.w3.org/ns/pim/pad#')
  * Get the chunks of the notepad
  * They are stored in a RDF linked list
  */
+
 // @ignore exporting this only for the unit test
 export function getChunks (subject, kb) {
   const chunks: any[] = []
