@@ -85,29 +85,29 @@ field[ns.ui('Form').uri] = field[
   var eles = []
   var original = []
   for (var i = 0; i < p2.length; i++) {
-    var field = p2[i]
-    var t = mostSpecificClassURI(field) // Field type
+    var formField = p2[i]
+    var t = mostSpecificClassURI(formField) // Field type
     if (t === ns.ui('Options').uri) {
-      var dep = kb.any(field, ns.ui('dependingOn'))
+      var dep = kb.any(formField, ns.ui('dependingOn'))
       if (dep && kb.any(subject, dep)) (original as any)[i] = kb.any(subject, dep).toNT()
     }
 
-    var fn = fieldFunction(dom, field)
+    var fn = fieldFunction(dom, formField)
 
     var itemChanged = function (ok, body) {
       if (ok) {
         for (var j = 0; j < p2.length; j++) {
           // This is really messy.
-          var field = p2[j]
-          var t = mostSpecificClassURI(field) // Field type
+          var formPart = p2[j]
+          var t = mostSpecificClassURI(formPart) // Field type
           if (t === ns.ui('Options').uri) {
-            var dep = kb.any(field, ns.ui('dependingOn'))
+            var dep = kb.any(formPart, ns.ui('dependingOn'))
             var newOne = fn(
               dom,
               box,
               already,
               subject,
-              field,
+              formPart,
               doc,
               callbackFunction
             )
@@ -121,7 +121,7 @@ field[ns.ui('Form').uri] = field[
       }
       callbackFunction(ok, body)
     }
-    ;(eles as any).push(fn(dom, box, already2, subject, field, doc, itemChanged))
+    ;(eles as any).push(fn(dom, box, already2, subject, formField, doc, itemChanged))
   }
   return box
 }
@@ -1127,18 +1127,19 @@ export function mostSpecificClassURI (x) {
   return bots[0]
 }
 
-export function fieldFunction (dom, field) {
-  const uri = mostSpecificClassURI(field) // What type
+export function fieldFunction (dom, fieldInQuestion) {
+  const uri = mostSpecificClassURI(fieldInQuestion) // What type
   // const uri = field.uri
   var fun = field[uri]
+
   debug(
-    'paneUtils: Going to implement field ' + field + ' of type ' + uri
+    'paneUtils: Going to implement field ' + fieldInQuestion + ' of type ' + uri
   )
   if (!fun) {
     return function () {
       return errorMessageBlock(
         dom,
-        'No handler for field ' + field + ' of type ' + uri
+        'No handler for field ' + fieldInQuestion + ' of type ' + uri
       )
     }
   }
