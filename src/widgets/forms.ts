@@ -161,7 +161,7 @@ field[ns.ui('Options').uri] = function (
   if (!cases) {
     box.appendChild(errorMessageBlock(dom, 'No cases to Options form. '))
   }
-  let values: { [uri: string]: any }
+  let values: { [uri: string]: boolean }
   if (dependingOn.sameTerm(ns.rdf('type'))) {
     values = kb.findTypeURIs(subject)
   } else {
