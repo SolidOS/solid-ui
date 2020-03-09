@@ -33,7 +33,7 @@
   <pre id="viewSource-templateTitle"></pre><script>showSource('templateTitle')</script>
   <div id="div-templateTitle"></div> -->
 
-  <h2 id="mostSpecificClassURI"><a href="#mostSpecificClassURI">mostSpecificClassURI</a></h2>
+  <!-- <h2 id="mostSpecificClassURI"><a href="#mostSpecificClassURI">mostSpecificClassURI</a></h2>
   <script id="script-mostSpecificClassURI">
     window.addEventListener('DOMContentLoaded', async (event) => {
       const fullNameField = UI.rdf.namedNode('https://timbl.com/timbl/Public/Test/Forms/individualForm.ttl#fullNameField')
@@ -185,16 +185,16 @@
   <pre id="viewSource-groupField"></pre><script>showSource('groupField')</script>
   <div id="div-groupField"></div>
 
-  <h2 id="optionsField"><a href="#optionsField">UI.widgets.field[UI.ns.ui('Options').uri], using RDF types</a></h2>
-  <script id="script-optionsField">
+  <h2 id="optionsFieldType"><a href="#optionsFieldType">UI.widgets.field[UI.ns.ui('Options').uri], using RDF types</a></h2>
+  <script id="script-optionsFieldType">
     window.addEventListener('DOMContentLoaded', (event) => {
-      const container = document.getElementById('div-optionsField')
+      const container = document.getElementById('div-optionsFieldType')
       const already = {}
       const subject = UI.rdf.namedNode('http://example.com/#this')
       const exampleOptionsField = UI.rdf.namedNode('http://example.com/#exampleOptionsField')
       const store = UI.rdf.namedNode('http://example.com/#store')
       const callbackFunction = (ok, errorMessage) => {
-        console.log(ok, errorMessage, document.getElementById('div-optionsField').innerHTML);
+        console.log(ok, errorMessage, document.getElementById('div-optionsFieldType').innerHTML);
       }
 
       // UI to display in case subject is a house:
@@ -230,8 +230,59 @@
       )
     })
   </script>
-  <pre id="viewSource-optionsField"></pre><script>showSource('optionsField')</script>
-  <div id="div-optionsField"></div>
+  <pre id="viewSource-optionsFieldType"></pre><script>showSource('optionsFieldType')</script>
+  <div id="div-optionsFieldType"></div> -->
+
+  <h2 id="optionsFieldDependingOn"><a href="#optionsFieldDependingOn">UI.widgets.field[UI.ns.ui('Options').uri], using dependingOn</a></h2>
+  <script id="script-optionsFieldDependingOn">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const container = document.getElementById('div-optionsFieldDependingOn')
+      const already = {}
+      const subject = UI.rdf.namedNode('http://example.com/#this')
+      const exampleOptionsField = UI.rdf.namedNode('http://example.com/#exampleOptionsField')
+      const store = UI.rdf.namedNode('http://example.com/#store')
+      const callbackFunction = (ok, errorMessage) => {
+        console.log(ok, errorMessage, document.getElementById('div-optionsFieldDependingOn').innerHTML);
+      }
+
+      // This form depends on colour:
+      UI.store.add(exampleOptionsField, UI.ns.ui('dependingOn'), UI.rdf.namedNode('http://example.com/#colour'), UI.rdf.namedNode('http://example.com/'))
+      
+      // UI to display in case subject is blue:
+      UI.store.add(exampleOptionsField, UI.ns.ui('case'), UI.rdf.namedNode('http://example.com/#if-subject-is-blue'), UI.rdf.namedNode('http://example.com/'))
+      UI.store.add(UI.rdf.namedNode('http://example.com/#if-subject-is-blue'), UI.ns.ui('for'), UI.rdf.namedNode('http://example.com/#red'), UI.rdf.namedNode('http://example.com/'))
+      UI.store.add(UI.rdf.namedNode('http://example.com/#if-subject-is-blue'), UI.ns.ui('use'), UI.rdf.namedNode('http://example.com/#ui-for-blue-things'), UI.rdf.namedNode('http://example.com/'))
+      UI.store.add(UI.rdf.namedNode('http://example.com/#ui-for-blue-things'), UI.ns.rdf('type'), UI.ns.ui('Comment'))
+      UI.store.add(UI.rdf.namedNode('http://example.com/#ui-for-blue-things'), UI.ns.ui('contents'), '[UI for blue things]')
+      
+      // UI to display in case subject is red:
+      UI.store.add(exampleOptionsField, UI.ns.ui('case'), UI.rdf.namedNode('http://example.com/#if-subject-is-red'), UI.rdf.namedNode('http://example.com/'))
+      UI.store.add(UI.rdf.namedNode('http://example.com/#if-subject-is-red'), UI.ns.ui('for'), UI.rdf.namedNode('http://example.com/#blue'), UI.rdf.namedNode('http://example.com/'))
+      UI.store.add(UI.rdf.namedNode('http://example.com/#if-subject-is-red'), UI.ns.ui('use'), UI.rdf.namedNode('http://example.com/#ui-for-red-things'), UI.rdf.namedNode('http://example.com/'))
+      UI.store.add(UI.rdf.namedNode('http://example.com/#ui-for-red-things'), UI.ns.rdf('type'), UI.ns.ui('Comment'))
+      UI.store.add(UI.rdf.namedNode('http://example.com/#ui-for-red-things'), UI.ns.ui('contents'), '[UI for red things]')
+
+      // Subject is red, so it should display [UI for reds]
+      UI.store.add(subject, UI.rdf.namedNode('http://example.com/#colour'), UI.rdf.namedNode('http://example.com/#red'), UI.rdf.namedNode('http://example.com/'))
+
+      
+      // FIXME: https://github.com/solid/solid-ui/issues/239
+      document.outlineManager = {
+        appendPropertyTRs: () => {}
+      }
+      const result = UI.widgets.field[UI.ns.ui('Options').uri](
+        document,
+        container,
+        already,
+        subject,
+        exampleOptionsField,
+        store,
+        callbackFunction
+      )
+    })
+  </script>
+  <pre id="viewSource-optionsFieldDependingOn"></pre><script>showSource('optionsFieldDependingOn')</script>
+  <div id="div-optionsFieldDependingOn"></div>
 
 </body>
 </html>
