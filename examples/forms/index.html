@@ -68,25 +68,46 @@
   <pre id="viewSource-fieldFunction"></pre><script>showSource('fieldFunction')</script>
   <div id="div-fieldFunction"></div>
 
-  <h2 id="appendForm"><a href="#appendForm">appendForm</a></h2>
-  <script id="script-appendForm">
+  <h2 id="appendFormTrivial"><a href="#appendFormTrivial">appendForm, trivial</a></h2>
+  <script id="script-appendFormTrivial">
     window.addEventListener('DOMContentLoaded', async (event) => {
       const dom = document
-      const container = document.getElementById('div-appendForm')
+      const container = document.getElementById('div-appendFormTrivial')
+      const already = {}
+      const subject = UI.rdf.namedNode('http://example.com/#subject')
+      const form = UI.rdf.namedNode('http://example.com/#form')
+      const doc = subject.doc()
+      const callbackFunction = () => {
+        console.log('callback appendFormTrivial called!')
+      }
+      UI.store.add(UI.rdf.namedNode('http://example.com/#form'), UI.ns.rdf('type'), UI.ns.ui('Comment'))
+      UI.store.add(UI.rdf.namedNode('http://example.com/#form'), UI.ns.ui('contents'), '[a trivial form with just a comment]')
+
+      UI.widgets.appendForm(dom, container, already, subject, form, doc)
+    })
+  </script>
+  <pre id="viewSource-appendFormTrivial"></pre><script>showSource('appendFormTrivial')</script>
+  <div id="div-appendFormTrivial"></div>
+
+  <h2 id="appendFormLive"><a href="#appendFormLive">appendForm, live</a></h2>
+  <script id="script-appendFormLive">
+    window.addEventListener('DOMContentLoaded', async (event) => {
+      const dom = document
+      const container = document.getElementById('div-appendFormLive')
       const already = {}
       const subject = UI.rdf.namedNode('https://michielbdejong.inrupt.net/profile/card#me')
       const form = UI.rdf.namedNode('https://timbl.com/timbl/Public/Test/Forms/individualForm.ttl#form1')
       const doc = subject.doc()
       const callbackFunction = () => {
-        console.log('callback appendForm called!')
+        console.log('callback appendFormLive called!')
       }
       await UI.store.fetcher.load(doc)
       await UI.store.fetcher.load(form.doc())
       UI.widgets.appendForm(dom, container, already, subject, form, doc)
     })
   </script>
-  <pre id="viewSource-appendForm"></pre><script>showSource('appendForm')</script>
-  <div id="div-appendForm"></div>
+  <pre id="viewSource-appendFormLive"></pre><script>showSource('appendFormLive')</script>
+  <div id="div-appendFormLive"></div>
 
   <h2 id="formField"><a href="#formField">UI.widgets.field[UI.ns.ui('Form').uri] / UI.widgets.field[UI.ns.ui('Group').uri], no already</a></h2>
   <script id="script-formField">
@@ -97,7 +118,7 @@
       const form = UI.rdf.namedNode('http://example.com/#form')
       const store = UI.rdf.namedNode('http://example.com/#store')
       const callbackFunction = (ok, errorMessage) => {
-        console.log(ok, errorMessage, document.getElementById('#div-formField').innerHTML);
+        console.log(ok, errorMessage, document.getElementById('div-formField').innerHTML);
       }
       UI.store.add(form, UI.ns.ui('parts'), new UI.rdf.Collection([
         UI.rdf.namedNode('http://example.com/#part1'),
@@ -143,12 +164,8 @@
         [key]: true
       }
       const callbackFunction = (ok, errorMessage) => {
-        console.log(ok, errorMessage, document.getElementById('#div-groupField').innerHTML);
+        console.log(ok, errorMessage, document.getElementById('div-groupField').innerHTML);
       }
-      UI.store.add(form, UI.ns.ui('parts'), new UI.rdf.Collection([
-        UI.rdf.namedNode('http://example.com/#part1'),
-        UI.rdf.namedNode('http://example.com/#part2')
-      ]), UI.rdf.namedNode('http://example.com/'))
 
       // FIXME: https://github.com/solid/solid-ui/issues/239
       document.outlineManager = {
@@ -168,23 +185,41 @@
   <pre id="viewSource-groupField"></pre><script>showSource('groupField')</script>
   <div id="div-groupField"></div>
 
-  <h2 id="optionsField"><a href="#optionsField">UI.widgets.field[UI.ns.ui('Options').uri]</a></h2>
+  <h2 id="optionsField"><a href="#optionsField">UI.widgets.field[UI.ns.ui('Options').uri], using RDF types</a></h2>
   <script id="script-optionsField">
     window.addEventListener('DOMContentLoaded', (event) => {
-      const container = document.getElementById('#div-optionsField')
+      const container = document.getElementById('div-optionsField')
+      const already = {}
       const subject = UI.rdf.namedNode('http://example.com/#this')
       const exampleOptionsField = UI.rdf.namedNode('http://example.com/#exampleOptionsField')
       const store = UI.rdf.namedNode('http://example.com/#store')
       const callbackFunction = (ok, errorMessage) => {
-        console.log(ok, errorMessage, document.getElementById('#div-optionsField').innerHTML);
+        console.log(ok, errorMessage, document.getElementById('div-optionsField').innerHTML);
       }
-      UI.store.add(exampleOptionsField, UI.ns.ui('dependingOn'), UI.rdf.namedNode('http://example.com/#bla'), UI.rdf.namedNode('http://example.com/'))
 
+      // UI to display in case subject is a house:
+      UI.store.add(exampleOptionsField, UI.ns.ui('case'), UI.rdf.namedNode('http://example.com/#if-subject-is-house'), UI.rdf.namedNode('http://example.com/'))
+      UI.store.add(UI.rdf.namedNode('http://example.com/#if-subject-is-house'), UI.ns.ui('for'), UI.rdf.namedNode('http://example.com/#house'), UI.rdf.namedNode('http://example.com/'))
+      UI.store.add(UI.rdf.namedNode('http://example.com/#if-subject-is-house'), UI.ns.ui('use'), UI.rdf.namedNode('http://example.com/#number-of-bedrooms'), UI.rdf.namedNode('http://example.com/'))
+      UI.store.add(UI.rdf.namedNode('http://example.com/#number-of-bedrooms'), UI.ns.rdf('type'), UI.ns.ui('Comment'))
+      UI.store.add(UI.rdf.namedNode('http://example.com/#number-of-bedrooms'), UI.ns.ui('contents'), '[UI for houses]')
+      
+      // UI to display in case subject is a cow:
+      UI.store.add(exampleOptionsField, UI.ns.ui('case'), UI.rdf.namedNode('http://example.com/#if-subject-is-cow'), UI.rdf.namedNode('http://example.com/'))
+      UI.store.add(UI.rdf.namedNode('http://example.com/#if-subject-is-cow'), UI.ns.ui('for'), UI.rdf.namedNode('http://example.com/#cow'), UI.rdf.namedNode('http://example.com/'))
+      UI.store.add(UI.rdf.namedNode('http://example.com/#if-subject-is-cow'), UI.ns.ui('use'), UI.rdf.namedNode('http://example.com/#number-of-legs'), UI.rdf.namedNode('http://example.com/'))
+      UI.store.add(UI.rdf.namedNode('http://example.com/#number-of-legs'), UI.ns.rdf('type'), UI.ns.ui('Comment'))
+      UI.store.add(UI.rdf.namedNode('http://example.com/#number-of-legs'), UI.ns.ui('contents'), '[UI for cows]')
+
+      // Subject is a cow, so it should display [UI for cows]
+      UI.store.add(subject, UI.ns.rdf('type'), UI.rdf.namedNode('http://example.com/#cow'), UI.rdf.namedNode('http://example.com/'))
+
+      
       // FIXME: https://github.com/solid/solid-ui/issues/239
       document.outlineManager = {
         appendPropertyTRs: () => {}
       }
-      UI.widgets.field[UI.ns.ui('Group').uri](
+      const result = UI.widgets.field[UI.ns.ui('Options').uri](
         document,
         container,
         already,

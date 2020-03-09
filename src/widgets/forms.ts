@@ -155,15 +155,18 @@ field[ns.ui('Options').uri] = function (
 
   let dependingOn = kb.any(form, ns.ui('dependingOn'))
   if (!dependingOn) {
+    console.log('depending on type')
     dependingOn = ns.rdf('type')
   } // @@ default to type (do we want defaults?)
   const cases = kb.each(form, ns.ui('case'))
   if (!cases) {
     box.appendChild(errorMessageBlock(dom, 'No cases to Options form. '))
   }
+  console.log('cases', cases)
   let values
   if (dependingOn.sameTerm(ns.rdf('type'))) {
     values = kb.findTypeURIs(subject)
+    console.log('values on type', values)
   } else {
     const value = kb.any(subject, dependingOn)
     if (value === undefined) {
@@ -176,16 +179,18 @@ field[ns.ui('Options').uri] = function (
     } else {
       values = {}
       values[value.uri] = true
+      console.log('values dependingOn', values)
     }
   }
   // @@ Add box.refresh() to sync fields with values
   for (let i = 0; i < cases.length; i++) {
     const c = cases[i]
     const tests = kb.each(c, ns.ui('for')) // There can be multiple 'for'
+    console.log('tests for case', cases[i], tests)
     for (let j = 0; j < tests.length; j++) {
       if (values[tests[j].uri]) {
-        const field = kb.the(c, ns.ui('use'))
-        if (!field) {
+        const fieldToAppend = kb.the(c, ns.ui('use'))
+        if (!fieldToAppend) {
           box.appendChild(
             errorMessageBlock(
               dom,
@@ -194,12 +199,13 @@ field[ns.ui('Options').uri] = function (
           )
           return box
         } else {
+          console.log('appending form for test', j, values[tests[j].uri], fieldToAppend)
           appendForm(
             dom,
             box,
             already,
             subject,
-            field,
+            fieldToAppend,
             doc,
             callbackFunction
           )
