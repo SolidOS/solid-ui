@@ -7,11 +7,28 @@
 import store from './store'
 import ns from './ns'
 import { Namespace, NamedNode, st } from 'rdflib'
-// import log from './log'
 import { newThing, errorMessageBlock } from './widgets'
-// import { } from './iconBase'
 import { beep } from './utils'
 
+type notepadOptions = {
+  statusArea?: HTMLElement
+  exists?: boolean
+}
+/**
+ * @ignore
+ */
+class NotepadElement extends HTMLElement {
+  subject?: NamedNode
+}
+/**
+ * @ignore
+ */
+class NotepadPart extends HTMLElement {
+  subject?: NamedNode | string
+  value?: string
+  state?: Number
+  lastSent?: String
+}
 /** Figure out a random color from my webid
  *
  * @param {NamedNode} author - The author of text being displayed
@@ -31,14 +48,14 @@ export function lightColorHash (author: NamedNode): string {
 
 /**  notepad
  *
- * @param {Document} dom - the web page of the browser
+ * @param {HTMLDocument} dom - the web page of the browser
  * @param {NamedNode} padDoc - the document into which the particpation should be shown
  * @param {NamedNode} subject - the thing in which participation is happening
  * @param {NamedNode} me - person who is logged into the pod
- * @param { } options - the options that can be passed in consist of statusArea, exists
+ * @param {notepadOptions} options - the options that can be passed in consist of statusArea, exists
  */
 
-export function notepad (dom: Document, padDoc: NamedNode, subject: NamedNode, me: NamedNode, options: any) {
+export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNode, me: NamedNode, options?: notepadOptions) {
   options = options || {}
   const exists = options.exists
   const table: any = dom.createElement('table')
@@ -76,18 +93,18 @@ export function notepad (dom: Document, padDoc: NamedNode, subject: NamedNode, m
   */
   const complain = function (message: string, upstream: boolean = false) {
     console.log(message)
-    if (options.statusArea) {
+    if ((options as notepadOptions).statusArea) {
       ; (upstream ? upstreamStatus as HTMLElement : downstreamStatus as HTMLElement).appendChild(errorMessageBlock(dom, message, 'pink'))
     }
   }
-
+  // @@ TODO need to refactor so that we don't have to type cast
   const clearStatus = function (_upsteam?: any) {
-    if (options.statusArea) {
-      options.statusArea.innerHTML = ''
+    if ((options as notepadOptions).statusArea) {
+      ((options as notepadOptions).statusArea as HTMLElement).innerHTML = ''
     }
   }
 
-  const setPartStyle = function (part: any, colors?: string, pending?: any) {
+  const setPartStyle = function (part: NotepadPart, colors?: string, pending?: any) {
     const chunk = part.subject
     colors = colors || ''
     const baseStyle =
@@ -125,7 +142,7 @@ export function notepad (dom: Document, padDoc: NamedNode, subject: NamedNode, m
     part.setAttribute('style', style + colors)
   }
 
-  const removePart = function (part) {
+  const removePart = function (part: NotepadPart) {
     const chunk = part.subject
     if (!chunk) throw new Error('No chunk for line to be deleted!') // just in case
     const prev = kb.any(undefined, PAD('next'), chunk)
@@ -140,17 +157,29 @@ export function notepad (dom: Document, padDoc: NamedNode, subject: NamedNode, m
       .statementsMatching(chunk, undefined, undefined, padDoc)
       .concat(kb.statementsMatching(undefined, undefined, chunk, padDoc))
     const ins = [st(prev, PAD('next'), next, padDoc)]
-    const label = chunk.uri.slice(-4)
-    console.log('Deleting line ' + label)
 
+    // @@ TODO what should we do if chunk is not a NamedNode should we
+    // assume then it is a string?
+    if (chunk instanceof NamedNode) {
+      const label = chunk.uri.slice(-4)
+
+      console.log('Deleting line ' + label)
+    }
+
+    // @@ TODO below you can see that before is redefined and not a boolean
     updater.update(del, ins, function (uri, ok, errorMessage, response) {
       if (ok) {
         const row = part.parentNode
-        const before = row.previousSibling
-        row.parentNode.removeChild(row)
-        console.log('    deleted line ' + label + ' ok ' + part.value)
-        if (before && before.firstChild) {
-          before.firstChild.focus()
+        if (row) {
+          const before: any = row.previousSibling
+          if (row.parentNode) {
+            row.parentNode.removeChild(row)
+          }
+          // console.log('    deleted line ' + label + ' ok ' + part.value)
+          if (before && before.firstChild) {
+            // @@ TODO IMPORTANT FOCUS ISN'T A PROPERTY ON A CHILDNODE
+            before.firstChild.focus()
+          }
         }
       } else if (response && response.status === 409) {
         // Conflict
@@ -173,7 +202,7 @@ export function notepad (dom: Document, padDoc: NamedNode, subject: NamedNode, m
     })
   } // removePart
 
-  const changeIndent = function (part, chunk, delta) {
+  const changeIndent = function (part: NotepadPart, chunk: string, delta) {
     const del = kb.statementsMatching(chunk, PAD('indent'))
     const current = del.length ? Number(del[0].object.value) : 0
     if (current + delta < -3) return //  limit negative indent
@@ -222,7 +251,7 @@ export function notepad (dom: Document, padDoc: NamedNode, subject: NamedNode, m
         // Return results
     return (iCaretPos)
   }
-*/
+  */
   const addListeners = function (part: any, chunk: any) {
     part.addEventListener('keydown', function (event) {
       let queueProperty, queue
@@ -230,7 +259,7 @@ export function notepad (dom: Document, padDoc: NamedNode, subject: NamedNode, m
       switch (event.keyCode) {
         case 13: // Return
         {
-          const before: any = event.shiftKey
+          const before: NotepadElement = event.shiftKey
           console.log('enter') // Shift-return inserts before -- only way to add to top of pad.
           if (before) {
             queue = kb.any(undefined, PAD('next'), chunk)
@@ -305,12 +334,16 @@ export function notepad (dom: Document, padDoc: NamedNode, subject: NamedNode, m
       }
     })
 
-    const updateStore = function (part: any) {
-      const chunk = part.subject
+    const updateStore = function (part: NotepadPart) {
+      const chunk: any = part.subject
+
       setPartStyle(part, undefined, true)
       const old = kb.any(chunk, ns.sioc('content')).value
       const del = [st(chunk, ns.sioc('content'), old, padDoc)]
-      const ins = [st(chunk, ns.sioc('content'), part.value, padDoc)]
+      let ins
+      if (part.value) {
+        ins = [st(chunk, ns.sioc('content'), part.value, padDoc)]
+      }
       const newOne = part.value
 
       // DEBUGGING ONLY
@@ -327,7 +360,7 @@ export function notepad (dom: Document, padDoc: NamedNode, subject: NamedNode, m
       }
       part.lastSent = newOne
 
-      console.log(
+      /* console.log(
         ' Patch proposed to ' +
         chunk.uri.slice(-4) +
         " '" +
@@ -335,7 +368,8 @@ export function notepad (dom: Document, padDoc: NamedNode, subject: NamedNode, m
         "' -> '" +
         newOne +
         "' "
-      )
+      ) */
+
       updater.update(del, ins, function (uri, ok, errorBody, xhr) {
         if (!ok) {
           // alert("clash " + errorBody);
@@ -413,7 +447,8 @@ export function notepad (dom: Document, padDoc: NamedNode, subject: NamedNode, m
     }) // listener
   } // addlisteners
 
-  const newPartAfter = function (tr1, chunk, before) {
+  // @@ TODO Need to research before as it appears to be used as an Element and a boolean
+  const newPartAfter = function (tr1: HTMLTableElement, chunk: String, before?: NotepadElement | boolean) {
     // @@ take chunk and add listeners
     let text = kb.any(chunk, ns.sioc('content'))
     text = text ? text.value : ''
@@ -444,7 +479,7 @@ export function notepad (dom: Document, padDoc: NamedNode, subject: NamedNode, m
 
   /* @@ TODO we need to look at indent, it can be a Number or an Object this doesn't seem correct.
   */
-  const newChunk = function (ele?: any, before?: any) {
+  const newChunk = function (ele?: NotepadElement, before?: NotepadElement) {
     // element of chunk being split
     const kb = store
     let indent: any = 0
@@ -581,6 +616,7 @@ export function notepad (dom: Document, padDoc: NamedNode, subject: NamedNode, m
   }
 
   // Ensure that the display matches the current state of the
+  // @@ TODO really need to refactor this so that we don't need to cast types
   const sync = function () {
     // var first = kb.the(subject, PAD('next'))
     if (kb.each(subject, PAD('next')).length !== 1) {
@@ -588,8 +624,8 @@ export function notepad (dom: Document, padDoc: NamedNode, subject: NamedNode, m
         'Pad: Inconsistent data - NEXT pointers: ' +
         kb.each(subject, PAD('next')).length
       console.log(msg)
-      if (options.statusAra) {
-        options.statusArea.textContent += msg
+      if ((options as notepadOptions).statusArea) {
+        ((options as notepadOptions).statusArea as HTMLElement).textContent += msg
       }
       return
     }
