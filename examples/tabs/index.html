@@ -70,19 +70,18 @@
 <article id="tabWidget-with-collection">
     <h2>
         <a href="#tabWidget-with-collection">
-            <code>tabWidget</code>: Populating content using a RDF collection
+            <code>tabWidget</code>: Populating content using an RDF collection
         </a>
     </h2>
     <p>
-        In this first example we'll see how you can generate a tabs widget using triples that's formatted as a
+        In this first example we'll see how you can generate a tabs widget using triples that are formatted as a
         collection
-        in RDF. See <a href="http://127.0.0.1:8080/Documentation/api/modules/_tabs_.html#tabwidget">API
+        in RDF. See <a href="https://solid.github.io/solid-ui/Documentation/api/modules/_tabs_.html#tabwidget">API
         documentation</a>
         for more info about how to use the tabWidget.
     </p>
     <script id="script-tabWidget-with-collection">
       window.addEventListener('DOMContentLoaded', () => {
-        console.log(UI.store)
         const subject = UI.rdf.namedNode(location.origin + '#subject1')
         const predicate = UI.rdf.namedNode(location.origin + '#predicate1')
         const tabs = UI.tabs.tabWidget({
@@ -96,14 +95,14 @@
       })
     </script>
     <p>
-        The triples belows shows the minimum data you need for to start using the tabWidget in combination with
-        UI.store.
+        The triples belows shows the minimum data you need to start using the tabWidget in combination with
+        <code>UI.store</code>.
     </p>
     <pre id="viewData-tabWidget-with-collection"></pre>
     <p>
-        Note that you would probably use UI.rdf.namedNode directly from rdflib.js, but we've used the convenience
-        reference
-        here.
+        Note that you would probably use <code>UI.rdf.namedNode</code> directly from rdflib.js. (E.g. instead of
+        <code>UI.rdf.namedNode</code> you would probably make use of namedNode with
+        <code>import { namedNode } from 'rdflib'</code>.
     </p>
     <pre id="viewSource-tabWidget-with-collection"></pre>
     <div id="demo-tabWidget-with-collection"></div>
@@ -185,7 +184,8 @@
     </h2>
     <p>
         Using option <code>backgroundColor</code> we can set a specific color (in hex value) to our tabs. It will
-        consider how light a color is when figuring out which color to set to the text.
+        consider how light a color is when figuring out which color to set to the text. It will also distinguish
+        between selected and not selected tabs by coloring the selected tab a bit darker.
     </p>
     <script id="script-tabWidget-option-backgroundColor">
       window.addEventListener('DOMContentLoaded', () => {
@@ -304,7 +304,7 @@
             bodyMain.innerText = `Content of ${subject}`
           },
           renderTab: (tabDiv, subject) => {
-            tabDiv.innerText = subject.uri
+            tabDiv.innerText = `Go to ${subject.uri}`
           }
         }))
       })
@@ -319,7 +319,7 @@
     </h2>
     <p>
         <code>renderTabSettings</code> functions much like <code>renderMain</code>, expect that it is triggered by
-        holding ALT key and clicking on a tab.
+        holding ALT key (Option key on Mac) and clicking on a tab.
     </p>
     <script id="script-tabWidget-option-renderTabSettings">
       window.addEventListener('DOMContentLoaded', function createTabsWithOnClose () {
