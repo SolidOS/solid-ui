@@ -21,7 +21,6 @@ var media = (module.exports = {})
 
 var UI = {
   icons: require('./iconBase'),
-  log: require('./log'),
   ns: require('./ns'),
   pad: require('./pad'),
   media: media,

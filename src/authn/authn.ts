@@ -26,7 +26,7 @@ import solidAuthClient from 'solid-auth-client'
 import ns from '../ns.js'
 import kb from '../store.js'
 import utils from '../utils.js'
-import log from '../log.js'
+import { log } from '../log'
 import { AppDetails, AuthenticationContext } from './types'
 import { PaneDefinition } from 'pane-registry'
 

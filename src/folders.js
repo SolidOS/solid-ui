@@ -4,7 +4,6 @@
 /* global confirm */
 const UI = {
   icons: require('./iconBase'),
-  log: require('./log'),
   ns: require('./ns'),
   pad: require('./'),
   rdf: require('rdflib'),

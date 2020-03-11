@@ -15,7 +15,7 @@ forms.field = {} // Form field functions by URI of field type.
 
 var UI = {
   icons: require('../iconBase'),
-  log: require('../log'),
+  log: require('../log').log,
   ns: require('../ns'),
   store: require('../store'),
   style: require('../style'),

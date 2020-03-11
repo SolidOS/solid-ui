@@ -10,7 +10,6 @@ var padModule = (module.exports = {})
 var UI = {
   authn: require('./authn/authn'),
   icons: require('./iconBase'),
-  log: require('./log'),
   ns: require('./ns'),
   pad: padModule,
   rdf: $rdf,

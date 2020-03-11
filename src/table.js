@@ -15,7 +15,7 @@
 
 var UI = {
   icons: require('./iconBase'),
-  log: require('./log'),
+  log: require('./log').log,
   ns: require('./ns'),
   store: require('./store'),
   widgets: require('./widgets')

@@ -3,7 +3,7 @@ import { iconBase, originalIconBase } from '../iconBase'
 import store from '../store'
 import ns from '../ns'
 import style from '../style'
-import log from '../log'
+import { log } from '../log'
 
 /**
  * UI Widgets such as buttons

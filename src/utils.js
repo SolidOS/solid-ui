@@ -36,7 +36,7 @@ module.exports = {
 }
 
 var UI = {
-  log: require('./log'),
+  log: require('./log').log,
   ns: require('./ns'),
   rdf: require('rdflib'),
   store: require('./store')

@@ -1,89 +1,89 @@
-import Logger from '../../src/log'
+import { log } from '../../src/log'
 
 jest.mock('solid-auth-client')
 
 describe('Logger', () => {
   it('exists', () => {
-    expect(Logger).toBeInstanceOf(Object)
+    expect(log).toBeInstanceOf(Object)
   })
 })
 describe('Logger.msg', () => {
   it('exists', () => {
-    expect(Logger.msg).toBeInstanceOf(Function)
+    expect(log.msg).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(Logger.msg('')).toEqual(undefined)
+    expect(log.msg('')).toEqual(undefined)
   })
 })
 
 describe('Logger.warn', () => {
   it('exists', () => {
-    expect(Logger.warn).toBeInstanceOf(Function)
+    expect(log.warn).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(Logger.warn('')).toEqual(undefined)
+    expect(log.warn('')).toEqual(undefined)
   })
 })
 
 describe('Logger.debug', () => {
   it('exists', () => {
-    expect(Logger.debug).toBeInstanceOf(Function)
+    expect(log.debug).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(Logger.debug('')).toEqual(undefined)
+    expect(log.debug('')).toEqual(undefined)
   })
 })
 
 describe('Logger.info', () => {
   it('exists', () => {
-    expect(Logger.info).toBeInstanceOf(Function)
+    expect(log.info).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(Logger.info('')).toEqual(undefined)
+    expect(log.info('')).toEqual(undefined)
   })
 })
 
 describe('Logger.error', () => {
   it('exists', () => {
-    expect(Logger.error).toBeInstanceOf(Function)
+    expect(log.error).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(Logger.error('')).toEqual(undefined)
+    expect(log.error('')).toEqual(undefined)
   })
 })
 
 describe('Logger.success', () => {
   it('exists', () => {
-    expect(Logger.success).toBeInstanceOf(Function)
+    expect(log.success).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(Logger.success('')).toEqual(undefined)
+    expect(log.success('')).toEqual(undefined)
   })
 })
 
 describe('Logger.clear', () => {
   it('exists', () => {
-    expect(Logger.clear).toBeInstanceOf(Function)
+    expect(log.clear).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(Logger.clear()).toEqual(undefined)
+    expect(log.clear()).toEqual(undefined)
   })
 })
 
 describe('Logger.setLevel', () => {
   it('exists', () => {
-    expect(Logger.setLevel).toBeInstanceOf(Function)
+    expect(log.setLevel).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(Logger.setLevel('')).toEqual(undefined)
+    expect(log.setLevel(2)).toEqual(undefined)
   })
 })
 
 describe('Logger.dumpHTML', () => {
   it('exists', () => {
-    expect(Logger.dumpHTML).toBeInstanceOf(Function)
+    expect(log.dumpHTML).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(Logger.dumpHTML()).toEqual(undefined)
+    expect(log.dumpHTML()).toEqual(undefined)
   })
 })
