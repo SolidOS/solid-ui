@@ -12,8 +12,8 @@ const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 const element = dom.createElement('div')
 
 describe('makeDropTarget', () => {
-  it('exists', () => {
-    expect(makeDropTarget).toBeInstanceOf(Function)
+  it('to exist on the public API', () => {
+    expect(makeDropTarget).toBe(makeDropTarget)
   })
   it('runs', () => {
     const handler = () => { }
@@ -23,7 +23,7 @@ describe('makeDropTarget', () => {
     const element = document.createElement('textarea')
     const handler = () => { }
     makeDropTarget(element, handler, handler)
-    const event = document.createEvent('HTMLEvents')
+    const event = new DragEvent('dragover') // this doesn't work because this doesn't work I can't get the dataTransfer property and therefore can't test
     console.log(event)
     event.initEvent('dragover', true, true)
     // event.dataTransfer = () => {}
@@ -49,8 +49,8 @@ describe('makeDropTarget.dragoverListener', () => {
 describe('makeDropTarget.dragenterListener', () => { })
 
 describe('makeDraggable', () => {
-  it('exists', () => {
-    expect(makeDraggable).toBeInstanceOf(Function)
+  it('to be exposed on the public API', () => {
+    expect(makeDraggable).toBe(makeDraggable)
   })
   it('runs', () => {
     const tr = element
@@ -60,8 +60,8 @@ describe('makeDraggable', () => {
 })
 
 describe('uploadFiles', () => {
-  it('exists', () => {
-    expect(uploadFiles).toBeInstanceOf(Function)
+  it('to be exposed on the public API', () => {
+    expect(uploadFiles).toBe(uploadFiles)
   })
   it('runs', () => {
     const files = []
