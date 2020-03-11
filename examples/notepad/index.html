@@ -37,6 +37,7 @@
   <script id="script-lightColorHash">
     window.addEventListener('DOMContentLoaded', (event) => {
       const htmlStr = UI.pad.lightColorHash(new UI.rdf.NamedNode('https://sharonstrats.inrupt.net/profile/card#me'))
+      // document.createTextNode use this to display the result ...
       const doc = $('#iframe-lightColorHash').contentWindow.document;
       doc.open()
       doc.write(htmlStr)

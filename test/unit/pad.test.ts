@@ -42,6 +42,8 @@ describe('notepad', () => {
     const subject = new RdfLib.NamedNode('https://subject#')
     const me = new RdfLib.NamedNode('https://sharonstrats.inrupt.net/profile/card#me')
     const options = {}
+
+      // use this instead jest.spyOn(window.console, 'log') Arne's PR Comments
       ; (window as any).console = { log: jest.fn() }
     expect(notepad(dom, padDoc, subject, me, options))
       .toMatchSnapshot()
