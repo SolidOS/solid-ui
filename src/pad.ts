@@ -554,7 +554,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
   }
 
   const consistencyCheck = function () {
-    const found: any = []
+    const found: { [uri: string]: boolean } = {}
     let failed = 0
     function complain2 (msg) {
       complain(msg)
