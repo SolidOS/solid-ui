@@ -26,7 +26,7 @@ import solidAuthClient from 'solid-auth-client'
 import ns from '../ns.js'
 import kb from '../store.js'
 import utils from '../utils.js'
-import { log } from '../log'
+import { alert } from '../log'
 import { AppDetails, AuthenticationContext } from './types'
 import { PaneDefinition } from 'pane-registry'
 
@@ -1069,7 +1069,7 @@ export function loginStatusBox (
         const message = `Your WebID was ${me}. It has been forgotten.`
         me = null
         try {
-          log.alert(message)
+          alert(message)
         } catch (e) {
           window.alert(message)
         }

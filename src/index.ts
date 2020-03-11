@@ -46,7 +46,7 @@ import { authn } from './authn/index'
 import create from './create'
 // @ts-ignore
 import icons from './iconBase'
-import { log } from './log'
+import * as log from './log'
 // @ts-ignore
 import matrix from './matrix'
 // @ts-ignore

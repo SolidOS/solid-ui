@@ -1,5 +1,5 @@
-import { log, LogLevel, escapeForXML } from '../../src/log'
 import * as api from '../../src/index'
+import * as log from '../../src/log'
 import { JSDOM } from 'jsdom'
 
 jest.mock('solid-auth-client')
@@ -12,7 +12,7 @@ describe('log', () => {
   it('is exposed in public API', () => expect(api.log).toBe(log))
 
   describe('with document', () => {
-    beforeEach(() => (log.dom = dom))
+    beforeEach(() => (log.setInternals(window, dom)))
     afterEach(() => (log.clear()))
 
     describe('msg', () => {
@@ -31,11 +31,11 @@ describe('log', () => {
 
     describe('changing order of logs', () => {
       beforeEach(() => {
-        log.ascending = true
+        log.logAscending()
         log.msg('foo')
         log.msg('bar')
       })
-      afterEach(() => (log.ascending = false))
+      afterEach(() => (log.logDescending()))
       it('should add new messages on top', () => expect(status.children[0].innerHTML).toContain('bar'))
     })
 
@@ -67,10 +67,7 @@ describe('log', () => {
     })
 
     describe('alert', () => {
-      beforeEach(() => {
-        log.window = window
-        window.alert = jest.fn() // not supported by JSDOM anyway
-      })
+      beforeEach(() => (window.alert = jest.fn())) // not supported by JSDOM anyway
       beforeEach(() => (log.alert('foo')))
       it('calls alert', () => expect(window.alert).toHaveBeenCalledWith('foo'))
     })
@@ -84,21 +81,21 @@ describe('log', () => {
     })
 
     describe('setLevel', () => {
-      afterEach(() => (log.setLevel(LogLevel.Error + LogLevel.Warning + LogLevel.Message)))
-      it('can set so only error are logged', () => expect(setLevelAndCallAllLogsAndReturnLengthOfStatusChildren(LogLevel.Error)).toBe(2))
-      it('can set so only warning are logged', () => expect(setLevelAndCallAllLogsAndReturnLengthOfStatusChildren(LogLevel.Warning)).toBe(2))
-      it('can set so only message are logged', () => expect(setLevelAndCallAllLogsAndReturnLengthOfStatusChildren(LogLevel.Message)).toBe(2))
-      it('can set so only success are logged', () => expect(setLevelAndCallAllLogsAndReturnLengthOfStatusChildren(LogLevel.Success)).toBe(2))
-      it('can set so only info are logged', () => expect(setLevelAndCallAllLogsAndReturnLengthOfStatusChildren(LogLevel.Info)).toBe(2))
-      it('can set so only debug are logged', () => expect(setLevelAndCallAllLogsAndReturnLengthOfStatusChildren(LogLevel.Debug)).toBe(2))
-      it('can set so all are logged', () => expect(setLevelAndCallAllLogsAndReturnLengthOfStatusChildren(LogLevel.All)).toBe(7))
-      it('can set so only error and info are logged', () => expect(setLevelAndCallAllLogsAndReturnLengthOfStatusChildren(LogLevel.Error + LogLevel.Info)).toBe(3))
+      afterEach(() => (log.setLevel(log.LogLevel.Error + log.LogLevel.Warning + log.LogLevel.Message)))
+      it('can set so only error are logged', () => expect(setLevelAndCallAllLogsAndReturnLengthOfStatusChildren(log.LogLevel.Error)).toBe(2))
+      it('can set so only warning are logged', () => expect(setLevelAndCallAllLogsAndReturnLengthOfStatusChildren(log.LogLevel.Warning)).toBe(2))
+      it('can set so only message are logged', () => expect(setLevelAndCallAllLogsAndReturnLengthOfStatusChildren(log.LogLevel.Message)).toBe(2))
+      it('can set so only success are logged', () => expect(setLevelAndCallAllLogsAndReturnLengthOfStatusChildren(log.LogLevel.Success)).toBe(2))
+      it('can set so only info are logged', () => expect(setLevelAndCallAllLogsAndReturnLengthOfStatusChildren(log.LogLevel.Info)).toBe(2))
+      it('can set so only debug are logged', () => expect(setLevelAndCallAllLogsAndReturnLengthOfStatusChildren(log.LogLevel.Debug)).toBe(2))
+      it('can set so all are logged', () => expect(setLevelAndCallAllLogsAndReturnLengthOfStatusChildren(log.LogLevel.All)).toBe(7))
+      it('can set so only error and info are logged', () => expect(setLevelAndCallAllLogsAndReturnLengthOfStatusChildren(log.LogLevel.Error + log.LogLevel.Info)).toBe(3))
     })
 
     describe('dumpHTML', () => {
       let body
       beforeEach(() => {
-        body = escapeForXML(dom.body.innerHTML)
+        body = log.escapeForXML(dom.body.innerHTML)
         log.dumpHTML()
       })
       it('logs content of document.body', () => expect(status.children[0].innerHTML).toContain(body))
@@ -108,7 +105,7 @@ describe('log', () => {
   describe('without document', () => {
     let _log
 
-    beforeEach(() => (log.dom = undefined))
+    beforeEach(() => (log.setInternals(undefined, undefined)))
     beforeEach(() => {
       _log = console.log
       console.log = jest.fn() // could have used jest.spyOn(console, 'log'), but that does not prevent logging to console
@@ -146,7 +143,6 @@ describe('log', () => {
     })
 
     describe('alert', () => {
-      beforeEach(() => (log.window = undefined))
       beforeEach(() => (log.alert('foo')))
       it('calls console.log', () => expect(console.log).toHaveBeenCalledWith('foo'))
     })
@@ -157,15 +153,15 @@ describe('log', () => {
     })
 
     describe('setLevel', () => {
-      afterEach(() => (log.setLevel(LogLevel.Error + LogLevel.Warning + LogLevel.Message)))
-      it('can set so only error are logged', () => expect(setLevelAndCallAllLogsAndReturnConsoleLog(LogLevel.Error)).toHaveBeenCalledTimes(2))
-      it('can set so only warning are logged', () => expect(setLevelAndCallAllLogsAndReturnConsoleLog(LogLevel.Warning)).toHaveBeenCalledTimes(2))
-      it('can set so only message are logged', () => expect(setLevelAndCallAllLogsAndReturnConsoleLog(LogLevel.Message)).toHaveBeenCalledTimes(2))
-      it('can set so only success are logged', () => expect(setLevelAndCallAllLogsAndReturnConsoleLog(LogLevel.Success)).toHaveBeenCalledTimes(2))
-      it('can set so only info are logged', () => expect(setLevelAndCallAllLogsAndReturnConsoleLog(LogLevel.Info)).toHaveBeenCalledTimes(2))
-      it('can set so only debug are logged', () => expect(setLevelAndCallAllLogsAndReturnConsoleLog(LogLevel.Debug)).toHaveBeenCalledTimes(2))
-      it('can set so all are logged', () => expect(setLevelAndCallAllLogsAndReturnConsoleLog(LogLevel.All)).toHaveBeenCalledTimes(7))
-      it('can set so only error and info are logged', () => expect(setLevelAndCallAllLogsAndReturnConsoleLog(LogLevel.Error + LogLevel.Info)).toHaveBeenCalledTimes(3))
+      afterEach(() => (log.setLevel(log.LogLevel.Error + log.LogLevel.Warning + log.LogLevel.Message)))
+      it('can set so only error are logged', () => expect(setLevelAndCallAllLogsAndReturnConsoleLog(log.LogLevel.Error)).toHaveBeenCalledTimes(2))
+      it('can set so only warning are logged', () => expect(setLevelAndCallAllLogsAndReturnConsoleLog(log.LogLevel.Warning)).toHaveBeenCalledTimes(2))
+      it('can set so only message are logged', () => expect(setLevelAndCallAllLogsAndReturnConsoleLog(log.LogLevel.Message)).toHaveBeenCalledTimes(2))
+      it('can set so only success are logged', () => expect(setLevelAndCallAllLogsAndReturnConsoleLog(log.LogLevel.Success)).toHaveBeenCalledTimes(2))
+      it('can set so only info are logged', () => expect(setLevelAndCallAllLogsAndReturnConsoleLog(log.LogLevel.Info)).toHaveBeenCalledTimes(2))
+      it('can set so only debug are logged', () => expect(setLevelAndCallAllLogsAndReturnConsoleLog(log.LogLevel.Debug)).toHaveBeenCalledTimes(2))
+      it('can set so all are logged', () => expect(setLevelAndCallAllLogsAndReturnConsoleLog(log.LogLevel.All)).toHaveBeenCalledTimes(7))
+      it('can set so only error and info are logged', () => expect(setLevelAndCallAllLogsAndReturnConsoleLog(log.LogLevel.Error + log.LogLevel.Info)).toHaveBeenCalledTimes(3))
     })
 
     describe('dumpHTML', () => {
