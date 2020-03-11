@@ -126,7 +126,7 @@
       const padDoc = kb.sym(document.location.href.replace(/\/[^\/]*$/, "/pad.ttl#this"))
       await fetcher.load(padDoc.doc())
       options = {}
-      const htmlStr = manageParticipation(Document, container, padDoc, subject, me, options)
+      const htmlStr = manageParticipation(document, container, padDoc, subject, me, options)
     })
   </script>
 
@@ -134,23 +134,21 @@
   <script>$('#viewSource-manageParticipation').innerHTML = $('#script-manageParticipation').innerText</script>
   <iframe id='iframe-manageParticipation' src="about:blank"></iframe>
   <div id="div-manageParticipation"></div>
+
   <h2>notepad </h2>
   <script id='script-notepad'>
     window.addEventListener('DOMContentLoaded', async (event) => {
-      const doc = $('#frame-notepad').contentWindow.document;
-      const kb = UI.store
+      const pad = UI.rdf.namedNode('https://example-user.inrupt.net/public/example-notepad/index.ttl#this')
       const me = new UI.rdf.NamedNode('https://sharonstrats.inrupt.net/profile/card#me')
-      const container = createElement(HTMLDivElement)
-      const subject = kb.sym('https://test.test#');
-      const padDoc = kb.sym(document.location.href.replace(/\/[^\/]*$/, "/pad.ttl#this"))
-      await fetcher.load(padDoc.doc())
+      const subject = UI.store.sym('https://test.test#');
       options = {}
-      const htmlStr = notepad(Document, padDoc, subject, me, options)
+
+      const result = UI.pad.notepad(document, pad, subject, me, options)
+      $('#div-notepad').appendChild(result)
     })
   </script>
   <pre id="viewSource-notepad"></pre>
   <script>$('#viewSource-notepad').innerHTML = $('#script-notepad').innerText</script>
-  <iframe id='iframe-notepad' src="about:blank"></iframe>
   <div id="div-notepad"></div>
 
 </body>
