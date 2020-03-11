@@ -9,6 +9,8 @@ import ns from './ns'
 import { Namespace, NamedNode, st } from 'rdflib'
 import { newThing, errorMessageBlock } from './widgets'
 import { beep } from './utils'
+export { notepadToHTML } from './pad-utils'
+export { renderPartipants, participationObject, manageParticipation, recordParticipation } from './participation'
 
 type notepadOptions = {
   statusArea?: HTMLDivElement

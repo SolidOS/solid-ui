@@ -20,7 +20,7 @@
         document.location.href.replace(/\/[^\/]*$/, "/pad.ttl#this")
       )
       await fetcher.load(pad.doc())
-      const htmlStr = notepadToHTML(pad, kb)
+      const htmlStr = UI.pad.notepadToHTML(pad, kb)
       const doc = $('#iframe-notepadToHTML').contentWindow.document;
       doc.open()
       doc.write(htmlStr)
