@@ -1,5 +1,3 @@
-import { escapeForXML } from './utils'
-
 // ///////////////////////  Logging
 //
 // bitmask levels
@@ -12,26 +10,37 @@ const TINFO = 16
 const TDEBUG = 32
 const TALL = 63
 
-/* global alert */
+export enum LogLevel {
+  Error = TERROR,
+  Warning = TWARN,
+  Message = TMESG,
+  Success = TSUCCESS,
+  Info = TINFO,
+  Debug = TDEBUG,
+  All = TALL
+}
+
 class Log {
   public level: number = TERROR + TWARN + TMESG
   public ascending: boolean = false
+  public dom?: HTMLDocument = document // must be able to override for tests
+  public window?: Window = window // must be able to override for tests
 
   public msg (str: string, type: number = TMESG, typestr: string = 'mesg') {
     if (!(this.level & type)) return // bitmask
 
-    if (typeof document !== 'undefined') {
-      const logArea = document.getElementById('status')
+    if (typeof this.dom !== 'undefined') {
+      const logArea = this.dom.getElementById('status')
       if (!logArea) return
 
-      const addendum = document.createElement('span')
+      const addendum = this.dom.createElement('span')
       addendum.setAttribute('class', typestr)
       const now = new Date()
       addendum.innerHTML = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()} [${typestr}] ${escapeForXML(str)}<br/>`
-      if (!this.ascending) {
-        logArea.appendChild(addendum)
-      } else {
+      if (this.ascending) {
         logArea.insertBefore(addendum, logArea.firstChild)
+      } else {
+        logArea.appendChild(addendum)
       }
     } else if (typeof console !== 'undefined') {
       console.log(str)
@@ -59,15 +68,15 @@ class Log {
   }
 
   alert (msg: string): void {
-    if (typeof alert !== 'undefined') {
-      alert(msg)
+    if (this.window && typeof this.window.alert !== 'undefined') {
+      this.window.alert(msg)
     } else {
       this.warn(msg)
     }
   }
 
   clear (): void {
-    const logArea = document.getElementById('status')
+    const logArea = this.dom?.getElementById('status')
     if (!logArea) return
     logArea.innerHTML = ''
   }
@@ -79,11 +88,20 @@ class Log {
   }
 
   dumpHTML (): void {
+    if (!this.dom) return
     const level = this.level
     this.level = TALL
-    this.debug(document.body.innerHTML)
+    this.debug(this.dom?.body?.innerHTML || '')
     this.level = level
   }
+}
+
+export function escapeForXML (str: string): string {
+  // can be replaced with function utils module when migrating
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
 }
 
 export const log = new Log()
