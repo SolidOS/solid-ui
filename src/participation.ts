@@ -6,17 +6,27 @@ import { personTR, newThing, errorMessageBlock } from './widgets'
 import { syncTableToArray } from './utils'
 import { lightColorHash } from './pad'
 
+type ParticipationOptions = {
+  deleteFunction?: () => {}
+  link?: string
+  draggable?: boolean
+}
+
+class ParticipationTableElement extends HTMLTableElement {
+  refresh?: () => void
+}
 const kb = store
+
 /**  Manage participation in this session
 *
 *  @param {Document} dom - the web page loaded into the browser
-*  @param { HTMLTableElement } table - the table element
+*  @param {HTMLTableElement} table - the table element
 *  @param {NamedNode} unused1/document - the document to render (this argument is no longer used, but left in for backwards compatibility)
 *  @param {NamedNode} subject
 *  @param {NamedNode} unused2/me - user that is logged into the pod (this argument is no longer used, but left in for backwards compatibility)
-*  @param { } options - the options that can be passed in are deleteFunction, link, and draggable these are used by the personTR button
+*  @param {ParticipationOptions} options - the options that can be passed in are deleteFunction, link, and draggable these are used by the personTR button
 */
-export function renderPartipants (dom: Document, table: any, unused1: NamedNode, subject: NamedNode, unused2: NamedNode, options: any) {
+export function renderPartipants (dom: HTMLDocument, table: ParticipationTableElement, unused1: NamedNode, subject: NamedNode, unused2: NamedNode, options: ParticipationOptions) {
   table.setAttribute('style', 'margin: 0.8em;')
 
   const newRowForParticpation = function (parp) {
@@ -163,7 +173,7 @@ export function recordParticipation (subject: NamedNode, padDoc: NamedNode, refr
 *   @param {NamedNode} document - the document into which the particpation should be shown
 *   @param {NamedNode} subject - the thing in which participation is happening
 *   @param {NamedNode} me - the logged in user
-*   @param { } options - the options that can be passed in are deleteFunction, link, and draggable these are used by the personTR button
+*   @param {ParticipationOptions} options - the options that can be passed in are deleteFunction, link, and draggable these are used by the personTR button
 *
 */
 export function manageParticipation (
@@ -172,7 +182,7 @@ export function manageParticipation (
   padDoc: NamedNode,
   subject: NamedNode,
   me: NamedNode,
-  options: any
+  options: ParticipationOptions
 ) {
   const table = dom.createElement('table')
   container.appendChild(table)

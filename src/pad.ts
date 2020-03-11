@@ -11,7 +11,7 @@ import { newThing, errorMessageBlock } from './widgets'
 import { beep } from './utils'
 
 type notepadOptions = {
-  statusArea?: HTMLElement
+  statusArea?: HTMLDivElement
   exists?: boolean
 }
 /**
@@ -34,7 +34,7 @@ class NotepadPart extends HTMLElement {
  * @param {NamedNode} author - The author of text being displayed
  * @returns {String} The CSS color generated, constrained to be light for a background color
  */
-export function lightColorHash (author: NamedNode): string {
+export function lightColorHash (author?: NamedNode): string {
   const hash = function (x) {
     return x.split('').reduce(function (a, b) {
       a = (a << 5) - a + b.charCodeAt(0)
@@ -54,7 +54,6 @@ export function lightColorHash (author: NamedNode): string {
  * @param {NamedNode} me - person who is logged into the pod
  * @param {notepadOptions} options - the options that can be passed in consist of statusArea, exists
  */
-
 export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNode, me: NamedNode, options?: notepadOptions) {
   options = options || {}
   const exists = options.exists

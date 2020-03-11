@@ -1,4 +1,4 @@
-import { Namespace } from 'rdflib'
+import { Namespace, NamedNode } from 'rdflib'
 import store from './store'
 import ns from './ns'
 
@@ -9,7 +9,7 @@ const PAD = Namespace('http://www.w3.org/ns/pim/pad#')
  */
 
 // @ignore exporting this only for the unit test
-export function getChunks (subject, kb) {
+export function getChunks (subject: NamedNode, kb: store) {
   const chunks: any[] = []
   for (
     let chunk = kb.the(subject, PAD('next'));
