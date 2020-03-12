@@ -19,14 +19,14 @@ describe('Index', () => {
       'store',
       'style',
       'table',
-      'tabs',
       'utils',
       'widgets',
       'versionInfo',
       'dom',
       'rdf',
       'pad',
-      'participation'
+      'participation',
+      'tabs'
     ])
   })
 })
