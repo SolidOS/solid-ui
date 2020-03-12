@@ -260,26 +260,26 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
       //  up 38; down 40; left 37; right 39     tab 9; shift 16; escape 27
       switch (event.keyCode) {
         case 13: // Return
-          {
-            const before: NotepadElement = event.shiftKey
-            console.log('enter') // Shift-return inserts before -- only way to add to top of pad.
-            if (before) {
-              queue = kb.any(undefined, PAD('next'), chunk)
-              queueProperty = 'newlinesAfter'
-            } else {
-              queue = kb.any(chunk, PAD('next'))
-              queueProperty = 'newlinesBefore'
-            }
-            queue[queueProperty] = queue[queueProperty] || 0
-            queue[queueProperty] += 1
-            if (queue[queueProperty] > 1) {
-              console.log('    queueing newline queue = ' + queue[queueProperty])
-              return
-            }
-            console.log('    go ahead line before ' + queue[queueProperty])
-            newChunk(part, before) // was document.activeElement
-            break
+        {
+          const before: NotepadElement = event.shiftKey
+          console.log('enter') // Shift-return inserts before -- only way to add to top of pad.
+          if (before) {
+            queue = kb.any(undefined, PAD('next'), chunk)
+            queueProperty = 'newlinesAfter'
+          } else {
+            queue = kb.any(chunk, PAD('next'))
+            queueProperty = 'newlinesBefore'
           }
+          queue[queueProperty] = queue[queueProperty] || 0
+          queue[queueProperty] += 1
+          if (queue[queueProperty] > 1) {
+            console.log('    queueing newline queue = ' + queue[queueProperty])
+            return
+          }
+          console.log('    go ahead line before ' + queue[queueProperty])
+          newChunk(part, before) // was document.activeElement
+          break
+        }
         case 8: // Delete
           if (part.value.length === 0) {
             console.log(
@@ -306,12 +306,12 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
           }
           break
         case 9: // Tab
-          {
-            const delta = event.shiftKey ? -1 : 1
-            changeIndent(part, chunk, delta)
-            event.preventDefault() // default is to highlight next field
-            break
-          }
+        {
+          const delta = event.shiftKey ? -1 : 1
+          changeIndent(part, chunk, delta)
+          event.preventDefault() // default is to highlight next field
+          break
+        }
         case 27: // ESC
           console.log('escape')
           updater.requestDownstreamAction(padDoc, reloadAndSync)
