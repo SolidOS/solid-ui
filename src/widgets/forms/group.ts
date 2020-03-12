@@ -1,9 +1,9 @@
 import { st, Node, Collection } from 'rdflib'
-import store from '../store'
-import ns from '../ns'
-import { formBorderColor } from '../style'
+import store from '../../store'
+import ns from '../../ns'
+import { formBorderColor } from '../../style'
 
-import { errorMessageBlock } from '../widgets/error'
+import { errorMessageBlock } from '../error'
 import { FieldFunction, mostSpecificClassURI, fieldFunction } from './fieldFunction'
 
 export function sortBySequence (list: Node[]): Node[] {

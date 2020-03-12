@@ -24,7 +24,7 @@ var widgets = Object.assign(
   require('./dragAndDrop'), // uploadFiles etc
   require('./error'), // UI.widgets.errorMessageBlock
   require('./buttons'),
-  require('../forms')
+  require('./forms')
 )
 
 module.exports = widgets

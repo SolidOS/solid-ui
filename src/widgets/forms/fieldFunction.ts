@@ -1,7 +1,7 @@
 import { Node } from 'rdflib'
-import store from '../store'
-import { debug } from '../log'
-import { errorMessageBlock } from '../widgets/error'
+import store from '../../store'
+import { debug } from '../../log'
+import { errorMessageBlock } from '../error'
 
 export const field: { [classUri: string]: FieldFunction } = {} // Form field functions by URI of field type.
 

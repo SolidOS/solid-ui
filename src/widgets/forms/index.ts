@@ -5,18 +5,18 @@
  */
 
 import { st, sym, Literal, IndexedFormula, Node, NamedNode, Statement } from 'rdflib'
-import store from '../store'
-import ns from '../ns'
-import { formBorderColor, formHeadingColor, textInputStyle, multilineTextInputStyle } from '../style'
-import { debug, info } from '../log'
+import store from '../../store'
+import ns from '../../ns'
+import { formBorderColor, formHeadingColor, textInputStyle, multilineTextInputStyle } from '../../style'
+import { debug, info } from '../../log'
 
-import { errorMessageBlock } from '../widgets/error'
-import { propertyTriage, allClassURIs, removeButton, linkButton } from '../widgets/buttons'
-import { label, labelWithOntology } from '../utils'
+import { errorMessageBlock } from '../error'
+import { propertyTriage, allClassURIs, removeButton, linkButton } from '../buttons'
+import { label, labelWithOntology } from '../../utils'
 import { multipleField } from './multiple'
 import { Group } from './group'
-
 import { field, mostSpecificClassURI, fieldFunction } from './fieldFunction'
+
 export { field, mostSpecificClassURI, fieldFunction } from './fieldFunction'
 export { sortBySequence } from './group'
 

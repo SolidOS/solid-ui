@@ -24,7 +24,7 @@ import {
   propertiesForClass,
   sortByLabel,
   sortBySequence
-} from '../../../src/forms'
+} from '../../../src/widgets/forms'
 
 // jest.mock('rdflib')
 // jest.mock('solid-auth-client')

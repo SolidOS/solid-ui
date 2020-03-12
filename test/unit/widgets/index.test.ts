@@ -1,7 +1,7 @@
 import * as DragAndDrop from '../../../src/widgets/dragAndDrop'
 import * as Error from '../../../src/widgets/error'
 import * as Buttons from '../../../src/widgets/buttons'
-import * as Forms from '../../../src/forms'
+import * as Forms from '../../../src/widgets/forms'
 import * as PeoplePicker from '../../../src/widgets/peoplePicker'
 import * as Index from '../../../src/widgets/index'
 
