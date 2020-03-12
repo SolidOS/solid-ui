@@ -1,4 +1,4 @@
-import { Node } from 'rdflib'
+import { Node, NamedNode, sym } from 'rdflib'
 import store from '../../store'
 import { debug } from '../../log'
 import { errorMessageBlock } from '../error'
@@ -48,4 +48,34 @@ export function fieldFunction (dom: HTMLDocument, fieldInQuestion: Node): FieldF
     }
   }
   return fun
+}
+
+export function appendForm (
+  dom: HTMLDocument,
+  container: HTMLElement,
+  already,
+  subject: Node,
+  form: Node,
+  doc: Node,
+  itemDone: (ok: boolean, errorMessage: string) => void
+) {
+  return fieldFunction(dom, form)(
+    dom,
+    container,
+    already,
+    subject,
+    form,
+    doc,
+    itemDone
+  )
+}
+
+/**
+ * Mint local ID using timestamp
+ *
+ * @param doc - the document in which the ID is to be generated
+ */
+export function newThing (doc: Node): Node {
+  const now = new Date()
+  return sym((doc as NamedNode).uri + '#' + 'id' + ('' + now.getTime()))
 }

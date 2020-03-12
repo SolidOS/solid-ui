@@ -4,7 +4,7 @@
  * A Vanilla Dom implementation of the form language
  */
 
-import { st, sym, Literal, IndexedFormula, Node, NamedNode, Statement } from 'rdflib'
+import { st, Literal, IndexedFormula, Node, NamedNode, Statement } from 'rdflib'
 import store from '../../store'
 import ns from '../../ns'
 import { formBorderColor, formHeadingColor, textInputStyle, multilineTextInputStyle } from '../../style'
@@ -15,9 +15,10 @@ import { propertyTriage, allClassURIs, removeButton, linkButton } from '../butto
 import { label, labelWithOntology } from '../../utils'
 import { multipleField } from './multiple'
 import { Group } from './group'
-import { field, mostSpecificClassURI, fieldFunction } from './fieldFunction'
+import { field, mostSpecificClassURI, fieldFunction, appendForm, newThing } from './fieldFunction'
+import { optionsField } from './options'
 
-export { field, mostSpecificClassURI, fieldFunction } from './fieldFunction'
+export { field, mostSpecificClassURI, fieldFunction, appendForm, newThing } from './fieldFunction'
 export { sortBySequence } from './group'
 
 const checkMarkCharacter = '\u2713'
@@ -46,93 +47,7 @@ field[ns.ui('Form').uri] = field[
   ns.ui('Group').uri
 ] = Group
 
-/**
- * Options field: Select one or more cases
- *
- * @param dom The HTML Document object aka Document Object Model
- * @param container  If present, the created widget will be appended to this
- * @param already A hash table of (form, subject) kept to prevent recursive forms looping
- * @param subject The thing about which the form displays/edits data
- * @param form The form or field to be rendered
- * @param doc The web document in which the data is
- * @param callbackFunction Called when data is changed?
- *
- * @returns The HTML widget created
- */
-field[ns.ui('Options').uri] = function (
-  dom: HTMLDocument,
-  container: HTMLElement | undefined,
-  already: { },
-  subject: Node,
-  form: Node,
-  doc: Node,
-  callbackFunction: (ok: boolean, errorMessage: string) => void
-): HTMLElement {
-  const kb = store
-  const box = dom.createElement('div')
-  // box.setAttribute('style', 'padding-left: 2em; border: 0.05em dotted purple;')  // Indent Options
-  if (container) container.appendChild(box)
-
-  let dependingOn = kb.any(form, ns.ui('dependingOn'))
-  if (!dependingOn) {
-    dependingOn = ns.rdf('type')
-  } // @@ default to type (do we want defaults?)
-  const cases = kb.each(form, ns.ui('case'))
-  if (!cases) {
-    box.appendChild(errorMessageBlock(dom, 'No cases to Options form. '))
-  }
-  let values: { [uri: string]: boolean }
-  if (dependingOn.sameTerm(ns.rdf('type'))) {
-    values = kb.findTypeURIs(subject)
-  } else {
-    values = {}
-    const matches = kb.each(subject, dependingOn)
-    if (!matches.length) {
-      box.appendChild(
-        errorMessageBlock(
-          dom,
-          "Can't select subform as no value of: " + dependingOn
-        )
-      )
-    } else {
-      matches.forEach((match: Node) => {
-        values[match.value] = true
-      })
-    }
-  }
-  // @@ Add box.refresh() to sync fields with values
-  for (let i = 0; i < cases.length; i++) {
-    const c = cases[i]
-    const tests = kb.each(c, ns.ui('for')) // There can be multiple 'for'
-    for (let j = 0; j < tests.length; j++) {
-      if (values[tests[j].uri]) {
-        const fieldToAppend = kb.the(c, ns.ui('use'))
-        if (!fieldToAppend) {
-          box.appendChild(
-            errorMessageBlock(
-              dom,
-              'No "use" part for case in form ' + form
-            )
-          )
-          return box
-        } else {
-          appendForm(
-            dom,
-            box,
-            already,
-            subject,
-            fieldToAppend,
-            doc,
-            callbackFunction
-          )
-        }
-        break
-      }
-    }
-  }
-  return box
-}
-
+field[ns.ui('Options').uri] = optionsField
 field[ns.ui('Multiple').uri] = multipleField
 
 /**
@@ -755,26 +670,6 @@ export function editFormButton (
     true
   )
   return b
-}
-
-export function appendForm (
-  dom: HTMLDocument,
-  container: HTMLElement,
-  already,
-  subject: Node,
-  form: Node,
-  doc: Node,
-  itemDone: (ok: boolean, errorMessage: string) => void
-) {
-  return fieldFunction(dom, form)(
-    dom,
-    container,
-    already,
-    subject,
-    form,
-    doc,
-    itemDone
-  )
 }
 
 /**
@@ -1606,14 +1501,4 @@ export function fieldStore (subject, predicate, def) {
     return store.sym(sts[0].why.uri)
   }
   return def
-}
-
-/**
- * Mint local ID using timestamp
- *
- * @param doc - the document in which the ID is to be generated
- */
-export function newThing (doc: Node): Node {
-  const now = new Date()
-  return sym((doc as NamedNode).uri + '#' + 'id' + ('' + now.getTime()))
 }

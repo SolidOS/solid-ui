@@ -6,8 +6,7 @@ import { debug } from '../../log'
 import { errorMessageBlock } from '../error'
 import { button, deleteButtonWithCheck } from '../buttons'
 import { syncTableToArrayReOrdered, label } from '../../utils'
-import { fieldFunction } from './fieldFunction'
-import { newThing } from '.'
+import { fieldFunction, newThing } from './fieldFunction'
 
 /**
  * Multiple field: zero or more similar subFields
