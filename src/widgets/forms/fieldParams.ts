@@ -1,4 +1,5 @@
 import ns from '../../ns'
+import { formHeadingColor } from '../../style'
 
 export const fieldParams = {}
 
@@ -81,3 +82,15 @@ fieldParams[ns.ui('EmailField').uri] = {
   uriPrefix: 'mailto:'
 }
 fieldParams[ns.ui('EmailField').uri].pattern = /^\s*.*@.*\..*\s*$/ // @@ Get the right regexp here
+
+/**
+ * Non-interactive fields
+ */
+fieldParams[ns.ui('Comment').uri] = {
+  element: 'p',
+  style: `padding: 0.1em 1.5em; color: ${formHeadingColor}; white-space: pre-wrap;`
+}
+fieldParams[ns.ui('Heading').uri] = {
+  element: 'h3',
+  style: `font-size: 110%; color: ${formHeadingColor};`
+}
