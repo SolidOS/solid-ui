@@ -9,8 +9,9 @@ import ns from './ns'
 import { Namespace, NamedNode, st } from 'rdflib'
 import { newThing, errorMessageBlock } from './widgets'
 import { beep } from './utils'
-export { notepadToHTML } from './pad-utils'
 export { renderPartipants, participationObject, manageParticipation, recordParticipation } from './participation'
+
+const PAD = Namespace('http://www.w3.org/ns/pim/pad#')
 
 type notepadOptions = {
   statusArea?: HTMLDivElement
@@ -259,26 +260,26 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
       //  up 38; down 40; left 37; right 39     tab 9; shift 16; escape 27
       switch (event.keyCode) {
         case 13: // Return
-        {
-          const before: NotepadElement = event.shiftKey
-          console.log('enter') // Shift-return inserts before -- only way to add to top of pad.
-          if (before) {
-            queue = kb.any(undefined, PAD('next'), chunk)
-            queueProperty = 'newlinesAfter'
-          } else {
-            queue = kb.any(chunk, PAD('next'))
-            queueProperty = 'newlinesBefore'
+          {
+            const before: NotepadElement = event.shiftKey
+            console.log('enter') // Shift-return inserts before -- only way to add to top of pad.
+            if (before) {
+              queue = kb.any(undefined, PAD('next'), chunk)
+              queueProperty = 'newlinesAfter'
+            } else {
+              queue = kb.any(chunk, PAD('next'))
+              queueProperty = 'newlinesBefore'
+            }
+            queue[queueProperty] = queue[queueProperty] || 0
+            queue[queueProperty] += 1
+            if (queue[queueProperty] > 1) {
+              console.log('    queueing newline queue = ' + queue[queueProperty])
+              return
+            }
+            console.log('    go ahead line before ' + queue[queueProperty])
+            newChunk(part, before) // was document.activeElement
+            break
           }
-          queue[queueProperty] = queue[queueProperty] || 0
-          queue[queueProperty] += 1
-          if (queue[queueProperty] > 1) {
-            console.log('    queueing newline queue = ' + queue[queueProperty])
-            return
-          }
-          console.log('    go ahead line before ' + queue[queueProperty])
-          newChunk(part, before) // was document.activeElement
-          break
-        }
         case 8: // Delete
           if (part.value.length === 0) {
             console.log(
@@ -305,12 +306,12 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
           }
           break
         case 9: // Tab
-        {
-          const delta = event.shiftKey ? -1 : 1
-          changeIndent(part, chunk, delta)
-          event.preventDefault() // default is to highlight next field
-          break
-        }
+          {
+            const delta = event.shiftKey ? -1 : 1
+            changeIndent(part, chunk, delta)
+            event.preventDefault() // default is to highlight next field
+            break
+          }
         case 27: // ESC
           console.log('escape')
           updater.requestDownstreamAction(padDoc, reloadAndSync)
@@ -784,4 +785,82 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
     })
   }
   return table
+}
+
+/**
+ * Get the chunks of the notepad
+ * They are stored in a RDF linked list
+ */
+
+// @ignore exporting this only for the unit test
+export function getChunks (subject: NamedNode, kb: store) {
+  const chunks: any[] = []
+  for (
+    let chunk = kb.the(subject, PAD('next'));
+    !chunk.sameTerm(subject);
+    chunk = kb.the(chunk, PAD('next'))
+  ) {
+    chunks.push(chunk)
+  }
+  return chunks
+}
+
+/**
+ *  Encode content to be put in XML or HTML elements
+ */
+// @ignore exporting this only for the unit test
+export function xmlEncode (str) {
+  return str.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+}
+
+/**
+ * Convert a notepad to HTML
+ *   @param { } pad - the notepad
+ *   @param {store} pad - the data store
+ */
+export function notepadToHTML (pad: any, kb: store) {
+  const chunks = getChunks(pad, kb)
+  let html = '<html>\n  <head>\n'
+  const title = kb.anyValue(pad, ns.dct('title'))
+  if (title) {
+    html += `    <title>${xmlEncode(title)}</title>\n`
+  }
+  html += '  </head>\n  <body>\n'
+  let level = 0
+
+  function increaseLevel (indent) {
+    for (; level < indent; level++) {
+      html += '<ul>\n'
+    }
+  }
+
+  function decreaseLevel (indent) {
+    for (; level > indent; level--) {
+      html += '</ul>\n'
+    }
+  }
+  chunks.forEach(chunk => {
+    const indent = kb.anyJS(chunk, PAD('indent'))
+    const rawContent = kb.anyJS(chunk, ns.sioc('content'))
+    if (!rawContent) return // seed chunk is dummy
+    const content = xmlEncode(rawContent)
+    if (indent < 0) { // negative indent levels represent heading levels
+      decreaseLevel(0)
+      const h = indent >= -3 ? 4 + indent : 1 // -1 -> h4, -2 -> h3
+      html += `\n<h${h}>${content}</h${h}>\n`
+    } else { // >= 0
+      if (indent > 0) { // Lists
+        decreaseLevel(indent)
+        increaseLevel(indent)
+        html += `<li>${content}</li>\n`
+      } else { // indent 0
+        decreaseLevel(indent)
+        html += `<p>${content}</p>\n`
+      }
+    }
+  }) // foreach chunk
+  // At the end decreaseLevel any open ULs
+  decreaseLevel(0)
+  html += '  </body>\n</html>\n'
+  return html
 }
