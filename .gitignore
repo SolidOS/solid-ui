@@ -3,4 +3,5 @@ dist
 lib
 src/versionInfo.ts
 .idea
+.vscode
 coverage
