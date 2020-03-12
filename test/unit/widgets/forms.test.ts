@@ -81,10 +81,10 @@ describe('Form field', () => {
   // to test that the form gets added but obviously not in the container passed in
   it.skip('still returns an element if the container is null', () => {
     // debugger
-    const container = null
+    const container = document.createElement('div')
     const already = {}
     const subject = namedNode('http://example.com/#this')
-    const form = document.createElement('div')
+    const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
     const callbackFunction = () => {}
     expect(
@@ -113,7 +113,7 @@ describe('Form field', () => {
     const container = document.createElement('container')
     const already = { dubSubject }
     const subject = dubSubject
-    const form = document.createElement('div')
+    const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
     const callbackFunction = () => {}
     expect(
@@ -877,7 +877,7 @@ describe('NamedNodeURIField', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = namedNode('http://example.com/#this')
-    const form = document.createElement('div')
+    const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
     const callbackFunction = () => {}
     uiStore.add(form, ns.rdf('type'), namedNode('http://example.com/#type'), namedNode('http://example.com/'))
@@ -1232,7 +1232,7 @@ describe('propertiesForClass', () => {
     expect(propertiesForClass).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    expect(propertiesForClass(graph(), null)).toBeInstanceOf(Object)
+    expect(propertiesForClass(graph(), namedNode('http://example.com/#class'))).toBeInstanceOf(Object)
   })
 })
 
@@ -1252,7 +1252,7 @@ describe('formsFor', () => {
     expect(formsFor).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    expect(formsFor(null)).toBeInstanceOf(Object)
+    expect(formsFor(namedNode('http://example.com/#sub'))).toBeInstanceOf(Object)
   })
 })
 
@@ -1341,11 +1341,11 @@ describe('makeSelectForOptions', () => {
       makeSelectForOptions(
         document,
         graph(),
-        null,
-        null,
+        namedNode('http://example.com/#subject'),
+        namedNode('http://example.com/#predicate'),
+        [],
         {},
-        {},
-        graph(),
+        namedNode('http://example.com/#doc'),
         () => {}
       )
     ).toBeInstanceOf(HTMLDivElement)
@@ -1397,11 +1397,11 @@ describe('buildCheckboxForm', () => {
       buildCheckboxForm(
         document,
         graph(),
-        null,
+        'label',
         [],
         [],
-        null,
-        graph(),
+        namedNode('http://example.com/#form'),
+        namedNode('http://example.com/#doc'),
         false
       )
     ).toBeInstanceOf(HTMLDivElement)
@@ -1450,6 +1450,6 @@ describe('newThing', () => {
   it.skip('returns the correct .', () => {
     const Date = jest.fn()
     Date.mockReturnValueOnce('Thu Feb 06 2020 19:42:59 GMT+1100')
-    expect(newThing('doc')).toBe('')
+    expect(newThing(namedNode('doc'))).toBe('')
   })
 })
