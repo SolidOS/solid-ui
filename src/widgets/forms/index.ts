@@ -4,10 +4,10 @@
  * A Vanilla Dom implementation of the form language
  */
 
-import { st, IndexedFormula, Node, NamedNode, Statement } from 'rdflib'
+import { st, IndexedFormula, Node, NamedNode } from 'rdflib'
 import store from '../../store'
 import ns from '../../ns'
-import { formBorderColor, formHeadingColor, multilineTextInputStyle } from '../../style'
+import { formBorderColor, formHeadingColor } from '../../style'
 import { debug, info } from '../../log'
 
 import { errorMessageBlock } from '../error'
@@ -19,32 +19,17 @@ import { field, mostSpecificClassURI, fieldFunction, appendForm, newThing } from
 import { optionsField } from './options'
 import { fieldParams } from './fieldParams'
 import { basicField, fieldStore, fieldLabel } from './basic'
+import { multiLineTextField } from './multiLineText'
+import { buildCheckboxForm } from './checkbox'
 
+// exporting these from module files for unit testing:
 export { sortBySequence } from './group'
 export { field, mostSpecificClassURI, fieldFunction, appendForm, newThing } from './fieldFunction'
 export { fieldParams } from './fieldParams'
 export { basicField, fieldStore, fieldLabel } from './basic'
+export { makeDescription } from './multiLineText'
+export { buildCheckboxForm } from './checkbox'
 
-const checkMarkCharacter = '\u2713'
-const cancelCharacter = '\u2715'
-const dashCharacter = '-'
-
-/**
- * Group of different fields
- *
- * One type of form field is an ordered Group of other fields.
- * A Form is actually just the same as a group.
- *
- * @param dom The HTML Document object aka Document Object Model
- * @param container  If present, the created widget will be appended to this
- * @param already A hash table of (form, subject) kept to prevent recursive forms looping
- * @param subject The thing about which the form displays/edits data
- * @param form The form or field to be rendered
- * @param doc The web document in which the data is
- * @param callbackFunction Called when data is changed?
- *
- * @returns The HTML widget created
- */
 field[ns.ui('Form').uri] = field[
   ns.ui('Group').uri
 ] = Group
@@ -66,39 +51,7 @@ field[ns.ui('TextField').uri] = basicField
 field[ns.ui('SingleLineTextField').uri] = basicField
 field[ns.ui('NamedNodeURIField').uri] = basicField
 
-/**
- * Multiline Text field
- */
-field[ns.ui('MultiLineTextField').uri] = function (
-  dom: HTMLDocument,
-  container: HTMLElement | undefined,
-  already: { },
-  subject: Node,
-  form: Node,
-  doc: Node,
-  callbackFunction: (ok: boolean, errorMessage: string) => void
-): HTMLElement {
-  const kb = store
-  const property = kb.any(form, ns.ui('property'))
-  if (!property) {
-    return errorMessageBlock(dom, 'No property to text field: ' + form)
-  }
-  const box = dom.createElement('div')
-  box.appendChild(fieldLabel(dom, property, form))
-  doc = fieldStore(subject, property, doc)
-  const field = makeDescription(
-    dom,
-    kb,
-    subject,
-    property,
-    doc,
-    callbackFunction
-  )
-  // box.appendChild(dom.createTextNode('<-@@ subj:'+subject+', prop:'+property))
-  box.appendChild(field)
-  if (container) container.appendChild(box)
-  return box
-}
+field[ns.ui('MultiLineTextField').uri] = multiLineTextField
 
 /**
  * Boolean field and Tri-state version (true/false/null)
@@ -643,106 +596,6 @@ export function promptForNew (
   return box
 }
 
-export function makeDescription (
-  dom: HTMLDocument,
-  kb: IndexedFormula,
-  subject: Node,
-  predicate: Node,
-  doc: Node,
-  callbackFunction: (ok: boolean, errorMessage: string) => void
-) {
-  const group = dom.createElement('div')
-
-  const sts = kb.statementsMatching(subject, predicate, null, doc) // Only one please
-  if (sts.length > 1) {
-    return errorMessageBlock(
-      dom,
-      'Should not be ' + sts.length + ' i.e. >1 ' + predicate + ' of ' + subject
-    )
-  }
-  const desc = sts.length ? sts[0].object.value : undefined
-
-  const field = dom.createElement('textarea')
-  group.appendChild(field)
-  field.rows = desc ? desc.split('\n').length + 2 : 2
-  field.cols = 80
-  const style = multilineTextInputStyle ||
-    'font-size:100%; white-space: pre-wrap; background-color: white;' +
-    ' border: 0.07em solid gray; padding: 1em 0.5em; margin: 1em 1em;'
-  field.setAttribute('style', style)
-  if (sts.length) {
-    field.value = desc as string
-  } else {
-    // Unless you can make the predicate label disappear with the first click then this is over-cute
-    // field.value = label(predicate); // Was"enter a description here"
-    field.select() // Select it ready for user input -- doesn't work
-  }
-
-  ;(group as any).refresh = function () {
-    const v = kb.any(subject, predicate, null, doc)
-    if (v && v.value !== field.value) {
-      field.value = v.value // don't touch widget if no change
-      // @@ this is the place to color the field from the user who chanaged it
-    }
-  }
-  let submit
-  function saveChange (_e) {
-    submit.disabled = true
-    submit.setAttribute('style', 'visibility: hidden; float: right;') // Keep UI clean
-    field.disabled = true
-    field.setAttribute('style', style + 'color: gray;') // pending
-    const ds = kb.statementsMatching(subject, predicate, null, doc)
-    const is = st(subject, predicate, field.value, doc)
-    store.updater.update(ds, is, function (uri, ok, body) {
-      if (ok) {
-        field.setAttribute('style', style + 'color: black;')
-        field.disabled = false
-      } else {
-        group.appendChild(
-          errorMessageBlock(
-            dom,
-            'Error (while saving change to ' + (doc as NamedNode).uri + '): ' + body
-          )
-        )
-      }
-      if (callbackFunction) {
-        callbackFunction(ok, body)
-      }
-    })
-  }
-
-  const br = dom.createElement('br')
-  group.appendChild(br)
-
-  const editable = store.updater.editable((doc as NamedNode).uri)
-  if (editable) {
-    submit = dom.createElement('input')
-    submit.setAttribute('type', 'submit')
-    submit.disabled = true // until the filled has been modified
-    submit.setAttribute('style', 'visibility: hidden; float: right;') // Keep UI clean
-    submit.value = 'Save ' + label(predicate) // @@ I18n
-    group.appendChild(submit)
-
-    field.addEventListener(
-      'keyup',
-      function (_e) {
-        // Green means has been changed, not saved yet
-        field.setAttribute('style', style + 'color: green;')
-        if (submit) {
-          submit.disabled = false
-          submit.setAttribute('style', 'float: right;') // Remove visibility: hidden
-        }
-      },
-      true
-    )
-    field.addEventListener('change', saveChange, true)
-    submit.addEventListener('click', saveChange, false)
-  } else {
-    field.disabled = true
-  }
-  return group
-}
-
 export type SelectOptions = {
   multiple?: boolean,
   nullLabel?: string,
@@ -1079,145 +932,4 @@ export function makeSelectForNestedCategory (
   }
   update()
   return container
-}
-
-/**
- * Build a checkbox from a given statement(s)
- *
- * If the source document is editable, make the checkbox editable
- *
- * ins and sel are either statements *or arrays of statements* which should be
- * made if the checkbox is checked and unchecked respectively.
- *  tristate: Allow ins, or del, or neither
- */
-export function buildCheckboxForm (
-  dom: HTMLDocument,
-  kb: IndexedFormula,
-  lab: string,
-  del: Statement | Statement[],
-  ins: Statement | Statement[],
-  form: Node,
-  doc: Node,
-  tristate: boolean): HTMLElement {
-  // 20190115
-  const box = dom.createElement('div')
-  const tx = dom.createTextNode(lab)
-  const editable = store.updater.editable((doc as NamedNode).uri)
-  ;(tx as any).style =
-    'colour: black; font-size: 100%; padding-left: 0.5 em; padding-right: 0.5 em;'
-  box.appendChild(tx)
-  const input = dom.createElement('button')
-
-  input.setAttribute(
-    'style',
-    'font-size: 150%; height: 1.2em; width: 1.2em; background-color: #eef; margin: 0.1em'
-  )
-  box.appendChild(input)
-
-  function fix (x) {
-    if (!x) return [] // no statements
-    if (x.object) {
-      if (!x.why) {
-        x.why = doc // be back-compaitible  with old code
-      }
-      return [x] // one statements
-    }
-    if (x instanceof Array) return x
-    throw new Error('buildCheckboxForm: bad param ' + x)
-  }
-  ins = fix(ins)
-  del = fix(del)
-
-  function holdsAll (a) {
-    const missing = a.filter(
-      st => !kb.holds(st.subject, st.predicate, st.object, st.why)
-    )
-    return missing.length === 0
-  }
-  function refresh () {
-    let state: any = holdsAll(ins)
-    let displayState = state
-    if ((del as Statement[]).length) {
-      const negation = holdsAll(del)
-      if (state && negation) {
-        box.appendChild(
-          errorMessageBlock(
-            dom,
-            'Inconsistent data in store!\n' + ins + ' and\n' + del
-          )
-        )
-        return box
-      }
-      if (!state && !negation) {
-        state = null
-        const defa = kb.any(form, ns.ui('default'))
-        displayState = defa ? defa.value === '1' : tristate ? null : false
-      }
-    }
-    ;(input as any).state = state
-    input.textContent = {
-      true: checkMarkCharacter,
-      false: cancelCharacter,
-      null: dashCharacter
-    }[displayState]
-  }
-
-  refresh()
-  if (!editable) return box
-
-  const boxHandler = function (_e) {
-    ;(tx as any).style = 'color: #bbb;' // grey -- not saved yet
-    const toDelete: Statement = ((input as any).state === true ? ins : (input as any).state === false ? del : []) as Statement
-    ;(input as any).newState =
-      (input as any).state === null
-        ? true
-        : (input as any).state === true
-          ? false
-          : tristate
-            ? null
-            : true
-
-    const toInsert: Statement =
-      ((input as any).newState === true ? ins : (input as any).newState === false ? del : []) as Statement
-    console.log(`  Deleting  ${toDelete}`)
-    console.log(`  Inserting ${toInsert}`)
-    store.updater.update(toDelete, toInsert, function (
-      uri,
-      success,
-      errorBody
-    ) {
-      if (!success) {
-        if (toDelete.why) {
-          const hmmm = kb.holds(
-            toDelete.subject,
-            toDelete.predicate,
-            toDelete.object,
-            toDelete.why as Node
-          )
-          if (hmmm) {
-            console.log(' @@@@@ weird if 409 - does hold statement')
-          }
-        }
-        ;(tx as any).style = 'color: #black; background-color: #fee;'
-        box.appendChild(
-          errorMessageBlock(
-            dom,
-            `Checkbox: Error updating doc from ${(input as any).state} to ${
-              (input as any).newState
-            }:\n\n${errorBody}`
-          )
-        )
-      } else {
-        ;(tx as any).style = 'color: #black;'
-        ;(input as any).state = (input as any).newState
-        input.textContent = {
-          true: checkMarkCharacter,
-          false: cancelCharacter,
-          null: dashCharacter
-        }[(input as any).state] // @@
-      }
-    })
-  }
-  input.addEventListener('click', boxHandler, false)
-  return box
 }

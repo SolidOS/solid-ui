@@ -19,6 +19,22 @@ export function sortBySequence (list: Node[]): Node[] {
   })
 }
 
+/**
+ * Group of different fields
+ *
+ * One type of form field is an ordered Group of other fields.
+ * A Form is actually just the same as a group.
+ *
+ * @param dom The HTML Document object aka Document Object Model
+ * @param container  If present, the created widget will be appended to this
+ * @param already A hash table of (form, subject) kept to prevent recursive forms looping
+ * @param subject The thing about which the form displays/edits data
+ * @param form The form or field to be rendered
+ * @param doc The web document in which the data is
+ * @param callbackFunction Called when data is changed?
+ *
+ * @returns The HTML widget created
+ */
 export function Group (dom: HTMLDocument, container: HTMLElement | undefined, already: { }, subject: Node, form: Node, doc: Node, callbackFunction: (ok: boolean, errorMessage: string) => void): HTMLElement {
   const kb = store
   const box = dom.createElement('div')
