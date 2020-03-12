@@ -11,8 +11,8 @@ import ns from '../ns'
 import { formBorderColor, formHeadingColor, textInputStyle, multilineTextInputStyle } from '../style'
 import { debug, info } from '../log'
 
-import { errorMessageBlock } from './error'
-import { button, propertyTriage, allClassURIs, deleteButtonWithCheck, removeButton, linkButton } from './buttons'
+import { errorMessageBlock } from '../widgets/error'
+import { button, propertyTriage, allClassURIs, deleteButtonWithCheck, removeButton, linkButton } from '../widgets/buttons'
 import { syncTableToArrayReOrdered, label, labelWithOntology } from '../utils'
 
 const checkMarkCharacter = '\u2713'
