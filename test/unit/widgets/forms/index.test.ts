@@ -1,6 +1,6 @@
 import { namedNode, graph } from 'rdflib'
-import ns from '../../../src/ns'
-import uiStore from '../../../src/store'
+import ns from '../../../../src/ns'
+import uiStore from '../../../../src/store'
 
 import {
   appendForm,
@@ -9,7 +9,6 @@ import {
   field,
   fieldFunction,
   fieldLabel,
-  fieldParams,
   fieldStore,
   findClosest,
   formsFor,
@@ -24,7 +23,7 @@ import {
   propertiesForClass,
   sortByLabel,
   sortBySequence
-} from '../../../src/widgets/forms'
+} from '../../../../src/widgets/forms'
 
 // jest.mock('rdflib')
 // jest.mock('solid-auth-client')
@@ -193,84 +192,6 @@ describe('Multiple field', () => {
         </h3>
       </div>
     `)
-  })
-})
-
-describe('fieldParams', () => {
-  it('exists', () => {
-    expect(fieldParams).toBeInstanceOf(Object)
-  })
-})
-
-describe('ColorField params', () => {
-  it('exists', () => {
-    expect(fieldParams[ns.ui('ColorField').uri]).toBeInstanceOf(Object)
-  })
-})
-
-describe('DateField params', () => {
-  it('exists', () => {
-    expect(fieldParams[ns.ui('DateField').uri]).toBeInstanceOf(Object)
-  })
-})
-
-describe('DateTimeField params', () => {
-  it('exists', () => {
-    expect(fieldParams[ns.ui('DateTimeField').uri]).toBeInstanceOf(Object)
-  })
-})
-
-describe('TimeField params', () => {
-  it('exists', () => {
-    expect(fieldParams[ns.ui('TimeField').uri]).toBeInstanceOf(Object)
-  })
-})
-
-describe('IntegerField params', () => {
-  it('exists', () => {
-    expect(fieldParams[ns.ui('IntegerField').uri]).toBeInstanceOf(Object)
-  })
-})
-
-describe('DecimalField params', () => {
-  it('exists', () => {
-    expect(fieldParams[ns.ui('DecimalField').uri]).toBeInstanceOf(Object)
-  })
-})
-
-describe('FloatField params', () => {
-  it('exists', () => {
-    expect(fieldParams[ns.ui('FloatField').uri]).toBeInstanceOf(Object)
-  })
-})
-
-describe('SingleLineTextField params', () => {
-  it('exists', () => {
-    expect(fieldParams[ns.ui('SingleLineTextField').uri]).toBeInstanceOf(Object)
-  })
-})
-
-describe('NamedNodeURIField params', () => {
-  it('exists', () => {
-    expect(fieldParams[ns.ui('NamedNodeURIField').uri]).toBeInstanceOf(Object)
-  })
-})
-
-describe('TextField params', () => {
-  it('exists', () => {
-    expect(fieldParams[ns.ui('TextField').uri]).toBeInstanceOf(Object)
-  })
-})
-
-describe('PhoneField params', () => {
-  it('exists', () => {
-    expect(fieldParams[ns.ui('PhoneField').uri]).toBeInstanceOf(Object)
-  })
-})
-
-describe('EmailField params', () => {
-  it('exists', () => {
-    expect(fieldParams[ns.ui('EmailField').uri]).toBeInstanceOf(Object)
   })
 })
 
@@ -1102,12 +1023,6 @@ describe('Choice', () => {
         </h3>
       </div>
     `)
-  })
-})
-
-describe('Comment params', () => {
-  it('exists', () => {
-    expect(fieldParams[ns.ui('Comment').uri]).toBeInstanceOf(Object)
   })
 })
 
