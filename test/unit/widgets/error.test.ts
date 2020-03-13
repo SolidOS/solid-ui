@@ -10,10 +10,13 @@ describe('errorMessageBlock', () => {
     expect(errorMessageBlock).toBeInstanceOf(Function)
   })
   it('creates an error message div', () => {
-    expect(errorMessageBlock(dom, 'my error message', undefined)).toMatchSnapshot()
+    expect(errorMessageBlock(dom, 'my error message')).toMatchSnapshot()
   })
   it('escapes the HTML', () => {
-    expect(errorMessageBlock(dom, 'my <script> kiddie </script> message', undefined)).toMatchSnapshot()
+    const result = errorMessageBlock(dom, 'my <script> kiddie </script> message')
+    expect(result).toMatchSnapshot()
+    expect(result.innerHTML.indexOf('<script>')).toEqual(-1)
+    expect(result.innerHTML.indexOf('&lt;script&gt;')).toEqual(3)
   })
   it('sets the background color', () => {
     expect(errorMessageBlock(dom, 'my colored message', '#0ff')).toMatchSnapshot()
