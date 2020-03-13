@@ -13,7 +13,7 @@ describe('mostSpecificClassURI', () => {
     expect(mostSpecificClassURI).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const form = namedNode('http://example.com/#form')
+    const form = namedNode('http://example.com/#form1')
     uiStore.add(form, ns.rdf('type'), namedNode('http://example.com/#type'), namedNode('http://example.com/'))
     expect(mostSpecificClassURI(form)).toEqual('http://example.com/#type')
   })
@@ -29,32 +29,55 @@ describe('fieldFunction', () => {
     field['http://example.com/#type'] = myFunction
 
     // create a field of type http://example.com/#type
-    const form = namedNode('http://example.com/#form')
+    const form = namedNode('http://example.com/#form2')
     uiStore.add(form, ns.rdf('type'), namedNode('http://example.com/#type'), namedNode('http://example.com/'))
 
-    expect(fieldFunction(document, namedNode('http://example.com/#form'))).toEqual(myFunction)
+    expect(fieldFunction(undefined, form)).toEqual(myFunction)
   })
 
-  it('returns an error block if subject type undefined', () => {
-    const fn = fieldFunction(document, namedNode('http://example.com/#doesnt-exist'))
-    const result = fn(document, document.createElement('div'), {},
-      namedNode('http://example.com/#subject'),
-      namedNode('http://example.com/#form'),
-      namedNode('http://example.com/'),
-      () => {})
-    expect(result).toMatchSnapshot()
+  describe('function returned if subject type undefined', () => {
+    const fn = fieldFunction(undefined, namedNode('http://example.com/#doesnt-exist'))
+    it('returns an error block', () => {
+      const result = fn(document, document.createElement('div'), {},
+        namedNode('http://example.com/#subject'),
+        namedNode('http://example.com/#form'),
+        namedNode('http://example.com/'),
+        () => {})
+      expect(result).toMatchSnapshot()
+    })
+    it('appends an error block to a container', () => {
+      const container = document.createElement('div')
+      fn(document, container, {},
+        namedNode('http://example.com/#subject'),
+        namedNode('http://example.com/#form'),
+        namedNode('http://example.com/'),
+        () => {})
+      expect(container).toMatchSnapshot()
+    })
   })
 
-  it('returns an error block if no matching function exists', () => {
+  describe('function returned if no matching function exists', () => {
     // create a field of type http://example.com/#unknown-type
-    const form = namedNode('http://example.com/#form')
+    const form = namedNode('http://example.com/#form3')
     uiStore.add(form, ns.rdf('type'), namedNode('http://example.com/#unknown-type'), namedNode('http://example.com/'))
-    const fn = fieldFunction(document, namedNode('http://example.com/#form'))
-    const result = fn(document, document.createElement('div'), {},
-      namedNode('http://example.com/#subject'),
-      namedNode('http://example.com/#form'),
-      namedNode('http://example.com/'),
-      () => {})
-    expect(result).toMatchSnapshot()
+    const fn = fieldFunction(undefined, form)
+
+    it('returns an error block', () => {
+      const result = fn(document, document.createElement('div'), {},
+        namedNode('http://example.com/#subject'),
+        namedNode('http://example.com/#form'),
+        namedNode('http://example.com/'),
+        () => {})
+      expect(result).toMatchSnapshot()
+    })
+    it('appends an error block to a container', () => {
+      const container = document.createElement('div')
+      fn(document, container, {},
+        namedNode('http://example.com/#subject'),
+        namedNode('http://example.com/#form'),
+        namedNode('http://example.com/'),
+        () => {})
+      expect(container).toMatchSnapshot()
+    })
   })
 })
