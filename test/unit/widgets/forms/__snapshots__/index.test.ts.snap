@@ -1,0 +1,395 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BooleanField runs 1`] = `
+<div>
+  Bla
+  <button
+    style="font-size: 150%; height: 1.2em; width: 1.2em; background-color: #eef; margin: 0.1em"
+  >
+    ✕
+  </button>
+</div>
+`;
+
+exports[`Classifier runs 1`] = `
+<span>
+  <div
+    style="margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; background-color: #fee; color:black;"
+  >
+    Can't do multiple selector with no subclasses of category: &lt;http://example.com/#bla&gt;
+  </div>
+</span>
+`;
+
+exports[`ColorField runs 1`] = `
+<tr>
+  <td
+    class="formFieldName"
+    style="  vertical-align: middle;"
+  >
+    <a
+      href="http://example.com/#bla"
+      style="color: #3B5998; text-decoration: none;"
+    >
+      Bla
+    </a>
+  </td>
+  <td
+    class="formFieldValue"
+  >
+    <input
+      maxlength="4096"
+      size="20"
+      style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+      type="text"
+    />
+  </td>
+</tr>
+`;
+
+exports[`Comment runs 1`] = `
+<div>
+  <undefined>
+    &lt;http://example.com/#bla&gt;
+  </undefined>
+</div>
+`;
+
+exports[`DateField runs 1`] = `
+<tr>
+  <td
+    class="formFieldName"
+    style="  vertical-align: middle;"
+  >
+    <a
+      href="http://example.com/#bla"
+      style="color: #3B5998; text-decoration: none;"
+    >
+      Bla
+    </a>
+  </td>
+  <td
+    class="formFieldValue"
+  >
+    <input
+      maxlength="4096"
+      size="20"
+      style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+      type="text"
+    />
+  </td>
+</tr>
+`;
+
+exports[`DateTimeField runs 1`] = `
+<tr>
+  <td
+    class="formFieldName"
+    style="  vertical-align: middle;"
+  >
+    <a
+      href="http://example.com/#bla"
+      style="color: #3B5998; text-decoration: none;"
+    >
+      Bla
+    </a>
+  </td>
+  <td
+    class="formFieldValue"
+  >
+    <input
+      maxlength="4096"
+      size="20"
+      style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+      type="text"
+    />
+  </td>
+</tr>
+`;
+
+exports[`DecimalField runs 1`] = `
+<tr>
+  <td
+    class="formFieldName"
+    style="  vertical-align: middle;"
+  >
+    <a
+      href="http://example.com/#bla"
+      style="color: #3B5998; text-decoration: none;"
+    >
+      Bla
+    </a>
+  </td>
+  <td
+    class="formFieldValue"
+  >
+    <input
+      maxlength="4096"
+      size="20"
+      style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+      type="text"
+    />
+  </td>
+</tr>
+`;
+
+exports[`EmailField runs 1`] = `
+<tr>
+  <td
+    class="formFieldName"
+    style="  vertical-align: middle;"
+  >
+    <a
+      href="http://example.com/#bla"
+      style="color: #3B5998; text-decoration: none;"
+    >
+      Bla
+    </a>
+  </td>
+  <td
+    class="formFieldValue"
+  >
+    <input
+      maxlength="4096"
+      size="20"
+      style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+      type="text"
+    />
+  </td>
+</tr>
+`;
+
+exports[`FloatField] runs 1`] = `
+<tr>
+  <td
+    class="formFieldName"
+    style="  vertical-align: middle;"
+  >
+    <a
+      href="http://example.com/#bla"
+      style="color: #3B5998; text-decoration: none;"
+    >
+      Bla
+    </a>
+  </td>
+  <td
+    class="formFieldValue"
+  >
+    <input
+      maxlength="4096"
+      size="20"
+      style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+      type="text"
+    />
+  </td>
+</tr>
+`;
+
+exports[`Form field runs 1`] = `
+<div
+  style="padding-left: 2em; border: 0.05em solid #888888;"
+/>
+`;
+
+exports[`Heading runs 1`] = `
+<div>
+  <undefined>
+    &lt;http://example.com/#bla&gt;
+  </undefined>
+</div>
+`;
+
+exports[`IntegerField runs 1`] = `
+<tr>
+  <td
+    class="formFieldName"
+    style="  vertical-align: middle;"
+  >
+    <a
+      href="http://example.com/#bla"
+      style="color: #3B5998; text-decoration: none;"
+    >
+      Bla
+    </a>
+  </td>
+  <td
+    class="formFieldValue"
+  >
+    <input
+      maxlength="4096"
+      size="20"
+      style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+      type="text"
+    />
+  </td>
+</tr>
+`;
+
+exports[`NamedNodeURIField runs 1`] = `
+<tr>
+  <td
+    class="formFieldName"
+    style="  vertical-align: middle;"
+  >
+    <a
+      href="http://example.com/#bla"
+      style="color: #3B5998; text-decoration: none;"
+    >
+      Bla
+    </a>
+  </td>
+  <td
+    class="formFieldValue"
+  >
+    <input
+      maxlength="4096"
+      size="20"
+      style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+      type="text"
+    />
+  </td>
+</tr>
+`;
+
+exports[`NumericField runs 1`] = `
+<tr>
+  <td
+    class="formFieldName"
+    style="  vertical-align: middle;"
+  >
+    <a
+      href="http://example.com/#bla"
+      style="color: #3B5998; text-decoration: none;"
+    >
+      Bla
+    </a>
+  </td>
+  <td
+    class="formFieldValue"
+  >
+    <input
+      maxlength="4096"
+      size="20"
+      style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+      type="text"
+    />
+  </td>
+</tr>
+`;
+
+exports[`Options field runs 1`] = `<div />`;
+
+exports[`PhoneField runs 1`] = `
+<tr>
+  <td
+    class="formFieldName"
+    style="  vertical-align: middle;"
+  >
+    <a
+      href="http://example.com/#bla"
+      style="color: #3B5998; text-decoration: none;"
+    >
+      Bla
+    </a>
+  </td>
+  <td
+    class="formFieldValue"
+  >
+    <input
+      maxlength="4096"
+      size="20"
+      style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+      type="text"
+    />
+  </td>
+</tr>
+`;
+
+exports[`SingleLineTextField runs 1`] = `
+<tr>
+  <td
+    class="formFieldName"
+    style="  vertical-align: middle;"
+  >
+    <a
+      href="http://example.com/#bla"
+      style="color: #3B5998; text-decoration: none;"
+    >
+      Bla
+    </a>
+  </td>
+  <td
+    class="formFieldValue"
+  >
+    <input
+      maxlength="4096"
+      size="20"
+      style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+      type="text"
+    />
+  </td>
+</tr>
+`;
+
+exports[`TextField runs 1`] = `
+<tr>
+  <td
+    class="formFieldName"
+    style="  vertical-align: middle;"
+  >
+    <a
+      href="http://example.com/#bla"
+      style="color: #3B5998; text-decoration: none;"
+    >
+      Bla
+    </a>
+  </td>
+  <td
+    class="formFieldValue"
+  >
+    <input
+      maxlength="4096"
+      size="20"
+      style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+      type="text"
+    />
+  </td>
+</tr>
+`;
+
+exports[`TimeField runs 1`] = `
+<tr>
+  <td
+    class="formFieldName"
+    style="  vertical-align: middle;"
+  >
+    <a
+      href="http://example.com/#bla"
+      style="color: #3B5998; text-decoration: none;"
+    >
+      Bla
+    </a>
+  </td>
+  <td
+    class="formFieldValue"
+  >
+    <input
+      maxlength="4096"
+      size="20"
+      style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+      type="text"
+    />
+  </td>
+</tr>
+`;
+
+exports[`TristateField runs 1`] = `
+<div>
+  Bla
+  <button
+    style="font-size: 150%; height: 1.2em; width: 1.2em; background-color: #eef; margin: 0.1em"
+  >
+    -
+  </button>
+</div>
+`;

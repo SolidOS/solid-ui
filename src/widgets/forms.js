@@ -5,6 +5,8 @@
 
 /* global alert */
 
+import { fieldParams } from './forms/fieldParams'
+
 module.exports = {}
 
 var forms = {}
@@ -540,81 +542,7 @@ forms.field[ns.ui('Multiple').uri] = function (
 // or use HTML5: http://www.w3.org/TR/2011/WD-html-markup-20110113/input.date.html
 //
 
-forms.fieldParams = {}
-
-forms.fieldParams[ns.ui('ColorField').uri] = {
-  size: 9,
-  type: 'color',
-  dt: 'color'
-} // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/color
-forms.fieldParams[
-  ns.ui('ColorField').uri
-].pattern = /^\s*#[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]([0-9a-f][0-9a-f])?\s*$/
-
-forms.fieldParams[ns.ui('DateField').uri] = {
-  size: 20,
-  type: 'date',
-  dt: 'date'
-}
-forms.fieldParams[
-  ns.ui('DateField').uri
-].pattern = /^\s*[0-9][0-9][0-9][0-9](-[0-1]?[0-9]-[0-3]?[0-9])?Z?\s*$/
-
-forms.fieldParams[ns.ui('DateTimeField').uri] = {
-  size: 20,
-  type: 'date',
-  dt: 'dateTime'
-}
-forms.fieldParams[
-  ns.ui('DateTimeField').uri
-].pattern = /^\s*[0-9][0-9][0-9][0-9](-[0-1]?[0-9]-[0-3]?[0-9])?(T[0-2][0-9]:[0-5][0-9](:[0-5][0-9])?)?Z?\s*$/
-
-forms.fieldParams[ns.ui('TimeField').uri] = {
-  size: 10,
-  type: 'time',
-  dt: 'time'
-}
-forms.fieldParams[
-  ns.ui('TimeField').uri
-].pattern = /^\s*([0-2]?[0-9]:[0-5][0-9](:[0-5][0-9])?)\s*$/
-
-forms.fieldParams[ns.ui('IntegerField').uri] = {
-  size: 12,
-  style: 'text-align: right',
-  dt: 'integer'
-}
-forms.fieldParams[ns.ui('IntegerField').uri].pattern = /^\s*-?[0-9]+\s*$/
-
-forms.fieldParams[ns.ui('DecimalField').uri] = {
-  size: 12,
-  style: 'text-align: right',
-  dt: 'decimal'
-}
-forms.fieldParams[
-  ns.ui('DecimalField').uri
-].pattern = /^\s*-?[0-9]*(\.[0-9]*)?\s*$/
-
-forms.fieldParams[ns.ui('FloatField').uri] = {
-  size: 12,
-  style: 'text-align: right',
-  dt: 'float'
-}
-forms.fieldParams[
-  ns.ui('FloatField').uri
-].pattern = /^\s*-?[0-9]*(\.[0-9]*)?((e|E)-?[0-9]*)?\s*$/
-
-forms.fieldParams[ns.ui('SingleLineTextField').uri] = {}
-forms.fieldParams[ns.ui('NamedNodeURIField').uri] = { namedNode: true }
-forms.fieldParams[ns.ui('TextField').uri] = {}
-
-forms.fieldParams[ns.ui('PhoneField').uri] = { size: 20, uriPrefix: 'tel:' }
-forms.fieldParams[ns.ui('PhoneField').uri].pattern = /^\+?[\d-]+[\d]*$/
-
-forms.fieldParams[ns.ui('EmailField').uri] = {
-  size: 30,
-  uriPrefix: 'mailto:'
-}
-forms.fieldParams[ns.ui('EmailField').uri].pattern = /^\s*.*@.*\..*\s*$/ // @@ Get the right regexp here
+forms.fieldParams = fieldParams
 
 /** Render a basic form field
  *
@@ -1076,15 +1004,6 @@ forms.field[ns.ui('Choice').uri] = function (
 
 //          Documentation - non-interactive fields
 //
-
-forms.fieldParams[ns.ui('Comment').uri] = {
-  element: 'p',
-  style: `padding: 0.1em 1.5em; color: ${UI.style.formHeadingColor}; white-space: pre-wrap;`
-}
-forms.fieldParams[ns.ui('Heading').uri] = {
-  element: 'h3',
-  style: `font-size: 110%; color: ${UI.style.formHeadingColor};`
-}
 
 forms.field[ns.ui('Comment').uri] = forms.field[
   ns.ui('Heading').uri
