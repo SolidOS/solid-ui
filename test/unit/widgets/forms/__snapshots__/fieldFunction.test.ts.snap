@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`fieldFunction returns an error block if no matching function exists 1`] = `<div />`;

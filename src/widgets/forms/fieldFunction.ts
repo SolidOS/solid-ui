@@ -35,6 +35,7 @@ export function fieldFunction (dom: HTMLDocument, fieldInQuestion: Node): FieldF
   const uri = mostSpecificClassURI(fieldInQuestion) // What type
   // const uri = field.uri
   const fun = field[uri]
+  console.log(Object.keys(field))
 
   debug(
     'paneUtils: Going to implement field ' + fieldInQuestion + ' of type ' + uri
