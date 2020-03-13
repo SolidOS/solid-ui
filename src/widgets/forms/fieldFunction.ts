@@ -6,13 +6,13 @@ import { errorMessageBlock } from '../error'
 export const field: { [classUri: string]: FieldFunction } = {} // Form field functions by URI of field type.
 
 export type FieldFunction = (
-  dom: HTMLDocument,
-  container: HTMLElement | undefined,
-  already: { },
-  subject: Node,
-  form: Node,
-  doc: Node,
-  callbackFunction: (ok: boolean, errorMessage: string) => void
+  dom: HTMLDocument, // the DOM
+  container: HTMLElement | undefined, // if defined, the box will be appended to it
+  already: { }, // used to avoid looping in nested forms
+  subject: Node, // the thing for which data will be loaded into the form element
+  form: Node, // the RDF declaration for what the form should have
+  doc: Node, // the online RDF document for data binding (form input values will be read/saved automatically)
+  callbackFunction: (ok: boolean, errorMessage: string) => void // this will be called when data changes (TODO: check this with unit tests)
 ) => HTMLElement
 
 /**
@@ -33,20 +33,27 @@ export function mostSpecificClassURI (x: Node): string {
   return bots[0]
 }
 
-export function fieldFunction (dom: HTMLDocument, fieldInQuestion: Node): FieldFunction {
+/**
+ * Returns a function that creates a form widget
+ * @param dom unused
+ * @param fieldInQuestion the field for which to create a form, e.g. namedNode('https://timbl.com/timbl/Public/Test/Forms/individualForm.ttl#fullNameField')
+ */
+export function fieldFunction (dom: any /* unused */, fieldInQuestion: Node): FieldFunction {
   const uri = mostSpecificClassURI(fieldInQuestion) // What type
   // const uri = field.uri
   const fun = field[uri]
-
   debug(
     'paneUtils: Going to implement field ' + fieldInQuestion + ' of type ' + uri
   )
   if (!fun) {
-    return function () {
-      return errorMessageBlock(
-        dom,
+    return function (dom2: HTMLDocument, container?: HTMLElement): HTMLElement {
+      const box = errorMessageBlock(
+        dom2,
         'No handler for field ' + fieldInQuestion + ' of type ' + uri
       )
+      if (container) container.appendChild(box)
+
+      return box
     }
   }
   return fun
