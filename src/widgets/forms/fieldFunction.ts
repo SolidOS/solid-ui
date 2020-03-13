@@ -33,7 +33,7 @@ export function mostSpecificClassURI (x: Node): string {
 }
 
 /**
- * Returns a function that creates a from widget
+ * Returns a function that creates a form widget
  * @param dom unused
  * @param fieldInQuestion the field for which to create a form, e.g. namedNode('https://timbl.com/timbl/Public/Test/Forms/individualForm.ttl#fullNameField')
  */
