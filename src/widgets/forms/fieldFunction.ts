@@ -32,7 +32,12 @@ export function mostSpecificClassURI (x: Node): string {
   return bots[0]
 }
 
-export function fieldFunction (unused: any, fieldInQuestion: Node): FieldFunction {
+/**
+ * Returns a function that creates a from widget
+ * @param document unused
+ * @param fieldInQuestion the field for which to create a form, e.g. namedNode('https://timbl.com/timbl/Public/Test/Forms/individualForm.ttl#fullNameField')
+ */
+export function fieldFunction (document: HTMLDocument /* unused */, fieldInQuestion: Node): FieldFunction {
   const uri = mostSpecificClassURI(fieldInQuestion) // What type
   // const uri = field.uri
   const fun = field[uri]
