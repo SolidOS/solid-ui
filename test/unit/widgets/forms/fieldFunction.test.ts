@@ -7,13 +7,18 @@ import {
   fieldFunction,
   mostSpecificClassURI
 } from '../../../../src/widgets/forms/fieldFunction'
+import { clearStore } from '../../helpers/clearStore'
+
+afterEach(() => {
+  clearStore()
+})
 
 describe('mostSpecificClassURI', () => {
   it('exists', () => {
     expect(mostSpecificClassURI).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const form = namedNode('http://example.com/#form1')
+    const form = namedNode('http://example.com/#form')
     uiStore.add(form, ns.rdf('type'), namedNode('http://example.com/#type'), namedNode('http://example.com/'))
     expect(mostSpecificClassURI(form)).toEqual('http://example.com/#type')
   })
@@ -29,7 +34,7 @@ describe('fieldFunction', () => {
     field['http://example.com/#type'] = myFunction
 
     // create a field of type http://example.com/#type
-    const form = namedNode('http://example.com/#form2')
+    const form = namedNode('http://example.com/#form')
     uiStore.add(form, ns.rdf('type'), namedNode('http://example.com/#type'), namedNode('http://example.com/'))
 
     expect(fieldFunction(undefined, form)).toEqual(myFunction)
@@ -58,7 +63,7 @@ describe('fieldFunction', () => {
 
   describe('function returned if no matching function exists', () => {
     // create a field of type http://example.com/#unknown-type
-    const form = namedNode('http://example.com/#form3')
+    const form = namedNode('http://example.com/#form')
     uiStore.add(form, ns.rdf('type'), namedNode('http://example.com/#unknown-type'), namedNode('http://example.com/'))
     const fn = fieldFunction(undefined, form)
 
