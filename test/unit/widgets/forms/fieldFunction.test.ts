@@ -9,9 +9,7 @@ import {
 } from '../../../../src/widgets/forms/fieldFunction'
 import { clearStore } from '../../helpers/clearStore'
 
-afterEach(() => {
-  clearStore()
-})
+afterEach(clearStore)
 
 describe('mostSpecificClassURI', () => {
   it('exists', () => {
