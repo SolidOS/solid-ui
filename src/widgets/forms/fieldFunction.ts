@@ -7,12 +7,12 @@ export const field: { [classUri: string]: FieldFunction } = {} // Form field fun
 
 export type FieldFunction = (
   dom: HTMLDocument, // the DOM
-  container: HTMLElement | undefined,
-  already: { },
-  subject: Node,
-  form: Node,
-  doc: Node,
-  callbackFunction: (ok: boolean, errorMessage: string) => void
+  container: HTMLElement | undefined, // if defined, the box will be appended to it
+  already: { }, // used to avoid looping in nested forms
+  subject: Node, // the thing for which data will be loaded into the form element
+  form: Node, // the RDF declaration for what the form should have
+  doc: Node, // the online RDF document for data binding (form input values will be read/saved automatically)
+  callbackFunction: (ok: boolean, errorMessage: string) => void // this will be called when data changes (TODO: check this with unit tests)
 ) => HTMLElement
 
 /**
