@@ -1,3 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`fieldFunction returns an error block if no matching function exists 1`] = `<div />`;
+
+exports[`fieldFunction returns an error block if subject type undefined 1`] = `
+<div
+  style="margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; background-color: #fee; color:black;"
+>
+  No handler for field &lt;http://example.com/#doesnt-exist&gt; of type undefined
+</div>
+`;
