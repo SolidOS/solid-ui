@@ -73,7 +73,7 @@ describe('fieldFunction', () => {
     const fn = fieldFunction(undefined, form)
 
     it('returns an error block', () => {
-      const result = fn(document, document.createElement('div'), {},
+      const result = fn(document, undefined, {},
         namedNode('http://example.com/#subject'),
         namedNode('http://example.com/#form'),
         namedNode('http://example.com/'),
