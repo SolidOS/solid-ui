@@ -1,24 +1,24 @@
 import ns from '../../ns'
 import { formHeadingColor } from '../../style'
 
+export type FieldParamsObject = {
+  size?: number, // input element size attribute
+  type?: string, // input element type attribute. Default: 'text' (not for Comment and Heading)
+  element?: string, // element type to use (Comment and Heading only)
+  style?: string, // style to use
+  dt?: string, // xsd data type for the RDF Literal corresponding to the field value. Default: xsd:string
+  uriPrefix?: string, // e.g. 'mailto:', will be removed when displaying value to user. Overrides dt.
+  namedNode?: boolean, // if true, field value corresponds to the URI of an RDF NamedNode. Overrides dt and uriPrefix.
+  pattern?: RegExp // for client-side input validation; field will go red if violated, green if ok
+}
+
 /**
  * The fieldParams object defines various constants
  * for use in various form fields. Depending on the
  * field in questions, different values may be read
  * from here.
  */
-export const fieldParams: {
-  [ fieldUri: string ]: {
-    size?: number, // input element size attribute
-    type?: string, // input element type attribute. Default: 'text' (not for Comment and Heading)
-    element?: string, // element type to use (Comment and Heading only)
-    style?: string, // style to use
-    dt?: string, // xsd data type for the RDF Literal corresponding to the field value. Default: xsd:string
-    uriPrefix?: string, // e.g. 'mailto:', will be removed when displaying value to user. Overrides dt.
-    namedNode?: boolean, // if true, field value corresponds to the URI of an RDF NamedNode. Overrides dt and uriPrefix.
-    pattern?: RegExp // for client-side input validation; field will go red if violated, green if ok
-  }
-} = {
+export const fieldParams: { [ fieldUri: string ]: FieldParamsObject } = {
   /**
    * Text field
    *
