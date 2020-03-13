@@ -10,7 +10,6 @@ import { clearStore } from '../../helpers/clearStore'
 afterEach(clearStore)
 
 describe('Comment', () => {
-
   it('exists', () => {
     expect(commentField).toBeInstanceOf(Object)
   })
@@ -120,4 +119,3 @@ describe('Comment', () => {
     ).toMatchSnapshot()
   })
 })
-
