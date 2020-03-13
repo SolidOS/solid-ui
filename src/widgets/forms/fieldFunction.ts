@@ -41,7 +41,6 @@ export function fieldFunction (dom: any /* unused */, fieldInQuestion: Node): Fi
   const uri = mostSpecificClassURI(fieldInQuestion) // What type
   // const uri = field.uri
   const fun = field[uri]
-  console.log(uri, field, fieldInQuestion)
   debug(
     'paneUtils: Going to implement field ' + fieldInQuestion + ' of type ' + uri
   )
