@@ -7,3 +7,11 @@ exports[`errorMessageBlock runs 1`] = `
   my error message
 </div>
 `;
+
+exports[`errorMessageBlock sets the background color 1`] = `
+<div
+  style="margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; background-color: #0ff; color:black;"
+>
+  my colored message
+</div>
+`;

@@ -12,4 +12,7 @@ describe('errorMessageBlock', () => {
   it('runs', () => {
     expect(errorMessageBlock(dom, 'my error message', undefined)).toMatchSnapshot()
   })
+  it('sets the background color', () => {
+    expect(errorMessageBlock(dom, 'my colored message', '#0ff')).toMatchSnapshot()
+  })
 })
