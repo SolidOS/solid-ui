@@ -6,12 +6,13 @@
 /* global alert */
 
 import { fieldParams } from './forms/fieldParams'
+import { field, mostSpecificClassURI, fieldFunction } from './forms/fieldFunction'
 
 module.exports = {}
 
 var forms = {}
 
-forms.field = {} // Form field functions by URI of field type.
+forms.field = field // Form field functions by URI of field type.
 
 var UI = {
   icons: require('../iconBase'),
@@ -90,20 +91,20 @@ forms.field[ns.ui('Form').uri] = forms.field[
   var original = []
   for (var i = 0; i < p2.length; i++) {
     var field = p2[i]
-    var t = forms.mostSpecificClassURI(field) // Field type
+    var t = mostSpecificClassURI(field) // Field type
     if (t === ui('Options').uri) {
       var dep = kb.any(field, ui('dependingOn'))
       if (dep && kb.any(subject, dep)) original[i] = kb.any(subject, dep).toNT()
     }
 
-    var fn = forms.fieldFunction(dom, field)
+    var fn = fieldFunction(dom, field)
 
     var itemChanged = function (ok, body) {
       if (ok) {
         for (var j = 0; j < p2.length; j++) {
           // This is really messy.
           var field = p2[j]
-          var t = forms.mostSpecificClassURI(field) // Field type
+          var t = mostSpecificClassURI(field) // Field type
           if (t === ui('Options').uri) {
             var dep = kb.any(field, ui('dependingOn'))
             var newOne = fn(
@@ -385,7 +386,7 @@ forms.field[ns.ui('Multiple').uri] = function (
     // var ins = []
     // var del = []
 
-    var fn = forms.fieldFunction(dom, element)
+    var fn = fieldFunction(dom, element)
     var subField = fn(dom, null, already, object, element, store, itemDone) // p2 was: body.  moving to not passing that
     subField.subject = object // Keep a back pointer between the DOM array and the RDF objects
 
@@ -589,7 +590,7 @@ function basicField (
     return box
   }
   lhs.appendChild(forms.fieldLabel(dom, property, form))
-  var uri = forms.mostSpecificClassURI(form)
+  var uri = mostSpecificClassURI(form)
   var params = forms.fieldParams[uri]
   if (params === undefined) params = {} // non-bottom field types can do this
   var style = params.style || UI.style.textInputStyle || 'font-size: 100%; margin: 0.1em; padding: 0.1em;'
@@ -971,7 +972,7 @@ forms.field[ns.ui('Choice').uri] = function (
   var object = kb.any(subject, property)
   function addSubForm () {
     object = kb.any(subject, property)
-    forms.fieldFunction(dom, subForm)(
+    fieldFunction(dom, subForm)(
       dom,
       rhs,
       already,
@@ -1021,7 +1022,7 @@ forms.field[ns.ui('Comment').uri] = forms.field[
   var contents = kb.any(form, ui('contents'))
   if (!contents) contents = 'Error: No contents in comment field.'
 
-  var uri = forms.mostSpecificClassURI(form)
+  var uri = mostSpecificClassURI(form)
   var params = forms.fieldParams[uri]
   if (params === undefined) {
     params = {}
@@ -1039,41 +1040,6 @@ forms.field[ns.ui('Comment').uri] = forms.field[
   if (style) p.setAttribute('style', style)
 
   return box
-}
-
-/// ////////////// Form-related functions
-
-/** Which class of field is this?
- * @param x a field
- * @returns the URI of the most specific class
- */
-
-forms.mostSpecificClassURI = function (x) {
-  const kb = UI.store
-  var ft = kb.findTypeURIs(x)
-  var bot = kb.bottomTypeURIs(ft) // most specific
-  var bots = []
-  for (var b in bot) bots.push(b)
-  // if (bots.length > 1) throw "Didn't expect "+x+" to have multiple bottom types: "+bots
-  return bots[0]
-}
-
-forms.fieldFunction = function (dom, field) {
-  const uri = forms.mostSpecificClassURI(field) // What type
-  // const uri = field.uri
-  var fun = forms.field[uri]
-  UI.log.debug(
-    'paneUtils: Going to implement field ' + field + ' of type ' + uri
-  )
-  if (!fun) {
-    return function () {
-      return error.errorMessageBlock(
-        dom,
-        'No handler for field ' + field + ' of type ' + uri
-      )
-    }
-  }
-  return fun
 }
 
 // A button for editing a form (in place, at the moment)
@@ -1125,7 +1091,7 @@ forms.appendForm = function (
   store,
   itemDone
 ) {
-  return forms.fieldFunction(dom, form)(
+  return fieldFunction(dom, form)(
     dom,
     container,
     already,
@@ -1343,7 +1309,7 @@ forms.promptForNew = function (
   box.setAttribute('style', `border: 0.05em solid ${UI.style.formBorderColor}; color: ${UI.style.formBorderColor}`) // @@color?
   box.innerHTML = '<h3>New ' + utils.label(theClass) + '</h3>'
 
-  var formFunction = forms.fieldFunction(dom, form)
+  var formFunction = fieldFunction(dom, form)
   var object = forms.newThing(store)
   var gotButton = false
   var itemDone = function (ok, body) {
@@ -1607,7 +1573,7 @@ forms.makeSelectForOptions = function (
       if (ok) {
         select.disabled = false // data written back
         if (newObject) {
-          var fn = forms.fieldFunction(dom, options.subForm)
+          var fn = fieldFunction(dom, options.subForm)
           fn(
             dom,
             select.parentNode,
