@@ -23,9 +23,6 @@ import {
   sortBySequence
 } from '../../../../src/widgets/forms'
 
-// jest.mock('rdflib')
-// jest.mock('solid-auth-client')
-
 describe('field', () => {
   it('exists', () => {
     expect(field).toBeInstanceOf(Object)
@@ -42,13 +39,13 @@ describe('Form field', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    const callbackFunction = () => {}
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
 
     // FIXME: https://github.com/solid/solid-ui/issues/239
     ;(document as any).outlineManager = {
       appendPropertyTRs: () => {}
     }
-    field[ns.ui('Form').uri](
+    expect(field[ns.ui('Form').uri](
       document,
       container,
       already,
@@ -56,23 +53,7 @@ describe('Form field', () => {
       form,
       store,
       callbackFunction
-    )
-
-    expect(
-      field[ns.ui('Form').uri](
-        document,
-        container,
-        already,
-        subject,
-        form,
-        store,
-        callbackFunction
-      )
-    ).toMatchInlineSnapshot(`
-     <div
-       style="padding-left: 2em; border: 0.05em solid #888888;"
-     />
-    `)
+    )).toMatchSnapshot()
   })
   // @@ TODO check this further what test could I use to make sure
   // to test that the form gets added but obviously not in the container passed in
@@ -83,7 +64,7 @@ describe('Form field', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    const callbackFunction = () => {}
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       field[ns.ui('Form').uri](
         document,
@@ -94,15 +75,7 @@ describe('Form field', () => {
         store,
         callbackFunction
       )
-    ).toMatchInlineSnapshot(`
-      <div>
-        <h3
-          style="[object Object]"
-        >
-          [object Object]
-        </h3>
-      </div>
-    `)
+    ).toMatchSnapshot()
   })
   // @@ TODO need to double check proper subjects and what gets returned
   it.skip('returns.. if the subject has already been processed...', () => {
@@ -112,7 +85,7 @@ describe('Form field', () => {
     const subject = dubSubject
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    const callbackFunction = () => {}
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       field[ns.ui('Form').uri](
         document,
@@ -123,15 +96,7 @@ describe('Form field', () => {
         store,
         callbackFunction
       )
-    ).toMatchInlineSnapshot(`
-      <div>
-        <h3
-          style="[object Object]"
-        >
-          [object Object]
-        </h3>
-      </div>
-    `)
+    ).toMatchSnapshot()
   })
 })
 
@@ -145,7 +110,7 @@ describe('Options field', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    const callbackFunction = () => {}
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       field[ns.ui('Options').uri](
         document,
@@ -156,7 +121,7 @@ describe('Options field', () => {
         store,
         callbackFunction
       )
-    ).toMatchInlineSnapshot('<div />')
+    ).toMatchSnapshot()
   })
 })
 
@@ -170,7 +135,7 @@ describe('Multiple field', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    const callbackFunction = () => {}
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       field[ns.ui('Multiple').uri](
         document,
@@ -181,15 +146,7 @@ describe('Multiple field', () => {
         store,
         callbackFunction
       )
-    ).toMatchInlineSnapshot(`
-      <div>
-        <h3
-          style="[object Object]"
-        >
-          [object Object]
-        </h3>
-      </div>
-    `)
+    ).toMatchSnapshot()
   })
 })
 
@@ -204,7 +161,7 @@ describe('PhoneField', () => {
     const form = namedNode('http://example.com/#form')
     uiStore.add(form, ns.ui('property'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
     const store = namedNode('http://example.com/#store')
-    const callbackFunction = () => {}
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       field[ns.ui('PhoneField').uri](
         document,
@@ -215,31 +172,7 @@ describe('PhoneField', () => {
         store,
         callbackFunction
       )
-    ).toMatchInlineSnapshot(`
-      <tr>
-        <td
-          class="formFieldName"
-          style="  vertical-align: middle;"
-        >
-          <a
-            href="http://example.com/#bla"
-            style="color: #3B5998; text-decoration: none;"
-          >
-            Bla
-          </a>
-        </td>
-        <td
-          class="formFieldValue"
-        >
-          <input
-            maxlength="4096"
-            size="20"
-            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
-            type="text"
-          />
-        </td>
-      </tr>
-    `)
+    ).toMatchSnapshot()
   })
 })
 
@@ -253,7 +186,7 @@ describe('EmailField', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    const callbackFunction = () => {}
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       field[ns.ui('EmailField').uri](
         document,
@@ -264,31 +197,7 @@ describe('EmailField', () => {
         store,
         callbackFunction
       )
-    ).toMatchInlineSnapshot(`
-      <tr>
-        <td
-          class="formFieldName"
-          style="  vertical-align: middle;"
-        >
-          <a
-            href="http://example.com/#bla"
-            style="color: #3B5998; text-decoration: none;"
-          >
-            Bla
-          </a>
-        </td>
-        <td
-          class="formFieldValue"
-        >
-          <input
-            maxlength="4096"
-            size="20"
-            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
-            type="text"
-          />
-        </td>
-      </tr>
-    `)
+    ).toMatchSnapshot()
   })
 })
 
@@ -302,7 +211,7 @@ describe('ColorField', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    const callbackFunction = () => {}
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       field[ns.ui('ColorField').uri](
         document,
@@ -313,31 +222,7 @@ describe('ColorField', () => {
         store,
         callbackFunction
       )
-    ).toMatchInlineSnapshot(`
-      <tr>
-        <td
-          class="formFieldName"
-          style="  vertical-align: middle;"
-        >
-          <a
-            href="http://example.com/#bla"
-            style="color: #3B5998; text-decoration: none;"
-          >
-            Bla
-          </a>
-        </td>
-        <td
-          class="formFieldValue"
-        >
-          <input
-            maxlength="4096"
-            size="20"
-            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
-            type="text"
-          />
-        </td>
-      </tr>
-    `)
+    ).toMatchSnapshot()
   })
 })
 
@@ -362,31 +247,7 @@ describe('DateField', () => {
         store,
         callbackFunction
       )
-    ).toMatchInlineSnapshot(`
-      <tr>
-        <td
-          class="formFieldName"
-          style="  vertical-align: middle;"
-        >
-          <a
-            href="http://example.com/#bla"
-            style="color: #3B5998; text-decoration: none;"
-          >
-            Bla
-          </a>
-        </td>
-        <td
-          class="formFieldValue"
-        >
-          <input
-            maxlength="4096"
-            size="20"
-            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
-            type="text"
-          />
-        </td>
-      </tr>
-    `)
+    ).toMatchSnapshot()
   })
 })
 
@@ -400,7 +261,7 @@ describe('DateTimeField', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    const callbackFunction = () => {}
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       field[ns.ui('DateTimeField').uri](
         document,
@@ -411,31 +272,7 @@ describe('DateTimeField', () => {
         store,
         callbackFunction
       )
-    ).toMatchInlineSnapshot(`
-      <tr>
-        <td
-          class="formFieldName"
-          style="  vertical-align: middle;"
-        >
-          <a
-            href="http://example.com/#bla"
-            style="color: #3B5998; text-decoration: none;"
-          >
-            Bla
-          </a>
-        </td>
-        <td
-          class="formFieldValue"
-        >
-          <input
-            maxlength="4096"
-            size="20"
-            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
-            type="text"
-          />
-        </td>
-      </tr>
-    `)
+    ).toMatchSnapshot()
   })
 })
 
@@ -449,7 +286,7 @@ describe('TimeField', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    const callbackFunction = () => {}
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       field[ns.ui('TimeField').uri](
         document,
@@ -460,31 +297,7 @@ describe('TimeField', () => {
         store,
         callbackFunction
       )
-    ).toMatchInlineSnapshot(`
-      <tr>
-        <td
-          class="formFieldName"
-          style="  vertical-align: middle;"
-        >
-          <a
-            href="http://example.com/#bla"
-            style="color: #3B5998; text-decoration: none;"
-          >
-            Bla
-          </a>
-        </td>
-        <td
-          class="formFieldValue"
-        >
-          <input
-            maxlength="4096"
-            size="20"
-            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
-            type="text"
-          />
-        </td>
-      </tr>
-    `)
+    ).toMatchSnapshot()
   })
 })
 
@@ -498,7 +311,7 @@ describe('NumericField', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    const callbackFunction = () => {}
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       field[ns.ui('NumericField').uri](
         document,
@@ -509,31 +322,7 @@ describe('NumericField', () => {
         store,
         callbackFunction
       )
-    ).toMatchInlineSnapshot(`
-      <tr>
-        <td
-          class="formFieldName"
-          style="  vertical-align: middle;"
-        >
-          <a
-            href="http://example.com/#bla"
-            style="color: #3B5998; text-decoration: none;"
-          >
-            Bla
-          </a>
-        </td>
-        <td
-          class="formFieldValue"
-        >
-          <input
-            maxlength="4096"
-            size="20"
-            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
-            type="text"
-          />
-        </td>
-      </tr>
-    `)
+    ).toMatchSnapshot()
   })
 })
 
@@ -547,7 +336,7 @@ describe('IntegerField', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    const callbackFunction = () => {}
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       field[ns.ui('IntegerField').uri](
         document,
@@ -558,31 +347,7 @@ describe('IntegerField', () => {
         store,
         callbackFunction
       )
-    ).toMatchInlineSnapshot(`
-      <tr>
-        <td
-          class="formFieldName"
-          style="  vertical-align: middle;"
-        >
-          <a
-            href="http://example.com/#bla"
-            style="color: #3B5998; text-decoration: none;"
-          >
-            Bla
-          </a>
-        </td>
-        <td
-          class="formFieldValue"
-        >
-          <input
-            maxlength="4096"
-            size="20"
-            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
-            type="text"
-          />
-        </td>
-      </tr>
-    `)
+    ).toMatchSnapshot()
   })
 })
 
@@ -596,7 +361,7 @@ describe('DecimalField', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    const callbackFunction = () => {}
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       field[ns.ui('DecimalField').uri](
         document,
@@ -607,31 +372,7 @@ describe('DecimalField', () => {
         store,
         callbackFunction
       )
-    ).toMatchInlineSnapshot(`
-      <tr>
-        <td
-          class="formFieldName"
-          style="  vertical-align: middle;"
-        >
-          <a
-            href="http://example.com/#bla"
-            style="color: #3B5998; text-decoration: none;"
-          >
-            Bla
-          </a>
-        </td>
-        <td
-          class="formFieldValue"
-        >
-          <input
-            maxlength="4096"
-            size="20"
-            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
-            type="text"
-          />
-        </td>
-      </tr>
-    `)
+    ).toMatchSnapshot()
   })
 })
 
@@ -645,7 +386,7 @@ describe('FloatField]', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    const callbackFunction = () => {}
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       field[ns.ui('FloatField').uri](
         document,
@@ -656,31 +397,7 @@ describe('FloatField]', () => {
         store,
         callbackFunction
       )
-    ).toMatchInlineSnapshot(`
-      <tr>
-        <td
-          class="formFieldName"
-          style="  vertical-align: middle;"
-        >
-          <a
-            href="http://example.com/#bla"
-            style="color: #3B5998; text-decoration: none;"
-          >
-            Bla
-          </a>
-        </td>
-        <td
-          class="formFieldValue"
-        >
-          <input
-            maxlength="4096"
-            size="20"
-            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
-            type="text"
-          />
-        </td>
-      </tr>
-    `)
+    ).toMatchSnapshot()
   })
 })
 
@@ -694,7 +411,7 @@ describe('TextField', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    const callbackFunction = () => {}
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     uiStore.add(form, ns.rdf('type'), namedNode('http://example.com/#type'), namedNode('http://example.com/'))
     uiStore.add(form, ns.ui('property'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
 
@@ -708,31 +425,7 @@ describe('TextField', () => {
         store,
         callbackFunction
       )
-    ).toMatchInlineSnapshot(`
-      <tr>
-        <td
-          class="formFieldName"
-          style="  vertical-align: middle;"
-        >
-          <a
-            href="http://example.com/#bla"
-            style="color: #3B5998; text-decoration: none;"
-          >
-            Bla
-          </a>
-        </td>
-        <td
-          class="formFieldValue"
-        >
-          <input
-            maxlength="4096"
-            size="20"
-            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
-            type="text"
-          />
-        </td>
-      </tr>
-    `)
+    ).toMatchSnapshot()
   })
 })
 
@@ -746,7 +439,7 @@ describe('SingleLineTextField', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    const callbackFunction = () => {}
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     uiStore.add(form, ns.rdf('type'), namedNode('http://example.com/#type'), namedNode('http://example.com/'))
     uiStore.add(form, ns.ui('property'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
 
@@ -760,31 +453,7 @@ describe('SingleLineTextField', () => {
         store,
         callbackFunction
       )
-    ).toMatchInlineSnapshot(`
-      <tr>
-        <td
-          class="formFieldName"
-          style="  vertical-align: middle;"
-        >
-          <a
-            href="http://example.com/#bla"
-            style="color: #3B5998; text-decoration: none;"
-          >
-            Bla
-          </a>
-        </td>
-        <td
-          class="formFieldValue"
-        >
-          <input
-            maxlength="4096"
-            size="20"
-            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
-            type="text"
-          />
-        </td>
-      </tr>
-    `)
+    ).toMatchSnapshot()
   })
 })
 
@@ -798,7 +467,7 @@ describe('NamedNodeURIField', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    const callbackFunction = () => {}
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     uiStore.add(form, ns.rdf('type'), namedNode('http://example.com/#type'), namedNode('http://example.com/'))
     uiStore.add(form, ns.ui('property'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
 
@@ -812,31 +481,7 @@ describe('NamedNodeURIField', () => {
         store,
         callbackFunction
       )
-    ).toMatchInlineSnapshot(`
-      <tr>
-        <td
-          class="formFieldName"
-          style="  vertical-align: middle;"
-        >
-          <a
-            href="http://example.com/#bla"
-            style="color: #3B5998; text-decoration: none;"
-          >
-            Bla
-          </a>
-        </td>
-        <td
-          class="formFieldValue"
-        >
-          <input
-            maxlength="4096"
-            size="20"
-            style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
-            type="text"
-          />
-        </td>
-      </tr>
-    `)
+    ).toMatchSnapshot()
   })
 })
 
@@ -850,7 +495,7 @@ describe('MultiLineTextField', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    const callbackFunction = () => {}
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       field[ns.ui('MultiLineTextField').uri](
         document,
@@ -861,30 +506,7 @@ describe('MultiLineTextField', () => {
         store,
         callbackFunction
       )
-    ).toMatchInlineSnapshot(`
-<div>
-        <a
-          href="http://example.com/#bla"
-          style="color: #3B5998; text-decoration: none;"
-        >
-          Bla
-        </a>
-        <div>
-          <textarea
-            cols="80"
-            rows="2"
-            style="font-size:100%; white-space: pre-wrap; background-color: #eef; border: 0.07em solid gray; padding: 1em 0.5em; margin: 1em 1em;"
-          />
-          <br />
-          <input
-            disabled=""
-            style="visibility: hidden; float: right;"
-            type="submit"
-            value="Save bla"
-          />
-        </div>
-      </div>
-`)
+    ).toMatchSnapshot()
   })
 })
 
@@ -898,7 +520,7 @@ describe('BooleanField', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    const callbackFunction = () => {}
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       field[ns.ui('BooleanField').uri](
         document,
@@ -909,16 +531,7 @@ describe('BooleanField', () => {
         store,
         callbackFunction
       )
-    ).toMatchInlineSnapshot(`
-      <div>
-        Bla
-        <button
-          style="font-size: 150%; height: 1.2em; width: 1.2em; background-color: #eef; margin: 0.1em"
-        >
-          ✕
-        </button>
-      </div>
-    `)
+    ).toMatchSnapshot()
   })
 })
 
@@ -932,7 +545,7 @@ describe('TristateField', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    const callbackFunction = () => {}
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       field[ns.ui('TristateField').uri](
         document,
@@ -943,16 +556,7 @@ describe('TristateField', () => {
         store,
         callbackFunction
       )
-    ).toMatchInlineSnapshot(`
-<div>
-  Bla
-  <button
-    style="font-size: 150%; height: 1.2em; width: 1.2em; background-color: #eef; margin: 0.1em"
-  >
-    -
-  </button>
-</div>
-`)
+    ).toMatchSnapshot()
   })
 })
 
@@ -968,7 +572,7 @@ describe('Classifier', () => {
     const store = namedNode('http://example.com/#store')
     uiStore.add(form, ns.ui('category'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
 
-    const callbackFunction = () => {}
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       field[ns.ui('Classifier').uri](
         document,
@@ -979,15 +583,7 @@ describe('Classifier', () => {
         store,
         callbackFunction
       )
-    ).toMatchInlineSnapshot(`
-<span>
-  <div
-    style="margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; background-color: #fee; color:black;"
-  >
-    Can't do multiple selector with no subclasses of category: &lt;http://example.com/#bla&gt;
-  </div>
-</span>
-`)
+    ).toMatchSnapshot()
   })
 })
 
@@ -1001,7 +597,7 @@ describe('Choice', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    const callbackFunction = () => {}
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       field[ns.ui('Choice').uri](
         document,
@@ -1012,15 +608,7 @@ describe('Choice', () => {
         store,
         callbackFunction
       )
-    ).toMatchInlineSnapshot(`
-      <div>
-        <h3
-          style="[object Object]"
-        >
-          [object Object]
-        </h3>
-      </div>
-    `)
+    ).toMatchSnapshot()
   })
 })
 
@@ -1035,7 +623,7 @@ describe('Heading', () => {
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
     uiStore.add(form, ns.ui('contents'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
-    const callbackFunction = () => {}
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       field[ns.ui('Heading').uri](
         document,
@@ -1046,13 +634,7 @@ describe('Heading', () => {
         store,
         callbackFunction
       )
-    ).toMatchInlineSnapshot(`
-<div>
-  <undefined>
-    &lt;http://example.com/#bla&gt;
-  </undefined>
-</div>
-`)
+    ).toMatchSnapshot()
   })
 })
 
@@ -1066,7 +648,7 @@ describe('Comment', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    const callbackFunction = () => {}
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     uiStore.add(form, ns.ui('contents'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
     expect(
       field[ns.ui('Comment').uri](
@@ -1078,13 +660,7 @@ describe('Comment', () => {
         store,
         callbackFunction
       )
-    ).toMatchInlineSnapshot(`
-<div>
-  <undefined>
-    &lt;http://example.com/#bla&gt;
-  </undefined>
-</div>
-`)
+    ).toMatchSnapshot()
   })
 })
 
@@ -1096,7 +672,7 @@ describe('editFormButton', () => {
     const container = null
     const form = null
     const store = namedNode('http://example.com/#store')
-    const callbackFunction = () => {}
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       editFormButton(document, container, form, store, callbackFunction)
     ).toBeInstanceOf(HTMLButtonElement)
