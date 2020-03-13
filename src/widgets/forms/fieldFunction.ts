@@ -25,7 +25,6 @@ export function mostSpecificClassURI (x: Node): string {
   const kb = store
   const ft = kb.findTypeURIs(x)
   const bot = kb.bottomTypeURIs(ft) // most specific
-  console.log(x, ft, bot)
   const bots: any[] = []
   for (const b in bot) bots.push(b)
   // if (bots.length > 1) throw "Didn't expect "+x+" to have multiple bottom types: "+bots
