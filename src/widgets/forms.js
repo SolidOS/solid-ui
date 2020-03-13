@@ -6,12 +6,13 @@
 /* global alert */
 
 import { fieldParams } from './forms/fieldParams'
+import { field, mostSpecificClassURI, fieldFunction } from './forms/fieldFunction'
 
 module.exports = {}
 
 var forms = {}
 
-forms.field = {} // Form field functions by URI of field type.
+forms.field = field // Form field functions by URI of field type.
 
 var UI = {
   icons: require('../iconBase'),
@@ -1041,40 +1042,8 @@ forms.field[ns.ui('Comment').uri] = forms.field[
   return box
 }
 
-/// ////////////// Form-related functions
-
-/** Which class of field is this?
- * @param x a field
- * @returns the URI of the most specific class
- */
-
-forms.mostSpecificClassURI = function (x) {
-  const kb = UI.store
-  var ft = kb.findTypeURIs(x)
-  var bot = kb.bottomTypeURIs(ft) // most specific
-  var bots = []
-  for (var b in bot) bots.push(b)
-  // if (bots.length > 1) throw "Didn't expect "+x+" to have multiple bottom types: "+bots
-  return bots[0]
-}
-
-forms.fieldFunction = function (dom, field) {
-  const uri = forms.mostSpecificClassURI(field) // What type
-  // const uri = field.uri
-  var fun = forms.field[uri]
-  UI.log.debug(
-    'paneUtils: Going to implement field ' + field + ' of type ' + uri
-  )
-  if (!fun) {
-    return function () {
-      return error.errorMessageBlock(
-        dom,
-        'No handler for field ' + field + ' of type ' + uri
-      )
-    }
-  }
-  return fun
-}
+forms.mostSpecificClassURI = mostSpecificClassURI
+forms.fieldFunction = fieldFunction
 
 // A button for editing a form (in place, at the moment)
 //

@@ -7,7 +7,6 @@ import {
   buildCheckboxForm,
   editFormButton,
   field,
-  fieldFunction,
   fieldLabel,
   fieldStore,
   findClosest,
@@ -16,7 +15,6 @@ import {
   makeSelectForCategory,
   makeSelectForNestedCategory,
   makeSelectForOptions,
-  mostSpecificClassURI,
   newButton,
   newThing,
   promptForNew,
@@ -1087,26 +1085,6 @@ describe('Comment', () => {
   </undefined>
 </div>
 `)
-  })
-})
-
-describe('mostSpecificClassURI', () => {
-  it('exists', () => {
-    expect(mostSpecificClassURI).toBeInstanceOf(Function)
-  })
-  it('runs', () => {
-    const form = namedNode('http://example.com/#form')
-    uiStore.add(form, ns.rdf('type'), namedNode('http://example.com/#type'), namedNode('http://example.com/'))
-    expect(mostSpecificClassURI(form)).toEqual('http://example.com/#type')
-  })
-})
-
-describe('fieldFunction', () => {
-  it('exists', () => {
-    expect(fieldFunction).toBeInstanceOf(Object)
-  })
-  it('runs', () => {
-    expect(fieldFunction(document, namedNode('http://example.com/#this'))).toBeInstanceOf(Function)
   })
 })
 
