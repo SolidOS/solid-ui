@@ -640,32 +640,6 @@ describe('Heading', () => {
   })
 })
 
-describe('Comment', () => {
-  it('exists', () => {
-    expect(field[ns.ui('Comment').uri]).toBeInstanceOf(Object)
-  })
-  it('runs', () => {
-    const container = document.createElement('div')
-    const already = {}
-    const subject = namedNode('http://example.com/#this')
-    const form = namedNode('http://example.com/#form')
-    const store = namedNode('http://example.com/#store')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
-    uiStore.add(form, ns.ui('contents'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
-    expect(
-      field[ns.ui('Comment').uri](
-        document,
-        container,
-        already,
-        subject,
-        form,
-        store,
-        callbackFunction
-      )
-    ).toMatchSnapshot()
-  })
-})
-
 describe('mostSpecificClassURI', () => {
   it('exists', () => {
     expect(mostSpecificClassURI).toBeInstanceOf(Function)
