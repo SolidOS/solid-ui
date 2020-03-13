@@ -16,10 +16,12 @@ export type FieldFunction = (
 ) => HTMLElement
 
 /**
- * Which class of field is this?
+ * Which class of field is this? Relies on http://www.w3.org/2000/01/rdf-schema#subClassOf and
+ * https://linkeddata.github.io/rdflib.js/doc/classes/formula.html#bottomtypeuris
+ * to find the most specific RDF type if there are multiple.
  *
- * @param x a field
- * @returns the URI of the most specific class
+ * @param x a form field, e.g. `namedNode('https://timbl.com/timbl/Public/Test/Forms/individualForm.ttl#fullNameField')`
+ * @returns the URI of the most specific known class, e.g. `http://www.w3.org/ns/ui#SingleLineTextField`
  */
 export function mostSpecificClassURI (x: Node): string {
   const kb = store

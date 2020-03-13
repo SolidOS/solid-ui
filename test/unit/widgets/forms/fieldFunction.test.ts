@@ -9,18 +9,23 @@ import {
 } from '../../../../src/widgets/forms/fieldFunction'
 import { clearStore } from '../../helpers/clearStore'
 
-afterEach(() => {
-  clearStore()
-})
+afterEach(clearStore)
 
 describe('mostSpecificClassURI', () => {
   it('exists', () => {
     expect(mostSpecificClassURI).toBeInstanceOf(Function)
   })
-  it('runs', () => {
+  it('reports the RDF type if there is only one', () => {
     const form = namedNode('http://example.com/#form')
     uiStore.add(form, ns.rdf('type'), namedNode('http://example.com/#type'), namedNode('http://example.com/'))
     expect(mostSpecificClassURI(form)).toEqual('http://example.com/#type')
+  })
+  it('reports the subtype if there are one super and one sub type', () => {
+    const node = namedNode('http://example.com/#form')
+    uiStore.add(node, ns.rdf('type'), namedNode('http://example.com/#human'), namedNode('http://example.com/'))
+    uiStore.add(node, ns.rdf('type'), namedNode('http://example.com/#employee'), namedNode('http://example.com/'))
+    uiStore.add(namedNode('http://example.com/#employee'), ns.rdfs('subClassOf'), namedNode('http://example.com/#human'), namedNode('http://example.com/'))
+    expect(mostSpecificClassURI(node)).toEqual('http://example.com/#employee')
   })
 })
 
