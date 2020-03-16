@@ -660,7 +660,8 @@ describe('Comment', () => {
         store,
         callbackFunction
       )
-  ).toMatchSnapshot()
+    ).toMatchSnapshot()
+  })
 })
 
 describe('editFormButton', () => {
