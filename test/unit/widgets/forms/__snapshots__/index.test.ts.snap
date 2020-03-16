@@ -47,6 +47,14 @@ exports[`ColorField runs 1`] = `
 </tr>
 `;
 
+exports[`Comment runs 1`] = `
+<div>
+  <undefined>
+    &lt;http://example.com/#bla&gt;
+  </undefined>
+</div>
+`;
+
 exports[`DateField runs 1`] = `
 <tr>
   <td

@@ -7,7 +7,6 @@ import {
   buildCheckboxForm,
   editFormButton,
   field,
-  fieldFunction,
   fieldLabel,
   fieldStore,
   findClosest,
@@ -16,7 +15,6 @@ import {
   makeSelectForCategory,
   makeSelectForNestedCategory,
   makeSelectForOptions,
-  mostSpecificClassURI,
   newButton,
   newThing,
   promptForNew,
@@ -640,23 +638,29 @@ describe('Heading', () => {
   })
 })
 
-describe('mostSpecificClassURI', () => {
+describe('Comment', () => {
   it('exists', () => {
-    expect(mostSpecificClassURI).toBeInstanceOf(Function)
+    expect(field[ns.ui('Comment').uri]).toBeInstanceOf(Object)
   })
   it('runs', () => {
+    const container = document.createElement('div')
+    const already = {}
+    const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    uiStore.add(form, ns.rdf('type'), namedNode('http://example.com/#type'), namedNode('http://example.com/'))
-    expect(mostSpecificClassURI(form)).toEqual('http://example.com/#type')
-  })
-})
-
-describe('fieldFunction', () => {
-  it('exists', () => {
-    expect(fieldFunction).toBeInstanceOf(Object)
-  })
-  it('runs', () => {
-    expect(fieldFunction(document, namedNode('http://example.com/#this'))).toBeInstanceOf(Function)
+    const store = namedNode('http://example.com/#store')
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    uiStore.add(form, ns.ui('contents'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
+    expect(
+      field[ns.ui('Comment').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        callbackFunction
+      )
+    ).toMatchSnapshot()
   })
 })
 
