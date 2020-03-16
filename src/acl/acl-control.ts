@@ -15,6 +15,9 @@ import { getClasses } from '../jss'
 import { styles } from './styles'
 import * as debug from '../debug'
 
+let global: Window = window
+const preventBrowserDropEventsDone = Symbol('prevent double triggering of drop event')
+
 /**
  * See https://coshx.com/preventing-drag-and-drop-disasters-with-a-chrome-userscript
  * Without this dropping anything onto a browser page will cause chrome etc to jump to diff page
@@ -28,38 +31,35 @@ import * as debug from '../debug'
  * @returns void
  */
 export function preventBrowserDropEvents (document: HTMLDocument): void {
-  debug.log('preventBrowserDropEvents called.')
-  const global: any = window
+  console.log('preventBrowserDropEvents called.')
   if (typeof global !== 'undefined') {
-    if (global.preventBrowserDropEventsDone) return
-    global.preventBrowserDropEventsDone = true
-  }
-
-  function preventDrag (e) {
-    e.stopPropagation()
-    e.preventDefault()
-  }
-
-  function handleDrop (e) {
-    if (e.dataTransfer.files.length > 0) {
-      if (
-        !confirm(
-          'Are you sure you want to drop this file here? ' +
-          '(Cancel opens it in a new tab)'
-        )
-      ) {
-        e.stopPropagation()
-        e.preventDefault()
-        debug.log(
-          '@@@@ document-level DROP suppressed: ' + e.dataTransfer.dropEffect
-        )
-      }
-    }
+    if (global[preventBrowserDropEventsDone]) return
+    global[preventBrowserDropEventsDone] = true
   }
 
   document.addEventListener('drop', handleDrop, false)
   document.addEventListener('dragenter', preventDrag, false)
   document.addEventListener('dragover', preventDrag, false)
+}
+
+/** @internal */
+export function preventDrag (e) {
+  e.stopPropagation()
+  e.preventDefault()
+}
+
+/** @internal */
+export function handleDrop (e) {
+  if (e.dataTransfer.files.length > 0) {
+    if (
+      !global.confirm('Are you sure you want to drop this file here? (Cancel opens it in a new tab)')
+    ) {
+      e.stopPropagation()
+      e.preventDefault()
+      console.log('@@@@ document-level DROP suppressed: ' + e.dataTransfer.dropEffect
+      )
+    }
+  }
 }
 
 /**
@@ -211,4 +211,9 @@ function hasProtectedAcl (targetDoc: NamedNode): boolean {
   // @@ TODO: This is hacky way of knowing whether or not a certain ACL file can be removed
   // Hopefully we'll find a better, standardized solution to this - https://github.com/solid/specification/issues/37
   return targetDoc.uri === targetDoc.site().uri
+}
+
+/** @internal */
+export function setGlobalWindow (window: Window) {
+  global = window
 }
