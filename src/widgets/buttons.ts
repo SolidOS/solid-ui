@@ -3,7 +3,7 @@ import { iconBase, originalIconBase } from '../iconBase'
 import store from '../store'
 import ns from '../ns'
 import style from '../style'
-import log from '../log'
+import { info } from '../log'
 
 /**
  * UI Widgets such as buttons
@@ -869,7 +869,7 @@ export function propertyTriage (kb: IndexedFormula): any {
   }
   possibleProperties.op = op
   possibleProperties.dp = dp
-  log.info(`propertyTriage: ${no} non-lit, ${nd} literal. ${nu} unknown.`)
+  info(`propertyTriage: ${no} non-lit, ${nd} literal. ${nu} unknown.`)
   return possibleProperties
 }
 
