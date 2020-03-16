@@ -1,5 +1,10 @@
 import store from '../../../src/store'
 
 export function clearStore () {
-  store.statements.forEach(statement => store.remove(statement))
+  // FIXME: https://github.com/solid/solid-ui/issues/265
+
+  while (store.statements.length) {
+    console.log('Clearing store...')
+    store.statements.forEach(store.remove.bind(store))
+  }
 }
