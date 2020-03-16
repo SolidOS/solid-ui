@@ -1,6 +1,6 @@
 import store from '../../store'
 import ns from '../../ns'
-import { mostSpecificClassURI } from '../forms'
+import { mostSpecificClassURI } from './fieldFunction'
 import { fieldParams } from './fieldParams'
 
 /**
