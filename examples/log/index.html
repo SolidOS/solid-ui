@@ -202,22 +202,22 @@
         </a>
     </h2>
     <p>
-        You can fine-tune which messages you want shown by adding together the corresponding numbers for each level:
+        The module uses <a href="https://en.wikipedia.org/wiki/Mask_(computing)">bitmask</a> to filter which types
+        of messages that will be shown. It assigns the following 10-based number to each type (binaries in
+        parenthesis):
     </p>
     <ul>
-        <li>Error: 1</li>
-        <li>Warning: 2</li>
-        <li>Message: 4</li>
-        <li>Success: 8</li>
-        <li>Info: 16</li>
-        <li>Debug: 32</li>
+        <li>Error: 1 (000001)</li>
+        <li>Warning: 2 (000010)</li>
+        <li>Message: 4 (000100)</li>
+        <li>Success: 8 (001000)</li>
+        <li>Info: 16 (010000)</li>
+        <li>Debug: 32 (100000)</li>
     </ul>
     <p>
-        Setting level to 64 will show all messages.
-    </p>
-    <p>
         By default only error, warning, and normal messages will be shown, hence the number 7 that is shown by default
-        in this example.
+        in this example. You can set it to show all types of messages by passing 63 (which is the sum of all, and is
+        111111 in binary).
     </p>
     <script id="script-log-setLevel">
       window.addEventListener('DOMContentLoaded', () => {

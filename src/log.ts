@@ -129,8 +129,12 @@ export function clear (): void {
 }
 
 /**
- * Lets you configure which types of messages will be shown. The number is a
- * sum of the levels you want to show:
+ * Lets you configure which types of messages will be shown. The module uses
+ * [bitmask](https://en.wikipedia.org/wiki/Mask_(computing)) to filter which
+ * types of messages should be shown. E.g. if you only want warning messages
+ * to be shown, pass 2 to the function, if you want warning and success to be
+ * shown, pass 10 (2+8). By passing the sum of all, 63, you'll show all
+ * types of messages.
  *
  * - Error: 1
  * - Warning: 2
@@ -138,8 +142,6 @@ export function clear (): void {
  * - Success: 8
  * - Info: 16
  * - Debug: 32
- *
- * You can also choose to set all by passing the number *64*.
  */
 export function setLevel (level: number): void {
   _level = TALL
