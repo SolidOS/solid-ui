@@ -4,19 +4,38 @@ import * as AclControl from '../../../src/acl/acl-control'
 import { acl, aclControl } from '../../../src/acl/index'
 
 silenceDebugMessages()
-jest.mock('solid-auth-client')
 
-describe('acl/index:acl', () => {
-  it('exports all of acl/acl', () => {
-    for (const k in Acl) {
-      if (k !== 'getProspectiveHolder') {
-        expect(acl[k]).toEqual(Acl[k])
-      }
-    }
+describe('acl related APIs', () => {
+  it('exports some methods in the acl module', () => {
+    expect(Acl).toEqual(expect.objectContaining(acl))
+    expect([
+      'adoptACLDefault',
+      'readACL',
+      'sameACL',
+      'ACLunion',
+      'loadUnionACL',
+      'ACLbyCombination',
+      'makeACLGraph',
+      'makeACLGraphbyCombo',
+      'ACLToString',
+      'comboToString',
+      'makeACLString',
+      'putACLObject',
+      'putACLbyCombo',
+      'fixIndividualCardACL',
+      'fixIndividualACL',
+      'setACL',
+      'getACLorDefault',
+      'getACL'
+    ]).toEqual(expect.arrayContaining(Object.keys(acl)))
   })
-  it('exports all of acl/acl-control', () => {
-    for (const k in AclControl) {
-      expect(aclControl[k]).toEqual(AclControl[k])
-    }
+
+  it('exposes some methods of acl-control module', () => {
+    expect(AclControl).toEqual(expect.objectContaining(aclControl))
+    expect([
+      'preventBrowserDropEvents',
+      'shortNameForFolder',
+      'ACLControlBox5'
+    ]).toEqual(expect.arrayContaining(Object.keys(aclControl)))
   })
 })
