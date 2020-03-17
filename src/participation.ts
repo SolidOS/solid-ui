@@ -31,6 +31,7 @@ export function renderPartipants (dom: HTMLDocument, table: ParticipationTableEl
 
   const newRowForParticpation = function (parp) {
     const person = kb.any(parp, ns.wf('participant'))
+
     let tr
     if (!person) {
       tr = dom.createElement('tr')
@@ -56,6 +57,7 @@ export function renderPartipants (dom: HTMLDocument, table: ParticipationTableEl
 
   const syncTable = function () {
     const parps = kb.each(subject, ns.wf('participation')).map(function (parp) {
+      console.log('in participants')
       return [kb.anyValue(parp, ns.cal('dtstart')) || '9999-12-31', parp]
     })
     parps.sort() // List in order of joining
