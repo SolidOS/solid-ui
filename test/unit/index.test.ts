@@ -10,7 +10,6 @@ describe('Index', () => {
       'authn',
       'create',
       'icons',
-      'log',
       'matrix',
       'media',
       'messageArea',
@@ -24,8 +23,12 @@ describe('Index', () => {
       'versionInfo',
       'dom',
       'rdf',
+<<<<<<< HEAD
       'pad',
       'participation',
+=======
+      'log',
+>>>>>>> master
       'tabs'
     ])
   })

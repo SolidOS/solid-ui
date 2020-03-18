@@ -10,7 +10,6 @@
 const UI = {
   authn: require('./authn/authn'),
   icons: require('./iconBase'),
-  log: require('./log'),
   ns: require('./ns'),
   store: require('./store'),
   style: require('./style'),
