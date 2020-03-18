@@ -4,7 +4,6 @@
 
 /** @module pad
  */
-<<<<<<< HEAD:src/pad.ts
 import store from './store'
 import ns from './ns'
 import { Namespace, NamedNode, st } from 'rdflib'
@@ -32,19 +31,6 @@ class NotepadPart extends HTMLElement {
   value?: string
   state?: Number
   lastSent?: String
-=======
-
-const $rdf = require('rdflib')
-var padModule = (module.exports = {})
-var UI = {
-  authn: require('./authn/authn'),
-  icons: require('./iconBase'),
-  ns: require('./ns'),
-  pad: padModule,
-  rdf: $rdf,
-  store: require('./store'),
-  widgets: require('./widgets')
->>>>>>> master:src/pad.js
 }
 /** Figure out a random color from my webid
  *

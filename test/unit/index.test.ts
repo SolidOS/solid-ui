@@ -23,12 +23,9 @@ describe('Index', () => {
       'versionInfo',
       'dom',
       'rdf',
-<<<<<<< HEAD
+      'log',
       'pad',
       'participation',
-=======
-      'log',
->>>>>>> master
       'tabs'
     ])
   })
