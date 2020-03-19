@@ -1,6 +1,6 @@
 import widgets from '../../src/widgets'
 import { JSDOM } from 'jsdom'
-import * as participation from '../../src/participation'
+import * as participation from '../../src/pad'
 
 const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
 const dom = window.document
