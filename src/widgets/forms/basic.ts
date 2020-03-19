@@ -9,10 +9,16 @@ import { mostSpecificClassURI } from './fieldFunction'
 import { fieldParams } from './fieldParams'
 
 /**
+ * Create an anchor element with a label as the anchor text.
+ *
+ * @param dom The DOM
+ * @param property href for the anchor element
+ * @param fieldInQuestion field to produce a label for
+ *
  * @ignore exporting this only for unit tests
  */
-export function fieldLabel (dom: HTMLDocument, property: NamedNode, form: Node): HTMLElement | Text {
-  let lab = store.any(form, ns.ui('label'))
+export function fieldLabel (dom: HTMLDocument, property: NamedNode | undefined, fieldInQuestion: Node): HTMLElement | Text {
+  let lab = store.any(fieldInQuestion, ns.ui('label'))
   if (!lab) lab = label(property, true) // Init capital
   if (property === undefined) {
     return dom.createTextNode('@@Internal error: undefined property')
