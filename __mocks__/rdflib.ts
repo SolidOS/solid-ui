@@ -71,15 +71,13 @@ export class Fetcher {
 
 export class UpdateManager {
   // mock as needed
+  updated: boolean = false
+  reportSuccess: boolean = true
 
   editable (uri: string) {
-    if (uri === 'http://example.com/') {
-      return true
-    }
     if (uri === 'http://not.editable/') {
       return false
     }
-    console.error('please use only http://editable.com/ and http://not.editable/ as docs in test')
     return true
   }
 
@@ -87,7 +85,9 @@ export class UpdateManager {
     return Promise.resolve()
   }
 
-  update () {
+  update (_deletes, _inserts, onDone: (uri: string, ok: boolean, body: string) => void) {
+    this.updated = true
+    onDone('uri', this.reportSuccess, 'body')
     return Promise.resolve()
   }
 }

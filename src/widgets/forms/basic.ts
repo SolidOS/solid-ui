@@ -24,6 +24,7 @@ export function fieldLabel (dom: HTMLDocument, property: NamedNode | undefined, 
     return dom.createTextNode('@@Internal error: undefined property')
   }
   const anchor = dom.createElement('a')
+  /* istanbul ignore next */
   if (property.uri) anchor.setAttribute('href', property.uri)
   anchor.setAttribute('style', 'color: #3B5998; text-decoration: none;') // Not too blue and no underline
   anchor.textContent = lab
@@ -103,7 +104,7 @@ export function basicField (
   const uri = mostSpecificClassURI(form)
   let params = fieldParams[uri]
   if (params === undefined) params = {} // non-bottom field types can do this
-  const style = params.style || textInputStyle || 'font-size: 100%; margin: 0.1em; padding: 0.1em;'
+  const style = params.style || textInputStyle
   // box.appendChild(dom.createTextNode(' uri='+uri+', pattern='+ params.pattern))
   const field = dom.createElement('input')
   ;(field as any).style = textInputStyle // Do we have to override length etc?
@@ -129,6 +130,7 @@ export function basicField (
     field.value = decodeURIComponent(obj.uri.replace(params.uriPrefix, '')) // should have no spaces but in case
       .replace(/ /g, '')
   } else if (obj) {
+    /* istanbul ignore next */
     field.value = obj.value || obj.uri || ''
   }
   field.setAttribute('style', style)
@@ -178,7 +180,7 @@ export function basicField (
           result = new Literal(field.value)
         }
       }
-      let is = ds.map(st => st(st.subject, st.predicate, result, st.why)) // can include >1 doc
+      let is = ds.map(statement => st(statement.subject, statement.predicate, result, statement.why)) // can include >1 doc
       if (is.length === 0) {
         // or none
         is = [st(subject, property, result, doc as Node)]
@@ -190,8 +192,10 @@ export function basicField (
           if (!docs.includes(st.why.uri)) docs.push(st.why.uri)
         })
         ds.forEach(st => {
+          /* istanbul ignore next */
           if (!docs.includes(st.why.uri)) docs.push(st.why.uri)
         })
+        /* istanbul ignore next */
         if (docs.length === 0) {
           throw new Error('updateMany has no docs to patch')
         }
@@ -209,7 +213,6 @@ export function basicField (
           if (ok) {
             updateMany(ds2, is2, callback)
           } else {
-            console.log('Update many failed on: ' + doc)
             callback(uri, ok, body)
           }
         })
