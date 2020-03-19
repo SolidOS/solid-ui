@@ -1,33 +1,229 @@
 <!DOCTYPE HTML>
 <html lang="en">
-  <head>
-    <meta charset='UTF-8'>
-    <title>solid-ui UI.pad examples page</title>
-    <script type="text/javascript" src="../../lib/webpack-bundle.js"></script>
-    <script>
-      const $ = document.querySelector.bind(document)
+
+<head>
+  <meta charset='UTF-8'>
+  <title>solid-ui UI.pad examples page</title>
+  <script type="text/javascript" src="../../lib/webpack-bundle.js"></script>
+
+  <script>
+    function showData(functionName) {
+      const viewDataElement = document.querySelector(`#viewData-${functionName}`)
+      if (!viewDataElement) return
+      viewDataElement.innerHTML = document.querySelector(`#data-${functionName}`).innerText
+        .replace(/        /g, '')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+    }
+
+    function showSource(functionName) {
+      document.querySelector(`#viewSource-${functionName}`).innerHTML = document.querySelector(`#script-${functionName}`).innerText
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;')
+    }
+
+    function loadData(dataTag) {
+      UI.rdf.parse(dataTag.innerText, UI.store, location.origin, 'text/turtle', error => {
+        if (error) console.error(error)
+      })
+    }
+
+    Array.from(document.querySelectorAll('script[type="text/turtle"]')).forEach(dataTag => loadData(dataTag))
+
+    window.addEventListener('DOMContentLoaded', () => {
+      Array.from(document.querySelectorAll('article')).forEach(title => {
+        const section = title.id
+        showData(section)
+        showSource(section)
+      })
+    })
+  </script>
+</head>
+
+<body>
+
+  <h1>The Pad module</h1>
+
+  <p>
+    On this page you'll find some examples from the Pad module. See <a
+      href="https://solid.github.io/solid-ui/Documentation/api/modules/_tabs_.html#tabwidget">API
+      documentation</a> for more info about how to use the pad module.
+  </p>
+
+  <article id="notepad">
+    <h2>
+      <a href='#notepad'>
+        <code>notepad</code>: Creates a notepad
+      </a>
+    </h2>
+    <p>
+      In this first example we'll see how you can create a notepad. This method creates input fields
+      which allow you to provide a notepad component to your application.
+    </p>
+    <script id='script-notepad'>
+      window.addEventListener('DOMContentLoaded', async (event) => {
+        const pad = UI.rdf.namedNode('https://example-user.inrupt.net/public/example-notepad/index.ttl#this')
+        const me = new UI.rdf.NamedNode('https://example-user.inrupt.net/profile/card#me')
+        const subject = UI.store.sym('https://test.test#')
+        options = {}
+
+        const result = UI.pad.notepad(document, pad.doc(), subject, me, options)
+        document.querySelector('#div-notepad').appendChild(result)
+      })
     </script>
-  </head>
-  <body>
-    <h2>notepadToHTML</h2>
+    <pre id='viewSource-notepad'></pre>
+    <div id='div-notepad'></div>
+  </article>
+
+  <article id='manageParticipation'>
+
+    <h2>
+      <a href='#manageParticipation'>
+        <code>manageParticipation</code>: Creates the table to display the participants
+      </a>
+    </h2>
+    <p></p>
+    <script id='script-manageParticipation'>
+      window.addEventListener('DOMContentLoaded', (event) => {
+        const me = new UI.rdf.NamedNode('https://example-user.inrupt.net/profile/card#me')
+        const structure = document.createElement('div')
+        const container = document.createElement('div')
+        const subject = UI.store.sym('https://test.test#')
+        const pad = UI.rdf.namedNode('https://example-user.inrupt.net/public/example-notepad/index.ttl#this')
+        options = { statusArea: container }
+        // const result = UI.pad.manageParticipation(document, structure, pad.doc(), subject, me, options)
+        //  document.querySelector('#div-manageParticipation').appendChild(result)
+      })
+    </script>
+    <pre id='viewSource-manageParticipation'></pre>
+    <div id='div-manageParticipation'></div>
+  </article>
+
+  <article id="notepadToHTML">
+    <h2>
+      <a href="#notepadToHTML">
+        <code>notepadToHTML</code>: Converts a Turtle file to an HTML
+      </a>
+    </h2>
+    <p>
+      This method converts a pad.ttl document to HTML.
+    </p>
+
     <script id="script-notepadToHTML">
       window.addEventListener('DOMContentLoaded', async (event) => {
         const kb = UI.store
         const fetcher = UI.rdf.fetcher(kb)
-        const pad = kb.sym(
-          document.location.href.replace(/\/[^\/]*$/,"/pad.ttl#this")
-        )
+        // const pad = kb.sym(document.location.href.replace(/\/[^\/]*$/, "/pad.ttl#this"))
+        const pad = UI.rdf.namedNode('https://sharonstrats.inrupt.net/public/edu.mit.solid.pane.pad/id1584238219755/index.ttl#this')
         await fetcher.load(pad.doc())
         const htmlStr = UI.pad.notepadToHTML(pad, kb)
-        const doc = $('#iframe-notepadToHTML').contentWindow.document;
-        doc.open()
-        doc.write(htmlStr)
-        doc.close()
-        $('#div-notepadToHTML').appendChild(document.createTextNode(htmlStr))
+        document.querySelector('#div-notepadToHTML').appendChild(document.createTextNode(htmlStr))
       })
     </script>
-    <pre id="viewSource-notepadToHTML"></pre><script>$('#viewSource-notepadToHTML').innerHTML = $('#script-notepadToHTML').innerText</script>
-    <iframe id="iframe-notepadToHTML" src="about:blank"></iframe>
+    <pre id="viewSource-notepadToHTML"></pre>
     <div id="div-notepadToHTML"></div>
-  </body>
+  </article>
+
+  <article id="lightColorHash">
+    <h2>
+      <a href="#lightColorHash">
+        <code>lightColorHash</code> : Determines a color to be used for a participants notepad entry
+      </a>
+    </h2>
+    <p>This method returns a hex value for setting the color of the input box of the notepad.
+      It does this by hashing the uri passed in as an argument. Ideally this would be the uri of the person
+      logged in.
+    </p>
+    <script id="script-lightColorHash">
+      window.addEventListener('DOMContentLoaded', (event) => {
+        const colorStr = UI.pad.lightColorHash(new UI.rdf.NamedNode('https://sharonstrats.inrupt.net/profile/card#me'))
+        const inputBox = document.createElement('INPUT')
+        inputBox.setAttribute("type", "text")
+        inputBox.style.backgroundColor = colorStr
+        document.querySelector('#div-lightColorHash').appendChild(inputBox)
+
+      })
+    </script>
+    <pre id="viewSource-lightColorHash"></pre>
+    <div id="div-lightColorHash"></div>
+  </article>
+
+  <article id="renderPartipants">
+    <h2>
+      <a href="#renderPartipants">
+        <code>renderPartipants</code>: Creates a table of participants on a given notepad document
+
+      </a>
+    </h2>
+    <p>Creates the table with the list of participants that have contributed to
+      the given pad that is passed in. This gets called from manageParticipation,
+      but can be used on it's own as well. </p>
+    <script id="script-renderPartipants">
+      window.addEventListener('DOMContentLoaded', async (event) => {
+        const table = document.createElement('table');
+        const kb = UI.store
+        const fetcher = UI.rdf.fetcher(kb)
+        const pad = UI.rdf.namedNode('https://sharonstrats.inrupt.net/public/edu.mit.solid.pane.pad/id1584238219755/index.ttl#this')
+        await fetcher.load(pad.doc())
+        // subject = new NamedNode('test') // this i think the page where a list.. ns.ws('participants') are stored
+        subject = kb.sym('https://test.test#')
+        options = {} // what to put in options
+        //options are used in the button personTR there are the following properties can be defined deleteFunction, link, draggable
+        const tableOfParticipants = UI.pad.renderPartipants(document, table, pad, subject, new UI.rdf.NamedNode('https://sharonstrats.inrupt.net/profile/card#me'), options)
+        document.querySelector('#div-renderPartipants').appendChild(tableOfParticipants)
+      })
+    </script>
+    <pre id='viewSource-renderPartipants'></pre>
+    <div id='div-renderPartipants'></div>
+  </article>
+
+  <article id="participationObject">
+    <h2> <a href="#participationObject">
+        <code>participationObject</code>: Contains the subject, pad and URI for the participants
+      </a>
+    </h2>
+    <p></p>
+    <script id='script-participationObject'>
+      window.addEventListener('DOMContentLoaded', async (event) => {
+        const kb = UI.store
+        const subject = kb.sym('https://test.test#');
+        const fetcher = UI.rdf.fetcher(kb)
+        const pad = UI.rdf.namedNode('https://sharonstrats.inrupt.net/public/edu.mit.solid.pane.pad/id1584238219755/index.ttl#this')
+
+        await fetcher.load(pad.doc())
+        const me = new UI.rdf.NamedNode('https://sharonstrats.inrupt.net/profile/card#me')
+        const htmlStr = UI.pad.participationObject(subject, pad, me);
+        document.querySelector('#div-participationObject').appendChild(document.createTextNode(htmlStr))
+      })
+    </script>
+    <pre id="viewSource-participationObject"></pre>
+    <div id="div-participationObject"></div>
+  </article>
+
+  <article id="recordParticipation">
+    <h2> <a href="#recordParticipation">
+        <code>recordParticipation</code>: Adds the URI of the user to the participant store
+      </a></h2>
+    <p>Records the participants in the store for the given document and
+      returns the participation object. This is also used in manageParticipation,
+      but could also be used on it's own.</p>
+    <script id="script-recordParticipation">
+      window.addEventListener('DOMContentLoaded', async (event) => {
+        const kb = UI.store
+        const subject = kb.sym('https://test.test#');
+        const fetcher = UI.rdf.fetcher(kb)
+        const pad = UI.rdf.namedNode('https://example-user.inrupt.net/public/example-notepad/index.ttl#this')
+        await fetcher.load(pad.doc())
+        // const htmlStr = UI.pad.recordParticipation(subject, pad, false);
+      })
+    </script>
+    <pre id="viewSource-recordParticipation"></pre>
+    <div id="div-recordParticipation"></div>
+  </article>
+
+</body>
+
 </html>
