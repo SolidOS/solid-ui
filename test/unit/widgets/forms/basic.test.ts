@@ -57,9 +57,6 @@ describe('fieldLabel', () => {
     const expectedText = '@@Internal error: undefined property'
     expect((textNode as Text).wholeText).toEqual(expectedText)
   })
-  it.skip(' ...', () => {
-    // expect(fieldLabel('document', undefined, 'form').toBe())
-  })
 })
 
 describe('fieldStore', () => {
