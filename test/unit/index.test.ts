@@ -14,7 +14,6 @@ describe('Index', () => {
       'media',
       'messageArea',
       'infiniteMessageArea',
-      'pad',
       'preferences',
       'store',
       'style',
@@ -25,6 +24,8 @@ describe('Index', () => {
       'dom',
       'rdf',
       'log',
+      'pad',
+      'participation',
       'tabs'
     ])
   })

@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`notepad runs 1`] = `
+<table
+  style="padding: 1em; overflow: auto; resize: horizontal; min-width: 40em;"
+/>
+`;
+
+exports[`notepad status area ... 1`] = `
+<table
+  style="padding: 1em; overflow: auto; resize: horizontal; min-width: 40em;"
+/>
+`;
