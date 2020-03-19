@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`basicField runs 1`] = `
+<tr>
+  <td
+    class="formFieldName"
+    style="  vertical-align: middle;"
+  />
+  <td
+    class="formFieldValue"
+  />
+  Error: No property given for text field: &lt;http://example.com/#form&gt;
+</tr>
+`;
