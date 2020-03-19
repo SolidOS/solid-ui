@@ -95,23 +95,141 @@ describe('basicField', () => {
   it('exists', () => {
     expect(fieldStore).toBeInstanceOf(Function)
   })
-  it('runs', () => {
+  it('creates a basic field', () => {
+    const container = document.createElement('div')
+    const already = {}
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
+    const doc = namedNode('http://example.com/#doc')
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    store.add(form, ns.ui('property'), namedNode('http://example.com/#some-property'), namedNode('http://example.com/'))
+
+    const result = basicField(
+      document,
+      container,
+      already,
+      subject,
+      form,
+      doc,
+      callbackFunction
+    )
+    expect(result).toMatchSnapshot()
+  })
+  it('Can derive the doc if undefined', () => {
+    const container = document.createElement('div')
+    const already = {}
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
+    const doc = undefined
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    store.add(form, ns.ui('property'), namedNode('http://example.com/#some-property'), namedNode('http://example.com/'))
+    // Let it derive the correct doc from this:
+    store.add(subject, namedNode('http://example.com/#some-property'), namedNode('http://example.com/#o1'), namedNode('http://why1.com/'))
+
+    const result = basicField(
+      document,
+      container,
+      already,
+      subject,
+      form,
+      doc,
+      callbackFunction
+    )
+    // From the fact that it's picking up the 'http://example.com/#o1' object
+    // and that apparently it didn't error on line
+    // https://github.com/solid/solid-ui/blob/660ab45/src/widgets/forms/basic.ts#L135
+    // we can conclude that it successfully chose namedNode('http://why1.com/')
+    // as the value for `doc`.
+    expect((result.childNodes[1].childNodes[0] as HTMLInputElement).value).toEqual('http://example.com/#o1')
+  })
+
+  it('Sets the current value from rdflib', () => {
+    const container = document.createElement('div')
+    const already = {}
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
+    const property = namedNode('http://example.com/#some-property')
+    const doc = namedNode('http://example.com/')
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    store.add(form, ns.ui('property'), property, doc)
+    store.add(subject, property, 'current value', doc)
+
+    const result = basicField(
+      document,
+      container,
+      already,
+      subject,
+      form,
+      doc,
+      callbackFunction
+    )
+    expect((result.childNodes[1].childNodes[0] as HTMLInputElement).value).toEqual('current value')
+  })
+
+  it('Can read uriPrefix from fieldParams', () => {
+    const container = document.createElement('div')
+    const already = {}
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
+    const formType = namedNode('http://www.w3.org/ns/ui#PhoneField')
+    const property = namedNode('http://example.com/#some-property')
+    const doc = namedNode('http://example.com/')
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    store.add(form, ns.rdf('type'), formType, doc)
+    store.add(form, ns.ui('property'), property, doc)
+    store.add(subject, property, namedNode('tel:123412341234'), doc)
+
+    const result = basicField(
+      document,
+      container,
+      already,
+      subject,
+      form,
+      doc,
+      callbackFunction
+    )
+    expect((result.childNodes[1].childNodes[0] as HTMLInputElement).value).toEqual('123412341234')
+  })
+
+  it('Shows as readOnly if not editable', () => {
+    const container = document.createElement('div')
+    const already = {}
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
+    const property = namedNode('http://example.com/#some-property')
+    const doc = namedNode('http://not.editable/')
+    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    store.add(form, ns.ui('property'), property, doc)
+    store.add(subject, property, 'set in stone', doc)
+
+    const result = basicField(
+      document,
+      container,
+      already,
+      subject,
+      form,
+      doc,
+      callbackFunction
+    )
+    expect((result.childNodes[1].childNodes[0] as HTMLInputElement).readOnly).toEqual(true)
+  })
+
+  it('shows error if no property given', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
     const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
-    expect(
-      basicField(
-        document,
-        container,
-        already,
-        subject,
-        form,
-        store,
-        callbackFunction
-      )
-    ).toMatchSnapshot()
+    const result = basicField(
+      document,
+      container,
+      already,
+      subject,
+      form,
+      store,
+      callbackFunction
+    )
+    expect(result).toMatchSnapshot()
   })
 })

@@ -41,7 +41,7 @@ export function fieldLabel (dom: HTMLDocument, property: NamedNode | undefined, 
  *
  * @ignore exporting this only for unit tests
  */
-export function fieldStore (subject: Node, predicate: Node, def: Node): Node {
+export function fieldStore (subject: Node, predicate: Node, def: Node | undefined): Node | undefined {
   const sts = store.statementsMatching(subject, predicate)
   if (sts.length === 0) return def // can used default as no data yet
   if (
@@ -70,13 +70,14 @@ export function fieldStore (subject: Node, predicate: Node, def: Node): Node {
  *
  * @returns The HTML widget created
  */
+// eslint-disable-next-line complexity
 export function basicField (
   dom: HTMLDocument,
   container: HTMLElement | undefined,
   already,
   subject: Node,
   form: Node,
-  doc: Node,
+  doc: Node | undefined,
   callbackFunction: (ok: boolean, errorMessage: string) => void
 ): HTMLElement {
   const kb = store
@@ -131,7 +132,6 @@ export function basicField (
     field.value = obj.value || obj.uri || ''
   }
   field.setAttribute('style', style)
-
   if (!kb.updater.editable((doc as NamedNode).uri)) {
     field.readOnly = true // was: disabled. readOnly is better
     return box
@@ -181,7 +181,7 @@ export function basicField (
       let is = ds.map(st => st(st.subject, st.predicate, result, st.why)) // can include >1 doc
       if (is.length === 0) {
         // or none
-        is = [st(subject, property, result, doc)]
+        is = [st(subject, property, result, doc as Node)]
       }
 
       function updateMany (ds, is: { why: { uri: string } }[], callback) {

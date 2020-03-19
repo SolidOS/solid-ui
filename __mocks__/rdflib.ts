@@ -1,5 +1,7 @@
 // @@ TODO: Remove currently untyped methods as they are added
 
+import { IndexedFormula } from 'rdflib'
+
 export {
   BlankNode,
   Collection,
@@ -70,8 +72,15 @@ export class Fetcher {
 export class UpdateManager {
   // mock as needed
 
-  editable () {
-    return Promise.resolve()
+  editable (uri: string) {
+    if (uri === 'http://example.com/') {
+      return true
+    }
+    if (uri === 'http://not.editable/') {
+      return false
+    }
+    console.error('please use only http://editable.com/ and http://not.editable/ as docs in test')
+    return true
   }
 
   put () {

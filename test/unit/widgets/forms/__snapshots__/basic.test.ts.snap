@@ -1,6 +1,32 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`basicField runs 1`] = `
+exports[`basicField creates a basic field 1`] = `
+<tr>
+  <td
+    class="formFieldName"
+    style="  vertical-align: middle;"
+  >
+    <a
+      href="http://example.com/#some-property"
+      style="color: #3B5998; text-decoration: none;"
+    >
+      Some property
+    </a>
+  </td>
+  <td
+    class="formFieldValue"
+  >
+    <input
+      maxlength="4096"
+      size="20"
+      style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+      type="text"
+    />
+  </td>
+</tr>
+`;
+
+exports[`basicField shows error if no property given 1`] = `
 <tr>
   <td
     class="formFieldName"
