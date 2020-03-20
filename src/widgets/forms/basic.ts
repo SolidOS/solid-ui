@@ -15,7 +15,7 @@ import { fieldParams } from './fieldParams'
  * @param property href for the anchor element
  * @param fieldInQuestion field to produce a label for
  *
- * @ignore exporting this only for unit tests
+ * @internal exporting this only for unit tests
  */
 export function fieldLabel (dom: HTMLDocument, property: NamedNode | undefined, fieldInQuestion: Node): HTMLElement | Text {
   let lab = store.any(fieldInQuestion, ns.ui('label'))
@@ -40,7 +40,7 @@ export function fieldLabel (dom: HTMLDocument, property: NamedNode | undefined, 
  * @param predicate Predicate about which we want to find an editable RDF document
  * @param def default RDF document to return if none found
  *
- * @ignore exporting this only for unit tests
+ * @internal exporting this only for unit tests
  */
 export function fieldStore (subject: Node, predicate: Node, def: Node | undefined): Node | undefined {
   const sts = store.statementsMatching(subject, predicate)
