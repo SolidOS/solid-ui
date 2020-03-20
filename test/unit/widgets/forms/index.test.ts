@@ -7,8 +7,6 @@ import {
   buildCheckboxForm,
   editFormButton,
   field,
-  fieldLabel,
-  fieldStore,
   findClosest,
   formsFor,
   makeDescription,
@@ -22,6 +20,8 @@ import {
   sortByLabel,
   sortBySequence
 } from '../../../../src/widgets/forms'
+
+import { basicField } from '../../../../src/widgets/forms/basic'
 
 describe('field', () => {
   it('exists', () => {
@@ -150,338 +150,25 @@ describe('Multiple field', () => {
   })
 })
 
-describe('PhoneField', () => {
-  it('exists', () => {
-    expect(field[ns.ui('PhoneField').uri]).toBeInstanceOf(Object)
-  })
-  it('runs', () => {
-    const container = document.createElement('div')
-    const already = {}
-    const subject = namedNode('http://example.com/#this')
-    const form = namedNode('http://example.com/#form')
-    uiStore.add(form, ns.ui('property'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
-    const store = namedNode('http://example.com/#store')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
-    expect(
-      field[ns.ui('PhoneField').uri](
-        document,
-        container,
-        already,
-        subject,
-        form,
-        store,
-        callbackFunction
-      )
-    ).toMatchSnapshot()
-  })
-})
-
-describe('EmailField', () => {
-  it('exists', () => {
-    expect(field[ns.ui('EmailField').uri]).toBeInstanceOf(Object)
-  })
-  it('runs', () => {
-    const container = document.createElement('div')
-    const already = {}
-    const subject = namedNode('http://example.com/#this')
-    const form = namedNode('http://example.com/#form')
-    const store = namedNode('http://example.com/#store')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
-    expect(
-      field[ns.ui('EmailField').uri](
-        document,
-        container,
-        already,
-        subject,
-        form,
-        store,
-        callbackFunction
-      )
-    ).toMatchSnapshot()
-  })
-})
-
-describe('ColorField', () => {
-  it('exists', () => {
-    expect(field[ns.ui('ColorField').uri]).toBeInstanceOf(Object)
-  })
-  it('runs', () => {
-    const container = document.createElement('div')
-    const already = {}
-    const subject = namedNode('http://example.com/#this')
-    const form = namedNode('http://example.com/#form')
-    const store = namedNode('http://example.com/#store')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
-    expect(
-      field[ns.ui('ColorField').uri](
-        document,
-        container,
-        already,
-        subject,
-        form,
-        store,
-        callbackFunction
-      )
-    ).toMatchSnapshot()
-  })
-})
-
-describe('DateField', () => {
-  it('exists', () => {
-    expect(field[ns.ui('DateField').uri]).toBeInstanceOf(Object)
-  })
-  it('runs', () => {
-    const container = document.createElement('div')
-    const already = {}
-    const subject = namedNode('http://example.com/#this')
-    const form = namedNode('http://example.com/#form')
-    const store = namedNode('http://example.com/#store')
-    const callbackFunction = () => {}
-    expect(
-      field[ns.ui('DateField').uri](
-        document,
-        container,
-        already,
-        subject,
-        form,
-        store,
-        callbackFunction
-      )
-    ).toMatchSnapshot()
-  })
-})
-
-describe('DateTimeField', () => {
-  it('exists', () => {
-    expect(field[ns.ui('DateTimeField').uri]).toBeInstanceOf(Object)
-  })
-  it('runs', () => {
-    const container = document.createElement('div')
-    const already = {}
-    const subject = namedNode('http://example.com/#this')
-    const form = namedNode('http://example.com/#form')
-    const store = namedNode('http://example.com/#store')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
-    expect(
-      field[ns.ui('DateTimeField').uri](
-        document,
-        container,
-        already,
-        subject,
-        form,
-        store,
-        callbackFunction
-      )
-    ).toMatchSnapshot()
-  })
-})
-
-describe('TimeField', () => {
-  it('exists', () => {
-    expect(field[ns.ui('TimeField').uri]).toBeInstanceOf(Object)
-  })
-  it('runs', () => {
-    const container = document.createElement('div')
-    const already = {}
-    const subject = namedNode('http://example.com/#this')
-    const form = namedNode('http://example.com/#form')
-    const store = namedNode('http://example.com/#store')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
-    expect(
-      field[ns.ui('TimeField').uri](
-        document,
-        container,
-        already,
-        subject,
-        form,
-        store,
-        callbackFunction
-      )
-    ).toMatchSnapshot()
-  })
-})
-
-describe('NumericField', () => {
-  it('exists', () => {
-    expect(field[ns.ui('NumericField').uri]).toBeInstanceOf(Object)
-  })
-  it('runs', () => {
-    const container = document.createElement('div')
-    const already = {}
-    const subject = namedNode('http://example.com/#this')
-    const form = namedNode('http://example.com/#form')
-    const store = namedNode('http://example.com/#store')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
-    expect(
-      field[ns.ui('NumericField').uri](
-        document,
-        container,
-        already,
-        subject,
-        form,
-        store,
-        callbackFunction
-      )
-    ).toMatchSnapshot()
-  })
-})
-
-describe('IntegerField', () => {
-  it('exists', () => {
-    expect(field[ns.ui('IntegerField').uri]).toBeInstanceOf(Object)
-  })
-  it('runs', () => {
-    const container = document.createElement('div')
-    const already = {}
-    const subject = namedNode('http://example.com/#this')
-    const form = namedNode('http://example.com/#form')
-    const store = namedNode('http://example.com/#store')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
-    expect(
-      field[ns.ui('IntegerField').uri](
-        document,
-        container,
-        already,
-        subject,
-        form,
-        store,
-        callbackFunction
-      )
-    ).toMatchSnapshot()
-  })
-})
-
-describe('DecimalField', () => {
-  it('exists', () => {
-    expect(field[ns.ui('DecimalField').uri]).toBeInstanceOf(Object)
-  })
-  it('runs', () => {
-    const container = document.createElement('div')
-    const already = {}
-    const subject = namedNode('http://example.com/#this')
-    const form = namedNode('http://example.com/#form')
-    const store = namedNode('http://example.com/#store')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
-    expect(
-      field[ns.ui('DecimalField').uri](
-        document,
-        container,
-        already,
-        subject,
-        form,
-        store,
-        callbackFunction
-      )
-    ).toMatchSnapshot()
-  })
-})
-
-describe('FloatField]', () => {
-  it('exists', () => {
-    expect(field[ns.ui('FloatField').uri]).toBeInstanceOf(Object)
-  })
-  it('runs', () => {
-    const container = document.createElement('div')
-    const already = {}
-    const subject = namedNode('http://example.com/#this')
-    const form = namedNode('http://example.com/#form')
-    const store = namedNode('http://example.com/#store')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
-    expect(
-      field[ns.ui('FloatField').uri](
-        document,
-        container,
-        already,
-        subject,
-        form,
-        store,
-        callbackFunction
-      )
-    ).toMatchSnapshot()
-  })
-})
-
-describe('TextField', () => {
-  it('exists', () => {
-    expect(field[ns.ui('TextField').uri]).toBeInstanceOf(Object)
-  })
-  it('runs', () => {
-    const container = document.createElement('div')
-    const already = {}
-    const subject = namedNode('http://example.com/#this')
-    const form = namedNode('http://example.com/#form')
-    const store = namedNode('http://example.com/#store')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
-    uiStore.add(form, ns.rdf('type'), namedNode('http://example.com/#type'), namedNode('http://example.com/'))
-    uiStore.add(form, ns.ui('property'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
-
-    expect(
-      field[ns.ui('TextField').uri](
-        document,
-        container,
-        already,
-        subject,
-        form,
-        store,
-        callbackFunction
-      )
-    ).toMatchSnapshot()
-  })
-})
-
-describe('SingleLineTextField', () => {
-  it('exists', () => {
-    expect(field[ns.ui('SingleLineTextField').uri]).toBeInstanceOf(Object)
-  })
-  it('runs', () => {
-    const container = document.createElement('div')
-    const already = {}
-    const subject = namedNode('http://example.com/#this')
-    const form = namedNode('http://example.com/#form')
-    const store = namedNode('http://example.com/#store')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
-    uiStore.add(form, ns.rdf('type'), namedNode('http://example.com/#type'), namedNode('http://example.com/'))
-    uiStore.add(form, ns.ui('property'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
-
-    expect(
-      field[ns.ui('SingleLineTextField').uri](
-        document,
-        container,
-        already,
-        subject,
-        form,
-        store,
-        callbackFunction
-      )
-    ).toMatchSnapshot()
-  })
-})
-
-describe('NamedNodeURIField', () => {
-  it('exists', () => {
-    expect(field[ns.ui('NamedNodeURIField').uri]).toBeInstanceOf(Object)
-  })
-  it('runs', () => {
-    const container = document.createElement('div')
-    const already = {}
-    const subject = namedNode('http://example.com/#this')
-    const form = namedNode('http://example.com/#form')
-    const store = namedNode('http://example.com/#store')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
-    uiStore.add(form, ns.rdf('type'), namedNode('http://example.com/#type'), namedNode('http://example.com/'))
-    uiStore.add(form, ns.ui('property'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
-
-    expect(
-      field[ns.ui('NamedNodeURIField').uri](
-        document,
-        container,
-        already,
-        subject,
-        form,
-        store,
-        callbackFunction
-      )
-    ).toMatchSnapshot()
+;[
+  'PhoneField',
+  'EmailField',
+  'ColorField',
+  'DateField',
+  'DateTimeField',
+  'TimeField',
+  'NumericField',
+  'IntegerField',
+  'DecimalField',
+  'FloatField',
+  'TextField',
+  'SingleLineTextField',
+  'NamedNodeURIField'
+].forEach((fieldName: string) => {
+  describe(fieldName, () => {
+    it('is a basic field', () => {
+      expect(field[ns.ui(fieldName).uri]).toEqual(basicField)
+    })
   })
 })
 
@@ -874,37 +561,6 @@ describe('buildCheckboxForm', () => {
         false
       )
     ).toBeInstanceOf(HTMLDivElement)
-  })
-})
-
-describe('fieldLabel', () => {
-  it('exists', () => {
-    expect(fieldLabel).toBeInstanceOf(Object)
-  })
-  it('runs', () => {
-    expect(fieldLabel(document, namedNode('http://example.com/#this'), null)).toBeInstanceOf(
-      HTMLAnchorElement
-    )
-  })
-  it.skip(' ...', () => {
-    expect(fieldLabel('document', undefined, 'form').toBe())
-  })
-})
-
-describe('fieldStore', () => {
-  it('exists', () => {
-    expect(fieldStore).toBeInstanceOf(Object)
-  })
-  it('runs', () => {
-    expect(fieldStore(null, null, null)).toEqual({
-      termType: 'NamedNode',
-      value: 'http://example.com/'
-    })
-  })
-  it('returns def when there is no matching statement', () => {
-    const statementMatching = jest.fn()
-    statementMatching.mockReturnValueOnce(null)
-    expect(fieldStore('subject', 'predicate', 'def')).toBe('def')
   })
 })
 
