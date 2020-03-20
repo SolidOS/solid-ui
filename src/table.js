@@ -13,7 +13,7 @@
 // 2014 Core table widget moved into common/table.js - timbl
 //
 
-import { debug } from './debug'
+import * as debug from './debug'
 
 var UI = {
   icons: require('./iconBase'),

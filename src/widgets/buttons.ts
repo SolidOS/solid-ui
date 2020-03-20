@@ -3,7 +3,7 @@ import { iconBase, originalIconBase } from '../iconBase'
 import store from '../store'
 import ns from '../ns'
 import style from '../style'
-import { debug } from '../debug'
+import * as debug from '../debug'
 import { info } from '../log'
 
 /**

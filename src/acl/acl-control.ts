@@ -13,7 +13,7 @@ import { DataBrowserContext } from 'pane-registry'
 import { AccessController } from './access-controller'
 import { getClasses } from '../jss'
 import { styles } from './styles'
-import { debug } from '../debug'
+import * as debug from '../debug'
 
 /**
  * See https://coshx.com/preventing-drag-and-drop-disasters-with-a-chrome-userscript

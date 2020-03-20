@@ -13,7 +13,7 @@
 // (Especially latest taken ones)
 //
 /* global alert */
-import { debug } from './debug'
+import * as debug from './debug'
 
 /** @module mediaCapture */
 

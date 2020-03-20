@@ -10,7 +10,7 @@ import ns from '../ns'
 import kb from '../store.js'
 import utils from '../utils'
 import { AgentMapMap, ComboList } from './types'
-import { debug } from '../debug'
+import * as debug from '../debug'
 
 /**
  * Take the "default" ACL and convert it into the equivlent ACL

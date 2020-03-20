@@ -4,7 +4,7 @@
  */
 
 /* global alert */
-import { debug } from '../debug'
+import * as debug from '../debug'
 
 const $rdf = require('rdflib')
 const DateFolder = require('./dateFolder')

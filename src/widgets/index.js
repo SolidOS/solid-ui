@@ -10,7 +10,7 @@
  *  http://stackoverflow.com/questions/6756407/what-contenteditable-editors
  */
 
-import { debug } from '../debug'
+import * as debug from '../debug'
 
 // var aclModule = require('./acl.js')
 

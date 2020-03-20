@@ -1,6 +1,6 @@
 /* Drag and drop common functionality
  */
-import { debug } from '../debug'
+import * as debug from '../debug'
 
 const mime = require('mime-types')
 

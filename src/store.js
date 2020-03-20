@@ -1,7 +1,7 @@
 // This module of solid-ui has a main quadstore for the app to use
 //
 
-import { debug } from './debug'
+import * as debug from './debug'
 
 var rdf = require('rdflib')
 var store = (module.exports = rdf.graph()) // Make a Quad store

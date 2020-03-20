@@ -2,7 +2,7 @@
  *
  */
 /* global confirm */
-import { debug } from './debug'
+import * as debug from './debug'
 
 const UI = {
   icons: require('./iconBase'),

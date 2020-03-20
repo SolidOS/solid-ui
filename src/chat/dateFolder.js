@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-import { debug } from '../debug'
+import * as debug from '../debug'
 
 const kb = require('../store.js')
 const ns = require('../ns.js')

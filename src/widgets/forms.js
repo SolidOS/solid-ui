@@ -7,7 +7,7 @@
 
 import { fieldParams } from './forms/fieldParams'
 import { field, mostSpecificClassURI, fieldFunction } from './forms/fieldFunction'
-import { debug } from '../debug'
+import * as debug from '../debug'
 import { basicField } from './forms/basic'
 
 module.exports = {}

@@ -5,7 +5,7 @@
 /** @module UI.pad
  */
 
-import { debug } from './debug'
+import * as debug from './debug'
 
 const $rdf = require('rdflib')
 var padModule = (module.exports = {})

@@ -29,7 +29,7 @@ import utils from '../utils.js'
 import { alert } from '../log'
 import { AppDetails, AuthenticationContext } from './types'
 import { PaneDefinition } from 'pane-registry'
-import { debug } from '../debug'
+import * as debug from '../debug'
 
 export { solidAuthClient }
 

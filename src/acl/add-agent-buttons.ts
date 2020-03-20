@@ -11,7 +11,7 @@ import { logInLoadProfile } from '../authn/authn'
 import utils from '../utils'
 import { NamedNode } from 'rdflib'
 import { AuthenticationContext } from '../authn/types'
-import { debug } from '../debug'
+import * as debug from '../debug'
 
 /**
  * Renders the Sharing pane's "+" button and the menus behind it,

@@ -5,7 +5,7 @@
 
 /* global alert confirm */
 
-import { debug } from '../debug'
+import * as debug from '../debug'
 
 const UI = {
   authn: require('../authn/authn'),

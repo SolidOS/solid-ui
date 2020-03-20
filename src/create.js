@@ -7,7 +7,7 @@
 
 // const UI = require('solid-ui')
 
-import { debug } from './debug'
+import * as debug from './debug'
 
 const UI = {
   authn: require('./authn/authn'),

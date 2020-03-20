@@ -9,7 +9,7 @@ import { AccessGroups } from './access-groups'
 import { DataBrowserContext } from 'pane-registry'
 import { shortNameForFolder } from './acl-control'
 import utils from '../utils.js'
-import { debug } from '../debug'
+import * as debug from '../debug'
 
 /**
  * Rendered HTML component used in the databrowser's Sharing pane.

@@ -11,7 +11,7 @@ import ns from '../ns'
 import { AccessController } from './access-controller'
 import { AgentMapMap, ComboList, PartialAgentTriple } from './types'
 import { AddAgentButtons } from './add-agent-buttons'
-import { debug } from '../debug'
+import * as debug from '../debug'
 
 const ACL = ns.acl
 

@@ -1,7 +1,7 @@
 /* global $SolidTestEnvironment */
 // Works in FF extension - what about browserify??
 
-import { debug } from './debug'
+import * as debug from './debug'
 
 if (module.scriptURI) {
   // FF extension

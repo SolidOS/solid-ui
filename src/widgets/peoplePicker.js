@@ -12,7 +12,7 @@
 import escape from 'escape-html'
 import uuid from 'node-uuid'
 import * as rdf from 'rdflib'
-import { debug } from '../debug'
+import * as debug from '../debug'
 
 // const webClient = require('solid-web-client')(rdf)
 

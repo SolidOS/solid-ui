@@ -3,7 +3,7 @@
 //                  ==============================
 //
 
-import { debug } from './debug'
+import * as debug from './debug'
 
 const kb = require('./store')
 const ns = require('./ns')
