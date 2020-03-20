@@ -7,6 +7,8 @@
 
 // const UI = require('solid-ui')
 
+import { debug } from './debug'
+
 const UI = {
   authn: require('./authn/authn'),
   icons: require('./iconBase'),
@@ -94,7 +96,7 @@ function newThingUI (createContext, dataBrowserContext, thePanes) {
               // get div, dom, me, folder, pane, refreshTable
               newPaneOptions[opt] = options[opt]
             }
-            console.log(
+            debug.log(
               'newThingUI: Minting new ' +
                 newPaneOptions.pane.name +
                 ' at ' +
@@ -111,7 +113,7 @@ function newThingUI (createContext, dataBrowserContext, thePanes) {
                     newPaneOptions.folder.uri.length
                   )
                   const isPackage = tail.includes('/')
-                  console.log('  new thing is packge? ' + isPackage)
+                  debug.log('  new thing is packge? ' + isPackage)
                   if (isPackage) {
                     kb.add(
                       newPaneOptions.folder,

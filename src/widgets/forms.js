@@ -7,6 +7,7 @@
 
 import { fieldParams } from './forms/fieldParams'
 import { field, mostSpecificClassURI, fieldFunction } from './forms/fieldFunction'
+import { debug } from '../debug'
 import { basicField } from './forms/basic'
 
 module.exports = {}
@@ -262,7 +263,7 @@ forms.field[ns.ui('Multiple').uri] = function (
       } catch (err) {
         const msg = 'Error adding to unordered multiple: ' + err
         box.appendChild(error.errorMessageBlock(dom, msg))
-        console.error(msg)
+        debug.error(msg)
       }
       refresh() // 20191213
     }
@@ -275,7 +276,7 @@ forms.field[ns.ui('Multiple').uri] = function (
   function renderItem (object) {
     async function deleteThisItem () {
       if (ordered) {
-        console.log('pre delete: ' + debugString(list.elements))
+        debug.log('pre delete: ' + debugString(list.elements))
         for (let i = 0; i < list.elements.length; i++) {
           if (list.elements[i].sameTerm(object)) {
             list.elements.splice(i, 1)
@@ -309,7 +310,7 @@ forms.field[ns.ui('Multiple').uri] = function (
      */
     async function moveThisItem (event, upwards) {
       // @@ possibly, allow shift+click to do move to top or bottom?
-      console.log('pre move: ' + debugString(list.elements))
+      debug.log('pre move: ' + debugString(list.elements))
       for (var i = 0; i < list.elements.length; i++) {
         // Find object in array
         if (list.elements[i].sameTerm(object)) {
@@ -341,9 +342,9 @@ forms.field[ns.ui('Multiple').uri] = function (
     * this callback happens to avoid widow links
      */
     function itemDone (uri, ok, message) {
-      console.log(`Item ${uri} done callback for item ${object.uri.slice(-7)}`)
+      debug.log(`Item ${uri} done callback for item ${object.uri.slice(-7)}`)
       if (!ok) { // when does this happen? errors typically deal with upstream
-        console.error('  Item done callback: Error: ' + message)
+        debug.error('  Item done callback: Error: ' + message)
       } else {
         linkDone(uri, ok, message)
       }
@@ -488,7 +489,7 @@ forms.field[ns.ui('Multiple').uri] = function (
   }
 
   async function saveListThenRefresh () {
-    console.log('save list: ' + debugString(list.elements)) // 20191214
+    debug.log('save list: ' + debugString(list.elements)) // 20191214
 
     createListIfNecessary()
     try {
@@ -520,7 +521,7 @@ forms.field[ns.ui('Multiple').uri] = function (
     var extra = min - values.length
     if (extra > 0) {
       for (var j = 0; j < extra; j++) {
-        console.log('Adding extra: min ' + min)
+        debug.log('Adding extra: min ' + min)
         await addItem() // Add blanks if less than minimum
       }
       await saveListThenRefresh()
@@ -530,8 +531,8 @@ forms.field[ns.ui('Multiple').uri] = function (
     // }
   }
   asyncStuff().then(
-    () => { console.log(' Multiple render: async stuff ok') },
-    (err) => { console.error(' Multiple render: async stuff fails. #### ', err) }
+    () => { debug.log(' Multiple render: async stuff ok') },
+    (err) => { debug.error(' Multiple render: async stuff fails. #### ', err) }
   ) // async
 
   return box
@@ -1295,7 +1296,7 @@ forms.makeSelectForOptions = function (
 
   for (var i = 0; i < possible.length; i++) {
     var sub = possible[i] // @@ Maybe; make this so it works with blank nodes too
-    if (!sub.uri) console.warn(`makeSelectForOptions: option does not have an uri: ${sub}, with predicate: ${predicate}`)
+    if (!sub.uri) debug.warn(`makeSelectForOptions: option does not have an uri: ${sub}, with predicate: ${predicate}`)
     if (!sub.uri || sub.uri in uris) continue
     uris[sub.uri] = true
     n++
@@ -1678,8 +1679,8 @@ function buildCheckboxForm (dom, kb, lab, del, ins, form, store, tristate) {
 
     var toInsert =
       input.newState === true ? ins : input.newState === false ? del : []
-    console.log(`  Deleting  ${toDelete}`)
-    console.log(`  Inserting ${toInsert}`)
+    debug.log(`  Deleting  ${toDelete}`)
+    debug.log(`  Inserting ${toInsert}`)
     UI.store.updater.update(toDelete, toInsert, function (
       uri,
       success,
@@ -1694,7 +1695,7 @@ function buildCheckboxForm (dom, kb, lab, del, ins, form, store, tristate) {
             toDelete.why
           )
           if (hmmm) {
-            console.log(' @@@@@ weird if 409 - does hold statement')
+            debug.log(' @@@@@ weird if 409 - does hold statement')
           }
         }
         tx.style = 'color: #black; background-color: #fee;'

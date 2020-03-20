@@ -4,6 +4,8 @@
  */
 
 /* global alert */
+import { debug } from '../debug'
+
 const $rdf = require('rdflib')
 const DateFolder = require('./dateFolder')
 
@@ -37,7 +39,7 @@ async function createIfNotExists (doc, contentType = 'text/turtle', data = '') {
     var response = await fetcher.load(doc)
   } catch (err) {
     if (err.response.status === 404) {
-      console.log(
+      debug.log(
         'createIfNotExists: doc does NOT exist, will create... ' + doc
       )
       try {
@@ -46,27 +48,27 @@ async function createIfNotExists (doc, contentType = 'text/turtle', data = '') {
           contentType
         })
       } catch (err) {
-        console.log('createIfNotExists doc FAILED: ' + doc + ': ' + err)
+        debug.log('createIfNotExists doc FAILED: ' + doc + ': ' + err)
         throw err
       }
       delete fetcher.requested[doc.uri] // delete cached 404 error
-      // console.log('createIfNotExists doc created ok ' + doc)
+      // debug.log('createIfNotExists doc created ok ' + doc)
       return response
     } else {
-      console.log(
+      debug.log(
         'createIfNotExists doc load error NOT 404:  ' + doc + ': ' + err
       )
       throw err
     }
   }
-  // console.log('createIfNotExists: doc exists, all good: ' + doc)
+  // debug.log('createIfNotExists: doc exists, all good: ' + doc)
   return response
 }
 
 function desktopNotification (str) {
   // Let's check if the browser supports notifications
   if (!('Notification' in window)) {
-    console.warn('This browser does not support desktop notification')
+    debug.warn('This browser does not support desktop notification')
   } else if (Notification.permission === 'granted') {
     // Let's check whether notification permissions have already been granted
     // eslint-disable-next-line no-new
@@ -133,7 +135,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       if (err.response.status === 404) {
         return false
       } else {
-        console.log('documentExists: doc load error NOT 404:  ' + doc + ': ' + err)
+        debug.log('documentExists: doc load error NOT 404:  ' + doc + ': ' + err)
         throw err
       }
     }
@@ -210,7 +212,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
         (kb.fetcher.requested[chatDocument.uri] === undefined ||
           kb.fetcher.requested[chatDocument.uri] === 404)
       ) {
-        console.log(
+        debug.log(
           '@@@ SERVER_MKDIRP_BUG: Should only happen once: create chat file: ' +
           chatDocument
         )
@@ -334,7 +336,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       turnOnInput()
       Object.assign(context, userContext)
       bookmarks.findBookmarkDocument(context).then(context => {
-        console.log('Bookmark file: ' + context.bookmarkDocument)
+        debug.log('Bookmark file: ' + context.bookmarkDocument)
       })
     })
 
@@ -411,7 +413,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     let date = extremity.messageTable.date // day in mssecs
 
     date = await dateFolder.loadPrevious(date, backwards) // backwards
-    console.log(
+    debug.log(
       `insertPreviousMessages: from ${
         backwards ? 'backwards' : 'forwards'
       } loadPrevious: ${date}`
@@ -460,7 +462,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
    ** @returns DOM element generates
    */
   async function createMessageTable (date, live) {
-    console.log('   createMessageTable for  ' + date)
+    debug.log('   createMessageTable for  ' + date)
     const chatDocument = dateFolder.leafDocumentFromDate(date)
     try {
       await kb.fetcher.load(chatDocument)
@@ -468,11 +470,11 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       const messageTable = dom.createElement('table')
       const statusTR = messageTable.appendChild(dom.createElement('tr')) // ### find status in exception
       if (err.response && err.response.status && err.response.status === 404) {
-        console.log('Error 404 for chat file ' + chatDocument)
+        debug.log('Error 404 for chat file ' + chatDocument)
         return renderMessageTable(date, live) // no mssage file is fine.. will be craeted later
         // statusTR.appendChild(UI.widgets.errorMessageBlock(dom, 'no message file', 'white'))
       } else {
-        console.log('*** Error NON 404 for chat file ' + chatDocument)
+        debug.log('*** Error NON 404 for chat file ' + chatDocument)
         statusTR.appendChild(UI.widgets.errorMessageBlock(dom, err, 'pink'))
       }
       return statusTR
@@ -719,7 +721,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     const tables = div.children
     for (let i = 0; i < tables.length; i++) {
       n += tables[i].children.length - 1
-      // console.log('    table length:' + tables[i].children.length)
+      // debug.log('    table length:' + tables[i].children.length)
     }
     return n
   }
@@ -783,7 +785,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       earliest.messageTable.extendBackwards
     ) {
       const scrollBottom = div.scrollHeight - div.scrollTop
-      console.log('infinite scroll: adding above: top ' + div.scrollTop)
+      debug.log('infinite scroll: adding above: top ' + div.scrollTop)
       done = await earliest.messageTable.extendBackwards()
       if (freeze) {
         div.scrollTop = div.scrollHeight - scrollBottom
@@ -799,7 +801,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       latest.messageTable.extendForwards
     ) {
       const scrollTop = div.scrollTop
-      console.log(
+      debug.log(
         'infinite scroll: adding below: bottom: ' +
         (div.scrollHeight - div.scrollTop - div.clientHeight)
       )
