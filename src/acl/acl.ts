@@ -9,7 +9,7 @@ import * as $rdf from 'rdflib'
 import ns from '../ns'
 import kb from '../store.js'
 import utils from '../utils'
-import { AgentMapMap, ComboList } from './types'
+import { AgentMapMap, AgentMapUnion, ComboList } from './types'
 import * as debug from '../debug'
 
 /**
@@ -22,49 +22,38 @@ export function adoptACLDefault (
   doc: $rdf.NamedNode,
   aclDoc: $rdf.NamedNode,
   defaultResource: $rdf.NamedNode,
-  defaultACLdoc: $rdf.NamedNode
+  defaultACLDoc: $rdf.NamedNode
 ): $rdf.IndexedFormula {
   const ACL = ns.acl
   const isContainer = doc.uri.slice(-1) === '/' // Give default for all directories
-  const defaults = kb
-    .each(undefined, ACL('default'), defaultResource, defaultACLdoc)
-    .concat(
-      kb.each(undefined, ACL('defaultForNew'), defaultResource, defaultACLdoc)
-    )
-  let proposed: Array<$rdf.Statement> = []
-  defaults.map(function (da) {
-    proposed = proposed
-      .concat(kb.statementsMatching(da, ACL('agent'), undefined, defaultACLdoc))
-      .concat(kb.statementsMatching(da, ACL('agentClass'), undefined, defaultACLdoc))
-      .concat(kb.statementsMatching(da, ACL('agentGroup'), undefined, defaultACLdoc))
-      .concat(kb.statementsMatching(da, ACL('origin'), undefined, defaultACLdoc))
-      .concat(kb.statementsMatching(da, ACL('originClass'), undefined, defaultACLdoc))
-      .concat(kb.statementsMatching(da, ACL('mode'), undefined, defaultACLdoc))
-    proposed.push($rdf.st(da, ACL('accessTo'), doc, defaultACLdoc)) // Suppose
-    if (isContainer) {
-      // By default, make this apply to folder contents too
-      proposed.push($rdf.st(da, ACL('default'), doc, defaultACLdoc))
-    }
-  })
-  const kb2 = $rdf.graph() // Potential - derived is kept apart
-  proposed.map(function (st) {
-    const move = function (sym) {
-      const y = defaultACLdoc.uri.length // The default ACL file
-      return $rdf.sym(
-        sym.uri.slice(0, y) === defaultACLdoc.uri
-          ? aclDoc.uri + sym.uri.slice(y)
-          : sym.uri
-      )
-    }
-    kb2.add(
-      move(st.subject),
-      move(st.predicate),
-      move(st.object),
-      $rdf.sym(aclDoc.uri)
-    )
-  })
 
+  const defaults = kb
+    .each(undefined, ACL('default'), defaultResource, defaultACLDoc)
+    .concat(kb.each(undefined, ACL('defaultForNew'), defaultResource, defaultACLDoc))
+
+  const proposed = defaults.reduce((accumulatedStatements, da) => accumulatedStatements
+    .concat(kb.statementsMatching(da, ns.rdf('type'), ACL('Authorization'), defaultACLDoc))
+    .concat(kb.statementsMatching(da, ACL('agent'), undefined, defaultACLDoc))
+    .concat(kb.statementsMatching(da, ACL('agentClass'), undefined, defaultACLDoc))
+    .concat(kb.statementsMatching(da, ACL('agentGroup'), undefined, defaultACLDoc))
+    .concat(kb.statementsMatching(da, ACL('origin'), undefined, defaultACLDoc))
+    .concat(kb.statementsMatching(da, ACL('originClass'), undefined, defaultACLDoc))
+    .concat(kb.statementsMatching(da, ACL('mode'), undefined, defaultACLDoc))
+    .concat($rdf.st(da, ACL('accessTo'), doc, defaultACLDoc))
+    .concat(isContainer ? $rdf.st(da, ACL('default'), doc, defaultACLDoc) : []), [])
+
+  const kb2 = $rdf.graph() // Potential - derived is kept apart
+  proposed.forEach(st => kb2.add(move(st.subject), move(st.predicate), move(st.object), $rdf.sym(aclDoc.uri)))
   return kb2
+
+  function move (sym) {
+    const y = defaultACLDoc.uri.length // The default ACL file
+    return $rdf.sym(
+      sym.uri.slice(0, y) === defaultACLDoc.uri
+        ? aclDoc.uri + sym.uri.slice(y)
+        : sym.uri
+    )
+  }
 }
 
 /**
@@ -73,14 +62,14 @@ export function adoptACLDefault (
  * Accumulate the access rights which each agent or class has
  */
 export function readACL (
-  x: $rdf.NamedNode,
+  doc: $rdf.NamedNode,
   aclDoc: $rdf.NamedNode,
   kb2: $rdf.IndexedFormula = kb,
-  getDefaults?: boolean
+  getDefaults: boolean = false
 ): AgentMapMap {
   const auths: Array<$rdf.NamedNode> = getDefaults
     ? getDefaultsFallback(kb2, ns)
-    : kb2.each(undefined, ns.acl('accessTo'), x)
+    : kb2.each(undefined, ns.acl('accessTo'), doc)
 
   const ACL = ns.acl
   const ac = {
@@ -104,15 +93,15 @@ export function readACL (
 
   function getDefaultsFallback (kb, ns) {
     return kb
-      .each(undefined, ns.acl('default'), x)
-      .concat(kb.each(undefined, ns.acl('defaultForNew'), x))
+      .each(undefined, ns.acl('default'), doc)
+      .concat(kb.each(undefined, ns.acl('defaultForNew'), doc))
   }
 }
 
 /**
  * Compare two ACLs
  */
-export function sameACL (a: AgentMapMap, b: AgentMapMap): boolean {
+export function sameACL (a: AgentMapMap | AgentMapUnion, b: AgentMapMap | AgentMapUnion): boolean {
   const contains = function (a, b) {
     for (const pred in {
       agent: true,
@@ -139,8 +128,8 @@ export function sameACL (a: AgentMapMap, b: AgentMapMap): boolean {
 /**
  * Union N ACLs
  */
-export function ACLunion (list: Array<AgentMapMap>): AgentMapMap {
-  const b = list[0]
+export function ACLunion (list: Array<AgentMapMap>): AgentMapUnion {
+  const b = JSON.parse(JSON.stringify(list[0])) // in order to not mutate the original object
   let a, ag
   for (let k = 1; k < list.length; k++) {
     ;['agent', 'agentClass', 'agentGroup', 'origin', 'originClass'].map(
@@ -163,7 +152,7 @@ export function ACLunion (list: Array<AgentMapMap>): AgentMapMap {
 /**
  * Merge ACLs lists from things to form union
  */
-export function loadUnionACL (subjectList: Array<$rdf.NamedNode>, callbackFunction: Function): void {
+export function loadUnionACL (subjectList: Array<$rdf.NamedNode>, callbackFunction: loadUnionACLCallback): void {
   const aclList: Array<AgentMapMap> = []
   const doList = function (list) {
     if (list.length) {
@@ -192,13 +181,15 @@ export function loadUnionACL (subjectList: Array<$rdf.NamedNode>, callbackFuncti
   doList(subjectList)
 }
 
+type loadUnionACLCallback = (ok: boolean, message?: string | $rdf.NamedNode | AgentMapUnion | AgentMapMap) => void
+
 /**
  * Represents these as an RDF graph by combination of modes
  *
  * Each agent can only be in one place in this model, one combination of modes.
  * Combos are like full control, read append, read only etc.
  */
-export function ACLbyCombination (ac: AgentMapMap): ComboList {
+export function ACLbyCombination (ac: AgentMapMap | AgentMapUnion): ComboList {
   const byCombo = {}
   ;['agent', 'agentClass', 'agentGroup', 'origin', 'originClass'].map(function (pred) {
     for (const agent in ac[pred]) {
@@ -313,9 +304,9 @@ export function makeACLString (x: $rdf.NamedNode, ac: AgentMapMap, aclDoc: $rdf.
 export function putACLObject (
   kb: $rdf.IndexedFormula,
   x: $rdf.NamedNode,
-  ac: AgentMapMap,
+  ac: AgentMapMap | AgentMapUnion,
   aclDoc: $rdf.NamedNode,
-  callbackFunction
+  callbackFunction: (ok: boolean, message?: string) => void
 ): void {
   const byCombo = ACLbyCombination(ac)
   return putACLbyCombo(kb, x, byCombo, aclDoc, callbackFunction)
@@ -358,7 +349,7 @@ export function putACLbyCombo (
  *
  * All group files must be loaded first
  */
-export function fixIndividualCardACL (person: $rdf.NamedNode, log: Function, callbackFunction: Function): void {
+export function fixIndividualCardACL (person: $rdf.NamedNode, log: Function, callbackFunction: fixIndividualCardACL): void {
   const groups = kb.each(undefined, ns.vcard('hasMember'), person)
   // const doc = person.doc()
   if (groups) {
@@ -370,10 +361,12 @@ export function fixIndividualCardACL (person: $rdf.NamedNode, log: Function, cal
   // @@ if no groups, then use default for People container or the book top container.?
 }
 
+type fixIndividualCardACL = (ok: boolean, message?: string | $rdf.NamedNode | AgentMapUnion | AgentMapMap) => void
+
 /**
  * This function is used by [[fixIndividualCardACL]]
  */
-export function fixIndividualACL (item: $rdf.NamedNode, subjects: Array<$rdf.NamedNode>, log: Function, callbackFunction: Function): void {
+export function fixIndividualACL (item: $rdf.NamedNode, subjects: Array<$rdf.NamedNode>, log: Function, callbackFunction: fixIndividualACLCallback): void {
   log = log || debug.log
   const doc = item.doc()
   getACLorDefault(doc, function (
@@ -390,7 +383,7 @@ export function fixIndividualACL (item: $rdf.NamedNode, subjects: Array<$rdf.Nam
       : readACL(defaultHolder, defaultACLDoc)
     loadUnionACL(subjects, function (ok, union) {
       if (!ok) return callbackFunction(false, union)
-      if (sameACL(union, ac)) {
+      if (sameACL(union as AgentMapMap | AgentMapUnion, ac)) {
         log('Nice - same ACL. no change ' + utils.label(item) + ' ' + doc)
       } else {
         log('Group ACLs differ for ' + utils.label(item) + ' ' + doc)
@@ -402,7 +395,7 @@ export function fixIndividualACL (item: $rdf.NamedNode, subjects: Array<$rdf.Nam
         putACLObject(
           kb,
           targetDoc as $rdf.NamedNode,
-          union,
+          union as AgentMapMap | AgentMapUnion,
           targetACLDoc as $rdf.NamedNode,
           callbackFunction
         )
@@ -410,6 +403,8 @@ export function fixIndividualACL (item: $rdf.NamedNode, subjects: Array<$rdf.Nam
     })
   })
 }
+
+type fixIndividualACLCallback = (ok: boolean, message?: string | $rdf.NamedNode | AgentMapUnion | AgentMapMap) => void
 
 /**
  * Set an ACL
