@@ -151,7 +151,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
     const next = kb.any(chunk, PAD('next'))
     if (prev.sameTerm(subject) && next.sameTerm(subject)) {
       // Last one
-      console.log("You can't delete the only line.")
+      debug.log("You can't delete the only line.")
       return
     }
 
@@ -194,8 +194,8 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
           // updater.requestDownstreamAction(padDoc, reloadAndSync)
         }, 1000)
       } else {
-        console.log('    removePart FAILED ' + chunk + ': ' + errorMessage)
-        console.log("    removePart was deleteing :'" + del)
+        debug.log('    removePart FAILED ' + chunk + ': ' + errorMessage)
+        debug.log("    removePart was deleteing :'" + del)
         setPartStyle(part, 'color: black;  background-color: #fdd;') // failed
         const res = response ? response.status : ' [no response field] '
         complain('Error ' + res + ' saving changes: ' + errorMessage.true) // upstream,
@@ -212,7 +212,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
     const ins = st(chunk, PAD('indent'), newIndent, padDoc)
     updater.update(del, ins, function (uri, ok, errorBody) {
       if (!ok) {
-        console.log(
+        debug.log(
           "Indent change FAILED '" +
           newIndent +
           "' for " +
@@ -273,16 +273,16 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
           queue[queueProperty] = queue[queueProperty] || 0
           queue[queueProperty] += 1
           if (queue[queueProperty] > 1) {
-            console.log('    queueing newline queue = ' + queue[queueProperty])
+            debug.log('    queueing newline queue = ' + queue[queueProperty])
             return
           }
-          console.log('    go ahead line before ' + queue[queueProperty])
+          debug.log('    go ahead line before ' + queue[queueProperty])
           newChunk(part, before) // was document.activeElement
           break
         }
         case 8: // Delete
           if (part.value.length === 0) {
-            console.log(
+            debug.log(
               'Delete key line ' + chunk.uri.slice(-4) + ' state ' + part.state
             )
 
@@ -313,7 +313,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
           break
         }
         case 27: // ESC
-          console.log('escape')
+          debug.log('escape')
           updater.requestDownstreamAction(padDoc, reloadAndSync)
           event.preventDefault()
           break
@@ -375,7 +375,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
       updater.update(del, ins, function (uri, ok, errorBody, xhr) {
         if (!ok) {
           // alert("clash " + errorBody);
-          console.log(
+          debug.log(
             '    patch FAILED ' +
             xhr.status +
             " for '" +
@@ -406,7 +406,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
         } else {
           clearStatus(true) // upstream
           setPartStyle(part) // synced
-          console.log("    Patch ok '" + old + "' -> '" + newOne + "' ")
+          debug.log("    Patch ok '" + old + "' -> '" + newOne + "' ")
 
           if (part.state === 4) {
             //  delete me
@@ -426,9 +426,9 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
     }
 
     part.addEventListener('input', function inputChangeListener (_event) {
-      // console.log("input changed "+part.value);
+      // debug.log("input changed "+part.value);
       setPartStyle(part, undefined, true) // grey out - not synced
-      console.log(
+      debug.log(
         'Input event state ' + part.state + " value '" + part.value + "'"
       )
       switch (part.state) {
@@ -474,7 +474,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
       addListeners(part, chunk)
     } else {
       setPartStyle(part, 'color: #222; background-color: #fff')
-      console.log("Note can't add listeners - not logged in")
+      debug.log("Note can't add listeners - not logged in")
     }
     return part
   }
@@ -490,7 +490,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
 
     if (ele) {
       if (ele.tagName.toLowerCase() !== 'input') {
-        console.log('return pressed when current document is: ' + ele.tagName)
+        debug.log('return pressed when current document is: ' + ele.tagName)
       }
       here = ele.subject
       indent = kb.any(here, PAD('indent'))
@@ -528,17 +528,17 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
       ins.push(st(chunk, PAD('indent'), indent, padDoc))
     }
 
-    console.log('    Fresh chunk ' + label + ' proposed')
+    debug.log('    Fresh chunk ' + label + ' proposed')
     updater.update(del, ins, function (uri, ok, errorBody, _xhr) {
       if (!ok) {
         // alert("Error writing new line " + label + ": " + errorBody);
-        console.log('    ERROR writing new line ' + label + ': ' + errorBody)
+        debug.log('    ERROR writing new line ' + label + ': ' + errorBody)
       } else {
         const newPart = newPartAfter(tr1, chunk, before)
         setPartStyle(newPart)
         newPart.focus() // Note this is delayed
         if (queueProperty) {
-          console.log(
+          debug.log(
             '    Fresh chunk ' +
             label +
             ' updated, queue = ' +
@@ -546,7 +546,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
           )
           queue[queueProperty] -= 1
           if (queue[queueProperty] > 0) {
-            console.log(
+            debug.log(
               '    Implementing queued newlines = ' + next.newLinesBefore
             )
             newChunk(newPart, before)
@@ -712,7 +712,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
 
   const reloadAndSync = function () {
     if (reloading) {
-      console.log('   Already reloading - stop')
+      debug.log('   Already reloading - stop')
       return // once only needed
     }
     reloading = true
@@ -751,10 +751,10 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
   table.refresh = sync // Catch downward propagating refresh events
   table.reloadAndSync = reloadAndSync
 
-  if (!me) console.log('Warning: must be logged in for pad to be edited')
+  if (!me) debug.log('Warning: must be logged in for pad to be edited')
 
   if (exists) {
-    console.log('Existing pad.')
+    debug.log('Existing pad.')
     if (consistencyCheck()) {
       sync()
       if (kb.holds(subject, PAD('next'), subject)) {
@@ -762,7 +762,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
         newChunk() // require at least one line
       }
     } else {
-      console.log((table.textContent = 'Inconsistent data. Abort'))
+      debug.log((table.textContent = 'Inconsistent data. Abort'))
     }
   } else {
     // Make new pad
@@ -778,7 +778,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
       if (!ok) {
         complain(errorBody)
       } else {
-        console.log('Initial pad created')
+        debug.log('Initial pad created')
         newChunk() // Add a first chunck
         // getResults();
       }

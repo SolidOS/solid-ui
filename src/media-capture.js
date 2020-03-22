@@ -13,6 +13,7 @@
 // (Especially latest taken ones)
 //
 /* global alert */
+import * as debug from './debug'
 
 /** @module mediaCapture */
 
@@ -135,7 +136,7 @@ module.exports.cameraCaptureControl = function cameraCaptureControl (
 
     canvas.toBlob(blob => {
       const msg = `got blob type ${blob.type} size ${blob.size}`
-      console.log(msg)
+      debug.log(msg)
       destination = getImageDoc()
       imageBlob = blob // save for review
       reviewImage()
@@ -157,7 +158,7 @@ module.exports.cameraCaptureControl = function cameraCaptureControl (
   function saveBlob (blob, destination) {
     const contentType = blob.type
     // if (!confirm('Save picture to ' + destination + ' ?')) return
-    console.log(
+    debug.log(
       'Putting ' + blob.size + ' bytes of ' + contentType + ' to ' + destination
     )
     store.fetcher
@@ -167,7 +168,7 @@ module.exports.cameraCaptureControl = function cameraCaptureControl (
       })
       .then(
         _resp => {
-          console.log('ok saved ' + destination)
+          debug.log('ok saved ' + destination)
           stopVideo()
           doneCallback(destination)
         },
