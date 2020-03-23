@@ -33,41 +33,6 @@
   <pre id="viewSource-templateTitle"></pre><script>showSource('templateTitle')</script>
   <div id="div-templateTitle"></div> -->
 
-  <h2 id="mostSpecificClassURI"><a href="#mostSpecificClassURI">mostSpecificClassURI</a></h2>
-  <script id="script-mostSpecificClassURI">
-    window.addEventListener('DOMContentLoaded', async (event) => {
-      const fullNameField = UI.rdf.namedNode('https://timbl.com/timbl/Public/Test/Forms/individualForm.ttl#fullNameField')
-      await UI.store.fetcher.load(fullNameField.doc())
-      const result = UI.widgets.mostSpecificClassURI(fullNameField)
-      document.getElementById('div-mostSpecificClassURI').appendChild(document.createTextNode(result))
-    })
-  </script>
-  <pre id="viewSource-mostSpecificClassURI"></pre><script>showSource('mostSpecificClassURI')</script>
-  <div id="div-mostSpecificClassURI"></div>
-
-  <h2 id="fieldFunction"><a href="#fieldFunction">fieldFunction</a></h2>
-  <script id="script-fieldFunction">
-    window.addEventListener('DOMContentLoaded', async (event) => {
-      const dom = document
-      const container = document.getElementById('div-fieldFunction')
-      const already = {}
-      const subject = UI.rdf.namedNode('https://michielbdejong.inrupt.net/profile/card#me')
-      const form = UI.rdf.namedNode('https://timbl.com/timbl/Public/Test/Forms/individualForm.ttl#form1')
-      const doc = subject.doc()
-      const callbackFunction = () => {
-        console.log('callback fieldFunction called!')
-      }
-      await UI.store.fetcher.load(subject.doc())
-      const fullNameField = UI.rdf.namedNode('https://timbl.com/timbl/Public/Test/Forms/individualForm.ttl#fullNameField')
-      await UI.store.fetcher.load(fullNameField.doc())
-      const fieldFunction = UI.widgets.fieldFunction(dom, fullNameField)
-      const result = fieldFunction(dom, container, already, subject, fullNameField, doc)
-      document.getElementById('div-fieldFunction').appendChild(result)
-    })
-  </script>
-  <pre id="viewSource-fieldFunction"></pre><script>showSource('fieldFunction')</script>
-  <div id="div-fieldFunction"></div>
-
   <h2 id="appendFormTrivial"><a href="#appendFormTrivial">appendForm, trivial / Comment Field</a></h2>
   <p>This example shows a trivial use of the `appendForm` function, in conjunction with a Comment field.</p>
   <script id="script-appendFormTrivial">
@@ -109,6 +74,55 @@
   </script>
   <pre id="viewSource-appendFormLive"></pre><script>showSource('appendFormLive')</script>
   <div id="div-appendFormLive"></div>
+
+  <h2 id="basicField"><a href="#basicField">basic fields</a></h2>
+  <script id="script-basicField">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const container = document.getElementById('div-basicField')
+      const already = {}
+      const subject = UI.rdf.namedNode('http://example.com/#this')
+      const form = UI.rdf.namedNode('http://example.com/#form')
+      const doc = UI.rdf.namedNode('http://example.com/')
+      const callbackFunction = (ok, errorMessage) => {
+        console.log(ok, errorMessage, document.getElementById('div-basicField').innerHTML);
+      }
+      UI.store.add(form, UI.ns.ui('property'), UI.rdf.namedNode('http://example.com/#some-property'), doc)
+
+      // FIXME: https://github.com/solid/solid-ui/issues/239
+      document.outlineManager = {
+        appendPropertyTRs: () => {}
+      }
+      ;[
+        'PhoneField',
+        'EmailField',
+        'ColorField',
+        'DateField',
+        'DateTimeField',
+        'TimeField',
+        'NumericField',
+        'IntegerField',
+        'DecimalField',
+        'FloatField',
+        'TextField',
+        'SingleLineTextField',
+        'NamedNodeURIField'
+      ].forEach((fieldName) => {
+        UI.widgets.field[UI.ns.ui(fieldName).uri](
+          document,
+          container,
+          already,
+          subject,
+          form,
+          doc,
+          callbackFunction
+        );
+      })
+    });
+  </script>
+  <pre id="viewSource-basicField"></pre><script>showSource('basicField')</script>
+  <div id="div-basicField"></div>
+
+
 
   <h2 id="formField"><a href="#formField">UI.widgets.field[UI.ns.ui('Form').uri] / UI.widgets.field[UI.ns.ui('Group').uri], no already</a></h2>
   <script id="script-formField">
