@@ -23,8 +23,13 @@ describe('makeDropTarget', () => {
     const element = document.createElement('textarea')
     const handler = () => { }
     makeDropTarget(element, handler, handler)
+<<<<<<< HEAD
     const event = new DragEvent('dragover') // this doesn't work because this doesn't work I can't get the dataTransfer property and therefore can't test
     console.log(event)
+=======
+    const event = document.createEvent('HTMLEvents')
+    // debug.log(event)
+>>>>>>> master
     event.initEvent('dragover', true, true)
     // event.dataTransfer = () => {}
     // element.dispatchEvent(event)
