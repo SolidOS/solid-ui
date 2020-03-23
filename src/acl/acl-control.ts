@@ -13,7 +13,7 @@ import { DataBrowserContext } from 'pane-registry'
 import { AccessController } from './access-controller'
 import { getClasses } from '../jss'
 import { styles } from './styles'
-import * as debug from '../debug'
+import { log, warn } from '../debug'
 
 let global: Window = window
 const preventBrowserDropEventsDone = Symbol('prevent double triggering of drop event')
@@ -31,7 +31,7 @@ const preventBrowserDropEventsDone = Symbol('prevent double triggering of drop e
  * @returns void
  */
 export function preventBrowserDropEvents (document: HTMLDocument): void {
-  console.log('preventBrowserDropEvents called.')
+  log('preventBrowserDropEvents called.')
   if (typeof global !== 'undefined') {
     if (global[preventBrowserDropEventsDone]) return
     global[preventBrowserDropEventsDone] = true
@@ -56,7 +56,7 @@ export function handleDrop (e) {
     ) {
       e.stopPropagation()
       e.preventDefault()
-      console.log('@@@@ document-level DROP suppressed: ' + e.dataTransfer.dropEffect
+      log('@@@@ document-level DROP suppressed: ' + e.dataTransfer.dropEffect
       )
     }
   }
@@ -181,7 +181,7 @@ async function loadController (
         return resolve(getController(prospectiveDefaultHolder))
       } catch (error) {
         // No need to show this error in status, but good to warn about it in console
-        debug.warn(error)
+        warn(error)
       }
     }
     return resolve(getController())
