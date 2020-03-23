@@ -9,7 +9,6 @@ describe('fieldParams', () => {
 
 describe('ColorField params', () => {
   it('exists', () => {
-    console.log(fieldParams[ns.ui('ColorField').uri])
     expect(fieldParams[ns.ui('ColorField').uri]).toBeTruthy()
   })
 })

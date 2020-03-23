@@ -34,12 +34,8 @@ export function commentField (
 
   const uri = mostSpecificClassURI(form)
   let params = fieldParams[uri]
-  console.log(uri, params, Object.keys(fieldParams))
   if (params === undefined) {
-    console.log('no params!')
     params = {}
-  } else {
-    console.log('yes params!')
   } // non-bottom field types can do this
 
   const box = dom.createElement('div')

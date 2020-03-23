@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import * as api from '../../src/index'
 import * as log from '../../src/log'
 import { JSDOM } from 'jsdom'
