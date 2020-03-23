@@ -5,6 +5,7 @@ import ns from './ns'
 import { personTR, newThing, errorMessageBlock } from './widgets'
 import { syncTableToArray } from './utils'
 import { lightColorHash } from './pad'
+import { log } from './debug'
 
 type ParticipationOptions = {
   deleteFunction?: () => {}
@@ -57,7 +58,7 @@ export function renderPartipants (dom: HTMLDocument, table: ParticipationTableEl
 
   const syncTable = function () {
     const parps = kb.each(subject, ns.wf('participation')).map(function (parp) {
-      console.log('in participants')
+      log('in participants')
       return [kb.anyValue(parp, ns.cal('dtstart')) || '9999-12-31', parp]
     })
     parps.sort() // List in order of joining

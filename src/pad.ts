@@ -9,6 +9,7 @@ import ns from './ns'
 import { Namespace, NamedNode, st } from 'rdflib'
 import { newThing, errorMessageBlock } from './widgets'
 import { beep } from './utils'
+import { log } from './debug'
 export { renderPartipants, participationObject, manageParticipation, recordParticipation } from './participation'
 
 const PAD = Namespace('http://www.w3.org/ns/pim/pad#')
@@ -94,7 +95,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
   *
   */
   const complain = function (message: string, upstream: boolean = false) {
-    console.log(message)
+    log(message)
     if ((options as notepadOptions).statusArea) {
       ; (upstream ? upstreamStatus as HTMLElement : downstreamStatus as HTMLElement).appendChild(errorMessageBlock(dom, message, 'pink'))
     }
@@ -151,7 +152,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
     const next = kb.any(chunk, PAD('next'))
     if (prev.sameTerm(subject) && next.sameTerm(subject)) {
       // Last one
-      debug.log("You can't delete the only line.")
+      log("You can't delete the only line.")
       return
     }
 
@@ -165,7 +166,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
     if (chunk instanceof NamedNode) {
       const label = chunk.uri.slice(-4)
 
-      console.log('Deleting line ' + label)
+      log('Deleting line ' + label)
     }
 
     // @@ TODO below you can see that before is redefined and not a boolean
@@ -194,8 +195,8 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
           // updater.requestDownstreamAction(padDoc, reloadAndSync)
         }, 1000)
       } else {
-        debug.log('    removePart FAILED ' + chunk + ': ' + errorMessage)
-        debug.log("    removePart was deleteing :'" + del)
+        log('    removePart FAILED ' + chunk + ': ' + errorMessage)
+        log("    removePart was deleteing :'" + del)
         setPartStyle(part, 'color: black;  background-color: #fdd;') // failed
         const res = response ? response.status : ' [no response field] '
         complain('Error ' + res + ' saving changes: ' + errorMessage.true) // upstream,
@@ -212,7 +213,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
     const ins = st(chunk, PAD('indent'), newIndent, padDoc)
     updater.update(del, ins, function (uri, ok, errorBody) {
       if (!ok) {
-        debug.log(
+        log(
           "Indent change FAILED '" +
           newIndent +
           "' for " +
@@ -262,7 +263,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
         case 13: // Return
         {
           const before: NotepadElement = event.shiftKey
-          console.log('enter') // Shift-return inserts before -- only way to add to top of pad.
+          log('enter') // Shift-return inserts before -- only way to add to top of pad.
           if (before) {
             queue = kb.any(undefined, PAD('next'), chunk)
             queueProperty = 'newlinesAfter'
@@ -273,16 +274,16 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
           queue[queueProperty] = queue[queueProperty] || 0
           queue[queueProperty] += 1
           if (queue[queueProperty] > 1) {
-            debug.log('    queueing newline queue = ' + queue[queueProperty])
+            log('    queueing newline queue = ' + queue[queueProperty])
             return
           }
-          debug.log('    go ahead line before ' + queue[queueProperty])
+          log('    go ahead line before ' + queue[queueProperty])
           newChunk(part, before) // was document.activeElement
           break
         }
         case 8: // Delete
           if (part.value.length === 0) {
-            debug.log(
+            log(
               'Delete key line ' + chunk.uri.slice(-4) + ' state ' + part.state
             )
 
@@ -313,7 +314,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
           break
         }
         case 27: // ESC
-          debug.log('escape')
+          log('escape')
           updater.requestDownstreamAction(padDoc, reloadAndSync)
           event.preventDefault()
           break
@@ -375,7 +376,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
       updater.update(del, ins, function (uri, ok, errorBody, xhr) {
         if (!ok) {
           // alert("clash " + errorBody);
-          debug.log(
+          log(
             '    patch FAILED ' +
             xhr.status +
             " for '" +
@@ -406,7 +407,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
         } else {
           clearStatus(true) // upstream
           setPartStyle(part) // synced
-          debug.log("    Patch ok '" + old + "' -> '" + newOne + "' ")
+          log("    Patch ok '" + old + "' -> '" + newOne + "' ")
 
           if (part.state === 4) {
             //  delete me
@@ -428,7 +429,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
     part.addEventListener('input', function inputChangeListener (_event) {
       // debug.log("input changed "+part.value);
       setPartStyle(part, undefined, true) // grey out - not synced
-      debug.log(
+      log(
         'Input event state ' + part.state + " value '" + part.value + "'"
       )
       switch (part.state) {
@@ -474,7 +475,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
       addListeners(part, chunk)
     } else {
       setPartStyle(part, 'color: #222; background-color: #fff')
-      debug.log("Note can't add listeners - not logged in")
+      log("Note can't add listeners - not logged in")
     }
     return part
   }
@@ -490,7 +491,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
 
     if (ele) {
       if (ele.tagName.toLowerCase() !== 'input') {
-        debug.log('return pressed when current document is: ' + ele.tagName)
+        log('return pressed when current document is: ' + ele.tagName)
       }
       here = ele.subject
       indent = kb.any(here, PAD('indent'))
@@ -528,17 +529,17 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
       ins.push(st(chunk, PAD('indent'), indent, padDoc))
     }
 
-    debug.log('    Fresh chunk ' + label + ' proposed')
+    log('    Fresh chunk ' + label + ' proposed')
     updater.update(del, ins, function (uri, ok, errorBody, _xhr) {
       if (!ok) {
         // alert("Error writing new line " + label + ": " + errorBody);
-        debug.log('    ERROR writing new line ' + label + ': ' + errorBody)
+        log('    ERROR writing new line ' + label + ': ' + errorBody)
       } else {
         const newPart = newPartAfter(tr1, chunk, before)
         setPartStyle(newPart)
         newPart.focus() // Note this is delayed
         if (queueProperty) {
-          debug.log(
+          log(
             '    Fresh chunk ' +
             label +
             ' updated, queue = ' +
@@ -546,7 +547,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
           )
           queue[queueProperty] -= 1
           if (queue[queueProperty] > 0) {
-            debug.log(
+            log(
               '    Implementing queued newlines = ' + next.newLinesBefore
             )
             newChunk(newPart, before)
@@ -625,7 +626,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
       const msg =
         'Pad: Inconsistent data - NEXT pointers: ' +
         kb.each(subject, PAD('next')).length
-      console.log(msg)
+      log(msg)
       if ((options as notepadOptions).statusArea) {
         ((options as notepadOptions).statusArea as HTMLElement).textContent += msg
       }
@@ -701,7 +702,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
   let reloading = false
 
   const checkAndSync = function () {
-    console.log('    reloaded OK')
+    log('    reloaded OK')
     clearStatus()
     if (!consistencyCheck()) {
       complain('CONSITENCY CHECK FAILED')
@@ -712,13 +713,13 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
 
   const reloadAndSync = function () {
     if (reloading) {
-      debug.log('   Already reloading - stop')
+      log('   Already reloading - stop')
       return // once only needed
     }
     reloading = true
     let retryTimeout = 1000 // ms
     const tryReload = function () {
-      console.log('try reload - timeout = ' + retryTimeout)
+      log('try reload - timeout = ' + retryTimeout)
       updater.reload(updater.store, padDoc, function (ok, message, xhr) {
         reloading = false
         if (ok) {
@@ -751,10 +752,10 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
   table.refresh = sync // Catch downward propagating refresh events
   table.reloadAndSync = reloadAndSync
 
-  if (!me) debug.log('Warning: must be logged in for pad to be edited')
+  if (!me) log('Warning: must be logged in for pad to be edited')
 
   if (exists) {
-    debug.log('Existing pad.')
+    log('Existing pad.')
     if (consistencyCheck()) {
       sync()
       if (kb.holds(subject, PAD('next'), subject)) {
@@ -762,11 +763,11 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
         newChunk() // require at least one line
       }
     } else {
-      debug.log((table.textContent = 'Inconsistent data. Abort'))
+      log((table.textContent = 'Inconsistent data. Abort'))
     }
   } else {
     // Make new pad
-    console.log('No pad exists - making new one.')
+    log('No pad exists - making new one.')
     const insertables = [
       st(subject, ns.rdf('type'), PAD('Notepad'), padDoc),
       st(subject, ns.dc('author'), me, padDoc),
@@ -778,7 +779,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
       if (!ok) {
         complain(errorBody)
       } else {
-        debug.log('Initial pad created')
+        log('Initial pad created')
         newChunk() // Add a first chunck
         // getResults();
       }

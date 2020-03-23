@@ -1,6 +1,7 @@
 import { JSDOM } from 'jsdom'
 import * as RdfLib from 'rdflib'
 import { lightColorHash, notepad } from '../../src/pad'
+import { log } from '../../src/debug'
 
 // jest.mock('rdflib')
 // jest.mock('solid-auth-client')
@@ -47,7 +48,7 @@ describe('notepad', () => {
       ; (window as any).console = { log: jest.fn() }
     expect(notepad(dom, padDoc, subject, me, options))
       .toMatchSnapshot()
-    expect(console.log).toBeCalledWith(
+    expect(log).toBeCalledWith(
       'Warning: must be logged in for pad to be edited'
     )
   })
