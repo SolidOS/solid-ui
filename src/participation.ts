@@ -23,7 +23,7 @@ const kb = store
 *  @param {Document} dom - the web page loaded into the browser
 *  @param {HTMLTableElement} table - the table element
 *  @param {NamedNode} unused1/document - the document to render (this argument is no longer used, but left in for backwards compatibility)
-*  @param {NamedNode} subject
+*  @param {NamedNode} subject - the thing in which the participation is happening
 *  @param {NamedNode} unused2/me - user that is logged into the pod (this argument is no longer used, but left in for backwards compatibility)
 *  @param {ParticipationOptions} options - the options that can be passed in are deleteFunction, link, and draggable these are used by the personTR button
 */
