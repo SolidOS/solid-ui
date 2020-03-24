@@ -1,3 +1,4 @@
+import { silenceDebugMessages } from '../setup'
 import {
   textInputStyle,
   buttonStyle,
@@ -14,6 +15,7 @@ import {
   multilineTextInputStyle
 } from '../../src/style'
 
+silenceDebugMessages()
 jest.mock('solid-auth-client')
 
 describe('textInputStyle', () => {

@@ -1,9 +1,11 @@
+import { silenceDebugMessages } from '../../setup'
 import { AccessGroups } from '../../../src/acl/access-groups'
 import { IndexedFormula, graph } from 'rdflib'
 import { instantiateAccessGroups } from '../helpers/instantiateAccessGroups'
 import { JSDOM } from 'jsdom'
 import store from '../../../src/store'
 
+silenceDebugMessages()
 jest.mock('solid-auth-client')
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 

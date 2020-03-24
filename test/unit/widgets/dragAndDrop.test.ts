@@ -1,5 +1,5 @@
+import { silenceDebugMessages } from '../../setup'
 import { JSDOM } from 'jsdom'
-
 import {
   makeDropTarget,
   makeDraggable,
@@ -7,6 +7,7 @@ import {
 } from '../../../src/widgets/dragAndDrop'
 import { fetcher } from 'rdflib'
 
+silenceDebugMessages()
 jest.mock('solid-auth-client')
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 const element = dom.createElement('div')
@@ -24,7 +25,7 @@ describe('makeDropTarget', () => {
     const handler = () => {}
     makeDropTarget(element, handler, handler)
     const event = document.createEvent('HTMLEvents')
-    console.log(event)
+    // debug.log(event)
     event.initEvent('dragover', true, true)
     // event.dataTransfer = () => {}
     // element.dispatchEvent(event)

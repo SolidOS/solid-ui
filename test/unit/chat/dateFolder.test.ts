@@ -1,6 +1,8 @@
+import { silenceDebugMessages } from '../../setup'
 import DateFolder from '../../../src/chat/dateFolder'
 import { sym } from 'rdflib'
 
+silenceDebugMessages()
 jest.mock('solid-auth-client')
 
 describe('DateFolder', () => {

@@ -1,14 +1,16 @@
+import { silenceDebugMessages } from '../setup'
 import { JSDOM } from 'jsdom'
 import Preferences from '../../src/preferences'
 import { sym } from 'rdflib'
 
+silenceDebugMessages()
 jest.mock('solid-auth-client')
 const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
 const dom = window.document
 
 describe('Preferences', () => {
-  it('exists', () => {
-    expect(Preferences).toBeInstanceOf(Object)
+  it.skip('exists', () => {
+    expect(Preferences).toBeInstanceOf(Function)
   })
 })
 
@@ -56,7 +58,9 @@ describe('Preferences.recordSharedPreferences', () => {
     expect(Preferences.recordSharedPreferences).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(Preferences.recordSharedPreferences()).toBeTruthy()
+    const subject = null
+    const context = null
+    expect(Preferences.recordSharedPreferences(subject, context)).toBeTruthy()
   })
 })
 
@@ -65,6 +69,10 @@ describe('Preferences.getPreferencesForClass', () => {
     expect(Preferences.getPreferencesForClass).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(Preferences.getPreferencesForClass()).toBeTruthy()
+    const subject = null
+    const theClass = null
+    const predicates = null
+    const context = null
+    expect(Preferences.getPreferencesForClass(subject, theClass, predicates, context)).toBeTruthy()
   })
 })

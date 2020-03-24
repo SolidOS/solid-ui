@@ -1,6 +1,8 @@
+import { silenceDebugMessages } from '../setup'
 import { JSDOM } from 'jsdom'
 import { newThingUI } from '../../src/create'
 
+silenceDebugMessages()
 jest.mock('solid-auth-client')
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 const div = dom.createElement('div')

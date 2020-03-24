@@ -1,3 +1,4 @@
+import { silenceDebugMessages } from '../../setup'
 import { DataBrowserContext } from 'pane-registry'
 import { sym, graph, namedNode } from 'rdflib'
 import { JSDOM } from 'jsdom'
@@ -7,6 +8,7 @@ import {
   shortNameForFolder
 } from '../../../src/acl/acl-control'
 
+silenceDebugMessages()
 jest.mock('solid-auth-client')
 const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
 const dom = window.document

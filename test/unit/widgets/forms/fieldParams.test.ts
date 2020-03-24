@@ -1,5 +1,8 @@
+import { silenceDebugMessages } from '../../../setup'
 import ns from '../../../../src/ns'
 import { fieldParams } from '../../../../src/widgets/forms/fieldParams'
+
+silenceDebugMessages()
 
 describe('fieldParams', () => {
   it('exists', () => {
@@ -9,7 +12,6 @@ describe('fieldParams', () => {
 
 describe('ColorField params', () => {
   it('exists', () => {
-    console.log(fieldParams[ns.ui('ColorField').uri])
     expect(fieldParams[ns.ui('ColorField').uri]).toBeTruthy()
   })
 })

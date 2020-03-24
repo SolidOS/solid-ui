@@ -55,6 +55,7 @@ function log (str: string, type: number = TMESG, typestr: string = 'mesg') {
       logArea.appendChild(addendum)
     }
   } else if (typeof console !== 'undefined') {
+    // eslint-disable-next-line no-console
     console.log(str)
   }
 }

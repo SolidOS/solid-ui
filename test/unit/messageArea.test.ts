@@ -1,7 +1,9 @@
+import { silenceDebugMessages } from '../setup'
 import { JSDOM } from 'jsdom'
 import MessageArea from '../../src/messageArea'
 import { graph, sym } from 'rdflib'
 
+silenceDebugMessages()
 jest.mock('solid-auth-client')
 const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
 const dom = window.document
