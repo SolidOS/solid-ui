@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`manageParticipation runs 1`] = `
+<table
+  style="margin: 0.8em;"
+/>
+`;
+
+exports[`renderPartipants returns without crashing when a person is not returned 1`] = `
+<table
+  style="margin: 0.8em;"
+/>
+`;
+
+exports[`renderPartipants runs 1`] = `
+<table
+  style="margin: 0.8em;"
+/>
+`;
