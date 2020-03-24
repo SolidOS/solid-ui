@@ -128,8 +128,8 @@ export function sameACL (a: AgentMapMap | AgentMapUnion, b: AgentMapMap | AgentM
 /**
  * Union N ACLs
  */
-export function ACLunion (list: Array<AgentMapMap>): AgentMapUnion {
-  const b = JSON.parse(JSON.stringify(list[0])) // in order to not mutate the original object
+export function ACLunion (list: Array<AgentMapMap | AgentMapUnion>): AgentMapUnion {
+  const b = list[0]
   let a, ag
   for (let k = 1; k < list.length; k++) {
     ;['agent', 'agentClass', 'agentGroup', 'origin', 'originClass'].map(
@@ -146,7 +146,7 @@ export function ACLunion (list: Array<AgentMapMap>): AgentMapUnion {
       }
     )
   }
-  return b
+  return b as AgentMapUnion
 }
 
 /**
