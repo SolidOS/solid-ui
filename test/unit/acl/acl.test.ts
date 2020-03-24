@@ -42,23 +42,23 @@ import { createAgentMapFromTurtle } from '../helpers/createAgentMapFromTurtle'
 silenceDebugMessages()
 jest.mock('solid-auth-client')
 
-// describe('ACLbyCombination', () => {
-//   it('exists', () => {
-//     expect(ACLbyCombination).toBeInstanceOf(Function)
-//   })
-//   it('runs', () => {
-//     expect(ACLbyCombination({} as AgentMapMap)).toBeInstanceOf(Object)
-//   })
-// })
-//
-// describe('ACLToString', () => {
-//   it('exists', () => {
-//     expect(ACLToString).toBeInstanceOf(Function)
-//   })
-//   it('runs', () => {
-//     expect(ACLToString({} as AgentMapMap)).toEqual('{}')
-//   })
-// })
+describe('ACLbyCombination', () => {
+  it('exists', () => {
+    expect(ACLbyCombination).toBeInstanceOf(Function)
+  })
+  it('runs', () => {
+    expect(ACLbyCombination({} as AgentMapMap)).toBeInstanceOf(Object)
+  })
+})
+
+describe('ACLToString', () => {
+  it('exists', () => {
+    expect(ACLToString).toBeInstanceOf(Function)
+  })
+  it('runs', () => {
+    expect(ACLToString({} as AgentMapMap)).toEqual('{}')
+  })
+})
 
 describe('ACLunion', () => {
   it('combines a list of agent maps into one agent map', async () => {
@@ -113,36 +113,36 @@ describe('adoptACLDefault', () => {
   })
 })
 
-// describe('comboToString', () => {
-//   it('exists', () => {
-//     expect(comboToString).toBeInstanceOf(Function)
-//   })
-//   it('runs', () => {
-//     expect(comboToString({} as ComboList)).toEqual('{}')
-//   })
-// })
-//
-// describe('fixIndividualACL', () => {
-//   it('exists', () => {
-//     expect(fixIndividualACL).toBeInstanceOf(Function)
-//   })
-//   it('runs', () => {
-//     expect(fixIndividualACL(sym('https://test.test#'), [], () => {
-//     }, () => {
-//     })).toEqual(undefined)
-//   })
-// })
-//
-// describe('fixIndividualCardACL', () => {
-//   it('exists', () => {
-//     expect(fixIndividualCardACL).toBeInstanceOf(Function)
-//   })
-//   it('runs', () => {
-//     expect(fixIndividualCardACL(sym('https://test.test#'), () => {
-//     }, () => {
-//     })).toEqual(undefined)
-//   })
-// })
+describe('comboToString', () => {
+  it('exists', () => {
+    expect(comboToString).toBeInstanceOf(Function)
+  })
+  it('runs', () => {
+    expect(comboToString({} as ComboList)).toEqual('{}')
+  })
+})
+
+describe('fixIndividualACL', () => {
+  it('exists', () => {
+    expect(fixIndividualACL).toBeInstanceOf(Function)
+  })
+  it('runs', () => {
+    expect(fixIndividualACL(sym('https://test.test#'), [], () => {
+    }, () => {
+    })).toEqual(undefined)
+  })
+})
+
+describe('fixIndividualCardACL', () => {
+  it('exists', () => {
+    expect(fixIndividualCardACL).toBeInstanceOf(Function)
+  })
+  it('runs', () => {
+    expect(fixIndividualCardACL(sym('https://test.test#'), () => {
+    }, () => {
+    })).toEqual(undefined)
+  })
+})
 
 describe('getACL', () => {
   let callbackFunction
@@ -232,99 +232,99 @@ describe('getACLorDefault', () => {
 
 })
 
-// describe('getProspectiveHolder', () => {
-//   it('exists', () => {
-//     expect(getProspectiveHolder).toBeInstanceOf(Function)
-//   })
-//   it.skip('runs', async () => {
-//     expect(await getProspectiveHolder('')).toEqual(undefined)
-//   })
-// })
-//
-// describe('loadUnionACL', () => {
-//   it('exists', () => {
-//     expect(loadUnionACL).toBeInstanceOf(Function)
-//   })
-//   it('runs', () => {
-//     expect(loadUnionACL([], () => {
-//     })).toEqual(undefined)
-//   })
-// })
-//
-// describe('makeACLGraph', () => {
-//   it('exists', () => {
-//     expect(makeACLGraph).toBeInstanceOf(Function)
-//   })
-//   it('runs', () => {
-//     expect(makeACLGraph(
-//       createLiveStore(),
-//       sym('https://test.test#'),
-//       {} as AgentMapMap,
-//       sym('https://test.test#')
-//     )).toEqual(undefined)
-//   })
-// })
-//
-// describe('makeACLGraphbyCombo', () => {
-//   it('exists', () => {
-//     expect(makeACLGraphbyCombo).toBeInstanceOf(Function)
-//   })
-//   it('runs', () => {
-//     expect(makeACLGraphbyCombo(
-//       createLiveStore(),
-//       sym('https://test.test#'),
-//       {} as ComboList,
-//       sym('https://test.test#'),
-//       false,
-//       false
-//     )).toEqual(undefined)
-//   })
-// })
-//
-// describe('makeACLString', () => {
-//   it('exists', () => {
-//     expect(makeACLString).toBeInstanceOf(Function)
-//   })
-//   it.skip('runs', () => { // skipping this until serialize is typed correctly
-//     expect(makeACLString(
-//       sym('https://test.test#'),
-//       {} as AgentMapMap,
-//       sym('https://test.test#')
-//     )).toEqual(undefined)
-//   })
-// })
-//
-// describe('putACLbyCombo', () => {
-//   it('exists', () => {
-//     expect(putACLbyCombo).toBeInstanceOf(Function)
-//   })
-//   it('runs', () => {
-//     expect(putACLbyCombo(
-//       createLiveStore(),
-//       sym('https://test.test#'),
-//       {} as ComboList,
-//       sym('https://test.test#'),
-//       () => {
-//       }
-//     )).toEqual(undefined)
-//   })
-// })
-//
-// describe('putACLObject', () => {
-//   it('exists', () => {
-//     expect(putACLObject).toBeInstanceOf(Function)
-//   })
-//   it('runs', () => {
-//     expect(putACLObject(
-//       createLiveStore(),
-//       sym('https://test.test#'),
-//       {} as AgentMapMap,
-//       sym('https://test.test#'),
-//       () => {
-//       }
-//     )).toEqual(undefined)
-//   })
-// })
+describe('getProspectiveHolder', () => {
+  it('exists', () => {
+    expect(getProspectiveHolder).toBeInstanceOf(Function)
+  })
+  it.skip('runs', async () => {
+    expect(await getProspectiveHolder('')).toEqual(undefined)
+  })
+})
+
+describe('loadUnionACL', () => {
+  it('exists', () => {
+    expect(loadUnionACL).toBeInstanceOf(Function)
+  })
+  it('runs', () => {
+    expect(loadUnionACL([], () => {
+    })).toEqual(undefined)
+  })
+})
+
+describe('makeACLGraph', () => {
+  it('exists', () => {
+    expect(makeACLGraph).toBeInstanceOf(Function)
+  })
+  it('runs', () => {
+    expect(makeACLGraph(
+      createLiveStore(),
+      sym('https://test.test#'),
+      {} as AgentMapMap,
+      sym('https://test.test#')
+    )).toEqual(undefined)
+  })
+})
+
+describe('makeACLGraphbyCombo', () => {
+  it('exists', () => {
+    expect(makeACLGraphbyCombo).toBeInstanceOf(Function)
+  })
+  it('runs', () => {
+    expect(makeACLGraphbyCombo(
+      createLiveStore(),
+      sym('https://test.test#'),
+      {} as ComboList,
+      sym('https://test.test#'),
+      false,
+      false
+    )).toEqual(undefined)
+  })
+})
+
+describe('makeACLString', () => {
+  it('exists', () => {
+    expect(makeACLString).toBeInstanceOf(Function)
+  })
+  it.skip('runs', () => { // skipping this until serialize is typed correctly
+    expect(makeACLString(
+      sym('https://test.test#'),
+      {} as AgentMapMap,
+      sym('https://test.test#')
+    )).toEqual(undefined)
+  })
+})
+
+describe('putACLbyCombo', () => {
+  it('exists', () => {
+    expect(putACLbyCombo).toBeInstanceOf(Function)
+  })
+  it('runs', () => {
+    expect(putACLbyCombo(
+      createLiveStore(),
+      sym('https://test.test#'),
+      {} as ComboList,
+      sym('https://test.test#'),
+      () => {
+      }
+    )).toEqual(undefined)
+  })
+})
+
+describe('putACLObject', () => {
+  it('exists', () => {
+    expect(putACLObject).toBeInstanceOf(Function)
+  })
+  it('runs', () => {
+    expect(putACLObject(
+      createLiveStore(),
+      sym('https://test.test#'),
+      {} as AgentMapMap,
+      sym('https://test.test#'),
+      () => {
+      }
+    )).toEqual(undefined)
+  })
+})
 
 describe('readACL', () => {
   let agentMap
@@ -382,16 +382,16 @@ describe('sameACL', () => {
   })
 })
 
-// describe('setACL', () => {
-//   it('exists', () => {
-//     expect(setACL).toBeInstanceOf(Function)
-//   })
-//   it('runs', () => {
-//     expect(setACL(
-//       sym('https://test.test#'),
-//       '',
-//       () => {
-//       }
-//     )).toBeUndefined()
-//   })
-// })
+describe('setACL', () => {
+  it('exists', () => {
+    expect(setACL).toBeInstanceOf(Function)
+  })
+  it('runs', () => {
+    expect(setACL(
+      sym('https://test.test#'),
+      '',
+      () => {
+      }
+    )).toBeUndefined()
+  })
+})
