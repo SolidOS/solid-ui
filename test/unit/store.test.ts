@@ -1,5 +1,7 @@
+import { silenceDebugMessages } from '../setup'
 import kb from '../../src/store'
 
+silenceDebugMessages()
 jest.mock('solid-auth-client')
 
 describe('kb (main global IndexedFormula instance)', () => {

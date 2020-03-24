@@ -1,6 +1,8 @@
+import { silenceDebugMessages } from '../setup'
 import { JSDOM } from 'jsdom'
 import renderTableViewPane from '../../src/table'
 
+silenceDebugMessages()
 const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
 const dom = window.document
 

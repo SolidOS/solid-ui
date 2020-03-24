@@ -1,7 +1,9 @@
+import { silenceDebugMessages } from '../../setup'
 import { JSDOM } from 'jsdom'
 import { infiniteMessageArea } from '../../../src/chat/infinite'
 import { graph, sym } from 'rdflib'
 
+silenceDebugMessages()
 jest.mock('solid-auth-client')
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 

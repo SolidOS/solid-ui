@@ -1,7 +1,8 @@
+import { silenceDebugMessages } from '../../setup'
 import { JSDOM } from 'jsdom'
-
 import { errorMessageBlock } from '../../../src/widgets/error'
 
+silenceDebugMessages()
 jest.mock('solid-auth-client')
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 

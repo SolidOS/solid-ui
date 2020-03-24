@@ -1,3 +1,4 @@
+import { silenceDebugMessages } from '../setup'
 import { tabs } from '../../src/index'
 import { tabWidget } from '../../src/tabs'
 import { Collection, lit, NamedNode, namedNode } from 'rdflib'
@@ -7,6 +8,7 @@ import { clearStore } from './helpers/clearStore'
 import { label } from '../../src/utils'
 import { meeting, rdfs } from '../../src/ns'
 
+silenceDebugMessages()
 const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
 const dom = window.document
 

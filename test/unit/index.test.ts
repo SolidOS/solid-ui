@@ -1,5 +1,7 @@
-
+import { silenceDebugMessages } from '../setup'
 import * as Index from '../../src/index'
+
+silenceDebugMessages()
 
 describe('Index', () => {
   it('exists', () => {

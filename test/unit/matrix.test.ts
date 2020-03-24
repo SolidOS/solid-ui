@@ -1,6 +1,8 @@
+import { silenceDebugMessages } from '../setup'
 import { matrixForQuery } from '../../src/matrix'
 import { JSDOM } from 'jsdom'
 
+silenceDebugMessages()
 jest.mock('solid-auth-client')
 const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
 const dom = window.document

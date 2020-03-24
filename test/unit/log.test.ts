@@ -1,8 +1,10 @@
 /* eslint-disable no-console */
+import { silenceDebugMessages } from '../setup'
 import * as api from '../../src/index'
 import * as log from '../../src/log'
 import { JSDOM } from 'jsdom'
 
+silenceDebugMessages()
 jest.mock('solid-auth-client')
 
 const window = new JSDOM('<!DOCTYPE html><div id="status"></div>').window
