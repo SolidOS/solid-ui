@@ -1,5 +1,5 @@
+import { silenceDebugMessages } from '../../setup'
 import { JSDOM } from 'jsdom'
-
 import {
   checkUser, // Async
   currentUser, // Sync
@@ -26,6 +26,7 @@ import {
 import { AppDetails, AuthenticationContext } from '../../../src/authn/types'
 import { sym } from 'rdflib'
 
+silenceDebugMessages()
 jest.mock('solid-auth-client')
 const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
 const dom = window.document

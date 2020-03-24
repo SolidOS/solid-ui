@@ -1,9 +1,11 @@
+import { silenceDebugMessages } from '../../setup'
 import {
   sentimentStrip,
   sentimentStripLinked,
   messageToolbar
 } from '../../../src/chat/messageTools'
 
+silenceDebugMessages()
 jest.mock('solid-auth-client')
 
 describe('sentimentStrip', () => {

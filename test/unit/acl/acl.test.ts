@@ -1,3 +1,4 @@
+import { silenceDebugMessages } from '../../setup'
 import {
   ACLbyCombination,
   ACLToString,
@@ -23,6 +24,7 @@ import { AgentMapMap, ComboList } from '../../../src/acl/types'
 import { sym } from 'rdflib'
 import { createLiveStore } from '../helpers/createLiveStore'
 
+silenceDebugMessages()
 jest.mock('solid-auth-client')
 
 describe('ACLbyCombination', () => {

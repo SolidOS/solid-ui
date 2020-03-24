@@ -1,3 +1,4 @@
+import { silenceDebugMessages } from '../../setup'
 import {
   elementForImageURI,
   creatorAndDate,
@@ -5,6 +6,7 @@ import {
   renderMessage
 } from '../../../src/chat/message'
 
+silenceDebugMessages()
 jest.mock('solid-auth-client')
 
 describe('elementForImageURI', () => {

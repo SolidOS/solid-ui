@@ -1,3 +1,4 @@
+import { silenceDebugMessages } from '../../setup'
 import { JSDOM } from 'jsdom'
 import {
   addStyleSheet,
@@ -42,6 +43,7 @@ import { iconBase } from '../../../src/iconBase'
 import store from '../../../src/store'
 import { clearStore } from '../helpers/clearStore'
 
+silenceDebugMessages()
 jest.mock('solid-auth-client')
 const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
 const dom = window.document
