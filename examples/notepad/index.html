@@ -60,7 +60,7 @@
       </a>
     </h2>
     <p>
-      The Notepad provides functionality to both create a new Notepad or view/edit and existing one.
+      The Notepad provides functionality to both create a new Notepad or view/edit an existing one.
       The code below shows an example of how to view an existing notepad.
       <ul>
         <li>Use the store and fetcher to fetch the notepad document.</li>
@@ -92,7 +92,8 @@
 
     In order to create a new notepad you need to change three things:
     <ul>
-      <li>Provide user authentication. You can do this by .... </li>
+      <li>Provide user authentication. You can do this by by including solid-auth-client as explained in
+        https://solidproject.org/for-developers/apps/first-app/1-authentication </li>
       <li>Change the exists flag on the options object to <code>false</code>.</li>
       <li>Use the updater to create the document in the store, instead of using the <code>fetcher.load()</code> function
         above. The code below is a simple example (without error handling) to give you an idea of how this works.
