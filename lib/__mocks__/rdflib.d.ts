@@ -7,8 +7,10 @@ export declare class Fetcher {
     nowOrWhenFetched(): Promise<void>;
 }
 export declare class UpdateManager {
-    editable(): Promise<void>;
+    updated: boolean;
+    reportSuccess: boolean;
+    editable(uri: string): boolean;
     put(): Promise<void>;
-    update(): Promise<void>;
+    update(_deletes: any, _inserts: any, onDone: (uri: string, ok: boolean, body: string) => void): Promise<void>;
 }
 //# sourceMappingURL=rdflib.d.ts.map
