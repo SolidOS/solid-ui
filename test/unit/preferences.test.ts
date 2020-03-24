@@ -58,7 +58,7 @@ describe('Preferences.recordSharedPreferences', () => {
   it('runs', () => {
     const subject = null
     const context = null
-    expect(Preferences.recordSharedPreferences(subject, context).then())
+    expect(Preferences.recordSharedPreferences(subject, context)).toBeTruthy()
   })
 })
 

@@ -3,11 +3,25 @@
 exports[`notepad runs 1`] = `
 <table
   style="padding: 1em; overflow: auto; resize: horizontal; min-width: 40em;"
-/>
+>
+  <tr>
+    <input
+      style="font-size: 100%; font-family: monospace; width: 100%; border: none; white-space: pre-wrap;text-indent: 0em;"
+      type="text"
+    />
+  </tr>
+</table>
 `;
 
 exports[`notepad status area ... 1`] = `
 <table
   style="padding: 1em; overflow: auto; resize: horizontal; min-width: 40em;"
-/>
+>
+  <tr>
+    <input
+      style="font-size: 100%; font-family: monospace; width: 100%; border: none; white-space: pre-wrap;text-indent: 0em;"
+      type="text"
+    />
+  </tr>
+</table>
 `;
