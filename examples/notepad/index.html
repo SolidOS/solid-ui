@@ -49,59 +49,59 @@
 
   <p>
     On this page you'll find some examples from the Pad module. See <a
-      href="https://solid.github.io/solid-ui/Documentation/api/modules/_tabs_.html#tabwidget">API
+      href="https://solid.github.io/solid-ui/Documentation/api/modules/_pad_.html#pad">API
       documentation</a> for more info about how to use the pad module.
   </p>
 
   <article id="notepad">
     <h2>
       <a href='#notepad'>
-        <code>notepad</code>: Creates a notepad
+        <code>notepad</code>: Working with the Notepad
       </a>
     </h2>
     <p>
-      In this first example we'll see how you can create a notepad. This method creates input fields
-      which allow you to provide a notepad component to your application.
+      The Notepad provides functionality to both create a new Notepad or view/edit and existing one.
+      The code below shows an example of how to view an existing notepad.
+      <ul>
+        <li>Use the store and fetcher to fetch the notepad document.</li>
+        <li>Provide the full path of the pad document you are fetching.</li>
+        <li>Provide the URI of the author/editor of the document.</li>
+        <li>Provide the full path of the subject for this pad. As you can see in the example below it is the same
+          as the pad, except you also need to include '#this'.
+        </li>
+        <li>Optional: Provide a StatusArea property (HTMLDIVElement) to display error messages</li>
+      </ul>
     </p>
+
     <script id='script-notepad'>
       window.addEventListener('DOMContentLoaded', async (event) => {
-        const pad = UI.rdf.namedNode('https://example-user.inrupt.net/public/example-notepad/index.ttl#this')
-        const me = new UI.rdf.NamedNode('https://example-user.inrupt.net/profile/card#me')
-        const subject = UI.store.sym('https://test.test#')
-        options = {}
+        const kb = UI.store
+        const fetcher = UI.rdf.fetcher(kb)
+        const pad = UI.rdf.namedNode('https://sharonstrats.inrupt.net/public/edu.mit.solid.pane.pad/id1585026584938/index.ttl')
+        const me = new UI.rdf.NamedNode('https://sharonstrats.inrupt.net/profile/card#me')
+        const subject = UI.store.sym('https://sharonstrats.inrupt.net/public/edu.mit.solid.pane.pad/id1585026584938/index.ttl#this')
+        const options = { exists: true }
 
+        await fetcher.load(pad.doc()) // if you don't have this you will get an inconsistency error
         const result = UI.pad.notepad(document, pad.doc(), subject, me, options)
         document.querySelector('#div-notepad').appendChild(result)
       })
     </script>
     <pre id='viewSource-notepad'></pre>
     <div id='div-notepad'></div>
+
+    In order to create a new notepad you need to change three things:
+    <ul>
+      <li>Provide user authentication. You can do this by .... </li>
+      <li>Change the exists flag on the options object to <code>false</code>.</li>
+      <li>Use the updater to create the document in the store, instead of using the <code>fetcher.load()</code> function
+        above. The code below is a simple example (without error handling) to give you an idea of how this works.
+        <code> kb.updater.put(pad, [], 'text/turtle', function (pad, subject, me, options) {
+        const result = UI.pad.notepad(document, pad, subject, me, options)
+        document.querySelector('#div-notepad').appendChild(result)
+      }</code></li>
+    </ul>
   </article>
-
-  <article id='manageParticipation'>
-
-    <h2>
-      <a href='#manageParticipation'>
-        <code>manageParticipation</code>: Creates the table to display the participants
-      </a>
-    </h2>
-    <p></p>
-    <script id='script-manageParticipation'>
-      window.addEventListener('DOMContentLoaded', (event) => {
-        const me = new UI.rdf.NamedNode('https://example-user.inrupt.net/profile/card#me')
-        const structure = document.createElement('div')
-        const container = document.createElement('div')
-        const subject = UI.store.sym('https://test.test#')
-        const pad = UI.rdf.namedNode('https://example-user.inrupt.net/public/example-notepad/index.ttl#this')
-        options = { statusArea: container }
-        // const result = UI.pad.manageParticipation(document, structure, pad.doc(), subject, me, options)
-        //  document.querySelector('#div-manageParticipation').appendChild(result)
-      })
-    </script>
-    <pre id='viewSource-manageParticipation'></pre>
-    <div id='div-manageParticipation'></div>
-  </article>
-
   <article id="notepadToHTML">
     <h2>
       <a href="#notepadToHTML">
@@ -109,34 +109,42 @@
       </a>
     </h2>
     <p>
-      This method converts a pad.ttl document to HTML.
+      This method converts a pad document to HTML so that it can be exported.
     </p>
 
     <script id="script-notepadToHTML">
+
       window.addEventListener('DOMContentLoaded', async (event) => {
         const kb = UI.store
         const fetcher = UI.rdf.fetcher(kb)
-        // const pad = kb.sym(document.location.href.replace(/\/[^\/]*$/, "/pad.ttl#this"))
         const pad = UI.rdf.namedNode('https://sharonstrats.inrupt.net/public/edu.mit.solid.pane.pad/id1584238219755/index.ttl#this')
         await fetcher.load(pad.doc())
         const htmlStr = UI.pad.notepadToHTML(pad, kb)
-        document.querySelector('#div-notepadToHTML').appendChild(document.createTextNode(htmlStr))
+        const doc = document.querySelector('#iframe-notepadToHTML').contentWindow.document
+        doc.open()
+        doc.write(htmlStr)
+        doc.close()
       })
     </script>
     <pre id="viewSource-notepadToHTML"></pre>
+    <iframe id="iframe-notepadToHTML" src="about:blank"></iframe>
     <div id="div-notepadToHTML"></div>
   </article>
 
   <article id="lightColorHash">
     <h2>
       <a href="#lightColorHash">
-        <code>lightColorHash</code> : Determines a color to be used for a participants notepad entry
+        <code>lightColorHash</code> : Returns a color in hex format calculated by hashing a WebID
       </a>
     </h2>
-    <p>This method returns a hex value for setting the color of the input box of the notepad.
-      It does this by hashing the uri passed in as an argument. Ideally this would be the uri of the person
-      logged in.
+    <p>This method returns a hex value for setting a unique color on the input box of the notepad for a given
+      editor/user.
+      It does this by hashing the WebID passed in as an argument. Ideally this would be the WebID of the person
+      logged in. However, this function could be used in any situation where you need to have a unique color to style
+      a component based on WebIDs.
     </p>
+    <p>The example below shows how you can use the lightColorHash function.</p>
+
     <script id="script-lightColorHash">
       window.addEventListener('DOMContentLoaded', (event) => {
         const colorStr = UI.pad.lightColorHash(new UI.rdf.NamedNode('https://sharonstrats.inrupt.net/profile/card#me'))
@@ -151,6 +159,43 @@
     <div id="div-lightColorHash"></div>
   </article>
 
+
+  <article id='manageParticipation'>
+    <h2>
+      <a href='#manageParticipation'>
+        <code>manageParticipation</code>: Creates the table to display the participants
+      </a>
+    </h2>
+    <p>ManageParticpation manages the pad document editors. </p>
+    <p>The example below shows how to use this function. </p>
+    <ul>
+      <li>Provide the HTMLTableElement or HTMLDivElement on which to render the participants.</li>
+      <li>Provide the full path to the pad document.</li>
+      <li>Provide the full path to the subject, which is the pad document + '#this'.</li>
+      <li>Optional: There are three properties that can be set on the options object.</li>
+      <ul>
+        <li>statusArea - a place to show error messages from pad.</li>
+        <li>draggable - set this to true in order to make the participant draggable.</li>
+        <li>deleteFunction - provide a delete function to enable the delete functionality.</li>
+        <li>link - this should create a link to the WebID.</li>
+      </ul>
+    </ul>
+    <script id='script-manageParticipation'>
+      window.addEventListener('DOMContentLoaded', (event) => {
+        const me = new UI.rdf.NamedNode('https://example-user.inrupt.net/profile/card#me')
+        const structure = document.createElement('div')
+        const padMessages = document.createElement('div')
+        const subject = UI.store.sym('https://example-user.inrupt.net/public/example-notepad/index.ttl#this')
+        const pad = UI.rdf.namedNode('https://example-user.inrupt.net/public/example-notepad/index.ttl')
+        options = { statusArea: padMessages }
+        // const result = UI.pad.manageParticipation(document, structure, pad.doc(), subject, me, options)
+        //  document.querySelector('#div-manageParticipation').appendChild(result)
+      })
+    </script>
+    <pre id='viewSource-manageParticipation'></pre>
+    <div id='div-manageParticipation'></div>
+  </article>
+
   <article id="renderPartipants">
     <h2>
       <a href="#renderPartipants">
@@ -159,19 +204,32 @@
       </a>
     </h2>
     <p>Creates the table with the list of participants that have contributed to
-      the given pad that is passed in. This gets called from manageParticipation,
-      but can be used on it's own as well. </p>
+      the given pad. This is used by manageParticipation, but can be used on it's own as well. </p>
+
+    <p>The example below shows how to use this function, however the function call
+      is commented out because it will add a triple each time this page is rendered just as the renderParticpants
+      function below. </p>
+    <ul>
+      <li>Use the fetcher to load the pad document.</li>
+      <li>Provide the HTMLTableElement on which to render the participants.</li>
+      <li>Provide the full path to the pad document.</li>
+      <li>Provide the full path to the subject, which is the pad document + '#this'.</li>
+      <li>Optional: There are three properties that can be set on the options object.</li>
+      <ul>
+        <li>draggable - set this to true in order to make the participant draggable.</li>
+        <li>deleteFunction - provide a delete function to enable the delete functionality.</li>
+        <li>link - this should create a link to the WebID.</li>
+      </ul>
+    </ul>
     <script id="script-renderPartipants">
       window.addEventListener('DOMContentLoaded', async (event) => {
-        const table = document.createElement('table');
         const kb = UI.store
         const fetcher = UI.rdf.fetcher(kb)
-        const pad = UI.rdf.namedNode('https://sharonstrats.inrupt.net/public/edu.mit.solid.pane.pad/id1584238219755/index.ttl#this')
+        const table = document.createElement('table');
+        const pad = UI.rdf.namedNode('https://sharonstrats.inrupt.net/public/edu.mit.solid.pane.pad/id1585026584938/index.ttl')
+        const subject = kb.sym('https://sharonstrats.inrupt.net/public/edu.mit.solid.pane.pad/id1585026584938/index.ttl#this')
+        const options = { draggable: true, link: true, deleteFunction: () => alert("deleted") }
         await fetcher.load(pad.doc())
-        // subject = new NamedNode('test') // this i think the page where a list.. ns.ws('participants') are stored
-        subject = kb.sym('https://test.test#')
-        options = {} // what to put in options
-        //options are used in the button personTR there are the following properties can be defined deleteFunction, link, draggable
         const tableOfParticipants = UI.pad.renderPartipants(document, table, pad, subject, new UI.rdf.NamedNode('https://sharonstrats.inrupt.net/profile/card#me'), options)
         document.querySelector('#div-renderPartipants').appendChild(tableOfParticipants)
       })
@@ -182,20 +240,20 @@
 
   <article id="participationObject">
     <h2> <a href="#participationObject">
-        <code>participationObject</code>: Contains the subject, pad and URI for the participants
+        <code>participationObject</code>: Contains the subject, pad and WebID for the participants
       </a>
     </h2>
     <p></p>
     <script id='script-participationObject'>
       window.addEventListener('DOMContentLoaded', async (event) => {
         const kb = UI.store
-        const subject = kb.sym('https://test.test#');
+        const subject = kb.sym('https://sharonstrats.inrupt.net/public/edu.mit.solid.pane.pad/id1584238219755/index.ttl#this');
         const fetcher = UI.rdf.fetcher(kb)
-        const pad = UI.rdf.namedNode('https://sharonstrats.inrupt.net/public/edu.mit.solid.pane.pad/id1584238219755/index.ttl#this')
+        const pad = UI.rdf.namedNode('https://sharonstrats.inrupt.net/public/edu.mit.solid.pane.pad/id1584238219755/index.ttl')
 
         await fetcher.load(pad.doc())
         const me = new UI.rdf.NamedNode('https://sharonstrats.inrupt.net/profile/card#me')
-        const htmlStr = UI.pad.participationObject(subject, pad, me);
+        const htmlStr = await UI.pad.participationObject(subject, pad, me);
         document.querySelector('#div-participationObject').appendChild(document.createTextNode(htmlStr))
       })
     </script>
@@ -205,17 +263,18 @@
 
   <article id="recordParticipation">
     <h2> <a href="#recordParticipation">
-        <code>recordParticipation</code>: Adds the URI of the user to the participant store
+        <code>recordParticipation</code>: Adds the WebID of the user to the participant store
       </a></h2>
-    <p>Records the participants in the store for the given document and
-      returns the participation object. This is also used in manageParticipation,
-      but could also be used on it's own.</p>
+    <p>Records the participants in the store for the given document and returns the participation object.
+      This is also used in manageParticipation, but could also be used on it's own to create a particpation triple. </p>
+    <p>The code below provides an example of the code you need to write to use this function, however the function call
+      is commented out because it will add a triple each time this page is rendered. </p>
     <script id="script-recordParticipation">
       window.addEventListener('DOMContentLoaded', async (event) => {
         const kb = UI.store
-        const subject = kb.sym('https://test.test#');
+        const subject = kb.sym('https://sharonstrats.inrupt.net/public/edu.mit.solid.pane.pad/id1585026584938/index.ttl#this');
         const fetcher = UI.rdf.fetcher(kb)
-        const pad = UI.rdf.namedNode('https://example-user.inrupt.net/public/example-notepad/index.ttl#this')
+        const pad = UI.rdf.namedNode('https://sharonstrats.inrupt.net/public/example-notepad/index.ttl#this')
         await fetcher.load(pad.doc())
         // const htmlStr = UI.pad.recordParticipation(subject, pad, false);
       })
