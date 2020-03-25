@@ -56,6 +56,7 @@ export function fetcher (store: any) {
 
 export class Fetcher {
   requested: any
+  nonexistent = {}
 
   constructor () {
     this.requested = {}

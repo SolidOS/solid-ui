@@ -1,0 +1,44 @@
+@prefix : <https://example.com/.acl#>.
+@prefix acl: <http://www.w3.org/ns/auth/acl#>.
+@prefix meg: <https://example.com/>.
+@prefix profile: <https://example.com/profile/card#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+
+:1
+    acl:accessTo meg:;
+    acl:default meg:;
+    acl:agent profile:me;
+    acl:mode acl:Read;
+    a acl:Authorization.
+:2a
+    acl:accessTo meg:;
+    acl:agentClass foaf:Agent;
+    acl:mode acl:Read;
+    a acl:Authorization.
+:2b
+    acl:default meg:;
+    acl:agentClass foaf:Agent;
+    acl:mode acl:Read;
+    a acl:Authorization.
+:3a
+    acl:accessTo meg:;
+    acl:agentGroup <https://example.com/#group>;
+    acl:mode acl:Read;
+    a acl:Authorization.
+:3b
+    acl:defaultForNew meg:;
+    acl:agentGroup <https://example.com/#group>;
+    acl:mode acl:Read;
+    a acl:Authorization.
+:4
+    acl:accessTo meg:;
+    acl:default meg:;
+    acl:origin <https://example.com/#origin>;
+    acl:mode acl:Read;
+    a acl:Authorization.
+:5
+    acl:accessTo meg:;
+    acl:defaultForNew meg:;
+    acl:originClass <https://example.com/#originClass>;
+    acl:mode acl:Read;
+    a acl:Authorization.
