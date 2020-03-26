@@ -11,7 +11,7 @@ const mime = require('mime-types')
 class FileObject extends File {
   lastModifiedDate?: Date
 }
-export function makeDropTarget (ele: HTMLElement, droppedURIHandler: any, droppedFileHandler: any) {
+export function makeDropTarget (ele: HTMLElement, droppedURIHandler?: any, droppedFileHandler?: any) {
   const dragoverListener = function (e: DragEvent) {
     e.preventDefault() // Neeed else drop does not work [sic]
     if (e.dataTransfer) {

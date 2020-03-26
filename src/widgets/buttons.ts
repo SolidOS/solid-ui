@@ -2,7 +2,7 @@ import { IndexedFormula, NamedNode, st, sym, uri, Util } from 'rdflib'
 import { iconBase, originalIconBase } from '../iconBase'
 import store from '../store'
 import ns from '../ns'
-import style from '../style'
+import { classIconStyle, iconStyle, buttonStyle, textInputStyle } from '../style'
 import * as debug from '../debug'
 import { info } from '../log'
 
@@ -342,7 +342,7 @@ function trySetImage (element, thing, iconForClassMap) {
   const typeIcon = iconForClassMap[thing.uri]
   if (typeIcon) {
     element.setAttribute('src', typeIcon)
-    element.style = style.classIconStyle
+    element.style = classIconStyle
     // element.style.border = '0.1em solid green;'
     // element.style.backgroundColor = '#eeffee' // pale green
     return true
@@ -393,7 +393,7 @@ export function setImage (element: HTMLElement, thing: NamedNode) { // 20191230a
 // See eg http://stackoverflow.com/questions/980855/inputting-a-default-image
 function faviconOrDefault (dom: HTMLDocument, x: NamedNode) {
   var image = dom.createElement('img')
-  ;(image as any).style = style.iconStyle
+    ; (image as any).style = iconStyle
   var isOrigin = function (x) {
     if (!x.uri) return false
     var parts = x.uri.split('/')
@@ -445,10 +445,10 @@ export function deleteButtonWithCheck (
       container.removeChild(deleteButtonElt) // Ask -- are you sure?
       var cancelButtonElt = dom.createElement('button')
       // cancelButton.textContent = 'cancel'
-      cancelButtonElt.setAttribute('style', style.buttonStyle)
+      cancelButtonElt.setAttribute('style', buttonStyle)
       var img = cancelButtonElt.appendChild(dom.createElement('img'))
       img.setAttribute('src', cancelIconURI)
-      img.setAttribute('style', style.buttonStyle)
+      img.setAttribute('style', buttonStyle)
 
       container.appendChild(cancelButtonElt).addEventListener(
         'click',
@@ -461,7 +461,7 @@ export function deleteButtonWithCheck (
       )
       var sureButtonElt = dom.createElement('button')
       sureButtonElt.textContent = 'Delete ' + noun
-      sureButtonElt.setAttribute('style', style.buttonStyle)
+      sureButtonElt.setAttribute('style', buttonStyle)
       container.appendChild(sureButtonElt).addEventListener(
         'click',
         function (_event) {
@@ -489,7 +489,7 @@ export function deleteButtonWithCheck (
 export function button (dom: HTMLDocument, iconURI: string, text: string, handler: (event: any) => void) {
   var button = dom.createElement('button')
   button.setAttribute('type', 'button')
-  button.setAttribute('style', style.buttonStyle)
+  button.setAttribute('style', buttonStyle)
   // button.innerHTML = text  // later, user preferences may make text preferred for some
   var img = button.appendChild(dom.createElement('img'))
   img.setAttribute('src', iconURI)
@@ -548,7 +548,7 @@ export function askName (
     namefield.setAttribute('type', 'text')
     namefield.setAttribute('size', '100')
     namefield.setAttribute('maxLength', '2048') // No arbitrary limits
-    namefield.setAttribute('style', style.textInputStyle)
+    namefield.setAttribute('style', textInputStyle)
     namefield.select() // focus next user input
     form.appendChild(namefield)
     container.appendChild(form)
@@ -639,7 +639,7 @@ export function personTR (dom: HTMLDocument, pred: NamedNode, obj: NamedNode, op
       dragAndDrop.makeDraggable(tr, obj)
     }
   }
-  ;(tr as any).subject = obj
+  ; (tr as any).subject = obj
   return tr
 }
 
@@ -721,7 +721,7 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
     things.sort()
     utils.syncTableToArray(attachmentTable, things, createNewRow)
   })
-  ;(attachmentOuter as any).refresh = refresh // Participate in downstream changes
+    ; (attachmentOuter as any).refresh = refresh // Participate in downstream changes
   refresh()
 
   var droppedURIHandler = function (uris) {
@@ -767,10 +767,10 @@ export function openHrefInOutlineMode (e: Event) {
   const dom = window.document
   if ((dom as any).outlineManager) {
     // @@ TODO Remove the use of document as a global object
-    ;(dom as any).outlineManager.GotoSubject(store.sym(uri), true, undefined, true, undefined)
+    ; (dom as any).outlineManager.GotoSubject(store.sym(uri), true, undefined, true, undefined)
   } else if (window && (window as any).panes && (window as any).panes.getOutliner) {
     // @@ TODO Remove the use of window as a global object
-    ;(window as any).panes
+    ; (window as any).panes
       .getOutliner()
       .GotoSubject(store.sym(uri), true, undefined, true, undefined)
   } else {
@@ -887,7 +887,7 @@ export function linkButton (dom: HTMLDocument, object: NamedNode): HTMLElement {
   b.textContent = 'Goto ' + utils.label(object)
   b.addEventListener('click', function (_event) {
     // b.parentNode.removeChild(b)
-    ;(dom as any).outlineManager.GotoSubject(object, true, undefined, true, undefined)
+    ; (dom as any).outlineManager.GotoSubject(object, true, undefined, true, undefined)
   }, true)
   return b
 }
@@ -900,7 +900,7 @@ export function removeButton (dom: HTMLDocument, element: HTMLElement) {
   b.setAttribute('type', 'button')
   b.textContent = '✕' // MULTIPLICATION X
   b.addEventListener('click', function (_event) {
-    ;(element as any).parentNode.removeChild(element)
+    ; (element as any).parentNode.removeChild(element)
   }, true)
   return b
 }
@@ -1230,7 +1230,7 @@ export function fileUploadButtonDiv (
     false
   )
 
-  ;(input as any).style = 'display:none'
+  ; (input as any).style = 'display:none'
   const buttonElt = div.appendChild(
     button(
       dom,
