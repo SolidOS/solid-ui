@@ -2,6 +2,7 @@ export { BlankNode, Collection, convert, DataFactory, Empty, Formula, Literal, l
 export declare function fetcher(store: any): Fetcher;
 export declare class Fetcher {
     requested: any;
+    nonexistent: {};
     constructor();
     load(): void;
     nowOrWhenFetched(): Promise<void>;

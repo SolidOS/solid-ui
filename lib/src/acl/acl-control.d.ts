@@ -19,6 +19,10 @@ import { DataBrowserContext } from 'pane-registry';
  * @returns void
  */
 export declare function preventBrowserDropEvents(document: HTMLDocument): void;
+/** @internal */
+export declare function preventDrag(e: any): void;
+/** @internal */
+export declare function handleDrop(e: any): void;
 /**
  * Get a folder's own filename in the directory tree. Also works for
  * domain names; the URL protocol ('https://') acts as the tree root
@@ -60,4 +64,6 @@ export declare function shortNameForFolder(x: NamedNode): string;
  * https://github.com/solid/solid-ui/commit/948b874bd93e7bf5160e6e224821b888f07d15f3#diff-4192a29f38a0ababd563b36b47eba5bbR54
  */
 export declare function ACLControlBox5(subject: NamedNode, context: DataBrowserContext, noun: string, kb: IndexedFormula): HTMLElement;
+/** @internal */
+export declare function setGlobalWindow(window: Window): void;
 //# sourceMappingURL=acl-control.d.ts.map

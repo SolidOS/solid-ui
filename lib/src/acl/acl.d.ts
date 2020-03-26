@@ -5,39 +5,40 @@
  * @packageDocumentation
  */
 import * as $rdf from 'rdflib';
-import { AgentMapMap, ComboList } from './types';
+import { AgentMapMap, AgentMapUnion, ComboList } from './types';
 /**
  * Take the "default" ACL and convert it into the equivlent ACL
  * which the resource would have had. Return it as a new separate store.
  * The "defaultForNew" predicate is also accepted, as a deprecated
  * synonym for "default".
  */
-export declare function adoptACLDefault(doc: $rdf.NamedNode, aclDoc: $rdf.NamedNode, defaultResource: $rdf.NamedNode, defaultACLdoc: $rdf.NamedNode): $rdf.IndexedFormula;
+export declare function adoptACLDefault(doc: $rdf.NamedNode, aclDoc: $rdf.NamedNode, defaultResource: $rdf.NamedNode, defaultACLDoc: $rdf.NamedNode): $rdf.IndexedFormula;
 /**
  * Read and canonicalize the ACL for x in aclDoc
  *
  * Accumulate the access rights which each agent or class has
  */
-export declare function readACL(x: $rdf.NamedNode, aclDoc: $rdf.NamedNode, kb2?: $rdf.IndexedFormula, getDefaults?: boolean): AgentMapMap;
+export declare function readACL(doc: $rdf.NamedNode, aclDoc: $rdf.NamedNode, kb2?: $rdf.IndexedFormula, getDefaults?: boolean): AgentMapMap;
 /**
  * Compare two ACLs
  */
-export declare function sameACL(a: AgentMapMap, b: AgentMapMap): boolean;
+export declare function sameACL(a: AgentMapMap | AgentMapUnion, b: AgentMapMap | AgentMapUnion): boolean;
 /**
  * Union N ACLs
  */
-export declare function ACLunion(list: Array<AgentMapMap>): AgentMapMap;
+export declare function ACLunion(list: Array<AgentMapMap | AgentMapUnion>): AgentMapUnion;
 /**
  * Merge ACLs lists from things to form union
  */
-export declare function loadUnionACL(subjectList: Array<$rdf.NamedNode>, callbackFunction: Function): void;
+export declare function loadUnionACL(subjectList: Array<$rdf.NamedNode>, callbackFunction: loadUnionACLCallback): void;
+declare type loadUnionACLCallback = (ok: boolean, message?: string | $rdf.NamedNode | AgentMapUnion | AgentMapMap) => void;
 /**
  * Represents these as an RDF graph by combination of modes
  *
  * Each agent can only be in one place in this model, one combination of modes.
  * Combos are like full control, read append, read only etc.
  */
-export declare function ACLbyCombination(ac: AgentMapMap): ComboList;
+export declare function ACLbyCombination(ac: AgentMapMap | AgentMapUnion): ComboList;
 /**
  * Write ACL graph to store from AC
  */
@@ -62,7 +63,7 @@ export declare function makeACLString(x: $rdf.NamedNode, ac: AgentMapMap, aclDoc
 /**
  * Write ACL graph to web
  */
-export declare function putACLObject(kb: $rdf.IndexedFormula, x: $rdf.NamedNode, ac: AgentMapMap, aclDoc: $rdf.NamedNode, callbackFunction: any): void;
+export declare function putACLObject(kb: $rdf.IndexedFormula, x: $rdf.NamedNode, ac: AgentMapMap | AgentMapUnion, aclDoc: $rdf.NamedNode, callbackFunction: (ok: boolean, message?: string) => void): void;
 /**
  * Write ACL graph to web from a [[ComboList]]
  */
@@ -72,11 +73,13 @@ export declare function putACLbyCombo(kb: $rdf.IndexedFormula, x: $rdf.NamedNode
  *
  * All group files must be loaded first
  */
-export declare function fixIndividualCardACL(person: $rdf.NamedNode, log: Function, callbackFunction: Function): void;
+export declare function fixIndividualCardACL(person: $rdf.NamedNode, log: Function, callbackFunction: fixIndividualCardACL): void;
+declare type fixIndividualCardACL = (ok: boolean, message?: string | $rdf.NamedNode | AgentMapUnion | AgentMapMap) => void;
 /**
  * This function is used by [[fixIndividualCardACL]]
  */
-export declare function fixIndividualACL(item: $rdf.NamedNode, subjects: Array<$rdf.NamedNode>, log: Function, callbackFunction: Function): void;
+export declare function fixIndividualACL(item: $rdf.NamedNode, subjects: Array<$rdf.NamedNode>, log: Function, callbackFunction: fixIndividualACLCallback): void;
+declare type fixIndividualACLCallback = (ok: boolean, message?: string | $rdf.NamedNode | AgentMapUnion | AgentMapMap) => void;
 /**
  * Set an ACL
  */
@@ -104,4 +107,5 @@ export declare function getACL(doc: $rdf.NamedNode, callbackFunction: (ok: boole
  * Calls [[getACLorDefault]] and then (?)
  */
 export declare function getProspectiveHolder(targetDirectory: string): Promise<$rdf.NamedNode | undefined>;
+export {};
 //# sourceMappingURL=acl.d.ts.map
