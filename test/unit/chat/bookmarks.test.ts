@@ -1,6 +1,8 @@
+import { silenceDebugMessages } from '../../setup'
 import { findBookmarkDocument, toggleBookmark, renderBookmarksButton } from '../../../src/chat/bookmarks'
 import { NamedNode } from 'rdflib'
 
+silenceDebugMessages()
 jest.mock('solid-auth-client')
 
 describe('findBookmarkDocument', () => {

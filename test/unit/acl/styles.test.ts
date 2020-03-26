@@ -1,5 +1,7 @@
+import { silenceDebugMessages } from '../../setup'
 import * as Styles from '../../../src/acl/styles'
 
+silenceDebugMessages()
 jest.mock('solid-auth-client')
 
 describe('Styles', () => {

@@ -1,5 +1,8 @@
+import { silenceDebugMessages } from '../../../setup'
 import ns from '../../../../src/ns'
 import { fieldParams } from '../../../../src/widgets/forms/fieldParams'
+
+silenceDebugMessages()
 
 describe('fieldParams', () => {
   it('exists', () => {

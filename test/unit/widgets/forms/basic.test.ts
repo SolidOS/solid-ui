@@ -1,4 +1,5 @@
-import { namedNode, blankNode } from 'rdflib'
+import { silenceDebugMessages } from '../../../setup'
+import { namedNode } from 'rdflib'
 import {
   fieldLabel,
   fieldStore,
@@ -8,6 +9,7 @@ import { store, ns } from '../../../../src/'
 import { textInputStyle } from '../../../../src/style'
 import { clearStore } from '../../helpers/clearStore'
 
+silenceDebugMessages()
 afterEach(clearStore)
 
 describe('fieldLabel', () => {

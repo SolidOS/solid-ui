@@ -1,7 +1,10 @@
+import { silenceDebugMessages } from '../setup'
 import { JSDOM } from 'jsdom'
 import * as RdfLib from 'rdflib'
 import { lightColorHash, notepad } from '../../src/pad'
 import { log } from '../../src/debug'
+
+silenceDebugMessages()
 
 // jest.mock('rdflib')
 // jest.mock('solid-auth-client')

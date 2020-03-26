@@ -1,3 +1,4 @@
+import { silenceDebugMessages } from '../../../setup'
 import { namedNode, graph } from 'rdflib'
 import ns from '../../../../src/ns'
 import uiStore from '../../../../src/store'
@@ -22,6 +23,8 @@ import {
 } from '../../../../src/widgets/forms'
 
 import { basicField } from '../../../../src/widgets/forms/basic'
+
+silenceDebugMessages()
 
 describe('field', () => {
   it('exists', () => {

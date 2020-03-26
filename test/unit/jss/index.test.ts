@@ -1,5 +1,7 @@
+import { silenceDebugMessages } from '../../setup'
 import { getClasses, getStylesheet } from '../../../src/jss/index'
 
+silenceDebugMessages()
 jest.mock('solid-auth-client')
 
 describe('getClasses', () => {

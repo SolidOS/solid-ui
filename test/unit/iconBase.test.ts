@@ -1,5 +1,7 @@
+import { silenceDebugMessages } from '../setup'
 import { iconBase, originalIconBase } from '../../src/iconBase'
 
+silenceDebugMessages()
 jest.mock('solid-auth-client')
 
 describe('iconBase', () => {

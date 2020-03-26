@@ -1,3 +1,4 @@
+import { silenceDebugMessages } from '../../../setup'
 import { namedNode } from 'rdflib'
 import ns from '../../../../src/ns'
 import uiStore from '../../../../src/store'
@@ -9,6 +10,7 @@ import {
 } from '../../../../src/widgets/forms/fieldFunction'
 import { clearStore } from '../../helpers/clearStore'
 
+silenceDebugMessages()
 afterEach(clearStore)
 
 describe('mostSpecificClassURI', () => {
