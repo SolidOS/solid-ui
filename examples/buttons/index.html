@@ -79,19 +79,32 @@
   <pre id="viewSource-attachmentList"></pre><script>showSource('attachmentList')</script>
   <div id="div-attachmentList"></div>
 
- <h2 id="button"><a href="#button">button</a></h2>
-  <script id="script-button">
+  <h2 id="button with icon"><a href="#button-with-icon">button with icon</a></h2>
+  <script id="script-button-with-icon">
     window.addEventListener('DOMContentLoaded', (event) => {
       const solidLogo = 'https://solidproject.org/assets/img/solid-emblem.svg'
-      $('#div-button').appendChild(
+      $('#div-button-with-icon').appendChild(
         UI.widgets.button(document, solidLogo, 'test', () => {
           window.alert('clicked!')
         })
       )
     })
   </script>
-  <pre id="viewSource-button"></pre><script>showSource('button')</script>
-  <div id="div-button"></div>
+  <pre id="viewSource-button-with-icon"></pre><script>showSource('button-with-icon')</script>
+  <div id="div-button-with-icon"></div>
+
+  <h2 id="button-with-text"><a href="#button-with-text">button with text</a></h2>
+  <script id="script-button-with-text">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      $('#div-button-with-text').appendChild(
+        UI.widgets.button(document, undefined, 'test', () => {
+          window.alert('clicked!')
+        })
+      )
+    })
+  </script>
+  <pre id="viewSource-button-with-text"></pre><script>showSource('button-with-text')</script>
+  <div id="div-button-with-text"></div>
 
  <h2 id="cancelButton"><a href="#cancelButton">cancelButton</a></h2>
   <script id="script-cancelButton">

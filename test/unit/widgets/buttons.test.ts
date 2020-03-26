@@ -1,5 +1,5 @@
 import { silenceDebugMessages } from '../../setup'
-import { JSDOM } from 'jsdom'
+import { JSDOM, DOMWindow } from 'jsdom'
 import {
   addStyleSheet,
   allClassURIs,
@@ -45,12 +45,18 @@ import { clearStore } from '../helpers/clearStore'
 
 silenceDebugMessages()
 jest.mock('solid-auth-client')
-const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
-const dom = window.document
-const element = dom.createElement('div')
-const event = new window.Event('test')
-dom.dispatchEvent(event)
+let window: DOMWindow
+let dom: HTMLDocument
+let element: HTMLDivElement
+let event: Event
 
+beforeEach(() => {
+  window = new JSDOM('<!DOCTYPE html><head></head><body><p>Hello world</p></body>').window
+  dom = window.document
+  element = dom.createElement('div')
+  event = new window.Event('test')
+  dom.dispatchEvent(event)
+})
 describe('addStyleSheet', () => {
   it('exists', () => {
     expect(addStyleSheet).toBeInstanceOf(Function)
@@ -105,7 +111,14 @@ describe('button', () => {
     const text = 'txt'
     const handler = () => {
     }
-    expect(button(dom, iconURI, text, handler)).toBeTruthy()
+    // FIXME: Not sure why this is needed, but
+    // JSS tries to do .insertBefore on a StyleSheet element,
+    // and that seems to fail in JSDOM (it works fine in the browser)
+    const domCopy = {
+      head: {},
+      createElement: dom.createElement.bind(dom)
+    }
+    expect(button(domCopy as unknown as HTMLDocument, iconURI, text, handler)).toBeTruthy()
   })
 })
 

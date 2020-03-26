@@ -5,6 +5,7 @@ import ns from '../ns'
 import style from '../style'
 import * as debug from '../debug'
 import { info } from '../log'
+import { getClasses } from '../jss'
 
 /**
  * UI Widgets such as buttons
@@ -480,21 +481,45 @@ export function deleteButtonWithCheck (
 /*  Make a button
  *
  * @param dom - the DOM document object
- * @Param iconURI - the URI of theb icon to use
+ * @Param iconURI - the URI of the icon to use (if any)
  * @param text - the tooltip text or possibly button contents text
  * @param handler <function> - A handler to called when button is clicked
  *
  * @returns <dDomElement> - the button
  */
-export function button (dom: HTMLDocument, iconURI: string, text: string, handler: (event: any) => void) {
+export function button (dom: HTMLDocument, iconURI: string | undefined, text: string, handler: (event: any) => void) {
   var button = dom.createElement('button')
   button.setAttribute('type', 'button')
-  button.setAttribute('style', style.buttonStyle)
   // button.innerHTML = text  // later, user preferences may make text preferred for some
-  var img = button.appendChild(dom.createElement('img'))
-  img.setAttribute('src', iconURI)
-  img.setAttribute('style', 'width: 2em; height: 2em;') // trial and error. 2em disappears
-  img.title = text
+  if (iconURI) {
+    var img = button.appendChild(dom.createElement('img'))
+    img.setAttribute('src', iconURI)
+    img.setAttribute('style', 'width: 2em; height: 2em;') // trial and error. 2em disappears
+    img.title = text
+    button.setAttribute('style', style.buttonStyle)
+  } else {
+    button.innerText = text.toLocaleUpperCase()
+    const { classes } = getClasses(dom.head, {
+      textButton: { // See https://design.inrupt.com/atomic-core/?cat=Atoms#Buttons
+        'background-color': '#7c4dff',
+        color: '#fff',
+        'font-family': 'Raleway, Roboto, sans-serif',
+        'border-radius': '0.25em',
+        border: 'none',
+        cursor: 'pointer',
+        'font-size': '.8em',
+        'text-decoration': 'none',
+        padding: '0.5em 4em',
+        transition: '0.25s all ease-in-out',
+        outline: 'none',
+        '&:hover': {
+          'background-color': '#8f67ff',
+          transition: '0.25s all ease-in-out'
+        }
+      }
+    })
+    button.classList.add(classes.textButton)
+  }
   if (handler) {
     button.addEventListener('click', handler, false)
   }

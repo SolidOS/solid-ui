@@ -29,11 +29,6 @@ describe('buttonStyle', () => {
     expect(typeof buttonStyle).toEqual('string')
   })
 })
-describe('textButtonStyle', () => {
-  it('exists', () => {
-    expect(typeof textButtonStyle).toEqual('string')
-  })
-})
 describe('iconStyle', () => {
   it('exists', () => {
     expect(typeof iconStyle).toEqual('string')
