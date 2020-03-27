@@ -27,6 +27,16 @@ export type StatusAreaContext = {
   div?: HTMLElement
   dom?: HTMLDocument
 }
+enum ButtonType {
+  primary,
+  secondary,
+  cancel,
+  continue
+}
+type ButtonWidgetOptions = {
+  buttonType?: ButtonType
+  filled?: boolean
+}
 function getStatusArea (context?: StatusAreaContext) {
   var box = (context && context.statusArea) || (context && context.div) || null
   if (box) return box
@@ -394,7 +404,7 @@ export function setImage (element: HTMLElement, thing: NamedNode) { // 20191230a
 // See eg http://stackoverflow.com/questions/980855/inputting-a-default-image
 function faviconOrDefault (dom: HTMLDocument, x: NamedNode) {
   var image = dom.createElement('img')
-  ;(image as any).style = style.iconStyle
+    ; (image as any).style = style.iconStyle
   var isOrigin = function (x) {
     if (!x.uri) return false
     var parts = x.uri.split('/')
@@ -478,6 +488,34 @@ export function deleteButtonWithCheck (
   return deleteButtonElt
 }
 
+function getButtonStyle (options: ButtonWidgetOptions) {
+  const color = '#7c4dff'
+
+  const backgroundColor = options.filled ? color : '#ffffff'
+  const fontColor = options.filled ? '#ffffff' : color
+  const borderColor = options.filled ? 'none' : color
+  const hoverBackgroundColor = 'lighten(color, 5%)'
+
+  // See https://design.inrupt.com/atomic-core/?cat=Atoms#Buttons
+  return {
+    'background-color': `${backgroundColor}`,
+    color: `${fontColor}`,
+    'font-family': 'Raleway, Roboto, sans-serif',
+    'border-radius': '0.25em',
+    'border-color': `${borderColor}`,
+    border: '1px solid',
+    cursor: 'pointer',
+    'font-size': '.8em',
+    'text-decoration': 'none',
+    padding: '0.5em 4em',
+    transition: '0.25s all ease-in-out',
+    outline: 'none',
+    '&:hover': {
+      'background-color': `${hoverBackgroundColor}`,
+      transition: '0.25s all ease-in-out'
+    }
+  }
+}
 /*  Make a button
  *
  * @param dom - the DOM document object
@@ -487,7 +525,7 @@ export function deleteButtonWithCheck (
  *
  * @returns <dDomElement> - the button
  */
-export function button (dom: HTMLDocument, iconURI: string | undefined, text: string, handler: (event: any) => void) {
+export function button (dom: HTMLDocument, iconURI: string | undefined, text: string, handler: (event: any) => void, options: ButtonWidgetOptions) {
   var button = dom.createElement('button')
   button.setAttribute('type', 'button')
   // button.innerHTML = text  // later, user preferences may make text preferred for some
@@ -499,25 +537,11 @@ export function button (dom: HTMLDocument, iconURI: string | undefined, text: st
     button.setAttribute('style', style.buttonStyle)
   } else {
     button.innerText = text.toLocaleUpperCase()
+    const style = getButtonStyle(options)
     const { classes } = getClasses(dom.head, {
-      textButton: { // See https://design.inrupt.com/atomic-core/?cat=Atoms#Buttons
-        'background-color': '#7c4dff',
-        color: '#fff',
-        'font-family': 'Raleway, Roboto, sans-serif',
-        'border-radius': '0.25em',
-        border: 'none',
-        cursor: 'pointer',
-        'font-size': '.8em',
-        'text-decoration': 'none',
-        padding: '0.5em 4em',
-        transition: '0.25s all ease-in-out',
-        outline: 'none',
-        '&:hover': {
-          'background-color': '#8f67ff',
-          transition: '0.25s all ease-in-out'
-        }
-      }
+      textButton: style
     })
+
     button.classList.add(classes.textButton)
   }
   if (handler) {
@@ -534,7 +558,7 @@ export function button (dom: HTMLDocument, iconURI: string | undefined, text: st
  * @returns <dDomElement> - the button
  */
 export function cancelButton (dom: HTMLDocument, handler: (event: any) => void) {
-  return button(dom, cancelIconURI, 'Cancel', handler)
+  return button(dom, cancelIconURI, 'Cancel', handler, {})
 }
 
 /*  Make a continue button
@@ -545,7 +569,7 @@ export function cancelButton (dom: HTMLDocument, handler: (event: any) => void) 
  * @returns <dDomElement> - the button
  */
 export function continueButton (dom: HTMLDocument, handler: (event: any) => void) {
-  return button(dom, checkIconURI, 'Continue', handler)
+  return button(dom, checkIconURI, 'Continue', handler, {})
 }
 
 /* Grab a name for a new thing
@@ -664,7 +688,7 @@ export function personTR (dom: HTMLDocument, pred: NamedNode, obj: NamedNode, op
       dragAndDrop.makeDraggable(tr, obj)
     }
   }
-  ;(tr as any).subject = obj
+  ; (tr as any).subject = obj
   return tr
 }
 
@@ -746,7 +770,7 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
     things.sort()
     utils.syncTableToArray(attachmentTable, things, createNewRow)
   })
-  ;(attachmentOuter as any).refresh = refresh // Participate in downstream changes
+    ; (attachmentOuter as any).refresh = refresh // Participate in downstream changes
   refresh()
 
   var droppedURIHandler = function (uris) {
@@ -792,10 +816,10 @@ export function openHrefInOutlineMode (e: Event) {
   const dom = window.document
   if ((dom as any).outlineManager) {
     // @@ TODO Remove the use of document as a global object
-    ;(dom as any).outlineManager.GotoSubject(store.sym(uri), true, undefined, true, undefined)
+    ; (dom as any).outlineManager.GotoSubject(store.sym(uri), true, undefined, true, undefined)
   } else if (window && (window as any).panes && (window as any).panes.getOutliner) {
     // @@ TODO Remove the use of window as a global object
-    ;(window as any).panes
+    ; (window as any).panes
       .getOutliner()
       .GotoSubject(store.sym(uri), true, undefined, true, undefined)
   } else {
@@ -895,7 +919,7 @@ export function propertyTriage (kb: IndexedFormula): any {
   }
   possibleProperties.op = op
   possibleProperties.dp = dp
-  info(`propertyTriage: ${no} non-lit, ${nd} literal. ${nu} unknown.`)
+  info(`propertyTriage: ${no} non - lit, ${nd} literal.${nu} unknown.`)
   return possibleProperties
 }
 
@@ -912,7 +936,7 @@ export function linkButton (dom: HTMLDocument, object: NamedNode): HTMLElement {
   b.textContent = 'Goto ' + utils.label(object)
   b.addEventListener('click', function (_event) {
     // b.parentNode.removeChild(b)
-    ;(dom as any).outlineManager.GotoSubject(object, true, undefined, true, undefined)
+    ; (dom as any).outlineManager.GotoSubject(object, true, undefined, true, undefined)
   }, true)
   return b
 }
@@ -925,7 +949,7 @@ export function removeButton (dom: HTMLDocument, element: HTMLElement) {
   b.setAttribute('type', 'button')
   b.textContent = '✕' // MULTIPLICATION X
   b.addEventListener('click', function (_event) {
-    ;(element as any).parentNode.removeChild(element)
+    ; (element as any).parentNode.removeChild(element)
   }, true)
   return b
 }
@@ -1130,13 +1154,13 @@ function twoLineTransaction (dom: HTMLDocument, x: NamedNode): HTMLElement {
   }
   var box = dom.createElement('table')
   box.innerHTML = `
-    <tr>
-      <td colspan="2">${enc('payee')}</td>
-    </tr>
-    <tr>
-      <td>${enc('date').slice(0, 10)}</td>
-      <td style="text-align: right;">${enc('amount')}</td>
-    </tr>`
+      < tr >
+      <td colspan="2" > ${enc('payee')} < /td>
+      < /tr>
+      < tr >
+      <td>${enc('date').slice(0, 10)} < /td>
+      < td style = "text-align: right;" > ${enc('amount')} < /td>
+      < /tr>`
   if (failed) {
     box.innerHTML = `
       <tr>
@@ -1255,7 +1279,7 @@ export function fileUploadButtonDiv (
     false
   )
 
-  ;(input as any).style = 'display:none'
+    ; (input as any).style = 'display:none'
   const buttonElt = div.appendChild(
     button(
       dom,
@@ -1263,7 +1287,7 @@ export function fileUploadButtonDiv (
       'Upload files',
       _event => {
         input.click()
-      }
+      }, {}
     )
   )
   dragAndDrop.makeDropTarget(buttonElt, null, droppedFileHandler) // Can also just drop on button

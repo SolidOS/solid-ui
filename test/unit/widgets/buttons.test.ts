@@ -118,7 +118,7 @@ describe('button', () => {
       head: {},
       createElement: dom.createElement.bind(dom)
     }
-    expect(button(domCopy as unknown as HTMLDocument, iconURI, text, handler)).toBeTruthy()
+    expect(button(domCopy as unknown as HTMLDocument, iconURI, text, handler, {})).toBeTruthy()
   })
 })
 
@@ -456,8 +456,8 @@ describe('selectorPanelRefresh', () => {
     const inverse = false
     const possible = [namedNode('https://domain.tld/#test')]
     const options = {}
-    const callbackFunction = () => {}
-    const linkCallback = () => {}
+    const callbackFunction = () => { }
+    const linkCallback = () => { }
     expect(selectorPanelRefresh(
       list,
       dom,
