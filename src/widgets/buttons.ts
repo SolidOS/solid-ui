@@ -22,6 +22,10 @@ const dragAndDrop = require('./dragAndDrop')
 const cancelIconURI = iconBase + 'noun_1180156.svg' // black X
 const checkIconURI = iconBase + 'noun_1180158.svg' // green checkmark; Continue
 
+const PRIMARY_COLOR = '#7c4dff'
+const SECONDARY_COLOR = '#01C9EA'
+
+
 export type StatusAreaContext = {
   statusArea?: HTMLElement
   div?: HTMLElement
@@ -34,8 +38,8 @@ export enum ButtonType {
   Continue = ''
 }
 export type ButtonWidgetOptions = {
-  buttonType?: ButtonType,
-  filled?: boolean
+  buttonColor?: ButtonType,
+  needsBorder?: boolean
 }
 function getStatusArea (context?: StatusAreaContext) {
   var box = (context && context.statusArea) || (context && context.div) || null
@@ -488,18 +492,22 @@ export function deleteButtonWithCheck (
   return deleteButtonElt
 }
 
-function getButtonStyle (options: ButtonWidgetOptions = { buttonType: ButtonType.Primary, filled: true }) {
+function getButtonStyle (options: ButtonWidgetOptions = { buttonColor: ButtonType.Primary, needsBorder: false }) {
   // We need to accomadate for legacy code, which is why we have to allow buttonType and filled to be optional
-  let backgroundColor: (ButtonType | string | undefined) = options.buttonType
-  let fontColor: (ButtonType | string | undefined) = '#ffffff'
-  let borderColor: (ButtonType | string | undefined) = options.buttonType
-  let hoverBackgroundColor: (ButtonType | string | undefined) = `lighten(${options.buttonType}, 5%)`
-  let hoverFontColor: (ButtonType | string | undefined) = fontColor
-  if (!options.filled) {
+  let color = PRIMARY_COLOR
+  if (options.buttonColor === ButtonType.Secondary) {
+    color = SECONDARY_COLOR
+  }
+  let backgroundColor: string = color
+  let fontColor: string = '#ffffff'
+  let borderColor: string = color
+  let hoverBackgroundColor: string = `lighten(${color}, 5%)`
+  let hoverFontColor: string = fontColor
+  if (options.needsBorder) {
     backgroundColor = '#ffffff'
-    fontColor = options.buttonType
-    borderColor = options.buttonType
-    hoverBackgroundColor = options.buttonType
+    fontColor = color
+    borderColor = color
+    hoverBackgroundColor = color
     hoverFontColor = backgroundColor
   }
 
@@ -533,7 +541,7 @@ function getButtonStyle (options: ButtonWidgetOptions = { buttonType: ButtonType
  *
  * @returns <dDomElement> - the button
  */
-export function button (dom: HTMLDocument, iconURI: string | undefined, text: string, handler: (event: any) => void, options: ButtonWidgetOptions = { buttonType: ButtonType.Primary, filled: true }) {
+export function button (dom: HTMLDocument, iconURI: string | undefined, text: string, handler: (event: any) => void, options: ButtonWidgetOptions = { buttonColor: ButtonType.Primary, needsBorder: false }) {
   var button = dom.createElement('button')
   button.setAttribute('type', 'button')
   // button.innerHTML = text  // later, user preferences may make text preferred for some
@@ -566,7 +574,7 @@ export function button (dom: HTMLDocument, iconURI: string | undefined, text: st
  * @returns <dDomElement> - the button
  */
 export function cancelButton (dom: HTMLDocument, handler: (event: any) => void) {
-  return button(dom, cancelIconURI, 'Cancel', handler, {})
+  return button(dom, cancelIconURI, 'Cancel', handler)
 }
 
 /*  Make a continue button
@@ -577,7 +585,7 @@ export function cancelButton (dom: HTMLDocument, handler: (event: any) => void) 
  * @returns <dDomElement> - the button
  */
 export function continueButton (dom: HTMLDocument, handler: (event: any) => void) {
-  return button(dom, checkIconURI, 'Continue', handler, {})
+  return button(dom, checkIconURI, 'Continue', handler)
 }
 
 /* Grab a name for a new thing
@@ -1287,7 +1295,7 @@ export function fileUploadButtonDiv (
     false
   )
 
-  ; (input as any).style = 'display:none'
+    ; (input as any).style = 'display:none'
   const buttonElt = div.appendChild(
     button(
       dom,

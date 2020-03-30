@@ -119,7 +119,7 @@ describe('button', () => {
       head: {},
       createElement: dom.createElement.bind(dom)
     }
-    expect(button(domCopy as unknown as HTMLDocument, iconURI, text, handler, {})).toBeTruthy()
+    expect(button(domCopy as unknown as HTMLDocument, iconURI, text, handler)).toBeTruthy()
   })
 })
 
