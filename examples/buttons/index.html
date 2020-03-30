@@ -100,13 +100,54 @@
   <script>showSource('button-with-icon')</script>
   <div id="div-button-with-icon"></div>
 
-  <h2 id="button-with-text"><a href="#button-with-text">button with text</a></h2>
+  <h2 id="button-with-text"><a href="#button-with-text-primary-filled">button with text</a></h2>
+  <script id="script-button-with-text">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      $('#div-button-with-text').appendChild(
+        UI.widgets.button(document, undefined, 'test', () => {
+          window.alert('clicked!')
+        }, { buttonType: UI.widgets.ButtonType.Primary, filled: true })
+      )
+    })
+  </script>
+  <pre id="viewSource-button-with-text"></pre>
+  <script>showSource('button-with-text')</script>
+  <div id="div-button-with-text"></div>
+
+  <h2 id="button-with-text"><a href="#button-with-text-primary-notfilled">button with text</a></h2>
+  <script id="script-button-with-text">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      $('#div-button-with-text').appendChild(
+        UI.widgets.button(document, undefined, 'test', () => {
+          window.alert('clicked!')
+        }, { buttonType: UI.widgets.ButtonType.Primary, filled: false })
+      )
+    })
+  </script>
+  <pre id="viewSource-button-with-text"></pre>
+  <script>showSource('button-with-text')</script>
+  <div id="div-button-with-text"></div>
+
+  <h2 id="button-with-text"><a href="#button-with-text-secondary-filled">button with text</a></h2>
   <script id="script-button-with-text">
     window.addEventListener('DOMContentLoaded', (event) => {
       $('#div-button-with-text').appendChild(
         UI.widgets.button(document, undefined, 'test', () => {
           window.alert('clicked!')
         }, { buttonType: UI.widgets.ButtonType.Secondary, filled: true })
+      )
+    })
+  </script>
+  <pre id="viewSource-button-with-text"></pre>
+  <script>showSource('button-with-text')</script>
+  <div id="div-button-with-text"></div>
+  <h2 id="button-with-text"><a href="#button-with-text-secondary-notfilled">button with text</a></h2>
+  <script id="script-button-with-text">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      $('#div-button-with-text').appendChild(
+        UI.widgets.button(document, undefined, 'test', () => {
+          window.alert('clicked!')
+        }, { buttonType: UI.widgets.ButtonType.Secondary, filled: false })
       )
     })
   </script>
