@@ -106,7 +106,7 @@
       $('#div-button-with-text').appendChild(
         UI.widgets.button(document, undefined, 'test', () => {
           window.alert('clicked!')
-        }, { buttonType: 0, filled: false })
+        }, { buttonType: UI.widgets.ButtonType.Secondary, filled: true })
       )
     })
   </script>

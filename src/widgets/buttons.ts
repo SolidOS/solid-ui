@@ -27,14 +27,14 @@ export type StatusAreaContext = {
   div?: HTMLElement
   dom?: HTMLDocument
 }
-enum ButtonType {
-  primary,
-  secondary,
-  cancel,
-  continue
+export enum ButtonType {
+  Primary = '#7c4dff',
+  Secondary = '#01C9EA',
+  Cancel = '',
+  Continue = ''
 }
-type ButtonWidgetOptions = {
-  buttonType?: ButtonType
+export type ButtonWidgetOptions = {
+  buttonType?: ButtonType,
   filled?: boolean
 }
 function getStatusArea (context?: StatusAreaContext) {
@@ -488,13 +488,20 @@ export function deleteButtonWithCheck (
   return deleteButtonElt
 }
 
-function getButtonStyle (options: ButtonWidgetOptions) {
-  const color = '#7c4dff'
-
-  const backgroundColor = options.filled ? color : '#ffffff'
-  const fontColor = options.filled ? '#ffffff' : color
-  const borderColor = options.filled ? 'none' : color
-  const hoverBackgroundColor = 'lighten(color, 5%)'
+function getButtonStyle (options: ButtonWidgetOptions = { buttonType: ButtonType.Primary, filled: true }) {
+  // We need to accomadate for legacy code, which is why we have to allow buttonType and filled to be optional
+  let backgroundColor: (ButtonType | string | undefined) = options.buttonType
+  let fontColor: (ButtonType | string | undefined) = '#ffffff'
+  let borderColor: (ButtonType | string | undefined) = options.buttonType
+  let hoverBackgroundColor: (ButtonType | string | undefined) = `lighten(${options.buttonType}, 5%)`
+  let hoverFontColor: (ButtonType | string | undefined) = fontColor
+  if (!options.filled) {
+    backgroundColor = '#ffffff'
+    fontColor = options.buttonType
+    borderColor = options.buttonType
+    hoverBackgroundColor = options.buttonType
+    hoverFontColor = backgroundColor
+  }
 
   // See https://design.inrupt.com/atomic-core/?cat=Atoms#Buttons
   return {
@@ -512,6 +519,7 @@ function getButtonStyle (options: ButtonWidgetOptions) {
     outline: 'none',
     '&:hover': {
       'background-color': `${hoverBackgroundColor}`,
+      color: `${hoverFontColor}`,
       transition: '0.25s all ease-in-out'
     }
   }
@@ -525,7 +533,7 @@ function getButtonStyle (options: ButtonWidgetOptions) {
  *
  * @returns <dDomElement> - the button
  */
-export function button (dom: HTMLDocument, iconURI: string | undefined, text: string, handler: (event: any) => void, options: ButtonWidgetOptions) {
+export function button (dom: HTMLDocument, iconURI: string | undefined, text: string, handler: (event: any) => void, options: ButtonWidgetOptions = { buttonType: ButtonType.Primary, filled: true }) {
   var button = dom.createElement('button')
   button.setAttribute('type', 'button')
   // button.innerHTML = text  // later, user preferences may make text preferred for some
@@ -1279,7 +1287,7 @@ export function fileUploadButtonDiv (
     false
   )
 
-    ; (input as any).style = 'display:none'
+  ; (input as any).style = 'display:none'
   const buttonElt = div.appendChild(
     button(
       dom,

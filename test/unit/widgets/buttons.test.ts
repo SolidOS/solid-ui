@@ -35,7 +35,8 @@ import {
   setName,
   shortDate,
   shortTime,
-  timestamp
+  timestamp,
+  ButtonType
 } from '../../../src/widgets/buttons'
 import { graph, namedNode, NamedNode, sym } from 'rdflib'
 import { foaf, rdf, sioc, vcard } from '../../../src/ns'
