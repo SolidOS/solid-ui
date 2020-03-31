@@ -1292,7 +1292,7 @@ export function fileUploadButtonDiv (
     false
   )
 
-    ; (input as any).style = 'display:none'
+  ; (input as any).style = 'display:none'
   const buttonElt = div.appendChild(
     button(
       dom,
