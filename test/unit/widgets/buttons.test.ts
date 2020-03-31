@@ -50,12 +50,14 @@ let window: DOMWindow
 let dom: HTMLDocument
 let element: HTMLDivElement
 let event: Event
+let clickEvent: Event
 
 beforeEach(() => {
   window = new JSDOM('<!DOCTYPE html><head></head><body><p>Hello world</p></body>').window
   dom = window.document
   element = dom.createElement('div')
   event = new window.Event('test')
+  clickEvent = new window.Event('click')
   dom.dispatchEvent(event)
 })
 describe('addStyleSheet', () => {
@@ -113,6 +115,23 @@ describe('button', () => {
     const handler = () => {
     }
     expect(button(domWithHead(), iconURI, text, handler)).toBeTruthy()
+  })
+  it('has the style class from JSS', () => {
+    const iconURI = ''
+    const text = 'txt'
+    const handler = () => {
+    }
+    const buttonElt = button(domWithHead(), iconURI, text, handler)
+    expect(buttonElt.classList[0]).toEqual(expect.stringMatching(/^textButton-\d-\d-\d$/))
+  })
+  it('calls the callback when you click it', (done) => {
+    const iconURI = ''
+    const text = 'txt'
+    const handler = () => {
+      done()
+    }
+    const buttonElt = button(domWithHead(), iconURI, text, handler)
+    buttonElt.dispatchEvent(clickEvent)
   })
 })
 
