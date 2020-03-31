@@ -1,4 +1,4 @@
-import { silenceDebugMessages } from '../../setup'
+import { silenceDebugMessages } from '../../helpers/setup'
 import { JSDOM, DOMWindow } from 'jsdom'
 import {
   addStyleSheet,
@@ -42,6 +42,7 @@ import { foaf, rdf, sioc, vcard } from '../../../src/ns'
 import { iconBase } from '../../../src/iconBase'
 import store from '../../../src/store'
 import { clearStore } from '../helpers/clearStore'
+import { domWithHead } from '../../helpers/dom-with-head'
 
 silenceDebugMessages()
 jest.mock('solid-auth-client')
@@ -111,14 +112,7 @@ describe('button', () => {
     const text = 'txt'
     const handler = () => {
     }
-    // FIXME: Not sure why this is needed, but
-    // JSS tries to do .insertBefore on a StyleSheet element,
-    // and that seems to fail in JSDOM (it works fine in the browser)
-    const domCopy = {
-      head: {},
-      createElement: dom.createElement.bind(dom)
-    }
-    expect(button(domCopy as unknown as HTMLDocument, iconURI, text, handler)).toBeTruthy()
+    expect(button(domWithHead(), iconURI, text, handler)).toBeTruthy()
   })
 })
 
