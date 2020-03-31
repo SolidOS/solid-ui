@@ -25,18 +25,13 @@ const checkIconURI = iconBase + 'noun_1180158.svg' // green checkmark; Continue
 const PRIMARY_COLOR = '#7c4dff'
 const SECONDARY_COLOR = '#01C9EA'
 
-
 export type StatusAreaContext = {
   statusArea?: HTMLElement
   div?: HTMLElement
   dom?: HTMLDocument
 }
-export enum ButtonType {
-  Primary = '#7c4dff',
-  Secondary = '#01C9EA',
-  Cancel = '',
-  Continue = ''
-}
+export type ButtonType = 'Primary' | 'Secondary' | 'Cancel' | 'Continue'
+
 export type ButtonWidgetOptions = {
   buttonColor?: ButtonType,
   needsBorder?: boolean
@@ -492,16 +487,18 @@ export function deleteButtonWithCheck (
   return deleteButtonElt
 }
 
-function getButtonStyle (options: ButtonWidgetOptions = { buttonColor: ButtonType.Primary, needsBorder: false }) {
+function getButtonStyle (options: ButtonWidgetOptions = { buttonColor: 'Primary', needsBorder: false }) {
   // We need to accomadate for legacy code, which is why we have to allow buttonType and filled to be optional
   let color = PRIMARY_COLOR
-  if (options.buttonColor === ButtonType.Secondary) {
+  if (options.buttonColor === 'Secondary') {
     color = SECONDARY_COLOR
   }
   let backgroundColor: string = color
   let fontColor: string = '#ffffff'
   let borderColor: string = color
-  let hoverBackgroundColor: string = `lighten(${color}, 5%)`
+  // hoverBackground i used the color picker tool to change the rgb and then find out the hex
+  // lighten is used in design.inrupt.com, but this only works in sass and less
+  let hoverBackgroundColor: string = (options.buttonColor === 'Primary') ? '#9f7dff' : '#37cde6'
   let hoverFontColor: string = fontColor
   if (options.needsBorder) {
     backgroundColor = '#ffffff'
@@ -541,7 +538,7 @@ function getButtonStyle (options: ButtonWidgetOptions = { buttonColor: ButtonTyp
  *
  * @returns <dDomElement> - the button
  */
-export function button (dom: HTMLDocument, iconURI: string | undefined, text: string, handler: (event: any) => void, options: ButtonWidgetOptions = { buttonColor: ButtonType.Primary, needsBorder: false }) {
+export function button (dom: HTMLDocument, iconURI: string | undefined, text: string, handler: (event: any) => void, options: ButtonWidgetOptions = { buttonColor: 'Primary', needsBorder: false }) {
   var button = dom.createElement('button')
   button.setAttribute('type', 'button')
   // button.innerHTML = text  // later, user preferences may make text preferred for some
