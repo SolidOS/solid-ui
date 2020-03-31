@@ -927,7 +927,7 @@ export function propertyTriage (kb: IndexedFormula): any {
   }
   possibleProperties.op = op
   possibleProperties.dp = dp
-  info(`propertyTriage: ${no} non - lit, ${nd} literal.${nu} unknown.`)
+  info(`propertyTriage: ${no} non-lit, ${nd} literal. ${nu} unknown.`)
   return possibleProperties
 }
 
@@ -1162,13 +1162,13 @@ function twoLineTransaction (dom: HTMLDocument, x: NamedNode): HTMLElement {
   }
   var box = dom.createElement('table')
   box.innerHTML = `
-      < tr >
-      <td colspan="2" > ${enc('payee')} < /td>
+      <tr>
+      <td colspan="2"> ${enc('payee')}</td>
       < /tr>
       < tr >
-      <td>${enc('date').slice(0, 10)} < /td>
-      < td style = "text-align: right;" > ${enc('amount')} < /td>
-      < /tr>`
+      <td>${enc('date').slice(0, 10)}</td>
+      <td style = "text-align: right;">${enc('amount')}</td>
+      </tr>`
   if (failed) {
     box.innerHTML = `
       <tr>
@@ -1295,7 +1295,7 @@ export function fileUploadButtonDiv (
       'Upload files',
       _event => {
         input.click()
-      }, {}
+      }
     )
   )
   dragAndDrop.makeDropTarget(buttonElt, null, droppedFileHandler) // Can also just drop on button
