@@ -403,7 +403,7 @@ export function setImage (element: HTMLElement, thing: NamedNode) { // 20191230a
 // See eg http://stackoverflow.com/questions/980855/inputting-a-default-image
 function faviconOrDefault (dom: HTMLDocument, x: NamedNode) {
   var image = dom.createElement('img')
-    ; (image as any).style = style.iconStyle
+  ;(image as any).style = style.iconStyle
   var isOrigin = function (x) {
     if (!x.uri) return false
     var parts = x.uri.split('/')
@@ -701,7 +701,7 @@ export function personTR (dom: HTMLDocument, pred: NamedNode, obj: NamedNode, op
       dragAndDrop.makeDraggable(tr, obj)
     }
   }
-  ; (tr as any).subject = obj
+  ;(tr as any).subject = obj
   return tr
 }
 
@@ -783,7 +783,7 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
     things.sort()
     utils.syncTableToArray(attachmentTable, things, createNewRow)
   })
-    ; (attachmentOuter as any).refresh = refresh // Participate in downstream changes
+  ;(attachmentOuter as any).refresh = refresh // Participate in downstream changes
   refresh()
 
   var droppedURIHandler = function (uris) {
@@ -829,10 +829,10 @@ export function openHrefInOutlineMode (e: Event) {
   const dom = window.document
   if ((dom as any).outlineManager) {
     // @@ TODO Remove the use of document as a global object
-    ; (dom as any).outlineManager.GotoSubject(store.sym(uri), true, undefined, true, undefined)
+    ;(dom as any).outlineManager.GotoSubject(store.sym(uri), true, undefined, true, undefined)
   } else if (window && (window as any).panes && (window as any).panes.getOutliner) {
     // @@ TODO Remove the use of window as a global object
-    ; (window as any).panes
+    ;(window as any).panes
       .getOutliner()
       .GotoSubject(store.sym(uri), true, undefined, true, undefined)
   } else {
@@ -949,7 +949,7 @@ export function linkButton (dom: HTMLDocument, object: NamedNode): HTMLElement {
   b.textContent = 'Goto ' + utils.label(object)
   b.addEventListener('click', function (_event) {
     // b.parentNode.removeChild(b)
-    ; (dom as any).outlineManager.GotoSubject(object, true, undefined, true, undefined)
+    ;(dom as any).outlineManager.GotoSubject(object, true, undefined, true, undefined)
   }, true)
   return b
 }
@@ -962,7 +962,7 @@ export function removeButton (dom: HTMLDocument, element: HTMLElement) {
   b.setAttribute('type', 'button')
   b.textContent = '✕' // MULTIPLICATION X
   b.addEventListener('click', function (_event) {
-    ; (element as any).parentNode.removeChild(element)
+  ;(element as any).parentNode.removeChild(element)
   }, true)
   return b
 }
@@ -1292,7 +1292,7 @@ export function fileUploadButtonDiv (
     false
   )
 
-  ; (input as any).style = 'display:none'
+  ;(input as any).style = 'display:none'
   const buttonElt = div.appendChild(
     button(
       dom,
