@@ -27,6 +27,12 @@ export type StatusAreaContext = {
   div?: HTMLElement
   dom?: HTMLDocument
 }
+export type ButtonType = 'Primary' | 'Secondary'
+
+export type ButtonWidgetOptions = {
+  buttonColor?: ButtonType,
+  needsBorder?: boolean
+}
 function getStatusArea (context?: StatusAreaContext) {
   var box = (context && context.statusArea) || (context && context.div) || null
   if (box) return box
@@ -478,6 +484,48 @@ export function deleteButtonWithCheck (
   return deleteButtonElt
 }
 
+/**
+ * Get the button style, based on options.
+ * See https://design.inrupt.com/atomic-core/?cat=Atoms#Buttons
+ */
+function getButtonStyle (options: ButtonWidgetOptions = {}) {
+  // default to primary color
+  const color: string = (options.buttonColor === 'Secondary') ? '#01c9ea' : '#7c4dff'
+  let backgroundColor: string = color
+  let fontColor: string = '#ffffff'
+  let borderColor: string = color
+  // default to primary color
+  let hoverBackgroundColor: string = (options.buttonColor === 'Secondary') ? '#37cde6' : '#9f7dff'
+  let hoverFontColor: string = fontColor
+  if (options.needsBorder) {
+    backgroundColor = '#ffffff'
+    fontColor = color
+    borderColor = color
+    hoverBackgroundColor = color
+    hoverFontColor = backgroundColor
+  }
+
+  return {
+    'background-color': `${backgroundColor}`,
+    color: `${fontColor}`,
+    'font-family': 'Raleway, Roboto, sans-serif',
+    'border-radius': '0.25em',
+    'border-color': `${borderColor}`,
+    border: '1px solid',
+    cursor: 'pointer',
+    'font-size': '.8em',
+    'text-decoration': 'none',
+    padding: '0.5em 4em',
+    transition: '0.25s all ease-in-out',
+    outline: 'none',
+    '&:hover': {
+      'background-color': `${hoverBackgroundColor}`,
+      color: `${hoverFontColor}`,
+      transition: '0.25s all ease-in-out'
+    }
+  }
+}
+
 /*  Make a button
  *
  * @param dom - the DOM document object
@@ -487,7 +535,7 @@ export function deleteButtonWithCheck (
  *
  * @returns <dDomElement> - the button
  */
-export function button (dom: HTMLDocument, iconURI: string | undefined, text: string, handler: (event: any) => void) {
+export function button (dom: HTMLDocument, iconURI: string | undefined, text: string, handler: (event: any) => void, options: ButtonWidgetOptions = { buttonColor: 'Primary', needsBorder: false }) {
   var button = dom.createElement('button')
   button.setAttribute('type', 'button')
   // button.innerHTML = text  // later, user preferences may make text preferred for some
@@ -499,25 +547,11 @@ export function button (dom: HTMLDocument, iconURI: string | undefined, text: st
     button.setAttribute('style', style.buttonStyle)
   } else {
     button.innerText = text.toLocaleUpperCase()
+    const style = getButtonStyle(options)
     const { classes } = getClasses(dom.head, {
-      textButton: { // See https://design.inrupt.com/atomic-core/?cat=Atoms#Buttons
-        'background-color': '#7c4dff',
-        color: '#fff',
-        'font-family': 'Raleway, Roboto, sans-serif',
-        'border-radius': '0.25em',
-        border: 'none',
-        cursor: 'pointer',
-        'font-size': '.8em',
-        'text-decoration': 'none',
-        padding: '0.5em 4em',
-        transition: '0.25s all ease-in-out',
-        outline: 'none',
-        '&:hover': {
-          'background-color': '#8f67ff',
-          transition: '0.25s all ease-in-out'
-        }
-      }
+      textButton: style
     })
+
     button.classList.add(classes.textButton)
   }
   if (handler) {
@@ -1130,13 +1164,13 @@ function twoLineTransaction (dom: HTMLDocument, x: NamedNode): HTMLElement {
   }
   var box = dom.createElement('table')
   box.innerHTML = `
-    <tr>
-      <td colspan="2">${enc('payee')}</td>
-    </tr>
-    <tr>
+      <tr>
+      <td colspan="2"> ${enc('payee')}</td>
+      < /tr>
+      < tr >
       <td>${enc('date').slice(0, 10)}</td>
-      <td style="text-align: right;">${enc('amount')}</td>
-    </tr>`
+      <td style = "text-align: right;">${enc('amount')}</td>
+      </tr>`
   if (failed) {
     box.innerHTML = `
       <tr>
