@@ -27,7 +27,7 @@ export type StatusAreaContext = {
   div?: HTMLElement
   dom?: HTMLDocument
 }
-export type ButtonType = 'Primary' | 'Secondary' | 'Cancel' | 'Continue'
+export type ButtonType = 'Primary' | 'Secondary'
 
 export type ButtonWidgetOptions = {
   buttonColor?: ButtonType,
