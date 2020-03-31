@@ -484,13 +484,15 @@ export function deleteButtonWithCheck (
   return deleteButtonElt
 }
 
+/**
+ * Get the button style, based on options.
+ * See https://design.inrupt.com/atomic-core/?cat=Atoms#Buttons
+ */
 function getButtonStyle (options: ButtonWidgetOptions = { buttonColor: 'Primary', needsBorder: false }) {
   const color: string = (options.buttonColor === 'Primary') ? '#7c4dff' : '#01C9EA'
   let backgroundColor: string = color
   let fontColor: string = '#ffffff'
   let borderColor: string = color
-  // hoverBackground in design.inrupt.com is rgb, using the equivalent hex here
-  // lighten is used in design.inrupt.com, but this only works in sass and less
   let hoverBackgroundColor: string = (options.buttonColor === 'Primary') ? '#9f7dff' : '#37cde6'
   let hoverFontColor: string = fontColor
   if (options.needsBorder) {
@@ -501,7 +503,6 @@ function getButtonStyle (options: ButtonWidgetOptions = { buttonColor: 'Primary'
     hoverFontColor = backgroundColor
   }
 
-  // See https://design.inrupt.com/atomic-core/?cat=Atoms#Buttons
   return {
     'background-color': `${backgroundColor}`,
     color: `${fontColor}`,
