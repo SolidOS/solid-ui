@@ -22,9 +22,6 @@ const dragAndDrop = require('./dragAndDrop')
 const cancelIconURI = iconBase + 'noun_1180156.svg' // black X
 const checkIconURI = iconBase + 'noun_1180158.svg' // green checkmark; Continue
 
-const PRIMARY_COLOR = '#7c4dff'
-const SECONDARY_COLOR = '#01C9EA'
-
 export type StatusAreaContext = {
   statusArea?: HTMLElement
   div?: HTMLElement
@@ -488,15 +485,11 @@ export function deleteButtonWithCheck (
 }
 
 function getButtonStyle (options: ButtonWidgetOptions = { buttonColor: 'Primary', needsBorder: false }) {
-  // We need to accomadate for legacy code, which is why we have to allow buttonType and filled to be optional
-  let color = PRIMARY_COLOR
-  if (options.buttonColor === 'Secondary') {
-    color = SECONDARY_COLOR
-  }
+  const color: string = (options.buttonColor === 'Primary') ? '#7c4dff' : '#01C9EA'
   let backgroundColor: string = color
   let fontColor: string = '#ffffff'
   let borderColor: string = color
-  // hoverBackground i used the color picker tool to change the rgb and then find out the hex
+  // hoverBackground in design.inrupt.com is rgb, using the equivalent hex here
   // lighten is used in design.inrupt.com, but this only works in sass and less
   let hoverBackgroundColor: string = (options.buttonColor === 'Primary') ? '#9f7dff' : '#37cde6'
   let hoverFontColor: string = fontColor
@@ -529,6 +522,7 @@ function getButtonStyle (options: ButtonWidgetOptions = { buttonColor: 'Primary'
     }
   }
 }
+
 /*  Make a button
  *
  * @param dom - the DOM document object
@@ -962,7 +956,7 @@ export function removeButton (dom: HTMLDocument, element: HTMLElement) {
   b.setAttribute('type', 'button')
   b.textContent = '✕' // MULTIPLICATION X
   b.addEventListener('click', function (_event) {
-  ;(element as any).parentNode.removeChild(element)
+    ;(element as any).parentNode.removeChild(element)
   }, true)
   return b
 }
