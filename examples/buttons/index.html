@@ -99,21 +99,21 @@
         $('#div-button-with-text-primary-no-border').appendChild(
           UI.widgets.button(document, undefined, 'test', () => {
             window.alert('clicked!')
-          }, { buttonColor: 'Primary', needsBorder: false })
+          })
         )
       })
     </script>
     <pre id="viewSource-button-with-text-primary-no-border"></pre><script>showSource('button-with-text-primary-no-border')</script>
     <div id="div-button-with-text-primary-no-border"></div>
 
-    <h2 id="button-with-text-primary-needs-border"><a href="#button-with-text-primary-needs-border">button with text< (primary color, needs border)/a>
+    <h2 id="button-with-text-primary-needs-border"><a href="#button-with-text-primary-needs-border">button with text (primary color, needs border)</a>
     </h2>
     <script id="script-button-with-text-primary-needs-border">
       window.addEventListener('DOMContentLoaded', (event) => {
         $('#div-button-with-text-primary-needs-border').appendChild(
           UI.widgets.button(document, undefined, 'test', () => {
             window.alert('clicked!')
-          }, { buttonColor: 'Primary', needsBorder: true })
+          }, { needsBorder: true })
         )
       })
     </script>
@@ -127,7 +127,7 @@
         $('#div-button-with-text-secondary-no-border').appendChild(
           UI.widgets.button(document, undefined, 'test', () => {
             window.alert('clicked!')
-          }, { buttonColor: 'Secondary', needsBorder: false })
+          }, { buttonColor: 'Secondary' })
         )
       })
     </script>

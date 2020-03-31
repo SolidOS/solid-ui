@@ -488,12 +488,14 @@ export function deleteButtonWithCheck (
  * Get the button style, based on options.
  * See https://design.inrupt.com/atomic-core/?cat=Atoms#Buttons
  */
-function getButtonStyle (options: ButtonWidgetOptions = { buttonColor: 'Primary', needsBorder: false }) {
-  const color: string = (options.buttonColor === 'Primary') ? '#7c4dff' : '#01c9ea'
+function getButtonStyle (options: ButtonWidgetOptions = {}) {
+  // default to primary color
+  const color: string = (options.buttonColor === 'Secondary') ? '#01c9ea' : '#7c4dff'
   let backgroundColor: string = color
   let fontColor: string = '#ffffff'
   let borderColor: string = color
-  let hoverBackgroundColor: string = (options.buttonColor === 'Primary') ? '#9f7dff' : '#37cde6'
+  // default to primary color
+  let hoverBackgroundColor: string = (options.buttonColor === 'Secondary') ? '#37cde6' : '#9f7dff'
   let hoverFontColor: string = fontColor
   if (options.needsBorder) {
     backgroundColor = '#ffffff'
