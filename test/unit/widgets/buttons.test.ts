@@ -35,8 +35,7 @@ import {
   setName,
   shortDate,
   shortTime,
-  timestamp,
-  ButtonType
+  timestamp
 } from '../../../src/widgets/buttons'
 import { graph, namedNode, NamedNode, sym } from 'rdflib'
 import { foaf, rdf, sioc, vcard } from '../../../src/ns'
@@ -457,8 +456,8 @@ describe('selectorPanelRefresh', () => {
     const inverse = false
     const possible = [namedNode('https://domain.tld/#test')]
     const options = {}
-    const callbackFunction = () => { }
-    const linkCallback = () => { }
+    const callbackFunction = () => {}
+    const linkCallback = () => {}
     expect(selectorPanelRefresh(
       list,
       dom,
