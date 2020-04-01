@@ -27,5 +27,5 @@ $D/source-file-list.txt :
 	find $S -name "*.js" > $@
 
 clean:
-	rm imports.* requires.* imports.*  source-file-list.txt dependencies.dot
+	rm imports.* requires.* source-file-list.txt dependencies.dot
 # ends
