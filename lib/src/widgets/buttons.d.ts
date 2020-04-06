@@ -4,6 +4,11 @@ export declare type StatusAreaContext = {
     div?: HTMLElement;
     dom?: HTMLDocument;
 };
+export declare type ButtonType = 'Primary' | 'Secondary';
+export declare type ButtonWidgetOptions = {
+    buttonColor?: ButtonType;
+    needsBorder?: boolean;
+};
 /**
  * Display an error message block
  */
@@ -118,7 +123,7 @@ export declare function setImage(element: HTMLElement, thing: NamedNode): void;
  * @@ Supress check if command key held down?
  */
 export declare function deleteButtonWithCheck(dom: HTMLDocument, container: HTMLElement, noun: string, deleteFunction: () => any): HTMLImageElement;
-export declare function button(dom: HTMLDocument, iconURI: string, text: string, handler: (event: any) => void): HTMLButtonElement;
+export declare function button(dom: HTMLDocument, iconURI: string | undefined, text: string, handler: (event: any) => void, options?: ButtonWidgetOptions): HTMLButtonElement;
 export declare function cancelButton(dom: HTMLDocument, handler: (event: any) => void): HTMLButtonElement;
 export declare function continueButton(dom: HTMLDocument, handler: (event: any) => void): HTMLButtonElement;
 export declare function askName(dom: HTMLDocument, kb: IndexedFormula, container: HTMLDivElement, predicate?: NamedNode, theClass?: NamedNode, noun?: string): Promise<unknown>;
