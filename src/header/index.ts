@@ -54,8 +54,7 @@ export async function initHeader (store: IndexedFormula) {
 
 function rebuildHeader (header: HTMLElement, store: IndexedFormula, pod: NamedNode) {
   return async (session: SolidSession | null) => {
-    // const user = session ? sym(session.webId) : null
-    const user = sym('https://sharonstrats.inrupt.net/profile/card#me')
+    const user = session ? sym(session.webId) : null
     log(user)
     header.innerHTML = ''
     header.appendChild(await createBanner(store, pod, user))
