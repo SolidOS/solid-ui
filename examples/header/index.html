@@ -22,11 +22,11 @@
 <div id='PageHeader'></div>
 <script id="script-header">
   window.addEventListener('DOMContentLoaded', async () => {
-    try {
+   try {
       await UI.initHeader(UI.store)
-    } catch (error) {
+  } catch (error) {
       window.alert(`Error loading header. You need to have a div with id = PageHeader on your page.`)
-    }
+   }
   });
 </script>
 <pre id="viewSource-header"></pre><script>showSource('header')</script>

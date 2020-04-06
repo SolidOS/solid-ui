@@ -2,6 +2,7 @@
     Copied from mashlib/src/global/metadata.ts
  */
 import { NamedNode, sym } from 'rdflib'
+import { log } from '../debug'
 
 type ThrottleOptions = {
     leading?: boolean;
