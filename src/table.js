@@ -455,7 +455,22 @@ module.exports = function renderTableViewPane (doc, options) {
       this.useCount += 1
     }
 
+    this.getHints = function () {
+      if (
+        options &&
+        options.hints &&
+        this.variable &&
+        options.hints[this.variable.toNT()]
+      ) {
+        return options.hints[this.variable.toNT()]
+      }
+      return {}
+    }
+
     this.getLabel = function () {
+      if (this.getHints().label) {
+        return this.getHints().label
+      }
       if (this.predicate) {
         if (this.predicate.sameTerm(ns.rdf('type')) && this.superClass) {
           return utils.label(this.superClass)
@@ -830,12 +845,6 @@ module.exports = function renderTableViewPane (doc, options) {
     /* Empty header for link column */
     var linkTd = doc.createElement('th')
     tr.appendChild(linkTd)
-
-    /*
-    var labelTd = doc.createElement("th")
-    labelTd.appendChild(doc.createTextNode("*label*"))
-    tr.appendChild(labelTd)
-    */
 
     for (let i = 0; i < columns.length; ++i) {
       var th = doc.createElement('th')
