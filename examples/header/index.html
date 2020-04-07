@@ -32,5 +32,18 @@
 <pre id="viewSource-header"></pre><script>showSource('header')</script>
 <div id="div-header"></div>
 
+<h2 id="headerNotLoggedIn"><a href="#headerNotLoggedIn">Header</a></h2>
+<div id='PageHeader2'></div>
+<script id="script-headerNotLoggedIn">
+  window.addEventListener('DOMContentLoaded', async () => {
+    try {
+      await UI.initHeader(UI.store)
+    } catch (error) {
+      window.alert(`Error loading header. You need to have a div with id = PageHeader on your page.`)
+    }
+  });
+</script>
+<pre id="viewSource-headerNotLoggedIn"></pre><script>showSource('headerNotLoggedIn')</script>
+<div id="div-headerNotLoggedIn"></div>
 </body>
 </html>

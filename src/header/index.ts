@@ -42,33 +42,42 @@ export interface SolidSession {
     webId: string;
 }
 
-export async function initHeader (store: IndexedFormula) {
+type Menu = {
+    label: string,
+    url: string
+}
+type HeaderOptions = {
+    logo?: string,
+    menuList?: Menu[]
+}
+export async function initHeader (store: IndexedFormula, options: HeaderOptions) {
   const header = document.getElementById('PageHeader')
   if (!header) {
     return
   }
 
   const pod = getPod()
-  solidAuthClient.trackSession(rebuildHeader(header, store, pod))
+  solidAuthClient.trackSession(rebuildHeader(header, store, pod, options))
 }
 
-function rebuildHeader (header: HTMLElement, store: IndexedFormula, pod: NamedNode) {
+function rebuildHeader (header: HTMLElement, store: IndexedFormula, pod: NamedNode, options: HeaderOptions) {
   return async (session: SolidSession | null) => {
     const user = session ? sym(session.webId) : null
-    log(user)
+    // SAM - don't forget to put in the line above instead of the line below :)
+    // const user = sym('https://sharonstrats.inrupt.net/profile/card#me')
     header.innerHTML = ''
-    header.appendChild(await createBanner(store, pod, user))
+    header.appendChild(await createBanner(store, pod, user, options))
   }
 }
 
-async function createBanner (store: IndexedFormula, pod: NamedNode, user: NamedNode | null): Promise<HTMLElement> {
+async function createBanner (store: IndexedFormula, pod: NamedNode, user: NamedNode | null, options: HeaderOptions): Promise<HTMLElement> {
   const podLink = document.createElement('a')
   podLink.href = pod.uri
   podLink.classList.add('header-banner__link')
   podLink.innerHTML = icon
 
   const menu = user
-    ? await createUserMenu(store, user)
+    ? await createUserMenu(store, user, options)
     : createLoginSignUpButtons()
 
   const banner = document.createElement('div')
@@ -102,7 +111,7 @@ function createUserMenuLink (label: string, href: string): HTMLElement {
   return link
 }
 
-async function createUserMenu (store: IndexedFormula, user: NamedNode): Promise<HTMLElement> {
+async function createUserMenu (store: IndexedFormula, user: NamedNode, options: HeaderOptions): Promise<HTMLElement> {
   const fetcher = (<any>store).fetcher
   if (fetcher) {
     // Making sure that Profile is loaded before building menu
@@ -155,20 +164,17 @@ function createUserMenuItem (child: HTMLElement): HTMLElement {
   return menuProfileItem
 }
 
-async function getMenuItems (outliner: any): Promise<Array<{
-    paneName: string;
-    tabName?: string;
-    label: string;
-    icon: string;
-}>> {
-  return outliner.getDashboardItems()
-}
-
 function getProfileImg (store: IndexedFormula, user: NamedNode): string | HTMLElement {
-  const profileUrl = widgets.findImage(user)
-  if (!profileUrl) {
+  const profileUrl = null
+  try {
+    const profileUrl = widgets.findImage(user)
+    if (!profileUrl) {
+      return emptyProfile
+    }
+  } catch {
     return emptyProfile
   }
+
   const profileImage = document.createElement('div')
   profileImage.classList.add('header-user-menu__photo')
   profileImage.style.backgroundImage = `url("${profileUrl}")`
