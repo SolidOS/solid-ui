@@ -86,12 +86,6 @@ function createLoginSignUpButtons () {
   return profileLoginButtonPre
 }
 
-async function openDashboardPane (outliner: any, pane: string): Promise<void> {
-  outliner.showDashboard({
-    pane
-  })
-}
-
 function createUserMenuButton (label: string, onClick: EventListenerOrEventListenerObject): HTMLElement {
   const button = document.createElement('button')
   button.classList.add('header-user-menu__button')
@@ -114,15 +108,10 @@ async function createUserMenu (store: IndexedFormula, user: NamedNode): Promise<
     // Making sure that Profile is loaded before building menu
     await fetcher.load(user)
   }
-  // const outliner = getOutliner(document)
-
   const loggedInMenuList = document.createElement('ul')
   loggedInMenuList.classList.add('header-user-menu__list')
   loggedInMenuList.appendChild(createUserMenuItem(createUserMenuLink('Show your profile', user.uri)))
-  /* const menuItems = await getMenuItems(outliner)
-  menuItems.forEach(item => {
-    loggedInMenuList.appendChild(createUserMenuItem(createUserMenuButton(item.label, () => openDashboardPane(outliner, item.tabName || item.paneName))))
-  }) */
+
   loggedInMenuList.appendChild(createUserMenuItem(createUserMenuButton('Log out', () => solidAuthClient.logout())))
 
   const loggedInMenu = document.createElement('nav')
@@ -133,12 +122,12 @@ async function createUserMenu (store: IndexedFormula, user: NamedNode): Promise<
   const loggedInMenuTrigger = document.createElement('button')
   loggedInMenuTrigger.classList.add('header-user-menu__trigger')
   loggedInMenuTrigger.type = 'button'
-  /* const profileImg = getProfileImg(store, user)
+  const profileImg = getProfileImg(store, user)
   if (typeof profileImg === 'string') {
     loggedInMenuTrigger.innerHTML = profileImg
   } else {
     loggedInMenuTrigger.appendChild(profileImg)
-  } */
+  }
 
   const loggedInMenuContainer = document.createElement('div')
   loggedInMenuContainer.classList.add('header-banner__user-menu', 'header-user-menu')
