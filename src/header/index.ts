@@ -84,7 +84,7 @@ function rebuildHeader (header: HTMLElement, store: IndexedFormula, pod: NamedNo
 async function createBanner (store: IndexedFormula, pod: NamedNode, user: NamedNode | null, options: HeaderOptions): Promise<HTMLElement> {
   const podLink = document.createElement('a')
   podLink.href = pod.uri
-  addStyleClassToElement(podLink,'header-banner__link')
+  addStyleClassToElement(podLink, 'header-banner__link')
   podLink.innerHTML = icon
 
   const menu = user
@@ -92,7 +92,7 @@ async function createBanner (store: IndexedFormula, pod: NamedNode, user: NamedN
     : createLoginSignUpButtons()
 
   const banner = document.createElement('div')
-  addStyleClassToElement(banner,'header-banner' )
+  addStyleClassToElement(banner, 'header-banner')
   banner.appendChild(podLink)
   banner.appendChild(menu)
 
@@ -101,7 +101,7 @@ async function createBanner (store: IndexedFormula, pod: NamedNode, user: NamedN
 
 function createLoginSignUpButtons () {
   const profileLoginButtonPre = document.createElement('div')
-  addStyleClassToElement(profileLoginButtonPre,'header-banner__login')
+  addStyleClassToElement(profileLoginButtonPre, 'header-banner__login')
   profileLoginButtonPre.appendChild(loginStatusBox(document, null, {}))
   return profileLoginButtonPre
 }
@@ -136,7 +136,7 @@ async function createUserMenu (store: IndexedFormula, user: NamedNode, options: 
 
   const loggedInMenu = document.createElement('nav')
 
-  addStyleClassToElement(loggedInMenu,'header-user-menu__navigation-menu')
+  addStyleClassToElement(loggedInMenu, 'header-user-menu__navigation-menu')
   loggedInMenu.setAttribute('aria-hidden', 'true')
   loggedInMenu.appendChild(loggedInMenuList)
 
@@ -172,7 +172,7 @@ async function createUserMenu (store: IndexedFormula, user: NamedNode, options: 
 
 function createUserMenuItem (child: HTMLElement): HTMLElement {
   const menuProfileItem = document.createElement('li')
-  addStyleClassToElement(menuProfileItem,'header-user-menu__list-item')
+  addStyleClassToElement(menuProfileItem, 'header-user-menu__list-item')
   menuProfileItem.appendChild(child)
   return menuProfileItem
 }
@@ -189,7 +189,7 @@ function getProfileImg (store: IndexedFormula, user: NamedNode): string | HTMLEl
   }
 
   const profileImage = document.createElement('div')
-  addStyleClassToElement(profileImage,'header-user-menu__photo' )
+  addStyleClassToElement(profileImage, 'header-user-menu__photo')
   profileImage.style.backgroundImage = `url("${profileUrl}")`
   return profileImage
 }
