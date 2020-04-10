@@ -9,6 +9,8 @@ import { icon } from './icon'
 import { emptyProfile } from './empty-profile'
 import { throttle, getPod } from './headerHelpers'
 import { log } from '../debug'
+import { getClasses } from '../jss'
+import { styleMap } from './styleMap'
 
 // SolidAuthorization, SolidClam, and SolidSession was copied from mashlib/typings/solid-auth-client
 // access_token, client_id, id_token, at_hash had to be converted to camelcase for typescript compatibility
@@ -49,6 +51,16 @@ type Menu = {
 type HeaderOptions = {
     logo?: string,
     menuList?: Menu[]
+}
+
+function getStyle (styleClass) {
+  return styleMap[styleClass]
+}
+
+function addStyleClassToElement (element: any, styleClass: string) {
+  const style = getStyle(styleClass)
+  const { classes } = getClasses(document.head, { [styleClass]: style })
+  element.classList.add(classes[styleClass])
 }
 export async function initHeader (store: IndexedFormula, options: HeaderOptions) {
   const header = document.getElementById('PageHeader')
