@@ -51,12 +51,13 @@ type Menu = {
 type HeaderOptions = {
     logo?: string,
     menuList?: Menu[]
+    onclick: () => {}
 }
 
 function getStyle (styleClass) {
   return styleMap[styleClass]
 }
-
+// SAM change to string array in case of adding multiple classes
 function addStyleClassToElement (element: any, styleClass: string) {
   const style = getStyle(styleClass)
   const { classes } = getClasses(document.head, { [styleClass]: style })
@@ -83,7 +84,7 @@ function rebuildHeader (header: HTMLElement, store: IndexedFormula, pod: NamedNo
 async function createBanner (store: IndexedFormula, pod: NamedNode, user: NamedNode | null, options: HeaderOptions): Promise<HTMLElement> {
   const podLink = document.createElement('a')
   podLink.href = pod.uri
-  podLink.classList.add('header-banner__link')
+  addStyleClassToElement(podLink,'header-banner__link')
   podLink.innerHTML = icon
 
   const menu = user
@@ -91,7 +92,7 @@ async function createBanner (store: IndexedFormula, pod: NamedNode, user: NamedN
     : createLoginSignUpButtons()
 
   const banner = document.createElement('div')
-  banner.classList.add('header-banner')
+  addStyleClassToElement(banner,'header-banner' )
   banner.appendChild(podLink)
   banner.appendChild(menu)
 
@@ -100,14 +101,14 @@ async function createBanner (store: IndexedFormula, pod: NamedNode, user: NamedN
 
 function createLoginSignUpButtons () {
   const profileLoginButtonPre = document.createElement('div')
-  profileLoginButtonPre.classList.add('header-banner__login')
+  addStyleClassToElement(profileLoginButtonPre,'header-banner__login')
   profileLoginButtonPre.appendChild(loginStatusBox(document, null, {}))
   return profileLoginButtonPre
 }
 
 function createUserMenuButton (label: string, onClick: EventListenerOrEventListenerObject): HTMLElement {
   const button = document.createElement('button')
-  button.classList.add('header-user-menu__button')
+  addStyleClassToElement(button, 'header-user-menu__button')
   button.addEventListener('click', onClick)
   button.innerText = label
   return button
@@ -115,7 +116,7 @@ function createUserMenuButton (label: string, onClick: EventListenerOrEventListe
 
 function createUserMenuLink (label: string, href: string): HTMLElement {
   const link = document.createElement('a')
-  link.classList.add('header-user-menu__link')
+  addStyleClassToElement(link, 'header-user-menu__link')
   link.href = href
   link.innerText = label
   return link
@@ -128,18 +129,19 @@ async function createUserMenu (store: IndexedFormula, user: NamedNode, options: 
     await fetcher.load(user)
   }
   const loggedInMenuList = document.createElement('ul')
-  loggedInMenuList.classList.add('header-user-menu__list')
+  addStyleClassToElement(loggedInMenuList, 'header-user-menu__list')
   loggedInMenuList.appendChild(createUserMenuItem(createUserMenuLink('Show your profile', user.uri)))
 
   loggedInMenuList.appendChild(createUserMenuItem(createUserMenuButton('Log out', () => solidAuthClient.logout())))
 
   const loggedInMenu = document.createElement('nav')
-  loggedInMenu.classList.add('header-user-menu__navigation-menu')
+
+  addStyleClassToElement(loggedInMenu,'header-user-menu__navigation-menu')
   loggedInMenu.setAttribute('aria-hidden', 'true')
   loggedInMenu.appendChild(loggedInMenuList)
 
   const loggedInMenuTrigger = document.createElement('button')
-  loggedInMenuTrigger.classList.add('header-user-menu__trigger')
+  addStyleClassToElement(loggedInMenuTrigger, 'header-user-menu__trigger')
   loggedInMenuTrigger.type = 'button'
   const profileImg = getProfileImg(store, user)
   if (typeof profileImg === 'string') {
@@ -149,7 +151,8 @@ async function createUserMenu (store: IndexedFormula, user: NamedNode, options: 
   }
 
   const loggedInMenuContainer = document.createElement('div')
-  loggedInMenuContainer.classList.add('header-banner__user-menu', 'header-user-menu')
+  addStyleClassToElement(loggedInMenuContainer, 'header-banner__user-menu')
+  addStyleClassToElement(loggedInMenuContainer, 'header-user-menu')
   loggedInMenuContainer.appendChild(loggedInMenuTrigger)
   loggedInMenuContainer.appendChild(loggedInMenu)
 
@@ -169,7 +172,7 @@ async function createUserMenu (store: IndexedFormula, user: NamedNode, options: 
 
 function createUserMenuItem (child: HTMLElement): HTMLElement {
   const menuProfileItem = document.createElement('li')
-  menuProfileItem.classList.add('header-user-menu__list-item')
+  addStyleClassToElement(menuProfileItem,'header-user-menu__list-item')
   menuProfileItem.appendChild(child)
   return menuProfileItem
 }
@@ -186,7 +189,7 @@ function getProfileImg (store: IndexedFormula, user: NamedNode): string | HTMLEl
   }
 
   const profileImage = document.createElement('div')
-  profileImage.classList.add('header-user-menu__photo')
+  addStyleClassToElement(profileImage,'header-user-menu__photo' )
   profileImage.style.backgroundImage = `url("${profileUrl}")`
   return profileImage
 }
