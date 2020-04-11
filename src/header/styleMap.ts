@@ -23,11 +23,11 @@ export const styleMap = {
     background: 'none',
     border: '0',
     cursor: 'pointer',
-    width: '60px',
-    height: '60px',
+    width: '60px', // defined in mashlib as a SASS variable $icon_size
+    height: '60px', // defined in mashlib as a SASS variable $icon_size
     img: {
       borderRadius: '50%',
-      height: '56px',
+      height: '56px', // defined in mashlib as a SASS variable $icon_size - 4px
       width: '56px'
     }
   },
@@ -56,11 +56,11 @@ export const styleMap = {
   },
   'header-user-menu__navigation-menu': {
     background: 'white',
-    border: 'solid 1px #000000',
+    border: 'solid 1px #000000', // the color was defined in mashlib as a SASS variable $divider_color
     borderRight: '0',
     position: 'absolute',
     right: '0',
-    top: '60px',
+    top: '60px', // defined in mashlib as a SASS variable $icon_size
     width: '200px',
     'z-index': '1',
     '&[aria-hidden = true]': {
@@ -68,7 +68,7 @@ export const styleMap = {
     }
   },
   'header-user-menu__list-item': {
-    borderBottom: 'solid 1px #000000',
+    borderBottom: 'solid 1px #000000', // the color was defined in mashlib as a SASS variable $divider_color
     '&:last-child': {
       border: '0'
     }
@@ -79,27 +79,20 @@ export const styleMap = {
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     margin: '5px',
-    height: '50px',
+    height: '50px', // $icon-size - $image-margin * 2 image-margin was 5px in mashlib and icson size 60px
     width: '50px'
   },
   'header-banner': {
-    boxShadow: '0px 1px 4px #000000',
+    boxShadow: '0px 1px 4px #000000', // the color was defined in mashlib as a SASS variable $divider_color
     display: 'flex',
     padding: '0 1.5em',
     marginBottom: '4px'
   },
   'header-banner__link': {
-    boxShadow: '0px 1px 4px #000000',
-    padding: '0 1.5em',
-    marginBottom: '4px',
     display: 'block'
   },
 
   'header-banner__login': {
-    boxShadow: '0px 1px 4px #000000',
-    display: 'flex',
-    padding: '0 1.5em',
-    marginBottom: '4px',
     marginLeft: 'auto',
     input: {
       // hacks to override the default style of login and signup button from solid-ui
@@ -108,11 +101,11 @@ export const styleMap = {
     }
   },
   'header-banner__user-menu': {
-    boxShadow: '0px 1px 4px #000000',
-    display: 'flex',
-    padding: '0 1.5em',
-    marginBottom: '4px',
-    borderLeft: 'solid 1px #000000',
+    borderLeft: 'solid 1px #000000', // the color was defined in mashlib as a SASS variable $divider_color
     marginLeft: 'auto'
+  },
+  'header-banner__icon': {
+    height: '60px', // this is the icon size
+    width: '65px' // may just be 65px round($icon-size * 352 / 322);
   }
 }
