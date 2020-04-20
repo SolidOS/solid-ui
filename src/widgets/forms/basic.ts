@@ -183,7 +183,7 @@ export function basicField (
       let is = ds.map(statement => st(statement.subject, statement.predicate, result, statement.why)) // can include >1 doc
       if (is.length === 0) {
         // or none
-        is = [st(subject, property, result, doc as Node)]
+        is = [st(subject, property, result, doc)]
       }
 
       function updateMany (ds, is: { why: { uri: string } }[], callback) {

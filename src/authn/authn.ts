@@ -742,7 +742,7 @@ export function registrationList (context: AuthenticationContext, options: {
  * @returns Resolves with aclDoc uri on successful write
  */
 export function setACLUserPublic (
-  docURI: $rdf.NamedNode,
+  docURI: string,
   me: $rdf.NamedNode,
   options: {
     defaultForNew?: boolean,
@@ -786,7 +786,7 @@ export function setACLUserPublic (
  * @param docURI
  * @returns
  */
-function fetchACLRel (docURI: $rdf.NamedNode): Promise<$rdf.NamedNode> {
+function fetchACLRel (docURI: string): Promise<$rdf.NamedNode> {
   const fetcher = kb.fetcher
 
   return fetcher.load(docURI).then(result => {
@@ -816,9 +816,9 @@ function fetchACLRel (docURI: $rdf.NamedNode): Promise<$rdf.NamedNode> {
  * @returns Serialized ACL
  */
 function genACLText (
-  docURI: $rdf.NamedNode,
+  docURI: string,
   me: $rdf.NamedNode,
-  aclURI: $rdf.NamedNode,
+  aclURI: string,
   options: {
     defaultForNew?: boolean,
     public?: []
