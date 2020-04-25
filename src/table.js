@@ -473,7 +473,7 @@ module.exports = function renderTableViewPane (doc, options) {
       }
       if (this.predicate) {
         if (this.predicate.sameTerm(ns.rdf('type')) && this.superClass) {
-          return utils.label(this.superClass)
+          return utils.label(this.superClass, true) // do initial cap
         }
         return utils.label(this.predicate)
       } else if (this.variable) {
@@ -645,6 +645,18 @@ module.exports = function renderTableViewPane (doc, options) {
     }
 
     return resultDiv
+  }
+
+  // Find the column for a given variable
+
+  function getColumnForVariable (columns, variableNT) {
+    for (const predicateUri in columns) {
+      var column = columns[predicateUri]
+      if (column.variable.toNT() === variableNT) {
+        return column
+      }
+    }
+    return null
   }
 
   // Find the column for a given predicate, creating a new column object
@@ -1647,16 +1659,11 @@ module.exports = function renderTableViewPane (doc, options) {
         }
       }
 
-      /*
-                  for (let i=0; i< rows.length; i++) {
-                      rows[i].originalValues = rows[i].values
-                      rows[i].values = {}
-                      // oldStyle = rows[i]._htmlRow.getAttribute('style') || ''
-                      rows[i]._htmlRow.style.background = '#ffe'; //setAttribute('style', ' background-color: #ffe;')//
-                      applyColumnFilters(rows, columns); // @@ TBL added this
-                      // Here add table clean-up, remove "loading" message etc.
-                  }
-                  */
+      if (options.sortBy) { // @@ for each column check needs sorting
+        const column = getColumnForVariable(columns, options.sortBy)
+        literalSort(rows, column, options.sortReverse)
+      }
+
       if (options.onDone) options.onDone()
     }
     kb.query(query, onResult, undefined, onDone)
