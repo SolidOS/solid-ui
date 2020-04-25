@@ -79,7 +79,7 @@ export const styleMap = {
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     margin: '5px',
-    height: '50px', // $icon-size - $image-margin * 2 image-margin was 5px in mashlib and icson size 60px
+    height: '50px', // $icon-size - $image-margin * 2 image-margin was 5px in mashlib and icon size 60px
     width: '50px'
   },
   'header-banner': {
@@ -105,7 +105,8 @@ export const styleMap = {
     marginLeft: 'auto'
   },
   'header-banner__icon': {
-    height: '60px', // this is the icon size
-    width: '65px' // may just be 65px round($icon-size * 352 / 322);
+    backgroundSize: '65px 60px',
+    height: '60px !important', // this is the icon size
+    width: '65px !important' // may just be 65px round($icon-size * 352 / 322);
   }
 }

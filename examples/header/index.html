@@ -19,11 +19,29 @@
 <body>
 
 <h2 id="header"><a href="#header">Header</a></h2>
+<p>This example demonstrates how to use the header component. The header has a different view depending
+on whether or not you are logged in. Unless you are already logged into your pod identity provider you
+should see the logged out view. To see the logged in view click the login button below. </p>
+<p>The header allows for both logo customization and also for menu items.</p>
+<p>options: logo</p>
+<p>options menu items (can have a list of link or a list of onclicks if you have buttons...</p>
+<script>
+  async function login(idp) {
+    const session = await solid.auth.currentSession();
+    if (!session)
+      await solid.auth.login(idp);
+    else
+      alert(`Logged in as ${session.webId}`);
+  }
+  login('https://solid.community');
+</script>
 <div id='PageHeader'></div>
+<button onclick="login('https://solid.community')">Login</button>
 <script id="script-header">
   window.addEventListener('DOMContentLoaded', async () => {
    try {
-      await UI.initHeader(UI.store)
+      options = { menuList: [{ label: "Testing", url: 'https://reflectechblog.wordpress.com/' }] }
+      await UI.initHeader(UI.store, options)
   } catch (error) {
       window.alert(`Error loading header. You need to have a div with id = PageHeader on your page.`)
    }
@@ -32,18 +50,5 @@
 <pre id="viewSource-header"></pre><script>showSource('header')</script>
 <div id="div-header"></div>
 
-<h2 id="headerNotLoggedIn"><a href="#headerNotLoggedIn">Header</a></h2>
-<div id='PageHeader2'></div>
-<script id="script-headerNotLoggedIn">
-  window.addEventListener('DOMContentLoaded', async () => {
-    try {
-      await UI.initHeader(UI.store)
-    } catch (error) {
-      window.alert(`Error loading header. You need to have a div with id = PageHeader on your page.`)
-    }
-  });
-</script>
-<pre id="viewSource-headerNotLoggedIn"></pre><script>showSource('headerNotLoggedIn')</script>
-<div id="div-headerNotLoggedIn"></div>
 </body>
 </html>

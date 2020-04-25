@@ -1,5 +1,5 @@
 export const icon = `
-<svg width="352px" height="322px" viewBox="0 0 352 322" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="fadeIn header-banner__icon">
+<svg width="352px" height="322px"  viewBox="0 0  352 322" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="fadeIn header-banner__icon">
     <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
     <title>To root of Pod</title>
     <desc>Created with Sketch.</desc>

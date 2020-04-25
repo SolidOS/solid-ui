@@ -7,13 +7,14 @@ import { loginStatusBox, solidAuthClient } from '../authn/authn'
 import { widgets } from '../widgets'
 import { icon } from './icon'
 import { emptyProfile } from './empty-profile'
-import { throttle, getPod } from './headerHelpers'
+import { throttle, getPod, addStyleClassToElement } from './headerHelpers'
 import { log } from '../debug'
 import { getClasses } from '../jss'
 import { styleMap } from './styleMap'
 
 // SolidAuthorization, SolidClam, and SolidSession was copied from mashlib/typings/solid-auth-client
 // access_token, client_id, id_token, at_hash had to be converted to camelcase for typescript compatibility
+
 interface SolidAuthorization {
     accessToken: string;
     clientId: string;
@@ -44,25 +45,33 @@ export interface SolidSession {
     webId: string;
 }
 
-type Menu = {
+export type MenuItemLink = {
     label: string,
     url: string
 }
-type HeaderOptions = {
-    logo?: string,
-    menuList?: Menu[]
+
+export type MenuItemButton = {
+    label: string,
     onclick: () => {}
 }
 
-function getStyle (styleClass) {
-  return styleMap[styleClass]
+export type MenuItems = MenuItemLink | MenuItemButton
+
+/*
+HeaderOptions allow for customizing the logo and menu list.  If a logo is not provided the default
+    is solid.  menuList ..
+ */
+export type HeaderOptions = {
+    logo?: string,
+    menuList?: MenuItems[]
 }
-// SAM change to string array in case of adding multiple classes
-function addStyleClassToElement (element: any, styleClass: string) {
-  const style = getStyle(styleClass)
-  const { classes } = getClasses(document.head, { [styleClass]: style })
-  element.classList.add(classes[styleClass])
-}
+
+/**
+ * Initialize header component, the header object returned depends on whether the user is authenticated.
+ * @param store
+ * @param options .....
+ * @returns a header for an authenticated user with menu items given or a login screen
+ */
 export async function initHeader (store: IndexedFormula, options: HeaderOptions) {
   const header = document.getElementById('PageHeader')
   if (!header) {
@@ -72,56 +81,70 @@ export async function initHeader (store: IndexedFormula, options: HeaderOptions)
   const pod = getPod()
   solidAuthClient.trackSession(rebuildHeader(header, store, pod, options))
 }
-
+/**
+ * @internal
+ */
 function rebuildHeader (header: HTMLElement, store: IndexedFormula, pod: NamedNode, options: HeaderOptions) {
   return async (session: SolidSession | null) => {
     const user = session ? sym(session.webId) : null
+    // const user = sym('https://sharonstrats.inrupt.net/profile/card#me')
     header.innerHTML = ''
     header.appendChild(await createBanner(store, pod, user, options))
   }
 }
-
+/**
+ * @internal
+ */
 async function createBanner (store: IndexedFormula, pod: NamedNode, user: NamedNode | null, options: HeaderOptions): Promise<HTMLElement> {
   const podLink = document.createElement('a')
   podLink.href = pod.uri
-  addStyleClassToElement(podLink, 'header-banner__link')
-  podLink.innerHTML = icon
+  addStyleClassToElement(podLink, ['header-banner__link'])
+  podLink.innerHTML = "<span style='background-size: 65px 60px'>" + icon + '</span>'
 
   const menu = user
     ? await createUserMenu(store, user, options)
     : createLoginSignUpButtons()
 
   const banner = document.createElement('div')
-  addStyleClassToElement(banner, 'header-banner')
+  addStyleClassToElement(banner, ['header-banner'])
   banner.appendChild(podLink)
   banner.appendChild(menu)
 
   return banner
 }
-
+/**
+ * @internal
+ */
 function createLoginSignUpButtons () {
   const profileLoginButtonPre = document.createElement('div')
-  addStyleClassToElement(profileLoginButtonPre, 'header-banner__login')
+  addStyleClassToElement(profileLoginButtonPre, ['header-banner__login'])
   profileLoginButtonPre.appendChild(loginStatusBox(document, null, {}))
   return profileLoginButtonPre
 }
-
+/**
+ * @internal
+ */
 function createUserMenuButton (label: string, onClick: EventListenerOrEventListenerObject): HTMLElement {
   const button = document.createElement('button')
-  addStyleClassToElement(button, 'header-user-menu__button')
+  addStyleClassToElement(button, ['header-user-menu__button'])
   button.addEventListener('click', onClick)
   button.innerText = label
   return button
 }
-
+/**
+ * @internal
+ */
 function createUserMenuLink (label: string, href: string): HTMLElement {
   const link = document.createElement('a')
-  addStyleClassToElement(link, 'header-user-menu__link')
+  addStyleClassToElement(link, ['header-user-menu__link'])
   link.href = href
   link.innerText = label
   return link
 }
 
+/**
+ * @internal
+ */
 async function createUserMenu (store: IndexedFormula, user: NamedNode, options: HeaderOptions): Promise<HTMLElement> {
   const fetcher = (<any>store).fetcher
   if (fetcher) {
@@ -129,19 +152,29 @@ async function createUserMenu (store: IndexedFormula, user: NamedNode, options: 
     await fetcher.load(user)
   }
   const loggedInMenuList = document.createElement('ul')
-  addStyleClassToElement(loggedInMenuList, 'header-user-menu__list')
+  addStyleClassToElement(loggedInMenuList, ['header-user-menu__list'])
   loggedInMenuList.appendChild(createUserMenuItem(createUserMenuLink('Show your profile', user.uri)))
+  if (options.menuList) {
+    options.menuList.map(function (menuItem) {
+      const menuItemType: string = 'url'
+      // if ((menuItem as MenuItemButton).onclick()) {
+      //  const menuType: string = 'onclick'
+      // }
+      loggedInMenuList.appendChild(createUserMenuItem(createUserMenuLink(menuItem.label, menuItem[menuItemType])))
+    })
+    // SAM test this if works then add button code instead of url code
+  }
 
   loggedInMenuList.appendChild(createUserMenuItem(createUserMenuButton('Log out', () => solidAuthClient.logout())))
 
   const loggedInMenu = document.createElement('nav')
 
-  addStyleClassToElement(loggedInMenu, 'header-user-menu__navigation-menu')
+  addStyleClassToElement(loggedInMenu, ['header-user-menu__navigation-menu'])
   loggedInMenu.setAttribute('aria-hidden', 'true')
   loggedInMenu.appendChild(loggedInMenuList)
 
   const loggedInMenuTrigger = document.createElement('button')
-  addStyleClassToElement(loggedInMenuTrigger, 'header-user-menu__trigger')
+  addStyleClassToElement(loggedInMenuTrigger, ['header-user-menu__trigger'])
   loggedInMenuTrigger.type = 'button'
   const profileImg = getProfileImg(store, user)
   if (typeof profileImg === 'string') {
@@ -151,8 +184,8 @@ async function createUserMenu (store: IndexedFormula, user: NamedNode, options: 
   }
 
   const loggedInMenuContainer = document.createElement('div')
-  addStyleClassToElement(loggedInMenuContainer, 'header-banner__user-menu')
-  addStyleClassToElement(loggedInMenuContainer, 'header-user-menu')
+  addStyleClassToElement(loggedInMenuContainer, ['header-banner__user-menu'])
+  addStyleClassToElement(loggedInMenuContainer, ['header-user-menu'])
   loggedInMenuContainer.appendChild(loggedInMenuTrigger)
   loggedInMenuContainer.appendChild(loggedInMenu)
 
@@ -170,13 +203,18 @@ async function createUserMenu (store: IndexedFormula, user: NamedNode, options: 
   return loggedInMenuContainer
 }
 
+/**
+ * @internal
+ */
 function createUserMenuItem (child: HTMLElement): HTMLElement {
   const menuProfileItem = document.createElement('li')
-  addStyleClassToElement(menuProfileItem, 'header-user-menu__list-item')
+  addStyleClassToElement(menuProfileItem, ['header-user-menu__list-item'])
   menuProfileItem.appendChild(child)
   return menuProfileItem
 }
-
+/**
+ * @internal
+ */
 function getProfileImg (store: IndexedFormula, user: NamedNode): string | HTMLElement {
   const profileUrl = null
   try {
@@ -189,11 +227,14 @@ function getProfileImg (store: IndexedFormula, user: NamedNode): string | HTMLEl
   }
 
   const profileImage = document.createElement('div')
-  addStyleClassToElement(profileImage, 'header-user-menu__photo')
+  addStyleClassToElement(profileImage, ['header-user-menu__photo'])
   profileImage.style.backgroundImage = `url("${profileUrl}")`
   return profileImage
 }
 
+/**
+ * @internal
+ */
 function toggleMenu (event: Event, trigger: HTMLButtonElement, menu: HTMLElement): void {
   const isExpanded = trigger.getAttribute('aria-expanded') === 'true'
   const expand = event.type === 'mouseover'

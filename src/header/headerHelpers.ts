@@ -3,11 +3,25 @@
  */
 import { NamedNode, sym } from 'rdflib'
 import { log } from '../debug'
+import { styleMap } from './styleMap'
+import { getClasses } from '../jss'
 
 type ThrottleOptions = {
     leading?: boolean;
     throttling?: boolean;
     trailing?: boolean;
+}
+
+function getStyle (styleClass) {
+  return styleMap[styleClass]
+}
+
+export function addStyleClassToElement (element: any, styleClasses: string[]) {
+  styleClasses.map((styleClass) => {
+    const style = getStyle(styleClass)
+    const { classes } = getClasses(document.head, { [styleClass]: style })
+    element.classList.add(classes[styleClass])
+  })
 }
 
 export function getPod (): NamedNode {
