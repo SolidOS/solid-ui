@@ -5,7 +5,6 @@
 import { IndexedFormula, NamedNode, sym } from 'rdflib'
 import { loginStatusBox, solidAuthClient } from '../authn/authn'
 import { widgets } from '../widgets'
-import { icon } from './icon'
 import { emptyProfile } from './empty-profile'
 import { throttle, getPod, addStyleClassToElement } from './headerHelpers'
 import { log } from '../debug'
@@ -16,60 +15,60 @@ import { styleMap } from './styleMap'
 // access_token, client_id, id_token, at_hash had to be converted to camelcase for typescript compatibility
 
 interface SolidAuthorization {
-    accessToken: string;
-    clientId: string;
-    idToken: string;
+  accessToken: string;
+  clientId: string;
+  idToken: string;
 }
 
 interface SolidClaim {
-    atHash: string;
-    aud: string;
-    azp: string;
-    cnf: {
-        jwk: string;
-    };
-    exp: number;
-    iat: number;
-    iss: string;
-    jti: string;
-    nonce: string;
-    sub: string;
+  atHash: string;
+  aud: string;
+  azp: string;
+  cnf: {
+    jwk: string;
+  };
+  exp: number;
+  iat: number;
+  iss: string;
+  jti: string;
+  nonce: string;
+  sub: string;
 }
 export interface SolidSession {
-    authorization: SolidAuthorization;
-    credentialType: string;
-    idClaims: SolidClaim;
-    idp: string;
-    issuer: string;
-    sessionKey: string;
-    webId: string;
+  authorization: SolidAuthorization;
+  credentialType: string;
+  idClaims: SolidClaim;
+  idp: string;
+  issuer: string;
+  sessionKey: string;
+  webId: string;
 }
 
 export type MenuItemLink = {
-    label: string,
-    url: string
+  label: string,
+  url: string
 }
 
 export type MenuItemButton = {
-    label: string,
-    onclick: () => {}
+  label: string,
+  onclick: () => {}
 }
 
 export type MenuItems = MenuItemLink | MenuItemButton
 
 /*
 HeaderOptions allow for customizing the logo and menu list.  If a logo is not provided the default
-    is solid.  menuList ..
+    is solid. Menulist will always show a link to logout and to the users profile.
  */
 export type HeaderOptions = {
-    logo?: string,
-    menuList?: MenuItems[]
+  logo?: string,
+  menuList?: MenuItems[]
 }
 
 /**
  * Initialize header component, the header object returned depends on whether the user is authenticated.
- * @param store
- * @param options .....
+ * @param store the data store
+ * @param options allow the header to be customized with a personalized logo and a menu list of links or buttons.
  * @returns a header for an authenticated user with menu items given or a login screen
  */
 export async function initHeader (store: IndexedFormula, options: HeaderOptions) {
@@ -87,7 +86,6 @@ export async function initHeader (store: IndexedFormula, options: HeaderOptions)
 function rebuildHeader (header: HTMLElement, store: IndexedFormula, pod: NamedNode, options: HeaderOptions) {
   return async (session: SolidSession | null) => {
     const user = session ? sym(session.webId) : null
-    // const user = sym('https://sharonstrats.inrupt.net/profile/card#me')
     header.innerHTML = ''
     header.appendChild(await createBanner(store, pod, user, options))
   }
@@ -99,7 +97,10 @@ async function createBanner (store: IndexedFormula, pod: NamedNode, user: NamedN
   const podLink = document.createElement('a')
   podLink.href = pod.uri
   addStyleClassToElement(podLink, ['header-banner__link'])
-  podLink.innerHTML = "<span style='background-size: 65px 60px'>" + icon + '</span>'
+  const image = document.createElement('img')
+  image.src = options.logo ? options.logo : 'https://solidproject.org/assets/img/solid-emblem.svg'
+  addStyleClassToElement(image, ['header-banner__icon'])
+  podLink.appendChild(image)
 
   const menu = user
     ? await createUserMenu(store, user, options)
@@ -156,13 +157,13 @@ async function createUserMenu (store: IndexedFormula, user: NamedNode, options: 
   loggedInMenuList.appendChild(createUserMenuItem(createUserMenuLink('Show your profile', user.uri)))
   if (options.menuList) {
     options.menuList.map(function (menuItem) {
-      const menuItemType: string = 'url'
-      // if ((menuItem as MenuItemButton).onclick()) {
-      //  const menuType: string = 'onclick'
-      // }
-      loggedInMenuList.appendChild(createUserMenuItem(createUserMenuLink(menuItem.label, menuItem[menuItemType])))
+      const menuItemType: string = (menuItem as MenuItemLink).url ? 'url' : 'onclick'
+      if (menuItemType === 'url') {
+        loggedInMenuList.appendChild(createUserMenuItem(createUserMenuLink(menuItem.label, menuItem[menuItemType])))
+      } else {
+        loggedInMenuList.appendChild(createUserMenuItem(createUserMenuButton(menuItem.label, menuItem[menuItemType])))
+      }
     })
-    // SAM test this if works then add button code instead of url code
   }
 
   loggedInMenuList.appendChild(createUserMenuItem(createUserMenuButton('Log out', () => solidAuthClient.logout())))
