@@ -71,7 +71,7 @@ export type HeaderOptions = {
  * @param options allow the header to be customized with a personalized logo and a menu list of links or buttons.
  * @returns a header for an authenticated user with menu items given or a login screen
  */
-export async function initHeader (store: IndexedFormula, options: HeaderOptions) {
+export async function initHeader (store: IndexedFormula, options?: HeaderOptions) {
   const header = document.getElementById('PageHeader')
   if (!header) {
     return
@@ -81,9 +81,9 @@ export async function initHeader (store: IndexedFormula, options: HeaderOptions)
   solidAuthClient.trackSession(rebuildHeader(header, store, pod, options))
 }
 /**
- * @internal
+ * @ignore exporting this only for the unit test
  */
-function rebuildHeader (header: HTMLElement, store: IndexedFormula, pod: NamedNode, options: HeaderOptions) {
+export function rebuildHeader (header: HTMLElement, store: IndexedFormula, pod: NamedNode, options?: HeaderOptions) {
   return async (session: SolidSession | null) => {
     const user = session ? sym(session.webId) : null
     header.innerHTML = ''
@@ -91,14 +91,16 @@ function rebuildHeader (header: HTMLElement, store: IndexedFormula, pod: NamedNo
   }
 }
 /**
- * @internal
+ * @ignore exporting this only for the unit test
  */
-async function createBanner (store: IndexedFormula, pod: NamedNode, user: NamedNode | null, options: HeaderOptions): Promise<HTMLElement> {
+export async function createBanner (store: IndexedFormula, pod: NamedNode, user: NamedNode | null, options?: HeaderOptions): Promise<HTMLElement> {
   const podLink = document.createElement('a')
   podLink.href = pod.uri
   addStyleClassToElement(podLink, ['header-banner__link'])
   const image = document.createElement('img')
-  image.src = options.logo ? options.logo : 'https://solidproject.org/assets/img/solid-emblem.svg'
+  if (options) {
+    image.src = options.logo ? options.logo : 'https://solidproject.org/assets/img/solid-emblem.svg'
+  }
   addStyleClassToElement(image, ['header-banner__icon'])
   podLink.appendChild(image)
 
@@ -114,18 +116,18 @@ async function createBanner (store: IndexedFormula, pod: NamedNode, user: NamedN
   return banner
 }
 /**
- * @internal
+ * @ignore exporting this only for the unit test
  */
-function createLoginSignUpButtons () {
+export function createLoginSignUpButtons () {
   const profileLoginButtonPre = document.createElement('div')
   addStyleClassToElement(profileLoginButtonPre, ['header-banner__login'])
   profileLoginButtonPre.appendChild(loginStatusBox(document, null, {}))
   return profileLoginButtonPre
 }
 /**
- * @internal
+ * @ignore exporting this only for the unit test
  */
-function createUserMenuButton (label: string, onClick: EventListenerOrEventListenerObject): HTMLElement {
+export function createUserMenuButton (label: string, onClick: EventListenerOrEventListenerObject): HTMLElement {
   const button = document.createElement('button')
   addStyleClassToElement(button, ['header-user-menu__button'])
   button.addEventListener('click', onClick)
@@ -133,9 +135,9 @@ function createUserMenuButton (label: string, onClick: EventListenerOrEventListe
   return button
 }
 /**
- * @internal
+ * @ignore exporting this only for the unit test
  */
-function createUserMenuLink (label: string, href: string): HTMLElement {
+export function createUserMenuLink (label: string, href: string): HTMLElement {
   const link = document.createElement('a')
   addStyleClassToElement(link, ['header-user-menu__link'])
   link.href = href
@@ -144,9 +146,9 @@ function createUserMenuLink (label: string, href: string): HTMLElement {
 }
 
 /**
- * @internal
+ * @ignore exporting this only for the unit test
  */
-async function createUserMenu (store: IndexedFormula, user: NamedNode, options: HeaderOptions): Promise<HTMLElement> {
+export async function createUserMenu (store: IndexedFormula, user: NamedNode, options?: HeaderOptions): Promise<HTMLElement> {
   const fetcher = (<any>store).fetcher
   if (fetcher) {
     // Making sure that Profile is loaded before building menu
@@ -155,15 +157,17 @@ async function createUserMenu (store: IndexedFormula, user: NamedNode, options: 
   const loggedInMenuList = document.createElement('ul')
   addStyleClassToElement(loggedInMenuList, ['header-user-menu__list'])
   loggedInMenuList.appendChild(createUserMenuItem(createUserMenuLink('Show your profile', user.uri)))
-  if (options.menuList) {
-    options.menuList.map(function (menuItem) {
-      const menuItemType: string = (menuItem as MenuItemLink).url ? 'url' : 'onclick'
-      if (menuItemType === 'url') {
-        loggedInMenuList.appendChild(createUserMenuItem(createUserMenuLink(menuItem.label, menuItem[menuItemType])))
-      } else {
-        loggedInMenuList.appendChild(createUserMenuItem(createUserMenuButton(menuItem.label, menuItem[menuItemType])))
-      }
-    })
+  if (options) {
+    if (options.menuList) {
+      options.menuList.map(function (menuItem) {
+        const menuItemType: string = (menuItem as MenuItemLink).url ? 'url' : 'onclick'
+        if (menuItemType === 'url') {
+          loggedInMenuList.appendChild(createUserMenuItem(createUserMenuLink(menuItem.label, menuItem[menuItemType])))
+        } else {
+          loggedInMenuList.appendChild(createUserMenuItem(createUserMenuButton(menuItem.label, menuItem[menuItemType])))
+        }
+      })
+    }
   }
 
   loggedInMenuList.appendChild(createUserMenuItem(createUserMenuButton('Log out', () => solidAuthClient.logout())))
@@ -205,18 +209,18 @@ async function createUserMenu (store: IndexedFormula, user: NamedNode, options: 
 }
 
 /**
- * @internal
+ * @ignore exporting this only for the unit test
  */
-function createUserMenuItem (child: HTMLElement): HTMLElement {
+export function createUserMenuItem (child: HTMLElement): HTMLElement {
   const menuProfileItem = document.createElement('li')
   addStyleClassToElement(menuProfileItem, ['header-user-menu__list-item'])
   menuProfileItem.appendChild(child)
   return menuProfileItem
 }
 /**
- * @internal
+ * @ignore exporting this only for the unit test
  */
-function getProfileImg (store: IndexedFormula, user: NamedNode): string | HTMLElement {
+export function getProfileImg (store: IndexedFormula, user: NamedNode): string | HTMLElement {
   const profileUrl = null
   try {
     const profileUrl = widgets.findImage(user)

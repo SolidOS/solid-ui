@@ -11,11 +11,16 @@ type ThrottleOptions = {
     throttling?: boolean;
     trailing?: boolean;
 }
-
+/**
+ * @internal
+ */
 function getStyle (styleClass) {
   return styleMap[styleClass]
 }
 
+/**
+ * @ignore exporting this only for the unit test
+ */
 export function addStyleClassToElement (element: any, styleClasses: string[]) {
   styleClasses.map((styleClass) => {
     const style = getStyle(styleClass)
@@ -23,12 +28,16 @@ export function addStyleClassToElement (element: any, styleClasses: string[]) {
     element.classList.add(classes[styleClass])
   })
 }
-
+/**
+ * @ignore exporting this only for the unit test
+ */
 export function getPod (): NamedNode {
   // @@ TODO: This is given that mashlib runs on NSS - might need to change when we want it to run on other Pod servers
   return sym(document.location.origin).site()
 }
-
+/**
+ * @ignore exporting this only for the unit test
+ */
 export function throttle (func: Function, wait: number, options: ThrottleOptions = {}): (...args: any[]) => any {
   let context: any,
     args: any,
