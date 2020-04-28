@@ -21,19 +21,27 @@ const tableQuery = ` PREFIX :  <https://example.com/tests#>
 SELECT ?who, ?name WHERE  { ?who :name ?name . }
 `
 const doc = $rdf.sym('https://example.com/tests')
-$rdf.parse(tableData, kb, doc.uri)
+$rdf.parse(tableData, kb, doc.uri, 'text/turtle', null) // should be able  to omit tcontent type and callback
 // const query = $rdf.SPARQLToQuery(tableQuery) // TypeError: $rdf.SPARQLToQuery is not a function
 
-const query = new $rdf.Query()
+const query = new $rdf.Query('List people')
 const vars = ['person', 'name', 'age', 'hobby']
-var v = {} // The RDF variable objects for each variable name
+
+export interface Person {
+    person: NamedNode,
+    name: string,
+    age: number,
+    hobby: string
+}
+
+var v = <Person> {} // The RDF variable objects for each variable name
 vars.map(function (x) {
   query.vars.push((v[x] = $rdf.variable(x)))
 })
-const EX = new $rdf.Namespace('https://example.com/tests#')
-query.pat.add(v.person, EX('name'), v.name)
-query.pat.add(v.person, EX('age'), v.age)
-query.pat.add(v.person, EX('hobby'), v.hobby)
+const EX = $rdf.Namespace('https://example.com/tests#')
+query.pat.add(v.person, EX('name'), v.name, doc)
+query.pat.add(v.person, EX('age'), v.age, doc)
+query.pat.add(v.person, EX('hobby'), v.hobby, doc)
 
 const tableOptions = { query }
 
@@ -68,7 +76,6 @@ describe('renderTableViewPane', () => {
     }
 
     await new Promise(resolve => setTimeout(resolve, 3000));
-    console.log('After delay, widget.innerHTML = ' + widget.innerHTML)
     expect(result).toMatch(/.*Alice.*/)
     // console.log('@@@ >>>> ' + renderTableViewPane(document, tableOptions).innerHTML + '<<<<<')
     // expect(renderTableViewPane(document, tableOptions).innerHTML).toMatch(/.*<table.*person.*name.*age.*hobby.*/)
@@ -80,11 +87,9 @@ describe('renderTableViewPane', () => {
 
     function onDone (ele) {
       result = ele.innerHTML
-      // console.log('***** onDone called! ' + result)
     }
 
     await new Promise(resolve => setTimeout(resolve, 3000));
-    console.log('After delay, widget.innerHTML = ' + widget.innerHTML)
     expect(result).toMatch(/.*Alice.*/)
   })
   it('orders by age', async () => {
@@ -94,10 +99,8 @@ describe('renderTableViewPane', () => {
     function onDone (ele) {
       result = widget.innerHTML
       // result = ele.innerHTML
-      //console.log('***** onDone called! ' + result)
     }
     await new Promise(resolve => setTimeout(resolve, 3000));
-    console.log('After delay, widget.innerHTML = ' + widget.innerHTML)
     expect(result).toMatch(/.*Charlie.*Bob.*Alice.*/)
   })
 
@@ -107,10 +110,8 @@ describe('renderTableViewPane', () => {
     const widget = renderTableViewPane(document, options)
     function onDone (ele) {
       result = ele.innerHTML
-      console.log('***** onDone called! ' + result)
     }
     await new Promise(resolve => setTimeout(resolve, 3000));
-    console.log('After delay, widget.innerHTML = ' + widget.innerHTML)
     expect(result).toMatch(/.*Alice.*Bob.*Charlie.*/)
   })
 
@@ -120,7 +121,6 @@ describe('renderTableViewPane', () => {
     const widget = renderTableViewPane(document, options)
     function onDone (ele) {
       result = ele.innerHTML
-      console.log('***** onDone called! ' + result)
     }
     await new Promise(resolve => setTimeout(resolve, 3000));
     // console.log('After delay, widget.innerHTML = ' + widget.innerHTML)
@@ -133,10 +133,9 @@ describe('renderTableViewPane', () => {
     const widget = renderTableViewPane(document, options)
     function onDone (ele) {
       result = ele.innerHTML
-      console.log('***** onDone called! ' + result)
     }
     await new Promise(resolve => setTimeout(resolve, 3000));
-    console.log('After delay, widget.innerHTML = ' + widget.innerHTML)
+    // console.log('After delay, widget.innerHTML = ' + widget.innerHTML)
     expect(result).toMatch(/.*Alice.*Charlie.*Bob.*/)
   })
 
@@ -151,22 +150,10 @@ describe('renderTableViewPane', () => {
     const widget = renderTableViewPane(document, options)
     function onDone (ele) {
       result = ele.innerHTML
-      console.log('***** onDone called! ' + result)
     }
     await new Promise(resolve => setTimeout(resolve, 3000));
     // console.log('After delay, widget.innerHTML = ' + widget.innerHTML)
     expect(result).toMatch(/.*WHO.*WHAT.*WHEN.*WHY.*/)
   })
-
-
-
-
-/*
-  hints: {
-    '?issue': { linkFunction: exposeThisOverlay, label: 'Title' },
-    '?created': { cellFormat: 'shortDate' },
-    '?state': { initialSelection: selectedStates, label: 'Status' }
-  }
-*/
 
 })
