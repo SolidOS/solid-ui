@@ -325,7 +325,7 @@ module.exports = function renderTableViewPane (doc, options) {
   function SubjectType (type) {
     this.type = type
     this.columns = null
-    this.allColumns = null
+    this.allColumns = []
     this.useCount = 0
 
     // Get a list of all columns used by this type.
@@ -656,7 +656,8 @@ module.exports = function renderTableViewPane (doc, options) {
         return column
       }
     }
-    return null
+    throw new Error(`getColumnForVariable: no column for variable ${variableNT}`)
+    // return null
   }
 
   // Find the column for a given predicate, creating a new column object
@@ -1664,7 +1665,7 @@ module.exports = function renderTableViewPane (doc, options) {
         literalSort(rows, column, options.sortReverse)
       }
 
-      if (options.onDone) options.onDone()
+      if (options.onDone) options.onDone(resultDiv) // return div makes testing easier
     }
     kb.query(query, onResult, undefined, onDone)
   }
