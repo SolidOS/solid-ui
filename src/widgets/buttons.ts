@@ -1,4 +1,4 @@
-import { IndexedFormula, NamedNode, st, sym, uri, Util } from 'rdflib'
+import { IndexedFormula, NamedNode, Node, st, sym, uri, Util } from 'rdflib'
 import { iconBase, originalIconBase } from '../iconBase'
 import store from '../store'
 import ns from '../ns'
@@ -917,7 +917,7 @@ export function propertyTriage (kb: IndexedFormula): any {
       no++
     }
   } // If nothing discovered, then could be either:
-  var ps = kb.each(undefined, ns.rdf('type'), ns.rdf('Property'))
+  var ps = kb.each(undefined, ns.rdf('type'), ns.rdf('Property')) as Array<Node>
   for (var i = 0; i < ps.length; i++) {
     p = ps[i].toNT()
     // log.debug('propertyTriage: unknown: ' + p)

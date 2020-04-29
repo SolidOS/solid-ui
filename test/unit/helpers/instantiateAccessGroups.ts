@@ -1,12 +1,13 @@
-import { NamedNode, graph, IndexedFormula } from 'rdflib'
-import { AccessGroups, AccessGroupsOptions } from '../../../src/acl/access-groups'
+import { sym } from 'rdflib'
+import { AccessGroups } from '../../../src/acl/access-groups'
 import { instantiateAccessController } from './instantiateAccessController'
+import { LiveStore } from 'pane-registry'
 
-export function instantiateAccessGroups (dom: HTMLDocument, store: IndexedFormula) {
+export function instantiateAccessGroups (dom: HTMLDocument, store: LiveStore) {
   return new AccessGroups(
-    {} as NamedNode,
-    {} as NamedNode,
+    sym('http://test.test/doc'),
+    sym('http://test.test/doc.acl'),
     instantiateAccessController(dom, store),
-    graph() as IndexedFormula,
-    {} as AccessGroupsOptions)
+    store,
+    {})
 }
