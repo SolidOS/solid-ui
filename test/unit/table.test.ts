@@ -3,9 +3,10 @@ import { JSDOM } from 'jsdom'
 import renderTableViewPane from '../../src/table'
 
 import store from '../../src/store'
+import {NamedNode, sym, parse, variable, Namespace, Query} from "rdflib";
 const kb = store
 
-import * as $rdf from 'rdflib'
+//import * as $rdf from 'rdflib'
 
 silenceDebugMessages()
 const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
@@ -20,11 +21,11 @@ const tableData = `@prefix : <https://example.com/tests#> .
 const tableQuery = ` PREFIX :  <https://example.com/tests#>
 SELECT ?who, ?name WHERE  { ?who :name ?name . }
 `
-const doc = $rdf.sym('https://example.com/tests')
-$rdf.parse(tableData, kb, doc.uri, 'text/turtle', null) // should be able  to omit tcontent type and callback
+const doc = sym('https://example.com/tests')
+parse(tableData, kb, doc.uri) // should be able  to omit tcontent type and callback
 // const query = $rdf.SPARQLToQuery(tableQuery) // TypeError: $rdf.SPARQLToQuery is not a function
 
-const query = new $rdf.Query('List people')
+const query = new Query('List people')
 const vars = ['person', 'name', 'age', 'hobby']
 
 export interface Person {
@@ -36,9 +37,9 @@ export interface Person {
 
 var v = <Person> {} // The RDF variable objects for each variable name
 vars.map(function (x) {
-  query.vars.push((v[x] = $rdf.variable(x)))
+  query.vars.push((v[x] = variable(x)))
 })
-const EX = $rdf.Namespace('https://example.com/tests#')
+const EX = Namespace('https://example.com/tests#')
 query.pat.add(v.person, EX('name'), v.name, doc)
 query.pat.add(v.person, EX('age'), v.age, doc)
 query.pat.add(v.person, EX('hobby'), v.hobby, doc)
