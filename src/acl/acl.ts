@@ -295,7 +295,6 @@ export function comboToString (byCombo: ComboList): string {
 export function makeACLString (x: NamedNode, ac: AgentMapMap, aclDoc: NamedNode): string {
   const kb2 = graph()
   makeACLGraph(kb2, x, ac, aclDoc)
-  // @@ TODO Remove casting
   return serialize(aclDoc, kb2, aclDoc.uri, 'text/turtle') || ''
 }
 
@@ -327,7 +326,6 @@ export function putACLbyCombo (
   makeACLGraphbyCombo(kb2, x, byCombo, aclDoc, true)
 
   // const str = makeACLString = function(x, ac, aclDoc)
-  // @@ TODO Remove casting of kb.updater and kb.fetcher
   kb.updater.put(
     aclDoc,
     kb2.statementsMatching(undefined, undefined, undefined, aclDoc),
@@ -336,9 +334,9 @@ export function putACLbyCombo (
       if (!ok) {
         callbackFunction(ok, message)
       } else {
-        ;(kb as any).fetcher.unload(aclDoc)
+        kb.fetcher.unload(aclDoc)
         makeACLGraphbyCombo(kb, x, byCombo, aclDoc, true)
-        ;(kb as any).fetcher.requested[aclDoc.uri] = 'done' // missing: save headers
+        kb.fetcher.requested[aclDoc.uri] = 'done' // missing: save headers
         callbackFunction(ok)
       }
     }

@@ -917,7 +917,7 @@ export function propertyTriage (kb: IndexedFormula): any {
       no++
     }
   } // If nothing discovered, then could be either:
-  var ps = kb.each(undefined, ns.rdf('type'), ns.rdf('Property')) as Array<Node>
+  var ps = kb.each(undefined, ns.rdf('type'), ns.rdf('Property'))
   for (var i = 0; i < ps.length; i++) {
     p = ps[i].toNT()
     // log.debug('propertyTriage: unknown: ' + p)
