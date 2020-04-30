@@ -20,7 +20,6 @@
  * @packageDocumentation
  */
 import SolidTls from 'solid-auth-tls'
-import * as $rdf from 'rdflib'
 import widgets from '../widgets'
 import solidAuthClient from 'solid-auth-client'
 import ns from '../ns.js'
@@ -30,6 +29,7 @@ import { alert } from '../log'
 import { AppDetails, AuthenticationContext } from './types'
 import { PaneDefinition } from 'pane-registry'
 import * as debug from '../debug'
+import { graph, namedNode, NamedNode, Namespace, serialize, st, Statement, sym, UpdateManager } from 'rdflib'
 
 export { solidAuthClient }
 
@@ -38,7 +38,7 @@ export { solidAuthClient }
 /**
  * Look for and load the User who has control over it
  */
-export function findOriginOwner (doc: $rdf.NamedNode | string): string | boolean {
+export function findOriginOwner (doc: NamedNode | string): string | boolean {
   const uri = (typeof doc === 'string') ? doc : doc.uri
   const i = uri.indexOf('://')
   if (i < 0) return false
@@ -56,14 +56,14 @@ export function findOriginOwner (doc: $rdf.NamedNode | string): string | boolean
  * @returns Returns the WebID, after setting it
  */
 export function saveUser (
-  webId: $rdf.NamedNode | string | null,
+  webId: NamedNode | string | null,
   context?: AuthenticationContext
-): $rdf.NamedNode | null {
+): NamedNode | null {
   // @@ TODO Remove the need for having context as output argument
   let webIdUri: string
   if (webId) {
     webIdUri = (typeof webId === 'string') ? webId : webId.uri
-    const me = $rdf.namedNode(webIdUri)
+    const me = namedNode(webIdUri)
     if (context) {
       context.me = me
     }
@@ -76,7 +76,7 @@ export function saveUser (
  * Wrapper around [[offlineTestID]]
  * @returns {NamedNode|null}
  */
-export function defaultTestUser (): $rdf.NamedNode | null {
+export function defaultTestUser (): NamedNode | null {
   // Check for offline override
   const offlineId = offlineTestID()
 
@@ -92,13 +92,13 @@ export function defaultTestUser (): $rdf.NamedNode | null {
  *
  * @returns Named Node or null
  */
-export function currentUser (): $rdf.NamedNode | null {
+export function currentUser (): NamedNode | null {
   const str = localStorage['solid-auth-client']
   if (str) {
     const da = JSON.parse(str)
     if (da.session && da.session.webId) {
       // @@ TODO check has not expired
-      return $rdf.sym(da.session.webId)
+      return sym(da.session.webId)
     }
   }
   return offlineTestID() // null unless testing
@@ -122,7 +122,7 @@ export function logIn (context: AuthenticationContext): Promise<AuthenticationCo
     checkUser().then(webId => {
       // Already logged in?
       if (webId) {
-        context.me = $rdf.sym(webId as string)
+        context.me = sym(webId as string)
         debug.log(`logIn: Already logged in as ${context.me}`)
         return resolve(context)
       }
@@ -311,7 +311,7 @@ async function loadOneTypeIndex (context: AuthenticationContext, isPublic: boole
 
 async function loadIndex (
   context: AuthenticationContext,
-  predicate: $rdf.NamedNode,
+  predicate: NamedNode,
   isPublic: boolean
 ): Promise<AuthenticationContext> {
   // Loading preferences is more than loading profile
@@ -398,14 +398,14 @@ async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boo
     context.index[visibility] = context.index[visibility] || []
     let newIndex
     if (context.index[visibility].length === 0) {
-      newIndex = $rdf.sym(`${relevant.dir().uri + visibility}TypeIndex.ttl`)
+      newIndex = sym(`${relevant.dir().uri + visibility}TypeIndex.ttl`)
       debug.log(`Linking to new fresh type index ${newIndex}`)
       if (!confirm(`OK to create a new empty index file at ${newIndex}, overwriting anything that is now there?`)) {
         throw new Error('cancelled by user')
       }
       debug.log(`Linking to new fresh type index ${newIndex}`)
       const addMe = [
-        $rdf.st(context.me, ns.solid(`${visibility}TypeIndex`), newIndex, relevant)
+        st(context.me, ns.solid(`${visibility}TypeIndex`), newIndex, relevant)
       ]
       try {
         await updatePromise(kb.updater, [], addMe)
@@ -453,7 +453,7 @@ async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boo
  */
 export async function findAppInstances (
   context: AuthenticationContext,
-  theClass: $rdf.NamedNode,
+  theClass: NamedNode,
   isPublic: boolean
 ): Promise<AuthenticationContext> {
   const fetcher = kb.fetcher
@@ -469,7 +469,7 @@ export async function findAppInstances (
     await loadOneTypeIndex(context, isPublic)
   } catch (err) {
   }
-  const index = context.index as { [key: string]: Array<$rdf.NamedNode> }
+  const index = context.index as { [key: string]: Array<NamedNode> }
   const thisIndex = index[visibility]
   const registrations = thisIndex
     .map(ix => kb.each(undefined, ns.solid('forClass'), theClass, ix))
@@ -510,9 +510,9 @@ export async function findAppInstances (
 
 // @@@@ use the one in rdflib.js when it is available and delete this
 function updatePromise (
-  updater: $rdf.UpdateManager,
-  del: Array<$rdf.Statement>,
-  ins: Array<$rdf.Statement> = []
+  updater: UpdateManager,
+  del: Array<Statement>,
+  ins: Array<Statement> = []
 ): Promise<void> {
   return new Promise(function (resolve, reject) {
     updater.update(del, ins, function (uri, ok, errorBody) {
@@ -530,8 +530,8 @@ function updatePromise (
  */
 export async function registerInTypeIndex (
   context: AuthenticationContext,
-  instance: $rdf.NamedNode,
-  theClass: $rdf.NamedNode,
+  instance: NamedNode,
+  theClass: NamedNode,
   isPublic: boolean
 ): Promise<AuthenticationContext> {
   await ensureOneTypeIndex(context, isPublic)
@@ -546,9 +546,9 @@ export async function registerInTypeIndex (
   const registration = widgets.newThing(index)
   const ins = [
     // See https://github.com/solid/solid/blob/master/proposals/data-discovery.md
-    $rdf.st(registration, ns.rdf('type'), ns.solid('TypeRegistration'), index),
-    $rdf.st(registration, ns.solid('forClass'), theClass, index),
-    $rdf.st(registration, ns.solid('instance'), instance, index)
+    st(registration, ns.rdf('type'), ns.solid('TypeRegistration'), index),
+    st(registration, ns.solid('forClass'), theClass, index),
+    st(registration, ns.solid('instance'), instance, index)
   ]
   try {
     await updatePromise(kb.updater, [], ins)
@@ -591,8 +591,8 @@ export function registrationControl (
           ? registrations[0]
           : widgets.newThing(index)
         return [
-          $rdf.st(reg, ns.solid('instance'), instance, index),
-          $rdf.st(reg, ns.solid('forClass'), theClass, index)
+          st(reg, ns.solid('instance'), instance, index),
+          st(reg, ns.solid('forClass'), theClass, index)
         ]
       }
 
@@ -670,7 +670,7 @@ export function registrationList (context: AuthenticationContext, options: {
     box.setAttribute('style', 'font-size: 120%; text-align: right; padding: 1em; border: solid #eee 0.5em;')
     const table = box.firstChild as HTMLElement
 
-    let ix: Array<$rdf.NamedNode> = []
+    let ix: Array<NamedNode> = []
     let sts = []
     const vs = ['private', 'public']
     vs.forEach(function (visibility) {
@@ -688,7 +688,7 @@ export function registrationList (context: AuthenticationContext, options: {
     })
 
     for (let i = 0; i < sts.length; i++) {
-      const statement: $rdf.Statement = sts[i]
+      const statement: Statement = sts[i]
       // const cla = statement.subject
       const inst = statement.object
       // if (false) {
@@ -742,13 +742,13 @@ export function registrationList (context: AuthenticationContext, options: {
  * @returns Resolves with aclDoc uri on successful write
  */
 export function setACLUserPublic (
-  docURI: $rdf.NamedNode,
-  me: $rdf.NamedNode,
+  docURI: string,
+  me: NamedNode,
   options: {
     defaultForNew?: boolean,
     public?: []
   }
-): Promise<$rdf.NamedNode> {
+): Promise<NamedNode> {
   const aclDoc = kb.any(
     kb.sym(docURI),
     kb.sym('http://www.iana.org/assignments/link-relations/acl')
@@ -786,7 +786,7 @@ export function setACLUserPublic (
  * @param docURI
  * @returns
  */
-function fetchACLRel (docURI: $rdf.NamedNode): Promise<$rdf.NamedNode> {
+function fetchACLRel (docURI: string): Promise<NamedNode> {
   const fetcher = kb.fetcher
 
   return fetcher.load(docURI).then(result => {
@@ -816,17 +816,17 @@ function fetchACLRel (docURI: $rdf.NamedNode): Promise<$rdf.NamedNode> {
  * @returns Serialized ACL
  */
 function genACLText (
-  docURI: $rdf.NamedNode,
-  me: $rdf.NamedNode,
-  aclURI: $rdf.NamedNode,
+  docURI: string,
+  me: NamedNode,
+  aclURI: string,
   options: {
     defaultForNew?: boolean,
     public?: []
   } = {}
-): string {
+): string | undefined {
   const optPublic = options.public || []
-  const g = $rdf.graph()
-  const auth = $rdf.Namespace('http://www.w3.org/ns/auth/acl#')
+  const g = graph()
+  const auth = Namespace('http://www.w3.org/ns/auth/acl#')
   let a = g.sym(`${aclURI}#a1`)
   const acl = g.sym(aclURI)
   const doc = g.sym(docURI)
@@ -850,16 +850,15 @@ function genACLText (
       g.add(a, auth('mode'), auth(optPublic[p]), acl) // Like 'Read' etc
     }
   }
-  // @@ TODO Remove casting of $rdf
-  return ($rdf as any).serialize(acl, g, aclURI, 'text/turtle')
+  return serialize(acl, g, aclURI)
 }
 
 /**
- * Returns `$rdf.sym($SolidTestEnvironment.username)` if
+ * Returns `sym($SolidTestEnvironment.username)` if
  * `$SolidTestEnvironment.username` is defined as a global
  * @returns {NamedNode|null}
  */
-export function offlineTestID (): $rdf.NamedNode | null {
+export function offlineTestID (): NamedNode | null {
   const { $SolidTestEnvironment }: any = window
   if (
     typeof $SolidTestEnvironment !== 'undefined' &&
@@ -867,7 +866,7 @@ export function offlineTestID (): $rdf.NamedNode | null {
   ) {
     // Test setup
     debug.log('Assuming the user is ' + $SolidTestEnvironment.username)
-    return $rdf.sym($SolidTestEnvironment.username)
+    return sym($SolidTestEnvironment.username)
   }
 
   if (
@@ -882,7 +881,7 @@ export function offlineTestID (): $rdf.NamedNode | null {
     /* me = kb.any(subject, ns.acl('owner')); // when testing on plane with no WebID
      */
     debug.log('Assuming user is ' + id)
-    return $rdf.sym(id)
+    return sym(id)
   }
   return null
 }
@@ -999,8 +998,8 @@ function checkCurrentUser () {
  * @returns Resolves with webId uri, if no callback provided
  */
 export function checkUser<T> (
-  setUserCallback?: (me: $rdf.NamedNode | null) => T
-): Promise<$rdf.NamedNode | T> {
+  setUserCallback?: (me: NamedNode | null) => T
+): Promise<NamedNode | T> {
   // Check to see if already logged in / have the WebID
   const me = defaultTestUser()
   if (me) {
@@ -1058,7 +1057,7 @@ export function loginStatusBox (
 
     const uri = newidURI.uri || newidURI
     //    UI.preferences.set('me', uri)
-    me = $rdf.sym(uri)
+    me = sym(uri)
     box.refresh()
     if (listener) listener(me.uri)
   }
@@ -1107,7 +1106,7 @@ export function loginStatusBox (
     solidAuthClient.currentSession().then(
       session => {
         if (session && session.webId) {
-          me = $rdf.sym(session.webId)
+          me = sym(session.webId)
         } else {
           me = null
         }
@@ -1130,7 +1129,7 @@ export function loginStatusBox (
   if (solidAuthClient.trackSession) {
     solidAuthClient.trackSession(session => {
       if (session && session.webId) {
-        me = $rdf.sym(session.webId)
+        me = sym(session.webId)
       } else {
         me = null
       }
@@ -1387,7 +1386,7 @@ export function newAppInstance (
   callback: (workspace: string | null, newBase: string) => void
 ): HTMLElement {
   const gotWS = function (ws, base) {
-    // $rdf.log.debug("newAppInstance: Selected workspace = " + (ws? ws.uri : 'none'))
+    // log.debug("newAppInstance: Selected workspace = " + (ws? ws.uri : 'none'))
     callback(ws, base)
   }
   const div = dom.createElement('div')
@@ -1406,7 +1405,7 @@ export function newAppInstance (
  * Retrieves whether the currently logged in user is a power user
  * and/or a developer
  */
-export async function getUserRoles (): Promise<Array<$rdf.NamedNode>> {
+export async function getUserRoles (): Promise<Array<NamedNode>> {
   try {
     const {
       me,
@@ -1431,7 +1430,7 @@ export async function filterAvailablePanes (panes: Array<PaneDefinition>): Promi
   return panes.filter(pane => isMatchingAudience(pane, userRoles))
 }
 
-function isMatchingAudience (pane: PaneDefinition, userRoles: Array<$rdf.NamedNode>): boolean {
+function isMatchingAudience (pane: PaneDefinition, userRoles: Array<NamedNode>): boolean {
   const audience = pane.audience || []
   return audience.reduce(
     (isMatch, audienceRole) => isMatch && !!userRoles.find(role => role.equals(audienceRole)),
