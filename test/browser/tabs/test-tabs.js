@@ -1,3 +1,4 @@
+/* global $rdf UI debug */
 if (!window.UI) {
   window.alert('Please run "npm install && npm run build" in your repo root first.')
 }

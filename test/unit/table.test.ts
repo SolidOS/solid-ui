@@ -3,10 +3,10 @@ import { JSDOM } from 'jsdom'
 import renderTableViewPane from '../../src/table'
 
 import store from '../../src/store'
-import {NamedNode, sym, parse, variable, Namespace, Query} from "rdflib";
+import { NamedNode, sym, parse, variable, Namespace, Query } from 'rdflib'
 const kb = store
 
-//import * as $rdf from 'rdflib'
+// import * as $rdf from 'rdflib'
 
 silenceDebugMessages()
 const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
@@ -41,7 +41,7 @@ vars.map(function (x) {
 })
 const EX = Namespace('https://example.com/tests#')
 query.pat.add(v.person, EX('name'), v.name, doc)
-query.pat.add(v.person, EX('age'), v.age, doc)
+query.pat.add(v.person, EX('age'), v.age as any, doc) // @@ TODO remove `as any` Pending fix rdflib https://github.com/linkeddata/rdflib.js/issues/416
 query.pat.add(v.person, EX('hobby'), v.hobby, doc)
 
 const tableOptions = { query }
@@ -62,21 +62,21 @@ describe('renderTableViewPane', () => {
   it('calls onDone', async () => {
     var result
     const onDone = jest.fn() // mock function
-    const widget = renderTableViewPane(document, {query, onDone}).innerHTML
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    const widget = renderTableViewPane(document, { query, onDone }).innerHTML
+    await new Promise(resolve => setTimeout(resolve, 1000))
     expect(onDone).toHaveBeenCalled()
   })
   it('includes the data', async () => {
     const options = { sourceDocument: null, tableClass: null, query: null }
     var result
-    const widget = renderTableViewPane(document, {query, onDone})
+    const widget = renderTableViewPane(document, { query, onDone })
 
     function onDone (ele) {
       result = ele.innerHTML
       // console.log('***** onDone called! ' + result)
     }
 
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await new Promise(resolve => setTimeout(resolve, 3000))
     expect(result).toMatch(/.*Alice.*/)
     // console.log('@@@ >>>> ' + renderTableViewPane(document, tableOptions).innerHTML + '<<<<<')
     // expect(renderTableViewPane(document, tableOptions).innerHTML).toMatch(/.*<table.*person.*name.*age.*hobby.*/)
@@ -84,77 +84,80 @@ describe('renderTableViewPane', () => {
   it('includes the data', async () => {
     const options = { sourceDocument: null, tableClass: null, query: null }
     var result
-    const widget = renderTableViewPane(document, {query, onDone})
+    const widget = renderTableViewPane(document, { query, onDone })
 
     function onDone (ele) {
       result = ele.innerHTML
     }
 
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await new Promise(resolve => setTimeout(resolve, 3000))
     expect(result).toMatch(/.*Alice.*/)
   })
   it('orders by age', async () => {
-    const options = { query,  onDone, sortBy: '?age', sortReverse: false}
+    const options = { query, onDone, sortBy: '?age', sortReverse: false }
     var result
     const widget = renderTableViewPane(document, options)
     function onDone (ele) {
       result = widget.innerHTML
       // result = ele.innerHTML
     }
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await new Promise(resolve => setTimeout(resolve, 3000))
     expect(result).toMatch(/.*Charlie.*Bob.*Alice.*/)
   })
 
   it('orders by reverse age', async () => {
-    const options = { query,  onDone,  sortBy: '?age', sortReverse: true}
+    const options = { query, onDone, sortBy: '?age', sortReverse: true }
     var result
     const widget = renderTableViewPane(document, options)
     function onDone (ele) {
       result = ele.innerHTML
     }
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await new Promise(resolve => setTimeout(resolve, 3000))
     expect(result).toMatch(/.*Alice.*Bob.*Charlie.*/)
   })
 
   it('orders by name', async () => {
-    const options = { query,  onDone, sortBy: '?name', sortReverse: false}
+    const options = { query, onDone, sortBy: '?name', sortReverse: false }
     var result
     const widget = renderTableViewPane(document, options)
     function onDone (ele) {
       result = ele.innerHTML
     }
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await new Promise(resolve => setTimeout(resolve, 3000))
     // console.log('After delay, widget.innerHTML = ' + widget.innerHTML)
     expect(result).toMatch(/.*Alice.*Bob.*Charlie.*/)
   })
 
   it('orders by hobby', async () => {
-    const options = { query,  onDone, sortBy: '?hobby', sortReverse: false}
+    const options = { query, onDone, sortBy: '?hobby', sortReverse: false }
     var result
     const widget = renderTableViewPane(document, options)
     function onDone (ele) {
       result = ele.innerHTML
     }
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await new Promise(resolve => setTimeout(resolve, 3000))
     // console.log('After delay, widget.innerHTML = ' + widget.innerHTML)
     expect(result).toMatch(/.*Alice.*Charlie.*Bob.*/)
   })
 
   it('renames columns', async () => {
-    const options = { query,  onDone, hints: {
-      '?person': {label: 'WHO'},
-      '?name': {label: 'WHAT'},
-      '?age': {label: 'WHEN'},
-      '?hobby': {label: 'WHY'}
-    }}
+    const options = {
+      query,
+      onDone,
+      hints: {
+        '?person': { label: 'WHO' },
+        '?name': { label: 'WHAT' },
+        '?age': { label: 'WHEN' },
+        '?hobby': { label: 'WHY' }
+      }
+    }
     var result
     const widget = renderTableViewPane(document, options)
     function onDone (ele) {
       result = ele.innerHTML
     }
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await new Promise(resolve => setTimeout(resolve, 3000))
     // console.log('After delay, widget.innerHTML = ' + widget.innerHTML)
     expect(result).toMatch(/.*WHO.*WHAT.*WHEN.*WHY.*/)
   })
-
 })

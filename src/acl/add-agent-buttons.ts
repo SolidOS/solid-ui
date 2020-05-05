@@ -185,7 +185,7 @@ export class AddAgentButtons {
 
   private async renderAppsTable (eventContext: AuthenticationContext): Promise<string> {
     await logInLoadProfile(eventContext)
-    const trustedApps = this.groupList.store.each(eventContext.me, ns.acl('trustedApp'))
+    const trustedApps = this.groupList.store.each(eventContext.me, ns.acl('trustedApp')) as Array<NamedNode>
     const trustedOrigins = trustedApps.flatMap(app => this.groupList.store.each(app, ns.acl('origin')))
 
     this.barElement.appendChild(this.groupList.controller.dom.createElement('p')).textContent = `You have ${trustedOrigins.length} selected web apps.`

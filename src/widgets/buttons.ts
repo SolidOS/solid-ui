@@ -1,4 +1,4 @@
-import { IndexedFormula, NamedNode, st, sym, uri, Util } from 'rdflib'
+import { IndexedFormula, NamedNode, Node, st, sym, uri, Util } from 'rdflib'
 import { iconBase, originalIconBase } from '../iconBase'
 import store from '../store'
 import ns from '../ns'
