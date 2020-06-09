@@ -25,6 +25,7 @@ module.exports = {
   labelWithOntology,
   newVariableName,
   ontologyLabel,
+  predicateLabel,
   predicateLabelForXML,
   predParentOf,
   RDFComparePredicateObject,
@@ -527,22 +528,12 @@ function label (x, initialCap) {
     return doCap(s2)
   }
 
-  // The tabulator labeler is more sophisticated if it exists
-  // Todo: move it to a solid-ui option.
-  /*
-  var lab
-  if (typeof tabulator !== 'undefined' && tabulator.lb) {
-    lab = tabulator.lb.label(x)
-    if (lab) {
-      return doCap(lab.value)
-    }
-  }
-  */
   // Hard coded known label predicates
   //  @@ TBD: Add subproperties of rdfs:label
 
   var kb = UI.store
   var lab1 =
+    kb.any(x, UI.ns.ui('label')) || // Prioritize ui:label
     kb.any(x, UI.ns.link('message')) ||
     kb.any(x, UI.ns.vcard('fn')) ||
     kb.any(x, UI.ns.foaf('name')) ||
@@ -618,18 +609,16 @@ function labelForXML (x) {
   return escapeForXML(label(x))
 }
 
-// As above but for predicate, possibly inverse
 function predicateLabelForXML (p, inverse) {
-  var lab
+  return escapeForXML(predicateLabel(p, inverse))
+}
+// As above but for predicate, possibly inverse
+function predicateLabel (p, inverse) {
+  var lab = label(p)
   if (inverse) {
     // If we know an inverse predicate, use its label
-    var ip = UI.store.any(p, UI.ns.owl('inverseOf'))
-    if (!ip) ip = UI.store.any(undefined, UI.ns.owl('inverseOf'), p)
-    if (ip) return labelForXML(ip)
-  }
-
-  lab = labelForXML(p)
-  if (inverse) {
+    var ip = UI.store.any(p, UI.ns.owl('inverseOf')) || UI.store.any(undefined, UI.ns.owl('inverseOf'), p)
+    if (ip) return label(ip)
     if (lab === 'type') return '...' // Not "is type of"
     return 'is ' + lab + ' of'
   }
@@ -654,7 +643,7 @@ function predParentOf (node) {
   var n = node
   while (true) {
     if (n.getAttribute('predTR')) {
-      return n
+      return ns
     } else if (n.previousSibling && n.previousSibling.nodeName === 'TR') {
       n = n.previousSibling
     } else {
