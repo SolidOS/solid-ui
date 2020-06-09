@@ -537,8 +537,8 @@ function getButtonStyle (options: ButtonWidgetOptions = {}) {
  * @returns <dDomElement> - the button
  */
 export function button (dom: HTMLDocument, iconURI: string | undefined, text: string,
-   handler?: (event: any) => void,
-   options: ButtonWidgetOptions = { buttonColor: 'Primary', needsBorder: false }) {
+  handler?: (event: any) => void,
+  options: ButtonWidgetOptions = { buttonColor: 'Primary', needsBorder: false }) {
   var button = dom.createElement('button')
   button.setAttribute('type', 'button')
   // button.innerHTML = text  // later, user preferences may make text preferred for some
