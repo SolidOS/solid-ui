@@ -424,7 +424,7 @@ forms.field[ns.ui('Multiple').uri] = function (
   var values // Initial values - an array.  Even when no list yet.
 
   // var unsavedList = false // Flag that
-  values = reverse ? kb.any(null, property, subjet) :  kb.any(subject, property)
+  values = reverse ? kb.any(null, property, subject) : kb.any(subject, property)
   if (ordered) {
     list = values
     if (list) {
@@ -481,10 +481,10 @@ forms.field[ns.ui('Multiple').uri] = function (
   function refresh () {
     let vals
     if (ordered) {
-      const li = reverse ? kb.the(null, property, subjet) :  kb.the(subject, property)
+      const li = reverse ? kb.the(null, property, subject) : kb.the(subject, property)
       vals = li ? li.elements : []
     } else {
-      vals = reverse ? kb.each(null, property, subjet) :  kb.each(subject, property)
+      vals = reverse ? kb.each(null, property, subject) : kb.each(subject, property)
       vals.sort() // achieve consistency on each refresh
     }
     utils.syncTableToArrayReOrdered(body, vals, renderItem)

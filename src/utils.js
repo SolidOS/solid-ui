@@ -643,7 +643,7 @@ function predParentOf (node) {
   var n = node
   while (true) {
     if (n.getAttribute('predTR')) {
-      return ns
+      return n
     } else if (n.previousSibling && n.previousSibling.nodeName === 'TR') {
       n = n.previousSibling
     } else {
