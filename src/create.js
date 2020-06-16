@@ -1,16 +1,17 @@
 /*   create.js     UI to craete new objects in the solid-app-set world
-**
-*/
+ **
+ */
 // const error = require('./widgets/error')
 // const widgets = require('./widgets/index')
 // const utils = require('./utils')
 
 // const UI = require('solid-ui')
 
+import * as debug from './debug'
+
 const UI = {
-  authn: require('./signin'),
+  authn: require('./authn/authn'),
   icons: require('./iconBase'),
-  log: require('./log'),
   ns: require('./ns'),
   store: require('./store'),
   style: require('./style'),
@@ -25,25 +26,28 @@ module.exports = {
 }
 
 /*  newThingUI -- return UI for user to select a new object, folder, etc
-**
-** context must include:  dom, div,
-**     optional:   folder: NamedNode -- the folder where the thing is bring put
-**                (suppresses asking for a full URI or workspace)
-**
-*/
-function newThingUI (context, thePanes) {
-  const dom = context.dom
-  const div = context.div
-  if (context.me && !context.me.uri) throw new Error('newThingUI:  Invalid userid: ' + context.me)
+ **
+ ** context must include:  dom, div,
+ **     optional:   folder: NamedNode -- the folder where the thing is bring put
+ **                (suppresses asking for a full URI or workspace)
+ **
+ */
+function newThingUI (createContext, dataBrowserContext, thePanes) {
+  if (!thePanes) throw new Error('@@ newThingUI: update API') // phase out
+  const dom = createContext.dom
+  const div = createContext.div
+  if (createContext.me && !createContext.me.uri) {
+    throw new Error('newThingUI:  Invalid userid: ' + createContext.me)
+  }
 
-  var iconStyle = 'padding: 0.7em; width: 2em; height: 2em;' // was: 'padding: 1em; width: 3em; height: 3em;'
-  var star = div.appendChild(dom.createElement('img'))
+  const iconStyle = 'padding: 0.7em; width: 2em; height: 2em;' // was: 'padding: 1em; width: 3em; height: 3em;'
+  const star = div.appendChild(dom.createElement('img'))
   var visible = false // the inividual tools tools
   //   noun_272948.svg = black star
   // noun_34653_green.svg = green plus
   star.setAttribute('src', UI.icons.iconBase + 'noun_34653_green.svg')
   star.setAttribute('style', iconStyle)
-  star.setAttribute('title', 'Add another tool to the meeting')
+  star.setAttribute('title', 'Add another tool')
 
   var complain = function complain (message) {
     var pre = div.appendChild(dom.createElement('pre'))
@@ -51,9 +55,28 @@ function newThingUI (context, thePanes) {
     pre.appendChild(dom.createTextNode(message))
   }
 
-  var selectNewTool = function (event) {
+  function styleTheIcons (style) {
+    for (var i = 0; i < iconArray.length; i++) {
+      var st = iconStyle + style
+      if (iconArray[i].disabled) {
+        // @@ unused
+        st += 'opacity: 0.3;'
+      }
+      iconArray[i].setAttribute('style', st) // eg 'background-color: #ccc;'
+    }
+  }
+
+  function selectTool (icon) {
+    styleTheIcons('display: none;') // 'background-color: #ccc;'
+    icon.setAttribute('style', iconStyle + 'background-color: yellow;')
+  }
+
+  function selectNewTool (_event) {
     visible = !visible
-    star.setAttribute('style', iconStyle + (visible ? 'background-color: yellow;' : ''))
+    star.setAttribute(
+      'style',
+      iconStyle + (visible ? 'background-color: yellow;' : '')
+    )
     styleTheIcons(visible ? '' : 'display: none;')
   }
 
@@ -63,61 +86,92 @@ function newThingUI (context, thePanes) {
     return new Promise(function (resolve, reject) {
       var selectUI // , selectUIParent
       function callbackWS (ws, newBase) {
-        UI.authn.logInLoadProfile(context).then(context => {
-          var newPaneOptions = {
-            newBase: newBase,
-            workspace: ws
-          }
-          for (var opt in options) { // get div, dom, me, folder, pane, refreshTable
-            newPaneOptions[opt] = options[opt]
-          }
-          console.log('newThingUI: Minting new ' + newPaneOptions.pane.name + ' at ' + newPaneOptions.newBase)
-          options.pane.mintNew(newPaneOptions)
-            .then(function (newPaneOptions) {
-              if (!newPaneOptions || !newPaneOptions.newInstance) {
-                throw new Error('Cannot mint new - missing newInstance')
-              }
-              if (newPaneOptions.folder) {
-                var tail = newPaneOptions.newInstance.uri.slice(newPaneOptions.folder.uri.length)
-                const isPackage = tail.includes('/')
-                console.log('  new thing is packge? ' + isPackage)
-                if (isPackage) {
-                  kb.add(newPaneOptions.folder, UI.ns.ldp('contains'), kb.sym(newPaneOptions.newBase),
-                    newPaneOptions.folder.doc())
-                } else { // single file
-                  kb.add(newPaneOptions.folder, UI.ns.ldp('contains'), newPaneOptions.newInstance,
-                    newPaneOptions.folder.doc()) // Ping the patch system?
+        UI.authn.logInLoadProfile(createContext).then(
+          _context => {
+            var newPaneOptions = {
+              newBase: newBase,
+              workspace: ws
+            }
+            for (var opt in options) {
+              // get div, dom, me, folder, pane, refreshTable
+              newPaneOptions[opt] = options[opt]
+            }
+            debug.log(
+              'newThingUI: Minting new ' +
+                newPaneOptions.pane.name +
+                ' at ' +
+                newPaneOptions.newBase
+            )
+            options.pane
+              .mintNew(dataBrowserContext, newPaneOptions)
+              .then(function (newPaneOptions) {
+                if (!newPaneOptions || !newPaneOptions.newInstance) {
+                  throw new Error('Cannot mint new - missing newInstance')
                 }
-                if (newPaneOptions.refreshTarget) {
-                  newPaneOptions.refreshTarget.refresh() // Refresh the cntaining display
-                }
-                // selectUI.parentNode.removeChild(selectUI) It removes itself
-              } else {
-                var p = options.div.appendChild(dom.createElement('p'))
-                p.setAttribute('style', 'font-size: 120%;')
-                // Make link to new thing
-                p.innerHTML =
-                  "Your <a target='_blank' href='" + newPaneOptions.newInstance.uri + "'><b>new " + options.noun + '</b></a> is ready to be set up. ' +
-                  "<br/><br/><a target='_blank' href='" + newPaneOptions.newInstance.uri + "'>Go to your new " + options.noun + '.</a>'
+                if (newPaneOptions.folder) {
+                  var tail = newPaneOptions.newInstance.uri.slice(
+                    newPaneOptions.folder.uri.length
+                  )
+                  const isPackage = tail.includes('/')
+                  debug.log('  new thing is packge? ' + isPackage)
+                  if (isPackage) {
+                    kb.add(
+                      newPaneOptions.folder,
+                      UI.ns.ldp('contains'),
+                      kb.sym(newPaneOptions.newBase),
+                      newPaneOptions.folder.doc()
+                    )
+                  } else {
+                    // single file
+                    kb.add(
+                      newPaneOptions.folder,
+                      UI.ns.ldp('contains'),
+                      newPaneOptions.newInstance,
+                      newPaneOptions.folder.doc()
+                    ) // Ping the patch system?
+                  }
+                  if (newPaneOptions.refreshTarget) {
+                    newPaneOptions.refreshTarget.refresh() // Refresh the cntaining display
+                  }
+                  // selectUI.parentNode.removeChild(selectUI) It removes itself
+                } else {
+                  var p = options.div.appendChild(dom.createElement('p'))
+                  p.setAttribute('style', 'font-size: 120%;')
+                  // Make link to new thing
+                  p.innerHTML =
+                    "Your <a target='_blank' href='" +
+                    newPaneOptions.newInstance.uri +
+                    "'><b>new " +
+                    options.noun +
+                    '</b></a> is ready to be set up. ' +
+                    "<br/><br/><a target='_blank' href='" +
+                    newPaneOptions.newInstance.uri +
+                    "'>Go to your new " +
+                    options.noun +
+                    '.</a>'
                   // selectUI.parentNode.removeChild(selectUI) // Clean up
-                // selectUIParent.removeChild(selectUI) // Clean up
-              }
-              selectNewTool() // toggle star to plain and menu vanish again
-            })
-            .catch(function (err) {
-              complain(err)
-              reject(err)
-            })
-        }, err => { // login fails
-          complain('Error logging on: ' + err)
-        })
+                  // selectUIParent.removeChild(selectUI) // Clean up
+                }
+                selectNewTool() // toggle star to plain and menu vanish again
+              })
+              .catch(function (err) {
+                complain(err)
+                reject(err)
+              })
+          },
+          err => {
+            // login fails
+            complain('Error logging on: ' + err)
+          }
+        )
       } // callbackWS
 
       var pa = options.pane
       options.appPathSegment = 'edu.mit.solid.pane.' + pa.name
       options.noun = pa.mintClass ? UI.utils.label(pa.mintClass) : pa.name
 
-      if (!options.folder) { // No folder given? Ask user for full URI
+      if (!options.folder) {
+        // No folder given? Ask user for full URI
         selectUI = UI.authn.selectWorkspace(dom, options, callbackWS)
         options.div.appendChild(selectUI)
         // selectUIParent = options.div
@@ -135,13 +189,21 @@ function newThingUI (context, thePanes) {
             callbackWS(null, uri)
           }
         }
-        UI.widgets.askName(dom, UI.store, options.div, UI.ns.foaf('name'), null, options.noun).then(gotName)
+        UI.widgets
+          .askName(
+            dom,
+            UI.store,
+            options.div,
+            UI.ns.foaf('name'),
+            null,
+            options.noun
+          )
+          .then(gotName)
         // selectUI = getNameForm(dom, UI.store, options.noun, gotName)
         // options.div.appendChild(selectUI)
         // selectUIParent = options.div
       }
-    }
-  )
+    })
   } // makeNewAppInstance
 
   const iconArray = []
@@ -153,13 +215,13 @@ function newThingUI (context, thePanes) {
     return classMap
   }, {})
   mintingPanes.forEach(pane => {
-    const icon = context.div.appendChild(dom.createElement('img'))
+    const icon = createContext.div.appendChild(dom.createElement('img'))
     icon.setAttribute('src', pane.icon)
     const noun = pane.mintClass
-      ? (mintingClassMap[pane.mintClass] > 1
+      ? mintingClassMap[pane.mintClass] > 1
         ? `${UI.utils.label(pane.mintClass)} (using ${pane.name} pane)`
-        : UI.utils.label(pane.mintClass))
-      : (pane.name + ' @@')
+        : UI.utils.label(pane.mintClass)
+      : pane.name + ' @@'
     icon.setAttribute('title', 'Make new ' + noun)
     icon.setAttribute('style', iconStyle + 'display: none;')
     iconArray.push(icon)
@@ -168,33 +230,19 @@ function newThingUI (context, thePanes) {
         selectTool(icon)
         makeNewAppInstance({
           event: e,
-          folder: context.folder,
+          folder: createContext.folder,
           iconEle: icon,
           pane,
           noun,
           noIndexHTML: true, // do NOT @@ for now write a HTML file
-          div: context.div,
-          me: context.me,
-          dom: context.dom,
-          refreshTarget: context.refreshTarget
+          div: createContext.div,
+          me: createContext.me,
+          dom: createContext.dom,
+          refreshTarget: createContext.refreshTarget
         })
       })
     }
   })
-
-  var styleTheIcons = function (style) {
-    for (var i = 0; i < iconArray.length; i++) {
-      var st = iconStyle + style
-      if (iconArray[i].disabled) { // @@ unused
-        st += 'opacity: 0.3;'
-      }
-      iconArray[i].setAttribute('style', st) // eg 'background-color: #ccc;'
-    }
-  }
-  var selectTool = function (icon) {
-    styleTheIcons('display: none;') // 'background-color: #ccc;'
-    icon.setAttribute('style', iconStyle + 'background-color: yellow;')
-  }
 }
 
 // Form to get the name of a new thing before we create it

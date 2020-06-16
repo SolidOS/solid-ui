@@ -1,10 +1,15 @@
+/**
+ * Functions related to chat and bookmarks
+ * @packageDocumentation
+ */
 
 /* global alert confirm */
 
+import * as debug from '../debug'
+
 const UI = {
-  authn: require('../signin'),
+  authn: require('../authn/authn'),
   icons: require('../iconBase'),
-  log: require('../log'),
   ns: require('../ns'),
   media: require('../media-capture'),
   pad: require('../pad'),
@@ -28,31 +33,46 @@ const dom = UI.dom || window.document
  *  Be absolutely sure something does not exist before creating a new empty file
  * as otherwise existing could  be deleted.
  * @param doc {NamedNode} - The resource
-*/
+ */
 function createIfNotExists (doc) {
   return new Promise(function (resolve, reject) {
-    kb.fetcher.load(doc).then(response => {
-      console.log('createIfNotExists doc exists, all good ' + doc)
-     // kb.fetcher.webOperation('HEAD', doc.uri).then(response => {
-      resolve(response)
-    }, err => {
-      if (err.response.status === 404) {
-        console.log('createIfNotExists doc does NOT exist, will create... ' + doc)
+    kb.fetcher.load(doc).then(
+      response => {
+        debug.log('createIfNotExists doc exists, all good ' + doc)
+        // kb.fetcher.webOperation('HEAD', doc.uri).then(response => {
+        resolve(response)
+      },
+      err => {
+        if (err.response.status === 404) {
+          debug.log(
+            'createIfNotExists doc does NOT exist, will create... ' + doc
+          )
 
-        kb.fetcher.webOperation('PUT', doc.uri, {data: '', contentType: 'text/turtle'}).then(response => {
-           // fetcher.requested[doc.uri] = 'done' // do not need to read ??  but no headers
-          delete kb.fetcher.requested[doc.uri] // delete cached 404 error
-          console.log('createIfNotExists doc created ok ' + doc)
-          resolve(response)
-        }, err => {
-          console.log('createIfNotExists doc FAILED: ' + doc + ': ' + err)
+          kb.fetcher
+            .webOperation('PUT', doc.uri, {
+              data: '',
+              contentType: 'text/turtle'
+            })
+            .then(
+              response => {
+                // fetcher.requested[doc.uri] = 'done' // do not need to read ??  but no headers
+                delete kb.fetcher.requested[doc.uri] // delete cached 404 error
+                debug.log('createIfNotExists doc created ok ' + doc)
+                resolve(response)
+              },
+              err => {
+                debug.log('createIfNotExists doc FAILED: ' + doc + ': ' + err)
+                reject(err)
+              }
+            )
+        } else {
+          debug.log(
+            'createIfNotExists doc load error NOT 404:  ' + doc + ': ' + err
+          )
           reject(err)
-        })
-      } else {
-        console.log('createIfNotExists doc load error NOT 404:  ' + doc + ': ' + err)
-        reject(err)
+        }
       }
-    })
+    )
   })
 }
 
@@ -72,31 +92,39 @@ function updatePromise (del, ins) {
 // export findBookmarkDocument,
 
 /*         Bookmarking
-*/
+ */
 /** Find a user's bookmarks
-*/
+ */
 export async function findBookmarkDocument (userContext) {
-  const klass = BOOK('Bookmark')
+  const theClass = BOOK('Bookmark')
   const fileTail = 'bookmarks.ttl'
   const isPublic = true
 
-  await UI.authn.findAppInstances(userContext, klass, isPublic) // public -- only look for public links
+  await UI.authn.findAppInstances(userContext, theClass, isPublic) // public -- only look for public links
   if (userContext.instances && userContext.instances.length > 0) {
     userContext.bookmarkDocument = userContext.instances[0]
     if (userContext.instances.length > 1) {
       alert('More than one bookmark file! ' + userContext.instances)
     }
   } else {
-    if (userContext.publicProfile) { // publicProfile or preferencesFile
-      var newBookmarkFile = $rdf.sym(userContext.publicProfile.dir().uri + fileTail)
+    if (userContext.publicProfile) {
+      // publicProfile or preferencesFile
+      var newBookmarkFile = $rdf.sym(
+        userContext.publicProfile.dir().uri + fileTail
+      )
       try {
-        console.log('Creating new bookmark file ' + newBookmarkFile)
+        debug.log('Creating new bookmark file ' + newBookmarkFile)
         await createIfNotExists(newBookmarkFile)
       } catch (e) {
-        alert.error('Can\'t make fresh bookmark file:' + e)
+        alert.error("Can't make fresh bookmark file:" + e)
         return userContext
       }
-      await UI.authn.registerInTypeIndex(userContext, newBookmarkFile, klass, true) // public
+      await UI.authn.registerInTypeIndex(
+        userContext,
+        newBookmarkFile,
+        theClass,
+        true
+      ) // public
       userContext.bookmarkDocument = newBookmarkFile
     } else {
       alert('You seem to have no bookmark file and not even a profile file.')
@@ -105,7 +133,7 @@ export async function findBookmarkDocument (userContext) {
   return userContext
 }
 
- /** Add a bookmark
+/** Add a bookmark
  */
 
 async function addBookmark (context, target) {
@@ -126,8 +154,8 @@ async function addBookmark (context, target) {
   if (!me) throw new Error('Must be logged on to add Bookmark')
 
   var author = kb.any(target, ns.foaf('maker'))
-  title = label(author) + ': ' +
-           kb.anyValue(target, ns.sioc('content')).slice(0, 80) // @@ add chat title too?
+  title =
+    label(author) + ': ' + kb.anyValue(target, ns.sioc('content')).slice(0, 80) // @@ add chat title too?
   const bookmarkDoc = context.bookmarkDocument
   const bookmark = UI.widgets.newThing(bookmarkDoc, title)
   const ins = [
@@ -141,7 +169,7 @@ async function addBookmark (context, target) {
   try {
     await updatePromise([], ins) // 20190118A
   } catch (e) {
-    let msg = 'Making bookmark: ' + e
+    const msg = 'Making bookmark: ' + e
     alert.error(msg)
     return null
   }
@@ -150,40 +178,55 @@ async function addBookmark (context, target) {
 
 export async function toggleBookmark (userContext, target, bookmarkButton) {
   await kb.fetcher.load(userContext.bookmarkDocument)
-  let bookmarks = kb.each(null, BOOK('recalls'), target, userContext.bookmarkDocument)
-  if (bookmarks.length) { // delete
+  const bookmarks = kb.each(
+    null,
+    BOOK('recalls'),
+    target,
+    userContext.bookmarkDocument
+  )
+  if (bookmarks.length) {
+    // delete
     if (!confirm('Delete bookmark on this?' + bookmarks.length)) return
     for (let i = 0; i < bookmarks.length; i++) {
       try {
         await updatePromise(kb.connectedStatements(bookmarks[i]), [])
         bookmarkButton.style.backgroundColor = 'white'
-        console.log('Bookmark deleted: ' + bookmarks[i])
+        debug.log('Bookmark deleted: ' + bookmarks[i])
       } catch (e) {
-        console.error('Cant delete bookmark:' + e)
+        debug.error('Cant delete bookmark:' + e)
         alert('Cant delete bookmark:' + e)
       }
     }
   } else {
-    let bookmark = await addBookmark(userContext, target)
+    const bookmark = await addBookmark(userContext, target)
     bookmarkButton.style.backgroundColor = 'yellow'
-    console.log('Bookmark added: ' + bookmark)
+    debug.log('Bookmark added: ' + bookmark)
   }
 }
 
 export async function renderBookmarksButton (userContext, target) {
   async function setBookmarkButtonColor (bookmarkButton) {
     await kb.fetcher.load(userContext.bookmarkDocument)
-    let bookmarked = kb.any(null, BOOK('recalls'), bookmarkButton.target, userContext.bookmarkDocument)
+    const bookmarked = kb.any(
+      null,
+      BOOK('recalls'),
+      bookmarkButton.target,
+      userContext.bookmarkDocument
+    )
     bookmarkButton.style = UI.style.buttonStyle
     if (bookmarked) bookmarkButton.style.backgroundColor = 'yellow'
   }
 
   var bookmarkButton
   if (userContext.bookmarkDocument) {
-    bookmarkButton = UI.widgets.button(dom, UI.icons.iconBase + BOOKMARK_ICON,
-        label(BOOK('Bookmark')), () => {
-          toggleBookmark(userContext, target, bookmarkButton)
-        })
+    bookmarkButton = UI.widgets.button(
+      dom,
+      UI.icons.iconBase + BOOKMARK_ICON,
+      label(BOOK('Bookmark')),
+      () => {
+        toggleBookmark(userContext, target, bookmarkButton)
+      }
+    )
     bookmarkButton.target = target
     await setBookmarkButtonColor(bookmarkButton)
     return bookmarkButton

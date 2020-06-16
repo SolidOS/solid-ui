@@ -1,10 +1,11 @@
 /**      UI To Delete Folder and content
-*
-*/
+ *
+ */
 /* global confirm */
+import * as debug from './debug'
+
 const UI = {
   icons: require('./iconBase'),
-  log: require('./log'),
   ns: require('./ns'),
   pad: require('./'),
   rdf: require('rdflib'),
@@ -16,25 +17,28 @@ const UI = {
 const ns = UI.ns
 
 function deleteRecursive (kb, folder) {
-  return new Promise(function (resolve, reject) {
+  // eslint-disable-next-line promise/param-names
+  return new Promise(function (resolve, _reject) {
     kb.fetcher.load(folder).then(function () {
-      let promises = kb.each(folder, ns.ldp('contains')).map(file => {
+      const promises = kb.each(folder, ns.ldp('contains')).map(file => {
         if (kb.holds(file, ns.rdf('type'), ns.ldp('BasicContainer'))) {
           return deleteRecursive(kb, file)
         } else {
-          console.log('deleteRecirsive file: ' + file)
+          debug.log('deleteRecirsive file: ' + file)
           if (!confirm(' Really DELETE File ' + file)) {
             throw new Error('User aborted delete file')
           }
           return kb.fetcher.webOperation('DELETE', file.uri)
         }
       })
-      console.log('deleteRecirsive folder: ' + folder)
+      debug.log('deleteRecirsive folder: ' + folder)
       if (!confirm(' Really DELETE folder ' + folder)) {
         throw new Error('User aborted delete file')
       }
       promises.push(kb.fetcher.webOperation('DELETE', folder.uri))
-      Promise.all(promises).then(res => { resolve() })
+      Promise.all(promises).then(_res => {
+        resolve()
+      })
     })
   })
 }
@@ -46,9 +50,10 @@ function deleteRecursive (kb, folder) {
  * @param action - returns a promise.  All the promises must be resolved
  */
 function forAllFiles (folder, kb, action) {
-  return new Promise(function (resolve, reject) {
+  // eslint-disable-next-line promise/param-names
+  return new Promise(function (resolve, _reject) {
     kb.fetcher.load(folder).then(function () {
-      let promises = kb.each(folder, ns.ldp('contains')).map(file => {
+      const promises = kb.each(folder, ns.ldp('contains')).map(file => {
         if (kb.holds(file, ns.rdf('type'), ns.ldp('BasicContainer'))) {
           return forAllFiles(file, kb, action)
         } else {
@@ -56,7 +61,9 @@ function forAllFiles (folder, kb, action) {
         }
       })
       promises.push(action(folder))
-      Promise.all(promises).then(res => { resolve() })
+      Promise.all(promises).then(_res => {
+        resolve()
+      })
     })
   })
 }
@@ -64,13 +71,13 @@ function forAllFiles (folder, kb, action) {
 module.exports.deleteRecursive = deleteRecursive
 
 /** Delete Folder and contents
-*
+ *
  * @param {NamedNode} folder - The LDP container to be deleted
  * @param {DOMElement} containingElement - Where to put the user interface
  * @param {IndexedForumula} store - Quadstore (optional)
  * @param {Document} dom - The browser 'document' gloabl or equivalent (or iuse global)
  * @returns {DOMElement} - The control which has eben inserted in the
-*/
+ */
 /* global document */
 module.exports.deleteFolder = function (folder, store, dom) {
   store = store || UI.store
@@ -89,28 +96,42 @@ module.exports.deleteFolder = function (folder, store, dom) {
   buttonsTR.appendChild(dom.createElement('td')) // buttonsTD2
   const buttonsTD3 = buttonsTR.appendChild(dom.createElement('td'))
 
-  let cancel = buttonsTD1.appendChild(UI.widgets.cancelButton(dom))
-  cancel.addEventListener('click', function (e) {
-    div.parentNode.removeChild(div)
-  }, false)
+  const cancel = buttonsTD1.appendChild(UI.widgets.cancelButton(dom))
+  cancel.addEventListener(
+    'click',
+    function (_event) {
+      div.parentNode.removeChild(div)
+    },
+    false
+  )
 
-  let doit = buttonsTD3.appendChild(UI.widgets.button(UI.icons.iconBase + 'noun_925021.svg', 'Yes, delete'))
-  doit.addEventListener('click', function (e) {
-    deleteThem(folder).then(() => {
-      console.log('All deleted.')
-    })
-  }, false)
+  const doit = buttonsTD3.appendChild(
+    UI.widgets.button(dom, UI.icons.iconBase + 'noun_925021.svg', 'Yes, delete')
+  )
+  doit.addEventListener(
+    'click',
+    function (_event) {
+      deleteThem(folder).then(() => {
+        debug.log('All deleted.')
+      })
+    },
+    false
+  )
 
   function deleteThem (folder) {
-    return forAllFiles(folder, (file) => store.fetcher.webOperation('DELETE', file.uri))
+    return forAllFiles(folder, file =>
+      store.fetcher.webOperation('DELETE', file.uri)
+    )
   }
   var count = 0
-  forAllFiles(folder, store, () => { count += 1 }) // Count files
-  .then(() => {
-    let msg = ' Files to delete: ' + count
-    console.log(msg)
-    p.textContent += msg
-  })
+  forAllFiles(folder, store, () => {
+    count += 1
+  }) // Count files
+    .then(() => {
+      const msg = ' Files to delete: ' + count
+      debug.log(msg)
+      p.textContent += msg
+    })
 
   return div
 }

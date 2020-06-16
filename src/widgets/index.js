@@ -1,14 +1,16 @@
 /**
-* General purpose utility functions used in the panes
-* oshani@csail.mit.edu
-*
-* Includes form-oriented widgets  timbl@w3.org
-*
-* sign-in sign-up widgets are in signin.js
-*
-*  Note... For pointers to posssible text-editing code, see
-*  http://stackoverflow.com/questions/6756407/what-contenteditable-editors
-*/
+ * General purpose utility functions used in the panes
+ * oshani@csail.mit.edu
+ *
+ * Includes form-oriented widgets  timbl@w3.org
+ *
+ * sign-in sign-up widgets are in signin.js
+ *
+ *  Note... For pointers to posssible text-editing code, see
+ *  http://stackoverflow.com/questions/6756407/what-contenteditable-editors
+ */
+
+import * as debug from '../debug'
 
 // var aclModule = require('./acl.js')
 
@@ -20,14 +22,14 @@
 // export widgets with the same name)
 var widgets = Object.assign(
   {},
-  {PeoplePicker: require('./peoplePicker')},
-  require('./dragAndDrop'),   // uploadFiles etc
-  require('./error'),         // UI.widgets.errorMessageBlock
+  require('./peoplePicker'),
+  require('./dragAndDrop'), // uploadFiles etc
+  require('./error'), // UI.widgets.errorMessageBlock
   require('./buttons'),
   require('./forms')
 )
 
 module.exports = widgets
-console.log('@@@ widgets: ', widgets)
+debug.log('@@@ widgets: ', widgets)
 
 // ends

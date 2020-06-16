@@ -1,19 +1,24 @@
 language: node_js
+node_js:
+  # see https://github.com/solid/solid-ui/issues/193 for discussion
+  # of node versions supported for Travis.
+  - "12"
+  - "lts/*"
+  - "node"
 install:
-  - npm install
+  - npm ci
 script:
+  # This includes build, lint, and jest:
   - npm test
-  # Make sure it still builds successfully - the build isn't actually used yet:
-  - npm run build
 before_deploy:
   - node ./travis/bumpversion.js
 deploy:
   provider: npm
   # Do not throw away the updated package.json we generated in `before_deploy`:
   skip_cleanup: true
-  email: "$NPM_EMAIL"
-  api_key: "$NPM_TOKEN"
+  email: '$NPM_EMAIL'
+  api_key: '$NPM_TOKEN'
   # Note: do not deploy on pull request, because $TRAVIS_BRANCH will be the target branch.
-  tag: "$TRAVIS_BRANCH"
+  tag: '$TRAVIS_BRANCH'
   on:
     all_branches: true

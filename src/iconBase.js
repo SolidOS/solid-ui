@@ -1,15 +1,26 @@
-
+/* global $SolidTestEnvironment */
 // Works in FF extension - what about browserify??
 
-if (module.scriptURI) { // FF extension
-  module.exports.iconBase = '' +
-    module.scriptURI.slice(0, module.scriptURI.lastIndexOf('/')) + '/icons/'
-  module.exports.originalIconBase = '' +
-      module.scriptURI.slice(0, module.scriptURI.lastIndexOf('/')) + '/originalIcons/'
-} else { // Node or browserify
+import * as debug from './debug'
+
+if (module.scriptURI) {
+  // FF extension
+  module.exports.iconBase =
+    '' +
+    module.scriptURI.slice(0, module.scriptURI.lastIndexOf('/')) +
+    '/icons/'
+  module.exports.originalIconBase =
+    '' +
+    module.scriptURI.slice(0, module.scriptURI.lastIndexOf('/')) +
+    '/originalIcons/'
+} else {
+  // Node or browserify
   var iconsOnGithub = 'https://solid.github.io/solid-ui/src'
 
-  if (typeof $SolidTestEnvironment !== 'undefined' && $SolidTestEnvironment.iconBase) {
+  if (
+    typeof $SolidTestEnvironment !== 'undefined' &&
+    $SolidTestEnvironment.iconBase
+  ) {
     module.exports.iconBase = $SolidTestEnvironment.iconBase
     module.exports.originalIconBase = $SolidTestEnvironment.originalIconBase
   } else {
@@ -17,4 +28,4 @@ if (module.scriptURI) { // FF extension
     module.exports.originalIconBase = iconsOnGithub + '/originalIcons/'
   }
 }
-console.log('   Icon base is: ' + module.exports.iconBase)
+debug.log('   Icon base is: ' + module.exports.iconBase)

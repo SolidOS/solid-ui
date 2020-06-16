@@ -1,0 +1,21 @@
+@prefix : <https://example.com/doc.ttl.acl#>.
+@prefix acl: <http://www.w3.org/ns/auth/acl#>.
+@prefix meg: <https://example.com/doc.ttl>.
+@prefix profile: <https://example.com/profile/card#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+
+:Append
+    acl:accessTo meg:;
+    acl:agent profile:me;
+    acl:mode acl:Append;
+    a acl:Authorization.
+:ControlReadWrite
+    acl:accessTo meg:;
+    acl:agent profile:me;
+    acl:mode acl:Control, acl:Read, acl:Write;
+    a acl:Authorization.
+:Read
+    acl:accessTo meg:;
+    acl:agentClass foaf:Agent;
+    acl:mode acl:Read;
+    a acl:Authorization.

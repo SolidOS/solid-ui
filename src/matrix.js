@@ -1,3 +1,4 @@
+/* global $rdf */
 //      Build a 2D matrix of values
 //
 //  dom      AKA document
@@ -21,7 +22,6 @@
 
 var UI = {
   icons: require('./iconBase'),
-  log: require('./log'),
   ns: require('./ns'),
   pad: require('./'),
   rdf: require('rdflib'),
@@ -32,7 +32,15 @@ var UI = {
 const utils = require('./utils')
 const kb = UI.store
 
-module.exports.matrixForQuery = function (dom, query, vx, vy, vvalue, options, whenDone) {
+module.exports.matrixForQuery = function (
+  dom,
+  query,
+  vx,
+  vy,
+  vvalue,
+  options,
+  whenDone
+) {
   var matrix = dom.createElement('table')
   var header = dom.createElement('tr')
   var corner = header.appendChild(dom.createElement('td'))
@@ -43,7 +51,8 @@ module.exports.matrixForQuery = function (dom, query, vx, vy, vvalue, options, w
   var rows = [] // Associative array
 
   var setCell = function (cell, x, y, value) {
-    while (cell.firstChild) { // Empty any previous
+    while (cell.firstChild) {
+      // Empty any previous
       cell.removeChild(cell.firstChild)
     }
     cell.setAttribute('style', '')
@@ -66,18 +75,30 @@ module.exports.matrixForQuery = function (dom, query, vx, vy, vvalue, options, w
     header.setAttribute('style', 'padding: 0.3em;')
     header.textContent = utils.label(y1) // first approximation
     if (y1.termType === 'NamedNode') {
-      kb.fetcher.nowOrWhenFetched(y1.uri.split('#')[0], undefined, function (ok, body, response) {
+      kb.fetcher.nowOrWhenFetched(y1.uri.split('#')[0], undefined, function (
+        ok,
+        _body,
+        _response
+      ) {
         if (ok) header.textContent = utils.label(y1)
       })
     }
     for (var i = 0; i < columns.length; i++) {
-      setCell(tr.appendChild(dom.createElement('td')), $rdf.fromNT(columns[i]), y1, null)
+      setCell(
+        tr.appendChild(dom.createElement('td')),
+        $rdf.fromNT(columns[i]),
+        y1,
+        null
+      )
     }
     tr.dataValueNT = y
     rows[y] = tr
-    for (var ele = matrix.lastHeader.nextSibling; ele; ele = ele.nextSibling) { // skip header
-      if (((y > ele.dataValueNT) && options && options.yDecreasing) ||
-        ((y < ele.dataValueNT) && !(options && options.yDecreasing))) {
+    for (var ele = matrix.lastHeader.nextSibling; ele; ele = ele.nextSibling) {
+      // skip header
+      if (
+        (y > ele.dataValueNT && options && options.yDecreasing) ||
+        (y < ele.dataValueNT && !(options && options.yDecreasing))
+      ) {
         return matrix.insertBefore(tr, ele) // return the tr
       }
     }
@@ -93,9 +114,14 @@ module.exports.matrixForQuery = function (dom, query, vx, vy, vvalue, options, w
         return i
       }
 
-      if (((xNT > columns[i]) && options.xDecreasing) ||
-        ((xNT < columns[i]) && !options.xDecreasing)) {
-        columns = columns.slice(0, i).concat([xNT]).concat(columns.slice(i))
+      if (
+        (xNT > columns[i] && options.xDecreasing) ||
+        (xNT < columns[i] && !options.xDecreasing)
+      ) {
+        columns = columns
+          .slice(0, i)
+          .concat([xNT])
+          .concat(columns.slice(i))
         col = i
         break
       }
@@ -107,7 +133,8 @@ module.exports.matrixForQuery = function (dom, query, vx, vy, vvalue, options, w
     }
 
     // col is the number of the new column, starting from 0
-    for (var row = matrix.firstChild; row; row = row.nextSibling) { // For every row header or not
+    for (var row = matrix.firstChild; row; row = row.nextSibling) {
+      // For every row header or not
       var y = row.dataValueNT
       var td = dom.createElement('td') // Add a new cell
       td.style.textAlign = 'center'
@@ -120,7 +147,8 @@ module.exports.matrixForQuery = function (dom, query, vx, vy, vvalue, options, w
         row.appendChild(td)
       } else {
         var t = row.firstChild
-        for (var j = 0; j < col + 1; j++) { // Skip header col too
+        for (var j = 0; j < col + 1; j++) {
+          // Skip header col too
           t = t.nextSibling
         }
         row.insertBefore(td, t)
@@ -143,7 +171,8 @@ module.exports.matrixForQuery = function (dom, query, vx, vy, vvalue, options, w
     var colsUsed = []
     var rowsUsed = []
 
-    if (options.set_y) { // Knows y values create rows
+    if (options.set_y) {
+      // Knows y values create rows
       for (var k = 0; k < options.set_y.length; k++) {
         rowsUsed[options.set_y[k]] = true
       }
@@ -175,8 +204,9 @@ module.exports.matrixForQuery = function (dom, query, vx, vy, vvalue, options, w
         delete rows[row.dataValueNT]
         matrix.removeChild(row)
       } else {
-        for (var j = row.children.length - 1; j > 0; j--) { // backwards
-          let cell = row.children[j]
+        for (var j = row.children.length - 1; j > 0; j--) {
+          // backwards
+          const cell = row.children[j]
           if (!colsUsed[j]) {
             row.removeChild(cell)
           }
@@ -207,7 +237,8 @@ module.exports.matrixForQuery = function (dom, query, vx, vy, vvalue, options, w
     setCell(cell, x, y, value)
   }
 
-  if (options.set_y) { // Knows y values create rows
+  if (options.set_y) {
+    // Knows y values create rows
     for (var k = 0; k < options.set_y.length; k++) {
       rowFor(options.set_y[k])
     }

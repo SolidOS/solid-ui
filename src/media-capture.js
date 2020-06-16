@@ -1,4 +1,3 @@
-
 /// /////////////////////////////////////////////
 //
 //   Media input widget
@@ -14,15 +13,15 @@
 // (Especially latest taken ones)
 //
 /* global alert */
+import * as debug from './debug'
 
 /** @module mediaCapture */
 
 var $rdf = require('rdflib')
-var media = module.exports = {}
+var media = (module.exports = {})
 
 var UI = {
   icons: require('./iconBase'),
-  log: require('./log'),
   ns: require('./ns'),
   pad: require('./pad'),
   media: media,
@@ -49,7 +48,12 @@ const contentType = 'image/png'
  * @param {NamedNode} getImageDoc() - NN of the image file to be created
  * @param {function} doneCallback - Called when a picture has been taken
  */
-module.exports.cameraCaptureControl = function cameraCaptureControl (dom, store, getImageDoc, doneCallback) {
+module.exports.cameraCaptureControl = function cameraCaptureControl (
+  dom,
+  store,
+  getImageDoc,
+  doneCallback
+) {
   const div = dom.createElement('div')
   var destination, imageBlob, player, canvas
 
@@ -60,28 +64,34 @@ module.exports.cameraCaptureControl = function cameraCaptureControl (dom, store,
 
   const buttons = table.appendChild(dom.createElement('tr'))
 
-  buttons.appendChild(dom.createElement('td')) // Cancel button
-  .appendChild(UI.widgets.cancelButton(dom))
-  .addEventListener('click', e => {
-    stopVideo()
-    doneCallback(null)
-  })
+  buttons
+    .appendChild(dom.createElement('td')) // Cancel button
+    .appendChild(UI.widgets.cancelButton(dom))
+    .addEventListener('click', _event => {
+      stopVideo()
+      doneCallback(null)
+    })
 
-  const retakeButton = buttons.appendChild(dom.createElement('td')) // Retake button
-  .appendChild(UI.widgets.button(dom, retakeIcon, 'Retake'))
-  retakeButton.addEventListener('click', e => {
+  const retakeButton = buttons
+    .appendChild(dom.createElement('td')) // Retake button
+    .appendChild(UI.widgets.button(dom, retakeIcon, 'Retake'))
+  retakeButton.addEventListener('click', _event => {
     retake()
   })
   retakeButton.style.visibility = 'collapse' // Hide for now
 
-  const shutterButton = buttons.appendChild(dom.createElement('td')) // Trigger capture button
-  .appendChild(UI.widgets.button(dom, UI.icons.iconBase + 'noun_10636.svg', 'Snap'))
+  const shutterButton = buttons
+    .appendChild(dom.createElement('td')) // Trigger capture button
+    .appendChild(
+      UI.widgets.button(dom, UI.icons.iconBase + 'noun_10636.svg', 'Snap')
+    )
   shutterButton.addEventListener('click', grabCanvas)
   shutterButton.style.visibility = 'collapse' // Hide for now
 
-  const sendButton = buttons.appendChild(dom.createElement('td')) // Confirm and save button
-  .appendChild(UI.widgets.continueButton(dom)) // @@ or send icon??
-  sendButton.addEventListener('click', e => {
+  const sendButton = buttons
+    .appendChild(dom.createElement('td')) // Confirm and save button
+    .appendChild(UI.widgets.continueButton(dom)) // @@ or send icon??
+  sendButton.addEventListener('click', _event => {
     saveBlob(imageBlob, destination)
   })
   sendButton.style.visibility = 'collapse' // Hide for now
@@ -91,13 +101,15 @@ module.exports.cameraCaptureControl = function cameraCaptureControl (dom, store,
     player.setAttribute('controls', '1')
     player.setAttribute('autoplay', '1')
     player.setAttribute('style', controlStyle)
-    navigator.mediaDevices.getUserMedia(constraints)
-      .then((stream) => {
-        player.srcObject = stream
-        shutterButton.style.visibility = 'visible' // Enable
-        sendButton.style.visibility = 'collapse'
-        retakeButton.style.visibility = 'collapse'
-      })
+    if (!navigator.mediaDevices) {
+      throw new Error('navigator.mediaDevices not available')
+    }
+    navigator.mediaDevices.getUserMedia(constraints).then(stream => {
+      player.srcObject = stream
+      shutterButton.style.visibility = 'visible' // Enable
+      sendButton.style.visibility = 'collapse'
+      retakeButton.style.visibility = 'collapse'
+    })
   }
 
   const constraints = {
@@ -123,8 +135,8 @@ module.exports.cameraCaptureControl = function cameraCaptureControl (dom, store,
     player.parentNode.removeChild(player)
 
     canvas.toBlob(blob => {
-      let msg = `got blob type ${blob.type} size ${blob.size}`
-      console.log(msg)
+      const msg = `got blob type ${blob.type} size ${blob.size}`
+      debug.log(msg)
       destination = getImageDoc()
       imageBlob = blob // save for review
       reviewImage()
@@ -144,17 +156,27 @@ module.exports.cameraCaptureControl = function cameraCaptureControl (dom, store,
     }
   }
   function saveBlob (blob, destination) {
-    let contentType = blob.type
+    const contentType = blob.type
     // if (!confirm('Save picture to ' + destination + ' ?')) return
-    console.log('Putting ' + blob.size + ' bytes of ' + contentType + ' to ' + destination)
-    store.fetcher.webOperation('PUT', destination.uri, {data: blob, contentType: contentType}).then(resp => {
-      console.log('ok saved ' + destination)
-      stopVideo()
-      doneCallback(destination)
-    }, err => {
-      stopVideo()
-      alert(err)
-    })
+    debug.log(
+      'Putting ' + blob.size + ' bytes of ' + contentType + ' to ' + destination
+    )
+    store.fetcher
+      .webOperation('PUT', destination.uri, {
+        data: blob,
+        contentType: contentType
+      })
+      .then(
+        _resp => {
+          debug.log('ok saved ' + destination)
+          stopVideo()
+          doneCallback(destination)
+        },
+        err => {
+          stopVideo()
+          alert(err)
+        }
+      )
   }
 
   // Attach the video stream to the video element and autoplay.
@@ -172,7 +194,12 @@ module.exports.cameraCaptureControl = function cameraCaptureControl (dom, store,
  * This expacts the buttton to a large control when it is pressed
  */
 
-module.exports.cameraButton = function cameraButton (dom, store, getImageDoc, doneCallback) {
+module.exports.cameraButton = function cameraButton (
+  dom,
+  store,
+  getImageDoc,
+  doneCallback
+) {
   const div = dom.createElement('div')
   const but = UI.widgets.button(dom, cameraIcon, 'Take picture')
   var control
@@ -182,9 +209,14 @@ module.exports.cameraButton = function cameraButton (dom, store, getImageDoc, do
     doneCallback(imageDoc)
   }
   div.appendChild(but)
-  but.addEventListener('click', event => {
+  but.addEventListener('click', _event => {
     div.removeChild(but)
-    control = UI.media.cameraCaptureControl(dom, store, getImageDoc, restoreButton)
+    control = UI.media.cameraCaptureControl(
+      dom,
+      store,
+      getImageDoc,
+      restoreButton
+    )
     div.appendChild(control)
   })
   return div
@@ -195,7 +227,7 @@ module.exports.cameraButton = function cameraButton (dom, store, getImageDoc, do
 //  Put up a video stream and take a picture
 //  In: context.div, dom
 
-UI.media.cameraOLD = function (context, gotBlob) {
+UI.media.cameraOLD = function (context, _gotBlob) {
   function takeSnapshot () {
     var dom = context.dom
     var img = dom.createElement('img')
@@ -218,13 +250,14 @@ UI.media.cameraOLD = function (context, gotBlob) {
   context.div.appendChild(video)
   // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob
-  navigator.mediaDevices.getUserMedia({video: true})
-  .then(function (stream) {
-    video.src = window.URL.createObjectURL(stream)
-    video.addEventListener('click', takeSnapshot)
-  })
-  .catch(function (error) {
-    alert('Could not access the camera. Error: ' + error.name)
-  })
+  navigator.mediaDevices
+    .getUserMedia({ video: true })
+    .then(function (stream) {
+      video.src = window.URL.createObjectURL(stream)
+      video.addEventListener('click', takeSnapshot)
+    })
+    .catch(function (error) {
+      alert('Could not access the camera. Error: ' + error.name)
+    })
   return video
 }

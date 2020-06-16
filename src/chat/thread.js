@@ -1,9 +1,11 @@
-//  Common code for a discussion are a of messages about something
-//
+/**
+ * Contains the [[thread]] function
+ * @packageDocumentation
+ */
+
 var UI = {
-  authn: require('../signin'),
+  authn: require('../authn/authn'),
   icons: require('../iconBase'),
-  log: require('../log'),
   ns: require('../ns'),
   pad: require('../'),
   rdf: require('rdflib'),
@@ -12,11 +14,15 @@ var UI = {
   widgets: require('../widgets')
 }
 
-const utils = require('./utils')
+const utils = require('../utils')
+const $rdf = require('rdflib')
 
 // var buttonStyle = 'font-size: 100%; margin: 0.8em; padding:0.5em; background-color: white;'
 
-module.exports = function (dom, kb, subject, messageStore, options) {
+/**
+ * HTML component for a chat thread
+ */
+module.exports = function thread (dom, kb, subject, messageStore, options) {
   kb = kb || UI.store
   messageStore = messageStore.doc() // No hash
   var ns = UI.ns
@@ -27,7 +33,8 @@ module.exports = function (dom, kb, subject, messageStore, options) {
 
   var newestFirst = !!options.newestFirst
 
-  var messageBodyStyle = 'white-space: pre-wrap; width: 90%; font-size:100%; border: 0.07em solid #eee; padding: .2em 0.5em; margin: 0.1em 1em 0.1em 1em;'
+  var messageBodyStyle =
+    'white-space: pre-wrap; width: 90%; font-size:100%; border: 0.07em solid #eee; padding: .2em 0.5em; margin: 0.1em 1em 0.1em 1em;'
   // 'font-size: 100%; margin: 0.1em 1em 0.1em 1em;  background-color: white; white-space: pre-wrap; padding: 0.1em;'
 
   var div = dom.createElement('div')
@@ -37,7 +44,8 @@ module.exports = function (dom, kb, subject, messageStore, options) {
 
   var updater = UI.store.updater
 
-  var anchor = function (text, term) { // If there is no link return an element anyway
+  var anchor = function (text, term) {
+    // If there is no link return an element anyway
     var a = dom.createElement('a')
     if (term && term.uri) {
       a.setAttribute('href', term.uri)
@@ -57,13 +65,20 @@ module.exports = function (dom, kb, subject, messageStore, options) {
   }
 
   var announce = {
-    log: function (message) { mention(message, 'color: #111;') },
-    warn: function (message) { mention(message, 'color: #880;') },
-    error: function (message) { mention(message, 'color: #800;') }
+    log: function (message) {
+      mention(message, 'color: #111;')
+    },
+    warn: function (message) {
+      mention(message, 'color: #880;')
+    },
+    error: function (message) {
+      mention(message, 'color: #800;')
+    }
   }
 
-  //       Form for a new message
-  //
+  /**
+   * Form for a new message
+   */
   var newMessageForm = function () {
     var form = dom.createElement('tr')
     var lhs = dom.createElement('td')
@@ -86,21 +101,39 @@ module.exports = function (dom, kb, subject, messageStore, options) {
       // http://www.w3schools.com/jsref/jsref_obj_date.asp
       var message = kb.sym(messageStore.uri + '#' + 'Msg' + timestamp)
 
-      sts.push(new $rdf.Statement(subject, ns.wf('message'), message, messageStore))
+      sts.push(
+        new $rdf.Statement(subject, ns.wf('message'), message, messageStore)
+      )
       // sts.push(new $rdf.Statement(message, ns.dc('title'), kb.literal(titlefield.value), messageStore))
-      sts.push(new $rdf.Statement(message, ns.sioc('content'), kb.literal(field.value), messageStore))
-      sts.push(new $rdf.Statement(message, DCT('created'), dateStamp, messageStore))
-      if (me) sts.push(new $rdf.Statement(message, ns.foaf('maker'), me, messageStore))
+      sts.push(
+        new $rdf.Statement(
+          message,
+          ns.sioc('content'),
+          kb.literal(field.value),
+          messageStore
+        )
+      )
+      sts.push(
+        new $rdf.Statement(message, DCT('created'), dateStamp, messageStore)
+      )
+      if (me) {
+        sts.push(
+          new $rdf.Statement(message, ns.foaf('maker'), me, messageStore)
+        )
+      }
 
       var sendComplete = function (uri, success, body) {
         if (!success) {
-          form.appendChild(UI.widgets.errorMessageBlock(
-            dom, 'Error writing message: ' + body))
+          form.appendChild(
+            UI.widgets.errorMessageBlock(dom, 'Error writing message: ' + body)
+          )
         } else {
-          var bindings = { '?msg': message,
+          var bindings = {
+            '?msg': message,
             '?content': kb.literal(field.value),
             '?date': dateStamp,
-            '?creator': me}
+            '?creator': me
+          }
           renderMessage(bindings, false) // not green
 
           field.value = '' // clear from out for reuse
@@ -123,22 +156,32 @@ module.exports = function (dom, kb, subject, messageStore, options) {
       // field.cols = 40
       field.setAttribute('style', messageBodyStyle + 'background-color: #eef;')
 
-      field.addEventListener('keyup', function (e) { // User preference?
-        if (e.keyCode === 13) {
-          if (!e.altKey) { // Alt-Enter just adds a new line
-            sendMessage()
+      field.addEventListener(
+        'keyup',
+        function (e) {
+          // User preference?
+          if (e.keyCode === 13) {
+            if (!e.altKey) {
+              // Alt-Enter just adds a new line
+              sendMessage()
+            }
           }
-        }
-      }, false)
+        },
+        false
+      )
 
       rhs.innerHTML = ''
-      sendButton = UI.widgets.button(dom, UI.icons.iconBase + 'noun_383448.svg', 'Send')
+      sendButton = UI.widgets.button(
+        dom,
+        UI.icons.iconBase + 'noun_383448.svg',
+        'Send'
+      )
       sendButton.setAttribute('style', UI.style.buttonStyle + 'float: right;')
       sendButton.addEventListener('click', sendMessage, false)
       rhs.appendChild(sendButton)
     }
 
-    let context = {div: middle, dom: dom}
+    const context = { div: middle, dom: dom }
     UI.authn.logIn(context).then(context => {
       me = context.me
       turnOnInput()
@@ -156,7 +199,10 @@ module.exports = function (dom, kb, subject, messageStore, options) {
   function creatorAndDate (td1, creator, date, message) {
     var nickAnchor = td1.appendChild(anchor(nick(creator), creator))
     if (creator.uri) {
-      UI.store.fetcher.nowOrWhenFetched(creator.doc(), undefined, function (ok, body) {
+      UI.store.fetcher.nowOrWhenFetched(creator.doc(), undefined, function (
+        _ok,
+        _body
+      ) {
         nickAnchor.textContent = nick(creator)
       })
     }
@@ -183,7 +229,8 @@ module.exports = function (dom, kb, subject, messageStore, options) {
       }
     })
 
-    for (ele = messageTable.firstChild; ele;) {
+    // eslint-disable-next-line space-in-parens
+    for (ele = messageTable.firstChild; ele; ) {
       ele2 = ele.nextSibling
       if (ele.AJAR_subject && !stored[ele.AJAR_subject.uri]) {
         messageTable.removeChild(ele)
@@ -191,10 +238,10 @@ module.exports = function (dom, kb, subject, messageStore, options) {
       ele = ele2
     }
   }
-
   var deleteMessage = function (message) {
-    var deletions = kb.statementsMatching(message).concat(
-      kb.statementsMatching(undefined, undefined, message))
+    var deletions = kb
+      .statementsMatching(message)
+      .concat(kb.statementsMatching(undefined, undefined, message))
     updater.update(deletions, [], function (uri, ok, body) {
       if (!ok) {
         announce.error('Cant delete messages:' + body)
@@ -227,11 +274,14 @@ module.exports = function (dom, kb, subject, messageStore, options) {
 
     var done = false
     for (var ele = messageTable.firstChild; ; ele = ele.nextSibling) {
-      if (!ele) { // empty
+      if (!ele) {
+        // empty
         break
       }
-      if (((dateString > ele.AJAR_date) && newestFirst) ||
-        ((dateString < ele.AJAR_date) && !newestFirst)) {
+      if (
+        (dateString > ele.AJAR_date && newestFirst) ||
+        (dateString < ele.AJAR_date && !newestFirst)
+      ) {
         messageTable.insertBefore(tr, ele)
         done = true
         break
@@ -248,8 +298,11 @@ module.exports = function (dom, kb, subject, messageStore, options) {
     var td2 = dom.createElement('td')
     tr.appendChild(td2)
     var pre = dom.createElement('p')
-    pre.setAttribute('style', messageBodyStyle +
-      (fresh ? 'background-color: #e8ffe8;' : 'background-color: #white;'))
+    pre.setAttribute(
+      'style',
+      messageBodyStyle +
+        (fresh ? 'background-color: #e8ffe8;' : 'background-color: #white;')
+    )
     td2.appendChild(pre)
     pre.textContent = content.value
 
@@ -263,23 +316,35 @@ module.exports = function (dom, kb, subject, messageStore, options) {
     tr.setAttribute('class', 'hoverControl') // See tabbedtab.css (sigh global CSS)
     delButton.setAttribute('class', 'hoverControlHide')
     delButton.setAttribute('style', 'color: red;')
-    delButton.addEventListener('click', function (e) {
-      td3.removeChild(delButton) // Ask -- are you sure?
-      var cancelButton = dom.createElement('button')
-      cancelButton.textContent = 'cancel'
-      td3.appendChild(cancelButton).addEventListener('click', function (e) {
-        td3.removeChild(sureButton)
-        td3.removeChild(cancelButton)
-        td3.appendChild(delButton)
-      }, false)
-      var sureButton = dom.createElement('button')
-      sureButton.textContent = 'Delete message'
-      td3.appendChild(sureButton).addEventListener('click', function (e) {
-        td3.removeChild(sureButton)
-        td3.removeChild(cancelButton)
-        deleteMessage(message)
-      }, false)
-    }, false)
+    delButton.addEventListener(
+      'click',
+      function (_event) {
+        td3.removeChild(delButton) // Ask -- are you sure?
+        var cancelButton = dom.createElement('button')
+        cancelButton.textContent = 'cancel'
+        td3.appendChild(cancelButton).addEventListener(
+          'click',
+          function (_event) {
+            td3.removeChild(sureButton)
+            td3.removeChild(cancelButton)
+            td3.appendChild(delButton)
+          },
+          false
+        )
+        var sureButton = dom.createElement('button')
+        sureButton.textContent = 'Delete message'
+        td3.appendChild(sureButton).addEventListener(
+          'click',
+          function (_event) {
+            td3.removeChild(sureButton)
+            td3.removeChild(cancelButton)
+            deleteMessage(message)
+          },
+          false
+        )
+      },
+      false
+    )
   }
 
   // Messages with date, author etc
@@ -305,13 +370,14 @@ module.exports = function (dom, kb, subject, messageStore, options) {
     var v = {} // semicolon needed
     var vs = ['msg', 'date', 'creator', 'content']
     vs.map(function (x) {
-      query.vars.push(v[x] = $rdf.variable(x))
+      query.vars.push((v[x] = $rdf.variable(x)))
     })
-    query.pat.add(subject, WF('message'), v['msg'])
-    query.pat.add(v['msg'], ns.dct('created'), v['date'])
-    query.pat.add(v['msg'], ns.foaf('maker'), v['creator'])
-    query.pat.add(v['msg'], ns.sioc('content'), v['content'])
+    query.pat.add(subject, WF('message'), v.msg)
+    query.pat.add(v.msg, ns.dct('created'), v.date)
+    query.pat.add(v.msg, ns.foaf('maker'), v.creator)
+    query.pat.add(v.msg, ns.sioc('content'), v.content)
   }
+
   function doneQuery () {
     messageTable.fresh = true // any new are fresh and so will be greenish
   }
