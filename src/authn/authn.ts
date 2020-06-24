@@ -30,6 +30,7 @@ import { AppDetails, AuthenticationContext } from './types'
 import { PaneDefinition } from 'pane-registry'
 import * as debug from '../debug'
 import { graph, namedNode, NamedNode, Namespace, serialize, st, Statement, sym, UpdateManager } from 'rdflib'
+import { textInputStyle, buttonStyle, commentStyle } from '../style'
 
 export { solidAuthClient }
 
@@ -658,6 +659,7 @@ export function registrationControl (
 export function registrationList (context: AuthenticationContext, options: {
   private?: boolean
   public?: boolean
+  type?: NamedNode
 }): Promise<AuthenticationContext> {
   const dom = context.dom as HTMLDocument
   const div = context.div as HTMLElement
@@ -689,16 +691,13 @@ export function registrationList (context: AuthenticationContext, options: {
 
     for (let i = 0; i < sts.length; i++) {
       const statement: Statement = sts[i]
+      if (options.type) { // now check  terms:forClass
+        if (!kb.holds(statement.subject, ns.solid('forClass'), options.type, statement.why)) {
+          continue // skip irrelevant ones
+        }
+      }
       // const cla = statement.subject
       const inst = statement.object
-      // if (false) {
-      //   const tr = table.appendChild(dom.createElement('tr'))
-      //   const anchor = tr.appendChild(dom.createElement('a'))
-      //   anchor.setAttribute('href', inst.uri)
-      //   anchor.textContent = utils.label(inst)
-      // } else {
-      // }
-
       table.appendChild(widgets.personTR(dom, ns.solid('instance'), inst, {
         deleteFunction: function (_x) {
           kb.updater.update([statement], [], function (uri, ok, errorBody) {
@@ -710,7 +709,7 @@ export function registrationList (context: AuthenticationContext, options: {
           })
         }
       }))
-    }
+    } // registrationList
 
     /*
        //const containers = kb.each(theClass, ns.solid('instanceContainer'));
@@ -915,7 +914,7 @@ function signInOrSignUpBox (
   debug.log('widgets.signInOrSignUpBox')
   box.setUserCallback = setUserCallback
   box.setAttribute('class', magicClassName)
-  box.style = 'display:flex;'
+  ;(box as any).style = 'display:flex;' // @@ fix all typecasts like this
 
   // Sign in button with PopUP
   const signInPopUpButton = dom.createElement('input') // multi
@@ -1204,29 +1203,22 @@ export function selectWorkspace (
     let newBase = null
 
     // A workspace specifically defined in the private preference file:
-    let w = kb
-      .statementsMatching(
-        id,
-        ns.space('workspace'), // Only trust preference file here
-        undefined,
-        preferencesFile
-      )
-      .map(function (st) {
-        return st.object
-      })
+    let w = kb.each(id, ns.space('workspace'), undefined, preferencesFile) // Only trust preference file here
 
     // A workspace in a storage in the public profile:
     const storages = kb.each(id, ns.space('storage')) // @@ No provenance requirement at the moment
-    storages.map(function (s) {
-      w = w.concat(kb.each(s, ns.ldp('contains')))
-    })
+    if (w.length === 0 && storages) {
+      say(`You don't seem to have any workspaces. You have ${storages.length} storage spaces.`)
+      storages.map(function (s) {
+        w = w.concat(kb.each(s, ns.ldp('contains')))
+      }).filter(file => ['public', 'private'].includes(file.id().toLowerCase()))
+    }
 
     if (w.length === 1) {
       say(`Workspace used: ${w[0].uri}`) // @@ allow user to see URI
       newBase = figureOutBase(w[0])
       // callbackWS(w[0], newBase)
     } else if (w.length === 0) {
-      say(`You don't seem to have any workspaces. You have ${storages.length} storage spaces.`)
     }
 
     // Prompt for ws selection or creation
@@ -1243,10 +1235,13 @@ export function selectWorkspace (
     box.appendChild(dom.createElement('hr')) // @@
 
     const p = box.appendChild(dom.createElement('p'))
-    p.textContent = `Where would you like to store the data for the ${noun}?  Give the URL of the directory where you would like the data stored.`
+    ;(p as any).style = commentStyle
+    p.textContent = `Where would you like to store the data for the ${noun}?
+    Give the URL of the directory where you would like the data stored.`
     // @@ TODO Remove the need to cast baseField to any
     const baseField: any = box.appendChild(dom.createElement('input'))
     baseField.setAttribute('type', 'text')
+    ;(baseField as any).style = textInputStyle
     baseField.size = 80 // really a string
     baseField.label = 'base URL'
     baseField.autocomplete = 'on'
@@ -1260,6 +1255,7 @@ export function selectWorkspace (
     box.appendChild(dom.createElement('br')) // @@
 
     const button = box.appendChild(dom.createElement('button'))
+    ;(button as any).style = buttonStyle
     button.textContent = `Start new ${noun} at this URI`
     button.addEventListener('click', function (_event) {
       let newBase = baseField.value
@@ -1294,10 +1290,8 @@ export function selectWorkspace (
         tr.appendChild(col1)
       }
       col2 = dom.createElement('td')
-      style = kb.any(ws, ns.ui('style'))
-      if (style) {
-        style = style.value
-      } else {
+      style = kb.anyValue(ws, ns.ui('style'))
+      if (!style) {
         // Otherwise make up arbitrary colour
         const hash = function (x) {
           return x.split('').reduce(function (a, b) {

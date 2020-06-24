@@ -167,7 +167,7 @@ function newThingUI (createContext, dataBrowserContext, thePanes) {
       } // callbackWS
 
       var pa = options.pane
-      options.appPathSegment = 'edu.mit.solid.pane.' + pa.name
+      options.appPathSegment = pa.name // was 'edu.mit.solid.pane.'
       options.noun = pa.mintClass ? UI.utils.label(pa.mintClass) : pa.name
 
       if (!options.folder) {

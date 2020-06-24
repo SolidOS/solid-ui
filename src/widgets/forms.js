@@ -420,19 +420,18 @@ forms.field[ns.ui('Multiple').uri] = function (
   }
 
   var body = box.appendChild(dom.createElement('tr')) // 20191207
-  var list // The RDF collection which keeps the ordered version or
-  var values // Initial values - an array.  Even when no list yet.
-
-  // var unsavedList = false // Flag that
+  var list // The RDF collection which keeps the ordered version or null
+  var values // Initial values - always an array.  Even when no list yet.
   values = reverse ? kb.any(null, property, subject) : kb.any(subject, property)
   if (ordered) {
-    list = values
+    list = reverse ? kb.any(null, property, subject) : kb.any(subject, property)
     if (list) {
       values = list.elements
     } else {
       values = []
     }
   } else {
+    values = reverse ? kb.each(null, property, subject) : kb.each(subject, property)
     list = null
   }
   // Add control on the bottom for adding more items
@@ -442,7 +441,7 @@ forms.field[ns.ui('Multiple').uri] = function (
     var img = tail.appendChild(dom.createElement('img'))
     img.setAttribute('src', plusIconURI) //  plus sign
     img.setAttribute('style', 'margin: 0.2em; width: 1.5em; height:1.5em')
-    img.title = 'Click to add one or more ' + utils.predicateLabel(property, reverse) // @@ use inverse label if
+    img.title = 'Click to add one or more ' + utils.predicateLabel(property, reverse)
     var prompt = tail.appendChild(dom.createElement('span'))
     prompt.textContent =
       (values.length === 0 ? 'Add one or more ' : 'Add more ') +
@@ -742,6 +741,7 @@ forms.field[ns.ui('Choice').uri] = function (
     return error.errorMessageBlock(dom, "No 'from' for Choice: " + form)
   }
   var subForm = kb.any(form, ui('use')) // Optional
+  var follow = kb.anyJS(form, ui('follow')) // data doc moves to new subject?
   var possible = []
   var possibleProperties
   var np = '--' + utils.label(property) + '-?'
@@ -778,11 +778,10 @@ forms.field[ns.ui('Choice').uri] = function (
       already,
       object,
       subForm,
-      store,
+      follow ? object.doc() : store,
       callbackFunction
     )
   }
-  // box.appendChild(dom.createTextNode('Choice: subForm='+subForm))
   var possible2 = forms.sortByLabel(possible)
   if (kb.any(form, ui('canMintNew'))) {
     opts.mint = '* New *' // @@ could be better
@@ -833,10 +832,7 @@ forms.field[ns.ui('Comment').uri] = forms.field[
   var p = box.appendChild(dom.createElement(params.element))
   p.textContent = contents
 
-  var style = kb.any(form, ui('style'))
-  if (style === undefined) {
-    style = params.style ? params.style : ''
-  }
+  var style = kb.anyValue(form, ui('style')) || params.style || ''
   if (style) p.setAttribute('style', style)
 
   return box
@@ -1286,6 +1282,9 @@ forms.makeSelectForOptions = function (
         '.'
     )
   }
+  if (options.mint && !options.subForm) {
+    return error.errorMessageBlock(dom, "Selector: can't mint new with no subform.")
+  }
   UI.log.debug('makeSelectForOptions: store=' + store)
 
   var getActual = function () {
@@ -1632,7 +1631,7 @@ function buildCheckboxForm (dom, kb, lab, del, ins, form, store, tristate) {
     input.state = state
     input.textContent = {
       true: checkMarkCharacter,
-      false: cancelCharacter,
+      false: tristate ? cancelCharacter : ' ', // Just use blank when not tristate
       null: dashCharacter
     }[displayState]
   }
