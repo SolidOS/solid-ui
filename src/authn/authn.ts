@@ -1197,6 +1197,19 @@ export function selectWorkspace (
   }
 
   function displayOptions (context) {
+    async function makeNewWorkspace (_event) {
+      const row = table.appendChild(dom.createElement('tr'))
+      const cell = row.appendChild(dom.createElement('td'))
+      cell.setAttribute('colspan', '3')
+      cell.style.padding = '0.5em'
+      const newBase = encodeURI(await widgets.askName(dom, kb, cell, ns.solid('URL'), ns.space('Workspace'), 'Workspace'))
+      const newWs = widgets.newThing(context.preferencesFile)
+      const newData = [st(context.me, ns.space('workspace'), newWs, context.preferencesFile),
+        st(newWs, ns.space('uriPrefix'), newBase, context.preferencesFile)]
+      await kb.updater.update([], newData)
+      // @@ now refresh list of workspaces
+    }
+
     // const status = ''
     const id = context.me
     const preferencesFile = context.preferencesFile
@@ -1237,7 +1250,8 @@ export function selectWorkspace (
     const p = box.appendChild(dom.createElement('p'))
     ;(p as any).style = commentStyle
     p.textContent = `Where would you like to store the data for the ${noun}?
-    Give the URL of the directory where you would like the data stored.`
+    Give the URL of the folder where you would like the data stored.
+    It can be anywhere in solid world - this URI is just an idea.`
     // @@ TODO Remove the need to cast baseField to any
     const baseField: any = box.appendChild(dom.createElement('input'))
     baseField.setAttribute('type', 'text')
@@ -1284,7 +1298,7 @@ export function selectWorkspace (
       tr = dom.createElement('tr')
       if (i === 0) {
         col1 = dom.createElement('td')
-        col1.setAttribute('rowspan', `${w.length}1`)
+        col1.setAttribute('rowspan', `${w.length}`)
         col1.textContent = 'Choose a workspace for this:'
         col1.setAttribute('style', 'vertical-align:middle;')
         tr.appendChild(col1)
@@ -1344,7 +1358,7 @@ export function selectWorkspace (
     col2 = dom.createElement('td')
     col2.setAttribute('style', cellStyle)
     col2.textContent = '+ Make a new workspace'
-    // addMyListener(col2, 'Set up a new workspace', '') // @@ TBD
+    col2.addEventListener('click', makeNewWorkspace)
     trLast.appendChild(col2)
     table.appendChild(trLast)
   } // displayOptions

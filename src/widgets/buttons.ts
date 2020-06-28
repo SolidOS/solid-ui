@@ -243,7 +243,11 @@ export const iconForClass = {
   'ui:Form': 'noun_122196.svg',
   'rdfs:Class': 'class-rectangle.svg', // For RDF developers
   'rdf:Property': 'property-diamond.svg',
-  'owl:Ontology': 'noun_classification_1479198.svg'
+  'owl:Ontology': 'noun_classification_1479198.svg',
+  'wf:Tracker': 'noun_122196.svg',
+  'wf:Task': 'noun_17020_gray-tick.svg',
+  'wf:Open': 'noun_17020_sans-tick.svg',
+  'wf:Closed': 'noun_17020.svg'
 }
 
 /**
