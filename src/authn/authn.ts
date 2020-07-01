@@ -31,6 +31,8 @@ import { PaneDefinition } from 'pane-registry'
 import * as debug from '../debug'
 import { graph, namedNode, NamedNode, Namespace, serialize, st, Statement, sym, UpdateManager } from 'rdflib'
 import { textInputStyle, buttonStyle, commentStyle } from '../style'
+// eslint-disable-next-line camelcase
+import { Quad_Object } from 'rdflib/lib/tf-types'
 
 export { solidAuthClient }
 
@@ -1205,7 +1207,8 @@ export function selectWorkspace (
       const newBase = encodeURI(await widgets.askName(dom, kb, cell, ns.solid('URL'), ns.space('Workspace'), 'Workspace'))
       const newWs = widgets.newThing(context.preferencesFile)
       const newData = [st(context.me, ns.space('workspace'), newWs, context.preferencesFile),
-        st(newWs, ns.space('uriPrefix'), newBase, context.preferencesFile)]
+        // eslint-disable-next-line camelcase
+        st(newWs, ns.space('uriPrefix'), newBase as unknown as Quad_Object, context.preferencesFile)]
       await kb.updater.update([], newData)
       // @@ now refresh list of workspaces
     }
