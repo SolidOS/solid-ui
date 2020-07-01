@@ -30,6 +30,9 @@ import { AppDetails, AuthenticationContext } from './types'
 import { PaneDefinition } from 'pane-registry'
 import * as debug from '../debug'
 import { graph, namedNode, NamedNode, Namespace, serialize, st, Statement, sym, UpdateManager } from 'rdflib'
+import { textInputStyle, buttonStyle, commentStyle } from '../style'
+// eslint-disable-next-line camelcase
+import { Quad_Object } from 'rdflib/lib/tf-types'
 
 export { solidAuthClient }
 
@@ -658,6 +661,7 @@ export function registrationControl (
 export function registrationList (context: AuthenticationContext, options: {
   private?: boolean
   public?: boolean
+  type?: NamedNode
 }): Promise<AuthenticationContext> {
   const dom = context.dom as HTMLDocument
   const div = context.div as HTMLElement
@@ -689,16 +693,13 @@ export function registrationList (context: AuthenticationContext, options: {
 
     for (let i = 0; i < sts.length; i++) {
       const statement: Statement = sts[i]
+      if (options.type) { // now check  terms:forClass
+        if (!kb.holds(statement.subject, ns.solid('forClass'), options.type, statement.why)) {
+          continue // skip irrelevant ones
+        }
+      }
       // const cla = statement.subject
       const inst = statement.object
-      // if (false) {
-      //   const tr = table.appendChild(dom.createElement('tr'))
-      //   const anchor = tr.appendChild(dom.createElement('a'))
-      //   anchor.setAttribute('href', inst.uri)
-      //   anchor.textContent = utils.label(inst)
-      // } else {
-      // }
-
       table.appendChild(widgets.personTR(dom, ns.solid('instance'), inst, {
         deleteFunction: function (_x) {
           kb.updater.update([statement], [], function (uri, ok, errorBody) {
@@ -710,7 +711,7 @@ export function registrationList (context: AuthenticationContext, options: {
           })
         }
       }))
-    }
+    } // registrationList
 
     /*
        //const containers = kb.each(theClass, ns.solid('instanceContainer'));
@@ -915,7 +916,7 @@ function signInOrSignUpBox (
   debug.log('widgets.signInOrSignUpBox')
   box.setUserCallback = setUserCallback
   box.setAttribute('class', magicClassName)
-  box.style = 'display:flex;'
+  ;(box as any).style = 'display:flex;' // @@ fix all typecasts like this
 
   // Sign in button with PopUP
   const signInPopUpButton = dom.createElement('input') // multi
@@ -1198,35 +1199,42 @@ export function selectWorkspace (
   }
 
   function displayOptions (context) {
+    async function makeNewWorkspace (_event) {
+      const row = table.appendChild(dom.createElement('tr'))
+      const cell = row.appendChild(dom.createElement('td'))
+      cell.setAttribute('colspan', '3')
+      cell.style.padding = '0.5em'
+      const newBase = encodeURI(await widgets.askName(dom, kb, cell, ns.solid('URL'), ns.space('Workspace'), 'Workspace'))
+      const newWs = widgets.newThing(context.preferencesFile)
+      const newData = [st(context.me, ns.space('workspace'), newWs, context.preferencesFile),
+        // eslint-disable-next-line camelcase
+        st(newWs, ns.space('uriPrefix'), newBase as unknown as Quad_Object, context.preferencesFile)]
+      await kb.updater.update([], newData)
+      // @@ now refresh list of workspaces
+    }
+
     // const status = ''
     const id = context.me
     const preferencesFile = context.preferencesFile
     let newBase = null
 
     // A workspace specifically defined in the private preference file:
-    let w = kb
-      .statementsMatching(
-        id,
-        ns.space('workspace'), // Only trust preference file here
-        undefined,
-        preferencesFile
-      )
-      .map(function (st) {
-        return st.object
-      })
+    let w = kb.each(id, ns.space('workspace'), undefined, preferencesFile) // Only trust preference file here
 
     // A workspace in a storage in the public profile:
     const storages = kb.each(id, ns.space('storage')) // @@ No provenance requirement at the moment
-    storages.map(function (s) {
-      w = w.concat(kb.each(s, ns.ldp('contains')))
-    })
+    if (w.length === 0 && storages) {
+      say(`You don't seem to have any workspaces. You have ${storages.length} storage spaces.`)
+      storages.map(function (s) {
+        w = w.concat(kb.each(s, ns.ldp('contains')))
+      }).filter(file => ['public', 'private'].includes(file.id().toLowerCase()))
+    }
 
     if (w.length === 1) {
       say(`Workspace used: ${w[0].uri}`) // @@ allow user to see URI
       newBase = figureOutBase(w[0])
       // callbackWS(w[0], newBase)
     } else if (w.length === 0) {
-      say(`You don't seem to have any workspaces. You have ${storages.length} storage spaces.`)
     }
 
     // Prompt for ws selection or creation
@@ -1243,10 +1251,14 @@ export function selectWorkspace (
     box.appendChild(dom.createElement('hr')) // @@
 
     const p = box.appendChild(dom.createElement('p'))
-    p.textContent = `Where would you like to store the data for the ${noun}?  Give the URL of the directory where you would like the data stored.`
+    ;(p as any).style = commentStyle
+    p.textContent = `Where would you like to store the data for the ${noun}?
+    Give the URL of the folder where you would like the data stored.
+    It can be anywhere in solid world - this URI is just an idea.`
     // @@ TODO Remove the need to cast baseField to any
     const baseField: any = box.appendChild(dom.createElement('input'))
     baseField.setAttribute('type', 'text')
+    ;(baseField as any).style = textInputStyle
     baseField.size = 80 // really a string
     baseField.label = 'base URL'
     baseField.autocomplete = 'on'
@@ -1260,6 +1272,7 @@ export function selectWorkspace (
     box.appendChild(dom.createElement('br')) // @@
 
     const button = box.appendChild(dom.createElement('button'))
+    ;(button as any).style = buttonStyle
     button.textContent = `Start new ${noun} at this URI`
     button.addEventListener('click', function (_event) {
       let newBase = baseField.value
@@ -1288,16 +1301,14 @@ export function selectWorkspace (
       tr = dom.createElement('tr')
       if (i === 0) {
         col1 = dom.createElement('td')
-        col1.setAttribute('rowspan', `${w.length}1`)
+        col1.setAttribute('rowspan', `${w.length}`)
         col1.textContent = 'Choose a workspace for this:'
         col1.setAttribute('style', 'vertical-align:middle;')
         tr.appendChild(col1)
       }
       col2 = dom.createElement('td')
-      style = kb.any(ws, ns.ui('style'))
-      if (style) {
-        style = style.value
-      } else {
+      style = kb.anyValue(ws, ns.ui('style'))
+      if (!style) {
         // Otherwise make up arbitrary colour
         const hash = function (x) {
           return x.split('').reduce(function (a, b) {
@@ -1350,7 +1361,7 @@ export function selectWorkspace (
     col2 = dom.createElement('td')
     col2.setAttribute('style', cellStyle)
     col2.textContent = '+ Make a new workspace'
-    // addMyListener(col2, 'Set up a new workspace', '') // @@ TBD
+    col2.addEventListener('click', makeNewWorkspace)
     trLast.appendChild(col2)
     table.appendChild(trLast)
   } // displayOptions
