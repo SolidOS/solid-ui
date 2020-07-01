@@ -1,5 +1,5 @@
 import ns from '../../ns'
-import { formHeadingColor, formHeadingStyle } from '../../style'
+import { formHeadingColor, formHeadingStyle, commentStyle } from '../../style'
 
 export type FieldParamsObject = {
   size?: number, // input element size attribute
@@ -101,10 +101,10 @@ export const fieldParams: { [ fieldUri: string ]: FieldParamsObject } = {
    */
   [ns.ui('Comment').uri]: {
     element: 'p',
-    style: `padding: 0.1em 1.5em; color: ${formHeadingColor}; white-space: pre-wrap;`
+    style: commentStyle // was `padding: 0.1em 1.5em; color: ${formHeadingColor}; white-space: pre-wrap;`
   },
   [ns.ui('Heading').uri]: {
     element: 'h3',
-    style: `font-size: 110%; font-weight: bold; color: ${formHeadingColor}; padding: 0.2em;`
+    style: formHeadingStyle // was: `font-size: 110%; font-weight: bold; color: ${formHeadingColor}; padding: 0.2em;`
   }
 }

@@ -9,10 +9,10 @@ module.exports = {
     'background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; ',
   buttonStyle:
       'background-color: #fff; padding: 0.7em;  border: .01em solid white;  border-radius:0.2em; font-size: 100%; margin: 0.3em;', // 'background-color: #eef;
-  commentStyle: 'padding: 0.7em;  border: none; font-size: 100%;',
+  commentStyle: 'padding: 0.7em;  border: none; font-size: 100%; white-space: pre-wrap;',
   iconStyle: 'width: 3em; height: 3em; margin: 0.1em; border-radius: 1em;',
   classIconStyle: 'width: 3em; height: 3em; margin: 0.1em; border-radius: 0; border: 0.1em solid green; padding: 0.2em; background-color: #efe;', // combine with buttonStyle
-
+  tabBorderRadius: '0.2em',
   messageBodyStyle:
     'white-space: pre-wrap; width: 99%; font-size:100%; border: 0.07em solid #eee; border-radius:0.2em; padding: .3em 0.5em; margin: 0.1em;',
   pendingeditModifier: 'color: #bbb;',
