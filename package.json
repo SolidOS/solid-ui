@@ -58,7 +58,7 @@
     "jss-preset-default": "^10.3.0",
     "mime-types": "^2.1.27",
     "node-uuid": "^1.4.7",
-    "pane-registry": "^2.0.1",
+    "pane-registry": "^2.1.0",
     "rdflib": "^1.2.2",
     "solid-auth-client": "^2.4.1",
     "solid-auth-tls": "^0.1.2",
