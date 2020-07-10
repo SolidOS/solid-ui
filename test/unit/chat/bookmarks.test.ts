@@ -65,11 +65,10 @@ describe('findBookmarkDocument', () => {
     store.add(pubReg2, ns.rdf('type'), ns.solid('TypeRegistration'), context.publicTypeIndex)
     store.add(pubReg2, ns.solid('forClass'), BOOK('Bookmark'), context.publicTypeIndex)
     store.add(pubReg2, ns.solid('instance'), bookmarksDoc, context.publicTypeIndex)
-    
+
     const result = await findBookmarkDocument(context)
     expect((window.alert as any).mock.calls.length).toEqual(1)
     expect((window.alert as any).mock.calls[0][0]).toMatchSnapshot()
-
   })
 })
 
