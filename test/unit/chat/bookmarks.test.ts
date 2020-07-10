@@ -47,30 +47,30 @@ describe('findBookmarkDocument', () => {
       publicTypeIndex: new NamedNode('http://example.com/pubType.ttl')
     }
 
-    window.alert = jest.fn();
-    store.add(context.me, ns.space('preferencesFile'), context.preferencesFile, context.publicProfile);
+    window.alert = jest.fn()
+    store.add(context.me, ns.space('preferencesFile'), context.preferencesFile, context.publicProfile)
     // announce private index in settings:
-    store.add(context.me, ns.solid('privateTypeIndex'), context.privateTypeIndex, context.preferencesFile);
+    store.add(context.me, ns.solid('privateTypeIndex'), context.privateTypeIndex, context.preferencesFile)
     // announce public index in profile:
-    store.add(context.me, ns.solid('publicTypeIndex'), context.publicTypeIndex, context.publicProfile);
+    store.add(context.me, ns.solid('publicTypeIndex'), context.publicTypeIndex, context.publicProfile)
 
-    store.add(privReg, ns.rdf('type'), ns.solid('TypeRegistration'), context.privateTypeIndex);
-    store.add(privReg, ns.solid('forClass'), BOOK('Bookmark'), context.privateTypeIndex);
-    store.add(privReg, ns.solid('instance'), bookmarksDoc, context.privateTypeIndex);
+    store.add(privReg, ns.rdf('type'), ns.solid('TypeRegistration'), context.privateTypeIndex)
+    store.add(privReg, ns.solid('forClass'), BOOK('Bookmark'), context.privateTypeIndex)
+    store.add(privReg, ns.solid('instance'), bookmarksDoc, context.privateTypeIndex)
 
-    store.add(pubReg1, ns.rdf('type'), ns.solid('TypeRegistration'), context.publicTypeIndex);
-    store.add(pubReg1, ns.solid('forClass'), BOOK('Bookmark'), context.publicTypeIndex);
-    store.add(pubReg1, ns.solid('instance'), bookmarksDoc, context.publicTypeIndex);
+    store.add(pubReg1, ns.rdf('type'), ns.solid('TypeRegistration'), context.publicTypeIndex)
+    store.add(pubReg1, ns.solid('forClass'), BOOK('Bookmark'), context.publicTypeIndex)
+    store.add(pubReg1, ns.solid('instance'), bookmarksDoc, context.publicTypeIndex)
 
-    store.add(pubReg2, ns.rdf('type'), ns.solid('TypeRegistration'), context.publicTypeIndex);
-    store.add(pubReg2, ns.solid('forClass'), BOOK('Bookmark'), context.publicTypeIndex);
-    store.add(pubReg2, ns.solid('instance'), bookmarksDoc, context.publicTypeIndex);
+    store.add(pubReg2, ns.rdf('type'), ns.solid('TypeRegistration'), context.publicTypeIndex)
+    store.add(pubReg2, ns.solid('forClass'), BOOK('Bookmark'), context.publicTypeIndex)
+    store.add(pubReg2, ns.solid('instance'), bookmarksDoc, context.publicTypeIndex)
     
     const result = await findBookmarkDocument(context)
-    expect((window.alert as any).mock.calls.length).toEqual(1);
-    expect((window.alert as any).mock.calls[0][0]).toMatchSnapshot();
+    expect((window.alert as any).mock.calls.length).toEqual(1)
+    expect((window.alert as any).mock.calls[0][0]).toMatchSnapshot()
 
-  });
+  })
 })
 
 describe('toggleBookmark', () => {
