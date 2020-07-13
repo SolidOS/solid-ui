@@ -1,5 +1,9 @@
 # Testing Documentation and Guidelines
 
+## Data fixtures
+See https://github.com/solid/solid-ui/blob/5fd8fb0/test/unit/widgets/buttons.test.ts#L222 for an example of how to use `store.add` in a
+unit test to set up some data in the store. Don't forget to [clearStore afterEach](https://github.com/solid/solid-ui/blob/5fd8fb0/test/unit/widgets/buttons.test.ts#L214).
+
 ## Custom matchers
 
 We have added some custom matchers to ease the testing. You can see the full list at `test/setup.ts`, in 
