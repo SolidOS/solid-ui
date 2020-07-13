@@ -484,11 +484,14 @@ export async function findAppInstances (
     .map(reg => kb.each(reg, ns.solid('instanceContainer')))
     .flat()
 
+  function unique (arr: NamedNode[]): NamedNode[] {
+    return Array.from(new Set(arr))
+  }
   context.instances = context.instances || []
-  context.instances = context.instances.concat(instances)
+  context.instances = unique(context.instances.concat(instances))
 
   context.containers = context.containers || []
-  context.containers = context.containers.concat(containers)
+  context.containers = unique(context.containers.concat(containers))
   if (!containers.length) {
     return context
   }
