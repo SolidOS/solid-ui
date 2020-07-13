@@ -1278,7 +1278,7 @@ export function selectWorkspace (
     ;(button as any).style = buttonStyle
     button.textContent = `Start new ${noun} at this URI`
     button.addEventListener('click', function (_event) {
-      let newBase = baseField.value
+      let newBase = baseField.value.replace(' ', '%20') // do not re-encode in general, as % encodings may exist
       if (newBase.slice(-1) !== '/') {
         newBase += '/'
       }
@@ -1372,7 +1372,7 @@ export function selectWorkspace (
   logInLoadPreferences(context) // kick off async operation
     .then(displayOptions)
     .catch(err => {
-      box.appendChild(widgets.errorMessageBlock(err))
+      box.appendChild(widgets.errorMessageBlock(context.dom, err))
     })
 
   return box // return the box element, while login proceeds
