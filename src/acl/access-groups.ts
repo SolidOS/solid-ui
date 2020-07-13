@@ -70,7 +70,10 @@ export class AccessGroups {
   ) {
     this.defaults = options.defaults || false
     fetcher(store, {})
-    store.updater = new UpdateManager(store)
+
+    // The store will already have an updater at this point:
+    // store.updater = new UpdateManager(store)
+
     this._store = store as LiveStore // TODO hacky, find a better solution
     this.aclMap = readACL(doc, aclDoc, store, this.defaults)
     this.byCombo = ACLbyCombination(this.aclMap)
