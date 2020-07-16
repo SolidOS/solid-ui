@@ -348,35 +348,6 @@ forms.field[ns.ui('Multiple').uri] = function (
       } else {
         linkDone(uri, ok, message)
       }
-      /*  Put this as a function and call it from only one place
-      var ins, del
-      // alert('Multiple: item calklback.' + uri)
-      if (ok) {
-        // @@@ Check IT hasnt alreday been written in
-        if (ordered) {
-          list = kb.any(subject, property, null, store)
-          if (!list) {
-            list = new $rdf.Collection([object])
-            ins = [$rdf.st(subject, property, list)] // Will this work?
-          } else {
-            const oldList = new $rdf.Collection(list.elments)
-            list.append(object)
-            del = [$rdf.st(subject, property, oldList)] // If this doesn't work, kb.saveBack(store)
-            ins = [$rdf.st(subject, property, list)]
-          }
-        } else {
-          if (!kb.holds(subject, property, object, store)) {
-            ins = [$rdf.st(subject, property, object, store)]
-          }
-          kb.updater.update(del, ins, linkDone)
-        }
-      } else {
-        box.appendChild(
-          error.errorMessageBlock(dom, 'Multiple: item failed: ' + body)
-        )
-        callbackFunction(ok, message)
-      }
-      */
     }
     var linkDone = function (uri, ok, message) {
       return callbackFunction(ok, message)
@@ -428,6 +399,7 @@ forms.field[ns.ui('Multiple').uri] = function (
   const ordered = orderedNode ? $rdf.Node.toJS(orderedNode) : false
 
   var property = kb.any(form, ui('property'))
+  const reverse = kb.anyJS(form, ui('reverse'))
   if (!property) {
     box.appendChild(
       error.errorMessageBlock(dom, 'No property to multiple: ' + form)
@@ -448,20 +420,18 @@ forms.field[ns.ui('Multiple').uri] = function (
   }
 
   var body = box.appendChild(dom.createElement('tr')) // 20191207
-  var list // The RDF collection which keeps the ordered version
-  var values // Initial values - an array.  Even when no list yet.
-
-  // var unsavedList = false // Flag that
+  var list // The RDF collection which keeps the ordered version or null
+  var values // Initial values - always an array.  Even when no list yet.
+  values = reverse ? kb.any(null, property, subject) : kb.any(subject, property)
   if (ordered) {
-    list = kb.any(subject, property)
+    list = reverse ? kb.any(null, property, subject) : kb.any(subject, property)
     if (list) {
       values = list.elements
     } else {
-      // unsavedList = true
       values = []
     }
   } else {
-    values = kb.each(subject, property)
+    values = reverse ? kb.each(null, property, subject) : kb.each(subject, property)
     list = null
   }
   // Add control on the bottom for adding more items
@@ -471,7 +441,7 @@ forms.field[ns.ui('Multiple').uri] = function (
     var img = tail.appendChild(dom.createElement('img'))
     img.setAttribute('src', plusIconURI) //  plus sign
     img.setAttribute('style', 'margin: 0.2em; width: 1.5em; height:1.5em')
-    img.title = 'Click to add one or more ' + utils.label(property)
+    img.title = 'Click to add one or more ' + utils.predicateLabel(property, reverse)
     var prompt = tail.appendChild(dom.createElement('span'))
     prompt.textContent =
       (values.length === 0 ? 'Add one or more ' : 'Add more ') +
@@ -484,7 +454,11 @@ forms.field[ns.ui('Multiple').uri] = function (
   function createListIfNecessary () {
     if (!list) {
       list = new $rdf.Collection()
-      kb.add(subject, property, list, store)
+      if (reverse) {
+        kb.add(list, property, subject, store)
+      } else {
+        kb.add(subject, property, list, store)
+      }
     }
   }
 
@@ -506,10 +480,10 @@ forms.field[ns.ui('Multiple').uri] = function (
   function refresh () {
     let vals
     if (ordered) {
-      const li = kb.the(subject, property)
+      const li = reverse ? kb.the(null, property, subject) : kb.the(subject, property)
       vals = li ? li.elements : []
     } else {
-      vals = kb.each(subject, property)
+      vals = reverse ? kb.each(null, property, subject) : kb.each(subject, property)
       vals.sort() // achieve consistency on each refresh
     }
     utils.syncTableToArrayReOrdered(body, vals, renderItem)
@@ -767,6 +741,7 @@ forms.field[ns.ui('Choice').uri] = function (
     return error.errorMessageBlock(dom, "No 'from' for Choice: " + form)
   }
   var subForm = kb.any(form, ui('use')) // Optional
+  var follow = kb.anyJS(form, ui('follow')) // data doc moves to new subject?
   var possible = []
   var possibleProperties
   var np = '--' + utils.label(property) + '-?'
@@ -803,11 +778,10 @@ forms.field[ns.ui('Choice').uri] = function (
       already,
       object,
       subForm,
-      store,
+      follow ? object.doc() : store,
       callbackFunction
     )
   }
-  // box.appendChild(dom.createTextNode('Choice: subForm='+subForm))
   var possible2 = forms.sortByLabel(possible)
   if (kb.any(form, ui('canMintNew'))) {
     opts.mint = '* New *' // @@ could be better
@@ -858,10 +832,7 @@ forms.field[ns.ui('Comment').uri] = forms.field[
   var p = box.appendChild(dom.createElement(params.element))
   p.textContent = contents
 
-  var style = kb.any(form, ui('style'))
-  if (style === undefined) {
-    style = params.style ? params.style : ''
-  }
+  var style = kb.anyValue(form, ui('style')) || params.style || ''
   if (style) p.setAttribute('style', style)
 
   return box
@@ -1311,6 +1282,9 @@ forms.makeSelectForOptions = function (
         '.'
     )
   }
+  if (options.mint && !options.subForm) {
+    return error.errorMessageBlock(dom, "Selector: can't mint new with no subform.")
+  }
   UI.log.debug('makeSelectForOptions: store=' + store)
 
   var getActual = function () {
@@ -1657,7 +1631,7 @@ function buildCheckboxForm (dom, kb, lab, del, ins, form, store, tristate) {
     input.state = state
     input.textContent = {
       true: checkMarkCharacter,
-      false: cancelCharacter,
+      false: tristate ? cancelCharacter : ' ', // Just use blank when not tristate
       null: dashCharacter
     }[displayState]
   }

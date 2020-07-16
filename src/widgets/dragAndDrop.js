@@ -157,18 +157,19 @@ function makeDraggable (tr, obj) {
   )
 }
 
-/* uploadFiles
- **
- **  Generic uploader of local files to the web
- **   typically called from dropped file handler
- ** Params
- **  fetcher   instance of class Fetcher as in kb.fetcher
- **  files      Array of file objects
- **  fileBase   URI of folder in which to put files (except images) (no trailing slash)
- **  imageBase  URI of folder in which to put images
- **  successHandler(file, uploadedURI)    Called after each success upload
- **                              With file object an final URI as params
- */
+/** uploadFiles
+**
+**  Generic uploader of local files to the web
+**   typically called from dropped file handler
+**
+**  @param {Fetcher} fetcher    instance of class Fetcher as in kb.fetcher
+**  @param {Array<File>} files      Array of file objects
+**  @param {String} fileBase    URI of folder in which to put files (except images) (no trailing slash)
+**  @param {String } imageBase  URI of folder in which to put images
+**  @param successHandler function(file, uploadedURI)    Called after EACH success upload
+**                              With file object an final URI as params
+*/
+
 function uploadFiles (fetcher, files, fileBase, imageBase, successHandler) {
   for (var i = 0; files[i]; i++) {
     const f = files[i]
@@ -204,9 +205,11 @@ function uploadFiles (fetcher, files, fileBase, imageBase, successHandler) {
           }
         } else {
           var extension = mime.extension(theFile.type)
-          if (theFile.type !== mime.lookup(theFile.name)) {
+          // Note not simple: eg .mp3 => audio/mpeg; .mpga => audio/mpeg; audio/mp3 => .mp3
+          if (!theFile.name.endsWith('.' + extension) && // Not already has preferred extension? and ...
+            theFile.type !== mime.lookup(theFile.name)) { // the mime type of this ext is not the right one?
             suffix = '_.' + extension
-            debug.log('MIME TYPE MISMATCH -- adding extension: ' + suffix)
+            // console.log('MIME TYPE MISMATCH: ' + mime.lookup(theFile.name) + ': adding extension: ' + suffix)
           }
         }
         var folderName = theFile.type.startsWith('image/')

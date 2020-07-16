@@ -190,11 +190,11 @@ export function tabWidget (options: TabWidgetOptions) {
   const tabContainer = navElement.appendChild(dom.createElement('ul'))
   tabContainer.setAttribute('style', `
     list-style-type: none;
-    display: flex; 
-    height: 100%; 
+    display: flex;
+    height: 100%;
     width: 100%;
     margin: 0;
-    padding: 0; 
+    padding: 0;
     flex-direction: ${(vertical ? 'column' : 'row')}
   `)
 
@@ -204,7 +204,7 @@ export function tabWidget (options: TabWidgetOptions) {
   rootElement.tabContainer = tabContainer
   rootElement.bodyContainer = bodyContainer
 
-  const corners = ['2em', '2em', '0', '0'] // top left, TR, BR, BL
+  const corners = ['0.2em', '0.2em', '0', '0'] // top left, TR, BR, BL
   const cornersPrepped = corners.concat(corners).slice(orientation, orientation + 4)
   const cornersStyle = `border-radius: ${cornersPrepped.join(' ')};`
 

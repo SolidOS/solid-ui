@@ -12,12 +12,12 @@ describe('kb (main global IndexedFormula instance)', () => {
 
 describe('kb.fetcher', () => {
   it('exists', () => {
-    expect((kb as any).fetcher).toBeInstanceOf(Object)
+    expect(kb.fetcher).toBeInstanceOf(Object)
   })
 })
 
 describe('kb.updater', () => {
   it('exists', () => {
-    expect((kb as any).updater).toBeInstanceOf(Object)
+    expect(kb.updater).toBeInstanceOf(Object)
   })
 })

@@ -6,6 +6,7 @@ import style from '../style'
 import * as debug from '../debug'
 import { info } from '../log'
 import { getClasses } from '../jss'
+import { uploadFiles } from './dragAndDrop.js'
 
 /**
  * UI Widgets such as buttons
@@ -242,7 +243,11 @@ export const iconForClass = {
   'ui:Form': 'noun_122196.svg',
   'rdfs:Class': 'class-rectangle.svg', // For RDF developers
   'rdf:Property': 'property-diamond.svg',
-  'owl:Ontology': 'noun_classification_1479198.svg'
+  'owl:Ontology': 'noun_classification_1479198.svg',
+  'wf:Tracker': 'noun_122196.svg',
+  'wf:Task': 'noun_17020_gray-tick.svg',
+  'wf:Open': 'noun_17020_sans-tick.svg',
+  'wf:Closed': 'noun_17020.svg'
 }
 
 /**
@@ -535,7 +540,9 @@ function getButtonStyle (options: ButtonWidgetOptions = {}) {
  *
  * @returns <dDomElement> - the button
  */
-export function button (dom: HTMLDocument, iconURI: string | undefined, text: string, handler: (event: any) => void, options: ButtonWidgetOptions = { buttonColor: 'Primary', needsBorder: false }) {
+export function button (dom: HTMLDocument, iconURI: string | undefined, text: string,
+  handler?: (event: any) => void,
+  options: ButtonWidgetOptions = { buttonColor: 'Primary', needsBorder: false }) {
   var button = dom.createElement('button')
   button.setAttribute('type', 'button')
   // button.innerHTML = text  // later, user preferences may make text preferred for some
@@ -723,6 +730,7 @@ export type attachmentListOptions = {
   modify?: boolean
   promptIcon?: string
   predicate?: NamedNode
+  uploadFolder?: NamedNode
   noun?: string
 }
 
@@ -732,8 +740,8 @@ export type attachmentListOptions = {
  * to a meeting.
  * Accepts dropping URLs onto it to add attachments to it.
  */
-export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTMLElement, options?: attachmentListOptions) {
-  options = options || {}
+export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTMLElement, options: attachmentListOptions = {}) {
+  // options = options || {}
   var doc = options.doc || subject.doc()
   if (options.modify === undefined) options.modify = true
   var modify = options.modify
@@ -783,7 +791,7 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
   ;(attachmentOuter as any).refresh = refresh // Participate in downstream changes
   refresh()
 
-  var droppedURIHandler = function (uris) {
+  function droppedURIHandler (uris) {
     var ins: any = []
     uris.map(function (u) {
       var target = sym(u) // Attachment needs text label to disinguish I think not icon.
@@ -798,13 +806,40 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
       }
     })
   }
-  if (modify) {
-    var paperclip = attachmentLeft.appendChild(dom.createElement('img'))
-    paperclip.setAttribute('src', promptIcon)
-    paperclip.setAttribute('style', 'width; 2em; height: 2em; margin: 0.5em;')
-    paperclip.setAttribute('draggable', 'false')
 
-    dragAndDrop.makeDropTarget(attachmentLeft, droppedURIHandler)
+  function droppedFileHandler (files) {
+    uploadFiles(
+      kb.fetcher,
+      files,
+      options.uploadFolder?.uri, // Files
+      options.uploadFolder?.uri, // Pictures
+      function (theFile, destURI) {
+        const ins = [st(subject, predicate, kb.sym(destURI), doc)]
+        kb.updater.update([], ins, function (uri, ok, errorBody, _xhr) {
+          if (ok) {
+            refresh()
+          } else {
+            complain(undefined, 'Error adding link to uploaded file: ' + errorBody)
+          }
+        })
+      }
+    )
+  }
+
+  if (modify) {
+    // const buttonStyle = 'width; 2em; height: 2em; margin: 0.5em; padding: 0.1em;'
+    const paperclip = button(dom, promptIcon, 'Drop attachments here')
+    // paperclip.style = buttonStyle // @@ needed?  default has white background
+    attachmentLeft.appendChild(paperclip)
+    const fhandler = options.uploadFolder ? droppedFileHandler : null
+    dragAndDrop.makeDropTarget(paperclip, droppedURIHandler, fhandler) // beware missing the wire of the paparclip!
+    dragAndDrop.makeDropTarget(attachmentLeft, droppedURIHandler, fhandler) // just the outer won't do it
+
+    if (options.uploadFolder) { // Addd an explicit file upload button as well
+      const buttonDiv = fileUploadButtonDiv(dom, droppedFileHandler)
+      attachmentLeft.appendChild(buttonDiv)
+      // buttonDiv.children[1].style =  buttonStyle
+    }
   }
   return attachmentOuter
 }

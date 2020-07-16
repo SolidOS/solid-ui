@@ -1,15 +1,20 @@
-import { DataBrowserContext, list, paneForIcon, paneForPredicate, register, byName } from 'pane-registry'
-import { IndexedFormula } from 'rdflib'
+import { DataBrowserContext, LiveStore } from 'pane-registry'
 
 export function createDataBrowserContext (
   dom: HTMLDocument,
-  store: IndexedFormula
+  store: LiveStore
 ): DataBrowserContext {
   return {
     dom,
     getOutliner: jest.fn(),
     session: {
-      paneRegistry: { list, paneForIcon, paneForPredicate, register, byName },
+      paneRegistry: {
+        list: [],
+        paneForIcon: [],
+        paneForPredicate: [],
+        register: jest.fn(),
+        byName: jest.fn()
+      },
       store
     }
   }
