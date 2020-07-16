@@ -1,4 +1,4 @@
 import { AccessController } from '../../../src/acl/access-controller';
-import { IndexedFormula } from 'rdflib';
-export declare function instantiateAccessController(dom: HTMLDocument, store: IndexedFormula): AccessController;
+import { LiveStore } from 'pane-registry';
+export declare function instantiateAccessController(dom: HTMLDocument, store: LiveStore): AccessController;
 //# sourceMappingURL=instantiateAccessController.d.ts.map

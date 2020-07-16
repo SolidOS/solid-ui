@@ -6,6 +6,7 @@
 import { IndexedFormula, NamedNode } from 'rdflib';
 import { AccessController } from './access-controller';
 import { AgentMapMap, ComboList } from './types';
+import { LiveStore } from 'pane-registry';
 /**
  * Type for the options parameter of [[AccessGroups]]
  */
@@ -28,8 +29,8 @@ export declare class AccessGroups {
     private readonly rootElement;
     private _store;
     constructor(doc: NamedNode, aclDoc: NamedNode, controller: AccessController, store: IndexedFormula, options?: AccessGroupsOptions);
-    get store(): IndexedFormula;
-    set store(store: IndexedFormula);
+    get store(): LiveStore;
+    set store(store: LiveStore);
     render(): HTMLElement;
     private renderGroups;
     private renderGroup;

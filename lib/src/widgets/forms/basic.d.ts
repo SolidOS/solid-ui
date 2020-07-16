@@ -1,4 +1,4 @@
-import { Node, NamedNode } from 'rdflib';
+import { BlankNode, Node, NamedNode, Variable } from 'rdflib';
 /**
  * Create an anchor element with a label as the anchor text.
  *
@@ -20,7 +20,7 @@ export declare function fieldLabel(dom: HTMLDocument, property: NamedNode | unde
  *
  * @internal exporting this only for unit tests
  */
-export declare function fieldStore(subject: Node, predicate: Node, def: Node | undefined): Node | undefined;
+export declare function fieldStore(subject: NamedNode | BlankNode | Variable, predicate: NamedNode | Variable, def: NamedNode | undefined): NamedNode | undefined;
 /**
  * Render a basic form field
  *
@@ -37,5 +37,5 @@ export declare function fieldStore(subject: Node, predicate: Node, def: Node | u
  *
  * @returns The HTML widget created
  */
-export declare function basicField(dom: HTMLDocument, container: HTMLElement | undefined, already: any, subject: Node, form: Node, doc: Node | undefined, callbackFunction: (ok: boolean, errorMessage: string) => void): HTMLElement;
+export declare function basicField(dom: HTMLDocument, container: HTMLElement | undefined, already: any, subject: NamedNode | BlankNode | Variable, form: NamedNode, doc: NamedNode | undefined, callbackFunction: (ok: boolean, errorMessage: string) => void): HTMLElement;
 //# sourceMappingURL=basic.d.ts.map

@@ -91,6 +91,10 @@ export declare const iconForClass: {
     'rdfs:Class': string;
     'rdf:Property': string;
     'owl:Ontology': string;
+    'wf:Tracker': string;
+    'wf:Task': string;
+    'wf:Open': string;
+    'wf:Closed': string;
 };
 /**
  * Find an image for this thing as a class
@@ -123,7 +127,7 @@ export declare function setImage(element: HTMLElement, thing: NamedNode): void;
  * @@ Supress check if command key held down?
  */
 export declare function deleteButtonWithCheck(dom: HTMLDocument, container: HTMLElement, noun: string, deleteFunction: () => any): HTMLImageElement;
-export declare function button(dom: HTMLDocument, iconURI: string | undefined, text: string, handler: (event: any) => void, options?: ButtonWidgetOptions): HTMLButtonElement;
+export declare function button(dom: HTMLDocument, iconURI: string | undefined, text: string, handler?: (event: any) => void, options?: ButtonWidgetOptions): HTMLButtonElement;
 export declare function cancelButton(dom: HTMLDocument, handler: (event: any) => void): HTMLButtonElement;
 export declare function continueButton(dom: HTMLDocument, handler: (event: any) => void): HTMLButtonElement;
 export declare function askName(dom: HTMLDocument, kb: IndexedFormula, container: HTMLDivElement, predicate?: NamedNode, theClass?: NamedNode, noun?: string): Promise<unknown>;
@@ -149,6 +153,7 @@ export declare type attachmentListOptions = {
     modify?: boolean;
     promptIcon?: string;
     predicate?: NamedNode;
+    uploadFolder?: NamedNode;
     noun?: string;
 };
 /**

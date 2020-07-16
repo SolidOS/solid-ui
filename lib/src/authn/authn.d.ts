@@ -1,12 +1,12 @@
-import * as $rdf from 'rdflib';
 import solidAuthClient from 'solid-auth-client';
 import { AppDetails, AuthenticationContext } from './types';
 import { PaneDefinition } from 'pane-registry';
+import { NamedNode } from 'rdflib';
 export { solidAuthClient };
 /**
  * Look for and load the User who has control over it
  */
-export declare function findOriginOwner(doc: $rdf.NamedNode | string): string | boolean;
+export declare function findOriginOwner(doc: NamedNode | string): string | boolean;
 /**
  * Saves `webId` in `context.me`
  * @param webId
@@ -14,18 +14,18 @@ export declare function findOriginOwner(doc: $rdf.NamedNode | string): string | 
  *
  * @returns Returns the WebID, after setting it
  */
-export declare function saveUser(webId: $rdf.NamedNode | string | null, context?: AuthenticationContext): $rdf.NamedNode | null;
+export declare function saveUser(webId: NamedNode | string | null, context?: AuthenticationContext): NamedNode | null;
 /**
  * Wrapper around [[offlineTestID]]
  * @returns {NamedNode|null}
  */
-export declare function defaultTestUser(): $rdf.NamedNode | null;
+export declare function defaultTestUser(): NamedNode | null;
 /**
  * Checks synchronously whether user is logged in
  *
  * @returns Named Node or null
  */
-export declare function currentUser(): $rdf.NamedNode | null;
+export declare function currentUser(): NamedNode | null;
 /**
  * Resolves with the logged in user's WebID
  *
@@ -62,11 +62,11 @@ export declare function loadTypeIndexes(context: AuthenticationContext): Promise
  * 2016-12-11 change to include forClass arc a la
  * https://github.com/solid/solid/blob/master/proposals/data-discovery.md
  */
-export declare function findAppInstances(context: AuthenticationContext, theClass: $rdf.NamedNode, isPublic: boolean): Promise<AuthenticationContext>;
+export declare function findAppInstances(context: AuthenticationContext, theClass: NamedNode, isPublic: boolean): Promise<AuthenticationContext>;
 /**
  * Register a new app in a type index
  */
-export declare function registerInTypeIndex(context: AuthenticationContext, instance: $rdf.NamedNode, theClass: $rdf.NamedNode, isPublic: boolean): Promise<AuthenticationContext>;
+export declare function registerInTypeIndex(context: AuthenticationContext, instance: NamedNode, theClass: NamedNode, isPublic: boolean): Promise<AuthenticationContext>;
 /**
  * UI to control registration of instance
  */
@@ -77,6 +77,7 @@ export declare function registrationControl(context: AuthenticationContext, inst
 export declare function registrationList(context: AuthenticationContext, options: {
     private?: boolean;
     public?: boolean;
+    type?: NamedNode;
 }): Promise<AuthenticationContext>;
 /**
  * Simple Access Control
@@ -91,16 +92,16 @@ export declare function registrationList(context: AuthenticationContext, options
  *
  * @returns Resolves with aclDoc uri on successful write
  */
-export declare function setACLUserPublic(docURI: $rdf.NamedNode, me: $rdf.NamedNode, options: {
+export declare function setACLUserPublic(docURI: string, me: NamedNode, options: {
     defaultForNew?: boolean;
     public?: [];
-}): Promise<$rdf.NamedNode>;
+}): Promise<NamedNode>;
 /**
- * Returns `$rdf.sym($SolidTestEnvironment.username)` if
+ * Returns `sym($SolidTestEnvironment.username)` if
  * `$SolidTestEnvironment.username` is defined as a global
  * @returns {NamedNode|null}
  */
-export declare function offlineTestID(): $rdf.NamedNode | null;
+export declare function offlineTestID(): NamedNode | null;
 /**
  * @returns {Promise<string|null>} Resolves with WebID URI or null
  */
@@ -111,7 +112,7 @@ export declare function offlineTestID(): $rdf.NamedNode | null;
  *
  * @returns Resolves with webId uri, if no callback provided
  */
-export declare function checkUser<T>(setUserCallback?: (me: $rdf.NamedNode | null) => T): Promise<$rdf.NamedNode | T>;
+export declare function checkUser<T>(setUserCallback?: (me: NamedNode | null) => T): Promise<NamedNode | T>;
 /**
  * Login status box
  *
@@ -169,7 +170,7 @@ export declare function newAppInstance(dom: HTMLDocument, appDetails: AppDetails
  * Retrieves whether the currently logged in user is a power user
  * and/or a developer
  */
-export declare function getUserRoles(): Promise<Array<$rdf.NamedNode>>;
+export declare function getUserRoles(): Promise<Array<NamedNode>>;
 /**
  * Filters which panes should be available, based on the result of [[getUserRoles]]
  */

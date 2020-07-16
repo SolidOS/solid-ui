@@ -1,3 +1,3 @@
-import { IndexedFormula } from 'rdflib';
-export declare function createLiveStore(): IndexedFormula;
+import { LiveStore } from 'pane-registry';
+export declare function createLiveStore(): LiveStore;
 //# sourceMappingURL=createLiveStore.d.ts.map

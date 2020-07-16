@@ -27,6 +27,7 @@ import * as tabs from './tabs';
 import utils from './utils';
 import widgets from './widgets';
 import versionInfo from './versionInfo';
+import { initHeader } from './header';
 declare const dom: Document | null;
-export { ns, rdf, acl, aclControl, authn, create, dom, icons, log, matrix, media, messageArea, infiniteMessageArea, pad, preferences, store, style, table, tabs, utils, widgets, versionInfo };
+export { ns, rdf, acl, aclControl, authn, create, dom, icons, log, matrix, media, messageArea, infiniteMessageArea, pad, preferences, store, style, table, tabs, utils, widgets, versionInfo, initHeader };
 //# sourceMappingURL=index.d.ts.map

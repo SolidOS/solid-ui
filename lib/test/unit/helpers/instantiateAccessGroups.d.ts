@@ -1,4 +1,4 @@
-import { IndexedFormula } from 'rdflib';
 import { AccessGroups } from '../../../src/acl/access-groups';
-export declare function instantiateAccessGroups(dom: HTMLDocument, store: IndexedFormula): AccessGroups;
+import { LiveStore } from 'pane-registry';
+export declare function instantiateAccessGroups(dom: HTMLDocument, store: LiveStore): AccessGroups;
 //# sourceMappingURL=instantiateAccessGroups.d.ts.map
