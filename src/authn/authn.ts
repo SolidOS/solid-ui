@@ -436,9 +436,10 @@ async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boo
     await loadOneTypeIndex(context, isPublic)
     if (context.index) {
       debug.log(
-        `ensureOneTypeIndex: Type index exists already ${isPublic}`
+        `ensureOneTypeIndex: Type index exists already ${isPublic
           ? context.index.public[0]
           : context.index.private[0]
+        }`
       )
     }
     return context
