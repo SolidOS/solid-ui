@@ -61,7 +61,6 @@
     "pane-registry": "^2.1.1",
     "rdflib": "^1.2.3",
     "solid-auth-client": "^2.4.1",
-    "solid-auth-tls": "^0.1.2",
     "solid-namespace": "^0.3.0",
     "ts-jest": "^25.5.1"
   },

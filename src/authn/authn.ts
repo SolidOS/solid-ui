@@ -19,7 +19,7 @@
  * * `statusArea`      A DOM element (opt) progress stuff can be displayed, or error messages
  * @packageDocumentation
  */
-import SolidTls from 'solid-auth-tls'
+import Signup from './signup'
 import widgets from '../widgets'
 import solidAuthClient from 'solid-auth-client'
 import ns from '../ns.js'
@@ -964,7 +964,7 @@ function signInOrSignUpBox (
   signupButton.setAttribute('style', `${signInButtonStyle}background-color: #efe;`)
 
   signupButton.addEventListener('click', function (_event) {
-    const signupMgr = new SolidTls.Signup()
+    const signupMgr = new Signup()
     signupMgr.signup().then(function (uri) {
       debug.log('signInOrSignUpBox signed up ' + uri)
       setUserCallback(uri)
