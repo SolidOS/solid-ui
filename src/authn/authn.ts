@@ -19,7 +19,7 @@
  * * `statusArea`      A DOM element (opt) progress stuff can be displayed, or error messages
  * @packageDocumentation
  */
-import SolidTls from 'solid-auth-tls'
+import Signup from './signup'
 import widgets from '../widgets'
 import solidAuthClient from 'solid-auth-client'
 import ns from '../ns.js'
@@ -436,9 +436,10 @@ async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boo
     await loadOneTypeIndex(context, isPublic)
     if (context.index) {
       debug.log(
-        `ensureOneTypeIndex: Type index exists already ${isPublic}`
+        `ensureOneTypeIndex: Type index exists already ${isPublic
           ? context.index.public[0]
           : context.index.private[0]
+        }`
       )
     }
     return context
@@ -964,7 +965,7 @@ function signInOrSignUpBox (
   signupButton.setAttribute('style', `${signInButtonStyle}background-color: #efe;`)
 
   signupButton.addEventListener('click', function (_event) {
-    const signupMgr = new SolidTls.Signup()
+    const signupMgr = new Signup()
     signupMgr.signup().then(function (uri) {
       debug.log('signInOrSignUpBox signed up ' + uri)
       setUserCallback(uri)
