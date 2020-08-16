@@ -1,0 +1,42 @@
+import * as UI from '../../lib'
+
+import { Canvas, Meta, Story, Preview, Source} from '@storybook/addon-docs/blocks';
+
+import { action } from '@storybook/addon-actions'
+
+<Meta title="Buttons" />
+
+## Button with text (no border)
+
+<Canvas>
+  <Story name="Primary">
+        {UI.widgets.button( document, undefined, "Primary", action("on click"))}
+   </Story>
+   <Story name="Secondary">
+        {UI.widgets.button( document, undefined, "Secondary", action("on click"), {buttonColor: "Secondary"})}
+   </Story>
+</Canvas>
+
+## Button with text (needs border)
+
+<Canvas>
+   <Story name="Primary (needs border)">
+       {UI.widgets.button( document, undefined, "Secondary", action("on click"), {needsBorder: true})}
+   </Story>
+   <Story name="Secondary (needs border)">
+       {UI.widgets.button( document, undefined, "Secondary", action("on click"), {buttonColor: "Secondary", needsBorder: true})}
+   </Story>
+</Canvas>
+
+
+## Continue & Cancel button
+
+<Canvas>
+    <Story name="Continue button">
+           {UI.widgets.continueButton(document, action("clicked"))}
+   </Story>
+   <Story name="Cancel button">
+           {UI.widgets.cancelButton(document, action("clicked"))}
+   </Story>
+</Canvas>
+
