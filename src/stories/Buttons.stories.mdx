@@ -1,7 +1,6 @@
 import * as UI from '../../lib'
 
-import { Canvas, Meta, Story, Preview, Source} from '@storybook/addon-docs/blocks';
-
+import { Canvas, Meta, Story } from '@storybook/addon-docs/blocks';
 import { action } from '@storybook/addon-actions'
 
 <Meta title="Buttons" />
@@ -10,10 +9,10 @@ import { action } from '@storybook/addon-actions'
 
 <Canvas>
   <Story name="Primary">
-        {UI.widgets.button( document, undefined, "Primary", action("on click"))}
+        {UI.widgets.button( document, undefined, "Primary", action("clicked"))}
    </Story>
    <Story name="Secondary">
-        {UI.widgets.button( document, undefined, "Secondary", action("on click"), {buttonColor: "Secondary"})}
+        {UI.widgets.button( document, undefined, "Secondary", action("clicked"), {buttonColor: "Secondary"})}
    </Story>
 </Canvas>
 
@@ -21,10 +20,10 @@ import { action } from '@storybook/addon-actions'
 
 <Canvas>
    <Story name="Primary (needs border)">
-       {UI.widgets.button( document, undefined, "Secondary", action("on click"), {needsBorder: true})}
+       {UI.widgets.button( document, undefined, "Secondary", action("clicked"), {needsBorder: true})}
    </Story>
    <Story name="Secondary (needs border)">
-       {UI.widgets.button( document, undefined, "Secondary", action("on click"), {buttonColor: "Secondary", needsBorder: true})}
+       {UI.widgets.button( document, undefined, "Secondary", action("clicked"), {buttonColor: "Secondary", needsBorder: true})}
    </Story>
 </Canvas>
 
@@ -37,6 +36,101 @@ import { action } from '@storybook/addon-actions'
    </Story>
    <Story name="Cancel button">
            {UI.widgets.cancelButton(document, action("clicked"))}
+   </Story>
+</Canvas>
+
+
+## Delete button
+
+<Canvas>
+    <Story name="Delete button">
+           { () => {
+               const div = document.createElement("div");
+               const result = UI.widgets.deleteButtonWithCheck(
+                                document,
+                                div,
+                                'something',
+                                action('deleted'))
+               return div
+             }
+           }
+   </Story>
+</Canvas>
+
+
+## Button with icon
+
+<Canvas>
+    <Story name="Button with icon">
+           {
+             UI.widgets.button(document, 'https://solidproject.org/assets/img/solid-emblem.svg', 'test', action('clicked!'))
+           }
+   </Story>
+</Canvas>
+
+## File upload button
+
+<Canvas>
+    <Story name="File upload button">
+           {
+            UI.widgets.fileUploadButtonDiv(document, action('uploaded'))
+           }
+   </Story>
+</Canvas>
+
+## Link button
+
+<Canvas>
+    <Story name="Link button">
+           {
+            () => {
+                document.outlineManager = {
+                  GotoSubject: action('go to subject')
+                }
+                return UI.widgets.linkButton(document, UI.rdf.namedNode('http://example.com/'))
+            }
+           }
+   </Story>
+</Canvas>
+
+## Link icon
+
+<Canvas>
+    <Story name="Link icon">
+           {
+            UI.widgets.linkIcon(
+                      document,
+                      UI.rdf.namedNode('https://solidproject.org/')
+                    )
+           }
+   </Story>
+   <Story name="Link custom icon">
+              {
+               UI.widgets.linkIcon(
+                         document,
+                         UI.rdf.namedNode('https://solidproject.org/'),
+                         'https://solidproject.org/favicon.ico'
+                       )
+              }
+      </Story>
+</Canvas>
+
+
+## Remove button
+
+<Canvas>
+    <Story name="Remove button">
+           {
+            () => {
+                const div = document.createElement('div')
+                const p = document.createElement('p')
+                p.appendChild(document.createTextNode('click x to remove me'))
+                const button = UI.widgets.removeButton(document, p)
+                div.appendChild(p)
+                div.appendChild(button)
+                return div
+            }
+           }
    </Story>
 </Canvas>
 
