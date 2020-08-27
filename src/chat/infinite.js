@@ -88,6 +88,9 @@ function desktopNotification (str) {
   // want to be respectful there is no need to bother them any more.
 }
 
+// HELPER CODE FOR MENTION - WILL NEED TO MOVE
+// function pasteText({replacementText, cursorContext, activeQuery}: )
+
 /**
  * Common code for a chat (discussion area of messages about something)
  * This version runs over a series of files for different time periods
@@ -155,6 +158,14 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     form.appendChild(rhs)
     form.AJAR_date = '9999-01-01T00:00:00Z' // ISO format for field sort
     var field, sendButton
+    debug.log('line 158')
+    var parps = kb
+      .each(chatChannel, ns.wf('participation'))
+      .map(function (parp) {
+        const name = parp.value.replace('/https:///', '').split('.')
+        debug.log('parp ' + name[0])
+        return [{ uri: parp.value, id: name[0] }]
+      })
 
     async function sendMessage (text) {
       var now = new Date()
@@ -286,6 +297,24 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
         'keydown',
         async function (e) {
           // User preference?
+          debug.log('key code ' + e.keyCode)
+          if (e.shiftKey) {
+            if (e.keyCode === 50) {
+              debug.log('testing @ key')
+              let mentionOption = null
+              const selection = dom.createElement('select')
+              parps.map(function (parp) {
+                mentionOption = dom.createElement('option')
+                mentionOption.appendChild(dom.createTextNode(parp.id))
+                mentionOption.value = parp.id
+                selection.appendChild(mentionOption)
+              })
+              // field.appendChild(selection)
+              const test = dom.getSelection()
+              window.alert(field.value)
+              field.appendChild(selection)
+            }
+          }
           if (e.keyCode === 13) {
             if (!e.altKey) {
               // Alt-Enter just adds a new line
