@@ -9,7 +9,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "npm run clean && npm run build-version && npm run build-lib && npm run build-types && npm run build-webpack",
+    "build": "npm run clean && npm run build-version && npm run build-lib && npm run build-types && npm run build-webpack && npm run build-storybook",
     "build-lib": "babel src -d lib --source-maps --extensions \".ts,.js\"",
     "build-types": "tsc --emitDeclarationOnly",
     "build-version": "sh ./timestamp.sh > src/versionInfo.ts  && eslint \"src/versionInfo.ts\" --fix",
@@ -26,7 +26,7 @@
     "prepublishOnly": "npm test && npm run build",
     "postpublish": "git push origin master --follow-tags",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook  --output-dir ./examples/storybook"
   },
   "repository": {
     "type": "git",
