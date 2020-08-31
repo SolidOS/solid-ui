@@ -1,0 +1,285 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createBanner check customized logo... 1`] = `
+<div
+  class="header-banner-0-1-81"
+>
+  <a
+    class="header-banner__link-0-1-68"
+    href="https://test.com"
+  >
+    <img
+      class="header-banner__icon-0-1-69"
+      src="https://solidproject.org/assets/img/solid-emblem.svg"
+    />
+  </a>
+  <div
+    class="header-banner__user-menu-0-1-79 header-user-menu-0-1-80"
+  >
+    <button
+      class="header-user-menu__trigger-0-1-78"
+      type="button"
+    >
+      
+
+      <svg
+        fill="none"
+        height="26"
+        viewBox="0 0 26 26"
+        width="26"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        
+    
+        <path
+          clip-rule="evenodd"
+          d="M13 25C19.6274 25 25 19.6274 25 13C25 6.37258 19.6274 1 13 1C6.37258 1 1 6.37258 1 13C1 19.6274 6.37258 25 13 25Z"
+          fill="#D8D8D8"
+          fill-rule="evenodd"
+          stroke="#8B8B8B"
+        />
+        
+    
+        <mask
+          height="26"
+          id="mask0"
+          mask-type="alpha"
+          maskUnits="userSpaceOnUse"
+          width="26"
+          x="0"
+          y="0"
+        >
+          
+        
+          <path
+            clip-rule="evenodd"
+            d="M13 25C19.6274 25 25 19.6274 25 13C25 6.37258 19.6274 1 13 1C6.37258 1 1 6.37258 1 13C1 19.6274 6.37258 25 13 25Z"
+            fill="white"
+            fill-rule="evenodd"
+            stroke="white"
+          />
+          
+    
+        </mask>
+        
+    
+        <g
+          mask="url(#mask0)"
+        >
+          
+        
+          <path
+            clip-rule="evenodd"
+            d="M17.0468 10.4586C17.0468 14.4979 15.4281 16.9214 12.9999 16.9214C10.5718 16.9214 8.95298 14.4979 8.95298 10.4586C8.95298 6.41931 12.9999 6.41931 12.9999 6.41931C12.9999 6.41931 17.0468 6.41931 17.0468 10.4586ZM4.09668 23.3842C6.52483 17.7293 12.9999 17.7293 12.9999 17.7293C12.9999 17.7293 19.475 17.7293 21.9031 23.3842C21.9031 23.3842 17.8481 25 12.9999 25C8.15169 25 4.09668 23.3842 4.09668 23.3842Z"
+            fill="#8B8B8B"
+            fill-rule="evenodd"
+          />
+          
+    
+        </g>
+        
+
+      </svg>
+    </button>
+    <nav
+      aria-hidden="true"
+      class="header-user-menu__navigation-menu-0-1-77"
+    >
+      <ul
+        class="header-user-menu__list-0-1-70"
+      >
+        <li
+          class="header-user-menu__list-item-0-1-72"
+        >
+          <a
+            class="header-user-menu__link-0-1-71"
+            href="https://sharonstrats.inrupt.net/profile/card#me"
+          />
+        </li>
+        <li
+          class="header-user-menu__list-item-0-1-74"
+        >
+          <a
+            class="header-user-menu__link-0-1-73"
+            href="https://reflectechblog.wordpress.com/"
+          />
+        </li>
+        <li
+          class="header-user-menu__list-item-0-1-76"
+        >
+          <button
+            class="header-user-menu__button-0-1-75"
+          />
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+`;
+
+exports[`createBanner creates a link 1`] = `
+<div
+  class="header-banner-0-1-53"
+>
+  <a
+    class="header-banner__link-0-1-40"
+    href="https://test.com"
+  >
+    <img
+      class="header-banner__icon-0-1-41"
+      src="https://solidproject.org/assets/img/solid-emblem.svg"
+    />
+  </a>
+  <div
+    class="header-banner__user-menu-0-1-51 header-user-menu-0-1-52"
+  >
+    <button
+      class="header-user-menu__trigger-0-1-50"
+      type="button"
+    >
+      
+
+      <svg
+        fill="none"
+        height="26"
+        viewBox="0 0 26 26"
+        width="26"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        
+    
+        <path
+          clip-rule="evenodd"
+          d="M13 25C19.6274 25 25 19.6274 25 13C25 6.37258 19.6274 1 13 1C6.37258 1 1 6.37258 1 13C1 19.6274 6.37258 25 13 25Z"
+          fill="#D8D8D8"
+          fill-rule="evenodd"
+          stroke="#8B8B8B"
+        />
+        
+    
+        <mask
+          height="26"
+          id="mask0"
+          mask-type="alpha"
+          maskUnits="userSpaceOnUse"
+          width="26"
+          x="0"
+          y="0"
+        >
+          
+        
+          <path
+            clip-rule="evenodd"
+            d="M13 25C19.6274 25 25 19.6274 25 13C25 6.37258 19.6274 1 13 1C6.37258 1 1 6.37258 1 13C1 19.6274 6.37258 25 13 25Z"
+            fill="white"
+            fill-rule="evenodd"
+            stroke="white"
+          />
+          
+    
+        </mask>
+        
+    
+        <g
+          mask="url(#mask0)"
+        >
+          
+        
+          <path
+            clip-rule="evenodd"
+            d="M17.0468 10.4586C17.0468 14.4979 15.4281 16.9214 12.9999 16.9214C10.5718 16.9214 8.95298 14.4979 8.95298 10.4586C8.95298 6.41931 12.9999 6.41931 12.9999 6.41931C12.9999 6.41931 17.0468 6.41931 17.0468 10.4586ZM4.09668 23.3842C6.52483 17.7293 12.9999 17.7293 12.9999 17.7293C12.9999 17.7293 19.475 17.7293 21.9031 23.3842C21.9031 23.3842 17.8481 25 12.9999 25C8.15169 25 4.09668 23.3842 4.09668 23.3842Z"
+            fill="#8B8B8B"
+            fill-rule="evenodd"
+          />
+          
+    
+        </g>
+        
+
+      </svg>
+    </button>
+    <nav
+      aria-hidden="true"
+      class="header-user-menu__navigation-menu-0-1-49"
+    >
+      <ul
+        class="header-user-menu__list-0-1-42"
+      >
+        <li
+          class="header-user-menu__list-item-0-1-44"
+        >
+          <a
+            class="header-user-menu__link-0-1-43"
+            href="https://sharonstrats.inrupt.net/profile/card#me"
+          />
+        </li>
+        <li
+          class="header-user-menu__list-item-0-1-46"
+        >
+          <a
+            class="header-user-menu__link-0-1-45"
+            href="https://reflectechblog.wordpress.com/"
+          />
+        </li>
+        <li
+          class="header-user-menu__list-item-0-1-48"
+        >
+          <button
+            class="header-user-menu__button-0-1-47"
+          />
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+`;
+
+exports[`createLoginSignUpButtons creates div 1`] = `
+<div
+  class="header-banner__login-0-1-1"
+>
+  <div />
+</div>
+`;
+
+exports[`createUserMenu creates a menu.... 1`] = `Promise {}`;
+
+exports[`createUserMenu creates the default options... 1`] = `Promise {}`;
+
+exports[`createUserMenuButton creates a button 1`] = `
+<button
+  class="header-user-menu__button-0-1-3"
+/>
+`;
+
+exports[`createUserMenuItem creates a link 1`] = `
+<li
+  class="header-user-menu__list-item-0-1-7"
+>
+  <ul />
+</li>
+`;
+
+exports[`createUserMenuLink creates a link 1`] = `
+<a
+  class="header-user-menu__link-0-1-5"
+  href="http://www.test.com"
+/>
+`;
+
+exports[`getProfileImg returns an empty image 1`] = `
+"
+<svg xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"26\\" height=\\"26\\" viewBox=\\"0 0 26 26\\" fill=\\"none\\">
+    <path fill-rule=\\"evenodd\\" clip-rule=\\"evenodd\\" d=\\"M13 25C19.6274 25 25 19.6274 25 13C25 6.37258 19.6274 1 13 1C6.37258 1 1 6.37258 1 13C1 19.6274 6.37258 25 13 25Z\\" fill=\\"#D8D8D8\\" stroke=\\"#8B8B8B\\"/>
+    <mask id=\\"mask0\\" mask-type=\\"alpha\\" maskUnits=\\"userSpaceOnUse\\" x=\\"0\\" y=\\"0\\" width=\\"26\\" height=\\"26\\">
+        <path fill-rule=\\"evenodd\\" clip-rule=\\"evenodd\\" d=\\"M13 25C19.6274 25 25 19.6274 25 13C25 6.37258 19.6274 1 13 1C6.37258 1 1 6.37258 1 13C1 19.6274 6.37258 25 13 25Z\\" fill=\\"white\\" stroke=\\"white\\"/>
+    </mask>
+    <g mask=\\"url(#mask0)\\">
+        <path fill-rule=\\"evenodd\\" clip-rule=\\"evenodd\\" d=\\"M17.0468 10.4586C17.0468 14.4979 15.4281 16.9214 12.9999 16.9214C10.5718 16.9214 8.95298 14.4979 8.95298 10.4586C8.95298 6.41931 12.9999 6.41931 12.9999 6.41931C12.9999 6.41931 17.0468 6.41931 17.0468 10.4586ZM4.09668 23.3842C6.52483 17.7293 12.9999 17.7293 12.9999 17.7293C12.9999 17.7293 19.475 17.7293 21.9031 23.3842C21.9031 23.3842 17.8481 25 12.9999 25C8.15169 25 4.09668 23.3842 4.09668 23.3842Z\\" fill=\\"#8B8B8B\\"/>
+    </g>
+</svg>"
+`;
+
+exports[`header is exposed on public API 1`] = `undefined`;
+
+exports[`rebuildHeader creates a link 1`] = `[Function]`;

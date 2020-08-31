@@ -5,52 +5,73 @@
 import { IndexedFormula, NamedNode, sym } from 'rdflib'
 import { loginStatusBox, solidAuthClient } from '../authn/authn'
 import { widgets } from '../widgets'
-import { icon } from './icon'
 import { emptyProfile } from './empty-profile'
-import { throttle, getPod } from './headerHelpers'
+import { throttle, getPod, addStyleClassToElement } from './headerHelpers'
 import { log } from '../debug'
+import { getClasses } from '../jss'
+import { styleMap } from './styleMap'
 
 // SolidAuthorization, SolidClam, and SolidSession was copied from mashlib/typings/solid-auth-client
 // access_token, client_id, id_token, at_hash had to be converted to camelcase for typescript compatibility
+
 interface SolidAuthorization {
-    accessToken: string;
-    clientId: string;
-    idToken: string;
+  accessToken: string;
+  clientId: string;
+  idToken: string;
 }
 
 interface SolidClaim {
-    atHash: string;
-    aud: string;
-    azp: string;
-    cnf: {
-        jwk: string;
-    };
-    exp: number;
-    iat: number;
-    iss: string;
-    jti: string;
-    nonce: string;
-    sub: string;
+  atHash: string;
+  aud: string;
+  azp: string;
+  cnf: {
+    jwk: string;
+  };
+  exp: number;
+  iat: number;
+  iss: string;
+  jti: string;
+  nonce: string;
+  sub: string;
 }
 export interface SolidSession {
-    authorization: SolidAuthorization;
-    credentialType: string;
-    idClaims: SolidClaim;
-    idp: string;
-    issuer: string;
-    sessionKey: string;
-    webId: string;
+  authorization: SolidAuthorization;
+  credentialType: string;
+  idClaims: SolidClaim;
+  idp: string;
+  issuer: string;
+  sessionKey: string;
+  webId: string;
 }
 
-type Menu = {
-    label: string,
-    url: string
+export type MenuItemLink = {
+  label: string,
+  url: string
 }
-type HeaderOptions = {
-    logo?: string,
-    menuList?: Menu[]
+
+export type MenuItemButton = {
+  label: string,
+  onclick: () => {}
 }
-export async function initHeader (store: IndexedFormula, options: HeaderOptions) {
+
+export type MenuItems = MenuItemLink | MenuItemButton
+
+/*
+HeaderOptions allow for customizing the logo and menu list.  If a logo is not provided the default
+    is solid. Menulist will always show a link to logout and to the users profile.
+ */
+export type HeaderOptions = {
+  logo?: string,
+  menuList?: MenuItems[]
+}
+
+/**
+ * Initialize header component, the header object returned depends on whether the user is authenticated.
+ * @param store the data store
+ * @param options allow the header to be customized with a personalized logo and a menu list of links or buttons.
+ * @returns a header for an authenticated user with menu items given or a login screen
+ */
+export async function initHeader (store: IndexedFormula, options?: HeaderOptions) {
   const header = document.getElementById('PageHeader')
   if (!header) {
     return
@@ -59,75 +80,106 @@ export async function initHeader (store: IndexedFormula, options: HeaderOptions)
   const pod = getPod()
   solidAuthClient.trackSession(rebuildHeader(header, store, pod, options))
 }
-
-function rebuildHeader (header: HTMLElement, store: IndexedFormula, pod: NamedNode, options: HeaderOptions) {
+/**
+ * @ignore exporting this only for the unit test
+ */
+export function rebuildHeader (header: HTMLElement, store: IndexedFormula, pod: NamedNode, options?: HeaderOptions) {
   return async (session: SolidSession | null) => {
     const user = session ? sym(session.webId) : null
     header.innerHTML = ''
     header.appendChild(await createBanner(store, pod, user, options))
   }
 }
-
-async function createBanner (store: IndexedFormula, pod: NamedNode, user: NamedNode | null, options: HeaderOptions): Promise<HTMLElement> {
+/**
+ * @ignore exporting this only for the unit test
+ */
+export async function createBanner (store: IndexedFormula, pod: NamedNode, user: NamedNode | null, options?: HeaderOptions): Promise<HTMLElement> {
   const podLink = document.createElement('a')
   podLink.href = pod.uri
-  podLink.classList.add('header-banner__link')
-  podLink.innerHTML = icon
+  addStyleClassToElement(podLink, ['header-banner__link'])
+  const image = document.createElement('img')
+  if (options) {
+    image.src = options.logo ? options.logo : 'https://solidproject.org/assets/img/solid-emblem.svg'
+  }
+  addStyleClassToElement(image, ['header-banner__icon'])
+  podLink.appendChild(image)
 
   const menu = user
     ? await createUserMenu(store, user, options)
     : createLoginSignUpButtons()
 
   const banner = document.createElement('div')
-  banner.classList.add('header-banner')
+  addStyleClassToElement(banner, ['header-banner'])
   banner.appendChild(podLink)
   banner.appendChild(menu)
 
   return banner
 }
-
-function createLoginSignUpButtons () {
+/**
+ * @ignore exporting this only for the unit test
+ */
+export function createLoginSignUpButtons () {
   const profileLoginButtonPre = document.createElement('div')
-  profileLoginButtonPre.classList.add('header-banner__login')
+  addStyleClassToElement(profileLoginButtonPre, ['header-banner__login'])
   profileLoginButtonPre.appendChild(loginStatusBox(document, null, {}))
   return profileLoginButtonPre
 }
-
-function createUserMenuButton (label: string, onClick: EventListenerOrEventListenerObject): HTMLElement {
+/**
+ * @ignore exporting this only for the unit test
+ */
+export function createUserMenuButton (label: string, onClick: EventListenerOrEventListenerObject): HTMLElement {
   const button = document.createElement('button')
-  button.classList.add('header-user-menu__button')
+  addStyleClassToElement(button, ['header-user-menu__button'])
   button.addEventListener('click', onClick)
   button.innerText = label
   return button
 }
-
-function createUserMenuLink (label: string, href: string): HTMLElement {
+/**
+ * @ignore exporting this only for the unit test
+ */
+export function createUserMenuLink (label: string, href: string): HTMLElement {
   const link = document.createElement('a')
-  link.classList.add('header-user-menu__link')
+  addStyleClassToElement(link, ['header-user-menu__link'])
   link.href = href
   link.innerText = label
   return link
 }
 
-async function createUserMenu (store: IndexedFormula, user: NamedNode, options: HeaderOptions): Promise<HTMLElement> {
+/**
+ * @ignore exporting this only for the unit test
+ */
+export async function createUserMenu (store: IndexedFormula, user: NamedNode, options?: HeaderOptions): Promise<HTMLElement> {
   const fetcher = (<any>store).fetcher
   if (fetcher) {
     // Making sure that Profile is loaded before building menu
     await fetcher.load(user)
   }
   const loggedInMenuList = document.createElement('ul')
-  loggedInMenuList.classList.add('header-user-menu__list')
+  addStyleClassToElement(loggedInMenuList, ['header-user-menu__list'])
   loggedInMenuList.appendChild(createUserMenuItem(createUserMenuLink('Show your profile', user.uri)))
+  if (options) {
+    if (options.menuList) {
+      options.menuList.map(function (menuItem) {
+        const menuItemType: string = (menuItem as MenuItemLink).url ? 'url' : 'onclick'
+        if (menuItemType === 'url') {
+          loggedInMenuList.appendChild(createUserMenuItem(createUserMenuLink(menuItem.label, menuItem[menuItemType])))
+        } else {
+          loggedInMenuList.appendChild(createUserMenuItem(createUserMenuButton(menuItem.label, menuItem[menuItemType])))
+        }
+      })
+    }
+  }
 
   loggedInMenuList.appendChild(createUserMenuItem(createUserMenuButton('Log out', () => solidAuthClient.logout())))
 
   const loggedInMenu = document.createElement('nav')
-  loggedInMenu.classList.add('header-user-menu__navigation-menu')
+
+  addStyleClassToElement(loggedInMenu, ['header-user-menu__navigation-menu'])
   loggedInMenu.setAttribute('aria-hidden', 'true')
   loggedInMenu.appendChild(loggedInMenuList)
 
   const loggedInMenuTrigger = document.createElement('button')
-  loggedInMenuTrigger.classList.add('header-user-menu__trigger')
+  addStyleClassToElement(loggedInMenuTrigger, ['header-user-menu__trigger'])
   loggedInMenuTrigger.type = 'button'
   const profileImg = getProfileImg(store, user)
   if (typeof profileImg === 'string') {
@@ -137,7 +189,8 @@ async function createUserMenu (store: IndexedFormula, user: NamedNode, options: 
   }
 
   const loggedInMenuContainer = document.createElement('div')
-  loggedInMenuContainer.classList.add('header-banner__user-menu', 'header-user-menu')
+  addStyleClassToElement(loggedInMenuContainer, ['header-banner__user-menu'])
+  addStyleClassToElement(loggedInMenuContainer, ['header-user-menu'])
   loggedInMenuContainer.appendChild(loggedInMenuTrigger)
   loggedInMenuContainer.appendChild(loggedInMenu)
 
@@ -155,14 +208,19 @@ async function createUserMenu (store: IndexedFormula, user: NamedNode, options: 
   return loggedInMenuContainer
 }
 
-function createUserMenuItem (child: HTMLElement): HTMLElement {
+/**
+ * @ignore exporting this only for the unit test
+ */
+export function createUserMenuItem (child: HTMLElement): HTMLElement {
   const menuProfileItem = document.createElement('li')
-  menuProfileItem.classList.add('header-user-menu__list-item')
+  addStyleClassToElement(menuProfileItem, ['header-user-menu__list-item'])
   menuProfileItem.appendChild(child)
   return menuProfileItem
 }
-
-function getProfileImg (store: IndexedFormula, user: NamedNode): string | HTMLElement {
+/**
+ * @ignore exporting this only for the unit test
+ */
+export function getProfileImg (store: IndexedFormula, user: NamedNode): string | HTMLElement {
   const profileUrl = null
   try {
     const profileUrl = widgets.findImage(user)
@@ -174,11 +232,14 @@ function getProfileImg (store: IndexedFormula, user: NamedNode): string | HTMLEl
   }
 
   const profileImage = document.createElement('div')
-  profileImage.classList.add('header-user-menu__photo')
+  addStyleClassToElement(profileImage, ['header-user-menu__photo'])
   profileImage.style.backgroundImage = `url("${profileUrl}")`
   return profileImage
 }
 
+/**
+ * @internal
+ */
 function toggleMenu (event: Event, trigger: HTMLButtonElement, menu: HTMLElement): void {
   const isExpanded = trigger.getAttribute('aria-expanded') === 'true'
   const expand = event.type === 'mouseover'
