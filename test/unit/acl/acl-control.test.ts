@@ -56,7 +56,7 @@ describe('preventBrowserDropEvents', () => {
 
   describe('handleDrop', () => {
     beforeEach(() => {
-      setGlobalWindow(window)
+      setGlobalWindow(window as unknown as Window)
       event.dataTransfer = { files: [{}] }
       window.confirm = jest.fn(() => false)
       handleDrop(event)

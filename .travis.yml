@@ -13,12 +13,19 @@ script:
 before_deploy:
   - node ./travis/bumpversion.js
 deploy:
-  provider: npm
-  # Do not throw away the updated package.json we generated in `before_deploy`:
-  skip_cleanup: true
-  email: '$NPM_EMAIL'
-  api_key: '$NPM_TOKEN'
-  # Note: do not deploy on pull request, because $TRAVIS_BRANCH will be the target branch.
-  tag: '$TRAVIS_BRANCH'
-  on:
-    all_branches: true
+  - provider: npm
+    # Do not throw away the updated package.json we generated in `before_deploy`:
+    skip_cleanup: true
+    email: '$NPM_EMAIL'
+    api_key: '$NPM_TOKEN'
+    # Note: do not deploy on pull request, because $TRAVIS_BRANCH will be the target branch.
+    tag: '$TRAVIS_BRANCH'
+    on:
+      all_branches: true
+  - provider: pages
+    skip_cleanup: true
+    github_token: $GITHUB_TOKEN
+    keep_history: true
+    target_branch: gh-pages
+    on:
+      branch: master

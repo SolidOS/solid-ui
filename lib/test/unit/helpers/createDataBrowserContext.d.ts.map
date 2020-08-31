@@ -1,1 +1,0 @@
-{"version":3,"file":"createDataBrowserContext.d.ts","sourceRoot":"","sources":["../../../../test/unit/helpers/createDataBrowserContext.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,kBAAkB,EAAE,SAAS,EAAE,MAAM,eAAe,CAAA;AAE7D,wBAAgB,wBAAwB,CACtC,GAAG,EAAE,YAAY,EACjB,KAAK,EAAE,SAAS,GACf,kBAAkB,CAepB"}
