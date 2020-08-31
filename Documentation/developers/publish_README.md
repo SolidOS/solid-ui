@@ -1,4 +1,4 @@
-To publish the icons, examples, etc to https://solid.github.io/solid-ui/ do the following:
+To publish the icons, examples, storybook, etc to https://solid.github.io/solid-ui/ do the following:
 ```sh
 git fetch origin
 git checkout gh-pages

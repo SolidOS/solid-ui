@@ -6,3 +6,4 @@ src/versionInfo.ts
 .vscode
 coverage
 Documentation/api
+examples/storybook
