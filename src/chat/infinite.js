@@ -89,8 +89,56 @@ function desktopNotification (str) {
 }
 
 // HELPER CODE FOR MENTION - WILL NEED TO MOVE
-// function pasteText({replacementText, cursorContext, activeQuery}: )
+function pasteText (dom, { replacementText, cursorContext, activeQuery }) {
+  const lastIndex = cursorContext.textBeforeCursor.lastIndexOf(activeQuery)
+  cursorContext.textNode.textContent = cursorContext.textNodeContent.substring(0, lastIndex) + replacementText + cursorContext.textAfterCursor
 
+  const selection = dom.getSelection()
+  if (!selection) return
+
+  // put cursor at the end of the replaced text
+  const range = dom.createRange(dom)
+  range.setStart(cursorContext.textNode, lastIndex + replacementText.length)
+  range.setEnd(cursorContext.textNode, lastIndex + replacementText.length)
+  range.collapse(true)
+  selection.removeAllRanges()
+  selection.addRange(range)
+}
+function getCursorContext (dom) {
+  let cursorTextNodeAndParent = getTextNodeAndParent(dom)
+  if (!cursorTextNodeAndParent) return null
+
+  cursorTextNodeAndParent.textNodeParent.normalize()
+  cursorTextNodeAndParent = getTextNodeAndParent(dom)
+  if (!cursorTextNodeAndParent) return null
+
+  const { textNode, textNodeParent, selection } = cursorTextNodeAndParent
+
+  const range = selection.getRangeAt(0)
+  const textNodeContent = textNode.textContent
+  const cursorCharacterPosition = range.startOffset
+  if (!(cursorCharacterPosition >= 0)) return null
+  return {
+    textNode,
+    textNodeParent,
+    textNodeContent,
+    cursorCharacterPosition,
+    textBeforeCursor: textNodeContent.substring(0, cursorCharacterPosition),
+    textAfterCursor: textNodeContent.substr(cursorCharacterPosition)
+  }
+}
+function getTextNodeAndParent (dom) {
+  const selection = dom.getSelection()
+  if (!selection) return null
+
+  const textNode = selection.anchorNode
+  if (!textNode || textNode.nodeType !== Node.TEXT_NODE) return null
+  const textNodeParent = textNode.parentNode
+  if (!textNodeParent) return null
+
+  return { textNode, textNodeParent, selection }
+}
+// ************ END MENTION CODE
 /**
  * Common code for a chat (discussion area of messages about something)
  * This version runs over a series of files for different time periods
@@ -166,6 +214,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
         debug.log('parp ' + name[0])
         return [{ uri: parp.value, id: name[0] }]
       })
+    parps.push({ uri: 'Testing', id: 'Tina' })
 
     async function sendMessage (text) {
       var now = new Date()
@@ -301,17 +350,19 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
           if (e.shiftKey) {
             if (e.keyCode === 50) {
               debug.log('testing @ key')
-              let mentionOption = null
-              const selection = dom.createElement('select')
-              parps.map(function (parp) {
-                mentionOption = dom.createElement('option')
-                mentionOption.appendChild(dom.createTextNode(parp.id))
-                mentionOption.value = parp.id
-                selection.appendChild(mentionOption)
+              const mentionOption = null
+              const selection = dom.createElement('span')
+              selection.className = 'mymention'
+              const options = parps.map(function (parp) {
+                selection.setAttribute('data-mention-id', 1)
+                selection.appendChild(dom.createTextNode('@' + parp.id))
               })
+
               // field.appendChild(selection)
               const test = dom.getSelection()
-              window.alert(field.value)
+              const test2 = getCursorContext(dom)
+              field.autocomplete = 'on'
+              field.focus()
               field.appendChild(selection)
             }
           }
