@@ -19,8 +19,7 @@
  * * `statusArea`      A DOM element (opt) progress stuff can be displayed, or error messages
  * @packageDocumentation
  */
-import SolidTls from 'solid-auth-tls'
-import * as $rdf from 'rdflib'
+import Signup from './signup'
 import widgets from '../widgets'
 import solidAuthClient from 'solid-auth-client'
 import ns from '../ns.js'
@@ -30,6 +29,10 @@ import { alert } from '../log'
 import { AppDetails, AuthenticationContext } from './types'
 import { PaneDefinition } from 'pane-registry'
 import * as debug from '../debug'
+import { graph, namedNode, NamedNode, Namespace, serialize, st, Statement, sym, UpdateManager } from 'rdflib'
+import { textInputStyle, buttonStyle, commentStyle } from '../style'
+// eslint-disable-next-line camelcase
+import { Quad_Object } from 'rdflib/lib/tf-types'
 
 export { solidAuthClient }
 
@@ -38,7 +41,7 @@ export { solidAuthClient }
 /**
  * Look for and load the User who has control over it
  */
-export function findOriginOwner (doc: $rdf.NamedNode | string): string | boolean {
+export function findOriginOwner (doc: NamedNode | string): string | boolean {
   const uri = (typeof doc === 'string') ? doc : doc.uri
   const i = uri.indexOf('://')
   if (i < 0) return false
@@ -56,14 +59,14 @@ export function findOriginOwner (doc: $rdf.NamedNode | string): string | boolean
  * @returns Returns the WebID, after setting it
  */
 export function saveUser (
-  webId: $rdf.NamedNode | string | null,
+  webId: NamedNode | string | null,
   context?: AuthenticationContext
-): $rdf.NamedNode | null {
+): NamedNode | null {
   // @@ TODO Remove the need for having context as output argument
   let webIdUri: string
   if (webId) {
     webIdUri = (typeof webId === 'string') ? webId : webId.uri
-    const me = $rdf.namedNode(webIdUri)
+    const me = namedNode(webIdUri)
     if (context) {
       context.me = me
     }
@@ -76,7 +79,7 @@ export function saveUser (
  * Wrapper around [[offlineTestID]]
  * @returns {NamedNode|null}
  */
-export function defaultTestUser (): $rdf.NamedNode | null {
+export function defaultTestUser (): NamedNode | null {
   // Check for offline override
   const offlineId = offlineTestID()
 
@@ -92,13 +95,13 @@ export function defaultTestUser (): $rdf.NamedNode | null {
  *
  * @returns Named Node or null
  */
-export function currentUser (): $rdf.NamedNode | null {
+export function currentUser (): NamedNode | null {
   const str = localStorage['solid-auth-client']
   if (str) {
     const da = JSON.parse(str)
     if (da.session && da.session.webId) {
       // @@ TODO check has not expired
-      return $rdf.sym(da.session.webId)
+      return sym(da.session.webId)
     }
   }
   return offlineTestID() // null unless testing
@@ -122,7 +125,7 @@ export function logIn (context: AuthenticationContext): Promise<AuthenticationCo
     checkUser().then(webId => {
       // Already logged in?
       if (webId) {
-        context.me = $rdf.sym(webId as string)
+        context.me = sym(webId as string)
         debug.log(`logIn: Already logged in as ${context.me}`)
         return resolve(context)
       }
@@ -311,7 +314,7 @@ async function loadOneTypeIndex (context: AuthenticationContext, isPublic: boole
 
 async function loadIndex (
   context: AuthenticationContext,
-  predicate: $rdf.NamedNode,
+  predicate: NamedNode,
   isPublic: boolean
 ): Promise<AuthenticationContext> {
   // Loading preferences is more than loading profile
@@ -398,14 +401,14 @@ async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boo
     context.index[visibility] = context.index[visibility] || []
     let newIndex
     if (context.index[visibility].length === 0) {
-      newIndex = $rdf.sym(`${relevant.dir().uri + visibility}TypeIndex.ttl`)
+      newIndex = sym(`${relevant.dir().uri + visibility}TypeIndex.ttl`)
       debug.log(`Linking to new fresh type index ${newIndex}`)
       if (!confirm(`OK to create a new empty index file at ${newIndex}, overwriting anything that is now there?`)) {
         throw new Error('cancelled by user')
       }
       debug.log(`Linking to new fresh type index ${newIndex}`)
       const addMe = [
-        $rdf.st(context.me, ns.solid(`${visibility}TypeIndex`), newIndex, relevant)
+        st(context.me, ns.solid(`${visibility}TypeIndex`), newIndex, relevant)
       ]
       try {
         await updatePromise(kb.updater, [], addMe)
@@ -433,9 +436,10 @@ async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boo
     await loadOneTypeIndex(context, isPublic)
     if (context.index) {
       debug.log(
-        `ensureOneTypeIndex: Type index exists already ${isPublic}`
+        `ensureOneTypeIndex: Type index exists already ${isPublic
           ? context.index.public[0]
           : context.index.private[0]
+        }`
       )
     }
     return context
@@ -453,7 +457,7 @@ async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boo
  */
 export async function findAppInstances (
   context: AuthenticationContext,
-  theClass: $rdf.NamedNode,
+  theClass: NamedNode,
   isPublic: boolean
 ): Promise<AuthenticationContext> {
   const fetcher = kb.fetcher
@@ -469,7 +473,7 @@ export async function findAppInstances (
     await loadOneTypeIndex(context, isPublic)
   } catch (err) {
   }
-  const index = context.index as { [key: string]: Array<$rdf.NamedNode> }
+  const index = context.index as { [key: string]: Array<NamedNode> }
   const thisIndex = index[visibility]
   const registrations = thisIndex
     .map(ix => kb.each(undefined, ns.solid('forClass'), theClass, ix))
@@ -481,11 +485,14 @@ export async function findAppInstances (
     .map(reg => kb.each(reg, ns.solid('instanceContainer')))
     .flat()
 
+  function unique (arr: NamedNode[]): NamedNode[] {
+    return Array.from(new Set(arr))
+  }
   context.instances = context.instances || []
-  context.instances = context.instances.concat(instances)
+  context.instances = unique(context.instances.concat(instances))
 
   context.containers = context.containers || []
-  context.containers = context.containers.concat(containers)
+  context.containers = unique(context.containers.concat(containers))
   if (!containers.length) {
     return context
   }
@@ -510,9 +517,9 @@ export async function findAppInstances (
 
 // @@@@ use the one in rdflib.js when it is available and delete this
 function updatePromise (
-  updater: $rdf.UpdateManager,
-  del: Array<$rdf.Statement>,
-  ins: Array<$rdf.Statement> = []
+  updater: UpdateManager,
+  del: Array<Statement>,
+  ins: Array<Statement> = []
 ): Promise<void> {
   return new Promise(function (resolve, reject) {
     updater.update(del, ins, function (uri, ok, errorBody) {
@@ -530,8 +537,8 @@ function updatePromise (
  */
 export async function registerInTypeIndex (
   context: AuthenticationContext,
-  instance: $rdf.NamedNode,
-  theClass: $rdf.NamedNode,
+  instance: NamedNode,
+  theClass: NamedNode,
   isPublic: boolean
 ): Promise<AuthenticationContext> {
   await ensureOneTypeIndex(context, isPublic)
@@ -546,9 +553,9 @@ export async function registerInTypeIndex (
   const registration = widgets.newThing(index)
   const ins = [
     // See https://github.com/solid/solid/blob/master/proposals/data-discovery.md
-    $rdf.st(registration, ns.rdf('type'), ns.solid('TypeRegistration'), index),
-    $rdf.st(registration, ns.solid('forClass'), theClass, index),
-    $rdf.st(registration, ns.solid('instance'), instance, index)
+    st(registration, ns.rdf('type'), ns.solid('TypeRegistration'), index),
+    st(registration, ns.solid('forClass'), theClass, index),
+    st(registration, ns.solid('instance'), instance, index)
   ]
   try {
     await updatePromise(kb.updater, [], ins)
@@ -591,8 +598,8 @@ export function registrationControl (
           ? registrations[0]
           : widgets.newThing(index)
         return [
-          $rdf.st(reg, ns.solid('instance'), instance, index),
-          $rdf.st(reg, ns.solid('forClass'), theClass, index)
+          st(reg, ns.solid('instance'), instance, index),
+          st(reg, ns.solid('forClass'), theClass, index)
         ]
       }
 
@@ -658,6 +665,7 @@ export function registrationControl (
 export function registrationList (context: AuthenticationContext, options: {
   private?: boolean
   public?: boolean
+  type?: NamedNode
 }): Promise<AuthenticationContext> {
   const dom = context.dom as HTMLDocument
   const div = context.div as HTMLElement
@@ -670,7 +678,7 @@ export function registrationList (context: AuthenticationContext, options: {
     box.setAttribute('style', 'font-size: 120%; text-align: right; padding: 1em; border: solid #eee 0.5em;')
     const table = box.firstChild as HTMLElement
 
-    let ix: Array<$rdf.NamedNode> = []
+    let ix: Array<NamedNode> = []
     let sts = []
     const vs = ['private', 'public']
     vs.forEach(function (visibility) {
@@ -688,17 +696,14 @@ export function registrationList (context: AuthenticationContext, options: {
     })
 
     for (let i = 0; i < sts.length; i++) {
-      const statement: $rdf.Statement = sts[i]
+      const statement: Statement = sts[i]
+      if (options.type) { // now check  terms:forClass
+        if (!kb.holds(statement.subject, ns.solid('forClass'), options.type, statement.why)) {
+          continue // skip irrelevant ones
+        }
+      }
       // const cla = statement.subject
       const inst = statement.object
-      // if (false) {
-      //   const tr = table.appendChild(dom.createElement('tr'))
-      //   const anchor = tr.appendChild(dom.createElement('a'))
-      //   anchor.setAttribute('href', inst.uri)
-      //   anchor.textContent = utils.label(inst)
-      // } else {
-      // }
-
       table.appendChild(widgets.personTR(dom, ns.solid('instance'), inst, {
         deleteFunction: function (_x) {
           kb.updater.update([statement], [], function (uri, ok, errorBody) {
@@ -710,7 +715,7 @@ export function registrationList (context: AuthenticationContext, options: {
           })
         }
       }))
-    }
+    } // registrationList
 
     /*
        //const containers = kb.each(theClass, ns.solid('instanceContainer'));
@@ -742,13 +747,13 @@ export function registrationList (context: AuthenticationContext, options: {
  * @returns Resolves with aclDoc uri on successful write
  */
 export function setACLUserPublic (
-  docURI: $rdf.NamedNode,
-  me: $rdf.NamedNode,
+  docURI: string,
+  me: NamedNode,
   options: {
     defaultForNew?: boolean,
     public?: []
   }
-): Promise<$rdf.NamedNode> {
+): Promise<NamedNode> {
   const aclDoc = kb.any(
     kb.sym(docURI),
     kb.sym('http://www.iana.org/assignments/link-relations/acl')
@@ -786,7 +791,7 @@ export function setACLUserPublic (
  * @param docURI
  * @returns
  */
-function fetchACLRel (docURI: $rdf.NamedNode): Promise<$rdf.NamedNode> {
+function fetchACLRel (docURI: string): Promise<NamedNode> {
   const fetcher = kb.fetcher
 
   return fetcher.load(docURI).then(result => {
@@ -816,17 +821,17 @@ function fetchACLRel (docURI: $rdf.NamedNode): Promise<$rdf.NamedNode> {
  * @returns Serialized ACL
  */
 function genACLText (
-  docURI: $rdf.NamedNode,
-  me: $rdf.NamedNode,
-  aclURI: $rdf.NamedNode,
+  docURI: string,
+  me: NamedNode,
+  aclURI: string,
   options: {
     defaultForNew?: boolean,
     public?: []
   } = {}
-): string {
+): string | undefined {
   const optPublic = options.public || []
-  const g = $rdf.graph()
-  const auth = $rdf.Namespace('http://www.w3.org/ns/auth/acl#')
+  const g = graph()
+  const auth = Namespace('http://www.w3.org/ns/auth/acl#')
   let a = g.sym(`${aclURI}#a1`)
   const acl = g.sym(aclURI)
   const doc = g.sym(docURI)
@@ -850,16 +855,15 @@ function genACLText (
       g.add(a, auth('mode'), auth(optPublic[p]), acl) // Like 'Read' etc
     }
   }
-  // @@ TODO Remove casting of $rdf
-  return ($rdf as any).serialize(acl, g, aclURI, 'text/turtle')
+  return serialize(acl, g, aclURI)
 }
 
 /**
- * Returns `$rdf.sym($SolidTestEnvironment.username)` if
+ * Returns `sym($SolidTestEnvironment.username)` if
  * `$SolidTestEnvironment.username` is defined as a global
  * @returns {NamedNode|null}
  */
-export function offlineTestID (): $rdf.NamedNode | null {
+export function offlineTestID (): NamedNode | null {
   const { $SolidTestEnvironment }: any = window
   if (
     typeof $SolidTestEnvironment !== 'undefined' &&
@@ -867,7 +871,7 @@ export function offlineTestID (): $rdf.NamedNode | null {
   ) {
     // Test setup
     debug.log('Assuming the user is ' + $SolidTestEnvironment.username)
-    return $rdf.sym($SolidTestEnvironment.username)
+    return sym($SolidTestEnvironment.username)
   }
 
   if (
@@ -882,7 +886,7 @@ export function offlineTestID (): $rdf.NamedNode | null {
     /* me = kb.any(subject, ns.acl('owner')); // when testing on plane with no WebID
      */
     debug.log('Assuming user is ' + id)
-    return $rdf.sym(id)
+    return sym(id)
   }
   return null
 }
@@ -916,7 +920,7 @@ function signInOrSignUpBox (
   debug.log('widgets.signInOrSignUpBox')
   box.setUserCallback = setUserCallback
   box.setAttribute('class', magicClassName)
-  box.style = 'display:flex;'
+  ;(box as any).style = 'display:flex;' // @@ fix all typecasts like this
 
   // Sign in button with PopUP
   const signInPopUpButton = dom.createElement('input') // multi
@@ -961,7 +965,7 @@ function signInOrSignUpBox (
   signupButton.setAttribute('style', `${signInButtonStyle}background-color: #efe;`)
 
   signupButton.addEventListener('click', function (_event) {
-    const signupMgr = new SolidTls.Signup()
+    const signupMgr = new Signup()
     signupMgr.signup().then(function (uri) {
       debug.log('signInOrSignUpBox signed up ' + uri)
       setUserCallback(uri)
@@ -999,8 +1003,8 @@ function checkCurrentUser () {
  * @returns Resolves with webId uri, if no callback provided
  */
 export function checkUser<T> (
-  setUserCallback?: (me: $rdf.NamedNode | null) => T
-): Promise<$rdf.NamedNode | T> {
+  setUserCallback?: (me: NamedNode | null) => T
+): Promise<NamedNode | T> {
   // Check to see if already logged in / have the WebID
   const me = defaultTestUser()
   if (me) {
@@ -1058,7 +1062,7 @@ export function loginStatusBox (
 
     const uri = newidURI.uri || newidURI
     //    UI.preferences.set('me', uri)
-    me = $rdf.sym(uri)
+    me = sym(uri)
     box.refresh()
     if (listener) listener(me.uri)
   }
@@ -1107,7 +1111,7 @@ export function loginStatusBox (
     solidAuthClient.currentSession().then(
       session => {
         if (session && session.webId) {
-          me = $rdf.sym(session.webId)
+          me = sym(session.webId)
         } else {
           me = null
         }
@@ -1130,7 +1134,7 @@ export function loginStatusBox (
   if (solidAuthClient.trackSession) {
     solidAuthClient.trackSession(session => {
       if (session && session.webId) {
-        me = $rdf.sym(session.webId)
+        me = sym(session.webId)
       } else {
         me = null
       }
@@ -1199,35 +1203,42 @@ export function selectWorkspace (
   }
 
   function displayOptions (context) {
+    async function makeNewWorkspace (_event) {
+      const row = table.appendChild(dom.createElement('tr'))
+      const cell = row.appendChild(dom.createElement('td'))
+      cell.setAttribute('colspan', '3')
+      cell.style.padding = '0.5em'
+      const newBase = encodeURI(await widgets.askName(dom, kb, cell, ns.solid('URL'), ns.space('Workspace'), 'Workspace'))
+      const newWs = widgets.newThing(context.preferencesFile)
+      const newData = [st(context.me, ns.space('workspace'), newWs, context.preferencesFile),
+        // eslint-disable-next-line camelcase
+        st(newWs, ns.space('uriPrefix'), newBase as unknown as Quad_Object, context.preferencesFile)]
+      await kb.updater.update([], newData)
+      // @@ now refresh list of workspaces
+    }
+
     // const status = ''
     const id = context.me
     const preferencesFile = context.preferencesFile
     let newBase = null
 
     // A workspace specifically defined in the private preference file:
-    let w = kb
-      .statementsMatching(
-        id,
-        ns.space('workspace'), // Only trust preference file here
-        undefined,
-        preferencesFile
-      )
-      .map(function (st) {
-        return st.object
-      })
+    let w = kb.each(id, ns.space('workspace'), undefined, preferencesFile) // Only trust preference file here
 
     // A workspace in a storage in the public profile:
     const storages = kb.each(id, ns.space('storage')) // @@ No provenance requirement at the moment
-    storages.map(function (s) {
-      w = w.concat(kb.each(s, ns.ldp('contains')))
-    })
+    if (w.length === 0 && storages) {
+      say(`You don't seem to have any workspaces. You have ${storages.length} storage spaces.`)
+      storages.map(function (s) {
+        w = w.concat(kb.each(s, ns.ldp('contains')))
+      }).filter(file => ['public', 'private'].includes(file.id().toLowerCase()))
+    }
 
     if (w.length === 1) {
       say(`Workspace used: ${w[0].uri}`) // @@ allow user to see URI
       newBase = figureOutBase(w[0])
       // callbackWS(w[0], newBase)
     } else if (w.length === 0) {
-      say(`You don't seem to have any workspaces. You have ${storages.length} storage spaces.`)
     }
 
     // Prompt for ws selection or creation
@@ -1244,10 +1255,14 @@ export function selectWorkspace (
     box.appendChild(dom.createElement('hr')) // @@
 
     const p = box.appendChild(dom.createElement('p'))
-    p.textContent = `Where would you like to store the data for the ${noun}?  Give the URL of the directory where you would like the data stored.`
+    ;(p as any).style = commentStyle
+    p.textContent = `Where would you like to store the data for the ${noun}?
+    Give the URL of the folder where you would like the data stored.
+    It can be anywhere in solid world - this URI is just an idea.`
     // @@ TODO Remove the need to cast baseField to any
     const baseField: any = box.appendChild(dom.createElement('input'))
     baseField.setAttribute('type', 'text')
+    ;(baseField as any).style = textInputStyle
     baseField.size = 80 // really a string
     baseField.label = 'base URL'
     baseField.autocomplete = 'on'
@@ -1261,9 +1276,10 @@ export function selectWorkspace (
     box.appendChild(dom.createElement('br')) // @@
 
     const button = box.appendChild(dom.createElement('button'))
+    ;(button as any).style = buttonStyle
     button.textContent = `Start new ${noun} at this URI`
     button.addEventListener('click', function (_event) {
-      let newBase = baseField.value
+      let newBase = baseField.value.replace(' ', '%20') // do not re-encode in general, as % encodings may exist
       if (newBase.slice(-1) !== '/') {
         newBase += '/'
       }
@@ -1289,16 +1305,14 @@ export function selectWorkspace (
       tr = dom.createElement('tr')
       if (i === 0) {
         col1 = dom.createElement('td')
-        col1.setAttribute('rowspan', `${w.length}1`)
+        col1.setAttribute('rowspan', `${w.length}`)
         col1.textContent = 'Choose a workspace for this:'
         col1.setAttribute('style', 'vertical-align:middle;')
         tr.appendChild(col1)
       }
       col2 = dom.createElement('td')
-      style = kb.any(ws, ns.ui('style'))
-      if (style) {
-        style = style.value
-      } else {
+      style = kb.anyValue(ws, ns.ui('style'))
+      if (!style) {
         // Otherwise make up arbitrary colour
         const hash = function (x) {
           return x.split('').reduce(function (a, b) {
@@ -1351,7 +1365,7 @@ export function selectWorkspace (
     col2 = dom.createElement('td')
     col2.setAttribute('style', cellStyle)
     col2.textContent = '+ Make a new workspace'
-    // addMyListener(col2, 'Set up a new workspace', '') // @@ TBD
+    col2.addEventListener('click', makeNewWorkspace)
     trLast.appendChild(col2)
     table.appendChild(trLast)
   } // displayOptions
@@ -1359,7 +1373,7 @@ export function selectWorkspace (
   logInLoadPreferences(context) // kick off async operation
     .then(displayOptions)
     .catch(err => {
-      box.appendChild(widgets.errorMessageBlock(err))
+      box.appendChild(widgets.errorMessageBlock(context.dom, err))
     })
 
   return box // return the box element, while login proceeds
@@ -1387,7 +1401,7 @@ export function newAppInstance (
   callback: (workspace: string | null, newBase: string) => void
 ): HTMLElement {
   const gotWS = function (ws, base) {
-    // $rdf.log.debug("newAppInstance: Selected workspace = " + (ws? ws.uri : 'none'))
+    // log.debug("newAppInstance: Selected workspace = " + (ws? ws.uri : 'none'))
     callback(ws, base)
   }
   const div = dom.createElement('div')
@@ -1406,7 +1420,7 @@ export function newAppInstance (
  * Retrieves whether the currently logged in user is a power user
  * and/or a developer
  */
-export async function getUserRoles (): Promise<Array<$rdf.NamedNode>> {
+export async function getUserRoles (): Promise<Array<NamedNode>> {
   try {
     const {
       me,
@@ -1431,7 +1445,7 @@ export async function filterAvailablePanes (panes: Array<PaneDefinition>): Promi
   return panes.filter(pane => isMatchingAudience(pane, userRoles))
 }
 
-function isMatchingAudience (pane: PaneDefinition, userRoles: Array<$rdf.NamedNode>): boolean {
+function isMatchingAudience (pane: PaneDefinition, userRoles: Array<NamedNode>): boolean {
   const audience = pane.audience || []
   return audience.reduce(
     (isMatch, audienceRole) => isMatch && !!userRoles.find(role => role.equals(audienceRole)),

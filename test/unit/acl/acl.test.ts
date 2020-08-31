@@ -25,7 +25,6 @@ import { sym } from 'rdflib'
 import { createLiveStore } from '../helpers/createLiveStore'
 import { clearStore } from '../helpers/clearStore'
 import globalStore from '../../../src/store'
-import ns from '../../../src/ns'
 import {
   ACL_LINK,
   DEFAULT_CONTAINER_ACL,

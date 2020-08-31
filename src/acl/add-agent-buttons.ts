@@ -9,7 +9,7 @@ import widgets from '../widgets'
 import ns from '../ns'
 import { logInLoadProfile } from '../authn/authn'
 import utils from '../utils'
-import { NamedNode } from 'rdflib'
+import { NamedNode, Store } from 'rdflib'
 import { AuthenticationContext } from '../authn/types'
 import * as debug from '../debug'
 
@@ -185,15 +185,15 @@ export class AddAgentButtons {
 
   private async renderAppsTable (eventContext: AuthenticationContext): Promise<string> {
     await logInLoadProfile(eventContext)
-    const trustedApps = this.groupList.store.each(eventContext.me, ns.acl('trustedApp'))
-    const trustedOrigins = trustedApps.flatMap(app => this.groupList.store.each(app, ns.acl('origin')))
+    const trustedApps = (this.groupList.store as Store).each(eventContext.me, ns.acl('trustedApp')) as Array<NamedNode> // @@ TODO fix as
+    const trustedOrigins = trustedApps.flatMap(app => (this.groupList.store as Store).each(app, ns.acl('origin'))) // @@ TODO fix as
 
     this.barElement.appendChild(this.groupList.controller.dom.createElement('p')).textContent = `You have ${trustedOrigins.length} selected web apps.`
     return new Promise((resolve, reject) => {
       const appsTable = this.barElement.appendChild(this.groupList.controller.dom.createElement('table'))
       appsTable.classList.add(this.groupList.controller.classes.trustedAppAddApplicationsTable)
       trustedApps.forEach(app => {
-        const origin = this.groupList.store.any(app, ns.acl('origin'))
+        const origin = (this.groupList.store as Store).any(app, ns.acl('origin')) // @@ TODO fix as
         if (!origin) {
           reject(new Error(`Unable to pick app: ${app.value}`))
         }

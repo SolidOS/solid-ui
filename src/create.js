@@ -130,7 +130,7 @@ function newThingUI (createContext, dataBrowserContext, thePanes) {
                       newPaneOptions.folder.doc()
                     ) // Ping the patch system?
                   }
-                  if (newPaneOptions.refreshTarget) {
+                  if (newPaneOptions.refreshTarget && newPaneOptions.refreshTarget.refresh) {
                     newPaneOptions.refreshTarget.refresh() // Refresh the cntaining display
                   }
                   // selectUI.parentNode.removeChild(selectUI) It removes itself
@@ -167,8 +167,9 @@ function newThingUI (createContext, dataBrowserContext, thePanes) {
       } // callbackWS
 
       var pa = options.pane
-      options.appPathSegment = 'edu.mit.solid.pane.' + pa.name
+      // options.appPathSegment = pa.name // was 'edu.mit.solid.pane.'
       options.noun = pa.mintClass ? UI.utils.label(pa.mintClass) : pa.name
+      options.appPathSegment = options.noun.slice(0, 1).toUpperCase() + options.noun.slice(1)
 
       if (!options.folder) {
         // No folder given? Ask user for full URI

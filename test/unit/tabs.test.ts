@@ -34,8 +34,7 @@ describe('tabWidget', () => {
     beforeAll(() => {
       const predicate = meeting('toolList')
       store.add(subject, predicate, new Collection([item1, item2]), subject.doc())
-      // @@ TODO Remove need for casting lit (fix typings in rdflib)
-      store.add(item1, rdfs('label'), (lit as any)('Item 1'), subject.doc())
+      store.add(item1, rdfs('label'), lit('Item 1'), subject.doc())
 
       tabWidgetElement = tabs.tabWidget({
         dom,

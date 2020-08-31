@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='UTF-8'>
+    <title>solid-ui UI.widgets.draganddrop examples page</title>
+    <script type="text/javascript" src="../../lib/webpack-bundle.js"></script>
+    <script>
+        const $ = document.querySelector.bind(document)
+        function showSource(widgetName) {
+            $(`#viewSource-${widgetName}`).innerHTML = $(`#script-${widgetName}`).innerText
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;")
+        }
+    </script>
+</head>
+<body>
+<h2 id="makeDropTarget"><a href="#makeDropTarget">DragAndDrop</a></h2>
+<p><strong>DragAndDrop</strong> has three functions that can be used to handle dragging and dropping of uris, files, and
+    images.</p>
+
+<p><strong>makeDraggable</strong> is used to make an element Draggable. Along with the
+HTML Element, it is also necessary to pass an object with a uri. This is used to set the data on the
+EventListener for 'dragstart'. </p>
+
+<p><strong>makeDropTarget</strong> is used to make an element enabled as a drop target. Along with the HTML Element, it is also
+necessary to pass in two callback functions; one to handle draggable uris and the other to handle draggable
+    files and images.</p>
+
+<p><strong>uploadFiles</strong> is used to process the files that a user is uploading.</p>
+
+
+<p id="drag" draggable="true"><strong>Drag me to the target! </strong> </p>
+
+<div id="target">
+    <p>Drag the message above or drag any file or image and drop it on this target to see it work. </p>
+    <img src="../../src/icons/noun_748003.svg" width="200" height="200">
+</div>
+
+<script id="script-makeDropTarget">
+    const droppedURIHandler = function() {
+        return alert('URI was dropped')
+    }
+    const droppedFileHandler = function () {
+        return alert('File was dropped')
+        /* Example from meeting panes for using uploadFiles in the droppedFileHandler function
+           which is passed to the makeDropTarget function.
+           ***************
+        function (files) {
+        UI.widgets.uploadFiles(kb.fetcher, files, meeting.dir().uri + 'Files', meeting.dir().uri + 'Pictures',
+            function (theFile, _destURI) {
+            if (theFile.type.startsWith('image/')) {
+                makePicturesFolder('Files') // if necessary
+            } else {
+                makeMaterialsFolder('Pictures')
+            }
+            }) */
+    }
+    const target = document.querySelector('#target')
+    const dragElement = document.querySelector('#drag')
+    const uri =  new UI.rdf.NamedNode('https://exampleuser.inrupt.net')
+    UI.widgets.makeDropTarget(target, droppedURIHandler, droppedFileHandler)
+    UI.widgets.makeDraggable(dragElement,uri)
+</script>
+<pre id="viewSource-makeDropTarget"></pre>
+<script>
+    showSource('makeDropTarget')
+</script>
+</body>
+</html>

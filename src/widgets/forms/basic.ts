@@ -1,4 +1,4 @@
-import { st, Literal, Node, NamedNode } from 'rdflib'
+import { st, BlankNode, Literal, Node, NamedNode, Variable } from 'rdflib'
 import store from '../../store'
 import ns from '../../ns'
 import { textInputStyle } from '../../style'
@@ -42,7 +42,7 @@ export function fieldLabel (dom: HTMLDocument, property: NamedNode | undefined, 
  *
  * @internal exporting this only for unit tests
  */
-export function fieldStore (subject: Node, predicate: Node, def: Node | undefined): Node | undefined {
+export function fieldStore (subject: NamedNode | BlankNode | Variable, predicate: NamedNode | Variable, def: NamedNode | undefined): NamedNode | undefined {
   const sts = store.statementsMatching(subject, predicate)
   if (sts.length === 0) return def // can used default as no data yet
   if (
@@ -76,9 +76,9 @@ export function basicField (
   dom: HTMLDocument,
   container: HTMLElement | undefined,
   already,
-  subject: Node,
-  form: Node,
-  doc: Node | undefined,
+  subject: NamedNode | BlankNode | Variable,
+  form: NamedNode,
+  doc: NamedNode | undefined,
   callbackFunction: (ok: boolean, errorMessage: string) => void
 ): HTMLElement {
   const kb = store
@@ -183,7 +183,7 @@ export function basicField (
       let is = ds.map(statement => st(statement.subject, statement.predicate, result, statement.why)) // can include >1 doc
       if (is.length === 0) {
         // or none
-        is = [st(subject, property, result, doc as Node)]
+        is = [st(subject, property, result, doc)]
       }
 
       function updateMany (ds, is: { why: { uri: string } }[], callback) {
