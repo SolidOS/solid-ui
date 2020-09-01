@@ -10,6 +10,7 @@ install:
 script:
   # This includes build, lint, and jest:
   - npm test
+  - npm run doc
 before_deploy:
   - node ./travis/bumpversion.js
   - sh ./travis/unignore-pages.sh
