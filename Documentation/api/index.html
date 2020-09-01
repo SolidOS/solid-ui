@@ -1,0 +1,292 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>solid-ui</title>
+	<meta name="description" content="Documentation for solid-ui">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">solid-ui</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1>solid-ui</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#solid-ui" id="solid-ui" style="color: inherit; text-decoration: none;">
+					<h1>solid-ui</h1>
+				</a>
+				<p><a href="https://www.npmjs.com/package/solid-ui"><img src="https://img.shields.io/npm/v/solid-ui.svg" alt="NPM Package"></a></p>
+				<p>User Interface widgets and utilities for Solid</p>
+				<p>These are HTML5 widgets which connect to a solid store. Building blocks for solid-based apps.</p>
+				<a href="#getting-started" id="getting-started" style="color: inherit; text-decoration: none;">
+					<h2>Getting started</h2>
+				</a>
+				<a href="#in-npm-based-projects" id="in-npm-based-projects" style="color: inherit; text-decoration: none;">
+					<h3>In npm-based projects</h3>
+				</a>
+				<p>When including solid-ui in an npm-based project, you can use it with:</p>
+				<pre><code class="language-js">  <span class="hljs-keyword">import</span> { ns, rdf,  acl, aclControl, authn, create, dom, icons, log, matrix, media,
+  messageArea, infiniteMessageArea, pad, preferences, store, style, table, tabs, utils, widgets, versionInfo
+} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;solid-ui&#x27;</span>
+</code></pre>
+				<a href="#directly-in-a-webpage" id="directly-in-a-webpage" style="color: inherit; text-decoration: none;">
+					<h3>Directly in a webpage</h3>
+				</a>
+				<p>Clone this repo, and in the repo root run:</p>
+				<ul>
+					<li><code>npm install</code></li>
+					<li><code>npm run build</code></li>
+				</ul>
+				<p>This will generate a <code>lib/</code> folder containing, among other artifacts, <code>lib/webpack-bundle.js</code>.
+					Now run <code>npx serve</code> and go to <a href="http://localhost:5000/examples/">http://localhost:5000/examples/</a> with your browser to see some examples.
+					See the <a href="https://github.com/solid/solid-ui/tree/examples/examples">&#39;examples&#39; folder</a> for the
+				source code of those examples.</p>
+				<p>While viewing one of those examples, you can open the web console in your browser and for instance
+				try how you can create a button:</p>
+				<pre><code class="language-js"><span class="hljs-keyword">const</span> solidLogo = <span class="hljs-string">&#x27;https://solidproject.org/assets/img/solid-emblem.svg&#x27;</span>
+<span class="hljs-keyword">const</span> myButton = UI.widgets.button(<span class="hljs-built_in">document</span>, solidLogo, <span class="hljs-string">&#x27;test&#x27;</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">window</span>.alert(<span class="hljs-string">&#x27;clicked!&#x27;</span>))
+UI.widgets.clearElement(<span class="hljs-built_in">document</span>.body)
+<span class="hljs-built_in">document</span>.body.appendChild(myButton)</code></pre>
+				<p>Or a chat widget:</p>
+				<pre><code class="language-js"><span class="hljs-keyword">const</span> chatChannel = <span class="hljs-string">&#x27;https://example-user.inrupt.net/public/example-chat/index.ttl#this&#x27;</span>
+<span class="hljs-keyword">const</span> chat = UI.infiniteMessageArea(<span class="hljs-built_in">document</span>, UI.store, UI.rdf.namedNode(chatChannel))
+<span class="hljs-built_in">document</span>.body.appendChild(chat)</code></pre>
+				<p>Or a full ACL Control Box:</p>
+				<pre><code class="language-js"><span class="hljs-keyword">const</span> exampleFolder = <span class="hljs-string">&#x27;https://example-user.inrupt.net/public/public-control/&#x27;</span>
+<span class="hljs-keyword">const</span> aclControlBox = UI.aclControl.ACLControlBox5(UI.rdf.namedNode(exampleFolder), { <span class="hljs-attr">dom</span>: <span class="hljs-built_in">document</span> }, <span class="hljs-string">&#x27;&#x27;</span>, UI.store)
+<span class="hljs-built_in">document</span>.body.appendChild(aclControlBox)</code></pre>
+				<a href="#documentation" id="documentation" style="color: inherit; text-decoration: none;">
+					<h2>Documentation</h2>
+				</a>
+				<a href="#api" id="api" style="color: inherit; text-decoration: none;">
+					<h3>API</h3>
+				</a>
+				<p>See <a href="https://solid.github.io/solid-ui/Documentation/api/">https://solid.github.io/solid-ui/Documentation/api/</a> for the API documentation.</p>
+				<a href="#components" id="components" style="color: inherit; text-decoration: none;">
+					<h3>Components</h3>
+				</a>
+				<p>The UI components are presented in a <a href="http://solid.github.io/solid-ui/examples/storybook/">storybook</a>.</p>
+				<a href="#overview" id="overview" style="color: inherit; text-decoration: none;">
+					<h2>Overview</h2>
+				</a>
+				<p>This has been a place to put any functionality from solid views which has been generalized to be usable in other views.</p>
+				<ul>
+					<li><p>Authentication UI: manage the user&#39;s logged in/out state.</p>
+					</li>
+					<li><p>Discovery: finding the user&#39;s stuff, and leaving records of new things</p>
+					</li>
+					<li><p>Preferences: UI for managing a user&#39;s preferences with two axes of defaults</p>
+					</li>
+					<li><p>An Access Control List widget for Solid ACL system</p>
+					</li>
+					<li><p>Acess Control Logic</p>
+					</li>
+					<li><p>Create a new object from modules/extensions which have registered their ability to create things</p>
+					</li>
+					<li><p>A <a href="https://solid.github.io/solid-ui/Documentation/forms-intro.html">form system</a>: Forms are defined in RDF, and create/edit RDF data, including form definitions</p>
+					</li>
+					<li><p>A collection of shortcut namespace objects for a selection of relevant RDF vocabularies.</p>
+					</li>
+					<li><p>Small atomic widgets (buttons etc) of which the others are constructed.</p>
+					</li>
+					<li><p>An error message panel</p>
+					</li>
+				</ul>
+				<p>Some of the larger controls include:</p>
+				<ul>
+					<li>A chat widget: add discussion to any object. Infinite scroll, embedded images, social reactions, etc etc</li>
+					<li>A people picker widget for choosing a set of people or an existing group</li>
+					<li>A general purpose table display with built-in faceted browsing</li>
+					<li>A two-dimentional matrix of editable live data that extends in both dimensions.</li>
+					<li>A notepad of shared notes for real-time collaboration</li>
+					<li>Drag and drop code for linking things and uploading files</li>
+					<li>A set of tabs for holding other widgets and arbitrary UI elements</li>
+				</ul>
+				<p>The typical style of the widgets is to know what data it has been derived from,
+					allow users to edit it, and to automatically sync with data as it changes in the future.
+				To see how these are used, see the panes which use them within the data browser.</p>
+				<p>The level of support for this varies.</p>
+				<p>See also: <a href="https://solid.github.io/solid-ui/Documentation/forms-intro.html">A short intoduction to the Form system</a></p>
+				<p>Contributions of bug fixes and new functionality, documentation, and tests are
+				always appreciated.</p>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_acl_access_controller_.html">&quot;acl/access-<wbr>controller&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_acl_access_groups_.html">&quot;acl/access-<wbr>groups&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_acl_acl_.html">&quot;acl/acl&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_acl_acl_control_.html">&quot;acl/acl-<wbr>control&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_acl_add_agent_buttons_.html">&quot;acl/add-<wbr>agent-<wbr>buttons&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_acl_index_.html">&quot;acl/index&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_acl_styles_.html">&quot;acl/styles&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_acl_types_.html">&quot;acl/types&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_authn_authn_.html">&quot;authn/authn&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_authn_index_.html">&quot;authn/index&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_authn_types_.html">&quot;authn/types&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_debug_.html">&quot;debug&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_header_empty_profile_.html">&quot;header/empty-<wbr>profile&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_header_headerhelpers_.html">&quot;header/header<wbr>Helpers&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_header_index_.html">&quot;header/index&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_header_stylemap_.html">&quot;header/style<wbr>Map&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_icons_solid_logo_.html">&quot;icons/solid_<wbr>logo&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_index_.html">&quot;index&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_jss_index_.html">&quot;jss/index&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_log_.html">&quot;log&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_tabs_.html">&quot;tabs&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_versioninfo_.html">&quot;version<wbr>Info&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_widgets_buttons_.html">&quot;widgets/buttons&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_widgets_error_.html">&quot;widgets/error&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_widgets_forms_basic_.html">&quot;widgets/forms/basic&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_widgets_forms_comment_.html">&quot;widgets/forms/comment&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_widgets_forms_fieldfunction_.html">&quot;widgets/forms/field<wbr>Function&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_widgets_forms_fieldparams_.html">&quot;widgets/forms/field<wbr>Params&quot;</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
