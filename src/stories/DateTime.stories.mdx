@@ -1,0 +1,43 @@
+import * as UI from '../../lib'
+
+import { Canvas, Meta, Story } from '@storybook/addon-docs/blocks'
+
+<Meta title="Date & Time"/>
+
+## formatDateTime
+
+[API documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_apiwidgets_buttons_.html#formatdatetime)
+
+<Canvas withSource="open">
+  <Story name="formatDateTime">
+    {
+      UI.widgets.formatDateTime(
+        new Date(),
+        '{FullYear}-{Month}-{Date}T{Hours}:{Minutes}:{Seconds}.{Milliseconds}'
+      )
+    }
+  </Story>
+</Canvas>
+
+<Canvas withSource="open">
+  <Story name="formatDateTime date">
+    {
+      UI.widgets.formatDateTime(
+        new Date(),
+        '{Date}.{Month}.{Year}'
+      )
+    }
+  </Story>
+</Canvas>
+
+<Canvas withSource="open">
+  <Story name="formatDateTime time">
+    {
+      UI.widgets.formatDateTime(
+        new Date(),
+        '{Hours}:{Minutes}:{Seconds}'
+      )
+    }
+  </Story>
+</Canvas>
+

@@ -1,0 +1,42 @@
+import * as UI from '../../lib'
+
+import { Canvas, Meta, Story } from '@storybook/addon-docs/blocks'
+
+<Meta title="Interactive"/>
+
+## Ask name
+
+[API documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#askname)
+
+<Canvas>
+  <Story name="Ask name">
+    {() => {
+      const div = document.createElement("div");
+      UI.widgets.askName(document, UI.store, div)
+        .then(name => window.alert(`You picked "${name}"`))
+      return div
+    }
+    }
+  </Story>
+</Canvas>
+
+## Attachment list
+
+[API documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#attachmentlist)
+
+<Canvas>
+  <Story name="Attachment llist">
+    {() => {
+      const div = document.createElement("div");
+      UI.store.add(
+        UI.rdf.namedNode('https://example-user.inrupt.net/public/some-message.ttl#this'),
+        UI.ns.wf('attachment'),
+        UI.rdf.namedNode('http://example.com/#some-attachment')
+      )
+      UI.widgets.attachmentList(document, UI.rdf.namedNode('https://example-user.inrupt.net/public/some-message.ttl' +
+        '#this'), div)
+      return div
+    }
+    }
+  </Story>
+</Canvas>

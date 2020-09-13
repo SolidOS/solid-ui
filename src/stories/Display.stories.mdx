@@ -1,0 +1,21 @@
+import * as UI from '../../lib'
+
+import { Canvas, Meta, Story } from '@storybook/addon-docs/blocks'
+
+<Meta title="Display"/>
+
+## complain
+
+[API documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#complain)
+
+<Canvas>
+  <Story name="complain">
+    {
+      () => {
+        const div = document.createElement("div");
+        UI.widgets.complain({ div, dom: document }, 'not good!')
+        return div
+      }
+    }
+  </Story>
+</Canvas>
