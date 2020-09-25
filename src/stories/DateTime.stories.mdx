@@ -6,7 +6,7 @@ import { Canvas, Meta, Story } from '@storybook/addon-docs/blocks'
 
 ## formatDateTime
 
-[API documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_apiwidgets_buttons_.html#formatdatetime)
+[API documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#formatdatetime)
 
 <Canvas withSource="open">
   <Story name="formatDateTime">
@@ -41,3 +41,54 @@ import { Canvas, Meta, Story } from '@storybook/addon-docs/blocks'
   </Story>
 </Canvas>
 
+## shortDate
+
+By default, converts e.g. '2020-02-19T19:35:28.557Z' to '19:35' if today is 19 Feb 2020, and to 'Feb 19' if not.
+
+[API documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#shortdate)
+
+<Canvas withSource="open">
+  <Story name="shortDate (not today & without time)">
+    {
+      UI.widgets.shortDate('2020-01-01T15:43', true)
+    }
+  </Story>
+</Canvas>
+
+<Canvas withSource="open">
+  <Story name="shortDate (with time, but not today)">
+    {
+      UI.widgets.shortDate('2020-01-01T15:43', false)
+    }
+  </Story>
+</Canvas>
+
+<Canvas withSource="open">
+  <Story name="shortDate (today & without time)">
+    {
+      UI.widgets.shortDate(new Date().toISOString(), true)
+    }
+  </Story>
+</Canvas>
+
+<Canvas withSource="open">
+  <Story name="shortDate (today & with time)">
+    {
+      UI.widgets.shortDate(new Date().toISOString(), false)
+    }
+  </Story>
+</Canvas>
+
+## shortTime
+
+Get a short string representation of the current time
+
+[API documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#shorttime)
+
+<Canvas withSource="open">
+  <Story name="shortTime">
+    {
+      UI.widgets.shortTime()
+    }
+  </Story>
+</Canvas>
