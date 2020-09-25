@@ -1,6 +1,7 @@
 import * as UI from '../../lib'
 
 import { Canvas, Meta, Story } from '@storybook/addon-docs/blocks'
+import { rawJsonDecorator } from './decorators'
 
 <Meta title="RDF utilities" />
 
@@ -11,9 +12,7 @@ Retrieve all RDF class URIs from solid-ui's RDF store
 [API Documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#allclassuris)
 
 <Canvas withSource="open">
-  <Story name="allClassUris" decorators={[ (Story) => {
-    return `<pre>${JSON.stringify(Story(), null, 2)}</pre>`
-  }]}>
+  <Story name="allClassUris" decorators={[rawJsonDecorator]}>
     { () => {
         UI.store.add(
           UI.rdf.namedNode('http://example.com/#some-thing'),
@@ -38,9 +37,7 @@ Make a URI in the Tabulator.org annotation store out of the URI of the thing to 
 [API Documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#defaultannotationstore)
 
 <Canvas withSource="open">
-  <Story name="defaultAnnotationStore" decorators={[ (Story) => {
-    return `<pre>${JSON.stringify(Story(), null, 2)}</pre>`
-  }]}>
+  <Story name="defaultAnnotationStore" decorators={[rawJsonDecorator]}>
     { () => {
       const url = 'http://example.com/a/b.html'
       return UI.widgets.defaultAnnotationStore(UI.rdf.namedNode(url))

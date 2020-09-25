@@ -1,6 +1,7 @@
 import * as UI from '../../lib'
 
 import { Canvas, Meta, Story } from '@storybook/addon-docs/blocks'
+import { rawJsonDecorator } from './decorators'
 
 export const imageDecorator = (Story) => {
   const result = Story()
@@ -108,6 +109,28 @@ Find an image for this thing as a class
   <Story name="E-Mail" decorators={[imageDecorator]}>
     {
       UI.widgets.findImageFromURI(UI.rdf.namedNode('mailto:user@mail.example'))
+    }
+  </Story>
+</Canvas>
+
+## imagesOf
+
+Set of suitable images
+
+[API Documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#imagesof)
+
+<Canvas withSource="open">
+  <Story name="imagesOf" decorators={[rawJsonDecorator]}>
+    {
+      () => {
+        const store = UI.rdf.graph()
+        const thing = UI.rdf.namedNode('http://thing.example/resource#it')
+        const avatar = UI.rdf.namedNode('https://pod.example/image1.png')
+        const image = UI.rdf.namedNode('https://pod.example/image2.jpg')
+        store.add(thing, UI.ns.sioc('avatar'), avatar)
+        store.add(thing, UI.ns.foaf('img'), image)
+        return UI.widgets.imagesOf(thing, store)
+      }
     }
   </Story>
 </Canvas>
