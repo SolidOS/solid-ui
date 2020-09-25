@@ -1,0 +1,51 @@
+import * as UI from '../../lib'
+
+import { Canvas, Meta, Story } from '@storybook/addon-docs/blocks'
+import { rawJsonDecorator } from './decorators'
+
+<Meta title="Media Types" />
+
+## isAudio
+
+[API Documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#isaudio)
+
+<Canvas withSource="open">
+  <Story name="isAudio" decorators={[rawJsonDecorator]}>
+    { () => {
+      const type = UI.rdf.namedNode('http://www.w3.org/ns/iana/media-types/audio/')
+      UI.store.add(UI.rdf.namedNode('http://example.com/audio.mpeg'), UI.ns.rdf('type'), type)
+      return UI.widgets.isAudio(UI.rdf.namedNode('http://example.com/audio.mpeg'))
+    }
+    }
+  </Story>
+</Canvas>
+
+## isVideo
+
+[API Documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#isvideo)
+
+<Canvas withSource="open">
+  <Story name="isVideo" decorators={[rawJsonDecorator]}>
+    { () => {
+      const type = UI.rdf.namedNode('http://www.w3.org/ns/iana/media-types/video/')
+      UI.store.add(UI.rdf.namedNode('http://example.com/video.mov'), UI.ns.rdf('type'), type)
+      return UI.widgets.isVideo(UI.rdf.namedNode('http://example.com/video.mov'))
+    }
+    }
+  </Story>
+</Canvas>
+
+## isImage
+
+[API Documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#isvideo)
+
+<Canvas withSource="open">
+  <Story name="isImage" decorators={[rawJsonDecorator]}>
+    { () => {
+      const type = UI.rdf.namedNode('http://www.w3.org/ns/iana/media-types/image/')
+      UI.store.add(UI.rdf.namedNode('http://example.com/image.jpeg'), UI.ns.rdf('type'), type)
+      return UI.widgets.isImage(UI.rdf.namedNode('http://example.com/image.jpeg'))
+    }
+    }
+  </Story>
+</Canvas>
