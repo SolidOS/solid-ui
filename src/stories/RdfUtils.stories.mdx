@@ -53,12 +53,27 @@ To figure out the log URI from the full URI used to invoke the reasoner
 [API Documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#extractloguri)
 
 <Canvas withSource="open">
-  <Story name="extractLogURI" decorators={[ (Story) => {
-    return `<pre>${Story()}</pre>`
-  }]}>
+  <Story name="extractLogURI" decorators={[rawJsonDecorator]}>
     { () => {
       const url = 'https://example.com/logFile=http%3A%2F%2Fexample.org%2Flogs.ttl&rulesFile=ttp%3A%2F%2Fexample.org%2Frules.ttl'
       return decodeURIComponent(UI.widgets.extractLogURI(url))
+    }
+    }
+  </Story>
+</Canvas>
+
+## propertyTriage
+
+Figuring which properties we know about
+
+[API Documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#propertytriage)
+
+<Canvas withSource="open">
+  <Story name="propertyTriage" decorators={[rawJsonDecorator]}>
+    { () => {
+      // FIXME: make this example return actual possible properties
+      const kb = UI.rdf.graph()
+      return UI.widgets.propertyTriage(kb)
     }
     }
   </Story>
