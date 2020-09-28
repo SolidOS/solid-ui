@@ -22,10 +22,13 @@ import { Canvas, Meta, Story } from '@storybook/addon-docs/blocks'
 
 ## Attachment list
 
+Component that displays a list of resources, for instance the attachments of a message, or the various documents related to a meeting.
+Accepts dropping URLs onto it to add attachments to it.
+
 [API documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#attachmentlist)
 
 <Canvas>
-  <Story name="Attachment llist">
+  <Story name="Attachment list">
     {() => {
       const div = document.createElement("div");
       UI.store.add(
@@ -40,3 +43,20 @@ import { Canvas, Meta, Story } from '@storybook/addon-docs/blocks'
     }
   </Story>
 </Canvas>
+
+## personTR
+
+A TR to represent a draggable person, etc in a list
+
+[API documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#persontr)
+
+<Canvas>
+  <Story name="Person TR">
+    {() => {
+      const michiel = UI.rdf.namedNode('https://michielbdejong.inrupt.net/profile/card#me')
+      return UI.widgets.personTR(document, null, michiel)
+    }
+    }
+  </Story>
+</Canvas>
+
