@@ -92,7 +92,7 @@ To see how these are used, see the panes which use them within the data browser.
 
 The level of support for this varies.
 
-See also: [A short intoduction to the Form system](https://solid.github.io/solid-ui/Documentation/forms-intro.html)
+See also: [A short introduction to the Form system](https://solid.github.io/solid-ui/Documentation/forms-intro.html)
 
 Contributions of bug fixes and new functionality, documentation, and tests are
 always appreciated.
