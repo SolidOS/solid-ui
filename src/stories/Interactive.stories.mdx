@@ -2,6 +2,8 @@ import * as UI from '../../lib'
 
 import { Canvas, Meta, Story } from '@storybook/addon-docs/blocks'
 
+import { action } from '@storybook/addon-actions'
+
 <Meta title="Interactive"/>
 
 ## Ask name
@@ -60,3 +62,70 @@ A TR to represent a draggable person, etc in a list
   </Story>
 </Canvas>
 
+## selectorPanel
+
+[API documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#selectorpanel)
+
+<Canvas>
+  <Story name="selectorPanel">
+    {() => {
+      const kb = UI.rdf.graph()
+      const type = UI.rdf.namedNode('http://example.com/#type')
+      const predicate = UI.rdf.namedNode('http://example.com/#pred')
+      const inverse = false
+      const possible = [
+        UI.rdf.namedNode('http://example.com/#blue'),
+        UI.rdf.namedNode('http://example.com/#green'),
+        UI.rdf.namedNode('http://example.com/#yellow')
+      ]
+      const options = {}
+      return UI.widgets.selectorPanel(
+        document,
+        kb,
+        type,
+        predicate,
+        inverse,
+        possible,
+        options,
+        action("selection"),
+        action("link clicked")
+      )
+    }
+    }
+  </Story>
+</Canvas>
+
+## selectorPanelRefresh
+
+[API documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#selectorpanelrefresh)
+
+<Canvas>
+  <Story name="selectorPanelRefresh">
+    {() => {
+      const list = document.createElement('div')
+      const kb = UI.rdf.graph()
+      const type = UI.rdf.namedNode('http://example.com/#type')
+      const predicate = UI.rdf.namedNode('http://example.com/#pred')
+      const inverse = false
+      const possible = [
+        UI.rdf.namedNode('http://example.com/#blue'),
+        UI.rdf.namedNode('http://example.com/#green'),
+        UI.rdf.namedNode('http://example.com/#yellow')
+      ]
+      const options = {}
+      return UI.widgets.selectorPanelRefresh(
+        list,
+        document,
+        kb,
+        type,
+        predicate,
+        inverse,
+        possible,
+        options,
+        action("selection"),
+        action("link clicked")
+      )
+    }
+    }
+  </Story>
+</Canvas>
