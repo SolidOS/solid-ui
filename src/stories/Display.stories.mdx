@@ -19,3 +19,23 @@ import { Canvas, Meta, Story } from '@storybook/addon-docs/blocks'
     }
   </Story>
 </Canvas>
+
+## setName
+
+Sets the best name we have and looks up a better one
+
+[API documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#setname)
+
+<Canvas>
+  <Story name="setName">
+    {
+      () => {
+        const div = document.createElement("div")
+        const jane = UI.rdf.namedNode('https://jane.example/person/card#me')
+        UI.store.add(jane, UI.ns.foaf('name'), 'Jane Doe')
+        UI.widgets.setName(div, jane)
+        return div
+      }
+    }
+  </Story>
+</Canvas>

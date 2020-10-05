@@ -668,7 +668,7 @@ export function linkIcon (dom: HTMLDocument, subject: NamedNode, iconURI?: strin
 }
 
 /**
- * A TR to repreent a draggable person, etc in a list
+ * A TR to represent a draggable person, etc in a list
  *
  * pred is unused param at the moment
  */

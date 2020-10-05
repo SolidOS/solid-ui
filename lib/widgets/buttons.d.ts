@@ -136,7 +136,7 @@ export declare function askName(dom: HTMLDocument, kb: IndexedFormula, container
  */
 export declare function linkIcon(dom: HTMLDocument, subject: NamedNode, iconURI?: string): HTMLElement;
 /**
- * A TR to repreent a draggable person, etc in a list
+ * A TR to represent a draggable person, etc in a list
  *
  * pred is unused param at the moment
  */
