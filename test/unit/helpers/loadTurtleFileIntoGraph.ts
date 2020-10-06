@@ -1,4 +1,4 @@
-import { IndexedFormula, NamedNode, parse } from 'rdflib'
+import { IndexedFormula } from 'rdflib'
 import { getFileContent } from './getFileContent'
 import { loadTurtleIntoGraph } from './loadTurtleIntoGraph'
 

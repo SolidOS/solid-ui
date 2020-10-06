@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import { fetcher, IndexedFormula, NamedNode, sym, UpdateManager } from 'rdflib'
+import { fetcher, IndexedFormula, NamedNode, sym } from 'rdflib'
 import { ACLbyCombination, readACL } from './acl'
 import widgets from '../widgets'
 import ns from '../ns'
