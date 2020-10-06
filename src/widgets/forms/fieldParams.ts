@@ -1,5 +1,5 @@
 import ns from '../../ns'
-import { formHeadingColor, formHeadingStyle, commentStyle } from '../../style'
+import { commentStyle, formHeadingStyle } from '../../style'
 
 export type FieldParamsObject = {
   size?: number, // input element size attribute

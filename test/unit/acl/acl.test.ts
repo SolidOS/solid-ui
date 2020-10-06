@@ -8,7 +8,6 @@ import {
   fixIndividualACL,
   fixIndividualCardACL,
   getACL,
-  getACLorDefault,
   getProspectiveHolder,
   loadUnionACL,
   makeACLGraph,
@@ -32,7 +31,8 @@ import {
   DEFAULT_RESOURCE_ACL,
   DEFAULT_RESOURCE_DOC,
   getAgentMapForAclWithAllAgents,
-  getAgentMapForAclWithAllAgentsUsingDefaults, mocks, PROFILE
+  getAgentMapForAclWithAllAgentsUsingDefaults,
+  mocks
 } from './acl.mocks'
 import { loadTurtleIntoGraph } from '../helpers/loadTurtleIntoGraph'
 import { createGraphFromTurtle } from '../helpers/createGraphFromTurtle'
@@ -225,10 +225,6 @@ describe('getACL', () => {
 
     it('should trigger callback with failure', () => expect(callbackFunction).toHaveBeenCalledWith(false, `Can't get headers to find ACL for ${DEFAULT_RESOURCE_DOC}: Failed response`))
   })
-})
-
-describe('getACLorDefault', () => {
-
 })
 
 describe('getProspectiveHolder', () => {

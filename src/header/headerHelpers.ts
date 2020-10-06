@@ -2,7 +2,6 @@
     Copied from mashlib/src/global/metadata.ts
  */
 import { NamedNode, sym } from 'rdflib'
-import { log } from '../debug'
 import { styleMap } from './styleMap'
 import { getClasses } from '../jss'
 

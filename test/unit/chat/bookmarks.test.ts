@@ -1,5 +1,5 @@
 import { silenceDebugMessages } from '../../helpers/setup'
-import { findBookmarkDocument, toggleBookmark, renderBookmarksButton } from '../../../src/chat/bookmarks'
+import { findBookmarkDocument, renderBookmarksButton, toggleBookmark } from '../../../src/chat/bookmarks'
 import { NamedNode, Namespace } from 'rdflib'
 import store from '../../../src/store'
 import { clearStore } from '../helpers/clearStore'
@@ -68,7 +68,7 @@ describe('findBookmarkDocument', () => {
     store.add(pubReg2, ns.solid('forClass'), BOOK('Bookmark'), context.publicTypeIndex)
     store.add(pubReg2, ns.solid('instance'), bookmarksDoc3, context.publicTypeIndex)
 
-    const result = await findBookmarkDocument(context)
+    await findBookmarkDocument(context)
     expect((window.alert as any).mock.calls.length).toEqual(1)
     expect((window.alert as any).mock.calls[0][0]).toMatchSnapshot()
   })
@@ -106,17 +106,15 @@ describe('findBookmarkDocument', () => {
     store.add(pubReg2, ns.solid('forClass'), BOOK('Bookmark'), context.publicTypeIndex)
     store.add(pubReg2, ns.solid('instance'), bookmarksDoc3, context.publicTypeIndex)
 
-    const result = await findBookmarkDocument(context)
+    await findBookmarkDocument(context)
     expect((window.alert as any).mock.calls.length).toEqual(1)
     expect((window.alert as any).mock.calls[0][0]).toMatchSnapshot()
   })
   it('does not complains if you have one bookmark docs', async () => {
     const privReg = new NamedNode('http://example.com/privType.ttl#reg1')
     const pubReg1 = new NamedNode('http://example.com/pubType.ttl#reg1')
-    const pubReg2 = new NamedNode('http://example.com/pubType.ttl#reg2')
     const bookmarksDoc1 = new NamedNode('http://example.com/bookmarks1.ttl')
     const bookmarksDoc2 = new NamedNode('http://example.com/bookmarks2.ttl')
-    const bookmarksDoc3 = new NamedNode('http://example.com/bookmarks3.ttl')
     const context = {
       me: new NamedNode('http://example.com/profile/card#me'),
       publicProfile: new NamedNode('http://example.com/profile/card'),
@@ -140,7 +138,7 @@ describe('findBookmarkDocument', () => {
     store.add(pubReg1, ns.solid('forClass'), BOOK('Bookmark'), context.publicTypeIndex)
     store.add(pubReg1, ns.solid('instance'), bookmarksDoc2, context.publicTypeIndex)
 
-    const result = await findBookmarkDocument(context)
+    await findBookmarkDocument(context)
     expect((window.alert as any).mock.calls.length).toEqual(0)
   })
 })
