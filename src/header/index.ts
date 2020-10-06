@@ -6,10 +6,7 @@ import { IndexedFormula, NamedNode, sym } from 'rdflib'
 import { loginStatusBox, solidAuthClient } from '../authn/authn'
 import { widgets } from '../widgets'
 import { emptyProfile } from './empty-profile'
-import { throttle, getPod, addStyleClassToElement } from './headerHelpers'
-import { log } from '../debug'
-import { getClasses } from '../jss'
-import { styleMap } from './styleMap'
+import { addStyleClassToElement, getPod, throttle } from './headerHelpers'
 
 // SolidAuthorization, SolidClam, and SolidSession was copied from mashlib/typings/solid-auth-client
 // access_token, client_id, id_token, at_hash had to be converted to camelcase for typescript compatibility
