@@ -58,6 +58,8 @@ import { infiniteMessageArea } from './chat/infinite'
 // @ts-ignore
 import pad from './pad'
 // @ts-ignore
+import participation from './participation'
+// @ts-ignore
 import preferences from './preferences'
 // @ts-ignore
 import store from './store'
@@ -90,6 +92,7 @@ if (typeof window !== 'undefined') {
     messageArea,
     infiniteMessageArea,
     pad,
+    participation,
     preferences,
     store,
     style,
@@ -117,6 +120,7 @@ export {
   messageArea,
   infiniteMessageArea,
   pad,
+  participation,
   preferences,
   store,
   style,

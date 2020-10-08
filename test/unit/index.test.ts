@@ -17,6 +17,7 @@ describe('Index', () => {
       'messageArea',
       'infiniteMessageArea',
       'pad',
+      'participation',
       'preferences',
       'store',
       'style',
