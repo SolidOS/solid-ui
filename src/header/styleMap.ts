@@ -12,11 +12,8 @@ export const styleMap = {
     textAlign: 'left',
     padding: '1em',
     width: '100%',
-    '&:focus': {
-      backgroundColor: '#eee'
-    },
-    '&:hover': {
-      backgroundColor: '#eee'
+    '&:focus, &:hover': {
+      backgroundColor: 'linear-gradient(to right, #7C4DFF 0%, #18A9E6 50%, #01C9EA 100%)'
     }
   },
   'header-user-menu__trigger': {
@@ -42,11 +39,8 @@ export const styleMap = {
     textAlign: 'left',
     padding: '1em',
     width: '100%',
-    '&:focus': {
-      backgroundColor: '#eee'
-    },
-    '&:hover': {
-      backgroundColor: '#eee'
+    '&:focus, &:hover': {
+      backgroundColor: 'linear-gradient(to right, #7C4DFF 0%, #18A9E6 50%, #01C9EA 100%)'
     }
   },
   'header-user-menu__list': {

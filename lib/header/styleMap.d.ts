@@ -11,10 +11,7 @@ export declare const styleMap: {
         textAlign: string;
         padding: string;
         width: string;
-        '&:focus': {
-            backgroundColor: string;
-        };
-        '&:hover': {
+        '&:focus, &:hover': {
             backgroundColor: string;
         };
     };
@@ -41,10 +38,7 @@ export declare const styleMap: {
         textAlign: string;
         padding: string;
         width: string;
-        '&:focus': {
-            backgroundColor: string;
-        };
-        '&:hover': {
+        '&:focus, &:hover': {
             backgroundColor: string;
         };
     };
