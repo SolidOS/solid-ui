@@ -20,6 +20,21 @@ import { Canvas, Meta, Story } from '@storybook/addon-docs/blocks'
   </Story>
 </Canvas>
 
+
+## errorMessageBlock
+
+[API documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_error_.html#errormessageblock)
+
+<Canvas>
+  <Story name="errorMessageBlock">
+    {
+      () => {
+        return UI.widgets.errorMessageBlock(document, 'my error message', '#f0f')
+      }
+    }
+  </Story>
+</Canvas>
+
 ## setName
 
 Sets the best name we have and looks up a better one
