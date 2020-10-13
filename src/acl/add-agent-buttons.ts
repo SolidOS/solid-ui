@@ -150,9 +150,9 @@ export class AddAgentButtons {
           div: this.barElement,
           dom: this.groupList.controller.dom
         }
+        this.renderAppsView()
         const existingApps = this.renderAppsTable(eventContext)
           .catch(error => this.groupList.controller.renderStatus(error))
-        this.renderAppsView()
         const newApp = this.renderNameForm(ns.schema('WebApplication'), 'webapp domain')
           .then(name => this.getOriginFromName(name))
         Promise.race([
