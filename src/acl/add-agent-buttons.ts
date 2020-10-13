@@ -152,7 +152,8 @@ export class AddAgentButtons {
         }
         const existingApps = this.renderAppsTable(eventContext)
           .catch(error => this.groupList.controller.renderStatus(error))
-        this.renderAppsView()
+        // this.renderAppsView() // The whole global trusted app control - not needed here
+        //  ...  https://github.com/solid/solid-ui/issues/346
         const newApp = this.renderNameForm(ns.schema('WebApplication'), 'webapp domain')
           .then(name => this.getOriginFromName(name))
         Promise.race([
@@ -188,7 +189,7 @@ export class AddAgentButtons {
     const trustedApps = (this.groupList.store as Store).each(eventContext.me, ns.acl('trustedApp')) as Array<NamedNode> // @@ TODO fix as
     const trustedOrigins = trustedApps.flatMap(app => (this.groupList.store as Store).each(app, ns.acl('origin'))) // @@ TODO fix as
 
-    this.barElement.appendChild(this.groupList.controller.dom.createElement('p')).textContent = `You have ${trustedOrigins.length} selected web apps.`
+    this.barElement.appendChild(this.groupList.controller.dom.createElement('p')).textContent = `You have ${trustedOrigins.length} preferred web apps. Select one to give it access:`
     return new Promise((resolve, reject) => {
       const appsTable = this.barElement.appendChild(this.groupList.controller.dom.createElement('table'))
       appsTable.classList.add(this.groupList.controller.classes.trustedAppAddApplicationsTable)

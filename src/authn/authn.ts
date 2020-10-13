@@ -1226,11 +1226,9 @@ export function selectWorkspace (
 
     // A workspace in a storage in the public profile:
     const storages = kb.each(id, ns.space('storage')) // @@ No provenance requirement at the moment
-    if (w.length === 0 && storages) {
+    if (w.length === 0 && storages.length) {
       say(`You don't seem to have any workspaces. You have ${storages.length} storage spaces.`)
-      storages.map(function (s) {
-        w = w.concat(kb.each(s, ns.ldp('contains')))
-      }).filter(file => ['public', 'private'].includes(file.id().toLowerCase()))
+      w = storages // @@ for now, use them
     }
 
     if (w.length === 1) {

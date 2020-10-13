@@ -1,4 +1,4 @@
-import { IndexedFormula, NamedNode, st, sym, uri, Util } from 'rdflib'
+import { IndexedFormula, NamedNode, Store, st, sym, uri, Util } from 'rdflib'
 import { iconBase, originalIconBase } from '../iconBase'
 import store from '../store'
 import ns from '../ns'
@@ -369,13 +369,42 @@ function trySetImage (element, thing, iconForClassMap) {
   const types = kb.findTypeURIs(thing)
   for (var typeURI in types) {
     if (iconForClassMap[typeURI]) {
-      element.setAttribute('src', iconForClassMap[typeURI])
+      element.setAttribute('src', iconForClassMap[typeURI]) // @@ use bottom type?
       return false // maybe we can do better
     }
   }
   element.setAttribute('src', iconBase + 'noun_10636_grey.svg') // Grey Circle -  some thing
   return false // we can do better
 }
+
+/* Find the most specific classes for an object
+ * See https://en.wikipedia.org/wiki/Topological_sorting#Kahn's_algorithm
+*/
+/*
+export function partialSort (kb:Store, typeURIs:string[]) { // : Array<NamedNode>
+  var L = []
+  var incoming = {}
+  var starter = []
+  for (var uri in typeURIs) {
+    const node = kb.sym(uri)
+    incoming[uri] = kb.each(node, ns.rdfs('subClassOf')) // superclasses
+    if (incoming[uri].length === 0) { // no superclasses - could be top
+      starter.push(node.uri)
+    }
+  }
+  while (starter.length) {
+    var n = starter.pop()
+    L.push(n)
+    for (const m of incoming[n]) {
+      incoming[m].remove(n) // remove edge
+      if (incoming[m].length === 0) {
+        starter.push(m) // as far as n is concerned, go for it.
+      }
+    }
+  }
+  return L
+}
+*/
 
 /**
  * ToDo: Also add icons for *properties* like  home, work, email, range, domain, comment,
