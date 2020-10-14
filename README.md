@@ -96,3 +96,17 @@ See also: [A short introduction to the Form system](https://solid.github.io/soli
 
 Contributions of bug fixes and new functionality, documentation, and tests are
 always appreciated.
+
+## Development
+
+When developing a component in solid-ui you can test it in isolation using storybook
+
+```
+npm run build
+npm run storybook
+```
+
+If there is no story for the component yet, add a new one to `./src/stories`.
+
+When you want to test the component within a solid-pane, you can use the [development mode of solid-panes](https://github.com/solid/solid-panes#development) or
+ [mashlib-dev](https://github.com/solid/mashlib-dev).
