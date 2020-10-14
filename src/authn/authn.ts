@@ -21,7 +21,10 @@
  */
 import Signup from './signup'
 import widgets from '../widgets'
-import solidAuthClient from 'solid-auth-client'
+import {
+  Session,
+  getClientAuthenticationWithDependencies
+} from '@inrupt/solid-client-authn-browser'
 import ns from '../ns.js'
 import kb from '../store.js'
 import utils from '../utils.js'
@@ -34,7 +37,15 @@ import { textInputStyle, buttonStyle, commentStyle } from '../style'
 // eslint-disable-next-line camelcase
 import { Quad_Object } from 'rdflib/lib/tf-types'
 
-export { solidAuthClient }
+// Set up auth session
+const authSession = new Session(
+  {
+    clientAuthentication: getClientAuthenticationWithDependencies({})
+  },
+  'mySession'
+)
+
+export { authSession }
 
 // const userCheckSite = 'https://databox.me/'
 
@@ -96,16 +107,10 @@ export function defaultTestUser (): NamedNode | null {
  * @returns Named Node or null
  */
 export function currentUser (): NamedNode | null {
-  const str = localStorage['solid-auth-client']
-  if (str) {
-    const da = JSON.parse(str)
-    if (da.session && da.session.webId) {
-      // @@ TODO check has not expired
-      return sym(da.session.webId)
-    }
+  if (authSession.info.webId) {
+    return sym(authSession.info.webId)
   }
-  return offlineTestID() // null unless testing
-  // JSON.parse(localStorage['solid-auth-client']).session.webId
+  return offlineTestID()
 }
 
 /**
@@ -929,31 +934,52 @@ function signInOrSignUpBox (
   signInPopUpButton.setAttribute('value', 'Log in')
   signInPopUpButton.setAttribute('style', `${signInButtonStyle}background-color: #eef;`)
 
+  /**
+ * Handle a successful authentication redirect
+ */
+  const authCode = new URL(window.location.href).searchParams.get('code')
+  if (authCode) {
+    // Being redirected after requesting a token
+    authSession
+      .handleIncomingRedirect(window.location.href)
+      .then((sessionInfo) => {
+        if (sessionInfo && sessionInfo.isLoggedIn) {
+          const webIdURI = sessionInfo.webId
+          // setUserCallback(webIdURI)
+          const divs = dom.getElementsByClassName(magicClassName)
+          debug.log(`Logged in, ${divs.length} panels to be serviced`)
+          // At the same time, satisfy all the other login boxes
+          for (let i = 0; i < divs.length; i++) {
+            const div: any = divs[i]
+            // @@ TODO Remove the need to manipulate HTML elements
+            if (div.setUserCallback) {
+              try {
+                div.setUserCallback(webIdURI)
+                const parent = div.parentNode
+                if (parent) {
+                  parent.removeChild(div)
+                }
+              } catch (e) {
+                debug.log(`## Error satisfying login box: ${e}`)
+                div.appendChild(widgets.errorMessageBlock(dom, e))
+              }
+            }
+          }
+        }
+      })
+  }
+
   signInPopUpButton.addEventListener('click', () => {
     const offline = offlineTestID()
     if (offline) return setUserCallback(offline.uri)
-    return solidAuthClient.popupLogin().then(session => {
-      const webIdURI = session.webId
-      // setUserCallback(webIdURI)
-      const divs = dom.getElementsByClassName(magicClassName)
-      debug.log(`Logged in, ${divs.length} panels to be serviced`)
-      // At the same time, satisfy all the other login boxes
-      for (let i = 0; i < divs.length; i++) {
-        const div: any = divs[i]
-        // @@ TODO Remove the need to manipulate HTML elements
-        if (div.setUserCallback) {
-          try {
-            div.setUserCallback(webIdURI)
-            const parent = div.parentNode
-            if (parent) {
-              parent.removeChild(div)
-            }
-          } catch (e) {
-            debug.log(`## Error satisfying login box: ${e}`)
-            div.appendChild(widgets.errorMessageBlock(dom, e))
-          }
-        }
-      }
+
+    const thisUrl = new URL(window.location.href).origin
+    const issuer = prompt('Enter an issuer', thisUrl)
+    authSession.login({
+      // @ts-ignore this library requires a specific kind of URL that isn't global
+      redirectUrl: new URL(window.location.href),
+      // @ts-ignore
+      oidcIssuer: new URL(issuer)
     })
   }, false)
 
@@ -977,8 +1003,8 @@ function signInOrSignUpBox (
 /**
  * @returns {Promise<string|null>} Resolves with WebID URI or null
  */
-function webIdFromSession (session?: { webId: string }): string | null {
-  const webId = session ? session.webId : null
+function webIdFromSession (session?: { webId?: string }): string | null {
+  const webId = session?.webId ? session.webId : null
   if (webId) {
     saveUser(webId)
   }
@@ -997,7 +1023,7 @@ function checkCurrentUser () {
 
 /**
  * Retrieves currently logged in webId from either
- * defaultTestUser or SolidAuthClient
+ * defaultTestUser or SolidAuthn
  * @param [setUserCallback] Optional callback
  *
  * @returns Resolves with webId uri, if no callback provided
@@ -1006,31 +1032,21 @@ export function checkUser<T> (
   setUserCallback?: (me: NamedNode | null) => T
 ): Promise<NamedNode | T> {
   // Check to see if already logged in / have the WebID
-  const me = defaultTestUser()
+  let me = defaultTestUser()
   if (me) {
     return Promise.resolve(setUserCallback ? setUserCallback(me) : me)
   }
 
   // doc = kb.any(doc, ns.link('userMirror')) || doc
+  const webId = webIdFromSession(authSession.info)
 
-  return solidAuthClient
-    .currentSession()
-    .then(webIdFromSession)
-    .catch(err => {
-      debug.log('Error fetching currentSession:', err)
-    })
-    .then(webId => {
-      // if (webId.startsWith('dns:')) {  // legacy rww.io pseudo-users
-      //   webId = null
-      // }
-      const me = saveUser(webId)
+  me = saveUser(webId)
 
-      if (me) {
-        debug.log(`(Logged in as ${me} by authentication)`)
-      }
+  if (me) {
+    debug.log(`(Logged in as ${me} by authentication)`)
+  }
 
-      return setUserCallback ? setUserCallback(me) : me
-    })
+  return Promise.resolve(setUserCallback ? setUserCallback(me) : me)
 }
 
 /**
@@ -1069,7 +1085,7 @@ export function loginStatusBox (
 
   function logoutButtonHandler (_event) {
     // UI.preferences.set('me', '')
-    solidAuthClient.logout().then(
+    authSession.logout().then(
       function () {
         const message = `Your WebID was ${me}. It has been forgotten.`
         me = null
@@ -1108,39 +1124,36 @@ export function loginStatusBox (
   }
 
   box.refresh = function () {
-    solidAuthClient.currentSession().then(
-      session => {
-        if (session && session.webId) {
-          me = sym(session.webId)
-        } else {
-          me = null
-        }
-        if ((me && box.me !== me.uri) || (!me && box.me)) {
-          widgets.clearElement(box)
-          if (me) {
-            box.appendChild(logoutButton(me, options))
-          } else {
-            box.appendChild(signInOrSignUpBox(dom, setIt, options))
-          }
-        }
-        box.me = me ? me.uri : null
-      },
-      err => {
-        alert(`loginStatusBox: ${err}`)
+    const sessionInfo = authSession.info
+    if (sessionInfo && sessionInfo.webId) {
+      me = sym(sessionInfo.webId)
+    } else {
+      me = null
+    }
+    if ((me && box.me !== me.uri) || (!me && box.me)) {
+      widgets.clearElement(box)
+      if (me) {
+        box.appendChild(logoutButton(me, options))
+      } else {
+        box.appendChild(signInOrSignUpBox(dom, setIt, options))
       }
-    )
+    }
+    box.me = me ? me.uri : null
   }
 
-  if (solidAuthClient.trackSession) {
-    solidAuthClient.trackSession(session => {
-      if (session && session.webId) {
-        me = sym(session.webId)
-      } else {
-        me = null
-      }
-      box.refresh()
-    })
+  function trackSession () {
+    const sessionInfo = authSession.info
+    if (sessionInfo && sessionInfo.webId) {
+      me = sym(sessionInfo.webId)
+    } else {
+      me = null
+    }
+    box.refresh()
   }
+
+  trackSession()
+  authSession.onLogin(trackSession)
+  authSession.onLogout(trackSession)
 
   box.me = '99999' // Force refresh
   box.refresh()
