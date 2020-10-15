@@ -4,6 +4,7 @@ import {
 } from '@inrupt/solid-client-authn-browser'
 
 let authSession
+// @ts-ignore
 if (!window.authSession) {
   authSession = new Session(
     {
@@ -11,8 +12,10 @@ if (!window.authSession) {
     },
     'mySession'
   )
+  // @ts-ignore
   window.authSession = authSession
 } else {
+  // @ts-ignore
   authSession = window.authSession
 }
 
