@@ -1,0 +1,53 @@
+import * as UI from '../../../lib'
+
+import { Canvas, Meta, Story } from '@storybook/addon-docs/blocks'
+
+<Meta title="Forms/fields" />
+
+## basic fields
+
+<Canvas>
+  <Story name="basic fields">
+    {() => {
+      const container = document.createElement('div')
+      const already = {}
+      const subject = UI.rdf.namedNode('http://example.com/#this')
+      const form = UI.rdf.namedNode('http://example.com/#form')
+      const doc = UI.rdf.namedNode('http://example.com/')
+      const callbackFunction = (ok, errorMessage) => {
+        console.log(ok, errorMessage, document.getElementById('div-basicField').innerHTML);
+      }
+      UI.store.add(form, UI.ns.ui('property'), UI.rdf.namedNode('http://example.com/#some-property'), doc)
+      // FIXME: https://github.com/solid/solid-ui/issues/239
+      document.outlineManager = {
+        appendPropertyTRs: () => {}
+      }
+      ;[
+        'PhoneField',
+        'EmailField',
+        'ColorField',
+        'DateField',
+        'DateTimeField',
+        'TimeField',
+        'NumericField',
+        'IntegerField',
+        'DecimalField',
+        'FloatField',
+        'TextField',
+        'SingleLineTextField',
+        'NamedNodeURIField'
+      ].forEach((fieldName) => {
+        UI.widgets.field[UI.ns.ui(fieldName).uri](
+          document,
+          container,
+          already,
+          subject,
+          form,
+          doc,
+          callbackFunction
+        );
+      })
+      return container
+    }}
+  </Story>
+</Canvas>
