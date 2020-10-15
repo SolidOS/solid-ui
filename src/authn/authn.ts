@@ -21,14 +21,11 @@
  */
 import Signup from './signup'
 import widgets from '../widgets'
-import {
-  Session,
-  getClientAuthenticationWithDependencies
-} from '@inrupt/solid-client-authn-browser'
 import ns from '../ns.js'
 import kb from '../store.js'
 import utils from '../utils.js'
 import { alert } from '../log'
+import authSession from './authSession'
 import { AppDetails, AuthenticationContext } from './types'
 import { PaneDefinition } from 'pane-registry'
 import * as debug from '../debug'
@@ -36,14 +33,6 @@ import { graph, namedNode, NamedNode, Namespace, serialize, st, Statement, sym, 
 import { textInputStyle, buttonStyle, commentStyle } from '../style'
 // eslint-disable-next-line camelcase
 import { Quad_Object } from 'rdflib/lib/tf-types'
-
-// Set up auth session
-const authSession = new Session(
-  {
-    clientAuthentication: getClientAuthenticationWithDependencies({})
-  },
-  'mySession'
-)
 
 export { authSession }
 
@@ -934,40 +923,32 @@ function signInOrSignUpBox (
   signInPopUpButton.setAttribute('value', 'Log in')
   signInPopUpButton.setAttribute('style', `${signInButtonStyle}background-color: #eef;`)
 
-  /**
- * Handle a successful authentication redirect
- */
-  const authCode = new URL(window.location.href).searchParams.get('code')
-  if (authCode) {
-    // Being redirected after requesting a token
-    authSession
-      .handleIncomingRedirect(window.location.href)
-      .then((sessionInfo) => {
-        if (sessionInfo && sessionInfo.isLoggedIn) {
-          const webIdURI = sessionInfo.webId
-          // setUserCallback(webIdURI)
-          const divs = dom.getElementsByClassName(magicClassName)
-          debug.log(`Logged in, ${divs.length} panels to be serviced`)
-          // At the same time, satisfy all the other login boxes
-          for (let i = 0; i < divs.length; i++) {
-            const div: any = divs[i]
-            // @@ TODO Remove the need to manipulate HTML elements
-            if (div.setUserCallback) {
-              try {
-                div.setUserCallback(webIdURI)
-                const parent = div.parentNode
-                if (parent) {
-                  parent.removeChild(div)
-                }
-              } catch (e) {
-                debug.log(`## Error satisfying login box: ${e}`)
-                div.appendChild(widgets.errorMessageBlock(dom, e))
-              }
+  authSession.onLogin(() => {
+    const sessionInfo = authSession.info
+    if (sessionInfo && sessionInfo.isLoggedIn) {
+      const webIdURI = sessionInfo.webId
+      // setUserCallback(webIdURI)
+      const divs = dom.getElementsByClassName(magicClassName)
+      debug.log(`Logged in, ${divs.length} panels to be serviced`)
+      // At the same time, satisfy all the other login boxes
+      for (let i = 0; i < divs.length; i++) {
+        const div: any = divs[i]
+        // @@ TODO Remove the need to manipulate HTML elements
+        if (div.setUserCallback) {
+          try {
+            div.setUserCallback(webIdURI)
+            const parent = div.parentNode
+            if (parent) {
+              parent.removeChild(div)
             }
+          } catch (e) {
+            debug.log(`## Error satisfying login box: ${e}`)
+            div.appendChild(widgets.errorMessageBlock(dom, e))
           }
         }
-      })
-  }
+      }
+    }
+  })
 
   signInPopUpButton.addEventListener('click', () => {
     const offline = offlineTestID()
@@ -1028,9 +1009,19 @@ function checkCurrentUser () {
  *
  * @returns Resolves with webId uri, if no callback provided
  */
-export function checkUser<T> (
+export async function checkUser<T> (
   setUserCallback?: (me: NamedNode | null) => T
 ): Promise<NamedNode | T> {
+  /**
+   * Handle a successful authentication redirect
+   */
+  const authCode = new URL(window.location.href).searchParams.get('code')
+  if (authCode) {
+    // Being redirected after requesting a token
+    await authSession
+      .handleIncomingRedirect(window.location.href)
+  }
+
   // Check to see if already logged in / have the WebID
   let me = defaultTestUser()
   if (me) {
