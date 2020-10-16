@@ -1,0 +1,125 @@
+import * as UI from '../../../lib'
+
+import { Canvas, Meta, Story } from '@storybook/addon-docs/blocks'
+import { action } from '@storybook/addon-actions'
+
+<Meta title="Forms/fields" />
+
+## basic fields
+
+<Canvas>
+  <Story name="basic fields">
+    {() => {
+      const container = document.createElement('div')
+      const already = {}
+      const subject = UI.rdf.namedNode('http://example.com/#this')
+      const form = UI.rdf.namedNode('http://example.com/#form')
+      const doc = UI.rdf.namedNode('http://example.com/')
+      const callbackFunction = (ok, errorMessage) => {
+        console.log(ok, errorMessage, document.getElementById('div-basicField').innerHTML);
+      }
+      UI.store.add(form, UI.ns.ui('property'), UI.rdf.namedNode('http://example.com/#some-property'), doc)
+      // FIXME: https://github.com/solid/solid-ui/issues/239
+      document.outlineManager = {
+        appendPropertyTRs: () => {}
+      }
+      ;[
+        'PhoneField',
+        'EmailField',
+        'ColorField',
+        'DateField',
+        'DateTimeField',
+        'TimeField',
+        'NumericField',
+        'IntegerField',
+        'DecimalField',
+        'FloatField',
+        'TextField',
+        'SingleLineTextField',
+        'NamedNodeURIField'
+      ].forEach((fieldName) => {
+        UI.widgets.field[UI.ns.ui(fieldName).uri](
+          document,
+          container,
+          already,
+          subject,
+          form,
+          doc,
+          callbackFunction
+        );
+      })
+      return container
+    }}
+  </Story>
+</Canvas>
+
+
+## UI.widgets.field[UI.ns.ui('Form').uri] / UI.widgets.field[UI.ns.ui('Group').uri], no already
+
+<Canvas>
+  <Story name="form / group, no already">
+    {() => {
+      const container = document.createElement('div')
+      const already = {}
+      const subject = UI.rdf.namedNode('http://example.com/#this')
+      const form = UI.rdf.namedNode('http://example.com/#form')
+      const store = UI.rdf.namedNode('http://example.com/#store')
+      UI.store.add(form, UI.ns.ui('parts'), new UI.rdf.Collection([
+        UI.rdf.namedNode('http://example.com/#part1'),
+        UI.rdf.namedNode('http://example.com/#part2')
+      ]), UI.rdf.namedNode('http://example.com/'))
+      UI.store.add(UI.rdf.namedNode('http://example.com/#part1'), UI.ns.rdf('type'), UI.ns.ui('Comment'))
+      UI.store.add(UI.rdf.namedNode('http://example.com/#part1'), UI.ns.ui('contents'), '[this is part 1 of the form]')
+      UI.store.add(UI.rdf.namedNode('http://example.com/#part2'), UI.ns.rdf('type'), UI.ns.ui('Comment'))
+      UI.store.add(UI.rdf.namedNode('http://example.com/#part2'), UI.ns.ui('contents'), '[this is part 2 of the form]')
+      // FIXME: https://github.com/solid/solid-ui/issues/239
+      document.outlineManager = {
+        appendPropertyTRs: () => {}
+      }
+      UI.widgets.field[UI.ns.ui('Form').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        action('callback')
+      );
+      return container;
+    }}
+  </Story>
+</Canvas>
+
+## UI.widgets.field[UI.ns.ui('Form').uri] / xUI.widgets.field[UI.ns.ui('Group').uri], with already
+
+`UI.widgets.field[UI.ns.ui('Group').uri]` is currently synonymous with `UI.widgets.field[UI.ns.ui('Form').uri]`, but
+ this additional example shows the use of `already`.
+
+<Canvas>
+  <Story name="form / group, with already">
+    {() => {
+      const container = document.createElement('div')
+      const subject = UI.rdf.namedNode('http://example.com/#this')
+      const form = UI.rdf.namedNode('http://example.com/#form')
+      const store = UI.rdf.namedNode('http://example.com/#store')
+      const key = subject.toNT() + '|' + form.toNT()
+      const already = {
+        [key]: true
+      }
+      // FIXME: https://github.com/solid/solid-ui/issues/239
+      document.outlineManager = {
+        appendPropertyTRs: () => {}
+      }
+      UI.widgets.field[UI.ns.ui('Group').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        store,
+        action('callback')
+      )
+      return container;
+    }}
+  </Story>
+</Canvas>
