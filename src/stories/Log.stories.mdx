@@ -165,3 +165,25 @@ By default only error, warning, and normal messages will be shown, hence the num
     {() => UI.log.dumpHTML()}
   </Story>
 </Canvas>
+
+## log.logAscending: Start logging all messages in ascending order
+
+<Canvas withSource="open">
+  <Story name="log ascending"
+         decorators={[buttonDecorator]}
+         args={{ buttonLabel: "Log ascending" }}
+  >
+    {() => UI.log.logAscending()}
+  </Story>
+</Canvas>
+
+## log.logDescending: Start logging all messages in descending order
+
+<Canvas withSource="open">
+  <Story name="log descending"
+         decorators={[buttonDecorator]}
+         args={{ buttonLabel: "Log descending" }}
+  >
+    {() => UI.log.logDescending()}
+  </Story>
+</Canvas>
