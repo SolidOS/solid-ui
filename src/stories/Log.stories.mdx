@@ -154,3 +154,14 @@ By default only error, warning, and normal messages will be shown, hence the num
     }}
   </Story>
 </Canvas>
+
+## log.dumpHTML: Dump all HTML in body in a log message
+
+<Canvas withSource="open">
+  <Story name="dump html"
+         decorators={[buttonDecorator]}
+         args={{ buttonLabel: "Dump HTML" }}
+  >
+    {() => UI.log.dumpHTML()}
+  </Story>
+</Canvas>
