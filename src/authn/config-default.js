@@ -18,7 +18,7 @@ module.exports = {
   /**
    * Default signup endpoints (list of identity providers)
    */
-  signupEndpoint: 'https://solid.github.io/solid-idps/',
+  signupEndpoint: 'https://solidproject.org/use-solid/',
 
   /**
    * Default height of the Signup popup window, in pixels
