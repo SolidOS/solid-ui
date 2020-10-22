@@ -32,4 +32,6 @@ describe('Index', () => {
       'tabs'
     ])
   })
+  // make sure none of them are undefined:
+  Object.keys(Index).forEach(key => expect(Index[key] && key).toEqual(key))
 })
