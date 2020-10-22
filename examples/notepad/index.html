@@ -133,7 +133,7 @@
     </p>
     <script id="script-lightColorHash">
       window.addEventListener('DOMContentLoaded', (event) => {
-        const colorStr = pad.lightColorHash(new UI.rdf.NamedNode('https://sharonstrats.inrupt.net/profile/card#me'))
+        const colorStr = UI.pad.lightColorHash(new UI.rdf.NamedNode('https://sharonstrats.inrupt.net/profile/card#me'))
         const inputBox = document.createElement('INPUT')
         inputBox.setAttribute("type", "text")
         inputBox.style.backgroundColor = colorStr
