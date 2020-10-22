@@ -58,7 +58,7 @@ import { infiniteMessageArea } from './chat/infinite'
 // @ts-ignore
 import * as pad from './pad'
 // @ts-ignore
-import participation from './participation'
+import * as participation from './participation'
 // @ts-ignore
 import preferences from './preferences'
 // @ts-ignore
