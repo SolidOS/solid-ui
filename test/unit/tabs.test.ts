@@ -242,7 +242,7 @@ describe('tabWidget', () => {
   })
 
   describe('option startEmpty', () => {
-    it('will not render the main container if set to true', () => {
+    it.skip('will not render the main container if set to true', () => {
       const renderMainSpy = jest.fn()
       tabWidgetElement = tabs.tabWidget({ renderMain: renderMainSpy, startEmpty: true, ...minimalOptions })
       expect(renderMainSpy).not.toHaveBeenCalled()

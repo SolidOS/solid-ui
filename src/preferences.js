@@ -10,6 +10,7 @@ const ns = require('./ns')
 const authn = require('./authn/authn')
 const widgets = require('./widgets')
 const pad = require('./pad')
+const participation = require('./participation')
 
 // This was tabulator . preferences in the tabulator
 //
@@ -134,7 +135,7 @@ function recordPersonalDefaults (theClass, context) {
 
 function renderPreferencesForm (subject, theClass, preferencesForm, context) {
   var prefContainer = context.dom.createElement('div')
-  pad.participationObject(subject, subject.doc(), context.me).then(
+  participation.participationObject(subject, subject.doc(), context.me).then(
     participation => {
       const dom = context.dom
       function heading (text) {
@@ -228,7 +229,7 @@ function getPreferencesForClass (subject, theClass, predicates, context) {
     recordSharedPreferences(subject, context).then(context => {
       var sharedPreferences = context.sharedPreferences
       if (context.me) {
-        pad
+        participation
           .participationObject(subject, subject.doc(), context.me)
           .then(participation => {
             recordPersonalDefaults(theClass, context).then(context => {
