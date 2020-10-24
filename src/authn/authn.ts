@@ -323,7 +323,7 @@ async function loadIndex (
       ? logInLoadProfile(context)
       : logInLoadPreferences(context)
   } catch (err) {
-    widgets.complain(context, `loadPubicIndex: login and load problem ${err}`)
+    widgets.complain(context, `loadPublicIndex: login and load problem ${err}`)
   }
   const me = context.me
   let ixs
@@ -355,7 +355,7 @@ async function loadIndex (
   try {
     await kb.fetcher.load(ixs)
   } catch (err) {
-    widgets.complain(context, `loadPubicIndex: loading public type index ${err}`)
+    widgets.complain(context, `loadPublicIndex: loading public type index ${err}`)
   }
   return context
 }
