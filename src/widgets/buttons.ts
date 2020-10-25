@@ -5,6 +5,8 @@ import ns from '../ns'
 import style from '../style'
 import * as debug from '../debug'
 import { info } from '../log'
+import { getClasses } from '../jss'
+import { uploadFiles } from './dragAndDrop.js'
 
 /**
  * UI Widgets such as buttons
@@ -25,6 +27,12 @@ export type StatusAreaContext = {
   statusArea?: HTMLElement
   div?: HTMLElement
   dom?: HTMLDocument
+}
+export type ButtonType = 'Primary' | 'Secondary'
+
+export type ButtonWidgetOptions = {
+  buttonColor?: ButtonType,
+  needsBorder?: boolean
 }
 function getStatusArea (context?: StatusAreaContext) {
   var box = (context && context.statusArea) || (context && context.div) || null
@@ -235,7 +243,11 @@ export const iconForClass = {
   'ui:Form': 'noun_122196.svg',
   'rdfs:Class': 'class-rectangle.svg', // For RDF developers
   'rdf:Property': 'property-diamond.svg',
-  'owl:Ontology': 'noun_classification_1479198.svg'
+  'owl:Ontology': 'noun_classification_1479198.svg',
+  'wf:Tracker': 'noun_122196.svg',
+  'wf:Task': 'noun_17020_gray-tick.svg',
+  'wf:Open': 'noun_17020_sans-tick.svg',
+  'wf:Closed': 'noun_17020.svg'
 }
 
 /**
@@ -477,24 +489,78 @@ export function deleteButtonWithCheck (
   return deleteButtonElt
 }
 
+/**
+ * Get the button style, based on options.
+ * See https://design.inrupt.com/atomic-core/?cat=Atoms#Buttons
+ */
+function getButtonStyle (options: ButtonWidgetOptions = {}) {
+  // default to primary color
+  const color: string = (options.buttonColor === 'Secondary') ? '#01c9ea' : '#7c4dff'
+  let backgroundColor: string = color
+  let fontColor: string = '#ffffff'
+  let borderColor: string = color
+  // default to primary color
+  let hoverBackgroundColor: string = (options.buttonColor === 'Secondary') ? '#37cde6' : '#9f7dff'
+  let hoverFontColor: string = fontColor
+  if (options.needsBorder) {
+    backgroundColor = '#ffffff'
+    fontColor = color
+    borderColor = color
+    hoverBackgroundColor = color
+    hoverFontColor = backgroundColor
+  }
+
+  return {
+    'background-color': `${backgroundColor}`,
+    color: `${fontColor}`,
+    'font-family': 'Raleway, Roboto, sans-serif',
+    'border-radius': '0.25em',
+    'border-color': `${borderColor}`,
+    border: '1px solid',
+    cursor: 'pointer',
+    'font-size': '.8em',
+    'text-decoration': 'none',
+    padding: '0.5em 4em',
+    transition: '0.25s all ease-in-out',
+    outline: 'none',
+    '&:hover': {
+      'background-color': `${hoverBackgroundColor}`,
+      color: `${hoverFontColor}`,
+      transition: '0.25s all ease-in-out'
+    }
+  }
+}
+
 /*  Make a button
  *
  * @param dom - the DOM document object
- * @Param iconURI - the URI of theb icon to use
+ * @Param iconURI - the URI of the icon to use (if any)
  * @param text - the tooltip text or possibly button contents text
  * @param handler <function> - A handler to called when button is clicked
  *
  * @returns <dDomElement> - the button
  */
-export function button (dom: HTMLDocument, iconURI: string, text: string, handler: (event: any) => void) {
+export function button (dom: HTMLDocument, iconURI: string | undefined, text: string,
+  handler?: (event: any) => void,
+  options: ButtonWidgetOptions = { buttonColor: 'Primary', needsBorder: false }) {
   var button = dom.createElement('button')
   button.setAttribute('type', 'button')
-  button.setAttribute('style', style.buttonStyle)
   // button.innerHTML = text  // later, user preferences may make text preferred for some
-  var img = button.appendChild(dom.createElement('img'))
-  img.setAttribute('src', iconURI)
-  img.setAttribute('style', 'width: 2em; height: 2em;') // trial and error. 2em disappears
-  img.title = text
+  if (iconURI) {
+    var img = button.appendChild(dom.createElement('img'))
+    img.setAttribute('src', iconURI)
+    img.setAttribute('style', 'width: 2em; height: 2em;') // trial and error. 2em disappears
+    img.title = text
+    button.setAttribute('style', style.buttonStyle)
+  } else {
+    button.innerText = text.toLocaleUpperCase()
+    const style = getButtonStyle(options)
+    const { classes } = getClasses(dom.head, {
+      textButton: style
+    })
+
+    button.classList.add(classes.textButton)
+  }
   if (handler) {
     button.addEventListener('click', handler, false)
   }
@@ -602,7 +668,7 @@ export function linkIcon (dom: HTMLDocument, subject: NamedNode, iconURI?: strin
 }
 
 /**
- * A TR to repreent a draggable person, etc in a list
+ * A TR to represent a draggable person, etc in a list
  *
  * pred is unused param at the moment
  */
@@ -664,6 +730,7 @@ export type attachmentListOptions = {
   modify?: boolean
   promptIcon?: string
   predicate?: NamedNode
+  uploadFolder?: NamedNode
   noun?: string
 }
 
@@ -673,8 +740,8 @@ export type attachmentListOptions = {
  * to a meeting.
  * Accepts dropping URLs onto it to add attachments to it.
  */
-export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTMLElement, options?: attachmentListOptions) {
-  options = options || {}
+export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTMLElement, options: attachmentListOptions = {}) {
+  // options = options || {}
   var doc = options.doc || subject.doc()
   if (options.modify === undefined) options.modify = true
   var modify = options.modify
@@ -724,7 +791,7 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
   ;(attachmentOuter as any).refresh = refresh // Participate in downstream changes
   refresh()
 
-  var droppedURIHandler = function (uris) {
+  function droppedURIHandler (uris) {
     var ins: any = []
     uris.map(function (u) {
       var target = sym(u) // Attachment needs text label to disinguish I think not icon.
@@ -739,13 +806,40 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
       }
     })
   }
-  if (modify) {
-    var paperclip = attachmentLeft.appendChild(dom.createElement('img'))
-    paperclip.setAttribute('src', promptIcon)
-    paperclip.setAttribute('style', 'width; 2em; height: 2em; margin: 0.5em;')
-    paperclip.setAttribute('draggable', 'false')
 
-    dragAndDrop.makeDropTarget(attachmentLeft, droppedURIHandler)
+  function droppedFileHandler (files) {
+    uploadFiles(
+      kb.fetcher,
+      files,
+      options.uploadFolder?.uri, // Files
+      options.uploadFolder?.uri, // Pictures
+      function (theFile, destURI) {
+        const ins = [st(subject, predicate, kb.sym(destURI), doc)]
+        kb.updater.update([], ins, function (uri, ok, errorBody, _xhr) {
+          if (ok) {
+            refresh()
+          } else {
+            complain(undefined, 'Error adding link to uploaded file: ' + errorBody)
+          }
+        })
+      }
+    )
+  }
+
+  if (modify) {
+    // const buttonStyle = 'width; 2em; height: 2em; margin: 0.5em; padding: 0.1em;'
+    const paperclip = button(dom, promptIcon, 'Drop attachments here')
+    // paperclip.style = buttonStyle // @@ needed?  default has white background
+    attachmentLeft.appendChild(paperclip)
+    const fhandler = options.uploadFolder ? droppedFileHandler : null
+    dragAndDrop.makeDropTarget(paperclip, droppedURIHandler, fhandler) // beware missing the wire of the paparclip!
+    dragAndDrop.makeDropTarget(attachmentLeft, droppedURIHandler, fhandler) // just the outer won't do it
+
+    if (options.uploadFolder) { // Addd an explicit file upload button as well
+      const buttonDiv = fileUploadButtonDiv(dom, droppedFileHandler)
+      attachmentLeft.appendChild(buttonDiv)
+      // buttonDiv.children[1].style =  buttonStyle
+    }
   }
   return attachmentOuter
 }
@@ -1105,13 +1199,13 @@ function twoLineTransaction (dom: HTMLDocument, x: NamedNode): HTMLElement {
   }
   var box = dom.createElement('table')
   box.innerHTML = `
-    <tr>
-      <td colspan="2">${enc('payee')}</td>
-    </tr>
-    <tr>
+      <tr>
+      <td colspan="2"> ${enc('payee')}</td>
+      < /tr>
+      < tr >
       <td>${enc('date').slice(0, 10)}</td>
-      <td style="text-align: right;">${enc('amount')}</td>
-    </tr>`
+      <td style = "text-align: right;">${enc('amount')}</td>
+      </tr>`
   if (failed) {
     box.innerHTML = `
       <tr>

@@ -325,7 +325,7 @@ module.exports = function renderTableViewPane (doc, options) {
   function SubjectType (type) {
     this.type = type
     this.columns = null
-    this.allColumns = null
+    this.allColumns = []
     this.useCount = 0
 
     // Get a list of all columns used by this type.
@@ -455,10 +455,25 @@ module.exports = function renderTableViewPane (doc, options) {
       this.useCount += 1
     }
 
+    this.getHints = function () {
+      if (
+        options &&
+        options.hints &&
+        this.variable &&
+        options.hints[this.variable.toNT()]
+      ) {
+        return options.hints[this.variable.toNT()]
+      }
+      return {}
+    }
+
     this.getLabel = function () {
+      if (this.getHints().label) {
+        return this.getHints().label
+      }
       if (this.predicate) {
         if (this.predicate.sameTerm(ns.rdf('type')) && this.superClass) {
-          return utils.label(this.superClass)
+          return utils.label(this.superClass, true) // do initial cap
         }
         return utils.label(this.predicate)
       } else if (this.variable) {
@@ -630,6 +645,19 @@ module.exports = function renderTableViewPane (doc, options) {
     }
 
     return resultDiv
+  }
+
+  // Find the column for a given variable
+
+  function getColumnForVariable (columns, variableNT) {
+    for (const predicateUri in columns) {
+      var column = columns[predicateUri]
+      if (column.variable.toNT() === variableNT) {
+        return column
+      }
+    }
+    throw new Error(`getColumnForVariable: no column for variable ${variableNT}`)
+    // return null
   }
 
   // Find the column for a given predicate, creating a new column object
@@ -830,12 +858,6 @@ module.exports = function renderTableViewPane (doc, options) {
     /* Empty header for link column */
     var linkTd = doc.createElement('th')
     tr.appendChild(linkTd)
-
-    /*
-    var labelTd = doc.createElement("th")
-    labelTd.appendChild(doc.createTextNode("*label*"))
-    tr.appendChild(labelTd)
-    */
 
     for (let i = 0; i < columns.length; ++i) {
       var th = doc.createElement('th')
@@ -1638,17 +1660,12 @@ module.exports = function renderTableViewPane (doc, options) {
         }
       }
 
-      /*
-                  for (let i=0; i< rows.length; i++) {
-                      rows[i].originalValues = rows[i].values
-                      rows[i].values = {}
-                      // oldStyle = rows[i]._htmlRow.getAttribute('style') || ''
-                      rows[i]._htmlRow.style.background = '#ffe'; //setAttribute('style', ' background-color: #ffe;')//
-                      applyColumnFilters(rows, columns); // @@ TBL added this
-                      // Here add table clean-up, remove "loading" message etc.
-                  }
-                  */
-      if (options.onDone) options.onDone()
+      if (options.sortBy) { // @@ for each column check needs sorting
+        const column = getColumnForVariable(columns, options.sortBy)
+        literalSort(rows, column, options.sortReverse)
+      }
+
+      if (options.onDone) options.onDone(resultDiv) // return div makes testing easier
     }
     kb.query(query, onResult, undefined, onDone)
   }

@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import { IndexedFormula, NamedNode, sym } from 'rdflib'
+import { fetcher, IndexedFormula, NamedNode, sym } from 'rdflib'
 import { ACLbyCombination, readACL } from './acl'
 import widgets from '../widgets'
 import ns from '../ns'
@@ -12,6 +12,7 @@ import { AccessController } from './access-controller'
 import { AgentMapMap, ComboList, PartialAgentTriple } from './types'
 import { AddAgentButtons } from './add-agent-buttons'
 import * as debug from '../debug'
+import { LiveStore } from 'pane-registry'
 
 const ACL = ns.acl
 
@@ -58,7 +59,7 @@ export class AccessGroups {
   public aclMap: AgentMapMap
   private readonly addAgentButton: AddAgentButtons
   private readonly rootElement: HTMLElement
-  private _store: IndexedFormula
+  private _store: LiveStore
 
   constructor (
     private doc: NamedNode,
@@ -68,7 +69,12 @@ export class AccessGroups {
     private options: AccessGroupsOptions = {}
   ) {
     this.defaults = options.defaults || false
-    this._store = store
+    fetcher(store, {})
+
+    // The store will already have an updater at this point:
+    // store.updater = new UpdateManager(store)
+
+    this._store = store as LiveStore // TODO hacky, find a better solution
     this.aclMap = readACL(doc, aclDoc, store, this.defaults)
     this.byCombo = ACLbyCombination(this.aclMap)
     this.addAgentButton = new AddAgentButtons(this)
@@ -178,7 +184,7 @@ export class AccessGroups {
     if (!agent && !secondAttempt) {
       debug.log(`   Not obvious: looking up dropped thing ${thing}`)
       try {
-        await (this.store as any).fetcher.load(thing.doc())
+        await this._store.fetcher.load(thing.doc())
       } catch (error) {
         const message = `Ignore error looking up dropped thing: ${error}`
         debug.error(message)

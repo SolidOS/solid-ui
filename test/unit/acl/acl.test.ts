@@ -1,4 +1,4 @@
-import { silenceDebugMessages } from '../../setup'
+import { silenceDebugMessages } from '../../helpers/setup'
 import {
   ACLbyCombination,
   ACLToString,
@@ -8,7 +8,6 @@ import {
   fixIndividualACL,
   fixIndividualCardACL,
   getACL,
-  getACLorDefault,
   getProspectiveHolder,
   loadUnionACL,
   makeACLGraph,
@@ -25,7 +24,6 @@ import { sym } from 'rdflib'
 import { createLiveStore } from '../helpers/createLiveStore'
 import { clearStore } from '../helpers/clearStore'
 import globalStore from '../../../src/store'
-import ns from '../../../src/ns'
 import {
   ACL_LINK,
   DEFAULT_CONTAINER_ACL,
@@ -33,7 +31,8 @@ import {
   DEFAULT_RESOURCE_ACL,
   DEFAULT_RESOURCE_DOC,
   getAgentMapForAclWithAllAgents,
-  getAgentMapForAclWithAllAgentsUsingDefaults, mocks, PROFILE
+  getAgentMapForAclWithAllAgentsUsingDefaults,
+  mocks
 } from './acl.mocks'
 import { loadTurtleIntoGraph } from '../helpers/loadTurtleIntoGraph'
 import { createGraphFromTurtle } from '../helpers/createGraphFromTurtle'
@@ -226,10 +225,6 @@ describe('getACL', () => {
 
     it('should trigger callback with failure', () => expect(callbackFunction).toHaveBeenCalledWith(false, `Can't get headers to find ACL for ${DEFAULT_RESOURCE_DOC}: Failed response`))
   })
-})
-
-describe('getACLorDefault', () => {
-
 })
 
 describe('getProspectiveHolder', () => {

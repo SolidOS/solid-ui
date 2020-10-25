@@ -1,4 +1,4 @@
-import { silenceDebugMessages } from '../setup'
+import { silenceDebugMessages } from '../helpers/setup'
 import * as Index from '../../src/index'
 
 silenceDebugMessages()
@@ -16,7 +16,6 @@ describe('Index', () => {
       'media',
       'messageArea',
       'infiniteMessageArea',
-      'pad',
       'preferences',
       'store',
       'style',
@@ -24,10 +23,15 @@ describe('Index', () => {
       'utils',
       'widgets',
       'versionInfo',
+      'initHeader',
       'dom',
       'rdf',
       'log',
+      'pad',
+      'participation',
       'tabs'
     ])
   })
+  // make sure none of them are undefined:
+  Object.keys(Index).forEach(key => expect(Index[key] && key).toEqual(key))
 })

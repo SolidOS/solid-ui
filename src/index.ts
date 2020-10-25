@@ -56,7 +56,9 @@ import messageArea from './messageArea'
 // @ts-ignore
 import { infiniteMessageArea } from './chat/infinite'
 // @ts-ignore
-import pad from './pad'
+import * as pad from './pad'
+// @ts-ignore
+import * as participation from './participation'
 // @ts-ignore
 import preferences from './preferences'
 // @ts-ignore
@@ -70,6 +72,7 @@ import * as tabs from './tabs'
 import utils from './utils'
 import widgets from './widgets'
 import versionInfo from './versionInfo'
+import { initHeader } from './header'
 
 const dom = window ? window.document : null // Idea that UI.dom can be adapted in non-browser environments
 
@@ -89,6 +92,7 @@ if (typeof window !== 'undefined') {
     messageArea,
     infiniteMessageArea,
     pad,
+    participation,
     preferences,
     store,
     style,
@@ -96,7 +100,8 @@ if (typeof window !== 'undefined') {
     tabs,
     utils,
     widgets,
-    versionInfo
+    versionInfo,
+    initHeader
   } // Simpler access by non-node scripts
 }
 
@@ -115,6 +120,7 @@ export {
   messageArea,
   infiniteMessageArea,
   pad,
+  participation,
   preferences,
   store,
   style,
@@ -122,5 +128,6 @@ export {
   tabs,
   utils,
   widgets,
-  versionInfo
+  versionInfo,
+  initHeader
 }

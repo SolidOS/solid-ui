@@ -1,0 +1,75 @@
+import * as UI from '../../lib'
+
+import { Canvas, Meta, Story } from '@storybook/addon-docs/blocks'
+
+<Meta title="DOM manipulation" />
+
+## addStyleSheet
+
+Stick a stylesheet link the document if not already there
+
+[API Documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#addstylesheet)
+
+<Canvas withSource="open">
+  <Story name="addStyleSheet" withSource="open" decorators={[ (Story) => {
+    Story()
+    const html = (document.querySelector('link').outerHTML)
+    const pre = document.createElement('pre')
+    const text =  document.createTextNode(html)
+    pre.appendChild(text)
+    return pre
+  }]}>
+    {() => {
+        UI.widgets.addStyleSheet(document, 'https://linkeddata.github.io/tabulator-firefox/content/tabbedtab.css')
+    }}
+  </Story>
+</Canvas>
+
+## clearElement
+
+Remove all the children of an HTML element
+
+[API Documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#clearelement)
+
+<Canvas withSource="open">
+  <Story name="clearElement">
+    { () => {
+      let counter = 0
+      const div = document.createElement('p')
+      setInterval(() => {
+        if (counter++ % 2 === 0) {
+          const text = document.createTextNode('Now you see me')
+          div.appendChild(text)
+        } else {
+          UI.widgets.clearElement(div)
+        }
+      }, 1000)
+      return div
+    }
+    }
+  </Story>
+</Canvas>
+
+
+## refreshTree
+
+Refresh a DOM tree recursively
+
+[API Documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#refreshtree)
+
+<Canvas withSource="open">
+  <Story name="refreshTree">
+    { () => {
+      setInterval(() => {
+        UI.widgets.refreshTree(document.body)
+      }, 1000)
+      const refreshable = document.createElement('p')
+      refreshable.refresh = () => {
+        refreshable.innerText = new Date().getTime()
+      }
+      return refreshable
+    }
+    }
+  </Story>
+</Canvas>
+

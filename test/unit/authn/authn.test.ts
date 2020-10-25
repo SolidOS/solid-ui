@@ -1,4 +1,4 @@
-import { silenceDebugMessages } from '../../setup'
+import { silenceDebugMessages } from '../../helpers/setup'
 import { JSDOM } from 'jsdom'
 import {
   checkUser, // Async
@@ -215,7 +215,7 @@ describe('setACLUserPublic', () => {
   })
   it.skip('runs', async () => {
     expect(await setACLUserPublic(
-      sym('https://test.test#'),
+      'https://test.test#',
       sym('https://test.test#'),
       {}
     )).toEqual({})

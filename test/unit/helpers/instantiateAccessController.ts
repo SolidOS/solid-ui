@@ -1,8 +1,9 @@
 import { AccessController } from '../../../src/acl/access-controller'
 import { createDataBrowserContext } from './createDataBrowserContext'
-import { IndexedFormula, sym } from 'rdflib'
+import { sym } from 'rdflib'
+import { LiveStore } from 'pane-registry'
 
-export function instantiateAccessController (dom: HTMLDocument, store: IndexedFormula) {
+export function instantiateAccessController (dom: HTMLDocument, store: LiveStore) {
   const subject = sym('https://test.test#')
   const noun = ''
   const context = createDataBrowserContext(dom, store)

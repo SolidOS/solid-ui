@@ -1,4 +1,4 @@
-import { silenceDebugMessages } from '../../setup'
+import { silenceDebugMessages } from '../../helpers/setup'
 import { DataBrowserContext } from 'pane-registry'
 import { sym, graph, namedNode } from 'rdflib'
 import { JSDOM } from 'jsdom'
@@ -56,7 +56,7 @@ describe('preventBrowserDropEvents', () => {
 
   describe('handleDrop', () => {
     beforeEach(() => {
-      setGlobalWindow(window)
+      setGlobalWindow(window as unknown as Window)
       event.dataTransfer = { files: [{}] }
       window.confirm = jest.fn(() => false)
       handleDrop(event)
