@@ -1,2 +1,6 @@
-s?//.*$??g 
-'s/^\([^:]*\):.*require(.\(.*\).).*/<\1> :dependsOn <\2>./
+# A comment // deleted the whole line
+s?^.*//.*$??g
+# Strip path to filename
+s?../src/??g
+# Convert syntax to turtle
+s/^\([^:]*\):.*require(.\(.*\).).*/<\1> :dependsOn <\2>./

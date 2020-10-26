@@ -7,7 +7,7 @@ S=../src
 # Where to put files?
 D=.
 
-InternalDependencies.svg:
+InternalDependencies.svg: $D/dependencies.dot
 	dot  -Tsvg -oInternalDependencies.svg $D/dependencies.dot
 $D/dependencies.dot : $D/all.ttl ttl2dot.sed
 	sed -f ttl2dot.sed < $< > $@
@@ -15,14 +15,14 @@ $D/all.ttl : $D/imports.ttl $D/requires.ttl
 	cat $D/imports.ttl $D/requires.ttl > $@
 $D/imports.ttl : $D/imports.txt
 	sed -e 's/^\([^:]*\):.*from .\(.*\)./<\1> :dependsOn <\2>./' < $D/imports.txt > $@
-$D/requires.ttl : convert-dependency.sed
+$D/requires.ttl : convert-dependency.sed $D/requires.txt
 	 sed -f convert-dependency.sed < $D/requires.txt > $@
 $D/imports.txt : $D/source-file-list.txt
 	cat $D/source-file-list.txt | xargs grep "import.*from " > $D/imports.txt
 $D/requires.txt : $D/source-file-list.txt
 	cat $D/source-file-list.txt | xargs grep "require(" > $D/requires.txt
-$D/imports-list.txt : $D/
-	grep -e "^import.*from "   > $@
+# $D/imports-list.txt : $D/
+#	 grep -e "^import.*from "   > $@
 $D/source-file-list.txt :
 	find $S -name "*.js" > $@
 
