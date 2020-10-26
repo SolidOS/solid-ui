@@ -60,7 +60,7 @@
     "jss-preset-default": "^10.4.0",
     "mime-types": "^2.1.27",
     "node-uuid": "^1.4.7",
-    "pane-registry": "^2.3.0",
+    "pane-registry": "^2.3.1",
     "path-browserify": "^1.0.1",
     "rdflib": "^2.0.0",
     "solid-auth-client": "^2.5.2",
