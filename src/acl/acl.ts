@@ -150,6 +150,8 @@ export function ACLunion (list: Array<AgentMapMap | AgentMapUnion>): AgentMapUni
   return b as AgentMapUnion
 }
 
+type loadUnionACLCallback = (ok: boolean, message?: string | NamedNode | AgentMapUnion | AgentMapMap) => void
+
 /**
  * Merge ACLs lists from things to form union
  */
@@ -181,8 +183,6 @@ export function loadUnionACL (subjectList: Array<NamedNode>, callbackFunction: l
   }
   doList(subjectList)
 }
-
-type loadUnionACLCallback = (ok: boolean, message?: string | NamedNode | AgentMapUnion | AgentMapMap) => void
 
 /**
  * Represents these as an RDF graph by combination of modes
@@ -343,12 +343,15 @@ export function putACLbyCombo (
   )
 }
 
+type fixIndividualCardACLCallback = (ok: boolean, message?: string | NamedNode | AgentMapUnion | AgentMapMap) => void
+type fixIndividualACLCallback = (ok: boolean, message?: string | NamedNode | AgentMapUnion | AgentMapMap) => void
+
 /**
  * Fix the ACl for an individual card as a function of the groups it is in
  *
  * All group files must be loaded first
  */
-export function fixIndividualCardACL (person: NamedNode, log: Function, callbackFunction: fixIndividualCardACL): void {
+export function fixIndividualCardACL (person: NamedNode, log: Function, callbackFunction: fixIndividualCardACLCallback): void {
   const groups = kb.each(undefined, ns.vcard('hasMember'), person)
   // const doc = person.doc()
   if (groups) {
@@ -359,8 +362,6 @@ export function fixIndividualCardACL (person: NamedNode, log: Function, callback
   }
   // @@ if no groups, then use default for People container or the book top container.?
 }
-
-type fixIndividualCardACL = (ok: boolean, message?: string | NamedNode | AgentMapUnion | AgentMapMap) => void
 
 /**
  * This function is used by [[fixIndividualCardACL]]
@@ -402,8 +403,6 @@ export function fixIndividualACL (item: NamedNode, subjects: Array<NamedNode>, l
     })
   })
 }
-
-type fixIndividualACLCallback = (ok: boolean, message?: string | NamedNode | AgentMapUnion | AgentMapMap) => void
 
 /**
  * Set an ACL

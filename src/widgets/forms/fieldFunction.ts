@@ -3,8 +3,6 @@ import store from '../../store'
 import { debug } from '../../log'
 import { errorMessageBlock } from '../error'
 
-export const field: { [classUri: string]: FieldFunction } = {} // Form field functions by URI of field type.
-
 export type FieldFunction = (
   dom: HTMLDocument, // the DOM
   container: HTMLElement | undefined, // if defined, the box will be appended to it
@@ -14,6 +12,8 @@ export type FieldFunction = (
   doc: Node, // the online RDF document for data binding (form input values will be read/saved automatically)
   callbackFunction: (ok: boolean, errorMessage: string) => void // this will be called when data changes (TODO: check this with unit tests)
 ) => HTMLElement
+
+export const field: { [classUri: string]: FieldFunction } = {} // Form field functions by URI of field type.
 
 /**
  * Which class of field is this? Relies on http://www.w3.org/2000/01/rdf-schema#subClassOf and
