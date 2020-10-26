@@ -3,6 +3,13 @@ import { cancelButton } from './widgets'
 import { label } from './utils'
 import { NamedNode } from 'rdflib'
 
+/**
+ * @ignore
+ */
+class ContainerElement extends HTMLElement {
+  asSettings?: boolean
+}
+
 type TabWidgetOptions = {
   backgroundColor?: string
   dom?: HTMLDocument
@@ -23,13 +30,6 @@ export class TabWidgetElement extends HTMLElement {
   bodyContainer?: HTMLElement
   refresh?: () => void
   tabContainer?: HTMLElement
-}
-
-/**
- * @ignore
- */
-class ContainerElement extends HTMLElement {
-  asSettings?: boolean
 }
 
 /**

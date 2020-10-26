@@ -28,11 +28,11 @@ export declare function sameACL(a: AgentMapMap | AgentMapUnion, b: AgentMapMap |
  * Union N ACLs
  */
 export declare function ACLunion(list: Array<AgentMapMap | AgentMapUnion>): AgentMapUnion;
+declare type loadUnionACLCallback = (ok: boolean, message?: string | NamedNode | AgentMapUnion | AgentMapMap) => void;
 /**
  * Merge ACLs lists from things to form union
  */
 export declare function loadUnionACL(subjectList: Array<NamedNode>, callbackFunction: loadUnionACLCallback): void;
-declare type loadUnionACLCallback = (ok: boolean, message?: string | NamedNode | AgentMapUnion | AgentMapMap) => void;
 /**
  * Represents these as an RDF graph by combination of modes
  *
@@ -69,18 +69,18 @@ export declare function putACLObject(kb: LiveStore, x: NamedNode, ac: AgentMapMa
  * Write ACL graph to web from a [[ComboList]]
  */
 export declare function putACLbyCombo(kb: LiveStore, x: NamedNode, byCombo: ComboList, aclDoc: NamedNode, callbackFunction: (ok: boolean, message?: string) => void): void;
+declare type fixIndividualCardACLCallback = (ok: boolean, message?: string | NamedNode | AgentMapUnion | AgentMapMap) => void;
+declare type fixIndividualACLCallback = (ok: boolean, message?: string | NamedNode | AgentMapUnion | AgentMapMap) => void;
 /**
  * Fix the ACl for an individual card as a function of the groups it is in
  *
  * All group files must be loaded first
  */
-export declare function fixIndividualCardACL(person: NamedNode, log: Function, callbackFunction: fixIndividualCardACL): void;
-declare type fixIndividualCardACL = (ok: boolean, message?: string | NamedNode | AgentMapUnion | AgentMapMap) => void;
+export declare function fixIndividualCardACL(person: NamedNode, log: Function, callbackFunction: fixIndividualCardACLCallback): void;
 /**
  * This function is used by [[fixIndividualCardACL]]
  */
 export declare function fixIndividualACL(item: NamedNode, subjects: Array<NamedNode>, log: Function, callbackFunction: fixIndividualACLCallback): void;
-declare type fixIndividualACLCallback = (ok: boolean, message?: string | NamedNode | AgentMapUnion | AgentMapMap) => void;
 /**
  * Set an ACL
  */

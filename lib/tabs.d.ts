@@ -1,4 +1,10 @@
 import { NamedNode } from 'rdflib';
+/**
+ * @ignore
+ */
+declare class ContainerElement extends HTMLElement {
+    asSettings?: boolean;
+}
 declare type TabWidgetOptions = {
     backgroundColor?: string;
     dom?: HTMLDocument;
@@ -18,12 +24,6 @@ export declare class TabWidgetElement extends HTMLElement {
     bodyContainer?: HTMLElement;
     refresh?: () => void;
     tabContainer?: HTMLElement;
-}
-/**
- * @ignore
- */
-declare class ContainerElement extends HTMLElement {
-    asSettings?: boolean;
 }
 /**
  * Use this widget to generate tabs from triples set in the global store.

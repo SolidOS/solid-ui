@@ -220,8 +220,8 @@ function newThingUI (createContext, dataBrowserContext, thePanes) {
     icon.setAttribute('src', pane.icon)
     const noun = pane.mintClass
       ? mintingClassMap[pane.mintClass] > 1
-        ? `${UI.utils.label(pane.mintClass)} (using ${pane.name} pane)`
-        : UI.utils.label(pane.mintClass)
+          ? `${UI.utils.label(pane.mintClass)} (using ${pane.name} pane)`
+          : UI.utils.label(pane.mintClass)
       : pane.name + ' @@'
     icon.setAttribute('title', 'Make new ' + noun)
     icon.setAttribute('style', iconStyle + 'display: none;')
