@@ -59,7 +59,7 @@
     "jss": "^10.4.0",
     "jss-preset-default": "^10.4.0",
     "mime-types": "^2.1.27",
-    "pane-registry": "^2.3.1",
+    "pane-registry": "^2.3.2",
     "path-browserify": "^1.0.1",
     "rdflib": "^2.1.1",
     "solid-auth-client": "^2.5.2",
