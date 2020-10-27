@@ -91,4 +91,7 @@ export class UpdateManager {
     onDone('uri', this.reportSuccess, 'body')
     return Promise.resolve()
   }
+
+  addDownstreamChangeListener () {
+  }
 }
