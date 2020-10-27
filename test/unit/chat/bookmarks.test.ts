@@ -31,7 +31,8 @@ describe('findBookmarkDocument', () => {
       index: {
         public: []
       },
-      instances: []
+      instances: [],
+      statusArea: result.statusArea
     })
   })
   it('complains if you have multiple bookmark docs', async () => {
