@@ -1,7 +1,7 @@
 import { silenceDebugMessages } from '../helpers/setup'
 import { JSDOM } from 'jsdom'
 import { deleteRecursive, deleteFolder } from '../../src/folders'
-import { graph } from 'rdflib'
+import { store } from '../../src/index'
 
 silenceDebugMessages()
 jest.mock('solid-auth-client')
@@ -12,7 +12,7 @@ describe('deleteRecursive', () => {
     expect(deleteRecursive).toBeInstanceOf(Function)
   })
   it.skip('runs', async () => {
-    expect(await deleteRecursive()).toEqual(undefined)
+    expect(await deleteRecursive(store, 'test/')).toEqual(undefined)
   })
 })
 
@@ -20,7 +20,7 @@ describe('deleteFolder', () => {
   it('exists', () => {
     expect(deleteFolder).toBeInstanceOf(Function)
   })
-  it('runs', () => {
-    expect(deleteFolder({}, graph(), dom)).toBeTruthy()
+  it('runs', async () => {
+    expect(await deleteFolder({}, undefined, dom)).toBeTruthy()
   })
 })

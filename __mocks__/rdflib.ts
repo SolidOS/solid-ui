@@ -63,6 +63,7 @@ export class Fetcher {
   }
 
   load () {
+    return Promise.resolve()
   }
 
   nowOrWhenFetched () {
