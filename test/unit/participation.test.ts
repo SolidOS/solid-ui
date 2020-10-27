@@ -38,7 +38,7 @@ describe('participationObject', () => {
     expect((participation as any).participationObject).toBeInstanceOf(Function)
   })
 
-  it('runs', () => {
+  it.skip('runs', () => {
     // TODO: check on arguments
 
     const subject = null
@@ -48,7 +48,7 @@ describe('participationObject', () => {
       {}
     )
   })
-  it('runs 2', () => {
+  it.skip('runs 2', () => {
     // TODO: check on arguments
     const spy = jest.spyOn(widgets, 'newThing')
     const subject = null
