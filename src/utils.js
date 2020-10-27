@@ -322,8 +322,8 @@ function getTerm (target) {
       return target.nextSibling
         ? st.predicate
         : !statementTr.AJAR_inverse
-          ? st.object
-          : st.subject
+            ? st.object
+            : st.subject
   }
 }
 
@@ -427,6 +427,7 @@ function shortName (uri) {
   let i
   const hash = p.lastIndexOf('#')
   if (hash >= 0) p = p.slice(hash - 1) // lop off localid
+  // eslint-disable-next-line no-unreachable-loop
   for (;;) {
     const slash = p.lastIndexOf('/')
     if (slash >= 0) p = p.slice(slash + 1)
