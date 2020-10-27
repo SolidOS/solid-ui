@@ -71,7 +71,7 @@ describe('Preferences.getPreferencesForClass', () => {
   it('runs', () => {
     const subject = sym('https://test.test/sub')
     const theClass = sym('https://test.test/class')
-    const predicates = [ sym('https://test.test/pred') ]
+    const predicates = [sym('https://test.test/pred')]
     const context = {}
     expect(Preferences.getPreferencesForClass(subject, theClass, predicates, context)).toBeTruthy()
   })
