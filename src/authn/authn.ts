@@ -319,9 +319,9 @@ async function loadIndex (
 ): Promise<AuthenticationContext> {
   // Loading preferences is more than loading profile
   try {
-    ;(await isPublic)
+    await (isPublic
       ? logInLoadProfile(context)
-      : logInLoadPreferences(context)
+      : logInLoadPreferences(context))
   } catch (err) {
     widgets.complain(context, `loadPublicIndex: login and load problem ${err}`)
   }
