@@ -9,7 +9,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "npm run clean && npm run build-version && npm run build-lib && npm run build-types && npm run build-webpack",
+    "build": "npm run clean && npm run build-version && npm run build-lib && npm run build-types && npm run build-webpack && npm run build-storybook",
     "build-lib": "babel src -d lib --source-maps --extensions \".ts,.js\"",
     "build-types": "tsc --emitDeclarationOnly",
     "build-version": "sh ./timestamp.sh > src/versionInfo.ts  && eslint \"src/versionInfo.ts\" --fix",
@@ -98,7 +98,7 @@
     "ts-jest": "^26.4.2",
     "typedoc": "^0.19.2",
     "typescript": "^4.0.3",
-    "webpack": "^5.2.0",
+    "webpack": "^4.44.2",
     "webpack-cli": "^4.1.0"
   },
   "husky": {
