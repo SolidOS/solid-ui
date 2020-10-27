@@ -4,7 +4,6 @@ var UI = {
   authn: require('./authn/authn'),
   icons: require('./iconBase'),
   ns: require('./ns'),
-  pad: require('./'),
   rdf: require('rdflib'),
   store: require('./store'),
   style: require('./style'),
