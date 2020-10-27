@@ -58,8 +58,8 @@ describe('Preferences.recordSharedPreferences', () => {
     expect(Preferences.recordSharedPreferences).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const subject = null
-    const context = null
+    const subject = sym('https://test.test/sub')
+    const context = {}
     expect(Preferences.recordSharedPreferences(subject, context)).toBeTruthy()
   })
 })
@@ -69,10 +69,10 @@ describe('Preferences.getPreferencesForClass', () => {
     expect(Preferences.getPreferencesForClass).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const subject = null
-    const theClass = null
-    const predicates = null
-    const context = null
+    const subject = sym('https://test.test/sub')
+    const theClass = sym('https://test.test/class')
+    const predicates = [ sym('https://test.test/pred') ]
+    const context = {}
     expect(Preferences.getPreferencesForClass(subject, theClass, predicates, context)).toBeTruthy()
   })
 })
