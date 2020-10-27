@@ -95,7 +95,7 @@ function desktopNotification (str) {
  * Parameters for the whole chat like its title are stored on
  * index.ttl#this and the chats messages are stored in YYYY/MM/DD/chat.ttl
  */
-export function infiniteMessageArea (dom, kb, chatChannel, options) {
+export async function infiniteMessageArea (dom, kb, chatChannel, options) {
   kb = kb || UI.store
   const ns = UI.ns
   const WF = $rdf.Namespace('http://www.w3.org/2005/01/wf/flow#')
@@ -491,11 +491,13 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     async function extendBackwards () {
       const done = await insertPreviousMessages(true)
       if (done) {
-        scrollBackButton.firstChild.setAttribute(
-          'src',
-          UI.icons.iconBase + 'noun_T-Block_1114655_000000.svg'
-        ) // T
-        scrollBackButton.disabled = true
+        if (scrollBackButton) {
+          scrollBackButton.firstChild.setAttribute(
+            'src',
+            UI.icons.iconBase + 'noun_T-Block_1114655_000000.svg'
+          ) // T
+          scrollBackButton.disabled = true
+        }
         messageTable.initial = true
       } else {
         messageTable.extendedBack = true
@@ -505,6 +507,9 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     }
 
     function setScrollBackButtonIcon () {
+      if (!scrollBackButton) {
+        return
+      }
       const sense = messageTable.extendedBack ? !newestFirst : newestFirst
       const scrollBackIcon = messageTable.initial
         ? 'noun_T-Block_1114655_000000.svg'
@@ -576,7 +581,6 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     /// ///////////////////////
 
     var messageTable = dom.createElement('table')
-
     messageTable.extendBackwards = extendBackwards // Make function available to scroll stuff
     messageTable.extendForwards = extendForwards // Make function available to scroll stuff
     // var messageButton
@@ -586,7 +590,6 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
 
     messageTable.fresh = false
     messageTable.setAttribute('style', 'width: 100%;') // fill that div!
-
     if (live) {
       messageTable.final = true
       liveMessageTable = messageTable
@@ -823,9 +826,11 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     // During initial load ONLY keep scroll to selected thing or bottom
     function fixScroll () {
       if (options.selectedElement) {
-        options.selectedElement.scrollIntoView({ block: 'center' }) // allign tops or bopttoms
+        options.selectedElement.scrollIntoView({ block: 'center' }) // align tops or bottoms
       } else {
-        liveMessageTable.inputRow.scrollIntoView(newestFirst) // allign tops or bopttoms
+        if (liveMessageTable.inputRow.scrollIntoView) {
+          liveMessageTable.inputRow.scrollIntoView(newestFirst) // align tops or bottoms
+        }
       }
     }
 
@@ -858,6 +863,6 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     }
   }
 
-  go()
+  await go()
   return div
 }

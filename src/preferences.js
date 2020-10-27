@@ -1,4 +1,3 @@
-/* global $rdf */
 //                  Solid-UI temporary preferences
 //                  ==============================
 //
@@ -11,6 +10,7 @@ const authn = require('./authn/authn')
 const widgets = require('./widgets')
 const pad = require('./pad')
 const participation = require('./participation')
+const $rdf = require('rdflib')
 
 // This was tabulator . preferences in the tabulator
 //

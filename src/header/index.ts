@@ -1,3 +1,4 @@
+/* global EventListenerOrEventListenerObject */
 /*
     This file was copied from mashlib/src/global/header.ts file. It is modified to
     work in solid-ui by adjusting where imported functions are found.

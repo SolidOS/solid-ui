@@ -10,7 +10,7 @@
  *
  */
 import escape from 'escape-html'
-import uuid from 'node-uuid'
+import uuid from 'uuid'
 import * as rdf from 'rdflib'
 import * as debug from '../debug'
 
