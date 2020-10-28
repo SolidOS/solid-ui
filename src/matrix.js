@@ -23,7 +23,6 @@
 var UI = {
   icons: require('./iconBase'),
   ns: require('./ns'),
-  pad: require('./'),
   rdf: require('rdflib'),
   store: require('./store'),
   widgets: require('./widgets')

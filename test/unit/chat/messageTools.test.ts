@@ -33,6 +33,6 @@ describe('messageToolbar', () => {
     expect(messageToolbar).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(messageToolbar()).toBeInstanceOf(HTMLDivElement)
+    expect(messageToolbar('a', document.createElement('tr'), {})).toBeInstanceOf(HTMLDivElement)
   })
 })
