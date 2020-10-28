@@ -1011,7 +1011,7 @@ function checkCurrentUser () {
  */
 export async function checkUser<T> (
   setUserCallback?: (me: NamedNode | null) => T
-): Promise<NamedNode | T> {
+): Promise<NamedNode | T | null> {
   /**
    * Handle a successful authentication redirect
    */
