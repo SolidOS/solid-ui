@@ -7,7 +7,6 @@ declare const _default: {
         ares: string;
         brotli: string;
         cldr: string;
-        http_parser: string;
         icu: string;
         llhttp: string;
         modules: string;
