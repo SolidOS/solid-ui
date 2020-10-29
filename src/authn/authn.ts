@@ -985,6 +985,7 @@ function signInOrSignUpBox (
  * @returns {Promise<string|null>} Resolves with WebID URI or null
  */
 function webIdFromSession (session?: { webId?: string }): string | null {
+  console.log(session)
   const webId = session?.webId ? session.webId : null
   if (webId) {
     saveUser(webId)
@@ -1001,6 +1002,7 @@ function checkCurrentUser () {
   return checkUser()
 }
 */
+var checkingRedirect = false;
 
 /**
  * Retrieves currently logged in webId from either
@@ -1016,11 +1018,15 @@ export async function checkUser<T> (
    * Handle a successful authentication redirect
    */
   const authCode = new URL(window.location.href).searchParams.get('code')
-  if (authCode) {
+  if (authCode && !checkingRedirect) {
+    checkingRedirect = true
     // Being redirected after requesting a token
+    console.log('HANDLING REDIRECT: ', authCode)
     await authSession
       .handleIncomingRedirect(window.location.href)
+    console.log(authSession.info)
   }
+
 
   // Check to see if already logged in / have the WebID
   let me = defaultTestUser()

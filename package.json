@@ -54,7 +54,7 @@
   "homepage": "https://github.com/solid/solid-ui",
   "dependencies": {
     "@babel/runtime": "^7.10.5",
-    "@inrupt/solid-client-authn-browser": "^0.2.1",
+    "@inrupt/solid-client-authn-browser": "^0.2.2",
     "escape-html": "^1.0.3",
     "jss": "^10.3.0",
     "jss-preset-default": "^10.3.0",
