@@ -91,3 +91,27 @@ Note that we've set option ordered to false in this example.
     }}
   </Story>
 </Canvas>
+
+
+## tabWidget: Populating content using option items
+
+Finally we can set the items manually by using option items.
+
+We do not need to use options subject and predicate when using items.
+
+<Canvas>
+  <Story name="option items">
+    {() => {
+      const item1 = UI.rdf.namedNode(location.origin + '#item3A')
+      const item2 = UI.rdf.namedNode(location.origin + '#item3B')
+      return UI.tabs.tabWidget({
+          items: [item1, item2],
+          renderMain: (bodyMain, subject) => {
+            bodyMain.innerText = `Content of ${subject}`
+          }
+        })
+    }}
+  </Story>
+</Canvas>
+
+ℹ For the remaining examples we'll use option items to populate our tabs.
