@@ -27,15 +27,15 @@ info about how to use the tabWidget.
 The triples belows shows the minimum data you need to start using the tabWidget in combination with UI.store.
 
 <Canvas>
-    <Story name="tabWidget" decorators={[loadTurtleDecorator]}>
+    <Story name="rdf collection" decorators={[loadTurtleDecorator]}>
     {() => {
       const subject = UI.rdf.namedNode(location.origin + '#subject1')
       const predicate = UI.rdf.namedNode(location.origin + '#predicate1')
       return {
         data: `
-        @prefix : <#> .
-        :subject1
-            :predicate1 ( :item1A :item1B ) .
+@prefix : <#> .
+:subject1
+    :predicate1 ( :item1A :item1B ) .
         `,
         render: () => UI.tabs.tabWidget({
           subject,
@@ -52,3 +52,42 @@ The triples belows shows the minimum data you need to start using the tabWidget 
 Note that you would probably use `UI.rdf.namedNode` directly from rdflib.js. (E.g. instead of
         `UI.rdf.namedNode` you would probably make use of namedNode with
         `import { namedNode } from 'rdflib'`.
+
+
+## tabWidget: Populating content using unsorted triples
+
+In this second example we'll use an unsorted set of triples instead of a collection.
+
+This is the data we will be working with. Note that we've also added labels to the items to help the widget know how to label the tabs.
+
+Note that we've set option ordered to false in this example.
+
+
+<Canvas>
+  <Story name="unsorted triples" decorators={[loadTurtleDecorator]}>
+    {() => {
+      const subject = UI.rdf.namedNode(location.origin + '#subject2')
+      const predicate = UI.rdf.namedNode(location.origin + '#predicate2')
+      return {
+        data: `
+@prefix :     <#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+:subject2
+    :predicate2 :item2A, :item2B .
+:item2A
+    rdfs:label "Tab 1" .
+:item2B
+    rdfs:label "Tab 2" .
+        `,
+        render: () => UI.tabs.tabWidget({
+          subject,
+          predicate,
+          ordered: false,
+          renderMain: (bodyMain, subject) => {
+            bodyMain.innerText = `Content of ${UI.utils.label(subject)}`
+          }
+        })
+      }
+    }}
+  </Story>
+</Canvas>
