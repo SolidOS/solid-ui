@@ -1,0 +1,54 @@
+import * as UI from '../../lib'
+
+import { Canvas, Meta, Story } from '@storybook/addon-docs/blocks'
+
+<Meta title="Tabs"/>
+
+export const loadTurtleDecorator = (Story) => {
+  const { render, data } = Story()
+  UI.rdf.parse(data, UI.store, location.origin, 'text/turtle', error => {
+    if (error) console.error(error)
+  })
+  const div = document.createElement("div");
+  const pre = document.createElement("pre");
+  pre.appendChild(document.createTextNode(data))
+  div.appendChild(pre)
+  div.appendChild(render());
+  return div;
+}
+
+
+## tabWidget: Populating content using an RDF collection
+
+In this first example we'll see how you can generate a tabs widget using triples that are formatted as a collection in
+RDF. See [API documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_tabs_.html#tabwidget) for more
+info about how to use the tabWidget.
+
+The triples belows shows the minimum data you need to start using the tabWidget in combination with UI.store.
+
+<Canvas>
+    <Story name="tabWidget" decorators={[loadTurtleDecorator]}>
+    {() => {
+      const subject = UI.rdf.namedNode(location.origin + '#subject1')
+      const predicate = UI.rdf.namedNode(location.origin + '#predicate1')
+      return {
+        data: `
+        @prefix : <#> .
+        :subject1
+            :predicate1 ( :item1A :item1B ) .
+        `,
+        render: () => UI.tabs.tabWidget({
+          subject,
+          predicate,
+          renderMain: (bodyMain, subject) => {
+            bodyMain.innerText = `Content of ${subject.uri}`
+          }
+        })
+      }
+    }}
+  </Story>
+</Canvas>
+
+Note that you would probably use `UI.rdf.namedNode` directly from rdflib.js. (E.g. instead of
+        `UI.rdf.namedNode` you would probably make use of namedNode with
+        `import { namedNode } from 'rdflib'`.
