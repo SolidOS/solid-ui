@@ -1,6 +1,7 @@
 import * as UI from '../../lib'
 
 import { Canvas, Meta, Story, Props } from '@storybook/addon-docs/blocks'
+import { action } from '@storybook/addon-actions'
 
 <Meta title="Tabs"/>
 
@@ -119,7 +120,7 @@ We do not need to use options subject and predicate when using items.
 
 ## tabWidget: Option backgroundColor
 
-Using option backgroundColor we can set a specific color (in hex value) to our tabs. It will consider how light a
+Using option `backgroundColor` we can set a specific color (in hex value) to our tabs. It will consider how light a
 color is when figuring out which color to set to the text. It will also distinguish between selected and not selected
 tabs by coloring the selected tab a bit darker.
 
@@ -135,7 +136,6 @@ tabs by coloring the selected tab a bit darker.
     {({backgroundColor}) => {
       const item1 = UI.rdf.namedNode(location.origin + '#item3A')
       const item2 = UI.rdf.namedNode(location.origin + '#item3B')
-      console.log({backgroundColor})
       return UI.tabs.tabWidget({
         backgroundColor,
         items: [item1, item2],
@@ -148,3 +148,21 @@ tabs by coloring the selected tab a bit darker.
 </Canvas>
 
 <Props story="background color" />
+
+## tabWidget: Option onClose
+
+<Canvas>
+  <Story name="on close">
+    {() => {
+      const item1 = UI.rdf.namedNode(location.origin + '#item3A')
+      const item2 = UI.rdf.namedNode(location.origin + '#item3B')
+      return UI.tabs.tabWidget({
+        onClose: action('closed'),
+        items: [item1, item2],
+        renderMain: (bodyMain, subject) => {
+          bodyMain.innerText = `Content of ${subject}`
+        }
+     })
+    }}
+  </Story>
+</Canvas>
