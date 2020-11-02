@@ -8,7 +8,6 @@ export const DEFAULT_CONTAINER_ACL = sym('https://example.com/doc.ttl.acl')
 export const DEFAULT_RESOURCE_DOC = sym('https://example.com/')
 export const DEFAULT_RESOURCE_ACL = sym('https://example.com/.acl')
 export const PROFILE = sym('https://example.com/profile/card#me')
-export const ACL_LINK = sym('http://www.iana.org/assignments/link-relations/acl')
 
 export const mocks = {
   aclWithAllAgents: getFileContent(resolve(__dirname, './mocks/aclWithAllAgents.ttl')),

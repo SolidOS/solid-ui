@@ -19,17 +19,18 @@
  * * `statusArea`      A DOM element (opt) progress stuff can be displayed, or error messages
  * @packageDocumentation
  */
+import { graph, namedNode, NamedNode, Namespace, serialize, st, Statement, sym, UpdateManager } from 'rdflib'
+import solidAuthClient from 'solid-auth-client'
+import { ACL_LINK } from 'solid-logic'
+import { PaneDefinition } from 'pane-registry'
 import Signup from './signup'
 import widgets from '../widgets'
-import solidAuthClient from 'solid-auth-client'
 import ns from '../ns.js'
 import kb from '../store.js'
 import utils from '../utils.js'
 import { alert } from '../log'
 import { AppDetails, AuthenticationContext } from './types'
-import { PaneDefinition } from 'pane-registry'
 import * as debug from '../debug'
-import { graph, namedNode, NamedNode, Namespace, serialize, st, Statement, sym, UpdateManager } from 'rdflib'
 import { textInputStyle, buttonStyle, commentStyle } from '../style'
 // eslint-disable-next-line camelcase
 import { Quad_Object } from 'rdflib/lib/tf-types'
@@ -756,7 +757,7 @@ export function setACLUserPublic (
 ): Promise<NamedNode> {
   const aclDoc = kb.any(
     kb.sym(docURI),
-    kb.sym('http://www.iana.org/assignments/link-relations/acl')
+    kb.sym(ACL_LINK)
   )
 
   return Promise.resolve()
@@ -801,7 +802,7 @@ function fetchACLRel (docURI: string): Promise<NamedNode> {
 
     const aclDoc = kb.any(
       kb.sym(docURI),
-      kb.sym('http://www.iana.org/assignments/link-relations/acl')
+      kb.sym(ACL_LINK)
     )
 
     if (!aclDoc) {

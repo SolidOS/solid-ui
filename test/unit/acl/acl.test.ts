@@ -1,3 +1,4 @@
+import { ACL_LINK } from 'solid-logic'
 import { silenceDebugMessages } from '../../helpers/setup'
 import {
   ACLbyCombination,
@@ -25,7 +26,6 @@ import { createLiveStore } from '../helpers/createLiveStore'
 import { clearStore } from '../helpers/clearStore'
 import globalStore from '../../../src/store'
 import {
-  ACL_LINK,
   DEFAULT_CONTAINER_ACL,
   DEFAULT_CONTAINER_DOC,
   DEFAULT_RESOURCE_ACL,
