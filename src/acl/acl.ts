@@ -12,6 +12,7 @@ import { AgentMapMap, AgentMapUnion, ComboList } from './types'
 import * as debug from '../debug'
 import { graph, IndexedFormula, NamedNode, serialize, st, sym } from 'rdflib'
 import { LiveStore } from 'pane-registry'
+import { ACL_LINK } from 'solid-logic'
 
 /**
  * Take the "default" ACL and convert it into the equivlent ACL
@@ -414,7 +415,7 @@ export function setACL (
 ): void {
   const aclDoc = kb.any(
     kb.sym(docURI),
-    kb.sym('http://www.iana.org/assignments/link-relations/acl')
+    kb.sym(ACL_LINK)
   ) // @@ check that this get set by web.js
   if (aclDoc) {
     // Great we already know where it is
@@ -429,7 +430,7 @@ export function setACL (
       if (!ok) return callbackFunction(ok, 'Gettting headers for ACL: ' + body)
       const aclDoc = kb.any(
         kb.sym(docURI),
-        kb.sym('http://www.iana.org/assignments/link-relations/acl')
+        kb.sym(ACL_LINK)
       ) // @@ check that this get set by web.js
       if (!aclDoc) {
         // complainIfBad(false, "No Link rel=ACL header for " + docURI)
@@ -582,7 +583,7 @@ export function getACL (
     }
     const aclDoc = kb.any(
       doc,
-      kb.sym('http://www.iana.org/assignments/link-relations/acl')
+      kb.sym(ACL_LINK)
     ) // @@ check that this get set by web.js
     if (!aclDoc) {
       callbackFunction(false, 900, `No Link rel=ACL header for ${doc}`)
