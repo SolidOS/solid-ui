@@ -262,29 +262,13 @@ export function logInLoadPreferences (context: AuthenticationContext): Promise<A
  * @see https://github.com/solid/solid/blob/master/proposals/data-discovery.md#discoverability
  */
 export async function loadTypeIndexes (context: AuthenticationContext): Promise<AuthenticationContext> {
-  await loadPublicTypeIndex(context)
-  await loadPrivateTypeIndex(context)
+  await loadIndex(context, true)
+  await loadIndex(context, false)
   return context
-}
-
-async function loadPublicTypeIndex (context: AuthenticationContext): Promise<AuthenticationContext> {
-  return loadIndex(context, ns.solid('publicTypeIndex'), true)
-}
-
-async function loadPrivateTypeIndex (context: AuthenticationContext): Promise<AuthenticationContext> {
-  return loadIndex(context, ns.solid('privateTypeIndex'), false)
-}
-
-async function loadOneTypeIndex (context: AuthenticationContext, isPublic: boolean): Promise<AuthenticationContext> {
-  const predicate = isPublic
-    ? ns.solid('publicTypeIndex')
-    : ns.solid('privateTypeIndex')
-  return loadIndex(context, predicate, isPublic)
 }
 
 async function loadIndex (
   context: AuthenticationContext,
-  predicate: NamedNode,
   isPublic: boolean
 ): Promise<AuthenticationContext> {
   const me = context.me
@@ -312,7 +296,7 @@ async function loadIndex (
   try {
     await solidLogicSingleton.load(ixs)
   } catch (err) {
-    widgets.complain(context, `loadPublicIndex: loading public type index ${err}`)
+    widgets.complain(context, `loadIndex: loading public type index ${err}`)
   }
   return context
 }
@@ -386,7 +370,7 @@ async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boo
   } // makeIndexIfNecessary
 
   try {
-    await loadOneTypeIndex(context, isPublic)
+    await loadIndex(context, isPublic)
     if (context.index) {
       debug.log(
         `ensureOneTypeIndex: Type index exists already ${isPublic
@@ -398,7 +382,7 @@ async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boo
     return context
   } catch (error) {
     await makeIndexIfNecessary(context, isPublic)
-    // widgets.complain(context, 'calling loadOneTypeIndex:' + error)
+    // widgets.complain(context, 'calling loadIndex:' + error)
   }
 }
 
@@ -426,12 +410,12 @@ export async function findAppInstances (
       ? logInLoadProfile(context)
       : logInLoadPreferences(context))
   } catch (err) {
-    widgets.complain(context, `loadPublicIndex: login and load problem ${err}`)
+    widgets.complain(context, `loadIndex: login and load problem ${err}`)
   }
 
   const visibility = isPublic ? 'public' : 'private'
   try {
-    await loadOneTypeIndex(context, isPublic)
+    await loadIndex(context, isPublic)
   } catch (err) {
   }
   const index = context.index as { [key: string]: Array<NamedNode> }
