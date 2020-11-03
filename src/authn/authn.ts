@@ -287,14 +287,6 @@ async function loadIndex (
   predicate: NamedNode,
   isPublic: boolean
 ): Promise<AuthenticationContext> {
-  // Loading preferences is more than loading profile
-  try {
-    await (isPublic
-      ? logInLoadProfile(context)
-      : logInLoadPreferences(context))
-  } catch (err) {
-    widgets.complain(context, `loadPublicIndex: login and load problem ${err}`)
-  }
   const me = context.me
   let ixs
   context.index = context.index || {}
@@ -426,6 +418,15 @@ export async function findAppInstances (
     await findAppInstances(context, theClass, true)
     await findAppInstances(context, theClass, false)
     return context
+  }
+
+  // Loading preferences is more than loading profile
+  try {
+    await (isPublic
+      ? logInLoadProfile(context)
+      : logInLoadPreferences(context))
+  } catch (err) {
+    widgets.complain(context, `loadPublicIndex: login and load problem ${err}`)
   }
 
   const visibility = isPublic ? 'public' : 'private'
