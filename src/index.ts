@@ -62,7 +62,7 @@ import * as participation from './participation'
 // @ts-ignore
 import preferences from './preferences'
 // @ts-ignore
-import store from './store'
+import { solidLogicSingleton } from './logic'
 // @ts-ignore
 import style from './style'
 // @ts-ignore
@@ -75,6 +75,7 @@ import versionInfo from './versionInfo'
 import { initHeader } from './header'
 
 const dom = window ? window.document : null // Idea that UI.dom can be adapted in non-browser environments
+const store = solidLogicSingleton.store
 
 if (typeof window !== 'undefined') {
   ;(<any>window).UI = {

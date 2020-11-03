@@ -1,7 +1,9 @@
-import store from '../../store'
+import { solidLogicSingleton } from '../../logic'
 import ns from '../../ns'
 import { mostSpecificClassURI } from './fieldFunction'
 import { fieldParams } from './fieldParams'
+
+const store = solidLogicSingleton.store
 
 /**
  * A [[FieldFunction]] for a simple comment box. It will look for

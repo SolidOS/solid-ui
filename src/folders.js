@@ -8,7 +8,7 @@ const UI = {
   icons: require('./iconBase'),
   ns: require('./ns'),
   rdf: require('rdflib'),
-  store: require('./store'),
+  store: require('./logic').solidLogicSingleton.store,
   widgets: require('./widgets'),
   utils: require('./utils')
 }

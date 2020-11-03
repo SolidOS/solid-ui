@@ -1,7 +1,7 @@
 import { silenceDebugMessages } from '../../../helpers/setup'
 import { namedNode } from 'rdflib'
 import ns from '../../../../src/ns'
-import uiStore from '../../../../src/store'
+import { solidLogicSingleton } from '../../../../src/logic'
 
 import {
   field,
@@ -19,14 +19,14 @@ describe('mostSpecificClassURI', () => {
   })
   it('reports the RDF type if there is only one', () => {
     const form = namedNode('http://example.com/#form')
-    uiStore.add(form, ns.rdf('type'), namedNode('http://example.com/#type'), namedNode('http://example.com/'))
+    solidLogicSingleton.store.add(form, ns.rdf('type'), namedNode('http://example.com/#type'), namedNode('http://example.com/'))
     expect(mostSpecificClassURI(form)).toEqual('http://example.com/#type')
   })
   it('reports the subtype if there are one super and one sub type', () => {
     const node = namedNode('http://example.com/#form')
-    uiStore.add(node, ns.rdf('type'), namedNode('http://example.com/#human'), namedNode('http://example.com/'))
-    uiStore.add(node, ns.rdf('type'), namedNode('http://example.com/#employee'), namedNode('http://example.com/'))
-    uiStore.add(namedNode('http://example.com/#employee'), ns.rdfs('subClassOf'), namedNode('http://example.com/#human'), namedNode('http://example.com/'))
+    solidLogicSingleton.store.add(node, ns.rdf('type'), namedNode('http://example.com/#human'), namedNode('http://example.com/'))
+    solidLogicSingleton.store.add(node, ns.rdf('type'), namedNode('http://example.com/#employee'), namedNode('http://example.com/'))
+    solidLogicSingleton.store.add(namedNode('http://example.com/#employee'), ns.rdfs('subClassOf'), namedNode('http://example.com/#human'), namedNode('http://example.com/'))
     expect(mostSpecificClassURI(node)).toEqual('http://example.com/#employee')
   })
 })
@@ -42,7 +42,7 @@ describe('fieldFunction', () => {
 
     // create a field of type http://example.com/#type
     const form = namedNode('http://example.com/#form')
-    uiStore.add(form, ns.rdf('type'), namedNode('http://example.com/#type'), namedNode('http://example.com/'))
+    solidLogicSingleton.store.add(form, ns.rdf('type'), namedNode('http://example.com/#type'), namedNode('http://example.com/'))
 
     expect(fieldFunction(undefined, form)).toEqual(myFunction)
   })
@@ -71,7 +71,7 @@ describe('fieldFunction', () => {
   describe('function returned if no matching function exists', () => {
     // create a field of type http://example.com/#unknown-type
     const form = namedNode('http://example.com/#form')
-    uiStore.add(form, ns.rdf('type'), namedNode('http://example.com/#unknown-type'), namedNode('http://example.com/'))
+    solidLogicSingleton.store.add(form, ns.rdf('type'), namedNode('http://example.com/#unknown-type'), namedNode('http://example.com/'))
     const fn = fieldFunction(undefined, form)
 
     it('returns an error block', () => {

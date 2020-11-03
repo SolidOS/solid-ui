@@ -6,13 +6,15 @@
  */
 
 import ns from '../ns'
-import kb from '../store.js'
+import { solidLogicSingleton } from '../logic'
 import utils from '../utils'
 import { AgentMapMap, AgentMapUnion, ComboList } from './types'
 import * as debug from '../debug'
 import { graph, IndexedFormula, NamedNode, serialize, st, sym } from 'rdflib'
 import { LiveStore } from 'pane-registry'
 import { ACL_LINK } from 'solid-logic'
+
+const kb = solidLogicSingleton.store
 
 /**
  * Take the "default" ACL and convert it into the equivlent ACL

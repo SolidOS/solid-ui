@@ -26,7 +26,7 @@ var UI = {
   pad: require('./pad'),
   media: media,
   rdf: $rdf,
-  store: require('./store'),
+  store: require('./logic').solidLogicSingleton.store,
   utils: require('./utils'),
   widgets: require('./widgets')
 }

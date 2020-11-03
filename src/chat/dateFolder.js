@@ -5,7 +5,7 @@
 
 import * as debug from '../debug'
 
-const kb = require('../store.js')
+const kb = require('../logic').solidLogicSingleton.store
 const ns = require('../ns.js')
 const $rdf = require('rdflib')
 

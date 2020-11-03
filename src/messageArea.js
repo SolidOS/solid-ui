@@ -5,7 +5,7 @@ var UI = {
   icons: require('./iconBase'),
   ns: require('./ns'),
   rdf: require('rdflib'),
-  store: require('./store'),
+  store: require('./logic').solidLogicSingleton.store,
   style: require('./style'),
   widgets: require('./widgets')
 }

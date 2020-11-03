@@ -20,7 +20,9 @@ import { makeDropTarget } from './dragAndDrop'
 import { errorMessageBlock } from './error'
 import { iconBase } from '../iconBase'
 import ns from '../ns'
-import kb from '../store'
+import { solidLogicSingleton } from '../logic'
+
+const kb = solidLogicSingleton.store
 
 export class PeoplePicker {
   constructor (element, typeIndex, groupPickedCb, options) {

@@ -1,7 +1,9 @@
-import store from './store'
 import { cancelButton } from './widgets'
 import { label } from './utils'
 import { NamedNode } from 'rdflib'
+import { solidLogicSingleton } from './logic'
+
+const store = solidLogicSingleton.store
 
 /**
  * @ignore

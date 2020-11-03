@@ -2,7 +2,9 @@ import { silenceDebugMessages } from '../../helpers/setup'
 import { AddAgentButtons } from '../../../src/acl/add-agent-buttons'
 import { instantiateAccessGroups } from '../helpers/instantiateAccessGroups'
 import { JSDOM } from 'jsdom'
-import store from '../../../src/store'
+import { solidLogicSingleton } from '../../../src/logic'
+
+const store = solidLogicSingleton.store
 
 silenceDebugMessages()
 jest.mock('solid-auth-client')
