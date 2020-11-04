@@ -10,11 +10,24 @@ export const ACL_LINK = rdf.sym('http://www.iana.org/assignments/link-relations/
 const ns = solidNamespace(rdf)
 
 export class SolidLogic {
+  cache: {
+    profileDocument: {
+      [WebID: string]: NamedNode
+    }
+    preferencesFile: {
+      [WebID: string]: NamedNode
+    }
+  }
+
   store: IndexedFomula
   constructor (fetcher: { fetch: () => any }) {
     this.store = rdf.graph() // Make a Quad store
     rdf.fetcher(this.store, fetcher) // Attach a web I/O module, store.fetcher
     this.store.updater = new rdf.UpdateManager(this.store) // Add real-time live updates store.updater
+    this.cache = {
+      profileDocument: {},
+      preferencesFile: {}
+    }
   }
 
   async findAclDocUrl (url: string | NamedNode) {
@@ -102,6 +115,63 @@ export class SolidLogic {
     return this.store.fetcher.load(doc)
   }
 
+  async loadProfile (webID?: NamedNode): Promise<NamedNode> {
+    if (!webID) {
+      throw new Error('Could not log in')
+    }
+    let profileDocument
+    try {
+      profileDocument = webID.doc()
+      await this.loadDoc(profileDocument)
+      return profileDocument
+    } catch (err) {
+      const message = `Logged in but cannot load profile ${profileDocument} : ${err}`
+      throw new Error(message)
+    }
+  }
+
+  async loadIndexes (
+    me: NamedNode | string,
+    publicProfile: NamedNode | string | null,
+    preferencesFile: NamedNode | string | null,
+    onWarning = async (_err: Error) => { return undefined }
+  ): Promise<{
+    private: any,
+    public: any
+  }> {
+    let privateIndexes
+    let publicIndexes
+    if (publicProfile) {
+      publicIndexes = this.getTypeIndex(me, publicProfile, true)
+      try {
+        await this.load(publicIndexes)
+      } catch (err) {
+        onWarning(new Error(`loadIndex: loading public type index(es) ${err}`))
+      }
+    }
+    if (preferencesFile) {
+      privateIndexes = this.getTypeIndex(me, preferencesFile, true)
+      if (privateIndexes.length === 0) {
+        await onWarning(new Error(`Your preference file ${preferencesFile} does not point to a private type index.`))
+      } else {
+        try {
+          await this.load(publicIndexes)
+        } catch (err) {
+          onWarning(new Error(`loadIndex: loading private type index(es) ${err}`))
+        }
+      }
+    } else {
+      debug.log(
+        'We know your preference file is not available, so we are not bothering with private type indexes.'
+      )
+    }
+
+    return {
+      private: privateIndexes,
+      public: publicIndexes
+    }
+  }
+
   async createEmptyRdfDoc (doc: NamedNode, comment: string) {
     await this.store.fetcher.webOperation('PUT', doc.uri, {
       data: `# ${new Date()} ${comment}
@@ -116,7 +186,7 @@ export class SolidLogic {
     ins: Array<Statement> = []
   ): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.store.updater.update(del, ins, function (uri, ok, errorBody) {
+      this.store.updater.update(del, ins, function (_uri, ok, errorBody) {
         if (!ok) {
           reject(new Error(errorBody))
         } else {
