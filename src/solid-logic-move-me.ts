@@ -48,7 +48,25 @@ export class SolidLogic {
       .load(profileDocument, { withCredentials: false, cache: 'reload' })
   }
 
+  async loadProfile (me: NamedNode): Promise<NamedNode> {
+    if (this.cache.preferencesFile[me]) {
+      return this.cache.preferencesFile[me]
+    }
+    let profileDocument
+    try {
+      profileDocument = me.doc()
+      await this.loadDoc(profileDocument)
+      return profileDocument
+    } catch (err) {
+      const message = `Logged in but cannot load profile ${profileDocument} : ${err}`
+      throw new Error(message)
+    }
+  }
+
   async loadPreferences (me: NamedNode): Promise<NamedNode> {
+    if (this.cache.preferencesFile[me]) {
+      return this.cache.preferencesFile[me]
+    }
     const preferencesFile = this.store.any(me, ns.space('preferencesFile'))
 
     /**
@@ -113,21 +131,6 @@ export class SolidLogic {
 
   load (doc: NamedNode | string) {
     return this.store.fetcher.load(doc)
-  }
-
-  async loadProfile (webID?: NamedNode): Promise<NamedNode> {
-    if (!webID) {
-      throw new Error('Could not log in')
-    }
-    let profileDocument
-    try {
-      profileDocument = webID.doc()
-      await this.loadDoc(profileDocument)
-      return profileDocument
-    } catch (err) {
-      const message = `Logged in but cannot load profile ${profileDocument} : ${err}`
-      throw new Error(message)
-    }
   }
 
   async loadIndexes (
