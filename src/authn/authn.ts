@@ -21,7 +21,6 @@
  */
 import { graph, namedNode, NamedNode, Namespace, serialize, st, Statement, sym, bnode } from 'rdflib'
 import solidAuthClient from 'solid-auth-client'
-import { ACL_LINK } from 'solid-logic'
 import { PaneDefinition } from 'pane-registry'
 import Signup from './signup'
 import widgets from '../widgets'
@@ -34,7 +33,7 @@ import { textInputStyle, buttonStyle, commentStyle } from '../style'
 // eslint-disable-next-line camelcase
 import { Quad_Object } from 'rdflib/lib/tf-types'
 import { solidLogicSingleton } from '../logic'
-import { CrossOriginForbiddenError, FetchError, NotFoundError, SameOriginForbiddenError, UnauthorizedError } from '../solid-logic-move-me'
+import { CrossOriginForbiddenError, FetchError, NotFoundError, SameOriginForbiddenError, UnauthorizedError, ACL_LINK } from 'solid-logic'
 
 export { solidAuthClient }
 
