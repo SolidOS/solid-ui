@@ -8,7 +8,7 @@ var rdf = require('rdflib')
 var store = (module.exports = rdf.graph()) // Make a Quad store
 
 const fetcher = async (url, requestInit) => {
-  if (authSession.info.webid) {
+  if (authSession.info.webId) {
     return authSession.fetch(url, requestInit)
   } else {
     return window.fetch(url, requestInit)

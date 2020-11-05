@@ -270,6 +270,7 @@ export function logInLoadPreferences (context: AuthenticationContext): Promise<A
               m2 = `Strange: Error ${status} trying to read your preference file.${message}`
               alert(m2)
             }
+            resolve(context)
           }) // load preference file then
       })
       .catch(err => {
@@ -955,12 +956,15 @@ function signInOrSignUpBox (
     if (offline) return setUserCallback(offline.uri)
 
     const thisUrl = new URL(window.location.href).origin
+    // HACK solid-client-authn-js no longer comes with its own UI for selecting
+    // an IDP. This was the easiest way to get the user to select.
+    // TODO: make a nice UI to select an IDP
     const issuer = prompt('Enter an issuer', thisUrl)
     authSession.login({
       // @ts-ignore this library requires a specific kind of URL that isn't global
-      redirectUrl: new URL(window.location.href),
+      redirectUrl: window.location.href,
       // @ts-ignore
-      oidcIssuer: new URL(issuer)
+      oidcIssuer: issuer
     })
   }, false)
 
@@ -985,7 +989,6 @@ function signInOrSignUpBox (
  * @returns {Promise<string|null>} Resolves with WebID URI or null
  */
 function webIdFromSession (session?: { webId?: string }): string | null {
-  console.log(session)
   const webId = session?.webId ? session.webId : null
   if (webId) {
     saveUser(webId)
@@ -1002,7 +1005,11 @@ function checkCurrentUser () {
   return checkUser()
 }
 */
-var checkingRedirect = false;
+
+// HACK this global variable exists to prevent authSession.handleIncomingRedirect
+// From being called twice. It would not be needed if it automatically redirected
+// by iteself. See https://github.com/inrupt/solid-client-authn-js/issues/514
+var checkingRedirect = false
 
 /**
  * Retrieves currently logged in webId from either
@@ -1017,16 +1024,24 @@ export async function checkUser<T> (
   /**
    * Handle a successful authentication redirect
    */
+  // HACK normally you wouldn't need to do a check to see if 'code' is in the
+  // query, but it was removed from solid-client-authn-js
+  // See https://github.com/inrupt/solid-client-authn-js/issues/421
+  // Remove this after
   const authCode = new URL(window.location.href).searchParams.get('code')
   if (authCode && !checkingRedirect) {
     checkingRedirect = true
     // Being redirected after requesting a token
-    console.log('HANDLING REDIRECT: ', authCode)
     await authSession
       .handleIncomingRedirect(window.location.href)
-    console.log(authSession.info)
+    // HACK solid-client-authn-js should automatically remove code and state
+    // from the URL, but it doesn't, so we do it manually here
+    // see https://github.com/inrupt/solid-client-authn-js/issues/514
+    const newPageUrl = new URL(window.location.href)
+    newPageUrl.searchParams.delete('code')
+    newPageUrl.searchParams.delete('state')
+    window.history.replaceState({}, '', newPageUrl.toString())
   }
-
 
   // Check to see if already logged in / have the WebID
   let me = defaultTestUser()
