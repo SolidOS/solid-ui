@@ -166,3 +166,123 @@ tabs by coloring the selected tab a bit darker.
     }}
   </Story>
 </Canvas>
+
+## tabWidget: Option orientation
+
+Using option `orientation` we can set how the tabs and body should be positioned.
+
+<Canvas>
+  <Story name="orientation"
+         args={{ orientation: "1" }}
+         argTypes={{orientation: {control: {type: 'select',
+               options: [
+                 '0',
+                 '1',
+                 '2',
+                 '3'
+               ],}}}}>>
+    {({orientation}) => {
+      const item1 = UI.rdf.namedNode(location.origin + '#item3A')
+      const item2 = UI.rdf.namedNode(location.origin + '#item3B')
+      return UI.tabs.tabWidget({
+        orientation,
+        items: [item1, item2],
+        renderMain: (bodyMain, subject) => {
+          bodyMain.innerText = `Content of ${subject}`
+        }
+     })
+    }}
+  </Story>
+</Canvas>
+
+<Props story="orientation" />
+
+## tabWidget: Option renderTab
+
+`renderTab` allows us to override the default behavior for how tabs are rendered, e.g. which text should be shown for each tab.
+
+<Canvas>
+  <Story name="renderTab">
+    {() => {
+      const item1 = UI.rdf.namedNode(location.origin + '#item3A')
+      const item2 = UI.rdf.namedNode(location.origin + '#item3B')
+      return UI.tabs.tabWidget({
+        items: [item1, item2],
+        renderMain: (bodyMain, subject) => {
+          bodyMain.innerText = `Content of ${subject}`
+        },
+        renderTab: (tabDiv, subject) => {
+          tabDiv.innerText = `Go to ${subject.uri}`
+        }
+     })
+    }}
+  </Story>
+</Canvas>
+
+## tabWidget: Option renderTabSettings
+
+`renderTabSettings` functions much like `renderMain`, expect that it is triggered by holding ALT key (Option key on Mac
+) and clicking on a tab.
+
+<Canvas>
+  <Story name="renderTabSettings">
+    {() => {
+      const item1 = UI.rdf.namedNode(location.origin + '#item3A')
+      const item2 = UI.rdf.namedNode(location.origin + '#item3B')
+      return UI.tabs.tabWidget({
+        items: [item1, item2],
+        renderMain: (bodyMain, subject) => {
+          bodyMain.innerText = `Content of ${subject}`
+        },
+        renderTabSettings: (bodyMain, subject) => {
+          bodyMain.innerText = `Settings for ${subject.uri}`
+        }
+     })
+    }}
+  </Story>
+</Canvas>
+
+## tabWidget: Option selectedTab
+
+`selectedTab` allows you to set which tab should be opened by when the widget is initially rendered. It must be used
+in junction with `renderTab` since it relies on `dataset.name` being set.
+
+<Canvas>
+  <Story name="selectedTab">
+    {() => {
+      const item1 = UI.rdf.namedNode(location.origin + '#item3A')
+      const item2 = UI.rdf.namedNode(location.origin + '#item3B')
+      return UI.tabs.tabWidget({
+        items: [item1, item2],
+        renderMain: (bodyMain, subject) => {
+          bodyMain.innerText = `Content of ${subject}`
+        },
+        renderTab: (tabDiv, subject) => {
+          tabDiv.dataset.name = subject.uri
+          tabDiv.innerText = UI.utils.label(subject)
+        },
+        selectedTab: item2.uri
+     })
+    }}
+  </Story>
+</Canvas>
+
+## tabWidget: Option startEmpty
+
+`startEmpty` makes it so that the body of a tab isn't shown when initially rendered.
+
+<Canvas>
+  <Story name="startEmpty">
+    {() => {
+      const item1 = UI.rdf.namedNode(location.origin + '#item3A')
+      const item2 = UI.rdf.namedNode(location.origin + '#item3B')
+      return UI.tabs.tabWidget({
+        items: [item1, item2],
+        startEmpty: true,
+        renderMain: (bodyMain, subject) => {
+          bodyMain.innerText = `Content of ${subject}`
+        },
+     })
+    }}
+  </Story>
+</Canvas>
