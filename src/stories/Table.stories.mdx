@@ -1,4 +1,5 @@
 import * as UI from '../../lib'
+import renderTableViewPane from '../../lib/table'
 
 import { Canvas, Meta, Story } from '@storybook/addon-docs/blocks'
 import { rawJsonDecorator } from './decorators'
@@ -7,4 +8,14 @@ import { rawJsonDecorator } from './decorators'
 
 ## table: Create a table
 
-(under construction)
+<Canvas>
+  <Story name="table">
+        {() => {
+          return renderTableViewPane(document, {
+            sourceDocument: 'https://michielbdejong.solidcommunity.net/profile/card#me',
+            tableClass: UI.ns.acl('trustedApp'),
+            query: ''
+          })
+        }}
+   </Story>
+</Canvas>
