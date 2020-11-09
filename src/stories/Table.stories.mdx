@@ -11,10 +11,28 @@ import { rawJsonDecorator } from './decorators'
 <Canvas>
   <Story name="table">
         {() => {
+          const TRIP = $rdf.Namespace('http://www.w3.org/ns/pim/trip#')
+          const query = new $rdf.Query(UI.utils.label(subject))
+          const vars =  [ 'date', 'transaction', 'comment', 'type',  'in_USD']
+          const v = {}
+          vars.map((x) => {
+            const v[x] = $rdf.variable(x) // Only used by UI
+            query.vars.push(v[x])
+          })
+          query.pat.add(v['transaction'], TRIP('trip'), subject)
+          var opt = kb.formula()
+          opt.add(v['transaction'], ns.rdf('type'), v['type']); // Issue: this will get stored supertypes too
+          query.pat.optional.push(opt)
+          query.pat.add(v['transaction'], UI.ns.qu('date'), v['date'])
+          var opt = kb.formula()
+          opt.add(v['transaction'], ns.rdfs('comment'), v['comment'])
+          query.pat.optional.push(opt)
+          //opt = kb.formula()
+          query.pat.add(v['transaction'], UI.ns.qu('in_USD'), v['in_USD'])
           return renderTableViewPane(document, {
             sourceDocument: 'https://michielbdejong.solidcommunity.net/profile/card#me',
             tableClass: UI.ns.acl('trustedApp'),
-            query: ''
+            query
           })
         }}
    </Story>
