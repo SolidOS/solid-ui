@@ -21,7 +21,6 @@
  */
 import { graph, namedNode, NamedNode, Namespace, serialize, st, Statement, sym, bnode } from 'rdflib'
 import solidAuthClient from 'solid-auth-client'
-import { ACL_LINK } from 'solid-logic'
 import { PaneDefinition } from 'pane-registry'
 import Signup from './signup'
 import widgets from '../widgets'
@@ -34,7 +33,7 @@ import { textInputStyle, buttonStyle, commentStyle } from '../style'
 // eslint-disable-next-line camelcase
 import { Quad_Object } from 'rdflib/lib/tf-types'
 import { solidLogicSingleton } from '../logic'
-import { CrossOriginForbiddenError, FetchError, NotFoundError, SameOriginForbiddenError, UnauthorizedError } from '../solid-logic-move-me'
+import { CrossOriginForbiddenError, FetchError, NotFoundError, SameOriginForbiddenError, UnauthorizedError, ACL_LINK } from 'solid-logic'
 
 export { solidAuthClient }
 
@@ -150,38 +149,25 @@ export function logIn (context: AuthenticationContext): Promise<AuthenticationCo
  *
  * @returns Resolves with the context after login / fetch
  */
-export function logInLoadProfile (context: AuthenticationContext): Promise<AuthenticationContext> {
+export async function logInLoadProfile (context: AuthenticationContext): Promise<AuthenticationContext> {
   if (context.publicProfile) {
-    return Promise.resolve(context)
+    return context
   } // already done
-  let profileDocument
-  return new Promise(function (resolve, reject) {
-    return logIn(context)
-      .then(context => {
-        const webID = context.me
-        if (!webID) {
-          return reject(new Error('Could not log in'))
-        }
-        profileDocument = webID.doc()
-        solidLogicSingleton.loadDoc(profileDocument)
-          .then(_response => {
-            context.publicProfile = profileDocument
-            resolve(context)
-          })
-          .catch(err => {
-            const message = `Logged in but cannot load profile ${profileDocument} : ${err}`
-            if (context.div && context.dom) {
-              context.div.appendChild(
-                widgets.errorMessageBlock(context.dom, message)
-              )
-            }
-            reject(message)
-          })
-      })
-      .catch(err => {
-        reject(new Error(`Can't log in: ${err}`))
-      })
-  })
+  try {
+    const loggedInContext = await logIn(context)
+    if (!loggedInContext.me) {
+      throw new Error('Could not log in')
+    }
+    context.publicProfile = solidLogicSingleton.loadProfile(loggedInContext.me)
+  } catch (err) {
+    if (context.div && context.dom) {
+      context.div.appendChild(
+        widgets.errorMessageBlock(context.dom, err.message)
+      )
+    }
+    throw new Error(`Can't log in: ${err}`)
+  }
+  return context
 }
 
 /**
@@ -233,16 +219,16 @@ export function logInLoadPreferences (context: AuthenticationContext): Promise<A
           debug.warn(m2)
         } else if (err instanceof NotFoundError) {
           if (
-            confirm(`You do not currently have a preference file. OK for me to create an empty one? ${err.preferencesFile}`)
+            confirm(`You do not currently have a preference file. OK for me to create an empty one? ${(err as any).preferencesFile || ''}`)
           ) {
             // @@@ code me  ... weird to have a name of the file but no file
-            alert(`Sorry; I am not prepared to do this. Please create an empty file at ${err.preferencesFile}`)
+            alert(`Sorry; I am not prepared to do this. Please create an empty file at ${(err as any).preferencesFile || '(?)'}`)
             return complain(
               new Error('Sorry; no code yet to create a preference file at ')
             )
           } else {
             reject(
-              new Error(`User declined to create a preference file at ${err.preferencesFile}`)
+              new Error(`User declined to create a preference file at ${(err as any).preferencesFile || '(?)'}`)
             )
           }
         } else if (err instanceof FetchError) {
@@ -261,43 +247,32 @@ export function logInLoadPreferences (context: AuthenticationContext): Promise<A
  *
  * @see https://github.com/solid/solid/blob/master/proposals/data-discovery.md#discoverability
  */
-export async function loadTypeIndexes (context: AuthenticationContext): Promise<AuthenticationContext> {
-  await loadIndex(context, true)
-  await loadIndex(context, false)
-  return context
-}
-
 async function loadIndex (
   context: AuthenticationContext,
   isPublic: boolean
 ): Promise<AuthenticationContext> {
-  const me = context.me
-  let ixs
+  const indexes = await solidLogicSingleton.loadIndexes(
+    context.me,
+    (isPublic ? context.publicProfile : null),
+    (isPublic ? null : context.preferencesFile),
+    async (err: Error) => widgets.complain(context, err.message)
+  )
   context.index = context.index || {}
+  context.index.private = indexes.private || context.index.private
+  context.index.public = indexes.public || context.index.public
+  return context
+}
 
-  if (isPublic) {
-    ixs = solidLogicSingleton.getTypeIndex(me, context.publicProfile, isPublic)
-    context.index.public = ixs
-  } else {
-    if (!context.preferencesFileError) {
-      ixs = solidLogicSingleton.getTypeIndex(me, context.preferencesFile, isPublic)
-      context.index.private = ixs
-      if (ixs.length === 0) {
-        widgets.complain(`Your preference file ${context.preferencesFile} does not point to a private type index.`)
-        return context
-      }
-    } else {
-      debug.log(
-        'We know your preference file is not available, so we are not bothering with private type indexes.'
-      )
-    }
-  }
-
-  try {
-    await solidLogicSingleton.load(ixs)
-  } catch (err) {
-    widgets.complain(context, `loadIndex: loading public type index ${err}`)
-  }
+export async function loadTypeIndexes (context: AuthenticationContext) {
+  const indexes = await solidLogicSingleton.loadIndexes(
+    context.me,
+    context.publicProfile,
+    context.preferencesFile,
+    async (err: Error) => widgets.complain(context, err.message)
+  )
+  context.index = context.index || {}
+  context.index.private = indexes.private || context.index.private
+  context.index.public = indexes.public || context.index.public
   return context
 }
 
@@ -395,7 +370,7 @@ async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boo
 export async function findAppInstances (
   context: AuthenticationContext,
   theClass: NamedNode,
-  isPublic: boolean
+  isPublic?: boolean
 ): Promise<AuthenticationContext> {
   if (isPublic === undefined) {
     // Then both public and private

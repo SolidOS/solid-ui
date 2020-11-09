@@ -119,7 +119,7 @@ describe('logInLoadProfile', () => {
   it('runs', async () => {
     expect.assertions(1)
     await logInLoadProfile({}).catch((e) => {
-      expect(e.message).toEqual('Could not log in')
+      expect(e.message).toEqual('Can\'t log in: Error: Could not log in')
     })
   })
 })
@@ -131,7 +131,7 @@ describe('logInLoadPreferences', () => {
   it('runs', async () => {
     expect.assertions(1)
     await logInLoadPreferences({}).catch((e) => {
-      expect(e.message).toEqual('(via loadPrefs) Error: Could not log in')
+      expect(e.message).toEqual('(via loadPrefs) Error: Can\'t log in: Error: Could not log in')
     })
   })
 })

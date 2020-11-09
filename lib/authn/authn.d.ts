@@ -70,12 +70,6 @@ export declare function logInLoadProfile(context: AuthenticationContext): Promis
  * @param context
  */
 export declare function logInLoadPreferences(context: AuthenticationContext): Promise<AuthenticationContext>;
-/**
- * Resolves with the same context, outputting
- * output: index.public, index.private
- *
- * @see https://github.com/solid/solid/blob/master/proposals/data-discovery.md#discoverability
- */
 export declare function loadTypeIndexes(context: AuthenticationContext): Promise<AuthenticationContext>;
 /**
  * Returns promise of context with arrays of symbols
@@ -83,7 +77,7 @@ export declare function loadTypeIndexes(context: AuthenticationContext): Promise
  * 2016-12-11 change to include forClass arc a la
  * https://github.com/solid/solid/blob/master/proposals/data-discovery.md
  */
-export declare function findAppInstances(context: AuthenticationContext, theClass: NamedNode, isPublic: boolean): Promise<AuthenticationContext>;
+export declare function findAppInstances(context: AuthenticationContext, theClass: NamedNode, isPublic?: boolean): Promise<AuthenticationContext>;
 /**
  * Register a new app in a type index
  */
