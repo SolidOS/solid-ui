@@ -219,16 +219,16 @@ export function logInLoadPreferences (context: AuthenticationContext): Promise<A
           debug.warn(m2)
         } else if (err instanceof NotFoundError) {
           if (
-            confirm(`You do not currently have a preference file. OK for me to create an empty one? ${err.preferencesFile}`)
+            confirm(`You do not currently have a preference file. OK for me to create an empty one? ${(err as any).preferencesFile || ''}`)
           ) {
             // @@@ code me  ... weird to have a name of the file but no file
-            alert(`Sorry; I am not prepared to do this. Please create an empty file at ${err.preferencesFile}`)
+            alert(`Sorry; I am not prepared to do this. Please create an empty file at ${(err as any).preferencesFile || '(?)'}`)
             return complain(
               new Error('Sorry; no code yet to create a preference file at ')
             )
           } else {
             reject(
-              new Error(`User declined to create a preference file at ${err.preferencesFile}`)
+              new Error(`User declined to create a preference file at ${(err as any).preferencesFile || '(?)'}`)
             )
           }
         } else if (err instanceof FetchError) {
