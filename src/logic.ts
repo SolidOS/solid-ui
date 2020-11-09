@@ -4,7 +4,7 @@
 import * as debug from './debug'
 import { fetch } from 'solid-auth-client'
 // import { SolidLogic } from 'solid-logic'
-import { SolidLogic } from './solid-logic-move-me'
+import { SolidLogic } from 'solid-logic'
 
 export const solidLogicSingleton = new SolidLogic({ fetch })
 
