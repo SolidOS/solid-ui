@@ -1,10 +1,7 @@
 /** **************
  *   Notepad Widget
  */
-/** @module pad
- */
-import store from './store';
-import { NamedNode } from 'rdflib';
+import { NamedNode, IndexedFormula } from 'rdflib';
 export { renderPartipants, participationObject, manageParticipation, recordParticipation } from './participation';
 declare type notepadOptions = {
     statusArea?: HTMLDivElement;
@@ -29,7 +26,7 @@ export declare function notepad(dom: HTMLDocument, padDoc: NamedNode, subject: N
  * Get the chunks of the notepad
  * They are stored in a RDF linked list
  */
-export declare function getChunks(subject: NamedNode, kb: store): any[];
+export declare function getChunks(subject: NamedNode, kb: IndexedFormula): any[];
 /**
  *  Encode content to be put in XML or HTML elements
  */
@@ -39,5 +36,5 @@ export declare function xmlEncode(str: any): any;
  *   @param { } pad - the notepad
  *   @param {store} pad - the data store
  */
-export declare function notepadToHTML(pad: any, kb: store): string;
+export declare function notepadToHTML(pad: any, kb: IndexedFormula): string;
 //# sourceMappingURL=pad.d.ts.map

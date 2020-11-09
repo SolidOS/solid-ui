@@ -4,13 +4,15 @@
 
 /** @module pad
  */
-import store from './store'
 import ns from './ns'
-import { Namespace, NamedNode, st } from 'rdflib'
+import { Namespace, NamedNode, st, IndexedFormula } from 'rdflib'
 import { newThing, errorMessageBlock } from './widgets'
 import { beep } from './utils'
 import { log } from './debug'
+import { solidLogicSingleton } from './logic'
 export { renderPartipants, participationObject, manageParticipation, recordParticipation } from './participation'
+
+const store = solidLogicSingleton.store
 
 const PAD = Namespace('http://www.w3.org/ns/pim/pad#')
 
@@ -790,7 +792,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
  */
 
 // @ignore exporting this only for the unit test
-export function getChunks (subject: NamedNode, kb: store) {
+export function getChunks (subject: NamedNode, kb: IndexedFormula) {
   const chunks: any[] = []
   for (
     let chunk = kb.the(subject, PAD('next'));
@@ -815,7 +817,7 @@ export function xmlEncode (str) {
  *   @param { } pad - the notepad
  *   @param {store} pad - the data store
  */
-export function notepadToHTML (pad: any, kb: store) {
+export function notepadToHTML (pad: any, kb: IndexedFormula) {
   const chunks = getChunks(pad, kb)
   let html = '<html>\n  <head>\n'
   const title = kb.anyValue(pad, ns.dct('title'))

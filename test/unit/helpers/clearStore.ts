@@ -1,5 +1,5 @@
-import store from '../../../src/store'
+import { solidLogicSingleton } from '../../../src/logic'
 
 export function clearStore () {
-  store.statements.slice().forEach(store.remove.bind(store))
+  solidLogicSingleton.clearStore()
 }

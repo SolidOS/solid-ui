@@ -4,7 +4,7 @@
 
 import * as debug from './debug'
 
-const kb = require('./store')
+const kb = require('./logic').solidLogicSingleton.store
 const ns = require('./ns')
 const authn = require('./authn/authn')
 const widgets = require('./widgets')

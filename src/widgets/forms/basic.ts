@@ -1,5 +1,5 @@
 import { st, BlankNode, Literal, Node, NamedNode, Variable } from 'rdflib'
-import store from '../../store'
+import { solidLogicSingleton } from '../../logic'
 import ns from '../../ns'
 import { textInputStyle } from '../../style'
 import { label } from '../../utils'
@@ -8,6 +8,7 @@ import { errorMessageBlock } from '../error'
 import { mostSpecificClassURI } from './fieldFunction'
 import { fieldParams } from './fieldParams'
 
+const store = solidLogicSingleton.store
 /**
  * Create an anchor element with a label as the anchor text.
  *

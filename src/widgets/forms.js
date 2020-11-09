@@ -20,7 +20,7 @@ var UI = {
   icons: require('../iconBase'),
   log: require('../log'),
   ns: require('../ns'),
-  store: require('../store'),
+  store: require('../logic').solidLogicSingleton.store,
   style: require('../style'),
   widgets: forms
 }

@@ -1,4 +1,3 @@
-import store from './store'
 import { currentUser } from './authn/authn'
 import { NamedNode, st } from 'rdflib'
 import ns from './ns'
@@ -6,6 +5,7 @@ import { personTR, newThing, errorMessageBlock } from './widgets'
 import { syncTableToArray } from './utils'
 import { lightColorHash } from './pad'
 import { log } from './debug'
+import { solidLogicSingleton } from './logic'
 
 type ParticipationOptions = {
   deleteFunction?: () => {}
@@ -16,7 +16,7 @@ type ParticipationOptions = {
 class ParticipationTableElement extends HTMLTableElement {
   refresh?: () => void
 }
-const kb = store
+const kb = solidLogicSingleton.store
 
 /**  Manage participation in this session
 *
