@@ -30,6 +30,7 @@ describe('findBookmarkDocument', () => {
     expect(result).toEqual({
       containers: [],
       index: {
+        private: [],
         public: []
       },
       instances: [],
