@@ -1,7 +1,9 @@
 import { Node } from 'rdflib'
-import store from '../../store'
+import { solidLogicSingleton } from '../../logic'
 import { debug } from '../../log'
 import { errorMessageBlock } from '../error'
+
+const store = solidLogicSingleton.store
 
 export type FieldFunction = (
   dom: HTMLDocument, // the DOM

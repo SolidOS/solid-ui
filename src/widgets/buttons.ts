@@ -1,12 +1,12 @@
 import { IndexedFormula, NamedNode, st, sym, uri, Util } from 'rdflib'
 import { iconBase, originalIconBase } from '../iconBase'
-import store from '../store'
 import ns from '../ns'
 import style from '../style'
 import * as debug from '../debug'
 import { info } from '../log'
 import { getClasses } from '../jss'
 import { uploadFiles } from './dragAndDrop.js'
+import { solidLogicSingleton } from '../logic'
 
 /**
  * UI Widgets such as buttons
@@ -19,6 +19,8 @@ const utils = require('../utils')
 
 const error = require('./error')
 const dragAndDrop = require('./dragAndDrop')
+
+const store = solidLogicSingleton.store
 
 const cancelIconURI = iconBase + 'noun_1180156.svg' // black X
 const checkIconURI = iconBase + 'noun_1180158.svg' // green checkmark; Continue

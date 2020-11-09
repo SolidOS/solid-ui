@@ -3,7 +3,9 @@ import { AccessGroups } from '../../../src/acl/access-groups'
 import { IndexedFormula, graph } from 'rdflib'
 import { instantiateAccessGroups } from '../helpers/instantiateAccessGroups'
 import { JSDOM } from 'jsdom'
-import store from '../../../src/store'
+import { solidLogicSingleton } from '../../../src/logic'
+
+const store = solidLogicSingleton.store
 
 silenceDebugMessages()
 jest.mock('solid-auth-client')

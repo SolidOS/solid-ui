@@ -40,7 +40,7 @@ var UI = {
   log: require('./log'),
   ns: require('./ns'),
   rdf: require('rdflib'),
-  store: require('./store')
+  store: require('./logic').solidLogicSingleton.store
 }
 
 var nextVariable = 0

@@ -13,7 +13,7 @@ const UI = {
   authn: require('./authn/authn'),
   icons: require('./iconBase'),
   ns: require('./ns'),
-  store: require('./store'),
+  store: require('./logic').solidLogicSingleton.store,
   style: require('./style'),
   utils: require('./utils'),
   widgets: require('./widgets')

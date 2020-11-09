@@ -38,11 +38,15 @@ import {
   timestamp
 } from '../../../src/widgets/buttons'
 import { graph, namedNode, NamedNode, sym } from 'rdflib'
+// @ts-ignore
 import { foaf, rdf, sioc, vcard } from '../../../src/ns'
+// @ts-ignore
 import { iconBase } from '../../../src/iconBase'
-import store from '../../../src/store'
 import { clearStore } from '../helpers/clearStore'
 import { domWithHead } from '../../helpers/dom-with-head'
+import { solidLogicSingleton } from '../../../src/logic'
+
+const store = solidLogicSingleton.store
 
 silenceDebugMessages()
 jest.mock('solid-auth-client')
