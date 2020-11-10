@@ -21,6 +21,7 @@ import { infiniteMessageArea } from './chat/infinite';
 import * as pad from './pad';
 import * as participation from './participation';
 import preferences from './preferences';
+import { solidLogicSingleton } from './logic';
 import style from './style';
 import table from './table';
 import * as tabs from './tabs';
@@ -30,5 +31,5 @@ import versionInfo from './versionInfo';
 import { initHeader } from './header';
 declare const dom: Document | null;
 declare const store: any;
-export { ns, rdf, acl, aclControl, authn, create, dom, icons, log, matrix, media, messageArea, infiniteMessageArea, pad, participation, preferences, store, style, table, tabs, utils, widgets, versionInfo, initHeader };
+export { ns, rdf, acl, aclControl, authn, create, dom, icons, log, matrix, media, messageArea, infiniteMessageArea, pad, participation, preferences, solidLogicSingleton, store, style, table, tabs, utils, widgets, versionInfo, initHeader };
 //# sourceMappingURL=index.d.ts.map
