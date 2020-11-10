@@ -17,6 +17,7 @@ describe('Index', () => {
       'messageArea',
       'infiniteMessageArea',
       'preferences',
+      'solidLogicSingleton',
       'style',
       'table',
       'utils',

@@ -1,7 +1,6 @@
 import { silenceDebugMessages } from '../helpers/setup'
 import { solidLogicSingleton } from '../../src/logic'
 
-const kb = solidLogicSingleton.store
 silenceDebugMessages()
 jest.mock('solid-auth-client')
 
