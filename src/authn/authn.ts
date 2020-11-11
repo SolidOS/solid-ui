@@ -150,6 +150,7 @@ export function logIn (context: AuthenticationContext): Promise<AuthenticationCo
  * @returns Resolves with the context after login / fetch
  */
 export async function logInLoadProfile (context: AuthenticationContext): Promise<AuthenticationContext> {
+  // console.log('Solid UI logInLoadProfile')
   if (context.publicProfile) {
     return context
   } // already done
@@ -158,7 +159,7 @@ export async function logInLoadProfile (context: AuthenticationContext): Promise
     if (!loggedInContext.me) {
       throw new Error('Could not log in')
     }
-    context.publicProfile = solidLogicSingleton.loadProfile(loggedInContext.me)
+    context.publicProfile = await solidLogicSingleton.loadProfile(loggedInContext.me)
   } catch (err) {
     if (context.div && context.dom) {
       context.div.appendChild(
@@ -178,67 +179,66 @@ export async function logInLoadProfile (context: AuthenticationContext): Promise
  *
  * @param context
  */
-export function logInLoadPreferences (context: AuthenticationContext): Promise<AuthenticationContext> {
+export async function logInLoadPreferences (context: AuthenticationContext): Promise<AuthenticationContext> {
+  // console.log('Solid UI logInLoadPreferences')
   if (context.preferencesFile) return Promise.resolve(context) // already done
 
   const statusArea = context.statusArea || context.div || null
   let progressDisplay
-  return new Promise(function (resolve, reject) {
-    function complain (message) {
-      message = `logInLoadPreferences: ${message}`
-      if (statusArea) {
-        // statusArea.innerHTML = ''
-        statusArea.appendChild(
-          widgets.errorMessageBlock(context.dom, message)
+  function complain (message) {
+    message = `logInLoadPreferences: ${message}`
+    if (statusArea) {
+      // statusArea.innerHTML = ''
+      statusArea.appendChild(
+        widgets.errorMessageBlock(context.dom, message)
+      )
+    }
+    debug.log(message)
+    // reject(new Error(message))
+  }
+  try {
+    context = await logInLoadProfile(context)
+
+    // console.log('back in Solid UI after logInLoadProfile', context)
+    const preferencesFile = await solidLogicSingleton.loadPreferences(context.me)
+    if (progressDisplay) {
+      progressDisplay.parentNode.removeChild(progressDisplay)
+    }
+    context.preferencesFile = preferencesFile
+  } catch (err) {
+    let m2: string
+    if (err instanceof UnauthorizedError) {
+      m2 = 'Strange - you are not authenticated (properly logged in) to read preference file.'
+      alert(m2)
+    } else if (err instanceof CrossOriginForbiddenError) {
+      m2 = `Unauthorized: Assuming preference file blocked for origin ${window.location.origin}`
+      context.preferencesFileError = m2
+      return context
+    } else if (err instanceof SameOriginForbiddenError) {
+      m2 = 'You are not authorized to read your preference file. This may be because you are using an untrusted web app.'
+      debug.warn(m2)
+    } else if (err instanceof NotFoundError) {
+      if (
+        confirm(`You do not currently have a preference file. OK for me to create an empty one? ${(err as any).preferencesFile || ''}`)
+      ) {
+        // @@@ code me  ... weird to have a name of the file but no file
+        alert(`Sorry; I am not prepared to do this. Please create an empty file at ${(err as any).preferencesFile || '(?)'}`)
+        complain(
+          new Error('Sorry; no code yet to create a preference file at ')
+        )
+      } else {
+        throw (
+          new Error(`User declined to create a preference file at ${(err as any).preferencesFile || '(?)'}`)
         )
       }
-      debug.log(message)
-      reject(new Error(message))
+    } else if (err instanceof FetchError) {
+      m2 = `Strange: Error ${err.status} trying to read your preference file.${err.message}`
+      alert(m2)
+    } else {
+      throw new Error(`(via loadPrefs) ${err}`)
     }
-    return logInLoadProfile(context)
-      .then(context => {
-        return solidLogicSingleton.loadPreferences(context.me).then(function (preferencesFile) {
-          if (progressDisplay) {
-            progressDisplay.parentNode.removeChild(progressDisplay)
-          }
-          context.preferencesFile = preferencesFile
-          return resolve(context)
-        })
-      })
-      .catch(err => {
-        let m2: string
-        if (err instanceof UnauthorizedError) {
-          m2 = 'Strange - you are not authenticated (properly logged in) to read preference file.'
-          alert(m2)
-        } else if (err instanceof CrossOriginForbiddenError) {
-          m2 = `Unauthorized: Assuming preference file blocked for origin ${window.location.origin}`
-          context.preferencesFileError = m2
-          return resolve(context)
-        } else if (err instanceof SameOriginForbiddenError) {
-          m2 = 'You are not authorized to read your preference file. This may be because you are using an untrusted web app.'
-          debug.warn(m2)
-        } else if (err instanceof NotFoundError) {
-          if (
-            confirm(`You do not currently have a preference file. OK for me to create an empty one? ${(err as any).preferencesFile || ''}`)
-          ) {
-            // @@@ code me  ... weird to have a name of the file but no file
-            alert(`Sorry; I am not prepared to do this. Please create an empty file at ${(err as any).preferencesFile || '(?)'}`)
-            return complain(
-              new Error('Sorry; no code yet to create a preference file at ')
-            )
-          } else {
-            reject(
-              new Error(`User declined to create a preference file at ${(err as any).preferencesFile || '(?)'}`)
-            )
-          }
-        } else if (err instanceof FetchError) {
-          m2 = `Strange: Error ${err.status} trying to read your preference file.${err.message}`
-          alert(m2)
-        } else {
-          reject(new Error(`(via loadPrefs) ${err}`))
-        }
-      })
-  })
+  }
+  return context
 }
 
 /**
@@ -372,22 +372,28 @@ export async function findAppInstances (
   theClass: NamedNode,
   isPublic?: boolean
 ): Promise<AuthenticationContext> {
+  // console.log('findAppInstances', { context, theClass, isPublic })
   if (isPublic === undefined) {
     // Then both public and private
+    // console.log('finding public app instance')
     await findAppInstances(context, theClass, true)
+    // console.log('finding private app instance')
     await findAppInstances(context, theClass, false)
+    // console.log('found public & private app instance', context)
     return context
   }
 
   // Loading preferences is more than loading profile
   try {
+    // console.log('calling logInLoad', isPublic)
     await (isPublic
       ? logInLoadProfile(context)
       : logInLoadPreferences(context))
+    // console.log('called logInLoad', isPublic)
   } catch (err) {
     widgets.complain(context, `loadIndex: login and load problem ${err}`)
   }
-
+  // console.log('awaited LogInLoad!', context)
   const visibility = isPublic ? 'public' : 'private'
   try {
     await loadIndex(context, isPublic)
@@ -1102,6 +1108,7 @@ export function selectWorkspace (
   }
 
   function displayOptions (context) {
+    // console.log('displayOptions!', context)
     async function makeNewWorkspace (_event) {
       const row = table.appendChild(dom.createElement('tr'))
       const cell = row.appendChild(dom.createElement('td'))
@@ -1269,9 +1276,11 @@ export function selectWorkspace (
     table.appendChild(trLast)
   } // displayOptions
 
+  // console.log('kicking off async operation')
   logInLoadPreferences(context) // kick off async operation
     .then(displayOptions)
     .catch(err => {
+      // console.log("err from async op")
       box.appendChild(widgets.errorMessageBlock(context.dom, err))
     })
 
