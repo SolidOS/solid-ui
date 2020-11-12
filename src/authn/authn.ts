@@ -514,7 +514,7 @@ export function registrationControl (
         index = context.index.public[0]
         statements = registrationStatements(index)
         tbody.children[0].appendChild(
-          widgets.buildChecsolidLogicSingleton.storeoxForm(
+          widgets.buildCheckBoxForm(
             context.dom,
             solidLogicSingleton.store,
             `Public link to this ${context.noun}`,
@@ -530,7 +530,7 @@ export function registrationControl (
         index = context.index.private[0]
         statements = registrationStatements(index)
         tbody.children[1].appendChild(
-          widgets.buildChecsolidLogicSingleton.storeoxForm(
+          widgets.buildCheckBoxForm(
             context.dom,
             solidLogicSingleton.store,
             `Personal note of this ${context.noun}`,
