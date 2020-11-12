@@ -289,7 +289,7 @@ export class GroupBuilder {
     dropContainer.style.flexDirection = 'column'
 
     makeDropTarget(dropContainer, uris => {
-      uris.map(uri => {
+      uris.forEach(uri => {
         this.add(uri).catch(err => {
           this.element.appendChild(
             errorMessageBlock(

@@ -1,4 +1,4 @@
-var defaultConfig = require('./config-default')
+const defaultConfig = require('./config-default')
 
 /**
  * Provides functionality for signing up with a Solid provider
@@ -19,18 +19,18 @@ function Signup (config) {
  * @return {Promise<String>} Event listener promise, resolves to user's WebID
  */
 Signup.prototype.listen = function listen () {
-  var promise = new Promise(function (resolve, reject) {
-    var eventMethod = window.addEventListener
+  const promise = new Promise(function (resolve, reject) {
+    const eventMethod = window.addEventListener
       ? 'addEventListener'
       : 'attachEvent'
-    var eventListener = window[eventMethod]
-    var messageEvent = eventMethod === 'attachEvent'
+    const eventListener = window[eventMethod]
+    const messageEvent = eventMethod === 'attachEvent'
       ? 'onmessage'
       : 'message'
     eventListener(messageEvent, function (e) {
-      var u = e.data
+      const u = e.data
       if (u.slice(0, 5) === 'User:') {
-        var user = u.slice(5, u.length)
+        const user = u.slice(5, u.length)
         if (user && user.length > 0 && user.slice(0, 4) === 'http') {
           return resolve(user)
         } else {
@@ -52,19 +52,19 @@ Signup.prototype.listen = function listen () {
  */
 Signup.prototype.signup = function signup (signupUrl) {
   signupUrl = signupUrl || this.config.signupEndpoint
-  var width = this.config.signupWindowWidth
-  var height = this.config.signupWindowHeight
+  const width = this.config.signupWindowWidth
+  const height = this.config.signupWindowHeight
   // set borders
-  var leftPosition = (window.screen.width / 2) - ((width / 2) + 10)
+  const leftPosition = (window.screen.width / 2) - ((width / 2) + 10)
   // set title and status bars
-  var topPosition = (window.screen.height / 2) - ((height / 2) + 50)
-  var windowTitle = 'Solid signup'
-  var windowUrl = signupUrl + '?origin=' +
+  const topPosition = (window.screen.height / 2) - ((height / 2) + 50)
+  const windowTitle = 'Solid signup'
+  const windowUrl = signupUrl + '?origin=' +
     encodeURIComponent(window.location.origin)
-  var windowSpecs = 'resizable,scrollbars,status,width=' + width + ',height=' +
+  const windowSpecs = 'resizable,scrollbars,status,width=' + width + ',height=' +
     height + ',left=' + leftPosition + ',top=' + topPosition
   window.open(windowUrl, windowTitle, windowSpecs)
-  var self = this
+  const self = this
   return new Promise(function (resolve) {
     self.listen()
       .then(function (webid) {

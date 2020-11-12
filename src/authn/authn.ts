@@ -1135,7 +1135,7 @@ export function selectWorkspace (
     const storages = solidLogicSingleton.store.each(id, ns.space('storage')) // @@ No provenance requirement at the moment
     if (w.length === 0 && storages) {
       say(`You don't seem to have any workspaces. You have ${storages.length} storage spaces.`)
-      storages.map(function (s) {
+      storages.forEach(function (s) {
         w = w.concat(solidLogicSingleton.store.each(s, ns.ldp('contains')))
       }).filter(file => ['public', 'private'].includes(file.id().toLowerCase()))
     }
@@ -1144,7 +1144,7 @@ export function selectWorkspace (
       say(`Workspace used: ${w[0].uri}`) // @@ allow user to see URI
       newBase = figureOutBase(w[0])
       // callbackWS(w[0], newBase)
-    } else if (w.length === 0) {
+    // } else if (w.length === 0) {
     }
 
     // Prompt for ws selection or creation

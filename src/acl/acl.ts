@@ -136,7 +136,7 @@ export function ACLunion (list: Array<AgentMapMap | AgentMapUnion>): AgentMapUni
   const b = list[0]
   let a, ag
   for (let k = 1; k < list.length; k++) {
-    ;['agent', 'agentClass', 'agentGroup', 'origin', 'originClass'].map(
+    ;['agent', 'agentClass', 'agentGroup', 'origin', 'originClass'].forEach(
       function (pred) {
         a = list[k]
         if (a[pred]) {
@@ -195,7 +195,7 @@ export function loadUnionACL (subjectList: Array<NamedNode>, callbackFunction: l
  */
 export function ACLbyCombination (ac: AgentMapMap | AgentMapUnion): ComboList {
   const byCombo = {}
-  ;['agent', 'agentClass', 'agentGroup', 'origin', 'originClass'].map(function (pred) {
+  ;['agent', 'agentClass', 'agentGroup', 'origin', 'originClass'].forEach(function (pred) {
     for (const agent in ac[pred]) {
       const combo: string[] = []
       for (const mode in ac[pred][agent]) {

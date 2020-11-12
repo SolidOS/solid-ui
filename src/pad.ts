@@ -607,7 +607,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
       }
 
       const sts = kb.statementsMatching(undefined, ns.sioc('contents'))
-      sts.map(function (st) {
+      sts.forEach(function (st) {
         if (!found[st.subject.uri]) {
           complain2('Loose chunk! ' + st.subject.uri)
         }

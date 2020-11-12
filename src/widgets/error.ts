@@ -6,7 +6,7 @@
  * @returns A div element with the msg string
  */
 export function errorMessageBlock (dom: HTMLDocument, msg: string, backgroundColor?: string): HTMLDivElement {
-  var div = dom.createElement('div')
+  const div = dom.createElement('div')
   div.setAttribute(
     'style',
     'margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; background-color: ' +

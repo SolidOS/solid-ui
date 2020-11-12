@@ -20,7 +20,7 @@ import * as debug from '../debug'
 //
 // (In order to avoid name collisions, it is safely assumed that modules don't
 // export widgets with the same name)
-var widgets = Object.assign(
+const widgets = Object.assign(
   {},
   require('./peoplePicker'),
   require('./dragAndDrop'), // uploadFiles etc

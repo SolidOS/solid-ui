@@ -26,7 +26,7 @@ module.exports = class DateFolder {
   leafDocumentFromDate (date) {
     // debug.log('incoming date: ' + date)
     const isoDate = date.toISOString() // Like "2018-05-07T17:42:46.576Z"
-    var path = isoDate.split('T')[0].replace(/-/g, '/') //  Like "2018/05/07"
+    let path = isoDate.split('T')[0].replace(/-/g, '/') //  Like "2018/05/07"
     path = this.root.dir().uri + path + '/' + this.leafFileName
     return kb.sym(path)
   }
@@ -37,7 +37,7 @@ module.exports = class DateFolder {
     const head = this.rootFolder.uri.length
     const str = doc.uri.slice(head, head + 10).replace(/\//g, '-')
     // let date = new Date(str + 'Z') // GMT - but fails in FF - invalid format :-(
-    var date = new Date(str) // not explicitly UTC but is assumed so in spec
+    const date = new Date(str) // not explicitly UTC but is assumed so in spec
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse
     debug.log('Date for ' + doc + ':' + date.toISOString())
     return date
@@ -81,7 +81,7 @@ module.exports = class DateFolder {
       // debug.log('  previousPeriod level' + level + ' file ' + file)
       const parent = file.dir()
       await kb.fetcher.load(parent)
-      var siblings = kb.each(parent, ns.ldp('contains'))
+      let siblings = kb.each(parent, ns.ldp('contains'))
       siblings = siblings.filter(younger)
       const folder = await lastNonEmpty(siblings)
       if (folder) return folder
@@ -91,7 +91,7 @@ module.exports = class DateFolder {
       const uncle = await previousPeriod(parent, level - 1)
       if (!uncle) return null // reached first ever
       await kb.fetcher.load(uncle)
-      var cousins = kb.each(uncle, ns.ldp('contains'))
+      const cousins = kb.each(uncle, ns.ldp('contains'))
       const result = await lastNonEmpty(cousins)
       return result
     } // previousPeriod
@@ -107,8 +107,8 @@ module.exports = class DateFolder {
 
   async firstLeaf (backwards) {
     // backwards -> last leafObject
-    var folderStore = $rdf.graph()
-    var folderFetcher = new $rdf.Fetcher(folderStore)
+    const folderStore = $rdf.graph()
+    const folderFetcher = new $rdf.Fetcher(folderStore)
     async function earliestSubfolder (parent) {
       function suitable (x) {
         const tail = x.uri
@@ -125,7 +125,7 @@ module.exports = class DateFolder {
       // }catch (err) {
       // }
 
-      var kids = folderStore.each(parent, ns.ldp('contains'))
+      let kids = folderStore.each(parent, ns.ldp('contains'))
       kids = kids.filter(suitable)
       if (kids.length === 0) {
         throw new Error(' @@@  No children to         parent2 ' + parent)
