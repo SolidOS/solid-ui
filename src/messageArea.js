@@ -31,6 +31,7 @@ module.exports = function (dom, kb, subject, messageStore, options) {
   // 'font-size: 100%; margin: 0.1em 1em 0.1em 1em;  background-color: white; white-space: pre-wrap; padding: 0.1em;'
 
   const div = dom.createElement('div')
+  // eslint-disable-next-line prefer-const
   let messageTable // Shared by initial build and addMessageFromBindings
 
   let me

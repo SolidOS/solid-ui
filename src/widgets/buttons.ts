@@ -1082,7 +1082,9 @@ export function selectorPanelRefresh (
 
   const refreshItem = function (box: HTMLElement, x: NamedNode) {
     // Scope to hold item and x
-    let item, image
+    let item: any
+    // eslint-disable-next-line prefer-const
+    let image: HTMLImageElement
 
     const setStyle = function () {
       const already = inverse
@@ -1096,6 +1098,7 @@ export function selectorPanelRefresh (
       image.setAttribute('title', already.length ? already.length : 'attach')
     }
     const f = index.twoLine.widgetForClass(type)
+    // eslint-disable-next-line prefer-const
     item = f(dom, x)
     item.setAttribute('style', style0)
 

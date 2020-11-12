@@ -803,7 +803,9 @@ module.exports = function renderTableViewPane (doc, options) {
     let subjects, types
 
     const s = discoverTypes()
+    // eslint-disable-next-line prefer-const
     subjects = s[0]
+    // eslint-disable-next-line prefer-const
     types = s[1] // no [ ] on LHS
 
     for (const typeUrl in subjects) {
@@ -1404,7 +1406,7 @@ module.exports = function renderTableViewPane (doc, options) {
       } else if (obj.termType === 'Collection') {
         const span = doc.createElement('span')
         span.appendChild(doc.createTextNode('['))
-        obj.elements.map(function (x) {
+        obj.elements.forEach(function (x) {
           span.appendChild(renderValue(x, column))
           span.appendChild(doc.createTextNode(', '))
         })

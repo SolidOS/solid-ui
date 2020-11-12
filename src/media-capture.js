@@ -239,6 +239,7 @@ UI.media.cameraOLD = function (context, _gotBlob) {
     canvas.width = width
     canvas.height = height
 
+    // eslint-disable-next-line prefer-const
     ctx = canvas.getContext('2d')
     ctx.drawImage(video, 0, 0, width, height)
 

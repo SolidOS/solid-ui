@@ -1527,6 +1527,7 @@ forms.makeSelectForNestedCategory = function (
     if (ok) update()
     callbackFunction(ok, body)
   }
+  // eslint-disable-next-line prefer-const
   select = forms.makeSelectForCategory(
     dom,
     kb,
@@ -1580,6 +1581,7 @@ function buildCheckboxForm (dom, kb, lab, del, ins, form, store, tristate) {
     'colour: black; font-size: 100%; padding-left: 0.5 em; padding-right: 0.5 em;'
   box.appendChild(tx)
   let input
+  // eslint-disable-next-line prefer-const
   input = dom.createElement('button')
 
   input.setAttribute(
