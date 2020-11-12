@@ -122,7 +122,7 @@ module.exports.deleteFolder = function (folder, store, dom) {
       store.fetcher.webOperation('DELETE', file.uri)
     )
   }
-  var count = 0
+  let count = 0
   forAllFiles(folder, store, () => {
     count += 1
   }) // Count files

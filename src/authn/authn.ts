@@ -400,7 +400,11 @@ export async function findAppInstances (
   } catch (err) {
   }
   const index = context.index as { [key: string]: Array<NamedNode> }
+  // eslint-disable-next-line no-console
+  console.log({ index, visibility })
   const thisIndex = index[visibility]
+  // eslint-disable-next-line no-console
+  console.log('Failing test?', thisIndex.map(ix => solidLogicSingleton.store.each(undefined, ns.solid('forClass'), theClass, ix)))
   const registrations = thisIndex
     .map(ix => solidLogicSingleton.store.each(undefined, ns.solid('forClass'), theClass, ix))
     .flat()
@@ -514,7 +518,7 @@ export function registrationControl (
         index = context.index.public[0]
         statements = registrationStatements(index)
         tbody.children[0].appendChild(
-          widgets.buildChecsolidLogicSingleton.storeoxForm(
+          widgets.buildCheckBoxForm(
             context.dom,
             solidLogicSingleton.store,
             `Public link to this ${context.noun}`,
@@ -530,7 +534,7 @@ export function registrationControl (
         index = context.index.private[0]
         statements = registrationStatements(index)
         tbody.children[1].appendChild(
-          widgets.buildChecsolidLogicSingleton.storeoxForm(
+          widgets.buildCheckBoxForm(
             context.dom,
             solidLogicSingleton.store,
             `Personal note of this ${context.noun}`,
@@ -1135,7 +1139,7 @@ export function selectWorkspace (
     const storages = solidLogicSingleton.store.each(id, ns.space('storage')) // @@ No provenance requirement at the moment
     if (w.length === 0 && storages) {
       say(`You don't seem to have any workspaces. You have ${storages.length} storage spaces.`)
-      storages.map(function (s) {
+      storages.forEach(function (s) {
         w = w.concat(solidLogicSingleton.store.each(s, ns.ldp('contains')))
       }).filter(file => ['public', 'private'].includes(file.id().toLowerCase()))
     }
@@ -1144,7 +1148,7 @@ export function selectWorkspace (
       say(`Workspace used: ${w[0].uri}`) // @@ allow user to see URI
       newBase = figureOutBase(w[0])
       // callbackWS(w[0], newBase)
-    } else if (w.length === 0) {
+    // } else if (w.length === 0) {
     }
 
     // Prompt for ws selection or creation

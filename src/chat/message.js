@@ -53,9 +53,9 @@ export function elementForImageURI (imageUri, options) {
   return anchor
 }
 
-var anchor = function (text, term) {
+const anchor = function (text, term) {
   // If there is no link return an element anyway
-  var a = dom.createElement('a')
+  const a = dom.createElement('a')
   if (term && term.uri) {
     a.setAttribute('href', term.uri)
     a.addEventListener('click', UI.widgets.openHrefInOutlineMode, true)
@@ -66,7 +66,7 @@ var anchor = function (text, term) {
 }
 
 function nick (person) {
-  var s = UI.store.any(person, UI.ns.foaf('nick'))
+  const s = UI.store.any(person, UI.ns.foaf('nick'))
   if (s) return '' + s.value
   return '' + label(person)
 }
@@ -76,7 +76,7 @@ function nick (person) {
  * inside the `td1` element
  */
 export function creatorAndDate (td1, creator, date, message) {
-  var nickAnchor = td1.appendChild(anchor(nick(creator), creator))
+  const nickAnchor = td1.appendChild(anchor(nick(creator), creator))
   if (creator.uri) {
     UI.store.fetcher.nowOrWhenFetched(creator.doc(), undefined, function (
       _ok,
@@ -94,7 +94,7 @@ export function creatorAndDate (td1, creator, date, message) {
  * inside the `td1` element
  */
 export function creatorAndDateHorizontal (td1, creator, date, message) {
-  var nickAnchor = td1.appendChild(anchor(label(creator), creator))
+  const nickAnchor = td1.appendChild(anchor(label(creator), creator))
   if (creator.uri) {
     UI.store.fetcher.nowOrWhenFetched(creator.doc(), undefined, function (
       _ok,
@@ -119,16 +119,16 @@ export function renderMessage (
   options,
   userContext
 ) {
-  var colorizeByAuthor =
+  const colorizeByAuthor =
     options.colorizeByAuthor === '1' || options.colorizeByAuthor === true
 
-  var creator = bindings['?creator']
-  var message = bindings['?msg']
-  var date = bindings['?date']
-  var content = bindings['?content']
+  const creator = bindings['?creator']
+  const message = bindings['?msg']
+  const date = bindings['?date']
+  const content = bindings['?content']
 
-  var dateString = date.value
-  var messageRow = dom.createElement('tr')
+  const dateString = date.value
+  const messageRow = dom.createElement('tr')
   messageRow.AJAR_date = dateString
   messageRow.AJAR_subject = message
 
@@ -138,13 +138,13 @@ export function renderMessage (
     messageTable.selectedElement = messageRow
   }
 
-  var done = false
-  for (var ele = messageTable.firstChild; ; ele = ele.nextSibling) {
+  let done = false
+  for (let ele = messageTable.firstChild; ; ele = ele.nextSibling) {
     if (!ele) {
       // empty
       break
     }
-    var newestFirst = options.newestfirst === true
+    const newestFirst = options.newestfirst === true
     if (
       (dateString > ele.AJAR_date && newestFirst) ||
       (dateString < ele.AJAR_date && !newestFirst)
@@ -158,7 +158,7 @@ export function renderMessage (
     messageTable.appendChild(messageRow)
   }
 
-  var td1 = dom.createElement('td')
+  const td1 = dom.createElement('td')
   messageRow.appendChild(td1)
   if (options.authorAboveContent) {
     const img = dom.createElement('img')
@@ -173,7 +173,7 @@ export function renderMessage (
   }
 
   // Render the content ot the message itself
-  var td2 = messageRow.appendChild(dom.createElement('td'))
+  const td2 = messageRow.appendChild(dom.createElement('td'))
 
   if (options.authorAboveContent) {
     creatorAndDateHorizontal(
@@ -187,7 +187,7 @@ export function renderMessage (
   const isURI = /^https?:\/[^ <>]*$/i.test(text)
   let para = null
   if (isURI) {
-    var isImage = /\.(gif|jpg|jpeg|tiff|png|svg)$/i.test(text) // @@ Should use content-type not URI
+    const isImage = /\.(gif|jpg|jpeg|tiff|png|svg)$/i.test(text) // @@ Should use content-type not URI
     if (isImage && options.expandImagesInline) {
       const img = elementForImageURI(text, options)
       td2.appendChild(img)
@@ -206,7 +206,7 @@ export function renderMessage (
     para.textContent = text
   }
   if (para) {
-    var bgcolor = colorizeByAuthor
+    const bgcolor = colorizeByAuthor
       ? UI.pad.lightColorHash(creator)
       : getBgColor(fresh)
     para.setAttribute(
@@ -227,9 +227,9 @@ export function renderMessage (
   }
 
   // Message tool bar button
-  var td3 = dom.createElement('td')
+  const td3 = dom.createElement('td')
   messageRow.appendChild(td3)
-  var toolsButton = UI.widgets.button(
+  const toolsButton = UI.widgets.button(
     dom,
     UI.icons.iconBase + 'noun_243787.svg',
     '...'

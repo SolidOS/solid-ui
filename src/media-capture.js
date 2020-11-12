@@ -17,10 +17,10 @@ import * as debug from './debug'
 
 /** @module mediaCapture */
 
-var $rdf = require('rdflib')
-var media = (module.exports = {})
+const $rdf = require('rdflib')
+const media = (module.exports = {})
 
-var UI = {
+const UI = {
   icons: require('./iconBase'),
   ns: require('./ns'),
   pad: require('./pad'),
@@ -55,7 +55,7 @@ module.exports.cameraCaptureControl = function cameraCaptureControl (
   doneCallback
 ) {
   const div = dom.createElement('div')
-  var destination, imageBlob, player, canvas
+  let destination, imageBlob, player, canvas
 
   const table = div.appendChild(dom.createElement('table'))
   const mainTR = table.appendChild(dom.createElement('tr'))
@@ -202,7 +202,7 @@ module.exports.cameraButton = function cameraButton (
 ) {
   const div = dom.createElement('div')
   const but = UI.widgets.button(dom, cameraIcon, 'Take picture')
-  var control
+  let control
   function restoreButton (imageDoc) {
     div.removeChild(control)
     div.appendChild(but)
@@ -229,16 +229,17 @@ module.exports.cameraButton = function cameraButton (
 
 UI.media.cameraOLD = function (context, _gotBlob) {
   function takeSnapshot () {
-    var dom = context.dom
-    var img = dom.createElement('img')
-    var ctx
-    var width = video.offsetWidth
-    var height = video.offsetHeight
+    const dom = context.dom
+    const img = dom.createElement('img')
+    let ctx
+    const width = video.offsetWidth
+    const height = video.offsetHeight
 
-    var canvas = context.canvas || document.createElement('canvas')
+    const canvas = context.canvas || document.createElement('canvas')
     canvas.width = width
     canvas.height = height
 
+    // eslint-disable-next-line prefer-const
     ctx = canvas.getContext('2d')
     ctx.drawImage(video, 0, 0, width, height)
 

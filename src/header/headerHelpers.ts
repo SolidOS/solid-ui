@@ -21,7 +21,7 @@ function getStyle (styleClass) {
  * @ignore exporting this only for the unit test
  */
 export function addStyleClassToElement (element: any, styleClasses: string[]) {
-  styleClasses.map((styleClass) => {
+  styleClasses.forEach((styleClass) => {
     const style = getStyle(styleClass)
     const { classes } = getClasses(document.head, { [styleClass]: style })
     element.classList.add(classes[styleClass])

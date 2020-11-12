@@ -37,14 +37,14 @@ export type ButtonWidgetOptions = {
   needsBorder?: boolean
 }
 function getStatusArea (context?: StatusAreaContext) {
-  var box = (context && context.statusArea) || (context && context.div) || null
+  let box = (context && context.statusArea) || (context && context.div) || null
   if (box) return box
   let dom = context && context.dom
   if (!dom && typeof document !== 'undefined') {
     dom = document
   }
   if (dom) {
-    var body = dom.getElementsByTagName('body')[0]
+    const body = dom.getElementsByTagName('body')[0]
     box = dom.createElement('div')
     body.insertBefore((box as unknown as HTMLElement), body.firstElementChild)
     if (context) {
@@ -60,7 +60,7 @@ function getStatusArea (context?: StatusAreaContext) {
  */
 export function complain (context?: StatusAreaContext, err?: string) {
   if (!err) return // only if error
-  var ele = getStatusArea(context)
+  const ele = getStatusArea(context)
   debug.log('Complaint: ' + err)
   if (ele) ele.appendChild(error.errorMessageBlock((context && context.dom) || document, err))
   else alert(err)
@@ -80,8 +80,8 @@ export function clearElement (ele: HTMLElement) {
  * To figure out the log URI from the full URI used to invoke the reasoner
  */
 export function extractLogURI (fullURI) {
-  var logPos = fullURI.search(/logFile=/)
-  var rulPos = fullURI.search(/&rulesFile=/)
+  const logPos = fullURI.search(/logFile=/)
+  const rulPos = fullURI.search(/&rulesFile=/)
   return fullURI.substring(logPos + 8, rulPos)
 }
 
@@ -93,7 +93,7 @@ export function extractLogURI (fullURI) {
  */
 export function shortDate (str?: string, noTime?: boolean): string {
   if (!str) return '???'
-  var month = [
+  const month = [
     'Jan',
     'Feb',
     'Mar',
@@ -108,7 +108,7 @@ export function shortDate (str?: string, noTime?: boolean): string {
     'Dec'
   ]
   try {
-    var nowZ = new Date().toISOString()
+    const nowZ = new Date().toISOString()
     // var nowZ = $rdf.term(now).value
     // var n = now.getTimezoneOffset() // Minutes
     if (str.slice(0, 10) === nowZ.slice(0, 10) && !noTime) {
@@ -137,9 +137,9 @@ export function formatDateTime (date: Date, format: string): string {
   return format
     .split('{')
     .map(function (s) {
-      var k = s.split('}')[0]
-      var width = { Milliseconds: 3, FullYear: 4 }
-      var d = { Month: 1 }
+      const k = s.split('}')[0]
+      const width = { Milliseconds: 3, FullYear: 4 }
+      const d = { Month: 1 }
       return s
         ? ('000' + (date['get' + k]() + (d[k] || 0))).slice(-(width[k] || 2)) + s.split('}')[1]
         : ''
@@ -175,15 +175,15 @@ export function shortTime (): string {
  * Sets the best name we have and looks up a better one
  */
 export function setName (element: HTMLElement, x: NamedNode) {
-  var kb = store
-  var findName = function (x) {
-    var name =
+  const kb = store
+  const findName = function (x) {
+    const name =
       kb.any(x, ns.vcard('fn')) ||
       kb.any(x, ns.foaf('name')) ||
       kb.any(x, ns.vcard('organization-name'))
     return name ? name.value : null
   }
-  var name = x.sameTerm(ns.foaf('Agent')) ? 'Everyone' : findName(x)
+  const name = x.sameTerm(ns.foaf('Agent')) ? 'Everyone' : findName(x)
   element.textContent = name || utils.label(x)
   if (!name && x.uri) {
     // Note this is only a fetch, not a lookUP of all sameAs etc
@@ -257,10 +257,10 @@ export const iconForClass = {
  */
 function tempSite (x: NamedNode) {
   // use only while one in rdflib fails with origins 2019
-  var str = x.uri.split('#')[0]
-  var p = str.indexOf('//')
+  const str = x.uri.split('#')[0]
+  const p = str.indexOf('//')
   if (p < 0) throw new Error('This URI does not have a web site part (origin)')
-  var q = str.indexOf('/', p + 2)
+  const q = str.indexOf('/', p + 2)
   if (q < 0) {
     // no third slash?
     return str.slice(0) + '/' // Add slash to a bare origin
@@ -369,7 +369,7 @@ function trySetImage (element, thing, iconForClassMap) {
 
   // Do we have a generic icon for something in any class its in?
   const types = kb.findTypeURIs(thing)
-  for (var typeURI in types) {
+  for (const typeURI in types) {
     if (iconForClassMap[typeURI]) {
       element.setAttribute('src', iconForClassMap[typeURI])
       return false // maybe we can do better
@@ -385,8 +385,8 @@ function trySetImage (element, thing, iconForClassMap) {
 export function setImage (element: HTMLElement, thing: NamedNode) { // 20191230a
   const kb = store
 
-  var iconForClassMap = {}
-  for (var k in iconForClass) {
+  const iconForClassMap = {}
+  for (const k in iconForClass) {
     const pref = k.split(':')[0]
     const id = k.split(':')[1]
     const theClass = ns[pref](id)
@@ -406,11 +406,11 @@ export function setImage (element: HTMLElement, thing: NamedNode) { // 20191230a
 // If a web page then a favicon with a fallback to
 // See eg http://stackoverflow.com/questions/980855/inputting-a-default-image
 function faviconOrDefault (dom: HTMLDocument, x: NamedNode) {
-  var image = dom.createElement('img')
+  const image = dom.createElement('img')
   ;(image as any).style = style.iconStyle
-  var isOrigin = function (x) {
+  const isOrigin = function (x) {
     if (!x.uri) return false
-    var parts = x.uri.split('/')
+    const parts = x.uri.split('/')
     return parts.length === 3 || (parts.length === 4 && parts[3] === '')
   }
   image.setAttribute(
@@ -418,7 +418,7 @@ function faviconOrDefault (dom: HTMLDocument, x: NamedNode) {
     iconBase + (isOrigin(x) ? 'noun_15177.svg' : 'noun_681601.svg') // App symbol vs document
   )
   if (x.uri && x.uri.startsWith('https:') && x.uri.indexOf('#') < 0) {
-    var res = dom.createElement('object') // favico with a fallback of a default image if no favicon
+    const res = dom.createElement('object') // favico with a fallback of a default image if no favicon
     res.setAttribute('data', tempSite(x) + 'favicon.ico')
     res.setAttribute('type', 'image/x-icon')
     res.appendChild(image) // fallback
@@ -439,15 +439,15 @@ export function deleteButtonWithCheck (
   noun: string,
   deleteFunction: () => any
 ) {
-  var minusIconURI = iconBase + 'noun_2188_red.svg' // white minus in red #cc0000 circle
+  const minusIconURI = iconBase + 'noun_2188_red.svg' // white minus in red #cc0000 circle
 
   // var delButton = dom.createElement('button')
 
-  var img = dom.createElement('img')
+  const img = dom.createElement('img')
   img.setAttribute('src', minusIconURI) //  plus sign
   img.setAttribute('style', 'margin: 0.2em; width: 1em; height:1em')
   img.title = 'Remove this ' + noun
-  var deleteButtonElt = img
+  const deleteButtonElt = img
 
   container.appendChild(deleteButtonElt)
   container.setAttribute('class', 'hoverControl') // See tabbedtab.css (sigh global CSS)
@@ -457,10 +457,10 @@ export function deleteButtonWithCheck (
     'click',
     function (_event) {
       container.removeChild(deleteButtonElt) // Ask -- are you sure?
-      var cancelButtonElt = dom.createElement('button')
+      const cancelButtonElt = dom.createElement('button')
       // cancelButton.textContent = 'cancel'
       cancelButtonElt.setAttribute('style', style.buttonStyle)
-      var img = cancelButtonElt.appendChild(dom.createElement('img'))
+      const img = cancelButtonElt.appendChild(dom.createElement('img'))
       img.setAttribute('src', cancelIconURI)
       img.setAttribute('style', style.buttonStyle)
 
@@ -545,11 +545,11 @@ function getButtonStyle (options: ButtonWidgetOptions = {}) {
 export function button (dom: HTMLDocument, iconURI: string | undefined, text: string,
   handler?: (event: any) => void,
   options: ButtonWidgetOptions = { buttonColor: 'Primary', needsBorder: false }) {
-  var button = dom.createElement('button')
+  const button = dom.createElement('button')
   button.setAttribute('type', 'button')
   // button.innerHTML = text  // later, user preferences may make text preferred for some
   if (iconURI) {
-    var img = button.appendChild(dom.createElement('img'))
+    const img = button.appendChild(dom.createElement('img'))
     img.setAttribute('src', iconURI)
     img.setAttribute('style', 'width: 2em; height: 2em;') // trial and error. 2em disappears
     img.title = text
@@ -606,13 +606,13 @@ export function askName (
   noun?: string) {
   // eslint-disable-next-line promise/param-names
   return new Promise(function (resolve, _reject) {
-    var form = dom.createElement('div') // form is broken as HTML behaviour can resurface on js error
+    const form = dom.createElement('div') // form is broken as HTML behaviour can resurface on js error
     // classLabel = utils.label(ns.vcard('Individual'))
     predicate = predicate || ns.foaf('name') // eg 'name' in user's language
     noun = noun || (theClass ? utils.label(theClass) : '  ') // eg 'folder' in users's language
-    var prompt = noun + ' ' + utils.label(predicate) + ': '
+    const prompt = noun + ' ' + utils.label(predicate) + ': '
     form.appendChild(dom.createElement('p')).textContent = prompt
-    var namefield = dom.createElement('input')
+    const namefield = dom.createElement('input')
     namefield.setAttribute('type', 'text')
     namefield.setAttribute('size', '100')
     namefield.setAttribute('maxLength', '2048') // No arbitrary limits
@@ -654,13 +654,13 @@ export function askName (
  * A little link icon
  */
 export function linkIcon (dom: HTMLDocument, subject: NamedNode, iconURI?: string): HTMLElement {
-  var anchor = dom.createElement('a')
+  const anchor = dom.createElement('a')
   anchor.setAttribute('href', subject.uri)
   if (subject.uri.startsWith('http')) {
     // If diff web page
     anchor.setAttribute('target', '_blank') // open in a new tab or window
   } // as mailboxes and mail messages do not need new browser window
-  var img = anchor.appendChild(dom.createElement('img'))
+  const img = anchor.appendChild(dom.createElement('img'))
   img.setAttribute(
     'src',
     iconURI || originalIconBase + 'go-to-this.png'
@@ -675,15 +675,15 @@ export function linkIcon (dom: HTMLDocument, subject: NamedNode, iconURI?: strin
  * pred is unused param at the moment
  */
 export function personTR (dom: HTMLDocument, pred: NamedNode, obj: NamedNode, options: any): HTMLTableRowElement {
-  var tr = dom.createElement('tr')
+  const tr = dom.createElement('tr')
   options = options || {}
   // tr.predObj = [pred.uri, obj.uri]   moved to acl-control
-  var td1 = tr.appendChild(dom.createElement('td'))
-  var td2 = tr.appendChild(dom.createElement('td'))
-  var td3 = tr.appendChild(dom.createElement('td'))
+  const td1 = tr.appendChild(dom.createElement('td'))
+  const td2 = tr.appendChild(dom.createElement('td'))
+  const td3 = tr.appendChild(dom.createElement('td'))
 
   // var image = td1.appendChild(dom.createElement('img'))
-  var image = faviconOrDefault(dom, obj)
+  const image = faviconOrDefault(dom, obj)
 
   td1.setAttribute('style', 'vertical-align: middle; width:2.5em; padding:0.5em; height: 2.5em;')
   td2.setAttribute('style', 'vertical-align: middle; text-align:left;')
@@ -697,7 +697,7 @@ export function personTR (dom: HTMLDocument, pred: NamedNode, obj: NamedNode, op
   if (obj.uri) {
     // blank nodes need not apply
     if (options.link !== false) {
-      var anchor = td3.appendChild(linkIcon(dom, obj))
+      const anchor = td3.appendChild(linkIcon(dom, obj))
       anchor.classList.add('HoverControlHide')
       td3.appendChild(dom.createElement('br'))
     }
@@ -719,7 +719,7 @@ export function refreshTree (root: any): void {
     root.refresh()
     return
   }
-  for (var i = 0; i < root.children.length; i++) {
+  for (let i = 0; i < root.children.length; i++) {
     refreshTree(root.children[i])
   }
 }
@@ -744,24 +744,24 @@ export type attachmentListOptions = {
  */
 export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTMLElement, options: attachmentListOptions = {}) {
   // options = options || {}
-  var doc = options.doc || subject.doc()
+  const doc = options.doc || subject.doc()
   if (options.modify === undefined) options.modify = true
-  var modify = options.modify
-  var promptIcon: string = options.promptIcon || (iconBase + 'noun_748003.svg' as string) //    target
+  const modify = options.modify
+  const promptIcon: string = options.promptIcon || (iconBase + 'noun_748003.svg' as string) //    target
   // var promptIcon = options.promptIcon || (iconBase + 'noun_25830.svg') //  paperclip
-  var predicate = options.predicate || ns.wf('attachment')
-  var noun = options.noun || 'attachment'
+  const predicate = options.predicate || ns.wf('attachment')
+  const noun = options.noun || 'attachment'
 
-  var kb = store
-  var attachmentOuter = div.appendChild(dom.createElement('table'))
+  const kb = store
+  const attachmentOuter = div.appendChild(dom.createElement('table'))
   attachmentOuter.setAttribute('style', 'margin-top: 1em; margin-bottom: 1em;')
-  var attachmentOne = attachmentOuter.appendChild(dom.createElement('tr'))
-  var attachmentLeft = attachmentOne.appendChild(dom.createElement('td'))
-  var attachmentRight = attachmentOne.appendChild(dom.createElement('td'))
-  var attachmentTable = attachmentRight.appendChild(dom.createElement('table'))
+  const attachmentOne = attachmentOuter.appendChild(dom.createElement('tr'))
+  const attachmentLeft = attachmentOne.appendChild(dom.createElement('td'))
+  const attachmentRight = attachmentOne.appendChild(dom.createElement('td'))
+  const attachmentTable = attachmentRight.appendChild(dom.createElement('table'))
   attachmentTable.appendChild(dom.createElement('tr')) // attachmentTableTop
 
-  var deleteAttachment = function (target) {
+  const deleteAttachment = function (target) {
     kb.updater.update(st(subject, predicate, target, doc), [], function (
       uri,
       ok,
@@ -775,9 +775,9 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
       }
     })
   }
-  var createNewRow = function (target) {
-    var theTarget = target
-    var opt: any = { noun: noun }
+  const createNewRow = function (target) {
+    const theTarget = target
+    const opt: any = { noun: noun }
     if (modify) {
       opt.deleteFunction = function () {
         deleteAttachment(theTarget)
@@ -786,7 +786,7 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
     return personTR(dom, predicate, target, opt)
   }
   var refresh = ((attachmentTable as any).refresh = function () {
-    var things = kb.each(subject, predicate)
+    const things = kb.each(subject, predicate)
     things.sort()
     utils.syncTableToArray(attachmentTable, things, createNewRow)
   })
@@ -794,9 +794,9 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
   refresh()
 
   function droppedURIHandler (uris) {
-    var ins: any = []
-    uris.map(function (u) {
-      var target = sym(u) // Attachment needs text label to disinguish I think not icon.
+    const ins: any = []
+    uris.forEach(function (u) {
+      const target = sym(u) // Attachment needs text label to disinguish I think not icon.
       debug.log('Dropped on attachemnt ' + u) // icon was: iconBase + 'noun_25830.svg'
       ins.push(st(subject, predicate, target, doc))
     })
@@ -857,8 +857,8 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
 export function openHrefInOutlineMode (e: Event) {
   e.preventDefault()
   e.stopPropagation()
-  var target = utils.getTarget(e)
-  var uri = target.getAttribute('href')
+  const target = utils.getTarget(e)
+  const uri = target.getAttribute('href')
   if (!uri) return debug.log('openHrefInOutlineMode: No href found!\n')
   const dom = window.document
   if ((dom as any).outlineManager) {
@@ -882,14 +882,14 @@ export function openHrefInOutlineMode (e: Event) {
  */
 export function defaultAnnotationStore (subject) {
   if (subject.uri === undefined) return undefined
-  var s = subject.uri
+  let s = subject.uri
   if (s.slice(0, 7) !== 'http://') return undefined
   s = s.slice(7) // Remove
-  var hash = s.indexOf('#')
+  const hash = s.indexOf('#')
   if (hash >= 0) s = s.slice(0, hash)
   // Strip trailing
   else {
-    var slash = s.lastIndexOf('/')
+    const slash = s.lastIndexOf('/')
     if (slash < 0) return undefined
     s = s.slice(0, slash)
   }
@@ -902,21 +902,21 @@ export function defaultAnnotationStore (subject) {
  * the list of all class URIs.
  */
 export function allClassURIs (): { [uri: string]: boolean } {
-  var set = {}
+  const set = {}
   store
     .statementsMatching(undefined, ns.rdf('type'), undefined)
-    .map(function (st) {
+    .forEach(function (st) {
       if (st.object.uri) set[st.object.uri] = true
     })
   store
     .statementsMatching(undefined, ns.rdfs('subClassOf'), undefined)
-    .map(function (st) {
+    .forEach(function (st) {
       if (st.object.uri) set[st.object.uri] = true
       if (st.subject.uri) set[st.subject.uri] = true
     })
   store
     .each(undefined, ns.rdf('type'), ns.rdfs('Class'))
-    .map(function (c) {
+    .forEach(function (c) {
       if (c.uri) set[c.uri] = true
     })
   return set
@@ -935,17 +935,17 @@ export function allClassURIs (): { [uri: string]: boolean } {
  */
 
 export function propertyTriage (kb: IndexedFormula): any {
-  var possibleProperties: any = {}
+  const possibleProperties: any = {}
   // if (possibleProperties === undefined) possibleProperties = {}
   // var kb = store
-  var dp = {}
-  var op = {}
-  var no = 0
-  var nd = 0
-  var nu = 0
-  var pi = (kb as any).predicateIndex // One entry for each pred
+  const dp = {}
+  const op = {}
+  let no = 0
+  let nd = 0
+  let nu = 0
+  const pi = (kb as any).predicateIndex // One entry for each pred
   for (var p in pi) {
-    var object = pi[p][0].object
+    const object = pi[p][0].object
     if (object.termType === 'Literal') {
       dp[p] = true
       nd++
@@ -954,8 +954,8 @@ export function propertyTriage (kb: IndexedFormula): any {
       no++
     }
   } // If nothing discovered, then could be either:
-  var ps = kb.each(undefined, ns.rdf('type'), ns.rdf('Property'))
-  for (var i = 0; i < ps.length; i++) {
+  const ps = kb.each(undefined, ns.rdf('type'), ns.rdf('Property'))
+  for (let i = 0; i < ps.length; i++) {
     p = ps[i].toNT()
     // log.debug('propertyTriage: unknown: ' + p)
     if (!op[p] && !dp[p]) {
@@ -978,7 +978,7 @@ export function propertyTriage (kb: IndexedFormula): any {
  * A button for jumping
  */
 export function linkButton (dom: HTMLDocument, object: NamedNode): HTMLElement {
-  var b = dom.createElement('button')
+  const b = dom.createElement('button')
   b.setAttribute('type', 'button')
   b.textContent = 'Goto ' + utils.label(object)
   b.addEventListener('click', function (_event) {
@@ -992,7 +992,7 @@ export function linkButton (dom: HTMLDocument, object: NamedNode): HTMLElement {
  * A button to remove some other element from the page
  */
 export function removeButton (dom: HTMLDocument, element: HTMLElement) {
-  var b = dom.createElement('button')
+  const b = dom.createElement('button')
   b.setAttribute('type', 'button')
   b.textContent = '✕' // MULTIPLICATION X
   b.addEventListener('click', function (_event) {
@@ -1075,17 +1075,19 @@ export function selectorPanelRefresh (
   callbackFunction: (x: NamedNode, e: Event, selected: boolean) => void,
   linkCallback: (x: NamedNode, e: Event, inverse: boolean, setStyleFunction: () => void) => void
 ) {
-  var style0 =
+  const style0 =
     'border: 0.1em solid #ddd; border-bottom: none; width: 95%; height: 2em; padding: 0.5em;'
-  var selected: any = null
+  let selected: any = null
   list.innerHTML = ''
 
-  var refreshItem = function (box: HTMLElement, x: NamedNode) {
+  const refreshItem = function (box: HTMLElement, x: NamedNode) {
     // Scope to hold item and x
-    var item, image
+    let item: any
+    // eslint-disable-next-line prefer-const
+    let image: HTMLImageElement
 
-    var setStyle = function () {
-      var already = inverse
+    const setStyle = function () {
+      const already = inverse
         ? kb.each(undefined, predicate, x)
         : kb.each(x, predicate)
       iconDiv.setAttribute('class', already.length === 0 ? 'hideTillHover' : '') // See tabbedtab.css
@@ -1095,15 +1097,16 @@ export function selectorPanelRefresh (
       )
       image.setAttribute('title', already.length ? already.length : 'attach')
     }
-    var f = index.twoLine.widgetForClass(type)
+    const f = index.twoLine.widgetForClass(type)
+    // eslint-disable-next-line prefer-const
     item = f(dom, x)
     item.setAttribute('style', style0)
 
-    var nav = dom.createElement('div')
+    const nav = dom.createElement('div')
     nav.setAttribute('class', 'hideTillHover') // See tabbedtab.css
     nav.setAttribute('style', 'float:right; width:10%')
 
-    var a = dom.createElement('a')
+    const a = dom.createElement('a')
     a.setAttribute('href', x.uri)
     a.setAttribute('style', 'float:right')
     nav.appendChild(a).textContent = '>'
@@ -1144,8 +1147,8 @@ export function selectorPanelRefresh (
     return box
   }
 
-  for (var i = 0; i < possible.length; i++) {
-    var box = dom.createElement('div')
+  for (let i = 0; i < possible.length; i++) {
+    const box = dom.createElement('div')
     list.appendChild(box)
     refreshItem(box, possible[i])
   }
@@ -1164,7 +1167,7 @@ export let index: any = {}
 
 function twoLineDefault (dom: HTMLDocument, x: NamedNode): HTMLElement {
   // Default
-  var box = dom.createElement('div')
+  const box = dom.createElement('div')
   box.textContent = utils.label(x)
   return box
 }
@@ -1174,11 +1177,11 @@ function twoLineDefault (dom: HTMLDocument, x: NamedNode): HTMLElement {
  * @param c The RDF class for which we want a widget generator function
  */
 function twoLineWidgetForClass (c: NamedNode): (dom: HTMLDocument, x: NamedNode) => HTMLElement {
-  var widget = index.twoLine[c.uri]
-  var kb = store
+  let widget = index.twoLine[c.uri]
+  const kb = store
   if (widget) return widget
-  var sup = kb.findSuperClassesNT(c)
-  for (var cl in sup) {
+  const sup = kb.findSuperClassesNT(c)
+  for (const cl in sup) {
     widget = index.twoLine[kb.fromNT(cl).uri]
     if (widget) return widget
   }
@@ -1193,13 +1196,13 @@ function twoLineWidgetForClass (c: NamedNode): (dom: HTMLDocument, x: NamedNode)
  *          * ns.qu('amount') -> a literal
  */
 function twoLineTransaction (dom: HTMLDocument, x: NamedNode): HTMLElement {
-  var failed = ''
-  var enc = function (p) {
-    var y = store.any(x, ns.qu(p))
+  let failed = ''
+  const enc = function (p) {
+    const y = store.any(x, ns.qu(p))
     if (!y) failed += '@@ No value for ' + p + '! '
     return y ? utils.escapeForXML(y.value) : '?' // @@@@
   }
-  var box = dom.createElement('table')
+  const box = dom.createElement('table')
   box.innerHTML = `
       <tr>
       <td colspan="2"> ${enc('payee')}</td>
@@ -1228,11 +1231,11 @@ function twoLineTrip (
   dom: HTMLDocument,
   x: NamedNode
 ): HTMLElement {
-  var enc = function (p) {
-    var y = store.any(x, p)
+  const enc = function (p) {
+    const y = store.any(x, p)
     return y ? utils.escapeForXML(y.value) : '?'
   }
-  var box = dom.createElement('table')
+  const box = dom.createElement('table')
   box.innerHTML = `
     <tr>
       <td colspan="2">${enc(ns.dc('title'))}</td>
@@ -1248,8 +1251,8 @@ function twoLineTrip (
  * Stick a stylesheet link the document if not already there
  */
 export function addStyleSheet (dom: HTMLDocument, href: string): void {
-  var links = dom.querySelectorAll('link')
-  for (var i = 0; i < links.length; i++) {
+  const links = dom.querySelectorAll('link')
+  for (let i = 0; i < links.length; i++) {
     if (
       (links[i].getAttribute('rel') || '') === 'stylesheet' &&
       (links[i].getAttribute('href') || '') === href
@@ -1257,7 +1260,7 @@ export function addStyleSheet (dom: HTMLDocument, href: string): void {
       return
     }
   }
-  var link = dom.createElement('link')
+  const link = dom.createElement('link')
   link.setAttribute('rel', 'stylesheet')
   link.setAttribute('type', 'text/css')
   link.setAttribute('href', href)
@@ -1276,19 +1279,19 @@ export function isVideo (file?: NamedNode) {
  *
  */
 export function isImage (file?: NamedNode, kind?: string): boolean {
-  var dcCLasses = {
+  const dcCLasses = {
     audio: 'http://purl.org/dc/dcmitype/Sound',
     image: 'http://purl.org/dc/dcmitype/Image',
     video: 'http://purl.org/dc/dcmitype/MovingImage'
   }
-  var what = kind || 'image'
+  const what = kind || 'image'
   // See https://github.com/linkeddata/rdflib.js/blob/e367d5088c/src/formula.ts#L554
   //
-  var typeURIs = store.findTypeURIs(file)
+  const typeURIs = store.findTypeURIs(file)
   // See https://github.com/linkeddata/rdflib.js/blob/d5000f/src/utils-js.js#L14
   // e.g.'http://www.w3.org/ns/iana/media-types/audio'
-  var prefix: string = Util.mediaTypeClass(what + '/*').uri.split('*')[0]
-  for (var t in typeURIs) {
+  const prefix: string = Util.mediaTypeClass(what + '/*').uri.split('*')[0]
+  for (const t in typeURIs) {
     if (t.startsWith(prefix)) return true
   }
   if (dcCLasses[what] in typeURIs) return true

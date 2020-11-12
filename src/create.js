@@ -42,22 +42,22 @@ function newThingUI (createContext, dataBrowserContext, thePanes) {
 
   const iconStyle = 'padding: 0.7em; width: 2em; height: 2em;' // was: 'padding: 1em; width: 3em; height: 3em;'
   const star = div.appendChild(dom.createElement('img'))
-  var visible = false // the inividual tools tools
+  let visible = false // the inividual tools tools
   //   noun_272948.svg = black star
   // noun_34653_green.svg = green plus
   star.setAttribute('src', UI.icons.iconBase + 'noun_34653_green.svg')
   star.setAttribute('style', iconStyle)
   star.setAttribute('title', 'Add another tool')
 
-  var complain = function complain (message) {
-    var pre = div.appendChild(dom.createElement('pre'))
+  const complain = function complain (message) {
+    const pre = div.appendChild(dom.createElement('pre'))
     pre.setAttribute('style', 'background-color: pink')
     pre.appendChild(dom.createTextNode(message))
   }
 
   function styleTheIcons (style) {
-    for (var i = 0; i < iconArray.length; i++) {
-      var st = iconStyle + style
+    for (let i = 0; i < iconArray.length; i++) {
+      let st = iconStyle + style
       if (iconArray[i].disabled) {
         // @@ unused
         st += 'opacity: 0.3;'
@@ -84,15 +84,15 @@ function newThingUI (createContext, dataBrowserContext, thePanes) {
 
   function makeNewAppInstance (options) {
     return new Promise(function (resolve, reject) {
-      var selectUI // , selectUIParent
+      let selectUI // , selectUIParent
       function callbackWS (ws, newBase) {
         UI.authn.logInLoadProfile(createContext).then(
           _context => {
-            var newPaneOptions = {
+            const newPaneOptions = {
               newBase: newBase,
               workspace: ws
             }
-            for (var opt in options) {
+            for (const opt in options) {
               // get div, dom, me, folder, pane, refreshTable
               newPaneOptions[opt] = options[opt]
             }
@@ -109,7 +109,7 @@ function newThingUI (createContext, dataBrowserContext, thePanes) {
                   throw new Error('Cannot mint new - missing newInstance')
                 }
                 if (newPaneOptions.folder) {
-                  var tail = newPaneOptions.newInstance.uri.slice(
+                  const tail = newPaneOptions.newInstance.uri.slice(
                     newPaneOptions.folder.uri.length
                   )
                   const isPackage = tail.includes('/')
@@ -135,7 +135,7 @@ function newThingUI (createContext, dataBrowserContext, thePanes) {
                   }
                   // selectUI.parentNode.removeChild(selectUI) It removes itself
                 } else {
-                  var p = options.div.appendChild(dom.createElement('p'))
+                  const p = options.div.appendChild(dom.createElement('p'))
                   p.setAttribute('style', 'font-size: 120%;')
                   // Make link to new thing
                   p.innerHTML =
@@ -166,7 +166,7 @@ function newThingUI (createContext, dataBrowserContext, thePanes) {
         )
       } // callbackWS
 
-      var pa = options.pane
+      const pa = options.pane
       // options.appPathSegment = pa.name // was 'edu.mit.solid.pane.'
       options.noun = pa.mintClass ? UI.utils.label(pa.mintClass) : pa.name
       options.appPathSegment = options.noun.slice(0, 1).toUpperCase() + options.noun.slice(1)
@@ -177,12 +177,12 @@ function newThingUI (createContext, dataBrowserContext, thePanes) {
         options.div.appendChild(selectUI)
         // selectUIParent = options.div
       } else {
-        var gotName = function (name) {
+        const gotName = function (name) {
           if (!name) {
             // selectUIParent.removeChild(selectUI)   itremves itself if cancelled
             selectNewTool() // toggle star to plain and menu vanish again
           } else {
-            var uri = options.folder.uri
+            let uri = options.folder.uri
             if (!uri.endsWith('/')) {
               uri = uri + '/'
             }
