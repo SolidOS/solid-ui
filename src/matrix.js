@@ -1,4 +1,3 @@
-/* global $rdf */
 //      Build a 2D matrix of values
 //
 //  dom      AKA document
@@ -85,7 +84,7 @@ module.exports.matrixForQuery = function (
     for (let i = 0; i < columns.length; i++) {
       setCell(
         tr.appendChild(dom.createElement('td')),
-        $rdf.fromNT(columns[i]),
+        UI.rdf.fromNT(columns[i]),
         y1,
         null
       )
@@ -140,7 +139,7 @@ module.exports.matrixForQuery = function (
       if (row === matrix.firstChild) {
         td.textContent = utils.label(x1)
       } else {
-        setCell(td, x1, $rdf.fromNT(y), null)
+        setCell(td, x1, UI.rdf.fromNT(y), null)
       }
       if (col === columns.length - 1) {
         row.appendChild(td)
@@ -187,8 +186,8 @@ module.exports.matrixForQuery = function (
       for (let j = 1; j < row.children.length; j++) {
         cell = row.children[j]
         if (cell.old) {
-          const y = $rdf.fromNT(row.dataValueNT)
-          const x = $rdf.fromNT(columns[j - 1])
+          const y = UI.rdf.fromNT(row.dataValueNT)
+          const x = UI.rdf.fromNT(columns[j - 1])
           setCell(cell, x, y, null)
         } else {
           rowsUsed[row.dataValueNT] = true
