@@ -405,7 +405,7 @@ export function setImage (element: HTMLElement, thing: NamedNode) { // 20191230a
 
 // If a web page then a favicon with a fallback to
 // See eg http://stackoverflow.com/questions/980855/inputting-a-default-image
-function faviconOrDefault (dom: HTMLDocument, x: NamedNode) {
+export function faviconOrDefault (dom: HTMLDocument, x: NamedNode) {
   const image = dom.createElement('img')
   ;(image as any).style = style.iconStyle
   const isOrigin = function (x) {
@@ -473,7 +473,7 @@ export function deleteButtonWithCheck (
         },
         false
       )
-      var sureButtonElt = dom.createElement('button')
+      const sureButtonElt = dom.createElement('button')
       sureButtonElt.textContent = 'Delete ' + noun
       sureButtonElt.setAttribute('style', style.buttonStyle)
       container.appendChild(sureButtonElt).addEventListener(
@@ -674,7 +674,9 @@ export function linkIcon (dom: HTMLDocument, subject: NamedNode, iconURI?: strin
  *
  * pred is unused param at the moment
  */
-export function personTR (dom: HTMLDocument, pred: NamedNode, obj: NamedNode, options: any): HTMLTableRowElement {
+export const personTR = renderAsRow // The legacy name is used in a lot of places
+
+export function renderAsRow (dom: HTMLDocument, pred: NamedNode, obj: NamedNode, options: any): HTMLTableRowElement {
   const tr = dom.createElement('tr')
   options = options || {}
   // tr.predObj = [pred.uri, obj.uri]   moved to acl-control
@@ -682,15 +684,20 @@ export function personTR (dom: HTMLDocument, pred: NamedNode, obj: NamedNode, op
   const td2 = tr.appendChild(dom.createElement('td'))
   const td3 = tr.appendChild(dom.createElement('td'))
 
-  // var image = td1.appendChild(dom.createElement('img'))
-  const image = faviconOrDefault(dom, obj)
+  // const image = td1.appendChild(dom.createElement('img'))
+  const image = options.image || faviconOrDefault(dom, obj)
 
   td1.setAttribute('style', 'vertical-align: middle; width:2.5em; padding:0.5em; height: 2.5em;')
   td2.setAttribute('style', 'vertical-align: middle; text-align:left;')
   td3.setAttribute('style', 'vertical-align: middle; width:2em; padding:0.5em; height: 4em;')
   td1.appendChild(image)
 
-  setName(td2, obj)
+  if (options.title) {
+    td2.textContent = options.title
+  } else {
+    setName(td2, obj) // This is async
+  }
+
   if (options.deleteFunction) {
     deleteButtonWithCheck(dom, td3, options.noun || 'one', options.deleteFunction)
   }
@@ -744,24 +751,8 @@ export type attachmentListOptions = {
  */
 export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTMLElement, options: attachmentListOptions = {}) {
   // options = options || {}
-  const doc = options.doc || subject.doc()
-  if (options.modify === undefined) options.modify = true
-  const modify = options.modify
-  const promptIcon: string = options.promptIcon || (iconBase + 'noun_748003.svg' as string) //    target
-  // var promptIcon = options.promptIcon || (iconBase + 'noun_25830.svg') //  paperclip
-  const predicate = options.predicate || ns.wf('attachment')
-  const noun = options.noun || 'attachment'
 
-  const kb = store
-  const attachmentOuter = div.appendChild(dom.createElement('table'))
-  attachmentOuter.setAttribute('style', 'margin-top: 1em; margin-bottom: 1em;')
-  const attachmentOne = attachmentOuter.appendChild(dom.createElement('tr'))
-  const attachmentLeft = attachmentOne.appendChild(dom.createElement('td'))
-  const attachmentRight = attachmentOne.appendChild(dom.createElement('td'))
-  const attachmentTable = attachmentRight.appendChild(dom.createElement('table'))
-  attachmentTable.appendChild(dom.createElement('tr')) // attachmentTableTop
-
-  const deleteAttachment = function (target) {
+  function deleteAttachment (target) {
     kb.updater.update(st(subject, predicate, target, doc), [], function (
       uri,
       ok,
@@ -775,7 +766,8 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
       }
     })
   }
-  const createNewRow = function (target) {
+
+  function createNewRow (target) {
     const theTarget = target
     const opt: any = { noun: noun }
     if (modify) {
@@ -785,13 +777,12 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
     }
     return personTR(dom, predicate, target, opt)
   }
-  var refresh = ((attachmentTable as any).refresh = function () {
+
+  function refresh () {
     const things = kb.each(subject, predicate)
     things.sort()
     utils.syncTableToArray(attachmentTable, things, createNewRow)
-  })
-  ;(attachmentOuter as any).refresh = refresh // Participate in downstream changes
-  refresh()
+  }
 
   function droppedURIHandler (uris) {
     const ins: any = []
@@ -827,6 +818,28 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
       }
     )
   }
+
+  const doc = options.doc || subject.doc()
+  if (options.modify === undefined) options.modify = true
+  const modify = options.modify
+  const promptIcon: string = options.promptIcon || (iconBase + 'noun_748003.svg' as string) //    target
+  // const promptIcon = options.promptIcon || (iconBase + 'noun_25830.svg') //  paperclip
+  const predicate = options.predicate || ns.wf('attachment')
+  const noun = options.noun || 'attachment'
+
+  const kb = store
+  const attachmentOuter = div.appendChild(dom.createElement('table'))
+  attachmentOuter.setAttribute('style', 'margin-top: 1em; margin-bottom: 1em;')
+  const attachmentOne = attachmentOuter.appendChild(dom.createElement('tr'))
+  const attachmentLeft = attachmentOne.appendChild(dom.createElement('td'))
+  const attachmentRight = attachmentOne.appendChild(dom.createElement('td'))
+  const attachmentTable = attachmentRight.appendChild(dom.createElement('table'))
+  attachmentTable.appendChild(dom.createElement('tr')) // attachmentTableTop
+
+  ;(attachmentOuter as any).refresh = refresh // Participate in downstream changes
+  ;(attachmentTable as any).refresh = refresh
+
+  refresh()
 
   if (modify) {
     // const buttonStyle = 'width; 2em; height: 2em; margin: 0.5em; padding: 0.1em;'
@@ -937,14 +950,14 @@ export function allClassURIs (): { [uri: string]: boolean } {
 export function propertyTriage (kb: IndexedFormula): any {
   const possibleProperties: any = {}
   // if (possibleProperties === undefined) possibleProperties = {}
-  // var kb = store
+  // const kb = store
   const dp = {}
   const op = {}
   let no = 0
   let nd = 0
   let nu = 0
   const pi = (kb as any).predicateIndex // One entry for each pred
-  for (var p in pi) {
+  for (const p in pi) {
     const object = pi[p][0].object
     if (object.termType === 'Literal') {
       dp[p] = true
@@ -956,8 +969,7 @@ export function propertyTriage (kb: IndexedFormula): any {
   } // If nothing discovered, then could be either:
   const ps = kb.each(undefined, ns.rdf('type'), ns.rdf('Property'))
   for (let i = 0; i < ps.length; i++) {
-    p = ps[i].toNT()
-    // log.debug('propertyTriage: unknown: ' + p)
+    const p = ps[i].toNT()
     if (!op[p] && !dp[p]) {
       dp[p] = true
       op[p] = true
@@ -1020,7 +1032,7 @@ export function removeButton (dom: HTMLDocument, element: HTMLElement) {
 //
 /*
 buttons.headerButtons = function (dom, kb, name, words) {
-    var box = dom.createElement('table')
+    const box = dom.createElement('table')
     var i, word, s = '<tr>'
     box.setAttribute('style', 'width: 90%; height: 1.5em')
     for (i=0; i<words.length; i++) {
@@ -1112,7 +1124,7 @@ export function selectorPanelRefresh (
     nav.appendChild(a).textContent = '>'
     box.appendChild(nav)
 
-    var iconDiv = dom.createElement('div')
+    const iconDiv = dom.createElement('div')
     iconDiv.setAttribute(
       'style',
       (inverse ? 'float:left;' : 'float:right;') + ' width:30px;'

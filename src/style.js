@@ -18,16 +18,26 @@ module.exports = {
   pendingeditModifier: 'color: #bbb;',
   highlightColor: '#7C4DFF', // Solid lavendar https://design.inrupt.com/atomic-core/?cat=Core
 
+  // Contacts
+  personaBarStyle: 'width: 100%; height: 4em; background-color: #eee; vertical-align: middle;',
   // Login buttons
 
   signInButtonStyle: 'padding: 1em; border-radius:0.2em; margin: 2em; font-size: 100%;', // was 0.5em radius
   // Forms
+
+  heading1Style: 'font-size: 180%; font-weight: bold; color: #888888; padding: 0.5em;', // originall was brown now grey
+  heading2Style: 'font-size: 130%; font-weight: bold; color: #888888; padding: 0.4em;', // originall was brown now grey
+  heading3Style: 'font-size: 120%; font-weight: bold; color: #888888; padding: 0.3em;', // For eg in large forms or before a small form
+  heading4Style: 'font-size: 110%; font-weight: bold; color: #888888; padding: 0.2em;', // Lowest level used by default in smalll things
 
   formBorderColor: '#888888', // originall was brown now grey
   formHeadingColor: '#888888', // originall was brown now grey
   formHeadingStyle: 'font-size: 110%; font-weight: bold; color: #888888; padding: 0.2em;', // originall was brown now grey
   formTextInput: 'font-size: 100%; margin: 0.1em; padding: 0.1em;', // originally used this
 
+  textInputBackgroundColor: '#eef',
+  textInputBackgroundColorUneditable: '#fff',
   multilineTextInputStyle: 'font-size:100%; white-space: pre-wrap; background-color: #eef;' +
-  ' border: 0.07em solid gray; padding: 1em 0.5em; margin: 1em 1em;'
+  ' border: 0.07em solid gray; padding: 1em 0.5em; margin: 1em 1em;',
+  checkboxStyle: 'colour: black; font-size: 100%; padding-left: 0.5 em; padding-right: 0.5 em;'
 }
