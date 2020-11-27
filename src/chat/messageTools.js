@@ -1,21 +1,23 @@
-/* global $rdf */
-/*    Tools for doing things with a message
- *  Let is be cretiev here.  Allow all sorts of things to
+/**
+ * Tools for doing things with a message
+ * Let us be creative here.  Allow all sorts of things to
  * be done to a message - linking to new or old objects in an open way
  *
  * Ideas: Bookmark, Like, star, pin at top of chat, reply as new thread,
- * If you made it originally:  edit, delete, attach
+ * If you made it originally: edit, delete, attach
+ * @packageDocumentation
  */
+
+/* global $rdf */
 
 const UI = {
   authn: require('../authn/authn'),
   icons: require('../iconBase'),
-  log: require('../log'),
   ns: require('../ns'),
   media: require('../media/media-capture'),
   pad: require('../pad'),
   rdf: require('rdflib'),
-  store: require('../store'),
+  store: require('../logic').solidLogicSingleton.store,
   style: require('../style'),
   utils: require('../utils'),
   widgets: require('../widgets')
@@ -55,16 +57,18 @@ function updatePromise (del, ins) {
   }) // promise
 }
 
-/* Emoji in Unicode
+/**
+ * Emoji in Unicode
  */
 
-var emoji = {}
+const emoji = {}
 emoji[ns.schema('AgreeAction')] = '👍'
 emoji[ns.schema('DisagreeAction')] = '👎'
 emoji[ns.schema('EndorseAction')] = '⭐️'
 emoji[ns.schema('LikeAction')] = '❤️'
 
-/*  Strip of sentiments expressed
+/**
+ * Create strip of sentiments expressed
  */
 export function sentimentStrip (target, doc) {
   const actions = kb.each(null, ns.schema('target'), target, doc)
@@ -73,14 +77,14 @@ export function sentimentStrip (target, doc) {
   const strings = sentiments.map(x => emoji[x] || '')
   return dom.createTextNode(strings.join(' '))
 }
-/**  Strip of sentiments expressed
+/**
+ * Create strip of sentiments expressed, with hyperlinks
  *
  * @param target {NamedNode} - The thing about which they are expressed
- * @param doc {NamedNode} - The document iun which they are expressed
+ * @param doc {NamedNode} - The document in which they are expressed
  */
-
 export function sentimentStripLinked (target, doc) {
-  var strip = dom.createElement('span')
+  const strip = dom.createElement('span')
   function refresh () {
     strip.innerHTML = ''
     const actions = kb.each(null, ns.schema('target'), target, doc)
@@ -90,15 +94,15 @@ export function sentimentStripLinked (target, doc) {
     ])
     sentiments.sort()
     sentiments.forEach(ss => {
-      const [klass, agent] = ss
-      var res
+      const [theClass, agent] = ss
+      let res
       if (agent) {
         res = dom.createElement('a')
         res.setAttribute('href', agent.uri)
       } else {
         res = dom.createTextNode('')
       }
-      res.textContent = emoji[klass] || '*'
+      res.textContent = emoji[theClass] || '*'
       strip.appendChild(res)
     })
   }
@@ -107,6 +111,9 @@ export function sentimentStripLinked (target, doc) {
   return strip
 }
 
+/**
+ * Creates a message toolbar component
+ */
 export function messageToolbar (message, messageRow, userContext) {
   const div = dom.createElement('div')
   function closeToolbar () {
@@ -178,7 +185,7 @@ export function messageToolbar (message, messageRow, userContext) {
         } else {
           // no action
           action = UI.widgets.newThing(doc)
-          var insertMe = [
+          const insertMe = [
             $rdf.st(action, ns.schema('agent'), context.me, doc),
             $rdf.st(action, ns.rdf('type'), actionClass, doc),
             $rdf.st(action, ns.schema('target'), target, doc)
@@ -188,7 +195,7 @@ export function messageToolbar (message, messageRow, userContext) {
 
           if (mutuallyExclusive) {
             // Delete incompative sentiments
-            var dirty = false
+            let dirty = false
             for (let i = 0; i < mutuallyExclusive.length; i++) {
               const a = existingAction(mutuallyExclusive[i])
               if (a) {
@@ -205,7 +212,7 @@ export function messageToolbar (message, messageRow, userContext) {
       }
     )
     function existingAction (actionClass) {
-      var actions = kb
+      const actions = kb
         .each(null, ns.schema('agent'), context.me, doc)
         .filter(x => kb.holds(x, ns.rdf('type'), actionClass, doc))
         .filter(x => kb.holds(x, ns.schema('target'), target, doc))
@@ -215,7 +222,7 @@ export function messageToolbar (message, messageRow, userContext) {
       action = existingAction(actionClass)
       setColor()
     }
-    var action
+    let action
     button.refresh = refresh // If the file changes, refresh live
     refresh()
     return button
@@ -225,12 +232,12 @@ export function messageToolbar (message, messageRow, userContext) {
   // https://schema.org/AgreeAction
   me = UI.authn.currentUser() // If already logged on
   if (me) {
-    // Things yo mnust be logged in fo
-    var context1 = { me, dom, div }
+    // Things you mnust be logged in for
+    const context1 = { me, dom, div }
     div.appendChild(
       sentimentButton(
         context1,
-        message, // @@ use UI.widgets.sentimentButton
+        message, // @@ TODO use UI.widgets.sentimentButton
         UI.icons.iconBase + THUMBS_UP_ICON,
         ns.schema('AgreeAction'),
         message.doc(),

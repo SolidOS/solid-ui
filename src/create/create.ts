@@ -1,15 +1,24 @@
-/*   create.js     UI to create new objects in the solid-app-set world
+/*   create.js     UI to craete new objects in the solid-app-set world
  **
  */
+// const error = require('./widgets/error')
+// const widgets = require('./widgets/index')
+// const utils = require('./utils')
+
+// const UI = require('solid-ui')
+
+import * as debug from '../debug'
 
 import icons from '../iconBase'
 import utils from '../utils'
 import widgets from '../widgets'
-import kb from '../store'
+import { solidLogicSingleton } from '../logic'
 import ns from '../ns'
 import { logInLoadProfile, selectWorkspace } from '../authn/authn'
 import { DataBrowserContext, NewPaneOptions, PaneDefinition } from 'pane-registry'
 import { CreateContext, NewAppInstanceOptions } from './types'
+
+const kb = solidLogicSingleton.store
 
 /*  newThingUI -- return UI for user to select a new object, folder, etc
  **
@@ -36,7 +45,7 @@ export function newThingUI (
   // noun_34653_green.svg = green plus
   star.setAttribute('src', icons.iconBase + 'noun_34653_green.svg')
   star.setAttribute('style', iconStyle)
-  star.setAttribute('title', 'Add another tool to the meeting')
+  star.setAttribute('title', 'Add another tool')
 
   const complain = function complain (message) {
     const pre = div.appendChild(dom.createElement('pre'))
@@ -44,7 +53,23 @@ export function newThingUI (
     pre.appendChild(dom.createTextNode(message))
   }
 
-  const selectNewTool = function (_event?) {
+  function styleTheIcons (style) {
+    for (let i = 0; i < iconArray.length; i++) {
+      let st = iconStyle + style
+      if (iconArray[i].disabled) {
+        // @@ unused
+        st += 'opacity: 0.3;'
+      }
+      iconArray[i].setAttribute('style', st) // eg 'background-color: #ccc;'
+    }
+  }
+
+  function selectTool (icon) {
+    styleTheIcons('display: none;') // 'background-color: #ccc;'
+    icon.setAttribute('style', iconStyle + 'background-color: yellow;')
+  }
+
+  function selectNewTool (_event?) {
     visible = !visible
     star.setAttribute(
       'style',
@@ -65,8 +90,13 @@ export function newThingUI (
               newBase: newBase,
               workspace: ws
             }, options)
-            console.log(`newThingUI: Minting new ${newPaneOptions.pane.name} at ${newPaneOptions.newBase}`)
-            options.pane.mintNew!(dataBrowserContext, newPaneOptions)
+            for (const opt in options) {
+              // get div, dom, me, folder, pane, refreshTable
+              newPaneOptions[opt] = options[opt]
+            }
+            debug.log(`newThingUI: Minting new ${newPaneOptions.pane.name} at ${newPaneOptions.newBase}`)
+            options.pane
+              .mintNew!(dataBrowserContext, newPaneOptions)
               .then(function (newPaneOptions) {
                 if (!newPaneOptions || !newPaneOptions.newInstance) {
                   throw new Error('Cannot mint new - missing newInstance')
@@ -76,7 +106,7 @@ export function newThingUI (
                     newPaneOptions.folder.uri.length
                   )
                   const isPackage = tail.includes('/')
-                  console.log('  new thing is packge? ' + isPackage)
+                  debug.log('  new thing is packge? ' + isPackage)
                   if (isPackage) {
                     kb.add(
                       newPaneOptions.folder,
@@ -93,7 +123,8 @@ export function newThingUI (
                       newPaneOptions.folder.doc()
                     ) // Ping the patch system?
                   }
-                  if (newPaneOptions.refreshTarget) {
+                  // @ts-ignore @@ TODO check whether refresh can exist here. Either fix type or remove unreachable code
+                  if (newPaneOptions.refreshTarget && newPaneOptions.refreshTarget.refresh) {
                     // @@ TODO Remove the need to cast as any
                     ;(newPaneOptions.refreshTarget as any).refresh() // Refresh the containing display
                   }
@@ -131,8 +162,9 @@ export function newThingUI (
       } // callbackWS
 
       const pa = options.pane
-      options.appPathSegment = 'edu.mit.solid.pane.' + pa.name
+      // options.appPathSegment = pa.name // was 'edu.mit.solid.pane.'
       options.noun = pa.mintClass ? utils.label(pa.mintClass) : pa.name
+      options.appPathSegment = options.noun.slice(0, 1).toUpperCase() + options.noun.slice(1)
 
       if (!options.folder) {
         // No folder given? Ask user for full URI
@@ -173,7 +205,7 @@ export function newThingUI (
     })
   } // makeNewAppInstance
 
-  const iconArray: Array<HTMLElement> = []
+  const iconArray: Array<any> = []
   const mintingPanes = Object.values(thePanes).filter(pane => pane.mintNew)
   const mintingClassMap = mintingPanes.reduce((classMap, pane) => {
     if (pane.mintClass) {
@@ -187,8 +219,8 @@ export function newThingUI (
     icon.setAttribute('src', pane.icon)
     const noun = pane.mintClass
       ? mintingClassMap[pane.mintClass] > 1
-        ? `${utils.label(pane.mintClass)} (using ${pane.name} pane)`
-        : utils.label(pane.mintClass)
+          ? `${utils.label(pane.mintClass)} (using ${pane.name} pane)`
+          : utils.label(pane.mintClass)
       : pane.name + ' @@'
     icon.setAttribute('title', 'Make new ' + noun)
     icon.setAttribute('style', iconStyle + 'display: none;')
@@ -211,22 +243,6 @@ export function newThingUI (
       })
     }
   })
-
-  const styleTheIcons = function (style) {
-    for (let i = 0; i < iconArray.length; i++) {
-      let st = iconStyle + style
-      // @@ TODO Remove need to cast iconArray[i]
-      if ((iconArray[i] as any).disabled) {
-        // @@ unused
-        st += 'opacity: 0.3;'
-      }
-      iconArray[i].setAttribute('style', st) // eg 'background-color: #ccc;'
-    }
-  }
-  const selectTool = function (icon) {
-    styleTheIcons('display: none;') // 'background-color: #ccc;'
-    icon.setAttribute('style', iconStyle + 'background-color: yellow;')
-  }
 }
 
 // Form to get the name of a new thing before we create it

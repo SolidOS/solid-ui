@@ -1,11 +1,17 @@
-/* global $rdf */
-/** Track back through the YYYY/MM/DD tree to find the previous/next day
- **
+/**
+ * Contains the [[DateFolder]] class
+ * @packageDocumentation
  */
 
-const kb = require('../store.js')
-const ns = require('../ns.js')
+import * as debug from '../debug'
 
+const kb = require('../logic').solidLogicSingleton.store
+const ns = require('../ns.js')
+const $rdf = require('rdflib')
+
+/**
+ * Track back through the YYYY/MM/DD tree to find the previous/next day
+ */
 module.exports = class DateFolder {
   constructor (rootThing, leafFileName, membershipProperty) {
     this.root = rootThing
@@ -18,9 +24,9 @@ module.exports = class DateFolder {
    * @returns: <NamedNode> - document
    */
   leafDocumentFromDate (date) {
-    // console.log('incoming date: ' + date)
+    // debug.log('incoming date: ' + date)
     const isoDate = date.toISOString() // Like "2018-05-07T17:42:46.576Z"
-    var path = isoDate.split('T')[0].replace(/-/g, '/') //  Like "2018/05/07"
+    let path = isoDate.split('T')[0].replace(/-/g, '/') //  Like "2018/05/07"
     path = this.root.dir().uri + path + '/' + this.leafFileName
     return kb.sym(path)
   }
@@ -31,9 +37,9 @@ module.exports = class DateFolder {
     const head = this.rootFolder.uri.length
     const str = doc.uri.slice(head, head + 10).replace(/\//g, '-')
     // let date = new Date(str + 'Z') // GMT - but fails in FF - invalid format :-(
-    var date = new Date(str) // not explicitly UTC but is assumed so in spec
+    const date = new Date(str) // not explicitly UTC but is assumed so in spec
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse
-    console.log('Date for ' + doc + ':' + date.toISOString())
+    debug.log('Date for ' + doc + ':' + date.toISOString())
     return date
   }
 
@@ -72,10 +78,10 @@ module.exports = class DateFolder {
         }
         return null
       }
-      // console.log('  previousPeriod level' + level + ' file ' + file)
+      // debug.log('  previousPeriod level' + level + ' file ' + file)
       const parent = file.dir()
       await kb.fetcher.load(parent)
-      var siblings = kb.each(parent, ns.ldp('contains'))
+      let siblings = kb.each(parent, ns.ldp('contains'))
       siblings = siblings.filter(younger)
       const folder = await lastNonEmpty(siblings)
       if (folder) return folder
@@ -85,7 +91,7 @@ module.exports = class DateFolder {
       const uncle = await previousPeriod(parent, level - 1)
       if (!uncle) return null // reached first ever
       await kb.fetcher.load(uncle)
-      var cousins = kb.each(uncle, ns.ldp('contains'))
+      const cousins = kb.each(uncle, ns.ldp('contains'))
       const result = await lastNonEmpty(cousins)
       return result
     } // previousPeriod
@@ -93,7 +99,7 @@ module.exports = class DateFolder {
     const folder = this.leafDocumentFromDate(date).dir()
     const found = await previousPeriod(folder, 3)
     if (found) {
-      const doc = kb.sym(found.uri + this.leafFileNam)
+      const doc = kb.sym(found.uri + this.leafFileName)
       return this.dateFromLeafDocument(doc)
     }
     return null
@@ -101,8 +107,8 @@ module.exports = class DateFolder {
 
   async firstLeaf (backwards) {
     // backwards -> last leafObject
-    var folderStore = $rdf.graph()
-    var folderFetcher = new $rdf.Fetcher(folderStore)
+    const folderStore = $rdf.graph()
+    const folderFetcher = new $rdf.Fetcher(folderStore)
     async function earliestSubfolder (parent) {
       function suitable (x) {
         const tail = x.uri
@@ -112,14 +118,14 @@ module.exports = class DateFolder {
         if (!'0123456789'.includes(tail[0])) return false // not numeric
         return true
       }
-      console.log('            parent ' + parent)
+      debug.log('            parent ' + parent)
       delete folderFetcher.requested[parent.uri]
       // try {
       await folderFetcher.load(parent, { force: true }) // Force fetch as will have changed
       // }catch (err) {
       // }
 
-      var kids = folderStore.each(parent, ns.ldp('contains'))
+      let kids = folderStore.each(parent, ns.ldp('contains'))
       kids = kids.filter(suitable)
       if (kids.length === 0) {
         throw new Error(' @@@  No children to         parent2 ' + parent)
@@ -143,7 +149,7 @@ module.exports = class DateFolder {
     if (leafObjects.length === 0) {
       const msg =
         '  INCONSISTENCY -- no chat leafObject in file ' + leafDocument
-      console.trace(msg)
+      debug.trace(msg)
       throw new Error(msg)
     }
     const sortMe = leafObjects.map(leafObject => [
@@ -152,7 +158,7 @@ module.exports = class DateFolder {
     ])
     sortMe.sort()
     if (backwards) sortMe.reverse()
-    console.log(
+    debug.log(
       (backwards ? 'Latest' : 'Earliest') + ' leafObject is ' + sortMe[0][1]
     )
     return sortMe[0][1]

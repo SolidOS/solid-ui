@@ -1,0 +1,276 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta
+      name="generator"
+      content="HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 17.1), see www.w3.org"
+    />
+
+    <title>An Ecosystem of forms</title>
+    <style type="text/css">
+      /*<![CDATA[*/
+      body {
+        font-family: Trebuchet MS, Palatino, sans-serif;
+        color: black;
+        background: white;
+      }
+      p,
+      ul,
+      ol {
+        text-indent: 0em;
+        margin-left: 4em; /* a bit of white space */
+      }
+      pre {
+        margin-left: 5em;
+        background-color: #eee;
+        padding: 0.5em;
+      }
+
+      li {
+        text-indent: 0;
+      }
+      h1 {
+        text-align: center;
+      }
+      h2 {
+        font-style: bold;
+        margin-left: 1em;
+      }
+      h3 {
+        font-style: bold;
+        margin-left: 2em;
+      }
+      h4 {
+        font-style: italic;
+        margin-left: 3em;
+      }
+      h4.class {
+        color: #070;
+      }
+      address {
+        text-align: right;
+      }
+      a:link,
+      a:active {
+        color: #00e;
+        background: transparent;
+        text-decoration: none;
+      }
+
+      a:visited {
+        color: #529;
+        background: transparent;
+      }
+      div.intro {
+        margin-left: 5%;
+        margin-right: 5%;
+        font-style: italic;
+      }
+      pre {
+        font-family: monospace;
+      }
+      tt {
+        font-family: monospace;
+        font-size: 120%;
+      }
+      a:link img,
+      a:visited img {
+        border-style: none;
+      }
+      ul.toc {
+        list-style: disc;
+        list-style: none;
+      }
+      div.issue {
+        padding: 0.5em;
+        border: none;
+        margin-right: 5%;
+      }
+      table {
+        border-collapse: collapse;
+        margin: 1em;
+      }
+      table.parameters {
+        background-color: #dddddd;
+      } /*  background-color: #ddddff; */
+      table.properties {
+        background-color: #ddddff;
+      } /*  background-color: #ddddff; */
+      td {
+        padding: 0.5em;
+        border: 0.1em solid white;
+        margin: 0;
+      }
+      /*]]>*/
+    </style>
+  </head>
+
+  <body>
+    <h2>Forms in the ecosystem</h2>
+
+    <p>
+      The User Interface ontology at <tt>http://www.w3.org/ns/ui</tt> defines
+      RDF terms for describing forms. The
+      <tt><a href="https://github.com/solid/solid-ui">solid-ui</a></tt> project
+      provides functions to use these forms within your web application to
+      create a quick user interface solution. <a href="forms-intro.html">An introduction</a>
+      basically describes how forms work. This document describes how forms fit into the ecosystem of apps,
+      views/panes, and data browsers and stuff.
+    </p>
+
+    <p>How to forms end up getting used? How do form end up getting created, copied, and modified?<p>
+
+    <p>
+      The simplest way is for a developer of a web app to included the mashlib, and then insert a form
+      into the web page as a control, specifying the form and the subject, and the place he data is to be
+      stored.  This is a good way of building workflow quickly. It also separates out the
+      logic of the form from the presentation details of style.
+      A solid-ui form is not just a set of components, it is a binding to the underlying linked data.
+      So no more code is needed by the developer.
+    </p>
+    <p>
+     Now look at other ways in which forms can be used within connected data system like the mashlib and
+     the databrowser.
+    </p>
+<h2>Forms and classes</h2>
+
+<p>Forms create graphs of information starting off a root node, a seed node, if you like.
+  They are made for recording information about things of particular types,
+  in particular RFDS Classes.  There are two relationships:
+</p>
+  <table class="properties">
+    <tr>
+      <td>ui:creationForm</td>
+
+      <td>Creation form</td>
+
+      <td>
+        A form which may be used to collect information about a
+        hitherto locally undocumented instance instance of this class.
+      </td>
+    </tr>
+    <tr>
+      <td>ui:annotationForm</td>
+
+      <td>Annotation form</td>
+
+      <td>
+        A form which may be used to add <b>more</b> information to an <b>existing</b>
+    instance of this class which we know something about.  Anything from
+    adding just add one more fact, to adding a whole lot of information about a specific
+    facet of the thing.
+      </td>
+    </tr>
+ </table>
+<p>A creation form must have enough in it to make a record which makes sense.
+  Just having height and weight, for example, produces a node with nothing to identify
+  what the thing is. A creation form may have say name, address, phone number
+  so that the record is useful in apps. Once you have made something using a creation form, then you can
+  later add more data with an annotation form. You can also use any creation form
+  as an annotation form later to edit the data.</p>
+  <p>So in the form ecosystem, when a user wants to create
+  something new, it is reasonable to give them a list of creation forms,
+  for whatever classes they may be interested in.  But then when they are looking in the UI at
+  an object of a particular class, then it is reasonable to offer them those forms (of either type) relate to that Class of the object, if they
+  want to record more things.
+</p>
+<p>Using RDFS inference is useful here. If there are forms declared as being for Person class,
+  and the user is looking at something which is of class Student, then it follows that
+  the subject is also of type Person, and can so those forms may be used.
+  One trick is to present first the forms of the most specific type (Student) before the ones for the more generic type (Person)
+  as they may at a guess be more relevant.
+
+</p>
+<p>How to find out forms for a given class?  A simple way is to include the link to the
+  form in the ontology. This obviously gives it a pretty definitive status.</p>
+    <h3>Many existing ontologies</h3>
+<p>Communities, projects, organizations and groups may want to share sets of forms they use, and
+  so community-based indexes of these are interesting.
+</p>
+
+<h2>Forms from shapes</h2>
+<p>
+  Forms are very simpler to shapes, as noted elsewhere. Forms can be generated from shapes.
+</p>
+
+<h2>Creating forms</h2>
+<p>Filling in forms should be something which is easy for any user to do.
+  It will be conceptually complicated, should be as easy as possible also for them to make a new form.
+   How does the work flow work?  This one is easy to implement but not very easy.
+ <ul>
+  <li>
+    A user navigates from an object to its class.
+    Then the "builder" view of the class prompts them to make a new form,
+    a creation form or an annotation form.
+    They have to chose where to put the form.
+  </li>
+</ul>
+
+<p>Maybe they want to edit an existing form.</p>
+<ul>
+<li>
+ A user is looking at a form someone else has made.
+ They find a way in the UI to look at the form itself.
+ (A "See this form" button etc, or a peeling-back-the corner icon, say).
+ This takes them to the form itself.
+</li>
+<li>
+ They then edit it if they have permission
+</li>
+<li>
+ They clone it into their own project to make their own version
+</li>
+</ul>
+
+<p>There are many ways of creating and editing forms, but because there is a form for editing forms,
+  one way is with that.
+</p>
+
+<h2>Forms and Ontologies</h2>
+<p>If you are using the form form to create a form, then for each field you will have to supply a
+  predicate.  The solid-ui system will give you a selector to
+  chose from all the predicates it knows about.
+  For this reason it is good to load in ontologies you want to use
+  before you start editing.
+  The form playground has tools to do that.
+</p>
+<p>Some days, the user finds that the good old vocabularies the Solid project has been using
+  provide all the concepts they need.  Some days, they will have to look further afield and find
+  an existing ontology just new to them.  Some days they will find one almost perfect and want to imagine
+   of suggest
+  friendly amendment to it.   Some days they will decide to just create a new ontology,
+  for speed, for control, or for fun.
+  Some days they will find the ad hoc ontology they created at one point is now one they want to
+  get people to  adopt or link to from their own ontologies.</p>
+  <p>
+  So one way or another  users will  become ontology users,
+  and then will become ontology editors and creators. We need tools to enable these workflows,
+  particularly the social collaborative parts. These tools are not covered here.
+  It is worth saying that the power of systems in a big world depends on wide  interop, and you get
+  interop from shared vocabularies, and you get shared vocabularies from hard work, where there is much glory
+  but no free lunch.
+</p>
+  <p>So if ontology editing becomes a practical part of these workflows,
+    can we use forms as one way of editing an ontology?
+    It seems reasonable, though a custom engineered UI may be much nicer.
+  </p>
+<p>
+<table>
+  <tr><th>To we have a ...</th><th>ontology</th><th>shape</th><th>form</th></tr>
+  <tr><th>for a ...</th><td colspan="4"></td></tr>
+  <tr><th>ontology</th><td>RDFS, OWL</td><td>??</td><td>??</td></tr>
+  <tr><th>shape</th><td>SHACL</td><td>shape shape</td><td></td></tr>
+  <tr><th>form</th><td>UI</td><td>??</td><td>FormForm</td></tr>
+</table>
+</p>
+<p>Filling in a bit of this table seems like it may by a good move.
+
+</p>
+
+<h2>Conclusion</h2>
+<p>A worthy goal is to build a platform where collaborative systems can be build
+  by their users without having to write code.  Forms can contribute to that quest.</p>
+<hr />
+  </body>
+</html>

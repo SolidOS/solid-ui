@@ -1,12 +1,16 @@
-/* global $rdf */
 //                  Solid-UI temporary preferences
 //                  ==============================
 //
-const kb = require('./store')
+
+import * as debug from './debug'
+
+const kb = require('./logic').solidLogicSingleton.store
 const ns = require('./ns')
 const authn = require('./authn/authn')
 const widgets = require('./widgets')
 const pad = require('./pad')
+const participation = require('./participation')
+const $rdf = require('rdflib')
 
 // This was tabulator . preferences in the tabulator
 //
@@ -19,7 +23,7 @@ module.exports = {
   },
   set: function (k, v) {
     if (typeof v !== 'string') {
-      console.log('Non-string value of preference ' + k + ': ' + v)
+      debug.log('Non-string value of preference ' + k + ': ' + v)
       throw new Error('Non-string value of preference ' + k + ': ' + v)
     }
     this.value[k] = v
@@ -34,13 +38,13 @@ module.exports = {
 // (maybe make it in a separate file?)
 function recordSharedPreferences (subject, context) {
   return new Promise(function (resolve, reject) {
-    var sharedPreferences = kb.any(subject, ns.ui('sharedPreferences'))
+    const sharedPreferences = kb.any(subject, ns.ui('sharedPreferences'))
     if (!sharedPreferences) {
       const sp = $rdf.sym(subject.doc().uri + '#SharedPreferences')
       const ins = [
         $rdf.st(subject, ns.ui('sharedPreferences'), sp, subject.doc())
       ]
-      console.log('Creating shared preferences ' + sp)
+      debug.log('Creating shared preferences ' + sp)
       kb.updater.update([], ins, function (uri, ok, errorMessage) {
         if (!ok) {
           reject(new Error('Error creating shared prefs: ' + errorMessage))
@@ -58,26 +62,26 @@ function recordSharedPreferences (subject, context) {
 
 // Construct a personal defaults node in the preferences file for a given class of object
 //
-function recordPersonalDefaults (klass, context) {
+function recordPersonalDefaults (theClass, context) {
   return new Promise(function (resolve, reject) {
     authn.logInLoadPreferences(context).then(
       context => {
         if (!context.preferencesFile) {
-          console.log(
+          debug.log(
             'Not doing private class preferences as no access to preferences file. ' +
               context.preferencesFileError
           )
           return
         }
-        var regs = kb.each(
+        const regs = kb.each(
           null,
           ns.solid('forClass'),
-          klass,
+          theClass,
           context.preferencesFile
         )
-        var ins = []
-        var prefs
-        var reg
+        let ins = []
+        let prefs
+        let reg
         if (regs.length) {
           // Use existing node if we can
           regs.forEach(r => {
@@ -101,7 +105,7 @@ function recordPersonalDefaults (klass, context) {
               ns.solid('TypeRegistration'),
               context.preferencesFile
             ),
-            $rdf.st(reg, ns.solid('forClass'), klass, context.preferencesFile)
+            $rdf.st(reg, ns.solid('forClass'), theClass, context.preferencesFile)
           ]
         }
         prefs = widgets.newThing(context.preferencesFile)
@@ -115,7 +119,7 @@ function recordPersonalDefaults (klass, context) {
         )
         kb.updater.update([], ins, function (uri, ok, errm) {
           if (!ok) {
-            reject(new Error('Setting preferences for ' + klass + ': ' + errm))
+            reject(new Error('Setting preferences for ' + theClass + ': ' + errm))
           } else {
             context.personalDefaults = prefs
             resolve(context)
@@ -129,9 +133,9 @@ function recordPersonalDefaults (klass, context) {
   })
 }
 
-function renderPreferencesForm (subject, klass, preferencesForm, context) {
-  var prefContainer = context.dom.createElement('div')
-  pad.participationObject(subject, subject.doc(), context.me).then(
+function renderPreferencesForm (subject, theClass, preferencesForm, context) {
+  const prefContainer = context.dom.createElement('div')
+  participation.participationObject(subject, subject.doc(), context.me).then(
     participation => {
       const dom = context.dom
       function heading (text) {
@@ -152,7 +156,7 @@ function renderPreferencesForm (subject, klass, preferencesForm, context) {
 
       heading("Everyone's  view of this " + context.noun)
       recordSharedPreferences(subject, context).then(context => {
-        var sharedPreferences = context.sharedPreferences
+        const sharedPreferences = context.sharedPreferences
         widgets.appendForm(
           dom,
           prefContainer,
@@ -166,7 +170,7 @@ function renderPreferencesForm (subject, klass, preferencesForm, context) {
         )
 
         heading('My default view of any ' + context.noun)
-        recordPersonalDefaults(klass, context).then(
+        recordPersonalDefaults(theClass, context).then(
           context => {
             widgets.appendForm(
               dom,
@@ -220,17 +224,17 @@ function toJS (term) {
 // This is the function which acuakly reads and combines the preferences
 //
 //  @@ make it much more tolerant of missing buts of prefernces
-function getPreferencesForClass (subject, klass, predicates, context) {
+function getPreferencesForClass (subject, theClass, predicates, context) {
   return new Promise(function (resolve, reject) {
     recordSharedPreferences(subject, context).then(context => {
-      var sharedPreferences = context.sharedPreferences
+      const sharedPreferences = context.sharedPreferences
       if (context.me) {
-        pad
+        participation
           .participationObject(subject, subject.doc(), context.me)
           .then(participation => {
-            recordPersonalDefaults(klass, context).then(context => {
-              var results = []
-              var personalDefaults = context.personalDefaults
+            recordPersonalDefaults(theClass, context).then(context => {
+              const results = []
+              const personalDefaults = context.personalDefaults
               predicates.forEach(pred => {
                 // Order of preference: My settings on object, Global settings on object, my settings on class
                 const v1 =
@@ -246,7 +250,7 @@ function getPreferencesForClass (subject, klass, predicates, context) {
           }, reject)
       } else {
         // no user defined, just use common prefs
-        var results = []
+        const results = []
         predicates.forEach(pred => {
           const v1 = kb.any(sharedPreferences, pred)
           if (v1) {

@@ -10,6 +10,8 @@
  *  http://stackoverflow.com/questions/6756407/what-contenteditable-editors
  */
 
+import * as debug from '../debug'
+
 // var aclModule = require('./acl.js')
 
 // Each widget should ideally live in its own file.  In order to break up this
@@ -18,7 +20,7 @@
 //
 // (In order to avoid name collisions, it is safely assumed that modules don't
 // export widgets with the same name)
-var widgets = Object.assign(
+const widgets = Object.assign(
   {},
   require('./peoplePicker'),
   require('./dragAndDrop'), // uploadFiles etc
@@ -28,6 +30,6 @@ var widgets = Object.assign(
 )
 
 module.exports = widgets
-console.log('@@@ widgets: ', widgets)
+debug.log('@@@ widgets: ', widgets)
 
 // ends

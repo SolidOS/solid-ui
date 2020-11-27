@@ -20,9 +20,11 @@
 //   matrix.refresh() will re-run the query and adjust the display
 
 import utils from '../utils'
-import kb from '../store'
 import * as $rdf from 'rdflib'
 import { MatrixOptions } from './types'
+import { solidLogicSingleton } from '../logic'
+
+const kb = solidLogicSingleton.store
 
 export function matrixForQuery (
   dom: HTMLDocument,

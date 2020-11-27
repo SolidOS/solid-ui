@@ -1,12 +1,9 @@
-import { NamedNode } from 'rdflib'
+/**
+ * Contains types for src/acl/
+ * @packageDocumentation
+ */
 
-export type AgentMapMap = {
-  agent: AgentMap,
-  agentClass: AgentMap,
-  agentGroup: AgentMap,
-  origin: AgentMap,
-  originClass: AgentMap
-}
+import { NamedNode } from 'rdflib'
 
 export type AgentMap = {
   [agentUri: string]: {
@@ -14,4 +11,23 @@ export type AgentMap = {
   }
 }
 
-export type ComboList = Array<NamedNode[]>
+export type AgentUnion = {
+  [agentUri: string]: true | []
+}
+
+export type AgentMapMap<T = AgentMap> = {
+  agent: T,
+  agentClass: T,
+  agentGroup: T,
+  origin: T,
+  originClass: T
+}
+
+export type AgentMapUnion = AgentMapMap<AgentUnion>
+
+export type ComboList = { [key: string]: Array<string[]> }
+
+export type PartialAgentTriple = {
+  pred: string,
+  obj: NamedNode
+}

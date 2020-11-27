@@ -1,28 +1,33 @@
 language: node_js
 node_js:
-  - "8.12"
-  - "8"
-  - "10.3"
-  - "10"
-  - "12.0"
+  # see https://github.com/solid/solid-ui/issues/193 for discussion
+  # of node versions supported for Travis.
   - "12"
   - "lts/*"
   - "node"
 install:
   - npm ci
 script:
+  # This includes build, lint, and jest:
   - npm test
-  # Make sure it still builds successfully - the build isn't actually used yet:
-  - npm run build
+  - npm run doc
 before_deploy:
   - node ./travis/bumpversion.js
+  - sh ./travis/unignore-pages.sh
 deploy:
-  provider: npm
-  # Do not throw away the updated package.json we generated in `before_deploy`:
-  skip_cleanup: true
-  email: '$NPM_EMAIL'
-  api_key: '$NPM_TOKEN'
-  # Note: do not deploy on pull request, because $TRAVIS_BRANCH will be the target branch.
-  tag: '$TRAVIS_BRANCH'
-  on:
-    all_branches: true
+  - provider: npm
+    # Do not throw away the updated package.json we generated in `before_deploy`:
+    skip_cleanup: true
+    email: '$NPM_EMAIL'
+    api_key: '$NPM_TOKEN'
+    # Note: do not deploy on pull request, because $TRAVIS_BRANCH will be the target branch.
+    tag: '$TRAVIS_BRANCH'
+    on:
+      all_branches: true
+  - provider: pages
+    skip_cleanup: true
+    github_token: $GITHUB_TOKEN
+    keep_history: true
+    target_branch: gh-pages
+    on:
+      branch: master

@@ -1,11 +1,13 @@
-//  Common code for a discussion are a of messages about something
-//   This version runs over a series of files for different time periods
-//
-//  Parameters for the whole chat like its title are stred on
-//  index.ttl#this and the chats messages are stored in YYYY/MM/DD/chat.ttl
-//
-/* global alert $rdf */
-import DateFolder from './dateFolder'
+/**
+ * Contains the [[infiniteMessageArea]] class
+ * @packageDocumentation
+ */
+
+/* global alert */
+import * as debug from '../debug'
+
+const $rdf = require('rdflib')
+const DateFolder = require('./dateFolder')
 
 // @@ trace20190428T1745
 
@@ -14,12 +16,11 @@ const SERVER_MKDIRP_BUG = true
 const UI = {
   authn: require('../authn/authn'),
   icons: require('../iconBase'),
-  log: require('../log'),
   ns: require('../ns'),
   media: require('../media/media-capture'),
   pad: require('../pad'),
   rdf: require('rdflib'),
-  store: require('../store'),
+  store: require('../logic').solidLogicSingleton.store,
   style: require('../style'),
   utils: require('../utils'),
   widgets: require('../widgets')
@@ -38,7 +39,7 @@ async function createIfNotExists (doc, contentType = 'text/turtle', data = '') {
     var response = await fetcher.load(doc)
   } catch (err) {
     if (err.response.status === 404) {
-      console.log(
+      debug.log(
         'createIfNotExists: doc does NOT exist, will create... ' + doc
       )
       try {
@@ -47,24 +48,54 @@ async function createIfNotExists (doc, contentType = 'text/turtle', data = '') {
           contentType
         })
       } catch (err) {
-        console.log('createIfNotExists doc FAILED: ' + doc + ': ' + err)
+        debug.log('createIfNotExists doc FAILED: ' + doc + ': ' + err)
         throw err
       }
       delete fetcher.requested[doc.uri] // delete cached 404 error
-      // console.log('createIfNotExists doc created ok ' + doc)
+      // debug.log('createIfNotExists doc created ok ' + doc)
       return response
     } else {
-      console.log(
+      debug.log(
         'createIfNotExists doc load error NOT 404:  ' + doc + ': ' + err
       )
       throw err
     }
   }
-  // console.log('createIfNotExists: doc exists, all good: ' + doc)
+  // debug.log('createIfNotExists: doc exists, all good: ' + doc)
   return response
 }
 
-export function infiniteMessageArea (dom, kb, chatChannel, options) {
+function desktopNotification (str) {
+  // Let's check if the browser supports notifications
+  if (!('Notification' in window)) {
+    debug.warn('This browser does not support desktop notification')
+  } else if (Notification.permission === 'granted') {
+    // Let's check whether notification permissions have already been granted
+    // eslint-disable-next-line no-new
+    new Notification(str)
+  } else if (Notification.permission !== 'denied') {
+    // Otherwise, we need to ask the user for permission
+    Notification.requestPermission().then(function (permission) {
+      // If the user accepts, let's create a notification
+      if (permission === 'granted') {
+        // eslint-disable-next-line no-new
+        new Notification(str)
+      }
+    })
+  }
+
+  // At last, if the user has denied notifications, and you
+  // want to be respectful there is no need to bother them any more.
+}
+
+/**
+ * Common code for a chat (discussion area of messages about something)
+ * This version runs over a series of files for different time periods
+ *
+ * Parameters for the whole chat like its title are stored on
+ * index.ttl#this and the chats messages are stored in YYYY/MM/DD/chat.ttl
+ */
+export async function infiniteMessageArea (dom, kb, chatChannel, options) {
   kb = kb || UI.store
   const ns = UI.ns
   const WF = $rdf.Namespace('http://www.w3.org/2005/01/wf/flow#')
@@ -73,7 +104,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
 
   options = options || {}
 
-  var newestFirst = options.newestFirst === '1' || options.newestFirst === true // hack for now
+  const newestFirst = options.newestFirst === '1' || options.newestFirst === true // hack for now
 
   const dateFolder = new DateFolder(chatChannel, 'chat.ttl')
 
@@ -85,13 +116,13 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
   // var messageBodyStyle = 'white-space: pre-wrap; width: 90%; font-size:100%; border: 0.07em solid #eee; padding: .2em 0.5em; margin: 0.1em 1em 0.1em 1em;'
   // 'font-size: 100%; margin: 0.1em 1em 0.1em 1em;  background-color: white; white-space: pre-wrap; padding: 0.1em;'
 
-  var div = dom.createElement('div')
-  var menuButton
+  const div = dom.createElement('div')
+  let menuButton
   const statusArea = div.appendChild(dom.createElement('div'))
-  var userContext = { dom, statusArea, div: statusArea } // logged on state, pointers to user's stuff
-  var me
+  const userContext = { dom, statusArea, div: statusArea } // logged on state, pointers to user's stuff
+  let me
 
-  var updater = UI.store.updater
+  const updater = UI.store.updater
 
   /** Does a file exist on the web?
    * @returns {Boolean}
@@ -104,41 +135,42 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       if (err.response.status === 404) {
         return false
       } else {
-        console.log('documentExists: doc load error NOT 404:  ' + doc + ': ' + err)
+        debug.log('documentExists: doc load error NOT 404:  ' + doc + ': ' + err)
         throw err
       }
     }
     return true
   }
 */
+
   /*       Form for a new message
    */
   function newMessageForm (messageTable) {
-    var form = dom.createElement('tr')
-    var lhs = dom.createElement('td')
-    var middle = dom.createElement('td')
-    var rhs = dom.createElement('td')
+    const form = dom.createElement('tr')
+    const lhs = dom.createElement('td')
+    const middle = dom.createElement('td')
+    const rhs = dom.createElement('td')
     form.appendChild(lhs)
     form.appendChild(middle)
     form.appendChild(rhs)
     form.AJAR_date = '9999-01-01T00:00:00Z' // ISO format for field sort
-    var field, sendButton
+    let field, sendButton
 
     async function sendMessage (text) {
-      var now = new Date()
+      const now = new Date()
       await addNewTableIfNewDay(now)
 
       if (!text) {
         field.setAttribute('style', messageBodyStyle + 'color: #bbb;') // pendingedit
         field.disabled = true
       }
-      var sts = []
-      var timestamp = '' + now.getTime()
-      var dateStamp = $rdf.term(now)
+      const sts = []
+      const timestamp = '' + now.getTime()
+      const dateStamp = $rdf.term(now)
       const chatDocument = dateFolder.leafDocumentFromDate(now)
 
-      var message = kb.sym(chatDocument.uri + '#' + 'Msg' + timestamp)
-      var content = kb.literal(text || field.value)
+      const message = kb.sym(chatDocument.uri + '#' + 'Msg' + timestamp)
+      const content = kb.literal(text || field.value)
       // if (text) field.value = text  No - don't destroy half-finsihed user input
 
       sts.push(
@@ -157,7 +189,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       }
 
       function sendComplete () {
-        var bindings = {
+        const bindings = {
           '?msg': message,
           '?content': content,
           '?date': dateStamp,
@@ -174,14 +206,15 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
           field.select()
         }
       }
+
       if (
         SERVER_MKDIRP_BUG &&
         (kb.fetcher.requested[chatDocument.uri] === undefined ||
           kb.fetcher.requested[chatDocument.uri] === 404)
       ) {
-        console.log(
+        debug.log(
           '@@@ SERVER_MKDIRP_BUG: Should only happen once: create chat file: ' +
-            chatDocument
+          chatDocument
         )
         await createIfNotExists(chatDocument)
       }
@@ -214,8 +247,8 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     }
 
     // When a set of URIs are dropped on the field
-    var droppedURIHandler = async function (uris) {
-      for (var uri of uris) {
+    const droppedURIHandler = async function (uris) {
+      for (const uri of uris) {
         await sendMessage(uri)
       }
     }
@@ -275,18 +308,21 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       rhs.appendChild(sendButton)
 
       const chatDocument = dateFolder.leafDocumentFromDate(new Date())
-      var imageDoc
+      let imageDoc
+
       function getImageDoc () {
         imageDoc = kb.sym(
           chatDocument.dir().uri + 'Image_' + Date.now() + '.png'
         )
         return imageDoc
       }
+
       async function tookPicture (imageDoc) {
         if (imageDoc) {
           await sendMessage(imageDoc.uri)
         }
       }
+
       middle.appendChild(
         UI.media.cameraButton(dom, kb, getImageDoc, tookPicture)
       )
@@ -300,7 +336,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       turnOnInput()
       Object.assign(context, userContext)
       bookmarks.findBookmarkDocument(context).then(context => {
-        console.log('Bookmark file: ' + context.bookmarkDocument)
+        debug.log('Bookmark file: ' + context.bookmarkDocument)
       })
     })
 
@@ -310,15 +346,15 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
   // ///////////////////////////////////////////////////////////////////////
 
   function syncMessages (about, messageTable) {
-    var displayed = {}
-    var ele, ele2
+    const displayed = {}
+    let ele, ele2
     for (ele = messageTable.firstChild; ele; ele = ele.nextSibling) {
       if (ele.AJAR_subject) {
         displayed[ele.AJAR_subject.uri] = true
       }
     }
 
-    var messages = kb
+    const messages = kb
       .statementsMatching(
         about,
         ns.wf('message'),
@@ -328,8 +364,8 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       .map(st => {
         return st.object
       })
-    var stored = {}
-    messages.map(function (m) {
+    const stored = {}
+    messages.forEach(function (m) {
       stored[m.uri] = true
       if (!displayed[m.uri]) {
         addMessage(m, messageTable)
@@ -337,7 +373,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     })
 
     // eslint-disable-next-line space-in-parens
-    for (ele = messageTable.firstChild; ele; ) {
+    for (ele = messageTable.firstChild; ele;) {
       ele2 = ele.nextSibling
       if (ele.AJAR_subject && !stored[ele.AJAR_subject.uri]) {
         messageTable.removeChild(ele)
@@ -353,7 +389,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
   } // syncMessages
 
   var addMessage = function (message, messageTable) {
-    var bindings = {
+    const bindings = {
       '?msg': message,
       '?creator': kb.any(message, ns.foaf('maker')),
       '?date': kb.any(message, DCT('created')),
@@ -377,7 +413,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     let date = extremity.messageTable.date // day in mssecs
 
     date = await dateFolder.loadPrevious(date, backwards) // backwards
-    console.log(
+    debug.log(
       `insertPreviousMessages: from ${
         backwards ? 'backwards' : 'forwards'
       } loadPrevious: ${date}`
@@ -386,7 +422,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       await appendCurrentMessages() // If necessary skip to today and add that
     }
     if (!date) return true // done
-    var live = false
+    let live = false
     if (!backwards) {
       const todayDoc = dateFolder.leafDocumentFromDate(new Date())
       const doc = dateFolder.leafDocumentFromDate(date)
@@ -403,6 +439,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     }
     return live // not done
   }
+
   /* Remove message tables earlier than this one
    */
   function removePreviousMessages (backwards, messageTable) {
@@ -425,7 +462,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
    ** @returns DOM element generates
    */
   async function createMessageTable (date, live) {
-    console.log('   createMessageTable for  ' + date)
+    debug.log('   createMessageTable for  ' + date)
     const chatDocument = dateFolder.leafDocumentFromDate(date)
     try {
       await kb.fetcher.load(chatDocument)
@@ -433,11 +470,11 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       const messageTable = dom.createElement('table')
       const statusTR = messageTable.appendChild(dom.createElement('tr')) // ### find status in exception
       if (err.response && err.response.status && err.response.status === 404) {
-        console.log('Error 404 for chat file ' + chatDocument)
+        debug.log('Error 404 for chat file ' + chatDocument)
         return renderMessageTable(date, live) // no mssage file is fine.. will be craeted later
         // statusTR.appendChild(UI.widgets.errorMessageBlock(dom, 'no message file', 'white'))
       } else {
-        console.log('*** Error NON 404 for chat file ' + chatDocument)
+        debug.log('*** Error NON 404 for chat file ' + chatDocument)
         statusTR.appendChild(UI.widgets.errorMessageBlock(dom, err, 'pink'))
       }
       return statusTR
@@ -446,19 +483,21 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
   }
 
   function renderMessageTable (date, live) {
-    var scrollBackButton
-    var scrollForwardButton
+    let scrollBackButton
+    let scrollForwardButton
 
     /// /////////////////   Scroll down adding more above
 
     async function extendBackwards () {
       const done = await insertPreviousMessages(true)
       if (done) {
-        scrollBackButton.firstChild.setAttribute(
-          'src',
-          UI.icons.iconBase + 'noun_T-Block_1114655_000000.svg'
-        ) // T
-        scrollBackButton.disabled = true
+        if (scrollBackButton) {
+          scrollBackButton.firstChild.setAttribute(
+            'src',
+            UI.icons.iconBase + 'noun_T-Block_1114655_000000.svg'
+          ) // T
+          scrollBackButton.disabled = true
+        }
         messageTable.initial = true
       } else {
         messageTable.extendedBack = true
@@ -466,7 +505,11 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       setScrollBackButtonIcon()
       return done
     }
+
     function setScrollBackButtonIcon () {
+      if (!scrollBackButton) {
+        return
+      }
       const sense = messageTable.extendedBack ? !newestFirst : newestFirst
       const scrollBackIcon = messageTable.initial
         ? 'noun_T-Block_1114655_000000.svg'
@@ -480,6 +523,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
         return sense ? 'noun_1369241.svg' : 'noun_1369237.svg'
       }
     }
+
     async function scrollBackButtonHandler (_event) {
       if (messageTable.extendedBack) {
         removePreviousMessages(true, messageTable)
@@ -507,6 +551,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       setScrollForwardButtonIcon()
       return done
     }
+
     function setScrollForwardButtonIcon () {
       const sense = messageTable.extendedForwards ? !newestFirst : newestFirst // noun_T-Block_1114657_000000.svg
       const scrollForwardIcon = messageTable.final
@@ -521,6 +566,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
         return !sense ? 'noun_1369241.svg' : 'noun_1369237.svg'
       }
     }
+
     async function scrollForwardButtonHandler (_event) {
       if (messageTable.extendedForwards) {
         removePreviousMessages(false, messageTable)
@@ -535,22 +581,20 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     /// ///////////////////////
 
     var messageTable = dom.createElement('table')
-
     messageTable.extendBackwards = extendBackwards // Make function available to scroll stuff
     messageTable.extendForwards = extendForwards // Make function available to scroll stuff
     // var messageButton
     messageTable.date = date
-    var chatDocument = dateFolder.leafDocumentFromDate(date)
+    const chatDocument = dateFolder.leafDocumentFromDate(date)
     messageTable.chatDocument = chatDocument
 
     messageTable.fresh = false
     messageTable.setAttribute('style', 'width: 100%;') // fill that div!
-
     if (live) {
       messageTable.final = true
       liveMessageTable = messageTable
       latest.messageTable = messageTable
-      var tr = newMessageForm(messageTable)
+      const tr = newMessageForm(messageTable)
       if (newestFirst) {
         messageTable.insertBefore(tr, messageTable.firstChild) // If newestFirst
       } else {
@@ -646,7 +690,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
         liveMessageTable.removeChild(liveMessageTable.inputRow)
         delete liveMessageTable.inputRow
       }
-      var oldChatDocument = latest.messageTable.chatDocument
+      const oldChatDocument = latest.messageTable.chatDocument
       await appendCurrentMessages()
       // Adding a link in the document will ping listeners to add the new block too
       if (
@@ -673,22 +717,24 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       }
     }
   }
+
   /*
   function messageCount () {
     var n = 0
     const tables = div.children
     for (let i = 0; i < tables.length; i++) {
       n += tables[i].children.length - 1
-      // console.log('    table length:' + tables[i].children.length)
+      // debug.log('    table length:' + tables[i].children.length)
     }
     return n
   }
 */
+
   /* Add the live message block with entry field for today
    */
   async function appendCurrentMessages () {
-    var now = new Date()
-    var chatDocument = dateFolder.leafDocumentFromDate(now)
+    const now = new Date()
+    const chatDocument = dateFolder.leafDocumentFromDate(now)
 
     /*   Don't actually make the documemnt until a message is sent  @@@@@ WHEN SERVER FIXED
      * currently server won't patch to a file ina non-existent directory
@@ -711,6 +757,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       // only the last messageTable is live
       addNewTableIfNewDay(new Date()).then(() => {
         syncMessages(chatChannel, messageTable)
+        desktopNotification(chatChannel)
       })
     } // The short chat version fors live update in the pane but we do it in the widget
     kb.updater.addDownstreamChangeListener(chatDocument, div.refresh) // Live update
@@ -719,11 +766,12 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     return messageTable
   }
 
-  var liveMessageTable
+  let liveMessageTable
   var earliest = { messageTable: null } // Stuff about each end of the loaded days
   var latest = { messageTable: null }
 
-  var lock = false
+  let lock = false
+
   async function loadMoreWhereNeeded (event, fixScroll) {
     if (lock) return
     lock = true
@@ -731,7 +779,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     const magicZone = 150
     // const top = div.scrollTop
     // const bottom = div.scrollHeight - top - div.clientHeight
-    var done
+    let done
 
     while (
       div.scrollTop < magicZone &&
@@ -740,7 +788,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       earliest.messageTable.extendBackwards
     ) {
       const scrollBottom = div.scrollHeight - div.scrollTop
-      console.log('infinite scroll: adding above: top ' + div.scrollTop)
+      debug.log('infinite scroll: adding above: top ' + div.scrollTop)
       done = await earliest.messageTable.extendBackwards()
       if (freeze) {
         div.scrollTop = div.scrollHeight - scrollBottom
@@ -756,9 +804,9 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       latest.messageTable.extendForwards
     ) {
       const scrollTop = div.scrollTop
-      console.log(
+      debug.log(
         'infinite scroll: adding below: bottom: ' +
-          (div.scrollHeight - div.scrollTop - div.clientHeight)
+        (div.scrollHeight - div.scrollTop - div.clientHeight)
       )
       done = await latest.messageTable.extendForwards() // then add more data on the bottom
       if (freeze) {
@@ -778,21 +826,23 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
     // During initial load ONLY keep scroll to selected thing or bottom
     function fixScroll () {
       if (options.selectedElement) {
-        options.selectedElement.scrollIntoView({ block: 'center' }) // allign tops or bopttoms
+        options.selectedElement.scrollIntoView({ block: 'center' }) // align tops or bottoms
       } else {
-        liveMessageTable.inputRow.scrollIntoView(newestFirst) // allign tops or bopttoms
+        if (liveMessageTable.inputRow.scrollIntoView) {
+          liveMessageTable.inputRow.scrollIntoView(newestFirst) // align tops or bottoms
+        }
       }
     }
 
-    var live
+    let live
     if (options.selectedMessage) {
       var selectedDocument = options.selectedMessage.doc()
-      var now = new Date()
-      var todayDocument = dateFolder.leafDocumentFromDate(now)
+      const now = new Date()
+      const todayDocument = dateFolder.leafDocumentFromDate(now)
       live = todayDocument.sameTerm(selectedDocument)
     }
     if (options.selectedMessage && !live) {
-      var selectedDate = dateFolder.dateFromLeafDocument(selectedDocument)
+      const selectedDate = dateFolder.dateFromLeafDocument(selectedDocument)
       var selectedMessageTable = await createMessageTable(selectedDate, live)
       div.appendChild(selectedMessageTable)
       earliest.messageTable = selectedMessageTable
@@ -812,6 +862,7 @@ export function infiniteMessageArea (dom, kb, chatChannel, options) {
       document.body.addEventListener('scroll', loadMoreWhereNeeded)
     }
   }
-  go()
+
+  await go()
   return div
 }

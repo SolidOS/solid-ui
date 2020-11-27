@@ -45,8 +45,7 @@ import { authn } from './authn/index'
 import { create } from './create/index'
 // @ts-ignore
 import icons from './iconBase'
-// @ts-ignore
-import log from './log'
+import * as log from './log'
 import { matrix } from './matrix/index'
 import { media } from './media/index'
 // @ts-ignore
@@ -54,22 +53,26 @@ import messageArea from './messageArea'
 // @ts-ignore
 import { infiniteMessageArea } from './chat/infinite'
 // @ts-ignore
-import pad from './pad'
+import * as pad from './pad'
+// @ts-ignore
+import * as participation from './participation'
 // @ts-ignore
 import preferences from './preferences'
 // @ts-ignore
-import store from './store'
+import { solidLogicSingleton } from './logic'
 // @ts-ignore
 import style from './style'
 // @ts-ignore
 import table from './table'
-// @ts-ignore
-import tabs from './tabs'
+import * as tabs from './tabs'
 // @ts-ignore
 import utils from './utils'
 import widgets from './widgets'
+import versionInfo from './versionInfo'
+import { initHeader } from './header'
 
 const dom = window ? window.document : null // Idea that UI.dom can be adapted in non-browser environments
+const store = solidLogicSingleton.store
 
 if (typeof window !== 'undefined') {
   ;(<any>window).UI = {
@@ -87,13 +90,17 @@ if (typeof window !== 'undefined') {
     messageArea,
     infiniteMessageArea,
     pad,
+    participation,
     preferences,
+    solidLogicSingleton,
     store,
     style,
     table,
     tabs,
     utils,
-    widgets
+    widgets,
+    versionInfo,
+    initHeader
   } // Simpler access by non-node scripts
 }
 
@@ -112,11 +119,15 @@ export {
   messageArea,
   infiniteMessageArea,
   pad,
+  participation,
   preferences,
+  solidLogicSingleton,
   store,
   style,
   table,
   tabs,
   utils,
-  widgets
+  widgets,
+  versionInfo,
+  initHeader
 }

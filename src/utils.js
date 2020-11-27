@@ -1,4 +1,3 @@
-/* global tabulator */
 //                  Solid-UI general Utilities
 //                  ==========================
 //
@@ -26,23 +25,25 @@ module.exports = {
   labelWithOntology,
   newVariableName,
   ontologyLabel,
+  predicateLabel,
   predicateLabelForXML,
   predParentOf,
   RDFComparePredicateObject,
   RDFComparePredicateSubject,
   shortName,
   stackString,
-  syncTableToArray
+  syncTableToArray,
+  syncTableToArrayReOrdered
 }
 
-var UI = {
+const UI = {
   log: require('./log'),
   ns: require('./ns'),
   rdf: require('rdflib'),
-  store: require('./store')
+  store: require('./logic').solidLogicSingleton.store
 }
 
-var nextVariable = 0
+let nextVariable = 0
 
 function newVariableName () {
   return 'v' + nextVariable++
@@ -55,7 +56,7 @@ function clearVariableNames () {
 // http://stackoverflow.com/questions/879152/how-do-i-make-javascript-beep
 // http://www.tsheffler.com/blog/2013/05/14/audiocontext-noteonnoteoff-and-time-units/
 
-var audioContext
+let audioContext
 
 if (typeof AudioContext !== 'undefined') {
   audioContext = AudioContext
@@ -81,7 +82,7 @@ function beep () {
       finishedCallback = function () {}
     }
 
-    var osc = ctx.createOscillator()
+    const osc = ctx.createOscillator()
 
     osc.type = type
     osc.frequency.value = frequency || 256
@@ -96,7 +97,7 @@ function beep () {
 // NOT USED ANYWHERE
 function hashColor (who) {
   who = who.uri || who
-  var hash = function (x) {
+  const hash = function (x) {
     return x.split('').reduce(function (a, b) {
       a = (a << 5) - a + b.charCodeAt(0)
       return a & a
@@ -108,8 +109,8 @@ function hashColor (who) {
 function genUuid () {
   // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-    var r = (Math.random() * 16) | 0
-    var v = c === 'x' ? r : (r & 0x3) | 0x8
+    const r = (Math.random() * 16) | 0
+    const v = c === 'x' ? r : (r & 0x3) | 0x8
     return v.toString(16)
   })
 }
@@ -121,6 +122,7 @@ function genUuid () {
  * @param {function({NamedNode})} createNewRow(thing) returns a TR table row for a new thing
  *
  * Tolerates out of order elements but puts new ones in order.
+ * Can be used for any element type; does not have to be a table and tr.
  */
 function syncTableToArray (table, things, createNewRow) {
   let foundOne
@@ -133,7 +135,7 @@ function syncTableToArray (table, things, createNewRow) {
   }
 
   for (let g = 0; g < things.length; g++) {
-    var thing = things[g]
+    const thing = things[g]
     foundOne = false
 
     for (i = 0; i < table.children.length; i++) {
@@ -164,6 +166,53 @@ function syncTableToArray (table, things, createNewRow) {
     }
   }
 } // syncTableToArray
+
+/** Sync a DOM table with an array of things
+ *
+ * @param {DomElement} table - will have a tr for each thing
+ * @param {Array<NamedNode>} things - ORDERED array of UNIQUE NamedNode objects. No duplicates
+ * @param {function({NamedNode})} createNewRow(thing) returns a rendering of a new thing
+ *
+ * Ensures order matches exacly.  We will re-rder existing elements if necessary
+ * Can be used for any element type; does not have to be a table and tr.
+ * Any RDF node value can only appear ONCE in the array
+ */
+function syncTableToArrayReOrdered (table, things, createNewRow) {
+  const elementMap = {}
+
+  for (let i = 0; i < table.children.length; i++) {
+    const row = table.children[i]
+    elementMap[row.subject.toNT()] = row // More sophisticaed would be to have a bag of duplicates
+  }
+
+  for (let g = 0; g < things.length; g++) {
+    const thing = things[g]
+    if (g >= table.children.length) { // table needs extending
+      const newRow = createNewRow(thing)
+      newRow.subject = thing
+      table.appendChild(newRow)
+    } else {
+      const row = table.children[g]
+      if (row.subject.sameTerm(thing)) {
+        // ...
+      } else {
+        const existingRow = elementMap[thing.toNT()]
+        if (existingRow) {
+          table.removeChild(existingRow)
+          table.insertBefore(existingRow, row) // Insert existing row in place of this one
+        } else {
+          const newRow = createNewRow(thing)
+          row.before(newRow) // Insert existing row in place of this one
+          newRow.subject = thing
+        }
+      }
+    }
+  } // loop g
+  // Lop off any we don't need any more:
+  while (table.children.length > things.length) {
+    table.removeChild(table.children[table.children.length - 1])
+  }
+} // syncTableToArrayReOrdered
 
 /* Error stack to string for better diagnotsics
  **
@@ -200,13 +249,12 @@ function stackString (e) {
 function emptyNode (node) {
   const nodes = node.childNodes
   const len = nodes.length
-  let i
-  for (i = len - 1; i >= 0; i--) node.removeChild(nodes[i])
+  for (let i = len - 1; i >= 0; i--) node.removeChild(nodes[i])
   return node
 }
 
 function getTarget (e) {
-  var target
+  let target
   e = e || window.event
   if (e.target) target = e.target
   else if (e.srcElement) target = e.srcElement
@@ -219,7 +267,7 @@ function getTarget (e) {
 }
 
 function ancestor (target, tagName) {
-  var level
+  let level
   for (level = target; level; level = level.parentNode) {
     // UI.log.debug("looking for "+tagName+" Level: "+level+" "+level.tagName)
     try {
@@ -233,7 +281,7 @@ function ancestor (target, tagName) {
 }
 
 function getAbout (kb, target) {
-  var level, aa
+  let level, aa
   for (
     level = target;
     level && level.nodeType === 1;
@@ -253,10 +301,10 @@ function getAbout (kb, target) {
 }
 
 function getTerm (target) {
-  var statementTr = target.parentNode
-  var st = statementTr ? statementTr.AJAR_statement : undefined
+  const statementTr = target.parentNode
+  const st = statementTr ? statementTr.AJAR_statement : undefined
 
-  var className = st ? target.className : '' // if no st then it's necessary to use getAbout
+  const className = st ? target.className : '' // if no st then it's necessary to use getAbout
   switch (className) {
     case 'pred':
     case 'pred selected':
@@ -274,16 +322,14 @@ function getTerm (target) {
     case 'undetermined selected':
       return target.nextSibling
         ? st.predicate
-        : getUndeterminedSelection(statementTr, st)
+        : !statementTr.AJAR_inverse
+            ? st.object
+            : st.subject
   }
 }
 
-function getUndeterminedSelection (statementTr, st) {
-  return !statementTr.AJAR_inverse ? st.object : st.subject
-}
-
 function include (document, linkstr) {
-  var lnk = document.createElement('script')
+  const lnk = document.createElement('script')
   lnk.setAttribute('type', 'text/javascript')
   lnk.setAttribute('src', linkstr)
   // TODO:This needs to be fixed or no longer used.
@@ -292,7 +338,7 @@ function include (document, linkstr) {
 }
 
 function addLoadEvent (func) {
-  var oldonload = window.onload
+  const oldonload = window.onload
   if (typeof window.onload !== 'function') {
     window.onload = func
   } else {
@@ -306,16 +352,16 @@ function addLoadEvent (func) {
 // Find the position of an object relative to the window
 function findPos (obj) {
   // C&P from http://www.quirksmode.org/js/findpos.html
-  var myDocument = obj.ownerDocument
-  var DocBox = myDocument.documentElement.getBoundingClientRect()
-  var box = obj.getBoundingClientRect()
+  const myDocument = obj.ownerDocument
+  const DocBox = myDocument.documentElement.getBoundingClientRect()
+  const box = obj.getBoundingClientRect()
   return [box.left - DocBox.left, box.top - DocBox.top]
 }
 
 function getEyeFocus (element, instantly, isBottom, myWindow) {
   if (!myWindow) myWindow = window
-  var elementPosY = findPos(element)[1]
-  var totalScroll = elementPosY - 52 - myWindow.scrollY // magic number 52 for web-based version
+  const elementPosY = findPos(element)[1]
+  const totalScroll = elementPosY - 52 - myWindow.scrollY // magic number 52 for web-based version
   if (instantly) {
     if (isBottom) {
       myWindow.scrollBy(
@@ -329,8 +375,8 @@ function getEyeFocus (element, instantly, isBottom, myWindow) {
     myWindow.scrollBy(0, totalScroll)
     return
   }
-  var id = myWindow.setInterval(scrollAmount, 50)
-  var times = 0
+  const id = myWindow.setInterval(scrollAmount, 50)
+  let times = 0
   function scrollAmount () {
     myWindow.scrollBy(0, totalScroll / 10)
     times++
@@ -344,7 +390,7 @@ function AJARImage (src, alt, tt, doc) {
   if (!doc) {
     doc = document
   }
-  var image = doc.createElement('img')
+  const image = doc.createElement('img')
   image.setAttribute('src', src)
   image.addEventListener('copy', function (e) {
     e.clipboardData.setData('text/plain', '')
@@ -382,6 +428,7 @@ function shortName (uri) {
   let i
   const hash = p.lastIndexOf('#')
   if (hash >= 0) p = p.slice(hash - 1) // lop off localid
+  // eslint-disable-next-line no-unreachable-loop
   for (;;) {
     const slash = p.lastIndexOf('/')
     if (slash >= 0) p = p.slice(slash + 1)
@@ -404,10 +451,10 @@ function shortName (uri) {
 // Short name for an ontology
 function ontologyLabel (term) {
   if (term.uri === undefined) return '??'
-  var s = term.uri
-  var namespaces = []
-  var i = s.lastIndexOf('#')
-  var part
+  let s = term.uri
+  const namespaces = []
+  let i = s.lastIndexOf('#')
+  let part
   if (i >= 0) {
     s = s.slice(0, i + 1)
   } else {
@@ -463,9 +510,9 @@ function label (x, initialCap) {
     return s
   }
   function cleanUp (s1) {
-    var s2 = ''
+    let s2 = ''
     if (s1.slice(-1) === '/') s1 = s1.slice(0, -1) // chop trailing slash
-    for (var i = 0; i < s1.length; i++) {
+    for (let i = 0; i < s1.length; i++) {
       if (s1[i] === '_' || s1[i] === '-') {
         s2 += ' '
         continue
@@ -483,21 +530,12 @@ function label (x, initialCap) {
     return doCap(s2)
   }
 
-  // The tabulator labeler is more sophisticated if it exists
-  // Todo: move it to a solid-ui option.
-  var lab
-  if (typeof tabulator !== 'undefined' && tabulator.lb) {
-    lab = tabulator.lb.label(x)
-    if (lab) {
-      return doCap(lab.value)
-    }
-  }
-
   // Hard coded known label predicates
   //  @@ TBD: Add subproperties of rdfs:label
 
-  var kb = UI.store
-  var lab1 =
+  const kb = UI.store
+  const lab1 =
+    kb.any(x, UI.ns.ui('label')) || // Prioritize ui:label
     kb.any(x, UI.ns.link('message')) ||
     kb.any(x, UI.ns.vcard('fn')) ||
     kb.any(x, UI.ns.foaf('name')) ||
@@ -522,7 +560,7 @@ function label (x, initialCap) {
   if (x.termType === 'Collection') {
     return '(' + x.elements.length + ')'
   }
-  var s = x.uri
+  let s = x.uri
   if (typeof s === 'undefined') return x.toString() // can't be a symbol
   // s = decodeURI(s) // This can crash is random valid @ signs are presentation
   // The idea was to clean up eg URIs encoded in query strings
@@ -534,7 +572,7 @@ function label (x, initialCap) {
       .join('/') // If it is properly encoded
   } catch (e) {
     // try individual decoding of ASCII code points
-    for (var i = s.length - 3; i > 0; i--) {
+    for (let i = s.length - 3; i > 0; i--) {
       const hex = '0123456789abcefABCDEF' // The while upacks multiple layers of encoding
       while (
         s[i] === '%' &&
@@ -551,14 +589,14 @@ function label (x, initialCap) {
   if (s.slice(-5) === '#this') s = s.slice(0, -5)
   else if (s.slice(-3) === '#me') s = s.slice(0, -3)
 
-  var hash = s.indexOf('#')
+  const hash = s.indexOf('#')
   if (hash >= 0) return cleanUp(s.slice(hash + 1))
 
   if (s.slice(-9) === '/foaf.rdf') s = s.slice(0, -9)
   else if (s.slice(-5) === '/foaf') s = s.slice(0, -5)
 
   // Eh? Why not do this? e.g. dc:title needs it only trim URIs, not rdfs:labels
-  var slash = s.lastIndexOf('/', s.length - 2) // (len-2) excludes trailing slash
+  const slash = s.lastIndexOf('/', s.length - 2) // (len-2) excludes trailing slash
   if (slash >= 0 && slash < x.uri.length) return cleanUp(s.slice(slash + 1))
 
   return doCap(decodeURIComponent(x.uri))
@@ -573,18 +611,16 @@ function labelForXML (x) {
   return escapeForXML(label(x))
 }
 
-// As above but for predicate, possibly inverse
 function predicateLabelForXML (p, inverse) {
-  var lab
+  return escapeForXML(predicateLabel(p, inverse))
+}
+// As above but for predicate, possibly inverse
+function predicateLabel (p, inverse) {
+  const lab = label(p)
   if (inverse) {
     // If we know an inverse predicate, use its label
-    var ip = UI.store.any(p, UI.ns.owl('inverseOf'))
-    if (!ip) ip = UI.store.any(undefined, UI.ns.owl('inverseOf'), p)
-    if (ip) return labelForXML(ip)
-  }
-
-  lab = labelForXML(p)
-  if (inverse) {
+    const ip = UI.store.any(p, UI.ns.owl('inverseOf')) || UI.store.any(undefined, UI.ns.owl('inverseOf'), p)
+    if (ip) return label(ip)
     if (lab === 'type') return '...' // Not "is type of"
     return 'is ' + lab + ' of'
   }
@@ -593,20 +629,20 @@ function predicateLabelForXML (p, inverse) {
 
 // Not a method. For use in sorts
 function RDFComparePredicateObject (self, other) {
-  var x = self.predicate.compareTerm(other.predicate)
+  const x = self.predicate.compareTerm(other.predicate)
   if (x !== 0) return x
   return self.object.compareTerm(other.object)
 }
 
 function RDFComparePredicateSubject (self, other) {
-  var x = self.predicate.compareTerm(other.predicate)
+  const x = self.predicate.compareTerm(other.predicate)
   if (x !== 0) return x
   return self.subject.compareTerm(other.subject)
 }
 // ends
 
 function predParentOf (node) {
-  var n = node
+  let n = node
   while (true) {
     if (n.getAttribute('predTR')) {
       return n

@@ -12,6 +12,7 @@
 // or access cemra roll (etc) OR to access solid cloud storage of favorite photo almbums.
 // (Especially latest taken ones)
 //
+import * as debug from '../debug'
 
 /** @module mediaCapture */
 
@@ -89,6 +90,9 @@ export function cameraCaptureControl (
     player.setAttribute('controls', '1')
     player.setAttribute('autoplay', '1')
     player.setAttribute('style', controlStyle)
+    if (!navigator.mediaDevices) {
+      throw new Error('navigator.mediaDevices not available')
+    }
     navigator.mediaDevices.getUserMedia(constraints).then(stream => {
       player.srcObject = stream
       shutterButton.style.visibility = 'visible' // Enable
@@ -121,7 +125,7 @@ export function cameraCaptureControl (
 
     canvas.toBlob(blob => {
       const msg = `got blob type ${blob.type} size ${blob.size}`
-      console.log(msg)
+      debug.log(msg)
       destination = getImageDoc()
       imageBlob = blob // save for review
       reviewImage()
@@ -143,7 +147,7 @@ export function cameraCaptureControl (
   function saveBlob (blob, destination) {
     const contentType = blob.type
     // if (!confirm('Save picture to ' + destination + ' ?')) return
-    console.log(
+    debug.log(
       'Putting ' + blob.size + ' bytes of ' + contentType + ' to ' + destination
     )
     // @@ TODO Remove casting
@@ -154,7 +158,7 @@ export function cameraCaptureControl (
       })
       .then(
         _resp => {
-          console.log('ok saved ' + destination)
+          debug.log('ok saved ' + destination)
           stopVideo()
           doneCallback(destination)
         },
@@ -207,43 +211,3 @@ export function cameraButton (
   })
   return div
 }
-
-/// /////////////////////////////////////// OLD BROKEN
-
-//  Put up a video stream and take a picture
-//  In: context.div, dom
-
-// export function cameraOLD (context, _gotBlob) {
-//   function takeSnapshot () {
-//     const dom = context.dom
-//     const img = dom.createElement('img')
-//     const ctx
-//     const width = video.offsetWidth
-//     const height = video.offsetHeight
-//
-//     const canvas = context.canvas || document.createElement('canvas')
-//     canvas.width = width
-//     canvas.height = height
-//
-//     ctx = canvas.getContext('2d')
-//     ctx.drawImage(video, 0, 0, width, height)
-//
-//     img.src = canvas.toDataURL(contentType) // @@@
-//     context.div.appendChild(img)
-//   }
-//
-//   const video = context.dom.createElement('video')
-//   context.div.appendChild(video)
-//   // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
-//   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob
-//   navigator.mediaDevices
-//     .getUserMedia({ video: true })
-//     .then(function (stream) {
-//       video.src = window.URL.createObjectURL(stream)
-//       video.addEventListener('click', takeSnapshot)
-//     })
-//     .catch(function (error) {
-//       alert('Could not access the camera. Error: ' + error.name)
-//     })
-//   return video
-// }
