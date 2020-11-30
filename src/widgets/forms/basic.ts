@@ -19,7 +19,7 @@ const store = solidLogicSingleton.store
  * @internal exporting this only for unit tests
  */
 export function fieldLabel (dom: HTMLDocument, property: NamedNode | undefined, fieldInQuestion: Node): HTMLElement | Text {
-  let lab = store.any(fieldInQuestion, ns.ui('label'))
+  let lab = store.any(fieldInQuestion as any, ns.ui('label'))
   if (!lab) lab = label(property, true) // Init capital
   if (property === undefined) {
     return dom.createTextNode('@@Internal error: undefined property')
@@ -28,7 +28,7 @@ export function fieldLabel (dom: HTMLDocument, property: NamedNode | undefined, 
   /* istanbul ignore next */
   if (property.uri) anchor.setAttribute('href', property.uri)
   anchor.setAttribute('style', 'color: #3B5998; text-decoration: none;') // Not too blue and no underline
-  anchor.textContent = lab
+  anchor.textContent = lab as any
   return anchor
 }
 
@@ -46,12 +46,15 @@ export function fieldLabel (dom: HTMLDocument, property: NamedNode | undefined, 
 export function fieldStore (subject: NamedNode | BlankNode | Variable, predicate: NamedNode | Variable, def: NamedNode | undefined): NamedNode | undefined {
   const sts = store.statementsMatching(subject, predicate)
   if (sts.length === 0) return def // can used default as no data yet
+  if (!store.updater) {
+    throw new Error('Store has no updater')
+  }
   if (
     sts.length > 0 &&
-    sts[0].why.uri &&
-    store.updater.editable(sts[0].why.uri, store)
+    sts[0].why.value &&
+    store.updater.editable(sts[0].why.value, store)
   ) {
-    return store.sym(sts[0].why.uri)
+    return store.sym(sts[0].why.value)
   }
   return def
 }
@@ -101,7 +104,7 @@ export function basicField (
     )
     return box
   }
-  lhs.appendChild(fieldLabel(dom, property, form))
+  lhs.appendChild(fieldLabel(dom, property as any, form))
   const uri = mostSpecificClassURI(form)
   let params = fieldParams[uri]
   if (params === undefined) params = {} // non-bottom field types can do this
@@ -120,21 +123,24 @@ export function basicField (
   const maxLength = kb.any(form, ns.ui('maxLength'))
   field.setAttribute('maxLength', maxLength ? '' + maxLength : '4096')
 
-  doc = doc || fieldStore(subject, property, doc)
+  doc = doc || fieldStore(subject, property as any, doc)
 
-  let obj = kb.any(subject, property, undefined, doc)
+  let obj = kb.any(subject, property as any, undefined, doc)
   if (!obj) {
     obj = kb.any(form, ns.ui('default'))
   }
-  if (obj && obj.uri && params.uriPrefix) {
+  if (obj && obj.value && params.uriPrefix) {
     // eg tel: or mailto:
-    field.value = decodeURIComponent(obj.uri.replace(params.uriPrefix, '')) // should have no spaces but in case
+    field.value = decodeURIComponent(obj.value.replace(params.uriPrefix, '')) // should have no spaces but in case
       .replace(/ /g, '')
   } else if (obj) {
     /* istanbul ignore next */
-    field.value = obj.value || obj.uri || ''
+    field.value = obj.value || obj.value || ''
   }
   field.setAttribute('style', style)
+  if (!kb.updater) {
+    throw new Error('kb has no updater')
+  }
   if (!kb.updater.editable((doc as NamedNode).uri)) {
     field.readOnly = true // was: disabled. readOnly is better
     return box
@@ -163,7 +169,7 @@ export function basicField (
       if (params.pattern && !field.value.match(params.pattern)) return
       field.disabled = true // See if this stops getting two dates from fumbling e.g the chrome datepicker.
       field.setAttribute('style', style + 'color: gray;') // pending
-      const ds = kb.statementsMatching(subject, property) // remove any multiple values
+      const ds = kb.statementsMatching(subject, property as any) // remove any multiple values
       let result
       if (params.namedNode) {
         result = kb.sym(field.value)
@@ -184,7 +190,7 @@ export function basicField (
       let is = ds.map(statement => st(statement.subject, statement.predicate, result, statement.why)) // can include >1 doc
       if (is.length === 0) {
         // or none
-        is = [st(subject, property, result, doc)]
+        is = [st(subject, property as any, result, doc)]
       }
 
       function updateMany (ds, is: { why: { uri: string } }[], callback) {
@@ -200,8 +206,11 @@ export function basicField (
         if (docs.length === 0) {
           throw new Error('updateMany has no docs to patch')
         }
+        if (!kb.updater) {
+          throw new Error('kb has no updater')
+        }
         if (docs.length === 1) {
-          return kb.updater.update(ds, is, callback)
+          return kb.updater.update(ds, is as any, callback)
         }
         // return kb.updater.update(ds, is, callback)
 
@@ -210,7 +219,7 @@ export function basicField (
         const is2 = is.filter(st => st.why.uri !== doc)
         const ds1 = ds.filter(st => st.why.uri === doc)
         const ds2 = ds.filter(st => st.why.uri !== doc)
-        kb.updater.update(ds1, is1, function (uri, ok, body) {
+        kb.updater.update(ds1, is1 as any, function (uri, ok, body) {
           if (ok) {
             updateMany(ds2, is2, callback)
           } else {
@@ -219,7 +228,7 @@ export function basicField (
         })
       }
 
-      updateMany(ds, is, function (uri, ok, body) {
+      updateMany(ds, is as any, function (uri, ok, body) {
         // kb.updater.update(ds, is, function (uri, ok, body) {
         if (ok) {
           field.disabled = false

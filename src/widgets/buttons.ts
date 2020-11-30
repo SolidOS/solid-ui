@@ -186,6 +186,9 @@ export function setName (element: HTMLElement, x: NamedNode) {
   const name = x.sameTerm(ns.foaf('Agent')) ? 'Everyone' : findName(x)
   element.textContent = name || utils.label(x)
   if (!name && x.uri) {
+    if (!kb.fetcher) {
+      throw new Error('kb has no fetcher')
+    }
     // Note this is only a fetch, not a lookUP of all sameAs etc
     kb.fetcher.nowOrWhenFetched(x.doc(), undefined, function (_ok) {
       element.textContent = findName(x) || utils.label(x) // had: (ok ? '' : '? ') +
@@ -335,7 +338,7 @@ export function findImage (thing: NamedNode): string {
     kb.any(thing, ns.vcard('hasPhoto')) ||
     kb.any(thing, ns.vcard('photo')) ||
     kb.any(thing, ns.foaf('depiction'))
-  return image ? image.uri : null
+  return image ? (image as any).uri : null
 }
 
 /**
@@ -395,6 +398,9 @@ export function setImage (element: HTMLElement, thing: NamedNode) { // 20191230a
 
   const happy = trySetImage(element, thing, iconForClassMap)
   if (!happy && thing.uri) {
+    if (!kb.fetcher) {
+      throw new Error('kb has no fetcher')
+    }
     kb.fetcher.nowOrWhenFetched(thing.doc(), undefined, (ok) => {
       if (ok) {
         trySetImage(element, thing, iconForClassMap)
@@ -473,7 +479,7 @@ export function deleteButtonWithCheck (
         },
         false
       )
-      var sureButtonElt = dom.createElement('button')
+      const sureButtonElt = dom.createElement('button')
       sureButtonElt.textContent = 'Delete ' + noun
       sureButtonElt.setAttribute('style', style.buttonStyle)
       container.appendChild(sureButtonElt).addEventListener(
@@ -762,7 +768,11 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
   attachmentTable.appendChild(dom.createElement('tr')) // attachmentTableTop
 
   const deleteAttachment = function (target) {
-    kb.updater.update(st(subject, predicate, target, doc), [], function (
+    if (!kb.updater) {
+      throw new Error('kb has no updater')
+    }
+
+    kb.updater.update(st(subject, predicate, target, doc) as any, [], function (
       uri,
       ok,
       errorBody,
@@ -785,7 +795,7 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
     }
     return personTR(dom, predicate, target, opt)
   }
-  var refresh = ((attachmentTable as any).refresh = function () {
+  const refresh = ((attachmentTable as any).refresh = function () {
     const things = kb.each(subject, predicate)
     things.sort()
     utils.syncTableToArray(attachmentTable, things, createNewRow)
@@ -800,6 +810,10 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
       debug.log('Dropped on attachemnt ' + u) // icon was: iconBase + 'noun_25830.svg'
       ins.push(st(subject, predicate, target, doc))
     })
+    if (!kb.updater) {
+      throw new Error('kb has no updater')
+    }
+
     kb.updater.update([], ins, function (uri, ok, errorBody, _xhr) {
       if (ok) {
         refresh()
@@ -817,6 +831,9 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
       options.uploadFolder?.uri, // Pictures
       function (theFile, destURI) {
         const ins = [st(subject, predicate, kb.sym(destURI), doc)]
+        if (!kb.updater) {
+          throw new Error('kb has no updater')
+        }
         kb.updater.update([], ins, function (uri, ok, errorBody, _xhr) {
           if (ok) {
             refresh()
@@ -906,18 +923,18 @@ export function allClassURIs (): { [uri: string]: boolean } {
   store
     .statementsMatching(undefined, ns.rdf('type'), undefined)
     .forEach(function (st) {
-      if (st.object.uri) set[st.object.uri] = true
+      if (st.object.value) set[st.object.value] = true
     })
   store
     .statementsMatching(undefined, ns.rdfs('subClassOf'), undefined)
     .forEach(function (st) {
-      if (st.object.uri) set[st.object.uri] = true
-      if (st.subject.uri) set[st.subject.uri] = true
+      if (st.object.value) set[st.object.value] = true
+      if (st.subject.value) set[st.subject.value] = true
     })
   store
     .each(undefined, ns.rdf('type'), ns.rdfs('Class'))
     .forEach(function (c) {
-      if (c.uri) set[c.uri] = true
+      if (c.value) set[c.value] = true
     })
   return set
 }
@@ -944,7 +961,7 @@ export function propertyTriage (kb: IndexedFormula): any {
   let nd = 0
   let nu = 0
   const pi = (kb as any).predicateIndex // One entry for each pred
-  for (var p in pi) {
+  for (const p in pi) {
     const object = pi[p][0].object
     if (object.termType === 'Literal') {
       dp[p] = true
@@ -956,7 +973,7 @@ export function propertyTriage (kb: IndexedFormula): any {
   } // If nothing discovered, then could be either:
   const ps = kb.each(undefined, ns.rdf('type'), ns.rdf('Property'))
   for (let i = 0; i < ps.length; i++) {
-    p = ps[i].toNT()
+    const p = ps[i].toNT()
     // log.debug('propertyTriage: unknown: ' + p)
     if (!op[p] && !dp[p]) {
       dp[p] = true
@@ -1095,7 +1112,7 @@ export function selectorPanelRefresh (
         'src',
         options.connectIcon || iconBase + 'noun_25830.svg'
       )
-      image.setAttribute('title', already.length ? already.length : 'attach')
+      image.setAttribute('title', already.length ? already.length : 'attach' as any)
     }
     const f = index.twoLine.widgetForClass(type)
     // eslint-disable-next-line prefer-const
@@ -1112,7 +1129,7 @@ export function selectorPanelRefresh (
     nav.appendChild(a).textContent = '>'
     box.appendChild(nav)
 
-    var iconDiv = dom.createElement('div')
+    const iconDiv = dom.createElement('div')
     iconDiv.setAttribute(
       'style',
       (inverse ? 'float:left;' : 'float:right;') + ' width:30px;'
@@ -1287,7 +1304,7 @@ export function isImage (file?: NamedNode, kind?: string): boolean {
   const what = kind || 'image'
   // See https://github.com/linkeddata/rdflib.js/blob/e367d5088c/src/formula.ts#L554
   //
-  const typeURIs = store.findTypeURIs(file)
+  const typeURIs = store.findTypeURIs(file as any)
   // See https://github.com/linkeddata/rdflib.js/blob/d5000f/src/utils-js.js#L14
   // e.g.'http://www.w3.org/ns/iana/media-types/audio'
   const prefix: string = Util.mediaTypeClass(what + '/*').uri.split('*')[0]

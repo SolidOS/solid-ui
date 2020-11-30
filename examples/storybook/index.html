@@ -17,15 +17,22 @@
   } catch (e) {
     // eslint-disable-next-line no-console
     console.warn('unable to connect to top frame for connecting dev tools');
-  }</script><style>#root[hidden],
+  }
+
+  window.onerror = function onerror(message, source, line, column, err) {
+    if (window.CONFIG_TYPE !== 'DEVELOPMENT') return;
+    // eslint-disable-next-line no-var, vars-on-top
+    var error = { message: err.message, name: err.name, stack: err.stack };
+    window.fetch('/runtime-error', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message, source, line, column, error, origin: 'manager' }),
+    });
+  };</script><style>#root[hidden],
       #docs-root[hidden] {
         display: none !important;
-      }</style></head><body><div id="root"></div><div id="docs-root"></div><script>window['LOGLEVEL'] = "info";
+      }</style></head><body><div id="root"></div><div id="docs-root"></div><script>window['CONFIG_TYPE'] = "PRODUCTION";
             
         
             
-        
-            
-        
-            
-              window['DOCS_MODE'] = false;</script><script src="./sb_dll/storybook_ui_dll.js"></script><script src="runtime~main.870e8ee0658e83d05c6b.bundle.js"></script><script src="vendors~main.5d7400b647a9f82cda9a.bundle.js"></script><script src="main.b4a74bf3b36346b8e256.bundle.js"></script></body></html>
+              window['LOGLEVEL'] = "info";</script><script src="runtime~main.6a9b04192e3176eff72a.bundle.js"></script><script src="vendors~main.cd5bf7702edf5698c473.bundle.js"></script><script src="main.60438cbd426da17024d2.bundle.js"></script></body></html>

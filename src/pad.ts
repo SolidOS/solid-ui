@@ -122,10 +122,10 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
       'font-size: 150%; padding-top: 1em; padding-bottom: 1em; width: 100%;'
     ]
 
-    const author = kb.any(chunk, ns.dc('author'))
+    const author = kb.any(chunk as any, ns.dc('author'))
     if (!colors && author) {
       // Hash the user webid for now -- later allow user selection!
-      const bgcolor = lightColorHash(author)
+      const bgcolor = lightColorHash(author as any)
       colors =
         'color: ' +
         (pending ? '#888' : 'black') +
@@ -136,7 +136,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
 
     // @@ TODO Need to research when this can be an object with the indent stored in value
     // and when the indent is stored as a Number itself, not in an object.
-    let indent = kb.any(chunk, PAD('indent'))
+    let indent: any = kb.any(chunk as any, PAD('indent'))
 
     indent = indent ? indent.value : 0
     const style =
@@ -150,8 +150,8 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
   const removePart = function (part: NotepadPart) {
     const chunk = part.subject
     if (!chunk) throw new Error('No chunk for line to be deleted!') // just in case
-    const prev = kb.any(undefined, PAD('next'), chunk)
-    const next = kb.any(chunk, PAD('next'))
+    const prev: any = kb.any(undefined, PAD('next'), chunk as any)
+    const next: any = kb.any(chunk as any, PAD('next'))
     if (prev.sameTerm(subject) && next.sameTerm(subject)) {
       // Last one
       log("You can't delete the only line.")
@@ -159,8 +159,8 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
     }
 
     const del = kb
-      .statementsMatching(chunk, undefined, undefined, padDoc)
-      .concat(kb.statementsMatching(undefined, undefined, chunk, padDoc))
+      .statementsMatching(chunk as any, undefined, undefined, padDoc)
+      .concat(kb.statementsMatching(undefined, undefined, chunk as any, padDoc))
     const ins = [st(prev, PAD('next'), next, padDoc)]
 
     // @@ TODO what should we do if chunk is not a NamedNode should we
@@ -170,7 +170,9 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
 
       log('Deleting line ' + label)
     }
-
+    if (!updater) {
+      throw new Error('have no updater')
+    }
     // @@ TODO below you can see that before is redefined and not a boolean
     updater.update(del, ins, function (uri, ok, errorMessage, response) {
       if (ok) {
@@ -186,7 +188,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
             before.firstChild.focus()
           }
         }
-      } else if (response && response.status === 409) {
+      } else if (response && (response as any).status === 409) {
         // Conflict
         setPartStyle(part, 'color: black;  background-color: #ffd;') // yellow
         part.state = 0 // Needs downstream refresh
@@ -200,20 +202,23 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
         log('    removePart FAILED ' + chunk + ': ' + errorMessage)
         log("    removePart was deleteing :'" + del)
         setPartStyle(part, 'color: black;  background-color: #fdd;') // failed
-        const res = response ? response.status : ' [no response field] '
-        complain('Error ' + res + ' saving changes: ' + errorMessage.true) // upstream,
+        const res = response ? (response as any).status : ' [no response field] '
+        complain('Error ' + res + ' saving changes: ' + (errorMessage as any).true) // upstream,
         // updater.requestDownstreamAction(padDoc, reloadAndSync);
       }
     })
   } // removePart
 
   const changeIndent = function (part: NotepadPart, chunk: string, delta) {
-    const del = kb.statementsMatching(chunk, PAD('indent'))
+    const del = kb.statementsMatching(chunk as any, PAD('indent'))
     const current = del.length ? Number(del[0].object.value) : 0
     if (current + delta < -3) return //  limit negative indent
     const newIndent = current + delta
     const ins = st(chunk as any, PAD('indent'), newIndent, padDoc)
-    updater.update(del, ins, function (uri, ok, errorBody) {
+    if (!updater) {
+      throw new Error('no updater')
+    }
+    updater.update(del, ins as any, function (uri, ok, errorBody) {
       if (!ok) {
         log(
           "Indent change FAILED '" +
@@ -255,6 +260,10 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
   */
   const addListeners = function (part: any, chunk: any) {
     part.addEventListener('keydown', function (event) {
+      if (!updater) {
+        throw new Error('no updater')
+      }
+
       let queueProperty, queue
       //  up 38; down 40; left 37; right 39     tab 9; shift 16; escape 27
       switch (event.keyCode) {
@@ -337,9 +346,8 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
 
     const updateStore = function (part: NotepadPart) {
       const chunk: any = part.subject
-
       setPartStyle(part, undefined, true)
-      const old = kb.any(chunk, ns.sioc('content')).value
+      const old = (kb.any(chunk, ns.sioc('content')) as any).value
       const del = [st(chunk, ns.sioc('content'), old, padDoc)]
       let ins
       if (part.value) {
@@ -370,13 +378,16 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
         newOne +
         "' "
       ) */
+      if (!updater) {
+        throw new Error('no updater')
+      }
 
       updater.update(del, ins, function (uri, ok, errorBody, xhr) {
         if (!ok) {
           // alert("clash " + errorBody);
           log(
             '    patch FAILED ' +
-            xhr.status +
+            (xhr as any).status +
             " for '" +
             old +
             "' -> '" +
@@ -384,7 +395,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
             "': " +
             errorBody
           )
-          if (xhr.status === 409) {
+          if ((xhr as any).status === 409) {
             // Conflict -  @@ we assume someone else
             setPartStyle(part, 'color: black;  background-color: #fdd;')
             part.state = 0 // Needs downstream refresh
@@ -396,7 +407,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
             setPartStyle(part, 'color: black;  background-color: #fdd;') // failed pink
             part.state = 0
             complain(
-              '    Error ' + xhr.status + ' sending data: ' + errorBody,
+              '    Error ' + (xhr as any).status + ' sending data: ' + errorBody,
               true
             )
             beep(1.0, 128) // Other
@@ -451,7 +462,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
   // @@ TODO Need to research before as it appears to be used as an Element and a boolean
   const newPartAfter = function (tr1: HTMLTableElement, chunk: String, before?: NotepadElement | boolean) {
     // @@ take chunk and add listeners
-    let text = kb.any(chunk, ns.sioc('content'))
+    let text: any = kb.any(chunk as any, ns.sioc('content'))
     text = text ? text.value : ''
     const tr = dom.createElement('tr')
     if (before) {
@@ -528,6 +539,9 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
     }
 
     log('    Fresh chunk ' + label + ' proposed')
+    if (!updater) {
+      throw new Error('no updater')
+    }
     updater.update(del, ins, function (uri, ok, errorBody, _xhr) {
       if (!ok) {
         // alert("Error writing new line " + label + ": " + errorBody);
@@ -608,8 +622,8 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
 
       const sts = kb.statementsMatching(undefined, ns.sioc('contents'))
       sts.forEach(function (st) {
-        if (!found[st.subject.uri]) {
-          complain2('Loose chunk! ' + st.subject.uri)
+        if (!found[st.subject.value]) {
+          complain2('Loose chunk! ' + st.subject.value)
         }
       })
     }
@@ -639,7 +653,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
     // Find which lines correspond to existing chunks
 
     for (
-      let chunk = kb.the(subject, PAD('next'));
+      let chunk = kb.the(subject, PAD('next')) as unknown as any;
       !chunk.sameTerm(subject);
       chunk = kb.the(chunk, PAD('next'))
     ) {
@@ -663,11 +677,11 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
     // Insert any new lines and update old ones
     row = table.firstChild // might be null
     for (
-      let chunk = kb.the(subject, PAD('next'));
+      let chunk = kb.the(subject, PAD('next')) as unknown as any;
       !chunk.sameTerm(subject);
       chunk = kb.the(chunk, PAD('next'))
     ) {
-      const text = kb.any(chunk, ns.sioc('content')).value
+      const text = (kb.any(chunk, ns.sioc('content')) as any).value
       // superstitious -- don't mess with unchanged input fields
       // which may be selected by the user
       if (row && manif[chunk.uri]) {
@@ -718,12 +732,15 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
     let retryTimeout = 1000 // ms
     const tryReload = function () {
       log('try reload - timeout = ' + retryTimeout)
+      if (!updater) {
+        throw new Error('no updater')
+      }
       updater.reload(updater.store, padDoc, function (ok, message, xhr) {
         reloading = false
         if (ok) {
           checkAndSync()
         } else {
-          if (xhr.status === 0) {
+          if ((xhr as any).status === 0) {
             complain(
               'Network error refreshing the pad. Retrying in ' +
               retryTimeout / 1000
@@ -734,7 +751,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
           } else {
             complain(
               'Error ' +
-              xhr.status +
+              (xhr as any).status +
               'refreshing the pad:' +
               message +
               '. Stopped. ' +
@@ -773,9 +790,12 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
       st(subject, PAD('next'), subject, padDoc)
     ]
 
-    updater.update([], insertables, function (uri: string, ok: boolean, errorBody: string) {
+    if (!updater) {
+      throw new Error('no updater')
+    }
+    updater.update([], insertables, function (uri: string | null | undefined, ok: boolean, errorBody?: string) {
       if (!ok) {
-        complain(errorBody)
+        complain(errorBody || '')
       } else {
         log('Initial pad created')
         newChunk() // Add a first chunck
@@ -795,7 +815,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
 export function getChunks (subject: NamedNode, kb: IndexedFormula) {
   const chunks: any[] = []
   for (
-    let chunk = kb.the(subject, PAD('next'));
+    let chunk: any = kb.the(subject, PAD('next'));
     !chunk.sameTerm(subject);
     chunk = kb.the(chunk, PAD('next'))
   ) {

@@ -59,7 +59,7 @@ export function renderPartipants (dom: HTMLDocument, table: ParticipationTableEl
   const syncTable = function () {
     const parps = kb.each(subject, ns.wf('participation')).map(function (parp) {
       log('in participants')
-      return [kb.anyValue(parp, ns.cal('dtstart')) || '9999-12-31', parp]
+      return [kb.anyValue(parp as any, ns.cal('dtstart')) || '9999-12-31', parp]
     })
     parps.sort() // List in order of joining
     const participations = parps.map(function (p) {
@@ -110,7 +110,10 @@ export function participationObject (subject: NamedNode, padDoc: NamedNode, me: 
           padDoc
         )
       ]
-      kb.updater.update([], ins, function (uri: string, ok: boolean, errorMessage: string) {
+      if (!kb.updater) {
+        throw new Error('kb has no updater')
+      }
+      kb.updater.update([], ins, function (uri: string | null | undefined, ok: boolean, errorMessage?: string) {
         if (!ok) {
           reject(new Error('Error recording your partipation: ' + errorMessage))
         } else {
@@ -156,7 +159,10 @@ export function recordParticipation (subject: NamedNode, padDoc: NamedNode, refr
         padDoc
       )
     ]
-    kb.updater.update([], ins, function (uri: string, ok: boolean, errorMessage: string) {
+    if (!kb.updater) {
+      throw new Error('kb has no updater')
+    }
+    kb.updater.update([], ins, function (uri: string | null | undefined, ok: boolean, errorMessage?: string) {
       if (!ok) {
         throw new Error('Error recording your partipation: ' + errorMessage)
       }

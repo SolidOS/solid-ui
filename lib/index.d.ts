@@ -30,6 +30,6 @@ import widgets from './widgets';
 import versionInfo from './versionInfo';
 import { initHeader } from './header';
 declare const dom: Document | null;
-declare const store: any;
+declare const store: rdf.Store;
 export { ns, rdf, acl, aclControl, authn, create, dom, icons, log, matrix, media, messageArea, infiniteMessageArea, pad, participation, preferences, solidLogicSingleton, store, style, table, tabs, utils, widgets, versionInfo, initHeader };
 //# sourceMappingURL=index.d.ts.map

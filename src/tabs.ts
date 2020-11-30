@@ -255,9 +255,9 @@ export function tabWidget (options: TabWidgetOptions) {
     if (options.items) return options.items
     if (options.ordered !== false) {
       // options.ordered defaults to true
-      return store.the(subject, options.predicate).elements
+      return (store.the(subject, options.predicate) as any).elements
     } else {
-      return store.each(subject, options.predicate)
+      return store.each(subject, options.predicate) as any
     }
   }
 
