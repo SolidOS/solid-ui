@@ -27,7 +27,7 @@ export const field: { [classUri: string]: FieldFunction } = {} // Form field fun
  */
 export function mostSpecificClassURI (x: Node): string {
   const kb = store
-  const ft = kb.findTypeURIs(x)
+  const ft = kb.findTypeURIs(x as any)
   const bot = kb.bottomTypeURIs(ft) // most specific
   const bots: any[] = []
   for (const b in bot) bots.push(b)

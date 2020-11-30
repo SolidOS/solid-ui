@@ -10,7 +10,7 @@ import { solidLogicSingleton } from '../logic'
 import utils from '../utils'
 import { AgentMapMap, AgentMapUnion, ComboList } from './types'
 import * as debug from '../debug'
-import { graph, IndexedFormula, NamedNode, serialize, st, sym } from 'rdflib'
+import { graph, IndexedFormula, NamedNode, serialize, st, Statement, sym } from 'rdflib'
 import { LiveStore } from 'pane-registry'
 import { ACL_LINK } from 'solid-logic'
 
@@ -36,15 +36,15 @@ export function adoptACLDefault (
     .concat(kb.each(undefined, ACL('defaultForNew'), defaultResource, defaultACLDoc))
 
   const proposed = defaults.reduce((accumulatedStatements, da) => accumulatedStatements
-    .concat(kb.statementsMatching(da, ns.rdf('type'), ACL('Authorization'), defaultACLDoc))
-    .concat(kb.statementsMatching(da, ACL('agent'), undefined, defaultACLDoc))
-    .concat(kb.statementsMatching(da, ACL('agentClass'), undefined, defaultACLDoc))
-    .concat(kb.statementsMatching(da, ACL('agentGroup'), undefined, defaultACLDoc))
-    .concat(kb.statementsMatching(da, ACL('origin'), undefined, defaultACLDoc))
-    .concat(kb.statementsMatching(da, ACL('originClass'), undefined, defaultACLDoc))
-    .concat(kb.statementsMatching(da, ACL('mode'), undefined, defaultACLDoc))
-    .concat(st(da, ACL('accessTo'), doc, defaultACLDoc))
-    .concat(isContainer ? st(da, ACL('default'), doc, defaultACLDoc) : []), [])
+    .concat(kb.statementsMatching(da as NamedNode, ns.rdf('type'), ACL('Authorization'), defaultACLDoc))
+    .concat(kb.statementsMatching(da as NamedNode, ACL('agent'), undefined, defaultACLDoc))
+    .concat(kb.statementsMatching(da as NamedNode, ACL('agentClass'), undefined, defaultACLDoc))
+    .concat(kb.statementsMatching(da as NamedNode, ACL('agentGroup'), undefined, defaultACLDoc))
+    .concat(kb.statementsMatching(da as NamedNode, ACL('origin'), undefined, defaultACLDoc))
+    .concat(kb.statementsMatching(da as NamedNode, ACL('originClass'), undefined, defaultACLDoc))
+    .concat(kb.statementsMatching(da as NamedNode, ACL('mode'), undefined, defaultACLDoc))
+    .concat(st(da as NamedNode, ACL('accessTo'), doc, defaultACLDoc))
+    .concat(isContainer ? st(da as NamedNode, ACL('default'), doc, defaultACLDoc) : []), [] as Statement[])
 
   const kb2 = graph() // Potential - derived is kept apart
   proposed.forEach(st => kb2.add(move(st.subject), move(st.predicate), move(st.object), sym(aclDoc.uri)))
@@ -355,7 +355,7 @@ type fixIndividualACLCallback = (ok: boolean, message?: string | NamedNode | Age
  * All group files must be loaded first
  */
 export function fixIndividualCardACL (person: NamedNode, log: Function, callbackFunction: fixIndividualCardACLCallback): void {
-  const groups = kb.each(undefined, ns.vcard('hasMember'), person)
+  const groups = kb.each(undefined, ns.vcard('hasMember'), person) as NamedNode[]
   // const doc = person.doc()
   if (groups) {
     fixIndividualACL(person, groups, log, callbackFunction)
@@ -396,7 +396,7 @@ export function fixIndividualACL (item: NamedNode, subjects: Array<NamedNode>, l
         // makeACLString(targetDoc, ac, targetACLDoc))
 
         putACLObject(
-          kb,
+          kb as unknown as LiveStore,
           targetDoc as NamedNode,
           union as AgentMapMap | AgentMapUnion,
           targetACLDoc as NamedNode,
@@ -416,34 +416,44 @@ export function setACL (
   callbackFunction: (ok: boolean, message: string) => void
 ): void {
   const aclDoc = kb.any(
-    kb.sym(docURI),
-    kb.sym(ACL_LINK)
+    docURI,
+    ACL_LINK
   ) // @@ check that this get set by web.js
+  if (!kb.fetcher) {
+    throw new Error('Store has no fetcher')
+  }
   if (aclDoc) {
     // Great we already know where it is
     kb.fetcher
-      .webOperation('PUT', aclDoc.uri, {
+      .webOperation('PUT', aclDoc.value, {
         data: aclText,
         contentType: 'text/turtle'
       })
-      .then(callbackFunction) // @@@ check params
+      .then((res) => {
+        callbackFunction(res.ok, res.error || '')
+      }) // @@@ check params
   } else {
     kb.fetcher.nowOrWhenFetched(docURI, undefined, function (ok, body) {
       if (!ok) return callbackFunction(ok, 'Gettting headers for ACL: ' + body)
       const aclDoc = kb.any(
-        kb.sym(docURI),
-        kb.sym(ACL_LINK)
+        docURI,
+        ACL_LINK
       ) // @@ check that this get set by web.js
       if (!aclDoc) {
         // complainIfBad(false, "No Link rel=ACL header for " + docURI)
         callbackFunction(false, 'No Link rel=ACL header for ' + docURI)
       } else {
+        if (!kb.fetcher) {
+          throw new Error('Store has no fetcher')
+        }
         kb.fetcher
-          .webOperation('PUT', aclDoc.uri, {
+          .webOperation('PUT', aclDoc.value, {
             data: aclText,
             contentType: 'text/turtle'
           })
-          .then(callbackFunction)
+          .then((res) => {
+            callbackFunction(res.ok, res.error || '')
+          })
       }
     })
   }
@@ -469,7 +479,7 @@ export function getACLorDefault (
     d?: NamedNode
   ) => void
 ): void {
-  getACL(doc, function (ok, status, aclDoc, message) {
+  getACL(doc, function (ok, status, aclDoc, message): string | void {
     const ACL = ns.acl
     if (!ok) return callbackFunction(false, false, status as number, message as string)
 
@@ -485,14 +495,14 @@ export function getACLorDefault (
       }
       uri = uri.slice(0, right + 1)
       const doc2 = sym(uri)
-      getACL(doc2, function (ok, status, defaultACLDoc) {
+      getACL(doc2, function (ok, status, defaultACLDoc: any): NamedNode | void {
         if (!ok) {
           return callbackFunction(
             false,
             true,
             status as number,
             `( No ACL pointer ${uri} ${status})${defaultACLDoc}`
-          )
+          ) as void
         } else if (status === 403) {
           return callbackFunction(
             false,
@@ -579,26 +589,32 @@ export function getACL (
     message?: string
   ) => void
 ): void {
+  if (!kb.fetcher) {
+    throw new Error('kb has no fetcher')
+  }
   kb.fetcher.nowOrWhenFetched(doc, undefined, function (ok, body) {
     if (!ok) {
       return callbackFunction(ok, `Can't get headers to find ACL for ${doc}: ${body}`)
     }
     const aclDoc = kb.any(
       doc,
-      kb.sym(ACL_LINK)
+      ACL_LINK
     ) // @@ check that this get set by web.js
     if (!aclDoc) {
       callbackFunction(false, 900, `No Link rel=ACL header for ${doc}`)
     } else {
-      if (kb.fetcher.nonexistent[aclDoc.uri]) {
+      if (!kb.fetcher) {
+        throw new Error('kb has no fetcher')
+      }
+      if (kb.fetcher.nonexistent[aclDoc.value]) {
         return callbackFunction(
           true,
           404,
-          aclDoc,
+          aclDoc as NamedNode,
           `ACL file ${aclDoc} does not exist.`
         )
       }
-      kb.fetcher.nowOrWhenFetched(aclDoc, undefined, function (
+      kb.fetcher.nowOrWhenFetched(aclDoc as NamedNode, undefined, function (
         ok,
         message,
         response
@@ -607,11 +623,11 @@ export function getACL (
           callbackFunction(
             true,
             response.status,
-            aclDoc,
+            aclDoc as NamedNode,
             `Can't read Access Control File ${aclDoc}: ${message}`
           )
         } else {
-          callbackFunction(true, 200, aclDoc)
+          callbackFunction(true, 200, aclDoc as NamedNode)
         }
       })
     }
