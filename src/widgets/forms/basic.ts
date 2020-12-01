@@ -83,6 +83,7 @@ export function basicField (
   callbackFunction: (ok: boolean, errorMessage: string) => void
 ): HTMLElement {
   const kb = store
+  const formDoc = form.doc ? form.doc() : null // @@ if blank no way to know
 
   const box = dom.createElement('tr')
   if (container) container.appendChild(box)
@@ -102,7 +103,7 @@ export function basicField (
     return box
   }
   // It can be cleaner to just remove empty feilds if you can't edit them anyway
-  const suppressEmptyUneditable = kb.anyJS(form, ns.ui('suppressEmptyUneditable'), null, form.doc())
+  const suppressEmptyUneditable = kb.anyJS(form, ns.ui('suppressEmptyUneditable'), null, formDoc)
 
   lhs.appendChild(fieldLabel(dom, property, form))
   const uri = mostSpecificClassURI(form)
