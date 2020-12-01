@@ -571,7 +571,7 @@ forms.field[ns.ui('MultiLineTextField').uri] = function (
   const suppressEmptyUneditable = form && kb.anyJS(form, ns.ui('suppressEmptyUneditable'), null, formDoc)
 
   if (!editable && suppressEmptyUneditable && text === '') {
-    box.style.visibility = 'collapse'
+    box.style.display = 'none'
   }
   const field = forms.makeDescription(
     dom,
@@ -858,7 +858,7 @@ forms.field[ns.ui('Comment').uri] = forms.field[
   const suppressIfUneditable = kb.anyJS(form, ns.ui('suppressIfUneditable'), null, formDoc)
   const editable = UI.store.updater.editable(store.uri)
   if (suppressIfUneditable && !editable) {
-    box.style.visibility = 'collapse'
+    box.style.display = 'none'
   }
   return box
 }
@@ -1197,7 +1197,7 @@ forms.makeDescription = function (
   }
   function saveChange (_e) {
     submit.disabled = true
-    submit.setAttribute('style', 'visibility: hidden; float: right;') // Keep UI clean
+    submit.setAttribute('style', ' : hidden; float: right;') // Keep UI clean
     field.disabled = true
     field.setAttribute('style', style + 'color: gray;') // pending
     const ds = kb.statementsMatching(subject, predicate, null, store)

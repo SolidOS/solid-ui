@@ -149,7 +149,7 @@ export function basicField (
     field.readOnly = true // was: disabled. readOnly is better
     field.style.backgroundColor = textInputBackgroundColorUneditable
     if (suppressEmptyUneditable && field.value === '') {
-      box.style.visibility = 'collapse' // clutter
+      box.style.display = 'none' // clutter
     }
     return box
   }
