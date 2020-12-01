@@ -19,7 +19,7 @@
  * * `statusArea`      A DOM element (opt) progress stuff can be displayed, or error messages
  * @packageDocumentation
  */
-import { graph, namedNode, NamedNode, Namespace, serialize, st, Statement, sym, bnode } from 'rdflib'
+import { graph, namedNode, NamedNode, Namespace, serialize, st, Statement, sym, BlankNode } from 'rdflib'
 import solidAuthClient from 'solid-auth-client'
 import { PaneDefinition } from 'pane-registry'
 import Signup from './signup'
@@ -200,7 +200,7 @@ export async function logInLoadPreferences (context: AuthenticationContext): Pro
     context = await logInLoadProfile(context)
 
     // console.log('back in Solid UI after logInLoadProfile', context)
-    const preferencesFile = await solidLogicSingleton.loadPreferences(context.me)
+    const preferencesFile = await solidLogicSingleton.loadPreferences(context.me as NamedNode)
     if (progressDisplay) {
       progressDisplay.parentNode.removeChild(progressDisplay)
     }
@@ -252,9 +252,9 @@ async function loadIndex (
   isPublic: boolean
 ): Promise<AuthenticationContext> {
   const indexes = await solidLogicSingleton.loadIndexes(
-    context.me,
-    (isPublic ? context.publicProfile : null),
-    (isPublic ? null : context.preferencesFile),
+    context.me as NamedNode,
+    (isPublic ? context.publicProfile || null : null),
+    (isPublic ? null : context.preferencesFile || null),
     async (err: Error) => widgets.complain(context, err.message)
   )
   context.index = context.index || {}
@@ -265,9 +265,9 @@ async function loadIndex (
 
 export async function loadTypeIndexes (context: AuthenticationContext) {
   const indexes = await solidLogicSingleton.loadIndexes(
-    context.me,
-    context.publicProfile,
-    context.preferencesFile,
+    context.me as NamedNode,
+    context.publicProfile || null,
+    context.preferencesFile || null,
     async (err: Error) => widgets.complain(context, err.message)
   )
   context.index = context.index || {}
@@ -409,26 +409,26 @@ export async function findAppInstances (
     .map(ix => solidLogicSingleton.store.each(undefined, ns.solid('forClass'), theClass, ix))
     .flat()
   const instances = registrations
-    .map(reg => solidLogicSingleton.store.each(reg, ns.solid('instance')))
+    .map(reg => solidLogicSingleton.store.each(reg as NamedNode, ns.solid('instance')))
     .flat()
   const containers = registrations
-    .map(reg => solidLogicSingleton.store.each(reg, ns.solid('instanceContainer')))
+    .map(reg => solidLogicSingleton.store.each(reg as NamedNode, ns.solid('instanceContainer')))
     .flat()
 
   function unique (arr: NamedNode[]): NamedNode[] {
     return Array.from(new Set(arr))
   }
   context.instances = context.instances || []
-  context.instances = unique(context.instances.concat(instances))
+  context.instances = unique(context.instances.concat(instances as NamedNode[]))
 
   context.containers = context.containers || []
-  context.containers = unique(context.containers.concat(containers))
+  context.containers = unique(context.containers.concat(containers as NamedNode[]))
   if (!containers.length) {
     return context
   }
   // If the index gives containers, then look up all things within them
   try {
-    await solidLogicSingleton.load(containers)
+    await solidLogicSingleton.load(containers as NamedNode[])
   } catch (err) {
     const e = new Error(`[FAI] Unable to load containers${err}`)
     debug.log(e) // complain
@@ -439,7 +439,7 @@ export async function findAppInstances (
   for (let i = 0; i < containers.length; i++) {
     const cont = containers[i]
     context.instances = context.instances.concat(
-      solidLogicSingleton.getContainerElements(cont)
+      solidLogicSingleton.getContainerElements(cont as NamedNode) as NamedNode[]
     )
   }
   return context
@@ -499,7 +499,7 @@ export function registrationControl (
       box.innerHTML = '<table><tbody><tr></tr><tr></tr></tbody></table>' // tbody will be inserted anyway
       box.setAttribute('style', 'font-size: 120%; text-align: right; padding: 1em; border: solid gray 0.05em;')
       const tbody = box.children[0].children[0]
-      const form = bnode() // @@ say for now
+      const form = new BlankNode() // @@ say for now
 
       const registrationStatements = function (index) {
         const registrations = solidLogicSingleton.getRegistrations(instance, theClass)
@@ -588,7 +588,7 @@ export function registrationList (context: AuthenticationContext, options: {
     const table = box.firstChild as HTMLElement
 
     let ix: Array<NamedNode> = []
-    let sts = []
+    let sts: Statement[] = []
     const vs = ['private', 'public']
     vs.forEach(function (visibility) {
       if (context.index && options[visibility]) {
@@ -615,6 +615,9 @@ export function registrationList (context: AuthenticationContext, options: {
       const inst = statement.object
       table.appendChild(widgets.personTR(dom, ns.solid('instance'), inst, {
         deleteFunction: function (_x) {
+          if (!solidLogicSingleton.store.updater) {
+            throw new Error('Cannot delete this, store has no updater')
+          }
           solidLogicSingleton.store.updater.update([statement], [], function (uri, ok, errorBody) {
             if (ok) {
               debug.log(`Removed from index: ${statement.subject}`)
@@ -665,13 +668,13 @@ export function setACLUserPublic (
 ): Promise<NamedNode> {
   const aclDoc = solidLogicSingleton.store.any(
     solidLogicSingleton.store.sym(docURI),
-    solidLogicSingleton.store.sym(ACL_LINK)
+    ACL_LINK
   )
 
   return Promise.resolve()
     .then(() => {
       if (aclDoc) {
-        return aclDoc
+        return aclDoc as NamedNode
       }
 
       return fetchACLRel(docURI).catch(err => {
@@ -680,7 +683,9 @@ export function setACLUserPublic (
     })
     .then(aclDoc => {
       const aclText = genACLText(docURI, me, aclDoc.uri, options)
-
+      if (!solidLogicSingleton.store.fetcher) {
+        throw new Error('Cannot PUT this, store has no fetcher')
+      }
       return solidLogicSingleton.store.fetcher
         .webOperation('PUT', aclDoc.uri, {
           data: aclText,
@@ -702,22 +707,25 @@ export function setACLUserPublic (
  */
 function fetchACLRel (docURI: string): Promise<NamedNode> {
   const fetcher = solidLogicSingleton.store.fetcher
+  if (!fetcher) {
+    throw new Error('Cannot fetch ACL rel, store has no fetcher')
+  }
 
   return fetcher.load(docURI).then(result => {
     if (!result.ok) {
-      throw new Error('fetchACLRel: While loading:' + result.error)
+      throw new Error('fetchACLRel: While loading:' + (result as any).error)
     }
 
     const aclDoc = solidLogicSingleton.store.any(
       solidLogicSingleton.store.sym(docURI),
-      solidLogicSingleton.store.sym(ACL_LINK)
+      ACL_LINK
     )
 
     if (!aclDoc) {
       throw new Error('fetchACLRel: No Link rel=ACL header for ' + docURI)
     }
 
-    return aclDoc
+    return aclDoc as NamedNode
   })
 }
 
@@ -1096,19 +1104,20 @@ export function selectWorkspace (
   }
 
   function figureOutBase (ws) {
-    let newBase = solidLogicSingleton.store.any(ws, ns.space('uriPrefix'))
-    if (!newBase) {
-      newBase = ws.uri.split('#')[0]
+    const newBaseNode: NamedNode = solidLogicSingleton.store.any(ws, ns.space('uriPrefix')) as NamedNode
+    let newBaseString: string
+    if (!newBaseNode) {
+      newBaseString = ws.uri.split('#')[0]
     } else {
-      newBase = newBase.value
+      newBaseString = newBaseNode.value
     }
-    if (newBase.slice(-1) !== '/') {
-      debug.log(`${appPathSegment}: No / at end of uriPrefix ${newBase}`) // @@ paramater?
-      newBase = `${newBase}/`
+    if (newBaseString.slice(-1) !== '/') {
+      debug.log(`${appPathSegment}: No / at end of uriPrefix ${newBaseString}`) // @@ paramater?
+      newBaseString = `${newBaseString}/`
     }
     const now = new Date()
-    newBase += `${appPathSegment}/id${now.getTime()}/` // unique id
-    return newBase
+    newBaseString += `${appPathSegment}/id${now.getTime()}/` // unique id
+    return newBaseString
   }
 
   function displayOptions (context) {
@@ -1123,6 +1132,9 @@ export function selectWorkspace (
       const newData = [st(context.me, ns.space('workspace'), newWs, context.preferencesFile),
         // eslint-disable-next-line camelcase
         st(newWs, ns.space('uriPrefix'), newBase as unknown as Quad_Object, context.preferencesFile)]
+      if (!solidLogicSingleton.store.updater) {
+        throw new Error('store has no updater')
+      }
       await solidLogicSingleton.store.updater.update([], newData)
       // @@ now refresh list of workspaces
     }
@@ -1130,17 +1142,18 @@ export function selectWorkspace (
     // const status = ''
     const id = context.me
     const preferencesFile = context.preferencesFile
-    let newBase = null
+    let newBase: any = null
 
     // A workspace specifically defined in the private preference file:
-    let w = solidLogicSingleton.store.each(id, ns.space('workspace'), undefined, preferencesFile) // Only trust preference file here
+    let w: any = solidLogicSingleton.store.each(id, ns.space('workspace'), undefined, preferencesFile) // Only trust preference file here
 
     // A workspace in a storage in the public profile:
     const storages = solidLogicSingleton.store.each(id, ns.space('storage')) // @@ No provenance requirement at the moment
     if (w.length === 0 && storages) {
       say(`You don't seem to have any workspaces. You have ${storages.length} storage spaces.`)
-      storages.forEach(function (s) {
+      storages.map(function (s: any) {
         w = w.concat(solidLogicSingleton.store.each(s, ns.ldp('contains')))
+        return w
       }).filter(file => ['public', 'private'].includes(file.id().toLowerCase()))
     }
 
@@ -1342,7 +1355,7 @@ export async function getUserRoles (): Promise<Array<NamedNode>> {
     if (!preferencesFile || preferencesFileError) {
       throw new Error(preferencesFileError)
     }
-    return solidLogicSingleton.store.each(me, ns.rdf('type'), null, preferencesFile.doc())
+    return solidLogicSingleton.store.each(me, ns.rdf('type'), null, preferencesFile.doc()) as NamedNode[]
   } catch (error) {
     debug.warn('Unable to fetch your preferences - this was the error: ', error)
   }

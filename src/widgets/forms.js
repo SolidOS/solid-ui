@@ -99,7 +99,7 @@ forms.field[ns.ui('Form').uri] = forms.field[
       if (dep && kb.any(subject, dep)) original[i] = kb.any(subject, dep).toNT()
     }
 
-    var fn = fieldFunction(dom, field)
+    const fn = fieldFunction(dom, field)
 
     const itemChanged = function (ok, body) {
       if (ok) {
@@ -313,7 +313,8 @@ forms.field[ns.ui('Multiple').uri] = function (
     async function moveThisItem (event, upwards) {
       // @@ possibly, allow shift+click to do move to top or bottom?
       debug.log('pre move: ' + debugString(list.elements))
-      for (var i = 0; i < list.elements.length; i++) {
+      let i
+      for (i = 0; i < list.elements.length; i++) {
         // Find object in array
         if (list.elements[i].sameTerm(object)) {
           break
@@ -351,7 +352,7 @@ forms.field[ns.ui('Multiple').uri] = function (
         linkDone(uri, ok, message)
       }
     }
-    var linkDone = function (uri, ok, message) {
+    const linkDone = function (uri, ok, message) {
       return callbackFunction(ok, message)
     }
 
@@ -363,7 +364,7 @@ forms.field[ns.ui('Multiple').uri] = function (
 
     const formDoc = form.doc ? form.doc() : null // @@ if blank no way to know
     const fn = fieldFunction(dom, element)
-    var subField = fn(dom, null, already, object, element, store, itemDone) // p2 was: body.  moving to not passing that
+    const subField = fn(dom, null, already, object, element, store, itemDone) // p2 was: body.  moving to not passing that
     subField.subject = object // Keep a back pointer between the DOM array and the RDF objects
 
     // delete button and move buttons
@@ -394,7 +395,7 @@ forms.field[ns.ui('Multiple').uri] = function (
   kb.updater = kb.updater || new $rdf.UpdateManager(kb)
   const formDoc = form.doc ? form.doc() : null // @@ if blank no way to know
 
-  var box = dom.createElement('table')
+  const box = dom.createElement('table')
   // We don't indent multiple as it is a sort of a prefix of the next field and has contents of one.
   // box.setAttribute('style', 'padding-left: 2em; border: 0.05em solid green;')  // Indent a multiple
   const ui = UI.ns.ui
@@ -403,7 +404,7 @@ forms.field[ns.ui('Multiple').uri] = function (
   const orderedNode = kb.any(form, ui('ordered'))
   const ordered = orderedNode ? $rdf.Node.toJS(orderedNode) : false
 
-  var property = kb.any(form, ui('property'))
+  const property = kb.any(form, ui('property'))
   const reverse = kb.anyJS(form, ui('reverse'), null, formDoc)
   if (!property) {
     box.appendChild(
@@ -1403,7 +1404,7 @@ forms.makeSelectForOptions = function (
     })
   }
 
-  var select = dom.createElement('select')
+  const select = dom.createElement('select')
   select.setAttribute('style', 'margin: 0.6em 1.5em;')
   if (options.multiple) select.setAttribute('multiple', 'true')
   select.currentURI = null
