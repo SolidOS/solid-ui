@@ -409,8 +409,8 @@ export function setImage (element: HTMLElement, thing: NamedNode) { // 20191230a
   }
 }
 
-// If a web page then a favicon with a fallback to
-// See eg http://stackoverflow.com/questions/980855/inputting-a-default-image
+// If a web page, then a favicon, with a fallback to ???
+// See, e.g., http://stackoverflow.com/questions/980855/inputting-a-default-image
 export function faviconOrDefault (dom: HTMLDocument, x: NamedNode) {
   const image = dom.createElement('img')
   ;(image as any).style = style.iconStyle

@@ -105,7 +105,7 @@ export function basicField (
     )
     return box
   }
-  // It can be cleaner to just remove empty feilds if you can't edit them anyway
+  // It can be cleaner to just remove empty fields if you can't edit them anyway
   const suppressEmptyUneditable = kb.anyJS(form, ns.ui('suppressEmptyUneditable'), null, formDoc)
 
   lhs.appendChild(fieldLabel(dom, property as any, form))
