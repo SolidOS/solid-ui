@@ -12,7 +12,7 @@ const UI = {
   authn: require('../authn/authn'),
   icons: require('../iconBase'),
   ns: require('../ns'),
-  media: require('../media-capture'),
+  media: require('../media/media-capture'),
   pad: require('../pad'),
   rdf: require('rdflib'),
   store: require('../logic').solidLogicSingleton.store,

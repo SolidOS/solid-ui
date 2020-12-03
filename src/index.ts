@@ -42,15 +42,12 @@ import * as rdf from 'rdflib' // pull in first avoid cross-refs
 import ns from './ns'
 import { acl, aclControl } from './acl/index'
 import { authn } from './authn/index'
-// @ts-ignore
-import create from './create'
+import { create } from './create/index'
 // @ts-ignore
 import icons from './iconBase'
 import * as log from './log'
-// @ts-ignore
-import matrix from './matrix'
-// @ts-ignore
-import media from './media-capture'
+import { matrix } from './matrix/index'
+import { media } from './media/index'
 // @ts-ignore
 import messageArea from './messageArea'
 // @ts-ignore

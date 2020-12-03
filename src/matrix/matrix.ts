@@ -9,8 +9,8 @@
 //
 // Options:
 //     cellFunction(td, x, y, value)  fill the TD element of a single cell
-//     xDecreasing  set true for x axis to be in decreasiong order.
-//     yDecreasing  set true for y axis to be in decreasiong order.
+//     xDecreasing  set true for x axis to be in decreasing order.
+//     yDecreasing  set true for y axis to be in decreasing order.
 //     set_x        array of X values to be define initial rows (order irrelevant)
 //     set_y        array of Y values to be define initial columns
 //
@@ -19,34 +19,31 @@
 //   Extra rows and columns are inserted as needed to hold new data points
 //   matrix.refresh() will re-run the query and adjust the display
 
-const UI = {
-  icons: require('./iconBase'),
-  ns: require('./ns'),
-  rdf: require('rdflib'),
-  store: require('./logic').solidLogicSingleton.store,
-  widgets: require('./widgets')
-}
+import utils from '../utils'
+import * as $rdf from 'rdflib'
+import { MatrixOptions } from './types'
+import { solidLogicSingleton } from '../logic'
 
-const utils = require('./utils')
-const kb = UI.store
+const kb = solidLogicSingleton.store
 
-module.exports.matrixForQuery = function (
-  dom,
-  query,
-  vx,
-  vy,
-  vvalue,
-  options,
-  whenDone
+export function matrixForQuery (
+  dom: HTMLDocument,
+  query: $rdf.Query,
+  vx: $rdf.Variable,
+  vy: $rdf.Variable,
+  vvalue: $rdf.Variable,
+  options: MatrixOptions,
+  whenDone: Function
 ) {
-  const matrix = dom.createElement('table')
+  // @@ TODO Remove need to cast to any
+  const matrix: any = dom.createElement('table')
   const header = dom.createElement('tr')
   const corner = header.appendChild(dom.createElement('td'))
   corner.setAttribute('class', 'MatrixCorner')
   matrix.appendChild(header) // just one for now
   matrix.lastHeader = header // Element before data
-  let columns = [] // Vector
-  const rows = [] // Associative array
+  let columns: any[] = [] // Vector
+  const rows: any[] = [] // Associative array
 
   const setCell = function (cell, x, y, value) {
     while (cell.firstChild) {
@@ -68,7 +65,8 @@ module.exports.matrixForQuery = function (
   const rowFor = function (y1) {
     const y = y1.toNT()
     if (rows[y]) return rows[y]
-    const tr = dom.createElement('tr')
+    // @@ TODO Remove need for casting to any
+    const tr: any = dom.createElement('tr')
     const header = tr.appendChild(dom.createElement('td'))
     header.setAttribute('style', 'padding: 0.3em;')
     header.textContent = utils.label(y1) // first approximation
@@ -84,7 +82,7 @@ module.exports.matrixForQuery = function (
     for (let i = 0; i < columns.length; i++) {
       setCell(
         tr.appendChild(dom.createElement('td')),
-        UI.rdf.fromNT(columns[i]),
+        $rdf.fromNT(columns[i]),
         y1,
         null
       )
@@ -103,9 +101,9 @@ module.exports.matrixForQuery = function (
     return matrix.appendChild(tr) // return the tr
   }
 
-  const columnNumberFor = function (x1) {
-    const xNT = x1.toNT() // xNT is a NT string
-    let col = null
+  const columnNumberFor = function (x1): number {
+    const xNT: any = x1.toNT() // xNT is a NT string
+    let col: any = null
     // These are data columns (not headings)
     for (let i = 0; i < columns.length; i++) {
       if (columns[i] === xNT) {
@@ -139,7 +137,7 @@ module.exports.matrixForQuery = function (
       if (row === matrix.firstChild) {
         td.textContent = utils.label(x1)
       } else {
-        setCell(td, x1, UI.rdf.fromNT(y), null)
+        setCell(td, x1, $rdf.fromNT(y), null)
       }
       if (col === columns.length - 1) {
         row.appendChild(td)
@@ -166,17 +164,17 @@ module.exports.matrixForQuery = function (
 
   const clearOldCells = function () {
     let row, cell
-    const colsUsed = []
-    const rowsUsed = []
+    const colsUsed: any[] = []
+    const rowsUsed: any[] = []
 
     if (options.set_y) {
       // Knows y values create rows
-      for (var k = 0; k < options.set_y.length; k++) {
+      for (let k = 0; k < options.set_y.length; k++) {
         rowsUsed[options.set_y[k]] = true
       }
     }
     if (options.set_x) {
-      for (k = 0; k < options.set_x.length; k++) {
+      for (let k = 0; k < options.set_x.length; k++) {
         colsUsed[columnNumberFor(options.set_x[k]) + 1] = true
       }
     }
@@ -186,8 +184,8 @@ module.exports.matrixForQuery = function (
       for (let j = 1; j < row.children.length; j++) {
         cell = row.children[j]
         if (cell.old) {
-          const y = UI.rdf.fromNT(row.dataValueNT)
-          const x = UI.rdf.fromNT(columns[j - 1])
+          const y = $rdf.fromNT(row.dataValueNT)
+          const x = $rdf.fromNT(columns[j - 1])
           setCell(cell, x, y, null)
         } else {
           rowsUsed[row.dataValueNT] = true
@@ -211,7 +209,7 @@ module.exports.matrixForQuery = function (
         }
       }
     }
-    const newcolumns = []
+    const newcolumns: any[] = []
     for (let j = 0; j < columns.length; j++) {
       if (colsUsed[j + 1]) {
         newcolumns.push(columns[j])
@@ -225,10 +223,10 @@ module.exports.matrixForQuery = function (
     kb.query(query, addCellFromBindings, undefined, clearOldCells)
   }
 
-  var addCellFromBindings = function (bindings) {
-    const x = bindings[vx]
-    const y = bindings[vy]
-    const value = bindings[vvalue]
+  const addCellFromBindings = function (bindings) {
+    const x = bindings[vx.toString()]
+    const y = bindings[vy.toString()]
+    const value = bindings[(vvalue.toString())]
     const row = rowFor(y)
     const colNo = columnNumberFor(x)
     const cell = row.children[colNo + 1] // number of Y axis headings
@@ -237,12 +235,12 @@ module.exports.matrixForQuery = function (
 
   if (options.set_y) {
     // Knows y values create rows
-    for (var k = 0; k < options.set_y.length; k++) {
+    for (let k = 0; k < options.set_y.length; k++) {
       rowFor(options.set_y[k])
     }
   }
   if (options.set_x) {
-    for (k = 0; k < options.set_x.length; k++) {
+    for (let k = 0; k < options.set_x.length; k++) {
       columnNumberFor(options.set_x[k])
     }
   }
