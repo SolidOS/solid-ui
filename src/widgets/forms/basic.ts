@@ -1,7 +1,7 @@
 import { st, BlankNode, Literal, Node, NamedNode, Variable } from 'rdflib'
 import { solidLogicSingleton } from '../../logic'
 import ns from '../../ns'
-import { textInputStyle, textInputBackgroundColorUneditable } from '../../style'
+import { textInputStyle, textInputBackgroundColorUneditable, textInputStyleUneditable } from '../../style'
 import { label } from '../../utils'
 
 import { errorMessageBlock } from '../error'
@@ -147,7 +147,8 @@ export function basicField (
   }
   if (!kb.updater.editable((doc as NamedNode).uri)) {
     field.readOnly = true // was: disabled. readOnly is better
-    field.style.backgroundColor = textInputBackgroundColorUneditable
+    ;(field as any).style = textInputStyleUneditable
+    // backgroundColor = textInputBackgroundColorUneditable
     if (suppressEmptyUneditable && field.value === '') {
       box.style.display = 'none' // clutter
     }

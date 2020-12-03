@@ -7,6 +7,8 @@
 module.exports = {
   textInputStyle:
     'background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; ',
+  textInputStyleUneditable: // Color difference only
+    'background-color: white; padding: 0.5em;  border: .05em solid white;  border-radius:0.2em; font-size: 100%; margin:0.2em; ',
   buttonStyle:
       'background-color: #fff; padding: 0.7em;  border: .01em solid white;  border-radius:0.2em; font-size: 100%; margin: 0.3em;', // 'background-color: #eef;
   commentStyle: 'padding: 0.7em;  border: none; font-size: 100%; white-space: pre-wrap;',
