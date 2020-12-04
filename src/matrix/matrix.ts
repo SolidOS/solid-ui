@@ -33,7 +33,7 @@ export function matrixForQuery (
   vy: $rdf.Variable,
   vvalue: $rdf.Variable,
   options: MatrixOptions,
-  whenDone: Function
+  whenDone: () => void
 ) {
   // @@ TODO Remove need to cast to any
   const matrix: any = dom.createElement('table')
@@ -71,7 +71,7 @@ export function matrixForQuery (
     header.setAttribute('style', 'padding: 0.3em;')
     header.textContent = utils.label(y1) // first approximation
     if (y1.termType === 'NamedNode') {
-      kb.fetcher.nowOrWhenFetched(y1.uri.split('#')[0], undefined, function (
+      kb.fetcher!.nowOrWhenFetched(y1.uri.split('#')[0], undefined, function (
         ok,
         _body,
         _response

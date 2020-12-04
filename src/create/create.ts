@@ -88,6 +88,7 @@ export function newThingUI (
           _context => {
             const newPaneOptions: NewPaneOptions = Object.assign({
               newBase: newBase,
+              folder: options.folder || undefined,
               workspace: ws
             }, options)
             for (const opt in options) {
@@ -209,7 +210,7 @@ export function newThingUI (
   const mintingPanes = Object.values(thePanes).filter(pane => pane.mintNew)
   const mintingClassMap = mintingPanes.reduce((classMap, pane) => {
     if (pane.mintClass) {
-      classMap[pane.mintClass] = (classMap[pane.mintClass] || 0) + 1
+      classMap[pane.mintClass.uri] = (classMap[pane.mintClass.uri] || 0) + 1
     }
     return classMap
   }, {})
@@ -218,7 +219,7 @@ export function newThingUI (
     const icon: any = createContext.div.appendChild(dom.createElement('img'))
     icon.setAttribute('src', pane.icon)
     const noun = pane.mintClass
-      ? mintingClassMap[pane.mintClass] > 1
+      ? mintingClassMap[pane.mintClass.uri] > 1
           ? `${utils.label(pane.mintClass)} (using ${pane.name} pane)`
           : utils.label(pane.mintClass)
       : pane.name + ' @@'
