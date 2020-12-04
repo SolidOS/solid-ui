@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/matrix/index.ts"],"names":["matrix","matrixForQuery"],"mappings":";;;;;;;AAAA;;AAIO,IAAMA,MAAM,GAAG;AACpBC,EAAAA,cAAc,EAAdA;AADoB,CAAf","sourcesContent":["import {\n  matrixForQuery\n} from './matrix'\n\nexport const matrix = {\n  matrixForQuery\n}\n"],"file":"index.js"}
