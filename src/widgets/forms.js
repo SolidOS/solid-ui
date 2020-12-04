@@ -1197,7 +1197,7 @@ forms.makeDescription = function (
   }
   function saveChange (_e) {
     submit.disabled = true
-    submit.setAttribute('style', ' : hidden; float: right;') // Keep UI clean
+    submit.setAttribute('style', 'visibility: hidden; float: right;') // Keep UI clean
     field.disabled = true
     field.setAttribute('style', style + 'color: gray;') // pending
     const ds = kb.statementsMatching(subject, predicate, null, store)
