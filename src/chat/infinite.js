@@ -787,6 +787,16 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
       !earliest.messageTable.initial &&
       earliest.messageTable.extendBackwards
     ) {
+      // If this has been called before the element is actually in the
+      // user's DOM tree, then this scrollTop check won't work -> loop forever
+      // https://github.com/solid/solid-ui/issues/366
+      if (div.scrollHeight === 0) {
+        // console.log('    chat/loadMoreWhereNeeded: trying later...')
+        setTimeout(loadMoreWhereNeeded, 2000) // couple be less
+        lock = false
+        return // abandon now, do later
+      }
+      // console.log('    chat/loadMoreWhereNeeded: Going now')
       const scrollBottom = div.scrollHeight - div.scrollTop
       debug.log('infinite scroll: adding above: top ' + div.scrollTop)
       done = await earliest.messageTable.extendBackwards()
@@ -818,7 +828,7 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
     lock = false
   }
 
-  async function go () {
+  async function loadInitialContent () {
     function yank () {
       selectedMessageTable.selectedElement.scrollIntoView({ block: 'center' })
     }
@@ -863,6 +873,6 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
     }
   }
 
-  await go()
+  await loadInitialContent()
   return div
 }

@@ -9,7 +9,7 @@ import { fieldParams } from './forms/fieldParams'
 import { field, mostSpecificClassURI, fieldFunction } from './forms/fieldFunction'
 import * as debug from '../debug'
 import { basicField } from './forms/basic'
-
+import * as style from '../style'
 module.exports = {}
 
 const forms = {}
@@ -76,13 +76,13 @@ forms.field[ns.ui('Form').uri] = forms.field[
   const already2 = {}
   for (const x in already) already2[x] = 1
   already2[key] = 1
-
-  let parts = kb.any(form, ui('parts'))
+  const formDoc = form.doc ? form.doc() : null // @@ if blank no way to know
+  let parts = kb.any(form, ui('parts'), null, formDoc)
   let p2
   if (parts) {
     p2 = parts.elements
   } else {
-    parts = kb.each(form, ui('part')) //  Warning: unordered
+    parts = kb.each(form, ui('part'), null, formDoc) //  Warning: unordered
     p2 = forms.sortBySequence(parts)
   }
   if (!parts) {
@@ -95,7 +95,7 @@ forms.field[ns.ui('Form').uri] = forms.field[
     const field = p2[i]
     const t = mostSpecificClassURI(field) // Field type
     if (t === ui('Options').uri) {
-      const dep = kb.any(field, ui('dependingOn'))
+      const dep = kb.any(field, ui('dependingOn'), null, formDoc)
       if (dep && kb.any(subject, dep)) original[i] = kb.any(subject, dep).toNT()
     }
 
@@ -157,6 +157,8 @@ forms.field[ns.ui('Options').uri] = function (
 ) {
   const kb = UI.store
   const box = dom.createElement('div')
+  const formDoc = form.doc ? form.doc() : null // @@ if blank no way to know
+
   // box.setAttribute('style', 'padding-left: 2em; border: 0.05em dotted purple;')  // Indent Options
   const ui = UI.ns.ui
   if (container) container.appendChild(box)
@@ -165,7 +167,7 @@ forms.field[ns.ui('Options').uri] = function (
   if (!dependingOn) {
     dependingOn = ns.rdf('type')
   } // @@ default to type (do we want defaults?)
-  const cases = kb.each(form, ui('case'))
+  const cases = kb.each(form, ui('case'), null, formDoc)
   if (!cases) {
     box.appendChild(error.errorMessageBlock(dom, 'No cases to Options form. '))
   }
@@ -189,7 +191,7 @@ forms.field[ns.ui('Options').uri] = function (
   // @@ Add box.refresh() to sync fields with values
   for (let i = 0; i < cases.length; i++) {
     const c = cases[i]
-    const tests = kb.each(c, ui('for')) // There can be multiple 'for'
+    const tests = kb.each(c, ui('for'), null, formDoc) // There can be multiple 'for'
     for (let j = 0; j < tests.length; j++) {
       if (values[tests[j].uri]) {
         const field = kb.the(c, ui('use'))
@@ -286,7 +288,7 @@ forms.field[ns.ui('Multiple').uri] = function (
         }
       } else {
         // unordered
-        if (kb.holds(subject, property, object)) {
+        if (kb.holds(subject, property, object, store)) {
           const del = [$rdf.st(subject, property, object, store)]
           kb.updater.update(del, [], function (uri, ok, message) {
             if (ok) {
@@ -360,6 +362,7 @@ forms.field[ns.ui('Multiple').uri] = function (
     // var ins = []
     // var del = []
 
+    const formDoc = form.doc ? form.doc() : null // @@ if blank no way to know
     const fn = fieldFunction(dom, element)
     const subField = fn(dom, null, already, object, element, store, itemDone) // p2 was: body.  moving to not passing that
     subField.subject = object // Keep a back pointer between the DOM array and the RDF objects
@@ -390,6 +393,8 @@ forms.field[ns.ui('Multiple').uri] = function (
 
   const kb = UI.store
   kb.updater = kb.updater || new $rdf.UpdateManager(kb)
+  const formDoc = form.doc ? form.doc() : null // @@ if blank no way to know
+
   const box = dom.createElement('table')
   // We don't indent multiple as it is a sort of a prefix of the next field and has contents of one.
   // box.setAttribute('style', 'padding-left: 2em; border: 0.05em solid green;')  // Indent a multiple
@@ -400,7 +405,7 @@ forms.field[ns.ui('Multiple').uri] = function (
   const ordered = orderedNode ? $rdf.Node.toJS(orderedNode) : false
 
   const property = kb.any(form, ui('property'))
-  const reverse = kb.anyJS(form, ui('reverse'))
+  const reverse = kb.anyJS(form, ui('reverse'), null, formDoc)
   if (!property) {
     box.appendChild(
       error.errorMessageBlock(dom, 'No property to multiple: ' + form)
@@ -423,16 +428,16 @@ forms.field[ns.ui('Multiple').uri] = function (
   var body = box.appendChild(dom.createElement('tr')) // 20191207
   let list // The RDF collection which keeps the ordered version or null
   let values // Initial values - always an array.  Even when no list yet.
-  values = reverse ? kb.any(null, property, subject) : kb.any(subject, property)
+  values = reverse ? kb.any(null, property, subject, store) : kb.any(subject, property, null, store)
   if (ordered) {
-    list = reverse ? kb.any(null, property, subject) : kb.any(subject, property)
+    list = reverse ? kb.any(null, property, subject, store) : kb.any(subject, property, null, store)
     if (list) {
       values = list.elements
     } else {
       values = []
     }
   } else {
-    values = reverse ? kb.each(null, property, subject) : kb.each(subject, property)
+    values = reverse ? kb.each(null, property, subject, store) : kb.each(subject, property, null, store)
     list = null
   }
   // Add control on the bottom for adding more items
@@ -481,10 +486,10 @@ forms.field[ns.ui('Multiple').uri] = function (
   function refresh () {
     let vals
     if (ordered) {
-      const li = reverse ? kb.the(null, property, subject) : kb.the(subject, property)
+      const li = reverse ? kb.the(null, property, subject, store) : kb.the(subject, property, null, store)
       vals = li ? li.elements : []
     } else {
-      vals = reverse ? kb.each(null, property, subject) : kb.each(subject, property)
+      vals = reverse ? kb.each(null, property, subject, store) : kb.each(subject, property, null, store)
       vals.sort() // achieve consistency on each refresh
     }
     utils.syncTableToArrayReOrdered(body, vals, renderItem)
@@ -551,6 +556,8 @@ forms.field[ns.ui('MultiLineTextField').uri] = function (
 ) {
   const ui = UI.ns.ui
   const kb = UI.store
+  const formDoc = form.doc ? form.doc() : null // @@ if blank no way to know
+
   const property = kb.any(form, ui('property'))
   if (!property) {
     return error.errorMessageBlock(dom, 'No property to text field: ' + form)
@@ -558,6 +565,14 @@ forms.field[ns.ui('MultiLineTextField').uri] = function (
   const box = dom.createElement('div')
   box.appendChild(forms.fieldLabel(dom, property, form))
   store = forms.fieldStore(subject, property, store)
+
+  const text = kb.anyJS(subject, property, null, store) || ''
+  const editable = UI.store.updater.editable(store.uri)
+  const suppressEmptyUneditable = form && kb.anyJS(form, ns.ui('suppressEmptyUneditable'), null, formDoc)
+
+  if (!editable && suppressEmptyUneditable && text === '') {
+    box.style.display = 'none'
+  }
   const field = forms.makeDescription(
     dom,
     kb,
@@ -725,6 +740,8 @@ forms.field[ns.ui('Choice').uri] = function (
   const ui = UI.ns.ui
   const kb = UI.store
   const multiple = false
+  const formDoc = form.doc ? form.doc() : null // @@ if blank no way to know
+
   let p
   const box = dom.createElement('tr')
   if (container) container.appendChild(box)
@@ -742,12 +759,12 @@ forms.field[ns.ui('Choice').uri] = function (
     return error.errorMessageBlock(dom, "No 'from' for Choice: " + form)
   }
   const subForm = kb.any(form, ui('use')) // Optional
-  const follow = kb.anyJS(form, ui('follow')) // data doc moves to new subject?
+  const follow = kb.anyJS(form, ui('follow'), null, formDoc) // data doc moves to new subject?
   let possible = []
   let possibleProperties
   const np = '--' + utils.label(property) + '-?'
   const opts = { multiple: multiple, nullLabel: np, disambiguate: false }
-  possible = kb.each(undefined, ns.rdf('type'), from)
+  possible = kb.each(undefined, ns.rdf('type'), from, formDoc)
   for (const x in kb.findMembersNT(from)) {
     possible.push(kb.fromNT(x))
     // box.appendChild(dom.createTextNode("RDFS: adding "+x))
@@ -814,13 +831,14 @@ forms.field[ns.ui('Comment').uri] = forms.field[
   already,
   subject,
   form,
-  _store,
+  store,
   _callbackFunction
 ) {
   const ui = UI.ns.ui
   const kb = UI.store
   let contents = kb.any(form, ui('contents'))
   if (!contents) contents = 'Error: No contents in comment field.'
+  const formDoc = form.doc ? form.doc() : null // @@ if blank no way to know
 
   const uri = mostSpecificClassURI(form)
   let params = forms.fieldParams[uri]
@@ -836,6 +854,12 @@ forms.field[ns.ui('Comment').uri] = forms.field[
   const style = kb.anyValue(form, ui('style')) || params.style || ''
   if (style) p.setAttribute('style', style)
 
+  // Some headings and prompts are only useful to guide user input
+  const suppressIfUneditable = kb.anyJS(form, ns.ui('suppressIfUneditable'), null, formDoc)
+  const editable = UI.store.updater.editable(store.uri)
+  if (suppressIfUneditable && !editable) {
+    box.style.display = 'none'
+  }
   return box
 }
 
@@ -1148,25 +1172,15 @@ forms.makeDescription = function (
   callbackFunction
 ) {
   const group = dom.createElement('div')
-
-  const sts = kb.statementsMatching(subject, predicate, null, store) // Only one please
-  if (sts.length > 1) {
-    return error.errorMessageBlock(
-      dom,
-      'Should not be ' + sts.length + ' i.e. >1 ' + predicate + ' of ' + subject
-    )
-  }
-  const desc = sts.length ? sts[0].object.value : undefined
+  const desc = kb.anyJS(subject, predicate, null, store)
 
   const field = dom.createElement('textarea')
   group.appendChild(field)
   field.rows = desc ? desc.split('\n').length + 2 : 2
   field.cols = 80
-  const style = UI.style.multilineTextInputStyle ||
-    'font-size:100%; white-space: pre-wrap; background-color: white;' +
-    ' border: 0.07em solid gray; padding: 1em 0.5em; margin: 1em 1em;'
-  field.setAttribute('style', style)
-  if (sts.length) {
+
+  field.setAttribute('style', UI.style.multilineTextInputStyle)
+  if (desc !== null) {
     field.value = desc
   } else {
     // Unless you can make the predicate label disappear with the first click then this is over-cute
@@ -1233,7 +1247,8 @@ forms.makeDescription = function (
     field.addEventListener('change', saveChange, true)
     submit.addEventListener('click', saveChange, false)
   } else {
-    field.disabled = true
+    field.disabled = true // @@ change color too
+    field.style.backgroundColor = style.textInputBackgroundColorUneditable
   }
   return group
 }
@@ -1578,8 +1593,8 @@ function buildCheckboxForm (dom, kb, lab, del, ins, form, store, tristate) {
   const box = dom.createElement('div')
   const tx = dom.createTextNode(lab)
   const editable = UI.store.updater.editable(store.uri)
-  tx.style =
-    'colour: black; font-size: 100%; padding-left: 0.5 em; padding-right: 0.5 em;'
+  tx.style = style.checkboxStyle
+
   box.appendChild(tx)
   let input
   // eslint-disable-next-line prefer-const
