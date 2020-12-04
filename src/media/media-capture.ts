@@ -12,28 +12,17 @@
 // or access cemra roll (etc) OR to access solid cloud storage of favorite photo almbums.
 // (Especially latest taken ones)
 //
-/* global alert */
-import * as debug from './debug'
+import * as debug from '../debug'
 
 /** @module mediaCapture */
 
-const $rdf = require('rdflib')
-const media = (module.exports = {})
-
-const UI = {
-  icons: require('./iconBase'),
-  ns: require('./ns'),
-  pad: require('./pad'),
-  media: media,
-  rdf: $rdf,
-  store: require('./logic').solidLogicSingleton.store,
-  utils: require('./utils'),
-  widgets: require('./widgets')
-}
+import icons from '../iconBase'
+import widgets from '../widgets'
+import { IndexedFormula, NamedNode } from 'rdflib'
 
 // const cameraIcon = require('./noun_Camera_1618446_000000') // load it in JS
-const cameraIcon = UI.icons.iconBase + 'noun_Camera_1618446_000000.svg' // Get it from github
-const retakeIcon = UI.icons.iconBase + 'noun_479395.svg' // Get it from github
+const cameraIcon = icons.iconBase + 'noun_Camera_1618446_000000.svg' // Get it from github
+const retakeIcon = icons.iconBase + 'noun_479395.svg' // Get it from github
 
 const canvasWidth = '640'
 const canvasHeight = '480'
@@ -48,11 +37,11 @@ const contentType = 'image/png'
  * @param {NamedNode} getImageDoc() - NN of the image file to be created
  * @param {function} doneCallback - Called when a picture has been taken
  */
-module.exports.cameraCaptureControl = function cameraCaptureControl (
-  dom,
-  store,
-  getImageDoc,
-  doneCallback
+export function cameraCaptureControl (
+  dom: HTMLDocument,
+  store: IndexedFormula,
+  getImageDoc: () => NamedNode,
+  doneCallback: (imageDoc) => Promise<void>
 ) {
   const div = dom.createElement('div')
   let destination, imageBlob, player, canvas
@@ -66,7 +55,7 @@ module.exports.cameraCaptureControl = function cameraCaptureControl (
 
   buttons
     .appendChild(dom.createElement('td')) // Cancel button
-    .appendChild(UI.widgets.cancelButton(dom))
+    .appendChild(widgets.cancelButton(dom))
     .addEventListener('click', _event => {
       stopVideo()
       doneCallback(null)
@@ -74,7 +63,7 @@ module.exports.cameraCaptureControl = function cameraCaptureControl (
 
   const retakeButton = buttons
     .appendChild(dom.createElement('td')) // Retake button
-    .appendChild(UI.widgets.button(dom, retakeIcon, 'Retake'))
+    .appendChild(widgets.button(dom, retakeIcon, 'Retake'))
   retakeButton.addEventListener('click', _event => {
     retake()
   })
@@ -83,14 +72,14 @@ module.exports.cameraCaptureControl = function cameraCaptureControl (
   const shutterButton = buttons
     .appendChild(dom.createElement('td')) // Trigger capture button
     .appendChild(
-      UI.widgets.button(dom, UI.icons.iconBase + 'noun_10636.svg', 'Snap')
+      widgets.button(dom, icons.iconBase + 'noun_10636.svg', 'Snap')
     )
   shutterButton.addEventListener('click', grabCanvas)
   shutterButton.style.visibility = 'collapse' // Hide for now
 
   const sendButton = buttons
     .appendChild(dom.createElement('td')) // Confirm and save button
-    .appendChild(UI.widgets.continueButton(dom)) // @@ or send icon??
+    .appendChild(widgets.continueButton(dom)) // @@ or send icon??
   sendButton.addEventListener('click', _event => {
     saveBlob(imageBlob, destination)
   })
@@ -161,7 +150,8 @@ module.exports.cameraCaptureControl = function cameraCaptureControl (
     debug.log(
       'Putting ' + blob.size + ' bytes of ' + contentType + ' to ' + destination
     )
-    store.fetcher
+    // @@ TODO Remove casting
+    ;(store as any).fetcher
       .webOperation('PUT', destination.uri, {
         data: blob,
         contentType: contentType
@@ -194,16 +184,16 @@ module.exports.cameraCaptureControl = function cameraCaptureControl (
  * This expacts the buttton to a large control when it is pressed
  */
 
-module.exports.cameraButton = function cameraButton (
-  dom,
-  store,
-  getImageDoc,
-  doneCallback
-) {
+export function cameraButton (
+  dom: HTMLDocument,
+  store: IndexedFormula,
+  getImageDoc: () => NamedNode,
+  doneCallback: (imageDoc) => Promise<void>
+): HTMLElement {
   const div = dom.createElement('div')
-  const but = UI.widgets.button(dom, cameraIcon, 'Take picture')
+  const but = widgets.button(dom, cameraIcon, 'Take picture')
   let control
-  function restoreButton (imageDoc) {
+  async function restoreButton (imageDoc) {
     div.removeChild(control)
     div.appendChild(but)
     doneCallback(imageDoc)
@@ -211,7 +201,7 @@ module.exports.cameraButton = function cameraButton (
   div.appendChild(but)
   but.addEventListener('click', _event => {
     div.removeChild(but)
-    control = UI.media.cameraCaptureControl(
+    control = cameraCaptureControl(
       dom,
       store,
       getImageDoc,
@@ -220,45 +210,4 @@ module.exports.cameraButton = function cameraButton (
     div.appendChild(control)
   })
   return div
-}
-
-/// /////////////////////////////////////// OLD BROKEN
-
-//  Put up a video stream and take a picture
-//  In: context.div, dom
-
-UI.media.cameraOLD = function (context, _gotBlob) {
-  function takeSnapshot () {
-    const dom = context.dom
-    const img = dom.createElement('img')
-    let ctx
-    const width = video.offsetWidth
-    const height = video.offsetHeight
-
-    const canvas = context.canvas || document.createElement('canvas')
-    canvas.width = width
-    canvas.height = height
-
-    // eslint-disable-next-line prefer-const
-    ctx = canvas.getContext('2d')
-    ctx.drawImage(video, 0, 0, width, height)
-
-    img.src = canvas.toDataURL(contentType) // @@@
-    context.div.appendChild(img)
-  }
-
-  var video = context.dom.createElement('video')
-  context.div.appendChild(video)
-  // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
-  // https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob
-  navigator.mediaDevices
-    .getUserMedia({ video: true })
-    .then(function (stream) {
-      video.src = window.URL.createObjectURL(stream)
-      video.addEventListener('click', takeSnapshot)
-    })
-    .catch(function (error) {
-      alert('Could not access the camera. Error: ' + error.name)
-    })
-  return video
 }

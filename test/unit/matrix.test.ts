@@ -1,5 +1,5 @@
 import { silenceDebugMessages } from '../helpers/setup'
-import { matrixForQuery } from '../../src/matrix'
+import { matrix } from '../../src/matrix'
 import { JSDOM } from 'jsdom'
 
 silenceDebugMessages()
@@ -9,10 +9,10 @@ const dom = window.document
 
 describe('matrixForQuery', () => {
   it('exists', () => {
-    expect(matrixForQuery).toBeInstanceOf(Function)
+    expect(matrix.matrixForQuery).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(matrixForQuery(
+    expect(matrix.matrixForQuery(
       dom,
       '',
       '',

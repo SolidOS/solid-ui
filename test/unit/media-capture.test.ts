@@ -1,6 +1,6 @@
 import { silenceDebugMessages } from '../helpers/setup'
 import { JSDOM } from 'jsdom'
-import { cameraCaptureControl, cameraButton } from '../../src/media-capture'
+import { cameraCaptureControl, cameraButton } from '../../src/media/media-capture'
 import { graph } from 'rdflib'
 
 silenceDebugMessages()
