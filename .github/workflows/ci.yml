@@ -1,12 +1,8 @@
 name: CI
 
 on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
+  - push
+  - pull_request
 
 jobs:
   test:
@@ -26,3 +22,26 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run doc
+      - name: Save build
+        if: matrix.node-version == '14.x'
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: |
+            .
+            !node_modules
+          retention-days: 1
+
+  gh-pages:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: build
+      - run: rm .gitignore
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
