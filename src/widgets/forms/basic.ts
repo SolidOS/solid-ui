@@ -1,7 +1,7 @@
 import { st, BlankNode, Literal, Node, NamedNode, Variable } from 'rdflib'
 import { solidLogicSingleton } from '../../logic'
 import ns from '../../ns'
-import { textInputStyle } from '../../style'
+import { textInputStyle, textInputBackgroundColorUneditable, textInputStyleUneditable } from '../../style'
 import { label } from '../../utils'
 
 import { errorMessageBlock } from '../error'
@@ -86,6 +86,7 @@ export function basicField (
   callbackFunction: (ok: boolean, errorMessage: string) => void
 ): HTMLElement {
   const kb = store
+  const formDoc = form.doc ? form.doc() : null // @@ if blank no way to know
 
   const box = dom.createElement('tr')
   if (container) container.appendChild(box)
@@ -104,6 +105,9 @@ export function basicField (
     )
     return box
   }
+  // It can be cleaner to just remove empty fields if you can't edit them anyway
+  const suppressEmptyUneditable = kb.anyJS(form, ns.ui('suppressEmptyUneditable'), null, formDoc)
+
   lhs.appendChild(fieldLabel(dom, property as any, form))
   const uri = mostSpecificClassURI(form)
   let params = fieldParams[uri]
@@ -143,6 +147,11 @@ export function basicField (
   }
   if (!kb.updater.editable((doc as NamedNode).uri)) {
     field.readOnly = true // was: disabled. readOnly is better
+    ;(field as any).style = textInputStyleUneditable
+    // backgroundColor = textInputBackgroundColorUneditable
+    if (suppressEmptyUneditable && field.value === '') {
+      box.style.display = 'none' // clutter
+    }
     return box
   }
 

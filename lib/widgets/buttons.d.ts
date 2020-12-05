@@ -122,6 +122,7 @@ export declare function findImage(thing: NamedNode): string;
  * ToDo: Also add icons for *properties* like  home, work, email, range, domain, comment,
  */
 export declare function setImage(element: HTMLElement, thing: NamedNode): void;
+export declare function faviconOrDefault(dom: HTMLDocument, x: NamedNode): HTMLImageElement | HTMLObjectElement;
 /**
  * Delete button with a check you really mean it
  * @@ Supress check if command key held down?
@@ -140,7 +141,8 @@ export declare function linkIcon(dom: HTMLDocument, subject: NamedNode, iconURI?
  *
  * pred is unused param at the moment
  */
-export declare function personTR(dom: HTMLDocument, pred: NamedNode, obj: NamedNode, options: any): HTMLTableRowElement;
+export declare const personTR: typeof renderAsRow;
+export declare function renderAsRow(dom: HTMLDocument, pred: NamedNode, obj: NamedNode, options: any): HTMLTableRowElement;
 /**
  * Refresh a DOM tree recursively
  */
