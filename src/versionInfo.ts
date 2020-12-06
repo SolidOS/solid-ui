@@ -1,5 +1,5 @@
 export default {
-  buildTime: '2020-12-06T00:21:13Z',
+  buildTime: '2020-12-06T10:08:50Z',
   commit: '43ce93b181f19eb2f7750ce6871655dc3b9c590d',
   npmInfo:
 {
