@@ -34,7 +34,7 @@ module.exports = {
 
   formBorderColor: '#888888', // originally was brown; now grey
   formHeadingColor: '#888888', // originally was brown; now grey
-  formHeadingStyle: 'font-size: 110%; font-weight: bold; color: #888888; padding: 0.2em;', // originally was brown; now grey
+  formHeadingStyle: 'font-size: 110%; font-weight: bold; color: #888888; padding: 0.2em;  margin: 0.2em 0.7em;', // originally was brown; now grey
   formTextInput: 'font-size: 100%; margin: 0.1em; padding: 0.1em;', // originally used this
 
   textInputBackgroundColor: '#eef',
