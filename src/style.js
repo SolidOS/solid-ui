@@ -27,10 +27,10 @@ module.exports = {
   signInButtonStyle: 'padding: 1em; border-radius:0.2em; margin: 2em; font-size: 100%;', // was 0.5em radius
   // Forms
 
-  heading1Style: 'font-size: 180%; font-weight: bold; color: #888888; padding: 0.5em;', // originally was brown; now grey
-  heading2Style: 'font-size: 130%; font-weight: bold; color: #888888; padding: 0.4em;', // originally was brown; now grey
-  heading3Style: 'font-size: 120%; font-weight: bold; color: #888888; padding: 0.3em;', // For example, in large forms or before a small form
-  heading4Style: 'font-size: 110%; font-weight: bold; color: #888888; padding: 0.2em;', // Lowest level used by default in small things
+  heading1Style: 'font-size: 180%; font-weight: bold; color: #888888; padding: 0.5em; margin: 0.2em 0.7em;', // originally was brown; now grey
+  heading2Style: 'font-size: 130%; font-weight: bold; color: #888888; padding: 0.4em; margin: 0.2em 0.7em;', // originally was brown; now grey
+  heading3Style: 'font-size: 120%; font-weight: bold; color: #888888; padding: 0.3em; margin: 0.2em 0.7em;', // For example, in large forms or before a small form
+  heading4Style: 'font-size: 110%; font-weight: bold; color: #888888; padding: 0.2em; margin: 0.2em 0.7em;', // Lowest level used by default in small things
 
   formBorderColor: '#888888', // originally was brown; now grey
   formHeadingColor: '#888888', // originally was brown; now grey
