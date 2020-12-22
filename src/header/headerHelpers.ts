@@ -2,19 +2,41 @@
     Copied from mashlib/src/global/metadata.ts
  */
 import { NamedNode, sym } from 'rdflib'
-import { log } from '../debug'
+import { styleMap } from './styleMap'
+import { getClasses } from '../jss'
 
 type ThrottleOptions = {
     leading?: boolean;
     throttling?: boolean;
     trailing?: boolean;
 }
+/**
+ * @internal
+ */
+function getStyle (styleClass) {
+  return styleMap[styleClass]
+}
 
+/**
+ * @ignore exporting this only for the unit test
+ */
+export function addStyleClassToElement (element: any, styleClasses: string[]) {
+  styleClasses.forEach((styleClass) => {
+    const style = getStyle(styleClass)
+    const { classes } = getClasses(document.head, { [styleClass]: style })
+    element.classList.add(classes[styleClass])
+  })
+}
+/**
+ * @ignore exporting this only for the unit test
+ */
 export function getPod (): NamedNode {
   // @@ TODO: This is given that mashlib runs on NSS - might need to change when we want it to run on other Pod servers
   return sym(document.location.origin).site()
 }
-
+/**
+ * @ignore exporting this only for the unit test
+ */
 export function throttle (func: Function, wait: number, options: ThrottleOptions = {}): (...args: any[]) => any {
   let context: any,
     args: any,

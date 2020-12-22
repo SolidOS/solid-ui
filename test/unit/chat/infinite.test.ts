@@ -1,7 +1,7 @@
 import { silenceDebugMessages } from '../../helpers/setup'
 import { JSDOM } from 'jsdom'
 import { infiniteMessageArea } from '../../../src/chat/infinite'
-import { graph, sym } from 'rdflib'
+import { sym } from 'rdflib'
 
 silenceDebugMessages()
 jest.mock('solid-auth-client')
@@ -11,13 +11,13 @@ describe('infiniteMessageArea', () => {
   it('exists', () => {
     expect(infiniteMessageArea).toBeInstanceOf(Function)
   })
-  it('runs', () => {
-    const kb = graph()
+  it('runs', async () => {
+    const kb = undefined // will default to UI.store
     const chatChannel = sym('https://domain.tld/chat')
     const options = {}
     ;(window as any).alert = () => {}
 
-    const result = infiniteMessageArea(dom, kb, chatChannel, options)
+    const result = await infiniteMessageArea(dom, kb, chatChannel, options)
     expect(result).toBeTruthy()
   })
 })

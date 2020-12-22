@@ -1,18 +1,17 @@
 import { silenceDebugMessages } from '../helpers/setup'
 import {
-  textInputStyle,
   buttonStyle,
-  textButtonStyle,
-  iconStyle,
   classIconStyle,
-  messageBodyStyle,
-  pendingeditModifier,
-  highlightColor,
-  signInButtonStyle,
   formBorderColor,
   formHeadingColor,
   formTextInput,
-  multilineTextInputStyle
+  highlightColor,
+  iconStyle,
+  messageBodyStyle,
+  multilineTextInputStyle,
+  pendingeditModifier,
+  signInButtonStyle,
+  textInputStyle
 } from '../../src/style'
 
 silenceDebugMessages()

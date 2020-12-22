@@ -19,20 +19,21 @@
  * * `statusArea`      A DOM element (opt) progress stuff can be displayed, or error messages
  * @packageDocumentation
  */
+import { graph, namedNode, NamedNode, Namespace, serialize, st, Statement, sym, BlankNode } from 'rdflib'
+import solidAuthClient from 'solid-auth-client'
+import { PaneDefinition } from 'pane-registry'
 import Signup from './signup'
 import widgets from '../widgets'
-import solidAuthClient from 'solid-auth-client'
 import ns from '../ns.js'
-import kb from '../store.js'
 import utils from '../utils.js'
 import { alert } from '../log'
 import { AppDetails, AuthenticationContext } from './types'
-import { PaneDefinition } from 'pane-registry'
 import * as debug from '../debug'
-import { graph, namedNode, NamedNode, Namespace, serialize, st, Statement, sym, UpdateManager } from 'rdflib'
 import { textInputStyle, buttonStyle, commentStyle } from '../style'
 // eslint-disable-next-line camelcase
 import { Quad_Object } from 'rdflib/lib/tf-types'
+import { solidLogicSingleton } from '../logic'
+import { CrossOriginForbiddenError, FetchError, NotFoundError, SameOriginForbiddenError, UnauthorizedError, ACL_LINK } from 'solid-logic'
 
 export { solidAuthClient }
 
@@ -148,43 +149,26 @@ export function logIn (context: AuthenticationContext): Promise<AuthenticationCo
  *
  * @returns Resolves with the context after login / fetch
  */
-export function logInLoadProfile (context: AuthenticationContext): Promise<AuthenticationContext> {
+export async function logInLoadProfile (context: AuthenticationContext): Promise<AuthenticationContext> {
+  // console.log('Solid UI logInLoadProfile')
   if (context.publicProfile) {
-    return Promise.resolve(context)
+    return context
   } // already done
-  const fetcher = kb.fetcher
-  let profileDocument
-  return new Promise(function (resolve, reject) {
-    return logIn(context)
-      .then(context => {
-        const webID = context.me
-        if (!webID) {
-          return reject(new Error('Could not log in'))
-        }
-        profileDocument = webID.doc()
-        // Load the profile into the knowledge base (fetcher.store)
-        //   withCredentials: Web arch should let us just load by turning off creds helps CORS
-        //   reload: Gets around a specific old Chrome bug caching/origin/cors
-        fetcher
-          .load(profileDocument, { withCredentials: false, cache: 'reload' })
-          .then(_response => {
-            context.publicProfile = profileDocument
-            resolve(context)
-          })
-          .catch(err => {
-            const message = `Logged in but cannot load profile ${profileDocument} : ${err}`
-            if (context.div && context.dom) {
-              context.div.appendChild(
-                widgets.errorMessageBlock(context.dom, message)
-              )
-            }
-            reject(message)
-          })
-      })
-      .catch(err => {
-        reject(new Error(`Can't log in: ${err}`))
-      })
-  })
+  try {
+    const loggedInContext = await logIn(context)
+    if (!loggedInContext.me) {
+      throw new Error('Could not log in')
+    }
+    context.publicProfile = await solidLogicSingleton.loadProfile(loggedInContext.me)
+  } catch (err) {
+    if (context.div && context.dom) {
+      context.div.appendChild(
+        widgets.errorMessageBlock(context.dom, err.message)
+      )
+    }
+    throw new Error(`Can't log in: ${err}`)
+  }
+  return context
 }
 
 /**
@@ -195,94 +179,66 @@ export function logInLoadProfile (context: AuthenticationContext): Promise<Authe
  *
  * @param context
  */
-export function logInLoadPreferences (context: AuthenticationContext): Promise<AuthenticationContext> {
+export async function logInLoadPreferences (context: AuthenticationContext): Promise<AuthenticationContext> {
+  // console.log('Solid UI logInLoadPreferences')
   if (context.preferencesFile) return Promise.resolve(context) // already done
 
   const statusArea = context.statusArea || context.div || null
   let progressDisplay
-  return new Promise(function (resolve, reject) {
-    return logInLoadProfile(context)
-      .then(context => {
-        const preferencesFile = kb.any(context.me, ns.space('preferencesFile'))
+  function complain (message) {
+    message = `logInLoadPreferences: ${message}`
+    if (statusArea) {
+      // statusArea.innerHTML = ''
+      statusArea.appendChild(
+        widgets.errorMessageBlock(context.dom, message)
+      )
+    }
+    debug.log(message)
+    // reject(new Error(message))
+  }
+  try {
+    context = await logInLoadProfile(context)
 
-        function complain (message) {
-          message = `logInLoadPreferences: ${message}`
-          if (statusArea) {
-            // statusArea.innerHTML = ''
-            statusArea.appendChild(
-              widgets.errorMessageBlock(context.dom, message)
-            )
-          }
-          debug.log(message)
-          reject(new Error(message))
-        }
-
-        /**
-         * Are we working cross-origin?
-         * Returns True if we are in a webapp at an origin, and the file origin is different
-         */
-        function differentOrigin (): boolean {
-          return `${window.location.origin}/` !== preferencesFile.site().uri
-        }
-
-        if (!preferencesFile) {
-          return reject(new Error(`Can't find a preference file pointer in profile ${context.publicProfile}`))
-        }
-
-        // //// Load preference file
-        return kb.fetcher
-          .load(preferencesFile, { withCredentials: true })
-          .then(function () {
-            if (progressDisplay) {
-              progressDisplay.parentNode.removeChild(progressDisplay)
-            }
-            context.preferencesFile = preferencesFile
-            return resolve(context)
-          })
-          .catch(function (err) {
-            // Really important to look at why
-            const status = err.status
-            const message = err.message
-            debug.log(
-              `HTTP status ${status} for preference file ${preferencesFile}`
-            )
-            let m2
-            if (status === 401) {
-              m2 = 'Strange - you are not authenticated (properly logged in) to read preference file.'
-              alert(m2)
-            } else if (status === 403) {
-              if (differentOrigin()) {
-                m2 = `Unauthorized: Assuming preference file blocked for origin ${window.location.origin}`
-                context.preferencesFileError = m2
-                return resolve(context)
-              }
-              m2 = 'You are not authorized to read your preference file. This may be because you are using an untrusted web app.'
-              debug.warn(m2)
-            } else if (status === 404) {
-              if (
-                confirm(`You do not currently have a preference file. OK for me to create an empty one? ${preferencesFile}`)
-              ) {
-                // @@@ code me  ... weird to have a name of the file but no file
-                alert(`Sorry; I am not prepared to do this. Please create an empty file at ${preferencesFile}`)
-                return complain(
-                  new Error('Sorry; no code yet to create a preference file at ')
-                )
-              } else {
-                reject(
-                  new Error(`User declined to create a preference file at ${preferencesFile}`)
-                )
-              }
-            } else {
-              m2 = `Strange: Error ${status} trying to read your preference file.${message}`
-              alert(m2)
-            }
-          }) // load preference file then
-      })
-      .catch(err => {
-        // Fail initial login load preferences
-        reject(new Error(`(via loadPrefs) ${err}`))
-      })
-  })
+    // console.log('back in Solid UI after logInLoadProfile', context)
+    const preferencesFile = await solidLogicSingleton.loadPreferences(context.me as NamedNode)
+    if (progressDisplay) {
+      progressDisplay.parentNode.removeChild(progressDisplay)
+    }
+    context.preferencesFile = preferencesFile
+  } catch (err) {
+    let m2: string
+    if (err instanceof UnauthorizedError) {
+      m2 = 'Strange - you are not authenticated (properly logged in) to read preference file.'
+      alert(m2)
+    } else if (err instanceof CrossOriginForbiddenError) {
+      m2 = `Unauthorized: Assuming preference file blocked for origin ${window.location.origin}`
+      context.preferencesFileError = m2
+      return context
+    } else if (err instanceof SameOriginForbiddenError) {
+      m2 = 'You are not authorized to read your preference file. This may be because you are using an untrusted web app.'
+      debug.warn(m2)
+    } else if (err instanceof NotFoundError) {
+      if (
+        confirm(`You do not currently have a preference file. OK for me to create an empty one? ${(err as any).preferencesFile || ''}`)
+      ) {
+        // @@@ code me  ... weird to have a name of the file but no file
+        alert(`Sorry; I am not prepared to do this. Please create an empty file at ${(err as any).preferencesFile || '(?)'}`)
+        complain(
+          new Error('Sorry; no code yet to create a preference file at ')
+        )
+      } else {
+        throw (
+          new Error(`User declined to create a preference file at ${(err as any).preferencesFile || '(?)'}`)
+        )
+      }
+    } else if (err instanceof FetchError) {
+      m2 = `Strange: Error ${err.status} trying to read your preference file.${err.message}`
+      alert(m2)
+    } else {
+      throw new Error(`(via loadPrefs) ${err}`)
+    }
+  }
+  return context
 }
 
 /**
@@ -291,72 +247,32 @@ export function logInLoadPreferences (context: AuthenticationContext): Promise<A
  *
  * @see https://github.com/solid/solid/blob/master/proposals/data-discovery.md#discoverability
  */
-export async function loadTypeIndexes (context: AuthenticationContext): Promise<AuthenticationContext> {
-  await loadPublicTypeIndex(context)
-  await loadPrivateTypeIndex(context)
+async function loadIndex (
+  context: AuthenticationContext,
+  isPublic: boolean
+): Promise<AuthenticationContext> {
+  const indexes = await solidLogicSingleton.loadIndexes(
+    context.me as NamedNode,
+    (isPublic ? context.publicProfile || null : null),
+    (isPublic ? null : context.preferencesFile || null),
+    async (err: Error) => widgets.complain(context, err.message)
+  )
+  context.index = context.index || {}
+  context.index.private = indexes.private || context.index.private
+  context.index.public = indexes.public || context.index.public
   return context
 }
 
-async function loadPublicTypeIndex (context: AuthenticationContext): Promise<AuthenticationContext> {
-  return loadIndex(context, ns.solid('publicTypeIndex'), true)
-}
-
-async function loadPrivateTypeIndex (context: AuthenticationContext): Promise<AuthenticationContext> {
-  return loadIndex(context, ns.solid('privateTypeIndex'), false)
-}
-
-async function loadOneTypeIndex (context: AuthenticationContext, isPublic: boolean): Promise<AuthenticationContext> {
-  const predicate = isPublic
-    ? ns.solid('publicTypeIndex')
-    : ns.solid('privateTypeIndex')
-  return loadIndex(context, predicate, isPublic)
-}
-
-async function loadIndex (
-  context: AuthenticationContext,
-  predicate: NamedNode,
-  isPublic: boolean
-): Promise<AuthenticationContext> {
-  // Loading preferences is more than loading profile
-  try {
-    ;(await isPublic)
-      ? logInLoadProfile(context)
-      : logInLoadPreferences(context)
-  } catch (err) {
-    widgets.complain(context, `loadPubicIndex: login and load problem ${err}`)
-  }
-  const me = context.me
-  let ixs
+export async function loadTypeIndexes (context: AuthenticationContext) {
+  const indexes = await solidLogicSingleton.loadIndexes(
+    context.me as NamedNode,
+    context.publicProfile || null,
+    context.preferencesFile || null,
+    async (err: Error) => widgets.complain(context, err.message)
+  )
   context.index = context.index || {}
-
-  if (isPublic) {
-    ixs = kb.each(me, predicate, undefined, context.publicProfile)
-    context.index.public = ixs
-  } else {
-    if (!context.preferencesFileError) {
-      ixs = kb.each(
-        me,
-        ns.solid('privateTypeIndex'),
-        undefined,
-        context.preferencesFile
-      )
-      context.index.private = ixs
-      if (ixs.length === 0) {
-        widgets.complain(`Your preference file ${context.preferencesFile} does not point to a private type index.`)
-        return context
-      }
-    } else {
-      debug.log(
-        'We know your preference file is not available, so we are not bothering with private type indexes.'
-      )
-    }
-  }
-
-  try {
-    await kb.fetcher.load(ixs)
-  } catch (err) {
-    widgets.complain(context, `loadPubicIndex: loading public type index ${err}`)
-  }
+  context.index.private = indexes.private || context.index.private
+  context.index.public = indexes.public || context.index.public
   return context
 }
 
@@ -385,11 +301,7 @@ async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boo
 
     async function putIndex (newIndex) {
       try {
-        await kb.fetcher.webOperation('PUT', newIndex.uri, {
-          data: `# ${new Date()} Blank initial Type index
-`,
-          contentType: 'text/turtle'
-        })
+        await solidLogicSingleton.createEmptyRdfDoc(newIndex, 'Blank initial Type index')
         return context
       } catch (e) {
         const msg = `Error creating new index ${e}`
@@ -411,7 +323,7 @@ async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boo
         st(context.me, ns.solid(`${visibility}TypeIndex`), newIndex, relevant)
       ]
       try {
-        await updatePromise(kb.updater, [], addMe)
+        await solidLogicSingleton.updatePromise([], addMe)
       } catch (err) {
         const msg = `Error saving type index link saving back ${newIndex}: ${err}`
         widgets.complain(context, msg)
@@ -425,7 +337,7 @@ async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boo
       // officially exists
       const ixs = context.index[visibility]
       try {
-        await kb.fetcher.load(ixs)
+        await solidLogicSingleton.load(ixs)
       } catch (err) {
         widgets.complain(context, `ensureOneTypeIndex: loading indexes ${err}`)
       }
@@ -433,7 +345,7 @@ async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boo
   } // makeIndexIfNecessary
 
   try {
-    await loadOneTypeIndex(context, isPublic)
+    await loadIndex(context, isPublic)
     if (context.index) {
       debug.log(
         `ensureOneTypeIndex: Type index exists already ${isPublic
@@ -445,7 +357,7 @@ async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boo
     return context
   } catch (error) {
     await makeIndexIfNecessary(context, isPublic)
-    // widgets.complain(context, 'calling loadOneTypeIndex:' + error)
+    // widgets.complain(context, 'calling loadIndex:' + error)
   }
 }
 
@@ -458,47 +370,65 @@ async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boo
 export async function findAppInstances (
   context: AuthenticationContext,
   theClass: NamedNode,
-  isPublic: boolean
+  isPublic?: boolean
 ): Promise<AuthenticationContext> {
-  const fetcher = kb.fetcher
+  // console.log('findAppInstances', { context, theClass, isPublic })
   if (isPublic === undefined) {
     // Then both public and private
+    // console.log('finding public app instance')
     await findAppInstances(context, theClass, true)
+    // console.log('finding private app instance')
     await findAppInstances(context, theClass, false)
+    // console.log('found public & private app instance', context)
     return context
   }
 
+  // Loading preferences is more than loading profile
+  try {
+    // console.log('calling logInLoad', isPublic)
+    await (isPublic
+      ? logInLoadProfile(context)
+      : logInLoadPreferences(context))
+    // console.log('called logInLoad', isPublic)
+  } catch (err) {
+    widgets.complain(context, `loadIndex: login and load problem ${err}`)
+  }
+  // console.log('awaited LogInLoad!', context)
   const visibility = isPublic ? 'public' : 'private'
   try {
-    await loadOneTypeIndex(context, isPublic)
+    await loadIndex(context, isPublic)
   } catch (err) {
   }
   const index = context.index as { [key: string]: Array<NamedNode> }
+  // eslint-disable-next-line no-console
+  console.log({ index, visibility })
   const thisIndex = index[visibility]
+  // eslint-disable-next-line no-console
+  console.log('Failing test?', thisIndex.map(ix => solidLogicSingleton.store.each(undefined, ns.solid('forClass'), theClass, ix)))
   const registrations = thisIndex
-    .map(ix => kb.each(undefined, ns.solid('forClass'), theClass, ix))
+    .map(ix => solidLogicSingleton.store.each(undefined, ns.solid('forClass'), theClass, ix))
     .flat()
   const instances = registrations
-    .map(reg => kb.each(reg, ns.solid('instance')))
+    .map(reg => solidLogicSingleton.store.each(reg as NamedNode, ns.solid('instance')))
     .flat()
   const containers = registrations
-    .map(reg => kb.each(reg, ns.solid('instanceContainer')))
+    .map(reg => solidLogicSingleton.store.each(reg as NamedNode, ns.solid('instanceContainer')))
     .flat()
 
   function unique (arr: NamedNode[]): NamedNode[] {
     return Array.from(new Set(arr))
   }
   context.instances = context.instances || []
-  context.instances = unique(context.instances.concat(instances))
+  context.instances = unique(context.instances.concat(instances as NamedNode[]))
 
   context.containers = context.containers || []
-  context.containers = unique(context.containers.concat(containers))
+  context.containers = unique(context.containers.concat(containers as NamedNode[]))
   if (!containers.length) {
     return context
   }
   // If the index gives containers, then look up all things within them
   try {
-    await fetcher.load(containers)
+    await solidLogicSingleton.load(containers as NamedNode[])
   } catch (err) {
     const e = new Error(`[FAI] Unable to load containers${err}`)
     debug.log(e) // complain
@@ -509,27 +439,10 @@ export async function findAppInstances (
   for (let i = 0; i < containers.length; i++) {
     const cont = containers[i]
     context.instances = context.instances.concat(
-      kb.each(cont, ns.ldp('contains'))
+      solidLogicSingleton.getContainerElements(cont as NamedNode) as NamedNode[]
     )
   }
   return context
-}
-
-// @@@@ use the one in rdflib.js when it is available and delete this
-function updatePromise (
-  updater: UpdateManager,
-  del: Array<Statement>,
-  ins: Array<Statement> = []
-): Promise<void> {
-  return new Promise(function (resolve, reject) {
-    updater.update(del, ins, function (uri, ok, errorBody) {
-      if (!ok) {
-        reject(new Error(errorBody))
-      } else {
-        resolve()
-      }
-    }) // callback
-  }) // promise
 }
 
 /**
@@ -558,7 +471,7 @@ export async function registerInTypeIndex (
     st(registration, ns.solid('instance'), instance, index)
   ]
   try {
-    await updatePromise(kb.updater, [], ins)
+    await solidLogicSingleton.updatePromise([], ins)
   } catch (e) {
     debug.log(e)
     alert(e)
@@ -586,14 +499,10 @@ export function registrationControl (
       box.innerHTML = '<table><tbody><tr></tr><tr></tr></tbody></table>' // tbody will be inserted anyway
       box.setAttribute('style', 'font-size: 120%; text-align: right; padding: 1em; border: solid gray 0.05em;')
       const tbody = box.children[0].children[0]
-      const form = kb.bnode() // @@ say for now
+      const form = new BlankNode() // @@ say for now
 
       const registrationStatements = function (index) {
-        const registrations = kb
-          .each(undefined, ns.solid('instance'), instance)
-          .filter(function (r) {
-            return kb.holds(r, ns.solid('forClass'), theClass)
-          })
+        const registrations = solidLogicSingleton.getRegistrations(instance, theClass)
         const reg = registrations.length
           ? registrations[0]
           : widgets.newThing(index)
@@ -609,9 +518,9 @@ export function registrationControl (
         index = context.index.public[0]
         statements = registrationStatements(index)
         tbody.children[0].appendChild(
-          widgets.buildCheckboxForm(
+          widgets.buildCheckBoxForm(
             context.dom,
-            kb,
+            solidLogicSingleton.store,
             `Public link to this ${context.noun}`,
             null,
             statements,
@@ -625,9 +534,9 @@ export function registrationControl (
         index = context.index.private[0]
         statements = registrationStatements(index)
         tbody.children[1].appendChild(
-          widgets.buildCheckboxForm(
+          widgets.buildCheckBoxForm(
             context.dom,
-            kb,
+            solidLogicSingleton.store,
             `Personal note of this ${context.noun}`,
             null,
             statements,
@@ -679,13 +588,13 @@ export function registrationList (context: AuthenticationContext, options: {
     const table = box.firstChild as HTMLElement
 
     let ix: Array<NamedNode> = []
-    let sts = []
+    let sts: Statement[] = []
     const vs = ['private', 'public']
     vs.forEach(function (visibility) {
       if (context.index && options[visibility]) {
         ix = ix.concat(context.index[visibility][0])
         sts = sts.concat(
-          kb.statementsMatching(
+          solidLogicSingleton.store.statementsMatching(
             undefined,
             ns.solid('instance'),
             undefined,
@@ -698,7 +607,7 @@ export function registrationList (context: AuthenticationContext, options: {
     for (let i = 0; i < sts.length; i++) {
       const statement: Statement = sts[i]
       if (options.type) { // now check  terms:forClass
-        if (!kb.holds(statement.subject, ns.solid('forClass'), options.type, statement.why)) {
+        if (!solidLogicSingleton.store.holds(statement.subject, ns.solid('forClass'), options.type, statement.why)) {
           continue // skip irrelevant ones
         }
       }
@@ -706,7 +615,10 @@ export function registrationList (context: AuthenticationContext, options: {
       const inst = statement.object
       table.appendChild(widgets.personTR(dom, ns.solid('instance'), inst, {
         deleteFunction: function (_x) {
-          kb.updater.update([statement], [], function (uri, ok, errorBody) {
+          if (!solidLogicSingleton.store.updater) {
+            throw new Error('Cannot delete this, store has no updater')
+          }
+          solidLogicSingleton.store.updater.update([statement], [], function (uri, ok, errorBody) {
             if (ok) {
               debug.log(`Removed from index: ${statement.subject}`)
             } else {
@@ -718,12 +630,12 @@ export function registrationList (context: AuthenticationContext, options: {
     } // registrationList
 
     /*
-       //const containers = kb.each(theClass, ns.solid('instanceContainer'));
+       //const containers = solidLogicSingleton.store.each(theClass, ns.solid('instanceContainer'));
        if (containers.length) {
        fetcher.load(containers).then(function(xhrs){
        for (const i=0; i<containers.length; i++) {
        const cont = containers[i];
-       instances = instances.concat(kb.each(cont, ns.ldp('contains')));
+       instances = instances.concat(solidLogicSingleton.store.each(cont, ns.ldp('contains')));
        }
        });
        }
@@ -754,15 +666,15 @@ export function setACLUserPublic (
     public?: []
   }
 ): Promise<NamedNode> {
-  const aclDoc = kb.any(
-    kb.sym(docURI),
-    kb.sym('http://www.iana.org/assignments/link-relations/acl')
+  const aclDoc = solidLogicSingleton.store.any(
+    solidLogicSingleton.store.sym(docURI),
+    ACL_LINK
   )
 
   return Promise.resolve()
     .then(() => {
       if (aclDoc) {
-        return aclDoc
+        return aclDoc as NamedNode
       }
 
       return fetchACLRel(docURI).catch(err => {
@@ -771,8 +683,10 @@ export function setACLUserPublic (
     })
     .then(aclDoc => {
       const aclText = genACLText(docURI, me, aclDoc.uri, options)
-
-      return kb.fetcher
+      if (!solidLogicSingleton.store.fetcher) {
+        throw new Error('Cannot PUT this, store has no fetcher')
+      }
+      return solidLogicSingleton.store.fetcher
         .webOperation('PUT', aclDoc.uri, {
           data: aclText,
           contentType: 'text/turtle'
@@ -792,23 +706,26 @@ export function setACLUserPublic (
  * @returns
  */
 function fetchACLRel (docURI: string): Promise<NamedNode> {
-  const fetcher = kb.fetcher
+  const fetcher = solidLogicSingleton.store.fetcher
+  if (!fetcher) {
+    throw new Error('Cannot fetch ACL rel, store has no fetcher')
+  }
 
   return fetcher.load(docURI).then(result => {
     if (!result.ok) {
-      throw new Error('fetchACLRel: While loading:' + result.error)
+      throw new Error('fetchACLRel: While loading:' + (result as any).error)
     }
 
-    const aclDoc = kb.any(
-      kb.sym(docURI),
-      kb.sym('http://www.iana.org/assignments/link-relations/acl')
+    const aclDoc = solidLogicSingleton.store.any(
+      solidLogicSingleton.store.sym(docURI),
+      ACL_LINK
     )
 
     if (!aclDoc) {
       throw new Error('fetchACLRel: No Link rel=ACL header for ' + docURI)
     }
 
-    return aclDoc
+    return aclDoc as NamedNode
   })
 }
 
@@ -883,7 +800,7 @@ export function offlineTestID (): NamedNode | null {
     if (!div) return null
     const id = div.getAttribute('testID')
     if (!id) return null
-    /* me = kb.any(subject, ns.acl('owner')); // when testing on plane with no WebID
+    /* me = solidLogicSingleton.store.any(subject, ns.acl('owner')); // when testing on plane with no WebID
      */
     debug.log('Assuming user is ' + id)
     return sym(id)
@@ -1011,7 +928,7 @@ export function checkUser<T> (
     return Promise.resolve(setUserCallback ? setUserCallback(me) : me)
   }
 
-  // doc = kb.any(doc, ns.link('userMirror')) || doc
+  // doc = solidLogicSingleton.store.any(doc, ns.link('userMirror')) || doc
 
   return solidAuthClient
     .currentSession()
@@ -1092,8 +1009,8 @@ export function loginStatusBox (
     let logoutLabel = 'WebID logout'
     if (me) {
       const nick =
-        kb.any(me, ns.foaf('nick')) ||
-        kb.any(me, ns.foaf('name'))
+        solidLogicSingleton.store.any(me, ns.foaf('nick')) ||
+        solidLogicSingleton.store.any(me, ns.foaf('name'))
       if (nick) {
         logoutLabel = 'Logout ' + nick.value
       }
@@ -1187,50 +1104,56 @@ export function selectWorkspace (
   }
 
   function figureOutBase (ws) {
-    let newBase = kb.any(ws, ns.space('uriPrefix'))
-    if (!newBase) {
-      newBase = ws.uri.split('#')[0]
+    const newBaseNode: NamedNode = solidLogicSingleton.store.any(ws, ns.space('uriPrefix')) as NamedNode
+    let newBaseString: string
+    if (!newBaseNode) {
+      newBaseString = ws.uri.split('#')[0]
     } else {
-      newBase = newBase.value
+      newBaseString = newBaseNode.value
     }
-    if (newBase.slice(-1) !== '/') {
-      debug.log(`${appPathSegment}: No / at end of uriPrefix ${newBase}`) // @@ paramater?
-      newBase = `${newBase}/`
+    if (newBaseString.slice(-1) !== '/') {
+      debug.log(`${appPathSegment}: No / at end of uriPrefix ${newBaseString}`) // @@ paramater?
+      newBaseString = `${newBaseString}/`
     }
     const now = new Date()
-    newBase += `${appPathSegment}/id${now.getTime()}/` // unique id
-    return newBase
+    newBaseString += `${appPathSegment}/id${now.getTime()}/` // unique id
+    return newBaseString
   }
 
   function displayOptions (context) {
+    // console.log('displayOptions!', context)
     async function makeNewWorkspace (_event) {
       const row = table.appendChild(dom.createElement('tr'))
       const cell = row.appendChild(dom.createElement('td'))
       cell.setAttribute('colspan', '3')
       cell.style.padding = '0.5em'
-      const newBase = encodeURI(await widgets.askName(dom, kb, cell, ns.solid('URL'), ns.space('Workspace'), 'Workspace'))
+      const newBase = encodeURI(await widgets.askName(dom, solidLogicSingleton.store, cell, ns.solid('URL'), ns.space('Workspace'), 'Workspace'))
       const newWs = widgets.newThing(context.preferencesFile)
       const newData = [st(context.me, ns.space('workspace'), newWs, context.preferencesFile),
         // eslint-disable-next-line camelcase
         st(newWs, ns.space('uriPrefix'), newBase as unknown as Quad_Object, context.preferencesFile)]
-      await kb.updater.update([], newData)
+      if (!solidLogicSingleton.store.updater) {
+        throw new Error('store has no updater')
+      }
+      await solidLogicSingleton.store.updater.update([], newData)
       // @@ now refresh list of workspaces
     }
 
     // const status = ''
     const id = context.me
     const preferencesFile = context.preferencesFile
-    let newBase = null
+    let newBase: any = null
 
     // A workspace specifically defined in the private preference file:
-    let w = kb.each(id, ns.space('workspace'), undefined, preferencesFile) // Only trust preference file here
+    let w: any = solidLogicSingleton.store.each(id, ns.space('workspace'), undefined, preferencesFile) // Only trust preference file here
 
     // A workspace in a storage in the public profile:
-    const storages = kb.each(id, ns.space('storage')) // @@ No provenance requirement at the moment
+    const storages = solidLogicSingleton.store.each(id, ns.space('storage')) // @@ No provenance requirement at the moment
     if (w.length === 0 && storages) {
       say(`You don't seem to have any workspaces. You have ${storages.length} storage spaces.`)
-      storages.map(function (s) {
-        w = w.concat(kb.each(s, ns.ldp('contains')))
+      storages.map(function (s: any) {
+        w = w.concat(solidLogicSingleton.store.each(s, ns.ldp('contains')))
+        return w
       }).filter(file => ['public', 'private'].includes(file.id().toLowerCase()))
     }
 
@@ -1238,7 +1161,7 @@ export function selectWorkspace (
       say(`Workspace used: ${w[0].uri}`) // @@ allow user to see URI
       newBase = figureOutBase(w[0])
       // callbackWS(w[0], newBase)
-    } else if (w.length === 0) {
+    // } else if (w.length === 0) {
     }
 
     // Prompt for ws selection or creation
@@ -1290,7 +1213,7 @@ export function selectWorkspace (
 
     // const row = 0
     w = w.filter(function (x) {
-      return !kb.holds(
+      return !solidLogicSingleton.store.holds(
         x,
         ns.rdf('type'), // Ignore master workspaces
         ns.space('MasterWorkspace')
@@ -1311,7 +1234,7 @@ export function selectWorkspace (
         tr.appendChild(col1)
       }
       col2 = dom.createElement('td')
-      style = kb.anyValue(ws, ns.ui('style'))
+      style = solidLogicSingleton.store.anyValue(ws, ns.ui('style'))
       if (!style) {
         // Otherwise make up arbitrary colour
         const hash = function (x) {
@@ -1325,7 +1248,7 @@ export function selectWorkspace (
       }
       col2.setAttribute('style', deselectedStyle + style)
       tr.target = ws.uri
-      let label = kb.any(ws, ns.rdfs('label'))
+      let label = solidLogicSingleton.store.any(ws, ns.rdfs('label'))
       if (!label) {
         label = ws.uri.split('/').slice(-1)[0] || ws.uri.split('/').slice(-2)[0]
       }
@@ -1340,7 +1263,7 @@ export function selectWorkspace (
       }
       table.appendChild(tr)
 
-      comment = kb.any(ws, ns.rdfs('comment'))
+      comment = solidLogicSingleton.store.any(ws, ns.rdfs('comment'))
       comment = comment ? comment.value : 'Use this workspace'
       col2.addEventListener('click', function (_event) {
         col3.textContent = comment ? comment.value : ''
@@ -1370,9 +1293,11 @@ export function selectWorkspace (
     table.appendChild(trLast)
   } // displayOptions
 
+  // console.log('kicking off async operation')
   logInLoadPreferences(context) // kick off async operation
     .then(displayOptions)
     .catch(err => {
+      // console.log("err from async op")
       box.appendChild(widgets.errorMessageBlock(context.dom, err))
     })
 
@@ -1430,7 +1355,7 @@ export async function getUserRoles (): Promise<Array<NamedNode>> {
     if (!preferencesFile || preferencesFileError) {
       throw new Error(preferencesFileError)
     }
-    return kb.each(me, ns.rdf('type'), null, preferencesFile.doc())
+    return solidLogicSingleton.store.each(me, ns.rdf('type'), null, preferencesFile.doc()) as NamedNode[]
   } catch (error) {
     debug.warn('Unable to fetch your preferences - this was the error: ', error)
   }

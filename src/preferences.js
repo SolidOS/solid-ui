@@ -1,15 +1,16 @@
-/* global $rdf */
 //                  Solid-UI temporary preferences
 //                  ==============================
 //
 
 import * as debug from './debug'
 
-const kb = require('./store')
+const kb = require('./logic').solidLogicSingleton.store
 const ns = require('./ns')
 const authn = require('./authn/authn')
 const widgets = require('./widgets')
 const pad = require('./pad')
+const participation = require('./participation')
+const $rdf = require('rdflib')
 
 // This was tabulator . preferences in the tabulator
 //
@@ -37,7 +38,7 @@ module.exports = {
 // (maybe make it in a separate file?)
 function recordSharedPreferences (subject, context) {
   return new Promise(function (resolve, reject) {
-    var sharedPreferences = kb.any(subject, ns.ui('sharedPreferences'))
+    const sharedPreferences = kb.any(subject, ns.ui('sharedPreferences'))
     if (!sharedPreferences) {
       const sp = $rdf.sym(subject.doc().uri + '#SharedPreferences')
       const ins = [
@@ -72,15 +73,15 @@ function recordPersonalDefaults (theClass, context) {
           )
           return
         }
-        var regs = kb.each(
+        const regs = kb.each(
           null,
           ns.solid('forClass'),
           theClass,
           context.preferencesFile
         )
-        var ins = []
-        var prefs
-        var reg
+        let ins = []
+        let prefs
+        let reg
         if (regs.length) {
           // Use existing node if we can
           regs.forEach(r => {
@@ -133,8 +134,8 @@ function recordPersonalDefaults (theClass, context) {
 }
 
 function renderPreferencesForm (subject, theClass, preferencesForm, context) {
-  var prefContainer = context.dom.createElement('div')
-  pad.participationObject(subject, subject.doc(), context.me).then(
+  const prefContainer = context.dom.createElement('div')
+  participation.participationObject(subject, subject.doc(), context.me).then(
     participation => {
       const dom = context.dom
       function heading (text) {
@@ -155,7 +156,7 @@ function renderPreferencesForm (subject, theClass, preferencesForm, context) {
 
       heading("Everyone's  view of this " + context.noun)
       recordSharedPreferences(subject, context).then(context => {
-        var sharedPreferences = context.sharedPreferences
+        const sharedPreferences = context.sharedPreferences
         widgets.appendForm(
           dom,
           prefContainer,
@@ -226,14 +227,14 @@ function toJS (term) {
 function getPreferencesForClass (subject, theClass, predicates, context) {
   return new Promise(function (resolve, reject) {
     recordSharedPreferences(subject, context).then(context => {
-      var sharedPreferences = context.sharedPreferences
+      const sharedPreferences = context.sharedPreferences
       if (context.me) {
-        pad
+        participation
           .participationObject(subject, subject.doc(), context.me)
           .then(participation => {
             recordPersonalDefaults(theClass, context).then(context => {
-              var results = []
-              var personalDefaults = context.personalDefaults
+              const results = []
+              const personalDefaults = context.personalDefaults
               predicates.forEach(pred => {
                 // Order of preference: My settings on object, Global settings on object, my settings on class
                 const v1 =
@@ -249,7 +250,7 @@ function getPreferencesForClass (subject, theClass, predicates, context) {
           }, reject)
       } else {
         // no user defined, just use common prefs
-        var results = []
+        const results = []
         predicates.forEach(pred => {
           const v1 = kb.any(sharedPreferences, pred)
           if (v1) {

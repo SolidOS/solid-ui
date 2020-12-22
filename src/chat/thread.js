@@ -3,13 +3,13 @@
  * @packageDocumentation
  */
 
-var UI = {
+const UI = {
   authn: require('../authn/authn'),
   icons: require('../iconBase'),
   ns: require('../ns'),
   pad: require('../'),
   rdf: require('rdflib'),
-  store: require('../store'),
+  store: require('../logic').solidLogicSingleton.store,
   style: require('../style'),
   widgets: require('../widgets')
 }
@@ -25,28 +25,29 @@ const $rdf = require('rdflib')
 module.exports = function thread (dom, kb, subject, messageStore, options) {
   kb = kb || UI.store
   messageStore = messageStore.doc() // No hash
-  var ns = UI.ns
-  var WF = $rdf.Namespace('http://www.w3.org/2005/01/wf/flow#')
-  var DCT = $rdf.Namespace('http://purl.org/dc/terms/')
+  const ns = UI.ns
+  const WF = $rdf.Namespace('http://www.w3.org/2005/01/wf/flow#')
+  const DCT = $rdf.Namespace('http://purl.org/dc/terms/')
 
   options = options || {}
 
-  var newestFirst = !!options.newestFirst
+  const newestFirst = !!options.newestFirst
 
-  var messageBodyStyle =
+  const messageBodyStyle =
     'white-space: pre-wrap; width: 90%; font-size:100%; border: 0.07em solid #eee; padding: .2em 0.5em; margin: 0.1em 1em 0.1em 1em;'
   // 'font-size: 100%; margin: 0.1em 1em 0.1em 1em;  background-color: white; white-space: pre-wrap; padding: 0.1em;'
 
-  var div = dom.createElement('div')
-  var messageTable // Shared by initial build and addMessageFromBindings
+  const div = dom.createElement('div')
+  // eslint-disable-next-line prefer-const
+  let messageTable // Shared by initial build and addMessageFromBindings
 
-  var me
+  let me
 
-  var updater = UI.store.updater
+  const updater = UI.store.updater
 
-  var anchor = function (text, term) {
+  const anchor = function (text, term) {
     // If there is no link return an element anyway
-    var a = dom.createElement('a')
+    const a = dom.createElement('a')
     if (term && term.uri) {
       a.setAttribute('href', term.uri)
       a.addEventListener('click', UI.widgets.openHrefInOutlineMode, true)
@@ -56,15 +57,15 @@ module.exports = function thread (dom, kb, subject, messageStore, options) {
     return a
   }
 
-  var mention = function mention (message, style) {
-    var pre = dom.createElement('pre')
+  const mention = function mention (message, style) {
+    const pre = dom.createElement('pre')
     pre.setAttribute('style', style || 'color: grey')
     div.appendChild(pre)
     pre.appendChild(dom.createTextNode(message))
     return pre
   }
 
-  var announce = {
+  const announce = {
     log: function (message) {
       mention(message, 'color: #111;')
     },
@@ -79,27 +80,27 @@ module.exports = function thread (dom, kb, subject, messageStore, options) {
   /**
    * Form for a new message
    */
-  var newMessageForm = function () {
-    var form = dom.createElement('tr')
-    var lhs = dom.createElement('td')
-    var middle = dom.createElement('td')
-    var rhs = dom.createElement('td')
+  const newMessageForm = function () {
+    const form = dom.createElement('tr')
+    const lhs = dom.createElement('td')
+    const middle = dom.createElement('td')
+    const rhs = dom.createElement('td')
     form.appendChild(lhs)
     form.appendChild(middle)
     form.appendChild(rhs)
     form.AJAR_date = '9999-01-01T00:00:00Z' // ISO format for field sort
 
-    var sendMessage = function () {
+    const sendMessage = function () {
       // titlefield.setAttribute('class','pendingedit')
       // titlefield.disabled = true
       field.setAttribute('class', 'pendingedit')
       field.disabled = true
-      var sts = []
-      var now = new Date()
-      var timestamp = '' + now.getTime()
-      var dateStamp = $rdf.term(now)
+      const sts = []
+      const now = new Date()
+      const timestamp = '' + now.getTime()
+      const dateStamp = $rdf.term(now)
       // http://www.w3schools.com/jsref/jsref_obj_date.asp
-      var message = kb.sym(messageStore.uri + '#' + 'Msg' + timestamp)
+      const message = kb.sym(messageStore.uri + '#' + 'Msg' + timestamp)
 
       sts.push(
         new $rdf.Statement(subject, ns.wf('message'), message, messageStore)
@@ -122,13 +123,13 @@ module.exports = function thread (dom, kb, subject, messageStore, options) {
         )
       }
 
-      var sendComplete = function (uri, success, body) {
+      const sendComplete = function (uri, success, body) {
         if (!success) {
           form.appendChild(
             UI.widgets.errorMessageBlock(dom, 'Error writing message: ' + body)
           )
         } else {
-          var bindings = {
+          const bindings = {
             '?msg': message,
             '?content': kb.literal(field.value),
             '?date': dateStamp,
@@ -145,8 +146,8 @@ module.exports = function thread (dom, kb, subject, messageStore, options) {
     }
     form.appendChild(dom.createElement('br'))
 
-    var field, sendButton
-    var turnOnInput = function () {
+    let field, sendButton
+    const turnOnInput = function () {
       creatorAndDate(lhs, me, '', null)
 
       field = dom.createElement('textarea')
@@ -191,13 +192,13 @@ module.exports = function thread (dom, kb, subject, messageStore, options) {
   }
 
   function nick (person) {
-    var s = UI.store.any(person, UI.ns.foaf('nick'))
+    const s = UI.store.any(person, UI.ns.foaf('nick'))
     if (s) return '' + s.value
     return '' + utils.label(person)
   }
 
   function creatorAndDate (td1, creator, date, message) {
-    var nickAnchor = td1.appendChild(anchor(nick(creator), creator))
+    const nickAnchor = td1.appendChild(anchor(nick(creator), creator))
     if (creator.uri) {
       UI.store.fetcher.nowOrWhenFetched(creator.doc(), undefined, function (
         _ok,
@@ -213,16 +214,16 @@ module.exports = function thread (dom, kb, subject, messageStore, options) {
   // ///////////////////////////////////////////////////////////////////////
 
   function syncMessages (about, messageTable) {
-    var displayed = {}
-    var ele, ele2
+    const displayed = {}
+    let ele, ele2
     for (ele = messageTable.firstChild; ele; ele = ele.nextSibling) {
       if (ele.AJAR_subject) {
         displayed[ele.AJAR_subject.uri] = true
       }
     }
-    var messages = kb.each(about, ns.wf('message'))
-    var stored = {}
-    messages.map(function (m) {
+    const messages = kb.each(about, ns.wf('message'))
+    const stored = {}
+    messages.forEach(function (m) {
       stored[m.uri] = true
       if (!displayed[m.uri]) {
         addMessage(m)
@@ -238,8 +239,8 @@ module.exports = function thread (dom, kb, subject, messageStore, options) {
       ele = ele2
     }
   }
-  var deleteMessage = function (message) {
-    var deletions = kb
+  const deleteMessage = function (message) {
+    const deletions = kb
       .statementsMatching(message)
       .concat(kb.statementsMatching(undefined, undefined, message))
     updater.update(deletions, [], function (uri, ok, body) {
@@ -252,7 +253,7 @@ module.exports = function thread (dom, kb, subject, messageStore, options) {
   }
 
   var addMessage = function (message) {
-    var bindings = {
+    const bindings = {
       '?msg': message,
       '?creator': kb.any(message, ns.foaf('maker')),
       '?date': kb.any(message, DCT('created')),
@@ -262,18 +263,18 @@ module.exports = function thread (dom, kb, subject, messageStore, options) {
   }
 
   var renderMessage = function (bindings, fresh) {
-    var creator = bindings['?creator']
-    var message = bindings['?msg']
-    var date = bindings['?date']
-    var content = bindings['?content']
+    const creator = bindings['?creator']
+    const message = bindings['?msg']
+    const date = bindings['?date']
+    const content = bindings['?content']
 
-    var dateString = date.value
-    var tr = dom.createElement('tr')
+    const dateString = date.value
+    const tr = dom.createElement('tr')
     tr.AJAR_date = dateString
     tr.AJAR_subject = message
 
-    var done = false
-    for (var ele = messageTable.firstChild; ; ele = ele.nextSibling) {
+    let done = false
+    for (let ele = messageTable.firstChild; ; ele = ele.nextSibling) {
       if (!ele) {
         // empty
         break
@@ -291,13 +292,13 @@ module.exports = function thread (dom, kb, subject, messageStore, options) {
       messageTable.appendChild(tr)
     }
 
-    var td1 = dom.createElement('td')
+    const td1 = dom.createElement('td')
     tr.appendChild(td1)
     creatorAndDate(td1, creator, UI.widgets.shortDate(dateString), message)
 
-    var td2 = dom.createElement('td')
+    const td2 = dom.createElement('td')
     tr.appendChild(td2)
-    var pre = dom.createElement('p')
+    const pre = dom.createElement('p')
     pre.setAttribute(
       'style',
       messageBodyStyle +
@@ -306,10 +307,10 @@ module.exports = function thread (dom, kb, subject, messageStore, options) {
     td2.appendChild(pre)
     pre.textContent = content.value
 
-    var td3 = dom.createElement('td')
+    const td3 = dom.createElement('td')
     tr.appendChild(td3)
 
-    var delButton = dom.createElement('button')
+    const delButton = dom.createElement('button')
     td3.appendChild(delButton)
     delButton.textContent = '-'
 
@@ -320,7 +321,7 @@ module.exports = function thread (dom, kb, subject, messageStore, options) {
       'click',
       function (_event) {
         td3.removeChild(delButton) // Ask -- are you sure?
-        var cancelButton = dom.createElement('button')
+        const cancelButton = dom.createElement('button')
         cancelButton.textContent = 'cancel'
         td3.appendChild(cancelButton).addEventListener(
           'click',
@@ -354,22 +355,22 @@ module.exports = function thread (dom, kb, subject, messageStore, options) {
   div.appendChild(messageTable)
   messageTable.setAttribute('style', 'width: 100%;') // fill that div!
 
-  var tr = newMessageForm()
+  const tr = newMessageForm()
   if (newestFirst) {
     messageTable.insertBefore(tr, messageTable.firstChild) // If newestFirst
   } else {
     messageTable.appendChild(tr) // not newestFirst
   }
 
-  var query
+  let query
   // Do this with a live query to pull in messages from web
   if (options.query) {
     query = options.query
   } else {
     query = new $rdf.Query('Messages')
-    var v = {} // semicolon needed
-    var vs = ['msg', 'date', 'creator', 'content']
-    vs.map(function (x) {
+    const v = {} // semicolon needed
+    const vs = ['msg', 'date', 'creator', 'content']
+    vs.forEach(function (x) {
       query.vars.push((v[x] = $rdf.variable(x)))
     })
     query.pat.add(subject, WF('message'), v.msg)

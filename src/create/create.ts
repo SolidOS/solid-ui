@@ -7,23 +7,18 @@
 
 // const UI = require('solid-ui')
 
-import * as debug from './debug'
+import * as debug from '../debug'
 
-const UI = {
-  authn: require('./authn/authn'),
-  icons: require('./iconBase'),
-  ns: require('./ns'),
-  store: require('./store'),
-  style: require('./style'),
-  utils: require('./utils'),
-  widgets: require('./widgets')
-}
+import icons from '../iconBase'
+import utils from '../utils'
+import widgets from '../widgets'
+import { solidLogicSingleton } from '../logic'
+import ns from '../ns'
+import { logInLoadProfile, selectWorkspace } from '../authn/authn'
+import { DataBrowserContext, NewPaneOptions, PaneDefinition } from 'pane-registry'
+import { CreateContext, NewAppInstanceOptions } from './types'
 
-const kb = UI.store
-
-module.exports = {
-  newThingUI
-}
+const kb = solidLogicSingleton.store
 
 /*  newThingUI -- return UI for user to select a new object, folder, etc
  **
@@ -32,8 +27,11 @@ module.exports = {
  **                (suppresses asking for a full URI or workspace)
  **
  */
-function newThingUI (createContext, dataBrowserContext, thePanes) {
-  if (!thePanes) throw new Error('@@ newThingUI: update API') // phase out
+export function newThingUI (
+  createContext: CreateContext,
+  dataBrowserContext: DataBrowserContext,
+  thePanes: Array<PaneDefinition>
+): void {
   const dom = createContext.dom
   const div = createContext.div
   if (createContext.me && !createContext.me.uri) {
@@ -42,22 +40,22 @@ function newThingUI (createContext, dataBrowserContext, thePanes) {
 
   const iconStyle = 'padding: 0.7em; width: 2em; height: 2em;' // was: 'padding: 1em; width: 3em; height: 3em;'
   const star = div.appendChild(dom.createElement('img'))
-  var visible = false // the inividual tools tools
+  let visible = false // the inividual tools tools
   //   noun_272948.svg = black star
   // noun_34653_green.svg = green plus
-  star.setAttribute('src', UI.icons.iconBase + 'noun_34653_green.svg')
+  star.setAttribute('src', icons.iconBase + 'noun_34653_green.svg')
   star.setAttribute('style', iconStyle)
   star.setAttribute('title', 'Add another tool')
 
-  var complain = function complain (message) {
-    var pre = div.appendChild(dom.createElement('pre'))
+  const complain = function complain (message) {
+    const pre = div.appendChild(dom.createElement('pre'))
     pre.setAttribute('style', 'background-color: pink')
     pre.appendChild(dom.createTextNode(message))
   }
 
   function styleTheIcons (style) {
-    for (var i = 0; i < iconArray.length; i++) {
-      var st = iconStyle + style
+    for (let i = 0; i < iconArray.length; i++) {
+      let st = iconStyle + style
       if (iconArray[i].disabled) {
         // @@ unused
         st += 'opacity: 0.3;'
@@ -71,7 +69,7 @@ function newThingUI (createContext, dataBrowserContext, thePanes) {
     icon.setAttribute('style', iconStyle + 'background-color: yellow;')
   }
 
-  function selectNewTool (_event) {
+  function selectNewTool (_event?) {
     visible = !visible
     star.setAttribute(
       'style',
@@ -82,34 +80,30 @@ function newThingUI (createContext, dataBrowserContext, thePanes) {
 
   star.addEventListener('click', selectNewTool)
 
-  function makeNewAppInstance (options) {
+  function makeNewAppInstance (options: NewAppInstanceOptions) {
     return new Promise(function (resolve, reject) {
-      var selectUI // , selectUIParent
+      let selectUI // , selectUIParent
       function callbackWS (ws, newBase) {
-        UI.authn.logInLoadProfile(createContext).then(
+        logInLoadProfile(createContext).then(
           _context => {
-            var newPaneOptions = {
+            const newPaneOptions: NewPaneOptions = Object.assign({
               newBase: newBase,
+              folder: options.folder || undefined,
               workspace: ws
-            }
-            for (var opt in options) {
+            }, options)
+            for (const opt in options) {
               // get div, dom, me, folder, pane, refreshTable
               newPaneOptions[opt] = options[opt]
             }
-            debug.log(
-              'newThingUI: Minting new ' +
-                newPaneOptions.pane.name +
-                ' at ' +
-                newPaneOptions.newBase
-            )
+            debug.log(`newThingUI: Minting new ${newPaneOptions.pane.name} at ${newPaneOptions.newBase}`)
             options.pane
-              .mintNew(dataBrowserContext, newPaneOptions)
+              .mintNew!(dataBrowserContext, newPaneOptions)
               .then(function (newPaneOptions) {
                 if (!newPaneOptions || !newPaneOptions.newInstance) {
                   throw new Error('Cannot mint new - missing newInstance')
                 }
                 if (newPaneOptions.folder) {
-                  var tail = newPaneOptions.newInstance.uri.slice(
+                  const tail = newPaneOptions.newInstance.uri.slice(
                     newPaneOptions.folder.uri.length
                   )
                   const isPackage = tail.includes('/')
@@ -117,7 +111,7 @@ function newThingUI (createContext, dataBrowserContext, thePanes) {
                   if (isPackage) {
                     kb.add(
                       newPaneOptions.folder,
-                      UI.ns.ldp('contains'),
+                      ns.ldp('contains'),
                       kb.sym(newPaneOptions.newBase),
                       newPaneOptions.folder.doc()
                     )
@@ -125,17 +119,19 @@ function newThingUI (createContext, dataBrowserContext, thePanes) {
                     // single file
                     kb.add(
                       newPaneOptions.folder,
-                      UI.ns.ldp('contains'),
+                      ns.ldp('contains'),
                       newPaneOptions.newInstance,
                       newPaneOptions.folder.doc()
                     ) // Ping the patch system?
                   }
+                  // @ts-ignore @@ TODO check whether refresh can exist here. Either fix type or remove unreachable code
                   if (newPaneOptions.refreshTarget && newPaneOptions.refreshTarget.refresh) {
-                    newPaneOptions.refreshTarget.refresh() // Refresh the cntaining display
+                    // @@ TODO Remove the need to cast as any
+                    ;(newPaneOptions.refreshTarget as any).refresh() // Refresh the containing display
                   }
                   // selectUI.parentNode.removeChild(selectUI) It removes itself
                 } else {
-                  var p = options.div.appendChild(dom.createElement('p'))
+                  const p = options.div.appendChild(dom.createElement('p'))
                   p.setAttribute('style', 'font-size: 120%;')
                   // Make link to new thing
                   p.innerHTML =
@@ -166,23 +162,26 @@ function newThingUI (createContext, dataBrowserContext, thePanes) {
         )
       } // callbackWS
 
-      var pa = options.pane
+      const pa = options.pane
       // options.appPathSegment = pa.name // was 'edu.mit.solid.pane.'
-      options.noun = pa.mintClass ? UI.utils.label(pa.mintClass) : pa.name
+      options.noun = pa.mintClass ? utils.label(pa.mintClass) : pa.name
       options.appPathSegment = options.noun.slice(0, 1).toUpperCase() + options.noun.slice(1)
 
       if (!options.folder) {
         // No folder given? Ask user for full URI
-        selectUI = UI.authn.selectWorkspace(dom, options, callbackWS)
+        selectUI = selectWorkspace(dom, {
+          noun: options.noun,
+          appPathSegment: options.appPathSegment
+        }, callbackWS)
         options.div.appendChild(selectUI)
         // selectUIParent = options.div
       } else {
-        var gotName = function (name) {
+        const gotName = function (name) {
           if (!name) {
             // selectUIParent.removeChild(selectUI)   itremves itself if cancelled
             selectNewTool() // toggle star to plain and menu vanish again
           } else {
-            var uri = options.folder.uri
+            let uri = options.folder!.uri
             if (!uri.endsWith('/')) {
               uri = uri + '/'
             }
@@ -190,38 +189,39 @@ function newThingUI (createContext, dataBrowserContext, thePanes) {
             callbackWS(null, uri)
           }
         }
-        UI.widgets
+        widgets
           .askName(
             dom,
-            UI.store,
+            kb,
             options.div,
-            UI.ns.foaf('name'),
+            ns.foaf('name'),
             null,
             options.noun
           )
           .then(gotName)
-        // selectUI = getNameForm(dom, UI.store, options.noun, gotName)
+        // selectUI = getNameForm(dom, kb, options.noun, gotName)
         // options.div.appendChild(selectUI)
         // selectUIParent = options.div
       }
     })
   } // makeNewAppInstance
 
-  const iconArray = []
+  const iconArray: Array<any> = []
   const mintingPanes = Object.values(thePanes).filter(pane => pane.mintNew)
   const mintingClassMap = mintingPanes.reduce((classMap, pane) => {
     if (pane.mintClass) {
-      classMap[pane.mintClass] = (classMap[pane.mintClass] || 0) + 1
+      classMap[pane.mintClass.uri] = (classMap[pane.mintClass.uri] || 0) + 1
     }
     return classMap
   }, {})
   mintingPanes.forEach(pane => {
-    const icon = createContext.div.appendChild(dom.createElement('img'))
+    // @@ TODO Remove the need to cast to any
+    const icon: any = createContext.div.appendChild(dom.createElement('img'))
     icon.setAttribute('src', pane.icon)
     const noun = pane.mintClass
-      ? mintingClassMap[pane.mintClass] > 1
-        ? `${UI.utils.label(pane.mintClass)} (using ${pane.name} pane)`
-        : UI.utils.label(pane.mintClass)
+      ? mintingClassMap[pane.mintClass.uri] > 1
+          ? `${utils.label(pane.mintClass)} (using ${pane.name} pane)`
+          : utils.label(pane.mintClass)
       : pane.name + ' @@'
     icon.setAttribute('title', 'Make new ' + noun)
     icon.setAttribute('style', iconStyle + 'display: none;')
@@ -231,7 +231,7 @@ function newThingUI (createContext, dataBrowserContext, thePanes) {
         selectTool(icon)
         makeNewAppInstance({
           event: e,
-          folder: createContext.folder,
+          folder: createContext.folder || null,
           iconEle: icon,
           pane,
           noun,
@@ -252,16 +252,16 @@ function newThingUI (createContext, dataBrowserContext, thePanes) {
 //
 /*
 function getNameForm (dom, kb, classLabel, gotNameCallback) {
-  var form = dom.createElement('div') // form is broken as HTML behaviour can resurface on js error
+  const form = dom.createElement('div') // form is broken as HTML behaviour can resurface on js error
   form.innerHTML = '<p>Name of new ' + classLabel + ':</p>'
-  var namefield = dom.createElement('input')
+  const namefield = dom.createElement('input')
   namefield.setAttribute('type', 'text')
   namefield.setAttribute('size', '30')
-  namefield.setAttribute('style', UI.style.textInputStyle)
+  namefield.setAttribute('style', style.textInputStyle)
   namefield.setAttribute('maxLength', '2048') // No arbitrary limits
   namefield.select() // focus next user input
 
-  var gotName = function () {
+  const gotName = function () {
     namefield.setAttribute('class', 'pendingedit')
     namefield.disabled = true
     continueButton.disabled = true
@@ -278,13 +278,13 @@ function getNameForm (dom, kb, classLabel, gotNameCallback) {
 
   form.appendChild(dom.createElement('br'))
 
-  var cancel = form.appendChild(UI.widgets.cancelButton(dom))
+  const cancel = form.appendChild(widgets.cancelButton(dom))
   cancel.addEventListener('click', function (e) {
     form.parentNode.removeChild(form)
     gotNameCallback(false)
   }, false)
 
-  var continueButton = form.appendChild(UI.widgets.continueButton(dom))
+  const continueButton = form.appendChild(widgets.continueButton(dom))
   continueButton.addEventListener('click', function (e) {
     gotName()
   }, false)

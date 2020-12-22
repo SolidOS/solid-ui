@@ -1,7 +1,16 @@
-import store from './store'
 import { cancelButton } from './widgets'
 import { label } from './utils'
 import { NamedNode } from 'rdflib'
+import { solidLogicSingleton } from './logic'
+
+const store = solidLogicSingleton.store
+
+/**
+ * @ignore
+ */
+class ContainerElement extends HTMLElement {
+  asSettings?: boolean
+}
 
 type TabWidgetOptions = {
   backgroundColor?: string
@@ -23,13 +32,6 @@ export class TabWidgetElement extends HTMLElement {
   bodyContainer?: HTMLElement
   refresh?: () => void
   tabContainer?: HTMLElement
-}
-
-/**
- * @ignore
- */
-class ContainerElement extends HTMLElement {
-  asSettings?: boolean
 }
 
 /**
@@ -253,9 +255,9 @@ export function tabWidget (options: TabWidgetOptions) {
     if (options.items) return options.items
     if (options.ordered !== false) {
       // options.ordered defaults to true
-      return store.the(subject, options.predicate).elements
+      return (store.the(subject, options.predicate) as any).elements
     } else {
-      return store.each(subject, options.predicate)
+      return store.each(subject, options.predicate) as any
     }
   }
 

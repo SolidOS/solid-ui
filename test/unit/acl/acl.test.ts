@@ -1,4 +1,6 @@
+import { ACL_LINK } from 'solid-logic'
 import { silenceDebugMessages } from '../../helpers/setup'
+import { solidLogicSingleton } from '../../../src/logic'
 import {
   ACLbyCombination,
   ACLToString,
@@ -8,7 +10,6 @@ import {
   fixIndividualACL,
   fixIndividualCardACL,
   getACL,
-  getACLorDefault,
   getProspectiveHolder,
   loadUnionACL,
   makeACLGraph,
@@ -24,15 +25,14 @@ import { AgentMapMap, ComboList } from '../../../src/acl/types'
 import { sym } from 'rdflib'
 import { createLiveStore } from '../helpers/createLiveStore'
 import { clearStore } from '../helpers/clearStore'
-import globalStore from '../../../src/store'
 import {
-  ACL_LINK,
   DEFAULT_CONTAINER_ACL,
   DEFAULT_CONTAINER_DOC,
   DEFAULT_RESOURCE_ACL,
   DEFAULT_RESOURCE_DOC,
   getAgentMapForAclWithAllAgents,
-  getAgentMapForAclWithAllAgentsUsingDefaults, mocks, PROFILE
+  getAgentMapForAclWithAllAgentsUsingDefaults,
+  mocks
 } from './acl.mocks'
 import { loadTurtleIntoGraph } from '../helpers/loadTurtleIntoGraph'
 import { createGraphFromTurtle } from '../helpers/createGraphFromTurtle'
@@ -101,7 +101,7 @@ describe('adoptACLDefault', () => {
   let copiedStore
 
   beforeAll(async () => {
-    await loadTurtleIntoGraph(await mocks.defaultAcl, DEFAULT_RESOURCE_ACL.uri, globalStore)
+    await loadTurtleIntoGraph(await mocks.defaultAcl, DEFAULT_RESOURCE_ACL.uri, solidLogicSingleton.store)
     copiedStore = adoptACLDefault(DEFAULT_CONTAINER_DOC, DEFAULT_CONTAINER_ACL, DEFAULT_RESOURCE_DOC, DEFAULT_RESOURCE_ACL)
   })
   afterAll(clearStore)
@@ -153,14 +153,14 @@ describe('getACL', () => {
   describe('200 response for doc', () => {
     describe('200 response for acl', () => {
       beforeEach(() => {
-        globalStore.fetcher.nowOrWhenFetched = (doc, options, callback) => {
+        solidLogicSingleton.store.fetcher.nowOrWhenFetched = (doc, options, callback) => {
           switch (doc) {
             case DEFAULT_RESOURCE_DOC:
-              globalStore.add(DEFAULT_RESOURCE_DOC, ACL_LINK, DEFAULT_RESOURCE_ACL, DEFAULT_RESOURCE_DOC)
-              // eslint-disable-next-line standard/no-callback-literal
+              solidLogicSingleton.store.add(DEFAULT_RESOURCE_DOC, ACL_LINK, DEFAULT_RESOURCE_ACL, DEFAULT_RESOURCE_DOC)
+              // eslint-disable-next-line node/no-callback-literal
               return callback(true)
             case DEFAULT_RESOURCE_ACL:
-              // eslint-disable-next-line standard/no-callback-literal
+              // eslint-disable-next-line node/no-callback-literal
               return callback(true)
           }
         }
@@ -172,15 +172,15 @@ describe('getACL', () => {
 
     describe('ACL resource previously set as nonexistant', () => {
       beforeEach(() => {
-        globalStore.fetcher.nowOrWhenFetched = (doc, options, callback) => {
-          globalStore.add(DEFAULT_RESOURCE_DOC, ACL_LINK, DEFAULT_RESOURCE_ACL, DEFAULT_RESOURCE_DOC)
-          globalStore.fetcher.nonexistent[DEFAULT_RESOURCE_ACL.uri] = true
-          // eslint-disable-next-line standard/no-callback-literal
+        solidLogicSingleton.store.fetcher.nowOrWhenFetched = (doc, options, callback) => {
+          solidLogicSingleton.store.add(DEFAULT_RESOURCE_DOC, ACL_LINK, DEFAULT_RESOURCE_ACL, DEFAULT_RESOURCE_DOC)
+          solidLogicSingleton.store.fetcher.nonexistent[DEFAULT_RESOURCE_ACL.uri] = true
+          // eslint-disable-next-line node/no-callback-literal
           return callback(true)
         }
         getACL(DEFAULT_RESOURCE_DOC, callbackFunction)
       })
-      afterEach(() => (globalStore.fetcher.nonexistent = {}))
+      afterEach(() => (solidLogicSingleton.store.fetcher.nonexistent = {}))
 
       it('should trigger callback with 404', () => expect(callbackFunction).toHaveBeenCalledWith(true, 404, DEFAULT_RESOURCE_ACL, `ACL file ${DEFAULT_RESOURCE_ACL} does not exist.`))
     })
@@ -188,14 +188,14 @@ describe('getACL', () => {
     describe('Failing to request ACL resource', () => {
       const errorMessage = 'Some ERROR'
       beforeEach(() => {
-        globalStore.fetcher.nowOrWhenFetched = (doc, options, callback) => {
+        solidLogicSingleton.store.fetcher.nowOrWhenFetched = (doc, options, callback) => {
           switch (doc) {
             case DEFAULT_RESOURCE_DOC:
-              globalStore.add(DEFAULT_RESOURCE_DOC, ACL_LINK, DEFAULT_RESOURCE_ACL, DEFAULT_RESOURCE_DOC)
-              // eslint-disable-next-line standard/no-callback-literal
+              solidLogicSingleton.store.add(DEFAULT_RESOURCE_DOC, ACL_LINK, DEFAULT_RESOURCE_ACL, DEFAULT_RESOURCE_DOC)
+              // eslint-disable-next-line node/no-callback-literal
               return callback(true)
             case DEFAULT_RESOURCE_ACL:
-              // eslint-disable-next-line standard/no-callback-literal
+              // eslint-disable-next-line node/no-callback-literal
               return callback(false, errorMessage, { status: 500 })
           }
         }
@@ -208,8 +208,8 @@ describe('getACL', () => {
 
   describe('no ACL link for resource', () => {
     beforeEach(() => {
-      // eslint-disable-next-line standard/no-callback-literal
-      globalStore.fetcher.nowOrWhenFetched = (doc, options, callback) => callback(true)
+      // eslint-disable-next-line node/no-callback-literal
+      solidLogicSingleton.store.fetcher.nowOrWhenFetched = (doc, options, callback) => callback(true)
       getACL(DEFAULT_RESOURCE_DOC, callbackFunction)
     })
 
@@ -218,17 +218,13 @@ describe('getACL', () => {
 
   describe('failed response for doc', () => {
     beforeEach(() => {
-      // eslint-disable-next-line standard/no-callback-literal
-      globalStore.fetcher.nowOrWhenFetched = (doc, options, callback) => callback(false, 'Failed response')
+      // eslint-disable-next-line node/no-callback-literal
+      solidLogicSingleton.store.fetcher.nowOrWhenFetched = (doc, options, callback) => callback(false, 'Failed response')
       getACL(DEFAULT_RESOURCE_DOC, callbackFunction)
     })
 
     it('should trigger callback with failure', () => expect(callbackFunction).toHaveBeenCalledWith(false, `Can't get headers to find ACL for ${DEFAULT_RESOURCE_DOC}: Failed response`))
   })
-})
-
-describe('getACLorDefault', () => {
-
 })
 
 describe('getProspectiveHolder', () => {
@@ -332,7 +328,7 @@ describe('readACL', () => {
 
   describe('using global store', () => {
     beforeAll(async () => {
-      await loadTurtleIntoGraph(await mocks.aclWithAllAgents, DEFAULT_RESOURCE_ACL.uri, globalStore)
+      await loadTurtleIntoGraph(await mocks.aclWithAllAgents, DEFAULT_RESOURCE_ACL.uri, solidLogicSingleton.store)
       agentMap = readACL(DEFAULT_RESOURCE_DOC, DEFAULT_RESOURCE_ACL)
     })
     afterAll(clearStore)

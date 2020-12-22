@@ -42,25 +42,24 @@ import * as rdf from 'rdflib' // pull in first avoid cross-refs
 import ns from './ns'
 import { acl, aclControl } from './acl/index'
 import { authn } from './authn/index'
-// @ts-ignore
-import create from './create'
+import { create } from './create/index'
 // @ts-ignore
 import icons from './iconBase'
 import * as log from './log'
-// @ts-ignore
-import matrix from './matrix'
-// @ts-ignore
-import media from './media-capture'
+import { matrix } from './matrix/index'
+import { media } from './media/index'
 // @ts-ignore
 import messageArea from './messageArea'
 // @ts-ignore
 import { infiniteMessageArea } from './chat/infinite'
 // @ts-ignore
-import pad from './pad'
+import * as pad from './pad'
+// @ts-ignore
+import * as participation from './participation'
 // @ts-ignore
 import preferences from './preferences'
 // @ts-ignore
-import store from './store'
+import { solidLogicSingleton } from './logic'
 // @ts-ignore
 import style from './style'
 // @ts-ignore
@@ -73,6 +72,7 @@ import versionInfo from './versionInfo'
 import { initHeader } from './header'
 
 const dom = window ? window.document : null // Idea that UI.dom can be adapted in non-browser environments
+const store = solidLogicSingleton.store
 
 if (typeof window !== 'undefined') {
   ;(<any>window).UI = {
@@ -90,7 +90,9 @@ if (typeof window !== 'undefined') {
     messageArea,
     infiniteMessageArea,
     pad,
+    participation,
     preferences,
+    solidLogicSingleton,
     store,
     style,
     table,
@@ -117,7 +119,9 @@ export {
   messageArea,
   infiniteMessageArea,
   pad,
+  participation,
   preferences,
+  solidLogicSingleton,
   store,
   style,
   table,

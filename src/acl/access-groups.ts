@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import { fetcher, IndexedFormula, NamedNode, sym, UpdateManager } from 'rdflib'
+import { fetcher, IndexedFormula, NamedNode, sym } from 'rdflib'
 import { ACLbyCombination, readACL } from './acl'
 import widgets from '../widgets'
 import ns from '../ns'
@@ -147,11 +147,13 @@ export class AccessGroups {
   }
 
   private renderAgent (groupAgentsTable, combo, pred, obj): HTMLElement {
-    const personRow = widgets.personTR(this.controller.dom, ACL(pred), sym(obj), this.controller.isEditable ? {
-      deleteFunction: () => this.deleteAgent(combo, pred, obj)
-        .then(() => groupAgentsTable.removeChild(personRow))
-        .catch(error => this.controller.renderStatus(error))
-    } : {})
+    const personRow = widgets.personTR(this.controller.dom, ACL(pred), sym(obj), this.controller.isEditable
+      ? {
+          deleteFunction: () => this.deleteAgent(combo, pred, obj)
+            .then(() => groupAgentsTable.removeChild(personRow))
+            .catch(error => this.controller.renderStatus(error))
+        }
+      : {})
     return personRow
   }
 

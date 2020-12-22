@@ -7,9 +7,8 @@ import * as debug from './debug'
 const UI = {
   icons: require('./iconBase'),
   ns: require('./ns'),
-  pad: require('./'),
   rdf: require('rdflib'),
-  store: require('./store'),
+  store: require('./logic').solidLogicSingleton.store,
   widgets: require('./widgets'),
   utils: require('./utils')
 }
@@ -123,7 +122,7 @@ module.exports.deleteFolder = function (folder, store, dom) {
       store.fetcher.webOperation('DELETE', file.uri)
     )
   }
-  var count = 0
+  let count = 0
   forAllFiles(folder, store, () => {
     count += 1
   }) // Count files

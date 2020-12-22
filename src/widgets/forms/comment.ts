@@ -1,7 +1,9 @@
-import store from '../../store'
+import { solidLogicSingleton } from '../../logic'
 import ns from '../../ns'
 import { mostSpecificClassURI } from './fieldFunction'
 import { fieldParams } from './fieldParams'
+
+const store = solidLogicSingleton.store
 
 /**
  * A [[FieldFunction]] for a simple comment box. It will look for
@@ -29,9 +31,10 @@ export function commentField (
   _callbackFunction
 ) {
   const kb = store
-  let contents = kb.any(form, ns.ui('contents'))
-  if (!contents) contents = 'Error: No contents in comment field.'
-
+  let contents: any = kb.any(form, ns.ui('contents'))
+  if (!contents) {
+    contents = 'Error: No contents in comment field.'
+  }
   const uri = mostSpecificClassURI(form)
   let params = fieldParams[uri]
   if (params === undefined) {
@@ -43,11 +46,11 @@ export function commentField (
   const p = box.appendChild(dom.createElement(params.element || 'p'))
   p.textContent = contents
 
-  let style = kb.any(form, ns.ui('style'))
+  let style: any = kb.any(form, ns.ui('style'))
   if (style === undefined) {
     style = params.style ? params.style : ''
   }
-  if (style) p.setAttribute('style', style)
+  if (style) p.setAttribute('style', style as any)
 
   return box
 }

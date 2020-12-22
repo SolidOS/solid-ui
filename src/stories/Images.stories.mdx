@@ -1,0 +1,155 @@
+import * as UI from '../../lib'
+
+import { Canvas, Meta, Story } from '@storybook/addon-docs/blocks'
+import { rawJsonDecorator } from './decorators'
+
+export const imageDecorator = (Story) => {
+  const result = Story()
+  return `
+            <div>Returns:</div>
+            <pre>${result}</pre>
+            <p>Preview:</p>
+            <img src="${result}" width="80" />
+`
+}
+
+<Meta title="Images"/>
+
+## findImage
+
+Find something we have as explicit image data for the thing
+
+[API Documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#findimage)
+
+### for foaf:Agent
+
+<Canvas withSource="open">
+  <Story name="for foaf:Agent" decorators={[imageDecorator]}>
+    {
+      UI.widgets.findImage(UI.ns.foaf('Agent'))
+    }
+  </Story>
+</Canvas>
+
+### for rdf:Resource
+
+<Canvas withSource="open">
+  <Story name="for rdf:Resource" decorators={[imageDecorator]}>
+    {
+      UI.widgets.findImage(UI.ns.rdf('Resource'))
+    }
+  </Story>
+</Canvas>
+
+### with vcard:hasPhoto
+
+<Canvas withSource="open">
+  <Story name="with vcard:hasPhoto" decorators={[imageDecorator]}>
+    {() => {
+      const person = UI.rdf.namedNode('https://person.example/1#me')
+      const photo = UI.rdf.namedNode('https://michielbdejong.com/img/me.jpg')
+      UI.store.add(person, UI.ns.vcard('hasPhoto'), photo)
+      return UI.widgets.findImage(person)
+    }}
+  </Story>
+</Canvas>
+
+### with foaf:img
+
+<Canvas withSource="open">
+  <Story name="with foaf:img" decorators={[imageDecorator]}>
+    {() => {
+      const person = UI.rdf.namedNode('https://person.example/2#me')
+      const photo = UI.rdf.namedNode('https://michielbdejong.com/img/me.jpg')
+      UI.store.add(person, UI.ns.foaf('img'), photo)
+      return UI.widgets.findImage(person)
+    }}
+  </Story>
+</Canvas>
+
+## findImageFromURI
+
+Find an image for this thing as a class
+
+[API Documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#findimagefromuri)
+
+### without favicon
+
+<Canvas withSource="open">
+  <Story name="without favicon" decorators={[imageDecorator]}>
+    {
+      UI.widgets.findImageFromURI(UI.rdf.namedNode('https://example.com/'))
+    }
+  </Story>
+</Canvas>
+
+### favicon
+
+<Canvas withSource="open">
+  <Story name="favicon" decorators={[imageDecorator]}>
+    {
+      UI.widgets.findImageFromURI(UI.rdf.namedNode('https://solidproject.org/some/file.html'))
+    }
+  </Story>
+</Canvas>
+
+### Message-ID (mid:)
+
+<Canvas withSource="open">
+  <Story name="Message-ID" decorators={[imageDecorator]}>
+    {
+      UI.widgets.findImageFromURI(UI.rdf.namedNode('mid:example'))
+    }
+  </Story>
+</Canvas>
+
+### E-Mail (mailto:)
+
+<Canvas withSource="open">
+  <Story name="E-Mail" decorators={[imageDecorator]}>
+    {
+      UI.widgets.findImageFromURI(UI.rdf.namedNode('mailto:user@mail.example'))
+    }
+  </Story>
+</Canvas>
+
+### imagesOf
+
+Set of suitable images
+
+[API Documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#imagesof)
+
+<Canvas withSource="open">
+  <Story name="imagesOf" decorators={[rawJsonDecorator]}>
+    {
+      () => {
+        const store = UI.rdf.graph()
+        const thing = UI.rdf.namedNode('http://thing.example/resource#it')
+        const avatar = UI.rdf.namedNode('https://pod.example/image1.png')
+        const image = UI.rdf.namedNode('https://pod.example/image2.jpg')
+        store.add(thing, UI.ns.sioc('avatar'), avatar)
+        store.add(thing, UI.ns.foaf('img'), image)
+        return UI.widgets.imagesOf(thing, store)
+      }
+    }
+  </Story>
+</Canvas>
+
+## setImage
+
+[API Documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#setimage)
+
+<Canvas withSource="open">
+  <Story name="setImage">
+    {
+      () => {
+        const myTrip = UI.rdf.namedNode('http://example.com/#trip')
+        UI.store.add(myTrip, UI.ns.rdf('type'), UI.ns.trip('Trip'))
+        const img = document.createElement('img')
+        img.setAttribute('style', 'height:50px;width:50px;')
+        UI.widgets.setImage(img, myTrip)
+        return img
+      }
+    }
+  </Story>
+</Canvas>

@@ -1,8 +1,9 @@
 import { silenceDebugMessages } from '../../../helpers/setup'
 import { namedNode, graph } from 'rdflib'
 import ns from '../../../../src/ns'
-import uiStore from '../../../../src/store'
+import { solidLogicSingleton } from '../../../../src/logic'
 
+// @ts-ignore
 import {
   appendForm,
   buildCheckboxForm,
@@ -260,7 +261,7 @@ describe('Classifier', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    uiStore.add(form, ns.ui('category'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
+    solidLogicSingleton.store.add(form, ns.ui('category'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
 
     const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
@@ -312,7 +313,7 @@ describe('Heading', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    uiStore.add(form, ns.ui('contents'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
+    solidLogicSingleton.store.add(form, ns.ui('contents'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
     const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       field[ns.ui('Heading').uri](
@@ -339,7 +340,7 @@ describe('Comment', () => {
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
     const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
-    uiStore.add(form, ns.ui('contents'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
+    solidLogicSingleton.store.add(form, ns.ui('contents'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
     expect(
       field[ns.ui('Comment').uri](
         document,

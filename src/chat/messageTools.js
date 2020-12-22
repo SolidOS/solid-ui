@@ -14,10 +14,10 @@ const UI = {
   authn: require('../authn/authn'),
   icons: require('../iconBase'),
   ns: require('../ns'),
-  media: require('../media-capture'),
+  media: require('../media/media-capture'),
   pad: require('../pad'),
   rdf: require('rdflib'),
-  store: require('../store'),
+  store: require('../logic').solidLogicSingleton.store,
   style: require('../style'),
   utils: require('../utils'),
   widgets: require('../widgets')
@@ -61,7 +61,7 @@ function updatePromise (del, ins) {
  * Emoji in Unicode
  */
 
-var emoji = {}
+const emoji = {}
 emoji[ns.schema('AgreeAction')] = '👍'
 emoji[ns.schema('DisagreeAction')] = '👎'
 emoji[ns.schema('EndorseAction')] = '⭐️'
@@ -84,7 +84,7 @@ export function sentimentStrip (target, doc) {
  * @param doc {NamedNode} - The document in which they are expressed
  */
 export function sentimentStripLinked (target, doc) {
-  var strip = dom.createElement('span')
+  const strip = dom.createElement('span')
   function refresh () {
     strip.innerHTML = ''
     const actions = kb.each(null, ns.schema('target'), target, doc)
@@ -95,7 +95,7 @@ export function sentimentStripLinked (target, doc) {
     sentiments.sort()
     sentiments.forEach(ss => {
       const [theClass, agent] = ss
-      var res
+      let res
       if (agent) {
         res = dom.createElement('a')
         res.setAttribute('href', agent.uri)
@@ -185,7 +185,7 @@ export function messageToolbar (message, messageRow, userContext) {
         } else {
           // no action
           action = UI.widgets.newThing(doc)
-          var insertMe = [
+          const insertMe = [
             $rdf.st(action, ns.schema('agent'), context.me, doc),
             $rdf.st(action, ns.rdf('type'), actionClass, doc),
             $rdf.st(action, ns.schema('target'), target, doc)
@@ -195,7 +195,7 @@ export function messageToolbar (message, messageRow, userContext) {
 
           if (mutuallyExclusive) {
             // Delete incompative sentiments
-            var dirty = false
+            let dirty = false
             for (let i = 0; i < mutuallyExclusive.length; i++) {
               const a = existingAction(mutuallyExclusive[i])
               if (a) {
@@ -212,7 +212,7 @@ export function messageToolbar (message, messageRow, userContext) {
       }
     )
     function existingAction (actionClass) {
-      var actions = kb
+      const actions = kb
         .each(null, ns.schema('agent'), context.me, doc)
         .filter(x => kb.holds(x, ns.rdf('type'), actionClass, doc))
         .filter(x => kb.holds(x, ns.schema('target'), target, doc))
@@ -222,7 +222,7 @@ export function messageToolbar (message, messageRow, userContext) {
       action = existingAction(actionClass)
       setColor()
     }
-    var action
+    let action
     button.refresh = refresh // If the file changes, refresh live
     refresh()
     return button
@@ -233,7 +233,7 @@ export function messageToolbar (message, messageRow, userContext) {
   me = UI.authn.currentUser() // If already logged on
   if (me) {
     // Things you mnust be logged in for
-    var context1 = { me, dom, div }
+    const context1 = { me, dom, div }
     div.appendChild(
       sentimentButton(
         context1,

@@ -1,6 +1,6 @@
 import { silenceDebugMessages } from '../helpers/setup'
 import { JSDOM } from 'jsdom'
-import { newThingUI } from '../../src/create'
+import { create } from '../../src/create'
 
 silenceDebugMessages()
 jest.mock('solid-auth-client')
@@ -9,9 +9,9 @@ const div = dom.createElement('div')
 
 describe('newThingUI', () => {
   it('exists', () => {
-    expect(newThingUI).toBeInstanceOf(Function)
+    expect(create.newThingUI).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(newThingUI({ dom, div }, { dom }, {})).toEqual(undefined)
+    expect(create.newThingUI({ dom, div }, { dom }, {})).toEqual(undefined)
   })
 })
