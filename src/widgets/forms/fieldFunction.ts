@@ -1,9 +1,9 @@
 import { Node } from 'rdflib'
-import store from '../../store'
+import { solidLogicSingleton } from '../../logic'
 import { debug } from '../../log'
 import { errorMessageBlock } from '../error'
 
-export const field: { [classUri: string]: FieldFunction } = {} // Form field functions by URI of field type.
+const store = solidLogicSingleton.store
 
 export type FieldFunction = (
   dom: HTMLDocument, // the DOM
@@ -15,6 +15,8 @@ export type FieldFunction = (
   callbackFunction: (ok: boolean, errorMessage: string) => void // this will be called when data changes (TODO: check this with unit tests)
 ) => HTMLElement
 
+export const field: { [classUri: string]: FieldFunction } = {} // Form field functions by URI of field type.
+
 /**
  * Which class of field is this? Relies on http://www.w3.org/2000/01/rdf-schema#subClassOf and
  * https://linkeddata.github.io/rdflib.js/doc/classes/formula.html#bottomtypeuris
@@ -25,7 +27,7 @@ export type FieldFunction = (
  */
 export function mostSpecificClassURI (x: Node): string {
   const kb = store
-  const ft = kb.findTypeURIs(x)
+  const ft = kb.findTypeURIs(x as any)
   const bot = kb.bottomTypeURIs(ft) // most specific
   const bots: any[] = []
   for (const b in bot) bots.push(b)

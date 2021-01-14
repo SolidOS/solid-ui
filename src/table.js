@@ -15,11 +15,11 @@
 
 import * as debug from './debug'
 
-var UI = {
+const UI = {
   icons: require('./iconBase'),
   log: require('./log'),
   ns: require('./ns'),
-  store: require('./store'),
+  store: require('./logic').solidLogicSingleton.store,
   widgets: require('./widgets')
 }
 
@@ -28,25 +28,25 @@ const $rdf = require('rdflib')
 
 // UI.widgets.renderTableViewPane
 module.exports = function renderTableViewPane (doc, options) {
-  var sourceDocument = options.sourceDocument
-  var tableClass = options.tableClass
-  var givenQuery = options.query
+  const sourceDocument = options.sourceDocument
+  const tableClass = options.tableClass
+  const givenQuery = options.query
 
-  var RDFS_LITERAL = 'http://www.w3.org/2000/01/rdf-schema#Literal'
-  var ns = UI.ns
-  var kb = UI.store
-  var rowsLookup = {} //  Persistent mapping of subject URI to dom TR
+  const RDFS_LITERAL = 'http://www.w3.org/2000/01/rdf-schema#Literal'
+  const ns = UI.ns
+  const kb = UI.store
+  const rowsLookup = {} //  Persistent mapping of subject URI to dom TR
 
   // Predicates that are never made into columns:
 
-  var FORBIDDEN_COLUMNS = {
+  const FORBIDDEN_COLUMNS = {
     'http://www.w3.org/2002/07/owl#sameAs': true,
     'http://www.w3.org/1999/02/22-rdf-syntax-ns#type': true
   }
 
   // Number types defined in the XML schema:
 
-  var XSD_NUMBER_TYPES = {
+  const XSD_NUMBER_TYPES = {
     'http://www.w3.org/2001/XMLSchema#decimal': true,
     'http://www.w3.org/2001/XMLSchema#float': true,
     'http://www.w3.org/2001/XMLSchema#double': true,
@@ -65,14 +65,14 @@ module.exports = function renderTableViewPane (doc, options) {
     'http://www.w3.org/2001/XMLSchema#unsignedByte': true
   }
 
-  var XSD_DATE_TYPES = {
+  const XSD_DATE_TYPES = {
     'http://www.w3.org/2001/XMLSchema#dateTime': true,
     'http://www.w3.org/2001/XMLSchema#date': true
   }
 
   // Classes that indicate an image:
 
-  var IMAGE_TYPES = {
+  const IMAGE_TYPES = {
     'http://xmlns.com/foaf/0.1/Image': true,
     'http://purl.org/dc/terms/Image': true
   }
@@ -84,22 +84,22 @@ module.exports = function renderTableViewPane (doc, options) {
   // as an anchor that can be used to combine this information
   // back into the same row.
 
-  var keyVariable = options.keyVariable || '?_row'
+  const keyVariable = options.keyVariable || '?_row'
 
-  var subjectIdCounter = 0
-  var allType, types
-  var typeSelectorDiv, addColumnDiv
+  let subjectIdCounter = 0
+  let allType, types
+  let typeSelectorDiv, addColumnDiv
 
   // The last SPARQL query used:
-  var lastQuery = null
-  var mostCommonType = null
+  let lastQuery = null
+  let mostCommonType = null
 
-  var resultDiv = doc.createElement('div')
+  const resultDiv = doc.createElement('div')
   resultDiv.className = 'tableViewPane'
 
   resultDiv.appendChild(generateControlBar()) // sets typeSelectorDiv
 
-  var tableDiv = doc.createElement('div')
+  const tableDiv = doc.createElement('div')
   resultDiv.appendChild(tableDiv)
 
   // Save a refresh function for use by caller
@@ -116,7 +116,7 @@ module.exports = function renderTableViewPane (doc, options) {
   } else {
     // Find the most common type and select it by default
 
-    var s = calculateTable()
+    const s = calculateTable()
     allType = s[0]
     types = s[1]
     if (!tableClass) {
@@ -197,10 +197,10 @@ module.exports = function renderTableViewPane (doc, options) {
   // Generate the control bar displayed at the top of the screen.
 
   function generateControlBar () {
-    var result = doc.createElement('table')
+    const result = doc.createElement('table')
     result.setAttribute('class', 'toolbar')
 
-    var tr = doc.createElement('tr')
+    const tr = doc.createElement('tr')
 
     /*             @@    Add in later -- not debugged yet
             var sparqlButtonDiv = doc.createElement("td")
@@ -221,13 +221,13 @@ module.exports = function renderTableViewPane (doc, options) {
   // Add the SELECT details to the query being built.
 
   function addSelectToQuery (query, type) {
-    var selectedColumns = type.getColumns()
+    const selectedColumns = type.getColumns()
 
     for (let i = 0; i < selectedColumns.length; ++i) {
       // TODO: autogenerate nicer names for variables
       // variables have to be unambiguous
 
-      var variable = kb.variable('_col' + i)
+      const variable = kb.variable('_col' + i)
 
       query.vars.push(variable)
       selectedColumns[i].setVariable(variable)
@@ -237,7 +237,7 @@ module.exports = function renderTableViewPane (doc, options) {
   // Add WHERE details to the query being built.
 
   function addWhereToQuery (query, rowVar, type) {
-    var queryType = type.type
+    let queryType = type.type
 
     if (!queryType) {
       queryType = kb.variable('_any')
@@ -250,12 +250,12 @@ module.exports = function renderTableViewPane (doc, options) {
   // Generate OPTIONAL column selectors.
 
   function addColumnsToQuery (query, rowVar, type) {
-    var selectedColumns = type.getColumns()
+    const selectedColumns = type.getColumns()
 
     for (let i = 0; i < selectedColumns.length; ++i) {
-      var column = selectedColumns[i]
+      const column = selectedColumns[i]
 
-      var formula = kb.formula()
+      const formula = kb.formula()
 
       formula.add(rowVar, column.predicate, column.getVariable())
 
@@ -267,8 +267,8 @@ module.exports = function renderTableViewPane (doc, options) {
   // object.
 
   function generateQuery (type) {
-    var query = new $rdf.Query()
-    var rowVar = kb.variable(keyVariable.slice(1)) // don't pass '?'
+    const query = new $rdf.Query()
+    const rowVar = kb.variable(keyVariable.slice(1)) // don't pass '?'
 
     addSelectToQuery(query, type)
     addWhereToQuery(query, rowVar, type)
@@ -286,7 +286,7 @@ module.exports = function renderTableViewPane (doc, options) {
     clearElement(addColumnDiv)
     addColumnDiv.appendChild(generateColumnAddDropdown(type))
 
-    var query = generateQuery(type)
+    const query = generateQuery(type)
 
     updateTable(query, type)
   }
@@ -300,7 +300,7 @@ module.exports = function renderTableViewPane (doc, options) {
 
     // Render the HTML table.
 
-    var htmlTable = renderTableForQuery(query, type)
+    const htmlTable = renderTableForQuery(query, type)
 
     // Clear the tableDiv element, and replace with the new table.
 
@@ -342,7 +342,7 @@ module.exports = function renderTableViewPane (doc, options) {
       // and select only the six most popular columns.
 
       if (!this.columns) {
-        var allColumns = this.getAllColumns()
+        const allColumns = this.getAllColumns()
         this.columns = allColumns.slice(0, 7)
       }
 
@@ -352,10 +352,10 @@ module.exports = function renderTableViewPane (doc, options) {
     // Get a list of unused columns
 
     this.getUnusedColumns = function () {
-      var allColumns = this.getAllColumns()
-      var columns = this.getColumns()
+      const allColumns = this.getAllColumns()
+      const columns = this.getColumns()
 
-      var result = []
+      const result = []
 
       for (let i = 0; i < allColumns.length; ++i) {
         if (columns.indexOf(allColumns[i]) === -1) {
@@ -416,7 +416,7 @@ module.exports = function renderTableViewPane (doc, options) {
     // numbers (using regexps).
 
     this.checkValue = function (term) {
-      var termType = term.termType
+      const termType = term.termType
       if (
         this.possiblyLiteral &&
         termType !== 'Literal' &&
@@ -428,7 +428,7 @@ module.exports = function renderTableViewPane (doc, options) {
         if (termType !== 'Literal') {
           this.possiblyNumber = false
         } else {
-          var literalValue = term.value
+          const literalValue = term.value
 
           if (!literalValue.match(/^-?\d+(\.\d*)?$/)) {
             this.possiblyNumber = false
@@ -529,11 +529,11 @@ module.exports = function renderTableViewPane (doc, options) {
   // Convert an object to an array.
 
   function objectToArray (obj, filter) {
-    var result = []
+    const result = []
 
     for (const property in obj) {
       // @@@ have to guard against methods
-      var value = obj[property]
+      const value = obj[property]
 
       if (!filter || filter(property, value)) {
         result.push(value)
@@ -546,7 +546,7 @@ module.exports = function renderTableViewPane (doc, options) {
   // Generate an <option> in a drop-down list.
 
   function optionElement (label, value) {
-    var result = doc.createElement('option')
+    const result = doc.createElement('option')
 
     result.setAttribute('value', value)
     result.appendChild(doc.createTextNode(label))
@@ -557,11 +557,11 @@ module.exports = function renderTableViewPane (doc, options) {
   // Generate drop-down list box for choosing type of data displayed
 
   function generateTypeSelector (allType, types) {
-    var resultDiv = doc.createElement('div')
+    const resultDiv = doc.createElement('div')
 
     resultDiv.appendChild(doc.createTextNode('Select type: '))
 
-    var dropdown = doc.createElement('select')
+    const dropdown = doc.createElement('select')
 
     dropdown.appendChild(optionElement('All types', 'null'))
 
@@ -572,7 +572,7 @@ module.exports = function renderTableViewPane (doc, options) {
     dropdown.addEventListener(
       'click',
       function () {
-        var type
+        let type
 
         if (dropdown.value === 'null') {
           type = allType
@@ -599,13 +599,13 @@ module.exports = function renderTableViewPane (doc, options) {
   // Build drop-down list to add a new column
 
   function generateColumnAddDropdown (type) {
-    var resultDiv = doc.createElement('div')
+    const resultDiv = doc.createElement('div')
 
-    var unusedColumns = type.getUnusedColumns()
+    const unusedColumns = type.getUnusedColumns()
 
     unusedColumns.sort(function (a, b) {
-      var aLabel = a.sortKey()
-      var bLabel = b.sortKey()
+      const aLabel = a.sortKey()
+      const bLabel = b.sortKey()
       return (aLabel > bLabel) - (aLabel < bLabel)
     })
 
@@ -616,12 +616,12 @@ module.exports = function renderTableViewPane (doc, options) {
 
       // Build dropdown list of unused columns.
 
-      var dropdown = doc.createElement('select')
+      const dropdown = doc.createElement('select')
 
       dropdown.appendChild(optionElement('', '-1'))
 
       for (let i = 0; i < unusedColumns.length; ++i) {
-        var column = unusedColumns[i]
+        const column = unusedColumns[i]
         dropdown.appendChild(optionElement(column.getLabel(), '' + i))
       }
 
@@ -633,7 +633,7 @@ module.exports = function renderTableViewPane (doc, options) {
       dropdown.addEventListener(
         'click',
         function () {
-          var columnIndex = Number(dropdown.value)
+          const columnIndex = Number(dropdown.value)
 
           if (columnIndex >= 0) {
             type.addColumn(unusedColumns[columnIndex])
@@ -651,7 +651,7 @@ module.exports = function renderTableViewPane (doc, options) {
 
   function getColumnForVariable (columns, variableNT) {
     for (const predicateUri in columns) {
-      var column = columns[predicateUri]
+      const column = columns[predicateUri]
       if (column.variable.toNT() === variableNT) {
         return column
       }
@@ -664,7 +664,7 @@ module.exports = function renderTableViewPane (doc, options) {
   // if necessary.
 
   function getColumnForPredicate (columns, predicate) {
-    var column
+    let column
 
     if (predicate.uri in columns) {
       column = columns[predicate.uri]
@@ -681,7 +681,7 @@ module.exports = function renderTableViewPane (doc, options) {
   // necessary.
 
   function getTypeForObject (types, type) {
-    var subjectType
+    let subjectType
 
     if (type.uri in types) {
       subjectType = types[type.uri]
@@ -698,12 +698,12 @@ module.exports = function renderTableViewPane (doc, options) {
   function discoverTypes () {
     // rdf:type properties of subjects, indexed by URI for the type.
 
-    var types = {}
+    const types = {}
 
     // Get a list of statements that match:  ? rdfs:type ?
     // From this we can get a list of subjects and types.
 
-    var subjectList = kb.statementsMatching(
+    const subjectList = kb.statementsMatching(
       undefined,
       UI.ns.rdf('type'),
       tableClass, // can be undefined OR
@@ -714,17 +714,17 @@ module.exports = function renderTableViewPane (doc, options) {
     // lists of subjects (it is necessary to record the type of
     // a subject).
 
-    var subjects = {}
+    const subjects = {}
 
     for (let i = 0; i < subjectList.length; ++i) {
-      var type = subjectList[i].object
+      const type = subjectList[i].object
 
       if (type.termType !== 'NamedNode') {
         // @@ no bnodes?
         continue
       }
 
-      var typeObj = getTypeForObject(types, type)
+      const typeObj = getTypeForObject(types, type)
 
       if (!(type.uri in subjects)) {
         subjects[type.uri] = []
@@ -742,17 +742,17 @@ module.exports = function renderTableViewPane (doc, options) {
   function getSubjectProperties (subject, columns) {
     // Get a list of properties of this subject.
 
-    var properties = kb.statementsMatching(
+    const properties = kb.statementsMatching(
       subject,
       undefined,
       undefined,
       sourceDocument
     )
 
-    var result = {}
+    const result = {}
 
     for (let j = 0; j < properties.length; ++j) {
-      var predicate = properties[j].predicate
+      const predicate = properties[j].predicate
 
       if (predicate.uri in FORBIDDEN_COLUMNS) {
         continue
@@ -760,7 +760,7 @@ module.exports = function renderTableViewPane (doc, options) {
 
       // Find/create a column for this predicate.
 
-      var column = getColumnForPredicate(columns, predicate)
+      const column = getColumnForPredicate(columns, predicate)
       column.checkValue(properties[j].object)
 
       result[predicate.uri] = column
@@ -772,16 +772,16 @@ module.exports = function renderTableViewPane (doc, options) {
   // Identify the columns associated with a type.
 
   function identifyColumnsForType (type, subjects) {
-    var allColumns = {}
+    const allColumns = {}
 
     // Process each subject of this type to build up the
     // column list.
 
     for (let i = 0; i < subjects.length; ++i) {
-      var columns = getSubjectProperties(subjects[i], allColumns)
+      const columns = getSubjectProperties(subjects[i], allColumns)
 
       for (const predicateUri in columns) {
-        var column = columns[predicateUri]
+        const column = columns[predicateUri]
 
         column.addUse()
       }
@@ -789,7 +789,7 @@ module.exports = function renderTableViewPane (doc, options) {
 
     // Generate the columns list
 
-    var allColumnsList = objectToArray(allColumns)
+    const allColumnsList = objectToArray(allColumns)
     sortColumns(allColumnsList)
     type.allColumns = allColumnsList
   }
@@ -800,15 +800,17 @@ module.exports = function renderTableViewPane (doc, options) {
     // Find the types that we will display in the dropdown
     // list box, and associated objects of those types.
 
-    var subjects, types
+    let subjects, types
 
-    var s = discoverTypes()
+    const s = discoverTypes()
+    // eslint-disable-next-line prefer-const
     subjects = s[0]
+    // eslint-disable-next-line prefer-const
     types = s[1] // no [ ] on LHS
 
     for (const typeUrl in subjects) {
-      var subjectList = subjects[typeUrl]
-      var type = types[typeUrl]
+      const subjectList = subjects[typeUrl]
+      const type = types[typeUrl]
 
       identifyColumnsForType(type, subjectList)
     }
@@ -816,7 +818,7 @@ module.exports = function renderTableViewPane (doc, options) {
     // TODO: Special type that captures all rows.
     // Combine columns from all types
 
-    var allType = new SubjectType(null)
+    const allType = new SubjectType(null)
 
     return [allType, objectToArray(types)]
   }
@@ -834,7 +836,7 @@ module.exports = function renderTableViewPane (doc, options) {
   // Create the delete button for a column.
 
   function renderColumnDeleteButton (type, column) {
-    var button = doc.createElement('a')
+    const button = doc.createElement('a')
 
     button.appendChild(doc.createTextNode('[x]'))
 
@@ -853,15 +855,15 @@ module.exports = function renderTableViewPane (doc, options) {
   // Render the table header for the HTML table.
 
   function renderTableHeader (columns, type) {
-    var tr = doc.createElement('tr')
+    const tr = doc.createElement('tr')
 
     /* Empty header for link column */
-    var linkTd = doc.createElement('th')
+    const linkTd = doc.createElement('th')
     tr.appendChild(linkTd)
 
     for (let i = 0; i < columns.length; ++i) {
-      var th = doc.createElement('th')
-      var column = columns[i]
+      const th = doc.createElement('th')
+      const column = columns[i]
 
       th.appendChild(doc.createTextNode(column.getLabel()))
 
@@ -881,12 +883,12 @@ module.exports = function renderTableViewPane (doc, options) {
   // column, using the provided sort function to compare values.
 
   function applyColumnSort (rows, column, sortFunction, reverse) {
-    var columnKey = column.getKey()
+    const columnKey = column.getKey()
 
     // Sort the rows array.
     rows.sort(function (row1, row2) {
-      var row1Value = null
-      var row2Value = null
+      let row1Value = null
+      let row2Value = null
 
       if (columnKey in row1.values) {
         row1Value = row1.values[columnKey][0]
@@ -895,7 +897,7 @@ module.exports = function renderTableViewPane (doc, options) {
         row2Value = row2.values[columnKey][0]
       }
 
-      var result = sortFunction(row1Value, row2Value)
+      const result = sortFunction(row1Value, row2Value)
 
       if (reverse) {
         return -result
@@ -907,7 +909,7 @@ module.exports = function renderTableViewPane (doc, options) {
     // Remove all rows from the table:
 
     if (rows.length) {
-      var parentTable = rows[0]._htmlRow.parentNode
+      const parentTable = rows[0]._htmlRow.parentNode
 
       for (let i = 0; i < rows.length; ++i) {
         parentTable.removeChild(rows[i]._htmlRow)
@@ -925,17 +927,17 @@ module.exports = function renderTableViewPane (doc, options) {
   // columns.
 
   function applyColumnFiltersToRow (row, columns) {
-    var rowDisplayed = true
+    let rowDisplayed = true
 
     // Check the filter functions for every column.
     // The row should only be displayed if the filter functions
     // for all of the columns return true.
 
     for (let c = 0; c < columns.length; ++c) {
-      var column = columns[c]
-      var columnKey = column.getKey()
+      const column = columns[c]
+      const columnKey = column.getKey()
 
-      var columnValue = null
+      let columnValue = null
 
       if (columnKey in row.values) {
         columnValue = row.values[columnKey][0]
@@ -950,7 +952,7 @@ module.exports = function renderTableViewPane (doc, options) {
     // Show or hide the HTML row according to the result
     // from the filter function.
 
-    var htmlRow = row._htmlRow
+    const htmlRow = row._htmlRow
 
     if (rowDisplayed) {
       htmlRow.style.display = ''
@@ -966,7 +968,7 @@ module.exports = function renderTableViewPane (doc, options) {
     // Apply filterFunction to each row.
 
     for (let r = 0; r < rows.length; ++r) {
-      var row = rows[r]
+      const row = rows[r]
       applyColumnFiltersToRow(row, columns)
     }
   }
@@ -990,8 +992,8 @@ module.exports = function renderTableViewPane (doc, options) {
     }
 
     function literalCompare (value1, value2) {
-      var strValue1 = literalToString(value1)
-      var strValue2 = literalToString(value2)
+      const strValue1 = literalToString(value1)
+      const strValue2 = literalToString(value2)
 
       if (strValue1 < strValue2) {
         return -1
@@ -1008,15 +1010,15 @@ module.exports = function renderTableViewPane (doc, options) {
   // Generates a selector for an RDF literal column.
 
   function renderLiteralSelector (rows, columns, column) {
-    var result = doc.createElement('div')
+    const result = doc.createElement('div')
 
-    var textBox = doc.createElement('input')
+    const textBox = doc.createElement('input')
     textBox.setAttribute('type', 'text')
     textBox.style.width = '70%'
 
     result.appendChild(textBox)
 
-    var sort1 = doc.createElement('span')
+    const sort1 = doc.createElement('span')
     sort1.appendChild(doc.createTextNode('\u25BC'))
     sort1.addEventListener(
       'click',
@@ -1027,7 +1029,7 @@ module.exports = function renderTableViewPane (doc, options) {
     )
     result.appendChild(sort1)
 
-    var sort2 = doc.createElement('span')
+    const sort2 = doc.createElement('span')
     sort2.appendChild(doc.createTextNode('\u25B2'))
     sort2.addEventListener(
       'click',
@@ -1038,7 +1040,7 @@ module.exports = function renderTableViewPane (doc, options) {
     )
     result.appendChild(sort2)
 
-    var substring = null
+    let substring = null
 
     // Filter the table to show only rows that have a particular
     // substring in the specified column.
@@ -1049,7 +1051,7 @@ module.exports = function renderTableViewPane (doc, options) {
       } else if (!colValue) {
         return false
       } else {
-        var literalValue
+        let literalValue
 
         if (colValue.termType === 'Literal') {
           literalValue = colValue.value
@@ -1090,17 +1092,17 @@ module.exports = function renderTableViewPane (doc, options) {
   //  @param list,    List of alternative terms
   //
   function renderEnumSelector (rows, columns, column, list) {
-    var doMultiple = true
-    var result = doc.createElement('div')
-    var dropdown = doc.createElement('select')
+    const doMultiple = true
+    const result = doc.createElement('div')
+    const dropdown = doc.createElement('select')
 
-    var searchValue = {} // Defualt to all enabled
+    let searchValue = {} // Defualt to all enabled
     for (let i = 0; i < list.length; ++i) {
-      var value = list[i]
+      const value = list[i]
       searchValue[value.uri] = true
     }
 
-    var initialSelection = getHints(column).initialSelection
+    const initialSelection = getHints(column).initialSelection
     if (initialSelection) searchValue = initialSelection
 
     if (doMultiple) dropdown.setAttribute('multiple', 'true')
@@ -1153,22 +1155,22 @@ module.exports = function renderTableViewPane (doc, options) {
   // Selector for XSD number types.
 
   function renderNumberSelector (rows, columns, column) {
-    var result = doc.createElement('div')
+    const result = doc.createElement('div')
 
-    var minSelector = doc.createElement('input')
+    const minSelector = doc.createElement('input')
     minSelector.setAttribute('type', 'text')
     minSelector.style.width = '40px'
     result.appendChild(minSelector)
 
-    var maxSelector = doc.createElement('input')
+    const maxSelector = doc.createElement('input')
     maxSelector.setAttribute('type', 'text')
     maxSelector.style.width = '40px'
     result.appendChild(maxSelector)
 
     // Select based on minimum/maximum limits.
 
-    var min = null
-    var max = null
+    let min = null
+    let max = null
 
     column.filterFunction = function (colValue) {
       if (colValue) {
@@ -1241,8 +1243,8 @@ module.exports = function renderTableViewPane (doc, options) {
       return renderEnumSelector(rows, columns, column, column.alternatives)
     }
 
-    var cs = column.getConstraints()
-    var range
+    const cs = column.getConstraints()
+    let range
     for (let i = 0; i < cs.length; i++) {
       range = cs[i]
 
@@ -1267,7 +1269,7 @@ module.exports = function renderTableViewPane (doc, options) {
 
       // Also  ToDo: @@@ Handle membership of classes whcih are disjointUnions
 
-      var choices = kb.each(range, UI.ns.owl('oneOf'))
+      const choices = kb.each(range, UI.ns.owl('oneOf'))
       if (choices.length > 0) {
         return renderEnumSelector(rows, columns, column, choices.elements)
       }
@@ -1278,7 +1280,7 @@ module.exports = function renderTableViewPane (doc, options) {
   // Generate the search selectors for the table columns.
 
   function renderTableSelectors (rows, columns) {
-    var tr = doc.createElement('tr')
+    const tr = doc.createElement('tr')
     tr.className = 'selectors'
 
     // Empty link column
@@ -1288,9 +1290,9 @@ module.exports = function renderTableViewPane (doc, options) {
     // Generate selectors.
 
     for (let i = 0; i < columns.length; ++i) {
-      var td = doc.createElement('td')
+      const td = doc.createElement('td')
 
-      var selector = renderTableSelector(rows, columns, columns[i])
+      const selector = renderTableSelector(rows, columns, columns[i])
 
       if (selector) {
         td.appendChild(selector)
@@ -1309,8 +1311,8 @@ module.exports = function renderTableViewPane (doc, options) {
 
   function linkTo (uri, linkText, hints) {
     hints = hints || {}
-    var result = doc.createElement('a')
-    var linkFunction = hints.linkFunction
+    const result = doc.createElement('a')
+    const linkFunction = hints.linkFunction
     result.setAttribute('href', uri)
     result.appendChild(doc.createTextNode(linkText))
     if (!linkFunction) {
@@ -1321,8 +1323,8 @@ module.exports = function renderTableViewPane (doc, options) {
         function (e) {
           e.preventDefault()
           e.stopPropagation()
-          var target = utils.getTarget(e)
-          var uri = target.getAttribute('href')
+          const target = utils.getTarget(e)
+          const uri = target.getAttribute('href')
           if (!uri) debug.log('No href found \n')
           linkFunction(uri)
         },
@@ -1333,7 +1335,7 @@ module.exports = function renderTableViewPane (doc, options) {
   }
 
   function linkToObject (obj, hints) {
-    var match = false
+    let match = false
 
     if (obj.uri) {
       match = obj.uri.match(/^mailto:(.*)/)
@@ -1349,7 +1351,7 @@ module.exports = function renderTableViewPane (doc, options) {
   // Render an image
 
   function renderImage (obj) {
-    var result = doc.createElement('img')
+    const result = doc.createElement('img')
     result.setAttribute('src', obj.uri)
 
     // Set the height, so it appears as a thumbnail.
@@ -1374,8 +1376,8 @@ module.exports = function renderTableViewPane (doc, options) {
 
   function renderValue (obj, column) {
     // hint
-    var hints = getHints(column)
-    var cellFormat = hints.cellFormat
+    const hints = getHints(column)
+    const cellFormat = hints.cellFormat
     if (cellFormat) {
       switch (cellFormat) {
         case 'shortDate':
@@ -1404,7 +1406,7 @@ module.exports = function renderTableViewPane (doc, options) {
       } else if (obj.termType === 'Collection') {
         const span = doc.createElement('span')
         span.appendChild(doc.createTextNode('['))
-        obj.elements.map(function (x) {
+        obj.elements.forEach(function (x) {
           span.appendChild(renderValue(x, column))
           span.appendChild(doc.createTextNode(', '))
         })
@@ -1424,7 +1426,7 @@ module.exports = function renderTableViewPane (doc, options) {
   function renderTableRowInto (tr, row, columns, _downstream) {
     /* Link column, for linking to this subject. */
 
-    var linkTd = doc.createElement('td')
+    const linkTd = doc.createElement('td')
 
     if (row._subject && 'uri' in row._subject) {
       linkTd.appendChild(linkTo(row._subject.uri, '\u2192'))
@@ -1436,22 +1438,22 @@ module.exports = function renderTableViewPane (doc, options) {
     // column or not).
 
     for (let i = 0; i < columns.length; ++i) {
-      var column = columns[i]
-      var td = doc.createElement('td')
+      const column = columns[i]
+      const td = doc.createElement('td')
       var orig
 
-      var columnKey = column.getKey()
+      const columnKey = column.getKey()
 
       if (columnKey in row.values) {
-        var objects = row.values[columnKey]
-        var different = false
+        const objects = row.values[columnKey]
+        let different = false
         if (row.originalValues && row.originalValues[columnKey]) {
           if (objects.length !== row.originalValues[columnKey].length) {
             different = true
           }
         }
         for (let j = 0; j < objects.length; ++j) {
-          var obj = objects[j]
+          const obj = objects[j]
           if (
             row.originalValues &&
             row.originalValues[columnKey] &&
@@ -1487,7 +1489,7 @@ module.exports = function renderTableViewPane (doc, options) {
   // a cell (the query can sometimes find it multiple times)
 
   function valueInList (value, list) {
-    var key = null
+    let key = null
 
     if (value.termType === 'Literal') {
       key = 'value'
@@ -1499,7 +1501,7 @@ module.exports = function renderTableViewPane (doc, options) {
 
     // Check the list and compare keys:
 
-    var i
+    let i
 
     for (i = 0; i < list.length; ++i) {
       if (list[i].termType === value.termType && list[i][key] === value[key]) {
@@ -1516,11 +1518,11 @@ module.exports = function renderTableViewPane (doc, options) {
   // containing the values.
 
   function updateRow (row, columns, values) {
-    var key
-    var needUpdate = false
+    let key
+    let needUpdate = false
 
     for (key in values) {
-      var value = values[key]
+      const value = values[key]
 
       // If this key is not already in the row, create a new entry
       // for it:
@@ -1556,7 +1558,7 @@ module.exports = function renderTableViewPane (doc, options) {
     } else if ('_subject_id' in subject) {
       return subject._subject_id
     } else {
-      var result = '' + subjectIdCounter
+      const result = '' + subjectIdCounter
       subject._subject_id = result
       ++subjectIdCounter
       return result
@@ -1569,9 +1571,9 @@ module.exports = function renderTableViewPane (doc, options) {
 
   function runQuery (query, rows, columns, table) {
     query.running = true
-    var startTime = Date.now()
+    const startTime = Date.now()
 
-    var progressMessage = doc.createElement('tr')
+    let progressMessage = doc.createElement('tr')
     table.appendChild(progressMessage)
     progressMessage.textContent = 'Loading ...'
 
@@ -1586,16 +1588,16 @@ module.exports = function renderTableViewPane (doc, options) {
       // rows[i]._htmlRow.style.background = '#ffe'; //setAttribute('style', ' background-color: #ffe;')// yellow
     }
 
-    var onResult = function (values) {
+    const onResult = function (values) {
       if (!query.running) {
         return
       }
 
       progressMessage.textContent += '.' // give a progress bar
 
-      var row = null
-      var rowKey = null
-      var rowKeyId
+      let row = null
+      let rowKey = null
+      let rowKeyId
 
       // If the query has a row key, use it to look up the row.
 
@@ -1614,7 +1616,7 @@ module.exports = function renderTableViewPane (doc, options) {
       // Create a new row?
 
       if (!row) {
-        var tr = doc.createElement('tr')
+        const tr = doc.createElement('tr')
         table.appendChild(tr)
 
         row = {
@@ -1634,7 +1636,7 @@ module.exports = function renderTableViewPane (doc, options) {
       updateRow(row, columns, values)
     }
 
-    var onDone = function () {
+    const onDone = function () {
       if (
         progressMessage &&
         progressMessage.parentNode &&
@@ -1644,7 +1646,7 @@ module.exports = function renderTableViewPane (doc, options) {
         progressMessage = null
       }
 
-      var elapsedTimeMS = Date.now() - startTime
+      const elapsedTimeMS = Date.now() - startTime
       debug.log(
         'Query done: ' + rows.length + ' rows, ' + elapsedTimeMS + 'ms'
       )
@@ -1653,7 +1655,7 @@ module.exports = function renderTableViewPane (doc, options) {
         // backwards
         if (rows[i].original) {
           debug.log('   deleting row ' + rows[i]._subject)
-          var tr = rows[i]._htmlRow
+          const tr = rows[i]._htmlRow
           tr.parentNode.removeChild(tr)
           delete rowsLookup[getSubjectId(rows[i]._subject)]
           rows.splice(i, 1)
@@ -1678,7 +1680,7 @@ module.exports = function renderTableViewPane (doc, options) {
     UI.log.debug('>> processing formula')
 
     for (let i = 0; i < formula.statements.length; ++i) {
-      var statement = formula.statements[i]
+      const statement = formula.statements[i]
       // UI.log.debug("processing statement " + i)
 
       // Does it match this?:
@@ -1690,9 +1692,9 @@ module.exports = function renderTableViewPane (doc, options) {
         statement.predicate.termType === 'NamedNode' &&
         statement.object.termType === 'Variable'
       ) {
-        var variable = statement.object.toString()
+        const variable = statement.object.toString()
         if (variable in columns) {
-          var column = columns[variable]
+          const column = columns[variable]
           column.setPredicate(statement.predicate, false, statement.subject)
         }
       }
@@ -1724,12 +1726,12 @@ module.exports = function renderTableViewPane (doc, options) {
   function inferColumns (query) {
     // Generate the columns list:
 
-    var result = []
-    var columns = {}
+    const result = []
+    const columns = {}
 
     for (let i = 0; i < query.vars.length; ++i) {
-      var column = new Column()
-      var queryVar = query.vars[i]
+      const column = new Column()
+      const queryVar = query.vars[i]
       UI.log.debug('column ' + i + ' : ' + queryVar)
 
       column.setVariable(queryVar)
@@ -1746,7 +1748,7 @@ module.exports = function renderTableViewPane (doc, options) {
 
   function renderTableForQuery (query, type) {
     // infer columns from query, to allow generic queries
-    var columns
+    let columns
     if (!givenQuery) {
       columns = type.getColumns()
     } else {
@@ -1756,11 +1758,11 @@ module.exports = function renderTableViewPane (doc, options) {
     // Start with an empty list of rows; this will be populated
     // by the query.
 
-    var rows = []
+    const rows = []
 
     // Create table element and header.
 
-    var table = doc.createElement('table')
+    const table = doc.createElement('table')
 
     table.appendChild(renderTableHeader(columns, type))
     table.appendChild(renderTableSelectors(rows, columns))
@@ -1780,12 +1782,12 @@ module.exports = function renderTableViewPane (doc, options) {
   // Find the most common type of row
 
   function getMostCommonType (types) {
-    var bestCount = -1
-    var best = null
+    let bestCount = -1
+    let best = null
 
     let typeUri
     for (typeUri in types) {
-      var type = types[typeUri]
+      const type = types[typeUri]
 
       if (type.useCount > bestCount) {
         best = type

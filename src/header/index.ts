@@ -1,3 +1,4 @@
+/* global EventListenerOrEventListenerObject */
 /*
     This file was copied from mashlib/src/global/header.ts file. It is modified to
     work in solid-ui by adjusting where imported functions are found.
@@ -159,7 +160,7 @@ export async function createUserMenu (store: IndexedFormula, user: NamedNode, op
   loggedInMenuList.appendChild(createUserMenuItem(createUserMenuLink('Show your profile', user.uri)))
   if (options) {
     if (options.menuList) {
-      options.menuList.map(function (menuItem) {
+      options.menuList.forEach(function (menuItem) {
         const menuItemType: string = (menuItem as MenuItemLink).url ? 'url' : 'onclick'
         if (menuItemType === 'url') {
           loggedInMenuList.appendChild(createUserMenuItem(createUserMenuLink(menuItem.label, menuItem[menuItemType])))

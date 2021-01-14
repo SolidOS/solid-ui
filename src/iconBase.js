@@ -15,7 +15,7 @@ if (module.scriptURI) {
     '/originalIcons/'
 } else {
   // Node or browserify
-  var iconsOnGithub = 'https://solid.github.io/solid-ui/src'
+  const iconsOnGithub = 'https://solid.github.io/solid-ui/src'
 
   if (
     typeof $SolidTestEnvironment !== 'undefined' &&

@@ -1,10 +1,11 @@
 import { silenceDebugMessages } from '../../helpers/setup'
 import { findBookmarkDocument, renderBookmarksButton, toggleBookmark } from '../../../src/chat/bookmarks'
 import { NamedNode, Namespace } from 'rdflib'
-import store from '../../../src/store'
 import { clearStore } from '../helpers/clearStore'
 import { ns } from '../../../src/'
+import { solidLogicSingleton } from '../../../src/logic'
 
+const store = solidLogicSingleton.store
 const BOOK = Namespace('http://www.w3.org/2002/01/bookmark#')
 
 silenceDebugMessages()
@@ -29,9 +30,11 @@ describe('findBookmarkDocument', () => {
     expect(result).toEqual({
       containers: [],
       index: {
+        private: [],
         public: []
       },
-      instances: []
+      instances: [],
+      statusArea: result.statusArea
     })
   })
   it('complains if you have multiple bookmark docs', async () => {

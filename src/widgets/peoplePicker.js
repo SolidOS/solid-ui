@@ -10,7 +10,7 @@
  *
  */
 import escape from 'escape-html'
-import uuid from 'node-uuid'
+import uuid from 'uuid'
 import * as rdf from 'rdflib'
 import * as debug from '../debug'
 
@@ -20,7 +20,9 @@ import { makeDropTarget } from './dragAndDrop'
 import { errorMessageBlock } from './error'
 import { iconBase } from '../iconBase'
 import ns from '../ns'
-import kb from '../store'
+import { solidLogicSingleton } from '../logic'
+
+const kb = solidLogicSingleton.store
 
 export class PeoplePicker {
   constructor (element, typeIndex, groupPickedCb, options) {
@@ -287,7 +289,7 @@ export class GroupBuilder {
     dropContainer.style.flexDirection = 'column'
 
     makeDropTarget(dropContainer, uris => {
-      uris.map(uri => {
+      uris.forEach(uri => {
         this.add(uri).catch(err => {
           this.element.appendChild(
             errorMessageBlock(

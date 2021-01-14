@@ -1,10 +1,10 @@
 import { silenceDebugMessages } from '../helpers/setup'
+import { NamedNode, Namespace, parse, Query, sym, variable } from 'rdflib'
+import { solidLogicSingleton } from '../../src/logic'
+// @ts-ignore
 import renderTableViewPane from '../../src/table'
 
-import store from '../../src/store'
-import { NamedNode, Namespace, parse, Query, sym, variable } from 'rdflib'
-
-const kb = store
+const kb = solidLogicSingleton.store
 
 silenceDebugMessages()
 
@@ -28,8 +28,8 @@ export interface Person {
     hobby: string
 }
 
-var v = <Person> {} // The RDF variable objects for each variable name
-vars.map(function (x) {
+const v = <Person> {} // The RDF variable objects for each variable name
+vars.forEach(function (x) {
   query.vars.push((v[x] = variable(x)))
 })
 const EX = Namespace('https://example.com/tests#')
@@ -59,7 +59,7 @@ describe('renderTableViewPane', () => {
     expect(onDone).toHaveBeenCalled()
   })
   it('includes the data', async () => {
-    var result = null
+    let result = null
     const _ = renderTableViewPane(document, { query, onDone })
 
     function onDone (ele) {
@@ -73,7 +73,7 @@ describe('renderTableViewPane', () => {
     // expect(renderTableViewPane(document, tableOptions).innerHTML).toMatch(/.*<table.*person.*name.*age.*hobby.*/)
   })
   it('includes the data', async () => {
-    var result = null
+    let result = null
     const _ = renderTableViewPane(document, { query, onDone })
 
     function onDone (ele) {
@@ -85,7 +85,7 @@ describe('renderTableViewPane', () => {
   })
   it('orders by age', async () => {
     const options = { query, onDone, sortBy: '?age', sortReverse: false }
-    var result = null
+    let result = null
     const widget = renderTableViewPane(document, options)
     function onDone () {
       result = widget.innerHTML
@@ -96,7 +96,7 @@ describe('renderTableViewPane', () => {
 
   it('orders by reverse age', async () => {
     const options = { query, onDone, sortBy: '?age', sortReverse: true }
-    var result = null
+    let result = null
     const _ = renderTableViewPane(document, options)
     function onDone (ele) {
       result = ele.innerHTML
@@ -107,7 +107,7 @@ describe('renderTableViewPane', () => {
 
   it('orders by name', async () => {
     const options = { query, onDone, sortBy: '?name', sortReverse: false }
-    var result = null
+    let result = null
     const _ = renderTableViewPane(document, options)
     function onDone (ele) {
       result = ele.innerHTML
@@ -119,7 +119,7 @@ describe('renderTableViewPane', () => {
 
   it('orders by hobby', async () => {
     const options = { query, onDone, sortBy: '?hobby', sortReverse: false }
-    var result = null
+    let result = null
     const _ = renderTableViewPane(document, options)
     function onDone (ele) {
       result = ele.innerHTML
@@ -140,7 +140,7 @@ describe('renderTableViewPane', () => {
         '?hobby': { label: 'WHY' }
       }
     }
-    var result = null
+    let result = null
     const _ = renderTableViewPane(document, options)
     function onDone (ele) {
       result = ele.innerHTML

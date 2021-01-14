@@ -117,8 +117,11 @@ describe('logInLoadProfile', () => {
   it('exists', () => {
     expect(logInLoadProfile).toBeInstanceOf(Function)
   })
-  it('runs', () => {
-    expect(logInLoadProfile({})).toBeInstanceOf(Object)
+  it('runs', async () => {
+    expect.assertions(1)
+    await logInLoadProfile({}).catch((e) => {
+      expect(e.message).toEqual('Can\'t log in: Error: Could not log in')
+    })
   })
 })
 
@@ -126,8 +129,11 @@ describe('logInLoadPreferences', () => {
   it('exists', () => {
     expect(logInLoadPreferences).toBeInstanceOf(Function)
   })
-  it('runs', () => {
-    expect(logInLoadPreferences({})).toBeInstanceOf(Object)
+  it('runs', async () => {
+    expect.assertions(1)
+    await logInLoadPreferences({}).catch((e) => {
+      expect(e.message).toEqual('(via loadPrefs) Error: Can\'t log in: Error: Could not log in')
+    })
   })
 })
 

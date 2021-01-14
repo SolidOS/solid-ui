@@ -63,6 +63,7 @@ export class Fetcher {
   }
 
   load () {
+    return Promise.resolve()
   }
 
   nowOrWhenFetched () {
@@ -90,5 +91,8 @@ export class UpdateManager {
     this.updated = true
     onDone('uri', this.reportSuccess, 'body')
     return Promise.resolve()
+  }
+
+  addDownstreamChangeListener () {
   }
 }

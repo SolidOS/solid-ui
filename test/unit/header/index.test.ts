@@ -10,10 +10,13 @@ import {
   createBanner,
   createUserMenu
 } from '../../../src/header'
-import store from '../../../src/store'
 import { NamedNode } from 'rdflib'
+// @ts-ignore
 import widgets from '../../../src/widgets/index'
+import { solidLogicSingleton } from '../../../src/logic'
 // import { JSDOM } from 'jsdom'
+
+const store = solidLogicSingleton.store
 
 // SAM todos...
 //  1. create specific tests to check for a class being assigned
