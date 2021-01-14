@@ -9,7 +9,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "npm run clean && npm run build-version && npm run build-lib && npm run build-types && npm run build-webpack && npm run build-storybook",
+    "build": "npm run clean && npm run build-version && npm run build-lib && npm run build-types && npm run build-webpack # FIXME: && npm run build-storybook",
     "build-lib": "babel src -d lib --source-maps --extensions \".ts,.js\"",
     "build-types": "tsc --emitDeclarationOnly",
     "build-version": "sh ./timestamp.sh > src/versionInfo.ts  && eslint \"src/versionInfo.ts\" --fix",
