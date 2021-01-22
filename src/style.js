@@ -4,7 +4,7 @@
 
 // These must all end with semicolon so they can be appended to.
 
-module.exports = {
+const styleModule = {
   textInputStyle:
     'background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; ',
   textInputStyleUneditable: // Color difference only
@@ -22,24 +22,31 @@ module.exports = {
 
   // Contacts
   personaBarStyle: 'width: 100%; height: 4em; background-color: #eee; vertical-align: middle;',
+  searchInputStyle: 'border: 0.1em solid #444; border-radius: 0.5em; width: 100%; font-size: 100%; padding: 0.1em 0.6em; margin 0.2em;',
+  autocompleteRowStyle: 'border: 0.2em solid straw;',
+
   // Login buttons
-
   signInButtonStyle: 'padding: 1em; border-radius:0.2em; margin: 2em; font-size: 100%;', // was 0.5em radius
-  // Forms
 
-  heading1Style: 'font-size: 180%; font-weight: bold; color: #888888; padding: 0.5em;', // originally was brown; now grey
-  heading2Style: 'font-size: 130%; font-weight: bold; color: #888888; padding: 0.4em;', // originally was brown; now grey
-  heading3Style: 'font-size: 120%; font-weight: bold; color: #888888; padding: 0.3em;', // For example, in large forms or before a small form
-  heading4Style: 'font-size: 110%; font-weight: bold; color: #888888; padding: 0.2em;', // Lowest level used by default in small things
+  // Forms
+  heading1Style: 'font-size: 180%; font-weight: bold; color: #888888; padding: 0.5em; margin: 0.2em 0.7em;', // originally was brown; now grey
+  heading2Style: 'font-size: 130%; font-weight: bold; color: #888888; padding: 0.4em; margin: 0.2em 0.7em;', // originally was brown; now grey
+  heading3Style: 'font-size: 120%; font-weight: bold; color: #888888; padding: 0.3em; margin: 0.2em 0.7em;', // For example, in large forms or before a small form
+  heading4Style: 'font-size: 110%; font-weight: bold; color: #888888; padding: 0.2em; margin: 0.2em 0.7em;', // Lowest level used by default in small things
 
   formBorderColor: '#888888', // originally was brown; now grey
   formHeadingColor: '#888888', // originally was brown; now grey
-  formHeadingStyle: 'font-size: 110%; font-weight: bold; color: #888888; padding: 0.2em;', // originally was brown; now grey
+  formHeadingStyle: 'font-size: 110%; font-weight: bold; color: #888888; padding: 0.2em;  margin: 0.2em 0.7em;', // originally was brown; now grey
   formTextInput: 'font-size: 100%; margin: 0.1em; padding: 0.1em;', // originally used this
 
   textInputBackgroundColor: '#eef',
   textInputBackgroundColorUneditable: '#fff',
   multilineTextInputStyle: 'font-size:100%; white-space: pre-wrap; background-color: #eef;' +
   ' border: 0.07em solid gray; padding: 1em 0.5em; margin: 1em 1em;',
-  checkboxStyle: 'colour: black; font-size: 100%; padding-left: 0.5 em; padding-right: 0.5 em;'
+  checkboxStyle: 'colour: black; font-size: 100%; padding-left: 0.5 em; padding-right: 0.5 em;',
+
+  setStyle: function setStyle (ele, styleName) {
+    ele.style = styleModule[styleName]
+  }
 }
+module.exports = styleModule
