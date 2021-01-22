@@ -1172,7 +1172,7 @@ forms.makeDescription = function (
   callbackFunction
 ) {
   const group = dom.createElement('div')
-  const desc = kb.anyJS(subject, predicate, null, store)
+  const desc = kb.anyJS(subject, predicate, null, store) || ''
 
   const field = dom.createElement('textarea')
   group.appendChild(field)
