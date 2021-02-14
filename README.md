@@ -1,4 +1,4 @@
-# solid-ui //dev-test-branch
+# solid-ui
 
 [![NPM Package](https://img.shields.io/npm/v/solid-ui.svg)](https://www.npmjs.com/package/solid-ui)
 
