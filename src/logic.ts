@@ -2,11 +2,10 @@
 //
 
 import * as debug from './debug'
-import { fetch } from 'solid-auth-client'
-// import { SolidLogic } from 'solid-logic'
+import auth from 'solid-auth-client'
 import { SolidLogic } from 'solid-logic'
 
-export const solidLogicSingleton = new SolidLogic({ fetch })
+export const solidLogicSingleton = new SolidLogic({ fetch: auth.fetch }, auth)
 
 debug.log('Unique quadstore initialized.')
 
