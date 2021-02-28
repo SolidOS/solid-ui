@@ -9,6 +9,10 @@ import { solidLogicSingleton } from '../../src/logic'
 // @ts-ignore
 import { meeting, rdfs } from '../../src/ns'
 
+jest.mock('solid-auth-client', () => ({
+  currentSession: () => Promise.resolve(),
+  trackSession: () => null
+}))
 const store = solidLogicSingleton.store
 
 silenceDebugMessages()

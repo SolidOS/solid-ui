@@ -5,7 +5,10 @@ import * as log from '../../src/log'
 import { JSDOM } from 'jsdom'
 
 silenceDebugMessages()
-jest.mock('solid-auth-client')
+jest.mock('solid-auth-client', () => ({
+  currentSession: () => Promise.resolve(),
+  trackSession: () => null
+}))
 
 const window = new JSDOM('<!DOCTYPE html><div id="status"></div>').window
 const dom = window.document

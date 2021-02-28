@@ -49,7 +49,10 @@ import { solidLogicSingleton } from '../../../src/logic'
 const store = solidLogicSingleton.store
 
 silenceDebugMessages()
-jest.mock('solid-auth-client')
+jest.mock('solid-auth-client', () => ({
+  currentSession: () => Promise.resolve(),
+  trackSession: () => null
+}))
 let window: DOMWindow
 let dom: HTMLDocument
 let element: HTMLDivElement

@@ -39,7 +39,10 @@ import { createGraphFromTurtle } from '../helpers/createGraphFromTurtle'
 import { createAgentMapFromTurtle } from '../helpers/createAgentMapFromTurtle'
 
 silenceDebugMessages()
-jest.mock('solid-auth-client')
+jest.mock('solid-auth-client', () => ({
+  currentSession: () => Promise.resolve(),
+  trackSession: () => null
+}))
 
 describe('ACLbyCombination', () => {
   it('exists', () => {

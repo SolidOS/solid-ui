@@ -6,7 +6,10 @@ import {
 } from '../../../src/chat/messageTools'
 
 silenceDebugMessages()
-jest.mock('solid-auth-client')
+jest.mock('solid-auth-client', () => ({
+  currentSession: () => Promise.resolve(),
+  trackSession: () => null
+}))
 
 describe('sentimentStrip', () => {
   it('exists', () => {
