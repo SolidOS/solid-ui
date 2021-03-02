@@ -39,7 +39,7 @@ jobs:
   gh-pages:
     needs: test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/download-artifact@v2
         with:
