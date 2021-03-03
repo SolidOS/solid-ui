@@ -22,9 +22,9 @@
     "jest": "jest",
     "test:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --runInBand --watch",
     "test": "npm run build && npm run lint && npm run jest",
-    "doc": "typedoc --out ./Documentation/api/ ./src/ --stripInternal",
+    "doc": "typedoc --out ./Documentation/api/ ./src/ --excludeInternal",
     "prepublishOnly": "npm test && npm run build",
-    "postpublish": "git push origin master --follow-tags",
+    "postpublish": "git push origin main --follow-tags",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook  --output-dir ./examples/storybook"
   },
