@@ -25,6 +25,11 @@ import {
 
 import { basicField } from '../../../../src/widgets/forms/basic'
 
+jest.mock('solid-auth-client', () => ({
+  currentSession: () => Promise.resolve(),
+  trackSession: () => null
+}))
+
 silenceDebugMessages()
 
 describe('field', () => {

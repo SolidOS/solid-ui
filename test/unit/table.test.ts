@@ -8,6 +8,11 @@ const kb = solidLogicSingleton.store
 
 silenceDebugMessages()
 
+jest.mock('solid-auth-client', () => ({
+  currentSession: () => Promise.resolve(),
+  trackSession: () => null
+}))
+
 const tableData = `@prefix : <https://example.com/tests#> .
  :Alice   :age 21; :name "Alice"; :hobby "Fishing"; :dob 1999-07-04Z .
  :Bob     :age 18; :name "Bob"; :hobby "Hockey"; :dob 2002-05-12Z .

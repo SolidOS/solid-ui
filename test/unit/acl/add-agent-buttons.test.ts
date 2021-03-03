@@ -7,7 +7,10 @@ import { solidLogicSingleton } from '../../../src/logic'
 const store = solidLogicSingleton.store
 
 silenceDebugMessages()
-jest.mock('solid-auth-client')
+jest.mock('solid-auth-client', () => ({
+  currentSession: () => Promise.resolve(),
+  trackSession: () => null
+}))
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 function instantiateAddAgentButtons () {
