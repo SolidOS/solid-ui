@@ -736,6 +736,62 @@ export function renderAsRow (dom: HTMLDocument, pred: NamedNode, obj: NamedNode,
   ;(tr as any).subject = obj
   return tr
 }
+/**
+ * A Div to represent a draggable person, etc in a list
+ *
+ * pred is unused param at the moment
+ */
+export function renderAsDiv (dom: HTMLDocument, pred: NamedNode, obj: NamedNode, options: any): HTMLElement {
+  const div = dom.createElement('div')
+  // add an option to change justify-content...
+  div.setAttribute('style', 'display: flex; align-items: center; justify-content: space-between; height: 2.5em; padding: 1em;')
+
+  options = options || {}
+  const imageDiv = div.appendChild(dom.createElement('div'))
+  const nameDiv = div.appendChild(dom.createElement('div'))
+  const linkDiv = div.appendChild(dom.createElement('div'))
+
+  const image = options.image || faviconOrDefault(dom, obj)
+
+  imageDiv.setAttribute('style', 'width:2.5em; padding:0.5em; height: 2.5em;')
+  linkDiv.setAttribute('style', 'width:2em; padding:0.5em; height: 4em;')
+  imageDiv.appendChild(image)
+
+  if (options.title) {
+    nameDiv.textContent = options.title
+  } else {
+    setName(nameDiv, obj) // This is async
+  }
+
+  if (options.deleteFunction) {
+    deleteButtonWithCheck(dom, linkDiv, options.noun || 'one', options.deleteFunction)
+  }
+  if (obj.uri) {
+    // blank nodes need not apply
+    if (options.link !== false) {
+      const anchor = linkDiv.appendChild(linkIcon(dom, obj))
+      anchor.classList.add('HoverControlHide')
+      linkDiv.appendChild(dom.createElement('br'))
+    }
+    if (options.draggable !== false) {
+      // default is on
+      image.setAttribute('draggable', 'false') // Stop the image being dragged instead - just the TR
+      dragAndDrop.makeDraggable(div, obj)
+    }
+  }
+  if (options.clickable && options.onClickFunction) {
+    div.addEventListener('click', options.onClickFunction)
+  }
+
+  if (options.wrapInATR) {
+    const tr = dom.createElement('tr')
+    const td = tr.appendChild(dom.createElement('td'))
+    td.appendChild(div)
+    ;(tr as any).subject = obj
+    return tr
+  }
+  return div
+}
 
 /**
  * Refresh a DOM tree recursively
