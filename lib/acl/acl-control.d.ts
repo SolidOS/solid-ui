@@ -1,6 +1,6 @@
 /**
  * Functions for rendering the ACL User Interface.
- * See https://github.com/solid/userguide/blob/master/views/sharing/userguide.md#view
+ * See https://github.com/solid/userguide/blob/main/views/sharing/userguide.md#view
  * for a screenshot.
  * @packageDocumentation
  */

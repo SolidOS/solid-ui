@@ -22,12 +22,21 @@
   window.onerror = function onerror(message, source, line, column, err) {
     if (window.CONFIG_TYPE !== 'DEVELOPMENT') return;
     // eslint-disable-next-line no-var, vars-on-top
-    var error = { message: err.message, name: err.name, stack: err.stack };
-    window.fetch('/runtime-error', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message, source, line, column, error, origin: 'manager' }),
-    });
+    var xhr = new window.XMLHttpRequest();
+    xhr.open('POST', '/runtime-error');
+    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+    xhr.send(
+      JSON.stringify({
+        /* eslint-disable object-shorthand */
+        message: message,
+        source: source,
+        line: line,
+        column: column,
+        error: err && { message: err.message, name: err.name, stack: err.stack },
+        origin: 'manager',
+        /* eslint-enable object-shorthand */
+      })
+    );
   };</script><style>#root[hidden],
       #docs-root[hidden] {
         display: none !important;
@@ -35,4 +44,4 @@
             
         
             
-              window['LOGLEVEL'] = "info";</script><script src="runtime~main.6a9b04192e3176eff72a.bundle.js"></script><script src="vendors~main.cd5bf7702edf5698c473.bundle.js"></script><script src="main.60438cbd426da17024d2.bundle.js"></script></body></html>
+              window['LOGLEVEL'] = "info";</script><script src="runtime~main.6a9b04192e3176eff72a.bundle.js"></script><script src="vendors~main.8af33d594382f89bafcf.bundle.js"></script><script src="main.4f360185e07eb56f4fce.bundle.js"></script></body></html>

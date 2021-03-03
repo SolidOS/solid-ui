@@ -1,0 +1,256 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>tabs | solid-ui</title>
+	<meta name="description" content="Documentation for solid-ui">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+	<script async src="../assets/js/search.js" id="search-script"></script>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">solid-ui</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../modules.html">solid-ui</a>
+				</li>
+				<li>
+					<a href="tabs.html">tabs</a>
+				</li>
+			</ul>
+			<h1>Module tabs</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Classes</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/tabs.tabwidgetelement.html" class="tsd-kind-icon">Tab<wbr>Widget<wbr>Element</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Functions</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="tabs.html#tabwidget" class="tsd-kind-icon">tab<wbr>Widget</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="tabwidget" class="tsd-anchor"></a>
+					<h3>tab<wbr>Widget</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">tab<wbr>Widget<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TabWidgetOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/tabs.tabwidgetelement.html" class="tsd-signature-type" data-tsd-kind="Class">TabWidgetElement</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/solid/solid-ui/blob/c509180/src/tabs.ts#L170">src/tabs.ts:170</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Use this widget to generate tabs from triples set in the global store.</p>
+								</div>
+								<p><a href="https://solid.github.io/solid-ui/examples/tabs/">Here you can see examples of the tabs</a>.</p>
+								<p>It assumes that items to use for tabs will be in a collection by default,
+								e.g.:</p>
+								<pre><code class="language-turtle">:subject :predicate ( :item1 :item2 ) .
+</code></pre>
+								<p>You can override this by setting <code>ordered: false</code>, in which case it expects
+								unordered triples:</p>
+								<pre><code class="language-turtle">:subject :predicate :item1, :item 2 .
+</code></pre>
+								<p>Triples that are not ordered in collection are in principle not sorted,
+									which means that tabs could change order every time you render the widget.
+									But in this case the widget will try to sort it in order to keep it
+								consistent.</p>
+								<p>In both of these cases you need to define options <code>subject</code> and <code>predicate</code>
+								to tell the widget which triples it should be looking for.</p>
+								<p>Finally you can set items manually, using the <code>items</code> option, e.g.:</p>
+								<pre><code class="language-javascript"><span style="color: #000000">{</span>
+<span style="color: #000000">  items: [</span>
+<span style="color: #000000">    </span><span style="color: #795E26">namedNode</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;https://domain.tld/#item1&#039;</span><span style="color: #000000">),</span>
+<span style="color: #000000">    </span><span style="color: #795E26">namedNode</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;https://domain.tld/#item2&#039;</span><span style="color: #000000">)</span>
+<span style="color: #000000">  ]</span>
+<span style="color: #000000">}</span>
+</code></pre>
+								<p>When you set items manually you do not need to set <code>subject</code> and
+								<code>predicate</code>.</p>
+								<p>In any case you probably want to set the renderMain option to specify
+								what should be rendered for the various items, e.g.:</p>
+								<pre><code class="language-javascript"><span style="color: #000000">{</span>
+<span style="color: #000000">  renderMain: (</span><span style="color: #001080">bodyMain</span><span style="color: #000000">, </span><span style="color: #001080">subject</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">bodyMain</span><span style="color: #000000">.</span><span style="color: #001080">innerHTML</span><span style="color: #000000"> = </span><span style="color: #795E26">renderItem</span><span style="color: #000000">(</span><span style="color: #001080">subject</span><span style="color: #000000">)</span>
+<span style="color: #000000">  }</span>
+<span style="color: #000000">}</span>
+</code></pre>
+								<p><strong>Note:</strong> <code>renderItem</code> is a custom function that you need to define yourself.</p>
+								<p>The option <code>renderTabSettings</code> allows you to render a custom view in the
+									body container that is shown when you hold the ALT key and click on a
+								tab. It works very much like the <code>renderMain</code> option:</p>
+								<pre><code class="language-javascript"><span style="color: #000000">{</span>
+<span style="color: #000000">  renderTabSettings: (</span><span style="color: #001080">bodyMain</span><span style="color: #000000">, </span><span style="color: #001080">subject</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">bodyMain</span><span style="color: #000000">.</span><span style="color: #001080">innerHTML</span><span style="color: #000000"> = </span><span style="color: #795E26">renderTabSettings</span><span style="color: #000000">(</span><span style="color: #001080">subject</span><span style="color: #000000">)</span>
+<span style="color: #000000">  }</span>
+<span style="color: #000000">}</span>
+</code></pre>
+								<p><strong>Note:</strong> <code>renderTabSettings</code> is a custom function that you need to define
+								yourself.</p>
+								<p>By default the widget will try to guess the label by using the
+									[[utils.label]] function. If you want to customize this yourself, you can
+								use the <code>renderTab</code> option:</p>
+								<pre><code class="language-javascript"><span style="color: #000000">{</span>
+<span style="color: #000000">  renderTab: (</span><span style="color: #001080">tabDiv</span><span style="color: #000000">, </span><span style="color: #001080">subject</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">tabDiv</span><span style="color: #000000">.</span><span style="color: #001080">innerText</span><span style="color: #000000"> = </span><span style="color: #795E26">renderTabText</span><span style="color: #000000">(</span><span style="color: #001080">subject</span><span style="color: #000000">)</span>
+<span style="color: #000000">  }</span>
+<span style="color: #000000">}</span>
+</code></pre>
+								<p><strong>Note:</strong> <code>renderTabText</code> is a custom function you need to define yourself.</p>
+								<p>The option renderTab is also important if you want to set which tab should
+									be selected once the widget is rendered. By default it will simply select
+									the first tab, but you can override by setting <code>dataset.name</code> on the tab
+								and referring to the same string in <code>selectedTab</code>:</p>
+								<pre><code class="language-javascript"><span style="color: #000000">{</span>
+<span style="color: #000000">  renderTab: (</span><span style="color: #001080">tabDiv</span><span style="color: #000000">, </span><span style="color: #001080">subject</span><span style="color: #000000">)  </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">tabDiv</span><span style="color: #000000">.</span><span style="color: #001080">dataset</span><span style="color: #000000">.</span><span style="color: #001080">name</span><span style="color: #000000"> = </span><span style="color: #001080">subject</span><span style="color: #000000">.</span><span style="color: #001080">uri</span>
+<span style="color: #000000">  },</span>
+<span style="color: #000000">  selectedTab: </span><span style="color: #001080">item2</span><span style="color: #000000">.</span><span style="color: #001080">uri</span>
+<span style="color: #000000">}</span>
+</code></pre>
+								<p>You can apply a color to use for tabs and border of the container by using
+								option <code>background-color</code>. This is #ddddcc by default.</p>
+								<p>You can override the document object that the widget uses to generate DOM
+									elements by setting the option <code>dom</code>. This is encouraged to set if you
+									intend your functionality to be used in environments that don&#39;t provide
+								a global <code>document</code> object.</p>
+								<p>If you want to render a close button next to the tabs you can set option
+									<code>onClose</code> which takes a callback function that is triggered when the
+								button is clicked:</p>
+								<pre><code class="language-javascript"><span style="color: #000000">{</span>
+<span style="color: #000000">  onClose: (</span><span style="color: #001080">event</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #008000">// do something that hides the widget altogether</span>
+<span style="color: #000000">  }</span>
+<span style="color: #000000">}</span>
+</code></pre>
+								<p>The option <code>orientation</code> allows you to set which side the tabs should be
+								located: <code>&#39;0&#39;</code> = Top, <code>&#39;1&#39;</code> = Left, <code>&#39;2&#39;</code> = Bottom, <code>&#39;3&#39;</code> = Right</p>
+								<p>If you don&#39;t want to render anything in the body container by default,
+								you can set the option <code>startEmpty</code> to <code>true</code>.</p>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>options: <span class="tsd-signature-type">TabWidgetOptions</span></h5>
+									<div class="tsd-comment tsd-typography">
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../classes/tabs.tabwidgetelement.html" class="tsd-signature-type" data-tsd-kind="Class">TabWidgetElement</a></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="../modules.html">Exports</a>
+					</li>
+					<li class="current tsd-kind-module">
+						<a href="tabs.html">tabs</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/tabs.tabwidgetelement.html" class="tsd-kind-icon">Tab<wbr>Widget<wbr>Element</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="tabs.html#tabwidget" class="tsd-kind-icon">tab<wbr>Widget</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

@@ -75,7 +75,7 @@ export declare function loadTypeIndexes(context: AuthenticationContext): Promise
  * Returns promise of context with arrays of symbols
  *
  * 2016-12-11 change to include forClass arc a la
- * https://github.com/solid/solid/blob/master/proposals/data-discovery.md
+ * https://github.com/solid/solid/blob/main/proposals/data-discovery.md
  */
 export declare function findAppInstances(context: AuthenticationContext, theClass: NamedNode, isPublic?: boolean): Promise<AuthenticationContext>;
 /**

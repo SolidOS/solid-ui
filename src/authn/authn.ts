@@ -245,7 +245,7 @@ export async function logInLoadPreferences (context: AuthenticationContext): Pro
  * Resolves with the same context, outputting
  * output: index.public, index.private
  *
- * @see https://github.com/solid/solid/blob/master/proposals/data-discovery.md#discoverability
+ * @see https://github.com/solid/solid/blob/main/proposals/data-discovery.md#discoverability
  */
 async function loadIndex (
   context: AuthenticationContext,
@@ -278,7 +278,7 @@ export async function loadTypeIndexes (context: AuthenticationContext) {
 
 /**
  * Resolves with the same context, outputting
- * @see https://github.com/solid/solid/blob/master/proposals/data-discovery.md#discoverability
+ * @see https://github.com/solid/solid/blob/main/proposals/data-discovery.md#discoverability
  */
 async function ensureTypeIndexes (context: AuthenticationContext): Promise<AuthenticationContext> {
   await ensureOneTypeIndex(context, true)
@@ -292,7 +292,7 @@ async function ensureTypeIndexes (context: AuthenticationContext): Promise<Authe
  * Many reasons for failing including script not having permission etc
  *
  * Adds its output to the context
- * @see https://github.com/solid/solid/blob/master/proposals/data-discovery.md#discoverability
+ * @see https://github.com/solid/solid/blob/main/proposals/data-discovery.md#discoverability
  */
 async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boolean): Promise<AuthenticationContext | void> {
   async function makeIndexIfNecessary (context, isPublic) {
@@ -365,7 +365,7 @@ async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boo
  * Returns promise of context with arrays of symbols
  *
  * 2016-12-11 change to include forClass arc a la
- * https://github.com/solid/solid/blob/master/proposals/data-discovery.md
+ * https://github.com/solid/solid/blob/main/proposals/data-discovery.md
  */
 export async function findAppInstances (
   context: AuthenticationContext,
@@ -465,7 +465,7 @@ export async function registerInTypeIndex (
   const index = indexes[0]
   const registration = widgets.newThing(index)
   const ins = [
-    // See https://github.com/solid/solid/blob/master/proposals/data-discovery.md
+    // See https://github.com/solid/solid/blob/main/proposals/data-discovery.md
     st(registration, ns.rdf('type'), ns.solid('TypeRegistration'), index),
     st(registration, ns.solid('forClass'), theClass, index),
     st(registration, ns.solid('instance'), instance, index)

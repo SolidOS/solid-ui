@@ -15,7 +15,7 @@ import * as debug from '../debug'
 
 /**
  * Renders the Sharing pane's "+" button and the menus behind it,
- * see https://github.com/solid/userguide/blob/master/views/sharing/userguide.md#add
+ * see https://github.com/solid/userguide/blob/main/views/sharing/userguide.md#add
  */
 export class AddAgentButtons {
   private readonly rootElement: HTMLElement

@@ -7,6 +7,7 @@
 	<meta name="description" content="Documentation for solid-ui">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
+	<script async src="assets/js/search.js" id="search-script"></script>
 </head>
 <body>
 <header>
@@ -40,8 +41,6 @@
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
 							<input type="checkbox" id="tsd-filter-externals" checked />
 							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
-							<input type="checkbox" id="tsd-filter-only-exported" />
-							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
 						</div>
 					</div>
 					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
@@ -51,11 +50,6 @@
 	</div>
 	<div class="tsd-page-title">
 		<div class="container">
-			<ul class="tsd-breadcrumb">
-				<li>
-					<a href="globals.html">Globals</a>
-				</li>
-			</ul>
 			<h1>solid-ui</h1>
 		</div>
 	</div>
@@ -77,9 +71,10 @@
 					<h3>In npm-based projects</h3>
 				</a>
 				<p>When including solid-ui in an npm-based project, you can use it with:</p>
-				<pre><code class="language-js">  <span class="hljs-keyword">import</span> { ns, rdf,  acl, aclControl, authn, create, dom, icons, log, matrix, media,
-  messageArea, infiniteMessageArea, pad, preferences, store, style, table, tabs, utils, widgets, versionInfo
-} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;solid-ui&#x27;</span>
+				<pre><code class="language-js"><span style="color: #000000">  </span><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">ns</span><span style="color: #000000">, </span><span style="color: #001080">rdf</span><span style="color: #000000">,  </span><span style="color: #001080">acl</span><span style="color: #000000">, </span><span style="color: #001080">aclControl</span><span style="color: #000000">, </span><span style="color: #001080">authn</span><span style="color: #000000">, </span><span style="color: #001080">create</span><span style="color: #000000">, </span><span style="color: #001080">dom</span><span style="color: #000000">, </span><span style="color: #001080">icons</span><span style="color: #000000">, </span><span style="color: #001080">log</span><span style="color: #000000">, </span><span style="color: #001080">matrix</span><span style="color: #000000">, </span><span style="color: #001080">media</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #001080">messageArea</span><span style="color: #000000">, </span><span style="color: #001080">infiniteMessageArea</span><span style="color: #000000">, </span><span style="color: #001080">pad</span><span style="color: #000000">, </span><span style="color: #001080">preferences</span><span style="color: #000000">, </span><span style="color: #001080">store</span><span style="color: #000000">, </span><span style="color: #001080">style</span><span style="color: #000000">, </span><span style="color: #001080">table</span><span style="color: #000000">, </span><span style="color: #001080">tabs</span><span style="color: #000000">, </span><span style="color: #001080">utils</span><span style="color: #000000">, </span><span style="color: #001080">widgets</span><span style="color: #000000">, </span><span style="color: #001080">versionInfo</span>
+<span style="color: #000000">} </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;solid-ui&#039;</span>
+
 </code></pre>
 				<a href="#directly-in-a-webpage" id="directly-in-a-webpage" style="color: inherit; text-decoration: none;">
 					<h3>Directly in a webpage</h3>
@@ -95,18 +90,21 @@
 				source code of those examples.</p>
 				<p>While viewing one of those examples, you can open the web console in your browser and for instance
 				try how you can create a button:</p>
-				<pre><code class="language-js"><span class="hljs-keyword">const</span> solidLogo = <span class="hljs-string">&#x27;https://solidproject.org/assets/img/solid-emblem.svg&#x27;</span>
-<span class="hljs-keyword">const</span> myButton = UI.widgets.button(<span class="hljs-built_in">document</span>, solidLogo, <span class="hljs-string">&#x27;test&#x27;</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">window</span>.alert(<span class="hljs-string">&#x27;clicked!&#x27;</span>))
-UI.widgets.clearElement(<span class="hljs-built_in">document</span>.body)
-<span class="hljs-built_in">document</span>.body.appendChild(myButton)</code></pre>
+				<pre><code class="language-js"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">solidLogo</span><span style="color: #000000"> = </span><span style="color: #A31515">&#039;https://solidproject.org/assets/img/solid-emblem.svg&#039;</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">myButton</span><span style="color: #000000"> = </span><span style="color: #0070C1">UI</span><span style="color: #000000">.</span><span style="color: #001080">widgets</span><span style="color: #000000">.</span><span style="color: #795E26">button</span><span style="color: #000000">(</span><span style="color: #001080">document</span><span style="color: #000000">, </span><span style="color: #001080">solidLogo</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;test&#039;</span><span style="color: #000000">, () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">window</span><span style="color: #000000">.</span><span style="color: #795E26">alert</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;clicked!&#039;</span><span style="color: #000000">))</span>
+<span style="color: #0070C1">UI</span><span style="color: #000000">.</span><span style="color: #001080">widgets</span><span style="color: #000000">.</span><span style="color: #795E26">clearElement</span><span style="color: #000000">(</span><span style="color: #001080">document</span><span style="color: #000000">.</span><span style="color: #001080">body</span><span style="color: #000000">)</span>
+<span style="color: #001080">document</span><span style="color: #000000">.</span><span style="color: #001080">body</span><span style="color: #000000">.</span><span style="color: #795E26">appendChild</span><span style="color: #000000">(</span><span style="color: #001080">myButton</span><span style="color: #000000">)</span>
+</code></pre>
 				<p>Or a chat widget:</p>
-				<pre><code class="language-js"><span class="hljs-keyword">const</span> chatChannel = <span class="hljs-string">&#x27;https://example-user.inrupt.net/public/example-chat/index.ttl#this&#x27;</span>
-<span class="hljs-keyword">const</span> chat = UI.infiniteMessageArea(<span class="hljs-built_in">document</span>, UI.store, UI.rdf.namedNode(chatChannel))
-<span class="hljs-built_in">document</span>.body.appendChild(chat)</code></pre>
+				<pre><code class="language-js"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">chatChannel</span><span style="color: #000000"> = </span><span style="color: #A31515">&#039;https://example-user.inrupt.net/public/example-chat/index.ttl#this&#039;</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">chat</span><span style="color: #000000"> = </span><span style="color: #0070C1">UI</span><span style="color: #000000">.</span><span style="color: #795E26">infiniteMessageArea</span><span style="color: #000000">(</span><span style="color: #001080">document</span><span style="color: #000000">, </span><span style="color: #0070C1">UI</span><span style="color: #000000">.</span><span style="color: #001080">store</span><span style="color: #000000">, </span><span style="color: #0070C1">UI</span><span style="color: #000000">.</span><span style="color: #001080">rdf</span><span style="color: #000000">.</span><span style="color: #795E26">namedNode</span><span style="color: #000000">(</span><span style="color: #001080">chatChannel</span><span style="color: #000000">))</span>
+<span style="color: #001080">document</span><span style="color: #000000">.</span><span style="color: #001080">body</span><span style="color: #000000">.</span><span style="color: #795E26">appendChild</span><span style="color: #000000">(</span><span style="color: #001080">chat</span><span style="color: #000000">)</span>
+</code></pre>
 				<p>Or a full ACL Control Box:</p>
-				<pre><code class="language-js"><span class="hljs-keyword">const</span> exampleFolder = <span class="hljs-string">&#x27;https://example-user.inrupt.net/public/public-control/&#x27;</span>
-<span class="hljs-keyword">const</span> aclControlBox = UI.aclControl.ACLControlBox5(UI.rdf.namedNode(exampleFolder), { <span class="hljs-attr">dom</span>: <span class="hljs-built_in">document</span> }, <span class="hljs-string">&#x27;&#x27;</span>, UI.store)
-<span class="hljs-built_in">document</span>.body.appendChild(aclControlBox)</code></pre>
+				<pre><code class="language-js"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">exampleFolder</span><span style="color: #000000"> = </span><span style="color: #A31515">&#039;https://example-user.inrupt.net/public/public-control/&#039;</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">aclControlBox</span><span style="color: #000000"> = </span><span style="color: #0070C1">UI</span><span style="color: #000000">.</span><span style="color: #001080">aclControl</span><span style="color: #000000">.</span><span style="color: #795E26">ACLControlBox5</span><span style="color: #000000">(</span><span style="color: #0070C1">UI</span><span style="color: #000000">.</span><span style="color: #001080">rdf</span><span style="color: #000000">.</span><span style="color: #795E26">namedNode</span><span style="color: #000000">(</span><span style="color: #001080">exampleFolder</span><span style="color: #000000">), { </span><span style="color: #001080">dom:</span><span style="color: #000000"> </span><span style="color: #001080">document</span><span style="color: #000000"> }, </span><span style="color: #A31515">&#039;&#039;</span><span style="color: #000000">, </span><span style="color: #0070C1">UI</span><span style="color: #000000">.</span><span style="color: #001080">store</span><span style="color: #000000">)</span>
+<span style="color: #001080">document</span><span style="color: #000000">.</span><span style="color: #001080">body</span><span style="color: #000000">.</span><span style="color: #795E26">appendChild</span><span style="color: #000000">(</span><span style="color: #001080">aclControlBox</span><span style="color: #000000">)</span>
+</code></pre>
 				<a href="#documentation" id="documentation" style="color: inherit; text-decoration: none;">
 					<h2>Documentation</h2>
 				</a>
@@ -165,8 +163,9 @@ UI.widgets.clearElement(<span class="hljs-built_in">document</span>.body)
 					<h2>Development</h2>
 				</a>
 				<p>When developing a component in solid-ui you can test it in isolation using storybook</p>
-				<pre><code>npm <span class="hljs-keyword">run</span><span class="bash"> build</span>
-npm <span class="hljs-keyword">run</span><span class="bash"> storybook</span></code></pre>
+				<pre><code><span style="color: #001080">npm</span><span style="color: #000000"> </span><span style="color: #001080">run</span><span style="color: #000000"> </span><span style="color: #001080">build</span>
+<span style="color: #001080">npm</span><span style="color: #000000"> </span><span style="color: #001080">run</span><span style="color: #000000"> </span><span style="color: #001080">storybook</span>
+</code></pre>
 				<p>If there is no story for the component yet, add a new one to <code>./src/stories</code>.</p>
 				<p>When you want to test the component within a solid-pane, you can use the <a href="https://github.com/solid/solid-panes#development">development mode of solid-panes</a> or
 				<a href="https://github.com/solid/mashlib-dev">mashlib-dev</a>.</p>
@@ -175,125 +174,125 @@ npm <span class="hljs-keyword">run</span><span class="bash"> storybook</span></c
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<nav class="tsd-navigation primary">
 				<ul>
-					<li class="globals  ">
-						<a href="globals.html"><em>Globals</em></a>
+					<li class=" ">
+						<a href="modules.html">Exports</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_acl_access_controller_.html">&quot;acl/access-<wbr>controller&quot;</a>
+						<a href="modules/acl.html">acl</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_acl_access_groups_.html">&quot;acl/access-<wbr>groups&quot;</a>
+						<a href="modules/acl_access_controller.html">acl/access-<wbr>controller</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_acl_acl_.html">&quot;acl/acl&quot;</a>
+						<a href="modules/acl_access_groups.html">acl/access-<wbr>groups</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_acl_acl_control_.html">&quot;acl/acl-<wbr>control&quot;</a>
+						<a href="modules/acl_acl.html">acl/acl</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_acl_add_agent_buttons_.html">&quot;acl/add-<wbr>agent-<wbr>buttons&quot;</a>
+						<a href="modules/acl_acl_control.html">acl/acl-<wbr>control</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_acl_index_.html">&quot;acl/index&quot;</a>
+						<a href="modules/acl_add_agent_buttons.html">acl/add-<wbr>agent-<wbr>buttons</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_acl_styles_.html">&quot;acl/styles&quot;</a>
+						<a href="modules/acl_styles.html">acl/styles</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_acl_types_.html">&quot;acl/types&quot;</a>
+						<a href="modules/acl_types.html">acl/types</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_authn_authn_.html">&quot;authn/authn&quot;</a>
+						<a href="modules/authn.html">authn</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_authn_index_.html">&quot;authn/index&quot;</a>
+						<a href="modules/authn_authn.html">authn/authn</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_authn_types_.html">&quot;authn/types&quot;</a>
+						<a href="modules/authn_types.html">authn/types</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_create_create_.html">&quot;create/create&quot;</a>
+						<a href="modules/create.html">create</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_create_index_.html">&quot;create/index&quot;</a>
+						<a href="modules/create_create.html">create/create</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_create_types_.html">&quot;create/types&quot;</a>
+						<a href="modules/create_types.html">create/types</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_debug_.html">&quot;debug&quot;</a>
+						<a href="modules/debug.html">debug</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_header_empty_profile_.html">&quot;header/empty-<wbr>profile&quot;</a>
+						<a href="modules/header.html">header</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_header_headerhelpers_.html">&quot;header/header<wbr>Helpers&quot;</a>
+						<a href="modules/header_empty_profile.html">header/empty-<wbr>profile</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_header_index_.html">&quot;header/index&quot;</a>
+						<a href="modules/header_headerhelpers.html">header/header<wbr>Helpers</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_header_stylemap_.html">&quot;header/style<wbr>Map&quot;</a>
+						<a href="modules/header_stylemap.html">header/style<wbr>Map</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_icons_solid_logo_.html">&quot;icons/solid_<wbr>logo&quot;</a>
+						<a href="modules/icons_solid_logo.html">icons/solid_<wbr>logo</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_index_.html">&quot;index&quot;</a>
+						<a href="modules/index.html">index</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_jss_index_.html">&quot;jss/index&quot;</a>
+						<a href="modules/jss.html">jss</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_log_.html">&quot;log&quot;</a>
+						<a href="modules/log.html">log</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_logic_.html">&quot;logic&quot;</a>
+						<a href="modules/logic.html">logic</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_matrix_index_.html">&quot;matrix/index&quot;</a>
+						<a href="modules/matrix.html">matrix</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_matrix_matrix_.html">&quot;matrix/matrix&quot;</a>
+						<a href="modules/matrix_matrix.html">matrix/matrix</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_matrix_types_.html">&quot;matrix/types&quot;</a>
+						<a href="modules/matrix_types.html">matrix/types</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_media_index_.html">&quot;media/index&quot;</a>
+						<a href="modules/media.html">media</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_media_media_capture_.html">&quot;media/media-<wbr>capture&quot;</a>
+						<a href="modules/media_media_capture.html">media/media-<wbr>capture</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_pad_.html">&quot;pad&quot;</a>
+						<a href="modules/pad.html">pad</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_participation_.html">&quot;participation&quot;</a>
+						<a href="modules/participation.html">participation</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_tabs_.html">&quot;tabs&quot;</a>
+						<a href="modules/tabs.html">tabs</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_versioninfo_.html">&quot;version<wbr>Info&quot;</a>
+						<a href="modules/versioninfo.html">version<wbr>Info</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_widgets_buttons_.html">&quot;widgets/buttons&quot;</a>
+						<a href="modules/widgets_buttons.html">widgets/buttons</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_widgets_error_.html">&quot;widgets/error&quot;</a>
+						<a href="modules/widgets_error.html">widgets/error</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_widgets_forms_basic_.html">&quot;widgets/forms/basic&quot;</a>
+						<a href="modules/widgets_forms_basic.html">widgets/forms/basic</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_widgets_forms_comment_.html">&quot;widgets/forms/comment&quot;</a>
+						<a href="modules/widgets_forms_comment.html">widgets/forms/comment</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_widgets_forms_fieldfunction_.html">&quot;widgets/forms/field<wbr>Function&quot;</a>
+						<a href="modules/widgets_forms_fieldfunction.html">widgets/forms/field<wbr>Function</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_widgets_forms_fieldparams_.html">&quot;widgets/forms/field<wbr>Params&quot;</a>
+						<a href="modules/widgets_forms_fieldparams.html">widgets/forms/field<wbr>Params</a>
 					</li>
 				</ul>
 			</nav>
@@ -309,7 +308,6 @@ npm <span class="hljs-keyword">run</span><span class="bash"> storybook</span></c
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
 				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
 				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
