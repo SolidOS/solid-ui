@@ -7,7 +7,10 @@ import {
 } from '../../../src/chat/message'
 
 silenceDebugMessages()
-jest.mock('solid-auth-client')
+jest.mock('solid-auth-client', () => ({
+  currentSession: () => Promise.resolve(),
+  trackSession: () => null
+}))
 
 describe('elementForImageURI', () => {
   it('exists', () => {
