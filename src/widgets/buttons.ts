@@ -561,7 +561,7 @@ export function button (dom: HTMLDocument, iconURI: string | undefined, text: st
     img.title = text
     button.setAttribute('style', style.buttonStyle)
   } else {
-    button.innerText = text.toLocaleUpperCase()
+    button.textContent = text.toLocaleUpperCase()
     const style = getButtonStyle(options)
     const { classes } = getClasses(dom.head, {
       textButton: style

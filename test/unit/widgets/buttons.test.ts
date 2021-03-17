@@ -140,6 +140,10 @@ describe('button', () => {
     const buttonElt = button(domWithHead(), iconURI, text, handler)
     buttonElt.dispatchEvent(clickEvent)
   })
+  it('text button with upper-cased caption', () => {
+    const buttonElt = button(domWithHead(), undefined, 'Click me', () => {})
+    expect(buttonElt.innerHTML).toBe('CLICK ME')
+  })
 })
 
 describe('cancelButton', () => {
