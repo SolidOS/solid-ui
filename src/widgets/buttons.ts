@@ -7,6 +7,12 @@ import { info } from '../log'
 import { getClasses } from '../jss'
 import { uploadFiles } from './dragAndDrop.js'
 import { solidLogicSingleton } from '../logic'
+import {
+  wrapDivInATR,
+  addEventListenerToElement,
+  createLinkForURI
+}
+  from './widgetHelpers'
 
 /**
  * UI Widgets such as buttons
@@ -723,6 +729,7 @@ export function renderAsRow (dom: HTMLDocument, pred: NamedNode, obj: NamedNode,
   ;(tr as any).subject = obj
   return tr
 }
+
 /**
  * A Div to represent a draggable person, etc in a list
  *
@@ -756,9 +763,8 @@ export function renderAsDiv (dom: HTMLDocument, pred: NamedNode, obj: NamedNode,
   if (obj.uri) {
     // blank nodes need not apply
     if (options.link !== false) {
-      const anchor = linkDiv.appendChild(linkIcon(dom, obj))
-      anchor.classList.add('HoverControlHide')
-      linkDiv.appendChild(dom.createElement('br'))
+      const iconLink = linkIcon(dom, obj)
+      createLinkForURI(dom, linkDiv, iconLink)
     }
     if (options.draggable !== false) {
       // default is on
@@ -767,14 +773,11 @@ export function renderAsDiv (dom: HTMLDocument, pred: NamedNode, obj: NamedNode,
     }
   }
   if (options.clickable && options.onClickFunction) {
-    div.addEventListener('click', options.onClickFunction)
+    addEventListenerToElement(div, options.onClickFunction)
   }
 
   if (options.wrapInATR) {
-    const tr = dom.createElement('tr')
-    const td = tr.appendChild(dom.createElement('td'))
-    td.appendChild(div)
-    ;(tr as any).subject = obj
+    const tr = wrapDivInATR(dom, div, obj)
     return tr
   }
   return div
