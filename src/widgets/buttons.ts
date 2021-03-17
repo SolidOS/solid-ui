@@ -8,10 +8,16 @@ import * as debug from '../debug'
 import { info } from '../log'
 import { getClasses } from '../jss'
 import { uploadFiles, makeDraggable, makeDropTarget } from './dragAndDrop'
-import { store } from '../logic'
 import * as utils from '../utils'
 
 import { errorMessageBlock } from './error'
+import { solidLogicSingleton } from '../logic'
+import {
+  wrapDivInATR,
+  addEventListenerToElement,
+  createLinkForURI
+}
+  from './widgetHelpers'
 
 /**
  * UI Widgets such as buttons
@@ -19,7 +25,7 @@ import { errorMessageBlock } from './error'
  */
 
 /* global alert */
-
+const store = solidLogicSingleton.store
 const { iconBase, originalIconBase } = icons
 
 const cancelIconURI = iconBase + 'noun_1180156.svg' // black X
@@ -736,6 +742,7 @@ export function renderAsRow (dom: HTMLDocument, pred: NamedNode, obj: NamedNode,
   ;(tr as any).subject = obj
   return tr
 }
+
 /**
  * A Div to represent a draggable person, etc in a list
  *
@@ -769,25 +776,21 @@ export function renderAsDiv (dom: HTMLDocument, pred: NamedNode, obj: NamedNode,
   if (obj.uri) {
     // blank nodes need not apply
     if (options.link !== false) {
-      const anchor = linkDiv.appendChild(linkIcon(dom, obj))
-      anchor.classList.add('HoverControlHide')
-      linkDiv.appendChild(dom.createElement('br'))
+      const iconLink = linkIcon(dom, obj)
+      createLinkForURI(dom, linkDiv, iconLink)
     }
     if (options.draggable !== false) {
       // default is on
       image.setAttribute('draggable', 'false') // Stop the image being dragged instead - just the TR
-      dragAndDrop.makeDraggable(div, obj)
+      makeDraggable(div, obj)
     }
   }
   if (options.clickable && options.onClickFunction) {
-    div.addEventListener('click', options.onClickFunction)
+    addEventListenerToElement(div, options.onClickFunction)
   }
 
   if (options.wrapInATR) {
-    const tr = dom.createElement('tr')
-    const td = tr.appendChild(dom.createElement('td'))
-    td.appendChild(div)
-    ;(tr as any).subject = obj
+    const tr = wrapDivInATR(dom, div, obj)
     return tr
   }
   return div
@@ -1007,13 +1010,13 @@ export function allClassURIs (): { [uri: string]: boolean } {
     .forEach(function (st) {
       if (st.object.value) set[st.object.value] = true
     })
-  store
+    store
     .statementsMatching(undefined, ns.rdfs('subClassOf'), undefined)
     .forEach(function (st) {
       if (st.object.value) set[st.object.value] = true
       if (st.subject.value) set[st.subject.value] = true
     })
-  store
+    store
     .each(undefined, ns.rdf('type'), ns.rdfs('Class'))
     .forEach(function (c) {
       if (c.value) set[c.value] = true
