@@ -80,6 +80,8 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 14.x
+      - name: Disable pre- and post-publish actions
+        run: 'sed -i -E "s/\"((pre|post)publish)/\"ignore:\1/" package.json'
       - uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}
