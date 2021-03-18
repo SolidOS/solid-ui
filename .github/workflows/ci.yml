@@ -50,7 +50,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: .
 
-  npm:
+  npm-publish-build:
     needs: test
     runs-on: ubuntu-latest
     steps:
@@ -69,3 +69,18 @@ jobs:
         with:
           token: ${{ secrets.NPM_TOKEN }}
           tag: ${{ env.GITHUB_REF_SLUG }}
+  npm-publish-latest:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: build
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          tag: latest
