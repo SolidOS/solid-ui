@@ -82,6 +82,5 @@ jobs:
           node-version: 14.x
       - uses: JS-DevTools/npm-publish@v1
         with:
-          dry-run: true
           token: ${{ secrets.NPM_TOKEN }}
           tag: latest
