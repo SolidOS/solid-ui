@@ -406,7 +406,6 @@ function trySetImage (element, thing, iconForClassMap) {
   element.setAttribute('src', iconBase + 'noun_10636_grey.svg') // Grey Circle -  some thing
   return false // we can do better
 }
-
 /**
  * ToDo: Also add icons for *properties* like  home, work, email, range, domain, comment,
  */
