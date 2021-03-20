@@ -47,12 +47,16 @@ export const style = { // styleModule
   textInputBackgroundColorUneditable: '#fff',
   multilineTextInputStyle: 'font-size:100%; white-space: pre-wrap; background-color: #eef;' +
   ' border: 0.07em solid gray; padding: 1em 0.5em; margin: 1em 1em;',
-  checkboxStyle: 'colour: black; font-size: 100%; padding-left: 0.5 em; padding-right: 0.5 em;'
+  checkboxStyle: 'colour: black; font-size: 100%; padding-left: 0.5 em; padding-right: 0.5 em;',
 
-}
+  // Buttons
+  renderAsDivStyle: 'display: flex; align-items: center; justify-content: space-between; height: 2.5em; padding: 1em;',
+  imageDivStyle: 'width:2.5em; padding:0.5em; height: 2.5em;',
+  linkDivStyle: 'width:2em; padding:0.5em; height: 4em;',
 
-style.setStyle = function setStyle (ele, styleName) {
-  ele.style = style[styleName]
+  setStyle: function setStyle (ele, styleName) {
+    ele.style = styleModule[styleName]
+  }
 }
 
 module.exports = style // @@ No way to do this in ESM

@@ -1,9 +1,17 @@
 /*  Buttons
 */
 import { IndexedFormula, NamedNode, st, sym, uri, Util } from 'rdflib'
-import { icons } from '../iconBase'
-import * as ns from '../ns'
-import * as style from '../style'
+import { iconBase, originalIconBase } from '../iconBase'
+import ns from '../ns'
+import {
+  buttonStyle,
+  classIconStyle,
+  iconStyle,
+  imageDivStyle,
+  linkDivStyle,
+  renderAsDivStyle,
+  textInputStyle
+} from '../style'
 import * as debug from '../debug'
 import { info } from '../log'
 import { getClasses } from '../jss'
@@ -13,11 +21,11 @@ import * as utils from '../utils'
 import { errorMessageBlock } from './error'
 import { solidLogicSingleton } from '../logic'
 import {
-  wrapDivInATR,
-  addEventListenerToElement,
-  createLinkForURI
-}
-  from './widgetHelpers'
+  addClickListenerToElement,
+  createImageDiv,
+  createLinkForURI,
+  wrapDivInATR
+} from './widgetHelpers'
 
 /**
  * UI Widgets such as buttons
@@ -26,7 +34,6 @@ import {
 
 /* global alert */
 const store = solidLogicSingleton.store
-const { iconBase, originalIconBase } = icons
 
 const cancelIconURI = iconBase + 'noun_1180156.svg' // black X
 const checkIconURI = iconBase + 'noun_1180158.svg' // green checkmark; Continue
@@ -41,6 +48,17 @@ export type ButtonType = 'Primary' | 'Secondary'
 export type ButtonWidgetOptions = {
   buttonColor?: ButtonType,
   needsBorder?: boolean
+}
+export type RenderAsDivOptions = {
+  image?: HTMLImageElement,
+  title?: string,
+  deleteFunction?: () => void,
+  link?: boolean,
+  noun?: string,
+  draggable?: boolean,
+  clickable?: boolean,
+  onClickFunction?: () => void,
+  wrapInATR?: boolean
 }
 function getStatusArea (context?: StatusAreaContext) {
   let box = (context && context.statusArea) || (context && context.div) || null
@@ -365,7 +383,7 @@ function trySetImage (element, thing, iconForClassMap) {
   const typeIcon = iconForClassMap[thing.uri]
   if (typeIcon) {
     element.setAttribute('src', typeIcon)
-    element.style = style.classIconStyle
+    element.style = classIconStyle
     // element.style.border = '0.1em solid green;'
     // element.style.backgroundColor = '#eeffee' // pale green
     return true
@@ -419,7 +437,7 @@ export function setImage (element: HTMLElement, thing: NamedNode) { // 20191230a
 // See, e.g., http://stackoverflow.com/questions/980855/inputting-a-default-image
 export function faviconOrDefault (dom: HTMLDocument, x: NamedNode) {
   const image = dom.createElement('img')
-  ;(image as any).style = style.iconStyle
+  ;(image as any).style = iconStyle
   const isOrigin = function (x) {
     if (!x.uri) return false
     const parts = x.uri.split('/')
@@ -482,10 +500,10 @@ export function deleteButtonWithCheck (
       container.removeChild(deleteButtonElt) // Ask -- are you sure?
       cancelButtonElt = dom.createElement('button')
       // cancelButton.textContent = 'cancel'
-      cancelButtonElt.setAttribute('style', style.buttonStyle)
+      cancelButtonElt.setAttribute('style', buttonStyle)
       const img = cancelButtonElt.appendChild(dom.createElement('img'))
       img.setAttribute('src', cancelIconURI)
-      img.setAttribute('style', style.buttonStyle)
+      img.setAttribute('style', buttonStyle)
 
       container.appendChild(cancelButtonElt).addEventListener(
         'click',
@@ -499,7 +517,7 @@ export function deleteButtonWithCheck (
       )
       sureButtonElt = dom.createElement('button')
       sureButtonElt.textContent = 'Delete ' + noun
-      sureButtonElt.setAttribute('style', style.buttonStyle)
+      sureButtonElt.setAttribute('style', buttonStyle)
       container.appendChild(sureButtonElt).addEventListener(
         'click',
         function (_event) {
@@ -578,7 +596,7 @@ export function button (dom: HTMLDocument, iconURI: string | undefined, text: st
     img.setAttribute('src', iconURI)
     img.setAttribute('style', 'width: 2em; height: 2em;') // trial and error. 2em disappears
     img.title = text
-    button.setAttribute('style', style.buttonStyle)
+    button.setAttribute('style', buttonStyle)
   } else {
     button.textContent = text.toLocaleUpperCase()
     const style = getButtonStyle(options)
@@ -641,7 +659,7 @@ export function askName (
     namefield.setAttribute('type', 'text')
     namefield.setAttribute('size', '100')
     namefield.setAttribute('maxLength', '2048') // No arbitrary limits
-    namefield.setAttribute('style', style.textInputStyle)
+    namefield.setAttribute('style', textInputStyle)
     namefield.select() // focus next user input
     form.appendChild(namefield)
     container.appendChild(form)
@@ -742,53 +760,68 @@ export function renderAsRow (dom: HTMLDocument, pred: NamedNode, obj: NamedNode,
   ;(tr as any).subject = obj
   return tr
 }
-
-/**
- * A Div to represent a draggable person, etc in a list
- *
- * pred is unused param at the moment
- */
-export function renderAsDiv (dom: HTMLDocument, pred: NamedNode, obj: NamedNode, options: any): HTMLElement {
-  const div = dom.createElement('div')
-  // add an option to change justify-content...
-  div.setAttribute('style', 'display: flex; align-items: center; justify-content: space-between; height: 2.5em; padding: 1em;')
-
-  options = options || {}
-  const imageDiv = div.appendChild(dom.createElement('div'))
+/* A helper function for renderAsDiv
+*  creates the NameDiv for the person
+*  Note: could not move it to the helper file because they call exported functions
+*  from buttons
+*/
+function createNameDiv (dom: HTMLDocument, div: HTMLDivElement, title: string | undefined, obj: NamedNode) {
   const nameDiv = div.appendChild(dom.createElement('div'))
-  const linkDiv = div.appendChild(dom.createElement('div'))
-
-  const image = options.image || faviconOrDefault(dom, obj)
-
-  imageDiv.setAttribute('style', 'width:2.5em; padding:0.5em; height: 2.5em;')
-  linkDiv.setAttribute('style', 'width:2em; padding:0.5em; height: 4em;')
-  imageDiv.appendChild(image)
-
-  if (options.title) {
-    nameDiv.textContent = options.title
+  if (title) {
+    nameDiv.textContent = title
   } else {
     setName(nameDiv, obj) // This is async
   }
+}
+/* A helper function for renderAsDiv
+*  creates the linkDiv for the person
+*  Note: could not move it to the helper file because they call exported functions
+*  from buttons
+*/
+function createLinkDiv (dom: HTMLDocument, div: HTMLDivElement, obj: NamedNode, options: RenderAsDivOptions) {
+  const linkDiv = div.appendChild(dom.createElement('div'))
+  linkDiv.setAttribute('style', linkDivStyle)
 
   if (options.deleteFunction) {
     deleteButtonWithCheck(dom, linkDiv, options.noun || 'one', options.deleteFunction)
   }
+
   if (obj.uri) {
     // blank nodes need not apply
     if (options.link !== false) {
       const iconLink = linkIcon(dom, obj)
       createLinkForURI(dom, linkDiv, iconLink)
     }
+<<<<<<< HEAD
     if (options.draggable !== false) {
       // default is on
       image.setAttribute('draggable', 'false') // Stop the image being dragged instead - just the TR
       makeDraggable(div, obj)
     }
+=======
+    dragAndDrop.makeDraggable(div, obj)
+>>>>>>> 57d218e (refactored and started adding tests)
   }
+}
+/**
+ * A Div to represent a draggable person, etc in a list
+ * configurable to add an onClick listener
+ */
+export function renderAsDiv (dom: HTMLDocument, obj: NamedNode, options: RenderAsDivOptions): HTMLElement {
+  const div = dom.createElement('div')
+  div.setAttribute('style', renderAsDivStyle)
+
+  options = options || {}
+  const image = options.image || faviconOrDefault(dom, obj)
+  createImageDiv(dom, div, image)
+  createNameDiv(dom, div, options.title, obj)
+  createLinkDiv(dom, div, obj, options)
+
   if (options.clickable && options.onClickFunction) {
-    addEventListenerToElement(div, options.onClickFunction)
+    addClickListenerToElement(div, options.onClickFunction)
   }
 
+  // to be compatible with the SolidOS table layout
   if (options.wrapInATR) {
     const tr = wrapDivInATR(dom, div, obj)
     return tr
