@@ -409,7 +409,6 @@ describe('personTR', () => {
 })
 
 describe('renderAsDiv ', () => {
-  
   it('is exposed on public API', () => {
     expect(renderAsDiv).toBe(renderAsDiv)
   })
@@ -421,7 +420,6 @@ describe('renderAsDiv ', () => {
     expect(renderAsDiv(dom, obj, options)).toBeTruthy()
   })
 })
-
 
 describe('propertyTriage', () => {
   it('exists', () => {
