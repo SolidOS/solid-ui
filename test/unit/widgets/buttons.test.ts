@@ -29,6 +29,8 @@ import {
   propertyTriage,
   refreshTree,
   removeButton,
+  renderAsDiv,
+  RenderAsDivOptions,
   selectorPanel,
   selectorPanelRefresh,
   setImage,
@@ -405,6 +407,21 @@ describe('personTR', () => {
     expect(personTR(dom, pred, obj, options)).toBeTruthy()
   })
 })
+
+describe('renderAsDiv ', () => {
+  
+  it('is exposed on public API', () => {
+    expect(renderAsDiv).toBe(renderAsDiv)
+  })
+  // still working on this..
+  it('runs', () => {
+    const obj = sym('https://test.test#')
+    const options = {}
+    // need to check all the options
+    expect(renderAsDiv(dom, obj, options)).toBeTruthy()
+  })
+})
+
 
 describe('propertyTriage', () => {
   it('exists', () => {
