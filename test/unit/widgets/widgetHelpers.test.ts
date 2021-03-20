@@ -32,11 +32,11 @@ afterAll(clearStore)
 describe('wrapDivInATR', () => {
   const subject = new NamedNode('https://subject#')
   it('is NOT exposed on public API', () => {
-   // expect(wrapDivInATR).toBeFalsy
+    // expect(wrapDivInATR).toBeFalsy
   })
   it('returns a tr', () => {
     wrapDivInATR(dom, element, subject)
-  })   
+  })
 })
 
 describe('addClickListenerToElement', () => {
@@ -53,7 +53,7 @@ describe('createLinkForURI', () => {
   it('is NOT exposed on public API', () => {
   // expect(createLinkForURI).toBeFalsy
   })
-  // createLinkForURI(dom, element, linkIcon) 
+  // createLinkForURI(dom, element, linkIcon)
   /*   {
   const anchor = linkDiv.appendChild(linkIcon)
   anchor.classList.add('HoverControlHide')
