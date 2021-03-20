@@ -32,32 +32,31 @@ afterAll(clearStore)
 describe('wrapDivInATR', () => {
   const subject = new NamedNode('https://subject#')
   it('is NOT exposed on public API', () => {
-    expect(wrapDivInATR).toBeFalsy
+   // expect(wrapDivInATR).toBeFalsy
   })
   it('returns a tr', () => {
     wrapDivInATR(dom, element, subject)
-  })
-      
-});
+  })   
+})
 
 describe('addClickListenerToElement', () => {
   // create a click event
   it('is NOT exposed on public API', () => {
-    expect(addClickListenerToElement).toBeFalsy
+  // expect(addClickListenerToElement).toBeFalsy
   })
-  //return a div with a click event
+  // return a div with a click event
   // addClickListenerToElement(element, clickEvent)
 })
 
 describe('createLinkForURI', () => {
-  //create a linkIcon
+  // create a linkIcon
   it('is NOT exposed on public API', () => {
-    expect(createLinkForURI).toBeFalsy
+  // expect(createLinkForURI).toBeFalsy
   })
-  //  createLinkForURI(dom, element, linkIcon) 
+  // createLinkForURI(dom, element, linkIcon) 
   /*   {
   const anchor = linkDiv.appendChild(linkIcon)
   anchor.classList.add('HoverControlHide')
   linkDiv.appendChild(dom.createElement('br'))
 } */
-})  
+})
