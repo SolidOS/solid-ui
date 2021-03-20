@@ -7,13 +7,9 @@ import {
 } from '../../../src/widgets/widgetHelpers'
 import { NamedNode } from 'rdflib'
 // @ts-ignore
-import { iconBase } from '../../../src/iconBase'
 import { clearStore } from '../helpers/clearStore'
-import { domWithHead } from '../../helpers/dom-with-head'
-import { solidLogicSingleton } from '../../../src/logic'
 
 silenceDebugMessages()
-jest.mock('solid-auth-client') // not sure if I need this
 let window: DOMWindow
 let dom: HTMLDocument
 let element: HTMLDivElement
