@@ -1,6 +1,6 @@
 import { IndexedFormula, NamedNode, st, sym, uri, Util } from 'rdflib'
 import { iconBase } from '../iconBase'
-import { linkIcon } from './buttons/iconLinks'
+import { linkIcon, createLinkForURI } from './buttons/iconLinks'
 import ns from '../ns'
 import {
   buttonStyle,
@@ -18,7 +18,6 @@ import { solidLogicSingleton } from '../logic'
 import {
   addClickListenerToElement,
   createImageDiv,
-  createLinkForURI,
   wrapDivInATR
 } from './widgetHelpers'
 
