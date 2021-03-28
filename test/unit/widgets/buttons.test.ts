@@ -40,6 +40,9 @@ import {
   shortTime,
   timestamp
 } from '../../../src/widgets/buttons'
+import {
+  linkDivStyle
+} from '../../../src/style'
 import { graph, namedNode, NamedNode, sym } from 'rdflib'
 // @ts-ignore
 import { foaf, rdf, sioc, vcard } from '../../../src/ns'
@@ -57,6 +60,8 @@ let window: DOMWindow
 let dom: HTMLDocument
 let element: HTMLDivElement
 let linkDiv: HTMLDivElement
+let image: HTMLImageElement
+let obj: NamedNode
 let event: Event
 let clickEvent: Event
 
@@ -65,6 +70,8 @@ beforeEach(() => {
   dom = window.document
   element = dom.createElement('div')
   event = new window.Event('test')
+  image = dom.createElement('img')
+  obj = new NamedNode('https://test.test#')
   linkDiv = dom.createElement('div')
   clickEvent = new window.Event('click')
   dom.dispatchEvent(event)
@@ -201,12 +208,20 @@ describe('createLinkDiv', () => {
   })
   it('adds the style....', () => {
     createLinkDiv(dom, element, obj, options)
+    expect(element.children[0].getAttribute('style')).toEqual(linkDivStyle)
   })
   it('adds the deleteFunction of .... deleteButton with Check', () => {
+    const options = {
+      deleteFunction: () => {}
+    }
     createLinkDiv(dom, element, obj, options)
   })
   it('adds the link icon and link for the uri if link option is true', () => {
+    const options = {
+      link: true
+    }
     createLinkDiv(dom, element, obj, options)
+    expect(element.children[0].children[0].nodeName).toEqual('A')
   })
 })
 
@@ -218,6 +233,7 @@ describe('createNameDiv', () => {
     expect(element.children.length).toBeGreaterThan(0)
     expect(element.children[0].textContent).toEqual('Name')
   })
+
   it.skip('uses the name from the obj if no title is given', () => {
     // this is more complicated to test for now leaving it
   })
@@ -440,19 +456,30 @@ describe('personTR', () => {
 })
 
 describe('renderAsDiv ', () => {
-  const options: RenderAsDivOptions = {
-    deleteFunction: () => {},
-    link: true
-  }
   it('is exposed on public API', () => {
     expect(renderAsDiv).toBe(renderAsDiv)
   })
-  // still working on this..
-  it('runs', () => {
-    const obj = sym('https://test.test#')
-    const options = {}
-    // need to check all the options
-    expect(renderAsDiv(dom, obj, options)).toBeTruthy()
+
+  it('uses the image given', () => {
+    image.setAttribute('alt', 'test')
+    const options = { image: image }
+    const element = renderAsDiv(dom, obj, options)
+    expect(element.children[0].children[0].getAttribute('alt')).toEqual('test')
+  })
+  it.skip('the div is clickable if given true for the clickable option', () => {
+    const options = {
+      clickable: true,
+      onClickFunction: () => {}
+    }
+    const element = renderAsDiv(dom, obj, options)
+    // expect(element.).toBeTruthy()
+  })
+  it('wraps the div in a TR if wrapInATR option is set to true', () => {
+    const options = {
+      wrapInATR: true
+    }
+    const element = renderAsDiv(dom, obj, options)
+    expect(element.nodeName).toEqual('TR')
   })
 })
 
