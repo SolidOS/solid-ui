@@ -450,6 +450,10 @@ describe('personTR', () => {
 })
 
 describe('renderAsDiv ', () => {
+  const options: RenderAsDivOptions = {
+    deleteFunction: () => {},
+    link: true
+  }
   it('is exposed on public API', () => {
     expect(renderAsDiv).toBe(renderAsDiv)
   })

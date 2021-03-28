@@ -17,7 +17,6 @@ let dom: HTMLDocument
 let element: HTMLDivElement
 let image: HTMLImageElement
 let linkIcon: HTMLAnchorElement
-let clickEvent: Event
 
 beforeEach(() => {
   window = new JSDOM('<!DOCTYPE html><head></head><body><p>Hello world</p></body>').window
@@ -25,8 +24,6 @@ beforeEach(() => {
   element = dom.createElement('div')
   image = dom.createElement('img')
   linkIcon = dom.createElement('a')
-  clickEvent = new window.Event('click')
-  dom.dispatchEvent(clickEvent)
 })
 describe('wrapDivInATR ', () => {
   const obj = namedNode('https://test.com/#name')
