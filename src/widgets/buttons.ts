@@ -5,7 +5,6 @@ import {
   buttonStyle,
   classIconStyle,
   iconStyle,
-  imageDivStyle,
   linkDivStyle,
   renderAsDivStyle,
   textInputStyle
@@ -751,8 +750,9 @@ export function renderAsRow (dom: HTMLDocument, pred: NamedNode, obj: NamedNode,
 *  creates the NameDiv for the person
 *  Note: could not move it to the helper file because they call exported functions
 *  from buttons
+*  Note: exported for testing only
 */
-function createNameDiv (dom: HTMLDocument, div: HTMLDivElement, title: string | undefined, obj: NamedNode) {
+export function createNameDiv (dom: HTMLDocument, div: HTMLDivElement, title: string | undefined, obj: NamedNode) {
   const nameDiv = div.appendChild(dom.createElement('div'))
   if (title) {
     nameDiv.textContent = title
@@ -764,8 +764,9 @@ function createNameDiv (dom: HTMLDocument, div: HTMLDivElement, title: string | 
 *  creates the linkDiv for the person
 *  Note: could not move it to the helper file because they call exported functions
 *  from buttons
+*  Note: exported for testing only
 */
-function createLinkDiv (dom: HTMLDocument, div: HTMLDivElement, obj: NamedNode, options: RenderAsDivOptions) {
+export function createLinkDiv (dom: HTMLDocument, div: HTMLDivElement, obj: NamedNode, options: RenderAsDivOptions) {
   const linkDiv = div.appendChild(dom.createElement('div'))
   linkDiv.setAttribute('style', linkDivStyle)
 

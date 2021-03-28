@@ -10,6 +10,8 @@ import {
   clearElement,
   complain,
   continueButton,
+  createLinkDiv,
+  createNameDiv,
   defaultAnnotationStore,
   deleteButtonWithCheck,
   extractLogURI,
@@ -178,6 +180,45 @@ describe('continueButton', () => {
     const handler = () => {
     }
     expect(continueButton(dom, handler)).toBeTruthy()
+  })
+})
+
+describe('createLinkDiv', () => {
+  const obj = namedNode('https://test.com/#name')
+  const options: RenderAsDivOptions = {
+    deleteFunction: () => {},
+    link: true
+  }
+
+  it('adds a div to the element provided', () => {
+    createLinkDiv(dom, element, obj, options)
+    expect(element.children.length).toBeGreaterThan(0)
+  })
+  it('makes the element draggable', () => {
+    createLinkDiv(dom, element, obj, options)
+    expect(element.getAttribute('draggable')).toEqual('true')
+  })
+  it('adds the style....', () => {
+    createLinkDiv(dom, element, obj, options)
+  })
+  it('adds the deleteFunction of .... deleteButton with Check', () => {
+    createLinkDiv(dom, element, obj, options)
+  })
+  it('adds the link icon and link for the uri if link option is true', () => {
+    createLinkDiv(dom, element, obj, options)
+  })
+})
+
+describe('createNameDiv', () => {
+  const obj = namedNode('https://test.com/#name')
+
+  it('adds a div to the element with textContent equal to Name', () => {
+    createNameDiv(dom, element, 'Name', obj)
+    expect(element.children.length).toBeGreaterThan(0)
+    expect(element.children[0].textContent).toEqual('Name')
+  })
+  it.skip('uses the name from the obj if no title is given', () => {
+    // this is more complicated to test for now leaving it
   })
 })
 
