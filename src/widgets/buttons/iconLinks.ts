@@ -12,7 +12,6 @@ import { originalIconBase } from '../../iconBase'
  *
  * @returns The anchor tag for the subject
  *
- * @internal exporting this only for unit tests
  */
 // eslint-disable-next-line complexity
 export function linkIcon (dom: HTMLDocument, subject: NamedNode, iconURI?: string): HTMLElement {
