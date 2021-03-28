@@ -1,7 +1,8 @@
 /*  Buttons
 */
 import { IndexedFormula, NamedNode, st, sym, uri, Util } from 'rdflib'
-import { iconBase, originalIconBase } from '../iconBase'
+import { iconBase } from '../iconBase'
+import { linkIcon } from './buttons/iconLinks'
 import ns from '../ns'
 import {
   buttonStyle,
@@ -193,7 +194,6 @@ export function shortTime (): string {
 }
 
 // ///////////////////// Handy UX widgets
-
 /**
  * Sets the best name we have and looks up a better one
  */
@@ -692,25 +692,6 @@ export function askName (
 // ////////////////////////////////////////////////////////////////
 
 /**
- * A little link icon
- */
-export function linkIcon (dom: HTMLDocument, subject: NamedNode, iconURI?: string): HTMLElement {
-  const anchor = dom.createElement('a')
-  anchor.setAttribute('href', subject.uri)
-  if (subject.uri.startsWith('http')) {
-    // If diff web page
-    anchor.setAttribute('target', '_blank') // open in a new tab or window
-  } // as mailboxes and mail messages do not need new browser window
-  const img = anchor.appendChild(dom.createElement('img'))
-  img.setAttribute(
-    'src',
-    iconURI || originalIconBase + 'go-to-this.png'
-  )
-  img.setAttribute('style', 'margin: 0.3em;')
-  return anchor
-}
-
-/**
  * A TR to represent a draggable person, etc in a list
  *
  * pred is unused param at the moment
@@ -762,7 +743,7 @@ export function renderAsRow (dom: HTMLDocument, pred: NamedNode, obj: NamedNode,
 *  creates the NameDiv for the person
 *  Note: could not move it to the helper file because they call exported functions
 *  from buttons
-*  Note: exported for testing only
+*  @internal exporting this only for unit tests
 */
 export function createNameDiv (dom: HTMLDocument, div: HTMLDivElement, title: string | undefined, obj: NamedNode) {
   const nameDiv = div.appendChild(dom.createElement('div'))
@@ -776,7 +757,7 @@ export function createNameDiv (dom: HTMLDocument, div: HTMLDivElement, title: st
 *  creates the linkDiv for the person
 *  Note: could not move it to the helper file because they call exported functions
 *  from buttons
-*  Note: exported for testing only
+* @internal exporting this only for unit tests
 */
 export function createLinkDiv (dom: HTMLDocument, div: HTMLDivElement, obj: NamedNode, options: RenderAsDivOptions) {
   const linkDiv = div.appendChild(dom.createElement('div'))
@@ -789,8 +770,7 @@ export function createLinkDiv (dom: HTMLDocument, div: HTMLDivElement, obj: Name
   if (obj.uri) {
     // blank nodes need not apply
     if (options.link !== false) {
-      const iconLink = linkIcon(dom, obj)
-      createLinkForURI(dom, linkDiv, iconLink)
+      createLinkForURI(dom, linkDiv, obj)
     }
 <<<<<<< HEAD
     if (options.draggable !== false) {
