@@ -40,11 +40,20 @@ import { forms } from './forms'
 
 const widgets = Object.assign(
   {},
+<<<<<<< HEAD
   buttons,
   peoplePicker,
   dragAndDrop,
   error,
   forms
+=======
+  require('./peoplePicker'),
+  require('./dragAndDrop'), // uploadFiles etc
+  require('./error'), // UI.widgets.errorMessageBlock
+  require('./buttons'),
+  require('./forms'),
+  require('./buttons/iconLinks')
+>>>>>>> b4bfed6 (exported iconLink from widgets)
 )
 
 // export default widgets .. Policy is not to use exports default
