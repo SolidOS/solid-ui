@@ -9,13 +9,13 @@ import { info } from '../log'
 import { getClasses } from '../jss'
 // import { uploadFiles } from './dragAndDrop.js'
 
-export type Mentionees = Array<mentionee>;
-
 export type mentionee = {
-    id: Number,
-    name: string,
-    uri: NamedNode
-  }
+  id: Number,
+  name: string,
+  uri: NamedNode
+}
+
+export type Mentionees = Array<mentionee>;
 
 /** Create a Mention Context to use to display to user when they want to mention someone
  *
@@ -48,5 +48,6 @@ function createMentionOptions (mentionOptions: HTMLSpanElement, potentialMention
     mentionOption.setAttribute('data-value', potentialMentionee.name)
     mentionOption.textContent = potentialMentionee.name
     mentionOptions.appendChild(mentionOption)
+    return 'test'
   })
 }

@@ -5,7 +5,7 @@
 
 /* global alert */
 import * as debug from '../debug'
-
+import { createMentionBox } from './mention'
 const $rdf = require('rdflib')
 const DateFolder = require('./dateFolder')
 
@@ -205,9 +205,9 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
     form.appendChild(middle)
     form.appendChild(rhs)
     form.AJAR_date = '9999-01-01T00:00:00Z' // ISO format for field sort
-    var field, sendButton
+    let field, sendButton
     debug.log('line 158')
-    var parps = kb
+    const parps = kb
       .each(chatChannel, ns.wf('participation'))
       .map(function (parp) {
         const name = parp.value.replace('/https:///', '').split('.')
@@ -335,8 +335,13 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
       creatorAndDate(lhs, me, '', null)
 
       field = dom.createElement('textarea')
+      const mentionContainer = dom.createElement('span')
+      mentionContainer.className = 'mention-container'
+      mentionContainer.setAttribute('style', 'position:absolute; display: block; color: #999;')
       middle.innerHTML = ''
       middle.appendChild(field)
+      middle.appendChild(mentionContainer)
+
       field.rows = 3
       // field.cols = 40
       field.setAttribute('style', messageBodyStyle + 'background-color: #eef;')
@@ -346,25 +351,25 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
         'keydown',
         async function (e) {
           // User preference?
-          debug.log('key code ' + e.keyCode)
           if (e.shiftKey) {
-            if (e.keyCode === 50) {
-              debug.log('testing @ key')
-              const mentionOption = null
-              const selection = dom.createElement('span')
-              selection.className = 'mymention'
+            if (e.key === '@') {
+              const startPos = this.selectionStart
+              const endPos = this.selectionEnd
+              mentionContainer.appendChild(createMentionBox(dom, parps))
+              /* console.log('Selection')
+              console.dir(selection)
               const options = parps.map(function (parp) {
                 selection.setAttribute('data-mention-id', 1)
                 selection.appendChild(dom.createTextNode('@' + parp.id))
+                console.log(parp.id)
+                console.log(parp.uri)
                 return null
               })
 
-              // field.appendChild(selection)
               const test = dom.getSelection()
               const test2 = getCursorContext(dom)
               field.autocomplete = 'on'
-              field.focus()
-              field.appendChild(selection)
+              field.focus() */
             }
           }
           if (e.keyCode === 13) {
