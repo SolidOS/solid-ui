@@ -25,7 +25,6 @@ import {
   isImage,
   isVideo,
   linkButton,
-  linkIcon,
   openHrefInOutlineMode,
   personTR,
   propertyTriage,
@@ -61,6 +60,7 @@ jest.mock('solid-auth-client', () => ({
 let window: DOMWindow
 let dom: HTMLDocument
 let element: HTMLDivElement
+let linkDiv: HTMLDivElement
 let event: Event
 let clickEvent: Event
 
@@ -69,6 +69,7 @@ beforeEach(() => {
   dom = window.document
   element = dom.createElement('div')
   event = new window.Event('test')
+  linkDiv = dom.createElement('div')
   clickEvent = new window.Event('click')
   dom.dispatchEvent(event)
 })
@@ -422,17 +423,6 @@ describe('linkButton', () => {
   it('runs', () => {
     const object = sym('https://test.test#')
     expect(linkButton(dom, object)).toBeTruthy()
-  })
-})
-
-describe('linkIcon', () => {
-  it('exists', () => {
-    expect(linkIcon).toBeInstanceOf(Function)
-  })
-  it('runs', () => {
-    const subject = sym('https://test.test#')
-    const iconURI = ''
-    expect(linkIcon(dom, subject, iconURI)).toBeTruthy()
   })
 })
 

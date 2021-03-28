@@ -4,7 +4,6 @@ import { namedNode } from 'rdflib'
 import {
   wrapDivInATR,
   addClickListenerToElement,
-  createLinkForURI,
   createImageDiv
 } from '../../../src/widgets/widgetHelpers'
 import {
@@ -16,14 +15,12 @@ let window: DOMWindow
 let dom: HTMLDocument
 let element: HTMLDivElement
 let image: HTMLImageElement
-let linkIcon: HTMLAnchorElement
 
 beforeEach(() => {
   window = new JSDOM('<!DOCTYPE html><head></head><body><p>Hello world</p></body>').window
   dom = window.document
   element = dom.createElement('div')
   image = dom.createElement('img')
-  linkIcon = dom.createElement('a')
 })
 describe('wrapDivInATR ', () => {
   const obj = namedNode('https://test.com/#name')
@@ -40,18 +37,6 @@ describe('addClickListenerToElement', () => {
   it('adds the click function to the div', () => {
     addClickListenerToElement(element, onClickFunction)
     // simulate doesn't work on a Div Element, not sure if I should try spy/mock...
-  })
-})
-
-describe('createLinkForURI', () => {
-  it('creates a Link for a URI element should return with two children a tag and br tag', () => {
-    createLinkForURI(dom, element, linkIcon)
-    expect(element.children[0].nodeName).toEqual('A')
-    expect(element.children[1].nodeName).toEqual('BR')
-  })
-  it('adds the classList to the div', () => {
-    createLinkForURI(dom, element, linkIcon)
-    expect(linkIcon.classList[0]).toEqual('HoverControlHide')
   })
 })
 
