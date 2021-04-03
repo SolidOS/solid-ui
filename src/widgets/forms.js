@@ -451,7 +451,8 @@ forms.field[ns.ui('Multiple').uri] = function (
     const prompt = tail.appendChild(dom.createElement('span'))
     prompt.textContent =
       (values.length === 0 ? 'Add one or more ' : 'Add more ') +
-      utils.label(property)
+      utils.predicateLabel(property, reverse)
+      // utils.label(property)
     tail.addEventListener('click', async _eventNotUsed => {
       await addItem()
     }, true)
