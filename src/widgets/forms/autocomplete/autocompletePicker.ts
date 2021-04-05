@@ -21,7 +21,7 @@ const AUTOCOMPLETE_DEBOUNCE_MS = 300
 // const autocompleteRowStyle = 'border: 0.2em solid straw;' // @@ white
 
 /*
-Autocomplete happens in four phases:
+Autocomplete happens in 6 phases:
   1. The search string is too small to bother
   2. The search string is big enough, and we have not loaded the array
   3. The search string is big enough, and we have loaded array up to the limit
@@ -29,12 +29,15 @@ Autocomplete happens in four phases:
   4. The search string is big enough, and we have loaded array NOT to the limit
      but including all matches.   No more fetches.
      If user gets more precise, wait for them to select one - or reduce to a single
-  5. Optionally waiting for accept button to be pressed
+  5. Single one selected. Optionally waiting for accept button to be pressed, or can change string and go to 5 or 2
+  6. Locked with a value. Press 'edit' button to return to 5
 */
 
 type AutocompleteOptions = { cancelButton?: HTMLElement,
                              acceptButton?: HTMLElement,
                              class: NamedNode,
+                             currentObject: NamedNode,
+                             currentLabel: string,
                              queryParams: QueryParameters }
 
 interface Callback1 {
@@ -147,6 +150,7 @@ export async function renderAutoComplete (dom: HTMLDocument, options:Autocomplet
     }
     inputEventHandlerLock = true
     const languagePrefs = await getPreferredLanguages()
+    const language = languagePrefs[0] // if have to pick one
     const filter = searchInput.value.trim().toLowerCase()
     if (filter.length < AUTOCOMPLETE_THRESHOLD) { // too small
       clearList()
@@ -160,7 +164,7 @@ export async function renderAutoComplete (dom: HTMLDocument, options:Autocomplet
       }
       let bindings
       try {
-        bindings = await queryPublicDataByName(filter, OrgClass, options.queryParams)
+        bindings = await queryPublicDataByName(filter, OrgClass, languagePrefs, options.queryParams)
         // bindings = await queryDbpedia(sparql)
       } catch (err) {
         complain('Error querying db of organizations: ' + err)
@@ -225,6 +229,12 @@ export async function renderAutoComplete (dom: HTMLDocument, options:Autocomplet
   const cell = head.appendChild(dom.createElement('td'))
   const searchInput = cell.appendChild(dom.createElement('input'))
   searchInput.setAttribute('type', 'text')
+  if (options.currentObject) { // If have existing value then jump into the endgame of the autocomplete
+    searchInput.value = options.currentLabel || ''
+    foundName = options.currentLabel
+    lastFilter = options.currentLabel
+    foundObject = options.currentObject
+  }
   const searchInputStyle = style.searchInputStyle ||
     'border: 0.1em solid #444; border-radius: 0.5em; width: 100%; font-size: 100%; padding: 0.1em 0.6em' // @
   searchInput.setAttribute('style', searchInputStyle)

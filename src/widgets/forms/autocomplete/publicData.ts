@@ -54,6 +54,11 @@ export const wikidataClasses = {
   SportsOrganization: 'http://www.wikidata.org/entity/Q4438121'
 }
 
+export const fetcherOptionsJsonPublicData = {
+  credentials: 'omit', // try to avoid CORS problems. Data is public so no auth
+  headers: { Accept: 'application/json' }
+}
+
 export async function getPreferredLanguages () {
   return ['fr', 'en', 'de', 'it'] // @@ testing only -- code me later
 }
@@ -63,6 +68,7 @@ export const escoParameters:QueryParameters = {
   searchByNameQuery: null, // No sparql endpoint
   searchByNameURI: 'https://ec.europa.eu/esco/api/search?language=$(language)&type=occupation&text=$(name)',
   endpoint: null,
+  returnFormat: 'ESCO',
   class: {}
 }
 
@@ -225,6 +231,15 @@ export function loadFromBindings (kb, solidSubject:NamedNode, bindings, doc, pre
 
 /* ESCO sopecific
 */
+export function ESCOResultToBindings (json: Object): Bindings {
+  const results = json._embedded.results // Array
+  const bindings = results.map(result => {
+    const name = result.title
+    const uri = result.uri // like http://data.europa.eu/esco/occupation/57af9090-55b4-4911-b2d0-86db01c00b02
+    return { name: { value: name, type: 'literal' }, uri: { type: 'IRI', value: uri } } // simulate SPARQL bindings
+  })
+  return bindings
+}
 
 /*  Query all entities of given class and partially matching name
 */
@@ -235,39 +250,54 @@ export async function queryESCODataByName (filter: string, theClass:NamedNode, q
     .replace('$(class)', theClass)
   console.log('Querying ESCO data - uri: ' + queryURI)
 
-  const options = {
-    credentials: 'omit',
-    headers: { Accept: 'application/json' }
-  } // CORS
-  const response = await kb.fetcher.webOperation('GET', queryURI, options)
-  // complain('Error querying db of organizations: ' + err)
+  const response = await kb.fetcher.webOperation('GET', queryURI, fetcherOptionsJsonPublicData)
   const text = response.responseText
   console.log('    Query result  text' + text.slice(0, 500) + '...')
   if (text.length === 0) throw new Error('Wot no text back from ESCO query ' + queryURI)
   const json = JSON.parse(text)
-  console.log('    Query result JSON' + JSON.stringify(json, null, 4).slice(0, 500) + '...')
-
-  const results = json._embedded.results // Array
-  const bindings = results.map(result => {
-    const name = result.title
-    const uri = result.uri // like http://data.europa.eu/esco/occupation/57af9090-55b4-4911-b2d0-86db01c00b02
-    return { name: { value: name, type: 'literal' }, uri: { type: 'IRI', value: uri } } // simulate SPARQL bindings
-  })
-  return bindings
-  // return queryPublicDataSelect(sparql, queryTarget)
+  console.log('    ESCO Query result JSON' + JSON.stringify(json, null, 4).slice(0, 500) + '...')
+  return ESCOResultToBindings(json)
 }
 
 /*  Query all entities of given class and partially matching name
 */
-export async function queryPublicDataByName (filter: string, theClass:NamedNode, queryTarget: QueryParameters): Promise<Bindings> {
-  const sparql = queryTarget.searchByNameQuery
-    .replace('$(name)', filter)
-    .replace('$(limit)', '' + AUTOCOMPLETE_LIMIT)
-    .replace('$(class)', theClass)
-  console.log('Querying public data - sparql: ' + sparql)
-  return queryPublicDataSelect(sparql, queryTarget)
+export async function queryPublicDataByName (
+  filter: string,
+  theClass:NamedNode,
+  languages: Array<string>,
+  queryTarget: QueryParameters): Promise<Bindings> {
+  function substituteStrings (template: string):string {
+    return template.replace('$(name)', filter)
+      .replace('$(limit)', '' + AUTOCOMPLETE_LIMIT)
+      .replace('$(class)', theClass)
+  }
+  if (queryTarget.searchByNameQuery) {
+    const sparql = substituteStrings(queryTarget.searchByNameQuery)
+    console.log('Querying public data - sparql: ' + sparql)
+    return queryPublicDataSelect(sparql, queryTarget)
+  } else if (queryTarget.searchByNameURI) { // not sparql - random API
+    const queryURI = substituteStrings(queryTarget.searchByNameURI)
+    const response = await kb.fetcher.webOperation('GET', queryURI, fetcherOptionsJsonPublicData)
+    const text = response.responseText
+    console.log('    Query result  text' + text.slice(0, 500) + '...')
+    if (text.length === 0) throw new Error('Wot no text back from ESCO query ' + queryURI)
+    const json = JSON.parse(text)
+    console.log('    API Query result JSON' + JSON.stringify(json, null, 4).slice(0, 500) + '...')
+    if (json._embedded) {
+      console.log('      Looks like ESCO')
+      const bindings = ESCOResultToBindings(json)
+      return bindings
+    } else {
+      alert('Code me: unrecognized API return format')
+      console.log('*** Need to add code to parse unrecognized API JSON return\n' + JSON.stringify(json), null, 4)
+    }
+  } else {
+    throw new Error('Query source must have either rest API or SPARQL endpoint.')
+  }
 }
 
+/* Query a database using SPARQL SELECT
+*/
 export async function queryPublicDataSelect (sparql: string, queryTarget: QueryParameters): Promise<Bindings> {
   const myUrlWithParams = new URL(queryTarget.endpoint)
   myUrlWithParams.searchParams.append('query', sparql)
@@ -289,6 +319,8 @@ export async function queryPublicDataSelect (sparql: string, queryTarget: QueryP
   return bindings
 }
 
+/* Load from a database using SPARQL CONSTRUCT
+*/
 export async function queryPublicDataConstruct (sparql: string, pubicId: NamedNode, queryTarget: QueryParameters): Promise<Bindings> {
   console.log('queryPublicDataConstruct: sparql:', sparql)
   const myUrlWithParams = new URL(queryTarget.endpoint)

@@ -8,20 +8,28 @@ import { renderAutocompleteControl } from './autocompletBar'
 import { NamedNode, BlankNode, Variable, st } from 'rdflib'
 
 /**
- * Render a autocomplete form field
- *
- * The same function is used for many similar one-value fields, with different
- * regexps used to validate.
- *
- * @param dom The HTML Document object aka Document Object Model
- * @param container  If present, the created widget will be appended to this
- * @param already A hash table of (form, subject) kept to prevent recursive forms looping
- * @param subject The thing about which the form displays/edits data
- * @param form The form or field to be rendered
- * @param doc The web document in which the data is
- * @param callbackFunction Called when data is changed?
- *
- * @returns The HTML widget created
+  * Render a autocomplete form field
+  *
+  * Teh autocomplete form searches for an iobject in a definitive public database,
+  * and allows the user to search for it by name, displaying a list of objects whose names match
+  * the input to date, and letting  the user either click on one of the list,
+  * or just go on untill there is only one.  The process then returns two values,
+  * the URiI of the object and its name.
+  *
+  * @param dom The HTML Document object aka Document Object Model
+  * @param container  If present, the created widget will be appended to this
+  * @param already A hash table of (form, subject) kept to prevent recursive forms looping
+  * @param subject The thing about which the form displays/edits data
+  * @param form The form or field to be rendered
+  * @param doc The web document in which the data is
+  * @param callbackFunction Called when data is changed so other parts can be refreshed.
+  *
+  * Form properties:
+  * @param ui:property  The property to store the object itself
+  * @param ui:labelProperty The property used to store the name of the object
+  * @param ui:categoory The class of objects to be searched, if fixed (else dep on class of subject)
+  *
+  * @returns The HTML widget created
  */
 // eslint-disable-next-line complexity
 export function autocompleteField (
@@ -34,15 +42,15 @@ export function autocompleteField (
   callbackFunction: (ok: boolean, errorMessage: string) => void
 ): HTMLElement {
   async function addOneIdAndRefresh (result, _name) {
-    const ds = kb.statementsMatching(subject, property as any) // remove any multiple values
+    const deletables = kb.statementsMatching(subject, property as any, null, null) // remove any multiple values in any doc
 
-    let is = ds.map(statement => st(statement.subject, statement.predicate, result, statement.why)) // can include >1 doc
-    if (is.length === 0) {
+    let insertables = deletables.map(statement => st(statement.subject, statement.predicate, result, statement.why)) // can include >1 doc
+    if (insertables.length === 0) {
       // or none
-      is = [st(subject, property as any, result, doc)]
+      insertables = [st(subject, property as any, result, doc)]
     }
     try {
-      await kb.updater.updateMany(ds, is)
+      await kb.updater.updateMany(deletables, insertables)
     } catch (err) {
       callbackFunction(false, err)
       box.appendChild(widgets.errorMessageBlock(dom, 'Autocomplete form data write error:' + err))
@@ -66,70 +74,87 @@ export function autocompleteField (
 
   const property = kb.any(form, ns.ui('property'))
   if (!property) {
-    box.appendChild(
+    return box.appendChild(
       dom.createTextNode('Error: No property given for autocomplete field: ' + form)
     )
-    return box
   }
+  const labelProperty = kb.any(form, ns.ui('labelProperty')) || ns.schema('name')
+
   const searchClass = kb.any(form, ns.ui('searchClass'))
   if (!searchClass) {
     return box.appendChild(
       dom.createTextNode('Error: No searchClass given for autocomplete field: ' + form)
     )
   }
-  const endPoint = kb.any(form, ns.ui('endPoint'))
-  if (!endPoint) {
+  // Parse the data source into query options
+
+  const dataSource = kb.any(form, ns.ui('dataSource'))
+  if (!dataSource) {
     return box.appendChild(
-      dom.createTextNode('Error: No SPARQL endPoint given for autocomplete field: ' + form)
+      dom.createTextNode('Error: No data source given for autocomplete field: ' + form)
     )
+  }
+  const queryParams = {} // @@ const?
+  queryParams.targetClass = kb.any(dataSource, ns.ui('targetClass'), null, dataSource.doc()) // Different ontology?
+  queryParams.name = kb.anyJS(dataSource, ns.schema('name'), null, dataSource.doc()) // Different ontology?
+  queryParams.logo = kb.anyJS(dataSource, ns.schema('logo'), null, dataSource.doc()) // Different ontology?
+
+  if (!queryParams.targetClass) {
+    queryParams.targetClass = kb.any(subject, ns.rdf('type')) // @@ be more selective of which class if many
+  }
+  const endPoint = kb.any(dataSource, ns.ui('endPoint'), null, dataSource.doc())
+  if (endPoint) { // SPARQL
+    queryParams.endpoint = endPoint
+
+    queryParams.searchByNameQuery = kb.the(dataSource, ns.ui('searchByNameQuery'), null, dataSource.doc())
+    if (!queryParams.searchByNameQuery) {
+      return box.appendChild(
+        dom.createTextNode('Error: No searchByNameQuery given for data Source: ' + form))
+    }
+    queryParams.insitituteDetailsQuery = kb.any(dataSource, ns.ui('insitituteDetailsQuery'), null, dataSource.doc())
+  } else {
+    return box.appendChild(
+      dom.createTextNode('Error: No SPARQL endPoint given for autocomplete field: ' + form))
   }
   const queryTemplate = kb.any(form, ns.ui('queryTemplate'))
   if (!queryTemplate) {
-    box.appendChild(
+    return box.appendChild(
       dom.createTextNode('Error: No queryTemplate given for autocomplete field: ' + form)
     )
-    return box
   }
   // It can be cleaner to just remove empty fields if you can't edit them anyway
   const suppressEmptyUneditable = kb.anyJS(form, ns.ui('suppressEmptyUneditable'), null, formDoc)
   const editable = kb.updater.editable((doc as NamedNode).uri)
-  lhs.appendChild(widgets.fieldLabel(dom, property as any, form))
-  const uri = widgets.mostSpecificClassURI(form)
-  let params = widgets.fieldParams[uri]
-  if (params === undefined) params = {} // non-bottom field types can do this
-  // const theStyle = params.style || style.textInputStyle
-  const klass = kb.the(form, ns.ui('category'), null, formDoc)
-  /*
-  { label: string;
-    logo: string;
-    searchByNameQuery?: string;
-    searchByNameURI?: string;
-    insitituteDetailsQuery?: string;
-    endPoint?: string;
-    class: object
-  }
-*/
-
-  const searchByNameQuery = kb.the(form, ns.ui('searchByNameQuery'), null, formDoc)
-  const queryParams = {
-    label: 'from form',
-    logo: '',
-    class: klass,
-    endPoint: endPoint.uri,
-    searchByNameQuery
-  }
 
   const options = { // cancelButton?: HTMLElement,
     // acceptButton?: HTMLElement,
-    class: klass,
+    targetClass: dataSource.targetClass, // @@ simplify?
     queryParams
   }
+  let obj = kb.any(subject, property as any, undefined, doc)
+  if (!obj) {
+    obj = kb.any(form, ns.ui('default'))
+    if (obj) {
+      options.currentObject = obj
+      options.currentName = kb.the(obj, labelProperty, null, form.doc())
+    } else { // No data or default. Should we suprress the whole field?
+      if (suppressEmptyUneditable && !editable) {
+        box.style.display = 'none' // clutter removal
+        return box
+      }
+    }
+  } else { // get object and name from target data:
+    options.currentObject = obj
+    options.currentName = kb.the(obj, labelProperty, null, subject.doc())
+  }
+
+  lhs.appendChild(widgets.fieldLabel(dom, property as any, form))
+
+  // const searchByNameQuery = kb.the(form, ns.ui('searchByNameQuery'), null, formDoc)
 
   rhs.appendChild(await renderAutocompleteControl(dom, subject, options, addOneIdAndRefresh))
 
-  // @@ set existing value is any
-  // renderAutoComplete(dom, options, addOneIdAndRefresh).then(acWiget => rhs.appendChild(acWiget))
-
+  /*
   const field = dom.createElement('input')
   ;(field as any).style = style.textInputStyle // Do we have to override length etc?
   rhs.appendChild(field)
@@ -144,28 +169,7 @@ export function autocompleteField (
   field.setAttribute('maxLength', maxLength ? '' + maxLength : '4096')
 
   doc = doc || widgets.fieldStore(subject, property as any, doc)
-
-  let obj = kb.any(subject, property as any, undefined, doc)
-  if (!obj) {
-    obj = kb.any(form, ns.ui('default'))
-  }
-  if (obj) {
-    field.value = obj.value || ''
-  }
-  field.setAttribute('style', style)
-  if (!kb.updater) {
-    throw new Error('kb has no updater')
-  }
-  if (!editable) {
-    field.readOnly = true // was: disabled. readOnly is better
-    ;(field as any).style = style.textInputStyleUneditable
-    // backgroundColor = textInputBackgroundColorUneditable
-    if (suppressEmptyUneditable && field.value === '') {
-      box.style.display = 'none' // clutter
-    }
-    return box
-  }
-
+*/
   return box
 }
 
