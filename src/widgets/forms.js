@@ -2,6 +2,7 @@
  *
  *      A Vanilla Dom implementation of the form language
  */
+/* eslint-disable multiline-ternary */
 
 /* global alert */
 
@@ -232,6 +233,11 @@ forms.field[ns.ui('Options').uri] = function (
  ** @param {function(ok, errorMessage)} callbackFunction Called when data is changed?
  **
  ** @returns {Element} The HTML widget created
+ **
+ ** Form properties:
+ **      @param {Boolean} reverse Make e reverse arc in the data OPS not SPO
+ **      @param {NamedNode} property The property to be written in the data
+ **      @param {Boolean} ordered Is the list an ordered one where the user defined the order
  */
 forms.field[ns.ui('Multiple').uri] = function (
   dom,
@@ -252,14 +258,15 @@ forms.field[ns.ui('Multiple').uri] = function (
   *
    * @param {Node} object The RDF object to be represented by this item.
    */
-  async function addItem (object) {
-    if (!object) object = forms.newThing(store) // by default just add new nodes
+  async function addItem () {
+    const object = forms.newThing(store) // by default just add new nodes
     if (ordered) {
       createListIfNecessary() // Sets list and unsavedList
       list.elements.push(object)
       await saveListThenRefresh()
     } else {
-      const toBeInserted = [$rdf.st(subject, property, object, store)]
+      // eslint-disable-next-line multiline-ternary
+      const toBeInserted = reverse ? [$rdf.st(object, property, subject, store)] : [$rdf.st(subject, property, object, store)]
       try {
         await kb.updater.update([], toBeInserted)
       } catch (err) {
@@ -267,7 +274,7 @@ forms.field[ns.ui('Multiple').uri] = function (
         box.appendChild(error.errorMessageBlock(dom, msg))
         debug.error(msg)
       }
-      refresh() // 20191213
+      refresh()
     }
   }
 
@@ -387,12 +394,11 @@ forms.field[ns.ui('Multiple').uri] = function (
     return subField // unused
   } // renderItem
 
-  /// ///////// Body of form field implementation
+  /// ///////// Body of Multiple form field implementation
 
   const plusIconURI = UI.icons.iconBase + 'noun_19460_green.svg' // white plus in green circle
 
   const kb = UI.store
-  kb.updater = kb.updater || new $rdf.UpdateManager(kb)
   const formDoc = form.doc ? form.doc() : null // @@ if blank no way to know
 
   const box = dom.createElement('table')
@@ -752,7 +758,7 @@ forms.field[ns.ui('Choice').uri] = function (
   box.appendChild(rhs)
   const property = kb.any(form, ui('property'))
   if (!property) {
-    return error.errorMessageBlock(dom, 'No property for Choice: ' + form)
+    return box.appendChild(error.errorMessageBlock(dom, 'No property for Choice: ' + form))
   }
   lhs.appendChild(forms.fieldLabel(dom, property, form))
   const from = kb.any(form, ui('from'))
