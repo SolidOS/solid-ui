@@ -1,6 +1,6 @@
 /* Form field for doing autocompleete
  */
-import { ns, style, widgets, store } from 'solid-ui'
+import { ns, widgets, store } from 'solid-ui'
 
 // import { renderAutoComplete } from './autocompletePicker'
 import { renderAutocompleteControl } from './autocompletBar'
@@ -150,9 +150,12 @@ export function autocompleteField (
 
   lhs.appendChild(widgets.fieldLabel(dom, property as any, form))
 
-  // const searchByNameQuery = kb.the(form, ns.ui('searchByNameQuery'), null, formDoc)
-
-  rhs.appendChild(await renderAutocompleteControl(dom, subject, options, addOneIdAndRefresh))
+  renderAutocompleteControl(dom, subject, options, addOneIdAndRefresh).then((control) => {
+    // console.log('Async load of autocomplete field control finished:' + control)
+    rhs.appendChild(control)
+  }, (err) => {
+    rhs.appendChild(widgets.errorMessageBlock(dom, `Error rendering autocomplete${form}: ${err}`))
+  })
 
   /*
   const field = dom.createElement('input')
