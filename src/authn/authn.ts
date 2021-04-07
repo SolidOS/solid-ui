@@ -439,7 +439,7 @@ export async function findAppInstances (
   for (let i = 0; i < containers.length; i++) {
     const cont = containers[i]
     context.instances = context.instances.concat(
-      solidLogicSingleton.getContainerElements(cont as NamedNode) as NamedNode[]
+      (await solidLogicSingleton.getContainerMembers(cont.value)).map(uri => solidLogicSingleton.store.sym(uri)) // @@ warning: uses strings not NN
     )
   }
   return context

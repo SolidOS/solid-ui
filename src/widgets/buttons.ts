@@ -910,7 +910,7 @@ export function openHrefInOutlineMode (e: Event) {
  *
  * @@ Todo: make it a personal preference.
  */
-export function defaultAnnotationStore (subject) {
+export function defaultAnnotationStore (subject:NamedNode):NamedNode {
   if (subject.uri === undefined) return undefined
   let s = subject.uri
   if (s.slice(0, 7) !== 'http://') return undefined

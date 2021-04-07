@@ -4,7 +4,7 @@
 **
 */
 /* eslint-disable no-console */
-import { style, widgets, store } from 'solid-ui'
+import { style, widgets, store } from '../../../index'
 import { NamedNode } from 'rdflib'
 import {
   queryPublicDataByName, filterByLanguage,
@@ -33,19 +33,26 @@ Autocomplete happens in 6 phases:
   6. Locked with a value. Press 'edit' button to return to 5
 */
 
-type AutocompleteOptions = { cancelButton?: HTMLElement,
-                             acceptButton?: HTMLElement,
-                             class: NamedNode,
-                             currentObject: NamedNode,
-                             currentLabel: string,
-                             queryParams: QueryParameters }
+export type AutocompleteDecoration = {
+  acceptButton?: HTMLElement,
+  cancelButton?: HTMLElement,
+  editButton?: HTMLElement
+}
+export type AutocompleteOptions = {
+     targetClass: NamedNode,
+     currentObject?: NamedNode,
+     currentName?: string,
+     queryParams: QueryParameters
+}
 
 interface Callback1 {
   (subject: NamedNode, name: string): void;
 }
 
 // The core of the autocomplete UI
-export async function renderAutoComplete (dom: HTMLDocument, options:AutocompleteOptions, // subject:NamedNode, predicate:NamedNode,
+export async function renderAutoComplete (dom: HTMLDocument,
+  options:AutocompleteOptions,
+  decoration: AutocompleteDecoration,
   callback: Callback1) {
   function complain (message) {
     const errorRow = table.appendChild(dom.createElement('tr'))
@@ -55,20 +62,20 @@ export async function renderAutoComplete (dom: HTMLDocument, options:Autocomplet
     errorRow.style.padding = '1em'
   }
   function remove (ele?: HTMLElement) {
-    if (ele) {
+    if (ele && ele.parentNode) {
       ele.parentNode.removeChild(ele)
     }
   }
   function finish (object, name) {
     console.log('Auto complete: finish! ' + object)
-    // remove(options.cancelButton)
-    // remove(options.acceptButton)
+    // remove(decoration.cancelButton)
+    // remove(decoration.acceptButton)
     // remove(div)
     callback(object, name)
   }
   async function gotIt (object:NamedNode, name:string) {
-    if (options.acceptButton) {
-      (options.acceptButton as any).disabled = false
+    if (decoration.acceptButton) {
+      (decoration.acceptButton as any).disabled = false
       searchInput.value = name // complete it
       foundName = name
       foundObject = object
@@ -83,7 +90,7 @@ export async function renderAutoComplete (dom: HTMLDocument, options:Autocomplet
     if (searchInput.value === foundName) { // still
       finish(foundObject, foundName)
     } else {
-      (options.acceptButton as any).disabled = true
+      (decoration.acceptButton as any).disabled = true
     }
   }
 
@@ -103,21 +110,22 @@ export async function renderAutoComplete (dom: HTMLDocument, options:Autocomplet
 
   function cancelText (_event) {
     searchInput.value = ''
-    if (options.acceptButton) {
-      (options.acceptButton as any).disabled = true // start again
+    if (decoration.acceptButton) {
+      (decoration.acceptButton as any).disabled = true // start again
     }
     candidatesLoaded = false
   }
 
   function thinOut (filter) {
     let hits = 0
-    let pick = null; let pickedName = ''
+    let pick = undefined as NamedNode | undefined
+    let pickedName = ''
     for (let j = table.children.length - 1; j > 0; j--) { // backwards as we are removing rows
       const row = table.children[j]
-      if (nameMatch(filter, row.textContent)) {
+      if (nameMatch(filter, row.textContent || '')) {
         hits += 1
         pick = row.getAttribute('subject')
-        pickedName = row.textContent
+        pickedName = row.textContent as string
         ;(row as any).style.display = ''
         ;(row as any).style.color = 'blue' // @@ chose color
       } else {
@@ -126,13 +134,13 @@ export async function renderAutoComplete (dom: HTMLDocument, options:Autocomplet
     }
     if (hits === 1) { // Maybe require green confirmation button be clicked?
       console.log(`  auto complete elimination:  "${filter}" -> "${pickedName}"`)
-      gotIt(kb.sym(pick), pickedName) // uri, name
+      gotIt(kb.sym(pick as NamedNode), pickedName as string) // uri, name
     }
   }
 
   function clearList () {
     while (table.children.length > 1) {
-      table.removeChild(table.lastChild)
+      table.removeChild(table.lastChild as Node)
     }
   }
 
@@ -176,7 +184,7 @@ export async function renderAutoComplete (dom: HTMLDocument, options:Autocomplet
       if (loadedEnough) {
         lastFilter = filter
       } else {
-        lastFilter = null
+        lastFilter = undefined
       }
       clearList()
       const slimmed = filterByLanguage(bindings, languagePrefs)
@@ -188,6 +196,9 @@ export async function renderAutoComplete (dom: HTMLDocument, options:Autocomplet
       slimmed.slice(0, numberOfRows).forEach(binding => {
         const row = table.appendChild(dom.createElement('tr'))
         style.setStyle(row, 'autocompleteRowStyle')
+        if (!binding.subject || !binding.name) {
+          return
+        }
         const uri = binding.subject.value
         const name = binding.name.value
         row.setAttribute('style', 'padding: 0.3em;')
@@ -205,23 +216,23 @@ export async function renderAutoComplete (dom: HTMLDocument, options:Autocomplet
   } // refreshList
 
   const queryParams: QueryParameters = options.queryParams
-  const OrgClass = options.class // kb.sym('http://umbel.org/umbel/rc/EducationalOrganization') // @@@ other
-  if (options.acceptButton) {
-    options.acceptButton.addEventListener('click', acceptButtonHandler, false)
+  const OrgClass = options.targetClass // kb.sym('http://umbel.org/umbel/rc/EducationalOrganization') // @@@ other
+  if (decoration.acceptButton) {
+    decoration.acceptButton.addEventListener('click', acceptButtonHandler, false)
   }
-  if (options.cancelButton) {
-    // options.cancelButton.addEventListener('click', cancelButtonHandler, false)
+  if (decoration.cancelButton) {
+    // decoration.cancelButton.addEventListener('click', cancelButtonHandler, false)
   }
 
   var candidatesLoaded = false
-  const runningTimeout = null
+  const runningTimeout = undefined as any
   let inputEventHandlerLock = false
   let allDisplayed = false
-  let lastFilter = null
+  let lastFilter = undefined as (string | undefined)
   let numberOfRows = AUTOCOMPLETE_ROWS // this gets slimmed down
   const div = dom.createElement('div')
-  let foundName = null // once found accepted string must match this
-  let foundObject = null
+  let foundName = undefined as (string | undefined)// once found accepted string must match this
+  let foundObject = undefined as (NamedNode | undefined)
   const table = div.appendChild(dom.createElement('table'))
   table.setAttribute('style', 'max-width: 30em; margin: 0.5em;')
   const head = table.appendChild(dom.createElement('tr'))
@@ -230,9 +241,9 @@ export async function renderAutoComplete (dom: HTMLDocument, options:Autocomplet
   const searchInput = cell.appendChild(dom.createElement('input'))
   searchInput.setAttribute('type', 'text')
   if (options.currentObject) { // If have existing value then jump into the endgame of the autocomplete
-    searchInput.value = options.currentLabel || ''
-    foundName = options.currentLabel
-    lastFilter = options.currentLabel
+    searchInput.value = options.currentName || ''
+    foundName = options.currentName
+    lastFilter = options.currentName
     foundObject = options.currentObject
   }
   const searchInputStyle = style.searchInputStyle ||

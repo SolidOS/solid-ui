@@ -6,9 +6,12 @@
 
 import { NamedNode, Literal, parse } from 'rdflib'
 
-import { ns, store } from 'solid-ui'
-import * as instituteDetailsQuery from '../lib/instituteDetailsQuery.js'
+// import { ns, store } from 'solid-ui'
+import { ns } from '../../../ns'
+import { store } from '../../../index'
 
+// import * as instituteDetailsQuery from '../lib/instituteDetailsQuery.js'
+import instituteDetailsQuery from './instituteDetailsQuery.sparql'
 const kb = store
 
 export const AUTOCOMPLETE_LIMIT = 3000 // How many to get from server
@@ -36,7 +39,7 @@ export type QueryParameters =
   searchByNameURI?: string;
   insitituteDetailsQuery?: string;
   endpoint?: string;
-  class: object
+  targetClass?: NamedNode,
 }
 
 // Schema.org seems to suggest NGOs are non-profit and Corporaions are for-profit
@@ -55,8 +58,8 @@ export const wikidataClasses = {
 }
 
 export const fetcherOptionsJsonPublicData = {
-  credentials: 'omit', // try to avoid CORS problems. Data is public so no auth
-  headers: { Accept: 'application/json' }
+  credentials: 'omit' as 'include' | 'omit' | undefined, // try to avoid CORS problems. Data is public so no auth
+  headers: new Headers({ Accept: 'application/json' })
 }
 
 export async function getPreferredLanguages () {
@@ -65,29 +68,29 @@ export async function getPreferredLanguages () {
 export const escoParameters:QueryParameters = {
   label: 'ESCO',
   logo: 'https://ec.europa.eu/esco/portal/static_resource2/images/logo/logo_en.gif',
-  searchByNameQuery: null, // No sparql endpoint
+  searchByNameQuery: undefined, // No sparql endpoint
   searchByNameURI: 'https://ec.europa.eu/esco/api/search?language=$(language)&type=occupation&text=$(name)',
-  endpoint: null,
-  returnFormat: 'ESCO',
-  class: {}
+  endpoint: undefined,
+  // returnFormat: 'ESCO',
+  targetClass: {}
 }
 
 export const dbpediaParameters:QueryParameters = {
   label: 'DBPedia',
   logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/DBpediaLogo.svg/263px-DBpediaLogo.svg.png',
   searchByNameQuery: `select distinct ?subject, ?name where {
-    ?subject a $(class); rdfs:label ?name
+    ?subject a $(targetClass); rdfs:label ?name
     FILTER regex(?name, "$(name)", "i")
   } LIMIT $(limit)`,
   endpoint: 'https://dbpedia.org/sparql/',
-  class: { AcademicInsitution: 'http://umbel.org/umbel/rc/EducationalOrganization' }
+  targetClass: { AcademicInsitution: 'http://umbel.org/umbel/rc/EducationalOrganization' }
 }
 
 export const wikidataParameters = {
   label: 'WikiData',
   logo: 'https://www.wikimedia.org/static/images/project-logos/wikidatawiki.png',
   endpoint: 'https://query.wikidata.org/sparql',
-  class: {
+  targetClass: {
     AcademicInsitution: 'http://www.wikidata.org/entity/Q4671277',
     Enterprise: 'http://www.wikidata.org/entity/Q6881511',
     Business: 'http://www.wikidata.org/entity/Q4830453',
@@ -97,7 +100,7 @@ export const wikidataParameters = {
   },
   searchByNameQuery: `SELECT ?subject ?name
   WHERE {
-    ?klass wdt:P279* $(class) .
+    ?klass wdt:P279* $(targetClass) .
     ?subject wdt:P31 ?klass .
     ?subject rdfs:label ?name.
     FILTER regex(?name, "$(name)", "i")
@@ -137,7 +140,7 @@ export function filterByLanguage (bindings, languagePrefs) {
   const languagePrefs2 = languagePrefs
   languagePrefs2.reverse() // prefered last
 
-  const slimmed = []
+  const slimmed = ([] as Array<Binding>)
   for (const u in uris) { // needs hasOwnProperty ?
     const bindings = uris[u]
     const sortMe = bindings.map(binding => {
@@ -145,7 +148,7 @@ export function filterByLanguage (bindings, languagePrefs) {
     })
     sortMe.sort() // best at th ebottom
     sortMe.reverse() // best at the top
-    slimmed.push(sortMe[0][1])
+    slimmed.push((sortMe[0][1] as any))
   } // map u
   console.log(` Filter by language: ${bindings.length} -> ${slimmed.length}`)
   return slimmed
@@ -162,7 +165,7 @@ export const wikidataClassMap = {
 }
 export const variableNameToPredicateMap = { // allow other mappings to be added in theory hence var
   // wikidata:
-  class: ns.rdf('type'),
+  targetClass: ns.rdf('type'),
   // logo: ns.schema('logo'),
   sealImage: ns.schema('logo'),
   // image: ns.schema('image'),   defaults to shema
@@ -215,11 +218,15 @@ export function loadFromBindings (kb, solidSubject:NamedNode, bindings, doc, pre
         // const regexp = /.*\(([-0-9\.-]*) ([-0-9\.-]*)\)/
         const regexp = /.*\(([-0-9.-]*) ([-0-9.-]*)\)/
         const match = regexp.exec(value)
-        const float = ns.xsd('float')
-        const latitude = new Literal(match[1], null, float)
-        const longitude = new Literal(match[2], null, float)
-        kb.add(solidSubject, ns.schema('longitude'), longitude, doc)
-        kb.add(solidSubject, ns.schema('latitude'), latitude, doc)
+        if (match) {
+          const float = ns.xsd('float')
+          const latitude = new Literal(match[1], null, float)
+          const longitude = new Literal(match[2], null, float)
+          kb.add(solidSubject, ns.schema('longitude'), longitude, doc)
+          kb.add(solidSubject, ns.schema('latitude'), latitude, doc)
+        } else {
+          console.log('Bad coordinates syntax: ' + value)
+        }
       } else {
         const pred = predMap[key] || ns.schema(key) // fallback to just using schema.org
         kb.add(solidSubject, pred, obj, doc) // @@ deal with non-string and objects
@@ -232,7 +239,7 @@ export function loadFromBindings (kb, solidSubject:NamedNode, bindings, doc, pre
 /* ESCO sopecific
 */
 export function ESCOResultToBindings (json: Object): Bindings {
-  const results = json._embedded.results // Array
+  const results = (json as any)._embedded.results // Array
   const bindings = results.map(result => {
     const name = result.title
     const uri = result.uri // like http://data.europa.eu/esco/occupation/57af9090-55b4-4911-b2d0-86db01c00b02
@@ -244,14 +251,15 @@ export function ESCOResultToBindings (json: Object): Bindings {
 /*  Query all entities of given class and partially matching name
 */
 export async function queryESCODataByName (filter: string, theClass:NamedNode, queryTarget: QueryParameters): Promise<Bindings> {
+  if (!queryTarget.searchByNameURI) throw new Error('Missing queryTarget.searchByNameURI on queryESCODataByName')
   const queryURI = queryTarget.searchByNameURI
     .replace('$(name)', filter)
     .replace('$(limit)', '' + AUTOCOMPLETE_LIMIT)
-    .replace('$(class)', theClass)
+    .replace('$(targetClass)', theClass)
   console.log('Querying ESCO data - uri: ' + queryURI)
 
   const response = await kb.fetcher.webOperation('GET', queryURI, fetcherOptionsJsonPublicData)
-  const text = response.responseText
+  const text = response.responseText || ''
   console.log('    Query result  text' + text.slice(0, 500) + '...')
   if (text.length === 0) throw new Error('Wot no text back from ESCO query ' + queryURI)
   const json = JSON.parse(text)
@@ -269,7 +277,7 @@ export async function queryPublicDataByName (
   function substituteStrings (template: string):string {
     return template.replace('$(name)', filter)
       .replace('$(limit)', '' + AUTOCOMPLETE_LIMIT)
-      .replace('$(class)', theClass)
+      .replace('$(targetClass)', theClass)
   }
   if (queryTarget.searchByNameQuery) {
     const sparql = substituteStrings(queryTarget.searchByNameQuery)
@@ -278,18 +286,18 @@ export async function queryPublicDataByName (
   } else if (queryTarget.searchByNameURI) { // not sparql - random API
     const queryURI = substituteStrings(queryTarget.searchByNameURI)
     const response = await kb.fetcher.webOperation('GET', queryURI, fetcherOptionsJsonPublicData)
-    const text = response.responseText
+    const text = response.responseText || '' // ts
     console.log('    Query result  text' + text.slice(0, 500) + '...')
     if (text.length === 0) throw new Error('Wot no text back from ESCO query ' + queryURI)
     const json = JSON.parse(text)
     console.log('    API Query result JSON' + JSON.stringify(json, null, 4).slice(0, 500) + '...')
-    if (json._embedded) {
+    if ((json as any)._embedded) {
       console.log('      Looks like ESCO')
       const bindings = ESCOResultToBindings(json)
       return bindings
     } else {
       alert('Code me: unrecognized API return format')
-      console.log('*** Need to add code to parse unrecognized API JSON return\n' + JSON.stringify(json), null, 4)
+      throw new Error(`*** Need to add code to parse unrecognized API JSON return\n${JSON.stringify(json, null, 4)}`)
     }
   } else {
     throw new Error('Query source must have either rest API or SPARQL endpoint.')
@@ -299,18 +307,20 @@ export async function queryPublicDataByName (
 /* Query a database using SPARQL SELECT
 */
 export async function queryPublicDataSelect (sparql: string, queryTarget: QueryParameters): Promise<Bindings> {
+  if (!queryTarget.endpoint) throw new Error('Missing queryTarget.endpoint required for queryPublicDataSelect')
   const myUrlWithParams = new URL(queryTarget.endpoint)
   myUrlWithParams.searchParams.append('query', sparql)
   const queryURI = myUrlWithParams.href
   console.log(' queryPublicDataSelect uri: ' + queryURI)
-
+  const headers = new Headers()
+  headers.append('Accept', 'application/json')
   const options = {
-    credentials: 'omit', // CORS - as we know it is public
-    headers: { Accept: 'application/json' }
+    credentials: 'omit' as 'include' | 'omit' | undefined, // CORS - as we know it is public
+    headers: headers
   }
   const response = await kb.fetcher.webOperation('GET', queryURI, options)
   // complain('Error querying db of organizations: ' + err)
-  const text = response.responseText
+  const text = response.responseText || 'wot no response text'
   // console.log('    Query result  text' + text.slice(0,100) + '...')
   if (text.length === 0) throw new Error('Wot no text back from query ' + queryURI)
   const json = JSON.parse(text)
@@ -321,19 +331,22 @@ export async function queryPublicDataSelect (sparql: string, queryTarget: QueryP
 
 /* Load from a database using SPARQL CONSTRUCT
 */
-export async function queryPublicDataConstruct (sparql: string, pubicId: NamedNode, queryTarget: QueryParameters): Promise<Bindings> {
+export async function queryPublicDataConstruct (sparql: string, pubicId: NamedNode, queryTarget: QueryParameters): Promise<void> {
   console.log('queryPublicDataConstruct: sparql:', sparql)
+  if (!queryTarget.endpoint) throw new Error('Missing queryTarget.endpoint required for queryPublicDataConstruct')
   const myUrlWithParams = new URL(queryTarget.endpoint)
   myUrlWithParams.searchParams.append('query', sparql)
   const queryURI = myUrlWithParams.href
   console.log(' queryPublicDataConstruct uri: ' + queryURI)
+  const headers = new Headers()
+  headers.append('Accept', 'text/turtle')
   const options = {
-    credentials: 'omit', // CORS
-    headers: { Accept: 'text/turtle' }
+    credentials: 'omit' as 'include' | 'omit' | undefined, // CORS // @tsc pain
+    headers: headers // ({ Accept: 'text/turtle' } as Headers)
   }
   const response = await kb.fetcher.webOperation('GET', queryURI, options)
-  const text = response.responseText
-  const report = text.lenth > 500 ? text.slice(0, 200) + ' ... ' + text.slice(-200) : text
+  const text = response.responseText || 'No response text?'
+  const report = text.length > 500 ? text.slice(0, 200) + ' ... ' + text.slice(-200) : text
   console.log('    queryPublicDataConstruct result text:' + report)
   if (text.length === 0) throw new Error('queryPublicDataConstruct: No text back from construct query:' + queryURI)
   parse(text, kb, pubicId.uri, 'text/turtle')
@@ -352,9 +365,11 @@ export async function loadPublicDataThing (kb, subject: NamedNode, publicDataID:
     const iDToFetch = publicDataID.uri.startsWith('http:')
       ? kb.sym('https:' + publicDataID.uri.slice(5))
       : publicDataID
+    const headers = new Headers()
+    headers.append('Accept', 'text/turtle')
     return kb.fetcher.load(iDToFetch, {
-      credentials: 'omit',
-      headers: { Accept: 'text/turtle' }
+      credentials: 'omit' as 'include' | 'omit' | undefined,
+      headers: headers
     })
   }
 }
@@ -368,7 +383,7 @@ export async function getWikidataDetails (kb, solidSubject:NamedNode, publicData
 
 export async function getWikidataDetailsOld (kb, solidSubject:NamedNode, publicDataID:NamedNode) {
   const sparql = `select distinct *  where {
-  optional { $(subject)  wdt:P31  ?class } # instance of
+  optional { $(subject)  wdt:P31  ?targetClass } # instance of
   optional { $(subject)  wdt:P154  ?logo }
   optional { $(subject)  wdt:P158  ?sealImage }
 # optional { $(subject)  wdt:P159  ?headquartersLocation }
