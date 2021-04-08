@@ -27,7 +27,7 @@ import { AutocompleteOptions } from './autocompletePicker'
   * Form properties:
   * @param ui:property  The property to store the object itself
   * @param ui:labelProperty The property used to store the name of the object
-  * @param ui:categoory The class of objects to be searched, if fixed (else dep on class of subject)
+  * @param ui:category The class of objects to be searched, if fixed (else dep on class of subject)
   *
   * @returns The HTML widget created
  */
@@ -59,6 +59,9 @@ export function autocompleteField (
     callbackFunction(true, '')
   }
 
+  if (!(subject instanceof NamedNode)) {
+    throw new Error('Sorry this field only works on NamedNode subjects (for editable)')
+  }
   const kb = store
   const formDoc = form.doc ? form.doc() : null // @@ if blank no way to know
 
@@ -79,6 +82,7 @@ export function autocompleteField (
     )
   }
   const labelProperty = kb.any(form, ns.ui('labelProperty')) || ns.schema('name')
+  const size = kb.any(form, ns.ui('size')) // may be undefined, let the widget decide
 
   const searchClass = kb.any(form, ns.ui('searchClass'))
   if (!searchClass) {
@@ -95,14 +99,19 @@ export function autocompleteField (
     )
   }
   const queryParams:QueryParameters = {
-    targetClass: kb.any(dataSource, ns.ui('targetClass'), null, dataSource.doc()),
+    targetClass: kb.any(dataSource, ns.ui('targetClass'), null, dataSource.doc()) as NamedNode | undefined,
     label: kb.anyJS(dataSource, ns.schema('name'), null, dataSource.doc()),
     logo: kb.anyJS(dataSource, ns.schema('logo'), null, dataSource.doc())
   }
   if (!queryParams.targetClass) {
-    queryParams.targetClass = kb.any(subject, ns.rdf('type')) as NamedNode | undefined // @@ be more selective of which class if many
+    const klass = kb.any(subject, ns.rdf('type')) as NamedNode | undefined
+    // @@ be more selective of which class if many
+    // @@ todo: Take ALL classes,  and compare them with those the data source knows about
+    // with translation where necessary.  Find most specific of the classes for the search.
+    if (!klass) throw new Error('Autocomplete: No class specified or is current type of' + subject)
+    queryParams.targetClass = klass
   }
-  const endPoint = kb.any(dataSource, ns.ui('endPoint'), null, dataSource.doc()) as NamedNode | undefined
+  const endPoint = kb.anyJS(dataSource, ns.ui('endPoint'), null, dataSource.doc()) as string | undefined
   if (endPoint) { // SPARQL
     queryParams.endpoint = endPoint
 
@@ -146,17 +155,17 @@ export function autocompleteField (
     }
   } else { // get object and name from target data:
     autocompleteOptions.currentObject = obj as NamedNode
-    autocompleteOptions.currentName = kb.anyJS(autocompleteOptions.currentObject, labelProperty, null, subject.doc())
+    autocompleteOptions.currentName = kb.anyJS(autocompleteOptions.currentObject, labelProperty, null, (subject as NamedNode).doc())
   }
 
   lhs.appendChild(widgets.fieldLabel(dom, property as any, form))
 
   const barOptions = {
-    editable: kb.updater.editable(doc.uri, kb),
+    editable: doc && doc.uri && kb.updater.editable(doc.uri, kb),
     permanent: true,
     dbLookup: false
   }
-  renderAutocompleteControl(dom, subject, barOptions, autocompleteOptions, addOneIdAndRefresh).then((control) => {
+  renderAutocompleteControl(dom, subject as NamedNode, barOptions, autocompleteOptions, addOneIdAndRefresh).then((control) => {
     // console.log('Async load of autocomplete field control finished:' + control)
     rhs.appendChild(control)
   }, (err) => {

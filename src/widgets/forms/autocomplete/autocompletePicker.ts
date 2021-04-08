@@ -49,6 +49,19 @@ interface Callback1 {
   (subject: NamedNode, name: string): void;
 }
 
+function assertString (x):string {
+  if (typeof x !== 'string') {
+    throw new Error('Expected this to be a string: ' + x)
+  }
+  return x
+}
+function assertNN (x):NamedNode {
+  if (!(x instanceof NamedNode)) {
+    throw new Error('Expected this to be a string: ' + x)
+  }
+  return x
+}
+
 // The core of the autocomplete UI
 export async function renderAutoComplete (dom: HTMLDocument,
   options:AutocompleteOptions,
@@ -124,7 +137,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
       const row = table.children[j]
       if (nameMatch(filter, row.textContent || '')) {
         hits += 1
-        pick = row.getAttribute('subject')
+        pick = kb.sym(assertString(row.getAttribute('subject')))
         pickedName = row.textContent as string
         ;(row as any).style.display = ''
         ;(row as any).style.color = 'blue' // @@ chose color
@@ -134,7 +147,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
     }
     if (hits === 1) { // Maybe require green confirmation button be clicked?
       console.log(`  auto complete elimination:  "${filter}" -> "${pickedName}"`)
-      gotIt(kb.sym(pick as NamedNode), pickedName as string) // uri, name
+      gotIt(assertNN(pick), assertString(pickedName)) // uri, name
     }
   }
 

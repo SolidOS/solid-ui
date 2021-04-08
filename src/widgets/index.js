@@ -30,6 +30,5 @@ const widgets = Object.assign(
 )
 
 module.exports = widgets
-debug.log('@@@ widgets: ', widgets)
 
 // ends

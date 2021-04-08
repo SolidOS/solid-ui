@@ -68,11 +68,10 @@ export async function getPreferredLanguages () {
 export const escoParameters:QueryParameters = {
   label: 'ESCO',
   logo: 'https://ec.europa.eu/esco/portal/static_resource2/images/logo/logo_en.gif',
-  searchByNameQuery: undefined, // No sparql endpoint
-  searchByNameURI: 'https://ec.europa.eu/esco/api/search?language=$(language)&type=occupation&text=$(name)',
-  endpoint: undefined,
+  searchByNameURI: 'https://ec.europa.eu/esco/api/search?language=$(language)&type=occupation&text=$(name)'
+  // endpoint: undefined
   // returnFormat: 'ESCO',
-  targetClass: {}
+  // targetClass: {}
 }
 
 export const dbpediaParameters:QueryParameters = {
@@ -82,22 +81,24 @@ export const dbpediaParameters:QueryParameters = {
     ?subject a $(targetClass); rdfs:label ?name
     FILTER regex(?name, "$(name)", "i")
   } LIMIT $(limit)`,
-  endpoint: 'https://dbpedia.org/sparql/',
-  targetClass: { AcademicInsitution: 'http://umbel.org/umbel/rc/EducationalOrganization' }
+  endpoint: 'https://dbpedia.org/sparql/'
+}
+
+const dbPediaTypeMap = { AcademicInsitution: 'http://umbel.org/umbel/rc/EducationalOrganization' }
+
+const wikidataOutgoingClassMap = {
+  AcademicInsitution: 'http://www.wikidata.org/entity/Q4671277',
+  Enterprise: 'http://www.wikidata.org/entity/Q6881511',
+  Business: 'http://www.wikidata.org/entity/Q4830453',
+  NGO: 'http://www.wikidata.org/entity/Q79913',
+  CharitableOrganization: 'http://www.wikidata.org/entity/Q708676',
+  Insitute: 'http://www.wikidata.org/entity/Q1664720'
 }
 
 export const wikidataParameters = {
   label: 'WikiData',
   logo: 'https://www.wikimedia.org/static/images/project-logos/wikidatawiki.png',
   endpoint: 'https://query.wikidata.org/sparql',
-  targetClass: {
-    AcademicInsitution: 'http://www.wikidata.org/entity/Q4671277',
-    Enterprise: 'http://www.wikidata.org/entity/Q6881511',
-    Business: 'http://www.wikidata.org/entity/Q4830453',
-    NGO: 'http://www.wikidata.org/entity/Q79913',
-    CharitableOrganization: 'http://www.wikidata.org/entity/Q708676',
-    Insitute: 'http://www.wikidata.org/entity/Q1664720'
-  },
   searchByNameQuery: `SELECT ?subject ?name
   WHERE {
     ?klass wdt:P279* $(targetClass) .
@@ -154,7 +155,7 @@ export function filterByLanguage (bindings, languagePrefs) {
   return slimmed
 }
 
-export const wikidataClassMap = {
+export const wikidataIncomingClassMap = {
   'http://www.wikidata.org/entity/Q15936437': ns.schema('CollegeOrUniversity'), // research university
   'http://www.wikidata.org/entity/Q1664720': ns.schema('EducationalOrganization'), // insitute @@
   'http://www.wikidata.org/entity/Q43229': ns.schema('Organization'), // research university
@@ -207,8 +208,8 @@ export function loadFromBindings (kb, solidSubject:NamedNode, bindings, doc, pre
         throw new Error(`loadFromBindings:  unexpected type: ${type}`)
       }
       if (key === 'type') {
-        if (wikidataClassMap[value]) {
-          obj = wikidataClassMap[value]
+        if (wikidataIncomingClassMap[value]) {
+          obj = wikidataIncomingClassMap[value]
         } else {
           console.warn('Unmapped Wikidata Class: ' + value)
         }
@@ -255,7 +256,7 @@ export async function queryESCODataByName (filter: string, theClass:NamedNode, q
   const queryURI = queryTarget.searchByNameURI
     .replace('$(name)', filter)
     .replace('$(limit)', '' + AUTOCOMPLETE_LIMIT)
-    .replace('$(targetClass)', theClass)
+    .replace('$(targetClass)', theClass.toNT())
   console.log('Querying ESCO data - uri: ' + queryURI)
 
   const response = await kb.fetcher.webOperation('GET', queryURI, fetcherOptionsJsonPublicData)
@@ -277,7 +278,7 @@ export async function queryPublicDataByName (
   function substituteStrings (template: string):string {
     return template.replace('$(name)', filter)
       .replace('$(limit)', '' + AUTOCOMPLETE_LIMIT)
-      .replace('$(targetClass)', theClass)
+      .replace('$(targetClass)', theClass.toNT())
   }
   if (queryTarget.searchByNameQuery) {
     const sparql = substituteStrings(queryTarget.searchByNameQuery)
@@ -376,7 +377,7 @@ export async function loadPublicDataThing (kb, subject: NamedNode, publicDataID:
 
 export async function getWikidataDetails (kb, solidSubject:NamedNode, publicDataID:NamedNode) {
   const subjRegexp = /wd:Q49108/g
-  const sparql = instituteDetailsQuery.replace(subjRegexp, publicDataID)
+  const sparql = instituteDetailsQuery.replace(subjRegexp, publicDataID.toNT())
   await queryPublicDataConstruct(sparql, publicDataID, wikidataParameters)
   console.log('getWikidataDetails: loaded.', publicDataID)
 }
@@ -395,7 +396,7 @@ optional { $(subject)  wdt:P1813  ?shortName }
 optional { $(subject)  wdt:P355  ?subsidiary }
 # SERVICE wikibase:label { bd:serviceParam wikibase:language "fr,en,de,it" }
 }`
-    .replace(subjectRegexp, publicDataID)
+    .replace(subjectRegexp, publicDataID.toNT())
   const bindings = await queryPublicDataSelect(sparql, wikidataParameters)
   loadFromBindings(kb, publicDataID, bindings, publicDataID.doc()) // arg2 was solidSubject
 }
@@ -411,7 +412,7 @@ export async function getWikidataLocation (kb, solidSubject:NamedNode, publicDat
 optional {  ?location  wdt:P17  ?country }
 
 # SERVICE wikibase:label { bd:serviceParam wikibase:language "fr,en,de,it" }
-}`.replace(subjectRegexp, publicDataID)
+}`.replace(subjectRegexp, publicDataID.toNT())
   console.log(' location query sparql:' + sparql)
   const bindings = await queryPublicDataSelect(sparql, wikidataParameters)
   console.log(' location query bindings:', bindings)

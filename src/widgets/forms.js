@@ -10,6 +10,7 @@ import { fieldParams } from './forms/fieldParams'
 import { field, mostSpecificClassURI, fieldFunction } from './forms/fieldFunction'
 import * as debug from '../debug'
 import { basicField } from './forms/basic'
+import { autocompleteField } from './forms/autocomplete/autocompleteField'
 import * as style from '../style'
 module.exports = {}
 
@@ -34,6 +35,8 @@ const utils = require('../utils')
 const checkMarkCharacter = '\u2713'
 const cancelCharacter = '\u2715'
 const dashCharacter = '-'
+
+forms.field[ns.ui('AutocompleteField').uri] = autocompleteField
 
 // ///////////////////////////////////////////////////////////////////////
 
