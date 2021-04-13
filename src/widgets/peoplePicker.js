@@ -14,8 +14,6 @@ import uuid from 'uuid'
 import * as rdf from 'rdflib'
 import * as debug from '../debug'
 
-// const webClient = require('solid-web-client')(rdf)
-
 import { makeDropTarget } from './dragAndDrop'
 import { errorMessageBlock } from './error'
 import { iconBase } from '../iconBase'

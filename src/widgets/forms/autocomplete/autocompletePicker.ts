@@ -3,8 +3,11 @@
 ** organization conveys many distinct types of thing.
 **
 */
-/* eslint-disable no-console */
-import { style, widgets, store } from '../../../index'
+import * as debug from '../../../debug'
+import { style } from '../../../style'
+import { store } from '../../../logic'
+import widgets from '../../../widgets'
+
 import { NamedNode } from 'rdflib'
 import {
   queryPublicDataByName, filterByLanguage,
@@ -69,7 +72,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
   callback: Callback1) {
   function complain (message) {
     const errorRow = table.appendChild(dom.createElement('tr'))
-    console.log(message)
+    debug.log(message)
     errorRow.appendChild(widgets.errorMessageBlock(dom, message, 'pink'))
     style.setStyle(errorRow, 'autocompleteRowStyle')
     errorRow.style.padding = '1em'
@@ -80,7 +83,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
     }
   }
   function finish (object, name) {
-    console.log('Auto complete: finish! ' + object)
+    debug.log('Auto complete: finish! ' + object)
     // remove(decoration.cancelButton)
     // remove(decoration.acceptButton)
     // remove(div)
@@ -92,8 +95,8 @@ export async function renderAutoComplete (dom: HTMLDocument,
       searchInput.value = name // complete it
       foundName = name
       foundObject = object
-      console.log('Auto complete: name: ' + name)
-      console.log('Auto complete: waiting for accept ' + object)
+      debug.log('Auto complete: name: ' + name)
+      debug.log('Auto complete: waiting for accept ' + object)
       return
     }
     finish(object, name)
@@ -108,7 +111,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
   }
 
   async function cancelButtonHandler (_event) {
-    console.log('Auto complete: Canceled by user! ')
+    debug.log('Auto complete: Canceled by user! ')
     div.innerHTML = '' // Clear out the table
   }
 
@@ -146,7 +149,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
       }
     }
     if (hits === 1) { // Maybe require green confirmation button be clicked?
-      console.log(`  auto complete elimination:  "${filter}" -> "${pickedName}"`)
+      debug.log(`  auto complete elimination:  "${filter}" -> "${pickedName}"`)
       gotIt(assertNN(pick), assertString(pickedName)) // uri, name
     }
   }
@@ -166,7 +169,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
 
   async function refreshList () {
     if (inputEventHandlerLock) {
-      console.log(`Ignoring "${searchInput.value}" because of lock `)
+      debug.log(`Ignoring "${searchInput.value}" because of lock `)
       return
     }
     inputEventHandlerLock = true
@@ -205,7 +208,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
         numberOfRows = slimmed.length // stretch if it means we get all items
       }
       allDisplayed = loadedEnough && slimmed.length <= numberOfRows
-      console.log(` Filter:"${filter}" bindings: ${bindings.length}, slimmed to ${slimmed.length}; rows: ${numberOfRows}, Enough? ${loadedEnough}, All displayed? ${allDisplayed}`)
+      debug.log(` Filter:"${filter}" bindings: ${bindings.length}, slimmed to ${slimmed.length}; rows: ${numberOfRows}, Enough? ${loadedEnough}, All displayed? ${allDisplayed}`)
       slimmed.slice(0, numberOfRows).forEach(binding => {
         const row = table.appendChild(dom.createElement('tr'))
         style.setStyle(row, 'autocompleteRowStyle')
@@ -219,8 +222,8 @@ export async function renderAutoComplete (dom: HTMLDocument,
         row.style.color = allDisplayed ? '#080' : '#000' // green means 'you should find it here'
         row.textContent = name
         row.addEventListener('click', async _event => {
-          console.log('       click row textContent: ' + row.textContent)
-          console.log('       click name: ' + name)
+          debug.log('       click row textContent: ' + row.textContent)
+          debug.log('       click name: ' + name)
           gotIt(kb.sym(uri), name)
         })
       })

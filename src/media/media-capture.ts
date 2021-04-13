@@ -16,11 +16,10 @@ import * as debug from '../debug'
 
 /** @module mediaCapture */
 
-import icons from '../iconBase'
+import { icons } from '../iconBase'
 import widgets from '../widgets'
 import { IndexedFormula, NamedNode } from 'rdflib'
 
-// const cameraIcon = require('./noun_Camera_1618446_000000') // load it in JS
 const cameraIcon = icons.iconBase + 'noun_Camera_1618446_000000.svg' // Get it from github
 const retakeIcon = icons.iconBase + 'noun_479395.svg' // Get it from github
 

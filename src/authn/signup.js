@@ -1,4 +1,4 @@
-const defaultConfig = require('./config-default')
+import defaultConfig from './config-default'
 
 /**
  * Provides functionality for signing up with a Solid provider
@@ -73,4 +73,4 @@ Signup.prototype.signup = function signup (signupUrl) {
   })
 }
 
-module.exports = Signup
+export default Signup

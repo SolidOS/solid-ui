@@ -4,7 +4,7 @@
 
 // These must all end with semicolon so they can be appended to.
 
-const styleModule = {
+const styleModule = { // styleModule
   textInputStyle:
     'background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; ',
   textInputStyleUneditable: // Color difference only
@@ -49,4 +49,4 @@ const styleModule = {
     ele.style = styleModule[styleName]
   }
 }
-module.exports = styleModule
+export default styleModule

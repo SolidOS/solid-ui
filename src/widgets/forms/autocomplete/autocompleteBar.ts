@@ -2,15 +2,18 @@
 
 // import { ns, widgets, store } from 'solid-ui'
 
-import { ns, widgets, store, icons } from '../../../index'
-import { renderAutoComplete, AutocompleteOptions, AutocompleteDecoration } from './autocompletePicker' // dbpediaParameters
+// import { ns, widgets, store, icons } from '../../../index'
+import ns from '../../../ns'
+import { icons } from '../../../iconBase'
+import { store } from '../../../logic'
+import widgets from '../../../widgets'
+
+import { renderAutoComplete, AutocompleteDecoration } from './autocompletePicker' // dbpediaParameters
 
 import { NamedNode } from 'rdflib'
 import { wikidataParameters } from './publicData'
 
 const WEBID_NOUN = 'Solid ID'
-
-const kb = store
 
 const GREEN_PLUS = icons.iconBase + 'noun_34653_green.svg'
 const SEARCH_ICON = icons.iconBase + 'noun_Search_875351.svg'

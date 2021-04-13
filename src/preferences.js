@@ -4,17 +4,20 @@
 
 import * as debug from './debug'
 
-const kb = require('./logic').solidLogicSingleton.store
-const ns = require('./ns')
-const authn = require('./authn/authn')
-const widgets = require('./widgets')
-const pad = require('./pad')
-const participation = require('./participation')
-const $rdf = require('rdflib')
+import { authn } from './authn/index'
+import { store } from './logic'
+import ns from './ns'
+import * as participation from './participation'// @ts-ignore
+
+import * as $rdf from 'rdflib' // pull in first avoid cross-refs
+import widgets from './widgets'
+
+const kb = store
 
 // This was tabulator . preferences in the tabulator
+//  Is this functionality used anywhere?
 //
-module.exports = {
+export default {
   // used for storing user name
   value: [],
   get: function (k) {

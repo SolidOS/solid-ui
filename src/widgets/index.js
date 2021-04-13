@@ -12,23 +12,28 @@
 
 import * as debug from '../debug'
 
-// var aclModule = require('./acl.js')
-
 // Each widget should ideally live in its own file.  In order to break up this
 // monolithic widget index over time, we should add new widgets to the
-// 'lib/widgets/' directory, and re-export them like so:
+// 'lib/widgets/' directory, and re-export them by merging the module namespaces:
 //
 // (In order to avoid name collisions, it is safely assumed that modules don't
 // export widgets with the same name)
+
+import * as peoplePicker from './peoplePicker'
+import * as dragAndDrop from './dragAndDrop'
+import * as buttons from './buttons'
+import * as error from './error'
+import { forms } from './forms'
+
 const widgets = Object.assign(
   {},
-  require('./peoplePicker'),
-  require('./dragAndDrop'), // uploadFiles etc
-  require('./error'), // UI.widgets.errorMessageBlock
-  require('./buttons'),
-  require('./forms')
+  buttons,
+  peoplePicker,
+  dragAndDrop,
+  error,
+  forms
 )
 
-module.exports = widgets
+export default widgets
 
 // ends

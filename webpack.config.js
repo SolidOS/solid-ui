@@ -21,5 +21,19 @@ module.exports = [{
   devServer: {
     contentBase: './dist'
   },
-  devtool: 'source-map'
+  devtool: 'source-map',
+  module: {
+    rules: [{
+        test: /\.sparql$/i,
+        use: 'raw-loader',
+      },
+      {
+        test: /\.ttl$/i,
+        use: 'raw-loader',
+      },
+   ]
+ },
+
+
+
 }]

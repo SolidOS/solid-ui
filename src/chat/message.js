@@ -8,26 +8,25 @@
 /* global $rdf */
 
 import { messageToolbar, sentimentStripLinked } from './messageTools'
-const UI = {
-  authn: require('../authn/authn'),
-  icons: require('../iconBase'),
-  ns: require('../ns'),
-  media: require('../media/media-capture'),
-  pad: require('../pad'),
-  rdf: require('rdflib'),
-  store: require('../logic').solidLogicSingleton.store,
-  style: require('../style'),
-  utils: require('../utils'),
-  widgets: require('../widgets')
-}
+
+import { authn } from '../authn/index'
+import { icons } from '../iconBase'
+import { store } from '../logic'
+import { media } from '../media/index'
+import ns from '../ns'
+import * as pad from '../pad'
+import * as rdf from 'rdflib' // pull in first avoid cross-refs
+import style from '../style'
+import utils from '../utils'
+import widgets from '../widgets'
+
+const UI = { authn, icons, ns, media, pad, rdf, store, style, utils, widgets }
+
 const dom = UI.dom || window.document
 // const kb = UI.store
 
-// module.exports = { renderMessage, creatorAndDate, creatorAndDateHorizontal }
-
 const messageBodyStyle = UI.style.messageBodyStyle
 
-// const { messageToolbar, sentimentStripLinked } = require('./messageTools')
 const label = UI.utils.label
 
 /**

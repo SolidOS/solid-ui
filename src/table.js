@@ -13,21 +13,21 @@
 // 2014 Core table widget moved into common/table.js - timbl
 //
 
+import { authn } from './authn/index'
 import * as debug from './debug'
+import { icons } from './iconBase'
+import { store } from './logic'
+import * as log from './log'
+import ns from './ns'
+import * as rdf from 'rdflib' // pull in first avoid cross-refs
+import style from './style'
+import utils from './utils'
+import widgets from './widgets'
 
-const UI = {
-  icons: require('./iconBase'),
-  log: require('./log'),
-  ns: require('./ns'),
-  store: require('./logic').solidLogicSingleton.store,
-  widgets: require('./widgets')
-}
-
-const utils = require('./utils')
-const $rdf = require('rdflib')
+const UI = { icons, log, ns, store, utils, widgets }
 
 // UI.widgets.renderTableViewPane
-module.exports = function renderTableViewPane (doc, options) {
+export default function renderTableViewPane (doc, options) {
   const sourceDocument = options.sourceDocument
   const tableClass = options.tableClass
   const givenQuery = options.query
@@ -159,13 +159,13 @@ module.exports = function renderTableViewPane (doc, options) {
     title.appendChild(doc.createTextNode('Edit SPARQL query'))
 
     var inputbox = doc.createElement('textarea')
-    inputbox.value = $rdf.queryToSPARQL(lastQuery)
+    inputbox.value = rdf.queryToSPARQL(lastQuery)
 
     dialog.appendChild(title)
     dialog.appendChild(inputbox)
 
     dialog.appendChild(createActionButton('Query', function () {
-      var query = $rdf.SPARQLToQuery(inputbox.value)
+      var query = rdf.SPARQLToQuery(inputbox.value)
       updateTable(query)
       closeDialog(dialog)
     }))
@@ -267,7 +267,7 @@ module.exports = function renderTableViewPane (doc, options) {
   // object.
 
   function generateQuery (type) {
-    const query = new $rdf.Query()
+    const query = new rdf.Query()
     const rowVar = kb.variable(keyVariable.slice(1)) // don't pass '?'
 
     addSelectToQuery(query, type)

@@ -44,12 +44,14 @@ import { acl, aclControl } from './acl/index'
 import { authn } from './authn/index'
 import { create } from './create/index'
 // @ts-ignore
-import icons from './iconBase'
+import * as debug from '../debug'
+// @ts-ignore
+import { icons } from './iconBase'
 import * as log from './log'
 import { matrix } from './matrix/index'
 import { media } from './media/index'
 // @ts-ignore
-import messageArea from './messageArea'
+import { messageArea } from './messageArea'
 // @ts-ignore
 import { infiniteMessageArea } from './chat/infinite'
 // @ts-ignore

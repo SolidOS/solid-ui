@@ -1,12 +1,17 @@
+/*  Buttons
+*/
 import { IndexedFormula, NamedNode, st, sym, uri, Util } from 'rdflib'
-import { iconBase, originalIconBase } from '../iconBase'
+import { icons } from '../iconBase'
 import ns from '../ns'
 import style from '../style'
 import * as debug from '../debug'
 import { info } from '../log'
 import { getClasses } from '../jss'
-import { uploadFiles } from './dragAndDrop.js'
-import { solidLogicSingleton } from '../logic'
+import { uploadFiles, makeDraggable, makeDropTarget } from './dragAndDrop'
+import { store } from '../logic'
+import utils from '../utils'
+
+import { errorMessageBlock } from './error'
 
 /**
  * UI Widgets such as buttons
@@ -15,12 +20,7 @@ import { solidLogicSingleton } from '../logic'
 
 /* global alert */
 
-const utils = require('../utils')
-
-const error = require('./error')
-const dragAndDrop = require('./dragAndDrop')
-
-const store = solidLogicSingleton.store
+const { iconBase, originalIconBase } = icons
 
 const cancelIconURI = iconBase + 'noun_1180156.svg' // black X
 const checkIconURI = iconBase + 'noun_1180158.svg' // green checkmark; Continue
@@ -62,7 +62,7 @@ export function complain (context?: StatusAreaContext, err?: string) {
   if (!err) return // only if error
   const ele = getStatusArea(context)
   debug.log('Complaint: ' + err)
-  if (ele) ele.appendChild(error.errorMessageBlock((context && context.dom) || document, err))
+  if (ele) ele.appendChild(errorMessageBlock((context && context.dom) || document, err))
   else alert(err)
 }
 
@@ -717,7 +717,7 @@ export function renderAsRow (dom: HTMLDocument, pred: NamedNode, obj: NamedNode,
     if (options.draggable !== false) {
       // default is on
       image.setAttribute('draggable', 'false') // Stop the image being dragged instead - just the TR
-      dragAndDrop.makeDraggable(tr, obj)
+      makeDraggable(tr, obj)
     }
   }
   ;(tr as any).subject = obj
@@ -864,8 +864,8 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
     // paperclip.style = buttonStyle // @@ needed?  default has white background
     attachmentLeft.appendChild(paperclip)
     const fhandler = options.uploadFolder ? droppedFileHandler : null
-    dragAndDrop.makeDropTarget(paperclip, droppedURIHandler, fhandler) // beware missing the wire of the paparclip!
-    dragAndDrop.makeDropTarget(attachmentLeft, droppedURIHandler, fhandler) // just the outer won't do it
+    makeDropTarget(paperclip, droppedURIHandler, fhandler) // beware missing the wire of the paparclip!
+    makeDropTarget(attachmentLeft, droppedURIHandler, fhandler) // just the outer won't do it
 
     if (options.uploadFolder) { // Addd an explicit file upload button as well
       const buttonDiv = fileUploadButtonDiv(dom, droppedFileHandler)
@@ -1369,7 +1369,7 @@ export function fileUploadButtonDiv (
       }
     )
   )
-  dragAndDrop.makeDropTarget(buttonElt, null, droppedFileHandler) // Can also just drop on button
+  makeDropTarget(buttonElt, null, droppedFileHandler) // Can also just drop on button
   return div
 }
 

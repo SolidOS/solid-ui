@@ -4,7 +4,7 @@
  */
 
 import { AccessGroups } from './access-groups'
-import icons from '../iconBase'
+import { icons } from '../iconBase'
 import widgets from '../widgets'
 import ns from '../ns'
 import { logInLoadProfile } from '../authn/authn'

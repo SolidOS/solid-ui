@@ -7,6 +7,9 @@ import { SolidLogic } from 'solid-logic'
 
 export const solidLogicSingleton = new SolidLogic({ fetch: auth.fetch }, auth)
 
+// Make this directly accessible as it is what you need most of the time
+export const store = solidLogicSingleton.store
+
 debug.log('Unique quadstore initialized.')
 
 // ends

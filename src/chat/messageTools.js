@@ -7,28 +7,25 @@
  * If you made it originally: edit, delete, attach
  * @packageDocumentation
  */
-
 /* global $rdf */
 
-const UI = {
-  authn: require('../authn/authn'),
-  icons: require('../iconBase'),
-  ns: require('../ns'),
-  media: require('../media/media-capture'),
-  pad: require('../pad'),
-  rdf: require('rdflib'),
-  store: require('../logic').solidLogicSingleton.store,
-  style: require('../style'),
-  utils: require('../utils'),
-  widgets: require('../widgets')
-}
+import { authn } from '../authn/index'
+import { icons } from '../iconBase'
+import { store } from '../logic'
+import { media } from '../media/index'
+import ns from '../ns'
+import * as pad from '../pad'
+import * as rdf from 'rdflib' // pull in first avoid cross-refs
+import style from '../style'
+import utils from '../utils'
+import widgets from '../widgets'
+import * as bookmarks from './bookmarks'
 
-const bookmarks = require('./bookmarks')
+const UI = { authn, icons, ns, media, pad, rdf, store, style, utils, widgets }
 
 const dom = window.document
 
-const kb = UI.store
-const ns = UI.ns
+const kb = store
 // const label = UI.utils.label
 
 // THE UNUSED ICONS are here as reminders for possible future functionality
@@ -173,7 +170,7 @@ export function messageToolbar (message, messageRow, userContext) {
     function setColor () {
       button.style.backgroundColor = action ? 'yellow' : 'white'
     }
-    var button = UI.widgets.button(
+    const button = UI.widgets.button(
       dom,
       icon,
       UI.utils.label(actionClass),

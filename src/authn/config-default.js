@@ -4,7 +4,7 @@
  * modules.
  * @module config-default
  */
-module.exports = {
+export default {
   /**
    * Primary authentication endpoint
    */
