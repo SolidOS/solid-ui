@@ -101,6 +101,7 @@ export const fetcherOptionsJsonPublicData = {
 export async function getPreferredLanguages () {
   return ['fr', 'en', 'de', 'it'] // @@ testing only -- code me later
 }
+
 export const escoParameters:QueryParameters = {
   label: 'ESCO',
   logo: 'https://ec.europa.eu/esco/portal/static_resource2/images/logo/logo_en.gif',

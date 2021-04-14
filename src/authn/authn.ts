@@ -1027,10 +1027,10 @@ export function loginStatusBox (
   box.refresh = function () {
     solidAuthClient.currentSession().then(
       session => {
-        if (session && session.webId) {
+        if (session && session.webId) { // offline
           me = sym(session.webId)
         } else {
-          me = null
+          me = offlineTestID() // null unless testing
         }
         if ((me && box.me !== me.uri) || (!me && box.me)) {
           widgets.clearElement(box)

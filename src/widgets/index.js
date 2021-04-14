@@ -9,6 +9,7 @@
  *  Note... For pointers to posssible text-editing code, see
  *  http://stackoverflow.com/questions/6756407/what-contenteditable-editors
  */
+/* eslint-disable no-console */
 
 import * as debug from '../debug'
 
@@ -33,7 +34,16 @@ const widgets = Object.assign(
   error,
   forms
 )
+/*
+export * from './peoplePicker'
+export * from './dragAndDrop'
+export * from './buttons'
+export * from './error'
+export * from './forms'
+*/
+// export { forms } from './forms'
 
 export default widgets
+console.log('widgets exported:', widgets)
 
 // ends
