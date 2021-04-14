@@ -14,7 +14,7 @@ import { renderMessage, creatorAndDate } from './message'
 import bookmarks from './bookmarks'
 
 import * as $rdf from 'rdflib' // pull in first avoid cross-refs
-import utils from '../utils'
+import * as utils from '../utils'
 import widgets from '../widgets'
 
 const UI = { authn, icons, ns, media, pad, $rdf, store, utils, widgets }

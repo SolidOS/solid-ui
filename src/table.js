@@ -21,7 +21,7 @@ import * as log from './log'
 import ns from './ns'
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
 import style from './style'
-import utils from './utils'
+import * as utils from './utils'
 import widgets from './widgets'
 
 const UI = { icons, log, ns, store, utils, widgets }

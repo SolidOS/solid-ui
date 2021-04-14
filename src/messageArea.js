@@ -7,7 +7,7 @@ import { store } from './logic'
 import ns from './ns'
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
 import style from './style'
-import utils from './utils'
+import * as utils from './utils'
 import widgets from './widgets'
 
 const UI = { authn, icons, ns, rdf, store, style, widgets }

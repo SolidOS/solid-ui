@@ -7,7 +7,7 @@
 
 import ns from '../ns'
 import { solidLogicSingleton } from '../logic'
-import utils from '../utils'
+import * as utils from '../utils'
 import { AgentMapMap, AgentMapUnion, ComboList } from './types'
 import * as debug from '../debug'
 import { graph, IndexedFormula, NamedNode, serialize, st, Statement, sym } from 'rdflib'

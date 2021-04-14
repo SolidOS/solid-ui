@@ -20,8 +20,8 @@ import * as log from '../log'
 import ns from '../ns'
 import * as $rdf from 'rdflib'
 import { store } from '../logic'
-import utils from '../utils'
-import widgets from '../widgets'
+import * as utils from '../utils'
+import widgets from '../widgets' // Note default export
 
 export const forms = {} // 20210412b
 

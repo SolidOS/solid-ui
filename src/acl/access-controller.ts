@@ -8,7 +8,7 @@ import { graph, NamedNode, UpdateManager } from 'rdflib'
 import { AccessGroups } from './access-groups'
 import { DataBrowserContext } from 'pane-registry'
 import { shortNameForFolder } from './acl-control'
-import utils from '../utils.js'
+import * as utils from '../utils.js'
 import * as debug from '../debug'
 
 /**

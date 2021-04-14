@@ -17,7 +17,7 @@ import ns from '../ns'
 import * as pad from '../pad'
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
 import style from '../style'
-import utils from '../utils'
+import * as utils from '../utils'
 import widgets from '../widgets'
 import * as bookmarks from './bookmarks'
 

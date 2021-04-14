@@ -10,7 +10,7 @@ import * as rdf from 'rdflib' // pull in first avoid cross-refs
 
 const UI = { log, ns, rdf, store }
 
-export default {
+export {
   addLoadEvent, // not used anywhere
   AJARImage,
   ancestor,

@@ -4,7 +4,7 @@
 
 import * as debug from '../debug'
 import { icons } from '../iconBase'
-import utils from '../utils'
+import * as utils from '../utils'
 import widgets from '../widgets'
 import { solidLogicSingleton } from '../logic'
 import ns from '../ns'

@@ -9,7 +9,7 @@ import { info } from '../log'
 import { getClasses } from '../jss'
 import { uploadFiles, makeDraggable, makeDropTarget } from './dragAndDrop'
 import { store } from '../logic'
-import utils from '../utils'
+import * as utils from '../utils'
 
 import { errorMessageBlock } from './error'
 

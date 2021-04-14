@@ -68,7 +68,7 @@ import style from './style'
 import table from './table'
 import * as tabs from './tabs'
 // @ts-ignore
-import utils from './utils'
+import * as utils from './utils'
 import widgets from './widgets'
 import versionInfo from './versionInfo'
 import { initHeader } from './header'
