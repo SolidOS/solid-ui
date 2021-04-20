@@ -1,6 +1,7 @@
 /* Logic to access public data stores
 *
 * including filtering resut by natural language etc
+* See https://solidos.solidcommunity.net/public/2021/01%20Building%20Solid%20Apps%20which%20use%20Public%20Data.html
 */
 import { NamedNode, Literal, parse } from 'rdflib'
 import * as debug from '../../../debug'
@@ -13,7 +14,9 @@ import { store } from '../../../logic'
 // import * as instituteDetailsWikidataQuery from './instituteDetailsWikidataQuery.js'
 const kb = store
 
-export const AUTOCOMPLETE_LIMIT = 3000 // How many to get from server
+export const AUTOCOMPLETE_LIMIT = 500 // How many to get from server
+// With 3000 we could exceed the wikidata timeout
+export const LANGUAGE = 'en' // @@ To do : get user's preferred language
 
 const subjectRegexp = /\$\(subject\)/g
 
@@ -121,9 +124,9 @@ export const dbpediaParameters:QueryParameters = {
   endpoint: 'https://dbpedia.org/sparql/'
 }
 
-const dbPediaTypeMap = { AcademicInsitution: 'http://umbel.org/umbel/rc/EducationalOrganization' }
+export const dbPediaTypeMap = { AcademicInsitution: 'http://umbel.org/umbel/rc/EducationalOrganization' }
 
-const wikidataOutgoingClassMap = {
+export const wikidataOutgoingClassMap = {
   AcademicInsitution: 'http://www.wikidata.org/entity/Q4671277',
   Enterprise: 'http://www.wikidata.org/entity/Q6881511',
   Business: 'http://www.wikidata.org/entity/Q4830453',
@@ -281,7 +284,7 @@ export function ESCOResultToBindings (json: Object): Bindings {
   const bindings = results.map(result => {
     const name = result.title
     const uri = result.uri // like http://data.europa.eu/esco/occupation/57af9090-55b4-4911-b2d0-86db01c00b02
-    return { name: { value: name, type: 'literal' }, uri: { type: 'IRI', value: uri } } // simulate SPARQL bindings
+    return { name: { value: name, type: 'literal' }, subject: { type: 'IRI', value: uri } } // simulate SPARQL bindings
   })
   return bindings
 }
@@ -313,10 +316,16 @@ export async function queryPublicDataByName (
   languages: Array<string>,
   queryTarget: QueryParameters): Promise<Bindings> {
   function substituteStrings (template: string):string {
-    return template.replace('$(name)', filter)
+    const u1 = template.replace('$(name)', filter)
       .replace('$(limit)', '' + AUTOCOMPLETE_LIMIT)
-      .replace('$(targetClass)', theClass.toNT())
+      .replace('$(language)', language)
+    return u1.replace('$(targetClass)', theClass.toNT())
   }
+  if (!theClass) {
+    throw new Error('queryPublicDataByName: No class provided')
+  }
+  const languagePrefs = await getPreferredLanguages()
+  const language = languagePrefs[0] || 'en'
   if (queryTarget.searchByNameQuery) {
     const sparql = substituteStrings(queryTarget.searchByNameQuery)
     debug.log('Querying public data - sparql: ' + sparql)

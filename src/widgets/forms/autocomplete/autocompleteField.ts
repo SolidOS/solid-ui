@@ -84,12 +84,6 @@ export function autocompleteField (
   const labelProperty = kb.any(form, ns.ui('labelProperty')) || ns.schema('name')
   const size = kb.any(form, ns.ui('size')) // may be undefined, let the widget decide
 
-  const searchClass = kb.any(form, ns.ui('searchClass'))
-  if (!searchClass) {
-    return box.appendChild(
-      widgets.errorMessageBlock(dom, 'Error: No searchClass given for autocomplete field: ' + form)
-    )
-  }
   // Parse the data source into query options
 
   const dataSource = kb.any(form, ns.ui('dataSource')) as NamedNode | undefined
@@ -99,10 +93,18 @@ export function autocompleteField (
     )
   }
   const queryParams:QueryParameters = {
-    targetClass: kb.any(dataSource, ns.ui('targetClass'), null, dataSource.doc()) as NamedNode | undefined,
+    // targetClass: kb.any(dataSource, ns.ui('targetClass'), null, dataSource.doc()) as NamedNode | undefined,
     label: kb.anyJS(dataSource, ns.schema('name'), null, dataSource.doc()),
     logo: kb.anyJS(dataSource, ns.schema('logo'), null, dataSource.doc())
   }
+
+  // @@ Should we pass the target class in from the data source definition or use a current type of the subject
+  const targetClass = (kb.any(form, ns.ui('targetClass'), null, form.doc()) || // class in form takes pecedence
+      kb.any(dataSource, ns.ui('targetClass'), null, dataSource.doc())) as NamedNode | undefined
+  if (targetClass) {
+    queryParams.targetClass = targetClass
+  }
+  /*
   if (!queryParams.targetClass) {
     const klass = kb.any(subject, ns.rdf('type')) as NamedNode | undefined
     // @@ be more selective of which class if many
@@ -111,31 +113,32 @@ export function autocompleteField (
     if (!klass) throw new Error('Autocomplete: No class specified or is current type of' + subject)
     queryParams.targetClass = klass
   }
-  const endPoint = kb.anyJS(dataSource, ns.ui('endPoint'), null, dataSource.doc()) as string | undefined
-  if (endPoint) { // SPARQL
-    queryParams.endpoint = endPoint
+  */
+  const endpoint = kb.anyJS(dataSource, ns.ui('endpoint'), null, dataSource.doc()) as string | undefined
+  if (endpoint) { // SPARQL
+    queryParams.endpoint = endpoint
 
     queryParams.searchByNameQuery = kb.anyJS(dataSource, ns.ui('searchByNameQuery'), null, dataSource.doc())
     if (!queryParams.searchByNameQuery) {
       return box.appendChild(
-        widgets.errorMessageBlock(dom, 'Error: No searchByNameQuery given for data Source: ' + form))
+        widgets.errorMessageBlock(dom, 'Error: No searchByNameQuery given for endpoint data Source: ' + form))
     }
     queryParams.insitituteDetailsQuery = kb.anyJS(dataSource, ns.ui('insitituteDetailsQuery'), null, dataSource.doc())
   } else {
-    return box.appendChild(
-      widgets.errorMessageBlock(dom, 'Error: No SPARQL endPoint given for autocomplete field: ' + form))
-  }
-  const queryTemplate = kb.any(form, ns.ui('queryTemplate'))
-  if (!queryTemplate) {
-    return box.appendChild(
-      widgets.errorMessageBlock(dom, 'Error: No queryTemplate given for autocomplete field: ' + form)
-    )
+    // return box.appendChild(
+    //  widgets.errorMessageBlock(dom, 'Error: No SPARQL endpoint given for autocomplete field: ' + form))
+    const searchByNameURI = kb.anyJS(dataSource, ns.ui('searchByNameURI'))
+    if (!searchByNameURI) {
+      return box.appendChild(
+        widgets.errorMessageBlock(dom, 'Error: No searchByNameURI OR sparql endpoint given for dataSource: ' + dataSource)
+      )
+    }
+    queryParams.searchByNameURI = searchByNameURI
   }
   // It can be cleaner to just remove empty fields if you can't edit them anyway
   const suppressEmptyUneditable = kb.anyJS(form, ns.ui('suppressEmptyUneditable'), null, formDoc)
   const editable = kb.updater.editable((doc as NamedNode).uri)
 
-  // @@ Should we pass the target class in from the data source definition or use a current type of the subject
   const autocompleteOptions:AutocompleteOptions = { // cancelButton?: HTMLElement,
     // acceptButton?: HTMLElement,
     targetClass: queryParams.targetClass, // @@ simplify?
@@ -163,10 +166,10 @@ export function autocompleteField (
   const barOptions = {
     editable: doc && doc.uri && kb.updater.editable(doc.uri, kb),
     permanent: true,
-    dbLookup: false
+    dbLookup: true
   }
   renderAutocompleteControl(dom, subject as NamedNode, barOptions, autocompleteOptions, addOneIdAndRefresh).then((control) => {
-    // console.log('Async load of autocomplete field control finished:' + control)
+    // log('Async load of autocomplete field control finished:' + control)
     rhs.appendChild(control)
   }, (err) => {
     rhs.appendChild(widgets.errorMessageBlock(dom, `Error rendering autocomplete${form}: ${err}`))

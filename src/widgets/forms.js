@@ -350,13 +350,12 @@ forms.field[ns.ui('Multiple').uri] = function (
     * One possibility is to not actually make the link to the thing until
     * this callback happens to avoid widow links
      */
-    function itemDone (uri, ok, message) {
-      debug.log(`Item ${uri} done callback for item ${object.uri.slice(-7)}`)
+    function itemDone (ok, message) {
+      debug.log(`Item done callback for item ${object.uri.slice(-7)}`)
       if (!ok) { // when does this happen? errors typically deal with upstream
         debug.error('  Item done callback: Error: ' + message)
-      } else {
-        linkDone(uri, ok, message)
       }
+      callbackFunction(ok, message)
     }
     const linkDone = function (uri, ok, message) {
       return callbackFunction(ok, message)

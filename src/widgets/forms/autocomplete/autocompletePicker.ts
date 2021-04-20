@@ -4,7 +4,7 @@
 **
 */
 import * as debug from '../../../debug'
-import { style } from '../../../style'
+import style from '../../../style'
 import { store } from '../../../logic'
 import widgets from '../../../widgets'
 
@@ -73,7 +73,9 @@ export async function renderAutoComplete (dom: HTMLDocument,
   function complain (message) {
     const errorRow = table.appendChild(dom.createElement('tr'))
     debug.log(message)
-    errorRow.appendChild(widgets.errorMessageBlock(dom, message, 'pink'))
+    const err = new Error(message)
+    errorRow.appendChild(widgets.errorMessageBlock(dom, err, 'pink'))
+    // errorMessageBlock will log the stack to the console
     style.setStyle(errorRow, 'autocompleteRowStyle')
     errorRow.style.padding = '1em'
   }
@@ -87,6 +89,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
     // remove(decoration.cancelButton)
     // remove(decoration.acceptButton)
     // remove(div)
+    clearList()
     callback(object, name)
   }
   async function gotIt (object:NamedNode, name:string) {
