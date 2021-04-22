@@ -19,7 +19,7 @@ import * as rdf from 'rdflib' // pull in first avoid cross-refs
 import style from '../style'
 import * as utils from '../utils'
 import widgets from '../widgets'
-import * as bookmarks from './bookmarks'
+import { renderBookmarksButton } from './bookmarks'
 
 const UI = { authn, icons, ns, media, pad, rdf, store, style, utils, widgets }
 
@@ -146,7 +146,7 @@ export function messageToolbar (message, messageRow, userContext) {
  */
   // Things anyone can do if they have a bookmark list
 
-  bookmarks.renderBookmarksButton(userContext).then(bookmarkButton => {
+  renderBookmarksButton(userContext).then(bookmarkButton => {
     if (bookmarkButton) div.appendChild(bookmarkButton)
   })
 

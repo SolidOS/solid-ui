@@ -11,7 +11,7 @@ import widgets from '../../../widgets'
 import { renderAutoComplete, AutocompleteDecoration } from './autocompletePicker' // dbpediaParameters
 
 import { NamedNode } from 'rdflib'
-import { wikidataParameters } from './publicData'
+// import { wikidataParameters } from './publicData'
 
 const WEBID_NOUN = 'Solid ID'
 
@@ -43,23 +43,29 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
     }
     return addOneIdAndRefresh(person, webid)
   }
+
   function removeDecorated () {
     if (decoratedAutocomplete) {
       creationArea.removeChild(decoratedAutocomplete)
       decoratedAutocomplete = undefined
     }
   }
+
+  async function displayAutocomplete () {
+    decoratedAutocomplete = dom.createElement('div') as HTMLElement
+    decoratedAutocomplete.setAttribute('style', 'display: flex; flex-flow: wrap;')
+    decoratedAutocomplete.appendChild(await renderAutoComplete(dom, acOptions, decoration, autoCompleteDone))
+    decoratedAutocomplete.appendChild(acceptButton)
+    decoratedAutocomplete.appendChild(cancelButton)
+    creationArea.appendChild(decoratedAutocomplete)
+  }
+
   async function searchButtonHandler (_event) {
     if (decoratedAutocomplete) {
       creationArea.removeChild(decoratedAutocomplete)
       decoratedAutocomplete = undefined
     } else {
-      decoratedAutocomplete = dom.createElement('div') as HTMLElement
-      decoratedAutocomplete.setAttribute('style', 'display: flex; flex-flow: wrap;')
-      decoratedAutocomplete.appendChild(await renderAutoComplete(dom, acOptions, decoration, autoCompleteDone))
-      decoratedAutocomplete.appendChild(acceptButton)
-      decoratedAutocomplete.appendChild(cancelButton)
-      creationArea.appendChild(decoratedAutocomplete)
+      displayAutocomplete()
     }
   }
 
@@ -72,8 +78,8 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
   // const queryParams = barOptions.queryParameters || wikidataParameters
   const acceptButton = widgets.continueButton(dom)
   const cancelButton = widgets.cancelButton(dom, removeDecorated) // @@ not in edit case only in temporary case
-  var editButton
-  var editing = true
+  let editButton
+  let editing = true
 
   function setVisible (element:HTMLElement, visible:boolean) {
     element.style.visibility = visible ? 'visible' : 'collapse'
@@ -95,7 +101,7 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
     acceptButton, cancelButton, editButton
   }
 
-  var decoratedAutocomplete = undefined as HTMLElement | undefined
+  let decoratedAutocomplete = undefined as HTMLElement | undefined
   // const { dom } = dataBrowserContext
   // barOptions = barOptions || {}
 
@@ -109,16 +115,19 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
       const plus = creationArea.appendChild(widgets.button(dom, GREEN_PLUS, barOptions.idNoun, greenButtonHandler))
       widgets.makeDropTarget(plus, droppedURIHandler, undefined)
     }
-    if (barOptions.dbLookup) {
+    if (barOptions.dbLookup && !acOptions.currentObject) {
       creationArea.appendChild(widgets.button(dom, SEARCH_ICON, barOptions.idNoun, searchButtonHandler))
     }
     if (barOptions.permanent && barOptions.editable) {
-      editButton = widgets.button(dom, icons.iconBase + 'noun_253504.svg', 'Edit', _event => {
+      editButton = widgets.button(dom, EDIT_ICON, 'Edit', _event => {
         editing = !editing
         syncEditingStatus()
       })
       creationArea.appendChild(editButton)
     }
+  }
+  if (acOptions.currentObject) {
+    displayAutocomplete()
   }
   syncEditingStatus()
   return creationArea

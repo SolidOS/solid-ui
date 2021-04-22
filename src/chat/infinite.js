@@ -11,13 +11,14 @@ import ns from '../ns'
 import * as pad from '../pad'
 import DateFolder from './dateFolder'
 import { renderMessage, creatorAndDate } from './message'
-import bookmarks from './bookmarks'
+import { findBookmarkDocument } from './bookmarks'
 
 import * as $rdf from 'rdflib' // pull in first avoid cross-refs
+import style from '../style'
 import * as utils from '../utils'
 import widgets from '../widgets'
 
-const UI = { authn, icons, ns, media, pad, $rdf, store, utils, widgets }
+const UI = { authn, icons, ns, media, pad, $rdf, store, style, utils, widgets }
 
 /* global alert */
 
@@ -326,7 +327,7 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
       me = context.me
       turnOnInput()
       Object.assign(context, userContext)
-      bookmarks.findBookmarkDocument(context).then(context => {
+      findBookmarkDocument(context).then(context => {
         debug.log('Bookmark file: ' + context.bookmarkDocument)
       })
     })
@@ -835,9 +836,9 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
       }
     }
 
-    let live
+    let live, selectedDocument
     if (options.selectedMessage) {
-      var selectedDocument = options.selectedMessage.doc()
+      selectedDocument = options.selectedMessage.doc()
       const now = new Date()
       const todayDocument = dateFolder.leafDocumentFromDate(now)
       live = todayDocument.sameTerm(selectedDocument)

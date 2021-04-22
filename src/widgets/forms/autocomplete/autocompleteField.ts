@@ -39,21 +39,22 @@ export function autocompleteField (
   subject: NamedNode | BlankNode | Variable,
   form: NamedNode,
   doc: NamedNode | undefined,
-  callbackFunction: (ok: boolean, errorMessage: string) => void
+  callbackFunction: (_ok: boolean, _errorMessage: string) => void
 ): HTMLElement {
-  async function addOneIdAndRefresh (result, _name) {
-    const deletables = kb.statementsMatching(subject, property as any, null, null) // remove any multiple values in any doc
-
-    let insertables = deletables.map(statement => st(statement.subject, statement.predicate, result, statement.why)) // can include >1 doc
-    if (insertables.length === 0) {
-      // or none
-      insertables = [st(subject, property as any, result, doc)]
-    }
+  async function addOneIdAndRefresh (result, name) {
+    const originals = kb.each(subject, property as any, null, doc)
+    const deletables = []
+    originals.forEach(x => { // Clean up multiple if there were any
+      deletables.concat(kb.statementsMatching(subject, property as any, x, doc)) // @@ concat does right
+      deletables.concat(kb.statementsMatching(x, labelProperty as any, null, doc))
+    })
+    const insertables = [st(subject, property as any, result, doc),
+      st(result, labelProperty as any, name, doc)] // @@ track the language of the  name too!
     try {
       await kb.updater.updateMany(deletables, insertables)
     } catch (err) {
       callbackFunction(false, err)
-      box.appendChild(widgets.errorMessageBlock(dom, 'Autocomplete form data write error:' + err))
+      box.appendChild(widgets.errorMessageBlock(dom, 'Autocomplete form data update error:' + err))
       return
     }
     callbackFunction(true, '')
@@ -82,7 +83,7 @@ export function autocompleteField (
     )
   }
   const labelProperty = kb.any(form, ns.ui('labelProperty')) || ns.schema('name')
-  const size = kb.any(form, ns.ui('size')) // may be undefined, let the widget decide
+  // const size = kb.any(form, ns.ui('size')) // may be undefined, let the widget decide
 
   // Parse the data source into query options
 
@@ -149,7 +150,7 @@ export function autocompleteField (
     obj = kb.any(form, ns.ui('default'))
     if (obj) {
       autocompleteOptions.currentObject = obj as NamedNode
-      autocompleteOptions.currentName = kb.anyJS(autocompleteOptions.currentObject, labelProperty, null, form.doc())
+      autocompleteOptions.currentName = kb.anyJS(autocompleteOptions.currentObject, labelProperty, null, doc)
     } else { // No data or default. Should we suprress the whole field?
       if (suppressEmptyUneditable && !editable) {
         box.style.display = 'none' // clutter removal
@@ -158,7 +159,7 @@ export function autocompleteField (
     }
   } else { // get object and name from target data:
     autocompleteOptions.currentObject = obj as NamedNode
-    autocompleteOptions.currentName = kb.anyJS(autocompleteOptions.currentObject, labelProperty, null, (subject as NamedNode).doc())
+    autocompleteOptions.currentName = kb.anyJS(autocompleteOptions.currentObject, labelProperty, null, doc)
   }
 
   lhs.appendChild(widgets.fieldLabel(dom, property as any, form))

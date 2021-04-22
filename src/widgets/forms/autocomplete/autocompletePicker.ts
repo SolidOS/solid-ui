@@ -49,7 +49,7 @@ export type AutocompleteOptions = {
 }
 
 interface Callback1 {
-  (subject: NamedNode, name: string): void;
+  (_subject: NamedNode, _name: string): void;
 }
 
 function assertString (x):string {
@@ -79,11 +79,13 @@ export async function renderAutoComplete (dom: HTMLDocument,
     style.setStyle(errorRow, 'autocompleteRowStyle')
     errorRow.style.padding = '1em'
   }
+  /*
   function remove (ele?: HTMLElement) {
     if (ele && ele.parentNode) {
       ele.parentNode.removeChild(ele)
     }
   }
+  */
   function finish (object, name) {
     debug.log('Auto complete: finish! ' + object)
     // remove(decoration.cancelButton)
@@ -113,11 +115,12 @@ export async function renderAutoComplete (dom: HTMLDocument,
     }
   }
 
+  /*
   async function cancelButtonHandler (_event) {
     debug.log('Auto complete: Canceled by user! ')
     div.innerHTML = '' // Clear out the table
   }
-
+*/
   function nameMatch (filter:string, candidate: string):boolean {
     const parts = filter.split(' ') // Each name part must be somewhere
     for (let j = 0; j < parts.length; j++) {
@@ -126,15 +129,15 @@ export async function renderAutoComplete (dom: HTMLDocument,
     }
     return true
   }
-
+  /*
   function cancelText (_event) {
     searchInput.value = ''
     if (decoration.acceptButton) {
       (decoration.acceptButton as any).disabled = true // start again
     }
-    candidatesLoaded = false
+    // candidatesLoaded = false
   }
-
+  */
   function thinOut (filter) {
     let hits = 0
     let pick = undefined as NamedNode | undefined
@@ -177,11 +180,10 @@ export async function renderAutoComplete (dom: HTMLDocument,
     }
     inputEventHandlerLock = true
     const languagePrefs = await getPreferredLanguages()
-    const language = languagePrefs[0] // if have to pick one
     const filter = searchInput.value.trim().toLowerCase()
     if (filter.length < AUTOCOMPLETE_THRESHOLD) { // too small
       clearList()
-      candidatesLoaded = false
+      // candidatesLoaded = false
       numberOfRows = AUTOCOMPLETE_ROWS
     } else {
       if (allDisplayed && lastFilter && filter.startsWith(lastFilter)) {
@@ -198,7 +200,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
         inputEventHandlerLock = false
         return
       }
-      candidatesLoaded = true
+      // candidatesLoaded = true
       const loadedEnough = bindings.length < AUTOCOMPLETE_LIMIT
       if (loadedEnough) {
         lastFilter = filter
@@ -234,7 +236,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
     inputEventHandlerLock = false
   } // refreshList
 
-  const queryParams: QueryParameters = options.queryParams
+  // const queryParams: QueryParameters = options.queryParams
   const OrgClass = options.targetClass // kb.sym('http://umbel.org/umbel/rc/EducationalOrganization') // @@@ other
   if (decoration.acceptButton) {
     decoration.acceptButton.addEventListener('click', acceptButtonHandler, false)
@@ -243,7 +245,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
     // decoration.cancelButton.addEventListener('click', cancelButtonHandler, false)
   }
 
-  var candidatesLoaded = false
+  // var candidatesLoaded = false
   const runningTimeout = undefined as any
   let inputEventHandlerLock = false
   let allDisplayed = false
