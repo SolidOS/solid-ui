@@ -9,8 +9,11 @@
 
 export function errorMessageBlock (dom: HTMLDocument, err: string | Error, backgroundColor?: string): HTMLDivElement {
   const div = dom.createElement('div')
-  if (err instanceof Error && err.stack) {
-    console.error(`errorMessageBlock: Error ${err} at: ${err.stack}`, err) // @@ pick one
+  if (err instanceof Error) {
+    console.error(`errorMessageBlock: Error ${err} at: ${err.stack || '??'}`, err) // @@ pick one
+    div.textContent = err.message
+  } else {
+    div.textContent = err
   }
   div.setAttribute(
     'style',
@@ -18,6 +21,5 @@ export function errorMessageBlock (dom: HTMLDocument, err: string | Error, backg
       (backgroundColor || '#fee') +
       '; color:black;'
   )
-  div.textContent = err
   return div
 }

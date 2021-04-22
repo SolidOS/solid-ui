@@ -42,12 +42,12 @@ export function autocompleteField (
   callbackFunction: (_ok: boolean, _errorMessage: string) => void
 ): HTMLElement {
   async function addOneIdAndRefresh (result, name) {
-    const originals = kb.each(subject, property as any, null, doc)
-    const deletables = []
-    originals.forEach(x => { // Clean up multiple if there were any
-      deletables.concat(kb.statementsMatching(subject, property as any, x, doc)) // @@ concat does right
-      deletables.concat(kb.statementsMatching(x, labelProperty as any, null, doc))
-    })
+    const oldValue = kb.the(subject, property as any, null, doc)
+    const deletables = oldValue
+      ? kb.statementsMatching(subject, property as any, oldValue, doc)
+        .concat(kb.statementsMatching(oldValue as any, labelProperty as any, null, doc))
+      : []
+
     const insertables = [st(subject, property as any, result, doc),
       st(result, labelProperty as any, name, doc)] // @@ track the language of the  name too!
     try {

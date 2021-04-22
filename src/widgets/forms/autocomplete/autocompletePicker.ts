@@ -42,7 +42,7 @@ export type AutocompleteDecoration = {
   editButton?: HTMLElement
 }
 export type AutocompleteOptions = {
-     targetClass: NamedNode,
+     targetClass?: NamedNode,
      currentObject?: NamedNode,
      currentName?: string,
      queryParams: QueryParameters
@@ -193,7 +193,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
       }
       let bindings
       try {
-        bindings = await queryPublicDataByName(filter, OrgClass, languagePrefs, options.queryParams)
+        bindings = await queryPublicDataByName(filter, targetClass as any, languagePrefs, options.queryParams) // @@ any
         // bindings = await queryDbpedia(sparql)
       } catch (err) {
         complain('Error querying db of organizations: ' + err)
@@ -237,7 +237,8 @@ export async function renderAutoComplete (dom: HTMLDocument,
   } // refreshList
 
   // const queryParams: QueryParameters = options.queryParams
-  const OrgClass = options.targetClass // kb.sym('http://umbel.org/umbel/rc/EducationalOrganization') // @@@ other
+  const targetClass = options.targetClass
+  if (!targetClass) throw new Error('need  class')
   if (decoration.acceptButton) {
     decoration.acceptButton.addEventListener('click', acceptButtonHandler, false)
   }
