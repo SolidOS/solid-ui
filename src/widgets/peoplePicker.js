@@ -17,7 +17,7 @@ import * as debug from '../debug'
 import { makeDropTarget } from './dragAndDrop'
 import { errorMessageBlock } from './error'
 import { iconBase } from '../iconBase'
-import ns from '../ns'
+import * as ns from '../ns'
 import { solidLogicSingleton } from '../logic'
 
 const kb = solidLogicSingleton.store

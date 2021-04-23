@@ -7,11 +7,11 @@ import { authn } from './authn/index'
 import * as debug from './debug'
 import { icons } from './iconBase'
 import { store } from './logic'
-import ns from './ns'
+import * as ns from './ns'
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
-import style from './style'
+import * as style from './style'
 import * as utils from './utils'
-import widgets from './widgets'
+import * as widgets from './widgets'
 
 const UI = { authn, icons, ns, rdf, store, style, widgets }
 

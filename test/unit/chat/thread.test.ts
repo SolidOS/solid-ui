@@ -1,6 +1,6 @@
 import { silenceDebugMessages } from '../../helpers/setup'
 import { JSDOM } from 'jsdom'
-import thread from '../../../src/chat/thread'
+import { thread } from '../../../src/chat/thread'
 import { graph, sym } from 'rdflib'
 
 silenceDebugMessages()

@@ -1,6 +1,6 @@
 import { st, BlankNode, Literal, Node, NamedNode, Variable } from 'rdflib'
 import { solidLogicSingleton } from '../../logic'
-import ns from '../../ns'
+import * as ns from '../../ns'
 import { textInputStyle, textInputBackgroundColorUneditable, textInputStyleUneditable } from '../../style'
 import { label } from '../../utils'
 

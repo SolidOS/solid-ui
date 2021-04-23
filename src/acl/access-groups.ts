@@ -6,8 +6,8 @@
 
 import { fetcher, IndexedFormula, NamedNode, sym } from 'rdflib'
 import { ACLbyCombination, readACL } from './acl'
-import widgets from '../widgets'
-import ns from '../ns'
+import * as widgets from '../widgets'
+import * as ns from '../ns'
 import { AccessController } from './access-controller'
 import { AgentMapMap, ComboList, PartialAgentTriple } from './types'
 import { AddAgentButtons } from './add-agent-buttons'

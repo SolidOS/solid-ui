@@ -9,12 +9,12 @@ import * as debug from '../debug'
 import { icons } from '../iconBase'
 import { store } from '../logic'
 import { media } from '../media/index'
-import ns from '../ns'
+import * as ns from '../ns'
 import * as pad from '../pad'
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
-import style from '../style'
+import * as style from '../style'
 import * as utils from '../utils'
-import widgets from '../widgets'
+import * as widgets from '../widgets'
 
 const UI = { authn, icons, ns, media, pad, rdf, store, style, utils, widgets }
 const $rdf = UI.rdf

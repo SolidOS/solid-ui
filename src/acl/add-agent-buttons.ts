@@ -5,8 +5,8 @@
 
 import { AccessGroups } from './access-groups'
 import { icons } from '../iconBase'
-import widgets from '../widgets'
-import ns from '../ns'
+import * as widgets from '../widgets'
+import * as ns from '../ns'
 import { logInLoadProfile } from '../authn/authn'
 import * as utils from '../utils'
 import { NamedNode, Store } from 'rdflib'

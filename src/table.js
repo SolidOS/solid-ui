@@ -18,16 +18,16 @@ import * as debug from './debug'
 import { icons } from './iconBase'
 import { store } from './logic'
 import * as log from './log'
-import ns from './ns'
+import * as ns from './ns'
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
-import style from './style'
+import * as style from './style'
 import * as utils from './utils'
-import widgets from './widgets'
+import * as widgets from './widgets'
 
 const UI = { icons, log, ns, store, utils, widgets }
 
 // UI.widgets.renderTableViewPane
-export default function renderTableViewPane (doc, options) {
+export function renderTableViewPane (doc, options) {
   const sourceDocument = options.sourceDocument
   const tableClass = options.tableClass
   const givenQuery = options.query

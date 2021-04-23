@@ -17,7 +17,7 @@ import * as debug from '../debug'
 /** @module mediaCapture */
 
 import { icons } from '../iconBase'
-import widgets from '../widgets'
+import * as widgets from '../widgets'
 import { IndexedFormula, NamedNode } from 'rdflib'
 
 const cameraIcon = icons.iconBase + 'noun_Camera_1618446_000000.svg' // Get it from github

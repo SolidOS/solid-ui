@@ -5,13 +5,9 @@
 */
 import { NamedNode, Literal, parse } from 'rdflib'
 import * as debug from '../../../debug'
-import ns from '../../../ns'
+import * as ns from '../../../ns'
 import { store } from '../../../logic'
 
-// import * as instituteDetailsWikidataQuery from '../lib/instituteDetailsWikidataQuery.js'
-// import instituteDetailsWikidataQuery from './instituteDetailsWikidataQuery.sparql'
-// import * as instituteDetailsWikidataQuery from '../../../../lib/widgets/forms/autocomplete/instituteDetailsWikidataQuery.js'
-// import * as instituteDetailsWikidataQuery from './instituteDetailsWikidataQuery.js'
 const kb = store
 
 export const AUTOCOMPLETE_LIMIT = 500 // How many to get from server

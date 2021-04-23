@@ -4,7 +4,7 @@
  * modules.
  * @module config-default
  */
-export default {
+export default { // @@ should not use export default
   /**
    * Primary authentication endpoint
    */

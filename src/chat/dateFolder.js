@@ -6,7 +6,7 @@
 import * as debug from '../debug'
 import { store } from '../logic'
 
-import ns from '../ns'
+import * as ns from '../ns'
 import * as $rdf from 'rdflib' // pull in first avoid cross-refs
 
 const kb = store
@@ -14,7 +14,7 @@ const kb = store
 /**
  * Track back through the YYYY/MM/DD tree to find the previous/next day
  */
-export default class DateFolder {
+export class DateFolder {
   constructor (rootThing, leafFileName, membershipProperty) {
     this.root = rootThing
     this.rootFolder = rootThing.dir()

@@ -25,6 +25,7 @@ If you would like to know more about the solid Solid project, please see
 https://github.com/solid/solid
 */
 'use strict'
+/* eslint-disable no-console */
 /**
  * Provides a Solid client helper object (which exposes various static modules).
  * @module solidUi.js
@@ -39,7 +40,7 @@ https://github.com/solid/solid
 // REMOVE @ts-ignore as you migrate files to TypeScript
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
 // @ts-ignore
-import ns from './ns'
+import * as ns from './ns'
 import { acl, aclControl } from './acl/index'
 import { authn } from './authn/index'
 import { create } from './create/index'
@@ -59,17 +60,17 @@ import * as pad from './pad'
 // @ts-ignore
 import * as participation from './participation'
 // @ts-ignore
-import preferences from './preferences'
+import * as preferences from './preferences'
 // @ts-ignore
 import { solidLogicSingleton } from './logic'
 // @ts-ignore
-import style from './style'
+import * as style from './style'
 // @ts-ignore
-import table from './table'
+import { renderTableViewPane as table } from './table'
 import * as tabs from './tabs'
 // @ts-ignore
 import * as utils from './utils'
-import widgets from './widgets'
+import * as widgets from './widgets/index'
 import versionInfo from './versionInfo'
 import { initHeader } from './header'
 
@@ -105,6 +106,7 @@ if (typeof window !== 'undefined') {
     initHeader
   } // Simpler access by non-node scripts
 }
+console.log('widgets imported to UI:', widgets)
 
 export {
   ns,

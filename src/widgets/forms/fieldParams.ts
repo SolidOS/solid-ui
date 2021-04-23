@@ -1,4 +1,4 @@
-import ns from '../../ns'
+import * as ns from '../../ns'
 import { commentStyle, formHeadingStyle } from '../../style'
 
 export type FieldParamsObject = {

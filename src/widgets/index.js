@@ -20,6 +20,13 @@ import * as debug from '../debug'
 // (In order to avoid name collisions, it is safely assumed that modules don't
 // export widgets with the same name)
 
+export * from './peoplePicker'
+export * from './dragAndDrop'
+export * from './buttons'
+export * from './error'
+export * from './forms'
+
+/*
 import * as peoplePicker from './peoplePicker'
 import * as dragAndDrop from './dragAndDrop'
 import * as buttons from './buttons'
@@ -34,16 +41,9 @@ const widgets = Object.assign(
   error,
   forms
 )
-/*
-export * from './peoplePicker'
-export * from './dragAndDrop'
-export * from './buttons'
-export * from './error'
-export * from './forms'
-*/
-// export { forms } from './forms'
 
-export default widgets
+// export default widgets .. Policy is not to use exports default
+module.export = widgets // @@ Apparently no way to do this (yet?) in esm
 console.log('widgets exported:', widgets)
-
+*/
 // ends

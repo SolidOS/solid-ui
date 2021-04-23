@@ -49,4 +49,4 @@ const styleModule = { // styleModule
     ele.style = styleModule[styleName]
   }
 }
-export default styleModule
+module.exports = styleModule // @@ No way to do this in ESM

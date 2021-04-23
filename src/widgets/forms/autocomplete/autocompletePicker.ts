@@ -4,9 +4,9 @@
 **
 */
 import * as debug from '../../../debug'
-import style from '../../../style'
+import * as style from '../../../style'
 import { store } from '../../../logic'
-import widgets from '../../../widgets'
+import * as widgets from '../../../widgets'
 
 import { NamedNode } from 'rdflib'
 import {

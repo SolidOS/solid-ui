@@ -42,4 +42,7 @@ export const icons =
           }
 
 log('   icons.iconBase is set to : ' + icons.iconBase)
-export const testIconBase = icons.iconBase
+
+// allow tests etc  named-import this directly from this module
+export const iconBase = icons.iconBase
+export const originalIconBase = icons.originalIconBase

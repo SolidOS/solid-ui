@@ -3,10 +3,10 @@
 // import { ns, widgets, store } from 'solid-ui'
 
 // import { ns, widgets, store, icons } from '../../../index'
-import ns from '../../../ns'
+import * as ns from '../../../ns'
 import { icons } from '../../../iconBase'
 import { store } from '../../../logic'
-import widgets from '../../../widgets'
+import * as widgets from '../../../widgets'
 
 import { renderAutoComplete, AutocompleteDecoration } from './autocompletePicker' // dbpediaParameters
 
