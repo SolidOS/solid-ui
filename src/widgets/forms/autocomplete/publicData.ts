@@ -3,6 +3,7 @@
 * including filtering resut by natural language etc
 * See https://solidos.solidcommunity.net/public/2021/01%20Building%20Solid%20Apps%20which%20use%20Public%20Data.html
 */
+/* eslint-disable no-console */
 import { NamedNode, Literal, parse } from 'rdflib'
 import * as debug from '../../../debug'
 import * as ns from '../../../ns'
@@ -13,6 +14,7 @@ const kb = store
 export const AUTOCOMPLETE_LIMIT = 500 // How many to get from server
 // With 3000 we could exceed the wikidata timeout
 export const LANGUAGE = 'en' // @@ To do : get user's preferred language
+export const defaultPreferedLangages = ['en', 'fr', 'de', 'it']
 
 const subjectRegexp = /\$\(subject\)/g
 
@@ -32,11 +34,12 @@ type Bindings = Binding[]
 
 export type QueryParameters =
 { label: string;
-  logo: string;
+  logo?: NamedNode;
   searchByNameQuery?: string;
   searchByNameURI?: string;
   insitituteDetailsQuery?: string;
   endpoint?: string;
+  objectURIBase?: NamedNode;
   targetClass?: NamedNode,
 }
 
@@ -98,12 +101,12 @@ export const fetcherOptionsJsonPublicData = {
 }
 
 export async function getPreferredLanguages () {
-  return ['fr', 'en', 'de', 'it'] // @@ testing only -- code me later
+  return defaultPreferedLangages // @@ testing only -- code me later to get from user prefs/profile
 }
 
 export const escoParameters:QueryParameters = {
   label: 'ESCO',
-  logo: 'https://ec.europa.eu/esco/portal/static_resource2/images/logo/logo_en.gif',
+  logo: kb.sym('https://ec.europa.eu/esco/portal/static_resource2/images/logo/logo_en.gif'),
   searchByNameURI: 'https://ec.europa.eu/esco/api/search?language=$(language)&type=occupation&text=$(name)'
   // endpoint: undefined
   // returnFormat: 'ESCO',
@@ -112,7 +115,7 @@ export const escoParameters:QueryParameters = {
 
 export const dbpediaParameters:QueryParameters = {
   label: 'DBPedia',
-  logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/DBpediaLogo.svg/263px-DBpediaLogo.svg.png',
+  logo: kb.sym('https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/DBpediaLogo.svg/263px-DBpediaLogo.svg.png'),
   searchByNameQuery: `select distinct ?subject, ?name where {
     ?subject a $(targetClass); rdfs:label ?name
     FILTER regex(?name, "$(name)", "i")
@@ -133,7 +136,7 @@ export const wikidataOutgoingClassMap = {
 
 export const wikidataParameters = {
   label: 'WikiData',
-  logo: 'https://www.wikimedia.org/static/images/project-logos/wikidatawiki.png',
+  logo: kb.sym('https://www.wikimedia.org/static/images/project-logos/wikidatawiki.png'),
   endpoint: 'https://query.wikidata.org/sparql',
   searchByNameQuery: `SELECT ?subject ?name
   WHERE {
@@ -300,6 +303,7 @@ export async function queryESCODataByName (filter: string, theClass:NamedNode, q
   debug.log('    Query result  text' + text.slice(0, 500) + '...')
   if (text.length === 0) throw new Error('Wot no text back from ESCO query ' + queryURI)
   const json = JSON.parse(text)
+  console.log('Whole JSON return object', json)
   debug.log('    ESCO Query result JSON' + JSON.stringify(json, null, 4).slice(0, 500) + '...')
   return ESCOResultToBindings(json)
 }

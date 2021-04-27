@@ -4,11 +4,12 @@
 
 // These must all end with semicolon so they can be appended to.
 
-const styleModule = { // styleModule
+export const style = { // styleModule
   textInputStyle:
     'background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; ',
   textInputStyleUneditable: // Color difference only
     'background-color: white; padding: 0.5em;  border: .05em solid white;  border-radius:0.2em; font-size: 100%; margin:0.2em; ',
+  textInputSize: 20, // Default text input size in characters roughly
   buttonStyle:
       'background-color: #fff; padding: 0.7em;  border: .01em solid white;  border-radius:0.2em; font-size: 100%; margin: 0.3em;', // 'background-color: #eef;
   commentStyle: 'padding: 0.7em;  border: none; font-size: 100%; white-space: pre-wrap;',
@@ -43,10 +44,12 @@ const styleModule = { // styleModule
   textInputBackgroundColorUneditable: '#fff',
   multilineTextInputStyle: 'font-size:100%; white-space: pre-wrap; background-color: #eef;' +
   ' border: 0.07em solid gray; padding: 1em 0.5em; margin: 1em 1em;',
-  checkboxStyle: 'colour: black; font-size: 100%; padding-left: 0.5 em; padding-right: 0.5 em;',
+  checkboxStyle: 'colour: black; font-size: 100%; padding-left: 0.5 em; padding-right: 0.5 em;'
 
-  setStyle: function setStyle (ele, styleName) {
-    ele.style = styleModule[styleName]
-  }
 }
-module.exports = styleModule // @@ No way to do this in ESM
+
+style.setStyle = function setStyle (ele, styleName) {
+  ele.style = style[styleName]
+}
+
+module.exports = style // @@ No way to do this in ESM

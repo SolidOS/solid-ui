@@ -119,11 +119,9 @@ export function basicField (
   rhs.appendChild(field)
   field.setAttribute('type', params.type ? params.type : 'text')
 
-  const size = kb.any(form, ns.ui('size')) // Form has precedence
-  field.setAttribute(
-    'size',
-    size ? '' + size : params.size ? '' + params.size : '20'
-  )
+  const size = kb.anyJS(form, ns.ui('size')) || style.textInputSize || 20
+  field.setAttribute('size', size)
+
   const maxLength = kb.any(form, ns.ui('maxLength'))
   field.setAttribute('maxLength', maxLength ? '' + maxLength : '4096')
 

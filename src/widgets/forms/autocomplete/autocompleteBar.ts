@@ -3,6 +3,8 @@
 // import { ns, widgets, store } from 'solid-ui'
 
 // import { ns, widgets, store, icons } from '../../../index'
+/* eslint-disable no-console */
+
 import * as ns from '../../../ns'
 import { icons } from '../../../iconBase'
 import { store } from '../../../logic'
@@ -17,20 +19,20 @@ const WEBID_NOUN = 'Solid ID'
 
 const GREEN_PLUS = icons.iconBase + 'noun_34653_green.svg'
 const SEARCH_ICON = icons.iconBase + 'noun_Search_875351.svg'
-const EDIT_ICON = icons.iconBase + 'noun_253504+svg'
+const EDIT_ICON = icons.iconBase + 'noun_253504.svg'
 
 export async function renderAutocompleteControl (dom:HTMLDocument,
   person:NamedNode,
   barOptions,
   acOptions,
   addOneIdAndRefresh): Promise<HTMLElement> {
-  async function autoCompleteDone (object, _name) {
-    const webid = object.uri
+  async function autoCompleteDone (object, name) {
     if (barOptions.permanent) { // remember to set this in publicid panel
       setVisible(editButton, true)
       setVisible(acceptButton, false)
       setVisible(cancelButton, false)
     } else {
+      console.log('temporary - removed decoratiion')
       removeDecorated()
     }
     return addOneIdAndRefresh(object, name)
@@ -44,6 +46,12 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
     return addOneIdAndRefresh(person, webid)
   }
 
+  function cancelButtonHandler (_event) {
+    removeDecorated()
+    if (barOptions.permanent) {
+      displayAutocomplete()
+    }
+  }
   function removeDecorated () {
     if (decoratedAutocomplete) {
       creationArea.removeChild(decoratedAutocomplete)
@@ -115,7 +123,7 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
       const plus = creationArea.appendChild(widgets.button(dom, GREEN_PLUS, barOptions.idNoun, greenButtonHandler))
       widgets.makeDropTarget(plus, droppedURIHandler, undefined)
     }
-    if (barOptions.dbLookup && !acOptions.currentObject) {
+    if (barOptions.dbLookup && !acOptions.currentObject && !barOptions.permanent) {
       creationArea.appendChild(widgets.button(dom, SEARCH_ICON, barOptions.idNoun, searchButtonHandler))
     }
     if (barOptions.permanent && barOptions.editable) {
@@ -126,7 +134,7 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
       creationArea.appendChild(editButton)
     }
   }
-  if (acOptions.currentObject) {
+  if (barOptions.permanent || acOptions.currentObject) {
     displayAutocomplete()
   }
   syncEditingStatus()

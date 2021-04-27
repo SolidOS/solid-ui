@@ -8,7 +8,7 @@ import * as style from '../../../style'
 import { store } from '../../../logic'
 import * as widgets from '../../../widgets'
 
-import { NamedNode } from 'rdflib'
+import { NamedNode, Literal } from 'rdflib'
 import {
   queryPublicDataByName, filterByLanguage,
   AUTOCOMPLETE_LIMIT, QueryParameters, getPreferredLanguages
@@ -44,12 +44,13 @@ export type AutocompleteDecoration = {
 export type AutocompleteOptions = {
      targetClass?: NamedNode,
      currentObject?: NamedNode,
-     currentName?: string,
-     queryParams: QueryParameters
+     currentName?: Literal,
+     queryParams: QueryParameters,
+     size?: number
 }
 
 interface Callback1 {
-  (_subject: NamedNode, _name: string): void;
+  (_subject: NamedNode, _name: Literal): void;
 }
 
 function assertString (x):string {
@@ -88,16 +89,19 @@ export async function renderAutoComplete (dom: HTMLDocument,
   */
   function finish (object, name) {
     debug.log('Auto complete: finish! ' + object)
+    if (object.termType === 'Literal' && options.queryParams.objectURIBase) {
+      object = kb.sym(options.queryParams.objectURIBase.value + object.value)
+    }
     // remove(decoration.cancelButton)
     // remove(decoration.acceptButton)
     // remove(div)
     clearList()
     callback(object, name)
   }
-  async function gotIt (object:NamedNode, name:string) {
+  async function gotIt (object:NamedNode | Literal, name: Literal) {
     if (decoration.acceptButton) {
       (decoration.acceptButton as any).disabled = false
-      searchInput.value = name // complete it
+      searchInput.value = name.value // complete it
       foundName = name
       foundObject = object
       debug.log('Auto complete: name: ' + name)
@@ -108,7 +112,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
   }
 
   async function acceptButtonHandler (_event) {
-    if (searchInput.value === foundName) { // still
+    if (foundName && searchInput.value === foundName.value) { // still
       finish(foundObject, foundName)
     } else {
       (decoration.acceptButton as any).disabled = true
@@ -140,23 +144,28 @@ export async function renderAutoComplete (dom: HTMLDocument,
   */
   function thinOut (filter) {
     let hits = 0
-    let pick = undefined as NamedNode | undefined
-    let pickedName = ''
+    let pick = undefined as NamedNode | Literal | undefined
+    let pickedName = undefined as Literal | undefined
     for (let j = table.children.length - 1; j > 0; j--) { // backwards as we are removing rows
       const row = table.children[j]
       if (nameMatch(filter, row.textContent || '')) {
         hits += 1
-        pick = kb.sym(assertString(row.getAttribute('subject')))
-        pickedName = row.textContent as string
+        pick = (row as any).solidSubject as NamedNode | Literal
+        pickedName = (row as any).solidName as Literal
+        // pick = kb.sym(assertString(row.getAttribute('subject')))
+        // pickedName = row.textContent as string
         ;(row as any).style.display = ''
-        ;(row as any).style.color = 'blue' // @@ chose color
+        // ;(row as any).style.color = 'blue' // @@ chose color
+        ;(row as any).style.color = allDisplayed ? '#080' : '#088' // green means 'you should find it here'
       } else {
         ;(row as any).style.display = 'none'
       }
     }
     if (hits === 1) { // Maybe require green confirmation button be clicked?
       debug.log(`  auto complete elimination:  "${filter}" -> "${pickedName}"`)
-      gotIt(assertNN(pick), assertString(pickedName)) // uri, name
+      if (pick && pickedName) { // @@ for TS only.
+        gotIt(pick, pickedName)
+      }
     }
   }
 
@@ -173,11 +182,27 @@ export async function renderAutoComplete (dom: HTMLDocument,
     setTimeout(refreshList, AUTOCOMPLETE_DEBOUNCE_MS)
   }
 
+  function thingFromBinding (item) {
+    if (item.type === 'uri') {
+      return kb.sym(item.value)
+    } else if (item.type === 'literal') {
+      if (item['xml:lang']) {
+        return new Literal(item.value, item['xml:lang'])
+      } else {
+        return new Literal(item.value)
+      }
+    } else {
+      throw new Error(`Unexpected type "${item.type}" in sparql binding}`)
+    }
+  }
+
   async function refreshList () {
     if (inputEventHandlerLock) {
       debug.log(`Ignoring "${searchInput.value}" because of lock `)
       return
     }
+    debug.log(`Setting lock at "${searchInput.value}"`)
+
     inputEventHandlerLock = true
     const languagePrefs = await getPreferredLanguages()
     const filter = searchInput.value.trim().toLowerCase()
@@ -220,17 +245,22 @@ export async function renderAutoComplete (dom: HTMLDocument,
         if (!binding.subject || !binding.name) {
           return
         }
-        const uri = binding.subject.value
-        const name = binding.name.value
+        const object = thingFromBinding(binding.subject)
+        // const uri = binding.subject.value
+        const nameTerm = thingFromBinding(binding.name) as Literal// Captures language 👍
+        // const name = binding.name.value
         row.setAttribute('style', 'padding: 0.3em;')
-        row.setAttribute('subject', uri)
-        row.style.color = allDisplayed ? '#080' : '#000' // green means 'you should find it here'
-        row.textContent = name
+        row.style.color = allDisplayed ? '#080' : '#088' // green means 'you should find it here'
+        row.textContent = nameTerm.value
         row.addEventListener('click', async _event => {
           debug.log('       click row textContent: ' + row.textContent)
-          debug.log('       click name: ' + name)
-          gotIt(kb.sym(uri), name)
+          debug.log('       click name: ' + nameTerm.value)
+          if (object && nameTerm) {
+            gotIt(object, nameTerm)
+          }
         })
+        ;(row as any).solidSubject = object // For thinning function
+        ;(row as any).solidName = nameTerm
       })
     }
     inputEventHandlerLock = false
@@ -253,22 +283,25 @@ export async function renderAutoComplete (dom: HTMLDocument,
   let lastFilter = undefined as (string | undefined)
   let numberOfRows = AUTOCOMPLETE_ROWS // this gets slimmed down
   const div = dom.createElement('div')
-  let foundName = undefined as (string | undefined)// once found accepted string must match this
-  let foundObject = undefined as (NamedNode | undefined)
+  let foundName = undefined as (Literal | undefined)// once found accepted string must match this
+  let foundObject = undefined as (NamedNode | Literal | undefined)
   const table = div.appendChild(dom.createElement('table'))
   table.setAttribute('style', 'max-width: 30em; margin: 0.5em;')
   const head = table.appendChild(dom.createElement('tr'))
-  style.setStyle(head, 'autocompleteRowStyle')
+  style.setStyle(head, 'autocompleteRowStyle') // textInputStyle or
   const cell = head.appendChild(dom.createElement('td'))
   const searchInput = cell.appendChild(dom.createElement('input'))
   searchInput.setAttribute('type', 'text')
   if (options.currentObject) { // If have existing value then jump into the endgame of the autocomplete
-    searchInput.value = options.currentName || ''
+    searchInput.value = options.currentName ? options.currentName.value : '??? wot no name for ' + options.currentObject
     foundName = options.currentName
-    lastFilter = options.currentName
+    lastFilter = options.currentName ? options.currentName.value : undefined
     foundObject = options.currentObject
   }
-  const searchInputStyle = style.searchInputStyle ||
+  const size = options.size || style.textInputSize || 20
+  searchInput.setAttribute('size', size)
+
+  const searchInputStyle = style.textInputStyle || // searchInputStyle ?
     'border: 0.1em solid #444; border-radius: 0.5em; width: 100%; font-size: 100%; padding: 0.1em 0.6em' // @
   searchInput.setAttribute('style', searchInputStyle)
   searchInput.addEventListener('keyup', function (event) {

@@ -5,7 +5,7 @@ import { store } from '../../../logic'
 import * as widgets from '../../../widgets'
 import { renderAutocompleteControl } from './autocompleteBar'
 import { QueryParameters } from './publicData'
-import { NamedNode, BlankNode, Variable, st } from 'rdflib'
+import { NamedNode, BlankNode, Literal, Variable, st } from 'rdflib'
 import { AutocompleteOptions } from './autocompletePicker'
 /**
   * Render a autocomplete form field
@@ -31,6 +31,7 @@ import { AutocompleteOptions } from './autocompletePicker'
   *
   * @returns The HTML widget created
  */
+/* eslint-disable no-console */
 // eslint-disable-next-line complexity
 export function autocompleteField (
   dom: HTMLDocument,
@@ -41,15 +42,27 @@ export function autocompleteField (
   doc: NamedNode | undefined,
   callbackFunction: (_ok: boolean, _errorMessage: string) => void
 ): HTMLElement {
-  async function addOneIdAndRefresh (result, name) {
+  async function addOneIdAndRefresh (result:NamedNode | Literal, name: Literal) {
+    if (!name) {
+      throw new Error('autocompleteField:  No name set.')
+    }
+
     const oldValue = kb.the(subject, property as any, null, doc)
+    if (oldValue) {
+      const oldName = kb.any(oldValue as any, labelProperty as any, null, doc)
+      if (oldValue.equals(result) && oldName && oldName.sameTerm(name)) {
+        console.log('No change: same values.')
+        return
+      }
+    }
     const deletables = oldValue
       ? kb.statementsMatching(subject, property as any, oldValue, doc)
         .concat(kb.statementsMatching(oldValue as any, labelProperty as any, null, doc))
       : []
-
+    console.log('autocompleteField Deletables ' + deletables.map(st => st.toNT()))
     const insertables = [st(subject, property as any, result, doc),
-      st(result, labelProperty as any, name, doc)] // @@ track the language of the  name too!
+      st(result as any, labelProperty as any, name, doc)] // @@ track the language of the  name too!
+    console.log(`AC form: ${deletables.length} to delete and ${insertables.length} to insert`)
     try {
       await kb.updater.updateMany(deletables, insertables)
     } catch (err) {
@@ -83,7 +96,6 @@ export function autocompleteField (
     )
   }
   const labelProperty = kb.any(form, ns.ui('labelProperty')) || ns.schema('name')
-  // const size = kb.any(form, ns.ui('size')) // may be undefined, let the widget decide
 
   // Parse the data source into query options
 
@@ -96,7 +108,7 @@ export function autocompleteField (
   const queryParams:QueryParameters = {
     // targetClass: kb.any(dataSource, ns.ui('targetClass'), null, dataSource.doc()) as NamedNode | undefined,
     label: kb.anyJS(dataSource, ns.schema('name'), null, dataSource.doc()),
-    logo: kb.anyJS(dataSource, ns.schema('logo'), null, dataSource.doc())
+    logo: (kb.any(dataSource, ns.schema('logo'), null, dataSource.doc())) as NamedNode | undefined
   }
 
   // @@ Should we pass the target class in from the data source definition or use a current type of the subject
@@ -105,6 +117,9 @@ export function autocompleteField (
   if (targetClass) {
     queryParams.targetClass = targetClass
   }
+
+  queryParams.objectURIBase = (kb.any(dataSource, ns.ui('objectURIBase'), null, dataSource.doc()) || undefined) as NamedNode | undefined
+
   /*
   if (!queryParams.targetClass) {
     const klass = kb.any(subject, ns.rdf('type')) as NamedNode | undefined
@@ -145,12 +160,15 @@ export function autocompleteField (
     targetClass: queryParams.targetClass, // @@ simplify?
     queryParams
   }
+
+  autocompleteOptions.size = kb.anyJS(form, ns.ui('size'), null, formDoc) || undefined
+
   let obj = kb.any(subject, property as any, undefined, doc)
   if (!obj) {
     obj = kb.any(form, ns.ui('default'))
     if (obj) {
       autocompleteOptions.currentObject = obj as NamedNode
-      autocompleteOptions.currentName = kb.anyJS(autocompleteOptions.currentObject, labelProperty, null, doc)
+      autocompleteOptions.currentName = kb.any(autocompleteOptions.currentObject, labelProperty, null, doc) as Literal
     } else { // No data or default. Should we suprress the whole field?
       if (suppressEmptyUneditable && !editable) {
         box.style.display = 'none' // clutter removal
@@ -159,7 +177,7 @@ export function autocompleteField (
     }
   } else { // get object and name from target data:
     autocompleteOptions.currentObject = obj as NamedNode
-    autocompleteOptions.currentName = kb.anyJS(autocompleteOptions.currentObject, labelProperty, null, doc)
+    autocompleteOptions.currentName = kb.any(autocompleteOptions.currentObject, labelProperty, null, doc) as Literal
   }
 
   lhs.appendChild(widgets.fieldLabel(dom, property as any, form))
