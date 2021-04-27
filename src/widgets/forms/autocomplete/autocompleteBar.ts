@@ -85,7 +85,7 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
 
   // const queryParams = barOptions.queryParameters || wikidataParameters
   const acceptButton = widgets.continueButton(dom)
-  const cancelButton = widgets.cancelButton(dom, removeDecorated) // @@ not in edit case only in temporary case
+  const cancelButton = widgets.cancelButton(dom, cancelButtonHandler) // @@ not in edit case only in temporary case
   let editButton
   let editing = true
 

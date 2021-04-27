@@ -8,13 +8,11 @@ import { NamedNode, Literal, parse } from 'rdflib'
 import * as debug from '../../../debug'
 import * as ns from '../../../ns'
 import { store } from '../../../logic'
-
+import { getPreferredLanguages } from '../../../language/languageLogic'
 const kb = store
 
 export const AUTOCOMPLETE_LIMIT = 500 // How many to get from server
 // With 3000 we could exceed the wikidata timeout
-export const LANGUAGE = 'en' // @@ To do : get user's preferred language
-export const defaultPreferedLangages = ['en', 'fr', 'de', 'it']
 
 const subjectRegexp = /\$\(subject\)/g
 
@@ -23,7 +21,7 @@ interface Term {
   value: string
 }
 
-interface Binding {
+export interface Binding {
   subject: Term;
   name?: Term
   location?: Term
@@ -100,10 +98,6 @@ export const fetcherOptionsJsonPublicData = {
   headers: new Headers({ Accept: 'application/json' })
 }
 
-export async function getPreferredLanguages () {
-  return defaultPreferedLangages // @@ testing only -- code me later to get from user prefs/profile
-}
-
 export const escoParameters:QueryParameters = {
   label: 'ESCO',
   logo: kb.sym('https://ec.europa.eu/esco/portal/static_resource2/images/logo/logo_en.gif'),
@@ -163,35 +157,6 @@ WHERE
 
   SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE], fr". }
 }`
-}
-
-/* From an array of bindings with a names for each row,
- * remove dupliacte names for the same thing, leaving the user's
- * preferred language version
-*/
-export function filterByLanguage (bindings, languagePrefs) {
-  const uris = {}
-  bindings.forEach(binding => { // Organize names by their subject
-    const uri = binding.subject.value
-    uris[uri] = uris[uri] || []
-    uris[uri].push(binding)
-  })
-
-  const languagePrefs2 = languagePrefs
-  languagePrefs2.reverse() // prefered last
-
-  const slimmed = ([] as Array<Binding>)
-  for (const u in uris) { // needs hasOwnProperty ?
-    const bindings = uris[u]
-    const sortMe = bindings.map(binding => {
-      return [languagePrefs2.indexOf(binding.name['xml:lang']), binding]
-    })
-    sortMe.sort() // best at th ebottom
-    sortMe.reverse() // best at the top
-    slimmed.push((sortMe[0][1] as any))
-  } // map u
-  debug.log(` Filter by language: ${bindings.length} -> ${slimmed.length}`)
-  return slimmed
 }
 
 export const wikidataIncomingClassMap = {

@@ -5,16 +5,12 @@
 */
 import * as debug from '../../../debug'
 import * as style from '../../../style'
-import { store } from '../../../logic'
+import { kb } from '../../../logic'
 import * as widgets from '../../../widgets'
 
 import { NamedNode, Literal } from 'rdflib'
-import {
-  queryPublicDataByName, filterByLanguage,
-  AUTOCOMPLETE_LIMIT, QueryParameters, getPreferredLanguages
-} from './publicData'
-
-const kb = store
+import { queryPublicDataByName, AUTOCOMPLETE_LIMIT, QueryParameters } from './publicData'
+import { filterByLanguage, getPreferredLanguages } from '../../../language/languageLogic'
 
 const AUTOCOMPLETE_THRESHOLD = 4 // don't check until this many characters typed
 const AUTOCOMPLETE_ROWS = 20 // 20?
@@ -52,7 +48,7 @@ export type AutocompleteOptions = {
 interface Callback1 {
   (_subject: NamedNode, _name: Literal): void;
 }
-
+/*
 function assertString (x):string {
   if (typeof x !== 'string') {
     throw new Error('Expected this to be a string: ' + x)
@@ -65,7 +61,7 @@ function assertNN (x):NamedNode {
   }
   return x
 }
-
+*/
 // The core of the autocomplete UI
 export async function renderAutoComplete (dom: HTMLDocument,
   options:AutocompleteOptions,
@@ -183,9 +179,10 @@ export async function renderAutoComplete (dom: HTMLDocument,
   }
 
   function thingFromBinding (item) {
-    if (item.type === 'uri') {
+    const typ = item.type.toLowerCase()
+    if (typ === 'uri' || typ === 'iri') {
       return kb.sym(item.value)
-    } else if (item.type === 'literal') {
+    } else if (typ === 'literal') {
       if (item['xml:lang']) {
         return new Literal(item.value, item['xml:lang'])
       } else {
