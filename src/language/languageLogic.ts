@@ -25,9 +25,9 @@ export async function getPreferredLanguages () {
       console.log(`User ${me} has not set their languages in their profile.`)
       return defaultPreferedLangages
     }
-    const languageCodeArray = []
+    const languageCodeArray: string[] = []
     list.elements.forEach(item => {
-      const lang = kb.any(item, ns.solid('publicId'), null, item.doc())
+      const lang = kb.any(item as any, ns.solid('publicId'), null, (item as NamedNode).doc())
       if (!lang) {
         console.warn('getPreferredLanguages: No publiID of language.')
         return

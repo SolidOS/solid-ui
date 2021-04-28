@@ -34,7 +34,7 @@ Autocomplete happens in 6 phases:
 
 export type AutocompleteDecoration = {
   acceptButton?: HTMLElement,
-  cancelButton?: HTMLElement,
+  cancelButton: HTMLElement, // Must have cancel button
   editButton?: HTMLElement
 }
 export type AutocompleteOptions = {
@@ -42,7 +42,8 @@ export type AutocompleteOptions = {
      currentObject?: NamedNode,
      currentName?: Literal,
      queryParams: QueryParameters,
-     size?: number
+     size?: number,
+     permanent?: boolean
 }
 
 interface Callback1 {
@@ -62,6 +63,10 @@ function assertNN (x):NamedNode {
   return x
 }
 */
+export function setVisible (element:HTMLElement, visible:boolean) {
+  element.style.visibility = visible ? 'visible' : 'collapse'
+}
+
 // The core of the autocomplete UI
 export async function renderAutoComplete (dom: HTMLDocument,
   options:AutocompleteOptions,
@@ -96,7 +101,8 @@ export async function renderAutoComplete (dom: HTMLDocument,
   }
   async function gotIt (object:NamedNode | Literal, name: Literal) {
     if (decoration.acceptButton) {
-      (decoration.acceptButton as any).disabled = false
+      (decoration.acceptButton as any).disbaled = false
+      setVisible(decoration.acceptButton, true) // now wait for confirmation
       searchInput.value = name.value // complete it
       foundName = name
       foundObject = object
@@ -111,16 +117,21 @@ export async function renderAutoComplete (dom: HTMLDocument,
     if (foundName && searchInput.value === foundName.value) { // still
       finish(foundObject, foundName)
     } else {
-      (decoration.acceptButton as any).disabled = true
+      // (decoration.acceptButton as any).disabled = true
     }
   }
 
-  /*
   async function cancelButtonHandler (_event) {
     debug.log('Auto complete: Canceled by user! ')
-    div.innerHTML = '' // Clear out the table
+    if (options.permanent) {
+      initialize()
+    } else {
+      if (div.parentNode) {
+        div.parentNode.removeChild(div)
+      }
+    }
   }
-*/
+
   function nameMatch (filter:string, candidate: string):boolean {
     const parts = filter.split(' ') // Each name part must be somewhere
     for (let j = 0; j < parts.length; j++) {
@@ -172,6 +183,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
   }
 
   async function inputEventHHandler (_event) {
+    setVisible(decoration.cancelButton, true) // only allow cancel when there is something to cancel
     if (runningTimeout) {
       clearTimeout(runningTimeout)
     }
@@ -263,6 +275,21 @@ export async function renderAutoComplete (dom: HTMLDocument,
     inputEventHandlerLock = false
   } // refreshList
 
+  function initialize () {
+    if (options.currentObject) { // If have existing value then jump into the endgame of the autocomplete
+      searchInput.value = options.currentName ? options.currentName.value : '??? wot no name for ' + options.currentObject
+      foundName = options.currentName
+      lastFilter = options.currentName ? options.currentName.value : undefined
+      foundObject = options.currentObject
+    } else {
+      searchInput.value = ''
+      lastFilter = undefined
+      foundObject = undefined
+    }
+    if (decoration.acceptButton) {
+      setVisible(decoration.acceptButton, false) // hide until input complete
+    }
+  }
   // const queryParams: QueryParameters = options.queryParams
   const targetClass = options.targetClass
   if (!targetClass) throw new Error('need  class')
@@ -270,7 +297,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
     decoration.acceptButton.addEventListener('click', acceptButtonHandler, false)
   }
   if (decoration.cancelButton) {
-    // decoration.cancelButton.addEventListener('click', cancelButtonHandler, false)
+    decoration.cancelButton.addEventListener('click', cancelButtonHandler, false)
   }
 
   // var candidatesLoaded = false
@@ -289,12 +316,9 @@ export async function renderAutoComplete (dom: HTMLDocument,
   const cell = head.appendChild(dom.createElement('td'))
   const searchInput = cell.appendChild(dom.createElement('input'))
   searchInput.setAttribute('type', 'text')
-  if (options.currentObject) { // If have existing value then jump into the endgame of the autocomplete
-    searchInput.value = options.currentName ? options.currentName.value : '??? wot no name for ' + options.currentObject
-    foundName = options.currentName
-    lastFilter = options.currentName ? options.currentName.value : undefined
-    foundObject = options.currentObject
-  }
+
+  initialize()
+
   const size = options.size || style.textInputSize || 20
   searchInput.setAttribute('size', size)
 

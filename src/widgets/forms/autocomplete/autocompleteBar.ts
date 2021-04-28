@@ -10,7 +10,7 @@ import { icons } from '../../../iconBase'
 import { store } from '../../../logic'
 import * as widgets from '../../../widgets'
 
-import { renderAutoComplete, AutocompleteDecoration } from './autocompletePicker' // dbpediaParameters
+import { renderAutoComplete, AutocompleteDecoration, setVisible } from './autocompletePicker' // dbpediaParameters
 
 import { NamedNode } from 'rdflib'
 // import { wikidataParameters } from './publicData'
@@ -85,18 +85,14 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
 
   // const queryParams = barOptions.queryParameters || wikidataParameters
   const acceptButton = widgets.continueButton(dom)
-  const cancelButton = widgets.cancelButton(dom, cancelButtonHandler) // @@ not in edit case only in temporary case
+  const cancelButton = widgets.cancelButton(dom) // @@ not in edit case only in temporary case cancelButtonHandler
   let editButton
   let editing = true
-
-  function setVisible (element:HTMLElement, visible:boolean) {
-    element.style.visibility = visible ? 'visible' : 'collapse'
-  }
 
   function syncEditingStatus () {
     if (editing) {
       setVisible(editButton, false)
-      setVisible(acceptButton, true)
+      setVisible(acceptButton, false) // not till git it
       setVisible(cancelButton, true)
     } else {
       setVisible(editButton, true)
