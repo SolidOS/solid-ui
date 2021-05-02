@@ -61,8 +61,8 @@ describe('AccessController#save', () => {
     expect(instantiateAccessController(dom, store).save).toBeInstanceOf(Function)
   })
   it('runs', async () => {
-    const jsdomAlert = window.alert;  // remember the jsdom alert
-    window.alert = () => {};  // provide an empty implementation for window.alert
+    const jsdomAlert = window.alert // remember the jsdom alert
+    window.alert = () => {} // provide an empty implementation for window.alert
     expect(instantiateAccessController(dom, store).save()).rejects.toThrow('Error : ACL file save rejected : no acl:Write')
     window.alert = jsdomAlert
   })
