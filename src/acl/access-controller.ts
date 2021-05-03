@@ -243,8 +243,8 @@ export class AccessController {
       if (!hasWrite) {
         alert('There is no "Write access" this is not allowed')
         return reject(new Error('ACL file save rejected : no acl:Write'))
-      } else if (!(hasControl || confirm('There is no "owners access" this is a dangerous situation !!!,' +
-         `\nAs ${webId}\nyou may definitly lose access to the resources covered by this ACL !!!` +
+      } else if (!(hasControl || confirm('There is no "owner access" -- this is a dangerous situation !!!,' +
+         `\n${webId},\nyou may lose access to the resources covered by this ACL !!!` +
          '\n\nDo you confirm ?'))) {
         return reject(new Error('ACL file save canceled by user'))
       } else {
