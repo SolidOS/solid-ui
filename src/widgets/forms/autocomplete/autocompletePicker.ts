@@ -69,7 +69,7 @@ export function setVisible (element:HTMLElement, visible:boolean) {
 
 // The core of the autocomplete UI
 export async function renderAutoComplete (dom: HTMLDocument,
-  options:AutocompleteOptions,
+  acOptions:AutocompleteOptions,
   decoration: AutocompleteDecoration,
   callback: Callback1) {
   function complain (message) {
@@ -90,8 +90,8 @@ export async function renderAutoComplete (dom: HTMLDocument,
   */
   function finish (object, name) {
     debug.log('Auto complete: finish! ' + object)
-    if (object.termType === 'Literal' && options.queryParams.objectURIBase) {
-      object = kb.sym(options.queryParams.objectURIBase.value + object.value)
+    if (object.termType === 'Literal' && acOptions.queryParams.objectURIBase) {
+      object = kb.sym(acOptions.queryParams.objectURIBase.value + object.value)
     }
     // remove(decoration.cancelButton)
     // remove(decoration.acceptButton)
@@ -110,6 +110,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
       debug.log('Auto complete: waiting for accept ' + object)
       return
     }
+    setVisible(decoration.cancelButton, true)
     finish(object, name)
   }
 
@@ -123,7 +124,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
 
   async function cancelButtonHandler (_event) {
     debug.log('Auto complete: Canceled by user! ')
-    if (options.permanent) {
+    if (acOptions.permanent) {
       initialize()
     } else {
       if (div.parentNode) {
@@ -227,7 +228,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
       }
       let bindings
       try {
-        bindings = await queryPublicDataByName(filter, targetClass as any, languagePrefs, options.queryParams) // @@ any
+        bindings = await queryPublicDataByName(filter, targetClass as any, languagePrefs, acOptions.queryParams) // @@ any
         // bindings = await queryDbpedia(sparql)
       } catch (err) {
         complain('Error querying db of organizations: ' + err)
@@ -276,11 +277,11 @@ export async function renderAutoComplete (dom: HTMLDocument,
   } // refreshList
 
   function initialize () {
-    if (options.currentObject) { // If have existing value then jump into the endgame of the autocomplete
-      searchInput.value = options.currentName ? options.currentName.value : '??? wot no name for ' + options.currentObject
-      foundName = options.currentName
-      lastFilter = options.currentName ? options.currentName.value : undefined
-      foundObject = options.currentObject
+    if (acOptions.currentObject) { // If have existing value then jump into the endgame of the autocomplete
+      searchInput.value = acOptions.currentName ? acOptions.currentName.value : '??? wot no name for ' + acOptions.currentObject
+      foundName = acOptions.currentName
+      lastFilter = acOptions.currentName ? acOptions.currentName.value : undefined
+      foundObject = acOptions.currentObject
     } else {
       searchInput.value = ''
       lastFilter = undefined
@@ -289,9 +290,11 @@ export async function renderAutoComplete (dom: HTMLDocument,
     if (decoration.acceptButton) {
       setVisible(decoration.acceptButton, false) // hide until input complete
     }
+    setVisible(decoration.cancelButton, false) // only allow cancel when there is something to cancel
+    clearList()
   }
-  // const queryParams: QueryParameters = options.queryParams
-  const targetClass = options.targetClass
+  // const queryParams: QueryParameters = acOptions.queryParams
+  const targetClass = acOptions.targetClass
   if (!targetClass) throw new Error('need  class')
   if (decoration.acceptButton) {
     decoration.acceptButton.addEventListener('click', acceptButtonHandler, false)
@@ -319,7 +322,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
 
   initialize()
 
-  const size = options.size || style.textInputSize || 20
+  const size = acOptions.size || style.textInputSize || 20
   searchInput.setAttribute('size', size)
 
   const searchInputStyle = style.textInputStyle || // searchInputStyle ?

@@ -165,8 +165,10 @@ export const wikidataIncomingClassMap = {
   'http://www.wikidata.org/entity/Q43229': ns.schema('Organization'), // research university
   'http://www.wikidata.org/entity/Q3918': ns.schema('CollegeOrUniversity'), // university
   'http://www.wikidata.org/entity/Q170584': ns.schema('Project'), // university
-  'http://www.wikidata.org/entity/Q327333': ns.schema('GovernmentOrganization'), // gobvt agency
-  'http://www.wikidata.org/entity/Q2221906': ns.schema('Place') // geographic location
+  'http://www.wikidata.org/entity/Q327333': ns.schema('GovernmentOrganization'), // govt agency
+  'http://www.wikidata.org/entity/Q2221906': ns.schema('Place'), // geographic location
+  'http://www.wikidata.org/entity/Q167037': ns.schema('Corporation') // Corporation
+
 }
 export const variableNameToPredicateMap = { // allow other mappings to be added in theory hence var
   // wikidata:

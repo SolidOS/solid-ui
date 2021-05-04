@@ -156,7 +156,7 @@ export function autocompleteField (
   const editable = kb.updater.editable((doc as NamedNode).uri)
 
   const autocompleteOptions:AutocompleteOptions = { // cancelButton?: HTMLElement,
-    // acceptButton?: HTMLElement,
+    permanent: true,
     targetClass: queryParams.targetClass, // @@ simplify?
     queryParams
   }
@@ -184,7 +184,7 @@ export function autocompleteField (
 
   const barOptions = {
     editable: doc && doc.uri && kb.updater.editable(doc.uri, kb),
-    permanent: true,
+    // permanent: true,
     dbLookup: true
   }
   renderAutocompleteControl(dom, subject as NamedNode, barOptions, autocompleteOptions, addOneIdAndRefresh).then((control) => {

@@ -27,7 +27,7 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
   acOptions,
   addOneIdAndRefresh): Promise<HTMLElement> {
   async function autoCompleteDone (object, name) {
-    if (barOptions.permanent) { // remember to set this in publicid panel
+    if (acOptions.permanent) { // remember to set this in publicid panel
       setVisible(editButton, true)
       setVisible(acceptButton, false)
       setVisible(cancelButton, false)
@@ -45,13 +45,14 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
     }
     return addOneIdAndRefresh(person, webid)
   }
-
+  /*
   function cancelButtonHandler (_event) {
     removeDecorated()
-    if (barOptions.permanent) {
+    if (acOptions.permanent) {
       displayAutocomplete()
     }
   }
+  */
   function removeDecorated () {
     if (decoratedAutocomplete) {
       creationArea.removeChild(decoratedAutocomplete)
@@ -92,8 +93,8 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
   function syncEditingStatus () {
     if (editing) {
       setVisible(editButton, false)
-      setVisible(acceptButton, false) // not till git it
-      setVisible(cancelButton, true)
+      setVisible(acceptButton, false) // not till got it
+      setVisible(cancelButton, false)
     } else {
       setVisible(editButton, true)
       setVisible(acceptButton, false)
@@ -119,10 +120,10 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
       const plus = creationArea.appendChild(widgets.button(dom, GREEN_PLUS, barOptions.idNoun, greenButtonHandler))
       widgets.makeDropTarget(plus, droppedURIHandler, undefined)
     }
-    if (barOptions.dbLookup && !acOptions.currentObject && !barOptions.permanent) {
+    if (barOptions.dbLookup && !acOptions.currentObject && !acOptions.permanent) {
       creationArea.appendChild(widgets.button(dom, SEARCH_ICON, barOptions.idNoun, searchButtonHandler))
     }
-    if (barOptions.permanent && barOptions.editable) {
+    if (acOptions.permanent && barOptions.editable) {
       editButton = widgets.button(dom, EDIT_ICON, 'Edit', _event => {
         editing = !editing
         syncEditingStatus()
@@ -130,7 +131,7 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
       creationArea.appendChild(editButton)
     }
   }
-  if (barOptions.permanent || acOptions.currentObject) {
+  if (acOptions.permanent || acOptions.currentObject) {
     displayAutocomplete()
   }
   syncEditingStatus()
