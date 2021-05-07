@@ -5,19 +5,16 @@
 */
 import * as debug from '../../../debug'
 import * as style from '../../../style'
-import { kb } from '../../../logic'
 import * as widgets from '../../../widgets'
-
+import { kb } from '../../../logic'
 import { NamedNode, Literal } from 'rdflib'
 import { queryPublicDataByName, AUTOCOMPLETE_LIMIT, QueryParameters } from './publicData'
-import { filterByLanguage, getPreferredLanguages } from '../../../language/languageLogic'
+import { filterByLanguage, getPreferredLanguages } from './language'
 
 const AUTOCOMPLETE_THRESHOLD = 4 // don't check until this many characters typed
 const AUTOCOMPLETE_ROWS = 20 // 20?
 const AUTOCOMPLETE_ROWS_STRETCH = 40
 const AUTOCOMPLETE_DEBOUNCE_MS = 300
-
-// const autocompleteRowStyle = 'border: 0.2em solid straw;' // @@ white
 
 /*
 Autocomplete happens in 6 phases:

@@ -7,9 +7,9 @@
 import { NamedNode, Literal, parse } from 'rdflib'
 import * as debug from '../../../debug'
 import * as ns from '../../../ns'
-import { store } from '../../../logic'
-import { getPreferredLanguages } from '../../../language/languageLogic'
-const kb = store
+import { kb } from '../../../logic'
+// import  * as logic from '../../../logic'
+import { getPreferredLanguages } from './language'
 
 export const AUTOCOMPLETE_LIMIT = 500 // How many to get from server
 // With 3000 we could exceed the wikidata timeout
@@ -288,6 +288,7 @@ export async function queryPublicDataByName (
       .replace('$(language)', language)
     return u1.replace('$(targetClass)', theClass.toNT())
   }
+
   if (!theClass) {
     throw new Error('queryPublicDataByName: No class provided')
   }
