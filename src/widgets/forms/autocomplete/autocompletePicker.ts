@@ -9,7 +9,7 @@ import * as widgets from '../../../widgets'
 import { kb } from '../../../logic'
 import { NamedNode, Literal } from 'rdflib'
 import { queryPublicDataByName, AUTOCOMPLETE_LIMIT, QueryParameters } from './publicData'
-import { filterByLanguage, getPreferredLanguages } from './language'
+import { filterByLanguage, getMyPreferredLanguages, defaultPreferedLangages } from './language'
 
 const AUTOCOMPLETE_THRESHOLD = 4 // don't check until this many characters typed
 const AUTOCOMPLETE_ROWS = 20 // 20?
@@ -211,7 +211,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
     debug.log(`Setting lock at "${searchInput.value}"`)
 
     inputEventHandlerLock = true
-    const languagePrefs = await getPreferredLanguages()
+    const languagePrefs = await getMyPreferredLanguages()
     const filter = searchInput.value.trim().toLowerCase()
     if (filter.length < AUTOCOMPLETE_THRESHOLD) { // too small
       clearList()
@@ -225,14 +225,13 @@ export async function renderAutoComplete (dom: HTMLDocument,
       }
       let bindings
       try {
-        bindings = await queryPublicDataByName(filter, targetClass as any, languagePrefs, acOptions.queryParams) // @@ any
-        // bindings = await queryDbpedia(sparql)
+        bindings = await queryPublicDataByName(filter, targetClass as any,
+          languagePrefs || defaultPreferedLangages, acOptions.queryParams)
       } catch (err) {
         complain('Error querying db of organizations: ' + err)
         inputEventHandlerLock = false
         return
       }
-      // candidatesLoaded = true
       const loadedEnough = bindings.length < AUTOCOMPLETE_LIMIT
       if (loadedEnough) {
         lastFilter = filter
@@ -253,9 +252,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
           return
         }
         const object = thingFromBinding(binding.subject)
-        // const uri = binding.subject.value
         const nameTerm = thingFromBinding(binding.name) as Literal// Captures language 👍
-        // const name = binding.name.value
         row.setAttribute('style', 'padding: 0.3em;')
         row.style.color = allDisplayed ? '#080' : '#088' // green means 'you should find it here'
         row.textContent = nameTerm.value

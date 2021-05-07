@@ -14,7 +14,7 @@ export const kb = store // Very commonly used synonym of store - Knowledge Base
 export const authn = solidLogicSingleton.authn
 export const chat = solidLogicSingleton.chat
 
-export const language = solidLogicSingleton.language
+// export const language = solidLogicSingleton.language // Does not work
 
 export const profile = solidLogicSingleton.profile
 

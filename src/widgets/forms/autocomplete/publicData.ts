@@ -9,7 +9,7 @@ import * as debug from '../../../debug'
 import * as ns from '../../../ns'
 import { kb } from '../../../logic'
 // import  * as logic from '../../../logic'
-import { getPreferredLanguages } from './language'
+import { getPreferredLanguages, defaultPreferedLangages } from './language'
 
 export const AUTOCOMPLETE_LIMIT = 500 // How many to get from server
 // With 3000 we could exceed the wikidata timeout
@@ -292,7 +292,7 @@ export async function queryPublicDataByName (
   if (!theClass) {
     throw new Error('queryPublicDataByName: No class provided')
   }
-  const languagePrefs = await getPreferredLanguages()
+  const languagePrefs = await getPreferredLanguages() || defaultPreferedLangages
   const language = languagePrefs[0] || 'en'
   if (queryTarget.searchByNameQuery) {
     const sparql = substituteStrings(queryTarget.searchByNameQuery)

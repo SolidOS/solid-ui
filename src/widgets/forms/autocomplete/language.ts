@@ -9,9 +9,8 @@ import * as debug from '../../../debug'
 import { authn } from '../../../authn/index'
 import * as ns from '../../../ns'
 import { Collection, NamedNode, Node } from 'rdflib'
-import { LiveStore, SolidNamespace, AuthnLogic } from '../index'
 // import { Binding } from '../widgets/forms/autocomplete/publicData'
-import { nativeNameForLanguageCode, englishNameForLanguageCode } from './nativeNameForLanguageCode'
+// import { nativeNameForLanguageCode, englishNameForLanguageCode } from './nativeNameForLanguageCode'
 import { kb } from '../../../logic'
 
 // const { currentUser } = logic.authn
@@ -95,12 +94,12 @@ export async function getPreferredLanagugesFor (kb, ns, person) {
   return null
 }
 */
-export async function getMyPreferredLanguages (kb, ns) {
+export async function getMyPreferredLanguages () {
   // In future:  cache in the login session for speed, but get from profile and private prefs
   // @@ TEESTING ONLY
-  const me = null // kb.sym('https://timbl.solidcommunity.net/') //await currentUser() as NamedNode @@
+  const me = await authn.currentUser() as NamedNode
   if (me) { // If logged in
-    return getPreferredLanagugesFor(kb, ns, me) || defaultPreferedLangages
+    return getPreferredLanagugesFor(me) || defaultPreferedLangages
   }
   return defaultPreferedLangages
 }
