@@ -209,6 +209,24 @@ export async function renderAutoComplete (dom: HTMLDocument,
   }
 
   async function refreshList () {
+    function rowForBinding (binding) {
+      const row = dom.createElement('tr')
+      style.setStyle(row, 'autocompleteRowStyle')
+      row.setAttribute('style', 'padding: 0.3em;')
+      row.style.color = allDisplayed ? '#080' : '#088' // green means 'you should find it here'
+      row.textContent = binding.name.value
+      const object = bindingToTerm(binding.subject)
+      const nameTerm = bindingToTerm(binding.name)
+      row.addEventListener('click', async _event => {
+        debug.log('       click row textContent: ' + row.textContent)
+        debug.log('       click name: ' + nameTerm.value)
+        if (object && nameTerm) {
+          gotIt(object, nameTerm as Literal)
+        }
+      })
+      return row
+    } // rowForBinding
+
     if (inputEventHandlerLock) {
       debug.log(`Ignoring "${searchInput.value}" because of lock `)
       return
@@ -235,29 +253,12 @@ export async function renderAutoComplete (dom: HTMLDocument,
       allDisplayed = loadedEnough && slimmed.length <= numberOfRows
       debug.log(` Filter:"${filter}" lastBindings: ${lastBindings.length}, slimmed to ${slimmed.length}; rows: ${numberOfRows}, Enough? ${loadedEnough}, All displayed? ${allDisplayed}`)
 
-      function rowForBinding (binding) {
-        const row = dom.createElement('tr')
-        style.setStyle(row, 'autocompleteRowStyle')
-        row.setAttribute('style', 'padding: 0.3em;')
-        row.style.color = allDisplayed ? '#080' : '#088' // green means 'you should find it here'
-        row.textContent = binding.name.value
-        const object = bindingToTerm(binding.subject)
-        const nameTerm = bindingToTerm(binding.name)
-        row.addEventListener('click', async _event => {
-          debug.log('       click row textContent: ' + row.textContent)
-          debug.log('       click name: ' + nameTerm.value)
-          if (object && nameTerm) {
-            gotIt(object, nameTerm)
-          }
-        })
-        return row
-      } // rowForSubject
       clearList()
       for (const binding of slimmed) {
         table.appendChild(rowForBinding(binding))
       }
       if (slimmed.length === 1) {
-        gotIt(bindingToTerm(slimmed[0].subject), bindingToTerm(slimmed[0].name))
+        gotIt(bindingToTerm(slimmed[0].subject), bindingToTerm(slimmed[0].name) as Literal)
       }
     } // else
     inputEventHandlerLock = false
