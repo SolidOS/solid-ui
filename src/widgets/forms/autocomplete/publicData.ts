@@ -11,7 +11,7 @@ import { kb } from '../../../logic'
 // import  * as logic from '../../../logic'
 import { getPreferredLanguages, defaultPreferedLangages } from './language'
 
-export const AUTOCOMPLETE_LIMIT = 500 // How many to get from server
+export const AUTOCOMPLETE_LIMIT = 200 // How many to get from server
 // With 3000 we could exceed the wikidata timeout
 
 const subjectRegexp = /\$\(subject\)/g
@@ -185,6 +185,21 @@ export const variableNameToPredicateMap = { // allow other mappings to be added 
   homepage: ns.foaf('homepage'),
   lat: ns.schema('latitude'),
   long: ns.schema('longitude')
+}
+
+export function bindingToTerm (item) {
+  const typ = item.type.toLowerCase()
+  if (typ === 'uri' || typ === 'iri') {
+    return kb.sym(item.value)
+  } else if (typ === 'literal') {
+    if (item['xml:lang']) {
+      return new Literal(item.value, item['xml:lang'])
+    } else {
+      return new Literal(item.value)
+    }
+  } else {
+    throw new Error(`bindingToTerm: Unexpected type "${item.type}" in sparql binding}`)
+  }
 }
 
 export function loadFromBindings (kb, solidSubject:NamedNode, bindings, doc, predMap = variableNameToPredicateMap) {

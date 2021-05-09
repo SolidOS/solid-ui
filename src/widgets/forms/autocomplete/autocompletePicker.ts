@@ -8,7 +8,7 @@ import * as style from '../../../style'
 import * as widgets from '../../../widgets'
 import { kb } from '../../../logic'
 import { NamedNode, Literal } from 'rdflib'
-import { queryPublicDataByName, AUTOCOMPLETE_LIMIT, QueryParameters } from './publicData'
+import { queryPublicDataByName, bindingToTerm, AUTOCOMPLETE_LIMIT, QueryParameters } from './publicData'
 import { filterByLanguage, getMyPreferredLanguages, defaultPreferedLangages } from './language'
 
 const AUTOCOMPLETE_THRESHOLD = 4 // don't check until this many characters typed
@@ -32,7 +32,8 @@ Autocomplete happens in 6 phases:
 export type AutocompleteDecoration = {
   acceptButton?: HTMLElement,
   cancelButton: HTMLElement, // Must have cancel button
-  editButton?: HTMLElement
+  editButton?: HTMLElement,
+  deleteButton?: HTMLElement
 }
 export type AutocompleteOptions = {
      targetClass?: NamedNode,
@@ -105,6 +106,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
       foundObject = object
       debug.log('Auto complete: name: ' + name)
       debug.log('Auto complete: waiting for accept ' + object)
+      clearList() // This may be an option - nice and clean but does not allow change of mind
       return
     }
     setVisible(decoration.cancelButton, true)
@@ -138,15 +140,8 @@ export async function renderAutoComplete (dom: HTMLDocument,
     }
     return true
   }
+
   /*
-  function cancelText (_event) {
-    searchInput.value = ''
-    if (decoration.acceptButton) {
-      (decoration.acceptButton as any).disabled = true // start again
-    }
-    // candidatesLoaded = false
-  }
-  */
   function thinOut (filter) {
     let hits = 0
     let pick = undefined as NamedNode | Literal | undefined
@@ -173,7 +168,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
       }
     }
   }
-
+*/
   function clearList () {
     while (table.children.length > 1) {
       table.removeChild(table.lastChild as Node)
@@ -188,19 +183,29 @@ export async function renderAutoComplete (dom: HTMLDocument,
     setTimeout(refreshList, AUTOCOMPLETE_DEBOUNCE_MS)
   }
 
-  function thingFromBinding (item) {
-    const typ = item.type.toLowerCase()
-    if (typ === 'uri' || typ === 'iri') {
-      return kb.sym(item.value)
-    } else if (typ === 'literal') {
-      if (item['xml:lang']) {
-        return new Literal(item.value, item['xml:lang'])
-      } else {
-        return new Literal(item.value)
-      }
-    } else {
-      throw new Error(`Unexpected type "${item.type}" in sparql binding}`)
+  async function loadBindingsAndFilterByLanguage (filter, languagePrefs) {
+    let bindings
+    try {
+      bindings = await queryPublicDataByName(filter, targetClass as any,
+        languagePrefs || defaultPreferedLangages, acOptions.queryParams)
+    } catch (err) {
+      complain('Error querying db of organizations: ' + err)
+      inputEventHandlerLock = false
+      return
     }
+    loadedEnough = bindings.length < AUTOCOMPLETE_LIMIT
+    if (loadedEnough) {
+      lastFilter = filter
+    } else {
+      lastFilter = undefined
+    }
+    clearList()
+    const slimmed = filterByLanguage(bindings, languagePrefs)
+    return slimmed
+  }
+
+  function filterByName (filter, bindings) {
+    return bindings.filter(binding => nameMatch(filter, binding.name.value))
   }
 
   async function refreshList () {
@@ -218,44 +223,26 @@ export async function renderAutoComplete (dom: HTMLDocument,
       // candidatesLoaded = false
       numberOfRows = AUTOCOMPLETE_ROWS
     } else {
-      if (allDisplayed && lastFilter && filter.startsWith(lastFilter)) {
-        thinOut(filter) // reversible?
-        inputEventHandlerLock = false
-        return
+      if (!allDisplayed || !lastFilter || !filter.startsWith(lastFilter)) {
+        debug.log(`   Querying database at "$(filter}" cf last "${lastFilter}".`)
+        lastBindings = await loadBindingsAndFilterByLanguage(filter, languagePrefs) // freesh query
       }
-      let bindings
-      try {
-        bindings = await queryPublicDataByName(filter, targetClass as any,
-          languagePrefs || defaultPreferedLangages, acOptions.queryParams)
-      } catch (err) {
-        complain('Error querying db of organizations: ' + err)
-        inputEventHandlerLock = false
-        return
-      }
-      const loadedEnough = bindings.length < AUTOCOMPLETE_LIMIT
-      if (loadedEnough) {
-        lastFilter = filter
-      } else {
-        lastFilter = undefined
-      }
-      clearList()
-      const slimmed = filterByLanguage(bindings, languagePrefs)
+      // Trim table as earach gets tighter:
+      const slimmed = filterByName(filter, lastBindings)
       if (loadedEnough && slimmed.length <= AUTOCOMPLETE_ROWS_STRETCH) {
         numberOfRows = slimmed.length // stretch if it means we get all items
       }
       allDisplayed = loadedEnough && slimmed.length <= numberOfRows
-      debug.log(` Filter:"${filter}" bindings: ${bindings.length}, slimmed to ${slimmed.length}; rows: ${numberOfRows}, Enough? ${loadedEnough}, All displayed? ${allDisplayed}`)
-      slimmed.slice(0, numberOfRows).forEach(binding => {
-        const row = table.appendChild(dom.createElement('tr'))
+      debug.log(` Filter:"${filter}" lastBindings: ${lastBindings.length}, slimmed to ${slimmed.length}; rows: ${numberOfRows}, Enough? ${loadedEnough}, All displayed? ${allDisplayed}`)
+
+      function rowForBinding (binding) {
+        const row = dom.createElement('tr')
         style.setStyle(row, 'autocompleteRowStyle')
-        if (!binding.subject || !binding.name) {
-          return
-        }
-        const object = thingFromBinding(binding.subject)
-        const nameTerm = thingFromBinding(binding.name) as Literal// Captures language 👍
         row.setAttribute('style', 'padding: 0.3em;')
         row.style.color = allDisplayed ? '#080' : '#088' // green means 'you should find it here'
-        row.textContent = nameTerm.value
+        row.textContent = binding.name.value
+        const object = bindingToTerm(binding.subject)
+        const nameTerm = bindingToTerm(binding.name)
         row.addEventListener('click', async _event => {
           debug.log('       click row textContent: ' + row.textContent)
           debug.log('       click name: ' + nameTerm.value)
@@ -263,10 +250,16 @@ export async function renderAutoComplete (dom: HTMLDocument,
             gotIt(object, nameTerm)
           }
         })
-        ;(row as any).solidSubject = object // For thinning function
-        ;(row as any).solidName = nameTerm
-      })
-    }
+        return row
+      } // rowForSubject
+      clearList()
+      for (const binding of slimmed) {
+        table.appendChild(rowForBinding(binding))
+      }
+      if (slimmed.length === 1) {
+        gotIt(bindingToTerm(slimmed[0].subject), bindingToTerm(slimmed[0].name))
+      }
+    } // else
     inputEventHandlerLock = false
   } // refreshList
 
@@ -281,8 +274,15 @@ export async function renderAutoComplete (dom: HTMLDocument,
       lastFilter = undefined
       foundObject = undefined
     }
+    if (decoration.deleteButton) {
+      setVisible(decoration.deleteButton, !!acOptions.currentObject)
+    }
+
     if (decoration.acceptButton) {
       setVisible(decoration.acceptButton, false) // hide until input complete
+    }
+    if (decoration.editButton) {
+      setVisible(decoration.editButton, true)
     }
     setVisible(decoration.cancelButton, false) // only allow cancel when there is something to cancel
     clearList()
@@ -298,6 +298,8 @@ export async function renderAutoComplete (dom: HTMLDocument,
   }
 
   // var candidatesLoaded = false
+  let lastBindings
+  let loadedEnough = false
   const runningTimeout = undefined as any
   let inputEventHandlerLock = false
   let allDisplayed = false

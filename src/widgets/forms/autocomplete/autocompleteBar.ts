@@ -20,6 +20,7 @@ const WEBID_NOUN = 'Solid ID'
 const GREEN_PLUS = icons.iconBase + 'noun_34653_green.svg'
 const SEARCH_ICON = icons.iconBase + 'noun_Search_875351.svg'
 const EDIT_ICON = icons.iconBase + 'noun_253504.svg'
+const DELETE_ICON = icons.iconBase + 'noun_2188_red.svg'
 
 export async function renderAutocompleteControl (dom:HTMLDocument,
   person:NamedNode,
@@ -88,6 +89,7 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
   const acceptButton = widgets.continueButton(dom)
   const cancelButton = widgets.cancelButton(dom) // @@ not in edit case only in temporary case cancelButtonHandler
   let editButton
+  let deleteButton
   let editing = true
 
   function syncEditingStatus () {
@@ -113,6 +115,9 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
   const creationArea = dom.createElement('div')
   creationArea.setAttribute('style', 'display: flex; flex-flow: wrap;')
 
+  if (acOptions.permanent || acOptions.currentObject) {
+    displayAutocomplete()
+  }
   if (barOptions.editable) {
     // creationArea.appendChild(await renderAutoComplete(dom, barOptions, autoCompleteDone)) wait for searchButton
     creationArea.style.width = '100%'
@@ -129,10 +134,10 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
         syncEditingStatus()
       })
       creationArea.appendChild(editButton)
+      if (acOptions.currentObject) {
+        deleteButton = widgets.button(dom, DELETE_ICON, 'Remove', _event => {}) // @@ add handler
+      }
     }
-  }
-  if (acOptions.permanent || acOptions.currentObject) {
-    displayAutocomplete()
   }
   syncEditingStatus()
   return creationArea

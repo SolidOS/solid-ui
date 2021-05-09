@@ -106,16 +106,18 @@ field[ns.ui('Form').uri] = field[ns.ui('Group').uri] =
               const t = mostSpecificClassURI(field) // Field type
               if (t === ui('Options').uri) {
                 const dep = kb.any(field, ui('dependingOn'))
-                const newOne = fn(
+                const optionsRender = fieldFunction(dom, field)
+                const newOne = optionsRender(
                   dom,
-                  box,
+                  null,
                   already,
                   subject,
                   field,
                   dataDoc,
                   callbackFunction
                 )
-                box.removeChild(newOne)
+                // box.removeChild(newOne) // don't have to put it on a container any more
+                debug.log('Refreshing Options field by replacing it.') // better to support actual refresh
                 box.insertBefore(newOne, eles[j])
                 box.removeChild(eles[j])
                 original[j] = kb.any(subject, dep).toNT()
