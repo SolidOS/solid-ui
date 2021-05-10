@@ -26,6 +26,9 @@ export * from './buttons'
 export * from './error'
 export * from './forms'
 
+export * from './forms/autocomplete/autocompleteBar'
+export * from './forms/autocomplete/autocompletePicker'
+
 /*
 import * as peoplePicker from './peoplePicker'
 import * as dragAndDrop from './dragAndDrop'
