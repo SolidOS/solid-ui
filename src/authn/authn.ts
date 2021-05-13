@@ -208,7 +208,7 @@ export async function logInLoadPreferences (context: AuthenticationContext): Pro
   } catch (err) {
     let m2: string
     if (err instanceof UnauthorizedError) {
-      m2 = 'Strange - you are not authenticated (properly logged in) to read preference file.'
+      m2 = 'Ooops - you are not authenticated (properly logged in) to for me to read your preference file.  Try loggin out and logging in?'
       alert(m2)
     } else if (err instanceof CrossOriginForbiddenError) {
       m2 = `Unauthorized: Assuming preference file blocked for origin ${window.location.origin}`
