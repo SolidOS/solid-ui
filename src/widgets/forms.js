@@ -9,6 +9,7 @@
 import * as buttons from './buttons'
 import { fieldParams } from './forms/fieldParams'
 import { field, mostSpecificClassURI, fieldFunction } from './forms/fieldFunction'
+import { setFieldStyle } from './forms/formStyle'
 import * as debug from '../debug'
 import { errorMessageBlock } from './error'
 import { basicField } from './forms/basic'
@@ -53,11 +54,39 @@ field[ns.ui('AutocompleteField').uri] = autocompleteField
  **
  ** @returns {Element} The HTML widget created
  */
+function refreshOpionsSubfieldinGroup (dom, already, subject, dataDoc, callbackFunction, groupDiv, subfields) {
+  const eles = groupDiv.children
+  for (let j = 0; j < subfields.length; j++) {
+    // This is really messy.
+    const field = subfields[j]
+    const t = mostSpecificClassURI(field) // Field type
+    if (t === ns.ui('Options').uri) {
+      // const dep = kb.any(field, ui('dependingOn'))
+      const optionsRender = fieldFunction(dom, field)
+      const newOne = optionsRender(
+        dom,
+        null,
+        already,
+        subject,
+        field,
+        dataDoc,
+        callbackFunction
+      )
+      // box.removeChild(newOne) // don't have to put it on a container any more
+      debug.log('Refreshing Options field by replacing it.') // better to support actual refresh
+      groupDiv.insertBefore(newOne, eles[j])
+      groupDiv.removeChild(eles[j + 1]) // Remove the old one
+      // original[j] = kb.any(subject, dep).toNT()
+      // eles[j] = newOne
+    }
+  }
+}
+
 field[ns.ui('Form').uri] = field[ns.ui('Group').uri] =
     function (dom, container, already, subject, form, dataDoc, callbackFunction) {
       const box = dom.createElement('div')
       box.setAttribute('style', `padding-left: 2em; border: 0.05em solid ${style.formBorderColor};`) // Indent a group
-      const ui = ns.ui // 20210411
+      const ui = ns.ui
       if (container) container.appendChild(box)
 
       // Prevent loops
@@ -75,59 +104,30 @@ field[ns.ui('Form').uri] = field[ns.ui('Group').uri] =
       already2[key] = 1
       const formDoc = form.doc ? form.doc() : null // @@ if blank no way to know
       let parts = kb.any(form, ui('parts'), null, formDoc)
-      let p2
+      let subfields
       if (parts) {
-        p2 = parts.elements
+        subfields = parts.elements
       } else {
         parts = kb.each(form, ui('part'), null, formDoc) //  Warning: unordered
-        p2 = sortBySequence(parts)
+        subfields = sortBySequence(parts)
       }
       if (!parts) {
         box.appendChild(errorMessageBlock(dom, 'No parts to form! '))
         return dom
       }
-      const eles = []
-      const original = []
-      for (let i = 0; i < p2.length; i++) {
-        const field = p2[i]
-        const t = mostSpecificClassURI(field) // Field type
-        if (t === ui('Options').uri) {
-          const dep = kb.any(field, ui('dependingOn'), null, formDoc)
-          if (dep && kb.any(subject, dep)) original[i] = kb.any(subject, dep).toNT()
-        }
 
-        const fn = fieldFunction(dom, field)
+      for (let i = 0; i < subfields.length; i++) {
+        const field = subfields[i]
+        // const t = mostSpecificClassURI(field) // Field type
+        const subFieldFunction = fieldFunction(dom, field) //
 
         const itemChanged = function (ok, body) {
-          if (ok) {
-            for (let j = 0; j < p2.length; j++) {
-              // This is really messy.
-              const field = p2[j]
-              const t = mostSpecificClassURI(field) // Field type
-              if (t === ui('Options').uri) {
-                const dep = kb.any(field, ui('dependingOn'))
-                const optionsRender = fieldFunction(dom, field)
-                const newOne = optionsRender(
-                  dom,
-                  null,
-                  already,
-                  subject,
-                  field,
-                  dataDoc,
-                  callbackFunction
-                )
-                // box.removeChild(newOne) // don't have to put it on a container any more
-                debug.log('Refreshing Options field by replacing it.') // better to support actual refresh
-                box.insertBefore(newOne, eles[j])
-                box.removeChild(eles[j])
-                original[j] = kb.any(subject, dep).toNT()
-                eles[j] = newOne
-              }
-            }
+          if (ok && body && body.widget && body.widget === 'select') {
+            refreshOpionsSubfieldinGroup(dom, already, subject, dataDoc, callbackFunction, box, subfields)
           }
-          callbackFunction(ok, body)
+          callbackFunction(ok, { widget: 'group', change: body })
         }
-        eles.push(fn(dom, box, already2, subject, field, dataDoc, itemChanged))
+        box.appendChild(subFieldFunction(dom, null, already2, subject, field, dataDoc, itemChanged))
       }
       return box
     }
@@ -356,14 +356,11 @@ field[ns.ui('Multiple').uri] = function (
       }
       callbackFunction(ok, message)
     }
-    const linkDone = function (uri, ok, message) {
-      return callbackFunction(ok, message)
-    }
 
     log.debug('Multiple: render object: ' + object)
 
     const fn = fieldFunction(dom, element)
-    const subField = fn(dom, null, already, object, element, dataDoc, itemDone) // p2 was: body.  moving to not passing that
+    const subField = fn(dom, null, already, object, element, dataDoc, itemDone) // subfields was: body.  moving to not passing that
     subField.subject = object // Keep a back pointer between the DOM array and the RDF objects
 
     // delete button and move buttons
@@ -415,7 +412,7 @@ field[ns.ui('Multiple').uri] = function (
   // var max = kb.any(form, ui('max')) // This is the minimum number
   // max = max ? max.value : 99999999
 
-  var element = kb.any(form, ui('part')) // This is the form to use for each one
+  const element = kb.any(form, ui('part')) // This is the form to use for each one
   if (!element) {
     box.appendChild(
       errorMessageBlock(dom, 'No part to multiple: ' + form)
@@ -423,7 +420,7 @@ field[ns.ui('Multiple').uri] = function (
     return box
   }
 
-  var body = box.appendChild(dom.createElement('tr')) // 20191207
+  const body = box.appendChild(dom.createElement('tr')) // 20191207
   let list // The RDF collection which keeps the ordered version or null
   let values // Initial values - always an array.  Even when no list yet.
   values = reverse ? kb.any(null, property, subject, dataDoc) : kb.any(subject, property, null, dataDoc)
@@ -758,8 +755,8 @@ field[ns.ui('Choice').uri] = function (
   const follow = kb.anyJS(form, ui('follow'), null, formDoc) // data doc moves to new subject?
   let possible = []
   let possibleProperties
-  const np = '--' + utils.label(property) + '-?'
-  const opts = { multiple: multiple, nullLabel: np, disambiguate: false }
+  const nullLabel = '--' + utils.label(property) + '-?'
+  const opts = { form, multiple, nullLabel, disambiguate: false }
   possible = kb.each(undefined, ns.rdf('type'), from, formDoc)
   for (const x in kb.findMembersNT(from)) {
     possible.push(kb.fromNT(x))
@@ -837,18 +834,16 @@ field[ns.ui('Comment').uri] = field[
   const formDoc = form.doc ? form.doc() : null // @@ if blank no way to know
 
   const uri = mostSpecificClassURI(form)
-  let params = fieldParams[uri]
-  if (params === undefined) {
-    params = {}
-  } // non-bottom field types can do this
+  const params = fieldParams[uri] || {}
 
   const box = dom.createElement('div')
   if (container) container.appendChild(box)
   const p = box.appendChild(dom.createElement(params.element))
   p.textContent = contents
 
-  const style = kb.anyValue(form, ui('style')) || params.style || ''
-  if (style) p.setAttribute('style', style)
+  // const style = kb.anyValue(form, ui('style'), null, form.doc()) || params.style || ''
+  // if (style) p.setAttribute('style', style) // @@ Hey later allow JCSS and RCSS
+  setFieldStyle(p, form)
 
   // Some headings and prompts are only useful to guide user input
   const suppressIfUneditable = kb.anyJS(form, ns.ui('suppressIfUneditable'), null, formDoc)
@@ -1004,24 +999,24 @@ export function formsFor (subject) {
 }
 
 export function sortBySequence (list) {
-  const p2 = list.map(function (p) {
+  const subfields = list.map(function (p) {
     const k = kb.any(p, ns.ui('sequence'))
     return [k || 9999, p]
   })
-  p2.sort(function (a, b) {
+  subfields.sort(function (a, b) {
     return a[0] - b[0]
   })
-  return p2.map(function (pair) {
+  return subfields.map(function (pair) {
     return pair[1]
   })
 }
 
 export function sortByLabel (list) {
-  const p2 = list.map(function (p) {
+  const subfields = list.map(function (p) {
     return [utils.label(p).toLowerCase(), p]
   })
-  p2.sort()
-  return p2.map(function (pair) {
+  subfields.sort()
+  return subfields.map(function (pair) {
     return pair[1]
   })
 }
@@ -1335,7 +1330,7 @@ export function makeSelectForOptions (
             dataDoc,
             function (ok, body) {
               if (!ok) {
-                callbackFunction(ok, body) // @@ if ok, need some form of refresh of the select for the new thing
+                callbackFunction(ok, body, { change: 'new' }) // @@ if ok, need some form of refresh of the select for the new thing
               }
             }
           )
@@ -1371,8 +1366,8 @@ export function makeSelectForOptions (
       removeValue(kb.sym(sel.currentURI))
       sel = sel.superSelect
     }
-    function doneNew (ok, body) {
-      callbackFunction(ok, body)
+    function doneNew (ok, _body) {
+      callbackFunction(ok, { widget: 'select', event: 'new' })
     }
     log.info('selectForOptions: data doc = ' + dataDoc)
     kb.updater.update(ds, is, function (uri, ok, body) {
@@ -1392,8 +1387,10 @@ export function makeSelectForOptions (
             doneNew
           )
         }
+      } else {
+        return select.parentNode.appendChild(errorMessageBlock(dom, 'Error updating data in select: ' + body))
       }
-      if (callbackFunction) callbackFunction(ok, body)
+      if (callbackFunction) callbackFunction(ok, { widget: 'select', event: 'change' })
     })
   }
 
@@ -1528,24 +1525,7 @@ export function makeSelectForNestedCategory (
   dataDoc,
   callbackFunction
 ) {
-  const container = dom.createElement('span') // Container
-  let child = null
-  let select
-  const onChange = function (ok, body) {
-    if (ok) update()
-    callbackFunction(ok, body)
-  }
-  // eslint-disable-next-line prefer-const
-  select = makeSelectForCategory(
-    dom,
-    kb,
-    subject,
-    category,
-    dataDoc,
-    onChange
-  )
-  container.appendChild(select)
-  var update = function () {
+  function update () {
     // log.info("Selected is now: "+select.currentURI)
     if (child) {
       container.removeChild(child)
@@ -1568,6 +1548,24 @@ export function makeSelectForNestedCategory (
       container.appendChild(child)
     }
   }
+
+  const container = dom.createElement('span') // Container
+  let child = null
+
+  function onChange (ok, body) {
+    if (ok) update()
+    callbackFunction(ok, body)
+  }
+  // eslint-disable-next-line prefer-const
+  const select = makeSelectForCategory(
+    dom,
+    kb,
+    subject,
+    category,
+    dataDoc,
+    onChange
+  )
+  container.appendChild(select)
   update()
   return container
 }

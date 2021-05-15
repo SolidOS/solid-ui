@@ -46,7 +46,6 @@ export function autocompleteField (
     if (!name) {
       throw new Error('autocompleteField:  No name set.')
     }
-
     const oldValue = kb.the(subject, property as any, null, doc)
     if (oldValue) {
       const oldName = kb.any(oldValue as any, labelProperty as any, null, doc)
@@ -71,6 +70,30 @@ export function autocompleteField (
       return
     }
     callbackFunction(true, '')
+  }
+
+  async function deleteOne (result:NamedNode | Literal, name: Literal) {
+    const oldValue = kb.the(subject, property as any, null, doc)
+    if (!oldValue) {
+      callbackFunction(false, 'NO data to elete')
+      box.appendChild(widgets.errorMessageBlock(dom, 'Autocomplet delete: no old data!'))
+      return
+    }
+    // const oldName = kb.any(oldValue as any, labelProperty as any, null, doc)
+    const deletables = kb.statementsMatching(subject, property as any, oldValue, doc)
+      .concat(kb.statementsMatching(oldValue as any, labelProperty as any, null, doc))
+    console.log('autocompleteField Deletables ' + deletables.map(st => st.toNT()))
+    const insertables = []
+    console.log(`AC form delete: ${deletables.length} to delete and ${insertables.length} to insert`)
+    try {
+      await kb.updater.updateMany(deletables, insertables)
+    } catch (err) {
+      const e2 = new Error('Autocomplete form data delete error:' + err)
+      callbackFunction(false, err)
+      box.appendChild(widgets.errorMessageBlock(dom, e2))
+      return
+    }
+    callbackFunction(true, '') // changed
   }
 
   if (!(subject instanceof NamedNode)) {
@@ -187,29 +210,12 @@ export function autocompleteField (
     // permanent: true,
     dbLookup: true
   }
-  renderAutocompleteControl(dom, subject as NamedNode, barOptions, autocompleteOptions, addOneIdAndRefresh).then((control) => {
-    // log('Async load of autocomplete field control finished:' + control)
+  renderAutocompleteControl(dom, subject as NamedNode, barOptions, autocompleteOptions, addOneIdAndRefresh, deleteOne).then((control) => {
     rhs.appendChild(control)
   }, (err) => {
     rhs.appendChild(widgets.errorMessageBlock(dom, `Error rendering autocomplete${form}: ${err}`))
   })
 
-  /*
-  const field = dom.createElement('input')
-  ;(field as any).style = style.textInputStyle // Do we have to override length etc?
-  rhs.appendChild(field)
-  field.setAttribute('type', params.type ? params.type : 'text')
-
-  const size = kb.any(form, ns.ui('size')) // Form has precedence
-  field.setAttribute(
-    'size',
-    size ? '' + size : params.size ? '' + params.size : '20'
-  )
-  const maxLength = kb.any(form, ns.ui('maxLength'))
-  field.setAttribute('maxLength', maxLength ? '' + maxLength : '4096')
-
-  doc = doc || widgets.fieldStore(subject, property as any, doc)
-*/
   return box
 }
 

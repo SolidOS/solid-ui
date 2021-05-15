@@ -445,11 +445,16 @@ export function deleteButtonWithCheck (
   noun: string,
   deleteFunction: () => any
 ) {
+  function setStyle () {
+    container.style.border = ''
+    container.style.margin = '0.3em'
+    container.style.borderRadius = '0'
+    container.style.padding = '0.3em white'
+    container.style.boxShadow = ''
+  }
   const minusIconURI = iconBase + 'noun_2188_red.svg' // white minus in red #cc0000 circle
-
-  // var delButton = dom.createElement('button')
-
   const img = dom.createElement('img')
+  let sureButtonElt, cancelButtonElt
   img.setAttribute('src', minusIconURI) //  plus sign
   img.setAttribute('style', 'margin: 0.2em; width: 1em; height:1em')
   img.title = 'Remove this ' + noun
@@ -457,13 +462,19 @@ export function deleteButtonWithCheck (
 
   container.appendChild(deleteButtonElt)
   container.setAttribute('class', 'hoverControl') // See tabbedtab.css (sigh global CSS)
+  setStyle()
+
   deleteButtonElt.setAttribute('class', 'hoverControlHide')
-  // delButton.setAttribute('style', 'color: red; margin-right: 0.3em; foat:right; text-align:right')
+
   deleteButtonElt.addEventListener(
     'click',
     function (_event) {
+      container.style.borderRadius = '0.5em'
+      container.style.border = 'orange 0.05em;'
+      container.style.boxShadow = '0.2em 0.5em #888888'
+
       container.removeChild(deleteButtonElt) // Ask -- are you sure?
-      const cancelButtonElt = dom.createElement('button')
+      cancelButtonElt = dom.createElement('button')
       // cancelButton.textContent = 'cancel'
       cancelButtonElt.setAttribute('style', style.buttonStyle)
       const img = cancelButtonElt.appendChild(dom.createElement('img'))
@@ -475,11 +486,12 @@ export function deleteButtonWithCheck (
         function (_event) {
           container.removeChild(sureButtonElt)
           container.removeChild(cancelButtonElt)
+          setStyle()
           container.appendChild(deleteButtonElt)
         },
         false
       )
-      const sureButtonElt = dom.createElement('button')
+      sureButtonElt = dom.createElement('button')
       sureButtonElt.textContent = 'Delete ' + noun
       sureButtonElt.setAttribute('style', style.buttonStyle)
       container.appendChild(sureButtonElt).addEventListener(
@@ -487,6 +499,7 @@ export function deleteButtonWithCheck (
         function (_event) {
           container.removeChild(sureButtonElt)
           container.removeChild(cancelButtonElt)
+          setStyle()
           deleteFunction()
         },
         false

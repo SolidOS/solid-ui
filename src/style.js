@@ -4,6 +4,8 @@
 
 // These must all end with semicolon so they can be appended to.
 
+const formBorderColor = '#888888' // Mid-grey
+
 export const style = { // styleModule
   textInputStyle:
     'background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; ',
@@ -35,10 +37,11 @@ export const style = { // styleModule
   heading3Style: 'font-size: 120%; font-weight: bold; color: #888888; padding: 0.3em; margin: 0.2em 0.7em;', // For example, in large forms or before a small form
   heading4Style: 'font-size: 110%; font-weight: bold; color: #888888; padding: 0.2em; margin: 0.2em 0.7em;', // Lowest level used by default in small things
 
-  formBorderColor: '#888888', // originally was brown; now grey
+  formBorderColor: formBorderColor, // originally was brown; now grey
   formHeadingColor: '#888888', // originally was brown; now grey
   formHeadingStyle: 'font-size: 110%; font-weight: bold; color: #888888; padding: 0.2em;  margin: 0.2em 0.7em;', // originally was brown; now grey
   formTextInput: 'font-size: 100%; margin: 0.1em; padding: 0.1em;', // originally used this
+  formGroupStyle: `padding-left: 2em; border: 0.05em solid ${formBorderColor};`,
 
   textInputBackgroundColor: '#eef',
   textInputBackgroundColorUneditable: '#fff',

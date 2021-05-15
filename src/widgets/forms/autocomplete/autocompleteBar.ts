@@ -1,39 +1,40 @@
-// The Control with decorations
+/* The Autocomplete Control with decorations
 
-// import { ns, widgets, store } from 'solid-ui'
+This control has the buttons which control the state between editing, viewing, searching, accepting
+and so on.  See the state diagram in the documentation.  The AUtocomplete Picker does the main work.
 
-// import { ns, widgets, store, icons } from '../../../index'
-/* eslint-disable no-console */
+*/
 
 import * as ns from '../../../ns'
 import { icons } from '../../../iconBase'
 import { store } from '../../../logic'
 import * as widgets from '../../../widgets'
+import * as utils from '../../../utils'
 
 import { renderAutoComplete, AutocompleteDecoration, setVisible } from './autocompletePicker' // dbpediaParameters
 
 import { NamedNode } from 'rdflib'
-// import { wikidataParameters } from './publicData'
 
 const WEBID_NOUN = 'Solid ID'
 
 const GREEN_PLUS = icons.iconBase + 'noun_34653_green.svg'
 const SEARCH_ICON = icons.iconBase + 'noun_Search_875351.svg'
 const EDIT_ICON = icons.iconBase + 'noun_253504.svg'
-const DELETE_ICON = icons.iconBase + 'noun_2188_red.svg'
+// const DELETE_ICON = icons.iconBase + 'noun_2188_red.svg'
 
 export async function renderAutocompleteControl (dom:HTMLDocument,
   person:NamedNode,
   barOptions,
   acOptions,
-  addOneIdAndRefresh): Promise<HTMLElement> {
+  addOneIdAndRefresh,
+  deleteOne): Promise<HTMLElement> {
   async function autoCompleteDone (object, name) {
     if (acOptions.permanent) { // remember to set this in publicid panel
       setVisible(editButton, true)
       setVisible(acceptButton, false)
       setVisible(cancelButton, false)
     } else {
-      console.log('temporary - removed decoratiion')
+      // console.log('temporary - removed decoratiion')
       removeDecorated()
     }
     return addOneIdAndRefresh(object, name)
@@ -46,14 +47,7 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
     }
     return addOneIdAndRefresh(person, webid)
   }
-  /*
-  function cancelButtonHandler (_event) {
-    removeDecorated()
-    if (acOptions.permanent) {
-      displayAutocomplete()
-    }
-  }
-  */
+
   function removeDecorated () {
     if (decoratedAutocomplete) {
       creationArea.removeChild(decoratedAutocomplete)
@@ -67,6 +61,8 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
     decoratedAutocomplete.appendChild(await renderAutoComplete(dom, acOptions, decoration, autoCompleteDone))
     decoratedAutocomplete.appendChild(acceptButton)
     decoratedAutocomplete.appendChild(cancelButton)
+    decoratedAutocomplete.appendChild(editButton)
+    decoratedAutocomplete.appendChild(deleteButtonContainer)
     creationArea.appendChild(decoratedAutocomplete)
   }
 
@@ -88,8 +84,16 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
   // const queryParams = barOptions.queryParameters || wikidataParameters
   const acceptButton = widgets.continueButton(dom)
   const cancelButton = widgets.cancelButton(dom) // @@ not in edit case only in temporary case cancelButtonHandler
-  let editButton
-  let deleteButton
+  // const deleteButton = widgets.button(dom, DELETE_ICON, 'Remove', _event => {}) // @@ add handler
+
+  const deleteButtonContainer = dom.createElement('div')
+  const noun = acOptions.targetClass ? utils.label(acOptions.targetClass) : 'item'
+  const deleteButton = widgets.deleteButtonWithCheck(dom, deleteButtonContainer, noun, deleteOne) // need to knock out this UI or caller does that
+
+  const editButton = widgets.button(dom, EDIT_ICON, 'Edit', _event => {
+    editing = !editing
+    syncEditingStatus()
+  })
   let editing = true
 
   function syncEditingStatus () {
@@ -105,7 +109,7 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
   }
 
   const decoration:AutocompleteDecoration = {
-    acceptButton, cancelButton, editButton
+    acceptButton, cancelButton, editButton, deleteButton
   }
 
   let decoratedAutocomplete = undefined as HTMLElement | undefined
@@ -127,16 +131,6 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
     }
     if (barOptions.dbLookup && !acOptions.currentObject && !acOptions.permanent) {
       creationArea.appendChild(widgets.button(dom, SEARCH_ICON, barOptions.idNoun, searchButtonHandler))
-    }
-    if (acOptions.permanent && barOptions.editable) {
-      editButton = widgets.button(dom, EDIT_ICON, 'Edit', _event => {
-        editing = !editing
-        syncEditingStatus()
-      })
-      creationArea.appendChild(editButton)
-      if (acOptions.currentObject) {
-        deleteButton = widgets.button(dom, DELETE_ICON, 'Remove', _event => {}) // @@ add handler
-      }
     }
   }
   syncEditingStatus()

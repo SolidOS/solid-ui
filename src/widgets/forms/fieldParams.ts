@@ -1,5 +1,5 @@
 import * as ns from '../../ns'
-import { commentStyle, formHeadingStyle } from '../../style'
+import { commentStyle, formHeadingStyle, formGroupStyle } from '../../style'
 
 export type FieldParamsObject = {
   size?: number, // input element size attribute
@@ -94,6 +94,10 @@ export const fieldParams: { [ fieldUri: string ]: FieldParamsObject } = {
     size: 30,
     uriPrefix: 'mailto:',
     pattern: /^\s*.*@.*\..*\s*$/ // @@ Get the right regexp here
+  },
+
+  [ns.ui('Group').uri]: {
+    style: formGroupStyle
   },
 
   /**

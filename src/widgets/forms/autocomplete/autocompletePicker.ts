@@ -1,6 +1,6 @@
 /* Create and edit data using public data
 **
-** organization conveys many distinct types of thing.
+** As the data source is passed as a parameter, all kinds of APIa and query services can be used
 **
 */
 import * as debug from '../../../debug'
@@ -9,7 +9,7 @@ import * as widgets from '../../../widgets'
 import { kb } from '../../../logic'
 import { NamedNode, Literal } from 'rdflib'
 import { queryPublicDataByName, bindingToTerm, AUTOCOMPLETE_LIMIT, QueryParameters } from './publicData'
-import { filterByLanguage, getMyPreferredLanguages, defaultPreferedLangages } from './language'
+import { filterByLanguage, getPreferredLanguages, defaultPreferedLangages } from './language'
 
 const AUTOCOMPLETE_THRESHOLD = 4 // don't check until this many characters typed
 const AUTOCOMPLETE_ROWS = 20 // 20?
@@ -45,8 +45,9 @@ export type AutocompleteOptions = {
 }
 
 interface Callback1 {
-  (_subject: NamedNode, _name: Literal): void;
+  (_subject: NamedNode, _name: Literal): any;
 }
+
 /*
 function assertString (x):string {
   if (typeof x !== 'string') {
@@ -234,7 +235,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
     debug.log(`Setting lock at "${searchInput.value}"`)
 
     inputEventHandlerLock = true
-    const languagePrefs = await getMyPreferredLanguages()
+    const languagePrefs = await getPreferredLanguages()
     const filter = searchInput.value.trim().toLowerCase()
     if (filter.length < AUTOCOMPLETE_THRESHOLD) { // too small
       clearList()
@@ -286,8 +287,10 @@ export async function renderAutoComplete (dom: HTMLDocument,
       setVisible(decoration.editButton, true)
     }
     setVisible(decoration.cancelButton, false) // only allow cancel when there is something to cancel
+    inputEventHandlerLock = false
     clearList()
-  }
+  } // initialiize
+
   // const queryParams: QueryParameters = acOptions.queryParams
   const targetClass = acOptions.targetClass
   if (!targetClass) throw new Error('need  class')

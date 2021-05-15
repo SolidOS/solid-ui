@@ -54,54 +54,26 @@ export async function getPreferredLanagugesFor (person: NamedNode) {
   }
   return null
 }
-
+/* Get the preferred langauges for the user
+ *
+ *  Either from solid preferences or browser preferences or default
+ */
 export async function getPreferredLanguages () {
   // In future:  cache in the login session for speed, but get from profile and private prefs
   const me = await authn.currentUser() as NamedNode
   if (me) { // If logged in
-    return getPreferredLanagugesFor(me) || defaultPreferedLangages
+    const solidLanguagePrefs = await getPreferredLanagugesFor(me)
+    if (solidLanguagePrefs) return solidLanguagePrefs
+  }
+  if (typeof navigator !== 'undefined') { // use browser settings
+    if (navigator.languages) {
+      return navigator.languages.map(longForm => longForm.split('-')[0])
+    }
+    if (navigator.language) {
+      return [navigator.language.split('-')[0]]
+    }
   }
   return defaultPreferedLangages // @@ or null?
-}
-
-/*
-export async function getPreferredLanagugesFor (kb, ns, person) {
-  await kb.fetcher.load(person.doc())
-  const list = kb.any(person, ns.schema('knowsLanguage'), null, person.doc()) as Collection | undefined
-  if (!list) {
-    console.log(`User ${person} has not set their languages in their profile.`)
-    return null // differnet from []
-  }
-  const languageCodeArray: string[] = []
-  list.elements.forEach(item => {
-    const lang = kb.any(item as any, ns.solid('publicId'), null, (item as NamedNode).doc())
-    if (!lang) {
-      console.warn('getPreferredLanguages: No publiID of language.')
-      return
-    }
-    if (!lang.value.startsWith(languageCodeURIBase)) {
-      console.error(`What should be a language code ${lang.value} does not start with ${languageCodeURIBase}`)
-      return
-    }
-    const code = lang.value.slice(languageCodeURIBase.length)
-    languageCodeArray.push(code)
-  })
-
-  if (languageCodeArray.length > 0) {
-    console.log(`     User knows languages with codes: "${languageCodeArray.join(',')}"`)
-    return languageCodeArray
-  }
-  return null
-}
-*/
-export async function getMyPreferredLanguages () {
-  // In future:  cache in the login session for speed, but get from profile and private prefs
-  // @@ TEESTING ONLY
-  const me = await authn.currentUser() as NamedNode
-  if (me) { // If logged in
-    return getPreferredLanagugesFor(me) || defaultPreferedLangages
-  }
-  return defaultPreferedLangages
 }
 
 /* From an array of bindings with a names for each row,
@@ -117,7 +89,7 @@ export function filterByLanguage (bindings, languagePrefs) {
     uris[uri].push(binding)
   })
 
-  const languagePrefs2 = languagePrefs
+  const languagePrefs2 = languagePrefs || defaultPreferedLangages
   languagePrefs2.reverse() // prefered last
 
   const slimmed = ([] as Array<Binding>)
