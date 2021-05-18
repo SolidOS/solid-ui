@@ -5,8 +5,8 @@
  * @packageDocumentation
  */
 
-import ns from '../ns'
-import utils from '../utils.js'
+import * as ns from '../ns'
+import * as utils from '../utils.js'
 import { getACLorDefault, getProspectiveHolder } from './acl'
 import { IndexedFormula, NamedNode } from 'rdflib'
 import { DataBrowserContext } from 'pane-registry'

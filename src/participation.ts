@@ -1,6 +1,9 @@
+/* Manage a UI for the particpation of a person in any thing
+*/
+
 import { currentUser } from './authn/authn'
 import { NamedNode, st } from 'rdflib'
-import ns from './ns'
+import * as ns from './ns'
 import { personTR, newThing, errorMessageBlock } from './widgets'
 import { syncTableToArray } from './utils'
 import { lightColorHash } from './pad'

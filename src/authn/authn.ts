@@ -22,10 +22,10 @@
 import { graph, namedNode, NamedNode, Namespace, serialize, st, Statement, sym, BlankNode } from 'rdflib'
 import solidAuthClient from 'solid-auth-client'
 import { PaneDefinition } from 'pane-registry'
-import Signup from './signup'
-import widgets from '../widgets'
-import ns from '../ns.js'
-import utils from '../utils.js'
+import { Signup } from './signup'
+import * as widgets from '../widgets'
+import * as ns from '../ns.js'
+import * as utils from '../utils.js'
 import { alert } from '../log'
 import { AppDetails, AuthenticationContext } from './types'
 import * as debug from '../debug'
@@ -208,7 +208,7 @@ export async function logInLoadPreferences (context: AuthenticationContext): Pro
   } catch (err) {
     let m2: string
     if (err instanceof UnauthorizedError) {
-      m2 = 'Strange - you are not authenticated (properly logged in) to read preference file.'
+      m2 = 'Ooops - you are not authenticated (properly logged in) to for me to read your preference file.  Try loggin out and logging in?'
       alert(m2)
     } else if (err instanceof CrossOriginForbiddenError) {
       m2 = `Unauthorized: Assuming preference file blocked for origin ${window.location.origin}`
@@ -439,7 +439,7 @@ export async function findAppInstances (
   for (let i = 0; i < containers.length; i++) {
     const cont = containers[i]
     context.instances = context.instances.concat(
-      solidLogicSingleton.getContainerElements(cont as NamedNode) as NamedNode[]
+      (await solidLogicSingleton.getContainerMembers(cont.value)).map(uri => solidLogicSingleton.store.sym(uri)) // @@ warning: uses strings not NN
     )
   }
   return context
@@ -1027,10 +1027,10 @@ export function loginStatusBox (
   box.refresh = function () {
     solidAuthClient.currentSession().then(
       session => {
-        if (session && session.webId) {
+        if (session && session.webId) { // offline
           me = sym(session.webId)
         } else {
-          me = null
+          me = offlineTestID() // null unless testing
         }
         if ((me && box.me !== me.uri) || (!me && box.me)) {
           widgets.clearElement(box)

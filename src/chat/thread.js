@@ -3,26 +3,23 @@
  * @packageDocumentation
  */
 
-const UI = {
-  authn: require('../authn/authn'),
-  icons: require('../iconBase'),
-  ns: require('../ns'),
-  pad: require('../'),
-  rdf: require('rdflib'),
-  store: require('../logic').solidLogicSingleton.store,
-  style: require('../style'),
-  widgets: require('../widgets')
-}
+import { authn } from '../authn/index'
+import { icons } from '../iconBase'
+import { store } from '../logic'
+import { media } from '../media/index'
+import * as ns from '../ns'
+import * as pad from '../pad'
+import * as $rdf from 'rdflib' // pull in first avoid cross-refs
+import * as style from '../style'
+import * as utils from '../utils'
+import * as widgets from '../widgets'
 
-const utils = require('../utils')
-const $rdf = require('rdflib')
-
-// var buttonStyle = 'font-size: 100%; margin: 0.8em; padding:0.5em; background-color: white;'
+const UI = { authn, icons, ns, media, pad, store, style, utils, widgets }
 
 /**
  * HTML component for a chat thread
  */
-module.exports = function thread (dom, kb, subject, messageStore, options) {
+export function thread (dom, kb, subject, messageStore, options) {
   kb = kb || UI.store
   messageStore = messageStore.doc() // No hash
   const ns = UI.ns

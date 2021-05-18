@@ -1,8 +1,9 @@
 import { silenceDebugMessages } from '../../../helpers/setup'
 import { namedNode, graph } from 'rdflib'
-import ns from '../../../../src/ns'
-import { solidLogicSingleton } from '../../../../src/logic'
+import * as ns from '../../../../src/ns'
+import { solidLogicSingleton, store, kb } from '../../../../src/logic'
 
+// console.log('@@ solidLogicSingleton', solidLogicSingleton)
 // @ts-ignore
 import {
   appendForm,
@@ -24,6 +25,8 @@ import {
 } from '../../../../src/widgets/forms'
 
 import { basicField } from '../../../../src/widgets/forms/basic'
+
+const doc = kb.sym('http://example.com/doc.ttl')
 
 jest.mock('solid-auth-client', () => ({
   currentSession: () => Promise.resolve(),
@@ -266,7 +269,7 @@ describe('Classifier', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    solidLogicSingleton.store.add(form, ns.ui('category'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
+    kb.add(form, ns.ui('category'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
 
     const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
@@ -318,7 +321,7 @@ describe('Heading', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    solidLogicSingleton.store.add(form, ns.ui('contents'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
+    kb.add(form, ns.ui('contents'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
     const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       field[ns.ui('Heading').uri](
@@ -345,7 +348,7 @@ describe('Comment', () => {
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
     const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
-    solidLogicSingleton.store.add(form, ns.ui('contents'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
+    kb.add(form, ns.ui('contents'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
     expect(
       field[ns.ui('Comment').uri](
         document,
@@ -397,7 +400,7 @@ describe('propertiesForClass', () => {
     expect(propertiesForClass).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    expect(propertiesForClass(graph(), namedNode('http://example.com/#class'))).toBeInstanceOf(Object)
+    expect(propertiesForClass(kb, namedNode('http://example.com/#class'))).toBeInstanceOf(Object)
   })
 })
 
@@ -406,7 +409,6 @@ describe('findClosest', () => {
     expect(findClosest).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    const kb = graph()
     kb.sym = namedNode
     expect(findClosest(kb, 'http://example.com/#cla', namedNode('http://example.com/#prop'))).toBeInstanceOf(Object)
   })
@@ -447,12 +449,12 @@ describe('newButton', () => {
     expect(
       newButton(
         document,
-        graph(),
+        kb,
         namedNode('http://example.com/#subject'),
         namedNode('http://example.com/#predicate'),
         namedNode('http://example.com/#class'),
         namedNode('http://example.com/#form'),
-        namedNode('http://example.com/#store'),
+        namedNode('http://example.com/doc'),
         () => {}
       )
     ).toBeInstanceOf(HTMLButtonElement)
@@ -467,12 +469,12 @@ describe('promptForNew', () => {
     expect(
       promptForNew(
         document,
-        graph(),
+        kb,
         namedNode('http://example.com/#this'),
         namedNode('http://example.com/#this'),
         namedNode('http://example.com/#this'),
         null,
-        graph(),
+        doc,
         () => {}
       )
     ).toBeInstanceOf(HTMLFormElement)
@@ -487,7 +489,7 @@ describe('makeDescription', () => {
     expect(
       makeDescription(
         document,
-        graph(),
+        kb,
         namedNode('http://example.com/#subject'),
         namedNode('http://example.com/#predicate'),
         namedNode('http://example.com/#store'),
@@ -505,7 +507,7 @@ describe('makeSelectForOptions', () => {
     expect(
       makeSelectForOptions(
         document,
-        graph(),
+        kb,
         namedNode('http://example.com/#subject'),
         namedNode('http://example.com/#predicate'),
         [],
@@ -525,10 +527,10 @@ describe('makeSelectForCategory', () => {
     expect(
       makeSelectForCategory(
         document,
-        graph(),
+        kb,
         null,
         null,
-        graph(),
+        doc,
         () => {}
       )
     ).toBeInstanceOf(HTMLDivElement)
@@ -543,10 +545,10 @@ describe('makeSelectForNestedCategory', () => {
     expect(
       makeSelectForNestedCategory(
         document,
-        graph(),
+        kb,
         namedNode('http://example.com/#this'),
         namedNode('http://example.com/#this'),
-        graph(),
+        doc,
         () => {}
       )
     ).toBeInstanceOf(HTMLSpanElement)
@@ -561,7 +563,7 @@ describe('buildCheckboxForm', () => {
     expect(
       buildCheckboxForm(
         document,
-        graph(),
+        kb,
         'label',
         [],
         [],

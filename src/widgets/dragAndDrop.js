@@ -1,18 +1,19 @@
 /* Drag and drop common functionality
+ *
+ * It is easy to make something draggable, or to make it a drag target!
+ * Just call the functions below.  In a solid world, any part of the UI which
+ * represent one thing which has a UR, should be made draggable using makeDraggable
+ * Any list of things should typically allow you to drag new members of the list
+ * onto it.
+ * The file upload function uploadFiles is provided as often of someone drags a file from the computer
+ * desktop, you may want to upload it into the pod.
  */
 import * as debug from '../debug'
-
-const mime = require('mime-types')
+import * as mime from 'mime-types'
 
 /* global FileReader alert */
-module.exports = {
-  makeDropTarget: makeDropTarget,
-  makeDraggable: makeDraggable,
-  uploadFiles: uploadFiles
-}
-// const UI = require('../index.js') // this package
 
-function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
+export function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
   const dragoverListener = function (e) {
     e.preventDefault() // Neeed else drop does not work [sic]
     e.dataTransfer.dropEffect = 'copy'
@@ -119,7 +120,7 @@ function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
 //
 // Possibly later set the drag image too?
 //
-function makeDraggable (tr, obj) {
+export function makeDraggable (tr, obj) {
   tr.setAttribute('draggable', 'true') // Stop the image being dragged instead - just the TR
 
   tr.addEventListener(
@@ -170,7 +171,7 @@ function makeDraggable (tr, obj) {
 **                              With file object an final URI as params
 */
 
-function uploadFiles (fetcher, files, fileBase, imageBase, successHandler) {
+export function uploadFiles (fetcher, files, fileBase, imageBase, successHandler) {
   for (let i = 0; files[i]; i++) {
     const f = files[i]
     debug.log(

@@ -4,30 +4,27 @@
  */
 
 /* global alert confirm */
-
+import { authn } from '../authn/index'
 import * as debug from '../debug'
+import { icons } from '../iconBase'
+import { store } from '../logic'
+import { media } from '../media/index'
+import * as ns from '../ns'
+import * as pad from '../pad'
+import * as rdf from 'rdflib' // pull in first avoid cross-refs
+import * as style from '../style'
+import * as utils from '../utils'
+import * as widgets from '../widgets'
 
-const UI = {
-  authn: require('../authn/authn'),
-  icons: require('../iconBase'),
-  ns: require('../ns'),
-  media: require('../media/media-capture'),
-  pad: require('../pad'),
-  rdf: require('rdflib'),
-  store: require('../logic').solidLogicSingleton.store,
-  style: require('../style'),
-  utils: require('../utils'),
-  widgets: require('../widgets')
-}
+const UI = { authn, icons, ns, media, pad, rdf, store, style, utils, widgets }
 const $rdf = UI.rdf
 
 const BOOK = $rdf.Namespace('http://www.w3.org/2002/01/bookmark#')
 const BOOKMARK_ICON = 'noun_45961.svg'
 
-const kb = UI.store
-const ns = UI.ns
-const label = UI.utils.label
-const dom = UI.dom || window.document
+const kb = store
+const label = utils.label
+const dom = window.document || null
 
 /** Create a resource if it really does not exist
  *  Be absolutely sure something does not exist before creating a new empty file

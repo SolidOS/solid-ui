@@ -1,5 +1,5 @@
 import { silenceDebugMessages } from '../../helpers/setup'
-import DateFolder from '../../../src/chat/dateFolder'
+import { DateFolder } from '../../../src/chat/dateFolder'
 import { sym } from 'rdflib'
 
 silenceDebugMessages()

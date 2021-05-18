@@ -1,4 +1,4 @@
-import widgets from '../../src/widgets'
+import * as widgets from '../../src/widgets'
 import { JSDOM } from 'jsdom'
 import * as participation from '../../src/pad'
 
