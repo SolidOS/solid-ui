@@ -1,1 +1,1 @@
-{"version":3,"file":"logic.d.ts","sourceRoot":"","sources":["../src/logic.ts"],"names":[],"mappings":"AAKA,OAAO,EAAE,UAAU,EAAE,MAAM,aAAa,CAAA;AAExC,eAAO,MAAM,mBAAmB,YAA8C,CAAA"}
+{"version":3,"file":"logic.d.ts","sourceRoot":"","sources":["../src/logic.ts"],"names":[],"mappings":"AAKA,OAAO,EAAE,UAAU,EAAE,MAAM,aAAa,CAAA;AAExC,eAAO,MAAM,mBAAmB,YAA8C,CAAA;AAG9E,eAAO,MAAM,KAAK,iCAA4B,CAAA;AAC9C,eAAO,MAAM,EAAE,iCAAQ,CAAA;AAEvB,eAAO,MAAM,KAAK,4CAA4B,CAAA;AAC9C,eAAO,MAAM,IAAI,oDAA2B,CAAA;AAI5C,eAAO,MAAM,OAAO,6DAA8B,CAAA"}

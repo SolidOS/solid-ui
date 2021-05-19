@@ -1,5 +1,5 @@
 import { solidLogicSingleton } from '../../logic'
-import ns from '../../ns'
+import * as ns from '../../ns'
 import { mostSpecificClassURI } from './fieldFunction'
 import { fieldParams } from './fieldParams'
 

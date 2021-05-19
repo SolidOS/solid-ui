@@ -8,7 +8,7 @@ import { graph, NamedNode, UpdateManager } from 'rdflib'
 import { AccessGroups } from './access-groups'
 import { DataBrowserContext } from 'pane-registry'
 import { shortNameForFolder } from './acl-control'
-import utils from '../utils.js'
+import * as utils from '../utils.js'
 import * as debug from '../debug'
 
 /**
@@ -43,13 +43,13 @@ export class AccessController {
     if (defaultHolder && defaultACLDoc) {
       this.isUsingDefaults = true
       const aclDefaultStore = adoptACLDefault(this.targetDoc, targetACLDoc, defaultHolder, defaultACLDoc)
-      this.mainCombo = new AccessGroups(targetDoc, targetACLDoc, this, aclDefaultStore, { defaults: true })
+      this.mainCombo = new AccessGroups(targetDoc, targetACLDoc, this, aclDefaultStore, { defaults: this.isContainer })
       this.defaultsCombo = null
       this.defaultsDiffer = false
     } else {
       this.isUsingDefaults = false
       this.mainCombo = new AccessGroups(targetDoc, targetACLDoc, this, store)
-      this.defaultsCombo = new AccessGroups(targetDoc, targetACLDoc, this, store, { defaults: true })
+      this.defaultsCombo = new AccessGroups(targetDoc, targetACLDoc, this, store, { defaults: this.isContainer })
       this.defaultsDiffer = !sameACL(this.mainCombo.aclMap, this.defaultsCombo.aclMap)
     }
   }
@@ -76,7 +76,7 @@ export class AccessController {
     if (this.defaultsCombo && this.defaultsDiffer) {
       this.rootElement.appendChild(this.renderRemoveDefaultsController())
       this.rootElement.appendChild(this.defaultsCombo.render())
-    } else if (this.isEditable) {
+    } else if (this.isEditable && this.isContainer) {
       this.rootElement.appendChild(this.renderAddDefaultsController())
     }
     if (!this.targetIsProtected && this.isUsingDefaults) {

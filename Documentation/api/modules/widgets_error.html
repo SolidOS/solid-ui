@@ -84,13 +84,13 @@
 					<a name="errormessageblock" class="tsd-anchor"></a>
 					<h3>error<wbr>Message<wbr>Block</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">error<wbr>Message<wbr>Block<span class="tsd-signature-symbol">(</span>dom<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLDocument</span>, msg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, backgroundColor<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLDivElement</span></li>
+						<li class="tsd-signature tsd-kind-icon">error<wbr>Message<wbr>Block<span class="tsd-signature-symbol">(</span>dom<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLDocument</span>, err<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Error</span>, backgroundColor<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLDivElement</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/solid/solid-ui/blob/e44ca42/src/widgets/error.ts#L8">src/widgets/error.ts:8</a></li>
+									<li>Defined in <a href="https://github.com/solid/solid-ui/blob/9c81be3/src/widgets/error.ts#L10">src/widgets/error.ts:10</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -107,7 +107,7 @@
 									</div>
 								</li>
 								<li>
-									<h5>msg: <span class="tsd-signature-type">string</span></h5>
+									<h5>err: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Error</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>The error message string to display</p>
 									</div>
@@ -120,7 +120,7 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">HTMLDivElement</span></h4>
-							<p>A div element with the msg string</p>
+							<p>A div element with the err string</p>
 						</li>
 					</ul>
 				</section>

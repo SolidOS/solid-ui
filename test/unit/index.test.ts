@@ -9,32 +9,33 @@ silenceDebugMessages()
 
 describe('Index', () => {
   it('exists', () => {
-    expect(Object.keys(Index)).toEqual([
-      'ns',
+    expect(Object.keys(Index).sort()).toEqual([
       'acl',
       'aclControl',
       'authn',
       'create',
+      'dom',
       'icons',
+      'infiniteMessageArea',
+      'initHeader',
+      'language',
+      'log',
       'matrix',
       'media',
       'messageArea',
-      'infiniteMessageArea',
-      'preferences',
-      'solidLogicSingleton',
-      'style',
-      'table',
-      'utils',
-      'widgets',
-      'versionInfo',
-      'initHeader',
-      'dom',
-      'store',
-      'rdf',
-      'log',
+      'ns',
       'pad',
       'participation',
-      'tabs'
+      'preferences',
+      'rdf',
+      'solidLogicSingleton',
+      'store',
+      'style',
+      'table',
+      'tabs',
+      'utils',
+      'versionInfo',
+      'widgets'
     ])
   })
   // make sure none of them are undefined:

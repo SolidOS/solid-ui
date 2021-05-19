@@ -41,11 +41,12 @@ import { graph, namedNode, NamedNode, sym } from 'rdflib'
 // @ts-ignore
 import { foaf, rdf, sioc, vcard } from '../../../src/ns'
 // @ts-ignore
-import { iconBase } from '../../../src/iconBase'
+import { icons } from '../../../src/iconBase'
 import { clearStore } from '../helpers/clearStore'
 import { domWithHead } from '../../helpers/dom-with-head'
 import { solidLogicSingleton } from '../../../src/logic'
 
+const { iconBase } = icons
 const store = solidLogicSingleton.store
 
 silenceDebugMessages()

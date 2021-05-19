@@ -113,7 +113,7 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-external"><a href="index.rdf.collection.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-has-type-parameter tsd-is-overwrite tsd-is-external"><a href="index.rdf.collection.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-external">
@@ -160,16 +160,16 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Constructors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-external">
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-has-type-parameter tsd-is-overwrite tsd-is-external">
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-external">
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-has-type-parameter tsd-is-overwrite tsd-is-external">
 						<li class="tsd-signature tsd-kind-icon">new <wbr>Collection&lt;T&gt;<span class="tsd-signature-symbol">(</span>initial<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-type">ValueType</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index.rdf.collection.html" class="tsd-signature-type" data-tsd-kind="Class">Collection</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="index.rdf.node.html">Node</a>.<a href="index.rdf.node.html#constructor">constructor</a></p>
+								<p>Overrides <a href="index.rdf.node.html">Node</a>.<a href="index.rdf.node.html#constructor">constructor</a></p>
 								<ul>
 									<li>Defined in node_modules/rdflib/lib/collection.d.ts:31</li>
 								</ul>
@@ -177,7 +177,7 @@
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>T<span class="tsd-signature-symbol">: </span><a href="index.rdf.node.html" class="tsd-signature-type" data-tsd-kind="Class">Node</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span> = <a href="index.rdf.node.html" class="tsd-signature-type" data-tsd-kind="Class">Node</a><span class="tsd-signature-symbol"> | </span><a href="index.rdf.variable.html" class="tsd-signature-type" data-tsd-kind="Class">Variable</a><span class="tsd-signature-symbol"> | </span><a href="index.rdf.blanknode.html" class="tsd-signature-type" data-tsd-kind="Class">BlankNode</a><span class="tsd-signature-symbol"> | </span><a href="index.rdf.collection.html" class="tsd-signature-type" data-tsd-kind="Class">Collection</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="index.rdf.literal.html" class="tsd-signature-type" data-tsd-kind="Class">Literal</a></h4>
+									<h4>T<span class="tsd-signature-symbol">: </span><a href="index.rdf.node.html" class="tsd-signature-type" data-tsd-kind="Class">Node</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span> = <a href="index.rdf.node.html" class="tsd-signature-type" data-tsd-kind="Class">Node</a><span class="tsd-signature-symbol"> | </span><a href="index.rdf.variable.html" class="tsd-signature-type" data-tsd-kind="Class">Variable</a><span class="tsd-signature-symbol"> | </span><a href="index.rdf.blanknode.html" class="tsd-signature-type" data-tsd-kind="Class">BlankNode</a><span class="tsd-signature-symbol"> | </span><a href="index.rdf.literal.html" class="tsd-signature-type" data-tsd-kind="Class">Literal</a><span class="tsd-signature-symbol"> | </span><a href="index.rdf.collection.html" class="tsd-signature-type" data-tsd-kind="Class">Collection</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -281,6 +281,7 @@
 					<h3>term<wbr>Type</h3>
 					<div class="tsd-signature tsd-kind-icon">term<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;Collection&quot;</span></div>
 					<aside class="tsd-sources">
+						<p>Implementation of Term.termType</p>
 						<p>Overrides <a href="index.rdf.node.html">Node</a>.<a href="index.rdf.node.html#termtype">termType</a></p>
 						<ul>
 							<li>Defined in node_modules/rdflib/lib/collection.d.ts:23</li>
@@ -297,6 +298,7 @@
 					<h3>value</h3>
 					<div class="tsd-signature tsd-kind-icon">value<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
+						<p>Implementation of Term.value</p>
 						<p>Inherited from <a href="index.rdf.node.html">Node</a>.<a href="index.rdf.node.html#value">value</a></p>
 						<ul>
 							<li>Defined in node_modules/rdflib/lib/node-internal.d.ts:19</li>
@@ -488,6 +490,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Implementation of Term.equals</p>
 								<p>Inherited from <a href="index.rdf.node.html">Node</a>.<a href="index.rdf.node.html#equals">equals</a></p>
 								<ul>
 									<li>Defined in node_modules/rdflib/lib/node-internal.d.ts:36</li>
@@ -797,7 +800,7 @@
 					<li class="current tsd-kind-class tsd-parent-kind-namespace tsd-has-type-parameter tsd-is-external">
 						<a href="index.rdf.collection.html" class="tsd-kind-icon">Collection</a>
 						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-external">
+							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-has-type-parameter tsd-is-overwrite tsd-is-external">
 								<a href="index.rdf.collection.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-external">

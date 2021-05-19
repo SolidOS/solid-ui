@@ -8,28 +8,29 @@
  * @static
  */
 import * as rdf from 'rdflib';
-import ns from './ns';
+import * as ns from './ns';
 import { acl, aclControl } from './acl/index';
 import { authn } from './authn/index';
 import { create } from './create/index';
-import icons from './iconBase';
+import { icons } from './iconBase';
+import * as language from './widgets/forms/autocomplete/language';
 import * as log from './log';
 import { matrix } from './matrix/index';
 import { media } from './media/index';
-import messageArea from './messageArea';
+import { messageArea } from './messageArea';
 import { infiniteMessageArea } from './chat/infinite';
 import * as pad from './pad';
 import * as participation from './participation';
-import preferences from './preferences';
+import * as preferences from './preferences';
 import { solidLogicSingleton } from './logic';
-import style from './style';
-import table from './table';
+import * as style from './style';
+import { renderTableViewPane as table } from './table';
 import * as tabs from './tabs';
-import utils from './utils';
-import widgets from './widgets';
+import * as utils from './utils';
+import * as widgets from './widgets/index';
 import versionInfo from './versionInfo';
 import { initHeader } from './header';
 declare const dom: Document | null;
 declare const store: import("solid-logic").LiveStore;
-export { ns, rdf, acl, aclControl, authn, create, dom, icons, log, matrix, media, messageArea, infiniteMessageArea, pad, participation, preferences, solidLogicSingleton, store, style, table, tabs, utils, widgets, versionInfo, initHeader };
+export { ns, rdf, acl, aclControl, authn, create, dom, icons, language, log, matrix, media, messageArea, infiniteMessageArea, pad, participation, preferences, solidLogicSingleton, store, style, table, tabs, utils, widgets, versionInfo, initHeader };
 //# sourceMappingURL=index.d.ts.map

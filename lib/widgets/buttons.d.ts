@@ -177,7 +177,7 @@ export declare function openHrefInOutlineMode(e: Event): void;
  *
  * @@ Todo: make it a personal preference.
  */
-export declare function defaultAnnotationStore(subject: any): NamedNode | undefined;
+export declare function defaultAnnotationStore(subject: NamedNode): NamedNode | undefined;
 /**
  * Retrieve all RDF class URIs from solid-ui's RDF store
  * @returns an object `ret` such that `Object.keys(ret)` is

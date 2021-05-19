@@ -3,8 +3,14 @@
 //
 // This must load AFTER the rdflib.js and log-ext.js (or log.js).
 //
+import * as log from './log'
+import { store } from './logic'
+import * as ns from './ns'
+import * as rdf from 'rdflib' // pull in first avoid cross-refs
 
-module.exports = {
+const UI = { log, ns, rdf, store }
+
+export {
   addLoadEvent, // not used anywhere
   AJARImage,
   ancestor,
@@ -34,13 +40,6 @@ module.exports = {
   stackString,
   syncTableToArray,
   syncTableToArrayReOrdered
-}
-
-const UI = {
-  log: require('./log'),
-  ns: require('./ns'),
-  rdf: require('rdflib'),
-  store: require('./logic').solidLogicSingleton.store
 }
 
 let nextVariable = 0

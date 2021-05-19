@@ -273,6 +273,7 @@
 					<h3>fire<wbr>Callbacks</h3>
 					<div class="tsd-signature tsd-kind-icon">fire<wbr>Callbacks<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Function</span></div>
 					<aside class="tsd-sources">
+						<p>Implementation of CallbackifyInterface.fireCallbacks</p>
 						<ul>
 							<li>Defined in node_modules/rdflib/lib/fetcher.d.ts:217</li>
 						</ul>
@@ -910,7 +911,7 @@
 					<a name="guesscontenttype" class="tsd-anchor"></a>
 					<h3>guess<wbr>Content<wbr>Type</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">guess<wbr>Content<wbr>Type<span class="tsd-signature-symbol">(</span>uri<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;text/turtle&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;application/rdf+xml&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;text/html&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;application/ld+json&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;text/n3&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;application/n3&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;application/nquads&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;application/n-quads&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;application/sparql-update&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;application/x-turtle&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;application/xhtml+xml&quot;</span></li>
+						<li class="tsd-signature tsd-kind-icon">guess<wbr>Content<wbr>Type<span class="tsd-signature-symbol">(</span>uri<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ContentType</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -925,7 +926,7 @@
 									<h5>uri: <span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;text/turtle&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;application/rdf+xml&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;text/html&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;application/ld+json&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;text/n3&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;application/n3&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;application/nquads&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;application/n-quads&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;application/sparql-update&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;application/x-turtle&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;application/xhtml+xml&quot;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ContentType</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -933,7 +934,7 @@
 					<a name="handleerror" class="tsd-anchor"></a>
 					<h3>handle<wbr>Error</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">handle<wbr>Error<span class="tsd-signature-symbol">(</span>response<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ExtendedResponse</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Error</span>, docuri<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AutoInitOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ExtendedResponse</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">FetchError</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">handle<wbr>Error<span class="tsd-signature-symbol">(</span>response<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ExtendedResponse</span>, docuri<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AutoInitOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ExtendedResponse</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">FetchError</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -951,7 +952,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>response: <span class="tsd-signature-type">ExtendedResponse</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Error</span></h5>
+									<h5>response: <span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ExtendedResponse</span></h5>
 								</li>
 								<li>
 									<h5>docuri: <span class="tsd-signature-type">string</span></h5>
