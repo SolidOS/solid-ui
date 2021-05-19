@@ -18,6 +18,7 @@ describe('Index', () => {
       'icons',
       'infiniteMessageArea',
       'initHeader',
+      'language',
       'log',
       'matrix',
       'media',
