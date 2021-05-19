@@ -1,19 +1,13 @@
 /*   create.js     UI to craete new objects in the solid-app-set world
  **
  */
-// const error = require('./widgets/error')
-// const widgets = require('./widgets/index')
-// const utils = require('./utils')
-
-// const UI = require('solid-ui')
 
 import * as debug from '../debug'
-
-import icons from '../iconBase'
-import utils from '../utils'
-import widgets from '../widgets'
+import { icons } from '../iconBase'
+import * as utils from '../utils'
+import * as widgets from '../widgets'
 import { solidLogicSingleton } from '../logic'
-import ns from '../ns'
+import * as ns from '../ns'
 import { logInLoadProfile, selectWorkspace } from '../authn/authn'
 import { DataBrowserContext, NewPaneOptions, PaneDefinition } from 'pane-registry'
 import { CreateContext, NewAppInstanceOptions } from './types'
@@ -220,8 +214,8 @@ export function newThingUI (
     icon.setAttribute('src', pane.icon)
     const noun = pane.mintClass
       ? mintingClassMap[pane.mintClass.uri] > 1
-          ? `${utils.label(pane.mintClass)} (using ${pane.name} pane)`
-          : utils.label(pane.mintClass)
+        ? `${utils.label(pane.mintClass)} (using ${pane.name} pane)`
+        : utils.label(pane.mintClass)
       : pane.name + ' @@'
     icon.setAttribute('title', 'Make new ' + noun)
     icon.setAttribute('style', iconStyle + 'display: none;')

@@ -755,7 +755,8 @@ describe('basicField', () => {
     expect(size).toEqual('30')
   })
 
-  it('Can read size from fieldParams', () => {
+  // It comes from the style module now not fieldParams
+  it.skip('Can read size from fieldParams', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = namedNode('http://example.com/#this')

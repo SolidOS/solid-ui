@@ -4,15 +4,17 @@
  */
 
 import * as debug from '../debug'
+import { store } from '../logic'
 
-const kb = require('../logic').solidLogicSingleton.store
-const ns = require('../ns.js')
-const $rdf = require('rdflib')
+import * as ns from '../ns'
+import * as $rdf from 'rdflib' // pull in first avoid cross-refs
+
+const kb = store
 
 /**
  * Track back through the YYYY/MM/DD tree to find the previous/next day
  */
-module.exports = class DateFolder {
+export class DateFolder {
   constructor (rootThing, leafFileName, membershipProperty) {
     this.root = rootThing
     this.rootFolder = rootThing.dir()

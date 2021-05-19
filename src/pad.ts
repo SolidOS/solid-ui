@@ -4,7 +4,7 @@
 
 /** @module pad
  */
-import ns from './ns'
+import * as ns from './ns'
 import { Namespace, NamedNode, st, IndexedFormula } from 'rdflib'
 import { newThing, errorMessageBlock } from './widgets'
 import { beep } from './utils'
