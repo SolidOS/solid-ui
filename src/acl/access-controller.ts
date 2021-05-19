@@ -8,8 +8,10 @@ import { graph, NamedNode, UpdateManager } from 'rdflib'
 import { AccessGroups } from './access-groups'
 import { DataBrowserContext } from 'pane-registry'
 import { shortNameForFolder } from './acl-control'
+import { currentUser } from '../authn/authn'
 import * as utils from '../utils.js'
 import * as debug from '../debug'
+import ns from '../ns'
 
 /**
  * Rendered HTML component used in the databrowser's Sharing pane.
@@ -215,6 +217,7 @@ export class AccessController {
   }
 
   public save (): Promise<void> {
+    // build graph
     const newAClGraph = graph()
     if (!this.isContainer) {
       makeACLGraphbyCombo(newAClGraph, this.targetDoc, this.mainCombo.byCombo, this.targetACLDoc, true)
@@ -226,26 +229,47 @@ export class AccessController {
       // Linked controls
       makeACLGraphbyCombo(newAClGraph, this.targetDoc, this.mainCombo.byCombo, this.targetACLDoc, true, true)
     }
+
     const updater = newAClGraph.updater || new UpdateManager(newAClGraph)
-    return new Promise((resolve, reject) => updater.put(
-      this.targetACLDoc,
-      newAClGraph.statementsMatching(undefined, undefined, undefined, this.targetACLDoc),
-      'text/turtle',
-      (uri, ok, message) => {
-        if (!ok) {
-          return reject(new Error(`ACL file save failed: ${message}`))
-        }
-        this.store.fetcher.unload(this.targetACLDoc)
-        this.store.add(newAClGraph.statements)
-        this.store.fetcher.requested[this.targetACLDoc.uri] = 'done' // missing: save headers
-        this.mainCombo.store = this.store
-        if (this.defaultsCombo) {
-          this.defaultsCombo.store = this.store
-        }
-        this.defaultsDiffer = !!this.defaultsCombo && !sameACL(this.mainCombo.aclMap, this.defaultsCombo.aclMap)
-        debug.log('ACL modification: success!')
-        resolve()
+
+    // save ACL resource
+
+    return new Promise((resolve, reject) => {
+      // check acl for acl:Write alert and acl:Control confirm
+      const hasWrite = newAClGraph.any(undefined, ns.acl('mode'), ns.acl('Write'), this.targetACLDoc)
+      const hasControl = newAClGraph.any(undefined, ns.acl('mode'), ns.acl('Control'), this.targetACLDoc)
+      const user = currentUser()
+      const webId = user ? user.uri : 'user'
+      if (!hasWrite) {
+        alert('There is no "Write access" this is not allowed')
+        return reject(new Error('ACL file save rejected : no acl:Write'))
+      } else if (!(hasControl || confirm('There is no "owner access" -- this is a dangerous situation !!!,' +
+         `\n${webId},\nyou may lose access to the resources covered by this ACL !!!` +
+         '\n\nDo you confirm ?'))) {
+        return reject(new Error('ACL file save canceled by user'))
+      } else {
+        // save acl
+        updater.put(
+          this.targetACLDoc,
+          newAClGraph.statementsMatching(undefined, undefined, undefined, this.targetACLDoc),
+          'text/turtle',
+          (uri, ok, message) => {
+            if (!ok) {
+              return reject(new Error(`ACL file save failed: ${message}`))
+            }
+            this.store.fetcher.unload(this.targetACLDoc)
+            this.store.add(newAClGraph.statements)
+            this.store.fetcher.requested[this.targetACLDoc.uri] = 'done' // missing: save headers
+            this.mainCombo.store = this.store
+            if (this.defaultsCombo) {
+              this.defaultsCombo.store = this.store
+            }
+            this.defaultsDiffer = !!this.defaultsCombo && !sameACL(this.mainCombo.aclMap, this.defaultsCombo.aclMap)
+            debug.log('ACL modification: success!')
+            resolve()
+          }
+        )
       }
-    ))
+    })
   }
 }
