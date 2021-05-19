@@ -2,20 +2,20 @@
  *
  */
 /* global confirm */
+
+import { authn } from './authn/index'
 import * as debug from './debug'
+import { icons } from './iconBase'
+import { store } from './logic'
+import * as ns from './ns'
+import * as rdf from 'rdflib' // pull in first avoid cross-refs
+import * as style from './style'
+import * as utils from './utils'
+import * as widgets from './widgets'
 
-const UI = {
-  icons: require('./iconBase'),
-  ns: require('./ns'),
-  rdf: require('rdflib'),
-  store: require('./logic').solidLogicSingleton.store,
-  widgets: require('./widgets'),
-  utils: require('./utils')
-}
+const UI = { authn, icons, ns, rdf, store, style, widgets }
 
-const ns = UI.ns
-
-function deleteRecursive (kb, folder) {
+export function deleteRecursive (kb, folder) {
   // eslint-disable-next-line promise/param-names
   return new Promise(function (resolve, _reject) {
     kb.fetcher.load(folder).then(function () {
@@ -67,8 +67,6 @@ function forAllFiles (folder, kb, action) {
   })
 }
 
-module.exports.deleteRecursive = deleteRecursive
-
 /** Delete Folder and contents
  *
  * @param {NamedNode} folder - The LDP container to be deleted
@@ -78,7 +76,7 @@ module.exports.deleteRecursive = deleteRecursive
  * @returns {DOMElement} - The control which has eben inserted in the
  */
 /* global document */
-module.exports.deleteFolder = function (folder, store, dom) {
+export function deleteFolder (folder, store, dom) {
   store = store || UI.store
   if (typeof docuent !== 'undefined') {
     dom = dom || document

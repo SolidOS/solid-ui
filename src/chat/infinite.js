@@ -2,41 +2,33 @@
  * Contains the [[infiniteMessageArea]] class
  * @packageDocumentation
  */
+import { authn } from '../authn/index'
+import * as debug from '../debug'
+import { icons } from '../iconBase'
+import { store } from '../logic'
+import { media } from '../media/index'
+import * as ns from '../ns'
+import * as pad from '../pad'
+import { DateFolder } from './dateFolder'
+import { renderMessage, creatorAndDate } from './message'
+import { findBookmarkDocument } from './bookmarks'
+
+import * as $rdf from 'rdflib' // pull in first avoid cross-refs
+import * as style from '../style'
+import * as utils from '../utils'
+import * as widgets from '../widgets'
+
+const UI = { authn, icons, ns, media, pad, $rdf, store, style, utils, widgets }
 
 /* global alert */
-import * as debug from '../debug'
-
-const $rdf = require('rdflib')
-const DateFolder = require('./dateFolder')
-
-// @@ trace20190428T1745
 
 const SERVER_MKDIRP_BUG = true
 
-const UI = {
-  authn: require('../authn/authn'),
-  icons: require('../iconBase'),
-  ns: require('../ns'),
-  media: require('../media/media-capture'),
-  pad: require('../pad'),
-  rdf: require('rdflib'),
-  store: require('../logic').solidLogicSingleton.store,
-  style: require('../style'),
-  utils: require('../utils'),
-  widgets: require('../widgets')
-}
-
-// const utils = require('./utils')
-const { renderMessage, creatorAndDate } = require('./message')
-const bookmarks = require('./bookmarks')
-
-// module.exports = module.exports || {}
-// module.exports.infiniteMessageArea =
-
-async function createIfNotExists (doc, contentType = 'text/turtle', data = '') {
+export async function createIfNotExists (doc, contentType = 'text/turtle', data = '') {
   const fetcher = UI.store.fetcher
+  let response
   try {
-    var response = await fetcher.load(doc)
+    response = await fetcher.load(doc)
   } catch (err) {
     if (err.response.status === 404) {
       debug.log(
@@ -65,7 +57,7 @@ async function createIfNotExists (doc, contentType = 'text/turtle', data = '') {
   return response
 }
 
-function desktopNotification (str) {
+export function desktopNotification (str) {
   // Let's check if the browser supports notifications
   if (!('Notification' in window)) {
     debug.warn('This browser does not support desktop notification')
@@ -335,7 +327,7 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
       me = context.me
       turnOnInput()
       Object.assign(context, userContext)
-      bookmarks.findBookmarkDocument(context).then(context => {
+      findBookmarkDocument(context).then(context => {
         debug.log('Bookmark file: ' + context.bookmarkDocument)
       })
     })
@@ -388,7 +380,7 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
     }
   } // syncMessages
 
-  var addMessage = function (message, messageTable) {
+  function addMessage (message, messageTable) {
     const bindings = {
       '?msg': message,
       '?creator': kb.any(message, ns.foaf('maker')),
@@ -580,10 +572,10 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
 
     /// ///////////////////////
 
-    var messageTable = dom.createElement('table')
+    const messageTable = dom.createElement('table')
     messageTable.extendBackwards = extendBackwards // Make function available to scroll stuff
     messageTable.extendForwards = extendForwards // Make function available to scroll stuff
-    // var messageButton
+
     messageTable.date = date
     const chatDocument = dateFolder.leafDocumentFromDate(date)
     messageTable.chatDocument = chatDocument
@@ -767,8 +759,8 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
   }
 
   let liveMessageTable
-  var earliest = { messageTable: null } // Stuff about each end of the loaded days
-  var latest = { messageTable: null }
+  const earliest = { messageTable: null } // Stuff about each end of the loaded days
+  const latest = { messageTable: null }
 
   let lock = false
 
@@ -844,9 +836,9 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
       }
     }
 
-    let live
+    let live, selectedDocument
     if (options.selectedMessage) {
-      var selectedDocument = options.selectedMessage.doc()
+      selectedDocument = options.selectedMessage.doc()
       const now = new Date()
       const todayDocument = dateFolder.leafDocumentFromDate(now)
       live = todayDocument.sameTerm(selectedDocument)

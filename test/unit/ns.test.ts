@@ -1,11 +1,11 @@
 import { silenceDebugMessages } from '../helpers/setup'
-import SolidNamespace from '../../src/ns'
+import { rdf } from '../../src/ns'
 
 silenceDebugMessages()
 jest.mock('solid-auth-client')
 
-describe('SolidNamespace', () => {
-  it('exists', () => {
-    expect(SolidNamespace).toBeInstanceOf(Object)
+describe('RDF Namespace', () => {
+  it('gives the right URI for rdf:type', () => {
+    expect(rdf('type').uri).toEqual('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
   })
 })

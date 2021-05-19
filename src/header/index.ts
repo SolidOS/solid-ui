@@ -5,7 +5,7 @@
  */
 import { IndexedFormula, NamedNode, sym } from 'rdflib'
 import { loginStatusBox, solidAuthClient } from '../authn/authn'
-import { widgets } from '../widgets'
+import * as widgets from '../widgets'
 import { emptyProfile } from './empty-profile'
 import { addStyleClassToElement, getPod, throttle } from './headerHelpers'
 

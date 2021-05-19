@@ -5,9 +5,9 @@
  * @packageDocumentation
  */
 
-import ns from '../ns'
+import * as ns from '../ns'
 import { solidLogicSingleton } from '../logic'
-import utils from '../utils'
+import * as utils from '../utils'
 import { AgentMapMap, AgentMapUnion, ComboList } from './types'
 import * as debug from '../debug'
 import { graph, IndexedFormula, NamedNode, serialize, st, Statement, sym } from 'rdflib'
@@ -231,6 +231,8 @@ export function makeACLGraphbyCombo (
 ): void {
   const ACL = ns.acl
   for (const combo in byCombo) {
+    const pairs = byCombo[combo]
+    if (!pairs.length) continue // do not add to store when no agent
     const modeURIs = combo.split('\n')
     let short = modeURIs
       .map(function (u) {
@@ -249,7 +251,6 @@ export function makeACLGraphbyCombo (
     for (let i = 0; i < modeURIs.length; i++) {
       kb.add(a, ACL('mode'), kb.sym(modeURIs[i]), aclDoc)
     }
-    const pairs = byCombo[combo]
     for (let i = 0; i < pairs.length; i++) {
       const pred = pairs[i][0]
       const ag = pairs[i][1]

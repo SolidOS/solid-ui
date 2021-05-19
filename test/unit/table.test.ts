@@ -2,7 +2,7 @@ import { silenceDebugMessages } from '../helpers/setup'
 import { NamedNode, Namespace, parse, Query, sym, variable } from 'rdflib'
 import { solidLogicSingleton } from '../../src/logic'
 // @ts-ignore
-import renderTableViewPane from '../../src/table'
+import { renderTableViewPane } from '../../src/table'
 
 const kb = solidLogicSingleton.store
 

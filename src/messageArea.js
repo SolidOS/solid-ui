@@ -1,26 +1,23 @@
 //  Common code for a discussion are a of messages about something
 //
-const UI = {
-  authn: require('./authn/authn'),
-  icons: require('./iconBase'),
-  ns: require('./ns'),
-  rdf: require('rdflib'),
-  store: require('./logic').solidLogicSingleton.store,
-  style: require('./style'),
-  widgets: require('./widgets')
-}
 
-const $rdf = require('rdflib')
-const utils = require('./utils')
+import { authn } from './authn/index'
+import { icons } from './iconBase'
+import { store } from './logic'
+import * as ns from './ns'
+import * as rdf from 'rdflib' // pull in first avoid cross-refs
+import * as style from './style'
+import * as utils from './utils'
+import * as widgets from './widgets'
 
-// var buttonStyle = 'font-size: 100%; margin: 0.8em; padding:0.5em; background-color: white;'
+const UI = { authn, icons, ns, rdf, store, style, widgets }
 
-module.exports = function (dom, kb, subject, messageStore, options) {
+export function messageArea (dom, kb, subject, messageStore, options) {
   kb = kb || UI.store
   messageStore = messageStore.doc() // No hash
   const ns = UI.ns
-  const WF = $rdf.Namespace('http://www.w3.org/2005/01/wf/flow#')
-  const DCT = $rdf.Namespace('http://purl.org/dc/terms/')
+  const WF = rdf.Namespace('http://www.w3.org/2005/01/wf/flow#')
+  const DCT = rdf.Namespace('http://purl.org/dc/terms/')
 
   options = options || {}
 
@@ -90,16 +87,15 @@ module.exports = function (dom, kb, subject, messageStore, options) {
       const sts = []
       const now = new Date()
       const timestamp = '' + now.getTime()
-      const dateStamp = $rdf.term(now)
+      const dateStamp = rdf.term(now)
       // http://www.w3schools.com/jsref/jsref_obj_date.asp
       const message = kb.sym(messageStore.uri + '#' + 'Msg' + timestamp)
 
       sts.push(
-        new $rdf.Statement(subject, ns.wf('message'), message, messageStore)
+        new rdf.Statement(subject, ns.wf('message'), message, messageStore)
       )
-      // sts.push(new $rdf.Statement(message, ns.dc('title'), kb.literal(titlefield.value), messageStore))
       sts.push(
-        new $rdf.Statement(
+        new rdf.Statement(
           message,
           ns.sioc('content'),
           kb.literal(field.value),
@@ -107,11 +103,11 @@ module.exports = function (dom, kb, subject, messageStore, options) {
         )
       )
       sts.push(
-        new $rdf.Statement(message, DCT('created'), dateStamp, messageStore)
+        new rdf.Statement(message, DCT('created'), dateStamp, messageStore)
       )
       if (me) {
         sts.push(
-          new $rdf.Statement(message, ns.foaf('maker'), me, messageStore)
+          new rdf.Statement(message, ns.foaf('maker'), me, messageStore)
         )
       }
 
@@ -360,11 +356,11 @@ module.exports = function (dom, kb, subject, messageStore, options) {
   if (options.query) {
     query = options.query
   } else {
-    query = new $rdf.Query('Messages')
+    query = new rdf.Query('Messages')
     const v = {} // semicolon needed
     const vs = ['msg', 'date', 'creator', 'content']
     vs.forEach(function (x) {
-      query.vars.push((v[x] = $rdf.variable(x)))
+      query.vars.push((v[x] = rdf.variable(x)))
     })
     query.pat.add(subject, WF('message'), v.msg)
     query.pat.add(v.msg, ns.dct('created'), v.date)

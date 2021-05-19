@@ -1,42 +1,45 @@
-//                  Solid-UI temporary preferences
-//                  ==============================
+//                  Solid-UI preferences
+//                  =====================
 //
 
 import * as debug from './debug'
 
-const kb = require('./logic').solidLogicSingleton.store
-const ns = require('./ns')
-const authn = require('./authn/authn')
-const widgets = require('./widgets')
-const pad = require('./pad')
-const participation = require('./participation')
-const $rdf = require('rdflib')
+import { authn } from './authn/index'
+import { store } from './logic'
+import * as ns from './ns'
+import * as participation from './participation'// @ts-ignore
+
+import * as $rdf from 'rdflib' // pull in first avoid cross-refs
+import * as widgets from './widgets'
+
+const kb = store
 
 // This was tabulator . preferences in the tabulator
+//  Is this functionality used anywhere?
 //
-module.exports = {
-  // used for storing user name
-  value: [],
-  get: function (k) {
-    // original
-    return this.value[k]
-  },
-  set: function (k, v) {
-    if (typeof v !== 'string') {
-      debug.log('Non-string value of preference ' + k + ': ' + v)
-      throw new Error('Non-string value of preference ' + k + ': ' + v)
-    }
-    this.value[k] = v
-  },
-  renderPreferencesForm,
-  recordSharedPreferences,
-  getPreferencesForClass
+
+// used for storing user name
+// @@ Deprocate these functions.  They were used for
+// communication around the tabulator functionality about the user session
+
+export const value = []
+export function get (k) {
+  return value[k]
 }
+
+export function set (k, v) {
+  if (typeof v !== 'string') {
+    debug.log('Non-string value of preference ' + k + ': ' + v)
+    throw new Error('Non-string value of preference ' + k + ': ' + v)
+  }
+  this.value[k] = v
+}
+
 // In a solid world, Preferences are stored in the web
 //
 // Make an RDF node for recording the common view preferences for any object
 // (maybe make it in a separate file?)
-function recordSharedPreferences (subject, context) {
+export function recordSharedPreferences (subject, context) {
   return new Promise(function (resolve, reject) {
     const sharedPreferences = kb.any(subject, ns.ui('sharedPreferences'))
     if (!sharedPreferences) {
@@ -62,7 +65,7 @@ function recordSharedPreferences (subject, context) {
 
 // Construct a personal defaults node in the preferences file for a given class of object
 //
-function recordPersonalDefaults (theClass, context) {
+export function recordPersonalDefaults (theClass, context) {
   return new Promise(function (resolve, reject) {
     authn.logInLoadPreferences(context).then(
       context => {
@@ -133,7 +136,7 @@ function recordPersonalDefaults (theClass, context) {
   })
 }
 
-function renderPreferencesForm (subject, theClass, preferencesForm, context) {
+export function renderPreferencesForm (subject, theClass, preferencesForm, context) {
   const prefContainer = context.dom.createElement('div')
   participation.participationObject(subject, subject.doc(), context.me).then(
     participation => {
@@ -224,7 +227,7 @@ function toJS (term) {
 // This is the function which acuakly reads and combines the preferences
 //
 //  @@ make it much more tolerant of missing buts of prefernces
-function getPreferencesForClass (subject, theClass, predicates, context) {
+export function getPreferencesForClass (subject, theClass, predicates, context) {
   return new Promise(function (resolve, reject) {
     recordSharedPreferences(subject, context).then(context => {
       const sharedPreferences = context.sharedPreferences
