@@ -545,6 +545,48 @@
       </tr>
     </table>
 
+    <h4 class="class" id="Autocomplete">Autocomplete</h4>
+
+    <p>The autocomplete field alllows the user to select one
+      out of a large number of existing choices, by typing enough of its
+      name to be unambiguous.
+    </p>
+
+  <p>The field stores two triples,one of the given <tt>property</tt> linking to the
+  object the user has selcted, and the other stoting the name of that object,
+  as seen in the completed feld, using the <tt>labelProperty</tt>.
+  </p>
+
+  <p>The field must specify a <tt>dataSource</tt> which gives the paramters
+    and form of the query make over the net.
+  </p>
+
+  <table class="properties">
+
+    <tr>
+      <td>labelProperty</td>
+      <td>String</td>
+      <td>The property which will be used to store the name of the selected thing as a separate triple</td>
+    </tr>
+
+    <tr>
+      <td>dataSource</td>
+
+      <td>DataSource</td>
+
+      <td>The API details or query endpint and query details to be usde to search of the itemn in
+        the databasse.</td>
+    </tr>
+    <tr>
+      <td>targetClass</td>
+      <td>rdfs:Class</td>
+      <td>Is tyhis is specified, it be used to replace any occuurences of
+         "$(targetClass)" in the query template.  this allows different instances
+         of AutocompleteField to share the same DatSource, by specifying different values for <tt>targetClass</tt>.</td>
+    </tr>
+
+  </table>
+
     <h3>Documentation fields</h3>
 
     <h4 class="class">Heading</h4>

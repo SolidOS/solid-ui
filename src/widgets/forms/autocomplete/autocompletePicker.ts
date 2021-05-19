@@ -243,7 +243,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
       numberOfRows = AUTOCOMPLETE_ROWS
     } else {
       if (!allDisplayed || !lastFilter || !filter.startsWith(lastFilter)) {
-        debug.log(`   Querying database at "$(filter}" cf last "${lastFilter}".`)
+        debug.log(`   Querying database at "${filter}" cf last "${lastFilter}".`)
         lastBindings = await loadBindingsAndFilterByLanguage(filter, languagePrefs) // freesh query
       }
       // Trim table as earach gets tighter:
@@ -293,7 +293,8 @@ export async function renderAutoComplete (dom: HTMLDocument,
 
   // const queryParams: QueryParameters = acOptions.queryParams
   const targetClass = acOptions.targetClass
-  if (!targetClass) throw new Error('need  class')
+  if (!targetClass) throw new Error('renderAutoComplete: missing targetClass')
+  // console.log(`renderAutoComplete: targetClass=${targetClass}` )
   if (decoration.acceptButton) {
     decoration.acceptButton.addEventListener('click', acceptButtonHandler, false)
   }

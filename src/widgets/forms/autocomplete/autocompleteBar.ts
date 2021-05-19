@@ -71,7 +71,7 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
       creationArea.removeChild(decoratedAutocomplete)
       decoratedAutocomplete = undefined
     } else {
-      displayAutocomplete()
+      await displayAutocomplete()
     }
   }
 
@@ -120,7 +120,7 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
   creationArea.setAttribute('style', 'display: flex; flex-flow: wrap;')
 
   if (acOptions.permanent || acOptions.currentObject) {
-    displayAutocomplete()
+    await displayAutocomplete()
   }
   if (barOptions.editable) {
     // creationArea.appendChild(await renderAutoComplete(dom, barOptions, autoCompleteDone)) wait for searchButton

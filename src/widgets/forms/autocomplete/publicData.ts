@@ -32,6 +32,7 @@ type Bindings = Binding[]
 
 export type QueryParameters =
 { label: string;
+  limit?: number;
   logo?: NamedNode;
   searchByNameQuery?: string;
   searchByNameURI?: string;
@@ -130,6 +131,7 @@ export const wikidataOutgoingClassMap = {
 
 export const wikidataParameters = {
   label: 'WikiData',
+  limit: 3000, // Need a high one as very many items, and many languages
   logo: kb.sym('https://www.wikimedia.org/static/images/project-logos/wikidatawiki.png'),
   endpoint: 'https://query.wikidata.org/sparql',
   searchByNameQuery: `SELECT ?subject ?name
@@ -274,9 +276,10 @@ export function ESCOResultToBindings (json: Object): Bindings {
 */
 export async function queryESCODataByName (filter: string, theClass:NamedNode, queryTarget: QueryParameters): Promise<Bindings> {
   if (!queryTarget.searchByNameURI) throw new Error('Missing queryTarget.searchByNameURI on queryESCODataByName')
+  const limit = queryTarget.limit || AUTOCOMPLETE_LIMIT
   const queryURI = queryTarget.searchByNameURI
     .replace('$(name)', filter)
-    .replace('$(limit)', '' + AUTOCOMPLETE_LIMIT)
+    .replace('$(limit)', '' + limit)
     .replace('$(targetClass)', theClass.toNT())
   debug.log('Querying ESCO data - uri: ' + queryURI)
 
@@ -298,8 +301,9 @@ export async function queryPublicDataByName (
   languages: Array<string>,
   queryTarget: QueryParameters): Promise<Bindings> {
   function substituteStrings (template: string):string {
+    const limit = queryTarget.limit || AUTOCOMPLETE_LIMIT
     const u1 = template.replace('$(name)', filter)
-      .replace('$(limit)', '' + AUTOCOMPLETE_LIMIT)
+      .replace('$(limit)', '' + limit)
       .replace('$(language)', language)
     return u1.replace('$(targetClass)', theClass.toNT())
   }
@@ -315,10 +319,18 @@ export async function queryPublicDataByName (
     return queryPublicDataSelect(sparql, queryTarget)
   } else if (queryTarget.searchByNameURI) { // not sparql - random API
     const queryURI = substituteStrings(queryTarget.searchByNameURI)
-    const response = await kb.fetcher.webOperation('GET', queryURI, fetcherOptionsJsonPublicData)
+    let response
+    try {
+      response = await kb.fetcher.webOperation('GET', queryURI, fetcherOptionsJsonPublicData)
+    } catch (err) {
+      throw new Error(`Exception when trying to fetch ${queryURI} \n ${err}`)
+    }
     const text = response.responseText || '' // ts
+    if (response.status !== 200) {
+      throw new Error(`HTTP error status ${response.status} trying to fetch ${queryURI} `)
+    }
     debug.log('    Query result  text' + text.slice(0, 500) + '...')
-    if (text.length === 0) throw new Error('Wot no text back from ESCO query ' + queryURI)
+    if (text.length === 0) throw new Error('Wot no text back from public data query ' + queryURI)
     const json = JSON.parse(text)
     debug.log('    API Query result JSON' + JSON.stringify(json, null, 4).slice(0, 500) + '...')
     if ((json as any)._embedded) {
