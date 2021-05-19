@@ -43,13 +43,13 @@ export class AccessController {
     if (defaultHolder && defaultACLDoc) {
       this.isUsingDefaults = true
       const aclDefaultStore = adoptACLDefault(this.targetDoc, targetACLDoc, defaultHolder, defaultACLDoc)
-      this.mainCombo = new AccessGroups(targetDoc, targetACLDoc, this, aclDefaultStore, { defaults: this.isContainer })
+      this.mainCombo = new AccessGroups(targetDoc, targetACLDoc, this, aclDefaultStore, { defaults: true })
       this.defaultsCombo = null
       this.defaultsDiffer = false
     } else {
       this.isUsingDefaults = false
       this.mainCombo = new AccessGroups(targetDoc, targetACLDoc, this, store)
-      this.defaultsCombo = new AccessGroups(targetDoc, targetACLDoc, this, store, { defaults: this.isContainer })
+      this.defaultsCombo = new AccessGroups(targetDoc, targetACLDoc, this, store, { defaults: true })
       this.defaultsDiffer = !sameACL(this.mainCombo.aclMap, this.defaultsCombo.aclMap)
     }
   }
@@ -76,7 +76,7 @@ export class AccessController {
     if (this.defaultsCombo && this.defaultsDiffer) {
       this.rootElement.appendChild(this.renderRemoveDefaultsController())
       this.rootElement.appendChild(this.defaultsCombo.render())
-    } else if (this.isEditable && this.isContainer) {
+    } else if (this.isEditable) {
       this.rootElement.appendChild(this.renderAddDefaultsController())
     }
     if (!this.targetIsProtected && this.isUsingDefaults) {
