@@ -211,7 +211,7 @@ describe('basicField', () => {
     inputElement.value = '555-1234'
     const event = new Event('keyup')
     inputElement.dispatchEvent(event)
-    expect(inputElement.getAttribute('style')).toEqual('background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; color: green;')
+    expect(inputElement.getAttribute('style')).toEqual('background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em;color: green;')
   })
 
   it('goes red if value doesnt match pattern', () => {
@@ -240,7 +240,7 @@ describe('basicField', () => {
     inputElement.value = 'not a valid phone number'
     const event = new Event('keyup')
     inputElement.dispatchEvent(event)
-    expect(inputElement.getAttribute('style')).toEqual('background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; color: red;')
+    expect(inputElement.getAttribute('style')).toEqual('background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em;color: red;')
   })
 
   it('handles change if value doesnt match pattern', () => {
