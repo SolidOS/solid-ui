@@ -3,6 +3,7 @@
 import * as ns from '../../../ns'
 import { store } from '../../../logic'
 import * as widgets from '../../../widgets'
+import * as style from '../../../style'
 import { renderAutocompleteControl } from './autocompleteBar'
 import { QueryParameters } from './publicData'
 import { NamedNode, BlankNode, Literal, Variable, st } from 'rdflib'
@@ -102,13 +103,13 @@ export function autocompleteField (
   const kb = store
   const formDoc = form.doc ? form.doc() : null // @@ if blank no way to know
 
-  const box = dom.createElement('tr')
+  const box = dom.createElement('div')
   if (container) container.appendChild(box)
-  const lhs = dom.createElement('td')
+  const lhs = dom.createElement('div')
   lhs.setAttribute('class', 'formFieldName')
-  lhs.setAttribute('style', '  vertical-align: middle;')
+  lhs.setAttribute('style', style.formFieldNameBoxStyle)
   box.appendChild(lhs)
-  const rhs = dom.createElement('td')
+  const rhs = dom.createElement('div')
   rhs.setAttribute('class', 'formFieldValue')
   box.appendChild(rhs)
 

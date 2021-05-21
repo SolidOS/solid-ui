@@ -293,6 +293,13 @@ export async function queryESCODataByName (filter: string, theClass:NamedNode, q
   return ESCOResultToBindings(json)
 }
 
+function fixWikidataJSON (str) {
+  const badness = str.indexOf('SPARQL-QUERY')
+  if (badness < 0) return str
+  debug.warn('  ### Fixing JSON with wikidata error code injection ' + str.slice(badness, badness + 200))
+  const goodness = str.lastIndexOf('}, {')
+  return str.slice(goodness) + ' } ] } } ' // Close binding, array, bindings, results, root object
+}
 /*  Query all entities of given class and partially matching name
 */
 export async function queryPublicDataByName (
@@ -331,7 +338,8 @@ export async function queryPublicDataByName (
     }
     debug.log('    Query result  text' + text.slice(0, 500) + '...')
     if (text.length === 0) throw new Error('Wot no text back from public data query ' + queryURI)
-    const json = JSON.parse(text)
+    const text2 = fixWikidataJSON(text) // Kludge: strip of interrupting error message
+    const json = JSON.parse(text2)
     debug.log('    API Query result JSON' + JSON.stringify(json, null, 4).slice(0, 500) + '...')
     if ((json as any)._embedded) {
       debug.log('      Looks like ESCO')

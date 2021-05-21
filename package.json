@@ -54,6 +54,7 @@
   "homepage": "https://github.com/solid/solid-ui",
   "dependencies": {
     "@babel/runtime": "^7.12.5",
+    "contacts-pane": "^2.4.7",
     "crypto-browserify": "^3.12.0",
     "escape-html": "^1.0.3",
     "jss": "^10.5.1",

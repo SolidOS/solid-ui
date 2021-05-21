@@ -4,7 +4,6 @@ This control has the buttons which control the state between editing, viewing, s
 and so on.  See the state diagram in the documentation.  The AUtocomplete Picker does the main work.
 
 */
-
 import * as ns from '../../../ns'
 import { icons } from '../../../iconBase'
 import { store } from '../../../logic'
@@ -81,11 +80,8 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
     }
   }
 
-  // const queryParams = barOptions.queryParameters || wikidataParameters
   const acceptButton = widgets.continueButton(dom)
   const cancelButton = widgets.cancelButton(dom) // @@ not in edit case only in temporary case cancelButtonHandler
-  // const deleteButton = widgets.button(dom, DELETE_ICON, 'Remove', _event => {}) // @@ add handler
-
   const deleteButtonContainer = dom.createElement('div')
   const noun = acOptions.targetClass ? utils.label(acOptions.targetClass) : 'item'
   const deleteButton = widgets.deleteButtonWithCheck(dom, deleteButtonContainer, noun, deleteOne) // need to knock out this UI or caller does that
@@ -113,11 +109,10 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
   }
 
   let decoratedAutocomplete = undefined as HTMLElement | undefined
-  // const { dom } = dataBrowserContext
-  // barOptions = barOptions || {}
 
   const creationArea = dom.createElement('div')
-  creationArea.setAttribute('style', 'display: flex; flex-flow: wrap;')
+  creationArea.style.display = 'flex'
+  creationArea.style.flexDirection = 'row'
 
   if (acOptions.permanent || acOptions.currentObject) {
     await displayAutocomplete()

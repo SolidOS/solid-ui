@@ -1,4 +1,4 @@
-/* Create and edit data using public data
+/* Autocomplete Picker: Create and edit data using public data
 **
 ** As the data source is passed as a parameter, all kinds of APIa and query services can be used
 **
@@ -63,7 +63,7 @@ function assertNN (x):NamedNode {
 }
 */
 export function setVisible (element:HTMLElement, visible:boolean) {
-  element.style.visibility = visible ? 'visible' : 'collapse'
+  element.style.display = visible ? '' : 'none' // Do not use visibility, it holds the real esttate
 }
 
 // The core of the autocomplete UI
@@ -227,6 +227,11 @@ export async function renderAutoComplete (dom: HTMLDocument,
       })
       return row
     } // rowForBinding
+    function compareBindingsByName (self, other) {
+      return other.name.value > self.name.value
+        ? 1
+        : other.name.name < self.name.value ? -1 : 0
+    }
 
     if (inputEventHandlerLock) {
       debug.log(`Ignoring "${searchInput.value}" because of lock `)
@@ -246,7 +251,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
         debug.log(`   Querying database at "${filter}" cf last "${lastFilter}".`)
         lastBindings = await loadBindingsAndFilterByLanguage(filter, languagePrefs) // freesh query
       }
-      // Trim table as earach gets tighter:
+      // Trim table as search gets tighter:
       const slimmed = filterByName(filter, lastBindings)
       if (loadedEnough && slimmed.length <= AUTOCOMPLETE_ROWS_STRETCH) {
         numberOfRows = slimmed.length // stretch if it means we get all items
@@ -254,8 +259,11 @@ export async function renderAutoComplete (dom: HTMLDocument,
       allDisplayed = loadedEnough && slimmed.length <= numberOfRows
       debug.log(` Filter:"${filter}" lastBindings: ${lastBindings.length}, slimmed to ${slimmed.length}; rows: ${numberOfRows}, Enough? ${loadedEnough}, All displayed? ${allDisplayed}`)
 
+      const displayable = slimmed.slice(0, numberOfRows)
+
+      displayable.sort(compareBindingsByName)
       clearList()
-      for (const binding of slimmed) {
+      for (const binding of displayable) {
         table.appendChild(rowForBinding(binding))
       }
       if (slimmed.length === 1) {
