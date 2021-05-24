@@ -233,7 +233,6 @@ export class AccessController {
     const updater = newAClGraph.updater || new UpdateManager(newAClGraph)
 
     // save ACL resource
-
     return new Promise((resolve, reject) => {
       // check acl for acl:Write alert and acl:Control confirm
       const hasWrite = newAClGraph.any(undefined, ns.acl('mode'), ns.acl('Write'), this.targetACLDoc)
