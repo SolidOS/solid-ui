@@ -83,4 +83,16 @@ describe('label', () => {
       expect(result).toEqual('profile')
     })
   })
+
+  describe('cleanup', () => {
+    it('replaces dashes a underscores with blanks', () => {
+      const result = label(sym('https://resource.example/path/to/some-weired_folder-name'))
+      expect(result).toEqual('some weired folder name')
+    })
+
+    it('separates camel case parts with blanks', () => {
+      const result = label(sym('https://resource.example/path/to/camelCaseFolderName/'))
+      expect(result).toEqual('camel Case Folder Name')
+    })
+  })
 })
