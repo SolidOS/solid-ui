@@ -28,7 +28,9 @@ describe('label', () => {
       'http://www.w3.org/2001/04/roadmap/org#name',
       'http://www.w3.org/2002/12/cal/ical#summary',
       'http://xmlns.com/foaf/0.1/nick',
-      'http://www.w3.org/2000/01/rdf-schema#label'
+      'http://www.w3.org/2000/01/rdf-schema#label',
+      'https://www.w3.org/ns/activitystreams#name',
+      'http://schema.org/name'
     ])('renders %s as label', (property) => {
       store.add(thing, sym(property), lit('the label'), thing.doc())
       const result = label(thing)

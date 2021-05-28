@@ -55,6 +55,8 @@ export function label (x, initialCap) {
     kb.any(x, kb.sym('http://www.w3.org/2001/04/roadmap/org#name')) ||
     kb.any(x, UI.ns.cal('summary')) ||
     kb.any(x, UI.ns.foaf('nick')) ||
+    kb.any(x, UI.ns.as('name')) ||
+    kb.any(x, UI.ns.schema('name')) ||
     kb.any(x, UI.ns.rdfs('label'))
 
   if (lab1) {
