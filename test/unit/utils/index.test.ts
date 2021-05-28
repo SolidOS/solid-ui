@@ -1,4 +1,4 @@
-import { silenceDebugMessages } from '../helpers/setup'
+import { silenceDebugMessages } from '../../helpers/setup'
 import { JSDOM } from 'jsdom'
 import {
   addLoadEvent, // not used anywhere
@@ -29,7 +29,7 @@ import {
   stackString,
   syncTableToArray,
   syncTableToArrayReOrdered
-} from '../../src/utils'
+} from '../../../src/utils'
 import { sym } from 'rdflib'
 
 silenceDebugMessages()
