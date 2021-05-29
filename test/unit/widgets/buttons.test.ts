@@ -1,5 +1,8 @@
+import * as buttons from '../../../src/widgets/buttons'
 import { silenceDebugMessages } from '../../helpers/setup'
 import { JSDOM, DOMWindow } from 'jsdom'
+import { findByText } from '@testing-library/dom'
+import userEvent from '@testing-library/user-event'
 import {
   addStyleSheet,
   allClassURIs,
@@ -51,11 +54,13 @@ import { iconBase } from '../../../src/iconBase'
 import { clearStore } from '../helpers/clearStore'
 import { domWithHead } from '../../helpers/dom-with-head'
 import { solidLogicSingleton } from '../../../src/logic'
+import { hasUncaughtExceptionCaptureCallback } from 'node:process'
 
 const store = solidLogicSingleton.store
 
 silenceDebugMessages()
 jest.mock('solid-auth-client')
+
 let window: DOMWindow
 let dom: HTMLDocument
 let element: HTMLDivElement
@@ -210,16 +215,20 @@ describe('createLinkDiv', () => {
     createLinkDiv(dom, element, obj, options)
     expect(element.children[0].getAttribute('style')).toEqual(linkDivStyle)
   })
+
+  // TODO: find out how to use findByText
   it('adds the deleteFunction of .... deleteButton with Check', () => {
-    const options = {
-      deleteFunction: () => {}
-    }
     createLinkDiv(dom, element, obj, options)
+    const deleteImg = element.children[0].children[0]
+    expect(element.children[0].children[0].nodeName).toEqual('IMG')
+    expect(deleteImg.getAttribute('title')).toEqual('Remove this one')
   })
+
   it('adds the link icon and link for the uri if link option is true', () => {
     const options = {
       link: true
     }
+    // testing-library dom need to check solid-panes
     createLinkDiv(dom, element, obj, options)
     expect(element.children[0].children[0].nodeName).toEqual('A')
   })
@@ -228,14 +237,15 @@ describe('createLinkDiv', () => {
 describe('createNameDiv', () => {
   const obj = namedNode('https://test.com/#name')
 
-  it('adds a div to the element with textContent equal to Name', () => {
-    createNameDiv(dom, element, 'Name', obj)
+  it('adds a div to the element with textContent equal to Something', () => {
+    createNameDiv(dom, element, 'Something', obj)
     expect(element.children.length).toBeGreaterThan(0)
-    expect(element.children[0].textContent).toEqual('Name')
+    expect(element.children[0].textContent).toEqual('Something')
   })
 
-  it.skip('uses the name from the obj if no title is given', () => {
-    // this is more complicated to test for now leaving it
+  it('uses the name from the obj if no title is given', () => {
+    createNameDiv(dom, element, null, obj)
+    expect(element.children[0].textContent).toEqual('name')
   })
 })
 
@@ -466,13 +476,15 @@ describe('renderAsDiv ', () => {
     const element = renderAsDiv(dom, obj, options)
     expect(element.children[0].children[0].getAttribute('alt')).toEqual('test')
   })
-  it.skip('the div is clickable if given true for the clickable option', () => {
+  it('the div is clickable if given true for the clickable option', () => {
+    const mockClickFunction = jest.fn()
     const options = {
       clickable: true,
-      onClickFunction: () => {}
+      onClickFunction: mockClickFunction
     }
     const element = renderAsDiv(dom, obj, options)
-    // expect(element.).toBeTruthy()
+    userEvent.click(element)
+    expect(mockClickFunction).toHaveBeenCalled()
   })
   it('wraps the div in a TR if wrapInATR option is set to true', () => {
     const options = {
