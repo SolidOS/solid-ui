@@ -478,6 +478,7 @@ export function deleteButtonWithCheck (
   let sureButtonElt, cancelButtonElt
   img.setAttribute('src', minusIconURI) //  plus sign
   img.setAttribute('style', 'margin: 0.2em; width: 1em; height:1em')
+  img.setAttribute('role', 'button')
   img.title = 'Remove this ' + noun
   const deleteButtonElt = img
 
