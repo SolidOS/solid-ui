@@ -1,7 +1,6 @@
-import * as buttons from '../../../src/widgets/buttons'
 import { silenceDebugMessages } from '../../helpers/setup'
 import { JSDOM, DOMWindow } from 'jsdom'
-import { findByText } from '@testing-library/dom'
+import { getByRole } from '@testing-library/dom'
 import userEvent from '@testing-library/user-event'
 import {
   addStyleSheet,
@@ -219,8 +218,9 @@ describe('createLinkDiv', () => {
   // TODO: find out how to use findByText
   it('adds the deleteFunction of .... deleteButton with Check', () => {
     createLinkDiv(dom, element, obj, options)
-    const deleteImg = element.children[0].children[0]
-    expect(element.children[0].children[0].nodeName).toEqual('IMG')
+    const deleteImg = getByRole(element, 'button')
+    // const deleteImg = element.children[0].children[0]
+    expect(deleteImg.nodeName).toEqual('IMG')
     expect(deleteImg.getAttribute('title')).toEqual('Remove this one')
   })
 
