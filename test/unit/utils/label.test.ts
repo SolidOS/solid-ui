@@ -65,22 +65,13 @@ describe('label', () => {
     })
     it('the last part of the path is used if fragment is #me', () => {
       const result = label(
-        sym('https://resource.example/profile/card#me')
+        sym('https://resource.example/path/to/folder/#me')
       )
-      expect(result).toEqual('card')
+      expect(result).toEqual('folder')
     })
-    it('the last part of the path before foaf.rdf is used', () => {
-      const result = label(
-        sym('https://resource.example/profile/foaf.rdf')
-      )
-      expect(result).toEqual('profile')
-    })
-
-    it('the last part of the path before foaf is used', () => {
-      const result = label(
-        sym('https://resource.example/profile/foaf')
-      )
-      expect(result).toEqual('profile')
+    it('the hostname is used for common WebID URI pattern', () => {
+      const result = label(sym('https://alice.solid.example/profile/card#me'))
+      expect(result).toEqual('alice.solid.example')
     })
   })
 

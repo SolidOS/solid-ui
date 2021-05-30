@@ -76,20 +76,27 @@ export function label (thing, initialCap = false): string {
       }
     }
   }
-  if (s.slice(-5) === '#this') s = s.slice(0, -5)
-  else if (s.slice(-3) === '#me') s = s.slice(0, -3)
+
+  s = slice(s, '/profile/card#me')
+  s = slice(s, '#this')
+  s = slice(s, '#me')
 
   const hash = s.indexOf('#')
   if (hash >= 0) return cleanUp(s.slice(hash + 1))
-
-  if (s.slice(-9) === '/foaf.rdf') s = s.slice(0, -9)
-  else if (s.slice(-5) === '/foaf') s = s.slice(0, -5)
 
   // Eh? Why not do this? e.g. dc:title needs it only trim URIs, not rdfs:labels
   const slash = s.lastIndexOf('/', s.length - 2) // (len-2) excludes trailing slash
   if (slash >= 0 && slash < thing.uri.length) return cleanUp(s.slice(slash + 1))
 
   return doCap(decodeURIComponent(thing.uri))
+}
+
+function slice (s: string, suffix: string) {
+  const length = suffix.length * -1
+  if (s.slice(length) === suffix) {
+    return s.slice(0, length)
+  }
+  return s
 }
 
 // Hard coded known label predicates
