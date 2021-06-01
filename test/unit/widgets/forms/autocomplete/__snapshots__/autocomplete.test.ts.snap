@@ -21,7 +21,7 @@ exports[`autocompleteField adds the autocomplete field to the container, if prov
 </div>
 `;
 
-exports[`autocompleteField clickimng on row of gren table then acecpt button saves data 1`] = `
+exports[`autocompleteField clicking on row of greenn table then accecpt button saves data 1`] = `
 <div>
   <div
     class="formFieldName"

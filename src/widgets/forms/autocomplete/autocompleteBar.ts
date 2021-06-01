@@ -58,9 +58,16 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
     decoratedAutocomplete = dom.createElement('div') as HTMLElement
     decoratedAutocomplete.setAttribute('style', 'display: flex; flex-flow: wrap;')
     decoratedAutocomplete.appendChild(await renderAutoComplete(dom, acOptions, decoration, autoCompleteDone))
+    // console.log('@@ acceptButton', acceptButton)
     decoratedAutocomplete.appendChild(acceptButton)
+    // console.log('@@ cancelButton', cancelButton)
+
     decoratedAutocomplete.appendChild(cancelButton)
+    // console.log('@@ editButton', editButton)
+
     decoratedAutocomplete.appendChild(editButton)
+    // console.log('@@ deleteButtonContainer', deleteButtonContainer)
+
     decoratedAutocomplete.appendChild(deleteButtonContainer)
     creationArea.appendChild(decoratedAutocomplete)
   }
@@ -81,15 +88,19 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
   }
 
   const acceptButton = widgets.continueButton(dom)
-  const cancelButton = widgets.cancelButton(dom) // @@ not in edit case only in temporary case cancelButtonHandler
+  acceptButton.setAttribute('data-testid', 'accept-button')
+
+  const cancelButton = widgets.cancelButton(dom)
+  cancelButton.setAttribute('data-testid', 'cancel-button')
   const deleteButtonContainer = dom.createElement('div')
   const noun = acOptions.targetClass ? utils.label(acOptions.targetClass) : 'item'
   const deleteButton = widgets.deleteButtonWithCheck(dom, deleteButtonContainer, noun, deleteOne) // need to knock out this UI or caller does that
-
+  deleteButton.setAttribute('data-testid', 'delete-button')
   const editButton = widgets.button(dom, EDIT_ICON, 'Edit', _event => {
     editing = !editing
     syncEditingStatus()
   })
+  editButton.setAttribute('data-testid', 'edit-button')
   let editing = true
 
   function syncEditingStatus () {

@@ -1,25 +1,23 @@
 /* Test the autocomplete field in the form system
 */
 
-import { clearStore } from '../../../helpers/clearStore'
 import { getFileContent } from '../../../helpers/getFileContent'
 // Note different helpers directory:
-import { silenceDebugMessages } from '../../../../helpers/setup'
-import { lit, namedNode, parse} from 'rdflib'
+// import { silenceDebugMessages } from '../../../../helpers/setup'
+import { parse } from 'rdflib'
 import {
   autocompleteField
 } from '../../../../../src/widgets/forms/autocomplete/autocompleteField'
 import { store, ns } from '../../../../../src/'
-import { textInputStyle } from '../../../../../src/style'
+// import { textInputStyle } from '../../../../../src/style'
 import {
-  findByAltText,
+//  findByAltText,
   findByTestId,
-  getByAltText,
-  queryByAltText,
-  waitFor,
-} from "@testing-library/dom";
+  //  getByAltText,
+  // queryByAltText,
+  waitFor
+} from '@testing-library/dom'
 import nock from 'nock'
-
 
 jest.unmock('rdflib') // we need Fetcher to work (mocked)
 jest.unmock('debug') // while debugging only @@
@@ -27,22 +25,18 @@ jest.mock('solid-auth-client', () => ({
   currentSession: () => Promise.resolve(),
   trackSession: () => null
 }))
-jest.mock('debug', () => { // temp
-  log: console.log
-})
 
 const turtleResponseHeaders = {
-  'Vary': "Accept, Authorization, Origin",
-  'Access-Control-Allow-Credentials': "true",
-  'Access-Control-Expose-Headers': "Authorization, User, Location, Link, Vary, Last-Modified, ETag, Accept-Patch, Accept-Post, Updates-Via, Allow, WAC-Allow, Content-Length, WWW-Authenticate, MS-Author-Via",
-  'Allow': "OPTIONS, HEAD, GET, PATCH, POST, PUT, DELETE",
-  //Link: <one.ttl.acl>; rel="acl", <one.ttl.meta>; rel="describedBy", <http://www.w3.org/ns/ldp#Resource>; rel="type"
+  Vary: 'Accept, Authorization, Origin',
+  'Access-Control-Allow-Credentials': 'true',
+  'Access-Control-Expose-Headers': 'Authorization, User, Location, Link, Vary, Last-Modified, ETag, Accept-Patch, Accept-Post, Updates-Via, Allow, WAC-Allow, Content-Length, WWW-Authenticate, MS-Author-Via',
+  Allow: 'OPTIONS, HEAD, GET, PATCH, POST, PUT, DELETE',
+  // Link: <one.ttl.acl>; rel="acl", <one.ttl.meta>; rel="describedBy", <http://www.w3.org/ns/ldp#Resource>; rel="type"
   'WAC-Allow': 'user="read write",public="read',
-  'MS-Author-Via': "SPARQL",
+  'MS-Author-Via': 'SPARQL',
   // Updates-Via: wss://timbl.com
-  'Content-Type': "text/turtle; charset=utf-8"
+  'Content-Type': 'text/turtle; charset=utf-8'
 }
-
 
 const prefixes = `@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
@@ -78,7 +72,7 @@ const formText = prefixes + `
           ?subject rdfs:label ?name.
           FILTER regex(?name, "$(name)", "i")
         } LIMIT $(limit) """.
-  `;
+  `
 
 const initialDataText = prefixes + `
 <#Alice> solid:publicId  wd:Q12345 .
@@ -92,25 +86,23 @@ const form = kb.sym('https://example.org/forms.ttl#CorporationAutocomplete')
 const subject = kb.sym('https://example.org/data.ttl#Alice')
 const predicate = ns.solid('publicId')
 
-parse(formText, store, form.doc().uri);
+parse(formText, store, form.doc().uri)
 parse(initialDataText, store, subject.doc().uri)
 
 // silenceDebugMessages()
 // afterEach(clearStore)
 
-async function wait(ms) {
+async function wait (ms) {
   return new Promise(resolve => {
-    setTimeout(resolve, ms);
-  });
+    setTimeout(resolve, ms)
+  })
 }
 
-
 describe('autocompleteField', () => {
-  let inputElement, result
+  let result
   beforeEach(() => {
     // fetch.resetMocks();
-  });
-
+  })
 
   it('exists as a function', () => {
     expect(autocompleteField).toBeInstanceOf(Function)
@@ -122,7 +114,7 @@ describe('autocompleteField', () => {
 
     result = autocompleteField(
       document,
-      container as HTMLElement | undefined ,
+      container as HTMLElement | undefined,
       already,
       subject,
       form,
@@ -130,7 +122,7 @@ describe('autocompleteField', () => {
       callbackFunction
     )
 
-    const inputElement = await findByTestId(result, "autocomplete-input");
+    const inputElement = await findByTestId(result, 'autocomplete-input')
     expect(inputElement.tagName).toEqual('INPUT')
     expect(result).toMatchSnapshot()
   })
@@ -155,7 +147,7 @@ describe('autocompleteField', () => {
   it('has an accept button which is hidden', async () => {
     const container = document.createElement('div')
     const already = {}
-        const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
 
     result = autocompleteField(
       document,
@@ -166,11 +158,11 @@ describe('autocompleteField', () => {
       subject.doc(),
       callbackFunction
     )
-    const acceptButton = await findByTestId(result, "accept-button");
+    const acceptButton = await findByTestId(result, 'accept-button')
     expect(acceptButton.style.display).toEqual('none')
-    const cancelButton = await findByTestId(result, "cancel-button");
+    const cancelButton = await findByTestId(result, 'cancel-button')
     expect(cancelButton.style.display).toEqual('none')
-    const editButton = await findByTestId(result, "edit-button");
+    const editButton = await findByTestId(result, 'edit-button')
     expect(editButton.style.display).toEqual('none')
     // const deleteButton = await findByTestId(result, "delete-button");  @@
     // expect(deleteButton.style.display).toEqual('none')
@@ -179,7 +171,7 @@ describe('autocompleteField', () => {
   it('has an input element which has the initial value', async () => {
     const container = document.createElement('div')
     const already = {}
-        const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
 
     result = autocompleteField(
       document,
@@ -191,9 +183,8 @@ describe('autocompleteField', () => {
       callbackFunction
     )
 
-    const inputElement = await findByTestId(result, "autocomplete-input");
+    const inputElement = await findByTestId(result, 'autocomplete-input')
     expect(inputElement.value).toEqual('test institution')
-
   })
 
   it('makes Cancel button appear when user inputs something', async () => {
@@ -211,16 +202,15 @@ describe('autocompleteField', () => {
       callbackFunction
     )
     const inputElement = await findByTestId(result, 'autocomplete-input') as HTMLInputElement
-    const fakeResponse = await getFileContent('test/unit/widgets/forms/autocomplete/broken-sparql-response-small.txt')
+    // const fakeResponse = await getFileContent('test/unit/widgets/forms/autocomplete/broken-sparql-response-small.txt')
 
     inputElement.value = 'mass'
 
     const event1 = new Event('input')
     inputElement.dispatchEvent(event1)
 
-    const cancelButton = await findByTestId(result, "cancel-button");
+    const cancelButton = await findByTestId(result, 'cancel-button')
     expect(cancelButton.style.display).toEqual('') // Visibile again
-
   })
 
   it('makes Cancel button work when user inputs something', async () => {
@@ -238,14 +228,14 @@ describe('autocompleteField', () => {
       callbackFunction
     )
     const inputElement = await findByTestId(result, 'autocomplete-input') as HTMLInputElement
-    const fakeResponse = await getFileContent('test/unit/widgets/forms/autocomplete/broken-sparql-response-small.txt')
+    //   const fakeResponse = await getFileContent('test/unit/widgets/forms/autocomplete/broken-sparql-response-small.txt')
 
     inputElement.value = 'mass'
 
     const event1 = new Event('input')
     inputElement.dispatchEvent(event1)
 
-    const cancelButton = await findByTestId(result, "cancel-button");
+    const cancelButton = await findByTestId(result, 'cancel-button')
     expect(cancelButton.style.display).toEqual('') // Visibile again
 
     const event2 = new Event('click')
@@ -253,7 +243,6 @@ describe('autocompleteField', () => {
     await wait(300)
     expect(inputElement.value).toEqual('test institution') // restored
     expect(cancelButton.style.display).toEqual('none') // invisibile again
-
   })
 
   it('on innpt fetches data (fixing wikidata timeout issue) making green table', async () => {
@@ -273,7 +262,7 @@ describe('autocompleteField', () => {
     const inputElement = await findByTestId(result, 'autocomplete-input') as HTMLInputElement
     const fakeResponse = await getFileContent('test/unit/widgets/forms/autocomplete/broken-sparql-response-small.txt')
 
-    const scope0 = nock('https://query.wikidata.org')
+    nock('https://query.wikidata.org')
       .get(/^\/sparql/)
       .reply(200, fakeResponse) // replyWithFile?
 
@@ -287,11 +276,9 @@ describe('autocompleteField', () => {
     expect(table.children.length).toBeGreaterThan(1)
     expect(table).toMatchSnapshot()
     expect(table.children[1].style.color).toEqual('rgb(0, 136, 0)') // green as all loaded
-
   })
 
-
-  it('clicking on row of green table then accecpt button saves data', async () => {
+  it('clicking on row of greenn table then accecpt button saves data', async () => {
     const container = document.createElement('div')
     const already = {}
     const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
@@ -308,7 +295,7 @@ describe('autocompleteField', () => {
     const inputElement = await findByTestId(result, 'autocomplete-input') as HTMLInputElement
     const fakeResponse = await getFileContent('test/unit/widgets/forms/autocomplete/broken-sparql-response-small.txt')
 
-    const scope1 = nock('https://query.wikidata.org')
+    nock('https://query.wikidata.org')
       .get(/^\/sparql/)
       .reply(200, fakeResponse) // replyWithFile?
 
@@ -321,7 +308,7 @@ describe('autocompleteField', () => {
     await waitFor(() => expect(table.children.length).toEqual(4))
     // expect(table.children.length).toBeGreaterThan(1)
     let row
-    for (let i = 0; i<table.children.length; i++) {
+    for (let i = 0; i < table.children.length; i++) {
       if (table.children[i].textContent.includes(CHOSEN_NAME)) {
         row = table.children[i]
       }
@@ -330,40 +317,40 @@ describe('autocompleteField', () => {
     const clickEvent = new Event('click')
     row.dispatchEvent(clickEvent)
 
-    console.log(`waiting ... for accept effect: ${inputElement.textContent}`)
+    // console.log(`waiting ... for accept effect: ${inputElement.textContent}`)
     await wait(1000)
 
     expect(row.children.length).toEqual(0)
-    const inputElement2 = await findByTestId(result, 'autocomplete-input') as HTMLInputElement
+    await findByTestId(result, 'autocomplete-input')
 
     expect(result).toMatchSnapshot()
     // await waitFor(() => expect(inputElement2.textContent).toEqual(CHOSEN_NAME)) @@ re enable
 
-    const acceptButton = await findByTestId(result, "accept-button");
+    const acceptButton = await findByTestId(result, 'accept-button')
     expect(acceptButton.style.display).toEqual('') // should be visible
 
-    console.log('nocking get subject' , subject.site().uri)
-    const dataGetNock = nock(subject.site().uri)
+    // console.log('nocking get subject' , subject.site().uri)
+    nock(subject.site().uri)
       .defaultReplyHeaders(turtleResponseHeaders)
       .get('/data.ttl')
       .reply(200, initialDataText) // replyWithFile?
 
     await kb.fetcher.load(subject)
 
-    console.log('nocking patch ' , subject.site().uri)
-    const scope2 = nock(subject.site().uri)
-     .intercept('/data.ttl', 'PATCH')
-      .reply(200, "ok")
+    // console.log('nocking patch ' , subject.site().uri)
+    nock(subject.site().uri)
+      .intercept('/data.ttl', 'PATCH')
+      .reply(200, 'ok')
 
-    console.log('nocking patch ' , subject.site().uri)
-    const scope4 = nock(subject.site().uri)
-     .intercept('/data.ttl', 'PATCH')
-      .reply(200, "ok")
+    // console.log('nocking patch ' , subject.site().uri)
+    nock(subject.site().uri)
+      .intercept('/data.ttl', 'PATCH')
+      .reply(200, 'ok')
 
     const clickEvent2 = new Event('click')
     acceptButton.dispatchEvent(clickEvent2)
 
-    console.log('waiting .. after accept button click')
+    // console.log('waiting .. after accept button click')
     await wait(500)
     // Check the data is right in local quadstore
     const obj = kb.any(subject, predicate, null, subject.doc())
@@ -371,7 +358,5 @@ describe('autocompleteField', () => {
     const name = kb.any(obj, ns.schema('name'), null, subject.doc())
     expect(name.termType).toEqual('Literal')
     expect(name.value).toEqual(CHOSEN_NAME)
-
   })
-
 })

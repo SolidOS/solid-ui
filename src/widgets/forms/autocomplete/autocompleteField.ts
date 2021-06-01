@@ -11,7 +11,7 @@ import { AutocompleteOptions } from './autocompletePicker'
 /**
   * Render a autocomplete form field
   *
-  * Teh autocomplete form searches for an iobject in a definitive public database,
+  * The autocomplete form searches for an object in a definitive public database,
   * and allows the user to search for it by name, displaying a list of objects whose names match
   * the input to date, and letting  the user either click on one of the list,
   * or just go on untill there is only one.  The process then returns two values,
@@ -32,7 +32,6 @@ import { AutocompleteOptions } from './autocompletePicker'
   *
   * @returns The HTML widget created
  */
-/* eslint-disable no-console */
 // eslint-disable-next-line complexity
 export function autocompleteField (
   dom: HTMLDocument,
@@ -51,7 +50,7 @@ export function autocompleteField (
     if (oldValue) {
       const oldName = kb.any(oldValue as any, labelProperty as any, null, doc)
       if (oldValue.equals(result) && oldName && oldName.sameTerm(name)) {
-        console.log('No change: same values.')
+        // console.log('No change: same values.')
         return
       }
     }
@@ -59,15 +58,16 @@ export function autocompleteField (
       ? kb.statementsMatching(subject, property as any, oldValue, doc)
         .concat(kb.statementsMatching(oldValue as any, labelProperty as any, null, doc))
       : []
-    console.log('autocompleteField Deletables ' + deletables.map(st => st.toNT()))
+    // console.log('autocompleteField Deletables ' + deletables.map(st => st.toNT()))
     const insertables = [st(subject, property as any, result, doc),
       st(result as any, labelProperty as any, name, doc)] // @@ track the language of the  name too!
-    console.log(`AC form: ${deletables.length} to delete and ${insertables.length} to insert`)
+    // console.log(`AC form: ${deletables.length} to delete and ${insertables.length} to insert`)
     try {
+      // console.log('@@@ AC updating ', deletables, insertables)
       await kb.updater.updateMany(deletables, insertables)
     } catch (err) {
       callbackFunction(false, err)
-      box.appendChild(widgets.errorMessageBlock(dom, 'Autocomplete form data update error:' + err))
+      box.appendChild(widgets.errorMessageBlock(dom, 'Autocomplete form data update error:' + err, null, err))
       return
     }
     callbackFunction(true, '')
@@ -77,21 +77,22 @@ export function autocompleteField (
     const oldValue = kb.the(subject, property as any, null, doc)
     if (!oldValue) {
       callbackFunction(false, 'NO data to elete')
-      box.appendChild(widgets.errorMessageBlock(dom, 'Autocomplet delete: no old data!'))
+      box.appendChild(widgets.errorMessageBlock(dom, 'Autocomplete delete: no old data!'))
       return
     }
     // const oldName = kb.any(oldValue as any, labelProperty as any, null, doc)
     const deletables = kb.statementsMatching(subject, property as any, oldValue, doc)
       .concat(kb.statementsMatching(oldValue as any, labelProperty as any, null, doc))
-    console.log('autocompleteField Deletables ' + deletables.map(st => st.toNT()))
+    // console.log('autocompleteField Deletables ' + deletables.map(st => st.toNT()))
     const insertables = []
-    console.log(`AC form delete: ${deletables.length} to delete and ${insertables.length} to insert`)
+    // console.log(`AC form delete: ${deletables.length} to delete and ${insertables.length} to insert`)
     try {
+      // console.log('@@@ AC updating ', deletables, insertables)
       await kb.updater.updateMany(deletables, insertables)
     } catch (err) {
       const e2 = new Error('Autocomplete form data delete error:' + err)
       callbackFunction(false, err)
-      box.appendChild(widgets.errorMessageBlock(dom, e2))
+      box.appendChild(widgets.errorMessageBlock(dom, e2, null, err))
       return
     }
     callbackFunction(true, '') // changed
@@ -125,6 +126,7 @@ export function autocompleteField (
 
   const dataSource = kb.any(form, ns.ui('dataSource')) as NamedNode | undefined
   if (!dataSource) {
+    // console.log('@@ connectedStatements ACF ', kb.connectedStatements(form).map(x => x.toNT()).join('\n'))
     return box.appendChild(
       widgets.errorMessageBlock(dom, 'Error: No data source given for autocomplete field: ' + form)
     )
@@ -207,16 +209,15 @@ export function autocompleteField (
   lhs.appendChild(widgets.fieldLabel(dom, property as any, form))
 
   const barOptions = {
-    editable: doc && doc.uri && kb.updater.editable(doc.uri, kb),
-    // permanent: true,
+    editable,
     dbLookup: true
   }
+
   renderAutocompleteControl(dom, subject as NamedNode, barOptions, autocompleteOptions, addOneIdAndRefresh, deleteOne).then((control) => {
     rhs.appendChild(control)
   }, (err) => {
-    rhs.appendChild(widgets.errorMessageBlock(dom, `Error rendering autocomplete${form}: ${err}`))
+    rhs.appendChild(widgets.errorMessageBlock(dom, `Error rendering autocomplete ${form}: ${err}`, '#fee', err)) //
   })
-
   return box
 }
 
