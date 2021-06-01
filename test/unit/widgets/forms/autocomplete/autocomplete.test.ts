@@ -245,7 +245,7 @@ describe('autocompleteField', () => {
     expect(cancelButton.style.display).toEqual('none') // invisibile again
   })
 
-  it('on innpt fetches data (fixing wikidata timeout issue) making green table', async () => {
+  it('on inpt fetches data (fixing wikidata timeout issue) making green table', async () => {
     const container = document.createElement('div')
     const already = {}
     const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
@@ -276,6 +276,53 @@ describe('autocompleteField', () => {
     expect(table.children.length).toBeGreaterThan(1)
     expect(table).toMatchSnapshot()
     expect(table.children[1].style.color).toEqual('rgb(0, 136, 0)') // green as all loaded
+  })
+
+  it('typing more search term till unique selects the whole name and sets the accecpt button active', async () => {
+    const container = document.createElement('div')
+    const already = {}
+    const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const CHOSEN_NAME = 'abbazia di San Massimino'
+    result = autocompleteField(
+      document,
+      container,
+      already,
+      subject,
+      form,
+      subject.doc(),
+      callbackFunction
+    )
+    const inputElement = await findByTestId(result, 'autocomplete-input') as HTMLInputElement
+    const fakeResponse = await getFileContent('test/unit/widgets/forms/autocomplete/broken-sparql-response-small.txt')
+
+    nock('https://query.wikidata.org')
+      .get(/^\/sparql/)
+      .reply(200, fakeResponse) // replyWithFile?
+
+    inputElement.value = 'mass'
+
+    const event1 = new Event('input')
+    inputElement.dispatchEvent(event1)
+
+    const table = await findByTestId(result, 'autocomplete-table')
+    await waitFor(() => expect(table.children.length).toEqual(4))
+    // expect(table.children.length).toBeGreaterThan(1)
+
+    inputElement.value = 'massim' // add extra 2 characters to make it unique
+
+    inputElement.dispatchEvent(new Event('input'))
+
+    await wait(1000)
+
+    expect(table.children.length).toEqual(1)
+    await findByTestId(result, 'autocomplete-input')
+
+    expect(inputElement.value).toEqual(CHOSEN_NAME)
+    expect(result).toMatchSnapshot()
+    // await waitFor(() => expect(inputElement2.textContent).toEqual(CHOSEN_NAME)) @@ re enable
+
+    const acceptButton = await findByTestId(result, 'accept-button')
+    expect(acceptButton.style.display).toEqual('') // should be visible
   })
 
   it('clicking on row of greenn table then accecpt button saves data', async () => {
@@ -320,7 +367,7 @@ describe('autocompleteField', () => {
     // console.log(`waiting ... for accept effect: ${inputElement.textContent}`)
     await wait(1000)
 
-    expect(row.children.length).toEqual(0)
+    expect(table.children.length).toEqual(1)
     await findByTestId(result, 'autocomplete-input')
 
     expect(result).toMatchSnapshot()
@@ -336,11 +383,6 @@ describe('autocompleteField', () => {
       .reply(200, initialDataText) // replyWithFile?
 
     await kb.fetcher.load(subject)
-
-    // console.log('nocking patch ' , subject.site().uri)
-    nock(subject.site().uri)
-      .intercept('/data.ttl', 'PATCH')
-      .reply(200, 'ok')
 
     // console.log('nocking patch ' , subject.site().uri)
     nock(subject.site().uri)
