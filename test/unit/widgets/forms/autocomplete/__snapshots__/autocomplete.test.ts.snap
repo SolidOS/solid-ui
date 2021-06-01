@@ -1,0 +1,219 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`autocompleteField adds the autocomplete field to the container, if provided 1`] = `
+<div>
+  <div>
+    <div
+      class="formFieldName"
+      style="padding: 0.3em; vertical-align: middle; width:8em;"
+    >
+      <a
+        href="http://www.w3.org/ns/solid/terms#publicId"
+        style="color: #3B5998; text-decoration: none;"
+      >
+        Corporation in wikidata
+      </a>
+    </div>
+    <div
+      class="formFieldValue"
+    />
+  </div>
+</div>
+`;
+
+exports[`autocompleteField clickimng on row of gren table then acecpt button saves data 1`] = `
+<div>
+  <div
+    class="formFieldName"
+    style="padding: 0.3em; vertical-align: middle; width:8em;"
+  >
+    <a
+      href="http://www.w3.org/ns/solid/terms#publicId"
+      style="color: #3B5998; text-decoration: none;"
+    >
+      Corporation in wikidata
+    </a>
+  </div>
+  <div
+    class="formFieldValue"
+  >
+    <div
+      style="display: flex; flex-direction: row;"
+    >
+      <div
+        style="display: flex; flex-flow: wrap;"
+      >
+        <div>
+          <table
+            data-testid="autocomplete-table"
+            style="max-width: 30em; margin: 0.5em;"
+          >
+            <tr
+              style=""
+            >
+              <td>
+                <input
+                  data-testid="autocomplete-input"
+                  size="60"
+                  style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em;"
+                  type="text"
+                />
+              </td>
+            </tr>
+          </table>
+        </div>
+        <button
+          data-testid="accept-button"
+          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: .01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em;"
+          type="button"
+        >
+          <img
+            src="https://solid.github.io/solid-ui/src/icons/noun_1180158.svg"
+            style="width: 2em; height: 2em;"
+            title="Continue"
+          />
+        </button>
+        <button
+          data-testid="cancel-button"
+          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: .01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em;"
+          type="button"
+        >
+          <img
+            src="https://solid.github.io/solid-ui/src/icons/noun_1180156.svg"
+            style="width: 2em; height: 2em;"
+            title="Cancel"
+          />
+        </button>
+        <button
+          data-testid="edit-button"
+          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: .01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em; display: none;"
+          type="button"
+        >
+          <img
+            src="https://solid.github.io/solid-ui/src/icons/noun_253504.svg"
+            style="width: 2em; height: 2em;"
+            title="Edit"
+          />
+        </button>
+        <div />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`autocompleteField creates a autocomplete field 1`] = `
+<div>
+  <div
+    class="formFieldName"
+    style="padding: 0.3em; vertical-align: middle; width:8em;"
+  >
+    <a
+      href="http://www.w3.org/ns/solid/terms#publicId"
+      style="color: #3B5998; text-decoration: none;"
+    >
+      Corporation in wikidata
+    </a>
+  </div>
+  <div
+    class="formFieldValue"
+  >
+    <div
+      style="display: flex; flex-direction: row;"
+    >
+      <div
+        style="display: flex; flex-flow: wrap;"
+      >
+        <div>
+          <table
+            data-testid="autocomplete-table"
+            style="max-width: 30em; margin: 0.5em;"
+          >
+            <tr
+              style=""
+            >
+              <td>
+                <input
+                  data-testid="autocomplete-input"
+                  size="60"
+                  style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em;"
+                  type="text"
+                />
+              </td>
+            </tr>
+          </table>
+        </div>
+        <button
+          data-testid="accept-button"
+          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: .01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em; display: none;"
+          type="button"
+        >
+          <img
+            src="https://solid.github.io/solid-ui/src/icons/noun_1180158.svg"
+            style="width: 2em; height: 2em;"
+            title="Continue"
+          />
+        </button>
+        <button
+          data-testid="cancel-button"
+          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: .01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em; display: none;"
+          type="button"
+        >
+          <img
+            src="https://solid.github.io/solid-ui/src/icons/noun_1180156.svg"
+            style="width: 2em; height: 2em;"
+            title="Cancel"
+          />
+        </button>
+        <button
+          data-testid="edit-button"
+          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: .01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em; display: none;"
+          type="button"
+        >
+          <img
+            src="https://solid.github.io/solid-ui/src/icons/noun_253504.svg"
+            style="width: 2em; height: 2em;"
+            title="Edit"
+          />
+        </button>
+        <div />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`autocompleteField on innpt fetches data (fixing wikidata timeout issue) making green table 1`] = `
+<table
+  data-testid="autocomplete-table"
+  style="max-width: 30em; margin: 0.5em;"
+>
+  <tr
+    style=""
+  >
+    <td>
+      <input
+        data-testid="autocomplete-input"
+        size="60"
+        style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em;"
+        type="text"
+      />
+    </td>
+  </tr>
+  <tr
+    style="padding: 0.3em; color: rgb(0, 136, 0);"
+  >
+    abbazia di San Massimino
+  </tr>
+  <tr
+    style="padding: 0.3em; color: rgb(0, 136, 0);"
+  >
+    abbazia di Sant'Angelo in Massa
+  </tr>
+  <tr
+    style="padding: 0.3em; color: rgb(0, 136, 0);"
+  >
+    Massillargues-Attuech
+  </tr>
+</table>
+`;
