@@ -1,0 +1,2008 @@
+{
+  "head" : {
+    "vars" : [ "subject", "name" ]
+  },
+  "results" : {
+    "bindings" : [ {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q7548669"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Snowmass"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q2310818"
+      },
+      "name" : {
+        "xml:lang" : "de",
+        "type" : "literal",
+        "value" : "Grand Massif"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q2310818"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Grand Massif"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q2310818"
+      },
+      "name" : {
+        "xml:lang" : "en-ca",
+        "type" : "literal",
+        "value" : "Grand Massif"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q2310818"
+      },
+      "name" : {
+        "xml:lang" : "en-gb",
+        "type" : "literal",
+        "value" : "Grand Massif"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q2310818"
+      },
+      "name" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "Grand Massif"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q2310818"
+      },
+      "name" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Grand Massif"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q2310818"
+      },
+      "name" : {
+        "xml:lang" : "nl",
+        "type" : "literal",
+        "value" : "Le Grand Massif"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q2310818"
+      },
+      "name" : {
+        "xml:lang" : "pl",
+        "type" : "literal",
+        "value" : "Grand Massif"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q2310818"
+      },
+      "name" : {
+        "xml:lang" : "pt",
+        "type" : "literal",
+        "value" : "Grand Massif"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q2310818"
+      },
+      "name" : {
+        "xml:lang" : "uk",
+        "type" : "literal",
+        "value" : "Grand Massif"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q28087259"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mass Rapid Transit Corporation (Malaysia)"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3224379"
+      },
+      "name" : {
+        "xml:lang" : "de",
+        "type" : "literal",
+        "value" : "Le Massif de Charlevoix"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3224379"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Le Massif"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3224379"
+      },
+      "name" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Le Massif"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3224379"
+      },
+      "name" : {
+        "xml:lang" : "it",
+        "type" : "literal",
+        "value" : "Le Massif"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3224379"
+      },
+      "name" : {
+        "xml:lang" : "nl",
+        "type" : "literal",
+        "value" : "Le Massif"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3224379"
+      },
+      "name" : {
+        "xml:lang" : "sv",
+        "type" : "literal",
+        "value" : "Le Massif"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3231156"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Massif des Brasses"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3231156"
+      },
+      "name" : {
+        "xml:lang" : "nan",
+        "type" : "literal",
+        "value" : "Massif des Brasses"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q6784644"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Massif du Sud"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q6784644"
+      },
+      "name" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "station touristique Massif du Sud"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q4807795"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Aspen/Snowmass"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q4807795"
+      },
+      "name" : {
+        "xml:lang" : "en-ca",
+        "type" : "literal",
+        "value" : "Aspen/Snowmass"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q4807795"
+      },
+      "name" : {
+        "xml:lang" : "en-gb",
+        "type" : "literal",
+        "value" : "Aspen/Snowmass"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q4807795"
+      },
+      "name" : {
+        "xml:lang" : "nl",
+        "type" : "literal",
+        "value" : "Aspen Snowmass"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "ast",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "ca",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "de",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "eu",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "gl",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "hu",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "hy",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "id",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "kk",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "lt",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "ms",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "nl",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "pl",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "pt",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "ru",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "sv",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "tr",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "uk",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "zh-cn",
+        "type" : "literal",
+        "value" : "massimo dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q101511091"
+      },
+      "name" : {
+        "xml:lang" : "ca",
+        "type" : "literal",
+        "value" : "Massa d’Or Produccions"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q101511091"
+      },
+      "name" : {
+        "xml:lang" : "de",
+        "type" : "literal",
+        "value" : "Massa d’Or Produccions"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q101511091"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Massa d’Or Produccions"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q101511091"
+      },
+      "name" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "Massa d’Or Produccions"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q101511091"
+      },
+      "name" : {
+        "xml:lang" : "eu",
+        "type" : "literal",
+        "value" : "Massa d’Or Produccions"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q101511091"
+      },
+      "name" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Massa d’Or Produccions"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q101511091"
+      },
+      "name" : {
+        "xml:lang" : "it",
+        "type" : "literal",
+        "value" : "Massa d’Or Produccions"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q101511091"
+      },
+      "name" : {
+        "xml:lang" : "nl",
+        "type" : "literal",
+        "value" : "Massa d’Or Produccions"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q101511091"
+      },
+      "name" : {
+        "xml:lang" : "pt",
+        "type" : "literal",
+        "value" : "Massa d’Or Produccions"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1466613"
+      },
+      "name" : {
+        "xml:lang" : "ast",
+        "type" : "literal",
+        "value" : "Massive Entertainment"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1466613"
+      },
+      "name" : {
+        "xml:lang" : "bar",
+        "type" : "literal",
+        "value" : "Massive Entertainment"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1466613"
+      },
+      "name" : {
+        "xml:lang" : "cs",
+        "type" : "literal",
+        "value" : "Massive Entertainment"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1466613"
+      },
+      "name" : {
+        "xml:lang" : "de",
+        "type" : "literal",
+        "value" : "Massive Entertainment"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1466613"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Massive Entertainment"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1466613"
+      },
+      "name" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "Massive Entertainment"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1466613"
+      },
+      "name" : {
+        "xml:lang" : "fi",
+        "type" : "literal",
+        "value" : "Massive Entertainment"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1466613"
+      },
+      "name" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Massive Entertainment"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1466613"
+      },
+      "name" : {
+        "xml:lang" : "hy",
+        "type" : "literal",
+        "value" : "Massive Entertainment"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1466613"
+      },
+      "name" : {
+        "xml:lang" : "it",
+        "type" : "literal",
+        "value" : "Massive Entertainment"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1466613"
+      },
+      "name" : {
+        "xml:lang" : "nb",
+        "type" : "literal",
+        "value" : "Massive Entertainment"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1466613"
+      },
+      "name" : {
+        "xml:lang" : "nl",
+        "type" : "literal",
+        "value" : "Massive Entertainment"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1466613"
+      },
+      "name" : {
+        "xml:lang" : "pl",
+        "type" : "literal",
+        "value" : "Massive Entertainment"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1466613"
+      },
+      "name" : {
+        "xml:lang" : "pt",
+        "type" : "literal",
+        "value" : "Massive Entertainment"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1466613"
+      },
+      "name" : {
+        "xml:lang" : "ru",
+        "type" : "literal",
+        "value" : "Massive Entertainment"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1466613"
+      },
+      "name" : {
+        "xml:lang" : "sk",
+        "type" : "literal",
+        "value" : "Massive Entertainment"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1466613"
+      },
+      "name" : {
+        "xml:lang" : "sv",
+        "type" : "literal",
+        "value" : "Massive Entertainment"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1466613"
+      },
+      "name" : {
+        "xml:lang" : "uk",
+        "type" : "literal",
+        "value" : "Massive Entertainment"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1466613"
+      },
+      "name" : {
+        "xml:lang" : "zh",
+        "type" : "literal",
+        "value" : "Massive Entertainment"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q19381147"
+      },
+      "name" : {
+        "xml:lang" : "nb",
+        "type" : "literal",
+        "value" : "Massawa Airways"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1907767"
+      },
+      "name" : {
+        "xml:lang" : "de",
+        "type" : "literal",
+        "value" : "Massive Development"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1907767"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Massive Development"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1907767"
+      },
+      "name" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Massive Development"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1907767"
+      },
+      "name" : {
+        "xml:lang" : "nl",
+        "type" : "literal",
+        "value" : "Massive Development"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1907767"
+      },
+      "name" : {
+        "xml:lang" : "ru",
+        "type" : "literal",
+        "value" : "Massive Development"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3504740"
+      },
+      "name" : {
+        "xml:lang" : "ca",
+        "type" : "literal",
+        "value" : "Supermassive Games"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3504740"
+      },
+      "name" : {
+        "xml:lang" : "de",
+        "type" : "literal",
+        "value" : "Supermassive Games"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3504740"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Supermassive Games"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3504740"
+      },
+      "name" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "Supermassive Games"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3504740"
+      },
+      "name" : {
+        "xml:lang" : "fi",
+        "type" : "literal",
+        "value" : "Supermassive Games"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3504740"
+      },
+      "name" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Supermassive Games"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3504740"
+      },
+      "name" : {
+        "xml:lang" : "it",
+        "type" : "literal",
+        "value" : "Supermassive Games"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3504740"
+      },
+      "name" : {
+        "xml:lang" : "nl",
+        "type" : "literal",
+        "value" : "Supermassive Games"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3504740"
+      },
+      "name" : {
+        "xml:lang" : "pt",
+        "type" : "literal",
+        "value" : "Supermassive Games"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3504740"
+      },
+      "name" : {
+        "xml:lang" : "ru",
+        "type" : "literal",
+        "value" : "Supermassive Games"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3504740"
+      },
+      "name" : {
+        "xml:lang" : "uk",
+        "type" : "literal",
+        "value" : "Supermassive Games"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3009079"
+      },
+      "name" : {
+        "xml:lang" : "ca",
+        "type" : "literal",
+        "value" : "Mass Media Inc."
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3009079"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mass Media Inc."
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3009079"
+      },
+      "name" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Mass Media"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3009079"
+      },
+      "name" : {
+        "xml:lang" : "it",
+        "type" : "literal",
+        "value" : "Mass Media Inc."
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3009079"
+      },
+      "name" : {
+        "xml:lang" : "nl",
+        "type" : "literal",
+        "value" : "Mass Media Inc."
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3009079"
+      },
+      "name" : {
+        "xml:lang" : "ro",
+        "type" : "literal",
+        "value" : "Mass Media Games"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q4854166"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Bancroft School of Massage Therapy"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q5450208"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Finger Lakes School of Massage"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q14714880"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Connecticut Center for Massage Therapy"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q33542873"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Limasse Five"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q6714525"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "MASS Engineering"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q6714525"
+      },
+      "name" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "MASS Engineering"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q7355246"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Rockford Mass Transit District"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q7580990"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Sangamon Mass Transit District"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q6824784"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Metro mass Transit L.T.D"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q5069909"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Champaign-Urbana Mass Transit District"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q18205984"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Falavarjan County Municipalities Mass Transit Organization"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q18207132"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Lenjan County Mass Transit Organization"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q16982609"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "University of Massachusetts Transportation Services"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q106238347"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Borkhar County Mass Transit Organization"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q19753405"
+      },
+      "name" : {
+        "xml:lang" : "it",
+        "type" : "literal",
+        "value" : "Compagnia della stampa Massetti Rodella"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q19753440"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Elsevier Masson"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q19753440"
+      },
+      "name" : {
+        "xml:lang" : "it",
+        "type" : "literal",
+        "value" : "Elsevier Masson"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q7187667"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Bank Massad"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q7187667"
+      },
+      "name" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "Banco Massad"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1717001"
+      },
+      "name" : {
+        "xml:lang" : "de",
+        "type" : "literal",
+        "value" : "Vermont and Massachusetts Railroad"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "ast",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "ca",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "de",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "eu",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "gl",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "hu",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "hy",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "id",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "kk",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "lt",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "ms",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "nl",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "pl",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "pt",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "ru",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "sv",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "tr",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "uk",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "zh-cn",
+        "type" : "literal",
+        "value" : "massimo dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1278205"
+      },
+      "name" : {
+        "xml:lang" : "de",
+        "type" : "literal",
+        "value" : "Eastern Massachusetts Street Railway"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1278205"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Eastern Massachusetts Street Railway"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q22922899"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Massage Envy"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q22922899"
+      },
+      "name" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "Massage Envy"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q22922899"
+      },
+      "name" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Massage Envy"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q22922899"
+      },
+      "name" : {
+        "xml:lang" : "it",
+        "type" : "literal",
+        "value" : "Massage Envy"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q22922899"
+      },
+      "name" : {
+        "xml:lang" : "nl",
+        "type" : "literal",
+        "value" : "Massage Envy"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q64573956"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Massage Heights"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q22922899"
+      },
+      "name" : {
+        "xml:lang" : "de",
+        "type" : "literal",
+        "value" : "Massage Envy"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q6784578"
+      },
+      "name" : {
+        "xml:lang" : "de",
+        "type" : "literal",
+        "value" : "Massena Terminal Railroad"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q6784578"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Massena Terminal Railroad"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q48727264"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Punjab Mass Transit Authority"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q171985"
+      },
+      "name" : {
+        "xml:lang" : "sv",
+        "type" : "literal",
+        "value" : "Massachusetts Bay Transportation Authority"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q171985"
+      },
+      "name" : {
+        "xml:lang" : "tr",
+        "type" : "literal",
+        "value" : "Massachusetts Bay Transportation Authority"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q787665"
+      },
+      "name" : {
+        "xml:lang" : "de",
+        "type" : "literal",
+        "value" : "Automobiles Mass"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q171985"
+      },
+      "name" : {
+        "xml:lang" : "ca",
+        "type" : "literal",
+        "value" : "Massachusetts Bay Transportation Authority"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q171985"
+      },
+      "name" : {
+        "xml:lang" : "de",
+        "type" : "literal",
+        "value" : "Massachusetts Bay Transportation Authority"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q171985"
+      },
+      "name" : {
+        "xml:lang" : "de-ch",
+        "type" : "literal",
+        "value" : "Massachusetts Bay Transportation Authority"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q171985"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Massachusetts Bay Transportation Authority"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q171985"
+      },
+      "name" : {
+        "xml:lang" : "en-ca",
+        "type" : "literal",
+        "value" : "Massachusetts Bay Transportation Authority"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q171985"
+      },
+      "name" : {
+        "xml:lang" : "en-gb",
+        "type" : "literal",
+        "value" : "Massachusetts Bay Transportation Authority"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q171985"
+      },
+      "name" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "Massachusetts Bay Transportation Authority"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q171985"
+      },
+      "name" : {
+        "xml:lang" : "fi",
+        "type" : "literal",
+        "value" : "Massachusetts Bay Transit Authority"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q171985"
+      },
+      "name" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Massachusetts Bay Transportation Authority"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q171985"
+      },
+      "name" : {
+        "xml:lang" : "nb",
+        "type" : "literal",
+        "value" : "Massachusetts Bay Transportation Authority"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q171985"
+      },
+      "name" : {
+        "xml:lang" : "nl",
+        "type" : "literal",
+        "value" : "Massachusetts Bay Transportation Authority"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q171985"
+      },
+      "name" : {
+        "xml:lang" : "pl",
+        "type" : "literal",
+        "value" : "Massachusetts Bay Transportation Authority"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q171985"
+      },
+      "name" : {
+        "xml:lang" : "pt",
+        "type" : "literal",
+        "value" : "Massachusetts Bay Transportation Authority"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q59779919"
+      },
+      "name" : {
+        "xml:lang" : "de",
+        "type" : "literal",
+        "value" : "Massnick-Phipps Manufacturing Company"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q41438757"
+      },
+      "name" : {
+        "xml:lang" : "de",
+        "type" : "literal",
+        "value" : "Acme Motor Car Company (Massachusetts)"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3297582"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Massey Energy"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3297582"
+      },
+      "name" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Massey Energy"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q104817495"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Bangkok Mass Transit System Public Company Limited"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "ast",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "ca",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "de",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "eu",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "gl",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "hu",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "hy",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "id",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "kk",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "lt",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "ms",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "nl",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "pl",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "pt",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "ru",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "sv",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "tr",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "uk",
+        "type" : "literal",
+        "value" : "Massimo Dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q788231"
+      },
+      "name" : {
+        "xml:lang" : "zh-cn",
+        "type" : "literal",
+        "value" : "massimo dutti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1502774"
+      },
+      "name" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Massimo Zanetti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1502774"
+      },
+      "name" : {
+        "xml:lang" : "nl",
+        "type" : "literal",
+        "value" : "Massimo Zanetti"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1502774"
+      },
+      "name" : {
+        "xml:lang" : "de",
+        "type" : "literal",
+        "value" : "Massimo Zanetti Beverage Group"
+      }
+    }, {
+      "subject" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1502774"
+      },
+      "name" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Massimo Zanetti Beverage Group"
+      }
+    } ]
+  }
+}

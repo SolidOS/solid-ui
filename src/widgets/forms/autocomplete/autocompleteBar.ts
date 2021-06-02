@@ -4,7 +4,6 @@ This control has the buttons which control the state between editing, viewing, s
 and so on.  See the state diagram in the documentation.  The AUtocomplete Picker does the main work.
 
 */
-
 import * as ns from '../../../ns'
 import { icons } from '../../../iconBase'
 import { store } from '../../../logic'
@@ -59,9 +58,16 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
     decoratedAutocomplete = dom.createElement('div') as HTMLElement
     decoratedAutocomplete.setAttribute('style', 'display: flex; flex-flow: wrap;')
     decoratedAutocomplete.appendChild(await renderAutoComplete(dom, acOptions, decoration, autoCompleteDone))
+    // console.log('@@ acceptButton', acceptButton)
     decoratedAutocomplete.appendChild(acceptButton)
+    // console.log('@@ cancelButton', cancelButton)
+
     decoratedAutocomplete.appendChild(cancelButton)
+    // console.log('@@ editButton', editButton)
+
     decoratedAutocomplete.appendChild(editButton)
+    // console.log('@@ deleteButtonContainer', deleteButtonContainer)
+
     decoratedAutocomplete.appendChild(deleteButtonContainer)
     creationArea.appendChild(decoratedAutocomplete)
   }
@@ -71,7 +77,7 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
       creationArea.removeChild(decoratedAutocomplete)
       decoratedAutocomplete = undefined
     } else {
-      displayAutocomplete()
+      await displayAutocomplete()
     }
   }
 
@@ -81,19 +87,20 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
     }
   }
 
-  // const queryParams = barOptions.queryParameters || wikidataParameters
   const acceptButton = widgets.continueButton(dom)
-  const cancelButton = widgets.cancelButton(dom) // @@ not in edit case only in temporary case cancelButtonHandler
-  // const deleteButton = widgets.button(dom, DELETE_ICON, 'Remove', _event => {}) // @@ add handler
+  acceptButton.setAttribute('data-testid', 'accept-button')
 
+  const cancelButton = widgets.cancelButton(dom)
+  cancelButton.setAttribute('data-testid', 'cancel-button')
   const deleteButtonContainer = dom.createElement('div')
   const noun = acOptions.targetClass ? utils.label(acOptions.targetClass) : 'item'
   const deleteButton = widgets.deleteButtonWithCheck(dom, deleteButtonContainer, noun, deleteOne) // need to knock out this UI or caller does that
-
+  deleteButton.setAttribute('data-testid', 'delete-button')
   const editButton = widgets.button(dom, EDIT_ICON, 'Edit', _event => {
     editing = !editing
     syncEditingStatus()
   })
+  editButton.setAttribute('data-testid', 'edit-button')
   let editing = true
 
   function syncEditingStatus () {
@@ -113,14 +120,13 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
   }
 
   let decoratedAutocomplete = undefined as HTMLElement | undefined
-  // const { dom } = dataBrowserContext
-  // barOptions = barOptions || {}
 
   const creationArea = dom.createElement('div')
-  creationArea.setAttribute('style', 'display: flex; flex-flow: wrap;')
+  creationArea.style.display = 'flex'
+  creationArea.style.flexDirection = 'row'
 
   if (acOptions.permanent || acOptions.currentObject) {
-    displayAutocomplete()
+    await displayAutocomplete()
   }
   if (barOptions.editable) {
     // creationArea.appendChild(await renderAutoComplete(dom, barOptions, autoCompleteDone)) wait for searchButton

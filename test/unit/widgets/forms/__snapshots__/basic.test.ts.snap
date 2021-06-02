@@ -2,10 +2,12 @@
 
 exports[`basicField adds the basic field to the container, if provided 1`] = `
 <div>
-  <tr>
-    <td
+  <div
+    style="display: flex; flex-direction: row;"
+  >
+    <div
       class="formFieldName"
-      style="  vertical-align: middle;"
+      style="padding: 0.3em; vertical-align: middle; width:8em;"
     >
       <a
         href="http://example.com/#some-property"
@@ -13,26 +15,28 @@ exports[`basicField adds the basic field to the container, if provided 1`] = `
       >
         Some property
       </a>
-    </td>
-    <td
+    </div>
+    <div
       class="formFieldValue"
     >
       <input
         maxlength="4096"
         size="20"
-        style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+        style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em;"
         type="text"
       />
-    </td>
-  </tr>
+    </div>
+  </div>
 </div>
 `;
 
 exports[`basicField creates a basic field 1`] = `
-<tr>
-  <td
+<div
+  style="display: flex; flex-direction: row;"
+>
+  <div
     class="formFieldName"
-    style="  vertical-align: middle;"
+    style="padding: 0.3em; vertical-align: middle; width:8em;"
   >
     <a
       href="http://example.com/#some-property"
@@ -40,29 +44,24 @@ exports[`basicField creates a basic field 1`] = `
     >
       Some property
     </a>
-  </td>
-  <td
+  </div>
+  <div
     class="formFieldValue"
   >
     <input
       maxlength="4096"
       size="20"
-      style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; "
+      style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em;"
       type="text"
     />
-  </td>
-</tr>
+  </div>
+</div>
 `;
 
 exports[`basicField shows error if no property given 1`] = `
-<tr>
-  <td
-    class="formFieldName"
-    style="  vertical-align: middle;"
-  />
-  <td
-    class="formFieldValue"
-  />
+<div
+  style="margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; background-color: #fee; color:black;"
+>
   Error: No property given for text field: &lt;http://example.com/#form&gt;
-</tr>
+</div>
 `;

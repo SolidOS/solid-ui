@@ -61,7 +61,6 @@ function refreshOpionsSubfieldinGroup (dom, already, subject, dataDoc, callbackF
     const field = subfields[j]
     const t = mostSpecificClassURI(field) // Field type
     if (t === ns.ui('Options').uri) {
-      // const dep = kb.any(field, ui('dependingOn'))
       const optionsRender = fieldFunction(dom, field)
       const newOne = optionsRender(
         dom,
@@ -72,12 +71,9 @@ function refreshOpionsSubfieldinGroup (dom, already, subject, dataDoc, callbackF
         dataDoc,
         callbackFunction
       )
-      // box.removeChild(newOne) // don't have to put it on a container any more
       debug.log('Refreshing Options field by replacing it.') // better to support actual refresh
       groupDiv.insertBefore(newOne, eles[j])
       groupDiv.removeChild(eles[j + 1]) // Remove the old one
-      // original[j] = kb.any(subject, dep).toNT()
-      // eles[j] = newOne
     }
   }
 }
@@ -85,7 +81,6 @@ function refreshOpionsSubfieldinGroup (dom, already, subject, dataDoc, callbackF
 field[ns.ui('Form').uri] = field[ns.ui('Group').uri] =
     function (dom, container, already, subject, form, dataDoc, callbackFunction) {
       const box = dom.createElement('div')
-      box.setAttribute('style', `padding-left: 2em; border: 0.05em solid ${style.formBorderColor};`) // Indent a group
       const ui = ns.ui
       if (container) container.appendChild(box)
 
@@ -98,11 +93,19 @@ field[ns.ui('Form').uri] = field[ns.ui('Group').uri] =
         dom.outlineManager.appendPropertyTRs(box, plist)
         return box
       }
-      // box.appendChild(dom.createTextNode('Group: first time, key: '+key))
       const already2 = {}
       for (const x in already) already2[x] = 1
       already2[key] = 1
       const formDoc = form.doc ? form.doc() : null // @@ if blank no way to know
+      const weight0 = kb.any(form, ui('weight'), null, formDoc) // Say 0-3
+      const weight = weight0 ? Number(weight0.value) : 1
+      if (weight > 3 || weight < 0) return box.appendChild(errorMessageBlock(dom, `Form Group weight ${weight} should be 0-3`))
+
+      box.setAttribute('style', style.formGroupStyle[weight]) // Indent a group
+      box.style.display = 'flex'
+      box.style.flexDirection = 'column'
+      box.class = 'form-weight-' + weight
+
       let parts = kb.any(form, ui('parts'), null, formDoc)
       let subfields
       if (parts) {
@@ -112,13 +115,11 @@ field[ns.ui('Form').uri] = field[ns.ui('Group').uri] =
         subfields = sortBySequence(parts)
       }
       if (!parts) {
-        box.appendChild(errorMessageBlock(dom, 'No parts to form! '))
-        return dom
+        return box.appendChild(errorMessageBlock(dom, 'No parts to form! '))
       }
 
       for (let i = 0; i < subfields.length; i++) {
         const field = subfields[i]
-        // const t = mostSpecificClassURI(field) // Field type
         const subFieldFunction = fieldFunction(dom, field) //
 
         const itemChanged = function (ok, body) {
@@ -158,7 +159,6 @@ field[ns.ui('Options').uri] = function (
   const box = dom.createElement('div')
   const formDoc = form.doc ? form.doc() : null // @@ if blank no way to know
 
-  // box.setAttribute('style', 'padding-left: 2em; border: 0.05em dotted purple;')  // Indent Options
   const ui = ns.ui
   if (container) container.appendChild(box)
 
@@ -367,17 +367,34 @@ field[ns.ui('Multiple').uri] = function (
     if (kb.updater.editable(dataDoc.uri)) {
       buttons.deleteButtonWithCheck(dom, subField, utils.label(property),
         deleteThisItem)
-      if (ordered) {
-        subField.appendChild(
-          buttons.button(
-            dom, icons.iconBase + 'noun_1369237.svg', 'Move Up',
-            async event => moveThisItem(event, true))
-        )
-        subField.appendChild(
-          buttons.button(
-            dom, icons.iconBase + 'noun_1369241.svg', 'Move Down',
-            async event => moveThisItem(event, false))
-        )
+      if (ordered) { // Add controsl in a frame
+        const frame = dom.createElement('div')
+        frame.style.display = 'grid'
+        frame.style.gridTemplateColumns = 'auto 3em'
+        frame.style.gridTemplateRows = '50% 50%'
+        const moveUpButton = buttons.button(
+          dom, icons.iconBase + 'noun_1369237.svg', 'Move Up',
+          async event => moveThisItem(event, true))
+        const moveDownButton = buttons.button(
+          dom, icons.iconBase + 'noun_1369241.svg', 'Move Down',
+          async event => moveThisItem(event, false))
+        const shim = dom.createElement('div')
+        shim.appendChild(subField) // Subfield has its own laytout
+        frame.appendChild(shim)
+
+        frame.appendChild(moveUpButton)
+        frame.appendChild(moveDownButton)
+        moveUpButton.style.gridColumn = 2
+        moveDownButton.style.gridColumn = 2
+        moveUpButton.style.gridRow = 1
+        moveDownButton.style.padding = '0em' // don't take too much space
+        moveUpButton.style.padding = '0em'
+
+        moveDownButton.style.gridRow = 2
+        shim.style.gridColumn = 1
+        shim.style.gridRowStart = 'span 2' // Cover both rows
+        // shim.style.gridRowEnd = 2 // Cover both rows
+        return frame
       }
     }
     return subField // unused
@@ -390,7 +407,8 @@ field[ns.ui('Multiple').uri] = function (
   const kb = store
   const formDoc = form.doc ? form.doc() : null // @@ if blank no way to know
 
-  const box = dom.createElement('table')
+  const box = (dom.createElement('div'))
+  const shim = box // no  shim
   // We don't indent multiple as it is a sort of a prefix of the next field and has contents of one.
   // box.setAttribute('style', 'padding-left: 2em; border: 0.05em solid green;')  // Indent a multiple
   const ui = ns.ui
@@ -405,22 +423,23 @@ field[ns.ui('Multiple').uri] = function (
     box.appendChild(
       errorMessageBlock(dom, 'No property to multiple: ' + form)
     ) // used for arcs in the data
-    return box
+    return shim
   }
   let min = kb.any(form, ui('min')) // This is the minimum number -- default 0
   min = min ? 0 + min.value : 0
-  // var max = kb.any(form, ui('max')) // This is the minimum number
-  // max = max ? max.value : 99999999
 
   const element = kb.any(form, ui('part')) // This is the form to use for each one
   if (!element) {
     box.appendChild(
       errorMessageBlock(dom, 'No part to multiple: ' + form)
     )
-    return box
+    return shim
   }
 
-  const body = box.appendChild(dom.createElement('tr')) // 20191207
+  const body = box.appendChild(dom.createElement('div'))
+  body.style.display = 'flex'
+
+  body.style.flexDirection = 'column'
   let list // The RDF collection which keeps the ordered version or null
   let values // Initial values - always an array.  Even when no list yet.
   values = reverse ? kb.any(null, property, subject, dataDoc) : kb.any(subject, property, null, dataDoc)
@@ -437,7 +456,7 @@ field[ns.ui('Multiple').uri] = function (
   }
   // Add control on the bottom for adding more items
   if (kb.updater.editable(dataDoc.uri)) {
-    const tail = box.appendChild(dom.createElement('tr'))
+    const tail = box.appendChild(dom.createElement('div'))
     tail.style.padding = '0.5em'
     const img = tail.appendChild(dom.createElement('img'))
     img.setAttribute('src', plusIconURI) //  plus sign
@@ -502,16 +521,13 @@ field[ns.ui('Multiple').uri] = function (
       }
       await saveListThenRefresh()
     }
-    // if (unsavedList) {
-    //     await saveListThenRefresh() // async
-    // }
   }
   asyncStuff().then(
     () => { debug.log(' Multiple render: async stuff ok') },
     (err) => { debug.error(' Multiple render: async stuff fails. #### ', err) }
   ) // async
 
-  return box
+  return shim
 } // Multiple
 
 /*          Text field
@@ -557,7 +573,13 @@ field[ns.ui('MultiLineTextField').uri] = function (
     return errorMessageBlock(dom, 'No property to text field: ' + form)
   }
   const box = dom.createElement('div')
-  box.appendChild(fieldLabel(dom, property, form))
+  box.style.display = 'flex'
+  box.style.flexDirection = 'row'
+  const left = box.appendChild(dom.createElement('div'))
+  left.style.width = style.formFieldNameBoxWidth
+  const right = box.appendChild(dom.createElement('div'))
+
+  left.appendChild(fieldLabel(dom, property, form))
   dataDoc = fieldStore(subject, property, dataDoc)
 
   const text = kb.anyJS(subject, property, null, dataDoc) || ''
@@ -575,8 +597,7 @@ field[ns.ui('MultiLineTextField').uri] = function (
     dataDoc,
     callbackFunction
   )
-  // box.appendChild(dom.createTextNode('<-@@ subj:'+subject+', prop:'+property))
-  box.appendChild(field)
+  right.appendChild(field)
   if (container) container.appendChild(box)
   return box
 }
@@ -613,7 +634,6 @@ function booleanField (
   if (state === undefined) {
     state = false
   } // @@ sure we want that -- or three-state?
-  // log.debug('dataDoc is '+dataDoc)
   const ins = $rdf.st(subject, property, true, dataDoc)
   const del = $rdf.st(subject, property, false, dataDoc)
   const box = buildCheckboxForm(dom, kb, lab, del, ins, form, dataDoc, tristate)
@@ -687,14 +707,6 @@ field[ns.ui('Classifier').uri] = function (
   log.debug('Classifier: dataDoc=' + dataDoc)
   const checkOptions = function (ok, body) {
     if (!ok) return callbackFunction(ok, body)
-
-    /*
-    var parent = kb.any(undefined, ui('part'), form)
-    if (!parent) return callbackFunction(ok, body)
-    var kids = kb.each(parent, ui('part')); // @@@@@@@@@ Garbage
-    kids = kids.filter(function(k){return kb.any(k, ns.rdf('type'), ui('Options'))})
-    if (kids.length) log.debug('Yes, found related options: '+kids[0])
-    */
     return callbackFunction(ok, body)
   }
   const box = makeSelectForNestedCategory(
@@ -736,11 +748,12 @@ field[ns.ui('Choice').uri] = function (
   const formDoc = form.doc ? form.doc() : null // @@ if blank no way to know
 
   let p
-  const box = dom.createElement('tr')
+  const box = dom.createElement('div')
+  // Set flexDirection column?
   if (container) container.appendChild(box)
-  const lhs = dom.createElement('td')
+  const lhs = dom.createElement('div')
   box.appendChild(lhs)
-  const rhs = dom.createElement('td')
+  const rhs = dom.createElement('div')
   box.appendChild(rhs)
   const property = kb.any(form, ui('property'))
   if (!property) {
@@ -760,9 +773,8 @@ field[ns.ui('Choice').uri] = function (
   possible = kb.each(undefined, ns.rdf('type'), from, formDoc)
   for (const x in kb.findMembersNT(from)) {
     possible.push(kb.fromNT(x))
-    // box.appendChild(dom.createTextNode("RDFS: adding "+x))
   } // Use rdfs
-  // log.debug("%%% Choice field: possible.length 1 = "+possible.length)
+
   if (from.sameTerm(ns.rdfs('Class'))) {
     for (p in buttons.allClassURIs()) possible.push(kb.sym(p))
     // log.debug("%%% Choice field: possible.length 2 = "+possible.length)
@@ -841,8 +853,6 @@ field[ns.ui('Comment').uri] = field[
   const p = box.appendChild(dom.createElement(params.element))
   p.textContent = contents
 
-  // const style = kb.anyValue(form, ui('style'), null, form.doc()) || params.style || ''
-  // if (style) p.setAttribute('style', style) // @@ Hey later allow JCSS and RCSS
   setFieldStyle(p, form)
 
   // Some headings and prompts are only useful to guide user input
@@ -959,7 +969,6 @@ export function findClosest (kb, cla, prop) {
   const agenda = [kb.sym(cla)] // ordered - this is breadth first search
   while (agenda.length > 0) {
     const c = agenda.shift() // first
-    // if (c.uri && (c.uri == ns.owl('Thing').uri || c.uri == ns.rdf('Resource').uri )) continue
     const lists = kb.each(c, prop)
     log.debug('Lists for ' + c + ', ' + prop + ': ' + lists.length)
     if (lists.length !== 0) return lists
@@ -1138,7 +1147,6 @@ export function promptForNew (
     if (!gotButton) {
       gotButton = box.appendChild(buttons.linkButton(dom, object))
     }
-    // tabulator.outline.GotoSubject(object, true, undefined, true, undefined)
   }
   function linkDone (uri, ok, body) {
     return callbackFunction(ok, body)
@@ -1172,7 +1180,7 @@ export function makeDescription (
     field.value = desc
   } else {
     // Unless you can make the predicate label disappear with the first click then this is over-cute
-    // field.value = utils.label(predicate); // Was"enter a description here"
+    // field.value = utils.label(predicate); // Was"enter a description here" @@ possibly: add prompt which disappears
     field.select() // Select it ready for user input -- doesn't work
   }
 
@@ -1187,12 +1195,12 @@ export function makeDescription (
     submit.disabled = true
     submit.setAttribute('style', 'visibility: hidden; float: right;') // Keep UI clean
     field.disabled = true
-    field.setAttribute('style', style + 'color: gray;') // pending
+    field.style.color = style.textInputColorPending // setAttribute('style', style + 'color: gray;') // pending
     const ds = kb.statementsMatching(subject, predicate, null, dataDoc)
     const is = $rdf.st(subject, predicate, field.value, dataDoc)
     kb.updater.update(ds, is, function (uri, ok, body) {
       if (ok) {
-        field.setAttribute('style', style + 'color: black;')
+        field.style.color = style.textInputColor
         field.disabled = false
       } else {
         group.appendChild(
@@ -1208,32 +1216,27 @@ export function makeDescription (
     })
   }
 
-  const br = dom.createElement('br')
-  group.appendChild(br)
-
   const editable = kb.updater.editable(dataDoc.uri)
   if (editable) {
-    var submit = dom.createElement('input')
-    submit.setAttribute('type', 'submit')
+    var submit = widgets.continueButton(dom, saveChange)
     submit.disabled = true // until the filled has been modified
-    submit.setAttribute('style', 'visibility: hidden; float: right;') // Keep UI clean
-    submit.value = 'Save ' + utils.label(predicate) // @@ I18n
+    submit.style.visibility = 'hidden'
+    submit.style.float = 'right'
     group.appendChild(submit)
 
     field.addEventListener(
       'keyup',
       function (_e) {
         // Green means has been changed, not saved yet
-        field.setAttribute('style', style + 'color: green;')
+        field.style.color = 'green' // setAttribute('style', style + 'color: green;')
         if (submit) {
           submit.disabled = false
-          submit.setAttribute('style', 'float: right;') // Remove visibility: hidden
+          submit.style.visibility = '' // Remove visibility: hidden
         }
       },
       true
     )
     field.addEventListener('change', saveChange, true)
-    submit.addEventListener('click', saveChange, false)
   } else {
     field.disabled = true // @@ change color too
     field.style.backgroundColor = style.textInputBackgroundColorUneditable
@@ -1304,8 +1307,6 @@ export function makeSelectForOptions (
   }
   var actual = getActual()
 
-  // var newObject = null
-
   const onChange = function (_e) {
     select.disabled = true // until data written back - gives user feedback too
     const ds = []
@@ -1352,7 +1353,6 @@ export function makeSelectForOptions (
       if (!opt.selected && opt.AJAR_uri in actual) {
         // old class
         removeValue(kb.sym(opt.AJAR_uri))
-        // ds.push($rdf.st(subject, predicate, kb.sym(opt.AJAR_uri), dataDoc ))
       }
       if (opt.selected) select.currentURI = opt.AJAR_uri
     }
@@ -1372,7 +1372,6 @@ export function makeSelectForOptions (
     log.info('selectForOptions: data doc = ' + dataDoc)
     kb.updater.update(ds, is, function (uri, ok, body) {
       actual = getActual() // refresh
-      // kb.each(subject, predicate, null, dataDoc).map(function(x){actual[x.uri] = true})
       if (ok) {
         select.disabled = false // data written back
         if (newObject) {
@@ -1395,7 +1394,7 @@ export function makeSelectForOptions (
   }
 
   const select = dom.createElement('select')
-  select.setAttribute('style', 'margin: 0.6em 1.5em;')
+  select.setAttribute('style', style.formSelectSTyle)
   if (options.multiple) select.setAttribute('multiple', 'true')
   select.currentURI = null
 
@@ -1526,7 +1525,6 @@ export function makeSelectForNestedCategory (
   callbackFunction
 ) {
   function update () {
-    // log.info("Selected is now: "+select.currentURI)
     if (child) {
       container.removeChild(child)
       child = null
@@ -1579,7 +1577,6 @@ export function makeSelectForNestedCategory (
  **  tristate: Allow ins, or del, or neither
  */
 export function buildCheckboxForm (dom, kb, lab, del, ins, form, dataDoc, tristate) {
-  // 20190115
   const box = dom.createElement('div')
   const tx = dom.createTextNode(lab)
   const editable = kb.updater.editable(dataDoc.uri)

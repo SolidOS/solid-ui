@@ -5,7 +5,7 @@ import { fieldParams } from './fieldParams'
 
 import { mostSpecificClassURI } from './fieldFunction'
 
-const STYLE_URI_PREFIX = 'https://www.w3.org/ns/css/attribute#'
+const STYLE_URI_PREFIX = 'https://www.w3.org/ns/css#'
 
 /* eslint-disable no-console */
 
