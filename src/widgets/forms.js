@@ -61,7 +61,6 @@ function refreshOpionsSubfieldinGroup (dom, already, subject, dataDoc, callbackF
     const field = subfields[j]
     const t = mostSpecificClassURI(field) // Field type
     if (t === ns.ui('Options').uri) {
-      // const dep = kb.any(field, ui('dependingOn'))
       const optionsRender = fieldFunction(dom, field)
       const newOne = optionsRender(
         dom,
@@ -72,12 +71,9 @@ function refreshOpionsSubfieldinGroup (dom, already, subject, dataDoc, callbackF
         dataDoc,
         callbackFunction
       )
-      // box.removeChild(newOne) // don't have to put it on a container any more
       debug.log('Refreshing Options field by replacing it.') // better to support actual refresh
       groupDiv.insertBefore(newOne, eles[j])
       groupDiv.removeChild(eles[j + 1]) // Remove the old one
-      // original[j] = kb.any(subject, dep).toNT()
-      // eles[j] = newOne
     }
   }
 }
@@ -97,7 +93,6 @@ field[ns.ui('Form').uri] = field[ns.ui('Group').uri] =
         dom.outlineManager.appendPropertyTRs(box, plist)
         return box
       }
-      // box.appendChild(dom.createTextNode('Group: first time, key: '+key))
       const already2 = {}
       for (const x in already) already2[x] = 1
       already2[key] = 1
@@ -125,7 +120,6 @@ field[ns.ui('Form').uri] = field[ns.ui('Group').uri] =
 
       for (let i = 0; i < subfields.length; i++) {
         const field = subfields[i]
-        // const t = mostSpecificClassURI(field) // Field type
         const subFieldFunction = fieldFunction(dom, field) //
 
         const itemChanged = function (ok, body) {
@@ -165,7 +159,6 @@ field[ns.ui('Options').uri] = function (
   const box = dom.createElement('div')
   const formDoc = form.doc ? form.doc() : null // @@ if blank no way to know
 
-  // box.setAttribute('style', 'padding-left: 2em; border: 0.05em dotted purple;')  // Indent Options
   const ui = ns.ui
   if (container) container.appendChild(box)
 
@@ -434,8 +427,6 @@ field[ns.ui('Multiple').uri] = function (
   }
   let min = kb.any(form, ui('min')) // This is the minimum number -- default 0
   min = min ? 0 + min.value : 0
-  // var max = kb.any(form, ui('max')) // This is the minimum number
-  // max = max ? max.value : 99999999
 
   const element = kb.any(form, ui('part')) // This is the form to use for each one
   if (!element) {
@@ -530,9 +521,6 @@ field[ns.ui('Multiple').uri] = function (
       }
       await saveListThenRefresh()
     }
-    // if (unsavedList) {
-    //     await saveListThenRefresh() // async
-    // }
   }
   asyncStuff().then(
     () => { debug.log(' Multiple render: async stuff ok') },
@@ -609,7 +597,6 @@ field[ns.ui('MultiLineTextField').uri] = function (
     dataDoc,
     callbackFunction
   )
-  // box.appendChild(dom.createTextNode('<-@@ subj:'+subject+', prop:'+property))
   right.appendChild(field)
   if (container) container.appendChild(box)
   return box
@@ -647,7 +634,6 @@ function booleanField (
   if (state === undefined) {
     state = false
   } // @@ sure we want that -- or three-state?
-  // log.debug('dataDoc is '+dataDoc)
   const ins = $rdf.st(subject, property, true, dataDoc)
   const del = $rdf.st(subject, property, false, dataDoc)
   const box = buildCheckboxForm(dom, kb, lab, del, ins, form, dataDoc, tristate)
@@ -721,14 +707,6 @@ field[ns.ui('Classifier').uri] = function (
   log.debug('Classifier: dataDoc=' + dataDoc)
   const checkOptions = function (ok, body) {
     if (!ok) return callbackFunction(ok, body)
-
-    /*
-    var parent = kb.any(undefined, ui('part'), form)
-    if (!parent) return callbackFunction(ok, body)
-    var kids = kb.each(parent, ui('part')); // @@@@@@@@@ Garbage
-    kids = kids.filter(function(k){return kb.any(k, ns.rdf('type'), ui('Options'))})
-    if (kids.length) log.debug('Yes, found related options: '+kids[0])
-    */
     return callbackFunction(ok, body)
   }
   const box = makeSelectForNestedCategory(
@@ -795,9 +773,8 @@ field[ns.ui('Choice').uri] = function (
   possible = kb.each(undefined, ns.rdf('type'), from, formDoc)
   for (const x in kb.findMembersNT(from)) {
     possible.push(kb.fromNT(x))
-    // box.appendChild(dom.createTextNode("RDFS: adding "+x))
   } // Use rdfs
-  // log.debug("%%% Choice field: possible.length 1 = "+possible.length)
+
   if (from.sameTerm(ns.rdfs('Class'))) {
     for (p in buttons.allClassURIs()) possible.push(kb.sym(p))
     // log.debug("%%% Choice field: possible.length 2 = "+possible.length)
@@ -876,8 +853,6 @@ field[ns.ui('Comment').uri] = field[
   const p = box.appendChild(dom.createElement(params.element))
   p.textContent = contents
 
-  // const style = kb.anyValue(form, ui('style'), null, form.doc()) || params.style || ''
-  // if (style) p.setAttribute('style', style) // @@ Hey later allow JCSS and RCSS
   setFieldStyle(p, form)
 
   // Some headings and prompts are only useful to guide user input
@@ -994,7 +969,6 @@ export function findClosest (kb, cla, prop) {
   const agenda = [kb.sym(cla)] // ordered - this is breadth first search
   while (agenda.length > 0) {
     const c = agenda.shift() // first
-    // if (c.uri && (c.uri == ns.owl('Thing').uri || c.uri == ns.rdf('Resource').uri )) continue
     const lists = kb.each(c, prop)
     log.debug('Lists for ' + c + ', ' + prop + ': ' + lists.length)
     if (lists.length !== 0) return lists
@@ -1173,7 +1147,6 @@ export function promptForNew (
     if (!gotButton) {
       gotButton = box.appendChild(buttons.linkButton(dom, object))
     }
-    // tabulator.outline.GotoSubject(object, true, undefined, true, undefined)
   }
   function linkDone (uri, ok, body) {
     return callbackFunction(ok, body)
@@ -1207,7 +1180,7 @@ export function makeDescription (
     field.value = desc
   } else {
     // Unless you can make the predicate label disappear with the first click then this is over-cute
-    // field.value = utils.label(predicate); // Was"enter a description here"
+    // field.value = utils.label(predicate); // Was"enter a description here" @@ possibly: add prompt which disappears
     field.select() // Select it ready for user input -- doesn't work
   }
 
@@ -1243,19 +1216,12 @@ export function makeDescription (
     })
   }
 
-  // const br = dom.createElement('br')
-  // group.appendChild(br)
-
   const editable = kb.updater.editable(dataDoc.uri)
   if (editable) {
-    // var submit = dom.createElement('input')
-    // submit.setAttribute('type', 'submit')
     var submit = widgets.continueButton(dom, saveChange)
     submit.disabled = true // until the filled has been modified
     submit.style.visibility = 'hidden'
     submit.style.float = 'right'
-    // submit.setAttribute('style', 'visibility: hidden; float: right;') // Keep UI clean
-    // submit.value = 'Save ' + utils.label(predicate) // @@ I18n
     group.appendChild(submit)
 
     field.addEventListener(
@@ -1271,7 +1237,6 @@ export function makeDescription (
       true
     )
     field.addEventListener('change', saveChange, true)
-    // submit.addEventListener('click', saveChange, false)
   } else {
     field.disabled = true // @@ change color too
     field.style.backgroundColor = style.textInputBackgroundColorUneditable
@@ -1342,8 +1307,6 @@ export function makeSelectForOptions (
   }
   var actual = getActual()
 
-  // var newObject = null
-
   const onChange = function (_e) {
     select.disabled = true // until data written back - gives user feedback too
     const ds = []
@@ -1390,7 +1353,6 @@ export function makeSelectForOptions (
       if (!opt.selected && opt.AJAR_uri in actual) {
         // old class
         removeValue(kb.sym(opt.AJAR_uri))
-        // ds.push($rdf.st(subject, predicate, kb.sym(opt.AJAR_uri), dataDoc ))
       }
       if (opt.selected) select.currentURI = opt.AJAR_uri
     }
@@ -1410,7 +1372,6 @@ export function makeSelectForOptions (
     log.info('selectForOptions: data doc = ' + dataDoc)
     kb.updater.update(ds, is, function (uri, ok, body) {
       actual = getActual() // refresh
-      // kb.each(subject, predicate, null, dataDoc).map(function(x){actual[x.uri] = true})
       if (ok) {
         select.disabled = false // data written back
         if (newObject) {
@@ -1564,7 +1525,6 @@ export function makeSelectForNestedCategory (
   callbackFunction
 ) {
   function update () {
-    // log.info("Selected is now: "+select.currentURI)
     if (child) {
       container.removeChild(child)
       child = null
@@ -1617,7 +1577,6 @@ export function makeSelectForNestedCategory (
  **  tristate: Allow ins, or del, or neither
  */
 export function buildCheckboxForm (dom, kb, lab, del, ins, form, dataDoc, tristate) {
-  // 20190115
   const box = dom.createElement('div')
   const tx = dom.createTextNode(lab)
   const editable = kb.updater.editable(dataDoc.uri)
