@@ -98,7 +98,7 @@ export function autocompleteField (
     callbackFunction(true, '') // changed
   }
 
-  if (!(subject instanceof NamedNode)) {
+  if (subject.termType !== 'NamedNode') {
     throw new Error('Sorry this field only works on NamedNode subjects (for editable)')
   }
   const kb = store
