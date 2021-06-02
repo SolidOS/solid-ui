@@ -1,4 +1,4 @@
-/* Create and edit data using public data
+/* Autocomplete Picker: Create and edit data using public data
 **
 ** As the data source is passed as a parameter, all kinds of APIa and query services can be used
 **
@@ -25,7 +25,7 @@ Autocomplete happens in 6 phases:
   4. The search string is big enough, and we have loaded array NOT to the limit
      but including all matches.   No more fetches.
      If user gets more precise, wait for them to select one - or reduce to a single
-  5. Single one selected. Optionally waiting for accept button to be pressed, or can change string and go to 5 or 2
+  5. Single one selected. Optionally waiting for accept button to be pressed, OR can change string and go to 5 or 2
   6. Locked with a value. Press 'edit' button to return to 5
 */
 
@@ -48,22 +48,8 @@ interface Callback1 {
   (_subject: NamedNode, _name: Literal): any;
 }
 
-/*
-function assertString (x):string {
-  if (typeof x !== 'string') {
-    throw new Error('Expected this to be a string: ' + x)
-  }
-  return x
-}
-function assertNN (x):NamedNode {
-  if (!(x instanceof NamedNode)) {
-    throw new Error('Expected this to be a string: ' + x)
-  }
-  return x
-}
-*/
 export function setVisible (element:HTMLElement, visible:boolean) {
-  element.style.visibility = visible ? 'visible' : 'collapse'
+  element.style.display = visible ? '' : 'none' // Do not use visibility, it holds the real estate
 }
 
 // The core of the autocomplete UI
@@ -80,13 +66,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
     style.setStyle(errorRow, 'autocompleteRowStyle')
     errorRow.style.padding = '1em'
   }
-  /*
-  function remove (ele?: HTMLElement) {
-    if (ele && ele.parentNode) {
-      ele.parentNode.removeChild(ele)
-    }
-  }
-  */
+
   function finish (object, name) {
     debug.log('Auto complete: finish! ' + object)
     if (object.termType === 'Literal' && acOptions.queryParams.objectURIBase) {
@@ -117,8 +97,6 @@ export async function renderAutoComplete (dom: HTMLDocument,
   async function acceptButtonHandler (_event) {
     if (foundName && searchInput.value === foundName.value) { // still
       finish(foundObject, foundName)
-    } else {
-      // (decoration.acceptButton as any).disabled = true
     }
   }
 
@@ -142,34 +120,6 @@ export async function renderAutoComplete (dom: HTMLDocument,
     return true
   }
 
-  /*
-  function thinOut (filter) {
-    let hits = 0
-    let pick = undefined as NamedNode | Literal | undefined
-    let pickedName = undefined as Literal | undefined
-    for (let j = table.children.length - 1; j > 0; j--) { // backwards as we are removing rows
-      const row = table.children[j]
-      if (nameMatch(filter, row.textContent || '')) {
-        hits += 1
-        pick = (row as any).solidSubject as NamedNode | Literal
-        pickedName = (row as any).solidName as Literal
-        // pick = kb.sym(assertString(row.getAttribute('subject')))
-        // pickedName = row.textContent as string
-        ;(row as any).style.display = ''
-        // ;(row as any).style.color = 'blue' // @@ chose color
-        ;(row as any).style.color = allDisplayed ? '#080' : '#088' // green means 'you should find it here'
-      } else {
-        ;(row as any).style.display = 'none'
-      }
-    }
-    if (hits === 1) { // Maybe require green confirmation button be clicked?
-      debug.log(`  auto complete elimination:  "${filter}" -> "${pickedName}"`)
-      if (pick && pickedName) { // @@ for TS only.
-        gotIt(pick, pickedName)
-      }
-    }
-  }
-*/
   function clearList () {
     while (table.children.length > 1) {
       table.removeChild(table.lastChild as Node)
@@ -177,14 +127,19 @@ export async function renderAutoComplete (dom: HTMLDocument,
   }
 
   async function inputEventHHandler (_event) {
+    // console.log('@@ AC inputEventHHandler called')
     setVisible(decoration.cancelButton, true) // only allow cancel when there is something to cancel
+    refreshList() /// @@  debounqce does not work with jest
+    /*
     if (runningTimeout) {
       clearTimeout(runningTimeout)
     }
-    setTimeout(refreshList, AUTOCOMPLETE_DEBOUNCE_MS)
+    runningTimeout = setTimeout(refreshList, AUTOCOMPLETE_DEBOUNCE_MS)
+    */
   }
 
   async function loadBindingsAndFilterByLanguage (filter, languagePrefs) {
+    // console.log('@@ loadBindingsAndFilterByLanguage ' + filter)
     let bindings
     try {
       bindings = await queryPublicDataByName(filter, targetClass as any,
@@ -210,6 +165,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
   }
 
   async function refreshList () {
+    // console.log('@@ refreshList called')
     function rowForBinding (binding) {
       const row = dom.createElement('tr')
       style.setStyle(row, 'autocompleteRowStyle')
@@ -227,6 +183,11 @@ export async function renderAutoComplete (dom: HTMLDocument,
       })
       return row
     } // rowForBinding
+    function compareBindingsByName (self, other) {
+      return other.name.value > self.name.value
+        ? 1
+        : other.name.name < self.name.value ? -1 : 0
+    }
 
     if (inputEventHandlerLock) {
       debug.log(`Ignoring "${searchInput.value}" because of lock `)
@@ -243,10 +204,10 @@ export async function renderAutoComplete (dom: HTMLDocument,
       numberOfRows = AUTOCOMPLETE_ROWS
     } else {
       if (!allDisplayed || !lastFilter || !filter.startsWith(lastFilter)) {
-        debug.log(`   Querying database at "$(filter}" cf last "${lastFilter}".`)
+        debug.log(`   Querying database at "${filter}" cf last "${lastFilter}".`)
         lastBindings = await loadBindingsAndFilterByLanguage(filter, languagePrefs) // freesh query
       }
-      // Trim table as earach gets tighter:
+      // Trim table as search gets tighter:
       const slimmed = filterByName(filter, lastBindings)
       if (loadedEnough && slimmed.length <= AUTOCOMPLETE_ROWS_STRETCH) {
         numberOfRows = slimmed.length // stretch if it means we get all items
@@ -254,8 +215,11 @@ export async function renderAutoComplete (dom: HTMLDocument,
       allDisplayed = loadedEnough && slimmed.length <= numberOfRows
       debug.log(` Filter:"${filter}" lastBindings: ${lastBindings.length}, slimmed to ${slimmed.length}; rows: ${numberOfRows}, Enough? ${loadedEnough}, All displayed? ${allDisplayed}`)
 
+      const displayable = slimmed.slice(0, numberOfRows)
+
+      displayable.sort(compareBindingsByName)
       clearList()
-      for (const binding of slimmed) {
+      for (const binding of displayable) {
         table.appendChild(rowForBinding(binding))
       }
       if (slimmed.length === 1) {
@@ -286,14 +250,17 @@ export async function renderAutoComplete (dom: HTMLDocument,
     if (decoration.editButton) {
       setVisible(decoration.editButton, true)
     }
-    setVisible(decoration.cancelButton, false) // only allow cancel when there is something to cancel
+    if (decoration.cancelButton) {
+      setVisible(decoration.cancelButton, false) // only allow cancel when there is something to cancel
+    }
     inputEventHandlerLock = false
     clearList()
   } // initialiize
 
   // const queryParams: QueryParameters = acOptions.queryParams
   const targetClass = acOptions.targetClass
-  if (!targetClass) throw new Error('need  class')
+  if (!targetClass) throw new Error('renderAutoComplete: missing targetClass')
+  // console.log(`renderAutoComplete: targetClass=${targetClass}` )
   if (decoration.acceptButton) {
     decoration.acceptButton.addEventListener('click', acceptButtonHandler, false)
   }
@@ -313,6 +280,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
   let foundName = undefined as (Literal | undefined)// once found accepted string must match this
   let foundObject = undefined as (NamedNode | Literal | undefined)
   const table = div.appendChild(dom.createElement('table'))
+  table.setAttribute('data-testid', 'autocomplete-table')
   table.setAttribute('style', 'max-width: 30em; margin: 0.5em;')
   const head = table.appendChild(dom.createElement('tr'))
   style.setStyle(head, 'autocompleteRowStyle') // textInputStyle or
@@ -324,6 +292,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
 
   const size = acOptions.size || style.textInputSize || 20
   searchInput.setAttribute('size', size)
+  searchInput.setAttribute('data-testid', 'autocomplete-input')
 
   const searchInputStyle = style.textInputStyle || // searchInputStyle ?
     'border: 0.1em solid #444; border-radius: 0.5em; width: 100%; font-size: 100%; padding: 0.1em 0.6em' // @
@@ -335,6 +304,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
   }, false)
 
   searchInput.addEventListener('input', inputEventHHandler)
+  // console.log('@@ renderAutoComplete returns ' + div.innerHTML)
   return div
 } // renderAutoComplete
 

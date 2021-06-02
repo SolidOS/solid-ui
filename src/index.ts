@@ -25,7 +25,6 @@ If you would like to know more about the solid Solid project, please see
 https://github.com/solid/solid
 */
 'use strict'
-/* eslint-disable no-console */
 /**
  * Provides a Solid client helper object (which exposes various static modules).
  * @module solidUi.js
@@ -108,7 +107,6 @@ if (typeof window !== 'undefined') {
     initHeader
   } // Simpler access by non-node scripts
 }
-console.log('widgets imported to UI:', widgets)
 
 export {
   ns,

@@ -13,6 +13,7 @@ export interface Binding {
 declare type Bindings = Binding[];
 export declare type QueryParameters = {
     label: string;
+    limit?: number;
     logo?: NamedNode;
     searchByNameQuery?: string;
     searchByNameURI?: string;
@@ -52,6 +53,7 @@ export declare const wikidataOutgoingClassMap: {
 };
 export declare const wikidataParameters: {
     label: string;
+    limit: number;
     logo: NamedNode;
     endpoint: string;
     searchByNameQuery: string;

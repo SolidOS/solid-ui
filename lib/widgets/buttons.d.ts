@@ -127,7 +127,8 @@ export declare function faviconOrDefault(dom: HTMLDocument, x: NamedNode): HTMLI
  * Delete button with a check you really mean it
  * @@ Supress check if command key held down?
  */
-export declare function deleteButtonWithCheck(dom: HTMLDocument, container: HTMLElement, noun: string, deleteFunction: () => any): HTMLImageElement;
+export declare function deleteButtonWithCheck(dom: HTMLDocument, _container: HTMLElement, // Used to interfere with style of this
+noun: string, deleteFunction: () => any): HTMLDivElement;
 export declare function button(dom: HTMLDocument, iconURI: string | undefined, text: string, handler?: (event: any) => void, options?: ButtonWidgetOptions): HTMLButtonElement;
 export declare function cancelButton(dom: HTMLDocument, handler: (event: any) => void): HTMLButtonElement;
 export declare function continueButton(dom: HTMLDocument, handler: (event: any) => void): HTMLButtonElement;

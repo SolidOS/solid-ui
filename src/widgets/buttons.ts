@@ -441,17 +441,18 @@ export function faviconOrDefault (dom: HTMLDocument, x: NamedNode) {
  */
 export function deleteButtonWithCheck (
   dom: HTMLDocument,
-  container: HTMLElement,
+  _container: HTMLElement, // Used to interfere with style of this
   noun: string,
   deleteFunction: () => any
 ) {
   function setStyle () {
-    container.style.border = ''
-    container.style.margin = '0.3em'
-    container.style.borderRadius = '0'
-    container.style.padding = '0.3em white'
-    container.style.boxShadow = ''
+    buttonDiv.style.border = ''
+    buttonDiv.style.margin = '0.3em'
+    buttonDiv.style.borderRadius = '0'
+    buttonDiv.style.padding = '0.3em white'
+    buttonDiv.style.boxShadow = ''
   }
+  const buttonDiv = dom.createElement('div')
   const minusIconURI = iconBase + 'noun_2188_red.svg' // white minus in red #cc0000 circle
   const img = dom.createElement('img')
   let sureButtonElt, cancelButtonElt
@@ -460,8 +461,8 @@ export function deleteButtonWithCheck (
   img.title = 'Remove this ' + noun
   const deleteButtonElt = img
 
-  container.appendChild(deleteButtonElt)
-  container.setAttribute('class', 'hoverControl') // See tabbedtab.css (sigh global CSS)
+  buttonDiv.appendChild(deleteButtonElt)
+  buttonDiv.setAttribute('class', 'hoverControl') // See tabbedtab.css (sigh global CSS)
   setStyle()
 
   deleteButtonElt.setAttribute('class', 'hoverControlHide')
@@ -469,11 +470,12 @@ export function deleteButtonWithCheck (
   deleteButtonElt.addEventListener(
     'click',
     function (_event) {
-      container.style.borderRadius = '0.5em'
-      container.style.border = 'orange 0.05em;'
-      container.style.boxShadow = '0.2em 0.5em #888888'
+      buttonDiv.style.borderRadius = '0.5em'
+      buttonDiv.style.border = 'orange 0.05em;'
+      buttonDiv.style.boxShadow = '0.2em 0.5em #888888'
+      buttonDiv.style.padding = '0.3em'
 
-      container.removeChild(deleteButtonElt) // Ask -- are you sure?
+      buttonDiv.removeChild(deleteButtonElt) // Ask -- are you sure?
       cancelButtonElt = dom.createElement('button')
       // cancelButton.textContent = 'cancel'
       cancelButtonElt.setAttribute('style', style.buttonStyle)
@@ -481,24 +483,24 @@ export function deleteButtonWithCheck (
       img.setAttribute('src', cancelIconURI)
       img.setAttribute('style', style.buttonStyle)
 
-      container.appendChild(cancelButtonElt).addEventListener(
+      buttonDiv.appendChild(cancelButtonElt).addEventListener(
         'click',
         function (_event) {
-          container.removeChild(sureButtonElt)
-          container.removeChild(cancelButtonElt)
+          buttonDiv.removeChild(sureButtonElt)
+          buttonDiv.removeChild(cancelButtonElt)
           setStyle()
-          container.appendChild(deleteButtonElt)
+          buttonDiv.appendChild(deleteButtonElt)
         },
         false
       )
       sureButtonElt = dom.createElement('button')
       sureButtonElt.textContent = 'Delete ' + noun
       sureButtonElt.setAttribute('style', style.buttonStyle)
-      container.appendChild(sureButtonElt).addEventListener(
+      buttonDiv.appendChild(sureButtonElt).addEventListener(
         'click',
         function (_event) {
-          container.removeChild(sureButtonElt)
-          container.removeChild(cancelButtonElt)
+          buttonDiv.removeChild(sureButtonElt)
+          buttonDiv.removeChild(cancelButtonElt)
           setStyle()
           deleteFunction()
         },
@@ -507,7 +509,7 @@ export function deleteButtonWithCheck (
     },
     false
   )
-  return deleteButtonElt
+  return buttonDiv // deleteButtonElt
 }
 
 /**

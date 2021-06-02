@@ -37,5 +37,5 @@ export declare function fieldStore(subject: NamedNode | BlankNode | Variable, pr
  *
  * @returns The HTML widget created
  */
-export declare function basicField(dom: HTMLDocument, container: HTMLElement | undefined, already: any, subject: NamedNode | BlankNode | Variable, form: NamedNode, doc: NamedNode | undefined, callbackFunction: (ok: boolean, errorMessage: string) => void): HTMLElement;
+export declare function basicField(dom: HTMLDocument, container: HTMLElement | undefined, already: any, subject: NamedNode | BlankNode | Variable, form: NamedNode, doc: NamedNode | undefined, callbackFunction: (_ok: boolean, _errorMessage: string) => void): HTMLElement;
 //# sourceMappingURL=basic.d.ts.map

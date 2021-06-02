@@ -2,7 +2,7 @@ import { NamedNode, BlankNode, Variable } from 'rdflib';
 /**
   * Render a autocomplete form field
   *
-  * Teh autocomplete form searches for an iobject in a definitive public database,
+  * The autocomplete form searches for an object in a definitive public database,
   * and allows the user to search for it by name, displaying a list of objects whose names match
   * the input to date, and letting  the user either click on one of the list,
   * or just go on untill there is only one.  The process then returns two values,
