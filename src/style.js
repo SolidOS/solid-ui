@@ -5,7 +5,7 @@
 // These must all end with semicolon so they can be appended to.
 
 const formBorderColor = '#888888' // Mid-grey
-const lowProfileLinkColor = '#3B5998' // Grey-blue.   Eg for field labels linking to ontology
+const lowProfileLinkColor = '#3B5998' // Grey-blue, e.g., for field labels linking to ontology
 const formFieldNameBoxWidth = '8em' // The fixed amount to get form fields to line up
 // The latter we put in when switching awy from using tables.  Getting allignment between
 // fields in different groups though is hard problem.

@@ -49,7 +49,7 @@ interface Callback1 {
 }
 
 export function setVisible (element:HTMLElement, visible:boolean) {
-  element.style.display = visible ? '' : 'none' // Do not use visibility, it holds the real esttate
+  element.style.display = visible ? '' : 'none' // Do not use visibility, it holds the real estate
 }
 
 // The core of the autocomplete UI
