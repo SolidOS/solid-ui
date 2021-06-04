@@ -772,15 +772,8 @@ export function createLinkDiv (dom: HTMLDocument, div: HTMLDivElement, obj: Name
     if (options.link !== false) {
       createLinkForURI(dom, linkDiv, obj)
     }
-<<<<<<< HEAD
-    if (options.draggable !== false) {
-      // default is on
-      image.setAttribute('draggable', 'false') // Stop the image being dragged instead - just the TR
-      makeDraggable(div, obj)
-    }
-=======
-    dragAndDrop.makeDraggable(div, obj)
->>>>>>> 57d218e (refactored and started adding tests)
+
+    makeDraggable(div, obj)
   }
 }
 /**
@@ -1023,13 +1016,13 @@ export function allClassURIs (): { [uri: string]: boolean } {
     .forEach(function (st) {
       if (st.object.value) set[st.object.value] = true
     })
-    store
+  store
     .statementsMatching(undefined, ns.rdfs('subClassOf'), undefined)
     .forEach(function (st) {
       if (st.object.value) set[st.object.value] = true
       if (st.subject.value) set[st.subject.value] = true
     })
-    store
+  store
     .each(undefined, ns.rdf('type'), ns.rdfs('Class'))
     .forEach(function (c) {
       if (c.value) set[c.value] = true

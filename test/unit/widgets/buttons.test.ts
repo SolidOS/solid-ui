@@ -42,9 +42,6 @@ import {
   shortTime,
   timestamp
 } from '../../../src/widgets/buttons'
-import {
-  linkDivStyle
-} from '../../../src/style'
 import { graph, namedNode, NamedNode, sym } from 'rdflib'
 // @ts-ignore
 import { foaf, rdf, sioc, vcard } from '../../../src/ns'
@@ -53,25 +50,19 @@ import { icons } from '../../../src/iconBase'
 import { clearStore } from '../helpers/clearStore'
 import { domWithHead } from '../../helpers/dom-with-head'
 import { solidLogicSingleton } from '../../../src/logic'
-import { hasUncaughtExceptionCaptureCallback } from 'node:process'
 
+const style = require('../../../src/style')
 const { iconBase } = icons
 const store = solidLogicSingleton.store
 
 silenceDebugMessages()
-<<<<<<< HEAD
 jest.mock('solid-auth-client', () => ({
   currentSession: () => Promise.resolve(),
   trackSession: () => null
 }))
-=======
-jest.mock('solid-auth-client')
-
->>>>>>> bb1f56c (fixed tests)
 let window: DOMWindow
 let dom: HTMLDocument
 let element: HTMLDivElement
-let linkDiv: HTMLDivElement
 let image: HTMLImageElement
 let obj: NamedNode
 let event: Event
@@ -84,7 +75,6 @@ beforeEach(() => {
   event = new window.Event('test')
   image = dom.createElement('img')
   obj = new NamedNode('https://test.test#')
-  linkDiv = dom.createElement('div')
   clickEvent = new window.Event('click')
   dom.dispatchEvent(event)
 })
@@ -223,15 +213,14 @@ describe('createLinkDiv', () => {
     expect(element.getAttribute('draggable')).toEqual('true')
   })
   it('adds the style....', () => {
+    const options = {}
     createLinkDiv(dom, element, obj, options)
-    expect(element.children[0].getAttribute('style')).toEqual(linkDivStyle)
+    expect(element.children[0].getAttribute('style')).toEqual(style.linkDivStyle)
   })
 
-  // TODO: find out how to use findByText
   it('adds the deleteFunction of .... deleteButton with Check', () => {
     createLinkDiv(dom, element, obj, options)
     const deleteImg = getByRole(element, 'button')
-    // const deleteImg = element.children[0].children[0]
     expect(deleteImg.nodeName).toEqual('IMG')
     expect(deleteImg.getAttribute('title')).toEqual('Remove this one')
   })

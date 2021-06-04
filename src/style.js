@@ -55,7 +55,7 @@ export const style = { // styleModule
   linkDivStyle: 'width:2em; padding:0.5em; height: 4em;',
 
   setStyle: function setStyle (ele, styleName) {
-    ele.style = styleModule[styleName]
+    ele.style = style[styleName]
   }
 }
 
