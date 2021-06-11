@@ -441,7 +441,7 @@ export function faviconOrDefault (dom: HTMLDocument, x: NamedNode) {
  */
 export function deleteButtonWithCheck (
   dom: HTMLDocument,
-  container?: HTMLElement, // Used to interfere with style of this
+  container: HTMLElement | null, // Used to interfere with style of this
   noun: string,
   deleteFunction: () => any
 ) {
