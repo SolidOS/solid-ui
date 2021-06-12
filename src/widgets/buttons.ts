@@ -435,81 +435,96 @@ export function faviconOrDefault (dom: HTMLDocument, x: NamedNode) {
   }
 }
 
+/* Two-option dialog pop-up
+*/
+
+function renderDeleteConfirmPopup (dom, refererenceElement, prompt, deleteFunction) {
+  function removePopup () {
+    refererenceElement.parentElement.removeChild(refererenceElement)
+  }
+  function removePopupAndDoDeletion () {
+    removePopup()
+    deleteFunction()
+  }
+  const popup = dom.createElement('div')
+  popup.style = style.confirmPopupStyle
+  popup.style.position = 'absolute'
+  popup.style.top = '-1em' // try leaving original button clear
+
+  popup.style.display = 'grid'
+  popup.style.gridTemplateColumns = 'auto auto'
+  const affirm = dom.createElement('div')
+  affirm.style.gridColumn = '1/2'
+  affirm.style.gridRow = '1' // @@ sigh; TS. could pass number in fact
+  const cancel = dom.createElement('div')
+  cancel.style.gridColumn = '1/2'
+  cancel.style.gridRow = '2'
+
+  const xButton = cancelButton(dom, removePopup)
+  popup.appendChild(xButton)
+  xButton.style.gridColumn = '1'
+  xButton.style.gridRow = '2'
+
+  const cancelPrompt = popup.appendChild(dom.createElement('button'))
+  cancelPrompt.style = style.buttonStyle
+  cancelPrompt.style.gridRow = '2'
+  cancelPrompt.style.gridColumn = '2'
+  cancelPrompt.textContent = 'Cancel' // @@ I18n
+
+  const affirmIcon = button(dom, icons.iconBase + 'noun_925021.svg', 'Delete it') // trashcan
+  popup.appendChild(affirmIcon)
+  affirmIcon.style.gridRow = '1'
+  affirmIcon.style.gridColumn = '1'
+
+  const sureButtonElt = popup.appendChild(dom.createElement('button'))
+  sureButtonElt.style = style.buttonStyle
+  sureButtonElt.style.gridRow = '1'
+  sureButtonElt.style.gridColumn = '2'
+  sureButtonElt.textContent = prompt
+  popup.appendChild(sureButtonElt)
+
+  affirmIcon.addEventListener('click', removePopupAndDoDeletion)
+  sureButtonElt.addEventListener('click', removePopupAndDoDeletion)
+
+  // xButton.addEventListener('click', removePopup)
+  cancelPrompt.addEventListener('click', removePopup)
+
+  return popup
+}
 /**
  * Delete button with a check you really mean it
  * @@ Supress check if command key held down?
  */
 export function deleteButtonWithCheck (
   dom: HTMLDocument,
-  _container: HTMLElement, // Used to interfere with style of this
+  container: HTMLElement,
   noun: string,
   deleteFunction: () => any
 ) {
-  function setStyle () {
-    buttonDiv.style.border = ''
-    buttonDiv.style.margin = '0.3em'
-    buttonDiv.style.borderRadius = '0'
-    buttonDiv.style.padding = '0.3em white'
-    buttonDiv.style.boxShadow = ''
+  function createPopup () {
+    const refererenceElement = dom.createElement('div')
+    container.insertBefore(refererenceElement, deleteButton)
+    refererenceElement.style.position = 'relative' // Needed as reference for popup
+    refererenceElement.appendChild(renderDeleteConfirmPopup(dom, refererenceElement, prompt, deleteFunction))
   }
-  const buttonDiv = dom.createElement('div')
   const minusIconURI = iconBase + 'noun_2188_red.svg' // white minus in red #cc0000 circle
-  const img = dom.createElement('img')
-  let sureButtonElt, cancelButtonElt
-  img.setAttribute('src', minusIconURI) //  plus sign
-  img.setAttribute('style', 'margin: 0.2em; width: 1em; height:1em')
-  img.title = 'Remove this ' + noun
-  const deleteButtonElt = img
+  const deleteButton = dom.createElement('img')
+  deleteButton.setAttribute('src', minusIconURI)
 
-  buttonDiv.appendChild(deleteButtonElt)
-  buttonDiv.setAttribute('class', 'hoverControl') // See tabbedtab.css (sigh global CSS)
-  setStyle()
+  deleteButton.setAttribute('style', style.smallButtonStyle) // @@tsc - would set deleteButton.style
+  deleteButton.style.float = 'right' // Historically this has alwaus floated right
 
-  deleteButtonElt.setAttribute('class', 'hoverControlHide')
+  const prompt = 'Remove this ' + noun
+  deleteButton.title = prompt
+  // @@ In an ideal world, make use of hover an accessibility option
+  deleteButton.classList.add('hoverControlHide')
 
-  deleteButtonElt.addEventListener(
-    'click',
-    function (_event) {
-      buttonDiv.style.borderRadius = '0.5em'
-      buttonDiv.style.border = 'orange 0.05em;'
-      buttonDiv.style.boxShadow = '0.2em 0.5em #888888'
-      buttonDiv.style.padding = '0.3em'
+  deleteButton.addEventListener('click', createPopup)
 
-      buttonDiv.removeChild(deleteButtonElt) // Ask -- are you sure?
-      cancelButtonElt = dom.createElement('button')
-      // cancelButton.textContent = 'cancel'
-      cancelButtonElt.setAttribute('style', style.buttonStyle)
-      const img = cancelButtonElt.appendChild(dom.createElement('img'))
-      img.setAttribute('src', cancelIconURI)
-      img.setAttribute('style', style.buttonStyle)
-
-      buttonDiv.appendChild(cancelButtonElt).addEventListener(
-        'click',
-        function (_event) {
-          buttonDiv.removeChild(sureButtonElt)
-          buttonDiv.removeChild(cancelButtonElt)
-          setStyle()
-          buttonDiv.appendChild(deleteButtonElt)
-        },
-        false
-      )
-      sureButtonElt = dom.createElement('button')
-      sureButtonElt.textContent = 'Delete ' + noun
-      sureButtonElt.setAttribute('style', style.buttonStyle)
-      buttonDiv.appendChild(sureButtonElt).addEventListener(
-        'click',
-        function (_event) {
-          buttonDiv.removeChild(sureButtonElt)
-          buttonDiv.removeChild(cancelButtonElt)
-          setStyle()
-          deleteFunction()
-        },
-        false
-      )
-    },
-    false
-  )
-  return buttonDiv // deleteButtonElt
+  container.classList.add('hoverControl')
+  container.appendChild(deleteButton)
+  deleteButton.setAttribute('data-testid', 'deleteButtonWithCheck')
+  return deleteButton // or button div?  caller may change size of image
 }
 
 /**
@@ -564,7 +579,7 @@ function getButtonStyle (options: ButtonWidgetOptions = {}) {
  * @returns <dDomElement> - the button
  */
 export function button (dom: HTMLDocument, iconURI: string | undefined, text: string,
-  handler?: (event: any) => void,
+  handler?: (_event: any) => void,
   options: ButtonWidgetOptions = { buttonColor: 'Primary', needsBorder: false }) {
   const button = dom.createElement('button')
   button.setAttribute('type', 'button')
@@ -597,7 +612,7 @@ export function button (dom: HTMLDocument, iconURI: string | undefined, text: st
  *
  * @returns <dDomElement> - the button
  */
-export function cancelButton (dom: HTMLDocument, handler: (event: any) => void) {
+export function cancelButton (dom: HTMLDocument, handler: (_event?: any) => void) {
   return button(dom, cancelIconURI, 'Cancel', handler)
 }
 
@@ -608,7 +623,7 @@ export function cancelButton (dom: HTMLDocument, handler: (event: any) => void) 
  *
  * @returns <dDomElement> - the button
  */
-export function continueButton (dom: HTMLDocument, handler: (event: any) => void) {
+export function continueButton (dom: HTMLDocument, handler: (_event: any) => void) {
   return button(dom, checkIconURI, 'Continue', handler)
 }
 
@@ -1090,8 +1105,8 @@ export function selectorPanel (
   inverse: boolean,
   possible: NamedNode[],
   options: { connectIcon?: string },
-  callbackFunction: (x: NamedNode, e: Event, selected: boolean) => void,
-  linkCallback: (x: NamedNode, e: Event, inverse: boolean, setStyleFunction: () => void) => void
+  callbackFunction: (_x: NamedNode, _e: Event, _selected: boolean) => void,
+  linkCallback: (_x: NamedNode, _e: Event, _inverse: boolean, _setStyleFunction: () => void) => void
 ) {
   return selectorPanelRefresh(
     dom.createElement('div'),
@@ -1116,8 +1131,8 @@ export function selectorPanelRefresh (
   inverse: boolean,
   possible: NamedNode[],
   options: { connectIcon?: string },
-  callbackFunction: (x: NamedNode, e: Event, selected: boolean) => void,
-  linkCallback: (x: NamedNode, e: Event, inverse: boolean, setStyleFunction: () => void) => void
+  callbackFunction: (_x: NamedNode, _e: Event, _selected: boolean) => void,
+  linkCallback: (_x: NamedNode, _e: Event, _inverse: boolean, _setStyleFunction: () => void) => void
 ) {
   const style0 =
     'border: 0.1em solid #ddd; border-bottom: none; width: 95%; height: 2em; padding: 0.5em;'
@@ -1220,7 +1235,7 @@ function twoLineDefault (dom: HTMLDocument, x: NamedNode): HTMLElement {
  * Find a function that can create a widget for a given class
  * @param c The RDF class for which we want a widget generator function
  */
-function twoLineWidgetForClass (c: NamedNode): (dom: HTMLDocument, x: NamedNode) => HTMLElement {
+function twoLineWidgetForClass (c: NamedNode): (_dom: HTMLDocument, _x: NamedNode) => HTMLElement {
   let widget = index.twoLine[c.uri]
   const kb = store
   if (widget) return widget
@@ -1352,7 +1367,7 @@ export function isImage (file?: NamedNode, kind?: string): boolean {
 // See https://developer.mozilla.org/en-US/docs/Web/API/File/Using_files_from_web_applications
 export function fileUploadButtonDiv (
   dom: HTMLDocument,
-  droppedFileHandler: (files: FileList) => void
+  droppedFileHandler: (_files: FileList) => void
 ) {
   const div = dom.createElement('div')
   const input = div.appendChild(dom.createElement('input'))

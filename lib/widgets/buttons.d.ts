@@ -127,11 +127,10 @@ export declare function faviconOrDefault(dom: HTMLDocument, x: NamedNode): HTMLI
  * Delete button with a check you really mean it
  * @@ Supress check if command key held down?
  */
-export declare function deleteButtonWithCheck(dom: HTMLDocument, _container: HTMLElement, // Used to interfere with style of this
-noun: string, deleteFunction: () => any): HTMLDivElement;
-export declare function button(dom: HTMLDocument, iconURI: string | undefined, text: string, handler?: (event: any) => void, options?: ButtonWidgetOptions): HTMLButtonElement;
-export declare function cancelButton(dom: HTMLDocument, handler: (event: any) => void): HTMLButtonElement;
-export declare function continueButton(dom: HTMLDocument, handler: (event: any) => void): HTMLButtonElement;
+export declare function deleteButtonWithCheck(dom: HTMLDocument, container: HTMLElement, noun: string, deleteFunction: () => any): HTMLImageElement;
+export declare function button(dom: HTMLDocument, iconURI: string | undefined, text: string, handler?: (_event: any) => void, options?: ButtonWidgetOptions): HTMLButtonElement;
+export declare function cancelButton(dom: HTMLDocument, handler: (_event?: any) => void): HTMLButtonElement;
+export declare function continueButton(dom: HTMLDocument, handler: (_event: any) => void): HTMLButtonElement;
 export declare function askName(dom: HTMLDocument, kb: IndexedFormula, container: HTMLDivElement, predicate?: NamedNode, theClass?: NamedNode, noun?: string): Promise<unknown>;
 /**
  * A little link icon
@@ -212,10 +211,10 @@ export declare function linkButton(dom: HTMLDocument, object: NamedNode): HTMLEl
 export declare function removeButton(dom: HTMLDocument, element: HTMLElement): HTMLButtonElement;
 export declare function selectorPanel(dom: HTMLDocument, kb: IndexedFormula, type: NamedNode, predicate: NamedNode, inverse: boolean, possible: NamedNode[], options: {
     connectIcon?: string;
-}, callbackFunction: (x: NamedNode, e: Event, selected: boolean) => void, linkCallback: (x: NamedNode, e: Event, inverse: boolean, setStyleFunction: () => void) => void): HTMLElement;
+}, callbackFunction: (_x: NamedNode, _e: Event, _selected: boolean) => void, linkCallback: (_x: NamedNode, _e: Event, _inverse: boolean, _setStyleFunction: () => void) => void): HTMLElement;
 export declare function selectorPanelRefresh(list: HTMLElement, dom: HTMLDocument, kb: IndexedFormula, type: NamedNode, predicate: NamedNode, inverse: boolean, possible: NamedNode[], options: {
     connectIcon?: string;
-}, callbackFunction: (x: NamedNode, e: Event, selected: boolean) => void, linkCallback: (x: NamedNode, e: Event, inverse: boolean, setStyleFunction: () => void) => void): HTMLElement;
+}, callbackFunction: (_x: NamedNode, _e: Event, _selected: boolean) => void, linkCallback: (_x: NamedNode, _e: Event, _inverse: boolean, _setStyleFunction: () => void) => void): HTMLElement;
 export declare let index: any;
 /**
  * Stick a stylesheet link the document if not already there
@@ -234,5 +233,5 @@ export declare function isImage(file?: NamedNode, kind?: string): boolean;
  * @returns {Element} - a div with a button and a inout in it
  * The input is hidden, as it is uglky - the user clicks on the nice icons and fires the input.
  */
-export declare function fileUploadButtonDiv(dom: HTMLDocument, droppedFileHandler: (files: FileList) => void): HTMLDivElement;
+export declare function fileUploadButtonDiv(dom: HTMLDocument, droppedFileHandler: (_files: FileList) => void): HTMLDivElement;
 //# sourceMappingURL=buttons.d.ts.map
