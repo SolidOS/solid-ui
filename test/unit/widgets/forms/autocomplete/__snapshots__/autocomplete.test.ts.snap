@@ -95,19 +95,16 @@ exports[`autocompleteField clicking on row of greenn table then accecpt button s
             title="Edit"
           />
         </button>
-        <div>
-          <div
-            class="hoverControl"
+        <div
+          class="hoverControl"
+        >
+          <img
+            class="hoverControlHide"
             data-testid="delete-button"
-            style="margin: 0.3em; border-radius: 0;"
-          >
-            <img
-              class="hoverControlHide"
-              src="https://solid.github.io/solid-ui/src/icons/noun_2188_red.svg"
-              style="margin: 0.2em; width: 1em; height:1em"
-              title="Remove this Q6881511"
-            />
-          </div>
+            src="https://solid.github.io/solid-ui/src/icons/noun_2188_red.svg"
+            style="margin: 0.2em; width: 1em; height: 1em; float: right;"
+            title="Remove this Q6881511"
+          />
         </div>
       </div>
     </div>
@@ -189,19 +186,16 @@ exports[`autocompleteField creates a autocomplete field 1`] = `
             title="Edit"
           />
         </button>
-        <div>
-          <div
-            class="hoverControl"
+        <div
+          class="hoverControl"
+        >
+          <img
+            class="hoverControlHide"
             data-testid="delete-button"
-            style="margin: 0.3em; border-radius: 0;"
-          >
-            <img
-              class="hoverControlHide"
-              src="https://solid.github.io/solid-ui/src/icons/noun_2188_red.svg"
-              style="margin: 0.2em; width: 1em; height:1em"
-              title="Remove this Q6881511"
-            />
-          </div>
+            src="https://solid.github.io/solid-ui/src/icons/noun_2188_red.svg"
+            style="margin: 0.2em; width: 1em; height: 1em; float: right;"
+            title="Remove this Q6881511"
+          />
         </div>
       </div>
     </div>
@@ -318,19 +312,16 @@ exports[`autocompleteField typing more search term till unique selects the whole
             title="Edit"
           />
         </button>
-        <div>
-          <div
-            class="hoverControl"
+        <div
+          class="hoverControl"
+        >
+          <img
+            class="hoverControlHide"
             data-testid="delete-button"
-            style="margin: 0.3em; border-radius: 0;"
-          >
-            <img
-              class="hoverControlHide"
-              src="https://solid.github.io/solid-ui/src/icons/noun_2188_red.svg"
-              style="margin: 0.2em; width: 1em; height:1em"
-              title="Remove this Q6881511"
-            />
-          </div>
+            src="https://solid.github.io/solid-ui/src/icons/noun_2188_red.svg"
+            style="margin: 0.2em; width: 1em; height: 1em; float: right;"
+            title="Remove this Q6881511"
+          />
         </div>
       </div>
     </div>
