@@ -2,7 +2,7 @@ import { lit, sym } from 'rdflib'
 import { label } from '../../../src/utils'
 import { silenceDebugMessages } from '../../helpers/setup'
 import { store } from '../../../src/logic'
-import * as ns from '../../../src/ns'
+
 silenceDebugMessages()
 jest.mock('solid-auth-client', () => ({
   currentSession: () => Promise.resolve(),
