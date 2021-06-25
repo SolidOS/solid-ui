@@ -10,8 +10,9 @@ import { getClasses } from '../jss'
 import { uploadFiles, makeDraggable, makeDropTarget } from './dragAndDrop'
 import { store } from '../logic'
 import * as utils from '../utils'
-
 import { errorMessageBlock } from './error'
+import { addClickListenerToElement, createImageDiv, wrapDivInATR } from './widgetHelpers'
+import { linkIcon, createLinkForURI } from './buttons/iconLinks'
 
 /**
  * UI Widgets such as buttons
@@ -36,6 +37,19 @@ export type ButtonWidgetOptions = {
   buttonColor?: ButtonType,
   needsBorder?: boolean
 }
+
+export type RenderAsDivOptions = {
+  image?: HTMLImageElement,
+  title?: string,
+  deleteFunction?: () => void,
+  link?: boolean,
+  noun?: string,
+  draggable?: boolean,
+  clickable?: boolean,
+  onClickFunction?: () => void,
+  wrapInATR?: boolean
+}
+
 function getStatusArea (context?: StatusAreaContext) {
   let box = (context && context.statusArea) || (context && context.div) || null
   if (box) return box
@@ -684,27 +698,6 @@ export function askName (
   }) // Promise
 }
 
-// ////////////////////////////////////////////////////////////////
-
-/**
- * A little link icon
- */
-export function linkIcon (dom: HTMLDocument, subject: NamedNode, iconURI?: string): HTMLElement {
-  const anchor = dom.createElement('a')
-  anchor.setAttribute('href', subject.uri)
-  if (subject.uri.startsWith('http')) {
-    // If diff web page
-    anchor.setAttribute('target', '_blank') // open in a new tab or window
-  } // as mailboxes and mail messages do not need new browser window
-  const img = anchor.appendChild(dom.createElement('img'))
-  img.setAttribute(
-    'src',
-    iconURI || originalIconBase + 'go-to-this.png'
-  )
-  img.setAttribute('style', 'margin: 0.3em;')
-  return anchor
-}
-
 /**
  * A TR to represent a draggable person, etc in a list
  *
@@ -752,6 +745,69 @@ export function renderAsRow (dom: HTMLDocument, pred: NamedNode, obj: NamedNode,
   }
   ;(tr as any).subject = obj
   return tr
+}
+
+/* A helper function for renderAsDiv
+*  creates the NameDiv for the person
+*  Note: could not move it to the helper file because they call exported functions
+*  from buttons
+*  @internal exporting this only for unit tests
+*/
+export function createNameDiv (dom: HTMLDocument, div: HTMLDivElement, title: string | undefined, obj: NamedNode) {
+  const nameDiv = div.appendChild(dom.createElement('div'))
+  if (title) {
+    nameDiv.textContent = title
+  } else {
+    setName(nameDiv, obj) // This is async
+  }
+}
+/* A helper function for renderAsDiv
+*  creates the linkDiv for the person
+*  Note: could not move it to the helper file because they call exported functions
+*  from buttons
+* @internal exporting this only for unit tests
+*/
+export function createLinkDiv (dom: HTMLDocument, div: HTMLDivElement, obj: NamedNode, options: RenderAsDivOptions) {
+  const linkDiv = div.appendChild(dom.createElement('div'))
+  linkDiv.setAttribute('style', style.linkDivStyle)
+
+  if (options.deleteFunction) {
+    deleteButtonWithCheck(dom, linkDiv, options.noun || 'one', options.deleteFunction)
+  }
+
+  if (obj.uri) {
+    // blank nodes need not apply
+    if (options.link !== false) {
+      createLinkForURI(dom, linkDiv, obj)
+    }
+
+    makeDraggable(div, obj)
+  }
+}
+/**
+ * A Div to represent a draggable person, etc in a list
+ * configurable to add an onClick listener
+ */
+export function renderAsDiv (dom: HTMLDocument, obj: NamedNode, options: RenderAsDivOptions): HTMLElement {
+  const div = dom.createElement('div')
+  div.setAttribute('style', style.renderAsDivStyle)
+
+  options = options || {}
+  const image = options.image || faviconOrDefault(dom, obj)
+  createImageDiv(dom, div, image)
+  createNameDiv(dom, div, options.title, obj)
+  createLinkDiv(dom, div, obj, options)
+
+  if (options.clickable && options.onClickFunction) {
+    addClickListenerToElement(div, options.onClickFunction)
+  }
+
+  // to be compatible with the SolidOS table layout
+  if (options.wrapInATR) {
+    const tr = wrapDivInATR(dom, div, obj)
+    return tr
+  }
+  return div
 }
 
 /**
