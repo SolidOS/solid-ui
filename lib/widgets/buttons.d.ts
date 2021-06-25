@@ -9,6 +9,17 @@ export declare type ButtonWidgetOptions = {
     buttonColor?: ButtonType;
     needsBorder?: boolean;
 };
+export declare type RenderAsDivOptions = {
+    image?: HTMLImageElement;
+    title?: string;
+    deleteFunction?: () => void;
+    link?: boolean;
+    noun?: string;
+    draggable?: boolean;
+    clickable?: boolean;
+    onClickFunction?: () => void;
+    wrapInATR?: boolean;
+};
 /**
  * Display an error message block
  */
@@ -133,16 +144,19 @@ export declare function cancelButton(dom: HTMLDocument, handler: (_event?: any) 
 export declare function continueButton(dom: HTMLDocument, handler: (_event: any) => void): HTMLButtonElement;
 export declare function askName(dom: HTMLDocument, kb: IndexedFormula, container: HTMLDivElement, predicate?: NamedNode, theClass?: NamedNode, noun?: string): Promise<unknown>;
 /**
- * A little link icon
- */
-export declare function linkIcon(dom: HTMLDocument, subject: NamedNode, iconURI?: string): HTMLElement;
-/**
  * A TR to represent a draggable person, etc in a list
  *
  * pred is unused param at the moment
  */
 export declare const personTR: typeof renderAsRow;
 export declare function renderAsRow(dom: HTMLDocument, pred: NamedNode, obj: NamedNode, options: any): HTMLTableRowElement;
+export declare function createNameDiv(dom: HTMLDocument, div: HTMLDivElement, title: string | undefined, obj: NamedNode): void;
+export declare function createLinkDiv(dom: HTMLDocument, div: HTMLDivElement, obj: NamedNode, options: RenderAsDivOptions): void;
+/**
+ * A Div to represent a draggable person, etc in a list
+ * configurable to add an onClick listener
+ */
+export declare function renderAsDiv(dom: HTMLDocument, obj: NamedNode, options: RenderAsDivOptions): HTMLElement;
 /**
  * Refresh a DOM tree recursively
  */

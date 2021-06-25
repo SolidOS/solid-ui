@@ -96,7 +96,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/solid/solid-ui/blob/262ae08/src/tabs.ts#L168">src/tabs.ts:168</a></li>
+									<li>Defined in <a href="https://github.com/solid/solid-ui/blob/c0d3f6f/src/tabs.ts#L168">src/tabs.ts:168</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -106,11 +106,11 @@
 								<p><a href="https://solid.github.io/solid-ui/examples/tabs/">Here you can see examples of the tabs</a>.</p>
 								<p>It assumes that items to use for tabs will be in a collection by default,
 								e.g.:</p>
-								<pre><code class="language-turtle">:subject :predicate ( :item1 :item2 ) .
+								<pre><code class="language-turtle"><span style="color: #0000FF">:</span><span style="color: #001080">subject</span><span style="color: #000000"> </span><span style="color: #0000FF">:</span><span style="color: #001080">predicate</span><span style="color: #000000"> ( </span><span style="color: #0000FF">:</span><span style="color: #001080">item1</span><span style="color: #000000"> </span><span style="color: #0000FF">:</span><span style="color: #001080">item2</span><span style="color: #000000"> ) .</span>
 </code></pre>
 								<p>You can override this by setting <code>ordered: false</code>, in which case it expects
 								unordered triples:</p>
-								<pre><code class="language-turtle">:subject :predicate :item1, :item 2 .
+								<pre><code class="language-turtle"><span style="color: #0000FF">:</span><span style="color: #001080">subject</span><span style="color: #000000"> </span><span style="color: #0000FF">:</span><span style="color: #001080">predicate</span><span style="color: #000000"> </span><span style="color: #0000FF">:</span><span style="color: #001080">item1</span><span style="color: #000000">, </span><span style="color: #0000FF">:</span><span style="color: #001080">item</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000"> .</span>
 </code></pre>
 								<p>Triples that are not ordered in collection are in principle not sorted,
 									which means that tabs could change order every time you render the widget.
