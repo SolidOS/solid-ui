@@ -522,65 +522,6 @@ export function deleteButtonWithCheck (
     refererenceElement.appendChild(renderDeleteConfirmPopup(dom, refererenceElement, prompt, deleteFunction))
   }
   const minusIconURI = iconBase + 'noun_2188_red.svg' // white minus in red #cc0000 circle
-<<<<<<< HEAD
-  const img = dom.createElement('img')
-  let sureButtonElt, cancelButtonElt
-  img.setAttribute('src', minusIconURI) //  plus sign
-  img.setAttribute('style', 'margin: 0.2em; width: 1em; height:1em')
-  img.setAttribute('role', 'button')
-  img.title = 'Remove this ' + noun
-  const deleteButtonElt = img
-
-  buttonDiv.appendChild(deleteButtonElt)
-  buttonDiv.setAttribute('class', 'hoverControl') // See tabbedtab.css (sigh global CSS)
-  setStyle()
-
-  deleteButtonElt.setAttribute('class', 'hoverControlHide')
-
-  deleteButtonElt.addEventListener(
-    'click',
-    function (_event) {
-      buttonDiv.style.borderRadius = '0.5em'
-      buttonDiv.style.border = 'orange 0.05em;'
-      buttonDiv.style.boxShadow = '0.2em 0.5em #888888'
-      buttonDiv.style.padding = '0.3em'
-
-      buttonDiv.removeChild(deleteButtonElt) // Ask -- are you sure?
-      cancelButtonElt = dom.createElement('button')
-      // cancelButton.textContent = 'cancel'
-      cancelButtonElt.setAttribute('style', style.buttonStyle)
-      const img = cancelButtonElt.appendChild(dom.createElement('img'))
-      img.setAttribute('src', cancelIconURI)
-      img.setAttribute('style', style.buttonStyle)
-
-      buttonDiv.appendChild(cancelButtonElt).addEventListener(
-        'click',
-        function (_event) {
-          buttonDiv.removeChild(sureButtonElt)
-          buttonDiv.removeChild(cancelButtonElt)
-          setStyle()
-          buttonDiv.appendChild(deleteButtonElt)
-        },
-        false
-      )
-      sureButtonElt = dom.createElement('button')
-      sureButtonElt.textContent = 'Delete ' + noun
-      sureButtonElt.setAttribute('style', style.buttonStyle)
-      buttonDiv.appendChild(sureButtonElt).addEventListener(
-        'click',
-        function (_event) {
-          buttonDiv.removeChild(sureButtonElt)
-          buttonDiv.removeChild(cancelButtonElt)
-          setStyle()
-          deleteFunction()
-        },
-        false
-      )
-    },
-    false
-  )
-  return buttonDiv // deleteButtonElt
-=======
   const deleteButton = dom.createElement('img')
   deleteButton.setAttribute('src', minusIconURI)
 
@@ -598,7 +539,6 @@ export function deleteButtonWithCheck (
   container.appendChild(deleteButton)
   deleteButton.setAttribute('data-testid', 'deleteButtonWithCheck')
   return deleteButton // or button div?  caller may change size of image
->>>>>>> main
 }
 
 /**
