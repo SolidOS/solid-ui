@@ -4,7 +4,7 @@ import { Canvas, Meta, Story } from '@storybook/addon-docs/blocks'
 
 import { action } from '@storybook/addon-actions'
 
-<Meta title="Interactive" />
+<Meta title="Interactive"/>
 
 ## Ask name
 
@@ -13,12 +13,12 @@ import { action } from '@storybook/addon-actions'
 <Canvas>
   <Story name="Ask name">
     {() => {
-      const div = document.createElement('div')
-      UI.widgets
-        .askName(document, UI.store, div)
-        .then((name) => window.alert(`You picked "${name}"`))
+      const div = document.createElement("div");
+      UI.widgets.askName(document, UI.store, div)
+        .then(name => window.alert(`You picked "${name}"`))
       return div
-    }}
+    }
+    }
   </Story>
 </Canvas>
 
@@ -32,23 +32,17 @@ Accepts dropping URLs onto it to add attachments to it.
 <Canvas>
   <Story name="Attachment list">
     {() => {
-      const div = document.createElement('div')
+      const div = document.createElement("div");
       UI.store.add(
-        UI.rdf.namedNode(
-          'https://example-user.inrupt.net/public/some-message.ttl#this'
-        ),
+        UI.rdf.namedNode('https://example-user.inrupt.net/public/some-message.ttl#this'),
         UI.ns.wf('attachment'),
         UI.rdf.namedNode('http://example.com/#some-attachment')
       )
-      UI.widgets.attachmentList(
-        document,
-        UI.rdf.namedNode(
-          'https://example-user.inrupt.net/public/some-message.ttl' + '#this'
-        ),
-        div
-      )
+      UI.widgets.attachmentList(document, UI.rdf.namedNode('https://example-user.inrupt.net/public/some-message.ttl' +
+        '#this'), div)
       return div
-    }}
+    }
+    }
   </Story>
 </Canvas>
 
@@ -61,31 +55,10 @@ A TR to represent a draggable person, etc in a list
 <Canvas>
   <Story name="Person TR">
     {() => {
-      const michiel = UI.rdf.namedNode(
-        'https://michielbdejong.inrupt.net/profile/card#me'
-      )
+      const michiel = UI.rdf.namedNode('https://michielbdejong.inrupt.net/profile/card#me')
       return UI.widgets.personTR(document, null, michiel)
-    }}
-  </Story>
-</Canvas>
-
-## renderAsDIV
-
-A Div to represent a draggable person, etc in a list
-
-[API documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#persontr)
-
-<Canvas>
-  <Story name="Render As DIV">
-    {() => {
-      const michiel = UI.rdf.namedNode(
-        'https://michielbdejong.inrupt.net/profile/card#me'
-      )
-      const options = {
-        wrapInATR: true
-      }
-      return UI.widgets.renderAsDiv(document, michiel, options)
-    }}
+    }
+    }
   </Story>
 </Canvas>
 
@@ -114,10 +87,11 @@ A Div to represent a draggable person, etc in a list
         inverse,
         possible,
         options,
-        action('selection'),
-        action('link clicked')
+        action("selection"),
+        action("link clicked")
       )
-    }}
+    }
+    }
   </Story>
 </Canvas>
 
@@ -148,9 +122,10 @@ A Div to represent a draggable person, etc in a list
         inverse,
         possible,
         options,
-        action('selection'),
-        action('link clicked')
+        action("selection"),
+        action("link clicked")
       )
-    }}
+    }
+    }
   </Story>
 </Canvas>

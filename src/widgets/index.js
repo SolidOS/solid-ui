@@ -23,7 +23,6 @@ import * as debug from '../debug'
 export * from './peoplePicker'
 export * from './dragAndDrop'
 export * from './buttons'
-export * from './buttons/iconLinks'
 export * from './error'
 export * from './forms'
 

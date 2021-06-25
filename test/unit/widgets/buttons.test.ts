@@ -1,7 +1,5 @@
 import { silenceDebugMessages } from '../../helpers/setup'
 import { JSDOM, DOMWindow } from 'jsdom'
-import { getByRole } from '@testing-library/dom'
-import userEvent from '@testing-library/user-event'
 import {
   addStyleSheet,
   allClassURIs,
@@ -10,8 +8,6 @@ import {
   button,
   cancelButton,
   clearElement,
-  createLinkDiv,
-  createNameDiv,
   complain,
   continueButton,
   defaultAnnotationStore,
@@ -27,13 +23,12 @@ import {
   isImage,
   isVideo,
   linkButton,
+  linkIcon,
   openHrefInOutlineMode,
   personTR,
   propertyTriage,
   refreshTree,
   removeButton,
-  renderAsDiv,
-  RenderAsDivOptions,
   selectorPanel,
   selectorPanelRefresh,
   setImage,
@@ -50,7 +45,7 @@ import { icons } from '../../../src/iconBase'
 import { clearStore } from '../helpers/clearStore'
 import { domWithHead } from '../../helpers/dom-with-head'
 import { solidLogicSingleton } from '../../../src/logic'
-import * as style from '../../../src/style'
+
 const { iconBase } = icons
 const store = solidLogicSingleton.store
 
@@ -62,8 +57,6 @@ jest.mock('solid-auth-client', () => ({
 let window: DOMWindow
 let dom: HTMLDocument
 let element: HTMLDivElement
-let image: HTMLImageElement
-let obj: NamedNode
 let event: Event
 let clickEvent: Event
 
@@ -72,8 +65,6 @@ beforeEach(() => {
   dom = window.document
   element = dom.createElement('div')
   event = new window.Event('test')
-  image = dom.createElement('img')
-  obj = new NamedNode('https://test.test#')
   clickEvent = new window.Event('click')
   dom.dispatchEvent(event)
 })
@@ -150,7 +141,6 @@ describe('button', () => {
     const buttonElt = button(domWithHead(), iconURI, text, handler)
     buttonElt.dispatchEvent(clickEvent)
   })
-
   it('text button with upper-cased caption', () => {
     const buttonElt = button(domWithHead(), undefined, 'Click me', () => {})
     expect(buttonElt.innerHTML).toBe('CLICK ME')
@@ -196,58 +186,7 @@ describe('continueButton', () => {
     expect(continueButton(dom, handler)).toBeTruthy()
   })
 })
-describe('createLinkDiv', () => {
-  const obj = namedNode('https://test.com/#name')
-  const options: RenderAsDivOptions = {
-    deleteFunction: () => {},
-    link: true
-  }
 
-  it('adds a div to the element provided', () => {
-    createLinkDiv(dom, element, obj, options)
-    expect(element.children.length).toBeGreaterThan(0)
-  })
-  it('makes the element draggable', () => {
-    createLinkDiv(dom, element, obj, options)
-    expect(element.getAttribute('draggable')).toEqual('true')
-  })
-  it('adds the style....', () => {
-    const options = {}
-    createLinkDiv(dom, element, obj, options)
-    expect(element.children[0].getAttribute('style')).toEqual(style.linkDivStyle)
-  })
-
-  it.skip('adds the deleteFunction of .... deleteButton with Check', () => {
-    createLinkDiv(dom, element, obj, options)
-    const deleteImg = getByRole(element, 'button')
-    expect(deleteImg.nodeName).toEqual('IMG')
-    expect(deleteImg.getAttribute('title')).toEqual('Remove this one')
-  })
-
-  it('adds the link icon and link for the uri if link option is true', () => {
-    const options = {
-      link: true
-    }
-    // testing-library dom need to check solid-panes
-    createLinkDiv(dom, element, obj, options)
-    expect(element.children[0].children[0].nodeName).toEqual('A')
-  })
-})
-
-describe('createNameDiv', () => {
-  const obj = namedNode('https://test.com/#name')
-
-  it('adds a div to the element with textContent equal to Something', () => {
-    createNameDiv(dom, element, 'Something', obj)
-    expect(element.children.length).toBeGreaterThan(0)
-    expect(element.children[0].textContent).toEqual('Something')
-  })
-
-  it('uses the name from the obj if no title is given', () => {
-    createNameDiv(dom, element, null, obj)
-    expect(element.children[0].textContent).toEqual('name')
-  })
-})
 describe('defaultAnnotationStore', () => {
   it('exists', () => {
     expect(defaultAnnotationStore).toBeInstanceOf(Function)
@@ -443,6 +382,17 @@ describe('linkButton', () => {
   })
 })
 
+describe('linkIcon', () => {
+  it('exists', () => {
+    expect(linkIcon).toBeInstanceOf(Function)
+  })
+  it('runs', () => {
+    const subject = sym('https://test.test#')
+    const iconURI = ''
+    expect(linkIcon(dom, subject, iconURI)).toBeTruthy()
+  })
+})
+
 describe('openHrefInOutlineMode', () => {
   it('exists', () => {
     expect(openHrefInOutlineMode).toBeInstanceOf(Function)
@@ -461,36 +411,6 @@ describe('personTR', () => {
     const obj = sym('https://test.test#')
     const options = {}
     expect(personTR(dom, pred, obj, options)).toBeTruthy()
-  })
-})
-
-describe('renderAsDiv ', () => {
-  it('is exposed on public API', () => {
-    expect(renderAsDiv).toBe(renderAsDiv)
-  })
-
-  it('uses the image given', () => {
-    image.setAttribute('alt', 'test')
-    const options = { image: image }
-    const element = renderAsDiv(dom, obj, options)
-    expect(element.children[0].children[0].getAttribute('alt')).toEqual('test')
-  })
-  it('the div is clickable if given true for the clickable option', () => {
-    const mockClickFunction = jest.fn()
-    const options = {
-      clickable: true,
-      onClickFunction: mockClickFunction
-    }
-    const element = renderAsDiv(dom, obj, options)
-    userEvent.click(element)
-    expect(mockClickFunction).toHaveBeenCalled()
-  })
-  it('wraps the div in a TR if wrapInATR option is set to true', () => {
-    const options = {
-      wrapInATR: true
-    }
-    const element = renderAsDiv(dom, obj, options)
-    expect(element.nodeName).toEqual('TR')
   })
 })
 

@@ -83,7 +83,6 @@
     "@storybook/addon-links": "^6.1.15",
     "@storybook/html": "^6.1.20",
     "@testing-library/dom": "^7.31.0",
-    "@testing-library/user-event": "^13.1.9",
     "@types/jest": "^26.0.20",
     "@types/jsdom": "^16.2.6",
     "@types/node": "^14.14.22",
