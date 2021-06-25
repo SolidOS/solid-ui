@@ -69,7 +69,7 @@ export class AccessController {
         defaultHolderLink.href = this.defaultHolder.uri
         defaultHolderLink.innerText = shortNameForFolder(this.defaultHolder)
       }
-    } else if (!this.defaultsDiffer) {
+    } else if (!this.defaultsDiffer && this.isContainer) {
       this.renderStatus('This is also the default for things in this folder.')
     } else {
       this.renderStatus('')
@@ -234,41 +234,26 @@ export class AccessController {
 
     // save ACL resource
     return new Promise((resolve, reject) => {
-      // check acl for acl:Write alert and acl:Control confirm
-      const hasWrite = newAClGraph.any(undefined, ns.acl('mode'), ns.acl('Write'), this.targetACLDoc)
-      const hasControl = newAClGraph.any(undefined, ns.acl('mode'), ns.acl('Control'), this.targetACLDoc)
-      const user = currentUser()
-      const webId = user ? user.uri : 'user'
-      if (!hasWrite) {
-        alert('There is no "Write access" this is not allowed')
-        return reject(new Error('ACL file save rejected : no acl:Write'))
-      } else if (!(hasControl || confirm('There is no "owner access" -- this is a dangerous situation !!!,' +
-         `\n${webId},\nyou may lose access to the resources covered by this ACL !!!` +
-         '\n\nDo you confirm ?'))) {
-        return reject(new Error('ACL file save canceled by user'))
-      } else {
-        // save acl
-        updater.put(
-          this.targetACLDoc,
-          newAClGraph.statementsMatching(undefined, undefined, undefined, this.targetACLDoc),
-          'text/turtle',
-          (uri, ok, message) => {
-            if (!ok) {
-              return reject(new Error(`ACL file save failed: ${message}`))
-            }
-            this.store.fetcher.unload(this.targetACLDoc)
-            this.store.add(newAClGraph.statements)
-            this.store.fetcher.requested[this.targetACLDoc.uri] = 'done' // missing: save headers
-            this.mainCombo.store = this.store
-            if (this.defaultsCombo) {
-              this.defaultsCombo.store = this.store
-            }
-            this.defaultsDiffer = !!this.defaultsCombo && !sameACL(this.mainCombo.aclMap, this.defaultsCombo.aclMap)
-            debug.log('ACL modification: success!')
-            resolve()
+      updater.put(
+        this.targetACLDoc,
+        newAClGraph.statementsMatching(undefined, undefined, undefined, this.targetACLDoc),
+        'text/turtle',
+        (uri, ok, message) => {
+          if (!ok) {
+            return reject(new Error(`ACL file save failed: ${message}`))
           }
-        )
-      }
+          this.store.fetcher.unload(this.targetACLDoc)
+          this.store.add(newAClGraph.statements)
+          this.store.fetcher.requested[this.targetACLDoc.uri] = 'done' // missing: save headers
+          this.mainCombo.store = this.store
+          if (this.defaultsCombo) {
+            this.defaultsCombo.store = this.store
+          }
+          this.defaultsDiffer = !!this.defaultsCombo && !sameACL(this.mainCombo.aclMap, this.defaultsCombo.aclMap)
+          debug.log('ACL modification: success!')
+          resolve()
+        }
+      )
     })
   }
 }
