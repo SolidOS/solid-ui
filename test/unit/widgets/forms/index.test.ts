@@ -1,7 +1,7 @@
 import { silenceDebugMessages } from '../../../helpers/setup'
-import { namedNode, graph } from 'rdflib'
+import { namedNode } from 'rdflib'
 import * as ns from '../../../../src/ns'
-import { solidLogicSingleton, store, kb } from '../../../../src/logic'
+import { kb } from '../../../../src/logic'
 
 // console.log('@@ solidLogicSingleton', solidLogicSingleton)
 // @ts-ignore

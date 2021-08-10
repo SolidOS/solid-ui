@@ -73,7 +73,7 @@ export function autocompleteField (
     callbackFunction(true, '')
   }
 
-  async function deleteOne (result:NamedNode | Literal, name: Literal) {
+  async function deleteOne (_result:NamedNode | Literal, _name: Literal) {
     const oldValue = kb.the(subject, property as any, null, doc)
     if (!oldValue) {
       callbackFunction(false, 'NO data to elete')

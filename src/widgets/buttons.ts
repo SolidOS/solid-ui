@@ -21,7 +21,7 @@ import { linkIcon, createLinkForURI } from './buttons/iconLinks'
 
 /* global alert */
 
-const { iconBase, originalIconBase } = icons
+const { iconBase } = icons
 
 const cancelIconURI = iconBase + 'noun_1180156.svg' // black X
 const checkIconURI = iconBase + 'noun_1180158.svg' // green checkmark; Continue
