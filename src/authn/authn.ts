@@ -26,7 +26,7 @@ import * as widgets from '../widgets'
 import * as ns from '../ns.js'
 import * as utils from '../utils'
 import { alert } from '../log'
-import authSession from './authSession'
+import authSessionImport from './authSession'
 import { AppDetails, AuthenticationContext } from './types'
 import * as debug from '../debug'
 import { textInputStyle, buttonStyle, commentStyle } from '../style'
@@ -35,7 +35,7 @@ import { Quad_Object } from 'rdflib/lib/tf-types'
 import { solidLogicSingleton } from '../logic'
 import { CrossOriginForbiddenError, FetchError, NotFoundError, SameOriginForbiddenError, UnauthorizedError, ACL_LINK } from 'solid-logic'
 
-export { authSession }
+export const authSession = authSessionImport
 
 // const userCheckSite = 'https://databox.me/'
 

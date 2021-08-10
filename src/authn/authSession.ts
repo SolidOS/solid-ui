@@ -3,7 +3,7 @@ import {
   getClientAuthenticationWithDependencies
 } from '@inrupt/solid-client-authn-browser'
 
-let authSession
+let authSession: Session
 // @ts-ignore
 if (!window.authSession) {
   authSession = new Session(
