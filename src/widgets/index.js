@@ -11,8 +11,6 @@
  */
 /* eslint-disable no-console */
 
-import * as debug from '../debug'
-
 // Each widget should ideally live in its own file.  In order to break up this
 // monolithic widget index over time, we should add new widgets to the
 // 'lib/widgets/' directory, and re-export them by merging the module namespaces:

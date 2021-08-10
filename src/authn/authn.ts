@@ -395,20 +395,16 @@ export async function findAppInstances (
   } catch (err) {
   }
   const index = context.index as { [key: string]: Array<NamedNode> }
-  // eslint-disable-next-line no-console
-  console.log({ index, visibility })
   const thisIndex = index[visibility]
-  // eslint-disable-next-line no-console
-  console.log('Failing test?', thisIndex.map(ix => solidLogicSingleton.store.each(undefined, ns.solid('forClass'), theClass, ix)))
   const registrations = thisIndex
     .map(ix => solidLogicSingleton.store.each(undefined, ns.solid('forClass'), theClass, ix))
-    .flat()
+    .reduce((acc, curr) => acc.concat(curr), [])
   const instances = registrations
     .map(reg => solidLogicSingleton.store.each(reg as NamedNode, ns.solid('instance')))
-    .flat()
+    .reduce((acc, curr) => acc.concat(curr), [])
   const containers = registrations
     .map(reg => solidLogicSingleton.store.each(reg as NamedNode, ns.solid('instanceContainer')))
-    .flat()
+    .reduce((acc, curr) => acc.concat(curr), [])
 
   function unique (arr: NamedNode[]): NamedNode[] {
     return Array.from(new Set(arr))

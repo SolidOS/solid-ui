@@ -8,10 +8,8 @@ import { graph, NamedNode, UpdateManager } from 'rdflib'
 import { AccessGroups } from './access-groups'
 import { DataBrowserContext } from 'pane-registry'
 import { shortNameForFolder } from './acl-control'
-import { currentUser } from '../authn/authn'
 import * as utils from '../utils'
 import * as debug from '../debug'
-import ns from '../ns'
 
 /**
  * Rendered HTML component used in the databrowser's Sharing pane.
