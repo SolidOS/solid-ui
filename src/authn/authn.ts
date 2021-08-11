@@ -919,11 +919,6 @@ function checkCurrentUser () {
 }
 */
 
-// HACK this global variable exists to prevent authSession.handleIncomingRedirect
-// From being called twice. It would not be needed if it automatically redirected
-// by iteself. See https://github.com/inrupt/solid-client-authn-js/issues/514
-let checkingRedirect = false
-
 /**
  * Retrieves currently logged in webId from either
  * defaultTestUser or SolidAuth
@@ -937,24 +932,11 @@ export async function checkUser<T> (
   /**
    * Handle a successful authentication redirect
    */
-  // HACK normally you wouldn't need to do a check to see if 'code' is in the
-  // query, but it was removed from solid-client-authn-js
-  // See https://github.com/inrupt/solid-client-authn-js/issues/421
-  // Remove this after
-  const authCode = new URL(window.location.href).searchParams.get('code')
-  if (authCode && !checkingRedirect) {
-    checkingRedirect = true
-    // Being redirected after requesting a token
-    await authSession
-      .handleIncomingRedirect(window.location.href)
-    // HACK solid-client-authn-js should automatically remove code and state
-    // from the URL, but it doesn't, so we do it manually here
-    // see https://github.com/inrupt/solid-client-authn-js/issues/514
-    const newPageUrl = new URL(window.location.href)
-    newPageUrl.searchParams.delete('code')
-    newPageUrl.searchParams.delete('state')
-    window.history.replaceState({}, '', newPageUrl.toString())
-  }
+  await authSession
+    .handleIncomingRedirect({
+      restorePreviousSession: true,
+      url: window.location.href
+    })
 
   // Check to see if already logged in / have the WebID
   let me = defaultTestUser()
