@@ -37,6 +37,11 @@ import { CrossOriginForbiddenError, FetchError, NotFoundError, SameOriginForbidd
 
 export const authSession = authSessionImport
 
+const DEFAULT_ISSUERS = [
+  'https://solidcommunity.net',
+  'https://solidweb.org'
+]
+
 // const userCheckSite = 'https://databox.me/'
 
 /**
@@ -869,16 +874,71 @@ function signInOrSignUpBox (
     if (offline) return setUserCallback(offline.uri)
 
     const thisUrl = new URL(window.location.href).origin
-    // HACK solid-client-authn-js no longer comes with its own UI for selecting
-    // an IDP. This was the easiest way to get the user to select.
-    // TODO: make a nice UI to select an IDP
-    const issuer = prompt('Enter an issuer', thisUrl)
-    authSession.login({
-      // @ts-ignore this library requires a specific kind of URL that isn't global
-      redirectUrl: window.location.href,
-      // @ts-ignore
-      oidcIssuer: issuer
+    /**
+     * Issuer Menu
+     */
+    const issuerPopup = dom.createElement('div')
+    issuerPopup.setAttribute('style', 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; align-items: center;')
+    box.appendChild(issuerPopup)
+    const issuerPopupBox = dom.createElement('div')
+    issuerPopupBox.setAttribute('style', `
+      background-color: white;
+      box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
+      -webkit-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
+      -moz-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
+      -o-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+      min-width: 400px;
+      padding: 10px;
+    `)
+    issuerPopup.appendChild(issuerPopupBox)
+    const issuerPopupBoxTopMenu = dom.createElement('div')
+    issuerPopupBoxTopMenu.setAttribute('style', `
+      border-bottom: 1px solid #AAA;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    `)
+    issuerPopupBox.appendChild(issuerPopupBoxTopMenu)
+    const issuerPopupBoxLabel = dom.createElement('label')
+    issuerPopupBoxLabel.setAttribute('style', 'margin-right: 5px')
+    issuerPopupBoxLabel.innerText = 'Select an identity provider'
+    const issuerPopupBoxCloseButton = dom.createElement('button')
+    issuerPopupBoxCloseButton.innerHTML = '<img src="https://solid.github.io/solid-ui/src/icons/noun_1180156.svg" style="width: 2em; height: 2em;" title="Cancel">'
+    issuerPopupBoxCloseButton.setAttribute('style', 'background-color: transparent; border: none;')
+    issuerPopupBoxCloseButton.addEventListener('click', () => {
+      issuerPopup.remove()
     })
+    issuerPopupBoxTopMenu.appendChild(issuerPopupBoxLabel)
+    issuerPopupBoxTopMenu.appendChild(issuerPopupBoxCloseButton)
+
+    /**
+     * Text-based idp selection
+     */
+    const issuerTextContainer = dom.createElement('div')
+    issuerTextContainer.setAttribute('style', `
+      border-bottom: 1px solid #AAA;
+      display: flex;
+      flex-direction: column;
+    `)
+    const issuerTextLabel = dom.createElement('label')
+    issuerTextLabel.innerText = 'Enter your WebID or the URL of your identity provider:'
+    const issuerTextInput = dom.createElement('input')
+    issuerTextInput.setAttribute('type', 'text')
+    const issuerTextGoButton = dom.createElement('button')
+    issuerTextGoButton.innerText = 'Go'
+    issuerTextContainer.appendChild(issuerTextLabel)
+    issuerTextContainer.appendChild(issuerTextInput)
+    issuerTextContainer.appendChild(issuerTextGoButton)
+    issuerPopupBox.appendChild(issuerTextContainer)
+
+    // authSession.login({
+    //   // @ts-ignore this library requires a specific kind of URL that isn't global
+    //   redirectUrl: window.location.href,
+    //   // @ts-ignore
+    //   oidcIssuer: issuer,
+    // })
   }, false)
 
   // Sign up button
