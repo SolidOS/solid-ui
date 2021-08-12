@@ -112,7 +112,7 @@ export function defaultTestUser (): NamedNode | null {
  * @returns Named Node or null
  */
 export function currentUser (): NamedNode | null {
-  if (authSession.info.webId) {
+  if (authSession.info.webId && authSession.info.isLoggedIn) {
     return sym(authSession.info.webId)
   }
   return offlineTestID() // null unless testing
@@ -1013,8 +1013,8 @@ function signInOrSignUpBox (
 /**
  * @returns {Promise<string|null>} Resolves with WebID URI or null
  */
-function webIdFromSession (session?: { webId?: string }): string | null {
-  const webId = session?.webId ? session.webId : null
+function webIdFromSession (session?: { webId?: string, isLoggedIn: boolean }): string | null {
+  const webId = session?.webId && session.isLoggedIn ? session.webId : null
   if (webId) {
     saveUser(webId)
   }
@@ -1144,7 +1144,7 @@ export function loginStatusBox (
 
   box.refresh = function () {
     const sessionInfo = authSession.info
-    if (sessionInfo && sessionInfo.webId) {
+    if (sessionInfo && sessionInfo.webId && sessionInfo.isLoggedIn) {
       me = sym(sessionInfo.webId)
     } else {
       me = null
@@ -1162,7 +1162,7 @@ export function loginStatusBox (
 
   function trackSession () {
     const sessionInfo = authSession.info
-    if (sessionInfo && sessionInfo.webId) {
+    if (sessionInfo && sessionInfo.webId && sessionInfo.isLoggedIn) {
       me = sym(sessionInfo.webId)
     } else {
       me = null
