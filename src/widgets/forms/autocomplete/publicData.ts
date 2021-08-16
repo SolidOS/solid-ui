@@ -54,6 +54,7 @@ export const wikidataClasses = {
   Occupation: 'http://www.wikidata.org/entity/Q28640', // Profession
   // Organization: 'http://www.wikidata.org/entity/Q43229',
   Project: 'http://www.wikidata.org/entity/Q170584',
+  ResearchOrganization: 'http://www.wikidata.org/entity/Q31855',
   SportsOrganization: 'http://www.wikidata.org/entity/Q4438121'
 }
 
