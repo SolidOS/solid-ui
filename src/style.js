@@ -37,7 +37,7 @@ export const style = { // styleModule
   autocompleteRowStyle: 'border: 0.2em solid straw;',
 
   // Login buttons
-  signInButtonStyle: 'padding: 1em; border-radius:0.2em; margin: 2em; font-size: 100%;', // was 0.5em radius
+  signInButtonStyle: 'padding: 1em; border-radius:0.2em; font-size: 100%;', // was 0.5em radius
 
   // Forms
   heading1Style: 'font-size: 180%; font-weight: bold; color: #888888; padding: 0.5em; margin: 0.7em 0.0m;', // originally was brown; now grey
