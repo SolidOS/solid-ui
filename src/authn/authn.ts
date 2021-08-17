@@ -815,7 +815,7 @@ export function offlineTestID (): NamedNode | null {
 }
 
 function getDefaultSignInButtonStyle (): string {
-  return 'padding: 1em; border-radius:0.5em; margin: 2em; font-size: 100%;'
+  return 'padding: 1em; border-radius:0.5em; font-size: 100%;'
 }
 
 /**
