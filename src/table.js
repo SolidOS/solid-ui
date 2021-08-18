@@ -13,14 +13,12 @@
 // 2014 Core table widget moved into common/table.js - timbl
 //
 
-import { authn } from './authn/index'
 import * as debug from './debug'
 import { icons } from './iconBase'
 import { store } from './logic'
 import * as log from './log'
 import * as ns from './ns'
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
-import * as style from './style'
 import * as utils from './utils'
 import * as widgets from './widgets'
 
@@ -109,8 +107,9 @@ export function renderTableViewPane (doc, options) {
   }
 
   // A specifically asked-for query
+  let table
   if (givenQuery) {
-    var table = renderTableForQuery(givenQuery)
+    table = renderTableForQuery(givenQuery)
     // lastQuery = givenQuery
     tableDiv.appendChild(table)
   } else {
@@ -1440,7 +1439,7 @@ export function renderTableViewPane (doc, options) {
     for (let i = 0; i < columns.length; ++i) {
       const column = columns[i]
       const td = doc.createElement('td')
-      var orig
+      let orig
 
       const columnKey = column.getKey()
 

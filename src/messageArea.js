@@ -241,7 +241,7 @@ export function messageArea (dom, kb, subject, messageStore, options) {
     })
   }
 
-  var addMessage = function (message) {
+  const addMessage = function (message) {
     const bindings = {
       '?msg': message,
       '?creator': kb.any(message, ns.foaf('maker')),
@@ -251,7 +251,7 @@ export function messageArea (dom, kb, subject, messageStore, options) {
     renderMessage(bindings, true) // fresh from elsewhere
   }
 
-  var renderMessage = function (bindings, fresh) {
+  const renderMessage = function (bindings, fresh) {
     const creator = bindings['?creator']
     const message = bindings['?msg']
     const date = bindings['?date']
@@ -321,7 +321,7 @@ export function messageArea (dom, kb, subject, messageStore, options) {
           },
           false
         )
-        var sureButton = dom.createElement('button')
+        const sureButton = dom.createElement('button')
         sureButton.textContent = 'Delete message'
         td3.appendChild(sureButton).addEventListener(
           'click',

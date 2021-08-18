@@ -1,6 +1,6 @@
 import { silenceDebugMessages } from '../../../helpers/setup'
 import { JSDOM, DOMWindow } from 'jsdom'
-import { sym, NamedNode } from 'rdflib'
+import { NamedNode } from 'rdflib'
 import {
   linkIcon,
   createLinkForURI
