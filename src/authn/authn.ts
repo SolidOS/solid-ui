@@ -1052,6 +1052,9 @@ export async function checkUser<T> (
   if (preLoginRedirectHash) {
     window.localStorage.setItem('preLoginRedirectHash', preLoginRedirectHash)
   }
+  authSession.onSessionRestore((url) => {
+    if (document.location.toString() !== url) history.replaceState(null, '', url)
+  })
 
   /**
    * Handle a successful authentication redirect
