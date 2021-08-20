@@ -925,6 +925,12 @@ function signInOrSignUpBox (
 
     const loginToIssuer = async (issuerUri: string) => {
       try {
+        // Save hash
+        const preLoginRedirectHash = new URL(window.location.href).hash
+        if (preLoginRedirectHash) {
+          window.localStorage.setItem('preLoginRedirectHash', preLoginRedirectHash)
+        }
+        // Login
         await authSession.login({
           redirectUrl: window.location.href,
           oidcIssuer: issuerUri
@@ -1041,6 +1047,12 @@ function checkCurrentUser () {
 export async function checkUser<T> (
   setUserCallback?: (me: NamedNode | null) => T
 ): Promise<NamedNode | T | null> {
+  // Save hash for "restorePreviousSession"
+  const preLoginRedirectHash = new URL(window.location.href).hash
+  if (preLoginRedirectHash) {
+    window.localStorage.setItem('preLoginRedirectHash', preLoginRedirectHash)
+  }
+
   /**
    * Handle a successful authentication redirect
    */
@@ -1049,6 +1061,15 @@ export async function checkUser<T> (
       restorePreviousSession: true,
       url: window.location.href
     })
+
+  // Check to see if a hash was stored in local storage
+  const postLoginRedirectHash = window.localStorage.getItem('preLoginRedirectHash')
+  if (postLoginRedirectHash) {
+    const curUrl = new URL(window.location.href)
+    curUrl.hash = postLoginRedirectHash
+    window.location.href = curUrl.toString()
+    window.localStorage.setItem('preLoginRedirectHash', '')
+  }
 
   // Check to see if already logged in / have the WebID
   let me = defaultTestUser()
