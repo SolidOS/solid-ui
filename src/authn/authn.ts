@@ -107,11 +107,44 @@ export function defaultTestUser (): NamedNode | null {
 }
 
 /**
+ * find a user or app's context as set in window.SolidAppContext
+ * @return {any} - an appContext object
+ */
+function appContext():any {
+  let { SolidAppContext }: any = window;
+  SolidAppContext ||= {};
+  SolidAppContext.viewingNoAuthPage = false;
+  if( SolidAppContext.app && window.document ){
+     let currentPage = window.document.location.href;
+     if( currentPage.startsWith(SolidAppContext.app) ) {
+       SolidAppContext.viewingNoAuthPage = true;
+       let params = new URLSearchParams(window.document.location.search);
+       if(params){
+         let viewedPage = SolidAppContext.viewedPage=params.get('uri') || null;
+         if(viewedPage) {
+           viewedPage = decodeURI(viewedPage) 
+           if(!viewedPage.startsWith(SolidAppContext.app) ){
+             let ary = viewedPage.split(/\//);
+             SolidAppContext.idp = ary[0] + '//' + ary[2];
+             SolidAppContext.viewingNoAuthPage = false;
+           }
+         }
+       }
+     }
+   }
+   return SolidAppContext;
+}
+
+/**
  * Checks synchronously whether user is logged in
  *
  * @returns Named Node or null
  */
 export function currentUser (): NamedNode | null {
+  let app = appContext();
+  if( app.viewingNoAuthPage ) {
+    return sym( app.webid );
+  }
   if (authSession.info.webId && authSession.info.isLoggedIn) {
     return sym(authSession.info.webId)
   }
@@ -125,7 +158,8 @@ export function currentUser (): NamedNode | null {
  * @param context
  */
 export function logIn (context: AuthenticationContext): Promise<AuthenticationContext> {
-  const me = defaultTestUser() // me is a NamedNode or null
+  let app = appContext();
+  const me = app.viewingNoAuthPage ?sym(app.webid) :defaultTestUser(); // me is a NamedNode or null
 
   if (me) {
     context.me = me
@@ -987,7 +1021,10 @@ function signInOrSignUpBox (
     issuerBottonLabel.innerText = 'Or pick an identity provider from the list below:'
     issuerBottonLabel.setAttribute('style', 'color: #888')
     issuerButtonContainer.appendChild(issuerBottonLabel);
+    let app = appContext();
     [{ name: thisUrl, uri: thisUrl }].concat(DEFAULT_ISSUERS).forEach((issuerInfo) => {
+      if( issuerInfo.uri.startsWith(app.app) && app.idp )
+        issuerInfo.uri = issuerInfo.name = app.idp;
       const issuerButton = dom.createElement('button')
       issuerButton.innerText = issuerInfo.name
       issuerButton.setAttribute('style', 'height: 38px; margin-top: 10px')
