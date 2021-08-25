@@ -1,6 +1,9 @@
 import { toContainGraph } from '../custom-matchers/toContainGraph'
 import { toEqualGraph } from '../custom-matchers/toEqualGraph'
 import { error, log, trace, warn } from '../../src/debug'
+import { TextEncoder, TextDecoder } from 'util'
+global.TextEncoder = TextEncoder
+global.TextDecoder = TextDecoder
 
 // We don't want to output debug messages to console as part of the tests
 jest.mock('../../src/debug')
