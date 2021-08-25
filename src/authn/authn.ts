@@ -1202,6 +1202,10 @@ export function loginStatusBox (
   return box
 }
 
+authSession.onLogout(() => {
+  window.location.reload()
+})
+
 /**
  * Workspace selection etc
  * See https://github.com/solid/userguide/issues/16
