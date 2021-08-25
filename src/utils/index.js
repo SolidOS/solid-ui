@@ -361,9 +361,9 @@ function findPos (obj) {
 function getEyeFocus (element, instantly, isBottom, myWindow) {
   if (!myWindow) myWindow = window
   const elementPosY = findPos(element)[1]
-  let appContext = window.SolidAppContext || {};
-  var scrollDiff = appContext && appContext.scroll || 52 // 52 = magic number for web-based version
-  var totalScroll = elementPosY - scrollDiff - myWindow.scrollY;
+  const appContext = window.SolidAppContext || {}
+  const scrollDiff = (appContext && appContext.scroll) || 52 // 52 = magic number for web-based version
+  const totalScroll = elementPosY - scrollDiff - myWindow.scrollY
 
   if (instantly) {
     if (isBottom) {
