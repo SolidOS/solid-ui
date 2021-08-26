@@ -101,7 +101,6 @@
     "postcss-flexbugs-fixes": "^5.0.2",
     "raw-loader": "^4.0.2",
     "react-is": "^17.0.1",
-    "solid-auth-cli": "^1.0.15",
     "standard": "^16.0.3",
     "ts-jest": "^26.4.4",
     "typedoc": "^0.21.1",

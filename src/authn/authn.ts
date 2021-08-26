@@ -921,119 +921,7 @@ function signInOrSignUpBox (
     const offline = offlineTestID()
     if (offline) return setUserCallback(offline.uri)
 
-    /**
-     * Issuer Menu
-     */
-    const issuerPopup = dom.createElement('div')
-    issuerPopup.setAttribute('style', 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; align-items: center;')
-    box.appendChild(issuerPopup)
-    const issuerPopupBox = dom.createElement('div')
-    issuerPopupBox.setAttribute('style', `
-      background-color: white;
-      box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
-      -webkit-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
-      -moz-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
-      -o-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
-      border-radius: 4px;
-      min-width: 400px;
-      padding: 10px;
-    `)
-    issuerPopup.appendChild(issuerPopupBox)
-    const issuerPopupBoxTopMenu = dom.createElement('div')
-    issuerPopupBoxTopMenu.setAttribute('style', `
-      border-bottom: 1px solid #DDD;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-    `)
-    issuerPopupBox.appendChild(issuerPopupBoxTopMenu)
-    const issuerPopupBoxLabel = dom.createElement('label')
-    issuerPopupBoxLabel.setAttribute('style', 'margin-right: 5px; font-weight: 800')
-    issuerPopupBoxLabel.innerText = 'Select an identity provider'
-    const issuerPopupBoxCloseButton = dom.createElement('button')
-    issuerPopupBoxCloseButton.innerHTML = '<img src="https://solid.github.io/solid-ui/src/icons/noun_1180156.svg" style="width: 2em; height: 2em;" title="Cancel">'
-    issuerPopupBoxCloseButton.setAttribute('style', 'background-color: transparent; border: none;')
-    issuerPopupBoxCloseButton.addEventListener('click', () => {
-      issuerPopup.remove()
-    })
-    issuerPopupBoxTopMenu.appendChild(issuerPopupBoxLabel)
-    issuerPopupBoxTopMenu.appendChild(issuerPopupBoxCloseButton)
-
-    const loginToIssuer = async (issuerUri: string) => {
-      try {
-        // Save hash
-        const preLoginRedirectHash = new URL(window.location.href).hash
-        if (preLoginRedirectHash) {
-          window.localStorage.setItem('preLoginRedirectHash', preLoginRedirectHash)
-        }
-        // Login
-        await authSession.login({
-          redirectUrl: window.location.href,
-          oidcIssuer: issuerUri
-        })
-      } catch (err) {
-        alert(err.message)
-      }
-    }
-
-    /**
-     * Text-based idp selection
-     */
-    const issuerTextContainer = dom.createElement('div')
-    issuerTextContainer.setAttribute('style', `
-      border-bottom: 1px solid #DDD;
-      display: flex;
-      flex-direction: column;
-      padding-top: 10px;
-    `)
-    const issuerTextInputContainer = dom.createElement('div')
-    issuerTextInputContainer.setAttribute('style', `
-      display: flex;
-      flex-direction: row;
-    `)
-    const issuerTextLabel = dom.createElement('label')
-    issuerTextLabel.innerText = 'Enter the URL of your identity provider:'
-    issuerTextLabel.setAttribute('style', 'color: #888')
-    const issuerTextInput = dom.createElement('input')
-    issuerTextInput.setAttribute('type', 'text')
-    issuerTextInput.setAttribute('style', 'margin-left: 0 !important; flex: 1; margin-right: 5px !important')
-    issuerTextInput.setAttribute('placeholder', 'https://example.com')
-    const issuerTextGoButton = dom.createElement('button')
-    issuerTextGoButton.innerText = 'Go'
-    issuerTextGoButton.setAttribute('style', 'margin-top: 12px; margin-bottom: 12px;')
-    issuerTextGoButton.addEventListener('click', () => {
-      loginToIssuer(issuerTextInput.value)
-    })
-    issuerTextContainer.appendChild(issuerTextLabel)
-    issuerTextInputContainer.appendChild(issuerTextInput)
-    issuerTextInputContainer.appendChild(issuerTextGoButton)
-    issuerTextContainer.appendChild(issuerTextInputContainer)
-    issuerPopupBox.appendChild(issuerTextContainer)
-
-    /**
-     * Button-based idp selection
-     */
-    const issuerButtonContainer = dom.createElement('div')
-    issuerButtonContainer.setAttribute('style', `
-       display: flex;
-       flex-direction: column;
-       padding-top: 10px;
-    `)
-    const issuerBottonLabel = dom.createElement('label')
-    issuerBottonLabel.innerText = 'Or pick an identity provider from the list below:'
-    issuerBottonLabel.setAttribute('style', 'color: #888')
-    issuerButtonContainer.appendChild(issuerBottonLabel)
-    DEFAULT_ISSUERS.forEach((issuerInfo) => {
-      const issuerButton = dom.createElement('button')
-      issuerButton.innerText = issuerInfo.name
-      issuerButton.setAttribute('style', 'height: 38px; margin-top: 10px')
-      issuerButton.addEventListener('click', () => {
-        loginToIssuer(issuerInfo.uri)
-      })
-      issuerButtonContainer.appendChild(issuerButton)
-    })
-    issuerPopupBox.appendChild(issuerButtonContainer)
+    renderSignInPopup(dom)
   }, false)
 
   // Sign up button
@@ -1051,6 +939,122 @@ function signInOrSignUpBox (
     })
   }, false)
   return box
+}
+
+export function renderSignInPopup (dom: HTMLDocument) {
+  /**
+   * Issuer Menu
+   */
+  const issuerPopup = dom.createElement('div')
+  issuerPopup.setAttribute('style', 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; align-items: center;')
+  dom.body.appendChild(issuerPopup)
+  const issuerPopupBox = dom.createElement('div')
+  issuerPopupBox.setAttribute('style', `
+     background-color: white;
+     box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
+     -webkit-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
+     -moz-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
+     -o-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
+     border-radius: 4px;
+     min-width: 400px;
+     padding: 10px;
+   `)
+  issuerPopup.appendChild(issuerPopupBox)
+  const issuerPopupBoxTopMenu = dom.createElement('div')
+  issuerPopupBoxTopMenu.setAttribute('style', `
+     border-bottom: 1px solid #DDD;
+     display: flex;
+     flex-direction: row;
+     align-items: center;
+     justify-content: space-between;
+   `)
+  issuerPopupBox.appendChild(issuerPopupBoxTopMenu)
+  const issuerPopupBoxLabel = dom.createElement('label')
+  issuerPopupBoxLabel.setAttribute('style', 'margin-right: 5px; font-weight: 800')
+  issuerPopupBoxLabel.innerText = 'Select an identity provider'
+  const issuerPopupBoxCloseButton = dom.createElement('button')
+  issuerPopupBoxCloseButton.innerHTML = '<img src="https://solid.github.io/solid-ui/src/icons/noun_1180156.svg" style="width: 2em; height: 2em;" title="Cancel">'
+  issuerPopupBoxCloseButton.setAttribute('style', 'background-color: transparent; border: none;')
+  issuerPopupBoxCloseButton.addEventListener('click', () => {
+    issuerPopup.remove()
+  })
+  issuerPopupBoxTopMenu.appendChild(issuerPopupBoxLabel)
+  issuerPopupBoxTopMenu.appendChild(issuerPopupBoxCloseButton)
+
+  const loginToIssuer = async (issuerUri: string) => {
+    try {
+      // Save hash
+      const preLoginRedirectHash = new URL(window.location.href).hash
+      if (preLoginRedirectHash) {
+        window.localStorage.setItem('preLoginRedirectHash', preLoginRedirectHash)
+      }
+      // Login
+      await authSession.login({
+        redirectUrl: window.location.href,
+        oidcIssuer: issuerUri
+      })
+    } catch (err) {
+      alert(err.message)
+    }
+  }
+
+  /**
+    * Text-based idp selection
+    */
+  const issuerTextContainer = dom.createElement('div')
+  issuerTextContainer.setAttribute('style', `
+     border-bottom: 1px solid #DDD;
+     display: flex;
+     flex-direction: column;
+     padding-top: 10px;
+   `)
+  const issuerTextInputContainer = dom.createElement('div')
+  issuerTextInputContainer.setAttribute('style', `
+     display: flex;
+     flex-direction: row;
+   `)
+  const issuerTextLabel = dom.createElement('label')
+  issuerTextLabel.innerText = 'Enter the URL of your identity provider:'
+  issuerTextLabel.setAttribute('style', 'color: #888')
+  const issuerTextInput = dom.createElement('input')
+  issuerTextInput.setAttribute('type', 'text')
+  issuerTextInput.setAttribute('style', 'margin-left: 0 !important; flex: 1; margin-right: 5px !important')
+  issuerTextInput.setAttribute('placeholder', 'https://example.com')
+  const issuerTextGoButton = dom.createElement('button')
+  issuerTextGoButton.innerText = 'Go'
+  issuerTextGoButton.setAttribute('style', 'margin-top: 12px; margin-bottom: 12px;')
+  issuerTextGoButton.addEventListener('click', () => {
+    loginToIssuer(issuerTextInput.value)
+  })
+  issuerTextContainer.appendChild(issuerTextLabel)
+  issuerTextInputContainer.appendChild(issuerTextInput)
+  issuerTextInputContainer.appendChild(issuerTextGoButton)
+  issuerTextContainer.appendChild(issuerTextInputContainer)
+  issuerPopupBox.appendChild(issuerTextContainer)
+
+  /**
+    * Button-based idp selection
+    */
+  const issuerButtonContainer = dom.createElement('div')
+  issuerButtonContainer.setAttribute('style', `
+      display: flex;
+      flex-direction: column;
+      padding-top: 10px;
+   `)
+  const issuerBottonLabel = dom.createElement('label')
+  issuerBottonLabel.innerText = 'Or pick an identity provider from the list below:'
+  issuerBottonLabel.setAttribute('style', 'color: #888')
+  issuerButtonContainer.appendChild(issuerBottonLabel)
+  DEFAULT_ISSUERS.forEach((issuerInfo) => {
+    const issuerButton = dom.createElement('button')
+    issuerButton.innerText = issuerInfo.name
+    issuerButton.setAttribute('style', 'height: 38px; margin-top: 10px')
+    issuerButton.addEventListener('click', () => {
+      loginToIssuer(issuerInfo.uri)
+    })
+    issuerButtonContainer.appendChild(issuerButton)
+  })
+  issuerPopupBox.appendChild(issuerButtonContainer)
 }
 
 /**
