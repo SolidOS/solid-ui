@@ -24,7 +24,7 @@ export interface Binding {
 
 export const languageCodeURIBase = 'https://www.w3.org/ns/iana/language-code/' /// @@ unsupported on the web (2021)
 
-export const defaultPreferedLangages = ['en', 'fr', 'de', 'it']
+export const defaultPreferedLangages = ['en', 'fr', 'de', 'it', 'ar']
 
 export async function getPreferredLanagugesFor (person: NamedNode) {
   await kb.fetcher.load(person.doc())
@@ -60,20 +60,25 @@ export async function getPreferredLanagugesFor (person: NamedNode) {
  */
 export async function getPreferredLanguages () {
   // In future:  cache in the login session for speed, but get from profile and private prefs
+  // We append the defaults so if someone's first choice is not available they don't get something very obscure
+  // See https://github.com/solid/solidos/issues/42
+  function addDefaults (array) {
+    return array.concat(defaultPreferedLangages.filter(code => !array.includes(code)))
+  }
   const me = await authn.currentUser() as NamedNode
   if (me) { // If logged in
     const solidLanguagePrefs = await getPreferredLanagugesFor(me)
-    if (solidLanguagePrefs) return solidLanguagePrefs
+    if (solidLanguagePrefs) return addDefaults(solidLanguagePrefs)
   }
   if (typeof navigator !== 'undefined') { // use browser settings
     if (navigator.languages) {
-      return navigator.languages.map(longForm => longForm.split('-')[0])
+      return addDefaults(navigator.languages.map(longForm => longForm.split('-')[0]))
     }
     if (navigator.language) {
-      return [navigator.language.split('-')[0]]
+      return addDefaults([navigator.language.split('-')[0]])
     }
   }
-  return defaultPreferedLangages // @@ or null?
+  return defaultPreferedLangages
 }
 
 /* From an array of bindings with a names for each row,
