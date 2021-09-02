@@ -27,15 +27,17 @@ export const languageCodeURIBase = 'https://www.w3.org/ns/iana/language-code/' /
 export const defaultPreferedLangages = ['en', 'fr', 'de', 'it', 'ar']
 
 export async function getPreferredLanagugesFor (person: NamedNode) {
-  await kb.fetcher.load(person.doc())
-  const list = kb.any(person, ns.schema('knowsLanguage'), null, person.doc()) as Collection | undefined
+  const doc = person.doc()
+  await kb.fetcher.load(doc)
+  const list = kb.any(person, ns.schema('knowsLanguage'), null, doc) as Collection | undefined
   if (!list) {
     console.log(`User ${person} has not set their languages in their profile.`)
     return null // differnet from []
   }
   const languageCodeArray: string[] = []
   list.elements.forEach(item => {
-    const lang = kb.any(item as any, ns.solid('publicId'), null, (item as NamedNode).doc())
+    // console.log('@@ item ' + item)
+    const lang = kb.any(item as any, ns.solid('publicId'), null, doc)
     if (!lang) {
       console.warn('getPreferredLanguages: No publiID of language.')
       return
