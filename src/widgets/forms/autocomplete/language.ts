@@ -26,6 +26,10 @@ export const languageCodeURIBase = 'https://www.w3.org/ns/iana/language-code/' /
 
 export const defaultPreferedLangages = ['en', 'fr', 'de', 'it', 'ar']
 
+export function addDefaults (array) {
+  return array.concat(defaultPreferedLangages.filter(code => !array.includes(code)))
+}
+
 export async function getPreferredLanagugesFor (person: NamedNode) {
   const doc = person.doc()
   await kb.fetcher.load(doc)
@@ -52,7 +56,7 @@ export async function getPreferredLanagugesFor (person: NamedNode) {
 
   if (languageCodeArray.length > 0) {
     console.log(`     User knows languages with codes: "${languageCodeArray.join(',')}"`)
-    return languageCodeArray
+    return addDefaults(languageCodeArray)
   }
   return null
 }
@@ -64,13 +68,10 @@ export async function getPreferredLanguages () {
   // In future:  cache in the login session for speed, but get from profile and private prefs
   // We append the defaults so if someone's first choice is not available they don't get something very obscure
   // See https://github.com/solid/solidos/issues/42
-  function addDefaults (array) {
-    return array.concat(defaultPreferedLangages.filter(code => !array.includes(code)))
-  }
   const me = await authn.currentUser() as NamedNode
   if (me) { // If logged in
     const solidLanguagePrefs = await getPreferredLanagugesFor(me)
-    if (solidLanguagePrefs) return addDefaults(solidLanguagePrefs)
+    if (solidLanguagePrefs) return solidLanguagePrefs
   }
   if (typeof navigator !== 'undefined') { // use browser settings
     if (navigator.languages) {

@@ -52,14 +52,15 @@ const prefixes = `@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 `
 const alice = store.sym('https://alice.example.com/profile#me')
 const aliceProfileText = prefixes + `
- <#me> a foaf:Person; schema:knowsLanguage ( [ solid:publicId lang:el ] ) . # Just greek
-`
+ <#me> a foaf:Person; schema:knowsLanguage ( [ solid:publicId lang:el ] ) . # Just greek `
 parse(aliceProfileText, store, alice.doc().uri)
 
 const bob = store.sym('https://bob.example.com/profile#me')
 const bobProfileText = prefixes + `
  <#me> a foaf:Person; schema:knowsLanguage ( [ solid:publicId lang:en]  [ solid:publicId lang:fr] ) . # Just english and french
 `
+parse(bobProfileText, store, bob.doc().uri)
+
 /*
 const charlieProfileText = prefixes + `
  <#me> a foaf:Person . # Nothing stated about languages
@@ -68,20 +69,16 @@ const charlieProfileText = prefixes + `
 const kb = store
 
 describe('getPreferredLanagugesFor', () => {
-  let result
-  beforeEach(() => {
-    // fetch.resetMocks();
-  })
-
   it('exists as a function', () => {
     expect(getPreferredLanagugesFor).toBeInstanceOf(Function)
   })
   it('returns just greek for Alice, plus deafults', async () => {
-    expect(getPreferredLanagugesFor).toBeInstanceOf(Function)
-
-    result = await getPreferredLanagugesFor(alice)
-
-    expect(result).toEqual(['el']) // toMatchSnapshot()
+    const result = await getPreferredLanagugesFor(alice)
+    expect(result).toEqual(['el'].concat(['en', 'fr', 'de', 'it', 'ar'])) // toMatchSnapshot()
+  })
+  it('returns just greek for Bob, plus deafults', async () => {
+    const result = await getPreferredLanagugesFor(bob)
+    expect(result).toEqual(['en', 'fr', 'de', 'it', 'ar']) // toMatchSnapshot()
   })
 })
 //
