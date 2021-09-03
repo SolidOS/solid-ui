@@ -50,6 +50,8 @@ const prefixes = `@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 
 @prefix : <#>.
 `
+const expectedDefaults = ['en', 'fr', 'de', 'it', 'ar']
+
 const alice = store.sym('https://alice.example.com/profile#me')
 const aliceProfileText = prefixes + `
  <#me> a foaf:Person; schema:knowsLanguage ( [ solid:publicId lang:el ] ) . # Just greek `
@@ -61,12 +63,21 @@ const bobProfileText = prefixes + `
 `
 parse(bobProfileText, store, bob.doc().uri)
 
-/*
+const charlie = store.sym('https://charlie.example.com/profile#me')
 const charlieProfileText = prefixes + `
- <#me> a foaf:Person . # Nothing stated about languages
-`
-*/
+ <#me> a foaf:Person . # Nothing stated about languages`
+parse(charlieProfileText, store, charlie.doc().uri)
+
 const kb = store
+
+describe('defaultPreferedLangages', () => {
+  it('exists as a array', () => {
+    expect(defaultPreferedLangages).toBeInstanceOf(Array)
+  })
+  it('exists as a array', () => {
+    expect(defaultPreferedLangages).toEqual(expectedDefaults)
+  })
+})
 
 describe('getPreferredLanagugesFor', () => {
   it('exists as a function', () => {
@@ -74,11 +85,15 @@ describe('getPreferredLanagugesFor', () => {
   })
   it('returns just greek for Alice, plus deafults', async () => {
     const result = await getPreferredLanagugesFor(alice)
-    expect(result).toEqual(['el'].concat(['en', 'fr', 'de', 'it', 'ar'])) // toMatchSnapshot()
+    expect(result).toEqual(['el'].concat(['en', 'fr', 'de', 'it', 'ar']))
   })
-  it('returns just greek for Bob, plus deafults', async () => {
+  it('returns english, french Bob, plus deafults', async () => {
     const result = await getPreferredLanagugesFor(bob)
-    expect(result).toEqual(['en', 'fr', 'de', 'it', 'ar']) // toMatchSnapshot()
+    expect(result).toEqual(['en', 'fr', 'de', 'it', 'ar'])
+  })
+  it('returns nothing for Charlie, plus deafults', async () => {
+    const result = await getPreferredLanagugesFor(charlie)
+    expect(result).toEqual(expectedDefaults)
   })
 })
 //

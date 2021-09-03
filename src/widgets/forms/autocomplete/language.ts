@@ -36,7 +36,7 @@ export async function getPreferredLanagugesFor (person: NamedNode) {
   const list = kb.any(person, ns.schema('knowsLanguage'), null, doc) as Collection | undefined
   if (!list) {
     console.log(`User ${person} has not set their languages in their profile.`)
-    return null // differnet from []
+    return defaultPreferedLangages
   }
   const languageCodeArray: string[] = []
   list.elements.forEach(item => {
