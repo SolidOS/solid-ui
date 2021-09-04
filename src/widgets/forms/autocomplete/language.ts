@@ -76,9 +76,7 @@ export async function getPreferredLanguages () {
   }
   if (typeof navigator !== 'undefined') { // use browser settings
     if (navigator.languages) {
-      let navLanguages = navigator.languages.map(longForm => longForm.split('-')[0])
-      console.log(navLanguages)
-      return addDefaults(navLanguages)
+      return addDefaults(navigator.languages.map(longForm => longForm.split('-')[0]))
     }
     if (navigator.language) {
       return addDefaults([navigator.language.split('-')[0]])
