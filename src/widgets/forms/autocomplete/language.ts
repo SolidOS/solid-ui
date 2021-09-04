@@ -27,6 +27,7 @@ export const languageCodeURIBase = 'https://www.w3.org/ns/iana/language-code/' /
 export const defaultPreferedLangages = ['en', 'fr', 'de', 'it', 'ar']
 
 export function addDefaults (array) {
+  if (!array) array = []
   return array.concat(defaultPreferedLangages.filter(code => !array.includes(code)))
 }
 
@@ -75,7 +76,9 @@ export async function getPreferredLanguages () {
   }
   if (typeof navigator !== 'undefined') { // use browser settings
     if (navigator.languages) {
-      return addDefaults(navigator.languages.map(longForm => longForm.split('-')[0]))
+      let navLanguages = navigator.languages.map(longForm => longForm.split('-')[0])
+      console.log(navLanguages)
+      return addDefaults(navLanguages)
     }
     if (navigator.language) {
       return addDefaults([navigator.language.split('-')[0]])
