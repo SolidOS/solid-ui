@@ -101,9 +101,9 @@ describe('defaultPreferedLangages', () => {
   })
 })
 describe('getPreferredLanguages', () => {
-  let languageGetter 
+  let languageGetter
   beforeEach(() => {
-    // languageGetter = jest.spyOn(navigator, 'language', 'get') 
+    // languageGetter = jest.spyOn(navigator, 'language', 'get')
     languageGetter = jest.spyOn(navigator, 'languages', 'get')
   })
   it.skip('returns an expectedDefaults plus language defined in browser', async () => {
@@ -111,7 +111,7 @@ describe('getPreferredLanguages', () => {
     // Note to Tim: even though addDefaults see tests above does not add if already exists
     //  this keeps coming back with 'it' added to the array below.
     const preferred = await getPreferredLanguages()
-    expect(preferred).toEqual(["en", "fr", "de", "it", "ar"])
+    expect(preferred).toEqual(['en', 'fr', 'de', 'it', 'ar'])
   })
 })
 describe('getPreferredLanagugesFor', () => {
