@@ -10,7 +10,7 @@ import {
 } from '../../../../../src/widgets/forms/autocomplete/autocompleteField'
 import {
   languageCodeURIBase,
-  defaultPreferedLangages,
+  defaultPreferredLangages,
   getPreferredLanagugesFor,
   getPreferredLanguages,
   filterByLanguage,
@@ -92,12 +92,12 @@ describe('addDefaults', () => {
     expect(addDefaults(langArray)).toEqual(expectedDefaults)
   })
 })
-describe('defaultPreferedLangages', () => {
+describe('defaultPreferredLangages', () => {
   it('exists as a array', () => {
-    expect(defaultPreferedLangages).toBeInstanceOf(Array)
+    expect(defaultPreferredLangages).toBeInstanceOf(Array)
   })
   it('exists as a array', () => {
-    expect(defaultPreferedLangages).toEqual(expectedDefaults)
+    expect(defaultPreferredLangages).toEqual(expectedDefaults)
   })
 })
 describe('getPreferredLanguages', () => {
@@ -143,7 +143,7 @@ describe('filterByLanguage', () => {
   })
 
   it('filters picking english by default', async () => {
-    const result = filterByLanguage(elephants, defaultPreferedLangages)
+    const result = filterByLanguage(elephants, defaultPreferredLangages)
     const names = result.map(binding => binding.name.value)
     expect(names).toEqual(['elephant'])
   })
