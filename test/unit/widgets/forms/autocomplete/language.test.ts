@@ -72,10 +72,10 @@ parse(charlieProfileText, store, charlie.doc().uri)
 
 // const kb = store
 const elephants = [
-  { subject: kb.sym('https://www.wikidata.org/wiki/Q7378'), name: kb.literal('Elefant', 'de') },
-  { subject: kb.sym('https://www.wikidata.org/wiki/Q7378'), name: kb.literal('elephant', 'en') },
-  { subject: kb.sym('https://www.wikidata.org/wiki/Q7378'), name: kb.literal('elefante', 'it') },
-  { subject: kb.sym('https://www.wikidata.org/wiki/Q7378'), name: kb.literal('éléphant', 'fr') }
+  { subject: { uri: 'https://www.wikidata.org/wiki/Q7378' }, name: { value: 'Elefant', 'xml:lang': 'de' } },
+  { subject: { uri: 'https://www.wikidata.org/wiki/Q7378' }, name: { value: 'elephant', 'xml:lang': 'en' } },
+  { subject: { uri: 'https://www.wikidata.org/wiki/Q7378' }, name: { value: 'elefante', 'xml:lang': 'it' } },
+  { subject: { uri: 'https://www.wikidata.org/wiki/Q7378' }, name: { value: 'éléphant', 'xml:lang': 'fr' } }
 ]
 
 describe('addDefaults', () => {
@@ -106,21 +106,23 @@ describe('getPreferredLanguages', () => {
     // languageGetter = jest.spyOn(navigator, 'language', 'get')
     languageGetter = jest.spyOn(navigator, 'languages', 'get')
   })
-  it.skip('returns an expectedDefaults plus language defined in browser', async () => {
+  it('returns the italian language defined in browser, plus other defaults', async () => {
     languageGetter.mockReturnValue(['it'])
     // Note to Tim: even though addDefaults see tests above does not add if already exists
     //  this keeps coming back with 'it' added to the array below.
+    // This seems reasonable- the 'it' sould be put on front as most important, the defaults
     const preferred = await getPreferredLanguages()
-    expect(preferred).toEqual(['en', 'fr', 'de', 'it', 'ar'])
+    expect(preferred).toEqual(['it', 'en', 'fr', 'de', 'ar'])
   })
 })
 describe('getPreferredLanagugesFor', () => {
   it('exists as a function', () => {
     expect(getPreferredLanagugesFor).toBeInstanceOf(Function)
   })
-  it.skip('returns just greek for Alice, plus deafults', async () => {
+  it.skip('returns just greek for Alice, plus deafults ', async () => {
     // Note to Tim: for some reason languageCodeURIBase doesn't find 'el'
-    const kbAnySpy = jest.spyOn(kb, 'any').mockReturnValueOnce({ elements: ['el'] }).mockReturnValueOnce({ value: 'el' })
+    const usersLanguages = { elements: [{ value: 'https://www.w3.org/ns/iana/language-code/el' }] }
+    const kbAnySpy = jest.spyOn(kb, 'any').mockReturnValueOnce(usersLanguages).mockReturnValueOnce(usersLanguages)
     const result = await getPreferredLanagugesFor(alice)
     expect(result).toEqual(['el'].concat(['en', 'fr', 'de', 'it', 'ar']))
     expect(kbAnySpy).toHaveBeenCalledTimes(2)
@@ -140,10 +142,20 @@ describe('filterByLanguage', () => {
     expect(filterByLanguage).toBeInstanceOf(Function)
   })
 
-  it('filters according to the precendence of the language preferences', async () => {
+  it('filters picking english by default', async () => {
     const result = filterByLanguage(elephants, defaultPreferedLangages)
     const names = result.map(binding => binding.name.value)
     expect(names).toEqual(['elephant'])
+  })
+  it('filters leaving french ', async () => {
+    const result = filterByLanguage(elephants, ['fr'])
+    const names = result.map(binding => binding.name.value)
+    expect(names).toEqual(['éléphant'])
+  })
+  it('filters leaving Italian', async () => {
+    const result = filterByLanguage(elephants, ['it'])
+    const names = result.map(binding => binding.name.value)
+    expect(names).toEqual(['elefante'])
   })
 })
 // ends

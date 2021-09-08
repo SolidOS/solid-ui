@@ -36,7 +36,7 @@ export async function getPreferredLanagugesFor (person: NamedNode) {
   await kb.fetcher.load(doc)
   const list = kb.any(person, ns.schema('knowsLanguage'), null, doc) as Collection | undefined
   if (!list) {
-    console.log(`User ${person} has not set their languages in their profile.`)
+    // console.log(`User ${person} has not set their languages in their profile.`)
     return defaultPreferedLangages
   }
   const languageCodeArray: string[] = []
@@ -102,13 +102,19 @@ export function filterByLanguage (bindings, languagePrefs) {
   languagePrefs2.reverse() // prefered last
 
   const slimmed = ([] as Array<Binding>)
+  // console.log(` @@ {languagePrefs2 ${languagePrefs2}`)
   for (const u in uris) { // needs hasOwnProperty ?
     const bindings = uris[u]
     const sortMe = bindings.map(binding => {
-      return [languagePrefs2.indexOf(binding.name['xml:lang']), binding]
+      const lang = binding.name['xml:lang']
+      const index = languagePrefs2.indexOf(lang)
+      const pair = [index, binding]
+      // console.log(`   @@ lang: ${lang}, index: ${index}`)
+      return pair
     })
     sortMe.sort() // best at th ebottom
     sortMe.reverse() // best at the top
+    // console.debug('@@ sortMe:', sortMe)
     slimmed.push((sortMe[0][1] as any))
   } // map u
   debug.log(` Filter by language: ${bindings.length} -> ${slimmed.length}`)
