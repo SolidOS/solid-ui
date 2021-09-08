@@ -33,6 +33,8 @@ jest.mock('solid-auth-client', () => ({
   trackSession: () => null
 }))
 
+const kb = store
+
 const prefixes = `@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix foaf: <http://xmlns.com/foaf/0.1/>.
@@ -68,7 +70,13 @@ const charlieProfileText = prefixes + `
  <#me> a foaf:Person . # Nothing stated about languages`
 parse(charlieProfileText, store, charlie.doc().uri)
 
-const kb = store
+// const kb = store
+const elephants = [
+  { subject: kb.sym('https://www.wikidata.org/wiki/Q7378'), name: kb.literal('Elefant', 'de') },
+  { subject: kb.sym('https://www.wikidata.org/wiki/Q7378'), name: kb.literal('elephant', 'en') },
+  { subject: kb.sym('https://www.wikidata.org/wiki/Q7378'), name: kb.literal('elefante', 'it') },
+  { subject: kb.sym('https://www.wikidata.org/wiki/Q7378'), name: kb.literal('éléphant', 'fr') }
+]
 
 describe('defaultPreferedLangages', () => {
   it('exists as a array', () => {
@@ -91,9 +99,21 @@ describe('getPreferredLanagugesFor', () => {
     const result = await getPreferredLanagugesFor(bob)
     expect(result).toEqual(['en', 'fr', 'de', 'it', 'ar'])
   })
-  it('returns nothing for Charlie, plus deafults', async () => {
+  it('returns nothing for Charlie, just deafults', async () => {
     const result = await getPreferredLanagugesFor(charlie)
     expect(result).toEqual(expectedDefaults)
   })
 })
-//
+
+describe('filterByLanguage', () => {
+  it('exists as a function', () => {
+    expect(filterByLanguage).toBeInstanceOf(Function)
+  })
+
+  it('filters according to the precendence of the language preferences', async () => {
+    const result = filterByLanguage(elephants, defaultPreferedLangages)
+    const names = result.map(binding => binding.name.value)
+    expect(names).toEqual(['elephant'])
+  })
+})
+// ends
