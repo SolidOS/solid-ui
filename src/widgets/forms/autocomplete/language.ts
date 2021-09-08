@@ -24,11 +24,11 @@ export interface Binding {
 
 export const languageCodeURIBase = 'https://www.w3.org/ns/iana/language-code/' /// @@ unsupported on the web (2021)
 
-export const defaultPreferedLangages = ['en', 'fr', 'de', 'it', 'ar']
+export const defaultPreferredLangages = ['en', 'fr', 'de', 'it', 'ar']
 
 export function addDefaults (array) {
   if (!array) array = []
-  return array.concat(defaultPreferedLangages.filter(code => !array.includes(code)))
+  return array.concat(defaultPreferredLangages.filter(code => !array.includes(code)))
 }
 
 export async function getPreferredLanagugesFor (person: NamedNode) {
@@ -37,7 +37,7 @@ export async function getPreferredLanagugesFor (person: NamedNode) {
   const list = kb.any(person, ns.schema('knowsLanguage'), null, doc) as Collection | undefined
   if (!list) {
     // console.log(`User ${person} has not set their languages in their profile.`)
-    return defaultPreferedLangages
+    return defaultPreferredLangages
   }
   const languageCodeArray: string[] = []
   list.elements.forEach(item => {
@@ -82,7 +82,7 @@ export async function getPreferredLanguages () {
       return addDefaults([navigator.language.split('-')[0]])
     }
   }
-  return defaultPreferedLangages
+  return defaultPreferredLangages
 }
 
 /* From an array of bindings with a names for each row,
@@ -98,8 +98,8 @@ export function filterByLanguage (bindings, languagePrefs) {
     uris[uri].push(binding)
   })
 
-  const languagePrefs2 = languagePrefs || defaultPreferedLangages
-  languagePrefs2.reverse() // prefered last
+  const languagePrefs2 = languagePrefs || defaultPreferredLangages
+  languagePrefs2.reverse() // Preferred last
 
   const slimmed = ([] as Array<Binding>)
   // console.log(` @@ {languagePrefs2 ${languagePrefs2}`)
