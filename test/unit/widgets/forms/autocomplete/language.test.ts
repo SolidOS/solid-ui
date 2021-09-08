@@ -157,5 +157,10 @@ describe('filterByLanguage', () => {
     const names = result.map(binding => binding.name.value)
     expect(names).toEqual(['elefante'])
   })
+  it('filters leaving Italian even when unavailable greek comes first', async () => {
+    const result = filterByLanguage(elephants, ['el', 'it'])
+    const names = result.map(binding => binding.name.value)
+    expect(names).toEqual(['elefante'])
+  })
 })
 // ends
