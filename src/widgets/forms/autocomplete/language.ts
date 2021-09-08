@@ -27,6 +27,7 @@ export const languageCodeURIBase = 'https://www.w3.org/ns/iana/language-code/' /
 export const defaultPreferedLangages = ['en', 'fr', 'de', 'it', 'ar']
 
 export function addDefaults (array) {
+  if (!array) array = []
   return array.concat(defaultPreferedLangages.filter(code => !array.includes(code)))
 }
 
