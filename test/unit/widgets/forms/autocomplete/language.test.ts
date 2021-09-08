@@ -1,13 +1,7 @@
 /* Test the language handling
 */
 
-import { getFileContent } from '../../../helpers/getFileContent'
-// Note different helpers directory:
-// import { silenceDebugMessages } from '../../../../helpers/setup'
 import { parse } from 'rdflib'
-import {
-  autocompleteField
-} from '../../../../../src/widgets/forms/autocomplete/autocompleteField'
 import {
   languageCodeURIBase,
   defaultPreferredLangages,
@@ -16,15 +10,7 @@ import {
   filterByLanguage,
   addDefaults
 } from '../../../../../src/widgets/forms/autocomplete/language'
-import { store, ns } from '../../../../../src/'
-// import { textInputStyle } from '../../../../../src/style'
-import {
-//  findByAltText,
-  findByTestId,
-  //  getByAltText,
-  // queryByAltText,
-  waitFor
-} from '@testing-library/dom'
+import { store } from '../../../../../src/'
 
 // jest.unmock('rdflib') // we need Fetcher to work (mocked)
 jest.unmock('debug') // while debugging only @@
