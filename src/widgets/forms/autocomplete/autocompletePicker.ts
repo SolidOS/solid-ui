@@ -14,7 +14,6 @@ import { filterByLanguage, getPreferredLanguages, defaultPreferedLangages } from
 const AUTOCOMPLETE_THRESHOLD = 4 // don't check until this many characters typed
 const AUTOCOMPLETE_ROWS = 20 // 20?
 const AUTOCOMPLETE_ROWS_STRETCH = 40
-const AUTOCOMPLETE_DEBOUNCE_MS = 300
 
 /*
 Autocomplete happens in 6 phases:
@@ -271,7 +270,6 @@ export async function renderAutoComplete (dom: HTMLDocument,
   // var candidatesLoaded = false
   let lastBindings
   let loadedEnough = false
-  const runningTimeout = undefined as any
   let inputEventHandlerLock = false
   let allDisplayed = false
   let lastFilter = undefined as (string | undefined)

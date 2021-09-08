@@ -843,9 +843,10 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
       const todayDocument = dateFolder.leafDocumentFromDate(now)
       live = todayDocument.sameTerm(selectedDocument)
     }
+    let selectedMessageTable
     if (options.selectedMessage && !live) {
       const selectedDate = dateFolder.dateFromLeafDocument(selectedDocument)
-      var selectedMessageTable = await createMessageTable(selectedDate, live)
+      selectedMessageTable = await createMessageTable(selectedDate, live)
       div.appendChild(selectedMessageTable)
       earliest.messageTable = selectedMessageTable
       latest.messageTable = selectedMessageTable

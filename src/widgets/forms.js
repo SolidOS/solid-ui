@@ -1217,8 +1217,9 @@ export function makeDescription (
   }
 
   const editable = kb.updater.editable(dataDoc.uri)
+  let submit
   if (editable) {
-    var submit = widgets.continueButton(dom, saveChange)
+    submit = widgets.continueButton(dom, saveChange)
     submit.disabled = true // until the filled has been modified
     submit.style.visibility = 'hidden'
     submit.style.float = 'right'
@@ -1293,7 +1294,7 @@ export function makeSelectForOptions (
     return errorMessageBlock(dom, "Selector: can't mint new with no subform.")
   }
   log.debug('makeSelectForOptions: dataDoc=' + dataDoc)
-
+  let actual
   const getActual = function () {
     actual = {}
     if (predicate.sameTerm(ns.rdf('type'))) {
@@ -1305,7 +1306,7 @@ export function makeSelectForOptions (
     }
     return actual
   }
-  var actual = getActual()
+  actual = getActual()
 
   const onChange = function (_e) {
     select.disabled = true // until data written back - gives user feedback too
@@ -1316,10 +1317,10 @@ export function makeSelectForOptions (
         ds.push($rdf.st(subject, predicate, t, dataDoc))
       }
     }
+    let newObject
     for (let i = 0; i < select.options.length; i++) {
       const opt = select.options[i]
       if (opt.selected && opt.AJAR_mint) {
-        var newObject
         if (options.mintClass) {
           const thisForm = promptForNew(
             dom,
