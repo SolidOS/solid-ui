@@ -3,7 +3,7 @@
     This file was copied from mashlib/src/global/header.ts file. It is modified to
     work in solid-ui by adjusting where imported functions are found.
  */
-import { IndexedFormula, NamedNode, sym } from 'rdflib'
+import { IndexedFormula, NamedNode } from 'rdflib'
 import { loginStatusBox, authSession, currentUser } from '../authn/authn'
 import * as widgets from '../widgets'
 import { emptyProfile } from './empty-profile'

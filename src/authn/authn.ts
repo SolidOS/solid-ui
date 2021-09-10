@@ -988,6 +988,7 @@ export function renderSignInPopup (dom: HTMLDocument) {
       if (preLoginRedirectHash) {
         window.localStorage.setItem('preLoginRedirectHash', preLoginRedirectHash)
       }
+      window.localStorage.setItem('loginIssuer', issuerUri)
       // Login
       await authSession.login({
         redirectUrl: window.location.href,
@@ -1243,7 +1244,23 @@ export function loginStatusBox (
   return box
 }
 
-authSession.onLogout(() => {
+authSession.onLogout(async () => {
+  const issuer = window.localStorage.getItem('loginIssuer')
+  if (issuer) {
+    try {
+      const wellKnownUri = new URL(issuer)
+      wellKnownUri.pathname = '/.well-known/openid-configuration'
+      const wellKnownResult = await fetch(wellKnownUri.toString())
+      if (wellKnownResult.status === 200) {
+        const openidConfiguration = await wellKnownResult.json()
+        if (openidConfiguration && openidConfiguration.end_session_endpoint) {
+          await fetch(openidConfiguration.end_session_endpoint)
+        }
+      }
+    } catch (err) {
+      // Do nothing
+    }
+  }
   window.location.reload()
 })
 
