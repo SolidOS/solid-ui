@@ -11,6 +11,11 @@ const formFieldNameBoxWidth = '8em' // The fixed amount to get form fields to li
 // fields in different groups though is hard problem.
 
 export const style = { // styleModule
+
+  checkboxStyle: 'colour: black; font-size: 100%; padding-left: 0.5 em; padding-right: 0.5 em;',
+  checkboxInputStyle: 'font-size: 150%; height: 1.2em; width: 1.2em; background-color: #eef; margin: 0.1em',
+
+  fieldLabelStyle: 'color: #3B5998; text-decoration: none;',
   formSelectSTyle:
     'background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em;',
   textInputStyle:
@@ -64,8 +69,6 @@ export const style = { // styleModule
   textInputColorPending: '#888',
   multilineTextInputStyle: 'font-size:100%; white-space: pre-wrap; background-color: #eef;' +
   ' border: 0.07em solid gray; padding: 1em 0.5em; margin: 1em 1em;',
-
-  checkboxStyle: 'colour: black; font-size: 100%; padding-left: 0.5 em; padding-right: 0.5 em;',
 
   // Buttons
   renderAsDivStyle: 'display: flex; align-items: center; justify-content: space-between; height: 2.5em; padding: 1em;',

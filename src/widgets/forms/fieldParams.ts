@@ -41,7 +41,7 @@ export const fieldParams: { [ fieldUri: string ]: FieldParamsObject } = {
 
   [ns.ui('DateTimeField').uri]: {
     size: 20,
-    type: 'date',
+    type: 'datetime-local', // See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime
     dt: 'dateTime',
     pattern: /^\s*[0-9][0-9][0-9][0-9](-[0-1]?[0-9]-[0-3]?[0-9])?(T[0-2][0-9]:[0-5][0-9](:[0-5][0-9])?)?Z?\s*$/
   },

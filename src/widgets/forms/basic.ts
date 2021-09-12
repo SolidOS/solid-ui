@@ -1,4 +1,4 @@
-import { st, BlankNode, Literal, Node, NamedNode, Variable } from 'rdflib'
+import { st, BlankNode, Literal, Node, NamedNode, Variable, Store } from 'rdflib'
 import { solidLogicSingleton } from '../../logic'
 import * as ns from '../../ns'
 import { textInputStyle, textInputStyleUneditable, formFieldNameBoxWidth, formFieldNameBoxStyle } from '../../style'
@@ -8,6 +8,29 @@ import { mostSpecificClassURI } from './fieldFunction'
 import { fieldParams } from './fieldParams'
 
 const store = solidLogicSingleton.store
+
+/*  Style and create a name, value pair
+*/
+export function renderNameValuePair (dom: HTMLDocument, kb: Store, box: HTMLElement, form: NamedNode):HTMLElement {
+  const property = kb.any(form, ns.ui('property'))
+  box.style.display = 'flex'
+  box.style.flexDirection = 'row'
+  const lhs = box.appendChild(dom.createElement('div'))
+  lhs.style.width = formFieldNameBoxWidth
+  const rhs = box.appendChild(dom.createElement('div'))
+
+  lhs.setAttribute('class', 'formFieldName')
+  lhs.setAttribute('style', formFieldNameBoxStyle)
+  rhs.setAttribute('class', 'formFieldValue')
+  if (!property) { // Assume more space for error on right
+    rhs.appendChild(errorMessageBlock(dom, 'No property given for form field: ' + form))
+    lhs.appendChild(dom.createTextNode('???'))
+  } else {
+    lhs.appendChild(fieldLabel(dom, property as NamedNode, form))
+  }
+  return rhs
+}
+
 /**
  * Create an anchor element with a label as the anchor text.
  *
@@ -90,23 +113,24 @@ export function basicField (
   const box = dom.createElement('div')
 
   const property = kb.any(form, ns.ui('property'))
+  if (container) container.appendChild(box)
   if (!property) {
     return box.appendChild(
       errorMessageBlock(dom, 'Error: No property given for text field: ' + form)
     )
   }
+  const rhs = renderNameValuePair(dom, kb, box, form)
+  /*
   box.style.display = 'flex'
   box.style.flexDirection = 'row'
   const lhs = box.appendChild(dom.createElement('div'))
   lhs.style.width = formFieldNameBoxWidth
   const rhs = box.appendChild(dom.createElement('div'))
   lhs.appendChild(fieldLabel(dom, property as NamedNode, form))
-
-  if (container) container.appendChild(box)
-
   lhs.setAttribute('class', 'formFieldName')
   lhs.setAttribute('style', formFieldNameBoxStyle)
   rhs.setAttribute('class', 'formFieldValue')
+  */
 
   // It can be cleaner to just remove empty fields if you can't edit them anyway
   const suppressEmptyUneditable = kb.anyJS(form, ns.ui('suppressEmptyUneditable'), null, formDoc)
