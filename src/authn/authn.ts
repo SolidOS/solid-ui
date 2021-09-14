@@ -35,6 +35,8 @@ import { Quad_Object } from 'rdflib/lib/tf-types'
 import { solidLogicSingleton } from '../logic'
 import { CrossOriginForbiddenError, FetchError, NotFoundError, SameOriginForbiddenError, UnauthorizedError, ACL_LINK } from 'solid-logic'
 
+/* global confirm */
+
 export const authSession = authSessionImport
 
 const DEFAULT_ISSUERS = [
@@ -1110,8 +1112,18 @@ export async function checkUser<T> (
   const postLoginRedirectHash = window.localStorage.getItem('preLoginRedirectHash')
   if (postLoginRedirectHash) {
     const curUrl = new URL(window.location.href)
-    curUrl.hash = postLoginRedirectHash
-    window.location.href = curUrl.toString()
+    if (curUrl.hash !== postLoginRedirectHash) {
+      if (history.pushState) {
+        // console.log('Setting window.location.has using pushState')
+        history.pushState(null, 'Restored localId after login damage', postLoginRedirectHash)
+      } else {
+        // console.warn('Setting window.location.has using location.hash')
+        location.hash = postLoginRedirectHash
+      }
+      curUrl.hash = postLoginRedirectHash
+    }
+    // See https://stackoverflow.com/questions/3870057/how-can-i-update-window-location-hash-without-jumping-the-document
+    // indow.location.href = curUrl.toString()// @@ See https://developer.mozilla.org/en-US/docs/Web/API/Window/location
     window.localStorage.setItem('preLoginRedirectHash', '')
   }
 
