@@ -118,16 +118,16 @@ function appContext ():any {
   let { SolidAppContext }: any = window
   SolidAppContext ||= {}
   SolidAppContext.viewingNoAuthPage = false
-  if (SolidAppContext.app && window.document) {
+  if (SolidAppContext.noAuth && window.document) {
     const currentPage = window.document.location.href
-    if (currentPage.startsWith(SolidAppContext.app)) {
+    if (currentPage.startsWith(SolidAppContext.noAuth)) {
       SolidAppContext.viewingNoAuthPage = true
       const params = new URLSearchParams(window.document.location.search)
       if (params) {
         let viewedPage = SolidAppContext.viewedPage = params.get('uri') || null
         if (viewedPage) {
           viewedPage = decodeURI(viewedPage)
-          if (!viewedPage.startsWith(SolidAppContext.app)) {
+          if (!viewedPage.startsWith(SolidAppContext.noAuth)) {
             const ary = viewedPage.split(/\//)
             SolidAppContext.idp = ary[0] + '//' + ary[2]
             SolidAppContext.viewingNoAuthPage = false
@@ -147,7 +147,7 @@ function appContext ():any {
 export function currentUser (): NamedNode | null {
   const app = appContext()
   if (app.viewingNoAuthPage) {
-    return sym(app.webid)
+    return sym(app.webId)
   }
   if (authSession.info.webId && authSession.info.isLoggedIn) {
     return sym(authSession.info.webId)
@@ -163,7 +163,7 @@ export function currentUser (): NamedNode | null {
  */
 export function logIn (context: AuthenticationContext): Promise<AuthenticationContext> {
   const app = appContext()
-  const me = app.viewingNoAuthPage ? sym(app.webid) : defaultTestUser() // me is a NamedNode or null
+  const me = app.viewingNoAuthPage ? sym(app.webId) : defaultTestUser() // me is a NamedNode or null
 
   if (me) {
     context.me = me
