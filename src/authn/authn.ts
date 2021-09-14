@@ -1115,7 +1115,7 @@ export async function checkUser<T> (
     if (curUrl.hash !== postLoginRedirectHash) {
       if (history.pushState) {
         // console.log('Setting window.location.has using pushState')
-        history.pushState(null, 'Restored localId after login damage', postLoginRedirectHash)
+        history.pushState(null, document.title, postLoginRedirectHash)
       } else {
         // console.warn('Setting window.location.has using location.hash')
         location.hash = postLoginRedirectHash
