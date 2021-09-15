@@ -12,7 +12,7 @@ import { field, mostSpecificClassURI, fieldFunction } from './forms/fieldFunctio
 import { setFieldStyle } from './forms/formStyle'
 import * as debug from '../debug'
 import { errorMessageBlock } from './error'
-import { basicField } from './forms/basic'
+import { basicField, renderNameValuePair } from './forms/basic'
 import { autocompleteField } from './forms/autocomplete/autocompleteField'
 import * as style from '../style'
 
@@ -172,27 +172,32 @@ field[ns.ui('Options').uri] = function (
   }
   let values
   if (dependingOn.sameTerm(ns.rdf('type'))) {
-    values = kb.findTypeURIs(subject)
+    values = Object.keys(kb.findTypeURIs(subject)).map(uri => $rdf.sym(uri)) // Use RDF-S inference
   } else {
-    const value = kb.any(subject, dependingOn)
-    if (value === undefined) {
-      box.appendChild(
-        errorMessageBlock(
-          dom,
-          "Can't select subform as no value of: " + dependingOn
-        )
-      )
-    } else {
-      values = {}
-      values[value.uri] = true
-    }
+    values = kb.each(subject, dependingOn)
   }
-  // @@ Add box.refresh() to sync fields with values
-  for (let i = 0; i < cases.length; i++) {
-    const c = cases[i]
-    const tests = kb.each(c, ui('for'), null, formDoc) // There can be multiple 'for'
-    for (let j = 0; j < tests.length; j++) {
-      if (values[tests[j].uri]) {
+  if (values.length === 0) {
+    box.appendChild(
+      errorMessageBlock(
+        dom,
+        "Can't select subform as no value of: " + dependingOn
+      )
+    )
+  } else {
+    for (let i = 0; i < cases.length; i++) {
+      const c = cases[i]
+      const tests = kb.each(c, ui('for'), null, formDoc) // There can be multiple 'for'
+      let match = false
+      for (let j = 0; j < tests.length; j++) {
+        for (const value of values) {
+          const test = tests[j]
+          if (value.sameTerm(tests) ||
+            (value.termType === test.termType && value.value === test.value)) {
+            match = true
+          }
+        }
+      }
+      if (match) {
         const field = kb.the(c, ui('use'))
         if (!field) {
           box.appendChild(
@@ -217,6 +222,7 @@ field[ns.ui('Options').uri] = function (
       }
     }
   }
+  // @@ Add box.refresh() to sync fields with values
   return box
 }
 
@@ -1579,20 +1585,14 @@ export function makeSelectForNestedCategory (
  */
 export function buildCheckboxForm (dom, kb, lab, del, ins, form, dataDoc, tristate) {
   const box = dom.createElement('div')
-  const tx = dom.createTextNode(lab)
+  const rhs = renderNameValuePair(dom, kb, box, form)
   const editable = kb.updater.editable(dataDoc.uri)
-  tx.style = style.checkboxStyle
 
-  box.appendChild(tx)
-  let input
-  // eslint-disable-next-line prefer-const
-  input = dom.createElement('button')
-
-  input.setAttribute(
-    'style',
-    'font-size: 150%; height: 1.2em; width: 1.2em; background-color: #eef; margin: 0.1em'
-  )
-  box.appendChild(input)
+  const input = dom.createElement('button')
+  const colorCarrier = input // Which element changes color to flag changed/saving/saved?
+  input.style = style.checkboxInputStyle
+  // colorCarrier.style = style.checkboxStyle
+  rhs.appendChild(input)
 
   function fix (x) {
     if (!x) return [] // no statements
@@ -1646,7 +1646,7 @@ export function buildCheckboxForm (dom, kb, lab, del, ins, form, dataDoc, trista
   if (!editable) return box
 
   const boxHandler = function (_e) {
-    tx.style = 'color: #bbb;' // grey -- not saved yet
+    colorCarrier.style.color = '#bbb;' // grey -- not saved yet
     const toDelete = input.state === true ? ins : input.state === false ? del : []
     input.newState =
       input.state === null
@@ -1678,7 +1678,8 @@ export function buildCheckboxForm (dom, kb, lab, del, ins, form, dataDoc, trista
             debug.log(' @@@@@ weird if 409 - does hold statement')
           }
         }
-        tx.style = 'color: #black; background-color: #fee;'
+        colorCarrier.style.color = 'color: #black;'
+        colorCarrier.style.backgroundColor = '#fee;'
         box.appendChild(
           errorMessageBlock(
             dom,
@@ -1688,7 +1689,7 @@ export function buildCheckboxForm (dom, kb, lab, del, ins, form, dataDoc, trista
           )
         )
       } else {
-        tx.style = 'color: #black;'
+        colorCarrier.style = 'color: #black;'
         input.state = input.newState
         input.textContent = {
           true: checkMarkCharacter,
@@ -1710,7 +1711,7 @@ export function fieldLabel (dom, property, form) {
   }
   const anchor = dom.createElement('a')
   if (property.uri) anchor.setAttribute('href', property.uri)
-  anchor.setAttribute('style', 'color: #3B5998; text-decoration: none;') // Not too blue and no underline
+  anchor.setAttribute('style', style.fieldLabelStyle) // Not too blue and no underline
   anchor.textContent = lab
   return anchor
 }
