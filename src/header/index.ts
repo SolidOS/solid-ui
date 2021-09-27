@@ -4,6 +4,7 @@
     work in solid-ui by adjusting where imported functions are found.
  */
 import { IndexedFormula, NamedNode } from 'rdflib'
+import { icons } from '..'
 import { loginStatusBox, authSession, currentUser } from '../authn/authn'
 import * as widgets from '../widgets'
 import { emptyProfile } from './empty-profile'
@@ -24,7 +25,7 @@ export type MenuItems = MenuItemLink | MenuItemButton
 /*
 HeaderOptions allow for customizing the logo and menu list.  If a logo is not provided the default
     is solid. Menulist will always show a link to logout and to the users profile.
- */
+  */
 export type HeaderOptions = {
   logo?: string,
   menuList?: MenuItems[]
@@ -71,16 +72,43 @@ export async function createBanner (store: IndexedFormula, pod: NamedNode, user:
   addStyleClassToElement(image, ['header-banner__icon'])
   podLink.appendChild(image)
 
-  const menu = user
+  const userMenu = user
     ? await createUserMenu(store, user, options)
     : createLoginSignUpButtons()
+
+  const helpMenu = createHelpMenu()
+  alert('HERE')
 
   const banner = document.createElement('div')
   addStyleClassToElement(banner, ['header-banner'])
   banner.appendChild(podLink)
-  banner.appendChild(menu)
+  banner.appendChild(userMenu)
+  banner.appendChild(helpMenu)
 
   return banner
+}
+
+function createHelpMenu () {
+  const helpMenuList = document.createElement('ul')
+  addStyleClassToElement(helpMenuList, ['header-user-menu__list'])
+  helpMenuList.appendChild(createUserMenuItem(createUserMenuLink('User guide', 'https://github.com/solid/userguide')))
+  helpMenuList.appendChild(createUserMenuItem(createUserMenuLink('Report a problem', 'https://github.com/solid/solidos/issues')))
+
+  const helpMenu = document.createElement('nav')
+
+  addStyleClassToElement(helpMenu, ['header-help-menu__navigation-menu'])
+  helpMenu.setAttribute('aria-hidden', 'true')
+  helpMenu.appendChild(helpMenuList)
+
+  const helpIcon = icons.iconBase + 'noun_help.svg'
+
+  const helpMenuContainer = document.createElement('div')
+  addStyleClassToElement(helpMenuContainer, ['header-banner__help-menu'])
+  addStyleClassToElement(helpMenuContainer, ['header-help-menu'])
+  helpMenuContainer.style.backgroundImage = `url("${helpIcon}")`
+  helpMenuContainer.appendChild(helpMenu)
+
+  return helpMenuContainer
 }
 /**
  * @ignore exporting this only for the unit test
