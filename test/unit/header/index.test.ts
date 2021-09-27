@@ -105,7 +105,6 @@ describe('createUserMenu', () => {
   })
 })
 
-//help menu
 describe('createHelpMenu', () => {
   it('creates a menu....', () => {
     expect(createHelpMenu()).toMatchSnapshot()
@@ -115,7 +114,6 @@ describe('createHelpMenu', () => {
     expect(helpMenu.className).toContain('header-banner__help-menu')
   })
 })
-//end help menu test
 // SAM look into this
 describe('rebuildHeader', () => {
   it('creates a link', () => {
