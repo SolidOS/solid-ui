@@ -2,22 +2,22 @@
 
 exports[`createBanner check customized logo... 1`] = `
 <div
-  class="header-banner-0-1-81"
+  class="header-banner-0-1-121"
 >
   <a
-    class="header-banner__link-0-1-68"
+    class="header-banner__link-0-1-100"
     href="https://test.com"
   >
     <img
-      class="header-banner__icon-0-1-69"
+      class="header-banner__icon-0-1-101"
       src="https://solidproject.org/assets/img/solid-emblem.svg"
     />
   </a>
   <div
-    class="header-banner__user-menu-0-1-79 header-user-menu-0-1-80"
+    class="header-banner__user-menu-0-1-111 header-user-menu-0-1-112"
   >
     <button
-      class="header-user-menu__trigger-0-1-78"
+      class="header-user-menu__trigger-0-1-110"
       type="button"
     >
       
@@ -83,32 +83,62 @@ exports[`createBanner check customized logo... 1`] = `
     </button>
     <nav
       aria-hidden="true"
-      class="header-user-menu__navigation-menu-0-1-77"
+      class="header-user-menu__navigation-menu-0-1-109"
     >
       <ul
-        class="header-user-menu__list-0-1-70"
+        class="header-user-menu__list-0-1-102"
       >
         <li
-          class="header-user-menu__list-item-0-1-72"
+          class="header-user-menu__list-item-0-1-104"
         >
           <a
-            class="header-user-menu__link-0-1-71"
+            class="header-user-menu__link-0-1-103"
             href="https://sharonstrats.inrupt.net/profile/card#me"
           />
         </li>
         <li
-          class="header-user-menu__list-item-0-1-74"
+          class="header-user-menu__list-item-0-1-106"
         >
           <a
-            class="header-user-menu__link-0-1-73"
+            class="header-user-menu__link-0-1-105"
             href="https://reflectechblog.wordpress.com/"
           />
         </li>
         <li
-          class="header-user-menu__list-item-0-1-76"
+          class="header-user-menu__list-item-0-1-108"
         >
           <button
-            class="header-user-menu__button-0-1-75"
+            class="header-user-menu__button-0-1-107"
+          />
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <div
+    class="header-banner__help-menu-0-1-119 header-help-menu-0-1-120"
+    style="background-image: url(https://solid.github.io/solid-ui/src/icons/noun_help.svg);"
+  >
+    <nav
+      aria-hidden="true"
+      class="header-help-menu__navigation-menu-0-1-118"
+    >
+      <ul
+        class="header-user-menu__list-0-1-113"
+      >
+        <li
+          class="header-user-menu__list-item-0-1-115"
+        >
+          <a
+            class="header-user-menu__link-0-1-114"
+            href="https://github.com/solid/userguide"
+          />
+        </li>
+        <li
+          class="header-user-menu__list-item-0-1-117"
+        >
+          <a
+            class="header-user-menu__link-0-1-116"
+            href="https://github.com/solid/solidos/issues"
           />
         </li>
       </ul>
@@ -119,22 +149,22 @@ exports[`createBanner check customized logo... 1`] = `
 
 exports[`createBanner creates a link 1`] = `
 <div
-  class="header-banner-0-1-53"
+  class="header-banner-0-1-77"
 >
   <a
-    class="header-banner__link-0-1-40"
+    class="header-banner__link-0-1-56"
     href="https://test.com"
   >
     <img
-      class="header-banner__icon-0-1-41"
+      class="header-banner__icon-0-1-57"
       src="https://solidproject.org/assets/img/solid-emblem.svg"
     />
   </a>
   <div
-    class="header-banner__user-menu-0-1-51 header-user-menu-0-1-52"
+    class="header-banner__user-menu-0-1-67 header-user-menu-0-1-68"
   >
     <button
-      class="header-user-menu__trigger-0-1-50"
+      class="header-user-menu__trigger-0-1-66"
       type="button"
     >
       
@@ -200,37 +230,100 @@ exports[`createBanner creates a link 1`] = `
     </button>
     <nav
       aria-hidden="true"
-      class="header-user-menu__navigation-menu-0-1-49"
+      class="header-user-menu__navigation-menu-0-1-65"
     >
       <ul
-        class="header-user-menu__list-0-1-42"
+        class="header-user-menu__list-0-1-58"
       >
         <li
-          class="header-user-menu__list-item-0-1-44"
+          class="header-user-menu__list-item-0-1-60"
         >
           <a
-            class="header-user-menu__link-0-1-43"
+            class="header-user-menu__link-0-1-59"
             href="https://sharonstrats.inrupt.net/profile/card#me"
           />
         </li>
         <li
-          class="header-user-menu__list-item-0-1-46"
+          class="header-user-menu__list-item-0-1-62"
         >
           <a
-            class="header-user-menu__link-0-1-45"
+            class="header-user-menu__link-0-1-61"
             href="https://reflectechblog.wordpress.com/"
           />
         </li>
         <li
-          class="header-user-menu__list-item-0-1-48"
+          class="header-user-menu__list-item-0-1-64"
         >
           <button
-            class="header-user-menu__button-0-1-47"
+            class="header-user-menu__button-0-1-63"
           />
         </li>
       </ul>
     </nav>
   </div>
+  <div
+    class="header-banner__help-menu-0-1-75 header-help-menu-0-1-76"
+    style="background-image: url(https://solid.github.io/solid-ui/src/icons/noun_help.svg);"
+  >
+    <nav
+      aria-hidden="true"
+      class="header-help-menu__navigation-menu-0-1-74"
+    >
+      <ul
+        class="header-user-menu__list-0-1-69"
+      >
+        <li
+          class="header-user-menu__list-item-0-1-71"
+        >
+          <a
+            class="header-user-menu__link-0-1-70"
+            href="https://github.com/solid/userguide"
+          />
+        </li>
+        <li
+          class="header-user-menu__list-item-0-1-73"
+        >
+          <a
+            class="header-user-menu__link-0-1-72"
+            href="https://github.com/solid/solidos/issues"
+          />
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+`;
+
+exports[`createHelpMenu creates a menu.... 1`] = `
+<div
+  class="header-banner__help-menu-0-1-46 header-help-menu-0-1-47"
+  style="background-image: url(https://solid.github.io/solid-ui/src/icons/noun_help.svg);"
+>
+  <nav
+    aria-hidden="true"
+    class="header-help-menu__navigation-menu-0-1-45"
+  >
+    <ul
+      class="header-user-menu__list-0-1-40"
+    >
+      <li
+        class="header-user-menu__list-item-0-1-42"
+      >
+        <a
+          class="header-user-menu__link-0-1-41"
+          href="https://github.com/solid/userguide"
+        />
+      </li>
+      <li
+        class="header-user-menu__list-item-0-1-44"
+      >
+        <a
+          class="header-user-menu__link-0-1-43"
+          href="https://github.com/solid/solidos/issues"
+        />
+      </li>
+    </ul>
+  </nav>
 </div>
 `;
 

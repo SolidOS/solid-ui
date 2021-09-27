@@ -108,7 +108,6 @@ export async function createBanner (store: IndexedFormula, pod: NamedNode, user:
     : createLoginSignUpButtons()
 
   const helpMenu = createHelpMenu()
-  alert('HERE')
 
   const banner = document.createElement('div')
   addStyleClassToElement(banner, ['header-banner'])
@@ -118,8 +117,10 @@ export async function createBanner (store: IndexedFormula, pod: NamedNode, user:
 
   return banner
 }
-
-function createHelpMenu () {
+/**
+ * @ignore exporting this only for the unit test
+ */
+export function createHelpMenu () {
   const helpMenuList = document.createElement('ul')
   addStyleClassToElement(helpMenuList, ['header-user-menu__list'])
   helpMenuList.appendChild(createUserMenuItem(createUserMenuLink('User guide', 'https://github.com/solid/userguide')))

@@ -8,7 +8,8 @@ import {
   rebuildHeader,
   getProfileImg,
   createBanner,
-  createUserMenu
+  createUserMenu,
+  createHelpMenu
 } from '../../../src/header'
 import { NamedNode } from 'rdflib'
 // @ts-ignore
@@ -103,6 +104,18 @@ describe('createUserMenu', () => {
     expect(userMenu.className).toContain('header-banner__user-menu')
   })
 })
+
+//help menu
+describe('createHelpMenu', () => {
+  it('creates a menu....', () => {
+    expect(createHelpMenu()).toMatchSnapshot()
+  })
+  it('assigns list item class header-banner__help-menu and header-help-menu', () => {
+    const helpMenu = createHelpMenu()
+    expect(helpMenu.className).toContain('header-banner__help-menu')
+  })
+})
+//end help menu test
 // SAM look into this
 describe('rebuildHeader', () => {
   it('creates a link', () => {
