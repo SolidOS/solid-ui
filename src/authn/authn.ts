@@ -1254,7 +1254,7 @@ authSession.onLogout(async () => {
       if (wellKnownResult.status === 200) {
         const openidConfiguration = await wellKnownResult.json()
         if (openidConfiguration && openidConfiguration.end_session_endpoint) {
-          await fetch(openidConfiguration.end_session_endpoint)
+          await fetch(openidConfiguration.end_session_endpoint, { credentials: 'include' })
         }
       }
     } catch (err) {
