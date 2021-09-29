@@ -97,17 +97,35 @@ export function createHelpMenu () {
 
   const helpMenu = document.createElement('nav')
 
-  addStyleClassToElement(helpMenu, ['header-help-menu__navigation-menu'])
+  addStyleClassToElement(helpMenu, ['header-user-menu__navigation-menu'])
   helpMenu.setAttribute('aria-hidden', 'true')
   helpMenu.appendChild(helpMenuList)
 
-  const helpIcon = icons.iconBase + 'noun_help.svg'
+  const helpIcon = icons.iconBase + 'noun_144.svg'
 
   const helpMenuContainer = document.createElement('div')
-  addStyleClassToElement(helpMenuContainer, ['header-banner__help-menu'])
-  addStyleClassToElement(helpMenuContainer, ['header-help-menu'])
-  helpMenuContainer.style.backgroundImage = `url("${helpIcon}")`
+  addStyleClassToElement(helpMenuContainer, ['header-banner__user-menu'])
+  addStyleClassToElement(helpMenuContainer, ['header-user-menu'])
   helpMenuContainer.appendChild(helpMenu)
+
+  const helpMenuTrigger = document.createElement('button')
+  addStyleClassToElement(helpMenuTrigger, ['header-user-menu__trigger'])
+  helpMenuTrigger.type = 'button'
+  const helpMenuIcon = document.createElement('img')
+  helpMenuIcon.src = helpIcon
+  helpMenuContainer.appendChild(helpMenuTrigger)
+  helpMenuTrigger.appendChild(helpMenuIcon)
+
+  const throttledMenuToggle = throttle((event: Event) => toggleMenu(event, helpMenuTrigger, helpMenu), 50)
+  helpMenuTrigger.addEventListener('click', throttledMenuToggle)
+  let timer = setTimeout(() => null, 0)
+  helpMenuContainer.addEventListener('mouseover', event => {
+    clearTimeout(timer)
+    throttledMenuToggle(event)
+  })
+  helpMenuContainer.addEventListener('mouseout', event => {
+    timer = setTimeout(() => throttledMenuToggle(event), 200)
+  })
 
   return helpMenuContainer
 }
