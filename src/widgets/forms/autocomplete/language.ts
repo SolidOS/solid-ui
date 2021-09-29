@@ -26,12 +26,12 @@ export const languageCodeURIBase = 'https://www.w3.org/ns/iana/language-code/' /
 
 export const defaultPreferredLanguages = ['en', 'fr', 'de', 'it', 'ar']
 
-export function addDefaults(array) {
+export function addDefaults (array) {
   if (!array) array = []
   return array.concat(defaultPreferredLanguages.filter(code => !array.includes(code)))
 }
 
-export async function getPreferredLanguagesFor(person: NamedNode) {
+export async function getPreferredLanguagesFor (person: NamedNode) {
   const doc = person.doc()
   await kb.fetcher.load(doc)
   const list = kb.any(person, ns.schema('knowsLanguage'), null, doc) as Collection | undefined
@@ -65,7 +65,7 @@ export async function getPreferredLanguagesFor(person: NamedNode) {
  *
  *  Either from solid preferences or browser preferences or default
  */
-export async function getPreferredLanguages() {
+export async function getPreferredLanguages () {
   // In future:  cache in the login session for speed, but get from profile and private prefs
   // We append the defaults so if someone's first choice is not available they don't get something very obscure
   // See https://github.com/solid/solidos/issues/42
@@ -90,7 +90,7 @@ export async function getPreferredLanguages() {
  * preferred language version
 */
 
-export function filterByLanguage(bindings, languagePrefs) {
+export function filterByLanguage (bindings, languagePrefs) {
   const uris = {}
   bindings.forEach(binding => { // Organize names by their subject
     const uri = binding.subject.value
