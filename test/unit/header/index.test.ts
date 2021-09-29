@@ -104,9 +104,9 @@ describe('createHelpMenu', () => {
   it('creates a menu....', () => {
     expect(createHelpMenu()).toMatchSnapshot()
   })
-  it('assigns list item class header-banner__help-menu and header-help-menu', () => {
+  it('assigns list item class header-banner__user-menu and header-user-menu', () => {
     const helpMenu = createHelpMenu()
-    expect(helpMenu.className).toContain('header-banner__help-menu')
+    expect(helpMenu.className).toContain('header-banner__user-menu')
   })
 })
 // SAM look into this
