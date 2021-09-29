@@ -9,7 +9,7 @@ import * as widgets from '../../../widgets'
 import { kb } from '../../../logic'
 import { NamedNode, Literal } from 'rdflib'
 import { queryPublicDataByName, bindingToTerm, AUTOCOMPLETE_LIMIT, QueryParameters } from './publicData'
-import { filterByLanguage, getPreferredLanguages, defaultPreferredLangages } from './language'
+import { filterByLanguage, getPreferredLanguages, defaultPreferredLanguages } from './language'
 
 const AUTOCOMPLETE_THRESHOLD = 4 // don't check until this many characters typed
 const AUTOCOMPLETE_ROWS = 20 // 20?
@@ -142,7 +142,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
     let bindings
     try {
       bindings = await queryPublicDataByName(filter, targetClass as any,
-        languagePrefs || defaultPreferredLangages, acOptions.queryParams)
+        languagePrefs || defaultPreferredLanguages, acOptions.queryParams)
     } catch (err) {
       complain('Error querying db of organizations: ' + err)
       inputEventHandlerLock = false

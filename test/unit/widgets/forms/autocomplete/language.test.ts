@@ -4,8 +4,8 @@
 import { parse } from 'rdflib'
 import {
   languageCodeURIBase,
-  defaultPreferredLangages,
-  getPreferredLanagugesFor,
+  defaultPreferredLanguages,
+  getPreferredLanguagesFor,
   getPreferredLanguages,
   filterByLanguage,
   addDefaults
@@ -78,12 +78,12 @@ describe('addDefaults', () => {
     expect(addDefaults(langArray)).toEqual(expectedDefaults)
   })
 })
-describe('defaultPreferredLangages', () => {
+describe('defaultPreferredLanguages', () => {
   it('exists as a array', () => {
-    expect(defaultPreferredLangages).toBeInstanceOf(Array)
+    expect(defaultPreferredLanguages).toBeInstanceOf(Array)
   })
   it('exists as a array', () => {
-    expect(defaultPreferredLangages).toEqual(expectedDefaults)
+    expect(defaultPreferredLanguages).toEqual(expectedDefaults)
   })
 })
 describe('getPreferredLanguages', () => {
@@ -101,24 +101,24 @@ describe('getPreferredLanguages', () => {
     expect(preferred).toEqual(['it', 'en', 'fr', 'de', 'ar'])
   })
 })
-describe('getPreferredLanagugesFor', () => {
+describe('getPreferredLanguagesFor', () => {
   it('exists as a function', () => {
-    expect(getPreferredLanagugesFor).toBeInstanceOf(Function)
+    expect(getPreferredLanguagesFor).toBeInstanceOf(Function)
   })
-  it.skip('returns just greek for Alice, plus deafults ', async () => {
+  it.skip('returns just greek for Alice, plus defaults ', async () => {
     // Note to Tim: for some reason languageCodeURIBase doesn't find 'el'
     const usersLanguages = { elements: [{ value: 'https://www.w3.org/ns/iana/language-code/el' }] }
     const kbAnySpy = jest.spyOn(kb, 'any').mockReturnValueOnce(usersLanguages).mockReturnValueOnce(usersLanguages)
-    const result = await getPreferredLanagugesFor(alice)
+    const result = await getPreferredLanguagesFor(alice)
     expect(result).toEqual(['el'].concat(['en', 'fr', 'de', 'it', 'ar']))
     expect(kbAnySpy).toHaveBeenCalledTimes(2)
   })
-  it('returns english, french Bob, plus deafults', async () => {
-    const result = await getPreferredLanagugesFor(bob)
+  it('returns english, french Bob, plus defaults', async () => {
+    const result = await getPreferredLanguagesFor(bob)
     expect(result).toEqual(['en', 'fr', 'de', 'it', 'ar'])
   })
-  it('returns nothing for Charlie, just deafults', async () => {
-    const result = await getPreferredLanagugesFor(charlie)
+  it('returns nothing for Charlie, just defaults', async () => {
+    const result = await getPreferredLanguagesFor(charlie)
     expect(result).toEqual(expectedDefaults)
   })
 })
@@ -129,7 +129,7 @@ describe('filterByLanguage', () => {
   })
 
   it('filters picking english by default', async () => {
-    const result = filterByLanguage(elephants, defaultPreferredLangages)
+    const result = filterByLanguage(elephants, defaultPreferredLanguages)
     const names = result.map(binding => binding.name.value)
     expect(names).toEqual(['elephant'])
   })

@@ -24,20 +24,20 @@ export interface Binding {
 
 export const languageCodeURIBase = 'https://www.w3.org/ns/iana/language-code/' /// @@ unsupported on the web (2021)
 
-export const defaultPreferredLangages = ['en', 'fr', 'de', 'it', 'ar']
+export const defaultPreferredLanguages = ['en', 'fr', 'de', 'it', 'ar']
 
 export function addDefaults (array) {
   if (!array) array = []
-  return array.concat(defaultPreferredLangages.filter(code => !array.includes(code)))
+  return array.concat(defaultPreferredLanguages.filter(code => !array.includes(code)))
 }
 
-export async function getPreferredLanagugesFor (person: NamedNode) {
+export async function getPreferredLanguagesFor (person: NamedNode) {
   const doc = person.doc()
   await kb.fetcher.load(doc)
   const list = kb.any(person, ns.schema('knowsLanguage'), null, doc) as Collection | undefined
   if (!list) {
     // console.log(`User ${person} has not set their languages in their profile.`)
-    return defaultPreferredLangages
+    return defaultPreferredLanguages
   }
   const languageCodeArray: string[] = []
   list.elements.forEach(item => {
@@ -71,7 +71,7 @@ export async function getPreferredLanguages () {
   // See https://github.com/solid/solidos/issues/42
   const me = await authn.currentUser() as NamedNode
   if (me) { // If logged in
-    const solidLanguagePrefs = await getPreferredLanagugesFor(me)
+    const solidLanguagePrefs = await getPreferredLanguagesFor(me)
     if (solidLanguagePrefs) return solidLanguagePrefs
   }
   if (typeof navigator !== 'undefined') { // use browser settings
@@ -82,7 +82,7 @@ export async function getPreferredLanguages () {
       return addDefaults([navigator.language.split('-')[0]])
     }
   }
-  return defaultPreferredLangages
+  return defaultPreferredLanguages
 }
 
 /* From an array of bindings with a names for each row,
@@ -98,7 +98,7 @@ export function filterByLanguage (bindings, languagePrefs) {
     uris[uri].push(binding)
   })
 
-  const languagePrefs2 = languagePrefs || defaultPreferredLangages
+  const languagePrefs2 = languagePrefs || defaultPreferredLanguages
   languagePrefs2.reverse() // Preferred last
 
   const slimmed = ([] as Array<Binding>)
