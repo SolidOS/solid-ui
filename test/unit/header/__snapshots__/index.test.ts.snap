@@ -133,6 +133,7 @@ exports[`createBanner check customized logo... 1`] = `
             <a
               class="header-user-menu__link-0-1-124"
               href="https://github.com/solid/userguide"
+              target="_blank"
             />
           </li>
           <li
@@ -141,6 +142,7 @@ exports[`createBanner check customized logo... 1`] = `
             <a
               class="header-user-menu__link-0-1-126"
               href="https://github.com/solid/solidos/issues"
+              target="_blank"
             />
           </li>
         </ul>
@@ -292,6 +294,7 @@ exports[`createBanner creates a link 1`] = `
             <a
               class="header-user-menu__link-0-1-74"
               href="https://github.com/solid/userguide"
+              target="_blank"
             />
           </li>
           <li
@@ -300,6 +303,7 @@ exports[`createBanner creates a link 1`] = `
             <a
               class="header-user-menu__link-0-1-76"
               href="https://github.com/solid/solidos/issues"
+              target="_blank"
             />
           </li>
         </ul>
@@ -335,6 +339,7 @@ exports[`createHelpMenu creates a menu.... 1`] = `
         <a
           class="header-user-menu__link-0-1-41"
           href="https://github.com/solid/userguide"
+          target="_blank"
         />
       </li>
       <li
@@ -343,6 +348,7 @@ exports[`createHelpMenu creates a menu.... 1`] = `
         <a
           class="header-user-menu__link-0-1-43"
           href="https://github.com/solid/solidos/issues"
+          target="_blank"
         />
       </li>
     </ul>
