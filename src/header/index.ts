@@ -97,8 +97,8 @@ export async function createBanner (store: IndexedFormula, pod: NamedNode, user:
 export function createHelpMenu () {
   const helpMenuList = document.createElement('ul')
   addStyleClassToElement(helpMenuList, ['header-user-menu__list'])
-  helpMenuList.appendChild(createUserMenuItem(createUserMenuLink('User guide', 'https://github.com/solid/userguide')))
-  helpMenuList.appendChild(createUserMenuItem(createUserMenuLink('Report a problem', 'https://github.com/solid/solidos/issues')))
+  helpMenuList.appendChild(createUserMenuItem(createUserMenuLink('User guide', 'https://github.com/solid/userguide', '_blank')))
+  helpMenuList.appendChild(createUserMenuItem(createUserMenuLink('Report a problem', 'https://github.com/solid/solidos/issues', '_blank')))
 
   const helpMenu = document.createElement('nav')
 
@@ -158,11 +158,12 @@ export function createUserMenuButton (label: string, onClick: EventListenerOrEve
 /**
  * @ignore exporting this only for the unit test
  */
-export function createUserMenuLink (label: string, href: string): HTMLElement {
+export function createUserMenuLink (label: string, href: string, target?:string): HTMLElement {
   const link = document.createElement('a')
   addStyleClassToElement(link, ['header-user-menu__link'])
   link.href = href
   link.innerText = label
+  if (target) link.target = target
   return link
 }
 
