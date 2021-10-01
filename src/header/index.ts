@@ -13,6 +13,8 @@ import { addStyleClassToElement, getPod, throttle } from './headerHelpers'
 // SolidAuthorization, SolidClam, and SolidSession was copied from mashlib/typings/solid-auth-client
 // access_token, client_id, id_token, at_hash had to be converted to camelcase for typescript compatibility
 
+// TODO this header code is not the one in production. Check mashlib.
+// ATTENTION - this is not the header code in production!!!
 interface SolidAuthorization {
   accessToken: string;
   clientId: string;
