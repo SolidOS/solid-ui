@@ -81,8 +81,13 @@ export async function createBanner (store: IndexedFormula, pod: NamedNode, user:
   const banner = document.createElement('div')
   addStyleClassToElement(banner, ['header-banner'])
   banner.appendChild(podLink)
-  banner.appendChild(userMenu)
-  banner.appendChild(helpMenu)
+
+  const leftSideOfHeader = document.createElement('div')
+  addStyleClassToElement(leftSideOfHeader, ['header-banner__right-menu'])
+  leftSideOfHeader.appendChild(userMenu)
+  leftSideOfHeader.appendChild(helpMenu)
+
+  banner.appendChild(leftSideOfHeader)
 
   return banner
 }
@@ -111,8 +116,10 @@ export function createHelpMenu () {
   const helpMenuTrigger = document.createElement('button')
   addStyleClassToElement(helpMenuTrigger, ['header-user-menu__trigger'])
   helpMenuTrigger.type = 'button'
+
   const helpMenuIcon = document.createElement('img')
   helpMenuIcon.src = helpIcon
+  addStyleClassToElement(helpMenuIcon, ['header-banner__help-icon'])
   helpMenuContainer.appendChild(helpMenuTrigger)
   helpMenuTrigger.appendChild(helpMenuIcon)
 
