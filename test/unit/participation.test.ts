@@ -2,11 +2,6 @@ import * as widgets from '../../src/widgets'
 import { JSDOM } from 'jsdom'
 import * as participation from '../../src/pad'
 
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
-
 const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
 const dom = window.document
 describe('renderPartipants', () => {

@@ -28,11 +28,6 @@ import { basicField } from '../../../../src/widgets/forms/basic'
 
 const doc = kb.sym('http://example.com/doc.ttl')
 
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
-
 silenceDebugMessages()
 
 describe('field', () => {

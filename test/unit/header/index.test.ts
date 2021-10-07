@@ -24,11 +24,6 @@ silenceDebugMessages()
 // const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
 // const dom = window.document
 
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
-
 describe('header', () => {
   // SAM not sure about this one
   const options = { menuList: [{ label: 'Testing', url: 'https://reflectechblog.wordpress.com/' }] }

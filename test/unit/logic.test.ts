@@ -2,10 +2,6 @@ import { silenceDebugMessages } from '../helpers/setup'
 import { solidLogicSingleton } from '../../src/logic'
 
 silenceDebugMessages()
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
 
 describe('solidLogicSingleton (main global SolidLogic instance)', () => {
   it('exists', () => {

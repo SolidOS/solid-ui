@@ -7,7 +7,6 @@ import {
 } from '../../../../src/widgets/buttons/iconLinks'
 
 silenceDebugMessages()
-jest.mock('solid-auth-client')
 let window: DOMWindow
 let dom: HTMLDocument
 let element: HTMLDivElement
