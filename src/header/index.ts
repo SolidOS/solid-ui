@@ -9,39 +9,6 @@ import * as widgets from '../widgets'
 import { emptyProfile } from './empty-profile'
 import { addStyleClassToElement, getPod, throttle } from './headerHelpers'
 
-// SolidAuthorization, SolidClam, and SolidSession was copied from mashlib/typings/solid-auth-client
-// access_token, client_id, id_token, at_hash had to be converted to camelcase for typescript compatibility
-
-interface SolidAuthorization {
-  accessToken: string;
-  clientId: string;
-  idToken: string;
-}
-
-interface SolidClaim {
-  atHash: string;
-  aud: string;
-  azp: string;
-  cnf: {
-    jwk: string;
-  };
-  exp: number;
-  iat: number;
-  iss: string;
-  jti: string;
-  nonce: string;
-  sub: string;
-}
-export interface SolidSession {
-  authorization: SolidAuthorization;
-  credentialType: string;
-  idClaims: SolidClaim;
-  idp: string;
-  issuer: string;
-  sessionKey: string;
-  webId: string;
-}
-
 export type MenuItemLink = {
   label: string,
   url: string
