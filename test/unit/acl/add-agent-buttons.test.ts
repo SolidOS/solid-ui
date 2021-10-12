@@ -162,6 +162,9 @@ describe('When "Add App" button is clicked', () => {
   })
   it('bar is simplified', () => {
     expect(bar.childNodes.length).toEqual(3)
+    // Adds a third element to list, for reason I cannot understand - This does
+    // not happen when I "manually test" it, ie run it in the browser
+    // https://github.com/solid/solid-ui/issues/236
   })
   it('Bar still contains the button that was clicked', () => {
     expect(getButtonName(bar.childNodes[0])).toEqual(barButtons[buttonIndex])
