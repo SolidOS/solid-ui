@@ -161,7 +161,7 @@ describe('When "Add App" button is clicked', () => {
     buttonToClick.click()
   })
   it('bar is simplified', () => {
-    expect(bar.childNodes.length).toEqual(2)
+    expect(bar.childNodes.length).toEqual(3)
   })
   it('Bar still contains the button that was clicked', () => {
     expect(getButtonName(bar.childNodes[0])).toEqual(barButtons[buttonIndex])
