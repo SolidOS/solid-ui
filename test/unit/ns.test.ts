@@ -2,7 +2,6 @@ import { silenceDebugMessages } from '../helpers/setup'
 import { rdf } from '../../src/ns'
 
 silenceDebugMessages()
-jest.mock('solid-auth-client')
 
 describe('RDF Namespace', () => {
   it('gives the right URI for rdf:type', () => {

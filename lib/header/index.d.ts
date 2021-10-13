@@ -1,32 +1,4 @@
 import { IndexedFormula, NamedNode } from 'rdflib';
-interface SolidAuthorization {
-    accessToken: string;
-    clientId: string;
-    idToken: string;
-}
-interface SolidClaim {
-    atHash: string;
-    aud: string;
-    azp: string;
-    cnf: {
-        jwk: string;
-    };
-    exp: number;
-    iat: number;
-    iss: string;
-    jti: string;
-    nonce: string;
-    sub: string;
-}
-export interface SolidSession {
-    authorization: SolidAuthorization;
-    credentialType: string;
-    idClaims: SolidClaim;
-    idp: string;
-    issuer: string;
-    sessionKey: string;
-    webId: string;
-}
 export declare type MenuItemLink = {
     label: string;
     url: string;
@@ -50,7 +22,7 @@ export declare function initHeader(store: IndexedFormula, options?: HeaderOption
 /**
  * @ignore exporting this only for the unit test
  */
-export declare function rebuildHeader(header: HTMLElement, store: IndexedFormula, pod: NamedNode, options?: HeaderOptions): (session: SolidSession | null) => Promise<void>;
+export declare function rebuildHeader(header: HTMLElement, store: IndexedFormula, pod: NamedNode, options?: HeaderOptions): () => Promise<void>;
 /**
  * @ignore exporting this only for the unit test
  */
@@ -79,5 +51,4 @@ export declare function createUserMenuItem(child: HTMLElement): HTMLElement;
  * @ignore exporting this only for the unit test
  */
 export declare function getProfileImg(store: IndexedFormula, user: NamedNode): string | HTMLElement;
-export {};
 //# sourceMappingURL=index.d.ts.map

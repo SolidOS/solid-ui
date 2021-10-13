@@ -8,10 +8,6 @@ import * as Index from '../../../src/widgets/index'
 
 silenceDebugMessages()
 
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
 describe('index', () => {
   it('contains all exports from DragAndDrop', () => {
     for (const k in DragAndDrop) {

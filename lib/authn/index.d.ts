@@ -7,7 +7,7 @@ currentUser, // Sync
 defaultTestUser, // Sync
 filterAvailablePanes, // Async
 findAppInstances, findOriginOwner, getUserRoles, // Async
-loadTypeIndexes, logIn, logInLoadProfile, logInLoadPreferences, loginStatusBox, newAppInstance, offlineTestID, registerInTypeIndex, registrationControl, registrationList, selectWorkspace, setACLUserPublic, saveUser } from './authn';
+loadTypeIndexes, logIn, logInLoadProfile, logInLoadPreferences, loginStatusBox, newAppInstance, offlineTestID, registerInTypeIndex, registrationControl, registrationList, selectWorkspace, setACLUserPublic, saveUser, renderSignInPopup } from './authn';
 export declare const authn: {
     checkUser: typeof checkUser;
     currentUser: typeof currentUser;
@@ -29,6 +29,7 @@ export declare const authn: {
     selectWorkspace: typeof selectWorkspace;
     setACLUserPublic: typeof setACLUserPublic;
     saveUser: typeof saveUser;
-    solidAuthClient: any;
+    authSession: import("@inrupt/solid-client-authn-browser").Session;
+    renderSignInPopup: typeof renderSignInPopup;
 };
 //# sourceMappingURL=index.d.ts.map

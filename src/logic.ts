@@ -2,10 +2,18 @@
 //
 
 import * as debug from './debug'
-import auth from 'solid-auth-client'
+import authSession from './authn/authSession'
 import { SolidLogic } from 'solid-logic'
 
-export const solidLogicSingleton = new SolidLogic({ fetch: auth.fetch }, auth)
+const fetcher = async (url, requestInit) => {
+  if (authSession.info.webId) {
+    return authSession.fetch(url, requestInit)
+  } else {
+    return window.fetch(url, requestInit)
+  }
+}
+
+export const solidLogicSingleton = new SolidLogic({ fetch: fetcher }, authSession)
 
 // Make this directly accessible as it is what you need most of the time
 export const store = solidLogicSingleton.store

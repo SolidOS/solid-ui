@@ -2,7 +2,6 @@ import { silenceDebugMessages } from '../../helpers/setup'
 import { getClasses, getStylesheet } from '../../../src/jss/index'
 
 silenceDebugMessages()
-jest.mock('solid-auth-client')
 
 describe('getClasses', () => {
   it('exists', () => {

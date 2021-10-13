@@ -5,7 +5,7 @@
   <meta charset='UTF-8'>
   <title>solid-ui UI.widgets.header examples page</title>
   <script type="text/javascript" src="../../lib/webpack-bundle.js"></script>
-  <script src="https://solid.github.io/solid-auth-client/dist/solid-auth-client.bundle.js"></script>
+  <script type="text/javascript" src="../../lib/authn/authn.js"></script>
   <script>
     const $ = document.querySelector.bind(document)
     function showSource(widgetName) {
@@ -17,33 +17,28 @@
         .replace(/'/g, "&#039;")
     }
   </script>
-  <style>
-    .loginButton {
-      border-radius: 0.2em;
-      margin: 1em;
-      font-size: 85%;
-      background-color: #fff;
-      border-style: .01em solid #7C4DFF;
-      color: #7C4DFF;
-    }
-
-    .loginButton:hover {
-      background-color: #7C4DFF;
-      color: #fff;
-    }
-  </style>
 </head>
 
 <body>
 
   <h2 id="header"><a href="#header">Header</a>
-    <button class="loginButton" onclick="login('https://solidcommunity.net')">Login</button>
+    <div id="webId"></div>
+    <div id="loginBanner"></div>
     <script>
-      async function login(idp) {
-        const session = await solid.auth.currentSession();
-        if (!session)
-          await solid.auth.login(idp);
+      loginBanner.appendChild(authn.loginStatusBox(document, null, {}));
+
+      async function finishLogin() {
+        await authn.authSession.handleIncomingRedirect();
+        const session = authn.authSession;
+        if (session.info.isLoggedIn) {
+          // Update the page with the status.
+          webId.innerHTML = "Logged in as: " + authn.currentUser().uri;
+        } else {
+          webId.innerHTML = "";
+        }
       }
+
+      finishLogin();
     </script>
   </h2>
   <p>This example demonstrates how to use the header component. The header has a different view depending

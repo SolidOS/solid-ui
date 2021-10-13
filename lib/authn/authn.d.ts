@@ -20,10 +20,9 @@
  * @packageDocumentation
  */
 import { NamedNode } from 'rdflib';
-import solidAuthClient from 'solid-auth-client';
 import { PaneDefinition } from 'pane-registry';
 import { AppDetails, AuthenticationContext } from './types';
-export { solidAuthClient };
+export declare const authSession: import("@inrupt/solid-client-authn-browser").Session;
 /**
  * Look for and load the User who has control over it
  */
@@ -117,17 +116,18 @@ export declare function setACLUserPublic(docURI: string, me: NamedNode, options:
  * @returns {NamedNode|null}
  */
 export declare function offlineTestID(): NamedNode | null;
+export declare function renderSignInPopup(dom: HTMLDocument): void;
 /**
  * @returns {Promise<string|null>} Resolves with WebID URI or null
  */
 /**
  * Retrieves currently logged in webId from either
- * defaultTestUser or SolidAuthClient
+ * defaultTestUser or SolidAuth
  * @param [setUserCallback] Optional callback
  *
  * @returns Resolves with webId uri, if no callback provided
  */
-export declare function checkUser<T>(setUserCallback?: (me: NamedNode | null) => T): Promise<NamedNode | T>;
+export declare function checkUser<T>(setUserCallback?: (me: NamedNode | null) => T): Promise<NamedNode | T | null>;
 /**
  * Login status box
  *
