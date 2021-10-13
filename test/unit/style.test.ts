@@ -15,7 +15,6 @@ import {
 } from '../../src/style'
 
 silenceDebugMessages()
-jest.mock('solid-auth-client')
 
 describe('textInputStyle', () => {
   it('exists', () => {

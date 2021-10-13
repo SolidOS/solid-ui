@@ -3,44 +3,11 @@
     This file was copied from mashlib/src/global/header.ts file. It is modified to
     work in solid-ui by adjusting where imported functions are found.
  */
-import { IndexedFormula, NamedNode, sym } from 'rdflib'
-import { loginStatusBox, solidAuthClient } from '../authn/authn'
+import { IndexedFormula, NamedNode } from 'rdflib'
+import { loginStatusBox, authSession, currentUser } from '../authn/authn'
 import * as widgets from '../widgets'
 import { emptyProfile } from './empty-profile'
 import { addStyleClassToElement, getPod, throttle } from './headerHelpers'
-
-// SolidAuthorization, SolidClam, and SolidSession was copied from mashlib/typings/solid-auth-client
-// access_token, client_id, id_token, at_hash had to be converted to camelcase for typescript compatibility
-
-interface SolidAuthorization {
-  accessToken: string;
-  clientId: string;
-  idToken: string;
-}
-
-interface SolidClaim {
-  atHash: string;
-  aud: string;
-  azp: string;
-  cnf: {
-    jwk: string;
-  };
-  exp: number;
-  iat: number;
-  iss: string;
-  jti: string;
-  nonce: string;
-  sub: string;
-}
-export interface SolidSession {
-  authorization: SolidAuthorization;
-  credentialType: string;
-  idClaims: SolidClaim;
-  idp: string;
-  issuer: string;
-  sessionKey: string;
-  webId: string;
-}
 
 export type MenuItemLink = {
   label: string,
@@ -76,14 +43,16 @@ export async function initHeader (store: IndexedFormula, options?: HeaderOptions
   }
 
   const pod = getPod()
-  solidAuthClient.trackSession(rebuildHeader(header, store, pod, options))
+  rebuildHeader(header, store, pod, options)()
+  authSession.onLogout(rebuildHeader(header, store, pod, options))
+  authSession.onLogin(rebuildHeader(header, store, pod, options))
 }
 /**
  * @ignore exporting this only for the unit test
  */
 export function rebuildHeader (header: HTMLElement, store: IndexedFormula, pod: NamedNode, options?: HeaderOptions) {
-  return async (session: SolidSession | null) => {
-    const user = session ? sym(session.webId) : null
+  return async () => {
+    const user = currentUser()
     header.innerHTML = ''
     header.appendChild(await createBanner(store, pod, user, options))
   }
@@ -168,7 +137,7 @@ export async function createUserMenu (store: IndexedFormula, user: NamedNode, op
     }
   }
 
-  loggedInMenuList.appendChild(createUserMenuItem(createUserMenuButton('Log out', () => solidAuthClient.logout())))
+  loggedInMenuList.appendChild(createUserMenuItem(createUserMenuButton('Log out', () => authSession.logout())))
 
   const loggedInMenu = document.createElement('nav')
 

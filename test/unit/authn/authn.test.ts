@@ -21,16 +21,13 @@ import {
   selectWorkspace,
   setACLUserPublic,
   saveUser,
-  solidAuthClient
+  authSession
 } from '../../../src/authn/authn'
 import { AppDetails, AuthenticationContext } from '../../../src/authn/types'
 import { sym } from 'rdflib'
+import { Session } from '@inrupt/solid-client-authn-browser'
 
 silenceDebugMessages()
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
 const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
 const dom = window.document
 
@@ -243,8 +240,8 @@ describe('saveUser', () => {
   })
 })
 
-describe('solidAuthClient', () => {
+describe('authSession', () => {
   it('exists', () => {
-    expect(solidAuthClient).toBeInstanceOf(Object)
+    expect(authSession).toBeInstanceOf(Session)
   })
 })

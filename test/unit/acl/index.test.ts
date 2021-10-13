@@ -5,11 +5,6 @@ import { acl, aclControl } from '../../../src/acl/index'
 
 silenceDebugMessages()
 
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
-
 describe('acl related APIs', () => {
   it('exports some methods in the acl module', () => {
     expect(Acl).toEqual(expect.objectContaining(acl))

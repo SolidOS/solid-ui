@@ -1,10 +1,6 @@
 import { silenceDebugMessages } from '../helpers/setup'
 import * as Index from '../../src/index'
 
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
 silenceDebugMessages()
 
 describe('Index', () => {

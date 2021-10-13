@@ -3,10 +3,6 @@ import { DateFolder } from '../../../src/chat/dateFolder'
 import { sym } from 'rdflib'
 
 silenceDebugMessages()
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
 
 describe('DateFolder', () => {
   it('exists', () => {
