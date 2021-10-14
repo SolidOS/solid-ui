@@ -127,7 +127,6 @@ describe('filterByLanguage', () => {
   it('exists as a function', () => {
     expect(filterByLanguage).toBeInstanceOf(Function)
   })
-
   it('filters picking english by default', async () => {
     const result = filterByLanguage(elephants, defaultPreferredLanguages)
     const names = result.map(binding => binding.name.value)
