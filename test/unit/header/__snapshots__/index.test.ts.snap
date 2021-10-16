@@ -2,235 +2,366 @@
 
 exports[`createBanner check customized logo... 1`] = `
 <div
-  class="header-banner-0-1-81"
+  class="header-banner-0-1-133"
 >
   <a
-    class="header-banner__link-0-1-68"
+    class="header-banner__link-0-1-110"
     href="https://test.com"
   >
     <img
-      class="header-banner__icon-0-1-69"
+      class="header-banner__icon-0-1-111"
       src="https://solidproject.org/assets/img/solid-emblem.svg"
     />
   </a>
   <div
-    class="header-banner__user-menu-0-1-79 header-user-menu-0-1-80"
+    class="header-banner__right-menu-0-1-134"
   >
-    <button
-      class="header-user-menu__trigger-0-1-78"
-      type="button"
+    <div
+      class="header-banner__user-menu-0-1-121 header-user-menu-0-1-122"
     >
-      
-
-      <svg
-        fill="none"
-        height="26"
-        viewBox="0 0 26 26"
-        width="26"
-        xmlns="http://www.w3.org/2000/svg"
+      <button
+        class="header-user-menu__trigger-0-1-120"
+        type="button"
       >
         
-    
-        <path
-          clip-rule="evenodd"
-          d="M13 25C19.6274 25 25 19.6274 25 13C25 6.37258 19.6274 1 13 1C6.37258 1 1 6.37258 1 13C1 19.6274 6.37258 25 13 25Z"
-          fill="#D8D8D8"
-          fill-rule="evenodd"
-          stroke="#8B8B8B"
-        />
-        
-    
-        <mask
+
+        <svg
+          fill="none"
           height="26"
-          id="mask0"
-          mask-type="alpha"
-          maskUnits="userSpaceOnUse"
+          viewBox="0 0 26 26"
           width="26"
-          x="0"
-          y="0"
+          xmlns="http://www.w3.org/2000/svg"
         >
           
-        
+    
           <path
             clip-rule="evenodd"
             d="M13 25C19.6274 25 25 19.6274 25 13C25 6.37258 19.6274 1 13 1C6.37258 1 1 6.37258 1 13C1 19.6274 6.37258 25 13 25Z"
-            fill="white"
+            fill="#D8D8D8"
             fill-rule="evenodd"
-            stroke="white"
+            stroke="#8B8B8B"
           />
           
     
-        </mask>
+          <mask
+            height="26"
+            id="mask0"
+            mask-type="alpha"
+            maskUnits="userSpaceOnUse"
+            width="26"
+            x="0"
+            y="0"
+          >
+            
         
+            <path
+              clip-rule="evenodd"
+              d="M13 25C19.6274 25 25 19.6274 25 13C25 6.37258 19.6274 1 13 1C6.37258 1 1 6.37258 1 13C1 19.6274 6.37258 25 13 25Z"
+              fill="white"
+              fill-rule="evenodd"
+              stroke="white"
+            />
+            
     
-        <g
-          mask="url(#mask0)"
-        >
-          
-        
-          <path
-            clip-rule="evenodd"
-            d="M17.0468 10.4586C17.0468 14.4979 15.4281 16.9214 12.9999 16.9214C10.5718 16.9214 8.95298 14.4979 8.95298 10.4586C8.95298 6.41931 12.9999 6.41931 12.9999 6.41931C12.9999 6.41931 17.0468 6.41931 17.0468 10.4586ZM4.09668 23.3842C6.52483 17.7293 12.9999 17.7293 12.9999 17.7293C12.9999 17.7293 19.475 17.7293 21.9031 23.3842C21.9031 23.3842 17.8481 25 12.9999 25C8.15169 25 4.09668 23.3842 4.09668 23.3842Z"
-            fill="#8B8B8B"
-            fill-rule="evenodd"
-          />
+          </mask>
           
     
-        </g>
+          <g
+            mask="url(#mask0)"
+          >
+            
         
+            <path
+              clip-rule="evenodd"
+              d="M17.0468 10.4586C17.0468 14.4979 15.4281 16.9214 12.9999 16.9214C10.5718 16.9214 8.95298 14.4979 8.95298 10.4586C8.95298 6.41931 12.9999 6.41931 12.9999 6.41931C12.9999 6.41931 17.0468 6.41931 17.0468 10.4586ZM4.09668 23.3842C6.52483 17.7293 12.9999 17.7293 12.9999 17.7293C12.9999 17.7293 19.475 17.7293 21.9031 23.3842C21.9031 23.3842 17.8481 25 12.9999 25C8.15169 25 4.09668 23.3842 4.09668 23.3842Z"
+              fill="#8B8B8B"
+              fill-rule="evenodd"
+            />
+            
+    
+          </g>
+          
 
-      </svg>
-    </button>
-    <nav
-      aria-hidden="true"
-      class="header-user-menu__navigation-menu-0-1-77"
-    >
-      <ul
-        class="header-user-menu__list-0-1-70"
+        </svg>
+      </button>
+      <nav
+        aria-hidden="true"
+        class="header-user-menu__navigation-menu-0-1-119"
       >
-        <li
-          class="header-user-menu__list-item-0-1-72"
+        <ul
+          class="header-user-menu__list-0-1-112"
         >
-          <a
-            class="header-user-menu__link-0-1-71"
-            href="https://sharonstrats.inrupt.net/profile/card#me"
-          />
-        </li>
-        <li
-          class="header-user-menu__list-item-0-1-74"
+          <li
+            class="header-user-menu__list-item-0-1-114"
+          >
+            <a
+              class="header-user-menu__link-0-1-113"
+              href="https://sharonstrats.inrupt.net/profile/card#me"
+            />
+          </li>
+          <li
+            class="header-user-menu__list-item-0-1-116"
+          >
+            <a
+              class="header-user-menu__link-0-1-115"
+              href="https://reflectechblog.wordpress.com/"
+            />
+          </li>
+          <li
+            class="header-user-menu__list-item-0-1-118"
+          >
+            <button
+              class="header-user-menu__button-0-1-117"
+            />
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div
+      class="header-banner__user-menu-0-1-129 header-user-menu-0-1-130"
+    >
+      <nav
+        aria-hidden="true"
+        class="header-user-menu__navigation-menu-0-1-128"
+      >
+        <ul
+          class="header-user-menu__list-0-1-123"
         >
-          <a
-            class="header-user-menu__link-0-1-73"
-            href="https://reflectechblog.wordpress.com/"
-          />
-        </li>
-        <li
-          class="header-user-menu__list-item-0-1-76"
-        >
-          <button
-            class="header-user-menu__button-0-1-75"
-          />
-        </li>
-      </ul>
-    </nav>
+          <li
+            class="header-user-menu__list-item-0-1-125"
+          >
+            <a
+              class="header-user-menu__link-0-1-124"
+              href="https://github.com/solid/userguide"
+              target="_blank"
+            />
+          </li>
+          <li
+            class="header-user-menu__list-item-0-1-127"
+          >
+            <a
+              class="header-user-menu__link-0-1-126"
+              href="https://github.com/solid/solidos/issues"
+              target="_blank"
+            />
+          </li>
+        </ul>
+      </nav>
+      <button
+        class="header-user-menu__trigger-0-1-131"
+        type="button"
+      >
+        <img
+          class="header-banner__help-icon-0-1-132"
+          src="https://solid.github.io/solid-ui/src/icons/noun_144.svg"
+        />
+      </button>
+    </div>
   </div>
 </div>
 `;
 
 exports[`createBanner creates a link 1`] = `
 <div
-  class="header-banner-0-1-53"
+  class="header-banner-0-1-83"
 >
   <a
-    class="header-banner__link-0-1-40"
+    class="header-banner__link-0-1-60"
     href="https://test.com"
   >
     <img
-      class="header-banner__icon-0-1-41"
+      class="header-banner__icon-0-1-61"
       src="https://solidproject.org/assets/img/solid-emblem.svg"
     />
   </a>
   <div
-    class="header-banner__user-menu-0-1-51 header-user-menu-0-1-52"
+    class="header-banner__right-menu-0-1-84"
   >
-    <button
-      class="header-user-menu__trigger-0-1-50"
-      type="button"
+    <div
+      class="header-banner__user-menu-0-1-71 header-user-menu-0-1-72"
     >
-      
-
-      <svg
-        fill="none"
-        height="26"
-        viewBox="0 0 26 26"
-        width="26"
-        xmlns="http://www.w3.org/2000/svg"
+      <button
+        class="header-user-menu__trigger-0-1-70"
+        type="button"
       >
         
-    
-        <path
-          clip-rule="evenodd"
-          d="M13 25C19.6274 25 25 19.6274 25 13C25 6.37258 19.6274 1 13 1C6.37258 1 1 6.37258 1 13C1 19.6274 6.37258 25 13 25Z"
-          fill="#D8D8D8"
-          fill-rule="evenodd"
-          stroke="#8B8B8B"
-        />
-        
-    
-        <mask
+
+        <svg
+          fill="none"
           height="26"
-          id="mask0"
-          mask-type="alpha"
-          maskUnits="userSpaceOnUse"
+          viewBox="0 0 26 26"
           width="26"
-          x="0"
-          y="0"
+          xmlns="http://www.w3.org/2000/svg"
         >
           
-        
+    
           <path
             clip-rule="evenodd"
             d="M13 25C19.6274 25 25 19.6274 25 13C25 6.37258 19.6274 1 13 1C6.37258 1 1 6.37258 1 13C1 19.6274 6.37258 25 13 25Z"
-            fill="white"
+            fill="#D8D8D8"
             fill-rule="evenodd"
-            stroke="white"
+            stroke="#8B8B8B"
           />
           
     
-        </mask>
+          <mask
+            height="26"
+            id="mask0"
+            mask-type="alpha"
+            maskUnits="userSpaceOnUse"
+            width="26"
+            x="0"
+            y="0"
+          >
+            
         
+            <path
+              clip-rule="evenodd"
+              d="M13 25C19.6274 25 25 19.6274 25 13C25 6.37258 19.6274 1 13 1C6.37258 1 1 6.37258 1 13C1 19.6274 6.37258 25 13 25Z"
+              fill="white"
+              fill-rule="evenodd"
+              stroke="white"
+            />
+            
     
-        <g
-          mask="url(#mask0)"
-        >
-          
-        
-          <path
-            clip-rule="evenodd"
-            d="M17.0468 10.4586C17.0468 14.4979 15.4281 16.9214 12.9999 16.9214C10.5718 16.9214 8.95298 14.4979 8.95298 10.4586C8.95298 6.41931 12.9999 6.41931 12.9999 6.41931C12.9999 6.41931 17.0468 6.41931 17.0468 10.4586ZM4.09668 23.3842C6.52483 17.7293 12.9999 17.7293 12.9999 17.7293C12.9999 17.7293 19.475 17.7293 21.9031 23.3842C21.9031 23.3842 17.8481 25 12.9999 25C8.15169 25 4.09668 23.3842 4.09668 23.3842Z"
-            fill="#8B8B8B"
-            fill-rule="evenodd"
-          />
+          </mask>
           
     
-        </g>
+          <g
+            mask="url(#mask0)"
+          >
+            
         
+            <path
+              clip-rule="evenodd"
+              d="M17.0468 10.4586C17.0468 14.4979 15.4281 16.9214 12.9999 16.9214C10.5718 16.9214 8.95298 14.4979 8.95298 10.4586C8.95298 6.41931 12.9999 6.41931 12.9999 6.41931C12.9999 6.41931 17.0468 6.41931 17.0468 10.4586ZM4.09668 23.3842C6.52483 17.7293 12.9999 17.7293 12.9999 17.7293C12.9999 17.7293 19.475 17.7293 21.9031 23.3842C21.9031 23.3842 17.8481 25 12.9999 25C8.15169 25 4.09668 23.3842 4.09668 23.3842Z"
+              fill="#8B8B8B"
+              fill-rule="evenodd"
+            />
+            
+    
+          </g>
+          
 
-      </svg>
-    </button>
-    <nav
-      aria-hidden="true"
-      class="header-user-menu__navigation-menu-0-1-49"
-    >
-      <ul
-        class="header-user-menu__list-0-1-42"
+        </svg>
+      </button>
+      <nav
+        aria-hidden="true"
+        class="header-user-menu__navigation-menu-0-1-69"
       >
-        <li
-          class="header-user-menu__list-item-0-1-44"
+        <ul
+          class="header-user-menu__list-0-1-62"
         >
-          <a
-            class="header-user-menu__link-0-1-43"
-            href="https://sharonstrats.inrupt.net/profile/card#me"
-          />
-        </li>
-        <li
-          class="header-user-menu__list-item-0-1-46"
+          <li
+            class="header-user-menu__list-item-0-1-64"
+          >
+            <a
+              class="header-user-menu__link-0-1-63"
+              href="https://sharonstrats.inrupt.net/profile/card#me"
+            />
+          </li>
+          <li
+            class="header-user-menu__list-item-0-1-66"
+          >
+            <a
+              class="header-user-menu__link-0-1-65"
+              href="https://reflectechblog.wordpress.com/"
+            />
+          </li>
+          <li
+            class="header-user-menu__list-item-0-1-68"
+          >
+            <button
+              class="header-user-menu__button-0-1-67"
+            />
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div
+      class="header-banner__user-menu-0-1-79 header-user-menu-0-1-80"
+    >
+      <nav
+        aria-hidden="true"
+        class="header-user-menu__navigation-menu-0-1-78"
+      >
+        <ul
+          class="header-user-menu__list-0-1-73"
         >
-          <a
-            class="header-user-menu__link-0-1-45"
-            href="https://reflectechblog.wordpress.com/"
-          />
-        </li>
-        <li
-          class="header-user-menu__list-item-0-1-48"
-        >
-          <button
-            class="header-user-menu__button-0-1-47"
-          />
-        </li>
-      </ul>
-    </nav>
+          <li
+            class="header-user-menu__list-item-0-1-75"
+          >
+            <a
+              class="header-user-menu__link-0-1-74"
+              href="https://github.com/solid/userguide"
+              target="_blank"
+            />
+          </li>
+          <li
+            class="header-user-menu__list-item-0-1-77"
+          >
+            <a
+              class="header-user-menu__link-0-1-76"
+              href="https://github.com/solid/solidos/issues"
+              target="_blank"
+            />
+          </li>
+        </ul>
+      </nav>
+      <button
+        class="header-user-menu__trigger-0-1-81"
+        type="button"
+      >
+        <img
+          class="header-banner__help-icon-0-1-82"
+          src="https://solid.github.io/solid-ui/src/icons/noun_144.svg"
+        />
+      </button>
+    </div>
   </div>
+</div>
+`;
+
+exports[`createHelpMenu creates a menu.... 1`] = `
+<div
+  class="header-banner__user-menu-0-1-46 header-user-menu-0-1-47"
+>
+  <nav
+    aria-hidden="true"
+    class="header-user-menu__navigation-menu-0-1-45"
+  >
+    <ul
+      class="header-user-menu__list-0-1-40"
+    >
+      <li
+        class="header-user-menu__list-item-0-1-42"
+      >
+        <a
+          class="header-user-menu__link-0-1-41"
+          href="https://github.com/solid/userguide"
+          target="_blank"
+        />
+      </li>
+      <li
+        class="header-user-menu__list-item-0-1-44"
+      >
+        <a
+          class="header-user-menu__link-0-1-43"
+          href="https://github.com/solid/solidos/issues"
+          target="_blank"
+        />
+      </li>
+    </ul>
+  </nav>
+  <button
+    class="header-user-menu__trigger-0-1-48"
+    type="button"
+  >
+    <img
+      class="header-banner__help-icon-0-1-49"
+      src="https://solid.github.io/solid-ui/src/icons/noun_144.svg"
+    />
+  </button>
 </div>
 `;
 

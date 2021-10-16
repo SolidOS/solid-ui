@@ -4,6 +4,7 @@
     work in solid-ui by adjusting where imported functions are found.
  */
 import { IndexedFormula, NamedNode } from 'rdflib'
+import { icons } from '..'
 import { loginStatusBox, authSession, currentUser } from '../authn/authn'
 import * as widgets from '../widgets'
 import { emptyProfile } from './empty-profile'
@@ -24,7 +25,7 @@ export type MenuItems = MenuItemLink | MenuItemButton
 /*
 HeaderOptions allow for customizing the logo and menu list.  If a logo is not provided the default
     is solid. Menulist will always show a link to logout and to the users profile.
- */
+  */
 export type HeaderOptions = {
   logo?: string,
   menuList?: MenuItems[]
@@ -71,16 +72,69 @@ export async function createBanner (store: IndexedFormula, pod: NamedNode, user:
   addStyleClassToElement(image, ['header-banner__icon'])
   podLink.appendChild(image)
 
-  const menu = user
+  const userMenu = user
     ? await createUserMenu(store, user, options)
     : createLoginSignUpButtons()
+
+  const helpMenu = createHelpMenu()
 
   const banner = document.createElement('div')
   addStyleClassToElement(banner, ['header-banner'])
   banner.appendChild(podLink)
-  banner.appendChild(menu)
+
+  const leftSideOfHeader = document.createElement('div')
+  addStyleClassToElement(leftSideOfHeader, ['header-banner__right-menu'])
+  leftSideOfHeader.appendChild(userMenu)
+  leftSideOfHeader.appendChild(helpMenu)
+
+  banner.appendChild(leftSideOfHeader)
 
   return banner
+}
+/**
+ * @ignore exporting this only for the unit test
+ */
+export function createHelpMenu () {
+  const helpMenuList = document.createElement('ul')
+  addStyleClassToElement(helpMenuList, ['header-user-menu__list'])
+  helpMenuList.appendChild(createUserMenuItem(createUserMenuLink('User guide', 'https://github.com/solid/userguide', '_blank')))
+  helpMenuList.appendChild(createUserMenuItem(createUserMenuLink('Report a problem', 'https://github.com/solid/solidos/issues', '_blank')))
+
+  const helpMenu = document.createElement('nav')
+
+  addStyleClassToElement(helpMenu, ['header-user-menu__navigation-menu'])
+  helpMenu.setAttribute('aria-hidden', 'true')
+  helpMenu.appendChild(helpMenuList)
+
+  const helpIcon = icons.iconBase + 'noun_144.svg'
+
+  const helpMenuContainer = document.createElement('div')
+  addStyleClassToElement(helpMenuContainer, ['header-banner__user-menu'])
+  addStyleClassToElement(helpMenuContainer, ['header-user-menu'])
+  helpMenuContainer.appendChild(helpMenu)
+
+  const helpMenuTrigger = document.createElement('button')
+  addStyleClassToElement(helpMenuTrigger, ['header-user-menu__trigger'])
+  helpMenuTrigger.type = 'button'
+
+  const helpMenuIcon = document.createElement('img')
+  helpMenuIcon.src = helpIcon
+  addStyleClassToElement(helpMenuIcon, ['header-banner__help-icon'])
+  helpMenuContainer.appendChild(helpMenuTrigger)
+  helpMenuTrigger.appendChild(helpMenuIcon)
+
+  const throttledMenuToggle = throttle((event: Event) => toggleMenu(event, helpMenuTrigger, helpMenu), 50)
+  helpMenuTrigger.addEventListener('click', throttledMenuToggle)
+  let timer = setTimeout(() => null, 0)
+  helpMenuContainer.addEventListener('mouseover', event => {
+    clearTimeout(timer)
+    throttledMenuToggle(event)
+  })
+  helpMenuContainer.addEventListener('mouseout', event => {
+    timer = setTimeout(() => throttledMenuToggle(event), 200)
+  })
+
+  return helpMenuContainer
 }
 /**
  * @ignore exporting this only for the unit test
@@ -104,11 +158,12 @@ export function createUserMenuButton (label: string, onClick: EventListenerOrEve
 /**
  * @ignore exporting this only for the unit test
  */
-export function createUserMenuLink (label: string, href: string): HTMLElement {
+export function createUserMenuLink (label: string, href: string, target?:string): HTMLElement {
   const link = document.createElement('a')
   addStyleClassToElement(link, ['header-user-menu__link'])
   link.href = href
   link.innerText = label
+  if (target) link.target = target
   return link
 }
 

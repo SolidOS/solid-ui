@@ -8,7 +8,8 @@ import {
   rebuildHeader,
   getProfileImg,
   createBanner,
-  createUserMenu
+  createUserMenu,
+  createHelpMenu
 } from '../../../src/header'
 import { NamedNode } from 'rdflib'
 // @ts-ignore
@@ -96,6 +97,16 @@ describe('createUserMenu', () => {
     const options = { menuList: [{ label: 'Testing', url: 'https://reflectechblog.wordpress.com/' }] }
     const userMenu = await createUserMenu(store, pod, options)
     expect(userMenu.className).toContain('header-banner__user-menu')
+  })
+})
+
+describe('createHelpMenu', () => {
+  it('creates a menu....', () => {
+    expect(createHelpMenu()).toMatchSnapshot()
+  })
+  it('assigns list item class header-banner__user-menu and header-user-menu', () => {
+    const helpMenu = createHelpMenu()
+    expect(helpMenu.className).toContain('header-banner__user-menu')
   })
 })
 // SAM look into this
