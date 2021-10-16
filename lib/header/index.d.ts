@@ -30,6 +30,10 @@ export declare function createBanner(store: IndexedFormula, pod: NamedNode, user
 /**
  * @ignore exporting this only for the unit test
  */
+export declare function createHelpMenu(): HTMLDivElement;
+/**
+ * @ignore exporting this only for the unit test
+ */
 export declare function createLoginSignUpButtons(): HTMLDivElement;
 /**
  * @ignore exporting this only for the unit test
@@ -38,7 +42,7 @@ export declare function createUserMenuButton(label: string, onClick: EventListen
 /**
  * @ignore exporting this only for the unit test
  */
-export declare function createUserMenuLink(label: string, href: string): HTMLElement;
+export declare function createUserMenuLink(label: string, href: string, target?: string): HTMLElement;
 /**
  * @ignore exporting this only for the unit test
  */

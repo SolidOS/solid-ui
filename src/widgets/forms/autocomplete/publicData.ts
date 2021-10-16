@@ -325,6 +325,7 @@ export async function queryPublicDataByName (
   if (!theClass) {
     throw new Error('queryPublicDataByName: No class provided')
   }
+
   const languagePrefs = await getPreferredLanguages() || defaultPreferredLanguages
   const language = languagePrefs[0] || 'en'
   if (queryTarget.searchByNameQuery) {

@@ -14,6 +14,9 @@ export declare const styleMap: {
         '&:focus, &:hover': {
             backgroundColor: string;
         };
+        a: {
+            textDecoration: string;
+        };
     };
     'header-user-menu__trigger': {
         background: string;
@@ -71,17 +74,20 @@ export declare const styleMap: {
         backgroundPosition: string;
         backgroundRepeat: string;
         backgroundSize: string;
-        margin: string;
         height: string;
         width: string;
     };
     'header-banner': {
         boxShadow: string;
         display: string;
+        justifyContent: string;
         padding: string;
         marginBottom: string;
     };
     'header-banner__link': {
+        display: string;
+    };
+    'header-banner__right-menu': {
         display: string;
     };
     'header-banner__login': {
@@ -95,7 +101,16 @@ export declare const styleMap: {
         borderLeft: string;
         marginLeft: string;
     };
+    'header-banner__help-menu': {
+        borderLeft: string;
+        marginLeft: string;
+    };
     'header-banner__icon': {
+        backgroundSize: string;
+        height: string;
+        width: string;
+    };
+    'header-banner__help-icon': {
         backgroundSize: string;
         height: string;
         width: string;
