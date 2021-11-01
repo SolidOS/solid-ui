@@ -22,7 +22,7 @@ const UI = { authn, icons, ns, media, pad, $rdf, store, style, utils, widgets }
 
 /* global alert */
 
-const SERVER_MKDIRP_BUG = true
+const SERVER_MKDIRP_BUG = false // Set false timbl 2021-10-31 should be fixed by now
 
 export async function createIfNotExists (doc, contentType = 'text/turtle', data = '') {
   const fetcher = UI.store.fetcher
@@ -209,6 +209,7 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
           chatDocument
         )
         await createIfNotExists(chatDocument)
+        // Otherwise, create the documentif necessary with a PATCH:
       }
       try {
         await updater.update([], sts)
