@@ -1311,8 +1311,8 @@ export function selectWorkspace (
   const box = dom.createElement('div')
   const context: AuthenticationContext = { me: me, dom: dom, div: box }
 
-  function say (s) {
-    box.appendChild(widgets.errorMessageBlock(dom, s))
+  function say (s, background) {
+    box.appendChild(widgets.errorMessageBlock(dom, s, background))
   }
 
   function figureOutBase (ws) {
@@ -1362,15 +1362,17 @@ export function selectWorkspace (
     // A workspace in a storage in the public profile:
     const storages = solidLogicSingleton.store.each(id, ns.space('storage')) // @@ No provenance requirement at the moment
     if (w.length === 0 && storages) {
-      say(`You don't seem to have any workspaces. You have ${storages.length} storage spaces.`)
+      say(`You don't seem to have any workspaces. You have ${storages.length} storage spaces.`, 'white')
       storages.map(function (s: any) {
         w = w.concat(solidLogicSingleton.store.each(s, ns.ldp('contains')))
         return w
-      }).filter(file => ['public', 'private'].includes(file.id().toLowerCase()))
+      }).filter(file => {
+        return (file.id) ? ['public', 'private'].includes(file.id().toLowerCase()) : ''
+      })
     }
 
     if (w.length === 1) {
-      say(`Workspace used: ${w[0].uri}`) // @@ allow user to see URI
+      say(`Workspace used: ${w[0].uri}`, 'white') // @@ allow user to see URI
       newBase = figureOutBase(w[0])
       // callbackWS(w[0], newBase)
     // } else if (w.length === 0) {
