@@ -1023,6 +1023,7 @@ export function renderSignInPopup (dom: HTMLDocument) {
   issuerTextInput.setAttribute('type', 'text')
   issuerTextInput.setAttribute('style', 'margin-left: 0 !important; flex: 1; margin-right: 5px !important')
   issuerTextInput.setAttribute('placeholder', 'https://example.com')
+  issuerTextInput.value = localStorage.getItem('loginIssuer') || ''
   const issuerTextGoButton = dom.createElement('button')
   issuerTextGoButton.innerText = 'Go'
   issuerTextGoButton.setAttribute('style', 'margin-top: 12px; margin-bottom: 12px;')
