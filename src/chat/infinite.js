@@ -209,7 +209,7 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
           chatDocument
         )
         await createIfNotExists(chatDocument)
-        // Otherwise, create the documentif necessary with a PATCH:
+        // Otherwise, create the document, if necessary, with a PATCH:
       }
       try {
         await updater.update([], sts)
