@@ -6,7 +6,7 @@
  * organizations to take some action on.
  *
  * Assumptions
- *   - Assumes that the user has a type index entry for vcard:AddressBook.
+ *   - Assumes that the user has a type index entry for vcard:AddressBook. @@ bad assuption
  *
  */
 import escape from 'escape-html'
@@ -23,7 +23,7 @@ import { solidLogicSingleton } from '../logic'
 const kb = solidLogicSingleton.store
 
 export class PeoplePicker {
-  constructor (element, typeIndex, groupPickedCb, options) {
+  constructor (element, typeIndex, groupPickedCb, options) { // @@ can't expect typeindex to be passed
     this.options = options || {}
     this.element = element
     this.typeIndex = typeIndex
