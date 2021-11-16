@@ -71,6 +71,7 @@
     @prefix ui:    &lt;http://www.w3.org/ns/ui#&gt;.
     @prefix trip:  &lt;http://www.w3.org/ns/pim/trip#&gt;.
     @prefix vcard: &lt;http://www.w3.org/2006/vcard/ns#&gt;.
+    @prefix xsd:   &lt;http://www.w3.org/2001/XMLSchema#&gt;.
     @prefix ex: &lt;#&gt;.  # Things in the examples
     @prefix : &lt;#&gt;.
 </pre>
@@ -96,6 +97,7 @@ ex:this vcard:fn "Alice" .
             <td class='output'></td>
         </tr>
 
+
         <tr>
             <td class='input'>
             <pre>
@@ -104,13 +106,159 @@ ex:this vcard:fn "Alice" .
    a ui:MultiLineTextField ;
    ui:property rdfs:comment .
 
- ex:this rdfs:comment "Alice" .
-
+ ex:this rdfs:comment "Here we made a comment" .
 </pre>
-            </td>
+             </td>
             <td class='output'></td>
-
           </tr>
+
+
+        <tr>
+            <td class='input'>
+            <pre>
+    # A simple form with one boolean field
+ ex:form
+   a ui:BooleanField ;
+   ui:property ex:allDay .
+
+ ex:this ex:allDay true .
+</pre>
+             </td>
+            <td class='output'></td>
+          </tr>
+
+          <tr>
+              <td class='input'>
+              <pre>
+      # one Tristate field
+   ex:form
+     a ui:TristateField ;
+     ui:property ex:allDay .
+
+   # ex:this ex:allDay true .
+  </pre>
+               </td>
+              <td class='output'></td>
+            </tr>
+
+            <tr>
+                <td class='input'>
+                <pre>
+        # A simple form with one integer field
+     ex:form
+       a ui:IntegerField ;
+       ui:property foaf:age .
+
+     ex:this foaf:age 6 .
+    </pre>
+                 </td>
+                <td class='output'></td>
+              </tr>
+
+              <tr>
+                  <td class='input'>
+                  <pre>
+          # A simple form with one decimal field
+       ex:form
+         a ui:DecimalField ;
+         ui:property ex:price .
+
+       ex:this ex:price 12.47 .
+      </pre>
+                   </td>
+                  <td class='output'></td>
+                </tr>
+
+                <tr>
+                    <td class='input'>
+                    <pre>
+            # A simple form with one floating point field
+         ex:form
+           a ui:FloatField ;
+           ui:property ex:weight .
+
+         ex:this ex:weight  1.56769e23 .
+        </pre>
+                     </td>
+                    <td class='output'></td>
+                  </tr>
+
+
+
+
+          <tr>
+              <td class='input'>
+              <pre>
+      # A simple form with one color field
+   ex:form
+     a ui:ColorField ;
+     ui:property ui:backgroundColor .
+
+   ex:this ui:backgroundColor "#ffccff" .
+  </pre>
+               </td>
+              <td class='output'></td>
+            </tr>
+
+            <tr>
+                <td class='input'>
+                <pre>
+        # A simple form with one date field
+     ex:form
+       a ui:DateField ;
+       ui:property cal:starts .
+
+     ex:this cal:starts "2021-10-12"^^xsd:date .
+    </pre>
+                 </td>
+                <td class='output'></td>
+              </tr>
+
+              <tr>
+                  <td class='input'>
+                  <pre>
+          # A  date-time field
+       ex:form
+         a ui:DateTimeField ;
+         ui:property cal:starts .
+
+       ex:this cal:starts "2021-10-12T12:34:23Z"^^xsd:dateTime .
+      </pre>
+                   </td>
+                  <td class='output'></td>
+                </tr>
+
+            <tr>
+                <td class='input'>
+                <pre>
+        # A simple form with one phone field
+     ex:form
+       a ui:PhoneField ;
+       ui:property vcard:hasPhone . # @@ chcek
+
+     ex:this vcard:hasEmail  &lt;tel:+1-55-555-1212&gt; .
+    </pre>
+                 </td>
+                <td class='output'></td>
+              </tr>
+
+              <tr>
+                  <td class='input'>
+                  <pre>
+          # A simple form with one email address field
+       ex:form
+         a ui:EmailField ;
+         ui:property vcard:hasEmai . # @@ chcek
+
+       ex:this vcard:hasEmail  &lt;mailto:info@example.com&gt; .
+      </pre>
+                   </td>
+                  <td class='output'></td>
+                </tr>
+
+
+
+
 
         </tbody>
     </table>
