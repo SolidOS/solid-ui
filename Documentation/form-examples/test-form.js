@@ -1,6 +1,6 @@
 /* global $rdf UI debug */
 if (!window.UI) {
-  window.alert('Please run "npm install && npm run build" in your repo root first.')
+  window.alert('Missing UI code - load mashlib first.')
 }
 window.$rdf = UI.rdf
 
