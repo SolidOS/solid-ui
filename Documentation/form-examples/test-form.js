@@ -4,7 +4,7 @@ if (!window.UI) {
 }
 window.$rdf = UI.rdf
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
   /// ///////////////////////////////////////////
 
   var kb = UI.store
@@ -12,7 +12,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   var uri = window.location.href
   var base = (window.document.title = uri.slice(0, uri.lastIndexOf('/') + 1))
-  var testDocURI = base + 'test.ttl' // imaginary doc - just use its URL
+  // var testDocURI = base + 'test.ttl' // imaginary doc - just use its URL
+  // const testDocURI = 'https://timbl.com/timbl/Public/Test/Forms/exampleData.ttl'
+  const testDocURI = 'https://solidos.solidcommunity.net/public/2021/10_example_data/example.ttl'
   var testDoc = $rdf.sym(testDocURI)
   const ex = $rdf.Namespace(testDocURI + "#")
 
@@ -55,5 +57,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   } // showResults
 
+  await kb.fetcher.load(testDoc)
   showResults()
 })
