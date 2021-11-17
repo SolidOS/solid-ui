@@ -56,7 +56,10 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
   } // showResults
-
-  await kb.fetcher.load(testDoc)
+  try {
+    await kb.fetcher.load(testDoc)
+  } catch (err) {
+    console.warn(err)
+  }
   showResults()
 })
