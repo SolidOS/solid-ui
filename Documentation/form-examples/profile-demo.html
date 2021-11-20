@@ -3,57 +3,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+   <title>Profile form demo</title>
+
     <meta name="generator"
             content="HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.17), see www.w3.org"/>
     <meta http-equiv="Content-Type" content=
             "text/html; charset=us-ascii"/>
 
-    <title>Profile form demo</title>
     <link type="text/css" rel="stylesheet" href="https://solid.github.io/mashlib/dist/mash.css"/>
-
-    <style type="text/css">
-
-        #Prolog {
-          display: none;
-        }
-        input {
-            background-color: #eef;
-            padding: 0.5em;
-            border: .5em solid white;
-            font-size: 120%;
-        }
-
-        table {
-            border-collapse: collapse;
-        }
-
-        tr.naviMenu {
-            background-color: white;
-        }
-
-        tr.naviMenu td {
-            text-align: middle;
-            vertical-align: middle;
-            padding-top: 4em;
-        }
-
-        table.tbody tr td {
-            padding: 1em;
-            border: 0.1em solid gray;
-        }
-
-        td.input {
-            border-top: 0.1em solid gray;
-            border-right: 0.1em dotted gray;
-            padding: 1em;
-        }
-
-        td.output {
-            border-top: 0.1em solid gray;
-            padding: 1em;
-        }
-    </style><!--
-    <script type="text/javascript" src="https://solid.github.io/mashlib/dist/mashlib.js"></script> -->
+    <link type="text/css" rel="stylesheet" href="../style/demo-style.css"/>
+<!-- <script type="text/javascript" src="https://solid.github.io/mashlib/dist/mashlib.js"></script> -->
     <script type="text/javascript" src="https://timbl.com/timbl/Automation/Library/Mashup/mashlib.js"></script>
     <script type="text/javascript" src="test-form.js"></script>
 </head>
@@ -66,24 +25,10 @@
 
 <div class="TabulatorOutline" id='UITestArea'></div>
 
-<h1>Pofile form demo</h1>
-<pre id='Prolog' style="display: none;">
-    @prefix foaf:  &lt;http://xmlns.com/foaf/0.1/&gt;.
-    @prefix sched: &lt;http://www.w3.org/ns/pim/schedule#&gt;.
-    @prefix cal:   &lt;http://www.w3.org/2002/12/cal/ical#&gt;.
-    @prefix dc:    &lt;http://purl.org/dc/elements/1.1/&gt;.
-    @prefix rdfs:  &lt;http://www.w3.org/2000/01/rdf-schema#&gt;.
-    @prefix ui:    &lt;http://www.w3.org/ns/ui#&gt;.
-    @prefix trip:  &lt;http://www.w3.org/ns/pim/trip#&gt;.
-    @prefix vcard: &lt;http://www.w3.org/2006/vcard/ns#&gt;.
-    @prefix xsd:   &lt;http://www.w3.org/2001/XMLSchema#&gt;.
-    @prefix ex: &lt;#&gt;.  # Things in the examples
-    @prefix : &lt;#&gt;.
-</pre>
-
+<h1>Profile form</h1>
 <div>
     <table style=
-            'border-collapse: collapse; border: 0.1em solid gray;' summary=
+            'border-collapse: collapse; border: 0.1em solid gray; margin: 1em;' summary=
             "Table of form and data values and UI outputs generated">
         <tbody>
 
@@ -94,7 +39,6 @@
             </td>
             <td class='output'></td>
         </tr>
-
 
         </tbody>
     </table>
