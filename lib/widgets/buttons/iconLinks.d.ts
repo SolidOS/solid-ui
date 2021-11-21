@@ -24,5 +24,5 @@ export declare function linkIcon(dom: HTMLDocument, subject: NamedNode, iconURI?
  * @returns The HTML widget created
  *
  */
-export declare const createLinkForURI: (dom: HTMLDocument, linkDiv: HTMLDivElement, obj: any) => void;
+export declare const createLinkForURI: (dom: HTMLDocument, linkDiv: HTMLDivElement, obj: NamedNode) => void;
 //# sourceMappingURL=iconLinks.d.ts.map
