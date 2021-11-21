@@ -801,8 +801,7 @@ function genACLText (
   g.add(a, ns.rdf('type'), auth('Authorization'), acl)
   g.add(a, auth('accessTo'), doc, acl)
   if (options.defaultForNew) {
-    // TODO: Should this be auth('default') instead?
-    g.add(a, auth('defaultForNew'), doc, acl)
+    g.add(a, auth('default'), doc, acl)
   }
   g.add(a, auth('agent'), me, acl)
   g.add(a, auth('mode'), auth('Read'), acl)
