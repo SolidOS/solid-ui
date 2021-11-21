@@ -57,12 +57,21 @@ document.addEventListener('DOMContentLoaded', async function () {
     return ele
   }
 
+  /* For loading eg ontologies from w3.org
+  */
+  function addStoHTTP (str) {
+    if (str.startsWith('http:')) {
+      return 'https:' + str.slice(5)
+    }
+    return str
+  }
+
   async function doRow (prolog, row) {
 
     async function loadTextIntoCell (cell) {
       const source = cell.getAttribute('source')
       if (!source) return
-      const response = await kb.fetcher.webOperation('GET', source, getOptions)
+      const response = await kb.fetcher.webOperation('GET', addStoHTTP(source), getOptions)
       if (!response.ok) { // if HTTP-status is 200-299
         const msg = "HTTP-Error: " + response.status
         cell.textContent = msg
