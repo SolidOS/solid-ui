@@ -62,7 +62,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     async function loadTextIntoCell (cell) {
       const source = cell.getAttribute('source')
       if (!source) return
-      form = $rdf.sym(source)
       const response = await kb.fetcher.webOperation('GET', source, getOptions)
       if (!response.ok) { // if HTTP-status is 200-299
         const msg = "HTTP-Error: " + response.status
@@ -81,7 +80,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     kb.removeMany(null, null, null, testDoc) // Remove previous test data
 
-    var form = ex('form') // By default
+
     for (var cell of row.children) {
       await loadTextIntoCell(cell)
       if (cell.getAttribute('class')) {
@@ -96,12 +95,17 @@ document.addEventListener('DOMContentLoaded', async function () {
     const outputCell = cellForClass['output']
 
     const inputText = inputCell.firstElementChild.textContent
-
+    if (inputCell.getAttribute('source')) {
+      form = $rdf.sym(inputCell.getAttribute('source'))
+    } else {
+      form = ex('form')
+    }
     if (targetCell.getAttribute('source')) {
       subject = $rdf.sym(targetCell.getAttribute('source'))
     } else {
       subject = ex('this')
     }
+
     try {
       $rdf.parse(prolog + inputText, kb, form.doc().uri, 'text/turtle') // str, kb, base, contentType
     } catch (e) {

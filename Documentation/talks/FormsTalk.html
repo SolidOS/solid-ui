@@ -20,7 +20,6 @@
 // alert("wrth")</script>
 </head>
 <body>
-<!-- @@ change W3C logos to solid logos -->
 <div class="background"><img alt="" id="head-icon"
 src="https://solidos.solidcommunity.net/profile/solidos-logo-v5.svg" />
 <object id="head-logo"
@@ -76,8 +75,18 @@ src="https://solidproject.solidcommunity.net/profile/solid-emblem.svg" /></a></o
 <h1>What would that look like?</h1>
 
 <pre>
-  @@ add a really small form with  just a set of questions - name steing, children number, enrolled date, interested boolean.
-  Forms part of the talkshould be on the web, maybe in the talk itself/examples or in other places where we have persistent curated set of examples.
+  # A simple group with two fields
+
+  ex:form a ui:Group;
+    ui:parts (ex:part1 ex:part2).
+
+        ex:part1 a ui:SingleLineTextField ;
+        ui:property vcard:fn;
+        ui:label "name" .
+
+        ex:part2 a ui:EmailField ;
+        ui:property vcard:hasEmail; # @@ chcek
+        ui:label "email" .
 </pre>
 </div>
 
@@ -136,7 +145,7 @@ src="https://solidproject.solidcommunity.net/profile/solid-emblem.svg" /></a></o
 </ul>
 
 <p>See also <a href="https://github.com/jeff-zucker/solid-ui-components/blob/main/Ontology.md">Jeff Zucker's proposals</a> for
-  components for building Apps and parts of Apps like Menus, Tabs,.</p>
+  components for building Apps and parts of Apps like Menus, Tabs, etc.</p>
 
 </div>
 
@@ -151,63 +160,20 @@ ex:form
 a ui:BooleanField ;
 ui:property ex:allDay .
 
-ex:this ex:allDay true .
-</pre>
- </td>
-<td class='output'></td>
-</tr>
-
-@@ example of turtle of form
-@@ example of ui result
-</div>
-
-<div class="slide">
-<h1>Examples of other fields</h1>
-<a href="">See demo fields</a>
-<pre>
-# A simple form with one boolean field
-ex:form
-a ui:BooleanField ;
-ui:property ex:allDay .
-
-ex:this ex:allDay true .
-</pre>
- </td>
-<td class='output'></td>
-</tr>
-
-<tr class="form-demo">
-  <td class='input'>
-  <pre>
-# one Tristate field
-ex:form
-a ui:TristateField ;
-ui:property ex:allDay .
-
-# ex:this ex:allDay true .
 </pre>
 </div>
 
 <div class="slide">
-<h1>Structures</h1>
-<p>Form componetnts which are structures combine
-  several fields</p>
+<h1>Examples of other form fields</h1>
+
+<ol>
+  <li><a target="demo" href="../form-examples/demo.html">Examples of individual Form Fields</a></li>
+  <li><a target="demo" href="../form-examples/structures.html">Examples of structues in forms</a></li>
+  <li><a target="demo" href="../form-examples/profile-demo.html">Examples of a Solid profile edting form</a></li>
+</ol>
+
 </div>
 
-<div class="slide">
-<h1>Group</h1>
-<p>A group is just set of components in order</p>
-@@ example, of form data and UI
-</div>
-
-<div class="slide">
-<h1>@@ Add examples for other structures</h1>
-</div>
-
-<div class="slide">
-<h1>Example: A contact card form</h1>
-@@ on the left the form data, on the right the form rendred
-</div>
 
 <div class="slide">
 <h1>Code: Render a form</h1>
@@ -258,11 +224,6 @@ ui:property ex:allDay .
   </tr>
 </table>
 
-</div>
-
-<div class="slide">
-<h1>Example: The profile editing form</h1>
-<p>@@</p>
 </div>
 
 <div class="slide">

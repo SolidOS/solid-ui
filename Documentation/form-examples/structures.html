@@ -13,7 +13,7 @@
 
     <link type="text/css" rel="stylesheet" href="../style/demo-style.css"/>
 
-    <script type="text/javascript" src="https://solid.github.io/mashlib/dist/mashlib.js"></script> -->
+  <!--   <script type="text/javascript" src="https://solid.github.io/mashlib/dist/mashlib.js"></script> -->
     <script type="text/javascript" src="https://timbl.com/timbl/Automation/Library/Mashup/mashlib.js"></script>
     <script type="text/javascript" src="test-form.js"></script>
 </head>
@@ -49,8 +49,7 @@
 
         <tr class="form-demo">
             <td class='input'>
-            <pre>
-   # A simple group with two fields
+            <pre># A simple group with two fields
 
 ex:form a ui:Group;
   ui:parts (ex:part1 ex:part2).
@@ -62,13 +61,10 @@ ex:form a ui:Group;
       ex:part2 a ui:EmailField ;
       ui:property vcard:hasEmail; # @@ chcek
       ui:label "email" .
-
-
-ex:this vcard:fn "Alice";
-   vcard:hasEmail  &lt;mailto:alice@example.com&gt; .
 </pre>
             </td>
-            <td class='target'></td> <td class='output'></td>
+            <td class='target'><pre>ex:this vcard:fn "Alice";
+               vcard:hasEmail  &lt;mailto:alice@example.com&gt; .</pre></td> <td class='output'></td>
         </tr>
 
 
@@ -76,7 +72,7 @@ ex:this vcard:fn "Alice";
         <tr class="form-demo">
             <td class='input'>
             <pre>
-   # A group with two fields and a nested subgroup
+# A group with two fields and a nested subgroup
 
 :form a ui:Group;
   ui:parts (:nameField :emailField :addresses) .
@@ -128,7 +124,9 @@ ex:this vcard:fn "Alice";
           ui:property vcard:country-name ;
           ui:size "40" .
 
-##### Data:
+</pre>
+            </td>
+            <td class='target'><pre>##### Data:
 
 :this vcard:fn "Alice";
    vcard:hasEmail  &lt;mailto:alice@example.com&gt;  ;
@@ -140,9 +138,7 @@ ex:this vcard:fn "Alice";
          vcard:street-address "101 Autumn Ave";
          vcard:country-name "USA"
       ] .
-</pre>
-            </td>
-            <td class='target'></td> <td class='output'></td>
+</pre></td> <td class='output'></td>
         </tr>
 
 
