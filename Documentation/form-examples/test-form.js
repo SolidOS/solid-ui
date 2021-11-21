@@ -39,7 +39,8 @@ document.addEventListener('DOMContentLoaded', async function () {
   @prefix : <#>.
 `
 
-  var div = dom.getElementById('UITestArea')
+  // var div = dom.getElementById('UITestArea')
+
   const getOptions = {
     credentials: 'omit', withCredentials: false
   }
@@ -57,43 +58,69 @@ document.addEventListener('DOMContentLoaded', async function () {
   }
 
   async function doRow (prolog, row) {
-    kb.removeMany(null, null, null, testDoc) // Remove previous test data
-    var text, subject
 
-    var form = ex('form') // By default
-
-    const inputCell = row.firstElementChild
-    if (inputCell.getAttribute('source')) {
-      const source = inputCell.getAttribute('source')
+    async function loadTextIntoCell (cell) {
+      const source = cell.getAttribute('source')
+      if (!source) return
       form = $rdf.sym(source)
       const response = await kb.fetcher.webOperation('GET', source, getOptions)
-      if (response.ok) { // if HTTP-status is 200-299
-        text = response.responseText;
-      } else {
+      if (!response.ok) { // if HTTP-status is 200-299
         const msg = "HTTP-Error: " + response.status
-        output(row).textContent = msg
+        cell.textContent = msg
+        cell.style.backgroundColor = '#fee'
         alert(msg);
+        return
       }
+      const text = response.responseText;
       const pre = dom.createElement('pre')
-      row.firstElementChild.appendChild(pre)
+      cell.appendChild(pre)
       pre.textContent = text
-    } else {
-      text = inputCell.firstElementChild.textContent
     }
 
-    if (inputCell.getAttribute('subject')) {
-      subject = $rdf.sym(inputCell.getAttribute('subject'))
+    const cellForClass = []
+
+    kb.removeMany(null, null, null, testDoc) // Remove previous test data
+
+    var form = ex('form') // By default
+    for (var cell of row.children) {
+      await loadTextIntoCell(cell)
+      if (cell.getAttribute('class')) {
+        for (const c of cell.getAttribute('class').split(' ')) {
+          cellForClass[c] = cell
+          console.log('   cellForClass: ' + c)
+        }
+      }
+    }
+    const inputCell = cellForClass['input']
+    const targetCell  = cellForClass['target']
+    const outputCell = cellForClass['output']
+
+    const inputText = inputCell.firstElementChild.textContent
+
+    if (targetCell.getAttribute('source')) {
+      subject = $rdf.sym(targetCell.getAttribute('source'))
     } else {
       subject = ex('this')
     }
     try {
-      $rdf.parse(prolog + text, kb, form.doc().uri, 'text/turtle') // str, kb, base, contentType
+      $rdf.parse(prolog + inputText, kb, form.doc().uri, 'text/turtle') // str, kb, base, contentType
     } catch (e) {
-      output(row).textContent = e
-      console.log('>>>>>>>' + prolog + text + '<<<<<<\n')
+      outputCell.textContent = e
+      console.log('>>>>>>>' + prolog + inputText + '<<<<<<\n')
       return
     }
-    renderForm(form, subject, output(row))
+
+    if (true) {
+      const subjectText = targetCell.firstElementChild.textContent
+      try {
+        $rdf.parse(prolog + subjectText, kb, subject.doc().uri, 'text/turtle') // str, kb, base, contentType
+      } catch (e) {
+        outputCell.textContent = e
+        console.log('>>>>>>>' + prolog + subjectText + '<<<<<<\n')
+        return
+      }
+    }
+    renderForm(form, subject, outputCell)
   }
   async function showResults () {
     var prologEle = dom.getElementById('Prolog')

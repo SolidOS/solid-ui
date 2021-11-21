@@ -45,180 +45,171 @@
     <table style=
             'border-collapse: collapse; border: 0.1em solid gray;' summary=
             "Table of input data values and UI outputs generated">
-        <tbody id='TestData'>
+        <tbody>
 
         <tr class="form-demo">
             <td class='input'>
-            <pre>
-   # A simple form with one text field
-ex:form
-  a ui:SingleLineTextField ;
-  ui:property vcard:fn;
-  ui:label "name" .
+                <pre># A simple form with one text field
 
-ex:this vcard:fn "Alice" .
+ex:form
+    a ui:SingleLineTextField; ui:label "name";
+    ui:property vcard:fn .
 </pre>
-            </td>
-            <td class='output'></td>
+         </td>
+         <td class='target'>
+            <pre>
+ex:this vcard:fn  "Alice" .
+</pre>
+    </td>
+             <td class='output'></td>
         </tr>
 
 
         <tr class="form-demo">
             <td class='input'>
             <pre>
-    # A simple form with one text field
- ex:form
+# A simple form with one text field
+
+ex:form
    a ui:MultiLineTextField ;
    ui:property rdfs:comment .
-
- ex:this rdfs:comment "Here we made a comment" .
 </pre>
              </td>
-            <td class='output'></td>
+             <td class='target'>
+                <pre>
+ex:this rdfs:comment "Here we made a comment" .
+          </pre>
+        </td>
+ <td class='output'></td>
           </tr>
 
 
         <tr class="form-demo">
             <td class='input'>
-            <pre>
-    # A simple form with one boolean field
+            <pre># A simple form with one boolean field
+
  ex:form
    a ui:BooleanField ;
    ui:property ex:allDay .
-
- ex:this ex:allDay true .
 </pre>
              </td>
-            <td class='output'></td>
+            <td class='target'><pre>
+ex:this ex:allDay true .
+</pre>
+            </td> <td class='output'></td>
           </tr>
 
           <tr class="form-demo">
               <td class='input'>
-              <pre>
-      # one Tristate field
-   ex:form
+              <pre># one Tristate field
+
+ex:form
      a ui:TristateField ;
      ui:property ex:allDay .
-
-   # ex:this ex:allDay true .
   </pre>
                </td>
-              <td class='output'></td>
+              <td class='target'><pre>
+# Commented oout so there is no value true or false:
+# ex:this ex:allDay true .</pre></td> <td class='output'></td>
             </tr>
 
             <tr class="form-demo">
                 <td class='input'>
-                <pre>
-        # A simple form with one integer field
-     ex:form
-       a ui:IntegerField ;
-       ui:property foaf:age .
+                <pre># A simple form with one integer field
 
-     ex:this foaf:age 6 .
-    </pre>
+ ex:form
+   a ui:IntegerField ;
+   ui:property foaf:age .
+</pre>
                  </td>
-                <td class='output'></td>
+                <td class='target'><pre>ex:this foaf:age 6 .</pre></td> <td class='output'></td>
               </tr>
 
               <tr class="form-demo">
                   <td class='input'>
-                  <pre>
-          # A simple form with one decimal field
-       ex:form
-         a ui:DecimalField ;
-         ui:property ex:price .
+                  <pre># A simple form with one decimal field
 
-       ex:this ex:price 12.47 .
-      </pre>
+ ex:form
+   a ui:DecimalField ;
+   ui:property ex:price .
+</pre>
                    </td>
-                  <td class='output'></td>
+                  <td class='target'><pre>ex:this ex:price 12.47 .</pre></td> <td class='output'></td>
                 </tr>
 
                 <tr class="form-demo">
                     <td class='input'>
                     <pre>
-            # A simple form with one floating point field
-         ex:form
-           a ui:FloatField ;
-           ui:property ex:weight .
+# A simple form with one floating point field
 
-         ex:this ex:weight  1.56769e23 .
+ex:form
+   a ui:FloatField ;
+   ui:property ex:weight .
         </pre>
                      </td>
-                    <td class='output'></td>
+                    <td class='target'><pre> ex:this ex:weight  1.56769e23 .</pre></td> <td class='output'></td>
                   </tr>
-
-
-
 
           <tr class="form-demo">
               <td class='input'>
               <pre>
-      # A simple form with one color field
-   ex:form
-     a ui:ColorField ;
-     ui:property ui:backgroundColor .
-
-   ex:this ui:backgroundColor "#ffccff" .
+    # A simple form with one color field
+ ex:form
+   a ui:ColorField ;
+   ui:property ui:backgroundColor .
   </pre>
                </td>
-              <td class='output'></td>
+              <td class='target'><pre>ex:this ui:backgroundColor "#ffccff" .</pre></td> <td class='output'></td>
             </tr>
 
             <tr class="form-demo">
                 <td class='input'>
-                <pre>
-        # A simple form with one date field
-     ex:form
-       a ui:DateField ;
-       ui:property cal:starts .
+                <pre># A simple form with one date field
 
-     ex:this cal:starts "2021-10-12"^^xsd:date .
+ex:form
+   a ui:DateField;
+   ui:property cal:starts .
     </pre>
                  </td>
-                <td class='output'></td>
+                <td class='target'><pre>ex:this cal:starts "2021-10-12"^^xsd:date .</pre></td> <td class='output'></td>
               </tr>
 
               <tr class="form-demo">
                   <td class='input'>
                   <pre>
-          # A  date-time field
-       ex:form
-         a ui:DateTimeField ;
-         ui:property cal:starts .
-
-       ex:this cal:starts "2021-10-12T12:34:23Z"^^xsd:dateTime .
-      </pre>
+# A  date-time field
+ ex:form
+     a ui:DateTimeField ;
+     ui:property cal:starts .
+</pre>
                    </td>
-                  <td class='output'></td>
+                  <td class='target'><pre> ex:this cal:starts "2021-10-12T12:34:23Z"^^xsd:dateTime .</pre></td> <td class='output'></td>
                 </tr>
 
             <tr class="form-demo">
                 <td class='input'>
                 <pre>
-        # A simple form with one phone field
-     ex:form
-       a ui:PhoneField ;
-       ui:property vcard:hasPhone . # @@ chcek
+  # A simple form with one phone field
 
-     ex:this vcard:hasEmail  &lt;tel:+1-55-555-1212&gt; .
+ex:form
+   a ui:PhoneField ;
+   ui:property vcard:hasPhone . # @@ check
     </pre>
                  </td>
-                <td class='output'></td>
+                <td class='target'><pre>ex:this vcard:hasPhone  &lt;tel:+1-55-555-1212&gt; .</pre></td> <td class='output'></td>
               </tr>
 
               <tr class="form-demo">
                   <td class='input'>
                   <pre>
-          # A simple form with one email address field
-       ex:form
-         a ui:EmailField ;
-         ui:property vcard:hasEmai . # @@ chcek
+    # A simple form with one email address field
 
-       ex:this vcard:hasEmail  &lt;mailto:info@example.com&gt; .
-      </pre>
+ex:form
+   a ui:EmailField ;
+   ui:property vcard:hasEmail . # @@ chcek
+</pre>
                    </td>
-                  <td class='output'></td>
+                  <td class='target'><pre>ex:this vcard:hasEmail  &lt;mailto:info@example.com&gt; .</pre></td> <td class='output'></td>
                 </tr>
 
 

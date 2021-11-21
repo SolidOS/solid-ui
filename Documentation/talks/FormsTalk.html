@@ -135,7 +135,8 @@ src="https://solidproject.solidcommunity.net/profile/solid-emblem.svg" /></a></o
   </li>
 </ul>
 
-<p>See also <a href="https://github.com/jeff-zucker/solid-ui-components">Jeff Zucker's proposals</a> for components for building Apps.</p>
+<p>See also <a href="https://github.com/jeff-zucker/solid-ui-components/blob/main/Ontology.md">Jeff Zucker's proposals</a> for
+  components for building Apps and parts of Apps like Menus, Tabs,.</p>
 
 </div>
 
@@ -143,7 +144,19 @@ src="https://solidproject.solidcommunity.net/profile/solid-emblem.svg" /></a></o
 <h1>Single Line Text field</h1>
 <p>Form fields are set up to write linked data into Solid pods.</p>
 <p>Each one adds (typically) a new edge to the data graph at run time</p>
-<p>So e give the predicate which will be used in the instance of the field.</p>
+<p>So We give the predicate which will be used in the instance of the field.</p>
+<pre>
+# A simple form with one boolean field
+ex:form
+a ui:BooleanField ;
+ui:property ex:allDay .
+
+ex:this ex:allDay true .
+</pre>
+ </td>
+<td class='output'></td>
+</tr>
+
 @@ example of turtle of form
 @@ example of ui result
 </div>
@@ -151,6 +164,28 @@ src="https://solidproject.solidcommunity.net/profile/solid-emblem.svg" /></a></o
 <div class="slide">
 <h1>Examples of other fields</h1>
 <a href="">See demo fields</a>
+<pre>
+# A simple form with one boolean field
+ex:form
+a ui:BooleanField ;
+ui:property ex:allDay .
+
+ex:this ex:allDay true .
+</pre>
+ </td>
+<td class='output'></td>
+</tr>
+
+<tr class="form-demo">
+  <td class='input'>
+  <pre>
+# one Tristate field
+ex:form
+a ui:TristateField ;
+ui:property ex:allDay .
+
+# ex:this ex:allDay true .
+</pre>
 </div>
 
 <div class="slide">
