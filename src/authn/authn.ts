@@ -1471,7 +1471,7 @@ export function selectWorkspace (
         tr.appendChild(col1)
       }
       col2 = dom.createElement('td')
-      style = solidLogicSingleton.store.anyValue(ws, ns.ui('style') as any)
+      style = solidLogicSingleton.store.anyValue(ws, ns.ui('style'))
       if (!style) {
         // Otherwise make up arbitrary colour
         const hash = function (x) {
