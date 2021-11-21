@@ -1,0 +1,15 @@
+    @prefix foaf:  <http://xmlns.com/foaf/0.1/>.
+    @prefix sched: <http://www.w3.org/ns/pim/schedule#>.
+    @prefix ical:  <http://www.w3.org/2002/12/cal/icaltzd#>.
+    @prefix dc:    <http://purl.org/dc/elements/1.1/>.
+    @prefix ui:    <http://www.w3.org/ns/ui#>.
+    
+ #    :event1 dc:author :a0; 
+ #       sched:YesNoMaybe;
+ #    :a0 foaf:name "Zoe".
+ #    :a1 foaf:name "Alice".
+ #    :a2 foaf:name "Bob".
+ #    
+ #    sched:Yes ui:backgroundColor "#efe".
+ #    sched:No  ui:backgroundColor "#fee".
+ #    sched:Maybe ui:backgroundColor "#ffe".

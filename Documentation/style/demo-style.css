@@ -1,0 +1,42 @@
+        input {
+            background-color: #eef;
+            padding: 0.5em;
+            border: .5em solid white;
+            font-size: 120%;
+        }
+
+        table {
+
+            border-collapse: collapse;
+            border: 0.1em solid gray;
+            margin: 1em;
+
+        }
+
+        tr.naviMenu {
+            background-color: white;
+        }
+
+        tr.naviMenu td {
+            text-align: middle;
+            vertical-align: middle;
+            padding-top: 4em;
+        }
+
+        table tbody tr td {
+            padding: 1em;
+            border: 0.1em solid gray;
+        }
+
+        td.input {
+            border-top: 0.1em solid gray;
+            border-right: 0.1em dotted gray;
+            padding: 1em;
+        }
+
+        td.output {
+            border-top: 0.1em solid gray;
+            padding: 1em;
+        }
+
+         td.input pre { padding: 0.5em;}

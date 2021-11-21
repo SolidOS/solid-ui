@@ -1,0 +1,262 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-US" xmlns="http://www.w3.org/1999/xhtml">
+<!-- https://www.w3.org/Talks/Tools/Slidy2/index.html -->
+<head>
+<title>Linked Data Forms</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="copyright" content=
+"Copyright Tim BL" />
+<meta name="duration" content="5" />
+<meta name="font-size-adjustment" content="-2" />
+<link rel="stylesheet" href="https://www.w3.org/Talks/Tools/Slidy2/styles/slidy.css" type="text/css" />
+<!--
+<link rel="stylesheet" href="https://www.w3.org/Talks/Tools/Slidy2/styles/w3c-blue.css" type="text/css" />
+-->
+<link rel="stylesheet" href="../style/solid-purple.css" type="text/css" />
+<script src="https://www.w3.org/Talks/Tools/Slidy2/scripts/slidy.js" charset="utf-8" type="text/javascript">
+</script>
+<script>
+// alert("wrth")</script>
+</head>
+<body>
+<div class="background"><img alt="" id="head-icon"
+src="https://solidos.solidcommunity.net/profile/solidos-logo-v5.svg" />
+<object id="head-logo"
+data="graphics/w3c-logo-white.svg" type="image/svg+xml"
+title="Solid logo"><a href="http://www.w3.org/"><img
+alt="Solid logo" id="head-logo-fallback"
+src="https://solidproject.solidcommunity.net/profile/solid-emblem.svg" /></a></object></div>
+
+<div class="background slanty">
+<img src="https://www.w3.org/Talks/Tools/Slidy2/graphics/w3c-logo-slanted.jpg" alt="slanted W3C logo" />
+</div>
+<div class="slide cover title">
+  <!-- hidden style graphics to ensure they are saved with other content -->
+  <img class="hidden" src="https://www.w3.org/Talks/Tools/Slidy2/graphics/bullet.png" alt="" />
+  <img class="hidden" src="https://www.w3.org/Talks/Tools/Slidy2/graphics/fold.gif" alt="" />
+  <img class="hidden" src="https://www.w3.org/Talks/Tools/Slidy2/graphics/unfold.gif" alt="" />
+  <img class="hidden" src="https://www.w3.org/Talks/Tools/Slidy2/graphics/fold-dim.gif" alt="" />
+  <img class="hidden" src="https://www.w3.org/Talks/Tools/Slidy2/graphics/nofold-dim.gif" alt="" />
+  <img class="hidden" src="https://www.w3.org/Talks/Tools/Slidy2/graphics/unfold-dim.gif" alt="" />
+  <img class="hidden" src="https://www.w3.org/Talks/Tools/Slidy2/graphics/bullet-fold.gif" alt="" />
+  <img class="hidden" src="https://www.w3.org/Talks/Tools/Slidy2/graphics/bullet-unfold.gif" alt="" />
+  <img class="hidden" src="https://www.w3.org/Talks/Tools/Slidy2/graphics/bullet-fold-dim.gif" alt="" />
+  <img class="hidden" src="https://www.w3.org/Talks/Tools/Slidy2/graphics/bullet-nofold-dim.gif" alt="" />
+  <img class="hidden" src="https://www.w3.org/Talks/Tools/Slidy2/graphics/bullet-unfold-dim.gif" alt="" />
+<!--
+<img src="https://www.w3.org/Talks/Tools/Slidy2/graphics/keys2.jpg" alt="Cover page images (keys)"
+ class="cover" />
+-->
+ <br clear="all" />
+<h1>Declarative User Interface: Forms and Apps in RDF</h1>
+
+<p><a href="http://www.w3.org/People/Berner-Lee/card£i/\">Tim BL</a>,
+&lt;<a href="mailto:timbl@w3.org">timbl@w3.org</a>&gt;<br />
+<br />
+<br />
+<br />
+<br /><em>Hit the space bar or swipe left for next slide</em></p>
+</div>
+
+<div class="slide">
+<h1>Declarative User Interface: Forms and Apps in RDF</h1>
+
+<ul>
+<li>Declaratve design is good.</li>
+<li>Compose apps and parts of apps out of <b>components</b></li>
+<li>High-level design allows <b>multiple</b> compaitible implementations</li>
+<li>In Solid, data is in Linked Data graphs</li>
+<li>Why not use that for User Interface?</li>
+</ul>
+</div>
+
+<div class="slide">
+<h1>What would that look like?</h1>
+
+<pre>
+  # A simple group with two fields
+
+  ex:form a ui:Group;
+    ui:parts (ex:part1 ex:part2).
+
+        ex:part1 a ui:SingleLineTextField ;
+        ui:property vcard:fn;
+        ui:label "name" .
+
+        ex:part2 a ui:EmailField ;
+        ui:property vcard:hasEmail;
+        ui:label "email" .
+</pre>
+</div>
+
+
+<div class="slide">
+<h1>Components are form Fields or structures</h1>
+<h3>Fields<h3>
+<ul>
+  <li>BooleanField
+  </li>
+  <li>TriStateField
+  </li>
+  <li>IntegerField
+  </li>
+  <li>DecimalField
+  </li>
+  <li>FloatField</li>
+
+</ul><ul>
+
+  <li>ColorField
+  </li>
+  <li>DateField
+  </li>
+  <li>DateTimeField
+  </li>
+  <li>PhoneField
+  </li>
+  <li>EmailField
+  </li>
+  <li>SingleLineTextField
+  </li>
+  <li>MultiLineTextField
+  </li>
+  <li>Autocomplete</li>
+</ul>
+<h3>Structures<h3>
+<ul>
+  <li>Group
+  </li>
+  <li>Choice
+  </li>
+  <li>Multiple
+  </li>
+  <li>Classifier
+  </li>
+  <li>Options
+  </li>
+</ul>
+<h3>Documentation components<h3>
+<ul>
+  <li>Heading
+  </li>
+  <li>Comment
+  </li>
+</ul>
+
+<p>See also <a href="https://github.com/jeff-zucker/solid-ui-components/blob/main/Ontology.md">Jeff Zucker's proposals</a> for
+  components for building Apps and parts of Apps like Menus, Tabs, etc.</p>
+
+</div>
+
+<div class="slide">
+<h1>Single Line Text field</h1>
+<p>Form fields are set up to write linked data into Solid pods.</p>
+<p>Each one adds (typically) a new edge to the data graph at run time</p>
+<p>So We give the predicate which will be used in the instance of the field.</p>
+<pre>
+# A simple form with one boolean field
+ex:form
+a ui:BooleanField ;
+ui:property ex:allDay .
+
+</pre>
+</div>
+
+<div class="slide">
+<h1>Examples of other form fields</h1>
+
+<ol>
+  <li><a target="demo" href="../form-examples/demo.html">Examples of individual Form Fields</a></li>
+  <li><a target="demo" href="../form-examples/structures.html">Examples of structues in forms</a></li>
+  <li><a target="demo" href="../form-examples/profile-demo.html">Examples of a Solid profile edting form</a></li>
+  <li><a target="demo" href="../form-examples/edit-form.html">Editing a simple form using the Form Form</a></li>
+  <li><a target="demo" href="../form-examples/edit-form-form.html">Editing the Form Form</a></li>
+</ol>
+
+</div>
+
+
+<div class="slide">
+<h1>Code: Render a form</h1>
+<p>To put a form in your UI</p>
+<pre>UI.widgets.appendForm(dom, container, {}, subject, form, doc, callback)
+  </pre>
+
+  <table class="parameters">
+  <tr>
+    <td>dom</td>
+
+    <td>is the DOM HTMLDocument object, a/k/a document</td>
+  </tr>
+
+  <tr>
+    <td>container</td>
+
+    <td>is a DOM element to contain the form</td>
+  </tr>
+
+  <tr>
+    <td>{}</td>
+
+    <td>are unused at present</td>
+  </tr>
+
+  <tr>
+    <td>subject</td>
+    <td>is the RDF thing about which data will be stored</td>
+  </tr>
+  <tr>
+    <td>form</td>
+    <td>is the RDF object in the store for the form</td>
+  </tr>
+  <tr>
+    <td>doc</td>
+    <td>
+      is the RDF document on the web where the data will be stored. Often,
+      <tt>subject.doc()</tt>
+    </td>
+  </tr>
+  <tr>
+    <td>callback</td>
+    <td>
+      is a function taking an error flag and a message (if the error flag is
+      true)
+    </td>
+  </tr>
+</table>
+
+</div>
+
+<div class="slide">
+<h1>Going meta -- designing forms using the form of forms 1</h1>
+<p>Here is a form for editing a form</p>
+<p>Users and developers should be able to design and adapt their forms</p>
+<img src="form-ecosystem.drawio.svg"/>
+</div>
+
+<p>The Form Form</p>
+<div class="slide">
+<h1>Going meta -- Editing forms using the form of forms 2</h1>
+<p>Here we are editing the really small form we started with.</p>
+<ul>
+  <li><a target="demo" href="../form-examples/edit-form.html">Editing a simple form using the Form Form</a></li>
+</ul>
+<p>Here we edit the FormForm with itself.</p>
+<ul>
+  <li><a target="demo" href="../form-examples/edit-form-form.html">Editing the Form Form</a></li>
+</ul>
+
+</div>
+
+<div class="slide">
+<h1>Questions?</h1>
+</div>
+<div class="slide">
+<h1>The Autocomplete field</h1>
+<p>This form field allows users to select things from lists in public databases, things like Languages, Organizations, Occupations, and Skills</p>
+<p>This is not covered in this talk.</p>
+<p>(There is a blog <a href="https://solidos.solidcommunity.net/public/2021/01%20Building%20Solid%20Apps%20which%20use%20Public%20Data.html">
+</i>Building Solid Apps which use Public Data</i></a>,
+  about this which I could run though for those interested)</p>
+</div>
