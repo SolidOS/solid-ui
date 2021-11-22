@@ -1295,11 +1295,8 @@ export function makeSelectForOptions (
         predicate +
         '.'
     )
-  }/* See https://github.com/solid/solid-ui/issues/453
-  if (options.mint && !options.subForm) {
-    return errorMessageBlock(dom, "Selector: can't mint new with no subform.")
   }
-  */
+
   log.debug('makeSelectForOptions: dataDoc=' + dataDoc)
   let actual
   const getActual = function () {
