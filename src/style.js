@@ -13,7 +13,7 @@ const formFieldNameBoxWidth = '8em' // The fixed amount to get form fields to li
 export const style = { // styleModule
 
   checkboxStyle: 'colour: black; font-size: 100%; padding-left: 0.5 em; padding-right: 0.5 em;',
-  checkboxInputStyle: 'font-size: 150%; height: 1.2em; width: 1.2em; background-color: #eef; margin: 0.1em',
+  checkboxInputStyle: 'font-size: 150%; height: 1.2em; width: 1.2em; background-color: #eef; border-radius:0.2em; margin: 0.1em',
 
   fieldLabelStyle: 'color: #3B5998; text-decoration: none;',
   formSelectSTyle:

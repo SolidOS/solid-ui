@@ -1,7 +1,7 @@
 import { st, BlankNode, Literal, Node, NamedNode, Variable, Store } from 'rdflib'
 import { solidLogicSingleton } from '../../logic'
 import * as ns from '../../ns'
-import { textInputStyle, textInputStyleUneditable, formFieldNameBoxWidth, formFieldNameBoxStyle } from '../../style'
+import { textInputSize, textInputStyle, textInputStyleUneditable, formFieldNameBoxWidth, formFieldNameBoxStyle } from '../../style'
 import { label } from '../../utils'
 import { errorMessageBlock } from '../error'
 import { mostSpecificClassURI } from './fieldFunction'
@@ -127,13 +127,14 @@ export function basicField (
   const uri = mostSpecificClassURI(form)
   let params = fieldParams[uri]
   if (params === undefined) params = { style: '' } // non-bottom field types can do this
-  const style = textInputStyle + params.style
+  const paramStyle = params.style || ''
+  const style = textInputStyle + paramStyle
   const field = dom.createElement('input')
   ;(field as any).style = style
   rhs.appendChild(field)
   field.setAttribute('type', params.type ? params.type : 'text')
 
-  const size = kb.anyJS(form, ns.ui('size')) || style.textInputSize || 20
+  const size = kb.anyJS(form, ns.ui('size')) || textInputSize || 20
   field.setAttribute('size', size)
 
   const maxLength = kb.any(form, ns.ui('maxLength'))
@@ -159,7 +160,7 @@ export function basicField (
   }
   if (!kb.updater.editable((doc as NamedNode).uri)) {
     field.readOnly = true // was: disabled. readOnly is better
-    ;(field as any).style = textInputStyleUneditable + params.style
+    ;(field as any).style = textInputStyleUneditable + paramStyle
     // backgroundColor = textInputBackgroundColorUneditable
     if (suppressEmptyUneditable && field.value === '') {
       box.style.display = 'none' // clutter
