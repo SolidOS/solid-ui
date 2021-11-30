@@ -120,28 +120,16 @@ export function basicField (
     )
   }
   const rhs = renderNameValuePair(dom, kb, box, form)
-  /*
-  box.style.display = 'flex'
-  box.style.flexDirection = 'row'
-  const lhs = box.appendChild(dom.createElement('div'))
-  lhs.style.width = formFieldNameBoxWidth
-  const rhs = box.appendChild(dom.createElement('div'))
-  lhs.appendChild(fieldLabel(dom, property as NamedNode, form))
-  lhs.setAttribute('class', 'formFieldName')
-  lhs.setAttribute('style', formFieldNameBoxStyle)
-  rhs.setAttribute('class', 'formFieldValue')
-  */
 
   // It can be cleaner to just remove empty fields if you can't edit them anyway
   const suppressEmptyUneditable = kb.anyJS(form, ns.ui('suppressEmptyUneditable'), null, formDoc)
 
   const uri = mostSpecificClassURI(form)
   let params = fieldParams[uri]
-  if (params === undefined) params = {} // non-bottom field types can do this
-  const style = params.style || textInputStyle
-  // box.appendChild(dom.createTextNode(' uri='+uri+', pattern='+ params.pattern))
+  if (params === undefined) params = { style: '' } // non-bottom field types can do this
+  const style = textInputStyle + params.style
   const field = dom.createElement('input')
-  ;(field as any).style = textInputStyle // Do we have to override length etc?
+  ;(field as any).style = style
   rhs.appendChild(field)
   field.setAttribute('type', params.type ? params.type : 'text')
 
@@ -171,7 +159,7 @@ export function basicField (
   }
   if (!kb.updater.editable((doc as NamedNode).uri)) {
     field.readOnly = true // was: disabled. readOnly is better
-    ;(field as any).style = textInputStyleUneditable
+    ;(field as any).style = textInputStyleUneditable + params.style
     // backgroundColor = textInputBackgroundColorUneditable
     if (suppressEmptyUneditable && field.value === '') {
       box.style.display = 'none' // clutter
