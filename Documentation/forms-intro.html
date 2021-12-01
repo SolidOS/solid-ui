@@ -242,20 +242,17 @@
     <table class="properties">
       <tr>
         <td>label</td>
-
         <td>String</td>
-
         <td>
           A label for the form field. This is the prompt for the user, e.g.,
-          "Name", "Employer".
+          "Name", "Employer".  If the label is not given in the form, the
+          system will make one from a label of the property in the ontology.
         </td>
       </tr>
 
       <tr>
         <td>property</td>
-
         <td>rdf:Property</td>
-
         <td>
           When the user enters the data, it is stored in the web as a triple
           with this property as its predicate.
@@ -264,14 +261,23 @@
 
       <tr>
         <td>default</td>
-
         <td>[according to field type] Optional</td>
-
         <td>
           The input control is set to this value by default. It is easiest for
           the user to enter this value. (This value is <b>not</b> automatically
           stored by the form system if the user does not select or enter it in
           some way.
+        </td>
+      </tr>
+
+      <tr>
+        <td>suppressEmptyUneditable</td>
+        <td>Boolean</td>
+        <td>
+          Setting this flag (on a single form field not a structure) means that when the user is just reading the data, not
+          editing it, the fields with blank data will be removed completely.
+          This avoid things like a blank field for a region in an address hen there isn't one given.
+          This can make the UX much cleaner.  Defaults to false.
         </td>
       </tr>
     </table>
@@ -650,7 +656,16 @@
 
         <td>The text content of the heading</td>
       </tr>
+      <tr>
+        <td>suppressIfUneditable</td>
+        <td>Boolean</td>
+        <td>If data is uneditable,ie read-only mode, hide this comment</td>
+      </tr>
     </table>
+
+<p>The <tt>suppressIfUneditable</tt> flag allow you to make a form which
+  is much cleaner and simpler when the user is just reading information,
+  not editing it.</p>
 
     <h4 class="class">Comment</h4>
 
@@ -664,11 +679,16 @@
         <td>contents</td>
 
         <td>String</td>
-
         <td>
           The text content of the comment. (This should be displayed by form
           systems as <tt>pre-wrap</tt> mode.)
         </td>
+        <tr>
+          <td>suppressIfUneditable</td>
+          <td>Boolean</td>
+          <td>If data is uneditable,ie read-only mode, hide this comment</td>
+        </tr>
+
       </tr>
     </table>
 
