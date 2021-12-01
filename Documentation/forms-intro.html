@@ -93,9 +93,11 @@
       }
       table.parameters {
         background-color: #dddddd;
+        margin-left: 4em;
       } /*  background-color: #ddddff; */
       table.properties {
         background-color: #ddddff;
+        margin-left: 4em;
       } /*  background-color: #ddddff; */
       td {
         padding: 0.5em;
@@ -399,6 +401,24 @@
       the same as for Form.
     </p>
 
+    <table class="properties">
+      <tr>
+        <td>weight</td>
+
+        <td>xsd:integer</td>
+        <td>0:lighter than normal, 1: Normal, 2,3: heavier than normal</td>
+      </tr>
+      <tr>
+        <td>parts</td>
+        <td>rdf:Collection</td>
+        <td>
+          The form fields, forms, in the group
+        </td>
+      </tr>
+    </table>
+
+
+
     <h4 class="class">Choice</h4>
 
     <p>The user choses an item from a class.</p>
@@ -425,9 +445,7 @@
 
       <tr>
         <td>canMintNew</td>
-
         <td>xsd:Boolean</td>
-
         <td>
           If the user doesn't find the thing they want, can they introduce an
           item of that class by filling in a form about it? [Boolean]
@@ -435,8 +453,8 @@
       </tr>
     </table>
 
-    If a new thing is minted, that will be done with a form which is a
-    <tt>ui:creationForm</tt> for the class.
+    <p>If a new thing is minted, that will be done with a form which is a
+    <tt>ui:creationForm</tt> for the class.</p>
 
     <h4 class="class">Multiple</h4>
 
@@ -454,6 +472,37 @@
       form. It is the field, or the address, and so on.
     </p>
 
+
+    <table class="properties">
+      <tr>
+        <td>ordered</td>
+        <td>Boolean</td>
+        <td>If true, the user has an ordered array of things, and the data is in an RDF collection.
+          If false, the UI is irrelevant and the data is a series of arcs.</td>
+      </tr>
+      <tr>
+        <td>property</td>
+        <td>rdf:Property</td>
+        <td>The API details or query endpint and query details to be usde to search of the itemn in
+          the databasse.</td>
+      </tr>
+      <tr>
+        <td>reverse</td>
+        <td>Boolean</td>
+        <td>If set, the form will write data triple like <tt>X P S</tt> instead of the normal <tt>S P X</tt>.
+         </td>
+      </tr>
+      <tr>
+        <td>part</td>
+        <td>Form</td>
+        <td>The form to be used for each one.
+         </td>
+      </tr>
+    </table>
+
+
+
+
     <h4 class="class">Classifier</h4>
 
     <table class="properties">
@@ -468,7 +517,7 @@
         </td>
       </tr>
     </table>
-
+    <p>
     This form field leverages the ontology heavily. It pulls the subclasses of
     the given class, and makes a pop-up menu for the user to chose one. If and
     only if the ontology says that the class is a disjoint union
@@ -477,7 +526,7 @@
     shows that that subclass has its own subclasses, then the user will be
     prompted to pick one of those, to (if they like) further refine the
     selection. And so on.
-
+  </p>
     <p>
       The classifier pops a menu to allow the user to select a set of values to
       classify the subject.
@@ -517,7 +566,7 @@
       </tr>
     </table>
 
-    and for each case:
+    <p>and for each case:</p>
 
     <table class="properties">
       <tr>
@@ -565,15 +614,12 @@
 
     <tr>
       <td>labelProperty</td>
-      <td>String</td>
+      <td>rdf:Property</td>
       <td>The property which will be used to store the name of the selected thing as a separate triple</td>
     </tr>
-
     <tr>
       <td>dataSource</td>
-
       <td>DataSource</td>
-
       <td>The API details or query endpint and query details to be usde to search of the itemn in
         the databasse.</td>
     </tr>
@@ -634,9 +680,11 @@
       daily life at home and at work. It can be vary efficient as developers can
       reuse material between forms. Users can even generate their own forms.
     </p>
+    <p>
     Future directions include separate implementations of the form UI code in
     for various platforms, and using various UI frameworks. There may also be
     extensions of the system with new field types, more options for setting style
     from various sources, etc.
+  </p>
   </body>
 </html>
