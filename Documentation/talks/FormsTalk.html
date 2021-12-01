@@ -179,6 +179,51 @@ ui:property ex:allDay .
 
 
 <div class="slide">
+  <h1>Common properties of form fields</h1>
+
+  <table class="properties">
+    <tr>
+      <td>label</td>
+      <td>String</td>
+      <td>
+        A label for the form field, prompt for the user.
+      </td>
+    </tr>
+
+    <tr>
+      <td>property</td>
+      <td>rdf:Property</td>
+      <td>
+        Data it is stored in the web as a triple
+        with this property as its predicate.
+      </td>
+    </tr>
+
+    <tr>
+      <td>default</td>
+      <td>[according to field type] Optional</td>
+      <td>
+        The input control is set to this value by default. It is easiest for
+        the user to enter this value. (This value is <b>not</b> automatically
+        stored by the form system if the user does not select or enter it in
+        some way.
+      </td>
+    </tr>
+
+    <tr>
+      <td>suppressEmptyUneditable</td>
+      <td>Boolean</td>
+      <td>
+        When the user is just reading the data, not
+        editing it, the fields with blank data will be hidden.
+      </td>
+    </tr>
+  </table>
+
+</div>
+
+
+<div class="slide">
 <h1>The Autocomplete field</h1>
 <p>This form field allows users to select things from lists in public databases, things like Languages, Organizations, Occupations, and Skills</p>
 <p>This is not covered in detail in this talk.</p>
