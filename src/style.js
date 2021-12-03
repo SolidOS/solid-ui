@@ -13,7 +13,7 @@ const formFieldNameBoxWidth = '8em' // The fixed amount to get form fields to li
 export const style = { // styleModule
 
   checkboxStyle: 'colour: black; font-size: 100%; padding-left: 0.5 em; padding-right: 0.5 em;',
-  checkboxInputStyle: 'font-size: 150%; height: 1.2em; width: 1.2em; background-color: #eef; margin: 0.1em',
+  checkboxInputStyle: 'font-size: 150%; height: 1.2em; width: 1.2em; background-color: #eef; border-radius:0.2em; margin: 0.1em',
 
   fieldLabelStyle: 'color: #3B5998; text-decoration: none;',
   formSelectSTyle:
@@ -21,13 +21,13 @@ export const style = { // styleModule
   textInputStyle:
     'background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em;',
   textInputStyleUneditable: // Color difference only
-    'background-color: white; padding: 0.5em;  border: .05em solid white;  border-radius:0.2em; font-size: 100%; margin:0.2em; ',
+    'background-color: white; padding: 0.5em;  border: .05em solid white;  border-radius:0.2em; font-size: 100%; margin:0.2em;',
   textInputSize: 20, // Default text input size in characters roughly
   buttonStyle:
       'background-color: #fff; padding: 0.7em;  border: .01em solid white;  border-radius:0.2em; font-size: 100%; margin: 0.3em;', // 'background-color: #eef;
   commentStyle: 'padding: 0.7em;  border: none; font-size: 100%; white-space: pre-wrap;',
   iconStyle: 'width: 3em; height: 3em; margin: 0.1em; border-radius: 1em;',
-  smallButtonStyle: 'margin: 0.2em; width: 1em; height:1em',
+  smallButtonStyle: 'margin: 0.2em; width: 1em; height:1em;',
   classIconStyle: 'width: 3em; height: 3em; margin: 0.1em; border-radius: 0.2em; border: 0.1em solid green; padding: 0.2em; background-color: #efe;', // combine with buttonStyle
   confirmPopupStyle: 'padding: 0.7em; border-radius: 0.2em; border: 0.1em solid orange; background-color: white; box-shadow: 0.5em 0.9em #888;',
   tabBorderRadius: '0.2em',
