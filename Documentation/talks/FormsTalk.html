@@ -165,10 +165,10 @@ ui:property ex:allDay .
 <h1>Examples of other form fields</h1>
 
 <ol>
-  <li><a target="demo" href="../form-examples/demo.html">Examples of individual Form Fields</a></li>
-  <li><a target="demo" href="../form-examples/structures.html">Examples of structures in forms: Groups</a></li>
-  <li><a target="demo" href="../form-examples/structures3.html">Selection, Options, Autocomplete</a></li>
-  <li><a target="demo" href="../form-examples/profile-demo.html">Examples of a Solid profile editing form</a></li>
+  <li><a target="demo1" href="../form-examples/demo.html">Examples of individual Form Fields</a></li>
+  <li><a target="demo2" href="../form-examples/structures.html">Examples of structures in forms: Groups</a></li>
+  <li><a target="demo3" href="../form-examples/structures3.html">Selection, Options, Autocomplete</a></li>
+  <li><a target="demo4" href="../form-examples/profile-demo.html">Examples of a Solid profile editing form</a></li>
   <!--
   <li><a target="demo" href="../form-examples/edit-form.html">Editing a simple form using the Form Form</a></li>
   <li><a target="demo" href="../form-examples/edit-form-form.html">Editing the Form Form</a></li>
@@ -179,9 +179,64 @@ ui:property ex:allDay .
 
 
 <div class="slide">
+  <h1>Common properties of form fields</h1>
+
+  <table class="properties">
+    <tr>
+      <td>label</td>
+      <td>String</td>
+      <td>
+        A label for the form field, prompt for the user.
+      </td>
+    </tr>
+
+    <tr>
+      <td>property</td>
+      <td>rdf:Property</td>
+      <td>
+        Data it is stored in the web as a triple
+        with this property as its predicate.
+      </td>
+    </tr>
+
+    <tr>
+      <td>default</td>
+      <td>[according to field type] Optional</td>
+      <td>
+        The input control is set to this value by default. It is easiest for
+        the user to enter this value. (This value is <b>not</b> automatically
+        stored by the form system if the user does not select or enter it in
+        some way.
+      </td>
+    </tr>
+
+    <tr>
+      <td>suppressEmptyUneditable</td>
+      <td>Boolean</td>
+      <td>
+        When the user is just reading the data, not
+        editing it, the fields with blank data will be hidden.
+      </td>
+    </tr>
+  </table>
+
+</div>
+
+
+<div class="slide">
+<h1>The Autocomplete field</h1>
+<p>This form field allows users to select things from lists in public databases, things like Languages, Organizations, Occupations, and Skills</p>
+<p>This is not covered in detail in this talk.</p>
+<p>(There is a blog <a href="https://solidos.solidcommunity.net/public/2021/01%20Building%20Solid%20Apps%20which%20use%20Public%20Data.html">
+</i>Building Solid Apps which use Public Data</i></a>,
+  about this which I could run though for those interested)</p>
+  <img src="../diagrams/PersonalPublicDataLinks.svg" />
+</div>
+
+<div class="slide">
 <h1>Code: Render a form</h1>
 <p>To put a form in your UI</p>
-<pre>UI.widgets.appendForm(dom, container, {}, subject, form, doc, callback)
+<pre>const element = UI.widgets.appendForm(dom, null, {}, subject, form, doc, callback)
   </pre>
 
   <table class="parameters">
@@ -192,9 +247,10 @@ ui:property ex:allDay .
   </tr>
 
   <tr>
-    <td>container</td>
+    <td>null</td>
 
-    <td>is a DOM element to contain the form</td>
+    <td>used to be the is a DOM element to contain the form. If given, the form will be
+    appended to it. This use is deprecated.</td>
   </tr>
 
   <tr>
@@ -222,7 +278,7 @@ ui:property ex:allDay .
     <td>callback</td>
     <td>
       is a function taking an error flag and a message (if the error flag is
-      true)
+      true). Called when the form field has been set to a new value.
     </td>
   </tr>
 </table>
@@ -241,14 +297,17 @@ ui:property ex:allDay .
 <h1>Going meta -- Editing forms using the form of forms 2</h1>
 <p>Here we are editing the really small form we started with.</p>
 <ul>
-  <li><a target="demo" href="../form-examples/edit-form.html">Editing a simple form using the Form Form</a></li>
+  <li><a target="demo8" href="../form-examples/edit-form.html">Editing a simple form using the Form Form</a></li>
 </ul>
 <p>Here we edit the FormForm with itself.</p>
 <ul>
-  <li><a target="demo" href="../form-examples/edit-form-form.html">Editing the Form Form</a></li>
+  <li><a target="demo9" href="../form-examples/edit-form-form.html">Editing the Form Form</a></li>
 </ul>
 
 </div>
+
+
+
 
 <div class="slide">
 <h1>Forms and Classes</h1>
@@ -349,17 +408,14 @@ export function formsFor (subject) {
 </ul>
 </div>
 
-
-
 <div class="slide">
 <h1>Questions?</h1>
+<ul>
+  <p>Reference</p>
+  <li><a target="doc" href="../form-ecosystem.html">Manual: The Form Ecosystem</a></li>
+  <li><a target="doc" href="../forms-intro.html">Manual: Intro to forms</a></li>
+  <li><a target="doc" href="https://www.w3.org/ns/ui.n3">The UI ontology (source)</a></li>
+</ul>
 </div>
-<div class="slide">
-<h1>The Autocomplete field</h1>
-<p>This form field allows users to select things from lists in public databases, things like Languages, Organizations, Occupations, and Skills</p>
-<p>This is not covered in this talk.</p>
-<p>(There is a blog <a href="https://solidos.solidcommunity.net/public/2021/01%20Building%20Solid%20Apps%20which%20use%20Public%20Data.html">
-</i>Building Solid Apps which use Public Data</i></a>,
-  about this which I could run though for those interested)</p>
-  <img src="../diagrams/PersonalPublicDataLinks.svg" />
+
 </div>

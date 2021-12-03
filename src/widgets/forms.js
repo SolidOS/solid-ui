@@ -1587,9 +1587,8 @@ export function buildCheckboxForm (dom, kb, lab, del, ins, form, dataDoc, trista
   const editable = kb.updater.editable(dataDoc.uri)
 
   const input = dom.createElement('button')
-  const colorCarrier = input // Which element changes color to flag changed/saving/saved?
+  const colorCarrier = input
   input.style = style.checkboxInputStyle
-  // colorCarrier.style = style.checkboxStyle
   rhs.appendChild(input)
 
   function fix (x) {
@@ -1644,7 +1643,7 @@ export function buildCheckboxForm (dom, kb, lab, del, ins, form, dataDoc, trista
   if (!editable) return box
 
   const boxHandler = function (_e) {
-    colorCarrier.style.color = '#bbb;' // grey -- not saved yet
+    colorCarrier.style.color = '#bbb' // grey -- not saved yet
     const toDelete = input.state === true ? ins : input.state === false ? del : []
     input.newState =
       input.state === null
@@ -1676,8 +1675,8 @@ export function buildCheckboxForm (dom, kb, lab, del, ins, form, dataDoc, trista
             debug.log(' @@@@@ weird if 409 - does hold statement')
           }
         }
-        colorCarrier.style.color = 'color: #black;'
-        colorCarrier.style.backgroundColor = '#fee;'
+        colorCarrier.style.color = '#000'
+        colorCarrier.style.backgroundColor = '#fee'
         box.appendChild(
           errorMessageBlock(
             dom,
@@ -1687,7 +1686,7 @@ export function buildCheckboxForm (dom, kb, lab, del, ins, form, dataDoc, trista
           )
         )
       } else {
-        colorCarrier.style = 'color: #black;'
+        colorCarrier.style.color = '#000'
         input.state = input.newState
         input.textContent = {
           true: checkMarkCharacter,

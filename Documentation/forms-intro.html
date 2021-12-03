@@ -93,9 +93,11 @@
       }
       table.parameters {
         background-color: #dddddd;
+        margin-left: 4em;
       } /*  background-color: #ddddff; */
       table.properties {
         background-color: #ddddff;
+        margin-left: 4em;
       } /*  background-color: #ddddff; */
       td {
         padding: 0.5em;
@@ -240,20 +242,17 @@
     <table class="properties">
       <tr>
         <td>label</td>
-
         <td>String</td>
-
         <td>
           A label for the form field. This is the prompt for the user, e.g.,
-          "Name", "Employer".
+          "Name", "Employer".  If the label is not given in the form, the
+          system will make one from a label of the property in the ontology.
         </td>
       </tr>
 
       <tr>
         <td>property</td>
-
         <td>rdf:Property</td>
-
         <td>
           When the user enters the data, it is stored in the web as a triple
           with this property as its predicate.
@@ -262,14 +261,23 @@
 
       <tr>
         <td>default</td>
-
         <td>[according to field type] Optional</td>
-
         <td>
           The input control is set to this value by default. It is easiest for
           the user to enter this value. (This value is <b>not</b> automatically
           stored by the form system if the user does not select or enter it in
           some way.
+        </td>
+      </tr>
+
+      <tr>
+        <td>suppressEmptyUneditable</td>
+        <td>Boolean</td>
+        <td>
+          Setting this flag (on a single form field not a structure) means that when the user is just reading the data, not
+          editing it, the fields with blank data will be removed completely.
+          This avoid things like a blank field for a region in an address when there isn't one given.
+          This can make the UX much cleaner.  Defaults to false.
         </td>
       </tr>
     </table>
@@ -399,6 +407,24 @@
       the same as for Form.
     </p>
 
+    <table class="properties">
+      <tr>
+        <td>weight</td>
+
+        <td>xsd:integer</td>
+        <td>0:lighter than normal, 1: Normal, 2,3: heavier than normal</td>
+      </tr>
+      <tr>
+        <td>parts</td>
+        <td>rdf:Collection</td>
+        <td>
+          The form fields, forms, in the group
+        </td>
+      </tr>
+    </table>
+
+
+
     <h4 class="class">Choice</h4>
 
     <p>The user choses an item from a class.</p>
@@ -425,9 +451,7 @@
 
       <tr>
         <td>canMintNew</td>
-
         <td>xsd:Boolean</td>
-
         <td>
           If the user doesn't find the thing they want, can they introduce an
           item of that class by filling in a form about it? [Boolean]
@@ -435,8 +459,8 @@
       </tr>
     </table>
 
-    If a new thing is minted, that will be done with a form which is a
-    <tt>ui:creationForm</tt> for the class.
+    <p>If a new thing is minted, that will be done with a form which is a
+    <tt>ui:creationForm</tt> for the class.</p>
 
     <h4 class="class">Multiple</h4>
 
@@ -454,6 +478,37 @@
       form. It is the field, or the address, and so on.
     </p>
 
+
+    <table class="properties">
+      <tr>
+        <td>ordered</td>
+        <td>Boolean</td>
+        <td>If true, the user has an ordered array of things, and the data is in an RDF collection.
+          If false, the UI is irrelevant and the data is a series of arcs.</td>
+      </tr>
+      <tr>
+        <td>property</td>
+        <td>rdf:Property</td>
+        <td>The API details or query endpoint and query details to be used to search the item in
+          the databasse.</td>
+      </tr>
+      <tr>
+        <td>reverse</td>
+        <td>Boolean</td>
+        <td>If set, the form will write data triple like <tt>X P S</tt> instead of the normal <tt>S P X</tt>.
+         </td>
+      </tr>
+      <tr>
+        <td>part</td>
+        <td>Form</td>
+        <td>The form to be used for each one.
+         </td>
+      </tr>
+    </table>
+
+
+
+
     <h4 class="class">Classifier</h4>
 
     <table class="properties">
@@ -468,7 +523,7 @@
         </td>
       </tr>
     </table>
-
+    <p>
     This form field leverages the ontology heavily. It pulls the subclasses of
     the given class, and makes a pop-up menu for the user to chose one. If and
     only if the ontology says that the class is a disjoint union
@@ -477,7 +532,7 @@
     shows that that subclass has its own subclasses, then the user will be
     prompted to pick one of those, to (if they like) further refine the
     selection. And so on.
-
+  </p>
     <p>
       The classifier pops a menu to allow the user to select a set of values to
       classify the subject.
@@ -517,7 +572,7 @@
       </tr>
     </table>
 
-    and for each case:
+    <p>and for each case:</p>
 
     <table class="properties">
       <tr>
@@ -565,24 +620,21 @@
 
     <tr>
       <td>labelProperty</td>
-      <td>String</td>
+      <td>rdf:Property</td>
       <td>The property which will be used to store the name of the selected thing as a separate triple</td>
     </tr>
-
     <tr>
       <td>dataSource</td>
-
       <td>DataSource</td>
-
       <td>The API details or query endpint and query details to be usde to search of the itemn in
         the databasse.</td>
     </tr>
     <tr>
       <td>targetClass</td>
       <td>rdfs:Class</td>
-      <td>Is tyhis is specified, it be used to replace any occuurences of
+      <td>Is tyhis is specified, it be used to replace any occurrences of
          "$(targetClass)" in the query template.  this allows different instances
-         of AutocompleteField to share the same DatSource, by specifying different values for <tt>targetClass</tt>.</td>
+         of AutocompleteField to share the same DataSource, by specifying different values for <tt>targetClass</tt>.</td>
     </tr>
 
   </table>
@@ -604,7 +656,16 @@
 
         <td>The text content of the heading</td>
       </tr>
+      <tr>
+        <td>suppressIfUneditable</td>
+        <td>Boolean</td>
+        <td>If data is uneditable,ie read-only mode, hide this comment</td>
+      </tr>
     </table>
+
+<p>The <tt>suppressIfUneditable</tt> flag allow you to make a form which
+  is much cleaner and simpler when the user is just reading information,
+  not editing it.</p>
 
     <h4 class="class">Comment</h4>
 
@@ -618,11 +679,16 @@
         <td>contents</td>
 
         <td>String</td>
-
         <td>
           The text content of the comment. (This should be displayed by form
           systems as <tt>pre-wrap</tt> mode.)
         </td>
+        <tr>
+          <td>suppressIfUneditable</td>
+          <td>Boolean</td>
+          <td>If data is uneditable,ie read-only mode, hide this comment</td>
+        </tr>
+
       </tr>
     </table>
 
@@ -634,9 +700,11 @@
       daily life at home and at work. It can be vary efficient as developers can
       reuse material between forms. Users can even generate their own forms.
     </p>
+    <p>
     Future directions include separate implementations of the form UI code in
     for various platforms, and using various UI frameworks. There may also be
     extensions of the system with new field types, more options for setting style
     from various sources, etc.
+  </p>
   </body>
 </html>
