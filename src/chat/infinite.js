@@ -156,29 +156,7 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
         field.setAttribute('style', messageBodyStyle + 'color: #bbb;') // pendingedit
         field.disabled = true
       }
-      const sts = []
-      const timestamp = '' + now.getTime()
-      const dateStamp = $rdf.term(now)
-      const chatDocument = dateFolder.leafDocumentFromDate(now)
-
-      const message = kb.sym(chatDocument.uri + '#' + 'Msg' + timestamp)
-      const content = kb.literal(text || field.value)
-      // if (text) field.value = text  No - don't destroy half-finsihed user input
-
-      sts.push(
-        new $rdf.Statement(chatChannel, ns.wf('message'), message, chatDocument)
-      )
-      sts.push(
-        new $rdf.Statement(message, ns.sioc('content'), content, chatDocument)
-      )
-      sts.push(
-        new $rdf.Statement(message, DCT('created'), dateStamp, chatDocument)
-      )
-      if (me) {
-        sts.push(
-          new $rdf.Statement(message, ns.foaf('maker'), me, chatDocument)
-        )
-      }
+      const { message, dateStamp, content, chatDocument, sts } = appendMsg(text || field.value)
 
       function sendComplete () {
         const bindings = {
@@ -338,6 +316,52 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
 
   // ///////////////////////////////////////////////////////////////////////
 
+  const appendMsg = function (newContent, oldMsg = {}, options = '') {
+    const sts = []
+    const now = new Date()
+    const timestamp = '' + now.getTime()
+    const dateStamp = $rdf.term(now)
+    // http://www.w3schools.com/jsref/jsref_obj_date.asp
+    const chatDocument = options ? oldMsg.doc() : dateFolder.leafDocumentFromDate(now)
+    const message = kb.sym(chatDocument.uri + '#' + 'Msg' + timestamp)
+    const content = kb.literal(newContent)
+
+    if (oldMsg && options === 'delete') {
+      sts.push(
+        new $rdf.Statement(replacingMsg(oldMsg), ns.schema('dateDeleted'), dateStamp, chatDocument)
+      )
+    } else {
+      if (oldMsg && options === 'edit') {
+        sts.push(
+          new $rdf.Statement(replacingMsg(oldMsg), ns.dct('isReplacedBy'), message, chatDocument)
+        )
+      }
+      sts.push(
+        new $rdf.Statement(
+          message,
+          ns.sioc('content'),
+          kb.literal(newContent),
+          chatDocument
+        )
+      )
+      sts.push(
+        new $rdf.Statement(message, ns.dct('created'), dateStamp, chatDocument)
+      )
+      if (me) {
+        sts.push(
+          new $rdf.Statement(message, ns.foaf('maker'), me, chatDocument)
+        )
+      }
+      return { message, dateStamp, content, chatDocument, sts }
+    }
+  }
+
+  function nick (person) {
+    const s = UI.store.any(person, UI.ns.foaf('nick'))
+    if (s) return '' + s.value
+    return '' + utils.label(person)
+  }
+
   function syncMessages (about, messageTable) {
     const displayed = {}
     let ele, ele2
@@ -382,11 +406,17 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
   } // syncMessages
 
   function addMessage (message, messageTable) {
+    let content
+    if (kb.any(replacingMsg(message))) {
+      content = kb.any(replacingMsg(message), ns.sioc('content'))
+    } else {
+      content = kb.literal('message deleted')
+    }
     const bindings = {
       '?msg': message,
       '?creator': kb.any(message, ns.foaf('maker')),
       '?date': kb.any(message, DCT('created')),
-      '?content': kb.any(message, ns.sioc('content'))
+      '?content': content // kb.any(replacingMsg(message), ns.sioc('content'))
     }
     renderMessage(
       messageTable,
@@ -397,6 +427,17 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
     ) // fresh from elsewhere
   }
 
+  const replacingMsg = function (message) {
+    let msg = message
+    while (msg) {
+      message = msg
+      msg = kb.any(message, DCT('isReplacedBy'))
+    }
+    if (kb.any(message, ns.schema('dateDeleted'))) {
+      return ns.schema('dateDeleted') // message has been deleted
+    }
+    return message
+  }
   // ////////
 
   /* Add a new messageTable at the top/bottom

@@ -60,7 +60,7 @@
     "jss": "^10.8.2",
     "jss-preset-default": "^10.8.2",
     "mime-types": "^2.1.33",
-    "pane-registry": "^2.4.3",
+    "pane-registry": "^2.4.4",
     "path-browserify": "^1.0.1",
     "postcss-flexbugs-fixes": "^5.0.2",
     "rdflib": "^2.2.14",

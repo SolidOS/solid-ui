@@ -20,6 +20,9 @@ import * as style from '../style'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
 import { renderBookmarksButton } from './bookmarks'
+import { infiniteMessageArea } from './infinite.js'
+import { renderMessage, creatorAndDate } from './message'
+import * as debug from '../debug'
 
 const UI = { authn, icons, ns, media, pad, rdf, store, style, utils, widgets }
 
@@ -54,6 +57,18 @@ function updatePromise (del, ins) {
   }) // promise
 }
 
+function replacingMsg (message) {
+  let msg = message
+  while (msg) {
+    message = msg
+    msg = kb.any(message, ns.dct('isReplacedBy'))
+  }
+  if (kb.any(message, ns.schema('dateDeleted'))) {
+    return ns.schema('dateDeleted') // message has been deleted
+  }
+  return message // message original or modified content
+}
+
 /**
  * Emoji in Unicode
  */
@@ -67,8 +82,8 @@ emoji[ns.schema('LikeAction')] = '❤️'
 /**
  * Create strip of sentiments expressed
  */
-export function sentimentStrip (target, doc) {
-  const actions = kb.each(null, ns.schema('target'), target, doc)
+export function sentimentStrip (target, doc) { // alain seems not used
+  const actions = (replacingMsg(target).value !== ns.schema('dateDeleted').value) ? kb.each(null, ns.schema('target'), target, doc) : []
   const sentiments = actions.map(a => kb.any(a, ns.rdf('type'), null, doc))
   sentiments.sort()
   const strings = sentiments.map(x => emoji[x] || '')
@@ -84,7 +99,7 @@ export function sentimentStripLinked (target, doc) {
   const strip = dom.createElement('span')
   function refresh () {
     strip.innerHTML = ''
-    const actions = kb.each(null, ns.schema('target'), target, doc)
+    const actions = (replacingMsg(target).uri !== ns.schema('dateDeleted').uri) ? kb.each(null, ns.schema('target'), target, doc) : []
     const sentiments = actions.map(a => [
       kb.any(a, ns.rdf('type'), null, doc),
       kb.any(a, ns.schema('agent'), null, doc)
@@ -112,7 +127,30 @@ export function sentimentStripLinked (target, doc) {
  * Creates a message toolbar component
  */
 export function messageToolbar (message, messageRow, userContext) {
+  debug.log(messageRow)
+  // alain TODO allow chat owner to fully delete message + sentiments and replacing messages
+
+  /* if (replacingMsg(message).value === ns.schema('dateDeleted').value) {
+    // TODO only admin can do : delete completely message and replacements
+    // find message and replacements
+    const admin
+    if (me && (me.uri === admin)) {
+      const messageArray = [message]
+      const msg = message
+      while(msg) {
+        message = msg
+        messageArray.push(message)
+        msg = kb.any(message, ns.dct('isReplacedBy'))
+      }
+      if (alert('confirm you want to completely remove this deleted message')) {
+        messageArray.map(msg => deleteThingThen(msg))
+      }
+    }
+    return
+  } */
   const div = dom.createElement('div')
+  // is message deleted ?
+  if (replacingMsg(message).value === ns.schema('dateDeleted').value) return div
   function closeToolbar () {
     div.parentElement.parentElement.removeChild(div.parentElement) // remive the TR
   }
@@ -130,12 +168,64 @@ export function messageToolbar (message, messageRow, userContext) {
       div,
       'message',
       async function () {
-        await kb.updater.update(kb.connectedStatements[message], [])
+        if (me.value === kb.any(message, ns.foaf('maker')).value) {
+          const { sts } = appendMsg('message deleted', message, 'delete')
+          await UI.store.updater.update([], sts) // alain: can sendMessage() do the refresh ?
+          // para.textContent = 'message deleted'
+        }
         closeToolbar()
       }
     )
     div.appendChild(deleteButton)
   } // if mine
+
+  function appendMsg (newContent, oldMsg = {}, options = '') {
+    const sts = []
+    const now = new Date()
+    const timestamp = '' + now.getTime()
+    const dateStamp = $rdf.term(now)
+    // http://www.w3schools.com/jsref/jsref_obj_date.asp
+    // const message = kb.sym(messageStore.uri + '#' + 'Msg' + timestamp)
+
+    const chatDocument = oldMsg.doc() // options ? oldMsg.doc() : dateFolder.leafDocumentFromDate(now)
+    const message = kb.sym(chatDocument.uri + '#' + 'Msg' + timestamp)
+    const content = kb.literal(newContent)
+
+    if (oldMsg && options === 'delete') {
+      sts.push(
+        new $rdf.Statement(replacingMsg(oldMsg), ns.schema('dateDeleted'), dateStamp, chatDocument)
+      )
+    } else {
+      if (oldMsg && options === 'edit') {
+        sts.push(
+          new $rdf.Statement(replacingMsg(oldMsg), ns.dct('isReplacedBy'), message, chatDocument)
+        )
+      }
+      sts.push(
+        new $rdf.Statement(
+          message,
+          ns.sioc('content'),
+          content,
+          chatDocument
+        )
+      )
+      sts.push(
+        new $rdf.Statement(message, ns.dct('created'), dateStamp, chatDocument)
+      )
+      if (me) {
+        sts.push(
+          new $rdf.Statement(message, ns.foaf('maker'), me, chatDocument)
+        )
+      }
+    }
+    return { message, dateStamp, content, chatDocument, sts }
+  }
+
+  function nick (person) {
+    const s = UI.store.any(person, UI.ns.foaf('nick'))
+    if (s) return '' + s.value
+    return '' + utils.label(person)
+  }
 
   // Things anyone can do if they have a bookmark list async
   /*
@@ -228,8 +318,9 @@ export function messageToolbar (message, messageRow, userContext) {
   // THUMBS_UP_ICON
   // https://schema.org/AgreeAction
   me = UI.authn.currentUser() // If already logged on
-  if (me) {
-    // Things you mnust be logged in for
+  // debug.log('Actions 3' + replacingMsg(message).value + ' ' + ns.schema('dateDeleted').value + ' ' + (replacingMsg(message).value !== ns.schema('dateDeleted').value))
+
+  if (me && (replacingMsg(message).value !== ns.schema('dateDeleted').value)) {
     const context1 = { me, dom, div }
     div.appendChild(
       sentimentButton(
