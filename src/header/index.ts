@@ -24,7 +24,7 @@ export type MenuItemLink = {
 
 export type MenuItemButton = {
   label: string,
-  onclick: () => {}
+  onclick: () => void
 }
 
 export type MenuItems = MenuItemLink | MenuItemButton
