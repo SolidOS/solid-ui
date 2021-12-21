@@ -51,19 +51,16 @@ export async function getPodOwner (pod: NamedNode, store: IndexedFormula): Promi
     if (store.fetcher) {
       await store.fetcher.load(podOwner.doc())
     } else {
-      console.log('There was a problem loading the Fetcher')
-      return null
+      throw new Error('There was a problem loading the Fetcher')
     }
     // @@ TODO: check back links to storage
   } catch (err) {
-    console.log('Did NOT find pod owners profile at ' + podOwner)
-    return null
+    throw new Error('Did NOT find pod owners profile at ' + podOwner)
   }
   if (podOwner) {
     const storageIsListedInPodOwnersProfile = store.holds(podOwner, ns.space('storage'), pod, podOwner.doc())
     if (!storageIsListedInPodOwnersProfile) {
-      console.log(`** Pod owner ${podOwner} does NOT list pod ${pod} as storage`)
-      return null
+      throw new Error(`** Pod owner ${podOwner} does NOT list pod ${pod} as storage`)
     }
   }
   return podOwner

@@ -82,7 +82,7 @@ export async function createBanner (store: IndexedFormula, pod: NamedNode, user:
   podLink.appendChild(image)
 
   const userMenu = user
-    ? await createUserMenu(store, user, userMenuList, options)
+    ? await createUserMenu(store, user, userMenuList)
     : createLoginSignUpButtons()
 
   const banner = document.createElement('div')
@@ -95,7 +95,7 @@ export async function createBanner (store: IndexedFormula, pod: NamedNode, user:
 
   if (options && options.helpMenuList) {
     const helpMenu = createHelpMenu(options, options.helpMenuList)
-    leftSideOfHeader.appendChild(helpMenu)
+    leftSideOfHeader.appendChild(helpMenu as HTMLDivElement)
   }
 
   banner.appendChild(leftSideOfHeader)
@@ -106,6 +106,7 @@ export async function createBanner (store: IndexedFormula, pod: NamedNode, user:
  * @ignore exporting this only for the unit test
  */
 export function createHelpMenu (options: HeaderOptions, helpMenuItems: MenuItems[]) {
+  if (!helpMenuItems) return
   const helpMenuList = document.createElement('ul')
   addStyleClassToElement(helpMenuList, ['header-user-menu__list'])
   helpMenuItems.forEach(function (menuItem) {
@@ -185,7 +186,7 @@ export function createUserMenuLink (label: string, href: string, target?: string
 /**
  * @ignore exporting this only for the unit test
  */
-export async function createUserMenu (store: IndexedFormula, user: NamedNode, userMenuList: MenuItems[], options?: HeaderOptions): Promise<HTMLElement> {
+export async function createUserMenu (store: IndexedFormula, user: NamedNode, userMenuList: MenuItems[]): Promise<HTMLElement> {
   const fetcher = (<any>store).fetcher
   if (fetcher) {
     // Making sure that Profile is loaded before building menu

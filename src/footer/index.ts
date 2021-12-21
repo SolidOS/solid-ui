@@ -36,7 +36,7 @@ export async function initFooter (store: IndexedFormula) {
 /**
  * @ignore exporting this only for the unit test
  */
-function rebuildFooter (footer: HTMLElement, store: IndexedFormula, pod: NamedNode | null, podOwner: NamedNode | null) {
+export function rebuildFooter (footer: HTMLElement, store: IndexedFormula, pod: NamedNode | null, podOwner: NamedNode | null) {
   return async () => {
     const user = currentUser()
     footer.innerHTML = ''
@@ -46,7 +46,7 @@ function rebuildFooter (footer: HTMLElement, store: IndexedFormula, pod: NamedNo
 /**
  * @ignore exporting this only for the unit test
  */
-function createControllerInfoBlock (store: IndexedFormula, user: NamedNode | null, pod: NamedNode | null, podOwner: NamedNode | null): HTMLElement {
+export function createControllerInfoBlock (store: IndexedFormula, user: NamedNode | null, pod: NamedNode | null, podOwner: NamedNode | null): HTMLElement {
   const profileLinkContainer = document.createElement('div')
   if (!pod || !podOwner || (user && user.equals(podOwner))) {
     return profileLinkContainer
