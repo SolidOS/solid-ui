@@ -22,31 +22,31 @@ export type FooterOptions = {
  * @param store the data store
  * @returns the footer
  */
-export async function initFooter (store: IndexedFormula) {
+export async function initFooter (store: IndexedFormula, options?: FooterOptions) {
   const footer = document.getElementById('PageFooter')
   if (!footer) {
     return
   }
   const pod = getPod()
   const podOwner = await getPodOwner(pod, store)
-  rebuildFooter(footer, store, pod, podOwner)()
-  authSession.onLogin(rebuildFooter(footer, store, pod, podOwner))
-  authSession.onLogout(rebuildFooter(footer, store, pod, podOwner))
+  rebuildFooter(footer, store, pod, podOwner, options)()
+  authSession.onLogin(rebuildFooter(footer, store, pod, podOwner, options))
+  authSession.onLogout(rebuildFooter(footer, store, pod, podOwner, options))
 }
 /**
  * @ignore exporting this only for the unit test
  */
-export function rebuildFooter (footer: HTMLElement, store: IndexedFormula, pod: NamedNode | null, podOwner: NamedNode | null) {
+export function rebuildFooter (footer: HTMLElement, store: IndexedFormula, pod: NamedNode | null, podOwner: NamedNode | null, options?: FooterOptions) {
   return async () => {
     const user = currentUser()
     footer.innerHTML = ''
-    footer.appendChild(await createControllerInfoBlock(store, user, pod, podOwner))
+    footer.appendChild(await createControllerInfoBlock(store, user, pod, podOwner, options))
   }
 }
 /**
  * @ignore exporting this only for the unit test
  */
-export function createControllerInfoBlock (store: IndexedFormula, user: NamedNode | null, pod: NamedNode | null, podOwner: NamedNode | null): HTMLElement {
+export function createControllerInfoBlock (store: IndexedFormula, user: NamedNode | null, pod: NamedNode | null, podOwner: NamedNode | null, options?: FooterOptions): HTMLElement {
   const profileLinkContainer = document.createElement('div')
   if (!pod || !podOwner || (user && user.equals(podOwner))) {
     return profileLinkContainer
@@ -72,8 +72,8 @@ export function createControllerInfoBlock (store: IndexedFormula, user: NamedNod
   solidProjectLinkPre.innerText = '. For more info, check out '
 
   const solidProjectLink = document.createElement('a')
-  solidProjectLink.href = DEFAULT_SOLID_PROJECT_URL
-  solidProjectLink.innerText = DEFAULT_SOLID_PROJECT_NAME
+  solidProjectLink.href = options && options.solidProjectUrl ? options.solidProjectUrl : DEFAULT_SOLID_PROJECT_URL
+  solidProjectLink.innerText = options && options.solidProjectName ? options.solidProjectName : DEFAULT_SOLID_PROJECT_NAME
 
   const solidProjectLinkPost = document.createElement('span')
   solidProjectLinkPost.innerText = '.'

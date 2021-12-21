@@ -1,5 +1,25 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`createControllerInfoBlock makes use of options 1`] = `
+<div
+  class="footer-pod-info-0-1-5 footer-0-1-6"
+>
+  <span />
+  <a
+    href="https://test.com"
+  />
+  <span />
+  <a
+    href="https://test.com"
+  />
+  <span />
+  <a
+    href="https://solid.com/"
+  />
+  <span />
+</div>
+`;
+
 exports[`createControllerInfoBlock runs createControllerInfoBlock 1`] = `
 <div
   class="footer-pod-info-0-1-1 footer-0-1-2"

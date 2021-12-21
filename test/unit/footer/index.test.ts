@@ -14,7 +14,8 @@ silenceDebugMessages()
 
 describe('footer', () => {
   it('is exposed on public API', async () => {
-    expect(await initFooter(store)).toMatchSnapshot()
+    const options = { solidProjectUrl: 'https://solid.com/', solidProjectName: 'Solid Project' }
+    expect(await initFooter(store, options)).toMatchSnapshot()
   })
 })
 describe('rebuildFooter', () => {
@@ -22,7 +23,9 @@ describe('rebuildFooter', () => {
     const footer = document.createElement('div')
     const pod = new NamedNode('https://test.com')
     const podOwner = new NamedNode('https://test2.com')
-    expect(rebuildFooter(footer, store, pod, podOwner)).toMatchSnapshot()
+    const options = { solidProjectUrl: 'https://solid.com/', solidProjectName: 'Solid Project' }
+
+    expect(rebuildFooter(footer, store, pod, podOwner, options)).toMatchSnapshot()
   })
   it('does NOT creates a link in the footer', () => {
     const footer = document.createElement('div')
@@ -45,5 +48,12 @@ describe('createControllerInfoBlock', () => {
     const footer = createControllerInfoBlock(store, user, pod, podOwner)
     expect(footer.className).toContain('footer-pod-info')
     expect(footer.className).toContain('footer')
+  })
+  it('makes use of options', async () => {
+    const pod = new NamedNode('https://test.com')
+    const podOwner = new NamedNode('https://test.com')
+    const user = new NamedNode('https://sharonstrats.inrupt.net/profile/card#me')
+    const options = { solidProjectUrl: 'https://solid.com/', solidProjectName: 'Solid Project' }
+    expect(createControllerInfoBlock(store, user, pod, podOwner, options)).toMatchSnapshot()
   })
 })
