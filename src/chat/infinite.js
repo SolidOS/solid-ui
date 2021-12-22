@@ -326,14 +326,18 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
     const message = kb.sym(chatDocument.uri + '#' + 'Msg' + timestamp)
     const content = kb.literal(newContent)
 
-    if (oldMsg && options === 'delete') {
+    if (oldMsg && options === 'delete') { // delete message
       sts.push(
         new $rdf.Statement(replacingMsg(oldMsg), ns.schema('dateDeleted'), dateStamp, chatDocument)
       )
     } else {
-      if (oldMsg && options === 'edit') {
+      if (oldMsg && options === 'edit') { // edit message
         sts.push(
           new $rdf.Statement(replacingMsg(oldMsg), ns.dct('isReplacedBy'), message, chatDocument)
+        )
+      } else {
+        sts.push( // new message
+          new $rdf.Statement(chatChannel, ns.wf('message'), message, chatDocument)
         )
       }
       sts.push(
@@ -352,8 +356,8 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
           new $rdf.Statement(message, ns.foaf('maker'), me, chatDocument)
         )
       }
-      return { message, dateStamp, content, chatDocument, sts }
     }
+    return { message, dateStamp, content, chatDocument, sts }
   }
 
   function nick (person) {
