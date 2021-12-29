@@ -3,18 +3,18 @@
  * @packageDocumentation
  */
 
-import { authn } from '../authn/index'
 import { icons } from '../iconBase'
 import { store } from '../logic'
 import { media } from '../media/index'
 import * as ns from '../ns'
+import * as login from '../login/login'
 import * as pad from '../pad'
 import * as $rdf from 'rdflib' // pull in first avoid cross-refs
 import * as style from '../style'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
 
-const UI = { authn, icons, ns, media, pad, store, style, utils, widgets }
+const UI = { icons, ns, media, pad, store, style, utils, widgets }
 
 /**
  * HTML component for a chat thread
@@ -180,7 +180,7 @@ export function thread (dom, kb, subject, messageStore, options) {
     }
 
     const context = { div: middle, dom: dom }
-    UI.authn.logIn(context).then(context => {
+    login.logIn(context).then(context => {
       me = context.me
       turnOnInput()
     })

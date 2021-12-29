@@ -3,7 +3,6 @@
  */
 /* global confirm */
 
-import { authn } from './authn/index'
 import * as debug from './debug'
 import { icons } from './iconBase'
 import { store } from './logic'
@@ -12,7 +11,7 @@ import * as rdf from 'rdflib' // pull in first avoid cross-refs
 import * as style from './style'
 import * as widgets from './widgets'
 
-const UI = { authn, icons, ns, rdf, store, style, widgets }
+const UI = { icons, ns, rdf, store, style, widgets }
 
 export function deleteRecursive (kb, folder) {
   // eslint-disable-next-line promise/param-names

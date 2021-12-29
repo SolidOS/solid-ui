@@ -1,8 +1,8 @@
 //  Common code for a discussion are a of messages about something
 //
 
-import { authn } from './authn/index'
 import { icons } from './iconBase'
+import * as login from './login/login'
 import { store } from './logic'
 import * as ns from './ns'
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
@@ -10,7 +10,7 @@ import * as style from './style'
 import * as utils from './utils'
 import * as widgets from './widgets'
 
-const UI = { authn, icons, ns, rdf, store, style, widgets }
+const UI = { icons, ns, rdf, store, style, widgets }
 
 export function messageArea (dom, kb, subject, messageStore, options) {
   kb = kb || UI.store
@@ -171,7 +171,7 @@ export function messageArea (dom, kb, subject, messageStore, options) {
     }
 
     const context = { div: middle, dom: dom }
-    UI.authn.logIn(context).then(context => {
+    login.logIn(context).then(context => {
       me = context.me
       turnOnInput()
     })

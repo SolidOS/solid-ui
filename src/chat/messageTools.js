@@ -9,7 +9,6 @@
  */
 /* global $rdf */
 
-import { authn } from '../authn/index'
 import { icons } from '../iconBase'
 import { store } from '../logic'
 import { media } from '../media/index'
@@ -20,8 +19,9 @@ import * as style from '../style'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
 import { renderBookmarksButton } from './bookmarks'
+import { authn } from 'solid-logic'
 
-const UI = { authn, icons, ns, media, pad, rdf, store, style, utils, widgets }
+const UI = { icons, ns, media, pad, rdf, store, style, utils, widgets }
 
 const dom = window.document
 
@@ -122,7 +122,7 @@ export function messageToolbar (message, messageRow, userContext) {
   }
 
   // Things only the original author can do
-  let me = UI.authn.currentUser() // If already logged on
+  let me = authn.currentUser() // If already logged on
   if (me && kb.holds(message, ns.foaf('maker'), me)) {
     // button to delete the message
     const deleteButton = UI.widgets.deleteButtonWithCheck(
@@ -227,7 +227,7 @@ export function messageToolbar (message, messageRow, userContext) {
 
   // THUMBS_UP_ICON
   // https://schema.org/AgreeAction
-  me = UI.authn.currentUser() // If already logged on
+  me = authn.currentUser() // If already logged on
   if (me) {
     // Things you mnust be logged in for
     const context1 = { me, dom, div }

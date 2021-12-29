@@ -6,7 +6,8 @@
 /* eslint-disable no-console */
 import * as debug from '../../../debug'
 // import * as logic from '../index'
-import { authn } from '../../../authn/index'
+// import { authn } from '../../../authn/index'
+import { authn } from 'solid-logic'
 import * as ns from '../../../ns'
 import { Collection, NamedNode, Node } from 'rdflib'
 // import { Binding } from '../widgets/forms/autocomplete/publicData'

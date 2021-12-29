@@ -3,7 +3,7 @@ import { findBookmarkDocument, renderBookmarksButton, toggleBookmark } from '../
 import { NamedNode, Namespace } from 'rdflib'
 import { clearStore } from '../helpers/clearStore'
 import { ns } from '../../../src/'
-import { solidLogicSingleton } from '../../../src/logic'
+import { solidLogicSingleton } from 'solid-logic'
 
 const store = solidLogicSingleton.store
 const BOOK = Namespace('http://www.w3.org/2002/01/bookmark#')
@@ -16,9 +16,6 @@ describe('findBookmarkDocument', () => {
   it('exists', () => {
     expect(findBookmarkDocument).toBeInstanceOf(Function)
   })
-
-  // findBookmarkDocument › runs
-  //   TypeError: thisIndex.map(...).flat is not a function
   it('runs', async () => {
     const context = {
       index: {}

@@ -2,10 +2,10 @@
  * Contains the [[infiniteMessageArea]] class
  * @packageDocumentation
  */
-import { authn } from '../authn/index'
 import * as debug from '../debug'
 import { icons } from '../iconBase'
 import { store } from '../logic'
+import * as login from '../login/login'
 import { media } from '../media/index'
 import * as ns from '../ns'
 import * as pad from '../pad'
@@ -18,7 +18,7 @@ import * as style from '../style'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
 
-const UI = { authn, icons, ns, media, pad, $rdf, store, style, utils, widgets }
+const UI = { icons, ns, media, pad, $rdf, store, style, utils, widgets }
 
 /* global alert */
 
@@ -324,7 +324,7 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
     } // turn on inpuut
 
     const context = { div: middle, dom: dom }
-    UI.authn.logIn(context).then(context => {
+    login.logIn(context).then(context => {
       me = context.me
       turnOnInput()
       Object.assign(context, userContext)

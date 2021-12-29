@@ -5,7 +5,9 @@
  */
 import { IndexedFormula, NamedNode } from 'rdflib'
 import { icons } from '..'
-import { loginStatusBox, authSession, currentUser } from '../authn/authn'
+import { authn } from 'solid-logic'
+import { loginStatusBox } from '../login/login'
+// import { loginStatusBox, authSession, currentUser } from '../authn/authn'
 import * as widgets from '../widgets'
 import { emptyProfile } from './empty-profile'
 import { addStyleClassToElement, getPod, throttle } from './headerHelpers'
@@ -45,15 +47,15 @@ export async function initHeader (store: IndexedFormula, options?: HeaderOptions
 
   const pod = getPod()
   rebuildHeader(header, store, pod, options)()
-  authSession.onLogout(rebuildHeader(header, store, pod, options))
-  authSession.onLogin(rebuildHeader(header, store, pod, options))
+  authn.authSession.onLogout(rebuildHeader(header, store, pod, options))
+  authn.authSession.onLogin(rebuildHeader(header, store, pod, options))
 }
 /**
  * @ignore exporting this only for the unit test
  */
 export function rebuildHeader (header: HTMLElement, store: IndexedFormula, pod: NamedNode, options?: HeaderOptions) {
   return async () => {
-    const user = currentUser()
+    const user = authn.currentUser()
     header.innerHTML = ''
     header.appendChild(await createBanner(store, pod, user, options))
   }
@@ -192,7 +194,7 @@ export async function createUserMenu (store: IndexedFormula, user: NamedNode, op
     }
   }
 
-  loggedInMenuList.appendChild(createUserMenuItem(createUserMenuButton('Log out', () => authSession.logout())))
+  loggedInMenuList.appendChild(createUserMenuItem(createUserMenuButton('Log out', () => authn.authSession.logout())))
 
   const loggedInMenu = document.createElement('nav')
 

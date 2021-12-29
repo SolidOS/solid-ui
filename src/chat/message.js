@@ -8,8 +8,6 @@
 /* global $rdf */
 
 import { messageToolbar, sentimentStripLinked } from './messageTools'
-
-import { authn } from '../authn/index'
 import { icons } from '../iconBase'
 import { store } from '../logic'
 import { media } from '../media/index'
@@ -20,7 +18,7 @@ import * as style from '../style'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
 
-const UI = { authn, icons, ns, media, pad, rdf, store, style, utils, widgets }
+const UI = { icons, ns, media, pad, rdf, store, style, utils, widgets }
 
 const dom = UI.dom || window.document
 // const kb = UI.store

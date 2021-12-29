@@ -4,7 +4,6 @@
  */
 
 /* global alert confirm */
-import { authn } from '../authn/index'
 import * as debug from '../debug'
 import { icons } from '../iconBase'
 import { store } from '../logic'
@@ -15,8 +14,9 @@ import * as rdf from 'rdflib' // pull in first avoid cross-refs
 import * as style from '../style'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
+import { authn } from 'solid-logic'
 
-const UI = { authn, icons, ns, media, pad, rdf, store, style, utils, widgets }
+const UI = { icons, ns, media, pad, rdf, store, style, utils, widgets }
 const $rdf = UI.rdf
 
 const BOOK = $rdf.Namespace('http://www.w3.org/2002/01/bookmark#')
@@ -97,7 +97,7 @@ export async function findBookmarkDocument (userContext) {
   const fileTail = 'bookmarks.ttl'
   const isPublic = true
 
-  await UI.authn.findAppInstances(userContext, theClass, isPublic) // public -- only look for public links
+  await authn.findAppInstances(userContext, theClass, isPublic) // public -- only look for public links
   if (userContext.instances && userContext.instances.length > 0) {
     userContext.bookmarkDocument = userContext.instances[0]
     if (userContext.instances.length > 1) {
@@ -116,7 +116,7 @@ export async function findBookmarkDocument (userContext) {
         alert.error("Can't make fresh bookmark file:" + e)
         return userContext
       }
-      await UI.authn.registerInTypeIndex(
+      await authn.registerInTypeIndex(
         userContext,
         newBookmarkFile,
         theClass,
@@ -147,7 +147,7 @@ async function addBookmark (context, target) {
    n0:maker c:me.
   */
   let title = ''
-  const me = UI.authn.currentUser() // If already logged on
+  const me = authn.currentUser() // If already logged on
   if (!me) throw new Error('Must be logged on to add Bookmark')
 
   const author = kb.any(target, ns.foaf('maker'))

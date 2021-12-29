@@ -41,7 +41,7 @@ import * as rdf from 'rdflib' // pull in first avoid cross-refs
 // @ts-ignore
 import * as ns from './ns'
 import { acl, aclControl } from './acl/index'
-import { authn } from './authn/index'
+// import { authn } from './authn/index'
 import { create } from './create/index'
 // @ts-ignore
 // import * as debug from '../debug'
@@ -83,7 +83,7 @@ if (typeof window !== 'undefined') {
     rdf,
     acl,
     aclControl,
-    authn,
+    //  authn,
     create,
     dom,
     icons,
@@ -113,7 +113,7 @@ export {
   rdf,
   acl,
   aclControl,
-  authn,
+  // authn,
   create,
   dom,
   icons,

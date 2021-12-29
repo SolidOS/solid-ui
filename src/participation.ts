@@ -1,7 +1,8 @@
 /* Manage a UI for the particpation of a person in any thing
 */
 
-import { currentUser } from './authn/authn'
+// import { currentUser } from './authn/authn'
+import { authn } from 'solid-logic'
 import { NamedNode, st } from 'rdflib'
 import * as ns from './ns'
 import { personTR, newThing, errorMessageBlock } from './widgets'
@@ -136,7 +137,7 @@ export function participationObject (subject: NamedNode, padDoc: NamedNode, me: 
  *
  */
 export function recordParticipation (subject: NamedNode, padDoc: NamedNode, refreshable: any) {
-  const me = currentUser()
+  const me = authn.currentUser()
   if (!me) return // Not logged in
 
   const parps = kb.each(subject, ns.wf('participation')).filter(function (pn) {

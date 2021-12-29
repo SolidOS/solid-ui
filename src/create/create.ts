@@ -6,9 +6,10 @@ import * as debug from '../debug'
 import { icons } from '../iconBase'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
-import { solidLogicSingleton } from '../logic'
 import * as ns from '../ns'
-import { logInLoadProfile, selectWorkspace } from '../authn/authn'
+import { authn, solidLogicSingleton } from 'solid-logic'
+import { selectWorkspace } from '../login/login'
+// import { logInLoadProfile, selectWorkspace } from '../authn/authn'
 import { DataBrowserContext, NewPaneOptions, PaneDefinition } from 'pane-registry'
 import { CreateContext, NewAppInstanceOptions } from './types'
 
@@ -78,7 +79,7 @@ export function newThingUI (
     return new Promise(function (resolve, reject) {
       let selectUI // , selectUIParent
       function callbackWS (ws, newBase) {
-        logInLoadProfile(createContext).then(
+        authn.logInLoadProfile(createContext).then(
           _context => {
             const newPaneOptions: NewPaneOptions = Object.assign({
               newBase: newBase,
