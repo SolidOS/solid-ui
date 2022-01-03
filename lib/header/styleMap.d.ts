@@ -111,8 +111,6 @@ export declare const styleMap: {
         width: string;
     };
     'header-banner__help-icon': {
-        backgroundSize: string;
-        height: string;
         width: string;
     };
 };

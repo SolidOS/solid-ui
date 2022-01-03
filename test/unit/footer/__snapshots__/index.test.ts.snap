@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createControllerInfoBlock makes use of options 1`] = `
+<div
+  class="footer-pod-info-0-1-5 footer-0-1-6"
+>
+  <span />
+  <a
+    href="https://test.com"
+  />
+  <span />
+  <a
+    href="https://test.com"
+  />
+  <span />
+  <a
+    href="https://solid.com/"
+  />
+  <span />
+</div>
+`;
+
+exports[`createControllerInfoBlock runs createControllerInfoBlock 1`] = `
+<div
+  class="footer-pod-info-0-1-1 footer-0-1-2"
+>
+  <span />
+  <a
+    href="https://test.com"
+  />
+  <span />
+  <a
+    href="https://test.com"
+  />
+  <span />
+  <a
+    href="https://solidproject.org"
+  />
+  <span />
+</div>
+`;
+
+exports[`footer is exposed on public API 1`] = `undefined`;
+
+exports[`rebuildFooter creates a link 1`] = `[Function]`;
+
+exports[`rebuildFooter does NOT creates a link in the footer 1`] = `[Function]`;

@@ -2,35 +2,38 @@ import { IndexedFormula, NamedNode } from 'rdflib';
 export declare type MenuItemLink = {
     label: string;
     url: string;
+    target?: string;
 };
 export declare type MenuItemButton = {
     label: string;
-    onclick: () => {};
+    onclick: () => void;
 };
 export declare type MenuItems = MenuItemLink | MenuItemButton;
 export declare type HeaderOptions = {
     logo?: string;
-    menuList?: MenuItems[];
+    helpIcon?: string;
+    helpMenuList?: MenuItems[];
 };
 /**
  * Initialize header component, the header object returned depends on whether the user is authenticated.
  * @param store the data store
- * @param options allow the header to be customized with a personalized logo and a menu list of links or buttons.
+ * @param userMenuList a list of menu items when the user is logged in
+ * @param options allow the header to be customized with a personalized logo, help icon and a help menu list of links or buttons.
  * @returns a header for an authenticated user with menu items given or a login screen
  */
-export declare function initHeader(store: IndexedFormula, options?: HeaderOptions): Promise<void>;
+export declare function initHeader(store: IndexedFormula, userMenuList: MenuItems[], options?: HeaderOptions): Promise<void>;
 /**
  * @ignore exporting this only for the unit test
  */
-export declare function rebuildHeader(header: HTMLElement, store: IndexedFormula, pod: NamedNode, options?: HeaderOptions): () => Promise<void>;
+export declare function rebuildHeader(header: HTMLElement, store: IndexedFormula, pod: NamedNode, userMenuList: MenuItems[], options?: HeaderOptions): () => Promise<void>;
 /**
  * @ignore exporting this only for the unit test
  */
-export declare function createBanner(store: IndexedFormula, pod: NamedNode, user: NamedNode | null, options?: HeaderOptions): Promise<HTMLElement>;
+export declare function createBanner(store: IndexedFormula, pod: NamedNode, user: NamedNode | null, userMenuList: MenuItems[], options?: HeaderOptions): Promise<HTMLElement>;
 /**
  * @ignore exporting this only for the unit test
  */
-export declare function createHelpMenu(): HTMLDivElement;
+export declare function createHelpMenu(options: HeaderOptions, helpMenuItems: MenuItems[]): HTMLDivElement | undefined;
 /**
  * @ignore exporting this only for the unit test
  */
@@ -46,7 +49,7 @@ export declare function createUserMenuLink(label: string, href: string, target?:
 /**
  * @ignore exporting this only for the unit test
  */
-export declare function createUserMenu(store: IndexedFormula, user: NamedNode, options?: HeaderOptions): Promise<HTMLElement>;
+export declare function createUserMenu(store: IndexedFormula, user: NamedNode, userMenuList: MenuItems[]): Promise<HTMLElement>;
 /**
  * @ignore exporting this only for the unit test
  */

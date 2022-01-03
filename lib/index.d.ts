@@ -30,7 +30,8 @@ import * as utils from './utils';
 import * as widgets from './widgets/index';
 import versionInfo from './versionInfo';
 import { initHeader } from './header';
+import { initFooter } from './footer';
 declare const dom: Document | null;
 declare const store: import("solid-logic").LiveStore;
-export { ns, rdf, acl, aclControl, authn, create, dom, icons, language, log, matrix, media, messageArea, infiniteMessageArea, pad, participation, preferences, solidLogicSingleton, store, style, table, tabs, utils, widgets, versionInfo, initHeader };
+export { ns, rdf, acl, aclControl, authn, create, dom, icons, language, log, matrix, media, messageArea, infiniteMessageArea, pad, participation, preferences, solidLogicSingleton, store, style, table, tabs, utils, widgets, versionInfo, initHeader, initFooter };
 //# sourceMappingURL=index.d.ts.map
