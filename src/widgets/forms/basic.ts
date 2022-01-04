@@ -1,5 +1,5 @@
 import { st, BlankNode, Literal, Node, NamedNode, Variable, Store } from 'rdflib'
-import { solidLogicSingleton } from '../../logic'
+import { solidLogicSingleton } from 'solid-logic'
 import * as ns from '../../ns'
 import { textInputSize, textInputStyle, textInputStyleUneditable, formFieldNameBoxWidth, formFieldNameBoxStyle } from '../../style'
 import { label } from '../../utils'

@@ -2,7 +2,7 @@ import { silenceDebugMessages } from '../../helpers/setup'
 import { AddAgentButtons } from '../../../src/acl/add-agent-buttons'
 import { instantiateAccessGroups } from '../helpers/instantiateAccessGroups'
 import { JSDOM } from 'jsdom'
-import { solidLogicSingleton } from '../../../src/logic'
+import { solidLogicSingleton } from 'solid-logic'
 
 const store = solidLogicSingleton.store
 
@@ -161,7 +161,7 @@ describe('When "Add App" button is clicked', () => {
     buttonToClick.click()
   })
   it('bar is simplified', () => {
-    expect(bar.childNodes.length).toEqual(3)
+    expect(bar.childNodes.length).toEqual(2)
     // Adds a third element to list, for reason I cannot understand - This does
     // not happen when I "manually test" it, ie run it in the browser
     // https://github.com/solid/solid-ui/issues/236

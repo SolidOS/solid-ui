@@ -5,7 +5,8 @@ import { Collection, lit, NamedNode, namedNode } from 'rdflib'
 import { JSDOM } from 'jsdom'
 import { clearStore } from './helpers/clearStore'
 import { label } from '../../src/utils'
-import { solidLogicSingleton } from '../../src/logic'
+import { solidLogicSingleton } from 'solid-logic'
+
 // @ts-ignore
 import { meeting, rdfs } from '../../src/ns'
 

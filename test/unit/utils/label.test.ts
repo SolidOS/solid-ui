@@ -1,7 +1,7 @@
 import { lit, sym } from 'rdflib'
 import { label } from '../../../src/utils'
 import { silenceDebugMessages } from '../../helpers/setup'
-import { store } from '../../../src/logic'
+import { store } from 'solid-logic'
 
 silenceDebugMessages()
 describe('label', () => {
