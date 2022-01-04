@@ -114,8 +114,6 @@ export const styleMap = {
     width: '65px !important' // may just be 65px round($icon-size * 352 / 322);
   },
   'header-banner__help-icon': {
-    backgroundSize: '55px 50px',
-    height: '50px !important', // this is the icon size
-    width: '55px !important' // may just be 65px round($icon-size * 352 / 430);
+    width: '28px !important'
   }
 }

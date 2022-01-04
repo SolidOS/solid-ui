@@ -12,6 +12,7 @@ describe('Index', () => {
       'dom',
       'icons',
       'infiniteMessageArea',
+      'initFooter',
       'initHeader',
       'language',
       'log',

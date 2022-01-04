@@ -73,6 +73,7 @@ import * as utils from './utils'
 import * as widgets from './widgets/index'
 import versionInfo from './versionInfo'
 import { initHeader } from './header'
+import { initFooter } from './footer'
 
 const dom = window ? window.document : null // Idea that UI.dom can be adapted in non-browser environments
 const store = solidLogicSingleton.store
@@ -104,7 +105,8 @@ if (typeof window !== 'undefined') {
     utils,
     widgets,
     versionInfo,
-    initHeader
+    initHeader,
+    initFooter
   } // Simpler access by non-node scripts
 }
 
@@ -134,5 +136,6 @@ export {
   utils,
   widgets,
   versionInfo,
-  initHeader
+  initHeader,
+  initFooter
 }

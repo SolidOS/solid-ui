@@ -4,81 +4,88 @@
     work in solid-ui by adjusting where imported functions are found.
  */
 import { IndexedFormula, NamedNode } from 'rdflib'
-import { icons } from '..'
+import { icons } from '../index'
 import { authn } from 'solid-logic'
 import { loginStatusBox } from '../login/login'
 // import { loginStatusBox, authSession, currentUser } from '../authn/authn'
 import * as widgets from '../widgets'
 import { emptyProfile } from './empty-profile'
-import { addStyleClassToElement, getPod, throttle } from './headerHelpers'
+import { addStyleClassToElement, getPod, throttle } from '../utils/headerFooterHelpers'
+
+/**
+ * menu icons
+*/
+const DEFAULT_HELP_MENU_ICON = icons.iconBase + 'noun_help.svg'
+const DEFAUL_SOLID_ICON_URL = 'https://solidproject.org/assets/img/solid-emblem.svg'
 
 export type MenuItemLink = {
   label: string,
-  url: string
+  url: string,
+  target?: string
 }
 
 export type MenuItemButton = {
   label: string,
-  onclick: () => {}
+  onclick: () => void
 }
 
 export type MenuItems = MenuItemLink | MenuItemButton
 
 /*
-HeaderOptions allow for customizing the logo and menu list.  If a logo is not provided the default
-    is solid. Menulist will always show a link to logout and to the users profile.
+  HeaderOptions allow for customizing the logo and menu list.  If a logo is not provided the default
+  is solid. Menulist will always show a link to logout and to the users profile.
   */
 export type HeaderOptions = {
   logo?: string,
-  menuList?: MenuItems[]
+  helpIcon?: string,
+  helpMenuList?: MenuItems[]
 }
 
 /**
  * Initialize header component, the header object returned depends on whether the user is authenticated.
  * @param store the data store
- * @param options allow the header to be customized with a personalized logo and a menu list of links or buttons.
+ * @param userMenuList a list of menu items when the user is logged in
+ * @param options allow the header to be customized with a personalized logo, help icon and a help menu list of links or buttons.
  * @returns a header for an authenticated user with menu items given or a login screen
  */
-export async function initHeader (store: IndexedFormula, options?: HeaderOptions) {
+export async function initHeader (store: IndexedFormula, userMenuList: MenuItems[], options?: HeaderOptions) {
   const header = document.getElementById('PageHeader')
   if (!header) {
     return
   }
 
   const pod = getPod()
-  rebuildHeader(header, store, pod, options)()
-  authn.authSession.onLogout(rebuildHeader(header, store, pod, options))
-  authn.authSession.onLogin(rebuildHeader(header, store, pod, options))
+  rebuildHeader(header, store, pod, userMenuList, options)()
+  authn.authSession.onLogout(rebuildHeader(header, store, pod, userMenuList, options))
+  authn.authSession.onLogin(rebuildHeader(header, store, pod, userMenuList, options))
 }
 /**
  * @ignore exporting this only for the unit test
  */
-export function rebuildHeader (header: HTMLElement, store: IndexedFormula, pod: NamedNode, options?: HeaderOptions) {
+export function rebuildHeader (header: HTMLElement, store: IndexedFormula, pod: NamedNode, userMenuList: MenuItems[], options?: HeaderOptions) {
   return async () => {
     const user = authn.currentUser()
     header.innerHTML = ''
-    header.appendChild(await createBanner(store, pod, user, options))
+    header.appendChild(await createBanner(store, pod, user, userMenuList, options))
   }
 }
 /**
  * @ignore exporting this only for the unit test
  */
-export async function createBanner (store: IndexedFormula, pod: NamedNode, user: NamedNode | null, options?: HeaderOptions): Promise<HTMLElement> {
+export async function createBanner (store: IndexedFormula, pod: NamedNode, user: NamedNode | null, userMenuList: MenuItems[], options?: HeaderOptions): Promise<HTMLElement> {
   const podLink = document.createElement('a')
   podLink.href = pod.uri
   addStyleClassToElement(podLink, ['header-banner__link'])
   const image = document.createElement('img')
   if (options) {
-    image.src = options.logo ? options.logo : 'https://solidproject.org/assets/img/solid-emblem.svg'
+    image.src = options.logo ? options.logo : DEFAUL_SOLID_ICON_URL
   }
   addStyleClassToElement(image, ['header-banner__icon'])
   podLink.appendChild(image)
 
   const userMenu = user
-    ? await createUserMenu(store, user, options)
+    ? await createUserMenu(store, user, userMenuList)
     : createLoginSignUpButtons()
-
-  const helpMenu = createHelpMenu()
 
   const banner = document.createElement('div')
   addStyleClassToElement(banner, ['header-banner'])
@@ -87,7 +94,11 @@ export async function createBanner (store: IndexedFormula, pod: NamedNode, user:
   const leftSideOfHeader = document.createElement('div')
   addStyleClassToElement(leftSideOfHeader, ['header-banner__right-menu'])
   leftSideOfHeader.appendChild(userMenu)
-  leftSideOfHeader.appendChild(helpMenu)
+
+  if (options && options.helpMenuList) {
+    const helpMenu = createHelpMenu(options, options.helpMenuList)
+    leftSideOfHeader.appendChild(helpMenu as HTMLDivElement)
+  }
 
   banner.appendChild(leftSideOfHeader)
 
@@ -96,19 +107,24 @@ export async function createBanner (store: IndexedFormula, pod: NamedNode, user:
 /**
  * @ignore exporting this only for the unit test
  */
-export function createHelpMenu () {
+export function createHelpMenu (options: HeaderOptions, helpMenuItems: MenuItems[]) {
+  if (!helpMenuItems) return
   const helpMenuList = document.createElement('ul')
   addStyleClassToElement(helpMenuList, ['header-user-menu__list'])
-  helpMenuList.appendChild(createUserMenuItem(createUserMenuLink('User guide', 'https://github.com/solid/userguide', '_blank')))
-  helpMenuList.appendChild(createUserMenuItem(createUserMenuLink('Report a problem', 'https://github.com/solid/solidos/issues', '_blank')))
+  helpMenuItems.forEach(function (menuItem) {
+    const menuItemType: string = (menuItem as MenuItemLink).url ? 'url' : 'onclick'
+    if (menuItemType === 'url') {
+      helpMenuList.appendChild(createUserMenuItem(createUserMenuLink(menuItem.label, (menuItem as MenuItemLink).url, (menuItem as MenuItemLink).target)))
+    } else {
+      helpMenuList.appendChild(createUserMenuItem(createUserMenuButton(menuItem.label, (menuItem as MenuItemButton).onclick)))
+    }
+  })
 
   const helpMenu = document.createElement('nav')
 
   addStyleClassToElement(helpMenu, ['header-user-menu__navigation-menu'])
   helpMenu.setAttribute('aria-hidden', 'true')
   helpMenu.appendChild(helpMenuList)
-
-  const helpIcon = icons.iconBase + 'noun_144.svg'
 
   const helpMenuContainer = document.createElement('div')
   addStyleClassToElement(helpMenuContainer, ['header-banner__user-menu'])
@@ -120,7 +136,7 @@ export function createHelpMenu () {
   helpMenuTrigger.type = 'button'
 
   const helpMenuIcon = document.createElement('img')
-  helpMenuIcon.src = helpIcon
+  helpMenuIcon.src = (options && options.helpIcon) ? options.helpIcon : icons.iconBase + DEFAULT_HELP_MENU_ICON
   addStyleClassToElement(helpMenuIcon, ['header-banner__help-icon'])
   helpMenuContainer.appendChild(helpMenuTrigger)
   helpMenuTrigger.appendChild(helpMenuIcon)
@@ -160,7 +176,7 @@ export function createUserMenuButton (label: string, onClick: EventListenerOrEve
 /**
  * @ignore exporting this only for the unit test
  */
-export function createUserMenuLink (label: string, href: string, target?:string): HTMLElement {
+export function createUserMenuLink (label: string, href: string, target?: string): HTMLElement {
   const link = document.createElement('a')
   addStyleClassToElement(link, ['header-user-menu__link'])
   link.href = href
@@ -172,30 +188,25 @@ export function createUserMenuLink (label: string, href: string, target?:string)
 /**
  * @ignore exporting this only for the unit test
  */
-export async function createUserMenu (store: IndexedFormula, user: NamedNode, options?: HeaderOptions): Promise<HTMLElement> {
+export async function createUserMenu (store: IndexedFormula, user: NamedNode, userMenuList: MenuItems[]): Promise<HTMLElement> {
   const fetcher = (<any>store).fetcher
   if (fetcher) {
     // Making sure that Profile is loaded before building menu
     await fetcher.load(user)
   }
+
   const loggedInMenuList = document.createElement('ul')
   addStyleClassToElement(loggedInMenuList, ['header-user-menu__list'])
-  loggedInMenuList.appendChild(createUserMenuItem(createUserMenuLink('Show your profile', user.uri)))
-  if (options) {
-    if (options.menuList) {
-      options.menuList.forEach(function (menuItem) {
-        const menuItemType: string = (menuItem as MenuItemLink).url ? 'url' : 'onclick'
-        if (menuItemType === 'url') {
-          loggedInMenuList.appendChild(createUserMenuItem(createUserMenuLink(menuItem.label, menuItem[menuItemType])))
-        } else {
-          loggedInMenuList.appendChild(createUserMenuItem(createUserMenuButton(menuItem.label, menuItem[menuItemType])))
-        }
-      })
-    }
+  if (userMenuList) {
+    userMenuList.forEach(function (menuItem) {
+      const menuItemType: string = (menuItem as MenuItemLink).url ? 'url' : 'onclick'
+      if (menuItemType === 'url') {
+        loggedInMenuList.appendChild(createUserMenuItem(createUserMenuLink(menuItem.label, (menuItem as MenuItemLink).url, (menuItem as MenuItemLink).target)))
+      } else {
+        loggedInMenuList.appendChild(createUserMenuItem(createUserMenuButton(menuItem.label, (menuItem as MenuItemButton).onclick)))
+      }
+    })
   }
-
-  loggedInMenuList.appendChild(createUserMenuItem(createUserMenuButton('Log out', () => authn.authSession.logout())))
-
   const loggedInMenu = document.createElement('nav')
 
   addStyleClassToElement(loggedInMenu, ['header-user-menu__navigation-menu'])
