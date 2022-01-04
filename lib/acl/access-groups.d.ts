@@ -6,7 +6,7 @@
 import { IndexedFormula, NamedNode } from 'rdflib';
 import { AccessController } from './access-controller';
 import { AgentMapMap, ComboList } from './types';
-import { LiveStore } from 'pane-registry';
+import { LiveStore } from 'solid-logic';
 /**
  * Type for the options parameter of [[AccessGroups]]
  */
