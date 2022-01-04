@@ -7,8 +7,7 @@
 import { NamedNode, Literal, parse } from 'rdflib'
 import * as debug from '../../../debug'
 import * as ns from '../../../ns'
-import { kb } from '../../../logic'
-// import  * as logic from '../../../logic'
+import { store } from 'solid-logic'
 import { getPreferredLanguages, defaultPreferredLanguages } from './language'
 
 export const AUTOCOMPLETE_LIMIT = 200 // How many to get from server
@@ -101,7 +100,7 @@ export const fetcherOptionsJsonPublicData = {
 
 export const escoParameters:QueryParameters = {
   label: 'ESCO',
-  logo: kb.sym('https://ec.europa.eu/esco/portal/static_resource2/images/logo/logo_en.gif'),
+  logo: store.sym('https://ec.europa.eu/esco/portal/static_resource2/images/logo/logo_en.gif'),
   searchByNameURI: 'https://ec.europa.eu/esco/api/search?language=$(language)&type=occupation&text=$(name)'
   // endpoint: undefined
   // returnFormat: 'ESCO',
@@ -110,7 +109,7 @@ export const escoParameters:QueryParameters = {
 
 export const dbpediaParameters:QueryParameters = {
   label: 'DBPedia',
-  logo: kb.sym('https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/DBpediaLogo.svg/263px-DBpediaLogo.svg.png'),
+  logo: store.sym('https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/DBpediaLogo.svg/263px-DBpediaLogo.svg.png'),
   searchByNameQuery: `select distinct ?subject, ?name where {
     ?subject a $(targetClass); rdfs:label ?name
     FILTER regex(?name, "$(name)", "i")
@@ -132,7 +131,7 @@ export const wikidataOutgoingClassMap = {
 export const wikidataParameters = {
   label: 'WikiData',
   limit: 3000, // Need a high one as very many items, and many languages
-  logo: kb.sym('https://www.wikimedia.org/static/images/project-logos/wikidatawiki.png'),
+  logo: store.sym('https://www.wikimedia.org/static/images/project-logos/wikidatawiki.png'),
   endpoint: 'https://query.wikidata.org/sparql',
   searchByNameQuery: `SELECT ?subject ?name
   WHERE {
@@ -192,7 +191,7 @@ export const variableNameToPredicateMap = { // allow other mappings to be added 
 export function bindingToTerm (item) {
   const typ = item.type.toLowerCase()
   if (typ === 'uri' || typ === 'iri') {
-    return kb.sym(item.value)
+    return store.sym(item.value)
   } else if (typ === 'literal') {
     if (item['xml:lang']) {
       return new Literal(item.value, item['xml:lang'])
@@ -283,7 +282,7 @@ export async function queryESCODataByName (filter: string, theClass:NamedNode, q
     .replace('$(targetClass)', theClass.toNT())
   debug.log('Querying ESCO data - uri: ' + queryURI)
 
-  const response = await kb.fetcher.webOperation('GET', queryURI, fetcherOptionsJsonPublicData)
+  const response = await store.fetcher.webOperation('GET', queryURI, fetcherOptionsJsonPublicData)
   const text = response.responseText || ''
   debug.log('    Query result  text' + text.slice(0, 500) + '...')
   if (text.length === 0) throw new Error('Wot no text back from ESCO query ' + queryURI)
@@ -336,7 +335,7 @@ export async function queryPublicDataByName (
     const queryURI = substituteStrings(queryTarget.searchByNameURI)
     let response
     try {
-      response = await kb.fetcher.webOperation('GET', queryURI, fetcherOptionsJsonPublicData)
+      response = await store.fetcher.webOperation('GET', queryURI, fetcherOptionsJsonPublicData)
     } catch (err) {
       throw new Error(`Exception when trying to fetch ${queryURI} \n ${err}`)
     }
@@ -377,7 +376,7 @@ export async function queryPublicDataSelect (sparql: string, queryTarget: QueryP
     headers: headers
   }
 
-  const response = await kb.fetcher.webOperation('GET', queryURI, options)
+  const response = await store.fetcher.webOperation('GET', queryURI, options)
 
   const text = response.responseText || ''
   if (text.length === 0) throw new Error('No text back from query ' + queryURI)
@@ -403,12 +402,12 @@ export async function queryPublicDataConstruct (sparql: string, pubicId: NamedNo
     credentials: 'omit' as 'include' | 'omit' | undefined, // CORS // @tsc pain
     headers: headers // ({ Accept: 'text/turtle' } as Headers)
   }
-  const response = await kb.fetcher.webOperation('GET', queryURI, options)
+  const response = await store.fetcher.webOperation('GET', queryURI, options)
   const text = response.responseText || 'No response text?'
   const report = text.length > 500 ? text.slice(0, 200) + ' ... ' + text.slice(-200) : text
   debug.log('    queryPublicDataConstruct result text:' + report)
   if (text.length === 0) throw new Error('queryPublicDataConstruct: No text back from construct query:' + queryURI)
-  parse(text, kb, pubicId.uri, 'text/turtle')
+  parse(text, store, pubicId.uri, 'text/turtle')
 }
 
 export async function loadPublicDataThing (kb, subject: NamedNode, publicDataID: NamedNode) {

@@ -9,7 +9,7 @@
 
 import { messageToolbar, sentimentStripLinked } from './messageTools'
 import { icons } from '../iconBase'
-import { store } from '../logic'
+import { store } from 'solid-logic'
 import { media } from '../media/index'
 import * as ns from '../ns'
 import * as pad from '../pad'

@@ -7,12 +7,11 @@
 import * as debug from '../../../debug'
 // import * as logic from '../index'
 // import { authn } from '../../../authn/index'
-import { authn } from 'solid-logic'
+import { authn, store } from 'solid-logic'
 import * as ns from '../../../ns'
 import { Collection, NamedNode, Node } from 'rdflib'
 // import { Binding } from '../widgets/forms/autocomplete/publicData'
 // import { nativeNameForLanguageCode, englishNameForLanguageCode } from './nativeNameForLanguageCode'
-import { kb } from '../../../logic'
 
 // const { currentUser } = logic.authn
 
@@ -34,8 +33,8 @@ export function addDefaults (array) {
 
 export async function getPreferredLanguagesFor (person: NamedNode) {
   const doc = person.doc()
-  await kb.fetcher.load(doc)
-  const list = kb.any(person, ns.schema('knowsLanguage'), null, doc) as Collection | undefined
+  await store.fetcher.load(doc)
+  const list = store.any(person, ns.schema('knowsLanguage'), null, doc) as Collection | undefined
   if (!list) {
     // console.log(`User ${person} has not set their languages in their profile.`)
     return defaultPreferredLanguages
@@ -43,7 +42,7 @@ export async function getPreferredLanguagesFor (person: NamedNode) {
   const languageCodeArray: string[] = []
   list.elements.forEach(item => {
     // console.log('@@ item ' + item)
-    const lang = kb.any(item as any, ns.solid('publicId'), null, doc)
+    const lang = store.any(item as any, ns.solid('publicId'), null, doc)
     if (!lang) {
       console.warn('getPreferredLanguages: No publiID of language.')
       return

@@ -20,7 +20,7 @@ import { icons } from '../iconBase'
 import * as log from '../log'
 import * as ns from '../ns'
 import * as $rdf from 'rdflib'
-import { store } from '../logic'
+import { store } from 'solid-logic'
 import * as utils from '../utils'
 import * as widgets from '../widgets' // Note default export
 

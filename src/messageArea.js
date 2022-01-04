@@ -3,7 +3,7 @@
 
 import { icons } from './iconBase'
 import * as login from './login/login'
-import { store } from './logic'
+import { store } from 'solid-logic'
 import * as ns from './ns'
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
 import * as style from './style'

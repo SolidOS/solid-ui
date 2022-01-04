@@ -14,7 +14,7 @@ import {
 import { NamedNode } from 'rdflib'
 // @ts-ignore
 import widgets from '../../../src/widgets/index'
-import { solidLogicSingleton } from '../../../src/logic'
+import { solidLogicSingleton } from 'solid-logic'
 // import { JSDOM } from 'jsdom'
 
 const store = solidLogicSingleton.store

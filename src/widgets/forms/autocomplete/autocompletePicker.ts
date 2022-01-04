@@ -6,7 +6,7 @@
 import * as debug from '../../../debug'
 import * as style from '../../../style'
 import * as widgets from '../../../widgets'
-import { kb } from '../../../logic'
+import { store } from 'solid-logic'
 import { NamedNode, Literal } from 'rdflib'
 import { queryPublicDataByName, bindingToTerm, AUTOCOMPLETE_LIMIT, QueryParameters } from './publicData'
 import { filterByLanguage, getPreferredLanguages, defaultPreferredLanguages } from './language'
@@ -69,7 +69,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
   function finish (object, name) {
     debug.log('Auto complete: finish! ' + object)
     if (object.termType === 'Literal' && acOptions.queryParams.objectURIBase) {
-      object = kb.sym(acOptions.queryParams.objectURIBase.value + object.value)
+      object = store.sym(acOptions.queryParams.objectURIBase.value + object.value)
     }
     // remove(decoration.cancelButton)
     // remove(decoration.acceptButton)

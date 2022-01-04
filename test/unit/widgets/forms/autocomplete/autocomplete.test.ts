@@ -8,7 +8,8 @@ import { parse } from 'rdflib'
 import {
   autocompleteField
 } from '../../../../../src/widgets/forms/autocomplete/autocompleteField'
-import { store, ns } from '../../../../../src/'
+import ns from '../../../../../src/ns'
+import { store } from 'solid-logic'
 // import { textInputStyle } from '../../../../../src/style'
 import {
 //  findByAltText,

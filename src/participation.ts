@@ -2,14 +2,13 @@
 */
 
 // import { currentUser } from './authn/authn'
-import { authn } from 'solid-logic'
 import { NamedNode, st } from 'rdflib'
 import * as ns from './ns'
 import { personTR, newThing, errorMessageBlock } from './widgets'
 import { syncTableToArray } from './utils'
 import { lightColorHash } from './pad'
 import { log } from './debug'
-import { solidLogicSingleton } from './logic'
+import { solidLogicSingleton, authn } from 'solid-logic'
 
 type ParticipationOptions = {
   deleteFunction?: () => {}

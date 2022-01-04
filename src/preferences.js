@@ -3,8 +3,7 @@
 //
 
 import * as debug from './debug'
-import { authn } from 'solid-logic'
-import { store } from './logic'
+import { authn, store } from 'solid-logic'
 import * as ns from './ns'
 import * as participation from './participation'// @ts-ignore
 

@@ -62,7 +62,7 @@ import * as participation from './participation'
 // @ts-ignore
 import * as preferences from './preferences'
 // @ts-ignore
-import { solidLogicSingleton } from './logic'
+import { solidLogicSingleton } from 'solid-logic'
 // @ts-ignore
 import * as style from './style'
 // @ts-ignore

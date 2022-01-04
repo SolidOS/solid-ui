@@ -6,7 +6,6 @@
 /* global alert confirm */
 import * as debug from '../debug'
 import { icons } from '../iconBase'
-import { store } from '../logic'
 import { media } from '../media/index'
 import * as ns from '../ns'
 import * as pad from '../pad'
@@ -14,7 +13,7 @@ import * as rdf from 'rdflib' // pull in first avoid cross-refs
 import * as style from '../style'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
-import { authn } from 'solid-logic'
+import { authn, store } from 'solid-logic'
 
 const UI = { icons, ns, media, pad, rdf, store, style, utils, widgets }
 const $rdf = UI.rdf

@@ -31,9 +31,8 @@ import * as debug from '../debug'
 import { textInputStyle, buttonStyle, commentStyle } from '../style'
 // eslint-disable-next-line camelcase
 import { Quad_Object } from 'rdflib/lib/tf-types'
-import { solidLogicSingleton } from '../logic'
 import { BlankNode, NamedNode, st, Statement, sym } from 'rdflib'
-import { authn, AppDetails, AuthenticationContext } from 'solid-logic'
+import { authn, AppDetails, AuthenticationContext, solidLogicSingleton } from 'solid-logic'
 
 /* global confirm */
 

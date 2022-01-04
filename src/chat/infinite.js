@@ -4,7 +4,7 @@
  */
 import * as debug from '../debug'
 import { icons } from '../iconBase'
-import { store } from '../logic'
+import { store } from 'solid-logic'
 import * as login from '../login/login'
 import { media } from '../media/index'
 import * as ns from '../ns'

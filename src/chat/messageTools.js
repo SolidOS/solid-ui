@@ -10,7 +10,6 @@
 /* global $rdf */
 
 import { icons } from '../iconBase'
-import { store } from '../logic'
 import { media } from '../media/index'
 import * as ns from '../ns'
 import * as pad from '../pad'
@@ -19,7 +18,7 @@ import * as style from '../style'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
 import { renderBookmarksButton } from './bookmarks'
-import { authn } from 'solid-logic'
+import { authn, store } from 'solid-logic'
 
 const UI = { icons, ns, media, pad, rdf, store, style, utils, widgets }
 

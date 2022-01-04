@@ -4,7 +4,7 @@
  */
 
 import { icons } from '../iconBase'
-import { store } from '../logic'
+import { store } from 'solid-logic'
 import { media } from '../media/index'
 import * as ns from '../ns'
 import * as login from '../login/login'
@@ -14,13 +14,13 @@ import * as style from '../style'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
 
-const UI = { icons, ns, media, pad, store, style, utils, widgets }
+const UI = { icons, ns, media, pad, style, utils, widgets }
 
 /**
  * HTML component for a chat thread
  */
 export function thread (dom, kb, subject, messageStore, options) {
-  kb = kb || UI.store
+  kb = kb || store
   messageStore = messageStore.doc() // No hash
   const ns = UI.ns
   const WF = $rdf.Namespace('http://www.w3.org/2005/01/wf/flow#')
@@ -40,7 +40,7 @@ export function thread (dom, kb, subject, messageStore, options) {
 
   let me
 
-  const updater = UI.store.updater
+  const updater = store.updater
 
   const anchor = function (text, term) {
     // If there is no link return an element anyway
@@ -189,7 +189,7 @@ export function thread (dom, kb, subject, messageStore, options) {
   }
 
   function nick (person) {
-    const s = UI.store.any(person, UI.ns.foaf('nick'))
+    const s = store.any(person, UI.ns.foaf('nick'))
     if (s) return '' + s.value
     return '' + utils.label(person)
   }
@@ -197,7 +197,7 @@ export function thread (dom, kb, subject, messageStore, options) {
   function creatorAndDate (td1, creator, date, message) {
     const nickAnchor = td1.appendChild(anchor(nick(creator), creator))
     if (creator.uri) {
-      UI.store.fetcher.nowOrWhenFetched(creator.doc(), undefined, function (
+      store.fetcher.nowOrWhenFetched(creator.doc(), undefined, function (
         _ok,
         _body
       ) {
