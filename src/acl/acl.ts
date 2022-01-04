@@ -11,8 +11,7 @@ import * as utils from '../utils'
 import { AgentMapMap, AgentMapUnion, ComboList } from './types'
 import * as debug from '../debug'
 import { graph, IndexedFormula, NamedNode, serialize, st, Statement, sym } from 'rdflib'
-import { LiveStore } from 'pane-registry'
-import { ACL_LINK } from 'solid-logic'
+import { ACL_LINK, LiveStore } from 'solid-logic'
 
 const kb = solidLogicSingleton.store
 
