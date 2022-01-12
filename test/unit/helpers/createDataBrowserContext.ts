@@ -1,4 +1,5 @@
-import { DataBrowserContext, LiveStore } from 'pane-registry'
+import { DataBrowserContext } from 'pane-registry'
+import { LiveStore } from 'solid-logic'
 
 export function createDataBrowserContext (
   dom: HTMLDocument,

@@ -171,7 +171,7 @@ export function messageArea (dom, kb, subject, messageStore, options) {
     }
 
     const context = { div: middle, dom: dom }
-    login.logIn(context).then(context => {
+    login.loggedInContext(context).then(context => {
       me = context.me
       turnOnInput()
     })

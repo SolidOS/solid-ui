@@ -8,7 +8,7 @@ import * as utils from '../utils'
 import * as widgets from '../widgets'
 import * as ns from '../ns'
 import { authn, solidLogicSingleton } from 'solid-logic'
-import { selectWorkspace } from '../login/login'
+import { loggedInContext, selectWorkspace } from '../login/login'
 // import { logInLoadProfile, selectWorkspace } from '../authn/authn'
 import { DataBrowserContext, NewPaneOptions, PaneDefinition } from 'pane-registry'
 import { CreateContext, NewAppInstanceOptions } from './types'
@@ -79,8 +79,12 @@ export function newThingUI (
     return new Promise(function (resolve, reject) {
       let selectUI // , selectUIParent
       function callbackWS (ws, newBase) {
-        authn.logInLoadProfile(createContext).then(
+        loggedInContext(createContext).then(
           _context => {
+            // load profile
+            if (_context.me) {
+              solidLogicSingleton.loadProfile(_context.me!)
+            }
             const newPaneOptions: NewPaneOptions = Object.assign({
               newBase: newBase,
               folder: options.folder || undefined,

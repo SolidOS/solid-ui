@@ -14,6 +14,7 @@ import * as style from '../style'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
 import { authn, store } from 'solid-logic'
+import { findAppInstances } from '../login/login'
 
 const UI = { icons, ns, media, pad, rdf, store, style, utils, widgets }
 const $rdf = UI.rdf
@@ -96,7 +97,7 @@ export async function findBookmarkDocument (userContext) {
   const fileTail = 'bookmarks.ttl'
   const isPublic = true
 
-  await authn.findAppInstances(userContext, theClass, isPublic) // public -- only look for public links
+  await findAppInstances(userContext, theClass, isPublic) // public -- only look for public links
   if (userContext.instances && userContext.instances.length > 0) {
     userContext.bookmarkDocument = userContext.instances[0]
     if (userContext.instances.length > 1) {

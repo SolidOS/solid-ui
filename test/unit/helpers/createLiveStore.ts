@@ -1,5 +1,5 @@
 import { fetcher, graph, UpdateManager } from 'rdflib'
-import { LiveStore } from 'pane-registry'
+import { LiveStore } from 'solid-logic'
 
 export function createLiveStore (): LiveStore { // will change this to LiveStore when pane-registry is updated
   const store = graph()

@@ -324,7 +324,7 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
     } // turn on inpuut
 
     const context = { div: middle, dom: dom }
-    login.logIn(context).then(context => {
+    login.loggedInContext(context).then(context => {
       me = context.me
       turnOnInput()
       Object.assign(context, userContext)

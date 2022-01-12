@@ -7,11 +7,12 @@ import { AccessGroups } from './access-groups'
 import { icons } from '../iconBase'
 import * as widgets from '../widgets'
 import * as ns from '../ns'
-import { authn, AuthenticationContext } from 'solid-logic'
+import { AuthenticationContext, solidLogicSingleton } from 'solid-logic'
 import * as utils from '../utils'
 import { NamedNode, Store } from 'rdflib'
 // import { AuthenticationContext } from '../authn/types'
 import * as debug from '../debug'
+import { loggedInContext } from '../login/login'
 
 /**
  * Renders the Sharing pane's "+" button and the menus behind it,
@@ -184,7 +185,17 @@ export class AddAgentButtons {
   }
 
   private async renderAppsTable (eventContext: AuthenticationContext): Promise<string> {
-    await authn.logInLoadProfile(eventContext)
+    const newContext = await loggedInContext(eventContext)
+    if (newContext.me) {
+      eventContext.publicProfile = await solidLogicSingleton.loadProfile(newContext.me!)
+    } else {
+      if (eventContext.div && eventContext.dom) {
+        eventContext.div.appendChild(
+          widgets.errorMessageBlock(eventContext.dom, 'Could not log in!')
+        )
+      }
+    }
+    // await authn.logInLoadProfile(eventContext)
     const trustedApps = (this.groupList.store as Store).each(eventContext.me, ns.acl('trustedApp')) as Array<NamedNode> // @@ TODO fix as
     const trustedOrigins = trustedApps.flatMap(app => (this.groupList.store as Store).each(app, ns.acl('origin'))) // @@ TODO fix as
 

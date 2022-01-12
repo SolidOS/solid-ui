@@ -33,8 +33,8 @@ import { textInputStyle, buttonStyle, commentStyle } from '../style'
 import { Quad_Object } from 'rdflib/lib/tf-types'
 import { BlankNode, NamedNode, st, Statement, sym } from 'rdflib'
 import { authn, AppDetails, AuthenticationContext, solidLogicSingleton } from 'solid-logic'
-
-/* global confirm */
+import { utils } from '../utils/index'
+import { authSession } from 'solid-logic/lib/authn/authn'
 
 // export const authSession = authSessionImport
 
@@ -99,34 +99,6 @@ import { authn, AppDetails, AuthenticationContext, solidLogicSingleton } from 's
  */
 
 /**
-  * Wrapper around [[offlineTestID]]
-  * @returns {NamedNode|null}
-  */
-export function defaultTestUser (): NamedNode | null {
-  // Check for offline override
-  const offlineId = authn.offlineTestID()
-
-  if (offlineId) {
-    return offlineId
-  }
-
-  if (
-    typeof document !== 'undefined' &&
-     document.location &&
-     ('' + document.location).slice(0, 16) === 'http://localhost'
-  ) {
-    const div = document.getElementById('appTarget')
-    if (!div) return null
-    const id = div.getAttribute('testID')
-    if (!id) return null
-    debug.log('Assuming user is ' + id)
-    return sym(id)
-  }
-
-  return null
-}
-
-/**
   * find a user or app's context as set in window.SolidAppContext
   * @return {any} - an appContext object
   */
@@ -177,12 +149,36 @@ export function defaultTestUser (): NamedNode | null {
   *
   * @param context
   */
-export function logIn (context: AuthenticationContext): Promise<AuthenticationContext> {
-  const app = authn.appContext()
-  const me = app.viewingNoAuthPage ? sym(app.webId) : defaultTestUser() // me is a NamedNode or null
-
+export function loggedInContext (context: AuthenticationContext): Promise<AuthenticationContext> {
+  const me = authn.currentUser()
   if (me) {
-    context.me = me
+    authn.saveUser(me, context)
+    return Promise.resolve(context)
+  }
+
+  return new Promise(resolve => {
+    authn.checkUser().then(webId => {
+      // Already logged in?
+      if (webId) {
+        debug.log(`logIn: Already logged in as ${context.me}`)
+        return resolve(context)
+      }
+      if (!context.div || !context.dom) {
+        return resolve(context)
+      }
+      const box = loginStatusBox(context.dom, webIdUri => {
+        authn.saveUser(webIdUri, context)
+        resolve(context) // always pass growing context
+      })
+      context.div.appendChild(box)
+    })
+  })
+}
+
+/* export function logIn (context: AuthenticationContext): Promise<AuthenticationContext> {
+  const webId: NamedNode | null = authn.currentUser()
+  if (webId) {
+    authn.saveUser(webId, context)
     return Promise.resolve(context)
   }
 
@@ -204,7 +200,33 @@ export function logIn (context: AuthenticationContext): Promise<AuthenticationCo
       context.div.appendChild(box)
     })
   })
-}
+} */
+
+/* Logs the user in and loads their WebID profile document into the store
+ *
+ * @param context
+ *
+ * @returns Resolves with the context after login / fetch
+ */
+/* export async function logInLoadProfile (context: AuthenticationContext): Promise<AuthenticationContext> {
+  if (context.publicProfile) {
+    return context
+  } // already done
+  try {
+    const loggedInContext = await logIn(context)
+    if (!loggedInContext.me) {
+      throw new Error('Could not log in')
+    }
+    context.publicProfile = await solidLogicSingleton.loadProfile(loggedInContext.me)
+  } catch (err) {
+    if (context.div && context.dom) {
+      context.div.appendChild(
+        widgets.errorMessageBlock(context.dom, err.message)
+      )
+    }
+  }
+  return context
+} */
 
 /**
   * Logs the user in and loads their WebID profile document into the store
@@ -431,79 +453,88 @@ export function logIn (context: AuthenticationContext): Promise<AuthenticationCo
   * 2016-12-11 change to include forClass arc a la
   * https://github.com/solid/solid/blob/main/proposals/data-discovery.md
   */
-/* export async function findAppInstances (
-   context: AuthenticationContext,
-   theClass: NamedNode,
-   isPublic?: boolean
- ): Promise<AuthenticationContext> {
-   // console.log('findAppInstances', { context, theClass, isPublic })
-   if (isPublic === undefined) {
-     // Then both public and private
-     // console.log('finding public app instance')
-     await findAppInstances(context, theClass, true)
-     // console.log('finding private app instance')
-     await findAppInstances(context, theClass, false)
-     // console.log('found public & private app instance', context)
-     return context
-   }
+export async function findAppInstances (
+  context: AuthenticationContext,
+  theClass: NamedNode,
+  isPublic?: boolean
+): Promise<AuthenticationContext> {
+  // console.log('findAppInstances', { context, theClass, isPublic })
+  if (isPublic === undefined) {
+    // Then both public and private
+    // console.log('finding public app instance')
+    await findAppInstances(context, theClass, true)
+    // console.log('finding private app instance')
+    await findAppInstances(context, theClass, false)
+    // console.log('found public & private app instance', context)
+    return context
+  }
 
-   // Loading preferences is more than loading profile
-   try {
-     // console.log('calling logInLoad', isPublic)
-     await (isPublic
-       ? logInLoadProfile(context)
-       : logInLoadPreferences(context))
-     // console.log('called logInLoad', isPublic)
-   } catch (err) {
-     widgets.complain(context, `loadIndex: login and load problem ${err}`)
-   }
-   // console.log('awaited LogInLoad!', context)
-   const visibility = isPublic ? 'public' : 'private'
-   try {
-     await loadIndex(context, isPublic)
-   } catch (err) {
-   }
-   const index = context.index as { [key: string]: Array<NamedNode> }
-   const thisIndex = index[visibility]
-   const registrations = thisIndex
-     .map(ix => solidLogicSingleton.store.each(undefined, ns.solid('forClass'), theClass, ix))
-     .reduce((acc, curr) => acc.concat(curr), [])
-   const instances = registrations
-     .map(reg => solidLogicSingleton.store.each(reg as NamedNode, ns.solid('instance')))
-     .reduce((acc, curr) => acc.concat(curr), [])
-   const containers = registrations
-     .map(reg => solidLogicSingleton.store.each(reg as NamedNode, ns.solid('instanceContainer')))
-     .reduce((acc, curr) => acc.concat(curr), [])
+  // Loading preferences is more than loading profile
+  try {
+    // console.log('calling logInLoad', isPublic)
+    /* await (isPublic
+      ? logInLoadProfile(context)
+      : logInLoadPreferences(context)) */
+    if (!context.me) {
+      context = await loggedInContext(context)
+    }
+    // load profile
+    context.publicProfile = await solidLogicSingleton.loadProfile(context.me!)
+    if (!isPublic) {
+      // load preferences
+      context.preferencesFile = await solidLogicSingleton.loadPreferences(context.me!)
+    }
+    // console.log('called logInLoad', isPublic)
+  } catch (err) {
+    widgets.complain(context, `loadIndex: login and load problem ${err}`)
+  }
+  // console.log('awaited LogInLoad!', context)
+  const visibility = isPublic ? 'public' : 'private'
+  try {
+    await authn.loadIndex(context, isPublic)
+  } catch (err) {
+  }
+  const index = context.index as { [key: string]: Array<NamedNode> }
+  const thisIndex = index[visibility]
+  const registrations = thisIndex
+    .map(ix => solidLogicSingleton.store.each(undefined, ns.solid('forClass'), theClass, ix))
+    .reduce((acc, curr) => acc.concat(curr), [])
+  const instances = registrations
+    .map(reg => solidLogicSingleton.store.each(reg as NamedNode, ns.solid('instance')))
+    .reduce((acc, curr) => acc.concat(curr), [])
+  const containers = registrations
+    .map(reg => solidLogicSingleton.store.each(reg as NamedNode, ns.solid('instanceContainer')))
+    .reduce((acc, curr) => acc.concat(curr), [])
 
-   function unique (arr: NamedNode[]): NamedNode[] {
-     return Array.from(new Set(arr))
-   }
-   context.instances = context.instances || []
-   context.instances = unique(context.instances.concat(instances as NamedNode[]))
+  function unique (arr: NamedNode[]): NamedNode[] {
+    return Array.from(new Set(arr))
+  }
+  context.instances = context.instances || []
+  context.instances = unique(context.instances.concat(instances as NamedNode[]))
 
-   context.containers = context.containers || []
-   context.containers = unique(context.containers.concat(containers as NamedNode[]))
-   if (!containers.length) {
-     return context
-   }
-   // If the index gives containers, then look up all things within them
-   try {
-     await solidLogicSingleton.load(containers as NamedNode[])
-   } catch (err) {
-     const e = new Error(`[FAI] Unable to load containers${err}`)
-     debug.log(e) // complain
-     widgets.complain(context, `Error looking for ${utils.label(theClass)}:  ${err}`)
-     // but then ignore it
-     // throw new Error(e)
-   }
-   for (let i = 0; i < containers.length; i++) {
-     const cont = containers[i]
-     context.instances = context.instances.concat(
-       (await solidLogicSingleton.getContainerMembers(cont.value)).map(uri => solidLogicSingleton.store.sym(uri)) // @@ warning: uses strings not NN
-     )
-   }
-   return context
- } */
+  context.containers = context.containers || []
+  context.containers = unique(context.containers.concat(containers as NamedNode[]))
+  if (!containers.length) {
+    return context
+  }
+  // If the index gives containers, then look up all things within them
+  try {
+    await solidLogicSingleton.load(containers as NamedNode[])
+  } catch (err) {
+    const e = new Error(`[FAI] Unable to load containers${err}`)
+    debug.log(e) // complain
+    widgets.complain(context, `Error looking for ${utils.label(theClass)}:  ${err}`)
+    // but then ignore it
+    // throw new Error(e)
+  }
+  for (let i = 0; i < containers.length; i++) {
+    const cont = containers[i]
+    context.instances = context.instances.concat(
+      (await solidLogicSingleton.getContainerMembers(cont.value)).map(uri => solidLogicSingleton.store.sym(uri)) // @@ warning: uses strings not NN
+    )
+  }
+  return context
+}
 
 /**
   * Register a new app in a type index
@@ -931,7 +962,7 @@ function signInOrSignUpBox (
   })
 
   signInPopUpButton.addEventListener('click', () => {
-    const offline = defaultTestUser() // offlineTestID()
+    const offline = authn.offlineTestID()
     if (offline) return setUserCallback(offline.uri)
 
     renderSignInPopup(dom)
@@ -953,6 +984,27 @@ function signInOrSignUpBox (
   }, false)
   return box
 }
+
+// ======== WHAT IS THIS? ========
+authSession.onLogout(async () => {
+  const issuer = window.localStorage.getItem('loginIssuer')
+  if (issuer) {
+    try {
+      const wellKnownUri = new URL(issuer)
+      wellKnownUri.pathname = '/.well-known/openid-configuration'
+      const wellKnownResult = await fetch(wellKnownUri.toString())
+      if (wellKnownResult.status === 200) {
+        const openidConfiguration = await wellKnownResult.json()
+        if (openidConfiguration && openidConfiguration.end_session_endpoint) {
+          await fetch(openidConfiguration.end_session_endpoint, { credentials: 'include' })
+        }
+      }
+    } catch (err) {
+      // Do nothing
+    }
+  }
+  window.location.reload()
+})
 
 export function renderSignInPopup (dom: HTMLDocument) {
   /**
@@ -1190,7 +1242,7 @@ export function loginStatusBox (
    } = {}
 ): HTMLElement {
   // 20190630
-  let me = defaultTestUser()
+  let me = authn.offlineTestID()
   // @@ TODO Remove the need to cast HTML element to any
   const box: any = dom.createElement('div')
 
@@ -1332,9 +1384,9 @@ export function selectWorkspace (
   const noun = appDetails.noun
   const appPathSegment = appDetails.appPathSegment
 
-  const me = defaultTestUser()
+  const me = authn.offlineTestID()
   const box = dom.createElement('div')
-  const context: AuthenticationContext = { me: me, dom: dom, div: box }
+  let context: AuthenticationContext = { me: me, dom: dom, div: box }
 
   function say (s, background) {
     box.appendChild(widgets.errorMessageBlock(dom, s, background))
@@ -1533,12 +1585,26 @@ export function selectWorkspace (
   } // displayOptions
 
   // console.log('kicking off async operation')
-  authn.logInLoadPreferences(context) // kick off async operation
+  /* authn.logInLoadPreferences(context) // kick off async operation
     .then(displayOptions)
     .catch(err => {
       // console.log("err from async op")
       box.appendChild(widgets.errorMessageBlock(context.dom, err))
+    }) */
+  try {
+    if (!context.me) {
+      loggedInContext(context).then(newContext => {
+        context = newContext
+      })
+    }
+    // load profile
+    solidLogicSingleton.loadProfile(context.me!).then(profile => {
+      context.publicProfile = profile
     })
+    displayOptions(context)
+  } catch (err) {
+    box.appendChild(widgets.errorMessageBlock(context.dom, err))
+  }
 
   return box // return the box element, while login proceeds
 } // selectWorkspace
@@ -1602,11 +1668,34 @@ export function newAppInstance (
  } */
 
 /**
-  * Filters which panes should be available, based on the result of [[getUserRoles]]
+  * Filters which panes should be available, based on the result of userRoles
   */
 export async function filterAvailablePanes (panes: Array<PaneDefinition>): Promise<Array<PaneDefinition>> {
-  const userRoles = await authn.getUserRoles()
-  return panes.filter(pane => isMatchingAudience(pane, userRoles))
+  // const userRoles = await authn.getUserRoles()
+  try {
+    const logInContext: AuthenticationContext = await loggedInContext({})
+    if (logInContext.me) {
+      // load profile
+      logInContext.publicProfile = await solidLogicSingleton.loadProfile(logInContext.me)
+      // load preferences
+      logInContext.preferencesFile = await solidLogicSingleton.loadPreferences(logInContext.me)
+      // load user roles
+      const userRoles = solidLogicSingleton.store.each(logInContext.me, ns.rdf('type'), null, logInContext.preferencesFile.doc()) as NamedNode[]
+      return panes.filter(pane => isMatchingAudience(pane, userRoles))
+    } else {
+      if (logInContext.div && logInContext.dom) {
+        logInContext.div.appendChild(
+          widgets.errorMessageBlock(logInContext.dom, 'Could not log in!')
+        )
+      } else {
+        debug.warn('Could not log in!')
+      }
+      return Promise.resolve([])
+    }
+  } catch (error) {
+    debug.warn('Unable to filterAvailablePanes: ', error)
+    return Promise.resolve([])
+  }
 }
 
 function isMatchingAudience (pane: PaneDefinition, userRoles: Array<NamedNode>): boolean {

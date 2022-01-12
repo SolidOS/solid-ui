@@ -1,7 +1,7 @@
 import { sym } from 'rdflib'
 import { AccessGroups } from '../../../src/acl/access-groups'
 import { instantiateAccessController } from './instantiateAccessController'
-import { LiveStore } from 'pane-registry'
+import { LiveStore } from 'solid-logic'
 
 export function instantiateAccessGroups (dom: HTMLDocument, store: LiveStore) {
   return new AccessGroups(
