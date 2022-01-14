@@ -10,8 +10,8 @@ import { solidLogicSingleton } from '../logic'
 import * as utils from '../utils'
 import { AgentMapMap, AgentMapUnion, ComboList } from './types'
 import * as debug from '../debug'
-import { graph, IndexedFormula, NamedNode, serialize, st, Statement, sym } from 'rdflib'
-import { ACL_LINK, LiveStore } from 'solid-logic'
+import { graph, IndexedFormula, NamedNode, serialize, st, Statement, sym, LiveStore } from 'rdflib'
+import { ACL_LINK } from 'solid-logic'
 
 const kb = solidLogicSingleton.store
 
