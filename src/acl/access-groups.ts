@@ -12,7 +12,7 @@ import { AccessController } from './access-controller'
 import { AgentMapMap, ComboList, PartialAgentTriple } from './types'
 import { AddAgentButtons } from './add-agent-buttons'
 import * as debug from '../debug'
-import { LiveStore } from 'pane-registry'
+import { LiveStore } from 'solid-logic'
 
 const ACL = ns.acl
 
