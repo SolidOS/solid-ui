@@ -64,7 +64,7 @@ export function autocompleteField (
     // console.log(`AC form: ${deletables.length} to delete and ${insertables.length} to insert`)
     try {
       // console.log('@@@ AC updating ', deletables, insertables)
-      await kb.updater.updateMany(deletables, insertables)
+      await kb.updater?.updateMany(deletables, insertables)
     } catch (err) {
       callbackFunction(false, err)
       box.appendChild(widgets.errorMessageBlock(dom, 'Autocomplete form data update error:' + err, null, err))
@@ -88,7 +88,7 @@ export function autocompleteField (
     // console.log(`AC form delete: ${deletables.length} to delete and ${insertables.length} to insert`)
     try {
       // console.log('@@@ AC updating ', deletables, insertables)
-      await kb.updater.updateMany(deletables, insertables)
+      await kb.updater?.updateMany(deletables, insertables)
     } catch (err) {
       const e2 = new Error('Autocomplete form data delete error:' + err)
       callbackFunction(false, err)
@@ -179,7 +179,7 @@ export function autocompleteField (
   }
   // It can be cleaner to just remove empty fields if you can't edit them anyway
   const suppressEmptyUneditable = kb.anyJS(form, ns.ui('suppressEmptyUneditable'), null, formDoc)
-  const editable = kb.updater.editable((doc as NamedNode).uri)
+  const editable = kb.updater?.editable((doc as NamedNode).uri)
 
   const autocompleteOptions:AutocompleteOptions = { // cancelButton?: HTMLElement,
     permanent: true,
