@@ -5,7 +5,7 @@
  */
 import { IndexedFormula, NamedNode } from 'rdflib'
 import { icons } from '../index'
-import { authn } from 'solid-logic'
+import { authn, authSession } from 'solid-logic'
 import { loginStatusBox } from '../login/login'
 // import { loginStatusBox, authSession, currentUser } from '../authn/authn'
 import * as widgets from '../widgets'
@@ -56,8 +56,8 @@ export async function initHeader (store: IndexedFormula, userMenuList: MenuItems
 
   const pod = getPod()
   rebuildHeader(header, store, pod, userMenuList, options)()
-  authn.authSession.onLogout(rebuildHeader(header, store, pod, userMenuList, options))
-  authn.authSession.onLogin(rebuildHeader(header, store, pod, userMenuList, options))
+  authSession.onLogout(rebuildHeader(header, store, pod, userMenuList, options))
+  authSession.onLogin(rebuildHeader(header, store, pod, userMenuList, options))
 }
 /**
  * @ignore exporting this only for the unit test

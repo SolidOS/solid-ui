@@ -3,7 +3,7 @@
     work in solid-ui by adjusting where imported functions are found.
  */
 import { IndexedFormula, NamedNode } from 'rdflib'
-import { authn } from 'solid-logic'
+import { authn, authSession } from 'solid-logic'
 import { addStyleClassToElement, getName, getPod, getPodOwner } from '../utils/headerFooterHelpers'
 
 const DEFAULT_SOLID_PROJECT_URL = 'https://solidproject.org'
@@ -30,8 +30,8 @@ export async function initFooter (store: IndexedFormula, options?: FooterOptions
   const pod = getPod()
   const podOwner = await getPodOwner(pod, store)
   rebuildFooter(footer, store, pod, podOwner, options)()
-  authn.authSession.onLogin(rebuildFooter(footer, store, pod, podOwner, options))
-  authn.authSession.onLogout(rebuildFooter(footer, store, pod, podOwner, options))
+  authSession.onLogin(rebuildFooter(footer, store, pod, podOwner, options))
+  authSession.onLogout(rebuildFooter(footer, store, pod, podOwner, options))
 }
 /**
  * @ignore exporting this only for the unit test
