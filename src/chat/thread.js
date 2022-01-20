@@ -176,7 +176,7 @@ export function thread (dom, kb, subject, messageStore, options) {
 
     if (options === 'edit' || options === 'delete') {
       sts.push(
-        new $rdf.Statement(replacingMsg(oldMsg), DCT('isReplacedBy'), message, messageStore)
+        new $rdf.Statement(mostRecentVersion(oldMsg), DCT('isReplacedBy'), message, messageStore)
       )
     } else {
       sts.push(
@@ -234,7 +234,7 @@ export function thread (dom, kb, subject, messageStore, options) {
 
     if (options === 'edit' || options === 'delete') {
       sts.push(
-        new $rdf.Statement(replacingMsg(oldMsg), DCT('isReplacedBy'), message, messageStore)
+        new $rdf.Statement(mostRecentVersion(oldMsg), DCT('isReplacedBy'), message, messageStore)
       )
     } else {
       sts.push(
@@ -311,7 +311,7 @@ export function thread (dom, kb, subject, messageStore, options) {
     }
   }
 
-  const replacingMsg = function (message) {
+  const mostRecentVersion = function (message) {
     let msg = message
     // const listMsg = []
     while (msg) {
