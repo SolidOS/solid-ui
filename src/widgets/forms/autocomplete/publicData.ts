@@ -4,11 +4,11 @@
 * See https://solidos.solidcommunity.net/public/2021/01%20Building%20Solid%20Apps%20which%20use%20Public%20Data.html
 */
 /* eslint-disable no-console */
-import { NamedNode, Literal, parse, IndexedFormula } from 'rdflib'
+import { Literal, NamedNode, parse } from 'rdflib'
+import { store } from 'solid-logic'
 import * as debug from '../../../debug'
 import * as ns from '../../../ns'
-import { store } from 'solid-logic'
-import { getPreferredLanguages, defaultPreferredLanguages } from './language'
+import { defaultPreferredLanguages, getPreferredLanguages } from './language'
 
 export const AUTOCOMPLETE_LIMIT = 200 // How many to get from server
 // With 3000 we could exceed the wikidata timeout

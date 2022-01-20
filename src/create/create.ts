@@ -2,15 +2,15 @@
  **
  */
 
-import * as debug from '../debug'
-import { icons } from '../iconBase'
-import * as utils from '../utils'
-import * as widgets from '../widgets'
-import * as ns from '../ns'
-import { authn, solidLogicSingleton } from 'solid-logic'
-import { loggedInContext, selectWorkspace } from '../login/login'
 // import { logInLoadProfile, selectWorkspace } from '../authn/authn'
 import { DataBrowserContext, NewPaneOptions, PaneDefinition } from 'pane-registry'
+import { solidLogicSingleton } from 'solid-logic'
+import * as debug from '../debug'
+import { icons } from '../iconBase'
+import { loggedInContext, selectWorkspace } from '../login/login'
+import * as ns from '../ns'
+import * as utils from '../utils'
+import * as widgets from '../widgets'
 import { CreateContext, NewAppInstanceOptions } from './types'
 
 const kb = solidLogicSingleton.store

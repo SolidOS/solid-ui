@@ -29,7 +29,7 @@ import { textInputStyle, buttonStyle, commentStyle } from '../style'
 // eslint-disable-next-line camelcase
 import { Quad_Object } from 'rdflib/lib/tf-types'
 import { BlankNode, IndexedFormula, NamedNode, st, Statement, sym } from 'rdflib'
-import { authn, AppDetails, AuthenticationContext, solidLogicSingleton, offlineTestID, typeIndexLogic, authSession, getSuggestedIssuers } from 'solid-logic'
+import { authn, AppDetails, AuthenticationContext, solidLogicSingleton, authUtil, typeIndexLogic, authSession, getSuggestedIssuers } from 'solid-logic'
 import { utils } from '../utils/index'
 
 /**
@@ -384,7 +384,7 @@ function signInOrSignUpBox (
   })
 
   signInPopUpButton.addEventListener('click', () => {
-    const offline = offlineTestID()
+    const offline = authUtil.offlineTestID()
     if (offline) return setUserCallback(offline.uri)
 
     renderSignInPopup(dom)
@@ -564,7 +564,7 @@ export function loginStatusBox (
    } = {}
 ): HTMLElement {
   // 20190630
-  let me = offlineTestID()
+  let me = authUtil.offlineTestID()
   // @@ TODO Remove the need to cast HTML element to any
   const box: any = dom.createElement('div')
 
@@ -706,7 +706,7 @@ export function selectWorkspace (
   const noun = appDetails.noun
   const appPathSegment = appDetails.appPathSegment
 
-  const me = offlineTestID()
+  const me = authUtil.offlineTestID()
   const box = dom.createElement('div')
   let context: AuthenticationContext = { me: me, dom: dom, div: box }
 
