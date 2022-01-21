@@ -1,6 +1,7 @@
 /**
  * Contains the [[DateFolder]] class
- * @packageDocumentation
+ * This tracks data stored in dated folders and sub-folders
+ *
  */
 
 import * as debug from '../debug'
@@ -8,8 +9,6 @@ import { store } from '../logic'
 
 import * as ns from '../ns'
 import * as $rdf from 'rdflib' // pull in first avoid cross-refs
-
-const kb = store
 
 /**
  * Track back through the YYYY/MM/DD tree to find the previous/next day
@@ -30,7 +29,7 @@ export class DateFolder {
     const isoDate = date.toISOString() // Like "2018-05-07T17:42:46.576Z"
     let path = isoDate.split('T')[0].replace(/-/g, '/') //  Like "2018/05/07"
     path = this.root.dir().uri + path + '/' + this.leafFileName
-    return kb.sym(path)
+    return store.sym(path)
   }
 
   /* Generate a date object from the leaf file name
@@ -68,11 +67,11 @@ export class DateFolder {
         if (level !== 3) return siblings.pop() // only length chck final leverl
         while (siblings.length) {
           const folder = siblings.pop()
-          const leafDocument = kb.sym(folder.uri + thisDateFolder.leafFileName)
-          await kb.fetcher.load(leafDocument)
+          const leafDocument = store.sym(folder.uri + thisDateFolder.leafFileName)
+          await store.fetcher.load(leafDocument)
           // files can have seealso links. skip ones with no leafObjects with a date
           if (
-            kb.statementsMatching(null, ns.dct('created'), null, leafDocument)
+            store.statementsMatching(null, ns.dct('created'), null, leafDocument)
               .length > 0
           ) {
             return folder
@@ -82,8 +81,8 @@ export class DateFolder {
       }
       // debug.log('  previousPeriod level' + level + ' file ' + file)
       const parent = file.dir()
-      await kb.fetcher.load(parent)
-      let siblings = kb.each(parent, ns.ldp('contains'))
+      await store.fetcher.load(parent)
+      let siblings = store.each(parent, ns.ldp('contains'))
       siblings = siblings.filter(younger)
       const folder = await lastNonEmpty(siblings)
       if (folder) return folder
@@ -92,8 +91,8 @@ export class DateFolder {
 
       const uncle = await previousPeriod(parent, level - 1)
       if (!uncle) return null // reached first ever
-      await kb.fetcher.load(uncle)
-      const cousins = kb.each(uncle, ns.ldp('contains'))
+      await store.fetcher.load(uncle)
+      const cousins = store.each(uncle, ns.ldp('contains'))
       const result = await lastNonEmpty(cousins)
       return result
     } // previousPeriod
@@ -101,7 +100,7 @@ export class DateFolder {
     const folder = this.leafDocumentFromDate(date).dir()
     const found = await previousPeriod(folder, 3)
     if (found) {
-      const doc = kb.sym(found.uri + this.leafFileName)
+      const doc = store.sym(found.uri + this.leafFileName)
       return this.dateFromLeafDocument(doc)
     }
     return null

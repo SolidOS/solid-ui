@@ -25,7 +25,8 @@ import * as widgets from '../widgets'
 const UI = { authn, icons, ns, media, pad, rdf, store, style, utils, widgets }
 
 const dom = UI.dom || window.document
-// const kb = UI.store
+const store = store
+// const store = UI.store
 
 const messageBodyStyle = UI.style.messageBodyStyle
 
@@ -297,7 +298,7 @@ export function renderMessageEditor (messageTable, userContext, options, date, o
   function droppedFileHandler (files) {
     const base = messageTable.chatDocument.dir().uri
     UI.widgets.uploadFiles(
-      kb.fetcher,
+      store.fetcher,
       files,
       base + 'Files',
       base + 'Pictures',

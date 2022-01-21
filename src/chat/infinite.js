@@ -23,38 +23,6 @@ const UI = { authn, icons, ns, media, pad, $rdf, store, style, utils, widgets }
 
 /* global alert */
 
-export async function createIfNotExists (doc, contentType = 'text/turtle', data = '') {
-  const fetcher = UI.store.fetcher
-  let response
-  try {
-    response = await fetcher.load(doc)
-  } catch (err) {
-    if (err.response.status === 404) {
-      debug.log(
-        'createIfNotExists: doc does NOT exist, will create... ' + doc
-      )
-      try {
-        response = await fetcher.webOperation('PUT', doc.uri, {
-          data,
-          contentType
-        })
-      } catch (err) {
-        debug.log('createIfNotExists doc FAILED: ' + doc + ': ' + err)
-        throw err
-      }
-      delete fetcher.requested[doc.uri] // delete cached 404 error
-      // debug.log('createIfNotExists doc created ok ' + doc)
-      return response
-    } else {
-      debug.log(
-        'createIfNotExists doc load error NOT 404:  ' + doc + ': ' + err
-      )
-      throw err
-    }
-  }
-  // debug.log('createIfNotExists: doc exists, all good: ' + doc)
-  return response
-}
 
 export function desktopNotification (str) {
   // Let's check if the browser supports notifications
@@ -124,8 +92,8 @@ export function insertMessageIntoTable (messageTable, bindings, fresh, options, 
  * Parameters for the whole chat like its title are stored on
  * index.ttl#this and the chats messages are stored in YYYY/MM/DD/chat.ttl
  */
-export async function infiniteMessageArea (dom, kb, chatChannel, options) {
-  kb = kb || UI.store
+export async function infiniteMessageArea (dom, store, chatChannel, options) {
+  store = store || UI.store
   const ns = UI.ns
   const WF = $rdf.Namespace('http://www.w3.org/2005/01/wf/flow#')
   const DCT = $rdf.Namespace('http://purl.org/dc/terms/')
@@ -152,8 +120,8 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
     const dateStamp = $rdf.term(now)
     // http://www.w3schools.com/jsref/jsref_obj_date.asp
     const chatDocument = options ? oldMsg.doc() : dateFolder.leafDocumentFromDate(now)
-    const message = kb.sym(chatDocument.uri + '#' + 'Msg' + timestamp)
-    const content = kb.literal(newContent)
+    const message = store.sym(chatDocument.uri + '#' + 'Msg' + timestamp)
+    const content = store.literal(newContent)
 
     if (oldMsg && options === 'delete') { // delete message -- no use a sep function
       sts.push(
@@ -173,7 +141,7 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
         new $rdf.Statement(
           message,
           ns.sioc('content'),
-          kb.literal(newContent),
+          store.literal(newContent),
           chatDocument
         )
       )
@@ -198,7 +166,7 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
       }
     }
 
-    const messages = kb
+    const messages = store
       .statementsMatching(
         about,
         ns.wf('message'),
@@ -234,16 +202,16 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
 
   function addMessage (message, messageTable) {
     let content
-    if (kb.any(mostRecentVersion(message))) {
-      content = kb.any(mostRecentVersion(message), ns.sioc('content'))
+    if (store.any(mostRecentVersion(message))) {
+      content = store.any(mostRecentVersion(message), ns.sioc('content'))
     } else {
-      content = kb.literal('message deleted')
+      content = store.literal('message deleted')
     }
     const bindings = {
       '?msg': message,
-      '?creator': kb.any(message, ns.foaf('maker')),
-      '?date': kb.any(message, DCT('created')),
-      '?content': content // kb.any(mostRecentVersion(message), ns.sioc('content'))
+      '?creator': store.any(message, ns.foaf('maker')),
+      '?date': store.any(message, DCT('created')),
+      '?content': content // store.any(mostRecentVersion(message), ns.sioc('content'))
     }
     insertMessageIntoTable(
       messageTable,
@@ -315,7 +283,7 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
     debug.log('   createMessageTable for  ' + date)
     const chatDocument = dateFolder.leafDocumentFromDate(date)
     try {
-      await kb.fetcher.load(chatDocument)
+      await store.fetcher.load(chatDocument)
     } catch (err) {
       const messageTable = dom.createElement('table')
       const statusTR = messageTable.appendChild(dom.createElement('tr')) // ### find status in exception
@@ -333,7 +301,7 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
   }
 
   function renderMessageTable (date, live) {
-    let scrollBackButton
+    let scrollBacstoreutton
     let scrollForwardButton
 
     /// /////////////////   Scroll down adding more above
@@ -341,30 +309,30 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
     async function extendBackwards () {
       const done = await insertPreviousMessages(true)
       if (done) {
-        if (scrollBackButton) {
-          scrollBackButton.firstChild.setAttribute(
+        if (scrollBacstoreutton) {
+          scrollBacstoreutton.firstChild.setAttribute(
             'src',
             UI.icons.iconBase + 'noun_T-Block_1114655_000000.svg'
           ) // T
-          scrollBackButton.disabled = true
+          scrollBacstoreutton.disabled = true
         }
         messageTable.initial = true
       } else {
         messageTable.extendedBack = true
       }
-      setScrollBackButtonIcon()
+      setScrollBacstoreuttonIcon()
       return done
     }
 
-    function setScrollBackButtonIcon () {
-      if (!scrollBackButton) {
+    function setScrollBacstoreuttonIcon () {
+      if (!scrollBacstoreutton) {
         return
       }
       const sense = messageTable.extendedBack ? !newestFirst : newestFirst
       const scrollBackIcon = messageTable.initial
         ? 'noun_T-Block_1114655_000000.svg'
         : getScrollbackIcon(sense)
-      scrollBackButton.firstChild.setAttribute(
+      scrollBacstoreutton.firstChild.setAttribute(
         'src',
         UI.icons.iconBase + scrollBackIcon
       )
@@ -374,11 +342,11 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
       }
     }
 
-    async function scrollBackButtonHandler (_event) {
+    async function scrollBacstoreuttonHandler (_event) {
       if (messageTable.extendedBack) {
         removePreviousMessages(true, messageTable)
         messageTable.extendedBack = false
-        setScrollBackButtonIcon()
+        setScrollBacstoreuttonIcon()
       } else {
         await extendBackwards()
       }
@@ -457,8 +425,8 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
     //
     // @@ listen for swipe past end event not just button
     if (options.infinite) {
-      const scrollBackButtonTR = dom.createElement('tr')
-      const scrollBackButtonCell = scrollBackButtonTR.appendChild(
+      const scrollBacstoreuttonTR = dom.createElement('tr')
+      const scrollBacstoreuttonCell = scrollBacstoreuttonTR.appendChild(
         dom.createElement('td')
       )
       // up traingles: noun_1369237.svg
@@ -466,24 +434,24 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
       const scrollBackIcon = newestFirst
         ? 'noun_1369241.svg'
         : 'noun_1369237.svg' // down and up arrows respoctively
-      scrollBackButton = UI.widgets.button(
+      scrollBacstoreutton = UI.widgets.button(
         dom,
         UI.icons.iconBase + scrollBackIcon,
         'Previous messages ...'
       )
-      scrollBackButtonCell.style = 'width:3em; height:3em;'
-      scrollBackButton.addEventListener('click', scrollBackButtonHandler, false)
+      scrollBacstoreuttonCell.style = 'width:3em; height:3em;'
+      scrollBacstoreutton.addEventListener('click', scrollBacstoreuttonHandler, false)
       messageTable.extendedBack = false
-      scrollBackButtonCell.appendChild(scrollBackButton)
-      setScrollBackButtonIcon()
+      scrollBacstoreuttonCell.appendChild(scrollBacstoreutton)
+      setScrollBacstoreuttonIcon()
 
-      const dateCell = scrollBackButtonTR.appendChild(dom.createElement('td'))
+      const dateCell = scrollBacstoreuttonTR.appendChild(dom.createElement('td'))
       dateCell.style =
         'text-align: center; vertical-align: middle; color: #888; font-style: italic;'
       dateCell.textContent = UI.widgets.shortDate(date.toISOString(), true) // no time, only date
 
       // @@@@@@@@@@@ todo move this button to other end of  message cell, o
-      const scrollForwardButtonCell = scrollBackButtonTR.appendChild(
+      const scrollForwardButtonCell = scrollBacstoreuttonTR.appendChild(
         dom.createElement('td')
       )
       const scrollForwardIcon = newestFirst
@@ -508,13 +476,13 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
 
       if (!newestFirst) {
         // opposite end from the entry field
-        messageTable.insertBefore(scrollBackButtonTR, messageTable.firstChild) // If not newestFirst
+        messageTable.insertBefore(scrollBacstoreuttonTR, messageTable.firstChild) // If not newestFirst
       } else {
-        messageTable.appendChild(scrollBackButtonTR) //  newestFirst
+        messageTable.appendChild(scrollBacstoreuttonTR) //  newestFirst
       }
     }
 
-    const sts = kb.statementsMatching(null, WF('message'), null, chatDocument)
+    const sts = store.statementsMatching(null, WF('message'), null, chatDocument)
     if (!live && sts.length === 0) {
       // not todays
       // no need buttomns at the moment
@@ -544,7 +512,7 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
       await appendCurrentMessages()
       // Adding a link in the document will ping listeners to add the new block too
       if (
-        !kb.holds(
+        !store.holds(
           oldChatDocument,
           ns.rdfs('seeAlso'),
           newChatDocument,
@@ -596,7 +564,7 @@ export async function infiniteMessageArea (dom, kb, chatChannel, options) {
         desktopNotification(chatChannel)
       })
     } // The short chat version fors live update in the pane but we do it in the widget
-    kb.updater.addDownstreamChangeListener(chatDocument, div.refresh) // Live update
+    store.updater.addDownstreamChangeListener(chatDocument, div.refresh) // Live update
     liveMessageTable = messageTable
     latest.messageTable = liveMessageTable
     return messageTable

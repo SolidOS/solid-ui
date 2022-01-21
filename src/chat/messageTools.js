@@ -25,11 +25,7 @@ import { renderMessage, creatorAndDate } from './message'
 import * as debug from '../debug'
 
 const UI = { authn, icons, ns, media, pad, rdf, store, style, utils, widgets }
-
 const dom = window.document
-
-const kb = store
-// const label = UI.utils.label
 
 // THE UNUSED ICONS are here as reminders for possible future functionality
 // const BOOKMARK_ICON = 'noun_45961.svg'
@@ -37,7 +33,7 @@ const kb = store
 // const MENU_ICON = 'noun_897914.svg'
 // const PAPERCLIP_ICON = 'noun_25830.svg' -> add attachments to this message
 // const PIN_ICON = 'noun_562340.svg'  -> pin this message permanently in the chat UI
-// const PENCIL_ICON = 'noun_253504.svg'
+const PENCIL_ICON = 'noun_253504.svg' // edit a message
 // const SPANNER_ICON = 'noun_344563.svg' -> settings
 const THUMBS_UP_ICON = 'noun_1384132.svg'
 const THUMBS_DOWN_ICON = 'noun_1384135.svg'
@@ -47,7 +43,7 @@ const THUMBS_DOWN_ICON = 'noun_1384135.svg'
 // @@@@ use the one in rdflib.js when it is avaiable and delete this
 function updatePromise (del, ins) {
   return new Promise(function (resolve, reject) {
-    kb.updater.update(del, ins, function (uri, ok, errorBody) {
+    store.updater.update(del, ins, function (uri, ok, errorBody) {
       if (!ok) {
         reject(new Error(errorBody))
       } else {
@@ -61,9 +57,9 @@ function mostRecentVersion (message) {
   let msg = message
   while (msg) {
     message = msg
-    msg = kb.any(message, ns.dct('isReplacedBy'))
+    msg = store.any(message, ns.dct('isReplacedBy'))
   }
-  if (kb.any(message, ns.schema('dateDeleted'))) {
+  if (store.any(message, ns.schema('dateDeleted'))) {
     return ns.schema('dateDeleted') // message has been deleted
   }
   return message // message original or modified content
@@ -83,8 +79,8 @@ emoji[ns.schema('LikeAction')] = '❤️'
  * Create strip of sentiments expressed
  */
 export function sentimentStrip (target, doc) { // alain seems not used
-  const actions = (mostRecentVersion(target).value !== ns.schema('dateDeleted').value) ? kb.each(null, ns.schema('target'), target, doc) : []
-  const sentiments = actions.map(a => kb.any(a, ns.rdf('type'), null, doc))
+  const actions = (mostRecentVersion(target).value !== ns.schema('dateDeleted').value) ? store.each(null, ns.schema('target'), target, doc) : []
+  const sentiments = actions.map(a => store.any(a, ns.rdf('type'), null, doc))
   sentiments.sort()
   const strings = sentiments.map(x => emoji[x] || '')
   return dom.createTextNode(strings.join(' '))
@@ -99,10 +95,10 @@ export function sentimentStripLinked (target, doc) {
   const strip = dom.createElement('span')
   function refresh () {
     strip.innerHTML = ''
-    const actions = (mostRecentVersion(target).uri !== ns.schema('dateDeleted').uri) ? kb.each(null, ns.schema('target'), target, doc) : []
+    const actions = (mostRecentVersion(target).uri !== ns.schema('dateDeleted').uri) ? store.each(null, ns.schema('target'), target, doc) : []
     const sentiments = actions.map(a => [
-      kb.any(a, ns.rdf('type'), null, doc),
-      kb.any(a, ns.schema('agent'), null, doc)
+      store.any(a, ns.rdf('type'), null, doc),
+      store.any(a, ns.schema('agent'), null, doc)
     ])
     sentiments.sort()
     sentiments.forEach(ss => {
@@ -129,7 +125,7 @@ export function sentimentStripLinked (target, doc) {
 export function messageToolbar (message, messageRow, userContext) {
 
   async function deleteMessage () {
-    if (me.value === kb.any(message, ns.foaf('maker')).value) {
+    if (me.value === store.any(message, ns.foaf('maker')).value) {
       const { sts } = appendMsg('message deleted', message, 'delete')
       await UI.store.updater.update([], sts) // alain: can sendMessage() do the refresh ?
       // para.textContent = 'message deleted'
@@ -138,7 +134,7 @@ export function messageToolbar (message, messageRow, userContext) {
   }
 
   async function editMessage () {
-    if (me.value === kb.any(message, ns.foaf('maker')).value) {
+    if (me.value === store.any(message, ns.foaf('maker')).value) {
       closeToolbar() // edit is a one-off action
       const table = messageRow.parentNode
       const editRow = renderMessageEditor(messageTable, userContext, options, date, message)
@@ -160,7 +156,7 @@ export function messageToolbar (message, messageRow, userContext) {
       while(msg) {
         message = msg
         messageArray.push(message)
-        msg = kb.any(message, ns.dct('isReplacedBy'))
+        msg = store.any(message, ns.dct('isReplacedBy'))
       }
       if (alert('confirm you want to completely remove this deleted message')) {
         messageArray.map(msg => deleteThingThen(msg))
@@ -176,12 +172,12 @@ export function messageToolbar (message, messageRow, userContext) {
   }
 
   async function deleteThingThen (x) {
-    await updatePromise(kb.connectedStatements(x), [])
+    await updatePromise(store.connectedStatements(x), [])
   }
 
   // Things only the original author can do
   let me = UI.authn.currentUser() // If already logged on
-  if (me && kb.holds(message, ns.foaf('maker'), me)) {
+  if (me && store.holds(message, ns.foaf('maker'), me)) {
     // button to delete the message
     const deleteButton = UI.widgets.deleteButtonWithCheck(
       dom,
@@ -197,11 +193,11 @@ export function messageToolbar (message, messageRow, userContext) {
     const timestamp = '' + now.getTime()
     const dateStamp = $rdf.term(now)
     // http://www.w3schools.com/jsref/jsref_obj_date.asp
-    // const message = kb.sym(messageStore.uri + '#' + 'Msg' + timestamp)
+    // const message = store.sym(messageStore.uri + '#' + 'Msg' + timestamp)
 
     const chatDocument = oldMsg.doc() // options ? oldMsg.doc() : dateFolder.leafDocumentFromDate(now)
-    const message = kb.sym(chatDocument.uri + '#' + 'Msg' + timestamp)
-    const content = kb.literal(newContent)
+    const message = store.sym(chatDocument.uri + '#' + 'Msg' + timestamp)
+    const content = store.literal(newContent)
 
     if (oldMsg && options === 'delete') {
       sts.push(
@@ -241,15 +237,15 @@ export function messageToolbar (message, messageRow, userContext) {
 
   // Things anyone can do if they have a bookmark list async
   /*
- var bookmarkButton = await bookmarks.renderBookmarksButton(userContext)
- if (bookmarkButton) {
-   div.appendChild(bookmarkButton)
+ var bookmarstoreutton = await bookmarks.renderBookmarksButton(userContext)
+ if (bookmarstoreutton) {
+   div.appendChild(bookmarstoreutton)
  }
  */
   // Things anyone can do if they have a bookmark list
 
-  renderBookmarksButton(userContext).then(bookmarkButton => {
-    if (bookmarkButton) div.appendChild(bookmarkButton)
+  renderBookmarksButton(userContext).then(bookmarstoreutton => {
+    if (bookmarstoreutton) div.appendChild(bookmarstoreutton)
   })
 
   /**   Button to allow user to express a sentiment (like, endorse, etc) about a target
@@ -311,10 +307,10 @@ export function messageToolbar (message, messageRow, userContext) {
       }
     )
     function existingAction (actionClass) {
-      const actions = kb
+      const actions = store
         .each(null, ns.schema('agent'), context.me, doc)
-        .filter(x => kb.holds(x, ns.rdf('type'), actionClass, doc))
-        .filter(x => kb.holds(x, ns.schema('target'), target, doc))
+        .filter(x => store.holds(x, ns.rdf('type'), actionClass, doc))
+        .filter(x => store.holds(x, ns.schema('target'), target, doc))
       return actions.length ? actions[0] : null
     }
     function refresh () {
