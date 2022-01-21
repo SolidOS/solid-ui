@@ -41,7 +41,6 @@ import * as rdf from 'rdflib' // pull in first avoid cross-refs
 // @ts-ignore
 import * as ns from './ns'
 import { acl, aclControl } from './acl/index'
-// import { authn } from './authn/index'
 import { create } from './create/index'
 // @ts-ignore
 // import * as debug from '../debug'
@@ -70,6 +69,7 @@ import { renderTableViewPane as table } from './table'
 import * as tabs from './tabs'
 // @ts-ignore
 import * as utils from './utils'
+import * as login from './login/login'
 import * as widgets from './widgets/index'
 import versionInfo from './versionInfo'
 import { initHeader } from './header'
@@ -90,6 +90,7 @@ if (typeof window !== 'undefined') {
     icons,
     language,
     log,
+    login,
     matrix,
     media,
     messageArea,
@@ -97,7 +98,6 @@ if (typeof window !== 'undefined') {
     pad,
     participation,
     preferences,
-    solidLogicSingleton,
     store,
     style,
     table,
@@ -121,6 +121,7 @@ export {
   icons,
   language,
   log,
+  login,
   matrix,
   media,
   messageArea,
@@ -128,7 +129,6 @@ export {
   pad,
   participation,
   preferences,
-  solidLogicSingleton,
   store,
   style,
   table,

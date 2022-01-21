@@ -2,12 +2,12 @@
 //                  =====================
 //
 
-import * as debug from './debug'
-import { solidLogicSingleton, store } from 'solid-logic'
-import * as ns from './ns'
-import * as participation from './participation'// @ts-ignore
-import { loggedInContext } from './login/login'
 import * as $rdf from 'rdflib' // pull in first avoid cross-refs
+import { store } from 'solid-logic'
+import * as debug from './debug'
+import { logInLoadPreferences } from './login/login'
+import * as ns from './ns'
+import * as participation from './participation' // @ts-ignore
 import * as widgets from './widgets'
 
 const kb = store
@@ -65,13 +65,7 @@ export function recordSharedPreferences (subject, context) {
 //
 export function recordPersonalDefaults (theClass, context) {
   return new Promise(function (resolve, reject) {
-    // authn.logInLoadPreferences(context).then(
-    if (!context.me) {
-      loggedInContext(context).then(_context => {
-        context = _context
-      })
-    }
-    solidLogicSingleton.loadProfile(context.me).then(
+    logInLoadPreferences(context).then(
       context => {
         if (!context.preferencesFile) {
           debug.log(

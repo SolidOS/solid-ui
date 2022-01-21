@@ -7,7 +7,7 @@ import { DataBrowserContext, NewPaneOptions, PaneDefinition } from 'pane-registr
 import { solidLogicSingleton } from 'solid-logic'
 import * as debug from '../debug'
 import { icons } from '../iconBase'
-import { loggedInContext, selectWorkspace } from '../login/login'
+import { logInLoadProfile, selectWorkspace } from '../login/login'
 import * as ns from '../ns'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
@@ -79,12 +79,8 @@ export function newThingUI (
     return new Promise(function (resolve, reject) {
       let selectUI // , selectUIParent
       function callbackWS (ws, newBase) {
-        loggedInContext(createContext).then(
+        logInLoadProfile(createContext).then(
           _context => {
-            // load profile
-            if (_context.me) {
-              solidLogicSingleton.loadProfile(_context.me!)
-            }
             const newPaneOptions: NewPaneOptions = Object.assign({
               newBase: newBase,
               folder: options.folder || undefined,

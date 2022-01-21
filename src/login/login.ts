@@ -29,8 +29,9 @@ import { textInputStyle, buttonStyle, commentStyle } from '../style'
 // eslint-disable-next-line camelcase
 import { Quad_Object } from 'rdflib/lib/tf-types'
 import { BlankNode, IndexedFormula, NamedNode, st, Statement, sym } from 'rdflib'
-import { authn, AppDetails, AuthenticationContext, solidLogicSingleton, authUtil, typeIndexLogic, authSession, getSuggestedIssuers } from 'solid-logic'
+import { solidLogicError, authn, AppDetails, AuthenticationContext, solidLogicSingleton, authUtil, typeIndexLogic, authSession, getSuggestedIssuers } from 'solid-logic'
 import { utils } from '../utils/index'
+import { loadIndex } from 'solid-logic/lib/typeIndex/typeIndex'
 
 /**
   * Resolves with the logged in user's WebID
@@ -64,6 +65,105 @@ export function loggedInContext (context: AuthenticationContext): Promise<Authen
 }
 
 /**
+ * Loads preference file
+ * Do this after having done log in and load profile
+ *
+ * @private
+ *
+ * @param context
+ */
+export async function logInLoadPreferences (context: AuthenticationContext): Promise<AuthenticationContext> {
+  // console.log('Solid UI logInLoadPreferences')
+  if (context.preferencesFile) return Promise.resolve(context) // already done
+
+  const statusArea = context.statusArea || context.div || null
+  let progressDisplay
+  function complain (message) {
+    message = `logInLoadPreferences: ${message}`
+    if (statusArea) {
+      // statusArea.innerHTML = ''
+      statusArea.appendChild(
+        widgets.errorMessageBlock(context.dom, message)
+      )
+    }
+    debug.log(message)
+    // reject(new Error(message))
+  }
+  try {
+    context = await logInLoadProfile(context)
+
+    // console.log('back in Solid UI after logInLoadProfile', context)
+    const preferencesFile = await solidLogicSingleton.loadPreferences(context.me as NamedNode)
+    if (progressDisplay) {
+      progressDisplay.parentNode.removeChild(progressDisplay)
+    }
+    context.preferencesFile = preferencesFile
+  } catch (err) {
+    let m2: string
+    if (err instanceof solidLogicError.UnauthorizedError) {
+      m2 = 'Ooops - you are not authenticated (properly logged in) to for me to read your preference file.  Try loggin out and logging in?'
+      alert(m2)
+    } else if (err instanceof solidLogicError.CrossOriginForbiddenError) {
+      m2 = `Unauthorized: Assuming preference file blocked for origin ${window.location.origin}`
+      context.preferencesFileError = m2
+      return context
+    } else if (err instanceof solidLogicError.SameOriginForbiddenError) {
+      m2 = 'You are not authorized to read your preference file. This may be because you are using an untrusted web app.'
+      debug.warn(m2)
+    } else if (err instanceof solidLogicError.NotFoundError) {
+      if (
+        confirm(`You do not currently have a preference file. OK for me to create an empty one? ${(err as any).preferencesFile || ''}`)
+      ) {
+        // @@@ code me  ... weird to have a name of the file but no file
+        alert(`Sorry; I am not prepared to do this. Please create an empty file at ${(err as any).preferencesFile || '(?)'}`)
+        complain(
+          new Error('Sorry; no code yet to create a preference file at ')
+        )
+      } else {
+        throw (
+          new Error(`User declined to create a preference file at ${(err as any).preferencesFile || '(?)'}`)
+        )
+      }
+    } else if (err instanceof solidLogicError.FetchError) {
+      m2 = `Strange: Error ${err.status} trying to read your preference file.${err.message}`
+      alert(m2)
+    } else {
+      throw new Error(`(via loadPrefs) ${err}`)
+    }
+  }
+  return context
+}
+
+/**
+ * Logs the user in and loads their WebID profile document into the store
+ *
+ * @param context
+ *
+ * @returns Resolves with the context after login / fetch
+ */
+export async function logInLoadProfile (context: AuthenticationContext): Promise<AuthenticationContext> {
+  // console.log('Solid UI logInLoadProfile')
+  if (context.publicProfile) {
+    return context
+  } // already done
+  try {
+    const logInContext = await loggedInContext(context)
+    if (!logInContext.me) {
+      throw new Error('Could not log in')
+    }
+    context.publicProfile = await solidLogicSingleton.loadProfile(logInContext.me)
+  } catch (err) {
+    if (context.div && context.dom) {
+      context.div.appendChild(
+        widgets.errorMessageBlock(context.dom, err.message)
+      )
+    }
+    throw new Error(`Can't log in: ${err}`)
+  }
+  return context
+}
+
+/**
   * Returns promise of context with arrays of symbols
   *
   * 2016-12-11 change to include forClass arc a la
@@ -88,18 +188,9 @@ export async function findAppInstances (
   // Loading preferences is more than loading profile
   try {
     // console.log('calling logInLoad', isPublic)
-    /* await (isPublic
+    await (isPublic
       ? logInLoadProfile(context)
-      : logInLoadPreferences(context)) */
-    if (!context.me) {
-      context = await loggedInContext(context)
-    }
-    // load profile
-    context.publicProfile = await solidLogicSingleton.loadProfile(context.me!)
-    if (!isPublic) {
-      // load preferences
-      context.preferencesFile = await solidLogicSingleton.loadPreferences(context.me!)
-    }
+      : logInLoadPreferences(context))
     // console.log('called logInLoad', isPublic)
   } catch (err) {
     widgets.complain(context, `loadIndex: login and load problem ${err}`)
@@ -107,7 +198,7 @@ export async function findAppInstances (
   // console.log('awaited LogInLoad!', context)
   const visibility = isPublic ? 'public' : 'private'
   try {
-    await typeIndexLogic.loadIndex(context, isPublic)
+    await loadIndex(context, isPublic)
   } catch (err) {
   }
   const index = context.index as { [key: string]: Array<NamedNode> }
@@ -708,7 +799,7 @@ export function selectWorkspace (
 
   const me = authUtil.offlineTestID()
   const box = dom.createElement('div')
-  let context: AuthenticationContext = { me: me, dom: dom, div: box }
+  const context: AuthenticationContext = { me: me, dom: dom, div: box }
 
   function say (s, background) {
     box.appendChild(widgets.errorMessageBlock(dom, s, background))
@@ -907,26 +998,12 @@ export function selectWorkspace (
   } // displayOptions
 
   // console.log('kicking off async operation')
-  /* authn.logInLoadPreferences(context) // kick off async operation
+  logInLoadPreferences(context) // kick off async operation
     .then(displayOptions)
     .catch(err => {
       // console.log("err from async op")
       box.appendChild(widgets.errorMessageBlock(context.dom, err))
-    }) */
-  try {
-    if (!context.me) {
-      loggedInContext(context).then(newContext => {
-        context = newContext
-      })
-    }
-    // load profile
-    solidLogicSingleton.loadProfile(context.me!).then(profile => {
-      context.publicProfile = profile
     })
-    displayOptions(context)
-  } catch (err) {
-    box.appendChild(widgets.errorMessageBlock(context.dom, err))
-  }
 
   return box // return the box element, while login proceeds
 } // selectWorkspace
@@ -967,36 +1044,33 @@ export function newAppInstance (
   div.appendChild(b)
   return div
 }
+/**
+ * Retrieves whether the currently logged in user is a power user
+ * and/or a developer
+ */
+export async function getUserRoles (): Promise<Array<NamedNode>> {
+  try {
+    const {
+      me,
+      preferencesFile,
+      preferencesFileError
+    } = await logInLoadPreferences({})
+    if (!preferencesFile || preferencesFileError) {
+      throw new Error(preferencesFileError)
+    }
+    return solidLogicSingleton.store.each(me, ns.rdf('type'), null, preferencesFile.doc()) as NamedNode[]
+  } catch (error) {
+    debug.warn('Unable to fetch your preferences - this was the error: ', error)
+  }
+  return []
+}
 
 /**
-  * Filters which panes should be available, based on the result of userRoles
-  */
+ * Filters which panes should be available, based on the result of [[getUserRoles]]
+ */
 export async function filterAvailablePanes (panes: Array<PaneDefinition>): Promise<Array<PaneDefinition>> {
-  // const userRoles = await authn.getUserRoles()
-  try {
-    const logInContext: AuthenticationContext = await loggedInContext({})
-    if (logInContext.me) {
-      // load profile
-      logInContext.publicProfile = await solidLogicSingleton.loadProfile(logInContext.me)
-      // load preferences
-      logInContext.preferencesFile = await solidLogicSingleton.loadPreferences(logInContext.me)
-      // load user roles
-      const userRoles = solidLogicSingleton.store.each(logInContext.me, ns.rdf('type'), null, logInContext.preferencesFile.doc()) as NamedNode[]
-      return panes.filter(pane => isMatchingAudience(pane, userRoles))
-    } else {
-      if (logInContext.div && logInContext.dom) {
-        logInContext.div.appendChild(
-          widgets.errorMessageBlock(logInContext.dom, 'Could not log in!')
-        )
-      } else {
-        debug.warn('Could not log in!')
-      }
-      return Promise.resolve([])
-    }
-  } catch (error) {
-    debug.warn('Unable to filterAvailablePanes: ', error)
-    return Promise.resolve([])
-  }
+  const userRoles = await getUserRoles()
+  return panes.filter(pane => isMatchingAudience(pane, userRoles))
 }
 
 function isMatchingAudience (pane: PaneDefinition, userRoles: Array<NamedNode>): boolean {
