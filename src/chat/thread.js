@@ -321,7 +321,7 @@ export function thread (dom, store, subject, messageStore, options) {
     return msg
   }
 
-  const deleteMessage = async function (message) { // alain: must delete message and all linked with isReplacedBy
+  const _deleteMessage = async function (message) { // alain: must delete message and all linked with isReplacedBy
     // alain: check that me is not the author and ask for confirmation.
     const deletions = await store.connectedStatements(message, messageStore)
     updater.update(deletions, [], function (uri, ok, body) {

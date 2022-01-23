@@ -7,24 +7,25 @@
  * If you made it originally: edit, delete, attach
  * @packageDocumentation
  */
-/* global $rdf */
 
 import { authn } from '../authn/index'
 import { icons } from '../iconBase'
 import { store } from '../logic'
-import { media } from '../media/index'
+// import { media } from '../media/index'
 import * as ns from '../ns'
-import * as pad from '../pad'
+// import * as pad from '../pad'
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
-import * as style from '../style'
+// import * as style from '../style'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
 import { renderBookmarksButton } from './bookmarks'
-import { infiniteMessageArea } from './infinite.js'
-import { renderMessage, creatorAndDate } from './message'
-import * as debug from '../debug'
+import { mostRecentVersion } from './chatLogic'
+import { renderMessageEditor } from './message'
 
-const UI = { authn, icons, ns, media, pad, rdf, store, style, utils, widgets }
+// import { infiniteMessageArea } from './infinite.js'
+// import { renderMessage, creatorAndDate } from './message'
+// import * as debug from '../debug'
+
 const dom = window.document
 
 // THE UNUSED ICONS are here as reminders for possible future functionality
@@ -37,38 +38,9 @@ const PENCIL_ICON = 'noun_253504.svg' // edit a message
 // const SPANNER_ICON = 'noun_344563.svg' -> settings
 const THUMBS_UP_ICON = 'noun_1384132.svg'
 const THUMBS_DOWN_ICON = 'noun_1384135.svg'
-
-// module.export = { messageTools, sentimentStripLinked, sentimentStrip }
-
-// @@@@ use the one in rdflib.js when it is avaiable and delete this
-function updatePromise (del, ins) {
-  return new Promise(function (resolve, reject) {
-    store.updater.update(del, ins, function (uri, ok, errorBody) {
-      if (!ok) {
-        reject(new Error(errorBody))
-      } else {
-        resolve()
-      }
-    }) // callback
-  }) // promise
-}
-
-function mostRecentVersion (message) {
-  let msg = message
-  while (msg) {
-    message = msg
-    msg = store.any(message, ns.dct('isReplacedBy'))
-  }
-  if (store.any(message, ns.schema('dateDeleted'))) {
-    return ns.schema('dateDeleted') // message has been deleted
-  }
-  return message // message original or modified content
-}
-
 /**
  * Emoji in Unicode
  */
-
 const emoji = {}
 emoji[ns.schema('AgreeAction')] = '👍'
 emoji[ns.schema('DisagreeAction')] = '👎'
@@ -118,29 +90,30 @@ export function sentimentStripLinked (target, doc) {
   strip.refresh = refresh
   return strip
 }
-
 /**
  * Creates a message toolbar component
  */
-export function messageToolbar (message, messageRow, userContext) {
-
+export function messageToolbar (message, messageRow, userContext, channelObjet) {
   async function deleteMessage () {
-    if (me.value === store.any(message, ns.foaf('maker')).value) {
-      const { sts } = appendMsg('message deleted', message, 'delete')
-      await UI.store.updater.update([], sts) // alain: can sendMessage() do the refresh ?
-      // para.textContent = 'message deleted'
+    const author = store.any(message, ns.foaf('maker'))
+    if (!me) {
+      alert('You can\'t delete the message, you are not logged in.')
+    } else if (me.sameTerm(author)) {
+      await channelObjet.deleteMessage(message)
+    } else {
+      alert('You can\'t delete the message, you are not logged in as the author, ' + author)
     }
     closeToolbar()
   }
 
-  async function editMessage () {
+  async function editMessage (messageRow) {
     if (me.value === store.any(message, ns.foaf('maker')).value) {
       closeToolbar() // edit is a one-off action
-      const table = messageRow.parentNode
-      const editRow = renderMessageEditor(messageTable, userContext, options, date, message)
-      table.insertBefore(editRow, messageRow)
+      const messageTable = messageRow.parentNode
+      const editRow = renderMessageEditor(channelObjet, messageTable, userContext, channelObjet.options, message)
+      messageTable.insertBefore(editRow, messageRow)
       editRow.originalRow = messageRow
-      messsageRow.style.display = 'none' // Hide the original message. unhide if user cancels edit
+      messageRow.style.display = 'none' // Hide the original message. unhide if user cancels edit
     }
   }
 
@@ -172,69 +145,17 @@ export function messageToolbar (message, messageRow, userContext) {
   }
 
   async function deleteThingThen (x) {
-    await updatePromise(store.connectedStatements(x), [])
+    await store.updater.update(store.connectedStatements(x), [])
   }
 
   // Things only the original author can do
-  let me = UI.authn.currentUser() // If already logged on
+  let me = authn.currentUser() // If already logged on
   if (me && store.holds(message, ns.foaf('maker'), me)) {
     // button to delete the message
-    const deleteButton = UI.widgets.deleteButtonWithCheck(
-      dom,
-      div,
-      'message', deleteMessage
-    )
-    div.appendChild(deleteButton)
+    div.appendChild(widgets.deleteButtonWithCheck(dom, div, 'message', deleteMessage))
+    // button to edit the message
+    div.appendChild(widgets.button(dom, icons.iconBase + PENCIL_ICON, 'edit', () => editMessage(messageRow)))
   } // if mine
-
-  function appendMsg (newContent, oldMsg = {}, options = '') {
-    const sts = []
-    const now = new Date()
-    const timestamp = '' + now.getTime()
-    const dateStamp = $rdf.term(now)
-    // http://www.w3schools.com/jsref/jsref_obj_date.asp
-    // const message = store.sym(messageStore.uri + '#' + 'Msg' + timestamp)
-
-    const chatDocument = oldMsg.doc() // options ? oldMsg.doc() : dateFolder.leafDocumentFromDate(now)
-    const message = store.sym(chatDocument.uri + '#' + 'Msg' + timestamp)
-    const content = store.literal(newContent)
-
-    if (oldMsg && options === 'delete') {
-      sts.push(
-        new $rdf.Statement(mostRecentVersion(oldMsg), ns.schema('dateDeleted'), dateStamp, chatDocument)
-      )
-    } else {
-      if (oldMsg && options === 'edit') {
-        sts.push(
-          new $rdf.Statement(mostRecentVersion(oldMsg), ns.dct('isReplacedBy'), message, chatDocument)
-        )
-      }
-      sts.push(
-        new $rdf.Statement(
-          message,
-          ns.sioc('content'),
-          content,
-          chatDocument
-        )
-      )
-      sts.push(
-        new $rdf.Statement(message, ns.dct('created'), dateStamp, chatDocument)
-      )
-      if (me) {
-        sts.push(
-          new $rdf.Statement(message, ns.foaf('maker'), me, chatDocument)
-        )
-      }
-    }
-    return { message, dateStamp, content, chatDocument, sts }
-  }
-
-  function nick (person) {
-    const s = UI.store.any(person, UI.ns.foaf('nick'))
-    if (s) return '' + s.value
-    return '' + utils.label(person)
-  }
-
   // Things anyone can do if they have a bookmark list async
   /*
  var bookmarstoreutton = await bookmarks.renderBookmarksButton(userContext)
@@ -268,10 +189,10 @@ export function messageToolbar (message, messageRow, userContext) {
     function setColor () {
       button.style.backgroundColor = action ? 'yellow' : 'white'
     }
-    const button = UI.widgets.button(
+    const button = widgets.button(
       dom,
       icon,
-      UI.utils.label(actionClass),
+      utils.label(actionClass),
       async function (_event) {
         if (action) {
           await deleteThingThen(action)
@@ -279,13 +200,13 @@ export function messageToolbar (message, messageRow, userContext) {
           setColor()
         } else {
           // no action
-          action = UI.widgets.newThing(doc)
+          action = widgets.newThing(doc)
           const insertMe = [
-            $rdf.st(action, ns.schema('agent'), context.me, doc),
-            $rdf.st(action, ns.rdf('type'), actionClass, doc),
-            $rdf.st(action, ns.schema('target'), target, doc)
+            rdf.st(action, ns.schema('agent'), context.me, doc),
+            rdf.st(action, ns.rdf('type'), actionClass, doc),
+            rdf.st(action, ns.schema('target'), target, doc)
           ]
-          await updatePromise([], insertMe)
+          await store.updater.update([], insertMe)
           setColor()
 
           if (mutuallyExclusive) {
@@ -299,8 +220,8 @@ export function messageToolbar (message, messageRow, userContext) {
               }
             }
             if (dirty) {
-              // UI.widgets.refreshTree(button.parentNode) // requires them all to be immediate siblings
-              UI.widgets.refreshTree(messageRow) // requires them all to be immediate siblings
+              // widgets.refreshTree(button.parentNode) // requires them all to be immediate siblings
+              widgets.refreshTree(messageRow) // requires them all to be immediate siblings
             }
           }
         }
@@ -325,7 +246,7 @@ export function messageToolbar (message, messageRow, userContext) {
 
   // THUMBS_UP_ICON
   // https://schema.org/AgreeAction
-  me = UI.authn.currentUser() // If already logged on
+  me = authn.currentUser() // If already logged on
   // debug.log('Actions 3' + mostRecentVersion(message).value + ' ' + ns.schema('dateDeleted').value + ' ' + (mostRecentVersion(message).value !== ns.schema('dateDeleted').value))
 
   if (me && (mostRecentVersion(message).value !== ns.schema('dateDeleted').value)) {
@@ -333,8 +254,8 @@ export function messageToolbar (message, messageRow, userContext) {
     div.appendChild(
       sentimentButton(
         context1,
-        message, // @@ TODO use UI.widgets.sentimentButton
-        UI.icons.iconBase + THUMBS_UP_ICON,
+        message, // @@ TODO use widgets.sentimentButton
+        icons.iconBase + THUMBS_UP_ICON,
         ns.schema('AgreeAction'),
         message.doc(),
         [ns.schema('DisagreeAction')]
@@ -345,7 +266,7 @@ export function messageToolbar (message, messageRow, userContext) {
       sentimentButton(
         context1,
         message,
-        UI.icons.iconBase + THUMBS_DOWN_ICON,
+        icons.iconBase + THUMBS_DOWN_ICON,
         ns.schema('DisagreeAction'),
         message.doc(),
         [ns.schema('AgreeAction')]
@@ -353,7 +274,7 @@ export function messageToolbar (message, messageRow, userContext) {
     )
   }
   // X button to remove the tool UI itself
-  const cancelButton = div.appendChild(UI.widgets.cancelButton(dom))
+  const cancelButton = div.appendChild(widgets.cancelButton(dom))
   cancelButton.style.float = 'right'
   cancelButton.firstChild.style.opacity = '0.3'
   cancelButton.addEventListener('click', closeToolbar)
