@@ -2,7 +2,6 @@
  **
  */
 
-// import { logInLoadProfile, selectWorkspace } from '../authn/authn'
 import { DataBrowserContext, NewPaneOptions, PaneDefinition } from 'pane-registry'
 import { solidLogicSingleton } from 'solid-logic'
 import * as debug from '../debug'

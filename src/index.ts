@@ -61,7 +61,6 @@ import * as participation from './participation'
 // @ts-ignore
 import * as preferences from './preferences'
 // @ts-ignore
-import { solidLogicSingleton } from 'solid-logic'
 // @ts-ignore
 import * as style from './style'
 // @ts-ignore
@@ -74,18 +73,20 @@ import * as widgets from './widgets/index'
 import versionInfo from './versionInfo'
 import { initHeader } from './header'
 import { initFooter } from './footer'
+import * as createTypes from './create/types'
+import * as solidLogicLib from 'solid-logic'
 
 const dom = window ? window.document : null // Idea that UI.dom can be adapted in non-browser environments
-const store = solidLogicSingleton.store
 
 if (typeof window !== 'undefined') {
   ;(<any>window).UI = {
+    solidLogicLib,
     ns,
     rdf,
     acl,
     aclControl,
-    //  authn,
     create,
+    createTypes,
     dom,
     icons,
     language,
@@ -98,7 +99,6 @@ if (typeof window !== 'undefined') {
     pad,
     participation,
     preferences,
-    store,
     style,
     table,
     tabs,
@@ -111,12 +111,13 @@ if (typeof window !== 'undefined') {
 }
 
 export {
+  solidLogicLib,
   ns,
   rdf,
   acl,
   aclControl,
-  // authn,
   create,
+  createTypes,
   dom,
   icons,
   language,
@@ -129,7 +130,6 @@ export {
   pad,
   participation,
   preferences,
-  store,
   style,
   table,
   tabs,

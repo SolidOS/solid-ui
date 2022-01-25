@@ -49,7 +49,7 @@ export function loggedInContext (context: AuthenticationContext): Promise<Authen
     authn.checkUser().then(webId => {
       // Already logged in?
       if (webId) {
-        debug.log(`logIn: Already logged in as ${context.me}`)
+        debug.log(`logIn: Already logged in as ${webId}`)
         return resolve(context)
       }
       if (!context.div || !context.dom) {
@@ -448,9 +448,12 @@ function signInOrSignUpBox (
   signInPopUpButton.setAttribute('style', `${signInButtonStyle}background-color: #eef;`)
 
   authSession.onLogin(() => {
-    const sessionInfo = authSession.info
-    if (sessionInfo && sessionInfo.isLoggedIn) {
-      const webIdURI = sessionInfo.webId
+    const me = authn.currentUser()
+    // const sessionInfo = authSession.info
+    // if (sessionInfo && sessionInfo.isLoggedIn) {
+    if (me) {
+      // const webIdURI = sessionInfo.webId
+      const webIdURI = me.uri
       // setUserCallback(webIdURI)
       const divs = dom.getElementsByClassName(magicClassName)
       debug.log(`Logged in, ${divs.length} panels to be serviced`)
@@ -497,27 +500,6 @@ function signInOrSignUpBox (
   }, false)
   return box
 }
-
-// ======== WHAT IS THIS? ========
-authSession.onLogout(async () => {
-  const issuer = window.localStorage.getItem('loginIssuer')
-  if (issuer) {
-    try {
-      const wellKnownUri = new URL(issuer)
-      wellKnownUri.pathname = '/.well-known/openid-configuration'
-      const wellKnownResult = await fetch(wellKnownUri.toString())
-      if (wellKnownResult.status === 200) {
-        const openidConfiguration = await wellKnownResult.json()
-        if (openidConfiguration && openidConfiguration.end_session_endpoint) {
-          await fetch(openidConfiguration.end_session_endpoint, { credentials: 'include' })
-        }
-      }
-    } catch (err) {
-      // Do nothing
-    }
-  }
-  window.location.reload()
-})
 
 export function renderSignInPopup (dom: HTMLDocument) {
   /**
@@ -664,17 +646,18 @@ export function loginStatusBox (
       return
     }
 
-    const uri = newidURI.uri || newidURI
-    me = sym(uri)
+    // const uri = newidURI.uri || newidURI
+    // me = sym(uri)
+    me = authn.saveUser(newidURI)
     box.refresh()
-    if (listener) listener(me.uri)
+    if (listener) listener(me!.uri)
   }
 
   function logoutButtonHandler (_event) {
-    // UI.preferences.set('me', '')
+    const oldMe = me
     authSession.logout().then(
       function () {
-        const message = `Your WebID was ${me}. It has been forgotten.`
+        const message = `Your WebID was ${oldMe}. It has been forgotten.`
         me = null
         try {
           alert(message)
@@ -711,12 +694,7 @@ export function loginStatusBox (
   }
 
   box.refresh = function () {
-    const sessionInfo = authSession.info
-    if (sessionInfo && sessionInfo.webId && sessionInfo.isLoggedIn) {
-      me = sym(sessionInfo.webId)
-    } else {
-      me = null
-    }
+    me = authn.currentUser()
     if ((me && box.me !== me.uri) || (!me && box.me)) {
       widgets.clearElement(box)
       if (me) {
@@ -727,20 +705,16 @@ export function loginStatusBox (
     }
     box.me = me ? me.uri : null
   }
+  box.refresh()
 
   function trackSession () {
-    const sessionInfo = authSession.info
-    if (sessionInfo && sessionInfo.webId && sessionInfo.isLoggedIn) {
-      me = sym(sessionInfo.webId)
-    } else {
-      me = null
-    }
+    me = authn.currentUser()
     box.refresh()
   }
   trackSession()
+
   authSession.onLogin(trackSession)
   authSession.onLogout(trackSession)
-
   box.me = '99999' // Force refresh
   box.refresh()
   return box
