@@ -23,84 +23,101 @@ import * as utils from '../utils'
  */
 
 export class ChatChannel {
-  constructor (channelRoot, options) {
-    this.channelRoot = channelRoot
+  constructor (channel, options) {
+    this.channel = channel
+    this.channelRoot = channel.doc()
     this.options = options
-    this.dateFolder = new DateFolder(channelRoot, 'chat.ttl')
+    this.dateFolder = new DateFolder(this.channelRoot, 'chat.ttl')
+    this.div = null // : HTMLElement
   }
 
   /* Store a new message in the web,
-    optionally as a replacement for an existing one.
+  */
+  async createMessage (text) {
+    return this.updateMessage(text)
+  }
+
+  /* Store a new message in the web,
+    as a replacement for an existing one.
     The old one iis left, and the two are linked
   */
-  async createMessage (newContent, oldMsg = null) {
+  async updateMessage (text, oldMsg = null, deleteIt) {
     const sts = []
     const now = new Date()
     const timestamp = '' + now.getTime()
     const dateStamp = $rdf.term(now)
     const chatDocument = oldMsg ? oldMsg.doc() : this.dateFolder.leafDocumentFromDate(now)
     const message = store.sym(chatDocument.uri + '#' + 'Msg' + timestamp)
-    const content = store.literal(newContent)
+    // const content = store.literal(text)
 
     const me = authn.currentUser() // If already logged on
 
-    if (oldMsg) { // edit message
-      sts.push(
-        new $rdf.Statement(mostRecentVersion(oldMsg), ns.dct('isReplacedBy'), message, chatDocument)
-      )
-    } else {
-      sts.push( // new message
-        new $rdf.Statement(this.chatChannel, ns.wf('message'), message, chatDocument)
-      )
+    if (oldMsg) { // edit message replaces old one
+      sts.push($rdf.st(mostRecentVersion(oldMsg), ns.dct('isReplacedBy'), message, chatDocument))
+      if (deleteIt) {
+        sts.push($rdf.st(message), ns.schema('dateDeleted'), dateStamp, chatDocument)
+      }
+    } else { // link new message to channel
+      sts.push($rdf.st(this.channel, ns.wf('message'), message, chatDocument))
     }
     sts.push(
-      new $rdf.Statement(
-        message,
-        ns.sioc('content'),
-        store.literal(newContent),
-        chatDocument
-      )
+      $rdf.st(message, ns.sioc('content'), store.literal(text), chatDocument)
     )
     sts.push(
-      new $rdf.Statement(message, ns.dct('created'), dateStamp, chatDocument)
+      $rdf.st(message, ns.dct('created'), dateStamp, chatDocument)
     )
     if (me) {
-      sts.push(
-        new $rdf.Statement(message, ns.foaf('maker'), me, chatDocument)
-      )
+      sts.push($rdf.st(message, ns.foaf('maker'), me, chatDocument))
     }
-    return { message, dateStamp, content, chatDocument, sts }
-  }
-
-  async deleteMessage (message) {
-    const sts = []
-    const dateStamp = $rdf.term(new Date())
-    const chatDocument = message.doc()
-    sts.push(
-      new $rdf.Statement(mostRecentVersion(message), ns.schema('dateDeleted'), dateStamp, chatDocument)
-    )
-    sts.push(
-      new $rdf.Statement(mostRecentVersion(message), ns.schema('dateDeleted'), dateStamp, chatDocument)
-    )
     try {
-      store.updater.update([], sts)
+      await store.updater.update([], sts)
     } catch (err) {
-      const msg = 'Error deleting chat essage: ' + err
+      const msg = 'Error saving chat message: ' + err
       alert(msg)
     }
-  } // method
+    return message
+  }
+
+  /* Mark a message as deleted
+  * Wee add a new version of the message,m witha deletion flag (deletion date)
+  * so that the deletion can be revoked by adding another non-deleted update
+  */
+  async deleteMessage (message) {
+    return this.updateMessage('(message deleted)', message, true)
+  }
 } // class ChatChannel
+
+export function originalVersion (message) {
+  let msg = message
+  while (msg) {
+    message = msg
+    msg = store.any(null, ns.dct('isReplacedBy'), message, message.doc())
+  }
+  return message
+}
 
 export function mostRecentVersion (message) {
   let msg = message
   while (msg) {
     message = msg
-    msg = store.any(message, ns.dct('isReplacedBy'))
+    msg = store.any(message, ns.dct('isReplacedBy'), null, message.doc())
   }
   if (store.any(message, ns.schema('dateDeleted'))) {
     return ns.schema('dateDeleted') // message has been deleted
   }
   return message
+}
+
+export function isDeleted (message) {
+  return store.holds(message, ns.schema('dateDeleted'), null, message.doc())
+}
+
+export function isReplaced (message) {
+  return store.holds(message, ns.dct('isReplacedBy'), null, message.doc())
+}
+
+export function isHidden (message) {
+  return this.isDeleted(message) || this.isReplaced(message)
 }
 
 // A Nickname for a person
@@ -111,7 +128,7 @@ export function nick (person) {
   return '' + utils.label(person)
 }
 
-export async function createIfNotExists (doc, contentType = 'text/turtle', data = '') {
+export async function _createIfNotExists (doc, contentType = 'text/turtle', data = '') {
   let response
   try {
     response = await store.fetcher.load(doc)

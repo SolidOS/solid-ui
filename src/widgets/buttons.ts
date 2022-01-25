@@ -627,7 +627,9 @@ export function button (dom: HTMLDocument, iconURI: string | undefined, text: st
  * @returns <dDomElement> - the button
  */
 export function cancelButton (dom: HTMLDocument, handler: (_event?: any) => void) {
-  return button(dom, cancelIconURI, 'Cancel', handler)
+  const b = button(dom, cancelIconURI, 'Cancel', handler)
+  b.firstChild.style.opacity = '0.3'  // Black X is too harsh: current language is grey X
+  return b
 }
 
 /*  Make a continue button

@@ -10,7 +10,7 @@ import { store } from '../logic'
 import * as ns from '../ns'
 // import * as pad from '../pad'
 // import { DateFolder } from './dateFolder'
-import { mostRecentVersion, ChatChannel } from './chatLogic'
+import { mostRecentVersion, ChatChannel, isDeleted } from './chatLogic'
 import { renderMessageEditor, renderMessageRow } from './message'
 // import { findBookmarkDocument } from './bookmarks'
 
@@ -24,9 +24,9 @@ import * as widgets from '../widgets'
 export function desktopNotification (str) {
   // Let's check if the browser supports notifications
   if (!('Notification' in window)) {
-    debug.warn('This browser does not support desktop notification')
+    debug.warn('This browser does no t support desktop notification')
   } else if (Notification.permission === 'granted') {
-    // Let's check whether notification permissions have already been granted
+    // Let's check whether notificatio n permissions have already been granted
     // eslint-disable-next-line no-new
     new Notification(str)
   } else if (Notification.permission !== 'denied') {
@@ -137,12 +137,12 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
     }
   } // syncMessages
 
+  // Called once per original message displayed
   function addMessage (message, messageTable) {
-    let content
-    if (store.any(mostRecentVersion(message))) {
-      content = store.any(mostRecentVersion(message), ns.sioc('content'))
-    } else {
-      content = store.literal('message deleted')
+    const latest = mostRecentVersion(message)
+    const content = store.any(latest, ns.sioc('content'))
+    if (isDeleted(latest) && !options.showDeletedMessages) {
+      return // ignore deleted messaged -- @@ could also leave a placeholder
     }
     const bindings = {
       '?msg': message,

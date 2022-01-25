@@ -20,7 +20,7 @@ import * as utils from '../utils'
 import * as widgets from '../widgets'
 import { renderBookmarksButton } from './bookmarks'
 import { mostRecentVersion } from './chatLogic'
-import { renderMessageEditor } from './message'
+import { switchToEditor } from './message'
 
 // import { infiniteMessageArea } from './infinite.js'
 // import { renderMessage, creatorAndDate } from './message'
@@ -93,13 +93,13 @@ export function sentimentStripLinked (target, doc) {
 /**
  * Creates a message toolbar component
  */
-export function messageToolbar (message, messageRow, userContext, channelObjet) {
+export function messageToolbar (message, messageRow, userContext, channelObject) {
   async function deleteMessage () {
     const author = store.any(message, ns.foaf('maker'))
     if (!me) {
       alert('You can\'t delete the message, you are not logged in.')
     } else if (me.sameTerm(author)) {
-      await channelObjet.deleteMessage(message)
+      await channelObject.deleteMessage(message)
     } else {
       alert('You can\'t delete the message, you are not logged in as the author, ' + author)
     }
@@ -109,11 +109,7 @@ export function messageToolbar (message, messageRow, userContext, channelObjet) 
   async function editMessage (messageRow) {
     if (me.value === store.any(message, ns.foaf('maker')).value) {
       closeToolbar() // edit is a one-off action
-      const messageTable = messageRow.parentNode
-      const editRow = renderMessageEditor(channelObjet, messageTable, userContext, channelObjet.options, message)
-      messageTable.insertBefore(editRow, messageRow)
-      editRow.originalRow = messageRow
-      messageRow.style.display = 'none' // Hide the original message. unhide if user cancels edit
+      switchToEditor(messageRow, message, channelObject, userContext)
     }
   }
 

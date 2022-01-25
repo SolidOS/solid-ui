@@ -8,7 +8,9 @@ import { insertMessageIntoTable } from './infinite'
 
 import { messageToolbar, sentimentStripLinked } from './messageTools'
 import { findBookmarkDocument } from './bookmarks'
+import { mostRecentVersion, originalVersion } from './chatLogic'
 
+import * as debug from '../debug'
 import { authn } from '../authn/index'
 import { icons } from '../iconBase'
 import { store } from '../logic'
@@ -121,9 +123,13 @@ export function renderMessageRow (channelObject, bindings, fresh, options, userC
   const date = bindings['?date']
   const content = bindings['?content']
 
-  const dateString = date.value
+  const originalMessage = originalVersion(message)
+  const edited = !message.sameTerm(originalMessage)
+
+  const sortDate = store.the(originalMessage, ns.dct('created'), null, originalMessage.doc()) // In message
+
   const messageRow = dom.createElement('tr')
-  messageRow.AJAR_date = dateString
+  messageRow.AJAR_date = sortDate.value
   messageRow.AJAR_subject = message
 
   const td1 = dom.createElement('td')
@@ -137,7 +143,11 @@ export function renderMessageRow (channelObject, bindings, fresh, options, userC
     widgets.setImage(img, creator)
     td1.appendChild(img)
   } else {
-    creatorAndDate(td1, creator, widgets.shortDate(dateString), message)
+    creatorAndDate(td1, creator, widgets.shortDate(sortDate.value), message)
+  }
+  let bothDates = widgets.shortDate(sortDate.value)
+  if (edited) {
+    bothDates += ' ... ' + widgets.shortDate(date.value)
   }
 
   // Render the content ot the message itself
@@ -147,7 +157,7 @@ export function renderMessageRow (channelObject, bindings, fresh, options, userC
     creatorAndDateHorizontal(
       td2,
       creator,
-      widgets.shortDate(dateString),
+      bothDates, // widgets.shortDate(dateString)
       message
     )
   }
@@ -228,23 +238,31 @@ export function renderMessageRow (channelObject, bindings, fresh, options, userC
   return messageRow
 }
 
-/*       Control for a new message -- or editing an old message
+export function switchToEditor (messageRow, message, channelObject, userContext) {
+  const messageTable = messageRow.parentNode
+  const editRow = renderMessageEditor(channelObject, messageTable, userContext,
+    channelObject.options, mostRecentVersion(message))
+  messageTable.insertBefore(editRow, messageRow)
+  editRow.originalRow = messageRow
+  messageRow.style.visibility = 'hidden' // Hide the original message. unhide if user cancels edit
+}
+/*       Control for a new message -- or editing an old message ***************
+ *
  */
 export function renderMessageEditor (channelObject, messageTable, userContext, options, originalMessage) {
-  async function sendMessage (text) {
-    function revertEditing (messageEditor) {
-      messageEditor.originalRow.style.display = 'block' // restore read-only version
-      messageEditor.parentNode.removeChild(messageEditor)
-    }
-    await channelObject.div.refresh() // Add new day if nec
-    const me = authn.currentUser() // Must be logged on or wuld have got login button
-    if (!text) {
-      field.setAttribute('style', messageBodyStyle + 'color: #bbb;') // pendingedit
-      field.disabled = true
-    }
-    const { message, dateStamp, content, _chatDocument, sts } = await channelObject.createMessage(text || field.value)
+  function revertEditing (messageEditor) {
+    messageEditor.originalRow.style.visibility = 'visible' // restore read-only version
+    messageEditor.parentNode.removeChild(messageEditor)
+  }
 
-    function sendComplete () {
+  async function handleFieldInput (_event) {
+    await sendMessage(field.value, true)
+  }
+
+  async function sendMessage (text, fromMainField) {
+    function sendComplete (message, text2) {
+      const dateStamp = store.any(message, ns.dct('created'), null, message.doc())
+      const content = $rdf.literal(text2)
       const bindings = {
         '?msg': message,
         '?content': content,
@@ -254,9 +272,18 @@ export function renderMessageEditor (channelObject, messageTable, userContext, o
       insertMessageIntoTable(channelObject, messageTable, bindings, false, options, userContext) // not green
 
       if (originalMessage) { // editing another message
-        revertEditing(messageEditor)
+        const oldRow = messageEditor.originalRow
+        // oldRow.style.display = '' // restore read-only version, re-attack
+        if (oldRow.parentNode) {
+          oldRow.parentNode.removeChild(oldRow) // No longer needed old version
+        } else {
+          debug.warn('No parentNode on old message ' + oldRow.textContent)
+          oldRow.style.backgroundColor = '#fee'
+          oldRow.style.visibility = 'hidden' // @@ FIX THIS AND REMOVE FROM DOM INSTEAD
+        }
+        messageEditor.parentNode.removeChild(messageEditor) // no longer need editor
       } else {
-        if (!text) {
+        if (fromMainField) {
           field.value = '' // clear from out for reuse
           field.setAttribute('style', messageBodyStyle)
           field.disabled = false
@@ -265,16 +292,26 @@ export function renderMessageEditor (channelObject, messageTable, userContext, o
           field.select()
         }
       }
+      // await channelObject.div.refresh() // Add new day if nec  @@ add back
     }
+
+    const me = authn.currentUser() // Must be logged on or wuld have got login button
+    if (fromMainField) {
+      field.setAttribute('style', messageBodyStyle + 'color: #bbb;') // pendingedit
+      field.disabled = true
+    }
+
+    let message
     try {
-      await store.updater.update([], sts)
+      message = await channelObject.updateMessage(text, originalMessage)
     } catch (err) {
-      messageEditor.appendChild(
+      const statusArea = userContext.statusArea || messageEditor
+      statusArea.appendChild(
         widgets.errorMessageBlock(dom, 'Error writing message: ' + err)
       )
       return
     }
-    sendComplete()
+    sendComplete(message, text)
   } // sendMessage
 
   //    DRAG AND DROP
@@ -286,7 +323,7 @@ export function renderMessageEditor (channelObject, messageTable, userContext, o
       base + 'Files',
       base + 'Pictures',
       async function (theFile, destURI) {
-        // @@@@@@ Wait for eachif several
+        // @@@@@@ Wait for each if several
         await sendMessage(destURI)
       }
     )
@@ -349,6 +386,9 @@ export function renderMessageEditor (channelObject, messageTable, userContext, o
     middle.innerHTML = ''
     middle.appendChild(field)
     field.rows = 3
+    if (originalMessage) {
+      field.value = store.anyValue(originalMessage, ns.sioc('content'), null, originalMessage.doc())
+    }
     // field.cols = 40
     field.setAttribute('style', messageBodyStyle + 'background-color: #eef;')
 
@@ -360,7 +400,7 @@ export function renderMessageEditor (channelObject, messageTable, userContext, o
         if (e.keyCode === 13) {
           if (!e.altKey) {
             // Alt-Enter just adds a new line
-            await sendMessage()
+            await handleFieldInput(e)
           }
         }
       },
@@ -369,14 +409,19 @@ export function renderMessageEditor (channelObject, messageTable, userContext, o
     widgets.makeDropTarget(field, droppedURIHandler, droppedFileHandler)
 
     rhs.innerHTML = ''
-    sendButton = widgets.button(
-      dom,
-      icons.iconBase + 'noun_383448.svg',
-      'Send'
-    )
-    sendButton.setAttribute('style', style.buttonStyle + 'float: right;')
-    sendButton.addEventListener('click', _event => sendMessage(), false)
+
+    sendButton = widgets.button(dom, sendIcon, 'Send')
+    sendButton.style.float = 'right'
+    sendButton.addEventListener('click', _event => handleFieldInput(), false)
     rhs.appendChild(sendButton)
+
+    if (originalMessage) { // Are we editing another message?
+      const cancelButton = rhs.appendChild(widgets.cancelButton(dom))
+      cancelButton.style.float = 'left'
+      // cancelButton.firstChild.style.opacity = '0.3' // moved to buttons
+      cancelButton.addEventListener('click', _event => revertEditing(messageEditor), false)
+      rhs.appendChild(cancelButton)
+    }
 
     const chatDocument = channelObject.dateFolder.leafDocumentFromDate(new Date())
     let imageDoc
@@ -385,16 +430,21 @@ export function renderMessageEditor (channelObject, messageTable, userContext, o
       media.cameraButton(dom, store, getImageDoc, tookPicture)
     )
 
-    pad.recordParticipation(channelObject.chatChannel, channelObject.chatChannel.doc()) // participation =
+    pad.recordParticipation(channelObject.channel, channelObject.channel.doc()) // participation =
   } // turn on inpuut
 
   // Body of renderMessageEditor
 
-  let sortDate
+  let sortDate, sendIcon
   if (originalMessage) {
     sortDate = store.anyValue(originalMessage, ns.dct('created'), null, originalMessage.doc())
+    // text = store.anyValue(originalMessage, ns.sioc('content'), null, originalMessage.doc())
+    sendIcon = icons.iconBase + 'noun_1180158.svg' // Green check
+    // cancelIcon = icons.iconBase + 'noun_1180156.svg' // Black cross
   } else {
+    sendIcon = icons.iconBase + 'noun_383448.svg'
     sortDate = '9999-01-01T00:00:00Z' // ISO format for field sort
+    // text = ''
   }
   const messageEditor = dom.createElement('tr')
   const lhs = dom.createElement('td')
@@ -404,7 +454,7 @@ export function renderMessageEditor (channelObject, messageTable, userContext, o
   messageEditor.appendChild(middle)
   messageEditor.appendChild(rhs)
   messageEditor.AJAR_date = sortDate
-  messageEditor.appendChild(dom.createElement('br'))
+  // messageEditor.appendChild(dom.createElement('br'))
 
   let field, sendButton
   const context = { div: middle, dom: dom }
