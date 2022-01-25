@@ -46,14 +46,15 @@ export function desktopNotification (str) {
 /**
  * Renders a chat message inside a `messageTable`
  */
-export function insertMessageIntoTable (channelObject, messageTable, bindings, fresh, options, userContext) {
+export function insertMessageIntoTable (channelObject, messageTable, message, fresh, options, userContext) {
   const messageRow = renderMessageRow(channelObject,
-    bindings,
+    message,
     fresh,
     options,
     userContext
   )
-  const message = messageRow.AJAR_subject
+
+  // const message = messageRow.AJAR_subject
   if (options.selectedMessage && options.selectedMessage.sameTerm(message)) {
     messageRow.style.backgroundColor = 'yellow'
     options.selectedElement = messageRow
@@ -140,19 +141,13 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
   // Called once per original message displayed
   function addMessage (message, messageTable) {
     const latest = mostRecentVersion(message)
-    const content = store.any(latest, ns.sioc('content'))
+    // const content = store.any(latest, ns.sioc('content'))
     if (isDeleted(latest) && !options.showDeletedMessages) {
       return // ignore deleted messaged -- @@ could also leave a placeholder
     }
-    const bindings = {
-      '?msg': message,
-      '?creator': store.any(message, ns.foaf('maker')),
-      '?date': store.any(message, ns.dct('created')),
-      '?content': content // store.any(mostRecentVersion(message), ns.sioc('content'))
-    }
     insertMessageIntoTable(channelObject,
       messageTable,
-      bindings,
+      message,
       messageTable.fresh,
       options,
       userContext

@@ -114,14 +114,14 @@ export function creatorAndDateHorizontal (td1, creator, date, message) {
 /**
  * Renders a chat message, read-only mode
  */
-export function renderMessageRow (channelObject, bindings, fresh, options, userContext) {
+export function renderMessageRow (channelObject, message, fresh, options, userContext) {
   const colorizeByAuthor =
     options.colorizeByAuthor === '1' || options.colorizeByAuthor === true
 
-  const creator = bindings['?creator']
-  const message = bindings['?msg']
-  const date = bindings['?date']
-  const content = bindings['?content']
+  const creator = store.any(message, ns.foaf('maker'))
+  const date = store.any(message, ns.dct('created'))
+  const latestVersion = mostRecentVersion(message)
+  const content = store.any(latestVersion, ns.sioc('content'))
 
   const originalMessage = originalVersion(message)
   const edited = !message.sameTerm(originalMessage)
@@ -260,16 +260,10 @@ export function renderMessageEditor (channelObject, messageTable, userContext, o
   }
 
   async function sendMessage (text, fromMainField) {
-    function sendComplete (message, text2) {
-      const dateStamp = store.any(message, ns.dct('created'), null, message.doc())
-      const content = $rdf.literal(text2)
-      const bindings = {
-        '?msg': message,
-        '?content': content,
-        '?date': dateStamp,
-        '?creator': me
-      }
-      insertMessageIntoTable(channelObject, messageTable, bindings, false, options, userContext) // not green
+    function sendComplete (message, _text2) {
+      // const dateStamp = store.any(message, ns.dct('created'), null, message.doc())
+      // const content = $rdf.literal(text2)
+      insertMessageIntoTable(channelObject, messageTable, message, false, options, userContext) // not green
 
       if (originalMessage) { // editing another message
         const oldRow = messageEditor.originalRow
@@ -295,7 +289,7 @@ export function renderMessageEditor (channelObject, messageTable, userContext, o
       // await channelObject.div.refresh() // Add new day if nec  @@ add back
     }
 
-    const me = authn.currentUser() // Must be logged on or wuld have got login button
+    // const me = authn.currentUser() // Must be logged on or wuld have got login button
     if (fromMainField) {
       field.setAttribute('style', messageBodyStyle + 'color: #bbb;') // pendingedit
       field.disabled = true

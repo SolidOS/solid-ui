@@ -7,7 +7,7 @@
  * If you made it originally: edit, delete, attach
  * @packageDocumentation
  */
-
+import * as debug from '../debug'
 import { authn } from '../authn/index'
 import { icons } from '../iconBase'
 import { store } from '../logic'
@@ -99,7 +99,16 @@ export function messageToolbar (message, messageRow, userContext, channelObject)
     if (!me) {
       alert('You can\'t delete the message, you are not logged in.')
     } else if (me.sameTerm(author)) {
-      await channelObject.deleteMessage(message)
+      try {
+        await channelObject.deleteMessage(message)
+      } catch (err) {
+        const msg = 'Error deleting messaage ' + err
+        debug.warn(msg)
+        alert(msg)
+        const area = userContext.statusArea || messageRow.parentNode
+        area.appendChild(widgets.errorMessageBlock(dom, msg))
+      }
+      messageRow.parentNode.removeChild(messageRow)
     } else {
       alert('You can\'t delete the message, you are not logged in as the author, ' + author)
     }
@@ -115,24 +124,6 @@ export function messageToolbar (message, messageRow, userContext, channelObject)
 
   // alain TODO allow chat owner to fully delete message + sentiments and replacing messages
 
-  /* if (mostRecentVersion(message).value === ns.schema('dateDeleted').value) {
-    // TODO only admin can do : delete completely message and replacements
-    // find message and replacements
-    const admin
-    if (me && (me.uri === admin)) {
-      const messageArray = [message]
-      const msg = message
-      while(msg) {
-        message = msg
-        messageArray.push(message)
-        msg = store.any(message, ns.dct('isReplacedBy'))
-      }
-      if (alert('confirm you want to completely remove this deleted message')) {
-        messageArray.map(msg => deleteThingThen(msg))
-      }
-    }
-    return
-  } */
   const div = dom.createElement('div')
   // is message deleted ?
   if (mostRecentVersion(message).value === ns.schema('dateDeleted').value) return div

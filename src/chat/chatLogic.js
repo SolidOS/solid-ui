@@ -55,7 +55,7 @@ export class ChatChannel {
     if (oldMsg) { // edit message replaces old one
       sts.push($rdf.st(mostRecentVersion(oldMsg), ns.dct('isReplacedBy'), message, chatDocument))
       if (deleteIt) {
-        sts.push($rdf.st(message), ns.schema('dateDeleted'), dateStamp, chatDocument)
+        sts.push($rdf.st(message, ns.schema('dateDeleted'), dateStamp, chatDocument))
       }
     } else { // link new message to channel
       sts.push($rdf.st(this.channel, ns.wf('message'), message, chatDocument))
@@ -73,7 +73,9 @@ export class ChatChannel {
       await store.updater.update([], sts)
     } catch (err) {
       const msg = 'Error saving chat message: ' + err
+      debug.warn(msg)
       alert(msg)
+      throw new Error(msg, err)
     }
     return message
   }
@@ -101,9 +103,6 @@ export function mostRecentVersion (message) {
   while (msg) {
     message = msg
     msg = store.any(message, ns.dct('isReplacedBy'), null, message.doc())
-  }
-  if (store.any(message, ns.schema('dateDeleted'))) {
-    return ns.schema('dateDeleted') // message has been deleted
   }
   return message
 }
