@@ -387,19 +387,23 @@ export function renderMessageEditor (channelObject, messageTable, userContext, o
     field.setAttribute('style', messageBodyStyle + 'background-color: #eef;')
 
     // Trap the Enter BEFORE it is used ti make a newline
+
     field.addEventListener(
       'keydown',
       async function (e) {
         // User preference?
-        if (e.keyCode === 13) {
-          if (!e.altKey) {
-            // Alt-Enter just adds a new line
+        if (e.code === "Enter") {
+        // if (e.keyCode === 13) { // deprocated https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode
+          if (!e.shiftKey) {
+            // Shift-Enter just adds a new line
+            // (note alt-enter doesn't add newline anyway on my setup - so have to use shift.
             await handleFieldInput(e)
           }
         }
       },
       false
     )
+
     widgets.makeDropTarget(field, droppedURIHandler, droppedFileHandler)
 
     rhs.innerHTML = ''
