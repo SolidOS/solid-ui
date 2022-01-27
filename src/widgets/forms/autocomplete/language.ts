@@ -33,7 +33,7 @@ export function addDefaults (array) {
 
 export async function getPreferredLanguagesFor (person: NamedNode) {
   const doc = person.doc()
-  await kb.fetcher.load(doc)
+  await kb.fetcher?.load(doc)
   const list = kb.any(person, ns.schema('knowsLanguage'), null, doc) as Collection | undefined
   if (!list) {
     // console.log(`User ${person} has not set their languages in their profile.`)
