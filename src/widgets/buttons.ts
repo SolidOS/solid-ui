@@ -628,7 +628,9 @@ export function button (dom: HTMLDocument, iconURI: string | undefined, text: st
  */
 export function cancelButton (dom: HTMLDocument, handler: (_event?: any) => void) {
   const b = button(dom, cancelIconURI, 'Cancel', handler)
-  b.firstChild.style.opacity = '0.3'  // Black X is too harsh: current language is grey X
+  if (b.firstChild) { // sigh for tsc
+    (b.firstChild as HTMLElement).style.opacity = '0.3' // Black X is too harsh: current language is grey X
+  }
   return b
 }
 

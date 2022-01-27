@@ -75,7 +75,7 @@ export class ChatChannel {
       const msg = 'Error saving chat message: ' + err
       debug.warn(msg)
       alert(msg)
-      throw new Error(msg, err)
+      throw new Error(msg)
     }
     return message
   }

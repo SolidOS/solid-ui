@@ -51,7 +51,8 @@ emoji[ns.schema('LikeAction')] = '❤️'
  * Create strip of sentiments expressed
  */
 export function sentimentStrip (target, doc) { // alain seems not used
-  const actions = (mostRecentVersion(target).value !== ns.schema('dateDeleted').value) ? store.each(null, ns.schema('target'), target, doc) : []
+  const latest = mostRecentVersion(target)
+  const actions = store.holds(latest, ns.schema('dateDeleted').value, null, latest.doc()) ? store.each(null, ns.schema('target'), target, doc) : []
   const sentiments = actions.map(a => store.any(a, ns.rdf('type'), null, doc))
   sentiments.sort()
   const strings = sentiments.map(x => emoji[x] || '')
