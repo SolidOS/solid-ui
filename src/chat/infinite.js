@@ -91,6 +91,19 @@ export function insertMessageIntoTable (channelObject, messageTable, message, fr
  * index.ttl#this and the chats messages are stored in YYYY/MM/DD/chat.ttl
  *
  * Use to import store as param 2, now ignores it and uses the UI main store
+ *
+ * Options include:
+
+ - shiftEnterSendsMessage: Use shift/enter to send message, Enter to add newline, instead of the reverse.
+ - authorDateOnLeft:  Display the author's anme and date of the message in the left column instead of first above the content
+ - selectedMessage: Display one message highlighted with the chat around it
+ - solo: By itelf on a webpage, so user scroll anywhere in the web page scan scroll the chat.
+ - newestFirst: Arrange the chat messages chronologically newest at the top insted of at the bottom
+ - infinite:  Use infinite scroll
+ - showDeletedMessages: Show messages which have been delted as "deleted message". Otherwise hide them.
+ - expandImagesInline: If a URI by itself in a message looks like an image URI, replace it with the image
+ - inlineImageHeightEms: The height (in ems) of images expaned from their URIs in the chat.
+
  */
 export async function infiniteMessageArea (dom, wasStore, chatChannel, options) {
   // ///////////////////////////////////////////////////////////////////////
@@ -329,7 +342,7 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
     /// ///////////////////////
     /*
     options = options || {}
-    options.authorAboveContent = true
+    options.authorDateOnLeft = true
     const newestFirst = options.newestFirst === '1' || options.newestFirst === true // hack for now
     const channelObject = new ChatChannel(chatChannel, options)
     const dateFolder = channelObject.dateFolder
@@ -615,7 +628,7 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
   // Body of main function
 
   options = options || {}
-  options.authorAboveContent = true
+  options.authorDateOnLeft = false // @@ make a user optiosn
   const newestFirst = options.newestFirst === '1' || options.newestFirst === true // hack for now
 
   const channelObject = new ChatChannel(chatChannel, options)

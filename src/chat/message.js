@@ -134,7 +134,7 @@ export function renderMessageRow (channelObject, message, fresh, options, userCo
 
   const td1 = dom.createElement('td')
   messageRow.appendChild(td1)
-  if (options.authorAboveContent) {
+  if (!options.authorDateOnLeft) {
     const img = dom.createElement('img')
     img.setAttribute(
       'style',
@@ -153,7 +153,7 @@ export function renderMessageRow (channelObject, message, fresh, options, userCo
   // Render the content ot the message itself
   const td2 = messageRow.appendChild(dom.createElement('td'))
 
-  if (options.authorAboveContent) {
+  if (!options.authorDateOnLeft) {
     creatorAndDateHorizontal(
       td2,
       creator,
@@ -392,9 +392,9 @@ export function renderMessageEditor (channelObject, messageTable, userContext, o
       'keydown',
       async function (e) {
         // User preference?
-        if (e.code === "Enter") {
+        if (e.code === 'Enter') {
         // if (e.keyCode === 13) { // deprocated https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode
-          if (!e.shiftKey) {
+          if ((!e.shiftKey && !options.shiftEnterSendsMessage) || (e.shiftKey && options.shiftEnterSendsMessage)) {
             // Shift-Enter just adds a new line
             // (note alt-enter doesn't add newline anyway on my setup - so have to use shift.
             await handleFieldInput(e)
