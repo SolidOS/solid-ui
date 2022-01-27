@@ -3,10 +3,9 @@
  * and [[AccessGroupsOptions]] classes
  * @packageDocumentation
  */
-import { IndexedFormula, NamedNode } from 'rdflib';
+import { IndexedFormula, NamedNode, LiveStore } from 'rdflib';
 import { AccessController } from './access-controller';
 import { AgentMapMap, ComboList } from './types';
-import { LiveStore } from 'solid-logic';
 /**
  * Type for the options parameter of [[AccessGroups]]
  */

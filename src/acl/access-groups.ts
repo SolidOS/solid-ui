@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import { fetcher, IndexedFormula, NamedNode, sym } from 'rdflib'
+import { fetcher, IndexedFormula, NamedNode, sym, LiveStore } from 'rdflib'
 import { ACLbyCombination, readACL } from './acl'
 import * as widgets from '../widgets'
 import * as ns from '../ns'
@@ -12,7 +12,6 @@ import { AccessController } from './access-controller'
 import { AgentMapMap, ComboList, PartialAgentTriple } from './types'
 import { AddAgentButtons } from './add-agent-buttons'
 import * as debug from '../debug'
-import { LiveStore } from 'solid-logic'
 
 const ACL = ns.acl
 
@@ -186,7 +185,7 @@ export class AccessGroups {
     if (!agent && !secondAttempt) {
       debug.log(`   Not obvious: looking up dropped thing ${thing}`)
       try {
-        await this._store.fetcher.load(thing.doc())
+        await this._store?.fetcher?.load(thing.doc())
       } catch (error) {
         const message = `Ignore error looking up dropped thing: ${error}`
         debug.error(message)

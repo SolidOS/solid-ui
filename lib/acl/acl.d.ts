@@ -5,8 +5,7 @@
  * @packageDocumentation
  */
 import { AgentMapMap, AgentMapUnion, ComboList } from './types';
-import { IndexedFormula, NamedNode } from 'rdflib';
-import { LiveStore } from 'solid-logic';
+import { IndexedFormula, NamedNode, LiveStore } from 'rdflib';
 /**
  * Take the "default" ACL and convert it into the equivlent ACL
  * which the resource would have had. Return it as a new separate store.
