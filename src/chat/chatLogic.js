@@ -17,8 +17,8 @@ import * as utils from '../utils'
  * Common code for a chat (discussion area of messages about something)
  * This version runs over a series of files for different time periods
  *
- * Parameters for the whole chat like its title are stored on
- * index.ttl#this and the chats messages are stored in YYYY/MM/DD/chat.ttl
+ * Parameters for the whole chat -- like its title -- are stored at
+ * index.ttl#this and the chat messages are stored in YYYY/MM/DD/chat.ttl
  *
  */
 
