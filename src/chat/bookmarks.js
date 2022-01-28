@@ -172,7 +172,7 @@ async function addBookmark (context, target) {
   return bookmark
 }
 
-export async function toggleBookmark (userContext, target, bookmarkbutton) {
+export async function toggleBookmark (userContext, target, bookmarkButton) {
   await store.fetcher.load(userContext.bookmarkDocument)
   const bookmarks = store.each(
     null,
@@ -186,7 +186,7 @@ export async function toggleBookmark (userContext, target, bookmarkbutton) {
     for (let i = 0; i < bookmarks.length; i++) {
       try {
         await updatePromise(store.connectedStatements(bookmarks[i]), [])
-        bookmarkbutton.style.backgroundColor = 'white'
+        bookmarkButton.style.backgroundColor = 'white'
         debug.log('Bookmark deleted: ' + bookmarks[i])
       } catch (e) {
         debug.error('Cant delete bookmark:' + e)
@@ -195,36 +195,36 @@ export async function toggleBookmark (userContext, target, bookmarkbutton) {
     }
   } else {
     const bookmark = await addBookmark(userContext, target)
-    bookmarkbutton.style.backgroundColor = 'yellow'
+    bookmarkButton.style.backgroundColor = 'yellow'
     debug.log('Bookmark added: ' + bookmark)
   }
 }
 
 export async function renderBookmarksButton (userContext, target) {
-  async function setBookmarkbuttonColor (bookmarkbutton) {
+  async function setBookmarkButtonColor (bookmarkButton) {
     await store.fetcher.load(userContext.bookmarkDocument)
     const bookmarked = store.any(
       null,
       BOOK('recalls'),
-      bookmarkbutton.target,
+      bookmarkButton.target,
       userContext.bookmarkDocument
     )
-    bookmarkbutton.style = UI.style.buttonStyle
-    if (bookmarked) bookmarkbutton.style.backgroundColor = 'yellow'
+    bookmarkButton.style = UI.style.buttonStyle
+    if (bookmarked) bookmarkButton.style.backgroundColor = 'yellow'
   }
 
-  let bookmarkbutton
+  let bookmarkButton
   if (userContext.bookmarkDocument) {
-    bookmarkbutton = UI.widgets.button(
+    bookmarkButton = UI.widgets.button(
       dom,
       UI.icons.iconBase + BOOKMARK_ICON,
       label(BOOK('Bookmark')),
       () => {
-        toggleBookmark(userContext, target, bookmarkbutton)
+        toggleBookmark(userContext, target, bookmarkButton)
       }
     )
-    bookmarkbutton.target = target
-    await setBookmarkbuttonColor(bookmarkbutton)
-    return bookmarkbutton
+    bookmarkButton.target = target
+    await setBookmarkButtonColor(bookmarkButton)
+    return bookmarkButton
   }
 }
