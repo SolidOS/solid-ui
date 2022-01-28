@@ -17,8 +17,8 @@ import * as utils from '../utils'
  * Common code for a chat (discussion area of messages about something)
  * This version runs over a series of files for different time periods
  *
- * Parameters for the whole chat -- like its title -- are stored at
- * index.ttl#this and the chat messages are stored in YYYY/MM/DD/chat.ttl
+ * Parameters for the whole chat like its title are stored on
+ * index.ttl#this and the chats messages are stored in YYYY/MM/DD/chat.ttl
  *
  */
 
@@ -39,7 +39,7 @@ export class ChatChannel {
 
   /* Store a new message in the web,
     as a replacement for an existing one.
-    The old one is left, and the two are linked
+    The old one iis left, and the two are linked
   */
   async updateMessage (text, oldMsg = null, deleteIt) {
     const sts = []
@@ -81,7 +81,7 @@ export class ChatChannel {
   }
 
   /* Mark a message as deleted
-  * We add a new version of the message, with a deletion flag (deletion date)
+  * Wee add a new version of the message,m witha deletion flag (deletion date)
   * so that the deletion can be revoked by adding another non-deleted update
   */
   async deleteMessage (message) {
