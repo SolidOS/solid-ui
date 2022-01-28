@@ -22,7 +22,6 @@ const $rdf = UI.rdf
 const BOOK = $rdf.Namespace('http://www.w3.org/2002/01/bookmark#')
 const BOOKMARK_ICON = 'noun_45961.svg'
 
-const kb = store
 const label = utils.label
 const dom = window.document || null
 
@@ -33,10 +32,10 @@ const dom = window.document || null
  */
 function createIfNotExists (doc) {
   return new Promise(function (resolve, reject) {
-    kb.fetcher.load(doc).then(
+    store.fetcher.load(doc).then(
       response => {
         debug.log('createIfNotExists doc exists, all good ' + doc)
-        // kb.fetcher.webOperation('HEAD', doc.uri).then(response => {
+        // store.fetcher.webOperation('HEAD', doc.uri).then(response => {
         resolve(response)
       },
       err => {
@@ -45,7 +44,7 @@ function createIfNotExists (doc) {
             'createIfNotExists doc does NOT exist, will create... ' + doc
           )
 
-          kb.fetcher
+          store.fetcher
             .webOperation('PUT', doc.uri, {
               data: '',
               contentType: 'text/turtle'
@@ -53,7 +52,7 @@ function createIfNotExists (doc) {
             .then(
               response => {
                 // fetcher.requested[doc.uri] = 'done' // do not need to read ??  but no headers
-                delete kb.fetcher.requested[doc.uri] // delete cached 404 error
+                delete store.fetcher.requested[doc.uri] // delete cached 404 error
                 debug.log('createIfNotExists doc created ok ' + doc)
                 resolve(response)
               },
@@ -76,7 +75,7 @@ function createIfNotExists (doc) {
 // @@@@ use the one in rdflib.js when it is avaiable and delete this
 function updatePromise (del, ins) {
   return new Promise(function (resolve, reject) {
-    kb.updater.update(del, ins, function (uri, ok, errorBody) {
+    store.updater.update(del, ins, function (uri, ok, errorBody) {
       if (!ok) {
         reject(new Error(errorBody))
       } else {
@@ -150,9 +149,9 @@ async function addBookmark (context, target) {
   const me = UI.authn.currentUser() // If already logged on
   if (!me) throw new Error('Must be logged on to add Bookmark')
 
-  const author = kb.any(target, ns.foaf('maker'))
+  const author = store.any(target, ns.foaf('maker'))
   title =
-    label(author) + ': ' + kb.anyValue(target, ns.sioc('content')).slice(0, 80) // @@ add chat title too?
+    label(author) + ': ' + store.anyValue(target, ns.sioc('content')).slice(0, 80) // @@ add chat title too?
   const bookmarkDoc = context.bookmarkDocument
   const bookmark = UI.widgets.newThing(bookmarkDoc, title)
   const ins = [
@@ -173,9 +172,9 @@ async function addBookmark (context, target) {
   return bookmark
 }
 
-export async function toggleBookmark (userContext, target, bookmarkButton) {
-  await kb.fetcher.load(userContext.bookmarkDocument)
-  const bookmarks = kb.each(
+export async function toggleBookmark (userContext, target, bookmarstoreutton) {
+  await store.fetcher.load(userContext.bookmarkDocument)
+  const bookmarks = store.each(
     null,
     BOOK('recalls'),
     target,
@@ -186,8 +185,8 @@ export async function toggleBookmark (userContext, target, bookmarkButton) {
     if (!confirm('Delete bookmark on this?' + bookmarks.length)) return
     for (let i = 0; i < bookmarks.length; i++) {
       try {
-        await updatePromise(kb.connectedStatements(bookmarks[i]), [])
-        bookmarkButton.style.backgroundColor = 'white'
+        await updatePromise(store.connectedStatements(bookmarks[i]), [])
+        bookmarstoreutton.style.backgroundColor = 'white'
         debug.log('Bookmark deleted: ' + bookmarks[i])
       } catch (e) {
         debug.error('Cant delete bookmark:' + e)
@@ -196,36 +195,36 @@ export async function toggleBookmark (userContext, target, bookmarkButton) {
     }
   } else {
     const bookmark = await addBookmark(userContext, target)
-    bookmarkButton.style.backgroundColor = 'yellow'
+    bookmarstoreutton.style.backgroundColor = 'yellow'
     debug.log('Bookmark added: ' + bookmark)
   }
 }
 
 export async function renderBookmarksButton (userContext, target) {
-  async function setBookmarkButtonColor (bookmarkButton) {
-    await kb.fetcher.load(userContext.bookmarkDocument)
-    const bookmarked = kb.any(
+  async function setBookmarstoreuttonColor (bookmarstoreutton) {
+    await store.fetcher.load(userContext.bookmarkDocument)
+    const bookmarked = store.any(
       null,
       BOOK('recalls'),
-      bookmarkButton.target,
+      bookmarstoreutton.target,
       userContext.bookmarkDocument
     )
-    bookmarkButton.style = UI.style.buttonStyle
-    if (bookmarked) bookmarkButton.style.backgroundColor = 'yellow'
+    bookmarstoreutton.style = UI.style.buttonStyle
+    if (bookmarked) bookmarstoreutton.style.backgroundColor = 'yellow'
   }
 
-  let bookmarkButton
+  let bookmarstoreutton
   if (userContext.bookmarkDocument) {
-    bookmarkButton = UI.widgets.button(
+    bookmarstoreutton = UI.widgets.button(
       dom,
       UI.icons.iconBase + BOOKMARK_ICON,
       label(BOOK('Bookmark')),
       () => {
-        toggleBookmark(userContext, target, bookmarkButton)
+        toggleBookmark(userContext, target, bookmarstoreutton)
       }
     )
-    bookmarkButton.target = target
-    await setBookmarkButtonColor(bookmarkButton)
-    return bookmarkButton
+    bookmarstoreutton.target = target
+    await setBookmarstoreuttonColor(bookmarstoreutton)
+    return bookmarstoreutton
   }
 }
