@@ -1,33 +1,36 @@
-/**
- * Contains the [[renderMessage]] function,
- * along with [[elementForImageURI]],
- * [[creatorAndDate]], and [[creatorAndDateHorizontal]]
+/**  UI code for individual messages: display them, edit them
+ *
  * @packageDocumentation
  */
 
 /* global $rdf */
+import { insertMessageIntoTable } from './infinite'
 
 import { messageToolbar, sentimentStripLinked } from './messageTools'
+import { findBookmarkDocument } from './bookmarks'
+import { mostRecentVersion, originalVersion } from './chatLogic'
 
+import * as debug from '../debug'
 import { authn } from '../authn/index'
 import { icons } from '../iconBase'
 import { store } from '../logic'
 import { media } from '../media/index'
 import * as ns from '../ns'
 import * as pad from '../pad'
-import * as rdf from 'rdflib' // pull in first avoid cross-refs
+// import * as rdf from 'rdflib' // pull in first avoid cross-refs
 import * as style from '../style'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
 
-const UI = { authn, icons, ns, media, pad, rdf, store, style, utils, widgets }
+// const UI = { authn, icons, ns, media, pad, rdf, store, style, utils, widgets }
 
-const dom = UI.dom || window.document
-// const kb = UI.store
+const dom = window.document
 
-const messageBodyStyle = UI.style.messageBodyStyle
+// const store = store
 
-const label = UI.utils.label
+const messageBodyStyle = style.messageBodyStyle
+
+const label = utils.label
 
 /**
  * HTML component for an image
@@ -42,13 +45,13 @@ export function elementForImageURI (imageUri, options) {
     'style',
     'max-height: ' + height + 'em; border-radius: 1em; margin: 0.7em;'
   )
-  // UI.widgets.makeDropTarget(img, handleURIsDroppedOnMugshot, droppedFileHandler)
+  // widgets.makeDropTarget(img, handleURIsDroppedOnMugshot, droppedFileHandler)
   if (imageUri) img.setAttribute('src', imageUri)
   const anchor = dom.createElement('a')
   anchor.setAttribute('href', imageUri)
   anchor.setAttribute('target', 'images')
   anchor.appendChild(img)
-  UI.widgets.makeDraggable(img, $rdf.sym(imageUri))
+  widgets.makeDraggable(img, $rdf.sym(imageUri))
   return anchor
 }
 
@@ -57,7 +60,7 @@ const anchor = function (text, term) {
   const a = dom.createElement('a')
   if (term && term.uri) {
     a.setAttribute('href', term.uri)
-    a.addEventListener('click', UI.widgets.openHrefInOutlineMode, true)
+    a.addEventListener('click', widgets.openHrefInOutlineMode, true)
     a.setAttribute('style', 'color: #3B5998; text-decoration: none; ') // font-weight: bold
   }
   a.textContent = text
@@ -65,7 +68,7 @@ const anchor = function (text, term) {
 }
 
 function nick (person) {
-  const s = UI.store.any(person, UI.ns.foaf('nick'))
+  const s = store.any(person, ns.foaf('nick'))
   if (s) return '' + s.value
   return '' + label(person)
 }
@@ -77,7 +80,7 @@ function nick (person) {
 export function creatorAndDate (td1, creator, date, message) {
   const nickAnchor = td1.appendChild(anchor(nick(creator), creator))
   if (creator.uri) {
-    UI.store.fetcher.nowOrWhenFetched(creator.doc(), undefined, function (
+    store.fetcher.nowOrWhenFetched(creator.doc(), undefined, function (
       _ok,
       _body
     ) {
@@ -95,7 +98,7 @@ export function creatorAndDate (td1, creator, date, message) {
 export function creatorAndDateHorizontal (td1, creator, date, message) {
   const nickAnchor = td1.appendChild(anchor(label(creator), creator))
   if (creator.uri) {
-    UI.store.fetcher.nowOrWhenFetched(creator.doc(), undefined, function (
+    store.fetcher.nowOrWhenFetched(creator.doc(), undefined, function (
       _ok,
       _body
     ) {
@@ -109,76 +112,52 @@ export function creatorAndDateHorizontal (td1, creator, date, message) {
 }
 
 /**
- * Renders a chat message inside a `messageTable`
+ * Renders a chat message, read-only mode
  */
-export function renderMessage (
-  messageTable,
-  bindings,
-  fresh,
-  options,
-  userContext
-) {
+export function renderMessageRow (channelObject, message, fresh, options, userContext) {
   const colorizeByAuthor =
     options.colorizeByAuthor === '1' || options.colorizeByAuthor === true
 
-  const creator = bindings['?creator']
-  const message = bindings['?msg']
-  const date = bindings['?date']
-  const content = bindings['?content']
+  const creator = store.any(message, ns.foaf('maker'))
+  const date = store.any(message, ns.dct('created'))
+  const latestVersion = mostRecentVersion(message)
+  const content = store.any(latestVersion, ns.sioc('content'))
 
-  const dateString = date.value
+  const originalMessage = originalVersion(message)
+  const edited = !message.sameTerm(originalMessage)
+
+  const sortDate = store.the(originalMessage, ns.dct('created'), null, originalMessage.doc()) // In message
+
   const messageRow = dom.createElement('tr')
-  messageRow.AJAR_date = dateString
+  messageRow.AJAR_date = sortDate.value
   messageRow.AJAR_subject = message
-
-  if (options.selectedMessage && options.selectedMessage.sameTerm(message)) {
-    messageRow.style.backgroundColor = 'yellow'
-    options.selectedElement = messageRow
-    messageTable.selectedElement = messageRow
-  }
-
-  let done = false
-  for (let ele = messageTable.firstChild; ; ele = ele.nextSibling) {
-    if (!ele) {
-      // empty
-      break
-    }
-    const newestFirst = options.newestfirst === true
-    if (
-      (dateString > ele.AJAR_date && newestFirst) ||
-      (dateString < ele.AJAR_date && !newestFirst)
-    ) {
-      messageTable.insertBefore(messageRow, ele)
-      done = true
-      break
-    }
-  }
-  if (!done) {
-    messageTable.appendChild(messageRow)
-  }
 
   const td1 = dom.createElement('td')
   messageRow.appendChild(td1)
-  if (options.authorAboveContent) {
+  if (!options.authorDateOnLeft) {
     const img = dom.createElement('img')
     img.setAttribute(
       'style',
       'max-height: 2.5em; max-width: 2.5em; border-radius: 0.5em; margin: auto;'
     )
-    UI.widgets.setImage(img, creator)
+    widgets.setImage(img, creator)
     td1.appendChild(img)
   } else {
-    creatorAndDate(td1, creator, UI.widgets.shortDate(dateString), message)
+    creatorAndDate(td1, creator, widgets.shortDate(sortDate.value), message)
+  }
+  let bothDates = widgets.shortDate(sortDate.value)
+  if (edited) {
+    bothDates += ' ... ' + widgets.shortDate(date.value)
   }
 
   // Render the content ot the message itself
   const td2 = messageRow.appendChild(dom.createElement('td'))
 
-  if (options.authorAboveContent) {
+  if (!options.authorDateOnLeft) {
     creatorAndDateHorizontal(
       td2,
       creator,
-      UI.widgets.shortDate(dateString),
+      bothDates, // widgets.shortDate(dateString)
       message
     )
   }
@@ -206,7 +185,7 @@ export function renderMessage (
   }
   if (para) {
     const bgcolor = colorizeByAuthor
-      ? UI.pad.lightColorHash(creator)
+      ? pad.lightColorHash(creator)
       : getBgColor(fresh)
     para.setAttribute(
       'style',
@@ -228,9 +207,9 @@ export function renderMessage (
   // Message tool bar button
   const td3 = dom.createElement('td')
   messageRow.appendChild(td3)
-  const toolsButton = UI.widgets.button(
+  const toolsButton = widgets.button(
     dom,
-    UI.icons.iconBase + 'noun_243787.svg',
+    icons.iconBase + 'noun_243787.svg',
     '...'
   )
   td3.appendChild(toolsButton)
@@ -242,7 +221,7 @@ export function renderMessage (
       return
     }
     const toolsTR = dom.createElement('tr')
-    const tools = messageToolbar(message, messageRow, userContext)
+    const tools = messageToolbar(message, messageRow, userContext, channelObject)
     tools.style =
       'border: 0.05em solid #888; border-radius: 0 0 0.7em 0.7em;  border-top: 0; height:3.5em; background-color: #fff;' // @@ fix
     if (messageRow.nextSibling) {
@@ -258,3 +237,234 @@ export function renderMessage (
   })
   return messageRow
 }
+
+export function switchToEditor (messageRow, message, channelObject, userContext) {
+  const messageTable = messageRow.parentNode
+  const editRow = renderMessageEditor(channelObject, messageTable, userContext,
+    channelObject.options, mostRecentVersion(message))
+  messageTable.insertBefore(editRow, messageRow)
+  editRow.originalRow = messageRow
+  messageRow.style.visibility = 'hidden' // Hide the original message. unhide if user cancels edit
+}
+/*       Control for a new message -- or editing an old message ***************
+ *
+ */
+export function renderMessageEditor (channelObject, messageTable, userContext, options, originalMessage) {
+  function revertEditing (messageEditor) {
+    messageEditor.originalRow.style.visibility = 'visible' // restore read-only version
+    messageEditor.parentNode.removeChild(messageEditor)
+  }
+
+  async function handleFieldInput (_event) {
+    await sendMessage(field.value, true)
+  }
+
+  async function sendMessage (text, fromMainField) {
+    function sendComplete (message, _text2) {
+      // const dateStamp = store.any(message, ns.dct('created'), null, message.doc())
+      // const content = $rdf.literal(text2)
+      insertMessageIntoTable(channelObject, messageTable, message, false, options, userContext) // not green
+
+      if (originalMessage) { // editing another message
+        const oldRow = messageEditor.originalRow
+        // oldRow.style.display = '' // restore read-only version, re-attack
+        if (oldRow.parentNode) {
+          oldRow.parentNode.removeChild(oldRow) // No longer needed old version
+        } else {
+          debug.warn('No parentNode on old message ' + oldRow.textContent)
+          oldRow.style.backgroundColor = '#fee'
+          oldRow.style.visibility = 'hidden' // @@ FIX THIS AND REMOVE FROM DOM INSTEAD
+        }
+        messageEditor.parentNode.removeChild(messageEditor) // no longer need editor
+      } else {
+        if (fromMainField) {
+          field.value = '' // clear from out for reuse
+          field.setAttribute('style', messageBodyStyle)
+          field.disabled = false
+          field.scrollIntoView(options.newestFirst) // allign bottom (top)
+          field.focus() // Start typing next line immediately
+          field.select()
+        }
+      }
+      // await channelObject.div.refresh() // Add new day if nec  @@ add back
+    }
+
+    // const me = authn.currentUser() // Must be logged on or wuld have got login button
+    if (fromMainField) {
+      field.setAttribute('style', messageBodyStyle + 'color: #bbb;') // pendingedit
+      field.disabled = true
+    }
+
+    let message
+    try {
+      message = await channelObject.updateMessage(text, originalMessage)
+    } catch (err) {
+      const statusArea = userContext.statusArea || messageEditor
+      statusArea.appendChild(
+        widgets.errorMessageBlock(dom, 'Error writing message: ' + err)
+      )
+      return
+    }
+    sendComplete(message, text)
+  } // sendMessage
+
+  //    DRAG AND DROP
+  function droppedFileHandler (files) {
+    const base = messageTable.chatDocument.dir().uri
+    widgets.uploadFiles(
+      store.fetcher,
+      files,
+      base + 'Files',
+      base + 'Pictures',
+      async function (theFile, destURI) {
+        // @@@@@@ Wait for each if several
+        await sendMessage(destURI)
+      }
+    )
+  }
+
+  // When a set of URIs are dropped on the field
+  const droppedURIHandler = async function (uris) {
+    for (const uri of uris) {
+      await sendMessage(uri)
+    }
+  }
+
+  // When we are actually logged on
+  function turnOnInput () {
+    function getImageDoc () {
+      imageDoc = $rdf.sym(
+        chatDocument.dir().uri + 'Image_' + Date.now() + '.png'
+      )
+      return imageDoc
+    }
+
+    async function tookPicture (imageDoc) {
+      if (imageDoc) {
+        await sendMessage(imageDoc.uri)
+      }
+    }
+
+    // Body of turnOnInput
+
+    let menuButton
+    if (options.menuHandler) {
+      const menuButton = widgets.button(
+        dom, icons.iconBase + 'noun_243787.svg', 'More')
+      menuButton.setAttribute('style', style.buttonStyle + 'float: right;')
+      // menuButton.addEventListener('click', _event => sendMessage(), false) (done in turnoninput)
+      rhs.appendChild(menuButton)
+    }
+
+    if (options.menuHandler && menuButton) {
+      const me = authn.currentUser()
+      const menuOptions = {
+        me,
+        dom,
+        div: null, // @@ was: div
+        newBase: messageTable.chatDocument.dir().uri
+      }
+      menuButton.addEventListener(
+        'click',
+        event => {
+          options.menuHandler(event, channelObject.chatChannel, menuOptions)
+        },
+        false
+      )
+    }
+
+    const me = authn.currentUser() // If already logged on
+    creatorAndDate(lhs, me, '', null)
+
+    field = dom.createElement('textarea')
+    middle.innerHTML = ''
+    middle.appendChild(field)
+    field.rows = 3
+    if (originalMessage) {
+      field.value = store.anyValue(originalMessage, ns.sioc('content'), null, originalMessage.doc())
+    }
+    // field.cols = 40
+    field.setAttribute('style', messageBodyStyle + 'background-color: #eef;')
+
+    // Trap the Enter BEFORE it is used ti make a newline
+
+    field.addEventListener(
+      'keydown',
+      async function (e) {
+        // User preference?
+        if (e.code === 'Enter') {
+        // if (e.keyCode === 13) { // deprocated https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode
+          if ((!e.shiftKey && !options.shiftEnterSendsMessage) || (e.shiftKey && options.shiftEnterSendsMessage)) {
+            // Shift-Enter just adds a new line
+            // (note alt-enter doesn't add newline anyway on my setup - so have to use shift.
+            await handleFieldInput(e)
+          }
+        }
+      },
+      false
+    )
+
+    widgets.makeDropTarget(field, droppedURIHandler, droppedFileHandler)
+
+    rhs.innerHTML = ''
+
+    sendButton = widgets.button(dom, sendIcon, 'Send')
+    sendButton.style.float = 'right'
+    sendButton.addEventListener('click', _event => handleFieldInput(), false)
+    rhs.appendChild(sendButton)
+
+    if (originalMessage) { // Are we editing another message?
+      const cancelButton = rhs.appendChild(widgets.cancelButton(dom))
+      cancelButton.style.float = 'left'
+      // cancelButton.firstChild.style.opacity = '0.3' // moved to buttons
+      cancelButton.addEventListener('click', _event => revertEditing(messageEditor), false)
+      rhs.appendChild(cancelButton)
+    }
+
+    const chatDocument = channelObject.dateFolder.leafDocumentFromDate(new Date())
+    let imageDoc
+
+    middle.appendChild(
+      media.cameraButton(dom, store, getImageDoc, tookPicture)
+    )
+
+    pad.recordParticipation(channelObject.channel, channelObject.channel.doc()) // participation =
+  } // turn on inpuut
+
+  // Body of renderMessageEditor
+
+  let sortDate, sendIcon
+  if (originalMessage) {
+    sortDate = store.anyValue(originalMessage, ns.dct('created'), null, originalMessage.doc())
+    // text = store.anyValue(originalMessage, ns.sioc('content'), null, originalMessage.doc())
+    sendIcon = icons.iconBase + 'noun_1180158.svg' // Green check
+    // cancelIcon = icons.iconBase + 'noun_1180156.svg' // Black cross
+  } else {
+    sendIcon = icons.iconBase + 'noun_383448.svg'
+    sortDate = '9999-01-01T00:00:00Z' // ISO format for field sort
+    // text = ''
+  }
+  const messageEditor = dom.createElement('tr')
+  const lhs = dom.createElement('td')
+  const middle = dom.createElement('td')
+  const rhs = dom.createElement('td')
+  messageEditor.appendChild(lhs)
+  messageEditor.appendChild(middle)
+  messageEditor.appendChild(rhs)
+  messageEditor.AJAR_date = sortDate
+  // messageEditor.appendChild(dom.createElement('br'))
+
+  let field, sendButton
+  const context = { div: middle, dom: dom }
+
+  authn.logIn(context).then(context => {
+    // me = context.me
+    turnOnInput()
+    Object.assign(context, userContext)
+    findBookmarkDocument(context).then(_context => {
+      // console.log('Bookmark file: ' + context.bookmarkDocument)
+    })
+  })
+
+  return messageEditor
+} // renderMessageEditor
