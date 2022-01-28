@@ -81,7 +81,7 @@ export class ChatChannel {
   }
 
   /* Mark a message as deleted
-  * Wee add a new version of the message,m witha deletion flag (deletion date)
+  * We add a new version of the message, with a deletion flag (deletion date)
   * so that the deletion can be revoked by adding another non-deleted update
   */
   async deleteMessage (message) {
