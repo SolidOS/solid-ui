@@ -39,7 +39,7 @@ export class ChatChannel {
 
   /* Store a new message in the web,
     as a replacement for an existing one.
-    The old one iis left, and the two are linked
+    The old one is left, and the two are linked
   */
   async updateMessage (text, oldMsg = null, deleteIt) {
     const sts = []
