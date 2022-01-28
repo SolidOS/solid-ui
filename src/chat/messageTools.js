@@ -146,15 +146,15 @@ export function messageToolbar (message, messageRow, userContext, channelObject)
   } // if mine
   // Things anyone can do if they have a bookmark list async
   /*
- var bookmarstoreutton = await bookmarks.renderBookmarksButton(userContext)
- if (bookmarstoreutton) {
-   div.appendChild(bookmarstoreutton)
+ var bookmarkbutton = await bookmarks.renderBookmarksButton(userContext)
+ if (bookmarkbutton) {
+   div.appendChild(bookmarkbutton)
  }
  */
   // Things anyone can do if they have a bookmark list
 
-  renderBookmarksButton(userContext).then(bookmarstoreutton => {
-    if (bookmarstoreutton) div.appendChild(bookmarstoreutton)
+  renderBookmarksButton(userContext).then(bookmarkbutton => {
+    if (bookmarkbutton) div.appendChild(bookmarkbutton)
   })
 
   /**   Button to allow user to express a sentiment (like, endorse, etc) about a target

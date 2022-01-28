@@ -244,7 +244,7 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
   }
 
   function renderMessageTable (date, live) {
-    let scrollBacstoreutton
+    let scrollBackbutton
     let scrollForwardButton
 
     /// /////////////////   Scroll down adding more above
@@ -252,30 +252,30 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
     async function extendBackwards () {
       const done = await insertPreviousMessages(true)
       if (done) {
-        if (scrollBacstoreutton) {
-          scrollBacstoreutton.firstChild.setAttribute(
+        if (scrollBackbutton) {
+          scrollBackbutton.firstChild.setAttribute(
             'src',
             icons.iconBase + 'noun_T-Block_1114655_000000.svg'
           ) // T
-          scrollBacstoreutton.disabled = true
+          scrollBackbutton.disabled = true
         }
         messageTable.initial = true
       } else {
         messageTable.extendedBack = true
       }
-      setScrollBacstoreuttonIcon()
+      setScrollBackbuttonIcon()
       return done
     }
 
-    function setScrollBacstoreuttonIcon () {
-      if (!scrollBacstoreutton) {
+    function setScrollBackbuttonIcon () {
+      if (!scrollBackbutton) {
         return
       }
       const sense = messageTable.extendedBack ? !newestFirst : newestFirst
       const scrollBackIcon = messageTable.initial
         ? 'noun_T-Block_1114655_000000.svg'
         : getScrollbackIcon(sense)
-      scrollBacstoreutton.firstChild.setAttribute(
+      scrollBackbutton.firstChild.setAttribute(
         'src',
         icons.iconBase + scrollBackIcon
       )
@@ -285,11 +285,11 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
       }
     }
 
-    async function scrollBacstoreuttonHandler (_event) {
+    async function scrollBackbuttonHandler (_event) {
       if (messageTable.extendedBack) {
         removePreviousMessages(true, messageTable)
         messageTable.extendedBack = false
-        setScrollBacstoreuttonIcon()
+        setScrollBackbuttonIcon()
       } else {
         await extendBackwards()
       }
@@ -380,8 +380,8 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
     //
     // @@ listen for swipe past end event not just button
     if (options.infinite) {
-      const scrollBacstoreuttonTR = dom.createElement('tr')
-      const scrollBacstoreuttonCell = scrollBacstoreuttonTR.appendChild(
+      const scrollBackbuttonTR = dom.createElement('tr')
+      const scrollBackbuttonCell = scrollBackbuttonTR.appendChild(
         dom.createElement('td')
       )
       // up traingles: noun_1369237.svg
@@ -389,24 +389,24 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
       const scrollBackIcon = newestFirst
         ? 'noun_1369241.svg'
         : 'noun_1369237.svg' // down and up arrows respoctively
-      scrollBacstoreutton = widgets.button(
+      scrollBackbutton = widgets.button(
         dom,
         icons.iconBase + scrollBackIcon,
         'Previous messages ...'
       )
-      scrollBacstoreuttonCell.style = 'width:3em; height:3em;'
-      scrollBacstoreutton.addEventListener('click', scrollBacstoreuttonHandler, false)
+      scrollBackbuttonCell.style = 'width:3em; height:3em;'
+      scrollBackbutton.addEventListener('click', scrollBackbuttonHandler, false)
       messageTable.extendedBack = false
-      scrollBacstoreuttonCell.appendChild(scrollBacstoreutton)
-      setScrollBacstoreuttonIcon()
+      scrollBackbuttonCell.appendChild(scrollBackbutton)
+      setScrollBackbuttonIcon()
 
-      const dateCell = scrollBacstoreuttonTR.appendChild(dom.createElement('td'))
+      const dateCell = scrollBackbuttonTR.appendChild(dom.createElement('td'))
       dateCell.style =
         'text-align: center; vertical-align: middle; color: #888; font-style: italic;'
       dateCell.textContent = widgets.shortDate(date.toISOString(), true) // no time, only date
 
       // @@@@@@@@@@@ todo move this button to other end of  message cell, o
-      const scrollForwardButtonCell = scrollBacstoreuttonTR.appendChild(
+      const scrollForwardButtonCell = scrollBackbuttonTR.appendChild(
         dom.createElement('td')
       )
       const scrollForwardIcon = newestFirst
@@ -431,9 +431,9 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
 
       if (!newestFirst) {
         // opposite end from the entry field
-        messageTable.insertBefore(scrollBacstoreuttonTR, messageTable.firstChild) // If not newestFirst
+        messageTable.insertBefore(scrollBackbuttonTR, messageTable.firstChild) // If not newestFirst
       } else {
-        messageTable.appendChild(scrollBacstoreuttonTR) //  newestFirst
+        messageTable.appendChild(scrollBackbuttonTR) //  newestFirst
       }
     }
 
