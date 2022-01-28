@@ -254,9 +254,9 @@ export function createUserMenuItem (child: HTMLElement): HTMLElement {
  * @ignore exporting this only for the unit test
  */
 export function getProfileImg (store: IndexedFormula, user: NamedNode): string | HTMLElement {
-  const profileUrl = null
+  let profileUrl = null
   try {
-    const profileUrl = widgets.findImage(user)
+    profileUrl = widgets.findImage(user)
     if (!profileUrl) {
       return emptyProfile
     }
@@ -266,7 +266,7 @@ export function getProfileImg (store: IndexedFormula, user: NamedNode): string |
 
   const profileImage = document.createElement('div')
   addStyleClassToElement(profileImage, ['header-user-menu__photo'])
-  profileImage.style.backgroundImage = `url("${profileUrl}")`
+  profileImage.style.backgroundImage = `url(${profileUrl})`
   return profileImage
 }
 
