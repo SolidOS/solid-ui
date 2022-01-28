@@ -3,7 +3,7 @@ import {
   elementForImageURI,
   creatorAndDate,
   creatorAndDateHorizontal,
-  renderMessage
+  renderMessageRow
 } from '../../../src/chat/message'
 
 silenceDebugMessages()
@@ -58,9 +58,9 @@ describe('creatorAndDateHorizontal', () => {
   })
 })
 
-describe('renderMessage', () => {
+describe('renderMessageRow', () => {
   it('exists', () => {
-    expect(renderMessage).toBeInstanceOf(Function)
+    expect(renderMessageRow).toBeInstanceOf(Function)
   })
   it.skip('runs', () => {
     const messageTable = {
@@ -85,6 +85,6 @@ describe('renderMessage', () => {
     const fresh = {}
     const options = {}
     const userContext = {}
-    expect(renderMessage(messageTable, bindings, fresh, options, userContext)).toBeInstanceOf(HTMLTableRowElement)
+    expect(renderMessageRow(messageTable, bindings, fresh, options, userContext)).toBeInstanceOf(HTMLTableRowElement)
   })
 })
