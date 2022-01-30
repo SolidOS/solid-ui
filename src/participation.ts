@@ -1,6 +1,6 @@
 /* Manage a UI for the particpation of a person in any thing
 */
-
+import * as debug from '../debug'
 import { currentUser } from './authn/authn'
 import { NamedNode, st } from 'rdflib'
 import * as ns from './ns'
@@ -19,7 +19,7 @@ type ParticipationOptions = {
 class ParticipationTableElement extends HTMLTableElement {
   refresh?: () => void
 }
-const kb = solidLogicSingleton.store
+const store = solidLogicSingleton.store
 
 /**  Manage participation in this session
 *
@@ -34,7 +34,7 @@ export function renderPartipants (dom: HTMLDocument, table: ParticipationTableEl
   table.setAttribute('style', 'margin: 0.8em;')
 
   const newRowForParticpation = function (parp) {
-    const person = kb.any(parp, ns.wf('participant'))
+    const person = store.any(parp, ns.wf('participant'))
 
     let tr
     if (!person) {
@@ -42,7 +42,7 @@ export function renderPartipants (dom: HTMLDocument, table: ParticipationTableEl
       tr.textContent = '???' // Don't crash - invalid part'n entry
       return tr
     }
-    const bg = kb.anyValue(parp, ns.ui('backgroundColor')) || 'white'
+    const bg = store.anyValue(parp, ns.ui('backgroundColor')) || 'white'
 
     const block = dom.createElement('div')
     block.setAttribute(
@@ -60,9 +60,9 @@ export function renderPartipants (dom: HTMLDocument, table: ParticipationTableEl
   }
 
   const syncTable = function () {
-    const parps = kb.each(subject, ns.wf('participation')).map(function (parp) {
+    const parps = store.each(subject, ns.wf('participation')).map(function (parp) {
       log('in participants')
-      return [kb.anyValue(parp as any, ns.cal('dtstart')) || '9999-12-31', parp]
+      return [store.anyValue(parp as any, ns.cal('dtstart')) || '9999-12-31', parp]
     })
     parps.sort() // List in order of joining
     const participations = parps.map(function (p) {
@@ -87,14 +87,25 @@ export function renderPartipants (dom: HTMLDocument, table: ParticipationTableEl
 export function participationObject (subject: NamedNode, padDoc: NamedNode, me: NamedNode) {
   return new Promise(function (resolve, reject) {
     if (!me) {
-      throw new Error('Not user id')
+      throw new Error('No user id')
     }
 
-    const parps = kb.each(subject, ns.wf('participation')).filter(function (pn) {
-      return kb.holds(pn, ns.wf('participant'), me)
+    const parps = store.each(subject, ns.wf('participation')).filter(function (pn) {
+      return store.holds(pn, ns.wf('participant'), me)
     })
-    if (parps.length > 1) {
-      throw new Error('Multiple records of your participation')
+    if (parps.length > 1) { // This can happen. https://github.com/solid/chat-pane/issues/71
+      const candidates = []
+      for (const participation of parps) {
+        const date = store.anyValue(participation, ns.cal('dtstart'))
+        if (date) {
+          candidates.push([date, participation])
+        }
+      }
+      candidates.sort() // Pick the earliest
+      // @@ Possibly, for extra credit, delete the others, if we have write access
+      debug.warn('Multiple particpation objects, picking earliest, in ' + padDoc)
+      resolve(candidates[0][1])
+      // throw new Error('Multiple records of your participation')
     }
     if (parps.length) {
       // If I am not already recorded
@@ -113,10 +124,7 @@ export function participationObject (subject: NamedNode, padDoc: NamedNode, me: 
           padDoc
         )
       ]
-      if (!kb.updater) {
-        throw new Error('kb has no updater')
-      }
-      kb.updater.update([], ins, function (uri: string | null | undefined, ok: boolean, errorMessage?: string) {
+      store.updater.update([], ins, function (uri: string | null | undefined, ok: boolean, errorMessage?: string) {
         if (!ok) {
           reject(new Error('Error recording your partipation: ' + errorMessage))
         } else {
@@ -139,8 +147,8 @@ export function recordParticipation (subject: NamedNode, padDoc: NamedNode, refr
   const me = currentUser()
   if (!me) return // Not logged in
 
-  const parps = kb.each(subject, ns.wf('participation')).filter(function (pn) {
-    return kb.holds(pn, ns.wf('participant'), me)
+  const parps = store.each(subject, ns.wf('participation')).filter(function (pn) {
+    return store.holds(pn, ns.wf('participant'), me)
   })
   if (parps.length > 1) {
     throw new Error('Multiple records of your participation')
@@ -149,6 +157,10 @@ export function recordParticipation (subject: NamedNode, padDoc: NamedNode, refr
     // If I am not already recorded
     return parps[0] // returns the particpation object
   } else {
+    if (!store.updater.editable(padDoc)) {
+      debug.info('Not recording participation, as no write acesss as ' + me + ' to ' + padDoc)
+      return null
+    }
     const participation = newThing(padDoc)
     const ins = [
       st(subject, ns.wf('participation'), participation, padDoc),
@@ -162,10 +174,7 @@ export function recordParticipation (subject: NamedNode, padDoc: NamedNode, refr
         padDoc
       )
     ]
-    if (!kb.updater) {
-      throw new Error('kb has no updater')
-    }
-    kb.updater.update([], ins, function (uri: string | null | undefined, ok: boolean, errorMessage?: string) {
+    store.updater.update([], ins, function (uri: string | null | undefined, ok: boolean, errorMessage?: string) {
       if (!ok) {
         throw new Error('Error recording your partipation: ' + errorMessage)
       }
@@ -199,8 +208,9 @@ export function manageParticipation (
   const table = dom.createElement('table')
   container.appendChild(table)
   renderPartipants(dom, table, padDoc, subject, me, options)
+  let _participation
   try {
-    recordParticipation(subject, padDoc, table)
+    _participation = recordParticipation(subject, padDoc, table)
   } catch (e) {
     container.appendChild(
       errorMessageBlock(
