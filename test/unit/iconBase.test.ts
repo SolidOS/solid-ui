@@ -4,7 +4,6 @@ import { icons } from '../../src/iconBase'
 const { iconBase, originalIconBase } = icons
 
 silenceDebugMessages()
-jest.mock('solid-auth-client')
 
 describe('iconBase', () => {
   it('exists', () => {

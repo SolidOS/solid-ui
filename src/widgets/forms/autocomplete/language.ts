@@ -24,18 +24,25 @@ export interface Binding {
 
 export const languageCodeURIBase = 'https://www.w3.org/ns/iana/language-code/' /// @@ unsupported on the web (2021)
 
-export const defaultPreferedLangages = ['en', 'fr', 'de', 'it']
+export const defaultPreferredLanguages = ['en', 'fr', 'de', 'it', 'ar']
 
-export async function getPreferredLanagugesFor (person: NamedNode) {
-  await kb.fetcher.load(person.doc())
-  const list = kb.any(person, ns.schema('knowsLanguage'), null, person.doc()) as Collection | undefined
+export function addDefaults (array) {
+  if (!array) array = []
+  return array.concat(defaultPreferredLanguages.filter(code => !array.includes(code)))
+}
+
+export async function getPreferredLanguagesFor (person: NamedNode) {
+  const doc = person.doc()
+  await kb.fetcher?.load(doc)
+  const list = kb.any(person, ns.schema('knowsLanguage'), null, doc) as Collection | undefined
   if (!list) {
-    console.log(`User ${person} has not set their languages in their profile.`)
-    return null // differnet from []
+    // console.log(`User ${person} has not set their languages in their profile.`)
+    return defaultPreferredLanguages
   }
   const languageCodeArray: string[] = []
   list.elements.forEach(item => {
-    const lang = kb.any(item as any, ns.solid('publicId'), null, (item as NamedNode).doc())
+    // console.log('@@ item ' + item)
+    const lang = kb.any(item as any, ns.solid('publicId'), null, doc)
     if (!lang) {
       console.warn('getPreferredLanguages: No publiID of language.')
       return
@@ -50,7 +57,7 @@ export async function getPreferredLanagugesFor (person: NamedNode) {
 
   if (languageCodeArray.length > 0) {
     console.log(`     User knows languages with codes: "${languageCodeArray.join(',')}"`)
-    return languageCodeArray
+    return addDefaults(languageCodeArray)
   }
   return null
 }
@@ -60,20 +67,22 @@ export async function getPreferredLanagugesFor (person: NamedNode) {
  */
 export async function getPreferredLanguages () {
   // In future:  cache in the login session for speed, but get from profile and private prefs
+  // We append the defaults so if someone's first choice is not available they don't get something very obscure
+  // See https://github.com/solid/solidos/issues/42
   const me = await authn.currentUser() as NamedNode
   if (me) { // If logged in
-    const solidLanguagePrefs = await getPreferredLanagugesFor(me)
+    const solidLanguagePrefs = await getPreferredLanguagesFor(me)
     if (solidLanguagePrefs) return solidLanguagePrefs
   }
   if (typeof navigator !== 'undefined') { // use browser settings
     if (navigator.languages) {
-      return navigator.languages.map(longForm => longForm.split('-')[0])
+      return addDefaults(navigator.languages.map(longForm => longForm.split('-')[0]))
     }
     if (navigator.language) {
-      return [navigator.language.split('-')[0]]
+      return addDefaults([navigator.language.split('-')[0]])
     }
   }
-  return defaultPreferedLangages // @@ or null?
+  return defaultPreferredLanguages
 }
 
 /* From an array of bindings with a names for each row,
@@ -89,17 +98,23 @@ export function filterByLanguage (bindings, languagePrefs) {
     uris[uri].push(binding)
   })
 
-  const languagePrefs2 = languagePrefs || defaultPreferedLangages
-  languagePrefs2.reverse() // prefered last
+  const languagePrefs2 = languagePrefs || defaultPreferredLanguages
+  languagePrefs2.reverse() // Preferred last
 
   const slimmed = ([] as Array<Binding>)
+  // console.log(` @@ {languagePrefs2 ${languagePrefs2}`)
   for (const u in uris) { // needs hasOwnProperty ?
     const bindings = uris[u]
     const sortMe = bindings.map(binding => {
-      return [languagePrefs2.indexOf(binding.name['xml:lang']), binding]
+      const lang = binding.name['xml:lang']
+      const index = languagePrefs2.indexOf(lang)
+      const pair = [index, binding]
+      // console.log(`   @@ lang: ${lang}, index: ${index}`)
+      return pair
     })
     sortMe.sort() // best at th ebottom
     sortMe.reverse() // best at the top
+    // console.debug('@@ sortMe:', sortMe)
     slimmed.push((sortMe[0][1] as any))
   } // map u
   debug.log(` Filter by language: ${bindings.length} -> ${slimmed.length}`)

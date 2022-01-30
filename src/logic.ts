@@ -2,10 +2,20 @@
 //
 
 import * as debug from './debug'
-import auth from 'solid-auth-client'
+import authSession from './authn/authSession'
 import { SolidLogic } from 'solid-logic'
 
-export const solidLogicSingleton = new SolidLogic({ fetch: auth.fetch }, auth)
+async function thisFetch (url, requestInit) {
+  const omitCreds = requestInit && requestInit.credentials && requestInit.credentials === 'omit'
+  if (authSession.info.webId && !omitCreds) { // see https://github.com/solid/solidos/issues/114
+    // In fact ftech should respect crentials omit itself
+    return authSession.fetch(url, requestInit)
+  } else {
+    return window.fetch(url, requestInit)
+  }
+}
+
+export const solidLogicSingleton = new SolidLogic({ fetch: thisFetch }, authSession)
 
 // Make this directly accessible as it is what you need most of the time
 export const store = solidLogicSingleton.store

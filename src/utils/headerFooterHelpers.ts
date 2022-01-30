@@ -1,8 +1,10 @@
 /*
     Copied from mashlib/src/global/metadata.ts
  */
-import { NamedNode, sym } from 'rdflib'
-import { styleMap } from './styleMap'
+import { IndexedFormula, NamedNode, sym } from 'rdflib'
+import { ns } from '..'
+import { styleMap as headerStyleMap } from '../header/styleMap'
+import { styleMap as footerStyleMap } from '../footer/styleMap'
 import { getClasses } from '../jss'
 
 type ThrottleOptions = {
@@ -13,16 +15,20 @@ type ThrottleOptions = {
 /**
  * @internal
  */
-function getStyle (styleClass) {
-  return styleMap[styleClass]
+function getStyle (styleClass, type?) {
+  if (type && type === 'footer') {
+    return footerStyleMap[styleClass]
+  } else {
+    return headerStyleMap[styleClass]
+  }
 }
 
 /**
  * @ignore exporting this only for the unit test
  */
-export function addStyleClassToElement (element: any, styleClasses: string[]) {
+export function addStyleClassToElement (element: any, styleClasses: string[], type?: string) {
   styleClasses.forEach((styleClass) => {
-    const style = getStyle(styleClass)
+    const style = getStyle(styleClass, type)
     const { classes } = getClasses(document.head, { [styleClass]: style })
     element.classList.add(classes[styleClass])
   })
@@ -33,6 +39,39 @@ export function addStyleClassToElement (element: any, styleClasses: string[]) {
 export function getPod (): NamedNode {
   // @@ TODO: This is given that mashlib runs on NSS - might need to change when we want it to run on other Pod servers
   return sym(document.location.origin).site()
+}
+/**
+ * @ignore exporting this only for the unit test
+ */
+export async function getPodOwner (pod: NamedNode, store: IndexedFormula): Promise<NamedNode | null> {
+  // @@ TODO: This is given the structure that NSS provides - might need to change for other Pod servers
+  const podOwner = sym(`${pod.uri}profile/card#me`)
+
+  try {
+    if (store.fetcher) {
+      await store.fetcher.load(podOwner.doc())
+    } else {
+      throw new Error('There was a problem loading the Fetcher')
+    }
+    // @@ TODO: check back links to storage
+  } catch (err) {
+    throw new Error('Did NOT find pod owners profile at ' + podOwner)
+  }
+  if (podOwner) {
+    const storageIsListedInPodOwnersProfile = store.holds(podOwner, ns.space('storage'), pod, podOwner.doc())
+    if (!storageIsListedInPodOwnersProfile) {
+      throw new Error(`** Pod owner ${podOwner} does NOT list pod ${pod} as storage`)
+    }
+  }
+  return podOwner
+}
+/**
+ * @ignore exporting this only for the unit test
+ */
+export function getName (store: IndexedFormula, user: NamedNode): string {
+  return store.anyValue(user, ns.vcard('fn'), null, user.doc()) ||
+    store.anyValue(user, ns.foaf('name'), null, user.doc()) ||
+    user.uri
 }
 /**
  * @ignore exporting this only for the unit test

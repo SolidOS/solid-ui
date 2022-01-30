@@ -1,13 +1,36 @@
-import { st, BlankNode, Literal, Node, NamedNode, Variable } from 'rdflib'
+import { st, BlankNode, Literal, Node, NamedNode, Variable, Store } from 'rdflib'
 import { solidLogicSingleton } from '../../logic'
 import * as ns from '../../ns'
-import { textInputStyle, textInputStyleUneditable, formFieldNameBoxWidth, formFieldNameBoxStyle } from '../../style'
+import { textInputSize, textInputStyle, textInputStyleUneditable, formFieldNameBoxWidth, formFieldNameBoxStyle } from '../../style'
 import { label } from '../../utils'
 import { errorMessageBlock } from '../error'
 import { mostSpecificClassURI } from './fieldFunction'
 import { fieldParams } from './fieldParams'
 
 const store = solidLogicSingleton.store
+
+/*  Style and create a name, value pair
+*/
+export function renderNameValuePair (dom: HTMLDocument, kb: Store, box: HTMLElement, form: NamedNode):HTMLElement {
+  const property = kb.any(form, ns.ui('property'))
+  box.style.display = 'flex'
+  box.style.flexDirection = 'row'
+  const lhs = box.appendChild(dom.createElement('div'))
+  lhs.style.width = formFieldNameBoxWidth
+  const rhs = box.appendChild(dom.createElement('div'))
+
+  lhs.setAttribute('class', 'formFieldName')
+  lhs.setAttribute('style', formFieldNameBoxStyle)
+  rhs.setAttribute('class', 'formFieldValue')
+  if (!property) { // Assume more space for error on right
+    rhs.appendChild(errorMessageBlock(dom, 'No property given for form field: ' + form))
+    lhs.appendChild(dom.createTextNode('???'))
+  } else {
+    lhs.appendChild(fieldLabel(dom, property as NamedNode, form))
+  }
+  return rhs
+}
+
 /**
  * Create an anchor element with a label as the anchor text.
  *
@@ -90,38 +113,28 @@ export function basicField (
   const box = dom.createElement('div')
 
   const property = kb.any(form, ns.ui('property'))
+  if (container) container.appendChild(box)
   if (!property) {
     return box.appendChild(
       errorMessageBlock(dom, 'Error: No property given for text field: ' + form)
     )
   }
-  box.style.display = 'flex'
-  box.style.flexDirection = 'row'
-  const lhs = box.appendChild(dom.createElement('div'))
-  lhs.style.width = formFieldNameBoxWidth
-  const rhs = box.appendChild(dom.createElement('div'))
-  lhs.appendChild(fieldLabel(dom, property as NamedNode, form))
-
-  if (container) container.appendChild(box)
-
-  lhs.setAttribute('class', 'formFieldName')
-  lhs.setAttribute('style', formFieldNameBoxStyle)
-  rhs.setAttribute('class', 'formFieldValue')
+  const rhs = renderNameValuePair(dom, kb, box, form)
 
   // It can be cleaner to just remove empty fields if you can't edit them anyway
   const suppressEmptyUneditable = kb.anyJS(form, ns.ui('suppressEmptyUneditable'), null, formDoc)
 
   const uri = mostSpecificClassURI(form)
   let params = fieldParams[uri]
-  if (params === undefined) params = {} // non-bottom field types can do this
-  const style = params.style || textInputStyle
-  // box.appendChild(dom.createTextNode(' uri='+uri+', pattern='+ params.pattern))
+  if (params === undefined) params = { style: '' } // non-bottom field types can do this
+  const paramStyle = params.style || ''
+  const style = textInputStyle + paramStyle
   const field = dom.createElement('input')
-  ;(field as any).style = textInputStyle // Do we have to override length etc?
+  ;(field as any).style = style
   rhs.appendChild(field)
   field.setAttribute('type', params.type ? params.type : 'text')
 
-  const size = kb.anyJS(form, ns.ui('size')) || style.textInputSize || 20
+  const size = kb.anyJS(form, ns.ui('size')) || textInputSize || 20
   field.setAttribute('size', size)
 
   const maxLength = kb.any(form, ns.ui('maxLength'))
@@ -147,7 +160,7 @@ export function basicField (
   }
   if (!kb.updater.editable((doc as NamedNode).uri)) {
     field.readOnly = true // was: disabled. readOnly is better
-    ;(field as any).style = textInputStyleUneditable
+    ;(field as any).style = textInputStyleUneditable + paramStyle
     // backgroundColor = textInputBackgroundColorUneditable
     if (suppressEmptyUneditable && field.value === '') {
       box.style.display = 'none' // clutter

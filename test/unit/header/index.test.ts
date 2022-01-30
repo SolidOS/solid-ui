@@ -8,36 +8,26 @@ import {
   rebuildHeader,
   getProfileImg,
   createBanner,
-  createUserMenu
+  createUserMenu,
+  createHelpMenu
 } from '../../../src/header'
 import { NamedNode } from 'rdflib'
 // @ts-ignore
 import widgets from '../../../src/widgets/index'
 import { solidLogicSingleton } from '../../../src/logic'
-// import { JSDOM } from 'jsdom'
 
 const store = solidLogicSingleton.store
 
-// SAM todos...
-//  1. create specific tests to check for a class being assigned
 silenceDebugMessages()
-// const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
-// const dom = window.document
-
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
 
 describe('header', () => {
-  // SAM not sure about this one
-  const options = { menuList: [{ label: 'Testing', url: 'https://reflectechblog.wordpress.com/' }] }
+  const options = { helpMenuList: [{ label: 'Testing', url: 'https://reflectechblog.wordpress.com/' }] }
   it('is exposed on public API', async () => {
-    expect(await initHeader(store, options)).toMatchSnapshot()
+    const menu = [{ label: 'Testing', onclick: () => 'https://reflectechblog.wordpress.com/' }]
+    expect(await initHeader(store, menu, options)).toMatchSnapshot()
   })
 })
 describe('createLoginSignUpButtons', () => {
-  // SAM needs a class check
   it('creates div', () => {
     expect(createLoginSignUpButtons()).toMatchSnapshot()
   })
@@ -87,59 +77,64 @@ describe('createUserMenuItem', () => {
 describe('createUserMenu', () => {
   it('creates a menu....', () => {
     const pod = new NamedNode('https://sharonstrats.inrupt.net/profile/card#me')
-
-    const options = { menuList: [{ label: 'Testing', url: 'https://reflectechblog.wordpress.com/' }] }
-    expect(createUserMenu(store, pod, options)).toMatchSnapshot()
-  })
-  it('creates the default options...', () => {
-    const pod = new NamedNode('https://sharonstrats.inrupt.net/profile/card#me')
-    // think of test here
-    expect(createUserMenu(store, pod)).toMatchSnapshot()
+    const menuList = [{ label: 'Testing', url: 'https://reflectechblog.wordpress.com/' }]
+    expect(createUserMenu(store, pod, menuList)).toMatchSnapshot()
   })
   it('assigns list item class header-banner__user-menu and header-user-menu', async () => {
     const pod = new NamedNode('https://sharonstrats.inrupt.net/profile/card#me')
-    const options = { menuList: [{ label: 'Testing', url: 'https://reflectechblog.wordpress.com/' }] }
-    const userMenu = await createUserMenu(store, pod, options)
+    const menuList = [{ label: 'Testing', url: 'https://reflectechblog.wordpress.com/' }]
+    const userMenu = await createUserMenu(store, pod, menuList)
     expect(userMenu.className).toContain('header-banner__user-menu')
   })
 })
-// SAM look into this
+
+describe('createHelpMenu', () => {
+  it('creates a menu....', () => {
+    expect(createHelpMenu()).toMatchSnapshot()
+  })
+  it('assigns list item class header-banner__user-menu and header-user-menu', () => {
+    const options = { helpMenuList: [{ label: 'Testing', url: 'https://reflectechblog.wordpress.com/' }] }
+    const helpMenu = createHelpMenu(options, options.helpMenuList)
+    expect(helpMenu.className).toContain('header-banner__user-menu')
+  })
+})
 describe('rebuildHeader', () => {
   it('creates a link', () => {
     const header = document.createElement('nav')
     const pod = new NamedNode('https://test.com')
-    const options = { menuList: [{ label: 'Testing', url: 'https://reflectechblog.wordpress.com/' }] }
-    expect(rebuildHeader(header, store, pod, options)).toMatchSnapshot()
+    const menuList = [{ label: 'Testing', url: 'https://reflectechblog.wordpress.com/' }]
+    const options = { helpMenuList: [{ label: 'Testing', url: 'https://reflectechblog.wordpress.com/' }] }
+    expect(rebuildHeader(header, store, pod, menuList, options)).toMatchSnapshot()
   })
 })
 describe('createBanner', () => {
   it('creates a link', async () => {
     const pod = new NamedNode('https://test.com')
     const user = new NamedNode('https://sharonstrats.inrupt.net/profile/card#me')
-    const options = { menuList: [{ label: 'Testing', url: 'https://reflectechblog.wordpress.com/' }] }
-    expect(await createBanner(store, pod, user, options)).toMatchSnapshot()
+    const menuList = [{ label: 'Testing', url: 'https://reflectechblog.wordpress.com/' }]
+    const options = { helpMenuList: [{ label: 'Testing', url: 'https://reflectechblog.wordpress.com/' }] }
+    expect(await createBanner(store, pod, user, menuList, options)).toMatchSnapshot()
   })
   it('assigns list item class header-banner', async () => {
     const pod = new NamedNode('https://test.com')
     const user = new NamedNode('https://sharonstrats.inrupt.net/profile/card#me')
-    const options = { menuList: [{ label: 'Testing', url: 'https://reflectechblog.wordpress.com/' }] }
-    const banner = await createBanner(store, pod, user, options)
+    const menuList = [{ label: 'Testing', url: 'https://reflectechblog.wordpress.com/' }]
+    const options = { helpMenuList: [{ label: 'Testing', url: 'https://reflectechblog.wordpress.com/' }] }
+    const banner = await createBanner(store, pod, user, menuList, options)
     expect(banner.className).toContain('header-banner')
   })
-  // SAM need to look into this further,
   it('check customized logo...', async () => {
     const pod = new NamedNode('https://test.com')
     const user = new NamedNode('https://sharonstrats.inrupt.net/profile/card#me')
-    const options = { logo: 'https://solidproject.org/assets/img/solid-emblem.svg', menuList: [{ label: 'Testing', url: 'https://reflectechblog.wordpress.com/' }] }
-    expect(await createBanner(store, pod, user, options)).toMatchSnapshot()
+    const menuList = [{ label: 'Testing', url: 'https://reflectechblog.wordpress.com/' }]
+    const options = { logo: 'https://solidproject.org/assets/img/solid-emblem.svg', helpMenuList: [{ label: 'Testing', url: 'https://reflectechblog.wordpress.com/' }] }
+    expect(await createBanner(store, pod, user, menuList, options)).toMatchSnapshot()
     // check something else re logo expect(banner.className).toContain('header-banner')
   })
 })
 
 // getProfileImg, need to mock widgets.findImage(user)
 describe('getProfileImg', () => {
-  // SAM look into best way to get the store and what user to use..
-  // this will also need a class check
   it.skip('returns an empty image', () => {
     // eslint-disable-next-line no-undef
     // eslint-disable-next-line no-undef

@@ -9,10 +9,6 @@ import { store, ns } from '../../../../src/'
 import { textInputStyle } from '../../../../src/style'
 import { clearStore } from '../../helpers/clearStore'
 
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
 silenceDebugMessages()
 afterEach(clearStore)
 
@@ -651,7 +647,7 @@ describe('basicField', () => {
       callbackFunction
     )
     const style = (result.childNodes[1].childNodes[0] as HTMLInputElement).getAttribute('style')
-    expect(style).toEqual('text-align: right')
+    expect(style).toEqual('background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em;text-align: right;')
   })
 
   it('Defaults to textInputStyle', () => {

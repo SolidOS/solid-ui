@@ -9,7 +9,7 @@ import * as debug from '../../../debug'
 import * as ns from '../../../ns'
 import { kb } from '../../../logic'
 // import  * as logic from '../../../logic'
-import { getPreferredLanguages, defaultPreferedLangages } from './language'
+import { getPreferredLanguages, defaultPreferredLanguages } from './language'
 
 export const AUTOCOMPLETE_LIMIT = 200 // How many to get from server
 // With 3000 we could exceed the wikidata timeout
@@ -284,8 +284,8 @@ export async function queryESCODataByName (filter: string, theClass:NamedNode, q
     .replace('$(targetClass)', theClass.toNT())
   debug.log('Querying ESCO data - uri: ' + queryURI)
 
-  const response = await kb.fetcher.webOperation('GET', queryURI, fetcherOptionsJsonPublicData)
-  const text = response.responseText || ''
+  const response = await kb.fetcher?.webOperation('GET', queryURI, fetcherOptionsJsonPublicData)
+  const text = response?.responseText || ''
   debug.log('    Query result  text' + text.slice(0, 500) + '...')
   if (text.length === 0) throw new Error('Wot no text back from ESCO query ' + queryURI)
   const json = JSON.parse(text)
@@ -326,7 +326,8 @@ export async function queryPublicDataByName (
   if (!theClass) {
     throw new Error('queryPublicDataByName: No class provided')
   }
-  const languagePrefs = await getPreferredLanguages() || defaultPreferedLangages
+
+  const languagePrefs = await getPreferredLanguages() || defaultPreferredLanguages
   const language = languagePrefs[0] || 'en'
   if (queryTarget.searchByNameQuery) {
     const sparql = substituteStrings(queryTarget.searchByNameQuery)
@@ -336,7 +337,7 @@ export async function queryPublicDataByName (
     const queryURI = substituteStrings(queryTarget.searchByNameURI)
     let response
     try {
-      response = await kb.fetcher.webOperation('GET', queryURI, fetcherOptionsJsonPublicData)
+      response = await kb.fetcher?.webOperation('GET', queryURI, fetcherOptionsJsonPublicData)
     } catch (err) {
       throw new Error(`Exception when trying to fetch ${queryURI} \n ${err}`)
     }
@@ -377,9 +378,9 @@ export async function queryPublicDataSelect (sparql: string, queryTarget: QueryP
     headers: headers
   }
 
-  const response = await kb.fetcher.webOperation('GET', queryURI, options)
+  const response = await kb.fetcher?.webOperation('GET', queryURI, options)
 
-  const text = response.responseText || ''
+  const text = response?.responseText || ''
   if (text.length === 0) throw new Error('No text back from query ' + queryURI)
   const text2 = fixWikidataJSON(text)
   const json = JSON.parse(text2)
@@ -403,8 +404,8 @@ export async function queryPublicDataConstruct (sparql: string, pubicId: NamedNo
     credentials: 'omit' as 'include' | 'omit' | undefined, // CORS // @tsc pain
     headers: headers // ({ Accept: 'text/turtle' } as Headers)
   }
-  const response = await kb.fetcher.webOperation('GET', queryURI, options)
-  const text = response.responseText || 'No response text?'
+  const response = await kb.fetcher?.webOperation('GET', queryURI, options)
+  const text = response?.responseText || 'No response text?'
   const report = text.length > 500 ? text.slice(0, 200) + ' ... ' + text.slice(-200) : text
   debug.log('    queryPublicDataConstruct result text:' + report)
   if (text.length === 0) throw new Error('queryPublicDataConstruct: No text back from construct query:' + queryURI)

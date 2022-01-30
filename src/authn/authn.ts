@@ -20,13 +20,13 @@
  * @packageDocumentation
  */
 import { graph, namedNode, NamedNode, Namespace, serialize, st, Statement, sym, BlankNode } from 'rdflib'
-import solidAuthClient from 'solid-auth-client'
 import { PaneDefinition } from 'pane-registry'
 import { Signup } from './signup'
 import * as widgets from '../widgets'
 import * as ns from '../ns.js'
 import * as utils from '../utils'
 import { alert } from '../log'
+import authSessionImport from './authSession'
 import { AppDetails, AuthenticationContext } from './types'
 import * as debug from '../debug'
 import { textInputStyle, buttonStyle, commentStyle } from '../style'
@@ -35,7 +35,28 @@ import { Quad_Object } from 'rdflib/lib/tf-types'
 import { solidLogicSingleton } from '../logic'
 import { CrossOriginForbiddenError, FetchError, NotFoundError, SameOriginForbiddenError, UnauthorizedError, ACL_LINK } from 'solid-logic'
 
-export { solidAuthClient }
+/* global confirm */
+
+export const authSession = authSessionImport
+
+const DEFAULT_ISSUERS = [
+  {
+    name: 'Solid Community',
+    uri: 'https://solidcommunity.net'
+  },
+  {
+    name: 'Solid Web',
+    uri: 'https://solidweb.org'
+  },
+  {
+    name: 'Inrupt.net',
+    uri: 'https://inrupt.net'
+  },
+  {
+    name: 'pod.Inrupt.com',
+    uri: 'https://broker.pod.inrupt.com'
+  }
+]
 
 // const userCheckSite = 'https://databox.me/'
 
@@ -92,18 +113,46 @@ export function defaultTestUser (): NamedNode | null {
 }
 
 /**
+ * find a user or app's context as set in window.SolidAppContext
+ * @return {any} - an appContext object
+ */
+function appContext ():any {
+  let { SolidAppContext }: any = window
+  SolidAppContext ||= {}
+  SolidAppContext.viewingNoAuthPage = false
+  if (SolidAppContext.noAuth && window.document) {
+    const currentPage = window.document.location.href
+    if (currentPage.startsWith(SolidAppContext.noAuth)) {
+      SolidAppContext.viewingNoAuthPage = true
+      const params = new URLSearchParams(window.document.location.search)
+      if (params) {
+        let viewedPage = SolidAppContext.viewedPage = params.get('uri') || null
+        if (viewedPage) {
+          viewedPage = decodeURI(viewedPage)
+          if (!viewedPage.startsWith(SolidAppContext.noAuth)) {
+            const ary = viewedPage.split(/\//)
+            SolidAppContext.idp = ary[0] + '//' + ary[2]
+            SolidAppContext.viewingNoAuthPage = false
+          }
+        }
+      }
+    }
+  }
+  return SolidAppContext
+}
+
+/**
  * Checks synchronously whether user is logged in
  *
  * @returns Named Node or null
  */
 export function currentUser (): NamedNode | null {
-  const str = localStorage['solid-auth-client']
-  if (str) {
-    const da = JSON.parse(str)
-    if (da.session && da.session.webId) {
-      // @@ TODO check has not expired
-      return sym(da.session.webId)
-    }
+  const app = appContext()
+  if (app.viewingNoAuthPage) {
+    return sym(app.webId)
+  }
+  if (authSession.info.webId && authSession.info.isLoggedIn) {
+    return sym(authSession.info.webId)
   }
   return offlineTestID() // null unless testing
   // JSON.parse(localStorage['solid-auth-client']).session.webId
@@ -115,7 +164,8 @@ export function currentUser (): NamedNode | null {
  * @param context
  */
 export function logIn (context: AuthenticationContext): Promise<AuthenticationContext> {
-  const me = defaultTestUser() // me is a NamedNode or null
+  const app = appContext()
+  const me = app.viewingNoAuthPage ? sym(app.webId) : defaultTestUser() // me is a NamedNode or null
 
   if (me) {
     context.me = me
@@ -751,8 +801,7 @@ function genACLText (
   g.add(a, ns.rdf('type'), auth('Authorization'), acl)
   g.add(a, auth('accessTo'), doc, acl)
   if (options.defaultForNew) {
-    // TODO: Should this be auth('default') instead?
-    g.add(a, auth('defaultForNew'), doc, acl)
+    g.add(a, auth('default'), doc, acl)
   }
   g.add(a, auth('agent'), me, acl)
   g.add(a, auth('mode'), auth('Read'), acl)
@@ -805,7 +854,7 @@ export function offlineTestID (): NamedNode | null {
 }
 
 function getDefaultSignInButtonStyle (): string {
-  return 'padding: 1em; border-radius:0.5em; margin: 2em; font-size: 100%;'
+  return 'padding: 1em; border-radius:0.5em; font-size: 100%;'
 }
 
 /**
@@ -842,11 +891,10 @@ function signInOrSignUpBox (
   signInPopUpButton.setAttribute('value', 'Log in')
   signInPopUpButton.setAttribute('style', `${signInButtonStyle}background-color: #eef;`)
 
-  signInPopUpButton.addEventListener('click', () => {
-    const offline = offlineTestID()
-    if (offline) return setUserCallback(offline.uri)
-    return solidAuthClient.popupLogin().then(session => {
-      const webIdURI = session.webId
+  authSession.onLogin(() => {
+    const sessionInfo = authSession.info
+    if (sessionInfo && sessionInfo.isLoggedIn) {
+      const webIdURI = sessionInfo.webId
       // setUserCallback(webIdURI)
       const divs = dom.getElementsByClassName(magicClassName)
       debug.log(`Logged in, ${divs.length} panels to be serviced`)
@@ -867,7 +915,14 @@ function signInOrSignUpBox (
           }
         }
       }
-    })
+    }
+  })
+
+  signInPopUpButton.addEventListener('click', () => {
+    const offline = offlineTestID()
+    if (offline) return setUserCallback(offline.uri)
+
+    renderSignInPopup(dom)
   }, false)
 
   // Sign up button
@@ -887,11 +942,151 @@ function signInOrSignUpBox (
   return box
 }
 
+export function renderSignInPopup (dom: HTMLDocument) {
+  /**
+   * Issuer Menu
+   */
+  const issuerPopup = dom.createElement('div')
+  issuerPopup.setAttribute('style', 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; align-items: center;')
+  dom.body.appendChild(issuerPopup)
+  const issuerPopupBox = dom.createElement('div')
+  issuerPopupBox.setAttribute('style', `
+     background-color: white;
+     box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
+     -webkit-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
+     -moz-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
+     -o-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
+     border-radius: 4px;
+     min-width: 400px;
+     padding: 10px;
+   `)
+  issuerPopup.appendChild(issuerPopupBox)
+  const issuerPopupBoxTopMenu = dom.createElement('div')
+  issuerPopupBoxTopMenu.setAttribute('style', `
+     border-bottom: 1px solid #DDD;
+     display: flex;
+     flex-direction: row;
+     align-items: center;
+     justify-content: space-between;
+   `)
+  issuerPopupBox.appendChild(issuerPopupBoxTopMenu)
+  const issuerPopupBoxLabel = dom.createElement('label')
+  issuerPopupBoxLabel.setAttribute('style', 'margin-right: 5px; font-weight: 800')
+  issuerPopupBoxLabel.innerText = 'Select an identity provider'
+  const issuerPopupBoxCloseButton = dom.createElement('button')
+  issuerPopupBoxCloseButton.innerHTML = '<img src="https://solid.github.io/solid-ui/src/icons/noun_1180156.svg" style="width: 2em; height: 2em;" title="Cancel">'
+  issuerPopupBoxCloseButton.setAttribute('style', 'background-color: transparent; border: none;')
+  issuerPopupBoxCloseButton.addEventListener('click', () => {
+    issuerPopup.remove()
+  })
+  issuerPopupBoxTopMenu.appendChild(issuerPopupBoxLabel)
+  issuerPopupBoxTopMenu.appendChild(issuerPopupBoxCloseButton)
+
+  const loginToIssuer = async (issuerUri: string) => {
+    try {
+      // Save hash
+      const preLoginRedirectHash = new URL(window.location.href).hash
+      if (preLoginRedirectHash) {
+        window.localStorage.setItem('preLoginRedirectHash', preLoginRedirectHash)
+      }
+      window.localStorage.setItem('loginIssuer', issuerUri)
+      // Login
+      await authSession.login({
+        redirectUrl: window.location.href,
+        oidcIssuer: issuerUri
+      })
+    } catch (err) {
+      alert(err.message)
+    }
+  }
+
+  /**
+    * Text-based idp selection
+    */
+  const issuerTextContainer = dom.createElement('div')
+  issuerTextContainer.setAttribute('style', `
+     border-bottom: 1px solid #DDD;
+     display: flex;
+     flex-direction: column;
+     padding-top: 10px;
+   `)
+  const issuerTextInputContainer = dom.createElement('div')
+  issuerTextInputContainer.setAttribute('style', `
+     display: flex;
+     flex-direction: row;
+   `)
+  const issuerTextLabel = dom.createElement('label')
+  issuerTextLabel.innerText = 'Enter the URL of your identity provider:'
+  issuerTextLabel.setAttribute('style', 'color: #888')
+  const issuerTextInput = dom.createElement('input')
+  issuerTextInput.setAttribute('type', 'text')
+  issuerTextInput.setAttribute('style', 'margin-left: 0 !important; flex: 1; margin-right: 5px !important')
+  issuerTextInput.setAttribute('placeholder', 'https://example.com')
+  issuerTextInput.value = localStorage.getItem('loginIssuer') || ''
+  const issuerTextGoButton = dom.createElement('button')
+  issuerTextGoButton.innerText = 'Go'
+  issuerTextGoButton.setAttribute('style', 'margin-top: 12px; margin-bottom: 12px;')
+  issuerTextGoButton.addEventListener('click', () => {
+    loginToIssuer(issuerTextInput.value)
+  })
+  issuerTextContainer.appendChild(issuerTextLabel)
+  issuerTextInputContainer.appendChild(issuerTextInput)
+  issuerTextInputContainer.appendChild(issuerTextGoButton)
+  issuerTextContainer.appendChild(issuerTextInputContainer)
+  issuerPopupBox.appendChild(issuerTextContainer)
+
+  /**
+    * Button-based idp selection
+    */
+  const issuerButtonContainer = dom.createElement('div')
+  issuerButtonContainer.setAttribute('style', `
+      display: flex;
+      flex-direction: column;
+      padding-top: 10px;
+   `)
+  const issuerBottonLabel = dom.createElement('label')
+  issuerBottonLabel.innerText = 'Or pick an identity provider from the list below:'
+  issuerBottonLabel.setAttribute('style', 'color: #888')
+  issuerButtonContainer.appendChild(issuerBottonLabel)
+  getSuggestedIssuers().forEach((issuerInfo) => {
+    const issuerButton = dom.createElement('button')
+    issuerButton.innerText = issuerInfo.name
+    issuerButton.setAttribute('style', 'height: 38px; margin-top: 10px')
+    issuerButton.addEventListener('click', () => {
+      loginToIssuer(issuerInfo.uri)
+    })
+    issuerButtonContainer.appendChild(issuerButton)
+  })
+  issuerPopupBox.appendChild(issuerButtonContainer)
+}
+
+/**
+ * @returns - A list of suggested OIDC issuers
+ */
+function getSuggestedIssuers (): { name: string, uri: string }[] {
+  // Suggest a default list of OIDC issuers
+  const issuers = [...DEFAULT_ISSUERS]
+
+  // Suggest the current host if not already included
+  const { host, origin } = new URL(location.href)
+  const hosts = issuers.map(({ uri }) => new URL(uri).host)
+  if (!hosts.includes(host) && !hosts.some(existing => isSubdomainOf(host, existing))) {
+    issuers.unshift({ name: host, uri: origin })
+  }
+
+  return issuers
+}
+
+function isSubdomainOf (subdomain: string, domain: string): boolean {
+  const dot = subdomain.length - domain.length - 1
+  return dot > 0 && subdomain[dot] === '.' && subdomain.endsWith(domain)
+}
+
 /**
  * @returns {Promise<string|null>} Resolves with WebID URI or null
  */
-function webIdFromSession (session?: { webId: string }): string | null {
-  const webId = session ? session.webId : null
+function webIdFromSession (session?: { webId?: string, isLoggedIn: boolean }): string | null {
+  const webId = session?.webId && session.isLoggedIn ? session.webId : null
   if (webId) {
     saveUser(webId)
   }
@@ -910,40 +1105,67 @@ function checkCurrentUser () {
 
 /**
  * Retrieves currently logged in webId from either
- * defaultTestUser or SolidAuthClient
+ * defaultTestUser or SolidAuth
  * @param [setUserCallback] Optional callback
  *
  * @returns Resolves with webId uri, if no callback provided
  */
-export function checkUser<T> (
+export async function checkUser<T> (
   setUserCallback?: (me: NamedNode | null) => T
-): Promise<NamedNode | T> {
+): Promise<NamedNode | T | null> {
+  // Save hash for "restorePreviousSession"
+  const preLoginRedirectHash = new URL(window.location.href).hash
+  if (preLoginRedirectHash) {
+    window.localStorage.setItem('preLoginRedirectHash', preLoginRedirectHash)
+  }
+  authSession.onSessionRestore((url) => {
+    if (document.location.toString() !== url) history.replaceState(null, '', url)
+  })
+
+  /**
+   * Handle a successful authentication redirect
+   */
+  await authSession
+    .handleIncomingRedirect({
+      restorePreviousSession: true,
+      url: window.location.href
+    })
+
+  // Check to see if a hash was stored in local storage
+  const postLoginRedirectHash = window.localStorage.getItem('preLoginRedirectHash')
+  if (postLoginRedirectHash) {
+    const curUrl = new URL(window.location.href)
+    if (curUrl.hash !== postLoginRedirectHash) {
+      if (history.pushState) {
+        // console.log('Setting window.location.has using pushState')
+        history.pushState(null, document.title, postLoginRedirectHash)
+      } else {
+        // console.warn('Setting window.location.has using location.hash')
+        location.hash = postLoginRedirectHash
+      }
+      curUrl.hash = postLoginRedirectHash
+    }
+    // See https://stackoverflow.com/questions/3870057/how-can-i-update-window-location-hash-without-jumping-the-document
+    // indow.location.href = curUrl.toString()// @@ See https://developer.mozilla.org/en-US/docs/Web/API/Window/location
+    window.localStorage.setItem('preLoginRedirectHash', '')
+  }
+
   // Check to see if already logged in / have the WebID
-  const me = defaultTestUser()
+  let me = defaultTestUser()
   if (me) {
     return Promise.resolve(setUserCallback ? setUserCallback(me) : me)
   }
 
   // doc = solidLogicSingleton.store.any(doc, ns.link('userMirror')) || doc
+  const webId = webIdFromSession(authSession.info)
 
-  return solidAuthClient
-    .currentSession()
-    .then(webIdFromSession)
-    .catch(err => {
-      debug.log('Error fetching currentSession:', err)
-    })
-    .then(webId => {
-      // if (webId.startsWith('dns:')) {  // legacy rww.io pseudo-users
-      //   webId = null
-      // }
-      const me = saveUser(webId)
+  me = saveUser(webId)
 
-      if (me) {
-        debug.log(`(Logged in as ${me} by authentication)`)
-      }
+  if (me) {
+    debug.log(`(Logged in as ${me} by authentication)`)
+  }
 
-      return setUserCallback ? setUserCallback(me) : me
-    })
+  return Promise.resolve(setUserCallback ? setUserCallback(me) : me)
 }
 
 /**
@@ -982,7 +1204,7 @@ export function loginStatusBox (
 
   function logoutButtonHandler (_event) {
     // UI.preferences.set('me', '')
-    solidAuthClient.logout().then(
+    authSession.logout().then(
       function () {
         const message = `Your WebID was ${me}. It has been forgotten.`
         me = null
@@ -1021,44 +1243,60 @@ export function loginStatusBox (
   }
 
   box.refresh = function () {
-    solidAuthClient.currentSession().then(
-      session => {
-        if (session && session.webId) { // offline
-          me = sym(session.webId)
-        } else {
-          me = offlineTestID() // null unless testing
-        }
-        if ((me && box.me !== me.uri) || (!me && box.me)) {
-          widgets.clearElement(box)
-          if (me) {
-            box.appendChild(logoutButton(me, options))
-          } else {
-            box.appendChild(signInOrSignUpBox(dom, setIt, options))
-          }
-        }
-        box.me = me ? me.uri : null
-      },
-      err => {
-        alert(`loginStatusBox: ${err}`)
+    const sessionInfo = authSession.info
+    if (sessionInfo && sessionInfo.webId && sessionInfo.isLoggedIn) {
+      me = sym(sessionInfo.webId)
+    } else {
+      me = null
+    }
+    if ((me && box.me !== me.uri) || (!me && box.me)) {
+      widgets.clearElement(box)
+      if (me) {
+        box.appendChild(logoutButton(me, options))
+      } else {
+        box.appendChild(signInOrSignUpBox(dom, setIt, options))
       }
-    )
+    }
+    box.me = me ? me.uri : null
   }
 
-  if (solidAuthClient.trackSession) {
-    solidAuthClient.trackSession(session => {
-      if (session && session.webId) {
-        me = sym(session.webId)
-      } else {
-        me = null
-      }
-      box.refresh()
-    })
+  function trackSession () {
+    const sessionInfo = authSession.info
+    if (sessionInfo && sessionInfo.webId && sessionInfo.isLoggedIn) {
+      me = sym(sessionInfo.webId)
+    } else {
+      me = null
+    }
+    box.refresh()
   }
+  trackSession()
+  authSession.onLogin(trackSession)
+  authSession.onLogout(trackSession)
 
   box.me = '99999' // Force refresh
   box.refresh()
   return box
 }
+
+authSession.onLogout(async () => {
+  const issuer = window.localStorage.getItem('loginIssuer')
+  if (issuer) {
+    try {
+      const wellKnownUri = new URL(issuer)
+      wellKnownUri.pathname = '/.well-known/openid-configuration'
+      const wellKnownResult = await fetch(wellKnownUri.toString())
+      if (wellKnownResult.status === 200) {
+        const openidConfiguration = await wellKnownResult.json()
+        if (openidConfiguration && openidConfiguration.end_session_endpoint) {
+          await fetch(openidConfiguration.end_session_endpoint, { credentials: 'include' })
+        }
+      }
+    } catch (err) {
+      // Do nothing
+    }
+  }
+  window.location.reload()
+})
 
 /**
  * Workspace selection etc
@@ -1095,8 +1333,8 @@ export function selectWorkspace (
   const box = dom.createElement('div')
   const context: AuthenticationContext = { me: me, dom: dom, div: box }
 
-  function say (s) {
-    box.appendChild(widgets.errorMessageBlock(dom, s))
+  function say (s, background) {
+    box.appendChild(widgets.errorMessageBlock(dom, s, background))
   }
 
   function figureOutBase (ws) {
@@ -1146,15 +1384,17 @@ export function selectWorkspace (
     // A workspace in a storage in the public profile:
     const storages = solidLogicSingleton.store.each(id, ns.space('storage')) // @@ No provenance requirement at the moment
     if (w.length === 0 && storages) {
-      say(`You don't seem to have any workspaces. You have ${storages.length} storage spaces.`)
+      say(`You don't seem to have any workspaces. You have ${storages.length} storage spaces.`, 'white')
       storages.map(function (s: any) {
         w = w.concat(solidLogicSingleton.store.each(s, ns.ldp('contains')))
         return w
-      }).filter(file => ['public', 'private'].includes(file.id().toLowerCase()))
+      }).filter(file => {
+        return (file.id) ? ['public', 'private'].includes(file.id().toLowerCase()) : ''
+      })
     }
 
     if (w.length === 1) {
-      say(`Workspace used: ${w[0].uri}`) // @@ allow user to see URI
+      say(`Workspace used: ${w[0].uri}`, 'white') // @@ allow user to see URI
       newBase = figureOutBase(w[0])
       // callbackWS(w[0], newBase)
     // } else if (w.length === 0) {

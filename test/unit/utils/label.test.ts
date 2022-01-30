@@ -4,10 +4,6 @@ import { silenceDebugMessages } from '../../helpers/setup'
 import { store } from '../../../src/logic'
 
 silenceDebugMessages()
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
 describe('label', () => {
   describe('uses well known label predicates', () => {
     const thing = sym('https://resource.example/label-test#it')

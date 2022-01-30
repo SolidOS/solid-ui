@@ -17,7 +17,6 @@ it.skip('only here to make tests run', () => null)
 // } from '../../../src/widgets/peoplePicker'
 // import ns from '../../../src/ns'
 // jest.mock('rdflib')
-// jest.mock('solid-auth-client')
 // const kb = require('../../../src/store')
 // const fetcher = kb.fetcher
 //

@@ -28,6 +28,7 @@ export const fieldParams: { [ fieldUri: string ]: FieldParamsObject } = {
   [ns.ui('ColorField').uri]: {
     size: 9,
     type: 'color',
+    style: 'height: 3em;', // around 1.5em is padding
     dt: 'color',
     pattern: /^\s*#[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]([0-9a-f][0-9a-f])?\s*$/
   }, // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/color
@@ -41,7 +42,7 @@ export const fieldParams: { [ fieldUri: string ]: FieldParamsObject } = {
 
   [ns.ui('DateTimeField').uri]: {
     size: 20,
-    type: 'date',
+    type: 'datetime-local', // See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime
     dt: 'dateTime',
     pattern: /^\s*[0-9][0-9][0-9][0-9](-[0-1]?[0-9]-[0-3]?[0-9])?(T[0-2][0-9]:[0-5][0-9](:[0-5][0-9])?)?Z?\s*$/
   },
@@ -55,21 +56,21 @@ export const fieldParams: { [ fieldUri: string ]: FieldParamsObject } = {
 
   [ns.ui('IntegerField').uri]: {
     size: 12,
-    style: 'text-align: right',
+    style: 'text-align: right;',
     dt: 'integer',
     pattern: /^\s*-?[0-9]+\s*$/
   },
 
   [ns.ui('DecimalField').uri]: {
     size: 12,
-    style: 'text-align: right',
+    style: 'text-align: right;',
     dt: 'decimal',
     pattern: /^\s*-?[0-9]*(\.[0-9]*)?\s*$/
   },
 
   [ns.ui('FloatField').uri]: {
     size: 12,
-    style: 'text-align: right',
+    style: 'text-align: right;',
     dt: 'float',
     pattern: /^\s*-?[0-9]*(\.[0-9]*)?((e|E)-?[0-9]*)?\s*$/
   },

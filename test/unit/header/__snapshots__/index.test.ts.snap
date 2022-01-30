@@ -2,249 +2,303 @@
 
 exports[`createBanner check customized logo... 1`] = `
 <div
-  class="header-banner-0-1-81"
+  class="header-banner-0-1-78"
 >
   <a
-    class="header-banner__link-0-1-68"
+    class="header-banner__link-0-1-69"
     href="https://test.com"
   >
     <img
-      class="header-banner__icon-0-1-69"
+      class="header-banner__icon-0-1-70"
       src="https://solidproject.org/assets/img/solid-emblem.svg"
     />
   </a>
   <div
-    class="header-banner__user-menu-0-1-79 header-user-menu-0-1-80"
+    class="header-banner__right-menu-0-1-79"
   >
-    <button
-      class="header-user-menu__trigger-0-1-78"
-      type="button"
+    <div
+      class="header-banner__user-menu-0-1-76 header-user-menu-0-1-77"
     >
-      
-
-      <svg
-        fill="none"
-        height="26"
-        viewBox="0 0 26 26"
-        width="26"
-        xmlns="http://www.w3.org/2000/svg"
+      <button
+        class="header-user-menu__trigger-0-1-75"
+        type="button"
       >
         
-    
-        <path
-          clip-rule="evenodd"
-          d="M13 25C19.6274 25 25 19.6274 25 13C25 6.37258 19.6274 1 13 1C6.37258 1 1 6.37258 1 13C1 19.6274 6.37258 25 13 25Z"
-          fill="#D8D8D8"
-          fill-rule="evenodd"
-          stroke="#8B8B8B"
-        />
-        
-    
-        <mask
+
+        <svg
+          fill="none"
           height="26"
-          id="mask0"
-          mask-type="alpha"
-          maskUnits="userSpaceOnUse"
+          viewBox="0 0 26 26"
           width="26"
-          x="0"
-          y="0"
+          xmlns="http://www.w3.org/2000/svg"
         >
           
-        
+    
           <path
             clip-rule="evenodd"
             d="M13 25C19.6274 25 25 19.6274 25 13C25 6.37258 19.6274 1 13 1C6.37258 1 1 6.37258 1 13C1 19.6274 6.37258 25 13 25Z"
-            fill="white"
+            fill="#D8D8D8"
             fill-rule="evenodd"
-            stroke="white"
+            stroke="#8B8B8B"
           />
           
     
-        </mask>
+          <mask
+            height="26"
+            id="mask0"
+            mask-type="alpha"
+            maskUnits="userSpaceOnUse"
+            width="26"
+            x="0"
+            y="0"
+          >
+            
         
+            <path
+              clip-rule="evenodd"
+              d="M13 25C19.6274 25 25 19.6274 25 13C25 6.37258 19.6274 1 13 1C6.37258 1 1 6.37258 1 13C1 19.6274 6.37258 25 13 25Z"
+              fill="white"
+              fill-rule="evenodd"
+              stroke="white"
+            />
+            
     
-        <g
-          mask="url(#mask0)"
-        >
-          
-        
-          <path
-            clip-rule="evenodd"
-            d="M17.0468 10.4586C17.0468 14.4979 15.4281 16.9214 12.9999 16.9214C10.5718 16.9214 8.95298 14.4979 8.95298 10.4586C8.95298 6.41931 12.9999 6.41931 12.9999 6.41931C12.9999 6.41931 17.0468 6.41931 17.0468 10.4586ZM4.09668 23.3842C6.52483 17.7293 12.9999 17.7293 12.9999 17.7293C12.9999 17.7293 19.475 17.7293 21.9031 23.3842C21.9031 23.3842 17.8481 25 12.9999 25C8.15169 25 4.09668 23.3842 4.09668 23.3842Z"
-            fill="#8B8B8B"
-            fill-rule="evenodd"
-          />
+          </mask>
           
     
-        </g>
+          <g
+            mask="url(#mask0)"
+          >
+            
         
+            <path
+              clip-rule="evenodd"
+              d="M17.0468 10.4586C17.0468 14.4979 15.4281 16.9214 12.9999 16.9214C10.5718 16.9214 8.95298 14.4979 8.95298 10.4586C8.95298 6.41931 12.9999 6.41931 12.9999 6.41931C12.9999 6.41931 17.0468 6.41931 17.0468 10.4586ZM4.09668 23.3842C6.52483 17.7293 12.9999 17.7293 12.9999 17.7293C12.9999 17.7293 19.475 17.7293 21.9031 23.3842C21.9031 23.3842 17.8481 25 12.9999 25C8.15169 25 4.09668 23.3842 4.09668 23.3842Z"
+              fill="#8B8B8B"
+              fill-rule="evenodd"
+            />
+            
+    
+          </g>
+          
 
-      </svg>
-    </button>
-    <nav
-      aria-hidden="true"
-      class="header-user-menu__navigation-menu-0-1-77"
-    >
-      <ul
-        class="header-user-menu__list-0-1-70"
+        </svg>
+      </button>
+      <nav
+        aria-hidden="true"
+        class="header-user-menu__navigation-menu-0-1-74"
       >
-        <li
-          class="header-user-menu__list-item-0-1-72"
+        <ul
+          class="header-user-menu__list-0-1-71"
         >
-          <a
-            class="header-user-menu__link-0-1-71"
-            href="https://sharonstrats.inrupt.net/profile/card#me"
-          />
-        </li>
-        <li
-          class="header-user-menu__list-item-0-1-74"
+          <li
+            class="header-user-menu__list-item-0-1-73"
+          >
+            <a
+              class="header-user-menu__link-0-1-72"
+              href="https://reflectechblog.wordpress.com/"
+            />
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div
+      class="header-banner__user-menu-0-1-84 header-user-menu-0-1-85"
+    >
+      <nav
+        aria-hidden="true"
+        class="header-user-menu__navigation-menu-0-1-83"
+      >
+        <ul
+          class="header-user-menu__list-0-1-80"
         >
-          <a
-            class="header-user-menu__link-0-1-73"
-            href="https://reflectechblog.wordpress.com/"
-          />
-        </li>
-        <li
-          class="header-user-menu__list-item-0-1-76"
-        >
-          <button
-            class="header-user-menu__button-0-1-75"
-          />
-        </li>
-      </ul>
-    </nav>
+          <li
+            class="header-user-menu__list-item-0-1-82"
+          >
+            <a
+              class="header-user-menu__link-0-1-81"
+              href="https://reflectechblog.wordpress.com/"
+            />
+          </li>
+        </ul>
+      </nav>
+      <button
+        class="header-user-menu__trigger-0-1-86"
+        type="button"
+      >
+        <img
+          class="header-banner__help-icon-0-1-87"
+          src="https://solid.github.io/solid-ui/src/icons/https://solid.github.io/solid-ui/src/icons/noun_help.svg"
+        />
+      </button>
+    </div>
   </div>
 </div>
 `;
 
 exports[`createBanner creates a link 1`] = `
 <div
-  class="header-banner-0-1-53"
+  class="header-banner-0-1-40"
 >
   <a
-    class="header-banner__link-0-1-40"
+    class="header-banner__link-0-1-31"
     href="https://test.com"
   >
     <img
-      class="header-banner__icon-0-1-41"
+      class="header-banner__icon-0-1-32"
       src="https://solidproject.org/assets/img/solid-emblem.svg"
     />
   </a>
   <div
-    class="header-banner__user-menu-0-1-51 header-user-menu-0-1-52"
+    class="header-banner__right-menu-0-1-41"
   >
-    <button
-      class="header-user-menu__trigger-0-1-50"
-      type="button"
+    <div
+      class="header-banner__user-menu-0-1-38 header-user-menu-0-1-39"
     >
-      
-
-      <svg
-        fill="none"
-        height="26"
-        viewBox="0 0 26 26"
-        width="26"
-        xmlns="http://www.w3.org/2000/svg"
+      <button
+        class="header-user-menu__trigger-0-1-37"
+        type="button"
       >
         
-    
-        <path
-          clip-rule="evenodd"
-          d="M13 25C19.6274 25 25 19.6274 25 13C25 6.37258 19.6274 1 13 1C6.37258 1 1 6.37258 1 13C1 19.6274 6.37258 25 13 25Z"
-          fill="#D8D8D8"
-          fill-rule="evenodd"
-          stroke="#8B8B8B"
-        />
-        
-    
-        <mask
+
+        <svg
+          fill="none"
           height="26"
-          id="mask0"
-          mask-type="alpha"
-          maskUnits="userSpaceOnUse"
+          viewBox="0 0 26 26"
           width="26"
-          x="0"
-          y="0"
+          xmlns="http://www.w3.org/2000/svg"
         >
           
-        
+    
           <path
             clip-rule="evenodd"
             d="M13 25C19.6274 25 25 19.6274 25 13C25 6.37258 19.6274 1 13 1C6.37258 1 1 6.37258 1 13C1 19.6274 6.37258 25 13 25Z"
-            fill="white"
+            fill="#D8D8D8"
             fill-rule="evenodd"
-            stroke="white"
+            stroke="#8B8B8B"
           />
           
     
-        </mask>
+          <mask
+            height="26"
+            id="mask0"
+            mask-type="alpha"
+            maskUnits="userSpaceOnUse"
+            width="26"
+            x="0"
+            y="0"
+          >
+            
         
+            <path
+              clip-rule="evenodd"
+              d="M13 25C19.6274 25 25 19.6274 25 13C25 6.37258 19.6274 1 13 1C6.37258 1 1 6.37258 1 13C1 19.6274 6.37258 25 13 25Z"
+              fill="white"
+              fill-rule="evenodd"
+              stroke="white"
+            />
+            
     
-        <g
-          mask="url(#mask0)"
-        >
-          
-        
-          <path
-            clip-rule="evenodd"
-            d="M17.0468 10.4586C17.0468 14.4979 15.4281 16.9214 12.9999 16.9214C10.5718 16.9214 8.95298 14.4979 8.95298 10.4586C8.95298 6.41931 12.9999 6.41931 12.9999 6.41931C12.9999 6.41931 17.0468 6.41931 17.0468 10.4586ZM4.09668 23.3842C6.52483 17.7293 12.9999 17.7293 12.9999 17.7293C12.9999 17.7293 19.475 17.7293 21.9031 23.3842C21.9031 23.3842 17.8481 25 12.9999 25C8.15169 25 4.09668 23.3842 4.09668 23.3842Z"
-            fill="#8B8B8B"
-            fill-rule="evenodd"
-          />
+          </mask>
           
     
-        </g>
+          <g
+            mask="url(#mask0)"
+          >
+            
         
+            <path
+              clip-rule="evenodd"
+              d="M17.0468 10.4586C17.0468 14.4979 15.4281 16.9214 12.9999 16.9214C10.5718 16.9214 8.95298 14.4979 8.95298 10.4586C8.95298 6.41931 12.9999 6.41931 12.9999 6.41931C12.9999 6.41931 17.0468 6.41931 17.0468 10.4586ZM4.09668 23.3842C6.52483 17.7293 12.9999 17.7293 12.9999 17.7293C12.9999 17.7293 19.475 17.7293 21.9031 23.3842C21.9031 23.3842 17.8481 25 12.9999 25C8.15169 25 4.09668 23.3842 4.09668 23.3842Z"
+              fill="#8B8B8B"
+              fill-rule="evenodd"
+            />
+            
+    
+          </g>
+          
 
-      </svg>
-    </button>
-    <nav
-      aria-hidden="true"
-      class="header-user-menu__navigation-menu-0-1-49"
-    >
-      <ul
-        class="header-user-menu__list-0-1-42"
+        </svg>
+      </button>
+      <nav
+        aria-hidden="true"
+        class="header-user-menu__navigation-menu-0-1-36"
       >
-        <li
-          class="header-user-menu__list-item-0-1-44"
+        <ul
+          class="header-user-menu__list-0-1-33"
         >
-          <a
-            class="header-user-menu__link-0-1-43"
-            href="https://sharonstrats.inrupt.net/profile/card#me"
-          />
-        </li>
-        <li
-          class="header-user-menu__list-item-0-1-46"
+          <li
+            class="header-user-menu__list-item-0-1-35"
+          >
+            <a
+              class="header-user-menu__link-0-1-34"
+              href="https://reflectechblog.wordpress.com/"
+            />
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div
+      class="header-banner__user-menu-0-1-46 header-user-menu-0-1-47"
+    >
+      <nav
+        aria-hidden="true"
+        class="header-user-menu__navigation-menu-0-1-45"
+      >
+        <ul
+          class="header-user-menu__list-0-1-42"
         >
-          <a
-            class="header-user-menu__link-0-1-45"
-            href="https://reflectechblog.wordpress.com/"
-          />
-        </li>
-        <li
-          class="header-user-menu__list-item-0-1-48"
-        >
-          <button
-            class="header-user-menu__button-0-1-47"
-          />
-        </li>
-      </ul>
-    </nav>
+          <li
+            class="header-user-menu__list-item-0-1-44"
+          >
+            <a
+              class="header-user-menu__link-0-1-43"
+              href="https://reflectechblog.wordpress.com/"
+            />
+          </li>
+        </ul>
+      </nav>
+      <button
+        class="header-user-menu__trigger-0-1-48"
+        type="button"
+      >
+        <img
+          class="header-banner__help-icon-0-1-49"
+          src="https://solid.github.io/solid-ui/src/icons/https://solid.github.io/solid-ui/src/icons/noun_help.svg"
+        />
+      </button>
+    </div>
   </div>
 </div>
 `;
+
+exports[`createHelpMenu creates a menu.... 1`] = `undefined`;
 
 exports[`createLoginSignUpButtons creates div 1`] = `
 <div
   class="header-banner__login-0-1-1"
 >
-  <div />
+  <div>
+    <div
+      class="SolidSignInOrSignUpBox"
+      style="display: flex;"
+    >
+      <input
+        style="padding: 1em; border-radius:0.5em; font-size: 100%;background-color: #eef;"
+        type="button"
+        value="Log in"
+      />
+      <input
+        style="padding: 1em; border-radius:0.5em; font-size: 100%;background-color: #efe;"
+        type="button"
+        value="Sign Up for Solid"
+      />
+    </div>
+  </div>
 </div>
 `;
 
 exports[`createUserMenu creates a menu.... 1`] = `Promise {}`;
-
-exports[`createUserMenu creates the default options... 1`] = `Promise {}`;
 
 exports[`createUserMenuButton creates a button 1`] = `
 <button

@@ -9,10 +9,6 @@ const store = solidLogicSingleton.store
 const BOOK = Namespace('http://www.w3.org/2002/01/bookmark#')
 
 silenceDebugMessages()
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
 
 describe('findBookmarkDocument', () => {
   afterEach(clearStore)

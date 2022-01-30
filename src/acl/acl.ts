@@ -10,8 +10,7 @@ import { solidLogicSingleton } from '../logic'
 import * as utils from '../utils'
 import { AgentMapMap, AgentMapUnion, ComboList } from './types'
 import * as debug from '../debug'
-import { graph, IndexedFormula, NamedNode, serialize, st, Statement, sym } from 'rdflib'
-import { LiveStore } from 'pane-registry'
+import { graph, IndexedFormula, NamedNode, serialize, st, Statement, sym, LiveStore } from 'rdflib'
 import { ACL_LINK } from 'solid-logic'
 
 const kb = solidLogicSingleton.store
@@ -330,7 +329,7 @@ export function putACLbyCombo (
   makeACLGraphbyCombo(kb2, x, byCombo, aclDoc, true)
 
   // const str = makeACLString = function(x, ac, aclDoc)
-  kb.updater.put(
+  kb.updater?.put(
     aclDoc,
     kb2.statementsMatching(undefined, undefined, undefined, aclDoc),
     'text/turtle',
@@ -338,9 +337,9 @@ export function putACLbyCombo (
       if (!ok) {
         callbackFunction(ok, message)
       } else {
-        kb.fetcher.unload(aclDoc)
+        kb.fetcher?.unload(aclDoc)
         makeACLGraphbyCombo(kb, x, byCombo, aclDoc, true)
-        kb.fetcher.requested[aclDoc.uri] = 'done' // missing: save headers
+        kb.fetcher!.requested[aclDoc.uri] = 'done' // missing: save headers
         callbackFunction(ok)
       }
     }

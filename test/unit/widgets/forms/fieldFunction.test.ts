@@ -10,11 +10,6 @@ import {
 } from '../../../../src/widgets/forms/fieldFunction'
 import { clearStore } from '../../helpers/clearStore'
 
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
-
 silenceDebugMessages()
 afterEach(clearStore)
 

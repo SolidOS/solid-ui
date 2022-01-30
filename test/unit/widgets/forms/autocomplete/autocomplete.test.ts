@@ -21,10 +21,6 @@ import nock from 'nock'
 
 jest.unmock('rdflib') // we need Fetcher to work (mocked)
 jest.unmock('debug') // while debugging only @@
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
 
 const turtleResponseHeaders = {
   Vary: 'Accept, Authorization, Origin',

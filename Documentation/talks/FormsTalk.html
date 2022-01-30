@@ -1,0 +1,421 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-US" xmlns="http://www.w3.org/1999/xhtml">
+<!-- https://www.w3.org/Talks/Tools/Slidy2/index.html -->
+<head>
+<title>Linked Data Forms</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="copyright" content=
+"Copyright Tim BL" />
+<meta name="duration" content="5" />
+<meta name="font-size-adjustment" content="-2" />
+<link rel="stylesheet" href="https://www.w3.org/Talks/Tools/Slidy2/styles/slidy.css" type="text/css" />
+<!--
+<link rel="stylesheet" href="https://www.w3.org/Talks/Tools/Slidy2/styles/w3c-blue.css" type="text/css" />
+-->
+<link rel="stylesheet" href="../style/solid-purple.css" type="text/css" />
+<script src="https://www.w3.org/Talks/Tools/Slidy2/scripts/slidy.js" charset="utf-8" type="text/javascript">
+</script>
+<script>
+// alert("wrth")</script>
+</head>
+<body>
+<div class="background"><img alt="" id="head-icon"
+src="https://solidos.solidcommunity.net/profile/solidos-logo-v5.svg" />
+<object id="head-logo"
+data="graphics/w3c-logo-white.svg" type="image/svg+xml"
+title="Solid logo"><a href="http://www.w3.org/"><img
+alt="Solid logo" id="head-logo-fallback"
+src="https://solidproject.solidcommunity.net/profile/solid-emblem.svg" /></a></object></div>
+
+<div class="background slanty">
+<img src="https://www.w3.org/Talks/Tools/Slidy2/graphics/w3c-logo-slanted.jpg" alt="slanted W3C logo" />
+</div>
+<div class="slide cover title">
+  <!-- hidden style graphics to ensure they are saved with other content -->
+  <img class="hidden" src="https://www.w3.org/Talks/Tools/Slidy2/graphics/bullet.png" alt="" />
+  <img class="hidden" src="https://www.w3.org/Talks/Tools/Slidy2/graphics/fold.gif" alt="" />
+  <img class="hidden" src="https://www.w3.org/Talks/Tools/Slidy2/graphics/unfold.gif" alt="" />
+  <img class="hidden" src="https://www.w3.org/Talks/Tools/Slidy2/graphics/fold-dim.gif" alt="" />
+  <img class="hidden" src="https://www.w3.org/Talks/Tools/Slidy2/graphics/nofold-dim.gif" alt="" />
+  <img class="hidden" src="https://www.w3.org/Talks/Tools/Slidy2/graphics/unfold-dim.gif" alt="" />
+  <img class="hidden" src="https://www.w3.org/Talks/Tools/Slidy2/graphics/bullet-fold.gif" alt="" />
+  <img class="hidden" src="https://www.w3.org/Talks/Tools/Slidy2/graphics/bullet-unfold.gif" alt="" />
+  <img class="hidden" src="https://www.w3.org/Talks/Tools/Slidy2/graphics/bullet-fold-dim.gif" alt="" />
+  <img class="hidden" src="https://www.w3.org/Talks/Tools/Slidy2/graphics/bullet-nofold-dim.gif" alt="" />
+  <img class="hidden" src="https://www.w3.org/Talks/Tools/Slidy2/graphics/bullet-unfold-dim.gif" alt="" />
+<!--
+<img src="https://www.w3.org/Talks/Tools/Slidy2/graphics/keys2.jpg" alt="Cover page images (keys)"
+ class="cover" />
+-->
+ <br clear="all" />
+<h1>Declarative User Interface: Forms and Apps in RDF</h1>
+
+<p><a href="http://www.w3.org/People/Berner-Lee/card£i/\">Tim BL</a>,
+&lt;<a href="mailto:timbl@w3.org">timbl@w3.org</a>&gt;<br />
+<br />
+<br />
+<br />
+<br /><em>Hit the space bar or swipe left for next slide</em></p>
+</div>
+
+<div class="slide">
+<h1>Declarative User Interface: Forms and Apps in RDF</h1>
+
+<ul>
+<li>Declarative design is good.</li>
+<li>The Principle of Least Power</li>
+<li>Compose apps and parts of apps out of <b>components</b></li>
+<li>High-level design allows <b>multiple</b> compatible implementations</li>
+<li>In Solid, data is in Linked Data graphs</li>
+<li>Why not use that for User Interface?</li>
+</ul>
+</div>
+
+<div class="slide">
+<h1>What would that look like?</h1>
+
+<pre>
+  # A simple group with two fields
+
+  ex:form a ui:Group;
+    ui:parts (ex:part1 ex:part2).
+
+        ex:part1 a ui:SingleLineTextField ;
+        ui:property vcard:fn;
+        ui:label "name" .
+
+        ex:part2 a ui:EmailField ;
+        ui:property vcard:hasEmail;
+        ui:label "email" .
+</pre>
+</div>
+
+
+<div class="slide">
+<h1>Components are form Fields or structures</h1>
+<h3>Fields<h3>
+<ul>
+  <li>BooleanField
+  </li>
+  <li>TriStateField
+  </li>
+  <li>IntegerField
+  </li>
+  <li>DecimalField
+  </li>
+  <li>FloatField</li>
+
+</ul><ul>
+
+  <li>ColorField
+  </li>
+  <li>DateField
+  </li>
+  <li>DateTimeField
+  </li>
+  <li>PhoneField
+  </li>
+  <li>EmailField
+  </li>
+  <li>SingleLineTextField
+  </li>
+  <li>MultiLineTextField
+  </li>
+  <li>Autocomplete</li>
+</ul>
+<h3>Structures<h3>
+<ul>
+  <li>Group
+  </li>
+  <li>Choice
+  </li>
+  <li>Multiple
+  </li>
+  <li>Classifier
+  </li>
+  <li>Options
+  </li>
+</ul>
+<h3>Documentation components<h3>
+<ul>
+  <li>Heading
+  </li>
+  <li>Comment
+  </li>
+</ul>
+
+</div>
+
+<div class="slide">
+<h1>Single Line Text field</h1>
+<p>Form fields are set up to write linked data into Solid pods.</p>
+<p>Each one adds (typically) a new edge to the data graph at run time</p>
+<p>So We give the predicate which will be used in the instance of the field.</p>
+<pre>
+# A simple form with one boolean field
+ex:form
+a ui:BooleanField ;
+ui:property ex:allDay .
+
+</pre>
+</div>
+
+<div class="slide">
+<h1>Examples of other form fields</h1>
+
+<ol>
+  <li><a target="demo1" href="../form-examples/demo.html">Examples of individual Form Fields</a></li>
+  <li><a target="demo2" href="../form-examples/structures.html">Examples of structures in forms: Groups</a></li>
+  <li><a target="demo3" href="../form-examples/structures3.html">Selection, Options, Autocomplete</a></li>
+  <li><a target="demo4" href="../form-examples/profile-demo.html">Examples of a Solid profile editing form</a></li>
+  <!--
+  <li><a target="demo" href="../form-examples/edit-form.html">Editing a simple form using the Form Form</a></li>
+  <li><a target="demo" href="../form-examples/edit-form-form.html">Editing the Form Form</a></li>
+-->
+</ol>
+
+</div>
+
+
+<div class="slide">
+  <h1>Common properties of form fields</h1>
+
+  <table class="properties">
+    <tr>
+      <td>label</td>
+      <td>String</td>
+      <td>
+        A label for the form field, prompt for the user.
+      </td>
+    </tr>
+
+    <tr>
+      <td>property</td>
+      <td>rdf:Property</td>
+      <td>
+        Data it is stored in the web as a triple
+        with this property as its predicate.
+      </td>
+    </tr>
+
+    <tr>
+      <td>default</td>
+      <td>[according to field type] Optional</td>
+      <td>
+        The input control is set to this value by default. It is easiest for
+        the user to enter this value. (This value is <b>not</b> automatically
+        stored by the form system if the user does not select or enter it in
+        some way.
+      </td>
+    </tr>
+
+    <tr>
+      <td>suppressEmptyUneditable</td>
+      <td>Boolean</td>
+      <td>
+        When the user is just reading the data, not
+        editing it, the fields with blank data will be hidden.
+      </td>
+    </tr>
+  </table>
+
+</div>
+
+
+<div class="slide">
+<h1>The Autocomplete field</h1>
+<p>This form field allows users to select things from lists in public databases, things like Languages, Organizations, Occupations, and Skills</p>
+<p>This is not covered in detail in this talk.</p>
+<p>(There is a blog <a href="https://solidos.solidcommunity.net/public/2021/01%20Building%20Solid%20Apps%20which%20use%20Public%20Data.html">
+</i>Building Solid Apps which use Public Data</i></a>,
+  about this which I could run though for those interested)</p>
+  <img src="../diagrams/PersonalPublicDataLinks.svg" />
+</div>
+
+<div class="slide">
+<h1>Code: Render a form</h1>
+<p>To put a form in your UI</p>
+<pre>const element = UI.widgets.appendForm(dom, null, {}, subject, form, doc, callback)
+  </pre>
+
+  <table class="parameters">
+  <tr>
+    <td>dom</td>
+
+    <td>is the DOM HTMLDocument object, a/k/a document</td>
+  </tr>
+
+  <tr>
+    <td>null</td>
+
+    <td>used to be the is a DOM element to contain the form. If given, the form will be
+    appended to it. This use is deprecated.</td>
+  </tr>
+
+  <tr>
+    <td>{}</td>
+
+    <td>are unused at present</td>
+  </tr>
+
+  <tr>
+    <td>subject</td>
+    <td>is the RDF thing about which data will be stored</td>
+  </tr>
+  <tr>
+    <td>form</td>
+    <td>is the RDF object in the store for the form</td>
+  </tr>
+  <tr>
+    <td>doc</td>
+    <td>
+      is the RDF document on the web where the data will be stored. Often,
+      <tt>subject.doc()</tt>
+    </td>
+  </tr>
+  <tr>
+    <td>callback</td>
+    <td>
+      is a function taking an error flag and a message (if the error flag is
+      true). Called when the form field has been set to a new value.
+    </td>
+  </tr>
+</table>
+
+</div>
+
+<div class="slide">
+<h1>Going meta -- designing forms using the form of forms 1</h1>
+<p>Here is a form for editing a form</p>
+<p>Users and developers should be able to design and adapt their forms</p>
+<img src="form-ecosystem.drawio.svg"/>
+</div>
+
+<p>The Form Form</p>
+<div class="slide">
+<h1>Going meta -- Editing forms using the form of forms 2</h1>
+<p>Here we are editing the really small form we started with.</p>
+<ul>
+  <li><a target="demo8" href="../form-examples/edit-form.html">Editing a simple form using the Form Form</a></li>
+</ul>
+<p>Here we edit the FormForm with itself.</p>
+<ul>
+  <li><a target="demo9" href="../form-examples/edit-form-form.html">Editing the Form Form</a></li>
+</ul>
+
+</div>
+
+
+
+
+<div class="slide">
+<h1>Forms and Classes</h1>
+<pre>
+export function formsFor (subject) {
+  const kb = store
+
+  log.debug('formsFor: subject=' + subject)
+  const t = kb.findTypeURIs(subject)
+  let t1
+  for (t1 in t) {
+    log.debug('   type: ' + t1)
+  }
+  const bottom = kb.bottomTypeURIs(t) // most specific
+  let candidates = []
+  for (const b in bottom) {
+    // Find the most specific
+    log.debug('candidatesFor: trying bottom type =' + b)
+    candidates = candidates.concat(
+      findClosest(kb, b, ns.ui('creationForm'))
+    )
+    candidates = candidates.concat(
+      findClosest(kb, b, ns.ui('annotationForm'))
+    )
+  }
+  return candidates
+}
+
+</pre>
+</div>
+
+<div class="slide">
+<h1>The Form Pane</h1>
+<p><a href="https://github.com/solid/solid-panes/blob/main/src/form/pane.js">The Form Pane</a></p>
+<pre>
+  icon: UI.icons.iconBase + 'noun_122196.svg',
+
+  name: 'form',
+
+  audience: [ns.solid('PowerUser')],
+
+  // Does the subject deserve this pane?
+  label: function (subject) {
+    const n = UI.widgets.formsFor(subject).length
+    UI.log.debug('Form pane: forms for ' + subject + ': ' + n)
+    if (!n) return null
+    return '' + n + ' forms'
+  },
+
+  render: function (subject, context) {
+  ...
+  }
+</pre>
+
+</div>
+
+
+
+
+<div class="slide">
+<h1>Future: A Form registry?</h1>
+<ul
+<li>A place to list forms for each class. (by Shape?)</li>
+<li>Global one could be say <tt>https://solidos.solidcommunity.net/reg/form</tt></li>
+<li>Users and Communities could have their own, linked from type index</li>
+<li>Idea: Things like global registries are linked from a global community, The Public  which is just like a user and controlled by Solid Project</li>
+</ul>
+</div>
+
+
+<div class="slide">
+<h1>Future</h1>
+<ul>
+  <li>Implementations in  other platforms - MechanicalUI etc, Native mobile...</li>
+  <li>Add new form features -- what can you think of? Things we have code for:
+    <ul>
+      <li>Matrix, Tables</li>
+      <li>Image gallery, collections</li>
+      <li>Drawers, sidebars</li>
+
+    </ul>
+  </li>
+  <li>Allow entire App top be build from RDF-based declarative components
+     <a href="https://github.com/jeff-zucker/solid-ui-components/blob/main/Ontology.md">a la JeffZ</a>
+     <ul>
+       <li>The App</li>
+       <li>Navigation</li>
+       <li>Menus</li>
+       <li>HTML templates</li>
+       <li>Style themes</li>
+       <li>etc.</li>
+     </ul>
+   </li>
+   <ul>Integrate with Ontologies
+     <li>Design/Edit Ontologies with forms</li>
+     <li>Browse and pick for existing ontologies when building a form</li>
+   </ul>
+</ul>
+</div>
+
+<div class="slide">
+<h1>Questions?</h1>
+<ul>
+  <p>Reference</p>
+  <li><a target="doc" href="../form-ecosystem.html">Manual: The Form Ecosystem</a></li>
+  <li><a target="doc" href="../forms-intro.html">Manual: Intro to forms</a></li>
+  <li><a target="doc" href="https://www.w3.org/ns/ui.n3">The UI ontology (source)</a></li>
+</ul>
+</div>
+
+</div>
