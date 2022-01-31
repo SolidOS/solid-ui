@@ -1,8 +1,8 @@
 /* Manage a UI for the particpation of a person in any thing
 */
-import * as debug from '../debug'
+import * as debug from './debug'
 import { currentUser } from './authn/authn'
-import { NamedNode, st } from 'rdflib'
+import { LiveStore, NamedNode, st, UpdateManager } from 'rdflib'
 import * as ns from './ns'
 import { personTR, newThing, errorMessageBlock } from './widgets'
 import { syncTableToArray } from './utils'
@@ -19,7 +19,7 @@ type ParticipationOptions = {
 class ParticipationTableElement extends HTMLTableElement {
   refresh?: () => void
 }
-const store = solidLogicSingleton.store
+const store = solidLogicSingleton.store as LiveStore
 
 /**  Manage participation in this session
 *
@@ -94,11 +94,11 @@ export function participationObject (subject: NamedNode, padDoc: NamedNode, me: 
       return store.holds(pn, ns.wf('participant'), me)
     })
     if (parps.length > 1) { // This can happen. https://github.com/solid/chat-pane/issues/71
-      const candidates = []
+      const candidates: (string | NamedNode) [][] = []
       for (const participation of parps) {
-        const date = store.anyValue(participation, ns.cal('dtstart'))
+        const date = store.anyValue(participation as NamedNode, ns.cal('dtstart'))
         if (date) {
-          candidates.push([date, participation])
+          candidates.push([date, participation as NamedNode])
         }
       }
       candidates.sort() // Pick the earliest
@@ -123,8 +123,8 @@ export function participationObject (subject: NamedNode, padDoc: NamedNode, me: 
           lightColorHash(me) as any,
           padDoc
         )
-      ]
-      store.updater.update([], ins, function (uri: string | null | undefined, ok: boolean, errorMessage?: string) {
+      ];
+      (store.updater as UpdateManager).update([], ins, function (uri: string | null | undefined, ok: boolean, errorMessage?: string) {
         if (!ok) {
           reject(new Error('Error recording your partipation: ' + errorMessage))
         } else {
@@ -157,8 +157,8 @@ export function recordParticipation (subject: NamedNode, padDoc: NamedNode, refr
     // If I am not already recorded
     return parps[0] // returns the particpation object
   } else {
-    if (!store.updater.editable(padDoc)) {
-      debug.info('Not recording participation, as no write acesss as ' + me + ' to ' + padDoc)
+    if (!(store.updater as UpdateManager).editable(padDoc)) {
+      debug.log('Not recording participation, as no write acesss as ' + me + ' to ' + padDoc)
       return null
     }
     const participation = newThing(padDoc)
@@ -173,8 +173,8 @@ export function recordParticipation (subject: NamedNode, padDoc: NamedNode, refr
         lightColorHash(me) as any,
         padDoc
       )
-    ]
-    store.updater.update([], ins, function (uri: string | null | undefined, ok: boolean, errorMessage?: string) {
+    ];
+    (store.updater as UpdateManager).update([], ins, function (uri: string | null | undefined, ok: boolean, errorMessage?: string) {
       if (!ok) {
         throw new Error('Error recording your partipation: ' + errorMessage)
       }
