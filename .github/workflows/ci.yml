@@ -3,10 +3,12 @@ name: CI
 on:
   push:
     branches:
-      - main
-  pull_request:
-    branches:
-      - main
+      - "**"
+    tags-ignore:
+      # Only create preview releases for branches
+      # (the `release` workflow creates actual releases for version tags):
+      - "**"
+  workflow_dispatch:
 
 jobs:
   test:
