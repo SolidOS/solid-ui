@@ -53,6 +53,7 @@ export const wikidataClasses = {
   Occupation: 'http://www.wikidata.org/entity/Q28640', // Profession
   // Organization: 'http://www.wikidata.org/entity/Q43229',
   Project: 'http://www.wikidata.org/entity/Q170584',
+  ResearchOrganization: 'http://www.wikidata.org/entity/Q31855',
   SportsOrganization: 'http://www.wikidata.org/entity/Q4438121'
 }
 
@@ -378,7 +379,7 @@ export async function queryPublicDataSelect (sparql: string, queryTarget: QueryP
 
   const response = await store.fetcher.webOperation('GET', queryURI, options)
 
-  const text = response.responseText || ''
+  const text = response?.responseText || ''
   if (text.length === 0) throw new Error('No text back from query ' + queryURI)
   const text2 = fixWikidataJSON(text)
   const json = JSON.parse(text2)

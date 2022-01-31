@@ -356,7 +356,7 @@ field[ns.ui('Multiple').uri] = function (
     * this callback happens to avoid widow links
      */
     function itemDone (ok, message) {
-      debug.log(`Item done callback for item ${object.uri.slice(-7)}`)
+      debug.log(`Item done callback for item ${object.toString()}`)
       if (!ok) { // when does this happen? errors typically deal with upstream
         debug.error('  Item done callback: Error: ' + message)
       }

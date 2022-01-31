@@ -1,0 +1,660 @@
+/**
+ * Contains the [[infiniteMessageArea]] class
+ * @packageDocumentation
+ */
+// import { authn } from '../authn/index'
+import * as debug from '../debug'
+import { icons } from '../iconBase'
+import { store } from '../logic'
+// import { media } from '../media/index'
+import * as ns from '../ns'
+// import * as pad from '../pad'
+// import { DateFolder } from './dateFolder'
+import { mostRecentVersion, ChatChannel } from './chatLogic'
+import { renderMessageEditor, renderMessageRow } from './message'
+// import { findBookmarkDocument } from './bookmarks'
+
+import * as $rdf from 'rdflib' // pull in first avoid cross-refs
+// import * as style from '../style'
+// import * as utils from '../utils'
+import * as widgets from '../widgets'
+
+const dom = window.document
+
+// const UI = { authn, icons, ns, media, pad, $rdf, store, style, utils, widgets }
+
+export function desktopNotification (str) {
+  // Let's check if the browser supports notifications
+  if (!('Notification' in window)) {
+    debug.warn('This browser does not support desktop notification')
+  } else if (Notification.permission === 'granted') {
+    // Let's check whether notification permissions have already been granted
+    // eslint-disable-next-line no-new
+    new Notification(str)
+  } else if (Notification.permission !== 'denied') {
+    // Otherwise, we need to ask the user for permission
+    Notification.requestPermission().then(function (permission) {
+      // If the user accepts, let's create a notification
+      if (permission === 'granted') {
+        // eslint-disable-next-line no-new
+        new Notification(str)
+      }
+    })
+  }
+  // At last, if the user has denied notifications, and you
+  // want to be respectful there is no need to bother them any more.
+}
+
+
+/**
+ * Common code for a chat (discussion area of messages about something)
+ * This version runs over a series of files for different time periods
+ *
+ * Parameters for the whole chat like its title are stored on
+ * index.ttl#this and the chats messages are stored in YYYY/MM/DD/chat.ttl
+ *
+ * Use to import store as param 2, now ignores it and uses the UI main store
+ */
+
+export class InfiniteScrolChat {
+  constructor (chatChannel, options) {
+
+
+    function addMessage (message, messageTable) {
+      let content
+      if (store.any(mostRecentVersion(message))) {
+        content = store.any(mostRecentVersion(message), ns.sioc('content'))
+      } else {
+        content = store.literal('message deleted')
+      }
+      const bindings = {
+        '?msg': message,
+        '?creator': store.any(message, ns.foaf('maker')),
+        '?date': store.any(message, ns.dct('created')),
+        '?content': content // store.any(mostRecentVersion(message), ns.sioc('content'))
+      }
+      insertMessageIntoTable(
+        this.messageTable,
+        bindings,
+        this.messageTable.fresh,
+        this.options,
+        this.userContext
+      ) // fresh from elsewhere
+    }
+
+    // ////////
+
+    /* Add a new this.messageTable at the top/bottom
+     */
+    async function insertPreviousMessages (backwards) {
+      const extremity = backwards ? this.earliest : this.latest
+      let date = extremity.this.messageTable.date // day in mssecs
+
+      date = await this.dateFolder.loadPrevious(date, backwards) // backwards
+      debug.log(
+        `insertPreviousMessages: from ${
+          backwards ? 'backwards' : 'forwards'
+        } loadPrevious: ${date}`
+      )
+      if (!date && !backwards && !this.liveMessageTable) {
+        await appendCurrentMessages() // If necessary skip to today and add that
+      }
+      if (!date) return true // done
+      let live = false
+      if (!backwards) {
+        const todayDoc = this.dateFolder.leafDocumentFromDate(new Date())
+        const doc = this.dateFolder.leafDocumentFromDate(date)
+        live = doc.sameTerm(todayDoc) // Is this todays?
+      }
+      const newMessageTable = await createMessageTable(date, live)
+      extremity.this.messageTable = newMessageTable // move pointer to this.earliest
+      if (backwards ? this.newestFirst : !this.newestFirst) {
+        // put on bottom or top
+        this.div.appendChild(newMessageTable)
+      } else {
+        // put on top as we scroll back
+        this.div.insertBefore(newMessageTable, this.div.firstChild)
+      }
+      return live // not done
+    }
+
+    /* Remove message tables earlier than this one
+     */
+    function removePreviousMessages (backwards, messageTable) {
+      if (backwards ? this.newestFirst : !this.newestFirst) {
+        // it was put on bottom
+        while (this.messageTable.nextSibling) {
+          this.div.removeChild(this.messageTable.nextSibling)
+        }
+      } else {
+        // it was put on top as we scroll back
+        while (this.messageTable.previousSibling) {
+          this.div.removeChild(this.messageTable.previousSibling)
+        }
+      }
+      const extr = backwards ? this.earliest : this.latest
+      extr.this.messageTable = this.messageTable
+    }
+
+    /* Load and render message table
+     ** @returns DOM element generates
+     */
+    async function createMessageTable (date, live) {
+      debug.log('   createMessageTable for  ' + date)
+      const chatDocument = this.dateFolder.leafDocumentFromDate(date)
+      try {
+        await store.fetcher.load(chatDocument)
+      } catch (err) {
+        const messageTable = dom.createElement('table')
+        const statusTR = messageTable.appendChild(dom.createElement('tr')) // ### find status in exception
+        if (err.response && err.response.status && err.response.status === 404) {
+          debug.log('Error 404 for chat file ' + chatDocument)
+          return renderMessageTable(date, live) // no mssage file is fine.. will be craeted later
+          // statusTR.appendChild(widgets.errorMessageBlock(dom, 'no message file', 'white'))
+        } else {
+          debug.log('*** Error NON 404 for chat file ' + chatDocument)
+          statusTR.appendChild(widgets.errorMessageBlock(dom, err, 'pink'))
+        }
+        return statusTR
+      }
+      return renderMessageTable(date, live)
+    }
+
+
+    async function addNewChatDocumentIfNewDay () {
+      let now = new Date()
+      // @@ Remove listener from previous table as it is now static
+      const newChatDocument = this.dateFolder.leafDocumentFromDate(now)
+      if (!newChatDocument.sameTerm(this.latest.this.messageTable.chatDocument)) {
+        // It is a new day
+        if (this.liveMessageTable.inputRow) {
+          this.liveMessageTable.removeChild(this.liveMessageTable.inputRow)
+          delete this.liveMessageTable.inputRow
+        }
+        const oldChatDocument = this.latest.this.messageTable.chatDocument
+        await appendCurrentMessages()
+        // Adding a link in the document will ping listeners to add the new block too
+        if (
+          !store.holds(
+            oldChatDocument,
+            ns.rdfs('seeAlso'),
+            newChatDocument,
+            oldChatDocument
+          )
+        ) {
+          const sts = [
+            $rdf.st(
+              oldChatDocument,
+              ns.rdfs('seeAlso'),
+              newChatDocument,
+              oldChatDocument
+            )
+          ]
+          try {
+            store.updater.update([], sts)
+          } catch (err) {
+            alert('Unable to link old message block to new one:' + err)
+          }
+        }
+      }
+    }
+
+    /*
+    function messageCount () {
+      var n = 0
+      const tables = this.div.children
+      for (let i = 0; i < tables.length; i++) {
+        n += tables[i].children.length - 1
+        // debug.log('    table length:' + tables[i].children.length)
+      }
+      return n
+    }
+  */
+
+    /* Add the live message block with entry field for today
+     */
+    async function appendCurrentMessages () {
+      const now = new Date()
+      const chatDocument = this.dateFolder.leafDocumentFromDate(now)
+
+      /// ///////////////////////////////////////////////////////////
+      this.messageTable = await createMessageTable(now, true)
+      this.div.appendChild(this.messageTable)
+      this.div.refresh = function () {
+        // only the last this.messageTable is live
+        addNewChatDocumentIfNewDay(new Date()).then(() => {
+          this.syncMessages(chatChannel, this.messageTable)
+          desktopNotification(chatChannel)
+        })
+      } // The short chat version fors live update in the pane but we do it in the widget
+      store.updater.addDownstreamChangeListener(chatDocument, this.div.refresh) // Live update
+      this.liveMessageTable = this.messageTable
+      this.latest.this.messageTable = this.liveMessageTable
+      return this.messageTable
+    }
+
+    async function loadMoreWhereNeeded (event, fixScroll) {
+      if (lock) return
+      lock = true
+      const freeze = !fixScroll
+      const magicZone = 150
+      // const top = this.div.scrollTop
+      // const bottom = this.div.scrollHeight - top - this.div.clientHeight
+      let done
+
+      while (
+        this.div.scrollTop < magicZone &&
+        this.earliest.this.messageTable &&
+        !this.earliest.this.messageTable.initial &&
+        this.earliest.this.messageTable.extendBackwards
+      ) {
+        // If this has been called before the element is actually in the
+        // user's DOM tree, then this scrollTop check won't work -> loop forever
+        // https://github.com/solid/solid-ui/issues/366
+        if (this.div.scrollHeight === 0) {
+          // console.log('    chat/loadMoreWhereNeeded: trying later...')
+          setTimeout(loadMoreWhereNeeded, 2000) // couple be less
+          lock = false
+          return // abandon now, do later
+        }
+        // console.log('    chat/loadMoreWhereNeeded: Going now')
+        const scrollBottom = this.div.scrollHeight - this.div.scrollTop
+        debug.log('infinite scroll: adding above: top ' + this.div.scrollTop)
+        done = await this.earliest.this.messageTable.extendBackwards()
+        if (freeze) {
+          this.div.scrollTop = this.div.scrollHeight - scrollBottom
+        }
+        if (fixScroll) fixScroll()
+        if (done) break
+      }
+      while (
+        this.options.selectedMessage && // we started in the middle not at the bottom
+        this.div.scrollHeight - this.div.scrollTop - this.div.clientHeight < magicZone && // we are scrolled right to the bottom
+        this.latest.this.messageTable &&
+        !this.latest.this.messageTable.final && // there is more data to come
+        this.latest.this.messageTable.extendForwards
+      ) {
+        const scrollTop = this.div.scrollTop
+        debug.log(
+          'infinite scroll: adding below: bottom: ' +
+          (this.div.scrollHeight - this.div.scrollTop - this.div.clientHeight)
+        )
+        done = await this.latest.this.messageTable.extendForwards() // then add more data on the bottom
+        if (freeze) {
+          this.div.scrollTop = scrollTop // while adding below keep same things in view
+        }
+        if (fixScroll) fixScroll()
+        if (done) break
+      }
+      lock = false
+    }
+
+    async function loadInitialContent () {
+      function yank () {
+        selectedMessageTable.selectedElement.scrollIntoView({ block: 'center' })
+      }
+
+      // During initial load ONLY keep scroll to selected thing or bottom
+      function fixScroll () {
+        if (this.options.selectedElement) {
+          this.options.selectedElement.scrollIntoView({ block: 'center' }) // align tops or bottoms
+        } else {
+          if (this.liveMessageTable.inputRow.scrollIntoView) {
+            this.liveMessageTable.inputRow.scrollIntoView(this.newestFirst) // align tops or bottoms
+          }
+        }
+      }
+
+      let live, selectedDocument
+      if (this.options.selectedMessage) {
+        selectedDocument = this.options.selectedMessage.doc()
+        const now = new Date()
+        const todayDocument = this.dateFolder.leafDocumentFromDate(now)
+        live = todayDocument.sameTerm(selectedDocument)
+      }
+      let selectedMessageTable
+      if (this.options.selectedMessage && !live) {
+        const selectedDate = this.dateFolder.dateFromLeafDocument(selectedDocument)
+        selectedMessageTable = await createMessageTable(selectedDate, live)
+        this.div.appendChild(selectedMessageTable)
+        this.earliest.this.messageTable = selectedMessageTable
+        this.latest.this.messageTable = selectedMessageTable
+        yank()
+        setTimeout(yank, 1000) // @@ kludge - restore position distubed by other cHANGES
+      } else {
+        // Live end
+        await appendCurrentMessages()
+        this.earliest.this.messageTable = this.liveMessageTable
+        this.latest.this.messageTable = this.liveMessageTable
+      }
+
+      await loadMoreWhereNeeded(null, fixScroll)
+      this.div.addEventListener('scroll', loadMoreWhereNeeded)
+      if (this.options.solo) {
+        document.body.addEventListener('scroll', loadMoreWhereNeeded)
+      }
+    }
+
+    // Body of main constructor
+
+    this.chatChannel = chatChannel
+    this.options = options || {}
+
+    this.options.authorAboveContent = true
+    this.newestFirst = this.options.newestFirst === '1' || this.options.newestFirst === true // hack for now
+    this.channelObject = new ChatChannel(chatChannel, this.options)
+    this.dateFolder = this.channelObject.dateFolder
+
+    this.div = dom.createElement('this.div')
+    this.statusArea = this.div.appendChild(dom.createElement('this.div'))
+    this.userContext = { dom, statusArea,  div: this.statusArea } // logged on state, pointers to user's stuff
+
+    this.liveMessageTable = null
+
+    this.earliest = { messageTable: null } // Stuff about each end of the loaded days
+    this.latest = { messageTable: null }
+
+    this.messageTable = dom.createElement('table')
+
+    // this.messageTable.extendBackwards = extendBackwards // Make function available to scroll stuff -- still needed?
+    // this.messageTable.extendForwards = extendForwards // Make function available to scroll stuff
+
+    this.messageTable.date = date
+    const chatDocument = this.dateFolder.leafDocumentFromDate(date)
+    this.messageTable.chatDocument = chatDocument
+
+    this.messageTable.fresh = false
+    this.messageTable.setAttribute('style', 'width: 100%;') // fill that this.div!
+
+    if (live) {
+      this.messageTable.final = true
+      this.liveMessageTable = this.messageTable
+      this.latest.this.messageTable = this.messageTable
+      const tr = renderMessageEditor(this.messageTable, this.userContext, this.options)
+      if (this.newestFirst) {
+        this.messageTable.insertBefore(tr, this.messageTable.firstChild) // If newestFirst
+      } else {
+        this.messageTable.appendChild(tr) // not newestFirst
+      }
+      this.messageTable.inputRow = tr
+    }
+
+
+    let lock = false
+
+    await loadInitialContent()
+
+  }// InfiniteScrolChat constructor
+
+  /**
+   * Renders a chat message inside a `this.messageTable`
+   */
+  insertMessageIntoTable (messageTable, bindings, fresh) {
+    const messageRow = renderMessageRow(
+      bindings,
+      fresh,
+      this.options,
+      this.userContext
+    )
+    const message = messageRow.AJAR_subject
+    if (options.selectedMessage && options.selectedMessage.sameTerm(message)) {
+      messageRow.style.backgroundColor = 'yellow'
+      this.options.selectedElement = messageRow
+      this.messageTable.selectedElement = messageRow
+    }
+
+    let done = false
+    for (let ele = this.messageTable.firstChild; ; ele = ele.nextSibling) {
+      if (!ele) {
+        // empty
+        break
+      }
+      this.newestFirst = this.options.newestfirst === true
+      const dateString = messageRow.AJAR_date
+      if (
+        (dateString > ele.AJAR_date && newestFirst) ||
+        (dateString < ele.AJAR_date && !newestFirst)
+      ) {
+        this.messageTable.insertBefore(messageRow, ele)
+        done = true
+        break
+      }
+    }
+    if (!done) {
+      this.messageTable.appendChild(messageRow)
+    }
+  } // method interMessageIntoTable
+
+
+
+  syncMessages (about, messageTable) {
+    const displayed = {}
+    let ele, ele2
+    for (ele = this.messageTable.firstChild; ele; ele = ele.nextSibling) {
+      if (ele.AJAR_subject) {
+        displayed[ele.AJAR_subject.uri] = true
+      }
+    }
+
+    const messages = store
+      .statementsMatching(
+        about,
+        ns.wf('message'),
+        null,
+        this.messageTable.chatDocument
+      )
+      .map(st => {
+        return st.object
+      })
+    const stored = {}
+    messages.forEach(function (m) {
+      stored[m.uri] = true
+      if (!displayed[m.uri]) {
+        addMessage(m, this.messageTable)
+      }
+    })
+
+    // eslint-disable-next-line space-in-parens
+    for (ele = this.messageTable.firstChild; ele;) {
+      ele2 = ele.nextSibling
+      if (ele.AJAR_subject && !stored[ele.AJAR_subject.uri]) {
+        this.messageTable.removeChild(ele)
+      }
+      ele = ele2
+    }
+    for (ele = this.messageTable.firstChild; ele; ele = ele.nextSibling) {
+      if (ele.AJAR_subject) {
+        // Refresh thumbs up etc
+        widgets.refreshTree(ele) // Things inside may have changed too
+      }
+    }
+  } // syncMessages
+
+  renderMessageTable (date, live) {
+    let scrollBackButton;
+    let scrollForwardButton;
+
+    /// /////////////////   Scroll down adding more above
+
+    extendBackwards () {
+      const done = await insertPreviousMessages(true)
+      if (done) {
+        if (scrollBackButton) {
+          scrollBackButton.firstChild.setAttribute(
+            'src',
+            icons.iconBase + 'noun_T-Block_1114655_000000.svg'
+          ) // T
+          scrollBackButton.disabled = true
+        }
+        this.messageTable.initial = true
+      } else {
+        this.messageTable.extendedBack = true
+      }
+      setScrollBackButtonIcon()
+      return done
+    }
+
+    setScrollBackButtonIcon () {
+      if (!scrollBackButton) {
+        return
+      }
+      const sense = this.messageTable.extendedBack ? !this.newestFirst : this.newestFirst
+      const scrollBackIcon = this.messageTable.initial
+        ? 'noun_T-Block_1114655_000000.svg'
+        : getScrollbackIcon(sense)
+      scrollBackButton.firstChild.setAttribute(
+        'src',
+        icons.iconBase + scrollBackIcon
+      )
+
+      function getScrollbackIcon (sense) {
+        return sense ? 'noun_1369241.svg' : 'noun_1369237.svg'
+      }
+    }
+
+    scrollBackButtonHandler (_event) {
+      if (this.messageTable.extendedBack) {
+        removePreviousMessages(true, this.messageTable)
+        this.messageTable.extendedBack = false
+        setScrollBackButtonIcon()
+      } else {
+        await extendBackwards()
+      }
+    }
+
+    /// ////////////// Scroll up adding more below
+
+    async extendForwards () {
+      const done = await insertPreviousMessages(false)
+      if (done) {
+        scrollForwardButton.firstChild.setAttribute(
+          'src',
+          icons.iconBase + 'noun_T-Block_1114655_000000.svg'
+        )
+        scrollForwardButton.disabled = true
+        this.messageTable.final = true
+      } else {
+        this.messageTable.extendedForwards = true
+      }
+      setScrollForwardButtonIcon()
+      return done
+    }
+
+    function setScrollForwardButtonIcon () {
+      const sense = this.messageTable.extendedForwards ? !this.newestFirst : this.newestFirst // noun_T-Block_1114657_000000.svg
+      const scrollForwardIcon = this.messageTable.final
+        ? 'noun_T-Block_1114657_000000.svg'
+        : getScrollForwardButtonIcon(sense)
+      scrollForwardButton.firstChild.setAttribute(
+        'src',
+        icons.iconBase + scrollForwardIcon
+      )
+
+      function getScrollForwardButtonIcon (sense) {
+        return !sense ? 'noun_1369241.svg' : 'noun_1369237.svg'
+      }
+    }
+
+    async function scrollForwardButtonHandler (_event) {
+      if (this.messageTable.extendedForwards) {
+        removePreviousMessages(false, this.messageTable)
+        this.messageTable.extendedForwards = false
+        setScrollForwardButtonIcon()
+      } else {
+        await extendForwards() // async
+        this.latest.this.messageTable.scrollIntoView(this.newestFirst)
+      }
+    }
+
+    /// Body of renderMessagtable
+    //
+    // @@ listen for swipe past end event not just button
+    if (this.options.infinite) {
+      const scrollBackButtonTR = dom.createElement('tr')
+      const scrollBackButtonCell = scrollBackButtonTR.appendChild(
+        dom.createElement('td')
+      )
+      // up traingles: noun_1369237.svg
+      // down triangles: noun_1369241.svg
+      const scrollBackIcon = this.newestFirst
+        ? 'noun_1369241.svg'
+        : 'noun_1369237.svg' // down and up arrows respoctively
+      scrollBackButton = widgets.button(
+        dom,
+        icons.iconBase + scrollBackIcon,
+        'Previous messages ...'
+      )
+      scrollBackButtonCell.style = 'width:3em; height:3em;'
+      scrollBackButton.addEventListener('click', scrollBackButtonHandler, false)
+      this.messageTable.extendedBack = false
+      scrollBackButtonCell.appendChild(scrollBackButton)
+      setScrollBackButtonIcon()
+
+      const dateCell = scrollBackButtonTR.appendChild(dom.createElement('td'))
+      dateCell.style =
+        'text-align: center; vertical-align: middle; color: #888; font-style: italic;'
+      dateCell.textContent = widgets.shortDate(date.toISOString(), true) // no time, only date
+
+      // @@@@@@@@@@@ todo move this button to other end of  message cell, o
+      const scrollForwardButtonCell = scrollBackButtonTR.appendChild(
+        dom.createElement('td')
+      )
+      const scrollForwardIcon = this.newestFirst
+        ? 'noun_1369241.svg'
+        : 'noun_1369237.svg' // down and up arrows respoctively
+      scrollForwardButton = widgets.button(
+        dom,
+        icons.iconBase + scrollForwardIcon,
+        'Later messages ...'
+      )
+      scrollForwardButtonCell.appendChild(scrollForwardButton)
+      scrollForwardButtonCell.style = 'width:3em; height:3em;'
+      scrollForwardButton.addEventListener(
+        'click',
+        scrollForwardButtonHandler,
+        false
+      )
+      this.messageTable.extendedForward = false
+      setScrollForwardButtonIcon()
+
+      this.messageTable.extendedForwards = false
+
+      if (!this.newestFirst) {
+        // opposite end from the entry field
+        this.messageTable.insertBefore(scrollBackButtonTR, this.messageTable.firstChild) // If not this.newestFirst
+      } else {
+        this.messageTable.appendChild(scrollBackButtonTR) //  this.newestFirst
+      }
+    }
+
+    const sts = store.statementsMatching(null, ns.wf('message'), null, chatDocument)
+    if (!live && sts.length === 0) {
+      // not todays
+      // no need buttomns at the moment
+      // this.messageTable.style.visibility = 'collapse' // Hide files with no messages
+    }
+    sts.forEach(st => {
+      addMessage(st.object, this.messageTable)
+    })
+    this.messageTable.fresh = true
+
+    // loadMessageTable(this.messageTable, chatDocument)
+    this.messageTable.fresh = false
+    return this.messageTable
+  } // renderMessageTable
+
+
+
+} // InfiniteScrolChat class
+
+ export async function infiniteMessageArea2 (dom, wasStore, chatChannel, options) {
+   const infiniteObject = new InfiniteScrolChat(chatChannel, options)
+   return infiniteObject.this.div
+
+}
+
+export async function infiniteMessageArea (dom, wasStore, chatChannel, options) {
+  // ///////////////////////////////////////////////////////////////////////
+
+  return this.div
+}

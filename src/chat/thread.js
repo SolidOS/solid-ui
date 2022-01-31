@@ -92,33 +92,7 @@ export function thread (dom, kb, subject, messageStore, options) {
       // titlefield.disabled = true
       field.setAttribute('class', 'pendingedit')
       field.disabled = true
-      const sts = []
-      const now = new Date()
-      const timestamp = '' + now.getTime()
-      const dateStamp = $rdf.term(now)
-      // http://www.w3schools.com/jsref/jsref_obj_date.asp
-      const message = kb.sym(messageStore.uri + '#' + 'Msg' + timestamp)
-
-      sts.push(
-        new $rdf.Statement(subject, ns.wf('message'), message, messageStore)
-      )
-      // sts.push(new $rdf.Statement(message, ns.dc('title'), kb.literal(titlefield.value), messageStore))
-      sts.push(
-        new $rdf.Statement(
-          message,
-          ns.sioc('content'),
-          kb.literal(field.value),
-          messageStore
-        )
-      )
-      sts.push(
-        new $rdf.Statement(message, DCT('created'), dateStamp, messageStore)
-      )
-      if (me) {
-        sts.push(
-          new $rdf.Statement(message, ns.foaf('maker'), me, messageStore)
-        )
-      }
+      const { message, dateStamp, sts } = appendMsg(field.value)
 
       const sendComplete = function (uri, success, body) {
         if (!success) {
@@ -128,7 +102,7 @@ export function thread (dom, kb, subject, messageStore, options) {
         } else {
           const bindings = {
             '?msg': message,
-            '?content': kb.literal(field.value),
+            '?content': store.literal(field.value),
             '?date': dateStamp,
             '?creator': me
           }
@@ -188,6 +162,106 @@ export function thread (dom, kb, subject, messageStore, options) {
     return form
   }
 
+  /* const sendMessage = function (oldMsg, options) { // alain
+    // titlefield.setAttribute('class','pendingedit')
+    // titlefield.disabled = true
+    field.setAttribute('class', 'pendingedit')
+    field.disabled = true
+    const sts = []
+    const now = new Date()
+    const timestamp = '' + now.getTime()
+    const dateStamp = $rdf.term(now)
+    // http://www.w3schools.com/jsref/jsref_obj_date.asp
+    const message = store.sym(messageStore.uri + '#' + 'Msg' + timestamp)
+
+    if (options === 'edit' || options === 'delete') {
+      sts.push(
+        new $rdf.Statement(mostRecentVersion(oldMsg), DCT('isReplacedBy'), message, messageStore)
+      )
+    } else {
+      sts.push(
+        new $rdf.Statement(subject, ns.wf('message'), message, messageStore)
+      )
+    }
+    // sts.push(new $rdf.Statement(message, ns.dc('title'), store.literal(titlefield.value), messageStore))
+    const msgBody = options !== 'delete' ? field.value : `message deleted\nby ${nick(me)}`
+    sts.push(
+      new $rdf.Statement(
+        message,
+        ns.sioc('content'),
+        store.literal(msgBody),
+        messageStore
+      )
+    )
+    sts.push(
+      new $rdf.Statement(message, DCT('created'), dateStamp, messageStore)
+    )
+    if (me) {
+      sts.push(
+        new $rdf.Statement(message, ns.foaf('maker'), me, messageStore)
+      )
+    }
+
+    const sendComplete = function (uri, success, body) {
+      if (!success) {
+        form.appendChild(
+          UI.widgets.errorMessageBlock(dom, 'Error writing message: ' + body)
+        )
+      } else {
+        const bindings = {
+          '?msg': message,
+          '?content': store.literal(field.value),
+          '?date': dateStamp,
+          '?creator': me
+        }
+        renderMessage(bindings, false) // not green
+
+        field.value = '' // clear from out for reuse
+        field.setAttribute('class', '')
+        field.disabled = false
+      }
+    }
+    updater.update([], sts, sendComplete)
+  } */
+
+  const appendMsg = function (fieldValue, oldMsg = {}, options = '') { // alain
+    const sts = []
+    const now = new Date()
+    const timestamp = '' + now.getTime()
+    const dateStamp = $rdf.term(now)
+    // http://www.w3schools.com/jsref/jsref_obj_date.asp
+    const message = store.sym(messageStore.uri + '#' + 'Msg' + timestamp)
+
+    if (options === 'edit' || options === 'delete') {
+      sts.push(
+        new $rdf.Statement(mostRecentVersion(oldMsg), DCT('isReplacedBy'), message, messageStore)
+      )
+    } else {
+      sts.push(
+        new $rdf.Statement(subject, ns.wf('message'), message, messageStore)
+      )
+    }
+    // sts.push(new $rdf.Statement(message, ns.dc('title'), store.literal(titlefield.value), messageStore))
+    const msgBody = options !== 'delete' ? fieldValue : `message deleted\nby ${nick(me)}`
+    sts.push(
+      new $rdf.Statement(
+        message,
+        ns.sioc('content'),
+        store.literal(msgBody),
+        messageStore
+      )
+    )
+    sts.push(
+      new $rdf.Statement(message, DCT('created'), dateStamp, messageStore)
+    )
+    if (me) {
+      sts.push(
+        new $rdf.Statement(message, ns.foaf('maker'), me, messageStore)
+      )
+    }
+    return { message, dateStamp, sts }
+  }
+
   function nick (person) {
     const s = store.any(person, UI.ns.foaf('nick'))
     if (s) return '' + s.value
@@ -218,7 +292,7 @@ export function thread (dom, kb, subject, messageStore, options) {
         displayed[ele.AJAR_subject.uri] = true
       }
     }
-    const messages = kb.each(about, ns.wf('message'))
+    const messages = store.each(about, ns.wf('message'))
     const stored = {}
     messages.forEach(function (m) {
       stored[m.uri] = true
@@ -236,10 +310,20 @@ export function thread (dom, kb, subject, messageStore, options) {
       ele = ele2
     }
   }
-  const deleteMessage = function (message) {
-    const deletions = kb
-      .statementsMatching(message)
-      .concat(kb.statementsMatching(undefined, undefined, message))
+
+  const mostRecentVersion = function (message) {
+    let msg = message
+    // const listMsg = []
+    while (msg) {
+      // listMsg.push(msg)
+      msg = store.statementsMatching(message, DCT('isReplacedBy'))
+    }
+    return msg
+  }
+
+  const _deleteMessage = async function (message) { // alain: must delete message and all linked with isReplacedBy
+    // alain: check that me is not the author and ask for confirmation.
+    const deletions = await store.connectedStatements(message, messageStore)
     updater.update(deletions, [], function (uri, ok, body) {
       if (!ok) {
         announce.error('Cant delete messages:' + body)
@@ -252,9 +336,9 @@ export function thread (dom, kb, subject, messageStore, options) {
   const addMessage = function (message) {
     const bindings = {
       '?msg': message,
-      '?creator': kb.any(message, ns.foaf('maker')),
-      '?date': kb.any(message, DCT('created')),
-      '?content': kb.any(message, ns.sioc('content'))
+      '?creator': store.any(message, ns.foaf('maker')),
+      '?date': store.any(message, DCT('created')),
+      '?content': store.any(message, ns.sioc('content'))
     }
     renderMessage(bindings, true) // fresh from elsewhere
   }
@@ -333,10 +417,14 @@ export function thread (dom, kb, subject, messageStore, options) {
         sureButton.textContent = 'Delete message'
         td3.appendChild(sureButton).addEventListener(
           'click',
-          function (_event) {
+          function (_event) { // alain test for delete or edit depending on me = maker
             td3.removeChild(sureButton)
             td3.removeChild(cancelButton)
-            deleteMessage(message)
+            // deleteMessage(message) // alain or sendMessage(message, 'delete' or 'edit') //alain
+            if (me.value === store.any(message, ns.foaf('maker')).value) {
+              const { sts } = appendMsg() // alain
+              updater.update([], sts)
+            }
           },
           false
         )
@@ -379,7 +467,7 @@ export function thread (dom, kb, subject, messageStore, options) {
   function doneQuery () {
     messageTable.fresh = true // any new are fresh and so will be greenish
   }
-  kb.query(query, renderMessage, undefined, doneQuery)
+  store.query(query, renderMessage, undefined, doneQuery)
   div.refresh = function () {
     syncMessages(subject, messageTable)
   }
