@@ -5,29 +5,20 @@
 
 /* global $rdf */
 import { insertMessageIntoTable } from './infinite'
-
 import { messageToolbar, sentimentStripLinked } from './messageTools'
 import { findBookmarkDocument } from './bookmarks'
 import { mostRecentVersion, originalVersion } from './chatLogic'
-
 import * as debug from '../debug'
-import { authn } from '../authn/index'
 import { icons } from '../iconBase'
-import { store } from 'solid-logic'
+import { store, authn } from 'solid-logic'
 import { media } from '../media/index'
 import * as ns from '../ns'
 import * as pad from '../pad'
-// import * as rdf from 'rdflib' // pull in first avoid cross-refs
 import * as style from '../style'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
 
-// const UI = { authn, icons, ns, media, pad, rdf, store, style, utils, widgets }
-
 const dom = window.document
-
-// const store = store
-
 const messageBodyStyle = style.messageBodyStyle
 
 const label = utils.label

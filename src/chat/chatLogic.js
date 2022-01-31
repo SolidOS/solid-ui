@@ -4,9 +4,8 @@
  */
 
 import * as debug from '../debug'
-import { authn } from '../authn/index'
 import { DateFolder } from './dateFolder'
-import { store } from '../logic'
+import { store, authn } from '../logic'
 import * as ns from '../ns'
 import * as $rdf from 'rdflib' // pull in first avoid cross-refs
 import * as utils from '../utils'

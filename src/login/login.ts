@@ -20,18 +20,18 @@
  * @packageDocumentation
  */
 import { PaneDefinition } from 'pane-registry'
-import { Signup } from '../signup/signup.js'
-import * as widgets from '../widgets'
-import * as ns from '../ns.js'
-import { alert } from '../log'
-import * as debug from '../debug'
-import { textInputStyle, buttonStyle, commentStyle } from '../style'
+import { BlankNode, IndexedFormula, NamedNode, st, Statement } from 'rdflib'
 // eslint-disable-next-line camelcase
 import { Quad_Object } from 'rdflib/lib/tf-types'
-import { BlankNode, IndexedFormula, NamedNode, st, Statement, sym } from 'rdflib'
-import { solidLogicError, authn, AppDetails, AuthenticationContext, solidLogicSingleton, authUtil, typeIndexLogic, authSession, getSuggestedIssuers } from 'solid-logic'
-import { utils } from '../utils/index'
+import { AppDetails, AuthenticationContext, authn, authSession, CrossOriginForbiddenError, ensureTypeIndexes, FetchError, getSuggestedIssuers, NotFoundError, offlineTestID, SameOriginForbiddenError, solidLogicSingleton, UnauthorizedError } from 'solid-logic'
 import { loadIndex } from 'solid-logic/lib/typeIndex/typeIndex'
+import * as debug from '../debug'
+import { alert } from '../log'
+import * as ns from '../ns.js'
+import { Signup } from '../signup/signup.js'
+import { buttonStyle, commentStyle, textInputStyle } from '../style'
+import { utils } from '../utils/index'
+import * as widgets from '../widgets'
 
 /**
   * Resolves with the logged in user's WebID
@@ -100,17 +100,17 @@ export async function logInLoadPreferences (context: AuthenticationContext): Pro
     context.preferencesFile = preferencesFile
   } catch (err) {
     let m2: string
-    if (err instanceof solidLogicError.UnauthorizedError) {
+    if (err instanceof UnauthorizedError) {
       m2 = 'Ooops - you are not authenticated (properly logged in) to for me to read your preference file.  Try loggin out and logging in?'
       alert(m2)
-    } else if (err instanceof solidLogicError.CrossOriginForbiddenError) {
+    } else if (err instanceof CrossOriginForbiddenError) {
       m2 = `Unauthorized: Assuming preference file blocked for origin ${window.location.origin}`
       context.preferencesFileError = m2
       return context
-    } else if (err instanceof solidLogicError.SameOriginForbiddenError) {
+    } else if (err instanceof SameOriginForbiddenError) {
       m2 = 'You are not authorized to read your preference file. This may be because you are using an untrusted web app.'
       debug.warn(m2)
-    } else if (err instanceof solidLogicError.NotFoundError) {
+    } else if (err instanceof NotFoundError) {
       if (
         confirm(`You do not currently have a preference file. OK for me to create an empty one? ${(err as any).preferencesFile || ''}`)
       ) {
@@ -124,7 +124,7 @@ export async function logInLoadPreferences (context: AuthenticationContext): Pro
           new Error(`User declined to create a preference file at ${(err as any).preferencesFile || '(?)'}`)
         )
       }
-    } else if (err instanceof solidLogicError.FetchError) {
+    } else if (err instanceof FetchError) {
       m2 = `Strange: Error ${err.status} trying to read your preference file.${err.message}`
       alert(m2)
     } else {
@@ -258,7 +258,7 @@ export function registrationControl (
   const box = dom.createElement('div')
   context.div.appendChild(box)
 
-  return typeIndexLogic.ensureTypeIndexes(context)
+  return ensureTypeIndexes(context)
     .then(function () {
       box.innerHTML = '<table><tbody><tr></tr><tr></tr></tbody></table>' // tbody will be inserted anyway
       box.setAttribute('style', 'font-size: 120%; text-align: right; padding: 1em; border: solid gray 0.05em;')
@@ -346,7 +346,7 @@ export function registrationList (context: AuthenticationContext, options: {
   const box = dom.createElement('div')
   div.appendChild(box)
 
-  return typeIndexLogic.ensureTypeIndexes(context).then(_indexes => {
+  return ensureTypeIndexes(context).then(_indexes => {
     box.innerHTML = '<table><tbody></tbody></table>' // tbody will be inserted anyway
     box.setAttribute('style', 'font-size: 120%; text-align: right; padding: 1em; border: solid #eee 0.5em;')
     const table = box.firstChild as HTMLElement
@@ -478,7 +478,7 @@ function signInOrSignUpBox (
   })
 
   signInPopUpButton.addEventListener('click', () => {
-    const offline = authUtil.offlineTestID()
+    const offline = offlineTestID()
     if (offline) return setUserCallback(offline.uri)
 
     renderSignInPopup(dom)
@@ -637,7 +637,7 @@ export function loginStatusBox (
    } = {}
 ): HTMLElement {
   // 20190630
-  let me = authUtil.offlineTestID()
+  let me = offlineTestID()
   // @@ TODO Remove the need to cast HTML element to any
   const box: any = dom.createElement('div')
 
@@ -771,7 +771,7 @@ export function selectWorkspace (
   const noun = appDetails.noun
   const appPathSegment = appDetails.appPathSegment
 
-  const me = authUtil.offlineTestID()
+  const me = offlineTestID()
   const box = dom.createElement('div')
   const context: AuthenticationContext = { me: me, dom: dom, div: box }
 

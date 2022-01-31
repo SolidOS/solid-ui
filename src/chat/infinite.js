@@ -2,22 +2,19 @@
  * Contains the [[infiniteMessageArea]] class
  * @packageDocumentation
  */
+// import { findBookmarkDocument } from './bookmarks'
+import * as $rdf from 'rdflib' // pull in first avoid cross-refs
+import { store } from 'solid-logic'
 import * as debug from '../debug'
 import { icons } from '../iconBase'
-import { store } from 'solid-logic'
-import * as login from '../login/login'
-import { media } from '../media/index'
 import * as ns from '../ns'
-// import * as pad from '../pad'
-// import { DateFolder } from './dateFolder'
-import { mostRecentVersion, ChatChannel, isDeleted } from './chatLogic'
-import { renderMessageEditor, renderMessageRow } from './message'
-// import { findBookmarkDocument } from './bookmarks'
-
-import * as $rdf from 'rdflib' // pull in first avoid cross-refs
 // import * as style from '../style'
 // import * as utils from '../utils'
 import * as widgets from '../widgets'
+// import * as pad from '../pad'
+// import { DateFolder } from './dateFolder'
+import { ChatChannel, isDeleted, mostRecentVersion } from './chatLogic'
+import { renderMessageEditor, renderMessageRow } from './message'
 
 // const UI = { authn, icons, ns, media, pad, $rdf, store, style, utils, widgets }
 

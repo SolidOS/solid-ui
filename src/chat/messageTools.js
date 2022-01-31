@@ -22,11 +22,6 @@ import { authn, store } from 'solid-logic'
 import { mostRecentVersion } from './chatLogic'
 import { switchToEditor } from './message'
 
-const UI = { icons, ns, rdf, utils, widgets }
-// import { infiniteMessageArea } from './infinite.js'
-// import { renderMessage, creatorAndDate } from './message'
-// import * as debug from '../debug'
-
 const dom = window.document
 
 // THE UNUSED ICONS are here as reminders for possible future functionality
