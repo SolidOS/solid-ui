@@ -1,5 +1,5 @@
 import { DataBrowserContext } from 'pane-registry'
-import { LiveStore } from 'solid-logic'
+import { LiveStore } from 'rdflib'
 
 export function createDataBrowserContext (
   dom: HTMLDocument,

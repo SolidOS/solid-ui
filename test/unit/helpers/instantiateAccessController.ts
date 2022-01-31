@@ -1,7 +1,6 @@
 import { AccessController } from '../../../src/acl/access-controller'
 import { createDataBrowserContext } from './createDataBrowserContext'
-import { sym } from 'rdflib'
-import { LiveStore } from 'solid-logic'
+import { sym, LiveStore } from 'rdflib'
 
 export function instantiateAccessController (dom: HTMLDocument, store: LiveStore) {
   const subject = sym('https://test.test#')
