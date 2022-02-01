@@ -7,7 +7,7 @@ window.$rdf = UI.rdf
 document.addEventListener('DOMContentLoaded', function () {
   /// ///////////////////////////////////////////
 
-  var kb = UI.store
+  var kb = UI.solidLogicLib.store
   var dom = document
 
   var uri = window.location.href

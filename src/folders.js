@@ -5,13 +5,13 @@
 
 import * as debug from './debug'
 import { icons } from './iconBase'
-import { store } from 'solid-logic'
+import { solidLogicSingleton } from 'solid-logic'
 import * as ns from './ns'
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
 import * as style from './style'
 import * as widgets from './widgets'
 
-const UI = { icons, ns, rdf, store, style, widgets }
+const UI = { icons, ns, rdf, style, widgets }
 
 export function deleteRecursive (kb, folder) {
   // eslint-disable-next-line promise/param-names
@@ -75,7 +75,7 @@ function forAllFiles (folder, kb, action) {
  */
 /* global document */
 export function deleteFolder (folder, store, dom) {
-  store = store || UI.store
+  store = store || solidLogicSingleton.store
   if (typeof docuent !== 'undefined') {
     dom = dom || document
   }

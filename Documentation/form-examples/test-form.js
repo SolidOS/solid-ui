@@ -7,7 +7,7 @@ window.$rdf = UI.rdf
 document.addEventListener('DOMContentLoaded', async function () {
   /// ///////////////////////////////////////////
 
-  var kb = UI.store
+  var kb = UI.solidLogicLib.store
 
   kb.updater.editable = // uri => true // Force modifyable UX // @@@
     function (uri) {

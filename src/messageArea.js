@@ -3,17 +3,17 @@
 
 import { icons } from './iconBase'
 import * as login from './login/login'
-import { store } from 'solid-logic'
+import { solidLogicSingleton } from 'solid-logic'
 import * as ns from './ns'
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
 import * as style from './style'
 import * as utils from './utils'
 import * as widgets from './widgets'
 
-const UI = { icons, ns, rdf, store, style, widgets }
+const UI = { icons, ns, rdf, style, widgets }
 
 export function messageArea (dom, kb, subject, messageStore, options) {
-  kb = kb || UI.store
+  kb = kb || solidLogicSingleton.store
   messageStore = messageStore.doc() // No hash
   const ns = UI.ns
   const WF = rdf.Namespace('http://www.w3.org/2005/01/wf/flow#')
@@ -33,7 +33,7 @@ export function messageArea (dom, kb, subject, messageStore, options) {
 
   let me
 
-  const updater = UI.store.updater
+  const updater = solidLogicSingleton.store.updater
 
   const anchor = function (text, term) {
     // If there is no link return an element anyway
@@ -180,7 +180,7 @@ export function messageArea (dom, kb, subject, messageStore, options) {
   }
 
   function nick (person) {
-    const s = UI.store.any(person, UI.ns.foaf('nick'))
+    const s = solidLogicSingleton.store.any(person, UI.ns.foaf('nick'))
     if (s) return '' + s.value
     return '' + utils.label(person)
   }
@@ -188,7 +188,7 @@ export function messageArea (dom, kb, subject, messageStore, options) {
   function creatorAndDate (td1, creator, date, message) {
     const nickAnchor = td1.appendChild(anchor(nick(creator), creator))
     if (creator.uri) {
-      UI.store.fetcher.nowOrWhenFetched(creator.doc(), undefined, function (
+      solidLogicSingleton.store.fetcher.nowOrWhenFetched(creator.doc(), undefined, function (
         _ok,
         _body
       ) {

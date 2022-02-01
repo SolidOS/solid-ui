@@ -18,8 +18,8 @@ This example shows a trivial use of the `appendForm` function, in conjunction wi
       const subject = UI.rdf.namedNode('http://example.com/#subject')
       const form = UI.rdf.namedNode('http://example.com/#form')
       const doc = subject.doc()
-      UI.store.add(UI.rdf.namedNode('http://example.com/#form'), UI.ns.rdf('type'), UI.ns.ui('Comment'))
-      UI.store.add(UI.rdf.namedNode('http://example.com/#form'), UI.ns.ui('contents'), '[a trivial form with just a comment]')
+      UI.solidLogicLib.store.add(UI.rdf.namedNode('http://example.com/#form'), UI.ns.rdf('type'), UI.ns.ui('Comment'))
+      UI.solidLogicLib.store.add(UI.rdf.namedNode('http://example.com/#form'), UI.ns.ui('contents'), '[a trivial form with just a comment]')
       UI.widgets.appendForm(document, container, already, subject, form, doc)
       return container
     }}
@@ -36,8 +36,8 @@ This example shows a trivial use of the `appendForm` function, in conjunction wi
       const subject = UI.rdf.namedNode('https://michielbdejong.inrupt.net/profile/card#me')
       const form = UI.rdf.namedNode('https://timbl.com/timbl/Public/Test/Forms/individualForm.ttl#form1')
       const doc = subject.doc()
-      const loadProfile = UI.store.fetcher.load(doc)
-      const loadForm = UI.store.fetcher.load(form.doc())
+      const loadProfile = UI.solidLogicLib.store.fetcher.load(doc)
+      const loadForm = UI.solidLogicLib.store.fetcher.load(form.doc())
       Promise.all([loadProfile,loadForm]).then(() => {
         UI.widgets.appendForm(document, container, already, subject, form, doc)
       })

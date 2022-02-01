@@ -13,10 +13,10 @@ import * as rdf from 'rdflib' // pull in first avoid cross-refs
 import * as style from '../style'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
-import { authn, store } from 'solid-logic'
+import { store, registerInTypeIndex, authn } from 'solid-logic'
 import { findAppInstances } from '../login/login'
 
-const UI = { icons, ns, media, pad, rdf, store, style, utils, widgets }
+const UI = { icons, ns, media, pad, rdf, style, utils, widgets }
 const $rdf = UI.rdf
 
 const BOOK = $rdf.Namespace('http://www.w3.org/2002/01/bookmark#')
@@ -115,7 +115,7 @@ export async function findBookmarkDocument (userContext) {
         alert.error("Can't make fresh bookmark file:" + e)
         return userContext
       }
-      await authn.registerInTypeIndex(
+      await registerInTypeIndex(
         userContext,
         newBookmarkFile,
         theClass,

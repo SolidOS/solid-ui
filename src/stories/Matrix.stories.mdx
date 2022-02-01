@@ -16,7 +16,7 @@ More complex examples can be investigated on the
     {() => {
       const testDocURI = "https://pod.example/"
       const testDoc = UI.rdf.sym(testDocURI)
-      const kb = UI.store
+      const kb = UI.solidLogicLib.store
       kb.removeMany(undefined, undefined, undefined, testDoc)
       const turtle = `@prefix :  <#>.
 @prefix foaf:  <http://xmlns.com/foaf/0.1/>.

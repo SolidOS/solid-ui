@@ -17,7 +17,7 @@ The inputs will be stored to [https://example-user.inrupt.net/public/example-not
         {() => {
           const pad = UI.rdf.namedNode('https://example-user.inrupt.net/public/example-notepad/index.ttl#this')
           const me = new UI.rdf.NamedNode('https://example-user.inrupt.net/profile/card#me')
-          const subject = UI.store.sym('https://test.test#')
+          const subject = UI.solidLogicLib.store.sym('https://test.test#')
           const options = {}
           return UI.pad.notepad(document, pad.doc(), subject, me, options)
         }}
@@ -32,7 +32,7 @@ The inputs will be stored to [https://example-user.inrupt.net/public/example-not
       const me = new UI.rdf.NamedNode('https://example-user.inrupt.net/profile/card#me')
       const structure = document.createElement('div')
       const container = document.createElement('div')
-      const subject = UI.store.sym('https://test.test#')
+      const subject = UI.solidLogicLib.store.sym('https://test.test#')
       const pad = UI.rdf.namedNode('https://sharonstrats.inrupt.net/public/edu.mit.solid.pane.pad/id1584238219755/index.ttl#this')
       const options = { statusArea: container }
       return UI.pad.manageParticipation(document, structure, pad.doc(), subject, me, options)
@@ -48,7 +48,7 @@ This method converts a pad.ttl document to HTML.
   <Story name="notepadToHTML">
     {() => {
       const div = document.createElement("div")
-      const kb = UI.store
+      const kb = UI.solidLogicLib.store
       const fetcher = UI.rdf.fetcher(kb)
       const pad = UI.rdf.namedNode('https://sharonstrats.inrupt.net/public/edu.mit.solid.pane.pad/id1584238219755/index.ttl#this')
       fetcher.load(pad.doc()).then(() => {
@@ -85,7 +85,7 @@ Creates the table with the list of participants that have contributed to the giv
     {() => {
       const div = document.createElement("div")
       const table = document.createElement('table');
-      const kb = UI.store
+      const kb = UI.solidLogicLib.store
       const fetcher = UI.rdf.fetcher(kb)
       const pad = UI.rdf.namedNode('https://sharonstrats.inrupt.net/public/edu.mit.solid.pane.pad/id1584238219755/index.ttl#this')
       fetcher.load(pad.doc()).then(() => {
@@ -107,7 +107,7 @@ Creates the table with the list of participants that have contributed to the giv
   <Story name="participationObject">
     {() => {
       const container = document.createElement("pre")
-      const kb = UI.store
+      const kb = UI.solidLogicLib.store
       const subject = kb.sym('https://test.test#');
       const fetcher = UI.rdf.fetcher(kb)
       const pad = UI.rdf.namedNode('https://sharonstrats.inrupt.net/public/edu.mit.solid.pane.pad/id1584238219755/index.ttl#this')

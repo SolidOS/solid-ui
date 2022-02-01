@@ -48,7 +48,7 @@ Find something we have as explicit image data for the thing
     {() => {
       const person = UI.rdf.namedNode('https://person.example/1#me')
       const photo = UI.rdf.namedNode('https://michielbdejong.com/img/me.jpg')
-      UI.store.add(person, UI.ns.vcard('hasPhoto'), photo)
+      UI.solidLogicLib.store.add(person, UI.ns.vcard('hasPhoto'), photo)
       return UI.widgets.findImage(person)
     }}
   </Story>
@@ -61,7 +61,7 @@ Find something we have as explicit image data for the thing
     {() => {
       const person = UI.rdf.namedNode('https://person.example/2#me')
       const photo = UI.rdf.namedNode('https://michielbdejong.com/img/me.jpg')
-      UI.store.add(person, UI.ns.foaf('img'), photo)
+      UI.solidLogicLib.store.add(person, UI.ns.foaf('img'), photo)
       return UI.widgets.findImage(person)
     }}
   </Story>
@@ -144,7 +144,7 @@ Set of suitable images
     {
       () => {
         const myTrip = UI.rdf.namedNode('http://example.com/#trip')
-        UI.store.add(myTrip, UI.ns.rdf('type'), UI.ns.trip('Trip'))
+        UI.solidLogicLib.store.add(myTrip, UI.ns.rdf('type'), UI.ns.trip('Trip'))
         const img = document.createElement('img')
         img.setAttribute('style', 'height:50px;width:50px;')
         UI.widgets.setImage(img, myTrip)

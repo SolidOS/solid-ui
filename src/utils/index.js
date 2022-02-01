@@ -9,7 +9,7 @@ import * as ns from '../ns'
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
 import { label } from './label'
 
-const UI = { log, ns, rdf, store }
+const UI = { log, ns, rdf }
 
 export {
   addLoadEvent, // not used anywhere
@@ -318,7 +318,7 @@ function getTerm (target) {
       }
     case '':
     case 'selected': // header TD
-      return getAbout(UI.store, target) // kb to be changed
+      return getAbout(store, target) // kb to be changed
     case 'undetermined selected':
       return target.nextSibling
         ? st.predicate
@@ -492,7 +492,7 @@ function ontologyLabel (term) {
 }
 
 function labelWithOntology (x, initialCap) {
-  const t = UI.store.findTypeURIs(x)
+  const t = store.findTypeURIs(x)
   if (t[UI.ns.rdf('Predicate').uri] || t[UI.ns.rdfs('Class').uri]) {
     return label(x, initialCap) + ' (' + ontologyLabel(x) + ')'
   }
@@ -516,7 +516,7 @@ function predicateLabel (p, inverse) {
   const lab = label(p)
   if (inverse) {
     // If we know an inverse predicate, use its label
-    const ip = UI.store.any(p, UI.ns.owl('inverseOf')) || UI.store.any(undefined, UI.ns.owl('inverseOf'), p)
+    const ip = store.any(p, UI.ns.owl('inverseOf')) || store.any(undefined, UI.ns.owl('inverseOf'), p)
     if (ip) return label(ip)
     if (lab === 'type') return '...' // Not "is type of"
     return 'is ' + lab + ' of'

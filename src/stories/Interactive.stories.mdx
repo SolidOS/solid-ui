@@ -15,7 +15,7 @@ import { action } from '@storybook/addon-actions'
     {() => {
       const div = document.createElement('div')
       UI.widgets
-        .askName(document, UI.store, div)
+        .askName(document, UI.solidLogicLib.store, div)
         .then((name) => window.alert(`You picked "${name}"`))
       return div
     }}
@@ -33,7 +33,7 @@ Accepts dropping URLs onto it to add attachments to it.
   <Story name="Attachment list">
     {() => {
       const div = document.createElement('div')
-      UI.store.add(
+      UI.solidLogicLib.store.add(
         UI.rdf.namedNode(
           'https://example-user.inrupt.net/public/some-message.ttl#this'
         ),

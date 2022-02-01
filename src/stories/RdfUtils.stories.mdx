@@ -14,12 +14,12 @@ Retrieve all RDF class URIs from solid-ui's RDF store
 <Canvas withSource="open">
   <Story name="allClassUris" decorators={[rawJsonDecorator]}>
     { () => {
-        UI.store.add(
+        UI.solidLogicLib.store.add(
           UI.rdf.namedNode('http://example.com/#some-thing'),
           UI.rdf.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
           UI.rdf.namedNode('http://example.com/#some-class')
         );
-        UI.store.add(
+        UI.solidLogicLib.store.add(
           UI.rdf.namedNode('http://example.com/#some-other-thing'),
           UI.rdf.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
           UI.rdf.namedNode('http://example.com/#some-other-class')

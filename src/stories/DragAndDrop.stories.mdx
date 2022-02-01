@@ -56,7 +56,7 @@ The function `uploadFiles` could for example be used in the droppedFileHandler f
         target.style = "padding: 1em; text-align:center; border: 1px solid black; width: 100px; height: 100px"
         target.appendChild(document.createTextNode("Drop a file (document, picture, ...) here"))
         UI.widgets.makeDropTarget(target, action('dropped uri'), (files) => {
-          UI.widgets.uploadFiles(UI.store.fetcher, files, fileBase, pictureBase, action('file uploaded successfully'))
+          UI.widgets.uploadFiles(UI.solidLogicLib.store.fetcher, files, fileBase, pictureBase, action('file uploaded successfully'))
         })
         return target
     }}

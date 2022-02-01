@@ -7,7 +7,7 @@ import { action } from '@storybook/addon-actions'
 
 export const loadTurtleDecorator = (Story) => {
   const { render, data } = Story()
-  UI.rdf.parse(data, UI.store, location.origin, 'text/turtle', error => {
+  UI.rdf.parse(data, UI.solidLogicLib.store, location.origin, 'text/turtle', error => {
     if (error) console.error(error)
   })
   const div = document.createElement("div");
@@ -25,7 +25,7 @@ In this first example we'll see how you can generate a tabs widget using triples
 RDF. See [API documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_tabs_.html#tabwidget) for more
 info about how to use the tabWidget.
 
-The triples belows shows the minimum data you need to start using the tabWidget in combination with UI.store.
+The triples belows shows the minimum data you need to start using the tabWidget in combination with store.
 
 <Canvas>
     <Story name="rdf collection" decorators={[loadTurtleDecorator]}>

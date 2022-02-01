@@ -39,14 +39,14 @@ document.body.appendChild(myButton)
 Or a chat widget:
 ```js
 const chatChannel = 'https://example-user.inrupt.net/public/example-chat/index.ttl#this'
-const chat = UI.infiniteMessageArea(document, UI.store, UI.rdf.namedNode(chatChannel))
+const chat = UI.infiniteMessageArea(document, store, UI.rdf.namedNode(chatChannel))
 document.body.appendChild(chat)
 ```
 
 Or a full ACL Control Box:
 ```js
 const exampleFolder = 'https://example-user.inrupt.net/public/public-control/'
-const aclControlBox = UI.aclControl.ACLControlBox5(UI.rdf.namedNode(exampleFolder), { dom: document }, '', UI.store)
+const aclControlBox = UI.aclControl.ACLControlBox5(UI.rdf.namedNode(exampleFolder), { dom: document }, '', store)
 document.body.appendChild(aclControlBox)
 ```
 

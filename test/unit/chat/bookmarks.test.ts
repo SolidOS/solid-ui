@@ -33,6 +33,33 @@ describe('findBookmarkDocument', () => {
       statusArea: result.statusArea
     })
   })
+
+  it('one public bookmark docs', async () => {
+    const pubReg1 = new NamedNode('http://example.com/pubType.ttl#reg1')
+    const bookmarksDoc1 = new NamedNode('http://example.com/bookmarks1.ttl')
+    const context = {
+      me: new NamedNode('http://example.com/profile/card#me'),
+      publicProfile: new NamedNode('http://example.com/profile/card'),
+      preferencesFile: new NamedNode('http://example.com/prefs.ttl'),
+      privateTypeIndex: new NamedNode('http://example.com/privType.ttl'),
+      publicTypeIndex: new NamedNode('http://example.com/pubType.ttl')
+    }
+
+    window.alert = jest.fn()
+    store.add(context.me, ns.space('preferencesFile'), context.preferencesFile, context.publicProfile)
+    // announce private index in settings:
+    store.add(context.me, ns.solid('privateTypeIndex'), context.privateTypeIndex, context.preferencesFile)
+    // announce public index in profile:
+    store.add(context.me, ns.solid('publicTypeIndex'), context.publicTypeIndex, context.publicProfile)
+
+    store.add(pubReg1, ns.rdf('type'), ns.solid('TypeRegistration'), context.publicTypeIndex)
+    store.add(pubReg1, ns.solid('forClass'), BOOK('Bookmark'), context.publicTypeIndex)
+    store.add(pubReg1, ns.solid('instance'), bookmarksDoc1, context.publicTypeIndex)
+
+    const userContext = await findBookmarkDocument(context)
+    expect(userContext.bookmarkDocument.value).toEqual('http://example.com/bookmarks1.ttl')
+  })
+
   it('complains if you have multiple bookmark docs', async () => {
     const privReg = new NamedNode('http://example.com/privType.ttl#reg1')
     const pubReg1 = new NamedNode('http://example.com/pubType.ttl#reg1')

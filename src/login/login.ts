@@ -23,8 +23,7 @@ import { PaneDefinition } from 'pane-registry'
 import { BlankNode, IndexedFormula, NamedNode, st, Statement } from 'rdflib'
 // eslint-disable-next-line camelcase
 import { Quad_Object } from 'rdflib/lib/tf-types'
-import { AppDetails, AuthenticationContext, authn, authSession, CrossOriginForbiddenError, ensureTypeIndexes, FetchError, getSuggestedIssuers, NotFoundError, offlineTestID, SameOriginForbiddenError, solidLogicSingleton, UnauthorizedError } from 'solid-logic'
-import { loadIndex } from 'solid-logic/lib/typeIndex/typeIndex'
+import { AppDetails, AuthenticationContext, loadIndex, authn, authSession, CrossOriginForbiddenError, ensureTypeIndexes, FetchError, getSuggestedIssuers, NotFoundError, offlineTestID, SameOriginForbiddenError, solidLogicSingleton, UnauthorizedError } from 'solid-logic'
 import * as debug from '../debug'
 import { alert } from '../log'
 import * as ns from '../ns.js'
@@ -200,6 +199,7 @@ export async function findAppInstances (
   try {
     await loadIndex(context, isPublic)
   } catch (err) {
+    debug.error(err)
   }
   const index = context.index as { [key: string]: Array<NamedNode> }
   const thisIndex = index[visibility]

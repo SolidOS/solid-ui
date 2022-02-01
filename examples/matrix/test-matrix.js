@@ -6,7 +6,7 @@ window.$rdf = UI.rdf
 document.addEventListener('DOMContentLoaded', function () {
   /// ///////////////////////////////////////////
 
-  var kb = UI.store
+  var kb = UI.solidLogicLib.store
   var dom = document
 
   var ICAL = $rdf.Namespace('http://www.w3.org/2002/12/cal/ical#')
