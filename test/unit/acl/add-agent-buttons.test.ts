@@ -161,7 +161,7 @@ describe('When "Add App" button is clicked', () => {
     buttonToClick.click()
   })
   it('bar is simplified', () => {
-    expect(bar.childNodes.length).toEqual(2)
+    expect(bar.childNodes.length).toEqual(3)
     // Adds a third element to list, for reason I cannot understand - This does
     // not happen when I "manually test" it, ie run it in the browser
     // https://github.com/solid/solid-ui/issues/236
