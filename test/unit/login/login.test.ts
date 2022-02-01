@@ -1,10 +1,5 @@
 import * as testLogin from '../../../src/login/login'
 
-const mockAppContext = {
-  viewingNoAuthPage: true,
-  webId: 'https://timea-test.solidcommunity.net/profile/card#me'
-}
-
 describe('logIn', () => {
   afterAll(() => {
     jest.restoreAllMocks()
