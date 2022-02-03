@@ -37,7 +37,8 @@ import * as widgets from '../widgets'
   *
   * @param context
   */
-export function loggedInContext (context: AuthenticationContext): Promise<AuthenticationContext> {
+// used to be logIn
+export function ensureLoggedIn (context: AuthenticationContext): Promise<AuthenticationContext> {
   const me = authn.currentUser()
   if (me) {
     authn.saveUser(me, context)
@@ -71,8 +72,8 @@ export function loggedInContext (context: AuthenticationContext): Promise<Authen
  *
  * @param context
  */
-export async function logInLoadPreferences (context: AuthenticationContext): Promise<AuthenticationContext> {
-  // console.log('Solid UI logInLoadPreferences')
+// used to be logInLoadPreferences
+export async function ensureLoadedPreferences (context: AuthenticationContext): Promise<AuthenticationContext> {
   if (context.preferencesFile) return Promise.resolve(context) // already done
 
   const statusArea = context.statusArea || context.div || null
@@ -89,7 +90,7 @@ export async function logInLoadPreferences (context: AuthenticationContext): Pro
     // reject(new Error(message))
   }
   try {
-    context = await logInLoadProfile(context)
+    context = await ensureLoadedProfile(context)
 
     // console.log('back in Solid UI after logInLoadProfile', context)
     const preferencesFile = await solidLogicSingleton.loadPreferences(context.me as NamedNode)
@@ -140,13 +141,13 @@ export async function logInLoadPreferences (context: AuthenticationContext): Pro
  *
  * @returns Resolves with the context after login / fetch
  */
-export async function logInLoadProfile (context: AuthenticationContext): Promise<AuthenticationContext> {
-  // console.log('Solid UI logInLoadProfile')
+// used to be logInLoadProfile
+export async function ensureLoadedProfile (context: AuthenticationContext): Promise<AuthenticationContext> {
   if (context.publicProfile) {
     return context
   } // already done
   try {
-    const logInContext = await loggedInContext(context)
+    const logInContext = await ensureLoggedIn(context)
     if (!logInContext.me) {
       throw new Error('Could not log in')
     }
@@ -188,8 +189,8 @@ export async function findAppInstances (
   try {
     // console.log('calling logInLoad', isPublic)
     await (isPublic
-      ? logInLoadProfile(context)
-      : logInLoadPreferences(context))
+      ? ensureLoadedProfile(context)
+      : ensureLoadedPreferences(context))
     // console.log('called logInLoad', isPublic)
   } catch (err) {
     widgets.complain(context, `loadIndex: login and load problem ${err}`)
@@ -972,7 +973,7 @@ export function selectWorkspace (
   } // displayOptions
 
   // console.log('kicking off async operation')
-  logInLoadPreferences(context) // kick off async operation
+  ensureLoadedPreferences(context) // kick off async operation
     .then(displayOptions)
     .catch(err => {
       // console.log("err from async op")
@@ -1028,7 +1029,7 @@ export async function getUserRoles (): Promise<Array<NamedNode>> {
       me,
       preferencesFile,
       preferencesFileError
-    } = await logInLoadPreferences({})
+    } = await ensureLoadedPreferences({})
     if (!preferencesFile || preferencesFileError) {
       throw new Error(preferencesFileError)
     }

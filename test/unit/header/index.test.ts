@@ -76,10 +76,10 @@ describe('createUserMenuItem', () => {
   })
 })
 describe('createUserMenu', () => {
-  it('creates a menu....', () => {
+  it('creates a menu....', async () => {
     const pod = new NamedNode('https://sharonstrats.inrupt.net/profile/card#me')
     const menuList = [{ label: 'Testing', url: 'https://reflectechblog.wordpress.com/' }]
-    expect(createUserMenu(store, pod, menuList)).toMatchSnapshot()
+    expect(await createUserMenu(store, pod, menuList)).toMatchSnapshot()
   })
   it('assigns list item class header-banner__user-menu and header-user-menu', async () => {
     const pod = new NamedNode('https://sharonstrats.inrupt.net/profile/card#me')
@@ -91,7 +91,7 @@ describe('createUserMenu', () => {
 
 describe('createHelpMenu', () => {
   it('creates a menu....', () => {
-    expect(createHelpMenu()).toMatchSnapshot()
+    expect(createHelpMenu({}, [])).toMatchSnapshot()
   })
   it('assigns list item class header-banner__user-menu and header-user-menu', () => {
     const options = { helpMenuList: [{ label: 'Testing', url: 'https://reflectechblog.wordpress.com/' }] }

@@ -1,13 +1,13 @@
 import * as testLogin from '../../../src/login/login'
 
-describe('logIn', () => {
+describe('ensureLoggedIn', () => {
   afterAll(() => {
     jest.restoreAllMocks()
   })
   it('exists', () => {
-    expect(testLogin.loggedInContext).toBeInstanceOf(Function)
+    expect(testLogin.ensureLoggedIn).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(testLogin.loggedInContext({})).toBeInstanceOf(Object)
+    expect(testLogin.ensureLoggedIn({})).toBeInstanceOf(Object)
   })
 })

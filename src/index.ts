@@ -31,19 +31,12 @@ https://github.com/solid/solid
  * @main solidUi.js
  */
 
-/**
- * @class SolidUi
- * @static
- */
-
 // REMOVE @ts-ignore as you migrate files to TypeScript
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
 // @ts-ignore
 import * as ns from './ns'
 import { acl, aclControl } from './acl/index'
 import { create } from './create/index'
-// @ts-ignore
-// import * as debug from '../debug'
 // @ts-ignore
 import { icons } from './iconBase'
 import * as language from './widgets/forms/autocomplete/language'
@@ -61,7 +54,6 @@ import * as participation from './participation'
 // @ts-ignore
 import * as preferences from './preferences'
 // @ts-ignore
-// @ts-ignore
 import * as style from './style'
 // @ts-ignore
 import { renderTableViewPane as table } from './table'
@@ -74,13 +66,15 @@ import versionInfo from './versionInfo'
 import { initHeader } from './header'
 import { initFooter } from './footer'
 import * as createTypes from './create/types'
-import * as solidLogicLib from 'solid-logic'
+import { authn, store, authSession } from 'solid-logic'
 
 const dom = window ? window.document : null // Idea that UI.dom can be adapted in non-browser environments
 
 if (typeof window !== 'undefined') {
   ;(<any>window).UI = {
-    solidLogicLib,
+    authn,
+    store,
+    authSession,
     ns,
     rdf,
     acl,
@@ -111,7 +105,6 @@ if (typeof window !== 'undefined') {
 }
 
 export {
-  solidLogicLib,
   ns,
   rdf,
   acl,

@@ -89,6 +89,7 @@ parse(initialDataText, store, subject.doc().uri)
 // silenceDebugMessages()
 // afterEach(clearStore)
 
+// TODO: timeout causes Jest did not exit one second after the test run has completed. -> fix.
 async function wait (ms) {
   return new Promise(resolve => {
     setTimeout(resolve, ms)

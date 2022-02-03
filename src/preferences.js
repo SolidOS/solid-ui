@@ -5,7 +5,7 @@
 import * as $rdf from 'rdflib' // pull in first avoid cross-refs
 import { store } from 'solid-logic'
 import * as debug from './debug'
-import { logInLoadPreferences } from './login/login'
+import { ensureLoadedPreferences } from './login/login'
 import * as ns from './ns'
 import * as participation from './participation' // @ts-ignore
 import * as widgets from './widgets'
@@ -65,7 +65,7 @@ export function recordSharedPreferences (subject, context) {
 //
 export function recordPersonalDefaults (theClass, context) {
   return new Promise(function (resolve, reject) {
-    logInLoadPreferences(context).then(
+    ensureLoadedPreferences(context).then(
       context => {
         if (!context.preferencesFile) {
           debug.log(

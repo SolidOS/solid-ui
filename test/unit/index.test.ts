@@ -26,7 +26,6 @@ describe('Index', () => {
       'participation',
       'preferences',
       'rdf',
-      'solidLogicLib',
       'style',
       'table',
       'tabs',
