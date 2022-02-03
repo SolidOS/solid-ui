@@ -55,6 +55,7 @@
   "dependencies": {
     "@babel/runtime": "^7.16.5",
     "@inrupt/solid-client-authn-browser": "^1.11.3",
+    "@storybook/addon-docs": "^6.4.18",
     "crypto-browserify": "^3.12.0",
     "escape-html": "^1.0.3",
     "jss": "^10.9.0",

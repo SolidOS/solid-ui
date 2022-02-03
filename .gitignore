@@ -7,3 +7,4 @@ src/versionInfo.ts
 coverage
 Documentation/api
 examples/storybook
+.history/
