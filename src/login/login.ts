@@ -79,7 +79,7 @@ export async function ensureLoadedPreferences (context: AuthenticationContext): 
   const statusArea = context.statusArea || context.div || null
   let progressDisplay
   function complain (message) {
-    message = `logInLoadPreferences: ${message}`
+    message = `ensureLoadedPreferences: ${message}`
     if (statusArea) {
       // statusArea.innerHTML = ''
       statusArea.appendChild(

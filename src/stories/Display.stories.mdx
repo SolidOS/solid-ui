@@ -47,7 +47,7 @@ Sets the best name we have and looks up a better one
       () => {
         const div = document.createElement("div")
         const jane = UI.rdf.namedNode('https://jane.example/person/card#me')
-        UI.solidLogicLib.store.add(jane, UI.ns.foaf('name'), 'Jane Doe')
+        UI.store.add(jane, UI.ns.foaf('name'), 'Jane Doe')
         UI.widgets.setName(div, jane)
         return div
       }

@@ -3,7 +3,7 @@ import { store } from 'solid-logic'
 import * as ns from '../ns'
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
 
-const UI = { log, ns, rdf, store }
+const UI = { log, ns, rdf }
 
 // This ubiquitous function returns the best label for a thing
 //

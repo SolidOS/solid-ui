@@ -18,7 +18,7 @@ import { action } from '@storybook/addon-actions'
       const callbackFunction = (ok, errorMessage) => {
         console.log(ok, errorMessage, document.getElementById('div-basicField').innerHTML);
       }
-      UI.solidLogicLib.store.add(form, UI.ns.ui('property'), UI.rdf.namedNode('http://example.com/#some-property'), doc)
+      UI.store.add(form, UI.ns.ui('property'), UI.rdf.namedNode('http://example.com/#some-property'), doc)
       // FIXME: https://github.com/solid/solid-ui/issues/239
       document.outlineManager = {
         appendPropertyTRs: () => {}
@@ -64,14 +64,14 @@ import { action } from '@storybook/addon-actions'
       const subject = UI.rdf.namedNode('http://example.com/#this')
       const form = UI.rdf.namedNode('http://example.com/#form')
       const store = UI.rdf.namedNode('http://example.com/#store')
-      UI.solidLogicLib.store.add(form, UI.ns.ui('parts'), new UI.rdf.Collection([
+      UI.store.add(form, UI.ns.ui('parts'), new UI.rdf.Collection([
         UI.rdf.namedNode('http://example.com/#part1'),
         UI.rdf.namedNode('http://example.com/#part2')
       ]), UI.rdf.namedNode('http://example.com/'))
-      UI.solidLogicLib.store.add(UI.rdf.namedNode('http://example.com/#part1'), UI.ns.rdf('type'), UI.ns.ui('Comment'))
-      UI.solidLogicLib.store.add(UI.rdf.namedNode('http://example.com/#part1'), UI.ns.ui('contents'), '[this is part 1 of the form]')
-      UI.solidLogicLib.store.add(UI.rdf.namedNode('http://example.com/#part2'), UI.ns.rdf('type'), UI.ns.ui('Comment'))
-      UI.solidLogicLib.store.add(UI.rdf.namedNode('http://example.com/#part2'), UI.ns.ui('contents'), '[this is part 2 of the form]')
+      UI.store.add(UI.rdf.namedNode('http://example.com/#part1'), UI.ns.rdf('type'), UI.ns.ui('Comment'))
+      UI.store.add(UI.rdf.namedNode('http://example.com/#part1'), UI.ns.ui('contents'), '[this is part 1 of the form]')
+      UI.store.add(UI.rdf.namedNode('http://example.com/#part2'), UI.ns.rdf('type'), UI.ns.ui('Comment'))
+      UI.store.add(UI.rdf.namedNode('http://example.com/#part2'), UI.ns.ui('contents'), '[this is part 2 of the form]')
       // FIXME: https://github.com/solid/solid-ui/issues/239
       document.outlineManager = {
         appendPropertyTRs: () => {}

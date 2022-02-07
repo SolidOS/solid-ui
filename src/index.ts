@@ -31,6 +31,11 @@ https://github.com/solid/solid
  * @main solidUi.js
  */
 
+/**
+ * @class SolidUi
+ * @static
+ */
+
 // REMOVE @ts-ignore as you migrate files to TypeScript
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
 // @ts-ignore

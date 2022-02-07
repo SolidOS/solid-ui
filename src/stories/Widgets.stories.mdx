@@ -15,9 +15,9 @@ Display a transaction
     { () => {
       const twoLineTransaction = UI.widgets.index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction']
       const thing = UI.rdf.namedNode('http://example.com/#transaction')
-      UI.solidLogicLib.store.add(thing, UI.ns.qu('payee'), UI.rdf.namedNode('https://payee.com/#me'))
-      UI.solidLogicLib.store.add(thing, UI.ns.qu('date'), UI.rdf.literal('2020-01-01'))
-      UI.solidLogicLib.store.add(thing, UI.ns.qu('amount'), UI.rdf.literal('20 USD'))
+      UI.store.add(thing, UI.ns.qu('payee'), UI.rdf.namedNode('https://payee.com/#me'))
+      UI.store.add(thing, UI.ns.qu('date'), UI.rdf.literal('2020-01-01'))
+      UI.store.add(thing, UI.ns.qu('amount'), UI.rdf.literal('20 USD'))
       return twoLineTransaction(document, thing)
     }
     }
@@ -35,9 +35,9 @@ Display a trip
     { () => {
       const twoLineTrip = UI.widgets.index.twoLine['http://www.w3.org/ns/pim/trip#Trip']
       const thing = UI.rdf.namedNode('http://example.com/#trip')
-      UI.solidLogicLib.store.add(thing, UI.ns.dc('title'), 'Some trip')
-      UI.solidLogicLib.store.add(thing, UI.ns.cal('dtstart'), UI.rdf.literal('2020-01-01'))
-      UI.solidLogicLib.store.add(thing, UI.ns.cal('dtend'), UI.rdf.literal('2020-02-02'))
+      UI.store.add(thing, UI.ns.dc('title'), 'Some trip')
+      UI.store.add(thing, UI.ns.cal('dtstart'), UI.rdf.literal('2020-01-01'))
+      UI.store.add(thing, UI.ns.cal('dtend'), UI.rdf.literal('2020-02-02'))
       return twoLineTrip(document, thing)
     }
     }

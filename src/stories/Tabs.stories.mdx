@@ -7,7 +7,7 @@ import { action } from '@storybook/addon-actions'
 
 export const loadTurtleDecorator = (Story) => {
   const { render, data } = Story()
-  UI.rdf.parse(data, UI.solidLogicLib.store, location.origin, 'text/turtle', error => {
+  UI.rdf.parse(data, UI.store, location.origin, 'text/turtle', error => {
     if (error) console.error(error)
   })
   const div = document.createElement("div");

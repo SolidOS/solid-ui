@@ -13,7 +13,7 @@ import { rawJsonDecorator } from './decorators'
   <Story name="isAudio" decorators={[rawJsonDecorator]}>
     { () => {
       const type = UI.rdf.namedNode('http://www.w3.org/ns/iana/media-types/audio/')
-      UI.solidLogicLib.store.add(UI.rdf.namedNode('http://example.com/audio.mpeg'), UI.ns.rdf('type'), type)
+      UI.store.add(UI.rdf.namedNode('http://example.com/audio.mpeg'), UI.ns.rdf('type'), type)
       return UI.widgets.isAudio(UI.rdf.namedNode('http://example.com/audio.mpeg'))
     }
     }
@@ -28,7 +28,7 @@ import { rawJsonDecorator } from './decorators'
   <Story name="isVideo" decorators={[rawJsonDecorator]}>
     { () => {
       const type = UI.rdf.namedNode('http://www.w3.org/ns/iana/media-types/video/')
-      UI.solidLogicLib.store.add(UI.rdf.namedNode('http://example.com/video.mov'), UI.ns.rdf('type'), type)
+      UI.store.add(UI.rdf.namedNode('http://example.com/video.mov'), UI.ns.rdf('type'), type)
       return UI.widgets.isVideo(UI.rdf.namedNode('http://example.com/video.mov'))
     }
     }
@@ -43,7 +43,7 @@ import { rawJsonDecorator } from './decorators'
   <Story name="isImage" decorators={[rawJsonDecorator]}>
     { () => {
       const type = UI.rdf.namedNode('http://www.w3.org/ns/iana/media-types/image/')
-      UI.solidLogicLib.store.add(UI.rdf.namedNode('http://example.com/image.jpeg'), UI.ns.rdf('type'), type)
+      UI.store.add(UI.rdf.namedNode('http://example.com/image.jpeg'), UI.ns.rdf('type'), type)
       return UI.widgets.isImage(UI.rdf.namedNode('http://example.com/image.jpeg'))
     }
     }

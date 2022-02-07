@@ -11,6 +11,7 @@ import { mostRecentVersion, originalVersion } from './chatLogic'
 import * as debug from '../debug'
 import { icons } from '../iconBase'
 import { store, authn } from 'solid-logic'
+import { login } from '../login/login'
 import { media } from '../media/index'
 import * as ns from '../ns'
 import * as pad from '../pad'
@@ -448,7 +449,7 @@ export function renderMessageEditor (channelObject, messageTable, userContext, o
   let field, sendButton
   const context = { div: middle, dom: dom }
 
-  authn.logIn(context).then(context => {
+  login.ensureLoggedIn(context).then(context => {
     // me = context.me
     turnOnInput()
     Object.assign(context, userContext)
