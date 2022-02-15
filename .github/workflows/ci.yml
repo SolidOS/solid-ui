@@ -4,10 +4,9 @@ on:
   push:
     branches:
       - "**"
-    tags-ignore:
-      # Only create preview releases for branches
-      # (the `release` workflow creates actual releases for version tags):
-      - "**"
+  pull_request:
+    branches:
+      - "**"  
   workflow_dispatch:
 
 jobs:
@@ -27,6 +26,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
       - run: npm test
+      - run: npm run doc
       - run: npm run build
       - name: Save build
         if: matrix.node-version == '14.x'
@@ -37,6 +37,20 @@ jobs:
             .
             !node_modules
           retention-days: 1
+
+  gh-pages:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: build
+      - run: rm .gitignore
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
 
   npm-publish-build:
     needs: build
@@ -57,3 +71,21 @@ jobs:
         with:
           token: ${{ secrets.NPM_TOKEN }}
           tag: ${{ env.GITHUB_REF_SLUG }}
+  
+  npm-publish-latest:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: build
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: Disable pre- and post-publish actions
+        run: 'sed -i -E "s/\"((pre|post)publish)/\"ignore:\1/" package.json'
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          tag: latest
