@@ -5,6 +5,7 @@
 User Interface widgets and utilities for Solid
 
 These are HTML5 widgets which connect to a solid store. Building blocks for solid-based apps.
+Vanilla JS.  Includes large widgets like chat, table, matrix; form fields, and small widgets.
 
 ## Getting started
 ### In npm-based projects
