@@ -4,7 +4,7 @@
  */
 
 import { adoptACLDefault, getProspectiveHolder, makeACLGraphbyCombo, sameACL } from './acl'
-import { graph, NamedNode, UpdateManager } from 'rdflib'
+import { fetcher, graph, NamedNode, UpdateManager } from 'rdflib'
 import { AccessGroups } from './access-groups'
 import { DataBrowserContext } from 'pane-registry'
 import { shortNameForFolder } from './acl-control'
@@ -228,6 +228,8 @@ export class AccessController {
       makeACLGraphbyCombo(newAClGraph, this.targetDoc, this.mainCombo.byCombo, this.targetACLDoc, true, true)
     }
 
+    // add authenticated fetcher
+    newAClGraph.fetcher = fetcher(newAClGraph, { fetch: this.store.fetcher._fetch })
     const updater = newAClGraph.updater || new UpdateManager(newAClGraph)
 
     // save ACL resource
