@@ -54,7 +54,6 @@
   "homepage": "https://github.com/solid/solid-ui",
   "dependencies": {
     "@babel/runtime": "^7.16.5",
-    "@inrupt/solid-client-authn-browser": "^1.11.3",
     "@storybook/addon-docs": "^6.4.18",
     "crypto-browserify": "^3.12.0",
     "escape-html": "^1.0.3",
@@ -65,7 +64,7 @@
     "path-browserify": "^1.0.1",
     "postcss-flexbugs-fixes": "^5.0.2",
     "rdflib": "^2.2.17",
-    "solid-logic": "1.3.13-60e05a84",
+    "solid-logic": "1.3.13-bbdd4a66",
     "solid-namespace": "^0.5.2",
     "stream-browserify": "^3.0.0",
     "uuid": "^8.3.2"
