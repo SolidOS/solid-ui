@@ -3,7 +3,7 @@
  * and [[AccessGroupsOptions]] classes
  * @packageDocumentation
  */
-import { IndexedFormula, NamedNode, LiveStore } from 'rdflib';
+import { NamedNode, LiveStore } from 'rdflib';
 import { AccessController } from './access-controller';
 import { AgentMapMap, ComboList } from './types';
 /**
@@ -27,7 +27,7 @@ export declare class AccessGroups {
     private readonly addAgentButton;
     private readonly rootElement;
     private _store;
-    constructor(doc: NamedNode, aclDoc: NamedNode, controller: AccessController, store: IndexedFormula, options?: AccessGroupsOptions);
+    constructor(doc: NamedNode, aclDoc: NamedNode, controller: AccessController, store: LiveStore, options?: AccessGroupsOptions);
     get store(): LiveStore;
     set store(store: LiveStore);
     render(): HTMLElement;

@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import { fetcher, IndexedFormula, NamedNode, sym, LiveStore } from 'rdflib'
+import { NamedNode, sym, LiveStore } from 'rdflib'
 import { ACLbyCombination, readACL } from './acl'
 import * as widgets from '../widgets'
 import * as ns from '../ns'
@@ -64,16 +64,11 @@ export class AccessGroups {
     private doc: NamedNode,
     private aclDoc: NamedNode,
     public controller: AccessController,
-    store: IndexedFormula,
+    store: LiveStore,
     private options: AccessGroupsOptions = {}
   ) {
     this.defaults = options.defaults || false
-    fetcher(store, {})
-
-    // The store will already have an updater at this point:
-    // store.updater = new UpdateManager(store)
-
-    this._store = store as LiveStore // TODO hacky, find a better solution
+    this._store = store
     this.aclMap = readACL(doc, aclDoc, store, this.defaults)
     this.byCombo = ACLbyCombination(this.aclMap)
     this.addAgentButton = new AddAgentButtons(this)
