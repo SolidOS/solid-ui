@@ -71,7 +71,7 @@ import versionInfo from './versionInfo'
 import { initHeader } from './header'
 import { initFooter } from './footer'
 import * as createTypes from './create/types'
-import { authn, store, authSession } from 'solid-logic'
+import { authn, store } from 'solid-logic'
 
 const dom = window ? window.document : null // Idea that UI.dom can be adapted in non-browser environments
 
@@ -79,7 +79,6 @@ if (typeof window !== 'undefined') {
   ;(<any>window).UI = {
     authn,
     store,
-    authSession,
     ns,
     rdf,
     acl,
@@ -109,7 +108,10 @@ if (typeof window !== 'undefined') {
   } // Simpler access by non-node scripts
 }
 
+// this variables are directly used in the storybook
 export {
+  authn,
+  store,
   ns,
   rdf,
   acl,
