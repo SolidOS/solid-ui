@@ -8,6 +8,7 @@ describe('Index', () => {
     expect(Object.keys(Index).sort()).toEqual([
       'acl',
       'aclControl',
+      'authn',
       'create',
       'createTypes',
       'dom',
@@ -26,6 +27,7 @@ describe('Index', () => {
       'participation',
       'preferences',
       'rdf',
+      'store',
       'style',
       'table',
       'tabs',
