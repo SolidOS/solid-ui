@@ -1,9 +1,9 @@
 export default {
-  buildTime: '2022-03-01T16:32:34Z',
-  commit: 'c89d416d05e0e4da563754609e155cfead5d3e29',
+  buildTime: '2022-03-01T17:00:41Z',
+  commit: 'c5a8888d6cb61363bc0445be007e3c96de593338',
   npmInfo:
 {
-  'solid-ui': '2.4.18',
+  'solid-ui': '2.4.19',
   npm: '6.14.16',
   ares: '1.18.1',
   brotli: '1.0.9',
