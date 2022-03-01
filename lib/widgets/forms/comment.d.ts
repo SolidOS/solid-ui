@@ -1,7 +1,7 @@
 /**
  * A [[FieldFunction]] for a simple comment box. It will look for
  * the first (form, ns.ui('contents'), ?) triple it can find in
- * UI.store and use the value of the object of that triple as
+ * store and use the value of the object of that triple as
  * the comment text.
  *
  * @param dom The DOM

@@ -10,7 +10,7 @@ import {
   filterByLanguage,
   addDefaults
 } from '../../../../../src/widgets/forms/autocomplete/language'
-import { store } from '../../../../../src/'
+import { store } from 'solid-logic'
 
 // jest.unmock('rdflib') // we need Fetcher to work (mocked)
 jest.unmock('debug') // while debugging only @@

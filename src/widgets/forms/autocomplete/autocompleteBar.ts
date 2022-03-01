@@ -6,7 +6,7 @@ and so on.  See the state diagram in the documentation.  The AUtocomplete Picker
 */
 import * as ns from '../../../ns'
 import { icons } from '../../../iconBase'
-import { store } from '../../../logic'
+import { store } from 'solid-logic'
 import * as widgets from '../../../widgets'
 import * as utils from '../../../utils'
 

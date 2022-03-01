@@ -8,7 +8,8 @@ import { parse } from 'rdflib'
 import {
   autocompleteField
 } from '../../../../../src/widgets/forms/autocomplete/autocompleteField'
-import { store, ns } from '../../../../../src/'
+import ns from '../../../../../src/ns'
+import { store } from 'solid-logic'
 // import { textInputStyle } from '../../../../../src/style'
 import {
 //  findByAltText,
@@ -88,6 +89,7 @@ parse(initialDataText, store, subject.doc().uri)
 // silenceDebugMessages()
 // afterEach(clearStore)
 
+// TODO: timeout causes Jest did not exit one second after the test run has completed. -> fix.
 async function wait (ms) {
   return new Promise(resolve => {
     setTimeout(resolve, ms)

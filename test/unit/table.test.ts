@@ -1,6 +1,6 @@
 import { silenceDebugMessages } from '../helpers/setup'
 import { NamedNode, Namespace, parse, Query, sym, variable } from 'rdflib'
-import { solidLogicSingleton } from '../../src/logic'
+import { solidLogicSingleton } from 'solid-logic'
 // @ts-ignore
 import { renderTableViewPane } from '../../src/table'
 

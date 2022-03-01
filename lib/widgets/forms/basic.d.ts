@@ -1,4 +1,4 @@
-import { BlankNode, Node, NamedNode, Variable, Store } from 'rdflib';
+import { BlankNode, NamedNode, Node, Store, Variable } from 'rdflib';
 export declare function renderNameValuePair(dom: HTMLDocument, kb: Store, box: HTMLElement, form: NamedNode): HTMLElement;
 /**
  * Create an anchor element with a label as the anchor text.

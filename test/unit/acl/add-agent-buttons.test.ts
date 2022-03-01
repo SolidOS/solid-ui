@@ -2,7 +2,7 @@ import { silenceDebugMessages } from '../../helpers/setup'
 import { AddAgentButtons } from '../../../src/acl/add-agent-buttons'
 import { instantiateAccessGroups } from '../helpers/instantiateAccessGroups'
 import { JSDOM } from 'jsdom'
-import { solidLogicSingleton } from '../../../src/logic'
+import { solidLogicSingleton } from 'solid-logic'
 
 const store = solidLogicSingleton.store
 

@@ -1,7 +1,7 @@
 import { silenceDebugMessages } from '../helpers/setup'
 import { JSDOM } from 'jsdom'
 import { deleteRecursive, deleteFolder } from '../../src/folders'
-import { store } from '../../src/index'
+import { store } from 'solid-logic'
 
 silenceDebugMessages()
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document

@@ -4,8 +4,10 @@
     work in solid-ui by adjusting where imported functions are found.
  */
 import { IndexedFormula, NamedNode } from 'rdflib'
-import { icons } from '../iconBase'
-import { loginStatusBox, authSession, currentUser } from '../authn/authn'
+import { icons } from '../index'
+import { authn, authSession } from 'solid-logic'
+import { loginStatusBox } from '../login/login'
+// import { loginStatusBox, authSession, currentUser } from '../authn/authn'
 import * as widgets from '../widgets'
 import { emptyProfile } from './empty-profile'
 import { addStyleClassToElement, getPod, throttle } from '../utils/headerFooterHelpers'
@@ -62,7 +64,7 @@ export async function initHeader (store: IndexedFormula, userMenuList: MenuItems
  */
 export function rebuildHeader (header: HTMLElement, store: IndexedFormula, pod: NamedNode, userMenuList: MenuItems[], options?: HeaderOptions) {
   return async () => {
-    const user = currentUser()
+    const user = authn.currentUser()
     header.innerHTML = ''
     header.appendChild(await createBanner(store, pod, user, userMenuList, options))
   }

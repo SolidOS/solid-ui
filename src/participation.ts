@@ -1,14 +1,15 @@
 /* Manage a UI for the particpation of a person in any thing
 */
+
+// import { currentUser } from './authn/authn'
 import * as debug from './debug'
-import { currentUser } from './authn/authn'
 import { LiveStore, NamedNode, st, UpdateManager } from 'rdflib'
 import * as ns from './ns'
 import { personTR, newThing, errorMessageBlock } from './widgets'
 import { syncTableToArray } from './utils'
 import { lightColorHash } from './pad'
 import { log } from './debug'
-import { solidLogicSingleton } from './logic'
+import { solidLogicSingleton, authn } from 'solid-logic'
 
 type ParticipationOptions = {
   deleteFunction?: () => {}
@@ -144,7 +145,7 @@ export function participationObject (subject: NamedNode, padDoc: NamedNode, me: 
  *
  */
 export function recordParticipation (subject: NamedNode, padDoc: NamedNode, refreshable: any) {
-  const me = currentUser()
+  const me = authn.currentUser()
   if (!me) return // Not logged in
 
   const parps = store.each(subject, ns.wf('participation')).filter(function (pn) {

@@ -14,7 +14,7 @@ describe('infiniteMessageArea', () => {
   when p1 in fact is  HTMLTableRowElement { AJAR_date: '9999-01-01T00:00:00Z' }
   */
   it.skip('runs', async () => {
-    const kb = undefined // will default to UI.store
+    const kb = undefined // will default to store
     const chatChannel = sym('https://domain.tld/chat.ttl#this')
     const options = {}
     ;(window as any).alert = () => {}

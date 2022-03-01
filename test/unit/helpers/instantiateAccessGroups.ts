@@ -1,4 +1,4 @@
-import { LiveStore, sym } from 'rdflib'
+import { sym, LiveStore } from 'rdflib'
 import { AccessGroups } from '../../../src/acl/access-groups'
 import { instantiateAccessController } from './instantiateAccessController'
 

@@ -3,15 +3,15 @@
  * @packageDocumentation
  */
 
-import { AccessGroups } from './access-groups'
-import { icons } from '../iconBase'
-import * as widgets from '../widgets'
-import * as ns from '../ns'
-import { logInLoadProfile } from '../authn/authn'
-import * as utils from '../utils'
 import { NamedNode, Store } from 'rdflib'
-import { AuthenticationContext } from '../authn/types'
+import { AuthenticationContext } from 'solid-logic'
 import * as debug from '../debug'
+import { icons } from '../iconBase'
+import { ensureLoadedProfile } from '../login/login'
+import * as ns from '../ns'
+import * as utils from '../utils'
+import * as widgets from '../widgets'
+import { AccessGroups } from './access-groups'
 
 /**
  * Renders the Sharing pane's "+" button and the menus behind it,
@@ -184,7 +184,7 @@ export class AddAgentButtons {
   }
 
   private async renderAppsTable (eventContext: AuthenticationContext): Promise<string> {
-    await logInLoadProfile(eventContext)
+    await ensureLoadedProfile(eventContext)
     const trustedApps = (this.groupList.store as Store).each(eventContext.me, ns.acl('trustedApp')) as Array<NamedNode> // @@ TODO fix as
     const trustedOrigins = trustedApps.flatMap(app => (this.groupList.store as Store).each(app, ns.acl('origin'))) // @@ TODO fix as
 

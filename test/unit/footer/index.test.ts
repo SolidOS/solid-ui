@@ -6,7 +6,7 @@ import {
 } from '../../../src/footer'
 import { NamedNode } from 'rdflib'
 // @ts-ignore
-import { solidLogicSingleton } from '../../../src/logic'
+import { solidLogicSingleton } from 'solid-logic'
 
 const store = solidLogicSingleton.store
 

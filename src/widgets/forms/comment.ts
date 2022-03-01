@@ -1,4 +1,4 @@
-import { solidLogicSingleton } from '../../logic'
+import { solidLogicSingleton } from 'solid-logic'
 import * as ns from '../../ns'
 import { mostSpecificClassURI } from './fieldFunction'
 import { fieldParams } from './fieldParams'
@@ -8,7 +8,7 @@ const store = solidLogicSingleton.store
 /**
  * A [[FieldFunction]] for a simple comment box. It will look for
  * the first (form, ns.ui('contents'), ?) triple it can find in
- * UI.store and use the value of the object of that triple as
+ * store and use the value of the object of that triple as
  * the comment text.
  *
  * @param dom The DOM

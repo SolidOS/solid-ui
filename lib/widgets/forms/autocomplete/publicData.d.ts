@@ -1,4 +1,4 @@
-import { NamedNode, Literal } from 'rdflib';
+import { Literal, NamedNode } from 'rdflib';
 export declare const AUTOCOMPLETE_LIMIT = 200;
 interface Term {
     type: string;
