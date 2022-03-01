@@ -60,11 +60,11 @@
     "jss": "^10.9.0",
     "jss-preset-default": "^10.9.0",
     "mime-types": "^2.1.34",
-    "pane-registry": "2.4.6-e0ddeef1",
+    "pane-registry": "2.4.6-989e87d4",
     "path-browserify": "^1.0.1",
     "postcss-flexbugs-fixes": "^5.0.2",
     "rdflib": "^2.2.17",
-    "solid-logic": "1.3.13-e7843519",
+    "solid-logic": "1.3.13-53806f5e",
     "solid-namespace": "^0.5.2",
     "stream-browserify": "^3.0.0",
     "uuid": "^8.3.2"
