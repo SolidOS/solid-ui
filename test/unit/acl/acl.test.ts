@@ -1,6 +1,5 @@
-import { ACL_LINK } from 'solid-logic'
+import { ACL_LINK, solidLogicSingleton } from 'solid-logic'
 import { silenceDebugMessages } from '../../helpers/setup'
-import { solidLogicSingleton } from '../../../src/logic'
 import {
   ACLbyCombination,
   ACLToString,

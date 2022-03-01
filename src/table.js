@@ -15,14 +15,14 @@
 
 import * as debug from './debug'
 import { icons } from './iconBase'
-import { store } from './logic'
+import { store } from 'solid-logic'
 import * as log from './log'
 import * as ns from './ns'
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
 import * as utils from './utils'
 import * as widgets from './widgets'
 
-const UI = { icons, log, ns, store, utils, widgets }
+const UI = { icons, log, ns, utils, widgets }
 
 // UI.widgets.renderTableViewPane
 export function renderTableViewPane (doc, options) {
@@ -32,7 +32,7 @@ export function renderTableViewPane (doc, options) {
 
   const RDFS_LITERAL = 'http://www.w3.org/2000/01/rdf-schema#Literal'
   const ns = UI.ns
-  const kb = UI.store
+  const kb = store
   const rowsLookup = {} //  Persistent mapping of subject URI to dom TR
 
   // Predicates that are never made into columns:

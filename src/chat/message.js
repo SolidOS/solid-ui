@@ -5,29 +5,21 @@
 
 /* global $rdf */
 import { insertMessageIntoTable } from './infinite'
-
 import { messageToolbar, sentimentStripLinked } from './messageTools'
 import { findBookmarkDocument } from './bookmarks'
 import { mostRecentVersion, originalVersion } from './chatLogic'
-
 import * as debug from '../debug'
-import { authn } from '../authn/index'
 import { icons } from '../iconBase'
-import { store } from '../logic'
+import { store, authn } from 'solid-logic'
+import { ensureLoggedIn } from '../login/login'
 import { media } from '../media/index'
 import * as ns from '../ns'
 import * as pad from '../pad'
-// import * as rdf from 'rdflib' // pull in first avoid cross-refs
 import * as style from '../style'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
 
-// const UI = { authn, icons, ns, media, pad, rdf, store, style, utils, widgets }
-
 const dom = window.document
-
-// const store = store
-
 const messageBodyStyle = style.messageBodyStyle
 
 const label = utils.label
@@ -457,7 +449,7 @@ export function renderMessageEditor (channelObject, messageTable, userContext, o
   let field, sendButton
   const context = { div: middle, dom: dom }
 
-  authn.logIn(context).then(context => {
+  ensureLoggedIn(context).then(context => {
     // me = context.me
     turnOnInput()
     Object.assign(context, userContext)

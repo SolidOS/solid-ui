@@ -19,206 +19,49 @@
  * * `statusArea`      A DOM element (opt) progress stuff can be displayed, or error messages
  * @packageDocumentation
  */
-import { graph, namedNode, NamedNode, Namespace, serialize, st, Statement, sym, BlankNode } from 'rdflib'
 import { PaneDefinition } from 'pane-registry'
-import { Signup } from './signup'
-import * as widgets from '../widgets'
-import * as ns from '../ns.js'
-import * as utils from '../utils'
-import { alert } from '../log'
-import authSessionImport from './authSession'
-import { AppDetails, AuthenticationContext } from './types'
-import * as debug from '../debug'
-import { textInputStyle, buttonStyle, commentStyle } from '../style'
+import { BlankNode, IndexedFormula, NamedNode, st, Statement } from 'rdflib'
 // eslint-disable-next-line camelcase
 import { Quad_Object } from 'rdflib/lib/tf-types'
-import { solidLogicSingleton } from '../logic'
-import { CrossOriginForbiddenError, FetchError, NotFoundError, SameOriginForbiddenError, UnauthorizedError, ACL_LINK } from 'solid-logic'
-
-/* global confirm */
-
-export const authSession = authSessionImport
-
-const DEFAULT_ISSUERS = [
-  {
-    name: 'Solid Community',
-    uri: 'https://solidcommunity.net'
-  },
-  {
-    name: 'Solid Web',
-    uri: 'https://solidweb.org'
-  },
-  {
-    name: 'Inrupt.net',
-    uri: 'https://inrupt.net'
-  },
-  {
-    name: 'pod.Inrupt.com',
-    uri: 'https://broker.pod.inrupt.com'
-  }
-]
-
-// const userCheckSite = 'https://databox.me/'
+import { AppDetails, AuthenticationContext, loadIndex, authn, authSession, CrossOriginForbiddenError, ensureTypeIndexes, FetchError, getSuggestedIssuers, NotFoundError, offlineTestID, SameOriginForbiddenError, solidLogicSingleton, UnauthorizedError } from 'solid-logic'
+import * as debug from '../debug'
+import { alert } from '../log'
+import * as ns from '../ns.js'
+import { Signup } from '../signup/signup.js'
+import { buttonStyle, commentStyle, textInputStyle } from '../style'
+import { utils } from '../utils/index'
+import * as widgets from '../widgets'
 
 /**
- * Look for and load the User who has control over it
- */
-export function findOriginOwner (doc: NamedNode | string): string | boolean {
-  const uri = (typeof doc === 'string') ? doc : doc.uri
-  const i = uri.indexOf('://')
-  if (i < 0) return false
-  const j = uri.indexOf('/', i + 3)
-  if (j < 0) return false
-  const origin = uri.slice(0, j + 1) // @@ TBC
-  return origin
-}
-
-/**
- * Saves `webId` in `context.me`
- * @param webId
- * @param context
- *
- * @returns Returns the WebID, after setting it
- */
-export function saveUser (
-  webId: NamedNode | string | null,
-  context?: AuthenticationContext
-): NamedNode | null {
-  // @@ TODO Remove the need for having context as output argument
-  let webIdUri: string
-  if (webId) {
-    webIdUri = (typeof webId === 'string') ? webId : webId.uri
-    const me = namedNode(webIdUri)
-    if (context) {
-      context.me = me
-    }
-    return me
-  }
-  return null
-}
-
-/**
- * Wrapper around [[offlineTestID]]
- * @returns {NamedNode|null}
- */
-export function defaultTestUser (): NamedNode | null {
-  // Check for offline override
-  const offlineId = offlineTestID()
-
-  if (offlineId) {
-    return offlineId
-  }
-
-  return null
-}
-
-/**
- * find a user or app's context as set in window.SolidAppContext
- * @return {any} - an appContext object
- */
-function appContext ():any {
-  let { SolidAppContext }: any = window
-  SolidAppContext ||= {}
-  SolidAppContext.viewingNoAuthPage = false
-  if (SolidAppContext.noAuth && window.document) {
-    const currentPage = window.document.location.href
-    if (currentPage.startsWith(SolidAppContext.noAuth)) {
-      SolidAppContext.viewingNoAuthPage = true
-      const params = new URLSearchParams(window.document.location.search)
-      if (params) {
-        let viewedPage = SolidAppContext.viewedPage = params.get('uri') || null
-        if (viewedPage) {
-          viewedPage = decodeURI(viewedPage)
-          if (!viewedPage.startsWith(SolidAppContext.noAuth)) {
-            const ary = viewedPage.split(/\//)
-            SolidAppContext.idp = ary[0] + '//' + ary[2]
-            SolidAppContext.viewingNoAuthPage = false
-          }
-        }
-      }
-    }
-  }
-  return SolidAppContext
-}
-
-/**
- * Checks synchronously whether user is logged in
- *
- * @returns Named Node or null
- */
-export function currentUser (): NamedNode | null {
-  const app = appContext()
-  if (app.viewingNoAuthPage) {
-    return sym(app.webId)
-  }
-  if (authSession.info.webId && authSession.info.isLoggedIn) {
-    return sym(authSession.info.webId)
-  }
-  return offlineTestID() // null unless testing
-  // JSON.parse(localStorage['solid-auth-client']).session.webId
-}
-
-/**
- * Resolves with the logged in user's WebID
- *
- * @param context
- */
-export function logIn (context: AuthenticationContext): Promise<AuthenticationContext> {
-  const app = appContext()
-  const me = app.viewingNoAuthPage ? sym(app.webId) : defaultTestUser() // me is a NamedNode or null
-
+  * Resolves with the logged in user's WebID
+  *
+  * @param context
+  */
+// used to be logIn
+export function ensureLoggedIn (context: AuthenticationContext): Promise<AuthenticationContext> {
+  const me = authn.currentUser()
   if (me) {
-    context.me = me
+    authn.saveUser(me, context)
     return Promise.resolve(context)
   }
 
   return new Promise(resolve => {
-    checkUser().then(webId => {
+    authn.checkUser().then(webId => {
       // Already logged in?
       if (webId) {
-        context.me = sym(webId as string)
-        debug.log(`logIn: Already logged in as ${context.me}`)
+        debug.log(`logIn: Already logged in as ${webId}`)
         return resolve(context)
       }
       if (!context.div || !context.dom) {
         return resolve(context)
       }
       const box = loginStatusBox(context.dom, webIdUri => {
-        saveUser(webIdUri, context)
+        authn.saveUser(webIdUri, context)
         resolve(context) // always pass growing context
       })
       context.div.appendChild(box)
     })
   })
-}
-
-/**
- * Logs the user in and loads their WebID profile document into the store
- *
- * @param context
- *
- * @returns Resolves with the context after login / fetch
- */
-export async function logInLoadProfile (context: AuthenticationContext): Promise<AuthenticationContext> {
-  // console.log('Solid UI logInLoadProfile')
-  if (context.publicProfile) {
-    return context
-  } // already done
-  try {
-    const loggedInContext = await logIn(context)
-    if (!loggedInContext.me) {
-      throw new Error('Could not log in')
-    }
-    context.publicProfile = await solidLogicSingleton.loadProfile(loggedInContext.me)
-  } catch (err) {
-    if (context.div && context.dom) {
-      context.div.appendChild(
-        widgets.errorMessageBlock(context.dom, err.message)
-      )
-    }
-    throw new Error(`Can't log in: ${err}`)
-  }
-  return context
 }
 
 /**
@@ -229,14 +72,14 @@ export async function logInLoadProfile (context: AuthenticationContext): Promise
  *
  * @param context
  */
-export async function logInLoadPreferences (context: AuthenticationContext): Promise<AuthenticationContext> {
-  // console.log('Solid UI logInLoadPreferences')
+// used to be logInLoadPreferences
+export async function ensureLoadedPreferences (context: AuthenticationContext): Promise<AuthenticationContext> {
   if (context.preferencesFile) return Promise.resolve(context) // already done
 
   const statusArea = context.statusArea || context.div || null
   let progressDisplay
   function complain (message) {
-    message = `logInLoadPreferences: ${message}`
+    message = `ensureLoadedPreferences: ${message}`
     if (statusArea) {
       // statusArea.innerHTML = ''
       statusArea.appendChild(
@@ -247,7 +90,7 @@ export async function logInLoadPreferences (context: AuthenticationContext): Pro
     // reject(new Error(message))
   }
   try {
-    context = await logInLoadProfile(context)
+    context = await ensureLoadedProfile(context)
 
     // console.log('back in Solid UI after logInLoadProfile', context)
     const preferencesFile = await solidLogicSingleton.loadPreferences(context.me as NamedNode)
@@ -292,131 +135,40 @@ export async function logInLoadPreferences (context: AuthenticationContext): Pro
 }
 
 /**
- * Resolves with the same context, outputting
- * output: index.public, index.private
+ * Logs the user in and loads their WebID profile document into the store
  *
- * @see https://github.com/solid/solid/blob/main/proposals/data-discovery.md#discoverability
- */
-async function loadIndex (
-  context: AuthenticationContext,
-  isPublic: boolean
-): Promise<AuthenticationContext> {
-  const indexes = await solidLogicSingleton.loadIndexes(
-    context.me as NamedNode,
-    (isPublic ? context.publicProfile || null : null),
-    (isPublic ? null : context.preferencesFile || null),
-    async (err: Error) => widgets.complain(context, err.message)
-  )
-  context.index = context.index || {}
-  context.index.private = indexes.private || context.index.private
-  context.index.public = indexes.public || context.index.public
-  return context
-}
-
-export async function loadTypeIndexes (context: AuthenticationContext) {
-  const indexes = await solidLogicSingleton.loadIndexes(
-    context.me as NamedNode,
-    context.publicProfile || null,
-    context.preferencesFile || null,
-    async (err: Error) => widgets.complain(context, err.message)
-  )
-  context.index = context.index || {}
-  context.index.private = indexes.private || context.index.private
-  context.index.public = indexes.public || context.index.public
-  return context
-}
-
-/**
- * Resolves with the same context, outputting
- * @see https://github.com/solid/solid/blob/main/proposals/data-discovery.md#discoverability
- */
-async function ensureTypeIndexes (context: AuthenticationContext): Promise<AuthenticationContext> {
-  await ensureOneTypeIndex(context, true)
-  await ensureOneTypeIndex(context, false)
-  return context
-}
-
-/**
- * Load or create ONE type index
- * Find one or make one or fail
- * Many reasons for failing including script not having permission etc
+ * @param context
  *
- * Adds its output to the context
- * @see https://github.com/solid/solid/blob/main/proposals/data-discovery.md#discoverability
+ * @returns Resolves with the context after login / fetch
  */
-async function ensureOneTypeIndex (context: AuthenticationContext, isPublic: boolean): Promise<AuthenticationContext | void> {
-  async function makeIndexIfNecessary (context, isPublic) {
-    const relevant = isPublic ? context.publicProfile : context.preferencesFile
-    const visibility = isPublic ? 'public' : 'private'
-
-    async function putIndex (newIndex) {
-      try {
-        await solidLogicSingleton.createEmptyRdfDoc(newIndex, 'Blank initial Type index')
-        return context
-      } catch (e) {
-        const msg = `Error creating new index ${e}`
-        widgets.complain(context, msg)
-      }
-    } // putIndex
-
-    context.index = context.index || {}
-    context.index[visibility] = context.index[visibility] || []
-    let newIndex
-    if (context.index[visibility].length === 0) {
-      newIndex = sym(`${relevant.dir().uri + visibility}TypeIndex.ttl`)
-      debug.log(`Linking to new fresh type index ${newIndex}`)
-      if (!confirm(`OK to create a new empty index file at ${newIndex}, overwriting anything that is now there?`)) {
-        throw new Error('cancelled by user')
-      }
-      debug.log(`Linking to new fresh type index ${newIndex}`)
-      const addMe = [
-        st(context.me, ns.solid(`${visibility}TypeIndex`), newIndex, relevant)
-      ]
-      try {
-        await solidLogicSingleton.updatePromise([], addMe)
-      } catch (err) {
-        const msg = `Error saving type index link saving back ${newIndex}: ${err}`
-        widgets.complain(context, msg)
-        return context
-      }
-
-      debug.log(`Creating new fresh type index file${newIndex}`)
-      await putIndex(newIndex)
-      context.index[visibility].push(newIndex) // @@ wait
-    } else {
-      // officially exists
-      const ixs = context.index[visibility]
-      try {
-        await solidLogicSingleton.load(ixs)
-      } catch (err) {
-        widgets.complain(context, `ensureOneTypeIndex: loading indexes ${err}`)
-      }
-    }
-  } // makeIndexIfNecessary
-
+// used to be logInLoadProfile
+export async function ensureLoadedProfile (context: AuthenticationContext): Promise<AuthenticationContext> {
+  if (context.publicProfile) {
+    return context
+  } // already done
   try {
-    await loadIndex(context, isPublic)
-    if (context.index) {
-      debug.log(
-        `ensureOneTypeIndex: Type index exists already ${isPublic
-          ? context.index.public[0]
-          : context.index.private[0]
-        }`
+    const logInContext = await ensureLoggedIn(context)
+    if (!logInContext.me) {
+      throw new Error('Could not log in')
+    }
+    context.publicProfile = await solidLogicSingleton.loadProfile(logInContext.me)
+  } catch (err) {
+    if (context.div && context.dom) {
+      context.div.appendChild(
+        widgets.errorMessageBlock(context.dom, err.message)
       )
     }
-    return context
-  } catch (error) {
-    await makeIndexIfNecessary(context, isPublic)
-    // widgets.complain(context, 'calling loadIndex:' + error)
+    throw new Error(`Can't log in: ${err}`)
   }
+  return context
 }
 
 /**
- * Returns promise of context with arrays of symbols
- *
- * 2016-12-11 change to include forClass arc a la
- * https://github.com/solid/solid/blob/main/proposals/data-discovery.md
- */
+  * Returns promise of context with arrays of symbols
+  *
+  * 2016-12-11 change to include forClass arc a la
+  * https://github.com/solid/solid/blob/main/proposals/data-discovery.md
+  */
 export async function findAppInstances (
   context: AuthenticationContext,
   theClass: NamedNode,
@@ -437,8 +189,8 @@ export async function findAppInstances (
   try {
     // console.log('calling logInLoad', isPublic)
     await (isPublic
-      ? logInLoadProfile(context)
-      : logInLoadPreferences(context))
+      ? ensureLoadedProfile(context)
+      : ensureLoadedPreferences(context))
     // console.log('called logInLoad', isPublic)
   } catch (err) {
     widgets.complain(context, `loadIndex: login and load problem ${err}`)
@@ -448,6 +200,7 @@ export async function findAppInstances (
   try {
     await loadIndex(context, isPublic)
   } catch (err) {
+    debug.error(err)
   }
   const index = context.index as { [key: string]: Array<NamedNode> }
   const thisIndex = index[visibility]
@@ -492,42 +245,8 @@ export async function findAppInstances (
 }
 
 /**
- * Register a new app in a type index
- */
-export async function registerInTypeIndex (
-  context: AuthenticationContext,
-  instance: NamedNode,
-  theClass: NamedNode,
-  isPublic: boolean
-): Promise<AuthenticationContext> {
-  await ensureOneTypeIndex(context, isPublic)
-  if (!context.index) {
-    throw new Error('registerInTypeIndex: No type index found')
-  }
-  const indexes = isPublic ? context.index.public : context.index.private
-  if (!indexes.length) {
-    throw new Error('registerInTypeIndex: What no type index?')
-  }
-  const index = indexes[0]
-  const registration = widgets.newThing(index)
-  const ins = [
-    // See https://github.com/solid/solid/blob/main/proposals/data-discovery.md
-    st(registration, ns.rdf('type'), ns.solid('TypeRegistration'), index),
-    st(registration, ns.solid('forClass'), theClass, index),
-    st(registration, ns.solid('instance'), instance, index)
-  ]
-  try {
-    await solidLogicSingleton.updatePromise([], ins)
-  } catch (e) {
-    debug.log(e)
-    alert(e)
-  }
-  return context
-}
-
-/**
- * UI to control registration of instance
- */
+  * UI to control registration of instance
+  */
 export function registrationControl (
   context: AuthenticationContext,
   instance,
@@ -615,13 +334,13 @@ export function registrationControl (
 }
 
 /**
- * UI to List at all registered things
- */
+  * UI to List at all registered things
+  */
 export function registrationList (context: AuthenticationContext, options: {
-  private?: boolean
-  public?: boolean
-  type?: NamedNode
-}): Promise<AuthenticationContext> {
+   private?: boolean
+   public?: boolean
+   type?: NamedNode
+ }): Promise<AuthenticationContext> {
   const dom = context.dom as HTMLDocument
   const div = context.div as HTMLElement
 
@@ -640,7 +359,7 @@ export function registrationList (context: AuthenticationContext, options: {
       if (context.index && options[visibility]) {
         ix = ix.concat(context.index[visibility][0])
         sts = sts.concat(
-          solidLogicSingleton.store.statementsMatching(
+          (solidLogicSingleton.store as unknown as IndexedFormula).statementsMatching(
             undefined,
             ns.solid('instance'),
             undefined,
@@ -676,181 +395,19 @@ export function registrationList (context: AuthenticationContext, options: {
     } // registrationList
 
     /*
-       //const containers = solidLogicSingleton.store.each(theClass, ns.solid('instanceContainer'));
-       if (containers.length) {
-       fetcher.load(containers).then(function(xhrs){
-       for (const i=0; i<containers.length; i++) {
-       const cont = containers[i];
-       instances = instances.concat(solidLogicSingleton.store.each(cont, ns.ldp('contains')));
-       }
-       });
-       }
-       */
+        //const containers = solidLogicSingleton.store.each(theClass, ns.solid('instanceContainer'));
+        if (containers.length) {
+        fetcher.load(containers).then(function(xhrs){
+        for (const i=0; i<containers.length; i++) {
+        const cont = containers[i];
+        instances = instances.concat(solidLogicSingleton.store.each(cont, ns.ldp('contains')));
+        }
+        });
+        }
+        */
 
     return context
   })
-}
-
-/**
- * Simple Access Control
- *
- * This function sets up a simple default ACL for a resource, with
- * RWC for the owner, and a specified access (default none) for the public.
- * In all cases owner has read write control.
- * Parameter lists modes allowed to public
- *
- * @param options
- * @param options.public eg ['Read', 'Write']
- *
- * @returns Resolves with aclDoc uri on successful write
- */
-export function setACLUserPublic (
-  docURI: string,
-  me: NamedNode,
-  options: {
-    defaultForNew?: boolean,
-    public?: []
-  }
-): Promise<NamedNode> {
-  const aclDoc = solidLogicSingleton.store.any(
-    solidLogicSingleton.store.sym(docURI),
-    ACL_LINK
-  )
-
-  return Promise.resolve()
-    .then(() => {
-      if (aclDoc) {
-        return aclDoc as NamedNode
-      }
-
-      return fetchACLRel(docURI).catch(err => {
-        throw new Error(`Error fetching rel=ACL header for ${docURI}: ${err}`)
-      })
-    })
-    .then(aclDoc => {
-      const aclText = genACLText(docURI, me, aclDoc.uri, options)
-      if (!solidLogicSingleton.store.fetcher) {
-        throw new Error('Cannot PUT this, store has no fetcher')
-      }
-      return solidLogicSingleton.store.fetcher
-        .webOperation('PUT', aclDoc.uri, {
-          data: aclText,
-          contentType: 'text/turtle'
-        })
-        .then(result => {
-          if (!result.ok) {
-            throw new Error('Error writing ACL text: ' + result.error)
-          }
-
-          return aclDoc
-        })
-    })
-}
-
-/**
- * @param docURI
- * @returns
- */
-function fetchACLRel (docURI: string): Promise<NamedNode> {
-  const fetcher = solidLogicSingleton.store.fetcher
-  if (!fetcher) {
-    throw new Error('Cannot fetch ACL rel, store has no fetcher')
-  }
-
-  return fetcher.load(docURI).then(result => {
-    if (!result.ok) {
-      throw new Error('fetchACLRel: While loading:' + (result as any).error)
-    }
-
-    const aclDoc = solidLogicSingleton.store.any(
-      solidLogicSingleton.store.sym(docURI),
-      ACL_LINK
-    )
-
-    if (!aclDoc) {
-      throw new Error('fetchACLRel: No Link rel=ACL header for ' + docURI)
-    }
-
-    return aclDoc as NamedNode
-  })
-}
-
-/**
- * @param docURI
- * @param me
- * @param aclURI
- * @param options
- *
- * @returns Serialized ACL
- */
-function genACLText (
-  docURI: string,
-  me: NamedNode,
-  aclURI: string,
-  options: {
-    defaultForNew?: boolean,
-    public?: []
-  } = {}
-): string | undefined {
-  const optPublic = options.public || []
-  const g = graph()
-  const auth = Namespace('http://www.w3.org/ns/auth/acl#')
-  let a = g.sym(`${aclURI}#a1`)
-  const acl = g.sym(aclURI)
-  const doc = g.sym(docURI)
-  g.add(a, ns.rdf('type'), auth('Authorization'), acl)
-  g.add(a, auth('accessTo'), doc, acl)
-  if (options.defaultForNew) {
-    g.add(a, auth('default'), doc, acl)
-  }
-  g.add(a, auth('agent'), me, acl)
-  g.add(a, auth('mode'), auth('Read'), acl)
-  g.add(a, auth('mode'), auth('Write'), acl)
-  g.add(a, auth('mode'), auth('Control'), acl)
-
-  if (optPublic.length) {
-    a = g.sym(`${aclURI}#a2`)
-    g.add(a, ns.rdf('type'), auth('Authorization'), acl)
-    g.add(a, auth('accessTo'), doc, acl)
-    g.add(a, auth('agentClass'), ns.foaf('Agent'), acl)
-    for (let p = 0; p < optPublic.length; p++) {
-      g.add(a, auth('mode'), auth(optPublic[p]), acl) // Like 'Read' etc
-    }
-  }
-  return serialize(acl, g, aclURI)
-}
-
-/**
- * Returns `sym($SolidTestEnvironment.username)` if
- * `$SolidTestEnvironment.username` is defined as a global
- * @returns {NamedNode|null}
- */
-export function offlineTestID (): NamedNode | null {
-  const { $SolidTestEnvironment }: any = window
-  if (
-    typeof $SolidTestEnvironment !== 'undefined' &&
-    $SolidTestEnvironment.username
-  ) {
-    // Test setup
-    debug.log('Assuming the user is ' + $SolidTestEnvironment.username)
-    return sym($SolidTestEnvironment.username)
-  }
-
-  if (
-    typeof document !== 'undefined' &&
-    document.location &&
-    ('' + document.location).slice(0, 16) === 'http://localhost'
-  ) {
-    const div = document.getElementById('appTarget')
-    if (!div) return null
-    const id = div.getAttribute('testID')
-    if (!id) return null
-    /* me = solidLogicSingleton.store.any(subject, ns.acl('owner')); // when testing on plane with no WebID
-     */
-    debug.log('Assuming user is ' + id)
-    return sym(id)
-  }
-  return null
 }
 
 function getDefaultSignInButtonStyle (): string {
@@ -858,14 +415,14 @@ function getDefaultSignInButtonStyle (): string {
 }
 
 /**
- * Bootstrapping identity
- * (Called by `loginStatusBox()`)
- *
- * @param dom
- * @param setUserCallback
- *
- * @returns
- */
+  * Bootstrapping identity
+  * (Called by `loginStatusBox()`)
+  *
+  * @param dom
+  * @param setUserCallback
+  *
+  * @returns
+  */
 function signInOrSignUpBox (
   dom: HTMLDocument,
   setUserCallback: (user: string) => void,
@@ -892,9 +449,12 @@ function signInOrSignUpBox (
   signInPopUpButton.setAttribute('style', `${signInButtonStyle}background-color: #eef;`)
 
   authSession.onLogin(() => {
-    const sessionInfo = authSession.info
-    if (sessionInfo && sessionInfo.isLoggedIn) {
-      const webIdURI = sessionInfo.webId
+    const me = authn.currentUser()
+    // const sessionInfo = authSession.info
+    // if (sessionInfo && sessionInfo.isLoggedIn) {
+    if (me) {
+      // const webIdURI = sessionInfo.webId
+      const webIdURI = me.uri
       // setUserCallback(webIdURI)
       const divs = dom.getElementsByClassName(magicClassName)
       debug.log(`Logged in, ${divs.length} panels to be serviced`)
@@ -944,31 +504,31 @@ function signInOrSignUpBox (
 
 export function renderSignInPopup (dom: HTMLDocument) {
   /**
-   * Issuer Menu
-   */
+    * Issuer Menu
+    */
   const issuerPopup = dom.createElement('div')
   issuerPopup.setAttribute('style', 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; align-items: center;')
   dom.body.appendChild(issuerPopup)
   const issuerPopupBox = dom.createElement('div')
   issuerPopupBox.setAttribute('style', `
-     background-color: white;
-     box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
-     -webkit-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
-     -moz-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
-     -o-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
-     border-radius: 4px;
-     min-width: 400px;
-     padding: 10px;
-   `)
+      background-color: white;
+      box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
+      -webkit-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
+      -moz-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
+      -o-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+      min-width: 400px;
+      padding: 10px;
+    `)
   issuerPopup.appendChild(issuerPopupBox)
   const issuerPopupBoxTopMenu = dom.createElement('div')
   issuerPopupBoxTopMenu.setAttribute('style', `
-     border-bottom: 1px solid #DDD;
-     display: flex;
-     flex-direction: row;
-     align-items: center;
-     justify-content: space-between;
-   `)
+      border-bottom: 1px solid #DDD;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    `)
   issuerPopupBox.appendChild(issuerPopupBoxTopMenu)
   const issuerPopupBoxLabel = dom.createElement('label')
   issuerPopupBoxLabel.setAttribute('style', 'margin-right: 5px; font-weight: 800')
@@ -1001,20 +561,20 @@ export function renderSignInPopup (dom: HTMLDocument) {
   }
 
   /**
-    * Text-based idp selection
-    */
+     * Text-based idp selection
+     */
   const issuerTextContainer = dom.createElement('div')
   issuerTextContainer.setAttribute('style', `
-     border-bottom: 1px solid #DDD;
-     display: flex;
-     flex-direction: column;
-     padding-top: 10px;
-   `)
+      border-bottom: 1px solid #DDD;
+      display: flex;
+      flex-direction: column;
+      padding-top: 10px;
+    `)
   const issuerTextInputContainer = dom.createElement('div')
   issuerTextInputContainer.setAttribute('style', `
-     display: flex;
-     flex-direction: row;
-   `)
+      display: flex;
+      flex-direction: row;
+    `)
   const issuerTextLabel = dom.createElement('label')
   issuerTextLabel.innerText = 'Enter the URL of your identity provider:'
   issuerTextLabel.setAttribute('style', 'color: #888')
@@ -1036,14 +596,14 @@ export function renderSignInPopup (dom: HTMLDocument) {
   issuerPopupBox.appendChild(issuerTextContainer)
 
   /**
-    * Button-based idp selection
-    */
+     * Button-based idp selection
+     */
   const issuerButtonContainer = dom.createElement('div')
   issuerButtonContainer.setAttribute('style', `
       display: flex;
       flex-direction: column;
       padding-top: 10px;
-   `)
+    `)
   const issuerBottonLabel = dom.createElement('label')
   issuerBottonLabel.innerText = 'Or pick an identity provider from the list below:'
   issuerBottonLabel.setAttribute('style', 'color: #888')
@@ -1061,132 +621,24 @@ export function renderSignInPopup (dom: HTMLDocument) {
 }
 
 /**
- * @returns - A list of suggested OIDC issuers
- */
-function getSuggestedIssuers (): { name: string, uri: string }[] {
-  // Suggest a default list of OIDC issuers
-  const issuers = [...DEFAULT_ISSUERS]
-
-  // Suggest the current host if not already included
-  const { host, origin } = new URL(location.href)
-  const hosts = issuers.map(({ uri }) => new URL(uri).host)
-  if (!hosts.includes(host) && !hosts.some(existing => isSubdomainOf(host, existing))) {
-    issuers.unshift({ name: host, uri: origin })
-  }
-
-  return issuers
-}
-
-function isSubdomainOf (subdomain: string, domain: string): boolean {
-  const dot = subdomain.length - domain.length - 1
-  return dot > 0 && subdomain[dot] === '.' && subdomain.endsWith(domain)
-}
-
-/**
- * @returns {Promise<string|null>} Resolves with WebID URI or null
- */
-function webIdFromSession (session?: { webId?: string, isLoggedIn: boolean }): string | null {
-  const webId = session?.webId && session.isLoggedIn ? session.webId : null
-  if (webId) {
-    saveUser(webId)
-  }
-  return webId
-}
-
-/**
- * @returns {Promise<string|null>} Resolves with WebID URI or null
- */
-
-/*
-function checkCurrentUser () {
-  return checkUser()
-}
-*/
-
-/**
- * Retrieves currently logged in webId from either
- * defaultTestUser or SolidAuth
- * @param [setUserCallback] Optional callback
- *
- * @returns Resolves with webId uri, if no callback provided
- */
-export async function checkUser<T> (
-  setUserCallback?: (me: NamedNode | null) => T
-): Promise<NamedNode | T | null> {
-  // Save hash for "restorePreviousSession"
-  const preLoginRedirectHash = new URL(window.location.href).hash
-  if (preLoginRedirectHash) {
-    window.localStorage.setItem('preLoginRedirectHash', preLoginRedirectHash)
-  }
-  authSession.onSessionRestore((url) => {
-    if (document.location.toString() !== url) history.replaceState(null, '', url)
-  })
-
-  /**
-   * Handle a successful authentication redirect
-   */
-  await authSession
-    .handleIncomingRedirect({
-      restorePreviousSession: true,
-      url: window.location.href
-    })
-
-  // Check to see if a hash was stored in local storage
-  const postLoginRedirectHash = window.localStorage.getItem('preLoginRedirectHash')
-  if (postLoginRedirectHash) {
-    const curUrl = new URL(window.location.href)
-    if (curUrl.hash !== postLoginRedirectHash) {
-      if (history.pushState) {
-        // console.log('Setting window.location.has using pushState')
-        history.pushState(null, document.title, postLoginRedirectHash)
-      } else {
-        // console.warn('Setting window.location.has using location.hash')
-        location.hash = postLoginRedirectHash
-      }
-      curUrl.hash = postLoginRedirectHash
-    }
-    // See https://stackoverflow.com/questions/3870057/how-can-i-update-window-location-hash-without-jumping-the-document
-    // indow.location.href = curUrl.toString()// @@ See https://developer.mozilla.org/en-US/docs/Web/API/Window/location
-    window.localStorage.setItem('preLoginRedirectHash', '')
-  }
-
-  // Check to see if already logged in / have the WebID
-  let me = defaultTestUser()
-  if (me) {
-    return Promise.resolve(setUserCallback ? setUserCallback(me) : me)
-  }
-
-  // doc = solidLogicSingleton.store.any(doc, ns.link('userMirror')) || doc
-  const webId = webIdFromSession(authSession.info)
-
-  me = saveUser(webId)
-
-  if (me) {
-    debug.log(`(Logged in as ${me} by authentication)`)
-  }
-
-  return Promise.resolve(setUserCallback ? setUserCallback(me) : me)
-}
-
-/**
- * Login status box
- *
- * A big sign-up/sign in box or a logout box depending on the state
- *
- * @param dom
- * @param listener
- *
- * @returns
- */
+  * Login status box
+  *
+  * A big sign-up/sign in box or a logout box depending on the state
+  *
+  * @param dom
+  * @param listener
+  *
+  * @returns
+  */
 export function loginStatusBox (
   dom: HTMLDocument,
   listener: ((uri: string | null) => void) | null = null,
   options: {
     buttonStyle?: string
-  } = {}
+   } = {}
 ): HTMLElement {
   // 20190630
-  let me = defaultTestUser()
+  let me = offlineTestID()
   // @@ TODO Remove the need to cast HTML element to any
   const box: any = dom.createElement('div')
 
@@ -1195,18 +647,18 @@ export function loginStatusBox (
       return
     }
 
-    const uri = newidURI.uri || newidURI
-    //    UI.preferences.set('me', uri)
-    me = sym(uri)
+    // const uri = newidURI.uri || newidURI
+    // me = sym(uri)
+    me = authn.saveUser(newidURI)
     box.refresh()
-    if (listener) listener(me.uri)
+    if (listener) listener(me!.uri)
   }
 
   function logoutButtonHandler (_event) {
-    // UI.preferences.set('me', '')
+    const oldMe = me
     authSession.logout().then(
       function () {
-        const message = `Your WebID was ${me}. It has been forgotten.`
+        const message = `Your WebID was ${oldMe}. It has been forgotten.`
         me = null
         try {
           alert(message)
@@ -1243,12 +695,7 @@ export function loginStatusBox (
   }
 
   box.refresh = function () {
-    const sessionInfo = authSession.info
-    if (sessionInfo && sessionInfo.webId && sessionInfo.isLoggedIn) {
-      me = sym(sessionInfo.webId)
-    } else {
-      me = null
-    }
+    me = authn.currentUser()
     if ((me && box.me !== me.uri) || (!me && box.me)) {
       widgets.clearElement(box)
       if (me) {
@@ -1259,20 +706,16 @@ export function loginStatusBox (
     }
     box.me = me ? me.uri : null
   }
+  box.refresh()
 
   function trackSession () {
-    const sessionInfo = authSession.info
-    if (sessionInfo && sessionInfo.webId && sessionInfo.isLoggedIn) {
-      me = sym(sessionInfo.webId)
-    } else {
-      me = null
-    }
+    me = authn.currentUser()
     box.refresh()
   }
   trackSession()
+
   authSession.onLogin(trackSession)
   authSession.onLogout(trackSession)
-
   box.me = '99999' // Force refresh
   box.refresh()
   return box
@@ -1299,28 +742,28 @@ authSession.onLogout(async () => {
 })
 
 /**
- * Workspace selection etc
- * See https://github.com/solid/userguide/issues/16
- */
+  * Workspace selection etc
+  * See https://github.com/solid/userguide/issues/16
+  */
 
 /**
- * Returns a UI object which, if it selects a workspace,
- * will callback(workspace, newBase).
- * See https://github.com/solid/userguide/issues/16 for more info on workspaces.
- *
- * If necessary, will get an account, preference file, etc. In sequence:
- *
- *   - If not logged in, log in.
- *   - Load preference file
- *   - Prompt user for workspaces
- *   - Allows the user to just type in a URI by hand
- *
- * Calls back with the workspace and the base URI
- *
- * @param dom
- * @param appDetails
- * @param callbackWS
- */
+  * Returns a UI object which, if it selects a workspace,
+  * will callback(workspace, newBase).
+  * See https://github.com/solid/userguide/issues/16 for more info on workspaces.
+  *
+  * If necessary, will get an account, preference file, etc. In sequence:
+  *
+  *   - If not logged in, log in.
+  *   - Load preference file
+  *   - Prompt user for workspaces
+  *   - Allows the user to just type in a URI by hand
+  *
+  * Calls back with the workspace and the base URI
+  *
+  * @param dom
+  * @param appDetails
+  * @param callbackWS
+  */
 export function selectWorkspace (
   dom: HTMLDocument,
   appDetails: AppDetails,
@@ -1329,7 +772,7 @@ export function selectWorkspace (
   const noun = appDetails.noun
   const appPathSegment = appDetails.appPathSegment
 
-  const me = defaultTestUser()
+  const me = offlineTestID()
   const box = dom.createElement('div')
   const context: AuthenticationContext = { me: me, dom: dom, div: box }
 
@@ -1397,7 +840,7 @@ export function selectWorkspace (
       say(`Workspace used: ${w[0].uri}`, 'white') // @@ allow user to see URI
       newBase = figureOutBase(w[0])
       // callbackWS(w[0], newBase)
-    // } else if (w.length === 0) {
+      // } else if (w.length === 0) {
     }
 
     // Prompt for ws selection or creation
@@ -1530,7 +973,7 @@ export function selectWorkspace (
   } // displayOptions
 
   // console.log('kicking off async operation')
-  logInLoadPreferences(context) // kick off async operation
+  ensureLoadedPreferences(context) // kick off async operation
     .then(displayOptions)
     .catch(err => {
       // console.log("err from async op")
@@ -1541,21 +984,21 @@ export function selectWorkspace (
 } // selectWorkspace
 
 /**
- * Creates a new instance of an app.
- *
- * An instance of an app could be e.g. an issue tracker for a given project,
- * or a chess game, or calendar, or a health/fitness record for a person.
- *
- * Note that this use of the term 'app' refers more to entries in the user's
- * type index than to actual software applications that use the personal data
- * to which these entries point.
- *
- * @param dom
- * @param appDetails
- * @param callback
- *
- * @returns A div with a button in it for making a new app instance
- */
+  * Creates a new instance of an app.
+  *
+  * An instance of an app could be e.g. an issue tracker for a given project,
+  * or a chess game, or calendar, or a health/fitness record for a person.
+  *
+  * Note that this use of the term 'app' refers more to entries in the user's
+  * type index than to actual software applications that use the personal data
+  * to which these entries point.
+  *
+  * @param dom
+  * @param appDetails
+  * @param callback
+  *
+  * @returns A div with a button in it for making a new app instance
+  */
 export function newAppInstance (
   dom: HTMLDocument,
   appDetails: AppDetails,
@@ -1576,7 +1019,6 @@ export function newAppInstance (
   div.appendChild(b)
   return div
 }
-
 /**
  * Retrieves whether the currently logged in user is a power user
  * and/or a developer
@@ -1587,7 +1029,7 @@ export async function getUserRoles (): Promise<Array<NamedNode>> {
       me,
       preferencesFile,
       preferencesFileError
-    } = await logInLoadPreferences({})
+    } = await ensureLoadedPreferences({})
     if (!preferencesFile || preferencesFileError) {
       throw new Error(preferencesFileError)
     }

@@ -49,7 +49,7 @@ import { foaf, rdf, sioc, vcard } from '../../../src/ns'
 import { icons } from '../../../src/iconBase'
 import { clearStore } from '../helpers/clearStore'
 import { domWithHead } from '../../helpers/dom-with-head'
-import { solidLogicSingleton } from '../../../src/logic'
+import { solidLogicSingleton } from 'solid-logic'
 import * as style from '../../../src/style'
 const { iconBase } = icons
 const store = solidLogicSingleton.store

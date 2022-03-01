@@ -3,7 +3,7 @@
     work in solid-ui by adjusting where imported functions are found.
  */
 import { IndexedFormula, NamedNode } from 'rdflib'
-import { authSession, currentUser } from '../authn/authn'
+import { authn, authSession } from 'solid-logic'
 import { addStyleClassToElement, getName, getPod, getPodOwner } from '../utils/headerFooterHelpers'
 
 const DEFAULT_SOLID_PROJECT_URL = 'https://solidproject.org'
@@ -38,7 +38,7 @@ export async function initFooter (store: IndexedFormula, options?: FooterOptions
  */
 export function rebuildFooter (footer: HTMLElement, store: IndexedFormula, pod: NamedNode | null, podOwner: NamedNode | null, options?: FooterOptions) {
   return async () => {
-    const user = currentUser()
+    const user = authn.currentUser()
     footer.innerHTML = ''
     footer.appendChild(await createControllerInfoBlock(store, user, pod, podOwner, options))
   }

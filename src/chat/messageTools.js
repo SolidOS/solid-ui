@@ -8,9 +8,7 @@
  * @packageDocumentation
  */
 import * as debug from '../debug'
-import { authn } from '../authn/index'
 import { icons } from '../iconBase'
-import { store } from '../logic'
 // import { media } from '../media/index'
 import * as ns from '../ns'
 // import * as pad from '../pad'
@@ -19,12 +17,10 @@ import * as rdf from 'rdflib' // pull in first avoid cross-refs
 import * as utils from '../utils'
 import * as widgets from '../widgets'
 import { renderBookmarksButton } from './bookmarks'
+import { authn, store } from 'solid-logic'
+
 import { mostRecentVersion } from './chatLogic'
 import { switchToEditor } from './message'
-
-// import { infiniteMessageArea } from './infinite.js'
-// import { renderMessage, creatorAndDate } from './message'
-// import * as debug from '../debug'
 
 const dom = window.document
 

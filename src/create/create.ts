@@ -2,14 +2,14 @@
  **
  */
 
+import { DataBrowserContext, NewPaneOptions, PaneDefinition } from 'pane-registry'
+import { solidLogicSingleton } from 'solid-logic'
 import * as debug from '../debug'
 import { icons } from '../iconBase'
+import { ensureLoadedProfile, selectWorkspace } from '../login/login'
+import * as ns from '../ns'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
-import { solidLogicSingleton } from '../logic'
-import * as ns from '../ns'
-import { logInLoadProfile, selectWorkspace } from '../authn/authn'
-import { DataBrowserContext, NewPaneOptions, PaneDefinition } from 'pane-registry'
 import { CreateContext, NewAppInstanceOptions } from './types'
 
 const kb = solidLogicSingleton.store
@@ -78,7 +78,7 @@ export function newThingUI (
     return new Promise(function (resolve, reject) {
       let selectUI // , selectUIParent
       function callbackWS (ws, newBase) {
-        logInLoadProfile(createContext).then(
+        ensureLoadedProfile(createContext).then(
           _context => {
             const newPaneOptions: NewPaneOptions = Object.assign({
               newBase: newBase,

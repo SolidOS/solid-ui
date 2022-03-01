@@ -5,9 +5,10 @@ import {
   fieldStore,
   basicField
 } from '../../../../src/widgets/forms/basic'
-import { store, ns } from '../../../../src/'
+import ns from '../../../../src/ns'
 import { textInputStyle } from '../../../../src/style'
 import { clearStore } from '../../helpers/clearStore'
+import { store } from 'solid-logic'
 
 silenceDebugMessages()
 afterEach(clearStore)

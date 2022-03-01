@@ -22,7 +22,7 @@
 import * as utils from '../utils'
 import * as $rdf from 'rdflib'
 import { MatrixOptions } from './types'
-import { solidLogicSingleton } from '../logic'
+import { solidLogicSingleton } from 'solid-logic'
 
 const kb = solidLogicSingleton.store
 

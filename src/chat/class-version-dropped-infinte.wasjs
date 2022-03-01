@@ -5,7 +5,7 @@
 // import { authn } from '../authn/index'
 import * as debug from '../debug'
 import { icons } from '../iconBase'
-import { store } from '../logic'
+import { store } from 'solid-logic'
 // import { media } from '../media/index'
 import * as ns from '../ns'
 // import * as pad from '../pad'
@@ -21,7 +21,7 @@ import * as widgets from '../widgets'
 
 const dom = window.document
 
-// const UI = { authn, icons, ns, media, pad, $rdf, store, style, utils, widgets }
+// const UI = { authn, icons, ns, media, pad, $rdf, style, utils, widgets }
 
 export function desktopNotification (str) {
   // Let's check if the browser supports notifications

@@ -1,7 +1,7 @@
 import { silenceDebugMessages } from '../../../helpers/setup'
 import { namedNode } from 'rdflib'
 import * as ns from '../../../../src/ns'
-import { kb } from '../../../../src/logic'
+import { store } from 'solid-logic'
 
 // console.log('@@ solidLogicSingleton', solidLogicSingleton)
 // @ts-ignore
@@ -26,7 +26,7 @@ import {
 
 import { basicField } from '../../../../src/widgets/forms/basic'
 
-const doc = kb.sym('http://example.com/doc.ttl')
+const doc = store.sym('http://example.com/doc.ttl')
 
 silenceDebugMessages()
 
@@ -45,7 +45,7 @@ describe('Form field', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = namedNode('http://example.com/#store')
+    const storeNode = namedNode('http://example.com/#store')
     const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
 
     // FIXME: https://github.com/solid/solid-ui/issues/239
@@ -58,7 +58,7 @@ describe('Form field', () => {
       already,
       subject,
       form,
-      store,
+      storeNode,
       callbackFunction
     )).toMatchSnapshot()
   })
@@ -70,7 +70,7 @@ describe('Form field', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = namedNode('http://example.com/#store')
+    const storeNode = namedNode('http://example.com/#store')
     const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       field[ns.ui('Form').uri](
@@ -79,7 +79,7 @@ describe('Form field', () => {
         already,
         subject,
         form,
-        store,
+        storeNode,
         callbackFunction
       )
     ).toMatchSnapshot()
@@ -91,7 +91,7 @@ describe('Form field', () => {
     const already = { dubSubject }
     const subject = dubSubject
     const form = namedNode('http://example.com/#form')
-    const store = namedNode('http://example.com/#store')
+    const storeNode = namedNode('http://example.com/#store')
     const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       field[ns.ui('Form').uri](
@@ -100,7 +100,7 @@ describe('Form field', () => {
         already,
         subject,
         form,
-        store,
+        storeNode,
         callbackFunction
       )
     ).toMatchSnapshot()
@@ -116,7 +116,7 @@ describe('Options field', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = namedNode('http://example.com/#store')
+    const storeNode = namedNode('http://example.com/#store')
     const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       field[ns.ui('Options').uri](
@@ -125,7 +125,7 @@ describe('Options field', () => {
         already,
         subject,
         form,
-        store,
+        storeNode,
         callbackFunction
       )
     ).toMatchSnapshot()
@@ -141,7 +141,7 @@ describe('Multiple field', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = namedNode('http://example.com/#store')
+    const storeNode = namedNode('http://example.com/#store')
     const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       field[ns.ui('Multiple').uri](
@@ -150,7 +150,7 @@ describe('Multiple field', () => {
         already,
         subject,
         form,
-        store,
+        storeNode,
         callbackFunction
       )
     ).toMatchSnapshot()
@@ -188,7 +188,7 @@ describe('MultiLineTextField', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = namedNode('http://example.com/#store')
+    const storeNode = namedNode('http://example.com/#store')
     const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       field[ns.ui('MultiLineTextField').uri](
@@ -197,7 +197,7 @@ describe('MultiLineTextField', () => {
         already,
         subject,
         form,
-        store,
+        storeNode,
         callbackFunction
       )
     ).toMatchSnapshot()
@@ -213,7 +213,7 @@ describe('BooleanField', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = namedNode('http://example.com/#store')
+    const storeNode = namedNode('http://example.com/#store')
     const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       field[ns.ui('BooleanField').uri](
@@ -222,7 +222,7 @@ describe('BooleanField', () => {
         already,
         subject,
         form,
-        store,
+        storeNode,
         callbackFunction
       )
     ).toMatchSnapshot()
@@ -238,7 +238,7 @@ describe('TristateField', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = namedNode('http://example.com/#store')
+    const storeNode = namedNode('http://example.com/#store')
     const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       field[ns.ui('TristateField').uri](
@@ -247,7 +247,7 @@ describe('TristateField', () => {
         already,
         subject,
         form,
-        store,
+        storeNode,
         callbackFunction
       )
     ).toMatchSnapshot()
@@ -263,8 +263,8 @@ describe('Classifier', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = namedNode('http://example.com/#store')
-    kb.add(form, ns.ui('category'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
+    const storeNode = namedNode('http://example.com/#store')
+    store.add(form, ns.ui('category'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
 
     const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
@@ -274,7 +274,7 @@ describe('Classifier', () => {
         already,
         subject,
         form,
-        store,
+        storeNode,
         callbackFunction
       )
     ).toMatchSnapshot()
@@ -290,7 +290,7 @@ describe('Choice', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = namedNode('http://example.com/#store')
+    const storeNode = namedNode('http://example.com/#store')
     const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       field[ns.ui('Choice').uri](
@@ -299,7 +299,7 @@ describe('Choice', () => {
         already,
         subject,
         form,
-        store,
+        storeNode,
         callbackFunction
       )
     ).toMatchSnapshot()
@@ -315,8 +315,8 @@ describe('Heading', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = namedNode('http://example.com/#store')
-    kb.add(form, ns.ui('contents'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
+    const storeNode = namedNode('http://example.com/#store')
+    store.add(form, ns.ui('contents'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
     const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
       field[ns.ui('Heading').uri](
@@ -325,7 +325,7 @@ describe('Heading', () => {
         already,
         subject,
         form,
-        store,
+        storeNode,
         callbackFunction
       )
     ).toMatchSnapshot()
@@ -341,9 +341,9 @@ describe('Comment', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const store = namedNode('http://example.com/#store')
+    const storeNode = namedNode('http://example.com/#store')
     const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
-    kb.add(form, ns.ui('contents'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
+    store.add(form, ns.ui('contents'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
     expect(
       field[ns.ui('Comment').uri](
         document,
@@ -351,7 +351,7 @@ describe('Comment', () => {
         already,
         subject,
         form,
-        store,
+        storeNode,
         callbackFunction
       )
     ).toMatchSnapshot()
@@ -365,10 +365,10 @@ describe('editFormButton', () => {
   it('runs', () => {
     const container = null
     const form = null
-    const store = namedNode('http://example.com/#store')
+    const storeNode = namedNode('http://example.com/#store')
     const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
     expect(
-      editFormButton(document, container, form, store, callbackFunction)
+      editFormButton(document, container, form, storeNode, callbackFunction)
     ).toBeInstanceOf(HTMLButtonElement)
   })
 })
@@ -382,10 +382,10 @@ describe('appendForm', () => {
     const already = {}
     const subject = namedNode('http://example.com/#subject')
     const form = namedNode('http://example.com/#form')
-    const store = namedNode('http://example.com/#store')
+    const storeNode = namedNode('http://example.com/#store')
     const itemDone = () => {}
     expect(
-      appendForm(document, container, already, subject, form, store, itemDone)
+      appendForm(document, container, already, subject, form, storeNode, itemDone)
     ).toBeInstanceOf(HTMLDivElement)
   })
 })
@@ -395,7 +395,7 @@ describe('propertiesForClass', () => {
     expect(propertiesForClass).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    expect(propertiesForClass(kb, namedNode('http://example.com/#class'))).toBeInstanceOf(Object)
+    expect(propertiesForClass(store, namedNode('http://example.com/#class'))).toBeInstanceOf(Object)
   })
 })
 
@@ -404,8 +404,8 @@ describe('findClosest', () => {
     expect(findClosest).toBeInstanceOf(Object)
   })
   it('runs', () => {
-    kb.sym = namedNode
-    expect(findClosest(kb, 'http://example.com/#cla', namedNode('http://example.com/#prop'))).toBeInstanceOf(Object)
+    store.sym = namedNode
+    expect(findClosest(store, 'http://example.com/#cla', namedNode('http://example.com/#prop'))).toBeInstanceOf(Object)
   })
 })
 
@@ -444,7 +444,7 @@ describe('newButton', () => {
     expect(
       newButton(
         document,
-        kb,
+        store,
         namedNode('http://example.com/#subject'),
         namedNode('http://example.com/#predicate'),
         namedNode('http://example.com/#class'),
@@ -464,7 +464,7 @@ describe('promptForNew', () => {
     expect(
       promptForNew(
         document,
-        kb,
+        store,
         namedNode('http://example.com/#this'),
         namedNode('http://example.com/#this'),
         namedNode('http://example.com/#this'),
@@ -484,7 +484,7 @@ describe('makeDescription', () => {
     expect(
       makeDescription(
         document,
-        kb,
+        store,
         namedNode('http://example.com/#subject'),
         namedNode('http://example.com/#predicate'),
         namedNode('http://example.com/#store'),
@@ -502,7 +502,7 @@ describe('makeSelectForOptions', () => {
     expect(
       makeSelectForOptions(
         document,
-        kb,
+        store,
         namedNode('http://example.com/#subject'),
         namedNode('http://example.com/#predicate'),
         [],
@@ -522,7 +522,7 @@ describe('makeSelectForCategory', () => {
     expect(
       makeSelectForCategory(
         document,
-        kb,
+        store,
         null,
         null,
         doc,
@@ -540,7 +540,7 @@ describe('makeSelectForNestedCategory', () => {
     expect(
       makeSelectForNestedCategory(
         document,
-        kb,
+        store,
         namedNode('http://example.com/#this'),
         namedNode('http://example.com/#this'),
         doc,
@@ -558,7 +558,7 @@ describe('buildCheckboxForm', () => {
     expect(
       buildCheckboxForm(
         document,
-        kb,
+        store,
         'label',
         [],
         [],

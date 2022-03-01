@@ -1,7 +1,7 @@
 import { silenceDebugMessages } from '../../../helpers/setup'
 import { namedNode } from 'rdflib'
 import ns from '../../../../src/ns'
-import { solidLogicSingleton } from '../../../../src/logic'
+import { solidLogicSingleton } from 'solid-logic'
 import {
   commentField
 } from '../../../../src/widgets/forms/comment'

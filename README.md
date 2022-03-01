@@ -5,6 +5,7 @@
 User Interface widgets and utilities for Solid
 
 These are HTML5 widgets which connect to a solid store. Building blocks for solid-based apps.
+Vanilla JS.  Includes large widgets like chat, table, matrix, form fields, and small widgets.
 
 ## Getting started
 ### In npm-based projects
@@ -39,14 +40,14 @@ document.body.appendChild(myButton)
 Or a chat widget:
 ```js
 const chatChannel = 'https://example-user.inrupt.net/public/example-chat/index.ttl#this'
-const chat = UI.infiniteMessageArea(document, UI.store, UI.rdf.namedNode(chatChannel))
+const chat = UI.infiniteMessageArea(document, store, UI.rdf.namedNode(chatChannel))
 document.body.appendChild(chat)
 ```
 
 Or a full ACL Control Box:
 ```js
 const exampleFolder = 'https://example-user.inrupt.net/public/public-control/'
-const aclControlBox = UI.aclControl.ACLControlBox5(UI.rdf.namedNode(exampleFolder), { dom: document }, '', UI.store)
+const aclControlBox = UI.aclControl.ACLControlBox5(UI.rdf.namedNode(exampleFolder), { dom: document }, '', store)
 document.body.appendChild(aclControlBox)
 ```
 

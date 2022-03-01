@@ -5,7 +5,7 @@
  */
 
 import * as debug from '../debug'
-import { store } from '../logic'
+import { store } from 'solid-logic'
 
 import * as ns from '../ns'
 import * as $rdf from 'rdflib' // pull in first avoid cross-refs

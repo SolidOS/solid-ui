@@ -41,10 +41,7 @@ import * as rdf from 'rdflib' // pull in first avoid cross-refs
 // @ts-ignore
 import * as ns from './ns'
 import { acl, aclControl } from './acl/index'
-import { authn } from './authn/index'
 import { create } from './create/index'
-// @ts-ignore
-// import * as debug from '../debug'
 // @ts-ignore
 import { icons } from './iconBase'
 import * as language from './widgets/forms/autocomplete/language'
@@ -62,34 +59,37 @@ import * as participation from './participation'
 // @ts-ignore
 import * as preferences from './preferences'
 // @ts-ignore
-import { solidLogicSingleton } from './logic'
-// @ts-ignore
 import * as style from './style'
 // @ts-ignore
 import { renderTableViewPane as table } from './table'
 import * as tabs from './tabs'
 // @ts-ignore
 import * as utils from './utils'
+import * as login from './login/login'
 import * as widgets from './widgets/index'
 import versionInfo from './versionInfo'
 import { initHeader } from './header'
 import { initFooter } from './footer'
+import * as createTypes from './create/types'
+import { authn, store } from 'solid-logic'
 
 const dom = window ? window.document : null // Idea that UI.dom can be adapted in non-browser environments
-const store = solidLogicSingleton.store
 
 if (typeof window !== 'undefined') {
   ;(<any>window).UI = {
+    authn,
+    store,
     ns,
     rdf,
     acl,
     aclControl,
-    authn,
     create,
+    createTypes,
     dom,
     icons,
     language,
     log,
+    login,
     matrix,
     media,
     messageArea,
@@ -97,8 +97,6 @@ if (typeof window !== 'undefined') {
     pad,
     participation,
     preferences,
-    solidLogicSingleton,
-    store,
     style,
     table,
     tabs,
@@ -110,17 +108,21 @@ if (typeof window !== 'undefined') {
   } // Simpler access by non-node scripts
 }
 
+// this variables are directly used in the storybook
 export {
+  authn,
+  store,
   ns,
   rdf,
   acl,
   aclControl,
-  authn,
   create,
+  createTypes,
   dom,
   icons,
   language,
   log,
+  login,
   matrix,
   media,
   messageArea,
@@ -128,8 +130,6 @@ export {
   pad,
   participation,
   preferences,
-  solidLogicSingleton,
-  store,
   style,
   table,
   tabs,

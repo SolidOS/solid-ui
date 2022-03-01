@@ -9,7 +9,7 @@ import { Namespace, NamedNode, st, IndexedFormula } from 'rdflib'
 import { newThing, errorMessageBlock } from './widgets'
 import { beep } from './utils'
 import { log } from './debug'
-import { solidLogicSingleton } from './logic'
+import { solidLogicSingleton } from 'solid-logic'
 export { renderPartipants, participationObject, manageParticipation, recordParticipation } from './participation'
 
 const store = solidLogicSingleton.store
