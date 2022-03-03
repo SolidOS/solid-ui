@@ -41,29 +41,51 @@ export function getPod (): NamedNode {
   return sym(document.location.origin).site()
 }
 /**
- * @ignore exporting this only for the unit test
  */
 export async function getPodOwner (pod: NamedNode, store: IndexedFormula): Promise<NamedNode | null> {
-  // @@ TODO: This is given the structure that NSS provides - might need to change for other Pod servers
-  const podOwner = sym(`${pod.uri}profile/card#me`)
+  // This is a massive guess.  In future
+  // const podOwner = sym(`${pod.uri}profile/card#me`)
 
   try {
-    if (store.fetcher) {
-      await store.fetcher.load(podOwner.doc())
-    } else {
-      throw new Error('There was a problem loading the Fetcher')
-    }
-    // @@ TODO: check back links to storage
+    store.fetcher.load(pod)
   } catch (err) {
-    throw new Error('Did NOT find pod owners profile at ' + podOwner)
+    console.error('Error loading pod ' + pod + ': ' + err)
+    return null
   }
+  if (!store.holds(pod, ns.rdf('type'), ns.space('Storage'), pod) {
+    console.warn('Pod  ' + pod ' does not declare itself as a space:Storage')
+    return null
+  }
+  const podOwner = store.any(null, ns.space('storage'), pod, pod)
   if (podOwner) {
-    const storageIsListedInPodOwnersProfile = store.holds(podOwner, ns.space('storage'), pod, podOwner.doc())
-    if (!storageIsListedInPodOwnersProfile) {
-      throw new Error(`** Pod owner ${podOwner} does NOT list pod ${pod} as storage`)
+    try {
+      store.fetcher.load(podOwner.doc())
+    } catch (err) {
+      console.warn('Unable to load profile of pod owner ' + podOwner)
+      return null
     }
+    if (!store.holds(podOwner, ns.space('storage'), pod, podOwner.doc()) {
+      console.warn(`Pod owner ${podOwner} does NOT list pod ${pod} as their storage`)
+    }
+    return podOwner // Success!
+  } else // pod ownder not declared in pod
+  // @@ TODO: This is given the structure that NSS provides
+
+  {
+    // This is a massive guess.  For old pods which don't have owner link
+    const guess = sym(`${pod.uri}profile/card#me`)
+    try {
+      store.fetcher.load(guess)
+    } else (err) {
+      console.error(`Ooops. Guessed wrong pod owner webid {$guess} : can't load it.`)
+      return null
+    }
+    if (store.holds(guess, ns.space('storage'), pod, guess.doc())) {
+      console.warn(`Using guessed pod owner webid but it links back.`)
+      return guess
+    }
+    return null
   }
-  return podOwner
 }
 /**
  * @ignore exporting this only for the unit test
