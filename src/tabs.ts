@@ -223,10 +223,16 @@ export function tabWidget (options: TabWidgetOptions) {
   orderedSync()
 
   if (!options.startEmpty && tabContainer.children.length && options.selectedTab) {
-    const selectedTab = Array.from(tabContainer.children)
+
+    const selectedTab0 = Array.from(tabContainer.children) // Version left for compatability with ??
       .map(tab => tab.firstChild as HTMLElement)
       .find(tab => tab.dataset.name === options.selectedTab)
-    const tab = selectedTab || tabContainer.children[0].firstChild as HTMLButtonElement
+
+    const selectedTabURI = optins.selectedTab.uri || options.selectedTab // Allow NamedNode or URI
+    const selectedTab1 = Array.from(tabContainer.children)
+      .find(tab => tab.subject && tab.subject.uri && tab.subject.uri === selectedTabURI)
+
+    const tab = selectedTab0 ||selectedTab1 || tabContainer.children[0].firstChild as HTMLButtonElement
     tab.click()
   } else if (!options.startEmpty) {
     (tabContainer.children[0].firstChild as HTMLButtonElement).click() // Open first tab
