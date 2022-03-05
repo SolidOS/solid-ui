@@ -13,8 +13,8 @@ export const styleMap = {
     padding: '1em',
     width: '100%',
     '&:focus, &:hover': {
-      backgroundColor: 'linear-gradient(to right, #7C4DFF 0%, #18A9E6 50%, #01C9EA 100%)'
-      // backgroundColor: '#eee'
+      // backgroundColor: 'linear-gradient(to right, #7C4DFF 0%, #18A9E6 50%, #01C9EA 100%)'
+      backgroundColor: 'rgba(48.6, 30.2, 100, 5%)'
     },
     a: {
       textDecoration: 'none'
@@ -44,7 +44,8 @@ export const styleMap = {
     padding: '1em',
     width: '100%',
     '&:focus, &:hover': {
-      backgroundColor: 'linear-gradient(to right, #7C4DFF 0%, #18A9E6 50%, #01C9EA 100%)'
+      // backgroundColor: 'linear-gradient(to right, #7C4DFF 0%, #18A9E6 50%, #01C9EA 100%)'
+      backgroundColor: 'rgba(48.6, 30.2, 100, 5%)'
     }
   },
   'header-user-menu__list': {
@@ -54,10 +55,11 @@ export const styleMap = {
   },
   'header-user-menu__navigation-menu': {
     background: 'white',
-    border: 'solid 1px #000000', // the color was defined in mashlib as a SASS variable $divider_color
-    borderRight: '0',
+    border: 'solid 1px #C8C8C8', // the color was defined in mashlib as a SASS variable $divider_color
+    borderRadius: '0.5rem',
+    borderRight: 'solid 1px #C8C8C8',
     position: 'absolute',
-    right: '0',
+    right: '0.5em',
     top: '60px', // defined in mashlib as a SASS variable $icon_size
     width: '200px',
     'z-index': '1',
@@ -66,7 +68,7 @@ export const styleMap = {
     }
   },
   'header-user-menu__list-item': {
-    borderBottom: 'solid 1px #000000', // the color was defined in mashlib as a SASS variable $divider_color
+    borderBottom: 'solid 1px #D8D8D8', // the color was defined in mashlib as a SASS variable $divider_color
     '&:last-child': {
       border: '0'
     }
@@ -80,7 +82,8 @@ export const styleMap = {
     width: '50px'
   },
   'header-banner': {
-    boxShadow: '0px 1px 4px #000000', // the color was defined in mashlib as a SASS variable $divider_color
+    border: 'solid 1px #C8C8C8',
+    boxShadow: '0px 1px 4px #C8C8C8', // the color was defined in mashlib as a SASS variable $divider_color
     display: 'flex',
     justifyContent: 'space-between',
     padding: '0 1.5em',
@@ -101,12 +104,14 @@ export const styleMap = {
     }
   },
   'header-banner__user-menu': {
-    borderLeft: 'solid 1px #000000', // the color was defined in mashlib as a SASS variable $divider_color
-    marginLeft: 'auto'
+    borderLeft: 'solid 1px #C8C8C8', // the color was defined in mashlib as a SASS variable $divider_color
+    marginLeft: 'auto',
+    marginRight: '0.5em'
   },
   'header-banner__help-menu': {
     borderLeft: 'solid 1px #000000', // the color was defined in mashlib as a SASS variable $divider_color
-    marginLeft: 'auto'
+    marginLeft: 'auto',
+    marginRight: '0.5em'
   },
   'header-banner__icon': {
     backgroundSize: '65px 60px',
