@@ -1,13 +1,10 @@
-const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = [{
   mode: 'development',
   entry: './lib/index.js',
-  output: {
-    path: path.resolve(__dirname, './lib'),
-    filename: 'webpack-bundle.js'
-  },
   plugins: [
+    new HtmlWebpackPlugin() // plugin that creats in /lib the index.html that contains the webpack-bundle.js
   ],
   externals: {
     fs: 'null',
@@ -18,22 +15,22 @@ module.exports = [{
     'whatwg-url': 'window',
     '@trust/webcrypto': 'crypto'
   },
+  resolve: {
+    fallback: { path: false }
+  },
   devServer: {
-    contentBase: './dist'
+    static: './dist'
   },
   devtool: 'source-map',
   module: {
     rules: [{
-        test: /\.sparql$/i,
-        use: 'raw-loader',
-      },
-      {
-        test: /\.ttl$/i,
-        use: 'raw-loader',
-      },
-   ]
- },
-
-
-
+      test: /\.sparql$/i,
+      type: 'asset/source'
+    },
+    {
+      test: /\.ttl$/i,
+      type: 'asset/source'
+    }
+    ]
+  }
 }]

@@ -153,7 +153,7 @@ export function thread (dom, kb, subject, messageStore, options) {
       rhs.appendChild(sendButton)
     }
 
-    const context = { div: middle, dom: dom }
+    const context = { div: middle, dom }
     login.ensureLoggedIn(context).then(context => {
       me = context.me
       turnOnInput()

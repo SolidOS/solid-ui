@@ -25,7 +25,7 @@ export function adoptACLDefault (
   aclDoc: NamedNode,
   defaultResource: NamedNode,
   defaultACLDoc: NamedNode
-): IndexedFormula {
+): LiveStore {
   const ACL = ns.acl
   const isContainer = doc.uri.slice(-1) === '/' // Give default for all directories
 
@@ -46,7 +46,7 @@ export function adoptACLDefault (
 
   const kb2 = graph() // Potential - derived is kept apart
   proposed.forEach(st => kb2.add(move(st.subject), move(st.predicate), move(st.object), sym(aclDoc.uri)))
-  return kb2
+  return kb2 as LiveStore
 
   function move (symbol) {
     const y = defaultACLDoc.uri.length // The default ACL file

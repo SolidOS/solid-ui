@@ -81,7 +81,7 @@ export function newThingUI (
         ensureLoadedProfile(createContext).then(
           _context => {
             const newPaneOptions: NewPaneOptions = Object.assign({
-              newBase: newBase,
+              newBase,
               folder: options.folder || undefined,
               workspace: ws
             }, options)

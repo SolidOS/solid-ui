@@ -1508,7 +1508,7 @@ export function makeSelectForCategory (
     subject,
     ns.rdf('type'),
     subs,
-    { multiple: multiple, nullPrompt: '--classify--' },
+    { multiple, nullPrompt: '--classify--' },
     dataDoc,
     callbackFunction
   )

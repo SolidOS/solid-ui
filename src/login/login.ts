@@ -774,7 +774,7 @@ export function selectWorkspace (
 
   const me = offlineTestID()
   const box = dom.createElement('div')
-  const context: AuthenticationContext = { me: me, dom: dom, div: box }
+  const context: AuthenticationContext = { me, dom, div: box }
 
   function say (s, background) {
     box.appendChild(widgets.errorMessageBlock(dom, s, background))

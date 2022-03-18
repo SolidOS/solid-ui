@@ -50,7 +50,7 @@ export const style = { // styleModule
   heading3Style: 'font-size: 120%; font-weight: bold; color: #888888; padding: 0.3em; margin: 0.7em 0.0em;', // For example, in large forms or before a small form
   heading4Style: 'font-size: 110%; font-weight: bold; color: #888888; padding: 0.2em; margin: 0.7em 0.0em;', // Lowest level used by default in small things
 
-  formBorderColor: formBorderColor, // originally was brown; now grey
+  formBorderColor, // originally was brown; now grey
   formHeadingColor: '#888888', // originally was brown; now grey
   formHeadingStyle: 'font-size: 110%; font-weight: bold; color: #888888; padding: 0.2em;  margin: 0.7em 0.0em;', // originally was brown; now grey
   formTextInput: 'font-size: 100%; margin: 0.1em; padding: 0.1em;', // originally used this
@@ -61,7 +61,7 @@ export const style = { // styleModule
   ],
 
   formFieldLabelStyle: `'color: ${lowProfileLinkColor}; text-decoration: none;'`,
-  formFieldNameBoxWidth: formFieldNameBoxWidth,
+  formFieldNameBoxWidth,
   formFieldNameBoxStyle: `padding: 0.3em; vertical-align: middle; width:${formFieldNameBoxWidth};`,
   textInputBackgroundColor: '#eef',
   textInputBackgroundColorUneditable: '#fff',

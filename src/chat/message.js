@@ -447,7 +447,7 @@ export function renderMessageEditor (channelObject, messageTable, userContext, o
   // messageEditor.appendChild(dom.createElement('br'))
 
   let field, sendButton
-  const context = { div: middle, dom: dom }
+  const context = { div: middle, dom }
 
   ensureLoggedIn(context).then(context => {
     // me = context.me
