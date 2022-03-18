@@ -12,7 +12,7 @@ import { IndexedFormula, NamedNode, LiveStore } from 'rdflib';
  * The "defaultForNew" predicate is also accepted, as a deprecated
  * synonym for "default".
  */
-export declare function adoptACLDefault(doc: NamedNode, aclDoc: NamedNode, defaultResource: NamedNode, defaultACLDoc: NamedNode): IndexedFormula;
+export declare function adoptACLDefault(doc: NamedNode, aclDoc: NamedNode, defaultResource: NamedNode, defaultACLDoc: NamedNode): LiveStore;
 /**
  * Read and canonicalize the ACL for x in aclDoc
  *
