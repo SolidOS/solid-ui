@@ -11,7 +11,7 @@ const store = solidLogicSingleton.store
 
 /*  Style and create a name, value pair
 */
-export function renderNameValuePair (dom: HTMLDocument, kb: Store, box: HTMLElement, form: NamedNode):HTMLElement {
+export function renderNameValuePair (dom: HTMLDocument, kb: Store, box: HTMLElement, form: NamedNode, label?: string):HTMLElement {
   const property = kb.any(form, ns.ui('property'))
   box.style.display = 'flex'
   box.style.flexDirection = 'row'
@@ -22,11 +22,13 @@ export function renderNameValuePair (dom: HTMLDocument, kb: Store, box: HTMLElem
   lhs.setAttribute('class', 'formFieldName')
   lhs.setAttribute('style', formFieldNameBoxStyle)
   rhs.setAttribute('class', 'formFieldValue')
-  if (!property) { // Assume more space for error on right
+  if (property) { // Assume more space for error on right
+    lhs.appendChild(fieldLabel(dom, property as NamedNode, form))
+  } else if (label) {
+    lhs.appendChild(dom.createTextNode(label))
+  } else {
     rhs.appendChild(errorMessageBlock(dom, 'No property given for form field: ' + form))
     lhs.appendChild(dom.createTextNode('???'))
-  } else {
-    lhs.appendChild(fieldLabel(dom, property as NamedNode, form))
   }
   return rhs
 }

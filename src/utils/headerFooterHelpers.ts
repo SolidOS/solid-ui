@@ -1,12 +1,13 @@
 /*
     Copied from mashlib/src/global/metadata.ts
  */
-import { IndexedFormula, NamedNode, sym } from 'rdflib'
+import { IndexedFormula, LiveStore, NamedNode, sym } from 'rdflib'
 import { ns } from '..'
 import { styleMap as headerStyleMap } from '../header/styleMap'
 import { styleMap as footerStyleMap } from '../footer/styleMap'
 import { getClasses } from '../jss'
 
+/* @ts-ignore  no-console */
 type ThrottleOptions = {
     leading?: boolean;
     throttling?: boolean;
@@ -42,50 +43,53 @@ export function getPod (): NamedNode {
 }
 /**
  */
-export async function getPodOwner (pod: NamedNode, store: IndexedFormula): Promise<NamedNode | null> {
+export async function getPodOwner (pod: NamedNode, store: LiveStore): Promise<NamedNode | null> {
   // This is a massive guess.  In future
   // const podOwner = sym(`${pod.uri}profile/card#me`)
-
+/* eslint-disable no-console */
   try {
+    // @ts-ignore  LiveStore always has fetcher
     store.fetcher.load(pod)
   } catch (err) {
     console.error('Error loading pod ' + pod + ': ' + err)
     return null
   }
-  if (!store.holds(pod, ns.rdf('type'), ns.space('Storage'), pod) {
-    console.warn('Pod  ' + pod ' does not declare itself as a space:Storage')
+  if (!store.holds(pod, ns.rdf('type'), ns.space('Storage'), pod)) {
+    console.warn('Pod  ' + pod + ' does not declare itself as a space:Storage')
     return null
   }
-  const podOwner = store.any(null, ns.space('storage'), pod, pod)
+  const podOwner = store.any(pod, ns.solid('owner'), null, pod)
+        || store.any(null, ns.space('storage'), pod, pod)
   if (podOwner) {
     try {
+      // @ts-ignore  LiveStore always has fetcher
       store.fetcher.load(podOwner.doc())
     } catch (err) {
       console.warn('Unable to load profile of pod owner ' + podOwner)
       return null
     }
-    if (!store.holds(podOwner, ns.space('storage'), pod, podOwner.doc()) {
+    if (!store.holds(podOwner, ns.space('storage'), pod, (podOwner as NamedNode).doc())) {
       console.warn(`Pod owner ${podOwner} does NOT list pod ${pod} as their storage`)
     }
-    return podOwner // Success!
-  } else // pod ownder not declared in pod
-  // @@ TODO: This is given the structure that NSS provides
-
-  {
+    return podOwner as NamedNode// Success!
+  } else { // pod ownder not declared in pod
+    // @@ TODO: This is given the structure that NSS provides
     // This is a massive guess.  For old pods which don't have owner link
     const guess = sym(`${pod.uri}profile/card#me`)
     try {
+      // @ts-ignore  LiveStore always has fetcher
       store.fetcher.load(guess)
-    } else (err) {
-      console.error(`Ooops. Guessed wrong pod owner webid {$guess} : can't load it.`)
+    } catch (err) {
+      console.error('Ooops. Guessed wrong pod owner webid {$guess} : can\'t load it.')
       return null
     }
     if (store.holds(guess, ns.space('storage'), pod, guess.doc())) {
-      console.warn(`Using guessed pod owner webid but it links back.`)
+      console.warn('Using guessed pod owner webid but it links back.')
       return guess
     }
     return null
   }
+  /* eslint-enable no-console */
 }
 /**
  * @ignore exporting this only for the unit test

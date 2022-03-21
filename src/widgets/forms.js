@@ -1583,7 +1583,7 @@ export function makeSelectForNestedCategory (
  */
 export function buildCheckboxForm (dom, kb, lab, del, ins, form, dataDoc, tristate) {
   const box = dom.createElement('div')
-  const rhs = renderNameValuePair(dom, kb, box, form)
+  const rhs = renderNameValuePair(dom, kb, box, form, lab)
   const editable = kb.updater.editable(dataDoc.uri)
 
   const input = dom.createElement('button')

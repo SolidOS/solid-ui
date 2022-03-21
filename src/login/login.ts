@@ -17,6 +17,9 @@
  * * `containers`      An array of nodes of containers of instances
  * * `div`             A DOM element where UI can be displayed
  * * `statusArea`      A DOM element (opt) progress stuff can be displayed, or error messages
+ * *
+ * * Vocabulary:  "load" loads a file if it exists;
+ * *  'Ensure" CREATES the file if it does not exist (if it can) and then loads it.
  * @packageDocumentation
  */
 import { PaneDefinition } from 'pane-registry'
@@ -247,107 +250,118 @@ export async function findAppInstances (
 /**
   * UI to control registration of instance
   */
-export function registrationControl (
+export async function registrationControl (
   context: AuthenticationContext,
   instance,
   theClass
 ): Promise<AuthenticationContext | void> {
   const dom = context.dom
   if (!dom || !context.div) {
-    return Promise.resolve()
+    return context
   }
   const box = dom.createElement('div')
   context.div.appendChild(box)
+  context.me = authn.currentUser() // @@
+  if (!context.me) {
+    box.innerHTML = `<p style="margin:2em;">(Log in to save a link to this)</p>`
+    return context
+  }
 
-  return ensureTypeIndexes(context)
-    .then(function () {
-      box.innerHTML = '<table><tbody><tr></tr><tr></tr></tbody></table>' // tbody will be inserted anyway
-      box.setAttribute('style', 'font-size: 120%; text-align: right; padding: 1em; border: solid gray 0.05em;')
-      const tbody = box.children[0].children[0]
-      const form = new BlankNode() // @@ say for now
-
-      const registrationStatements = function (index) {
-        const registrations = solidLogicSingleton.getRegistrations(instance, theClass)
-        const reg = registrations.length
-          ? registrations[0]
-          : widgets.newThing(index)
-        return [
-          st(reg, ns.solid('instance'), instance, index),
-          st(reg, ns.solid('forClass'), theClass, index)
-        ]
-      }
-
-      let index, statements
-
-      if (context.index && context.index.public && context.index.public.length > 0) {
-        index = context.index.public[0]
-        statements = registrationStatements(index)
-        tbody.children[0].appendChild(
-          widgets.buildCheckBoxForm(
-            context.dom,
-            solidLogicSingleton.store,
-            `Public link to this ${context.noun}`,
-            null,
-            statements,
-            form,
-            index
-          )
-        )
-      }
-
-      if (context.index && context.index.private && context.index.private.length > 0) {
-        index = context.index.private[0]
-        statements = registrationStatements(index)
-        tbody.children[1].appendChild(
-          widgets.buildCheckBoxForm(
-            context.dom,
-            solidLogicSingleton.store,
-            `Personal note of this ${context.noun}`,
-            null,
-            statements,
-            form,
-            index
-          )
-        )
-      }
-      return context
-    },
-    function (e) {
-      let msg
-      if (context.div && context.preferencesFileError) {
-        msg = '(Preferences not available)'
-        context.div.appendChild(dom.createElement('p')).textContent = msg
-      } else if (context.div) {
-        msg = `registrationControl: Type indexes not available: ${e}`
-        context.div.appendChild(widgets.errorMessageBlock(context.dom, e))
-      }
-      debug.log(msg)
+  let context2 // @@ const
+  try {
+    context2  = await ensureTypeIndexes(context)
+  } catch (e) {
+    let msg
+    if (context.div && context.preferencesFileError) {
+      msg = '(Preferences not available)'
+      context.div.appendChild(dom.createElement('p')).textContent = msg
+    } else if (context.div) {
+      msg = `registrationControl: Type indexes not available: ${e}`
+      context.div.appendChild(widgets.errorMessageBlock(context.dom, e))
     }
-    )
-    .catch(function (e) {
-      const msg = `registrationControl: Error making panel: ${e}`
-      if (context.div) {
-        context.div.appendChild(widgets.errorMessageBlock(context.dom, e))
-      }
-      debug.log(msg)
-    })
+    debug.log(msg)
+  }
+
+  box.innerHTML = '<table><tbody><tr></tr><tr></tr></tbody></table>' // tbody will be inserted anyway
+  box.setAttribute('style', 'font-size: 120%; text-align: right; padding: 1em; border: solid gray 0.05em;')
+  const tbody = box.children[0].children[0]
+  const form = new BlankNode() // @@ say for now
+
+  const registrationStatements = function (index) {
+    const registrations = solidLogicSingleton.getRegistrations(instance, theClass)
+    const reg = registrations.length
+      ? registrations[0]
+      : widgets.newThing(index)
+    return [
+      st(reg, ns.solid('instance'), instance, index),
+      st(reg, ns.solid('forClass'), theClass, index)
+    ]
+  }
+
+  let index, statements
+
+  try {
+    if (context2.index && context2.index.public && context2.index.public.length > 0) {
+      index = context2.index.public[0]
+      statements = registrationStatements(index)
+      tbody.children[0].appendChild(
+        widgets.buildCheckboxForm(
+          context2.dom,
+          solidLogicSingleton.store,
+          `Public link to this ${context2.noun}`,
+          null,
+          statements,
+          form,
+          index
+        )
+      )
+    }
+
+    if (context2.index && context2.index.private && context2.index.private.length > 0) {
+      index = context2.index.private[0]
+      statements = registrationStatements(index)
+      tbody.children[1].appendChild(
+        widgets.buildCheckboxForm(
+          context2.dom,
+          solidLogicSingleton.store,
+          `Personal note of this ${context2.noun}`,
+          null,
+          statements,
+          form,
+          index
+        )
+      )
+    }
+  } catch (e) {
+    const msg = `registrationControl: Error making panel: ${e}`
+    if (context.div) {
+      context.div.appendChild(widgets.errorMessageBlock(context.dom, e))
+    }
+    debug.log(msg)
+  }
+  return context2
 }
 
 /**
   * UI to List at all registered things
   */
-export function registrationList (context: AuthenticationContext, options: {
+export async function registrationList (context0: AuthenticationContext, options: {
    private?: boolean
    public?: boolean
    type?: NamedNode
  }): Promise<AuthenticationContext> {
-  const dom = context.dom as HTMLDocument
-  const div = context.div as HTMLElement
+  const dom = context0.dom as HTMLDocument
+  const div = context0.div as HTMLElement
 
   const box = dom.createElement('div')
   div.appendChild(box)
+  context0.me = authn.currentUser() // @@
+  if (!context0.me) {
+    box.innerHTML = `<p style="margin:2em;">(Log in list your stuff)</p>`
+    return context0
+  }
 
-  return ensureTypeIndexes(context).then(_indexes => {
+  return ensureTypeIndexes(context0).then(context => {
     box.innerHTML = '<table><tbody></tbody></table>' // tbody will be inserted anyway
     box.setAttribute('style', 'font-size: 120%; text-align: right; padding: 1em; border: solid #eee 0.5em;')
     const table = box.firstChild as HTMLElement
@@ -356,14 +370,14 @@ export function registrationList (context: AuthenticationContext, options: {
     let sts: Statement[] = []
     const vs = ['private', 'public']
     vs.forEach(function (visibility) {
-      if (context.index && options[visibility]) {
+      if (context.index && context.index[visibility].length > 0 && options[visibility]) {
         ix = ix.concat(context.index[visibility][0])
         sts = sts.concat(
-          (solidLogicSingleton.store as unknown as IndexedFormula).statementsMatching(
-            undefined,
-            ns.solid('instance'),
-            undefined,
-            context.index[visibility][0]
+           solidLogicSingleton.store.statementsMatching(
+              undefined,
+              ns.solid('instance'),
+              undefined,
+              context.index[visibility][0]
           )
         )
       }
