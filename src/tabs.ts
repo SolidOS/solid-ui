@@ -232,9 +232,10 @@ export function tabWidget (options: TabWidgetOptions) {
       // @ts-ignore
       .find(tab => (tab as TabElement).subject && (tab as TabElement).subject.uri && (tab as TabElement).subject.uri === selectedTabURI)
 
-    const tab = selectedTab0 || selectedTab1 || tabContainer.children[0].firstChild as HTMLButtonElement
+    const tab = selectedTab1 || selectedTab0 || tabContainer.children[0] as HTMLButtonElement
+    const clickMe = tab.firstChild
     // @ts-ignore
-    tab.click()
+    clickMe.click()
   } else if (!options.startEmpty) {
     (tabContainer.children[0].firstChild as HTMLButtonElement).click() // Open first tab
   }

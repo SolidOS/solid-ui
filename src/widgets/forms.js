@@ -12,7 +12,8 @@ import { field, mostSpecificClassURI, fieldFunction } from './forms/fieldFunctio
 import { setFieldStyle } from './forms/formStyle'
 import * as debug from '../debug'
 import { errorMessageBlock } from './error'
-import { basicField, renderNameValuePair } from './forms/basic'
+import { basicField, fieldLabel, fieldStore, renderNameValuePair } from './forms/basic'
+export { basicField, fieldLabel, fieldStore, renderNameValuePair } from './forms/basic'
 import { autocompleteField } from './forms/autocomplete/autocompleteField'
 import * as style from '../style'
 
@@ -1699,7 +1700,7 @@ export function buildCheckboxForm (dom, kb, lab, del, ins, form, dataDoc, trista
   input.addEventListener('click', boxHandler, false)
   return box
 }
-
+/*
 export function fieldLabel (dom, property, form) {
   let lab = kb.any(form, ns.ui('label'))
   if (!lab) lab = utils.label(property, true) // Init capital
@@ -1725,7 +1726,7 @@ export function fieldStore (subject, predicate, def) {
   }
   return def
 }
-
+*/
 /** Mint local ID using timestamp
  * @param {NamedNode} doc - the document in which the ID is to be generated
  */
