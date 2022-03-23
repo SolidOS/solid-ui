@@ -21,7 +21,7 @@ type TabWidgetOptions = {
   renderMain?: (bodyMain: HTMLElement, subject: NamedNode) => void
   renderTab?: (tabDiv: HTMLDivElement, subject: NamedNode) => void
   renderTabSettings?: (bodyMain: ContainerElement, subject: NamedNode) => void
-  selectedTab?: string
+  selectedTab?: NamedNode
   startEmpty?: boolean
   subject?: NamedNode
 }
@@ -223,11 +223,19 @@ export function tabWidget (options: TabWidgetOptions) {
   orderedSync()
 
   if (!options.startEmpty && tabContainer.children.length && options.selectedTab) {
-    const selectedTab = Array.from(tabContainer.children)
+    const selectedTab0 = Array.from(tabContainer.children) // Version left for compatability with ??
       .map(tab => tab.firstChild as HTMLElement)
       .find(tab => tab.dataset.name === options.selectedTab)
-    const tab = selectedTab || tabContainer.children[0].firstChild as HTMLButtonElement
-    tab.click()
+
+    const selectedTabURI = options.selectedTab.uri
+    const selectedTab1 = Array.from(tabContainer.children)
+      // @ts-ignore
+      .find(tab => (tab as TabElement).subject && (tab as TabElement).subject.uri && (tab as TabElement).subject.uri === selectedTabURI)
+
+    const tab = selectedTab1 || selectedTab0 || tabContainer.children[0] as HTMLButtonElement
+    const clickMe = tab.firstChild
+    // @ts-ignore
+    if (clickMe) clickMe.click()
   } else if (!options.startEmpty) {
     (tabContainer.children[0].firstChild as HTMLButtonElement).click() // Open first tab
   }

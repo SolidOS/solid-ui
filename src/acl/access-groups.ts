@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import { NamedNode, sym, LiveStore } from 'rdflib'
+import { NamedNode, sym, Store } from 'rdflib'
 import { ACLbyCombination, readACL } from './acl'
 import * as widgets from '../widgets'
 import * as ns from '../ns'
@@ -58,13 +58,13 @@ export class AccessGroups {
   public aclMap: AgentMapMap
   private readonly addAgentButton: AddAgentButtons
   private readonly rootElement: HTMLElement
-  private _store: LiveStore
+  private _store: Store // @@ was LiveStore but does not need to be connected to web
 
   constructor (
     private doc: NamedNode,
     private aclDoc: NamedNode,
     public controller: AccessController,
-    store: LiveStore,
+    store: Store, // @@ was LiveStore
     private options: AccessGroupsOptions = {}
   ) {
     this.defaults = options.defaults || false
