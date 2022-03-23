@@ -235,7 +235,7 @@ export function tabWidget (options: TabWidgetOptions) {
     const tab = selectedTab1 || selectedTab0 || tabContainer.children[0] as HTMLButtonElement
     const clickMe = tab.firstChild
     // @ts-ignore
-    clickMe.click()
+    if (clickMe) clickMe.click()
   } else if (!options.startEmpty) {
     (tabContainer.children[0].firstChild as HTMLButtonElement).click() // Open first tab
   }
