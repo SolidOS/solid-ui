@@ -23,7 +23,7 @@ export function renderNameValuePair (dom: HTMLDocument, kb: Store, box: HTMLElem
   lhs.setAttribute('style', formFieldNameBoxStyle)
   rhs.setAttribute('class', 'formFieldValue')
   if (label) {
-     lhs.appendChild(dom.createTextNode(label))
+    lhs.appendChild(dom.createTextNode(label))
   } else if (kb.any(form, ns.ui('property'))) { // Assume more space for error on right
     lhs.appendChild(fieldLabel(dom, kb.any(form, ns.ui('property')) as NamedNode, form))
   } else {

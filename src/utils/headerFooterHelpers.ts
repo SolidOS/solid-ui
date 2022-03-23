@@ -58,8 +58,8 @@ export async function getPodOwner (pod: NamedNode, store: LiveStore): Promise<Na
     console.warn('Pod  ' + pod + ' does not declare itself as a space:Storage')
     return null
   }
-  const podOwner = store.any(pod, ns.solid('owner'), null, pod)
-        || store.any(null, ns.space('storage'), pod, pod)
+  const podOwner = store.any(pod, ns.solid('owner'), null, pod) ||
+        store.any(null, ns.space('storage'), pod, pod)
   if (podOwner) {
     try {
       // @ts-ignore  LiveStore always has fetcher

@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import { NamedNode, sym, LiveStore, Store } from 'rdflib'
+import { NamedNode, sym, Store } from 'rdflib'
 import { ACLbyCombination, readACL } from './acl'
 import * as widgets from '../widgets'
 import * as ns from '../ns'

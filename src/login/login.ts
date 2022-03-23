@@ -23,7 +23,7 @@
  * @packageDocumentation
  */
 import { PaneDefinition } from 'pane-registry'
-import { BlankNode, IndexedFormula, NamedNode, st, Statement } from 'rdflib'
+import { BlankNode, NamedNode, st, Statement } from 'rdflib'
 // eslint-disable-next-line camelcase
 import { Quad_Object } from 'rdflib/lib/tf-types'
 import { AppDetails, AuthenticationContext, loadIndex, authn, authSession, CrossOriginForbiddenError, ensureTypeIndexes, FetchError, getSuggestedIssuers, NotFoundError, offlineTestID, SameOriginForbiddenError, solidLogicSingleton, UnauthorizedError } from 'solid-logic'
@@ -263,13 +263,13 @@ export async function registrationControl (
   context.div.appendChild(box)
   context.me = authn.currentUser() // @@
   if (!context.me) {
-    box.innerHTML = `<p style="margin:2em;">(Log in to save a link to this)</p>`
+    box.innerHTML = '<p style="margin:2em;">(Log in to save a link to this)</p>'
     return context
   }
 
   let context2 // @@ const
   try {
-    context2  = await ensureTypeIndexes(context)
+    context2 = await ensureTypeIndexes(context)
   } catch (e) {
     let msg
     if (context.div && context.preferencesFileError) {
@@ -357,7 +357,7 @@ export async function registrationList (context0: AuthenticationContext, options
   div.appendChild(box)
   context0.me = authn.currentUser() // @@
   if (!context0.me) {
-    box.innerHTML = `<p style="margin:2em;">(Log in list your stuff)</p>`
+    box.innerHTML = '<p style="margin:2em;">(Log in list your stuff)</p>'
     return context0
   }
 
@@ -373,11 +373,11 @@ export async function registrationList (context0: AuthenticationContext, options
       if (context.index && context.index[visibility].length > 0 && options[visibility]) {
         ix = ix.concat(context.index[visibility][0])
         sts = sts.concat(
-           solidLogicSingleton.store.statementsMatching(
-              undefined,
-              ns.solid('instance'),
-              undefined,
-              context.index[visibility][0]
+          solidLogicSingleton.store.statementsMatching(
+            undefined,
+            ns.solid('instance'),
+            undefined,
+            context.index[visibility][0]
           )
         )
       }

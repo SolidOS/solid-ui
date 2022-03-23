@@ -13,7 +13,6 @@ import { setFieldStyle } from './forms/formStyle'
 import * as debug from '../debug'
 import { errorMessageBlock } from './error'
 import { basicField, fieldLabel, fieldStore, renderNameValuePair } from './forms/basic'
-export { basicField, fieldLabel, fieldStore, renderNameValuePair } from './forms/basic'
 import { autocompleteField } from './forms/autocomplete/autocompleteField'
 import * as style from '../style'
 
@@ -23,7 +22,8 @@ import * as ns from '../ns'
 import * as $rdf from 'rdflib'
 import { store } from 'solid-logic'
 import * as utils from '../utils'
-import * as widgets from '../widgets' // Note default export
+import * as widgets from '../widgets'
+export { basicField, fieldLabel, fieldStore, renderNameValuePair } from './forms/basic' // Note default export
 
 export { field } from './forms/fieldFunction'
 export { fieldParams } from './forms/fieldParams'
