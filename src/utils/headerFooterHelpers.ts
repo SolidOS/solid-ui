@@ -72,7 +72,7 @@ export async function getPodOwner (pod: NamedNode, store: LiveStore): Promise<Na
       console.warn(`Pod owner ${podOwner} does NOT list pod ${pod} as their storage`)
     }
     return podOwner as NamedNode// Success!
-  } else { // pod ownder not declared in pod
+  } else { // pod owner not declared in pod
     // @@ TODO: This is given the structure that NSS provides
     // This is a massive guess.  For old pods which don't have owner link
     const guess = sym(`${pod.uri}profile/card#me`)
