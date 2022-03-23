@@ -58,7 +58,7 @@ export class AccessGroups {
   public aclMap: AgentMapMap
   private readonly addAgentButton: AddAgentButtons
   private readonly rootElement: HTMLElement
-  private _store: Store // @@ was LiveStore but doe not need to ne connected to web
+  private _store: Store // @@ was LiveStore but does not need to be connected to web
 
   constructor (
     private doc: NamedNode,
