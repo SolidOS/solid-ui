@@ -11,8 +11,8 @@ const store = solidLogicSingleton.store
 
 /*  Style and create a name, value pair
 */
-export function renderNameValuePair (dom: HTMLDocument, kb: Store, box: HTMLElement, form: NamedNode):HTMLElement {
-  const property = kb.any(form, ns.ui('property'))
+export function renderNameValuePair (dom: HTMLDocument, kb: Store, box: HTMLElement, form: NamedNode, label?: string):HTMLElement {
+  // const property = kb.any(form, ns.ui('property'))
   box.style.display = 'flex'
   box.style.flexDirection = 'row'
   const lhs = box.appendChild(dom.createElement('div'))
@@ -22,11 +22,13 @@ export function renderNameValuePair (dom: HTMLDocument, kb: Store, box: HTMLElem
   lhs.setAttribute('class', 'formFieldName')
   lhs.setAttribute('style', formFieldNameBoxStyle)
   rhs.setAttribute('class', 'formFieldValue')
-  if (!property) { // Assume more space for error on right
-    rhs.appendChild(errorMessageBlock(dom, 'No property given for form field: ' + form))
-    lhs.appendChild(dom.createTextNode('???'))
+  if (label) {
+    lhs.appendChild(dom.createTextNode(label))
+  } else if (kb.any(form, ns.ui('property'))) { // Assume more space for error on right
+    lhs.appendChild(fieldLabel(dom, kb.any(form, ns.ui('property')) as NamedNode, form))
   } else {
-    lhs.appendChild(fieldLabel(dom, property as NamedNode, form))
+    rhs.appendChild(errorMessageBlock(dom, 'No property or label given for form field: ' + form))
+    lhs.appendChild(dom.createTextNode('???'))
   }
   return rhs
 }

@@ -5,20 +5,20 @@
  * @packageDocumentation
  */
 import { AgentMapMap, AgentMapUnion, ComboList } from './types';
-import { IndexedFormula, NamedNode, LiveStore } from 'rdflib';
+import { Store, NamedNode, LiveStore } from 'rdflib';
 /**
  * Take the "default" ACL and convert it into the equivlent ACL
  * which the resource would have had. Return it as a new separate store.
  * The "defaultForNew" predicate is also accepted, as a deprecated
  * synonym for "default".
  */
-export declare function adoptACLDefault(doc: NamedNode, aclDoc: NamedNode, defaultResource: NamedNode, defaultACLDoc: NamedNode): LiveStore;
+export declare function adoptACLDefault(doc: NamedNode, aclDoc: NamedNode, defaultResource: NamedNode, defaultACLDoc: NamedNode): Store;
 /**
  * Read and canonicalize the ACL for x in aclDoc
  *
  * Accumulate the access rights which each agent or class has
  */
-export declare function readACL(doc: NamedNode, aclDoc: NamedNode, kb2?: IndexedFormula, getDefaults?: boolean): AgentMapMap;
+export declare function readACL(doc: NamedNode, aclDoc: NamedNode, kb2?: Store, getDefaults?: boolean): AgentMapMap;
 /**
  * Compare two ACLs
  */
@@ -42,11 +42,11 @@ export declare function ACLbyCombination(ac: AgentMapMap | AgentMapUnion): Combo
 /**
  * Write ACL graph to store from AC
  */
-export declare function makeACLGraph(kb: IndexedFormula, x: NamedNode, ac: AgentMapMap, aclDoc: NamedNode): void;
+export declare function makeACLGraph(kb: Store, x: NamedNode, ac: AgentMapMap, aclDoc: NamedNode): void;
 /**
  * Write ACL graph to store from combo
  */
-export declare function makeACLGraphbyCombo(kb: IndexedFormula, x: NamedNode, byCombo: ComboList, aclDoc: NamedNode, main?: boolean, defa?: boolean): void;
+export declare function makeACLGraphbyCombo(kb: Store, x: NamedNode, byCombo: ComboList, aclDoc: NamedNode, main?: boolean, defa?: boolean): void;
 /**
  * Debugging short strings for dumping ACL
  * and possibly in the UI

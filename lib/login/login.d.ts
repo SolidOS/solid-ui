@@ -17,6 +17,9 @@
  * * `containers`      An array of nodes of containers of instances
  * * `div`             A DOM element where UI can be displayed
  * * `statusArea`      A DOM element (opt) progress stuff can be displayed, or error messages
+ * *
+ * * Vocabulary:  "load" loads a file if it exists;
+ * *  'Ensure" CREATES the file if it does not exist (if it can) and then loads it.
  * @packageDocumentation
  */
 import { PaneDefinition } from 'pane-registry';
@@ -59,7 +62,7 @@ export declare function registrationControl(context: AuthenticationContext, inst
 /**
   * UI to List at all registered things
   */
-export declare function registrationList(context: AuthenticationContext, options: {
+export declare function registrationList(context0: AuthenticationContext, options: {
     private?: boolean;
     public?: boolean;
     type?: NamedNode;

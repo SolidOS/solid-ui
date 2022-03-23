@@ -16,7 +16,7 @@ declare type TabWidgetOptions = {
     renderMain?: (bodyMain: HTMLElement, subject: NamedNode) => void;
     renderTab?: (tabDiv: HTMLDivElement, subject: NamedNode) => void;
     renderTabSettings?: (bodyMain: ContainerElement, subject: NamedNode) => void;
-    selectedTab?: string;
+    selectedTab?: NamedNode;
     startEmpty?: boolean;
     subject?: NamedNode;
 };

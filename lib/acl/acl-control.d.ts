@@ -4,7 +4,7 @@
  * for a screenshot.
  * @packageDocumentation
  */
-import { IndexedFormula, NamedNode } from 'rdflib';
+import { Store, NamedNode } from 'rdflib';
 import { DataBrowserContext } from 'pane-registry';
 /**
  * See https://coshx.com/preventing-drag-and-drop-disasters-with-a-chrome-userscript
@@ -63,7 +63,7 @@ export declare function shortNameForFolder(x: NamedNode): string;
  * when it was introduced into solid-ui in
  * https://github.com/solid/solid-ui/commit/948b874bd93e7bf5160e6e224821b888f07d15f3#diff-4192a29f38a0ababd563b36b47eba5bbR54
  */
-export declare function ACLControlBox5(subject: NamedNode, context: DataBrowserContext, noun: string, kb: IndexedFormula): HTMLElement;
+export declare function ACLControlBox5(subject: NamedNode, context: DataBrowserContext, noun: string, kb: Store): HTMLElement;
 /** @internal */
 export declare function setGlobalWindow(window: Window): void;
 //# sourceMappingURL=acl-control.d.ts.map

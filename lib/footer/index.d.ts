@@ -1,4 +1,4 @@
-import { IndexedFormula, NamedNode } from 'rdflib';
+import { LiveStore, NamedNode } from 'rdflib';
 export declare type FooterOptions = {
     solidProjectUrl?: string;
     solidProjectName?: string;
@@ -8,13 +8,13 @@ export declare type FooterOptions = {
  * @param store the data store
  * @returns the footer
  */
-export declare function initFooter(store: IndexedFormula, options?: FooterOptions): Promise<void>;
+export declare function initFooter(store: LiveStore, options?: FooterOptions): Promise<void>;
 /**
  * @ignore exporting this only for the unit test
  */
-export declare function rebuildFooter(footer: HTMLElement, store: IndexedFormula, pod: NamedNode | null, podOwner: NamedNode | null, options?: FooterOptions): () => Promise<void>;
+export declare function rebuildFooter(footer: HTMLElement, store: LiveStore, pod: NamedNode | null, podOwner: NamedNode | null, options?: FooterOptions): () => Promise<void>;
 /**
  * @ignore exporting this only for the unit test
  */
-export declare function createControllerInfoBlock(store: IndexedFormula, user: NamedNode | null, pod: NamedNode | null, podOwner: NamedNode | null, options?: FooterOptions): HTMLElement;
+export declare function createControllerInfoBlock(store: LiveStore, user: NamedNode | null, pod: NamedNode | null, podOwner: NamedNode | null, options?: FooterOptions): HTMLElement;
 //# sourceMappingURL=index.d.ts.map

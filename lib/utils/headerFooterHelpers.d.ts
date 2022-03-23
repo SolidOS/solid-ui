@@ -1,4 +1,4 @@
-import { IndexedFormula, NamedNode } from 'rdflib';
+import { IndexedFormula, LiveStore, NamedNode } from 'rdflib';
 declare type ThrottleOptions = {
     leading?: boolean;
     throttling?: boolean;
@@ -13,9 +13,8 @@ export declare function addStyleClassToElement(element: any, styleClasses: strin
  */
 export declare function getPod(): NamedNode;
 /**
- * @ignore exporting this only for the unit test
  */
-export declare function getPodOwner(pod: NamedNode, store: IndexedFormula): Promise<NamedNode | null>;
+export declare function getPodOwner(pod: NamedNode, store: LiveStore): Promise<NamedNode | null>;
 /**
  * @ignore exporting this only for the unit test
  */
