@@ -2,7 +2,7 @@
     This file was copied from mashlib/src/global/footer.ts file. It is modified to
     work in solid-ui by adjusting where imported functions are found.
  */
-import { IndexedFormula, NamedNode } from 'rdflib'
+import { LiveStore, NamedNode } from 'rdflib'
 import { authn, authSession } from 'solid-logic'
 import { addStyleClassToElement, getName, getPod, getPodOwner } from '../utils/headerFooterHelpers'
 
@@ -22,7 +22,7 @@ export type FooterOptions = {
  * @param store the data store
  * @returns the footer
  */
-export async function initFooter (store: IndexedFormula, options?: FooterOptions) {
+export async function initFooter (store: LiveStore, options?: FooterOptions) {
   const footer = document.getElementById('PageFooter')
   if (!footer) {
     return
@@ -36,7 +36,7 @@ export async function initFooter (store: IndexedFormula, options?: FooterOptions
 /**
  * @ignore exporting this only for the unit test
  */
-export function rebuildFooter (footer: HTMLElement, store: IndexedFormula, pod: NamedNode | null, podOwner: NamedNode | null, options?: FooterOptions) {
+export function rebuildFooter (footer: HTMLElement, store: LiveStore, pod: NamedNode | null, podOwner: NamedNode | null, options?: FooterOptions) {
   return async () => {
     const user = authn.currentUser()
     footer.innerHTML = ''
@@ -46,7 +46,7 @@ export function rebuildFooter (footer: HTMLElement, store: IndexedFormula, pod: 
 /**
  * @ignore exporting this only for the unit test
  */
-export function createControllerInfoBlock (store: IndexedFormula, user: NamedNode | null, pod: NamedNode | null, podOwner: NamedNode | null, options?: FooterOptions): HTMLElement {
+export function createControllerInfoBlock (store: LiveStore, user: NamedNode | null, pod: NamedNode | null, podOwner: NamedNode | null, options?: FooterOptions): HTMLElement {
   const profileLinkContainer = document.createElement('div')
   if (!pod || !podOwner || (user && user.equals(podOwner))) {
     return profileLinkContainer

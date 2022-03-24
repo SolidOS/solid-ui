@@ -12,7 +12,7 @@ import { field, mostSpecificClassURI, fieldFunction } from './forms/fieldFunctio
 import { setFieldStyle } from './forms/formStyle'
 import * as debug from '../debug'
 import { errorMessageBlock } from './error'
-import { basicField, renderNameValuePair } from './forms/basic'
+import { basicField, fieldLabel, fieldStore, renderNameValuePair } from './forms/basic'
 import { autocompleteField } from './forms/autocomplete/autocompleteField'
 import * as style from '../style'
 
@@ -22,7 +22,8 @@ import * as ns from '../ns'
 import * as $rdf from 'rdflib'
 import { store } from 'solid-logic'
 import * as utils from '../utils'
-import * as widgets from '../widgets' // Note default export
+import * as widgets from '../widgets'
+export { basicField, fieldLabel, fieldStore, renderNameValuePair } from './forms/basic' // Note default export
 
 export { field } from './forms/fieldFunction'
 export { fieldParams } from './forms/fieldParams'
@@ -1583,7 +1584,7 @@ export function makeSelectForNestedCategory (
  */
 export function buildCheckboxForm (dom, kb, lab, del, ins, form, dataDoc, tristate) {
   const box = dom.createElement('div')
-  const rhs = renderNameValuePair(dom, kb, box, form)
+  const rhs = renderNameValuePair(dom, kb, box, form, lab)
   const editable = kb.updater.editable(dataDoc.uri)
 
   const input = dom.createElement('button')
@@ -1699,7 +1700,7 @@ export function buildCheckboxForm (dom, kb, lab, del, ins, form, dataDoc, trista
   input.addEventListener('click', boxHandler, false)
   return box
 }
-
+/*
 export function fieldLabel (dom, property, form) {
   let lab = kb.any(form, ns.ui('label'))
   if (!lab) lab = utils.label(property, true) // Init capital
@@ -1725,7 +1726,7 @@ export function fieldStore (subject, predicate, def) {
   }
   return def
 }
-
+*/
 /** Mint local ID using timestamp
  * @param {NamedNode} doc - the document in which the ID is to be generated
  */
