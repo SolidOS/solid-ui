@@ -10,7 +10,7 @@ import { solidLogicSingleton, ACL_LINK } from 'solid-logic'
 import * as utils from '../utils'
 import { AgentMapMap, AgentMapUnion, ComboList } from './types'
 import * as debug from '../debug'
-import { graph, IndexedFormula, NamedNode, serialize, st, Statement, sym, LiveStore } from 'rdflib'
+import { graph, Store, NamedNode, serialize, st, Statement, sym, LiveStore } from 'rdflib'
 
 const kb = solidLogicSingleton.store
 
@@ -25,7 +25,7 @@ export function adoptACLDefault (
   aclDoc: NamedNode,
   defaultResource: NamedNode,
   defaultACLDoc: NamedNode
-): IndexedFormula {
+): Store {
   const ACL = ns.acl
   const isContainer = doc.uri.slice(-1) === '/' // Give default for all directories
 
@@ -46,7 +46,7 @@ export function adoptACLDefault (
 
   const kb2 = graph() // Potential - derived is kept apart
   proposed.forEach(st => kb2.add(move(st.subject), move(st.predicate), move(st.object), sym(aclDoc.uri)))
-  return kb2
+  return kb2 as LiveStore
 
   function move (symbol) {
     const y = defaultACLDoc.uri.length // The default ACL file
@@ -66,7 +66,7 @@ export function adoptACLDefault (
 export function readACL (
   doc: NamedNode,
   aclDoc: NamedNode,
-  kb2: IndexedFormula = kb,
+  kb2: Store = kb,
   getDefaults: boolean = false
 ): AgentMapMap {
   const auths: Array<NamedNode> = getDefaults
@@ -211,7 +211,7 @@ export function ACLbyCombination (ac: AgentMapMap | AgentMapUnion): ComboList {
 /**
  * Write ACL graph to store from AC
  */
-export function makeACLGraph (kb: IndexedFormula, x: NamedNode, ac: AgentMapMap, aclDoc: NamedNode): void {
+export function makeACLGraph (kb: Store, x: NamedNode, ac: AgentMapMap, aclDoc: NamedNode): void {
   const byCombo = ACLbyCombination(ac)
   return makeACLGraphbyCombo(kb, x, byCombo, aclDoc)
 }
@@ -220,7 +220,7 @@ export function makeACLGraph (kb: IndexedFormula, x: NamedNode, ac: AgentMapMap,
  * Write ACL graph to store from combo
  */
 export function makeACLGraphbyCombo (
-  kb: IndexedFormula,
+  kb: Store,
   x: NamedNode,
   byCombo: ComboList,
   aclDoc: NamedNode,

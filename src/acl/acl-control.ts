@@ -8,7 +8,7 @@
 import * as ns from '../ns'
 import * as utils from '../utils'
 import { getACLorDefault, getProspectiveHolder } from './acl'
-import { IndexedFormula, NamedNode } from 'rdflib'
+import { Store, NamedNode } from 'rdflib'
 import { DataBrowserContext } from 'pane-registry'
 import { AccessController } from './access-controller'
 import { getClasses } from '../jss'
@@ -126,7 +126,7 @@ export function ACLControlBox5 (
   subject: NamedNode,
   context: DataBrowserContext,
   noun: string,
-  kb: IndexedFormula
+  kb: Store
 ): HTMLElement {
   const dom = context.dom
   const doc = subject.doc() // The ACL is actually to the doc describing the thing
@@ -154,7 +154,7 @@ export function ACLControlBox5 (
 
 async function loadController (
   doc: NamedNode,
-  kb: IndexedFormula,
+  kb: Store,
   subject: NamedNode,
   noun: string,
   context: DataBrowserContext,
@@ -200,7 +200,7 @@ function getDirectory (doc: NamedNode): string | null {
   return (q >= 0 && p < q + 2) || p < 0 ? null : str.slice(0, p + 1)
 }
 
-function isStorage (doc: NamedNode, aclDoc: NamedNode, store: IndexedFormula): boolean {
+function isStorage (doc: NamedNode, aclDoc: NamedNode, store: Store): boolean {
   // @@ TODO: The methods used for targetIsStorage are HACKs - it should not be relied upon, and work is
   // @@ underway to standardize a behavior that does not rely upon this hack
   // @@ hopefully fixed as part of https://github.com/solid/data-interoperability-panel/issues/10
