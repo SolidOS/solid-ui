@@ -869,7 +869,7 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
 
   function createNewRow (target) {
     const theTarget = target
-    const opt: any = { noun: noun }
+    const opt: any = { noun }
     if (modify) {
       opt.deleteFunction = function () {
         deleteAttachment(theTarget)

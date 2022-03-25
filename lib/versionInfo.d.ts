@@ -1,4 +1,4 @@
-declare const _default: {
+export declare const versionInfo: {
     buildTime: string;
     commit: string;
     npmInfo: {
@@ -21,5 +21,4 @@ declare const _default: {
         zlib: string;
     };
 };
-export default _default;
 //# sourceMappingURL=versionInfo.d.ts.map

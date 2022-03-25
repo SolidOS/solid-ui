@@ -224,8 +224,8 @@ export function uploadFiles (fetcher, files, fileBase, imageBase, successHandler
 
         fetcher
           .webOperation('PUT', destURI, {
-            data: data,
-            contentType: contentType
+            data,
+            contentType
           })
           .then(
             _response => {

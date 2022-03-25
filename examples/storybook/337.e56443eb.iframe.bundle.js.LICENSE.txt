@@ -33,16 +33,6 @@ object-assign
  */
 
 /*!
- * https://github.com/paulmillr/es6-shim
- * @license es6-shim Copyright 2013-2016 by Paul Miller (http://paulmillr.com)
- *   and contributors,  MIT License
- * es6-shim: v0.35.4
- * see https://github.com/paulmillr/es6-shim/blob/0.35.3/LICENSE
- * Details and documentation:
- * https://github.com/paulmillr/es6-shim/
- */
-
-/*!
  * isobject <https://github.com/jonschlinkert/isobject>
  *
  * Copyright (c) 2014-2017, Jon Schlinkert.
@@ -52,6 +42,7 @@ object-assign
 /*!
  * mime-db
  * Copyright(c) 2014 Jonathan Ong
+ * Copyright(c) 2015-2022 Douglas Christopher Wilson
  * MIT Licensed
  */
 
