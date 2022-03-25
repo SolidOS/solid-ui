@@ -374,7 +374,7 @@ export async function queryPublicDataSelect (sparql: string, queryTarget: QueryP
   headers.append('Accept', 'application/json')
   const options = {
     credentials: 'omit' as 'include' | 'omit' | undefined, // CORS - as we know it is public
-    headers: headers
+    headers
   }
 
   const response = await store.fetcher?.webOperation('GET', queryURI, options)
@@ -401,7 +401,7 @@ export async function queryPublicDataConstruct (sparql: string, pubicId: NamedNo
   headers.append('Accept', 'text/turtle')
   const options = {
     credentials: 'omit' as 'include' | 'omit' | undefined, // CORS // @tsc pain
-    headers: headers // ({ Accept: 'text/turtle' } as Headers)
+    headers // ({ Accept: 'text/turtle' } as Headers)
   }
   const response = await store.fetcher?.webOperation('GET', queryURI, options)
   const text = response?.responseText || 'No response text?'
@@ -428,7 +428,7 @@ export async function loadPublicDataThing (kb, subject: NamedNode, publicDataID:
     headers.append('Accept', 'text/turtle')
     return kb.fetcher.load(iDToFetch, {
       credentials: 'omit' as 'include' | 'omit' | undefined,
-      headers: headers
+      headers
     })
   }
 }

@@ -1,3 +1,4 @@
+
 import { silenceDebugMessages } from '../../helpers/setup'
 import { JSDOM, DOMWindow } from 'jsdom'
 import { getByRole } from '@testing-library/dom'
@@ -467,7 +468,7 @@ describe('renderAsDiv ', () => {
 
   it('uses the image given', () => {
     image.setAttribute('alt', 'test')
-    const options = { image: image }
+    const options = { image }
     const element = renderAsDiv(dom, obj, options)
     expect(element.children[0].children[0].getAttribute('alt')).toEqual('test')
   })

@@ -153,7 +153,7 @@ export function cameraCaptureControl (
     ;(store as any).fetcher
       .webOperation('PUT', destination.uri, {
         data: blob,
-        contentType: contentType
+        contentType
       })
       .then(
         _resp => {

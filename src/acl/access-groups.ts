@@ -250,7 +250,7 @@ function findAgent (uri, kb): PartialAgentTriple | null {
   // An Origin URI is one like https://fred.github.io eith no trailing slash
   if (uri.startsWith('http') && uri.split('/').length === 3) {
     // there is no third slash
-    return { pred: 'origin', obj: obj } // The only way to know an origin alas
+    return { pred: 'origin', obj } // The only way to know an origin alas
   }
   // @@ This is an almighty kludge needed because drag and drop adds extra slashes to origins
   if (
@@ -263,10 +263,10 @@ function findAgent (uri, kb): PartialAgentTriple | null {
     return { pred: 'origin', obj: sym(uri.slice(0, -1)) } // Fix a URI where the drag and drop system has added a spurious slash
   }
 
-  if (ns.vcard('WebID').uri in types) return { pred: 'agent', obj: obj }
+  if (ns.vcard('WebID').uri in types) return { pred: 'agent', obj }
 
   if (ns.vcard('Group').uri in types) {
-    return { pred: 'agentGroup', obj: obj } // @@ note vcard membership not RDFs
+    return { pred: 'agentGroup', obj } // @@ note vcard membership not RDFs
   }
   if (
     obj.sameTerm(ns.foaf('Agent')) ||
@@ -274,7 +274,7 @@ function findAgent (uri, kb): PartialAgentTriple | null {
     obj.sameTerm(ns.rdf('Resource')) ||
     obj.sameTerm(ns.owl('Thing'))
   ) {
-    return { pred: 'agentClass', obj: obj }
+    return { pred: 'agentClass', obj }
   }
   if (
     ns.vcard('Individual').uri in types ||
@@ -283,13 +283,13 @@ function findAgent (uri, kb): PartialAgentTriple | null {
   ) {
     const pref = kb.any(obj, ns.foaf('preferredURI'))
     if (pref) return { pred: 'agent', obj: sym(pref) }
-    return { pred: 'agent', obj: obj }
+    return { pred: 'agent', obj }
   }
   if (ns.solid('AppProvider').uri in types) {
-    return { pred: 'origin', obj: obj }
+    return { pred: 'origin', obj }
   }
   if (ns.solid('AppProviderClass').uri in types) {
-    return { pred: 'originClass', obj: obj }
+    return { pred: 'originClass', obj }
   }
   debug.log('    Triage fails for ' + uri)
   return null
