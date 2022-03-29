@@ -101,7 +101,6 @@ describe('findBookmarkDocument', () => {
   it('complains if you have multiple bookmark docs', async () => {
     const privReg = new NamedNode('http://example.com/privType.ttl#reg1')
     const pubReg1 = new NamedNode('http://example.com/pubType.ttl#reg1')
-    const pubReg2 = new NamedNode('http://example.com/pubType.ttl#reg2')
     const bookmarksDoc1 = new NamedNode('http://example.com/bookmarks1.ttl')
     const bookmarksDoc2 = new NamedNode('http://example.com/bookmarks2.ttl')
     const bookmarksDoc3 = new NamedNode('http://example.com/bookmarks3.ttl')
@@ -128,9 +127,9 @@ describe('findBookmarkDocument', () => {
     store.add(pubReg1, ns.solid('forClass'), BOOK('Bookmark'), context.publicTypeIndex)
     store.add(pubReg1, ns.solid('instance'), bookmarksDoc2, context.publicTypeIndex)
 
-    store.add(pubReg2, ns.rdf('type'), ns.solid('TypeRegistration'), context.publicTypeIndex)
-    store.add(pubReg2, ns.solid('forClass'), BOOK('Bookmark'), context.publicTypeIndex)
-    store.add(pubReg2, ns.solid('instance'), bookmarksDoc3, context.publicTypeIndex)
+    store.add(pubReg1, ns.rdf('type'), ns.solid('TypeRegistration'), context.publicTypeIndex)
+    store.add(pubReg1, ns.solid('forClass'), BOOK('Bookmark'), context.publicTypeIndex)
+    store.add(pubReg1, ns.solid('instance'), bookmarksDoc3, context.publicTypeIndex)
 
     await findBookmarkDocument(context)
     expect((window.alert as any).mock.calls.length).toEqual(1)
