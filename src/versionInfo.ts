@@ -1,6 +1,6 @@
 export const versionInfo = {
-  buildTime: '2022-03-25T11:34:22Z',
-  commit: '23e59b8bf7463376735665cfd2376400072ece71',
+  buildTime: '2022-03-29T21:19:59Z',
+  commit: 'fbe4b54822bdfad4f690a122e0890f61ed2a716d',
   npmInfo:
 {
   'solid-ui': '2.4.19',
