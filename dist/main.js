@@ -15167,10 +15167,10 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2022-03-29T21:19:59Z',
-  commit: 'fbe4b54822bdfad4f690a122e0890f61ed2a716d',
+  buildTime: '2022-03-30T15:41:56Z',
+  commit: '7d6df17d5d55a800bfb35ee0f2f1af1e5adea2d9',
   npmInfo: {
-    'solid-ui': '2.4.19',
+    'solid-ui': '2.4.20',
     npm: '6.14.16',
     ares: '1.18.1',
     brotli: '1.0.9',
@@ -43592,12 +43592,6 @@ class Term {
     return this.id;
   }
 
-  // ### Implement hashCode for Immutable.js, since we implement `equals`
-  // https://immutable-js.com/docs/v4.0.0/ValueObject/#hashCode()
-  get hashCode() {
-    return 0;
-  }
-
   // ### Returns whether this object represents the same term as the other
   equals(other) {
     // If both terms were created by this library,
@@ -43607,6 +43601,12 @@ class Term {
     // Otherwise, compare term type and value
     return !!other && this.termType === other.termType &&
                       this.value    === other.value;
+  }
+
+  // ### Implement hashCode for Immutable.js, since we implement `equals`
+  // https://immutable-js.com/docs/v4.0.0/ValueObject/#hashCode()
+  hashCode() {
+    return 0;
   }
 
   // ### Returns a plain object representation of this term
@@ -44034,16 +44034,17 @@ class N3Lexer {
   _tokenizeToEnd(callback, inputFinished) {
     // Continue parsing as far as possible; the loop will return eventually
     let input = this._input;
-    const outputComments = this._comments;
+    let currentLineLength = input.length;
     while (true) {
       // Count and skip whitespace lines
       let whiteSpaceMatch, comment;
       while (whiteSpaceMatch = this._newline.exec(input)) {
         // Try to find a comment
-        if (outputComments && (comment = this._comment.exec(whiteSpaceMatch[0])))
-          callback(null, { line: this._line, type: 'comment', value: comment[1], prefix: '' });
+        if (this._comments && (comment = this._comment.exec(whiteSpaceMatch[0])))
+          emitToken('comment', comment[1], '', this._line, whiteSpaceMatch[0].length);
         // Advance the input
         input = input.substr(whiteSpaceMatch[0].length, input.length);
+        currentLineLength = input.length;
         this._line++;
       }
       // Skip whitespace on current line
@@ -44055,9 +44056,10 @@ class N3Lexer {
         // If the input is finished, emit EOF
         if (inputFinished) {
           // Try to find a final comment
-          if (outputComments && (comment = this._comment.exec(input)))
-            callback(null, { line: this._line, type: 'comment', value: comment[1], prefix: '' });
-          callback(input = null, { line: this._line, type: 'eof', value: '', prefix: '' });
+          if (this._comments && (comment = this._comment.exec(input)))
+            emitToken('comment', comment[1], '', this._line, input.length);
+          input = null;
+          emitToken('eof', '', '', this._line, 0);
         }
         return this._input = input;
       }
@@ -44301,14 +44303,23 @@ class N3Lexer {
       }
 
       // Emit the parsed token
-      const token = { line: line, type: type, value: value, prefix: prefix };
-      callback(null, token);
+      const length = matchLength || match[0].length;
+      const token = emitToken(type, value, prefix, line, length);
       this.previousToken = token;
       this._previousMarker = type;
+
       // Advance to next part to tokenize
-      input = input.substr(matchLength || match[0].length, input.length);
+      input = input.substr(length, input.length);
     }
 
+    // Emits the token through the callback
+    function emitToken(type, value, prefix, line, length) {
+      const start = input ? currentLineLength - input.length : currentLineLength;
+      const end = start + length;
+      const token = { type, value, prefix, line, start, end };
+      callback(null, token);
+      return token;
+    }
     // Signals the syntax error through the callback
     function reportSyntaxError(self) { callback(self._syntaxError(/^\S*/.exec(input)[0])); }
   }
@@ -45580,7 +45591,7 @@ function inDefaultGraph(quad) {
 
 // Creates a function that prepends the given IRI to a local name
 function prefix(iri, factory) {
-  return prefixes({ '': iri }, factory)('');
+  return prefixes({ '': iri.value || iri }, factory)('');
 }
 
 // Creates a function that allows registering and expanding prefixes
@@ -48963,9 +48974,9 @@ __webpack_require__.r(__webpack_exports__);
 
 var _supports;
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__["default"])(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
 
 
@@ -49066,9 +49077,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _extended_term_factory__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./extended-term-factory */ "./node_modules/rdflib/esm/factories/extended-term-factory.js");
 
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__["default"])(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
 
 
@@ -49134,10 +49145,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ Fetcher)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js");
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/esm/inherits.js");
-/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "./node_modules/@babel/runtime/helpers/esm/possibleConstructorReturn.js");
-/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "./node_modules/@babel/runtime/helpers/esm/getPrototypeOf.js");
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/esm/inherits.js");
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "./node_modules/@babel/runtime/helpers/esm/possibleConstructorReturn.js");
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "./node_modules/@babel/runtime/helpers/esm/getPrototypeOf.js");
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
@@ -49168,7 +49179,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0,_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__["default"])(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0,_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__["default"])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0,_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__["default"])(this, result); }; }
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0,_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__["default"])(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0,_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__["default"])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0,_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__["default"])(this, result); }; }
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
@@ -49255,7 +49266,7 @@ var getNS = function getNS(factory) {
 
 var ns = getNS();
 
-var Handler = // TODO: Document, type
+var Handler = /*#__PURE__*/(0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])( // TODO: Document, type
 // TODO: Document, type
 function Handler(response, dom) {
   (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_5__["default"])(this, Handler);
@@ -49267,12 +49278,12 @@ function Handler(response, dom) {
   this.response = response; // The type assertion operator here might need to be removed.
 
   this.dom = dom;
-};
+});
 
 (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__["default"])(Handler, "pattern", void 0);
 
 var RDFXMLHandler = /*#__PURE__*/function (_Handler) {
-  (0,_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2__["default"])(RDFXMLHandler, _Handler);
+  (0,_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_1__["default"])(RDFXMLHandler, _Handler);
 
   var _super = _createSuper(RDFXMLHandler);
 
@@ -49282,7 +49293,7 @@ var RDFXMLHandler = /*#__PURE__*/function (_Handler) {
     return _super.apply(this, arguments);
   }
 
-  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(RDFXMLHandler, [{
+  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])(RDFXMLHandler, [{
     key: "parse",
     value: function parse(fetcher,
     /** An XML String */
@@ -49337,7 +49348,7 @@ var RDFXMLHandler = /*#__PURE__*/function (_Handler) {
 RDFXMLHandler.pattern = new RegExp('application/rdf\\+xml');
 
 var XHTMLHandler = /*#__PURE__*/function (_Handler2) {
-  (0,_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2__["default"])(XHTMLHandler, _Handler2);
+  (0,_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_1__["default"])(XHTMLHandler, _Handler2);
 
   var _super2 = _createSuper(XHTMLHandler);
 
@@ -49347,7 +49358,7 @@ var XHTMLHandler = /*#__PURE__*/function (_Handler2) {
     return _super2.apply(this, arguments);
   }
 
-  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(XHTMLHandler, [{
+  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])(XHTMLHandler, [{
     key: "parse",
     value: function parse(fetcher, responseText, options) {
       var relation, reverse;
@@ -49431,7 +49442,7 @@ var XHTMLHandler = /*#__PURE__*/function (_Handler2) {
 XHTMLHandler.pattern = new RegExp('application/xhtml');
 
 var XMLHandler = /*#__PURE__*/function (_Handler3) {
-  (0,_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2__["default"])(XMLHandler, _Handler3);
+  (0,_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_1__["default"])(XMLHandler, _Handler3);
 
   var _super3 = _createSuper(XMLHandler);
 
@@ -49441,7 +49452,7 @@ var XMLHandler = /*#__PURE__*/function (_Handler3) {
     return _super3.apply(this, arguments);
   }
 
-  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(XMLHandler, [{
+  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])(XMLHandler, [{
     key: "parse",
     value: function parse(fetcher, responseText, options) {
       var dom = _utils_js__WEBPACK_IMPORTED_MODULE_11__.parseXML(responseText); // XML Semantics defined by root element namespace
@@ -49525,7 +49536,7 @@ var XMLHandler = /*#__PURE__*/function (_Handler3) {
 XMLHandler.pattern = new RegExp('(text|application)/(.*)xml');
 
 var HTMLHandler = /*#__PURE__*/function (_Handler4) {
-  (0,_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2__["default"])(HTMLHandler, _Handler4);
+  (0,_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_1__["default"])(HTMLHandler, _Handler4);
 
   var _super4 = _createSuper(HTMLHandler);
 
@@ -49535,7 +49546,7 @@ var HTMLHandler = /*#__PURE__*/function (_Handler4) {
     return _super4.apply(this, arguments);
   }
 
-  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(HTMLHandler, [{
+  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])(HTMLHandler, [{
     key: "parse",
     value: function parse(fetcher, responseText, options) {
       var kb = fetcher.store; // We only handle XHTML so we have to figure out if this is XML
@@ -49597,7 +49608,7 @@ var HTMLHandler = /*#__PURE__*/function (_Handler4) {
 HTMLHandler.pattern = new RegExp('text/html');
 
 var JsonLdHandler = /*#__PURE__*/function (_Handler5) {
-  (0,_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2__["default"])(JsonLdHandler, _Handler5);
+  (0,_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_1__["default"])(JsonLdHandler, _Handler5);
 
   var _super5 = _createSuper(JsonLdHandler);
 
@@ -49607,7 +49618,7 @@ var JsonLdHandler = /*#__PURE__*/function (_Handler5) {
     return _super5.apply(this, arguments);
   }
 
-  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(JsonLdHandler, [{
+  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])(JsonLdHandler, [{
     key: "parse",
     value: function parse(fetcher, responseText, options, response) {
       var kb = fetcher.store;
@@ -49643,7 +49654,7 @@ var JsonLdHandler = /*#__PURE__*/function (_Handler5) {
 JsonLdHandler.pattern = /application\/ld\+json/;
 
 var TextHandler = /*#__PURE__*/function (_Handler6) {
-  (0,_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2__["default"])(TextHandler, _Handler6);
+  (0,_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_1__["default"])(TextHandler, _Handler6);
 
   var _super6 = _createSuper(TextHandler);
 
@@ -49653,7 +49664,7 @@ var TextHandler = /*#__PURE__*/function (_Handler6) {
     return _super6.apply(this, arguments);
   }
 
-  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(TextHandler, [{
+  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])(TextHandler, [{
     key: "parse",
     value: function parse(fetcher, responseText, options) {
       // We only speak dialects of XML right now. Is this XML?
@@ -49697,7 +49708,7 @@ var TextHandler = /*#__PURE__*/function (_Handler6) {
 TextHandler.pattern = new RegExp('text/plain');
 
 var N3Handler = /*#__PURE__*/function (_Handler7) {
-  (0,_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2__["default"])(N3Handler, _Handler7);
+  (0,_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_1__["default"])(N3Handler, _Handler7);
 
   var _super7 = _createSuper(N3Handler);
 
@@ -49707,7 +49718,7 @@ var N3Handler = /*#__PURE__*/function (_Handler7) {
     return _super7.apply(this, arguments);
   }
 
-  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(N3Handler, [{
+  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])(N3Handler, [{
     key: "parse",
     value: function parse(fetcher, responseText, options, response) {
       // Parse the text of this N3 file
@@ -49896,7 +49907,7 @@ var Fetcher = /*#__PURE__*/function () {
     });
   }
 
-  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(Fetcher, [{
+  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4__["default"])(Fetcher, [{
     key: "load",
     value:
     /**
@@ -52352,109 +52363,110 @@ var Formula = /*#__PURE__*/function (_Node) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "BlankNode": () => (/* reexport safe */ _blank_node__WEBPACK_IMPORTED_MODULE_9__["default"]),
-/* harmony export */   "Collection": () => (/* reexport safe */ _collection__WEBPACK_IMPORTED_MODULE_11__["default"]),
+/* harmony export */   "BlankNode": () => (/* reexport safe */ _blank_node__WEBPACK_IMPORTED_MODULE_10__["default"]),
+/* harmony export */   "Collection": () => (/* reexport safe */ _collection__WEBPACK_IMPORTED_MODULE_12__["default"]),
 /* harmony export */   "ConnectedStore": () => (/* binding */ ConnectedStore),
-/* harmony export */   "DataFactory": () => (/* reexport safe */ _factories_rdflib_data_factory__WEBPACK_IMPORTED_MODULE_6__["default"]),
-/* harmony export */   "Empty": () => (/* reexport safe */ _empty__WEBPACK_IMPORTED_MODULE_13__["default"]),
-/* harmony export */   "Fetcher": () => (/* reexport safe */ _fetcher__WEBPACK_IMPORTED_MODULE_14__["default"]),
-/* harmony export */   "Formula": () => (/* reexport safe */ _formula__WEBPACK_IMPORTED_MODULE_7__["default"]),
-/* harmony export */   "IndexedFormula": () => (/* reexport safe */ _store__WEBPACK_IMPORTED_MODULE_15__["default"]),
-/* harmony export */   "Literal": () => (/* reexport safe */ _literal__WEBPACK_IMPORTED_MODULE_17__["default"]),
+/* harmony export */   "DataFactory": () => (/* reexport safe */ _factories_rdflib_data_factory__WEBPACK_IMPORTED_MODULE_7__["default"]),
+/* harmony export */   "Empty": () => (/* reexport safe */ _empty__WEBPACK_IMPORTED_MODULE_14__["default"]),
+/* harmony export */   "Fetcher": () => (/* reexport safe */ _fetcher__WEBPACK_IMPORTED_MODULE_15__["default"]),
+/* harmony export */   "Formula": () => (/* reexport safe */ _formula__WEBPACK_IMPORTED_MODULE_8__["default"]),
+/* harmony export */   "IndexedFormula": () => (/* reexport safe */ _store__WEBPACK_IMPORTED_MODULE_16__["default"]),
+/* harmony export */   "Literal": () => (/* reexport safe */ _literal__WEBPACK_IMPORTED_MODULE_18__["default"]),
 /* harmony export */   "LiveStore": () => (/* binding */ LiveStore),
-/* harmony export */   "N3Parser": () => (/* reexport safe */ _n3parser__WEBPACK_IMPORTED_MODULE_19__["default"]),
-/* harmony export */   "NamedNode": () => (/* reexport safe */ _named_node__WEBPACK_IMPORTED_MODULE_20__["default"]),
-/* harmony export */   "Namespace": () => (/* reexport safe */ _namespace__WEBPACK_IMPORTED_MODULE_21__["default"]),
+/* harmony export */   "N3Parser": () => (/* reexport safe */ _n3parser__WEBPACK_IMPORTED_MODULE_20__["default"]),
+/* harmony export */   "NamedNode": () => (/* reexport safe */ _named_node__WEBPACK_IMPORTED_MODULE_21__["default"]),
+/* harmony export */   "Namespace": () => (/* reexport safe */ _namespace__WEBPACK_IMPORTED_MODULE_22__["default"]),
 /* harmony export */   "NextId": () => (/* binding */ NextId),
-/* harmony export */   "Node": () => (/* reexport safe */ _node__WEBPACK_IMPORTED_MODULE_8__["default"]),
-/* harmony export */   "Query": () => (/* reexport safe */ _query__WEBPACK_IMPORTED_MODULE_23__.Query),
-/* harmony export */   "RDFParser": () => (/* reexport safe */ _rdfxmlparser__WEBPACK_IMPORTED_MODULE_26__["default"]),
-/* harmony export */   "RDFaProcessor": () => (/* reexport safe */ _rdfaparser__WEBPACK_IMPORTED_MODULE_25__["default"]),
-/* harmony export */   "SPARQLToQuery": () => (/* reexport safe */ _sparql_to_query__WEBPACK_IMPORTED_MODULE_29__["default"]),
-/* harmony export */   "Serializer": () => (/* reexport safe */ _serializer__WEBPACK_IMPORTED_MODULE_28__["default"]),
-/* harmony export */   "Statement": () => (/* reexport safe */ _statement__WEBPACK_IMPORTED_MODULE_31__["default"]),
-/* harmony export */   "Store": () => (/* reexport safe */ _store__WEBPACK_IMPORTED_MODULE_15__["default"]),
-/* harmony export */   "UpdateManager": () => (/* reexport safe */ _update_manager__WEBPACK_IMPORTED_MODULE_32__["default"]),
-/* harmony export */   "UpdatesSocket": () => (/* reexport safe */ _updates_via__WEBPACK_IMPORTED_MODULE_33__.UpdatesSocket),
-/* harmony export */   "UpdatesVia": () => (/* reexport safe */ _updates_via__WEBPACK_IMPORTED_MODULE_33__.UpdatesVia),
-/* harmony export */   "Util": () => (/* reexport module object */ _utils_js__WEBPACK_IMPORTED_MODULE_35__),
-/* harmony export */   "Variable": () => (/* reexport safe */ _variable__WEBPACK_IMPORTED_MODULE_36__["default"]),
+/* harmony export */   "Node": () => (/* reexport safe */ _node__WEBPACK_IMPORTED_MODULE_9__["default"]),
+/* harmony export */   "Query": () => (/* reexport safe */ _query__WEBPACK_IMPORTED_MODULE_24__.Query),
+/* harmony export */   "RDFParser": () => (/* reexport safe */ _rdfxmlparser__WEBPACK_IMPORTED_MODULE_27__["default"]),
+/* harmony export */   "RDFaProcessor": () => (/* reexport safe */ _rdfaparser__WEBPACK_IMPORTED_MODULE_26__["default"]),
+/* harmony export */   "SPARQLToQuery": () => (/* reexport safe */ _sparql_to_query__WEBPACK_IMPORTED_MODULE_30__["default"]),
+/* harmony export */   "Serializer": () => (/* reexport safe */ _serializer__WEBPACK_IMPORTED_MODULE_29__["default"]),
+/* harmony export */   "Statement": () => (/* reexport safe */ _statement__WEBPACK_IMPORTED_MODULE_32__["default"]),
+/* harmony export */   "Store": () => (/* reexport safe */ _store__WEBPACK_IMPORTED_MODULE_16__["default"]),
+/* harmony export */   "UpdateManager": () => (/* reexport safe */ _update_manager__WEBPACK_IMPORTED_MODULE_33__["default"]),
+/* harmony export */   "UpdatesSocket": () => (/* reexport safe */ _updates_via__WEBPACK_IMPORTED_MODULE_34__.UpdatesSocket),
+/* harmony export */   "UpdatesVia": () => (/* reexport safe */ _updates_via__WEBPACK_IMPORTED_MODULE_34__.UpdatesVia),
+/* harmony export */   "Util": () => (/* reexport module object */ _utils_js__WEBPACK_IMPORTED_MODULE_36__),
+/* harmony export */   "Variable": () => (/* reexport safe */ _variable__WEBPACK_IMPORTED_MODULE_37__["default"]),
 /* harmony export */   "blankNode": () => (/* binding */ blankNode),
-/* harmony export */   "convert": () => (/* reexport module object */ _convert__WEBPACK_IMPORTED_MODULE_12__),
+/* harmony export */   "convert": () => (/* reexport module object */ _convert__WEBPACK_IMPORTED_MODULE_13__),
 /* harmony export */   "defaultGraph": () => (/* binding */ defaultGraph),
 /* harmony export */   "fetcher": () => (/* binding */ fetcher),
 /* harmony export */   "fromNT": () => (/* binding */ fromNT),
 /* harmony export */   "graph": () => (/* binding */ graph),
-/* harmony export */   "isBlankNode": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_10__.isBlankNode),
-/* harmony export */   "isCollection": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_10__.isCollection),
-/* harmony export */   "isGraph": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_10__.isGraph),
-/* harmony export */   "isLiteral": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_10__.isLiteral),
-/* harmony export */   "isNamedNode": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_10__.isNamedNode),
-/* harmony export */   "isPredicate": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_10__.isPredicate),
-/* harmony export */   "isQuad": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_10__.isQuad),
-/* harmony export */   "isRDFObject": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_10__.isRDFObject),
-/* harmony export */   "isRDFlibObject": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_10__.isRDFlibObject),
-/* harmony export */   "isStatement": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_10__.isStatement),
-/* harmony export */   "isStore": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_10__.isStore),
-/* harmony export */   "isSubject": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_10__.isSubject),
-/* harmony export */   "isTerm": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_10__.isTerm),
-/* harmony export */   "isVariable": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_10__.isVariable),
-/* harmony export */   "jsonParser": () => (/* reexport safe */ _jsonparser__WEBPACK_IMPORTED_MODULE_16__["default"]),
+/* harmony export */   "isBlankNode": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isBlankNode),
+/* harmony export */   "isCollection": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isCollection),
+/* harmony export */   "isGraph": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isGraph),
+/* harmony export */   "isLiteral": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isLiteral),
+/* harmony export */   "isNamedNode": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isNamedNode),
+/* harmony export */   "isPredicate": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isPredicate),
+/* harmony export */   "isQuad": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isQuad),
+/* harmony export */   "isRDFObject": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isRDFObject),
+/* harmony export */   "isRDFlibObject": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isRDFlibObject),
+/* harmony export */   "isStatement": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isStatement),
+/* harmony export */   "isStore": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isStore),
+/* harmony export */   "isSubject": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isSubject),
+/* harmony export */   "isTerm": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isTerm),
+/* harmony export */   "isVariable": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isVariable),
+/* harmony export */   "jsonParser": () => (/* reexport safe */ _jsonparser__WEBPACK_IMPORTED_MODULE_17__["default"]),
 /* harmony export */   "lit": () => (/* binding */ lit),
 /* harmony export */   "literal": () => (/* binding */ literal),
-/* harmony export */   "log": () => (/* reexport safe */ _log__WEBPACK_IMPORTED_MODULE_18__["default"]),
+/* harmony export */   "log": () => (/* reexport safe */ _log__WEBPACK_IMPORTED_MODULE_19__["default"]),
 /* harmony export */   "namedNode": () => (/* binding */ namedNode),
-/* harmony export */   "parse": () => (/* reexport safe */ _parse__WEBPACK_IMPORTED_MODULE_22__["default"]),
+/* harmony export */   "parse": () => (/* reexport safe */ _parse__WEBPACK_IMPORTED_MODULE_23__["default"]),
 /* harmony export */   "quad": () => (/* binding */ quad),
-/* harmony export */   "queryToSPARQL": () => (/* reexport safe */ _query_to_sparql__WEBPACK_IMPORTED_MODULE_24__["default"]),
-/* harmony export */   "serialize": () => (/* reexport safe */ _serialize__WEBPACK_IMPORTED_MODULE_27__["default"]),
-/* harmony export */   "sparqlUpdateParser": () => (/* reexport safe */ _patch_parser__WEBPACK_IMPORTED_MODULE_30__["default"]),
+/* harmony export */   "queryToSPARQL": () => (/* reexport safe */ _query_to_sparql__WEBPACK_IMPORTED_MODULE_25__["default"]),
+/* harmony export */   "serialize": () => (/* reexport safe */ _serialize__WEBPACK_IMPORTED_MODULE_28__["default"]),
+/* harmony export */   "sparqlUpdateParser": () => (/* reexport safe */ _patch_parser__WEBPACK_IMPORTED_MODULE_31__["default"]),
 /* harmony export */   "st": () => (/* binding */ st),
 /* harmony export */   "sym": () => (/* binding */ namedNode),
 /* harmony export */   "term": () => (/* binding */ term),
-/* harmony export */   "termValue": () => (/* reexport safe */ _utils_termValue__WEBPACK_IMPORTED_MODULE_37__.termValue),
+/* harmony export */   "termValue": () => (/* reexport safe */ _utils_termValue__WEBPACK_IMPORTED_MODULE_38__.termValue),
 /* harmony export */   "triple": () => (/* binding */ triple),
-/* harmony export */   "uri": () => (/* reexport module object */ _uri__WEBPACK_IMPORTED_MODULE_34__),
+/* harmony export */   "uri": () => (/* reexport module object */ _uri__WEBPACK_IMPORTED_MODULE_35__),
 /* harmony export */   "variable": () => (/* binding */ variable)
 /* harmony export */ });
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-/* harmony import */ var _babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/assertThisInitialized */ "./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js");
-/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/esm/inherits.js");
-/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "./node_modules/@babel/runtime/helpers/esm/possibleConstructorReturn.js");
-/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "./node_modules/@babel/runtime/helpers/esm/getPrototypeOf.js");
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
-/* harmony import */ var _blank_node__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./blank-node */ "./node_modules/rdflib/esm/blank-node.js");
-/* harmony import */ var _collection__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./collection */ "./node_modules/rdflib/esm/collection.js");
-/* harmony import */ var _convert__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./convert */ "./node_modules/rdflib/esm/convert.js");
-/* harmony import */ var _empty__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./empty */ "./node_modules/rdflib/esm/empty.js");
-/* harmony import */ var _fetcher__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./fetcher */ "./node_modules/rdflib/esm/fetcher.js");
-/* harmony import */ var _formula__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./formula */ "./node_modules/rdflib/esm/formula.js");
-/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./store */ "./node_modules/rdflib/esm/store.js");
-/* harmony import */ var _jsonparser__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./jsonparser */ "./node_modules/rdflib/esm/jsonparser.js");
-/* harmony import */ var _literal__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./literal */ "./node_modules/rdflib/esm/literal.js");
-/* harmony import */ var _log__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./log */ "./node_modules/rdflib/esm/log.js");
-/* harmony import */ var _n3parser__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./n3parser */ "./node_modules/rdflib/esm/n3parser.js");
-/* harmony import */ var _named_node__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./named-node */ "./node_modules/rdflib/esm/named-node.js");
-/* harmony import */ var _namespace__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./namespace */ "./node_modules/rdflib/esm/namespace.js");
-/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./node */ "./node_modules/rdflib/esm/node.js");
-/* harmony import */ var _parse__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./parse */ "./node_modules/rdflib/esm/parse.js");
-/* harmony import */ var _query__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./query */ "./node_modules/rdflib/esm/query.js");
-/* harmony import */ var _query_to_sparql__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./query-to-sparql */ "./node_modules/rdflib/esm/query-to-sparql.js");
-/* harmony import */ var _rdfaparser__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./rdfaparser */ "./node_modules/rdflib/esm/rdfaparser.js");
-/* harmony import */ var _rdfxmlparser__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./rdfxmlparser */ "./node_modules/rdflib/esm/rdfxmlparser.js");
-/* harmony import */ var _serialize__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./serialize */ "./node_modules/rdflib/esm/serialize.js");
-/* harmony import */ var _serializer__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./serializer */ "./node_modules/rdflib/esm/serializer.js");
-/* harmony import */ var _sparql_to_query__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./sparql-to-query */ "./node_modules/rdflib/esm/sparql-to-query.js");
-/* harmony import */ var _patch_parser__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./patch-parser */ "./node_modules/rdflib/esm/patch-parser.js");
-/* harmony import */ var _statement__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./statement */ "./node_modules/rdflib/esm/statement.js");
-/* harmony import */ var _update_manager__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./update-manager */ "./node_modules/rdflib/esm/update-manager.js");
-/* harmony import */ var _updates_via__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./updates-via */ "./node_modules/rdflib/esm/updates-via.js");
-/* harmony import */ var _uri__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./uri */ "./node_modules/rdflib/esm/uri.js");
-/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./utils-js */ "./node_modules/rdflib/esm/utils-js.js");
-/* harmony import */ var _variable__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./variable */ "./node_modules/rdflib/esm/variable.js");
-/* harmony import */ var _factories_rdflib_data_factory__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./factories/rdflib-data-factory */ "./node_modules/rdflib/esm/factories/rdflib-data-factory.js");
-/* harmony import */ var _utils_terms__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./utils/terms */ "./node_modules/rdflib/esm/utils/terms.js");
-/* harmony import */ var _utils_termValue__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./utils/termValue */ "./node_modules/rdflib/esm/utils/termValue.js");
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
+/* harmony import */ var _babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/assertThisInitialized */ "./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js");
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/esm/inherits.js");
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "./node_modules/@babel/runtime/helpers/esm/possibleConstructorReturn.js");
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "./node_modules/@babel/runtime/helpers/esm/getPrototypeOf.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
+/* harmony import */ var _blank_node__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./blank-node */ "./node_modules/rdflib/esm/blank-node.js");
+/* harmony import */ var _collection__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./collection */ "./node_modules/rdflib/esm/collection.js");
+/* harmony import */ var _convert__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./convert */ "./node_modules/rdflib/esm/convert.js");
+/* harmony import */ var _empty__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./empty */ "./node_modules/rdflib/esm/empty.js");
+/* harmony import */ var _fetcher__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./fetcher */ "./node_modules/rdflib/esm/fetcher.js");
+/* harmony import */ var _formula__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./formula */ "./node_modules/rdflib/esm/formula.js");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./store */ "./node_modules/rdflib/esm/store.js");
+/* harmony import */ var _jsonparser__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./jsonparser */ "./node_modules/rdflib/esm/jsonparser.js");
+/* harmony import */ var _literal__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./literal */ "./node_modules/rdflib/esm/literal.js");
+/* harmony import */ var _log__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./log */ "./node_modules/rdflib/esm/log.js");
+/* harmony import */ var _n3parser__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./n3parser */ "./node_modules/rdflib/esm/n3parser.js");
+/* harmony import */ var _named_node__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./named-node */ "./node_modules/rdflib/esm/named-node.js");
+/* harmony import */ var _namespace__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./namespace */ "./node_modules/rdflib/esm/namespace.js");
+/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./node */ "./node_modules/rdflib/esm/node.js");
+/* harmony import */ var _parse__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./parse */ "./node_modules/rdflib/esm/parse.js");
+/* harmony import */ var _query__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./query */ "./node_modules/rdflib/esm/query.js");
+/* harmony import */ var _query_to_sparql__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./query-to-sparql */ "./node_modules/rdflib/esm/query-to-sparql.js");
+/* harmony import */ var _rdfaparser__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./rdfaparser */ "./node_modules/rdflib/esm/rdfaparser.js");
+/* harmony import */ var _rdfxmlparser__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./rdfxmlparser */ "./node_modules/rdflib/esm/rdfxmlparser.js");
+/* harmony import */ var _serialize__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./serialize */ "./node_modules/rdflib/esm/serialize.js");
+/* harmony import */ var _serializer__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./serializer */ "./node_modules/rdflib/esm/serializer.js");
+/* harmony import */ var _sparql_to_query__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./sparql-to-query */ "./node_modules/rdflib/esm/sparql-to-query.js");
+/* harmony import */ var _patch_parser__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./patch-parser */ "./node_modules/rdflib/esm/patch-parser.js");
+/* harmony import */ var _statement__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./statement */ "./node_modules/rdflib/esm/statement.js");
+/* harmony import */ var _update_manager__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./update-manager */ "./node_modules/rdflib/esm/update-manager.js");
+/* harmony import */ var _updates_via__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./updates-via */ "./node_modules/rdflib/esm/updates-via.js");
+/* harmony import */ var _uri__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./uri */ "./node_modules/rdflib/esm/uri.js");
+/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./utils-js */ "./node_modules/rdflib/esm/utils-js.js");
+/* harmony import */ var _variable__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./variable */ "./node_modules/rdflib/esm/variable.js");
+/* harmony import */ var _factories_rdflib_data_factory__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./factories/rdflib-data-factory */ "./node_modules/rdflib/esm/factories/rdflib-data-factory.js");
+/* harmony import */ var _utils_terms__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./utils/terms */ "./node_modules/rdflib/esm/utils/terms.js");
+/* harmony import */ var _utils_termValue__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./utils/termValue */ "./node_modules/rdflib/esm/utils/termValue.js");
 
 
 
@@ -52462,7 +52474,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0,_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__["default"])(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0,_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__["default"])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0,_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__["default"])(this, result); }; }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0,_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__["default"])(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0,_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__["default"])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0,_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__["default"])(this, result); }; }
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
@@ -52500,8 +52513,8 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 var boundDataFactory = {};
 
-for (var name in _factories_rdflib_data_factory__WEBPACK_IMPORTED_MODULE_6__["default"]) {
-  if (typeof _factories_rdflib_data_factory__WEBPACK_IMPORTED_MODULE_6__["default"][name] === 'function') boundDataFactory[name] = _factories_rdflib_data_factory__WEBPACK_IMPORTED_MODULE_6__["default"][name].bind(_factories_rdflib_data_factory__WEBPACK_IMPORTED_MODULE_6__["default"]);
+for (var name in _factories_rdflib_data_factory__WEBPACK_IMPORTED_MODULE_7__["default"]) {
+  if (typeof _factories_rdflib_data_factory__WEBPACK_IMPORTED_MODULE_7__["default"][name] === 'function') boundDataFactory[name] = _factories_rdflib_data_factory__WEBPACK_IMPORTED_MODULE_7__["default"][name].bind(_factories_rdflib_data_factory__WEBPACK_IMPORTED_MODULE_7__["default"]);
 }
 
 var fetcher = boundDataFactory.fetcher,
@@ -52515,58 +52528,58 @@ var fetcher = boundDataFactory.fetcher,
     literal = boundDataFactory.literal,
     quad = boundDataFactory.quad,
     triple = boundDataFactory.triple;
-var formula = new _formula__WEBPACK_IMPORTED_MODULE_7__["default"]();
+var formula = new _formula__WEBPACK_IMPORTED_MODULE_8__["default"]();
 
 var fromNT = function fromNT(str) {
   return formula.fromNT(str);
 };
 
-var term = _node__WEBPACK_IMPORTED_MODULE_8__["default"].fromValue; // TODO: this export is broken;
+var term = _node__WEBPACK_IMPORTED_MODULE_9__["default"].fromValue; // TODO: this export is broken;
 // it exports the _current_ value of nextId, which is always 0
 
-var NextId = _blank_node__WEBPACK_IMPORTED_MODULE_9__["default"].nextId;
+var NextId = _blank_node__WEBPACK_IMPORTED_MODULE_10__["default"].nextId;
 
 
 
 var ConnectedStore = /*#__PURE__*/function (_Store) {
-  (0,_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2__["default"])(ConnectedStore, _Store);
+  (0,_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__["default"])(ConnectedStore, _Store);
 
   var _super = _createSuper(ConnectedStore);
 
   function ConnectedStore(features) {
     var _this;
 
-    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, ConnectedStore);
+    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, ConnectedStore);
 
     _this = _super.call(this, features);
 
-    (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_5__["default"])((0,_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_1__["default"])(_this), "fetcher", void 0);
+    (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__["default"])((0,_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2__["default"])(_this), "fetcher", void 0);
 
-    _this.fetcher = new _fetcher__WEBPACK_IMPORTED_MODULE_14__["default"]((0,_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_1__["default"])(_this), {});
+    _this.fetcher = new _fetcher__WEBPACK_IMPORTED_MODULE_15__["default"]((0,_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2__["default"])(_this), {});
     return _this;
   }
 
-  return ConnectedStore;
-}(_store__WEBPACK_IMPORTED_MODULE_15__["default"]);
+  return (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_0__["default"])(ConnectedStore);
+}(_store__WEBPACK_IMPORTED_MODULE_16__["default"]);
 var LiveStore = /*#__PURE__*/function (_ConnectedStore) {
-  (0,_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2__["default"])(LiveStore, _ConnectedStore);
+  (0,_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__["default"])(LiveStore, _ConnectedStore);
 
   var _super2 = _createSuper(LiveStore);
 
   function LiveStore(features) {
     var _this2;
 
-    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, LiveStore);
+    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, LiveStore);
 
     _this2 = _super2.call(this, features);
 
-    (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_5__["default"])((0,_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_1__["default"])(_this2), "updater", void 0);
+    (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__["default"])((0,_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2__["default"])(_this2), "updater", void 0);
 
-    _this2.updater = new _update_manager__WEBPACK_IMPORTED_MODULE_32__["default"]((0,_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_1__["default"])(_this2));
+    _this2.updater = new _update_manager__WEBPACK_IMPORTED_MODULE_33__["default"]((0,_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_2__["default"])(_this2));
     return _this2;
   }
 
-  return LiveStore;
+  return (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_0__["default"])(LiveStore);
 }(ConnectedStore);
 
 /***/ }),
@@ -55807,11 +55820,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Query": () => (/* binding */ Query),
 /* harmony export */   "indexedFormulaQuery": () => (/* binding */ indexedFormulaQuery)
 /* harmony export */ });
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./store */ "./node_modules/rdflib/esm/store.js");
-/* harmony import */ var _utils_default_graph_uri__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./utils/default-graph-uri */ "./node_modules/rdflib/esm/utils/default-graph-uri.js");
-/* harmony import */ var _log__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./log */ "./node_modules/rdflib/esm/log.js");
-/* harmony import */ var _uri__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./uri */ "./node_modules/rdflib/esm/uri.js");
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./store */ "./node_modules/rdflib/esm/store.js");
+/* harmony import */ var _utils_default_graph_uri__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./utils/default-graph-uri */ "./node_modules/rdflib/esm/utils/default-graph-uri.js");
+/* harmony import */ var _log__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./log */ "./node_modules/rdflib/esm/log.js");
+/* harmony import */ var _uri__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./uri */ "./node_modules/rdflib/esm/uri.js");
+
 
 // Matching a formula against another formula
 // Assync as well as Synchronously
@@ -55840,17 +55855,17 @@ __webpack_require__.r(__webpack_exports__);
  * Query class, for tracking queries the user has in the UI.
  */
 
-var Query = function Query(name, id) {
-  (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, Query);
+var Query = /*#__PURE__*/(0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_0__["default"])(function Query(name, id) {
+  (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, Query);
 
-  this.pat = new _store__WEBPACK_IMPORTED_MODULE_1__["default"](); // The pattern to search for
+  this.pat = new _store__WEBPACK_IMPORTED_MODULE_2__["default"](); // The pattern to search for
 
   this.vars = []; // Used by UI code but not in query.js
   //    this.orderBy = [] // Not used yet
 
   this.name = name;
   this.id = id;
-};
+});
 /**
  * This function will match a pattern to the current Store
  *
@@ -55927,7 +55942,7 @@ function indexedFormulaQuery(myQuery, callback, fetcher, onDone) {
         other = formula.redirections[other];
       }
 
-      if (actual.equals(other) || actual.uri && actual.uri === _utils_default_graph_uri__WEBPACK_IMPORTED_MODULE_2__.defaultGraphURI) {
+      if (actual.equals(other) || actual.uri && actual.uri === _utils_default_graph_uri__WEBPACK_IMPORTED_MODULE_3__.defaultGraphURI) {
         // Used to mean 'any graph' in a query
         return [[[], null]];
       }
@@ -56071,7 +56086,7 @@ function indexedFormulaQuery(myQuery, callback, fetcher, onDone) {
       }
     }
 
-    _log__WEBPACK_IMPORTED_MODULE_3__["default"].debug('OPTIONAL BIDNINGS ALL DONE:');
+    _log__WEBPACK_IMPORTED_MODULE_4__["default"].debug('OPTIONAL BIDNINGS ALL DONE:');
     this.doCallBacks(this.branches.length - 1, this.trunkBindings);
   }; // Recrursively generate the cross product of the bindings
 
@@ -56111,7 +56126,7 @@ function indexedFormulaQuery(myQuery, callback, fetcher, onDone) {
 
   MandatoryBranch.prototype.reportDone = function () {
     this.done = true;
-    _log__WEBPACK_IMPORTED_MODULE_3__["default"].info('Mandatory query branch finished.***');
+    _log__WEBPACK_IMPORTED_MODULE_4__["default"].info('Mandatory query branch finished.***');
 
     if (this.onDone !== undefined) {
       this.onDone();
@@ -56133,13 +56148,13 @@ function indexedFormulaQuery(myQuery, callback, fetcher, onDone) {
   };
 
   OptionalBranch.prototype.reportDone = function () {
-    _log__WEBPACK_IMPORTED_MODULE_3__["default"].debug('Optional branch finished - results.length = ' + this.results.length);
+    _log__WEBPACK_IMPORTED_MODULE_4__["default"].debug('Optional branch finished - results.length = ' + this.results.length);
 
     if (this.results.length === 0) {
       // This is what optional means: if no hits,
       this.results.push({}); // mimic success, but with no bindings
 
-      _log__WEBPACK_IMPORTED_MODULE_3__["default"].debug("Optional branch FAILED - that's OK.");
+      _log__WEBPACK_IMPORTED_MODULE_4__["default"].debug("Optional branch FAILED - that's OK.");
     }
 
     this.done = true;
@@ -56166,7 +56181,7 @@ function indexedFormulaQuery(myQuery, callback, fetcher, onDone) {
     for (i = 0; i < 4; i++) {
       var t = terms[i]; // console.log("  Prepare (" + t + ") "+(t in bindings))
 
-      if (t.uri && t.uri === _utils_default_graph_uri__WEBPACK_IMPORTED_MODULE_2__.defaultGraphURI) {// chrome:session
+      if (t.uri && t.uri === _utils_default_graph_uri__WEBPACK_IMPORTED_MODULE_3__.defaultGraphURI) {// chrome:session
         // console.log('     query: Ignoring slot ' + i)
       } else if (t.isVar && !(bindings[t] !== undefined)) {
         item.nvars++;
@@ -56229,18 +56244,18 @@ function indexedFormulaQuery(myQuery, callback, fetcher, onDone) {
   ***/
 
   var match = function match(f, g, bindingsSoFar, level, fetcher, localCallback, branch) {
-    _log__WEBPACK_IMPORTED_MODULE_3__["default"].debug('Match begins, Branch count now: ' + branch.count + ' for ' + branch.pattern_debug); // log.debug("match: f has "+f.statements.length+", g has "+g.statements.length)
+    _log__WEBPACK_IMPORTED_MODULE_4__["default"].debug('Match begins, Branch count now: ' + branch.count + ' for ' + branch.pattern_debug); // log.debug("match: f has "+f.statements.length+", g has "+g.statements.length)
 
     var pattern = g.statements;
 
     if (pattern.length === 0) {
       // when it's satisfied all the pattern triples
-      _log__WEBPACK_IMPORTED_MODULE_3__["default"].debug('FOUND MATCH WITH BINDINGS:' + bindingDebug(bindingsSoFar));
+      _log__WEBPACK_IMPORTED_MODULE_4__["default"].debug('FOUND MATCH WITH BINDINGS:' + bindingDebug(bindingsSoFar));
 
       if (g.optional.length === 0) {
         branch.reportMatch(bindingsSoFar);
       } else {
-        _log__WEBPACK_IMPORTED_MODULE_3__["default"].debug('OPTIONAL: ' + g.optional);
+        _log__WEBPACK_IMPORTED_MODULE_4__["default"].debug('OPTIONAL: ' + g.optional);
         var junction = new OptionalBranchJunction(callback, bindingsSoFar); // @@ won't work with nested optionals? nest callbacks
 
         var br = [];
@@ -56260,7 +56275,7 @@ function indexedFormulaQuery(myQuery, callback, fetcher, onDone) {
       }
 
       branch.count--;
-      _log__WEBPACK_IMPORTED_MODULE_3__["default"].debug('Match ends -- success , Branch count now: ' + branch.count + ' for ' + branch.pattern_debug);
+      _log__WEBPACK_IMPORTED_MODULE_4__["default"].debug('Match ends -- success , Branch count now: ' + branch.count + ' for ' + branch.pattern_debug);
       return; // Success
     }
 
@@ -56288,13 +56303,13 @@ function indexedFormulaQuery(myQuery, callback, fetcher, onDone) {
       for (i = 0; i < n; i++) {
         item = pattern[i]; // for each of the triples in the query
 
-        if (bindingsSoFar[item.subject] !== undefined && bindingsSoFar[item.subject].uri && fetcher && fetcher.getState((0,_uri__WEBPACK_IMPORTED_MODULE_4__.docpart)(bindingsSoFar[item.subject].uri)) === 'unrequested') {
+        if (bindingsSoFar[item.subject] !== undefined && bindingsSoFar[item.subject].uri && fetcher && fetcher.getState((0,_uri__WEBPACK_IMPORTED_MODULE_5__.docpart)(bindingsSoFar[item.subject].uri)) === 'unrequested') {
           // fetch the subject info and return to id
           fetchResource(bindingsSoFar[item.subject], id);
           return; // only look up one per line this time, but we will come back again though match
         }
 
-        if (bindingsSoFar[item.object] !== undefined && bindingsSoFar[item.object].uri && fetcher && fetcher.getState((0,_uri__WEBPACK_IMPORTED_MODULE_4__.docpart)(bindingsSoFar[item.object].uri)) === 'unrequested') {
+        if (bindingsSoFar[item.object] !== undefined && bindingsSoFar[item.object].uri && fetcher && fetcher.getState((0,_uri__WEBPACK_IMPORTED_MODULE_5__.docpart)(bindingsSoFar[item.object].uri)) === 'unrequested') {
           fetchResource(bindingsSoFar[item.object], id);
           return;
         }
@@ -56355,7 +56370,7 @@ function indexedFormulaQuery(myQuery, callback, fetcher, onDone) {
     rest.constraints = g.constraints;
     rest.statements = pattern.slice(1); // No indexes: we will not query g.
 
-    _log__WEBPACK_IMPORTED_MODULE_3__["default"].debug(level + 'match2 searching ' + item.index.length + ' for ' + item + '; bindings so far=' + bindingDebug(bindingsSoFar)); // var results = []
+    _log__WEBPACK_IMPORTED_MODULE_4__["default"].debug(level + 'match2 searching ' + item.index.length + ' for ' + item + '; bindings so far=' + bindingDebug(bindingsSoFar)); // var results = []
 
     var c;
     var nc = item.index.length;
@@ -56368,7 +56383,7 @@ function indexedFormulaQuery(myQuery, callback, fetcher, onDone) {
       st = item.index[c]; // for each statement in the item's index, spawn a new match with that binding
 
       nbs1 = unifyContents([item.subject, item.predicate, item.object, item.why], [st.subject, st.predicate, st.object, st.why], bindingsSoFar, f);
-      _log__WEBPACK_IMPORTED_MODULE_3__["default"].info(level + ' From first: ' + nbs1.length + ': ' + bindingsDebug(nbs1));
+      _log__WEBPACK_IMPORTED_MODULE_4__["default"].info(level + ' From first: ' + nbs1.length + ': ' + bindingsDebug(nbs1));
       nk = nbs1.length; // branch.count += nk
       // log.debug("Branch count bumped "+nk+" to: "+branch.count)
 
@@ -56379,7 +56394,7 @@ function indexedFormulaQuery(myQuery, callback, fetcher, onDone) {
 
         if (!constraintsSatisfied(newBindings1, g.constraints)) {
           // branch.count--
-          _log__WEBPACK_IMPORTED_MODULE_3__["default"].debug('Branch count CS: ' + branch.count);
+          _log__WEBPACK_IMPORTED_MODULE_4__["default"].debug('Branch count CS: ' + branch.count);
         } else {
           for (v in newBindings1) {
             if (newBindings1.hasOwnProperty(v)) {
@@ -56404,13 +56419,13 @@ function indexedFormulaQuery(myQuery, callback, fetcher, onDone) {
     branch.count--;
 
     if (onward === 0) {
-      _log__WEBPACK_IMPORTED_MODULE_3__["default"].debug('Match2 fails completely on ' + item);
+      _log__WEBPACK_IMPORTED_MODULE_4__["default"].debug('Match2 fails completely on ' + item);
     }
 
-    _log__WEBPACK_IMPORTED_MODULE_3__["default"].debug('Match2 ends, Branch count: ' + branch.count + ' for ' + branch.pattern_debug);
+    _log__WEBPACK_IMPORTED_MODULE_4__["default"].debug('Match2 ends, Branch count: ' + branch.count + ' for ' + branch.pattern_debug);
 
     if (branch.count === 0) {
-      _log__WEBPACK_IMPORTED_MODULE_3__["default"].debug('Branch finished.');
+      _log__WEBPACK_IMPORTED_MODULE_4__["default"].debug('Branch finished.');
       branch.reportDone();
     }
   }; // match2
@@ -56418,7 +56433,7 @@ function indexedFormulaQuery(myQuery, callback, fetcher, onDone) {
 
 
   var f = this;
-  _log__WEBPACK_IMPORTED_MODULE_3__["default"].debug('Query on ' + this.statements.length);
+  _log__WEBPACK_IMPORTED_MODULE_4__["default"].debug('Query on ' + this.statements.length);
   var trunck = new MandatoryBranch(callback, onDone);
   trunck.count++; // count one branch to complete at the moment
 
@@ -60392,9 +60407,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__["default"])(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
 
@@ -65348,7 +65363,11 @@ try {
  */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -65495,7 +65514,11 @@ exports.authSession = new solid_client_authn_browser_1.Session({
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -65686,7 +65709,11 @@ exports.SolidAuthnLogic = SolidAuthnLogic;
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -66083,6 +66110,219 @@ exports.determineChatContainer = determineChatContainer;
 
 /***/ }),
 
+/***/ "./node_modules/solid-logic/lib/discovery/discoveryLogic.js":
+/*!******************************************************************!*\
+  !*** ./node_modules/solid-logic/lib/discovery/discoveryLogic.js ***!
+  \******************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.loadAllTypeIndexes = exports.loadCommunityTypeIndexes = exports.loadTypeIndexesFor = exports.loadPreferences = exports.loadProfile = void 0;
+var rdflib_1 = __webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js");
+var ns = {
+    solid: (0, rdflib_1.Namespace)('http://www.w3.org/ns/solid/terms#'),
+    space: (0, rdflib_1.Namespace)('http://www.w3.org/ns/pim/space#')
+};
+function loadProfile(store, user) {
+    return __awaiter(this, void 0, void 0, function () {
+        var err_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!user) {
+                        throw new Error("loadProfile: no user given.");
+                    }
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, store.fetcher.load(user.doc())];
+                case 2:
+                    _a.sent();
+                    return [3 /*break*/, 4];
+                case 3:
+                    err_1 = _a.sent();
+                    throw new Error("Unable to load profile of user <".concat(user, ">: ").concat(err_1));
+                case 4: return [2 /*return*/, user.doc()];
+            }
+        });
+    });
+}
+exports.loadProfile = loadProfile;
+function loadPreferences(store, user) {
+    return __awaiter(this, void 0, void 0, function () {
+        var profile, preferencesFile;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, loadProfile(store, user)];
+                case 1:
+                    profile = _a.sent();
+                    preferencesFile = store.any(user, ns.space('preferencesFile'), undefined, profile);
+                    if (!preferencesFile) {
+                        // throw new Error(`USer ${user} has no pointer in profile to preferences file.`)
+                        return [2 /*return*/, undefined];
+                    }
+                    try {
+                        store.fetcher.load(preferencesFile);
+                    }
+                    catch (err) { // Mabeb a permission propblem or origin problem
+                        return [2 /*return*/, undefined
+                            // throw new Error(`Unable to load preferences file ${preferencesFile} of user <${user}>: ${err}`)
+                        ];
+                        // throw new Error(`Unable to load preferences file ${preferencesFile} of user <${user}>: ${err}`)
+                    }
+                    return [2 /*return*/, preferencesFile];
+            }
+        });
+    });
+}
+exports.loadPreferences = loadPreferences;
+function loadTypeIndexesFor(store, user) {
+    return __awaiter(this, void 0, void 0, function () {
+        var profile, publicTypeIndex, _a, pub, preferencesFile, privateTypeIndexes, priv;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    if (!user)
+                        throw new Error("loadTypeIndexesFor: No user given");
+                    return [4 /*yield*/, loadProfile(store, user)];
+                case 1:
+                    profile = _b.sent();
+                    publicTypeIndex = store.any(user, ns.solid('publicTypeIndex'), undefined, profile);
+                    if (!publicTypeIndex) return [3 /*break*/, 5];
+                    _b.label = 2;
+                case 2:
+                    _b.trys.push([2, 4, , 5]);
+                    return [4 /*yield*/, store.fetcher.load(publicTypeIndex)];
+                case 3:
+                    _b.sent();
+                    return [3 /*break*/, 5];
+                case 4:
+                    _a = _b.sent();
+                    return [3 /*break*/, 5];
+                case 5:
+                    pub = publicTypeIndex ? [{ label: 'public', index: publicTypeIndex, agent: user }] : [];
+                    return [4 /*yield*/, loadPreferences(store, user)];
+                case 6:
+                    preferencesFile = _b.sent();
+                    if (preferencesFile) { // watch out - can be in either as spec was not clear
+                        privateTypeIndexes = store.each(user, ns.solid('privateTypeIndex'), undefined, preferencesFile)
+                            .concat(store.each(user, ns.solid('privateTypeIndex'), undefined, profile));
+                        priv = privateTypeIndexes.length > 0 ? [{ label: 'priSo @@@@@vate', index: privateTypeIndexes[0], agent: user }] : [];
+                        return [2 /*return*/, pub.concat(priv)];
+                    }
+                    return [2 /*return*/, pub];
+            }
+        });
+    });
+}
+exports.loadTypeIndexesFor = loadTypeIndexesFor;
+function loadCommunityTypeIndexes(store, user) {
+    return __awaiter(this, void 0, void 0, function () {
+        var preferencesFile, communities, communityTypeIndexesPromise, result1;
+        var _this = this;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, loadPreferences(store, user)];
+                case 1:
+                    preferencesFile = _a.sent();
+                    if (preferencesFile) {
+                        communities = store.each(user, ns.solid('community'), undefined, preferencesFile);
+                        communityTypeIndexesPromise = communities.map(function (community) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, loadTypeIndexesFor(store, community)];
+                                case 1: return [2 /*return*/, _a.sent()];
+                            }
+                        }); }); });
+                        result1 = Promise.all(communityTypeIndexesPromise);
+                        // const result2 = Promise.all(result1)
+                        // const flat = result2.flat()
+                        return [2 /*return*/, result1
+                            // const communityTypeIndexes = await Promise.all(communityTypeIndexesPromise)
+                            /*
+                          let result = [] as TypeIndex[]
+                          for(const community of communities) {
+                            result = result.concat(await loadTypeIndexesFor(store, community as NamedNode)) as TypeIndex[] // @@ how oto make functional with async?
+                          }
+                          */
+                            // return communityTypeIndexesPromise.resolve()
+                        ];
+                        // const communityTypeIndexes = await Promise.all(communityTypeIndexesPromise)
+                        /*
+                      let result = [] as TypeIndex[]
+                      for(const community of communities) {
+                        result = result.concat(await loadTypeIndexesFor(store, community as NamedNode)) as TypeIndex[] // @@ how oto make functional with async?
+                      }
+                      */
+                        // return communityTypeIndexesPromise.resolve()
+                    }
+                    return [2 /*return*/, []];
+            }
+        });
+    });
+}
+exports.loadCommunityTypeIndexes = loadCommunityTypeIndexes;
+function loadAllTypeIndexes(store, user) {
+    return __awaiter(this, void 0, void 0, function () {
+        var _a, _b;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0: return [4 /*yield*/, loadTypeIndexesFor(store, user)];
+                case 1:
+                    _b = (_a = (_c.sent())).concat;
+                    return [4 /*yield*/, loadCommunityTypeIndexes(store, user)];
+                case 2: return [2 /*return*/, _b.apply(_a, [(_c.sent()).flat()])];
+            }
+        });
+    });
+}
+exports.loadAllTypeIndexes = loadAllTypeIndexes;
+/*
+export async function getAppInstances (store:LiveStore, klass: NamedNode) {
+
+}
+*/
+//# sourceMappingURL=discoveryLogic.js.map
+
+/***/ }),
+
 /***/ "./node_modules/solid-logic/lib/index.js":
 /*!***********************************************!*\
   !*** ./node_modules/solid-logic/lib/index.js ***!
@@ -66092,7 +66332,7 @@ exports.determineChatContainer = determineChatContainer;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.profile = exports.chat = exports.store = exports.authSession = exports.authn = exports.FetchError = exports.NotFoundError = exports.SameOriginForbiddenError = exports.CrossOriginForbiddenError = exports.UnauthorizedError = exports.solidLogicSingleton = exports.getSuggestedIssuers = exports.ACL_LINK = exports.appContext = exports.offlineTestID = exports.SolidLogic = exports.loadIndex = exports.registerInTypeIndex = exports.loadTypeIndexes = exports.ensureTypeIndexes = exports.genACLText = exports.setACLUserPublic = void 0;
+exports.profile = exports.chat = exports.store = exports.authSession = exports.authn = exports.FetchError = exports.NotFoundError = exports.SameOriginForbiddenError = exports.CrossOriginForbiddenError = exports.UnauthorizedError = exports.solidLogicSingleton = exports.getSuggestedIssuers = exports.ACL_LINK = exports.appContext = exports.offlineTestID = exports.SolidLogic = exports.loadAllTypeIndexes = exports.loadCommunityTypeIndexes = exports.loadTypeIndexesFor = exports.loadPreferences = exports.loadProfile = exports.loadIndex = exports.registerInTypeIndex = exports.loadTypeIndexes = exports.ensureTypeIndexes = exports.genACLText = exports.setACLUserPublic = void 0;
 // Make these variables directly accessible as it is what you need most of the time
 // This also makes these variable globaly accesible in mashlib
 var solidLogicSingleton_1 = __webpack_require__(/*! ./logic/solidLogicSingleton */ "./node_modules/solid-logic/lib/logic/solidLogicSingleton.js");
@@ -66114,6 +66354,12 @@ Object.defineProperty(exports, "ensureTypeIndexes", ({ enumerable: true, get: fu
 Object.defineProperty(exports, "loadTypeIndexes", ({ enumerable: true, get: function () { return typeIndexLogic_1.loadTypeIndexes; } }));
 Object.defineProperty(exports, "registerInTypeIndex", ({ enumerable: true, get: function () { return typeIndexLogic_1.registerInTypeIndex; } }));
 Object.defineProperty(exports, "loadIndex", ({ enumerable: true, get: function () { return typeIndexLogic_1.loadIndex; } }));
+var discoveryLogic_1 = __webpack_require__(/*! ./discovery/discoveryLogic */ "./node_modules/solid-logic/lib/discovery/discoveryLogic.js");
+Object.defineProperty(exports, "loadProfile", ({ enumerable: true, get: function () { return discoveryLogic_1.loadProfile; } }));
+Object.defineProperty(exports, "loadPreferences", ({ enumerable: true, get: function () { return discoveryLogic_1.loadPreferences; } }));
+Object.defineProperty(exports, "loadTypeIndexesFor", ({ enumerable: true, get: function () { return discoveryLogic_1.loadTypeIndexesFor; } }));
+Object.defineProperty(exports, "loadCommunityTypeIndexes", ({ enumerable: true, get: function () { return discoveryLogic_1.loadCommunityTypeIndexes; } }));
+Object.defineProperty(exports, "loadAllTypeIndexes", ({ enumerable: true, get: function () { return discoveryLogic_1.loadAllTypeIndexes; } }));
 var SolidLogic_1 = __webpack_require__(/*! ./logic/SolidLogic */ "./node_modules/solid-logic/lib/logic/SolidLogic.js");
 Object.defineProperty(exports, "SolidLogic", ({ enumerable: true, get: function () { return SolidLogic_1.SolidLogic; } }));
 var authUtil_1 = __webpack_require__(/*! ./authn/authUtil */ "./node_modules/solid-logic/lib/authn/authUtil.js");
@@ -66292,7 +66538,11 @@ exports.FetchError = FetchError;
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -66358,29 +66608,36 @@ var ProfileLogic_1 = __webpack_require__(/*! ../profile/ProfileLogic */ "./node_
 var debug = __importStar(__webpack_require__(/*! ../util/debug */ "./node_modules/solid-logic/lib/util/debug.js"));
 var UtilityLogic_1 = __webpack_require__(/*! ../util/UtilityLogic */ "./node_modules/solid-logic/lib/util/UtilityLogic.js");
 var CustomError_1 = __webpack_require__(/*! ./CustomError */ "./node_modules/solid-logic/lib/logic/CustomError.js");
+/*
+** It is important to distinquish `fetch`, a function provided by the browser
+** and `Fetcher`, a helper object for the rdflib Store which turns it
+** into a `ConnectedStore` or a `LiveStore`.  A Fetcher object is
+** available at store.fetcher, and `fetch` function at `store.fetcher._fetch`,
+*/
 var ns = (0, solid_namespace_1.default)(rdf);
 var SolidLogic = /** @class */ (function () {
-    function SolidLogic(fetcher, session) {
+    function SolidLogic(specialFetch, session) {
+        // would xpect to be able to do it this way: but get TypeError:  Failed to execute 'fetch' on 'Window': Illegal invocation status: 999
+        // this.store = new rdf.LiveStore({})
+        // this.store.fetcher._fetch = fetch
+        console.log("SolidLogic: Unique instance created.  There should only be one of these.");
         this.store = rdf.graph(); // Make a Quad store
-        rdf.fetcher(this.store, fetcher); // Attach a web I/O module, store.fetcher
+        rdf.fetcher(this.store, { fetch: specialFetch.fetch }); // Attach a web I/O module, store.fetcher
         this.store.updater = new rdf.UpdateManager(this.store); // Add real-time live updates store.updater
         this.store.features = []; // disable automatic node merging on store load
         this.cache = {
             profileDocument: {},
             preferencesFile: {},
         };
-        this.fetcher = fetcher;
+        this.underlyingFetch = { fetch: fetch }; // Note global one not the one passed
         this.authn = new SolidAuthnLogic_1.SolidAuthnLogic(session);
         debug.log('SolidAuthnLogic initialized');
         this.profile = new ProfileLogic_1.ProfileLogic(this.store, ns, this.authn);
         this.chat = new ChatLogic_1.ChatLogic(this.store, ns, this.profile);
-        this.util = new UtilityLogic_1.UtilityLogic(this.store, ns, this.fetcher);
+        this.util = new UtilityLogic_1.UtilityLogic(this.store, ns, this.underlyingFetch);
     }
     SolidLogic.prototype.findAclDocUrl = function (url) {
         return this.util.findAclDocUrl(url);
-    };
-    SolidLogic.prototype.loadDoc = function (doc) {
-        return this.util.loadDoc(doc);
     };
     SolidLogic.prototype.loadProfile = function (me) {
         return __awaiter(this, void 0, void 0, function () {
@@ -66388,21 +66645,24 @@ var SolidLogic = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        // console.log('loadProfile', me)
+                        /*
+                      // console.log('loadProfile cache ', this.cache)
                         if (this.cache.profileDocument[me.value]) {
-                            return [2 /*return*/, this.cache.profileDocument[me.value]];
-                        }
+                        return this.cache.profileDocument[me.value];
+                      }    @@ just use the cache in the store
+                        */
+                        console.log('loadProfile  me ', me);
+                        profileDocument = me.doc();
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);
-                        profileDocument = me.doc();
-                        return [4 /*yield*/, this.loadDoc(profileDocument)];
+                        return [4 /*yield*/, this.store.fetcher.load(profileDocument)];
                     case 2:
                         _a.sent();
                         return [2 /*return*/, profileDocument];
                     case 3:
                         err_1 = _a.sent();
-                        message = "Logged in but cannot load profile ".concat(profileDocument, " : ").concat(err_1);
+                        message = "Cannot load profile ".concat(profileDocument, " : ").concat(err_1);
                         throw new Error(message);
                     case 4: return [2 /*return*/];
                 }
@@ -66426,27 +66686,27 @@ var SolidLogic = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        // console.log('loadPreferences', me)
+                        console.log('loadPreferences cache ', this.cache);
                         if (this.cache.preferencesFile[me.value]) {
                             return [2 /*return*/, this.cache.preferencesFile[me.value]];
                         }
-                        preferencesFile = this.store.any(me, ns.space("preferencesFile"));
+                        return [4 /*yield*/, this.loadProfile(me)]; // Load pointer to pref file
+                    case 1:
+                        _a.sent(); // Load pointer to pref file
+                        preferencesFile = this.store.any(me, ns.space('preferencesFile'), null, me.doc());
                         if (!preferencesFile) {
                             throw new Error("Can't find a preference file pointer in profile ".concat(me.doc()));
                         }
-                        if (!this.store.fetcher) {
-                            throw new Error("Cannot load doc, have no fetcher");
-                        }
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, , 4]);
+                        _a.label = 2;
+                    case 2:
+                        _a.trys.push([2, 4, , 5]);
                         return [4 /*yield*/, this.store.fetcher.load(preferencesFile, {
                                 withCredentials: true,
                             })];
-                    case 2:
-                        _a.sent();
-                        return [3 /*break*/, 4];
                     case 3:
+                        _a.sent();
+                        return [3 /*break*/, 5];
+                    case 4:
                         err_2 = _a.sent();
                         status_1 = err_2.status;
                         debug.log("HTTP status ".concat(status_1, " for preference file ").concat(preferencesFile));
@@ -66463,7 +66723,7 @@ var SolidLogic = /** @class */ (function () {
                             throw new CustomError_1.NotFoundError(preferencesFile.value);
                         }
                         throw new CustomError_1.FetchError(err_2.status, err_2.message);
-                    case 4: return [2 /*return*/, preferencesFile];
+                    case 5: return [2 /*return*/, preferencesFile];
                 }
             });
         });
@@ -66481,9 +66741,6 @@ var SolidLogic = /** @class */ (function () {
         });
     };
     SolidLogic.prototype.load = function (doc) {
-        if (!this.store.fetcher) {
-            throw new Error("Cannot load doc(s), have no fetcher");
-        }
         return this.store.fetcher.load(doc);
     };
     SolidLogic.prototype.loadIndexes = function (me, publicProfile, preferencesFile, onWarning) {
@@ -66543,14 +66800,10 @@ var SolidLogic = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        if (!this.store.fetcher) {
-                            throw new Error("Cannot create empty rdf doc, have no fetcher");
-                        }
-                        return [4 /*yield*/, this.store.fetcher.webOperation("PUT", doc.uri, {
-                                data: "# ".concat(new Date(), " ").concat(comment, "\n    "),
-                                contentType: "text/turtle",
-                            })];
+                    case 0: return [4 /*yield*/, this.store.fetcher.webOperation("PUT", doc.uri, {
+                            data: "# ".concat(new Date(), " ").concat(comment, "\n    "),
+                            contentType: "text/turtle",
+                        })];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -66563,9 +66816,6 @@ var SolidLogic = /** @class */ (function () {
         var _this = this;
         if (ins === void 0) { ins = []; }
         return new Promise(function (resolve, reject) {
-            if (!_this.store.updater) {
-                throw new Error("Cannot updatePromise, have no updater");
-            }
             _this.store.updater.update(del, ins, function (_uri, ok, errorBody) {
                 if (!ok) {
                     reject(new Error(errorBody));
@@ -66598,7 +66848,7 @@ var SolidLogic = /** @class */ (function () {
     SolidLogic.prototype.fetch = function (url, options) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2 /*return*/, this.fetcher.fetch(url, options)];
+                return [2 /*return*/, this.underlyingFetch.fetch(url, options)];
             });
         });
     };
@@ -66619,7 +66869,11 @@ exports.SolidLogic = SolidLogic;
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -66678,8 +66932,11 @@ var debug = __importStar(__webpack_require__(/*! ../util/debug */ "./node_module
 var authSession_1 = __webpack_require__(/*! ../authSession/authSession */ "./node_modules/solid-logic/lib/authSession/authSession.js");
 var SolidLogic_1 = __webpack_require__(/*! ./SolidLogic */ "./node_modules/solid-logic/lib/logic/SolidLogic.js");
 var _fetch = function (url, requestInit) { return __awaiter(void 0, void 0, void 0, function () {
+    var omitCreds;
     return __generator(this, function (_a) {
-        if (authSession_1.authSession.info.webId) {
+        omitCreds = requestInit && requestInit.credentials && requestInit.credentials == 'omit';
+        if (authSession_1.authSession.info.webId && !omitCreds) { // see https://github.com/solid/solidos/issues/114
+            // In fact ftech should respect crentials omit itself
             return [2 /*return*/, authSession_1.authSession.fetch(url, requestInit)];
         }
         else {
@@ -66812,7 +67069,11 @@ exports.ProfileLogic = ProfileLogic;
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -66876,11 +67137,35 @@ var solid_namespace_1 = __importDefault(__webpack_require__(/*! solid-namespace 
 var $rdf = __importStar(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
 var uri_1 = __webpack_require__(/*! ../util/uri */ "./node_modules/solid-logic/lib/util/uri.js");
 var solidLogicSingleton_1 = __webpack_require__(/*! ../logic/solidLogicSingleton */ "./node_modules/solid-logic/lib/logic/solidLogicSingleton.js");
+// import { ensureLoadedPreferences } from '../logic/logic'
+var discoveryLogic_1 = __webpack_require__(/*! ../discovery/discoveryLogic */ "./node_modules/solid-logic/lib/discovery/discoveryLogic.js");
 exports.ns = (0, solid_namespace_1.default)($rdf);
+var store = solidLogicSingleton_1.solidLogicSingleton.store;
+function ensureLoadedPreferences(context) {
+    return __awaiter(this, void 0, void 0, function () {
+        var _a, _b;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    if (!context.me)
+                        throw new Error('@@ ensureLoadedPreferences: no user specified');
+                    _a = context;
+                    return [4 /*yield*/, (0, discoveryLogic_1.loadProfile)(store, context.me)];
+                case 1:
+                    _a.publicProfile = _c.sent();
+                    _b = context;
+                    return [4 /*yield*/, (0, discoveryLogic_1.loadPreferences)(store, context.me)];
+                case 2:
+                    _b.preferencesFile = _c.sent();
+                    return [2 /*return*/, context];
+            }
+        });
+    });
+}
 /**
  * Resolves with the same context, outputting
  * output: index.public, index.private
- *
+ *  @@ This is a very bizare function
  * @see https://github.com/solid/solid/blob/main/proposals/data-discovery.md#discoverability
  */
 function loadIndex(context, isPublic) {
@@ -66897,8 +67182,8 @@ function loadIndex(context, isPublic) {
                 case 1:
                     indexes = _a.sent();
                     context.index = context.index || {};
-                    context.index.private = indexes.private || context.index.private;
-                    context.index.public = indexes.public || context.index.public;
+                    context.index.private = indexes.private.concat(context.index.private || []); // otherwise concat will wrongly add 'undefined' as a private index
+                    context.index.public = indexes.public.concat(context.index.public || []); // otherwise concat will wrongly add 'undefined' as a public index
                     return [2 /*return*/, context];
             }
         });
@@ -66907,21 +67192,36 @@ function loadIndex(context, isPublic) {
 exports.loadIndex = loadIndex;
 function loadTypeIndexes(context) {
     return __awaiter(this, void 0, void 0, function () {
-        var indexes;
+        var error_1, indexes, error_2;
         var _this = this;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, solidLogicSingleton_1.solidLogicSingleton.loadIndexes(context.me, context.publicProfile || null, context.preferencesFile || null, 
-                    // async (err: Error) => widgets.complain(context, err.message)
-                    function (err) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                        return [2 /*return*/, debug.warn(err.message)];
-                    }); }); })];
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, (0, discoveryLogic_1.loadPreferences)(solidLogicSingleton_1.solidLogicSingleton.store, context.me)];
                 case 1:
+                    _a.sent();
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_1 = _a.sent();
+                    debug.warn(error_1.message);
+                    return [3 /*break*/, 3];
+                case 3:
+                    _a.trys.push([3, 5, , 6]);
+                    return [4 /*yield*/, solidLogicSingleton_1.solidLogicSingleton.loadIndexes(context.me, context.publicProfile || null, context.preferencesFile || null)];
+                case 4:
                     indexes = _a.sent();
                     context.index = context.index || {};
                     context.index.private = indexes.private || context.index.private;
                     context.index.public = indexes.public || context.index.public;
                     return [2 /*return*/, context];
+                case 5:
+                    error_2 = _a.sent();
+                    (function (error) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                        return [2 /*return*/, debug.warn(error.message)];
+                    }); }); });
+                    return [3 /*break*/, 6];
+                case 6: return [2 /*return*/];
             }
         });
     });
@@ -66931,14 +67231,18 @@ exports.loadTypeIndexes = loadTypeIndexes;
  * Resolves with the same context, outputting
  * @see https://github.com/solid/solid/blob/main/proposals/data-discovery.md#discoverability
  */
-function ensureTypeIndexes(context) {
+function ensureTypeIndexes(context, agent) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, ensureOneTypeIndex(context, true)];
+                case 0:
+                    if (!context.me) {
+                        throw new Error("ensureTypeIndexes: @@ no user");
+                    }
+                    return [4 /*yield*/, ensureOneTypeIndex(context, true, agent)];
                 case 1:
                     _a.sent();
-                    return [4 /*yield*/, ensureOneTypeIndex(context, false)];
+                    return [4 /*yield*/, ensureOneTypeIndex(context, false, agent)];
                 case 2:
                     _a.sent();
                     return [2 /*return*/, context];
@@ -66955,7 +67259,7 @@ exports.ensureTypeIndexes = ensureTypeIndexes;
  * Adds its output to the context
  * @see https://github.com/solid/solid/blob/main/proposals/data-discovery.md#discoverability
  */
-function ensureOneTypeIndex(context, isPublic) {
+function ensureOneTypeIndex(context, isPublic, agent) {
     return __awaiter(this, void 0, void 0, function () {
         function makeIndexIfNecessary(context, isPublic) {
             return __awaiter(this, void 0, void 0, function () {
@@ -66986,10 +67290,16 @@ function ensureOneTypeIndex(context, isPublic) {
                     switch (_a.label) {
                         case 0:
                             relevant = isPublic ? context.publicProfile : context.preferencesFile;
+                            if (!relevant)
+                                alert('@@@@ relevent null');
                             visibility = isPublic ? 'public' : 'private';
                             context.index = context.index || {};
                             context.index[visibility] = context.index[visibility] || [];
                             if (!(context.index[visibility].length === 0)) return [3 /*break*/, 6];
+                            if (!store.updater.editable(relevant)) {
+                                debug.log("Not adding new type index as ".concat(relevant, " is not editable"));
+                                return [2 /*return*/];
+                            }
                             newIndex = (0, rdflib_1.sym)("".concat(relevant.dir().uri + visibility, "TypeIndex.ttl"));
                             debug.log("Linking to new fresh type index ".concat(newIndex));
                             if (!confirm("OK to create a new empty index file at ".concat(newIndex, ", overwriting anything that is now there?"))) {
@@ -67038,29 +67348,41 @@ function ensureOneTypeIndex(context, isPublic) {
                 });
             });
         } // makeIndexIfNecessary
-        var error_1;
+        var context2, relevant, pp, error_3;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 2, , 4]);
-                    return [4 /*yield*/, loadIndex(context, isPublic)];
+                case 0: return [4 /*yield*/, ensureLoadedPreferences(context)];
                 case 1:
-                    _a.sent();
-                    if (context.index) {
-                        debug.log("ensureOneTypeIndex: Type index exists already ".concat(isPublic
-                            ? context.index.public[0]
-                            : context.index.private[0]));
-                    }
-                    return [2 /*return*/, context];
+                    context2 = _a.sent();
+                    if (!context2.publicProfile)
+                        throw new Error("@@ type index: no publicProfile");
+                    if (!context2.preferencesFile)
+                        throw new Error("@@ type index: no preferencesFile for profile  ".concat(context2.publicProfile));
+                    relevant = isPublic ? context2.publicProfile : context2.preferencesFile;
+                    _a.label = 2;
                 case 2:
-                    error_1 = _a.sent();
-                    return [4 /*yield*/, makeIndexIfNecessary(context, isPublic)
-                        // widgets.complain(context, 'calling loadIndex:' + error)
-                    ];
+                    _a.trys.push([2, 5, , 7]);
+                    return [4 /*yield*/, loadIndex(context2, isPublic)];
                 case 3:
                     _a.sent();
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
+                    pp = isPublic ? 'public' : 'private';
+                    if (context2.index && context2.index[pp] && context2.index[pp].length > 0) {
+                        debug.log("ensureOneTypeIndex: Type index exists already ".concat(context2.index[pp]));
+                        return [2 /*return*/, context2];
+                    }
+                    return [4 /*yield*/, makeIndexIfNecessary(context2, isPublic)];
+                case 4:
+                    _a.sent();
+                    return [3 /*break*/, 7];
+                case 5:
+                    error_3 = _a.sent();
+                    return [4 /*yield*/, makeIndexIfNecessary(context2, isPublic)
+                        // widgets.complain(context2, 'calling loadIndex:' + error)
+                    ];
+                case 6:
+                    _a.sent();
+                    return [3 /*break*/, 7];
+                case 7: return [2 /*return*/];
             }
         });
     });
@@ -67069,12 +67391,13 @@ function ensureOneTypeIndex(context, isPublic) {
  * Register a new app in a type index
  * used in chat in bookmark.js (solid-ui)
  */
-function registerInTypeIndex(context, instance, theClass, isPublic) {
+function registerInTypeIndex(context, instance, theClass, isPublic, agent // Defaults to current user
+) {
     return __awaiter(this, void 0, void 0, function () {
         var indexes, index, registration, ins, e_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, ensureOneTypeIndex(context, isPublic)];
+                case 0: return [4 /*yield*/, ensureOneTypeIndex(context, isPublic, agent)];
                 case 1:
                     _a.sent();
                     if (!context.index) {
@@ -67166,10 +67489,10 @@ exports.ACL_LINK = (0, rdflib_1.sym)("http://www.iana.org/assignments/link-relat
  * Utility-related logic
  */
 var UtilityLogic = /** @class */ (function () {
-    function UtilityLogic(store, ns, fetcher) {
+    function UtilityLogic(store, ns, underlyingFetch) {
         this.store = store;
         this.ns = ns;
-        this.fetcher = fetcher;
+        this.underlyingFetch = underlyingFetch;
     }
     UtilityLogic.prototype.findAclDocUrl = function (url) {
         var _a;
@@ -67228,7 +67551,7 @@ var UtilityLogic = /** @class */ (function () {
                         return [4 /*yield*/, this.findAclDocUrl(options.target)];
                     case 1:
                         aclDocUrl = _a.sent();
-                        return [2 /*return*/, this.fetcher.fetch(aclDocUrl, {
+                        return [2 /*return*/, this.underlyingFetch.fetch(aclDocUrl, {
                                 method: 'PUT',
                                 body: str,
                                 headers: [
@@ -67274,7 +67597,7 @@ var UtilityLogic = /** @class */ (function () {
                         if (!this.isContainer(url)) {
                             throw new Error("Not a container URL ".concat(url));
                         }
-                        return [4 /*yield*/, this.fetcher.fetch(url, {
+                        return [4 /*yield*/, this.underlyingFetch.fetch(url, {
                                 method: "PUT",
                                 headers: {
                                     "Content-Type": "text/turtle",
@@ -67327,7 +67650,7 @@ var UtilityLogic = /** @class */ (function () {
                         return [4 /*yield*/, this.findAclDocUrl(url)];
                     case 1:
                         aclDocUrl = _a.sent();
-                        return [4 /*yield*/, this.fetcher.fetch(aclDocUrl, { method: "DELETE" })];
+                        return [4 /*yield*/, this.underlyingFetch.fetch(aclDocUrl, { method: "DELETE" })];
                     case 2:
                         _a.sent();
                         return [4 /*yield*/, this.getContainerMembers(url)];
@@ -67337,7 +67660,7 @@ var UtilityLogic = /** @class */ (function () {
                     case 4:
                         _a.sent();
                         _a.label = 5;
-                    case 5: return [2 /*return*/, this.fetcher.fetch(url, { method: "DELETE" })];
+                    case 5: return [2 /*return*/, this.underlyingFetch.fetch(url, { method: "DELETE" })];
                     case 6:
                         e_1 = _a.sent();
                         return [3 /*break*/, 7];
