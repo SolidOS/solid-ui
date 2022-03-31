@@ -207,7 +207,7 @@ export function uploadFiles (fetcher, files, fileBase, imageBase, successHandler
         } else {
           const extension = mime.extension(theFile.type)
           // Note not simple: eg .mp3 => audio/mpeg; .mpga => audio/mpeg; audio/mp3 => .mp3
-          if (extension && !theFile.name.endsWith('.' + extension) && // Not already has preferred extension? and ...
+          if (extension && extension !== 'false' && !theFile.name.endsWith('.' + extension) && // Not already has preferred extension? and ...
             theFile.type !== mime.lookup(theFile.name)) { // the mime type of this ext is not the right one?
             suffix = '_.' + extension
             // console.log('MIME TYPE MISMATCH: ' + mime.lookup(theFile.name) + ': adding extension: ' + suffix)
