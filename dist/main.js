@@ -15167,8 +15167,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2022-03-30T15:41:56Z',
-  commit: '7d6df17d5d55a800bfb35ee0f2f1af1e5adea2d9',
+  buildTime: '2022-03-31T14:26:03Z',
+  commit: '8af353df5e826d7795123d61f2adc8ab29238fbb',
   npmInfo: {
     'solid-ui': '2.4.20',
     npm: '6.14.16',
@@ -16987,7 +16987,7 @@ function uploadFiles(fetcher, files, fileBase, imageBase, successHandler) {
         } else {
           var extension = mime.extension(theFile.type); // Note not simple: eg .mp3 => audio/mpeg; .mpga => audio/mpeg; audio/mp3 => .mp3
 
-          if (extension && !theFile.name.endsWith('.' + extension) && // Not already has preferred extension? and ...
+          if (extension && extension !== 'false' && !theFile.name.endsWith('.' + extension) && // Not already has preferred extension? and ...
           theFile.type !== mime.lookup(theFile.name)) {
             // the mime type of this ext is not the right one?
             suffix = '_.' + extension; // console.log('MIME TYPE MISMATCH: ' + mime.lookup(theFile.name) + ': adding extension: ' + suffix)
