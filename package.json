@@ -53,6 +53,7 @@
   },
   "homepage": "https://github.com/solid/solid-ui",
   "dependencies": {
+    "@mdx-js/react": "^2.1.1",
     "escape-html": "^1.0.3",
     "jss": "^10.9.0",
     "jss-preset-default": "^10.9.0",
