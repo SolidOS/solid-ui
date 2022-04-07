@@ -14234,94 +14234,110 @@ function getPodOwner(_x, _x2) {
 
 function _getPodOwner() {
   _getPodOwner = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(pod, store) {
-    var podOwner, guess;
+    var response, containerTurtle, podOwner, guess;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             _context.prev = 0;
-            // @ts-ignore  LiveStore always has fetcher
-            store.fetcher.load(pod);
-            _context.next = 8;
-            break;
+
+            if (store.any(pod, null, _.ns.ldp('Container'), pod)) {
+              _context.next = 7;
+              break;
+            }
+
+            _context.next = 4;
+            return store.fetcher.webOperation('GET', pod.uri, store.fetcher.initFetchOptions(pod.uri, {
+              headers: {
+                accept: 'text/turtle'
+              }
+            }));
 
           case 4:
-            _context.prev = 4;
+            response = _context.sent;
+            containerTurtle = response.responseText;
+            (0, _rdflib.parse)(containerTurtle, store, pod.uri, 'text/turtle');
+
+          case 7:
+            _context.next = 13;
+            break;
+
+          case 9:
+            _context.prev = 9;
             _context.t0 = _context["catch"](0);
             console.error('Error loading pod ' + pod + ': ' + _context.t0);
             return _context.abrupt("return", null);
 
-          case 8:
+          case 13:
             if (store.holds(pod, _.ns.rdf('type'), _.ns.space('Storage'), pod)) {
-              _context.next = 11;
+              _context.next = 16;
               break;
             }
 
             console.warn('Pod  ' + pod + ' does not declare itself as a space:Storage');
             return _context.abrupt("return", null);
 
-          case 11:
+          case 16:
             podOwner = store.any(pod, _.ns.solid('owner'), null, pod) || store.any(null, _.ns.space('storage'), pod, pod);
 
             if (!podOwner) {
-              _context.next = 25;
+              _context.next = 30;
               break;
             }
 
-            _context.prev = 13;
-            // @ts-ignore  LiveStore always has fetcher
+            _context.prev = 18;
             store.fetcher.load(podOwner.doc());
-            _context.next = 21;
+            _context.next = 26;
             break;
 
-          case 17:
-            _context.prev = 17;
-            _context.t1 = _context["catch"](13);
+          case 22:
+            _context.prev = 22;
+            _context.t1 = _context["catch"](18);
             console.warn('Unable to load profile of pod owner ' + podOwner);
             return _context.abrupt("return", null);
 
-          case 21:
+          case 26:
             if (!store.holds(podOwner, _.ns.space('storage'), pod, podOwner.doc())) {
               console.warn("Pod owner ".concat(podOwner, " does NOT list pod ").concat(pod, " as their storage"));
             }
 
             return _context.abrupt("return", podOwner);
 
-          case 25:
+          case 30:
             // pod owner not declared in pod
             // @@ TODO: This is given the structure that NSS provides
             // This is a massive guess.  For old pods which don't have owner link
             guess = (0, _rdflib.sym)("".concat(pod.uri, "profile/card#me"));
-            _context.prev = 26;
+            _context.prev = 31;
             // @ts-ignore  LiveStore always has fetcher
             store.fetcher.load(guess);
-            _context.next = 34;
+            _context.next = 39;
             break;
 
-          case 30:
-            _context.prev = 30;
-            _context.t2 = _context["catch"](26);
+          case 35:
+            _context.prev = 35;
+            _context.t2 = _context["catch"](31);
             console.error('Ooops. Guessed wrong pod owner webid {$guess} : can\'t load it.');
             return _context.abrupt("return", null);
 
-          case 34:
+          case 39:
             if (!store.holds(guess, _.ns.space('storage'), pod, guess.doc())) {
-              _context.next = 37;
+              _context.next = 42;
               break;
             }
 
             console.warn('Using guessed pod owner webid but it links back.');
             return _context.abrupt("return", guess);
 
-          case 37:
+          case 42:
             return _context.abrupt("return", null);
 
-          case 38:
+          case 43:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 4], [13, 17], [26, 30]]);
+    }, _callee, null, [[0, 9], [18, 22], [31, 35]]);
   }));
   return _getPodOwner.apply(this, arguments);
 }
@@ -15167,8 +15183,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2022-03-31T17:53:26Z',
-  commit: 'a2a9d57525687b72099562535327eb3430d7b70b',
+  buildTime: '2022-04-07T12:43:13Z',
+  commit: '78a8a64a53653a8adaf286cb0df2d99d939c0d51',
   npmInfo: {
     'solid-ui': '2.4.21',
     npm: '6.14.16',
@@ -15180,8 +15196,8 @@ var versionInfo = {
     modules: '83',
     napi: '8',
     nghttp2: '1.42.0',
-    node: '14.19.0',
-    openssl: '1.1.1m',
+    node: '14.19.1',
+    openssl: '1.1.1n',
     tz: '2021a3',
     unicode: '14.0',
     uv: '1.42.0',
