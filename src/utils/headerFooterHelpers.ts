@@ -66,7 +66,7 @@ export async function getPodOwner (pod: NamedNode, store: LiveStore): Promise<Na
         store.any(null, ns.space('storage'), pod, pod)
   if (podOwner) {
     try {
-      store.fetcher.load((podOwner as NamedNode).doc())
+      await store.fetcher.load((podOwner as NamedNode).doc())
     } catch (err) {
       console.warn('Unable to load profile of pod owner ' + podOwner)
       return null
@@ -81,7 +81,7 @@ export async function getPodOwner (pod: NamedNode, store: LiveStore): Promise<Na
     const guess = sym(`${pod.uri}profile/card#me`)
     try {
       // @ts-ignore  LiveStore always has fetcher
-      store.fetcher.load(guess)
+      await store.fetcher.load(guess)
     } catch (err) {
       console.error('Ooops. Guessed wrong pod owner webid {$guess} : can\'t load it.')
       return null
