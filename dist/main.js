@@ -14281,63 +14281,68 @@ function _getPodOwner() {
             podOwner = store.any(pod, _.ns.solid('owner'), null, pod) || store.any(null, _.ns.space('storage'), pod, pod);
 
             if (!podOwner) {
-              _context.next = 30;
+              _context.next = 31;
               break;
             }
 
             _context.prev = 18;
-            store.fetcher.load(podOwner.doc());
-            _context.next = 26;
+            _context.next = 21;
+            return store.fetcher.load(podOwner.doc());
+
+          case 21:
+            _context.next = 27;
             break;
 
-          case 22:
-            _context.prev = 22;
+          case 23:
+            _context.prev = 23;
             _context.t1 = _context["catch"](18);
             console.warn('Unable to load profile of pod owner ' + podOwner);
             return _context.abrupt("return", null);
 
-          case 26:
+          case 27:
             if (!store.holds(podOwner, _.ns.space('storage'), pod, podOwner.doc())) {
               console.warn("Pod owner ".concat(podOwner, " does NOT list pod ").concat(pod, " as their storage"));
             }
 
             return _context.abrupt("return", podOwner);
 
-          case 30:
+          case 31:
             // pod owner not declared in pod
             // @@ TODO: This is given the structure that NSS provides
             // This is a massive guess.  For old pods which don't have owner link
             guess = (0, _rdflib.sym)("".concat(pod.uri, "profile/card#me"));
-            _context.prev = 31;
-            // @ts-ignore  LiveStore always has fetcher
-            store.fetcher.load(guess);
-            _context.next = 39;
-            break;
+            _context.prev = 32;
+            _context.next = 35;
+            return store.fetcher.load(guess);
 
           case 35:
-            _context.prev = 35;
-            _context.t2 = _context["catch"](31);
+            _context.next = 41;
+            break;
+
+          case 37:
+            _context.prev = 37;
+            _context.t2 = _context["catch"](32);
             console.error('Ooops. Guessed wrong pod owner webid {$guess} : can\'t load it.');
             return _context.abrupt("return", null);
 
-          case 39:
+          case 41:
             if (!store.holds(guess, _.ns.space('storage'), pod, guess.doc())) {
-              _context.next = 42;
+              _context.next = 44;
               break;
             }
 
             console.warn('Using guessed pod owner webid but it links back.');
             return _context.abrupt("return", guess);
 
-          case 42:
+          case 44:
             return _context.abrupt("return", null);
 
-          case 43:
+          case 45:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 9], [18, 22], [31, 35]]);
+    }, _callee, null, [[0, 9], [18, 23], [32, 37]]);
   }));
   return _getPodOwner.apply(this, arguments);
 }
@@ -15183,8 +15188,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2022-04-07T12:43:13Z',
-  commit: '78a8a64a53653a8adaf286cb0df2d99d939c0d51',
+  buildTime: '2022-04-11T08:50:54Z',
+  commit: 'ec6f98e086b9e3122931c90290abf67866d0611d',
   npmInfo: {
     'solid-ui': '2.4.21',
     npm: '6.14.16',
