@@ -34,6 +34,7 @@ import { Signup } from '../signup/signup.js'
 import { buttonStyle, commentStyle, textInputStyle } from '../style'
 import { utils } from '../utils/index'
 import * as widgets from '../widgets'
+import {button, ButtonType} from "../widgets";
 
 /**
   * Resolves with the logged in user's WebID
@@ -997,6 +998,10 @@ export function selectWorkspace (
   return box // return the box element, while login proceeds
 } // selectWorkspace
 
+interface newAppInstanceOptions {
+  useSolidUIButton: boolean,
+  buttonStyle: ButtonType
+}
 /**
   * Creates a new instance of an app.
   *
@@ -1016,20 +1021,29 @@ export function selectWorkspace (
 export function newAppInstance (
   dom: HTMLDocument,
   appDetails: AppDetails,
-  callback: (workspace: string | null, newBase: string) => void
+  callback: (workspace: string | null, newBase: string) => void,
+  options: newAppInstanceOptions
 ): HTMLElement {
   const gotWS = function (ws, base) {
     // log.debug("newAppInstance: Selected workspace = " + (ws? ws.uri : 'none'))
     callback(ws, base)
   }
   const div = dom.createElement('div')
-  const b = dom.createElement('button')
-  b.setAttribute('type', 'button')
-  div.appendChild(b)
-  b.innerHTML = `Make new ${appDetails.noun}`
-  b.addEventListener('click', _event => {
+  const newAppClickHandler = _event => {
     div.appendChild(selectWorkspace(dom, appDetails, gotWS))
-  }, false)
+  }
+  let b
+  if (options.useSolidUIButton) {
+    b = button(dom, undefined, `Make new ${appDetails.noun}`, newAppClickHandler, options.buttonStyle)
+  } else {
+    b = dom.createElement('button')
+    b.setAttribute('type', 'button')
+    div.appendChild(b)
+    b.innerHTML = `Make new ${appDetails.noun}`
+    b.addEventListener('click', _event => {
+      div.appendChild(selectWorkspace(dom, appDetails, gotWS))
+    }, false)
+  }
   div.appendChild(b)
   return div
 }
