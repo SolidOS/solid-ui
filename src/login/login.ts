@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /**
  * Signing in, signing up, profile and preferences reloading
  * Type index management
@@ -26,7 +27,22 @@ import { PaneDefinition } from 'pane-registry'
 import { BlankNode, NamedNode, st, Statement } from 'rdflib'
 // eslint-disable-next-line camelcase
 import { Quad_Object } from 'rdflib/lib/tf-types'
-import { AppDetails, AuthenticationContext, loadIndex, authn, authSession, CrossOriginForbiddenError, ensureTypeIndexes, FetchError, getSuggestedIssuers, NotFoundError, offlineTestID, SameOriginForbiddenError, solidLogicSingleton, UnauthorizedError } from 'solid-logic'
+import {
+  AppDetails,
+  AuthenticationContext,
+  loadIndex,
+  authn,
+  authSession,
+  CrossOriginForbiddenError,
+  ensureTypeIndexes,
+  FetchError,
+  getSuggestedIssuers,
+  NotFoundError,
+  offlineTestID,
+  SameOriginForbiddenError,
+  solidLogicSingleton,
+  UnauthorizedError
+} from 'solid-logic'
 import * as debug from '../debug'
 import { alert } from '../log'
 import * as ns from '../ns.js'
@@ -36,10 +52,10 @@ import { utils } from '../utils/index'
 import * as widgets from '../widgets'
 
 /**
-  * Resolves with the logged in user's WebID
-  *
-  * @param context
-  */
+ * Resolves with the logged in user's WebID
+ *
+ * @param context
+ */
 // used to be logIn
 export function ensureLoggedIn (context: AuthenticationContext): Promise<AuthenticationContext> {
   const me = authn.currentUser()
@@ -48,8 +64,8 @@ export function ensureLoggedIn (context: AuthenticationContext): Promise<Authent
     return Promise.resolve(context)
   }
 
-  return new Promise(resolve => {
-    authn.checkUser().then(webId => {
+  return new Promise((resolve) => {
+    authn.checkUser().then((webId) => {
       // Already logged in?
       if (webId) {
         debug.log(`logIn: Already logged in as ${webId}`)
@@ -58,7 +74,7 @@ export function ensureLoggedIn (context: AuthenticationContext): Promise<Authent
       if (!context.div || !context.dom) {
         return resolve(context)
       }
-      const box = loginStatusBox(context.dom, webIdUri => {
+      const box = loginStatusBox(context.dom, (webIdUri) => {
         authn.saveUser(webIdUri, context)
         resolve(context) // always pass growing context
       })
@@ -76,7 +92,9 @@ export function ensureLoggedIn (context: AuthenticationContext): Promise<Authent
  * @param context
  */
 // used to be logInLoadPreferences
-export async function ensureLoadedPreferences (context: AuthenticationContext): Promise<AuthenticationContext> {
+export async function ensureLoadedPreferences (
+  context: AuthenticationContext
+): Promise<AuthenticationContext> {
   if (context.preferencesFile) return Promise.resolve(context) // already done
 
   const statusArea = context.statusArea || context.div || null
@@ -85,9 +103,7 @@ export async function ensureLoadedPreferences (context: AuthenticationContext): 
     message = `ensureLoadedPreferences: ${message}`
     if (statusArea) {
       // statusArea.innerHTML = ''
-      statusArea.appendChild(
-        widgets.errorMessageBlock(context.dom, message)
-      )
+      statusArea.appendChild(widgets.errorMessageBlock(context.dom, message))
     }
     debug.log(message)
     // reject(new Error(message))
@@ -104,27 +120,35 @@ export async function ensureLoadedPreferences (context: AuthenticationContext): 
   } catch (err) {
     let m2: string
     if (err instanceof UnauthorizedError) {
-      m2 = 'Ooops - you are not authenticated (properly logged in) to for me to read your preference file.  Try loggin out and logging in?'
+      m2 =
+        'Ooops - you are not authenticated (properly logged in) to for me to read your preference file.  Try loggin out and logging in?'
       alert(m2)
     } else if (err instanceof CrossOriginForbiddenError) {
       m2 = `Unauthorized: Assuming preference file blocked for origin ${window.location.origin}`
       context.preferencesFileError = m2
       return context
     } else if (err instanceof SameOriginForbiddenError) {
-      m2 = 'You are not authorized to read your preference file. This may be because you are using an untrusted web app.'
+      m2 =
+        'You are not authorized to read your preference file. This may be because you are using an untrusted web app.'
       debug.warn(m2)
     } else if (err instanceof NotFoundError) {
       if (
-        confirm(`You do not currently have a preference file. OK for me to create an empty one? ${(err as any).preferencesFile || ''}`)
+        confirm(
+          `You do not currently have a preference file. OK for me to create an empty one? ${
+            (err as any).preferencesFile || ''
+          }`
+        )
       ) {
         // @@@ code me  ... weird to have a name of the file but no file
-        alert(`Sorry; I am not prepared to do this. Please create an empty file at ${(err as any).preferencesFile || '(?)'}`)
-        complain(
-          new Error('Sorry; no code yet to create a preference file at ')
+        alert(
+          `Sorry; I am not prepared to do this. Please create an empty file at ${
+            (err as any).preferencesFile || '(?)'
+          }`
         )
+        complain(new Error('Sorry; no code yet to create a preference file at '))
       } else {
-        throw (
-          new Error(`User declined to create a preference file at ${(err as any).preferencesFile || '(?)'}`)
+        throw new Error(
+          `User declined to create a preference file at ${(err as any).preferencesFile || '(?)'}`
         )
       }
     } else if (err instanceof FetchError) {
@@ -145,7 +169,9 @@ export async function ensureLoadedPreferences (context: AuthenticationContext): 
  * @returns Resolves with the context after login / fetch
  */
 // used to be logInLoadProfile
-export async function ensureLoadedProfile (context: AuthenticationContext): Promise<AuthenticationContext> {
+export async function ensureLoadedProfile (
+  context: AuthenticationContext
+): Promise<AuthenticationContext> {
   if (context.publicProfile) {
     return context
   } // already done
@@ -157,9 +183,7 @@ export async function ensureLoadedProfile (context: AuthenticationContext): Prom
     context.publicProfile = await solidLogicSingleton.loadProfile(logInContext.me)
   } catch (err) {
     if (context.div && context.dom) {
-      context.div.appendChild(
-        widgets.errorMessageBlock(context.dom, err.message)
-      )
+      context.div.appendChild(widgets.errorMessageBlock(context.dom, err.message))
     }
     throw new Error(`Can't log in: ${err}`)
   }
@@ -167,11 +191,11 @@ export async function ensureLoadedProfile (context: AuthenticationContext): Prom
 }
 
 /**
-  * Returns promise of context with arrays of symbols
-  *
-  * 2016-12-11 change to include forClass arc a la
-  * https://github.com/solid/solid/blob/main/proposals/data-discovery.md
-  */
+ * Returns promise of context with arrays of symbols
+ *
+ * 2016-12-11 change to include forClass arc a la
+ * https://github.com/solidos/solid/blob/main/proposals/data-discovery.md
+ */
 export async function findAppInstances (
   context: AuthenticationContext,
   theClass: NamedNode,
@@ -191,9 +215,7 @@ export async function findAppInstances (
   // Loading preferences is more than loading profile
   try {
     // console.log('calling logInLoad', isPublic)
-    await (isPublic
-      ? ensureLoadedProfile(context)
-      : ensureLoadedPreferences(context))
+    await (isPublic ? ensureLoadedProfile(context) : ensureLoadedPreferences(context))
     // console.log('called logInLoad', isPublic)
   } catch (err) {
     widgets.complain(context, `loadIndex: login and load problem ${err}`)
@@ -208,13 +230,13 @@ export async function findAppInstances (
   const index = context.index as { [key: string]: Array<NamedNode> }
   const thisIndex = index[visibility]
   const registrations = thisIndex
-    .map(ix => solidLogicSingleton.store.each(undefined, ns.solid('forClass'), theClass, ix))
+    .map((ix) => solidLogicSingleton.store.each(undefined, ns.solid('forClass'), theClass, ix))
     .reduce((acc, curr) => acc.concat(curr), [])
   const instances = registrations
-    .map(reg => solidLogicSingleton.store.each(reg as NamedNode, ns.solid('instance')))
+    .map((reg) => solidLogicSingleton.store.each(reg as NamedNode, ns.solid('instance')))
     .reduce((acc, curr) => acc.concat(curr), [])
   const containers = registrations
-    .map(reg => solidLogicSingleton.store.each(reg as NamedNode, ns.solid('instanceContainer')))
+    .map((reg) => solidLogicSingleton.store.each(reg as NamedNode, ns.solid('instanceContainer')))
     .reduce((acc, curr) => acc.concat(curr), [])
 
   function unique (arr: NamedNode[]): NamedNode[] {
@@ -241,15 +263,17 @@ export async function findAppInstances (
   for (let i = 0; i < containers.length; i++) {
     const cont = containers[i]
     context.instances = context.instances.concat(
-      (await solidLogicSingleton.getContainerMembers(cont.value)).map(uri => solidLogicSingleton.store.sym(uri)) // @@ warning: uses strings not NN
+      (await solidLogicSingleton.getContainerMembers(cont.value)).map((uri) =>
+        solidLogicSingleton.store.sym(uri)
+      ) // @@ warning: uses strings not NN
     )
   }
   return context
 }
 
 /**
-  * UI to control registration of instance
-  */
+ * UI to control registration of instance
+ */
 export async function registrationControl (
   context: AuthenticationContext,
   instance,
@@ -283,15 +307,16 @@ export async function registrationControl (
   }
 
   box.innerHTML = '<table><tbody><tr></tr><tr></tr></tbody></table>' // tbody will be inserted anyway
-  box.setAttribute('style', 'font-size: 120%; text-align: right; padding: 1em; border: solid gray 0.05em;')
+  box.setAttribute(
+    'style',
+    'font-size: 120%; text-align: right; padding: 1em; border: solid gray 0.05em;'
+  )
   const tbody = box.children[0].children[0]
   const form = new BlankNode() // @@ say for now
 
   const registrationStatements = function (index) {
     const registrations = solidLogicSingleton.getRegistrations(instance, theClass)
-    const reg = registrations.length
-      ? registrations[0]
-      : widgets.newThing(index)
+    const reg = registrations.length ? registrations[0] : widgets.newThing(index)
     return [
       st(reg, ns.solid('instance'), instance, index),
       st(reg, ns.solid('forClass'), theClass, index)
@@ -343,13 +368,16 @@ export async function registrationControl (
 }
 
 /**
-  * UI to List at all registered things
-  */
-export async function registrationList (context0: AuthenticationContext, options: {
-   private?: boolean
-   public?: boolean
-   type?: NamedNode
- }): Promise<AuthenticationContext> {
+ * UI to List at all registered things
+ */
+export async function registrationList (
+  context0: AuthenticationContext,
+  options: {
+    private?: boolean;
+    public?: boolean;
+    type?: NamedNode;
+  }
+): Promise<AuthenticationContext> {
   const dom = context0.dom as HTMLDocument
   const div = context0.div as HTMLElement
 
@@ -361,9 +389,12 @@ export async function registrationList (context0: AuthenticationContext, options
     return context0
   }
 
-  return ensureTypeIndexes(context0).then(context => {
+  return ensureTypeIndexes(context0).then((context) => {
     box.innerHTML = '<table><tbody></tbody></table>' // tbody will be inserted anyway
-    box.setAttribute('style', 'font-size: 120%; text-align: right; padding: 1em; border: solid #eee 0.5em;')
+    box.setAttribute(
+      'style',
+      'font-size: 120%; text-align: right; padding: 1em; border: solid #eee 0.5em;'
+    )
     const table = box.firstChild as HTMLElement
 
     let ix: Array<NamedNode> = []
@@ -385,27 +416,41 @@ export async function registrationList (context0: AuthenticationContext, options
 
     for (let i = 0; i < sts.length; i++) {
       const statement: Statement = sts[i]
-      if (options.type) { // now check  terms:forClass
-        if (!solidLogicSingleton.store.holds(statement.subject, ns.solid('forClass'), options.type, statement.why)) {
+      if (options.type) {
+        // now check  terms:forClass
+        if (
+          !solidLogicSingleton.store.holds(
+            statement.subject,
+            ns.solid('forClass'),
+            options.type,
+            statement.why
+          )
+        ) {
           continue // skip irrelevant ones
         }
       }
       // const cla = statement.subject
       const inst = statement.object
-      table.appendChild(widgets.personTR(dom, ns.solid('instance'), inst, {
-        deleteFunction: function (_x) {
-          if (!solidLogicSingleton.store.updater) {
-            throw new Error('Cannot delete this, store has no updater')
-          }
-          solidLogicSingleton.store.updater.update([statement], [], function (uri, ok, errorBody) {
-            if (ok) {
-              debug.log(`Removed from index: ${statement.subject}`)
-            } else {
-              debug.log(`Error: Cannot delete ${statement}: ${errorBody}`)
+      table.appendChild(
+        widgets.personTR(dom, ns.solid('instance'), inst, {
+          deleteFunction: function (_x) {
+            if (!solidLogicSingleton.store.updater) {
+              throw new Error('Cannot delete this, store has no updater')
             }
-          })
-        }
-      }))
+            solidLogicSingleton.store.updater.update(
+              [statement],
+              [],
+              function (uri, ok, errorBody) {
+                if (ok) {
+                  debug.log(`Removed from index: ${statement.subject}`)
+                } else {
+                  debug.log(`Error: Cannot delete ${statement}: ${errorBody}`)
+                }
+              }
+            )
+          }
+        })
+      )
     } // registrationList
 
     /*
@@ -429,19 +474,19 @@ function getDefaultSignInButtonStyle (): string {
 }
 
 /**
-  * Bootstrapping identity
-  * (Called by `loginStatusBox()`)
-  *
-  * @param dom
-  * @param setUserCallback
-  *
-  * @returns
-  */
+ * Bootstrapping identity
+ * (Called by `loginStatusBox()`)
+ *
+ * @param dom
+ * @param setUserCallback
+ *
+ * @returns
+ */
 function signInOrSignUpBox (
   dom: HTMLDocument,
   setUserCallback: (user: string) => void,
   options: {
-    buttonStyle?: string
+    buttonStyle?: string;
   } = {}
 ): HTMLElement {
   options = options || {}
@@ -452,8 +497,8 @@ function signInOrSignUpBox (
   const magicClassName = 'SolidSignInOrSignUpBox'
   debug.log('widgets.signInOrSignUpBox')
   box.setUserCallback = setUserCallback
-  box.setAttribute('class', magicClassName)
-  ;(box as any).style = 'display:flex;' // @@ fix all typecasts like this
+  box.setAttribute('class', magicClassName);
+  (box as any).style = 'display:flex;' // @@ fix all typecasts like this
 
   // Sign in button with PopUP
   const signInPopUpButton = dom.createElement('input') // multi
@@ -492,12 +537,16 @@ function signInOrSignUpBox (
     }
   })
 
-  signInPopUpButton.addEventListener('click', () => {
-    const offline = offlineTestID()
-    if (offline) return setUserCallback(offline.uri)
+  signInPopUpButton.addEventListener(
+    'click',
+    () => {
+      const offline = offlineTestID()
+      if (offline) return setUserCallback(offline.uri)
 
-    renderSignInPopup(dom)
-  }, false)
+      renderSignInPopup(dom)
+    },
+    false
+  )
 
   // Sign up button
   const signupButton = dom.createElement('input')
@@ -506,25 +555,34 @@ function signInOrSignUpBox (
   signupButton.setAttribute('value', 'Sign Up for Solid')
   signupButton.setAttribute('style', `${signInButtonStyle}background-color: #efe;`)
 
-  signupButton.addEventListener('click', function (_event) {
-    const signupMgr = new Signup()
-    signupMgr.signup().then(function (uri) {
-      debug.log('signInOrSignUpBox signed up ' + uri)
-      setUserCallback(uri)
-    })
-  }, false)
+  signupButton.addEventListener(
+    'click',
+    function (_event) {
+      const signupMgr = new Signup()
+      signupMgr.signup().then(function (uri) {
+        debug.log('signInOrSignUpBox signed up ' + uri)
+        setUserCallback(uri)
+      })
+    },
+    false
+  )
   return box
 }
 
 export function renderSignInPopup (dom: HTMLDocument) {
   /**
-    * Issuer Menu
-    */
+   * Issuer Menu
+   */
   const issuerPopup = dom.createElement('div')
-  issuerPopup.setAttribute('style', 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; align-items: center;')
+  issuerPopup.setAttribute(
+    'style',
+    'position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; align-items: center;'
+  )
   dom.body.appendChild(issuerPopup)
   const issuerPopupBox = dom.createElement('div')
-  issuerPopupBox.setAttribute('style', `
+  issuerPopupBox.setAttribute(
+    'style',
+    `
       background-color: white;
       box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
       -webkit-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
@@ -533,22 +591,27 @@ export function renderSignInPopup (dom: HTMLDocument) {
       border-radius: 4px;
       min-width: 400px;
       padding: 10px;
-    `)
+    `
+  )
   issuerPopup.appendChild(issuerPopupBox)
   const issuerPopupBoxTopMenu = dom.createElement('div')
-  issuerPopupBoxTopMenu.setAttribute('style', `
+  issuerPopupBoxTopMenu.setAttribute(
+    'style',
+    `
       border-bottom: 1px solid #DDD;
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
-    `)
+    `
+  )
   issuerPopupBox.appendChild(issuerPopupBoxTopMenu)
   const issuerPopupBoxLabel = dom.createElement('label')
   issuerPopupBoxLabel.setAttribute('style', 'margin-right: 5px; font-weight: 800')
   issuerPopupBoxLabel.innerText = 'Select an identity provider'
   const issuerPopupBoxCloseButton = dom.createElement('button')
-  issuerPopupBoxCloseButton.innerHTML = '<img src="https://solid.github.io/solid-ui/src/icons/noun_1180156.svg" style="width: 2em; height: 2em;" title="Cancel">'
+  issuerPopupBoxCloseButton.innerHTML =
+    '<img src="https://solidos.github.io/solid-ui/src/icons/noun_1180156.svg" style="width: 2em; height: 2em;" title="Cancel">'
   issuerPopupBoxCloseButton.setAttribute('style', 'background-color: transparent; border: none;')
   issuerPopupBoxCloseButton.addEventListener('click', () => {
     issuerPopup.remove()
@@ -575,26 +638,35 @@ export function renderSignInPopup (dom: HTMLDocument) {
   }
 
   /**
-     * Text-based idp selection
-     */
+   * Text-based idp selection
+   */
   const issuerTextContainer = dom.createElement('div')
-  issuerTextContainer.setAttribute('style', `
+  issuerTextContainer.setAttribute(
+    'style',
+    `
       border-bottom: 1px solid #DDD;
       display: flex;
       flex-direction: column;
       padding-top: 10px;
-    `)
+    `
+  )
   const issuerTextInputContainer = dom.createElement('div')
-  issuerTextInputContainer.setAttribute('style', `
+  issuerTextInputContainer.setAttribute(
+    'style',
+    `
       display: flex;
       flex-direction: row;
-    `)
+    `
+  )
   const issuerTextLabel = dom.createElement('label')
   issuerTextLabel.innerText = 'Enter the URL of your identity provider:'
   issuerTextLabel.setAttribute('style', 'color: #888')
   const issuerTextInput = dom.createElement('input')
   issuerTextInput.setAttribute('type', 'text')
-  issuerTextInput.setAttribute('style', 'margin-left: 0 !important; flex: 1; margin-right: 5px !important')
+  issuerTextInput.setAttribute(
+    'style',
+    'margin-left: 0 !important; flex: 1; margin-right: 5px !important'
+  )
   issuerTextInput.setAttribute('placeholder', 'https://example.com')
   issuerTextInput.value = localStorage.getItem('loginIssuer') || ''
   const issuerTextGoButton = dom.createElement('button')
@@ -610,14 +682,17 @@ export function renderSignInPopup (dom: HTMLDocument) {
   issuerPopupBox.appendChild(issuerTextContainer)
 
   /**
-     * Button-based idp selection
-     */
+   * Button-based idp selection
+   */
   const issuerButtonContainer = dom.createElement('div')
-  issuerButtonContainer.setAttribute('style', `
+  issuerButtonContainer.setAttribute(
+    'style',
+    `
       display: flex;
       flex-direction: column;
       padding-top: 10px;
-    `)
+    `
+  )
   const issuerBottonLabel = dom.createElement('label')
   issuerBottonLabel.innerText = 'Or pick an identity provider from the list below:'
   issuerBottonLabel.setAttribute('style', 'color: #888')
@@ -635,21 +710,21 @@ export function renderSignInPopup (dom: HTMLDocument) {
 }
 
 /**
-  * Login status box
-  *
-  * A big sign-up/sign in box or a logout box depending on the state
-  *
-  * @param dom
-  * @param listener
-  *
-  * @returns
-  */
+ * Login status box
+ *
+ * A big sign-up/sign in box or a logout box depending on the state
+ *
+ * @param dom
+ * @param listener
+ *
+ * @returns
+ */
 export function loginStatusBox (
   dom: HTMLDocument,
   listener: ((uri: string | null) => void) | null = null,
   options: {
-    buttonStyle?: string
-   } = {}
+    buttonStyle?: string;
+  } = {}
 ): HTMLElement {
   // 20190630
   let me = offlineTestID()
@@ -682,7 +757,7 @@ export function loginStatusBox (
         box.refresh()
         if (listener) listener(null)
       },
-      err => {
+      (err) => {
         alert('Fail to log out:' + err)
       }
     )
@@ -756,28 +831,28 @@ authSession.onLogout(async () => {
 })
 
 /**
-  * Workspace selection etc
-  * See https://github.com/solid/userguide/issues/16
-  */
+ * Workspace selection etc
+ * See https://github.com/solidos/userguide/issues/16
+ */
 
 /**
-  * Returns a UI object which, if it selects a workspace,
-  * will callback(workspace, newBase).
-  * See https://github.com/solid/userguide/issues/16 for more info on workspaces.
-  *
-  * If necessary, will get an account, preference file, etc. In sequence:
-  *
-  *   - If not logged in, log in.
-  *   - Load preference file
-  *   - Prompt user for workspaces
-  *   - Allows the user to just type in a URI by hand
-  *
-  * Calls back with the workspace and the base URI
-  *
-  * @param dom
-  * @param appDetails
-  * @param callbackWS
-  */
+ * Returns a UI object which, if it selects a workspace,
+ * will callback(workspace, newBase).
+ * See https://github.com/solidos/userguide/issues/16 for more info on workspaces.
+ *
+ * If necessary, will get an account, preference file, etc. In sequence:
+ *
+ *   - If not logged in, log in.
+ *   - Load preference file
+ *   - Prompt user for workspaces
+ *   - Allows the user to just type in a URI by hand
+ *
+ * Calls back with the workspace and the base URI
+ *
+ * @param dom
+ * @param appDetails
+ * @param callbackWS
+ */
 export function selectWorkspace (
   dom: HTMLDocument,
   appDetails: AppDetails,
@@ -795,7 +870,10 @@ export function selectWorkspace (
   }
 
   function figureOutBase (ws) {
-    const newBaseNode: NamedNode = solidLogicSingleton.store.any(ws, ns.space('uriPrefix')) as NamedNode
+    const newBaseNode: NamedNode = solidLogicSingleton.store.any(
+      ws,
+      ns.space('uriPrefix')
+    ) as NamedNode
     let newBaseString: string
     if (!newBaseNode) {
       newBaseString = ws.uri.split('#')[0]
@@ -818,11 +896,27 @@ export function selectWorkspace (
       const cell = row.appendChild(dom.createElement('td'))
       cell.setAttribute('colspan', '3')
       cell.style.padding = '0.5em'
-      const newBase = encodeURI(await widgets.askName(dom, solidLogicSingleton.store, cell, ns.solid('URL'), ns.space('Workspace'), 'Workspace'))
+      const newBase = encodeURI(
+        await widgets.askName(
+          dom,
+          solidLogicSingleton.store,
+          cell,
+          ns.solid('URL'),
+          ns.space('Workspace'),
+          'Workspace'
+        )
+      )
       const newWs = widgets.newThing(context.preferencesFile)
-      const newData = [st(context.me, ns.space('workspace'), newWs, context.preferencesFile),
+      const newData = [
+        st(context.me, ns.space('workspace'), newWs, context.preferencesFile),
         // eslint-disable-next-line camelcase
-        st(newWs, ns.space('uriPrefix'), newBase as unknown as Quad_Object, context.preferencesFile)]
+        st(
+          newWs,
+          ns.space('uriPrefix'),
+          newBase as unknown as Quad_Object,
+          context.preferencesFile
+        )
+      ]
       if (!solidLogicSingleton.store.updater) {
         throw new Error('store has no updater')
       }
@@ -836,18 +930,28 @@ export function selectWorkspace (
     let newBase: any = null
 
     // A workspace specifically defined in the private preference file:
-    let w: any = solidLogicSingleton.store.each(id, ns.space('workspace'), undefined, preferencesFile) // Only trust preference file here
+    let w: any = solidLogicSingleton.store.each(
+      id,
+      ns.space('workspace'),
+      undefined,
+      preferencesFile
+    ) // Only trust preference file here
 
     // A workspace in a storage in the public profile:
     const storages = solidLogicSingleton.store.each(id, ns.space('storage')) // @@ No provenance requirement at the moment
     if (w.length === 0 && storages) {
-      say(`You don't seem to have any workspaces. You have ${storages.length} storage spaces.`, 'white')
-      storages.map(function (s: any) {
-        w = w.concat(solidLogicSingleton.store.each(s, ns.ldp('contains')))
-        return w
-      }).filter(file => {
-        return (file.id) ? ['public', 'private'].includes(file.id().toLowerCase()) : ''
-      })
+      say(
+        `You don't seem to have any workspaces. You have ${storages.length} storage spaces.`,
+        'white'
+      )
+      storages
+        .map(function (s: any) {
+          w = w.concat(solidLogicSingleton.store.each(s, ns.ldp('contains')))
+          return w
+        })
+        .filter((file) => {
+          return file.id ? ['public', 'private'].includes(file.id().toLowerCase()) : ''
+        })
     }
 
     if (w.length === 1) {
@@ -870,15 +974,15 @@ export function selectWorkspace (
     // const hr = box.appendChild(dom.createElement('hr')) // @@
     box.appendChild(dom.createElement('hr')) // @@
 
-    const p = box.appendChild(dom.createElement('p'))
-    ;(p as any).style = commentStyle
+    const p = box.appendChild(dom.createElement('p'));
+    (p as any).style = commentStyle
     p.textContent = `Where would you like to store the data for the ${noun}?
     Give the URL of the folder where you would like the data stored.
     It can be anywhere in solid world - this URI is just an idea.`
     // @@ TODO Remove the need to cast baseField to any
     const baseField: any = box.appendChild(dom.createElement('input'))
-    baseField.setAttribute('type', 'text')
-    ;(baseField as any).style = textInputStyle
+    baseField.setAttribute('type', 'text');
+    (baseField as any).style = textInputStyle
     baseField.size = 80 // really a string
     baseField.label = 'base URL'
     baseField.autocomplete = 'on'
@@ -891,8 +995,8 @@ export function selectWorkspace (
 
     box.appendChild(dom.createElement('br')) // @@
 
-    const button = box.appendChild(dom.createElement('button'))
-    ;(button as any).style = buttonStyle
+    const button = box.appendChild(dom.createElement('button'));
+    (button as any).style = buttonStyle
     button.textContent = `Start new ${noun} at this URI`
     button.addEventListener('click', function (_event) {
       let newBase = baseField.value.replace(' ', '%20') // do not re-encode in general, as % encodings may exist
@@ -958,22 +1062,30 @@ export function selectWorkspace (
 
       comment = solidLogicSingleton.store.any(ws, ns.rdfs('comment'))
       comment = comment ? comment.value : 'Use this workspace'
-      col2.addEventListener('click', function (_event) {
-        col3.textContent = comment ? comment.value : ''
-        col3.setAttribute('style', deselectedStyle + style)
-        const button = dom.createElement('button')
-        button.textContent = 'Continue'
-        // button.setAttribute('style', style);
-        const newBase = figureOutBase(ws)
-        baseField.value = newBase // show user proposed URI
+      col2.addEventListener(
+        'click',
+        function (_event) {
+          col3.textContent = comment ? comment.value : ''
+          col3.setAttribute('style', deselectedStyle + style)
+          const button = dom.createElement('button')
+          button.textContent = 'Continue'
+          // button.setAttribute('style', style);
+          const newBase = figureOutBase(ws)
+          baseField.value = newBase // show user proposed URI
 
-        button.addEventListener('click', function (_event) {
-          button.disabled = true
-          callbackWS(ws, newBase)
-          button.textContent = '---->'
-        }, true) // capture vs bubble
-        col3.appendChild(button)
-      }, true) // capture vs bubble
+          button.addEventListener(
+            'click',
+            function (_event) {
+              button.disabled = true
+              callbackWS(ws, newBase)
+              button.textContent = '---->'
+            },
+            true
+          ) // capture vs bubble
+          col3.appendChild(button)
+        },
+        true
+      ) // capture vs bubble
     }
 
     // last line with "Make new workspace"
@@ -989,7 +1101,7 @@ export function selectWorkspace (
   // console.log('kicking off async operation')
   ensureLoadedPreferences(context) // kick off async operation
     .then(displayOptions)
-    .catch(err => {
+    .catch((err) => {
       // console.log("err from async op")
       box.appendChild(widgets.errorMessageBlock(context.dom, err))
     })
@@ -998,21 +1110,21 @@ export function selectWorkspace (
 } // selectWorkspace
 
 /**
-  * Creates a new instance of an app.
-  *
-  * An instance of an app could be e.g. an issue tracker for a given project,
-  * or a chess game, or calendar, or a health/fitness record for a person.
-  *
-  * Note that this use of the term 'app' refers more to entries in the user's
-  * type index than to actual software applications that use the personal data
-  * to which these entries point.
-  *
-  * @param dom
-  * @param appDetails
-  * @param callback
-  *
-  * @returns A div with a button in it for making a new app instance
-  */
+ * Creates a new instance of an app.
+ *
+ * An instance of an app could be e.g. an issue tracker for a given project,
+ * or a chess game, or calendar, or a health/fitness record for a person.
+ *
+ * Note that this use of the term 'app' refers more to entries in the user's
+ * type index than to actual software applications that use the personal data
+ * to which these entries point.
+ *
+ * @param dom
+ * @param appDetails
+ * @param callback
+ *
+ * @returns A div with a button in it for making a new app instance
+ */
 export function newAppInstance (
   dom: HTMLDocument,
   appDetails: AppDetails,
@@ -1027,9 +1139,13 @@ export function newAppInstance (
   b.setAttribute('type', 'button')
   div.appendChild(b)
   b.innerHTML = `Make new ${appDetails.noun}`
-  b.addEventListener('click', _event => {
-    div.appendChild(selectWorkspace(dom, appDetails, gotWS))
-  }, false)
+  b.addEventListener(
+    'click',
+    (_event) => {
+      div.appendChild(selectWorkspace(dom, appDetails, gotWS))
+    },
+    false
+  )
   div.appendChild(b)
   return div
 }
@@ -1039,15 +1155,16 @@ export function newAppInstance (
  */
 export async function getUserRoles (): Promise<Array<NamedNode>> {
   try {
-    const {
-      me,
-      preferencesFile,
-      preferencesFileError
-    } = await ensureLoadedPreferences({})
+    const { me, preferencesFile, preferencesFileError } = await ensureLoadedPreferences({})
     if (!preferencesFile || preferencesFileError) {
       throw new Error(preferencesFileError)
     }
-    return solidLogicSingleton.store.each(me, ns.rdf('type'), null, preferencesFile.doc()) as NamedNode[]
+    return solidLogicSingleton.store.each(
+      me,
+      ns.rdf('type'),
+      null,
+      preferencesFile.doc()
+    ) as NamedNode[]
   } catch (error) {
     debug.warn('Unable to fetch your preferences - this was the error: ', error)
   }
@@ -1057,15 +1174,17 @@ export async function getUserRoles (): Promise<Array<NamedNode>> {
 /**
  * Filters which panes should be available, based on the result of [[getUserRoles]]
  */
-export async function filterAvailablePanes (panes: Array<PaneDefinition>): Promise<Array<PaneDefinition>> {
+export async function filterAvailablePanes (
+  panes: Array<PaneDefinition>
+): Promise<Array<PaneDefinition>> {
   const userRoles = await getUserRoles()
-  return panes.filter(pane => isMatchingAudience(pane, userRoles))
+  return panes.filter((pane) => isMatchingAudience(pane, userRoles))
 }
 
 function isMatchingAudience (pane: PaneDefinition, userRoles: Array<NamedNode>): boolean {
   const audience = pane.audience || []
   return audience.reduce(
-    (isMatch, audienceRole) => isMatch && !!userRoles.find(role => role.equals(audienceRole)),
+    (isMatch, audienceRole) => isMatch && !!userRoles.find((role) => role.equals(audienceRole)),
     true as boolean
   )
 }

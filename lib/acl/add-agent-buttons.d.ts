@@ -5,7 +5,7 @@
 import { AccessGroups } from './access-groups';
 /**
  * Renders the Sharing pane's "+" button and the menus behind it,
- * see https://github.com/solid/userguide/blob/main/views/sharing/userguide.md#add
+ * see https://github.com/solidos/userguide/blob/main/views/sharing/userguide.md#add
  */
 export declare class AddAgentButtons {
     private groupList;

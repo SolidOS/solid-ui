@@ -1,6 +1,6 @@
 /**
  * Non-UI functions for access control.
- * See https://github.com/solid/web-access-control-spec
+ * See https://github.com/solidos/web-access-control-spec
  * for the spec that defines how ACL documents work.
  * @packageDocumentation
  */

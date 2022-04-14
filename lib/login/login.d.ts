@@ -26,10 +26,10 @@ import { PaneDefinition } from 'pane-registry';
 import { NamedNode } from 'rdflib';
 import { AppDetails, AuthenticationContext } from 'solid-logic';
 /**
-  * Resolves with the logged in user's WebID
-  *
-  * @param context
-  */
+ * Resolves with the logged in user's WebID
+ *
+ * @param context
+ */
 export declare function ensureLoggedIn(context: AuthenticationContext): Promise<AuthenticationContext>;
 /**
  * Loads preference file
@@ -49,19 +49,19 @@ export declare function ensureLoadedPreferences(context: AuthenticationContext):
  */
 export declare function ensureLoadedProfile(context: AuthenticationContext): Promise<AuthenticationContext>;
 /**
-  * Returns promise of context with arrays of symbols
-  *
-  * 2016-12-11 change to include forClass arc a la
-  * https://github.com/solid/solid/blob/main/proposals/data-discovery.md
-  */
+ * Returns promise of context with arrays of symbols
+ *
+ * 2016-12-11 change to include forClass arc a la
+ * https://github.com/solidos/solid/blob/main/proposals/data-discovery.md
+ */
 export declare function findAppInstances(context: AuthenticationContext, theClass: NamedNode, isPublic?: boolean): Promise<AuthenticationContext>;
 /**
-  * UI to control registration of instance
-  */
+ * UI to control registration of instance
+ */
 export declare function registrationControl(context: AuthenticationContext, instance: any, theClass: any): Promise<AuthenticationContext | void>;
 /**
-  * UI to List at all registered things
-  */
+ * UI to List at all registered things
+ */
 export declare function registrationList(context0: AuthenticationContext, options: {
     private?: boolean;
     public?: boolean;
@@ -69,57 +69,57 @@ export declare function registrationList(context0: AuthenticationContext, option
 }): Promise<AuthenticationContext>;
 export declare function renderSignInPopup(dom: HTMLDocument): void;
 /**
-  * Login status box
-  *
-  * A big sign-up/sign in box or a logout box depending on the state
-  *
-  * @param dom
-  * @param listener
-  *
-  * @returns
-  */
+ * Login status box
+ *
+ * A big sign-up/sign in box or a logout box depending on the state
+ *
+ * @param dom
+ * @param listener
+ *
+ * @returns
+ */
 export declare function loginStatusBox(dom: HTMLDocument, listener?: ((uri: string | null) => void) | null, options?: {
     buttonStyle?: string;
 }): HTMLElement;
 /**
-  * Workspace selection etc
-  * See https://github.com/solid/userguide/issues/16
-  */
+ * Workspace selection etc
+ * See https://github.com/solidos/userguide/issues/16
+ */
 /**
-  * Returns a UI object which, if it selects a workspace,
-  * will callback(workspace, newBase).
-  * See https://github.com/solid/userguide/issues/16 for more info on workspaces.
-  *
-  * If necessary, will get an account, preference file, etc. In sequence:
-  *
-  *   - If not logged in, log in.
-  *   - Load preference file
-  *   - Prompt user for workspaces
-  *   - Allows the user to just type in a URI by hand
-  *
-  * Calls back with the workspace and the base URI
-  *
-  * @param dom
-  * @param appDetails
-  * @param callbackWS
-  */
+ * Returns a UI object which, if it selects a workspace,
+ * will callback(workspace, newBase).
+ * See https://github.com/solidos/userguide/issues/16 for more info on workspaces.
+ *
+ * If necessary, will get an account, preference file, etc. In sequence:
+ *
+ *   - If not logged in, log in.
+ *   - Load preference file
+ *   - Prompt user for workspaces
+ *   - Allows the user to just type in a URI by hand
+ *
+ * Calls back with the workspace and the base URI
+ *
+ * @param dom
+ * @param appDetails
+ * @param callbackWS
+ */
 export declare function selectWorkspace(dom: HTMLDocument, appDetails: AppDetails, callbackWS: (workspace: string | null, newBase: string) => void): HTMLElement;
 /**
-  * Creates a new instance of an app.
-  *
-  * An instance of an app could be e.g. an issue tracker for a given project,
-  * or a chess game, or calendar, or a health/fitness record for a person.
-  *
-  * Note that this use of the term 'app' refers more to entries in the user's
-  * type index than to actual software applications that use the personal data
-  * to which these entries point.
-  *
-  * @param dom
-  * @param appDetails
-  * @param callback
-  *
-  * @returns A div with a button in it for making a new app instance
-  */
+ * Creates a new instance of an app.
+ *
+ * An instance of an app could be e.g. an issue tracker for a given project,
+ * or a chess game, or calendar, or a health/fitness record for a person.
+ *
+ * Note that this use of the term 'app' refers more to entries in the user's
+ * type index than to actual software applications that use the personal data
+ * to which these entries point.
+ *
+ * @param dom
+ * @param appDetails
+ * @param callback
+ *
+ * @returns A div with a button in it for making a new app instance
+ */
 export declare function newAppInstance(dom: HTMLDocument, appDetails: AppDetails, callback: (workspace: string | null, newBase: string) => void): HTMLElement;
 /**
  * Retrieves whether the currently logged in user is a power user

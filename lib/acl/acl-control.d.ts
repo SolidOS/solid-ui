@@ -1,6 +1,6 @@
 /**
  * Functions for rendering the ACL User Interface.
- * See https://github.com/solid/userguide/blob/main/views/sharing/userguide.md#view
+ * See https://github.com/solidos/userguide/blob/main/views/sharing/userguide.md#view
  * for a screenshot.
  * @packageDocumentation
  */
@@ -61,7 +61,7 @@ export declare function shortNameForFolder(x: NamedNode): string;
  * Presumably the '5' is a version number of some sort,
  * but all we know is it was already called ACLControlBox5
  * when it was introduced into solid-ui in
- * https://github.com/solid/solid-ui/commit/948b874bd93e7bf5160e6e224821b888f07d15f3#diff-4192a29f38a0ababd563b36b47eba5bbR54
+ * https://github.com/solidos/solid-ui/commit/948b874bd93e7bf5160e6e224821b888f07d15f3#diff-4192a29f38a0ababd563b36b47eba5bbR54
  */
 export declare function ACLControlBox5(subject: NamedNode, context: DataBrowserContext, noun: string, kb: Store): HTMLElement;
 /** @internal */

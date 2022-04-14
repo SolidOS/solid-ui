@@ -30,7 +30,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/solid/solid-ui"
+    "url": "https://github.com/solidos/solid-ui"
   },
   "keywords": [
     "solid",
@@ -49,9 +49,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/solid/solid-ui/issues"
+    "url": "https://github.com/solidos/solid-ui/issues"
   },
-  "homepage": "https://github.com/solid/solid-ui",
+  "homepage": "https://github.com/solidos/solid-ui",
   "dependencies": {
     "escape-html": "^1.0.3",
     "jss": "^10.9.0",

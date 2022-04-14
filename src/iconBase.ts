@@ -1,4 +1,3 @@
-
 // Works in FF extension - what about browserify??
 // 2021-04-08 Convert to TS
 
@@ -12,7 +11,7 @@
  *
  * You can also use it if you want to just run a mashlib whhich takes its
  * icons seved by other than github.
-*/
+ */
 /* eslint-disable multiline-ternary */
 
 import { log } from './debug'
@@ -20,26 +19,26 @@ import { log } from './debug'
 declare let $SolidTestEnvironment
 
 // Do not export. lways us this module to find the icons, as it varies
-const iconsOnGithub = 'https://solid.github.io/solid-ui/src'
+const iconsOnGithub = 'https://solidos.github.io/solid-ui/src'
 
-export const icons =
-  (module as any).scriptURI // Firefox extension
+export const icons = (module as any).scriptURI // Firefox extension
+  ? {
+      iconBase:
+        (module as any).scriptURI.slice(0, (module as any).scriptURI.lastIndexOf('/')) + '/icons/',
+      originalIconBase:
+        (module as any).scriptURI.slice(0, (module as any).scriptURI.lastIndexOf('/')) +
+        '/originalIcons/'
+    }
+  : typeof $SolidTestEnvironment !== 'undefined' && $SolidTestEnvironment.iconBase // Test environemnt
     ? {
-        iconBase: (module as any).scriptURI.slice(0, (module as any).scriptURI.lastIndexOf('/')) +
-       '/icons/',
-        originalIconBase: (module as any).scriptURI.slice(0, (module as any).scriptURI.lastIndexOf('/')) +
-       '/originalIcons/'
+        iconBase: $SolidTestEnvironment.iconBase,
+        originalIconBase: $SolidTestEnvironment.originalIconBase
       }
-    : (typeof $SolidTestEnvironment !== 'undefined' &&
-  $SolidTestEnvironment.iconBase) // Test environemnt
-        ? {
-            iconBase: $SolidTestEnvironment.iconBase,
-            originalIconBase: $SolidTestEnvironment.originalIconBase
-
-          } : { // Normal case:
-            iconBase: iconsOnGithub + '/icons/',
-            originalIconBase: iconsOnGithub + '/originalIcons/'
-          }
+    : {
+      // Normal case:
+        iconBase: iconsOnGithub + '/icons/',
+        originalIconBase: iconsOnGithub + '/originalIcons/'
+      }
 
 log('   icons.iconBase is set to : ' + icons.iconBase)
 

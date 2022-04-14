@@ -1,6 +1,6 @@
 /**
  * Contains CSS styles for the Sharing pane,
- * see https://github.com/solid/userguide/blob/main/views/sharing/userguide.md
+ * see https://github.com/solidos/userguide/blob/main/views/sharing/userguide.md
  * @packageDocumentation
  */
 export const styles = {

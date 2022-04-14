@@ -25,7 +25,7 @@ Clone this repo, and in the repo root run:
 
 This will generate a `lib/` folder containing, among other artifacts, `lib/webpack-bundle.js`.
 Now run `npx serve` and go to http://localhost:5000/examples/ with your browser to see some examples.
-See the ['examples' folder](https://github.com/solid/solid-ui/tree/examples/examples) for the
+See the ['examples' folder](https://github.com/solidos/solid-ui/tree/examples/examples) for the
 source code of those examples.
 
 While viewing one of those examples, you can open the web console in your browser and for instance
@@ -53,9 +53,9 @@ document.body.appendChild(aclControlBox)
 
 
 ## Documentation
-- [talk presentation](https://solid.github.io/solid-ui/Documentation/talks/FormsTalk.html)
-- API https://solid.github.io/solid-ui/Documentation/api/ for the API documentation.
-- The UI components are presented in a [storybook](http://solid.github.io/solid-ui/examples/storybook/).
+- [talk presentation](https://solidos.github.io/solid-ui/Documentation/talks/FormsTalk.html)
+- API https://solidos.github.io/solid-ui/Documentation/api/ for the API documentation.
+- The UI components are presented in a [storybook](http://solidos.github.io/solid-ui/examples/storybook/).
 
 ## Overview
 This has been a place to put any functionality from solid views which has been generalized to be usable in other views.
@@ -67,7 +67,7 @@ This has been a place to put any functionality from solid views which has been g
 - Acess Control Logic
 - Create a new object from modules/extensions which have registered their ability to create things
 
-- A [form system](https://solid.github.io/solid-ui/Documentation/forms-intro.html): Forms are defined in RDF, and create/edit RDF data, including form definitions
+- A [form system](https://solidos.github.io/solid-ui/Documentation/forms-intro.html): Forms are defined in RDF, and create/edit RDF data, including form definitions
 - A collection of shortcut namespace objects for a selection of relevant RDF vocabularies.
 - Small atomic widgets (buttons etc) of which the others are constructed.
 - An error message panel
@@ -88,7 +88,7 @@ To see how these are used, see the panes which use them within the data browser.
 
 The level of support for this varies.
 
-See also: [A short introduction to the Form system](https://solid.github.io/solid-ui/Documentation/forms-intro.html)
+See also: [A short introduction to the Form system](https://solidos.github.io/solid-ui/Documentation/forms-intro.html)
 
 Contributions of bug fixes and new functionality, documentation, and tests are
 always appreciated.
@@ -104,5 +104,5 @@ npm run storybook
 
 If there is no story for the component yet, add a new one to `./src/stories`.
 
-When you want to test the component within a solid-pane, you can use the [development mode of solid-panes](https://github.com/solid/solid-panes#development) or
- [mashlib-dev](https://github.com/solid/mashlib-dev).
+When you want to test the component within a solid-pane, you can use the [development mode of solid-panes](https://github.com/solidos/solid-panes#development) or
+ [mashlib-dev](https://github.com/solidos/mashlib-dev).

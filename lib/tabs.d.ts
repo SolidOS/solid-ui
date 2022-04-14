@@ -28,7 +28,7 @@ export declare class TabWidgetElement extends HTMLElement {
 /**
  * Use this widget to generate tabs from triples set in the global store.
  *
- * [Here you can see examples of the tabs](https://solid.github.io/solid-ui/examples/tabs/).
+ * [Here you can see examples of the tabs](https://solidos.github.io/solid-ui/examples/tabs/).
  *
  * It assumes that items to use for tabs will be in a collection by default,
  * e.g.:

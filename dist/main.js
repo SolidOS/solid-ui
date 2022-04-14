@@ -219,7 +219,7 @@ var AccessController = /*#__PURE__*/function () {
     value: function renderTemporaryStatus(message) {
       var _this5 = this;
 
-      // @@ TODO Introduce better system for error notification to user https://github.com/solid/mashlib/issues/87
+      // @@ TODO Introduce better system for error notification to user https://github.com/solidos/mashlib/issues/87
       this.statusElement.classList.add(this.classes.aclControlBoxStatusRevealed);
       this.statusElement.innerText = message;
       this.statusElement.classList.add(this.classes.temporaryStatusInit);
@@ -233,7 +233,7 @@ var AccessController = /*#__PURE__*/function () {
   }, {
     key: "renderStatus",
     value: function renderStatus(message) {
-      // @@ TODO Introduce better system for error notification to user https://github.com/solid/mashlib/issues/87
+      // @@ TODO Introduce better system for error notification to user https://github.com/solidos/mashlib/issues/87
       this.statusElement.classList.toggle(this.classes.aclControlBoxStatusRevealed, !!message);
       this.statusElement.innerText = message;
     }
@@ -555,7 +555,7 @@ var EXPLANATION = {
 
 /**
  * Renders the table of Owners, Editors, Posters, Submitters, Viewers
- * for https://github.com/solid/userguide/blob/main/views/sharing/userguide.md
+ * for https://github.com/solidos/userguide/blob/main/views/sharing/userguide.md
  */
 var AccessGroups = /*#__PURE__*/function () {
   // @@ was LiveStore but does not need to be connected to web
@@ -1058,7 +1058,7 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 
 /**
  * Functions for rendering the ACL User Interface.
- * See https://github.com/solid/userguide/blob/main/views/sharing/userguide.md#view
+ * See https://github.com/solidos/userguide/blob/main/views/sharing/userguide.md#view
  * for a screenshot.
  * @packageDocumentation
  */
@@ -1155,7 +1155,7 @@ function shortNameForFolder(x) {
   if (slash >= 0) {
     str = str.slice(slash + 1);
   } // Return the folder's filename, or '/' if nothing found
-  // (but see https://github.com/solid/solid-ui/issues/196
+  // (but see https://github.com/solidos/solid-ui/issues/196
   // regarding whether this happens at the domain root or
   // not)
 
@@ -1168,7 +1168,7 @@ function shortNameForFolder(x) {
  * Presumably the '5' is a version number of some sort,
  * but all we know is it was already called ACLControlBox5
  * when it was introduced into solid-ui in
- * https://github.com/solid/solid-ui/commit/948b874bd93e7bf5160e6e224821b888f07d15f3#diff-4192a29f38a0ababd563b36b47eba5bbR54
+ * https://github.com/solidos/solid-ui/commit/948b874bd93e7bf5160e6e224821b888f07d15f3#diff-4192a29f38a0ababd563b36b47eba5bbR54
  */
 
 
@@ -1285,13 +1285,13 @@ function getDirectory(doc) {
 function isStorage(doc, aclDoc, store) {
   // @@ TODO: The methods used for targetIsStorage are HACKs - it should not be relied upon, and work is
   // @@ underway to standardize a behavior that does not rely upon this hack
-  // @@ hopefully fixed as part of https://github.com/solid/data-interoperability-panel/issues/10
+  // @@ hopefully fixed as part of https://github.com/solidos/data-interoperability-panel/issues/10
   return store.holds(doc, ns.rdf('type'), ns.space('Storage'), aclDoc);
 }
 
 function hasProtectedAcl(targetDoc) {
   // @@ TODO: This is hacky way of knowing whether or not a certain ACL file can be removed
-  // Hopefully we'll find a better, standardized solution to this - https://github.com/solid/specification/issues/37
+  // Hopefully we'll find a better, standardized solution to this - https://github.com/solidos/specification/issues/37
   return targetDoc.uri === targetDoc.site().uri;
 }
 /** @internal */
@@ -1360,7 +1360,7 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 
 /**
  * Non-UI functions for access control.
- * See https://github.com/solid/web-access-control-spec
+ * See https://github.com/solidos/web-access-control-spec
  * for the spec that defines how ACL documents work.
  * @packageDocumentation
  */
@@ -1962,7 +1962,7 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 
 /**
  * Renders the Sharing pane's "+" button and the menus behind it,
- * see https://github.com/solid/userguide/blob/main/views/sharing/userguide.md#add
+ * see https://github.com/solidos/userguide/blob/main/views/sharing/userguide.md#add
  */
 var AddAgentButtons = /*#__PURE__*/function () {
   function AddAgentButtons(groupList) {
@@ -2531,7 +2531,7 @@ exports.styles = void 0;
 
 /**
  * Contains CSS styles for the Sharing pane,
- * see https://github.com/solid/userguide/blob/main/views/sharing/userguide.md
+ * see https://github.com/solidos/userguide/blob/main/views/sharing/userguide.md
  * @packageDocumentation
  */
 var styles = {
@@ -7102,11 +7102,11 @@ var _debug = __webpack_require__(/*! ./debug */ "./lib/debug.js");
  *
  * You can also use it if you want to just run a mashlib whhich takes its
  * icons seved by other than github.
-*/
+ */
 
 /* eslint-disable multiline-ternary */
 // Do not export. lways us this module to find the icons, as it varies
-var iconsOnGithub = 'https://solid.github.io/solid-ui/src';
+var iconsOnGithub = 'https://solidos.github.io/solid-ui/src';
 var icons = module.scriptURI // Firefox extension
 ? {
   iconBase: module.scriptURI.slice(0, module.scriptURI.lastIndexOf('/')) + '/icons/',
@@ -7162,7 +7162,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 If you would like to know more about the solid Solid project, please see
-https://github.com/solid/solid
+https://github.com/solidos/solid
 */
 
 /**
@@ -7436,7 +7436,7 @@ var stylesheetsMap = new Map();
 /**
  * returns a StyleSheet object.
  * See https://cssinjs.org/ for more info about JSS.
- * (despite the name, see https://github.com/solid/solid-ui/issues/199)
+ * (despite the name, see https://github.com/solidos/solid-ui/issues/199)
  */
 
 function getClasses(insertionPoint, styles) {
@@ -7446,7 +7446,7 @@ function getClasses(insertionPoint, styles) {
 /**
  * returns a JSS object.
  * See https://cssinjs.org/ for more info about JSS.
- * (despite the name, see https://github.com/solid/solid-ui/issues/199)
+ * (despite the name, see https://github.com/solidos/solid-ui/issues/199)
  */
 
 
@@ -7783,6 +7783,8 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
+/* eslint-disable camelcase */
+
 /**
  * Signing in, signing up, profile and preferences reloading
  * Type index management
@@ -7809,10 +7811,10 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
  */
 
 /**
-  * Resolves with the logged in user's WebID
-  *
-  * @param context
-  */
+ * Resolves with the logged in user's WebID
+ *
+ * @param context
+ */
 // used to be logIn
 function ensureLoggedIn(context) {
   var me = _solidLogic.authn.currentUser();
@@ -8006,11 +8008,11 @@ function ensureLoadedProfile(_x3) {
   return _ensureLoadedProfile.apply(this, arguments);
 }
 /**
-  * Returns promise of context with arrays of symbols
-  *
-  * 2016-12-11 change to include forClass arc a la
-  * https://github.com/solid/solid/blob/main/proposals/data-discovery.md
-  */
+ * Returns promise of context with arrays of symbols
+ *
+ * 2016-12-11 change to include forClass arc a la
+ * https://github.com/solidos/solid/blob/main/proposals/data-discovery.md
+ */
 
 
 function _ensureLoadedProfile() {
@@ -8078,8 +8080,8 @@ function findAppInstances(_x4, _x5, _x6) {
   return _findAppInstances.apply(this, arguments);
 }
 /**
-  * UI to control registration of instance
-  */
+ * UI to control registration of instance
+ */
 
 
 function _findAppInstances() {
@@ -8228,8 +8230,8 @@ function registrationControl(_x7, _x8, _x9) {
   return _registrationControl.apply(this, arguments);
 }
 /**
-  * UI to List at all registered things
-  */
+ * UI to List at all registered things
+ */
 
 
 function _registrationControl() {
@@ -8455,14 +8457,14 @@ function getDefaultSignInButtonStyle() {
   return 'padding: 1em; border-radius:0.5em; font-size: 100%;';
 }
 /**
-  * Bootstrapping identity
-  * (Called by `loginStatusBox()`)
-  *
-  * @param dom
-  * @param setUserCallback
-  *
-  * @returns
-  */
+ * Bootstrapping identity
+ * (Called by `loginStatusBox()`)
+ *
+ * @param dom
+ * @param setUserCallback
+ *
+ * @returns
+ */
 
 
 function signInOrSignUpBox(dom, setUserCallback) {
@@ -8540,8 +8542,8 @@ function signInOrSignUpBox(dom, setUserCallback) {
 
 function renderSignInPopup(dom) {
   /**
-    * Issuer Menu
-    */
+   * Issuer Menu
+   */
   var issuerPopup = dom.createElement('div');
   issuerPopup.setAttribute('style', 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; align-items: center;');
   dom.body.appendChild(issuerPopup);
@@ -8555,7 +8557,7 @@ function renderSignInPopup(dom) {
   issuerPopupBoxLabel.setAttribute('style', 'margin-right: 5px; font-weight: 800');
   issuerPopupBoxLabel.innerText = 'Select an identity provider';
   var issuerPopupBoxCloseButton = dom.createElement('button');
-  issuerPopupBoxCloseButton.innerHTML = '<img src="https://solid.github.io/solid-ui/src/icons/noun_1180156.svg" style="width: 2em; height: 2em;" title="Cancel">';
+  issuerPopupBoxCloseButton.innerHTML = '<img src="https://solidos.github.io/solid-ui/src/icons/noun_1180156.svg" style="width: 2em; height: 2em;" title="Cancel">';
   issuerPopupBoxCloseButton.setAttribute('style', 'background-color: transparent; border: none;');
   issuerPopupBoxCloseButton.addEventListener('click', function () {
     issuerPopup.remove();
@@ -8608,8 +8610,8 @@ function renderSignInPopup(dom) {
     };
   }();
   /**
-     * Text-based idp selection
-     */
+   * Text-based idp selection
+   */
 
 
   var issuerTextContainer = dom.createElement('div');
@@ -8636,8 +8638,8 @@ function renderSignInPopup(dom) {
   issuerTextContainer.appendChild(issuerTextInputContainer);
   issuerPopupBox.appendChild(issuerTextContainer);
   /**
-     * Button-based idp selection
-     */
+   * Button-based idp selection
+   */
 
   var issuerButtonContainer = dom.createElement('div');
   issuerButtonContainer.setAttribute('style', "\n      display: flex;\n      flex-direction: column;\n      padding-top: 10px;\n    ");
@@ -8657,15 +8659,15 @@ function renderSignInPopup(dom) {
   issuerPopupBox.appendChild(issuerButtonContainer);
 }
 /**
-  * Login status box
-  *
-  * A big sign-up/sign in box or a logout box depending on the state
-  *
-  * @param dom
-  * @param listener
-  *
-  * @returns
-  */
+ * Login status box
+ *
+ * A big sign-up/sign in box or a logout box depending on the state
+ *
+ * @param dom
+ * @param listener
+ *
+ * @returns
+ */
 
 
 function loginStatusBox(dom) {
@@ -8826,28 +8828,28 @@ _solidLogic.authSession.onLogout( /*#__PURE__*/(0, _asyncToGenerator2["default"]
   }, _callee2, null, [[2, 17]]);
 })));
 /**
-  * Workspace selection etc
-  * See https://github.com/solid/userguide/issues/16
-  */
+ * Workspace selection etc
+ * See https://github.com/solidos/userguide/issues/16
+ */
 
 /**
-  * Returns a UI object which, if it selects a workspace,
-  * will callback(workspace, newBase).
-  * See https://github.com/solid/userguide/issues/16 for more info on workspaces.
-  *
-  * If necessary, will get an account, preference file, etc. In sequence:
-  *
-  *   - If not logged in, log in.
-  *   - Load preference file
-  *   - Prompt user for workspaces
-  *   - Allows the user to just type in a URI by hand
-  *
-  * Calls back with the workspace and the base URI
-  *
-  * @param dom
-  * @param appDetails
-  * @param callbackWS
-  */
+ * Returns a UI object which, if it selects a workspace,
+ * will callback(workspace, newBase).
+ * See https://github.com/solidos/userguide/issues/16 for more info on workspaces.
+ *
+ * If necessary, will get an account, preference file, etc. In sequence:
+ *
+ *   - If not logged in, log in.
+ *   - Load preference file
+ *   - Prompt user for workspaces
+ *   - Allows the user to just type in a URI by hand
+ *
+ * Calls back with the workspace and the base URI
+ *
+ * @param dom
+ * @param appDetails
+ * @param callbackWS
+ */
 
 
 function selectWorkspace(dom, appDetails, callbackWS) {
@@ -9110,21 +9112,21 @@ function selectWorkspace(dom, appDetails, callbackWS) {
 } // selectWorkspace
 
 /**
-  * Creates a new instance of an app.
-  *
-  * An instance of an app could be e.g. an issue tracker for a given project,
-  * or a chess game, or calendar, or a health/fitness record for a person.
-  *
-  * Note that this use of the term 'app' refers more to entries in the user's
-  * type index than to actual software applications that use the personal data
-  * to which these entries point.
-  *
-  * @param dom
-  * @param appDetails
-  * @param callback
-  *
-  * @returns A div with a button in it for making a new app instance
-  */
+ * Creates a new instance of an app.
+ *
+ * An instance of an app could be e.g. an issue tracker for a given project,
+ * or a chess game, or calendar, or a health/fitness record for a person.
+ *
+ * Note that this use of the term 'app' refers more to entries in the user's
+ * type index than to actual software applications that use the personal data
+ * to which these entries point.
+ *
+ * @param dom
+ * @param appDetails
+ * @param callback
+ *
+ * @returns A div with a button in it for making a new app instance
+ */
 
 
 function newAppInstance(dom, appDetails, callback) {
@@ -11405,7 +11407,7 @@ function participationObject(subject, padDoc, me) {
     });
 
     if (parps.length > 1) {
-      // This can happen. https://github.com/solid/chat-pane/issues/71
+      // This can happen. https://github.com/solidos/chat-pane/issues/71
       var candidates = [];
 
       var _iterator = _createForOfIteratorHelper(parps),
@@ -13750,7 +13752,7 @@ var TabElement = /*#__PURE__*/function (_HTMLElement3) {
 /**
  * Use this widget to generate tabs from triples set in the global store.
  *
- * [Here you can see examples of the tabs](https://solid.github.io/solid-ui/examples/tabs/).
+ * [Here you can see examples of the tabs](https://solidos.github.io/solid-ui/examples/tabs/).
  *
  * It assumes that items to use for tabs will be in a collection by default,
  * e.g.:
@@ -13930,7 +13932,9 @@ function tabWidget(options) {
     var selectedTabURI = options.selectedTab.uri;
     var selectedTab1 = Array.from(tabContainer.children) // @ts-ignore
     .find(function (tab) {
-      return tab.subject && tab.subject.uri && tab.subject.uri === selectedTabURI;
+      return tab.subject && // @ts-ignore
+      tab.subject.uri && // @ts-ignore
+      tab.subject.uri === selectedTabURI;
     });
     var tab = selectedTab1 || selectedTab0 || tabContainer.children[0];
     var clickMe = tab.firstChild; // @ts-ignore
@@ -13945,7 +13949,7 @@ function tabWidget(options) {
   function addCancelButton(tabContainer) {
     if (tabContainer.dataset.onCloseSet) {
       // @@ TODO: this is only here to make the browser tests work
-      // Discussion at https://github.com/solid/solid-ui/pull/110#issuecomment-527080663
+      // Discussion at https://github.com/solidos/solid-ui/pull/110#issuecomment-527080663
       var existingCancelButton = tabContainer.querySelector('.unstyled');
       tabContainer.removeChild(existingCancelButton);
     }
@@ -15188,8 +15192,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2022-04-11T08:50:54Z',
-  commit: 'ec6f98e086b9e3122931c90290abf67866d0611d',
+  buildTime: '2022-04-14T14:08:17Z',
+  commit: 'aae892c86fa4fe9cb94b175ee31d76453e9175b2',
   npmInfo: {
     'solid-ui': '2.4.21',
     npm: '6.14.16',
@@ -20772,7 +20776,7 @@ function queryESCODataByName(_x, _x2, _x3) {
 *
 * Wikidata bug: https://phabricator.wikimedia.org/T283962
 * This will not be needed whn that  WDQS bug fixed.
-* This is aptured in https://github.com/solid/solid-ui/issues/403
+* This is aptured in https://github.com/solidos/solid-ui/issues/403
 */
 
 
