@@ -1,59 +1,58 @@
-import * as UI from '../../lib'
+import * as UI from "../../lib";
 
-import { Canvas, Meta, Story, Props } from '@storybook/addon-docs'
-import { action } from '@storybook/addon-actions'
+import { Canvas, Meta, Story, Props } from "@storybook/addon-docs";
+import { action } from "@storybook/addon-actions";
 
-<Meta title="Tabs"/>
+<Meta title="Tabs" />
 
 export const loadTurtleDecorator = (Story) => {
-  const { render, data } = Story()
-  UI.rdf.parse(data, UI.store, location.origin, 'text/turtle', error => {
-    if (error) console.error(error)
-  })
+  const { render, data } = Story();
+  UI.rdf.parse(data, UI.store, location.origin, "text/turtle", (error) => {
+    if (error) console.error(error);
+  });
   const div = document.createElement("div");
   const pre = document.createElement("pre");
-  pre.appendChild(document.createTextNode(data))
-  div.appendChild(pre)
+  pre.appendChild(document.createTextNode(data));
+  div.appendChild(pre);
   div.appendChild(render());
   return div;
-}
-
+};
 
 ## tabWidget: Populating content using an RDF collection
 
 In this first example we'll see how you can generate a tabs widget using triples that are formatted as a collection in
-RDF. See [API documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_tabs_.html#tabwidget) for more
+RDF. See [API documentation](https://solidos.github.io/solid-ui/Documentation/api/modules/_tabs_.html#tabwidget) for more
 info about how to use the tabWidget.
 
 The triples belows shows the minimum data you need to start using the tabWidget in combination with store.
 
 <Canvas>
-    <Story name="rdf collection" decorators={[loadTurtleDecorator]}>
+  <Story name="rdf collection" decorators={[loadTurtleDecorator]}>
     {() => {
-      const subject = UI.rdf.namedNode(location.origin + '#subject1')
-      const predicate = UI.rdf.namedNode(location.origin + '#predicate1')
+      const subject = UI.rdf.namedNode(location.origin + "#subject1");
+      const predicate = UI.rdf.namedNode(location.origin + "#predicate1");
       return {
         data: `
 @prefix : <#> .
 :subject1
     :predicate1 ( :item1A :item1B ) .
         `,
-        render: () => UI.tabs.tabWidget({
-          subject,
-          predicate,
-          renderMain: (bodyMain, subject) => {
-            bodyMain.innerText = `Content of ${subject.uri}`
-          }
-        })
-      }
+        render: () =>
+          UI.tabs.tabWidget({
+            subject,
+            predicate,
+            renderMain: (bodyMain, subject) => {
+              bodyMain.innerText = `Content of ${subject.uri}`;
+            },
+          }),
+      };
     }}
   </Story>
 </Canvas>
 
 Note that you would probably use `UI.rdf.namedNode` directly from rdflib.js. (E.g. instead of
-        `UI.rdf.namedNode` you would probably make use of namedNode with
-        `import { namedNode } from 'rdflib'`.
-
+`UI.rdf.namedNode` you would probably make use of namedNode with
+`import { namedNode } from 'rdflib'`.
 
 ## tabWidget: Populating content using unsorted triples
 
@@ -63,12 +62,11 @@ This is the data we will be working with. Note that we've also added labels to t
 
 Note that we've set option ordered to false in this example.
 
-
 <Canvas>
   <Story name="unsorted triples" decorators={[loadTurtleDecorator]}>
     {() => {
-      const subject = UI.rdf.namedNode(location.origin + '#subject2')
-      const predicate = UI.rdf.namedNode(location.origin + '#predicate2')
+      const subject = UI.rdf.namedNode(location.origin + "#subject2");
+      const predicate = UI.rdf.namedNode(location.origin + "#predicate2");
       return {
         data: `
 @prefix :     <#> .
@@ -80,19 +78,19 @@ Note that we've set option ordered to false in this example.
 :item2B
     rdfs:label "Tab 2" .
         `,
-        render: () => UI.tabs.tabWidget({
-          subject,
-          predicate,
-          ordered: false,
-          renderMain: (bodyMain, subject) => {
-            bodyMain.innerText = `Content of ${UI.utils.label(subject)}`
-          }
-        })
-      }
+        render: () =>
+          UI.tabs.tabWidget({
+            subject,
+            predicate,
+            ordered: false,
+            renderMain: (bodyMain, subject) => {
+              bodyMain.innerText = `Content of ${UI.utils.label(subject)}`;
+            },
+          }),
+      };
     }}
   </Story>
 </Canvas>
-
 
 ## tabWidget: Populating content using option items
 
@@ -103,20 +101,19 @@ We do not need to use options subject and predicate when using items.
 <Canvas>
   <Story name="option items">
     {() => {
-      const item1 = UI.rdf.namedNode(location.origin + '#item3A')
-      const item2 = UI.rdf.namedNode(location.origin + '#item3B')
+      const item1 = UI.rdf.namedNode(location.origin + "#item3A");
+      const item2 = UI.rdf.namedNode(location.origin + "#item3B");
       return UI.tabs.tabWidget({
-          items: [item1, item2],
-          renderMain: (bodyMain, subject) => {
-            bodyMain.innerText = `Content of ${subject}`
-          }
-        })
+        items: [item1, item2],
+        renderMain: (bodyMain, subject) => {
+          bodyMain.innerText = `Content of ${subject}`;
+        },
+      });
     }}
   </Story>
 </Canvas>
 
 ℹ For the remaining examples we'll use option items to populate our tabs.
-
 
 ## tabWidget: Option backgroundColor
 
@@ -125,24 +122,23 @@ color is when figuring out which color to set to the text. It will also distingu
 tabs by coloring the selected tab a bit darker.
 
 <Canvas>
-  <Story name="background color"
-         args={{ backgroundColor: "#ff0000" }}
-         argTypes={{backgroundColor: {control: {type: 'select',
-               options: [
-                 '#ff0000',
-                 '#00ff00',
-                 '#0000ff'
-               ],}}}}>
-    {({backgroundColor}) => {
-      const item1 = UI.rdf.namedNode(location.origin + '#item3A')
-      const item2 = UI.rdf.namedNode(location.origin + '#item3B')
+  <Story
+    name="background color"
+    args={{ backgroundColor: "#ff0000" }}
+    argTypes={{
+      backgroundColor: { control: { type: "select", options: ["#ff0000", "#00ff00", "#0000ff"] } },
+    }}
+  >
+    {({ backgroundColor }) => {
+      const item1 = UI.rdf.namedNode(location.origin + "#item3A");
+      const item2 = UI.rdf.namedNode(location.origin + "#item3B");
       return UI.tabs.tabWidget({
         backgroundColor,
         items: [item1, item2],
         renderMain: (bodyMain, subject) => {
-          bodyMain.innerText = `Content of ${subject}`
-        }
-      })
+          bodyMain.innerText = `Content of ${subject}`;
+        },
+      });
     }}
   </Story>
 </Canvas>
@@ -154,15 +150,15 @@ tabs by coloring the selected tab a bit darker.
 <Canvas>
   <Story name="on close">
     {() => {
-      const item1 = UI.rdf.namedNode(location.origin + '#item3A')
-      const item2 = UI.rdf.namedNode(location.origin + '#item3B')
+      const item1 = UI.rdf.namedNode(location.origin + "#item3A");
+      const item2 = UI.rdf.namedNode(location.origin + "#item3B");
       return UI.tabs.tabWidget({
-        onClose: action('closed'),
+        onClose: action("closed"),
         items: [item1, item2],
         renderMain: (bodyMain, subject) => {
-          bodyMain.innerText = `Content of ${subject}`
-        }
-     })
+          bodyMain.innerText = `Content of ${subject}`;
+        },
+      });
     }}
   </Story>
 </Canvas>
@@ -172,25 +168,22 @@ tabs by coloring the selected tab a bit darker.
 Using option `orientation` we can set how the tabs and body should be positioned.
 
 <Canvas>
-  <Story name="orientation"
-         args={{ orientation: "1" }}
-         argTypes={{orientation: {control: {type: 'select',
-               options: [
-                 '0',
-                 '1',
-                 '2',
-                 '3'
-               ],}}}}>>
-    {({orientation}) => {
-      const item1 = UI.rdf.namedNode(location.origin + '#item3A')
-      const item2 = UI.rdf.namedNode(location.origin + '#item3B')
+  <Story
+    name="orientation"
+    args={{ orientation: "1" }}
+    argTypes={{ orientation: { control: { type: "select", options: ["0", "1", "2", "3"] } } }}
+  >
+    >
+    {({ orientation }) => {
+      const item1 = UI.rdf.namedNode(location.origin + "#item3A");
+      const item2 = UI.rdf.namedNode(location.origin + "#item3B");
       return UI.tabs.tabWidget({
         orientation,
         items: [item1, item2],
         renderMain: (bodyMain, subject) => {
-          bodyMain.innerText = `Content of ${subject}`
-        }
-     })
+          bodyMain.innerText = `Content of ${subject}`;
+        },
+      });
     }}
   </Story>
 </Canvas>
@@ -204,17 +197,17 @@ Using option `orientation` we can set how the tabs and body should be positioned
 <Canvas>
   <Story name="renderTab">
     {() => {
-      const item1 = UI.rdf.namedNode(location.origin + '#item3A')
-      const item2 = UI.rdf.namedNode(location.origin + '#item3B')
+      const item1 = UI.rdf.namedNode(location.origin + "#item3A");
+      const item2 = UI.rdf.namedNode(location.origin + "#item3B");
       return UI.tabs.tabWidget({
         items: [item1, item2],
         renderMain: (bodyMain, subject) => {
-          bodyMain.innerText = `Content of ${subject}`
+          bodyMain.innerText = `Content of ${subject}`;
         },
         renderTab: (tabDiv, subject) => {
-          tabDiv.innerText = `Go to ${subject.uri}`
-        }
-     })
+          tabDiv.innerText = `Go to ${subject.uri}`;
+        },
+      });
     }}
   </Story>
 </Canvas>
@@ -227,17 +220,17 @@ Using option `orientation` we can set how the tabs and body should be positioned
 <Canvas>
   <Story name="renderTabSettings">
     {() => {
-      const item1 = UI.rdf.namedNode(location.origin + '#item3A')
-      const item2 = UI.rdf.namedNode(location.origin + '#item3B')
+      const item1 = UI.rdf.namedNode(location.origin + "#item3A");
+      const item2 = UI.rdf.namedNode(location.origin + "#item3B");
       return UI.tabs.tabWidget({
         items: [item1, item2],
         renderMain: (bodyMain, subject) => {
-          bodyMain.innerText = `Content of ${subject}`
+          bodyMain.innerText = `Content of ${subject}`;
         },
         renderTabSettings: (bodyMain, subject) => {
-          bodyMain.innerText = `Settings for ${subject.uri}`
-        }
-     })
+          bodyMain.innerText = `Settings for ${subject.uri}`;
+        },
+      });
     }}
   </Story>
 </Canvas>
@@ -250,19 +243,19 @@ in junction with `renderTab` since it relies on `dataset.name` being set.
 <Canvas>
   <Story name="selectedTab">
     {() => {
-      const item1 = UI.rdf.namedNode(location.origin + '#item3A')
-      const item2 = UI.rdf.namedNode(location.origin + '#item3B')
+      const item1 = UI.rdf.namedNode(location.origin + "#item3A");
+      const item2 = UI.rdf.namedNode(location.origin + "#item3B");
       return UI.tabs.tabWidget({
         items: [item1, item2],
         renderMain: (bodyMain, subject) => {
-          bodyMain.innerText = `Content of ${subject}`
+          bodyMain.innerText = `Content of ${subject}`;
         },
         renderTab: (tabDiv, subject) => {
-          tabDiv.dataset.name = subject.uri
-          tabDiv.innerText = UI.utils.label(subject)
+          tabDiv.dataset.name = subject.uri;
+          tabDiv.innerText = UI.utils.label(subject);
         },
-        selectedTab: item2.uri
-     })
+        selectedTab: item2.uri,
+      });
     }}
   </Story>
 </Canvas>
@@ -274,15 +267,15 @@ in junction with `renderTab` since it relies on `dataset.name` being set.
 <Canvas>
   <Story name="startEmpty">
     {() => {
-      const item1 = UI.rdf.namedNode(location.origin + '#item3A')
-      const item2 = UI.rdf.namedNode(location.origin + '#item3B')
+      const item1 = UI.rdf.namedNode(location.origin + "#item3A");
+      const item2 = UI.rdf.namedNode(location.origin + "#item3B");
       return UI.tabs.tabWidget({
         items: [item1, item2],
         startEmpty: true,
         renderMain: (bodyMain, subject) => {
-          bodyMain.innerText = `Content of ${subject}`
+          bodyMain.innerText = `Content of ${subject}`;
         },
-     })
+      });
     }}
   </Story>
 </Canvas>

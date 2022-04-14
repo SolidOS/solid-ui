@@ -94,7 +94,7 @@ export function participationObject (subject: NamedNode, padDoc: NamedNode, me: 
     const parps = store.each(subject, ns.wf('participation')).filter(function (pn) {
       return store.holds(pn, ns.wf('participant'), me)
     })
-    if (parps.length > 1) { // This can happen. https://github.com/solid/chat-pane/issues/71
+    if (parps.length > 1) { // This can happen. https://github.com/solidos/chat-pane/issues/71
       const candidates: (string | NamedNode) [][] = []
       for (const participation of parps) {
         const date = store.anyValue(participation as NamedNode, ns.cal('dtstart'))

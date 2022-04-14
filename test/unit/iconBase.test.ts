@@ -1,18 +1,18 @@
-import { silenceDebugMessages } from '../helpers/setup'
-import { icons } from '../../src/iconBase'
+import { silenceDebugMessages } from "../helpers/setup";
+import { icons } from "../../src/iconBase";
 
-const { iconBase, originalIconBase } = icons
+const { iconBase, originalIconBase } = icons;
 
-silenceDebugMessages()
+silenceDebugMessages();
 
-describe('iconBase', () => {
-  it('exists', () => {
-    expect(iconBase).toEqual('https://solid.github.io/solid-ui/src/icons/')
-  })
-})
+describe("iconBase", () => {
+  it("exists", () => {
+    expect(iconBase).toEqual("https://solidos.github.io/solid-ui/src/icons/");
+  });
+});
 
-describe('originalIconBase', () => {
-  it('exists', () => {
-    expect(originalIconBase).toEqual('https://solid.github.io/solid-ui/src/originalIcons/')
-  })
-})
+describe("originalIconBase", () => {
+  it("exists", () => {
+    expect(originalIconBase).toEqual("https://solidos.github.io/solid-ui/src/originalIcons/");
+  });
+});

@@ -537,7 +537,7 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
     ) {
       // If this has been called before the element is actually in the
       // user's DOM tree, then this scrollTop check won't work -> loop forever
-      // https://github.com/solid/solid-ui/issues/366
+      // https://github.com/solidos/solid-ui/issues/366
       if (div.scrollHeight === 0) {
         // console.log('    chat/loadMoreWhereNeeded: trying later...')
         setTimeout(loadMoreWhereNeeded, 2000) // couple be less

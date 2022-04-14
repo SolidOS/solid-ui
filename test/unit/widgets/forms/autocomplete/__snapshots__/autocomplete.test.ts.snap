@@ -68,7 +68,7 @@ exports[`autocompleteField clicking on row of greenn table then accecpt button s
           type="button"
         >
           <img
-            src="https://solid.github.io/solid-ui/src/icons/noun_1180158.svg"
+            src="https://solidos.github.io/solid-ui/src/icons/noun_1180158.svg"
             style="width: 2em; height: 2em;"
             title="Continue"
           />
@@ -79,7 +79,7 @@ exports[`autocompleteField clicking on row of greenn table then accecpt button s
           type="button"
         >
           <img
-            src="https://solid.github.io/solid-ui/src/icons/noun_1180156.svg"
+            src="https://solidos.github.io/solid-ui/src/icons/noun_1180156.svg"
             style="width: 2em; height: 2em; opacity: 0.3;"
             title="Cancel"
           />
@@ -90,7 +90,7 @@ exports[`autocompleteField clicking on row of greenn table then accecpt button s
           type="button"
         >
           <img
-            src="https://solid.github.io/solid-ui/src/icons/noun_253504.svg"
+            src="https://solidos.github.io/solid-ui/src/icons/noun_253504.svg"
             style="width: 2em; height: 2em;"
             title="Edit"
           />
@@ -101,7 +101,7 @@ exports[`autocompleteField clicking on row of greenn table then accecpt button s
           <img
             class="hoverControlHide"
             data-testid="delete-button"
-            src="https://solid.github.io/solid-ui/src/icons/noun_2188_red.svg"
+            src="https://solidos.github.io/solid-ui/src/icons/noun_2188_red.svg"
             style="margin: 0.2em; width: 1em; height: 1em; float: right;"
             title="Remove this Q6881511"
           />
@@ -159,7 +159,7 @@ exports[`autocompleteField creates a autocomplete field 1`] = `
           type="button"
         >
           <img
-            src="https://solid.github.io/solid-ui/src/icons/noun_1180158.svg"
+            src="https://solidos.github.io/solid-ui/src/icons/noun_1180158.svg"
             style="width: 2em; height: 2em;"
             title="Continue"
           />
@@ -170,7 +170,7 @@ exports[`autocompleteField creates a autocomplete field 1`] = `
           type="button"
         >
           <img
-            src="https://solid.github.io/solid-ui/src/icons/noun_1180156.svg"
+            src="https://solidos.github.io/solid-ui/src/icons/noun_1180156.svg"
             style="width: 2em; height: 2em; opacity: 0.3;"
             title="Cancel"
           />
@@ -181,7 +181,7 @@ exports[`autocompleteField creates a autocomplete field 1`] = `
           type="button"
         >
           <img
-            src="https://solid.github.io/solid-ui/src/icons/noun_253504.svg"
+            src="https://solidos.github.io/solid-ui/src/icons/noun_253504.svg"
             style="width: 2em; height: 2em;"
             title="Edit"
           />
@@ -192,7 +192,7 @@ exports[`autocompleteField creates a autocomplete field 1`] = `
           <img
             class="hoverControlHide"
             data-testid="delete-button"
-            src="https://solid.github.io/solid-ui/src/icons/noun_2188_red.svg"
+            src="https://solidos.github.io/solid-ui/src/icons/noun_2188_red.svg"
             style="margin: 0.2em; width: 1em; height: 1em; float: right;"
             title="Remove this Q6881511"
           />
@@ -285,7 +285,7 @@ exports[`autocompleteField typing more search term till unique selects the whole
           type="button"
         >
           <img
-            src="https://solid.github.io/solid-ui/src/icons/noun_1180158.svg"
+            src="https://solidos.github.io/solid-ui/src/icons/noun_1180158.svg"
             style="width: 2em; height: 2em;"
             title="Continue"
           />
@@ -296,7 +296,7 @@ exports[`autocompleteField typing more search term till unique selects the whole
           type="button"
         >
           <img
-            src="https://solid.github.io/solid-ui/src/icons/noun_1180156.svg"
+            src="https://solidos.github.io/solid-ui/src/icons/noun_1180156.svg"
             style="width: 2em; height: 2em; opacity: 0.3;"
             title="Cancel"
           />
@@ -307,7 +307,7 @@ exports[`autocompleteField typing more search term till unique selects the whole
           type="button"
         >
           <img
-            src="https://solid.github.io/solid-ui/src/icons/noun_253504.svg"
+            src="https://solidos.github.io/solid-ui/src/icons/noun_253504.svg"
             style="width: 2em; height: 2em;"
             title="Edit"
           />
@@ -318,7 +318,7 @@ exports[`autocompleteField typing more search term till unique selects the whole
           <img
             class="hoverControlHide"
             data-testid="delete-button"
-            src="https://solid.github.io/solid-ui/src/icons/noun_2188_red.svg"
+            src="https://solidos.github.io/solid-ui/src/icons/noun_2188_red.svg"
             style="margin: 0.2em; width: 1em; height: 1em; float: right;"
             title="Remove this Q6881511"
           />
