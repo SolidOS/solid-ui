@@ -1,9 +1,9 @@
 export const versionInfo = {
-  buildTime: '2022-04-14T15:35:24Z',
-  commit: 'deb2e922d6e6ae79a8dc9b2702fefa134ba9c14a',
+  buildTime: '2022-04-14T16:39:29Z',
+  commit: '8f207a1dbaad449bbc4b82e43887dcf3d5499424',
   npmInfo:
 {
-  'solid-ui': '2.4.21',
+  'solid-ui': '2.4.22',
   npm: '6.14.16',
   ares: '1.18.1',
   brotli: '1.0.9',

@@ -15192,10 +15192,10 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2022-04-14T15:35:24Z',
-  commit: 'deb2e922d6e6ae79a8dc9b2702fefa134ba9c14a',
+  buildTime: '2022-04-14T16:39:29Z',
+  commit: '8f207a1dbaad449bbc4b82e43887dcf3d5499424',
   npmInfo: {
-    'solid-ui': '2.4.21',
+    'solid-ui': '2.4.22',
     npm: '6.14.16',
     ares: '1.18.1',
     brotli: '1.0.9',
@@ -25750,6 +25750,31 @@ function freeze(object, oc) {
 }
 
 /**
+ * Since we can not rely on `Object.assign` we provide a simplified version
+ * that is sufficient for our needs.
+ *
+ * @param {Object} target
+ * @param {Object | null | undefined} source
+ *
+ * @returns {Object} target
+ * @throws TypeError if target is not an object
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
+ * @see https://tc39.es/ecma262/multipage/fundamental-objects.html#sec-object.assign
+ */
+function assign(target, source) {
+	if (target === null || typeof target !== 'object') {
+		throw new TypeError('target is not an object')
+	}
+	for (var key in source) {
+		if (Object.prototype.hasOwnProperty.call(source, key)) {
+			target[key] = source[key]
+		}
+	}
+	return target
+}
+
+/**
  * All mime types that are allowed as input to `DOMParser.parseFromString`
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/DOMParser/parseFromString#Argument02 MDN
@@ -25866,6 +25891,7 @@ var NAMESPACE = freeze({
 	XMLNS: 'http://www.w3.org/2000/xmlns/',
 })
 
+exports.assign = assign;
 exports.freeze = freeze;
 exports.MIME_TYPE = MIME_TYPE;
 exports.NAMESPACE = NAMESPACE;
@@ -27400,9 +27426,10 @@ function needNamespaceDefine(node, isHTML, visibleNamespaces) {
  * are serialized as their entity references, so they will be preserved.
  * (In contrast to whitespace literals in the input which are normalized to spaces)
  * @see https://www.w3.org/TR/xml11/#AVNormalize
+ * @see https://w3c.github.io/DOM-Parsing/#serializing-an-element-s-attributes
  */
 function addSerializedAttribute(buf, qualifiedName, value) {
-	buf.push(' ', qualifiedName, '="', value.replace(/[<&"\t\n\r]/g, _xmlEncoder), '"')
+	buf.push(' ', qualifiedName, '="', value.replace(/[<>&"\t\n\r]/g, _xmlEncoder), '"')
 }
 
 function serializeToString(node,buf,isHTML,nodeFilter,visibleNamespaces){
@@ -27547,10 +27574,10 @@ function serializeToString(node,buf,isHTML,nodeFilter,visibleNamespaces){
 		 * and does not include the CDATA-section-close delimiter, `]]>`.
 		 *
 		 * @see https://www.w3.org/TR/xml/#NT-CharData
+		 * @see https://w3c.github.io/DOM-Parsing/#xml-serializing-a-text-node
 		 */
 		return buf.push(node.data
-			.replace(/[<&]/g,_xmlEncoder)
-			.replace(/]]>/g, ']]&gt;')
+			.replace(/[<&>]/g,_xmlEncoder)
 		);
 	case CDATA_SECTION_NODE:
 		return buf.push( '<![CDATA[',node.data,']]>');
@@ -65806,7 +65833,7 @@ function offlineTestID() {
         return (0, rdflib_1.sym)($SolidTestEnvironment.username);
     }
     // hack that makes SolidOS work in offline mode by adding the webId directly in html
-    // example usage: https://github.com/solid/mashlib/blob/29b8b53c46bf02e0e219f0bacd51b0e9951001dd/test/contact/local.html#L37
+    // example usage: https://github.com/solidos/mashlib/blob/29b8b53c46bf02e0e219f0bacd51b0e9951001dd/test/contact/local.html#L37
     if (typeof document !== 'undefined' &&
         document.location &&
         ('' + document.location).slice(0, 16) === 'http://localhost') {
@@ -66960,7 +66987,7 @@ var _fetch = function (url, requestInit) { return __awaiter(void 0, void 0, void
     var omitCreds;
     return __generator(this, function (_a) {
         omitCreds = requestInit && requestInit.credentials && requestInit.credentials == 'omit';
-        if (authSession_1.authSession.info.webId && !omitCreds) { // see https://github.com/solid/solidos/issues/114
+        if (authSession_1.authSession.info.webId && !omitCreds) { // see https://github.com/solidos/solidos/issues/114
             // In fact ftech should respect crentials omit itself
             return [2 /*return*/, authSession_1.authSession.fetch(url, requestInit)];
         }
@@ -67191,7 +67218,7 @@ function ensureLoadedPreferences(context) {
  * Resolves with the same context, outputting
  * output: index.public, index.private
  *  @@ This is a very bizare function
- * @see https://github.com/solid/solid/blob/main/proposals/data-discovery.md#discoverability
+ * @see https://github.com/solidos/solid/blob/main/proposals/data-discovery.md#discoverability
  */
 function loadIndex(context, isPublic) {
     return __awaiter(this, void 0, void 0, function () {
@@ -67254,7 +67281,7 @@ function loadTypeIndexes(context) {
 exports.loadTypeIndexes = loadTypeIndexes;
 /**
  * Resolves with the same context, outputting
- * @see https://github.com/solid/solid/blob/main/proposals/data-discovery.md#discoverability
+ * @see https://github.com/solidos/solid/blob/main/proposals/data-discovery.md#discoverability
  */
 function ensureTypeIndexes(context, agent) {
     return __awaiter(this, void 0, void 0, function () {
@@ -67282,7 +67309,7 @@ exports.ensureTypeIndexes = ensureTypeIndexes;
  * Many reasons for failing including script not having permission etc
  *
  * Adds its output to the context
- * @see https://github.com/solid/solid/blob/main/proposals/data-discovery.md#discoverability
+ * @see https://github.com/solidos/solid/blob/main/proposals/data-discovery.md#discoverability
  */
 function ensureOneTypeIndex(context, isPublic, agent) {
     return __awaiter(this, void 0, void 0, function () {
@@ -67435,7 +67462,7 @@ function registerInTypeIndex(context, instance, theClass, isPublic, agent // Def
                     index = indexes[0];
                     registration = (0, uri_1.newThing)(index);
                     ins = [
-                        // See https://github.com/solid/solid/blob/main/proposals/data-discovery.md
+                        // See https://github.com/solidos/solid/blob/main/proposals/data-discovery.md
                         (0, rdflib_1.st)(registration, exports.ns.rdf('type'), exports.ns.solid('TypeRegistration'), index),
                         (0, rdflib_1.st)(registration, exports.ns.solid('forClass'), theClass, index),
                         (0, rdflib_1.st)(registration, exports.ns.solid('instance'), instance, index)
@@ -67539,7 +67566,7 @@ var UtilityLogic = /** @class */ (function () {
             });
         });
     };
-    // Copied from https://github.com/solid/web-access-control-tests/blob/v3.0.0/test/surface/delete.test.ts#L5
+    // Copied from https://github.com/solidos/web-access-control-tests/blob/v3.0.0/test/surface/delete.test.ts#L5
     UtilityLogic.prototype.setSinglePeerAccess = function (options) {
         return __awaiter(this, void 0, void 0, function () {
             var str, aclDocUrl;
@@ -67627,7 +67654,7 @@ var UtilityLogic = /** @class */ (function () {
                                 headers: {
                                     "Content-Type": "text/turtle",
                                     "If-None-Match": "*",
-                                    Link: '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"', // See https://github.com/solid/node-solid-server/issues/1465
+                                    Link: '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"', // See https://github.com/solidos/node-solid-server/issues/1465
                                 },
                                 body: " ", // work around https://github.com/michielbdejong/community-server/issues/4#issuecomment-776222863
                             })];
@@ -76873,8 +76900,9 @@ class LocalJWKSet {
     }
     async getKey(protectedHeader, token) {
         const { alg, kid } = { ...protectedHeader, ...token.header };
+        const kty = getKtyFromAlg(alg);
         const candidates = this._jwks.keys.filter((jwk) => {
-            let candidate = jwk.kty === getKtyFromAlg(alg);
+            let candidate = kty === jwk.kty;
             if (candidate && typeof kid === 'string') {
                 candidate = kid === jwk.kid;
             }
@@ -78091,21 +78119,15 @@ function lengthAndInput(input) {
 }
 async function concatKdf(secret, bits, value) {
     const iterations = Math.ceil((bits >> 3) / 32);
-    let res;
-    for (let iter = 1; iter <= iterations; iter++) {
+    const res = new Uint8Array(iterations * 32);
+    for (let iter = 0; iter < iterations; iter++) {
         const buf = new Uint8Array(4 + secret.length + value.length);
-        buf.set(uint32be(iter));
+        buf.set(uint32be(iter + 1));
         buf.set(secret, 4);
         buf.set(value, 4 + secret.length);
-        if (!res) {
-            res = await (0,_runtime_digest_js__WEBPACK_IMPORTED_MODULE_0__["default"])('sha256', buf);
-        }
-        else {
-            res = concat(res, await (0,_runtime_digest_js__WEBPACK_IMPORTED_MODULE_0__["default"])('sha256', buf));
-        }
+        res.set(await (0,_runtime_digest_js__WEBPACK_IMPORTED_MODULE_0__["default"])('sha256', buf), iter * 32);
     }
-    res = res.slice(0, bits >> 3);
-    return res;
+    return res.slice(0, bits >> 3);
 }
 
 
@@ -79320,9 +79342,12 @@ const encode = (input) => {
     return encodeBase64(input).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
 };
 const decodeBase64 = (encoded) => {
-    return new Uint8Array(atob(encoded)
-        .split('')
-        .map((c) => c.charCodeAt(0)));
+    const binary = atob(encoded);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+    }
+    return bytes;
 };
 const decode = (input) => {
     let encoded = input;
