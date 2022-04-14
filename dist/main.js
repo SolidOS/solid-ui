@@ -8011,7 +8011,7 @@ function ensureLoadedProfile(_x3) {
  * Returns promise of context with arrays of symbols
  *
  * 2016-12-11 change to include forClass arc a la
- * https://github.com/solidos/solid/blob/main/proposals/data-discovery.md
+ * https://github.com/solid/solid/blob/main/proposals/data-discovery.md
  */
 
 
@@ -15192,8 +15192,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2022-04-14T14:08:17Z',
-  commit: 'aae892c86fa4fe9cb94b175ee31d76453e9175b2',
+  buildTime: '2022-04-14T15:35:24Z',
+  commit: 'deb2e922d6e6ae79a8dc9b2702fefa134ba9c14a',
   npmInfo: {
     'solid-ui': '2.4.21',
     npm: '6.14.16',

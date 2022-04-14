@@ -194,7 +194,7 @@ export async function ensureLoadedProfile (
  * Returns promise of context with arrays of symbols
  *
  * 2016-12-11 change to include forClass arc a la
- * https://github.com/solidos/solid/blob/main/proposals/data-discovery.md
+ * https://github.com/solid/solid/blob/main/proposals/data-discovery.md
  */
 export async function findAppInstances (
   context: AuthenticationContext,
