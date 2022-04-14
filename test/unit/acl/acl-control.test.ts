@@ -95,7 +95,7 @@ describe('shortNameForFolder', () => {
   it('works with protocol root', () => {
     // Note: I'm not certain this is actually by design, it might be
     // that the intended behaviour was that the domain root would get
-    // labeled '/'. See https://github.com/solid/solid-ui/issues/196
+    // labeled '/'. See https://github.com/solidos/solid-ui/issues/196
     expect(shortNameForFolder(namedNode('http://'))).toEqual('/')
   })
 })

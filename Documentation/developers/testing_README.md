@@ -1,8 +1,8 @@
 # Testing Documentation and Guidelines
 
 ## Data fixtures
-See https://github.com/solid/solid-ui/blob/5fd8fb0/test/unit/widgets/buttons.test.ts#L222 for an example of how to use `store.add` in a
-unit test to set up some data in the store. Don't forget to [clearStore afterEach](https://github.com/solid/solid-ui/blob/5fd8fb0/test/unit/widgets/buttons.test.ts#L214).
+See https://github.com/solidos/solid-ui/blob/5fd8fb0/test/unit/widgets/buttons.test.ts#L222 for an example of how to use `store.add` in a
+unit test to set up some data in the store. Don't forget to [clearStore afterEach](https://github.com/solidos/solid-ui/blob/5fd8fb0/test/unit/widgets/buttons.test.ts#L214).
 
 ## Custom matchers
 
@@ -24,5 +24,5 @@ There will also be times that even exporting the function isn't enough to enable
 In this case follow the commenting procedures in the Code Readme.md, which is to add the comment
 ` \* @@ TODO and desribe the problem.
 
-You can reference https://github.com/solid/solid-ui/issues/215 in your TODO comment if the code is hard to 
+You can reference https://github.com/solidos/solid-ui/issues/215 in your TODO comment if the code is hard to 
 test due to DOM manipulation.

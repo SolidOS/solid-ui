@@ -1,7 +1,7 @@
-import * as UI from '../../lib'
+import * as UI from "../../lib";
 
-import { Canvas, Meta, Story } from '@storybook/addon-docs'
-import { rawJsonDecorator } from './decorators'
+import { Canvas, Meta, Story } from "@storybook/addon-docs";
+import { rawJsonDecorator } from "./decorators";
 
 <Meta title="RDF utilities" />
 
@@ -9,24 +9,23 @@ import { rawJsonDecorator } from './decorators'
 
 Retrieve all RDF class URIs from solid-ui's RDF store
 
-[API Documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#allclassuris)
+[API Documentation](https://solidos.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#allclassuris)
 
 <Canvas withSource="open">
   <Story name="allClassUris" decorators={[rawJsonDecorator]}>
-    { () => {
-        UI.store.add(
-          UI.rdf.namedNode('http://example.com/#some-thing'),
-          UI.rdf.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
-          UI.rdf.namedNode('http://example.com/#some-class')
-        );
-        UI.store.add(
-          UI.rdf.namedNode('http://example.com/#some-other-thing'),
-          UI.rdf.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
-          UI.rdf.namedNode('http://example.com/#some-other-class')
-        )
-        return UI.widgets.allClassURIs()
-      }
-    }
+    {() => {
+      UI.store.add(
+        UI.rdf.namedNode("http://example.com/#some-thing"),
+        UI.rdf.namedNode("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
+        UI.rdf.namedNode("http://example.com/#some-class")
+      );
+      UI.store.add(
+        UI.rdf.namedNode("http://example.com/#some-other-thing"),
+        UI.rdf.namedNode("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
+        UI.rdf.namedNode("http://example.com/#some-other-class")
+      );
+      return UI.widgets.allClassURIs();
+    }}
   </Story>
 </Canvas>
 
@@ -34,15 +33,14 @@ Retrieve all RDF class URIs from solid-ui's RDF store
 
 Make a URI in the Tabulator.org annotation store out of the URI of the thing to be annotated.
 
-[API Documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#defaultannotationstore)
+[API Documentation](https://solidos.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#defaultannotationstore)
 
 <Canvas withSource="open">
   <Story name="defaultAnnotationStore" decorators={[rawJsonDecorator]}>
-    { () => {
-      const url = 'http://example.com/a/b.html'
-      return UI.widgets.defaultAnnotationStore(UI.rdf.namedNode(url))
-    }
-    }
+    {() => {
+      const url = "http://example.com/a/b.html";
+      return UI.widgets.defaultAnnotationStore(UI.rdf.namedNode(url));
+    }}
   </Story>
 </Canvas>
 
@@ -50,15 +48,15 @@ Make a URI in the Tabulator.org annotation store out of the URI of the thing to 
 
 To figure out the log URI from the full URI used to invoke the reasoner
 
-[API Documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#extractloguri)
+[API Documentation](https://solidos.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#extractloguri)
 
 <Canvas withSource="open">
   <Story name="extractLogURI" decorators={[rawJsonDecorator]}>
-    { () => {
-      const url = 'https://example.com/logFile=http%3A%2F%2Fexample.org%2Flogs.ttl&rulesFile=ttp%3A%2F%2Fexample.org%2Frules.ttl'
-      return decodeURIComponent(UI.widgets.extractLogURI(url))
-    }
-    }
+    {() => {
+      const url =
+        "https://example.com/logFile=http%3A%2F%2Fexample.org%2Flogs.ttl&rulesFile=ttp%3A%2F%2Fexample.org%2Frules.ttl";
+      return decodeURIComponent(UI.widgets.extractLogURI(url));
+    }}
   </Story>
 </Canvas>
 
@@ -66,15 +64,14 @@ To figure out the log URI from the full URI used to invoke the reasoner
 
 Figuring which properties we know about
 
-[API Documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#propertytriage)
+[API Documentation](https://solidos.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#propertytriage)
 
 <Canvas withSource="open">
   <Story name="propertyTriage" decorators={[rawJsonDecorator]}>
-    { () => {
+    {() => {
       // FIXME: make this example return actual possible properties
-      const kb = UI.rdf.graph()
-      return UI.widgets.propertyTriage(kb)
-    }
-    }
+      const kb = UI.rdf.graph();
+      return UI.widgets.propertyTriage(kb);
+    }}
   </Story>
 </Canvas>

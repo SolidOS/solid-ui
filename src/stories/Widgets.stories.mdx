@@ -1,6 +1,6 @@
-import * as UI from '../../lib'
+import * as UI from "../../lib";
 
-import { Canvas, Meta, Story } from '@storybook/addon-docs'
+import { Canvas, Meta, Story } from "@storybook/addon-docs";
 
 <Meta title="Widgets" />
 
@@ -8,19 +8,19 @@ import { Canvas, Meta, Story } from '@storybook/addon-docs'
 
 Display a transaction
 
-[API Documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#twolinetransaction)
+[API Documentation](https://solidos.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#twolinetransaction)
 
 <Canvas withSource="open">
   <Story name="twoLineTransactions">
-    { () => {
-      const twoLineTransaction = UI.widgets.index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction']
-      const thing = UI.rdf.namedNode('http://example.com/#transaction')
-      UI.store.add(thing, UI.ns.qu('payee'), UI.rdf.namedNode('https://payee.com/#me'))
-      UI.store.add(thing, UI.ns.qu('date'), UI.rdf.literal('2020-01-01'))
-      UI.store.add(thing, UI.ns.qu('amount'), UI.rdf.literal('20 USD'))
-      return twoLineTransaction(document, thing)
-    }
-    }
+    {() => {
+      const twoLineTransaction =
+        UI.widgets.index.twoLine["http://www.w3.org/2000/10/swap/pim/qif#Transaction"];
+      const thing = UI.rdf.namedNode("http://example.com/#transaction");
+      UI.store.add(thing, UI.ns.qu("payee"), UI.rdf.namedNode("https://payee.com/#me"));
+      UI.store.add(thing, UI.ns.qu("date"), UI.rdf.literal("2020-01-01"));
+      UI.store.add(thing, UI.ns.qu("amount"), UI.rdf.literal("20 USD"));
+      return twoLineTransaction(document, thing);
+    }}
   </Story>
 </Canvas>
 
@@ -28,19 +28,18 @@ Display a transaction
 
 Display a trip
 
-[API Documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#twolinetrip)
+[API Documentation](https://solidos.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#twolinetrip)
 
 <Canvas withSource="open">
   <Story name="twoLineTrip">
-    { () => {
-      const twoLineTrip = UI.widgets.index.twoLine['http://www.w3.org/ns/pim/trip#Trip']
-      const thing = UI.rdf.namedNode('http://example.com/#trip')
-      UI.store.add(thing, UI.ns.dc('title'), 'Some trip')
-      UI.store.add(thing, UI.ns.cal('dtstart'), UI.rdf.literal('2020-01-01'))
-      UI.store.add(thing, UI.ns.cal('dtend'), UI.rdf.literal('2020-02-02'))
-      return twoLineTrip(document, thing)
-    }
-    }
+    {() => {
+      const twoLineTrip = UI.widgets.index.twoLine["http://www.w3.org/ns/pim/trip#Trip"];
+      const thing = UI.rdf.namedNode("http://example.com/#trip");
+      UI.store.add(thing, UI.ns.dc("title"), "Some trip");
+      UI.store.add(thing, UI.ns.cal("dtstart"), UI.rdf.literal("2020-01-01"));
+      UI.store.add(thing, UI.ns.cal("dtend"), UI.rdf.literal("2020-02-02"));
+      return twoLineTrip(document, thing);
+    }}
   </Story>
 </Canvas>
 
@@ -48,17 +47,16 @@ Display a trip
 
 Find a function that can create a widget for a given class
 
-[API Documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#twolinewidgetforclass)
+[API Documentation](https://solidos.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#twolinewidgetforclass)
 
 <Canvas withSource="open">
   <Story name="twoLineWidgetForClass">
-    { () => {
-      const rdfClass = UI.ns.foaf('Person')
-      const thing = UI.rdf.namedNode('https://michielbdejong.inrupt.net/profile/card#me')
-      const widgetFunction = UI.widgets.index.twoLine.widgetForClass(rdfClass)
-      const widget = widgetFunction(document, thing)
-      return widget
-    }
-    }
+    {() => {
+      const rdfClass = UI.ns.foaf("Person");
+      const thing = UI.rdf.namedNode("https://michielbdejong.inrupt.net/profile/card#me");
+      const widgetFunction = UI.widgets.index.twoLine.widgetForClass(rdfClass);
+      const widget = widgetFunction(document, thing);
+      return widget;
+    }}
   </Story>
 </Canvas>

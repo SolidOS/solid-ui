@@ -50,7 +50,7 @@ export interface AccessGroupsOptions {
 
 /**
  * Renders the table of Owners, Editors, Posters, Submitters, Viewers
- * for https://github.com/solid/userguide/blob/main/views/sharing/userguide.md
+ * for https://github.com/solidos/userguide/blob/main/views/sharing/userguide.md
  */
 export class AccessGroups {
   private readonly defaults: boolean

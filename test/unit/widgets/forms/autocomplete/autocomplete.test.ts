@@ -108,7 +108,7 @@ describe('autocompleteField', () => {
   it('creates a autocomplete field', async () => {
     const container = undefined
     const already = {}
-    const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
 
     result = autocompleteField(
       document,
@@ -128,7 +128,7 @@ describe('autocompleteField', () => {
   it('adds the autocomplete field to the container, if provided', () => {
     const container = document.createElement('div')
     const already = {}
-    const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
 
     result = autocompleteField(
       document,
@@ -145,7 +145,7 @@ describe('autocompleteField', () => {
   it('has an accept button which is hidden', async () => {
     const container = document.createElement('div')
     const already = {}
-    const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
 
     result = autocompleteField(
       document,
@@ -169,7 +169,7 @@ describe('autocompleteField', () => {
   it('has an input element which has the initial value', async () => {
     const container = document.createElement('div')
     const already = {}
-    const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
 
     result = autocompleteField(
       document,
@@ -188,7 +188,7 @@ describe('autocompleteField', () => {
   it('makes Cancel button appear when user inputs something', async () => {
     const container = document.createElement('div')
     const already = {}
-    const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
 
     result = autocompleteField(
       document,
@@ -214,7 +214,7 @@ describe('autocompleteField', () => {
   it('makes Cancel button work when user inputs something', async () => {
     const container = document.createElement('div')
     const already = {}
-    const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
 
     result = autocompleteField(
       document,
@@ -246,7 +246,7 @@ describe('autocompleteField', () => {
   it('on inpt fetches data (fixing wikidata timeout issue) making green table', async () => {
     const container = document.createElement('div')
     const already = {}
-    const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
 
     result = autocompleteField(
       document,
@@ -279,7 +279,7 @@ describe('autocompleteField', () => {
   it('typing more search term till unique selects the whole name and sets the accecpt button active', async () => {
     const container = document.createElement('div')
     const already = {}
-    const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     const CHOSEN_NAME = 'abbazia di San Massimino'
     result = autocompleteField(
       document,
@@ -326,7 +326,7 @@ describe('autocompleteField', () => {
   it('clicking on row of greenn table then accecpt button saves data', async () => {
     const container = document.createElement('div')
     const already = {}
-    const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     const CHOSEN_NAME = 'abbazia di San Massimino'
     result = autocompleteField(
       document,

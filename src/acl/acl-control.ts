@@ -1,6 +1,6 @@
 /**
  * Functions for rendering the ACL User Interface.
- * See https://github.com/solid/userguide/blob/main/views/sharing/userguide.md#view
+ * See https://github.com/solidos/userguide/blob/main/views/sharing/userguide.md#view
  * for a screenshot.
  * @packageDocumentation
  */
@@ -108,7 +108,7 @@ export function shortNameForFolder (x: NamedNode): string {
     str = str.slice(slash + 1)
   }
   // Return the folder's filename, or '/' if nothing found
-  // (but see https://github.com/solid/solid-ui/issues/196
+  // (but see https://github.com/solidos/solid-ui/issues/196
   // regarding whether this happens at the domain root or
   // not)
   return str || '/'
@@ -120,7 +120,7 @@ export function shortNameForFolder (x: NamedNode): string {
  * Presumably the '5' is a version number of some sort,
  * but all we know is it was already called ACLControlBox5
  * when it was introduced into solid-ui in
- * https://github.com/solid/solid-ui/commit/948b874bd93e7bf5160e6e224821b888f07d15f3#diff-4192a29f38a0ababd563b36b47eba5bbR54
+ * https://github.com/solidos/solid-ui/commit/948b874bd93e7bf5160e6e224821b888f07d15f3#diff-4192a29f38a0ababd563b36b47eba5bbR54
  */
 export function ACLControlBox5 (
   subject: NamedNode,
@@ -203,13 +203,13 @@ function getDirectory (doc: NamedNode): string | null {
 function isStorage (doc: NamedNode, aclDoc: NamedNode, store: Store): boolean {
   // @@ TODO: The methods used for targetIsStorage are HACKs - it should not be relied upon, and work is
   // @@ underway to standardize a behavior that does not rely upon this hack
-  // @@ hopefully fixed as part of https://github.com/solid/data-interoperability-panel/issues/10
+  // @@ hopefully fixed as part of https://github.com/solidos/data-interoperability-panel/issues/10
   return store.holds(doc, ns.rdf('type'), ns.space('Storage'), aclDoc)
 }
 
 function hasProtectedAcl (targetDoc: NamedNode): boolean {
   // @@ TODO: This is hacky way of knowing whether or not a certain ACL file can be removed
-  // Hopefully we'll find a better, standardized solution to this - https://github.com/solid/specification/issues/37
+  // Hopefully we'll find a better, standardized solution to this - https://github.com/solidos/specification/issues/37
   return targetDoc.uri === targetDoc.site().uri
 }
 

@@ -11,20 +11,20 @@ class ContainerElement extends HTMLElement {
 }
 
 type TabWidgetOptions = {
-  backgroundColor?: string
-  dom?: HTMLDocument
-  items?: Array<NamedNode>
-  onClose?: (event: Event) => void
-  ordered?: boolean
-  orientation?: '0' | '1' | '2' | '3'
-  predicate?: NamedNode
-  renderMain?: (bodyMain: HTMLElement, subject: NamedNode) => void
-  renderTab?: (tabDiv: HTMLDivElement, subject: NamedNode) => void
-  renderTabSettings?: (bodyMain: ContainerElement, subject: NamedNode) => void
-  selectedTab?: NamedNode
-  startEmpty?: boolean
-  subject?: NamedNode
-}
+  backgroundColor?: string;
+  dom?: HTMLDocument;
+  items?: Array<NamedNode>;
+  onClose?: (event: Event) => void;
+  ordered?: boolean;
+  orientation?: '0' | '1' | '2' | '3';
+  predicate?: NamedNode;
+  renderMain?: (bodyMain: HTMLElement, subject: NamedNode) => void;
+  renderTab?: (tabDiv: HTMLDivElement, subject: NamedNode) => void;
+  renderTabSettings?: (bodyMain: ContainerElement, subject: NamedNode) => void;
+  selectedTab?: NamedNode;
+  startEmpty?: boolean;
+  subject?: NamedNode;
+};
 
 export class TabWidgetElement extends HTMLElement {
   bodyContainer?: HTMLElement
@@ -43,7 +43,7 @@ class TabElement extends HTMLElement {
 /**
  * Use this widget to generate tabs from triples set in the global store.
  *
- * [Here you can see examples of the tabs](https://solid.github.io/solid-ui/examples/tabs/).
+ * [Here you can see examples of the tabs](https://solidos.github.io/solid-ui/examples/tabs/).
  *
  * It assumes that items to use for tabs will be in a collection by default,
  * e.g.:
@@ -178,8 +178,12 @@ export function tabWidget (options: TabWidgetOptions) {
   const bodyMainStyle = `flex: 2; width: auto; height: 100%; border: 0.1em; border-style: solid; border-color: ${selectedColor}; padding: 1em;`
   const rootElement: TabWidgetElement = dom.createElement('div') // 20200117a
 
-  rootElement.setAttribute('style', 'display: flex; height: 100%; width: 100%; flex-direction: ' +
-    (vertical ? 'row' : 'column') + (flipped ? '-reverse;' : ';'))
+  rootElement.setAttribute(
+    'style',
+    'display: flex; height: 100%; width: 100%; flex-direction: ' +
+      (vertical ? 'row' : 'column') +
+      (flipped ? '-reverse;' : ';')
+  )
 
   const navElement = rootElement.appendChild(dom.createElement('nav'))
   navElement.setAttribute('style', 'margin: 0;')
@@ -188,15 +192,18 @@ export function tabWidget (options: TabWidgetOptions) {
 
   mainElement.setAttribute('style', 'margin: 0; width:100%; height: 100%;') // override tabbedtab.css
   const tabContainer = navElement.appendChild(dom.createElement('ul'))
-  tabContainer.setAttribute('style', `
+  tabContainer.setAttribute(
+    'style',
+    `
     list-style-type: none;
     display: flex;
     height: 100%;
     width: 100%;
     margin: 0;
     padding: 0;
-    flex-direction: ${(vertical ? 'column' : 'row')}
-  `)
+    flex-direction: ${vertical ? 'column' : 'row'}
+  `
+  )
 
   const tabElement = 'li'
 
@@ -215,7 +222,9 @@ export function tabWidget (options: TabWidgetOptions) {
   const paddingStyle = `padding: ${marginsPrepped.join(' ')};`
 
   const tabStyle = cornersStyle + `padding: 0.7em; max-width: 20em; color: ${color};`
-  const unselectedStyle = `${tabStyle + marginsStyle}opacity: 50%; background-color: ${backgroundColor};`
+  const unselectedStyle = `${
+    tabStyle + marginsStyle
+  }opacity: 50%; background-color: ${backgroundColor};`
   const selectedStyle = `${tabStyle + marginsStyle}background-color: ${selectedColor};`
   const shownStyle = 'height: 100%; width: 100%;'
   const hiddenStyle = shownStyle + 'display: none;'
@@ -224,15 +233,22 @@ export function tabWidget (options: TabWidgetOptions) {
 
   if (!options.startEmpty && tabContainer.children.length && options.selectedTab) {
     const selectedTab0 = Array.from(tabContainer.children) // Version left for compatability with ??
-      .map(tab => tab.firstChild as HTMLElement)
-      .find(tab => tab.dataset.name === options.selectedTab)
+      .map((tab) => tab.firstChild as HTMLElement)
+      .find((tab) => tab.dataset.name === options.selectedTab)
 
     const selectedTabURI = options.selectedTab.uri
     const selectedTab1 = Array.from(tabContainer.children)
       // @ts-ignore
-      .find(tab => (tab as TabElement).subject && (tab as TabElement).subject.uri && (tab as TabElement).subject.uri === selectedTabURI)
+      .find(
+        (tab) =>
+          (tab as TabElement).subject &&
+          // @ts-ignore
+          (tab as TabElement).subject.uri &&
+          // @ts-ignore
+          (tab as TabElement).subject.uri === selectedTabURI
+      )
 
-    const tab = selectedTab1 || selectedTab0 || tabContainer.children[0] as HTMLButtonElement
+    const tab = selectedTab1 || selectedTab0 || (tabContainer.children[0] as HTMLButtonElement)
     const clickMe = tab.firstChild
     // @ts-ignore
     if (clickMe) clickMe.click()
@@ -244,7 +260,7 @@ export function tabWidget (options: TabWidgetOptions) {
   function addCancelButton (tabContainer) {
     if (tabContainer.dataset.onCloseSet) {
       // @@ TODO: this is only here to make the browser tests work
-      // Discussion at https://github.com/solid/solid-ui/pull/110#issuecomment-527080663
+      // Discussion at https://github.com/solidos/solid-ui/pull/110#issuecomment-527080663
       const existingCancelButton = tabContainer.querySelector('.unstyled')
       tabContainer.removeChild(existingCancelButton)
     }
@@ -317,10 +333,7 @@ export function tabWidget (options: TabWidgetOptions) {
     // Find how many match at each end
     for (left = 0; left < tabContainer.children.length; left++) {
       slot = tabContainer.children[left] as TabElement
-      if (
-        left >= items.length ||
-        (slot.subject && !slot.subject.sameTerm(items[left]))
-      ) {
+      if (left >= items.length || (slot.subject && !slot.subject.sameTerm(items[left]))) {
         differ = true
         break
       }
