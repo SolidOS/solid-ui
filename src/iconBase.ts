@@ -14,34 +14,34 @@
  */
 /* eslint-disable multiline-ternary */
 
-import { log } from "./debug";
+import { log } from './debug'
 
-declare let $SolidTestEnvironment;
+declare let $SolidTestEnvironment
 
 // Do not export. lways us this module to find the icons, as it varies
-const iconsOnGithub = "https://solidos.github.io/solid-ui/src";
+const iconsOnGithub = 'https://solidos.github.io/solid-ui/src'
 
 export const icons = (module as any).scriptURI // Firefox extension
   ? {
       iconBase:
-        (module as any).scriptURI.slice(0, (module as any).scriptURI.lastIndexOf("/")) + "/icons/",
+        (module as any).scriptURI.slice(0, (module as any).scriptURI.lastIndexOf('/')) + '/icons/',
       originalIconBase:
-        (module as any).scriptURI.slice(0, (module as any).scriptURI.lastIndexOf("/")) +
-        "/originalIcons/",
+        (module as any).scriptURI.slice(0, (module as any).scriptURI.lastIndexOf('/')) +
+        '/originalIcons/'
     }
-  : typeof $SolidTestEnvironment !== "undefined" && $SolidTestEnvironment.iconBase // Test environemnt
-  ? {
-      iconBase: $SolidTestEnvironment.iconBase,
-      originalIconBase: $SolidTestEnvironment.originalIconBase,
-    }
-  : {
+  : typeof $SolidTestEnvironment !== 'undefined' && $SolidTestEnvironment.iconBase // Test environemnt
+    ? {
+        iconBase: $SolidTestEnvironment.iconBase,
+        originalIconBase: $SolidTestEnvironment.originalIconBase
+      }
+    : {
       // Normal case:
-      iconBase: iconsOnGithub + "/icons/",
-      originalIconBase: iconsOnGithub + "/originalIcons/",
-    };
+        iconBase: iconsOnGithub + '/icons/',
+        originalIconBase: iconsOnGithub + '/originalIcons/'
+      }
 
-log("   icons.iconBase is set to : " + icons.iconBase);
+log('   icons.iconBase is set to : ' + icons.iconBase)
 
 // allow tests etc  named-import this directly from this module
-export const iconBase = icons.iconBase;
-export const originalIconBase = icons.originalIconBase;
+export const iconBase = icons.iconBase
+export const originalIconBase = icons.originalIconBase

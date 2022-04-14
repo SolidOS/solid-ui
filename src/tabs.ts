@@ -1,13 +1,13 @@
-import { cancelButton } from "./widgets";
-import { label } from "./utils";
-import { NamedNode } from "rdflib";
-import { store } from "solid-logic";
+import { cancelButton } from './widgets'
+import { label } from './utils'
+import { NamedNode } from 'rdflib'
+import { store } from 'solid-logic'
 
 /**
  * @ignore
  */
 class ContainerElement extends HTMLElement {
-  asSettings?: boolean;
+  asSettings?: boolean
 }
 
 type TabWidgetOptions = {
@@ -16,7 +16,7 @@ type TabWidgetOptions = {
   items?: Array<NamedNode>;
   onClose?: (event: Event) => void;
   ordered?: boolean;
-  orientation?: "0" | "1" | "2" | "3";
+  orientation?: '0' | '1' | '2' | '3';
   predicate?: NamedNode;
   renderMain?: (bodyMain: HTMLElement, subject: NamedNode) => void;
   renderTab?: (tabDiv: HTMLDivElement, subject: NamedNode) => void;
@@ -27,17 +27,17 @@ type TabWidgetOptions = {
 };
 
 export class TabWidgetElement extends HTMLElement {
-  bodyContainer?: HTMLElement;
-  refresh?: () => void;
-  tabContainer?: HTMLElement;
+  bodyContainer?: HTMLElement
+  refresh?: () => void
+  tabContainer?: HTMLElement
 }
 
 /**
  * @ignore
  */
 class TabElement extends HTMLElement {
-  bodyTR?: HTMLElement;
-  subject?: NamedNode;
+  bodyTR?: HTMLElement
+  subject?: NamedNode
 }
 
 /**
@@ -165,35 +165,35 @@ class TabElement extends HTMLElement {
  *
  * @param options
  */
-export function tabWidget(options: TabWidgetOptions) {
-  const subject = options.subject;
-  const dom = options.dom || document;
-  const orientation = parseInt(options.orientation || "0");
-  const backgroundColor = options.backgroundColor || "#ddddcc";
-  const flipped = orientation & 2;
-  const vertical = orientation & 1;
-  const onClose = options.onClose;
+export function tabWidget (options: TabWidgetOptions) {
+  const subject = options.subject
+  const dom = options.dom || document
+  const orientation = parseInt(options.orientation || '0')
+  const backgroundColor = options.backgroundColor || '#ddddcc'
+  const flipped = orientation & 2
+  const vertical = orientation & 1
+  const onClose = options.onClose
 
-  const [selectedColor, color] = getColors(backgroundColor);
-  const bodyMainStyle = `flex: 2; width: auto; height: 100%; border: 0.1em; border-style: solid; border-color: ${selectedColor}; padding: 1em;`;
-  const rootElement: TabWidgetElement = dom.createElement("div"); // 20200117a
+  const [selectedColor, color] = getColors(backgroundColor)
+  const bodyMainStyle = `flex: 2; width: auto; height: 100%; border: 0.1em; border-style: solid; border-color: ${selectedColor}; padding: 1em;`
+  const rootElement: TabWidgetElement = dom.createElement('div') // 20200117a
 
   rootElement.setAttribute(
-    "style",
-    "display: flex; height: 100%; width: 100%; flex-direction: " +
-      (vertical ? "row" : "column") +
-      (flipped ? "-reverse;" : ";")
-  );
+    'style',
+    'display: flex; height: 100%; width: 100%; flex-direction: ' +
+      (vertical ? 'row' : 'column') +
+      (flipped ? '-reverse;' : ';')
+  )
 
-  const navElement = rootElement.appendChild(dom.createElement("nav"));
-  navElement.setAttribute("style", "margin: 0;");
+  const navElement = rootElement.appendChild(dom.createElement('nav'))
+  navElement.setAttribute('style', 'margin: 0;')
 
-  const mainElement = rootElement.appendChild(dom.createElement("main"));
+  const mainElement = rootElement.appendChild(dom.createElement('main'))
 
-  mainElement.setAttribute("style", "margin: 0; width:100%; height: 100%;"); // override tabbedtab.css
-  const tabContainer = navElement.appendChild(dom.createElement("ul"));
+  mainElement.setAttribute('style', 'margin: 0; width:100%; height: 100%;') // override tabbedtab.css
+  const tabContainer = navElement.appendChild(dom.createElement('ul'))
   tabContainer.setAttribute(
-    "style",
+    'style',
     `
     list-style-type: none;
     display: flex;
@@ -201,192 +201,194 @@ export function tabWidget(options: TabWidgetOptions) {
     width: 100%;
     margin: 0;
     padding: 0;
-    flex-direction: ${vertical ? "column" : "row"}
+    flex-direction: ${vertical ? 'column' : 'row'}
   `
-  );
+  )
 
-  const tabElement = "li";
+  const tabElement = 'li'
 
-  const bodyContainer = mainElement;
-  rootElement.tabContainer = tabContainer;
-  rootElement.bodyContainer = bodyContainer;
+  const bodyContainer = mainElement
+  rootElement.tabContainer = tabContainer
+  rootElement.bodyContainer = bodyContainer
 
-  const corners = ["0.2em", "0.2em", "0", "0"]; // top left, TR, BR, BL
-  const cornersPrepped = corners.concat(corners).slice(orientation, orientation + 4);
-  const cornersStyle = `border-radius: ${cornersPrepped.join(" ")};`;
+  const corners = ['0.2em', '0.2em', '0', '0'] // top left, TR, BR, BL
+  const cornersPrepped = corners.concat(corners).slice(orientation, orientation + 4)
+  const cornersStyle = `border-radius: ${cornersPrepped.join(' ')};`
 
-  const margins = ["0.3em", "0.3em", "0", "0.3em"]; // top, right, bottom, left
-  const marginsPrepped = margins.concat(margins).slice(orientation, orientation + 4);
-  const marginsStyle = `margin: ${marginsPrepped.join(" ")};`;
+  const margins = ['0.3em', '0.3em', '0', '0.3em'] // top, right, bottom, left
+  const marginsPrepped = margins.concat(margins).slice(orientation, orientation + 4)
+  const marginsStyle = `margin: ${marginsPrepped.join(' ')};`
 
-  const paddingStyle = `padding: ${marginsPrepped.join(" ")};`;
+  const paddingStyle = `padding: ${marginsPrepped.join(' ')};`
 
-  const tabStyle = cornersStyle + `padding: 0.7em; max-width: 20em; color: ${color};`;
+  const tabStyle = cornersStyle + `padding: 0.7em; max-width: 20em; color: ${color};`
   const unselectedStyle = `${
     tabStyle + marginsStyle
-  }opacity: 50%; background-color: ${backgroundColor};`;
-  const selectedStyle = `${tabStyle + marginsStyle}background-color: ${selectedColor};`;
-  const shownStyle = "height: 100%; width: 100%;";
-  const hiddenStyle = shownStyle + "display: none;";
-  rootElement.refresh = orderedSync;
-  orderedSync();
+  }opacity: 50%; background-color: ${backgroundColor};`
+  const selectedStyle = `${tabStyle + marginsStyle}background-color: ${selectedColor};`
+  const shownStyle = 'height: 100%; width: 100%;'
+  const hiddenStyle = shownStyle + 'display: none;'
+  rootElement.refresh = orderedSync
+  orderedSync()
 
   if (!options.startEmpty && tabContainer.children.length && options.selectedTab) {
     const selectedTab0 = Array.from(tabContainer.children) // Version left for compatability with ??
       .map((tab) => tab.firstChild as HTMLElement)
-      .find((tab) => tab.dataset.name === options.selectedTab);
+      .find((tab) => tab.dataset.name === options.selectedTab)
 
-    const selectedTabURI = options.selectedTab.uri;
+    const selectedTabURI = options.selectedTab.uri
     const selectedTab1 = Array.from(tabContainer.children)
       // @ts-ignore
       .find(
         (tab) =>
           (tab as TabElement).subject &&
+          // @ts-ignore
           (tab as TabElement).subject.uri &&
+          // @ts-ignore
           (tab as TabElement).subject.uri === selectedTabURI
-      );
+      )
 
-    const tab = selectedTab1 || selectedTab0 || (tabContainer.children[0] as HTMLButtonElement);
-    const clickMe = tab.firstChild;
+    const tab = selectedTab1 || selectedTab0 || (tabContainer.children[0] as HTMLButtonElement)
+    const clickMe = tab.firstChild
     // @ts-ignore
-    if (clickMe) clickMe.click();
+    if (clickMe) clickMe.click()
   } else if (!options.startEmpty) {
-    (tabContainer.children[0].firstChild as HTMLButtonElement).click(); // Open first tab
+    (tabContainer.children[0].firstChild as HTMLButtonElement).click() // Open first tab
   }
-  return rootElement;
+  return rootElement
 
-  function addCancelButton(tabContainer) {
+  function addCancelButton (tabContainer) {
     if (tabContainer.dataset.onCloseSet) {
       // @@ TODO: this is only here to make the browser tests work
       // Discussion at https://github.com/solidos/solid-ui/pull/110#issuecomment-527080663
-      const existingCancelButton = tabContainer.querySelector(".unstyled");
-      tabContainer.removeChild(existingCancelButton);
+      const existingCancelButton = tabContainer.querySelector('.unstyled')
+      tabContainer.removeChild(existingCancelButton)
     }
-    const extraTab = dom.createElement(tabElement);
-    extraTab.classList.add("unstyled");
-    const tabCancelButton = cancelButton(dom, onClose);
-    tabCancelButton.setAttribute("style", tabCancelButton.getAttribute("style") + paddingStyle);
-    extraTab.appendChild(tabCancelButton);
-    tabContainer.appendChild(extraTab);
-    tabContainer.dataset.onCloseSet = "true";
+    const extraTab = dom.createElement(tabElement)
+    extraTab.classList.add('unstyled')
+    const tabCancelButton = cancelButton(dom, onClose)
+    tabCancelButton.setAttribute('style', tabCancelButton.getAttribute('style') + paddingStyle)
+    extraTab.appendChild(tabCancelButton)
+    tabContainer.appendChild(extraTab)
+    tabContainer.dataset.onCloseSet = 'true'
   }
 
-  function getItems(): Array<NamedNode> {
-    if (options.items) return options.items;
+  function getItems (): Array<NamedNode> {
+    if (options.items) return options.items
     if (options.ordered !== false) {
       // options.ordered defaults to true
-      return (store.the(subject, options.predicate) as any).elements;
+      return (store.the(subject, options.predicate) as any).elements
     } else {
-      return store.each(subject, options.predicate) as any;
+      return store.each(subject, options.predicate) as any
     }
   }
 
-  function makeNewSlot(item: NamedNode) {
-    const ele = dom.createElement(tabElement) as TabElement;
-    ele.subject = item;
-    const div = ele.appendChild(dom.createElement("div"));
-    div.setAttribute("style", unselectedStyle);
+  function makeNewSlot (item: NamedNode) {
+    const ele = dom.createElement(tabElement) as TabElement
+    ele.subject = item
+    const div = ele.appendChild(dom.createElement('div'))
+    div.setAttribute('style', unselectedStyle)
 
-    div.addEventListener("click", function (e) {
+    div.addEventListener('click', function (e) {
       if (!e.metaKey) {
-        resetTabStyle();
-        resetBodyStyle();
+        resetTabStyle()
+        resetBodyStyle()
       }
-      div.setAttribute("style", selectedStyle);
-      if (!ele.bodyTR) return;
-      ele.bodyTR.setAttribute("style", shownStyle);
-      const bodyMain = getOrCreateContainerElement(ele);
+      div.setAttribute('style', selectedStyle)
+      if (!ele.bodyTR) return
+      ele.bodyTR.setAttribute('style', shownStyle)
+      const bodyMain = getOrCreateContainerElement(ele)
       if (options.renderTabSettings && e.altKey && ele.subject && bodyMain.asSettings !== true) {
-        bodyMain.innerHTML = "loading settings ..." + item;
-        options.renderTabSettings(bodyMain, ele.subject);
-        bodyMain.asSettings = true;
+        bodyMain.innerHTML = 'loading settings ...' + item
+        options.renderTabSettings(bodyMain, ele.subject)
+        bodyMain.asSettings = true
       } else if (options.renderMain && ele.subject && bodyMain.asSettings !== false) {
-        bodyMain.innerHTML = "loading item ..." + item;
-        options.renderMain(bodyMain, ele.subject);
-        bodyMain.asSettings = false;
+        bodyMain.innerHTML = 'loading item ...' + item
+        options.renderMain(bodyMain, ele.subject)
+        bodyMain.asSettings = false
       }
-    });
+    })
 
     if (options.renderTab) {
-      options.renderTab(div, item);
+      options.renderTab(div, item)
     } else {
-      div.textContent = label(item);
+      div.textContent = label(item)
     }
-    return ele;
+    return ele
 
-    function getOrCreateContainerElement(ele: TabElement): ContainerElement {
-      const bodyMain = ele.bodyTR?.children[0] as ContainerElement;
-      if (bodyMain) return bodyMain;
-      const newBodyMain = ele.bodyTR!.appendChild(dom.createElement("main"));
-      newBodyMain.setAttribute("style", bodyMainStyle);
-      return newBodyMain;
+    function getOrCreateContainerElement (ele: TabElement): ContainerElement {
+      const bodyMain = ele.bodyTR?.children[0] as ContainerElement
+      if (bodyMain) return bodyMain
+      const newBodyMain = ele.bodyTR!.appendChild(dom.createElement('main'))
+      newBodyMain.setAttribute('style', bodyMainStyle)
+      return newBodyMain
     }
   }
 
   // @@ Use common one from utils?
-  function orderedSync() {
-    const items = getItems();
-    let slot: TabElement, i, j, left, right;
-    let differ = false;
+  function orderedSync () {
+    const items = getItems()
+    let slot: TabElement, i, j, left, right
+    let differ = false
     // Find how many match at each end
     for (left = 0; left < tabContainer.children.length; left++) {
-      slot = tabContainer.children[left] as TabElement;
+      slot = tabContainer.children[left] as TabElement
       if (left >= items.length || (slot.subject && !slot.subject.sameTerm(items[left]))) {
-        differ = true;
-        break;
+        differ = true
+        break
       }
     }
     if (!differ && items.length === tabContainer.children.length) {
-      return; // The two just match in order: a case to optimize for
+      return // The two just match in order: a case to optimize for
     }
     for (right = tabContainer.children.length - 1; right >= 0; right--) {
-      slot = tabContainer.children[right] as TabElement;
-      j = right - tabContainer.children.length + items.length;
+      slot = tabContainer.children[right] as TabElement
+      j = right - tabContainer.children.length + items.length
       if (slot.subject && !slot.subject.sameTerm(items[j])) {
-        break;
+        break
       }
     }
     // The elements left ... right in tabContainer.children do not match
-    const insertables = items.slice(left, right - tabContainer.children.length + items.length + 1);
+    const insertables = items.slice(left, right - tabContainer.children.length + items.length + 1)
     while (right >= left) {
       // remove extra
-      tabContainer.removeChild(tabContainer.children[left]);
-      bodyContainer.removeChild(bodyContainer.children[left]);
-      right -= 1;
+      tabContainer.removeChild(tabContainer.children[left])
+      bodyContainer.removeChild(bodyContainer.children[left])
+      right -= 1
     }
     for (i = 0; i < insertables.length; i++) {
-      const newSlot = makeNewSlot(insertables[i]);
-      const newBodyDiv = dom.createElement("div");
-      newSlot.bodyTR = newBodyDiv;
+      const newSlot = makeNewSlot(insertables[i])
+      const newBodyDiv = dom.createElement('div')
+      newSlot.bodyTR = newBodyDiv
       if (left === tabContainer.children.length) {
         // None left of original on right
-        tabContainer.appendChild(newSlot);
-        bodyContainer.appendChild(newBodyDiv);
+        tabContainer.appendChild(newSlot)
+        bodyContainer.appendChild(newBodyDiv)
       } else {
-        tabContainer.insertBefore(newSlot, tabContainer.children[left + i]);
-        bodyContainer.insertBefore(newBodyDiv, bodyContainer.children[left + i]);
+        tabContainer.insertBefore(newSlot, tabContainer.children[left + i])
+        bodyContainer.insertBefore(newBodyDiv, bodyContainer.children[left + i])
       }
     }
     if (onClose) {
-      addCancelButton(tabContainer);
+      addCancelButton(tabContainer)
     }
   }
 
-  function resetTabStyle() {
+  function resetTabStyle () {
     for (let i = 0; i < tabContainer.children.length; i++) {
-      const tab = tabContainer.children[i];
-      if (tab.classList.contains("unstyled")) {
-        continue;
+      const tab = tabContainer.children[i]
+      if (tab.classList.contains('unstyled')) {
+        continue
       }
       if (tab.children[0]) {
-        tab.children[0].setAttribute("style", unselectedStyle);
+        tab.children[0].setAttribute('style', unselectedStyle)
       }
     }
   }
 
-  function resetBodyStyle() {
+  function resetBodyStyle () {
     for (let i = 0; i < bodyContainer.children.length; i++) {
-      bodyContainer.children[i].setAttribute("style", hiddenStyle);
+      bodyContainer.children[i].setAttribute('style', hiddenStyle)
     }
   }
 }
@@ -394,38 +396,38 @@ export function tabWidget(options: TabWidgetOptions) {
 /**
  * @internal
  */
-function getColors(backgroundColor: string): [string, string] {
+function getColors (backgroundColor: string): [string, string] {
   return isLight(backgroundColor)
-    ? [colorBlend(backgroundColor, "#ffffff", 0.3), "#000000"]
-    : [colorBlend(backgroundColor, "#000000", 0.3), "#ffffff"];
+    ? [colorBlend(backgroundColor, '#ffffff', 0.3), '#000000']
+    : [colorBlend(backgroundColor, '#000000', 0.3), '#ffffff']
 }
 
 /**
  * @internal
  */
-function colorBlend(a: string, b: string, mix: number): string {
-  let ca, cb, res;
-  let str = "#";
-  const hex = "0123456789abcdef";
+function colorBlend (a: string, b: string, mix: number): string {
+  let ca, cb, res
+  let str = '#'
+  const hex = '0123456789abcdef'
   for (let i = 0; i < 3; i++) {
-    ca = parseInt(a.slice(i * 2 + 1, i * 2 + 3), 16);
-    cb = parseInt(b.slice(i * 2 + 1, i * 2 + 3), 16);
-    res = ca * (1.0 - mix) + cb * mix; // @@@ rounding
-    const res2 = parseInt(("" + res).split(".")[0]); // @@ ugh
-    const h = parseInt(("" + res2 / 16).split(".")[0]); // @@ ugh
-    const l = parseInt(("" + (res2 % 16)).split(".")[0]); // @@ ugh
-    str += hex[h] + hex[l];
+    ca = parseInt(a.slice(i * 2 + 1, i * 2 + 3), 16)
+    cb = parseInt(b.slice(i * 2 + 1, i * 2 + 3), 16)
+    res = ca * (1.0 - mix) + cb * mix // @@@ rounding
+    const res2 = parseInt(('' + res).split('.')[0]) // @@ ugh
+    const h = parseInt(('' + res2 / 16).split('.')[0]) // @@ ugh
+    const l = parseInt(('' + (res2 % 16)).split('.')[0]) // @@ ugh
+    str += hex[h] + hex[l]
   }
-  return str;
+  return str
 }
 
 /**
  * @internal
  */
-function isLight(x: string): boolean {
-  let total = 0;
+function isLight (x: string): boolean {
+  let total = 0
   for (let i = 0; i < 3; i++) {
-    total += parseInt(x.slice(i * 2 + 1, i * 2 + 3), 16);
+    total += parseInt(x.slice(i * 2 + 1, i * 2 + 3), 16)
   }
-  return total > 128 * 3;
+  return total > 128 * 3
 }
