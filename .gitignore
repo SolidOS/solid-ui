@@ -8,3 +8,4 @@ coverage
 Documentation/api
 examples/storybook
 .history/
+Documentation/form-examples/main.js
