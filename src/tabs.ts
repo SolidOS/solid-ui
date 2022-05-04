@@ -221,7 +221,7 @@ export function tabWidget (options: TabWidgetOptions) {
 
   const paddingStyle = `padding: ${marginsPrepped.join(' ')};`
 
-  const tabStyle = cornersStyle + `padding: 0.7em; max-width: 20em; color: ${color};`
+  const tabStyle = cornersStyle + `padding: 0.7em .3em .3em .7em; max-width: 20em; color: ${color};`
   const unselectedStyle = `${
     tabStyle + marginsStyle
   }opacity: 50%; background-color: ${backgroundColor};`
@@ -288,6 +288,9 @@ export function tabWidget (options: TabWidgetOptions) {
     ele.subject = item
     const div = ele.appendChild(dom.createElement('div'))
     div.setAttribute('style', unselectedStyle)
+    const innerDiv = dom.createElement('div')
+    innerDiv.textContent = '...'
+    innerDiv.setAttribute('style', 'margin-left: 80%; width: 20%')
 
     div.addEventListener('click', function (e) {
       if (!e.metaKey) {
@@ -298,7 +301,8 @@ export function tabWidget (options: TabWidgetOptions) {
       if (!ele.bodyTR) return
       ele.bodyTR.setAttribute('style', shownStyle)
       const bodyMain = getOrCreateContainerElement(ele)
-      if (options.renderTabSettings && e.altKey && ele.subject && bodyMain.asSettings !== true) {
+      const target = e.target as HTMLDivElement
+      if (options.renderTabSettings && target.innerText === '...' && ele.subject && bodyMain.asSettings !== true) {
         bodyMain.innerHTML = 'loading settings ...' + item
         options.renderTabSettings(bodyMain, ele.subject)
         bodyMain.asSettings = true
@@ -311,8 +315,10 @@ export function tabWidget (options: TabWidgetOptions) {
 
     if (options.renderTab) {
       options.renderTab(div, item)
+      div.appendChild(innerDiv)
     } else {
       div.textContent = label(item)
+      div.appendChild(innerDiv)
     }
     return ele
 
