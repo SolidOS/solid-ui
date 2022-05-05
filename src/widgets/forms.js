@@ -1346,7 +1346,7 @@ export function makeSelectForOptions (
   const onChange = function (_e) {
     select.disabled = true // until data written back - gives user feedback too
     const ds = []
-    let is = []
+    const is = []
     const removeValue = function (t) {
       if (kb.holds(subject, predicate, t, dataDoc)) {
         ds.push($rdf.st(subject, predicate, t, dataDoc))
@@ -1365,10 +1365,6 @@ export function makeSelectForOptions (
         // new class
         is.push($rdf.st(subject, predicate, kb.sym(opt.AJAR_uri), dataDoc))
       }
-     /* if (!opt.selected && opt.AJAR_uri in actual) {
-        // old class
-        removeValue(kb.sym(opt.AJAR_uri))
-      }*/
       if (opt.selected) select.currentURI = opt.AJAR_uri
     }
     let sel = select.subSelect // All subclasses must also go
