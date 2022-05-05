@@ -19,12 +19,6 @@ document.addEventListener('DOMContentLoaded', async function () {
   var dom = document
 
   var uri = window.location.href
-  var base = (window.document.title = uri.slice(0, uri.lastIndexOf('/') + 1))
-  // var testDocURI = base + 'test.ttl' // imaginary doc - just use its URL
-  // const testDocURI = 'https://timbl.com/timbl/Public/Test/Forms/exampleData.ttl'
-  const testDocURI = 'https://solidos.solidcommunity.net/public/2021/10_example_data/example.ttl'
-  var testDoc = $rdf.sym(testDocURI)
-  const ex = $rdf.Namespace(testDocURI + "#")
 
   const defaultProlog = `
   @prefix foaf:  <http://xmlns.com/foaf/0.1/>.
@@ -88,9 +82,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     const cellForClass = []
 
-    kb.removeMany(null, null, null, testDoc) // Remove previous test data
-
-
     for (var cell of row.children) {
       await loadTextIntoCell(cell)
       if (cell.getAttribute('class')) {
@@ -103,17 +94,13 @@ document.addEventListener('DOMContentLoaded', async function () {
     const inputCell = cellForClass['input']
     const targetCell  = cellForClass['target']
     const outputCell = cellForClass['output']
-
+  
     const inputText = inputCell.firstElementChild.textContent
     if (inputCell.getAttribute('source')) {
       form = $rdf.sym(inputCell.getAttribute('source'))
-    } else {
-      form = ex('form')
     }
     if (targetCell.getAttribute('source')) {
       subject = $rdf.sym(targetCell.getAttribute('source'))
-    } else {
-      subject = ex('this')
     }
 
     try {
@@ -151,10 +138,5 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
   } // showResults
 
-  try {
-    // await kb.fetcher.load(testDoc) // To fool the form syt
-  } catch (err) {
-    console.warn(err)
-  }
   await showResults()
 })

@@ -28,6 +28,10 @@
             border: 0.1em solid gray;
         }
 
+        td {
+            vertical-align: top;
+        }
+
         td.input {
             border-top: 0.1em solid gray;
             border-right: 0.1em dotted gray;

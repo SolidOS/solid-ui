@@ -732,6 +732,14 @@ field[ns.ui('Classifier').uri] = function (
  **
  **  Not nested.  Generates a link to something from a given class.
  **  Optional subform for the thing selected.
+ **  Generates a subForm based on a ui:use form
+ **  Will look like:
+ ** <div id=dropDownDiv>
+ **   <div id=labelOfDropDown>
+ **   <div id=selectDiv>
+ **     <select id=dropDownSelect>
+ **       <option> ....
+ **     <subForm>
  **  Alternative implementatons caould be:
  ** -- pop-up menu (as here)
  ** -- radio buttons
@@ -775,8 +783,8 @@ field[ns.ui('Choice').uri] = function (
   const follow = kb.anyJS(form, ui('follow'), null, formDoc) // data doc moves to new subject?
   let possible = []
   let possibleProperties
-  const nullLabel = '--' + utils.label(property) + '-?'
-  const opts = { form, multiple, nullLabel, disambiguate: false }
+  const firstSelectOptionText = '* Select from ' + utils.label(subject, true) + ' *'
+  const opts = { form, subForm, multiple, firstSelectOptionText, disambiguate: false }
   possible = kb.each(undefined, ns.rdf('type'), from, formDoc)
   for (const x in kb.findMembersNT(from)) {
     possible.push(kb.fromNT(x))
@@ -799,37 +807,57 @@ field[ns.ui('Choice').uri] = function (
     for (p in possibleProperties.dp) possible.push(kb.fromNT(p))
     opts.disambiguate = true
   }
-  let object = kb.any(subject, property)
-  function addSubForm () {
-    object = kb.any(subject, property)
-    fieldFunction(dom, subForm)(
-      dom,
-      rhs,
-      already,
-      object,
-      subForm,
-      follow ? object.doc() : dataDoc,
-      callbackFunction
-    )
-  }
-  const possible2 = sortByLabel(possible)
+  const sortedPossible = sortByLabel(possible)
+  // TODO: this checks for any occurance regardles if it is set to true or false
   if (kb.any(form, ui('canMintNew'))) {
-    opts.mint = '* New *' // @@ could be better
-    opts.subForm = subForm
+    opts.mint = '* Create new *' // @@ could be better
   }
   const selector = makeSelectForOptions(
     dom,
     kb,
     subject,
     property,
-    possible2,
+    sortedPossible,
     opts,
     dataDoc,
     callbackFunction
   )
   rhs.appendChild(selector)
-  if (object && subForm) addSubForm()
+  let object
+  if (selector.currentURI) {
+    object = $rdf.sym(selector.currentURI)
+  } else {
+    object = kb.any(subject, property)
+  }
+  if (object && subForm) {
+    removeNextSiblingsAfterElement(selector)
+    addSubFormDropDown(dom, rhs, already, object, subForm, follow ? object.doc() : dataDoc, callbackFunction)
+  }
+
   return box
+}
+
+/**
+     * Removes all sibling elements after specified
+     * @param {HTMLElement} currentElement
+     * @private
+  */
+function removeNextSiblingsAfterElement (currentElement) {
+  while (currentElement.nextElementSibling) {
+    currentElement.nextElementSibling.remove()
+  }
+}
+
+function addSubFormDropDown (dom, selectDiv, already, subject, subForm, dataDoc, callbackFunction) {
+  fieldFunction(dom, subForm)(
+    dom,
+    selectDiv,
+    already,
+    subject,
+    subForm,
+    dataDoc,
+    callbackFunction
+  )
 }
 
 //          Documentation - non-interactive fields
@@ -1258,7 +1286,7 @@ export function makeDescription (
 // @param predicate - a term, the predicate of the statement(s) being edited
 // @param possible - a list of terms, the possible value the object can take
 // @param options.multiple - Boolean - Whether more than one at a time is allowed
-// @param options.nullLabel - a string to be displayed as the
+// @param options.firstSelectOptionText - a string to be displayed as the
 //                        option for none selected (for non multiple)
 // @param options.mint - User may create thing if this sent to the prompt string eg "New foo"
 // @param options.subForm - If mint, then the form to be used for minting the new thing
@@ -1306,7 +1334,9 @@ export function makeSelectForOptions (
       actual = kb.findTypeURIs(subject)
     } else {
       kb.each(subject, predicate, null, dataDoc).forEach(function (x) {
-        actual[x.uri] = true
+        if (x.uri) {
+          actual[x.uri] = true
+        }
       })
     }
     return actual
@@ -1326,40 +1356,19 @@ export function makeSelectForOptions (
     for (let i = 0; i < select.options.length; i++) {
       const opt = select.options[i]
       if (opt.selected && opt.AJAR_mint) {
-        if (options.mintClass) {
-          const thisForm = promptForNew(
-            dom,
-            kb,
-            subject,
-            predicate,
-            options.mintClass,
-            null,
-            dataDoc,
-            function (ok, body) {
-              if (!ok) {
-                callbackFunction(ok, body, { change: 'new' }) // @@ if ok, need some form of refresh of the select for the new thing
-              }
-            }
-          )
-          select.parentNode.appendChild(thisForm)
-          newObject = thisForm.AJAR_subject
-        } else {
-          newObject = newThing(dataDoc)
-        }
-        is.push($rdf.st(subject, predicate, newObject, dataDoc))
-        if (options.mintStatementsFun) {
-          is = is.concat(options.mintStatementsFun(newObject))
-        }
+        newObject = newThing(dataDoc)
+        removeNextSiblingsAfterElement(select)
+        addSubFormDropDown(dom, select.parentNode, {}, $rdf.sym(newObject), options.subForm, dataDoc, callbackFunction)
       }
       if (!opt.AJAR_uri) continue // a prompt or mint
       if (opt.selected && !(opt.AJAR_uri in actual)) {
         // new class
         is.push($rdf.st(subject, predicate, kb.sym(opt.AJAR_uri), dataDoc))
       }
-      if (!opt.selected && opt.AJAR_uri in actual) {
+     /* if (!opt.selected && opt.AJAR_uri in actual) {
         // old class
         removeValue(kb.sym(opt.AJAR_uri))
-      }
+      }*/
       if (opt.selected) select.currentURI = opt.AJAR_uri
     }
     let sel = select.subSelect // All subclasses must also go
@@ -1376,22 +1385,16 @@ export function makeSelectForOptions (
       callbackFunction(ok, { widget: 'select', event: 'new' })
     }
     log.info('selectForOptions: data doc = ' + dataDoc)
+    removeNextSiblingsAfterElement(select)
+    addSubFormDropDown(dom, select.parentNode, {}, $rdf.sym(select.currentURI), options.subForm, dataDoc, callbackFunction)
     kb.updater.update(ds, is, function (uri, ok, body) {
       actual = getActual() // refresh
       if (ok) {
-        select.disabled = false // data written back
         if (newObject) {
-          const fn = fieldFunction(dom, options.subForm)
-          fn(
-            dom,
-            select.parentNode,
-            {},
-            newObject,
-            options.subForm,
-            dataDoc,
-            doneNew
-          )
+          removeNextSiblingsAfterElement(select)
+          addSubFormDropDown(dom, select.parentNode, {}, newObject, options.subForm, dataDoc, doneNew)
         }
+        select.disabled = false // data written back
       } else {
         return select.parentNode.appendChild(errorMessageBlock(dom, 'Error updating data in select: ' + body))
       }
@@ -1447,11 +1450,14 @@ export function makeSelectForOptions (
     mint.AJAR_mint = true // Flag it
     select.insertBefore(mint, select.firstChild)
   }
-  if (select.currentURI == null && !options.multiple) {
+  if (!select.currentURI && !options.multiple) {
     const prompt = dom.createElement('option')
-    prompt.appendChild(dom.createTextNode(options.nullLabel))
-    select.insertBefore(prompt, select.firstChild)
+    prompt.appendChild(dom.createTextNode(options.firstSelectOptionText))
     prompt.selected = true
+    prompt.disabled = true
+    prompt.value = true
+    prompt.hidden = true
+    select.insertBefore(prompt, select.firstChild)
   }
   if (editable) {
     select.addEventListener('change', onChange, false)
@@ -1509,7 +1515,7 @@ export function makeSelectForCategory (
     subject,
     ns.rdf('type'),
     subs,
-    { multiple, nullPrompt: '--classify--' },
+    { multiple },
     dataDoc,
     callbackFunction
   )
