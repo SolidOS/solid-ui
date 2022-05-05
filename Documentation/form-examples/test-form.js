@@ -1,8 +1,9 @@
+
 /* global $rdf UI debug */
-if (!window.UI) {
+if (!window) {
   window.alert('Missing UI code - load mashlib first.')
 }
-window.$rdf = UI.rdf
+window.$rdf = window.UI.rdf
 
 document.addEventListener('DOMContentLoaded', async function () {
   /// ///////////////////////////////////////////

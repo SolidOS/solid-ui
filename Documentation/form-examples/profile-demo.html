@@ -4,29 +4,25 @@
   <head>
     <title>Profile form demo</title>
 
-    <meta
-      name="generator"
-      content="HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.17), see www.w3.org"
-    />
+    <meta name="generator" content="HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.17), see www.w3.org"/>
     <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
 
-    <link type="text/css" rel="stylesheet" href="https://solidos.github.io/mashlib/dist/mash.css" />
     <link type="text/css" rel="stylesheet" href="../style/demo-style.css" />
-    <!-- <script type="text/javascript" src="https://solidos.github.io/mashlib/dist/mashlib.js"></script> -->
-    <script
-      type="text/javascript"
-      src="https://timbl.com/timbl/Automation/Library/Mashup/mashlib.js"
-    ></script>
+   
+    <!-- used for production ready documentation -->
+    <!-- note: one does not need whole mashlib, solid-ui is sufficient also -->
+    <!--<script type="text/javascript" src="https://solidos.github.io/mashlib/dist/mashlib.js"></script> -->
+    <!-- to use only solid-ui -->
+    <script type="text/javascript" src="https://solidos.github.io/solid-ui/dist/main.js"></script>
+    
+    <!-- used for local development -->
+    <!-- make sure to use the latest build version by running npm run build-form-examples first -->
+    <!-- <script type="text/javascript" src="main.js"></script> -->
     <script type="text/javascript" src="test-form.js"></script>
   </head>
 
   <body>
-    <div class="TabulatorOutline" id="DummyUUID">
-      <table id="outline" summary="Space for where the test happens"></table>
-    </div>
-
-    <div class="TabulatorOutline" id="UITestArea"></div>
-
+  
     <h1>Profile form</h1>
     <div>
       <table
