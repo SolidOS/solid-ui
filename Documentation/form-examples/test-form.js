@@ -63,7 +63,9 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   async function doRow (prolog, row) {
 
-    async function loadTextIntoCell (cell) {
+    async function loadTextIntoCell(cell) {
+      
+      //TODO: need to take the sources from all cells not just the first one
       const source = cell.getAttribute('source')
       if (!source) return
       const response = await kb.fetcher.webOperation('GET', addStoHTTP(source), getOptions)
@@ -107,17 +109,17 @@ document.addEventListener('DOMContentLoaded', async function () {
       $rdf.parse(prolog + inputText, kb, form.doc().uri, 'text/turtle') // str, kb, base, contentType
     } catch (e) {
       outputCell.textContent = e
-      console.log('>>>>>>>' + prolog + inputText + '<<<<<<\n')
+      //console.log('>>>>>>>' + prolog + inputText + '<<<<<<\n')
       return
     }
 
     if (true) {
-      const subjectText = targetCell.firstElementChild.textContent
+      const subjectText = "" // targetCell.firstElementChild.textContent
       try {
         $rdf.parse(prolog + subjectText, kb, subject.doc().uri, 'text/turtle') // str, kb, base, contentType
       } catch (e) {
         outputCell.textContent = e
-        console.log('>>>>>>>' + prolog + subjectText + '<<<<<<\n')
+        //console.log('>>>>>>>' + prolog + subjectText + '<<<<<<\n')
         return
       }
     }

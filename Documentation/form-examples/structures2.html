@@ -23,7 +23,7 @@
 
   <body>
 
-    <h1>Form structures 2 - Classifier and Choice</h1>
+    <h1>Form structures 2 - Classifier and Options</h1>
     <pre id="Prolog">
     @prefix foaf:  &lt;http://xmlns.com/foaf/0.1/&gt;.
     @prefix sched: &lt;http://www.w3.org/ns/pim/schedule#&gt;.
@@ -49,7 +49,7 @@
       >
         <tbody>
           <tr>
-            <td>Form data exaple for ui:Options and </td>
+            <td>Form data example for ui:Classifier and ui:Options </td>
             <td>Raw data</td>
             <td>Form</td>
           </tr>
@@ -229,13 +229,65 @@
 
                  :OtherOrganizationForm a ui:Group; ui:weight 0; ui:parts ( :OrganizationNameField :homePageURIField ) .
 
-</pre
-              >
+                </pre>
             </td>
             <td
               class="target"
-              source="https://solidos.solidcommunity.net/public/2021/solidUiFormTestData/formAndDataInOneExample.ttl"
-            ></td>
+              source="https://solidos.solidcommunity.net/public/2021/solidUiFormTestData/organisationDataExample.ttl#org1"
+            >
+            <pre>
+              @prefix : &lt;#>.
+              @prefix acl: &lt;http://www.w3.org/ns/auth/acl#>.
+              @prefix foaf:
+              &lt;http://xmlns.com/foaf/0.1/>.
+              @prefix ldp: &lt;http://www.w3.org/ns/ldp#>.
+              @prefix org: &lt;http://www.w3.org/ns/org#>.
+              @prefix schema:
+              &lt;http://schema.org/>.
+              @prefix solid: &lt;http://www.w3.org/ns/solid/terms#>.
+              @prefix space: &lt;http://www.w3.org/ns/pim/space#>.
+              @prefix vcard: &lt;http://www.w3.org/2006/vcard/ns#>.
+              @prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#>.
+              @prefix pro: &lt;./>.
+              @prefix inbox: &lt;/inbox/>.
+              @prefix tes: &lt;>.
+              @prefix l:
+              &lt;https://www.w3.org/ns/iana/language-code/>.
+              @prefix ent:
+              &lt;http://www.wikidata.org/entity/>.
+              @prefix not:
+              &lt;https://notthereal.apple.com/>.
+              @prefix www:
+              &lt;https://www.thebeatles.com/>.
+              @prefix ww:
+              &lt;https://www.nasa.gov/>.
+              @prefix occup:
+              &lt;http://data.europa.eu/esco/occupation/>.
+              @prefix c: &lt;https://solidos.solidcommunity.net/profile/card#>.
+              @prefix skill:
+              &lt;http://data.europa.eu/esco/skill/>.
+              @prefix wikidata:
+              &lt;http://www.wikidata.org/entity/>.
+
+              
+                    wikidata:Q875914 schema:name "Kreischberg"@en.
+                    
+                    :id1621184812427
+                      a solid:FutureRole;
+                      schema:description "Second future role";
+                      schema:startDate "2023-12-25"^^xsd:date;
+                      vcard:role "Mission a Mars";
+                      org:member :me;
+                      org:organization :org1;
+                      org:role occup:6b0ad7c0-a37f-45c6-a486-ee943a11429e.
+                    :org1
+                      a schema:GovernmentOrganization, wikidata:Q6881511;
+                      schema:name "Kreischberg", "kreischberg";
+                      schema:uri ww:;
+                      solid:publicId wikidata:Q875914 .
+
+
+            </pre></td>
             <td class="output"></td>
           </tr>
 
