@@ -775,34 +775,34 @@ field[ns.ui('Choice').uri] = function (
     return box.appendChild(errorMessageBlock(dom, 'No property for Choice: ' + form))
   }
   lhs.appendChild(fieldLabel(dom, property, form))
-  const from = kb.any(form, ui('from'))
-  if (!from) {
-    return errorMessageBlock(dom, "No 'from' for Choice: " + form)
-  }
   const subForm = kb.any(form, ui('use')) // Optional
   const follow = kb.anyJS(form, ui('follow'), null, formDoc) // data doc moves to new subject?
   let possible = []
   let possibleProperties
   const firstSelectOptionText = '* Select from ' + utils.label(subject, true) + ' *'
   const opts = { form, subForm, multiple, firstSelectOptionText, disambiguate: false }
-  possible = kb.each(undefined, ns.rdf('type'), from, formDoc)
-  for (const x in kb.findMembersNT(from)) {
+  const uiFrom = kb.any(form, ui('from'))
+  if (!uiFrom) {
+    return errorMessageBlock(dom, "No 'from' for Choice: " + form)
+  }
+  possible = kb.each(undefined, ns.rdf('type'), uiFrom, formDoc)
+  for (const x in kb.findMembersNT(uiFrom)) {
     possible.push(kb.fromNT(x))
   } // Use rdfs
 
-  if (from.sameTerm(ns.rdfs('Class'))) {
+  if (uiFrom.sameTerm(ns.rdfs('Class'))) {
     for (p in buttons.allClassURIs()) possible.push(kb.sym(p))
     // log.debug("%%% Choice field: possible.length 2 = "+possible.length)
-  } else if (from.sameTerm(ns.rdf('Property'))) {
+  } else if (uiFrom.sameTerm(ns.rdf('Property'))) {
     possibleProperties = buttons.propertyTriage(kb)
     for (p in possibleProperties.op) possible.push(kb.fromNT(p))
     for (p in possibleProperties.dp) possible.push(kb.fromNT(p))
     opts.disambiguate = true // This is a big class, and the labels won't be enough.
-  } else if (from.sameTerm(ns.owl('ObjectProperty'))) {
+  } else if (uiFrom.sameTerm(ns.owl('ObjectProperty'))) {
     possibleProperties = buttons.propertyTriage(kb)
     for (p in possibleProperties.op) possible.push(kb.fromNT(p))
     opts.disambiguate = true
-  } else if (from.sameTerm(ns.owl('DatatypeProperty'))) {
+  } else if (uiFrom.sameTerm(ns.owl('DatatypeProperty'))) {
     possibleProperties = buttons.propertyTriage(kb)
     for (p in possibleProperties.dp) possible.push(kb.fromNT(p))
     opts.disambiguate = true
@@ -818,6 +818,7 @@ field[ns.ui('Choice').uri] = function (
     subject,
     property,
     sortedPossible,
+    uiFrom,
     opts,
     dataDoc,
     callbackFunction
@@ -831,7 +832,7 @@ field[ns.ui('Choice').uri] = function (
   }
   if (object && subForm) {
     removeNextSiblingsAfterElement(selector)
-    addSubFormDropDown(dom, rhs, already, object, subForm, follow ? object.doc() : dataDoc, callbackFunction)
+    addSubFormChoice(dom, rhs, already, object, subForm, follow ? object.doc() : dataDoc, callbackFunction)
   }
 
   return box
@@ -848,7 +849,7 @@ function removeNextSiblingsAfterElement (currentElement) {
   }
 }
 
-function addSubFormDropDown (dom, selectDiv, already, subject, subForm, dataDoc, callbackFunction) {
+function addSubFormChoice (dom, selectDiv, already, subject, subForm, dataDoc, callbackFunction) {
   fieldFunction(dom, subForm)(
     dom,
     selectDiv,
@@ -1299,6 +1300,7 @@ export function makeSelectForOptions (
   subject,
   predicate,
   possible,
+  uiFrom,
   options,
   dataDoc,
   callbackFunction
@@ -1344,9 +1346,8 @@ export function makeSelectForOptions (
   actual = getActual()
 
   const onChange = function (_e) {
-    select.disabled = true // until data written back - gives user feedback too
     const ds = []
-    const is = []
+    let is = []
     const removeValue = function (t) {
       if (kb.holds(subject, predicate, t, dataDoc)) {
         ds.push($rdf.st(subject, predicate, t, dataDoc))
@@ -1356,14 +1357,40 @@ export function makeSelectForOptions (
     for (let i = 0; i < select.options.length; i++) {
       const opt = select.options[i]
       if (opt.selected && opt.AJAR_mint) {
-        newObject = newThing(dataDoc)
-        removeNextSiblingsAfterElement(select)
-        addSubFormDropDown(dom, select.parentNode, {}, $rdf.sym(newObject), options.subForm, dataDoc, callbackFunction)
+        // not sure if this if is used because I cannot find mintClass
+        if (options.mintClass) {
+          const thisForm = promptForNew(
+            dom,
+            kb,
+            subject,
+            predicate,
+            options.mintClass,
+            null,
+            dataDoc,
+            function (ok, body) {
+              if (!ok) {
+                callbackFunction(ok, body, { change: 'new' }) // @@ if ok, need some form of refresh of the select for the new thing
+              }
+            }
+          )
+          select.parentNode.appendChild(thisForm)
+          newObject = thisForm.AJAR_subject
+        } else {
+          newObject = newThing(dataDoc)
+        }
+        is.push($rdf.st(subject, predicate, kb.sym(newObject), dataDoc))
+        if (uiFrom) is.push($rdf.st(newObject, ns.rdf('type'), kb.sym(uiFrom), dataDoc))
+        // not sure if this if is used because I cannot find mintStatementsFun
+        if (options.mintStatementsFun) {
+          is = is.concat(options.mintStatementsFun(newObject))
+        }
+        select.currentURI = newObject
       }
       if (!opt.AJAR_uri) continue // a prompt or mint
       if (opt.selected && !(opt.AJAR_uri in actual)) {
         // new class
         is.push($rdf.st(subject, predicate, kb.sym(opt.AJAR_uri), dataDoc))
+        select.currentURI = opt.AJAR_uri
       }
       if (opt.selected) select.currentURI = opt.AJAR_uri
     }
@@ -1377,24 +1404,17 @@ export function makeSelectForOptions (
       removeValue(kb.sym(sel.currentURI))
       sel = sel.superSelect
     }
-    function doneNew (ok, _body) {
-      callbackFunction(ok, { widget: 'select', event: 'new' })
-    }
     log.info('selectForOptions: data doc = ' + dataDoc)
+    // refresh subForm
     removeNextSiblingsAfterElement(select)
-    addSubFormDropDown(dom, select.parentNode, {}, $rdf.sym(select.currentURI), options.subForm, dataDoc, callbackFunction)
-    kb.updater.update(ds, is, function (uri, ok, body) {
-      actual = getActual() // refresh
+    addSubFormChoice(dom, select.parentNode, {}, $rdf.sym(select.currentURI), options.subForm, dataDoc, function (ok, body) {
       if (ok) {
-        if (newObject) {
-          removeNextSiblingsAfterElement(select)
-          addSubFormDropDown(dom, select.parentNode, {}, newObject, options.subForm, dataDoc, doneNew)
-        }
-        select.disabled = false // data written back
-      } else {
-        return select.parentNode.appendChild(errorMessageBlock(dom, 'Error updating data in select: ' + body))
-      }
-      if (callbackFunction) callbackFunction(ok, { widget: 'select', event: 'change' })
+        kb.updater.update(ds, is, function (uri, success, errorBody) {
+          actual = getActual() // refresh
+          if (!success) return select.parentNode.appendChild(errorMessageBlock(dom, 'Error updating data in select: ' + errorBody))
+          if (callbackFunction) callbackFunction(success, { widget: 'select', event: 'new' })
+        })
+      } else return select.parentNode.appendChild(errorMessageBlock(dom, 'Error updating data in field of select: ' + body))
     })
   }
 
@@ -1511,6 +1531,7 @@ export function makeSelectForCategory (
     subject,
     ns.rdf('type'),
     subs,
+    null,
     { multiple },
     dataDoc,
     callbackFunction
