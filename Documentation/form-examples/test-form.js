@@ -18,7 +18,9 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   var dom = document
 
-  var uri = window.location.href
+  // this is used for the example files like structures.html that do not have a URI which is mandatory for a form
+  const testDocURI = 'https://solidos.solidcommunity.net/public/2021/solidUiFormTestData/dummyFormTestFile.ttl'
+  const ex = $rdf.Namespace(testDocURI + "#")
 
   const defaultProlog = `
   @prefix foaf:  <http://xmlns.com/foaf/0.1/>.
@@ -30,26 +32,15 @@ document.addEventListener('DOMContentLoaded', async function () {
   @prefix trip:  <http://www.w3.org/ns/pim/trip#>.
   @prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
   @prefix xsd:   <http://www.w3.org/2001/XMLSchema#>.
-  @prefix ex: <#>.  # Things in the examples
   @prefix : <#>.
 `
-
-  // var div = dom.getElementById('UITestArea')
 
   const getOptions = {
     credentials: 'omit', withCredentials: false
   }
 
-  function output (row) {
-    return row.children[1]
-  }
-  function renderForm (form, subject, container) {
-    async function callback() {
-    }
-    const doc = subject.doc()
-
-    var ele =  UI.widgets.appendForm(dom, container, {}, subject, form, doc, callback)
-    return ele
+  function renderForm(form, subject, container) {
+    return UI.widgets.appendForm(dom, container, {}, subject, form, subject.doc(), {})
   }
 
   /* For loading eg ontologies from w3.org
@@ -63,29 +54,45 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   async function doRow (prolog, row) {
 
-    async function loadTextIntoCell(cell) {
-      
-      //TODO: need to take the sources from all cells not just the first one
+    async function loadTextIntoCell(cell, doc) {
+      let text = cell.textContent
       const source = cell.getAttribute('source')
-      if (!source) return
-      const response = await kb.fetcher.webOperation('GET', addStoHTTP(source), getOptions)
-      if (!response.ok) { // if HTTP-status is 200-299
-        const msg = "HTTP-Error: " + response.status
-        cell.textContent = msg
-        cell.style.backgroundColor = '#fee'
-        alert(msg);
-        return
+      if (source) {
+        const response = await kb.fetcher.webOperation('GET', addStoHTTP(source), getOptions)
+        if (!response.ok) { // if HTTP-status is 200-299
+          const msg = "HTTP-Error: " + response.status
+          cell.textContent = msg
+          cell.style.backgroundColor = '#fee'
+          alert(msg);
+          return
+        }
+        text = response.responseText;
+        const pre = dom.createElement('pre')
+        cell.appendChild(pre)
+        pre.textContent = text
+        try {
+          $rdf.parse(prolog + text, kb, doc.doc().uri, 'text/turtle') // str, kb, base, contentType
+        } catch (e) {
+          pre.textContent = e
+          //console.log('>>>>>>>' + prolog + inputText + '<<<<<<\n')
+          return
+        }
       }
-      const text = response.responseText;
-      const pre = dom.createElement('pre')
-      cell.appendChild(pre)
-      pre.textContent = text
+      else {
+        try {
+          $rdf.parse(prolog + text, kb, testDocURI, 'text/turtle') // str, kb, base, contentType
+        } catch (e) {
+          cell.textContent = e
+          //console.log('>>>>>>>' + prolog + inputText + '<<<<<<\n')
+          return
+        }
+      }
     }
 
     const cellForClass = []
 
     for (var cell of row.children) {
-      await loadTextIntoCell(cell)
+      //await loadTextIntoCell(cell)
       if (cell.getAttribute('class')) {
         for (const c of cell.getAttribute('class').split(' ')) {
           cellForClass[c] = cell
@@ -94,37 +101,26 @@ document.addEventListener('DOMContentLoaded', async function () {
       }
     }
     const inputCell = cellForClass['input']
-    const targetCell  = cellForClass['target']
+    const targetCell = cellForClass['target']
     const outputCell = cellForClass['output']
   
-    const inputText = inputCell.firstElementChild.textContent
+    let form
     if (inputCell.getAttribute('source')) {
       form = $rdf.sym(inputCell.getAttribute('source'))
+    } else {
+      form = ex('this')
     }
+    await loadTextIntoCell(inputCell, form)
+    let subject
     if (targetCell.getAttribute('source')) {
       subject = $rdf.sym(targetCell.getAttribute('source'))
+    } else {
+      subject = ex('org1')
     }
-
-    try {
-      $rdf.parse(prolog + inputText, kb, form.doc().uri, 'text/turtle') // str, kb, base, contentType
-    } catch (e) {
-      outputCell.textContent = e
-      //console.log('>>>>>>>' + prolog + inputText + '<<<<<<\n')
-      return
-    }
-
-    if (true) {
-      const subjectText = "" // targetCell.firstElementChild.textContent
-      try {
-        $rdf.parse(prolog + subjectText, kb, subject.doc().uri, 'text/turtle') // str, kb, base, contentType
-      } catch (e) {
-        outputCell.textContent = e
-        //console.log('>>>>>>>' + prolog + subjectText + '<<<<<<\n')
-        return
-      }
-    }
+    await loadTextIntoCell(targetCell, subject)
     renderForm(form, subject, outputCell)
   }
+
   async function showResults () {
     var prologEle = dom.getElementById('Prolog')
     const prolog = defaultProlog + (prologEle ? prologEle.textContent : "")
@@ -138,7 +134,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         await doRow(prolog, row)
       }
     }
-  } // showResults
+  }
 
   await showResults()
+
 })

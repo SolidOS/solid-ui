@@ -1411,10 +1411,12 @@ export function makeSelectForOptions (
       if (ok) {
         kb.updater.update(ds, is, function (uri, success, errorBody) {
           actual = getActual() // refresh
-          if (!success) return select.parentNode.appendChild(errorMessageBlock(dom, 'Error updating data in select: ' + errorBody))
-          if (callbackFunction) callbackFunction(success, { widget: 'select', event: 'new' })
+          if (!success) select.parentNode.appendChild(errorMessageBlock(dom, 'Error updating select: ' + errorBody))
         })
-      } else return select.parentNode.appendChild(errorMessageBlock(dom, 'Error updating data in field of select: ' + body))
+        // if (callbackFunction) callbackFunction(ok, { widget: 'select', event: 'new' })
+      } else {
+        select.parentNode.appendChild(errorMessageBlock(dom, 'Error updating data in field of select: ' + body))
+      }
     })
   }
 

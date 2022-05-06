@@ -54,64 +54,6 @@
                 <tr class="form-demo">
                     <td class="input"
                         source="https://solidos.solidcommunity.net/public/2021/solidUiFormTestData/ChoiceFormExample.ttl#this">
-                        <pre>
-                            # 20210404a
-                            @prefix ui: &lt;http://www.w3.org/ns/ui#>.
-                            @prefix skos: &lt;http://www.w3.org/2004/02/skos/core#>.
-                            @prefix So: &lt;https://timea.solidcommunity.net/HelloWorld/data/SolidHelloWorldOntology#>.
-                            @prefix schema: &lt;http://schema.org/>.
-                            @prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
-                    
-                            @prefix : &lt;#>.
-                    
-                            :this
-                                &lt;http://purl.org/dc/elements/1.1/title> "Solid example applications form" ;
-                                a ui:Form ;
-                                # ui:part :backgroundColor, :highlightColor;
-                                ui:parts (
-                                :projects
-                                ).
-        
-                                :projects a ui:Choice;
-                                ui:label "Select project"@en;
-                                ui:use :projectCreationForm ;
-                                ui:canMintNew true;
-                                ui:property skos:hasTopConcept;
-                                ui:from So:Example-Application .
-        
-        
-                                :projectCreationForm a ui:Form;
-                                schema:name "Form for creating a new Project" ;
-                                ui:parts (
-                                :projectName
-                                :projectDescription
-                                :projectAuthor
-                                ) .
-        
-        
-                                # Project Name
-        
-                                :projectName a ui:SingleLineTextField;
-                                ui:size 12;
-                                ui:property skos:prefLabel;
-                                ui:label "Name of project"@en.
-        
-                                # Project Description
-        
-                                :projectDescription a ui:SingleLineTextField;
-                                ui:size 100;
-                                ui:property skos:definition;
-                                ui:label "Short description"@en.
-        
-                                # Project Author
-        
-                                :projectAuthor a ui:SingleLineTextField;
-                                ui:size 100;
-                                ui:property So:author;
-                                ui:label "Author"@en.
-        
-                                # ENDS
-                        </pre>
                     </td>
                     <!-- <td class="target" source="https://timea.solidcommunity.net/HelloWorld/data/helloWorld.ttl#Examples"></td> -->
                     <td class="target" source="https://solidos.solidcommunity.net/public/2021/solidUiFormTestData/DataExampleForFormsTest.ttl#Examples"></td> 
