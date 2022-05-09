@@ -33,7 +33,6 @@
     @prefix trip:  &lt;http://www.w3.org/ns/pim/trip#&gt;.
     @prefix vcard: &lt;http://www.w3.org/2006/vcard/ns#&gt;.
     @prefix xsd:   &lt;http://www.w3.org/2001/XMLSchema#&gt;.
-    @prefix ex: &lt;#&gt;.  # Things in the examples
     @prefix : &lt;#&gt;.
 </pre
     >
@@ -44,19 +43,20 @@
         summary="Table of input data values and UI outputs generated"
       >
         <tbody>
+          <tr><td>Form data</td><td>Raw data</td><td>Form</td></tr>
           <tr class="form-demo">
             <td class="input">
               <pre>
 # A simple group with two fields
 
-ex:form a ui:Group;
-  ui:parts (ex:part1 ex:part2).
+:form a ui:Group;
+  ui:parts (:part1 :part2).
 
-      ex:part1 a ui:SingleLineTextField ;
+      :part1 a ui:SingleLineTextField ;
       ui:property vcard:fn;
       ui:label "name" .
 
-      ex:part2 a ui:EmailField ;
+      :part2 a ui:EmailField ;
       ui:property vcard:hasEmail; # @@ chcek
       ui:label "email" .
 </pre
@@ -64,7 +64,7 @@ ex:form a ui:Group;
             </td>
             <td class="target">
               <pre>
-ex:this vcard:fn "Alice";
+:this vcard:fn "Alice";
                vcard:hasEmail  &lt;mailto:alice@example.com&gt; .</pre
               >
             </td>

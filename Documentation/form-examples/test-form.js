@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   var base = (window.document.title = uri.slice(0, uri.lastIndexOf('/') + 1))
   // var testDocURI = base + 'test.ttl' // imaginary doc - just use its URL
   // const testDocURI = 'https://timbl.com/timbl/Public/Test/Forms/exampleData.ttl'
-  const testDocURI = 'https://solidos.solidcommunity.net/public/2021/10_example_data/example.ttl'
+  const testDocURI = 'https://solidos.solidcommunity.net/public/2021/solidUiFormTestData/dummyFormTestFile.ttl'
   var testDoc = $rdf.sym(testDocURI)
   const ex = $rdf.Namespace(testDocURI + "#")
 
