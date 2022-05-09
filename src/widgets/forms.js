@@ -764,11 +764,14 @@ field[ns.ui('Choice').uri] = function (
 
   let p
   const box = dom.createElement('div')
+  box.setAttribute('class', 'choiceBox')
   // Set flexDirection column?
   if (container) container.appendChild(box)
   const lhs = dom.createElement('div')
+  lhs.setAttribute('class', 'formFieldName choiceBox-label')
   box.appendChild(lhs)
   const rhs = dom.createElement('div')
+  rhs.setAttribute('class', 'formFieldValue choiceBox-selectBox')
   box.appendChild(rhs)
   const property = kb.any(form, ui('property'))
   if (!property) {
