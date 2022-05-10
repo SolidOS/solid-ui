@@ -372,8 +372,7 @@ field[ns.ui('Multiple').uri] = function (
 
     // delete button and move buttons
     if (kb.updater.editable(dataDoc.uri)) {
-      buttons.deleteButtonWithCheck(dom, subField, utils.label(property),
-        deleteThisItem)
+      buttons.deleteButtonWithCheck(dom, subField, multipleUIlabel, deleteThisItem)
       if (ordered) { // Add controsl in a frame
         const frame = dom.createElement('div')
         frame.style.display = 'grid'
@@ -432,6 +431,8 @@ field[ns.ui('Multiple').uri] = function (
     ) // used for arcs in the data
     return shim
   }
+  let multipleUIlabel = kb.any(form, ui('label'))
+  if (!multipleUIlabel) multipleUIlabel = utils.label(property, true) // Init capital
   let min = kb.any(form, ui('min')) // This is the minimum number -- default 0
   min = min ? 0 + min.value : 0
 
@@ -465,16 +466,14 @@ field[ns.ui('Multiple').uri] = function (
   if (kb.updater.editable(dataDoc.uri)) {
     const tail = box.appendChild(dom.createElement('div'))
     tail.style.padding = '0.5em'
-    let label = kb.any(form, ui('label'))
-    if (!label) label = utils.label(property, true) // Init capital
     const img = tail.appendChild(dom.createElement('img'))
     img.setAttribute('src', plusIconURI) //  plus sign
     img.setAttribute('style', 'margin: 0.2em; width: 1.5em; height:1.5em')
-    img.title = 'Click to add one or more ' + label
+    img.title = 'Click to add another ' + multipleUIlabel
     const prompt = dom.createElement('span')
     prompt.textContent =
-      (values.length === 0 ? 'Add one or more ' : 'Add more ') +
-      utils.predicateLabel(property, reverse)
+      (values.length === 0 ? 'Add another ' : 'Add ') +
+      multipleUIlabel
     tail.addEventListener('click', async _eventNotUsed => {
       await addItem()
     }, true)
@@ -747,7 +746,6 @@ field[ns.ui('Classifier').uri] = function (
  ** -- radio buttons
  ** -- auto-complete typing
  **
- ** Todo: Deal with multiple.  Maybe merge with multiple code.
  */
 
 field[ns.ui('Choice').uri] = function (
@@ -762,6 +760,8 @@ field[ns.ui('Choice').uri] = function (
   const ui = ns.ui
   const kb = store
   const formDoc = form.doc ? form.doc() : null // @@ if blank no way to know
+  let uiMultipleInUse = false // this signals to ui:choice that it is part of a ui:multiple
+  const multiSelect = false
 
   let p
   const box = dom.createElement('div')
@@ -787,15 +787,14 @@ field[ns.ui('Choice').uri] = function (
   const follow = kb.anyJS(form, ui('follow'), null, formDoc) // data doc moves to new subject?
   let possible = []
   let possibleProperties
-  let multiple = false
   let firstSelectOptionText = '* Select for ' + utils.label(subject, true) + ' *'
   // if we do NOT have a container it means it is a ui:Multiple
   // only important for the first option text in select
   if (!container) {
-    multiple = true
+    uiMultipleInUse = true
     firstSelectOptionText = utils.label(subject, true)
   }
-  const opts = { form, subForm, multiple, firstSelectOptionText, disambiguate: false }
+  const opts = { form, subForm, multiSelect, firstSelectOptionText, uiMultipleInUse, disambiguate: false }
   possible = kb.each(undefined, ns.rdf('type'), uiFrom, formDoc)
   for (const x in kb.findMembersNT(uiFrom)) {
     possible.push(kb.fromNT(x))
@@ -1297,9 +1296,10 @@ export function makeDescription (
 // @param subject - a term, the subject of the statement(s) being edited.
 // @param predicate - a term, the predicate of the statement(s) being edited
 // @param possible - a list of terms, the possible value the object can take
-// @param options.multiple - Boolean - Whether more than one at a time is allowed
+// @param options.multiSelect - Boolean - Whether more than one at a time is allowed
 // @param options.firstSelectOptionText - a string to be displayed as the
-//                        option for none selected (for non multiple)
+//                        option for none selected (for non multiSelect)
+// @param options.uiMultipleInUse - signals that the ui:choise is used with a ui:multiple
 // @param options.mint - User may create thing if this sent to the prompt string eg "New foo"
 // @param options.subForm - If mint, then the form to be used for minting the new thing
 // @param dataDoc - The web document being edited
@@ -1434,7 +1434,7 @@ export function makeSelectForOptions (
 
   const select = dom.createElement('select')
   select.setAttribute('style', style.formSelectSTyle)
-  // if (options.multiple) select.setAttribute('multiple', 'true') // use case merged with ui:Multiple
+  if (options.multiSelect) select.setAttribute('multiSelect', 'true')
   select.currentURI = null
 
   select.refresh = function () {
@@ -1480,7 +1480,7 @@ export function makeSelectForOptions (
     mint.AJAR_mint = true // Flag it
     select.insertBefore(mint, select.firstChild)
   }
-  if (!select.currentURI && options.multiple) {
+  if (!select.currentURI && options.uiMultipleInUse) {
     const prompt = dom.createElement('option')
     prompt.appendChild(dom.createTextNode(options.firstSelectOptionText))
     prompt.disabled = true
@@ -1511,10 +1511,10 @@ export function makeSelectForCategory (
 ) {
   const du = kb.any(category, ns.owl('disjointUnionOf'))
   let subs
-  let multiple = false
+  let multiSelect = false
   if (!du) {
     subs = kb.each(undefined, ns.rdfs('subClassOf'), category)
-    multiple = true
+    multiSelect = true
   } else {
     subs = du.elements
   }
@@ -1523,7 +1523,7 @@ export function makeSelectForCategory (
     return errorMessageBlock(
       dom,
       "Can't do " +
-        (multiple ? 'multiple ' : '') +
+        (multiSelect ? 'multiple ' : '') +
         'selector with no subclasses of category: ' +
         category
     )
@@ -1532,7 +1532,7 @@ export function makeSelectForCategory (
     return errorMessageBlock(
       dom,
       "Can't do " +
-        (multiple ? 'multiple ' : '') +
+        (multiSelect ? 'multiple ' : '') +
         'selector with only 1 subclass of category: ' +
         category +
         ':' +
@@ -1546,7 +1546,7 @@ export function makeSelectForCategory (
     ns.rdf('type'),
     subs,
     null,
-    { multiple },
+    { multiSelect },
     dataDoc,
     callbackFunction
   )
