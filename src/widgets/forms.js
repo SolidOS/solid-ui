@@ -811,7 +811,7 @@ field[ns.ui('Choice').uri] = function (
     opts.disambiguate = true
   }
   const sortedPossible = sortByLabel(possible)
-  // TODO: this checks for any occurance regardles if it is set to true or false
+  // TODO: this checks for any occurrence, regardless of true or false setting
   if (kb.any(form, ui('canMintNew'))) {
     opts.mint = '* Create new *' // @@ could be better
   }
