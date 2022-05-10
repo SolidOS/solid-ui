@@ -386,7 +386,7 @@ field[ns.ui('Multiple').uri] = function (
           dom, icons.iconBase + 'noun_1369241.svg', 'Move Down',
           async event => moveThisItem(event, false))
         const shim = dom.createElement('div')
-        shim.appendChild(subField) // Subfield has its own laytout
+        shim.appendChild(subField) // Subfield has its own layout
         frame.appendChild(shim)
 
         frame.appendChild(moveUpButton)
@@ -465,18 +465,20 @@ field[ns.ui('Multiple').uri] = function (
   if (kb.updater.editable(dataDoc.uri)) {
     const tail = box.appendChild(dom.createElement('div'))
     tail.style.padding = '0.5em'
+    let label = kb.any(form, ui('label'))
+    if (!label) label = utils.label(property, true) // Init capital
     const img = tail.appendChild(dom.createElement('img'))
     img.setAttribute('src', plusIconURI) //  plus sign
     img.setAttribute('style', 'margin: 0.2em; width: 1.5em; height:1.5em')
-    img.title = 'Click to add one or more ' + utils.predicateLabel(property, reverse)
-    const prompt = tail.appendChild(dom.createElement('span'))
+    img.title = 'Click to add one or more ' + label
+    const prompt = dom.createElement('span')
     prompt.textContent =
       (values.length === 0 ? 'Add one or more ' : 'Add more ') +
       utils.predicateLabel(property, reverse)
-      // utils.label(property)
     tail.addEventListener('click', async _eventNotUsed => {
       await addItem()
     }, true)
+    tail.appendChild(prompt)
   }
 
   function createListIfNecessary () {
@@ -759,7 +761,6 @@ field[ns.ui('Choice').uri] = function (
 ) {
   const ui = ns.ui
   const kb = store
-  const multiple = false
   const formDoc = form.doc ? form.doc() : null // @@ if blank no way to know
 
   let p
@@ -786,7 +787,14 @@ field[ns.ui('Choice').uri] = function (
   const follow = kb.anyJS(form, ui('follow'), null, formDoc) // data doc moves to new subject?
   let possible = []
   let possibleProperties
-  const firstSelectOptionText = '* Select from ' + utils.label(subject, true) + ' *'
+  let multiple = false
+  let firstSelectOptionText = '* Select for ' + utils.label(subject, true) + ' *'
+  // if we do NOT have a container it means it is a ui:Multiple
+  // only important for the first option text in select
+  if (!container) {
+    multiple = true
+    firstSelectOptionText = utils.label(subject, true)
+  }
   const opts = { form, subForm, multiple, firstSelectOptionText, disambiguate: false }
   possible = kb.each(undefined, ns.rdf('type'), uiFrom, formDoc)
   for (const x in kb.findMembersNT(uiFrom)) {
@@ -1426,7 +1434,7 @@ export function makeSelectForOptions (
 
   const select = dom.createElement('select')
   select.setAttribute('style', style.formSelectSTyle)
-  if (options.multiple) select.setAttribute('multiple', 'true')
+  // if (options.multiple) select.setAttribute('multiple', 'true') // use case merged with ui:Multiple
   select.currentURI = null
 
   select.refresh = function () {
@@ -1472,7 +1480,7 @@ export function makeSelectForOptions (
     mint.AJAR_mint = true // Flag it
     select.insertBefore(mint, select.firstChild)
   }
-  if (!select.currentURI && !options.multiple) {
+  if (!select.currentURI && options.multiple) {
     const prompt = dom.createElement('option')
     prompt.appendChild(dom.createTextNode(options.firstSelectOptionText))
     prompt.disabled = true
