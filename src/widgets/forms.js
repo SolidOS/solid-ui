@@ -90,8 +90,10 @@ field[ns.ui('Form').uri] = field[ns.ui('Group').uri] =
       if (already[key]) {
         // been there done that
         box.appendChild(dom.createTextNode('Group: see above ' + key))
-        const plist = [$rdf.st(subject, ns.owl('sameAs'), subject)] // @@ need prev subject
-        dom.outlineManager.appendPropertyTRs(box, plist)
+        // TODO fix dependency cycle to solid-panes by calling outlineManager
+        // const plist = [$rdf.st(subject, ns.owl('sameAs'), subject)] // @@ need prev subject
+        // dom.outlineManager.appendPropertyTRs(box, plist)
+        // dom.appendChild(plist)
         return box
       }
       const already2 = {}
@@ -432,7 +434,7 @@ field[ns.ui('Multiple').uri] = function (
     return shim
   }
   let multipleUIlabel = kb.any(form, ui('label'))
-  if (!multipleUIlabel) multipleUIlabel = utils.label(property, true) // Init capital
+  if (!multipleUIlabel) multipleUIlabel = utils.label(property)
   let min = kb.any(form, ui('min')) // This is the minimum number -- default 0
   min = min ? 0 + min.value : 0
 
@@ -746,6 +748,7 @@ field[ns.ui('Classifier').uri] = function (
  ** -- radio buttons
  ** -- auto-complete typing
  **
+ ** TODO: according to ontology ui:choice can also have ns.ui('default') - this is not implemented yet
  */
 
 field[ns.ui('Choice').uri] = function (
@@ -793,6 +796,9 @@ field[ns.ui('Choice').uri] = function (
   if (!container) {
     uiMultipleInUse = true
     firstSelectOptionText = utils.label(subject, true)
+  }
+  if (subject.termType === 'BlankNode') {
+    firstSelectOptionText = '* Select for ' + utils.label(property) + ' *'
   }
   const opts = { form, subForm, multiSelect, firstSelectOptionText, uiMultipleInUse, disambiguate: false }
   possible = kb.each(undefined, ns.rdf('type'), uiFrom, formDoc)
@@ -1153,6 +1159,7 @@ export function promptForNew (
       b.innerHTML = 'Goto ' + utils.label(theClass)
       b.addEventListener(
         'click',
+        // TODO fix dependency cycle to solid-panes by calling outlineManager
         function (_e) {
           dom.outlineManager.GotoSubject(
             theClass,

@@ -983,6 +983,7 @@ export function openHrefInOutlineMode (e: Event) {
   const dom = window.document
   if ((dom as any).outlineManager) {
     // @@ TODO Remove the use of document as a global object
+    // TODO fix dependency cycle to solid-panes by calling outlineManager
     ;(dom as any).outlineManager.GotoSubject(store.sym(uri), true, undefined, true, undefined)
   } else if (window && (window as any).panes && (window as any).panes.getOutliner) {
     // @@ TODO Remove the use of window as a global object
@@ -1102,6 +1103,7 @@ export function linkButton (dom: HTMLDocument, object: NamedNode): HTMLElement {
   b.textContent = 'Goto ' + utils.label(object)
   b.addEventListener('click', function (_event) {
     // b.parentNode.removeChild(b)
+    // TODO fix dependency cycle to solid-panes by calling outlineManager
     ;(dom as any).outlineManager.GotoSubject(object, true, undefined, true, undefined)
   }, true)
   return b
