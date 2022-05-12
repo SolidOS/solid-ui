@@ -40,3 +40,8 @@ One you are set up with the code, take a look at some example over at [solid-ui/
 - and you want to wrap your head around the entire UI vocabulary being rendered [here it is](https://solidos.github.io/solid-ui/Documentation/form-examples/edit-form-form.html)
 
 Most interesting is maybe how it is all wired together in the [test-form.js](https://github.com/SolidOS/solid-ui/blob/main/Documentation/form-examples/test-form.js) while the code for the form itself is mostly under [solid-ui/src/widgets/forms.js](https://github.com/SolidOS/solid-ui/blob/main/src/widgets/forms.js).
+
+## Spin-offs & further examples
+
+- [Jeff's solid-ui-components](https://github.com/jeff-zucker/solid-ui-components) is a differnet take on the UI vocabulary
+- [Timea's Solid Hello Worlds](https://github.com/timea-solid/SolidHelloWorlds) is a demo implementating both Jeff's lib and solid-ui Forms
