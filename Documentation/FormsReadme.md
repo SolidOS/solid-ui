@@ -39,7 +39,7 @@ One you are set up with the code, take a look at some examples over at [solid-ui
 - [ui:Choice example](https://solidos.github.io/solid-ui/Documentation/form-examples/structures3.html)
 - if you want, you can try to wrap your head around [a rendering of the entire UI vocabulary](https://solidos.github.io/solid-ui/Documentation/form-examples/edit-form-form.html) _(Scroll to the far right if all you see is a column or two of plain text...)_
 
-Most interesting is maybe how it is all wired together in the [test-form.js](https://github.com/SolidOS/solid-ui/blob/main/Documentation/form-examples/test-form.js) while the code for the form itself is mostly under [solid-ui/src/widgets/forms.js](https://github.com/SolidOS/solid-ui/blob/main/src/widgets/forms.js).
+Most interesting may be how it is all wired together in the [test-form.js](https://github.com/SolidOS/solid-ui/blob/main/Documentation/form-examples/test-form.js), while the code for the form itself is mostly under [solid-ui/src/widgets/forms.js](https://github.com/SolidOS/solid-ui/blob/main/src/widgets/forms.js).
 
 ## Spin-offs & further examples
 
