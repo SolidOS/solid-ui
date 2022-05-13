@@ -24,7 +24,7 @@ Sir Tim Berners-Lee gave a talk about Forms to the SolidOS team some time ago. H
 
 ## Creating your own Form using Turtle
 
-In the [form-playground](https://solidos.github.io/form-playground/playground.html) (code [here](https://github.com/SolidOS/form-playground)) you can create your own form to render a frontende for a given Turtle. 
+In the [form-playground](https://solidos.github.io/form-playground/playground.html) (code [here](https://github.com/SolidOS/form-playground)), you can create your own Form to render a frontend for some given Turtle. 
 
 ## Code examples
 
