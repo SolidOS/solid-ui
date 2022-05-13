@@ -17,9 +17,9 @@
 There are different documentation entry points for the topic.
 
 To get you started with Forms, we have the [forms-intro](./forms-intro.html).
-If you're asking yourself how Forms fit into the Soild ecosystem, head over to [form-ecosystem](./form-ecosystem.html).
+If you're asking yourself how Forms fit into the Solid ecosystem, head over to [form-ecosystem](./form-ecosystem.html).
 
-Sir Tim Berners-Lee gave a talk about Forms to the SolidOS team some time ago. His slides are online [here](./talks/FormsTalk.html), while a recording of the talk is on the [SolidOS pod](https://solidos.solidcommunity.net/public/SolidOS%20team%20meetings/SolidOS_team_videos.html).
+Sir Tim Berners-Lee gave a talk about Forms to the SolidOS team end of 2021. His slides are online [here](./talks/FormsTalk.html), while a recording of the talk is on the [SolidOS pod](https://solidos.solidcommunity.net/public/SolidOS%20team%20meetings/SolidOS_team_videos.html).
 
 
 ## Creating your own Form using Turtle
@@ -28,9 +28,9 @@ In the [form-playground](https://solidos.github.io/form-playground/playground.ht
 
 ## Code examples
 
-To make use of Forms, you need to use solid-ui. Head over to the [solid-ui readme](https://github.com/SolidOS/solid-ui/blob/main/README.md#getting-started) for some how-to guides.
+To make use of Forms, you need to use solid-ui. Head over to the [solid-ui readme](https://github.com/SolidOS/solid-ui/blob/main/README.md#getting-started) for some how-to guides on how to use it in `npm` or as a `html <script>`.
 
-One you are set up with the code, take a look at some examples over at [solid-ui/Documentation](<https://github.com/SolidOS/solid-ui/tree/main/Documentation>). The examples there are also deployed on Git Pages:
+Once you are set up with the code, take a look at some examples over at [solid-ui/Documentation](<https://github.com/SolidOS/solid-ui/tree/main/Documentation>). The examples there are also deployed on Git Pages:
 
 - [Basic Form Demo](https://solidos.github.io/solid-ui/Documentation/form-examples/demo.html)
 - [WebID profile Demo](https://solidos.github.io/solid-ui/Documentation/form-examples/profile-demo.html)
@@ -44,4 +44,4 @@ Most interesting may be how it is all wired together in the [test-form.js](https
 ## Spin-offs & further examples
 
 - [Jeff's solid-ui-components](https://github.com/jeff-zucker/solid-ui-components) is a different take on the UI vocabulary
-- [Timea's Solid Hello Worlds](https://github.com/timea-solid/SolidHelloWorlds) is a demo implementing both Jeff's lib and solid-ui Forms
+- [Timea's Solid Hello Worlds](https://github.com/timea-solid/SolidHelloWorlds) is a demo implementing both Jeff's lib and solid-ui Forms in one demo
