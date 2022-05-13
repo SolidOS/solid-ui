@@ -1,6 +1,6 @@
 # Welcome to solidUI Forms
 
-`Forms` are what we call the code part of solid-ui which takes the User Interface ontology at <http://www.w3.org/ns/ui> and makes it usable for developers. As its name already gives away, `Forms` are used for rendering WebApp Frontend elements, for example: <http://www.w3.org/ns/ui#Choice> will translate to something like:
+`Forms` are what we call the code part of solid-ui which takes the User Interface ontology at <http://www.w3.org/ns/ui> and makes it usable for developers. As its name suggests, `Forms` are used for rendering WebApp Frontend elements. For example, <http://www.w3.org/ns/ui#Choice> will translate to something like the following:
 ```
 <div id=dropDownDiv>
     <div id=labelOfDropDown> </div>
