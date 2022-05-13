@@ -43,5 +43,5 @@ Most interesting may be how it is all wired together in the [test-form.js](https
 
 ## Spin-offs & further examples
 
-- [Jeff's solid-ui-components](https://github.com/jeff-zucker/solid-ui-components) is a differnet take on the UI vocabulary
-- [Timea's Solid Hello Worlds](https://github.com/timea-solid/SolidHelloWorlds) is a demo implementating both Jeff's lib and solid-ui Forms
+- [Jeff's solid-ui-components](https://github.com/jeff-zucker/solid-ui-components) is a different take on the UI vocabulary
+- [Timea's Solid Hello Worlds](https://github.com/timea-solid/SolidHelloWorlds) is a demo implementing both Jeff's lib and solid-ui Forms
