@@ -22,7 +22,7 @@ If you're asking yourself how Forms fit into the Soild ecosystem, head over to [
 Sir Tim Berners-Lee gave a talk about Forms to the SolidOS team some time ago. His slides are online [here](./talks/FormsTalk.html), while a recording of the talk is on the [SolidOS pod](https://solidos.solidcommunity.net/public/SolidOS%20team%20meetings/SolidOS_team_videos.html).
 
 
-## Creating your own form (turtle)
+## Creating your own Form using Turtle
 
 In the [form-playground](https://solidos.github.io/form-playground/playground.html) (code [here](https://github.com/SolidOS/form-playground)) you can create your own form to render a frontende for a given Turtle. 
 
