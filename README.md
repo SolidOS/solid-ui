@@ -7,9 +7,9 @@ User Interface widgets and utilities for Solid (solid-ui)
 These are HTML5 widgets which connect to a solid store. Building blocks for solid-based apps.
 Vanilla JS.  Includes large widgets like chat, table, matrix, form fields, and small widgets.
 
-See [storybook](http://solidos.github.io/solid-ui/examples/storybook/) for SolidUI widgets.
-See [API](https://solidos.github.io/solid-ui/Documentation/api/) for SolidUI functions.
-See [Forms](https://solidos.github.io/solid-ui/Documentation/form-examples/demo.html) for UI vocabulary implementation.
+See [Solid-Ui Storybook](http://solidos.github.io/solid-ui/examples/storybook/) for SolidUI widgets.
+See [Solid-UI API](https://solidos.github.io/solid-ui/Documentation/api/) for SolidUI functions.
+See [Forms introduction](./Documentation/FormsReadme.md) for UI vocabulary implementation.
 
 Table of content:
 - Getting started(#getting-started)
@@ -69,5 +69,5 @@ If there is no story for the component yet, add a new one to `./src/stories`.
 When you want to test the component within a solid-pane, you can use the [development mode of solid-panes](https://github.com/solidos/solid-panes#development).
  
 ## Further documentation
-- [Slides about forms](https://solidos.github.io/solid-ui/Documentation/talks/FormsTalk.html)
+
 - [Some code know-how](https://github.com/SolidOS/solidos/wiki/2.-Solid-UI-know-how)
