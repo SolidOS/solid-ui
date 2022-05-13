@@ -19,7 +19,7 @@ There are different documentation entry points for the topic.
 To get you started with Forms, we have the [forms-intro](./forms-intro.html).
 If you're asking yourself how Forms fit into the Soild ecosystem, head over to [form-ecosystem](./form-ecosystem.html).
 
-Sir Tim Berners-Lee gave a talk about Form to the SolidOS team some time ago and his slides are online [here](./talks/FormsTalk.html) while the recording of it is on the [SolidOS pod](https://solidos.solidcommunity.net/public/SolidOS%20team%20meetings/SolidOS_team_videos.html).
+Sir Tim Berners-Lee gave a talk about Forms to the SolidOS team some time ago. His slides are online [here](./talks/FormsTalk.html), while a recording of the talk is on the [SolidOS pod](https://solidos.solidcommunity.net/public/SolidOS%20team%20meetings/SolidOS_team_videos.html).
 
 
 ## Creating your own form (turtle)
