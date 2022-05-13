@@ -30,7 +30,7 @@ In the [form-playground](https://solidos.github.io/form-playground/playground.ht
 
 To make use of Forms, you need to use solid-ui. Head over to the [solid-ui readme](https://github.com/SolidOS/solid-ui/blob/main/README.md#getting-started) for some how-to guides.
 
-One you are set up with the code, take a look at some example over at [solid-ui/Documentation](<https://github.com/SolidOS/solid-ui/tree/main/Documentation>). The examples there are also deployed on Git Pages:
+One you are set up with the code, take a look at some examples over at [solid-ui/Documentation](<https://github.com/SolidOS/solid-ui/tree/main/Documentation>). The examples there are also deployed on Git Pages:
 
 - [Basic Form Demo](https://solidos.github.io/solid-ui/Documentation/form-examples/demo.html)
 - [WebID profile Demo](https://solidos.github.io/solid-ui/Documentation/form-examples/profile-demo.html)
