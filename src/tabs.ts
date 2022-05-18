@@ -19,7 +19,7 @@ type TabWidgetOptions = {
   orientation?: '0' | '1' | '2' | '3';
   predicate?: NamedNode;
   renderMain?: (bodyMain: HTMLElement, subject: NamedNode) => void;
-  renderTab?: (tabDiv: HTMLDivElement, subject: NamedNode) => void;
+  renderTab?: (tabDiv: HTMLButtonElement, subject: NamedNode) => void;
   renderTabSettings?: (bodyMain: ContainerElement, subject: NamedNode) => void;
   selectedTab?: NamedNode;
   startEmpty?: boolean;
@@ -221,11 +221,11 @@ export function tabWidget (options: TabWidgetOptions) {
 
   const paddingStyle = `padding: ${marginsPrepped.join(' ')};`
 
-  const tabStyle = cornersStyle + `padding: 0.7em .3em .3em .7em; max-width: 20em; color: ${color};`
+  const tabStyle = cornersStyle + `position: relative; padding: 0.7em; max-width: 20em; color: ${color};`
   const unselectedStyle = `${
     tabStyle + marginsStyle
-  }opacity: 50%; background-color: ${backgroundColor};`
-  const selectedStyle = `${tabStyle + marginsStyle}background-color: ${selectedColor};`
+  } opacity: 50%; background-color: ${backgroundColor};`
+  const selectedStyle = `${tabStyle + marginsStyle} background-color: ${selectedColor};`
   const shownStyle = 'height: 100%; width: 100%;'
   const hiddenStyle = shownStyle + 'display: none;'
   rootElement.refresh = orderedSync
@@ -285,40 +285,49 @@ export function tabWidget (options: TabWidgetOptions) {
 
   function makeNewSlot (item: NamedNode) {
     const ele = dom.createElement(tabElement) as TabElement
+    ele.setAttribute('style', unselectedStyle)
     ele.subject = item
-    const div = ele.appendChild(dom.createElement('div'))
-    div.setAttribute('style', unselectedStyle)
-    const innerDiv = dom.createElement('div')
-    innerDiv.textContent = '...'
-    innerDiv.setAttribute('style', 'margin-left: 80%; width: 20%')
-
-    div.addEventListener('click', function (e) {
-      if (!e.metaKey) {
-        resetTabStyle()
-        resetBodyStyle()
-      }
-      div.setAttribute('style', selectedStyle)
+    const div = ele.appendChild(dom.createElement('button'))
+    div.setAttribute('style', 'background: none; border: none; font: inherit; cursor: pointer')
+    const ellipsis = dom.createElement('button')
+    ellipsis.textContent = '...'
+    ellipsis.setAttribute('style', 'position: absolute; right: 0; bottom: 0; width: 20%; background: none; color: inherit; border: none; padding: 0; font: inherit; cursor: pointer; outline: inherit;')
+    
+    div.onclick = function() {
+      console.log("ELEMENT ONCLICK CALLED")
+      resetTabStyle()
+      resetBodyStyle()
+      ele.setAttribute('style', selectedStyle)
       if (!ele.bodyTR) return
       ele.bodyTR.setAttribute('style', shownStyle)
       const bodyMain = getOrCreateContainerElement(ele)
-      const target = e.target as HTMLDivElement
-      if (options.renderTabSettings && target.innerText === '...' && ele.subject && bodyMain.asSettings !== true) {
-        bodyMain.innerHTML = 'loading settings ...' + item
-        options.renderTabSettings(bodyMain, ele.subject)
-        bodyMain.asSettings = true
-      } else if (options.renderMain && ele.subject && bodyMain.asSettings !== false) {
+      if (options.renderMain && ele.subject && bodyMain.asSettings !== false) {
         bodyMain.innerHTML = 'loading item ...' + item
         options.renderMain(bodyMain, ele.subject)
         bodyMain.asSettings = false
       }
-    })
+    }
+    ellipsis.onclick = function() {
+      console.log("ELLIPSIS ONCLICK CALLED")
+      resetTabStyle()
+      resetBodyStyle()
+      ele.setAttribute('style', selectedStyle)
+      if (!ele.bodyTR) return
+      ele.bodyTR.setAttribute('style', shownStyle)
+      const bodyMain = getOrCreateContainerElement(ele)
+      if (options.renderTabSettings && ele.subject && bodyMain.asSettings !== true) {
+        bodyMain.innerHTML = 'loading settings ...' + item
+        options.renderTabSettings(bodyMain, ele.subject)
+        bodyMain.asSettings = true
+      }
+    }
 
     if (options.renderTab) {
       options.renderTab(div, item)
-      div.appendChild(innerDiv)
+      ele.appendChild(ellipsis)
     } else {
-      div.textContent = label(item)
-      div.appendChild(innerDiv)
+      div.innerHTML = label(item)
+      ele.appendChild(ellipsis)
     }
     return ele
 
@@ -383,11 +392,12 @@ export function tabWidget (options: TabWidgetOptions) {
   function resetTabStyle () {
     for (let i = 0; i < tabContainer.children.length; i++) {
       const tab = tabContainer.children[i]
+      console.log("tabContainer", tabContainer.children[i])
       if (tab.classList.contains('unstyled')) {
         continue
       }
-      if (tab.children[0]) {
-        tab.children[0].setAttribute('style', unselectedStyle)
+      else {
+        tab.setAttribute('style', unselectedStyle)
       }
     }
   }
