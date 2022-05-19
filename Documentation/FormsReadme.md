@@ -41,6 +41,12 @@ Once you are set up with the code, take a look at some examples over at [solid-u
 
 Most interesting may be how it is all wired together in the [test-form.js](https://github.com/SolidOS/solid-ui/blob/main/Documentation/form-examples/test-form.js), while the code for the form itself is mostly under [solid-ui/src/widgets/forms.js](https://github.com/SolidOS/solid-ui/blob/main/src/widgets/forms.js).
 
+Locally you can take advantage of that.
+```
+npm run build-form-examples
+```
+and then you need to use the new build main.js by uncommenting the usage of teh script for example on line: https://github.com/SolidOS/solid-ui/blob/4f620aea3e91daf5ce9591dd83d3c95c161a44ad/Documentation/form-examples/structures3.html#L21 and commenting out the line: https://github.com/SolidOS/solid-ui/blob/4f620aea3e91daf5ce9591dd83d3c95c161a44ad/Documentation/form-examples/structures3.html#L15
+
 ## Spin-offs & further examples
 
 - [Jeff's solid-ui-components](https://github.com/jeff-zucker/solid-ui-components) is a different take on the UI vocabulary
