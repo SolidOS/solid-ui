@@ -47,6 +47,7 @@ npm run build-form-examples
 ```
 and then you need to use the new build main.js by uncommenting the usage of teh script for example on line: https://github.com/SolidOS/solid-ui/blob/4f620aea3e91daf5ce9591dd83d3c95c161a44ad/Documentation/form-examples/structures3.html#L21 and commenting out the line: https://github.com/SolidOS/solid-ui/blob/4f620aea3e91daf5ce9591dd83d3c95c161a44ad/Documentation/form-examples/structures3.html#L15
 
+And then you just need to switch out the input nad target (form adn raw data) links on line https://github.com/SolidOS/solid-ui/blob/4f620aea3e91daf5ce9591dd83d3c95c161a44ad/Documentation/form-examples/structures3.html#L56
 ## Spin-offs & further examples
 
 - [Jeff's solid-ui-components](https://github.com/jeff-zucker/solid-ui-components) is a different take on the UI vocabulary
