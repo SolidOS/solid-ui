@@ -115,5 +115,6 @@ function getWellKnownLabel (thing) {
       store.any(thing, UI.ns.foaf('nick')) ||
       store.any(thing, UI.ns.as('name')) ||
       store.any(thing, UI.ns.schema('name')) ||
-      store.any(thing, UI.ns.rdfs('label'))
+      store.any(thing, UI.ns.rdfs('label')) ||
+      store.any(thing, store.sym('http://www.w3.org/2004/02/skos/core#prefLabel'))
 }
