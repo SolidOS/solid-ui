@@ -808,6 +808,10 @@ field[ns.ui('Choice').uri] = function (
       for (p in possibleProperties.dp) possible.push(kb.fromNT(p))
       opts.disambiguate = true
     }
+
+    const object = kb.any(subject, property)
+    if (object) possible.push(object)
+
     return sortByLabel(possible)
   }
 
@@ -1775,9 +1779,6 @@ export function makeSelectForChoice (
   if (options.multiSelect) select.setAttribute('multiSelect', 'true')
   select.currentURI = null
 
-  const object = kb.any(subject, predicate)
-  if (object) select.currentURI = object
-
   for (const uri in uris) {
     select.appendChild(createOption(uri))
   }
@@ -1892,6 +1893,5 @@ export function makeSelectForChoice (
     select.addEventListener('change', onChange, false)
   }
 
-  select.refresh()
   return select
 } // makeSelectForChoice
