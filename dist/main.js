@@ -15192,8 +15192,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2022-05-20T08:02:01Z',
-  commit: '4485d5d9aa24db1f33b7a2a1441a868b72cfa617',
+  buildTime: '2022-05-20T09:44:30Z',
+  commit: 'a5a36443be6e25d047585d79bb83eb6d7ec33b35',
   npmInfo: {
     'solid-ui': '2.4.22',
     npm: '6.14.17',
@@ -18226,6 +18226,8 @@ _fieldFunction.field[ns.ui('Choice').uri] = function (dom, container, already, s
       opts.disambiguate = true;
     }
 
+    var object = kb.any(subject, property);
+    if (object) possible.push(object);
     return sortByLabel(possible);
   } // TODO: this checks for any occurrence, regardless of true or false setting
 
@@ -19040,8 +19042,6 @@ function makeSelectForChoice(dom, container, kb, subject, predicate, possible, u
   select.setAttribute('style', style.formSelectSTyle);
   if (options.multiSelect) select.setAttribute('multiSelect', 'true');
   select.currentURI = null;
-  var object = kb.any(subject, predicate);
-  if (object) select.currentURI = object;
 
   for (var uri in uris) {
     select.appendChild(createOption(uri));
@@ -19166,7 +19166,6 @@ function makeSelectForChoice(dom, container, kb, subject, predicate, possible, u
     select.addEventListener('change', onChange, false);
   }
 
-  select.refresh();
   return select;
 } // makeSelectForChoice
 //# sourceMappingURL=forms.js.map
