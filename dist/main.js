@@ -15192,8 +15192,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2022-05-20T06:55:49Z',
-  commit: '39d66c72c1c4f433317f3a8f6e3df4d0db35fd6e',
+  buildTime: '2022-05-20T07:49:44Z',
+  commit: '0b2c67046f504374a65ff9f4995cbb1f5fa17556',
   npmInfo: {
     'solid-ui': '2.4.22',
     npm: '6.14.17',
@@ -17371,47 +17371,43 @@ _fieldFunction.field[ns.ui('Options').uri] = function (dom, container, already, 
     values = kb.each(subject, dependingOn);
   }
 
-  if (values.length === 0) {
-    box.appendChild((0, _error.errorMessageBlock)(dom, "Can't select subform as no value of: " + dependingOn));
-  } else {
-    for (var i = 0; i < cases.length; i++) {
-      var c = cases[i];
-      var tests = kb.each(c, ui('for'), null, formDoc); // There can be multiple 'for'
+  for (var i = 0; i < cases.length; i++) {
+    var c = cases[i];
+    var tests = kb.each(c, ui('for'), null, formDoc); // There can be multiple 'for'
 
-      var match = false;
+    var match = false;
 
-      for (var j = 0; j < tests.length; j++) {
-        var _iterator = _createForOfIteratorHelper(values),
-            _step;
+    for (var j = 0; j < tests.length; j++) {
+      var _iterator = _createForOfIteratorHelper(values),
+          _step;
 
-        try {
-          for (_iterator.s(); !(_step = _iterator.n()).done;) {
-            var value = _step.value;
-            var test = tests[j];
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var value = _step.value;
+          var test = tests[j];
 
-            if (value.sameTerm(tests) || value.termType === test.termType && value.value === test.value) {
-              match = true;
-            }
+          if (value.sameTerm(tests) || value.termType === test.termType && value.value === test.value) {
+            match = true;
           }
-        } catch (err) {
-          _iterator.e(err);
-        } finally {
-          _iterator.f();
         }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+    }
+
+    if (match) {
+      var _field3 = kb.the(c, ui('use'));
+
+      if (!_field3) {
+        box.appendChild((0, _error.errorMessageBlock)(dom, 'No "use" part for case in form ' + form));
+        return box;
+      } else {
+        appendForm(dom, box, already, subject, _field3, dataDoc, callbackFunction);
       }
 
-      if (match) {
-        var _field3 = kb.the(c, ui('use'));
-
-        if (!_field3) {
-          box.appendChild((0, _error.errorMessageBlock)(dom, 'No "use" part for case in form ' + form));
-          return box;
-        } else {
-          appendForm(dom, box, already, subject, _field3, dataDoc, callbackFunction);
-        }
-
-        break;
-      }
+      break;
     }
   } // @@ Add box.refresh() to sync fields with values
 
@@ -18605,10 +18601,8 @@ function makeDescription(dom, kb, subject, predicate, dataDoc, callbackFunction)
 // @param subject - a term, the subject of the statement(s) being edited.
 // @param predicate - a term, the predicate of the statement(s) being edited
 // @param possible - a list of terms, the possible value the object can take
-// @param options.multiple - Boolean - Whether more than one at a time is allowed
 // @param options.nullLabel - a string to be displayed as the
 //                        option for none selected (for non multiple)
-// @param options.mint - User may create thing if this sent to the prompt string eg "New foo"
 // @param options.subForm - If mint, then the form to be used for minting the new thing
 // @param dataDoc - The web document being edited
 // @param callbackFunction - takes (boolean ok, string errorBody)
@@ -18632,7 +18626,7 @@ function makeSelectForOptions(dom, kb, subject, predicate, possible, options, da
   } // uris is now the set of possible options
 
 
-  if (n === 0 && !options.mint) {
+  if (n === 0) {
     return (0, _error.errorMessageBlock)(dom, "Can't do selector with no options, subject= " + subject + ' property = ' + predicate + '.');
   }
 
@@ -18669,34 +18663,8 @@ function makeSelectForOptions(dom, kb, subject, predicate, possible, options, da
       }
     };
 
-    var newObject;
-
     for (var _i = 0; _i < select.options.length; _i++) {
       var opt = select.options[_i];
-
-      if (opt.selected && opt.AJAR_mint) {
-        // not sure if this 'if' is used because I cannot find mintClass
-        if (options.mintClass) {
-          var thisForm = promptForNew(dom, kb, subject, predicate, options.mintClass, null, dataDoc, function (ok, body) {
-            if (!ok) {
-              callbackFunction(ok, body, {
-                change: 'new'
-              }); // @@ if ok, need some form of refresh of the select for the new thing
-            }
-          });
-          select.parentNode.appendChild(thisForm);
-          newObject = thisForm.AJAR_subject;
-        } else {
-          newObject = newThing(dataDoc);
-        }
-
-        is.push($rdf.st(subject, predicate, newObject, dataDoc)); // not sure if this 'if' is used because I cannot find mintStatementsFun
-
-        if (options.mintStatementsFun) {
-          is = is.concat(options.mintStatementsFun(newObject));
-        }
-      }
-
       if (!opt.AJAR_uri) continue; // a prompt or mint
 
       if (opt.selected && !(opt.AJAR_uri in actual)) {
@@ -18726,24 +18694,12 @@ function makeSelectForOptions(dom, kb, subject, predicate, possible, options, da
       sel = sel.superSelect;
     }
 
-    function doneNew(ok, _body) {
-      callbackFunction(ok, {
-        widget: 'select',
-        event: 'new'
-      });
-    }
-
     log.info('selectForOptions: data doc = ' + dataDoc);
     kb.updater.update(ds, is, function (uri, ok, body) {
       actual = getActual(); // refresh
 
       if (ok) {
         select.disabled = false; // data written back
-
-        if (newObject) {
-          var fn = (0, _fieldFunction.fieldFunction)(dom, options.subForm);
-          fn(dom, select.parentNode, {}, newObject, options.subForm, dataDoc, doneNew);
-        }
       } else {
         return select.parentNode.appendChild((0, _error.errorMessageBlock)(dom, 'Error updating data in select: ' + body));
       }
@@ -18757,7 +18713,6 @@ function makeSelectForOptions(dom, kb, subject, predicate, possible, options, da
 
   var select = dom.createElement('select');
   select.setAttribute('style', style.formSelectSTyle);
-  if (options.multiple) select.setAttribute('multiple', 'true');
   select.currentURI = null;
 
   select.refresh = function () {
@@ -18800,15 +18755,7 @@ function makeSelectForOptions(dom, kb, subject, predicate, possible, options, da
     select.appendChild(option);
   }
 
-  if (editable && options.mint) {
-    var mint = dom.createElement('option');
-    mint.appendChild(dom.createTextNode(options.mint));
-    mint.AJAR_mint = true; // Flag it
-
-    select.insertBefore(mint, select.firstChild);
-  }
-
-  if (select.currentURI == null && !options.multiple) {
+  if (!select.currentURI) {
     var prompt = dom.createElement('option');
     prompt.appendChild(dom.createTextNode(options.nullLabel));
     select.insertBefore(prompt, select.firstChild);
@@ -18831,28 +18778,16 @@ function makeSelectForOptions(dom, kb, subject, predicate, possible, options, da
 function makeSelectForCategory(dom, kb, subject, category, dataDoc, callbackFunction) {
   var du = kb.any(category, ns.owl('disjointUnionOf'));
   var subs;
-  var multiple = false;
 
   if (!du) {
     subs = kb.each(undefined, ns.rdfs('subClassOf'), category);
-    multiple = true;
   } else {
     subs = du.elements;
   }
 
   log.debug('Select list length ' + subs.length);
-
-  if (subs.length === 0) {
-    return (0, _error.errorMessageBlock)(dom, "Can't do " + (multiple ? 'multiple ' : '') + 'selector with no subclasses of category: ' + category);
-  }
-
-  if (subs.length === 1) {
-    return (0, _error.errorMessageBlock)(dom, "Can't do " + (multiple ? 'multiple ' : '') + 'selector with only 1 subclass of category: ' + category + ':' + subs[1]);
-  }
-
   return makeSelectForOptions(dom, kb, subject, ns.rdf('type'), subs, {
-    multiple: multiple,
-    nullPrompt: '--classify--'
+    nullLabel: '* Select type *'
   }, dataDoc, callbackFunction);
 }
 /** Make SELECT element to select subclasses recurively
@@ -18886,8 +18821,7 @@ function makeSelectForNestedCategory(dom, kb, subject, category, dataDoc, callba
   function onChange(ok, body) {
     if (ok) update();
     callbackFunction(ok, body);
-  } // eslint-disable-next-line prefer-const
-
+  }
 
   var select = makeSelectForCategory(dom, kb, subject, category, dataDoc, onChange);
   container.appendChild(select);

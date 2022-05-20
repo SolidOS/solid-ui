@@ -180,50 +180,42 @@ field[ns.ui('Options').uri] = function (
   } else {
     values = kb.each(subject, dependingOn)
   }
-  if (values.length === 0) {
-    box.appendChild(
-      errorMessageBlock(
-        dom,
-        "Can't select subform as no value of: " + dependingOn
-      )
-    )
-  } else {
-    for (let i = 0; i < cases.length; i++) {
-      const c = cases[i]
-      const tests = kb.each(c, ui('for'), null, formDoc) // There can be multiple 'for'
-      let match = false
-      for (let j = 0; j < tests.length; j++) {
-        for (const value of values) {
-          const test = tests[j]
-          if (value.sameTerm(tests) ||
-            (value.termType === test.termType && value.value === test.value)) {
-            match = true
-          }
+
+  for (let i = 0; i < cases.length; i++) {
+    const c = cases[i]
+    const tests = kb.each(c, ui('for'), null, formDoc) // There can be multiple 'for'
+    let match = false
+    for (let j = 0; j < tests.length; j++) {
+      for (const value of values) {
+        const test = tests[j]
+        if (value.sameTerm(tests) ||
+          (value.termType === test.termType && value.value === test.value)) {
+          match = true
         }
       }
-      if (match) {
-        const field = kb.the(c, ui('use'))
-        if (!field) {
-          box.appendChild(
-            errorMessageBlock(
-              dom,
-              'No "use" part for case in form ' + form
-            )
-          )
-          return box
-        } else {
-          appendForm(
+    }
+    if (match) {
+      const field = kb.the(c, ui('use'))
+      if (!field) {
+        box.appendChild(
+          errorMessageBlock(
             dom,
-            box,
-            already,
-            subject,
-            field,
-            dataDoc,
-            callbackFunction
+            'No "use" part for case in form ' + form
           )
-        }
-        break
+        )
+        return box
+      } else {
+        appendForm(
+          dom,
+          box,
+          already,
+          subject,
+          field,
+          dataDoc,
+          callbackFunction
+        )
       }
+      break
     }
   }
   // @@ Add box.refresh() to sync fields with values
@@ -1298,10 +1290,8 @@ export function makeDescription (
 // @param subject - a term, the subject of the statement(s) being edited.
 // @param predicate - a term, the predicate of the statement(s) being edited
 // @param possible - a list of terms, the possible value the object can take
-// @param options.multiple - Boolean - Whether more than one at a time is allowed
 // @param options.nullLabel - a string to be displayed as the
 //                        option for none selected (for non multiple)
-// @param options.mint - User may create thing if this sent to the prompt string eg "New foo"
 // @param options.subForm - If mint, then the form to be used for minting the new thing
 // @param dataDoc - The web document being edited
 // @param callbackFunction - takes (boolean ok, string errorBody)
@@ -1328,7 +1318,7 @@ export function makeSelectForOptions (
     uris[sub.uri] = true
     n++
   } // uris is now the set of possible options
-  if (n === 0 && !options.mint) {
+  if (n === 0) {
     return errorMessageBlock(
       dom,
       "Can't do selector with no options, subject= " +
@@ -1359,43 +1349,14 @@ export function makeSelectForOptions (
   const onChange = function (_e) {
     select.disabled = true // until data written back - gives user feedback too
     const ds = []
-    let is = []
+    const is = []
     const removeValue = function (t) {
       if (kb.holds(subject, predicate, t, dataDoc)) {
         ds.push($rdf.st(subject, predicate, t, dataDoc))
       }
     }
-    let newObject
     for (let i = 0; i < select.options.length; i++) {
       const opt = select.options[i]
-      if (opt.selected && opt.AJAR_mint) {
-        // not sure if this 'if' is used because I cannot find mintClass
-        if (options.mintClass) {
-          const thisForm = promptForNew(
-            dom,
-            kb,
-            subject,
-            predicate,
-            options.mintClass,
-            null,
-            dataDoc,
-            function (ok, body) {
-              if (!ok) {
-                callbackFunction(ok, body, { change: 'new' }) // @@ if ok, need some form of refresh of the select for the new thing
-              }
-            }
-          )
-          select.parentNode.appendChild(thisForm)
-          newObject = thisForm.AJAR_subject
-        } else {
-          newObject = newThing(dataDoc)
-        }
-        is.push($rdf.st(subject, predicate, newObject, dataDoc))
-        // not sure if this 'if' is used because I cannot find mintStatementsFun
-        if (options.mintStatementsFun) {
-          is = is.concat(options.mintStatementsFun(newObject))
-        }
-      }
       if (!opt.AJAR_uri) continue // a prompt or mint
       if (opt.selected && !(opt.AJAR_uri in actual)) {
         // new class
@@ -1417,26 +1378,11 @@ export function makeSelectForOptions (
       removeValue(kb.sym(sel.currentURI))
       sel = sel.superSelect
     }
-    function doneNew (ok, _body) {
-      callbackFunction(ok, { widget: 'select', event: 'new' })
-    }
     log.info('selectForOptions: data doc = ' + dataDoc)
     kb.updater.update(ds, is, function (uri, ok, body) {
       actual = getActual() // refresh
       if (ok) {
         select.disabled = false // data written back
-        if (newObject) {
-          const fn = fieldFunction(dom, options.subForm)
-          fn(
-            dom,
-            select.parentNode,
-            {},
-            newObject,
-            options.subForm,
-            dataDoc,
-            doneNew
-          )
-        }
       } else {
         return select.parentNode.appendChild(errorMessageBlock(dom, 'Error updating data in select: ' + body))
       }
@@ -1446,7 +1392,6 @@ export function makeSelectForOptions (
 
   const select = dom.createElement('select')
   select.setAttribute('style', style.formSelectSTyle)
-  if (options.multiple) select.setAttribute('multiple', 'true')
   select.currentURI = null
 
   select.refresh = function () {
@@ -1486,13 +1431,7 @@ export function makeSelectForOptions (
     }
     select.appendChild(option)
   }
-  if (editable && options.mint) {
-    const mint = dom.createElement('option')
-    mint.appendChild(dom.createTextNode(options.mint))
-    mint.AJAR_mint = true // Flag it
-    select.insertBefore(mint, select.firstChild)
-  }
-  if (select.currentURI == null && !options.multiple) {
+  if (!select.currentURI) {
     const prompt = dom.createElement('option')
     prompt.appendChild(dom.createTextNode(options.nullLabel))
     select.insertBefore(prompt, select.firstChild)
@@ -1520,41 +1459,20 @@ export function makeSelectForCategory (
 ) {
   const du = kb.any(category, ns.owl('disjointUnionOf'))
   let subs
-  let multiple = false
   if (!du) {
     subs = kb.each(undefined, ns.rdfs('subClassOf'), category)
-    multiple = true
   } else {
     subs = du.elements
   }
   log.debug('Select list length ' + subs.length)
-  if (subs.length === 0) {
-    return errorMessageBlock(
-      dom,
-      "Can't do " +
-        (multiple ? 'multiple ' : '') +
-        'selector with no subclasses of category: ' +
-        category
-    )
-  }
-  if (subs.length === 1) {
-    return errorMessageBlock(
-      dom,
-      "Can't do " +
-        (multiple ? 'multiple ' : '') +
-        'selector with only 1 subclass of category: ' +
-        category +
-        ':' +
-        subs[1]
-    )
-  }
+
   return makeSelectForOptions(
     dom,
     kb,
     subject,
     ns.rdf('type'),
     subs,
-    { multiple: multiple, nullPrompt: '--classify--' },
+    { nullLabel: '* Select type *' },
     dataDoc,
     callbackFunction
   )
@@ -1605,7 +1523,6 @@ export function makeSelectForNestedCategory (
     if (ok) update()
     callbackFunction(ok, body)
   }
-  // eslint-disable-next-line prefer-const
   const select = makeSelectForCategory(
     dom,
     kb,

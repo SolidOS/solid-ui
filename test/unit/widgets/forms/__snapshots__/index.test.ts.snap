@@ -13,7 +13,7 @@ exports[`Classifier runs 1`] = `
   <div
     style="margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; background-color: #fee; color:black;"
   >
-    Can't do multiple selector with no subclasses of category: &lt;http://example.com/#bla&gt;
+    Can't do selector with no options, subject= &lt;http://example.com/#this&gt; property = &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt;.
   </div>
 </span>
 `;
@@ -40,15 +40,7 @@ exports[`Heading runs 1`] = `
 </div>
 `;
 
-exports[`Options field runs 1`] = `
-<div>
-  <div
-    style="margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; background-color: #fee; color:black;"
-  >
-    Can't select subform as no value of: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt;
-  </div>
-</div>
-`;
+exports[`Options field runs 1`] = `<div />`;
 
 exports[`TristateField runs 1`] = `
 <div
