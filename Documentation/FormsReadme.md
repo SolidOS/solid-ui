@@ -41,13 +41,26 @@ Once you are set up with the code, take a look at some examples over at [solid-u
 
 Most interesting may be how it is all wired together in the [test-form.js](https://github.com/SolidOS/solid-ui/blob/main/Documentation/form-examples/test-form.js), while the code for the form itself is mostly under [solid-ui/src/widgets/forms.js](https://github.com/SolidOS/solid-ui/blob/main/src/widgets/forms.js).
 
-Locally you can take advantage of that.
+## Running or testing it locally
+
+Locally you can setup your own test of forms. All you need is the `/Documentation/form-examples` folders and the `test-form.js`.
+
+1. First build solid-ui locally and copy it to `/Documentation/form-examples`
+Run this instruction which will do all that for you.
 ```
 npm run build-form-examples
 ```
-and then you need to use the new build main.js by uncommenting the usage of teh script for example on line: https://github.com/SolidOS/solid-ui/blob/4f620aea3e91daf5ce9591dd83d3c95c161a44ad/Documentation/form-examples/structures3.html#L21 and commenting out the line: https://github.com/SolidOS/solid-ui/blob/4f620aea3e91daf5ce9591dd83d3c95c161a44ad/Documentation/form-examples/structures3.html#L15
+2. Use the newly build solid-ui (called main.js) in your html.
+You need to use the new build main.js:
+* uncommenting the usage of the main.js script; Example [here](https://github.com/SolidOS/solid-ui/blob/4f620aea3e91daf5ce9591dd83d3c95c161a44ad/Documentation/form-examples/structures3.html#L21)
+* commenting out the mashlib.js usage. Example [here](https://github.com/SolidOS/solid-ui/blob/4f620aea3e91daf5ce9591dd83d3c95c161a44ad/Documentation/form-examples/structures3.html#L15)
 
-And then you just need to switch out the input nad target (form adn raw data) links on line https://github.com/SolidOS/solid-ui/blob/4f620aea3e91daf5ce9591dd83d3c95c161a44ad/Documentation/form-examples/structures3.html#L56
+3. Use your own rad data and form
+Switch out the `input` and `target` (form and raw data) links. Example [here](https://github.com/SolidOS/solid-ui/blob/4f620aea3e91daf5ce9591dd83d3c95c161a44ad/Documentation/form-examples/structures3.html#L56)
+
+4. Run a local server
+For example run `npx vite`in the `Documentation` folder and the navigate to something like: http://localhost:3000/form-examples/profile-demo.html
+
 ## Spin-offs & further examples
 
 - [Jeff's solid-ui-components](https://github.com/jeff-zucker/solid-ui-components) is a different take on the UI vocabulary
