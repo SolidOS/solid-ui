@@ -15192,8 +15192,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2022-05-20T09:44:30Z',
-  commit: 'a5a36443be6e25d047585d79bb83eb6d7ec33b35',
+  buildTime: '2022-05-20T13:40:58Z',
+  commit: '993ab4aa29f540e8920023c0f3fec29c660dd28d',
   npmInfo: {
     'solid-ui': '2.4.22',
     npm: '6.14.17',
