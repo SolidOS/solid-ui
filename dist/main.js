@@ -12026,6 +12026,83 @@ module.exports = style; // @@ No way to do this in ESM
 
 /***/ }),
 
+/***/ "./lib/style_multiSelect.js":
+/*!**********************************!*\
+  !*** ./lib/style_multiSelect.js ***!
+  \**********************************/
+/***/ ((module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.style = void 0;
+
+/*
+ * BASED ON:
+ * IconicMultiSelect v0.7.0
+ * Licence:  MIT
+ * (c) 2021 Sidney Wimart.
+ * repo & configuration: https://github.com/sidneywm/iconic-multiselect
+ */
+
+/**
+ * @version IconicMultiSelect v0.7.0
+ * @licence  MIT
+ */
+var style = {
+  multiselect__container: "\n        -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n        background-color: #fff;\n        border-radius: 2px;\n        -webkit-box-shadow: 0 1px 3px 0 #d1d1d2, 0 0 0 1px #d1d1d2;\n                box-shadow: 0 1px 3px 0 #d1d1d2, 0 0 0 1px #d1d1d2;\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        display: -webkit-box;\n        display: -ms-flexbox;\n        display: flex;\n        min-height: 36px;\n        padding: 4px 8px 0 8px;\n        position: relative;\n        width: 354px;\n        margin-bottom: 5px;\n        font-size: 100%\n    ",
+
+  /*
+    multiselect__container:after: `
+        content: '';
+        min-height:inherit;
+        font-size:0;
+    `,
+     multiselect__container > *: `
+    color: #656565;
+    font-size: 14px;
+    `,
+  */
+  multiselect__wrapper: "\n        display: -webkit-box;\n        display: -ms-flexbox;\n        display: flex;\n        -ms-flex-wrap: wrap;\n            flex-wrap: wrap;\n        height: 100%;\n        width: 100%;\n    ",
+  multiselect__clear_btn: "\n        cursor: pointer;\n        align-items: center;\n        margin-bottom: 4px;\n        margin-left: 4px;\n    ",
+  multiselect__options: "\n        background-color: #f6f6f6;\n        border-radius: 2px;\n        left: 0;\n        max-height: 0;\n        overflow: hidden;\n        position: absolute;\n        top: calc(100% + 3px);\n        z-index: 9999;\n        width: 100%;\n        opacity: 0;\n        transition: max-height 0.1s ease;\n    ",
+  multiselect__options_visible: "\n        background-color: #f6f6f6;\n        border-radius: 2px;\n        left: 0;\n        max-height: 0;\n        overflow: hidden;\n        position: absolute;\n        top: calc(100% + 3px);\n        z-index: 9999;\n        width: 100%;\n        opacity: 0;\n        transition: max-height 0.1s ease;\n        max-height: 200px;\n        -webkit-box-shadow: 0 1px 3px 0 #d1d1d2, 0 0 0 1px #d1d1d2;\n        box-shadow: 0 1px 3px 0 #d1d1d2, 0 0 0 1px #d1d1d2;\n        opacity: 1;\n        transition: max-height 0.2s ease;\n    ",
+  multiselect__options_ul: "\n        list-style: none;\n        margin: 0;\n        padding: 2px 0;\n        max-height: 200px;\n        overflow: auto;\n    ",
+  multiselect__options_ul_li: "\n        cursor: pointer;\n        padding: 4px 8px;\n    ",
+  // multiselect__options ul li:hover: `
+  multiselect__options_ul_li_hover: "\n        background-color: #dedede;\n    ",
+
+  /*
+    multiselect__options ul li *: `
+    pointer-events: none;
+    `,
+  */
+  multiselect__options_ul_p_multiselect__options_no_results: "\n        margin: 0;\n        padding: 8px;\n        text-align: center;\n    ",
+  multiselect__options_ul_p_multiselect__options_no_data: "\n        margin: 0;\n        padding: 8px;\n        text-align: center;\n    ",
+  // multiselect__options ul li.multiselect__options--selected: `
+  multiselect__options_ul_li_multiselect__options_selected: "\n        background-color: #656565;\n        color: #fff;\n    ",
+  // multiselect__options ul li.multiselect__options--selected:hover: `
+  multiselect__options_ul_li_multiselect__options_selected_hover: "\n    background-color: #656565;\n    ",
+  // multiselect__options ul li.arrow-selected: `
+  multiselect__options_ul_li_arrow_selected: "\n        border: 2px solid rgba(101, 101, 101, 0.5);\n    ",
+  multiselect__selected: "\n        background-color: #656565;\n        border-radius: 2px;\n        color: #fff;\n        margin-bottom: 4px;\n        margin-right: 4px;\n        padding: 4px 8px;\n        display: -webkit-box;\n        display: -ms-flexbox;\n        display: flex;\n        -webkit-box-align: center;\n        -ms-flex-align: center;\n        align-items: center;\n    ",
+  multiselect__selected_multiselect__remove_btn: "\n        cursor: pointer;\n        display: flex;\n        margin-left: 6px;\n    ",
+  multiselect__input: "\n        border: none;\n        -ms-flex-preferred-size: 40%;\n            flex-basis: 40%;\n        -webkit-box-flex: 1;\n            -ms-flex-positive: 1;\n                flex-grow: 1;\n        height: 5px;        \n        margin-bottom: 4px;\n        min-width: 40%;\n        outline: none;      \n    "
+};
+exports.style = style;
+
+style.setStyle = function setStyle(ele, styleName) {
+  ele.style = style[styleName];
+};
+
+module.exports = style;
+//# sourceMappingURL=style_multiSelect.js.map
+
+/***/ }),
+
 /***/ "./lib/table.js":
 /*!**********************!*\
   !*** ./lib/table.js ***!
@@ -15205,8 +15282,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2022-05-25T07:28:38Z',
-  commit: '62779f1dbf177b64898b43dc69f011f10a8b1cf8',
+  buildTime: '2022-05-25T22:15:49Z',
+  commit: '78b3553416b2809ddb15ed7c7096d96ee54a319d',
   npmInfo: {
     'solid-ui': '2.4.22',
     npm: '6.14.17',
@@ -17212,6 +17289,8 @@ var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-l
 
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
 
+var _multiSelect = __webpack_require__(/*! ./multiSelect */ "./lib/widgets/multiSelect.js");
+
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -18158,7 +18237,6 @@ _fieldFunction.field[ns.ui('Choice').uri] = function (dom, container, already, s
   var kb = _solidLogic.store;
   var formDoc = form.doc ? form.doc() : null; // @@ if blank no way to know
 
-  var multiSelect = false;
   var p;
   var box = dom.createElement('div');
   box.setAttribute('class', 'choiceBox'); // Set flexDirection column?
@@ -18190,7 +18268,6 @@ _fieldFunction.field[ns.ui('Choice').uri] = function (dom, container, already, s
   var opts = {
     form: form,
     subForm: subForm,
-    multiSelect: multiSelect,
     disambiguate: false
   };
 
@@ -18239,9 +18316,7 @@ _fieldFunction.field[ns.ui('Choice').uri] = function (dom, container, already, s
       opts.disambiguate = true;
     }
 
-    var object = kb.any(subject, property);
-    if (object) possible.push(object);
-    return sortByLabel(possible);
+    return possible; // return sortByLabel(possible)
   } // TODO: this checks for any occurrence, regardless of true or false setting
 
 
@@ -18249,31 +18324,56 @@ _fieldFunction.field[ns.ui('Choice').uri] = function (dom, container, already, s
     opts.mint = '* Create new *'; // @@ could be better
   }
 
-  var selector;
+  var multiSelect = kb.any(form, ui('multiselect')); // Optional
+
+  var selector; // from ui:property
+
+  var selectedOptions = kb.each(subject, property, null, dataDoc).map(function (object) {
+    return object.value;
+  });
 
   rhs.refresh = function () {
-    var selectorOptions = getSelectorOptions();
-    selector = makeSelectForChoice(dom, rhs, kb, subject, property, selectorOptions, uiFrom, opts, dataDoc, callbackFunction);
+    // from ui:from + ui:property
+    var possibleOptions = getSelectorOptions();
+    possibleOptions.push(selectedOptions);
+    possibleOptions = sortByLabel(possibleOptions);
+    selector = makeSelectForChoice(dom, rhs, kb, subject, property, possibleOptions, selectedOptions, uiFrom, opts, dataDoc, callbackFunction);
     rhs.innerHTML = '';
     rhs.appendChild(selector);
+
+    if (multiSelect) {
+      var multiSelectDiv = new _multiSelect.IconicMultiSelect({
+        placeholder: selector.selected,
+        select: selector,
+        container: rhs,
+        textField: 'textField',
+        valueField: 'valueField'
+      });
+      multiSelectDiv.init();
+      multiSelectDiv.subscribe(function (event) {
+        if (event.action === 'REMOVE_OPTION') {
+          selectedOptions = selectedOptions.filter(function (value) {
+            return value !== event.value;
+          });
+        }
+
+        if (event.action === 'CLEAR_ALL_OPTIONS') {
+          selectedOptions = [];
+        }
+
+        if (event.action === 'ADD_OPTION') {
+          selectedOptions.push(event.value);
+        }
+
+        selector.update(selectedOptions);
+      });
+    }
   };
 
   rhs.refresh();
   if (selector && selector.refresh) selector.refresh();
   return box;
 };
-/**
-     * Removes all sibling elements after specified
-     * @param {HTMLElement} currentElement
-     * @private
-  */
-
-
-function removeNextSiblingsAfterElement(currentElement) {
-  while (currentElement.nextElementSibling) {
-    currentElement.nextElementSibling.remove();
-  }
-}
 
 function addSubFormChoice(dom, selectDiv, already, subject, subForm, dataDoc, callbackFunction) {
   (0, _fieldFunction.fieldFunction)(dom, subForm)(dom, selectDiv, already, subject, subForm, dataDoc, callbackFunction);
@@ -18996,8 +19096,6 @@ function newThing(doc) {
 // @param subject - a term, the subject of the statement(s) being edited.
 // @param predicate - a term, the predicate of the statement(s) being edited
 // @param possible - a list of terms, the possible value the object can take
-// @param options.multiSelect - Boolean - Whether more than one at a time is allowed
-// @param options.uiMultipleInUse - signals that the ui:choise is used with a ui:multiple
 // @param options.mint - User may create thing if this sent to the prompt string eg "New foo"
 // @param options.subForm - If mint, then the form to be used for minting the new thing
 // @param dataDoc - The web document being edited
@@ -19005,31 +19103,29 @@ function newThing(doc) {
 */
 
 
-function makeSelectForChoice(dom, container, kb, subject, predicate, possible, uiFrom, options, dataDoc, callbackFunction) {
-  var n = 0;
-  var uris = {}; // Count them
+function makeSelectForChoice(dom, container, kb, subject, predicate, inputPossibleOptions, selectedOptions, uiFrom, options, dataDoc, callbackFunction) {
+  var optionsFromClassUIfrom = {}; // Count them
 
   var editable = kb.updater.editable(dataDoc.uri);
 
-  for (var i = 0; i < possible.length; i++) {
-    var sub = possible[i]; // @@ Maybe; make this so it works with blank nodes too
+  for (var i = 0; i < inputPossibleOptions.length; i++) {
+    var sub = inputPossibleOptions[i]; // @@ Maybe; make this so it works with blank nodes too
+    // if (!sub.uri) debug.warn(`makeSelectForChoice: option does not have an uri: ${sub}, with predicate: ${predicate}`)
 
-    if (!sub.uri) debug.warn("makeSelectForOptions: option does not have an uri: ".concat(sub, ", with predicate: ").concat(predicate));
-    if (!sub.uri || sub.uri in uris) continue;
-    uris[sub.uri] = true;
-    n++;
-  } // uris is now the set of possible options
+    if (!sub.uri || sub.uri in optionsFromClassUIfrom) continue;
+    optionsFromClassUIfrom[sub.uri] = true;
+  }
 
+  var isEmpty = Object.keys(optionsFromClassUIfrom).length === 0;
 
-  if (n === 0 && !options.mint) {
+  if (isEmpty && !options.mint) {
     return (0, _error.errorMessageBlock)(dom, "Can't do selector with no options, subject= " + subject + ' property = ' + predicate + '.');
   }
 
-  log.debug('makeSelectForOptions: dataDoc=' + dataDoc);
+  log.debug('makeSelectForChoice: dataDoc=' + dataDoc);
 
-  function determinFirstSelectOption() {
-    var firstSelectOptionText = '--- classify ---';
-    var option = dom.createElement('option');
+  function determineFitstSelectOptionText() {
+    var firstSelectOptionText = '--- choice ---';
 
     if (predicate && !(predicate.termType === 'BlankNode')) {
       firstSelectOptionText = '* Select for property: ' + utils.label(predicate) + ' *';
@@ -19039,7 +19135,12 @@ function makeSelectForChoice(dom, container, kb, subject, predicate, possible, u
       firstSelectOptionText = '* Select for ' + utils.label(subject, true) + ' *';
     }
 
-    option.appendChild(dom.createTextNode(firstSelectOptionText));
+    return firstSelectOptionText;
+  }
+
+  function determinFirstSelectOption() {
+    var option = dom.createElement('option');
+    option.appendChild(dom.createTextNode(determineFitstSelectOptionText()));
     option.disabled = true;
     option.value = true;
     option.hidden = true;
@@ -19048,15 +19149,16 @@ function makeSelectForChoice(dom, container, kb, subject, predicate, possible, u
   }
 
   var onChange = function onChange(_e) {
+    container.removeChild(container.lastChild);
     select.refresh();
   };
 
   var select = dom.createElement('select');
   select.setAttribute('style', style.formSelectSTyle);
-  if (options.multiSelect) select.setAttribute('multiSelect', 'true');
+  select.setAttribute('id', 'formSelect');
   select.currentURI = null;
 
-  for (var uri in uris) {
+  for (var uri in optionsFromClassUIfrom) {
     select.appendChild(createOption(uri));
   }
 
@@ -19070,18 +19172,73 @@ function makeSelectForChoice(dom, container, kb, subject, predicate, possible, u
 
   if (select.children.length === 0) select.insertBefore(determinFirstSelectOption(), select.firstChild);
 
-  select.refresh = function () {
-    select.disabled = true; // unlocked any conflict we had got into
-
+  select.update = function (newSelectedOptions) {
+    selectedOptions = newSelectedOptions;
     var ds = [];
     var is = [];
 
     var removeValue = function removeValue(t) {
       if (kb.holds(subject, predicate, t, dataDoc)) {
-        ds.push($rdf.st(subject, predicate, t, dataDoc));
+        ds.push($rdf.st(subject, predicate, t, dataDoc)); // console.log("----value removed " + t)
       }
     };
 
+    var addValue = function addValue(t) {
+      if (!kb.holds(subject, predicate, t, dataDoc)) {
+        is.push($rdf.st(subject, predicate, t, dataDoc)); // console.log("----value added " + t)
+      }
+
+      if (uiFrom && !kb.holds(t, ns.rdf('type'), kb.sym(uiFrom), dataDoc)) {
+        is.push($rdf.st(t, ns.rdf('type'), kb.sym(uiFrom), dataDoc)); // console.log("----added type to value " + uiFrom)
+      }
+    };
+
+    var existingValues = kb.each(subject, predicate, null, dataDoc).map(function (object) {
+      return object.value;
+    });
+
+    var _iterator2 = _createForOfIteratorHelper(existingValues),
+        _step2;
+
+    try {
+      for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+        var value = _step2.value;
+        if (!containsObject(value, selectedOptions)) removeValue($rdf.sym(value));
+      }
+    } catch (err) {
+      _iterator2.e(err);
+    } finally {
+      _iterator2.f();
+    }
+
+    var _iterator3 = _createForOfIteratorHelper(selectedOptions),
+        _step3;
+
+    try {
+      for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+        var _value = _step3.value;
+        if (!(_value in existingValues)) addValue($rdf.sym(_value));
+      }
+    } catch (err) {
+      _iterator3.e(err);
+    } finally {
+      _iterator3.f();
+    }
+
+    kb.updater.update(ds, is, function (uri, ok, body) {
+      if (!ok) return select.parentNode.appendChild((0, _error.errorMessageBlock)(dom, 'Error updating data in select: ' + body));
+      select.refresh();
+      if (callbackFunction) callbackFunction(ok, {
+        widget: 'select',
+        event: 'change'
+      });
+    });
+  };
+
+  select.refresh = function () {
+    select.disabled = true; // unlocked any conflict we had got into
+
+    var is = [];
     var newObject;
 
     for (var _i3 = 0; _i3 < select.options.length; _i3++) {
@@ -19115,36 +19272,26 @@ function makeSelectForChoice(dom, container, kb, subject, predicate, possible, u
 
       if (!opt.AJAR_uri) continue; // a prompt or mint
 
-      if (opt.selected) select.currentURI = opt.AJAR_uri;
-    }
+      if (opt.selected && containsObject(opt.AJAR_uri, selectedOptions)) {
+        select.currentURI = opt.AJAR_uri;
+      }
 
-    var sel = select.subSelect; // All subclasses must also go
-
-    while (sel && sel.currentURI) {
-      removeValue(kb.sym(sel.currentURI));
-      sel = sel.subSelect;
-    }
-
-    sel = select.superSelect; // All superclasses are redundant
-
-    while (sel && sel.currentURI) {
-      removeValue(kb.sym(sel.currentURI));
-      sel = sel.superSelect;
+      if (!containsObject(opt.AJAR_uri, selectedOptions)) opt.setAttribute('selected', 'false');
+      if (containsObject(opt.AJAR_uri, selectedOptions)) opt.setAttribute('selected', 'true');
     }
 
     log.info('selectForOptions: data doc = ' + dataDoc);
 
     if (select.currentURI) {
-      removeNextSiblingsAfterElement(select);
       addSubFormChoice(dom, container, {}, $rdf.sym(select.currentURI), options.subForm, dataDoc, function (ok, body) {
         if (ok) {
-          kb.updater.update(ds, is, function (uri, success, errorBody) {
+          kb.updater.update([], is, function (uri, success, errorBody) {
             if (!success) container.appendChild((0, _error.errorMessageBlock)(dom, 'Error updating select: ' + errorBody));
           });
           if (callbackFunction) callbackFunction(ok, {
             widget: 'select',
             event: 'new'
-          }); // widgets.refreshTree(container)
+          });
         } else {
           container.appendChild((0, _error.errorMessageBlock)(dom, 'Error updating data in field of select: ' + body));
         }
@@ -19157,13 +19304,17 @@ function makeSelectForChoice(dom, container, kb, subject, predicate, possible, u
   function createOption(uri) {
     var option = dom.createElement('option');
     var c = kb.sym(uri);
+    var label;
 
     if (options.disambiguate) {
-      option.appendChild(dom.createTextNode(utils.labelWithOntology(c, true))); // Init. cap
+      label = utils.labelWithOntology(c, true); // Init. cap
     } else {
-      option.appendChild(dom.createTextNode(utils.label(c, true))); // Init.
+      label = utils.label(c, true);
     }
 
+    option.appendChild(dom.createTextNode(label)); // Init.
+
+    option.setAttribute('value', uri);
     var backgroundColor = kb.any(c, kb.sym('http://www.w3.org/ns/ui#backgroundColor'));
 
     if (backgroundColor) {
@@ -19171,7 +19322,12 @@ function makeSelectForChoice(dom, container, kb, subject, predicate, possible, u
     }
 
     option.AJAR_uri = uri;
-    if (c.toString() === '' + select.currentURI) option.selected = true;
+
+    if (c.value === '' + select.currentURI || containsObject(c.value, selectedOptions)) {
+      option.selected = true;
+      option.setAttribute('selected', 'true');
+    }
+
     return option;
   }
 
@@ -19181,6 +19337,19 @@ function makeSelectForChoice(dom, container, kb, subject, predicate, possible, u
 
   return select;
 } // makeSelectForChoice
+
+
+function containsObject(obj, list) {
+  var i;
+
+  for (i = 0; i < list.length; i++) {
+    if (list[i] === obj) {
+      return true;
+    }
+  }
+
+  return false;
+}
 //# sourceMappingURL=forms.js.map
 
 /***/ }),
@@ -22155,6 +22324,800 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 
 /***/ }),
 
+/***/ "./lib/widgets/multiSelect.js":
+/*!************************************!*\
+  !*** ./lib/widgets/multiSelect.js ***!
+  \************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.IconicMultiSelect = void 0;
+
+var _toConsumableArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/toConsumableArray */ "./node_modules/@babel/runtime/helpers/toConsumableArray.js"));
+
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js"));
+
+var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js"));
+
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js"));
+
+var style = _interopRequireWildcard(__webpack_require__(/*! ../style_multiSelect */ "./lib/style_multiSelect.js"));
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+/*
+ * IconicMultiSelect v0.7.0
+ * Licence:  MIT
+ * (c) 2021 Sidney Wimart.
+ * repo & configuration: https://github.com/sidneywm/iconic-multiselect
+ */
+
+/**
+ * @version IconicMultiSelect v0.7.0
+ * @licence  MIT
+ */
+var IconicMultiSelect = /*#__PURE__*/function () {
+  /**
+   * Iconic Multiselect constructor.
+   * @param { Object[] } data - Array of objects.
+   * @param { string } noData - Defines the message when there is no data input.
+   * @param { string } noResults - Defines the message when there is no result if options are filtered.
+   * @param { string } placeholder -  Defines the placeholder's text.
+   * @param { string } select - DOM element to be selected. It must be a HTML Select tag - https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select
+   * @param { string } textField - Field to select in the object for the text.
+   * @param { string } valueField - Field to select in the object for the value.
+   */
+  function IconicMultiSelect(_ref) {
+    var data = _ref.data,
+        itemTemplate = _ref.itemTemplate,
+        noData = _ref.noData,
+        noResults = _ref.noResults,
+        placeholder = _ref.placeholder,
+        select = _ref.select,
+        container = _ref.container,
+        tagTemplate = _ref.tagTemplate,
+        textField = _ref.textField,
+        valueField = _ref.valueField;
+    (0, _classCallCheck2["default"])(this, IconicMultiSelect);
+    (0, _defineProperty2["default"])(this, "_data", void 0);
+    (0, _defineProperty2["default"])(this, "_domElements", void 0);
+    (0, _defineProperty2["default"])(this, "_event", function () {});
+    (0, _defineProperty2["default"])(this, "_itemTemplate", void 0);
+    (0, _defineProperty2["default"])(this, "_multiselect", void 0);
+    (0, _defineProperty2["default"])(this, "_noData", void 0);
+    (0, _defineProperty2["default"])(this, "_noResults", void 0);
+    (0, _defineProperty2["default"])(this, "_options", []);
+    (0, _defineProperty2["default"])(this, "_placeholder", void 0);
+    (0, _defineProperty2["default"])(this, "_select", void 0);
+    (0, _defineProperty2["default"])(this, "_selectContainer", void 0);
+    (0, _defineProperty2["default"])(this, "_selectedOptions", []);
+    (0, _defineProperty2["default"])(this, "_tagTemplate", void 0);
+    (0, _defineProperty2["default"])(this, "_textField", void 0);
+    (0, _defineProperty2["default"])(this, "_valueField", void 0);
+    (0, _defineProperty2["default"])(this, "_cross", "\n    <svg\n      width=\"24\"\n      height=\"24\"\n      viewBox=\"0 0 24 24\"\n      fill=\"none\"\n      xmlns=\"http://www.w3.org/2000/svg\"\n    >\n      <path\n        d=\"M6.2253 4.81108C5.83477 4.42056 5.20161 4.42056 4.81108 4.81108C4.42056 5.20161 4.42056 5.83477 4.81108 6.2253L10.5858 12L4.81114 17.7747C4.42062 18.1652 4.42062 18.7984 4.81114 19.1889C5.20167 19.5794 5.83483 19.5794 6.22535 19.1889L12 13.4142L17.7747 19.1889C18.1652 19.5794 18.7984 19.5794 19.1889 19.1889C19.5794 18.7984 19.5794 18.1652 19.1889 17.7747L13.4142 12L19.189 6.2253C19.5795 5.83477 19.5795 5.20161 19.189 4.81108C18.7985 4.42056 18.1653 4.42056 17.7748 4.81108L12 10.5858L6.2253 4.81108Z\"\n        fill=\"currentColor\"\n      />\n    </svg>\n    ");
+    this._data = data !== null && data !== void 0 ? data : [];
+    this._itemTemplate = itemTemplate !== null && itemTemplate !== void 0 ? itemTemplate : null;
+    this._noData = noData !== null && noData !== void 0 ? noData : 'No data found.';
+    this._noResults = noResults !== null && noResults !== void 0 ? noResults : 'No results found.';
+    this._placeholder = placeholder !== null && placeholder !== void 0 ? placeholder : 'Select...';
+    this._select = select; // Timea added a container here
+
+    this._selectContainer = container;
+    this._tagTemplate = tagTemplate !== null && tagTemplate !== void 0 ? tagTemplate : null;
+    this._textField = textField !== null && textField !== void 0 ? textField : null;
+    this._valueField = valueField !== null && valueField !== void 0 ? valueField : null;
+  }
+  /**
+   * Initialize the Iconic Multiselect component.
+   * @public
+   */
+
+
+  (0, _createClass2["default"])(IconicMultiSelect, [{
+    key: "init",
+    value: function init() {
+      // Timea change to use this._select instead of this._selectContainer
+      if (this._select && this._select.nodeName === 'SELECT') {
+        if (this._itemTemplate && this._data.length === 0) {
+          throw new Error('itemTemplate must be initialized with data from the component settings');
+        }
+
+        if (this._tagTemplate && this._data.length === 0) {
+          throw new Error('tagTemplate must be initialized with data from the component settings');
+        }
+
+        this._options = this._data.length > 0 ? this._getDataFromSettings() : this._getDataFromSelectTag();
+
+        this._renderMultiselect();
+
+        this._renderOptionsList();
+
+        this._domElements = {
+          clear: this._multiselect.querySelector('.multiselect__clear-btn'),
+          input: this._multiselect.querySelector('.multiselect__input'),
+          optionsContainer: this._multiselect.querySelector('.multiselect__options'),
+          optionsContainerList: this._multiselect.querySelector('.multiselect__options > ul'),
+          options: {
+            list: this._multiselect.querySelectorAll('.multiselect__options > ul > li'),
+            find: function find(callbackFn) {
+              for (var i = 0; i < this.list.length; i++) {
+                var node = this.list[i];
+                if (callbackFn(node)) return node;
+              }
+
+              return undefined;
+            },
+            some: function some(callbackFn) {
+              for (var i = 0; i < this.list.length; i++) {
+                var node = this.list[i];
+                if (callbackFn(node, i)) return true;
+              }
+
+              return false;
+            }
+          }
+        };
+
+        this._enableEventListenners();
+
+        this._initSelectedList();
+      } else {
+        throw new Error("The selector '".concat(this._select, "' did not select any valid select tag."));
+      }
+    }
+    /**
+     * Subscribes to the emitted events.
+     * @param { Function } callback - Callback function which emits a custom event object.
+     * @public
+     */
+
+  }, {
+    key: "subscribe",
+    value: function subscribe(callback) {
+      if (typeof callback === 'function') {
+        this._event = callback;
+      } else {
+        throw new Error('parameter in the subscribe method is not a function');
+      }
+    }
+    /**
+     * Add an option to the selection list.
+     * @param { Object: { text: string; value: string; }} option
+     * @private
+     */
+
+  }, {
+    key: "_addOptionToList",
+    value: function _addOptionToList(option, index) {
+      var _this = this;
+
+      var html = "<span class=\"multiselect__selected\" style=\"".concat(style.multiselect__selected, "\" data-value=\"").concat(option.value, "\">").concat(this._tagTemplate ? this._processTemplate(this._tagTemplate, index) : option.text, "<span class=\"multiselect__remove-btn\" style=\"").concat(style.multiselect__remove_btn, "\">").concat(this._cross, "</span></span>");
+
+      this._domElements.input.insertAdjacentHTML('beforebegin', html);
+
+      var _this$_multiselect$qu = this._multiselect.querySelector("span[data-value=\"".concat(option.value, "\"]")),
+          removeBtn = _this$_multiselect$qu.lastElementChild;
+
+      removeBtn.addEventListener('click', function () {
+        var target = _this._domElements.options.find(function (el) {
+          return el.dataset.value === option.value;
+        });
+
+        _this._handleOption(target);
+      });
+    }
+    /**
+     * Clears all selected options.
+     * @private
+     */
+
+  }, {
+    key: "_clearSelection",
+    value: function _clearSelection() {
+      var _this2 = this;
+
+      var _loop = function _loop(i) {
+        var option = _this2._selectedOptions[i];
+
+        var target = _this2._domElements.options.find(function (el) {
+          return el.dataset.value === option.value;
+        });
+
+        target.classList.remove('multiselect__options--selected');
+        target.setAttribute('style', style.multiselect__options);
+
+        _this2._removeOptionFromList(target.dataset.value);
+      };
+
+      for (var i = 0; i < this._selectedOptions.length; i++) {
+        _loop(i);
+      }
+
+      this._selectedOptions = [];
+
+      this._handleClearSelectionBtn();
+
+      this._handlePlaceholder();
+
+      this._dispatchEvent({
+        action: 'CLEAR_ALL_OPTIONS',
+        selection: this._selectedOptions
+      });
+    }
+    /**
+     * Close the options container.
+     * @private
+     */
+
+  }, {
+    key: "_closeList",
+    value: function _closeList() {
+      this._domElements.input.value = '';
+
+      this._domElements.optionsContainer.classList.remove('visible');
+
+      this._domElements.optionsContainer.setAttribute('style', style.multiselect__options);
+
+      this._filterOptions('');
+
+      this._removeAllArrowSelected();
+    }
+    /**
+     * Dispatches new events.
+     * @param { object : { action: string; selection: { option: string; text: string; }[]; value?: string; } } event
+     * @private
+     */
+
+  }, {
+    key: "_dispatchEvent",
+    value: function _dispatchEvent(event) {
+      this._event(event);
+    }
+    /**
+     * Enables all main event listenners.
+     * @private
+     */
+
+  }, {
+    key: "_enableEventListenners",
+    value: function _enableEventListenners() {
+      var _this3 = this;
+
+      document.addEventListener('mouseup', function (_ref2) {
+        var target = _ref2.target;
+
+        if (!_this3._multiselect.contains(target)) {
+          _this3._filterOptions('');
+
+          _this3._closeList();
+
+          _this3._handlePlaceholder();
+        }
+      });
+
+      this._domElements.clear.addEventListener('click', function () {
+        _this3._clearSelection();
+      });
+
+      for (var i = 0; i < this._domElements.options.list.length; i++) {
+        var option = this._domElements.options.list[i];
+        option.addEventListener('click', function (_ref3) {
+          var target = _ref3.target;
+
+          _this3._handleOption(target);
+
+          _this3._closeList();
+        });
+      }
+
+      this._domElements.input.addEventListener('focus', function () {
+        _this3._domElements.optionsContainer.classList.add('visible');
+
+        _this3._domElements.optionsContainer.setAttribute('style', style.multiselect__options_visible);
+      });
+
+      this._domElements.input.addEventListener('input', function (_ref4) {
+        var value = _ref4.target.value;
+
+        if (_this3._domElements.options.list.length > 0) {
+          _this3._filterOptions(value);
+        }
+      });
+
+      this._domElements.input.addEventListener('keydown', function (e) {
+        _this3._handleArrows(e);
+
+        _this3._handleBackspace(e);
+
+        _this3._handleEnter(e);
+      });
+    }
+    /**
+     * Filters user input.
+     * @param { string } value
+     * @private
+     */
+
+  }, {
+    key: "_filterOptions",
+    value: function _filterOptions(value) {
+      var _this4 = this;
+
+      var isOpen = this._domElements.optionsContainer.classList.contains('visible');
+
+      var valueLowerCase = value.toLowerCase();
+
+      if (!isOpen && value.length > 0) {
+        this._domElements.optionsContainer.classList.add('visible');
+
+        this._domElements.optionsContainer.setAttribute('style', style.multiselect__options_visible);
+      }
+
+      if (this._domElements.options.list.length > 0) {
+        for (var i = 0; i < this._domElements.options.list.length; i++) {
+          var el = this._domElements.options.list[i];
+          var text = this._itemTemplate ? this._data[i][this._textField] : el.textContent;
+
+          if (text.toLowerCase().substring(0, valueLowerCase.length) === valueLowerCase) {
+            this._domElements.optionsContainerList.appendChild(el);
+          } else {
+            el.parentNode && el.parentNode.removeChild(el);
+          }
+        }
+
+        var hasResults = this._domElements.options.some(function (el, index) {
+          return (_this4._itemTemplate ? _this4._data[index][_this4._textField] : el.textContent).toLowerCase().substring(0, valueLowerCase.length) === valueLowerCase;
+        });
+
+        this._showNoResults(!hasResults);
+      }
+    }
+  }, {
+    key: "_generateId",
+    value: function _generateId(length) {
+      var result = '';
+      var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      var charactersLength = characters.length;
+
+      for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+
+      return result;
+    }
+    /**
+     * Gets data from select tag.
+     * @private
+     */
+
+  }, {
+    key: "_getDataFromSelectTag",
+    value: function _getDataFromSelectTag() {
+      var arr = [];
+      var options = this._select.options;
+
+      for (var i = 0; i < options.length; i++) {
+        var item = options[i];
+        arr.push({
+          text: item.text,
+          value: item.value,
+          selected: item.hasAttribute('selected')
+        });
+      }
+
+      return arr;
+    }
+    /**
+     * Gets data from settings.
+     * @private
+     */
+
+  }, {
+    key: "_getDataFromSettings",
+    value: function _getDataFromSettings() {
+      if (this._data.length > 0 && this._valueField && this._textField) {
+        var isValueFieldValid = typeof this._valueField === 'string';
+        var isTextFieldValid = typeof this._textField === 'string';
+        var arr = [];
+
+        if (!isValueFieldValid || !isTextFieldValid) {
+          throw new Error('textField and valueField must be of type string');
+        }
+
+        for (var i = 0; i < this._data.length; i++) {
+          var item = this._data[i];
+          arr.push({
+            value: item[this._valueField],
+            text: item[this._textField],
+            selected: typeof item.selected === 'boolean' ? item.selected : false
+          });
+        }
+
+        return arr;
+      } else {
+        return null;
+      }
+    }
+    /**
+     * Handles Arrow up & Down. Selection of an option is also possible with these keys.
+     * @param { Event } event
+     * @private
+     */
+
+  }, {
+    key: "_handleArrows",
+    value: function _handleArrows(event) {
+      if (event.keyCode === 40 || event.keyCode === 38) {
+        event.preventDefault();
+
+        var isOpen = this._domElements.optionsContainer.classList.contains('visible'); // An updated view of the container is needed because of the filtering option
+
+
+        var optionsContainerList = this._multiselect.querySelector('.multiselect__options > ul');
+
+        if (!isOpen) {
+          this._domElements.optionsContainer.classList.add('visible');
+
+          this._domElements.optionsContainer.setAttribute('style', style.multiselect__options_visible);
+
+          optionsContainerList.firstElementChild.classList.add('arrow-selected');
+          optionsContainerList.firstElementChild.setAttribute('style', style.multiselect__options_ul_li_arrow_selected);
+          optionsContainerList.firstElementChild.scrollIntoView(false);
+        } else {
+          var selected = this._multiselect.querySelector('.multiselect__options ul li.arrow-selected');
+
+          var action = {
+            ArrowUp: 'previous',
+            Up: 'previous',
+            ArrowDown: 'next',
+            Down: 'next'
+          };
+
+          if (!selected) {
+            optionsContainerList.firstElementChild.classList.add('arrow-selected');
+            optionsContainerList.firstElementChild.setAttribute('style', style.multiselect__options_ul_li_arrow_selected);
+            optionsContainerList.firstElementChild.scrollIntoView(false);
+            return;
+          }
+
+          selected.classList.remove('arrow-selected');
+          selected.setAttribute('style', style.multiselect__options_ul_li);
+          selected = selected[action[event.key] + 'ElementSibling']; // Go to start or end of the popup list
+
+          if (!selected) {
+            selected = optionsContainerList.children[action[event.key] === 'next' ? 0 : optionsContainerList.children.length - 1];
+            selected.classList.add('arrow-selected');
+            selected.setAttribute('style', style.multiselect__options_ul_li_arrow_selected);
+
+            this._scrollIntoView(optionsContainerList, selected);
+
+            return;
+          }
+
+          selected.classList.add('arrow-selected');
+          selected.setAttribute('style', style.multiselect__options_ul_li_arrow_selected);
+
+          this._scrollIntoView(optionsContainerList, selected);
+        }
+      }
+    }
+    /**
+     * Handles the backspace key event - Deletes the preceding option in the selection list.
+     * @param { Event } e
+     * @private
+     */
+
+  }, {
+    key: "_handleBackspace",
+    value: function _handleBackspace(e) {
+      if (e.keyCode === 8 && e.target.value === '') {
+        var lastSelectedOption = this._selectedOptions.length > 0 ? this._selectedOptions[this._selectedOptions.length - 1] : null;
+
+        if (lastSelectedOption) {
+          var targetLastSelectedOption = this._multiselect.querySelector("li[data-value=\"".concat(lastSelectedOption.value, "\"]"));
+
+          this._handleOption(targetLastSelectedOption);
+
+          if (this._selectedOptions.length === 0) {
+            this._domElements.optionsContainer.classList.remove('visible');
+
+            this._domElements.optionsContainer.setAttribute('style', style.multiselect__options);
+          }
+        }
+      }
+    }
+    /**
+     * Shows clear selection button if some options are selected.
+     * @private
+     */
+
+  }, {
+    key: "_handleClearSelectionBtn",
+    value: function _handleClearSelectionBtn() {
+      if (this._selectedOptions.length > 0) {
+        this._domElements.clear.style.display = 'flex';
+      } else {
+        this._domElements.clear.style.display = 'none';
+      }
+    }
+    /**
+     * Handles the enter key event.
+     * @param { Event } event
+     * @private
+     */
+
+  }, {
+    key: "_handleEnter",
+    value: function _handleEnter(event) {
+      if (event.keyCode === 13) {
+        var selected = this._multiselect.querySelector('.multiselect__options ul li.arrow-selected');
+
+        if (selected) {
+          this._handleOption(selected);
+
+          this._closeList();
+        }
+      }
+    }
+  }, {
+    key: "_handleOption",
+    value: function _handleOption(target) {
+      var dispatchEvent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+      // Remove
+      for (var i = 0; i < this._selectedOptions.length; i++) {
+        var el = this._selectedOptions[i];
+
+        if (el.value === target.dataset.value) {
+          target.classList.remove('multiselect__options--selected');
+          target.setAttribute('style', style.multiselect__options);
+
+          this._selectedOptions.splice(i, 1);
+
+          this._removeOptionFromList(target.dataset.value);
+
+          this._handleClearSelectionBtn();
+
+          this._handlePlaceholder();
+
+          return dispatchEvent && this._dispatchEvent({
+            action: 'REMOVE_OPTION',
+            value: target.dataset.value,
+            selection: this._selectedOptions
+          });
+        }
+      } // Add
+
+
+      for (var _i = 0; _i < this._options.length; _i++) {
+        var option = this._options[_i];
+
+        if (option.value === target.dataset.value) {
+          target.classList.add('multiselect__options--selected');
+          target.setAttribute('style', style.multiselect__options_selected);
+          this._selectedOptions = [].concat((0, _toConsumableArray2["default"])(this._selectedOptions), [option]);
+
+          this._addOptionToList(option, _i);
+
+          this._handleClearSelectionBtn();
+
+          this._handlePlaceholder();
+
+          return dispatchEvent && this._dispatchEvent({
+            action: 'ADD_OPTION',
+            value: target.dataset.value,
+            selection: this._selectedOptions
+          });
+        }
+      }
+    }
+    /**
+     * Shows the placeholder if no options are selected.
+     * @private
+     */
+
+  }, {
+    key: "_handlePlaceholder",
+    value: function _handlePlaceholder() {
+      this._domElements.input.placeholder = this._placeholder;
+    }
+  }, {
+    key: "_initSelectedList",
+    value: function _initSelectedList() {
+      var _this5 = this;
+
+      var hasItemsSelected = false;
+
+      var _loop2 = function _loop2(i) {
+        var option = _this5._options[i];
+
+        if (option.selected) {
+          hasItemsSelected = true;
+
+          var target = _this5._domElements.options.find(function (el) {
+            return el.dataset.value === option.value;
+          });
+
+          target.classList.add('multiselect__options--selected');
+          target.setAttribute('style', style.multiselect__options_selected);
+          _this5._selectedOptions = [].concat((0, _toConsumableArray2["default"])(_this5._selectedOptions), [option]);
+
+          _this5._addOptionToList(option, i);
+        }
+      };
+
+      for (var i = 0; i < this._options.length; i++) {
+        _loop2(i);
+      }
+
+      if (hasItemsSelected) {
+        this._handleClearSelectionBtn();
+      }
+
+      this._handlePlaceholder();
+    }
+    /**
+     * Process the custom template.
+     * @param { string } template
+     * @private
+     */
+
+  }, {
+    key: "_processTemplate",
+    value: function _processTemplate(template, index) {
+      var processedTemplate = template;
+      var objAttr = template.match(/\$\{(\w+)\}/g).map(function (e) {
+        return e.replace(/\$\{|\}/g, '');
+      });
+
+      for (var i = 0; i < objAttr.length; i++) {
+        var _this$_data$index$att;
+
+        var attr = objAttr[i]; // eslint-disable-next-line no-useless-escape
+
+        processedTemplate = processedTemplate.replace("${".concat(attr, "}"), (_this$_data$index$att = this._data[index][attr]) !== null && _this$_data$index$att !== void 0 ? _this$_data$index$att : '');
+      }
+
+      return processedTemplate;
+    }
+  }, {
+    key: "_removeAllArrowSelected",
+    value: function _removeAllArrowSelected() {
+      var className = 'arrow-selected';
+
+      var target = this._domElements.options.find(function (el) {
+        return el.classList.contains(className);
+      });
+
+      target && target.classList.remove(className) && target.setAttribute('style', style.multiselect__options_ul_li);
+    }
+    /**
+     * Removes an option from the list.
+     * @param { string } value
+     * @private
+     */
+
+  }, {
+    key: "_removeOptionFromList",
+    value: function _removeOptionFromList(value) {
+      var optionDom = this._multiselect.querySelector("span[data-value=\"".concat(value, "\"]"));
+
+      optionDom && optionDom.parentNode && optionDom.parentNode.removeChild(optionDom);
+    }
+    /**
+     * Renders the multiselect options list view.
+     * @private
+     */
+
+  }, {
+    key: "_renderOptionsList",
+    value: function _renderOptionsList() {
+      var _this6 = this;
+
+      var html = "\n        <div class=\"multiselect__options\" style=\"".concat(style.multiselect__options, "\">\n          <ul style=\"").concat(style.multiselect__options_ul, "\">\n          ").concat(this._options.length > 0 && !this._itemTemplate ? this._options.map(function (option) {
+        return "\n              <li data-value=\"".concat(option.value, "\" style=\"").concat(style.multiselect__options_ul_li, "\">").concat(option.text, "</li>\n            ");
+      }).join('') : '', "\n\n          ").concat(this._options.length > 0 && this._itemTemplate ? this._options.map(function (option, index) {
+        return "\n              <li data-value=\"".concat(option.value, "\" style=\"").concat(style.multiselect__options_ul_li, "\">").concat(_this6._processTemplate(_this6._itemTemplate, index), "</li>\n            ");
+      }).join('') : '', "\n          ").concat(this._showNoData(this._options.length === 0), "\n          </ul>\n        </div>\n      ");
+
+      this._multiselect.insertAdjacentHTML('beforeend', html);
+    }
+    /**
+     * Renders the multiselect view.
+     * @private
+     */
+
+  }, {
+    key: "_renderMultiselect",
+    value: function _renderMultiselect() {
+      this._select.style.display = 'none';
+
+      var id = 'iconic-' + this._generateId(20); // Timea created dedicated div element because previous code was not rendering
+
+
+      this._multiselect = document.createElement('div');
+
+      this._multiselect.setAttribute('id', id);
+
+      this._multiselect.setAttribute('class', 'multiselect__container');
+
+      this._multiselect.setAttribute('style', style.multiselect__container);
+
+      var html = "\n        <div class=\"multiselect__wrapper\" style=\"".concat(style.multiselect__wrapper, "\">\n          <input class=\"multiselect__input\" style=\"").concat(style.multiselect__input, "\" placeholder=\"").concat(this._placeholder, "\" />\n        </div>\n        <span style=\"display: none;\" class=\"multiselect__clear-btn\" style=\"").concat(style.multiselect__clear_btn, "\">").concat(this._cross, "</span>\n    ");
+      this._multiselect.innerHTML = html;
+
+      this._selectContainer.appendChild(this._multiselect);
+    }
+    /**
+     * ScrollIntoView - This small utility reproduces the behavior of .scrollIntoView({ block: "nearest", inline: "nearest" })
+     * This is for IE compatibility without a need of a polyfill
+     * @private
+     */
+
+  }, {
+    key: "_scrollIntoView",
+    value: function _scrollIntoView(parent, child) {
+      var rectParent = parent.getBoundingClientRect();
+      var rectChild = child.getBoundingClientRect(); // Detect if not visible at top and then scroll to the top
+
+      if (!(rectParent.top < rectChild.bottom - child.offsetHeight)) {
+        parent.scrollTop = child.clientHeight + (child.offsetTop - child.offsetHeight);
+      } // Detect if not visible at bottom and then scroll to the bottom
+
+
+      if (!(rectParent.bottom > rectChild.top + child.offsetHeight)) {
+        parent.scrollTop = child.clientHeight + (child.offsetTop - child.offsetHeight) - (parent.offsetHeight - (child.offsetHeight + (child.offsetHeight - child.clientHeight)));
+      }
+    }
+    /**
+     * Shows a no data message.
+     * @param { boolean } condition
+     * @private
+     */
+
+  }, {
+    key: "_showNoData",
+    value: function _showNoData(condition) {
+      return condition ? "<p class=\"multiselect__options--no-data\" style=\"".concat(style.multiselect__options_ul_p_multiselect__options_no_data, "\">").concat(this._noData, "</p>") : '';
+    }
+    /**
+     * Shows a no results message.
+     * @param { boolean } condition
+     * @private
+     */
+
+  }, {
+    key: "_showNoResults",
+    value: function _showNoResults(condition) {
+      var dom = this._multiselect.querySelector('.multiselect__options--no-results');
+
+      if (condition) {
+        var html = "<p class=\"multiselect__options--no-results\" style=\"".concat(style.multiselect__options_ul_p_multiselect__options_no_results, "\">").concat(this._noResults, "</p>");
+        !dom && this._domElements.optionsContainerList.insertAdjacentHTML('beforeend', html);
+      } else {
+        dom && dom.parentNode && dom.parentNode.removeChild(dom);
+      }
+    }
+  }]);
+  return IconicMultiSelect;
+}();
+
+exports.IconicMultiSelect = IconicMultiSelect;
+//# sourceMappingURL=multiSelect.js.map
+
+/***/ }),
+
 /***/ "./lib/widgets/peoplePicker.js":
 /*!*************************************!*\
   !*** ./lib/widgets/peoplePicker.js ***!
@@ -22826,6 +23789,22 @@ module.exports = _arrayWithHoles, module.exports.__esModule = true, module.expor
 
 /***/ }),
 
+/***/ "./node_modules/@babel/runtime/helpers/arrayWithoutHoles.js":
+/*!******************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/arrayWithoutHoles.js ***!
+  \******************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var arrayLikeToArray = __webpack_require__(/*! ./arrayLikeToArray.js */ "./node_modules/@babel/runtime/helpers/arrayLikeToArray.js");
+
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) return arrayLikeToArray(arr);
+}
+
+module.exports = _arrayWithoutHoles, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
 /***/ "./node_modules/@babel/runtime/helpers/assertThisInitialized.js":
 /*!**********************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/assertThisInitialized.js ***!
@@ -23091,6 +24070,20 @@ module.exports = _isNativeReflectConstruct, module.exports.__esModule = true, mo
 
 /***/ }),
 
+/***/ "./node_modules/@babel/runtime/helpers/iterableToArray.js":
+/*!****************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/iterableToArray.js ***!
+  \****************************************************************/
+/***/ ((module) => {
+
+function _iterableToArray(iter) {
+  if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
+}
+
+module.exports = _iterableToArray, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
 /***/ "./node_modules/@babel/runtime/helpers/iterableToArrayLimit.js":
 /*!*********************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/iterableToArrayLimit.js ***!
@@ -23142,6 +24135,20 @@ function _nonIterableRest() {
 }
 
 module.exports = _nonIterableRest, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime/helpers/nonIterableSpread.js":
+/*!******************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/nonIterableSpread.js ***!
+  \******************************************************************/
+/***/ ((module) => {
+
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+
+module.exports = _nonIterableSpread, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
 
@@ -23228,6 +24235,28 @@ function _taggedTemplateLiteral(strings, raw) {
 }
 
 module.exports = _taggedTemplateLiteral, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime/helpers/toConsumableArray.js":
+/*!******************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/toConsumableArray.js ***!
+  \******************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var arrayWithoutHoles = __webpack_require__(/*! ./arrayWithoutHoles.js */ "./node_modules/@babel/runtime/helpers/arrayWithoutHoles.js");
+
+var iterableToArray = __webpack_require__(/*! ./iterableToArray.js */ "./node_modules/@babel/runtime/helpers/iterableToArray.js");
+
+var unsupportedIterableToArray = __webpack_require__(/*! ./unsupportedIterableToArray.js */ "./node_modules/@babel/runtime/helpers/unsupportedIterableToArray.js");
+
+var nonIterableSpread = __webpack_require__(/*! ./nonIterableSpread.js */ "./node_modules/@babel/runtime/helpers/nonIterableSpread.js");
+
+function _toConsumableArray(arr) {
+  return arrayWithoutHoles(arr) || iterableToArray(arr) || unsupportedIterableToArray(arr) || nonIterableSpread();
+}
+
+module.exports = _toConsumableArray, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
 

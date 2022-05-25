@@ -22,6 +22,7 @@ import * as ns from '../ns'
 import * as $rdf from 'rdflib'
 import { store } from 'solid-logic'
 import * as utils from '../utils'
+import { IconicMultiSelect } from './multiSelect'
 import * as widgets from '../widgets'
 export { basicField, fieldLabel, fieldStore, renderNameValuePair } from './forms/basic' // Note default export
 
@@ -756,7 +757,6 @@ field[ns.ui('Choice').uri] = function (
   const ui = ns.ui
   const kb = store
   const formDoc = form.doc ? form.doc() : null // @@ if blank no way to know
-  const multiSelect = false
 
   let p
   const box = dom.createElement('div')
@@ -781,7 +781,7 @@ field[ns.ui('Choice').uri] = function (
   const subForm = kb.any(form, ui('use')) // Optional
   const follow = kb.anyJS(form, ui('follow'), null, formDoc) // data doc moves to new subject?
 
-  const opts = { form, subForm, multiSelect, disambiguate: false }
+  const opts = { form, subForm, disambiguate: false }
 
   function getSelectorOptions () {
     let possible = []
@@ -809,10 +809,8 @@ field[ns.ui('Choice').uri] = function (
       opts.disambiguate = true
     }
 
-    const object = kb.any(subject, property)
-    if (object) possible.push(object)
-
-    return sortByLabel(possible)
+    return possible
+    // return sortByLabel(possible)
   }
 
   // TODO: this checks for any occurrence, regardless of true or false setting
@@ -820,16 +818,26 @@ field[ns.ui('Choice').uri] = function (
     opts.mint = '* Create new *' // @@ could be better
   }
 
+  const multiSelect = kb.any(form, ui('multiselect')) // Optional
+
   let selector
+  // from ui:property
+  let selectedOptions = kb.each(subject, property, null, dataDoc).map(object => object.value)
+
   rhs.refresh = function () {
-    const selectorOptions = getSelectorOptions()
+    // from ui:from + ui:property
+    let possibleOptions = getSelectorOptions()
+    possibleOptions.push(selectedOptions)
+    possibleOptions = sortByLabel(possibleOptions)
+
     selector = makeSelectForChoice(
       dom,
       rhs,
       kb,
       subject,
       property,
-      selectorOptions,
+      possibleOptions,
+      selectedOptions,
       uiFrom,
       opts,
       dataDoc,
@@ -837,23 +845,36 @@ field[ns.ui('Choice').uri] = function (
     )
     rhs.innerHTML = ''
     rhs.appendChild(selector)
+    if (multiSelect) {
+      const multiSelectDiv = new IconicMultiSelect({
+        placeholder: selector.selected,
+        select: selector,
+        container: rhs,
+        textField: 'textField',
+        valueField: 'valueField'
+      })
+      multiSelectDiv.init()
+      multiSelectDiv.subscribe(function (event) {
+        if (event.action === 'REMOVE_OPTION') {
+          selectedOptions = selectedOptions.filter(function (value) {
+            return value !== event.value
+          })
+        }
+        if (event.action === 'CLEAR_ALL_OPTIONS') {
+          selectedOptions = []
+        }
+        if (event.action === 'ADD_OPTION') {
+          selectedOptions.push(event.value)
+        }
+        selector.update(selectedOptions)
+      })
+    }
   }
 
   rhs.refresh()
   if (selector && selector.refresh) selector.refresh()
 
   return box
-}
-
-/**
-     * Removes all sibling elements after specified
-     * @param {HTMLElement} currentElement
-     * @private
-  */
-function removeNextSiblingsAfterElement (currentElement) {
-  while (currentElement.nextElementSibling) {
-    currentElement.nextElementSibling.remove()
-  }
 }
 
 function addSubFormChoice (dom, selectDiv, already, subject, subForm, dataDoc, callbackFunction) {
@@ -1706,8 +1727,6 @@ export function newThing (doc) {
 // @param subject - a term, the subject of the statement(s) being edited.
 // @param predicate - a term, the predicate of the statement(s) being edited
 // @param possible - a list of terms, the possible value the object can take
-// @param options.multiSelect - Boolean - Whether more than one at a time is allowed
-// @param options.uiMultipleInUse - signals that the ui:choise is used with a ui:multiple
 // @param options.mint - User may create thing if this sent to the prompt string eg "New foo"
 // @param options.subForm - If mint, then the form to be used for minting the new thing
 // @param dataDoc - The web document being edited
@@ -1719,24 +1738,24 @@ export function makeSelectForChoice (
   kb,
   subject,
   predicate,
-  possible,
+  inputPossibleOptions,
+  selectedOptions,
   uiFrom,
   options,
   dataDoc,
   callbackFunction
 ) {
-  let n = 0
-  const uris = {} // Count them
+  const optionsFromClassUIfrom = {} // Count them
   const editable = kb.updater.editable(dataDoc.uri)
 
-  for (let i = 0; i < possible.length; i++) {
-    const sub = possible[i] // @@ Maybe; make this so it works with blank nodes too
-    if (!sub.uri) debug.warn(`makeSelectForOptions: option does not have an uri: ${sub}, with predicate: ${predicate}`)
-    if (!sub.uri || sub.uri in uris) continue
-    uris[sub.uri] = true
-    n++
-  } // uris is now the set of possible options
-  if (n === 0 && !options.mint) {
+  for (let i = 0; i < inputPossibleOptions.length; i++) {
+    const sub = inputPossibleOptions[i] // @@ Maybe; make this so it works with blank nodes too
+    // if (!sub.uri) debug.warn(`makeSelectForChoice: option does not have an uri: ${sub}, with predicate: ${predicate}`)
+    if (!sub.uri || sub.uri in optionsFromClassUIfrom) continue
+    optionsFromClassUIfrom[sub.uri] = true
+  }
+  const isEmpty = Object.keys(optionsFromClassUIfrom).length === 0
+  if (isEmpty && !options.mint) {
     return errorMessageBlock(
       dom,
       "Can't do selector with no options, subject= " +
@@ -1747,11 +1766,10 @@ export function makeSelectForChoice (
     )
   }
 
-  log.debug('makeSelectForOptions: dataDoc=' + dataDoc)
+  log.debug('makeSelectForChoice: dataDoc=' + dataDoc)
 
-  function determinFirstSelectOption () {
-    let firstSelectOptionText = '--- classify ---'
-    const option = dom.createElement('option')
+  function determineFitstSelectOptionText () {
+    let firstSelectOptionText = '--- choice ---'
 
     if (predicate && !(predicate.termType === 'BlankNode')) {
       firstSelectOptionText = '* Select for property: ' + utils.label(predicate) + ' *'
@@ -1760,8 +1778,12 @@ export function makeSelectForChoice (
     if (subject && !(subject.termType === 'BlankNode')) {
       firstSelectOptionText = '* Select for ' + utils.label(subject, true) + ' *'
     }
+    return firstSelectOptionText
+  }
 
-    option.appendChild(dom.createTextNode(firstSelectOptionText))
+  function determinFirstSelectOption () {
+    const option = dom.createElement('option')
+    option.appendChild(dom.createTextNode(determineFitstSelectOptionText()))
     option.disabled = true
     option.value = true
     option.hidden = true
@@ -1771,15 +1793,16 @@ export function makeSelectForChoice (
   }
 
   const onChange = function (_e) {
+    container.removeChild(container.lastChild)
     select.refresh()
   }
 
   const select = dom.createElement('select')
   select.setAttribute('style', style.formSelectSTyle)
-  if (options.multiSelect) select.setAttribute('multiSelect', 'true')
+  select.setAttribute('id', 'formSelect')
   select.currentURI = null
 
-  for (const uri in uris) {
+  for (const uri in optionsFromClassUIfrom) {
     select.appendChild(createOption(uri))
   }
 
@@ -1792,15 +1815,47 @@ export function makeSelectForChoice (
 
   if (select.children.length === 0) select.insertBefore(determinFirstSelectOption(), select.firstChild)
 
-  select.refresh = function () {
-    select.disabled = true // unlocked any conflict we had got into
+  select.update = function (newSelectedOptions) {
+    selectedOptions = newSelectedOptions
     const ds = []
-    let is = []
+    const is = []
     const removeValue = function (t) {
       if (kb.holds(subject, predicate, t, dataDoc)) {
         ds.push($rdf.st(subject, predicate, t, dataDoc))
+        // console.log("----value removed " + t)
       }
     }
+
+    const addValue = function (t) {
+      if (!kb.holds(subject, predicate, t, dataDoc)) {
+        is.push($rdf.st(subject, predicate, t, dataDoc))
+        // console.log("----value added " + t)
+      }
+      if (uiFrom && (!kb.holds(t, ns.rdf('type'), kb.sym(uiFrom), dataDoc))) {
+        is.push($rdf.st(t, ns.rdf('type'), kb.sym(uiFrom), dataDoc))
+        // console.log("----added type to value " + uiFrom)
+      }
+    }
+
+    const existingValues = kb.each(subject, predicate, null, dataDoc).map(object => object.value)
+    for (const value of existingValues) {
+      if (!containsObject(value, selectedOptions)) removeValue($rdf.sym(value))
+    }
+    for (const value of selectedOptions) {
+      if (!(value in existingValues)) addValue($rdf.sym(value))
+    }
+
+    kb.updater.update(ds, is, function (uri, ok, body) {
+      if (!ok) return select.parentNode.appendChild(errorMessageBlock(dom, 'Error updating data in select: ' + body))
+      select.refresh()
+      if (callbackFunction) callbackFunction(ok, { widget: 'select', event: 'change' })
+    })
+  }
+
+  select.refresh = function () {
+    select.disabled = true // unlocked any conflict we had got into
+    let is = []
+
     let newObject
     for (let i = 0; i < select.options.length; i++) {
       const opt = select.options[i]
@@ -1836,28 +1891,21 @@ export function makeSelectForChoice (
         select.currentURI = newObject
       }
       if (!opt.AJAR_uri) continue // a prompt or mint
-      if (opt.selected) select.currentURI = opt.AJAR_uri
+      if (opt.selected && containsObject(opt.AJAR_uri, selectedOptions)) {
+        select.currentURI = opt.AJAR_uri
+      }
+      if (!containsObject(opt.AJAR_uri, selectedOptions)) opt.setAttribute('selected', 'false')
+      if (containsObject(opt.AJAR_uri, selectedOptions)) opt.setAttribute('selected', 'true')
     }
-    let sel = select.subSelect // All subclasses must also go
-    while (sel && sel.currentURI) {
-      removeValue(kb.sym(sel.currentURI))
-      sel = sel.subSelect
-    }
-    sel = select.superSelect // All superclasses are redundant
-    while (sel && sel.currentURI) {
-      removeValue(kb.sym(sel.currentURI))
-      sel = sel.superSelect
-    }
+
     log.info('selectForOptions: data doc = ' + dataDoc)
     if (select.currentURI) {
-      removeNextSiblingsAfterElement(select)
       addSubFormChoice(dom, container, {}, $rdf.sym(select.currentURI), options.subForm, dataDoc, function (ok, body) {
         if (ok) {
-          kb.updater.update(ds, is, function (uri, success, errorBody) {
+          kb.updater.update([], is, function (uri, success, errorBody) {
             if (!success) container.appendChild(errorMessageBlock(dom, 'Error updating select: ' + errorBody))
           })
           if (callbackFunction) callbackFunction(ok, { widget: 'select', event: 'new' })
-          // widgets.refreshTree(container)
         } else {
           container.appendChild(errorMessageBlock(dom, 'Error updating data in field of select: ' + body))
         }
@@ -1869,11 +1917,14 @@ export function makeSelectForChoice (
   function createOption (uri) {
     const option = dom.createElement('option')
     const c = kb.sym(uri)
+    let label
     if (options.disambiguate) {
-      option.appendChild(dom.createTextNode(utils.labelWithOntology(c, true))) // Init. cap
+      label = utils.labelWithOntology(c, true) // Init. cap
     } else {
-      option.appendChild(dom.createTextNode(utils.label(c, true))) // Init.
+      label = utils.label(c, true)
     }
+    option.appendChild(dom.createTextNode(label)) // Init.
+    option.setAttribute('value', uri)
     const backgroundColor = kb.any(
       c,
       kb.sym('http://www.w3.org/ns/ui#backgroundColor')
@@ -1885,7 +1936,10 @@ export function makeSelectForChoice (
       )
     }
     option.AJAR_uri = uri
-    if (c.toString() === '' + select.currentURI) option.selected = true
+    if (c.value === '' + select.currentURI || containsObject(c.value, selectedOptions)) {
+      option.selected = true
+      option.setAttribute('selected', 'true')
+    }
     return option
   }
 
@@ -1895,3 +1949,14 @@ export function makeSelectForChoice (
 
   return select
 } // makeSelectForChoice
+
+function containsObject (obj, list) {
+  let i
+  for (i = 0; i < list.length; i++) {
+    if (list[i] === obj) {
+      return true
+    }
+  }
+
+  return false
+}
