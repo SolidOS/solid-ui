@@ -223,7 +223,7 @@ describe('tabWidget', () => {
         expect(subject).toBe(item2)
       })
       tabWidgetElement = tabs.tabWidget({ renderTabSettings: renderTabSettingsSpy, ...minimalOptions })
-      const event = new window.Event('click');
+      const event = new window.Event('click')
       tabWidgetElement.tabContainer.children[1].children[1].dispatchEvent(event)
       expect(renderTabSettingsSpy).toHaveBeenCalled()
     })
