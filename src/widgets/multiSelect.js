@@ -9,6 +9,7 @@
  * @version IconicMultiSelect v0.7.0
  * @licence  MIT
  */
+import * as style from '../style_multiSelect'
 
 export class IconicMultiSelect {
   _data
@@ -69,7 +70,7 @@ export class IconicMultiSelect {
    * Initialize the Iconic Multiselect component.
    * @public
    */
-    init() {
+  init () {
     // Timea change to use this._select instead of this._selectContainer
     if (this._select && this._select.nodeName === 'SELECT') {
       if (this._itemTemplate && this._data.length === 0) { throw new Error('itemTemplate must be initialized with data from the component settings') }
@@ -130,15 +131,15 @@ export class IconicMultiSelect {
    * @private
    */
   _addOptionToList (option, index) {
-    const html = `<span class="multiselect__selected" data-value="${option.value}">${
+    const html = `<span class="multiselect__selected" style="${style.multiselect__selected}" data-value="${option.value}">${
       this._tagTemplate ? this._processTemplate(this._tagTemplate, index) : option.text
-    }<span class="multiselect__remove-btn">${this._cross}</span></span>`
+    }<span class="multiselect__remove-btn" style="${style.multiselect__remove_btn}">${this._cross}</span></span>`
 
     this._domElements.input.insertAdjacentHTML('beforebegin', html)
 
     const { lastElementChild: removeBtn } = this._multiselect.querySelector(`span[data-value="${option.value}"]`)
     removeBtn.addEventListener('click', () => {
-      const target = this._domElements.options.find((el) => el.dataset.value == option.value)
+      const target = this._domElements.options.find((el) => el.dataset.value === option.value)
       this._handleOption(target)
     })
   }
@@ -150,8 +151,9 @@ export class IconicMultiSelect {
   _clearSelection () {
     for (let i = 0; i < this._selectedOptions.length; i++) {
       const option = this._selectedOptions[i]
-      const target = this._domElements.options.find((el) => el.dataset.value == option.value)
+      const target = this._domElements.options.find((el) => el.dataset.value === option.value)
       target.classList.remove('multiselect__options--selected')
+      target.setAttribute('style', style.multiselect__options)
       this._removeOptionFromList(target.dataset.value)
     }
     this._selectedOptions = []
@@ -170,6 +172,7 @@ export class IconicMultiSelect {
   _closeList () {
     this._domElements.input.value = ''
     this._domElements.optionsContainer.classList.remove('visible')
+    this._domElements.optionsContainer.setAttribute('style', style.multiselect__options)
     this._filterOptions('')
     this._removeAllArrowSelected()
   }
@@ -210,7 +213,7 @@ export class IconicMultiSelect {
 
     this._domElements.input.addEventListener('focus', () => {
       this._domElements.optionsContainer.classList.add('visible')
-      this._domElements.input.placeholder = ''
+      this._domElements.optionsContainer.setAttribute('style', style.multiselect__options_visible)
     })
 
     this._domElements.input.addEventListener('input', ({ target: { value } }) => {
@@ -237,6 +240,7 @@ export class IconicMultiSelect {
 
     if (!isOpen && value.length > 0) {
       this._domElements.optionsContainer.classList.add('visible')
+      this._domElements.optionsContainer.setAttribute('style', style.multiselect__options_visible)
     }
 
     if (this._domElements.options.list.length > 0) {
@@ -331,7 +335,9 @@ export class IconicMultiSelect {
 
       if (!isOpen) {
         this._domElements.optionsContainer.classList.add('visible')
+        this._domElements.optionsContainer.setAttribute('style', style.multiselect__options_visible)
         optionsContainerList.firstElementChild.classList.add('arrow-selected')
+        optionsContainerList.firstElementChild.setAttribute('style', style.multiselect__options_ul_li_arrow_selected)
         optionsContainerList.firstElementChild.scrollIntoView(false)
       } else {
         let selected = this._multiselect.querySelector('.multiselect__options ul li.arrow-selected')
@@ -344,24 +350,28 @@ export class IconicMultiSelect {
 
         if (!selected) {
           optionsContainerList.firstElementChild.classList.add('arrow-selected')
+          optionsContainerList.firstElementChild.setAttribute('style', style.multiselect__options_ul_li_arrow_selected)
           optionsContainerList.firstElementChild.scrollIntoView(false)
           return
         }
 
         selected.classList.remove('arrow-selected')
+        selected.setAttribute('style', style.multiselect__options_ul_li)
 
         selected = selected[action[event.key] + 'ElementSibling']
 
         // Go to start or end of the popup list
         if (!selected) {
           selected =
-            optionsContainerList.children[action[event.key] === 'next' ? 0 : optionsContainerList.children.length - 1]
+          optionsContainerList.children[action[event.key] === 'next' ? 0 : optionsContainerList.children.length - 1]
           selected.classList.add('arrow-selected')
+          selected.setAttribute('style', style.multiselect__options_ul_li_arrow_selected)
           this._scrollIntoView(optionsContainerList, selected)
           return
         }
 
         selected.classList.add('arrow-selected')
+        selected.setAttribute('style', style.multiselect__options_ul_li_arrow_selected)
         this._scrollIntoView(optionsContainerList, selected)
       }
     }
@@ -385,6 +395,7 @@ export class IconicMultiSelect {
 
         if (this._selectedOptions.length === 0) {
           this._domElements.optionsContainer.classList.remove('visible')
+          this._domElements.optionsContainer.setAttribute('style', style.multiselect__options)
         }
       }
     }
@@ -421,8 +432,9 @@ export class IconicMultiSelect {
     // Remove
     for (let i = 0; i < this._selectedOptions.length; i++) {
       const el = this._selectedOptions[i]
-      if (el.value == target.dataset.value) {
+      if (el.value === target.dataset.value) {
         target.classList.remove('multiselect__options--selected')
+        target.setAttribute('style', style.multiselect__options)
         this._selectedOptions.splice(i, 1)
         this._removeOptionFromList(target.dataset.value)
         this._handleClearSelectionBtn()
@@ -442,8 +454,9 @@ export class IconicMultiSelect {
     // Add
     for (let i = 0; i < this._options.length; i++) {
       const option = this._options[i]
-      if (option.value == target.dataset.value) {
+      if (option.value === target.dataset.value) {
         target.classList.add('multiselect__options--selected')
+        target.setAttribute('style', style.multiselect__options_selected)
         this._selectedOptions = [...this._selectedOptions, option]
         this._addOptionToList(option, i)
         this._handleClearSelectionBtn()
@@ -466,11 +479,7 @@ export class IconicMultiSelect {
    * @private
    */
   _handlePlaceholder () {
-    if (this._selectedOptions.length > 0) {
-      this._domElements.input.placeholder = ''
-    } else {
-      this._domElements.input.placeholder = this._placeholder
-    }
+    this._domElements.input.placeholder = this._placeholder
   }
 
   _initSelectedList () {
@@ -480,8 +489,9 @@ export class IconicMultiSelect {
       const option = this._options[i]
       if (option.selected) {
         hasItemsSelected = true
-        const target = this._domElements.options.find((el) => el.dataset.value == option.value)
+        const target = this._domElements.options.find((el) => el.dataset.value === option.value)
         target.classList.add('multiselect__options--selected')
+        target.setAttribute('style', style.multiselect__options_selected)
         this._selectedOptions = [...this._selectedOptions, option]
         this._addOptionToList(option, i)
       }
@@ -502,6 +512,7 @@ export class IconicMultiSelect {
 
     for (let i = 0; i < objAttr.length; i++) {
       const attr = objAttr[i]
+      // eslint-disable-next-line no-useless-escape
       processedTemplate = processedTemplate.replace(`\$\{${attr}\}`, this._data[index][attr] ?? '')
     }
 
@@ -511,7 +522,7 @@ export class IconicMultiSelect {
   _removeAllArrowSelected () {
     const className = 'arrow-selected'
     const target = this._domElements.options.find((el) => el.classList.contains(className))
-    target && target.classList.remove(className)
+    target && target.classList.remove(className) && target.setAttribute('style', style.multiselect__options_ul_li)
   }
 
   /**
@@ -530,14 +541,14 @@ export class IconicMultiSelect {
    */
   _renderOptionsList () {
     const html = `
-        <div class="multiselect__options">
-          <ul>
+        <div class="multiselect__options" style="${style.multiselect__options}">
+          <ul style="${style.multiselect__options_ul}">
           ${
             this._options.length > 0 && !this._itemTemplate
               ? this._options
                   .map((option) => {
                     return `
-              <li data-value="${option.value}">${option.text}</li>
+              <li data-value="${option.value}" style="${style.multiselect__options_ul_li}">${option.text}</li>
             `
                   })
                   .join('')
@@ -549,7 +560,7 @@ export class IconicMultiSelect {
               ? this._options
                   .map((option, index) => {
                     return `
-              <li data-value="${option.value}">${this._processTemplate(this._itemTemplate, index)}</li>
+              <li data-value="${option.value}" style="${style.multiselect__options_ul_li}">${this._processTemplate(this._itemTemplate, index)}</li>
             `
                   })
                   .join('')
@@ -574,11 +585,12 @@ export class IconicMultiSelect {
     this._multiselect = document.createElement('div')
     this._multiselect.setAttribute('id', id)
     this._multiselect.setAttribute('class', 'multiselect__container')
+    this._multiselect.setAttribute('style', style.multiselect__container)
     const html = `
-        <div class="multiselect__wrapper">
-          <input class="multiselect__input" placeholder="${this._placeholder}" />
+        <div class="multiselect__wrapper" style="${style.multiselect__wrapper}">
+          <input class="multiselect__input" style="${style.multiselect__input}" placeholder="${this._placeholder}" />
         </div>
-        <span style="display: none;" class="multiselect__clear-btn">${this._cross}</span>
+        <span style="display: none;" class="multiselect__clear-btn" style="${style.multiselect__clear_btn}">${this._cross}</span>
     `
     this._multiselect.innerHTML = html
     this._selectContainer.appendChild(this._multiselect)
@@ -613,7 +625,7 @@ export class IconicMultiSelect {
    * @private
    */
   _showNoData (condition) {
-    return condition ? `<p class="multiselect__options--no-data">${this._noData}</p>` : ''
+    return condition ? `<p class="multiselect__options--no-data" style="${style.multiselect__options_ul_p_multiselect__options_no_data}">${this._noData}</p>` : ''
   }
 
   /**
@@ -624,7 +636,7 @@ export class IconicMultiSelect {
   _showNoResults (condition) {
     const dom = this._multiselect.querySelector('.multiselect__options--no-results')
     if (condition) {
-      const html = `<p class="multiselect__options--no-results">${this._noResults}</p>`
+      const html = `<p class="multiselect__options--no-results" style="${style.multiselect__options_ul_p_multiselect__options_no_results}">${this._noResults}</p>`
       !dom && this._domElements.optionsContainerList.insertAdjacentHTML('beforeend', html)
     } else {
       dom && dom.parentNode && dom.parentNode.removeChild(dom)
