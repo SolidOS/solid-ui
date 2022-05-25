@@ -26,7 +26,10 @@ import { PaneDefinition } from 'pane-registry'
 import { BlankNode, NamedNode, st, Statement } from 'rdflib'
 // eslint-disable-next-line camelcase
 import { Quad_Object } from 'rdflib/lib/tf-types'
-import { AppDetails, AuthenticationContext, loadIndex, authn, authSession, CrossOriginForbiddenError, ensureTypeIndexes, FetchError, getSuggestedIssuers, NotFoundError, offlineTestID, SameOriginForbiddenError, solidLogicSingleton, UnauthorizedError } from 'solid-logic'
+import { AppDetails, AuthenticationContext, loadIndex, authn, authSession,
+   CrossOriginForbiddenError, ensureTypeIndexes, FetchError, getSuggestedIssuers,
+   discovery,
+    NotFoundError, offlineTestID, SameOriginForbiddenError, solidLogicSingleton, UnauthorizedError } from 'solid-logic'
 import * as debug from '../debug'
 import { alert } from '../log'
 import * as ns from '../ns.js'
@@ -34,7 +37,8 @@ import { Signup } from '../signup/signup.js'
 import { buttonStyle, commentStyle, textInputStyle } from '../style'
 import { utils } from '../utils/index'
 import * as widgets from '../widgets'
-
+const { getScopedAppInstances, getAppInstances, registerInstanceInTypeIndex } = discovery
+const store = solidLogicSingleton.store
 /**
   * Resolves with the logged in user's WebID
   *
@@ -187,8 +191,9 @@ export async function findAppInstances (
     // console.log('found public & private app instance', context)
     return context
   }
-
   // Loading preferences is more than loading profile
+
+  console.log('@@ 192 ', JSON.stringify(context))
   try {
     // console.log('calling logInLoad', isPublic)
     await (isPublic
@@ -205,30 +210,39 @@ export async function findAppInstances (
   } catch (err) {
     debug.error(err)
   }
+  console.log('@@ 209 ', JSON.stringify(context))
+
   const index = context.index as { [key: string]: Array<NamedNode> }
   const thisIndex = index[visibility]
+  console.log('@@ ', visibility, ' thisIndex ', JSON.stringify(thisIndex))
+
   const registrations = thisIndex
     .map(ix => solidLogicSingleton.store.each(undefined, ns.solid('forClass'), theClass, ix))
     .reduce((acc, curr) => acc.concat(curr), [])
   const instances = registrations
     .map(reg => solidLogicSingleton.store.each(reg as NamedNode, ns.solid('instance')))
     .reduce((acc, curr) => acc.concat(curr), [])
+  console.log('@@ ', visibility, ' context.index ', JSON.stringify(context.index))
+
   const containers = registrations
     .map(reg => solidLogicSingleton.store.each(reg as NamedNode, ns.solid('instanceContainer')))
     .reduce((acc, curr) => acc.concat(curr), [])
-
+  console.log('@@ ', visibility, ' instances ', JSON.stringify(instances))
   function unique (arr: NamedNode[]): NamedNode[] {
     return Array.from(new Set(arr))
   }
   context.instances = context.instances || []
   context.instances = unique(context.instances.concat(instances as NamedNode[]))
-
+  console.log('@@ ', visibility, ' context.index ', JSON.stringify(context.index))
+  console.log('@@ ', visibility, ' instances 3 ', JSON.stringify(context.instances))
   context.containers = context.containers || []
   context.containers = unique(context.containers.concat(containers as NamedNode[]))
   if (!containers.length) {
     return context
   }
   // If the index gives containers, then look up all things within them
+  console.log('@@ CONTAINERS   ', JSON.stringify(containers))
+
   try {
     await solidLogicSingleton.load(containers as NamedNode[])
   } catch (err) {
@@ -266,14 +280,15 @@ export async function registrationControl (
     box.innerHTML = '<p style="margin:2em;">(Log in to save a link to this)</p>'
     return context
   }
+  const user = context.me
 
-  let context2 // @@ const
+  let scopes // @@ const
   try {
-    context2 = await ensureTypeIndexes(context)
+    scopes = loadAllTypeIndexes(store, me)
   } catch (e) {
     let msg
     if (context.div && context.preferencesFileError) {
-      msg = '(Preferences not available)'
+      msg = '(Lists of stuff not available)'
       context.div.appendChild(dom.createElement('p')).textContent = msg
     } else if (context.div) {
       msg = `registrationControl: Type indexes not available: ${e}`
@@ -282,12 +297,12 @@ export async function registrationControl (
     debug.log(msg)
   }
 
-  box.innerHTML = '<table><tbody><tr></tr><tr></tr></tbody></table>' // tbody will be inserted anyway
+  box.innerHTML = '<table><tbody></tbody></table>' // tbody will be inserted anyway
   box.setAttribute('style', 'font-size: 120%; text-align: right; padding: 1em; border: solid gray 0.05em;')
   const tbody = box.children[0].children[0]
   const form = new BlankNode() // @@ say for now
 
-  const registrationStatements = function (index) {
+  function registrationStatements (index) {
     const registrations = solidLogicSingleton.getRegistrations(instance, theClass)
     const reg = registrations.length
       ? registrations[0]
@@ -298,23 +313,33 @@ export async function registrationControl (
     ]
   }
 
-  let index, statements
+  function renderScope (scope) {
+    const statements = registrationStatements(scope.index)
+    const name = scope.agent.sameTerm(me) ? '' :  label(scope.agent) + ' '
+    widgets.buildCheckboxForm(
+      context2.dom,
+      solidLogicSingleton.store,
+      `${name}${scope.label} link to this ${context2.noun}`,
+      null,
+      statements,
+      form,
+      scope.index
+    )
+  }
 
+  for const scope of scopes {
+    const row = tbody.appendChild(dom.createElement('tr'))
+    row.appendChild(renderScope(scope)) // @@ index
+  }
+  /*
   try {
     if (context2.index && context2.index.public && context2.index.public.length > 0) {
       index = context2.index.public[0]
+
+
       statements = registrationStatements(index)
       tbody.children[0].appendChild(
-        widgets.buildCheckboxForm(
-          context2.dom,
-          solidLogicSingleton.store,
-          `Public link to this ${context2.noun}`,
-          null,
-          statements,
-          form,
-          index
-        )
-      )
+
     }
 
     if (context2.index && context2.index.private && context2.index.private.length > 0) {
@@ -339,6 +364,7 @@ export async function registrationControl (
     }
     debug.log(msg)
   }
+  */
   return context2
 }
 
@@ -361,67 +387,67 @@ export async function registrationList (context0: AuthenticationContext, options
     return context0
   }
 
-  return ensureTypeIndexes(context0).then(context => {
-    box.innerHTML = '<table><tbody></tbody></table>' // tbody will be inserted anyway
-    box.setAttribute('style', 'font-size: 120%; text-align: right; padding: 1em; border: solid #eee 0.5em;')
-    const table = box.firstChild as HTMLElement
+  const scopes = loadAllTypeIndexes(store,  me) // includes community indexes
 
-    let ix: Array<NamedNode> = []
-    let sts: Statement[] = []
-    const vs = ['private', 'public']
-    vs.forEach(function (visibility) {
-      if (context.index && context.index[visibility].length > 0 && options[visibility]) {
-        ix = ix.concat(context.index[visibility][0])
-        sts = sts.concat(
-          solidLogicSingleton.store.statementsMatching(
-            undefined,
-            ns.solid('instance'),
-            undefined,
-            context.index[visibility][0]
-          )
+  box.innerHTML = '<table><tbody></tbody></table>' // tbody will be inserted anyway
+  box.setAttribute('style', 'font-size: 120%; text-align: right; padding: 1em; border: solid #eee 0.5em;')
+  const table = box.firstChild as HTMLElement
+
+  let ix: Array<NamedNode> = []
+  let sts: Statement[] = []
+  scopes.forEach(function (scope) {
+    if (context.index && context.index[visibility].length > 0 && options[visibility]) {
+      ix = ix.concat(context.index[visibility][0])
+      sts = sts.concat(
+        solidLogicSingleton.store.statementsMatching(
+          undefined,
+          ns.solid('instance'),
+          undefined,
+          scope.index
         )
-      }
-    })
-
-    for (let i = 0; i < sts.length; i++) {
-      const statement: Statement = sts[i]
-      if (options.type) { // now check  terms:forClass
-        if (!solidLogicSingleton.store.holds(statement.subject, ns.solid('forClass'), options.type, statement.why)) {
-          continue // skip irrelevant ones
-        }
-      }
-      // const cla = statement.subject
-      const inst = statement.object
-      table.appendChild(widgets.personTR(dom, ns.solid('instance'), inst, {
-        deleteFunction: function (_x) {
-          if (!solidLogicSingleton.store.updater) {
-            throw new Error('Cannot delete this, store has no updater')
-          }
-          solidLogicSingleton.store.updater.update([statement], [], function (uri, ok, errorBody) {
-            if (ok) {
-              debug.log(`Removed from index: ${statement.subject}`)
-            } else {
-              debug.log(`Error: Cannot delete ${statement}: ${errorBody}`)
-            }
-          })
-        }
-      }))
-    } // registrationList
-
-    /*
-        //const containers = solidLogicSingleton.store.each(theClass, ns.solid('instanceContainer'));
-        if (containers.length) {
-        fetcher.load(containers).then(function(xhrs){
-        for (const i=0; i<containers.length; i++) {
-        const cont = containers[i];
-        instances = instances.concat(solidLogicSingleton.store.each(cont, ns.ldp('contains')));
-        }
-        });
-        }
-        */
-
-    return context
+      )
+    }
   })
+
+  for (let i = 0; i < sts.length; i++) {
+    const statement: Statement = sts[i]
+    if (options.type) { // now check  terms:forClass
+      if (!solidLogicSingleton.store.holds(statement.subject, ns.solid('forClass'), options.type, statement.why)) {
+        continue // skip irrelevant ones
+      }
+    }
+    // const cla = statement.subject
+    const inst = statement.object
+    table.appendChild(widgets.personTR(dom, ns.solid('instance'), inst, {
+      deleteFunction: function (_x) {
+        if (!solidLogicSingleton.store.updater) {
+          throw new Error('Cannot delete this, store has no updater')
+        }
+        solidLogicSingleton.store.updater.update([statement], [], function (uri, ok, errorBody) {
+          if (ok) {
+            debug.log(`Removed from index: ${statement.subject}`)
+          } else {
+            debug.log(`Error: Cannot delete ${statement}: ${errorBody}`)
+          }
+        })
+      }
+    }))
+  } // registrationList
+
+  /*
+      //const containers = solidLogicSingleton.store.each(theClass, ns.solid('instanceContainer'));
+      if (containers.length) {
+      fetcher.load(containers).then(function(xhrs){
+      for (const i=0; i<containers.length; i++) {
+      const cont = containers[i];
+      instances = instances.concat(solidLogicSingleton.store.each(cont, ns.ldp('contains')));
+      }
+      });
+      }
+      */
+
+  return context
+
 }
 
 function getDefaultSignInButtonStyle (): string {

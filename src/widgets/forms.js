@@ -802,15 +802,16 @@ field[ns.ui('Choice').uri] = function (
   let object = kb.any(subject, property)
   function addSubForm () {
     object = kb.any(subject, property)
-    fieldFunction(dom, subForm)(
+    const subFormElement = fieldFunction(dom, subForm)(
       dom,
-      rhs,
+      null,
       already,
       object,
       subForm,
       follow ? object.doc() : dataDoc,
       callbackFunction
     )
+    rhs.appendChild(subFormElement)
   }
   const possible2 = sortByLabel(possible)
   if (kb.any(form, ui('canMintNew'))) {

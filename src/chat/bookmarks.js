@@ -85,8 +85,6 @@ function updatePromise (del, ins) {
   }) // promise
 }
 
-// export findBookmarkDocument,
-
 /*         Bookmarking
  */
 /** Find a user's bookmarks
@@ -96,7 +94,10 @@ export async function findBookmarkDocument (userContext) {
   const fileTail = 'bookmarks.ttl'
   const isPublic = true
 
+  console.log('@@ public bookmark userContext: before ', JSON.stringify(userContext))
   await findAppInstances(userContext, theClass, isPublic) // public -- only look for public links
+  console.log('@@ public bookmark userContext: aftern ', JSON.stringify(userContext))
+
   if (userContext.instances && userContext.instances.length > 0) {
     userContext.bookmarkDocument = userContext.instances[0]
     if (userContext.instances.length > 1) {
