@@ -809,10 +809,8 @@ field[ns.ui('Choice').uri] = function (
       opts.disambiguate = true
     }
 
-    const object = kb.each(subject, property)
-    if (object) possible.push(object)
-
-    return sortByLabel(possible)
+    return possible
+    // return sortByLabel(possible)
   }
 
   // TODO: this checks for any occurrence, regardless of true or false setting
@@ -823,15 +821,23 @@ field[ns.ui('Choice').uri] = function (
   const multiSelect = kb.any(form, ui('multiselect')) // Optional
 
   let selector
+  // from ui:property
+  let selectedOptions = kb.each(subject, property, null, dataDoc).map(object => object.value)
+
   rhs.refresh = function () {
-    const selectorOptions = getSelectorOptions()
+    // from ui:from + ui:property
+    let possibleOptions = getSelectorOptions()
+    possibleOptions.push(selectedOptions)
+    possibleOptions = sortByLabel(possibleOptions)
+
     selector = makeSelectForChoice(
       dom,
       rhs,
       kb,
       subject,
       property,
-      selectorOptions,
+      possibleOptions,
+      selectedOptions,
       uiFrom,
       opts,
       dataDoc,
@@ -849,8 +855,18 @@ field[ns.ui('Choice').uri] = function (
       })
       multiSelectDiv.init()
       multiSelectDiv.subscribe(function (event) {
-        console.log("----HERE" + JSON.stringify(event))
-        selector.refresh()
+        if (event.action === 'REMOVE_OPTION') {
+          selectedOptions = selectedOptions.filter(function (value) {
+            return value !== event.value
+          })
+        }
+        if (event.action === 'CLEAR_ALL_OPTIONS') {
+          selectedOptions = []
+        }
+        if (event.action === 'ADD_OPTION') {
+          selectedOptions.push(event.value)
+        }
+        selector.update(selectedOptions)
       })
     }
   }
@@ -1723,6 +1739,7 @@ export function makeSelectForChoice (
   subject,
   predicate,
   inputPossibleOptions,
+  selectedOptions,
   uiFrom,
   options,
   dataDoc,
@@ -1749,10 +1766,7 @@ export function makeSelectForChoice (
     )
   }
 
-  // these are objects which the subject actually has in the raw data
-  const optionsFromUIproperty = kb.each(subject, predicate).map(object => object.value)
-
-  log.debug('makeSelectForOptions: dataDoc=' + dataDoc)
+  log.debug('makeSelectForChoice: dataDoc=' + dataDoc)
 
   function determineFitstSelectOptionText () {
     let firstSelectOptionText = '--- choice ---'
@@ -1801,15 +1815,46 @@ export function makeSelectForChoice (
 
   if (select.children.length === 0) select.insertBefore(determinFirstSelectOption(), select.firstChild)
 
-  select.refresh = function () {
-    select.disabled = true // unlocked any conflict we had got into
+  select.update = function (newSelectedOptions) {
+    selectedOptions = newSelectedOptions
     const ds = []
-    let is = []
+    const is = []
     const removeValue = function (t) {
       if (kb.holds(subject, predicate, t, dataDoc)) {
         ds.push($rdf.st(subject, predicate, t, dataDoc))
+        // console.log("----value removed " + t)
       }
     }
+
+    const addValue = function (t) {
+      if (!kb.holds(subject, predicate, t, dataDoc)) {
+        is.push($rdf.st(subject, predicate, t, dataDoc))
+        // console.log("----value added " + t)
+      }
+      if (uiFrom && (!kb.holds(t, ns.rdf('type'), kb.sym(uiFrom), dataDoc))) {
+        is.push($rdf.st(t, ns.rdf('type'), kb.sym(uiFrom), dataDoc))
+        // console.log("----added type to value " + uiFrom)
+      }
+    }
+
+    const existingValues = kb.each(subject, predicate, null, dataDoc).map(object => object.value)
+    for (const value of existingValues) {
+      if (!containsObject(value, selectedOptions)) removeValue($rdf.sym(value))
+    }
+    for (const value of selectedOptions) {
+      if (!(value in existingValues)) addValue($rdf.sym(value))
+    }
+
+    kb.updater.update(ds, is, function (uri, ok, body) {
+      if (!ok) return select.parentNode.appendChild(errorMessageBlock(dom, 'Error updating data in select: ' + body))
+      if (callbackFunction) callbackFunction(ok, { widget: 'select', event: 'change' })
+    })
+  }
+
+  select.refresh = function () {
+    select.disabled = true // unlocked any conflict we had got into
+    let is = []
+
     let newObject
     for (let i = 0; i < select.options.length; i++) {
       const opt = select.options[i]
@@ -1845,27 +1890,20 @@ export function makeSelectForChoice (
         select.currentURI = newObject
       }
       if (!opt.AJAR_uri) continue // a prompt or mint
-      if (opt.selected) select.currentURI = opt.AJAR_uri
+      if (opt.selected && (selectedOptions.includes(opt.AJAR_uri))) select.currentURI = opt.AJAR_uri
+      if (opt.selected && !(selectedOptions.includes(opt.AJAR_uri))) {
+        opt.removeAttribute('selected')
+      }
     }
-    let sel = select.subSelect // All subclasses must also go
-    while (sel && sel.currentURI) {
-      removeValue(kb.sym(sel.currentURI))
-      sel = sel.subSelect
-    }
-    sel = select.superSelect // All superclasses are redundant
-    while (sel && sel.currentURI) {
-      removeValue(kb.sym(sel.currentURI))
-      sel = sel.superSelect
-    }
+
     log.info('selectForOptions: data doc = ' + dataDoc)
     if (select.currentURI) {
       addSubFormChoice(dom, container, {}, $rdf.sym(select.currentURI), options.subForm, dataDoc, function (ok, body) {
         if (ok) {
-          kb.updater.update(ds, is, function (uri, success, errorBody) {
+          kb.updater.update([], is, function (uri, success, errorBody) {
             if (!success) container.appendChild(errorMessageBlock(dom, 'Error updating select: ' + errorBody))
           })
           if (callbackFunction) callbackFunction(ok, { widget: 'select', event: 'new' })
-          // widgets.refreshTree(container)
         } else {
           container.appendChild(errorMessageBlock(dom, 'Error updating data in field of select: ' + body))
         }
@@ -1896,7 +1934,7 @@ export function makeSelectForChoice (
       )
     }
     option.AJAR_uri = uri
-    if (c.value === '' + select.currentURI || containsObject(c.value, optionsFromUIproperty)) {
+    if (c.value === '' + select.currentURI || containsObject(c.value, selectedOptions)) {
       option.selected = true
       option.setAttribute('selected', 'true')
     }

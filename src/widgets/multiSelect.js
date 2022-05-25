@@ -2,7 +2,7 @@
  * IconicMultiSelect v0.7.0
  * Licence:  MIT
  * (c) 2021 Sidney Wimart.
- * repo: https://github.com/sidneywm/iconic-multiselect
+ * repo & configuration: https://github.com/sidneywm/iconic-multiselect
  */
 
 /**
@@ -58,6 +58,7 @@ export class IconicMultiSelect {
     this._noResults = noResults ?? 'No results found.'
     this._placeholder = placeholder ?? 'Select...'
     this._select = select
+    // Timea added a container here
     this._selectContainer = container
     this._tagTemplate = tagTemplate ?? null
     this._textField = textField ?? null
@@ -68,7 +69,8 @@ export class IconicMultiSelect {
    * Initialize the Iconic Multiselect component.
    * @public
    */
-  init () {
+    init() {
+    // Timea change to use this._select instead of this._selectContainer
     if (this._select && this._select.nodeName === 'SELECT') {
       if (this._itemTemplate && this._data.length === 0) { throw new Error('itemTemplate must be initialized with data from the component settings') }
       if (this._tagTemplate && this._data.length === 0) { throw new Error('tagTemplate must be initialized with data from the component settings') }
@@ -568,7 +570,7 @@ export class IconicMultiSelect {
   _renderMultiselect () {
     this._select.style.display = 'none'
     const id = 'iconic-' + this._generateId(20)
-
+    // Timea created dedicated div element because previous code was not rendering
     this._multiselect = document.createElement('div')
     this._multiselect.setAttribute('id', id)
     this._multiselect.setAttribute('class', 'multiselect__container')
