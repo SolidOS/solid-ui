@@ -392,8 +392,7 @@ export function tabWidget (options: TabWidgetOptions) {
       const tab = tabContainer.children[i]
       if (tab.classList.contains('unstyled')) {
         continue
-      }
-      else {
+      } else {
         tab.setAttribute('style', unselectedStyle)
       }
     }
