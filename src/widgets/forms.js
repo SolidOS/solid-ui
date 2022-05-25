@@ -1847,6 +1847,7 @@ export function makeSelectForChoice (
 
     kb.updater.update(ds, is, function (uri, ok, body) {
       if (!ok) return select.parentNode.appendChild(errorMessageBlock(dom, 'Error updating data in select: ' + body))
+      select.refresh()
       if (callbackFunction) callbackFunction(ok, { widget: 'select', event: 'change' })
     })
   }
@@ -1890,10 +1891,11 @@ export function makeSelectForChoice (
         select.currentURI = newObject
       }
       if (!opt.AJAR_uri) continue // a prompt or mint
-      if (opt.selected && (selectedOptions.includes(opt.AJAR_uri))) select.currentURI = opt.AJAR_uri
-      if (opt.selected && !(selectedOptions.includes(opt.AJAR_uri))) {
-        opt.removeAttribute('selected')
+      if (opt.selected && containsObject(opt.AJAR_uri, selectedOptions)) {
+        select.currentURI = opt.AJAR_uri
       }
+      if (!containsObject(opt.AJAR_uri, selectedOptions)) opt.setAttribute('selected', 'false')
+      if (containsObject(opt.AJAR_uri, selectedOptions)) opt.setAttribute('selected', 'true')
     }
 
     log.info('selectForOptions: data doc = ' + dataDoc)
