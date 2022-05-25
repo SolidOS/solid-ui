@@ -223,9 +223,8 @@ describe('tabWidget', () => {
         expect(subject).toBe(item2)
       })
       tabWidgetElement = tabs.tabWidget({ renderTabSettings: renderTabSettingsSpy, ...minimalOptions })
-      const event = new window.Event('click');
-      (event as any).altKey = true // a bit of a hack, but works
-      tabWidgetElement.tabContainer.children[1].children[0].dispatchEvent(event)
+      const event = new window.Event('click')
+      tabWidgetElement.tabContainer.children[1].children[1].dispatchEvent(event)
       expect(renderTabSettingsSpy).toHaveBeenCalled()
     })
   })

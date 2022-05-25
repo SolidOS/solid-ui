@@ -14,7 +14,7 @@ declare type TabWidgetOptions = {
     orientation?: '0' | '1' | '2' | '3';
     predicate?: NamedNode;
     renderMain?: (bodyMain: HTMLElement, subject: NamedNode) => void;
-    renderTab?: (tabDiv: HTMLDivElement, subject: NamedNode) => void;
+    renderTab?: (tabDiv: HTMLButtonElement, subject: NamedNode) => void;
     renderTabSettings?: (bodyMain: ContainerElement, subject: NamedNode) => void;
     selectedTab?: NamedNode;
     startEmpty?: boolean;

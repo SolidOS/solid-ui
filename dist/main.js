@@ -13914,9 +13914,9 @@ function tabWidget(options) {
   var marginsPrepped = margins.concat(margins).slice(orientation, orientation + 4);
   var marginsStyle = "margin: ".concat(marginsPrepped.join(' '), ";");
   var paddingStyle = "padding: ".concat(marginsPrepped.join(' '), ";");
-  var tabStyle = cornersStyle + "padding: 0.7em; max-width: 20em; color: ".concat(color, ";");
-  var unselectedStyle = "".concat(tabStyle + marginsStyle, "opacity: 50%; background-color: ").concat(backgroundColor, ";");
-  var selectedStyle = "".concat(tabStyle + marginsStyle, "background-color: ").concat(selectedColor, ";");
+  var tabStyle = cornersStyle + "position: relative; padding: 0.7em; max-width: 20em; color: ".concat(color, ";");
+  var unselectedStyle = "".concat(tabStyle + marginsStyle, " opacity: 50%; background-color: ").concat(backgroundColor, ";");
+  var selectedStyle = "".concat(tabStyle + marginsStyle, " background-color: ").concat(selectedColor, ";");
   var shownStyle = 'height: 100%; width: 100%;';
   var hiddenStyle = shownStyle + 'display: none;';
   rootElement.refresh = orderedSync;
@@ -13976,35 +13976,50 @@ function tabWidget(options) {
 
   function makeNewSlot(item) {
     var ele = dom.createElement(tabElement);
+    ele.setAttribute('style', unselectedStyle);
     ele.subject = item;
-    var div = ele.appendChild(dom.createElement('div'));
-    div.setAttribute('style', unselectedStyle);
-    div.addEventListener('click', function (e) {
-      if (!e.metaKey) {
-        resetTabStyle();
-        resetBodyStyle();
-      }
+    var div = ele.appendChild(dom.createElement('button'));
+    div.setAttribute('style', 'background: none; border: none; font: inherit; cursor: pointer');
+    var ellipsis = dom.createElement('button');
+    ellipsis.textContent = '...';
+    ellipsis.setAttribute('style', 'position: absolute; right: 0; bottom: 0; width: 20%; background: none; color: inherit; border: none; padding: 0; font: inherit; cursor: pointer; outline: inherit;');
 
-      div.setAttribute('style', selectedStyle);
+    div.onclick = function () {
+      resetTabStyle();
+      resetBodyStyle();
+      ele.setAttribute('style', selectedStyle);
       if (!ele.bodyTR) return;
       ele.bodyTR.setAttribute('style', shownStyle);
       var bodyMain = getOrCreateContainerElement(ele);
 
-      if (options.renderTabSettings && e.altKey && ele.subject && bodyMain.asSettings !== true) {
-        bodyMain.innerHTML = 'loading settings ...' + item;
-        options.renderTabSettings(bodyMain, ele.subject);
-        bodyMain.asSettings = true;
-      } else if (options.renderMain && ele.subject && bodyMain.asSettings !== false) {
+      if (options.renderMain && ele.subject && bodyMain.asSettings !== false) {
         bodyMain.innerHTML = 'loading item ...' + item;
         options.renderMain(bodyMain, ele.subject);
         bodyMain.asSettings = false;
       }
-    });
+    };
+
+    ellipsis.onclick = function () {
+      resetTabStyle();
+      resetBodyStyle();
+      ele.setAttribute('style', selectedStyle);
+      if (!ele.bodyTR) return;
+      ele.bodyTR.setAttribute('style', shownStyle);
+      var bodyMain = getOrCreateContainerElement(ele);
+
+      if (options.renderTabSettings && ele.subject && bodyMain.asSettings !== true) {
+        bodyMain.innerHTML = 'loading settings ...' + item;
+        options.renderTabSettings(bodyMain, ele.subject);
+        bodyMain.asSettings = true;
+      }
+    };
 
     if (options.renderTab) {
       options.renderTab(div, item);
+      ele.appendChild(ellipsis);
     } else {
-      div.textContent = (0, _utils.label)(item);
+      div.innerHTML = (0, _utils.label)(item);
+      ele.appendChild(ellipsis);
     }
 
     return ele;
@@ -14084,10 +14099,8 @@ function tabWidget(options) {
 
       if (_tab.classList.contains('unstyled')) {
         continue;
-      }
-
-      if (_tab.children[0]) {
-        _tab.children[0].setAttribute('style', unselectedStyle);
+      } else {
+        _tab.setAttribute('style', unselectedStyle);
       }
     }
   }
@@ -15192,8 +15205,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2022-05-20T13:40:58Z',
-  commit: '993ab4aa29f540e8920023c0f3fec29c660dd28d',
+  buildTime: '2022-05-25T07:28:38Z',
+  commit: '62779f1dbf177b64898b43dc69f011f10a8b1cf8',
   npmInfo: {
     'solid-ui': '2.4.22',
     npm: '6.14.17',
