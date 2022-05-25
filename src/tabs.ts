@@ -292,9 +292,8 @@ export function tabWidget (options: TabWidgetOptions) {
     const ellipsis = dom.createElement('button')
     ellipsis.textContent = '...'
     ellipsis.setAttribute('style', 'position: absolute; right: 0; bottom: 0; width: 20%; background: none; color: inherit; border: none; padding: 0; font: inherit; cursor: pointer; outline: inherit;')
-    
-    div.onclick = function() {
-      console.log("ELEMENT ONCLICK CALLED")
+
+    div.onclick = function () {
       resetTabStyle()
       resetBodyStyle()
       ele.setAttribute('style', selectedStyle)
@@ -307,8 +306,7 @@ export function tabWidget (options: TabWidgetOptions) {
         bodyMain.asSettings = false
       }
     }
-    ellipsis.onclick = function() {
-      console.log("ELLIPSIS ONCLICK CALLED")
+    ellipsis.onclick = function () {
       resetTabStyle()
       resetBodyStyle()
       ele.setAttribute('style', selectedStyle)
@@ -392,7 +390,6 @@ export function tabWidget (options: TabWidgetOptions) {
   function resetTabStyle () {
     for (let i = 0; i < tabContainer.children.length; i++) {
       const tab = tabContainer.children[i]
-      console.log("tabContainer", tabContainer.children[i])
       if (tab.classList.contains('unstyled')) {
         continue
       }
