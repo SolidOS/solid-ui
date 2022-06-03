@@ -274,20 +274,20 @@ export async function registrationControl (
     const row = tbody.appendChild(dom.createElement('tr'))
     row.appendChild(renderScopeCheckbox(scope)) // @@ index
   }
-
   return context
 }
 
 export function renderScopeHeadingRow (context, store, scope) {
-  const backgroundColor = { private: '#ff8', public: 'white' }
+  const backgroundColor = { private: '#fee', public: '#efe' }
   const { dom } = context
   const name = scopeLabel(context, scope)
   const row = dom.createElement('tr')
   const cell = row.appendChild(dom.createElement('td'))
-  cell.colspan = 3 // @@ check
+  cell.setAttribute('colspan', '3')
+  cell.style.backgoundColor = backgroundColor[scope.label] || 'white'
   const header = cell.appendChild(dom.createElement('h3'))
   header.textContent = name
-  row.style.backgroundColor = backgroundColor[scope.label] || 'white'
+  header.style.textAlign = 'left'
   return row
 }
 /**
@@ -322,15 +322,13 @@ export async function registrationList (context: AuthenticationContext, options:
     const items = await getScopedAppsFromIndex(store, scope, options.type || null) // any class
     console.log('@@ instance items', items)
     for (const item of items) {
-      /*
-      async function deleteRegistration () {
-        await deleteTypeIndexRegistration(store, item)
-      } */
-      // if (!options.type || options.type.sameTerm(item.scope.class)) {
-      // tbody.appendChild(widgets.personTR(item.scope.instance))
-      tbody.appendChild(widgets.personTR(dom, ns.solid('instance'), item.instance, {
-        deleteFunction: async () => await deleteTypeIndexRegistration(store, item) // deleteRegistration
-      }))
+      const row = widgets.personTR(dom, ns.solid('instance'), item.instance, {
+        deleteFunction: async () => {
+          await deleteTypeIndexRegistration(store, item);
+          tbody.removeChild(row)
+        }
+      })
+      tbody.appendChild(row)
     }
   }
   return context

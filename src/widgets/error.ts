@@ -11,6 +11,7 @@
  *  where it happened!
  */
 /* eslint-disable no-console */
+import { cancelButton } from '../widgets'
 
 export function errorMessageBlock (dom: HTMLDocument, err: string | Error, backgroundColor?: string, err2?: Error): HTMLDivElement {
   const div = dom.createElement('div')
@@ -25,6 +26,10 @@ export function errorMessageBlock (dom: HTMLDocument, err: string | Error, backg
   } else {
     div.textContent = err as string
   }
+
+  div.appendChild(cancelButton(dom, () => { div.parentNode.removeChild(div) }))
+      .style = 'width: 2em; height: 2em; align: right;'
+
   div.setAttribute(
     'style',
     'margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; background-color: ' +
