@@ -320,7 +320,7 @@ export async function registrationList (context: AuthenticationContext, options:
   for (const scope of scopes) { // need some predicate for listing/adding agents
     tbody.appendChild(renderScopeHeadingRow(context, store, scope))
     const items = await getScopedAppsFromIndex(store, scope, options.type || null) // any class
-    console.log('@@ instance items', items)
+    console.log(`registrationList: @@ instance items for class ${options.type || 'undefined' }:`, items)
     for (const item of items) {
       const row = widgets.personTR(dom, ns.solid('instance'), item.instance, {
         deleteFunction: async () => {
@@ -328,6 +328,7 @@ export async function registrationList (context: AuthenticationContext, options:
           tbody.removeChild(row)
         }
       })
+      row.firstChild.style.marginLeft = '3em'
       tbody.appendChild(row)
     }
   }
