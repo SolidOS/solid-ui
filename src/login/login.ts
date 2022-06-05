@@ -286,7 +286,7 @@ export function renderScopeHeadingRow (context, store, scope) {
   cell.setAttribute('colspan', '3')
   cell.style.backgoundColor = backgroundColor[scope.label] || 'white'
   const header = cell.appendChild(dom.createElement('h3'))
-  header.textContent = name
+  header.textContent = name + ' links'
   header.style.textAlign = 'left'
   return row
 }
@@ -318,9 +318,11 @@ export async function registrationList (context: AuthenticationContext, options:
   const tbody = table.firstChild as HTMLElement
 
   for (const scope of scopes) { // need some predicate for listing/adding agents
-    tbody.appendChild(renderScopeHeadingRow(context, store, scope))
+    const headingRow = renderScopeHeadingRow(context, store, scope)
+    tbody.appendChild(headingRow)
     const items = await getScopedAppsFromIndex(store, scope, options.type || null) // any class
-    console.log(`registrationList: @@ instance items for class ${options.type || 'undefined' }:`, items)
+    if (items.length === 0) headingRow.style.display = 'none'
+    // console.log(`registrationList: @@ instance items for class ${options.type || 'undefined' }:`, items)
     for (const item of items) {
       const row = widgets.personTR(dom, ns.solid('instance'), item.instance, {
         deleteFunction: async () => {
@@ -328,7 +330,8 @@ export async function registrationList (context: AuthenticationContext, options:
           tbody.removeChild(row)
         }
       })
-      row.firstChild.style.marginLeft = '3em'
+      row.children[0].style.paddingLeft = '3em'
+
       tbody.appendChild(row)
     }
   }
