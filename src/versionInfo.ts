@@ -1,6 +1,6 @@
 export const versionInfo = {
-  buildTime: '2022-05-25T22:15:49Z',
-  commit: '78b3553416b2809ddb15ed7c7096d96ee54a319d',
+  buildTime: '2022-06-09T15:36:20Z',
+  commit: '535eb7577d433243ae414262e1be1b349e828ecb',
   npmInfo:
 {
   'solid-ui': '2.4.22',
@@ -13,8 +13,8 @@ export const versionInfo = {
   modules: '83',
   napi: '8',
   nghttp2: '1.42.0',
-  node: '14.19.2',
-  openssl: '1.1.1n',
+  node: '14.19.3',
+  openssl: '1.1.1o',
   tz: '2021a3',
   unicode: '14.0',
   uv: '1.42.0',

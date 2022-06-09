@@ -821,10 +821,9 @@ field[ns.ui('Choice').uri] = function (
   const multiSelect = kb.any(form, ui('multiselect')) // Optional
 
   let selector
-  // from ui:property
-  let selectedOptions = kb.each(subject, property, null, dataDoc).map(object => object.value)
-
   rhs.refresh = function () {
+    // from ui:property
+    let selectedOptions = kb.each(subject, property, null, dataDoc).map(object => object.value)
     // from ui:from + ui:property
     let possibleOptions = getSelectorOptions()
     possibleOptions.push(selectedOptions)
@@ -1768,7 +1767,7 @@ export function makeSelectForChoice (
 
   log.debug('makeSelectForChoice: dataDoc=' + dataDoc)
 
-  function determineFitstSelectOptionText () {
+  function createDefaultSelectOptionText () {
     let firstSelectOptionText = '--- choice ---'
 
     if (predicate && !(predicate.termType === 'BlankNode')) {
@@ -1781,9 +1780,9 @@ export function makeSelectForChoice (
     return firstSelectOptionText
   }
 
-  function determinFirstSelectOption () {
+  function createDefaultSelectOption () {
     const option = dom.createElement('option')
-    option.appendChild(dom.createTextNode(determineFitstSelectOptionText()))
+    option.appendChild(dom.createTextNode(createDefaultSelectOptionText()))
     option.disabled = true
     option.value = true
     option.hidden = true
@@ -1813,7 +1812,7 @@ export function makeSelectForChoice (
     select.insertBefore(mint, select.firstChild)
   }
 
-  if (select.children.length === 0) select.insertBefore(determinFirstSelectOption(), select.firstChild)
+  if (select.children.length === 0) select.insertBefore(createDefaultSelectOption(), select.firstChild)
 
   select.update = function (newSelectedOptions) {
     selectedOptions = newSelectedOptions
@@ -1822,7 +1821,6 @@ export function makeSelectForChoice (
     const removeValue = function (t) {
       if (kb.holds(subject, predicate, t, dataDoc)) {
         ds.push($rdf.st(subject, predicate, t, dataDoc))
-        // console.log("----value removed " + t)
       }
     }
 
@@ -1894,12 +1892,13 @@ export function makeSelectForChoice (
       if (opt.selected && containsObject(opt.AJAR_uri, selectedOptions)) {
         select.currentURI = opt.AJAR_uri
       }
-      if (!containsObject(opt.AJAR_uri, selectedOptions)) opt.setAttribute('selected', 'false')
+      if (!containsObject(opt.AJAR_uri, selectedOptions)) opt.removeAttribute('selected')
       if (containsObject(opt.AJAR_uri, selectedOptions)) opt.setAttribute('selected', 'true')
     }
 
     log.info('selectForOptions: data doc = ' + dataDoc)
-    if (select.currentURI) {
+
+    if (select.currentURI && options.subForm) {
       addSubFormChoice(dom, container, {}, $rdf.sym(select.currentURI), options.subForm, dataDoc, function (ok, body) {
         if (ok) {
           kb.updater.update([], is, function (uri, success, errorBody) {
@@ -1936,8 +1935,7 @@ export function makeSelectForChoice (
       )
     }
     option.AJAR_uri = uri
-    if (c.value === '' + select.currentURI || containsObject(c.value, selectedOptions)) {
-      option.selected = true
+    if (containsObject(c.value, selectedOptions)) {
       option.setAttribute('selected', 'true')
     }
     return option
