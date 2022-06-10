@@ -189,7 +189,7 @@ export async function ensureLoadedProfile (
   * 2016-12-11 change to include forClass arc a la
   * https://github.com/solid/solid/blob/main/proposals/data-discovery.md
   * This is now legacy; should instead use solid-logic getAppInstances
-  8 leaving the `isPublic` param undefined will bring in community index things too
+  * leaving the `isPublic` param undefined will bring in community index things, too
   */
 export async function findAppInstances (
   context: AuthenticationContext,
