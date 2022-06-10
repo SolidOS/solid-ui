@@ -193,7 +193,7 @@ export async function findAppInstances (
   } else if (isPublic === false) {
     items = items.filter(item => item.scope.label === 'private')
   }
-  context.instances = items.maps(item => item.instance)
+  context.instances = items.map(item => item.instance)
   return context
 }
 
