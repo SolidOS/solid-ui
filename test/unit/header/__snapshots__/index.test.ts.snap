@@ -128,7 +128,7 @@ exports[`createBanner check customized logo... 1`] = `
       >
         <img
           class="header-banner__help-icon-0-1-93"
-          src="https://solid.github.io/solid-ui/src/icons/https://solid.github.io/solid-ui/src/icons/noun_help.svg"
+          src="https://solidos.github.io/solid-ui/src/icons/https://solidos.github.io/solid-ui/src/icons/noun_help.svg"
         />
       </button>
     </div>
@@ -264,7 +264,7 @@ exports[`createBanner creates a link 1`] = `
       >
         <img
           class="header-banner__help-icon-0-1-55"
-          src="https://solid.github.io/solid-ui/src/icons/https://solid.github.io/solid-ui/src/icons/noun_help.svg"
+          src="https://solidos.github.io/solid-ui/src/icons/https://solidos.github.io/solid-ui/src/icons/noun_help.svg"
         />
       </button>
     </div>
@@ -290,7 +290,7 @@ exports[`createHelpMenu creates a menu.... 1`] = `
   >
     <img
       class="header-banner__help-icon-0-1-28"
-      src="https://solid.github.io/solid-ui/src/icons/https://solid.github.io/solid-ui/src/icons/noun_help.svg"
+      src="https://solidos.github.io/solid-ui/src/icons/https://solidos.github.io/solid-ui/src/icons/noun_help.svg"
     />
   </button>
 </div>

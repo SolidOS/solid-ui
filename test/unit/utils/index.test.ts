@@ -265,7 +265,7 @@ describe('shortName', () => {
     expect(shortName).toBeInstanceOf(Function)
   })
   it.skip('runs', () => {
-    // FIXME see https://github.com/solid/solid-ui/issues/194
+    // FIXME see https://github.com/solidos/solid-ui/issues/194
     expect(shortName('a')).toBeTruthy()
   })
 })

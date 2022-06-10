@@ -1,8 +1,9 @@
+
 /* global $rdf UI debug */
-if (!window.UI) {
+if (!window) {
   window.alert('Missing UI code - load mashlib first.')
 }
-window.$rdf = UI.rdf
+window.$rdf = window.UI.rdf
 
 document.addEventListener('DOMContentLoaded', async function () {
   /// ///////////////////////////////////////////
@@ -21,7 +22,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   var base = (window.document.title = uri.slice(0, uri.lastIndexOf('/') + 1))
   // var testDocURI = base + 'test.ttl' // imaginary doc - just use its URL
   // const testDocURI = 'https://timbl.com/timbl/Public/Test/Forms/exampleData.ttl'
-  const testDocURI = 'https://solidos.solidcommunity.net/public/2021/10_example_data/example.ttl'
+  const testDocURI = 'https://solidos.solidcommunity.net/public/2021/solidUiFormTestData/dummyFormTestFile.ttl'
   var testDoc = $rdf.sym(testDocURI)
   const ex = $rdf.Namespace(testDocURI + "#")
 

@@ -1,4 +1,3 @@
-
 import { silenceDebugMessages } from '../../helpers/setup'
 import { JSDOM, DOMWindow } from 'jsdom'
 import { getByRole } from '@testing-library/dom'
@@ -126,15 +125,13 @@ describe('button', () => {
   it('runs', () => {
     const iconURI = ''
     const text = 'txt'
-    const handler = () => {
-    }
+    const handler = () => {}
     expect(button(domWithHead(), iconURI, text, handler)).toBeTruthy()
   })
   it('has the style class from JSS', () => {
     const iconURI = ''
     const text = 'txt'
-    const handler = () => {
-    }
+    const handler = () => {}
     const buttonElt = button(domWithHead(), iconURI, text, handler)
     expect(buttonElt.classList[0]).toEqual(expect.stringMatching(/^textButton-\d-\d-\d$/))
   })
@@ -159,8 +156,7 @@ describe('cancelButton', () => {
     expect(cancelButton).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const handler = () => {
-    }
+    const handler = () => {}
     expect(cancelButton(dom, handler)).toBeTruthy()
   })
 })
@@ -188,8 +184,7 @@ describe('continueButton', () => {
     expect(continueButton).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const handler = () => {
-    }
+    const handler = () => {}
     expect(continueButton(dom, handler)).toBeTruthy()
   })
 })
@@ -261,8 +256,7 @@ describe('deleteButtonWithCheck', () => {
   it('runs', () => {
     const container = element
     const noun = ''
-    const deleteFunction = () => {
-    }
+    const deleteFunction = () => {}
     expect(deleteButtonWithCheck(dom, container, noun, deleteFunction)).toBeTruthy()
   })
 })
@@ -286,8 +280,10 @@ describe('findImage', () => {
   it('exists', () => {
     expect(findImage).toBeInstanceOf(Function)
   })
-  it('handles foaf(Agent)', () => expect(findImage(foaf('Agent'))).toEqual(iconBase + 'noun_98053.svg'))
-  it('handles rdf(Resource)', () => expect(findImage(rdf('Resource'))).toEqual(iconBase + 'noun_98053.svg'))
+  it('handles foaf(Agent)', () =>
+    expect(findImage(foaf('Agent'))).toEqual(iconBase + 'noun_98053.svg'))
+  it('handles rdf(Resource)', () =>
+    expect(findImage(rdf('Resource'))).toEqual(iconBase + 'noun_98053.svg'))
   it('handles sioc(avatar)', () => {
     store.add(subject, sioc('avatar'), imageObject, subject.doc())
     expect(findImage(subject)).toEqual(imageObject.uri)
@@ -320,7 +316,9 @@ describe('findImageFromURI', () => {
     expect(findImageFromURI).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(findImageFromURI('')).toEqual('https://solid.github.io/solid-ui/src/icons/noun_10636_grey.svg')
+    expect(findImageFromURI('')).toEqual(
+      'https://solidos.github.io/solid-ui/src/icons/noun_10636_grey.svg'
+    )
   })
 })
 
@@ -329,8 +327,7 @@ describe('fileUploadButtonDiv', () => {
     expect(fileUploadButtonDiv).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const handler = () => {
-    }
+    const handler = () => {}
     expect(fileUploadButtonDiv(dom, handler)).toBeTruthy()
   })
 })
@@ -370,7 +367,7 @@ describe('index.twoLine', () => {
     expect(index.twoLine).toBeInstanceOf(Object)
   })
 })
-describe('index.twoLine[\'\']', () => {
+describe("index.twoLine['']", () => {
   it('exists', () => {
     expect(index.twoLine['']).toBeInstanceOf(Function)
   })
@@ -378,15 +375,22 @@ describe('index.twoLine[\'\']', () => {
     expect(index.twoLine[''](dom, sym('https://domain.tld/#test'))).toBeTruthy()
   })
 })
-describe('index.twoLine[\'http://www.w3.org/2000/10/swap/pim/qif#Transaction\']', () => {
+describe("index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction']", () => {
   it('exists', () => {
-    expect(index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction']).toBeInstanceOf(Function)
+    expect(index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction']).toBeInstanceOf(
+      Function
+    )
   })
   it('runs', () => {
-    expect(index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction'](dom, sym('https://domain.tld/#test'))).toBeTruthy()
+    expect(
+      index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction'](
+        dom,
+        sym('https://domain.tld/#test')
+      )
+    ).toBeTruthy()
   })
 })
-describe('index.twoLine[\'http://www.w3.org/ns/pim/trip#Trip\']', () => {
+describe("index.twoLine['http://www.w3.org/ns/pim/trip#Trip']", () => {
   it('exists', () => {
     expect(index.twoLine['http://www.w3.org/ns/pim/trip#Trip']).toBeInstanceOf(Function)
   })
@@ -529,20 +533,21 @@ describe('selectorPanel', () => {
     const inverse = false
     const possible = [namedNode('https://domain.tld/#test')]
     const options = {}
-    const callbackFunction = () => {
-    }
-    const linkCallback = () => {
-    }
-    expect(selectorPanel(
-      dom,
-      kb,
-      type,
-      predicate,
-      inverse,
-      possible,
-      options,
-      callbackFunction,
-      linkCallback)).toBeTruthy()
+    const callbackFunction = () => {}
+    const linkCallback = () => {}
+    expect(
+      selectorPanel(
+        dom,
+        kb,
+        type,
+        predicate,
+        inverse,
+        possible,
+        options,
+        callbackFunction,
+        linkCallback
+      )
+    ).toBeTruthy()
   })
 })
 
@@ -560,18 +565,20 @@ describe('selectorPanelRefresh', () => {
     const options = {}
     const callbackFunction = () => {}
     const linkCallback = () => {}
-    expect(selectorPanelRefresh(
-      list,
-      dom,
-      kb,
-      type,
-      predicate,
-      inverse,
-      possible,
-      options,
-      callbackFunction,
-      linkCallback
-    )).toBeTruthy()
+    expect(
+      selectorPanelRefresh(
+        list,
+        dom,
+        kb,
+        type,
+        predicate,
+        inverse,
+        possible,
+        options,
+        callbackFunction,
+        linkCallback
+      )
+    ).toBeTruthy()
   })
 })
 

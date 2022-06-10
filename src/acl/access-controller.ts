@@ -141,7 +141,7 @@ export class AccessController {
   }
 
   public renderTemporaryStatus (message: string): void {
-    // @@ TODO Introduce better system for error notification to user https://github.com/solid/mashlib/issues/87
+    // @@ TODO Introduce better system for error notification to user https://github.com/solidos/mashlib/issues/87
     this.statusElement.classList.add(this.classes.aclControlBoxStatusRevealed)
     this.statusElement.innerText = message
     this.statusElement.classList.add(this.classes.temporaryStatusInit)
@@ -154,7 +154,7 @@ export class AccessController {
   }
 
   public renderStatus (message: string): void {
-    // @@ TODO Introduce better system for error notification to user https://github.com/solid/mashlib/issues/87
+    // @@ TODO Introduce better system for error notification to user https://github.com/solidos/mashlib/issues/87
     this.statusElement.classList.toggle(this.classes.aclControlBoxStatusRevealed, !!message)
     this.statusElement.innerText = message
   }
