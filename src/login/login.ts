@@ -187,7 +187,7 @@ export async function findAppInstances (
   theClass: NamedNode,
   isPublic?: boolean
 ): Promise<AuthenticationContext> {
-  let items = await getScopedAppInstances(store, theClass, context.me)
+  let items = context.me ? await getScopedAppInstances(store, theClass, context.me): []
   if (isPublic === true) { // old API - not recommended!
     items = items.filter(item => item.scope.label === 'public')
   } else if (isPublic === false) {
