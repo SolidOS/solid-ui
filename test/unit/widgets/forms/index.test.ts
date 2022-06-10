@@ -46,9 +46,9 @@ describe('Form field', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const storeNode = namedNode('http://example.com/#store')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
 
-    // FIXME: https://github.com/solid/solid-ui/issues/239
+    // FIXME: https://github.com/solidos/solid-ui/issues/239
     ;(document as any).outlineManager = {
       appendPropertyTRs: () => {}
     }
@@ -71,7 +71,7 @@ describe('Form field', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const storeNode = namedNode('http://example.com/#store')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     expect(
       field[ns.ui('Form').uri](
         document,
@@ -92,7 +92,7 @@ describe('Form field', () => {
     const subject = dubSubject
     const form = namedNode('http://example.com/#form')
     const storeNode = namedNode('http://example.com/#store')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     expect(
       field[ns.ui('Form').uri](
         document,
@@ -117,7 +117,7 @@ describe('Options field', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const storeNode = namedNode('http://example.com/#store')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     expect(
       field[ns.ui('Options').uri](
         document,
@@ -142,7 +142,7 @@ describe('Multiple field', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const storeNode = namedNode('http://example.com/#store')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     expect(
       field[ns.ui('Multiple').uri](
         document,
@@ -189,7 +189,7 @@ describe('MultiLineTextField', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const storeNode = namedNode('http://example.com/#store')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     expect(
       field[ns.ui('MultiLineTextField').uri](
         document,
@@ -214,7 +214,7 @@ describe('BooleanField', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const storeNode = namedNode('http://example.com/#store')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     expect(
       field[ns.ui('BooleanField').uri](
         document,
@@ -239,7 +239,7 @@ describe('TristateField', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const storeNode = namedNode('http://example.com/#store')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     expect(
       field[ns.ui('TristateField').uri](
         document,
@@ -266,7 +266,7 @@ describe('Classifier', () => {
     const storeNode = namedNode('http://example.com/#store')
     store.add(form, ns.ui('category'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
 
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     expect(
       field[ns.ui('Classifier').uri](
         document,
@@ -291,7 +291,7 @@ describe('Choice', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const storeNode = namedNode('http://example.com/#store')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     expect(
       field[ns.ui('Choice').uri](
         document,
@@ -317,7 +317,7 @@ describe('Heading', () => {
     const form = namedNode('http://example.com/#form')
     const storeNode = namedNode('http://example.com/#store')
     store.add(form, ns.ui('contents'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     expect(
       field[ns.ui('Heading').uri](
         document,
@@ -342,7 +342,7 @@ describe('Comment', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const storeNode = namedNode('http://example.com/#store')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.ui('contents'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
     expect(
       field[ns.ui('Comment').uri](
@@ -366,7 +366,7 @@ describe('editFormButton', () => {
     const container = null
     const form = null
     const storeNode = namedNode('http://example.com/#store')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     expect(
       editFormButton(document, container, form, storeNode, callbackFunction)
     ).toBeInstanceOf(HTMLButtonElement)

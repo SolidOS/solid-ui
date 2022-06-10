@@ -68,7 +68,7 @@ export async function getPreferredLanguagesFor (person: NamedNode) {
 export async function getPreferredLanguages () {
   // In future:  cache in the login session for speed, but get from profile and private prefs
   // We append the defaults so if someone's first choice is not available they don't get something very obscure
-  // See https://github.com/solid/solidos/issues/42
+  // See https://github.com/solidos/solidos/issues/42
   const me = await authn.currentUser() as NamedNode
   if (me) { // If logged in
     const solidLanguagePrefs = await getPreferredLanguagesFor(me)

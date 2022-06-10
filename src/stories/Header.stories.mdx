@@ -1,26 +1,26 @@
-import * as UI from '../../lib'
+import * as UI from "../../lib";
 
-import { Canvas, Meta, Story } from '@storybook/addon-docs'
+import { Canvas, Meta, Story } from "@storybook/addon-docs";
 
-<Meta title="Header"/>
+<Meta title="Header" />
 
 ## Header
 
 <div id="PageHeader" />
 
 export const headerDecorator = (Story) => {
-  setTimeout(() => Story(), 1)
-  return '<div>The above <code>div<code> with ID "PageHeader" is replaced by the header component</div>'
-}
+  setTimeout(() => Story(), 1);
+  return '<div>The above <code>div<code> with ID "PageHeader" is replaced by the header component</div>';
+};
 
 To experience the full behaviour of the header, you need to log in. This can be done at
-[the example page](http://solid.github.io/solid-ui/examples/header).
+[the example page](http://solidos.github.io/solid-ui/examples/header).
 
 <Canvas>
   <Story name="header" decorators={[headerDecorator]}>
     {() => {
-      const options = {}
-      UI.initHeader(UI.store, options)
+      const options = {};
+      UI.initHeader(UI.store, options);
     }}
   </Story>
 </Canvas>

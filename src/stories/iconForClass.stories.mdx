@@ -1,32 +1,34 @@
-import * as UI from '../../lib'
+import * as UI from "../../lib";
 
-import { Canvas, Meta, Story } from '@storybook/addon-docs'
+import { Canvas, Meta, Story } from "@storybook/addon-docs";
 
 export const iconDecorator = (Story) => {
-  const items = Story()
-  const lines = items.map(({className, icon}) => `<tr><td>${className}</td><td>${icon}</td><td><img src="${UI.icons.iconBase}${icon}" style="width:20px; height:20px;" /></td></tr>`)
+  const items = Story();
+  const lines = items.map(
+    ({ className, icon }) =>
+      `<tr><td>${className}</td><td>${icon}</td><td><img src="${UI.icons.iconBase}${icon}" style="width:20px; height:20px;" /></td></tr>`
+  );
   return `<table><th>className</th><th>icon</th><th>Preview</th>
-            ${lines.join('')}
-          </table>`
-}
+            ${lines.join("")}
+          </table>`;
+};
 
-<Meta title="iconForClass"/>
+<Meta title="iconForClass" />
 
 # iconForClass
 
 Best logo or avatar or photo etc to represent someone or some group etc
 
-[API Documentation](https://solid.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#iconforclass)
+[API Documentation](https://solidos.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#iconforclass)
 
 ## for solid:AppProviderClass
-
 
 <Canvas withSource="open">
   <Story name="for solid:AppProviderClass" decorators={[iconDecorator]}>
     {() =>
       Object.keys(UI.widgets.iconForClass).map((className) => {
-        const icon = UI.widgets.iconForClass[className]
-        return {className, icon}
+        const icon = UI.widgets.iconForClass[className];
+        return { className, icon };
       })
     }
   </Story>

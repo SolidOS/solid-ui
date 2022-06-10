@@ -1,7 +1,7 @@
 /*
     Copied from mashlib/src/global/metadata.ts
  */
-import { IndexedFormula, LiveStore, NamedNode, sym } from 'rdflib'
+import { IndexedFormula, LiveStore, NamedNode, parse, sym } from 'rdflib'
 import { ns } from '..'
 import { styleMap as headerStyleMap } from '../header/styleMap'
 import { styleMap as footerStyleMap } from '../footer/styleMap'
@@ -48,8 +48,12 @@ export async function getPodOwner (pod: NamedNode, store: LiveStore): Promise<Na
   // const podOwner = sym(`${pod.uri}profile/card#me`)
 /* eslint-disable no-console */
   try {
-    // @ts-ignore  LiveStore always has fetcher
-    store.fetcher.load(pod)
+    // load turtle Container representation
+    if (!store.any(pod, null, ns.ldp('Container'), pod)) {
+      const response = await store.fetcher.webOperation('GET', pod.uri, store.fetcher.initFetchOptions(pod.uri, { headers: { accept: 'text/turtle' } }))
+      const containerTurtle = response.responseText
+      parse(containerTurtle as string, store, pod.uri, 'text/turtle')
+    }
   } catch (err) {
     console.error('Error loading pod ' + pod + ': ' + err)
     return null
@@ -62,8 +66,7 @@ export async function getPodOwner (pod: NamedNode, store: LiveStore): Promise<Na
         store.any(null, ns.space('storage'), pod, pod)
   if (podOwner) {
     try {
-      // @ts-ignore  LiveStore always has fetcher
-      store.fetcher.load(podOwner.doc())
+      await store.fetcher.load((podOwner as NamedNode).doc())
     } catch (err) {
       console.warn('Unable to load profile of pod owner ' + podOwner)
       return null
@@ -78,7 +81,7 @@ export async function getPodOwner (pod: NamedNode, store: LiveStore): Promise<Na
     const guess = sym(`${pod.uri}profile/card#me`)
     try {
       // @ts-ignore  LiveStore always has fetcher
-      store.fetcher.load(guess)
+      await store.fetcher.load(guess)
     } catch (err) {
       console.error('Ooops. Guessed wrong pod owner webid {$guess} : can\'t load it.')
       return null

@@ -13,7 +13,7 @@ const stylesheetsMap = new Map<HTMLElement, Jss>()
 /**
  * returns a StyleSheet object.
  * See https://cssinjs.org/ for more info about JSS.
- * (despite the name, see https://github.com/solid/solid-ui/issues/199)
+ * (despite the name, see https://github.com/solidos/solid-ui/issues/199)
  */
 export function getClasses (insertionPoint: HTMLElement, styles: Partial<Styles>): StyleSheet {
   const stylesheet = getStylesheet(insertionPoint)
@@ -23,7 +23,7 @@ export function getClasses (insertionPoint: HTMLElement, styles: Partial<Styles>
 /**
  * returns a JSS object.
  * See https://cssinjs.org/ for more info about JSS.
- * (despite the name, see https://github.com/solid/solid-ui/issues/199)
+ * (despite the name, see https://github.com/solidos/solid-ui/issues/199)
  */
 export function getStylesheet (insertionPoint: HTMLElement): Jss {
   const cachedStylesheet = stylesheetsMap.get(insertionPoint)

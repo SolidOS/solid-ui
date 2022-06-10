@@ -297,7 +297,7 @@ export async function queryESCODataByName (filter: string, theClass:NamedNode, q
 *
 * Wikidata bug: https://phabricator.wikimedia.org/T283962
 * This will not be needed whn that  WDQS bug fixed.
-* This is aptured in https://github.com/solid/solid-ui/issues/403
+* This is aptured in https://github.com/solidos/solid-ui/issues/403
 */
 function fixWikidataJSON (str) {
   const syntaxProblem = str.indexOf('SPARQL-QUERY')

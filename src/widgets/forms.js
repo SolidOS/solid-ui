@@ -22,6 +22,7 @@ import * as ns from '../ns'
 import * as $rdf from 'rdflib'
 import { store } from 'solid-logic'
 import * as utils from '../utils'
+import { IconicMultiSelect } from './multiSelect'
 import * as widgets from '../widgets'
 export { basicField, fieldLabel, fieldStore, renderNameValuePair } from './forms/basic' // Note default export
 
@@ -86,12 +87,15 @@ field[ns.ui('Form').uri] = field[ns.ui('Group').uri] =
       if (container) container.appendChild(box)
 
       // Prevent loops
+      if (!form) return
       const key = subject.toNT() + '|' + form.toNT()
       if (already[key]) {
         // been there done that
         box.appendChild(dom.createTextNode('Group: see above ' + key))
-        const plist = [$rdf.st(subject, ns.owl('sameAs'), subject)] // @@ need prev subject
-        dom.outlineManager.appendPropertyTRs(box, plist)
+        // TODO fix dependency cycle to solid-panes by calling outlineManager
+        // const plist = [$rdf.st(subject, ns.owl('sameAs'), subject)] // @@ need prev subject
+        // dom.outlineManager.appendPropertyTRs(box, plist)
+        // dom.appendChild(plist)
         return box
       }
       const already2 = {}
@@ -177,50 +181,42 @@ field[ns.ui('Options').uri] = function (
   } else {
     values = kb.each(subject, dependingOn)
   }
-  if (values.length === 0) {
-    box.appendChild(
-      errorMessageBlock(
-        dom,
-        "Can't select subform as no value of: " + dependingOn
-      )
-    )
-  } else {
-    for (let i = 0; i < cases.length; i++) {
-      const c = cases[i]
-      const tests = kb.each(c, ui('for'), null, formDoc) // There can be multiple 'for'
-      let match = false
-      for (let j = 0; j < tests.length; j++) {
-        for (const value of values) {
-          const test = tests[j]
-          if (value.sameTerm(tests) ||
-            (value.termType === test.termType && value.value === test.value)) {
-            match = true
-          }
+
+  for (let i = 0; i < cases.length; i++) {
+    const c = cases[i]
+    const tests = kb.each(c, ui('for'), null, formDoc) // There can be multiple 'for'
+    let match = false
+    for (let j = 0; j < tests.length; j++) {
+      for (const value of values) {
+        const test = tests[j]
+        if (value.sameTerm(tests) ||
+          (value.termType === test.termType && value.value === test.value)) {
+          match = true
         }
       }
-      if (match) {
-        const field = kb.the(c, ui('use'))
-        if (!field) {
-          box.appendChild(
-            errorMessageBlock(
-              dom,
-              'No "use" part for case in form ' + form
-            )
-          )
-          return box
-        } else {
-          appendForm(
+    }
+    if (match) {
+      const field = kb.the(c, ui('use'))
+      if (!field) {
+        box.appendChild(
+          errorMessageBlock(
             dom,
-            box,
-            already,
-            subject,
-            field,
-            dataDoc,
-            callbackFunction
+            'No "use" part for case in form ' + form
           )
-        }
-        break
+        )
+        return box
+      } else {
+        appendForm(
+          dom,
+          box,
+          already,
+          subject,
+          field,
+          dataDoc,
+          callbackFunction
+        )
       }
+      break
     }
   }
   // @@ Add box.refresh() to sync fields with values
@@ -372,8 +368,7 @@ field[ns.ui('Multiple').uri] = function (
 
     // delete button and move buttons
     if (kb.updater.editable(dataDoc.uri)) {
-      buttons.deleteButtonWithCheck(dom, subField, utils.label(property),
-        deleteThisItem)
+      buttons.deleteButtonWithCheck(dom, subField, multipleUIlabel, deleteThisItem)
       if (ordered) { // Add controsl in a frame
         const frame = dom.createElement('div')
         frame.style.display = 'grid'
@@ -386,7 +381,7 @@ field[ns.ui('Multiple').uri] = function (
           dom, icons.iconBase + 'noun_1369241.svg', 'Move Down',
           async event => moveThisItem(event, false))
         const shim = dom.createElement('div')
-        shim.appendChild(subField) // Subfield has its own laytout
+        shim.appendChild(subField) // Subfield has its own layout
         frame.appendChild(shim)
 
         frame.appendChild(moveUpButton)
@@ -432,6 +427,8 @@ field[ns.ui('Multiple').uri] = function (
     ) // used for arcs in the data
     return shim
   }
+  let multipleUIlabel = kb.any(form, ui('label'))
+  if (!multipleUIlabel) multipleUIlabel = utils.label(property)
   let min = kb.any(form, ui('min')) // This is the minimum number -- default 0
   min = min ? 0 + min.value : 0
 
@@ -468,15 +465,15 @@ field[ns.ui('Multiple').uri] = function (
     const img = tail.appendChild(dom.createElement('img'))
     img.setAttribute('src', plusIconURI) //  plus sign
     img.setAttribute('style', 'margin: 0.2em; width: 1.5em; height:1.5em')
-    img.title = 'Click to add one or more ' + utils.predicateLabel(property, reverse)
-    const prompt = tail.appendChild(dom.createElement('span'))
+    img.title = 'Click to add another ' + multipleUIlabel
+    const prompt = dom.createElement('span')
     prompt.textContent =
-      (values.length === 0 ? 'Add one or more ' : 'Add more ') +
-      utils.predicateLabel(property, reverse)
-      // utils.label(property)
+      (values.length === 0 ? 'Add another ' : 'Add ') +
+      multipleUIlabel
     tail.addEventListener('click', async _eventNotUsed => {
       await addItem()
     }, true)
+    tail.appendChild(prompt)
   }
 
   function createListIfNecessary () {
@@ -732,12 +729,20 @@ field[ns.ui('Classifier').uri] = function (
  **
  **  Not nested.  Generates a link to something from a given class.
  **  Optional subform for the thing selected.
+ **  Generates a subForm based on a ui:use form
+ **  Will look like:
+ ** <div id=dropDownDiv>
+ **   <div id=labelOfDropDown>
+ **   <div id=selectDiv>
+ **     <select id=dropDownSelect>
+ **       <option> ....
+ **     <subForm>
  **  Alternative implementatons caould be:
  ** -- pop-up menu (as here)
  ** -- radio buttons
  ** -- auto-complete typing
  **
- ** Todo: Deal with multiple.  Maybe merge with multiple code.
+ ** TODO: according to ontology ui:choice can also have ns.ui('default') - this is not implemented yet
  */
 
 field[ns.ui('Choice').uri] = function (
@@ -751,86 +756,136 @@ field[ns.ui('Choice').uri] = function (
 ) {
   const ui = ns.ui
   const kb = store
-  const multiple = false
   const formDoc = form.doc ? form.doc() : null // @@ if blank no way to know
 
   let p
   const box = dom.createElement('div')
+  box.setAttribute('class', 'choiceBox')
   // Set flexDirection column?
   if (container) container.appendChild(box)
   const lhs = dom.createElement('div')
+  lhs.setAttribute('class', 'formFieldName choiceBox-label')
   box.appendChild(lhs)
   const rhs = dom.createElement('div')
+  rhs.setAttribute('class', 'formFieldValue choiceBox-selectBox')
   box.appendChild(rhs)
   const property = kb.any(form, ui('property'))
   if (!property) {
     return box.appendChild(errorMessageBlock(dom, 'No property for Choice: ' + form))
   }
   lhs.appendChild(fieldLabel(dom, property, form))
-  const from = kb.any(form, ui('from'))
-  if (!from) {
+  const uiFrom = kb.any(form, ui('from'))
+  if (!uiFrom) {
     return errorMessageBlock(dom, "No 'from' for Choice: " + form)
   }
   const subForm = kb.any(form, ui('use')) // Optional
   const follow = kb.anyJS(form, ui('follow'), null, formDoc) // data doc moves to new subject?
-  let possible = []
-  let possibleProperties
-  const nullLabel = '--' + utils.label(property) + '-?'
-  const opts = { form, multiple, nullLabel, disambiguate: false }
-  possible = kb.each(undefined, ns.rdf('type'), from, formDoc)
-  for (const x in kb.findMembersNT(from)) {
-    possible.push(kb.fromNT(x))
-  } // Use rdfs
 
-  if (from.sameTerm(ns.rdfs('Class'))) {
-    for (p in buttons.allClassURIs()) possible.push(kb.sym(p))
-    // log.debug("%%% Choice field: possible.length 2 = "+possible.length)
-  } else if (from.sameTerm(ns.rdf('Property'))) {
-    possibleProperties = buttons.propertyTriage(kb)
-    for (p in possibleProperties.op) possible.push(kb.fromNT(p))
-    for (p in possibleProperties.dp) possible.push(kb.fromNT(p))
-    opts.disambiguate = true // This is a big class, and the labels won't be enough.
-  } else if (from.sameTerm(ns.owl('ObjectProperty'))) {
-    possibleProperties = buttons.propertyTriage(kb)
-    for (p in possibleProperties.op) possible.push(kb.fromNT(p))
-    opts.disambiguate = true
-  } else if (from.sameTerm(ns.owl('DatatypeProperty'))) {
-    possibleProperties = buttons.propertyTriage(kb)
-    for (p in possibleProperties.dp) possible.push(kb.fromNT(p))
-    opts.disambiguate = true
+  const opts = { form, subForm, disambiguate: false }
+
+  function getSelectorOptions () {
+    let possible = []
+    let possibleProperties
+    possible = kb.each(undefined, ns.rdf('type'), uiFrom, formDoc)
+    for (const x in kb.findMembersNT(uiFrom)) {
+      possible.push(kb.fromNT(x))
+    } // Use rdfs
+
+    if (uiFrom.sameTerm(ns.rdfs('Class'))) {
+      for (p in buttons.allClassURIs()) possible.push(kb.sym(p))
+      // log.debug("%%% Choice field: possible.length 2 = "+possible.length)
+    } else if (uiFrom.sameTerm(ns.rdf('Property'))) {
+      possibleProperties = buttons.propertyTriage(kb)
+      for (p in possibleProperties.op) possible.push(kb.fromNT(p))
+      for (p in possibleProperties.dp) possible.push(kb.fromNT(p))
+      opts.disambiguate = true // This is a big class, and the labels won't be enough.
+    } else if (uiFrom.sameTerm(ns.owl('ObjectProperty'))) {
+      possibleProperties = buttons.propertyTriage(kb)
+      for (p in possibleProperties.op) possible.push(kb.fromNT(p))
+      opts.disambiguate = true
+    } else if (uiFrom.sameTerm(ns.owl('DatatypeProperty'))) {
+      possibleProperties = buttons.propertyTriage(kb)
+      for (p in possibleProperties.dp) possible.push(kb.fromNT(p))
+      opts.disambiguate = true
+    }
+
+    return possible
+    // return sortByLabel(possible)
   }
-  let object = kb.any(subject, property)
-  function addSubForm () {
-    object = kb.any(subject, property)
-    const subFormElement = fieldFunction(dom, subForm)(
+
+  // TODO: this checks for any occurrence, regardless of true or false setting
+  if (kb.any(form, ui('canMintNew'))) {
+    opts.mint = '* Create new *' // @@ could be better
+  }
+
+  const multiSelect = kb.any(form, ui('multiselect')) // Optional
+
+  let selector
+  rhs.refresh = function () {
+    // from ui:property
+    let selectedOptions = kb.each(subject, property, null, dataDoc).map(object => object.value)
+    // from ui:from + ui:property
+    let possibleOptions = getSelectorOptions()
+    possibleOptions.push(selectedOptions)
+    possibleOptions = sortByLabel(possibleOptions)
+
+    selector = makeSelectForChoice(
       dom,
-      null,
-      already,
-      object,
-      subForm,
-      follow ? object.doc() : dataDoc,
+      rhs,
+      kb,
+      subject,
+      property,
+      possibleOptions,
+      selectedOptions,
+      uiFrom,
+      opts,
+      dataDoc,
       callbackFunction
     )
-    rhs.appendChild(subFormElement)
+    rhs.innerHTML = ''
+    rhs.appendChild(selector)
+    if (multiSelect) {
+      const multiSelectDiv = new IconicMultiSelect({
+        placeholder: selector.selected,
+        select: selector,
+        container: rhs,
+        textField: 'textField',
+        valueField: 'valueField'
+      })
+      multiSelectDiv.init()
+      multiSelectDiv.subscribe(function (event) {
+        if (event.action === 'REMOVE_OPTION') {
+          selectedOptions = selectedOptions.filter(function (value) {
+            return value !== event.value
+          })
+        }
+        if (event.action === 'CLEAR_ALL_OPTIONS') {
+          selectedOptions = []
+        }
+        if (event.action === 'ADD_OPTION') {
+          selectedOptions.push(event.value)
+        }
+        selector.update(selectedOptions)
+      })
+    }
   }
-  const possible2 = sortByLabel(possible)
-  if (kb.any(form, ui('canMintNew'))) {
-    opts.mint = '* New *' // @@ could be better
-    opts.subForm = subForm
-  }
-  const selector = makeSelectForOptions(
+
+  rhs.refresh()
+  if (selector && selector.refresh) selector.refresh()
+
+  return box
+}
+
+function addSubFormChoice (dom, selectDiv, already, subject, subForm, dataDoc, callbackFunction) {
+  fieldFunction(dom, subForm)(
     dom,
-    kb,
+    selectDiv,
+    already,
     subject,
-    property,
-    possible2,
-    opts,
+    subForm,
     dataDoc,
     callbackFunction
   )
-  rhs.appendChild(selector)
-  if (object && subForm) addSubForm()
-  return box
 }
 
 //          Documentation - non-interactive fields
@@ -1115,6 +1170,7 @@ export function promptForNew (
       b.innerHTML = 'Goto ' + utils.label(theClass)
       b.addEventListener(
         'click',
+        // TODO fix dependency cycle to solid-panes by calling outlineManager
         function (_e) {
           dom.outlineManager.GotoSubject(
             theClass,
@@ -1258,10 +1314,8 @@ export function makeDescription (
 // @param subject - a term, the subject of the statement(s) being edited.
 // @param predicate - a term, the predicate of the statement(s) being edited
 // @param possible - a list of terms, the possible value the object can take
-// @param options.multiple - Boolean - Whether more than one at a time is allowed
 // @param options.nullLabel - a string to be displayed as the
 //                        option for none selected (for non multiple)
-// @param options.mint - User may create thing if this sent to the prompt string eg "New foo"
 // @param options.subForm - If mint, then the form to be used for minting the new thing
 // @param dataDoc - The web document being edited
 // @param callbackFunction - takes (boolean ok, string errorBody)
@@ -1288,7 +1342,7 @@ export function makeSelectForOptions (
     uris[sub.uri] = true
     n++
   } // uris is now the set of possible options
-  if (n === 0 && !options.mint) {
+  if (n === 0) {
     return errorMessageBlock(
       dom,
       "Can't do selector with no options, subject= " +
@@ -1307,7 +1361,9 @@ export function makeSelectForOptions (
       actual = kb.findTypeURIs(subject)
     } else {
       kb.each(subject, predicate, null, dataDoc).forEach(function (x) {
-        actual[x.uri] = true
+        if (x.uri) {
+          actual[x.uri] = true
+        }
       })
     }
     return actual
@@ -1317,41 +1373,14 @@ export function makeSelectForOptions (
   const onChange = function (_e) {
     select.disabled = true // until data written back - gives user feedback too
     const ds = []
-    let is = []
+    const is = []
     const removeValue = function (t) {
       if (kb.holds(subject, predicate, t, dataDoc)) {
         ds.push($rdf.st(subject, predicate, t, dataDoc))
       }
     }
-    let newObject
     for (let i = 0; i < select.options.length; i++) {
       const opt = select.options[i]
-      if (opt.selected && opt.AJAR_mint) {
-        if (options.mintClass) {
-          const thisForm = promptForNew(
-            dom,
-            kb,
-            subject,
-            predicate,
-            options.mintClass,
-            null,
-            dataDoc,
-            function (ok, body) {
-              if (!ok) {
-                callbackFunction(ok, body, { change: 'new' }) // @@ if ok, need some form of refresh of the select for the new thing
-              }
-            }
-          )
-          select.parentNode.appendChild(thisForm)
-          newObject = thisForm.AJAR_subject
-        } else {
-          newObject = newThing(dataDoc)
-        }
-        is.push($rdf.st(subject, predicate, newObject, dataDoc))
-        if (options.mintStatementsFun) {
-          is = is.concat(options.mintStatementsFun(newObject))
-        }
-      }
       if (!opt.AJAR_uri) continue // a prompt or mint
       if (opt.selected && !(opt.AJAR_uri in actual)) {
         // new class
@@ -1373,26 +1402,11 @@ export function makeSelectForOptions (
       removeValue(kb.sym(sel.currentURI))
       sel = sel.superSelect
     }
-    function doneNew (ok, _body) {
-      callbackFunction(ok, { widget: 'select', event: 'new' })
-    }
     log.info('selectForOptions: data doc = ' + dataDoc)
     kb.updater.update(ds, is, function (uri, ok, body) {
       actual = getActual() // refresh
       if (ok) {
         select.disabled = false // data written back
-        if (newObject) {
-          const fn = fieldFunction(dom, options.subForm)
-          fn(
-            dom,
-            select.parentNode,
-            {},
-            newObject,
-            options.subForm,
-            dataDoc,
-            doneNew
-          )
-        }
       } else {
         return select.parentNode.appendChild(errorMessageBlock(dom, 'Error updating data in select: ' + body))
       }
@@ -1402,7 +1416,6 @@ export function makeSelectForOptions (
 
   const select = dom.createElement('select')
   select.setAttribute('style', style.formSelectSTyle)
-  if (options.multiple) select.setAttribute('multiple', 'true')
   select.currentURI = null
 
   select.refresh = function () {
@@ -1442,13 +1455,7 @@ export function makeSelectForOptions (
     }
     select.appendChild(option)
   }
-  if (editable && options.mint) {
-    const mint = dom.createElement('option')
-    mint.appendChild(dom.createTextNode(options.mint))
-    mint.AJAR_mint = true // Flag it
-    select.insertBefore(mint, select.firstChild)
-  }
-  if (select.currentURI == null && !options.multiple) {
+  if (!select.currentURI) {
     const prompt = dom.createElement('option')
     prompt.appendChild(dom.createTextNode(options.nullLabel))
     select.insertBefore(prompt, select.firstChild)
@@ -1476,41 +1483,20 @@ export function makeSelectForCategory (
 ) {
   const du = kb.any(category, ns.owl('disjointUnionOf'))
   let subs
-  let multiple = false
   if (!du) {
     subs = kb.each(undefined, ns.rdfs('subClassOf'), category)
-    multiple = true
   } else {
     subs = du.elements
   }
   log.debug('Select list length ' + subs.length)
-  if (subs.length === 0) {
-    return errorMessageBlock(
-      dom,
-      "Can't do " +
-        (multiple ? 'multiple ' : '') +
-        'selector with no subclasses of category: ' +
-        category
-    )
-  }
-  if (subs.length === 1) {
-    return errorMessageBlock(
-      dom,
-      "Can't do " +
-        (multiple ? 'multiple ' : '') +
-        'selector with only 1 subclass of category: ' +
-        category +
-        ':' +
-        subs[1]
-    )
-  }
+
   return makeSelectForOptions(
     dom,
     kb,
     subject,
     ns.rdf('type'),
     subs,
-    { multiple, nullPrompt: '--classify--' },
+    { nullLabel: '* Select type *' },
     dataDoc,
     callbackFunction
   )
@@ -1561,7 +1547,6 @@ export function makeSelectForNestedCategory (
     if (ok) update()
     callbackFunction(ok, body)
   }
-  // eslint-disable-next-line prefer-const
   const select = makeSelectForCategory(
     dom,
     kb,
@@ -1734,4 +1719,242 @@ export function fieldStore (subject, predicate, def) {
 export function newThing (doc) {
   const now = new Date()
   return $rdf.sym(doc.uri + '#' + 'id' + ('' + now.getTime()))
+}
+
+/** Make SELECT element to select options
+//
+// @param subject - a term, the subject of the statement(s) being edited.
+// @param predicate - a term, the predicate of the statement(s) being edited
+// @param possible - a list of terms, the possible value the object can take
+// @param options.mint - User may create thing if this sent to the prompt string eg "New foo"
+// @param options.subForm - If mint, then the form to be used for minting the new thing
+// @param dataDoc - The web document being edited
+// @param callbackFunction - takes (boolean ok, string errorBody)
+*/
+export function makeSelectForChoice (
+  dom,
+  container,
+  kb,
+  subject,
+  predicate,
+  inputPossibleOptions,
+  selectedOptions,
+  uiFrom,
+  options,
+  dataDoc,
+  callbackFunction
+) {
+  const optionsFromClassUIfrom = {} // Count them
+  const editable = kb.updater.editable(dataDoc.uri)
+
+  for (let i = 0; i < inputPossibleOptions.length; i++) {
+    const sub = inputPossibleOptions[i] // @@ Maybe; make this so it works with blank nodes too
+    // if (!sub.uri) debug.warn(`makeSelectForChoice: option does not have an uri: ${sub}, with predicate: ${predicate}`)
+    if (!sub.uri || sub.uri in optionsFromClassUIfrom) continue
+    optionsFromClassUIfrom[sub.uri] = true
+  }
+  const isEmpty = Object.keys(optionsFromClassUIfrom).length === 0
+  if (isEmpty && !options.mint) {
+    return errorMessageBlock(
+      dom,
+      "Can't do selector with no options, subject= " +
+        subject +
+        ' property = ' +
+        predicate +
+        '.'
+    )
+  }
+
+  log.debug('makeSelectForChoice: dataDoc=' + dataDoc)
+
+  function createDefaultSelectOptionText () {
+    let firstSelectOptionText = '--- choice ---'
+
+    if (predicate && !(predicate.termType === 'BlankNode')) {
+      firstSelectOptionText = '* Select for property: ' + utils.label(predicate) + ' *'
+    }
+
+    if (subject && !(subject.termType === 'BlankNode')) {
+      firstSelectOptionText = '* Select for ' + utils.label(subject, true) + ' *'
+    }
+    return firstSelectOptionText
+  }
+
+  function createDefaultSelectOption () {
+    const option = dom.createElement('option')
+    option.appendChild(dom.createTextNode(createDefaultSelectOptionText()))
+    option.disabled = true
+    option.value = true
+    option.hidden = true
+    option.selected = true
+
+    return option
+  }
+
+  const onChange = function (_e) {
+    container.removeChild(container.lastChild)
+    select.refresh()
+  }
+
+  const select = dom.createElement('select')
+  select.setAttribute('style', style.formSelectSTyle)
+  select.setAttribute('id', 'formSelect')
+  select.currentURI = null
+
+  for (const uri in optionsFromClassUIfrom) {
+    select.appendChild(createOption(uri))
+  }
+
+  if (editable && options.mint) {
+    const mint = dom.createElement('option')
+    mint.appendChild(dom.createTextNode(options.mint))
+    mint.AJAR_mint = true // Flag it
+    select.insertBefore(mint, select.firstChild)
+  }
+
+  if (select.children.length === 0) select.insertBefore(createDefaultSelectOption(), select.firstChild)
+
+  select.update = function (newSelectedOptions) {
+    selectedOptions = newSelectedOptions
+    const ds = []
+    const is = []
+    const removeValue = function (t) {
+      if (kb.holds(subject, predicate, t, dataDoc)) {
+        ds.push($rdf.st(subject, predicate, t, dataDoc))
+      }
+    }
+
+    const addValue = function (t) {
+      if (!kb.holds(subject, predicate, t, dataDoc)) {
+        is.push($rdf.st(subject, predicate, t, dataDoc))
+        // console.log("----value added " + t)
+      }
+      if (uiFrom && (!kb.holds(t, ns.rdf('type'), kb.sym(uiFrom), dataDoc))) {
+        is.push($rdf.st(t, ns.rdf('type'), kb.sym(uiFrom), dataDoc))
+        // console.log("----added type to value " + uiFrom)
+      }
+    }
+
+    const existingValues = kb.each(subject, predicate, null, dataDoc).map(object => object.value)
+    for (const value of existingValues) {
+      if (!containsObject(value, selectedOptions)) removeValue($rdf.sym(value))
+    }
+    for (const value of selectedOptions) {
+      if (!(value in existingValues)) addValue($rdf.sym(value))
+    }
+
+    kb.updater.update(ds, is, function (uri, ok, body) {
+      if (!ok) return select.parentNode.appendChild(errorMessageBlock(dom, 'Error updating data in select: ' + body))
+      select.refresh()
+      if (callbackFunction) callbackFunction(ok, { widget: 'select', event: 'change' })
+    })
+  }
+
+  select.refresh = function () {
+    select.disabled = true // unlocked any conflict we had got into
+    let is = []
+
+    let newObject
+    for (let i = 0; i < select.options.length; i++) {
+      const opt = select.options[i]
+      if (opt.selected && opt.AJAR_mint) {
+        // not sure if this 'if' is used because I cannot find mintClass
+        if (options.mintClass) {
+          const thisForm = promptForNew(
+            dom,
+            kb,
+            subject,
+            predicate,
+            options.mintClass,
+            null,
+            dataDoc,
+            function (ok, body) {
+              if (!ok) {
+                callbackFunction(ok, body, { change: 'new' }) // @@ if ok, need some form of refresh of the select for the new thing
+              }
+            }
+          )
+          select.parentNode.appendChild(thisForm)
+          newObject = thisForm.AJAR_subject
+        } else {
+          newObject = newThing(dataDoc)
+        }
+        is.push($rdf.st(subject, predicate, kb.sym(newObject), dataDoc))
+        if (uiFrom) is.push($rdf.st(newObject, ns.rdf('type'), kb.sym(uiFrom), dataDoc))
+
+        // not sure if this 'if' is used because I cannot find mintStatementsFun
+        if (options.mintStatementsFun) {
+          is = is.concat(options.mintStatementsFun(newObject))
+        }
+        select.currentURI = newObject
+      }
+      if (!opt.AJAR_uri) continue // a prompt or mint
+      if (opt.selected && containsObject(opt.AJAR_uri, selectedOptions)) {
+        select.currentURI = opt.AJAR_uri
+      }
+      if (!containsObject(opt.AJAR_uri, selectedOptions)) opt.removeAttribute('selected')
+      if (containsObject(opt.AJAR_uri, selectedOptions)) opt.setAttribute('selected', 'true')
+    }
+
+    log.info('selectForOptions: data doc = ' + dataDoc)
+
+    if (select.currentURI && options.subForm) {
+      addSubFormChoice(dom, container, {}, $rdf.sym(select.currentURI), options.subForm, dataDoc, function (ok, body) {
+        if (ok) {
+          kb.updater.update([], is, function (uri, success, errorBody) {
+            if (!success) container.appendChild(errorMessageBlock(dom, 'Error updating select: ' + errorBody))
+          })
+          if (callbackFunction) callbackFunction(ok, { widget: 'select', event: 'new' })
+        } else {
+          container.appendChild(errorMessageBlock(dom, 'Error updating data in field of select: ' + body))
+        }
+      })
+    }
+    select.disabled = false
+  }
+
+  function createOption (uri) {
+    const option = dom.createElement('option')
+    const c = kb.sym(uri)
+    let label
+    if (options.disambiguate) {
+      label = utils.labelWithOntology(c, true) // Init. cap
+    } else {
+      label = utils.label(c, true)
+    }
+    option.appendChild(dom.createTextNode(label)) // Init.
+    option.setAttribute('value', uri)
+    const backgroundColor = kb.any(
+      c,
+      kb.sym('http://www.w3.org/ns/ui#backgroundColor')
+    )
+    if (backgroundColor) {
+      option.setAttribute(
+        'style',
+        'background-color: ' + backgroundColor.value + '; '
+      )
+    }
+    option.AJAR_uri = uri
+    if (containsObject(c.value, selectedOptions)) {
+      option.setAttribute('selected', 'true')
+    }
+    return option
+  }
+
+  if (editable) {
+    select.addEventListener('change', onChange, false)
+  }
+
+  return select
+} // makeSelectForChoice
+
+function containsObject (obj, list) {
+  let i
+  for (i = 0; i < list.length; i++) {
+    if (list[i] === obj) {
+      return true
+    }
+  }
+
+  return false
 }

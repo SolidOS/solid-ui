@@ -7,12 +7,12 @@ silenceDebugMessages()
 
 describe('iconBase', () => {
   it('exists', () => {
-    expect(iconBase).toEqual('https://solid.github.io/solid-ui/src/icons/')
+    expect(iconBase).toEqual('https://solidos.github.io/solid-ui/src/icons/')
   })
 })
 
 describe('originalIconBase', () => {
   it('exists', () => {
-    expect(originalIconBase).toEqual('https://solid.github.io/solid-ui/src/originalIcons/')
+    expect(originalIconBase).toEqual('https://solidos.github.io/solid-ui/src/originalIcons/')
   })
 })
