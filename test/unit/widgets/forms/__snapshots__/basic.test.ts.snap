@@ -63,5 +63,15 @@ exports[`basicField shows error if no property given 1`] = `
   style="margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; background-color: #fee; color:black;"
 >
   Error: No property given for text field: &lt;http://example.com/#form&gt;
+  <button
+    style="width: 2em; height: 2em;"
+    type="button"
+  >
+    <img
+      src="https://solidos.github.io/solid-ui/src/icons/noun_1180156.svg"
+      style="width: 2em; height: 2em; opacity: 0.3;"
+      title="Cancel"
+    />
+  </button>
 </div>
 `;

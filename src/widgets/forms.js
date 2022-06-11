@@ -26,7 +26,7 @@ import { IconicMultiSelect } from './multiSelect'
 import * as widgets from '../widgets'
 export { basicField, fieldLabel, fieldStore, renderNameValuePair } from './forms/basic' // Note default export
 
-export { field } from './forms/fieldFunction'
+export { field, mostSpecificClassURI, fieldFunction } from './forms/fieldFunction'
 export { fieldParams } from './forms/fieldParams'
 
 const checkMarkCharacter = '\u2713'
@@ -779,7 +779,7 @@ field[ns.ui('Choice').uri] = function (
     return errorMessageBlock(dom, "No 'from' for Choice: " + form)
   }
   const subForm = kb.any(form, ui('use')) // Optional
-  const follow = kb.anyJS(form, ui('follow'), null, formDoc) // data doc moves to new subject?
+  // const follow = kb.anyJS(form, ui('follow'), null, formDoc) // data doc moves to new subject?
 
   const opts = { form, subForm, disambiguate: false }
 

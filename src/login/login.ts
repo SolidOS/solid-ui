@@ -31,7 +31,7 @@ import {
   AppDetails, AuthenticationContext, authn, authSession, // loadIndex, ensureTypeIndexes, registerInstanceInTypeIndex
   CrossOriginForbiddenError, FetchError, getSuggestedIssuers,
   loadAllTypeIndexes, getScopedAppsFromIndex, deleteTypeIndexRegistration,
-  getScopedAppInstances, getAppInstances, registerInstanceInTypeIndex,
+  getScopedAppInstances,
   NotFoundError, offlineTestID, SameOriginForbiddenError, solidLogicSingleton, UnauthorizedError
 } from 'solid-logic'
 import * as debug from '../debug'
@@ -196,7 +196,7 @@ export async function findAppInstances (
   theClass: NamedNode,
   isPublic?: boolean
 ): Promise<AuthenticationContext> {
-  let items = context.me ? await getScopedAppInstances(store, theClass, context.me): []
+  let items = context.me ? await getScopedAppInstances(store, theClass, context.me) : []
   if (isPublic === true) { // old API - not recommended!
     items = items.filter(item => item.scope.label === 'public')
   } else if (isPublic === false) {
@@ -333,7 +333,7 @@ export async function registrationList (context: AuthenticationContext, options:
     for (const item of items) {
       const row = widgets.personTR(dom, ns.solid('instance'), item.instance, {
         deleteFunction: async () => {
-          await deleteTypeIndexRegistration(store, item);
+          await deleteTypeIndexRegistration(store, item)
           tbody.removeChild(row)
         }
       })

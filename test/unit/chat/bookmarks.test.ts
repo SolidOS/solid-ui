@@ -23,15 +23,7 @@ describe('findBookmarkDocument', () => {
     window.alert = () => {}
 
     const result = await findBookmarkDocument(context)
-    expect(result).toEqual({
-      containers: [],
-      index: {
-        private: [],
-        public: []
-      },
-      instances: [],
-      statusArea: result.statusArea
-    })
+    expect(result.instances).toEqual([])
   })
 
   it('one public bookmark docs', async () => {

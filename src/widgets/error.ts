@@ -27,8 +27,8 @@ export function errorMessageBlock (dom: HTMLDocument, err: string | Error, backg
     div.textContent = err as string
   }
 
-  div.appendChild(cancelButton(dom, () => { div.parentNode.removeChild(div) }))
-      .style = 'width: 2em; height: 2em; align: right;'
+  div.appendChild(cancelButton(dom, () => { if (div.parentNode) div.parentNode.removeChild(div) }))
+    .style = 'width: 2em; height: 2em; align: right;'
 
   div.setAttribute(
     'style',
