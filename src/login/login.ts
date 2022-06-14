@@ -186,16 +186,17 @@ export async function ensureLoadedProfile (
 /**
   * Returns promise of context with arrays of symbols
   *
-  * 2016-12-11 change to include forClass arc a la
-  * https://github.com/solid/solid/blob/main/proposals/data-discovery.md
-  * This is now legacy; should instead use solid-logic getAppInstances
   * leaving the `isPublic` param undefined will bring in community index things, too
   */
+/**
+ * @deprecated Since version 2.4.17 Will be deleted in version 3.0. Use solid-logic getAppInstances instead.
+ */
 export async function findAppInstances (
   context: AuthenticationContext,
   theClass: NamedNode,
   isPublic?: boolean
 ): Promise<AuthenticationContext> {
+  debug.warn('Calling deprecated function findAppInstances! Use solid-logic getAppInstances instead.')
   let items = context.me ? await getScopedAppInstances(store, theClass, context.me) : []
   if (isPublic === true) { // old API - not recommended!
     items = items.filter(item => item.scope.label === 'public')
