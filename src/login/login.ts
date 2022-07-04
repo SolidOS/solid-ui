@@ -32,7 +32,7 @@ import {
   CrossOriginForbiddenError, FetchError, getSuggestedIssuers,
   loadAllTypeIndexes, getScopedAppsFromIndex, deleteTypeIndexRegistration,
   getScopedAppInstances,
-  NotFoundError, offlineTestID, SameOriginForbiddenError, solidLogicSingleton, UnauthorizedError
+  offlineTestID, SameOriginForbiddenError, solidLogicSingleton, UnauthorizedError, WebOperationError, NotEditableError, loadPreferences, loadProfile, getRegistrations
 } from 'solid-logic'
 import * as debug from '../debug'
 import { alert } from '../log'
@@ -105,7 +105,7 @@ export async function ensureLoadedPreferences (
     context = await ensureLoadedProfile(context)
 
     // console.log('back in Solid UI after logInLoadProfile', context)
-    const preferencesFile = await solidLogicSingleton.loadPreferences(context.me as NamedNode)
+    const preferencesFile = await loadPreferences(context.me as NamedNode)
     if (progressDisplay) {
       progressDisplay.parentNode.removeChild(progressDisplay)
     }
@@ -124,26 +124,16 @@ export async function ensureLoadedPreferences (
       m2 =
         'You are not authorized to read your preference file. This may be because you are using an untrusted web app.'
       debug.warn(m2)
-    } else if (err instanceof NotFoundError) {
-      if (
-        confirm(
-          `You do not currently have a preference file. OK for me to create an empty one? ${
-            (err as any).preferencesFile || ''
-          }`
-        )
-      ) {
-        // @@@ code me  ... weird to have a name of the file but no file
-        alert(
-          `Sorry; I am not prepared to do this. Please create an empty file at ${
-            (err as any).preferencesFile || '(?)'
-          }`
-        )
-        complain(new Error('Sorry; no code yet to create a preference file at '))
-      } else {
-        throw new Error(
-          `User declined to create a preference file at ${(err as any).preferencesFile || '(?)'}`
-        )
-      }
+      return context
+    } else if (err instanceof NotEditableError) {
+      m2 =
+        'You are not authorized to edit your preference file. This may be because you are using an untrusted web app.'
+      debug.warn(m2)
+      return context
+    } else if (err instanceof WebOperationError) {
+      m2 =
+        'You are not authorized to edit your preference file. This may be because you are using an untrusted web app.'
+      debug.warn(m2)
     } else if (err instanceof FetchError) {
       m2 = `Strange: Error ${err.status} trying to read your preference file.${err.message}`
       alert(m2)
@@ -173,7 +163,7 @@ export async function ensureLoadedProfile (
     if (!logInContext.me) {
       throw new Error('Could not log in')
     }
-    context.publicProfile = await solidLogicSingleton.loadProfile(logInContext.me)
+    context.publicProfile = await loadProfile(logInContext.me)
   } catch (err) {
     if (context.div && context.dom) {
       context.div.appendChild(widgets.errorMessageBlock(context.dom, err.message))
@@ -188,16 +178,12 @@ export async function ensureLoadedProfile (
   *
   * leaving the `isPublic` param undefined will bring in community index things, too
   */
-/**
- * @deprecated Since version 2.4.17 Will be deleted in version 3.0. Use solid-logic getAppInstances instead.
- */
 export async function findAppInstances (
   context: AuthenticationContext,
   theClass: NamedNode,
   isPublic?: boolean
 ): Promise<AuthenticationContext> {
-  debug.warn('Calling deprecated function findAppInstances! Use solid-logic getAppInstances instead.')
-  let items = context.me ? await getScopedAppInstances(store, theClass, context.me) : []
+  let items = context.me ? await getScopedAppInstances(theClass, context.me) : []
   if (isPublic === true) { // old API - not recommended!
     items = items.filter(item => item.scope.label === 'public')
   } else if (isPublic === false) {
@@ -221,7 +207,7 @@ export async function registrationControl (
   theClass
 ): Promise<AuthenticationContext | void> {
   function registrationStatements (index) {
-    const registrations = solidLogicSingleton.getRegistrations(instance, theClass)
+    const registrations = getRegistrations(instance, theClass)
     const reg = registrations.length ? registrations[0] : widgets.newThing(index)
     return [
       st(reg, ns.solid('instance'), instance, index),
@@ -259,7 +245,7 @@ export async function registrationControl (
 
   let scopes // @@ const
   try {
-    scopes = await loadAllTypeIndexes(store, me)
+    scopes = await loadAllTypeIndexes(me)
   } catch (e) {
     let msg
     if (context.div && context.preferencesFileError) {
@@ -328,13 +314,13 @@ export async function registrationList (context: AuthenticationContext, options:
   for (const scope of scopes) { // need some predicate for listing/adding agents
     const headingRow = renderScopeHeadingRow(context, store, scope)
     tbody.appendChild(headingRow)
-    const items = await getScopedAppsFromIndex(store, scope, options.type || null) // any class
+    const items = await getScopedAppsFromIndex(scope, options.type || null) // any class
     if (items.length === 0) headingRow.style.display = 'none'
     // console.log(`registrationList: @@ instance items for class ${options.type || 'undefined' }:`, items)
     for (const item of items) {
       const row = widgets.personTR(dom, ns.solid('instance'), item.instance, {
         deleteFunction: async () => {
-          await deleteTypeIndexRegistration(store, item)
+          await deleteTypeIndexRegistration(item)
           tbody.removeChild(row)
         }
       })

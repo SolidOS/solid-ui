@@ -115,11 +115,10 @@ export async function findBookmarkDocument (userContext) {
         return userContext
       }
       await registerInTypeIndex(
-        userContext,
         newBookmarkFile,
-        theClass,
-        true
-      ) // public
+        userContext.index,
+        theClass
+      )
       userContext.bookmarkDocument = newBookmarkFile
     } else {
       alert('You seem to have no bookmark file and not even a profile file.')
