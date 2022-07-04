@@ -28,22 +28,43 @@ import { BlankNode, NamedNode, st } from 'rdflib'
 // eslint-disable-next-line camelcase
 import { Quad_Object } from 'rdflib/lib/tf-types'
 import {
-  AppDetails, AuthenticationContext, authn, authSession, // loadIndex, ensureTypeIndexes, registerInstanceInTypeIndex
-  CrossOriginForbiddenError, FetchError, getSuggestedIssuers,
-  loadAllTypeIndexes, getScopedAppsFromIndex, deleteTypeIndexRegistration,
-  getScopedAppInstances,
-  offlineTestID, SameOriginForbiddenError, solidLogicSingleton, UnauthorizedError, WebOperationError, NotEditableError, loadPreferences, loadProfile, getRegistrations
+  AppDetails,
+  AuthenticationContext,
+  authn,
+  authSession,
+  CrossOriginForbiddenError,
+  FetchError,
+  getSuggestedIssuers,
+  NotEditableError,
+  offlineTestID,
+  SameOriginForbiddenError,
+  solidLogicSingleton,
+  UnauthorizedError,
+  WebOperationError
 } from 'solid-logic'
 import * as debug from '../debug'
 import { alert } from '../log'
 import * as ns from '../ns.js'
 import { Signup } from '../signup/signup.js'
 import { buttonStyle, commentStyle, textInputStyle } from '../style'
-// import { utils } from '../utils/index'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
 
 const store = solidLogicSingleton.store
+
+const {
+  loadPreferences,
+  loadProfile
+} = solidLogicSingleton.profile
+
+const {
+  getScopedAppInstances,
+  getRegistrations,
+  loadAllTypeIndexes,
+  getScopedAppsFromIndex,
+  deleteTypeIndexRegistration
+} = solidLogicSingleton.typeIndex
+
 /**
  * Resolves with the logged in user's WebID
  *
@@ -303,7 +324,7 @@ export async function registrationList (context: AuthenticationContext, options:
     return context
   }
 
-  const scopes = await loadAllTypeIndexes(store, context.me) // includes community indexes
+  const scopes = await loadAllTypeIndexes(context.me) // includes community indexes
 
   // console.log('@@ registrationList ', scopes)
   box.innerHTML = '<table><tbody></tbody></table>' // tbody will be inserted anyway
