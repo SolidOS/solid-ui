@@ -819,6 +819,7 @@ field[ns.ui('Choice').uri] = function (
   }
 
   const multiSelect = kb.any(form, ui('multiselect')) // Optional
+  if (multiSelect) opts.multiSelect = true
 
   let selector
   rhs.refresh = function () {
@@ -863,10 +864,8 @@ field[ns.ui('Choice').uri] = function (
           selectedOptions = []
         }
         if (event.action === 'ADD_OPTION') {
-          console.log(event.value)
           const stringValue = event.value + ''
           if (stringValue.includes('Create new')) {
-            console.log("---- mint new")
             const newObject = newThing(dataDoc)
             const is = []
             is.push($rdf.st(subject, property, kb.sym(newObject), dataDoc))
@@ -1872,7 +1871,6 @@ export function makeSelectForChoice (
   }
 
   select.refresh = function () {
-    console.log("---- in refresh")
     select.disabled = true // unlocked any conflict we had got into
     let is = []
 
@@ -1920,7 +1918,7 @@ export function makeSelectForChoice (
 
     log.info('selectForOptions: data doc = ' + dataDoc)
 
-    if (select.currentURI && options.subForm) {
+    if (select.currentURI && options.subForm && !options.multiSelect) {
       addSubFormChoice(dom, container, {}, $rdf.sym(select.currentURI), options.subForm, dataDoc, function (ok, body) {
         if (ok) {
           kb.updater.update([], is, function (uri, success, errorBody) {
