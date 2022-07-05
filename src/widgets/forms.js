@@ -819,6 +819,7 @@ field[ns.ui('Choice').uri] = function (
   }
 
   const multiSelect = kb.any(form, ui('multiselect')) // Optional
+  if (multiSelect) opts.multiSelect = true
 
   let selector
   rhs.refresh = function () {
@@ -863,7 +864,26 @@ field[ns.ui('Choice').uri] = function (
           selectedOptions = []
         }
         if (event.action === 'ADD_OPTION') {
-          selectedOptions.push(event.value)
+          const stringValue = event.value + ''
+          if (stringValue.includes('Create new')) {
+            const newObject = newThing(dataDoc)
+            const is = []
+            is.push($rdf.st(subject, property, kb.sym(newObject), dataDoc))
+            if (uiFrom) is.push($rdf.st(newObject, ns.rdf('type'), kb.sym(uiFrom), dataDoc))
+            if (subForm) {
+              addSubFormChoice(dom, rhs, {}, $rdf.sym(newObject), subForm, dataDoc, function (ok, body) {
+                if (ok) {
+                  kb.updater.update([], is, function (uri, success, errorBody) {
+                    if (!success) rhs.appendChild(errorMessageBlock(dom, 'Error updating select: ' + errorBody))
+                  })
+                  selectedOptions.push(newObject)
+                  if (callbackFunction) callbackFunction(ok, { widget: 'select', event: 'new' })
+                } else {
+                  rhs.appendChild(errorMessageBlock(dom, 'Error updating data in field of select: ' + body))
+                }
+              })
+            }
+          } else selectedOptions.push(event.value)
         }
         selector.update(selectedOptions)
       })
@@ -1865,8 +1885,8 @@ export function makeSelectForChoice (
             kb,
             subject,
             predicate,
-            options.mintClass,
-            null,
+            uiFrom,
+            options.subForm,
             dataDoc,
             function (ok, body) {
               if (!ok) {
@@ -1898,7 +1918,7 @@ export function makeSelectForChoice (
 
     log.info('selectForOptions: data doc = ' + dataDoc)
 
-    if (select.currentURI && options.subForm) {
+    if (select.currentURI && options.subForm && !options.multiSelect) {
       addSubFormChoice(dom, container, {}, $rdf.sym(select.currentURI), options.subForm, dataDoc, function (ok, body) {
         if (ok) {
           kb.updater.update([], is, function (uri, success, errorBody) {
