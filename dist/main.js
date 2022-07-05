@@ -15151,8 +15151,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2022-06-09T15:36:20Z',
-  commit: '535eb7577d433243ae414262e1be1b349e828ecb',
+  buildTime: '2022-07-05T14:36:21Z',
+  commit: '68cc70d54913f6e70249ee516bb7baa70e4d7b95',
   npmInfo: {
     'solid-ui': '2.4.22',
     npm: '6.14.17',
@@ -18195,6 +18195,7 @@ _fieldFunction.field[ns.ui('Choice').uri] = function (dom, container, already, s
 
   var multiSelect = kb.any(form, ui('multiselect')); // Optional
 
+  if (multiSelect) opts.multiSelect = true;
   var selector;
 
   rhs.refresh = function () {
@@ -18231,7 +18232,31 @@ _fieldFunction.field[ns.ui('Choice').uri] = function (dom, container, already, s
         }
 
         if (event.action === 'ADD_OPTION') {
-          selectedOptions.push(event.value);
+          var stringValue = event.value + '';
+
+          if (stringValue.includes('Create new')) {
+            var newObject = newThing(dataDoc);
+            var is = [];
+            is.push($rdf.st(subject, property, kb.sym(newObject), dataDoc));
+            if (uiFrom) is.push($rdf.st(newObject, ns.rdf('type'), kb.sym(uiFrom), dataDoc));
+
+            if (subForm) {
+              addSubFormChoice(dom, rhs, {}, $rdf.sym(newObject), subForm, dataDoc, function (ok, body) {
+                if (ok) {
+                  kb.updater.update([], is, function (uri, success, errorBody) {
+                    if (!success) rhs.appendChild((0, _error.errorMessageBlock)(dom, 'Error updating select: ' + errorBody));
+                  });
+                  selectedOptions.push(newObject);
+                  if (callbackFunction) callbackFunction(ok, {
+                    widget: 'select',
+                    event: 'new'
+                  });
+                } else {
+                  rhs.appendChild((0, _error.errorMessageBlock)(dom, 'Error updating data in field of select: ' + body));
+                }
+              });
+            }
+          } else selectedOptions.push(event.value);
         }
 
         selector.update(selectedOptions);
@@ -19116,7 +19141,7 @@ function makeSelectForChoice(dom, container, kb, subject, predicate, inputPossib
       if (opt.selected && opt.AJAR_mint) {
         // not sure if this 'if' is used because I cannot find mintClass
         if (options.mintClass) {
-          var thisForm = promptForNew(dom, kb, subject, predicate, options.mintClass, null, dataDoc, function (ok, body) {
+          var thisForm = promptForNew(dom, kb, subject, predicate, uiFrom, options.subForm, dataDoc, function (ok, body) {
             if (!ok) {
               callbackFunction(ok, body, {
                 change: 'new'
@@ -19151,7 +19176,7 @@ function makeSelectForChoice(dom, container, kb, subject, predicate, inputPossib
 
     log.info('selectForOptions: data doc = ' + dataDoc);
 
-    if (select.currentURI && options.subForm) {
+    if (select.currentURI && options.subForm && !options.multiSelect) {
       addSubFormChoice(dom, container, {}, $rdf.sym(select.currentURI), options.subForm, dataDoc, function (ok, body) {
         if (ok) {
           kb.updater.update([], is, function (uri, success, errorBody) {
