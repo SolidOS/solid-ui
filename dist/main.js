@@ -15151,8 +15151,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2022-07-05T14:36:21Z',
-  commit: '68cc70d54913f6e70249ee516bb7baa70e4d7b95',
+  buildTime: '2022-07-22T13:39:45Z',
+  commit: '265993c62a1b8a12574e0a661f41f8a192ed9f88',
   npmInfo: {
     'solid-ui': '2.4.22',
     npm: '6.14.17',
@@ -15160,12 +15160,12 @@ var versionInfo = {
     brotli: '1.0.9',
     cldr: '40.0',
     icu: '70.1',
-    llhttp: '2.1.4',
+    llhttp: '2.1.5',
     modules: '83',
     napi: '8',
     nghttp2: '1.42.0',
-    node: '14.19.3',
-    openssl: '1.1.1o',
+    node: '14.20.0',
+    openssl: '1.1.1q',
     tz: '2021a3',
     unicode: '14.0',
     uv: '1.42.0',
@@ -18145,7 +18145,7 @@ _fieldFunction.field[ns.ui('Choice').uri] = function (dom, container, already, s
     var possibleProperties;
     possible = kb.each(undefined, ns.rdf('type'), uiFrom, formDoc);
 
-    for (var x in kb.findMembersNT(uiFrom)) {
+    for (var x in findMembersNT(kb, uiFrom, dataDoc)) {
       possible.push(kb.fromNT(x));
     } // Use rdfs
 
@@ -19242,6 +19242,70 @@ function containsObject(obj, list) {
   }
 
   return false;
+} // This functions replaces the findMembersNT (thisClass) from rdflib until we fix: https://github.com/linkeddata/rdflib.js/issues/565
+
+/**
+ * For thisClass or any subclass, anything which has it is its type
+ * or is the object of something which has the type as its range, or subject
+ * of something which has the type as its domain
+ * We don't bother doing subproperty (yet?)as it doesn't seeem to be used
+ * much.
+ * Get all the Classes of which we can RDFS-infer the subject is a member
+ * @return a hash of URIs
+ */
+
+
+function findMembersNT(store, thisClass, quad) {
+  var len2;
+  var len4;
+  var m;
+  var pred;
+  var ref1;
+  var ref2;
+  var ref3;
+  var ref4;
+  var ref5;
+  var st;
+  var u;
+  var seeds = {};
+  seeds[thisClass.toNT()] = true;
+  var members = {};
+  var ref = store.transitiveClosure(seeds, store.rdfFactory.namedNode('http://www.w3.org/2000/01/rdf-schema#subClassOf'), true);
+
+  for (var t in ref) {
+    ref1 = store.statementsMatching(null, store.rdfFactory.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), store.fromNT(t), quad);
+
+    for (var i = 0, len = ref1.length; i < len; i++) {
+      st = ref1[i];
+      members[st.subject.toNT()] = st;
+    }
+
+    ref2 = store.each(null, store.rdfFactory.namedNode('http://www.w3.org/2000/01/rdf-schema#domain'), store.fromNT(t), quad);
+
+    for (var l = 0, len1 = ref2.length; l < len1; l++) {
+      pred = ref2[l];
+      ref3 = store.statementsMatching(null, pred, null, quad);
+
+      for (m = 0, len2 = ref3.length; m < len2; m++) {
+        st = ref3[m];
+        members[st.subject.toNT()] = st;
+      }
+    }
+
+    ref4 = store.each(null, store.rdfFactory.namedNode('http://www.w3.org/2000/01/rdf-schema#range'), store.fromNT(t), quad);
+
+    for (var q = 0, len3 = ref4.length; q < len3; q++) {
+      pred = ref4[q];
+      ref5 = store.statementsMatching(null, pred, null, quad);
+
+      for (u = 0, len4 = ref5.length; u < len4; u++) {
+        st = ref5[u];
+        members[st.object.toNT()] = st;
+      }
+    }
+  }
+
+  return members;
 }
 //# sourceMappingURL=forms.js.map
 
