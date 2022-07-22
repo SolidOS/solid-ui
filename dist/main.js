@@ -15151,8 +15151,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2022-07-22T13:39:45Z',
-  commit: '265993c62a1b8a12574e0a661f41f8a192ed9f88',
+  buildTime: '2022-07-22T16:41:02Z',
+  commit: '9c4bbef14d9992beadf976c6cabebd882e879b4d',
   npmInfo: {
     'solid-ui': '2.4.22',
     npm: '6.14.17',
@@ -19245,10 +19245,10 @@ function containsObject(obj, list) {
 } // This functions replaces the findMembersNT (thisClass) from rdflib until we fix: https://github.com/linkeddata/rdflib.js/issues/565
 
 /**
- * For thisClass or any subclass, anything which has it is its type
- * or is the object of something which has the type as its range, or subject
- * of something which has the type as its domain
- * We don't bother doing subproperty (yet?)as it doesn't seeem to be used
+ * For anything which has thisClass (or any subclass) as its type,
+ * or is the object of something which has thisClass (or any subclass) as its range,
+ * or subject of something which has thisClass (or any subclass) as its domain
+ * We don't bother doing subproperty (yet?) as it doesn't seem to be used
  * much.
  * Get all the Classes of which we can RDFS-infer the subject is a member
  * @return a hash of URIs
