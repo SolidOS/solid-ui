@@ -1981,10 +1981,10 @@ function containsObject (obj, list) {
 
 // This functions replaces the findMembersNT (thisClass) from rdflib until we fix: https://github.com/linkeddata/rdflib.js/issues/565
 /**
- * For thisClass or any subclass, anything which has it is its type
- * or is the object of something which has the type as its range, or subject
- * of something which has the type as its domain
- * We don't bother doing subproperty (yet?)as it doesn't seeem to be used
+ * For anything which has thisClass (or any subclass) as its type,
+ * or is the object of something which has thisClass (or any subclass) as its range,
+ * or subject of something which has thisClass (or any subclass) as its domain
+ * We don't bother doing subproperty (yet?) as it doesn't seem to be used
  * much.
  * Get all the Classes of which we can RDFS-infer the subject is a member
  * @return a hash of URIs
