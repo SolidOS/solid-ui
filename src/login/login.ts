@@ -784,7 +784,7 @@ export function loginStatusBox (
   }
 
   box.refresh = function () {
-    me = authn.currentUser()
+    me = _solidLogic.authn.authSession.info.webId;
     if ((me && box.me !== me.uri) || (!me && box.me)) {
       widgets.clearElement(box)
       if (me) {
