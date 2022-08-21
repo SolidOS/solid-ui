@@ -787,7 +787,7 @@ field[ns.ui('Choice').uri] = function (
     let possible = []
     let possibleProperties
     possible = kb.each(undefined, ns.rdf('type'), uiFrom, formDoc)
-    for (const x in kb.findMembersNT(uiFrom)) {
+    for (const x in findMembersNT(kb, uiFrom, dataDoc)) {
       possible.push(kb.fromNT(x))
     } // Use rdfs
 
@@ -1977,4 +1977,68 @@ function containsObject (obj, list) {
   }
 
   return false
+}
+
+// This functions replaces the findMembersNT (thisClass) from rdflib until we fix: https://github.com/linkeddata/rdflib.js/issues/565
+/**
+ * For anything which has thisClass (or any subclass) as its type,
+ * or is the object of something which has thisClass (or any subclass) as its range,
+ * or subject of something which has thisClass (or any subclass) as its domain
+ * We don't bother doing subproperty (yet?) as it doesn't seem to be used
+ * much.
+ * Get all the Classes of which we can RDFS-infer the subject is a member
+ * @return a hash of URIs
+ */
+function findMembersNT (store, thisClass, quad) {
+  let len2
+  let len4
+  let m
+  let pred
+  let ref1
+  let ref2
+  let ref3
+  let ref4
+  let ref5
+  let st
+  let u
+  const seeds = {}
+  seeds[thisClass.toNT()] = true
+  const members = {}
+  const ref = store.transitiveClosure(seeds, store.rdfFactory.namedNode('http://www.w3.org/2000/01/rdf-schema#subClassOf'), true)
+  for (const t in ref) {
+    ref1 = store.statementsMatching(null,
+      store.rdfFactory.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+      store.fromNT(t),
+      quad)
+    for (let i = 0, len = ref1.length; i < len; i++) {
+      st = ref1[i]
+      members[st.subject.toNT()] = st
+    }
+    ref2 = store.each(null,
+      store.rdfFactory.namedNode('http://www.w3.org/2000/01/rdf-schema#domain'),
+      store.fromNT(t),
+      quad)
+    for (let l = 0, len1 = ref2.length; l < len1; l++) {
+      pred = ref2[l]
+      ref3 = store.statementsMatching(null, pred, null, quad)
+      for (m = 0, len2 = ref3.length; m < len2; m++) {
+        st = ref3[m]
+        members[st.subject.toNT()] = st
+      }
+    }
+    ref4 = store.each(null,
+      store.rdfFactory.namedNode('http://www.w3.org/2000/01/rdf-schema#range'),
+      store.fromNT(t),
+      quad)
+    for (let q = 0, len3 = ref4.length; q < len3; q++) {
+      pred = ref4[q]
+      ref5 = store.statementsMatching(null, pred, null, quad)
+      for (u = 0, len4 = ref5.length; u < len4; u++) {
+        st = ref5[u]
+        members[st.object.toNT()] = st
+      }
+    }
+  }
+
+  return members
 }
