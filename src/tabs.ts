@@ -289,9 +289,6 @@ export function tabWidget (options: TabWidgetOptions) {
     ele.subject = item
     const div = ele.appendChild(dom.createElement('button'))
     div.setAttribute('style', 'background: none; border: none; font: inherit; cursor: pointer')
-    const ellipsis = dom.createElement('button')
-    ellipsis.textContent = '...'
-    ellipsis.setAttribute('style', 'position: absolute; right: 0; bottom: 0; width: 20%; background: none; color: inherit; border: none; padding: 0; font: inherit; cursor: pointer; outline: inherit;')
 
     div.onclick = function () {
       resetTabStyle()
@@ -306,26 +303,32 @@ export function tabWidget (options: TabWidgetOptions) {
         bodyMain.asSettings = false
       }
     }
-    ellipsis.onclick = function () {
-      resetTabStyle()
-      resetBodyStyle()
-      ele.setAttribute('style', selectedStyle)
-      if (!ele.bodyTR) return
-      ele.bodyTR.setAttribute('style', shownStyle)
-      const bodyMain = getOrCreateContainerElement(ele)
-      if (options.renderTabSettings && ele.subject && bodyMain.asSettings !== true) {
-        bodyMain.innerHTML = 'loading settings ...' + item
-        options.renderTabSettings(bodyMain, ele.subject)
-        bodyMain.asSettings = true
+
+    if (options.renderTabSettings && ele.subject) {
+      const ellipsis = dom.createElement('button')
+      ellipsis.textContent = '...'
+      ellipsis.setAttribute('style', 'position: absolute; right: 0; bottom: 0; width: 20%; background: none; color: inherit; border: none; padding: 0; font: inherit; cursor: pointer; outline: inherit;')
+
+      ellipsis.onclick = function () {
+        resetTabStyle()
+        resetBodyStyle()
+        ele.setAttribute('style', selectedStyle)
+        if (!ele.bodyTR) return
+        ele.bodyTR.setAttribute('style', shownStyle)
+        const bodyMain = getOrCreateContainerElement(ele)
+        if (options.renderTabSettings && ele.subject && bodyMain.asSettings !== true) {
+          bodyMain.innerHTML = 'loading settings ...' + item
+          options.renderTabSettings(bodyMain, ele.subject)
+          bodyMain.asSettings = true
+        }
       }
+      ele.appendChild(ellipsis)
     }
 
     if (options.renderTab) {
       options.renderTab(div, item)
-      ele.appendChild(ellipsis)
     } else {
       div.innerHTML = label(item)
-      ele.appendChild(ellipsis)
     }
     return ele
 
