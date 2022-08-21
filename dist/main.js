@@ -13928,9 +13928,6 @@ function tabWidget(options) {
     ele.subject = item;
     var div = ele.appendChild(dom.createElement('button'));
     div.setAttribute('style', 'background: none; border: none; font: inherit; cursor: pointer');
-    var ellipsis = dom.createElement('button');
-    ellipsis.textContent = '...';
-    ellipsis.setAttribute('style', 'position: absolute; right: 0; bottom: 0; width: 20%; background: none; color: inherit; border: none; padding: 0; font: inherit; cursor: pointer; outline: inherit;');
 
     div.onclick = function () {
       resetTabStyle();
@@ -13947,27 +13944,33 @@ function tabWidget(options) {
       }
     };
 
-    ellipsis.onclick = function () {
-      resetTabStyle();
-      resetBodyStyle();
-      ele.setAttribute('style', selectedStyle);
-      if (!ele.bodyTR) return;
-      ele.bodyTR.setAttribute('style', shownStyle);
-      var bodyMain = getOrCreateContainerElement(ele);
+    if (options.renderTabSettings && ele.subject) {
+      var ellipsis = dom.createElement('button');
+      ellipsis.textContent = '...';
+      ellipsis.setAttribute('style', 'position: absolute; right: 0; bottom: 0; width: 20%; background: none; color: inherit; border: none; padding: 0; font: inherit; cursor: pointer; outline: inherit;');
 
-      if (options.renderTabSettings && ele.subject && bodyMain.asSettings !== true) {
-        bodyMain.innerHTML = 'loading settings ...' + item;
-        options.renderTabSettings(bodyMain, ele.subject);
-        bodyMain.asSettings = true;
-      }
-    };
+      ellipsis.onclick = function () {
+        resetTabStyle();
+        resetBodyStyle();
+        ele.setAttribute('style', selectedStyle);
+        if (!ele.bodyTR) return;
+        ele.bodyTR.setAttribute('style', shownStyle);
+        var bodyMain = getOrCreateContainerElement(ele);
+
+        if (options.renderTabSettings && ele.subject && bodyMain.asSettings !== true) {
+          bodyMain.innerHTML = 'loading settings ...' + item;
+          options.renderTabSettings(bodyMain, ele.subject);
+          bodyMain.asSettings = true;
+        }
+      };
+
+      ele.appendChild(ellipsis);
+    }
 
     if (options.renderTab) {
       options.renderTab(div, item);
-      ele.appendChild(ellipsis);
     } else {
       div.innerHTML = (0, _utils.label)(item);
-      ele.appendChild(ellipsis);
     }
 
     return ele;
@@ -15151,8 +15154,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2022-07-22T16:41:02Z',
-  commit: '9c4bbef14d9992beadf976c6cabebd882e879b4d',
+  buildTime: '2022-08-21T17:31:40Z',
+  commit: 'fd705c8d6e9df5698aa55d0a2784bd3ce336493c',
   npmInfo: {
     'solid-ui': '2.4.22',
     npm: '6.14.17',
