@@ -24,32 +24,46 @@
  * @packageDocumentation
  */
 import { PaneDefinition } from 'pane-registry'
-import { BlankNode, NamedNode, st, Statement } from 'rdflib'
+import { BlankNode, NamedNode, st } from 'rdflib'
 // eslint-disable-next-line camelcase
 import { Quad_Object } from 'rdflib/lib/tf-types'
 import {
   AppDetails,
   AuthenticationContext,
-  loadIndex,
   authn,
   authSession,
   CrossOriginForbiddenError,
-  ensureTypeIndexes,
   FetchError,
   getSuggestedIssuers,
-  NotFoundError,
+  NotEditableError,
   offlineTestID,
   SameOriginForbiddenError,
   solidLogicSingleton,
-  UnauthorizedError
+  UnauthorizedError,
+  WebOperationError
 } from 'solid-logic'
 import * as debug from '../debug'
 import { alert } from '../log'
 import * as ns from '../ns.js'
 import { Signup } from '../signup/signup.js'
 import { buttonStyle, commentStyle, textInputStyle } from '../style'
-import { utils } from '../utils/index'
+import * as utils from '../utils'
 import * as widgets from '../widgets'
+
+const store = solidLogicSingleton.store
+
+const {
+  loadPreferences,
+  loadProfile
+} = solidLogicSingleton.profile
+
+const {
+  getScopedAppInstances,
+  getRegistrations,
+  loadAllTypeIndexes,
+  getScopedAppsFromIndex,
+  deleteTypeIndexRegistration
+} = solidLogicSingleton.typeIndex
 
 /**
  * Resolves with the logged in user's WebID
@@ -112,7 +126,7 @@ export async function ensureLoadedPreferences (
     context = await ensureLoadedProfile(context)
 
     // console.log('back in Solid UI after logInLoadProfile', context)
-    const preferencesFile = await solidLogicSingleton.loadPreferences(context.me as NamedNode)
+    const preferencesFile = await loadPreferences(context.me as NamedNode)
     if (progressDisplay) {
       progressDisplay.parentNode.removeChild(progressDisplay)
     }
@@ -131,26 +145,16 @@ export async function ensureLoadedPreferences (
       m2 =
         'You are not authorized to read your preference file. This may be because you are using an untrusted web app.'
       debug.warn(m2)
-    } else if (err instanceof NotFoundError) {
-      if (
-        confirm(
-          `You do not currently have a preference file. OK for me to create an empty one? ${
-            (err as any).preferencesFile || ''
-          }`
-        )
-      ) {
-        // @@@ code me  ... weird to have a name of the file but no file
-        alert(
-          `Sorry; I am not prepared to do this. Please create an empty file at ${
-            (err as any).preferencesFile || '(?)'
-          }`
-        )
-        complain(new Error('Sorry; no code yet to create a preference file at '))
-      } else {
-        throw new Error(
-          `User declined to create a preference file at ${(err as any).preferencesFile || '(?)'}`
-        )
-      }
+      return context
+    } else if (err instanceof NotEditableError) {
+      m2 =
+        'You are not authorized to edit your preference file. This may be because you are using an untrusted web app.'
+      debug.warn(m2)
+      return context
+    } else if (err instanceof WebOperationError) {
+      m2 =
+        'You are not authorized to edit your preference file. This may be because you are using an untrusted web app.'
+      debug.warn(m2)
     } else if (err instanceof FetchError) {
       m2 = `Strange: Error ${err.status} trying to read your preference file.${err.message}`
       alert(m2)
@@ -180,7 +184,7 @@ export async function ensureLoadedProfile (
     if (!logInContext.me) {
       throw new Error('Could not log in')
     }
-    context.publicProfile = await solidLogicSingleton.loadProfile(logInContext.me)
+    context.publicProfile = await loadProfile(logInContext.me)
   } catch (err) {
     if (context.div && context.dom) {
       context.div.appendChild(widgets.errorMessageBlock(context.dom, err.message))
@@ -191,86 +195,30 @@ export async function ensureLoadedProfile (
 }
 
 /**
- * Returns promise of context with arrays of symbols
- *
- * 2016-12-11 change to include forClass arc a la
- * https://github.com/solid/solid/blob/main/proposals/data-discovery.md
- */
+  * Returns promise of context with arrays of symbols
+  *
+  * leaving the `isPublic` param undefined will bring in community index things, too
+  */
 export async function findAppInstances (
   context: AuthenticationContext,
   theClass: NamedNode,
   isPublic?: boolean
 ): Promise<AuthenticationContext> {
-  // console.log('findAppInstances', { context, theClass, isPublic })
-  if (isPublic === undefined) {
-    // Then both public and private
-    // console.log('finding public app instance')
-    await findAppInstances(context, theClass, true)
-    // console.log('finding private app instance')
-    await findAppInstances(context, theClass, false)
-    // console.log('found public & private app instance', context)
-    return context
+  let items = context.me ? await getScopedAppInstances(theClass, context.me) : []
+  if (isPublic === true) { // old API - not recommended!
+    items = items.filter(item => item.scope.label === 'public')
+  } else if (isPublic === false) {
+    items = items.filter(item => item.scope.label === 'private')
   }
-
-  // Loading preferences is more than loading profile
-  try {
-    // console.log('calling logInLoad', isPublic)
-    await (isPublic ? ensureLoadedProfile(context) : ensureLoadedPreferences(context))
-    // console.log('called logInLoad', isPublic)
-  } catch (err) {
-    widgets.complain(context, `loadIndex: login and load problem ${err}`)
-  }
-  // console.log('awaited LogInLoad!', context)
-  const visibility = isPublic ? 'public' : 'private'
-  try {
-    await loadIndex(context, isPublic)
-  } catch (err) {
-    debug.error(err)
-  }
-  const index = context.index as { [key: string]: Array<NamedNode> }
-  const thisIndex = index[visibility]
-  const registrations = thisIndex
-    .map((ix) => solidLogicSingleton.store.each(undefined, ns.solid('forClass'), theClass, ix))
-    .reduce((acc, curr) => acc.concat(curr), [])
-  const instances = registrations
-    .map((reg) => solidLogicSingleton.store.each(reg as NamedNode, ns.solid('instance')))
-    .reduce((acc, curr) => acc.concat(curr), [])
-  const containers = registrations
-    .map((reg) => solidLogicSingleton.store.each(reg as NamedNode, ns.solid('instanceContainer')))
-    .reduce((acc, curr) => acc.concat(curr), [])
-
-  function unique (arr: NamedNode[]): NamedNode[] {
-    return Array.from(new Set(arr))
-  }
-  context.instances = context.instances || []
-  context.instances = unique(context.instances.concat(instances as NamedNode[]))
-
-  context.containers = context.containers || []
-  context.containers = unique(context.containers.concat(containers as NamedNode[]))
-  if (!containers.length) {
-    return context
-  }
-  // If the index gives containers, then look up all things within them
-  try {
-    await solidLogicSingleton.load(containers as NamedNode[])
-  } catch (err) {
-    const e = new Error(`[FAI] Unable to load containers${err}`)
-    debug.log(e) // complain
-    widgets.complain(context, `Error looking for ${utils.label(theClass)}:  ${err}`)
-    // but then ignore it
-    // throw new Error(e)
-  }
-  for (let i = 0; i < containers.length; i++) {
-    const cont = containers[i]
-    context.instances = context.instances.concat(
-      (await solidLogicSingleton.getContainerMembers(cont.value)).map((uri) =>
-        solidLogicSingleton.store.sym(uri)
-      ) // @@ warning: uses strings not NN
-    )
-  }
+  context.instances = items.map(item => item.instance)
   return context
 }
 
+export function scopeLabel (context, scope) {
+  const mine = context.me && context.me.sameTerm(scope.agent)
+  const name = mine ? '' : utils.label(scope.agent) + ' '
+  return `${name}${scope.label}`
+}
 /**
  * UI to control registration of instance
  */
@@ -279,43 +227,8 @@ export async function registrationControl (
   instance,
   theClass
 ): Promise<AuthenticationContext | void> {
-  const dom = context.dom
-  if (!dom || !context.div) {
-    return context
-  }
-  const box = dom.createElement('div')
-  context.div.appendChild(box)
-  context.me = authn.currentUser() // @@
-  if (!context.me) {
-    box.innerHTML = '<p style="margin:2em;">(Log in to save a link to this)</p>'
-    return context
-  }
-
-  let context2 // @@ const
-  try {
-    context2 = await ensureTypeIndexes(context)
-  } catch (e) {
-    let msg
-    if (context.div && context.preferencesFileError) {
-      msg = '(Preferences not available)'
-      context.div.appendChild(dom.createElement('p')).textContent = msg
-    } else if (context.div) {
-      msg = `registrationControl: Type indexes not available: ${e}`
-      context.div.appendChild(widgets.errorMessageBlock(context.dom, e))
-    }
-    debug.log(msg)
-  }
-
-  box.innerHTML = '<table><tbody><tr></tr><tr></tr></tbody></table>' // tbody will be inserted anyway
-  box.setAttribute(
-    'style',
-    'font-size: 120%; text-align: right; padding: 1em; border: solid gray 0.05em;'
-  )
-  const tbody = box.children[0].children[0]
-  const form = new BlankNode() // @@ say for now
-
-  const registrationStatements = function (index) {
-    const registrations = solidLogicSingleton.getRegistrations(instance, theClass)
+  function registrationStatements (index) {
+    const registrations = getRegistrations(instance, theClass)
     const reg = registrations.length ? registrations[0] : widgets.newThing(index)
     return [
       st(reg, ns.solid('instance'), instance, index),
@@ -323,151 +236,122 @@ export async function registrationControl (
     ]
   }
 
-  let index, statements
+  function renderScopeCheckbox (scope) {
+    const statements = registrationStatements(scope.index)
+    const name = scopeLabel(context, scope)
+    const label = `${name} link to this ${context.noun}`
+    return widgets.buildCheckboxForm(
+      context.dom,
+      solidLogicSingleton.store,
+      label,
+      null,
+      statements,
+      form,
+      scope.index
+    )
+  }
+  /// / body of registrationControl
+  const dom = context.dom
+  if (!dom || !context.div) {
+    throw new Error('registrationControl: need dom and div')
+  }
+  const box = dom.createElement('div')
+  context.div.appendChild(box)
+  context.me = authn.currentUser() // @@
+  const me = context.me
+  if (!me) {
+    box.innerHTML = '<p style="margin:2em;">(Log in to save a link to this)</p>'
+    return context
+  }
 
+  let scopes // @@ const
   try {
-    if (context2.index && context2.index.public && context2.index.public.length > 0) {
-      index = context2.index.public[0]
-      statements = registrationStatements(index)
-      tbody.children[0].appendChild(
-        widgets.buildCheckboxForm(
-          context2.dom,
-          solidLogicSingleton.store,
-          `Public link to this ${context2.noun}`,
-          null,
-          statements,
-          form,
-          index
-        )
-      )
-    }
-
-    if (context2.index && context2.index.private && context2.index.private.length > 0) {
-      index = context2.index.private[0]
-      statements = registrationStatements(index)
-      tbody.children[1].appendChild(
-        widgets.buildCheckboxForm(
-          context2.dom,
-          solidLogicSingleton.store,
-          `Personal note of this ${context2.noun}`,
-          null,
-          statements,
-          form,
-          index
-        )
-      )
-    }
+    scopes = await loadAllTypeIndexes(me)
   } catch (e) {
-    const msg = `registrationControl: Error making panel: ${e}`
-    if (context.div) {
+    let msg
+    if (context.div && context.preferencesFileError) {
+      msg = '(Lists of stuff not available)'
+      context.div.appendChild(dom.createElement('p')).textContent = msg
+    } else if (context.div) {
+      msg = `registrationControl: Type indexes not available: ${e}`
       context.div.appendChild(widgets.errorMessageBlock(context.dom, e))
     }
     debug.log(msg)
+    return context
   }
-  return context2
+
+  box.innerHTML = '<table><tbody></tbody></table>' // tbody will be inserted anyway
+  box.setAttribute('style', 'font-size: 120%; text-align: right; padding: 1em; border: solid gray 0.05em;')
+  const tbody = box.children[0].children[0]
+  const form = new BlankNode() // @@ say for now
+
+  for (const scope of scopes) {
+    const row = tbody.appendChild(dom.createElement('tr'))
+    row.appendChild(renderScopeCheckbox(scope)) // @@ index
+  }
+  return context
 }
 
+export function renderScopeHeadingRow (context, store, scope) {
+  const backgroundColor = { private: '#fee', public: '#efe' }
+  const { dom } = context
+  const name = scopeLabel(context, scope)
+  const row = dom.createElement('tr')
+  const cell = row.appendChild(dom.createElement('td'))
+  cell.setAttribute('colspan', '3')
+  cell.style.backgoundColor = backgroundColor[scope.label] || 'white'
+  const header = cell.appendChild(dom.createElement('h3'))
+  header.textContent = name + ' links'
+  header.style.textAlign = 'left'
+  return row
+}
 /**
- * UI to List at all registered things
- */
-export async function registrationList (
-  context0: AuthenticationContext,
-  options: {
-    private?: boolean;
-    public?: boolean;
-    type?: NamedNode;
-  }
-): Promise<AuthenticationContext> {
-  const dom = context0.dom as HTMLDocument
-  const div = context0.div as HTMLElement
+  * UI to List at all registered things
+  */
+export async function registrationList (context: AuthenticationContext, options: {
+  private?: boolean
+  public?: boolean
+  type?: NamedNode
+}): Promise<AuthenticationContext> {
+  const dom = context.dom as HTMLDocument
+  const div = context.div as HTMLElement
 
   const box = dom.createElement('div')
   div.appendChild(box)
-  context0.me = authn.currentUser() // @@
-  if (!context0.me) {
+  context.me = authn.currentUser() // @@
+  if (!context.me) {
     box.innerHTML = '<p style="margin:2em;">(Log in list your stuff)</p>'
-    return context0
+    return context
   }
 
-  return ensureTypeIndexes(context0).then((context) => {
-    box.innerHTML = '<table><tbody></tbody></table>' // tbody will be inserted anyway
-    box.setAttribute(
-      'style',
-      'font-size: 120%; text-align: right; padding: 1em; border: solid #eee 0.5em;'
-    )
-    const table = box.firstChild as HTMLElement
+  const scopes = await loadAllTypeIndexes(context.me) // includes community indexes
 
-    let ix: Array<NamedNode> = []
-    let sts: Statement[] = []
-    const vs = ['private', 'public']
-    vs.forEach(function (visibility) {
-      if (context.index && context.index[visibility].length > 0 && options[visibility]) {
-        ix = ix.concat(context.index[visibility][0])
-        sts = sts.concat(
-          solidLogicSingleton.store.statementsMatching(
-            undefined,
-            ns.solid('instance'),
-            undefined,
-            context.index[visibility][0]
-          )
-        )
-      }
-    })
+  // console.log('@@ registrationList ', scopes)
+  box.innerHTML = '<table><tbody></tbody></table>' // tbody will be inserted anyway
+  box.setAttribute('style', 'font-size: 120%; text-align: right; padding: 1em; border: solid #eee 0.5em;')
+  const table = box.firstChild as HTMLElement
+  const tbody = table.firstChild as HTMLElement
 
-    for (let i = 0; i < sts.length; i++) {
-      const statement: Statement = sts[i]
-      if (options.type) {
-        // now check  terms:forClass
-        if (
-          !solidLogicSingleton.store.holds(
-            statement.subject,
-            ns.solid('forClass'),
-            options.type,
-            statement.why
-          )
-        ) {
-          continue // skip irrelevant ones
+  for (const scope of scopes) { // need some predicate for listing/adding agents
+    const headingRow = renderScopeHeadingRow(context, store, scope)
+    tbody.appendChild(headingRow)
+    const items = await getScopedAppsFromIndex(scope, options.type || null) // any class
+    if (items.length === 0) headingRow.style.display = 'none'
+    // console.log(`registrationList: @@ instance items for class ${options.type || 'undefined' }:`, items)
+    for (const item of items) {
+      const row = widgets.personTR(dom, ns.solid('instance'), item.instance, {
+        deleteFunction: async () => {
+          await deleteTypeIndexRegistration(item)
+          tbody.removeChild(row)
         }
-      }
-      // const cla = statement.subject
-      const inst = statement.object
-      table.appendChild(
-        widgets.personTR(dom, ns.solid('instance'), inst, {
-          deleteFunction: function (_x) {
-            if (!solidLogicSingleton.store.updater) {
-              throw new Error('Cannot delete this, store has no updater')
-            }
-            solidLogicSingleton.store.updater.update(
-              [statement],
-              [],
-              function (uri, ok, errorBody) {
-                if (ok) {
-                  debug.log(`Removed from index: ${statement.subject}`)
-                } else {
-                  debug.log(`Error: Cannot delete ${statement}: ${errorBody}`)
-                }
-              }
-            )
-          }
-        })
-      )
-    } // registrationList
+      })
+      row.children[0].style.paddingLeft = '3em'
 
-    /*
-        //const containers = solidLogicSingleton.store.each(theClass, ns.solid('instanceContainer'));
-        if (containers.length) {
-        fetcher.load(containers).then(function(xhrs){
-        for (const i=0; i<containers.length; i++) {
-        const cont = containers[i];
-        instances = instances.concat(solidLogicSingleton.store.each(cont, ns.ldp('contains')));
-        }
-        });
-        }
-        */
-
-    return context
-  })
-}
+      tbody.appendChild(row)
+    }
+  }
+  return context
+} // registrationList
 
 function getDefaultSignInButtonStyle (): string {
   return 'padding: 1em; border-radius:0.5em; font-size: 100%;'

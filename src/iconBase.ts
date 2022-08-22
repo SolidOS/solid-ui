@@ -18,8 +18,8 @@ import { log } from './debug'
 
 declare let $SolidTestEnvironment
 
-// Do not export. lways us this module to find the icons, as it varies
-const iconsOnGithub = 'https://solidos.github.io/solid-ui/src'
+// Do not export. Always us this module to find the icons, as they vary
+const iconsOnGithub = 'https://solidos.github.io/solid-ui/src' // changed org 2022-05
 
 export const icons = (module as any).scriptURI // Firefox extension
   ? {

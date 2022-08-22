@@ -1,19 +1,74 @@
 import { silenceDebugMessages } from '../../../helpers/setup'
 import { namedNode } from 'rdflib'
 import ns from '../../../../src/ns'
-import { solidLogicSingleton } from 'solid-logic'
+import { solidLogicSingleton, store } from 'solid-logic'
+
+/*
 import {
   commentField
 } from '../../../../src/widgets/forms/comment'
+*/
 import { clearStore } from '../../helpers/clearStore'
+
+import { field } from '../../../../src/widgets/forms'
+// const commentField = {} // @@@@@@
 
 silenceDebugMessages()
 afterEach(clearStore)
 
+const commentField = field[ns.ui('Comment').uri] // importing directly leads to chaos
+
 describe('Comment', () => {
-  it('exists', () => {
-    expect(commentField).toBeInstanceOf(Object)
+  it('index exists', () => {
+    expect(field).toBeInstanceOf(Object)
   })
+  it('exists', () => {
+    expect(field[ns.ui('Comment').uri]).toBeInstanceOf(Function)
+  })
+
+  it('objects to no contents', () => {
+    const container = document.createElement('div')
+    const already = {}
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
+    const dataDoc = namedNode('http://example.com/#store')
+    store.add(form, ns.ui('property'), ns.vcard('fn'), form.doc())
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
+    expect(
+      field[ns.ui('Comment').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        dataDoc,
+        callbackFunction
+      ).innerHTML
+    ).toContain('No contents in comment field')
+  })
+
+  it('Makes a field', () => {
+    const container = document.createElement('div')
+    const already = {}
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
+    const dataDoc = namedNode('http://example.com/#store')
+    store.add(form, ns.ui('property'), ns.vcard('fn'), form.doc())
+    store.add(form, ns.ui('contents'), 'Hello World!', form.doc())
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
+    expect(
+      field[ns.ui('Comment').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        dataDoc,
+        callbackFunction
+      ).innerHTML
+    ).toContain('Hello World')
+  })
+
   it('runs', () => {
     const container = document.createElement('div')
     const already = {}
