@@ -85,8 +85,6 @@ function updatePromise (del, ins) {
   }) // promise
 }
 
-// export findBookmarkDocument,
-
 /*         Bookmarking
  */
 /** Find a user's bookmarks
@@ -97,6 +95,7 @@ export async function findBookmarkDocument (userContext) {
   const isPublic = true
 
   await findAppInstances(userContext, theClass, isPublic) // public -- only look for public links
+
   if (userContext.instances && userContext.instances.length > 0) {
     userContext.bookmarkDocument = userContext.instances[0]
     if (userContext.instances.length > 1) {
@@ -116,11 +115,10 @@ export async function findBookmarkDocument (userContext) {
         return userContext
       }
       await registerInTypeIndex(
-        userContext,
         newBookmarkFile,
-        theClass,
-        true
-      ) // public
+        userContext.index,
+        theClass
+      )
       userContext.bookmarkDocument = newBookmarkFile
     } else {
       alert('You seem to have no bookmark file and not even a profile file.')

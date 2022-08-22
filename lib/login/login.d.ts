@@ -49,20 +49,21 @@ export declare function ensureLoadedPreferences(context: AuthenticationContext):
  */
 export declare function ensureLoadedProfile(context: AuthenticationContext): Promise<AuthenticationContext>;
 /**
- * Returns promise of context with arrays of symbols
- *
- * 2016-12-11 change to include forClass arc a la
- * https://github.com/solid/solid/blob/main/proposals/data-discovery.md
- */
+  * Returns promise of context with arrays of symbols
+  *
+  * leaving the `isPublic` param undefined will bring in community index things, too
+  */
 export declare function findAppInstances(context: AuthenticationContext, theClass: NamedNode, isPublic?: boolean): Promise<AuthenticationContext>;
+export declare function scopeLabel(context: any, scope: any): string;
 /**
  * UI to control registration of instance
  */
 export declare function registrationControl(context: AuthenticationContext, instance: any, theClass: any): Promise<AuthenticationContext | void>;
+export declare function renderScopeHeadingRow(context: any, store: any, scope: any): any;
 /**
- * UI to List at all registered things
- */
-export declare function registrationList(context0: AuthenticationContext, options: {
+  * UI to List at all registered things
+  */
+export declare function registrationList(context: AuthenticationContext, options: {
     private?: boolean;
     public?: boolean;
     type?: NamedNode;

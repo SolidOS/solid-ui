@@ -45,7 +45,7 @@ describe('Form field', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const storeNode = namedNode('http://example.com/#store')
+    const dataDoc = namedNode('http://example.com/#store')
     const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
 
     // FIXME: https://github.com/solidos/solid-ui/issues/239
@@ -58,7 +58,7 @@ describe('Form field', () => {
       already,
       subject,
       form,
-      storeNode,
+      dataDoc,
       callbackFunction
     )).toMatchSnapshot()
   })
@@ -70,7 +70,7 @@ describe('Form field', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const storeNode = namedNode('http://example.com/#store')
+    const dataDoc = namedNode('http://example.com/#store')
     const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     expect(
       field[ns.ui('Form').uri](
@@ -79,7 +79,7 @@ describe('Form field', () => {
         already,
         subject,
         form,
-        storeNode,
+        dataDoc,
         callbackFunction
       )
     ).toMatchSnapshot()
@@ -91,7 +91,8 @@ describe('Form field', () => {
     const already = { dubSubject }
     const subject = dubSubject
     const form = namedNode('http://example.com/#form')
-    const storeNode = namedNode('http://example.com/#store')
+    const dataDoc = namedNode('http://example.com/#store')
+
     const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     expect(
       field[ns.ui('Form').uri](
@@ -100,7 +101,7 @@ describe('Form field', () => {
         already,
         subject,
         form,
-        storeNode,
+        dataDoc,
         callbackFunction
       )
     ).toMatchSnapshot()
@@ -116,7 +117,7 @@ describe('Options field', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const storeNode = namedNode('http://example.com/#store')
+    const dataDoc = namedNode('http://example.com/#store')
     const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     expect(
       field[ns.ui('Options').uri](
@@ -125,7 +126,7 @@ describe('Options field', () => {
         already,
         subject,
         form,
-        storeNode,
+        dataDoc,
         callbackFunction
       )
     ).toMatchSnapshot()
@@ -141,7 +142,7 @@ describe('Multiple field', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const storeNode = namedNode('http://example.com/#store')
+    const dataDoc = namedNode('http://example.com/#store')
     const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     expect(
       field[ns.ui('Multiple').uri](
@@ -150,7 +151,7 @@ describe('Multiple field', () => {
         already,
         subject,
         form,
-        storeNode,
+        dataDoc,
         callbackFunction
       )
     ).toMatchSnapshot()
@@ -188,7 +189,7 @@ describe('MultiLineTextField', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const storeNode = namedNode('http://example.com/#store')
+    const dataDoc = namedNode('http://example.com/#store')
     const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     expect(
       field[ns.ui('MultiLineTextField').uri](
@@ -197,7 +198,7 @@ describe('MultiLineTextField', () => {
         already,
         subject,
         form,
-        storeNode,
+        dataDoc,
         callbackFunction
       )
     ).toMatchSnapshot()
@@ -208,12 +209,12 @@ describe('BooleanField', () => {
   it('exists', () => {
     expect(field[ns.ui('BooleanField').uri]).toBeInstanceOf(Object)
   })
-  it('runs', () => {
+  it('catches: No property to boolean field', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const storeNode = namedNode('http://example.com/#store')
+    const dataDoc = namedNode('http://example.com/#store')
     const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     expect(
       field[ns.ui('BooleanField').uri](
@@ -222,10 +223,30 @@ describe('BooleanField', () => {
         already,
         subject,
         form,
-        storeNode,
+        dataDoc,
         callbackFunction
-      )
-    ).toMatchSnapshot()
+      ).innerHTML
+    ).toContain('No property to boolean field')
+  })
+  it('Makes a button', () => {
+    const container = document.createElement('div')
+    const already = {}
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
+    const dataDoc = namedNode('http://example.com/#store')
+    store.add(form, ns.ui('property'), ns.vcard('fn'), form.doc())
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
+    expect(
+      field[ns.ui('BooleanField').uri](
+        document,
+        container,
+        already,
+        subject,
+        form,
+        dataDoc,
+        callbackFunction
+      ).innerHTML
+    ).toContain('<button')
   })
 })
 
@@ -238,7 +259,9 @@ describe('TristateField', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const storeNode = namedNode('http://example.com/#store')
+    const dataDoc = namedNode('http://example.com/#store')
+    store.add(form, ns.ui('property'), ns.vcard('fn'), form.doc())
+
     const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     expect(
       field[ns.ui('TristateField').uri](
@@ -247,7 +270,7 @@ describe('TristateField', () => {
         already,
         subject,
         form,
-        storeNode,
+        dataDoc,
         callbackFunction
       )
     ).toMatchSnapshot()
@@ -263,21 +286,24 @@ describe('Classifier', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const storeNode = namedNode('http://example.com/#store')
-    store.add(form, ns.ui('category'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
+    const dataDoc = namedNode('http://example.com/#store')
+    store.add(form, ns.ui('property'), ns.vcard('fn'), form.doc())
+
+    store.add(form, ns.ui('category'), namedNode('http://example.com/#bla'), form.doc())
 
     const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
-    expect(
+    const result =
       field[ns.ui('Classifier').uri](
         document,
         container,
         already,
         subject,
         form,
-        storeNode,
+        dataDoc,
         callbackFunction
-      )
-    ).toMatchSnapshot()
+      ).innerHTML
+    expect(result).toContain('<button')
+    expect(result).toContain('noun_1180156.svg') // cancel button icon
   })
 })
 
@@ -290,7 +316,7 @@ describe('Choice', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const storeNode = namedNode('http://example.com/#store')
+    const dataDoc = namedNode('http://example.com/#store')
     const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     expect(
       field[ns.ui('Choice').uri](
@@ -299,7 +325,7 @@ describe('Choice', () => {
         already,
         subject,
         form,
-        storeNode,
+        dataDoc,
         callbackFunction
       )
     ).toMatchSnapshot()
@@ -315,7 +341,7 @@ describe('Heading', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const storeNode = namedNode('http://example.com/#store')
+    const dataDoc = namedNode('http://example.com/#store')
     store.add(form, ns.ui('contents'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
     const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     expect(
@@ -325,7 +351,7 @@ describe('Heading', () => {
         already,
         subject,
         form,
-        storeNode,
+        dataDoc,
         callbackFunction
       )
     ).toMatchSnapshot()
@@ -341,7 +367,7 @@ describe('Comment', () => {
     const already = {}
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
-    const storeNode = namedNode('http://example.com/#store')
+    const dataDoc = namedNode('http://example.com/#store')
     const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.ui('contents'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
     expect(
@@ -351,7 +377,7 @@ describe('Comment', () => {
         already,
         subject,
         form,
-        storeNode,
+        dataDoc,
         callbackFunction
       )
     ).toMatchSnapshot()
@@ -365,10 +391,10 @@ describe('editFormButton', () => {
   it('runs', () => {
     const container = null
     const form = null
-    const storeNode = namedNode('http://example.com/#store')
+    const dataDoc = namedNode('http://example.com/#store')
     const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     expect(
-      editFormButton(document, container, form, storeNode, callbackFunction)
+      editFormButton(document, container, form, dataDoc, callbackFunction)
     ).toBeInstanceOf(HTMLButtonElement)
   })
 })
@@ -382,10 +408,10 @@ describe('appendForm', () => {
     const already = {}
     const subject = namedNode('http://example.com/#subject')
     const form = namedNode('http://example.com/#form')
-    const storeNode = namedNode('http://example.com/#store')
+    const dataDoc = namedNode('http://example.com/#store')
     const itemDone = () => {}
     expect(
-      appendForm(document, container, already, subject, form, storeNode, itemDone)
+      appendForm(document, container, already, subject, form, dataDoc, itemDone)
     ).toBeInstanceOf(HTMLDivElement)
   })
 })
