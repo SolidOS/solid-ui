@@ -787,7 +787,7 @@ export function loginStatusBox (
   box.refresh = function () {
     const sessionInfo = authSession.info
     if (sessionInfo && sessionInfo.webId && sessionInfo.isLoggedIn) {
-      me = sym(sessionInfo.webId)
+      me = solidLogicSingleton.store.sym(sessionInfo.webId)
     } else {
       me = null
     }
