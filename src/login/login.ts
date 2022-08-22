@@ -591,6 +591,7 @@ export function renderSignInPopup (dom: HTMLDocument) {
       border-radius: 4px;
       min-width: 400px;
       padding: 10px;
+      z-index : 10;
     `
   )
   issuerPopup.appendChild(issuerPopupBox)
