@@ -785,7 +785,20 @@ export function loginStatusBox (
   }
 
   box.refresh = function () {
-    me = authn.authSession.info.webId;
+    const sessionInfo = authSession.info
+    if (sessionInfo && sessionInfo.webId && sessionInfo.isLoggedIn) {
+      me = sym(sessionInfo.webId)
+    } else {
+      me = null
+    }
+    if ((me && box.me !== me.uri) || (!me && box.me)) {
+      widgets.clearElement(box)
+      if (me) {
+        box.appendChild(logoutButton(me, options))
+      } else {
+        box.appendChild(signInOrSignUpBox(dom, setIt, options))
+      }
+    }
     if ((me && box.me !== me.uri) || (!me && box.me)) {
       widgets.clearElement(box)
       if (me) {
