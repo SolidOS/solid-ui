@@ -475,6 +475,7 @@ export function renderSignInPopup (dom: HTMLDocument) {
       border-radius: 4px;
       min-width: 400px;
       padding: 10px;
+      z-index : 10;
     `
   )
   issuerPopup.appendChild(issuerPopupBox)
@@ -668,7 +669,12 @@ export function loginStatusBox (
   }
 
   box.refresh = function () {
-    me = authn.currentUser()
+    const sessionInfo = authSession.info
+    if (sessionInfo && sessionInfo.webId && sessionInfo.isLoggedIn) {
+      me = solidLogicSingleton.store.sym(sessionInfo.webId)
+    } else {
+      me = null
+    }
     if ((me && box.me !== me.uri) || (!me && box.me)) {
       widgets.clearElement(box)
       if (me) {

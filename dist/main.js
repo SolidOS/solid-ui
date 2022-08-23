@@ -8494,7 +8494,7 @@ function renderSignInPopup(dom) {
   issuerPopup.setAttribute('style', 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; align-items: center;');
   dom.body.appendChild(issuerPopup);
   var issuerPopupBox = dom.createElement('div');
-  issuerPopupBox.setAttribute('style', "\n      background-color: white;\n      box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);\n      -webkit-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);\n      -moz-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);\n      -o-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);\n      border-radius: 4px;\n      min-width: 400px;\n      padding: 10px;\n    ");
+  issuerPopupBox.setAttribute('style', "\n      background-color: white;\n      box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);\n      -webkit-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);\n      -moz-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);\n      -o-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);\n      border-radius: 4px;\n      min-width: 400px;\n      padding: 10px;\n      z-index : 10;\n    ");
   issuerPopup.appendChild(issuerPopupBox);
   var issuerPopupBoxTopMenu = dom.createElement('div');
   issuerPopupBoxTopMenu.setAttribute('style', "\n      border-bottom: 1px solid #DDD;\n      display: flex;\n      flex-direction: row;\n      align-items: center;\n      justify-content: space-between;\n    ");
@@ -8678,7 +8678,13 @@ function loginStatusBox(dom) {
   }
 
   box.refresh = function () {
-    me = _solidLogic.authn.currentUser();
+    var sessionInfo = _solidLogic.authSession.info;
+
+    if (sessionInfo && sessionInfo.webId && sessionInfo.isLoggedIn) {
+      me = _solidLogic.solidLogicSingleton.store.sym(sessionInfo.webId);
+    } else {
+      me = null;
+    }
 
     if (me && box.me !== me.uri || !me && box.me) {
       widgets.clearElement(box);
@@ -15231,8 +15237,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2022-08-23T09:21:35Z',
-  commit: '517d173698255f0c1f9c9767d1224b449bea8bba',
+  buildTime: '2022-08-23T13:15:25Z',
+  commit: '8f106c022af86d386cbc38d7174299c80f30e485',
   npmInfo: {
     'solid-ui': '2.4.22',
     npm: '8.13.2',
