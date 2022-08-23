@@ -15237,11 +15237,11 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2022-08-23T16:04:04Z',
-  commit: 'd4ac720be125b383e7c2522ae10422a0afa01088',
+  buildTime: '2022-08-23T16:14:00Z',
+  commit: 'd6a4e62ea0078f3fc6f46ef81e5f9df451281655',
   npmInfo: {
     'solid-ui': '2.4.22',
-    npm: '8.13.2',
+    npm: '8.18.0',
     node: '14.20.0',
     v8: '8.4.371.23-node.87',
     uv: '1.42.0',
