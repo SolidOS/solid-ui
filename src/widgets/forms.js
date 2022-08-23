@@ -1334,6 +1334,213 @@ export function makeDescription (
 // @param subject - a term, the subject of the statement(s) being edited.
 // @param predicate - a term, the predicate of the statement(s) being edited
 // @param possible - a list of terms, the possible value the object can take
+// @param options.multiple - Boolean - Whether more than one at a time is allowed
+// @param options.nullLabel - a string to be displayed as the
+//                        option for none selected (for non multiple)
+// @param options.mint - User may create thing if this sent to the prompt string eg "New foo"
+// @param options.subForm - If mint, then the form to be used for minting the new thing
+// @param dataDoc - The web document being edited
+// @param callbackFunction - takes (boolean ok, string errorBody)
+*/
+export function makeSelectForClassifierOptions (
+  dom,
+  kb,
+  subject,
+  predicate,
+  possible,
+  options,
+  dataDoc,
+  callbackFunction
+) {
+  log.debug('Select list length now ' + possible.length)
+  let n = 0
+  const uris = {} // Count them
+  const editable = kb.updater.editable(dataDoc.uri)
+
+  for (let i = 0; i < possible.length; i++) {
+    const sub = possible[i] // @@ Maybe; make this so it works with blank nodes too
+    if (!sub.uri) debug.warn(`makeSelectForClassifierOptions: option does not have an uri: ${sub}, with predicate: ${predicate}`)
+    if (!sub.uri || sub.uri in uris) continue
+    uris[sub.uri] = true
+    n++
+  } // uris is now the set of possible options
+  if (n === 0 && !options.mint) {
+    return errorMessageBlock(
+      dom,
+      "Can't do selector with no options, subject= " +
+        subject +
+        ' property = ' +
+        predicate +
+        '.'
+    )
+  }
+
+  log.debug('makeSelectForClassifierOptions: dataDoc=' + dataDoc)
+  let actual
+  const getActual = function () {
+    actual = {}
+    if (predicate.sameTerm(ns.rdf('type'))) {
+      actual = kb.findTypeURIs(subject)
+    } else {
+      kb.each(subject, predicate, null, dataDoc).forEach(function (x) {
+        actual[x.uri] = true
+      })
+    }
+    return actual
+  }
+  actual = getActual()
+
+  const onChange = function (_e) {
+    select.disabled = true // until data written back - gives user feedback too
+    const ds = []
+    let is = []
+    const removeValue = function (t) {
+      if (kb.holds(subject, predicate, t, dataDoc)) {
+        ds.push($rdf.st(subject, predicate, t, dataDoc))
+      }
+    }
+    let newObject
+    for (let i = 0; i < select.options.length; i++) {
+      const opt = select.options[i]
+      if (opt.selected && opt.AJAR_mint) {
+        if (options.mintClass) {
+          const thisForm = promptForNew(
+            dom,
+            kb,
+            subject,
+            predicate,
+            options.mintClass,
+            null,
+            dataDoc,
+            function (ok, body) {
+              if (!ok) {
+                callbackFunction(ok, body, { change: 'new' }) // @@ if ok, need some form of refresh of the select for the new thing
+              }
+            }
+          )
+          select.parentNode.appendChild(thisForm)
+          newObject = thisForm.AJAR_subject
+        } else {
+          newObject = newThing(dataDoc)
+        }
+        is.push($rdf.st(subject, predicate, newObject, dataDoc))
+        if (options.mintStatementsFun) {
+          is = is.concat(options.mintStatementsFun(newObject))
+        }
+      }
+      if (!opt.AJAR_uri) continue // a prompt or mint
+      if (opt.selected && !(opt.AJAR_uri in actual)) {
+        // new class
+        is.push($rdf.st(subject, predicate, kb.sym(opt.AJAR_uri), dataDoc))
+      }
+      if (!opt.selected && opt.AJAR_uri in actual) {
+        // old class
+        removeValue(kb.sym(opt.AJAR_uri))
+      }
+      if (opt.selected) select.currentURI = opt.AJAR_uri
+    }
+    let sel = select.subSelect // All subclasses must also go
+    while (sel && sel.currentURI) {
+      removeValue(kb.sym(sel.currentURI))
+      sel = sel.subSelect
+    }
+    sel = select.superSelect // All superclasses are redundant
+    while (sel && sel.currentURI) {
+      removeValue(kb.sym(sel.currentURI))
+      sel = sel.superSelect
+    }
+    function doneNew (ok, _body) {
+      callbackFunction(ok, { widget: 'select', event: 'new' })
+    }
+    log.info('makeSelectForClassifierOptions: data doc = ' + dataDoc)
+    kb.updater.update(ds, is, function (uri, ok, body) {
+      actual = getActual() // refresh
+      if (ok) {
+        select.disabled = false // data written back
+        if (newObject) {
+          const fn = fieldFunction(dom, options.subForm)
+          fn(
+            dom,
+            select.parentNode,
+            {},
+            newObject,
+            options.subForm,
+            dataDoc,
+            doneNew
+          )
+        }
+      } else {
+        return select.parentNode.appendChild(errorMessageBlock(dom, 'Error updating data in select: ' + body))
+      }
+      if (callbackFunction) callbackFunction(ok, { widget: 'select', event: 'change' })
+    })
+  }
+
+  const select = dom.createElement('select')
+  select.setAttribute('style', style.formSelectSTyle)
+  if (options.multiple) select.setAttribute('multiple', 'true')
+  select.currentURI = null
+
+  select.refresh = function () {
+    actual = getActual() // refresh
+    for (let i = 0; i < select.children.length; i++) {
+      const option = select.children[i]
+      if (option.AJAR_uri) {
+        option.selected = option.AJAR_uri in actual
+      }
+    }
+    select.disabled = false // unlocked any conflict we had got into
+  }
+
+  for (const uri in uris) {
+    const c = kb.sym(uri)
+    const option = dom.createElement('option')
+    if (options.disambiguate) {
+      option.appendChild(dom.createTextNode(utils.labelWithOntology(c, true))) // Init. cap
+    } else {
+      option.appendChild(dom.createTextNode(utils.label(c, true))) // Init.
+    }
+    const backgroundColor = kb.any(
+      c,
+      kb.sym('http://www.w3.org/ns/ui#backgroundColor')
+    )
+    if (backgroundColor) {
+      option.setAttribute(
+        'style',
+        'background-color: ' + backgroundColor.value + '; '
+      )
+    }
+    option.AJAR_uri = uri
+    if (uri in actual) {
+      option.setAttribute('selected', 'true')
+      select.currentURI = uri
+      // dump("Already in class: "+ uri+"\n")
+    }
+    select.appendChild(option)
+  }
+  if (editable && options.mint) {
+    const mint = dom.createElement('option')
+    mint.appendChild(dom.createTextNode(options.mint))
+    mint.AJAR_mint = true // Flag it
+    select.insertBefore(mint, select.firstChild)
+  }
+  if (select.currentURI == null && !options.multiple) {
+    const prompt = dom.createElement('option')
+    prompt.appendChild(dom.createTextNode(options.nullLabel))
+    select.insertBefore(prompt, select.firstChild)
+    prompt.selected = true
+  }
+  if (editable) {
+    select.addEventListener('change', onChange, false)
+  }
+  return select
+} // makeSelectForClassifierOptions
+
+/** Make SELECT element to select options
+//
+// @param subject - a term, the subject of the statement(s) being edited.
+// @param predicate - a term, the predicate of the statement(s) being edited
+// @param possible - a list of terms, the possible value the object can take
 // @param options.nullLabel - a string to be displayed as the
 //                        option for none selected (for non multiple)
 // @param options.subForm - If mint, then the form to be used for minting the new thing
@@ -1503,20 +1710,41 @@ export function makeSelectForCategory (
 ) {
   const du = kb.any(category, ns.owl('disjointUnionOf'))
   let subs
+  let multiple = false
   if (!du) {
     subs = kb.each(undefined, ns.rdfs('subClassOf'), category)
+    multiple = true
   } else {
     subs = du.elements
   }
   log.debug('Select list length ' + subs.length)
-
-  return makeSelectForOptions(
+  if (subs.length === 0) {
+    return errorMessageBlock(
+      dom,
+      "Can't do " +
+        (multiple ? 'multiple ' : '') +
+        'selector with no subclasses of category: ' +
+        category
+    )
+  }
+  if (subs.length === 1) {
+    return errorMessageBlock(
+      dom,
+      "Can't do " +
+        (multiple ? 'multiple ' : '') +
+        'selector with only 1 subclass of category: ' +
+        category +
+        ':' +
+        subs[1]
+    )
+  }
+  return makeSelectForClassifierOptions(
     dom,
     kb,
     subject,
     ns.rdf('type'),
     subs,
-    { nullLabel: '* Select type *' },
+    { multiple, nullLabel: '* Select type *' },
     dataDoc,
     callbackFunction
   )
