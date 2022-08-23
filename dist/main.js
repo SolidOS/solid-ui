@@ -15237,8 +15237,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2022-08-23T13:15:25Z',
-  commit: '8f106c022af86d386cbc38d7174299c80f30e485',
+  buildTime: '2022-08-23T16:04:04Z',
+  commit: 'd4ac720be125b383e7c2522ae10422a0afa01088',
   npmInfo: {
     'solid-ui': '2.4.22',
     npm: '8.13.2',
@@ -41473,11 +41473,7 @@ var join = function join(value, by) {
  */
 
 
-var toCssValue = function toCssValue(value, ignoreImportant) {
-  if (ignoreImportant === void 0) {
-    ignoreImportant = false;
-  }
-
+var toCssValue = function toCssValue(value) {
   if (!Array.isArray(value)) return value;
   var cssValue = ''; // Support space separated values via `[['5px', '10px']]`.
 
@@ -41490,7 +41486,7 @@ var toCssValue = function toCssValue(value, ignoreImportant) {
   } else cssValue = join(value, ', '); // Add !important, because it was ignored.
 
 
-  if (!ignoreImportant && value[value.length - 1] === '!important') {
+  if (value[value.length - 1] === '!important') {
     cssValue += ' !important';
   }
 
@@ -43012,19 +43008,16 @@ var setProperty = function setProperty(cssRule, prop, value) {
     var cssValue = value;
 
     if (Array.isArray(value)) {
-      cssValue = toCssValue(value, true);
-
-      if (value[value.length - 1] === '!important') {
-        cssRule.style.setProperty(prop, cssValue, 'important');
-        return true;
-      }
+      cssValue = toCssValue(value);
     } // Support CSSTOM.
 
 
     if (cssRule.attributeStyleMap) {
       cssRule.attributeStyleMap.set(prop, cssValue);
     } else {
-      cssRule.style.setProperty(prop, cssValue);
+      var indexOfImportantFlag = cssValue ? cssValue.indexOf('!important') : -1;
+      var cssValueWithoutImportantFlag = indexOfImportantFlag > -1 ? cssValue.substr(0, indexOfImportantFlag - 1) : cssValue;
+      cssRule.style.setProperty(prop, cssValueWithoutImportantFlag, indexOfImportantFlag > -1 ? 'important' : '');
     }
   } catch (err) {
     // IE may throw if property is unknown.
@@ -43437,7 +43430,7 @@ var Jss =
 function () {
   function Jss(options) {
     this.id = instanceCounter++;
-    this.version = "10.9.0";
+    this.version = "10.9.2";
     this.plugins = new PluginsRegistry();
     this.options = {
       id: {
@@ -76957,6 +76950,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "UnsecuredJWT": () => (/* reexport safe */ _jwt_unsecured_js__WEBPACK_IMPORTED_MODULE_20__.UnsecuredJWT),
 /* harmony export */   "base64url": () => (/* reexport module object */ _util_base64url_js__WEBPACK_IMPORTED_MODULE_28__),
 /* harmony export */   "calculateJwkThumbprint": () => (/* reexport safe */ _jwk_thumbprint_js__WEBPACK_IMPORTED_MODULE_16__.calculateJwkThumbprint),
+/* harmony export */   "calculateJwkThumbprintUri": () => (/* reexport safe */ _jwk_thumbprint_js__WEBPACK_IMPORTED_MODULE_16__.calculateJwkThumbprintUri),
 /* harmony export */   "compactDecrypt": () => (/* reexport safe */ _jwe_compact_decrypt_js__WEBPACK_IMPORTED_MODULE_0__.compactDecrypt),
 /* harmony export */   "compactVerify": () => (/* reexport safe */ _jws_compact_verify_js__WEBPACK_IMPORTED_MODULE_4__.compactVerify),
 /* harmony export */   "createLocalJWKSet": () => (/* reexport safe */ _jwks_local_js__WEBPACK_IMPORTED_MODULE_18__.createLocalJWKSet),
@@ -77198,8 +77192,8 @@ async function flattenedDecrypt(jwe, key, options) {
     }
     let parsedProt;
     if (jwe.protected) {
-        const protectedHeader = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwe.protected);
         try {
+            const protectedHeader = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwe.protected);
             parsedProt = JSON.parse(_lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_7__.decoder.decode(protectedHeader));
         }
         catch (_b) {
@@ -77787,7 +77781,8 @@ async function EmbeddedJWK(protectedHeader, token) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "calculateJwkThumbprint": () => (/* binding */ calculateJwkThumbprint)
+/* harmony export */   "calculateJwkThumbprint": () => (/* binding */ calculateJwkThumbprint),
+/* harmony export */   "calculateJwkThumbprintUri": () => (/* binding */ calculateJwkThumbprintUri)
 /* harmony export */ });
 /* harmony import */ var _runtime_digest_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../runtime/digest.js */ "./node_modules/jose/dist/browser/runtime/digest.js");
 /* harmony import */ var _runtime_base64url_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../runtime/base64url.js */ "./node_modules/jose/dist/browser/runtime/base64url.js");
@@ -77804,10 +77799,11 @@ const check = (value, description) => {
         throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWKInvalid(`${description} missing or invalid`);
     }
 };
-async function calculateJwkThumbprint(jwk, digestAlgorithm = 'sha256') {
+async function calculateJwkThumbprint(jwk, digestAlgorithm) {
     if (!(0,_lib_is_object_js__WEBPACK_IMPORTED_MODULE_4__["default"])(jwk)) {
         throw new TypeError('JWK must be an object');
     }
+    digestAlgorithm !== null && digestAlgorithm !== void 0 ? digestAlgorithm : (digestAlgorithm = 'sha256');
     if (digestAlgorithm !== 'sha256' &&
         digestAlgorithm !== 'sha384' &&
         digestAlgorithm !== 'sha512') {
@@ -77840,6 +77836,11 @@ async function calculateJwkThumbprint(jwk, digestAlgorithm = 'sha256') {
     }
     const data = _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_3__.encoder.encode(JSON.stringify(components));
     return (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_1__.encode)(await (0,_runtime_digest_js__WEBPACK_IMPORTED_MODULE_0__["default"])(digestAlgorithm, data));
+}
+async function calculateJwkThumbprintUri(jwk, digestAlgorithm) {
+    digestAlgorithm !== null && digestAlgorithm !== void 0 ? digestAlgorithm : (digestAlgorithm = 'sha256');
+    const thumbprint = await calculateJwkThumbprint(jwk, digestAlgorithm);
+    return `urn:ietf:params:oauth:jwk-thumbprint:sha-${digestAlgorithm.slice(-3)}:${thumbprint}`;
 }
 
 
@@ -78289,8 +78290,8 @@ async function flattenedVerify(jws, key, options) {
     }
     let parsedProt = {};
     if (jws.protected) {
-        const protectedHeader = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jws.protected);
         try {
+            const protectedHeader = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jws.protected);
             parsedProt = JSON.parse(_lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_3__.decoder.decode(protectedHeader));
         }
         catch (_b) {
