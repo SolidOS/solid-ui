@@ -15237,10 +15237,10 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2022-08-23T16:14:00Z',
-  commit: 'd6a4e62ea0078f3fc6f46ef81e5f9df451281655',
+  buildTime: '2022-08-29T19:48:29Z',
+  commit: 'c009049f74b70a8aa87d6821783a0500b0039d5f',
   npmInfo: {
-    'solid-ui': '2.4.22',
+    'solid-ui': '2.4.23',
     npm: '8.18.0',
     node: '14.20.0',
     v8: '8.4.371.23-node.87',
@@ -51401,8 +51401,8 @@ var Fetcher = /*#__PURE__*/function () {
       }
     }
     /**
-     * A generic web opeation, at the fetch() level.
-     * does not invole the quadstore.
+     * A generic web operation, at the fetch() level.
+     * does not involve the quad store.
      *
      *  Returns promise of Response
      *  If data is returned, copies it to response.responseText before returning
@@ -59268,7 +59268,7 @@ var Serializer = /*#__PURE__*/function () {
     this.prefixchars = 'abcdefghijklmnopqustuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     this.incoming = null; // Array not calculated yet
 
-    this.formulas = []; // remebering original formulae from hashes
+    this.formulas = []; // remembering original formulae from hashes
 
     this.store = store;
     this.rdfFactory = store.rdfFactory || _factories_canonical_data_factory__WEBPACK_IMPORTED_MODULE_4__["default"];
@@ -59310,7 +59310,7 @@ var Serializer = /*#__PURE__*/function () {
       return this.store.fromNT(s);
     }
     /**
-     * Defines a set of [prefix, namespace] pairs to be uised by this Serializer instance.
+     * Defines a set of [prefix, namespace] pairs to be used by this Serializer instance.
      * Overrides previous prefixes if any
      * @param namespaces
      * @return {Serializer}
@@ -59873,7 +59873,7 @@ var Serializer = /*#__PURE__*/function () {
                 return val;
 
               case 'http://www.w3.org/2001/XMLSchema#decimal':
-                // In urtle must have dot
+                // In Turtle, must have dot
                 if (val.indexOf('.') < 0) val += '.0';
                 return val;
 
@@ -59903,6 +59903,9 @@ var Serializer = /*#__PURE__*/function () {
 
         case 'NamedNode':
           return this.symbolToN3(expr);
+
+        case 'DefaultGraph':
+          return '';
 
         default:
           throw new Error('Internal: atomicTermToN3 cannot handle ' + expr + ' of termType: ' + expr.termType);
@@ -62628,7 +62631,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 
 
-
 /**
 * The UpdateManager is a helper object for a store.
 * Just as a Fetcher provides the store with the ability to read and write,
@@ -62827,6 +62829,11 @@ var UpdateManager = /*#__PURE__*/function () {
     key: "anonymizeNT",
     value: function anonymizeNT(stmt) {
       return this.anonymize(stmt.subject) + ' ' + this.anonymize(stmt.predicate) + ' ' + this.anonymize(stmt.object) + ' .';
+    }
+  }, {
+    key: "nTriples",
+    value: function nTriples(stmt) {
+      return "".concat(stmt.subject.toNT(), " ").concat(stmt.predicate.toNT(), " ").concat(stmt.object.toNT(), " .");
     }
     /**
      * Returns a list of all bnodes occurring in a statement
@@ -63029,17 +63036,16 @@ var UpdateManager = /*#__PURE__*/function () {
     value: function fire(uri, query, callbackFunction) {
       var _this = this;
 
+      var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
       return Promise.resolve().then(function () {
         if (!uri) {
           throw new Error('No URI given for remote editing operation: ' + query);
         } // console.log('UpdateManager: sending update to <' + uri + '>')
 
 
-        var options = {
-          noMeta: true,
-          contentType: 'application/sparql-update',
-          body: query
-        };
+        options.noMeta = true;
+        options.contentType = 'application/sparql-update';
+        options.body = query;
         return _this.store.fetcher.webOperation('PATCH', uri, options);
       }).then(function (response) {
         if (!response.ok) {
@@ -63404,12 +63410,15 @@ var UpdateManager = /*#__PURE__*/function () {
      * @param insertions - Statement or statements to be inserted.
      * @param callback - called as callbackFunction(uri, success, errorbody)
      *           OR returns a promise
+     * @param options - Options for the fetch call
      */
 
   }, {
     key: "update",
     value: function update(deletions, insertions, callback, secondTry) {
       var _this3 = this;
+
+      var options = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
 
       if (!callback) {
         var thisUpdater = this;
@@ -63421,7 +63430,7 @@ var UpdateManager = /*#__PURE__*/function () {
             } else {
               resolve();
             }
-          }); // callbackFunction
+          }, secondTry, options); // callbackFunction
         }); // promise
       } // if
 
@@ -63487,11 +63496,11 @@ var UpdateManager = /*#__PURE__*/function () {
 
 
           this.store.fetcher.load(doc).then(function (response) {
-            _this3.update(deletions, insertions, callback, true);
+            _this3.update(deletions, insertions, callback, true, options);
           }, function (err) {
             if (err.response.status === 404) {
               // nonexistent files are fine
-              _this3.update(deletions, insertions, callback, true);
+              _this3.update(deletions, insertions, callback, true, options);
             } else {
               throw new Error("Update: Can't get updatability status ".concat(doc, " before patching: ").concat(err));
             }
@@ -63545,7 +63554,7 @@ var UpdateManager = /*#__PURE__*/function () {
               query += 'INSERT DATA { ';
 
               for (var _i7 = 0; _i7 < is.length; _i7++) {
-                query += this.anonymizeNT(is[_i7]) + '\n';
+                query += this.nTriples(is[_i7]) + '\n';
               }
 
               query += ' }\n';
@@ -63587,13 +63596,13 @@ var UpdateManager = /*#__PURE__*/function () {
 
               downstreamAction(doc);
             }
-          });
+          }, options);
         } else if (protocol.indexOf('DAV') >= 0) {
-          this.updateDav(doc, ds, is, callback);
+          this.updateDav(doc, ds, is, callback, options);
         } else {
           if (protocol.indexOf('LOCALFILE') >= 0) {
             try {
-              this.updateLocalFile(doc, ds, is, callback);
+              this.updateLocalFile(doc, ds, is, callback, options);
             } catch (e) {
               callback(doc.value, false, 'Exception trying to write back file <' + doc.value + '>\n' // + tabulator.Util.stackString(e))
               );
@@ -63609,6 +63618,7 @@ var UpdateManager = /*#__PURE__*/function () {
   }, {
     key: "updateDav",
     value: function updateDav(doc, ds, is, callbackFunction) {
+      var options = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
       var kb = this.store; // The code below is derived from Kenny's UpdateCenter.js
 
       var request = kb.any(doc, this.ns.link('request'));
@@ -63645,11 +63655,9 @@ var UpdateManager = /*#__PURE__*/function () {
         targetURI = (0,_uri__WEBPACK_IMPORTED_MODULE_8__.join)(candidateTarget.value, targetURI);
       }
 
-      var options = {
-        contentType: contentType,
-        noMeta: true,
-        body: documentString
-      };
+      options.contentType = contentType;
+      options.noMeta = true;
+      options.body = documentString;
       return kb.fetcher.webOperation('PUT', targetURI, options).then(function (response) {
         if (!response.ok) {
           throw new Error(response.error);
@@ -63675,11 +63683,13 @@ var UpdateManager = /*#__PURE__*/function () {
      * @param ds
      * @param is
      * @param callbackFunction
+     * @param options
      */
 
   }, {
     key: "updateLocalFile",
     value: function updateLocalFile(doc, ds, is, callbackFunction) {
+      var options = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
       var kb = this.store; // console.log('Writing back to local file\n')
       // prepare contents of revised document
 
@@ -63707,11 +63717,9 @@ var UpdateManager = /*#__PURE__*/function () {
         throw new Error('File extension .' + ext + ' not supported for data write');
       }
 
-      var documentString = this.serialize(doc.value, newSts, contentType);
-      kb.fetcher.webOperation('PUT', doc.value, {
-        "body": documentString,
-        contentType: contentType
-      }).then(function (response) {
+      options.body = this.serialize(doc.value, newSts, contentType);
+      options.contentType = contentType;
+      kb.fetcher.webOperation('PUT', doc.value, options).then(function (response) {
         if (!response.ok) return callbackFunction(doc.value, false, response.error);
 
         for (var _i13 = 0; _i13 < ds.length; _i13++) {
@@ -66364,7 +66372,7 @@ var DEFAULT_ISSUERS = [
     },
     {
         name: 'pod.Inrupt.com',
-        uri: 'https://broker.pod.inrupt.com'
+        uri: 'https://login.inrupt.com'
     }
 ];
 /**
