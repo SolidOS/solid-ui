@@ -11,45 +11,28 @@
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.AccessController = void 0;
-
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
-
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
-
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js"));
-
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js"));
-
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js"));
-
 var _acl = __webpack_require__(/*! ./acl */ "./lib/acl/acl.js");
-
 var _rdflib = __webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js");
-
 var _accessGroups = __webpack_require__(/*! ./access-groups */ "./lib/acl/access-groups.js");
-
 var _aclControl = __webpack_require__(/*! ./acl-control */ "./lib/acl/acl-control.js");
-
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
-
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 /**
  * Contains the [[AccessController]] class
  * @packageDocumentation
  */
-
 /**
  * Rendered HTML component used in the databrowser's Sharing pane.
  */
@@ -78,7 +61,6 @@ var AccessController = /*#__PURE__*/function () {
     this.rootElement = dom.createElement('div');
     this.rootElement.classList.add(classes.aclGroupContent);
     this.isContainer = targetDoc.uri.slice(-1) === '/'; // Give default for all directories
-
     if (defaultHolder && defaultACLDoc) {
       this.isUsingDefaults = true;
       var aclDefaultStore = (0, _acl.adoptACLDefault)(this.targetDoc, targetACLDoc, defaultHolder, defaultACLDoc);
@@ -96,7 +78,6 @@ var AccessController = /*#__PURE__*/function () {
       this.defaultsDiffer = !(0, _acl.sameACL)(this.mainCombo.aclMap, this.defaultsCombo.aclMap);
     }
   }
-
   (0, _createClass2["default"])(AccessController, [{
     key: "isEditable",
     get: function get() {
@@ -106,10 +87,8 @@ var AccessController = /*#__PURE__*/function () {
     key: "render",
     value: function render() {
       this.rootElement.innerHTML = '';
-
       if (this.isUsingDefaults) {
         this.renderStatus("The sharing for this ".concat(this.noun, " is the default for folder "));
-
         if (this.defaultHolder) {
           var defaultHolderLink = this.statusElement.appendChild(this.dom.createElement('a'));
           defaultHolderLink.href = this.defaultHolder.uri;
@@ -120,29 +99,24 @@ var AccessController = /*#__PURE__*/function () {
       } else {
         this.renderStatus('');
       }
-
       this.rootElement.appendChild(this.mainCombo.render());
-
       if (this.defaultsCombo && this.defaultsDiffer) {
         this.rootElement.appendChild(this.renderRemoveDefaultsController());
         this.rootElement.appendChild(this.defaultsCombo.render());
       } else if (this.isEditable && this.isContainer) {
         this.rootElement.appendChild(this.renderAddDefaultsController());
       }
-
       if (!this.targetIsProtected && this.isUsingDefaults) {
         this.rootElement.appendChild(this.renderAddAclsController());
       } else if (!this.targetIsProtected) {
         this.rootElement.appendChild(this.renderRemoveAclsController());
       }
-
       return this.rootElement;
     }
   }, {
     key: "renderRemoveAclsController",
     value: function renderRemoveAclsController() {
       var _this = this;
-
       var useDefaultButton = this.dom.createElement('button');
       useDefaultButton.innerText = "Remove custom sharing settings for this ".concat(this.noun, " -- just use default").concat(this.prospectiveDefaultHolder ? " for ".concat(utils.label(this.prospectiveDefaultHolder)) : '');
       useDefaultButton.classList.add(this.classes.bigButton);
@@ -159,7 +133,6 @@ var AccessController = /*#__PURE__*/function () {
     key: "renderAddAclsController",
     value: function renderAddAclsController() {
       var _this2 = this;
-
       var addAclButton = this.dom.createElement('button');
       addAclButton.innerText = "Set specific sharing for this ".concat(this.noun);
       addAclButton.classList.add(this.classes.bigButton);
@@ -176,7 +149,6 @@ var AccessController = /*#__PURE__*/function () {
     key: "renderAddDefaultsController",
     value: function renderAddDefaultsController() {
       var _this3 = this;
-
       var containerElement = this.dom.createElement('div');
       containerElement.classList.add(this.classes.defaultsController);
       var noticeElement = containerElement.appendChild(this.dom.createElement('div'));
@@ -196,7 +168,6 @@ var AccessController = /*#__PURE__*/function () {
     key: "renderRemoveDefaultsController",
     value: function renderRemoveDefaultsController() {
       var _this4 = this;
-
       var containerElement = this.dom.createElement('div');
       containerElement.classList.add(this.classes.defaultsController);
       var noticeElement = containerElement.appendChild(this.dom.createElement('div'));
@@ -218,7 +189,6 @@ var AccessController = /*#__PURE__*/function () {
     key: "renderTemporaryStatus",
     value: function renderTemporaryStatus(message) {
       var _this5 = this;
-
       // @@ TODO Introduce better system for error notification to user https://github.com/solidos/mashlib/issues/87
       this.statusElement.classList.add(this.classes.aclControlBoxStatusRevealed);
       this.statusElement.innerText = message;
@@ -242,9 +212,7 @@ var AccessController = /*#__PURE__*/function () {
     value: function () {
       var _addAcls = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
         var _this6 = this;
-
         var message, aclGraph, _message;
-
         return _regenerator["default"].wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -253,11 +221,9 @@ var AccessController = /*#__PURE__*/function () {
                   _context.next = 4;
                   break;
                 }
-
                 message = 'Unable to find defaults to copy';
                 debug.error(message);
                 return _context.abrupt("return", Promise.reject(message));
-
               case 4:
                 aclGraph = (0, _acl.adoptACLDefault)(this.targetDoc, this.targetACLDoc, this.defaultHolder, this.defaultACLDoc);
                 aclGraph.statements.forEach(function (st) {
@@ -266,18 +232,15 @@ var AccessController = /*#__PURE__*/function () {
                 _context.prev = 6;
                 _context.next = 9;
                 return this.store.fetcher.putBack(this.targetACLDoc);
-
               case 9:
                 this.isUsingDefaults = false;
                 return _context.abrupt("return", Promise.resolve());
-
               case 13:
                 _context.prev = 13;
                 _context.t0 = _context["catch"](6);
                 _message = " Error writing back access control file! ".concat(_context.t0);
                 debug.error(_message);
                 return _context.abrupt("return", Promise.reject(_message));
-
               case 18:
               case "end":
                 return _context.stop();
@@ -285,11 +248,9 @@ var AccessController = /*#__PURE__*/function () {
           }
         }, _callee, this, [[6, 13]]);
       }));
-
       function addAcls() {
         return _addAcls.apply(this, arguments);
       }
-
       return addAcls;
     }()
   }, {
@@ -304,7 +265,6 @@ var AccessController = /*#__PURE__*/function () {
                   defaults: true
                 });
                 this.defaultsDiffer = true;
-
               case 2:
               case "end":
                 return _context2.stop();
@@ -312,11 +272,9 @@ var AccessController = /*#__PURE__*/function () {
           }
         }, _callee2, this);
       }));
-
       function addDefaults() {
         return _addDefaults.apply(this, arguments);
       }
-
       return addDefaults;
     }()
   }, {
@@ -331,35 +289,29 @@ var AccessController = /*#__PURE__*/function () {
                 _context3.prev = 0;
                 _context3.next = 3;
                 return this.store.fetcher["delete"](this.targetACLDoc.uri, {});
-
               case 3:
                 this.isUsingDefaults = true;
                 _context3.prev = 4;
                 _context3.next = 7;
                 return (0, _acl.getProspectiveHolder)(this.targetDoc.uri);
-
               case 7:
                 this.prospectiveDefaultHolder = _context3.sent;
                 _context3.next = 13;
                 break;
-
               case 10:
                 _context3.prev = 10;
                 _context3.t0 = _context3["catch"](4);
                 // No need to show this error in status, but good to warn about it in console
                 debug.warn(_context3.t0);
-
               case 13:
                 _context3.next = 20;
                 break;
-
               case 15:
                 _context3.prev = 15;
                 _context3.t1 = _context3["catch"](0);
                 message = "Error deleting access control file: ".concat(this.targetACLDoc, ": ").concat(_context3.t1);
                 debug.error(message);
                 return _context3.abrupt("return", Promise.reject(message));
-
               case 20:
               case "end":
                 return _context3.stop();
@@ -367,11 +319,9 @@ var AccessController = /*#__PURE__*/function () {
           }
         }, _callee3, this, [[0, 15], [4, 10]]);
       }));
-
       function removeAcls() {
         return _removeAcls.apply(this, arguments);
       }
-
       return removeAcls;
     }()
   }, {
@@ -389,11 +339,9 @@ var AccessController = /*#__PURE__*/function () {
                 this.defaultsDiffer = false;
                 _context4.next = 6;
                 return this.save();
-
               case 6:
                 _context4.next = 14;
                 break;
-
               case 8:
                 _context4.prev = 8;
                 _context4.t0 = _context4["catch"](1);
@@ -401,7 +349,6 @@ var AccessController = /*#__PURE__*/function () {
                 this.defaultsDiffer = true;
                 debug.error(_context4.t0);
                 return _context4.abrupt("return", Promise.reject(_context4.t0));
-
               case 14:
               case "end":
                 return _context4.stop();
@@ -409,21 +356,17 @@ var AccessController = /*#__PURE__*/function () {
           }
         }, _callee4, this, [[1, 8]]);
       }));
-
       function removeDefaults() {
         return _removeDefaults.apply(this, arguments);
       }
-
       return removeDefaults;
     }()
   }, {
     key: "save",
     value: function save() {
       var _this7 = this;
-
       // build graph
       var newAClGraph = (0, _rdflib.graph)();
-
       if (!this.isContainer) {
         (0, _acl.makeACLGraphbyCombo)(newAClGraph, this.targetDoc, this.mainCombo.byCombo, this.targetACLDoc, true);
       } else if (this.defaultsCombo && this.defaultsDiffer) {
@@ -433,32 +376,27 @@ var AccessController = /*#__PURE__*/function () {
       } else {
         // Linked controls
         (0, _acl.makeACLGraphbyCombo)(newAClGraph, this.targetDoc, this.mainCombo.byCombo, this.targetACLDoc, true, true);
-      } // add authenticated fetcher
+      }
 
-
+      // add authenticated fetcher
       newAClGraph.fetcher = (0, _rdflib.fetcher)(newAClGraph, {
         fetch: this.store.fetcher._fetch
       });
-      var updater = newAClGraph.updater || new _rdflib.UpdateManager(newAClGraph); // save ACL resource
+      var updater = newAClGraph.updater || new _rdflib.UpdateManager(newAClGraph);
 
+      // save ACL resource
       return new Promise(function (resolve, reject) {
         updater.put(_this7.targetACLDoc, newAClGraph.statementsMatching(undefined, undefined, undefined, _this7.targetACLDoc), 'text/turtle', function (uri, ok, message) {
           if (!ok) {
             return reject(new Error("ACL file save failed: ".concat(message)));
           }
-
           _this7.store.fetcher.unload(_this7.targetACLDoc);
-
           _this7.store.add(newAClGraph.statements);
-
           _this7.store.fetcher.requested[_this7.targetACLDoc.uri] = 'done'; // missing: save headers
-
           _this7.mainCombo.store = _this7.store;
-
           if (_this7.defaultsCombo) {
             _this7.defaultsCombo.store = _this7.store;
           }
-
           _this7.defaultsDiffer = !!_this7.defaultsCombo && !(0, _acl.sameACL)(_this7.mainCombo.aclMap, _this7.defaultsCombo.aclMap);
           debug.log('ACL modification: success!');
           resolve();
@@ -468,7 +406,6 @@ var AccessController = /*#__PURE__*/function () {
   }]);
   return AccessController;
 }();
-
 exports.AccessController = AccessController;
 //# sourceMappingURL=access-controller.js.map
 
@@ -484,47 +421,31 @@ exports.AccessController = AccessController;
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.AccessGroups = void 0;
-
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
-
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
-
 var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "./node_modules/@babel/runtime/helpers/slicedToArray.js"));
-
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js"));
-
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js"));
-
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js"));
-
 var _rdflib = __webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js");
-
 var _acl = __webpack_require__(/*! ./acl */ "./lib/acl/acl.js");
-
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
-
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
-
 var _addAgentButtons = __webpack_require__(/*! ./add-agent-buttons */ "./lib/acl/add-agent-buttons.js");
-
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 /**
  * Contains the [[AccessGroups]]
  * and [[AccessGroupsOptions]] classes
  * @packageDocumentation
  */
+
 var ACL = ns.acl;
 var COLLOQUIAL = {
   13: 'Owners',
@@ -549,16 +470,17 @@ var EXPLANATION = {
   2: 'can add new information but not read any',
   1: 'can read but not change information'
 };
+
 /**
  * Type for the options parameter of [[AccessGroups]]
  */
-
 /**
  * Renders the table of Owners, Editors, Posters, Submitters, Viewers
  * for https://github.com/solidos/userguide/blob/main/views/sharing/userguide.md
  */
 var AccessGroups = /*#__PURE__*/function () {
   // @@ was LiveStore but does not need to be connected to web
+
   function AccessGroups(doc, aclDoc, controller, store) {
     var options = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
     (0, _classCallCheck2["default"])(this, AccessGroups);
@@ -580,7 +502,6 @@ var AccessGroups = /*#__PURE__*/function () {
     this.rootElement = this.controller.dom.createElement('div');
     this.rootElement.classList.add(this.controller.classes.accessGroupList);
   }
-
   (0, _createClass2["default"])(AccessGroups, [{
     key: "store",
     get: function get() {
@@ -595,38 +516,31 @@ var AccessGroups = /*#__PURE__*/function () {
     key: "render",
     value: function render() {
       var _this = this;
-
       this.rootElement.innerHTML = '';
       this.renderGroups().forEach(function (group) {
         return _this.rootElement.appendChild(group);
       });
-
       if (this.controller.isEditable) {
         this.rootElement.appendChild(this.addAgentButton.render());
       }
-
       return this.rootElement;
     }
   }, {
     key: "renderGroups",
     value: function renderGroups() {
       var groupElements = [];
-
       for (var comboIndex = 15; comboIndex > 0; comboIndex--) {
         var combo = kToCombo(comboIndex);
-
         if (this.controller.isEditable && RECOMMENDED[comboIndex] || this.byCombo[combo]) {
           groupElements.push(this.renderGroup(comboIndex, combo));
         }
       }
-
       return groupElements;
     }
   }, {
     key: "renderGroup",
     value: function renderGroup(comboIndex, combo) {
       var _this2 = this;
-
       var groupRow = this.controller.dom.createElement('div');
       groupRow.classList.add(this.controller.classes.accessGroupListItem);
       widgets.makeDropTarget(groupRow, function (uris) {
@@ -646,7 +560,6 @@ var AccessGroups = /*#__PURE__*/function () {
     key: "renderGroupElements",
     value: function renderGroupElements(comboIndex, combo) {
       var _this3 = this;
-
       var groupNameColumn = this.controller.dom.createElement('div');
       groupNameColumn.classList.add(this.controller.classes.group);
       groupNameColumn.classList.toggle(this.controller.classes["group-".concat(comboIndex)], this.controller.isEditable);
@@ -658,9 +571,8 @@ var AccessGroups = /*#__PURE__*/function () {
       var combos = this.byCombo[combo] || [];
       combos.map(function (_ref) {
         var _ref2 = (0, _slicedToArray2["default"])(_ref, 2),
-            pred = _ref2[0],
-            obj = _ref2[1];
-
+          pred = _ref2[0],
+          obj = _ref2[1];
         return _this3.renderAgent(groupAgentsTable, combo, pred, obj);
       }).forEach(function (agentElement) {
         return groupAgentsTable.appendChild(agentElement);
@@ -675,7 +587,6 @@ var AccessGroups = /*#__PURE__*/function () {
     key: "renderAgent",
     value: function renderAgent(groupAgentsTable, combo, pred, obj) {
       var _this4 = this;
-
       var personRow = widgets.personTR(this.controller.dom, ACL(pred), (0, _rdflib.sym)(obj), this.controller.isEditable ? {
         deleteFunction: function deleteFunction() {
           return _this4.deleteAgent(combo, pred, obj).then(function () {
@@ -699,19 +610,15 @@ var AccessGroups = /*#__PURE__*/function () {
                 combos = this.byCombo[combo] || [];
                 comboToRemove = combos.find(function (_ref3) {
                   var _ref4 = (0, _slicedToArray2["default"])(_ref3, 2),
-                      comboPred = _ref4[0],
-                      comboObj = _ref4[1];
-
+                    comboPred = _ref4[0],
+                    comboObj = _ref4[1];
                   return comboPred === pred && comboObj === obj;
                 });
-
                 if (comboToRemove) {
                   combos.splice(combos.indexOf(comboToRemove), 1);
                 }
-
                 _context.next = 5;
                 return this.controller.save();
-
               case 5:
               case "end":
                 return _context.stop();
@@ -719,11 +626,9 @@ var AccessGroups = /*#__PURE__*/function () {
           }
         }, _callee, this);
       }));
-
       function deleteAgent(_x, _x2, _x3) {
         return _deleteAgent.apply(this, arguments);
       }
-
       return deleteAgent;
     }()
   }, {
@@ -736,11 +641,9 @@ var AccessGroups = /*#__PURE__*/function () {
               case 0:
                 _context2.next = 2;
                 return this.handleDroppedUri(uri, kToCombo(1));
-
               case 2:
                 _context2.next = 4;
                 return this.controller.save();
-
               case 4:
               case "end":
                 return _context2.stop();
@@ -748,11 +651,9 @@ var AccessGroups = /*#__PURE__*/function () {
           }
         }, _callee2, this);
       }));
-
       function addNewURI(_x4) {
         return _addNewURI.apply(this, arguments);
       }
-
       return addNewURI;
     }()
   }, {
@@ -760,7 +661,6 @@ var AccessGroups = /*#__PURE__*/function () {
     value: function () {
       var _handleDroppedUris = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(uris, combo) {
         var _this5 = this;
-
         return _regenerator["default"].wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
@@ -770,20 +670,16 @@ var AccessGroups = /*#__PURE__*/function () {
                 return Promise.all(uris.map(function (uri) {
                   return _this5.handleDroppedUri(uri, combo);
                 }));
-
               case 3:
                 _context3.next = 5;
                 return this.controller.save();
-
               case 5:
                 _context3.next = 10;
                 break;
-
               case 7:
                 _context3.prev = 7;
                 _context3.t0 = _context3["catch"](0);
                 return _context3.abrupt("return", Promise.reject(_context3.t0));
-
               case 10:
               case "end":
                 return _context3.stop();
@@ -791,84 +687,65 @@ var AccessGroups = /*#__PURE__*/function () {
           }
         }, _callee3, this, [[0, 7]]);
       }));
-
       function handleDroppedUris(_x5, _x6) {
         return _handleDroppedUris.apply(this, arguments);
       }
-
       return handleDroppedUris;
     }()
   }, {
     key: "handleDroppedUri",
     value: function () {
-      var _handleDroppedUri = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(uri, combo) {
-        var secondAttempt,
-            agent,
-            thing,
-            _this$_store,
-            _this$_store$fetcher,
-            message,
-            error,
-            _args4 = arguments;
-
-        return _regenerator["default"].wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                secondAttempt = _args4.length > 2 && _args4[2] !== undefined ? _args4[2] : false;
-                agent = findAgent(uri, this.store); // eg 'agent', 'origin', agentClass'
-
-                thing = (0, _rdflib.sym)(uri);
-
-                if (!(!agent && !secondAttempt)) {
-                  _context4.next = 18;
+      var _handleDroppedUri = (0, _asyncToGenerator2["default"])(function (uri, combo) {
+        var _this6 = this;
+        var secondAttempt = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+        return /*#__PURE__*/_regenerator["default"].mark(function _callee4() {
+          var agent, thing, _this6$_store, _this6$_store$fetcher, message, error;
+          return _regenerator["default"].wrap(function _callee4$(_context4) {
+            while (1) {
+              switch (_context4.prev = _context4.next) {
+                case 0:
+                  agent = findAgent(uri, _this6.store); // eg 'agent', 'origin', agentClass'
+                  thing = (0, _rdflib.sym)(uri);
+                  if (!(!agent && !secondAttempt)) {
+                    _context4.next = 17;
+                    break;
+                  }
+                  debug.log("   Not obvious: looking up dropped thing ".concat(thing));
+                  _context4.prev = 4;
+                  _context4.next = 7;
+                  return (_this6$_store = _this6._store) === null || _this6$_store === void 0 ? void 0 : (_this6$_store$fetcher = _this6$_store.fetcher) === null || _this6$_store$fetcher === void 0 ? void 0 : _this6$_store$fetcher.load(thing.doc());
+                case 7:
+                  _context4.next = 14;
                   break;
-                }
-
-                debug.log("   Not obvious: looking up dropped thing ".concat(thing));
-                _context4.prev = 5;
-                _context4.next = 8;
-                return (_this$_store = this._store) === null || _this$_store === void 0 ? void 0 : (_this$_store$fetcher = _this$_store.fetcher) === null || _this$_store$fetcher === void 0 ? void 0 : _this$_store$fetcher.load(thing.doc());
-
-              case 8:
-                _context4.next = 15;
-                break;
-
-              case 10:
-                _context4.prev = 10;
-                _context4.t0 = _context4["catch"](5);
-                message = "Ignore error looking up dropped thing: ".concat(_context4.t0);
-                debug.error(message);
-                return _context4.abrupt("return", Promise.reject(new Error(message)));
-
-              case 15:
-                return _context4.abrupt("return", this.handleDroppedUri(uri, combo, true));
-
-              case 18:
-                if (agent) {
-                  _context4.next = 22;
-                  break;
-                }
-
-                error = "   Error: Drop fails to drop appropriate thing! ".concat(uri);
-                debug.error(error);
-                return _context4.abrupt("return", Promise.reject(new Error(error)));
-
-              case 22:
-                this.setACLCombo(combo, uri, agent, this.controller.subject);
-
-              case 23:
-              case "end":
-                return _context4.stop();
+                case 9:
+                  _context4.prev = 9;
+                  _context4.t0 = _context4["catch"](4);
+                  message = "Ignore error looking up dropped thing: ".concat(_context4.t0);
+                  debug.error(message);
+                  return _context4.abrupt("return", Promise.reject(new Error(message)));
+                case 14:
+                  return _context4.abrupt("return", _this6.handleDroppedUri(uri, combo, true));
+                case 17:
+                  if (agent) {
+                    _context4.next = 21;
+                    break;
+                  }
+                  error = "   Error: Drop fails to drop appropriate thing! ".concat(uri);
+                  debug.error(error);
+                  return _context4.abrupt("return", Promise.reject(new Error(error)));
+                case 21:
+                  _this6.setACLCombo(combo, uri, agent, _this6.controller.subject);
+                case 22:
+                case "end":
+                  return _context4.stop();
+              }
             }
-          }
-        }, _callee4, this, [[5, 10]]);
-      }));
-
+          }, _callee4, null, [[4, 9]]);
+        })();
+      });
       function handleDroppedUri(_x7, _x8) {
         return _handleDroppedUri.apply(this, arguments);
       }
-
       return handleDroppedUri;
     }()
   }, {
@@ -877,9 +754,7 @@ var AccessGroups = /*#__PURE__*/function () {
       if (!(combo in this.byCombo)) {
         this.byCombo[combo] = [];
       }
-
       this.removeAgentFromCombos(uri); // Combos are mutually distinct
-
       this.byCombo[combo].push([res.pred, res.obj.uri]);
       debug.log("ACL: setting access to ".concat(subject, " by ").concat(res.pred, ": ").concat(res.obj));
     }
@@ -888,7 +763,6 @@ var AccessGroups = /*#__PURE__*/function () {
     value: function removeAgentFromCombos(uri) {
       for (var k = 0; k < 16; k++) {
         var combos = this.byCombo[kToCombo(k)];
-
         if (combos) {
           for (var i = 0; i < combos.length; i++) {
             while (i < combos.length && combos[i][1] === uri) {
@@ -901,54 +775,43 @@ var AccessGroups = /*#__PURE__*/function () {
   }]);
   return AccessGroups;
 }();
-
 exports.AccessGroups = AccessGroups;
-
 function kToCombo(k) {
   var y = ['Read', 'Append', 'Write', 'Control'];
   var combo = [];
-
   for (var i = 0; i < 4; i++) {
     if (k & 1 << i) {
       combo.push('http://www.w3.org/ns/auth/acl#' + y[i]);
     }
   }
-
   combo.sort();
   return combo.join('\n');
 }
-
 function ktToList(k) {
   var list = '';
   var y = ['Read', 'Append', 'Write', 'Control'];
-
   for (var i = 0; i < 4; i++) {
     if (k & 1 << i) {
       list += y[i];
     }
   }
-
   return list;
 }
-
 function findAgent(uri, kb) {
   var obj = (0, _rdflib.sym)(uri);
   var types = kb.findTypeURIs(obj);
-
   for (var ty in types) {
     debug.log('    drop object type includes: ' + ty);
-  } // An Origin URI is one like https://fred.github.io eith no trailing slash
-
-
+  }
+  // An Origin URI is one like https://fred.github.io eith no trailing slash
   if (uri.startsWith('http') && uri.split('/').length === 3) {
     // there is no third slash
     return {
       pred: 'origin',
       obj: obj
     }; // The only way to know an origin alas
-  } // @@ This is an almighty kludge needed because drag and drop adds extra slashes to origins
-
-
+  }
+  // @@ This is an almighty kludge needed because drag and drop adds extra slashes to origins
   if (uri.startsWith('http') && uri.split('/').length === 4 && uri.endsWith('/')) {
     // there  IS third slash
     debug.log('Assuming final slash on dragged origin URI was unintended!');
@@ -962,7 +825,6 @@ function findAgent(uri, kb) {
     pred: 'agent',
     obj: obj
   };
-
   if (ns.vcard('Group').uri in types) {
     return {
       pred: 'agentGroup',
@@ -970,14 +832,14 @@ function findAgent(uri, kb) {
     }; // @@ note vcard membership not RDFs
   }
 
-  if (obj.sameTerm(ns.foaf('Agent')) || obj.sameTerm(ns.acl('AuthenticatedAgent')) || // AuthenticatedAgent
+  if (obj.sameTerm(ns.foaf('Agent')) || obj.sameTerm(ns.acl('AuthenticatedAgent')) ||
+  // AuthenticatedAgent
   obj.sameTerm(ns.rdf('Resource')) || obj.sameTerm(ns.owl('Thing'))) {
     return {
       pred: 'agentClass',
       obj: obj
     };
   }
-
   if (ns.vcard('Individual').uri in types || ns.foaf('Person').uri in types || ns.foaf('Agent').uri in types) {
     var pref = kb.any(obj, ns.foaf('preferredURI'));
     if (pref) return {
@@ -989,21 +851,18 @@ function findAgent(uri, kb) {
       obj: obj
     };
   }
-
   if (ns.solid('AppProvider').uri in types) {
     return {
       pred: 'origin',
       obj: obj
     };
   }
-
   if (ns.solid('AppProviderClass').uri in types) {
     return {
       pred: 'originClass',
       obj: obj
     };
   }
-
   debug.log('    Triage fails for ' + uri);
   return null;
 }
@@ -1021,9 +880,7 @@ function findAgent(uri, kb) {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
@@ -1033,37 +890,27 @@ exports.preventBrowserDropEvents = preventBrowserDropEvents;
 exports.preventDrag = preventDrag;
 exports.setGlobalWindow = setGlobalWindow;
 exports.shortNameForFolder = shortNameForFolder;
-
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
-
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
-
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
-
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
-
 var _acl = __webpack_require__(/*! ./acl */ "./lib/acl/acl.js");
-
 var _accessController = __webpack_require__(/*! ./access-controller */ "./lib/acl/access-controller.js");
-
 var _jss = __webpack_require__(/*! ../jss */ "./lib/jss/index.js");
-
 var _styles = __webpack_require__(/*! ./styles */ "./lib/acl/styles.js");
-
 var _debug = __webpack_require__(/*! ../debug */ "./lib/debug.js");
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 /**
  * Functions for rendering the ACL User Interface.
  * See https://github.com/solidos/userguide/blob/main/views/sharing/userguide.md#view
  * for a screenshot.
  * @packageDocumentation
  */
+
 var global = window;
 var preventBrowserDropEventsDone = Symbol('prevent double triggering of drop event');
+
 /**
  * See https://coshx.com/preventing-drag-and-drop-disasters-with-a-chrome-userscript
  * Without this dropping anything onto a browser page will cause chrome etc to jump to diff page
@@ -1076,29 +923,24 @@ var preventBrowserDropEventsDone = Symbol('prevent double triggering of drop eve
  * @param document  The DOM
  * @returns void
  */
-
 function preventBrowserDropEvents(document) {
   (0, _debug.log)('preventBrowserDropEvents called.');
-
   if (typeof global !== 'undefined') {
     if (global[preventBrowserDropEventsDone]) return;
     global[preventBrowserDropEventsDone] = true;
   }
-
   document.addEventListener('drop', handleDrop, false);
   document.addEventListener('dragenter', preventDrag, false);
   document.addEventListener('dragover', preventDrag, false);
 }
+
 /** @internal */
-
-
 function preventDrag(e) {
   e.stopPropagation();
   e.preventDefault();
 }
+
 /** @internal */
-
-
 function handleDrop(e) {
   if (e.dataTransfer.files.length > 0) {
     if (!global.confirm('Are you sure you want to drop this file here? (Cancel opens it in a new tab)')) {
@@ -1108,6 +950,7 @@ function handleDrop(e) {
     }
   }
 }
+
 /**
  * Get a folder's own filename in the directory tree. Also works for
  * domain names; the URL protocol ('https://') acts as the tree root
@@ -1139,29 +982,27 @@ function handleDrop(e) {
  * @param x  RDF Node for the folder URL
  * @returns  Short name for the folder
  */
-
-
 function shortNameForFolder(x) {
-  var str = x.uri; // Strip the trailing slash
+  var str = x.uri;
 
+  // Strip the trailing slash
   if (str.slice(-1) === '/') {
     str = str.slice(0, -1);
-  } // Remove the path if present, keeping only the part
+  }
+
+  // Remove the path if present, keeping only the part
   // after the last slash.
-
-
   var slash = str.lastIndexOf('/');
-
   if (slash >= 0) {
     str = str.slice(slash + 1);
-  } // Return the folder's filename, or '/' if nothing found
+  }
+  // Return the folder's filename, or '/' if nothing found
   // (but see https://github.com/solidos/solid-ui/issues/196
   // regarding whether this happens at the domain root or
   // not)
-
-
   return str || '/';
 }
+
 /**
  * A wrapper that retrieves ACL data and uses it
  * to render an [[AccessController]] component.
@@ -1170,12 +1011,9 @@ function shortNameForFolder(x) {
  * when it was introduced into solid-ui in
  * https://github.com/solidos/solid-ui/commit/948b874bd93e7bf5160e6e224821b888f07d15f3#diff-4192a29f38a0ababd563b36b47eba5bbR54
  */
-
-
 function ACLControlBox5(subject, context, noun, kb) {
   var dom = context.dom;
   var doc = subject.doc(); // The ACL is actually to the doc describing the thing
-
   var classes = (0, _jss.getClasses)(dom.head, _styles.styles).classes;
   var container = dom.createElement('div');
   container.classList.add(classes.aclControlBoxContainer);
@@ -1184,7 +1022,6 @@ function ACLControlBox5(subject, context, noun, kb) {
   header.classList.add(classes.aclControlBoxHeader);
   var status = container.appendChild(dom.createElement('div'));
   status.classList.add(classes.aclControlBoxStatus);
-
   try {
     loadController(doc, kb, subject, noun, context, classes, dom, status).then(function (controller) {
       return container.appendChild(controller.render());
@@ -1192,14 +1029,11 @@ function ACLControlBox5(subject, context, noun, kb) {
   } catch (error) {
     status.innerText = error;
   }
-
   return container;
 }
-
 function loadController(_x, _x2, _x3, _x4, _x5, _x6, _x7, _x8) {
   return _loadController.apply(this, arguments);
 }
-
 function _loadController() {
   _loadController = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(doc, kb, subject, noun, context, classes, dom, status) {
     return _regenerator["default"].wrap(function _callee2$(_context2) {
@@ -1217,40 +1051,31 @@ function _loadController() {
                           getController = function _getController(prospectiveDefaultHolder) {
                             return new _accessController.AccessController(subject, noun, context, status, classes, targetIsProtected, targetDoc, targetACLDoc, defaultHolder, defaultACLDoc, prospectiveDefaultHolder, kb, dom);
                           };
-
                           if (ok) {
                             _context.next = 3;
                             break;
                           }
-
                           return _context.abrupt("return", reject(new Error("Error reading ".concat(isDirectACL ? '' : ' default ', "ACL. status ").concat(targetDoc, ": ").concat(targetACLDoc))));
-
                         case 3:
                           targetDirectory = getDirectory(targetDoc);
                           targetIsProtected = isStorage(targetDoc, targetACLDoc, kb) || hasProtectedAcl(targetDoc);
-
                           if (!(!targetIsProtected && targetDirectory)) {
                             _context.next = 16;
                             break;
                           }
-
                           _context.prev = 6;
                           _context.next = 9;
                           return (0, _acl.getProspectiveHolder)(targetDirectory);
-
                         case 9:
                           prospectiveDefaultHolder = _context.sent;
                           return _context.abrupt("return", resolve(getController(prospectiveDefaultHolder)));
-
                         case 13:
                           _context.prev = 13;
                           _context.t0 = _context["catch"](6);
                           // No need to show this error in status, but good to warn about it in console
                           (0, _debug.warn)(_context.t0);
-
                         case 16:
                           return _context.abrupt("return", resolve(getController()));
-
                         case 17:
                         case "end":
                           return _context.stop();
@@ -1258,13 +1083,11 @@ function _loadController() {
                     }
                   }, _callee, null, [[6, 13]]);
                 }));
-
                 return function (_x9, _x10, _x11, _x12, _x13, _x14) {
                   return _ref.apply(this, arguments);
                 };
               }());
             }));
-
           case 1:
           case "end":
             return _context2.stop();
@@ -1274,29 +1097,25 @@ function _loadController() {
   }));
   return _loadController.apply(this, arguments);
 }
-
 function getDirectory(doc) {
   var str = doc.uri.split('#')[0];
   var p = str.slice(0, -1).lastIndexOf('/');
   var q = str.indexOf('//');
   return q >= 0 && p < q + 2 || p < 0 ? null : str.slice(0, p + 1);
 }
-
 function isStorage(doc, aclDoc, store) {
   // @@ TODO: The methods used for targetIsStorage are HACKs - it should not be relied upon, and work is
   // @@ underway to standardize a behavior that does not rely upon this hack
   // @@ hopefully fixed as part of https://github.com/solidos/data-interoperability-panel/issues/10
   return store.holds(doc, ns.rdf('type'), ns.space('Storage'), aclDoc);
 }
-
 function hasProtectedAcl(targetDoc) {
   // @@ TODO: This is hacky way of knowing whether or not a certain ACL file can be removed
   // Hopefully we'll find a better, standardized solution to this - https://github.com/solidos/specification/issues/37
   return targetDoc.uri === targetDoc.site().uri;
 }
+
 /** @internal */
-
-
 function setGlobalWindow(window) {
   global = window;
 }
@@ -1314,9 +1133,7 @@ function setGlobalWindow(window) {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
@@ -1339,39 +1156,30 @@ exports.putACLbyCombo = putACLbyCombo;
 exports.readACL = readACL;
 exports.sameACL = sameACL;
 exports.setACL = setACL;
-
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
-
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
-
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
-
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
-
 var _rdflib = __webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js");
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 /**
  * Non-UI functions for access control.
  * See https://github.com/solidos/web-access-control-spec
  * for the spec that defines how ACL documents work.
  * @packageDocumentation
  */
+
 var kb = _solidLogic.solidLogicSingleton.store;
+
 /**
  * Take the "default" ACL and convert it into the equivlent ACL
  * which the resource would have had. Return it as a new separate store.
  * The "defaultForNew" predicate is also accepted, as a deprecated
  * synonym for "default".
  */
-
 function adoptACLDefault(doc, aclDoc, defaultResource, defaultACLDoc) {
   var ACL = ns.acl;
   var isContainer = doc.uri.slice(-1) === '/'; // Give default for all directories
@@ -1381,25 +1189,21 @@ function adoptACLDefault(doc, aclDoc, defaultResource, defaultACLDoc) {
     return accumulatedStatements.concat(kb.statementsMatching(da, ns.rdf('type'), ACL('Authorization'), defaultACLDoc)).concat(kb.statementsMatching(da, ACL('agent'), undefined, defaultACLDoc)).concat(kb.statementsMatching(da, ACL('agentClass'), undefined, defaultACLDoc)).concat(kb.statementsMatching(da, ACL('agentGroup'), undefined, defaultACLDoc)).concat(kb.statementsMatching(da, ACL('origin'), undefined, defaultACLDoc)).concat(kb.statementsMatching(da, ACL('originClass'), undefined, defaultACLDoc)).concat(kb.statementsMatching(da, ACL('mode'), undefined, defaultACLDoc)).concat((0, _rdflib.st)(da, ACL('accessTo'), doc, defaultACLDoc)).concat(isContainer ? (0, _rdflib.st)(da, ACL('default'), doc, defaultACLDoc) : []);
   }, []);
   var kb2 = (0, _rdflib.graph)(); // Potential - derived is kept apart
-
   proposed.forEach(function (st) {
     return kb2.add(move(st.subject), move(st.predicate), move(st.object), (0, _rdflib.sym)(aclDoc.uri));
   });
   return kb2;
-
   function move(symbol) {
     var y = defaultACLDoc.uri.length; // The default ACL file
-
     return (0, _rdflib.sym)(symbol.uri.slice(0, y) === defaultACLDoc.uri ? aclDoc.uri + symbol.uri.slice(y) : symbol.uri);
   }
 }
+
 /**
  * Read and canonicalize the ACL for x in aclDoc
  *
  * Accumulate the access rights which each agent or class has
  */
-
-
 function readACL(doc, aclDoc) {
   var kb2 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : kb;
   var getDefaults = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
@@ -1422,17 +1226,16 @@ function readACL(doc, aclDoc) {
       });
     });
   });
-  return ac;
 
+  return ac;
   function getDefaultsFallback(kb, ns) {
     return kb.each(undefined, ns.acl('default'), doc).concat(kb.each(undefined, ns.acl('defaultForNew'), doc));
   }
 }
+
 /**
  * Compare two ACLs
  */
-
-
 function sameACL(a, b) {
   var contains = function contains(a, b) {
     for (var pred in {
@@ -1452,26 +1255,21 @@ function sameACL(a, b) {
         }
       }
     }
-
     return true;
   };
-
   return contains(a, b) && contains(b, a);
 }
+
 /**
  * Union N ACLs
  */
-
-
 function ACLunion(list) {
   var b = list[0];
   var a, ag;
-
   var _loop = function _loop(k) {
     ;
     ['agent', 'agentClass', 'agentGroup', 'origin', 'originClass'].forEach(function (pred) {
       a = list[k];
-
       if (a[pred]) {
         for (ag in a[pred]) {
           for (var mode in a[pred][ag]) {
@@ -1482,20 +1280,16 @@ function ACLunion(list) {
       }
     });
   };
-
   for (var k = 1; k < list.length; k++) {
     _loop(k);
   }
-
   return b;
 }
-
 /**
  * Merge ACLs lists from things to form union
  */
 function loadUnionACL(subjectList, callbackFunction) {
   var aclList = [];
-
   var doList = function doList(list) {
     if (list.length) {
       var doc = list.shift().doc();
@@ -1511,27 +1305,23 @@ function loadUnionACL(subjectList, callbackFunction) {
       callbackFunction(true, ACLunion(aclList));
     }
   };
-
   doList(subjectList);
 }
+
 /**
  * Represents these as an RDF graph by combination of modes
  *
  * Each agent can only be in one place in this model, one combination of modes.
  * Combos are like full control, read append, read only etc.
  */
-
-
 function ACLbyCombination(ac) {
   var byCombo = {};
   ['agent', 'agentClass', 'agentGroup', 'origin', 'originClass'].forEach(function (pred) {
     for (var agent in ac[pred]) {
       var combo = [];
-
       for (var mode in ac[pred][agent]) {
         combo.push(mode);
       }
-
       combo.sort();
       var combo2 = combo.join('\n');
       if (!byCombo[combo2]) byCombo[combo2] = [];
@@ -1540,51 +1330,39 @@ function ACLbyCombination(ac) {
   });
   return byCombo;
 }
+
 /**
  * Write ACL graph to store from AC
  */
-
-
 function makeACLGraph(kb, x, ac, aclDoc) {
   var byCombo = ACLbyCombination(ac);
   return makeACLGraphbyCombo(kb, x, byCombo, aclDoc);
 }
+
 /**
  * Write ACL graph to store from combo
  */
-
-
 function makeACLGraphbyCombo(kb, x, byCombo, aclDoc, main, defa) {
   var ACL = ns.acl;
-
   for (var combo in byCombo) {
     var pairs = byCombo[combo];
     if (!pairs.length) continue; // do not add to store when no agent
-
     var modeURIs = combo.split('\n');
-
     var _short = modeURIs.map(function (u) {
       return u.split('#')[1];
     }).join('');
-
     if (defa && !main) _short += 'Default'; // don't muddle authorizations
-
     var _a = kb.sym(aclDoc.uri + '#' + _short);
-
     kb.add(_a, ns.rdf('type'), ACL('Authorization'), aclDoc);
-
     if (main) {
       kb.add(_a, ACL('accessTo'), x, aclDoc);
     }
-
     if (defa) {
       kb.add(_a, ACL('default'), x, aclDoc);
     }
-
     for (var i = 0; i < modeURIs.length; i++) {
       kb.add(_a, ACL('mode'), kb.sym(modeURIs[i]), aclDoc);
     }
-
     for (var _i = 0; _i < pairs.length; _i++) {
       var pred = pairs[_i][0];
       var ag = pairs[_i][1];
@@ -1592,23 +1370,20 @@ function makeACLGraphbyCombo(kb, x, byCombo, aclDoc, main, defa) {
     }
   }
 }
+
 /**
  * Debugging short strings for dumping ACL
  * and possibly in the UI
  */
-
-
 function ACLToString(ac) {
   return comboToString(ACLbyCombination(ac));
 }
+
 /**
  * Convert a [[ComboList]] to a string
  */
-
-
 function comboToString(byCombo) {
   var str = '';
-
   for (var combo in byCombo) {
     var modeURIs = combo.split('\n');
     var initials = modeURIs.map(function (u) {
@@ -1616,7 +1391,6 @@ function comboToString(byCombo) {
     }).join('');
     str += initials + ':';
     var pairs = byCombo[combo];
-
     for (var i = 0; i < pairs.length; i++) {
       var pred = pairs[i][0];
       var ag = (0, _rdflib.sym)(pairs[i][1]);
@@ -1624,92 +1398,83 @@ function comboToString(byCombo) {
       str += ag.sameTerm(ns.foaf('Agent')) ? '*' : utils.label(ag);
       if (i < pairs.length - 1) str += ',';
     }
-
     str += ';';
   }
-
   return '{' + str.slice(0, -1) + '}'; // drop extra semicolon
 }
+
 /**
  * Write ACL graph as Turtle
  */
-
-
 function makeACLString(x, ac, aclDoc) {
   var kb2 = (0, _rdflib.graph)();
   makeACLGraph(kb2, x, ac, aclDoc);
   return (0, _rdflib.serialize)(aclDoc, kb2, aclDoc.uri, 'text/turtle') || '';
 }
+
 /**
  * Write ACL graph to web
  */
-
-
 function putACLObject(kb, x, ac, aclDoc, callbackFunction) {
   var byCombo = ACLbyCombination(ac);
   return putACLbyCombo(kb, x, byCombo, aclDoc, callbackFunction);
 }
+
 /**
  * Write ACL graph to web from a [[ComboList]]
  */
-
-
 function putACLbyCombo(kb, x, byCombo, aclDoc, callbackFunction) {
   var _kb$updater;
-
   var kb2 = (0, _rdflib.graph)();
-  makeACLGraphbyCombo(kb2, x, byCombo, aclDoc, true); // const str = makeACLString = function(x, ac, aclDoc)
+  makeACLGraphbyCombo(kb2, x, byCombo, aclDoc, true);
 
+  // const str = makeACLString = function(x, ac, aclDoc)
   (_kb$updater = kb.updater) === null || _kb$updater === void 0 ? void 0 : _kb$updater.put(aclDoc, kb2.statementsMatching(undefined, undefined, undefined, aclDoc), 'text/turtle', function (uri, ok, message) {
     if (!ok) {
       callbackFunction(ok, message);
     } else {
       var _kb$fetcher;
-
       (_kb$fetcher = kb.fetcher) === null || _kb$fetcher === void 0 ? void 0 : _kb$fetcher.unload(aclDoc);
       makeACLGraphbyCombo(kb, x, byCombo, aclDoc, true);
       kb.fetcher.requested[aclDoc.uri] = 'done'; // missing: save headers
-
       callbackFunction(ok);
     }
   });
 }
-
 /**
  * Fix the ACl for an individual card as a function of the groups it is in
  *
  * All group files must be loaded first
  */
 function fixIndividualCardACL(person, log, callbackFunction) {
-  var groups = kb.each(undefined, ns.vcard('hasMember'), person); // const doc = person.doc()
-
+  var groups = kb.each(undefined, ns.vcard('hasMember'), person);
+  // const doc = person.doc()
   if (groups) {
     fixIndividualACL(person, groups, log, callbackFunction);
   } else {
     log('This card is in no groups');
     callbackFunction(true); // fine, no requirements to access. default should be ok
-  } // @@ if no groups, then use default for People container or the book top container.?
-
+  }
+  // @@ if no groups, then use default for People container or the book top container.?
 }
+
 /**
  * This function is used by [[fixIndividualCardACL]]
  */
-
-
 function fixIndividualACL(item, subjects, log, callbackFunction) {
   log = log || debug.log;
   var doc = item.doc();
   getACLorDefault(doc, function (ok, exists, targetDoc, targetACLDoc, defaultHolder, defaultACLDoc) {
     if (!ok || !defaultHolder || !defaultACLDoc) return callbackFunction(false, targetACLDoc); // ie message
-
     var ac = exists ? readACL(targetDoc, targetACLDoc) : readACL(defaultHolder, defaultACLDoc);
     loadUnionACL(subjects, function (ok, union) {
       if (!ok) return callbackFunction(false, union);
-
       if (sameACL(union, ac)) {
         log('Nice - same ACL. no change ' + utils.label(item) + ' ' + doc);
       } else {
-        log('Group ACLs differ for ' + utils.label(item) + ' ' + doc); // log("Group ACLs: " + makeACLString(targetDoc, union, targetACLDoc))
+        log('Group ACLs differ for ' + utils.label(item) + ' ' + doc);
+
+        // log("Group ACLs: " + makeACLString(targetDoc, union, targetACLDoc))
         // log((exists ? "Previous set" : "Default") + " ACLs: " +
         // makeACLString(targetDoc, ac, targetACLDoc))
 
@@ -1718,18 +1483,15 @@ function fixIndividualACL(item, subjects, log, callbackFunction) {
     });
   });
 }
+
 /**
  * Set an ACL
  */
-
-
 function setACL(docURI, aclText, callbackFunction) {
   var aclDoc = kb.any(docURI, _solidLogic.ACL_LINK); // @@ check that this get set by web.js
-
   if (!kb.fetcher) {
     throw new Error('Store has no fetcher');
   }
-
   if (aclDoc) {
     // Great we already know where it is
     kb.fetcher.webOperation('PUT', aclDoc.value, {
@@ -1742,7 +1504,6 @@ function setACL(docURI, aclText, callbackFunction) {
     kb.fetcher.nowOrWhenFetched(docURI, undefined, function (ok, body) {
       if (!ok) return callbackFunction(ok, 'Gettting headers for ACL: ' + body);
       var aclDoc = kb.any(docURI, _solidLogic.ACL_LINK); // @@ check that this get set by web.js
-
       if (!aclDoc) {
         // complainIfBad(false, "No Link rel=ACL header for " + docURI)
         callbackFunction(false, 'No Link rel=ACL header for ' + docURI);
@@ -1750,7 +1511,6 @@ function setACL(docURI, aclText, callbackFunction) {
         if (!kb.fetcher) {
           throw new Error('Store has no fetcher');
         }
-
         kb.fetcher.webOperation('PUT', aclDoc.value, {
           data: aclText,
           contentType: 'text/turtle'
@@ -1761,6 +1521,7 @@ function setACL(docURI, aclText, callbackFunction) {
     });
   }
 }
+
 /**
  * Get ACL file or default if necessary
  *
@@ -1770,25 +1531,21 @@ function setACL(docURI, aclText, callbackFunction) {
  * * `callbackFunction(false, false, status, message)` when there was an error getting the original
  * * `callbackFunction(false, true, status, message)` when there was an error getting the default
  */
-
-
 function getACLorDefault(doc, callbackFunction) {
   getACL(doc, function (ok, status, aclDoc, message) {
     var ACL = ns.acl;
-    if (!ok) return callbackFunction(false, false, status, message); // Recursively search for the ACL file which gives default access
+    if (!ok) return callbackFunction(false, false, status, message);
 
+    // Recursively search for the ACL file which gives default access
     var tryParent = function tryParent(uri) {
       if (uri.slice(-1) === '/') {
         uri = uri.slice(0, -1);
       }
-
       var right = uri.lastIndexOf('/');
       var left = uri.indexOf('/', uri.indexOf('//') + 2);
-
       if (left > right) {
         return callbackFunction(false, true, 404, 'Found no ACL resource');
       }
-
       uri = uri.slice(0, right + 1);
       var doc2 = (0, _rdflib.sym)(uri);
       getACL(doc2, function (ok, status, defaultACLDoc) {
@@ -1800,12 +1557,10 @@ function getACLorDefault(doc, callbackFunction) {
           return tryParent(uri);
         } else if (status !== 200) {
           return callbackFunction(false, true, status, "Error status '".concat(status, "' searching for default for ").concat(doc2));
-        } // 200
+        }
+        // 200
         // statusBlock.textContent += (" ACCESS set at " + uri + ". End search.")
-
-
         var defaults = kb.each(undefined, ACL('default'), kb.sym(uri), defaultACLDoc).concat(kb.each(undefined, ACL('defaultForNew'), kb.sym(uri), defaultACLDoc));
-
         if (!defaults.length) {
           return tryParent(uri); // Keep searching
         }
@@ -1814,7 +1569,6 @@ function getACLorDefault(doc, callbackFunction) {
         return callbackFunction(true, false, doc, aclDoc, defaultHolder, defaultACLDoc);
       });
     }; // tryParent
-
 
     if (!ok) {
       return callbackFunction(false, false, status, "Error accessing Access Control information for ".concat(doc, ") ").concat(message));
@@ -1830,6 +1584,7 @@ function getACLorDefault(doc, callbackFunction) {
     }
   }); // Call to getACL
 }
+
 /**
  * Calls back `(ok, status, acldoc, message)` as follows
  *
@@ -1838,31 +1593,24 @@ function getACLorDefault(doc, callbackFunction) {
  * * `(true, 404, documentSymbol, fileaccesserror)` if does not exist
  * * `(true, 200, documentSymbol)` if file exists and read OK
  */
-
-
 function getACL(doc, callbackFunction) {
   if (!kb.fetcher) {
     throw new Error('kb has no fetcher');
   }
-
   kb.fetcher.nowOrWhenFetched(doc, undefined, function (ok, body) {
     if (!ok) {
       return callbackFunction(ok, "Can't get headers to find ACL for ".concat(doc, ": ").concat(body));
     }
-
     var aclDoc = kb.any(doc, _solidLogic.ACL_LINK); // @@ check that this get set by web.js
-
     if (!aclDoc) {
       callbackFunction(false, 900, "No Link rel=ACL header for ".concat(doc));
     } else {
       if (!kb.fetcher) {
         throw new Error('kb has no fetcher');
       }
-
       if (kb.fetcher.nonexistent[aclDoc.value]) {
         return callbackFunction(true, 404, aclDoc, "ACL file ".concat(aclDoc, " does not exist."));
       }
-
       kb.fetcher.nowOrWhenFetched(aclDoc, undefined, function (ok, message, response) {
         if (!ok) {
           callbackFunction(true, response.status, aclDoc, "Can't read Access Control File ".concat(aclDoc, ": ").concat(message));
@@ -1873,15 +1621,13 @@ function getACL(doc, callbackFunction) {
     }
   });
 }
+
 /**
  * Calls [[getACLorDefault]] and then (?)
  */
-
-
 function getProspectiveHolder(_x) {
   return _getProspectiveHolder.apply(this, arguments);
 }
-
 function _getProspectiveHolder() {
   _getProspectiveHolder = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(targetDirectory) {
     return _regenerator["default"].wrap(function _callee$(_context) {
@@ -1893,11 +1639,9 @@ function _getProspectiveHolder() {
                 if (ok) {
                   return resolve(isDirectACL ? targetDoc : defaultHolder);
                 }
-
                 return reject(new Error("Error loading ".concat(targetDirectory)));
               });
             }));
-
           case 1:
           case "end":
             return _context.stop();
@@ -1921,45 +1665,28 @@ function _getProspectiveHolder() {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.AddAgentButtons = void 0;
-
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
-
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
-
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js"));
-
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js"));
-
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js"));
-
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
-
 var _iconBase = __webpack_require__(/*! ../iconBase */ "./lib/iconBase.js");
-
 var _login = __webpack_require__(/*! ../login/login */ "./lib/login/login.js");
-
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
-
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
-
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 /**
  * Contains the [[AddAgentButtons]] class
  * @packageDocumentation
  */
-
 /**
  * Renders the Sharing pane's "+" button and the menus behind it,
  * see https://github.com/solidos/userguide/blob/main/views/sharing/userguide.md#add
@@ -1974,7 +1701,6 @@ var AddAgentButtons = /*#__PURE__*/function () {
     this.rootElement = groupList.controller.dom.createElement('div');
     this.barElement = groupList.controller.dom.createElement('div');
   }
-
   (0, _createClass2["default"])(AddAgentButtons, [{
     key: "render",
     value: function render() {
@@ -1987,10 +1713,8 @@ var AddAgentButtons = /*#__PURE__*/function () {
     key: "renderAddButton",
     value: function renderAddButton() {
       var _this = this;
-
       return widgets.button(this.groupList.controller.dom, "".concat(_iconBase.icons.iconBase, "noun_34653_green.svg"), 'Add ...', function () {
         _this.toggleBar();
-
         _this.renderBar();
       });
     }
@@ -1998,11 +1722,9 @@ var AddAgentButtons = /*#__PURE__*/function () {
     key: "renderBar",
     value: function renderBar() {
       this.barElement.innerHTML = '';
-
       if (!this.isExpanded) {
         return;
       }
-
       this.barElement.appendChild(this.renderPersonButton());
       this.barElement.appendChild(this.renderGroupButton());
       this.barElement.appendChild(this.renderPublicButton());
@@ -2014,7 +1736,6 @@ var AddAgentButtons = /*#__PURE__*/function () {
     key: "renderSimplifiedBar",
     value: function renderSimplifiedBar(button) {
       var _this2 = this;
-
       Array.from(this.barElement.children).filter(function (element) {
         return element !== button;
       }).forEach(function (element) {
@@ -2025,10 +1746,8 @@ var AddAgentButtons = /*#__PURE__*/function () {
     key: "renderPersonButton",
     value: function renderPersonButton() {
       var _this3 = this;
-
       return widgets.button(this.groupList.controller.dom, _iconBase.icons.iconBase + widgets.iconForClass['vcard:Individual'], 'Add Person', function (event) {
         _this3.renderSimplifiedBar(event.target);
-
         _this3.renderNameForm(ns.vcard('Individual'), 'person').then(function (name) {
           return _this3.addPerson(name);
         }).then(function () {
@@ -2042,10 +1761,8 @@ var AddAgentButtons = /*#__PURE__*/function () {
     key: "renderGroupButton",
     value: function renderGroupButton() {
       var _this4 = this;
-
       return widgets.button(this.groupList.controller.dom, _iconBase.icons.iconBase + widgets.iconForClass['vcard:Group'], 'Add Group', function (event) {
         _this4.renderSimplifiedBar(event.target);
-
         _this4.renderNameForm(ns.vcard('Group'), 'group').then(function (name) {
           return _this4.addGroup(name);
         }).then(function () {
@@ -2064,7 +1781,6 @@ var AddAgentButtons = /*#__PURE__*/function () {
     key: "renderPublicButton",
     value: function renderPublicButton() {
       var _this5 = this;
-
       return widgets.button(this.groupList.controller.dom, _iconBase.icons.iconBase + widgets.iconForClass['foaf:Agent'], 'Add Everyone', function () {
         return _this5.addAgent(ns.foaf('Agent').uri).then(function () {
           return _this5.groupList.controller.renderTemporaryStatus('Adding the general public to those who can read. Drag the globe to a different level to give them more access.');
@@ -2077,7 +1793,6 @@ var AddAgentButtons = /*#__PURE__*/function () {
     key: "renderAuthenticatedAgentButton",
     value: function renderAuthenticatedAgentButton() {
       var _this6 = this;
-
       return widgets.button(this.groupList.controller.dom, "".concat(_iconBase.icons.iconBase, "noun_99101.svg"), 'Anyone logged In', function () {
         return _this6.addAgent(ns.acl('AuthenticatedAgent').uri).then(function () {
           return _this6.groupList.controller.renderTemporaryStatus('Adding anyone logged in to those who can read. Drag the ID icon to a different level to give them more access.');
@@ -2090,10 +1805,8 @@ var AddAgentButtons = /*#__PURE__*/function () {
     key: "renderBotButton",
     value: function renderBotButton() {
       var _this7 = this;
-
       return widgets.button(this.groupList.controller.dom, _iconBase.icons.iconBase + 'noun_Robot_849764.svg', 'A Software Agent (bot)', function (event) {
         _this7.renderSimplifiedBar(event.target);
-
         _this7.renderNameForm(ns.schema('Application'), 'bot').then(function (name) {
           return _this7.addBot(name);
         }).then(function () {
@@ -2105,25 +1818,19 @@ var AddAgentButtons = /*#__PURE__*/function () {
     key: "renderAppsButton",
     value: function renderAppsButton() {
       var _this8 = this;
-
       return widgets.button(this.groupList.controller.dom, "".concat(_iconBase.icons.iconBase, "noun_15177.svg"), 'A Web App (origin)', function (event) {
         _this8.renderSimplifiedBar(event.target);
-
         var eventContext = {
           div: _this8.barElement,
           dom: _this8.groupList.controller.dom
         };
-
         var existingApps = _this8.renderAppsTable(eventContext)["catch"](function (error) {
           return _this8.groupList.controller.renderStatus(error);
         });
-
         _this8.renderAppsView();
-
         var newApp = _this8.renderNameForm(ns.schema('WebApplication'), 'webapp domain').then(function (name) {
           return _this8.getOriginFromName(name);
         });
-
         Promise.race([existingApps, newApp]).then(function (origin) {
           if (origin) {
             _this8.groupList.addNewURI(origin);
@@ -2137,9 +1844,7 @@ var AddAgentButtons = /*#__PURE__*/function () {
     key: "renderAppsView",
     value: function renderAppsView() {
       var _this9 = this;
-
       var trustedApplications = this.groupList.controller.context.session.paneRegistry.byName('trustedApplications');
-
       if (trustedApplications) {
         var trustedApplicationsElement = trustedApplications.render(null, this.groupList.controller.context);
         trustedApplicationsElement.classList.add(this.groupList.controller.classes.trustedAppController);
@@ -2156,7 +1861,6 @@ var AddAgentButtons = /*#__PURE__*/function () {
     value: function () {
       var _renderAppsTable = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(eventContext) {
         var _this10 = this;
-
         var trustedApps, trustedOrigins;
         return _regenerator["default"].wrap(function _callee$(_context) {
           while (1) {
@@ -2164,31 +1868,22 @@ var AddAgentButtons = /*#__PURE__*/function () {
               case 0:
                 _context.next = 2;
                 return (0, _login.ensureLoadedProfile)(eventContext);
-
               case 2:
                 trustedApps = this.groupList.store.each(eventContext.me, ns.acl('trustedApp')); // @@ TODO fix as
-
                 trustedOrigins = trustedApps.flatMap(function (app) {
                   return _this10.groupList.store.each(app, ns.acl('origin'));
                 }); // @@ TODO fix as
-
                 this.barElement.appendChild(this.groupList.controller.dom.createElement('p')).textContent = "You have ".concat(trustedOrigins.length, " selected web apps.");
                 return _context.abrupt("return", new Promise(function (resolve, reject) {
                   var appsTable = _this10.barElement.appendChild(_this10.groupList.controller.dom.createElement('table'));
-
                   appsTable.classList.add(_this10.groupList.controller.classes.trustedAppAddApplicationsTable);
                   trustedApps.forEach(function (app) {
                     var origin = _this10.groupList.store.any(app, ns.acl('origin')); // @@ TODO fix as
-
-
                     if (!origin) {
                       reject(new Error("Unable to pick app: ".concat(app.value)));
                     }
-
                     var thingTR = widgets.personTR(_this10.groupList.controller.dom, ns.acl('origin'), origin, {});
-
                     var innerTable = _this10.groupList.controller.dom.createElement('table');
-
                     var innerRow = innerTable.appendChild(_this10.groupList.controller.dom.createElement('tr'));
                     var innerLeftColumn = innerRow.appendChild(_this10.groupList.controller.dom.createElement('td'));
                     innerLeftColumn.appendChild(thingTR);
@@ -2201,7 +1896,6 @@ var AddAgentButtons = /*#__PURE__*/function () {
                     appsTable.appendChild(innerTable);
                   });
                 }));
-
               case 6:
               case "end":
                 return _context.stop();
@@ -2209,11 +1903,9 @@ var AddAgentButtons = /*#__PURE__*/function () {
           }
         }, _callee, this);
       }));
-
       function renderAppsTable(_x) {
         return _renderAppsTable.apply(this, arguments);
       }
-
       return renderAppsTable;
     }()
   }, {
@@ -2235,29 +1927,22 @@ var AddAgentButtons = /*#__PURE__*/function () {
                   _context2.next = 2;
                   break;
                 }
-
                 return _context2.abrupt("return", this.toggleBar());
-
               case 2:
                 // user cancelled
                 domainNameRegexp = /^https?:/i;
-
                 if (name.match(domainNameRegexp)) {
                   _context2.next = 5;
                   break;
                 }
-
                 return _context2.abrupt("return", Promise.reject(new Error('Not a http URI')));
-
               case 5:
                 // @@ check it actually is a person and has an owner who agrees they own it
                 debug.log("Adding to ACL person: ".concat(name));
                 _context2.next = 8;
                 return this.groupList.addNewURI(name);
-
               case 8:
                 this.toggleBar();
-
               case 9:
               case "end":
                 return _context2.stop();
@@ -2265,11 +1950,9 @@ var AddAgentButtons = /*#__PURE__*/function () {
           }
         }, _callee2, this);
       }));
-
       function addPerson(_x2) {
         return _addPerson.apply(this, arguments);
       }
-
       return addPerson;
     }()
   }, {
@@ -2285,29 +1968,22 @@ var AddAgentButtons = /*#__PURE__*/function () {
                   _context3.next = 2;
                   break;
                 }
-
                 return _context3.abrupt("return", this.toggleBar());
-
               case 2:
                 // user cancelled
                 domainNameRegexp = /^https?:/i;
-
                 if (name.match(domainNameRegexp)) {
                   _context3.next = 5;
                   break;
                 }
-
                 return _context3.abrupt("return", Promise.reject(new Error('Not a http URI')));
-
               case 5:
                 // @@ check it actually is a group and has an owner who agrees they own it
                 debug.log('Adding to ACL group: ' + name);
                 _context3.next = 8;
                 return this.groupList.addNewURI(name);
-
               case 8:
                 this.toggleBar();
-
               case 9:
               case "end":
                 return _context3.stop();
@@ -2315,11 +1991,9 @@ var AddAgentButtons = /*#__PURE__*/function () {
           }
         }, _callee3, this);
       }));
-
       function addGroup(_x3) {
         return _addGroup.apply(this, arguments);
       }
-
       return addGroup;
     }()
   }, {
@@ -2332,10 +2006,8 @@ var AddAgentButtons = /*#__PURE__*/function () {
               case 0:
                 _context4.next = 2;
                 return this.groupList.addNewURI(agentUri);
-
               case 2:
                 this.toggleBar();
-
               case 3:
               case "end":
                 return _context4.stop();
@@ -2343,11 +2015,9 @@ var AddAgentButtons = /*#__PURE__*/function () {
           }
         }, _callee4, this);
       }));
-
       function addAgent(_x4) {
         return _addAgent.apply(this, arguments);
       }
-
       return addAgent;
     }()
   }, {
@@ -2363,29 +2033,22 @@ var AddAgentButtons = /*#__PURE__*/function () {
                   _context5.next = 2;
                   break;
                 }
-
                 return _context5.abrupt("return", this.toggleBar());
-
               case 2:
                 // user cancelled
                 domainNameRegexp = /^https?:/i;
-
                 if (name.match(domainNameRegexp)) {
                   _context5.next = 5;
                   break;
                 }
-
                 return _context5.abrupt("return", Promise.reject(new Error('Not a http URI')));
-
               case 5:
                 // @@ check it actually is a bot and has an owner who agrees they own it
                 debug.log('Adding to ACL bot: ' + name);
                 _context5.next = 8;
                 return this.groupList.addNewURI(name);
-
               case 8:
                 this.toggleBar();
-
               case 9:
               case "end":
                 return _context5.stop();
@@ -2393,11 +2056,9 @@ var AddAgentButtons = /*#__PURE__*/function () {
           }
         }, _callee5, this);
       }));
-
       function addBot(_x5) {
         return _addBot.apply(this, arguments);
       }
-
       return addBot;
     }()
   }, {
@@ -2413,26 +2074,20 @@ var AddAgentButtons = /*#__PURE__*/function () {
                   _context6.next = 2;
                   break;
                 }
-
                 return _context6.abrupt("return", Promise.resolve());
-
               case 2:
                 // user cancelled
                 domainNameRegexp = /^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/i; // https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch08s15.html
-
                 if (name.match(domainNameRegexp)) {
                   _context6.next = 5;
                   break;
                 }
-
                 return _context6.abrupt("return", Promise.reject(new Error('Not a domain name')));
-
               case 5:
                 origin = 'https://' + name;
                 debug.log('Adding to ACL origin: ' + origin);
                 this.toggleBar();
                 return _context6.abrupt("return", origin);
-
               case 9:
               case "end":
                 return _context6.stop();
@@ -2440,11 +2095,9 @@ var AddAgentButtons = /*#__PURE__*/function () {
           }
         }, _callee6, this);
       }));
-
       function getOriginFromName(_x6) {
         return _getOriginFromName.apply(this, arguments);
       }
-
       return getOriginFromName;
     }()
   }, {
@@ -2455,7 +2108,6 @@ var AddAgentButtons = /*#__PURE__*/function () {
   }]);
   return AddAgentButtons;
 }();
-
 exports.AddAgentButtons = AddAgentButtons;
 //# sourceMappingURL=add-agent-buttons.js.map
 
@@ -2474,15 +2126,13 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.aclControl = exports.acl = void 0;
-
 var _acl = __webpack_require__(/*! ./acl */ "./lib/acl/acl.js");
-
 var _aclControl = __webpack_require__(/*! ./acl-control */ "./lib/acl/acl-control.js");
-
 /**
  * Re-exports all the exports from the various files in the src/acl/ folder
  * @packageDocumentation
  */
+
 var acl = {
   adoptACLDefault: _acl.adoptACLDefault,
   readACL: _acl.readACL,
@@ -2527,7 +2177,6 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.styles = void 0;
-
 /**
  * Contains CSS styles for the Sharing pane,
  * see https://github.com/solidos/userguide/blob/main/views/sharing/userguide.md
@@ -2603,8 +2252,8 @@ var styles = {
   },
   trustedAppCancelButton: {
     "float": 'right' // @@ a little hack - https://stackoverflow.com/questions/52781251/using-typescript-jss-with-react-throws-type-is-unassignable-for-some-css-prop
-
   },
+
   trustedAppControllerI: {
     borderColor: 'orange',
     borderRadius: '1em',
@@ -2633,53 +2282,37 @@ exports.styles = styles;
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.findBookmarkDocument = findBookmarkDocument;
 exports.renderBookmarksButton = renderBookmarksButton;
 exports.toggleBookmark = toggleBookmark;
-
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
-
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
-
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
-
 var _iconBase = __webpack_require__(/*! ../iconBase */ "./lib/iconBase.js");
-
 var _index = __webpack_require__(/*! ../media/index */ "./lib/media/index.js");
-
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
-
 var pad = _interopRequireWildcard(__webpack_require__(/*! ../pad */ "./lib/pad.js"));
-
 var rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
-
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
-
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
-
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 var _login = __webpack_require__(/*! ../login/login */ "./lib/login/login.js");
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 /**
  * Functions related to chat and bookmarks
  * @packageDocumentation
  */
 
 /* global alert confirm */
+
 // pull in first avoid cross-refs
+
 var UI = {
   icons: _iconBase.icons,
   ns: ns,
@@ -2695,29 +2328,27 @@ var BOOK = $rdf.Namespace('http://www.w3.org/2002/01/bookmark#');
 var BOOKMARK_ICON = 'noun_45961.svg';
 var label = utils.label;
 var dom = window.document || null;
+
 /** Create a resource if it really does not exist
  *  Be absolutely sure something does not exist before creating a new empty file
  * as otherwise existing could  be deleted.
  * @param doc {NamedNode} - The resource
  */
-
 function createIfNotExists(doc) {
   return new Promise(function (resolve, reject) {
     _solidLogic.store.fetcher.load(doc).then(function (response) {
-      debug.log('createIfNotExists doc exists, all good ' + doc); // store.fetcher.webOperation('HEAD', doc.uri).then(response => {
-
+      debug.log('createIfNotExists doc exists, all good ' + doc);
+      // store.fetcher.webOperation('HEAD', doc.uri).then(response => {
       resolve(response);
     }, function (err) {
       if (err.response.status === 404) {
         debug.log('createIfNotExists doc does NOT exist, will create... ' + doc);
-
         _solidLogic.store.fetcher.webOperation('PUT', doc.uri, {
           data: '',
           contentType: 'text/turtle'
         }).then(function (response) {
           // fetcher.requested[doc.uri] = 'done' // do not need to read ??  but no headers
           delete _solidLogic.store.fetcher.requested[doc.uri]; // delete cached 404 error
-
           debug.log('createIfNotExists doc created ok ' + doc);
           resolve(response);
         }, function (err) {
@@ -2730,9 +2361,9 @@ function createIfNotExists(doc) {
       }
     });
   });
-} // @@@@ use the one in rdflib.js when it is avaiable and delete this
+}
 
-
+// @@@@ use the one in rdflib.js when it is avaiable and delete this
 function updatePromise(del, ins) {
   return new Promise(function (resolve, reject) {
     _solidLogic.store.updater.update(del, ins, function (uri, ok, errorBody) {
@@ -2742,23 +2373,18 @@ function updatePromise(del, ins) {
         resolve();
       }
     }); // callback
-
   }); // promise
 }
+
 /*         Bookmarking
  */
-
 /** Find a user's bookmarks
  */
-
-
 function findBookmarkDocument(_x) {
   return _findBookmarkDocument.apply(this, arguments);
 }
 /** Add a bookmark
  */
-
-
 function _findBookmarkDocument() {
   _findBookmarkDocument = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(userContext) {
     var theClass, fileTail, isPublic, newBookmarkFile;
@@ -2771,60 +2397,47 @@ function _findBookmarkDocument() {
             isPublic = true;
             _context.next = 5;
             return (0, _login.findAppInstances)(userContext, theClass, isPublic);
-
           case 5:
             if (!(userContext.instances && userContext.instances.length > 0)) {
               _context.next = 10;
               break;
             }
-
             userContext.bookmarkDocument = userContext.instances[0];
-
             if (userContext.instances.length > 1) {
               alert('More than one bookmark file! ' + userContext.instances);
             }
-
             _context.next = 28;
             break;
-
           case 10:
             if (!userContext.publicProfile) {
               _context.next = 27;
               break;
             }
-
             // publicProfile or preferencesFile
             newBookmarkFile = $rdf.sym(userContext.publicProfile.dir().uri + fileTail);
             _context.prev = 12;
             debug.log('Creating new bookmark file ' + newBookmarkFile);
             _context.next = 16;
             return createIfNotExists(newBookmarkFile);
-
           case 16:
             _context.next = 22;
             break;
-
           case 18:
             _context.prev = 18;
             _context.t0 = _context["catch"](12);
             alert.error("Can't make fresh bookmark file:" + _context.t0);
             return _context.abrupt("return", userContext);
-
           case 22:
             _context.next = 24;
             return (0, _solidLogic.registerInTypeIndex)(newBookmarkFile, userContext.index, theClass);
-
           case 24:
             userContext.bookmarkDocument = newBookmarkFile;
             _context.next = 28;
             break;
-
           case 27:
             alert('You seem to have no bookmark file and not even a profile file.');
-
           case 28:
             return _context.abrupt("return", userContext);
-
           case 29:
           case "end":
             return _context.stop();
@@ -2834,11 +2447,9 @@ function _findBookmarkDocument() {
   }));
   return _findBookmarkDocument.apply(this, arguments);
 }
-
 function addBookmark(_x2, _x3) {
   return _addBookmark.apply(this, arguments);
 }
-
 function _addBookmark() {
   _addBookmark = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(context, target) {
     var title, me, author, bookmarkDoc, bookmark, ins, msg;
@@ -2860,39 +2471,31 @@ function _addBookmark() {
             */
             title = '';
             me = _solidLogic.authn.currentUser(); // If already logged on
-
             if (me) {
               _context2.next = 4;
               break;
             }
-
             throw new Error('Must be logged on to add Bookmark');
-
           case 4:
             author = _solidLogic.store.any(target, ns.foaf('maker'));
             title = label(author) + ': ' + _solidLogic.store.anyValue(target, ns.sioc('content')).slice(0, 80); // @@ add chat title too?
-
             bookmarkDoc = context.bookmarkDocument;
             bookmark = UI.widgets.newThing(bookmarkDoc, title);
             ins = [$rdf.st(bookmarkDoc, UI.ns.dct('references'), bookmark, bookmarkDoc), $rdf.st(bookmark, UI.ns.rdf('type'), BOOK('Bookmark'), bookmarkDoc), $rdf.st(bookmark, UI.ns.dct('created'), new Date(), bookmarkDoc), $rdf.st(bookmark, BOOK('recalls'), target, bookmarkDoc), $rdf.st(bookmark, UI.ns.foaf('maker'), me, bookmarkDoc), $rdf.st(bookmark, UI.ns.dct('title'), title, bookmarkDoc)];
             _context2.prev = 9;
             _context2.next = 12;
             return updatePromise([], ins);
-
           case 12:
             _context2.next = 19;
             break;
-
           case 14:
             _context2.prev = 14;
             _context2.t0 = _context2["catch"](9);
             msg = 'Making bookmark: ' + _context2.t0;
             alert.error(msg);
             return _context2.abrupt("return", null);
-
           case 19:
             return _context2.abrupt("return", bookmark);
-
           case 20:
           case "end":
             return _context2.stop();
@@ -2902,11 +2505,9 @@ function _addBookmark() {
   }));
   return _addBookmark.apply(this, arguments);
 }
-
 function toggleBookmark(_x4, _x5, _x6) {
   return _toggleBookmark.apply(this, arguments);
 }
-
 function _toggleBookmark() {
   _toggleBookmark = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(userContext, target, bookmarkButton) {
     var bookmarks, i, bookmark;
@@ -2916,65 +2517,51 @@ function _toggleBookmark() {
           case 0:
             _context3.next = 2;
             return _solidLogic.store.fetcher.load(userContext.bookmarkDocument);
-
           case 2:
             bookmarks = _solidLogic.store.each(null, BOOK('recalls'), target, userContext.bookmarkDocument);
-
             if (!bookmarks.length) {
               _context3.next = 24;
               break;
             }
-
             if (confirm('Delete bookmark on this?' + bookmarks.length)) {
               _context3.next = 6;
               break;
             }
-
             return _context3.abrupt("return");
-
           case 6:
             i = 0;
-
           case 7:
             if (!(i < bookmarks.length)) {
               _context3.next = 22;
               break;
             }
-
             _context3.prev = 8;
             _context3.next = 11;
             return updatePromise(_solidLogic.store.connectedStatements(bookmarks[i]), []);
-
           case 11:
             bookmarkButton.style.backgroundColor = 'white';
             debug.log('Bookmark deleted: ' + bookmarks[i]);
             _context3.next = 19;
             break;
-
           case 15:
             _context3.prev = 15;
             _context3.t0 = _context3["catch"](8);
             debug.error('Cant delete bookmark:' + _context3.t0);
             alert('Cant delete bookmark:' + _context3.t0);
-
           case 19:
             i++;
             _context3.next = 7;
             break;
-
           case 22:
             _context3.next = 29;
             break;
-
           case 24:
             _context3.next = 26;
             return addBookmark(userContext, target);
-
           case 26:
             bookmark = _context3.sent;
             bookmarkButton.style.backgroundColor = 'yellow';
             debug.log('Bookmark added: ' + bookmark);
-
           case 29:
           case "end":
             return _context3.stop();
@@ -2984,15 +2571,12 @@ function _toggleBookmark() {
   }));
   return _toggleBookmark.apply(this, arguments);
 }
-
 function renderBookmarksButton(_x7, _x8) {
   return _renderBookmarksButton.apply(this, arguments);
 }
-
 function _renderBookmarksButton() {
   _renderBookmarksButton = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(userContext, target) {
     var setBookmarkButtonColor, _setBookmarkButtonColor, bookmarkButton;
-
     return _regenerator["default"].wrap(function _callee5$(_context5) {
       while (1) {
         switch (_context5.prev = _context5.next) {
@@ -3006,12 +2590,10 @@ function _renderBookmarksButton() {
                       case 0:
                         _context4.next = 2;
                         return _solidLogic.store.fetcher.load(userContext.bookmarkDocument);
-
                       case 2:
                         bookmarked = _solidLogic.store.any(null, BOOK('recalls'), bookmarkButton.target, userContext.bookmarkDocument);
                         bookmarkButton.style = UI.style.buttonStyle;
                         if (bookmarked) bookmarkButton.style.backgroundColor = 'yellow';
-
                       case 5:
                       case "end":
                         return _context4.stop();
@@ -3021,26 +2603,21 @@ function _renderBookmarksButton() {
               }));
               return _setBookmarkButtonColor.apply(this, arguments);
             };
-
             setBookmarkButtonColor = function _setBookmarkButtonCol(_x9) {
               return _setBookmarkButtonColor.apply(this, arguments);
             };
-
             if (!userContext.bookmarkDocument) {
               _context5.next = 8;
               break;
             }
-
             bookmarkButton = UI.widgets.button(dom, UI.icons.iconBase + BOOKMARK_ICON, label(BOOK('Bookmark')), function () {
               toggleBookmark(userContext, target, bookmarkButton);
             });
             bookmarkButton.target = target;
             _context5.next = 7;
             return setBookmarkButtonColor(bookmarkButton);
-
           case 7:
             return _context5.abrupt("return", bookmarkButton);
-
           case 8:
           case "end":
             return _context5.stop();
@@ -3064,9 +2641,7 @@ function _renderBookmarksButton() {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
@@ -3078,40 +2653,25 @@ exports.isReplaced = isReplaced;
 exports.mostRecentVersion = mostRecentVersion;
 exports.nick = nick;
 exports.originalVersion = originalVersion;
-
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
-
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
-
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js"));
-
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js"));
-
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
-
 var _dateFolder = __webpack_require__(/*! ./dateFolder */ "./lib/chat/dateFolder.js");
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
-
 var $rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
-
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 /**
  * Contains the [[ChatChannel]] class and logic for Solid Chat
  * @packageDocumentation
  */
 // pull in first avoid cross-refs
-
 /* The Solid logic for a 'LongChat'
 */
-
 /**
  * Common code for a chat (discussion area of messages about something)
  * This version runs over a series of files for different time periods
@@ -3129,10 +2689,9 @@ var ChatChannel = /*#__PURE__*/function () {
     this.dateFolder = new _dateFolder.DateFolder(this.channelRoot, 'chat.ttl');
     this.div = null; // : HTMLElement
   }
+
   /* Store a new message in the web,
   */
-
-
   (0, _createClass2["default"])(ChatChannel, [{
     key: "createMessage",
     value: function () {
@@ -3142,7 +2701,6 @@ var ChatChannel = /*#__PURE__*/function () {
             switch (_context.prev = _context.next) {
               case 0:
                 return _context.abrupt("return", this.updateMessage(text));
-
               case 1:
               case "end":
                 return _context.stop();
@@ -3150,105 +2708,82 @@ var ChatChannel = /*#__PURE__*/function () {
           }
         }, _callee, this);
       }));
-
       function createMessage(_x) {
         return _createMessage.apply(this, arguments);
       }
-
       return createMessage;
     }()
     /* Store a new message in the web,
       as a replacement for an existing one.
       The old one iis left, and the two are linked
     */
-
   }, {
     key: "updateMessage",
     value: function () {
-      var _updateMessage = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(text) {
-        var oldMsg,
-            deleteIt,
-            sts,
-            now,
-            timestamp,
-            dateStamp,
-            chatDocument,
-            message,
-            me,
-            msg,
-            _args2 = arguments;
-        return _regenerator["default"].wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                oldMsg = _args2.length > 1 && _args2[1] !== undefined ? _args2[1] : null;
-                deleteIt = _args2.length > 2 ? _args2[2] : undefined;
-                sts = [];
-                now = new Date();
-                timestamp = '' + now.getTime();
-                dateStamp = $rdf.term(now);
-                chatDocument = oldMsg ? oldMsg.doc() : this.dateFolder.leafDocumentFromDate(now);
-                message = _solidLogic.store.sym(chatDocument.uri + '#' + 'Msg' + timestamp); // const content = store.literal(text)
-
-                me = _solidLogic.authn.currentUser(); // If already logged on
-
-                if (oldMsg) {
-                  // edit message replaces old one
-                  sts.push($rdf.st(mostRecentVersion(oldMsg), ns.dct('isReplacedBy'), message, chatDocument));
-
-                  if (deleteIt) {
-                    sts.push($rdf.st(message, ns.schema('dateDeleted'), dateStamp, chatDocument));
+      var _updateMessage = (0, _asyncToGenerator2["default"])(function (text) {
+        var _this = this;
+        var oldMsg = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+        var deleteIt = arguments.length > 2 ? arguments[2] : undefined;
+        return /*#__PURE__*/_regenerator["default"].mark(function _callee2() {
+          var sts, now, timestamp, dateStamp, chatDocument, message, me, msg;
+          return _regenerator["default"].wrap(function _callee2$(_context2) {
+            while (1) {
+              switch (_context2.prev = _context2.next) {
+                case 0:
+                  sts = [];
+                  now = new Date();
+                  timestamp = '' + now.getTime();
+                  dateStamp = $rdf.term(now);
+                  chatDocument = oldMsg ? oldMsg.doc() : _this.dateFolder.leafDocumentFromDate(now);
+                  message = _solidLogic.store.sym(chatDocument.uri + '#' + 'Msg' + timestamp); // const content = store.literal(text)
+                  me = _solidLogic.authn.currentUser(); // If already logged on
+                  if (oldMsg) {
+                    // edit message replaces old one
+                    sts.push($rdf.st(mostRecentVersion(oldMsg), ns.dct('isReplacedBy'), message, chatDocument));
+                    if (deleteIt) {
+                      sts.push($rdf.st(message, ns.schema('dateDeleted'), dateStamp, chatDocument));
+                    }
+                  } else {
+                    // link new message to channel
+                    sts.push($rdf.st(_this.channel, ns.wf('message'), message, chatDocument));
                   }
-                } else {
-                  // link new message to channel
-                  sts.push($rdf.st(this.channel, ns.wf('message'), message, chatDocument));
-                }
-
-                sts.push($rdf.st(message, ns.sioc('content'), _solidLogic.store.literal(text), chatDocument));
-                sts.push($rdf.st(message, ns.dct('created'), dateStamp, chatDocument));
-
-                if (me) {
-                  sts.push($rdf.st(message, ns.foaf('maker'), me, chatDocument));
-                }
-
-                _context2.prev = 13;
-                _context2.next = 16;
-                return _solidLogic.store.updater.update([], sts);
-
-              case 16:
-                _context2.next = 24;
-                break;
-
-              case 18:
-                _context2.prev = 18;
-                _context2.t0 = _context2["catch"](13);
-                msg = 'Error saving chat message: ' + _context2.t0;
-                debug.warn(msg);
-                alert(msg);
-                throw new Error(msg);
-
-              case 24:
-                return _context2.abrupt("return", message);
-
-              case 25:
-              case "end":
-                return _context2.stop();
+                  sts.push($rdf.st(message, ns.sioc('content'), _solidLogic.store.literal(text), chatDocument));
+                  sts.push($rdf.st(message, ns.dct('created'), dateStamp, chatDocument));
+                  if (me) {
+                    sts.push($rdf.st(message, ns.foaf('maker'), me, chatDocument));
+                  }
+                  _context2.prev = 11;
+                  _context2.next = 14;
+                  return _solidLogic.store.updater.update([], sts);
+                case 14:
+                  _context2.next = 22;
+                  break;
+                case 16:
+                  _context2.prev = 16;
+                  _context2.t0 = _context2["catch"](11);
+                  msg = 'Error saving chat message: ' + _context2.t0;
+                  debug.warn(msg);
+                  alert(msg);
+                  throw new Error(msg);
+                case 22:
+                  return _context2.abrupt("return", message);
+                case 23:
+                case "end":
+                  return _context2.stop();
+              }
             }
-          }
-        }, _callee2, this, [[13, 18]]);
-      }));
-
+          }, _callee2, null, [[11, 16]]);
+        })();
+      });
       function updateMessage(_x2) {
         return _updateMessage.apply(this, arguments);
       }
-
       return updateMessage;
     }()
     /* Mark a message as deleted
     * Wee add a new version of the message,m witha deletion flag (deletion date)
     * so that the deletion can be revoked by adding another non-deleted update
     */
-
   }, {
     key: "deleteMessage",
     value: function () {
@@ -3258,7 +2793,6 @@ var ChatChannel = /*#__PURE__*/function () {
             switch (_context3.prev = _context3.next) {
               case 0:
                 return _context3.abrupt("return", this.updateMessage('(message deleted)', message, true));
-
               case 1:
               case "end":
                 return _context3.stop();
@@ -3266,136 +2800,108 @@ var ChatChannel = /*#__PURE__*/function () {
           }
         }, _callee3, this);
       }));
-
       function deleteMessage(_x3) {
         return _deleteMessage.apply(this, arguments);
       }
-
       return deleteMessage;
     }()
   }]);
   return ChatChannel;
 }(); // class ChatChannel
-
-
 exports.ChatChannel = ChatChannel;
-
 function originalVersion(message) {
   var msg = message;
-
   while (msg) {
     message = msg;
     msg = _solidLogic.store.any(null, ns.dct('isReplacedBy'), message, message.doc());
   }
-
   return message;
 }
-
 function mostRecentVersion(message) {
   var msg = message;
-
   while (msg) {
     message = msg;
     msg = _solidLogic.store.any(message, ns.dct('isReplacedBy'), null, message.doc());
   }
-
   return message;
 }
-
 function isDeleted(message) {
   return _solidLogic.store.holds(message, ns.schema('dateDeleted'), null, message.doc());
 }
-
 function isReplaced(message) {
   return _solidLogic.store.holds(message, ns.dct('isReplacedBy'), null, message.doc());
 }
-
 function isHidden(message) {
   return this.isDeleted(message) || this.isReplaced(message);
-} // A Nickname for a person
+}
 
+// A Nickname for a person
 
 function nick(person) {
   var s = _solidLogic.store.any(person, ns.foaf('nick'));
-
   if (s) return '' + s.value;
   return '' + utils.label(person);
 }
-
 function _createIfNotExists(_x4) {
   return _createIfNotExists2.apply(this, arguments);
 } // ends
-
-
 function _createIfNotExists2() {
-  _createIfNotExists2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(doc) {
-    var contentType,
-        data,
-        response,
-        _args4 = arguments;
-    return _regenerator["default"].wrap(function _callee4$(_context4) {
-      while (1) {
-        switch (_context4.prev = _context4.next) {
-          case 0:
-            contentType = _args4.length > 1 && _args4[1] !== undefined ? _args4[1] : 'text/turtle';
-            data = _args4.length > 2 && _args4[2] !== undefined ? _args4[2] : '';
-            _context4.prev = 2;
-            _context4.next = 5;
-            return _solidLogic.store.fetcher.load(doc);
-
-          case 5:
-            response = _context4.sent;
-            _context4.next = 28;
-            break;
-
-          case 8:
-            _context4.prev = 8;
-            _context4.t0 = _context4["catch"](2);
-
-            if (!(_context4.t0.response.status === 404)) {
+  _createIfNotExists2 = (0, _asyncToGenerator2["default"])(function (doc) {
+    var contentType = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'text/turtle';
+    var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+    return /*#__PURE__*/_regenerator["default"].mark(function _callee4() {
+      var response;
+      return _regenerator["default"].wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              _context4.prev = 0;
+              _context4.next = 3;
+              return _solidLogic.store.fetcher.load(doc);
+            case 3:
+              response = _context4.sent;
               _context4.next = 26;
               break;
-            }
-
-            debug.log('createIfNotExists: doc does NOT exist, will create... ' + doc);
-            _context4.prev = 12;
-            _context4.next = 15;
-            return _solidLogic.store.fetcher.webOperation('PUT', doc.uri, {
-              data: data,
-              contentType: contentType
-            });
-
-          case 15:
-            response = _context4.sent;
-            _context4.next = 22;
-            break;
-
-          case 18:
-            _context4.prev = 18;
-            _context4.t1 = _context4["catch"](12);
-            debug.log('createIfNotExists doc FAILED: ' + doc + ': ' + _context4.t1);
-            throw _context4.t1;
-
-          case 22:
-            delete _solidLogic.store.fetcher.requested[doc.uri]; // delete cached 404 error
-            // debug.log('createIfNotExists doc created ok ' + doc)
-
-            return _context4.abrupt("return", response);
-
-          case 26:
-            debug.log('createIfNotExists doc load error NOT 404:  ' + doc + ': ' + _context4.t0);
-            throw _context4.t0;
-
-          case 28:
-            return _context4.abrupt("return", response);
-
-          case 29:
-          case "end":
-            return _context4.stop();
+            case 6:
+              _context4.prev = 6;
+              _context4.t0 = _context4["catch"](0);
+              if (!(_context4.t0.response.status === 404)) {
+                _context4.next = 24;
+                break;
+              }
+              debug.log('createIfNotExists: doc does NOT exist, will create... ' + doc);
+              _context4.prev = 10;
+              _context4.next = 13;
+              return _solidLogic.store.fetcher.webOperation('PUT', doc.uri, {
+                data: data,
+                contentType: contentType
+              });
+            case 13:
+              response = _context4.sent;
+              _context4.next = 20;
+              break;
+            case 16:
+              _context4.prev = 16;
+              _context4.t1 = _context4["catch"](10);
+              debug.log('createIfNotExists doc FAILED: ' + doc + ': ' + _context4.t1);
+              throw _context4.t1;
+            case 20:
+              delete _solidLogic.store.fetcher.requested[doc.uri]; // delete cached 404 error
+              // debug.log('createIfNotExists doc created ok ' + doc)
+              return _context4.abrupt("return", response);
+            case 24:
+              debug.log('createIfNotExists doc load error NOT 404:  ' + doc + ': ' + _context4.t0);
+              throw _context4.t0;
+            case 26:
+              return _context4.abrupt("return", response);
+            case 27:
+            case "end":
+              return _context4.stop();
+          }
         }
-      }
-    }, _callee4, null, [[2, 8], [12, 18]]);
-  }));
+      }, _callee4, null, [[0, 6], [10, 16]]);
+    })();
+  });
   return _createIfNotExists2.apply(this, arguments);
 }
 //# sourceMappingURL=chatLogic.js.map
@@ -3412,41 +2918,27 @@ function _createIfNotExists2() {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.DateFolder = void 0;
-
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
-
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
-
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js"));
-
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js"));
-
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
-
 var $rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 /**
  * Contains the [[DateFolder]] class
  * This tracks data stored in dated folders and sub-folders
  *
  */
 // pull in first avoid cross-refs
-
 /**
  * Track back through the YYYY/MM/DD tree to find the previous/next day
  */
@@ -3456,37 +2948,32 @@ var DateFolder = /*#__PURE__*/function () {
     this.root = rootThing;
     this.rootFolder = rootThing.dir();
     this.leafFileName = leafFileName || 'index.ttl'; // typically chat.ttl
-
     this.membershipProperty = membershipProperty || ns.wf('leafObject');
   }
+
   /* Generate the leaf document (rdf object) from date
    * @returns: <NamedNode> - document
    */
-
-
   (0, _createClass2["default"])(DateFolder, [{
     key: "leafDocumentFromDate",
     value: function leafDocumentFromDate(date) {
       // debug.log('incoming date: ' + date)
       var isoDate = date.toISOString(); // Like "2018-05-07T17:42:46.576Z"
-
       var path = isoDate.split('T')[0].replace(/-/g, '/'); //  Like "2018/05/07"
-
       path = this.root.dir().uri + path + '/' + this.leafFileName;
       return _solidLogic.store.sym(path);
     }
+
     /* Generate a date object from the leaf file name
      */
-
   }, {
     key: "dateFromLeafDocument",
     value: function dateFromLeafDocument(doc) {
       var head = this.rootFolder.uri.length;
-      var str = doc.uri.slice(head, head + 10).replace(/\//g, '-'); // let date = new Date(str + 'Z') // GMT - but fails in FF - invalid format :-(
-
+      var str = doc.uri.slice(head, head + 10).replace(/\//g, '-');
+      // let date = new Date(str + 'Z') // GMT - but fails in FF - invalid format :-(
       var date = new Date(str); // not explicitly UTC but is assumed so in spec
       // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse
-
       debug.log('Date for ' + doc + ':' + date.toISOString());
       return date;
     }
@@ -3495,7 +2982,6 @@ var DateFolder = /*#__PURE__*/function () {
     value: function () {
       var _loadPrevious = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(date, backwards) {
         var thisDateFolder, previousPeriod, _previousPeriod, folder, found, doc;
-
         return _regenerator["default"].wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
@@ -3503,7 +2989,6 @@ var DateFolder = /*#__PURE__*/function () {
                 _previousPeriod = function _previousPeriod3() {
                   _previousPeriod = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(file, level) {
                     var younger, suitable, lastNonEmpty, _lastNonEmpty, parent, siblings, folder, uncle, cousins, result;
-
                     return _regenerator["default"].wrap(function _callee2$(_context2) {
                       while (1) {
                         switch (_context2.prev = _context2.next) {
@@ -3511,49 +2996,38 @@ var DateFolder = /*#__PURE__*/function () {
                             _lastNonEmpty = function _lastNonEmpty3() {
                               _lastNonEmpty = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(siblings) {
                                 var _folder, leafDocument;
-
                                 return _regenerator["default"].wrap(function _callee$(_context) {
                                   while (1) {
                                     switch (_context.prev = _context.next) {
                                       case 0:
                                         siblings = siblings.filter(suitable);
                                         siblings.sort(); // chronological order
-
                                         if (!backwards) siblings.reverse();
-
                                         if (!(level !== 3)) {
                                           _context.next = 5;
                                           break;
                                         }
-
                                         return _context.abrupt("return", siblings.pop());
-
                                       case 5:
                                         if (!siblings.length) {
                                           _context.next = 14;
                                           break;
                                         }
-
                                         _folder = siblings.pop();
                                         leafDocument = _solidLogic.store.sym(_folder.uri + thisDateFolder.leafFileName);
                                         _context.next = 10;
                                         return _solidLogic.store.fetcher.load(leafDocument);
-
                                       case 10:
                                         if (!(_solidLogic.store.statementsMatching(null, ns.dct('created'), null, leafDocument).length > 0)) {
                                           _context.next = 12;
                                           break;
                                         }
-
                                         return _context.abrupt("return", _folder);
-
                                       case 12:
                                         _context.next = 5;
                                         break;
-
                                       case 14:
                                         return _context.abrupt("return", null);
-
                                       case 15:
                                       case "end":
                                         return _context.stop();
@@ -3563,80 +3037,60 @@ var DateFolder = /*#__PURE__*/function () {
                               }));
                               return _lastNonEmpty.apply(this, arguments);
                             };
-
                             lastNonEmpty = function _lastNonEmpty2(_x5) {
                               return _lastNonEmpty.apply(this, arguments);
                             };
-
                             suitable = function _suitable(x) {
                               var tail = x.uri.slice(0, -1).split('/').slice(-1)[0];
                               if (!'0123456789'.includes(tail[0])) return false; // not numeric
-
                               return true;
                             };
-
                             younger = function _younger(x) {
                               if (backwards ? x.uri >= file.uri : x.uri <= file.uri) return false; // later than we want or same -- looking for different
-
                               return true;
                             };
-
                             // debug.log('  previousPeriod level' + level + ' file ' + file)
                             parent = file.dir();
                             _context2.next = 7;
                             return _solidLogic.store.fetcher.load(parent);
-
                           case 7:
                             siblings = _solidLogic.store.each(parent, ns.ldp('contains'));
                             siblings = siblings.filter(younger);
                             _context2.next = 11;
                             return lastNonEmpty(siblings);
-
                           case 11:
                             folder = _context2.sent;
-
                             if (!folder) {
                               _context2.next = 14;
                               break;
                             }
-
                             return _context2.abrupt("return", folder);
-
                           case 14:
                             if (!(level === 0)) {
                               _context2.next = 16;
                               break;
                             }
-
                             return _context2.abrupt("return", null);
-
                           case 16:
                             _context2.next = 18;
                             return previousPeriod(parent, level - 1);
-
                           case 18:
                             uncle = _context2.sent;
-
                             if (uncle) {
                               _context2.next = 21;
                               break;
                             }
-
                             return _context2.abrupt("return", null);
-
                           case 21:
                             _context2.next = 23;
                             return _solidLogic.store.fetcher.load(uncle);
-
                           case 23:
                             cousins = _solidLogic.store.each(uncle, ns.ldp('contains'));
                             _context2.next = 26;
                             return lastNonEmpty(cousins);
-
                           case 26:
                             result = _context2.sent;
                             return _context2.abrupt("return", result);
-
                           case 28:
                           case "end":
                             return _context2.stop();
@@ -3646,31 +3100,24 @@ var DateFolder = /*#__PURE__*/function () {
                   }));
                   return _previousPeriod.apply(this, arguments);
                 };
-
                 previousPeriod = function _previousPeriod2(_x3, _x4) {
                   return _previousPeriod.apply(this, arguments);
                 };
-
                 thisDateFolder = this;
                 // previousPeriod
                 folder = this.leafDocumentFromDate(date).dir();
                 _context3.next = 6;
                 return previousPeriod(folder, 3);
-
               case 6:
                 found = _context3.sent;
-
                 if (!found) {
                   _context3.next = 10;
                   break;
                 }
-
                 doc = _solidLogic.store.sym(found.uri + this.leafFileName);
                 return _context3.abrupt("return", this.dateFromLeafDocument(doc));
-
               case 10:
                 return _context3.abrupt("return", null);
-
               case 11:
               case "end":
                 return _context3.stop();
@@ -3678,20 +3125,16 @@ var DateFolder = /*#__PURE__*/function () {
           }
         }, _callee3, this);
       }));
-
       function loadPrevious(_x, _x2) {
         return _loadPrevious.apply(this, arguments);
       }
-
       return loadPrevious;
     }() // loadPrevious
-
   }, {
     key: "firstLeaf",
     value: function () {
       var _firstLeaf = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(backwards) {
         var folderStore, folderFetcher, earliestSubfolder, _earliestSubfolder, y, month, d, leafDocument, leafObjects, msg, sortMe;
-
         return _regenerator["default"].wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
@@ -3706,37 +3149,30 @@ var DateFolder = /*#__PURE__*/function () {
                             suitable = function _suitable2(x) {
                               var tail = x.uri.slice(0, -1).split('/').slice(-1)[0];
                               if (!'0123456789'.includes(tail[0])) return false; // not numeric
-
                               return true;
                             };
-
                             debug.log('            parent ' + parent);
-                            delete folderFetcher.requested[parent.uri]; // try {
-
+                            delete folderFetcher.requested[parent.uri];
+                            // try {
                             _context4.next = 5;
                             return folderFetcher.load(parent, {
                               force: true
                             });
-
                           case 5:
                             // Force fetch as will have changed
                             // }catch (err) {
                             // }
                             kids = folderStore.each(parent, ns.ldp('contains'));
                             kids = kids.filter(suitable);
-
                             if (!(kids.length === 0)) {
                               _context4.next = 9;
                               break;
                             }
-
                             throw new Error(' @@@  No children to         parent2 ' + parent);
-
                           case 9:
                             kids.sort();
                             if (backwards) kids.reverse();
                             return _context4.abrupt("return", kids[0]);
-
                           case 12:
                           case "end":
                             return _context4.stop();
@@ -3746,45 +3182,36 @@ var DateFolder = /*#__PURE__*/function () {
                   }));
                   return _earliestSubfolder.apply(this, arguments);
                 };
-
                 earliestSubfolder = function _earliestSubfolder2(_x7) {
                   return _earliestSubfolder.apply(this, arguments);
                 };
-
                 // backwards -> last leafObject
                 folderStore = $rdf.graph();
                 folderFetcher = new $rdf.Fetcher(folderStore);
                 _context5.next = 6;
                 return earliestSubfolder(this.root.dir());
-
               case 6:
                 y = _context5.sent;
                 _context5.next = 9;
                 return earliestSubfolder(y);
-
               case 9:
                 month = _context5.sent;
                 _context5.next = 12;
                 return earliestSubfolder(month);
-
               case 12:
                 d = _context5.sent;
                 leafDocument = $rdf.sym(d.uri + 'chat.ttl');
                 _context5.next = 16;
                 return folderFetcher.load(leafDocument);
-
               case 16:
                 leafObjects = folderStore.each(this.root, this.membershipProperty, null, leafDocument);
-
                 if (!(leafObjects.length === 0)) {
                   _context5.next = 21;
                   break;
                 }
-
                 msg = '  INCONSISTENCY -- no chat leafObject in file ' + leafDocument;
                 debug.trace(msg);
                 throw new Error(msg);
-
               case 21:
                 sortMe = leafObjects.map(function (leafObject) {
                   return [folderStore.any(leafObject, ns.dct('created')), leafObject];
@@ -3793,7 +3220,6 @@ var DateFolder = /*#__PURE__*/function () {
                 if (backwards) sortMe.reverse();
                 debug.log((backwards ? 'Latest' : 'Earliest') + ' leafObject is ' + sortMe[0][1]);
                 return _context5.abrupt("return", sortMe[0][1]);
-
               case 26:
               case "end":
                 return _context5.stop();
@@ -3801,19 +3227,14 @@ var DateFolder = /*#__PURE__*/function () {
           }
         }, _callee5, this);
       }));
-
       function firstLeaf(_x6) {
         return _firstLeaf.apply(this, arguments);
       }
-
       return firstLeaf;
     }() // firstleafObject
-
   }]);
   return DateFolder;
 }(); // class
-
-
 exports.DateFolder = DateFolder;
 //# sourceMappingURL=dateFolder.js.map
 
@@ -3829,51 +3250,40 @@ exports.DateFolder = DateFolder;
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.desktopNotification = desktopNotification;
 exports.infiniteMessageArea = infiniteMessageArea;
 exports.insertMessageIntoTable = insertMessageIntoTable;
-
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
-
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
-
 var $rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
-
 var _iconBase = __webpack_require__(/*! ../iconBase */ "./lib/iconBase.js");
-
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
-
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
-
 var _chatLogic = __webpack_require__(/*! ./chatLogic */ "./lib/chat/chatLogic.js");
-
 var _message = __webpack_require__(/*! ./message */ "./lib/chat/message.js");
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 /**
  * Contains the [[infiniteMessageArea]] class
  * @packageDocumentation
  */
 // import { findBookmarkDocument } from './bookmarks'
 // pull in first avoid cross-refs
+
 // import * as style from '../style'
 // import * as utils from '../utils'
+
 // import * as pad from '../pad'
 // import { DateFolder } from './dateFolder'
+
 // const UI = { authn, icons, ns, media, pad, $rdf, store, style, utils, widgets }
+
 function desktopNotification(str) {
   // Let's check if the browser supports notifications
   if (!('Notification' in window)) {
@@ -3891,46 +3301,42 @@ function desktopNotification(str) {
         new Notification(str);
       }
     });
-  } // At last, if the user has denied notifications, and you
+  }
+  // At last, if the user has denied notifications, and you
   // want to be respectful there is no need to bother them any more.
-
 }
+
 /**
  * Renders a chat message inside a `messageTable`
  */
-
-
 function insertMessageIntoTable(channelObject, messageTable, message, fresh, options, userContext) {
-  var messageRow = (0, _message.renderMessageRow)(channelObject, message, fresh, options, userContext); // const message = messageRow.AJAR_subject
+  var messageRow = (0, _message.renderMessageRow)(channelObject, message, fresh, options, userContext);
 
+  // const message = messageRow.AJAR_subject
   if (options.selectedMessage && options.selectedMessage.sameTerm(message)) {
     messageRow.style.backgroundColor = 'yellow';
     options.selectedElement = messageRow;
     messageTable.selectedElement = messageRow;
   }
-
   var done = false;
-
   for (var ele = messageTable.firstChild;; ele = ele.nextSibling) {
     if (!ele) {
       // empty
       break;
     }
-
     var newestFirst = options.newestfirst === true;
     var dateString = messageRow.AJAR_date;
-
     if (dateString > ele.AJAR_date && newestFirst || dateString < ele.AJAR_date && !newestFirst) {
       messageTable.insertBefore(messageRow, ele);
       done = true;
       break;
     }
   }
-
   if (!done) {
     messageTable.appendChild(messageRow);
   }
 }
+
 /**
  * Common code for a chat (discussion area of messages about something)
  * This version runs over a series of files for different time periods
@@ -3953,16 +3359,12 @@ function insertMessageIntoTable(channelObject, messageTable, message, fresh, opt
  - inlineImageHeightEms: The height (in ems) of images expaned from their URIs in the chat.
 
  */
-
-
 function infiniteMessageArea(_x, _x2, _x3, _x4) {
   return _infiniteMessageArea.apply(this, arguments);
 }
-
 function _infiniteMessageArea() {
   _infiniteMessageArea = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee12(dom, wasStore, chatChannel, options) {
     var syncMessages, addMessage, insertPreviousMessages, _insertPreviousMessages, removePreviousMessages, createMessageTable, _createMessageTable, renderMessageTable, addNewChatDocumentIfNewDay, _addNewChatDocumentIfNewDay, appendCurrentMessages, _appendCurrentMessages, loadMoreWhereNeeded, _loadMoreWhereNeeded, loadInitialContent, _loadInitialContent, newestFirst, channelObject, dateFolder, div, statusArea, userContext, liveMessageTable, earliest, latest, lock;
-
     return _regenerator["default"].wrap(function _callee12$(_context12) {
       while (1) {
         switch (_context12.prev = _context12.next) {
@@ -3985,29 +3387,24 @@ function _infiniteMessageArea() {
                             }
                           }
                         };
-
                         yank = function _yank() {
                           selectedMessageTable.selectedElement.scrollIntoView({
                             block: 'center'
                           });
                         };
-
                         if (options.selectedMessage) {
                           selectedDocument = options.selectedMessage.doc();
                           now = new Date();
                           todayDocument = dateFolder.leafDocumentFromDate(now);
                           live = todayDocument.sameTerm(selectedDocument);
                         }
-
                         if (!(options.selectedMessage && !live)) {
                           _context11.next = 15;
                           break;
                         }
-
                         selectedDate = dateFolder.dateFromLeafDocument(selectedDocument);
                         _context11.next = 7;
                         return createMessageTable(selectedDate, live);
-
                       case 7:
                         selectedMessageTable = _context11.sent;
                         div.appendChild(selectedMessageTable);
@@ -4015,29 +3412,22 @@ function _infiniteMessageArea() {
                         latest.messageTable = selectedMessageTable;
                         yank();
                         setTimeout(yank, 1000); // @@ kludge - restore position distubed by other cHANGES
-
                         _context11.next = 19;
                         break;
-
                       case 15:
                         _context11.next = 17;
                         return appendCurrentMessages();
-
                       case 17:
                         earliest.messageTable = liveMessageTable;
                         latest.messageTable = liveMessageTable;
-
                       case 19:
                         _context11.next = 21;
                         return loadMoreWhereNeeded(null, fixScroll);
-
                       case 21:
                         div.addEventListener('scroll', loadMoreWhereNeeded);
-
                         if (options.solo) {
                           document.body.addEventListener('scroll', loadMoreWhereNeeded);
                         }
-
                       case 23:
                       case "end":
                         return _context11.stop();
@@ -4047,11 +3437,9 @@ function _infiniteMessageArea() {
               }));
               return _loadInitialContent.apply(this, arguments);
             };
-
             loadInitialContent = function _loadInitialContent2() {
               return _loadInitialContent.apply(this, arguments);
             };
-
             _loadMoreWhereNeeded = function _loadMoreWhereNeeded3() {
               _loadMoreWhereNeeded = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee10(event, fixScroll) {
                 var freeze, magicZone, done, scrollBottom, scrollTop;
@@ -4063,97 +3451,78 @@ function _infiniteMessageArea() {
                           _context10.next = 2;
                           break;
                         }
-
                         return _context10.abrupt("return");
-
                       case 2:
                         lock = true;
                         freeze = !fixScroll;
                         magicZone = 150; // const top = div.scrollTop
                         // const bottom = div.scrollHeight - top - div.clientHeight
-
                       case 5:
                         if (!(div.scrollTop < magicZone && earliest.messageTable && !earliest.messageTable.initial && earliest.messageTable.extendBackwards)) {
                           _context10.next = 21;
                           break;
                         }
-
                         if (!(div.scrollHeight === 0)) {
                           _context10.next = 10;
                           break;
                         }
-
                         // console.log('    chat/loadMoreWhereNeeded: trying later...')
                         setTimeout(loadMoreWhereNeeded, 2000); // couple be less
-
                         lock = false;
                         return _context10.abrupt("return");
-
                       case 10:
                         // console.log('    chat/loadMoreWhereNeeded: Going now')
                         scrollBottom = div.scrollHeight - div.scrollTop;
                         debug.log('infinite scroll: adding above: top ' + div.scrollTop);
                         _context10.next = 14;
                         return earliest.messageTable.extendBackwards();
-
                       case 14:
                         done = _context10.sent;
-
                         if (freeze) {
                           div.scrollTop = div.scrollHeight - scrollBottom;
                         }
-
                         if (fixScroll) fixScroll();
-
                         if (!done) {
                           _context10.next = 19;
                           break;
                         }
-
                         return _context10.abrupt("break", 21);
-
                       case 19:
                         _context10.next = 5;
                         break;
-
                       case 21:
-                        if (!(options.selectedMessage && // we started in the middle not at the bottom
-                        div.scrollHeight - div.scrollTop - div.clientHeight < magicZone && // we are scrolled right to the bottom
-                        latest.messageTable && !latest.messageTable["final"] && // there is more data to come
+                        if (!(options.selectedMessage &&
+                        // we started in the middle not at the bottom
+                        div.scrollHeight - div.scrollTop - div.clientHeight < magicZone &&
+                        // we are scrolled right to the bottom
+                        latest.messageTable && !latest.messageTable["final"] &&
+                        // there is more data to come
                         latest.messageTable.extendForwards)) {
                           _context10.next = 33;
                           break;
                         }
-
                         scrollTop = div.scrollTop;
                         debug.log('infinite scroll: adding below: bottom: ' + (div.scrollHeight - div.scrollTop - div.clientHeight));
                         _context10.next = 26;
                         return latest.messageTable.extendForwards();
-
                       case 26:
                         done = _context10.sent;
-
                         // then add more data on the bottom
                         if (freeze) {
                           div.scrollTop = scrollTop; // while adding below keep same things in view
                         }
 
                         if (fixScroll) fixScroll();
-
                         if (!done) {
                           _context10.next = 31;
                           break;
                         }
-
                         return _context10.abrupt("break", 33);
-
                       case 31:
                         _context10.next = 21;
                         break;
-
                       case 33:
                         lock = false;
-
                       case 34:
                       case "end":
                         return _context10.stop();
@@ -4163,11 +3532,9 @@ function _infiniteMessageArea() {
               }));
               return _loadMoreWhereNeeded.apply(this, arguments);
             };
-
             loadMoreWhereNeeded = function _loadMoreWhereNeeded2(_x10, _x11) {
               return _loadMoreWhereNeeded.apply(this, arguments);
             };
-
             _appendCurrentMessages = function _appendCurrentMessage2() {
               _appendCurrentMessages = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee9() {
                 var now, chatDocument, messageTable;
@@ -4177,10 +3544,8 @@ function _infiniteMessageArea() {
                       case 0:
                         now = new Date();
                         chatDocument = dateFolder.leafDocumentFromDate(now); /// ///////////////////////////////////////////////////////////
-
                         _context9.next = 4;
                         return createMessageTable(now, true);
-
                       case 4:
                         messageTable = _context9.sent;
                         div.appendChild(messageTable);
@@ -4191,12 +3556,9 @@ function _infiniteMessageArea() {
                                 case 0:
                                   _context8.next = 2;
                                   return addNewChatDocumentIfNewDay(new Date());
-
                                 case 2:
                                   syncMessages(chatChannel, messageTable); // @@ livemessagetable??
-
                                   desktopNotification(chatChannel);
-
                                 case 4:
                                 case "end":
                                   return _context8.stop();
@@ -4204,14 +3566,10 @@ function _infiniteMessageArea() {
                             }
                           }, _callee8);
                         })); // The short chat version the live update listening is done in the pane but we do it in the widget @@
-
                         _solidLogic.store.updater.addDownstreamChangeListener(chatDocument, div.refresh); // Live update
-
-
                         liveMessageTable = messageTable;
                         latest.messageTable = liveMessageTable;
                         return _context9.abrupt("return", messageTable);
-
                       case 11:
                       case "end":
                         return _context9.stop();
@@ -4221,11 +3579,9 @@ function _infiniteMessageArea() {
               }));
               return _appendCurrentMessages.apply(this, arguments);
             };
-
             appendCurrentMessages = function _appendCurrentMessage() {
               return _appendCurrentMessages.apply(this, arguments);
             };
-
             _addNewChatDocumentIfNewDay = function _addNewChatDocumentIf2() {
               _addNewChatDocumentIfNewDay = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7() {
                 var newChatDocument, oldChatDocument, sts;
@@ -4235,34 +3591,28 @@ function _infiniteMessageArea() {
                       case 0:
                         // @@ Remove listener from previous table as it is now static
                         newChatDocument = dateFolder.leafDocumentFromDate(new Date());
-
                         if (newChatDocument.sameTerm(latest.messageTable.chatDocument)) {
                           _context7.next = 7;
                           break;
                         }
-
                         // It is a new day
                         if (liveMessageTable.inputRow) {
                           liveMessageTable.removeChild(liveMessageTable.inputRow);
                           delete liveMessageTable.inputRow;
                         }
-
                         oldChatDocument = latest.messageTable.chatDocument;
                         _context7.next = 6;
                         return appendCurrentMessages();
-
                       case 6:
                         // Adding a link in the document will ping listeners to add the new block too
                         if (!_solidLogic.store.holds(oldChatDocument, ns.rdfs('seeAlso'), newChatDocument, oldChatDocument)) {
                           sts = [$rdf.st(oldChatDocument, ns.rdfs('seeAlso'), newChatDocument, oldChatDocument)];
-
                           try {
                             _solidLogic.store.updater.update([], sts);
                           } catch (err) {
                             alert('Unable to link old chat file to new one:' + err);
                           }
                         }
-
                       case 7:
                       case "end":
                         return _context7.stop();
@@ -4272,19 +3622,17 @@ function _infiniteMessageArea() {
               }));
               return _addNewChatDocumentIfNewDay.apply(this, arguments);
             };
-
             addNewChatDocumentIfNewDay = function _addNewChatDocumentIf() {
               return _addNewChatDocumentIfNewDay.apply(this, arguments);
             };
-
             renderMessageTable = function _renderMessageTable(date, live) {
               var scrollBackbutton;
-              var scrollForwardButton; /// /////////////////   Scroll down adding more above
+              var scrollForwardButton;
 
+              /// /////////////////   Scroll down adding more above
               function extendBackwards() {
                 return _extendBackwards.apply(this, arguments);
               }
-
               function _extendBackwards() {
                 _extendBackwards = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
                   var done;
@@ -4294,25 +3642,19 @@ function _infiniteMessageArea() {
                         case 0:
                           _context.next = 2;
                           return insertPreviousMessages(true);
-
                         case 2:
                           done = _context.sent;
-
                           if (done) {
                             if (scrollBackbutton) {
                               scrollBackbutton.firstChild.setAttribute('src', _iconBase.icons.iconBase + 'noun_T-Block_1114655_000000.svg'); // T
-
                               scrollBackbutton.disabled = true;
                             }
-
                             messageTable.initial = true;
                           } else {
                             messageTable.extendedBack = true;
                           }
-
                           setScrollBackbuttonIcon();
                           return _context.abrupt("return", done);
-
                         case 6:
                         case "end":
                           return _context.stop();
@@ -4322,26 +3664,20 @@ function _infiniteMessageArea() {
                 }));
                 return _extendBackwards.apply(this, arguments);
               }
-
               function setScrollBackbuttonIcon() {
                 if (!scrollBackbutton) {
                   return;
                 }
-
                 var sense = messageTable.extendedBack ? !newestFirst : newestFirst;
                 var scrollBackIcon = messageTable.initial ? 'noun_T-Block_1114655_000000.svg' : getScrollbackIcon(sense);
                 scrollBackbutton.firstChild.setAttribute('src', _iconBase.icons.iconBase + scrollBackIcon);
-
                 function getScrollbackIcon(sense) {
                   return sense ? 'noun_1369241.svg' : 'noun_1369237.svg';
                 }
               }
-
               function scrollBackbuttonHandler(_x8) {
                 return _scrollBackbuttonHandler.apply(this, arguments);
               } /// ////////////// Scroll up adding more below
-
-
               function _scrollBackbuttonHandler() {
                 _scrollBackbuttonHandler = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(_event) {
                   return _regenerator["default"].wrap(function _callee2$(_context2) {
@@ -4352,17 +3688,14 @@ function _infiniteMessageArea() {
                             _context2.next = 6;
                             break;
                           }
-
                           removePreviousMessages(true, messageTable);
                           messageTable.extendedBack = false;
                           setScrollBackbuttonIcon();
                           _context2.next = 8;
                           break;
-
                         case 6:
                           _context2.next = 8;
                           return extendBackwards();
-
                         case 8:
                         case "end":
                           return _context2.stop();
@@ -4372,11 +3705,9 @@ function _infiniteMessageArea() {
                 }));
                 return _scrollBackbuttonHandler.apply(this, arguments);
               }
-
               function extendForwards() {
                 return _extendForwards.apply(this, arguments);
               }
-
               function _extendForwards() {
                 _extendForwards = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3() {
                   var done;
@@ -4386,10 +3717,8 @@ function _infiniteMessageArea() {
                         case 0:
                           _context3.next = 2;
                           return insertPreviousMessages(false);
-
                         case 2:
                           done = _context3.sent;
-
                           if (done) {
                             scrollForwardButton.firstChild.setAttribute('src', _iconBase.icons.iconBase + 'noun_T-Block_1114655_000000.svg');
                             scrollForwardButton.disabled = true;
@@ -4397,10 +3726,8 @@ function _infiniteMessageArea() {
                           } else {
                             messageTable.extendedForwards = true;
                           }
-
                           setScrollForwardButtonIcon();
                           return _context3.abrupt("return", done);
-
                         case 6:
                         case "end":
                           return _context3.stop();
@@ -4410,22 +3737,17 @@ function _infiniteMessageArea() {
                 }));
                 return _extendForwards.apply(this, arguments);
               }
-
               function setScrollForwardButtonIcon() {
                 var sense = messageTable.extendedForwards ? !newestFirst : newestFirst; // noun_T-Block_1114657_000000.svg
-
                 var scrollForwardIcon = messageTable["final"] ? 'noun_T-Block_1114657_000000.svg' : getScrollForwardButtonIcon(sense);
                 scrollForwardButton.firstChild.setAttribute('src', _iconBase.icons.iconBase + scrollForwardIcon);
-
                 function getScrollForwardButtonIcon(sense) {
                   return !sense ? 'noun_1369241.svg' : 'noun_1369237.svg';
                 }
               }
-
               function scrollForwardButtonHandler(_x9) {
                 return _scrollForwardButtonHandler.apply(this, arguments);
               } /// ///////////////////////
-
               /*
               options = options || {}
               options.authorDateOnLeft = true
@@ -4436,8 +3758,6 @@ function _infiniteMessageArea() {
               const statusArea = div.appendChild(dom.createElement('div'))
               const userContext = { dom, statusArea, div: statusArea } // logged on state, pointers to user's stuff
               */
-
-
               function _scrollForwardButtonHandler() {
                 _scrollForwardButtonHandler = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(_event) {
                   return _regenerator["default"].wrap(function _callee4$(_context4) {
@@ -4448,21 +3768,17 @@ function _infiniteMessageArea() {
                             _context4.next = 6;
                             break;
                           }
-
                           removePreviousMessages(false, messageTable);
                           messageTable.extendedForwards = false;
                           setScrollForwardButtonIcon();
                           _context4.next = 9;
                           break;
-
                         case 6:
                           _context4.next = 8;
                           return extendForwards();
-
                         case 8:
                           // async
                           latest.messageTable.scrollIntoView(newestFirst);
-
                         case 9:
                         case "end":
                           return _context4.stop();
@@ -4472,10 +3788,8 @@ function _infiniteMessageArea() {
                 }));
                 return _scrollForwardButtonHandler.apply(this, arguments);
               }
-
               var messageTable = dom.createElement('table');
               messageTable.extendBackwards = extendBackwards; // Make function available to scroll stuff
-
               messageTable.extendForwards = extendForwards; // Make function available to scroll stuff
 
               messageTable.date = date;
@@ -4483,13 +3797,11 @@ function _infiniteMessageArea() {
               messageTable.chatDocument = chatDocument;
               messageTable.fresh = false;
               messageTable.setAttribute('style', 'width: 100%;'); // fill that div!
-
               if (live) {
                 messageTable["final"] = true;
                 liveMessageTable = messageTable;
                 latest.messageTable = messageTable;
                 var tr = (0, _message.renderMessageEditor)(channelObject, messageTable, userContext, options);
-
                 if (newestFirst) {
                   messageTable.insertBefore(tr, messageTable.firstChild); // If newestFirst
                 } else {
@@ -4497,18 +3809,17 @@ function _infiniteMessageArea() {
                 }
 
                 messageTable.inputRow = tr;
-              } /// ///// Infinite scroll
+              }
+
+              /// ///// Infinite scroll
               //
               // @@ listen for swipe past end event not just button
-
-
               if (options.infinite) {
                 var scrollBackbuttonTR = dom.createElement('tr');
-                var scrollBackbuttonCell = scrollBackbuttonTR.appendChild(dom.createElement('td')); // up traingles: noun_1369237.svg
+                var scrollBackbuttonCell = scrollBackbuttonTR.appendChild(dom.createElement('td'));
+                // up traingles: noun_1369237.svg
                 // down triangles: noun_1369241.svg
-
                 var scrollBackIcon = newestFirst ? 'noun_1369241.svg' : 'noun_1369237.svg'; // down and up arrows respoctively
-
                 scrollBackbutton = widgets.button(dom, _iconBase.icons.iconBase + scrollBackIcon, 'Previous messages ...');
                 scrollBackbuttonCell.style = 'width:3em; height:3em;';
                 scrollBackbutton.addEventListener('click', scrollBackbuttonHandler, false);
@@ -4518,11 +3829,10 @@ function _infiniteMessageArea() {
                 var dateCell = scrollBackbuttonTR.appendChild(dom.createElement('td'));
                 dateCell.style = 'text-align: center; vertical-align: middle; color: #888; font-style: italic;';
                 dateCell.textContent = widgets.shortDate(date.toISOString(), true); // no time, only date
-                // @@@@@@@@@@@ todo move this button to other end of  message cell, o
 
+                // @@@@@@@@@@@ todo move this button to other end of  message cell, o
                 var scrollForwardButtonCell = scrollBackbuttonTR.appendChild(dom.createElement('td'));
                 var scrollForwardIcon = newestFirst ? 'noun_1369241.svg' : 'noun_1369237.svg'; // down and up arrows respoctively
-
                 scrollForwardButton = widgets.button(dom, _iconBase.icons.iconBase + scrollForwardIcon, 'Later messages ...');
                 scrollForwardButtonCell.appendChild(scrollForwardButton);
                 scrollForwardButtonCell.style = 'width:3em; height:3em;';
@@ -4530,7 +3840,6 @@ function _infiniteMessageArea() {
                 messageTable.extendedForward = false;
                 setScrollForwardButtonIcon();
                 messageTable.extendedForwards = false;
-
                 if (!newestFirst) {
                   // opposite end from the entry field
                   messageTable.insertBefore(scrollBackbuttonTR, messageTable.firstChild); // If not newestFirst
@@ -4540,21 +3849,20 @@ function _infiniteMessageArea() {
               }
 
               var sts = _solidLogic.store.statementsMatching(null, ns.wf('message'), null, chatDocument);
-
-              if (!live && sts.length === 0) {// not todays
+              if (!live && sts.length === 0) {
+                // not todays
                 // no need buttomns at the moment
                 // messageTable.style.visibility = 'collapse' // Hide files with no messages
               }
-
               sts.forEach(function (st) {
                 addMessage(st.object, messageTable);
               });
-              messageTable.fresh = true; // loadMessageTable(messageTable, chatDocument)
+              messageTable.fresh = true;
 
+              // loadMessageTable(messageTable, chatDocument)
               messageTable.fresh = false;
               return messageTable;
             };
-
             _createMessageTable = function _createMessageTable3() {
               _createMessageTable = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(date, live) {
                 var chatDocument, messageTable, statusTR;
@@ -4567,35 +3875,27 @@ function _infiniteMessageArea() {
                         _context6.prev = 2;
                         _context6.next = 5;
                         return _solidLogic.store.fetcher.load(chatDocument);
-
                       case 5:
                         _context6.next = 19;
                         break;
-
                       case 7:
                         _context6.prev = 7;
                         _context6.t0 = _context6["catch"](2);
                         messageTable = dom.createElement('table');
                         statusTR = messageTable.appendChild(dom.createElement('tr')); // ### find status in exception
-
                         if (!(_context6.t0.response && _context6.t0.response.status && _context6.t0.response.status === 404)) {
                           _context6.next = 16;
                           break;
                         }
-
                         debug.log('Error 404 for chat file ' + chatDocument);
                         return _context6.abrupt("return", renderMessageTable(date, live));
-
                       case 16:
                         debug.log('*** Error NON 404 for chat file ' + chatDocument);
                         statusTR.appendChild(widgets.errorMessageBlock(dom, _context6.t0, 'pink'));
-
                       case 18:
                         return _context6.abrupt("return", statusTR);
-
                       case 19:
                         return _context6.abrupt("return", renderMessageTable(date, live));
-
                       case 20:
                       case "end":
                         return _context6.stop();
@@ -4605,11 +3905,9 @@ function _infiniteMessageArea() {
               }));
               return _createMessageTable.apply(this, arguments);
             };
-
             createMessageTable = function _createMessageTable2(_x6, _x7) {
               return _createMessageTable.apply(this, arguments);
             };
-
             removePreviousMessages = function _removePreviousMessag(backwards, messageTable) {
               if (backwards ? newestFirst : !newestFirst) {
                 // it was put on bottom
@@ -4622,11 +3920,9 @@ function _infiniteMessageArea() {
                   div.removeChild(messageTable.previousSibling);
                 }
               }
-
               var extr = backwards ? earliest : latest;
               extr.messageTable = messageTable;
             };
-
             _insertPreviousMessages = function _insertPreviousMessag2() {
               _insertPreviousMessages = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(backwards) {
                 var extremity, date, live, todayDoc, doc, newMessageTable;
@@ -4636,48 +3932,37 @@ function _infiniteMessageArea() {
                       case 0:
                         extremity = backwards ? earliest : latest;
                         date = extremity.messageTable.date; // day in mssecs
-
                         _context5.next = 4;
                         return dateFolder.loadPrevious(date, backwards);
-
                       case 4:
                         date = _context5.sent;
                         // backwards
                         debug.log("insertPreviousMessages: from ".concat(backwards ? 'backwards' : 'forwards', " loadPrevious: ").concat(date));
-
                         if (!(!date && !backwards && !liveMessageTable)) {
                           _context5.next = 9;
                           break;
                         }
-
                         _context5.next = 9;
                         return appendCurrentMessages();
-
                       case 9:
                         if (date) {
                           _context5.next = 11;
                           break;
                         }
-
                         return _context5.abrupt("return", true);
-
                       case 11:
                         // done
                         live = false;
-
                         if (!backwards) {
                           todayDoc = dateFolder.leafDocumentFromDate(new Date());
                           doc = dateFolder.leafDocumentFromDate(date);
                           live = doc.sameTerm(todayDoc); // Is this todays?
                         }
-
                         _context5.next = 15;
                         return createMessageTable(date, live);
-
                       case 15:
                         newMessageTable = _context5.sent;
                         extremity.messageTable = newMessageTable; // move pointer to earliest
-
                         if (backwards ? newestFirst : !newestFirst) {
                           // put on bottom or top
                           div.appendChild(newMessageTable);
@@ -4685,9 +3970,7 @@ function _infiniteMessageArea() {
                           // put on top as we scroll back
                           div.insertBefore(newMessageTable, div.firstChild);
                         }
-
                         return _context5.abrupt("return", live);
-
                       case 19:
                       case "end":
                         return _context5.stop();
@@ -4697,54 +3980,45 @@ function _infiniteMessageArea() {
               }));
               return _insertPreviousMessages.apply(this, arguments);
             };
-
             insertPreviousMessages = function _insertPreviousMessag(_x5) {
               return _insertPreviousMessages.apply(this, arguments);
             };
-
             addMessage = function _addMessage(message, messageTable) {
-              var latest = (0, _chatLogic.mostRecentVersion)(message); // const content = store.any(latest, ns.sioc('content'))
-
+              var latest = (0, _chatLogic.mostRecentVersion)(message);
+              // const content = store.any(latest, ns.sioc('content'))
               if ((0, _chatLogic.isDeleted)(latest) && !options.showDeletedMessages) {
                 return; // ignore deleted messaged -- @@ could also leave a placeholder
               }
 
               insertMessageIntoTable(channelObject, messageTable, message, messageTable.fresh, options, userContext); // fresh from elsewhere
             };
-
             syncMessages = function _syncMessages(about, messageTable) {
               var displayed = {};
               var ele, ele2;
-
               for (ele = messageTable.firstChild; ele; ele = ele.nextSibling) {
                 if (ele.AJAR_subject) {
                   displayed[ele.AJAR_subject.uri] = true;
                 }
               }
-
               var messages = _solidLogic.store.statementsMatching(about, ns.wf('message'), null, messageTable.chatDocument).map(function (st) {
                 return st.object;
               });
-
               var stored = {};
               messages.forEach(function (m) {
                 stored[m.uri] = true;
-
                 if (!displayed[m.uri]) {
                   addMessage(m, messageTable);
                 }
-              }); // eslint-disable-next-line space-in-parens
+              });
 
+              // eslint-disable-next-line space-in-parens
               for (ele = messageTable.firstChild; ele;) {
                 ele2 = ele.nextSibling;
-
                 if (ele.AJAR_subject && !stored[ele.AJAR_subject.uri]) {
                   messageTable.removeChild(ele);
                 }
-
                 ele = ele2;
               }
-
               for (ele = messageTable.firstChild; ele; ele = ele.nextSibling) {
                 if (ele.AJAR_subject) {
                   // Refresh thumbs up etc
@@ -4754,11 +4028,10 @@ function _infiniteMessageArea() {
             };
 
             // Body of main function
+
             options = options || {};
             options.authorDateOnLeft = false; // @@ make a user optiosn
-
             newestFirst = options.newestFirst === '1' || options.newestFirst === true; // hack for now
-
             channelObject = new _chatLogic.ChatChannel(chatChannel, options);
             dateFolder = channelObject.dateFolder;
             div = dom.createElement('div');
@@ -4770,21 +4043,17 @@ function _infiniteMessageArea() {
               div: statusArea
             }; // logged on state, pointers to user's stuff
             // const messageTable = dom.createElement('table') // @@ check does this go in renderMessageTable
-
             earliest = {
               messageTable: null
             }; // Stuff about each end of the loaded days
-
             latest = {
               messageTable: null
             };
             lock = false;
             _context12.next = 30;
             return loadInitialContent();
-
           case 30:
             return _context12.abrupt("return", div);
-
           case 31:
           case "end":
             return _context12.stop();
@@ -4808,9 +4077,7 @@ function _infiniteMessageArea() {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
@@ -4820,66 +4087,42 @@ exports.elementForImageURI = elementForImageURI;
 exports.renderMessageEditor = renderMessageEditor;
 exports.renderMessageRow = renderMessageRow;
 exports.switchToEditor = switchToEditor;
-
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
-
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
-
 var _infinite = __webpack_require__(/*! ./infinite */ "./lib/chat/infinite.js");
-
 var _messageTools = __webpack_require__(/*! ./messageTools */ "./lib/chat/messageTools.js");
-
 var _bookmarks = __webpack_require__(/*! ./bookmarks */ "./lib/chat/bookmarks.js");
-
 var _chatLogic = __webpack_require__(/*! ./chatLogic */ "./lib/chat/chatLogic.js");
-
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
-
 var _iconBase = __webpack_require__(/*! ../iconBase */ "./lib/iconBase.js");
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 var _login = __webpack_require__(/*! ../login/login */ "./lib/login/login.js");
-
 var _index = __webpack_require__(/*! ../media/index */ "./lib/media/index.js");
-
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
-
 var pad = _interopRequireWildcard(__webpack_require__(/*! ../pad */ "./lib/pad.js"));
-
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
-
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
-
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 var dom = window.document;
 var messageBodyStyle = style.messageBodyStyle;
 var label = utils.label;
+
 /**
  * HTML component for an image
  */
-
 function elementForImageURI(imageUri, options) {
   var img = dom.createElement('img');
   var height = '10';
-
   if (options.inlineImageHeightEms) {
     height = ('' + options.inlineImageHeightEms).trim();
   }
-
-  img.setAttribute('style', 'max-height: ' + height + 'em; border-radius: 1em; margin: 0.7em;'); // widgets.makeDropTarget(img, handleURIsDroppedOnMugshot, droppedFileHandler)
-
+  img.setAttribute('style', 'max-height: ' + height + 'em; border-radius: 1em; margin: 0.7em;');
+  // widgets.makeDropTarget(img, handleURIsDroppedOnMugshot, droppedFileHandler)
   if (imageUri) img.setAttribute('src', imageUri);
   var anchor = dom.createElement('a');
   anchor.setAttribute('href', imageUri);
@@ -4888,11 +4131,9 @@ function elementForImageURI(imageUri, options) {
   widgets.makeDraggable(img, $rdf.sym(imageUri));
   return anchor;
 }
-
 var anchor = function anchor(text, term) {
   // If there is no link return an element anyway
   var a = dom.createElement('a');
-
   if (term && term.uri) {
     a.setAttribute('href', term.uri);
     a.addEventListener('click', widgets.openHrefInOutlineMode, true);
@@ -4902,79 +4143,62 @@ var anchor = function anchor(text, term) {
   a.textContent = text;
   return a;
 };
-
 function nick(person) {
   var s = _solidLogic.store.any(person, ns.foaf('nick'));
-
   if (s) return '' + s.value;
   return '' + label(person);
 }
+
 /**
  * Displays creator and date for a chat message
  * inside the `td1` element
  */
-
-
 function creatorAndDate(td1, creator, date, message) {
   var nickAnchor = td1.appendChild(anchor(nick(creator), creator));
-
   if (creator.uri) {
     _solidLogic.store.fetcher.nowOrWhenFetched(creator.doc(), undefined, function (_ok, _body) {
       nickAnchor.textContent = nick(creator);
     });
   }
-
   td1.appendChild(dom.createElement('br'));
   td1.appendChild(anchor(date, message));
 }
+
 /**
  * Horizontally displays creator and date for a chat message
  * inside the `td1` element
  */
-
-
 function creatorAndDateHorizontal(td1, creator, date, message) {
   var nickAnchor = td1.appendChild(anchor(label(creator), creator));
-
   if (creator.uri) {
     _solidLogic.store.fetcher.nowOrWhenFetched(creator.doc(), undefined, function (_ok, _body) {
       nickAnchor.textContent = nick(creator);
     });
   }
-
   var dateBit = td1.appendChild(anchor(date, message));
   dateBit.style.fontSize = '80%';
   dateBit.style.marginLeft = '1em';
   td1.appendChild(dom.createElement('br'));
 }
+
 /**
  * Renders a chat message, read-only mode
  */
-
-
 function renderMessageRow(channelObject, message, fresh, options, userContext) {
   var colorizeByAuthor = options.colorizeByAuthor === '1' || options.colorizeByAuthor === true;
-
   var creator = _solidLogic.store.any(message, ns.foaf('maker'));
-
   var date = _solidLogic.store.any(message, ns.dct('created'));
-
   var latestVersion = (0, _chatLogic.mostRecentVersion)(message);
-
   var content = _solidLogic.store.any(latestVersion, ns.sioc('content'));
-
   var originalMessage = (0, _chatLogic.originalVersion)(message);
   var edited = !message.sameTerm(originalMessage);
-
   var sortDate = _solidLogic.store.the(originalMessage, ns.dct('created'), null, originalMessage.doc()); // In message
-
 
   var messageRow = dom.createElement('tr');
   messageRow.AJAR_date = sortDate.value;
   messageRow.AJAR_subject = message;
   var td1 = dom.createElement('td');
   messageRow.appendChild(td1);
-
   if (!options.authorDateOnLeft) {
     var img = dom.createElement('img');
     img.setAttribute('style', 'max-height: 2.5em; max-width: 2.5em; border-radius: 0.5em; margin: auto;');
@@ -4983,31 +4207,25 @@ function renderMessageRow(channelObject, message, fresh, options, userContext) {
   } else {
     creatorAndDate(td1, creator, widgets.shortDate(sortDate.value), message);
   }
-
   var bothDates = widgets.shortDate(sortDate.value);
-
   if (edited) {
     bothDates += ' ... ' + widgets.shortDate(date.value);
-  } // Render the content ot the message itself
-
-
-  var td2 = messageRow.appendChild(dom.createElement('td'));
-
-  if (!options.authorDateOnLeft) {
-    creatorAndDateHorizontal(td2, creator, bothDates, // widgets.shortDate(dateString)
-    message);
   }
 
+  // Render the content ot the message itself
+  var td2 = messageRow.appendChild(dom.createElement('td'));
+  if (!options.authorDateOnLeft) {
+    creatorAndDateHorizontal(td2, creator, bothDates,
+    // widgets.shortDate(dateString)
+    message);
+  }
   var text = content.value.trim();
   var isURI = /^https?:\/[^ <>]*$/i.test(text);
   var para = null;
-
   if (isURI) {
     var isImage = /\.(gif|jpg|jpeg|tiff|png|svg)$/i.test(text); // @@ Should use content-type not URI
-
     if (isImage && options.expandImagesInline) {
       var _img = elementForImageURI(text, options);
-
       td2.appendChild(_img);
     } else {
       // Link but not Image
@@ -5023,25 +4241,22 @@ function renderMessageRow(channelObject, message, fresh, options, userContext) {
     td2.appendChild(para);
     para.textContent = text;
   }
-
   if (para) {
     var bgcolor = colorizeByAuthor ? pad.lightColorHash(creator) : getBgColor(fresh);
     para.setAttribute('style', messageBodyStyle + 'background-color: ' + bgcolor + ';');
   }
-
   function getBgColor(fresh) {
     return fresh ? '#e8ffe8' : 'white';
-  } // Sentiment strip
+  }
 
-
+  // Sentiment strip
   var strip = (0, _messageTools.sentimentStripLinked)(message, message.doc());
-
   if (strip.children.length) {
     td2.appendChild(dom.createElement('br'));
     td2.appendChild(strip);
-  } // Message tool bar button
+  }
 
-
+  // Message tool bar button
   var td3 = dom.createElement('td');
   messageRow.appendChild(td3);
   var toolsButton = widgets.button(dom, _iconBase.icons.iconBase + 'noun_243787.svg', '...');
@@ -5053,28 +4268,22 @@ function renderMessageRow(channelObject, message, fresh, options, userContext) {
       delete messageRow.toolTR;
       return;
     }
-
     var toolsTR = dom.createElement('tr');
     var tools = (0, _messageTools.messageToolbar)(message, messageRow, userContext, channelObject);
     tools.style = 'border: 0.05em solid #888; border-radius: 0 0 0.7em 0.7em;  border-top: 0; height:3.5em; background-color: #fff;'; // @@ fix
-
     if (messageRow.nextSibling) {
       messageRow.parentElement.insertBefore(toolsTR, messageRow.nextSibling);
     } else {
       messageRow.parentElement.appendChild(toolsTR);
     }
-
     messageRow.toolTR = toolsTR;
     toolsTR.appendChild(dom.createElement('td')); // left
-
     var toolsTD = toolsTR.appendChild(dom.createElement('td'));
     toolsTR.appendChild(dom.createElement('td')); // right
-
     toolsTD.appendChild(tools);
   });
   return messageRow;
 }
-
 function switchToEditor(messageRow, message, channelObject, userContext) {
   var messageTable = messageRow.parentNode;
   var editRow = renderMessageEditor(channelObject, messageTable, userContext, channelObject.options, (0, _chatLogic.mostRecentVersion)(message));
@@ -5085,19 +4294,14 @@ function switchToEditor(messageRow, message, channelObject, userContext) {
 /*       Control for a new message -- or editing an old message ***************
  *
  */
-
-
 function renderMessageEditor(channelObject, messageTable, userContext, options, originalMessage) {
   function revertEditing(messageEditor) {
     messageEditor.originalRow.style.visibility = 'visible'; // restore read-only version
-
     messageEditor.parentNode.removeChild(messageEditor);
   }
-
   function handleFieldInput(_x) {
     return _handleFieldInput.apply(this, arguments);
   }
-
   function _handleFieldInput() {
     _handleFieldInput = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(_event) {
       return _regenerator["default"].wrap(function _callee5$(_context6) {
@@ -5106,7 +4310,6 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
             case 0:
               _context6.next = 2;
               return sendMessage(field.value, true);
-
             case 2:
             case "end":
               return _context6.stop();
@@ -5116,13 +4319,10 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
     }));
     return _handleFieldInput.apply(this, arguments);
   }
-
   function sendMessage(_x2, _x3) {
     return _sendMessage.apply(this, arguments);
   } // sendMessage
   //    DRAG AND DROP
-
-
   function _sendMessage() {
     _sendMessage = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(text, fromMainField) {
       var sendComplete, message, statusArea;
@@ -5137,8 +4337,8 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
 
                 if (originalMessage) {
                   // editing another message
-                  var oldRow = messageEditor.originalRow; // oldRow.style.display = '' // restore read-only version, re-attack
-
+                  var oldRow = messageEditor.originalRow;
+                  // oldRow.style.display = '' // restore read-only version, re-attack
                   if (oldRow.parentNode) {
                     oldRow.parentNode.removeChild(oldRow); // No longer needed old version
                   } else {
@@ -5151,45 +4351,36 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
                 } else {
                   if (fromMainField) {
                     field.value = ''; // clear from out for reuse
-
                     field.setAttribute('style', messageBodyStyle);
                     field.disabled = false;
                     field.scrollIntoView(options.newestFirst); // allign bottom (top)
-
                     field.focus(); // Start typing next line immediately
-
                     field.select();
                   }
-                } // await channelObject.div.refresh() // Add new day if nec  @@ add back
-
+                }
+                // await channelObject.div.refresh() // Add new day if nec  @@ add back
               };
 
               // const me = authn.currentUser() // Must be logged on or wuld have got login button
               if (fromMainField) {
                 field.setAttribute('style', messageBodyStyle + 'color: #bbb;'); // pendingedit
-
                 field.disabled = true;
               }
-
               _context7.prev = 2;
               _context7.next = 5;
               return channelObject.updateMessage(text, originalMessage);
-
             case 5:
               message = _context7.sent;
               _context7.next = 13;
               break;
-
             case 8:
               _context7.prev = 8;
               _context7.t0 = _context7["catch"](2);
               statusArea = userContext.statusArea || messageEditor;
               statusArea.appendChild(widgets.errorMessageBlock(dom, 'Error writing message: ' + _context7.t0));
               return _context7.abrupt("return");
-
             case 13:
               sendComplete(message, text);
-
             case 14:
             case "end":
               return _context7.stop();
@@ -5199,7 +4390,6 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
     }));
     return _sendMessage.apply(this, arguments);
   }
-
   function droppedFileHandler(files) {
     var base = messageTable.chatDocument.dir().uri;
     widgets.uploadFiles(_solidLogic.store.fetcher, files, base + 'Files', base + 'Pictures', /*#__PURE__*/function () {
@@ -5210,7 +4400,6 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
               case 0:
                 _context2.next = 2;
                 return sendMessage(destURI);
-
               case 2:
               case "end":
                 return _context2.stop();
@@ -5218,58 +4407,45 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
           }
         }, _callee);
       }));
-
       return function (_x4, _x5) {
         return _ref.apply(this, arguments);
       };
     }());
-  } // When a set of URIs are dropped on the field
+  }
 
-
+  // When a set of URIs are dropped on the field
   var droppedURIHandler = /*#__PURE__*/function () {
     var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(uris) {
       var _iterator, _step, uri;
-
       return _regenerator["default"].wrap(function _callee2$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
               _iterator = _createForOfIteratorHelper(uris);
               _context3.prev = 1;
-
               _iterator.s();
-
             case 3:
               if ((_step = _iterator.n()).done) {
                 _context3.next = 9;
                 break;
               }
-
               uri = _step.value;
               _context3.next = 7;
               return sendMessage(uri);
-
             case 7:
               _context3.next = 3;
               break;
-
             case 9:
               _context3.next = 14;
               break;
-
             case 11:
               _context3.prev = 11;
               _context3.t0 = _context3["catch"](1);
-
               _iterator.e(_context3.t0);
-
             case 14:
               _context3.prev = 14;
-
               _iterator.f();
-
               return _context3.finish(14);
-
             case 17:
             case "end":
               return _context3.stop();
@@ -5277,24 +4453,20 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
         }
       }, _callee2, null, [[1, 11, 14, 17]]);
     }));
-
     return function droppedURIHandler(_x6) {
       return _ref2.apply(this, arguments);
     };
-  }(); // When we are actually logged on
+  }();
 
-
+  // When we are actually logged on
   function turnOnInput() {
     function getImageDoc() {
       imageDoc = $rdf.sym(chatDocument.dir().uri + 'Image_' + Date.now() + '.png');
       return imageDoc;
     }
-
     function tookPicture(_x7) {
       return _tookPicture.apply(this, arguments);
     } // Body of turnOnInput
-
-
     function _tookPicture() {
       _tookPicture = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(imageDoc) {
         return _regenerator["default"].wrap(function _callee4$(_context5) {
@@ -5305,10 +4477,8 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
                   _context5.next = 3;
                   break;
                 }
-
                 _context5.next = 3;
                 return sendMessage(imageDoc.uri);
-
               case 3:
               case "end":
                 return _context5.stop();
@@ -5318,21 +4488,15 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
       }));
       return _tookPicture.apply(this, arguments);
     }
-
     var menuButton;
-
     if (options.menuHandler) {
       var _menuButton = widgets.button(dom, _iconBase.icons.iconBase + 'noun_243787.svg', 'More');
-
-      _menuButton.setAttribute('style', style.buttonStyle + 'float: right;'); // menuButton.addEventListener('click', _event => sendMessage(), false) (done in turnoninput)
-
-
+      _menuButton.setAttribute('style', style.buttonStyle + 'float: right;');
+      // menuButton.addEventListener('click', _event => sendMessage(), false) (done in turnoninput)
       rhs.appendChild(_menuButton);
     }
-
     if (options.menuHandler && menuButton) {
       var _me = _solidLogic.authn.currentUser();
-
       var menuOptions = {
         me: _me,
         dom: dom,
@@ -5344,22 +4508,19 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
         options.menuHandler(event, channelObject.chatChannel, menuOptions);
       }, false);
     }
-
     var me = _solidLogic.authn.currentUser(); // If already logged on
-
-
     creatorAndDate(lhs, me, '', null);
     field = dom.createElement('textarea');
     middle.innerHTML = '';
     middle.appendChild(field);
     field.rows = 3;
-
     if (originalMessage) {
       field.value = _solidLogic.store.anyValue(originalMessage, ns.sioc('content'), null, originalMessage.doc());
-    } // field.cols = 40
+    }
+    // field.cols = 40
+    field.setAttribute('style', messageBodyStyle + 'background-color: #eef;');
 
-
-    field.setAttribute('style', messageBodyStyle + 'background-color: #eef;'); // Trap the Enter BEFORE it is used ti make a newline
+    // Trap the Enter BEFORE it is used ti make a newline
 
     field.addEventListener('keydown', /*#__PURE__*/function () {
       var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(e) {
@@ -5371,15 +4532,12 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
                   _context4.next = 4;
                   break;
                 }
-
                 if (!(!e.shiftKey && !options.shiftEnterSendsMessage || e.shiftKey && options.shiftEnterSendsMessage)) {
                   _context4.next = 4;
                   break;
                 }
-
                 _context4.next = 4;
                 return handleFieldInput(e);
-
               case 4:
               case "end":
                 return _context4.stop();
@@ -5387,7 +4545,6 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
           }
         }, _callee3);
       }));
-
       return function (_x8) {
         return _ref3.apply(this, arguments);
       };
@@ -5400,31 +4557,28 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
       return handleFieldInput();
     }, false);
     rhs.appendChild(sendButton);
-
     if (originalMessage) {
       // Are we editing another message?
       var cancelButton = rhs.appendChild(widgets.cancelButton(dom));
-      cancelButton.style["float"] = 'left'; // cancelButton.firstChild.style.opacity = '0.3' // moved to buttons
-
+      cancelButton.style["float"] = 'left';
+      // cancelButton.firstChild.style.opacity = '0.3' // moved to buttons
       cancelButton.addEventListener('click', function (_event) {
         return revertEditing(messageEditor);
       }, false);
       rhs.appendChild(cancelButton);
     }
-
     var chatDocument = channelObject.dateFolder.leafDocumentFromDate(new Date());
     var imageDoc;
     middle.appendChild(_index.media.cameraButton(dom, _solidLogic.store, getImageDoc, tookPicture));
     pad.recordParticipation(channelObject.channel, channelObject.channel.doc()); // participation =
   } // turn on inpuut
+
   // Body of renderMessageEditor
 
-
   var sortDate, sendIcon;
-
   if (originalMessage) {
-    sortDate = _solidLogic.store.anyValue(originalMessage, ns.dct('created'), null, originalMessage.doc()); // text = store.anyValue(originalMessage, ns.sioc('content'), null, originalMessage.doc())
-
+    sortDate = _solidLogic.store.anyValue(originalMessage, ns.dct('created'), null, originalMessage.doc());
+    // text = store.anyValue(originalMessage, ns.sioc('content'), null, originalMessage.doc())
     sendIcon = _iconBase.icons.iconBase + 'noun_1180158.svg'; // Green check
     // cancelIcon = icons.iconBase + 'noun_1180156.svg' // Black cross
   } else {
@@ -5440,7 +4594,8 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
   messageEditor.appendChild(lhs);
   messageEditor.appendChild(middle);
   messageEditor.appendChild(rhs);
-  messageEditor.AJAR_date = sortDate; // messageEditor.appendChild(dom.createElement('br'))
+  messageEditor.AJAR_date = sortDate;
+  // messageEditor.appendChild(dom.createElement('br'))
 
   var field, sendButton;
   var context = {
@@ -5451,7 +4606,8 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
     // me = context.me
     turnOnInput();
     Object.assign(context, userContext);
-    (0, _bookmarks.findBookmarkDocument)(context).then(function (_context) {// console.log('Bookmark file: ' + context.bookmarkDocument)
+    (0, _bookmarks.findBookmarkDocument)(context).then(function (_context) {
+      // console.log('Bookmark file: ' + context.bookmarkDocument)
     });
   });
   return messageEditor;
@@ -5470,46 +4626,28 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.messageToolbar = messageToolbar;
 exports.sentimentStrip = sentimentStrip;
 exports.sentimentStripLinked = sentimentStripLinked;
-
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
-
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
-
 var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "./node_modules/@babel/runtime/helpers/slicedToArray.js"));
-
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
-
 var _iconBase = __webpack_require__(/*! ../iconBase */ "./lib/iconBase.js");
-
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
-
 var rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
-
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
-
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
-
 var _bookmarks = __webpack_require__(/*! ./bookmarks */ "./lib/chat/bookmarks.js");
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 var _chatLogic = __webpack_require__(/*! ./chatLogic */ "./lib/chat/chatLogic.js");
-
 var _message = __webpack_require__(/*! ./message */ "./lib/chat/message.js");
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 /**
  * Tools for doing things with a message
  * Let us be creative here.  Allow all sorts of things to
@@ -5519,35 +4657,37 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
  * If you made it originally: edit, delete, attach
  * @packageDocumentation
  */
+
 // import { media } from '../media/index'
+
 // import * as pad from '../pad'
 // pull in first avoid cross-refs
 // import * as style from '../style'
-var dom = window.document; // THE UNUSED ICONS are here as reminders for possible future functionality
+
+var dom = window.document;
+
+// THE UNUSED ICONS are here as reminders for possible future functionality
 // const BOOKMARK_ICON = 'noun_45961.svg'
 // const HEART_ICON = 'noun_130259.svg' -> Add this to my (private) favorites
 // const MENU_ICON = 'noun_897914.svg'
 // const PAPERCLIP_ICON = 'noun_25830.svg' -> add attachments to this message
 // const PIN_ICON = 'noun_562340.svg'  -> pin this message permanently in the chat UI
-
 var PENCIL_ICON = 'noun_253504.svg'; // edit a message
 // const SPANNER_ICON = 'noun_344563.svg' -> settings
-
 var THUMBS_UP_ICON = 'noun_1384132.svg';
 var THUMBS_DOWN_ICON = 'noun_1384135.svg';
 /**
  * Emoji in Unicode
  */
-
 var emoji = {};
 emoji[ns.schema('AgreeAction')] = '👍';
 emoji[ns.schema('DisagreeAction')] = '👎';
 emoji[ns.schema('EndorseAction')] = '⭐️';
 emoji[ns.schema('LikeAction')] = '❤️';
+
 /**
  * Create strip of sentiments expressed
  */
-
 function sentimentStrip(target, doc) {
   // alain seems not used
   var latest = (0, _chatLogic.mostRecentVersion)(target);
@@ -5567,11 +4707,8 @@ function sentimentStrip(target, doc) {
  * @param target {NamedNode} - The thing about which they are expressed
  * @param doc {NamedNode} - The document in which they are expressed
  */
-
-
 function sentimentStripLinked(target, doc) {
   var strip = dom.createElement('span');
-
   function refresh() {
     strip.innerHTML = '';
     var actions = (0, _chatLogic.mostRecentVersion)(target).uri !== ns.schema('dateDeleted').uri ? _solidLogic.store.each(null, ns.schema('target'), target, doc) : [];
@@ -5581,23 +4718,19 @@ function sentimentStripLinked(target, doc) {
     sentiments.sort();
     sentiments.forEach(function (ss) {
       var _ss = (0, _slicedToArray2["default"])(ss, 2),
-          theClass = _ss[0],
-          agent = _ss[1];
-
+        theClass = _ss[0],
+        agent = _ss[1];
       var res;
-
       if (agent) {
         res = dom.createElement('a');
         res.setAttribute('href', agent.uri);
       } else {
         res = dom.createTextNode('');
       }
-
       res.textContent = emoji[theClass] || '*';
       strip.appendChild(res);
     });
   }
-
   refresh();
   strip.refresh = refresh;
   return strip;
@@ -5605,13 +4738,10 @@ function sentimentStripLinked(target, doc) {
 /**
  * Creates a message toolbar component
  */
-
-
 function messageToolbar(message, messageRow, userContext, channelObject) {
   function deleteMessage() {
     return _deleteMessage.apply(this, arguments);
   }
-
   function _deleteMessage() {
     _deleteMessage = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2() {
       var author, msg, area;
@@ -5620,30 +4750,24 @@ function messageToolbar(message, messageRow, userContext, channelObject) {
           switch (_context2.prev = _context2.next) {
             case 0:
               author = _solidLogic.store.any(message, ns.foaf('maker'));
-
               if (me) {
                 _context2.next = 5;
                 break;
               }
-
               alert('You can\'t delete the message, you are not logged in.');
               _context2.next = 22;
               break;
-
             case 5:
               if (!me.sameTerm(author)) {
                 _context2.next = 21;
                 break;
               }
-
               _context2.prev = 6;
               _context2.next = 9;
               return channelObject.deleteMessage(message);
-
             case 9:
               _context2.next = 18;
               break;
-
             case 11:
               _context2.prev = 11;
               _context2.t0 = _context2["catch"](6);
@@ -5652,18 +4776,14 @@ function messageToolbar(message, messageRow, userContext, channelObject) {
               alert(msg);
               area = userContext.statusArea || messageRow.parentNode;
               area.appendChild(widgets.errorMessageBlock(dom, msg));
-
             case 18:
               messageRow.parentNode.removeChild(messageRow);
               _context2.next = 22;
               break;
-
             case 21:
               alert('You can\'t delete the message, you are not logged in as the author, ' + author);
-
             case 22:
               closeToolbar();
-
             case 23:
             case "end":
               return _context2.stop();
@@ -5673,12 +4793,9 @@ function messageToolbar(message, messageRow, userContext, channelObject) {
     }));
     return _deleteMessage.apply(this, arguments);
   }
-
   function editMessage(_x) {
     return _editMessage.apply(this, arguments);
   } // alain TODO allow chat owner to fully delete message + sentiments and replacing messages
-
-
   function _editMessage() {
     _editMessage = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(messageRow) {
       return _regenerator["default"].wrap(function _callee3$(_context3) {
@@ -5687,10 +4804,8 @@ function messageToolbar(message, messageRow, userContext, channelObject) {
             case 0:
               if (me.value === _solidLogic.store.any(message, ns.foaf('maker')).value) {
                 closeToolbar(); // edit is a one-off action
-
                 (0, _message.switchToEditor)(messageRow, message, channelObject, userContext);
               }
-
             case 1:
             case "end":
               return _context3.stop();
@@ -5700,20 +4815,15 @@ function messageToolbar(message, messageRow, userContext, channelObject) {
     }));
     return _editMessage.apply(this, arguments);
   }
-
-  var div = dom.createElement('div'); // is message deleted ?
-
+  var div = dom.createElement('div');
+  // is message deleted ?
   if ((0, _chatLogic.mostRecentVersion)(message).value === ns.schema('dateDeleted').value) return div;
-
   function closeToolbar() {
     div.parentElement.parentElement.removeChild(div.parentElement); // remive the TR
   }
-
   function deleteThingThen(_x2) {
     return _deleteThingThen.apply(this, arguments);
   } // Things only the original author can do
-
-
   function _deleteThingThen() {
     _deleteThingThen = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(x) {
       return _regenerator["default"].wrap(function _callee4$(_context4) {
@@ -5722,7 +4832,6 @@ function messageToolbar(message, messageRow, userContext, channelObject) {
             case 0:
               _context4.next = 2;
               return _solidLogic.store.updater.update(_solidLogic.store.connectedStatements(x), []);
-
             case 2:
             case "end":
               return _context4.stop();
@@ -5732,20 +4841,16 @@ function messageToolbar(message, messageRow, userContext, channelObject) {
     }));
     return _deleteThingThen.apply(this, arguments);
   }
-
   var me = _solidLogic.authn.currentUser(); // If already logged on
-
-
   if (me && _solidLogic.store.holds(message, ns.foaf('maker'), me)) {
     // button to delete the message
-    div.appendChild(widgets.deleteButtonWithCheck(dom, div, 'message', deleteMessage)); // button to edit the message
-
+    div.appendChild(widgets.deleteButtonWithCheck(dom, div, 'message', deleteMessage));
+    // button to edit the message
     div.appendChild(widgets.button(dom, _iconBase.icons.iconBase + PENCIL_ICON, 'edit', function () {
       return editMessage(messageRow);
     }));
   } // if mine
   // Things anyone can do if they have a bookmark list async
-
   /*
   var bookmarkButton = await bookmarks.renderBookmarksButton(userContext)
   if (bookmarkButton) {
@@ -5754,10 +4859,10 @@ function messageToolbar(message, messageRow, userContext, channelObject) {
   */
   // Things anyone can do if they have a bookmark list
 
-
   (0, _bookmarks.renderBookmarksButton)(userContext).then(function (bookmarkButton) {
     if (bookmarkButton) div.appendChild(bookmarkButton);
   });
+
   /**   Button to allow user to express a sentiment (like, endorse, etc) about a target
    *
    * @param context {Object} - Provide dom and me
@@ -5767,12 +4872,10 @@ function messageToolbar(message, messageRow, userContext, channelObject) {
    * @param doc - {NamedNode} - the Solid document iunto which the data should be written
    * @param mutuallyExclusive {Array<NamedNode>} - Any RDF classes of sentimentswhich are mutiually exclusive
    */
-
   function sentimentButton(context, target, icon, actionClass, doc, mutuallyExclusive) {
     function setColor() {
       button.style.backgroundColor = action ? 'yellow' : 'white';
     }
-
     var button = widgets.button(dom, icon, utils.label(actionClass), /*#__PURE__*/function () {
       var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(_event) {
         var insertMe, dirty, i, a;
@@ -5784,66 +4887,52 @@ function messageToolbar(message, messageRow, userContext, channelObject) {
                   _context.next = 7;
                   break;
                 }
-
                 _context.next = 3;
                 return deleteThingThen(action);
-
               case 3:
                 action = null;
                 setColor();
                 _context.next = 25;
                 break;
-
               case 7:
                 // no action
                 action = widgets.newThing(doc);
                 insertMe = [rdf.st(action, ns.schema('agent'), context.me, doc), rdf.st(action, ns.rdf('type'), actionClass, doc), rdf.st(action, ns.schema('target'), target, doc)];
                 _context.next = 11;
                 return _solidLogic.store.updater.update([], insertMe);
-
               case 11:
                 setColor();
-
                 if (!mutuallyExclusive) {
                   _context.next = 25;
                   break;
                 }
-
                 // Delete incompative sentiments
                 dirty = false;
                 i = 0;
-
               case 15:
                 if (!(i < mutuallyExclusive.length)) {
                   _context.next = 24;
                   break;
                 }
-
                 a = existingAction(mutuallyExclusive[i]);
-
                 if (!a) {
                   _context.next = 21;
                   break;
                 }
-
                 _context.next = 20;
                 return deleteThingThen(a);
-
               case 20:
                 // but how refresh? refreshTree the parent?
                 dirty = true;
-
               case 21:
                 i++;
                 _context.next = 15;
                 break;
-
               case 24:
                 if (dirty) {
                   // widgets.refreshTree(button.parentNode) // requires them all to be immediate siblings
                   widgets.refreshTree(messageRow); // requires them all to be immediate siblings
                 }
-
               case 25:
               case "end":
                 return _context.stop();
@@ -5851,36 +4940,30 @@ function messageToolbar(message, messageRow, userContext, channelObject) {
           }
         }, _callee);
       }));
-
       return function (_x3) {
         return _ref.apply(this, arguments);
       };
     }());
-
     function existingAction(actionClass) {
       var actions = _solidLogic.store.each(null, ns.schema('agent'), context.me, doc).filter(function (x) {
         return _solidLogic.store.holds(x, ns.rdf('type'), actionClass, doc);
       }).filter(function (x) {
         return _solidLogic.store.holds(x, ns.schema('target'), target, doc);
       });
-
       return actions.length ? actions[0] : null;
     }
-
     function refresh() {
       action = existingAction(actionClass);
       setColor();
     }
-
     var action;
     button.refresh = refresh; // If the file changes, refresh live
-
     refresh();
     return button;
-  } // THUMBS_UP_ICON
+  }
+
+  // THUMBS_UP_ICON
   // https://schema.org/AgreeAction
-
-
   me = _solidLogic.authn.currentUser(); // If already logged on
   // debug.log('Actions 3' + mostRecentVersion(message).value + ' ' + ns.schema('dateDeleted').value + ' ' + (mostRecentVersion(message).value !== ns.schema('dateDeleted').value))
 
@@ -5890,13 +4973,13 @@ function messageToolbar(message, messageRow, userContext, channelObject) {
       dom: dom,
       div: div
     };
-    div.appendChild(sentimentButton(context1, message, // @@ TODO use widgets.sentimentButton
-    _iconBase.icons.iconBase + THUMBS_UP_ICON, ns.schema('AgreeAction'), message.doc(), [ns.schema('DisagreeAction')])); // Thumbs down
-
+    div.appendChild(sentimentButton(context1, message,
+    // @@ TODO use widgets.sentimentButton
+    _iconBase.icons.iconBase + THUMBS_UP_ICON, ns.schema('AgreeAction'), message.doc(), [ns.schema('DisagreeAction')]));
+    // Thumbs down
     div.appendChild(sentimentButton(context1, message, _iconBase.icons.iconBase + THUMBS_DOWN_ICON, ns.schema('DisagreeAction'), message.doc(), [ns.schema('AgreeAction')]));
-  } // X button to remove the tool UI itself
-
-
+  }
+  // X button to remove the tool UI itself
   var cancelButton = div.appendChild(widgets.cancelButton(dom));
   cancelButton.style["float"] = 'right';
   cancelButton.firstChild.style.opacity = '0.3';
@@ -5917,34 +5000,25 @@ function messageToolbar(message, messageRow, userContext, channelObject) {
 
 
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.newThingUI = newThingUI;
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
-
 var _iconBase = __webpack_require__(/*! ../iconBase */ "./lib/iconBase.js");
-
 var _login = __webpack_require__(/*! ../login/login */ "./lib/login/login.js");
-
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
-
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
-
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 /*   create.js     UI to craete new objects in the solid-app-set world
  **
  */
+
 var kb = _solidLogic.solidLogicSingleton.store;
+
 /*  newThingUI -- return UI for user to select a new object, folder, etc
  **
  ** context must include:  dom, div,
@@ -5952,63 +5026,49 @@ var kb = _solidLogic.solidLogicSingleton.store;
  **                (suppresses asking for a full URI or workspace)
  **
  */
-
 function newThingUI(createContext, dataBrowserContext, thePanes) {
   var dom = createContext.dom;
   var div = createContext.div;
-
   if (createContext.me && !createContext.me.uri) {
     throw new Error('newThingUI:  Invalid userid: ' + createContext.me);
   }
-
   var iconStyle = 'padding: 0.7em; width: 2em; height: 2em;'; // was: 'padding: 1em; width: 3em; height: 3em;'
-
   var star = div.appendChild(dom.createElement('img'));
   var visible = false; // the inividual tools tools
   //   noun_272948.svg = black star
   // noun_34653_green.svg = green plus
-
   star.setAttribute('src', _iconBase.icons.iconBase + 'noun_34653_green.svg');
   star.setAttribute('style', iconStyle);
   star.setAttribute('title', 'Add another tool');
-
   var complain = function complain(message) {
     var pre = div.appendChild(dom.createElement('pre'));
     pre.setAttribute('style', 'background-color: pink');
     pre.appendChild(dom.createTextNode(message));
   };
-
   function styleTheIcons(style) {
     for (var i = 0; i < iconArray.length; i++) {
       var st = iconStyle + style;
-
       if (iconArray[i].disabled) {
         // @@ unused
         st += 'opacity: 0.3;';
       }
-
       iconArray[i].setAttribute('style', st); // eg 'background-color: #ccc;'
     }
   }
 
   function selectTool(icon) {
     styleTheIcons('display: none;'); // 'background-color: #ccc;'
-
     icon.setAttribute('style', iconStyle + 'background-color: yellow;');
   }
-
   function selectNewTool(_event) {
     visible = !visible;
     star.setAttribute('style', iconStyle + (visible ? 'background-color: yellow;' : ''));
     styleTheIcons(visible ? '' : 'display: none;');
   }
-
   star.addEventListener('click', selectNewTool);
-
   function makeNewAppInstance(options) {
     return new Promise(function (resolve, reject) {
       var selectUI; // , selectUIParent
-
       function callbackWS(ws, newBase) {
         (0, _login.ensureLoadedProfile)(createContext).then(function (_context) {
           var newPaneOptions = Object.assign({
@@ -6016,42 +5076,38 @@ function newThingUI(createContext, dataBrowserContext, thePanes) {
             folder: options.folder || undefined,
             workspace: ws
           }, options);
-
           for (var opt in options) {
             // get div, dom, me, folder, pane, refreshTable
             newPaneOptions[opt] = options[opt];
           }
-
           debug.log("newThingUI: Minting new ".concat(newPaneOptions.pane.name, " at ").concat(newPaneOptions.newBase));
           options.pane.mintNew(dataBrowserContext, newPaneOptions).then(function (newPaneOptions) {
             if (!newPaneOptions || !newPaneOptions.newInstance) {
               throw new Error('Cannot mint new - missing newInstance');
             }
-
             if (newPaneOptions.folder) {
               var tail = newPaneOptions.newInstance.uri.slice(newPaneOptions.folder.uri.length);
               var isPackage = tail.includes('/');
               debug.log('  new thing is packge? ' + isPackage);
-
               if (isPackage) {
                 kb.add(newPaneOptions.folder, ns.ldp('contains'), kb.sym(newPaneOptions.newBase), newPaneOptions.folder.doc());
               } else {
                 // single file
                 kb.add(newPaneOptions.folder, ns.ldp('contains'), newPaneOptions.newInstance, newPaneOptions.folder.doc()); // Ping the patch system?
-              } // @ts-ignore @@ TODO check whether refresh can exist here. Either fix type or remove unreachable code
-
-
+              }
+              // @ts-ignore @@ TODO check whether refresh can exist here. Either fix type or remove unreachable code
               if (newPaneOptions.refreshTarget && newPaneOptions.refreshTarget.refresh) {
                 // @@ TODO Remove the need to cast as any
                 ;
                 newPaneOptions.refreshTarget.refresh(); // Refresh the containing display
-              } // selectUI.parentNode.removeChild(selectUI) It removes itself
-
+              }
+              // selectUI.parentNode.removeChild(selectUI) It removes itself
             } else {
               var p = options.div.appendChild(dom.createElement('p'));
-              p.setAttribute('style', 'font-size: 120%;'); // Make link to new thing
-
-              p.innerHTML = "Your <a target='_blank' href='" + newPaneOptions.newInstance.uri + "'><b>new " + options.noun + '</b></a> is ready to be set up. ' + "<br/><br/><a target='_blank' href='" + newPaneOptions.newInstance.uri + "'>Go to your new " + options.noun + '.</a>'; // selectUI.parentNode.removeChild(selectUI) // Clean up
+              p.setAttribute('style', 'font-size: 120%;');
+              // Make link to new thing
+              p.innerHTML = "Your <a target='_blank' href='" + newPaneOptions.newInstance.uri + "'><b>new " + options.noun + '</b></a> is ready to be set up. ' + "<br/><br/><a target='_blank' href='" + newPaneOptions.newInstance.uri + "'>Go to your new " + options.noun + '.</a>';
+              // selectUI.parentNode.removeChild(selectUI) // Clean up
               // selectUIParent.removeChild(selectUI) // Clean up
             }
 
@@ -6066,19 +5122,18 @@ function newThingUI(createContext, dataBrowserContext, thePanes) {
         });
       } // callbackWS
 
-
-      var pa = options.pane; // options.appPathSegment = pa.name // was 'edu.mit.solid.pane.'
-
+      var pa = options.pane;
+      // options.appPathSegment = pa.name // was 'edu.mit.solid.pane.'
       options.noun = pa.mintClass ? utils.label(pa.mintClass) : pa.name;
       options.appPathSegment = options.noun.slice(0, 1).toUpperCase() + options.noun.slice(1);
-
       if (!options.folder) {
         // No folder given? Ask user for full URI
         selectUI = (0, _login.selectWorkspace)(dom, {
           noun: options.noun,
           appPathSegment: options.appPathSegment
         }, callbackWS);
-        options.div.appendChild(selectUI); // selectUIParent = options.div
+        options.div.appendChild(selectUI);
+        // selectUIParent = options.div
       } else {
         var gotName = function gotName(name) {
           if (!name) {
@@ -6086,23 +5141,20 @@ function newThingUI(createContext, dataBrowserContext, thePanes) {
             selectNewTool(); // toggle star to plain and menu vanish again
           } else {
             var uri = options.folder.uri;
-
             if (!uri.endsWith('/')) {
               uri = uri + '/';
             }
-
             uri = uri + encodeURIComponent(name) + '/';
             callbackWS(null, uri);
           }
         };
-
-        widgets.askName(dom, kb, options.div, ns.foaf('name'), null, options.noun).then(gotName); // selectUI = getNameForm(dom, kb, options.noun, gotName)
+        widgets.askName(dom, kb, options.div, ns.foaf('name'), null, options.noun).then(gotName);
+        // selectUI = getNameForm(dom, kb, options.noun, gotName)
         // options.div.appendChild(selectUI)
         // selectUIParent = options.div
       }
     });
   } // makeNewAppInstance
-
 
   var iconArray = [];
   var mintingPanes = Object.values(thePanes).filter(function (pane) {
@@ -6112,7 +5164,6 @@ function newThingUI(createContext, dataBrowserContext, thePanes) {
     if (pane.mintClass) {
       classMap[pane.mintClass.uri] = (classMap[pane.mintClass.uri] || 0) + 1;
     }
-
     return classMap;
   }, {});
   mintingPanes.forEach(function (pane) {
@@ -6123,7 +5174,6 @@ function newThingUI(createContext, dataBrowserContext, thePanes) {
     icon.setAttribute('title', 'Make new ' + noun);
     icon.setAttribute('style', iconStyle + 'display: none;');
     iconArray.push(icon);
-
     if (!icon.disabled) {
       icon.addEventListener('click', function (e) {
         selectTool(icon);
@@ -6143,11 +5193,12 @@ function newThingUI(createContext, dataBrowserContext, thePanes) {
       });
     }
   });
-} // Form to get the name of a new thing before we create it
+}
+
+// Form to get the name of a new thing before we create it
 //
 // Used in contacts for new groups, individuals.
 //
-
 /*
 function getNameForm (dom, kb, classLabel, gotNameCallback) {
   const form = dom.createElement('div') // form is broken as HTML behaviour can resurface on js error
@@ -6207,9 +5258,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.create = void 0;
-
 var _create = __webpack_require__(/*! ./create */ "./lib/create/create.js");
-
 var create = {
   newThingUI: _create.newThingUI
 };
@@ -6250,31 +5299,23 @@ exports.error = error;
 exports.log = log;
 exports.trace = trace;
 exports.warn = warn;
-
 function log() {
   var _console;
-
   // eslint-disable-next-line no-console
   (_console = console).log.apply(_console, arguments);
 }
-
 function warn() {
   var _console2;
-
   // eslint-disable-next-line no-console
   (_console2 = console).warn.apply(_console2, arguments);
 }
-
 function error() {
   var _console3;
-
   // eslint-disable-next-line no-console
   (_console3 = console).error.apply(_console3, arguments);
 }
-
 function trace() {
   var _console4;
-
   // eslint-disable-next-line no-console
   (_console4 = console).trace.apply(_console4, arguments);
 }
@@ -6292,32 +5333,27 @@ function trace() {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.createControllerInfoBlock = createControllerInfoBlock;
 exports.initFooter = initFooter;
 exports.rebuildFooter = rebuildFooter;
-
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
-
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 var _headerFooterHelpers = __webpack_require__(/*! ../utils/headerFooterHelpers */ "./lib/utils/headerFooterHelpers.js");
-
 /*
     This file was copied from mashlib/src/global/footer.ts file. It is modified to
     work in solid-ui by adjusting where imported functions are found.
  */
+
 var DEFAULT_SOLID_PROJECT_URL = 'https://solidproject.org';
 var DEFAULT_SOLID_PROJECT_NAME = 'solidproject.org';
+
 /*
   FooterOptions allow for customizing the link and name of the link part of the footer.
   */
-
 /**
  * Initialize footer component, the footer object returned depends on whether the user is authenticated.
  * @param store the data store
@@ -6329,8 +5365,6 @@ function initFooter(_x, _x2) {
 /**
  * @ignore exporting this only for the unit test
  */
-
-
 function _initFooter() {
   _initFooter = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(store, options) {
     var footer, pod, podOwner;
@@ -6339,27 +5373,20 @@ function _initFooter() {
         switch (_context2.prev = _context2.next) {
           case 0:
             footer = document.getElementById('PageFooter');
-
             if (footer) {
               _context2.next = 3;
               break;
             }
-
             return _context2.abrupt("return");
-
           case 3:
             pod = (0, _headerFooterHelpers.getPod)();
             _context2.next = 6;
             return (0, _headerFooterHelpers.getPodOwner)(pod, store);
-
           case 6:
             podOwner = _context2.sent;
             rebuildFooter(footer, store, pod, podOwner, options)();
-
             _solidLogic.authSession.onLogin(rebuildFooter(footer, store, pod, podOwner, options));
-
             _solidLogic.authSession.onLogout(rebuildFooter(footer, store, pod, podOwner, options));
-
           case 10:
           case "end":
             return _context2.stop();
@@ -6369,7 +5396,6 @@ function _initFooter() {
   }));
   return _initFooter.apply(this, arguments);
 }
-
 function rebuildFooter(footer, store, pod, podOwner, options) {
   return /*#__PURE__*/(0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
     var user;
@@ -6382,12 +5408,9 @@ function rebuildFooter(footer, store, pod, podOwner, options) {
             _context.t0 = footer;
             _context.next = 5;
             return createControllerInfoBlock(store, user, pod, podOwner, options);
-
           case 5:
             _context.t1 = _context.sent;
-
             _context.t0.appendChild.call(_context.t0, _context.t1);
-
           case 7:
           case "end":
             return _context.stop();
@@ -6399,15 +5422,11 @@ function rebuildFooter(footer, store, pod, podOwner, options) {
 /**
  * @ignore exporting this only for the unit test
  */
-
-
 function createControllerInfoBlock(store, user, pod, podOwner, options) {
   var profileLinkContainer = document.createElement('div');
-
   if (!pod || !podOwner || user && user.equals(podOwner)) {
     return profileLinkContainer;
   }
-
   (0, _headerFooterHelpers.addStyleClassToElement)(profileLinkContainer, ['footer-pod-info', 'footer'], 'footer');
   var podLinkPre = document.createElement('span');
   podLinkPre.innerText = "You're visiting ";
@@ -6493,9 +5512,7 @@ exports.emptyProfile = emptyProfile;
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
@@ -6509,33 +5526,22 @@ exports.createUserMenuLink = createUserMenuLink;
 exports.getProfileImg = getProfileImg;
 exports.initHeader = initHeader;
 exports.rebuildHeader = rebuildHeader;
-
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
-
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
-
 var _index = __webpack_require__(/*! ../index */ "./lib/index.js");
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 var _login = __webpack_require__(/*! ../login/login */ "./lib/login/login.js");
-
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
-
 var _emptyProfile = __webpack_require__(/*! ./empty-profile */ "./lib/header/empty-profile.js");
-
 var _headerFooterHelpers = __webpack_require__(/*! ../utils/headerFooterHelpers */ "./lib/utils/headerFooterHelpers.js");
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 /* global EventListenerOrEventListenerObject */
-
 /*
     This file was copied from mashlib/src/global/header.ts file. It is modified to
     work in solid-ui by adjusting where imported functions are found.
  */
+
 // import { loginStatusBox, authSession, currentUser } from '../authn/authn'
 
 /**
@@ -6543,7 +5549,6 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 */
 var DEFAULT_HELP_MENU_ICON = _index.icons.iconBase + 'noun_help.svg';
 var DEFAUL_SOLID_ICON_URL = 'https://solidproject.org/assets/img/solid-emblem.svg';
-
 /**
  * Initialize header component, the header object returned depends on whether the user is authenticated.
  * @param store the data store
@@ -6557,8 +5562,6 @@ function initHeader(_x, _x2, _x3) {
 /**
  * @ignore exporting this only for the unit test
  */
-
-
 function _initHeader() {
   _initHeader = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(store, userMenuList, options) {
     var header, pod;
@@ -6567,22 +5570,16 @@ function _initHeader() {
         switch (_context2.prev = _context2.next) {
           case 0:
             header = document.getElementById('PageHeader');
-
             if (header) {
               _context2.next = 3;
               break;
             }
-
             return _context2.abrupt("return");
-
           case 3:
             pod = (0, _headerFooterHelpers.getPod)();
             rebuildHeader(header, store, pod, userMenuList, options)();
-
             _solidLogic.authSession.onLogout(rebuildHeader(header, store, pod, userMenuList, options));
-
             _solidLogic.authSession.onLogin(rebuildHeader(header, store, pod, userMenuList, options));
-
           case 7:
           case "end":
             return _context2.stop();
@@ -6592,7 +5589,6 @@ function _initHeader() {
   }));
   return _initHeader.apply(this, arguments);
 }
-
 function rebuildHeader(header, store, pod, userMenuList, options) {
   return /*#__PURE__*/(0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
     var user;
@@ -6605,12 +5601,9 @@ function rebuildHeader(header, store, pod, userMenuList, options) {
             _context.t0 = header;
             _context.next = 5;
             return createBanner(store, pod, user, userMenuList, options);
-
           case 5:
             _context.t1 = _context.sent;
-
             _context.t0.appendChild.call(_context.t0, _context.t1);
-
           case 7:
           case "end":
             return _context.stop();
@@ -6622,16 +5615,12 @@ function rebuildHeader(header, store, pod, userMenuList, options) {
 /**
  * @ignore exporting this only for the unit test
  */
-
-
 function createBanner(_x4, _x5, _x6, _x7, _x8) {
   return _createBanner.apply(this, arguments);
 }
 /**
  * @ignore exporting this only for the unit test
  */
-
-
 function _createBanner() {
   _createBanner = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(store, pod, user, userMenuList, options) {
     var podLink, image, userMenu, banner, leftSideOfHeader, helpMenu;
@@ -6643,30 +5632,23 @@ function _createBanner() {
             podLink.href = pod.uri;
             (0, _headerFooterHelpers.addStyleClassToElement)(podLink, ['header-banner__link']);
             image = document.createElement('img');
-
             if (options) {
               image.src = options.logo ? options.logo : DEFAUL_SOLID_ICON_URL;
             }
-
             (0, _headerFooterHelpers.addStyleClassToElement)(image, ['header-banner__icon']);
             podLink.appendChild(image);
-
             if (!user) {
               _context3.next = 13;
               break;
             }
-
             _context3.next = 10;
             return createUserMenu(store, user, userMenuList);
-
           case 10:
             _context3.t0 = _context3.sent;
             _context3.next = 14;
             break;
-
           case 13:
             _context3.t0 = createLoginSignUpButtons();
-
           case 14:
             userMenu = _context3.t0;
             banner = document.createElement('div');
@@ -6675,15 +5657,12 @@ function _createBanner() {
             leftSideOfHeader = document.createElement('div');
             (0, _headerFooterHelpers.addStyleClassToElement)(leftSideOfHeader, ['header-banner__right-menu']);
             leftSideOfHeader.appendChild(userMenu);
-
             if (options && options.helpMenuList) {
               helpMenu = createHelpMenu(options, options.helpMenuList);
               leftSideOfHeader.appendChild(helpMenu);
             }
-
             banner.appendChild(leftSideOfHeader);
             return _context3.abrupt("return", banner);
-
           case 24:
           case "end":
             return _context3.stop();
@@ -6693,14 +5672,12 @@ function _createBanner() {
   }));
   return _createBanner.apply(this, arguments);
 }
-
 function createHelpMenu(options, helpMenuItems) {
   if (!helpMenuItems) return;
   var helpMenuList = document.createElement('ul');
   (0, _headerFooterHelpers.addStyleClassToElement)(helpMenuList, ['header-user-menu__list']);
   helpMenuItems.forEach(function (menuItem) {
     var menuItemType = menuItem.url ? 'url' : 'onclick';
-
     if (menuItemType === 'url') {
       helpMenuList.appendChild(createUserMenuItem(createUserMenuLink(menuItem.label, menuItem.url, menuItem.target)));
     } else {
@@ -6744,8 +5721,6 @@ function createHelpMenu(options, helpMenuItems) {
 /**
  * @ignore exporting this only for the unit test
  */
-
-
 function createLoginSignUpButtons() {
   var profileLoginButtonPre = document.createElement('div');
   (0, _headerFooterHelpers.addStyleClassToElement)(profileLoginButtonPre, ['header-banner__login']);
@@ -6755,8 +5730,6 @@ function createLoginSignUpButtons() {
 /**
  * @ignore exporting this only for the unit test
  */
-
-
 function createUserMenuButton(label, onClick) {
   var button = document.createElement('button');
   (0, _headerFooterHelpers.addStyleClassToElement)(button, ['header-user-menu__button']);
@@ -6767,8 +5740,6 @@ function createUserMenuButton(label, onClick) {
 /**
  * @ignore exporting this only for the unit test
  */
-
-
 function createUserMenuLink(label, href, target) {
   var link = document.createElement('a');
   (0, _headerFooterHelpers.addStyleClassToElement)(link, ['header-user-menu__link']);
@@ -6777,19 +5748,16 @@ function createUserMenuLink(label, href, target) {
   if (target) link.target = target;
   return link;
 }
+
 /**
  * @ignore exporting this only for the unit test
  */
-
-
 function createUserMenu(_x9, _x10, _x11) {
   return _createUserMenu.apply(this, arguments);
 }
 /**
  * @ignore exporting this only for the unit test
  */
-
-
 function _createUserMenu() {
   _createUserMenu = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(store, user, userMenuList) {
     var fetcher, loggedInMenuList, loggedInMenu, loggedInMenuTrigger, profileImg, loggedInMenuContainer, throttledMenuToggle, timer;
@@ -6798,23 +5766,18 @@ function _createUserMenu() {
         switch (_context4.prev = _context4.next) {
           case 0:
             fetcher = store.fetcher;
-
             if (!fetcher) {
               _context4.next = 4;
               break;
             }
-
             _context4.next = 4;
             return fetcher.load(user);
-
           case 4:
             loggedInMenuList = document.createElement('ul');
             (0, _headerFooterHelpers.addStyleClassToElement)(loggedInMenuList, ['header-user-menu__list']);
-
             if (userMenuList) {
               userMenuList.forEach(function (menuItem) {
                 var menuItemType = menuItem.url ? 'url' : 'onclick';
-
                 if (menuItemType === 'url') {
                   loggedInMenuList.appendChild(createUserMenuItem(createUserMenuLink(menuItem.label, menuItem.url, menuItem.target)));
                 } else {
@@ -6822,7 +5785,6 @@ function _createUserMenu() {
                 }
               });
             }
-
             loggedInMenu = document.createElement('nav');
             (0, _headerFooterHelpers.addStyleClassToElement)(loggedInMenu, ['header-user-menu__navigation-menu']);
             loggedInMenu.setAttribute('aria-hidden', 'true');
@@ -6831,13 +5793,11 @@ function _createUserMenu() {
             (0, _headerFooterHelpers.addStyleClassToElement)(loggedInMenuTrigger, ['header-user-menu__trigger']);
             loggedInMenuTrigger.type = 'button';
             profileImg = getProfileImg(store, user);
-
             if (typeof profileImg === 'string') {
               loggedInMenuTrigger.innerHTML = profileImg;
             } else {
               loggedInMenuTrigger.appendChild(profileImg);
             }
-
             loggedInMenuContainer = document.createElement('div');
             (0, _headerFooterHelpers.addStyleClassToElement)(loggedInMenuContainer, ['header-banner__user-menu']);
             (0, _headerFooterHelpers.addStyleClassToElement)(loggedInMenuContainer, ['header-user-menu']);
@@ -6860,7 +5820,6 @@ function _createUserMenu() {
               }, 200);
             });
             return _context4.abrupt("return", loggedInMenuContainer);
-
           case 27:
           case "end":
             return _context4.stop();
@@ -6870,7 +5829,6 @@ function _createUserMenu() {
   }));
   return _createUserMenu.apply(this, arguments);
 }
-
 function createUserMenuItem(child) {
   var menuProfileItem = document.createElement('li');
   (0, _headerFooterHelpers.addStyleClassToElement)(menuProfileItem, ['header-user-menu__list-item']);
@@ -6880,40 +5838,32 @@ function createUserMenuItem(child) {
 /**
  * @ignore exporting this only for the unit test
  */
-
-
 function getProfileImg(store, user) {
   var profileUrl = null;
-
   try {
     profileUrl = widgets.findImage(user);
-
     if (!profileUrl) {
       return _emptyProfile.emptyProfile;
     }
   } catch (_unused) {
     return _emptyProfile.emptyProfile;
   }
-
   var profileImage = document.createElement('div');
   (0, _headerFooterHelpers.addStyleClassToElement)(profileImage, ['header-user-menu__photo']);
   profileImage.style.backgroundImage = "url(".concat(profileUrl, ")");
   return profileImage;
 }
+
 /**
  * @internal
  */
-
-
 function toggleMenu(event, trigger, menu) {
   var isExpanded = trigger.getAttribute('aria-expanded') === 'true';
   var expand = event.type === 'mouseover';
   var close = event.type === 'mouseout';
-
   if (isExpanded && expand || !isExpanded && close) {
     return;
   }
-
   trigger.setAttribute('aria-expanded', (!isExpanded).toString());
   menu.setAttribute('aria-hidden', isExpanded.toString());
 }
@@ -6948,9 +5898,10 @@ var styleMap = {
     padding: '1em',
     width: '100%',
     '&:focus, &:hover': {
-      backgroundColor: 'linear-gradient(to right, #7C4DFF 0%, #18A9E6 50%, #01C9EA 100%)' // backgroundColor: '#eee'
-
+      backgroundColor: 'linear-gradient(to right, #7C4DFF 0%, #18A9E6 50%, #01C9EA 100%)'
+      // backgroundColor: '#eee'
     },
+
     a: {
       textDecoration: 'none'
     }
@@ -7058,8 +6009,8 @@ var styleMap = {
     height: '60px !important',
     // this is the icon size
     width: '65px !important' // may just be 65px round($icon-size * 352 / 322);
-
   },
+
   'header-banner__help-icon': {
     width: '28px !important'
   }
@@ -7083,9 +6034,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.originalIconBase = exports.icons = exports.iconBase = void 0;
-
 var _debug = __webpack_require__(/*! ./debug */ "./lib/debug.js");
-
 // Works in FF extension - what about browserify??
 // 2021-04-08 Convert to TS
 
@@ -7100,8 +6049,8 @@ var _debug = __webpack_require__(/*! ./debug */ "./lib/debug.js");
  * You can also use it if you want to just run a mashlib whhich takes its
  * icons seved by other than github.
  */
-
 /* eslint-disable multiline-ternary */
+
 // Do not export. Always us this module to find the icons, as they vary
 var iconsOnGithub = 'https://solidos.github.io/solid-ui/src'; // changed org 2022-05
 
@@ -7119,8 +6068,9 @@ var icons = module.scriptURI // Firefox extension
   originalIconBase: iconsOnGithub + '/originalIcons/'
 };
 exports.icons = icons;
-(0, _debug.log)('   icons.iconBase is set to : ' + icons.iconBase); // allow tests etc  named-import this directly from this module
+(0, _debug.log)('   icons.iconBase is set to : ' + icons.iconBase);
 
+// allow tests etc  named-import this directly from this module
 var iconBase = icons.iconBase;
 exports.iconBase = iconBase;
 var originalIconBase = icons.originalIconBase;
@@ -7163,6 +6113,7 @@ If you would like to know more about the solid Solid project, please see
 https://github.com/solidos/solid
 */
 
+
 /**
  * Provides a Solid client helper object (which exposes various static modules).
  * @module solidUi.js
@@ -7173,10 +6124,9 @@ https://github.com/solidos/solid
  * @class SolidUi
  * @static
  */
+
 // REMOVE @ts-ignore as you migrate files to TypeScript
-
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
@@ -7270,87 +6220,46 @@ Object.defineProperty(exports, "versionInfo", ({
   }
 }));
 exports.widgets = void 0;
-
 var rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
-
 exports.rdf = rdf;
-
 var ns = _interopRequireWildcard(__webpack_require__(/*! ./ns */ "./lib/ns.js"));
-
 exports.ns = ns;
-
 var _index = __webpack_require__(/*! ./acl/index */ "./lib/acl/index.js");
-
 var _index2 = __webpack_require__(/*! ./create/index */ "./lib/create/index.js");
-
 var _iconBase = __webpack_require__(/*! ./iconBase */ "./lib/iconBase.js");
-
 var language = _interopRequireWildcard(__webpack_require__(/*! ./widgets/forms/autocomplete/language */ "./lib/widgets/forms/autocomplete/language.js"));
-
 exports.language = language;
-
 var log = _interopRequireWildcard(__webpack_require__(/*! ./log */ "./lib/log.js"));
-
 exports.log = log;
-
 var _index3 = __webpack_require__(/*! ./matrix/index */ "./lib/matrix/index.js");
-
 var _index4 = __webpack_require__(/*! ./media/index */ "./lib/media/index.js");
-
 var _messageArea = __webpack_require__(/*! ./messageArea */ "./lib/messageArea.js");
-
 var _infinite = __webpack_require__(/*! ./chat/infinite */ "./lib/chat/infinite.js");
-
 var pad = _interopRequireWildcard(__webpack_require__(/*! ./pad */ "./lib/pad.js"));
-
 exports.pad = pad;
-
 var participation = _interopRequireWildcard(__webpack_require__(/*! ./participation */ "./lib/participation.js"));
-
 exports.participation = participation;
-
 var preferences = _interopRequireWildcard(__webpack_require__(/*! ./preferences */ "./lib/preferences.js"));
-
 exports.preferences = preferences;
-
 var style = _interopRequireWildcard(__webpack_require__(/*! ./style */ "./lib/style.js"));
-
 exports.style = style;
-
 var _table = __webpack_require__(/*! ./table */ "./lib/table.js");
-
 var tabs = _interopRequireWildcard(__webpack_require__(/*! ./tabs */ "./lib/tabs.js"));
-
 exports.tabs = tabs;
-
 var utils = _interopRequireWildcard(__webpack_require__(/*! ./utils */ "./lib/utils/index.js"));
-
 exports.utils = utils;
-
 var login = _interopRequireWildcard(__webpack_require__(/*! ./login/login */ "./lib/login/login.js"));
-
 exports.login = login;
-
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ./widgets/index */ "./lib/widgets/index.js"));
-
 exports.widgets = widgets;
-
 var _versionInfo = __webpack_require__(/*! ./versionInfo */ "./lib/versionInfo.js");
-
 var _header = __webpack_require__(/*! ./header */ "./lib/header/index.js");
-
 var _footer = __webpack_require__(/*! ./footer */ "./lib/footer/index.js");
-
 var createTypes = _interopRequireWildcard(__webpack_require__(/*! ./create/types */ "./lib/create/types.js"));
-
 exports.createTypes = createTypes;
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 // pull in first avoid cross-refs
 // @ts-ignore
 // @ts-ignore
@@ -7363,9 +6272,7 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 // @ts-ignore
 // @ts-ignore
 var dom = window ? window.document : null; // Idea that UI.dom can be adapted in non-browser environments
-
 exports.dom = dom;
-
 if (typeof window !== 'undefined') {
   ;
   window.UI = {
@@ -7398,7 +6305,9 @@ if (typeof window !== 'undefined') {
     initHeader: _header.initHeader,
     initFooter: _footer.initFooter
   }; // Simpler access by non-node scripts
-} // this variables are directly used in the storybook
+}
+
+// this variables are directly used in the storybook
 //# sourceMappingURL=index.js.map
 
 /***/ }),
@@ -7413,48 +6322,42 @@ if (typeof window !== 'undefined') {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.getClasses = getClasses;
 exports.getStylesheet = getStylesheet;
-
 var _jss = __webpack_require__(/*! jss */ "./node_modules/jss/dist/jss.esm.js");
-
 var _jssPresetDefault = _interopRequireDefault(__webpack_require__(/*! jss-preset-default */ "./node_modules/jss-preset-default/dist/jss-preset-default.esm.js"));
-
 /**
  * Contains [[getClasses]] and [[getStylesheet]] functions,
  * usable as wrappers around JSS (A CSS authoring tool).
  * See https://cssinjs.org/
  * @packageDocumentation
  */
+
 var stylesheetsMap = new Map();
+
 /**
  * returns a StyleSheet object.
  * See https://cssinjs.org/ for more info about JSS.
  * (despite the name, see https://github.com/solidos/solid-ui/issues/199)
  */
-
 function getClasses(insertionPoint, styles) {
   var stylesheet = getStylesheet(insertionPoint);
   return stylesheet.createStyleSheet(styles).attach();
 }
+
 /**
  * returns a JSS object.
  * See https://cssinjs.org/ for more info about JSS.
  * (despite the name, see https://github.com/solidos/solid-ui/issues/199)
  */
-
-
 function getStylesheet(insertionPoint) {
   var cachedStylesheet = stylesheetsMap.get(insertionPoint);
-
   if (cachedStylesheet) {
     return cachedStylesheet;
   }
-
   var stylesheet = (0, _jss.create)({
     insertionPoint: insertionPoint,
     plugins: (0, _jssPresetDefault["default"])().plugins
@@ -7497,34 +6400,25 @@ exports.warn = warn;
 //
 // bitmask levels
 // const TNONE = 0
-
 /** @internal */
 var TERROR = 1;
 /** @internal */
-
 var TWARN = 2;
 /** @internal */
-
 var TMESG = 4;
 /** @internal */
-
 var TSUCCESS = 8;
 /** @internal */
-
 var TINFO = 16;
 /** @internal */
-
 var TDEBUG = 32;
 /** @internal */
-
 var TALL = 63;
-/** @internal */
 
+/** @internal */
 var LogLevel;
 /** @internal */
-
 exports.LogLevel = LogLevel;
-
 (function (LogLevel) {
   LogLevel[LogLevel["Error"] = TERROR] = "Error";
   LogLevel[LogLevel["Warning"] = TWARN] = "Warning";
@@ -7534,22 +6428,15 @@ exports.LogLevel = LogLevel;
   LogLevel[LogLevel["Debug"] = TDEBUG] = "Debug";
   LogLevel[LogLevel["All"] = TALL] = "All";
 })(LogLevel || (exports.LogLevel = LogLevel = {}));
-
 var _level = TERROR + TWARN + TMESG;
 /** @internal */
-
-
 var _ascending = false;
 /** @internal */
-
 var _dom = document; // must be able to override for tests
-
 /** @internal */
-
 var _window = window; // must be able to override for tests
 
 /** @internal */
-
 function log(str) {
   var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : TMESG;
   var typestr = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'mesg';
@@ -7557,15 +6444,11 @@ function log(str) {
 
   if (typeof _dom !== 'undefined') {
     var logArea = _dom.getElementById('status');
-
     if (!logArea) return;
-
     var addendum = _dom.createElement('span');
-
     addendum.setAttribute('class', typestr);
     var now = new Date();
     addendum.innerHTML = "".concat(now.getHours(), ":").concat(now.getMinutes(), ":").concat(now.getSeconds(), " [").concat(typestr, "] ").concat(escapeForXML(str), "<br/>");
-
     if (_ascending) {
       logArea.insertBefore(addendum, logArea.firstChild);
     } else {
@@ -7576,66 +6459,59 @@ function log(str) {
     console.log(str);
   }
 }
+
 /**
  * Adds a message to the element with id "status". The messages are prepended with
  * time and type of message, in this case [mesg].
  */
-
-
 function msg(message) {
   log(message);
 }
+
 /**
  * Adds a warning message to the element with id "status". The messages are
  * prepended with time and type of message, in this case [warn].
  */
-
-
 function warn(message) {
   log(message, TWARN, 'warn');
 }
+
 /**
  * Adds a debugging message to the element with id "status". The messages are
  * prepended with time and type of message, in this case [dbug].
  */
-
-
 function debug(message) {
   log(message, TDEBUG, 'dbug');
 }
+
 /**
  * Adds a info message to the element with id "status". The messages are
  * prepended with time and type of message, in this case [info].
  */
-
-
 function info(message) {
   log(message, TINFO, 'info');
 }
+
 /**
  * Adds a error to the element with id "status". The messages are
  * prepended with time and type of message, in this case [eror].
  */
-
-
 function error(message) {
   log(message, TERROR, 'eror');
 }
+
 /**
  * Adds a success message to the element with id "status". The messages are
  * prepended with time and type of message, in this case [good].
  */
-
-
 function success(message) {
   log(message, TSUCCESS, 'good');
 }
+
 /**
  * Uses the global alert to send an alert. If global alert is not available, it
  * will output the message using the method [[warning]]s.
  */
-
-
 function alert(message) {
   if (_window && typeof _window.alert !== 'undefined') {
     _window.alert(message);
@@ -7643,18 +6519,17 @@ function alert(message) {
     warn(message);
   }
 }
+
 /**
  * Will clear the content of the element with id "status".
  */
-
-
 function clear() {
   var _dom2;
-
   var logArea = (_dom2 = _dom) === null || _dom2 === void 0 ? void 0 : _dom2.getElementById('status');
   if (!logArea) return;
   logArea.innerHTML = '';
 }
+
 /**
  * Lets you configure which types of messages will be shown. The module uses
  * [bitmask](https://en.wikipedia.org/wiki/Mask_(computing)) to filter which
@@ -7670,54 +6545,46 @@ function clear() {
  * - Info: 16
  * - Debug: 32
  */
-
-
 function setLevel(level) {
   _level = TALL;
   debug('Log level is now ' + level);
   _level = level;
 }
+
 /**
  * Will dump the current HTML using the [[debug]] method.
  */
-
-
 function dumpHTML() {
   var _dom3, _dom3$body;
-
   if (!_dom) return;
   var level = _level;
   _level = TALL;
   debug(((_dom3 = _dom) === null || _dom3 === void 0 ? void 0 : (_dom3$body = _dom3.body) === null || _dom3$body === void 0 ? void 0 : _dom3$body.innerHTML) || '');
   _level = level;
 }
+
 /**
  * Will start prepending messages the list of log messages.
  */
-
-
 function logAscending() {
   _ascending = true;
 }
+
 /**
  * Will start appending messages the list of log messages. (This is default
  * behavior.)
  */
-
-
 function logDescending() {
   _ascending = false;
 }
+
 /** @internal */
-
-
 function escapeForXML(str) {
   // can be replaced with function utils module when migrating
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
+
 /** @internal */
-
-
 function setInternals(window, document) {
   _window = window;
   _dom = document;
@@ -7736,9 +6603,7 @@ function setInternals(window, document) {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
@@ -7756,65 +6621,45 @@ exports.renderScopeHeadingRow = renderScopeHeadingRow;
 exports.renderSignInPopup = renderSignInPopup;
 exports.scopeLabel = scopeLabel;
 exports.selectWorkspace = selectWorkspace;
-
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
-
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
-
 var _rdflib = __webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js");
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
-
 var _log = __webpack_require__(/*! ../log */ "./lib/log.js");
-
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns.js */ "./lib/ns.js"));
-
 var _signup = __webpack_require__(/*! ../signup/signup.js */ "./lib/signup/signup.js");
-
 var _style = __webpack_require__(/*! ../style */ "./lib/style.js");
-
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
-
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 var store = _solidLogic.solidLogicSingleton.store;
 var _solidLogicSingleton$ = _solidLogic.solidLogicSingleton.profile,
-    loadPreferences = _solidLogicSingleton$.loadPreferences,
-    loadProfile = _solidLogicSingleton$.loadProfile;
+  loadPreferences = _solidLogicSingleton$.loadPreferences,
+  loadProfile = _solidLogicSingleton$.loadProfile;
 var _solidLogicSingleton$2 = _solidLogic.solidLogicSingleton.typeIndex,
-    getScopedAppInstances = _solidLogicSingleton$2.getScopedAppInstances,
-    getRegistrations = _solidLogicSingleton$2.getRegistrations,
-    loadAllTypeIndexes = _solidLogicSingleton$2.loadAllTypeIndexes,
-    getScopedAppsFromIndex = _solidLogicSingleton$2.getScopedAppsFromIndex,
-    deleteTypeIndexRegistration = _solidLogicSingleton$2.deleteTypeIndexRegistration;
+  getScopedAppInstances = _solidLogicSingleton$2.getScopedAppInstances,
+  getRegistrations = _solidLogicSingleton$2.getRegistrations,
+  loadAllTypeIndexes = _solidLogicSingleton$2.loadAllTypeIndexes,
+  getScopedAppsFromIndex = _solidLogicSingleton$2.getScopedAppsFromIndex,
+  deleteTypeIndexRegistration = _solidLogicSingleton$2.deleteTypeIndexRegistration;
+
 /**
  * Resolves with the logged in user's WebID
  *
  * @param context
  */
 // used to be logIn
-
 function ensureLoggedIn(context) {
   var me = _solidLogic.authn.currentUser();
-
   if (me) {
     _solidLogic.authn.saveUser(me, context);
-
     return Promise.resolve(context);
   }
-
   return new Promise(function (resolve) {
     _solidLogic.authn.checkUser().then(function (webId) {
       // Already logged in?
@@ -7822,20 +6667,19 @@ function ensureLoggedIn(context) {
         debug.log("logIn: Already logged in as ".concat(webId));
         return resolve(context);
       }
-
       if (!context.div || !context.dom) {
         return resolve(context);
       }
-
       var box = loginStatusBox(context.dom, function (webIdUri) {
         _solidLogic.authn.saveUser(webIdUri, context);
-
         resolve(context); // always pass growing context
       });
+
       context.div.appendChild(box);
     });
   });
 }
+
 /**
  * Loads preference file
  * Do this after having done log in and load profile
@@ -7845,8 +6689,6 @@ function ensureLoggedIn(context) {
  * @param context
  */
 // used to be logInLoadPreferences
-
-
 function ensureLoadedPreferences(_x) {
   return _ensureLoadedPreferences.apply(this, arguments);
 }
@@ -7858,8 +6700,6 @@ function ensureLoadedPreferences(_x) {
  * @returns Resolves with the context after login / fetch
  */
 // used to be logInLoadProfile
-
-
 function _ensureLoadedPreferences() {
   _ensureLoadedPreferences = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(context) {
     var statusArea, progressDisplay, complain, preferencesFile, m2;
@@ -7869,117 +6709,93 @@ function _ensureLoadedPreferences() {
           case 0:
             complain = function _complain(message) {
               message = "ensureLoadedPreferences: ".concat(message);
-
               if (statusArea) {
                 // statusArea.innerHTML = ''
                 statusArea.appendChild(widgets.errorMessageBlock(context.dom, message));
               }
-
-              debug.log(message); // reject(new Error(message))
+              debug.log(message);
+              // reject(new Error(message))
             };
-
             if (!context.preferencesFile) {
               _context4.next = 3;
               break;
             }
-
             return _context4.abrupt("return", Promise.resolve(context));
-
           case 3:
             // already done
             statusArea = context.statusArea || context.div || null;
             _context4.prev = 4;
             _context4.next = 7;
             return ensureLoadedProfile(context);
-
           case 7:
             context = _context4.sent;
             _context4.next = 10;
             return loadPreferences(context.me);
-
           case 10:
             preferencesFile = _context4.sent;
-
             if (progressDisplay) {
               progressDisplay.parentNode.removeChild(progressDisplay);
             }
-
             context.preferencesFile = preferencesFile;
             _context4.next = 51;
             break;
-
           case 15:
             _context4.prev = 15;
             _context4.t0 = _context4["catch"](4);
-
             if (!(_context4.t0 instanceof _solidLogic.UnauthorizedError)) {
               _context4.next = 22;
               break;
             }
-
             m2 = 'Ooops - you are not authenticated (properly logged in) to for me to read your preference file.  Try loggin out and logging in?';
             (0, _log.alert)(m2);
             _context4.next = 51;
             break;
-
           case 22:
             if (!(_context4.t0 instanceof _solidLogic.CrossOriginForbiddenError)) {
               _context4.next = 28;
               break;
             }
-
             m2 = "Unauthorized: Assuming preference file blocked for origin ".concat(window.location.origin);
             context.preferencesFileError = m2;
             return _context4.abrupt("return", context);
-
           case 28:
             if (!(_context4.t0 instanceof _solidLogic.SameOriginForbiddenError)) {
               _context4.next = 34;
               break;
             }
-
             m2 = 'You are not authorized to read your preference file. This may be because you are using an untrusted web app.';
             debug.warn(m2);
             return _context4.abrupt("return", context);
-
           case 34:
             if (!(_context4.t0 instanceof _solidLogic.NotEditableError)) {
               _context4.next = 40;
               break;
             }
-
             m2 = 'You are not authorized to edit your preference file. This may be because you are using an untrusted web app.';
             debug.warn(m2);
             return _context4.abrupt("return", context);
-
           case 40:
             if (!(_context4.t0 instanceof _solidLogic.WebOperationError)) {
               _context4.next = 45;
               break;
             }
-
             m2 = 'You are not authorized to edit your preference file. This may be because you are using an untrusted web app.';
             debug.warn(m2);
             _context4.next = 51;
             break;
-
           case 45:
             if (!(_context4.t0 instanceof _solidLogic.FetchError)) {
               _context4.next = 50;
               break;
             }
-
             m2 = "Strange: Error ".concat(_context4.t0.status, " trying to read your preference file.").concat(_context4.t0.message);
             (0, _log.alert)(m2);
             _context4.next = 51;
             break;
-
           case 50:
             throw new Error("(via loadPrefs) ".concat(_context4.t0));
-
           case 51:
             return _context4.abrupt("return", context);
-
           case 52:
           case "end":
             return _context4.stop();
@@ -7989,7 +6805,6 @@ function _ensureLoadedPreferences() {
   }));
   return _ensureLoadedPreferences.apply(this, arguments);
 }
-
 function ensureLoadedProfile(_x2) {
   return _ensureLoadedProfile.apply(this, arguments);
 }
@@ -7998,8 +6813,6 @@ function ensureLoadedProfile(_x2) {
   *
   * leaving the `isPublic` param undefined will bring in community index things, too
   */
-
-
 function _ensureLoadedProfile() {
   _ensureLoadedProfile = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(context) {
     var logInContext;
@@ -8011,46 +6824,34 @@ function _ensureLoadedProfile() {
               _context5.next = 2;
               break;
             }
-
             return _context5.abrupt("return", context);
-
           case 2:
             _context5.prev = 2;
             _context5.next = 5;
             return ensureLoggedIn(context);
-
           case 5:
             logInContext = _context5.sent;
-
             if (logInContext.me) {
               _context5.next = 8;
               break;
             }
-
             throw new Error('Could not log in');
-
           case 8:
             _context5.next = 10;
             return loadProfile(logInContext.me);
-
           case 10:
             context.publicProfile = _context5.sent;
             _context5.next = 17;
             break;
-
           case 13:
             _context5.prev = 13;
             _context5.t0 = _context5["catch"](2);
-
             if (context.div && context.dom) {
               context.div.appendChild(widgets.errorMessageBlock(context.dom, _context5.t0.message));
             }
-
             throw new Error("Can't log in: ".concat(_context5.t0));
-
           case 17:
             return _context5.abrupt("return", context);
-
           case 18:
           case "end":
             return _context5.stop();
@@ -8060,11 +6861,9 @@ function _ensureLoadedProfile() {
   }));
   return _ensureLoadedProfile.apply(this, arguments);
 }
-
 function findAppInstances(_x3, _x4, _x5) {
   return _findAppInstances.apply(this, arguments);
 }
-
 function _findAppInstances() {
   _findAppInstances = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(context, theClass, isPublic) {
     var items;
@@ -8076,21 +6875,16 @@ function _findAppInstances() {
               _context6.next = 6;
               break;
             }
-
             _context6.next = 3;
             return getScopedAppInstances(theClass, context.me);
-
           case 3:
             _context6.t0 = _context6.sent;
             _context6.next = 7;
             break;
-
           case 6:
             _context6.t0 = [];
-
           case 7:
             items = _context6.t0;
-
             if (isPublic === true) {
               // old API - not recommended!
               items = items.filter(function (item) {
@@ -8101,12 +6895,10 @@ function _findAppInstances() {
                 return item.scope.label === 'private';
               });
             }
-
             context.instances = items.map(function (item) {
               return item.instance;
             });
             return _context6.abrupt("return", context);
-
           case 11:
           case "end":
             return _context6.stop();
@@ -8116,7 +6908,6 @@ function _findAppInstances() {
   }));
   return _findAppInstances.apply(this, arguments);
 }
-
 function scopeLabel(context, scope) {
   var mine = context.me && context.me.sameTerm(scope.agent);
   var name = mine ? '' : utils.label(scope.agent) + ' ';
@@ -8125,16 +6916,12 @@ function scopeLabel(context, scope) {
 /**
  * UI to control registration of instance
  */
-
-
 function registrationControl(_x6, _x7, _x8) {
   return _registrationControl.apply(this, arguments);
 }
-
 function _registrationControl() {
   _registrationControl = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7(context, instance, theClass) {
     var registrationStatements, renderScopeCheckbox, dom, box, me, scopes, msg, tbody, form, _iterator, _step, scope, row;
-
     return _regenerator["default"].wrap(function _callee7$(_context7) {
       while (1) {
         switch (_context7.prev = _context7.next) {
@@ -8145,52 +6932,40 @@ function _registrationControl() {
               var label = "".concat(name, " link to this ").concat(context.noun);
               return widgets.buildCheckboxForm(context.dom, _solidLogic.solidLogicSingleton.store, label, null, statements, form, scope.index);
             };
-
             registrationStatements = function _registrationStatemen(index) {
               var registrations = getRegistrations(instance, theClass);
               var reg = registrations.length ? registrations[0] : widgets.newThing(index);
               return [(0, _rdflib.st)(reg, ns.solid('instance'), instance, index), (0, _rdflib.st)(reg, ns.solid('forClass'), theClass, index)];
             };
-
             /// / body of registrationControl
             dom = context.dom;
-
             if (!(!dom || !context.div)) {
               _context7.next = 5;
               break;
             }
-
             throw new Error('registrationControl: need dom and div');
-
           case 5:
             box = dom.createElement('div');
             context.div.appendChild(box);
             context.me = _solidLogic.authn.currentUser(); // @@
-
             me = context.me;
-
             if (me) {
               _context7.next = 12;
               break;
             }
-
             box.innerHTML = '<p style="margin:2em;">(Log in to save a link to this)</p>';
             return _context7.abrupt("return", context);
-
           case 12:
             _context7.prev = 12;
             _context7.next = 15;
             return loadAllTypeIndexes(me);
-
           case 15:
             scopes = _context7.sent;
             _context7.next = 23;
             break;
-
           case 18:
             _context7.prev = 18;
             _context7.t0 = _context7["catch"](12);
-
             if (context.div && context.preferencesFileError) {
               msg = '(Lists of stuff not available)';
               context.div.appendChild(dom.createElement('p')).textContent = msg;
@@ -8198,19 +6973,14 @@ function _registrationControl() {
               msg = "registrationControl: Type indexes not available: ".concat(_context7.t0);
               context.div.appendChild(widgets.errorMessageBlock(context.dom, _context7.t0));
             }
-
             debug.log(msg);
             return _context7.abrupt("return", context);
-
           case 23:
             box.innerHTML = '<table><tbody></tbody></table>'; // tbody will be inserted anyway
-
             box.setAttribute('style', 'font-size: 120%; text-align: right; padding: 1em; border: solid gray 0.05em;');
             tbody = box.children[0].children[0];
             form = new _rdflib.BlankNode(); // @@ say for now
-
             _iterator = _createForOfIteratorHelper(scopes);
-
             try {
               for (_iterator.s(); !(_step = _iterator.n()).done;) {
                 scope = _step.value;
@@ -8222,9 +6992,7 @@ function _registrationControl() {
             } finally {
               _iterator.f();
             }
-
             return _context7.abrupt("return", context);
-
           case 30:
           case "end":
             return _context7.stop();
@@ -8234,7 +7002,6 @@ function _registrationControl() {
   }));
   return _registrationControl.apply(this, arguments);
 }
-
 function renderScopeHeadingRow(context, store, scope) {
   var backgroundColor = {
     "private": '#fee',
@@ -8254,17 +7021,12 @@ function renderScopeHeadingRow(context, store, scope) {
 /**
   * UI to List at all registered things
   */
-
-
 function registrationList(_x9, _x10) {
   return _registrationList.apply(this, arguments);
 } // registrationList
-
-
 function _registrationList() {
   _registrationList = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee9(context, options) {
     var dom, div, box, scopes, table, tbody, _iterator2, _step2, scope, headingRow, items, _iterator3, _step3, _loop;
-
     return _regenerator["default"].wrap(function _callee9$(_context9) {
       while (1) {
         switch (_context9.prev = _context9.next) {
@@ -8274,53 +7036,44 @@ function _registrationList() {
             box = dom.createElement('div');
             div.appendChild(box);
             context.me = _solidLogic.authn.currentUser(); // @@
-
             if (context.me) {
               _context9.next = 8;
               break;
             }
-
             box.innerHTML = '<p style="margin:2em;">(Log in list your stuff)</p>';
             return _context9.abrupt("return", context);
-
           case 8:
             _context9.next = 10;
             return loadAllTypeIndexes(context.me);
-
           case 10:
             scopes = _context9.sent;
             // includes community indexes
+
             // console.log('@@ registrationList ', scopes)
             box.innerHTML = '<table><tbody></tbody></table>'; // tbody will be inserted anyway
-
             box.setAttribute('style', 'font-size: 120%; text-align: right; padding: 1em; border: solid #eee 0.5em;');
             table = box.firstChild;
             tbody = table.firstChild;
             _iterator2 = _createForOfIteratorHelper(scopes);
             _context9.prev = 16;
-
             _iterator2.s();
-
           case 18:
             if ((_step2 = _iterator2.n()).done) {
               _context9.next = 30;
               break;
             }
-
             scope = _step2.value;
             // need some predicate for listing/adding agents
             headingRow = renderScopeHeadingRow(context, store, scope);
             tbody.appendChild(headingRow);
             _context9.next = 24;
             return getScopedAppsFromIndex(scope, options.type || null);
-
           case 24:
             items = _context9.sent;
             // any class
-            if (items.length === 0) headingRow.style.display = 'none'; // console.log(`registrationList: @@ instance items for class ${options.type || 'undefined' }:`, items)
-
+            if (items.length === 0) headingRow.style.display = 'none';
+            // console.log(`registrationList: @@ instance items for class ${options.type || 'undefined' }:`, items)
             _iterator3 = _createForOfIteratorHelper(items);
-
             try {
               _loop = function _loop() {
                 var item = _step3.value;
@@ -8333,10 +7086,8 @@ function _registrationList() {
                             case 0:
                               _context8.next = 2;
                               return deleteTypeIndexRegistration(item);
-
                             case 2:
                               tbody.removeChild(row);
-
                             case 3:
                             case "end":
                               return _context8.stop();
@@ -8344,18 +7095,15 @@ function _registrationList() {
                         }
                       }, _callee8);
                     }));
-
                     function deleteFunction() {
                       return _deleteFunction.apply(this, arguments);
                     }
-
                     return deleteFunction;
                   }()
                 });
                 row.children[0].style.paddingLeft = '3em';
                 tbody.appendChild(row);
               };
-
               for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
                 _loop();
               }
@@ -8364,31 +7112,22 @@ function _registrationList() {
             } finally {
               _iterator3.f();
             }
-
           case 28:
             _context9.next = 18;
             break;
-
           case 30:
             _context9.next = 35;
             break;
-
           case 32:
             _context9.prev = 32;
             _context9.t0 = _context9["catch"](16);
-
             _iterator2.e(_context9.t0);
-
           case 35:
             _context9.prev = 35;
-
             _iterator2.f();
-
             return _context9.finish(35);
-
           case 38:
             return _context9.abrupt("return", context);
-
           case 39:
           case "end":
             return _context9.stop();
@@ -8398,10 +7137,10 @@ function _registrationList() {
   }));
   return _registrationList.apply(this, arguments);
 }
-
 function getDefaultSignInButtonStyle() {
   return 'padding: 1em; border-radius:0.5em; font-size: 100%;';
 }
+
 /**
  * Bootstrapping identity
  * (Called by `loginStatusBox()`)
@@ -8411,48 +7150,43 @@ function getDefaultSignInButtonStyle() {
  *
  * @returns
  */
-
-
 function signInOrSignUpBox(dom, setUserCallback) {
   var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
   options = options || {};
-  var signInButtonStyle = options.buttonStyle || getDefaultSignInButtonStyle(); // @@ TODO Remove the need to cast HTML element to any
+  var signInButtonStyle = options.buttonStyle || getDefaultSignInButtonStyle();
 
+  // @@ TODO Remove the need to cast HTML element to any
   var box = dom.createElement('div');
   var magicClassName = 'SolidSignInOrSignUpBox';
   debug.log('widgets.signInOrSignUpBox');
   box.setUserCallback = setUserCallback;
   box.setAttribute('class', magicClassName);
   box.style = 'display:flex;'; // @@ fix all typecasts like this
+
   // Sign in button with PopUP
-
   var signInPopUpButton = dom.createElement('input'); // multi
-
   box.appendChild(signInPopUpButton);
   signInPopUpButton.setAttribute('type', 'button');
   signInPopUpButton.setAttribute('value', 'Log in');
   signInPopUpButton.setAttribute('style', "".concat(signInButtonStyle, "background-color: #eef;"));
-
   _solidLogic.authSession.onLogin(function () {
-    var me = _solidLogic.authn.currentUser(); // const sessionInfo = authSession.info
+    var me = _solidLogic.authn.currentUser();
+    // const sessionInfo = authSession.info
     // if (sessionInfo && sessionInfo.isLoggedIn) {
-
-
     if (me) {
       // const webIdURI = sessionInfo.webId
-      var webIdURI = me.uri; // setUserCallback(webIdURI)
-
+      var webIdURI = me.uri;
+      // setUserCallback(webIdURI)
       var divs = dom.getElementsByClassName(magicClassName);
-      debug.log("Logged in, ".concat(divs.length, " panels to be serviced")); // At the same time, satisfy all the other login boxes
-
+      debug.log("Logged in, ".concat(divs.length, " panels to be serviced"));
+      // At the same time, satisfy all the other login boxes
       for (var i = 0; i < divs.length; i++) {
-        var div = divs[i]; // @@ TODO Remove the need to manipulate HTML elements
-
+        var div = divs[i];
+        // @@ TODO Remove the need to manipulate HTML elements
         if (div.setUserCallback) {
           try {
             div.setUserCallback(webIdURI);
             var parent = div.parentNode;
-
             if (parent) {
               parent.removeChild(div);
             }
@@ -8464,13 +7198,13 @@ function signInOrSignUpBox(dom, setUserCallback) {
       }
     }
   });
-
   signInPopUpButton.addEventListener('click', function () {
     var offline = (0, _solidLogic.offlineTestID)();
     if (offline) return setUserCallback(offline.uri);
     renderSignInPopup(dom);
-  }, false); // Sign up button
+  }, false);
 
+  // Sign up button
   var signupButton = dom.createElement('input');
   box.appendChild(signupButton);
   signupButton.setAttribute('type', 'button');
@@ -8485,7 +7219,6 @@ function signInOrSignUpBox(dom, setUserCallback) {
   }, false);
   return box;
 }
-
 function renderSignInPopup(dom) {
   /**
    * Issuer Menu
@@ -8510,7 +7243,6 @@ function renderSignInPopup(dom) {
   });
   issuerPopupBoxTopMenu.appendChild(issuerPopupBoxLabel);
   issuerPopupBoxTopMenu.appendChild(issuerPopupBoxCloseButton);
-
   var loginToIssuer = /*#__PURE__*/function () {
     var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(issuerUri) {
       var preLoginRedirectHash;
@@ -8521,28 +7253,23 @@ function renderSignInPopup(dom) {
               _context.prev = 0;
               // Save hash
               preLoginRedirectHash = new URL(window.location.href).hash;
-
               if (preLoginRedirectHash) {
                 window.localStorage.setItem('preLoginRedirectHash', preLoginRedirectHash);
               }
-
-              window.localStorage.setItem('loginIssuer', issuerUri); // Login
-
+              window.localStorage.setItem('loginIssuer', issuerUri);
+              // Login
               _context.next = 6;
               return _solidLogic.authSession.login({
                 redirectUrl: window.location.href,
                 oidcIssuer: issuerUri
               });
-
             case 6:
               _context.next = 11;
               break;
-
             case 8:
               _context.prev = 8;
               _context.t0 = _context["catch"](0);
               (0, _log.alert)(_context.t0.message);
-
             case 11:
             case "end":
               return _context.stop();
@@ -8550,16 +7277,14 @@ function renderSignInPopup(dom) {
         }
       }, _callee, null, [[0, 8]]);
     }));
-
     return function loginToIssuer(_x11) {
       return _ref.apply(this, arguments);
     };
   }();
+
   /**
    * Text-based idp selection
    */
-
-
   var issuerTextContainer = dom.createElement('div');
   issuerTextContainer.setAttribute('style', "\n      border-bottom: 1px solid #DDD;\n      display: flex;\n      flex-direction: column;\n      padding-top: 10px;\n    ");
   var issuerTextInputContainer = dom.createElement('div');
@@ -8583,10 +7308,10 @@ function renderSignInPopup(dom) {
   issuerTextInputContainer.appendChild(issuerTextGoButton);
   issuerTextContainer.appendChild(issuerTextInputContainer);
   issuerPopupBox.appendChild(issuerTextContainer);
+
   /**
    * Button-based idp selection
    */
-
   var issuerButtonContainer = dom.createElement('div');
   issuerButtonContainer.setAttribute('style', "\n      display: flex;\n      flex-direction: column;\n      padding-top: 10px;\n    ");
   var issuerBottonLabel = dom.createElement('label');
@@ -8604,6 +7329,7 @@ function renderSignInPopup(dom) {
   });
   issuerPopupBox.appendChild(issuerButtonContainer);
 }
+
 /**
  * Login status box
  *
@@ -8614,110 +7340,86 @@ function renderSignInPopup(dom) {
  *
  * @returns
  */
-
-
 function loginStatusBox(dom) {
   var listener = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
   var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
   // 20190630
-  var me = (0, _solidLogic.offlineTestID)(); // @@ TODO Remove the need to cast HTML element to any
-
+  var me = (0, _solidLogic.offlineTestID)();
+  // @@ TODO Remove the need to cast HTML element to any
   var box = dom.createElement('div');
-
   function setIt(newidURI) {
     if (!newidURI) {
       return;
-    } // const uri = newidURI.uri || newidURI
+    }
+
+    // const uri = newidURI.uri || newidURI
     // me = sym(uri)
-
-
     me = _solidLogic.authn.saveUser(newidURI);
     box.refresh();
     if (listener) listener(me.uri);
   }
-
   function logoutButtonHandler(_event) {
     var oldMe = me;
-
     _solidLogic.authSession.logout().then(function () {
       var message = "Your WebID was ".concat(oldMe, ". It has been forgotten.");
       me = null;
-
       try {
         (0, _log.alert)(message);
       } catch (e) {
         window.alert(message);
       }
-
       box.refresh();
       if (listener) listener(null);
     }, function (err) {
       (0, _log.alert)('Fail to log out:' + err);
     });
   }
-
   function logoutButton(me, options) {
     var signInButtonStyle = options.buttonStyle || getDefaultSignInButtonStyle();
     var logoutLabel = 'WebID logout';
-
     if (me) {
       var nick = _solidLogic.solidLogicSingleton.store.any(me, ns.foaf('nick')) || _solidLogic.solidLogicSingleton.store.any(me, ns.foaf('name'));
-
       if (nick) {
         logoutLabel = 'Logout ' + nick.value;
       }
     }
-
-    var signOutButton = dom.createElement('input'); // signOutButton.className = 'WebIDCancelButton'
-
+    var signOutButton = dom.createElement('input');
+    // signOutButton.className = 'WebIDCancelButton'
     signOutButton.setAttribute('type', 'button');
     signOutButton.setAttribute('value', logoutLabel);
     signOutButton.setAttribute('style', "".concat(signInButtonStyle, "background-color: #eee;"));
     signOutButton.addEventListener('click', logoutButtonHandler, false);
     return signOutButton;
   }
-
   box.refresh = function () {
     var sessionInfo = _solidLogic.authSession.info;
-
     if (sessionInfo && sessionInfo.webId && sessionInfo.isLoggedIn) {
       me = _solidLogic.solidLogicSingleton.store.sym(sessionInfo.webId);
     } else {
       me = null;
     }
-
     if (me && box.me !== me.uri || !me && box.me) {
       widgets.clearElement(box);
-
       if (me) {
         box.appendChild(logoutButton(me, options));
       } else {
         box.appendChild(signInOrSignUpBox(dom, setIt, options));
       }
     }
-
     box.me = me ? me.uri : null;
   };
-
   box.refresh();
-
   function trackSession() {
     me = _solidLogic.authn.currentUser();
     box.refresh();
   }
-
   trackSession();
-
   _solidLogic.authSession.onLogin(trackSession);
-
   _solidLogic.authSession.onLogout(trackSession);
-
   box.me = '99999'; // Force refresh
-
   box.refresh();
   return box;
 }
-
 _solidLogic.authSession.onLogout( /*#__PURE__*/(0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2() {
   var issuer, wellKnownUri, wellKnownResult, openidConfiguration;
   return _regenerator["default"].wrap(function _callee2$(_context2) {
@@ -8725,53 +7427,41 @@ _solidLogic.authSession.onLogout( /*#__PURE__*/(0, _asyncToGenerator2["default"]
       switch (_context2.prev = _context2.next) {
         case 0:
           issuer = window.localStorage.getItem('loginIssuer');
-
           if (!issuer) {
             _context2.next = 19;
             break;
           }
-
           _context2.prev = 2;
           wellKnownUri = new URL(issuer);
           wellKnownUri.pathname = '/.well-known/openid-configuration';
           _context2.next = 7;
           return fetch(wellKnownUri.toString());
-
         case 7:
           wellKnownResult = _context2.sent;
-
           if (!(wellKnownResult.status === 200)) {
             _context2.next = 15;
             break;
           }
-
           _context2.next = 11;
           return wellKnownResult.json();
-
         case 11:
           openidConfiguration = _context2.sent;
-
           if (!(openidConfiguration && openidConfiguration.end_session_endpoint)) {
             _context2.next = 15;
             break;
           }
-
           _context2.next = 15;
           return fetch(openidConfiguration.end_session_endpoint, {
             credentials: 'include'
           });
-
         case 15:
           _context2.next = 19;
           break;
-
         case 17:
           _context2.prev = 17;
           _context2.t0 = _context2["catch"](2);
-
         case 19:
           window.location.reload();
-
         case 20:
         case "end":
           return _context2.stop();
@@ -8779,6 +7469,7 @@ _solidLogic.authSession.onLogout( /*#__PURE__*/(0, _asyncToGenerator2["default"]
     }
   }, _callee2, null, [[2, 17]]);
 })));
+
 /**
  * Workspace selection etc
  * See https://github.com/solidos/userguide/issues/16
@@ -8802,8 +7493,6 @@ _solidLogic.authSession.onLogout( /*#__PURE__*/(0, _asyncToGenerator2["default"]
  * @param appDetails
  * @param callbackWS
  */
-
-
 function selectWorkspace(dom, appDetails, callbackWS) {
   var noun = appDetails.noun;
   var appPathSegment = appDetails.appPathSegment;
@@ -8814,41 +7503,30 @@ function selectWorkspace(dom, appDetails, callbackWS) {
     dom: dom,
     div: box
   };
-
   function say(s, background) {
     box.appendChild(widgets.errorMessageBlock(dom, s, background));
   }
-
   function figureOutBase(ws) {
     var newBaseNode = _solidLogic.solidLogicSingleton.store.any(ws, ns.space('uriPrefix'));
-
     var newBaseString;
-
     if (!newBaseNode) {
       newBaseString = ws.uri.split('#')[0];
     } else {
       newBaseString = newBaseNode.value;
     }
-
     if (newBaseString.slice(-1) !== '/') {
       debug.log("".concat(appPathSegment, ": No / at end of uriPrefix ").concat(newBaseString)); // @@ paramater?
-
       newBaseString = "".concat(newBaseString, "/");
     }
-
     var now = new Date();
     newBaseString += "".concat(appPathSegment, "/id").concat(now.getTime(), "/"); // unique id
-
     return newBaseString;
   }
-
   function displayOptions(context) {
     // console.log('displayOptions!', context)
     function makeNewWorkspace(_x12) {
       return _makeNewWorkspace.apply(this, arguments);
     } // const status = ''
-
-
     function _makeNewWorkspace() {
       _makeNewWorkspace = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(_event) {
         var row, cell, newBase, newWs, newData;
@@ -8863,25 +7541,21 @@ function selectWorkspace(dom, appDetails, callbackWS) {
                 _context3.t0 = encodeURI;
                 _context3.next = 7;
                 return widgets.askName(dom, _solidLogic.solidLogicSingleton.store, cell, ns.solid('URL'), ns.space('Workspace'), 'Workspace');
-
               case 7:
                 _context3.t1 = _context3.sent;
                 newBase = (0, _context3.t0)(_context3.t1);
                 newWs = widgets.newThing(context.preferencesFile);
-                newData = [(0, _rdflib.st)(context.me, ns.space('workspace'), newWs, context.preferencesFile), // eslint-disable-next-line camelcase
+                newData = [(0, _rdflib.st)(context.me, ns.space('workspace'), newWs, context.preferencesFile),
+                // eslint-disable-next-line camelcase
                 (0, _rdflib.st)(newWs, ns.space('uriPrefix'), newBase, context.preferencesFile)];
-
                 if (_solidLogic.solidLogicSingleton.store.updater) {
                   _context3.next = 13;
                   break;
                 }
-
                 throw new Error('store has no updater');
-
               case 13:
                 _context3.next = 15;
                 return _solidLogic.solidLogicSingleton.store.updater.update([], newData);
-
               case 15:
               case "end":
                 return _context3.stop();
@@ -8891,18 +7565,15 @@ function selectWorkspace(dom, appDetails, callbackWS) {
       }));
       return _makeNewWorkspace.apply(this, arguments);
     }
-
     var id = context.me;
     var preferencesFile = context.preferencesFile;
-    var newBase = null; // A workspace specifically defined in the private preference file:
+    var newBase = null;
 
+    // A workspace specifically defined in the private preference file:
     var w = _solidLogic.solidLogicSingleton.store.each(id, ns.space('workspace'), undefined, preferencesFile); // Only trust preference file here
+
     // A workspace in a storage in the public profile:
-
-
     var storages = _solidLogic.solidLogicSingleton.store.each(id, ns.space('storage')); // @@ No provenance requirement at the moment
-
-
     if (w.length === 0 && storages) {
       say("You don't seem to have any workspaces. You have ".concat(storages.length, " storage spaces."), 'white');
       storages.map(function (s) {
@@ -8912,41 +7583,40 @@ function selectWorkspace(dom, appDetails, callbackWS) {
         return file.id ? ['public', 'private'].includes(file.id().toLowerCase()) : '';
       });
     }
-
     if (w.length === 1) {
       say("Workspace used: ".concat(w[0].uri), 'white'); // @@ allow user to see URI
-
-      newBase = figureOutBase(w[0]); // callbackWS(w[0], newBase)
+      newBase = figureOutBase(w[0]);
+      // callbackWS(w[0], newBase)
       // } else if (w.length === 0) {
-    } // Prompt for ws selection or creation
+    }
+
+    // Prompt for ws selection or creation
     // say( w.length + " workspaces for " + id + "Choose one.");
-
-
     var table = dom.createElement('table');
-    table.setAttribute('style', 'border-collapse:separate; border-spacing: 0.5em;'); // const popup = window.open(undefined, '_blank', { height: 300, width:400 }, false)
+    table.setAttribute('style', 'border-collapse:separate; border-spacing: 0.5em;');
 
-    box.appendChild(table); //  Add a field for directly adding the URI yourself
+    // const popup = window.open(undefined, '_blank', { height: 300, width:400 }, false)
+    box.appendChild(table);
+
+    //  Add a field for directly adding the URI yourself
+
     // const hr = box.appendChild(dom.createElement('hr')) // @@
-
     box.appendChild(dom.createElement('hr')); // @@
 
     var p = box.appendChild(dom.createElement('p'));
     p.style = _style.commentStyle;
-    p.textContent = "Where would you like to store the data for the ".concat(noun, "?\n    Give the URL of the folder where you would like the data stored.\n    It can be anywhere in solid world - this URI is just an idea."); // @@ TODO Remove the need to cast baseField to any
-
+    p.textContent = "Where would you like to store the data for the ".concat(noun, "?\n    Give the URL of the folder where you would like the data stored.\n    It can be anywhere in solid world - this URI is just an idea.");
+    // @@ TODO Remove the need to cast baseField to any
     var baseField = box.appendChild(dom.createElement('input'));
     baseField.setAttribute('type', 'text');
     baseField.style = _style.textInputStyle;
     baseField.size = 80; // really a string
-
     baseField.label = 'base URL';
     baseField.autocomplete = 'on';
-
     if (newBase) {
       // set to default
       baseField.value = newBase;
     }
-
     context.baseField = baseField;
     box.appendChild(dom.createElement('br')); // @@
 
@@ -8955,27 +7625,27 @@ function selectWorkspace(dom, appDetails, callbackWS) {
     button.textContent = "Start new ".concat(noun, " at this URI");
     button.addEventListener('click', function (_event) {
       var newBase = baseField.value.replace(' ', '%20'); // do not re-encode in general, as % encodings may exist
-
       if (newBase.slice(-1) !== '/') {
         newBase += '/';
       }
-
       callbackWS(null, newBase);
-    }); // Now go set up the table of spaces
-    // const row = 0
+    });
 
+    // Now go set up the table of spaces
+
+    // const row = 0
     w = w.filter(function (x) {
-      return !_solidLogic.solidLogicSingleton.store.holds(x, ns.rdf('type'), // Ignore master workspaces
+      return !_solidLogic.solidLogicSingleton.store.holds(x, ns.rdf('type'),
+      // Ignore master workspaces
       ns.space('MasterWorkspace'));
     });
     var col1, col2, col3, tr, ws, style, comment;
     var cellStyle = 'height: 3em; margin: 1em; padding: 1em white; border-radius: 0.3em;';
-    var deselectedStyle = "".concat(cellStyle, "border: 0px;"); // const selectedStyle = cellStyle + 'border: 1px solid black;'
-
+    var deselectedStyle = "".concat(cellStyle, "border: 0px;");
+    // const selectedStyle = cellStyle + 'border: 1px solid black;'
     for (var i = 0; i < w.length; i++) {
       ws = w[i];
       tr = dom.createElement('tr');
-
       if (i === 0) {
         col1 = dom.createElement('td');
         col1.setAttribute('rowspan', "".concat(w.length));
@@ -8983,10 +7653,8 @@ function selectWorkspace(dom, appDetails, callbackWS) {
         col1.setAttribute('style', 'vertical-align:middle;');
         tr.appendChild(col1);
       }
-
       col2 = dom.createElement('td');
       style = _solidLogic.solidLogicSingleton.store.anyValue(ws, ns.ui('style'));
-
       if (!style) {
         // Otherwise make up arbitrary colour
         var hash = function hash(x) {
@@ -8995,32 +7663,24 @@ function selectWorkspace(dom, appDetails, callbackWS) {
             return a & a;
           }, 0);
         };
-
         var bgcolor = "#".concat((hash(ws.uri) & 0xffffff | 0xc0c0c0).toString(16)); // c0c0c0  forces pale
-
         style = "color: black ; background-color: ".concat(bgcolor, ";");
       }
-
       col2.setAttribute('style', deselectedStyle + style);
       tr.target = ws.uri;
-
       var label = _solidLogic.solidLogicSingleton.store.any(ws, ns.rdfs('label'));
-
       if (!label) {
         label = ws.uri.split('/').slice(-1)[0] || ws.uri.split('/').slice(-2)[0];
       }
-
       col2.textContent = label || '???';
       tr.appendChild(col2);
-
       if (i === 0) {
         col3 = dom.createElement('td');
-        col3.setAttribute('rowspan', "".concat(w.length, "1")); // col3.textContent = '@@@@@ remove';
-
+        col3.setAttribute('rowspan', "".concat(w.length, "1"));
+        // col3.textContent = '@@@@@ remove';
         col3.setAttribute('style', 'width:50%;');
         tr.appendChild(col3);
       }
-
       table.appendChild(tr);
       comment = _solidLogic.solidLogicSingleton.store.any(ws, ns.rdfs('comment'));
       comment = comment ? comment.value : 'Use this workspace';
@@ -9028,8 +7688,8 @@ function selectWorkspace(dom, appDetails, callbackWS) {
         col3.textContent = comment ? comment.value : '';
         col3.setAttribute('style', deselectedStyle + style);
         var button = dom.createElement('button');
-        button.textContent = 'Continue'; // button.setAttribute('style', style);
-
+        button.textContent = 'Continue';
+        // button.setAttribute('style', style);
         var newBase = figureOutBase(ws);
         baseField.value = newBase; // show user proposed URI
 
@@ -9038,12 +7698,11 @@ function selectWorkspace(dom, appDetails, callbackWS) {
           callbackWS(ws, newBase);
           button.textContent = '---->';
         }, true); // capture vs bubble
-
         col3.appendChild(button);
       }, true); // capture vs bubble
-    } // last line with "Make new workspace"
+    }
 
-
+    // last line with "Make new workspace"
     var trLast = dom.createElement('tr');
     col2 = dom.createElement('td');
     col2.setAttribute('style', cellStyle);
@@ -9052,9 +7711,8 @@ function selectWorkspace(dom, appDetails, callbackWS) {
     trLast.appendChild(col2);
     table.appendChild(trLast);
   } // displayOptions
+
   // console.log('kicking off async operation')
-
-
   ensureLoadedPreferences(context) // kick off async operation
   .then(displayOptions)["catch"](function (err) {
     // console.log("err from async op")
@@ -9079,14 +7737,11 @@ function selectWorkspace(dom, appDetails, callbackWS) {
  *
  * @returns A div with a button in it for making a new app instance
  */
-
-
 function newAppInstance(dom, appDetails, callback) {
   var gotWS = function gotWS(ws, base) {
     // log.debug("newAppInstance: Selected workspace = " + (ws? ws.uri : 'none'))
     callback(ws, base);
   };
-
   var div = dom.createElement('div');
   var b = dom.createElement('button');
   b.setAttribute('type', 'button');
@@ -9102,20 +7757,15 @@ function newAppInstance(dom, appDetails, callback) {
  * Retrieves whether the currently logged in user is a power user
  * and/or a developer
  */
-
-
 function getUserRoles() {
   return _getUserRoles.apply(this, arguments);
 }
 /**
  * Filters which panes should be available, based on the result of [[getUserRoles]]
  */
-
-
 function _getUserRoles() {
   _getUserRoles = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee10() {
     var _yield$ensureLoadedPr, me, preferencesFile, preferencesFileError;
-
     return _regenerator["default"].wrap(function _callee10$(_context10) {
       while (1) {
         switch (_context10.prev = _context10.next) {
@@ -9123,31 +7773,24 @@ function _getUserRoles() {
             _context10.prev = 0;
             _context10.next = 3;
             return ensureLoadedPreferences({});
-
           case 3:
             _yield$ensureLoadedPr = _context10.sent;
             me = _yield$ensureLoadedPr.me;
             preferencesFile = _yield$ensureLoadedPr.preferencesFile;
             preferencesFileError = _yield$ensureLoadedPr.preferencesFileError;
-
             if (!(!preferencesFile || preferencesFileError)) {
               _context10.next = 9;
               break;
             }
-
             throw new Error(preferencesFileError);
-
           case 9:
             return _context10.abrupt("return", _solidLogic.solidLogicSingleton.store.each(me, ns.rdf('type'), null, preferencesFile.doc()));
-
           case 12:
             _context10.prev = 12;
             _context10.t0 = _context10["catch"](0);
             debug.warn('Unable to fetch your preferences - this was the error: ', _context10.t0);
-
           case 15:
             return _context10.abrupt("return", []);
-
           case 16:
           case "end":
             return _context10.stop();
@@ -9157,11 +7800,9 @@ function _getUserRoles() {
   }));
   return _getUserRoles.apply(this, arguments);
 }
-
 function filterAvailablePanes(_x13) {
   return _filterAvailablePanes.apply(this, arguments);
 }
-
 function _filterAvailablePanes() {
   _filterAvailablePanes = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee11(panes) {
     var userRoles;
@@ -9171,13 +7812,11 @@ function _filterAvailablePanes() {
           case 0:
             _context11.next = 2;
             return getUserRoles();
-
           case 2:
             userRoles = _context11.sent;
             return _context11.abrupt("return", panes.filter(function (pane) {
               return isMatchingAudience(pane, userRoles);
             }));
-
           case 4:
           case "end":
             return _context11.stop();
@@ -9187,7 +7826,6 @@ function _filterAvailablePanes() {
   }));
   return _filterAvailablePanes.apply(this, arguments);
 }
-
 function isMatchingAudience(pane, userRoles) {
   var audience = pane.audience || [];
   return audience.reduce(function (isMatch, audienceRole) {
@@ -9213,9 +7851,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.matrix = void 0;
-
 var _matrix = __webpack_require__(/*! ./matrix */ "./lib/matrix/matrix.js");
-
 var matrix = {
   matrixForQuery: _matrix.matrixForQuery
 };
@@ -9234,22 +7870,15 @@ exports.matrix = matrix;
 
 
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.matrixForQuery = matrixForQuery;
-
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
-
 var $rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 //      Build a 2D matrix of values
 //
 //  dom      AKA document
@@ -9270,8 +7899,8 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 //   Header row at top (x axis) and left (y-axis) generated automatically.
 //   Extra rows and columns are inserted as needed to hold new data points
 //   matrix.refresh() will re-run the query and adjust the display
-var kb = _solidLogic.solidLogicSingleton.store;
 
+var kb = _solidLogic.solidLogicSingleton.store;
 function matrixForQuery(dom, query, vx, vy, vvalue, options, whenDone) {
   // @@ TODO Remove need to cast to any
   var matrix = dom.createElement('table');
@@ -9279,11 +7908,8 @@ function matrixForQuery(dom, query, vx, vy, vvalue, options, whenDone) {
   var corner = header.appendChild(dom.createElement('td'));
   corner.setAttribute('class', 'MatrixCorner');
   matrix.appendChild(header); // just one for now
-
   matrix.lastHeader = header; // Element before data
-
   var columns = []; // Vector
-
   var rows = []; // Associative array
 
   var setCell = function setCell(cell, x, y, value) {
@@ -9291,42 +7917,34 @@ function matrixForQuery(dom, query, vx, vy, vvalue, options, whenDone) {
       // Empty any previous
       cell.removeChild(cell.firstChild);
     }
-
     cell.setAttribute('style', '');
     cell.style.textAlign = 'center';
-
     if (options.cellFunction) {
       options.cellFunction(cell, x, y, value);
     } else {
       cell.textContent = utils.label(value);
       cell.setAttribute('style', 'padding: 0.3em');
     }
-
     delete cell.old;
   };
-
   var rowFor = function rowFor(y1) {
     var y = y1.toNT();
-    if (rows[y]) return rows[y]; // @@ TODO Remove need for casting to any
-
+    if (rows[y]) return rows[y];
+    // @@ TODO Remove need for casting to any
     var tr = dom.createElement('tr');
     var header = tr.appendChild(dom.createElement('td'));
     header.setAttribute('style', 'padding: 0.3em;');
     header.textContent = utils.label(y1); // first approximation
-
     if (y1.termType === 'NamedNode') {
       kb.fetcher.nowOrWhenFetched(y1.uri.split('#')[0], undefined, function (ok, _body, _response) {
         if (ok) header.textContent = utils.label(y1);
       });
     }
-
     for (var i = 0; i < columns.length; i++) {
       setCell(tr.appendChild(dom.createElement('td')), $rdf.fromNT(columns[i]), y1, null);
     }
-
     tr.dataValueNT = y;
     rows[y] = tr;
-
     for (var ele = matrix.lastHeader.nextSibling; ele; ele = ele.nextSibling) {
       // skip header
       if (y > ele.dataValueNT && options && options.yDecreasing || y < ele.dataValueNT && !(options && options.yDecreasing)) {
@@ -9339,91 +7957,74 @@ function matrixForQuery(dom, query, vx, vy, vvalue, options, whenDone) {
 
   var columnNumberFor = function columnNumberFor(x1) {
     var xNT = x1.toNT(); // xNT is a NT string
-
-    var col = null; // These are data columns (not headings)
-
+    var col = null;
+    // These are data columns (not headings)
     for (var i = 0; i < columns.length; i++) {
       if (columns[i] === xNT) {
         return i;
       }
-
       if (xNT > columns[i] && options.xDecreasing || xNT < columns[i] && !options.xDecreasing) {
         columns = columns.slice(0, i).concat([xNT]).concat(columns.slice(i));
         col = i;
         break;
       }
     }
-
     if (col === null) {
       col = columns.length;
       columns.push(xNT);
-    } // col is the number of the new column, starting from 0
+    }
 
-
+    // col is the number of the new column, starting from 0
     for (var row = matrix.firstChild; row; row = row.nextSibling) {
       // For every row header or not
       var y = row.dataValueNT;
       var td = dom.createElement('td'); // Add a new cell
-
       td.style.textAlign = 'center';
-
       if (row === matrix.firstChild) {
         td.textContent = utils.label(x1);
       } else {
         setCell(td, x1, $rdf.fromNT(y), null);
       }
-
       if (col === columns.length - 1) {
         row.appendChild(td);
       } else {
         var t = row.firstChild;
-
         for (var j = 0; j < col + 1; j++) {
           // Skip header col too
           t = t.nextSibling;
         }
-
         row.insertBefore(td, t);
       }
     }
-
     return col;
   };
-
   var markOldCells = function markOldCells() {
     for (var i = 1; i < matrix.children.length; i++) {
       var row = matrix.children[i];
-
       for (var j = 1; j < row.children.length; j++) {
         row.children[j].old = true;
       }
     }
   };
-
   var clearOldCells = function clearOldCells() {
     var row, cell;
     var colsUsed = [];
     var rowsUsed = [];
-
     if (options.set_y) {
       // Knows y values create rows
       for (var k = 0; k < options.set_y.length; k++) {
         rowsUsed[options.set_y[k]] = true;
       }
     }
-
     if (options.set_x) {
       for (var _k = 0; _k < options.set_x.length; _k++) {
         colsUsed[columnNumberFor(options.set_x[_k]) + 1] = true;
       }
     }
-
     for (var i = 1; i < matrix.children.length; i++) {
       row = matrix.children[i];
-
       for (var j = 1; j < row.children.length; j++) {
         cell = row.children[j];
-
         if (cell.old) {
           var y = $rdf.fromNT(row.dataValueNT);
           var x = $rdf.fromNT(columns[j - 1]);
@@ -9434,10 +8035,8 @@ function matrixForQuery(dom, query, vx, vy, vvalue, options, whenDone) {
         }
       }
     }
-
     for (var _i = 0; _i < matrix.children.length; _i++) {
       row = matrix.children[_i];
-
       if (_i > 0 && !rowsUsed[row.dataValueNT]) {
         delete rows[row.dataValueNT];
         matrix.removeChild(row);
@@ -9445,30 +8044,24 @@ function matrixForQuery(dom, query, vx, vy, vvalue, options, whenDone) {
         for (var _j = row.children.length - 1; _j > 0; _j--) {
           // backwards
           var _cell = row.children[_j];
-
           if (!colsUsed[_j]) {
             row.removeChild(_cell);
           }
         }
       }
     }
-
     var newcolumns = [];
-
     for (var _j2 = 0; _j2 < columns.length; _j2++) {
       if (colsUsed[_j2 + 1]) {
         newcolumns.push(columns[_j2]);
       }
     }
-
     columns = newcolumns;
   };
-
   matrix.refresh = function () {
     markOldCells();
     kb.query(query, addCellFromBindings, undefined, clearOldCells);
   };
-
   var addCellFromBindings = function addCellFromBindings(bindings) {
     var x = bindings[vx.toString()];
     var y = bindings[vy.toString()];
@@ -9476,25 +8069,20 @@ function matrixForQuery(dom, query, vx, vy, vvalue, options, whenDone) {
     var row = rowFor(y);
     var colNo = columnNumberFor(x);
     var cell = row.children[colNo + 1]; // number of Y axis headings
-
     setCell(cell, x, y, value);
   };
-
   if (options.set_y) {
     // Knows y values create rows
     for (var k = 0; k < options.set_y.length; k++) {
       rowFor(options.set_y[k]);
     }
   }
-
   if (options.set_x) {
     for (var _k2 = 0; _k2 < options.set_x.length; _k2++) {
       columnNumberFor(options.set_x[_k2]);
     }
   }
-
   kb.query(query, addCellFromBindings, undefined, whenDone); // Populate the matrix
-
   return matrix;
 }
 //# sourceMappingURL=matrix.js.map
@@ -9514,9 +8102,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.media = void 0;
-
 var _mediaCapture = __webpack_require__(/*! ./media-capture */ "./lib/media/media-capture.js");
-
 var media = {
   cameraCaptureControl: _mediaCapture.cameraCaptureControl,
   cameraButton: _mediaCapture.cameraButton
@@ -9536,29 +8122,19 @@ exports.media = media;
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.cameraButton = cameraButton;
 exports.cameraCaptureControl = cameraCaptureControl;
-
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
-
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
-
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
-
 var _iconBase = __webpack_require__(/*! ../iconBase */ "./lib/iconBase.js");
-
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 /// /////////////////////////////////////////////
 //
 //   Media input widget
@@ -9575,22 +8151,22 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 //
 
 /** @module mediaCapture */
-var cameraIcon = _iconBase.icons.iconBase + 'noun_Camera_1618446_000000.svg'; // Get it from github
 
+var cameraIcon = _iconBase.icons.iconBase + 'noun_Camera_1618446_000000.svg'; // Get it from github
 var retakeIcon = _iconBase.icons.iconBase + 'noun_479395.svg'; // Get it from github
 
 var canvasWidth = '640';
 var canvasHeight = '480';
-var controlStyle = "border-radius: 0.5em; margin: 0.8em; width: ".concat(canvasWidth, "; height:").concat(canvasHeight, ";"); // const controlStyle = 'border-radius: 0.5em; margin: 0.8em; width: 320; height:240;'
-
+var controlStyle = "border-radius: 0.5em; margin: 0.8em; width: ".concat(canvasWidth, "; height:").concat(canvasHeight, ";");
+// const controlStyle = 'border-radius: 0.5em; margin: 0.8em; width: 320; height:240;'
 var contentType = 'image/png';
+
 /** A control to capture a picture using camera
  * @param {Docuemnt} dom - The Document object
  * @param {IndexedForumla} store - The quadstore to store data in
  * @param {NamedNode} getImageDoc() - NN of the image file to be created
  * @param {function} doneCallback - Called when a picture has been taken
  */
-
 function cameraCaptureControl(dom, store, getImageDoc, doneCallback) {
   var div = dom.createElement('div');
   var destination, imageBlob, player, canvas;
@@ -9618,7 +8194,6 @@ function cameraCaptureControl(dom, store, getImageDoc, doneCallback) {
 
   var sendButton = buttons.appendChild(dom.createElement('td')) // Confirm and save button
   .appendChild(widgets.continueButton(dom)); // @@ or send icon??
-
   sendButton.addEventListener('click', function (_event) {
     saveBlob(imageBlob, destination);
   });
@@ -9629,24 +8204,19 @@ function cameraCaptureControl(dom, store, getImageDoc, doneCallback) {
     player.setAttribute('controls', '1');
     player.setAttribute('autoplay', '1');
     player.setAttribute('style', controlStyle);
-
     if (!navigator.mediaDevices) {
       throw new Error('navigator.mediaDevices not available');
     }
-
     navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
       player.srcObject = stream;
       shutterButton.style.visibility = 'visible'; // Enable
-
       sendButton.style.visibility = 'collapse';
       retakeButton.style.visibility = 'collapse';
     });
   }
-
   var constraints = {
     video: true
   };
-
   function retake() {
     main.removeChild(canvas);
     displayPlayer(); // Make new one as old one is stuck black
@@ -9667,8 +8237,8 @@ function cameraCaptureControl(dom, store, getImageDoc, doneCallback) {
       debug.log(msg);
       destination = getImageDoc();
       imageBlob = blob; // save for review
-
-      reviewImage(); // alert(msg)
+      reviewImage();
+      // alert(msg)
     }, contentType); // toBlob
   }
 
@@ -9685,11 +8255,11 @@ function cameraCaptureControl(dom, store, getImageDoc, doneCallback) {
       });
     }
   }
-
   function saveBlob(blob, destination) {
-    var contentType = blob.type; // if (!confirm('Save picture to ' + destination + ' ?')) return
-
-    debug.log('Putting ' + blob.size + ' bytes of ' + contentType + ' to ' + destination) // @@ TODO Remove casting
+    var contentType = blob.type;
+    // if (!confirm('Save picture to ' + destination + ' ?')) return
+    debug.log('Putting ' + blob.size + ' bytes of ' + contentType + ' to ' + destination)
+    // @@ TODO Remove casting
     ;
     store.fetcher.webOperation('PUT', destination.uri, {
       data: blob,
@@ -9702,12 +8272,13 @@ function cameraCaptureControl(dom, store, getImageDoc, doneCallback) {
       stopVideo();
       alert(err);
     });
-  } // Attach the video stream to the video element and autoplay.
+  }
 
-
+  // Attach the video stream to the video element and autoplay.
   displayPlayer();
   return div;
 }
+
 /** A button to capture a picture using camera
  * @param {Docuemnt} dom - The Document object
  * @param {IndexedForumla} store - The quadstore to store data in
@@ -9718,16 +8289,13 @@ function cameraCaptureControl(dom, store, getImageDoc, doneCallback) {
  * This expacts the buttton to a large control when it is pressed
  */
 
-
 function cameraButton(dom, store, getImageDoc, doneCallback) {
   var div = dom.createElement('div');
   var but = widgets.button(dom, cameraIcon, 'Take picture');
   var control;
-
   function restoreButton(_x) {
     return _restoreButton.apply(this, arguments);
   }
-
   function _restoreButton() {
     _restoreButton = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(imageDoc) {
       return _regenerator["default"].wrap(function _callee$(_context) {
@@ -9737,7 +8305,6 @@ function cameraButton(dom, store, getImageDoc, doneCallback) {
               div.removeChild(control);
               div.appendChild(but);
               doneCallback(imageDoc);
-
             case 3:
             case "end":
               return _context.stop();
@@ -9747,7 +8314,6 @@ function cameraButton(dom, store, getImageDoc, doneCallback) {
     }));
     return _restoreButton.apply(this, arguments);
   }
-
   div.appendChild(but);
   but.addEventListener('click', function (_event) {
     div.removeChild(but);
@@ -9770,35 +8336,25 @@ function cameraButton(dom, store, getImageDoc, doneCallback) {
 
 
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.messageArea = messageArea;
-
 var _iconBase = __webpack_require__(/*! ./iconBase */ "./lib/iconBase.js");
-
 var login = _interopRequireWildcard(__webpack_require__(/*! ./login/login */ "./lib/login/login.js"));
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 var ns = _interopRequireWildcard(__webpack_require__(/*! ./ns */ "./lib/ns.js"));
-
 var rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
-
 var style = _interopRequireWildcard(__webpack_require__(/*! ./style */ "./lib/style.js"));
-
 var utils = _interopRequireWildcard(__webpack_require__(/*! ./utils */ "./lib/utils/index.js"));
-
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ./widgets */ "./lib/widgets/index.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 //  Common code for a discussion are a of messages about something
 //
+
 // pull in first avoid cross-refs
+
 var UI = {
   icons: _iconBase.icons,
   ns: ns,
@@ -9806,29 +8362,26 @@ var UI = {
   style: style,
   widgets: widgets
 };
-
 function messageArea(dom, kb, subject, messageStore, options) {
   kb = kb || _solidLogic.solidLogicSingleton.store;
   messageStore = messageStore.doc(); // No hash
-
   var ns = UI.ns;
   var WF = rdf.Namespace('http://www.w3.org/2005/01/wf/flow#');
   var DCT = rdf.Namespace('http://purl.org/dc/terms/');
   options = options || {};
   var newestFirst = !!options.newestFirst;
-  var messageBodyStyle = 'white-space: pre-wrap; width: 90%; font-size:100%; border: 0.07em solid #eee; padding: .2em 0.5em; margin: 0.1em 1em 0.1em 1em;'; // 'font-size: 100%; margin: 0.1em 1em 0.1em 1em;  background-color: white; white-space: pre-wrap; padding: 0.1em;'
+  var messageBodyStyle = 'white-space: pre-wrap; width: 90%; font-size:100%; border: 0.07em solid #eee; padding: .2em 0.5em; margin: 0.1em 1em 0.1em 1em;';
+  // 'font-size: 100%; margin: 0.1em 1em 0.1em 1em;  background-color: white; white-space: pre-wrap; padding: 0.1em;'
 
-  var div = dom.createElement('div'); // eslint-disable-next-line prefer-const
-
+  var div = dom.createElement('div');
+  // eslint-disable-next-line prefer-const
   var messageTable; // Shared by initial build and addMessageFromBindings
 
   var me;
   var updater = _solidLogic.solidLogicSingleton.store.updater;
-
   var anchor = function anchor(text, term) {
     // If there is no link return an element anyway
     var a = dom.createElement('a');
-
     if (term && term.uri) {
       a.setAttribute('href', term.uri);
       a.addEventListener('click', UI.widgets.openHrefInOutlineMode, true);
@@ -9838,7 +8391,6 @@ function messageArea(dom, kb, subject, messageStore, options) {
     a.textContent = text;
     return a;
   };
-
   var mention = function mention(message, style) {
     var pre = dom.createElement('pre');
     pre.setAttribute('style', style || 'color: grey');
@@ -9846,7 +8398,6 @@ function messageArea(dom, kb, subject, messageStore, options) {
     pre.appendChild(dom.createTextNode(message));
     return pre;
   };
-
   var announce = {
     log: function log(message) {
       mention(message, 'color: #111;');
@@ -9857,9 +8408,10 @@ function messageArea(dom, kb, subject, messageStore, options) {
     error: function error(message) {
       mention(message, 'color: #800;');
     }
-  }; //       Form for a new message
-  //
+  };
 
+  //       Form for a new message
+  //
   var newMessageForm = function newMessageForm() {
     var form = dom.createElement('tr');
     var lhs = dom.createElement('td');
@@ -9878,17 +8430,15 @@ function messageArea(dom, kb, subject, messageStore, options) {
       var sts = [];
       var now = new Date();
       var timestamp = '' + now.getTime();
-      var dateStamp = rdf.term(now); // http://www.w3schools.com/jsref/jsref_obj_date.asp
-
+      var dateStamp = rdf.term(now);
+      // http://www.w3schools.com/jsref/jsref_obj_date.asp
       var message = kb.sym(messageStore.uri + '#' + 'Msg' + timestamp);
       sts.push(new rdf.Statement(subject, ns.wf('message'), message, messageStore));
       sts.push(new rdf.Statement(message, ns.sioc('content'), kb.literal(field.value), messageStore));
       sts.push(new rdf.Statement(message, DCT('created'), dateStamp, messageStore));
-
       if (me) {
         sts.push(new rdf.Statement(message, ns.foaf('maker'), me, messageStore));
       }
-
       var sendComplete = function sendComplete(uri, success, body) {
         if (!success) {
           form.appendChild(UI.widgets.errorMessageBlock(dom, 'Error writing message: ' + body));
@@ -9902,25 +8452,21 @@ function messageArea(dom, kb, subject, messageStore, options) {
           renderMessage(bindings, false); // not green
 
           field.value = ''; // clear from out for reuse
-
           field.setAttribute('class', '');
           field.disabled = false;
         }
       };
-
       updater.update([], sts, sendComplete);
     };
-
     form.appendChild(dom.createElement('br'));
     var field, sendButton;
-
     var turnOnInput = function turnOnInput() {
       creatorAndDate(lhs, me, '', null);
       field = dom.createElement('textarea');
       middle.innerHTML = '';
       middle.appendChild(field);
-      field.rows = 3; // field.cols = 40
-
+      field.rows = 3;
+      // field.cols = 40
       field.setAttribute('style', messageBodyStyle + 'background-color: #eef;');
       field.addEventListener('keyup', function (e) {
         // User preference?
@@ -9937,7 +8483,6 @@ function messageArea(dom, kb, subject, messageStore, options) {
       sendButton.addEventListener('click', sendMessage, false);
       rhs.appendChild(sendButton);
     };
-
     var context = {
       div: middle,
       dom: dom
@@ -9948,59 +8493,50 @@ function messageArea(dom, kb, subject, messageStore, options) {
     });
     return form;
   };
-
   function nick(person) {
     var s = _solidLogic.solidLogicSingleton.store.any(person, UI.ns.foaf('nick'));
-
     if (s) return '' + s.value;
     return '' + utils.label(person);
   }
-
   function creatorAndDate(td1, creator, date, message) {
     var nickAnchor = td1.appendChild(anchor(nick(creator), creator));
-
     if (creator.uri) {
       _solidLogic.solidLogicSingleton.store.fetcher.nowOrWhenFetched(creator.doc(), undefined, function (_ok, _body) {
         nickAnchor.textContent = nick(creator);
       });
     }
-
     td1.appendChild(dom.createElement('br'));
     td1.appendChild(anchor(date, message));
-  } // ///////////////////////////////////////////////////////////////////////
+  }
 
+  // ///////////////////////////////////////////////////////////////////////
 
   function syncMessages(about, messageTable) {
     var displayed = {};
     var ele, ele2;
-
     for (ele = messageTable.firstChild; ele; ele = ele.nextSibling) {
       if (ele.AJAR_subject) {
         displayed[ele.AJAR_subject.uri] = true;
       }
     }
-
     var messages = kb.each(about, ns.wf('message'));
     var stored = {};
     messages.forEach(function (m) {
       stored[m.uri] = true;
-
       if (!displayed[m.uri]) {
         addMessage(m);
       }
-    }); // eslint-disable-next-line space-in-parens
+    });
 
+    // eslint-disable-next-line space-in-parens
     for (ele = messageTable.firstChild; ele;) {
       ele2 = ele.nextSibling;
-
       if (ele.AJAR_subject && !stored[ele.AJAR_subject.uri]) {
         messageTable.removeChild(ele);
       }
-
       ele = ele2;
     }
   }
-
   var deleteMessage = function deleteMessage(message) {
     var deletions = kb.statementsMatching(message).concat(kb.statementsMatching(undefined, undefined, message));
     updater.update(deletions, [], function (uri, ok, body) {
@@ -10011,7 +8547,6 @@ function messageArea(dom, kb, subject, messageStore, options) {
       }
     });
   };
-
   var addMessage = function addMessage(message) {
     var bindings = {
       '?msg': message,
@@ -10032,24 +8567,20 @@ function messageArea(dom, kb, subject, messageStore, options) {
     tr.AJAR_date = dateString;
     tr.AJAR_subject = message;
     var done = false;
-
     for (var ele = messageTable.firstChild;; ele = ele.nextSibling) {
       if (!ele) {
         // empty
         break;
       }
-
       if (dateString > ele.AJAR_date && newestFirst || dateString < ele.AJAR_date && !newestFirst) {
         messageTable.insertBefore(tr, ele);
         done = true;
         break;
       }
     }
-
     if (!done) {
       messageTable.appendChild(tr);
     }
-
     var td1 = dom.createElement('td');
     tr.appendChild(td1);
     creatorAndDate(td1, creator, UI.widgets.shortDate(dateString), message);
@@ -10065,12 +8596,10 @@ function messageArea(dom, kb, subject, messageStore, options) {
     td3.appendChild(delButton);
     delButton.textContent = '-';
     tr.setAttribute('class', 'hoverControl'); // See tabbedtab.css (sigh global CSS)
-
     delButton.setAttribute('class', 'hoverControlHide');
     delButton.setAttribute('style', 'color: red;');
     delButton.addEventListener('click', function (_event) {
       td3.removeChild(delButton); // Ask -- are you sure?
-
       var cancelButton = dom.createElement('button');
       cancelButton.textContent = 'cancel';
       td3.appendChild(cancelButton).addEventListener('click', function (_event) {
@@ -10086,8 +8615,9 @@ function messageArea(dom, kb, subject, messageStore, options) {
         deleteMessage(message);
       }, false);
     }, false);
-  }; // Messages with date, author etc
+  };
 
+  // Messages with date, author etc
 
   messageTable = dom.createElement('table');
   messageTable.fresh = false;
@@ -10095,21 +8625,19 @@ function messageArea(dom, kb, subject, messageStore, options) {
   messageTable.setAttribute('style', 'width: 100%;'); // fill that div!
 
   var tr = newMessageForm();
-
   if (newestFirst) {
     messageTable.insertBefore(tr, messageTable.firstChild); // If newestFirst
   } else {
     messageTable.appendChild(tr); // not newestFirst
   }
 
-  var query; // Do this with a live query to pull in messages from web
-
+  var query;
+  // Do this with a live query to pull in messages from web
   if (options.query) {
     query = options.query;
   } else {
     query = new rdf.Query('Messages');
     var v = {}; // semicolon needed
-
     var vs = ['msg', 'date', 'creator', 'content'];
     vs.forEach(function (x) {
       query.vars.push(v[x] = rdf.variable(x));
@@ -10119,18 +8647,15 @@ function messageArea(dom, kb, subject, messageStore, options) {
     query.pat.add(v.msg, ns.foaf('maker'), v.creator);
     query.pat.add(v.msg, ns.sioc('content'), v.content);
   }
-
   function doneQuery() {
     messageTable.fresh = true; // any new are fresh and so will be greenish
   }
 
   kb.query(query, renderMessage, undefined, doneQuery);
-
   div.refresh = function () {
     syncMessages(subject, messageTable);
-  }; // syncMessages(subject, messageTable) // no the query will do this async
-
-
+  };
+  // syncMessages(subject, messageTable) // no the query will do this async
   return div;
 }
 //# sourceMappingURL=messageArea.js.map
@@ -10147,21 +8672,19 @@ function messageArea(dom, kb, subject, messageStore, options) {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 var _solidNamespace = _interopRequireDefault(__webpack_require__(/*! solid-namespace */ "./node_modules/solid-namespace/index.js"));
-
 var $rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 // Namespaces we commonly use and have common prefixes for around Solid
 //
+
 // Delegate to this which takes RDFlib as param.
-module.exports = (0, _solidNamespace["default"])($rdf); // export * from ns2
+
+module.exports = (0, _solidNamespace["default"])($rdf);
+// export * from ns2
+
 // ends
 //# sourceMappingURL=ns.js.map
 
@@ -10177,9 +8700,7 @@ module.exports = (0, _solidNamespace["default"])($rdf); // export * from ns2
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
@@ -10212,91 +8733,57 @@ Object.defineProperty(exports, "renderPartipants", ({
   }
 }));
 exports.xmlEncode = xmlEncode;
-
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js"));
-
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js"));
-
 var _assertThisInitialized2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/assertThisInitialized */ "./node_modules/@babel/runtime/helpers/assertThisInitialized.js"));
-
 var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/inherits.js"));
-
 var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
-
 var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "./node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
-
 var _wrapNativeSuper2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/wrapNativeSuper */ "./node_modules/@babel/runtime/helpers/wrapNativeSuper.js"));
-
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js"));
-
 var ns = _interopRequireWildcard(__webpack_require__(/*! ./ns */ "./lib/ns.js"));
-
 var _rdflib = __webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js");
-
 var _widgets = __webpack_require__(/*! ./widgets */ "./lib/widgets/index.js");
-
 var _utils = __webpack_require__(/*! ./utils */ "./lib/utils/index.js");
-
 var _debug = __webpack_require__(/*! ./debug */ "./lib/debug.js");
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 var _participation = __webpack_require__(/*! ./participation */ "./lib/participation.js");
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2["default"])(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2["default"])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2["default"])(this, result); }; }
-
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
 var store = _solidLogic.solidLogicSingleton.store;
 var PAD = (0, _rdflib.Namespace)('http://www.w3.org/ns/pim/pad#');
-
 /**
  * @ignore
  */
 var NotepadElement = /*#__PURE__*/function (_HTMLElement) {
   (0, _inherits2["default"])(NotepadElement, _HTMLElement);
-
   var _super = _createSuper(NotepadElement);
-
   function NotepadElement() {
     var _this;
-
     (0, _classCallCheck2["default"])(this, NotepadElement);
-
     for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
-
     _this = _super.call.apply(_super, [this].concat(args));
     (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this), "subject", void 0);
     return _this;
   }
-
   return (0, _createClass2["default"])(NotepadElement);
 }( /*#__PURE__*/(0, _wrapNativeSuper2["default"])(HTMLElement));
 /**
  * @ignore
  */
-
-
 var NotepadPart = /*#__PURE__*/function (_HTMLElement2) {
   (0, _inherits2["default"])(NotepadPart, _HTMLElement2);
-
   var _super2 = _createSuper(NotepadPart);
-
   function NotepadPart() {
     var _this2;
-
     (0, _classCallCheck2["default"])(this, NotepadPart);
-
     for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
       args[_key2] = arguments[_key2];
     }
-
     _this2 = _super2.call.apply(_super2, [this].concat(args));
     (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this2), "subject", void 0);
     (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this2), "value", void 0);
@@ -10304,7 +8791,6 @@ var NotepadPart = /*#__PURE__*/function (_HTMLElement2) {
     (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this2), "lastSent", void 0);
     return _this2;
   }
-
   return (0, _createClass2["default"])(NotepadPart);
 }( /*#__PURE__*/(0, _wrapNativeSuper2["default"])(HTMLElement));
 /** Figure out a random color from my webid
@@ -10312,8 +8798,6 @@ var NotepadPart = /*#__PURE__*/function (_HTMLElement2) {
  * @param {NamedNode} author - The author of text being displayed
  * @returns {String} The CSS color generated, constrained to be light for a background color
  */
-
-
 function lightColorHash(author) {
   var hash = function hash(x) {
     return x.split('').reduce(function (a, b) {
@@ -10321,7 +8805,6 @@ function lightColorHash(author) {
       return a & a;
     }, 0);
   };
-
   return author && author.uri ? '#' + (hash(author.uri) & 0xffffff | 0xc0c0c0).toString(16) : '#ffffff'; // c0c0c0  forces pale
 } // no id -> white
 
@@ -10333,8 +8816,6 @@ function lightColorHash(author) {
  * @param {NamedNode} me - person who is logged into the pod
  * @param {notepadOptions} options - the options that can be passed in consist of statusArea, exists
  */
-
-
 function notepad(dom, padDoc, subject, me, options) {
   options = options || {};
   var exists = options.exists;
@@ -10346,17 +8827,14 @@ function notepad(dom, padDoc, subject, me, options) {
   table.setAttribute('style', 'padding: 1em; overflow: auto; resize: horizontal; min-width: 40em;');
   var upstreamStatus = null;
   var downstreamStatus = null;
-
   if (options.statusArea) {
     var t = options.statusArea.appendChild(dom.createElement('table'));
     var tr = t.appendChild(dom.createElement('tr'));
     upstreamStatus = tr.appendChild(dom.createElement('td'));
     downstreamStatus = tr.appendChild(dom.createElement('td'));
-
     if (upstreamStatus) {
       upstreamStatus.setAttribute('style', 'width:50%');
     }
-
     if (downstreamStatus) {
       downstreamStatus.setAttribute('style', 'width:50%');
     }
@@ -10364,25 +8842,20 @@ function notepad(dom, padDoc, subject, me, options) {
   /* @@ TODO want to look into this, it seems upstream should be a boolean and default to false ?
   *
   */
-
-
   var complain = function complain(message) {
     var upstream = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
     (0, _debug.log)(message);
-
     if (options.statusArea) {
       ;
       (upstream ? upstreamStatus : downstreamStatus).appendChild((0, _widgets.errorMessageBlock)(dom, message, 'pink'));
     }
-  }; // @@ TODO need to refactor so that we don't have to type cast
-
-
+  };
+  // @@ TODO need to refactor so that we don't have to type cast
   var clearStatus = function clearStatus(_upsteam) {
     if (options.statusArea) {
       options.statusArea.innerHTML = '';
     }
   };
-
   var setPartStyle = function setPartStyle(part, colors, pending) {
     var chunk = part.subject;
     colors = colors || '';
@@ -10390,61 +8863,52 @@ function notepad(dom, padDoc, subject, me, options) {
     var headingCore = 'font-family: sans-serif; font-weight: bold;  border: none;';
     var headingStyle = ['font-size: 110%;  padding-top: 0.5em; padding-bottom: 0.5em; width: 100%;', 'font-size: 120%; padding-top: 1em; padding-bottom: 1em; width: 100%;', 'font-size: 150%; padding-top: 1em; padding-bottom: 1em; width: 100%;'];
     var author = kb.any(chunk, ns.dc('author'));
-
     if (!colors && author) {
       // Hash the user webid for now -- later allow user selection!
       var bgcolor = lightColorHash(author);
       colors = 'color: ' + (pending ? '#888' : 'black') + '; background-color: ' + bgcolor + ';';
-    } // @@ TODO Need to research when this can be an object with the indent stored in value
+    }
+
+    // @@ TODO Need to research when this can be an object with the indent stored in value
     // and when the indent is stored as a Number itself, not in an object.
-
-
     var indent = kb.any(chunk, PAD('indent'));
     indent = indent ? indent.value : 0;
-    var style = indent >= 0 ? baseStyle + 'text-indent: ' + indent * 3 + 'em;' : headingCore + headingStyle[-1 - indent]; // ? baseStyle + 'padding-left: ' + (indent * 3) + 'em;'
-
+    var style = indent >= 0 ? baseStyle + 'text-indent: ' + indent * 3 + 'em;' : headingCore + headingStyle[-1 - indent];
+    // ? baseStyle + 'padding-left: ' + (indent * 3) + 'em;'
     part.setAttribute('style', style + colors);
   };
-
   var removePart = function removePart(part) {
     var chunk = part.subject;
     if (!chunk) throw new Error('No chunk for line to be deleted!'); // just in case
-
     var prev = kb.any(undefined, PAD('next'), chunk);
     var next = kb.any(chunk, PAD('next'));
-
     if (prev.sameTerm(subject) && next.sameTerm(subject)) {
       // Last one
       (0, _debug.log)("You can't delete the only line.");
       return;
     }
-
     var del = kb.statementsMatching(chunk, undefined, undefined, padDoc).concat(kb.statementsMatching(undefined, undefined, chunk, padDoc));
-    var ins = [(0, _rdflib.st)(prev, PAD('next'), next, padDoc)]; // @@ TODO what should we do if chunk is not a NamedNode should we
-    // assume then it is a string?
+    var ins = [(0, _rdflib.st)(prev, PAD('next'), next, padDoc)];
 
+    // @@ TODO what should we do if chunk is not a NamedNode should we
+    // assume then it is a string?
     if (chunk instanceof _rdflib.NamedNode) {
       var label = chunk.uri.slice(-4);
       (0, _debug.log)('Deleting line ' + label);
     }
-
     if (!updater) {
       throw new Error('have no updater');
-    } // @@ TODO below you can see that before is redefined and not a boolean
-
-
+    }
+    // @@ TODO below you can see that before is redefined and not a boolean
     updater.update(del, ins, function (uri, ok, errorMessage, response) {
       if (ok) {
         var row = part.parentNode;
-
         if (row) {
           var before = row.previousSibling;
-
           if (row.parentNode) {
             row.parentNode.removeChild(row);
-          } // console.log('    deleted line ' + label + ' ok ' + part.value)
-
-
+          }
+          // console.log('    deleted line ' + label + ' ok ' + part.value)
           if (before && before.firstChild) {
             // @@ TODO IMPORTANT FOCUS ISN'T A PROPERTY ON A CHILDNODE
             before.firstChild.focus();
@@ -10453,11 +8917,8 @@ function notepad(dom, padDoc, subject, me, options) {
       } else if (response && response.status === 409) {
         // Conflict
         setPartStyle(part, 'color: black;  background-color: #ffd;'); // yellow
-
         part.state = 0; // Needs downstream refresh
-
         (0, _utils.beep)(0.5, 512); // Ooops clash with other person
-
         setTimeout(function () {
           // Ideally, beep! @@
           reloadAndSync(); // Throw away our changes and
@@ -10467,7 +8928,6 @@ function notepad(dom, padDoc, subject, me, options) {
         (0, _debug.log)('    removePart FAILED ' + chunk + ': ' + errorMessage);
         (0, _debug.log)("    removePart was deleteing :'" + del);
         setPartStyle(part, 'color: black;  background-color: #fdd;'); // failed
-
         var res = response ? response.status : ' [no response field] ';
         complain('Error ' + res + ' saving changes: ' + errorMessage["true"]); // upstream,
         // updater.requestDownstreamAction(padDoc, reloadAndSync);
@@ -10475,31 +8935,27 @@ function notepad(dom, padDoc, subject, me, options) {
     });
   }; // removePart
 
-
   var changeIndent = function changeIndent(part, chunk, delta) {
     var del = kb.statementsMatching(chunk, PAD('indent'));
     var current = del.length ? Number(del[0].object.value) : 0;
     if (current + delta < -3) return; //  limit negative indent
-
     var newIndent = current + delta;
     var ins = (0, _rdflib.st)(chunk, PAD('indent'), newIndent, padDoc);
-
     if (!updater) {
       throw new Error('no updater');
     }
-
     updater.update(del, ins, function (uri, ok, errorBody) {
       if (!ok) {
         (0, _debug.log)("Indent change FAILED '" + newIndent + "' for " + padDoc + ': ' + errorBody);
         setPartStyle(part, 'color: black;  background-color: #fdd;'); // failed
-
         updater.requestDownstreamAction(padDoc, reloadAndSync);
       } else {
         setPartStyle(part); // Implement the indent
       }
     });
-  }; // Use this sort of code to split the line when return pressed in the middle @@
+  };
 
+  // Use this sort of code to split the line when return pressed in the middle @@
   /*
   function doGetCaretPosition doGetCaretPosition (oField) {
     var iCaretPos = 0
@@ -10521,23 +8977,19 @@ function notepad(dom, padDoc, subject, me, options) {
     return (iCaretPos)
   }
   */
-
-
   var addListeners = function addListeners(part, chunk) {
     part.addEventListener('keydown', function (event) {
       if (!updater) {
         throw new Error('no updater');
       }
-
-      var queueProperty, queue; //  up 38; down 40; left 37; right 39     tab 9; shift 16; escape 27
-
+      var queueProperty, queue;
+      //  up 38; down 40; left 37; right 39     tab 9; shift 16; escape 27
       switch (event.keyCode) {
         case 13:
           // Return
           {
             var before = event.shiftKey;
             (0, _debug.log)('enter'); // Shift-return inserts before -- only way to add to top of pad.
-
             if (before) {
               queue = kb.any(undefined, PAD('next'), chunk);
               queueProperty = 'newlinesAfter';
@@ -10545,116 +8997,92 @@ function notepad(dom, padDoc, subject, me, options) {
               queue = kb.any(chunk, PAD('next'));
               queueProperty = 'newlinesBefore';
             }
-
             queue[queueProperty] = queue[queueProperty] || 0;
             queue[queueProperty] += 1;
-
             if (queue[queueProperty] > 1) {
               (0, _debug.log)('    queueing newline queue = ' + queue[queueProperty]);
               return;
             }
-
             (0, _debug.log)('    go ahead line before ' + queue[queueProperty]);
             newChunk(part, before); // was document.activeElement
-
             break;
           }
-
         case 8:
           // Delete
           if (part.value.length === 0) {
             (0, _debug.log)('Delete key line ' + chunk.uri.slice(-4) + ' state ' + part.state);
-
             switch (part.state) {
               case 1: // contents being sent
-
               case 2:
                 // contents need to be sent again
                 part.state = 4; // delete me
-
                 return;
-
               case 3: // being deleted already
-
               case 4:
                 // already deleme state
                 return;
-
               case undefined:
               case 0:
                 part.state = 3; // being deleted
-
                 removePart(part);
                 event.preventDefault();
                 break;
               // continue
-
               default:
                 throw new Error('pad: Unexpected state ' + part);
             }
           }
-
           break;
-
         case 9:
           // Tab
           {
             var delta = event.shiftKey ? -1 : 1;
             changeIndent(part, chunk, delta);
             event.preventDefault(); // default is to highlight next field
-
             break;
           }
-
         case 27:
           // ESC
           (0, _debug.log)('escape');
           updater.requestDownstreamAction(padDoc, reloadAndSync);
           event.preventDefault();
           break;
-
         case 38:
           // Up
           if (part.parentNode.previousSibling) {
             part.parentNode.previousSibling.firstChild.focus();
             event.preventDefault();
           }
-
           break;
-
         case 40:
           // Down
           if (part.parentNode.nextSibling) {
             part.parentNode.nextSibling.firstChild.focus();
             event.preventDefault();
           }
-
           break;
-
         default:
       }
     });
-
     var updateStore = function updateStore(part) {
       var chunk = part.subject;
       setPartStyle(part, undefined, true);
       var old = kb.any(chunk, ns.sioc('content')).value;
       var del = [(0, _rdflib.st)(chunk, ns.sioc('content'), old, padDoc)];
       var ins;
-
       if (part.value) {
         ins = [(0, _rdflib.st)(chunk, ns.sioc('content'), part.value, padDoc)];
       }
+      var newOne = part.value;
 
-      var newOne = part.value; // DEBUGGING ONLY
-
+      // DEBUGGING ONLY
       if (part.lastSent) {
         if (old !== part.lastSent) {
           throw new Error("Out of order, last sent expected '" + old + "' but found '" + part.lastSent + "'");
         }
       }
-
       part.lastSent = newOne;
+
       /* console.log(
         ' Patch proposed to ' +
         chunk.uri.slice(-4) +
@@ -10664,29 +9092,23 @@ function notepad(dom, padDoc, subject, me, options) {
         newOne +
         "' "
       ) */
-
       if (!updater) {
         throw new Error('no updater');
       }
-
       updater.update(del, ins, function (uri, ok, errorBody, xhr) {
         if (!ok) {
           // alert("clash " + errorBody);
           (0, _debug.log)('    patch FAILED ' + xhr.status + " for '" + old + "' -> '" + newOne + "': " + errorBody);
-
           if (xhr.status === 409) {
             // Conflict -  @@ we assume someone else
             setPartStyle(part, 'color: black;  background-color: #fdd;');
             part.state = 0; // Needs downstream refresh
-
             (0, _utils.beep)(0.5, 512); // Ooops clash with other person
-
             setTimeout(function () {
               updater.requestDownstreamAction(padDoc, reloadAndSync);
             }, 1000);
           } else {
             setPartStyle(part, 'color: black;  background-color: #fdd;'); // failed pink
-
             part.state = 0;
             complain('    Error ' + xhr.status + ' sending data: ' + errorBody, true);
             (0, _utils.beep)(1.0, 128); // Other
@@ -10694,20 +9116,17 @@ function notepad(dom, padDoc, subject, me, options) {
           }
         } else {
           clearStatus(true); // upstream
-
           setPartStyle(part); // synced
-
           (0, _debug.log)("    Patch ok '" + old + "' -> '" + newOne + "' ");
-
           if (part.state === 4) {
             //  delete me
             part.state = 3;
             removePart(part);
-          } else if (part.state === 3) {// being deleted
+          } else if (part.state === 3) {
+            // being deleted
             // pass
           } else if (part.state === 2) {
             part.state = 1; // pending: lock
-
             updateStore(part);
           } else {
             part.state = 0; // clear lock
@@ -10719,44 +9138,34 @@ function notepad(dom, padDoc, subject, me, options) {
     part.addEventListener('input', function inputChangeListener(_event) {
       // debug.log("input changed "+part.value);
       setPartStyle(part, undefined, true); // grey out - not synced
-
       (0, _debug.log)('Input event state ' + part.state + " value '" + part.value + "'");
-
       switch (part.state) {
         case 3:
           // being deleted
           return;
-
         case 4:
           // needs to be deleted
           return;
-
         case 2:
           // needs content updating, we know
           return;
-
         case 1:
           part.state = 2; // lag we need another patch
-
           return;
-
         case 0:
         case undefined:
           part.state = 1; // being upadted
-
           updateStore(part);
       }
     }); // listener
   }; // addlisteners
+
   // @@ TODO Need to research before as it appears to be used as an Element and a boolean
-
-
   var newPartAfter = function newPartAfter(tr1, chunk, before) {
     // @@ take chunk and add listeners
     var text = kb.any(chunk, ns.sioc('content'));
     text = text ? text.value : '';
     var tr = dom.createElement('tr');
-
     if (before) {
       table.insertBefore(tr, tr1);
     } else {
@@ -10767,12 +9176,10 @@ function notepad(dom, padDoc, subject, me, options) {
         table.appendChild(tr);
       }
     }
-
     var part = tr.appendChild(dom.createElement('input'));
     part.subject = chunk;
     part.setAttribute('type', 'text');
     part.value = text;
-
     if (me) {
       setPartStyle(part, '');
       addListeners(part, chunk);
@@ -10780,29 +9187,24 @@ function notepad(dom, padDoc, subject, me, options) {
       setPartStyle(part, 'color: #222; background-color: #fff');
       (0, _debug.log)("Note can't add listeners - not logged in");
     }
-
     return part;
   };
+
   /* @@ TODO we need to look at indent, it can be a Number or an Object this doesn't seem correct.
   */
-
-
   var newChunk = function newChunk(ele, before) {
     // element of chunk being split
     var kb = store;
     var indent = 0;
     var queueProperty = null;
     var here, prev, next, queue, tr1;
-
     if (ele) {
       if (ele.tagName.toLowerCase() !== 'input') {
         (0, _debug.log)('return pressed when current document is: ' + ele.tagName);
       }
-
       here = ele.subject;
       indent = kb.any(here, PAD('indent'));
       indent = indent ? Number(indent.value) : 0;
-
       if (before) {
         prev = kb.any(undefined, PAD('next'), here);
         next = here;
@@ -10814,30 +9216,24 @@ function notepad(dom, padDoc, subject, me, options) {
         queue = next;
         queueProperty = 'newlinesBefore';
       }
-
       tr1 = ele.parentNode;
     } else {
       prev = subject;
       next = subject;
       tr1 = undefined;
     }
-
     var chunk = (0, _widgets.newThing)(padDoc);
     var label = chunk.uri.slice(-4);
     var del = [(0, _rdflib.st)(prev, PAD('next'), next, padDoc)];
     var ins = [(0, _rdflib.st)(prev, PAD('next'), chunk, padDoc), (0, _rdflib.st)(chunk, PAD('next'), next, padDoc), (0, _rdflib.st)(chunk, ns.dc('author'), me, padDoc), (0, _rdflib.st)(chunk, ns.sioc('content'), '', padDoc)];
-
     if (indent > 0) {
       // Do not inherit
       ins.push((0, _rdflib.st)(chunk, PAD('indent'), indent, padDoc));
     }
-
     (0, _debug.log)('    Fresh chunk ' + label + ' proposed');
-
     if (!updater) {
       throw new Error('no updater');
     }
-
     updater.update(del, ins, function (uri, ok, errorBody, _xhr) {
       if (!ok) {
         // alert("Error writing new line " + label + ": " + errorBody);
@@ -10846,11 +9242,9 @@ function notepad(dom, padDoc, subject, me, options) {
         var newPart = newPartAfter(tr1, chunk, before);
         setPartStyle(newPart);
         newPart.focus(); // Note this is delayed
-
         if (queueProperty) {
           (0, _debug.log)('    Fresh chunk ' + label + ' updated, queue = ' + queue[queueProperty]);
           queue[queueProperty] -= 1;
-
           if (queue[queueProperty] > 0) {
             (0, _debug.log)('    Implementing queued newlines = ' + next.newLinesBefore);
             newChunk(newPart, before);
@@ -10859,69 +9253,51 @@ function notepad(dom, padDoc, subject, me, options) {
       }
     });
   };
-
   var consistencyCheck = function consistencyCheck() {
     var found = {};
     var failed = 0;
-
     function complain2(msg) {
       complain(msg);
       failed++;
     }
-
     if (!kb.the(subject, PAD('next'))) {
       complain2('No initial next pointer');
       return false; // can't do linked list
-    } // var chunk = kb.the(subject, PAD('next'))
-
-
+    }
+    // var chunk = kb.the(subject, PAD('next'))
     var prev = subject;
     var chunk;
-
     for (;;) {
       chunk = kb.the(prev, PAD('next'));
-
       if (!chunk) {
         complain2('No next pointer from ' + prev);
       }
-
       if (chunk.sameTerm(subject)) {
         break;
       }
-
       prev = chunk;
       var label = chunk.uri.split('#')[1];
-
       if (found[chunk.uri]) {
         complain2('Loop!');
         return false;
       }
-
       found[chunk.uri] = true;
       var k = kb.each(chunk, PAD('next')).length;
-
       if (k !== 1) {
         complain2('Should be 1 not ' + k + ' next pointer for ' + label);
       }
-
       k = kb.each(chunk, PAD('indent')).length;
-
       if (k > 1) {
         complain2('Should be 0 or 1 not ' + k + ' indent for ' + label);
       }
-
       k = kb.each(chunk, ns.sioc('content')).length;
-
       if (k !== 1) {
         complain2('Should be 1 not ' + k + ' contents for ' + label);
       }
-
       k = kb.each(chunk, ns.dc('author')).length;
-
       if (k !== 1) {
         complain2('Should be 1 not ' + k + ' author for ' + label);
       }
-
       var sts = kb.statementsMatching(undefined, ns.sioc('contents'));
       sts.forEach(function (st) {
         if (!found[st.subject.value]) {
@@ -10929,103 +9305,89 @@ function notepad(dom, padDoc, subject, me, options) {
         }
       });
     }
-
     return !failed;
-  }; // Ensure that the display matches the current state of the
+  };
+
+  // Ensure that the display matches the current state of the
   // @@ TODO really need to refactor this so that we don't need to cast types
-
-
   var sync = function sync() {
     // var first = kb.the(subject, PAD('next'))
     if (kb.each(subject, PAD('next')).length !== 1) {
       var msg = 'Pad: Inconsistent data - NEXT pointers: ' + kb.each(subject, PAD('next')).length;
       (0, _debug.log)(msg);
-
       if (options.statusArea) {
         options.statusArea.textContent += msg;
       }
-
       return;
-    } // var last = kb.the(undefined, PAD('previous'), subject)
+    }
+    // var last = kb.the(undefined, PAD('previous'), subject)
     // var chunk = first //  = kb.the(subject, PAD('next'));
+    var row;
 
-
-    var row; // First see which of the logical chunks have existing physical manifestations
-
-    var manif = []; // Find which lines correspond to existing chunks
+    // First see which of the logical chunks have existing physical manifestations
+    var manif = [];
+    // Find which lines correspond to existing chunks
 
     for (var chunk = kb.the(subject, PAD('next')); !chunk.sameTerm(subject); chunk = kb.the(chunk, PAD('next'))) {
       for (var i = 0; i < table.children.length; i++) {
         var _tr = table.children[i];
-
         if (_tr.firstChild) {
           if (_tr.firstChild.subject.sameTerm(chunk)) {
             manif[chunk.uri] = _tr.firstChild;
           }
         }
       }
-    } // Remove any deleted lines
+    }
 
-
+    // Remove any deleted lines
     for (var _i = table.children.length - 1; _i >= 0; _i--) {
       row = table.children[_i];
-
       if (!manif[row.firstChild.subject.uri]) {
         table.removeChild(row);
       }
-    } // Insert any new lines and update old ones
-
-
+    }
+    // Insert any new lines and update old ones
     row = table.firstChild; // might be null
-
     for (var _chunk = kb.the(subject, PAD('next')); !_chunk.sameTerm(subject); _chunk = kb.the(_chunk, PAD('next'))) {
-      var text = kb.any(_chunk, ns.sioc('content')).value; // superstitious -- don't mess with unchanged input fields
+      var text = kb.any(_chunk, ns.sioc('content')).value;
+      // superstitious -- don't mess with unchanged input fields
       // which may be selected by the user
-
       if (row && manif[_chunk.uri]) {
         var part = row.firstChild;
-
         if (text !== part.value) {
           part.value = text;
         }
-
         setPartStyle(part);
         part.state = 0; // Clear the state machine
-
         delete part.lastSent; // DEBUG ONLY
-
         row = row.nextSibling;
       } else {
         newPartAfter(row, _chunk, true); // actually before
       }
     }
-  }; // Refresh the DOM tree
+  };
 
+  // Refresh the DOM tree
 
   var refreshTree = function refreshTree(root) {
     if (root.refresh) {
       root.refresh();
       return;
     }
-
     for (var i = 0; i < root.children.length; i++) {
       refreshTree(root.children[i]);
     }
   };
-
   var reloading = false;
-
   var checkAndSync = function checkAndSync() {
     (0, _debug.log)('    reloaded OK');
     clearStatus();
-
     if (!consistencyCheck()) {
       complain('CONSITENCY CHECK FAILED');
     } else {
       refreshTree(table);
     }
   };
-
   var reloadAndSync = function reloadAndSync() {
     if (reloading) {
       (0, _debug.log)('   Already reloading - stop');
@@ -11034,17 +9396,13 @@ function notepad(dom, padDoc, subject, me, options) {
 
     reloading = true;
     var retryTimeout = 1000; // ms
-
     var tryReload = function tryReload() {
       (0, _debug.log)('try reload - timeout = ' + retryTimeout);
-
       if (!updater) {
         throw new Error('no updater');
       }
-
       updater.reload(updater.store, padDoc, function (ok, message, xhr) {
         reloading = false;
-
         if (ok) {
           checkAndSync();
         } else {
@@ -11059,21 +9417,15 @@ function notepad(dom, padDoc, subject, me, options) {
         }
       });
     };
-
     tryReload();
   };
-
   table.refresh = sync; // Catch downward propagating refresh events
-
   table.reloadAndSync = reloadAndSync;
   if (!me) (0, _debug.log)('Warning: must be logged in for pad to be edited');
-
   if (exists) {
     (0, _debug.log)('Existing pad.');
-
     if (consistencyCheck()) {
       sync();
-
       if (kb.holds(subject, PAD('next'), subject)) {
         // Empty list untenable
         newChunk(); // require at least one line
@@ -11085,11 +9437,9 @@ function notepad(dom, padDoc, subject, me, options) {
     // Make new pad
     (0, _debug.log)('No pad exists - making new one.');
     var insertables = [(0, _rdflib.st)(subject, ns.rdf('type'), PAD('Notepad'), padDoc), (0, _rdflib.st)(subject, ns.dc('author'), me, padDoc), (0, _rdflib.st)(subject, ns.dc('created'), new Date(), padDoc), (0, _rdflib.st)(subject, PAD('next'), subject, padDoc)];
-
     if (!updater) {
       throw new Error('no updater');
     }
-
     updater.update([], insertables, function (uri, ok, errorBody) {
       if (!ok) {
         complain(errorBody || '');
@@ -11103,74 +9453,62 @@ function notepad(dom, padDoc, subject, me, options) {
 
   return table;
 }
+
 /**
  * Get the chunks of the notepad
  * They are stored in a RDF linked list
  */
+
 // @ignore exporting this only for the unit test
-
-
 function getChunks(subject, kb) {
   var chunks = [];
-
   for (var chunk = kb.the(subject, PAD('next')); !chunk.sameTerm(subject); chunk = kb.the(chunk, PAD('next'))) {
     chunks.push(chunk);
   }
-
   return chunks;
 }
+
 /**
  *  Encode content to be put in XML or HTML elements
  */
 // @ignore exporting this only for the unit test
-
-
 function xmlEncode(str) {
   return str.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;');
 }
+
 /**
  * Convert a notepad to HTML
  *   @param { } pad - the notepad
  *   @param {store} pad - the data store
  */
-
-
 function notepadToHTML(pad, kb) {
   var chunks = getChunks(pad, kb);
   var html = '<html>\n  <head>\n';
   var title = kb.anyValue(pad, ns.dct('title'));
-
   if (title) {
     html += "    <title>".concat(xmlEncode(title), "</title>\n");
   }
-
   html += '  </head>\n  <body>\n';
   var level = 0;
-
   function increaseLevel(indent) {
     for (; level < indent; level++) {
       html += '<ul>\n';
     }
   }
-
   function decreaseLevel(indent) {
     for (; level > indent; level--) {
       html += '</ul>\n';
     }
   }
-
   chunks.forEach(function (chunk) {
     var indent = kb.anyJS(chunk, PAD('indent'));
     var rawContent = kb.anyJS(chunk, ns.sioc('content'));
     if (!rawContent) return; // seed chunk is dummy
-
     var content = xmlEncode(rawContent);
-
     if (indent < 0) {
       // negative indent levels represent heading levels
       decreaseLevel(0);
       var h = indent >= -3 ? 4 + indent : 1; // -1 -> h4, -2 -> h3
-
       html += "\n<h".concat(h, ">").concat(content, "</h").concat(h, ">\n");
     } else {
       // >= 0
@@ -11187,7 +9525,6 @@ function notepadToHTML(pad, kb) {
     }
   }); // foreach chunk
   // At the end decreaseLevel any open ULs
-
   decreaseLevel(0);
   html += '  </body>\n</html>\n';
   return html;
@@ -11206,9 +9543,7 @@ function notepadToHTML(pad, kb) {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
@@ -11216,74 +9551,45 @@ exports.manageParticipation = manageParticipation;
 exports.participationObject = participationObject;
 exports.recordParticipation = recordParticipation;
 exports.renderPartipants = renderPartipants;
-
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js"));
-
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js"));
-
 var _assertThisInitialized2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/assertThisInitialized */ "./node_modules/@babel/runtime/helpers/assertThisInitialized.js"));
-
 var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/inherits.js"));
-
 var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
-
 var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "./node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
-
 var _wrapNativeSuper2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/wrapNativeSuper */ "./node_modules/@babel/runtime/helpers/wrapNativeSuper.js"));
-
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js"));
-
 var debug = _interopRequireWildcard(__webpack_require__(/*! ./debug */ "./lib/debug.js"));
-
 var _rdflib = __webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js");
-
 var ns = _interopRequireWildcard(__webpack_require__(/*! ./ns */ "./lib/ns.js"));
-
 var _widgets = __webpack_require__(/*! ./widgets */ "./lib/widgets/index.js");
-
 var _utils = __webpack_require__(/*! ./utils */ "./lib/utils/index.js");
-
 var _pad = __webpack_require__(/*! ./pad */ "./lib/pad.js");
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2["default"])(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2["default"])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2["default"])(this, result); }; }
-
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
 var ParticipationTableElement = /*#__PURE__*/function (_HTMLTableElement) {
   (0, _inherits2["default"])(ParticipationTableElement, _HTMLTableElement);
-
   var _super = _createSuper(ParticipationTableElement);
-
   function ParticipationTableElement() {
     var _this;
-
     (0, _classCallCheck2["default"])(this, ParticipationTableElement);
-
     for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
-
     _this = _super.call.apply(_super, [this].concat(args));
     (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this), "refresh", void 0);
     return _this;
   }
-
   return (0, _createClass2["default"])(ParticipationTableElement);
 }( /*#__PURE__*/(0, _wrapNativeSuper2["default"])(HTMLTableElement));
-
 var store = _solidLogic.solidLogicSingleton.store;
+
 /**  Manage participation in this session
 *
 *  @param {Document} dom - the web page loaded into the browser
@@ -11293,21 +9599,16 @@ var store = _solidLogic.solidLogicSingleton.store;
 *  @param {NamedNode} unused2/me - user that is logged into the pod (this argument is no longer used, but left in for backwards compatibility)
 *  @param {ParticipationOptions} options - the options that can be passed in are deleteFunction, link, and draggable these are used by the personTR button
 */
-
 function renderPartipants(dom, table, unused1, subject, unused2, options) {
   table.setAttribute('style', 'margin: 0.8em;');
-
   var newRowForParticpation = function newRowForParticpation(parp) {
     var person = store.any(parp, ns.wf('participant'));
     var tr;
-
     if (!person) {
       tr = dom.createElement('tr');
       tr.textContent = '???'; // Don't crash - invalid part'n entry
-
       return tr;
     }
-
     var bg = store.anyValue(parp, ns.ui('backgroundColor')) || 'white';
     var block = dom.createElement('div');
     block.setAttribute('style', 'height: 1.5em; width: 1.5em; margin: 0.3em; border 0.01em solid #888; background-color: ' + bg);
@@ -11319,24 +9620,22 @@ function renderPartipants(dom, table, unused1, subject, unused2, options) {
     tr.insertBefore(td, tr.firstChild);
     return tr;
   };
-
   var syncTable = function syncTable() {
     var parps = store.each(subject, ns.wf('participation')).map(function (parp) {
       (0, debug.log)('in participants');
       return [store.anyValue(parp, ns.cal('dtstart')) || '9999-12-31', parp];
     });
     parps.sort(); // List in order of joining
-
     var participations = parps.map(function (p) {
       return p[1];
     });
     (0, _utils.syncTableToArray)(table, participations, newRowForParticpation);
   };
-
   table.refresh = syncTable;
   syncTable();
   return table;
 }
+
 /** Record, or find old, Particpation object
  *
  * A particpaption object is a place to record things specifically about
@@ -11346,30 +9645,23 @@ function renderPartipants(dom, table, unused1, subject, unused2, options) {
  * @param {NamedNode} me - the logged in user
  *
  */
-
-
 function participationObject(subject, padDoc, me) {
   return new Promise(function (resolve, reject) {
     if (!me) {
       throw new Error('No user id');
     }
-
     var parps = store.each(subject, ns.wf('participation')).filter(function (pn) {
       return store.holds(pn, ns.wf('participant'), me);
     });
-
     if (parps.length > 1) {
       // This can happen. https://github.com/solidos/chat-pane/issues/71
       var candidates = [];
-
       var _iterator = _createForOfIteratorHelper(parps),
-          _step;
-
+        _step;
       try {
         for (_iterator.s(); !(_step = _iterator.n()).done;) {
           var participation = _step.value;
           var date = store.anyValue(participation, ns.cal('dtstart'));
-
           if (date) {
             candidates.push([date, participation]);
           }
@@ -11379,12 +9671,11 @@ function participationObject(subject, padDoc, me) {
       } finally {
         _iterator.f();
       }
-
       candidates.sort(); // Pick the earliest
       // @@ Possibly, for extra credit, delete the others, if we have write access
-
       debug.warn('Multiple particpation objects, picking earliest, in ' + padDoc);
-      resolve(candidates[0][1]); // throw new Error('Multiple records of your participation')
+      resolve(candidates[0][1]);
+      // throw new Error('Multiple records of your participation')
     }
 
     if (parps.length) {
@@ -11392,7 +9683,6 @@ function participationObject(subject, padDoc, me) {
       resolve(parps[0]); // returns the particpation object
     } else {
       var _participation2 = (0, _widgets.newThing)(padDoc);
-
       var ins = [(0, _rdflib.st)(subject, ns.wf('participation'), _participation2, padDoc), (0, _rdflib.st)(_participation2, ns.wf('participant'), me, padDoc), (0, _rdflib.st)(_participation2, ns.cal('dtstart'), new Date(), padDoc), (0, _rdflib.st)(_participation2, ns.ui('backgroundColor'), (0, _pad.lightColorHash)(me), padDoc)];
       store.updater.update([], ins, function (uri, ok, errorMessage) {
         if (!ok) {
@@ -11405,6 +9695,7 @@ function participationObject(subject, padDoc, me) {
     }
   });
 }
+
 /** Record my participation and display participants
  *
  * @param {NamedNode} subject - the thing in which participation is happening
@@ -11412,21 +9703,16 @@ function participationObject(subject, padDoc, me) {
  * @param {DOMNode} refreshable - a DOM element whose refresh() is to be called if the change works
  *
  */
-
-
 function recordParticipation(subject, padDoc, refreshable) {
   var me = _solidLogic.authn.currentUser();
-
   if (!me) return; // Not logged in
 
   var parps = store.each(subject, ns.wf('participation')).filter(function (pn) {
     return store.holds(pn, ns.wf('participant'), me);
   });
-
   if (parps.length > 1) {
     throw new Error('Multiple records of your participation');
   }
-
   if (parps.length) {
     // If I am not already recorded
     return parps[0]; // returns the particpation object
@@ -11435,22 +9721,22 @@ function recordParticipation(subject, padDoc, refreshable) {
       debug.log('Not recording participation, as no write acesss as ' + me + ' to ' + padDoc);
       return null;
     }
-
     var participation = (0, _widgets.newThing)(padDoc);
     var ins = [(0, _rdflib.st)(subject, ns.wf('participation'), participation, padDoc), (0, _rdflib.st)(participation, ns.wf('participant'), me, padDoc), (0, _rdflib.st)(participation, ns.cal('dtstart'), new Date(), padDoc), (0, _rdflib.st)(participation, ns.ui('backgroundColor'), (0, _pad.lightColorHash)(me), padDoc)];
     store.updater.update([], ins, function (uri, ok, errorMessage) {
       if (!ok) {
         throw new Error('Error recording your partipation: ' + errorMessage);
       }
-
       if (refreshable && refreshable.refresh) {
         refreshable.refresh();
-      } // UI.pad.renderPartipants(dom, table, padDoc, subject, me, options)
-
+      }
+      // UI.pad.renderPartipants(dom, table, padDoc, subject, me, options)
     });
+
     return participation;
   }
 }
+
 /**  Record my participation and display participants
 *
 *   @param {Document} dom  - the web page loaded into the browser
@@ -11461,15 +9747,11 @@ function recordParticipation(subject, padDoc, refreshable) {
 *   @param {ParticipationOptions} options - the options that can be passed in are deleteFunction, link, and draggable these are used by the personTR button
 *
 */
-
-
 function manageParticipation(dom, container, padDoc, subject, me, options) {
   var table = dom.createElement('table');
   container.appendChild(table);
   renderPartipants(dom, table, padDoc, subject, me, options);
-
   var _participation;
-
   try {
     _participation = recordParticipation(subject, padDoc, table);
   } catch (e) {
@@ -11492,7 +9774,6 @@ function manageParticipation(dom, container, padDoc, subject, me, options) {
 
 
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
@@ -11503,61 +9784,53 @@ exports.recordSharedPreferences = recordSharedPreferences;
 exports.renderPreferencesForm = renderPreferencesForm;
 exports.set = set;
 exports.value = void 0;
-
 var $rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 var debug = _interopRequireWildcard(__webpack_require__(/*! ./debug */ "./lib/debug.js"));
-
 var _login = __webpack_require__(/*! ./login/login */ "./lib/login/login.js");
-
 var ns = _interopRequireWildcard(__webpack_require__(/*! ./ns */ "./lib/ns.js"));
-
 var participation = _interopRequireWildcard(__webpack_require__(/*! ./participation */ "./lib/participation.js"));
-
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ./widgets */ "./lib/widgets/index.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 //                  Solid-UI preferences
 //                  =====================
 //
+
 // pull in first avoid cross-refs
+
 // @ts-ignore
-var kb = _solidLogic.store; // This was tabulator . preferences in the tabulator
+
+var kb = _solidLogic.store;
+
+// This was tabulator . preferences in the tabulator
 //  Is this functionality used anywhere?
 //
+
 // used for storing user name
 // @@ Deprocate these functions.  They were used for
 // communication around the tabulator functionality about the user session
 
 var value = [];
 exports.value = value;
-
 function get(k) {
   return value[k];
 }
-
 function set(k, v) {
   if (typeof v !== 'string') {
     debug.log('Non-string value of preference ' + k + ': ' + v);
     throw new Error('Non-string value of preference ' + k + ': ' + v);
   }
-
   this.value[k] = v;
-} // In a solid world, Preferences are stored in the web
+}
+
+// In a solid world, Preferences are stored in the web
 //
 // Make an RDF node for recording the common view preferences for any object
 // (maybe make it in a separate file?)
-
-
 function recordSharedPreferences(subject, context) {
   return new Promise(function (resolve, reject) {
     var sharedPreferences = kb.any(subject, ns.ui('sharedPreferences'));
-
     if (!sharedPreferences) {
       var sp = $rdf.sym(subject.doc().uri + '#SharedPreferences');
       var ins = [$rdf.st(subject, ns.ui('sharedPreferences'), sp, subject.doc())];
@@ -11575,10 +9848,10 @@ function recordSharedPreferences(subject, context) {
       resolve(context);
     }
   });
-} // Construct a personal defaults node in the preferences file for a given class of object
+}
+
+// Construct a personal defaults node in the preferences file for a given class of object
 //
-
-
 function recordPersonalDefaults(theClass, context) {
   return new Promise(function (resolve, reject) {
     (0, _login.ensureLoadedPreferences)(context).then(function (context) {
@@ -11586,21 +9859,17 @@ function recordPersonalDefaults(theClass, context) {
         debug.log('Not doing private class preferences as no access to preferences file. ' + context.preferencesFileError);
         return;
       }
-
       var regs = kb.each(null, ns.solid('forClass'), theClass, context.preferencesFile);
       var ins = [];
       var prefs;
       var reg;
-
       if (regs.length) {
         // Use existing node if we can
         regs.forEach(function (r) {
           prefs = prefs || kb.any(r, ns.solid('personalDefaults'));
         });
-
         if (prefs) {
           context.personalDefaults = prefs; // Found one
-
           resolve(context);
           return;
         } else {
@@ -11612,7 +9881,6 @@ function recordPersonalDefaults(theClass, context) {
         reg = widgets.newThing(context.preferencesFile);
         ins = [$rdf.st(reg, ns.rdf('type'), ns.solid('TypeRegistration'), context.preferencesFile), $rdf.st(reg, ns.solid('forClass'), theClass, context.preferencesFile)];
       }
-
       prefs = widgets.newThing(context.preferencesFile);
       ins.push($rdf.st(reg, ns.solid('personalDefaults'), prefs, context.preferencesFile));
       kb.updater.update([], ins, function (uri, ok, errm) {
@@ -11628,16 +9896,13 @@ function recordPersonalDefaults(theClass, context) {
     });
   });
 }
-
 function renderPreferencesForm(subject, theClass, preferencesForm, context) {
   var prefContainer = context.dom.createElement('div');
   participation.participationObject(subject, subject.doc(), context.me).then(function (participation) {
     var dom = context.dom;
-
     function heading(text) {
       prefContainer.appendChild(dom.createElement('h5')).textContent = text;
     }
-
     heading('My view of this ' + context.noun);
     widgets.appendForm(dom, prefContainer, {}, participation, preferencesForm, subject.doc(), function (ok, mes) {
       if (!ok) widgets.complain(context, mes);
@@ -11662,35 +9927,31 @@ function renderPreferencesForm(subject, theClass, preferencesForm, context) {
     prefContainer.appendChild(widgets.errorMessageBlock(context.dom, err));
   });
   return prefContainer;
-} // This should be part of rdflib.js ad part of the RDFJS Standard!!
+}
 
+// This should be part of rdflib.js ad part of the RDFJS Standard!!
 
 function toJS(term) {
   if (!term.datatype) return term; // Objects remain objects
-
   if (term.datatype.equals(ns.xsd('boolean'))) {
     return term.value === '1';
   }
-
   if (term.datatype.equals(ns.xsd('dateTime')) || term.datatype.equals(ns.xsd('date'))) {
     return new Date(term.value);
   }
-
   if (term.datatype.equals(ns.xsd('integer')) || term.datatype.equals(ns.xsd('float')) || term.datatype.equals(ns.xsd('decimal'))) {
     return Number(term.value);
   }
-
   return term.value;
-} // This is the function which acuakly reads and combines the preferences
+}
+
+// This is the function which acuakly reads and combines the preferences
 //
 //  @@ make it much more tolerant of missing buts of prefernces
-
-
 function getPreferencesForClass(subject, theClass, predicates, context) {
   return new Promise(function (resolve, reject) {
     recordSharedPreferences(subject, context).then(function (context) {
       var sharedPreferences = context.sharedPreferences;
-
       if (context.me) {
         participation.participationObject(subject, subject.doc(), context.me).then(function (participation) {
           recordPersonalDefaults(theClass, context).then(function (context) {
@@ -11699,7 +9960,6 @@ function getPreferencesForClass(subject, theClass, predicates, context) {
             predicates.forEach(function (pred) {
               // Order of preference: My settings on object, Global settings on object, my settings on class
               var v1 = kb.any(participation, pred) || kb.any(sharedPreferences, pred) || kb.any(personalDefaults, pred);
-
               if (v1) {
                 results[pred.uri] = toJS(v1);
               }
@@ -11712,7 +9972,6 @@ function getPreferencesForClass(subject, theClass, predicates, context) {
         var results = [];
         predicates.forEach(function (pred) {
           var v1 = kb.any(sharedPreferences, pred);
-
           if (v1) {
             results[pred.uri] = toJS(v1);
           }
@@ -11721,7 +9980,9 @@ function getPreferencesForClass(subject, theClass, predicates, context) {
       }
     });
   });
-} // ends
+}
+
+// ends
 //# sourceMappingURL=preferences.js.map
 
 /***/ }),
@@ -11734,49 +9995,42 @@ function getPreferencesForClass(subject, theClass, predicates, context) {
 
 "use strict";
 
+
 /**
  * Provides a simple configuration object for Solid web client and other
  * modules.
  * @module config-default
  */
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
 var _default = {
   // @@ should not use export default
-
   /**
    * Primary authentication endpoint
    */
   authEndpoint: '',
-
   /**
    * Fallback authentication endpoint
    */
   fallbackAuthEndpoint: 'https://databox.me/',
-
   /**
    * Default signup endpoints (list of identity providers)
    */
   signupEndpoint: 'https://solidproject.org/use-solid/',
-
   /**
    * Default height of the Signup popup window, in pixels
    */
   signupWindowHeight: 600,
-
   /**
    * Default width of the Signup popup window, in pixels
    */
   signupWindowWidth: 1024,
-
   /**
    * Path to the client private key (only needed when running within node)
    */
   key: '',
-
   /**
    * Path to the client certificate (only needed when running within node)
    */
@@ -11797,14 +10051,11 @@ exports["default"] = _default;
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.Signup = Signup;
-
 var _configDefault = _interopRequireDefault(__webpack_require__(/*! ./config-default */ "./lib/signup/config-default.js"));
-
 /**
  * Provides functionality for signing up with a Solid provider
  * @module signup
@@ -11817,13 +10068,12 @@ var _configDefault = _interopRequireDefault(__webpack_require__(/*! ./config-def
 function Signup(config) {
   this.config = config || _configDefault["default"];
 }
+
 /**
  * Sets up an event listener to monitor login messages from child window/iframe
  * @method listen
  * @return {Promise<String>} Event listener promise, resolves to user's WebID
  */
-
-
 Signup.prototype.listen = function listen() {
   var promise = new Promise(function (resolve, reject) {
     var eventMethod = window.addEventListener ? 'addEventListener' : 'attachEvent';
@@ -11831,10 +10081,8 @@ Signup.prototype.listen = function listen() {
     var messageEvent = eventMethod === 'attachEvent' ? 'onmessage' : 'message';
     eventListener(messageEvent, function (e) {
       var u = e.data;
-
       if (u.slice(0, 5) === 'User:') {
         var user = u.slice(5, u.length);
-
         if (user && user.length > 0 && user.slice(0, 4) === 'http') {
           return resolve(user);
         } else {
@@ -11845,6 +10093,7 @@ Signup.prototype.listen = function listen() {
   });
   return promise;
 };
+
 /**
  * Opens a signup popup window, sets up `listen()`.
  * @method signup
@@ -11853,15 +10102,13 @@ Signup.prototype.listen = function listen() {
  * @return {Promise<String>} Returns a listener promise, resolves with signed
  *   up user's WebID.
  */
-
-
 Signup.prototype.signup = function signup(signupUrl) {
   signupUrl = signupUrl || this.config.signupEndpoint;
   var width = this.config.signupWindowWidth;
-  var height = this.config.signupWindowHeight; // set borders
-
-  var leftPosition = window.screen.width / 2 - (width / 2 + 10); // set title and status bars
-
+  var height = this.config.signupWindowHeight;
+  // set borders
+  var leftPosition = window.screen.width / 2 - (width / 2 + 10);
+  // set title and status bars
   var topPosition = window.screen.height / 2 - (height / 2 + 50);
   var windowTitle = 'Solid signup';
   var windowUrl = signupUrl + '?origin=' + encodeURIComponent(window.location.origin);
@@ -11894,23 +10141,25 @@ exports.style = void 0;
 // Common readable consistent stylesheet
 // to avoid using style sheets which are document-global
 // and make programmable style toggling with selection, drag over, etc easier
+
 // These must all end with semicolon so they can be appended to.
+
 var formBorderColor = '#888888'; // Mid-grey
-
 var lowProfileLinkColor = '#3B5998'; // Grey-blue, e.g., for field labels linking to ontology
-
 var formFieldNameBoxWidth = '8em'; // The fixed amount to get form fields to line up
 // The latter we put in when switching awy from using tables.  Getting allignment between
 // fields in different groups though is hard problem.
 
 var style = {
   // styleModule
+
   checkboxStyle: 'colour: black; font-size: 100%; padding-left: 0.5 em; padding-right: 0.5 em;',
   checkboxInputStyle: 'font-size: 150%; height: 1.2em; width: 1.2em; background-color: #eef; border-radius:0.2em; margin: 0.1em',
   fieldLabelStyle: 'color: #3B5998; text-decoration: none;',
   formSelectSTyle: 'background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.4em;',
   textInputStyle: 'background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.4em;',
-  textInputStyleUneditable: // Color difference only
+  textInputStyleUneditable:
+  // Color difference only
   'background-color: white; padding: 0.5em;  border: .05em solid white;  border-radius:0.2em; font-size: 100%; margin:0.4em;',
   textInputSize: 20,
   // Default text input size in characters roughly
@@ -11927,6 +10176,7 @@ var style = {
   pendingeditModifier: 'color: #bbb;',
   highlightColor: '#7C4DFF',
   // Solid lavendar https://design.inrupt.com/atomic-core/?cat=Core
+
   // Contacts
   personaBarStyle: 'width: 100%; height: 4em; background-color: #eee; vertical-align: middle;',
   searchInputStyle: 'border: 0.1em solid #444; border-radius: 0.2em; width: 100%; font-size: 100%; padding: 0.1em 0.6em; margin 0.2em;',
@@ -11934,6 +10184,7 @@ var style = {
   // Login buttons
   signInButtonStyle: 'padding: 1em; border-radius:0.2em; font-size: 100%;',
   // was 0.5em radius
+
   // Forms
   heading1Style: 'font-size: 180%; font-weight: bold; color: #888888; padding: 0.5em; margin: 0.7em 0.0m;',
   // originally was brown; now grey
@@ -11943,6 +10194,7 @@ var style = {
   // For example, in large forms or before a small form
   heading4Style: 'font-size: 110%; font-weight: bold; color: #888888; padding: 0.2em; margin: 0.7em 0.0em;',
   // Lowest level used by default in small things
+
   formBorderColor: formBorderColor,
   // originally was brown; now grey
   formHeadingColor: '#888888',
@@ -11968,11 +10220,9 @@ var style = {
   linkDivStyle: 'width:2em; padding:0.5em; height: 4em;'
 };
 exports.style = style;
-
 style.setStyle = function setStyle(ele, styleName) {
   ele.style = style[styleName];
 };
-
 module.exports = style; // @@ No way to do this in ESM
 //# sourceMappingURL=style.js.map
 
@@ -11991,7 +10241,6 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.style = void 0;
-
 /*
  * BASED ON:
  * IconicMultiSelect v0.7.0
@@ -12006,7 +10255,6 @@ exports.style = void 0;
  */
 var style = {
   multiselect__container: "\n        -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n        background-color: #fff;\n        border-radius: 2px;\n        -webkit-box-shadow: 0 1px 3px 0 #d1d1d2, 0 0 0 1px #d1d1d2;\n                box-shadow: 0 1px 3px 0 #d1d1d2, 0 0 0 1px #d1d1d2;\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        display: -webkit-box;\n        display: -ms-flexbox;\n        display: flex;\n        min-height: 36px;\n        padding: 4px 8px 0 8px;\n        position: relative;\n        width: 354px;\n        margin-bottom: 5px;\n        font-size: 100%\n    ",
-
   /*
     multiselect__container:after: `
         content: '';
@@ -12026,12 +10274,12 @@ var style = {
   multiselect__options_ul_li: "\n        cursor: pointer;\n        padding: 4px 8px;\n    ",
   // multiselect__options ul li:hover: `
   multiselect__options_ul_li_hover: "\n        background-color: #dedede;\n    ",
-
   /*
     multiselect__options ul li *: `
     pointer-events: none;
     `,
   */
+
   multiselect__options_ul_p_multiselect__options_no_results: "\n        margin: 0;\n        padding: 8px;\n        text-align: center;\n    ",
   multiselect__options_ul_p_multiselect__options_no_data: "\n        margin: 0;\n        padding: 8px;\n        text-align: center;\n    ",
   // multiselect__options ul li.multiselect__options--selected: `
@@ -12045,11 +10293,9 @@ var style = {
   multiselect__input: "\n        border: none;\n        -ms-flex-preferred-size: 40%;\n            flex-basis: 40%;\n        -webkit-box-flex: 1;\n            -ms-flex-positive: 1;\n                flex-grow: 1;\n        height: 5px;        \n        margin-bottom: 4px;\n        min-width: 40%;\n        outline: none;      \n    "
 };
 exports.style = style;
-
 style.setStyle = function setStyle(ele, styleName) {
   ele.style = style[styleName];
 };
-
 module.exports = style;
 //# sourceMappingURL=style_multiSelect.js.map
 
@@ -12065,32 +10311,20 @@ module.exports = style;
 
 
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.renderTableViewPane = renderTableViewPane;
-
 var debug = _interopRequireWildcard(__webpack_require__(/*! ./debug */ "./lib/debug.js"));
-
 var _iconBase = __webpack_require__(/*! ./iconBase */ "./lib/iconBase.js");
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 var log = _interopRequireWildcard(__webpack_require__(/*! ./log */ "./lib/log.js"));
-
 var ns = _interopRequireWildcard(__webpack_require__(/*! ./ns */ "./lib/ns.js"));
-
 var rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
-
 var utils = _interopRequireWildcard(__webpack_require__(/*! ./utils */ "./lib/utils/index.js"));
-
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ./widgets */ "./lib/widgets/index.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 // Table Widget: Format an array of RDF statements as an HTML table.
 //
 // This can operate in one of three modes: when the class of object is given
@@ -12105,15 +10339,18 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 // 2008 Written, Ilaria Liccardi  as the tableViewPane.js
 // 2014 Core table widget moved into common/table.js - timbl
 //
+
 // pull in first avoid cross-refs
+
 var UI = {
   icons: _iconBase.icons,
   log: log,
   ns: ns,
   utils: utils,
   widgets: widgets
-}; // UI.widgets.renderTableViewPane
+};
 
+// UI.widgets.renderTableViewPane
 function renderTableViewPane(doc, options) {
   var sourceDocument = options.sourceDocument;
   var tableClass = options.tableClass;
@@ -12122,12 +10359,15 @@ function renderTableViewPane(doc, options) {
   var ns = UI.ns;
   var kb = _solidLogic.store;
   var rowsLookup = {}; //  Persistent mapping of subject URI to dom TR
+
   // Predicates that are never made into columns:
 
   var FORBIDDEN_COLUMNS = {
     'http://www.w3.org/2002/07/owl#sameAs': true,
     'http://www.w3.org/1999/02/22-rdf-syntax-ns#type': true
-  }; // Number types defined in the XML schema:
+  };
+
+  // Number types defined in the XML schema:
 
   var XSD_NUMBER_TYPES = {
     'http://www.w3.org/2001/XMLSchema#decimal': true,
@@ -12150,12 +10390,16 @@ function renderTableViewPane(doc, options) {
   var XSD_DATE_TYPES = {
     'http://www.w3.org/2001/XMLSchema#dateTime': true,
     'http://www.w3.org/2001/XMLSchema#date': true
-  }; // Classes that indicate an image:
+  };
+
+  // Classes that indicate an image:
 
   var IMAGE_TYPES = {
     'http://xmlns.com/foaf/0.1/Image': true,
     'http://purl.org/dc/terms/Image': true
-  }; // Name of the column used as a "key" value to look up the row.
+  };
+
+  // Name of the column used as a "key" value to look up the row.
   // This is necessary because in the normal view, the columns are
   // all "optional" values, meaning that we will get a result set
   // for every individual value that is found.  The row key acts
@@ -12165,8 +10409,9 @@ function renderTableViewPane(doc, options) {
   var keyVariable = options.keyVariable || '?_row';
   var subjectIdCounter = 0;
   var allType, types;
-  var typeSelectorDiv, addColumnDiv; // The last SPARQL query used:
+  var typeSelectorDiv, addColumnDiv;
 
+  // The last SPARQL query used:
   var lastQuery = null;
   var mostCommonType = null;
   var resultDiv = doc.createElement('div');
@@ -12174,40 +10419,39 @@ function renderTableViewPane(doc, options) {
   resultDiv.appendChild(generateControlBar()); // sets typeSelectorDiv
 
   var tableDiv = doc.createElement('div');
-  resultDiv.appendChild(tableDiv); // Save a refresh function for use by caller
+  resultDiv.appendChild(tableDiv);
 
+  // Save a refresh function for use by caller
   resultDiv.refresh = function () {
-    runQuery(table.query, table.logicalRows, table.columns, table); // updateTable(givenQuery, mostCommonType) // This could be a lot more incremental and efficient
-  }; // A specifically asked-for query
+    runQuery(table.query, table.logicalRows, table.columns, table);
+    // updateTable(givenQuery, mostCommonType) // This could be a lot more incremental and efficient
+  };
 
-
+  // A specifically asked-for query
   var table;
-
   if (givenQuery) {
-    table = renderTableForQuery(givenQuery); // lastQuery = givenQuery
-
+    table = renderTableForQuery(givenQuery);
+    // lastQuery = givenQuery
     tableDiv.appendChild(table);
   } else {
     // Find the most common type and select it by default
+
     var s = calculateTable();
     allType = s[0];
     types = s[1];
-
     if (!tableClass) {
       typeSelectorDiv.appendChild(generateTypeSelector(allType, types));
     }
-
     mostCommonType = getMostCommonType(types);
-
     if (mostCommonType) {
       buildFilteredTable(mostCommonType);
     } else {
       buildFilteredTable(allType);
     }
   }
+  return resultDiv;
 
-  return resultDiv; // /////////////////////////////////////////////////////////////////
-
+  // /////////////////////////////////////////////////////////////////
   /*
   function closeDialog (dialog) {
     dialog.parentNode.removeChild(dialog)
@@ -12260,58 +10504,60 @@ function renderTableViewPane(doc, options) {
     var result = doc.createElement('table');
     result.setAttribute('class', 'toolbar');
     var tr = doc.createElement('tr');
+
     /*             @@    Add in later -- not debugged yet
             var sparqlButtonDiv = doc.createElement("td")
             sparqlButtonDiv.appendChild(generateSparqlButton())
             tr.appendChild(sparqlButtonDiv)
     */
-
     typeSelectorDiv = doc.createElement('td');
     tr.appendChild(typeSelectorDiv);
     addColumnDiv = doc.createElement('td');
     tr.appendChild(addColumnDiv);
     result.appendChild(tr);
     return result;
-  } // Add the SELECT details to the query being built.
+  }
 
+  // Add the SELECT details to the query being built.
 
   function addSelectToQuery(query, type) {
     var selectedColumns = type.getColumns();
-
     for (var i = 0; i < selectedColumns.length; ++i) {
       // TODO: autogenerate nicer names for variables
       // variables have to be unambiguous
+
       var variable = kb.variable('_col' + i);
       query.vars.push(variable);
       selectedColumns[i].setVariable(variable);
     }
-  } // Add WHERE details to the query being built.
+  }
 
+  // Add WHERE details to the query being built.
 
   function addWhereToQuery(query, rowVar, type) {
     var queryType = type.type;
-
     if (!queryType) {
       queryType = kb.variable('_any');
-    } // _row a type
+    }
 
-
+    // _row a type
     query.pat.add(rowVar, UI.ns.rdf('type'), queryType);
-  } // Generate OPTIONAL column selectors.
+  }
 
+  // Generate OPTIONAL column selectors.
 
   function addColumnsToQuery(query, rowVar, type) {
     var selectedColumns = type.getColumns();
-
     for (var i = 0; i < selectedColumns.length; ++i) {
       var column = selectedColumns[i];
       var formula = kb.formula();
       formula.add(rowVar, column.predicate, column.getVariable());
       query.pat.optional.push(formula);
     }
-  } // Generate a query object from the currently-selected type
-  // object.
+  }
 
+  // Generate a query object from the currently-selected type
+  // object.
 
   function generateQuery(type) {
     var query = new rdf.Query();
@@ -12321,112 +10567,130 @@ function renderTableViewPane(doc, options) {
     addWhereToQuery(query, rowVar, type);
     addColumnsToQuery(query, rowVar, type);
     return query;
-  } // Build the contents of the tableDiv element, filtered according
-  // to the specified type.
+  }
 
+  // Build the contents of the tableDiv element, filtered according
+  // to the specified type.
 
   function buildFilteredTable(type) {
     // Generate "add column" cell.
+
     clearElement(addColumnDiv);
     addColumnDiv.appendChild(generateColumnAddDropdown(type));
     var query = generateQuery(type);
     updateTable(query, type);
   }
-
   function updateTable(query, type) {
     // Stop the previous query from doing any updates.
+
     if (lastQuery) {
       lastQuery.running = false;
-    } // Render the HTML table.
+    }
 
+    // Render the HTML table.
 
-    var htmlTable = renderTableForQuery(query, type); // Clear the tableDiv element, and replace with the new table.
+    var htmlTable = renderTableForQuery(query, type);
+
+    // Clear the tableDiv element, and replace with the new table.
 
     clearElement(tableDiv);
-    tableDiv.appendChild(htmlTable); // Save the query for the edit dialog.
+    tableDiv.appendChild(htmlTable);
+
+    // Save the query for the edit dialog.
 
     lastQuery = query;
-  } // Remove all subelements of the specified element.
+  }
 
+  // Remove all subelements of the specified element.
 
   function clearElement(element) {
     while (element.childNodes.length > 0) {
       element.removeChild(element.childNodes[0]);
     }
-  } // A SubjectType is created for each rdf:type discovered.
+  }
 
+  // A SubjectType is created for each rdf:type discovered.
 
   function SubjectType(type) {
     this.type = type;
     this.columns = null;
     this.allColumns = [];
-    this.useCount = 0; // Get a list of all columns used by this type.
+    this.useCount = 0;
+
+    // Get a list of all columns used by this type.
 
     this.getAllColumns = function () {
       return this.allColumns;
-    }; // Get a list of the current columns used by this type
-    // (subset of allColumns)
+    };
 
+    // Get a list of the current columns used by this type
+    // (subset of allColumns)
 
     this.getColumns = function () {
       // The first time through, get a list of all the columns
       // and select only the six most popular columns.
+
       if (!this.columns) {
         var allColumns = this.getAllColumns();
         this.columns = allColumns.slice(0, 7);
       }
-
       return this.columns;
-    }; // Get a list of unused columns
+    };
 
+    // Get a list of unused columns
 
     this.getUnusedColumns = function () {
       var allColumns = this.getAllColumns();
       var columns = this.getColumns();
       var result = [];
-
       for (var i = 0; i < allColumns.length; ++i) {
         if (columns.indexOf(allColumns[i]) === -1) {
           result.push(allColumns[i]);
         }
       }
-
       return result;
     };
-
     this.addColumn = function (column) {
       this.columns.push(column);
     };
-
     this.removeColumn = function (column) {
       this.columns = this.columns.filter(function (x) {
         return x !== column;
       });
     };
-
     this.getLabel = function () {
       return utils.label(this.type);
     };
-
     this.addUse = function () {
       this.useCount += 1;
     };
-  } // Class representing a column in the table.
+  }
 
+  // Class representing a column in the table.
 
   function Column() {
-    this.useCount = 0; // Have we checked any values for this column yet?
+    this.useCount = 0;
 
-    this.checkedAnyValues = false; // If the range is unknown, but we just get literals in this
+    // Have we checked any values for this column yet?
+
+    this.checkedAnyValues = false;
+
+    // If the range is unknown, but we just get literals in this
     // column, then we can generate a literal selector.
 
-    this.possiblyLiteral = true; // If the range is unknown, but we just get literals and they
+    this.possiblyLiteral = true;
+
+    // If the range is unknown, but we just get literals and they
     // match the regular expression for numbers, we can generate
     // a number selector.
 
-    this.possiblyNumber = true; // We accumulate classes which things in the column must be a member of
+    this.possiblyNumber = true;
 
-    this.constraints = []; // Check values as they are read.  If we don't know what the
+    // We accumulate classes which things in the column must be a member of
+
+    this.constraints = [];
+
+    // Check values as they are read.  If we don't know what the
     // range is, we might be able to infer that it is a literal
     // if all of the values are literals.  Similarly, we might
     // be able to determine if the literal values are actually
@@ -12434,7 +10698,6 @@ function renderTableViewPane(doc, options) {
 
     this.checkValue = function (term) {
       var termType = term.termType;
-
       if (this.possiblyLiteral && termType !== 'Literal' && termType !== 'NamedNode') {
         this.possiblyNumber = false;
         this.possiblyLiteral = false;
@@ -12443,45 +10706,35 @@ function renderTableViewPane(doc, options) {
           this.possiblyNumber = false;
         } else {
           var literalValue = term.value;
-
           if (!literalValue.match(/^-?\d+(\.\d*)?$/)) {
             this.possiblyNumber = false;
           }
         }
       }
-
       this.checkedAnyValues = true;
     };
-
     this.getVariable = function () {
       return this.variable;
     };
-
     this.setVariable = function (variable) {
       this.variable = variable;
     };
-
     this.getKey = function () {
       return this.variable.toString();
     };
-
     this.addUse = function () {
       this.useCount += 1;
     };
-
     this.getHints = function () {
       if (options && options.hints && this.variable && options.hints[this.variable.toNT()]) {
         return options.hints[this.variable.toNT()];
       }
-
       return {};
     };
-
     this.getLabel = function () {
       if (this.getHints().label) {
         return this.getHints().label;
       }
-
       if (this.predicate) {
         if (this.predicate.sameTerm(ns.rdf('type')) && this.superClass) {
           return utils.label(this.superClass, true); // do initial cap
@@ -12494,13 +10747,11 @@ function renderTableViewPane(doc, options) {
         return 'unlabeled column?';
       }
     };
-
     this.setPredicate = function (predicate, inverse, other) {
       if (inverse) {
         // variable is in the subject pos
         this.inverse = predicate;
         this.constraints = this.constraints.concat(kb.each(predicate, UI.ns.rdfs('domain')));
-
         if (predicate.sameTerm(ns.rdfs('subClassOf')) && other.termType === 'NamedNode') {
           this.superClass = other;
           this.alternatives = kb.each(undefined, ns.rdfs('subClassOf'), other);
@@ -12511,83 +10762,76 @@ function renderTableViewPane(doc, options) {
         this.constraints = this.constraints.concat(kb.each(predicate, UI.ns.rdfs('range')));
       }
     };
-
     this.getConstraints = function () {
       return this.constraints;
     };
-
     this.filterFunction = function () {
       return true;
     };
-
     this.sortKey = function () {
       return this.getLabel().toLowerCase();
     };
-
     this.isImageColumn = function () {
       for (var i = 0; i < this.constraints.length; i++) {
         if (this.constraints[i].uri in IMAGE_TYPES) return true;
       }
-
       return false;
     };
-  } // Convert an object to an array.
+  }
 
+  // Convert an object to an array.
 
   function objectToArray(obj, filter) {
     var result = [];
-
     for (var property in obj) {
       // @@@ have to guard against methods
       var value = obj[property];
-
       if (!filter || filter(property, value)) {
         result.push(value);
       }
     }
-
     return result;
-  } // Generate an <option> in a drop-down list.
+  }
 
+  // Generate an <option> in a drop-down list.
 
   function optionElement(label, value) {
     var result = doc.createElement('option');
     result.setAttribute('value', value);
     result.appendChild(doc.createTextNode(label));
     return result;
-  } // Generate drop-down list box for choosing type of data displayed
+  }
 
+  // Generate drop-down list box for choosing type of data displayed
 
   function generateTypeSelector(allType, types) {
     var resultDiv = doc.createElement('div');
     resultDiv.appendChild(doc.createTextNode('Select type: '));
     var dropdown = doc.createElement('select');
     dropdown.appendChild(optionElement('All types', 'null'));
-
     for (var uri in types) {
       dropdown.appendChild(optionElement(types[uri].getLabel(), uri));
     }
-
     dropdown.addEventListener('click', function () {
       var type;
-
       if (dropdown.value === 'null') {
         type = allType;
       } else {
         type = types[dropdown.value];
       }
-
       typeSelectorChanged(type);
     }, false);
     resultDiv.appendChild(dropdown);
     return resultDiv;
-  } // Callback invoked when the type selector drop-down list is changed.
+  }
 
+  // Callback invoked when the type selector drop-down list is changed.
 
   function typeSelectorChanged(selectedType) {
     buildFilteredTable(selectedType);
-  } // Build drop-down list to add a new column
+  }
 
+  // Build drop-down list to add a new column
 
   function generateColumnAddDropdown(type) {
     var resultDiv = doc.createElement('div');
@@ -12596,53 +10840,55 @@ function renderTableViewPane(doc, options) {
       var aLabel = a.sortKey();
       var bLabel = b.sortKey();
       return (aLabel > bLabel) - (aLabel < bLabel);
-    }); // If there are no unused columns, the div is empty.
+    });
+
+    // If there are no unused columns, the div is empty.
 
     if (unusedColumns.length > 0) {
-      resultDiv.appendChild(doc.createTextNode('Add column: ')); // Build dropdown list of unused columns.
+      resultDiv.appendChild(doc.createTextNode('Add column: '));
+
+      // Build dropdown list of unused columns.
 
       var dropdown = doc.createElement('select');
       dropdown.appendChild(optionElement('', '-1'));
-
       for (var i = 0; i < unusedColumns.length; ++i) {
         var column = unusedColumns[i];
         dropdown.appendChild(optionElement(column.getLabel(), '' + i));
       }
+      resultDiv.appendChild(dropdown);
 
-      resultDiv.appendChild(dropdown); // Invoke callback when the dropdown is changed, to add
+      // Invoke callback when the dropdown is changed, to add
       // the column and reload the table.
 
       dropdown.addEventListener('click', function () {
         var columnIndex = Number(dropdown.value);
-
         if (columnIndex >= 0) {
           type.addColumn(unusedColumns[columnIndex]);
           buildFilteredTable(type);
         }
       }, false);
     }
-
     return resultDiv;
-  } // Find the column for a given variable
+  }
 
+  // Find the column for a given variable
 
   function getColumnForVariable(columns, variableNT) {
     for (var predicateUri in columns) {
       var column = columns[predicateUri];
-
       if (column.variable.toNT() === variableNT) {
         return column;
       }
     }
+    throw new Error("getColumnForVariable: no column for variable ".concat(variableNT));
+    // return null
+  }
 
-    throw new Error("getColumnForVariable: no column for variable ".concat(variableNT)); // return null
-  } // Find the column for a given predicate, creating a new column object
+  // Find the column for a given predicate, creating a new column object
   // if necessary.
-
 
   function getColumnForPredicate(columns, predicate) {
     var column;
-
     if (predicate.uri in columns) {
       column = columns[predicate.uri];
     } else {
@@ -12650,134 +10896,139 @@ function renderTableViewPane(doc, options) {
       column.setPredicate(predicate);
       columns[predicate.uri] = column;
     }
-
     return column;
-  } // Find a type by its URI, creating a new SubjectType object if
-  // necessary.
+  }
 
+  // Find a type by its URI, creating a new SubjectType object if
+  // necessary.
 
   function getTypeForObject(types, type) {
     var subjectType;
-
     if (type.uri in types) {
       subjectType = types[type.uri];
     } else {
       subjectType = new SubjectType(type);
       types[type.uri] = subjectType;
     }
-
     return subjectType;
-  } // Discover types and subjects for search.
+  }
 
+  // Discover types and subjects for search.
 
   function discoverTypes() {
     // rdf:type properties of subjects, indexed by URI for the type.
-    var types = {}; // Get a list of statements that match:  ? rdfs:type ?
+
+    var types = {};
+
+    // Get a list of statements that match:  ? rdfs:type ?
     // From this we can get a list of subjects and types.
 
-    var subjectList = kb.statementsMatching(undefined, UI.ns.rdf('type'), tableClass, // can be undefined OR
+    var subjectList = kb.statementsMatching(undefined, UI.ns.rdf('type'), tableClass,
+    // can be undefined OR
     sourceDocument); // can be undefined
+
     // Subjects for later lookup.  This is a mapping of type URIs to
     // lists of subjects (it is necessary to record the type of
     // a subject).
 
     var subjects = {};
-
     for (var i = 0; i < subjectList.length; ++i) {
       var type = subjectList[i].object;
-
       if (type.termType !== 'NamedNode') {
         // @@ no bnodes?
         continue;
       }
-
       var typeObj = getTypeForObject(types, type);
-
       if (!(type.uri in subjects)) {
         subjects[type.uri] = [];
       }
-
       subjects[type.uri].push(subjectList[i].subject);
       typeObj.addUse();
     }
-
     return [subjects, types];
-  } // Get columns for the given subject.
+  }
 
+  // Get columns for the given subject.
 
   function getSubjectProperties(subject, columns) {
     // Get a list of properties of this subject.
+
     var properties = kb.statementsMatching(subject, undefined, undefined, sourceDocument);
     var result = {};
-
     for (var j = 0; j < properties.length; ++j) {
       var predicate = properties[j].predicate;
-
       if (predicate.uri in FORBIDDEN_COLUMNS) {
         continue;
-      } // Find/create a column for this predicate.
+      }
 
+      // Find/create a column for this predicate.
 
       var column = getColumnForPredicate(columns, predicate);
       column.checkValue(properties[j].object);
       result[predicate.uri] = column;
     }
-
     return result;
-  } // Identify the columns associated with a type.
+  }
 
+  // Identify the columns associated with a type.
 
   function identifyColumnsForType(type, subjects) {
-    var allColumns = {}; // Process each subject of this type to build up the
+    var allColumns = {};
+
+    // Process each subject of this type to build up the
     // column list.
 
     for (var i = 0; i < subjects.length; ++i) {
       var columns = getSubjectProperties(subjects[i], allColumns);
-
       for (var predicateUri in columns) {
         var column = columns[predicateUri];
         column.addUse();
       }
-    } // Generate the columns list
+    }
 
+    // Generate the columns list
 
     var allColumnsList = objectToArray(allColumns);
     sortColumns(allColumnsList);
     type.allColumns = allColumnsList;
-  } // Build table information from parsing RDF statements.
+  }
 
+  // Build table information from parsing RDF statements.
 
   function calculateTable() {
     // Find the types that we will display in the dropdown
     // list box, and associated objects of those types.
+
     var subjects, types;
-    var s = discoverTypes(); // eslint-disable-next-line prefer-const
-
-    subjects = s[0]; // eslint-disable-next-line prefer-const
-
+    var s = discoverTypes();
+    // eslint-disable-next-line prefer-const
+    subjects = s[0];
+    // eslint-disable-next-line prefer-const
     types = s[1]; // no [ ] on LHS
 
     for (var typeUrl in subjects) {
       var subjectList = subjects[typeUrl];
       var type = types[typeUrl];
       identifyColumnsForType(type, subjectList);
-    } // TODO: Special type that captures all rows.
-    // Combine columns from all types
+    }
 
+    // TODO: Special type that captures all rows.
+    // Combine columns from all types
 
     var allType = new SubjectType(null);
     return [allType, objectToArray(types)];
-  } // Sort the list of columns by the most common columns.
+  }
 
+  // Sort the list of columns by the most common columns.
 
   function sortColumns(columns) {
     function sortFunction(a, b) {
       return (a.useCount < b.useCount) - (a.useCount > b.useCount);
     }
-
     columns.sort(sortFunction);
-  } // Create the delete button for a column.
+  }
 
+  // Create the delete button for a column.
 
   function renderColumnDeleteButton(type, column) {
     var button = doc.createElement('a');
@@ -12787,76 +11038,78 @@ function renderTableViewPane(doc, options) {
       buildFilteredTable(type);
     }, false);
     return button;
-  } // Render the table header for the HTML table.
+  }
 
+  // Render the table header for the HTML table.
 
   function renderTableHeader(columns, type) {
     var tr = doc.createElement('tr');
-    /* Empty header for link column */
 
+    /* Empty header for link column */
     var linkTd = doc.createElement('th');
     tr.appendChild(linkTd);
-
     for (var i = 0; i < columns.length; ++i) {
       var th = doc.createElement('th');
       var column = columns[i];
-      th.appendChild(doc.createTextNode(column.getLabel())); // We can only add a delete button if we are using the
-      // proper interface and have a type to delete from:
+      th.appendChild(doc.createTextNode(column.getLabel()));
 
+      // We can only add a delete button if we are using the
+      // proper interface and have a type to delete from:
       if (type) {
         th.appendChild(renderColumnDeleteButton(type, column));
       }
-
       tr.appendChild(th);
     }
-
     return tr;
-  } // Sort the rows in the rendered table by data from a specific
+  }
+
+  // Sort the rows in the rendered table by data from a specific
   // column, using the provided sort function to compare values.
 
-
   function applyColumnSort(rows, column, sortFunction, reverse) {
-    var columnKey = column.getKey(); // Sort the rows array.
+    var columnKey = column.getKey();
 
+    // Sort the rows array.
     rows.sort(function (row1, row2) {
       var row1Value = null;
       var row2Value = null;
-
       if (columnKey in row1.values) {
         row1Value = row1.values[columnKey][0];
       }
-
       if (columnKey in row2.values) {
         row2Value = row2.values[columnKey][0];
       }
-
       var result = sortFunction(row1Value, row2Value);
-
       if (reverse) {
         return -result;
       } else {
         return result;
       }
-    }); // Remove all rows from the table:
+    });
+
+    // Remove all rows from the table:
 
     if (rows.length) {
       var parentTable = rows[0]._htmlRow.parentNode;
-
       for (var i = 0; i < rows.length; ++i) {
         parentTable.removeChild(rows[i]._htmlRow);
-      } // Add back the rows in the new sorted order:
+      }
 
+      // Add back the rows in the new sorted order:
 
       for (var _i = 0; _i < rows.length; ++_i) {
         parentTable.appendChild(rows[_i]._htmlRow);
       }
     }
-  } // Filter the list of rows based on the selectors for the
+  }
+
+  // Filter the list of rows based on the selectors for the
   // columns.
 
-
   function applyColumnFiltersToRow(row, columns) {
-    var rowDisplayed = true; // Check the filter functions for every column.
+    var rowDisplayed = true;
+
+    // Check the filter functions for every column.
     // The row should only be displayed if the filter functions
     // for all of the columns return true.
 
@@ -12864,39 +11117,41 @@ function renderTableViewPane(doc, options) {
       var column = columns[c];
       var columnKey = column.getKey();
       var columnValue = null;
-
       if (columnKey in row.values) {
         columnValue = row.values[columnKey][0];
       }
-
       if (!column.filterFunction(columnValue)) {
         rowDisplayed = false;
         break;
       }
-    } // Show or hide the HTML row according to the result
+    }
+
+    // Show or hide the HTML row according to the result
     // from the filter function.
 
-
     var htmlRow = row._htmlRow;
-
     if (rowDisplayed) {
       htmlRow.style.display = '';
     } else {
       htmlRow.style.display = 'none';
     }
-  } // Filter the list of rows based on the selectors for the
-  // columns.
+  }
 
+  // Filter the list of rows based on the selectors for the
+  // columns.
 
   function applyColumnFilters(rows, columns) {
     // Apply filterFunction to each row.
+
     for (var r = 0; r < rows.length; ++r) {
       var row = rows[r];
       applyColumnFiltersToRow(row, columns);
     }
-  } // /////////////////////////////////// Literal column handling
-  // Sort by literal value
+  }
 
+  // /////////////////////////////////// Literal column handling
+
+  // Sort by literal value
 
   function literalSort(rows, column, reverse) {
     function literalToString(colValue) {
@@ -12906,17 +11161,14 @@ function renderTableViewPane(doc, options) {
         } else if (colValue.termType === 'NamedNode') {
           return utils.label(colValue).toLowerCase();
         }
-
         return colValue.value.toLowerCase();
       } else {
         return '';
       }
     }
-
     function literalCompare(value1, value2) {
       var strValue1 = literalToString(value1);
       var strValue2 = literalToString(value2);
-
       if (strValue1 < strValue2) {
         return -1;
       } else if (strValue1 > strValue2) {
@@ -12925,10 +11177,10 @@ function renderTableViewPane(doc, options) {
         return 0;
       }
     }
-
     applyColumnSort(rows, column, literalCompare, reverse);
-  } // Generates a selector for an RDF literal column.
+  }
 
+  // Generates a selector for an RDF literal column.
 
   function renderLiteralSelector(rows, columns, column) {
     var result = doc.createElement('div');
@@ -12948,7 +11200,9 @@ function renderTableViewPane(doc, options) {
       literalSort(rows, column, true);
     }, false);
     result.appendChild(sort2);
-    var substring = null; // Filter the table to show only rows that have a particular
+    var substring = null;
+
+    // Filter the table to show only rows that have a particular
     // substring in the specified column.
 
     column.filterFunction = function (colValue) {
@@ -12958,7 +11212,6 @@ function renderTableViewPane(doc, options) {
         return false;
       } else {
         var literalValue;
-
         if (colValue.termType === 'Literal') {
           literalValue = colValue.value;
         } else if (colValue.termType === 'NamedNode') {
@@ -12966,22 +11219,22 @@ function renderTableViewPane(doc, options) {
         } else {
           literalValue = '';
         }
-
         return literalValue.toLowerCase().indexOf(substring) >= 0;
       }
     };
-
     textBox.addEventListener('keyup', function () {
       if (textBox.value !== '') {
         substring = textBox.value.toLowerCase();
       } else {
         substring = null;
       }
-
       applyColumnFilters(rows, columns);
     }, false);
     return result;
-  } // ///////////////////////////////////  Enumeration
+  }
+
+  // ///////////////////////////////////  Enumeration
+
   // Generates a dropdown selector for enumeration types include
   //
   //  @param rows,
@@ -12989,41 +11242,35 @@ function renderTableViewPane(doc, options) {
   //  @param column,
   //  @param list,    List of alternative terms
   //
-
-
   function renderEnumSelector(rows, columns, column, list) {
     var doMultiple = true;
     var result = doc.createElement('div');
     var dropdown = doc.createElement('select');
     var searchValue = {}; // Defualt to all enabled
-
     for (var i = 0; i < list.length; ++i) {
       var value = list[i];
       searchValue[value.uri] = true;
     }
-
     var initialSelection = getHints(column).initialSelection;
     if (initialSelection) searchValue = initialSelection;
     if (doMultiple) dropdown.setAttribute('multiple', 'true');else dropdown.appendChild(optionElement('(All)', '-1'));
-
     for (var _i2 = 0; _i2 < list.length; ++_i2) {
       var _value = list[_i2];
       var ele = optionElement(utils.label(_value), _i2);
       if (searchValue[_value.uri]) ele.selected = true;
       dropdown.appendChild(ele);
     }
+    result.appendChild(dropdown);
 
-    result.appendChild(dropdown); // Select based on an enum value.
+    // Select based on an enum value.
 
     column.filterFunction = function (colValue) {
       return !searchValue || colValue && searchValue[colValue.uri];
     };
-
     dropdown.addEventListener('click', function () {
       if (doMultiple) {
         searchValue = {};
         var opt = dropdown.options;
-
         for (var _i3 = 0; _i3 < opt.length; _i3++) {
           var option = opt[_i3];
           var index = Number(option.value);
@@ -13031,8 +11278,6 @@ function renderTableViewPane(doc, options) {
         }
       } else {
         var _index = Number(dropdown.value); // adjusted in Standard tweaks 2018-01
-
-
         if (_index < 0) {
           searchValue = null;
         } else {
@@ -13040,14 +11285,14 @@ function renderTableViewPane(doc, options) {
           searchValue[list[_index].uri] = true;
         }
       }
-
       applyColumnFilters(rows, columns);
     }, true);
     return result;
-  } // //////////////////////////////////// Numeric
+  }
+
+  // //////////////////////////////////// Numeric
   //
   // Selector for XSD number types.
-
 
   function renderNumberSelector(rows, columns, column) {
     var result = doc.createElement('div');
@@ -13058,28 +11303,27 @@ function renderTableViewPane(doc, options) {
     var maxSelector = doc.createElement('input');
     maxSelector.setAttribute('type', 'text');
     maxSelector.style.width = '40px';
-    result.appendChild(maxSelector); // Select based on minimum/maximum limits.
+    result.appendChild(maxSelector);
+
+    // Select based on minimum/maximum limits.
 
     var min = null;
     var max = null;
-
     column.filterFunction = function (colValue) {
       if (colValue) {
         colValue = Number(colValue);
       }
-
       if (min && (!colValue || colValue < min)) {
         return false;
       }
-
       if (max && (!colValue || colValue > max)) {
         return false;
       }
-
       return true;
-    }; // When the values in the boxes are changed, update the
-    // displayed columns.
+    };
 
+    // When the values in the boxes are changed, update the
+    // displayed columns.
 
     function eventListener() {
       if (minSelector.value === '') {
@@ -13087,86 +11331,93 @@ function renderTableViewPane(doc, options) {
       } else {
         min = Number(minSelector.value);
       }
-
       if (maxSelector.value === '') {
         max = null;
       } else {
         max = Number(maxSelector.value);
       }
-
       applyColumnFilters(rows, columns);
     }
-
     minSelector.addEventListener('keyup', eventListener, false);
     maxSelector.addEventListener('keyup', eventListener, false);
     return result;
-  } // /////////////////////////////////////////////////////////////////
-  // Fallback attempts at generating a selector if other attempts fail.
+  }
 
+  // /////////////////////////////////////////////////////////////////
+
+  // Fallback attempts at generating a selector if other attempts fail.
 
   function fallbackRenderTableSelector(rows, columns, column) {
     // Have all values matched as numbers?
+
     if (column.checkedAnyValues && column.possiblyNumber) {
       return renderNumberSelector(rows, columns, column);
-    } // Have all values been literals?
+    }
 
+    // Have all values been literals?
 
     if (column.possiblyLiteral) {
       return renderLiteralSelector(rows, columns, column);
     }
-
     return null;
-  } // Render a selector for a given row.
+  }
 
+  // Render a selector for a given row.
 
   function renderTableSelector(rows, columns, column) {
     // What type of data is in this column?  Check the constraints for
     // this predicate.
+
     // If this is a class which can be one of various sibling classes?
     if (column.superClass && column.alternatives.length > 0) {
       return renderEnumSelector(rows, columns, column, column.alternatives);
     }
-
     var cs = column.getConstraints();
     var range;
-
     for (var i = 0; i < cs.length; i++) {
-      range = cs[i]; // Is this a number type?
+      range = cs[i];
+
+      // Is this a number type?
       // Alternatively, is this an rdf:Literal type where all of
       // the values match as numbers?
 
       if (column.checkedAnyValues && column.possiblyNumber || range.uri in XSD_NUMBER_TYPES) {
         return renderNumberSelector(rows, columns, column);
-      } // rdf:Literal?  Assume a string at this point
+      }
 
+      // rdf:Literal?  Assume a string at this point
 
       if (range.uri === RDFS_LITERAL) {
         return renderLiteralSelector(rows, columns, column);
-      } // Is this an enumeration type?
+      }
+
+      // Is this an enumeration type?
+
       // Also  ToDo: @@@ Handle membership of classes whcih are disjointUnions
 
-
       var choices = kb.each(range, UI.ns.owl('oneOf'));
-
       if (choices.length > 0) {
         return renderEnumSelector(rows, columns, column, choices.elements);
       }
     }
-
     return fallbackRenderTableSelector(rows, columns, column);
-  } // Generate the search selectors for the table columns.
+  }
 
+  // Generate the search selectors for the table columns.
 
   function renderTableSelectors(rows, columns) {
     var tr = doc.createElement('tr');
-    tr.className = 'selectors'; // Empty link column
+    tr.className = 'selectors';
 
-    tr.appendChild(doc.createElement('td')); // Generate selectors.
+    // Empty link column
+
+    tr.appendChild(doc.createElement('td'));
+
+    // Generate selectors.
 
     for (var i = 0; i < columns.length; ++i) {
       var td = doc.createElement('td');
       var selector = renderTableSelector(rows, columns, columns[i]);
-
       if (selector) {
         td.appendChild(selector);
       }
@@ -13176,21 +11427,16 @@ function renderTableViewPane(doc, options) {
                       td.appendChild(document.createTextNode(columns[i].predicate.uri))
                   }
       */
-
-
       tr.appendChild(td);
     }
-
     return tr;
   }
-
   function linkTo(uri, linkText, hints) {
     hints = hints || {};
     var result = doc.createElement('a');
     var linkFunction = hints.linkFunction;
     result.setAttribute('href', uri);
     result.appendChild(doc.createTextNode(linkText));
-
     if (!linkFunction) {
       result.addEventListener('click', UI.widgets.openHrefInOutlineMode, true);
     } else {
@@ -13203,56 +11449,51 @@ function renderTableViewPane(doc, options) {
         linkFunction(uri);
       }, true);
     }
-
     return result;
   }
-
   function linkToObject(obj, hints) {
     var match = false;
-
     if (obj.uri) {
       match = obj.uri.match(/^mailto:(.*)/);
     }
-
     if (match) {
       return linkTo(obj.uri, match[1], hints);
     } else {
       return linkTo(obj.uri, utils.label(obj), hints);
     }
-  } // Render an image
+  }
 
+  // Render an image
 
   function renderImage(obj) {
     var result = doc.createElement('img');
-    result.setAttribute('src', obj.uri); // Set the height, so it appears as a thumbnail.
+    result.setAttribute('src', obj.uri);
 
+    // Set the height, so it appears as a thumbnail.
     result.style.height = '40px';
     return result;
-  } // Render an individual RDF object to an HTML object displayed
-  // in a table cell.
+  }
 
+  // Render an individual RDF object to an HTML object displayed
+  // in a table cell.
 
   function getHints(column) {
     if (options && options.hints && column.variable && options.hints[column.variable.toNT()]) {
       return options.hints[column.variable.toNT()];
     }
-
     return {};
   }
-
   function renderValue(obj, column) {
     // hint
     var hints = getHints(column);
     var cellFormat = hints.cellFormat;
-
     if (cellFormat) {
       switch (cellFormat) {
         case 'shortDate':
           return doc.createTextNode(UI.widgets.shortDate(obj.value));
         // break
-
-        default: // drop through
-
+        default:
+        // drop through
       }
     } else {
       if (obj.termType === 'Literal') {
@@ -13266,7 +11507,6 @@ function renderTableViewPane(doc, options) {
             return span;
           }
         }
-
         return doc.createTextNode(obj.value);
       } else if (obj.termType === 'NamedNode' && column.isImageColumn()) {
         return renderImage(obj);
@@ -13274,38 +11514,34 @@ function renderTableViewPane(doc, options) {
         return linkToObject(obj, hints);
       } else if (obj.termType === 'Collection') {
         var _span = doc.createElement('span');
-
         _span.appendChild(doc.createTextNode('['));
-
         obj.elements.forEach(function (x) {
           _span.appendChild(renderValue(x, column));
-
           _span.appendChild(doc.createTextNode(', '));
         });
-
         _span.removeChild(_span.lastChild);
-
         _span.appendChild(doc.createTextNode(']'));
-
         return _span;
       } else {
         return doc.createTextNode("unknown termtype '" + obj.termType + "'!");
       }
     }
-  } // Render a row of the HTML table, from the given row structure.
+  }
+
+  // Render a row of the HTML table, from the given row structure.
   // Note that unlike other functions, this renders into a provided
   // row (<tr>) element.
 
-
   function renderTableRowInto(tr, row, columns, _downstream) {
     /* Link column, for linking to this subject. */
-    var linkTd = doc.createElement('td');
 
+    var linkTd = doc.createElement('td');
     if (row._subject && 'uri' in row._subject) {
       linkTd.appendChild(linkTo(row._subject.uri, "\u2192"));
     }
+    tr.appendChild(linkTd);
 
-    tr.appendChild(linkTd); // Create a <td> for each column (whether the row has data for that
+    // Create a <td> for each column (whether the row has data for that
     // column or not).
 
     for (var i = 0; i < columns.length; ++i) {
@@ -13313,34 +11549,26 @@ function renderTableViewPane(doc, options) {
       var td = doc.createElement('td');
       var orig = void 0;
       var columnKey = column.getKey();
-
       if (columnKey in row.values) {
         var objects = row.values[columnKey];
         var different = false;
-
         if (row.originalValues && row.originalValues[columnKey]) {
           if (objects.length !== row.originalValues[columnKey].length) {
             different = true;
           }
         }
-
         for (var j = 0; j < objects.length; ++j) {
           var obj = objects[j];
-
           if (row.originalValues && row.originalValues[columnKey] && row.originalValues[columnKey].length > j) {
             orig = row.originalValues[columnKey][j];
-
             if (obj.toString() !== orig.toString()) {
               different = true;
             }
           }
-
           td.appendChild(renderValue(obj, column));
-
           if (j !== objects.length - 1) {
             td.appendChild(doc.createTextNode(',\n'));
           }
-
           if (different) {
             td.style.background = '#efe'; // green = new changed
           }
@@ -13348,71 +11576,77 @@ function renderTableViewPane(doc, options) {
       }
 
       tr.appendChild(td);
-    } // Save a reference to the HTML row in the row object.
+    }
 
+    // Save a reference to the HTML row in the row object.
 
     row._htmlRow = tr;
     return tr;
-  } // Check if a value is already stored in the list of values for
-  // a cell (the query can sometimes find it multiple times)
+  }
 
+  // Check if a value is already stored in the list of values for
+  // a cell (the query can sometimes find it multiple times)
 
   function valueInList(value, list) {
     var key = null;
-
     if (value.termType === 'Literal') {
       key = 'value';
     } else if (value.termType === 'NamedNode') {
       key = 'uri';
     } else {
       return list.indexOf(value) >= 0;
-    } // Check the list and compare keys:
+    }
 
+    // Check the list and compare keys:
 
     var i;
-
     for (i = 0; i < list.length; ++i) {
       if (list[i].termType === value.termType && list[i][key] === value[key]) {
         return true;
       }
-    } // Not found?
+    }
 
+    // Not found?
 
     return false;
-  } // Update a row, add new values, and regenerate the HTML element
-  // containing the values.
+  }
 
+  // Update a row, add new values, and regenerate the HTML element
+  // containing the values.
 
   function updateRow(row, columns, values) {
     var key;
     var needUpdate = false;
-
     for (key in values) {
-      var value = values[key]; // If this key is not already in the row, create a new entry
+      var value = values[key];
+
+      // If this key is not already in the row, create a new entry
       // for it:
 
       if (!(key in row.values)) {
         row.values[key] = [];
-      } // Possibly add this new value to the list, but don't
-      // add it if we have already added it:
+      }
 
+      // Possibly add this new value to the list, but don't
+      // add it if we have already added it:
 
       if (!valueInList(value, row.values[key])) {
         row.values[key].push(value);
         needUpdate = true;
       }
-    } // Regenerate the HTML row?
+    }
 
+    // Regenerate the HTML row?
 
     if (needUpdate) {
       clearElement(row._htmlRow);
       renderTableRowInto(row._htmlRow, row, columns);
     }
-
     applyColumnFiltersToRow(row, columns); // Hide immediately if nec
-  } // Get a unique ID for the given subject.  This is normally the
-  // URI; if the subject has no URI, a unique ID is assigned.
+  }
 
+  // Get a unique ID for the given subject.  This is normally the
+  // URI; if the subject has no URI, a unique ID is assigned.
 
   function getSubjectId(subject) {
     if ('uri' in subject) {
@@ -13425,10 +11659,11 @@ function renderTableViewPane(doc, options) {
       ++subjectIdCounter;
       return result;
     }
-  } // Run a query and populate the table.
+  }
+
+  // Run a query and populate the table.
   // Populates also an array of logical rows.  This will be empty when the function
   // first returns (as the query is performed in the background)
-
 
   function runQuery(query, rows, columns, table) {
     query.running = true;
@@ -13436,16 +11671,14 @@ function renderTableViewPane(doc, options) {
     var progressMessage = doc.createElement('tr');
     table.appendChild(progressMessage);
     progressMessage.textContent = 'Loading ...';
-
     for (var i = 0; i < rows.length; i++) {
       rows[i].original = true;
-
       if (!rows[i].originalValues) {
         // remember first set
         rows[i].originalValues = rows[i].values;
       }
-
-      rows[i].values = {}; // oldStyle = rows[i]._htmlRow.getAttribute('style') || ''
+      rows[i].values = {};
+      // oldStyle = rows[i]._htmlRow.getAttribute('style') || ''
       // rows[i]._htmlRow.style.background = '#ffe'; //setAttribute('style', ' background-color: #ffe;')// yellow
     }
 
@@ -13453,23 +11686,27 @@ function renderTableViewPane(doc, options) {
       if (!query.running) {
         return;
       }
-
       progressMessage.textContent += '.'; // give a progress bar
 
       var row = null;
       var rowKey = null;
-      var rowKeyId; // If the query has a row key, use it to look up the row.
+      var rowKeyId;
+
+      // If the query has a row key, use it to look up the row.
 
       if (keyVariable in values) {
         rowKey = values[keyVariable];
-        rowKeyId = getSubjectId(rowKey); // Do we have a row for this already?
+        rowKeyId = getSubjectId(rowKey);
+
+        // Do we have a row for this already?
         // If so, reuse it; otherwise, we must create a new row.
 
         if (rowKeyId in rowsLookup) {
           row = rowsLookup[rowKeyId];
         }
-      } // Create a new row?
+      }
 
+      // Create a new row?
 
       if (!row) {
         var tr = doc.createElement('tr');
@@ -13480,27 +11717,23 @@ function renderTableViewPane(doc, options) {
           values: {}
         };
         rows.push(row);
-
         if (rowKey) {
           rowsLookup[rowKeyId] = row;
         }
-      } // Add the new values to this row.
+      }
 
-
+      // Add the new values to this row.
       delete row.original; // This is included in the new data
-
       updateRow(row, columns, values);
     };
-
     var onDone = function onDone() {
       if (progressMessage && progressMessage.parentNode && progressMessage.parentNode.removeChild) {
         progressMessage.parentNode.removeChild(progressMessage);
         progressMessage = null;
       }
-
       var elapsedTimeMS = Date.now() - startTime;
-      debug.log('Query done: ' + rows.length + ' rows, ' + elapsedTimeMS + 'ms'); // Delete rows which were from old values not new
-
+      debug.log('Query done: ' + rows.length + ' rows, ' + elapsedTimeMS + 'ms');
+      // Delete rows which were from old values not new
       for (var _i4 = rows.length - 1; _i4 >= 0; _i4--) {
         // backwards
         if (rows[_i4].original) {
@@ -13511,27 +11744,27 @@ function renderTableViewPane(doc, options) {
           rows.splice(_i4, 1);
         }
       }
-
       if (options.sortBy) {
         // @@ for each column check needs sorting
         var column = getColumnForVariable(columns, options.sortBy);
         literalSort(rows, column, options.sortReverse);
       }
-
       if (options.onDone) options.onDone(resultDiv); // return div makes testing easier
     };
 
     kb.query(query, onResult, undefined, onDone);
-  } // Given the formula object which is the query pattern,
+  }
+
+  // Given the formula object which is the query pattern,
   // deduce from where the variable occurs constraints on
   // what values it can take.
 
-
   function inferColumnsFromFormula(columns, formula) {
     UI.log.debug('>> processing formula');
-
     for (var i = 0; i < formula.statements.length; ++i) {
-      var statement = formula.statements[i]; // UI.log.debug("processing statement " + i)
+      var statement = formula.statements[i];
+      // UI.log.debug("processing statement " + i)
+
       // Does it match this?:
       // <something> <predicate> ?var
       // If so, we can use the predicate as the predicate for the
@@ -13539,40 +11772,37 @@ function renderTableViewPane(doc, options) {
 
       if (statement.predicate.termType === 'NamedNode' && statement.object.termType === 'Variable') {
         var variable = statement.object.toString();
-
         if (variable in columns) {
           var column = columns[variable];
           column.setPredicate(statement.predicate, false, statement.subject);
         }
       }
-
       if (statement.predicate.termType === 'NamedNode' && statement.subject.termType === 'Variable') {
         var _variable = statement.subject.toString();
-
         if (_variable in columns) {
           var _column = columns[_variable];
-
           _column.setPredicate(statement.predicate, true, statement.object);
         }
       }
-    } // Apply to OPTIONAL formulas:
+    }
 
+    // Apply to OPTIONAL formulas:
 
     for (var _i5 = 0; _i5 < formula.optional.length; ++_i5) {
       UI.log.debug('recurse to optional subformula ' + _i5);
       inferColumnsFromFormula(columns, formula.optional[_i5]);
     }
-
     UI.log.debug('<< finished processing formula');
-  } // Generate a list of column structures and infer details about the
-  // predicates based on the contents of the query
+  }
 
+  // Generate a list of column structures and infer details about the
+  // predicates based on the contents of the query
 
   function inferColumns(query) {
     // Generate the columns list:
+
     var result = [];
     var columns = {};
-
     for (var i = 0; i < query.vars.length; ++i) {
       var column = new Column();
       var queryVar = query.vars[i];
@@ -13581,58 +11811,60 @@ function renderTableViewPane(doc, options) {
       columns[queryVar] = column;
       result.push(column);
     }
-
     inferColumnsFromFormula(columns, query.pat);
     return result;
-  } // Generate a table from a query.
+  }
 
+  // Generate a table from a query.
 
   function renderTableForQuery(query, type) {
     // infer columns from query, to allow generic queries
     var columns;
-
     if (!givenQuery) {
       columns = type.getColumns();
     } else {
       columns = inferColumns(query);
-    } // Start with an empty list of rows; this will be populated
+    }
+
+    // Start with an empty list of rows; this will be populated
     // by the query.
 
+    var rows = [];
 
-    var rows = []; // Create table element and header.
+    // Create table element and header.
 
     var table = doc.createElement('table');
     table.appendChild(renderTableHeader(columns, type));
-    table.appendChild(renderTableSelectors(rows, columns)); // Run query.  Note that this is perform asynchronously; the
+    table.appendChild(renderTableSelectors(rows, columns));
+
+    // Run query.  Note that this is perform asynchronously; the
     // query runs in the background and this call does not block.
 
     table.logicalRows = rows; // Save for refresh
-
     table.columns = columns;
     table.query = query;
     runQuery(query, rows, columns, table);
     return table;
-  } // Find the most common type of row
+  }
 
+  // Find the most common type of row
 
   function getMostCommonType(types) {
     var bestCount = -1;
     var best = null;
     var typeUri;
-
     for (typeUri in types) {
       var type = types[typeUri];
-
       if (type.useCount > bestCount) {
         best = type;
         bestCount = type.useCount;
       }
     }
-
     return best;
-  } // Filter list of columns to only those columns used in the
-  // specified rows.
+  }
 
+  // Filter list of columns to only those columns used in the
+  // specified rows.
   /*
   function filterColumns (columns, rows) {
     var filteredColumns = {}
@@ -13649,8 +11881,9 @@ function renderTableViewPane(doc, options) {
     return filteredColumns
   }
   */
+}
+// ///////////////////////////////////////////////////////////////////
 
-} // ///////////////////////////////////////////////////////////////////
 // ENDS
 //# sourceMappingURL=table.js.map
 
@@ -13666,116 +11899,78 @@ function renderTableViewPane(doc, options) {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.TabWidgetElement = void 0;
 exports.tabWidget = tabWidget;
-
 var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "./node_modules/@babel/runtime/helpers/slicedToArray.js"));
-
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js"));
-
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js"));
-
 var _assertThisInitialized2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/assertThisInitialized */ "./node_modules/@babel/runtime/helpers/assertThisInitialized.js"));
-
 var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/inherits.js"));
-
 var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
-
 var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "./node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
-
 var _wrapNativeSuper2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/wrapNativeSuper */ "./node_modules/@babel/runtime/helpers/wrapNativeSuper.js"));
-
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js"));
-
 var _widgets = __webpack_require__(/*! ./widgets */ "./lib/widgets/index.js");
-
 var _utils = __webpack_require__(/*! ./utils */ "./lib/utils/index.js");
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2["default"])(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2["default"])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2["default"])(this, result); }; }
-
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
 /**
  * @ignore
  */
 var ContainerElement = /*#__PURE__*/function (_HTMLElement) {
   (0, _inherits2["default"])(ContainerElement, _HTMLElement);
-
   var _super = _createSuper(ContainerElement);
-
   function ContainerElement() {
     var _this;
-
     (0, _classCallCheck2["default"])(this, ContainerElement);
-
     for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
-
     _this = _super.call.apply(_super, [this].concat(args));
     (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this), "asSettings", void 0);
     return _this;
   }
-
   return (0, _createClass2["default"])(ContainerElement);
 }( /*#__PURE__*/(0, _wrapNativeSuper2["default"])(HTMLElement));
-
 var TabWidgetElement = /*#__PURE__*/function (_HTMLElement2) {
   (0, _inherits2["default"])(TabWidgetElement, _HTMLElement2);
-
   var _super2 = _createSuper(TabWidgetElement);
-
   function TabWidgetElement() {
     var _this2;
-
     (0, _classCallCheck2["default"])(this, TabWidgetElement);
-
     for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
       args[_key2] = arguments[_key2];
     }
-
     _this2 = _super2.call.apply(_super2, [this].concat(args));
     (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this2), "bodyContainer", void 0);
     (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this2), "refresh", void 0);
     (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this2), "tabContainer", void 0);
     return _this2;
   }
-
   return (0, _createClass2["default"])(TabWidgetElement);
 }( /*#__PURE__*/(0, _wrapNativeSuper2["default"])(HTMLElement));
 /**
  * @ignore
  */
-
-
 exports.TabWidgetElement = TabWidgetElement;
-
 var TabElement = /*#__PURE__*/function (_HTMLElement3) {
   (0, _inherits2["default"])(TabElement, _HTMLElement3);
-
   var _super3 = _createSuper(TabElement);
-
   function TabElement() {
     var _this3;
-
     (0, _classCallCheck2["default"])(this, TabElement);
-
     for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
       args[_key3] = arguments[_key3];
     }
-
     _this3 = _super3.call.apply(_super3, [this].concat(args));
     (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this3), "bodyTR", void 0);
     (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this3), "subject", void 0);
     return _this3;
   }
-
   return (0, _createClass2["default"])(TabElement);
 }( /*#__PURE__*/(0, _wrapNativeSuper2["default"])(HTMLElement));
 /**
@@ -13903,8 +12098,6 @@ var TabElement = /*#__PURE__*/function (_HTMLElement3) {
  *
  * @param options
  */
-
-
 function tabWidget(options) {
   var subject = options.subject;
   var dom = options.dom || document;
@@ -13913,12 +12106,10 @@ function tabWidget(options) {
   var flipped = orientation & 2;
   var vertical = orientation & 1;
   var onClose = options.onClose;
-
   var _getColors = getColors(backgroundColor),
-      _getColors2 = (0, _slicedToArray2["default"])(_getColors, 2),
-      selectedColor = _getColors2[0],
-      color = _getColors2[1];
-
+    _getColors2 = (0, _slicedToArray2["default"])(_getColors, 2),
+    selectedColor = _getColors2[0],
+    color = _getColors2[1];
   var bodyMainStyle = "flex: 2; width: auto; height: 100%; border: 0.1em; border-style: solid; border-color: ".concat(selectedColor, "; padding: 1em;");
   var rootElement = dom.createElement('div'); // 20200117a
 
@@ -13927,7 +12118,6 @@ function tabWidget(options) {
   navElement.setAttribute('style', 'margin: 0;');
   var mainElement = rootElement.appendChild(dom.createElement('main'));
   mainElement.setAttribute('style', 'margin: 0; width:100%; height: 100%;'); // override tabbedtab.css
-
   var tabContainer = navElement.appendChild(dom.createElement('ul'));
   tabContainer.setAttribute('style', "\n    list-style-type: none;\n    display: flex;\n    height: 100%;\n    width: 100%;\n    margin: 0;\n    padding: 0;\n    flex-direction: ".concat(vertical ? 'column' : 'row', "\n  "));
   var tabElement = 'li';
@@ -13935,11 +12125,9 @@ function tabWidget(options) {
   rootElement.tabContainer = tabContainer;
   rootElement.bodyContainer = bodyContainer;
   var corners = ['0.2em', '0.2em', '0', '0']; // top left, TR, BR, BL
-
   var cornersPrepped = corners.concat(corners).slice(orientation, orientation + 4);
   var cornersStyle = "border-radius: ".concat(cornersPrepped.join(' '), ";");
   var margins = ['0.3em', '0.3em', '0', '0.3em']; // top, right, bottom, left
-
   var marginsPrepped = margins.concat(margins).slice(orientation, orientation + 4);
   var marginsStyle = "margin: ".concat(marginsPrepped.join(' '), ";");
   var paddingStyle = "padding: ".concat(marginsPrepped.join(' '), ";");
@@ -13950,7 +12138,6 @@ function tabWidget(options) {
   var hiddenStyle = shownStyle + 'display: none;';
   rootElement.refresh = orderedSync;
   orderedSync();
-
   if (!options.startEmpty && tabContainer.children.length && options.selectedTab) {
     var selectedTab0 = Array.from(tabContainer.children) // Version left for compatability with ??
     .map(function (tab) {
@@ -13959,22 +12146,24 @@ function tabWidget(options) {
       return tab.dataset.name === options.selectedTab;
     });
     var selectedTabURI = options.selectedTab.uri;
-    var selectedTab1 = Array.from(tabContainer.children) // @ts-ignore
+    var selectedTab1 = Array.from(tabContainer.children)
+    // @ts-ignore
     .find(function (tab) {
-      return tab.subject && // @ts-ignore
-      tab.subject.uri && // @ts-ignore
+      return tab.subject &&
+      // @ts-ignore
+      tab.subject.uri &&
+      // @ts-ignore
       tab.subject.uri === selectedTabURI;
     });
     var tab = selectedTab1 || selectedTab0 || tabContainer.children[0];
-    var clickMe = tab.firstChild; // @ts-ignore
-
+    var clickMe = tab.firstChild;
+    // @ts-ignore
     if (clickMe) clickMe.click();
   } else if (!options.startEmpty) {
     tabContainer.children[0].firstChild.click(); // Open first tab
   }
 
   return rootElement;
-
   function addCancelButton(tabContainer) {
     if (tabContainer.dataset.onCloseSet) {
       // @@ TODO: this is only here to make the browser tests work
@@ -13982,7 +12171,6 @@ function tabWidget(options) {
       var existingCancelButton = tabContainer.querySelector('.unstyled');
       tabContainer.removeChild(existingCancelButton);
     }
-
     var extraTab = dom.createElement(tabElement);
     extraTab.classList.add('unstyled');
     var tabCancelButton = (0, _widgets.cancelButton)(dom, onClose);
@@ -13991,10 +12179,8 @@ function tabWidget(options) {
     tabContainer.appendChild(extraTab);
     tabContainer.dataset.onCloseSet = 'true';
   }
-
   function getItems() {
     if (options.items) return options.items;
-
     if (options.ordered !== false) {
       // options.ordered defaults to true
       return _solidLogic.store.the(subject, options.predicate).elements;
@@ -14002,14 +12188,12 @@ function tabWidget(options) {
       return _solidLogic.store.each(subject, options.predicate);
     }
   }
-
   function makeNewSlot(item) {
     var ele = dom.createElement(tabElement);
     ele.setAttribute('style', unselectedStyle);
     ele.subject = item;
     var div = ele.appendChild(dom.createElement('button'));
     div.setAttribute('style', 'background: none; border: none; font: inherit; cursor: pointer');
-
     div.onclick = function () {
       resetTabStyle();
       resetBodyStyle();
@@ -14017,19 +12201,16 @@ function tabWidget(options) {
       if (!ele.bodyTR) return;
       ele.bodyTR.setAttribute('style', shownStyle);
       var bodyMain = getOrCreateContainerElement(ele);
-
       if (options.renderMain && ele.subject && bodyMain.asSettings !== false) {
         bodyMain.innerHTML = 'loading item ...' + item;
         options.renderMain(bodyMain, ele.subject);
         bodyMain.asSettings = false;
       }
     };
-
     if (options.renderTabSettings && ele.subject) {
       var ellipsis = dom.createElement('button');
       ellipsis.textContent = '...';
       ellipsis.setAttribute('style', 'position: absolute; right: 0; bottom: 0; width: 20%; background: none; color: inherit; border: none; padding: 0; font: inherit; cursor: pointer; outline: inherit;');
-
       ellipsis.onclick = function () {
         resetTabStyle();
         resetBodyStyle();
@@ -14037,51 +12218,43 @@ function tabWidget(options) {
         if (!ele.bodyTR) return;
         ele.bodyTR.setAttribute('style', shownStyle);
         var bodyMain = getOrCreateContainerElement(ele);
-
         if (options.renderTabSettings && ele.subject && bodyMain.asSettings !== true) {
           bodyMain.innerHTML = 'loading settings ...' + item;
           options.renderTabSettings(bodyMain, ele.subject);
           bodyMain.asSettings = true;
         }
       };
-
       ele.appendChild(ellipsis);
     }
-
     if (options.renderTab) {
       options.renderTab(div, item);
     } else {
       div.innerHTML = (0, _utils.label)(item);
     }
-
     return ele;
-
     function getOrCreateContainerElement(ele) {
       var _ele$bodyTR;
-
       var bodyMain = (_ele$bodyTR = ele.bodyTR) === null || _ele$bodyTR === void 0 ? void 0 : _ele$bodyTR.children[0];
       if (bodyMain) return bodyMain;
       var newBodyMain = ele.bodyTR.appendChild(dom.createElement('main'));
       newBodyMain.setAttribute('style', bodyMainStyle);
       return newBodyMain;
     }
-  } // @@ Use common one from utils?
+  }
 
-
+  // @@ Use common one from utils?
   function orderedSync() {
     var items = getItems();
     var slot, i, j, left, right;
-    var differ = false; // Find how many match at each end
-
+    var differ = false;
+    // Find how many match at each end
     for (left = 0; left < tabContainer.children.length; left++) {
       slot = tabContainer.children[left];
-
       if (left >= items.length || slot.subject && !slot.subject.sameTerm(items[left])) {
         differ = true;
         break;
       }
     }
-
     if (!differ && items.length === tabContainer.children.length) {
       return; // The two just match in order: a case to optimize for
     }
@@ -14089,27 +12262,22 @@ function tabWidget(options) {
     for (right = tabContainer.children.length - 1; right >= 0; right--) {
       slot = tabContainer.children[right];
       j = right - tabContainer.children.length + items.length;
-
       if (slot.subject && !slot.subject.sameTerm(items[j])) {
         break;
       }
-    } // The elements left ... right in tabContainer.children do not match
-
-
+    }
+    // The elements left ... right in tabContainer.children do not match
     var insertables = items.slice(left, right - tabContainer.children.length + items.length + 1);
-
     while (right >= left) {
       // remove extra
       tabContainer.removeChild(tabContainer.children[left]);
       bodyContainer.removeChild(bodyContainer.children[left]);
       right -= 1;
     }
-
     for (i = 0; i < insertables.length; i++) {
       var newSlot = makeNewSlot(insertables[i]);
       var newBodyDiv = dom.createElement('div');
       newSlot.bodyTR = newBodyDiv;
-
       if (left === tabContainer.children.length) {
         // None left of original on right
         tabContainer.appendChild(newSlot);
@@ -14119,16 +12287,13 @@ function tabWidget(options) {
         bodyContainer.insertBefore(newBodyDiv, bodyContainer.children[left + i]);
       }
     }
-
     if (onClose) {
       addCancelButton(tabContainer);
     }
   }
-
   function resetTabStyle() {
     for (var i = 0; i < tabContainer.children.length; i++) {
       var _tab = tabContainer.children[i];
-
       if (_tab.classList.contains('unstyled')) {
         continue;
       } else {
@@ -14136,59 +12301,47 @@ function tabWidget(options) {
       }
     }
   }
-
   function resetBodyStyle() {
     for (var i = 0; i < bodyContainer.children.length; i++) {
       bodyContainer.children[i].setAttribute('style', hiddenStyle);
     }
   }
 }
+
 /**
  * @internal
  */
-
-
 function getColors(backgroundColor) {
   return isLight(backgroundColor) ? [colorBlend(backgroundColor, '#ffffff', 0.3), '#000000'] : [colorBlend(backgroundColor, '#000000', 0.3), '#ffffff'];
 }
+
 /**
  * @internal
  */
-
-
 function colorBlend(a, b, mix) {
   var ca, cb, res;
   var str = '#';
   var hex = '0123456789abcdef';
-
   for (var i = 0; i < 3; i++) {
     ca = parseInt(a.slice(i * 2 + 1, i * 2 + 3), 16);
     cb = parseInt(b.slice(i * 2 + 1, i * 2 + 3), 16);
     res = ca * (1.0 - mix) + cb * mix; // @@@ rounding
-
     var res2 = parseInt(('' + res).split('.')[0]); // @@ ugh
-
     var h = parseInt(('' + res2 / 16).split('.')[0]); // @@ ugh
-
     var l = parseInt(('' + res2 % 16).split('.')[0]); // @@ ugh
-
     str += hex[h] + hex[l];
   }
-
   return str;
 }
+
 /**
  * @internal
  */
-
-
 function isLight(x) {
   var total = 0;
-
   for (var i = 0; i < 3; i++) {
     total += parseInt(x.slice(i * 2 + 1, i * 2 + 3), 16);
   }
-
   return total > 128 * 3;
 }
 //# sourceMappingURL=tabs.js.map
@@ -14205,7 +12358,6 @@ function isLight(x) {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
@@ -14214,23 +12366,14 @@ exports.getName = getName;
 exports.getPod = getPod;
 exports.getPodOwner = getPodOwner;
 exports.throttle = throttle;
-
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
-
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
-
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js"));
-
 var _rdflib = __webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js");
-
 var _ = __webpack_require__(/*! .. */ "./lib/index.js");
-
 var _styleMap = __webpack_require__(/*! ../header/styleMap */ "./lib/header/styleMap.js");
-
 var _styleMap2 = __webpack_require__(/*! ../footer/styleMap */ "./lib/footer/styleMap.js");
-
 var _jss = __webpack_require__(/*! ../jss */ "./lib/jss/index.js");
-
 /*
     Copied from mashlib/src/global/metadata.ts
  */
@@ -14245,42 +12388,33 @@ function getStyle(styleClass, type) {
     return _styleMap.styleMap[styleClass];
   }
 }
+
 /**
  * @ignore exporting this only for the unit test
  */
-
-
 function addStyleClassToElement(element, styleClasses, type) {
   styleClasses.forEach(function (styleClass) {
     var style = getStyle(styleClass, type);
-
     var _getClasses = (0, _jss.getClasses)(document.head, (0, _defineProperty2["default"])({}, styleClass, style)),
-        classes = _getClasses.classes;
-
+      classes = _getClasses.classes;
     element.classList.add(classes[styleClass]);
   });
 }
 /**
  * @ignore exporting this only for the unit test
  */
-
-
 function getPod() {
   // @@ TODO: This is given that mashlib runs on NSS - might need to change when we want it to run on other Pod servers
   return (0, _rdflib.sym)(document.location.origin).site();
 }
 /**
  */
-
-
 function getPodOwner(_x, _x2) {
   return _getPodOwner.apply(this, arguments);
 }
 /**
  * @ignore exporting this only for the unit test
  */
-
-
 function _getPodOwner() {
   _getPodOwner = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(pod, store) {
     var response, containerTurtle, podOwner, guess;
@@ -14289,72 +12423,57 @@ function _getPodOwner() {
         switch (_context.prev = _context.next) {
           case 0:
             _context.prev = 0;
-
             if (store.any(pod, null, _.ns.ldp('Container'), pod)) {
               _context.next = 7;
               break;
             }
-
             _context.next = 4;
             return store.fetcher.webOperation('GET', pod.uri, store.fetcher.initFetchOptions(pod.uri, {
               headers: {
                 accept: 'text/turtle'
               }
             }));
-
           case 4:
             response = _context.sent;
             containerTurtle = response.responseText;
             (0, _rdflib.parse)(containerTurtle, store, pod.uri, 'text/turtle');
-
           case 7:
             _context.next = 13;
             break;
-
           case 9:
             _context.prev = 9;
             _context.t0 = _context["catch"](0);
             console.error('Error loading pod ' + pod + ': ' + _context.t0);
             return _context.abrupt("return", null);
-
           case 13:
             if (store.holds(pod, _.ns.rdf('type'), _.ns.space('Storage'), pod)) {
               _context.next = 16;
               break;
             }
-
             console.warn('Pod  ' + pod + ' does not declare itself as a space:Storage');
             return _context.abrupt("return", null);
-
           case 16:
             podOwner = store.any(pod, _.ns.solid('owner'), null, pod) || store.any(null, _.ns.space('storage'), pod, pod);
-
             if (!podOwner) {
               _context.next = 31;
               break;
             }
-
             _context.prev = 18;
             _context.next = 21;
             return store.fetcher.load(podOwner.doc());
-
           case 21:
             _context.next = 27;
             break;
-
           case 23:
             _context.prev = 23;
             _context.t1 = _context["catch"](18);
             console.warn('Unable to load profile of pod owner ' + podOwner);
             return _context.abrupt("return", null);
-
           case 27:
             if (!store.holds(podOwner, _.ns.space('storage'), pod, podOwner.doc())) {
               console.warn("Pod owner ".concat(podOwner, " does NOT list pod ").concat(pod, " as their storage"));
             }
-
             return _context.abrupt("return", podOwner);
-
           case 31:
             // pod owner not declared in pod
             // @@ TODO: This is given the structure that NSS provides
@@ -14363,29 +12482,23 @@ function _getPodOwner() {
             _context.prev = 32;
             _context.next = 35;
             return store.fetcher.load(guess);
-
           case 35:
             _context.next = 41;
             break;
-
           case 37:
             _context.prev = 37;
             _context.t2 = _context["catch"](32);
             console.error('Ooops. Guessed wrong pod owner webid {$guess} : can\'t load it.');
             return _context.abrupt("return", null);
-
           case 41:
             if (!store.holds(guess, _.ns.space('storage'), pod, guess.doc())) {
               _context.next = 44;
               break;
             }
-
             console.warn('Using guessed pod owner webid but it links back.');
             return _context.abrupt("return", guess);
-
           case 44:
             return _context.abrupt("return", null);
-
           case 45:
           case "end":
             return _context.stop();
@@ -14395,49 +12508,41 @@ function _getPodOwner() {
   }));
   return _getPodOwner.apply(this, arguments);
 }
-
 function getName(store, user) {
   return store.anyValue(user, _.ns.vcard('fn'), null, user.doc()) || store.anyValue(user, _.ns.foaf('name'), null, user.doc()) || user.uri;
 }
 /**
  * @ignore exporting this only for the unit test
  */
-
-
 function throttle(func, wait) {
   var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
   var context, args, result;
   var timeout = null;
   var previous = 0;
-
   var later = function later() {
     previous = !options.leading ? 0 : Date.now();
     timeout = null;
     result = func.apply(context, args);
     if (!timeout) context = args = null;
   };
-
   return function () {
     var now = Date.now();
     if (!previous && !options.leading) previous = now;
-    var remaining = wait - (now - previous); // @ts-ignore
-
+    var remaining = wait - (now - previous);
+    // @ts-ignore
     context = this;
     args = arguments;
-
     if (remaining <= 0 || remaining > wait) {
       if (timeout) {
         clearTimeout(timeout);
         timeout = null;
       }
-
       previous = now;
       result = func.apply(context, args);
       if (!timeout) context = args = null;
     } else if (!timeout && options.trailing !== false) {
       timeout = setTimeout(later, remaining);
     }
-
     return result;
   };
 }
@@ -14455,7 +12560,6 @@ function throttle(func, wait) {
 
 
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
@@ -14493,69 +12597,59 @@ exports.shortName = shortName;
 exports.stackString = stackString;
 exports.syncTableToArray = syncTableToArray;
 exports.syncTableToArrayReOrdered = syncTableToArrayReOrdered;
-
 var log = _interopRequireWildcard(__webpack_require__(/*! ../log */ "./lib/log.js"));
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
-
 var rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
-
 var _label = __webpack_require__(/*! ./label */ "./lib/utils/label.js");
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 //                  Solid-UI general Utilities
 //                  ==========================
 //
 // This must load AFTER the rdflib.js and log-ext.js (or log.js).
 //
+
 // pull in first avoid cross-refs
+
 var UI = {
   log: log,
   ns: ns,
   rdf: rdf
 };
 var nextVariable = 0;
-
 function newVariableName() {
   return 'v' + nextVariable++;
 }
-
 function clearVariableNames() {
   nextVariable = 0;
-} // http://stackoverflow.com/questions/879152/how-do-i-make-javascript-beep
+}
+
+// http://stackoverflow.com/questions/879152/how-do-i-make-javascript-beep
 // http://www.tsheffler.com/blog/2013/05/14/audiocontext-noteonnoteoff-and-time-units/
 
-
 var audioContext;
-
 if (typeof AudioContext !== 'undefined') {
   audioContext = AudioContext;
 } else if (typeof window !== 'undefined') {
   audioContext = window.AudioContext || window.webkitAudioContext;
 }
-
 function beep() {
   if (!audioContext) {
     return;
   } // Safari 2015
 
-
   var ContextClass = audioContext;
   var ctx = new ContextClass();
   return function (duration, frequency, type, finishedCallback) {
-    duration = +(duration || 0.3); // Only 0-4 are valid types.
+    duration = +(duration || 0.3);
 
+    // Only 0-4 are valid types.
     type = type || 'sine'; // sine, square, sawtooth, triangle
 
     if (typeof finishedCallback !== 'function') {
       finishedCallback = function finishedCallback() {};
     }
-
     var osc = ctx.createOscillator();
     osc.type = type;
     osc.frequency.value = frequency || 256;
@@ -14563,20 +12657,18 @@ function beep() {
     osc.start(0);
     osc.stop(duration);
   };
-} // Make pseudorandom color from a uri
+}
+
+// Make pseudorandom color from a uri
 // NOT USED ANYWHERE
-
-
 function hashColor(who) {
   who = who.uri || who;
-
   var hash = function hash(x) {
     return x.split('').reduce(function (a, b) {
       a = (a << 5) - a + b.charCodeAt(0);
       return a & a;
     }, 0);
   };
-
   return '#' + (hash(who) & 0xffffff | 0xc0c0c0).toString(16); // c0c0c0 or 808080 forces pale
 }
 
@@ -14588,6 +12680,7 @@ function genUuid() {
     return v.toString(16);
   });
 }
+
 /** Sync a DOM table with an array of things
  *
  * @param {DomElement} table - will have a tr for each thing
@@ -14597,51 +12690,40 @@ function genUuid() {
  * Tolerates out of order elements but puts new ones in order.
  * Can be used for any element type; does not have to be a table and tr.
  */
-
-
 function syncTableToArray(table, things, createNewRow) {
   var foundOne;
   var row;
   var i;
-
   for (i = 0; i < table.children.length; i++) {
     row = table.children[i];
     row.trashMe = true;
   }
-
   for (var g = 0; g < things.length; g++) {
     var thing = things[g];
     foundOne = false;
-
     for (i = 0; i < table.children.length; i++) {
       row = table.children[i];
-
       if (row.subject && row.subject.sameTerm(thing)) {
         row.trashMe = false;
         foundOne = true;
         break;
       }
     }
-
     if (!foundOne) {
-      var newRow = createNewRow(thing); // Insert new row in position g in the table to match array
-
+      var newRow = createNewRow(thing);
+      // Insert new row in position g in the table to match array
       if (g >= table.children.length) {
         table.appendChild(newRow);
       } else {
         var ele = table.children[g];
         table.insertBefore(newRow, ele);
       }
-
       newRow.subject = thing;
     } // if not foundOne
-
   } // loop g
-
 
   for (i = 0; i < table.children.length; i++) {
     row = table.children[i];
-
     if (row.trashMe) {
       table.removeChild(row);
     }
@@ -14658,11 +12740,8 @@ function syncTableToArray(table, things, createNewRow) {
  * Can be used for any element type; does not have to be a table and tr.
  * Any RDF node value can only appear ONCE in the array
  */
-
-
 function syncTableToArrayReOrdered(table, things, createNewRow) {
   var elementMap = {};
-
   for (var i = 0; i < table.children.length; i++) {
     var row = table.children[i];
     elementMap[row.subject.toNT()] = row; // More sophisticaed would be to have a bag of duplicates
@@ -14670,7 +12749,6 @@ function syncTableToArrayReOrdered(table, things, createNewRow) {
 
   for (var g = 0; g < things.length; g++) {
     var thing = things[g];
-
     if (g >= table.children.length) {
       // table needs extending
       var newRow = createNewRow(thing);
@@ -14678,28 +12756,22 @@ function syncTableToArrayReOrdered(table, things, createNewRow) {
       table.appendChild(newRow);
     } else {
       var _row = table.children[g];
-
-      if (_row.subject.sameTerm(thing)) {// ...
+      if (_row.subject.sameTerm(thing)) {
+        // ...
       } else {
         var existingRow = elementMap[thing.toNT()];
-
         if (existingRow) {
           table.removeChild(existingRow);
           table.insertBefore(existingRow, _row); // Insert existing row in place of this one
         } else {
           var _newRow = createNewRow(thing);
-
           _row.before(_newRow); // Insert existing row in place of this one
-
-
           _newRow.subject = thing;
         }
       }
     }
   } // loop g
   // Lop off any we don't need any more:
-
-
   while (table.children.length > things.length) {
     table.removeChild(table.children[table.children.length - 1]);
   }
@@ -14709,71 +12781,54 @@ function syncTableToArrayReOrdered(table, things, createNewRow) {
  **
  ** See  http://snippets.dzone.com/posts/show/6632
  */
-
-
 function stackString(e) {
   var str = '' + e + '\n';
   var i;
-
   if (!e.stack) {
     return str + 'No stack available.\n';
   }
-
   var lines = e.stack.toString().split('\n');
   var toPrint = [];
-
   for (i = 0; i < lines.length; i++) {
     var line = lines[i];
-
     if (line.indexOf('ecmaunit.js') > -1) {
       // remove useless bit of traceback
       break;
     }
-
     if (line.charAt(0) === '(') {
       line = 'function' + line;
     }
-
     var chunks = line.split('@');
     toPrint.push(chunks);
-  } // toPrint.reverse();  No - I prefer the latest at the top by the error message -tbl
-
+  }
+  // toPrint.reverse();  No - I prefer the latest at the top by the error message -tbl
 
   for (i = 0; i < toPrint.length; i++) {
     str += '  ' + toPrint[i][1] + '\n    ' + toPrint[i][0];
   }
-
   return str;
 }
-
 function emptyNode(node) {
   var nodes = node.childNodes;
   var len = nodes.length;
-
   for (var i = len - 1; i >= 0; i--) {
     node.removeChild(nodes[i]);
   }
-
   return node;
 }
-
 function getTarget(e) {
   var target;
   e = e || window.event;
   if (e.target) target = e.target;else if (e.srcElement) target = e.srcElement;
-
   if (target.nodeType === 3) {
     // defeat Safari bug [sic]
     target = target.parentNode;
-  } // UI.log.debug("Click on: " + target.tagName)
-
-
+  }
+  // UI.log.debug("Click on: " + target.tagName)
   return target;
 }
-
 function ancestor(target, tagName) {
   var level;
-
   for (level = target; level; level = level.parentNode) {
     // UI.log.debug("looking for "+tagName+" Level: "+level+" "+level.tagName)
     try {
@@ -14783,20 +12838,17 @@ function ancestor(target, tagName) {
       return undefined;
     }
   }
-
   return undefined;
 }
-
 function getAbout(kb, target) {
   var level, aa;
-
   for (level = target; level && level.nodeType === 1; level = level.parentNode) {
     // UI.log.debug("Level "+level + ' '+level.nodeType + ': '+level.tagName)
     aa = level.getAttribute('about');
-
     if (aa) {
       // UI.log.debug("kb.fromNT(aa) = " + kb.fromNT(aa))
-      return kb.fromNT(aa); //        } else {
+      return kb.fromNT(aa);
+      //        } else {
       //            if (level.tagName=='TR') return undefined//this is to prevent literals passing through
     }
   }
@@ -14804,17 +12856,14 @@ function getAbout(kb, target) {
   UI.log.debug('getAbout: No about found');
   return undefined;
 }
-
 function getTerm(target) {
   var statementTr = target.parentNode;
   var st = statementTr ? statementTr.AJAR_statement : undefined;
   var className = st ? target.className : ''; // if no st then it's necessary to use getAbout
-
   switch (className) {
     case 'pred':
     case 'pred selected':
       return st.predicate;
-
     case 'obj':
     case 'obj selected':
       if (!statementTr.AJAR_inverse) {
@@ -14822,30 +12871,25 @@ function getTerm(target) {
       } else {
         return st.subject;
       }
-
     case '':
     case 'selected':
       // header TD
       return getAbout(_solidLogic.store, target);
     // kb to be changed
-
     case 'undetermined selected':
       return target.nextSibling ? st.predicate : !statementTr.AJAR_inverse ? st.object : st.subject;
   }
 }
-
 function include(document, linkstr) {
   var lnk = document.createElement('script');
   lnk.setAttribute('type', 'text/javascript');
-  lnk.setAttribute('src', linkstr); // TODO:This needs to be fixed or no longer used.
+  lnk.setAttribute('src', linkstr);
+  // TODO:This needs to be fixed or no longer used.
   // document.getElementsByTagName('head')[0].appendChild(lnk)
-
   return lnk;
 }
-
 function addLoadEvent(func) {
   var oldonload = window.onload;
-
   if (typeof window.onload !== 'function') {
     window.onload = func;
   } else {
@@ -14855,9 +12899,8 @@ function addLoadEvent(func) {
     };
   }
 } // addLoadEvent
+
 // Find the position of an object relative to the window
-
-
 function findPos(obj) {
   // C&P from http://www.quirksmode.org/js/findpos.html
   var myDocument = obj.ownerDocument;
@@ -14865,124 +12908,104 @@ function findPos(obj) {
   var box = obj.getBoundingClientRect();
   return [box.left - DocBox.left, box.top - DocBox.top];
 }
-
 function getEyeFocus(element, instantly, isBottom, myWindow) {
   if (!myWindow) myWindow = window;
   var elementPosY = findPos(element)[1];
   var appContext = window.SolidAppContext || {};
   var scrollDiff = appContext && appContext.scroll || 52; // 52 = magic number for web-based version
-
   var totalScroll = elementPosY - scrollDiff - myWindow.scrollY;
-
   if (instantly) {
     if (isBottom) {
       myWindow.scrollBy(0, elementPosY + element.clientHeight - (myWindow.scrollY + myWindow.innerHeight));
       return;
     }
-
     myWindow.scrollBy(0, totalScroll);
     return;
   }
-
   var id = myWindow.setInterval(scrollAmount, 50);
   var times = 0;
-
   function scrollAmount() {
     myWindow.scrollBy(0, totalScroll / 10);
     times++;
-
     if (times === 10) {
       myWindow.clearInterval(id);
     }
   }
 }
-
 function AJARImage(src, alt, tt, doc) {
   if (!doc) {
     doc = document;
   }
-
   var image = doc.createElement('img');
   image.setAttribute('src', src);
   image.addEventListener('copy', function (e) {
     e.clipboardData.setData('text/plain', '');
     e.clipboardData.setData('text/html', '');
     e.preventDefault(); // We want no title data to be written to the clipboard
-  }); //    if (typeof alt != 'undefined')      // Messes up cut-and-paste of text
+  });
+  //    if (typeof alt != 'undefined')      // Messes up cut-and-paste of text
   //        image.setAttribute('alt', alt)
-
   if (typeof tt !== 'undefined') {
     image.setAttribute('title', tt);
   }
-
   return image;
-} //  Make short name for ontology
+}
 
+//  Make short name for ontology
 
 function shortName(uri) {
   var p = uri;
   if ('#/'.indexOf(p[p.length - 1]) >= 0) p = p.slice(0, -1);
   var namespaces = [];
-
   for (var _ns in this.prefixes) {
     namespaces[this.prefixes[_ns]] = _ns; // reverse index
   }
 
   var pok;
-
   var canUse = function canUse(pp) {
     // if (!__Serializer.prototype.validPrefix.test(pp)) return false; // bad format
     if (pp === 'ns') return false; // boring
     // if (pp in this.namespaces) return false; // already used
     // this.prefixes[uri] = pp;
     // this.namespaces[pp] = uri;
-
     pok = pp;
     return true;
   };
-
   var i;
   var hash = p.lastIndexOf('#');
   if (hash >= 0) p = p.slice(hash - 1); // lop off localid
   // eslint-disable-next-line no-unreachable-loop
-
   for (;;) {
     var slash = p.lastIndexOf('/');
     if (slash >= 0) p = p.slice(slash + 1);
     i = 0;
-
     while (i < p.length) {
       if (this.prefixchars.indexOf(p[i])) i++;else break;
     }
-
     p = p.slice(0, i);
     if (p.length < 6 && canUse(p)) return pok; // exact i sbest
-
     if (canUse(p.slice(0, 3))) return pok;
     if (canUse(p.slice(0, 2))) return pok;
     if (canUse(p.slice(0, 4))) return pok;
     if (canUse(p.slice(0, 1))) return pok;
     if (canUse(p.slice(0, 5))) return pok;
-
     for (i = 0;; i++) {
       if (canUse(p.slice(0, 3) + i)) return pok;
     }
   }
-} // Short name for an ontology
+}
 
-
+// Short name for an ontology
 function ontologyLabel(term) {
   if (term.uri === undefined) return '??';
   var s = term.uri;
   var namespaces = [];
   var i = s.lastIndexOf('#');
   var part;
-
   if (i >= 0) {
     s = s.slice(0, i + 1);
   } else {
     i = s.lastIndexOf('/');
-
     if (i >= 0) {
       s = s.slice(0, i + 1);
     } else {
@@ -14997,16 +13020,13 @@ function ontologyLabel(term) {
   try {
     return namespaces[s];
   } catch (e) {}
-
   s = s.slice(0, -1); // Chop off delimiter ... now have just
 
   while (s) {
     i = s.lastIndexOf('/');
-
     if (i >= 0) {
       part = s.slice(i + 1);
       s = s.slice(0, i);
-
       if (part !== 'ns' && '0123456789'.indexOf(part[0]) < 0) {
         return part;
       }
@@ -15018,61 +13038,50 @@ function ontologyLabel(term) {
 
 function labelWithOntology(x, initialCap) {
   var t = _solidLogic.store.findTypeURIs(x);
-
   if (t[UI.ns.rdf('Predicate').uri] || t[UI.ns.rdfs('Class').uri]) {
     return (0, _label.label)(x, initialCap) + ' (' + ontologyLabel(x) + ')';
   }
-
   return (0, _label.label)(x, initialCap);
 }
-
 function escapeForXML(str) {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;');
-} //  As above but escaped for XML and chopped of contains a slash
+}
 
-
+//  As above but escaped for XML and chopped of contains a slash
 function labelForXML(x) {
   return escapeForXML((0, _label.label)(x));
 }
-
 function predicateLabelForXML(p, inverse) {
   return escapeForXML(predicateLabel(p, inverse));
-} // As above but for predicate, possibly inverse
-
-
+}
+// As above but for predicate, possibly inverse
 function predicateLabel(p, inverse) {
   var lab = (0, _label.label)(p);
-
   if (inverse) {
     // If we know an inverse predicate, use its label
     var ip = _solidLogic.store.any(p, UI.ns.owl('inverseOf')) || _solidLogic.store.any(undefined, UI.ns.owl('inverseOf'), p);
-
     if (ip) return (0, _label.label)(ip);
     if (lab === 'type') return '...'; // Not "is type of"
-
     return 'is ' + lab + ' of';
   }
-
   return lab;
-} // Not a method. For use in sorts
+}
 
-
+// Not a method. For use in sorts
 function RDFComparePredicateObject(self, other) {
   var x = self.predicate.compareTerm(other.predicate);
   if (x !== 0) return x;
   return self.object.compareTerm(other.object);
 }
-
 function RDFComparePredicateSubject(self, other) {
   var x = self.predicate.compareTerm(other.predicate);
   if (x !== 0) return x;
   return self.subject.compareTerm(other.subject);
-} // ends
-
+}
+// ends
 
 function predParentOf(node) {
   var n = node;
-
   while (true) {
     if (n.getAttribute('predTR')) {
       return n;
@@ -15083,7 +13092,9 @@ function predParentOf(node) {
       return node;
     }
   }
-} // makeQueryRow moved to outline mode
+}
+
+// makeQueryRow moved to outline mode
 //# sourceMappingURL=index.js.map
 
 /***/ }),
@@ -15098,125 +13109,104 @@ function predParentOf(node) {
 
 
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.label = label;
-
 var log = _interopRequireWildcard(__webpack_require__(/*! ../log */ "./lib/log.js"));
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
-
 var rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 // pull in first avoid cross-refs
+
 var UI = {
   log: log,
   ns: ns,
   rdf: rdf
-}; // This ubiquitous function returns the best label for a thing
+};
+
+// This ubiquitous function returns the best label for a thing
 //
 // The hacks in this code make a major difference to the usability
-
 function label(thing) {
   var initialCap = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
   function doCap(label) {
     if (initialCap) {
       return label.slice(0, 1).toUpperCase() + label.slice(1);
     }
-
     return label;
   }
-
   function cleanUp(label) {
     var result = '';
     if (label.slice(-1) === '/') label = label.slice(0, -1); // chop trailing slash
-
     for (var i = 0; i < label.length; i++) {
       if (label[i] === '_' || label[i] === '-') {
         result += ' ';
         continue;
       }
-
       result += label[i];
-
       if (i + 1 < label.length && label[i].toUpperCase() !== label[i] && label[i + 1].toLowerCase() !== label[i + 1]) {
         result += ' ';
       }
     }
-
     if (result.slice(0, 4) === 'has ') result = result.slice(4);
     return doCap(result);
   }
-
   var label = getWellKnownLabel(thing);
-
   if (label) {
     return doCap(label.value);
-  } // Default to label just generated from the URI
+  }
 
+  // Default to label just generated from the URI
 
   if (thing.termType === 'BlankNode') {
     return '...';
   }
-
   if (thing.termType === 'Collection') {
     return '(' + thing.elements.length + ')';
   }
-
   var s = thing.uri;
   if (typeof s === 'undefined') return thing.toString(); // can't be a symbol
   // s = decodeURI(s) // This can crash is random valid @ signs are presentation
   // The idea was to clean up eg URIs encoded in query strings
   // Also encoded character in what was filenames like @ [] {}
-
   try {
     s = s.split('/').map(decodeURIComponent).join('/'); // If it is properly encoded
   } catch (e) {
     // try individual decoding of ASCII code points
     for (var i = s.length - 3; i > 0; i--) {
       var hex = '0123456789abcefABCDEF'; // The while upacks multiple layers of encoding
-
       while (s[i] === '%' && hex.indexOf(s[i + 1]) >= 0 && hex.indexOf(s[i + 2]) >= 0) {
         s = s.slice(0, i) + String.fromCharCode(parseInt(s.slice(i + 1, i + 3), 16)) + s.slice(i + 3);
       }
     }
   }
-
   s = slice(s, '/profile/card#me');
   s = slice(s, '#this');
   s = slice(s, '#me');
   var hash = s.indexOf('#');
-  if (hash >= 0) return cleanUp(s.slice(hash + 1)); // Eh? Why not do this? e.g. dc:title needs it only trim URIs, not rdfs:labels
+  if (hash >= 0) return cleanUp(s.slice(hash + 1));
 
+  // Eh? Why not do this? e.g. dc:title needs it only trim URIs, not rdfs:labels
   var slash = s.lastIndexOf('/', s.length - 2); // (len-2) excludes trailing slash
-
   if (slash >= 0 && slash < thing.uri.length) return cleanUp(s.slice(slash + 1));
   return doCap(decodeURIComponent(thing.uri));
 }
-
 function slice(s, suffix) {
   var length = suffix.length * -1;
-
   if (s.slice(length) === suffix) {
     return s.slice(0, length);
   }
-
   return s;
-} // Hard coded known label predicates
+}
+
+// Hard coded known label predicates
 //  @@ TBD: Add subproperties of rdfs:label
-
-
 function getWellKnownLabel(thing) {
-  return _solidLogic.store.any(thing, UI.ns.ui('label')) || // Prioritize ui:label
+  return _solidLogic.store.any(thing, UI.ns.ui('label')) ||
+  // Prioritize ui:label
   _solidLogic.store.any(thing, UI.ns.link('message')) || _solidLogic.store.any(thing, UI.ns.vcard('fn')) || _solidLogic.store.any(thing, UI.ns.foaf('name')) || _solidLogic.store.any(thing, UI.ns.dct('title')) || _solidLogic.store.any(thing, UI.ns.dc('title')) || _solidLogic.store.any(thing, UI.ns.rss('title')) || _solidLogic.store.any(thing, UI.ns.contact('fullName')) || _solidLogic.store.any(thing, _solidLogic.store.sym('http://www.w3.org/2001/04/roadmap/org#name')) || _solidLogic.store.any(thing, UI.ns.cal('summary')) || _solidLogic.store.any(thing, UI.ns.foaf('nick')) || _solidLogic.store.any(thing, UI.ns.as('name')) || _solidLogic.store.any(thing, UI.ns.schema('name')) || _solidLogic.store.any(thing, UI.ns.rdfs('label')) || _solidLogic.store.any(thing, _solidLogic.store.sym('http://www.w3.org/2004/02/skos/core#prefLabel'));
 }
 //# sourceMappingURL=label.js.map
@@ -15237,12 +13227,12 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2022-08-29T19:48:29Z',
-  commit: 'c009049f74b70a8aa87d6821783a0500b0039d5f',
+  buildTime: '2022-11-17T16:58:04Z',
+  commit: '36d160782e1dc52931b0f4713a455b4e3c87f313',
   npmInfo: {
-    'solid-ui': '2.4.23',
-    npm: '8.18.0',
-    node: '14.20.0',
+    'solid-ui': '2.4.24',
+    npm: '8.19.3',
+    node: '14.20.1',
     v8: '8.4.371.23-node.87',
     uv: '1.42.0',
     zlib: '1.2.11',
@@ -15251,7 +13241,7 @@ var versionInfo = {
     modules: '83',
     nghttp2: '1.42.0',
     napi: '8',
-    llhttp: '2.1.5',
+    llhttp: '2.1.6',
     openssl: '1.1.1q',
     cldr: '40.0',
     icu: '70.1',
@@ -15274,7 +13264,6 @@ exports.versionInfo = versionInfo;
 
 
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
@@ -15318,37 +13307,21 @@ exports.setName = setName;
 exports.shortDate = shortDate;
 exports.shortTime = shortTime;
 exports.timestamp = timestamp;
-
 var _rdflib = __webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js");
-
 var _iconBase = __webpack_require__(/*! ../iconBase */ "./lib/iconBase.js");
-
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
-
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
-
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
-
 var _log = __webpack_require__(/*! ../log */ "./lib/log.js");
-
 var _jss = __webpack_require__(/*! ../jss */ "./lib/jss/index.js");
-
 var _dragAndDrop = __webpack_require__(/*! ./dragAndDrop */ "./lib/widgets/dragAndDrop.js");
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
-
 var _error = __webpack_require__(/*! ./error */ "./lib/widgets/error.js");
-
 var _widgetHelpers = __webpack_require__(/*! ./widgetHelpers */ "./lib/widgets/widgetHelpers.js");
-
 var _iconLinks = __webpack_require__(/*! ./buttons/iconLinks */ "./lib/widgets/buttons/iconLinks.js");
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 /*  Buttons
 */
 
@@ -15358,105 +13331,90 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
  */
 
 /* global alert */
+
 var iconBase = _iconBase.icons.iconBase;
 var cancelIconURI = iconBase + 'noun_1180156.svg'; // black X
-
 var checkIconURI = iconBase + 'noun_1180158.svg'; // green checkmark; Continue
 
 function getStatusArea(context) {
   var box = context && context.statusArea || context && context.div || null;
   if (box) return box;
   var dom = context && context.dom;
-
   if (!dom && typeof document !== 'undefined') {
     dom = document;
   }
-
   if (dom) {
     var body = dom.getElementsByTagName('body')[0];
     box = dom.createElement('div');
     body.insertBefore(box, body.firstElementChild);
-
     if (context) {
       context.statusArea = box;
     }
-
     return box;
   }
-
   return null;
 }
+
 /**
  * Display an error message block
  */
-
-
 function complain(context, err) {
   if (!err) return; // only if error
-
   var ele = getStatusArea(context);
   debug.log('Complaint: ' + err);
   if (ele) ele.appendChild((0, _error.errorMessageBlock)(context && context.dom || document, err));else alert(err);
 }
+
 /**
  * Remove all the children of an HTML element
  */
-
-
 function clearElement(ele) {
   while (ele.firstChild) {
     ele.removeChild(ele.firstChild);
   }
-
   return ele;
 }
+
 /**
  * To figure out the log URI from the full URI used to invoke the reasoner
  */
-
-
 function extractLogURI(fullURI) {
   var logPos = fullURI.search(/logFile=/);
   var rulPos = fullURI.search(/&rulesFile=/);
   return fullURI.substring(logPos + 8, rulPos);
 }
+
 /**
  * By default, converts e.g. '2020-02-19T19:35:28.557Z' to '19:35'
  * if today is 19 Feb 2020, and to 'Feb 19' if not.
  * @@@ TODO This needs to be changed to local time
  * @param noTime Return a string like 'Feb 19' even if it's today.
  */
-
-
 function shortDate(str, noTime) {
   if (!str) return '???';
   var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
   try {
-    var nowZ = new Date().toISOString(); // var nowZ = $rdf.term(now).value
+    var nowZ = new Date().toISOString();
+    // var nowZ = $rdf.term(now).value
     // var n = now.getTimezoneOffset() // Minutes
-
     if (str.slice(0, 10) === nowZ.slice(0, 10) && !noTime) {
       return str.slice(11, 16);
     }
-
     if (str.slice(0, 4) === nowZ.slice(0, 4)) {
       return month[parseInt(str.slice(5, 7), 10) - 1] + ' ' + parseInt(str.slice(8, 10), 10);
     }
-
     return str.slice(0, 10);
   } catch (e) {
     return 'shortdate:' + e;
   }
 }
+
 /**
  * Format a date and time
  * @param date for instance `new Date()`
  * @param format  for instance '{FullYear}-{Month}-{Date}T{Hours}:{Minutes}:{Seconds}.{Milliseconds}'
  * @returns for instance '2000-01-15T23:14:23.002'
  */
-
-
 function formatDateTime(date, format) {
   return format.split('{').map(function (s) {
     var k = s.split('}')[0];
@@ -15470,52 +13428,47 @@ function formatDateTime(date, format) {
     return s ? ('000' + (date['get' + k]() + (d[k] || 0))).slice(-(width[k] || 2)) + s.split('}')[1] : '';
   }).join('');
 }
+
 /**
  * Get a string representation of the current time
  * @returns for instance '2000-01-15T23:14:23.002'
  */
-
-
 function timestamp() {
   return formatDateTime(new Date(), '{FullYear}-{Month}-{Date}T{Hours}:{Minutes}:{Seconds}.{Milliseconds}');
 }
+
 /**
  * Get a short string representation of the current time
  * @returns for instance '23:14:23.002'
  */
-
-
 function shortTime() {
   return formatDateTime(new Date(), '{Hours}:{Minutes}:{Seconds}.{Milliseconds}');
-} // ///////////////////// Handy UX widgets
+}
+
+// ///////////////////// Handy UX widgets
 
 /**
  * Sets the best name we have and looks up a better one
  */
-
-
 function setName(element, x) {
   var kb = _solidLogic.store;
-
   var findName = function findName(x) {
     var name = kb.any(x, ns.vcard('fn')) || kb.any(x, ns.foaf('name')) || kb.any(x, ns.vcard('organization-name'));
     return name ? name.value : null;
   };
-
   var name = x.sameTerm(ns.foaf('Agent')) ? 'Everyone' : findName(x);
   element.textContent = name || utils.label(x);
-
   if (!name && x.uri) {
     if (!kb.fetcher) {
       throw new Error('kb has no fetcher');
-    } // Note this is only a fetch, not a lookUP of all sameAs etc
-
-
+    }
+    // Note this is only a fetch, not a lookUP of all sameAs etc
     kb.fetcher.nowOrWhenFetched(x.doc(), undefined, function (_ok) {
       element.textContent = findName(x) || utils.label(x); // had: (ok ? '' : '? ') +
     });
   }
 }
+
 /**
  * Set of suitable images
  * See also [[findImage]]
@@ -15533,16 +13486,13 @@ function setName(element, x) {
  *          * ns.foaf('depiction')
 
  */
-
-
 function imagesOf(x, kb) {
   return kb.each(x, ns.sioc('avatar')).concat(kb.each(x, ns.foaf('img'))).concat(kb.each(x, ns.vcard('logo'))).concat(kb.each(x, ns.vcard('hasPhoto'))).concat(kb.each(x, ns.vcard('photo'))).concat(kb.each(x, ns.foaf('depiction')));
 }
+
 /**
  * Best logo or avatar or photo etc to represent someone or some group etc
  */
-
-
 var iconForClass = {
   // Potentially extendable by other apps, panes, etc
   // Relative URIs to the iconBase
@@ -15575,19 +13525,17 @@ var iconForClass = {
   'wf:Open': 'noun_17020_sans-tick.svg',
   'wf:Closed': 'noun_17020.svg'
 };
+
 /**
  * Returns the origin of the URI of a NamedNode
  */
-
 exports.iconForClass = iconForClass;
-
 function tempSite(x) {
   // use only while one in rdflib fails with origins 2019
   var str = x.uri.split('#')[0];
   var p = str.indexOf('//');
   if (p < 0) throw new Error('This URI does not have a web site part (origin)');
   var q = str.indexOf('/', p + 2);
-
   if (q < 0) {
     // no third slash?
     return str.slice(0) + '/'; // Add slash to a bare origin
@@ -15595,20 +13543,19 @@ function tempSite(x) {
     return str.slice(0, q + 1);
   }
 }
+
 /**
  * Find an image for this thing as a class
  */
-
-
 function findImageFromURI(x) {
-  var iconDir = iconBase; // Special cases from URI scheme:
+  var iconDir = iconBase;
 
+  // Special cases from URI scheme:
   if (typeof x !== 'string' && x.uri) {
     if (x.uri.split('/').length === 4 && !x.uri.split('/')[1] && !x.uri.split('/')[3]) {
       return iconDir + 'noun_15177.svg'; // App -- this is an origin
-    } // Non-HTTP URI types imply types
-
-
+    }
+    // Non-HTTP URI types imply types
     if (x.uri.startsWith('message:') || x.uri.startsWith('mid:')) {
       // message: is apple bug-- should be mid:
       return iconDir + 'noun_480183.svg'; // envelope  noun_567486
@@ -15616,9 +13563,8 @@ function findImageFromURI(x) {
 
     if (x.uri.startsWith('mailto:')) {
       return iconDir + 'noun_567486.svg'; // mailbox - an email desitination
-    } // For HTTP(s) documents, we could look at the MIME type if we know it.
-
-
+    }
+    // For HTTP(s) documents, we could look at the MIME type if we know it.
     if (x.uri.startsWith('https:') && x.uri.indexOf('#') < 0) {
       return tempSite(x) + 'favicon.ico'; // was x.site().uri + ...
       // Todo: make the document icon a fallback for if the favicon does not exist
@@ -15628,9 +13574,9 @@ function findImageFromURI(x) {
 
     return null;
   }
-
   return iconDir + 'noun_10636_grey.svg'; // Grey Circle -  some thing
 }
+
 /**
  * Find something we have as explicit image data for the thing
  * See also [[imagesOf]]
@@ -15648,12 +13594,9 @@ function findImageFromURI(x) {
  *          * ns.vcard('photo')
  *          * ns.foaf('depiction')
  */
-
-
 function findImage(thing) {
   var kb = _solidLogic.store;
   var iconDir = iconBase;
-
   if (thing.sameTerm(ns.foaf('Agent')) || thing.sameTerm(ns.rdf('Resource'))) {
     return iconDir + 'noun_98053.svg'; // Globe
   }
@@ -15661,44 +13604,37 @@ function findImage(thing) {
   var image = kb.any(thing, ns.sioc('avatar')) || kb.any(thing, ns.foaf('img')) || kb.any(thing, ns.vcard('logo')) || kb.any(thing, ns.vcard('hasPhoto')) || kb.any(thing, ns.vcard('photo')) || kb.any(thing, ns.foaf('depiction'));
   return image ? image.uri : null;
 }
+
 /**
  * Do the best you can with the data available
  *
  * @return {Boolean} Are we happy with this icon?
  * Sets src AND STYLE of the image.
  */
-
-
 function trySetImage(element, thing, iconForClassMap) {
   var kb = _solidLogic.store;
   var explitImage = findImage(thing);
-
   if (explitImage) {
     element.setAttribute('src', explitImage);
     return true;
-  } // This is one of the classes we know about - the class itself?
-
-
+  }
+  // This is one of the classes we know about - the class itself?
   var typeIcon = iconForClassMap[thing.uri];
-
   if (typeIcon) {
     element.setAttribute('src', typeIcon);
-    element.style = style.classIconStyle; // element.style.border = '0.1em solid green;'
+    element.style = style.classIconStyle;
+    // element.style.border = '0.1em solid green;'
     // element.style.backgroundColor = '#eeffee' // pale green
-
     return true;
   }
-
   var schemeIcon = findImageFromURI(thing);
-
   if (schemeIcon) {
     element.setAttribute('src', schemeIcon);
     return true; // happy with this -- don't look it up
-  } // Do we have a generic icon for something in any class its in?
+  }
 
-
+  // Do we have a generic icon for something in any class its in?
   var types = kb.findTypeURIs(thing);
-
   for (var typeURI in types) {
     if (iconForClassMap[typeURI]) {
       element.setAttribute('src', iconForClassMap[typeURI]);
@@ -15707,83 +13643,71 @@ function trySetImage(element, thing, iconForClassMap) {
   }
 
   element.setAttribute('src', iconBase + 'noun_10636_grey.svg'); // Grey Circle -  some thing
-
   return false; // we can do better
 }
+
 /**
  * ToDo: Also add icons for *properties* like  home, work, email, range, domain, comment,
  */
-
-
 function setImage(element, thing) {
   // 20191230a
   var kb = _solidLogic.store;
   var iconForClassMap = {};
-
   for (var k in iconForClass) {
     var pref = k.split(':')[0];
     var id = k.split(':')[1];
     var theClass = ns[pref](id);
     iconForClassMap[theClass.uri] = _rdflib.uri.join(iconForClass[k], iconBase);
   }
-
   var happy = trySetImage(element, thing, iconForClassMap);
-
   if (!happy && thing.uri) {
     if (!kb.fetcher) {
       throw new Error('kb has no fetcher');
     }
-
     kb.fetcher.nowOrWhenFetched(thing.doc(), undefined, function (ok) {
       if (ok) {
         trySetImage(element, thing, iconForClassMap);
       }
     });
   }
-} // If a web page, then a favicon, with a fallback to ???
+}
+
+// If a web page, then a favicon, with a fallback to ???
 // See, e.g., http://stackoverflow.com/questions/980855/inputting-a-default-image
-
-
 function faviconOrDefault(dom, x) {
   var image = dom.createElement('img');
   image.style = style.iconStyle;
-
   var isOrigin = function isOrigin(x) {
     if (!x.uri) return false;
     var parts = x.uri.split('/');
     return parts.length === 3 || parts.length === 4 && parts[3] === '';
   };
-
   image.setAttribute('src', iconBase + (isOrigin(x) ? 'noun_15177.svg' : 'noun_681601.svg') // App symbol vs document
   );
 
   if (x.uri && x.uri.startsWith('https:') && x.uri.indexOf('#') < 0) {
     var res = dom.createElement('object'); // favico with a fallback of a default image if no favicon
-
     res.setAttribute('data', tempSite(x) + 'favicon.ico');
     res.setAttribute('type', 'image/x-icon');
     res.appendChild(image); // fallback
-
     return res;
   } else {
     setImage(image, x);
     return image;
   }
 }
+
 /* Two-option dialog pop-up
 */
-
 
 function renderDeleteConfirmPopup(dom, refererenceElement, prompt, deleteFunction) {
   function removePopup() {
     refererenceElement.parentElement.removeChild(refererenceElement);
   }
-
   function removePopupAndDoDeletion() {
     removePopup();
     deleteFunction();
   }
-
   var popup = dom.createElement('div');
   popup.style = style.confirmPopupStyle;
   popup.style.position = 'absolute';
@@ -15794,7 +13718,6 @@ function renderDeleteConfirmPopup(dom, refererenceElement, prompt, deleteFunctio
   var affirm = dom.createElement('div');
   affirm.style.gridColumn = '1/2';
   affirm.style.gridRow = '1'; // @@ sigh; TS. could pass number in fact
-
   var cancel = dom.createElement('div');
   cancel.style.gridColumn = '1/2';
   cancel.style.gridRow = '2';
@@ -15809,7 +13732,6 @@ function renderDeleteConfirmPopup(dom, refererenceElement, prompt, deleteFunctio
   cancelPrompt.textContent = 'Cancel'; // @@ I18n
 
   var affirmIcon = button(dom, _iconBase.icons.iconBase + 'noun_925021.svg', 'Delete it'); // trashcan
-
   popup.appendChild(affirmIcon);
   affirmIcon.style.gridRow = '1';
   affirmIcon.style.gridColumn = '1';
@@ -15820,8 +13742,9 @@ function renderDeleteConfirmPopup(dom, refererenceElement, prompt, deleteFunctio
   sureButtonElt.textContent = prompt;
   popup.appendChild(sureButtonElt);
   affirmIcon.addEventListener('click', removePopupAndDoDeletion);
-  sureButtonElt.addEventListener('click', removePopupAndDoDeletion); // xButton.addEventListener('click', removePopup)
+  sureButtonElt.addEventListener('click', removePopupAndDoDeletion);
 
+  // xButton.addEventListener('click', removePopup)
   cancelPrompt.addEventListener('click', removePopup);
   return popup;
 }
@@ -15829,28 +13752,22 @@ function renderDeleteConfirmPopup(dom, refererenceElement, prompt, deleteFunctio
  * Delete button with a check you really mean it
  * @@ Supress check if command key held down?
  */
-
-
 function deleteButtonWithCheck(dom, container, noun, deleteFunction) {
   function createPopup() {
     var refererenceElement = dom.createElement('div');
     container.insertBefore(refererenceElement, deleteButton);
     refererenceElement.style.position = 'relative'; // Needed as reference for popup
-
     refererenceElement.appendChild(renderDeleteConfirmPopup(dom, refererenceElement, prompt, deleteFunction));
   }
-
   var minusIconURI = iconBase + 'noun_2188_red.svg'; // white minus in red #cc0000 circle
-
   var deleteButton = dom.createElement('img');
   deleteButton.setAttribute('src', minusIconURI);
   deleteButton.setAttribute('style', style.smallButtonStyle); // @@tsc - would set deleteButton.style
-
   deleteButton.style["float"] = 'right'; // Historically this has alwaus floated right
 
   var prompt = 'Remove this ' + noun;
-  deleteButton.title = prompt; // @@ In an ideal world, make use of hover an accessibility option
-
+  deleteButton.title = prompt;
+  // @@ In an ideal world, make use of hover an accessibility option
   deleteButton.classList.add('hoverControlHide');
   deleteButton.addEventListener('click', createPopup);
   container.classList.add('hoverControl');
@@ -15858,23 +13775,21 @@ function deleteButtonWithCheck(dom, container, noun, deleteFunction) {
   deleteButton.setAttribute('data-testid', 'deleteButtonWithCheck');
   return deleteButton; // or button div?  caller may change size of image
 }
+
 /**
  * Get the button style, based on options.
  * See https://design.inrupt.com/atomic-core/?cat=Atoms#Buttons
  */
-
-
 function getButtonStyle() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   // default to primary color
   var color = options.buttonColor === 'Secondary' ? '#01c9ea' : '#7c4dff';
   var backgroundColor = color;
   var fontColor = '#ffffff';
-  var borderColor = color; // default to primary color
-
+  var borderColor = color;
+  // default to primary color
   var hoverBackgroundColor = options.buttonColor === 'Secondary' ? '#37cde6' : '#9f7dff';
   var hoverFontColor = fontColor;
-
   if (options.needsBorder) {
     backgroundColor = '#ffffff';
     fontColor = color;
@@ -15882,7 +13797,6 @@ function getButtonStyle() {
     hoverBackgroundColor = color;
     hoverFontColor = backgroundColor;
   }
-
   return {
     'background-color': "".concat(backgroundColor),
     color: "".concat(fontColor),
@@ -15903,6 +13817,7 @@ function getButtonStyle() {
     }
   };
 }
+
 /*  Make a button
  *
  * @param dom - the DOM document object
@@ -15912,42 +13827,35 @@ function getButtonStyle() {
  *
  * @returns <dDomElement> - the button
  */
-
-
 function button(dom, iconURI, text, handler) {
   var options = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {
     buttonColor: 'Primary',
     needsBorder: false
   };
   var button = dom.createElement('button');
-  button.setAttribute('type', 'button'); // button.innerHTML = text  // later, user preferences may make text preferred for some
-
+  button.setAttribute('type', 'button');
+  // button.innerHTML = text  // later, user preferences may make text preferred for some
   if (iconURI) {
     var img = button.appendChild(dom.createElement('img'));
     img.setAttribute('src', iconURI);
     img.setAttribute('style', 'width: 2em; height: 2em;'); // trial and error. 2em disappears
-
     img.title = text;
     button.setAttribute('style', style.buttonStyle);
   } else {
     button.textContent = text.toLocaleUpperCase();
-
     var _style = getButtonStyle(options);
-
     var _getClasses = (0, _jss.getClasses)(dom.head, {
-      textButton: _style
-    }),
-        classes = _getClasses.classes;
-
+        textButton: _style
+      }),
+      classes = _getClasses.classes;
     button.classList.add(classes.textButton);
   }
-
   if (handler) {
     button.addEventListener('click', handler, false);
   }
-
   return button;
 }
+
 /*  Make a cancel button
  *
  * @param dom - the DOM document object
@@ -15955,11 +13863,8 @@ function button(dom, iconURI, text, handler) {
  *
  * @returns <dDomElement> - the button
  */
-
-
 function cancelButton(dom, handler) {
   var b = button(dom, cancelIconURI, 'Cancel', handler);
-
   if (b.firstChild) {
     // sigh for tsc
     b.firstChild.style.opacity = '0.3'; // Black X is too harsh: current language is grey X
@@ -15967,6 +13872,7 @@ function cancelButton(dom, handler) {
 
   return b;
 }
+
 /*  Make a continue button
  *
  * @param dom - the DOM document object
@@ -15974,47 +13880,40 @@ function cancelButton(dom, handler) {
  *
  * @returns <dDomElement> - the button
  */
-
-
 function continueButton(dom, handler) {
   return button(dom, checkIconURI, 'Continue', handler);
 }
+
 /* Grab a name for a new thing
  *
  * Form to get the name of a new thing before we create it
  * @params theClass  Misspelt to avoid clashing with the JavaScript keyword
  * @returns: a promise of (a name or null if cancelled)
  */
-
-
 function askName(dom, kb, container, predicate, theClass, noun) {
   // eslint-disable-next-line promise/param-names
   return new Promise(function (resolve, _reject) {
     var form = dom.createElement('div'); // form is broken as HTML behaviour can resurface on js error
     // classLabel = utils.label(ns.vcard('Individual'))
-
     predicate = predicate || ns.foaf('name'); // eg 'name' in user's language
-
     noun = noun || (theClass ? utils.label(theClass) : '  '); // eg 'folder' in users's language
-
     var prompt = noun + ' ' + utils.label(predicate) + ': ';
     form.appendChild(dom.createElement('p')).textContent = prompt;
     var namefield = dom.createElement('input');
     namefield.setAttribute('type', 'text');
     namefield.setAttribute('size', '100');
     namefield.setAttribute('maxLength', '2048'); // No arbitrary limits
-
     namefield.setAttribute('style', style.textInputStyle);
     namefield.select(); // focus next user input
-
     form.appendChild(namefield);
-    container.appendChild(form); // namefield.focus()
+    container.appendChild(form);
+
+    // namefield.focus()
 
     function gotName() {
       form.parentNode.removeChild(form);
       resolve(namefield.value.trim());
     }
-
     namefield.addEventListener('keyup', function (e) {
       if (e.keyCode === 13) {
         gotName();
@@ -16031,31 +13930,28 @@ function askName(dom, kb, container, predicate, theClass, noun) {
     namefield.focus();
   }); // Promise
 }
+
 /**
  * A TR to represent a draggable person, etc in a list
  *
  * pred is unused param at the moment
  */
-
-
 var personTR = renderAsRow; // The legacy name is used in a lot of places
-
 exports.personTR = personTR;
-
 function renderAsRow(dom, pred, obj, options) {
   var tr = dom.createElement('tr');
-  options = options || {}; // tr.predObj = [pred.uri, obj.uri]   moved to acl-control
-
+  options = options || {};
+  // tr.predObj = [pred.uri, obj.uri]   moved to acl-control
   var td1 = tr.appendChild(dom.createElement('td'));
   var td2 = tr.appendChild(dom.createElement('td'));
-  var td3 = tr.appendChild(dom.createElement('td')); // const image = td1.appendChild(dom.createElement('img'))
+  var td3 = tr.appendChild(dom.createElement('td'));
 
+  // const image = td1.appendChild(dom.createElement('img'))
   var image = options.image || faviconOrDefault(dom, obj);
   td1.setAttribute('style', 'vertical-align: middle; width:2.5em; padding:0.5em; height: 2.5em;');
   td2.setAttribute('style', 'vertical-align: middle; text-align:left;');
   td3.setAttribute('style', 'vertical-align: middle; width:2em; padding:0.5em; height: 4em;');
   td1.appendChild(image);
-
   if (options.title) {
     td2.textContent = options.title;
   } else {
@@ -16065,7 +13961,6 @@ function renderAsRow(dom, pred, obj, options) {
   if (options.deleteFunction) {
     deleteButtonWithCheck(dom, td3, options.noun || 'one', options.deleteFunction);
   }
-
   if (obj.uri) {
     // blank nodes need not apply
     if (options.link !== false) {
@@ -16073,30 +13968,25 @@ function renderAsRow(dom, pred, obj, options) {
       anchor.classList.add('HoverControlHide');
       td3.appendChild(dom.createElement('br'));
     }
-
     if (options.draggable !== false) {
       // default is on
       image.setAttribute('draggable', 'false'); // Stop the image being dragged instead - just the TR
-
       (0, _dragAndDrop.makeDraggable)(tr, obj);
     }
   }
-
   ;
   tr.subject = obj;
   return tr;
 }
+
 /* A helper function for renderAsDiv
 *  creates the NameDiv for the person
 *  Note: could not move it to the helper file because they call exported functions
 *  from buttons
 *  @internal exporting this only for unit tests
 */
-
-
 function createNameDiv(dom, div, title, obj) {
   var nameDiv = div.appendChild(dom.createElement('div'));
-
   if (title) {
     nameDiv.textContent = title;
   } else {
@@ -16109,22 +13999,17 @@ function createNameDiv(dom, div, title, obj) {
 *  from buttons
 * @internal exporting this only for unit tests
 */
-
-
 function createLinkDiv(dom, div, obj, options) {
   var linkDiv = div.appendChild(dom.createElement('div'));
   linkDiv.setAttribute('style', style.linkDivStyle);
-
   if (options.deleteFunction) {
     deleteButtonWithCheck(dom, linkDiv, options.noun || 'one', options.deleteFunction);
   }
-
   if (obj.uri) {
     // blank nodes need not apply
     if (options.link !== false) {
       (0, _iconLinks.createLinkForURI)(dom, linkDiv, obj);
     }
-
     (0, _dragAndDrop.makeDraggable)(div, obj);
   }
 }
@@ -16132,8 +14017,6 @@ function createLinkDiv(dom, div, obj, options) {
  * A Div to represent a draggable person, etc in a list
  * configurable to add an onClick listener
  */
-
-
 function renderAsDiv(dom, obj, options) {
   var div = dom.createElement('div');
   div.setAttribute('style', style.renderAsDivStyle);
@@ -16142,38 +14025,34 @@ function renderAsDiv(dom, obj, options) {
   (0, _widgetHelpers.createImageDiv)(dom, div, image);
   createNameDiv(dom, div, options.title, obj);
   createLinkDiv(dom, div, obj, options);
-
   if (options.clickable && options.onClickFunction) {
     (0, _widgetHelpers.addClickListenerToElement)(div, options.onClickFunction);
-  } // to be compatible with the SolidOS table layout
+  }
 
-
+  // to be compatible with the SolidOS table layout
   if (options.wrapInATR) {
     var tr = (0, _widgetHelpers.wrapDivInATR)(dom, div, obj);
     return tr;
   }
-
   return div;
 }
+
 /**
  * Refresh a DOM tree recursively
  */
-
-
 function refreshTree(root) {
   if (root.refresh) {
     root.refresh();
     return;
   }
-
   for (var i = 0; i < root.children.length; i++) {
     refreshTree(root.children[i]);
   }
 }
+
 /**
  * Options argument for [[attachmentList]] function
  */
-
 
 /**
  * Component that displays a list of resources, for instance
@@ -16183,13 +14062,12 @@ function refreshTree(root) {
  */
 function attachmentList(dom, subject, div) {
   var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
-
   // options = options || {}
+
   var deleteAttachment = function deleteAttachment(target) {
     if (!kb.updater) {
       throw new Error('kb has no updater');
     }
-
     kb.updater.update((0, _rdflib.st)(subject, predicate, target, doc), [], function (uri, ok, errorBody, _xhr) {
       if (ok) {
         refresh();
@@ -16198,42 +14076,33 @@ function attachmentList(dom, subject, div) {
       }
     });
   };
-
   function createNewRow(target) {
     var theTarget = target;
     var opt = {
       noun: noun
     };
-
     if (modify) {
       opt.deleteFunction = function () {
         deleteAttachment(theTarget);
       };
     }
-
     return personTR(dom, predicate, target, opt);
   }
-
   var refresh = function refresh() {
     var things = kb.each(subject, predicate);
     things.sort();
     utils.syncTableToArray(attachmentTable, things, createNewRow);
   };
-
   function droppedURIHandler(uris) {
     var ins = [];
     uris.forEach(function (u) {
       var target = (0, _rdflib.sym)(u); // Attachment needs text label to disinguish I think not icon.
-
       debug.log('Dropped on attachemnt ' + u); // icon was: iconBase + 'noun_25830.svg'
-
       ins.push((0, _rdflib.st)(subject, predicate, target, doc));
     });
-
     if (!kb.updater) {
       throw new Error('kb has no updater');
     }
-
     kb.updater.update([], ins, function (uri, ok, errorBody, _xhr) {
       if (ok) {
         refresh();
@@ -16242,19 +14111,16 @@ function attachmentList(dom, subject, div) {
       }
     });
   }
-
   function droppedFileHandler(files) {
     var _options$uploadFolder, _options$uploadFolder2;
-
     (0, _dragAndDrop.uploadFiles)(kb.fetcher, files, (_options$uploadFolder = options.uploadFolder) === null || _options$uploadFolder === void 0 ? void 0 : _options$uploadFolder.uri, // Files
-    (_options$uploadFolder2 = options.uploadFolder) === null || _options$uploadFolder2 === void 0 ? void 0 : _options$uploadFolder2.uri, // Pictures
+    (_options$uploadFolder2 = options.uploadFolder) === null || _options$uploadFolder2 === void 0 ? void 0 : _options$uploadFolder2.uri,
+    // Pictures
     function (theFile, destURI) {
       var ins = [(0, _rdflib.st)(subject, predicate, kb.sym(destURI), doc)];
-
       if (!kb.updater) {
         throw new Error('kb has no updater');
       }
-
       kb.updater.update([], ins, function (uri, ok, errorBody, _xhr) {
         if (ok) {
           refresh();
@@ -16264,13 +14130,11 @@ function attachmentList(dom, subject, div) {
       });
     });
   }
-
   var doc = options.doc || subject.doc();
   if (options.modify === undefined) options.modify = true;
   var modify = options.modify;
   var promptIcon = options.promptIcon || iconBase + 'noun_748003.svg'; //    target
   // const promptIcon = options.promptIcon || (iconBase + 'noun_25830.svg') //  paperclip
-
   var predicate = options.predicate || ns.wf('attachment');
   var noun = options.noun || 'attachment';
   var kb = _solidLogic.store;
@@ -16282,30 +14146,32 @@ function attachmentList(dom, subject, div) {
   var attachmentTable = attachmentRight.appendChild(dom.createElement('table'));
   attachmentTable.appendChild(dom.createElement('tr')) // attachmentTableTop
   ;
+
   attachmentOuter.refresh = refresh; // Participate in downstream changes
   // ;(attachmentTable as any).refresh = refresh   <- outer should be best?
 
   refresh();
-
   if (modify) {
     // const buttonStyle = 'width; 2em; height: 2em; margin: 0.5em; padding: 0.1em;'
-    var paperclip = button(dom, promptIcon, 'Drop attachments here'); // paperclip.style = buttonStyle // @@ needed?  default has white background
-
+    var paperclip = button(dom, promptIcon, 'Drop attachments here');
+    // paperclip.style = buttonStyle // @@ needed?  default has white background
     attachmentLeft.appendChild(paperclip);
     var fhandler = options.uploadFolder ? droppedFileHandler : null;
     (0, _dragAndDrop.makeDropTarget)(paperclip, droppedURIHandler, fhandler); // beware missing the wire of the paparclip!
-
     (0, _dragAndDrop.makeDropTarget)(attachmentLeft, droppedURIHandler, fhandler); // just the outer won't do it
 
     if (options.uploadFolder) {
       // Addd an explicit file upload button as well
       var buttonDiv = fileUploadButtonDiv(dom, droppedFileHandler);
-      attachmentLeft.appendChild(buttonDiv); // buttonDiv.children[1].style =  buttonStyle
+      attachmentLeft.appendChild(buttonDiv);
+      // buttonDiv.children[1].style =  buttonStyle
     }
   }
 
   return attachmentOuter;
-} // /////////////////////////////////////////////////////////////////////////////
+}
+
+// /////////////////////////////////////////////////////////////////////////////
 
 /**
  * Event Handler for links within solid apps.
@@ -16313,8 +14179,6 @@ function attachmentList(dom, subject, div) {
  * Note that native links have constraints in Firefox, they
  * don't work with local files for instance (2011)
  */
-
-
 function openHrefInOutlineMode(e) {
   e.preventDefault();
   e.stopPropagation();
@@ -16322,7 +14186,6 @@ function openHrefInOutlineMode(e) {
   var uri = target.getAttribute('href');
   if (!uri) return debug.log('openHrefInOutlineMode: No href found!\n');
   var dom = window.document;
-
   if (dom.outlineManager) {
     // @@ TODO Remove the use of document as a global object
     // TODO fix dependency cycle to solid-panes by calling outlineManager
@@ -16334,24 +14197,23 @@ function openHrefInOutlineMode(e) {
     window.panes.getOutliner().GotoSubject(_solidLogic.store.sym(uri), true, undefined, true, undefined);
   } else {
     debug.log('ERROR: Can\'t access outline manager in this config');
-  } // dom.outlineManager.GotoSubject(store.sym(uri), true, undefined, true, undefined)
-
+  }
+  // dom.outlineManager.GotoSubject(store.sym(uri), true, undefined, true, undefined)
 }
+
 /**
  * Make a URI in the Tabulator.org annotation store out of the URI of the thing to be annotated.
  *
  * @@ Todo: make it a personal preference.
  */
-
-
 function defaultAnnotationStore(subject) {
   if (subject.uri === undefined) return undefined;
   var s = subject.uri;
   if (s.slice(0, 7) !== 'http://') return undefined;
   s = s.slice(7); // Remove
-
   var hash = s.indexOf('#');
-  if (hash >= 0) s = s.slice(0, hash); // Strip trailing
+  if (hash >= 0) s = s.slice(0, hash);
+  // Strip trailing
   else {
     var slash = s.lastIndexOf('/');
     if (slash < 0) return undefined;
@@ -16359,31 +14221,27 @@ function defaultAnnotationStore(subject) {
   }
   return _solidLogic.store.sym('http://tabulator.org/wiki/annnotation/' + s);
 }
+
 /**
  * Retrieve all RDF class URIs from solid-ui's RDF store
  * @returns an object `ret` such that `Object.keys(ret)` is
  * the list of all class URIs.
  */
-
-
 function allClassURIs() {
   var set = {};
-
   _solidLogic.store.statementsMatching(undefined, ns.rdf('type'), undefined).forEach(function (st) {
     if (st.object.value) set[st.object.value] = true;
   });
-
   _solidLogic.store.statementsMatching(undefined, ns.rdfs('subClassOf'), undefined).forEach(function (st) {
     if (st.object.value) set[st.object.value] = true;
     if (st.subject.value) set[st.subject.value] = true;
   });
-
   _solidLogic.store.each(undefined, ns.rdf('type'), ns.rdfs('Class')).forEach(function (c) {
     if (c.value) set[c.value] = true;
   });
-
   return set;
 }
+
 /**
  * Figuring which properties we know about
  *
@@ -16396,21 +14254,18 @@ function allClassURIs() {
  * @param {Store} kb The quadstore to be searched.
  */
 
-
 function propertyTriage(kb) {
-  var possibleProperties = {}; // if (possibleProperties === undefined) possibleProperties = {}
+  var possibleProperties = {};
+  // if (possibleProperties === undefined) possibleProperties = {}
   // const kb = store
-
   var dp = {};
   var op = {};
   var no = 0;
   var nd = 0;
   var nu = 0;
   var pi = kb.predicateIndex; // One entry for each pred
-
   for (var p in pi) {
     var object = pi[p][0].object;
-
     if (object.termType === 'Literal') {
       dp[p] = true;
       nd++;
@@ -16419,25 +14274,21 @@ function propertyTriage(kb) {
       no++;
     }
   } // If nothing discovered, then could be either:
-
-
   var ps = kb.each(undefined, ns.rdf('type'), ns.rdf('Property'));
-
   for (var i = 0; i < ps.length; i++) {
     var _p = ps[i].toNT();
-
     if (!op[_p] && !dp[_p]) {
       dp[_p] = true;
       op[_p] = true;
       nu++;
     }
   }
-
   possibleProperties.op = op;
   possibleProperties.dp = dp;
   (0, _log.info)("propertyTriage: ".concat(no, " non-lit, ").concat(nd, " literal. ").concat(nu, " unknown."));
   return possibleProperties;
 }
+
 /**
  * General purpose widgets
  */
@@ -16445,8 +14296,6 @@ function propertyTriage(kb) {
 /**
  * A button for jumping
  */
-
-
 function linkButton(dom, object) {
   var b = dom.createElement('button');
   b.setAttribute('type', 'button');
@@ -16459,22 +14308,22 @@ function linkButton(dom, object) {
   }, true);
   return b;
 }
+
 /**
  * A button to remove some other element from the page
  */
-
-
 function removeButton(dom, element) {
   var b = dom.createElement('button');
   b.setAttribute('type', 'button');
   b.textContent = '✕'; // MULTIPLICATION X
-
   b.addEventListener('click', function (_event) {
     ;
     element.parentNode.removeChild(element);
   }, true);
   return b;
-} //      Description text area
+}
+
+//      Description text area
 //
 // Make a box to demand a description or display existing one
 //
@@ -16484,12 +14333,13 @@ function removeButton(dom, element) {
 // @param predicate - a term, the predicate of the statement(s) being edited
 // @param store - The web document being edited
 // @param callbackFunction - takes (boolean ok, string errorBody)
+
 // /////////////////////////////////////// Random I/O widgets /////////////
+
 // ////              Column Header Buttons
 //
 //  These are for selecting different modes, sources,styles, etc.
 //
-
 /*
 buttons.headerButtons = function (dom, kb, name, words) {
     const box = dom.createElement('table')
@@ -16510,38 +14360,30 @@ buttons.headerButtons = function (dom, kb, name, words) {
 //
 //   @param inverse means this is the object rather than the subject
 //
-
-
 function selectorPanel(dom, kb, type, predicate, inverse, possible, options, callbackFunction, linkCallback) {
   return selectorPanelRefresh(dom.createElement('div'), dom, kb, type, predicate, inverse, possible, options, callbackFunction, linkCallback);
 }
-
 function selectorPanelRefresh(list, dom, kb, type, predicate, inverse, possible, options, callbackFunction, linkCallback) {
   var style0 = 'border: 0.1em solid #ddd; border-bottom: none; width: 95%; height: 2em; padding: 0.5em;';
   var selected = null;
   list.innerHTML = '';
-
   var refreshItem = function refreshItem(box, x) {
     // Scope to hold item and x
-    var item; // eslint-disable-next-line prefer-const
-
+    var item;
+    // eslint-disable-next-line prefer-const
     var image;
-
     var setStyle = function setStyle() {
       var already = inverse ? kb.each(undefined, predicate, x) : kb.each(x, predicate);
       iconDiv.setAttribute('class', already.length === 0 ? 'hideTillHover' : ''); // See tabbedtab.css
-
       image.setAttribute('src', options.connectIcon || iconBase + 'noun_25830.svg');
       image.setAttribute('title', already.length ? already.length : 'attach');
     };
-
-    var f = index.twoLine.widgetForClass(type); // eslint-disable-next-line prefer-const
-
+    var f = index.twoLine.widgetForClass(type);
+    // eslint-disable-next-line prefer-const
     item = f(dom, x);
     item.setAttribute('style', style0);
     var nav = dom.createElement('div');
     nav.setAttribute('class', 'hideTillHover'); // See tabbedtab.css
-
     nav.setAttribute('style', 'float:right; width:10%');
     var a = dom.createElement('a');
     a.setAttribute('href', x.uri);
@@ -16564,7 +14406,6 @@ function selectorPanelRefresh(list, dom, kb, type, predicate, inverse, possible,
         item.setAttribute('style', style0 + 'background-color: #ccc; color:black;');
         selected = item;
       }
-
       callbackFunction(x, event, selected === item);
       setStyle();
     }, false);
@@ -16574,52 +14415,47 @@ function selectorPanelRefresh(list, dom, kb, type, predicate, inverse, possible,
     box.appendChild(item);
     return box;
   };
-
   for (var i = 0; i < possible.length; i++) {
     var box = dom.createElement('div');
     list.appendChild(box);
     refreshItem(box, possible[i]);
   }
-
   return list;
-} // ###########################################################################
+}
+
+// ###########################################################################
 //
 //      Small compact views of things
 //
-
-
-var index = {}; // ///////////////////////////////////////////////////////////////////////////
+var index = {};
+// ///////////////////////////////////////////////////////////////////////////
 // We need these for anything which is a subject of an attachment.
 //
 // These should be moved to type-dependeent UI code. Related panes maybe
-
 exports.index = index;
-
 function twoLineDefault(dom, x) {
   // Default
   var box = dom.createElement('div');
   box.textContent = utils.label(x);
   return box;
 }
+
 /**
  * Find a function that can create a widget for a given class
  * @param c The RDF class for which we want a widget generator function
  */
-
-
 function twoLineWidgetForClass(c) {
   var widget = index.twoLine[c.uri];
   var kb = _solidLogic.store;
   if (widget) return widget;
   var sup = kb.findSuperClassesNT(c);
-
   for (var cl in sup) {
     widget = index.twoLine[kb.fromNT(cl).uri];
     if (widget) return widget;
   }
-
   return index.twoLine[''];
 }
+
 /**
  * Display a transaction
  * @param x Should have attributes through triples in store:
@@ -16627,27 +14463,22 @@ function twoLineWidgetForClass(c) {
  *          * ns.qu('date) -> a literal
  *          * ns.qu('amount') -> a literal
  */
-
-
 function twoLineTransaction(dom, x) {
   var failed = '';
-
   var enc = function enc(p) {
     var y = _solidLogic.store.any(x, ns.qu(p));
-
     if (!y) failed += '@@ No value for ' + p + '! ';
     return y ? utils.escapeForXML(y.value) : '?'; // @@@@
   };
 
   var box = dom.createElement('table');
   box.innerHTML = "\n      <tr>\n      <td colspan=\"2\"> ".concat(enc('payee'), "</td>\n      < /tr>\n      < tr >\n      <td>").concat(enc('date').slice(0, 10), "</td>\n      <td style = \"text-align: right;\">").concat(enc('amount'), "</td>\n      </tr>");
-
   if (failed) {
     box.innerHTML = "\n      <tr>\n        <td><a href=\"".concat(utils.escapeForXML(x.uri), "\">").concat(utils.escapeForXML(failed), "</a></td>\n      </tr>");
   }
-
   return box;
 }
+
 /**
  * Display a trip
  * @param x Should have attributes through triples in store:
@@ -16655,76 +14486,64 @@ function twoLineTransaction(dom, x) {
  *          * ns.cal('dtstart') -> a literal
  *          * ns.cal('dtend') -> a literal
  */
-
-
 function twoLineTrip(dom, x) {
   var enc = function enc(p) {
     var y = _solidLogic.store.any(x, p);
-
     return y ? utils.escapeForXML(y.value) : '?';
   };
-
   var box = dom.createElement('table');
   box.innerHTML = "\n    <tr>\n      <td colspan=\"2\">".concat(enc(ns.dc('title')), "</td>\n    </tr>\n    <tr style=\"color: #777\">\n      <td>").concat(enc(ns.cal('dtstart')), "</td>\n      <td>").concat(enc(ns.cal('dtend')), "</td>\n    </tr>");
   return box;
 }
+
 /**
  * Stick a stylesheet link the document if not already there
  */
-
-
 function addStyleSheet(dom, href) {
   var links = dom.querySelectorAll('link');
-
   for (var i = 0; i < links.length; i++) {
     if ((links[i].getAttribute('rel') || '') === 'stylesheet' && (links[i].getAttribute('href') || '') === href) {
       return;
     }
   }
-
   var link = dom.createElement('link');
   link.setAttribute('rel', 'stylesheet');
   link.setAttribute('type', 'text/css');
   link.setAttribute('href', href);
   dom.getElementsByTagName('head')[0].appendChild(link);
-} // Figure (or guess) whether this is an image, etc
+}
+
+// Figure (or guess) whether this is an image, etc
 //
-
-
 function isAudio(file) {
   return isImage(file, 'audio');
 }
-
 function isVideo(file) {
   return isImage(file, 'video');
 }
 /**
  *
  */
-
-
 function isImage(file, kind) {
   var dcCLasses = {
     audio: 'http://purl.org/dc/dcmitype/Sound',
     image: 'http://purl.org/dc/dcmitype/Image',
     video: 'http://purl.org/dc/dcmitype/MovingImage'
   };
-  var what = kind || 'image'; // See https://github.com/linkeddata/rdflib.js/blob/e367d5088c/src/formula.ts#L554
+  var what = kind || 'image';
+  // See https://github.com/linkeddata/rdflib.js/blob/e367d5088c/src/formula.ts#L554
   //
-
-  var typeURIs = _solidLogic.store.findTypeURIs(file); // See https://github.com/linkeddata/rdflib.js/blob/d5000f/src/utils-js.js#L14
+  var typeURIs = _solidLogic.store.findTypeURIs(file);
+  // See https://github.com/linkeddata/rdflib.js/blob/d5000f/src/utils-js.js#L14
   // e.g.'http://www.w3.org/ns/iana/media-types/audio'
-
-
   var prefix = _rdflib.Util.mediaTypeClass(what + '/*').uri.split('*')[0];
-
   for (var t in typeURIs) {
     if (t.startsWith(prefix)) return true;
   }
-
   if (dcCLasses[what] in typeURIs) return true;
   return false;
 }
+
 /**
  * File upload button
  * @param dom The DOM aka document
@@ -16733,8 +14552,6 @@ function isImage(file, kind) {
  * The input is hidden, as it is uglky - the user clicks on the nice icons and fires the input.
  */
 // See https://developer.mozilla.org/en-US/docs/Web/API/File/Using_files_from_web_applications
-
-
 function fileUploadButtonDiv(dom, droppedFileHandler) {
   var div = dom.createElement('div');
   var input = div.appendChild(dom.createElement('input'));
@@ -16742,7 +14559,6 @@ function fileUploadButtonDiv(dom, droppedFileHandler) {
   input.setAttribute('multiple', 'true');
   input.addEventListener('change', function (event) {
     debug.log('File drop event: ', event);
-
     if (event.files) {
       droppedFileHandler(event.files);
     } else if (event.target && event.target.files) {
@@ -16756,10 +14572,8 @@ function fileUploadButtonDiv(dom, droppedFileHandler) {
     input.click();
   }));
   (0, _dragAndDrop.makeDropTarget)(buttonElt, null, droppedFileHandler); // Can also just drop on button
-
   return div;
 }
-
 exports.index = index = {
   line: {// Approx 80em
   },
@@ -16789,9 +14603,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.createLinkForURI = void 0;
 exports.linkIcon = linkIcon;
-
 var _iconBase = __webpack_require__(/*! ../../iconBase */ "./lib/iconBase.js");
-
 /**
  * Creates an anchor tag for a NamedNode
  *
@@ -16808,13 +14620,10 @@ var _iconBase = __webpack_require__(/*! ../../iconBase */ "./lib/iconBase.js");
 function linkIcon(dom, subject, iconURI) {
   var anchor = dom.createElement('a');
   anchor.setAttribute('href', subject.uri);
-
   if (subject.uri.startsWith('http')) {
     // If diff web page
     anchor.setAttribute('target', '_blank'); // open in a new tab or window
   } // as mailboxes and mail messages do not need new browser window
-
-
   var img = anchor.appendChild(dom.createElement('img'));
   img.setAttribute('src', iconURI || _iconBase.originalIconBase + 'go-to-this.png');
   img.setAttribute('style', 'margin: 0.3em;');
@@ -16833,15 +14642,12 @@ function linkIcon(dom, subject, iconURI) {
  *
  */
 // eslint-disable-next-line complexity
-
-
 var createLinkForURI = function createLinkForURI(dom, linkDiv, obj) {
   var iconLink = linkIcon(dom, obj);
   var anchor = linkDiv.appendChild(iconLink);
   anchor.classList.add('HoverControlHide');
   linkDiv.appendChild(dom.createElement('br'));
 };
-
 exports.createLinkForURI = createLinkForURI;
 //# sourceMappingURL=iconLinks.js.map
 
@@ -16857,22 +14663,16 @@ exports.createLinkForURI = createLinkForURI;
 
 
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.makeDraggable = makeDraggable;
 exports.makeDropTarget = makeDropTarget;
 exports.uploadFiles = uploadFiles;
-
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
-
 var mime = _interopRequireWildcard(__webpack_require__(/*! mime-types */ "./node_modules/mime-types/index.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 /* Drag and drop common functionality
  *
  * It is easy to make something draggable, or to make it a drag target!
@@ -16885,16 +14685,14 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
  */
 
 /* global FileReader alert */
+
 function makeDropTarget(ele, droppedURIHandler, droppedFileHandler) {
   var dragoverListener = function dragoverListener(e) {
     e.preventDefault(); // Neeed else drop does not work [sic]
-
     e.dataTransfer.dropEffect = 'copy';
   };
-
   var dragenterListener = function dragenterListener(e) {
     debug.log('dragenter event dropEffect: ' + e.dataTransfer.dropEffect);
-
     if (this.style) {
       //  necessary not sure when
       if (!this.savedStyle) {
@@ -16903,19 +14701,15 @@ function makeDropTarget(ele, droppedURIHandler, droppedFileHandler) {
         this.savedStyle.backgroundColor = this.style.backgroundColor;
         this.savedStyle.borderRadius = this.style.borderRadius;
       }
-
       this.style.backgroundColor = '#ccc';
       this.style.border = '0.25em dashed black';
       this.style.borderRadius = '0.3em';
     }
-
     e.dataTransfer.dropEffect = 'link';
     debug.log('dragenter event dropEffect 2: ' + e.dataTransfer.dropEffect);
   };
-
   var dragleaveListener = function dragleaveListener(e) {
     debug.log('dragleave event dropEffect: ' + e.dataTransfer.dropEffect);
-
     if (this.savedStyle) {
       this.style.border = this.savedStyle.border;
       this.style.backgroundColor = this.savedStyle.backgroundColor;
@@ -16925,37 +14719,29 @@ function makeDropTarget(ele, droppedURIHandler, droppedFileHandler) {
       this.style.border = '0em solid black';
     }
   };
-
   var dropListener = function dropListener(e) {
     if (e.preventDefault) e.preventDefault(); // stops the browser from redirecting off to the text.
-
     debug.log('Drop event. dropEffect: ' + e.dataTransfer.dropEffect);
     debug.log('Drop event. types: ' + (e.dataTransfer.types ? e.dataTransfer.types.join(', ') : 'NOPE'));
     var uris = null;
     var text;
-
     if (e.dataTransfer.types) {
       for (var t = 0; t < e.dataTransfer.types.length; t++) {
         var type = e.dataTransfer.types[t];
-
         if (type === 'text/uri-list') {
           uris = e.dataTransfer.getData(type).split('\n'); // @ ignore those starting with #
-
           debug.log('Dropped text/uri-list: ' + uris);
         } else if (type === 'text/plain') {
           text = e.dataTransfer.getData(type);
         } else if (type === 'Files' && droppedFileHandler) {
           var files = e.dataTransfer.files; // FileList object.
-
           for (var i = 0; files[i]; i++) {
             var f = files[i];
             debug.log('Filename: ' + f.name + ', type: ' + (f.type || 'n/a') + ' size: ' + f.size + ' bytes, last modified: ' + (f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a'));
           }
-
           droppedFileHandler(files);
         }
       }
-
       if (uris === null && text && text.slice(0, 4) === 'http') {
         uris = text;
         debug.log("Waring: Poor man's drop: using text for URI"); // chrome disables text/uri-list??
@@ -16965,38 +14751,30 @@ function makeDropTarget(ele, droppedURIHandler, droppedFileHandler) {
       uris = [e.dataTransfer.getData('Text')];
       debug.log('WARNING non-standard drop event: ' + uris[0]);
     }
-
     debug.log('Dropped URI list (2): ' + uris);
-
     if (uris) {
       droppedURIHandler(uris);
     }
-
     this.style.backgroundColor = 'white'; // restore style
-
     return false;
   }; // dropListener
-
 
   var addTargetListeners = function addTargetListeners(ele) {
     if (!ele) {
       debug.log('@@@ addTargetListeners: ele ' + ele);
     }
-
     ele.addEventListener('dragover', dragoverListener);
     ele.addEventListener('dragenter', dragenterListener);
     ele.addEventListener('dragleave', dragleaveListener);
     ele.addEventListener('drop', dropListener);
   };
-
   addTargetListeners(ele, droppedURIHandler);
 } // listen for dropped URIs
+
 // Make an HTML element draggable as a URI-identified thing
 //
 // Possibly later set the drag image too?
 //
-
-
 function makeDraggable(tr, obj) {
   tr.setAttribute('draggable', 'true'); // Stop the image being dragged instead - just the TR
 
@@ -17009,7 +14787,8 @@ function makeDraggable(tr, obj) {
   }, false);
   tr.addEventListener('drag', function (e) {
     e.preventDefault();
-    e.stopPropagation(); // debug.log('Drag: dropEffect: ' + e.dataTransfer.dropEffect)
+    e.stopPropagation();
+    // debug.log('Drag: dropEffect: ' + e.dataTransfer.dropEffect)
   }, false);
   tr.addEventListener('dragend', function (e) {
     tr.style.fontWeight = 'normal';
@@ -17017,6 +14796,7 @@ function makeDraggable(tr, obj) {
     debug.log('Dragend: ' + tr + ' -> ' + obj);
   }, false);
 }
+
 /** uploadFiles
 **
 **  Generic uploader of local files to the web
@@ -17030,26 +14810,22 @@ function makeDraggable(tr, obj) {
 **                              With file object an final URI as params
 */
 
-
 function uploadFiles(fetcher, files, fileBase, imageBase, successHandler) {
   for (var i = 0; files[i]; i++) {
     var f = files[i];
     debug.log(' dropped: Filename: ' + f.name + ', type: ' + (f.type || 'n/a') + ' size: ' + f.size + ' bytes, last modified: ' + (f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a')); // See e.g. https://www.html5rocks.com/en/tutorials/file/dndfiles/
+
     // @@ Add: progress bar(s)
-
     var reader = new FileReader();
-
     reader.onload = function (theFile) {
       return function (e) {
         var data = e.target.result;
         var suffix = '';
         debug.log(' File read byteLength : ' + data.byteLength);
         var contentType = theFile.type;
-
         if (!theFile.type || theFile.type === '') {
           // Not known by browser
           contentType = mime.lookup(theFile.name);
-
           if (!contentType) {
             var msg = 'Filename needs to have an extension which gives a type we know: ' + theFile.name;
             debug.log(msg);
@@ -17057,12 +14833,14 @@ function uploadFiles(fetcher, files, fileBase, imageBase, successHandler) {
             throw new Error(msg);
           }
         } else {
-          var extension = mime.extension(theFile.type); // Note not simple: eg .mp3 => audio/mpeg; .mpga => audio/mpeg; audio/mp3 => .mp3
-
-          if (extension && extension !== 'false' && !theFile.name.endsWith('.' + extension) && // Not already has preferred extension? and ...
+          var extension = mime.extension(theFile.type);
+          // Note not simple: eg .mp3 => audio/mpeg; .mpga => audio/mpeg; audio/mp3 => .mp3
+          if (extension && extension !== 'false' && !theFile.name.endsWith('.' + extension) &&
+          // Not already has preferred extension? and ...
           theFile.type !== mime.lookup(theFile.name)) {
             // the mime type of this ext is not the right one?
-            suffix = '_.' + extension; // console.log('MIME TYPE MISMATCH: ' + mime.lookup(theFile.name) + ': adding extension: ' + suffix)
+            suffix = '_.' + extension;
+            // console.log('MIME TYPE MISMATCH: ' + mime.lookup(theFile.name) + ': adding extension: ' + suffix)
           }
         }
 
@@ -17082,7 +14860,6 @@ function uploadFiles(fetcher, files, fileBase, imageBase, successHandler) {
         });
       };
     }(f);
-
     reader.readAsArrayBuffer(f);
   }
 }
@@ -17103,9 +14880,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.errorMessageBlock = errorMessageBlock;
-
 var _widgets = __webpack_require__(/*! ../widgets */ "./lib/widgets/index.js");
-
 /**
  * Create an error message block
  * @param dom The DOM on which dom.createElement will be called
@@ -17118,24 +14893,20 @@ var _widgets = __webpack_require__(/*! ../widgets */ "./lib/widgets/index.js");
  *  Meanwhile the stack is dumped to the console for the developer, so you actually know
  *  where it happened!
  */
-
 /* eslint-disable no-console */
+
 function errorMessageBlock(dom, err, backgroundColor, err2) {
   var div = dom.createElement('div');
-  /* tslint:disable-next-line */
-  // Too complex for TS?
+
+  /* tslint:disable-next-line */ // Too complex for TS?
   // @ts-ignore
-
   var errorObject = err2 || err instanceof Error ? err : null;
-
   if (errorObject) {
     console.error("errorMessageBlock: ".concat(errorObject, " at: ").concat(errorObject.stack || '??'), errorObject); // @@ pick one
-
     div.textContent = errorObject.message;
   } else {
     div.textContent = err;
   }
-
   div.appendChild((0, _widgets.cancelButton)(dom, function () {
     if (div.parentNode) div.parentNode.removeChild(div);
   })).style = 'width: 2em; height: 2em; align: right;';
@@ -17156,9 +14927,7 @@ function errorMessageBlock(dom, err, backgroundColor, err2) {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
@@ -17227,65 +14996,41 @@ Object.defineProperty(exports, "renderNameValuePair", ({
 }));
 exports.sortByLabel = sortByLabel;
 exports.sortBySequence = sortBySequence;
-
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
-
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
-
 var buttons = _interopRequireWildcard(__webpack_require__(/*! ./buttons */ "./lib/widgets/buttons.js"));
-
 var _fieldParams = __webpack_require__(/*! ./forms/fieldParams */ "./lib/widgets/forms/fieldParams.js");
-
 var _fieldFunction = __webpack_require__(/*! ./forms/fieldFunction */ "./lib/widgets/forms/fieldFunction.js");
-
 var _formStyle = __webpack_require__(/*! ./forms/formStyle */ "./lib/widgets/forms/formStyle.js");
-
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
-
 var _error = __webpack_require__(/*! ./error */ "./lib/widgets/error.js");
-
 var _basic = __webpack_require__(/*! ./forms/basic */ "./lib/widgets/forms/basic.js");
-
 var _autocompleteField = __webpack_require__(/*! ./forms/autocomplete/autocompleteField */ "./lib/widgets/forms/autocomplete/autocompleteField.js");
-
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
-
 var _iconBase = __webpack_require__(/*! ../iconBase */ "./lib/iconBase.js");
-
 var log = _interopRequireWildcard(__webpack_require__(/*! ../log */ "./lib/log.js"));
-
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
-
 var $rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
-
 var _multiSelect = __webpack_require__(/*! ./multiSelect */ "./lib/widgets/multiSelect.js");
-
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 var checkMarkCharacter = "\u2713";
 var cancelCharacter = "\u2715";
 var dashCharacter = '-';
 var kb = _solidLogic.store;
-_fieldFunction.field[ns.ui('AutocompleteField').uri] = _autocompleteField.autocompleteField; // ///////////////////////////////////////////////////////////////////////
+_fieldFunction.field[ns.ui('AutocompleteField').uri] = _autocompleteField.autocompleteField;
+
+// ///////////////////////////////////////////////////////////////////////
 
 /*                                  Form Field implementations
  **
  */
-
 /**          Group of different fields
  **
  **  One type of form field is an ordered Group of other fields.
@@ -17301,20 +15046,16 @@ _fieldFunction.field[ns.ui('AutocompleteField').uri] = _autocompleteField.autoco
  **
  ** @returns {Element} The HTML widget created
  */
-
 function refreshOpionsSubfieldinGroup(dom, already, subject, dataDoc, callbackFunction, groupDiv, subfields) {
   var eles = groupDiv.children;
-
   for (var j = 0; j < subfields.length; j++) {
     // This is really messy.
     var _field = subfields[j];
     var t = (0, _fieldFunction.mostSpecificClassURI)(_field); // Field type
-
     if (t === ns.ui('Options').uri) {
       var optionsRender = (0, _fieldFunction.fieldFunction)(dom, _field);
       var newOne = optionsRender(dom, null, already, subject, _field, dataDoc, callbackFunction);
       debug.log('Refreshing Options field by replacing it.'); // better to support actual refresh
-
       groupDiv.insertBefore(newOne, eles[j]);
       groupDiv.removeChild(eles[j + 1]); // Remove the old one
     }
@@ -17324,54 +15065,44 @@ function refreshOpionsSubfieldinGroup(dom, already, subject, dataDoc, callbackFu
 _fieldFunction.field[ns.ui('Form').uri] = _fieldFunction.field[ns.ui('Group').uri] = function (dom, container, already, subject, form, dataDoc, callbackFunction) {
   var box = dom.createElement('div');
   var ui = ns.ui;
-  if (container) container.appendChild(box); // Prevent loops
+  if (container) container.appendChild(box);
 
+  // Prevent loops
   if (!form) return;
   var key = subject.toNT() + '|' + form.toNT();
-
   if (already[key]) {
     // been there done that
-    box.appendChild(dom.createTextNode('Group: see above ' + key)); // TODO fix dependency cycle to solid-panes by calling outlineManager
+    box.appendChild(dom.createTextNode('Group: see above ' + key));
+    // TODO fix dependency cycle to solid-panes by calling outlineManager
     // const plist = [$rdf.st(subject, ns.owl('sameAs'), subject)] // @@ need prev subject
     // dom.outlineManager.appendPropertyTRs(box, plist)
     // dom.appendChild(plist)
-
     return box;
   }
-
   var already2 = {};
-
   for (var x in already) {
     already2[x] = 1;
   }
-
   already2[key] = 1;
   var formDoc = form.doc ? form.doc() : null; // @@ if blank no way to know
-
   var weight0 = kb.any(form, ui('weight'), null, formDoc); // Say 0-3
-
   var weight = weight0 ? Number(weight0.value) : 1;
   if (weight > 3 || weight < 0) return box.appendChild((0, _error.errorMessageBlock)(dom, "Form Group weight ".concat(weight, " should be 0-3")));
   box.setAttribute('style', style.formGroupStyle[weight]); // Indent a group
-
   box.style.display = 'flex';
   box.style.flexDirection = 'column';
   box["class"] = 'form-weight-' + weight;
   var parts = kb.any(form, ui('parts'), null, formDoc);
   var subfields;
-
   if (parts) {
     subfields = parts.elements;
   } else {
     parts = kb.each(form, ui('part'), null, formDoc); //  Warning: unordered
-
     subfields = sortBySequence(parts);
   }
-
   if (!parts) {
     return box.appendChild((0, _error.errorMessageBlock)(dom, 'No parts to form! '));
   }
-
   for (var i = 0; i < subfields.length; i++) {
     var _field2 = subfields[i];
     var subFieldFunction = (0, _fieldFunction.fieldFunction)(dom, _field2); //
@@ -17380,18 +15111,16 @@ _fieldFunction.field[ns.ui('Form').uri] = _fieldFunction.field[ns.ui('Group').ur
       if (ok && body && body.widget && body.widget === 'select') {
         refreshOpionsSubfieldinGroup(dom, already, subject, dataDoc, callbackFunction, box, subfields);
       }
-
       callbackFunction(ok, {
         widget: 'group',
         change: body
       });
     };
-
     box.appendChild(subFieldFunction(dom, null, already2, subject, _field2, dataDoc, itemChanged));
   }
-
   return box;
 };
+
 /**          Options field: Select one or more cases
  **
  ** @param {Document} dom The HTML Document object aka Document Object Model
@@ -17405,7 +15134,6 @@ _fieldFunction.field[ns.ui('Form').uri] = _fieldFunction.field[ns.ui('Group').ur
  ** @returns {Element} The HTML widget created
  */
 
-
 _fieldFunction.field[ns.ui('Options').uri] = function (dom, container, already, subject, form, dataDoc, callbackFunction) {
   var kb = _solidLogic.store;
   var box = dom.createElement('div');
@@ -17414,20 +15142,14 @@ _fieldFunction.field[ns.ui('Options').uri] = function (dom, container, already, 
   var ui = ns.ui;
   if (container) container.appendChild(box);
   var dependingOn = kb.any(form, ui('dependingOn'));
-
   if (!dependingOn) {
     dependingOn = ns.rdf('type');
   } // @@ default to type (do we want defaults?)
-
-
   var cases = kb.each(form, ui('case'), null, formDoc);
-
   if (!cases) {
     box.appendChild((0, _error.errorMessageBlock)(dom, 'No cases to Options form. '));
   }
-
   var values;
-
   if (dependingOn.sameTerm(ns.rdf('type'))) {
     values = Object.keys(kb.findTypeURIs(subject)).map(function (uri) {
       return $rdf.sym(uri);
@@ -17435,22 +15157,17 @@ _fieldFunction.field[ns.ui('Options').uri] = function (dom, container, already, 
   } else {
     values = kb.each(subject, dependingOn);
   }
-
   for (var i = 0; i < cases.length; i++) {
     var c = cases[i];
     var tests = kb.each(c, ui('for'), null, formDoc); // There can be multiple 'for'
-
     var match = false;
-
     for (var j = 0; j < tests.length; j++) {
       var _iterator = _createForOfIteratorHelper(values),
-          _step;
-
+        _step;
       try {
         for (_iterator.s(); !(_step = _iterator.n()).done;) {
           var value = _step.value;
           var test = tests[j];
-
           if (value.sameTerm(tests) || value.termType === test.termType && value.value === test.value) {
             match = true;
           }
@@ -17461,24 +15178,21 @@ _fieldFunction.field[ns.ui('Options').uri] = function (dom, container, already, 
         _iterator.f();
       }
     }
-
     if (match) {
       var _field3 = kb.the(c, ui('use'));
-
       if (!_field3) {
         box.appendChild((0, _error.errorMessageBlock)(dom, 'No "use" part for case in form ' + form));
         return box;
       } else {
         appendForm(dom, box, already, subject, _field3, dataDoc, callbackFunction);
       }
-
       break;
     }
-  } // @@ Add box.refresh() to sync fields with values
-
-
+  }
+  // @@ Add box.refresh() to sync fields with values
   return box;
 };
+
 /**          Multiple field: zero or more similar subFields
  **
  ** @param {Document} dom The HTML Document object aka Document Object Model
@@ -17496,8 +15210,6 @@ _fieldFunction.field[ns.ui('Options').uri] = function (dom, container, already, 
  **      @param {NamedNode} property The property to be written in the data
  **      @param {Boolean} ordered Is the list an ordered one where the user defined the order
  */
-
-
 _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already, subject, form, dataDoc, callbackFunction) {
   /** Diagnostic function
   */
@@ -17506,12 +15218,11 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
       return x.toString().slice(-7);
     }).join(', ');
   }
+
   /** Add an item to the local quadstore not the UI or the web
   *
    * @param {Node} object The RDF object to be represented by this item.
    */
-
-
   function addItem() {
     return _addItem.apply(this, arguments);
   }
@@ -17519,8 +15230,6 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
    * @param {Event} anyEvent if used as an event handler
    * @param {Node} object The RDF object to be represented by this item.
    */
-
-
   function _addItem() {
     _addItem = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6() {
       var object, toBeInserted, msg;
@@ -17529,43 +15238,34 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
           switch (_context6.prev = _context6.next) {
             case 0:
               object = newThing(dataDoc); // by default just add new nodes
-
               if (!ordered) {
                 _context6.next = 8;
                 break;
               }
-
               createListIfNecessary(); // Sets list and unsavedList
-
               list.elements.push(object);
               _context6.next = 6;
               return saveListThenRefresh();
-
             case 6:
               _context6.next = 20;
               break;
-
             case 8:
               // eslint-disable-next-line multiline-ternary
               toBeInserted = reverse ? [$rdf.st(object, property, subject, dataDoc)] : [$rdf.st(subject, property, object, dataDoc)];
               _context6.prev = 9;
               _context6.next = 12;
               return kb.updater.update([], toBeInserted);
-
             case 12:
               _context6.next = 19;
               break;
-
             case 14:
               _context6.prev = 14;
               _context6.t0 = _context6["catch"](9);
               msg = 'Error adding to unordered multiple: ' + _context6.t0;
               box.appendChild((0, _error.errorMessageBlock)(dom, msg));
               debug.error(msg);
-
             case 19:
               refresh();
-
             case 20:
             case "end":
               return _context6.stop();
@@ -17575,7 +15275,6 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
     }));
     return _addItem.apply(this, arguments);
   }
-
   function renderItem(object) {
     function deleteThisItem() {
       return _deleteThisItem.apply(this, arguments);
@@ -17584,8 +15283,6 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
      * @param {Event} anyEvent if used as an event handler
      * @param {Boolean} upwards Move this up (true) or down (false).
      */
-
-
     function _deleteThisItem() {
       _deleteThisItem = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3() {
         var i, del;
@@ -17597,37 +15294,29 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
                   _context3.next = 14;
                   break;
                 }
-
                 debug.log('pre delete: ' + debugString(list.elements));
                 i = 0;
-
               case 3:
                 if (!(i < list.elements.length)) {
                   _context3.next = 12;
                   break;
                 }
-
                 if (!list.elements[i].sameTerm(object)) {
                   _context3.next = 9;
                   break;
                 }
-
                 list.elements.splice(i, 1);
                 _context3.next = 8;
                 return saveListThenRefresh();
-
               case 8:
                 return _context3.abrupt("return");
-
               case 9:
                 i++;
                 _context3.next = 3;
                 break;
-
               case 12:
                 _context3.next = 15;
                 break;
-
               case 14:
                 // unordered
                 if (kb.holds(subject, property, object, dataDoc)) {
@@ -17640,7 +15329,6 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
                     }
                   });
                 }
-
               case 15:
               case "end":
                 return _context3.stop();
@@ -17650,7 +15338,6 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
       }));
       return _deleteThisItem.apply(this, arguments);
     }
-
     function moveThisItem(_x, _x2) {
       return _moveThisItem.apply(this, arguments);
     }
@@ -17659,8 +15346,6 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
     * One possibility is to not actually make the link to the thing until
     * this callback happens to avoid widow links
      */
-
-
     function _moveThisItem() {
       _moveThisItem = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(event, upwards) {
         var i;
@@ -17671,66 +15356,50 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
                 // @@ possibly, allow shift+click to do move to top or bottom?
                 debug.log('pre move: ' + debugString(list.elements));
                 i = 0;
-
               case 2:
                 if (!(i < list.elements.length)) {
                   _context4.next = 8;
                   break;
                 }
-
                 if (!list.elements[i].sameTerm(object)) {
                   _context4.next = 5;
                   break;
                 }
-
                 return _context4.abrupt("break", 8);
-
               case 5:
                 i++;
                 _context4.next = 2;
                 break;
-
               case 8:
                 if (i === list.elements.length) {
                   alert('list move: not found element for ' + object);
                 }
-
                 if (!upwards) {
                   _context4.next = 16;
                   break;
                 }
-
                 if (!(i === 0)) {
                   _context4.next = 13;
                   break;
                 }
-
                 alert('@@ boop - already at top   -temp message'); // @@ make boop sound
-
                 return _context4.abrupt("return");
-
               case 13:
                 list.elements.splice(i - 1, 2, list.elements[i], list.elements[i - 1]);
                 _context4.next = 20;
                 break;
-
               case 16:
                 if (!(i === list.elements.length - 1)) {
                   _context4.next = 19;
                   break;
                 }
-
                 alert('@@ boop - already at bottom   -temp message'); // @@ make boop sound
-
                 return _context4.abrupt("return");
-
               case 19:
                 list.elements.splice(i, 2, list.elements[i + 1], list.elements[i]);
-
               case 20:
                 _context4.next = 22;
                 return saveListThenRefresh();
-
               case 22:
               case "end":
                 return _context4.stop();
@@ -17740,28 +15409,22 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
       }));
       return _moveThisItem.apply(this, arguments);
     }
-
     function itemDone(ok, message) {
       debug.log("Item done callback for item ".concat(object.toString()));
-
       if (!ok) {
         // when does this happen? errors typically deal with upstream
         debug.error('  Item done callback: Error: ' + message);
       }
-
       callbackFunction(ok, message);
     }
-
     log.debug('Multiple: render object: ' + object);
     var fn = (0, _fieldFunction.fieldFunction)(dom, element);
     var subField = fn(dom, null, already, object, element, dataDoc, itemDone); // subfields was: body.  moving to not passing that
-
     subField.subject = object; // Keep a back pointer between the DOM array and the RDF objects
-    // delete button and move buttons
 
+    // delete button and move buttons
     if (kb.updater.editable(dataDoc.uri)) {
       buttons.deleteButtonWithCheck(dom, subField, multipleUIlabel, deleteThisItem);
-
       if (ordered) {
         // Add controsl in a frame
         var frame = dom.createElement('div');
@@ -17775,7 +15438,6 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
                 switch (_context.prev = _context.next) {
                   case 0:
                     return _context.abrupt("return", moveThisItem(event, true));
-
                   case 1:
                   case "end":
                     return _context.stop();
@@ -17783,7 +15445,6 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
               }
             }, _callee);
           }));
-
           return function (_x3) {
             return _ref.apply(this, arguments);
           };
@@ -17795,7 +15456,6 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
                 switch (_context2.prev = _context2.next) {
                   case 0:
                     return _context2.abrupt("return", moveThisItem(event, false));
-
                   case 1:
                   case "end":
                     return _context2.stop();
@@ -17803,17 +15463,12 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
               }
             }, _callee2);
           }));
-
           return function (_x4) {
             return _ref2.apply(this, arguments);
           };
         }());
-
         var _shim = dom.createElement('div');
-
         _shim.appendChild(subField); // Subfield has its own layout
-
-
         frame.appendChild(_shim);
         frame.appendChild(moveUpButton);
         frame.appendChild(moveDownButton);
@@ -17821,21 +15476,18 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
         moveDownButton.style.gridColumn = 2;
         moveUpButton.style.gridRow = 1;
         moveDownButton.style.padding = '0em'; // don't take too much space
-
         moveUpButton.style.padding = '0em';
         moveDownButton.style.gridRow = 2;
         _shim.style.gridColumn = 1;
         _shim.style.gridRowStart = 'span 2'; // Cover both rows
         // shim.style.gridRowEnd = 2 // Cover both rows
-
         return frame;
       }
     }
-
     return subField; // unused
   } // renderItem
-  /// ///////// Body of Multiple form field implementation
 
+  /// ///////// Body of Multiple form field implementation
 
   var plusIconURI = _iconBase.icons.iconBase + 'noun_19460_green.svg'; // white plus in green circle
 
@@ -17846,44 +15498,33 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
   var shim = box; // no  shim
   // We don't indent multiple as it is a sort of a prefix of the next field and has contents of one.
   // box.setAttribute('style', 'padding-left: 2em; border: 0.05em solid green;')  // Indent a multiple
-
   var ui = ns.ui;
   if (container) container.appendChild(box);
   var orderedNode = kb.any(form, ui('ordered'));
   var ordered = orderedNode ? $rdf.Node.toJS(orderedNode) : false;
   var property = kb.any(form, ui('property'));
   var reverse = kb.anyJS(form, ui('reverse'), null, formDoc);
-
   if (!property) {
     box.appendChild((0, _error.errorMessageBlock)(dom, 'No property to multiple: ' + form)); // used for arcs in the data
-
     return shim;
   }
-
   var multipleUIlabel = kb.any(form, ui('label'));
   if (!multipleUIlabel) multipleUIlabel = utils.label(property);
   var min = kb.any(form, ui('min')); // This is the minimum number -- default 0
-
   min = min ? 0 + min.value : 0;
   var element = kb.any(form, ui('part')); // This is the form to use for each one
-
   if (!element) {
     box.appendChild((0, _error.errorMessageBlock)(dom, 'No part to multiple: ' + form));
     return shim;
   }
-
   var body = box.appendChild(dom.createElement('div'));
   body.style.display = 'flex';
   body.style.flexDirection = 'column';
   var list; // The RDF collection which keeps the ordered version or null
-
   var values; // Initial values - always an array.  Even when no list yet.
-
   values = reverse ? kb.any(null, property, subject, dataDoc) : kb.any(subject, property, null, dataDoc);
-
   if (ordered) {
     list = reverse ? kb.any(null, property, subject, dataDoc) : kb.any(subject, property, null, dataDoc);
-
     if (list) {
       values = list.elements;
     } else {
@@ -17892,15 +15533,13 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
   } else {
     values = reverse ? kb.each(null, property, subject, dataDoc) : kb.each(subject, property, null, dataDoc);
     list = null;
-  } // Add control on the bottom for adding more items
-
-
+  }
+  // Add control on the bottom for adding more items
   if (kb.updater.editable(dataDoc.uri)) {
     var tail = box.appendChild(dom.createElement('div'));
     tail.style.padding = '0.5em';
     var img = tail.appendChild(dom.createElement('img'));
     img.setAttribute('src', plusIconURI); //  plus sign
-
     img.setAttribute('style', 'margin: 0.2em; width: 1.5em; height:1.5em');
     img.title = 'Click to add another ' + multipleUIlabel;
     var prompt = dom.createElement('span');
@@ -17913,7 +15552,6 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
               case 0:
                 _context5.next = 2;
                 return addItem();
-
               case 2:
               case "end":
                 return _context5.stop();
@@ -17921,18 +15559,15 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
           }
         }, _callee5);
       }));
-
       return function (_x5) {
         return _ref3.apply(this, arguments);
       };
     }(), true);
     tail.appendChild(prompt);
   }
-
   function createListIfNecessary() {
     if (!list) {
       list = new $rdf.Collection();
-
       if (reverse) {
         kb.add(list, property, subject, dataDoc);
       } else {
@@ -17940,11 +15575,9 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
       }
     }
   }
-
   function saveListThenRefresh() {
     return _saveListThenRefresh.apply(this, arguments);
   }
-
   function _saveListThenRefresh() {
     _saveListThenRefresh = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7() {
       return _regenerator["default"].wrap(function _callee7$(_context7) {
@@ -17957,20 +15590,16 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
               _context7.prev = 2;
               _context7.next = 5;
               return kb.fetcher.putBack(dataDoc);
-
             case 5:
               _context7.next = 11;
               break;
-
             case 7:
               _context7.prev = 7;
               _context7.t0 = _context7["catch"](2);
               box.appendChild((0, _error.errorMessageBlock)(dom, 'Error trying to put back a list: ' + _context7.t0));
               return _context7.abrupt("return");
-
             case 11:
               refresh();
-
             case 12:
             case "end":
               return _context7.stop();
@@ -17980,10 +15609,8 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
     }));
     return _saveListThenRefresh.apply(this, arguments);
   }
-
   function refresh() {
     var vals;
-
     if (ordered) {
       var li = reverse ? kb.the(null, property, subject, dataDoc) : kb.the(subject, property, null, dataDoc);
       vals = li ? li.elements : [];
@@ -17994,15 +15621,11 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
 
     utils.syncTableToArrayReOrdered(body, vals, renderItem);
   }
-
   body.refresh = refresh; // Allow live update
-
   refresh();
-
   function asyncStuff() {
     return _asyncStuff.apply(this, arguments);
   }
-
   function _asyncStuff() {
     _asyncStuff = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee8() {
       var extra, j;
@@ -18011,33 +15634,26 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
           switch (_context8.prev = _context8.next) {
             case 0:
               extra = min - values.length;
-
               if (!(extra > 0)) {
                 _context8.next = 12;
                 break;
               }
-
               j = 0;
-
             case 3:
               if (!(j < extra)) {
                 _context8.next = 10;
                 break;
               }
-
               debug.log('Adding extra: min ' + min);
               _context8.next = 7;
               return addItem();
-
             case 7:
               j++;
               _context8.next = 3;
               break;
-
             case 10:
               _context8.next = 12;
               return saveListThenRefresh();
-
             case 12:
             case "end":
               return _context8.stop();
@@ -18047,7 +15663,6 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
     }));
     return _asyncStuff.apply(this, arguments);
   }
-
   asyncStuff().then(function () {
     debug.log(' Multiple render: async stuff ok');
   }, function (err) {
@@ -18064,7 +15679,6 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
 // or use HTML5: http://www.w3.org/TR/2011/WD-html-markup-20110113/input.date.html
 //
 
-
 _fieldFunction.field[ns.ui('PhoneField').uri] = _basic.basicField;
 _fieldFunction.field[ns.ui('EmailField').uri] = _basic.basicField;
 _fieldFunction.field[ns.ui('ColorField').uri] = _basic.basicField;
@@ -18078,6 +15692,7 @@ _fieldFunction.field[ns.ui('FloatField').uri] = _basic.basicField;
 _fieldFunction.field[ns.ui('TextField').uri] = _basic.basicField;
 _fieldFunction.field[ns.ui('SingleLineTextField').uri] = _basic.basicField;
 _fieldFunction.field[ns.ui('NamedNodeURIField').uri] = _basic.basicField;
+
 /*          Multiline Text field
  **
  */
@@ -18088,11 +15703,9 @@ _fieldFunction.field[ns.ui('MultiLineTextField').uri] = function (dom, container
   var formDoc = form.doc ? form.doc() : null; // @@ if blank no way to know
 
   var property = kb.any(form, ui('property'));
-
   if (!property) {
     return (0, _error.errorMessageBlock)(dom, 'No property to text field: ' + form);
   }
-
   var box = dom.createElement('div');
   box.style.display = 'flex';
   box.style.flexDirection = 'row';
@@ -18104,58 +15717,48 @@ _fieldFunction.field[ns.ui('MultiLineTextField').uri] = function (dom, container
   var text = kb.anyJS(subject, property, null, dataDoc) || '';
   var editable = kb.updater.editable(dataDoc.uri);
   var suppressEmptyUneditable = form && kb.anyJS(form, ns.ui('suppressEmptyUneditable'), null, formDoc);
-
   if (!editable && suppressEmptyUneditable && text === '') {
     box.style.display = 'none';
   }
-
   var field = makeDescription(dom, kb, subject, property, dataDoc, callbackFunction);
   right.appendChild(field);
   if (container) container.appendChild(box);
   return box;
 };
+
 /*          Boolean field  and Tri-state version (true/false/null)
  **
  ** @@ todo: remove tristate param
  */
-
-
 function booleanField(dom, container, already, subject, form, dataDoc, callbackFunction, tristate) {
   var ui = ns.ui;
   var kb = _solidLogic.store;
   var property = kb.any(form, ui('property'));
-
   if (!property) {
     var errorBlock = (0, _error.errorMessageBlock)(dom, 'No property to boolean field: ' + form);
     if (container) container.appendChild(errorBlock);
     return errorBlock;
   }
-
   var lab = kb.any(form, ui('label'));
   if (!lab) lab = utils.label(property, true); // Init capital
-
   dataDoc = (0, _basic.fieldStore)(subject, property, dataDoc);
   var state = kb.any(subject, property);
-
   if (state === undefined) {
     state = false;
   } // @@ sure we want that -- or three-state?
-
-
   var ins = $rdf.st(subject, property, true, dataDoc);
   var del = $rdf.st(subject, property, false, dataDoc);
   var box = buildCheckboxForm(dom, kb, lab, del, ins, form, dataDoc, tristate);
   if (container) container.appendChild(box);
   return box;
 }
-
 _fieldFunction.field[ns.ui('BooleanField').uri] = function (dom, container, already, subject, form, dataDoc, callbackFunction) {
   return booleanField(dom, container, already, subject, form, dataDoc, callbackFunction, false);
 };
-
 _fieldFunction.field[ns.ui('TristateField').uri] = function (dom, container, already, subject, form, dataDoc, callbackFunction) {
   return booleanField(dom, container, already, subject, form, dataDoc, callbackFunction, true);
 };
+
 /*          Classifier field
  **
  **  Nested categories
@@ -18163,27 +15766,23 @@ _fieldFunction.field[ns.ui('TristateField').uri] = function (dom, container, alr
  ** @@ To do: If a classification changes, then change any dependent Options fields.
  */
 
-
 _fieldFunction.field[ns.ui('Classifier').uri] = function (dom, container, already, subject, form, dataDoc, callbackFunction) {
   var kb = _solidLogic.store;
   var ui = ns.ui;
   var category = kb.any(form, ui('category'));
-
   if (!category) {
     return (0, _error.errorMessageBlock)(dom, 'No category for classifier: ' + form);
   }
-
   log.debug('Classifier: dataDoc=' + dataDoc);
-
   var checkOptions = function checkOptions(ok, body) {
     if (!ok) return callbackFunction(ok, body);
     return callbackFunction(ok, body);
   };
-
   var box = makeSelectForNestedCategory(dom, kb, subject, category, dataDoc, checkOptions);
   if (container) container.appendChild(box);
   return box;
 };
+
 /**         Choice field
  **
  **  Not nested.  Generates a link to something from a given class.
@@ -18204,7 +15803,6 @@ _fieldFunction.field[ns.ui('Classifier').uri] = function (dom, container, alread
  ** TODO: according to ontology ui:choice can also have ns.ui('default') - this is not implemented yet
  */
 
-
 _fieldFunction.field[ns.ui('Choice').uri] = function (dom, container, already, subject, form, dataDoc, callbackFunction) {
   var ui = ns.ui;
   var kb = _solidLogic.store;
@@ -18212,8 +15810,8 @@ _fieldFunction.field[ns.ui('Choice').uri] = function (dom, container, already, s
 
   var p;
   var box = dom.createElement('div');
-  box.setAttribute('class', 'choiceBox'); // Set flexDirection column?
-
+  box.setAttribute('class', 'choiceBox');
+  // Set flexDirection column?
   if (container) container.appendChild(box);
   var lhs = dom.createElement('div');
   lhs.setAttribute('class', 'formFieldName choiceBox-label');
@@ -18222,18 +15820,14 @@ _fieldFunction.field[ns.ui('Choice').uri] = function (dom, container, already, s
   rhs.setAttribute('class', 'formFieldValue choiceBox-selectBox');
   box.appendChild(rhs);
   var property = kb.any(form, ui('property'));
-
   if (!property) {
     return box.appendChild((0, _error.errorMessageBlock)(dom, 'No property for Choice: ' + form));
   }
-
   lhs.appendChild((0, _basic.fieldLabel)(dom, property, form));
   var uiFrom = kb.any(form, ui('from'));
-
   if (!uiFrom) {
     return (0, _error.errorMessageBlock)(dom, "No 'from' for Choice: " + form);
   }
-
   var subForm = kb.any(form, ui('use')); // Optional
   // const follow = kb.anyJS(form, ui('follow'), null, formDoc) // data doc moves to new subject?
 
@@ -18242,78 +15836,65 @@ _fieldFunction.field[ns.ui('Choice').uri] = function (dom, container, already, s
     subForm: subForm,
     disambiguate: false
   };
-
   function getSelectorOptions() {
     var possible = [];
     var possibleProperties;
     possible = kb.each(undefined, ns.rdf('type'), uiFrom, formDoc);
-
     for (var x in findMembersNT(kb, uiFrom, dataDoc)) {
       possible.push(kb.fromNT(x));
     } // Use rdfs
 
-
     if (uiFrom.sameTerm(ns.rdfs('Class'))) {
       for (p in buttons.allClassURIs()) {
         possible.push(kb.sym(p));
-      } // log.debug("%%% Choice field: possible.length 2 = "+possible.length)
-
+      }
+      // log.debug("%%% Choice field: possible.length 2 = "+possible.length)
     } else if (uiFrom.sameTerm(ns.rdf('Property'))) {
       possibleProperties = buttons.propertyTriage(kb);
-
       for (p in possibleProperties.op) {
         possible.push(kb.fromNT(p));
       }
-
       for (p in possibleProperties.dp) {
         possible.push(kb.fromNT(p));
       }
-
       opts.disambiguate = true; // This is a big class, and the labels won't be enough.
     } else if (uiFrom.sameTerm(ns.owl('ObjectProperty'))) {
       possibleProperties = buttons.propertyTriage(kb);
-
       for (p in possibleProperties.op) {
         possible.push(kb.fromNT(p));
       }
-
       opts.disambiguate = true;
     } else if (uiFrom.sameTerm(ns.owl('DatatypeProperty'))) {
       possibleProperties = buttons.propertyTriage(kb);
-
       for (p in possibleProperties.dp) {
         possible.push(kb.fromNT(p));
       }
-
       opts.disambiguate = true;
     }
+    return possible;
+    // return sortByLabel(possible)
+  }
 
-    return possible; // return sortByLabel(possible)
-  } // TODO: this checks for any occurrence, regardless of true or false setting
-
-
+  // TODO: this checks for any occurrence, regardless of true or false setting
   if (kb.any(form, ui('canMintNew'))) {
     opts.mint = '* Create new *'; // @@ could be better
   }
 
   var multiSelect = kb.any(form, ui('multiselect')); // Optional
-
   if (multiSelect) opts.multiSelect = true;
   var selector;
-
   rhs.refresh = function () {
     // from ui:property
     var selectedOptions = kb.each(subject, property, null, dataDoc).map(function (object) {
       return object.value;
-    }); // from ui:from + ui:property
-
+    });
+    // from ui:from + ui:property
     var possibleOptions = getSelectorOptions();
     possibleOptions.push(selectedOptions);
     possibleOptions = sortByLabel(possibleOptions);
     selector = makeSelectForChoice(dom, rhs, kb, subject, property, possibleOptions, selectedOptions, uiFrom, opts, dataDoc, callbackFunction);
     rhs.innerHTML = '';
     rhs.appendChild(selector);
-
     if (multiSelect) {
       var multiSelectDiv = new _multiSelect.IconicMultiSelect({
         placeholder: selector.selected,
@@ -18329,20 +15910,16 @@ _fieldFunction.field[ns.ui('Choice').uri] = function (dom, container, already, s
             return value !== event.value;
           });
         }
-
         if (event.action === 'CLEAR_ALL_OPTIONS') {
           selectedOptions = [];
         }
-
         if (event.action === 'ADD_OPTION') {
           var stringValue = event.value + '';
-
           if (stringValue.includes('Create new')) {
             var newObject = newThing(dataDoc);
             var is = [];
             is.push($rdf.st(subject, property, kb.sym(newObject), dataDoc));
             if (uiFrom) is.push($rdf.st(newObject, ns.rdf('type'), kb.sym(uiFrom), dataDoc));
-
             if (subForm) {
               addSubFormChoice(dom, rhs, {}, $rdf.sym(newObject), subForm, dataDoc, function (ok, body) {
                 if (ok) {
@@ -18361,22 +15938,20 @@ _fieldFunction.field[ns.ui('Choice').uri] = function (dom, container, already, s
             }
           } else selectedOptions.push(event.value);
         }
-
         selector.update(selectedOptions);
       });
     }
   };
-
   rhs.refresh();
   if (selector && selector.refresh) selector.refresh();
   return box;
 };
-
 function addSubFormChoice(dom, selectDiv, already, subject, subForm, dataDoc, callbackFunction) {
   (0, _fieldFunction.fieldFunction)(dom, subForm)(dom, selectDiv, already, subject, subForm, dataDoc, callbackFunction);
-} //          Documentation - non-interactive fields
-//
+}
 
+//          Documentation - non-interactive fields
+//
 
 _fieldFunction.field[ns.ui('Comment').uri] = _fieldFunction.field[ns.ui('Heading').uri] = function (dom, container, already, subject, form, dataDoc, _callbackFunction) {
   var ui = ns.ui;
@@ -18391,23 +15966,22 @@ _fieldFunction.field[ns.ui('Comment').uri] = _fieldFunction.field[ns.ui('Heading
   if (container) container.appendChild(box);
   var p = box.appendChild(dom.createElement(params.element));
   p.textContent = contents;
-  (0, _formStyle.setFieldStyle)(p, form); // Some headings and prompts are only useful to guide user input
+  (0, _formStyle.setFieldStyle)(p, form);
 
+  // Some headings and prompts are only useful to guide user input
   var suppressIfUneditable = kb.anyJS(form, ns.ui('suppressIfUneditable'), null, formDoc);
   var editable = kb.updater.editable(dataDoc.uri);
-
   if (suppressIfUneditable && !editable) {
     box.style.display = 'none';
   }
-
   return box;
-}; // A button for editing a form (in place, at the moment)
+};
+
+// A button for editing a form (in place, at the moment)
 //
 //  When editing forms, make it yellow, when editing thr form form, pink
 // Help people understand how many levels down they are.
 //
-
-
 function editFormButton(dom, container, form, dataDoc, callbackFunction) {
   var b = dom.createElement('button');
   b.setAttribute('type', 'button');
@@ -18419,10 +15993,10 @@ function editFormButton(dom, container, form, dataDoc, callbackFunction) {
   }, true);
   return b;
 }
-
 function appendForm(dom, container, already, subject, form, dataDoc, itemDone) {
   return (0, _fieldFunction.fieldFunction)(dom, form)(dom, container, already, subject, form, dataDoc, itemDone);
 }
+
 /**          Find list of properties for class
 //
 // Three possible sources: Those mentioned in schemas, which exludes many
@@ -18431,87 +16005,72 @@ function appendForm(dom, container, already, subject, form, dataDoc, itemDone) {
 // being used with this class.
 */
 
-
 function propertiesForClass(kb, c) {
   var explicit = kb.each(undefined, ns.rdf('range'), c);
-  [ns.rdfs('comment'), ns.dc('title'), // Generic things
+  [ns.rdfs('comment'), ns.dc('title'),
+  // Generic things
   ns.foaf('name'), ns.foaf('homepage')].forEach(function (x) {
     explicit.push(x);
   });
   var members = kb.each(undefined, ns.rdf('type'), c);
   if (members.length > 60) members = members.slice(0, 60); // Array supports slice?
-
   var used = {};
-
   for (var i = 0; i < (members.length > 60 ? 60 : members.length); i++) {
     kb.statementsMatching(members[i], undefined, undefined).forEach(function (st) {
       used[st.predicate.uri] = true;
     });
   }
-
   explicit.forEach(function (p) {
     used[p.uri] = true;
   });
   var result = [];
-
   for (var uri in used) {
     result.push(kb.sym(uri));
   }
-
   return result;
 }
+
 /** Find the closest class
 * @param kb The quad store
 * @param cla - the URI of the class
 * @param prop
 */
-
-
 function findClosest(kb, cla, prop) {
   var agenda = [kb.sym(cla)]; // ordered - this is breadth first search
-
   while (agenda.length > 0) {
     var c = agenda.shift(); // first
-
     var lists = kb.each(c, prop);
     log.debug('Lists for ' + c + ', ' + prop + ': ' + lists.length);
     if (lists.length !== 0) return lists;
     var supers = kb.each(c, ns.rdfs('subClassOf'));
-
     for (var i = 0; i < supers.length; i++) {
       agenda.push(supers[i]);
       log.debug('findClosest: add super: ' + supers[i]);
     }
   }
-
   return [];
-} // Which forms apply to a given existing subject?
+}
 
+// Which forms apply to a given existing subject?
 
 function formsFor(subject) {
   var kb = _solidLogic.store;
   log.debug('formsFor: subject=' + subject);
   var t = kb.findTypeURIs(subject);
   var t1;
-
   for (t1 in t) {
     log.debug('   type: ' + t1);
   }
-
   var bottom = kb.bottomTypeURIs(t); // most specific
-
   var candidates = [];
-
   for (var b in bottom) {
     // Find the most specific
     log.debug('candidatesFor: trying bottom type =' + b);
     candidates = candidates.concat(findClosest(kb, b, ns.ui('creationForm')));
     candidates = candidates.concat(findClosest(kb, b, ns.ui('annotationForm')));
   }
-
   return candidates;
 }
-
 function sortBySequence(list) {
   var subfields = list.map(function (p) {
     var k = kb.any(p, ns.ui('sequence'));
@@ -18524,7 +16083,6 @@ function sortBySequence(list) {
     return pair[1];
   });
 }
-
 function sortByLabel(list) {
   var subfields = list.map(function (p) {
     return [utils.label(p).toLowerCase(), p];
@@ -18534,13 +16092,12 @@ function sortByLabel(list) {
     return pair[1];
   });
 }
+
 /** Button to add a new whatever using a form
 //
 // @param form - optional form , else will look for one
 // @param dataDoc - optional dataDoc else will prompt for one (unimplemented)
 */
-
-
 function newButton(dom, kb, subject, predicate, theClass, form, dataDoc, callbackFunction) {
   var b = dom.createElement('button');
   b.setAttribute('type', 'button');
@@ -18550,6 +16107,7 @@ function newButton(dom, kb, subject, predicate, theClass, form, dataDoc, callbac
   }, false);
   return b;
 }
+
 /**      Prompt for new object of a given class
 //
 // @param dom - the document DOM for the user interface
@@ -18562,14 +16120,10 @@ function newButton(dom, kb, subject, predicate, theClass, form, dataDoc, callbac
 // @param callbackFunction - takes (boolean ok, string errorBody)
 // @returns a dom object with the form DOM
 */
-
-
 function promptForNew(dom, kb, subject, predicate, theClass, form, dataDoc, callbackFunction) {
   var box = dom.createElement('form');
-
   if (!form) {
     var lists = findClosest(kb, theClass.uri, ns.ui('creationForm'));
-
     if (lists.length === 0) {
       var p = box.appendChild(dom.createElement('p'));
       p.textContent = 'I am sorry, you need to provide information about a ' + utils.label(theClass) + " but I don't know enough information about those to ask you.";
@@ -18577,52 +16131,44 @@ function promptForNew(dom, kb, subject, predicate, theClass, form, dataDoc, call
       b.setAttribute('type', 'button');
       b.setAttribute('style', 'float: right;');
       b.innerHTML = 'Goto ' + utils.label(theClass);
-      b.addEventListener('click', // TODO fix dependency cycle to solid-panes by calling outlineManager
+      b.addEventListener('click',
+      // TODO fix dependency cycle to solid-panes by calling outlineManager
       function (_e) {
         dom.outlineManager.GotoSubject(theClass, true, undefined, true, undefined);
       }, false);
       return box;
     }
-
     log.debug('lists[0] is ' + lists[0]);
     form = lists[0]; // Pick any one
   }
 
   log.debug('form is ' + form);
   box.setAttribute('style', "border: 0.05em solid ".concat(style.formBorderColor, "; color: ").concat(style.formBorderColor)); // @@color?
-
   box.innerHTML = '<h3>New ' + utils.label(theClass) + '</h3>';
   var formFunction = (0, _fieldFunction.fieldFunction)(dom, form);
   var object = newThing(dataDoc);
   var gotButton = false;
-
   var itemDone = function itemDone(ok, body) {
     if (!ok) return callbackFunction(ok, body);
     var insertMe = [];
-
     if (subject && !kb.holds(subject, predicate, object, dataDoc)) {
       insertMe.push($rdf.st(subject, predicate, object, dataDoc));
     }
-
     if (subject && !kb.holds(object, ns.rdf('type'), theClass, dataDoc)) {
       insertMe.push($rdf.st(object, ns.rdf('type'), theClass, dataDoc));
     }
-
     if (insertMe.length) {
       kb.updater.update([], insertMe, linkDone);
     } else {
       callbackFunction(true, body);
     }
-
     if (!gotButton) {
       gotButton = box.appendChild(buttons.linkButton(dom, object));
     }
   };
-
   function linkDone(uri, ok, body) {
     return callbackFunction(ok, body);
   }
-
   log.info('paneUtils Object is ' + object);
   var f = formFunction(dom, box, {}, object, form, dataDoc, itemDone);
   var rb = buttons.removeButton(dom, f);
@@ -18630,7 +16176,6 @@ function promptForNew(dom, kb, subject, predicate, theClass, form, dataDoc, call
   box.AJAR_subject = object;
   return box;
 }
-
 function makeDescription(dom, kb, subject, predicate, dataDoc, callbackFunction) {
   var group = dom.createElement('div');
   var desc = kb.anyJS(subject, predicate, null, dataDoc) || '';
@@ -18639,7 +16184,6 @@ function makeDescription(dom, kb, subject, predicate, dataDoc, callbackFunction)
   field.rows = desc ? desc.split('\n').length + 2 : 2;
   field.cols = 80;
   field.setAttribute('style', style.multilineTextInputStyle);
-
   if (desc !== null) {
     field.value = desc;
   } else {
@@ -18650,7 +16194,6 @@ function makeDescription(dom, kb, subject, predicate, dataDoc, callbackFunction)
 
   group.refresh = function () {
     var v = kb.any(subject, predicate, null, dataDoc);
-
     if (v && v.value !== field.value) {
       field.value = v.value; // don't touch widget if no change
       // @@ this is the place to color the field from the user who chanaged it
@@ -18660,10 +16203,8 @@ function makeDescription(dom, kb, subject, predicate, dataDoc, callbackFunction)
   function saveChange(_e) {
     submit.disabled = true;
     submit.setAttribute('style', 'visibility: hidden; float: right;'); // Keep UI clean
-
     field.disabled = true;
     field.style.color = style.textInputColorPending; // setAttribute('style', style + 'color: gray;') // pending
-
     var ds = kb.statementsMatching(subject, predicate, null, dataDoc);
     var is = $rdf.st(subject, predicate, field.value, dataDoc);
     kb.updater.update(ds, is, function (uri, ok, body) {
@@ -18673,27 +16214,22 @@ function makeDescription(dom, kb, subject, predicate, dataDoc, callbackFunction)
       } else {
         group.appendChild((0, _error.errorMessageBlock)(dom, 'Error (while saving change to ' + dataDoc.uri + '): ' + body));
       }
-
       if (callbackFunction) {
         callbackFunction(ok, body);
       }
     });
   }
-
   var editable = kb.updater.editable(dataDoc.uri);
   var submit;
-
   if (editable) {
     submit = widgets.continueButton(dom, saveChange);
     submit.disabled = true; // until the filled has been modified
-
     submit.style.visibility = 'hidden';
     submit.style["float"] = 'right';
     group.appendChild(submit);
     field.addEventListener('keyup', function (_e) {
       // Green means has been changed, not saved yet
       field.style.color = 'green'; // setAttribute('style', style + 'color: green;')
-
       if (submit) {
         submit.disabled = false;
         submit.style.visibility = ''; // Remove visibility: hidden
@@ -18702,12 +16238,11 @@ function makeDescription(dom, kb, subject, predicate, dataDoc, callbackFunction)
     field.addEventListener('change', saveChange, true);
   } else {
     field.disabled = true; // @@ change color too
-
     field.style.backgroundColor = style.textInputBackgroundColorUneditable;
   }
-
   return group;
 }
+
 /** Make SELECT element to select options
 //
 // @param subject - a term, the subject of the statement(s) being edited.
@@ -18721,35 +16256,25 @@ function makeDescription(dom, kb, subject, predicate, dataDoc, callbackFunction)
 // @param dataDoc - The web document being edited
 // @param callbackFunction - takes (boolean ok, string errorBody)
 */
-
-
 function makeSelectForClassifierOptions(dom, kb, subject, predicate, possible, options, dataDoc, callbackFunction) {
   log.debug('Select list length now ' + possible.length);
   var n = 0;
   var uris = {}; // Count them
-
   var editable = kb.updater.editable(dataDoc.uri);
-
   for (var i = 0; i < possible.length; i++) {
     var sub = possible[i]; // @@ Maybe; make this so it works with blank nodes too
-
     if (!sub.uri) debug.warn("makeSelectForClassifierOptions: option does not have an uri: ".concat(sub, ", with predicate: ").concat(predicate));
     if (!sub.uri || sub.uri in uris) continue;
     uris[sub.uri] = true;
     n++;
   } // uris is now the set of possible options
-
-
   if (n === 0 && !options.mint) {
     return (0, _error.errorMessageBlock)(dom, "Can't do selector with no options, subject= " + subject + ' property = ' + predicate + '.');
   }
-
   log.debug('makeSelectForClassifierOptions: dataDoc=' + dataDoc);
   var actual;
-
   var getActual = function getActual() {
     actual = {};
-
     if (predicate.sameTerm(ns.rdf('type'))) {
       actual = kb.findTypeURIs(subject);
     } else {
@@ -18757,29 +16282,21 @@ function makeSelectForClassifierOptions(dom, kb, subject, predicate, possible, o
         actual[x.uri] = true;
       });
     }
-
     return actual;
   };
-
   actual = getActual();
-
   var onChange = function onChange(_e) {
     select.disabled = true; // until data written back - gives user feedback too
-
     var ds = [];
     var is = [];
-
     var removeValue = function removeValue(t) {
       if (kb.holds(subject, predicate, t, dataDoc)) {
         ds.push($rdf.st(subject, predicate, t, dataDoc));
       }
     };
-
     var newObject;
-
     for (var _i = 0; _i < select.options.length; _i++) {
       var opt = select.options[_i];
-
       if (opt.selected && opt.AJAR_mint) {
         if (options.mintClass) {
           var thisForm = promptForNew(dom, kb, subject, predicate, options.mintClass, null, dataDoc, function (ok, body) {
@@ -18789,62 +16306,49 @@ function makeSelectForClassifierOptions(dom, kb, subject, predicate, possible, o
               }); // @@ if ok, need some form of refresh of the select for the new thing
             }
           });
+
           select.parentNode.appendChild(thisForm);
           newObject = thisForm.AJAR_subject;
         } else {
           newObject = newThing(dataDoc);
         }
-
         is.push($rdf.st(subject, predicate, newObject, dataDoc));
-
         if (options.mintStatementsFun) {
           is = is.concat(options.mintStatementsFun(newObject));
         }
       }
-
       if (!opt.AJAR_uri) continue; // a prompt or mint
-
       if (opt.selected && !(opt.AJAR_uri in actual)) {
         // new class
         is.push($rdf.st(subject, predicate, kb.sym(opt.AJAR_uri), dataDoc));
       }
-
       if (!opt.selected && opt.AJAR_uri in actual) {
         // old class
         removeValue(kb.sym(opt.AJAR_uri));
       }
-
       if (opt.selected) select.currentURI = opt.AJAR_uri;
     }
-
     var sel = select.subSelect; // All subclasses must also go
-
     while (sel && sel.currentURI) {
       removeValue(kb.sym(sel.currentURI));
       sel = sel.subSelect;
     }
-
     sel = select.superSelect; // All superclasses are redundant
-
     while (sel && sel.currentURI) {
       removeValue(kb.sym(sel.currentURI));
       sel = sel.superSelect;
     }
-
     function doneNew(ok, _body) {
       callbackFunction(ok, {
         widget: 'select',
         event: 'new'
       });
     }
-
     log.info('makeSelectForClassifierOptions: data doc = ' + dataDoc);
     kb.updater.update(ds, is, function (uri, ok, body) {
       actual = getActual(); // refresh
-
       if (ok) {
         select.disabled = false; // data written back
-
         if (newObject) {
           var fn = (0, _fieldFunction.fieldFunction)(dom, options.subForm);
           fn(dom, select.parentNode, {}, newObject, options.subForm, dataDoc, doneNew);
@@ -18852,37 +16356,30 @@ function makeSelectForClassifierOptions(dom, kb, subject, predicate, possible, o
       } else {
         return select.parentNode.appendChild((0, _error.errorMessageBlock)(dom, 'Error updating data in select: ' + body));
       }
-
       if (callbackFunction) callbackFunction(ok, {
         widget: 'select',
         event: 'change'
       });
     });
   };
-
   var select = dom.createElement('select');
   select.setAttribute('style', style.formSelectSTyle);
   if (options.multiple) select.setAttribute('multiple', 'true');
   select.currentURI = null;
-
   select.refresh = function () {
     actual = getActual(); // refresh
-
     for (var _i2 = 0; _i2 < select.children.length; _i2++) {
       var option = select.children[_i2];
-
       if (option.AJAR_uri) {
         option.selected = option.AJAR_uri in actual;
       }
     }
-
     select.disabled = false; // unlocked any conflict we had got into
   };
 
   for (var uri in uris) {
     var c = kb.sym(uri);
     var option = dom.createElement('option');
-
     if (options.disambiguate) {
       option.appendChild(dom.createTextNode(utils.labelWithOntology(c, true))); // Init. cap
     } else {
@@ -18890,40 +16387,33 @@ function makeSelectForClassifierOptions(dom, kb, subject, predicate, possible, o
     }
 
     var backgroundColor = kb.any(c, kb.sym('http://www.w3.org/ns/ui#backgroundColor'));
-
     if (backgroundColor) {
       option.setAttribute('style', 'background-color: ' + backgroundColor.value + '; ');
     }
-
     option.AJAR_uri = uri;
-
     if (uri in actual) {
       option.setAttribute('selected', 'true');
-      select.currentURI = uri; // dump("Already in class: "+ uri+"\n")
+      select.currentURI = uri;
+      // dump("Already in class: "+ uri+"\n")
     }
 
     select.appendChild(option);
   }
-
   if (editable && options.mint) {
     var mint = dom.createElement('option');
     mint.appendChild(dom.createTextNode(options.mint));
     mint.AJAR_mint = true; // Flag it
-
     select.insertBefore(mint, select.firstChild);
   }
-
   if (select.currentURI == null && !options.multiple) {
     var prompt = dom.createElement('option');
     prompt.appendChild(dom.createTextNode(options.nullLabel));
     select.insertBefore(prompt, select.firstChild);
     prompt.selected = true;
   }
-
   if (editable) {
     select.addEventListener('change', onChange, false);
   }
-
   return select;
 } // makeSelectForClassifierOptions
 
@@ -18938,35 +16428,25 @@ function makeSelectForClassifierOptions(dom, kb, subject, predicate, possible, o
 // @param dataDoc - The web document being edited
 // @param callbackFunction - takes (boolean ok, string errorBody)
 */
-
-
 function makeSelectForOptions(dom, kb, subject, predicate, possible, options, dataDoc, callbackFunction) {
   log.debug('Select list length now ' + possible.length);
   var n = 0;
   var uris = {}; // Count them
-
   var editable = kb.updater.editable(dataDoc.uri);
-
   for (var i = 0; i < possible.length; i++) {
     var sub = possible[i]; // @@ Maybe; make this so it works with blank nodes too
-
     if (!sub.uri) debug.warn("makeSelectForOptions: option does not have an uri: ".concat(sub, ", with predicate: ").concat(predicate));
     if (!sub.uri || sub.uri in uris) continue;
     uris[sub.uri] = true;
     n++;
   } // uris is now the set of possible options
-
-
   if (n === 0) {
     return (0, _error.errorMessageBlock)(dom, "Can't do selector with no options, subject= " + subject + ' property = ' + predicate + '.');
   }
-
   log.debug('makeSelectForOptions: dataDoc=' + dataDoc);
   var actual;
-
   var getActual = function getActual() {
     actual = {};
-
     if (predicate.sameTerm(ns.rdf('type'))) {
       actual = kb.findTypeURIs(subject);
     } else {
@@ -18976,94 +16456,72 @@ function makeSelectForOptions(dom, kb, subject, predicate, possible, options, da
         }
       });
     }
-
     return actual;
   };
-
   actual = getActual();
-
   var onChange = function onChange(_e) {
     select.disabled = true; // until data written back - gives user feedback too
-
     var ds = [];
     var is = [];
-
     var removeValue = function removeValue(t) {
       if (kb.holds(subject, predicate, t, dataDoc)) {
         ds.push($rdf.st(subject, predicate, t, dataDoc));
       }
     };
-
     for (var _i3 = 0; _i3 < select.options.length; _i3++) {
       var opt = select.options[_i3];
       if (!opt.AJAR_uri) continue; // a prompt or mint
-
       if (opt.selected && !(opt.AJAR_uri in actual)) {
         // new class
         is.push($rdf.st(subject, predicate, kb.sym(opt.AJAR_uri), dataDoc));
       }
-
       if (!opt.selected && opt.AJAR_uri in actual) {
         // old class
         removeValue(kb.sym(opt.AJAR_uri));
       }
-
       if (opt.selected) select.currentURI = opt.AJAR_uri;
     }
-
     var sel = select.subSelect; // All subclasses must also go
-
     while (sel && sel.currentURI) {
       removeValue(kb.sym(sel.currentURI));
       sel = sel.subSelect;
     }
-
     sel = select.superSelect; // All superclasses are redundant
-
     while (sel && sel.currentURI) {
       removeValue(kb.sym(sel.currentURI));
       sel = sel.superSelect;
     }
-
     log.info('selectForOptions: data doc = ' + dataDoc);
     kb.updater.update(ds, is, function (uri, ok, body) {
       actual = getActual(); // refresh
-
       if (ok) {
         select.disabled = false; // data written back
       } else {
         return select.parentNode.appendChild((0, _error.errorMessageBlock)(dom, 'Error updating data in select: ' + body));
       }
-
       if (callbackFunction) callbackFunction(ok, {
         widget: 'select',
         event: 'change'
       });
     });
   };
-
   var select = dom.createElement('select');
   select.setAttribute('style', style.formSelectSTyle);
   select.currentURI = null;
-
   select.refresh = function () {
     actual = getActual(); // refresh
-
     for (var _i4 = 0; _i4 < select.children.length; _i4++) {
       var option = select.children[_i4];
-
       if (option.AJAR_uri) {
         option.selected = option.AJAR_uri in actual;
       }
     }
-
     select.disabled = false; // unlocked any conflict we had got into
   };
 
   for (var uri in uris) {
     var c = kb.sym(uri);
     var option = dom.createElement('option');
-
     if (options.disambiguate) {
       option.appendChild(dom.createTextNode(utils.labelWithOntology(c, true))); // Init. cap
     } else {
@@ -19071,68 +16529,59 @@ function makeSelectForOptions(dom, kb, subject, predicate, possible, options, da
     }
 
     var backgroundColor = kb.any(c, kb.sym('http://www.w3.org/ns/ui#backgroundColor'));
-
     if (backgroundColor) {
       option.setAttribute('style', 'background-color: ' + backgroundColor.value + '; ');
     }
-
     option.AJAR_uri = uri;
-
     if (uri in actual) {
       option.setAttribute('selected', 'true');
-      select.currentURI = uri; // dump("Already in class: "+ uri+"\n")
+      select.currentURI = uri;
+      // dump("Already in class: "+ uri+"\n")
     }
 
     select.appendChild(option);
   }
-
   if (!select.currentURI) {
     var prompt = dom.createElement('option');
     prompt.appendChild(dom.createTextNode(options.nullLabel));
     select.insertBefore(prompt, select.firstChild);
     prompt.selected = true;
   }
-
   if (editable) {
     select.addEventListener('change', onChange, false);
   }
-
   return select;
 } // makeSelectForOptions
+
 // Make SELECT element to select subclasses
 //
 // If there is any disjoint union it will so a mutually exclusive dropdown
 // Failing that it will do a multiple selection of subclasses.
 // Callback takes (boolean ok, string errorBody)
 
-
 function makeSelectForCategory(dom, kb, subject, category, dataDoc, callbackFunction) {
   var du = kb.any(category, ns.owl('disjointUnionOf'));
   var subs;
   var multiple = false;
-
   if (!du) {
     subs = kb.each(undefined, ns.rdfs('subClassOf'), category);
     multiple = true;
   } else {
     subs = du.elements;
   }
-
   log.debug('Select list length ' + subs.length);
-
   if (subs.length === 0) {
     return (0, _error.errorMessageBlock)(dom, "Can't do " + (multiple ? 'multiple ' : '') + 'selector with no subclasses of category: ' + category);
   }
-
   if (subs.length === 1) {
     return (0, _error.errorMessageBlock)(dom, "Can't do " + (multiple ? 'multiple ' : '') + 'selector with only 1 subclass of category: ' + category + ':' + subs[1]);
   }
-
   return makeSelectForClassifierOptions(dom, kb, subject, ns.rdf('type'), subs, {
     multiple: multiple,
     nullLabel: '* Select type *'
   }, dataDoc, callbackFunction);
 }
+
 /** Make SELECT element to select subclasses recurively
 //
 // It will so a mutually exclusive dropdown, with another if there are nested
@@ -19140,15 +16589,12 @@ function makeSelectForCategory(dom, kb, subject, category, dataDoc, callbackFunc
 //
 // @param  callbackFunction takes (boolean ok, string errorBody)
 */
-
-
 function makeSelectForNestedCategory(dom, kb, subject, category, dataDoc, callbackFunction) {
   function update() {
     if (child) {
       container.removeChild(child);
       child = null;
     }
-
     if (select.currentURI && kb.any(kb.sym(select.currentURI), ns.owl('disjointUnionOf'))) {
       child = makeSelectForNestedCategory(dom, kb, subject, kb.sym(select.currentURI), dataDoc, callbackFunction);
       select.subSelect = child.firstChild;
@@ -19156,21 +16602,18 @@ function makeSelectForNestedCategory(dom, kb, subject, category, dataDoc, callba
       container.appendChild(child);
     }
   }
-
   var container = dom.createElement('span'); // Container
-
   var child = null;
-
   function onChange(ok, body) {
     if (ok) update();
     callbackFunction(ok, body);
   }
-
   var select = makeSelectForCategory(dom, kb, subject, category, dataDoc, onChange);
   container.appendChild(select);
   update();
   return container;
 }
+
 /*  Build a checkbox from a given statement(s)
  **
  **  If the source document is editable, make the checkbox editable
@@ -19179,8 +16622,6 @@ function makeSelectForNestedCategory(dom, kb, subject, category, dataDoc, callba
  **  made if the checkbox is checed and unchecked respectively.
  **  tristate: Allow ins, or del, or neither
  */
-
-
 function buildCheckboxForm(dom, kb, lab, del, ins, form, dataDoc, tristate) {
   var box = dom.createElement('div');
   var rhs = (0, _basic.renderNameValuePair)(dom, kb, box, form, lab);
@@ -19189,10 +16630,8 @@ function buildCheckboxForm(dom, kb, lab, del, ins, form, dataDoc, tristate) {
   var colorCarrier = input;
   input.style = style.checkboxInputStyle;
   rhs.appendChild(input);
-
   function fix(x) {
     if (!x) return []; // no statements
-
     if (x.object) {
       if (!x.why) {
         x.why = dataDoc; // be back-compaitible  with old code
@@ -19204,36 +16643,29 @@ function buildCheckboxForm(dom, kb, lab, del, ins, form, dataDoc, tristate) {
     if (x instanceof Array) return x;
     throw new Error('buildCheckboxForm: bad param ' + x);
   }
-
   ins = fix(ins);
   del = fix(del);
-
   function holdsAll(a) {
     var missing = a.filter(function (st) {
       return !kb.holds(st.subject, st.predicate, st.object, st.why);
     });
     return missing.length === 0;
   }
-
   function refresh() {
     var state = holdsAll(ins);
     var displayState = state;
-
     if (del.length) {
       var negation = holdsAll(del);
-
       if (state && negation) {
         box.appendChild(widgets.errorMessageBlock(dom, 'Inconsistent data in dataDoc!\n' + ins + ' and\n' + del));
         return box;
       }
-
       if (!state && !negation) {
         state = null;
         var defa = kb.any(form, ns.ui('default'));
         displayState = defa ? defa.value === '1' : tristate ? null : false;
       }
     }
-
     input.state = state;
     input.textContent = {
       "true": checkMarkCharacter,
@@ -19242,13 +16674,10 @@ function buildCheckboxForm(dom, kb, lab, del, ins, form, dataDoc, tristate) {
       "null": dashCharacter
     }[displayState];
   }
-
   refresh();
   if (!editable) return box;
-
   var boxHandler = function boxHandler(_e) {
     colorCarrier.style.color = '#bbb'; // grey -- not saved yet
-
     var toDelete = input.state === true ? ins : input.state === false ? del : [];
     input.newState = input.state === null ? true : input.state === true ? false : tristate ? null : true;
     var toInsert = input.newState === true ? ins : input.newState === false ? del : [];
@@ -19258,12 +16687,10 @@ function buildCheckboxForm(dom, kb, lab, del, ins, form, dataDoc, tristate) {
       if (!success) {
         if (toDelete.why) {
           var hmmm = kb.holds(toDelete.subject, toDelete.predicate, toDelete.object, toDelete.why);
-
           if (hmmm) {
             debug.log(' @@@@@ weird if 409 - does hold statement');
           }
         }
-
         colorCarrier.style.color = '#000';
         colorCarrier.style.backgroundColor = '#fee';
         box.appendChild((0, _error.errorMessageBlock)(dom, "Checkbox: Error updating dataDoc from ".concat(input.state, " to ").concat(input.newState, ":\n\n").concat(errorBody)));
@@ -19309,16 +16736,14 @@ export function fieldStore (subject, predicate, def) {
   return def
 }
 */
-
 /** Mint local ID using timestamp
  * @param {NamedNode} doc - the document in which the ID is to be generated
  */
-
-
 function newThing(doc) {
   var now = new Date();
   return $rdf.sym(doc.uri + '#' + 'id' + ('' + now.getTime()));
 }
+
 /** Make SELECT element to select options
 //
 // @param subject - a term, the subject of the statement(s) being edited.
@@ -19329,43 +16754,30 @@ function newThing(doc) {
 // @param dataDoc - The web document being edited
 // @param callbackFunction - takes (boolean ok, string errorBody)
 */
-
-
 function makeSelectForChoice(dom, container, kb, subject, predicate, inputPossibleOptions, selectedOptions, uiFrom, options, dataDoc, callbackFunction) {
   var optionsFromClassUIfrom = {}; // Count them
-
   var editable = kb.updater.editable(dataDoc.uri);
-
   for (var i = 0; i < inputPossibleOptions.length; i++) {
     var sub = inputPossibleOptions[i]; // @@ Maybe; make this so it works with blank nodes too
     // if (!sub.uri) debug.warn(`makeSelectForChoice: option does not have an uri: ${sub}, with predicate: ${predicate}`)
-
     if (!sub.uri || sub.uri in optionsFromClassUIfrom) continue;
     optionsFromClassUIfrom[sub.uri] = true;
   }
-
   var isEmpty = Object.keys(optionsFromClassUIfrom).length === 0;
-
   if (isEmpty && !options.mint) {
     return (0, _error.errorMessageBlock)(dom, "Can't do selector with no options, subject= " + subject + ' property = ' + predicate + '.');
   }
-
   log.debug('makeSelectForChoice: dataDoc=' + dataDoc);
-
   function createDefaultSelectOptionText() {
     var firstSelectOptionText = '--- choice ---';
-
     if (predicate && !(predicate.termType === 'BlankNode')) {
       firstSelectOptionText = '* Select for property: ' + utils.label(predicate) + ' *';
     }
-
     if (subject && !(subject.termType === 'BlankNode')) {
       firstSelectOptionText = '* Select for ' + utils.label(subject, true) + ' *';
     }
-
     return firstSelectOptionText;
   }
-
   function createDefaultSelectOption() {
     var option = dom.createElement('option');
     option.appendChild(dom.createTextNode(createDefaultSelectOptionText()));
@@ -19375,59 +16787,50 @@ function makeSelectForChoice(dom, container, kb, subject, predicate, inputPossib
     option.selected = true;
     return option;
   }
-
   var onChange = function onChange(_e) {
     container.removeChild(container.lastChild);
     select.refresh();
   };
-
   var select = dom.createElement('select');
   select.setAttribute('style', style.formSelectSTyle);
   select.setAttribute('id', 'formSelect');
   select.currentURI = null;
-
   for (var uri in optionsFromClassUIfrom) {
     select.appendChild(createOption(uri));
   }
-
   if (editable && options.mint) {
     var mint = dom.createElement('option');
     mint.appendChild(dom.createTextNode(options.mint));
     mint.AJAR_mint = true; // Flag it
-
     select.insertBefore(mint, select.firstChild);
   }
-
   if (select.children.length === 0) select.insertBefore(createDefaultSelectOption(), select.firstChild);
-
   select.update = function (newSelectedOptions) {
     selectedOptions = newSelectedOptions;
     var ds = [];
     var is = [];
-
     var removeValue = function removeValue(t) {
       if (kb.holds(subject, predicate, t, dataDoc)) {
         ds.push($rdf.st(subject, predicate, t, dataDoc));
       }
     };
-
     var addValue = function addValue(t) {
       if (!kb.holds(subject, predicate, t, dataDoc)) {
-        is.push($rdf.st(subject, predicate, t, dataDoc)); // console.log("----value added " + t)
+        is.push($rdf.st(subject, predicate, t, dataDoc));
+        // console.log("----value added " + t)
       }
 
       if (uiFrom && !kb.holds(t, ns.rdf('type'), kb.sym(uiFrom), dataDoc)) {
-        is.push($rdf.st(t, ns.rdf('type'), kb.sym(uiFrom), dataDoc)); // console.log("----added type to value " + uiFrom)
+        is.push($rdf.st(t, ns.rdf('type'), kb.sym(uiFrom), dataDoc));
+        // console.log("----added type to value " + uiFrom)
       }
     };
 
     var existingValues = kb.each(subject, predicate, null, dataDoc).map(function (object) {
       return object.value;
     });
-
     var _iterator2 = _createForOfIteratorHelper(existingValues),
-        _step2;
-
+      _step2;
     try {
       for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
         var value = _step2.value;
@@ -19438,10 +16841,8 @@ function makeSelectForChoice(dom, container, kb, subject, predicate, inputPossib
     } finally {
       _iterator2.f();
     }
-
     var _iterator3 = _createForOfIteratorHelper(selectedOptions),
-        _step3;
-
+      _step3;
     try {
       for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
         var _value = _step3.value;
@@ -19452,7 +16853,6 @@ function makeSelectForChoice(dom, container, kb, subject, predicate, inputPossib
     } finally {
       _iterator3.f();
     }
-
     kb.updater.update(ds, is, function (uri, ok, body) {
       if (!ok) return select.parentNode.appendChild((0, _error.errorMessageBlock)(dom, 'Error updating data in select: ' + body));
       select.refresh();
@@ -19462,16 +16862,12 @@ function makeSelectForChoice(dom, container, kb, subject, predicate, inputPossib
       });
     });
   };
-
   select.refresh = function () {
     select.disabled = true; // unlocked any conflict we had got into
-
     var is = [];
     var newObject;
-
     for (var _i5 = 0; _i5 < select.options.length; _i5++) {
       var opt = select.options[_i5];
-
       if (opt.selected && opt.AJAR_mint) {
         // not sure if this 'if' is used because I cannot find mintClass
         if (options.mintClass) {
@@ -19482,34 +16878,29 @@ function makeSelectForChoice(dom, container, kb, subject, predicate, inputPossib
               }); // @@ if ok, need some form of refresh of the select for the new thing
             }
           });
+
           select.parentNode.appendChild(thisForm);
           newObject = thisForm.AJAR_subject;
         } else {
           newObject = newThing(dataDoc);
         }
-
         is.push($rdf.st(subject, predicate, kb.sym(newObject), dataDoc));
-        if (uiFrom) is.push($rdf.st(newObject, ns.rdf('type'), kb.sym(uiFrom), dataDoc)); // not sure if this 'if' is used because I cannot find mintStatementsFun
+        if (uiFrom) is.push($rdf.st(newObject, ns.rdf('type'), kb.sym(uiFrom), dataDoc));
 
+        // not sure if this 'if' is used because I cannot find mintStatementsFun
         if (options.mintStatementsFun) {
           is = is.concat(options.mintStatementsFun(newObject));
         }
-
         select.currentURI = newObject;
       }
-
       if (!opt.AJAR_uri) continue; // a prompt or mint
-
       if (opt.selected && containsObject(opt.AJAR_uri, selectedOptions)) {
         select.currentURI = opt.AJAR_uri;
       }
-
       if (!containsObject(opt.AJAR_uri, selectedOptions)) opt.removeAttribute('selected');
       if (containsObject(opt.AJAR_uri, selectedOptions)) opt.setAttribute('selected', 'true');
     }
-
     log.info('selectForOptions: data doc = ' + dataDoc);
-
     if (select.currentURI && options.subForm && !options.multiSelect) {
       addSubFormChoice(dom, container, {}, $rdf.sym(select.currentURI), options.subForm, dataDoc, function (ok, body) {
         if (ok) {
@@ -19525,59 +16916,46 @@ function makeSelectForChoice(dom, container, kb, subject, predicate, inputPossib
         }
       });
     }
-
     select.disabled = false;
   };
-
   function createOption(uri) {
     var option = dom.createElement('option');
     var c = kb.sym(uri);
     var label;
-
     if (options.disambiguate) {
       label = utils.labelWithOntology(c, true); // Init. cap
     } else {
       label = utils.label(c, true);
     }
-
     option.appendChild(dom.createTextNode(label)); // Init.
-
     option.setAttribute('value', uri);
     var backgroundColor = kb.any(c, kb.sym('http://www.w3.org/ns/ui#backgroundColor'));
-
     if (backgroundColor) {
       option.setAttribute('style', 'background-color: ' + backgroundColor.value + '; ');
     }
-
     option.AJAR_uri = uri;
-
     if (containsObject(c.value, selectedOptions)) {
       option.setAttribute('selected', 'true');
     }
-
     return option;
   }
-
   if (editable) {
     select.addEventListener('change', onChange, false);
   }
-
   return select;
 } // makeSelectForChoice
 
-
 function containsObject(obj, list) {
   var i;
-
   for (i = 0; i < list.length; i++) {
     if (list[i] === obj) {
       return true;
     }
   }
-
   return false;
-} // This functions replaces the findMembersNT (thisClass) from rdflib until we fix: https://github.com/linkeddata/rdflib.js/issues/565
+}
 
+// This functions replaces the findMembersNT (thisClass) from rdflib until we fix: https://github.com/linkeddata/rdflib.js/issues/565
 /**
  * For anything which has thisClass (or any subclass) as its type,
  * or is the object of something which has thisClass (or any subclass) as its range,
@@ -19587,8 +16965,6 @@ function containsObject(obj, list) {
  * Get all the Classes of which we can RDFS-infer the subject is a member
  * @return a hash of URIs
  */
-
-
 function findMembersNT(store, thisClass, quad) {
   var len2;
   var len4;
@@ -19605,40 +16981,31 @@ function findMembersNT(store, thisClass, quad) {
   seeds[thisClass.toNT()] = true;
   var members = {};
   var ref = store.transitiveClosure(seeds, store.rdfFactory.namedNode('http://www.w3.org/2000/01/rdf-schema#subClassOf'), true);
-
   for (var t in ref) {
     ref1 = store.statementsMatching(null, store.rdfFactory.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), store.fromNT(t), quad);
-
     for (var i = 0, len = ref1.length; i < len; i++) {
       st = ref1[i];
       members[st.subject.toNT()] = st;
     }
-
     ref2 = store.each(null, store.rdfFactory.namedNode('http://www.w3.org/2000/01/rdf-schema#domain'), store.fromNT(t), quad);
-
     for (var l = 0, len1 = ref2.length; l < len1; l++) {
       pred = ref2[l];
       ref3 = store.statementsMatching(null, pred, null, quad);
-
       for (m = 0, len2 = ref3.length; m < len2; m++) {
         st = ref3[m];
         members[st.subject.toNT()] = st;
       }
     }
-
     ref4 = store.each(null, store.rdfFactory.namedNode('http://www.w3.org/2000/01/rdf-schema#range'), store.fromNT(t), quad);
-
     for (var q = 0, len3 = ref4.length; q < len3; q++) {
       pred = ref4[q];
       ref5 = store.statementsMatching(null, pred, null, quad);
-
       for (u = 0, len4 = ref5.length; u < len4; u++) {
         st = ref5[u];
         members[st.object.toNT()] = st;
       }
     }
   }
-
   return members;
 }
 //# sourceMappingURL=forms.js.map
@@ -19655,55 +17022,36 @@ function findMembersNT(store, thisClass, quad) {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.renderAutocompleteControl = renderAutocompleteControl;
-
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
-
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
-
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../../../ns */ "./lib/ns.js"));
-
 var _iconBase = __webpack_require__(/*! ../../../iconBase */ "./lib/iconBase.js");
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../../../widgets */ "./lib/widgets/index.js"));
-
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../../../utils */ "./lib/utils/index.js"));
-
 var _autocompletePicker = __webpack_require__(/*! ./autocompletePicker */ "./lib/widgets/forms/autocomplete/autocompletePicker.js");
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 var WEBID_NOUN = 'Solid ID';
 var GREEN_PLUS = _iconBase.icons.iconBase + 'noun_34653_green.svg';
 var SEARCH_ICON = _iconBase.icons.iconBase + 'noun_Search_875351.svg';
-var EDIT_ICON = _iconBase.icons.iconBase + 'noun_253504.svg'; // const DELETE_ICON = icons.iconBase + 'noun_2188_red.svg'
-
+var EDIT_ICON = _iconBase.icons.iconBase + 'noun_253504.svg';
+// const DELETE_ICON = icons.iconBase + 'noun_2188_red.svg'
 function renderAutocompleteControl(_x, _x2, _x3, _x4, _x5, _x6) {
   return _renderAutocompleteControl.apply(this, arguments);
 } // renderAutocompleteControl
 // ends
-
-
 function _renderAutocompleteControl() {
   _renderAutocompleteControl = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(dom, person, barOptions, acOptions, addOneIdAndRefresh, deleteOne) {
     var autoCompleteDone, _autoCompleteDone, greenButtonHandler, _greenButtonHandler, removeDecorated, displayAutocomplete, _displayAutocomplete, searchButtonHandler, _searchButtonHandler, droppedURIHandler, _droppedURIHandler, acceptButton, cancelButton, deleteButtonContainer, noun, deleteButton, editButton, editing, syncEditingStatus, decoration, decoratedAutocomplete, creationArea, plus;
-
     return _regenerator["default"].wrap(function _callee6$(_context6) {
       while (1) {
         switch (_context6.prev = _context6.next) {
@@ -19712,7 +17060,6 @@ function _renderAutocompleteControl() {
               if (editing) {
                 (0, _autocompletePicker.setVisible)(editButton, false);
                 (0, _autocompletePicker.setVisible)(acceptButton, false); // not till got it
-
                 (0, _autocompletePicker.setVisible)(cancelButton, false);
               } else {
                 (0, _autocompletePicker.setVisible)(editButton, true);
@@ -19720,51 +17067,38 @@ function _renderAutocompleteControl() {
                 (0, _autocompletePicker.setVisible)(cancelButton, false);
               }
             };
-
             _droppedURIHandler = function _droppedURIHandler3() {
               _droppedURIHandler = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(uris) {
                 var _iterator, _step, webid;
-
                 return _regenerator["default"].wrap(function _callee5$(_context5) {
                   while (1) {
                     switch (_context5.prev = _context5.next) {
                       case 0:
                         _iterator = _createForOfIteratorHelper(uris);
                         _context5.prev = 1;
-
                         _iterator.s();
-
                       case 3:
                         if ((_step = _iterator.n()).done) {
                           _context5.next = 9;
                           break;
                         }
-
                         webid = _step.value;
                         _context5.next = 7;
                         return addOneIdAndRefresh(person, webid);
-
                       case 7:
                         _context5.next = 3;
                         break;
-
                       case 9:
                         _context5.next = 14;
                         break;
-
                       case 11:
                         _context5.prev = 11;
                         _context5.t0 = _context5["catch"](1);
-
                         _iterator.e(_context5.t0);
-
                       case 14:
                         _context5.prev = 14;
-
                         _iterator.f();
-
                         return _context5.finish(14);
-
                       case 17:
                       case "end":
                         return _context5.stop();
@@ -19774,11 +17108,9 @@ function _renderAutocompleteControl() {
               }));
               return _droppedURIHandler.apply(this, arguments);
             };
-
             droppedURIHandler = function _droppedURIHandler2(_x11) {
               return _droppedURIHandler.apply(this, arguments);
             };
-
             _searchButtonHandler = function _searchButtonHandler3() {
               _searchButtonHandler = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(_event) {
                 return _regenerator["default"].wrap(function _callee4$(_context4) {
@@ -19789,16 +17121,13 @@ function _renderAutocompleteControl() {
                           _context4.next = 5;
                           break;
                         }
-
                         creationArea.removeChild(decoratedAutocomplete);
                         decoratedAutocomplete = undefined;
                         _context4.next = 7;
                         break;
-
                       case 5:
                         _context4.next = 7;
                         return displayAutocomplete();
-
                       case 7:
                       case "end":
                         return _context4.stop();
@@ -19808,11 +17137,9 @@ function _renderAutocompleteControl() {
               }));
               return _searchButtonHandler.apply(this, arguments);
             };
-
             searchButtonHandler = function _searchButtonHandler2(_x10) {
               return _searchButtonHandler.apply(this, arguments);
             };
-
             _displayAutocomplete = function _displayAutocomplete3() {
               _displayAutocomplete = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3() {
                 return _regenerator["default"].wrap(function _callee3$(_context3) {
@@ -19824,22 +17151,21 @@ function _renderAutocompleteControl() {
                         _context3.t0 = decoratedAutocomplete;
                         _context3.next = 5;
                         return (0, _autocompletePicker.renderAutoComplete)(dom, acOptions, decoration, autoCompleteDone);
-
                       case 5:
                         _context3.t1 = _context3.sent;
-
                         _context3.t0.appendChild.call(_context3.t0, _context3.t1);
-
                         // console.log('@@ acceptButton', acceptButton)
-                        decoratedAutocomplete.appendChild(acceptButton); // console.log('@@ cancelButton', cancelButton)
+                        decoratedAutocomplete.appendChild(acceptButton);
+                        // console.log('@@ cancelButton', cancelButton)
 
-                        decoratedAutocomplete.appendChild(cancelButton); // console.log('@@ editButton', editButton)
+                        decoratedAutocomplete.appendChild(cancelButton);
+                        // console.log('@@ editButton', editButton)
 
-                        decoratedAutocomplete.appendChild(editButton); // console.log('@@ deleteButtonContainer', deleteButtonContainer)
+                        decoratedAutocomplete.appendChild(editButton);
+                        // console.log('@@ deleteButtonContainer', deleteButtonContainer)
 
                         decoratedAutocomplete.appendChild(deleteButtonContainer);
                         creationArea.appendChild(decoratedAutocomplete);
-
                       case 12:
                       case "end":
                         return _context3.stop();
@@ -19849,18 +17175,15 @@ function _renderAutocompleteControl() {
               }));
               return _displayAutocomplete.apply(this, arguments);
             };
-
             displayAutocomplete = function _displayAutocomplete2() {
               return _displayAutocomplete.apply(this, arguments);
             };
-
             removeDecorated = function _removeDecorated() {
               if (decoratedAutocomplete) {
                 creationArea.removeChild(decoratedAutocomplete);
                 decoratedAutocomplete = undefined;
               }
             };
-
             _greenButtonHandler = function _greenButtonHandler3() {
               _greenButtonHandler = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(_event) {
                 var webid;
@@ -19870,20 +17193,15 @@ function _renderAutocompleteControl() {
                       case 0:
                         _context2.next = 2;
                         return widgets.askName(dom, _solidLogic.store, creationArea, ns.vcard('url'), undefined, WEBID_NOUN);
-
                       case 2:
                         webid = _context2.sent;
-
                         if (webid) {
                           _context2.next = 5;
                           break;
                         }
-
                         return _context2.abrupt("return");
-
                       case 5:
                         return _context2.abrupt("return", addOneIdAndRefresh(person, webid));
-
                       case 6:
                       case "end":
                         return _context2.stop();
@@ -19893,11 +17211,9 @@ function _renderAutocompleteControl() {
               }));
               return _greenButtonHandler.apply(this, arguments);
             };
-
             greenButtonHandler = function _greenButtonHandler2(_x9) {
               return _greenButtonHandler.apply(this, arguments);
             };
-
             _autoCompleteDone = function _autoCompleteDone3() {
               _autoCompleteDone = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(object, name) {
                 return _regenerator["default"].wrap(function _callee$(_context) {
@@ -19913,9 +17229,7 @@ function _renderAutocompleteControl() {
                           // console.log('temporary - removed decoratiion')
                           removeDecorated();
                         }
-
                         return _context.abrupt("return", addOneIdAndRefresh(object, name));
-
                       case 2:
                       case "end":
                         return _context.stop();
@@ -19925,11 +17239,9 @@ function _renderAutocompleteControl() {
               }));
               return _autoCompleteDone.apply(this, arguments);
             };
-
             autoCompleteDone = function _autoCompleteDone2(_x7, _x8) {
               return _autoCompleteDone.apply(this, arguments);
             };
-
             acceptButton = widgets.continueButton(dom);
             acceptButton.setAttribute('data-testid', 'accept-button');
             cancelButton = widgets.cancelButton(dom);
@@ -19937,7 +17249,6 @@ function _renderAutocompleteControl() {
             deleteButtonContainer = dom.createElement('div');
             noun = acOptions.targetClass ? utils.label(acOptions.targetClass) : 'item';
             deleteButton = widgets.deleteButtonWithCheck(dom, deleteButtonContainer, noun, deleteOne); // need to knock out this UI or caller does that
-
             deleteButton.setAttribute('data-testid', 'delete-button');
             editButton = widgets.button(dom, EDIT_ICON, 'Edit', function (_event) {
               editing = !editing;
@@ -19955,33 +17266,26 @@ function _renderAutocompleteControl() {
             creationArea = dom.createElement('div');
             creationArea.style.display = 'flex';
             creationArea.style.flexDirection = 'row';
-
             if (!(acOptions.permanent || acOptions.currentObject)) {
               _context6.next = 31;
               break;
             }
-
             _context6.next = 31;
             return displayAutocomplete();
-
           case 31:
             if (barOptions.editable) {
               // creationArea.appendChild(await renderAutoComplete(dom, barOptions, autoCompleteDone)) wait for searchButton
               creationArea.style.width = '100%';
-
               if (barOptions.manualURIEntry) {
                 plus = creationArea.appendChild(widgets.button(dom, GREEN_PLUS, barOptions.idNoun, greenButtonHandler));
                 widgets.makeDropTarget(plus, droppedURIHandler, undefined);
               }
-
               if (barOptions.dbLookup && !acOptions.currentObject && !acOptions.permanent) {
                 creationArea.appendChild(widgets.button(dom, SEARCH_ICON, barOptions.idNoun, searchButtonHandler));
               }
             }
-
             syncEditingStatus();
             return _context6.abrupt("return", creationArea);
-
           case 34:
           case "end":
             return _context6.stop();
@@ -20005,34 +17309,21 @@ function _renderAutocompleteControl() {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.autocompleteField = autocompleteField;
-
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
-
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
-
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../../../ns */ "./lib/ns.js"));
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../../../widgets */ "./lib/widgets/index.js"));
-
 var style = _interopRequireWildcard(__webpack_require__(/*! ../../../style */ "./lib/style.js"));
-
 var _autocompleteBar = __webpack_require__(/*! ./autocompleteBar */ "./lib/widgets/forms/autocomplete/autocompleteBar.js");
-
 var _rdflib = __webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js");
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 /* Form field for doing autocompleete
  */
 
@@ -20063,15 +17354,12 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 // eslint-disable-next-line complexity
 function autocompleteField(dom, container, already, subject, form, doc, callbackFunction) {
   var _kb$updater;
-
   function addOneIdAndRefresh(_x, _x2) {
     return _addOneIdAndRefresh.apply(this, arguments);
   }
-
   function _addOneIdAndRefresh() {
     _addOneIdAndRefresh = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(result, name) {
       var oldValue, oldName, deletables, insertables, _kb$updater2;
-
       return _regenerator["default"].wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -20080,50 +17368,37 @@ function autocompleteField(dom, container, already, subject, form, doc, callback
                 _context.next = 2;
                 break;
               }
-
               throw new Error('autocompleteField:  No name set.');
-
             case 2:
               oldValue = kb.the(subject, property, null, doc);
-
               if (!oldValue) {
                 _context.next = 7;
                 break;
               }
-
               oldName = kb.any(oldValue, labelProperty, null, doc);
-
               if (!(oldValue.equals(result) && oldName && oldName.sameTerm(name))) {
                 _context.next = 7;
                 break;
               }
-
               return _context.abrupt("return");
-
             case 7:
               deletables = oldValue ? kb.statementsMatching(subject, property, oldValue, doc).concat(kb.statementsMatching(oldValue, labelProperty, null, doc)) : []; // console.log('autocompleteField Deletables ' + deletables.map(st => st.toNT()))
-
               insertables = [(0, _rdflib.st)(subject, property, result, doc), (0, _rdflib.st)(result, labelProperty, name, doc)]; // @@ track the language of the  name too!
               // console.log(`AC form: ${deletables.length} to delete and ${insertables.length} to insert`)
-
               _context.prev = 9;
               _context.next = 12;
               return (_kb$updater2 = kb.updater) === null || _kb$updater2 === void 0 ? void 0 : _kb$updater2.updateMany(deletables, insertables);
-
             case 12:
               _context.next = 19;
               break;
-
             case 14:
               _context.prev = 14;
               _context.t0 = _context["catch"](9);
               callbackFunction(false, _context.t0);
               box.appendChild(widgets.errorMessageBlock(dom, 'Autocomplete form data update error:' + _context.t0, null, _context.t0));
               return _context.abrupt("return");
-
             case 19:
               callbackFunction(true, '');
-
             case 20:
             case "end":
               return _context.stop();
@@ -20133,44 +17408,34 @@ function autocompleteField(dom, container, already, subject, form, doc, callback
     }));
     return _addOneIdAndRefresh.apply(this, arguments);
   }
-
   function deleteOne(_x3, _x4) {
     return _deleteOne.apply(this, arguments);
   }
-
   function _deleteOne() {
     _deleteOne = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(_result, _name) {
       var oldValue, deletables, insertables, _kb$updater3, e2;
-
       return _regenerator["default"].wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
               oldValue = kb.the(subject, property, null, doc);
-
               if (oldValue) {
                 _context2.next = 5;
                 break;
               }
-
               callbackFunction(false, 'NO data to elete');
               box.appendChild(widgets.errorMessageBlock(dom, 'Autocomplete delete: no old data!'));
               return _context2.abrupt("return");
-
             case 5:
               // const oldName = kb.any(oldValue as any, labelProperty as any, null, doc)
               deletables = kb.statementsMatching(subject, property, oldValue, doc).concat(kb.statementsMatching(oldValue, labelProperty, null, doc)); // console.log('autocompleteField Deletables ' + deletables.map(st => st.toNT()))
-
               insertables = []; // console.log(`AC form delete: ${deletables.length} to delete and ${insertables.length} to insert`)
-
               _context2.prev = 7;
               _context2.next = 10;
               return (_kb$updater3 = kb.updater) === null || _kb$updater3 === void 0 ? void 0 : _kb$updater3.updateMany(deletables, insertables);
-
             case 10:
               _context2.next = 18;
               break;
-
             case 12:
               _context2.prev = 12;
               _context2.t0 = _context2["catch"](7);
@@ -20178,10 +17443,8 @@ function autocompleteField(dom, container, already, subject, form, doc, callback
               callbackFunction(false, _context2.t0);
               box.appendChild(widgets.errorMessageBlock(dom, e2, null, _context2.t0));
               return _context2.abrupt("return");
-
             case 18:
               callbackFunction(true, ''); // changed
-
             case 19:
             case "end":
               return _context2.stop();
@@ -20191,11 +17454,9 @@ function autocompleteField(dom, container, already, subject, form, doc, callback
     }));
     return _deleteOne.apply(this, arguments);
   }
-
   if (subject.termType !== 'NamedNode') {
     throw new Error('Sorry this field only works on NamedNode subjects (for editable)');
   }
-
   var kb = _solidLogic.store;
   var formDoc = form.doc ? form.doc() : null; // @@ if blank no way to know
 
@@ -20209,34 +17470,33 @@ function autocompleteField(dom, container, already, subject, form, doc, callback
   rhs.setAttribute('class', 'formFieldValue');
   box.appendChild(rhs);
   var property = kb.any(form, ns.ui('property'));
-
   if (!property) {
     return box.appendChild(widgets.errorMessageBlock(dom, 'Error: No property given for autocomplete field: ' + form));
   }
+  var labelProperty = kb.any(form, ns.ui('labelProperty')) || ns.schema('name');
 
-  var labelProperty = kb.any(form, ns.ui('labelProperty')) || ns.schema('name'); // Parse the data source into query options
+  // Parse the data source into query options
 
   var dataSource = kb.any(form, ns.ui('dataSource'));
-
   if (!dataSource) {
     // console.log('@@ connectedStatements ACF ', kb.connectedStatements(form).map(x => x.toNT()).join('\n'))
     return box.appendChild(widgets.errorMessageBlock(dom, 'Error: No data source given for autocomplete field: ' + form));
   }
-
   var queryParams = {
     // targetClass: kb.any(dataSource, ns.ui('targetClass'), null, dataSource.doc()) as NamedNode | undefined,
     label: kb.anyJS(dataSource, ns.schema('name'), null, dataSource.doc()),
     logo: kb.any(dataSource, ns.schema('logo'), null, dataSource.doc())
-  }; // @@ Should we pass the target class in from the data source definition or use a current type of the subject
+  };
 
-  var targetClass = kb.any(form, ns.ui('targetClass'), null, form.doc()) || // class in form takes pecedence
+  // @@ Should we pass the target class in from the data source definition or use a current type of the subject
+  var targetClass = kb.any(form, ns.ui('targetClass'), null, form.doc()) ||
+  // class in form takes pecedence
   kb.any(dataSource, ns.ui('targetClass'), null, dataSource.doc());
-
   if (targetClass) {
     queryParams.targetClass = targetClass;
   }
-
   queryParams.objectURIBase = kb.any(dataSource, ns.ui('objectURIBase'), null, dataSource.doc()) || undefined;
+
   /*
   if (!queryParams.targetClass) {
     const klass = kb.any(subject, ns.rdf('type')) as NamedNode | undefined
@@ -20247,32 +17507,25 @@ function autocompleteField(dom, container, already, subject, form, doc, callback
     queryParams.targetClass = klass
   }
   */
-
   var endpoint = kb.anyJS(dataSource, ns.ui('endpoint'), null, dataSource.doc());
-
   if (endpoint) {
     // SPARQL
     queryParams.endpoint = endpoint;
     queryParams.searchByNameQuery = kb.anyJS(dataSource, ns.ui('searchByNameQuery'), null, dataSource.doc());
-
     if (!queryParams.searchByNameQuery) {
       return box.appendChild(widgets.errorMessageBlock(dom, 'Error: No searchByNameQuery given for endpoint data Source: ' + form));
     }
-
     queryParams.insitituteDetailsQuery = kb.anyJS(dataSource, ns.ui('insitituteDetailsQuery'), null, dataSource.doc());
   } else {
     // return box.appendChild(
     //  widgets.errorMessageBlock(dom, 'Error: No SPARQL endpoint given for autocomplete field: ' + form))
     var searchByNameURI = kb.anyJS(dataSource, ns.ui('searchByNameURI'));
-
     if (!searchByNameURI) {
       return box.appendChild(widgets.errorMessageBlock(dom, 'Error: No searchByNameURI OR sparql endpoint given for dataSource: ' + dataSource));
     }
-
     queryParams.searchByNameURI = searchByNameURI;
-  } // It can be cleaner to just remove empty fields if you can't edit them anyway
-
-
+  }
+  // It can be cleaner to just remove empty fields if you can't edit them anyway
   var suppressEmptyUneditable = kb.anyJS(form, ns.ui('suppressEmptyUneditable'), null, formDoc);
   var editable = (_kb$updater = kb.updater) === null || _kb$updater === void 0 ? void 0 : _kb$updater.editable(doc.uri);
   var autocompleteOptions = {
@@ -20284,10 +17537,8 @@ function autocompleteField(dom, container, already, subject, form, doc, callback
   };
   autocompleteOptions.size = kb.anyJS(form, ns.ui('size'), null, formDoc) || undefined;
   var obj = kb.any(subject, property, undefined, doc);
-
   if (!obj) {
     obj = kb.any(form, ns.ui('default'));
-
     if (obj) {
       autocompleteOptions.currentObject = obj;
       autocompleteOptions.currentName = kb.any(autocompleteOptions.currentObject, labelProperty, null, doc);
@@ -20295,7 +17546,6 @@ function autocompleteField(dom, container, already, subject, form, doc, callback
       // No data or default. Should we suprress the whole field?
       if (suppressEmptyUneditable && !editable) {
         box.style.display = 'none'; // clutter removal
-
         return box;
       }
     }
@@ -20304,7 +17554,6 @@ function autocompleteField(dom, container, already, subject, form, doc, callback
     autocompleteOptions.currentObject = obj;
     autocompleteOptions.currentName = kb.any(autocompleteOptions.currentObject, labelProperty, null, doc);
   }
-
   lhs.appendChild(widgets.fieldLabel(dom, property, form));
   var barOptions = {
     editable: editable,
@@ -20315,8 +17564,11 @@ function autocompleteField(dom, container, already, subject, form, doc, callback
   }, function (err) {
     rhs.appendChild(widgets.errorMessageBlock(dom, "Error rendering autocomplete ".concat(form, ": ").concat(err), '#fee', err)); //
   });
+
   return box;
-} // ends
+}
+
+// ends
 //# sourceMappingURL=autocompleteField.js.map
 
 /***/ }),
@@ -20331,46 +17583,29 @@ function autocompleteField(dom, container, already, subject, form, doc, callback
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.renderAutoComplete = renderAutoComplete;
 exports.setVisible = setVisible;
-
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
-
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
-
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../../../debug */ "./lib/debug.js"));
-
 var style = _interopRequireWildcard(__webpack_require__(/*! ../../../style */ "./lib/style.js"));
-
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../../../widgets */ "./lib/widgets/index.js"));
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 var _publicData = __webpack_require__(/*! ./publicData */ "./lib/widgets/forms/autocomplete/publicData.js");
-
 var _language = __webpack_require__(/*! ./language */ "./lib/widgets/forms/autocomplete/language.js");
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 var AUTOCOMPLETE_THRESHOLD = 4; // don't check until this many characters typed
-
 var AUTOCOMPLETE_ROWS = 20; // 20?
-
 var AUTOCOMPLETE_ROWS_STRETCH = 40;
+
 /*
 Autocomplete happens in 6 phases:
   1. The search string is too small to bother
@@ -20386,19 +17621,16 @@ Autocomplete happens in 6 phases:
 
 function setVisible(element, visible) {
   element.style.display = visible ? '' : 'none'; // Do not use visibility, it holds the real estate
-} // The core of the autocomplete UI
+}
 
-
+// The core of the autocomplete UI
 function renderAutoComplete(_x, _x2, _x3, _x4) {
   return _renderAutoComplete.apply(this, arguments);
 } // renderAutoComplete
 // ENDS
-
-
 function _renderAutoComplete() {
   _renderAutoComplete = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee8(dom, acOptions, decoration, callback) {
     var complain, finish, gotIt, _gotIt, acceptButtonHandler, _acceptButtonHandler, cancelButtonHandler, _cancelButtonHandler, nameMatch, clearList, inputEventHHandler, _inputEventHHandler, loadBindingsAndFilterByLanguage, _loadBindingsAndFilterByLanguage, filterByName, refreshList, _refreshList, initialize, targetClass, lastBindings, loadedEnough, inputEventHandlerLock, allDisplayed, lastFilter, numberOfRows, div, foundName, foundObject, table, head, cell, searchInput, size, searchInputStyle;
-
     return _regenerator["default"].wrap(function _callee8$(_context8) {
       while (1) {
         switch (_context8.prev = _context8.next) {
@@ -20415,11 +17647,9 @@ function _renderAutoComplete() {
                 lastFilter = undefined;
                 foundObject = undefined;
               }
-
               if (decoration.deleteButton) {
                 setVisible(decoration.deleteButton, !!acOptions.currentObject);
               }
-
               if (decoration.acceptButton) {
                 setVisible(decoration.acceptButton, false); // hide until input complete
               }
@@ -20427,7 +17657,6 @@ function _renderAutoComplete() {
               if (decoration.editButton) {
                 setVisible(decoration.editButton, true);
               }
-
               if (decoration.cancelButton) {
                 setVisible(decoration.cancelButton, false); // only allow cancel when there is something to cancel
               }
@@ -20435,11 +17664,9 @@ function _renderAutoComplete() {
               inputEventHandlerLock = false;
               clearList();
             };
-
             _refreshList = function _refreshList3() {
               _refreshList = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7() {
                 var rowForBinding, compareBindingsByName, languagePrefs, filter, slimmed, displayable, _iterator, _step, binding;
-
                 return _regenerator["default"].wrap(function _callee7$(_context7) {
                   while (1) {
                     switch (_context7.prev = _context7.next) {
@@ -20447,13 +17674,11 @@ function _renderAutoComplete() {
                         compareBindingsByName = function _compareBindingsByNam(self, other) {
                           return other.name.value > self.name.value ? 1 : other.name.name < self.name.value ? -1 : 0;
                         };
-
                         rowForBinding = function _rowForBinding(binding) {
                           var row = dom.createElement('tr');
                           style.setStyle(row, 'autocompleteRowStyle');
                           row.setAttribute('style', 'padding: 0.3em;');
                           row.style.color = allDisplayed ? '#080' : '#088'; // green means 'you should find it here'
-
                           row.textContent = binding.name.value;
                           var object = (0, _publicData.bindingToTerm)(binding.subject);
                           var nameTerm = (0, _publicData.bindingToTerm)(binding.name);
@@ -20465,11 +17690,9 @@ function _renderAutoComplete() {
                                     case 0:
                                       debug.log('       click row textContent: ' + row.textContent);
                                       debug.log('       click name: ' + nameTerm.value);
-
                                       if (object && nameTerm) {
                                         gotIt(object, nameTerm);
                                       }
-
                                     case 3:
                                     case "end":
                                       return _context6.stop();
@@ -20477,61 +17700,49 @@ function _renderAutoComplete() {
                                 }
                               }, _callee6);
                             }));
-
                             return function (_x12) {
                               return _ref.apply(this, arguments);
                             };
                           }());
                           return row;
                         };
-
                         if (!inputEventHandlerLock) {
                           _context7.next = 5;
                           break;
                         }
-
                         debug.log("Ignoring \"".concat(searchInput.value, "\" because of lock "));
                         return _context7.abrupt("return");
-
                       case 5:
                         debug.log("Setting lock at \"".concat(searchInput.value, "\""));
                         inputEventHandlerLock = true;
                         _context7.next = 9;
                         return (0, _language.getPreferredLanguages)();
-
                       case 9:
                         languagePrefs = _context7.sent;
                         filter = searchInput.value.trim().toLowerCase();
-
                         if (!(filter.length < AUTOCOMPLETE_THRESHOLD)) {
                           _context7.next = 16;
                           break;
                         }
-
                         // too small
-                        clearList(); // candidatesLoaded = false
-
+                        clearList();
+                        // candidatesLoaded = false
                         numberOfRows = AUTOCOMPLETE_ROWS;
                         _context7.next = 31;
                         break;
-
                       case 16:
                         if (!(!allDisplayed || !lastFilter || !filter.startsWith(lastFilter))) {
                           _context7.next = 21;
                           break;
                         }
-
                         debug.log("   Querying database at \"".concat(filter, "\" cf last \"").concat(lastFilter, "\"."));
                         _context7.next = 20;
                         return loadBindingsAndFilterByLanguage(filter, languagePrefs);
-
                       case 20:
                         lastBindings = _context7.sent;
-
                       case 21:
                         // Trim table as search gets tighter:
                         slimmed = filterByName(filter, lastBindings);
-
                         if (loadedEnough && slimmed.length <= AUTOCOMPLETE_ROWS_STRETCH) {
                           numberOfRows = slimmed.length; // stretch if it means we get all items
                         }
@@ -20542,7 +17753,6 @@ function _renderAutoComplete() {
                         displayable.sort(compareBindingsByName);
                         clearList();
                         _iterator = _createForOfIteratorHelper(displayable);
-
                         try {
                           for (_iterator.s(); !(_step = _iterator.n()).done;) {
                             binding = _step.value;
@@ -20553,15 +17763,12 @@ function _renderAutoComplete() {
                         } finally {
                           _iterator.f();
                         }
-
                         if (slimmed.length === 1) {
                           gotIt((0, _publicData.bindingToTerm)(slimmed[0].subject), (0, _publicData.bindingToTerm)(slimmed[0].name));
                         }
-
                       case 31:
                         // else
                         inputEventHandlerLock = false;
-
                       case 32:
                       case "end":
                         return _context7.stop();
@@ -20571,17 +17778,14 @@ function _renderAutoComplete() {
               }));
               return _refreshList.apply(this, arguments);
             };
-
             refreshList = function _refreshList2() {
               return _refreshList.apply(this, arguments);
             };
-
             filterByName = function _filterByName(filter, bindings) {
               return bindings.filter(function (binding) {
                 return nameMatch(filter, binding.name.value);
               });
             };
-
             _loadBindingsAndFilterByLanguage = function _loadBindingsAndFilte2() {
               _loadBindingsAndFilterByLanguage = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(filter, languagePrefs) {
                 var bindings, slimmed;
@@ -20592,32 +17796,26 @@ function _renderAutoComplete() {
                         _context5.prev = 0;
                         _context5.next = 3;
                         return (0, _publicData.queryPublicDataByName)(filter, targetClass, languagePrefs || _language.defaultPreferredLanguages, acOptions.queryParams);
-
                       case 3:
                         bindings = _context5.sent;
                         _context5.next = 11;
                         break;
-
                       case 6:
                         _context5.prev = 6;
                         _context5.t0 = _context5["catch"](0);
                         complain('Error querying db of organizations: ' + _context5.t0);
                         inputEventHandlerLock = false;
                         return _context5.abrupt("return");
-
                       case 11:
                         loadedEnough = bindings.length < _publicData.AUTOCOMPLETE_LIMIT;
-
                         if (loadedEnough) {
                           lastFilter = filter;
                         } else {
                           lastFilter = undefined;
                         }
-
                         clearList();
                         slimmed = (0, _language.filterByLanguage)(bindings, languagePrefs);
                         return _context5.abrupt("return", slimmed);
-
                       case 16:
                       case "end":
                         return _context5.stop();
@@ -20627,11 +17825,9 @@ function _renderAutoComplete() {
               }));
               return _loadBindingsAndFilterByLanguage.apply(this, arguments);
             };
-
             loadBindingsAndFilterByLanguage = function _loadBindingsAndFilte(_x10, _x11) {
               return _loadBindingsAndFilterByLanguage.apply(this, arguments);
             };
-
             _inputEventHHandler = function _inputEventHHandler3() {
               _inputEventHHandler = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(_event) {
                 return _regenerator["default"].wrap(function _callee4$(_context4) {
@@ -20640,16 +17836,13 @@ function _renderAutoComplete() {
                       case 0:
                         // console.log('@@ AC inputEventHHandler called')
                         setVisible(decoration.cancelButton, true); // only allow cancel when there is something to cancel
-
                         refreshList(); /// @@  debounqce does not work with jest
-
                         /*
                         if (runningTimeout) {
                           clearTimeout(runningTimeout)
                         }
                         runningTimeout = setTimeout(refreshList, AUTOCOMPLETE_DEBOUNCE_MS)
                         */
-
                       case 2:
                       case "end":
                         return _context4.stop();
@@ -20659,28 +17852,22 @@ function _renderAutoComplete() {
               }));
               return _inputEventHHandler.apply(this, arguments);
             };
-
             inputEventHHandler = function _inputEventHHandler2(_x9) {
               return _inputEventHHandler.apply(this, arguments);
             };
-
             clearList = function _clearList() {
               while (table.children.length > 1) {
                 table.removeChild(table.lastChild);
               }
             };
-
             nameMatch = function _nameMatch(filter, candidate) {
               var parts = filter.split(' '); // Each name part must be somewhere
-
               for (var j = 0; j < parts.length; j++) {
                 var word = parts[j];
                 if (candidate.toLowerCase().indexOf(word) < 0) return false;
               }
-
               return true;
             };
-
             _cancelButtonHandler = function _cancelButtonHandler3() {
               _cancelButtonHandler = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(_event) {
                 return _regenerator["default"].wrap(function _callee3$(_context3) {
@@ -20688,7 +17875,6 @@ function _renderAutoComplete() {
                     switch (_context3.prev = _context3.next) {
                       case 0:
                         debug.log('Auto complete: Canceled by user! ');
-
                         if (acOptions.permanent) {
                           initialize();
                         } else {
@@ -20696,7 +17882,6 @@ function _renderAutoComplete() {
                             div.parentNode.removeChild(div);
                           }
                         }
-
                       case 2:
                       case "end":
                         return _context3.stop();
@@ -20706,11 +17891,9 @@ function _renderAutoComplete() {
               }));
               return _cancelButtonHandler.apply(this, arguments);
             };
-
             cancelButtonHandler = function _cancelButtonHandler2(_x8) {
               return _cancelButtonHandler.apply(this, arguments);
             };
-
             _acceptButtonHandler = function _acceptButtonHandler3() {
               _acceptButtonHandler = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(_event) {
                 return _regenerator["default"].wrap(function _callee2$(_context2) {
@@ -20721,7 +17904,6 @@ function _renderAutoComplete() {
                           // still
                           finish(foundObject, foundName);
                         }
-
                       case 1:
                       case "end":
                         return _context2.stop();
@@ -20731,11 +17913,9 @@ function _renderAutoComplete() {
               }));
               return _acceptButtonHandler.apply(this, arguments);
             };
-
             acceptButtonHandler = function _acceptButtonHandler2(_x7) {
               return _acceptButtonHandler.apply(this, arguments);
             };
-
             _gotIt = function _gotIt3() {
               _gotIt = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(object, name) {
                 return _regenerator["default"].wrap(function _callee$(_context) {
@@ -20746,24 +17926,18 @@ function _renderAutoComplete() {
                           _context.next = 10;
                           break;
                         }
-
                         decoration.acceptButton.disbaled = false;
                         setVisible(decoration.acceptButton, true); // now wait for confirmation
-
                         searchInput.value = name.value; // complete it
-
                         foundName = name;
                         foundObject = object;
                         debug.log('Auto complete: name: ' + name);
                         debug.log('Auto complete: waiting for accept ' + object);
                         clearList(); // This may be an option - nice and clean but does not allow change of mind
-
                         return _context.abrupt("return");
-
                       case 10:
                         setVisible(decoration.cancelButton, true);
                         finish(object, name);
-
                       case 12:
                       case "end":
                         return _context.stop();
@@ -20773,73 +17947,60 @@ function _renderAutoComplete() {
               }));
               return _gotIt.apply(this, arguments);
             };
-
             gotIt = function _gotIt2(_x5, _x6) {
               return _gotIt.apply(this, arguments);
             };
-
             finish = function _finish(object, name) {
               debug.log('Auto complete: finish! ' + object);
-
               if (object.termType === 'Literal' && acOptions.queryParams.objectURIBase) {
                 object = _solidLogic.store.sym(acOptions.queryParams.objectURIBase.value + object.value);
-              } // remove(decoration.cancelButton)
+              }
+              // remove(decoration.cancelButton)
               // remove(decoration.acceptButton)
               // remove(div)
-
-
               clearList();
               callback(object, name);
             };
-
             complain = function _complain(message) {
               var errorRow = table.appendChild(dom.createElement('tr'));
               debug.log(message);
               var err = new Error(message);
-              errorRow.appendChild(widgets.errorMessageBlock(dom, err, 'pink')); // errorMessageBlock will log the stack to the console
-
+              errorRow.appendChild(widgets.errorMessageBlock(dom, err, 'pink'));
+              // errorMessageBlock will log the stack to the console
               style.setStyle(errorRow, 'autocompleteRowStyle');
               errorRow.style.padding = '1em';
             };
-
             // initialiize
             // const queryParams: QueryParameters = acOptions.queryParams
             targetClass = acOptions.targetClass;
-
             if (targetClass) {
               _context8.next = 21;
               break;
             }
-
             throw new Error('renderAutoComplete: missing targetClass');
-
           case 21:
             // console.log(`renderAutoComplete: targetClass=${targetClass}` )
             if (decoration.acceptButton) {
               decoration.acceptButton.addEventListener('click', acceptButtonHandler, false);
             }
-
             if (decoration.cancelButton) {
               decoration.cancelButton.addEventListener('click', cancelButtonHandler, false);
-            } // var candidatesLoaded = false
+            }
 
-
+            // var candidatesLoaded = false
             loadedEnough = false;
             inputEventHandlerLock = false;
             allDisplayed = false;
             lastFilter = undefined;
             numberOfRows = AUTOCOMPLETE_ROWS; // this gets slimmed down
-
             div = dom.createElement('div');
             foundName = undefined; // once found accepted string must match this
-
             foundObject = undefined;
             table = div.appendChild(dom.createElement('table'));
             table.setAttribute('data-testid', 'autocomplete-table');
             table.setAttribute('style', 'max-width: 30em; margin: 0.5em;');
             head = table.appendChild(dom.createElement('tr'));
             style.setStyle(head, 'autocompleteRowStyle'); // textInputStyle or
-
             cell = head.appendChild(dom.createElement('td'));
             searchInput = cell.appendChild(dom.createElement('input'));
             searchInput.setAttribute('type', 'text');
@@ -20847,19 +18008,18 @@ function _renderAutoComplete() {
             size = acOptions.size || style.textInputSize || 20;
             searchInput.setAttribute('size', size);
             searchInput.setAttribute('data-testid', 'autocomplete-input');
-            searchInputStyle = style.textInputStyle || // searchInputStyle ?
+            searchInputStyle = style.textInputStyle ||
+            // searchInputStyle ?
             'border: 0.1em solid #444; border-radius: 0.5em; width: 100%; font-size: 100%; padding: 0.1em 0.6em'; // @
-
             searchInput.setAttribute('style', searchInputStyle);
             searchInput.addEventListener('keyup', function (event) {
               if (event.keyCode === 13) {
                 acceptButtonHandler(event);
               }
             }, false);
-            searchInput.addEventListener('input', inputEventHHandler); // console.log('@@ renderAutoComplete returns ' + div.innerHTML)
-
+            searchInput.addEventListener('input', inputEventHHandler);
+            // console.log('@@ renderAutoComplete returns ' + div.innerHTML)
             return _context8.abrupt("return", div);
-
           case 48:
           case "end":
             return _context8.stop();
@@ -20883,9 +18043,7 @@ function _renderAutoComplete() {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
@@ -20895,43 +18053,33 @@ exports.filterByLanguage = filterByLanguage;
 exports.getPreferredLanguages = getPreferredLanguages;
 exports.getPreferredLanguagesFor = getPreferredLanguagesFor;
 exports.languageCodeURIBase = void 0;
-
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
-
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
-
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../../../debug */ "./lib/debug.js"));
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../../../ns */ "./lib/ns.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 /* Logic to access public data stores
 *
 * including filtering resut by natural language etc
 * See https://solidos.solidcommunity.net/public/2021/01%20Building%20Solid%20Apps%20which%20use%20Public%20Data.html
 */
-
 /* eslint-disable no-console */
+
 // import * as logic from '../index'
 // import { authn } from '../../../authn/index'
-var languageCodeURIBase = 'https://www.w3.org/ns/iana/language-code/'; /// @@ unsupported on the web (2021)
 
+var languageCodeURIBase = 'https://www.w3.org/ns/iana/language-code/'; /// @@ unsupported on the web (2021)
 exports.languageCodeURIBase = languageCodeURIBase;
 var defaultPreferredLanguages = ['en', 'fr', 'de', 'it', 'ar'];
 exports.defaultPreferredLanguages = defaultPreferredLanguages;
-
 function addDefaults(array) {
   if (!array) array = [];
   return array.concat(defaultPreferredLanguages.filter(function (code) {
     return !array.includes(code);
   }));
 }
-
 function getPreferredLanguagesFor(_x) {
   return _getPreferredLanguagesFor.apply(this, arguments);
 }
@@ -20939,12 +18087,9 @@ function getPreferredLanguagesFor(_x) {
  *
  *  Either from solid preferences or browser preferences or default
  */
-
-
 function _getPreferredLanguagesFor() {
   _getPreferredLanguagesFor = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(person) {
     var _store$fetcher;
-
     var doc, list, languageCodeArray;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
@@ -20953,48 +18098,37 @@ function _getPreferredLanguagesFor() {
             doc = person.doc();
             _context.next = 3;
             return (_store$fetcher = _solidLogic.store.fetcher) === null || _store$fetcher === void 0 ? void 0 : _store$fetcher.load(doc);
-
           case 3:
             list = _solidLogic.store.any(person, ns.schema('knowsLanguage'), null, doc);
-
             if (list) {
               _context.next = 6;
               break;
             }
-
             return _context.abrupt("return", defaultPreferredLanguages);
-
           case 6:
             languageCodeArray = [];
             list.elements.forEach(function (item) {
               // console.log('@@ item ' + item)
               var lang = _solidLogic.store.any(item, ns.solid('publicId'), null, doc);
-
               if (!lang) {
                 console.warn('getPreferredLanguages: No publiID of language.');
                 return;
               }
-
               if (!lang.value.startsWith(languageCodeURIBase)) {
                 console.error("What should be a language code ".concat(lang.value, " does not start with ").concat(languageCodeURIBase));
                 return;
               }
-
               var code = lang.value.slice(languageCodeURIBase.length);
               languageCodeArray.push(code);
             });
-
             if (!(languageCodeArray.length > 0)) {
               _context.next = 11;
               break;
             }
-
             console.log("     User knows languages with codes: \"".concat(languageCodeArray.join(','), "\""));
             return _context.abrupt("return", addDefaults(languageCodeArray));
-
           case 11:
             return _context.abrupt("return", null);
-
           case 12:
           case "end":
             return _context.stop();
@@ -21004,7 +18138,6 @@ function _getPreferredLanguagesFor() {
   }));
   return _getPreferredLanguagesFor.apply(this, arguments);
 }
-
 function getPreferredLanguages() {
   return _getPreferredLanguages.apply(this, arguments);
 }
@@ -21012,8 +18145,6 @@ function getPreferredLanguages() {
  * remove dupliacte names for the same thing, leaving the user's
  * preferred language version
 */
-
-
 function _getPreferredLanguages() {
   _getPreferredLanguages = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2() {
     var me, solidLanguagePrefs;
@@ -21023,54 +18154,41 @@ function _getPreferredLanguages() {
           case 0:
             _context2.next = 2;
             return _solidLogic.authn.currentUser();
-
           case 2:
             me = _context2.sent;
-
             if (!me) {
               _context2.next = 9;
               break;
             }
-
             _context2.next = 6;
             return getPreferredLanguagesFor(me);
-
           case 6:
             solidLanguagePrefs = _context2.sent;
-
             if (!solidLanguagePrefs) {
               _context2.next = 9;
               break;
             }
-
             return _context2.abrupt("return", solidLanguagePrefs);
-
           case 9:
             if (!(typeof navigator !== 'undefined')) {
               _context2.next = 14;
               break;
             }
-
             if (!navigator.languages) {
               _context2.next = 12;
               break;
             }
-
             return _context2.abrupt("return", addDefaults(navigator.languages.map(function (longForm) {
               return longForm.split('-')[0];
             })));
-
           case 12:
             if (!navigator.language) {
               _context2.next = 14;
               break;
             }
-
             return _context2.abrupt("return", addDefaults([navigator.language.split('-')[0]]));
-
           case 14:
             return _context2.abrupt("return", defaultPreferredLanguages);
-
           case 15:
           case "end":
             return _context2.stop();
@@ -21080,7 +18198,6 @@ function _getPreferredLanguages() {
   }));
   return _getPreferredLanguages.apply(this, arguments);
 }
-
 function filterByLanguage(bindings, languagePrefs) {
   var uris = {};
   bindings.forEach(function (binding) {
@@ -21092,29 +18209,23 @@ function filterByLanguage(bindings, languagePrefs) {
   var languagePrefs2 = languagePrefs || defaultPreferredLanguages;
   languagePrefs2.reverse(); // Preferred last
 
-  var slimmed = []; // console.log(` @@ {languagePrefs2 ${languagePrefs2}`)
-
+  var slimmed = [];
+  // console.log(` @@ {languagePrefs2 ${languagePrefs2}`)
   for (var u in uris) {
     // needs hasOwnProperty ?
     var _bindings = uris[u];
-
     var sortMe = _bindings.map(function (binding) {
       var lang = binding.name['xml:lang'];
       var index = languagePrefs2.indexOf(lang);
-      var pair = [index, binding]; // console.log(`   @@ lang: ${lang}, index: ${index}`)
-
+      var pair = [index, binding];
+      // console.log(`   @@ lang: ${lang}, index: ${index}`)
       return pair;
     });
-
     sortMe.sort(); // best at th ebottom
-
     sortMe.reverse(); // best at the top
     // console.debug('@@ sortMe:', sortMe)
-
     slimmed.push(sortMe[0][1]);
   } // map u
-
-
   debug.log(" Filter by language: ".concat(bindings.length, " -> ").concat(slimmed.length));
   return slimmed;
 }
@@ -21132,9 +18243,7 @@ function filterByLanguage(bindings, languagePrefs) {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
@@ -21154,35 +18263,24 @@ exports.queryPublicDataByName = queryPublicDataByName;
 exports.queryPublicDataConstruct = queryPublicDataConstruct;
 exports.queryPublicDataSelect = queryPublicDataSelect;
 exports.wikidataParameters = exports.wikidataOutgoingClassMap = exports.wikidataIncomingClassMap = exports.wikidataClasses = exports.variableNameToPredicateMap = void 0;
-
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
-
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
-
 var _rdflib = __webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js");
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../../../debug */ "./lib/debug.js"));
-
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../../../ns */ "./lib/ns.js"));
-
 var _language = __webpack_require__(/*! ./language */ "./lib/widgets/forms/autocomplete/language.js");
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 /* Logic to access public data stores
 *
 * including filtering resut by natural language etc
 * See https://solidos.solidcommunity.net/public/2021/01%20Building%20Solid%20Apps%20which%20use%20Public%20Data.html
 */
-
 /* eslint-disable no-console */
+
 var AUTOCOMPLETE_LIMIT = 200; // How many to get from server
 // With 3000 we could exceed the wikidata timeout
-
 exports.AUTOCOMPLETE_LIMIT = AUTOCOMPLETE_LIMIT;
 var subjectRegexp = /\$\(subject\)/g;
 // Schema.org seems to suggest NGOs are non-profit and Corporaions are for-profit
@@ -21220,10 +18318,10 @@ exports.fetcherOptionsJsonPublicData = fetcherOptionsJsonPublicData;
 var escoParameters = {
   label: 'ESCO',
   logo: _solidLogic.store.sym('https://ec.europa.eu/esco/portal/static_resource2/images/logo/logo_en.gif'),
-  searchByNameURI: 'https://ec.europa.eu/esco/api/search?language=$(language)&type=occupation&text=$(name)' // endpoint: undefined
+  searchByNameURI: 'https://ec.europa.eu/esco/api/search?language=$(language)&type=occupation&text=$(name)'
+  // endpoint: undefined
   // returnFormat: 'ESCO',
   // targetClass: {}
-
 };
 exports.escoParameters = escoParameters;
 var dbpediaParameters = {
@@ -21254,6 +18352,7 @@ var wikidataParameters = {
   endpoint: 'https://query.wikidata.org/sparql',
   searchByNameQuery: "SELECT ?subject ?name\n  WHERE {\n    ?klass wdt:P279* $(targetClass) .\n    ?subject wdt:P31 ?klass .\n    ?subject rdfs:label ?name.\n    FILTER regex(?name, \"$(name)\", \"i\")\n  } LIMIT $(limit) ",
   // was SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en" }
+
   insitituteDetailsQuery: "CONSTRUCT\n{  wd:Q49108 schema:name ?itemLabel;\n             schema:logo ?logo;\n              schema:logo  ?sealImage;\n             schema:subOrganization  ?subsidiary .\n                 ?subsidiary schema:name ?subsidiaryLabel .\n}\nWHERE\n{\n   wd:Q49108 # rdfs:label ?itemLabel ;\n             wdt:P154 ?logo;\n              wdt:P158  ?sealImage ;\n             wdt:P355  ?subsidiary .\n          #  ?subsidiary rdfs:label ?subsidiaryLabel .\n\n  SERVICE wikibase:label { bd:serviceParam wikibase:language \"[AUTO_LANGUAGE], fr\". }\n}"
 };
 exports.wikidataParameters = wikidataParameters;
@@ -21273,7 +18372,6 @@ var wikidataIncomingClassMap = {
   'http://www.wikidata.org/entity/Q2221906': ns.schema('Place'),
   // geographic location
   'http://www.wikidata.org/entity/Q167037': ns.schema('Corporation') // Corporation
-
 };
 exports.wikidataIncomingClassMap = wikidataIncomingClassMap;
 var variableNameToPredicateMap = {
@@ -21294,10 +18392,8 @@ var variableNameToPredicateMap = {
   "long": ns.schema('longitude')
 };
 exports.variableNameToPredicateMap = variableNameToPredicateMap;
-
 function bindingToTerm(item) {
   var typ = item.type.toLowerCase();
-
   if (typ === 'uri' || typ === 'iri') {
     return _solidLogic.store.sym(item.value);
   } else if (typ === 'literal') {
@@ -21310,7 +18406,6 @@ function bindingToTerm(item) {
     throw new Error("bindingToTerm: Unexpected type \"".concat(item.type, "\" in sparql binding}"));
   }
 }
-
 function loadFromBindings(kb, solidSubject, bindings, doc) {
   var predMap = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : variableNameToPredicateMap;
   var results = {};
@@ -21320,21 +18415,18 @@ function loadFromBindings(kb, solidSubject, bindings, doc) {
     for (var key in binding) {
       var result = binding[key];
       var combined = JSON.stringify(result); // ( result.type, result.value )
-
       results[key] = results[key] || new Set();
       results[key].add(combined); // remove duplicates
     }
   });
-
   var _loop = function _loop(key) {
     var values = results[key];
     debug.log("    results ".concat(key, " -> ").concat(values));
     values.forEach(function (combined) {
       var result = JSON.parse(combined);
       var type = result.type,
-          value = result.value;
+        value = result.value;
       var obj;
-
       if (type === 'uri') {
         obj = kb.sym(value);
       } else if (type === 'literal') {
@@ -21342,7 +18434,6 @@ function loadFromBindings(kb, solidSubject, bindings, doc) {
       } else {
         throw new Error("loadFromBindings:  unexpected type: ".concat(type));
       }
-
       if (key === 'type') {
         if (wikidataIncomingClassMap[value]) {
           obj = wikidataIncomingClassMap[value];
@@ -21351,14 +18442,12 @@ function loadFromBindings(kb, solidSubject, bindings, doc) {
         }
       } else if (key === 'coordinates') {
         // const latlong = value // Like 'Point(-71.106111111 42.375)'
-        debug.log('         @@@ hey a point: ' + value); // const regexp = /.*\(([-0-9\.-]*) ([-0-9\.-]*)\)/
-
+        debug.log('         @@@ hey a point: ' + value);
+        // const regexp = /.*\(([-0-9\.-]*) ([-0-9\.-]*)\)/
         var regexp = /.*\(([-0-9.-]*) ([-0-9.-]*)\)/;
         var match = regexp.exec(value);
-
         if (match) {
           var _float = ns.xsd('float');
-
           var latitude = new _rdflib.Literal(match[1], null, _float);
           var longitude = new _rdflib.Literal(match[2], null, _float);
           kb.add(solidSubject, ns.schema('longitude'), longitude, doc);
@@ -21368,29 +18457,23 @@ function loadFromBindings(kb, solidSubject, bindings, doc) {
         }
       } else {
         var pred = predMap[key] || ns.schema(key); // fallback to just using schema.org
-
         kb.add(solidSubject, pred, obj, doc); // @@ deal with non-string and objects
-
         debug.log("  public data ".concat(pred, " ").concat(obj, "."));
       }
     });
   };
-
   for (var key in results) {
     _loop(key);
   }
 }
+
 /* ESCO sopecific
 */
-
-
 function ESCOResultToBindings(json) {
   var results = json._embedded.results; // Array
-
   var bindings = results.map(function (result) {
     var name = result.title;
     var uri = result.uri; // like http://data.europa.eu/esco/occupation/57af9090-55b4-4911-b2d0-86db01c00b02
-
     return {
       name: {
         value: name,
@@ -21402,12 +18485,12 @@ function ESCOResultToBindings(json) {
       }
     }; // simulate SPARQL bindings
   });
+
   return bindings;
 }
+
 /*  Query all entities of given class and partially matching name
 */
-
-
 function queryESCODataByName(_x, _x2, _x3) {
   return _queryESCODataByName.apply(this, arguments);
 }
@@ -21417,12 +18500,9 @@ function queryESCODataByName(_x, _x2, _x3) {
 * This will not be needed whn that  WDQS bug fixed.
 * This is aptured in https://github.com/solidos/solid-ui/issues/403
 */
-
-
 function _queryESCODataByName() {
   _queryESCODataByName = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(filter, theClass, queryTarget) {
     var _store$fetcher;
-
     var limit, queryURI, response, text, json;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
@@ -21432,34 +18512,26 @@ function _queryESCODataByName() {
               _context.next = 2;
               break;
             }
-
             throw new Error('Missing queryTarget.searchByNameURI on queryESCODataByName');
-
           case 2:
             limit = queryTarget.limit || AUTOCOMPLETE_LIMIT;
             queryURI = queryTarget.searchByNameURI.replace('$(name)', filter).replace('$(limit)', '' + limit).replace('$(targetClass)', theClass.toNT());
             debug.log('Querying ESCO data - uri: ' + queryURI);
             _context.next = 7;
             return (_store$fetcher = _solidLogic.store.fetcher) === null || _store$fetcher === void 0 ? void 0 : _store$fetcher.webOperation('GET', queryURI, fetcherOptionsJsonPublicData);
-
           case 7:
             response = _context.sent;
             text = (response === null || response === void 0 ? void 0 : response.responseText) || '';
             debug.log('    Query result  text' + text.slice(0, 500) + '...');
-
             if (!(text.length === 0)) {
               _context.next = 12;
               break;
             }
-
             throw new Error('Wot no text back from ESCO query ' + queryURI);
-
           case 12:
             json = JSON.parse(text); // console.log('Whole JSON return object', json)
-
             debug.log('    ESCO Query result JSON' + JSON.stringify(json, null, 4).slice(0, 500) + '...');
             return _context.abrupt("return", ESCOResultToBindings(json));
-
           case 15:
           case "end":
             return _context.stop();
@@ -21469,30 +18541,24 @@ function _queryESCODataByName() {
   }));
   return _queryESCODataByName.apply(this, arguments);
 }
-
 function fixWikidataJSON(str) {
   var syntaxProblem = str.indexOf('SPARQL-QUERY');
-  if (syntaxProblem < 0) return str; // console.log('@@ fixWikidataJSON FIXING')
-
+  if (syntaxProblem < 0) return str;
+  // console.log('@@ fixWikidataJSON FIXING')
   debug.warn('  ### Fixing JSON with wikidata error code injection ' + str.slice(syntaxProblem, syntaxProblem + 200));
   var goodness = str.lastIndexOf('}, {');
   return str.slice(0, goodness) + ' } ] } } '; // Close binding, array, bindings, results, root object
 }
 /*  Query all entities of given class and partially matching name
 */
-
-
 function queryPublicDataByName(_x4, _x5, _x6, _x7) {
   return _queryPublicDataByName.apply(this, arguments);
 }
 /* Query a database using SPARQL SELECT
 */
-
-
 function _queryPublicDataByName() {
   _queryPublicDataByName = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(filter, theClass, languages, queryTarget) {
     var substituteStrings, languagePrefs, language, sparql, queryURI, response, _store$fetcher2, text, text2, json, bindings;
-
     return _regenerator["default"].wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
@@ -21502,109 +18568,82 @@ function _queryPublicDataByName() {
               var u1 = template.replace('$(name)', filter).replace('$(limit)', '' + limit).replace('$(language)', language);
               return u1.replace('$(targetClass)', theClass.toNT());
             };
-
             if (theClass) {
               _context2.next = 3;
               break;
             }
-
             throw new Error('queryPublicDataByName: No class provided');
-
           case 3:
             _context2.next = 5;
             return (0, _language.getPreferredLanguages)();
-
           case 5:
             _context2.t0 = _context2.sent;
-
             if (_context2.t0) {
               _context2.next = 8;
               break;
             }
-
             _context2.t0 = _language.defaultPreferredLanguages;
-
           case 8:
             languagePrefs = _context2.t0;
             language = languagePrefs[0] || 'en';
-
             if (!queryTarget.searchByNameQuery) {
               _context2.next = 16;
               break;
             }
-
             sparql = substituteStrings(queryTarget.searchByNameQuery);
             debug.log('Querying public data - sparql: ' + sparql);
             return _context2.abrupt("return", queryPublicDataSelect(sparql, queryTarget));
-
           case 16:
             if (!queryTarget.searchByNameURI) {
               _context2.next = 46;
               break;
             }
-
             // not sparql - random API
             queryURI = substituteStrings(queryTarget.searchByNameURI);
             _context2.prev = 18;
             _context2.next = 21;
             return (_store$fetcher2 = _solidLogic.store.fetcher) === null || _store$fetcher2 === void 0 ? void 0 : _store$fetcher2.webOperation('GET', queryURI, fetcherOptionsJsonPublicData);
-
           case 21:
             response = _context2.sent;
             _context2.next = 27;
             break;
-
           case 24:
             _context2.prev = 24;
             _context2.t1 = _context2["catch"](18);
             throw new Error("Exception when trying to fetch ".concat(queryURI, " \n ").concat(_context2.t1));
-
           case 27:
             text = response.responseText || ''; // ts
-
             if (!(response.status !== 200)) {
               _context2.next = 30;
               break;
             }
-
             throw new Error("HTTP error status ".concat(response.status, " trying to fetch ").concat(queryURI, " "));
-
           case 30:
             debug.log('    Query result  text' + text.slice(0, 500) + '...');
-
             if (!(text.length === 0)) {
               _context2.next = 33;
               break;
             }
-
             throw new Error('queryPublicDataByName: No text back from public data query ' + queryURI);
-
           case 33:
             text2 = fixWikidataJSON(text); // Kludge: strip of interrupting error message
-
             json = JSON.parse(text2);
             debug.log('    API Query result JSON' + JSON.stringify(json, null, 4).slice(0, 500) + '...');
-
             if (!json._embedded) {
               _context2.next = 42;
               break;
             }
-
             debug.log('      Looks like ESCO');
             bindings = ESCOResultToBindings(json);
             return _context2.abrupt("return", bindings);
-
           case 42:
             alert('Code me: unrecognized API return format');
             throw new Error("*** Need to add code to parse unrecognized API JSON return\n".concat(JSON.stringify(json, null, 4)));
-
           case 44:
             _context2.next = 47;
             break;
-
           case 46:
             throw new Error('Query source must have either rest API or SPARQL endpoint.');
-
           case 47:
           case "end":
             return _context2.stop();
@@ -21614,18 +18653,14 @@ function _queryPublicDataByName() {
   }));
   return _queryPublicDataByName.apply(this, arguments);
 }
-
 function queryPublicDataSelect(_x8, _x9) {
   return _queryPublicDataSelect.apply(this, arguments);
 }
 /* Load from a database using SPARQL CONSTRUCT
 */
-
-
 function _queryPublicDataSelect() {
   _queryPublicDataSelect = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(sparql, queryTarget) {
     var _store$fetcher3;
-
     var myUrlWithParams, queryURI, headers, options, response, text, text2, json, bindings;
     return _regenerator["default"].wrap(function _callee3$(_context3) {
       while (1) {
@@ -21635,9 +18670,7 @@ function _queryPublicDataSelect() {
               _context3.next = 2;
               break;
             }
-
             throw new Error('Missing queryTarget.endpoint required for queryPublicDataSelect');
-
           case 2:
             myUrlWithParams = new URL(queryTarget.endpoint);
             myUrlWithParams.searchParams.append('query', sparql);
@@ -21652,25 +18685,20 @@ function _queryPublicDataSelect() {
             };
             _context3.next = 11;
             return (_store$fetcher3 = _solidLogic.store.fetcher) === null || _store$fetcher3 === void 0 ? void 0 : _store$fetcher3.webOperation('GET', queryURI, options);
-
           case 11:
             response = _context3.sent;
             text = (response === null || response === void 0 ? void 0 : response.responseText) || '';
-
             if (!(text.length === 0)) {
               _context3.next = 15;
               break;
             }
-
             throw new Error('No text back from query ' + queryURI);
-
           case 15:
             text2 = fixWikidataJSON(text);
             json = JSON.parse(text2);
             debug.log('    Query result JSON' + JSON.stringify(json, null, 4).slice(0, 100) + '...');
             bindings = json.results.bindings;
             return _context3.abrupt("return", bindings);
-
           case 20:
           case "end":
             return _context3.stop();
@@ -21680,29 +18708,23 @@ function _queryPublicDataSelect() {
   }));
   return _queryPublicDataSelect.apply(this, arguments);
 }
-
 function queryPublicDataConstruct(_x10, _x11, _x12) {
   return _queryPublicDataConstruct.apply(this, arguments);
 }
-
 function _queryPublicDataConstruct() {
   _queryPublicDataConstruct = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(sparql, pubicId, queryTarget) {
     var _store$fetcher4;
-
     var myUrlWithParams, queryURI, headers, options, response, text, report;
     return _regenerator["default"].wrap(function _callee4$(_context4) {
       while (1) {
         switch (_context4.prev = _context4.next) {
           case 0:
             debug.log('queryPublicDataConstruct: sparql:', sparql);
-
             if (queryTarget.endpoint) {
               _context4.next = 3;
               break;
             }
-
             throw new Error('Missing queryTarget.endpoint required for queryPublicDataConstruct');
-
           case 3:
             myUrlWithParams = new URL(queryTarget.endpoint);
             myUrlWithParams.searchParams.append('query', sparql);
@@ -21714,27 +18736,21 @@ function _queryPublicDataConstruct() {
               credentials: 'omit',
               // CORS // @tsc pain
               headers: headers // ({ Accept: 'text/turtle' } as Headers)
-
             };
             _context4.next = 12;
             return (_store$fetcher4 = _solidLogic.store.fetcher) === null || _store$fetcher4 === void 0 ? void 0 : _store$fetcher4.webOperation('GET', queryURI, options);
-
           case 12:
             response = _context4.sent;
             text = (response === null || response === void 0 ? void 0 : response.responseText) || 'No response text?';
             report = text.length > 500 ? text.slice(0, 200) + ' ... ' + text.slice(-200) : text;
             debug.log('    queryPublicDataConstruct result text:' + report);
-
             if (!(text.length === 0)) {
               _context4.next = 18;
               break;
             }
-
             throw new Error('queryPublicDataConstruct: No text back from construct query:' + queryURI);
-
           case 18:
             (0, _rdflib.parse)(text, _solidLogic.store, pubicId.uri, 'text/turtle');
-
           case 19:
           case "end":
             return _context4.stop();
@@ -21744,11 +18760,9 @@ function _queryPublicDataConstruct() {
   }));
   return _queryPublicDataConstruct.apply(this, arguments);
 }
-
 function loadPublicDataThing(_x13, _x14, _x15) {
   return _loadPublicDataThing.apply(this, arguments);
 }
-
 function _loadPublicDataThing() {
   _loadPublicDataThing = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(kb, subject, publicDataID) {
     var iDToFetch, headers;
@@ -21760,22 +18774,17 @@ function _loadPublicDataThing() {
               _context5.next = 4;
               break;
             }
-
             return _context5.abrupt("return", getDbpediaDetails(kb, subject, publicDataID));
-
           case 4:
             if (!publicDataID.uri.match(/^https?:\/\/www\.wikidata\.org\/entity\/.*/)) {
               _context5.next = 9;
               break;
             }
-
             _context5.next = 7;
             return getWikidataDetails(kb, subject, publicDataID);
-
           case 7:
             _context5.next = 13;
             break;
-
           case 9:
             iDToFetch = publicDataID.uri.startsWith('http:') ? kb.sym('https:' + publicDataID.uri.slice(5)) : publicDataID;
             headers = new Headers();
@@ -21784,7 +18793,6 @@ function _loadPublicDataThing() {
               credentials: 'omit',
               headers: headers
             }));
-
           case 13:
           case "end":
             return _context5.stop();
@@ -21794,11 +18802,9 @@ function _loadPublicDataThing() {
   }));
   return _loadPublicDataThing.apply(this, arguments);
 }
-
 function getWikidataDetails(_x16, _x17, _x18) {
   return _getWikidataDetails.apply(this, arguments);
 }
-
 function _getWikidataDetails() {
   _getWikidataDetails = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(kb, solidSubject, publicDataID) {
     var subjRegexp, sparql;
@@ -21810,10 +18816,8 @@ function _getWikidataDetails() {
             sparql = instituteDetailsWikidataQuery.replace(subjRegexp, publicDataID.toNT());
             _context6.next = 4;
             return queryPublicDataConstruct(sparql, publicDataID, wikidataParameters);
-
           case 4:
             debug.log('getWikidataDetails: loaded.', publicDataID);
-
           case 5:
           case "end":
             return _context6.stop();
@@ -21823,11 +18827,9 @@ function _getWikidataDetails() {
   }));
   return _getWikidataDetails.apply(this, arguments);
 }
-
 function getWikidataDetailsOld(_x19, _x20, _x21) {
   return _getWikidataDetailsOld.apply(this, arguments);
 }
-
 function _getWikidataDetailsOld() {
   _getWikidataDetailsOld = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7(kb, solidSubject, publicDataID) {
     var sparql, bindings;
@@ -21838,11 +18840,9 @@ function _getWikidataDetailsOld() {
             sparql = "select distinct *  where {\n  optional { $(subject)  wdt:P31  ?targetClass } # instance of\n  optional { $(subject)  wdt:P154  ?logo }\n  optional { $(subject)  wdt:P158  ?sealImage }\n# optional { $(subject)  wdt:P159  ?headquartersLocation }\n\noptional { $(subject)  wdt:P17  ?country }\noptional { $(subject)  wdt:P18  ?image }\noptional { $(subject)  wdt:P1813  ?shortName }\n\noptional { $(subject)  wdt:P355  ?subsidiary }\n# SERVICE wikibase:label { bd:serviceParam wikibase:language \"fr,en,de,it\" }\n}".replace(subjectRegexp, publicDataID.toNT());
             _context7.next = 3;
             return queryPublicDataSelect(sparql, wikidataParameters);
-
           case 3:
             bindings = _context7.sent;
             loadFromBindings(kb, publicDataID, bindings, publicDataID.doc()); // arg2 was solidSubject
-
           case 5:
           case "end":
             return _context7.stop();
@@ -21852,11 +18852,9 @@ function _getWikidataDetailsOld() {
   }));
   return _getWikidataDetailsOld.apply(this, arguments);
 }
-
 function getWikidataLocation(_x22, _x23, _x24) {
   return _getWikidataLocation.apply(this, arguments);
 }
-
 function _getWikidataLocation() {
   _getWikidataLocation = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee8(kb, solidSubject, publicDataID) {
     var sparql, bindings;
@@ -21868,12 +18866,10 @@ function _getWikidataLocation() {
             debug.log(' location query sparql:' + sparql);
             _context8.next = 4;
             return queryPublicDataSelect(sparql, wikidataParameters);
-
           case 4:
             bindings = _context8.sent;
             debug.log(' location query bindings:', bindings);
             loadFromBindings(kb, publicDataID, bindings, publicDataID.doc()); // was solidSubject
-
           case 7:
           case "end":
             return _context8.stop();
@@ -21883,11 +18879,9 @@ function _getWikidataLocation() {
   }));
   return _getWikidataLocation.apply(this, arguments);
 }
-
 function getDbpediaDetails(_x25, _x26, _x27) {
   return _getDbpediaDetails.apply(this, arguments);
 }
-
 function _getDbpediaDetails() {
   _getDbpediaDetails = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee9(kb, solidSubject, publicDataID) {
     var sparql, bindings;
@@ -21899,12 +18893,10 @@ function _getDbpediaDetails() {
             sparql = "select distinct ?city, ?state, ?country, ?homepage, ?logo, ?lat, ?long,  WHERE {\n    OPTIONAL { <".concat(publicDataID, "> <http://dbpedia.org/ontology/city> ?city }\n    OPTIONAL { ").concat(publicDataID, " <http://dbpedia.org/ontology/state> ?state }\n    OPTIONAL { ").concat(publicDataID, " <http://dbpedia.org/ontology/country> ?country }\n    OPTIONAL { ").concat(publicDataID, " foaf:homepage ?homepage }\n    OPTIONAL { ").concat(publicDataID, " foaf:lat ?lat; foaf:long ?long }\n    OPTIONAL { ").concat(publicDataID, " <http://dbpedia.org/ontology/country> ?country }\n   }");
             _context9.next = 3;
             return queryPublicDataSelect(sparql, dbpediaParameters);
-
           case 3:
             bindings = _context9.sent;
             loadFromBindings(kb, publicDataID, bindings, publicDataID.doc());
             debug.log('Finished getDbpediaDetails.');
-
           case 6:
           case "end":
             return _context9.stop();
@@ -21928,7 +18920,6 @@ function _getDbpediaDetails() {
 
 
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
@@ -21936,31 +18927,20 @@ exports.basicField = basicField;
 exports.fieldLabel = fieldLabel;
 exports.fieldStore = fieldStore;
 exports.renderNameValuePair = renderNameValuePair;
-
 var _rdflib = __webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js");
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../../ns */ "./lib/ns.js"));
-
 var _style = __webpack_require__(/*! ../../style */ "./lib/style.js");
-
 var _utils = __webpack_require__(/*! ../../utils */ "./lib/utils/index.js");
-
 var _error = __webpack_require__(/*! ../error */ "./lib/widgets/error.js");
-
 var _fieldFunction = __webpack_require__(/*! ./fieldFunction */ "./lib/widgets/forms/fieldFunction.js");
-
 var _fieldParams = __webpack_require__(/*! ./fieldParams */ "./lib/widgets/forms/fieldParams.js");
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 var store = _solidLogic.solidLogicSingleton.store;
+
 /*  Style and create a name, value pair
 */
-
 function renderNameValuePair(dom, kb, box, form, label) {
   // const property = kb.any(form, ns.ui('property'))
   box.style.display = 'flex';
@@ -21971,7 +18951,6 @@ function renderNameValuePair(dom, kb, box, form, label) {
   lhs.setAttribute('class', 'formFieldName');
   lhs.setAttribute('style', _style.formFieldNameBoxStyle);
   rhs.setAttribute('class', 'formFieldValue');
-
   if (label) {
     lhs.appendChild(dom.createTextNode(label));
   } else if (kb.any(form, ns.ui('property'))) {
@@ -21981,9 +18960,9 @@ function renderNameValuePair(dom, kb, box, form, label) {
     rhs.appendChild((0, _error.errorMessageBlock)(dom, 'No property or label given for form field: ' + form));
     lhs.appendChild(dom.createTextNode('???'));
   }
-
   return rhs;
 }
+
 /**
  * Create an anchor element with a label as the anchor text.
  *
@@ -21993,25 +18972,20 @@ function renderNameValuePair(dom, kb, box, form, label) {
  *
  * @internal exporting this only for unit tests
  */
-
-
 function fieldLabel(dom, property, fieldInQuestion) {
   var lab = store.any(fieldInQuestion, ns.ui('label'));
   if (!lab) lab = (0, _utils.label)(property, true); // Init capital
-
   if (property === undefined) {
     return dom.createTextNode('@@Internal error: undefined property');
   }
-
   var anchor = dom.createElement('a');
   /* istanbul ignore next */
-
   if (property.uri) anchor.setAttribute('href', property.uri);
   anchor.setAttribute('style', 'color: #3B5998; text-decoration: none;'); // Not too blue and no underline
-
   anchor.textContent = lab;
   return anchor;
 }
+
 /**
  * Returns the document for the first quad that matches
  * the subject and predicate provided, or default if that
@@ -22023,22 +18997,18 @@ function fieldLabel(dom, property, fieldInQuestion) {
  *
  * @internal exporting this only for unit tests
  */
-
-
 function fieldStore(subject, predicate, def) {
   var sts = store.statementsMatching(subject, predicate);
   if (sts.length === 0) return def; // can used default as no data yet
-
   if (!store.updater) {
     throw new Error('Store has no updater');
   }
-
   if (sts.length > 0 && sts[0].why.value && store.updater.editable(sts[0].why.value, store)) {
     return store.sym(sts[0].why.value);
   }
-
   return def;
 }
+
 /**
  * Render a basic form field
  *
@@ -22056,8 +19026,6 @@ function fieldStore(subject, predicate, def) {
  * @returns The HTML widget created
  */
 // eslint-disable-next-line complexity
-
-
 function basicField(dom, container, already, subject, form, doc, callbackFunction) {
   var kb = store;
   var formDoc = form.doc ? form.doc() : null; // @@ if blank no way to know
@@ -22065,20 +19033,18 @@ function basicField(dom, container, already, subject, form, doc, callbackFunctio
   var box = dom.createElement('div');
   var property = kb.any(form, ns.ui('property'));
   if (container) container.appendChild(box);
-
   if (!property) {
     return box.appendChild((0, _error.errorMessageBlock)(dom, 'Error: No property given for text field: ' + form));
   }
+  var rhs = renderNameValuePair(dom, kb, box, form);
 
-  var rhs = renderNameValuePair(dom, kb, box, form); // It can be cleaner to just remove empty fields if you can't edit them anyway
-
+  // It can be cleaner to just remove empty fields if you can't edit them anyway
   var suppressEmptyUneditable = kb.anyJS(form, ns.ui('suppressEmptyUneditable'), null, formDoc);
   var uri = (0, _fieldFunction.mostSpecificClassURI)(form);
   var params = _fieldParams.fieldParams[uri];
   if (params === undefined) params = {
     style: ''
   }; // non-bottom field types can do this
-
   var paramStyle = params.style || '';
   var style = _style.textInputStyle + paramStyle;
   var field = dom.createElement('input');
@@ -22091,11 +19057,9 @@ function basicField(dom, container, already, subject, form, doc, callbackFunctio
   field.setAttribute('maxLength', maxLength ? '' + maxLength : '4096');
   doc = doc || fieldStore(subject, property, doc);
   var obj = kb.any(subject, property, undefined, doc);
-
   if (!obj) {
     obj = kb.any(form, ns.ui('default'));
   }
-
   if (obj && obj.value && params.uriPrefix) {
     // eg tel: or mailto:
     field.value = decodeURIComponent(obj.value.replace(params.uriPrefix, '')) // should have no spaces but in case
@@ -22104,26 +19068,23 @@ function basicField(dom, container, already, subject, form, doc, callbackFunctio
     /* istanbul ignore next */
     field.value = obj.value || obj.value || '';
   }
-
   field.setAttribute('style', style);
-
   if (!kb.updater) {
     throw new Error('kb has no updater');
   }
-
   if (!kb.updater.editable(doc.uri)) {
     field.readOnly = true // was: disabled. readOnly is better
     ;
-    field.style = _style.textInputStyleUneditable + paramStyle; // backgroundColor = textInputBackgroundColorUneditable
-
+    field.style = _style.textInputStyleUneditable + paramStyle;
+    // backgroundColor = textInputBackgroundColorUneditable
     if (suppressEmptyUneditable && field.value === '') {
       box.style.display = 'none'; // clutter
     }
 
     return box;
-  } // read-write:
+  }
 
-
+  // read-write:
   field.addEventListener('keyup', function (_e) {
     if (params.pattern) {
       field.setAttribute('style', style + (field.value.match(params.pattern) ? 'color: green;' : 'color: red;'));
@@ -22133,13 +19094,9 @@ function basicField(dom, container, already, subject, form, doc, callbackFunctio
     // i.e. lose focus with changed data
     if (params.pattern && !field.value.match(params.pattern)) return;
     field.disabled = true; // See if this stops getting two dates from fumbling e.g the chrome datepicker.
-
     field.setAttribute('style', style + 'color: gray;'); // pending
-
     var ds = kb.statementsMatching(subject, property); // remove any multiple values
-
     var result;
-
     if (params.namedNode) {
       result = kb.sym(field.value);
     } else if (params.uriPrefix) {
@@ -22152,16 +19109,13 @@ function basicField(dom, container, already, subject, form, doc, callbackFunctio
         result = new _rdflib.Literal(field.value);
       }
     }
-
     var is = ds.map(function (statement) {
       return (0, _rdflib.st)(statement.subject, statement.predicate, result, statement.why);
     }); // can include >1 doc
-
     if (is.length === 0) {
       // or none
       is = [(0, _rdflib.st)(subject, property, result, doc)];
     }
-
     function updateMany(ds, is, callback) {
       var docs = [];
       is.forEach(function (st) {
@@ -22172,19 +19126,16 @@ function basicField(dom, container, already, subject, form, doc, callbackFunctio
         if (!docs.includes(st.why.uri)) docs.push(st.why.uri);
       });
       /* istanbul ignore next */
-
       if (docs.length === 0) {
         throw new Error('updateMany has no docs to patch');
       }
-
       if (!kb.updater) {
         throw new Error('kb has no updater');
       }
-
       if (docs.length === 1) {
         return kb.updater.update(ds, is, callback);
-      } // return kb.updater.update(ds, is, callback)
-
+      }
+      // return kb.updater.update(ds, is, callback)
 
       var doc = docs.pop();
       var is1 = is.filter(function (st) {
@@ -22207,7 +19158,6 @@ function basicField(dom, container, already, subject, form, doc, callbackFunctio
         }
       });
     }
-
     updateMany(ds, is, function (uri, ok, body) {
       // kb.updater.update(ds, is, function (uri, ok, body) {
       if (ok) {
@@ -22216,7 +19166,6 @@ function basicField(dom, container, already, subject, form, doc, callbackFunctio
       } else {
         box.appendChild((0, _error.errorMessageBlock)(dom, body));
       }
-
       callbackFunction(ok, body);
     });
   }, true);
@@ -22241,13 +19190,9 @@ Object.defineProperty(exports, "__esModule", ({
 exports.field = void 0;
 exports.fieldFunction = fieldFunction;
 exports.mostSpecificClassURI = mostSpecificClassURI;
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 var _log = __webpack_require__(/*! ../../log */ "./lib/log.js");
-
 var _error = __webpack_require__(/*! ../error */ "./lib/widgets/error.js");
-
 var store = _solidLogic.solidLogicSingleton.store;
 var field = {}; // Form field functions by URI of field type.
 
@@ -22259,37 +19204,29 @@ var field = {}; // Form field functions by URI of field type.
  * @param x a form field, e.g. `namedNode('https://timbl.com/timbl/Public/Test/Forms/individualForm.ttl#fullNameField')`
  * @returns the URI of the most specific known class, e.g. `http://www.w3.org/ns/ui#SingleLineTextField`
  */
-
 exports.field = field;
-
 function mostSpecificClassURI(x) {
   var kb = store;
   var ft = kb.findTypeURIs(x);
   var bot = kb.bottomTypeURIs(ft); // most specific
-
   var bots = [];
-
   for (var b in bot) {
     bots.push(b);
-  } // if (bots.length > 1) throw "Didn't expect "+x+" to have multiple bottom types: "+bots
-
-
+  }
+  // if (bots.length > 1) throw "Didn't expect "+x+" to have multiple bottom types: "+bots
   return bots[0];
 }
+
 /**
  * Returns a function that creates a form widget
  * @param dom unused
  * @param fieldInQuestion the field for which to create a form, e.g. namedNode('https://timbl.com/timbl/Public/Test/Forms/individualForm.ttl#fullNameField')
  */
-
-
 function fieldFunction(dom, fieldInQuestion) {
   var uri = mostSpecificClassURI(fieldInQuestion); // What type
   // const uri = field.uri
-
   var fun = field[uri];
   (0, _log.debug)('paneUtils: Going to implement field ' + fieldInQuestion + ' of type ' + uri);
-
   if (!fun) {
     return function (dom2, container) {
       var box = (0, _error.errorMessageBlock)(dom2, 'No handler for field ' + fieldInQuestion + ' of type ' + uri);
@@ -22297,7 +19234,6 @@ function fieldFunction(dom, fieldInQuestion) {
       return box;
     };
   }
-
   return fun;
 }
 //# sourceMappingURL=fieldFunction.js.map
@@ -22314,26 +19250,17 @@ function fieldFunction(dom, fieldInQuestion) {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.fieldParams = void 0;
-
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js"));
-
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../../ns */ "./lib/ns.js"));
-
 var _style = __webpack_require__(/*! ../../style */ "./lib/style.js");
-
 var _fieldParams;
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 /**
  * The fieldParams object defines various constants
  * for use in various form fields. Depending on the
@@ -22388,17 +19315,14 @@ var fieldParams = (_fieldParams = {}, (0, _defineProperty2["default"])(_fieldPar
   size: 30,
   uriPrefix: 'mailto:',
   pattern: /^\s*.*@.*\..*\s*$/ // @@ Get the right regexp here
-
 }), (0, _defineProperty2["default"])(_fieldParams, ns.ui('Group').uri, {
   style: _style.formGroupStyle
 }), (0, _defineProperty2["default"])(_fieldParams, ns.ui('Comment').uri, {
   element: 'p',
   style: _style.commentStyle // was `padding: 0.1em 1.5em; color: ${formHeadingColor}; white-space: pre-wrap;`
-
 }), (0, _defineProperty2["default"])(_fieldParams, ns.ui('Heading').uri, {
   element: 'h3',
   style: _style.formHeadingStyle // was: `font-size: 110%; font-weight: bold; color: ${formHeadingColor}; padding: 0.2em;`
-
 }), _fieldParams);
 exports.fieldParams = fieldParams;
 //# sourceMappingURL=fieldParams.js.map
@@ -22415,50 +19339,37 @@ exports.fieldParams = fieldParams;
 
 
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.setFieldStyle = setFieldStyle;
-
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../../ns */ "./lib/ns.js"));
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 var _fieldParams = __webpack_require__(/*! ./fieldParams */ "./lib/widgets/forms/fieldParams.js");
-
 var _fieldFunction = __webpack_require__(/*! ./fieldFunction */ "./lib/widgets/forms/fieldFunction.js");
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 var STYLE_URI_PREFIX = 'https://www.w3.org/ns/css#';
+
 /* eslint-disable no-console */
 
 function setFieldStyle(ele, field) {
   var classUri = (0, _fieldFunction.mostSpecificClassURI)(field);
   var params = _fieldParams.fieldParams[classUri] || {};
-
   var style = _solidLogic.store.any(field, ns.ui('style'));
-
   if (!style) {
     if (params.style) {
       ele.setAttribute('style', params.style);
     }
-
     return;
   }
-
   if (style.termType === 'Literal') {
     if (style) ele.setAttribute('style', style.value);
   } else {
     var sts = _solidLogic.store.statementsMatching(style, null, null, field.doc());
-
     sts.forEach(function (st) {
       if (st.predicate.uri && st.predicate.uri.startsWith(STYLE_URI_PREFIX)) {
         var cssAttribute = st.predicate.uri.slice(STYLE_URI_PREFIX.length);
-
         try {
           ele.style[cssAttribute] = st.object.value;
         } catch (err) {
@@ -22483,7 +19394,6 @@ function setFieldStyle(ele, field) {
 
 
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
@@ -22491,9 +19401,7 @@ var _exportNames = {
   publicData: true
 };
 exports.publicData = void 0;
-
 var _peoplePicker = __webpack_require__(/*! ./peoplePicker */ "./lib/widgets/peoplePicker.js");
-
 Object.keys(_peoplePicker).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
   if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
@@ -22505,9 +19413,7 @@ Object.keys(_peoplePicker).forEach(function (key) {
     }
   });
 });
-
 var _dragAndDrop = __webpack_require__(/*! ./dragAndDrop */ "./lib/widgets/dragAndDrop.js");
-
 Object.keys(_dragAndDrop).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
   if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
@@ -22519,9 +19425,7 @@ Object.keys(_dragAndDrop).forEach(function (key) {
     }
   });
 });
-
 var _buttons = __webpack_require__(/*! ./buttons */ "./lib/widgets/buttons.js");
-
 Object.keys(_buttons).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
   if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
@@ -22533,9 +19437,7 @@ Object.keys(_buttons).forEach(function (key) {
     }
   });
 });
-
 var _iconLinks = __webpack_require__(/*! ./buttons/iconLinks */ "./lib/widgets/buttons/iconLinks.js");
-
 Object.keys(_iconLinks).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
   if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
@@ -22547,9 +19449,7 @@ Object.keys(_iconLinks).forEach(function (key) {
     }
   });
 });
-
 var _error = __webpack_require__(/*! ./error */ "./lib/widgets/error.js");
-
 Object.keys(_error).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
   if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
@@ -22561,9 +19461,7 @@ Object.keys(_error).forEach(function (key) {
     }
   });
 });
-
 var _forms = __webpack_require__(/*! ./forms */ "./lib/widgets/forms.js");
-
 Object.keys(_forms).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
   if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
@@ -22575,9 +19473,7 @@ Object.keys(_forms).forEach(function (key) {
     }
   });
 });
-
 var _autocompleteBar = __webpack_require__(/*! ./forms/autocomplete/autocompleteBar */ "./lib/widgets/forms/autocomplete/autocompleteBar.js");
-
 Object.keys(_autocompleteBar).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
   if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
@@ -22589,9 +19485,7 @@ Object.keys(_autocompleteBar).forEach(function (key) {
     }
   });
 });
-
 var _autocompletePicker = __webpack_require__(/*! ./forms/autocomplete/autocompletePicker */ "./lib/widgets/forms/autocomplete/autocompletePicker.js");
-
 Object.keys(_autocompletePicker).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
   if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
@@ -22603,13 +19497,9 @@ Object.keys(_autocompletePicker).forEach(function (key) {
     }
   });
 });
-
 var _publicData = _interopRequireWildcard(__webpack_require__(/*! ./forms/autocomplete/publicData */ "./lib/widgets/forms/autocomplete/publicData.js"));
-
 exports.publicData = _publicData;
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 //# sourceMappingURL=index.js.map
 
@@ -22625,35 +19515,24 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.IconicMultiSelect = void 0;
-
 var _toConsumableArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/toConsumableArray */ "./node_modules/@babel/runtime/helpers/toConsumableArray.js"));
-
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js"));
-
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js"));
-
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js"));
-
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style_multiSelect */ "./lib/style_multiSelect.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 /*
  * IconicMultiSelect v0.7.0
  * Licence:  MIT
  * (c) 2021 Sidney Wimart.
  * repo & configuration: https://github.com/sidneywm/iconic-multiselect
  */
-
 /**
  * @version IconicMultiSelect v0.7.0
  * @licence  MIT
@@ -22671,15 +19550,15 @@ var IconicMultiSelect = /*#__PURE__*/function () {
    */
   function IconicMultiSelect(_ref) {
     var data = _ref.data,
-        itemTemplate = _ref.itemTemplate,
-        noData = _ref.noData,
-        noResults = _ref.noResults,
-        placeholder = _ref.placeholder,
-        select = _ref.select,
-        container = _ref.container,
-        tagTemplate = _ref.tagTemplate,
-        textField = _ref.textField,
-        valueField = _ref.valueField;
+      itemTemplate = _ref.itemTemplate,
+      noData = _ref.noData,
+      noResults = _ref.noResults,
+      placeholder = _ref.placeholder,
+      select = _ref.select,
+      container = _ref.container,
+      tagTemplate = _ref.tagTemplate,
+      textField = _ref.textField,
+      valueField = _ref.valueField;
     (0, _classCallCheck2["default"])(this, IconicMultiSelect);
     (0, _defineProperty2["default"])(this, "_data", void 0);
     (0, _defineProperty2["default"])(this, "_domElements", void 0);
@@ -22702,19 +19581,18 @@ var IconicMultiSelect = /*#__PURE__*/function () {
     this._noData = noData !== null && noData !== void 0 ? noData : 'No data found.';
     this._noResults = noResults !== null && noResults !== void 0 ? noResults : 'No results found.';
     this._placeholder = placeholder !== null && placeholder !== void 0 ? placeholder : 'Select...';
-    this._select = select; // Timea added a container here
-
+    this._select = select;
+    // Timea added a container here
     this._selectContainer = container;
     this._tagTemplate = tagTemplate !== null && tagTemplate !== void 0 ? tagTemplate : null;
     this._textField = textField !== null && textField !== void 0 ? textField : null;
     this._valueField = valueField !== null && valueField !== void 0 ? valueField : null;
   }
+
   /**
    * Initialize the Iconic Multiselect component.
    * @public
    */
-
-
   (0, _createClass2["default"])(IconicMultiSelect, [{
     key: "init",
     value: function init() {
@@ -22723,17 +19601,12 @@ var IconicMultiSelect = /*#__PURE__*/function () {
         if (this._itemTemplate && this._data.length === 0) {
           throw new Error('itemTemplate must be initialized with data from the component settings');
         }
-
         if (this._tagTemplate && this._data.length === 0) {
           throw new Error('tagTemplate must be initialized with data from the component settings');
         }
-
         this._options = this._data.length > 0 ? this._getDataFromSettings() : this._getDataFromSelectTag();
-
         this._renderMultiselect();
-
         this._renderOptionsList();
-
         this._domElements = {
           clear: this._multiselect.querySelector('.multiselect__clear-btn'),
           input: this._multiselect.querySelector('.multiselect__input'),
@@ -22746,7 +19619,6 @@ var IconicMultiSelect = /*#__PURE__*/function () {
                 var node = this.list[i];
                 if (callbackFn(node)) return node;
               }
-
               return undefined;
             },
             some: function some(callbackFn) {
@@ -22754,25 +19626,22 @@ var IconicMultiSelect = /*#__PURE__*/function () {
                 var node = this.list[i];
                 if (callbackFn(node, i)) return true;
               }
-
               return false;
             }
           }
         };
-
         this._enableEventListenners();
-
         this._initSelectedList();
       } else {
         throw new Error("The selector '".concat(this._select, "' did not select any valid select tag."));
       }
     }
+
     /**
      * Subscribes to the emitted events.
      * @param { Function } callback - Callback function which emits a custom event object.
      * @public
      */
-
   }, {
     key: "subscribe",
     value: function subscribe(callback) {
@@ -22782,195 +19651,154 @@ var IconicMultiSelect = /*#__PURE__*/function () {
         throw new Error('parameter in the subscribe method is not a function');
       }
     }
+
     /**
      * Add an option to the selection list.
      * @param { Object: { text: string; value: string; }} option
      * @private
      */
-
   }, {
     key: "_addOptionToList",
     value: function _addOptionToList(option, index) {
       var _this = this;
-
       var html = "<span class=\"multiselect__selected\" style=\"".concat(style.multiselect__selected, "\" data-value=\"").concat(option.value, "\">").concat(this._tagTemplate ? this._processTemplate(this._tagTemplate, index) : option.text, "<span class=\"multiselect__remove-btn\" style=\"").concat(style.multiselect__remove_btn, "\">").concat(this._cross, "</span></span>");
-
       this._domElements.input.insertAdjacentHTML('beforebegin', html);
-
       var _this$_multiselect$qu = this._multiselect.querySelector("span[data-value=\"".concat(option.value, "\"]")),
-          removeBtn = _this$_multiselect$qu.lastElementChild;
-
+        removeBtn = _this$_multiselect$qu.lastElementChild;
       removeBtn.addEventListener('click', function () {
         var target = _this._domElements.options.find(function (el) {
           return el.dataset.value === option.value;
         });
-
         _this._handleOption(target);
       });
     }
+
     /**
      * Clears all selected options.
      * @private
      */
-
   }, {
     key: "_clearSelection",
     value: function _clearSelection() {
       var _this2 = this;
-
       var _loop = function _loop(i) {
         var option = _this2._selectedOptions[i];
-
         var target = _this2._domElements.options.find(function (el) {
           return el.dataset.value === option.value;
         });
-
         target.classList.remove('multiselect__options--selected');
         target.setAttribute('style', style.multiselect__options);
-
         _this2._removeOptionFromList(target.dataset.value);
       };
-
       for (var i = 0; i < this._selectedOptions.length; i++) {
         _loop(i);
       }
-
       this._selectedOptions = [];
-
       this._handleClearSelectionBtn();
-
       this._handlePlaceholder();
-
       this._dispatchEvent({
         action: 'CLEAR_ALL_OPTIONS',
         selection: this._selectedOptions
       });
     }
+
     /**
      * Close the options container.
      * @private
      */
-
   }, {
     key: "_closeList",
     value: function _closeList() {
       this._domElements.input.value = '';
-
       this._domElements.optionsContainer.classList.remove('visible');
-
       this._domElements.optionsContainer.setAttribute('style', style.multiselect__options);
-
       this._filterOptions('');
-
       this._removeAllArrowSelected();
     }
+
     /**
      * Dispatches new events.
      * @param { object : { action: string; selection: { option: string; text: string; }[]; value?: string; } } event
      * @private
      */
-
   }, {
     key: "_dispatchEvent",
     value: function _dispatchEvent(event) {
       this._event(event);
     }
+
     /**
      * Enables all main event listenners.
      * @private
      */
-
   }, {
     key: "_enableEventListenners",
     value: function _enableEventListenners() {
       var _this3 = this;
-
       document.addEventListener('mouseup', function (_ref2) {
         var target = _ref2.target;
-
         if (!_this3._multiselect.contains(target)) {
           _this3._filterOptions('');
-
           _this3._closeList();
-
           _this3._handlePlaceholder();
         }
       });
-
       this._domElements.clear.addEventListener('click', function () {
         _this3._clearSelection();
       });
-
       for (var i = 0; i < this._domElements.options.list.length; i++) {
         var option = this._domElements.options.list[i];
         option.addEventListener('click', function (_ref3) {
           var target = _ref3.target;
-
           _this3._handleOption(target);
-
           _this3._closeList();
         });
       }
-
       this._domElements.input.addEventListener('focus', function () {
         _this3._domElements.optionsContainer.classList.add('visible');
-
         _this3._domElements.optionsContainer.setAttribute('style', style.multiselect__options_visible);
       });
-
       this._domElements.input.addEventListener('input', function (_ref4) {
         var value = _ref4.target.value;
-
         if (_this3._domElements.options.list.length > 0) {
           _this3._filterOptions(value);
         }
       });
-
       this._domElements.input.addEventListener('keydown', function (e) {
         _this3._handleArrows(e);
-
         _this3._handleBackspace(e);
-
         _this3._handleEnter(e);
       });
     }
+
     /**
      * Filters user input.
      * @param { string } value
      * @private
      */
-
   }, {
     key: "_filterOptions",
     value: function _filterOptions(value) {
       var _this4 = this;
-
       var isOpen = this._domElements.optionsContainer.classList.contains('visible');
-
       var valueLowerCase = value.toLowerCase();
-
       if (!isOpen && value.length > 0) {
         this._domElements.optionsContainer.classList.add('visible');
-
         this._domElements.optionsContainer.setAttribute('style', style.multiselect__options_visible);
       }
-
       if (this._domElements.options.list.length > 0) {
         for (var i = 0; i < this._domElements.options.list.length; i++) {
           var el = this._domElements.options.list[i];
           var text = this._itemTemplate ? this._data[i][this._textField] : el.textContent;
-
           if (text.toLowerCase().substring(0, valueLowerCase.length) === valueLowerCase) {
             this._domElements.optionsContainerList.appendChild(el);
           } else {
             el.parentNode && el.parentNode.removeChild(el);
           }
         }
-
         var hasResults = this._domElements.options.some(function (el, index) {
           return (_this4._itemTemplate ? _this4._data[index][_this4._textField] : el.textContent).toLowerCase().substring(0, valueLowerCase.length) === valueLowerCase;
         });
-
         this._showNoResults(!hasResults);
       }
     }
@@ -22980,24 +19808,21 @@ var IconicMultiSelect = /*#__PURE__*/function () {
       var result = '';
       var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
       var charactersLength = characters.length;
-
       for (var i = 0; i < length; i++) {
         result += characters.charAt(Math.floor(Math.random() * charactersLength));
       }
-
       return result;
     }
+
     /**
      * Gets data from select tag.
      * @private
      */
-
   }, {
     key: "_getDataFromSelectTag",
     value: function _getDataFromSelectTag() {
       var arr = [];
       var options = this._select.options;
-
       for (var i = 0; i < options.length; i++) {
         var item = options[i];
         arr.push({
@@ -23006,14 +19831,13 @@ var IconicMultiSelect = /*#__PURE__*/function () {
           selected: item.hasAttribute('selected')
         });
       }
-
       return arr;
     }
+
     /**
      * Gets data from settings.
      * @private
      */
-
   }, {
     key: "_getDataFromSettings",
     value: function _getDataFromSettings() {
@@ -23021,11 +19845,9 @@ var IconicMultiSelect = /*#__PURE__*/function () {
         var isValueFieldValid = typeof this._valueField === 'string';
         var isTextFieldValid = typeof this._textField === 'string';
         var arr = [];
-
         if (!isValueFieldValid || !isTextFieldValid) {
           throw new Error('textField and valueField must be of type string');
         }
-
         for (var i = 0; i < this._data.length; i++) {
           var item = this._data[i];
           arr.push({
@@ -23034,105 +19856,89 @@ var IconicMultiSelect = /*#__PURE__*/function () {
             selected: typeof item.selected === 'boolean' ? item.selected : false
           });
         }
-
         return arr;
       } else {
         return null;
       }
     }
+
     /**
      * Handles Arrow up & Down. Selection of an option is also possible with these keys.
      * @param { Event } event
      * @private
      */
-
   }, {
     key: "_handleArrows",
     value: function _handleArrows(event) {
       if (event.keyCode === 40 || event.keyCode === 38) {
         event.preventDefault();
-
-        var isOpen = this._domElements.optionsContainer.classList.contains('visible'); // An updated view of the container is needed because of the filtering option
-
-
+        var isOpen = this._domElements.optionsContainer.classList.contains('visible');
+        // An updated view of the container is needed because of the filtering option
         var optionsContainerList = this._multiselect.querySelector('.multiselect__options > ul');
-
         if (!isOpen) {
           this._domElements.optionsContainer.classList.add('visible');
-
           this._domElements.optionsContainer.setAttribute('style', style.multiselect__options_visible);
-
           optionsContainerList.firstElementChild.classList.add('arrow-selected');
           optionsContainerList.firstElementChild.setAttribute('style', style.multiselect__options_ul_li_arrow_selected);
           optionsContainerList.firstElementChild.scrollIntoView(false);
         } else {
           var selected = this._multiselect.querySelector('.multiselect__options ul li.arrow-selected');
-
           var action = {
             ArrowUp: 'previous',
             Up: 'previous',
             ArrowDown: 'next',
             Down: 'next'
           };
-
           if (!selected) {
             optionsContainerList.firstElementChild.classList.add('arrow-selected');
             optionsContainerList.firstElementChild.setAttribute('style', style.multiselect__options_ul_li_arrow_selected);
             optionsContainerList.firstElementChild.scrollIntoView(false);
             return;
           }
-
           selected.classList.remove('arrow-selected');
           selected.setAttribute('style', style.multiselect__options_ul_li);
-          selected = selected[action[event.key] + 'ElementSibling']; // Go to start or end of the popup list
+          selected = selected[action[event.key] + 'ElementSibling'];
 
+          // Go to start or end of the popup list
           if (!selected) {
             selected = optionsContainerList.children[action[event.key] === 'next' ? 0 : optionsContainerList.children.length - 1];
             selected.classList.add('arrow-selected');
             selected.setAttribute('style', style.multiselect__options_ul_li_arrow_selected);
-
             this._scrollIntoView(optionsContainerList, selected);
-
             return;
           }
-
           selected.classList.add('arrow-selected');
           selected.setAttribute('style', style.multiselect__options_ul_li_arrow_selected);
-
           this._scrollIntoView(optionsContainerList, selected);
         }
       }
     }
+
     /**
      * Handles the backspace key event - Deletes the preceding option in the selection list.
      * @param { Event } e
      * @private
      */
-
   }, {
     key: "_handleBackspace",
     value: function _handleBackspace(e) {
       if (e.keyCode === 8 && e.target.value === '') {
         var lastSelectedOption = this._selectedOptions.length > 0 ? this._selectedOptions[this._selectedOptions.length - 1] : null;
-
         if (lastSelectedOption) {
           var targetLastSelectedOption = this._multiselect.querySelector("li[data-value=\"".concat(lastSelectedOption.value, "\"]"));
-
           this._handleOption(targetLastSelectedOption);
-
           if (this._selectedOptions.length === 0) {
             this._domElements.optionsContainer.classList.remove('visible');
-
             this._domElements.optionsContainer.setAttribute('style', style.multiselect__options);
           }
         }
       }
     }
+
     /**
      * Shows clear selection button if some options are selected.
      * @private
      */
-
   }, {
     key: "_handleClearSelectionBtn",
     value: function _handleClearSelectionBtn() {
@@ -23142,21 +19948,19 @@ var IconicMultiSelect = /*#__PURE__*/function () {
         this._domElements.clear.style.display = 'none';
       }
     }
+
     /**
      * Handles the enter key event.
      * @param { Event } event
      * @private
      */
-
   }, {
     key: "_handleEnter",
     value: function _handleEnter(event) {
       if (event.keyCode === 13) {
         var selected = this._multiselect.querySelector('.multiselect__options ul li.arrow-selected');
-
         if (selected) {
           this._handleOption(selected);
-
           this._closeList();
         }
       }
@@ -23165,46 +19969,34 @@ var IconicMultiSelect = /*#__PURE__*/function () {
     key: "_handleOption",
     value: function _handleOption(target) {
       var dispatchEvent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-
       // Remove
       for (var i = 0; i < this._selectedOptions.length; i++) {
         var el = this._selectedOptions[i];
-
         if (el.value === target.dataset.value) {
           target.classList.remove('multiselect__options--selected');
           target.setAttribute('style', style.multiselect__options);
-
           this._selectedOptions.splice(i, 1);
-
           this._removeOptionFromList(target.dataset.value);
-
           this._handleClearSelectionBtn();
-
           this._handlePlaceholder();
-
           return dispatchEvent && this._dispatchEvent({
             action: 'REMOVE_OPTION',
             value: target.dataset.value,
             selection: this._selectedOptions
           });
         }
-      } // Add
+      }
 
-
+      // Add
       for (var _i = 0; _i < this._options.length; _i++) {
         var option = this._options[_i];
-
         if (option.value === target.dataset.value) {
           target.classList.add('multiselect__options--selected');
           target.setAttribute('style', style.multiselect__options_selected);
           this._selectedOptions = [].concat((0, _toConsumableArray2["default"])(this._selectedOptions), [option]);
-
           this._addOptionToList(option, _i);
-
           this._handleClearSelectionBtn();
-
           this._handlePlaceholder();
-
           return dispatchEvent && this._dispatchEvent({
             action: 'ADD_OPTION',
             value: target.dataset.value,
@@ -23213,11 +20005,11 @@ var IconicMultiSelect = /*#__PURE__*/function () {
         }
       }
     }
+
     /**
      * Shows the placeholder if no options are selected.
      * @private
      */
-
   }, {
     key: "_handlePlaceholder",
     value: function _handlePlaceholder() {
@@ -23227,43 +20019,34 @@ var IconicMultiSelect = /*#__PURE__*/function () {
     key: "_initSelectedList",
     value: function _initSelectedList() {
       var _this5 = this;
-
       var hasItemsSelected = false;
-
       var _loop2 = function _loop2(i) {
         var option = _this5._options[i];
-
         if (option.selected) {
           hasItemsSelected = true;
-
           var target = _this5._domElements.options.find(function (el) {
             return el.dataset.value === option.value;
           });
-
           target.classList.add('multiselect__options--selected');
           target.setAttribute('style', style.multiselect__options_selected);
           _this5._selectedOptions = [].concat((0, _toConsumableArray2["default"])(_this5._selectedOptions), [option]);
-
           _this5._addOptionToList(option, i);
         }
       };
-
       for (var i = 0; i < this._options.length; i++) {
         _loop2(i);
       }
-
       if (hasItemsSelected) {
         this._handleClearSelectionBtn();
       }
-
       this._handlePlaceholder();
     }
+
     /**
      * Process the custom template.
      * @param { string } template
      * @private
      */
-
   }, {
     key: "_processTemplate",
     value: function _processTemplate(template, index) {
@@ -23271,128 +20054,113 @@ var IconicMultiSelect = /*#__PURE__*/function () {
       var objAttr = template.match(/\$\{(\w+)\}/g).map(function (e) {
         return e.replace(/\$\{|\}/g, '');
       });
-
       for (var i = 0; i < objAttr.length; i++) {
         var _this$_data$index$att;
-
-        var attr = objAttr[i]; // eslint-disable-next-line no-useless-escape
-
+        var attr = objAttr[i];
+        // eslint-disable-next-line no-useless-escape
         processedTemplate = processedTemplate.replace("${".concat(attr, "}"), (_this$_data$index$att = this._data[index][attr]) !== null && _this$_data$index$att !== void 0 ? _this$_data$index$att : '');
       }
-
       return processedTemplate;
     }
   }, {
     key: "_removeAllArrowSelected",
     value: function _removeAllArrowSelected() {
       var className = 'arrow-selected';
-
       var target = this._domElements.options.find(function (el) {
         return el.classList.contains(className);
       });
-
       target && target.classList.remove(className) && target.setAttribute('style', style.multiselect__options_ul_li);
     }
+
     /**
      * Removes an option from the list.
      * @param { string } value
      * @private
      */
-
   }, {
     key: "_removeOptionFromList",
     value: function _removeOptionFromList(value) {
       var optionDom = this._multiselect.querySelector("span[data-value=\"".concat(value, "\"]"));
-
       optionDom && optionDom.parentNode && optionDom.parentNode.removeChild(optionDom);
     }
+
     /**
      * Renders the multiselect options list view.
      * @private
      */
-
   }, {
     key: "_renderOptionsList",
     value: function _renderOptionsList() {
       var _this6 = this;
-
       var html = "\n        <div class=\"multiselect__options\" style=\"".concat(style.multiselect__options, "\">\n          <ul style=\"").concat(style.multiselect__options_ul, "\">\n          ").concat(this._options.length > 0 && !this._itemTemplate ? this._options.map(function (option) {
         return "\n              <li data-value=\"".concat(option.value, "\" style=\"").concat(style.multiselect__options_ul_li, "\">").concat(option.text, "</li>\n            ");
       }).join('') : '', "\n\n          ").concat(this._options.length > 0 && this._itemTemplate ? this._options.map(function (option, index) {
         return "\n              <li data-value=\"".concat(option.value, "\" style=\"").concat(style.multiselect__options_ul_li, "\">").concat(_this6._processTemplate(_this6._itemTemplate, index), "</li>\n            ");
       }).join('') : '', "\n          ").concat(this._showNoData(this._options.length === 0), "\n          </ul>\n        </div>\n      ");
-
       this._multiselect.insertAdjacentHTML('beforeend', html);
     }
+
     /**
      * Renders the multiselect view.
      * @private
      */
-
   }, {
     key: "_renderMultiselect",
     value: function _renderMultiselect() {
       this._select.style.display = 'none';
-
-      var id = 'iconic-' + this._generateId(20); // Timea created dedicated div element because previous code was not rendering
-
-
+      var id = 'iconic-' + this._generateId(20);
+      // Timea created dedicated div element because previous code was not rendering
       this._multiselect = document.createElement('div');
-
       this._multiselect.setAttribute('id', id);
-
       this._multiselect.setAttribute('class', 'multiselect__container');
-
       this._multiselect.setAttribute('style', style.multiselect__container);
-
       var html = "\n        <div class=\"multiselect__wrapper\" style=\"".concat(style.multiselect__wrapper, "\">\n          <input class=\"multiselect__input\" style=\"").concat(style.multiselect__input, "\" placeholder=\"").concat(this._placeholder, "\" />\n        </div>\n        <span style=\"display: none;\" class=\"multiselect__clear-btn\" style=\"").concat(style.multiselect__clear_btn, "\">").concat(this._cross, "</span>\n    ");
       this._multiselect.innerHTML = html;
-
       this._selectContainer.appendChild(this._multiselect);
     }
+
     /**
      * ScrollIntoView - This small utility reproduces the behavior of .scrollIntoView({ block: "nearest", inline: "nearest" })
      * This is for IE compatibility without a need of a polyfill
      * @private
      */
-
   }, {
     key: "_scrollIntoView",
     value: function _scrollIntoView(parent, child) {
       var rectParent = parent.getBoundingClientRect();
-      var rectChild = child.getBoundingClientRect(); // Detect if not visible at top and then scroll to the top
+      var rectChild = child.getBoundingClientRect();
 
+      // Detect if not visible at top and then scroll to the top
       if (!(rectParent.top < rectChild.bottom - child.offsetHeight)) {
         parent.scrollTop = child.clientHeight + (child.offsetTop - child.offsetHeight);
-      } // Detect if not visible at bottom and then scroll to the bottom
+      }
 
-
+      // Detect if not visible at bottom and then scroll to the bottom
       if (!(rectParent.bottom > rectChild.top + child.offsetHeight)) {
         parent.scrollTop = child.clientHeight + (child.offsetTop - child.offsetHeight) - (parent.offsetHeight - (child.offsetHeight + (child.offsetHeight - child.clientHeight)));
       }
     }
+
     /**
      * Shows a no data message.
      * @param { boolean } condition
      * @private
      */
-
   }, {
     key: "_showNoData",
     value: function _showNoData(condition) {
       return condition ? "<p class=\"multiselect__options--no-data\" style=\"".concat(style.multiselect__options_ul_p_multiselect__options_no_data, "\">").concat(this._noData, "</p>") : '';
     }
+
     /**
      * Shows a no results message.
      * @param { boolean } condition
      * @private
      */
-
   }, {
     key: "_showNoResults",
     value: function _showNoResults(condition) {
       var dom = this._multiselect.querySelector('.multiselect__options--no-results');
-
       if (condition) {
         var html = "<p class=\"multiselect__options--no-results\" style=\"".concat(style.multiselect__options_ul_p_multiselect__options_no_results, "\">").concat(this._noResults, "</p>");
         !dom && this._domElements.optionsContainerList.insertAdjacentHTML('beforeend', html);
@@ -23403,7 +20171,6 @@ var IconicMultiSelect = /*#__PURE__*/function () {
   }]);
   return IconicMultiSelect;
 }();
-
 exports.IconicMultiSelect = IconicMultiSelect;
 //# sourceMappingURL=multiSelect.js.map
 
@@ -23419,46 +20186,27 @@ exports.IconicMultiSelect = IconicMultiSelect;
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.Person = exports.PeoplePicker = exports.GroupPicker = exports.GroupBuilder = exports.Group = void 0;
-
 var _taggedTemplateLiteral2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/taggedTemplateLiteral */ "./node_modules/@babel/runtime/helpers/taggedTemplateLiteral.js"));
-
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js"));
-
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js"));
-
 var _escapeHtml = _interopRequireDefault(__webpack_require__(/*! escape-html */ "./node_modules/escape-html/index.js"));
-
 var _uuid = _interopRequireDefault(__webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js"));
-
 var rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
-
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
-
 var _dragAndDrop = __webpack_require__(/*! ./dragAndDrop */ "./lib/widgets/dragAndDrop.js");
-
 var _error = __webpack_require__(/*! ./error */ "./lib/widgets/error.js");
-
 var _iconBase = __webpack_require__(/*! ../iconBase */ "./lib/iconBase.js");
-
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
-
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-
 var _templateObject;
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 var kb = _solidLogic.solidLogicSingleton.store;
-
 var PeoplePicker = /*#__PURE__*/function () {
   function PeoplePicker(element, typeIndex, groupPickedCb, options) {
     (0, _classCallCheck2["default"])(this, PeoplePicker);
@@ -23468,21 +20216,17 @@ var PeoplePicker = /*#__PURE__*/function () {
     this.typeIndex = typeIndex;
     this.groupPickedCb = groupPickedCb;
     this.selectedgroup = this.options.selectedgroup; // current selected group if any
-
     this.onSelectGroup = this.onSelectGroup.bind(this);
   }
-
   (0, _createClass2["default"])(PeoplePicker, [{
     key: "render",
     value: function render() {
       var _this = this;
-
       var container = document.createElement('div');
       container.style.maxWidth = '350px';
       container.style.minHeight = '200px';
       container.style.outline = '1px solid black';
       container.style.display = 'flex';
-
       if (this.selectedgroup) {
         container.style.flexDirection = 'column';
         var selectedGroup = document.createElement('div');
@@ -23491,7 +20235,6 @@ var PeoplePicker = /*#__PURE__*/function () {
         changeGroupButton.textContent = (0, _escapeHtml["default"])('Change group');
         changeGroupButton.addEventListener('click', function (_event) {
           _this.selectedgroup = null;
-
           _this.render();
         });
         container.appendChild(selectedGroup);
@@ -23519,13 +20262,11 @@ var PeoplePicker = /*#__PURE__*/function () {
           container.appendChild(chooseExistingGroupButton);
           container.appendChild(createNewGroupButton);
           _this.element.innerHTML = '';
-
           _this.element.appendChild(container);
         })["catch"](function (err) {
           _this.element.appendChild((0, _error.errorMessageBlock)(document, (0, _escapeHtml["default"])("Could find your groups. (".concat(err, ")"))));
         });
       }
-
       this.element.innerHTML = '';
       this.element.appendChild(container);
       return this;
@@ -23538,19 +20279,14 @@ var PeoplePicker = /*#__PURE__*/function () {
           if (!ok) {
             return reject(err);
           }
-
           var bookRegistration = kb.any(null, ns.solid('forClass'), ns.vcard('AddressBook'));
-
           if (!bookRegistration) {
             return reject(new Error('no address book registered in the solid type index ' + typeIndex));
           }
-
           var book = kb.any(bookRegistration, ns.solid('instance'));
-
           if (!book) {
             return reject(new Error('incomplete address book registration'));
           }
-
           kb.fetcher.load(book).then(function (_xhr) {
             return resolve({
               book: book
@@ -23565,14 +20301,14 @@ var PeoplePicker = /*#__PURE__*/function () {
     key: "createNewGroup",
     value: function createNewGroup(book, defaultNewGroupName) {
       var _indexes = indexes(book),
-          groupIndex = _indexes.groupIndex,
-          groupContainer = _indexes.groupContainer;
-
+        groupIndex = _indexes.groupIndex,
+        groupContainer = _indexes.groupContainer;
       var group = rdf.sym("".concat(groupContainer.uri).concat(_uuid["default"].v4().slice(0, 8), ".ttl#this"));
-      var name = defaultNewGroupName || 'Untitled Group'; // NOTE that order matters here.  Unfortunately this type of update is
+      var name = defaultNewGroupName || 'Untitled Group';
+
+      // NOTE that order matters here.  Unfortunately this type of update is
       // non-atomic in that solid requires us to send two PATCHes, either of which
       // might fail.
-
       var patchPromises = [group.doc(), groupIndex].map(function (doc) {
         var typeStatement = rdf.st(group, ns.rdf('type'), ns.vcard('Group'), doc);
         var nameStatement = rdf.st(group, ns.vcard('fn'), name, group.doc(), doc);
@@ -23605,9 +20341,7 @@ var PeoplePicker = /*#__PURE__*/function () {
   }]);
   return PeoplePicker;
 }();
-
 exports.PeoplePicker = PeoplePicker;
-
 var GroupPicker = /*#__PURE__*/function () {
   function GroupPicker(element, book, onSelectGroup) {
     (0, _classCallCheck2["default"])(this, GroupPicker);
@@ -23615,12 +20349,10 @@ var GroupPicker = /*#__PURE__*/function () {
     this.book = book;
     this.onSelectGroup = onSelectGroup;
   }
-
   (0, _createClass2["default"])(GroupPicker, [{
     key: "render",
     value: function render() {
       var _this2 = this;
-
       this.loadGroups().then(function (groups) {
         // render the groups
         var container = document.createElement('div');
@@ -23633,7 +20365,6 @@ var GroupPicker = /*#__PURE__*/function () {
           container.appendChild(groupButton);
         });
         _this2.element.innerHTML = '';
-
         _this2.element.appendChild(container);
       })["catch"](function (err) {
         _this2.element.appendChild((0, _error.errorMessageBlock)(document, (0, _escapeHtml["default"])("There was an error loading your groups. (".concat(err, ")"))));
@@ -23644,16 +20375,13 @@ var GroupPicker = /*#__PURE__*/function () {
     key: "loadGroups",
     value: function loadGroups() {
       var _this3 = this;
-
       return new Promise(function (resolve, reject) {
         var _indexes2 = indexes(_this3.book),
-            groupIndex = _indexes2.groupIndex;
-
+          groupIndex = _indexes2.groupIndex;
         kb.fetcher.nowOrWhenFetched(groupIndex, function (ok, err) {
           if (!ok) {
             return reject(err);
           }
-
           var groups = kb.each(_this3.book, ns.vcard('includesGroup'));
           return resolve(groups);
         });
@@ -23663,7 +20391,6 @@ var GroupPicker = /*#__PURE__*/function () {
     key: "handleClickGroup",
     value: function handleClickGroup(group) {
       var _this4 = this;
-
       return function (_event) {
         _this4.onSelectGroup(group);
       };
@@ -23671,21 +20398,19 @@ var GroupPicker = /*#__PURE__*/function () {
   }]);
   return GroupPicker;
 }();
-
 exports.GroupPicker = GroupPicker;
-
 var Group = /*#__PURE__*/function () {
   function Group(element, group) {
     (0, _classCallCheck2["default"])(this, Group);
     this.element = element;
     this.group = group;
   }
-
   (0, _createClass2["default"])(Group, [{
     key: "render",
     value: function render() {
       var container = document.createElement('div');
-      container.textContent = (0, _escapeHtml["default"])( // @@@@@ need to escape??
+      container.textContent = (0, _escapeHtml["default"])(
+      // @@@@@ need to escape??
       getWithDefault(this.group, ns.vcard('fn'), "[".concat(this.group.value, "]")));
       this.element.innerHTML = '';
       this.element.appendChild(container);
@@ -23694,35 +20419,30 @@ var Group = /*#__PURE__*/function () {
   }]);
   return Group;
 }();
-
 exports.Group = Group;
-
 var GroupBuilder = /*#__PURE__*/function () {
   function GroupBuilder(element, book, group, doneBuildingCb, groupChangedCb) {
     (0, _classCallCheck2["default"])(this, GroupBuilder);
     this.element = element;
     this.book = book;
     this.group = group;
-
     this.onGroupChanged = function (err, changeType, agent) {
       if (groupChangedCb) {
         groupChangedCb(err, changeType, agent);
       }
     };
-
     this.groupChangedCb = groupChangedCb;
     this.doneBuildingCb = doneBuildingCb;
   }
-
   (0, _createClass2["default"])(GroupBuilder, [{
     key: "refresh",
-    value: function refresh() {// TODO: implement
+    value: function refresh() {
+      // TODO: implement
     }
   }, {
     key: "render",
     value: function render() {
       var _this5 = this;
-
       var dropContainer = document.createElement('div');
       dropContainer.style.maxWidth = '350px';
       dropContainer.style.minHeight = '200px';
@@ -23748,7 +20468,6 @@ var GroupBuilder = /*#__PURE__*/function () {
       groupNameLabel.textContent = (0, _escapeHtml["default"])('Group Name:');
       groupNameLabel.appendChild(groupNameInput);
       dropContainer.appendChild(groupNameLabel);
-
       if (kb.any(this.group, ns.vcard('hasMember'))) {
         kb.match(this.group, ns.vcard('hasMember')).forEach(function (statement) {
           var webIdNode = statement.object;
@@ -23761,7 +20480,6 @@ var GroupBuilder = /*#__PURE__*/function () {
         copy.textContent = (0, _escapeHtml["default"])(_templateObject || (_templateObject = (0, _taggedTemplateLiteral2["default"])(["\n        To add someone to this group, drag and drop their WebID URL onto the box.\n      "])));
         dropContainer.appendChild(copy);
       }
-
       var doneBuildingButton = document.createElement('button');
       doneBuildingButton.textContent = (0, _escapeHtml["default"])('Done');
       doneBuildingButton.addEventListener('click', function (_event) {
@@ -23776,41 +20494,32 @@ var GroupBuilder = /*#__PURE__*/function () {
     key: "add",
     value: function add(webId) {
       var _this6 = this;
-
       return new Promise(function (resolve, reject) {
         kb.fetcher.nowOrWhenFetched(webId, function (ok, err) {
           if (!ok) {
             _this6.onGroupChanged(err);
-
             return reject(err);
-          } // make sure it's a valid person, group, or entity (for now just handle
+          }
+          // make sure it's a valid person, group, or entity (for now just handle
           // webId)
-
-
           var webIdNode = rdf.namedNode(webId);
           var rdfClass = kb.any(webIdNode, ns.rdf('type'));
-
           if (!rdfClass || !rdfClass.equals(ns.foaf('Person'))) {
             return reject(new Error("Only people supported right now. (tried to add something of type ".concat(rdfClass.value, ")")));
           }
-
           return resolve(webIdNode);
         });
       }).then(function (webIdNode) {
         var statement = rdf.st(_this6.group, ns.vcard('hasMember'), webIdNode);
-
         if (kb.holdsStatement(statement)) {
           return webIdNode;
         }
-
         return patch(_this6.group.doc().uri, {
           toIns: [statement]
         }).then(function () {
           statement.why = _this6.group.doc();
           kb.add(statement);
-
           _this6.onGroupChanged(null, 'added', webIdNode);
-
           _this6.render();
         });
       });
@@ -23819,18 +20528,14 @@ var GroupBuilder = /*#__PURE__*/function () {
     key: "handleRemove",
     value: function handleRemove(webIdNode) {
       var _this7 = this;
-
       return function (_event) {
         var statement = rdf.st(_this7.group, ns.vcard('hasMember'), webIdNode);
         return patch(_this7.group.doc().uri, {
           toDel: [statement]
         }).then(function () {
           kb.remove(statement);
-
           _this7.onGroupChanged(null, 'removed', webIdNode);
-
           _this7.render();
-
           return true;
         })["catch"](function (err) {
           var name = kb.any(webIdNode, ns.foaf('name'));
@@ -23843,10 +20548,8 @@ var GroupBuilder = /*#__PURE__*/function () {
     key: "setGroupName",
     value: function setGroupName(name) {
       var _this8 = this;
-
       var _indexes3 = indexes(this.book),
-          groupIndex = _indexes3.groupIndex;
-
+        groupIndex = _indexes3.groupIndex;
       var updatePromises = [this.group.doc(), groupIndex].map(function (namedGraph) {
         var oldNameStatements = kb.match(_this8.group, ns.vcard('fn'), null, namedGraph);
         var newNameStatement = rdf.st(_this8.group, ns.vcard('fn'), rdf.literal(name));
@@ -23866,10 +20569,7 @@ var GroupBuilder = /*#__PURE__*/function () {
 }(); // @ignore exporting this only for the unit test
 // @@ TODO maybe I should move this down at end, but for
 // now I will leave it where it was
-
-
 exports.GroupBuilder = GroupBuilder;
-
 var Person = /*#__PURE__*/function () {
   function Person(element, webIdNode, handleRemove) {
     (0, _classCallCheck2["default"])(this, Person);
@@ -23877,22 +20577,22 @@ var Person = /*#__PURE__*/function () {
     this.element = element;
     this.handleRemove = handleRemove;
   }
-
   (0, _createClass2["default"])(Person, [{
     key: "render",
     value: function render() {
       var _this9 = this;
-
       var container = document.createElement('div');
-      container.style.display = 'flex'; // TODO: take a look at UI.widgets.setName
+      container.style.display = 'flex';
 
+      // TODO: take a look at UI.widgets.setName
       var imgSrc = getWithDefault(this.webIdNode, ns.foaf('img'), _iconBase.iconBase + 'noun_15059.svg');
       var profileImg = document.createElement('img');
       profileImg.src = (0, _escapeHtml["default"])(imgSrc);
       profileImg.width = '50';
       profileImg.height = '50';
-      profileImg.style.margin = '5px'; // TODO: take a look at UI.widgets.setImage
+      profileImg.style.margin = '5px';
 
+      // TODO: take a look at UI.widgets.setImage
       var name = getWithDefault(this.webIdNode, ns.foaf('name'), "[".concat(this.webIdNode, "]"));
       var nameSpan = document.createElement('span');
       nameSpan.innerHTML = (0, _escapeHtml["default"])(name);
@@ -23916,26 +20616,23 @@ var Person = /*#__PURE__*/function () {
   }]);
   return Person;
 }();
-
 exports.Person = Person;
-
 function getWithDefault(subject, predicate, defaultValue) {
   var object = kb.any(subject, predicate);
   return object ? object.value : defaultValue;
 }
-
 function patch(url, _ref3) {
   var toDel = _ref3.toDel,
-      toIns = _ref3.toIns;
+    toIns = _ref3.toIns;
   return new Promise(function (resolve, reject) {
     kb.updater.update(toDel, toIns, function (uri, success, errorMessage) {
       if (!success) {
         return reject(new Error("PATCH failed for resource <".concat(uri, ">: ").concat(errorMessage)));
       }
-
       resolve();
     });
-  }); // return webClient.patch(url, toDel, toIns)
+  });
+  // return webClient.patch(url, toDel, toIns)
   //   .then(solidResponse => {
   //     const status = solidResponse.xhr.status
   //     if (status < 200 || status >= 400) {
@@ -23970,9 +20667,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.wrapDivInATR = exports.createImageDiv = exports.addClickListenerToElement = void 0;
-
 var _style = __webpack_require__(/*! ../style */ "./lib/style.js");
-
 /**
  * Wraps a Div in a TR/RD
  *
@@ -23995,6 +20690,7 @@ var wrapDivInATR = function wrapDivInATR(dom, div, obj) {
   tr.subject = obj;
   return tr;
 };
+
 /**
  * Adds a click listener to a div
  *
@@ -24008,13 +20704,11 @@ var wrapDivInATR = function wrapDivInATR(dom, div, obj) {
  * @internal exporting this only for unit tests
  */
 // eslint-disable-next-line complexity
-
-
 exports.wrapDivInATR = wrapDivInATR;
-
 var addClickListenerToElement = function addClickListenerToElement(div, onClickFunction) {
   div.addEventListener('click', onClickFunction);
 };
+
 /**
  * Wraps a Div in a TR/RD
  *
@@ -24030,17 +20724,13 @@ var addClickListenerToElement = function addClickListenerToElement(div, onClickF
  * @internal exporting this only for unit tests
  */
 // eslint-disable-next-line complexity
-
-
 exports.addClickListenerToElement = addClickListenerToElement;
-
 var createImageDiv = function createImageDiv(dom, div, image) {
   var imageDiv = div.appendChild(dom.createElement('div'));
   imageDiv.setAttribute('style', _style.imageDivStyle);
   imageDiv.appendChild(image);
   image.setAttribute('draggable', 'false'); // Stop the image being dragged instead - just the TR
 };
-
 exports.createImageDiv = createImageDiv;
 //# sourceMappingURL=widgetHelpers.js.map
 
@@ -26465,6 +23155,38 @@ exports.getWebidFromTokenPayload = getWebidFromTokenPayload;
 
 
 /**
+ * Ponyfill for `Array.prototype.find` which is only available in ES6 runtimes.
+ *
+ * Works with anything that has a `length` property and index access properties, including NodeList.
+ *
+ * @template {unknown} T
+ * @param {Array<T> | ({length:number, [number]: T})} list
+ * @param {function (item: T, index: number, list:Array<T> | ({length:number, [number]: T})):boolean} predicate
+ * @param {Partial<Pick<ArrayConstructor['prototype'], 'find'>>?} ac `Array.prototype` by default,
+ * 				allows injecting a custom implementation in tests
+ * @returns {T | undefined}
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find
+ * @see https://tc39.es/ecma262/multipage/indexed-collections.html#sec-array.prototype.find
+ */
+function find(list, predicate, ac) {
+	if (ac === undefined) {
+		ac = Array.prototype;
+	}
+	if (list && typeof ac.find === 'function') {
+		return ac.find.call(list, predicate);
+	}
+	for (var i = 0; i < list.length; i++) {
+		if (Object.prototype.hasOwnProperty.call(list, i)) {
+			var item = list[i];
+			if (predicate.call(undefined, item, i, list)) {
+				return item;
+			}
+		}
+	}
+}
+
+/**
  * "Shallow freezes" an object to render it immutable.
  * Uses `Object.freeze` if available,
  * otherwise the immutability is only in the type.
@@ -26629,6 +23351,7 @@ var NAMESPACE = freeze({
 })
 
 exports.assign = assign;
+exports.find = find;
 exports.freeze = freeze;
 exports.MIME_TYPE = MIME_TYPE;
 exports.NAMESPACE = NAMESPACE;
@@ -26976,6 +23699,7 @@ exports.DOMParser = DOMParser;
 
 var conventions = __webpack_require__(/*! ./conventions */ "./node_modules/@xmldom/xmldom/lib/conventions.js");
 
+var find = conventions.find;
 var NAMESPACE = conventions.NAMESPACE;
 
 /**
@@ -27038,7 +23762,9 @@ function arrayIncludes (list) {
 
 function copy(src,dest){
 	for(var p in src){
-		dest[p] = src[p];
+		if (Object.prototype.hasOwnProperty.call(src, p)) {
+			dest[p] = src[p];
+		}
 	}
 }
 
@@ -27132,14 +23858,14 @@ NodeList.prototype = {
 	 * The number of nodes in the list. The range of valid child node indices is 0 to length-1 inclusive.
 	 * @standard level1
 	 */
-	length:0, 
+	length:0,
 	/**
 	 * Returns the indexth item in the collection. If index is greater than or equal to the number of nodes in the list, this returns null.
 	 * @standard level1
-	 * @param index  unsigned long 
+	 * @param index  unsigned long
 	 *   Index into the collection.
 	 * @return Node
-	 * 	The node at the indexth position in the NodeList, or null if that is not a valid index. 
+	 * 	The node at the indexth position in the NodeList, or null if that is not a valid index.
 	 */
 	item: function(index) {
 		return this[index] || null;
@@ -27149,7 +23875,23 @@ NodeList.prototype = {
 			serializeToString(this[i],buf,isHTML,nodeFilter);
 		}
 		return buf.join('');
-	}
+	},
+	/**
+	 * @private
+	 * @param {function (Node):boolean} predicate
+	 * @returns {Node[]}
+	 */
+	filter: function (predicate) {
+		return Array.prototype.filter.call(this, predicate);
+	},
+	/**
+	 * @private
+	 * @param {Node} item
+	 * @returns {number}
+	 */
+	indexOf: function (item) {
+		return Array.prototype.indexOf.call(this, item);
+	},
 };
 
 function LiveNodeList(node,refresh){
@@ -27183,7 +23925,7 @@ _extends(LiveNodeList,NodeList);
  * but this is simply to allow convenient enumeration of the contents of a NamedNodeMap,
  * and does not imply that the DOM specifies an order to these Nodes.
  * NamedNodeMap objects in the DOM are live.
- * used for attributes or DocumentType entities 
+ * used for attributes or DocumentType entities
  */
 function NamedNodeMap() {
 };
@@ -27227,7 +23969,7 @@ function _removeNamedNode(el,list,attr){
 			}
 		}
 	}else{
-		throw DOMException(NOT_FOUND_ERR,new Error(el.tagName+'@'+attr))
+		throw new DOMException(NOT_FOUND_ERR,new Error(el.tagName+'@'+attr))
 	}
 }
 NamedNodeMap.prototype = {
@@ -27272,10 +24014,10 @@ NamedNodeMap.prototype = {
 		var attr = this.getNamedItem(key);
 		_removeNamedNode(this._ownerElement,this,attr);
 		return attr;
-		
-		
+
+
 	},// raises: NOT_FOUND_ERR,NO_MODIFICATION_ALLOWED_ERR
-	
+
 	//for level2
 	removeNamedItemNS:function(namespaceURI,localName){
 		var attr = this.getNamedItemNS(namespaceURI,localName);
@@ -27421,11 +24163,11 @@ Node.prototype = {
 	prefix : null,
 	localName : null,
 	// Modified in DOM Level 2:
-	insertBefore:function(newChild, refChild){//raises 
+	insertBefore:function(newChild, refChild){//raises
 		return _insertBefore(this,newChild,refChild);
 	},
-	replaceChild:function(newChild, oldChild){//raises 
-		this.insertBefore(newChild,oldChild);
+	replaceChild:function(newChild, oldChild){//raises
+		_insertBefore(this, newChild,oldChild, assertPreReplacementValidityInDocument);
 		if(oldChild){
 			this.removeChild(oldChild);
 		}
@@ -27485,9 +24227,9 @@ Node.prototype = {
     		//console.dir(map)
     		if(map){
     			for(var n in map){
-    				if(map[n] == namespaceURI){
-    					return n;
-    				}
+						if (Object.prototype.hasOwnProperty.call(map, n) && map[n] === namespaceURI) {
+							return n;
+						}
     			}
     		}
     		el = el.nodeType == ATTRIBUTE_NODE?el.ownerDocument : el.parentNode;
@@ -27501,7 +24243,7 @@ Node.prototype = {
     		var map = el._nsMap;
     		//console.dir(map)
     		if(map){
-    			if(prefix in map){
+    			if(Object.prototype.hasOwnProperty.call(map, prefix)){
     				return map[prefix] ;
     			}
     		}
@@ -27547,6 +24289,7 @@ function _visitNode(node,callback){
 
 
 function Document(){
+	this.ownerDocument = this;
 }
 
 function _onAddAttribute(doc,el,newAttr){
@@ -27630,48 +24373,313 @@ function _removeChild (parentNode, child) {
 	_onUpdateChild(parentNode.ownerDocument, parentNode);
 	return child;
 }
+
 /**
- * preformance key(refChild == null)
+ * Returns `true` if `node` can be a parent for insertion.
+ * @param {Node} node
+ * @returns {boolean}
  */
-function _insertBefore(parentNode,newChild,nextChild){
-	var cp = newChild.parentNode;
-	if(cp){
-		cp.removeChild(newChild);//remove and update
+function hasValidParentNodeType(node) {
+	return (
+		node &&
+		(node.nodeType === Node.DOCUMENT_NODE || node.nodeType === Node.DOCUMENT_FRAGMENT_NODE || node.nodeType === Node.ELEMENT_NODE)
+	);
+}
+
+/**
+ * Returns `true` if `node` can be inserted according to it's `nodeType`.
+ * @param {Node} node
+ * @returns {boolean}
+ */
+function hasInsertableNodeType(node) {
+	return (
+		node &&
+		(isElementNode(node) ||
+			isTextNode(node) ||
+			isDocTypeNode(node) ||
+			node.nodeType === Node.DOCUMENT_FRAGMENT_NODE ||
+			node.nodeType === Node.COMMENT_NODE ||
+			node.nodeType === Node.PROCESSING_INSTRUCTION_NODE)
+	);
+}
+
+/**
+ * Returns true if `node` is a DOCTYPE node
+ * @param {Node} node
+ * @returns {boolean}
+ */
+function isDocTypeNode(node) {
+	return node && node.nodeType === Node.DOCUMENT_TYPE_NODE;
+}
+
+/**
+ * Returns true if the node is an element
+ * @param {Node} node
+ * @returns {boolean}
+ */
+function isElementNode(node) {
+	return node && node.nodeType === Node.ELEMENT_NODE;
+}
+/**
+ * Returns true if `node` is a text node
+ * @param {Node} node
+ * @returns {boolean}
+ */
+function isTextNode(node) {
+	return node && node.nodeType === Node.TEXT_NODE;
+}
+
+/**
+ * Check if en element node can be inserted before `child`, or at the end if child is falsy,
+ * according to the presence and position of a doctype node on the same level.
+ *
+ * @param {Document} doc The document node
+ * @param {Node} child the node that would become the nextSibling if the element would be inserted
+ * @returns {boolean} `true` if an element can be inserted before child
+ * @private
+ * https://dom.spec.whatwg.org/#concept-node-ensure-pre-insertion-validity
+ */
+function isElementInsertionPossible(doc, child) {
+	var parentChildNodes = doc.childNodes || [];
+	if (find(parentChildNodes, isElementNode) || isDocTypeNode(child)) {
+		return false;
 	}
-	if(newChild.nodeType === DOCUMENT_FRAGMENT_NODE){
-		var newFirst = newChild.firstChild;
-		if (newFirst == null) {
-			return newChild;
+	var docTypeNode = find(parentChildNodes, isDocTypeNode);
+	return !(child && docTypeNode && parentChildNodes.indexOf(docTypeNode) > parentChildNodes.indexOf(child));
+}
+
+/**
+ * Check if en element node can be inserted before `child`, or at the end if child is falsy,
+ * according to the presence and position of a doctype node on the same level.
+ *
+ * @param {Node} doc The document node
+ * @param {Node} child the node that would become the nextSibling if the element would be inserted
+ * @returns {boolean} `true` if an element can be inserted before child
+ * @private
+ * https://dom.spec.whatwg.org/#concept-node-ensure-pre-insertion-validity
+ */
+function isElementReplacementPossible(doc, child) {
+	var parentChildNodes = doc.childNodes || [];
+
+	function hasElementChildThatIsNotChild(node) {
+		return isElementNode(node) && node !== child;
+	}
+
+	if (find(parentChildNodes, hasElementChildThatIsNotChild)) {
+		return false;
+	}
+	var docTypeNode = find(parentChildNodes, isDocTypeNode);
+	return !(child && docTypeNode && parentChildNodes.indexOf(docTypeNode) > parentChildNodes.indexOf(child));
+}
+
+/**
+ * @private
+ * Steps 1-5 of the checks before inserting and before replacing a child are the same.
+ *
+ * @param {Node} parent the parent node to insert `node` into
+ * @param {Node} node the node to insert
+ * @param {Node=} child the node that should become the `nextSibling` of `node`
+ * @returns {Node}
+ * @throws DOMException for several node combinations that would create a DOM that is not well-formed.
+ * @throws DOMException if `child` is provided but is not a child of `parent`.
+ * @see https://dom.spec.whatwg.org/#concept-node-ensure-pre-insertion-validity
+ * @see https://dom.spec.whatwg.org/#concept-node-replace
+ */
+function assertPreInsertionValidity1to5(parent, node, child) {
+	// 1. If `parent` is not a Document, DocumentFragment, or Element node, then throw a "HierarchyRequestError" DOMException.
+	if (!hasValidParentNodeType(parent)) {
+		throw new DOMException(HIERARCHY_REQUEST_ERR, 'Unexpected parent node type ' + parent.nodeType);
+	}
+	// 2. If `node` is a host-including inclusive ancestor of `parent`, then throw a "HierarchyRequestError" DOMException.
+	// not implemented!
+	// 3. If `child` is non-null and its parent is not `parent`, then throw a "NotFoundError" DOMException.
+	if (child && child.parentNode !== parent) {
+		throw new DOMException(NOT_FOUND_ERR, 'child not in parent');
+	}
+	if (
+		// 4. If `node` is not a DocumentFragment, DocumentType, Element, or CharacterData node, then throw a "HierarchyRequestError" DOMException.
+		!hasInsertableNodeType(node) ||
+		// 5. If either `node` is a Text node and `parent` is a document,
+		// the sax parser currently adds top level text nodes, this will be fixed in 0.9.0
+		// || (node.nodeType === Node.TEXT_NODE && parent.nodeType === Node.DOCUMENT_NODE)
+		// or `node` is a doctype and `parent` is not a document, then throw a "HierarchyRequestError" DOMException.
+		(isDocTypeNode(node) && parent.nodeType !== Node.DOCUMENT_NODE)
+	) {
+		throw new DOMException(
+			HIERARCHY_REQUEST_ERR,
+			'Unexpected node type ' + node.nodeType + ' for parent node type ' + parent.nodeType
+		);
+	}
+}
+
+/**
+ * @private
+ * Step 6 of the checks before inserting and before replacing a child are different.
+ *
+ * @param {Document} parent the parent node to insert `node` into
+ * @param {Node} node the node to insert
+ * @param {Node | undefined} child the node that should become the `nextSibling` of `node`
+ * @returns {Node}
+ * @throws DOMException for several node combinations that would create a DOM that is not well-formed.
+ * @throws DOMException if `child` is provided but is not a child of `parent`.
+ * @see https://dom.spec.whatwg.org/#concept-node-ensure-pre-insertion-validity
+ * @see https://dom.spec.whatwg.org/#concept-node-replace
+ */
+function assertPreInsertionValidityInDocument(parent, node, child) {
+	var parentChildNodes = parent.childNodes || [];
+	var nodeChildNodes = node.childNodes || [];
+
+	// DocumentFragment
+	if (node.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
+		var nodeChildElements = nodeChildNodes.filter(isElementNode);
+		// If node has more than one element child or has a Text node child.
+		if (nodeChildElements.length > 1 || find(nodeChildNodes, isTextNode)) {
+			throw new DOMException(HIERARCHY_REQUEST_ERR, 'More than one element or text in fragment');
 		}
-		var newLast = newChild.lastChild;
-	}else{
-		newFirst = newLast = newChild;
+		// Otherwise, if `node` has one element child and either `parent` has an element child,
+		// `child` is a doctype, or `child` is non-null and a doctype is following `child`.
+		if (nodeChildElements.length === 1 && !isElementInsertionPossible(parent, child)) {
+			throw new DOMException(HIERARCHY_REQUEST_ERR, 'Element in fragment can not be inserted before doctype');
+		}
 	}
-	var pre = nextChild ? nextChild.previousSibling : parentNode.lastChild;
+	// Element
+	if (isElementNode(node)) {
+		// `parent` has an element child, `child` is a doctype,
+		// or `child` is non-null and a doctype is following `child`.
+		if (!isElementInsertionPossible(parent, child)) {
+			throw new DOMException(HIERARCHY_REQUEST_ERR, 'Only one element can be added and only after doctype');
+		}
+	}
+	// DocumentType
+	if (isDocTypeNode(node)) {
+		// `parent` has a doctype child,
+		if (find(parentChildNodes, isDocTypeNode)) {
+			throw new DOMException(HIERARCHY_REQUEST_ERR, 'Only one doctype is allowed');
+		}
+		var parentElementChild = find(parentChildNodes, isElementNode);
+		// `child` is non-null and an element is preceding `child`,
+		if (child && parentChildNodes.indexOf(parentElementChild) < parentChildNodes.indexOf(child)) {
+			throw new DOMException(HIERARCHY_REQUEST_ERR, 'Doctype can only be inserted before an element');
+		}
+		// or `child` is null and `parent` has an element child.
+		if (!child && parentElementChild) {
+			throw new DOMException(HIERARCHY_REQUEST_ERR, 'Doctype can not be appended since element is present');
+		}
+	}
+}
+
+/**
+ * @private
+ * Step 6 of the checks before inserting and before replacing a child are different.
+ *
+ * @param {Document} parent the parent node to insert `node` into
+ * @param {Node} node the node to insert
+ * @param {Node | undefined} child the node that should become the `nextSibling` of `node`
+ * @returns {Node}
+ * @throws DOMException for several node combinations that would create a DOM that is not well-formed.
+ * @throws DOMException if `child` is provided but is not a child of `parent`.
+ * @see https://dom.spec.whatwg.org/#concept-node-ensure-pre-insertion-validity
+ * @see https://dom.spec.whatwg.org/#concept-node-replace
+ */
+function assertPreReplacementValidityInDocument(parent, node, child) {
+	var parentChildNodes = parent.childNodes || [];
+	var nodeChildNodes = node.childNodes || [];
+
+	// DocumentFragment
+	if (node.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
+		var nodeChildElements = nodeChildNodes.filter(isElementNode);
+		// If `node` has more than one element child or has a Text node child.
+		if (nodeChildElements.length > 1 || find(nodeChildNodes, isTextNode)) {
+			throw new DOMException(HIERARCHY_REQUEST_ERR, 'More than one element or text in fragment');
+		}
+		// Otherwise, if `node` has one element child and either `parent` has an element child that is not `child` or a doctype is following `child`.
+		if (nodeChildElements.length === 1 && !isElementReplacementPossible(parent, child)) {
+			throw new DOMException(HIERARCHY_REQUEST_ERR, 'Element in fragment can not be inserted before doctype');
+		}
+	}
+	// Element
+	if (isElementNode(node)) {
+		// `parent` has an element child that is not `child` or a doctype is following `child`.
+		if (!isElementReplacementPossible(parent, child)) {
+			throw new DOMException(HIERARCHY_REQUEST_ERR, 'Only one element can be added and only after doctype');
+		}
+	}
+	// DocumentType
+	if (isDocTypeNode(node)) {
+		function hasDoctypeChildThatIsNotChild(node) {
+			return isDocTypeNode(node) && node !== child;
+		}
+
+		// `parent` has a doctype child that is not `child`,
+		if (find(parentChildNodes, hasDoctypeChildThatIsNotChild)) {
+			throw new DOMException(HIERARCHY_REQUEST_ERR, 'Only one doctype is allowed');
+		}
+		var parentElementChild = find(parentChildNodes, isElementNode);
+		// or an element is preceding `child`.
+		if (child && parentChildNodes.indexOf(parentElementChild) < parentChildNodes.indexOf(child)) {
+			throw new DOMException(HIERARCHY_REQUEST_ERR, 'Doctype can only be inserted before an element');
+		}
+	}
+}
+
+/**
+ * @private
+ * @param {Node} parent the parent node to insert `node` into
+ * @param {Node} node the node to insert
+ * @param {Node=} child the node that should become the `nextSibling` of `node`
+ * @returns {Node}
+ * @throws DOMException for several node combinations that would create a DOM that is not well-formed.
+ * @throws DOMException if `child` is provided but is not a child of `parent`.
+ * @see https://dom.spec.whatwg.org/#concept-node-ensure-pre-insertion-validity
+ */
+function _insertBefore(parent, node, child, _inDocumentAssertion) {
+	// To ensure pre-insertion validity of a node into a parent before a child, run these steps:
+	assertPreInsertionValidity1to5(parent, node, child);
+
+	// If parent is a document, and any of the statements below, switched on the interface node implements,
+	// are true, then throw a "HierarchyRequestError" DOMException.
+	if (parent.nodeType === Node.DOCUMENT_NODE) {
+		(_inDocumentAssertion || assertPreInsertionValidityInDocument)(parent, node, child);
+	}
+
+	var cp = node.parentNode;
+	if(cp){
+		cp.removeChild(node);//remove and update
+	}
+	if(node.nodeType === DOCUMENT_FRAGMENT_NODE){
+		var newFirst = node.firstChild;
+		if (newFirst == null) {
+			return node;
+		}
+		var newLast = node.lastChild;
+	}else{
+		newFirst = newLast = node;
+	}
+	var pre = child ? child.previousSibling : parent.lastChild;
 
 	newFirst.previousSibling = pre;
-	newLast.nextSibling = nextChild;
-	
-	
+	newLast.nextSibling = child;
+
+
 	if(pre){
 		pre.nextSibling = newFirst;
 	}else{
-		parentNode.firstChild = newFirst;
+		parent.firstChild = newFirst;
 	}
-	if(nextChild == null){
-		parentNode.lastChild = newLast;
+	if(child == null){
+		parent.lastChild = newLast;
 	}else{
-		nextChild.previousSibling = newLast;
+		child.previousSibling = newLast;
 	}
 	do{
-		newFirst.parentNode = parentNode;
+		newFirst.parentNode = parent;
 	}while(newFirst !== newLast && (newFirst= newFirst.nextSibling))
-	_onUpdateChild(parentNode.ownerDocument||parentNode,parentNode);
-	//console.log(parentNode.lastChild.nextSibling == null)
-	if (newChild.nodeType == DOCUMENT_FRAGMENT_NODE) {
-		newChild.firstChild = newChild.lastChild = null;
+	_onUpdateChild(parent.ownerDocument||parent, parent);
+	//console.log(parent.lastChild.nextSibling == null)
+	if (node.nodeType == DOCUMENT_FRAGMENT_NODE) {
+		node.firstChild = node.lastChild = null;
 	}
-	return newChild;
+	return node;
 }
 
 /**
@@ -27726,17 +24734,30 @@ Document.prototype = {
 			}
 			return newChild;
 		}
-		if(this.documentElement == null && newChild.nodeType == ELEMENT_NODE){
+		_insertBefore(this, newChild, refChild);
+		newChild.ownerDocument = this;
+		if (this.documentElement === null && newChild.nodeType === ELEMENT_NODE) {
 			this.documentElement = newChild;
 		}
 
-		return _insertBefore(this,newChild,refChild),(newChild.ownerDocument = this),newChild;
+		return newChild;
 	},
 	removeChild :  function(oldChild){
 		if(this.documentElement == oldChild){
 			this.documentElement = null;
 		}
 		return _removeChild(this,oldChild);
+	},
+	replaceChild: function (newChild, oldChild) {
+		//raises
+		_insertBefore(this, newChild, oldChild, assertPreReplacementValidityInDocument);
+		newChild.ownerDocument = this;
+		if (oldChild) {
+			this.removeChild(oldChild);
+		}
+		if (isElementNode(newChild)) {
+			this.documentElement = newChild;
+		}
 	},
 	// Introduced in DOM Level 2:
 	importNode : function(importedNode,deep){
@@ -27924,7 +24945,7 @@ Element.prototype = {
 		var attr = this.getAttributeNode(name)
 		attr && this.removeAttributeNode(attr);
 	},
-	
+
 	//four real opeartion method
 	appendChild:function(newChild){
 		if(newChild.nodeType === DOCUMENT_FRAGMENT_NODE){
@@ -27948,7 +24969,7 @@ Element.prototype = {
 		var old = this.getAttributeNodeNS(namespaceURI, localName);
 		old && this.removeAttributeNode(old);
 	},
-	
+
 	hasAttributeNS : function(namespaceURI, localName){
 		return this.getAttributeNodeNS(namespaceURI, localName)!=null;
 	},
@@ -27964,7 +24985,7 @@ Element.prototype = {
 	getAttributeNodeNS : function(namespaceURI, localName){
 		return this.attributes.getNamedItemNS(namespaceURI, localName);
 	},
-	
+
 	getElementsByTagName : function(tagName){
 		return new LiveNodeList(this,function(base){
 			var ls = [];
@@ -27985,7 +25006,7 @@ Element.prototype = {
 				}
 			});
 			return ls;
-			
+
 		});
 	}
 };
@@ -28014,7 +25035,7 @@ CharacterData.prototype = {
 	},
 	insertData: function(offset,text) {
 		this.replaceData(offset,0,text);
-	
+
 	},
 	appendChild:function(newChild){
 		throw new Error(ExceptionMessage[HIERARCHY_REQUEST_ERR])
@@ -28108,7 +25129,7 @@ function nodeSerializeToString(isHtml,nodeFilter){
 	var refNode = this.nodeType == 9 && this.documentElement || this;
 	var prefix = refNode.prefix;
 	var uri = refNode.namespaceURI;
-	
+
 	if(uri && prefix == null){
 		//console.log(prefix)
 		var prefix = refNode.lookupPrefix(uri);
@@ -28141,8 +25162,8 @@ function needNamespaceDefine(node, isHTML, visibleNamespaces) {
 	if (prefix === "xml" && uri === NAMESPACE.XML || uri === NAMESPACE.XMLNS) {
 		return false;
 	}
-	
-	var i = visibleNamespaces.length 
+
+	var i = visibleNamespaces.length
 	while (i--) {
 		var ns = visibleNamespaces[i];
 		// get namespace prefix
@@ -28193,7 +25214,7 @@ function serializeToString(node,buf,isHTML,nodeFilter,visibleNamespaces){
 		var len = attrs.length;
 		var child = node.firstChild;
 		var nodeName = node.tagName;
-		
+
 		isHTML = NAMESPACE.isHTML(node.namespaceURI) || isHTML
 
 		var prefixedNodeName = nodeName
@@ -28252,14 +25273,14 @@ function serializeToString(node,buf,isHTML,nodeFilter,visibleNamespaces){
 			serializeToString(attr,buf,isHTML,nodeFilter,visibleNamespaces);
 		}
 
-		// add namespace for current node		
+		// add namespace for current node
 		if (nodeName === prefixedNodeName && needNamespaceDefine(node, isHTML, visibleNamespaces)) {
 			var prefix = node.prefix||'';
 			var uri = node.namespaceURI;
 			addSerializedAttribute(buf, prefix ? 'xmlns:' + prefix : "xmlns", uri);
 			visibleNamespaces.push({ prefix: prefix, namespace:uri });
 		}
-		
+
 		if(child || isHTML && !/^(?:meta|link|img|br|hr|input)$/i.test(nodeName)){
 			buf.push('>');
 			//if is cdata child node
@@ -28400,11 +25421,13 @@ function importNode(doc,node,deep){
 //					attributes:1,childNodes:1,parentNode:1,documentElement:1,doctype,};
 function cloneNode(doc,node,deep){
 	var node2 = new node.constructor();
-	for(var n in node){
-		var v = node[n];
-		if(typeof v != 'object' ){
-			if(v != node2[n]){
-				node2[n] = v;
+	for (var n in node) {
+		if (Object.prototype.hasOwnProperty.call(node, n)) {
+			var v = node[n];
+			if (typeof v != "object") {
+				if (v != node2[n]) {
+					node2[n] = v;
+				}
 			}
 		}
 	}
@@ -28472,7 +25495,7 @@ try{
 				}
 			}
 		})
-		
+
 		function getTextContent(node){
 			switch(node.nodeType){
 			case ELEMENT_NODE:
@@ -28952,8 +25975,10 @@ function parse(source,defaultNSMapCopy,entityMap,domBuilder,errorHandler){
 		        if(endIgnoreCaseMach){
 		        	domBuilder.endElement(config.uri,config.localName,tagName);
 					if(localNSMap){
-						for(var prefix in localNSMap){
-							domBuilder.endPrefixMapping(prefix) ;
+						for (var prefix in localNSMap) {
+							if (Object.prototype.hasOwnProperty.call(localNSMap, prefix)) {
+								domBuilder.endPrefixMapping(prefix);
+							}
 						}
 					}
 					if(!endMatch){
@@ -29295,8 +26320,10 @@ function appendElement(el,domBuilder,currentNSMap){
 	if(el.closed){
 		domBuilder.endElement(ns,localName,tagName);
 		if(localNSMap){
-			for(prefix in localNSMap){
-				domBuilder.endPrefixMapping(prefix)
+			for (prefix in localNSMap) {
+				if (Object.prototype.hasOwnProperty.call(localNSMap, prefix)) {
+					domBuilder.endPrefixMapping(prefix);
+				}
 			}
 		}
 	}else{
@@ -29342,9 +26369,15 @@ function fixSelfClosed(source,elStartEnd,tagName,closeMap){
 	return pos<elStartEnd;
 	//}
 }
-function _copy(source,target){
-	for(var n in source){target[n] = source[n]}
+
+function _copy (source, target) {
+	for (var n in source) {
+		if (Object.prototype.hasOwnProperty.call(source, n)) {
+			target[n] = source[n];
+		}
+	}
 }
+
 function parseDCC(source,start,domBuilder,errorHandler){//sure start with '<!'
 	var next= source.charAt(start+2)
 	switch(next){
@@ -46725,7 +43758,7 @@ class N3Writer {
       }
       IRIlist = escapeRegex(IRIlist, /[\]\/\(\)\*\+\?\.\\\$]/g, '\\$&');
       this._prefixRegex = new RegExp(`^(?:${prefixList})[^\/]*$|` +
-                                     `^(${IRIlist})([a-zA-Z][\\-_a-zA-Z0-9]*)$`);
+                                     `^(${IRIlist})([_a-zA-Z][\\-_a-zA-Z0-9]*)$`);
     }
     // End a prefix block with a newline
     this._write(hasPrefixes ? '\n' : '', done);
@@ -46965,16 +43998,14 @@ module.exports = class IdentifierIssuer {
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
-/*
- * Copyright (c) 2016-2021 Digital Bazaar, Inc. All rights reserved.
+/*!
+ * Copyright (c) 2016-2022 Digital Bazaar, Inc. All rights reserved.
  */
 
 
 __webpack_require__(/*! setimmediate */ "./node_modules/setimmediate/setImmediate.js");
 
 const crypto = self.crypto || self.msCrypto;
-
-// TODO: synchronous version no longer supported in browser
 
 module.exports = class MessageDigest {
   /**
@@ -46993,7 +44024,7 @@ module.exports = class MessageDigest {
     } else if(algorithm === 'sha1') {
       this.algorithm = {name: 'SHA-1'};
     } else {
-      throw new Error(`Unsupport algorithm "${algorithm}".`);
+      throw new Error(`Unsupported algorithm "${algorithm}".`);
     }
     this._content = '';
   }
@@ -47025,8 +44056,8 @@ module.exports = class MessageDigest {
 /***/ ((module) => {
 
 "use strict";
-/*
- * Copyright (c) 2016-2021 Digital Bazaar, Inc. All rights reserved.
+/*!
+ * Copyright (c) 2016-2022 Digital Bazaar, Inc. All rights reserved.
  */
 
 
@@ -47227,18 +44258,16 @@ module.exports = class NQuads {
   }
 
   /**
-   * Converts an RDF quad to an N-Quad string (a single quad).
+   * Converts RDF quad components to an N-Quad string (a single quad).
    *
-   * @param quad the RDF quad convert.
+   * @param {Object} s - N-Quad subject component.
+   * @param {Object} p - N-Quad predicate component.
+   * @param {Object} o - N-Quad object component.
+   * @param {Object} g - N-Quad graph component.
    *
-   * @return the N-Quad string.
+   * @return {string} the N-Quad.
    */
-  static serializeQuad(quad) {
-    const s = quad.subject;
-    const p = quad.predicate;
-    const o = quad.object;
-    const g = quad.graph;
-
+  static serializeQuadComponents(s, p, o, g) {
     let nquad = '';
 
     // subject can only be NamedNode or BlankNode
@@ -47277,6 +44306,18 @@ module.exports = class NQuads {
 
     nquad += ' .\n';
     return nquad;
+  }
+
+  /**
+   * Converts an RDF quad to an N-Quad string (a single quad).
+   *
+   * @param quad the RDF quad convert.
+   *
+   * @return the N-Quad string.
+   */
+  static serializeQuad(quad) {
+    return NQuads.serializeQuadComponents(
+      quad.subject, quad.predicate, quad.object, quad.graph);
   }
 
   /**
@@ -47429,12 +44470,10 @@ function _unescape(s) {
 /***/ ((module) => {
 
 "use strict";
-/*
- * Copyright (c) 2016-2021 Digital Bazaar, Inc. All rights reserved.
+/*!
+ * Copyright (c) 2016-2022 Digital Bazaar, Inc. All rights reserved.
  */
 
-
-// TODO: convert to ES6 iterable?
 
 module.exports = class Permuter {
   /**
@@ -47525,8 +44564,8 @@ module.exports = class Permuter {
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
-/*
- * Copyright (c) 2016-2021 Digital Bazaar, Inc. All rights reserved.
+/*!
+ * Copyright (c) 2016-2022 Digital Bazaar, Inc. All rights reserved.
  */
 
 
@@ -47536,16 +44575,22 @@ const Permuter = __webpack_require__(/*! ./Permuter */ "./node_modules/rdf-canon
 const NQuads = __webpack_require__(/*! ./NQuads */ "./node_modules/rdf-canonize/lib/NQuads.js");
 
 module.exports = class URDNA2015 {
-  constructor() {
+  constructor({
+    createMessageDigest = () => new MessageDigest('sha256'),
+    maxDeepIterations = Infinity
+  } = {}) {
     this.name = 'URDNA2015';
     this.blankNodeInfo = new Map();
     this.canonicalIssuer = new IdentifierIssuer('_:c14n');
-    this.hashAlgorithm = 'sha256';
+    this.createMessageDigest = createMessageDigest;
+    this.maxDeepIterations = maxDeepIterations;
     this.quads = null;
+    this.deepIterations = null;
   }
 
   // 4.4) Normalization Algorithm
   async main(dataset) {
+    this.deepIterations = new Map();
     this.quads = dataset;
 
     // 1) Create the normalization state.
@@ -47672,13 +44717,15 @@ module.exports = class URDNA2015 {
       // 7.1) Create a copy, quad copy, of quad and replace any existing
       // blank node identifiers using the canonical identifiers
       // previously issued by canonical issuer.
-      // Note: We optimize with shallow copies here.
-      const q = {...quad};
-      q.subject = this._useCanonicalId({component: q.subject});
-      q.object = this._useCanonicalId({component: q.object});
-      q.graph = this._useCanonicalId({component: q.graph});
+      // Note: We optimize away the copy here.
+      const nQuad = NQuads.serializeQuadComponents(
+        this._componentWithCanonicalId(quad.subject),
+        quad.predicate,
+        this._componentWithCanonicalId(quad.object),
+        this._componentWithCanonicalId(quad.graph)
+      );
       // 7.2) Add quad copy to the normalized dataset.
-      normalized.push(NQuads.serializeQuad(q));
+      normalized.push(nQuad);
     }
 
     // sort normalized output
@@ -47726,7 +44773,7 @@ module.exports = class URDNA2015 {
 
     // 5) Return the hash that results from passing the sorted, joined nquads
     // through the hash algorithm.
-    const md = new MessageDigest(this.hashAlgorithm);
+    const md = this.createMessageDigest();
     for(const nquad of nquads) {
       md.update(nquad);
     }
@@ -47751,7 +44798,7 @@ module.exports = class URDNA2015 {
 
     // 2) Initialize a string input to the value of position.
     // Note: We use a hash object instead.
-    const md = new MessageDigest(this.hashAlgorithm);
+    const md = this.createMessageDigest();
     md.update(position);
 
     // 3) If position is not g, append <, the value of the predicate in quad,
@@ -47770,10 +44817,17 @@ module.exports = class URDNA2015 {
 
   // 4.8) Hash N-Degree Quads
   async hashNDegreeQuads(id, issuer) {
+    const deepIterations = this.deepIterations.get(id) || 0;
+    if(deepIterations > this.maxDeepIterations) {
+      throw new Error(
+        `Maximum deep iterations (${this.maxDeepIterations}) exceeded.`);
+    }
+    this.deepIterations.set(id, deepIterations + 1);
+
     // 1) Create a hash to related blank nodes map for storing hashes that
     // identify related blank nodes.
     // Note: 2) and 3) handled within `createHashToRelated`
-    const md = new MessageDigest(this.hashAlgorithm);
+    const md = this.createMessageDigest();
     const hashToRelated = await this.createHashToRelated(id, issuer);
 
     // 4) Create an empty string, data to hash.
@@ -48016,9 +45070,11 @@ module.exports = class URDNA2015 {
     }
   }
 
-  _useCanonicalId({component}) {
+  // canonical ids for 7.1
+  _componentWithCanonicalId(component) {
     if(component.termType === 'BlankNode' &&
       !component.value.startsWith(this.canonicalIssuer.prefix)) {
+      // create new BlankNode
       return {
         termType: 'BlankNode',
         value: this.canonicalIssuer.getId(component.value)
@@ -48046,27 +45102,35 @@ function _stringHashCompare(a, b) {
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
-/*
- * Copyright (c) 2016-2021 Digital Bazaar, Inc. All rights reserved.
+/*!
+ * Copyright (c) 2016-2022 Digital Bazaar, Inc. All rights reserved.
  */
 
 
 const IdentifierIssuer = __webpack_require__(/*! ./IdentifierIssuer */ "./node_modules/rdf-canonize/lib/IdentifierIssuer.js");
+// FIXME: do not import; convert to requiring a
+// hash factory
 const MessageDigest = __webpack_require__(/*! ./MessageDigest */ "./node_modules/rdf-canonize/lib/MessageDigest-browser.js");
 const Permuter = __webpack_require__(/*! ./Permuter */ "./node_modules/rdf-canonize/lib/Permuter.js");
 const NQuads = __webpack_require__(/*! ./NQuads */ "./node_modules/rdf-canonize/lib/NQuads.js");
 
 module.exports = class URDNA2015Sync {
-  constructor() {
+  constructor({
+    createMessageDigest = () => new MessageDigest('sha256'),
+    maxDeepIterations = Infinity
+  } = {}) {
     this.name = 'URDNA2015';
     this.blankNodeInfo = new Map();
     this.canonicalIssuer = new IdentifierIssuer('_:c14n');
-    this.hashAlgorithm = 'sha256';
+    this.createMessageDigest = createMessageDigest;
+    this.maxDeepIterations = maxDeepIterations;
     this.quads = null;
+    this.deepIterations = null;
   }
 
   // 4.4) Normalization Algorithm
   main(dataset) {
+    this.deepIterations = new Map();
     this.quads = dataset;
 
     // 1) Create the normalization state.
@@ -48188,13 +45252,15 @@ module.exports = class URDNA2015Sync {
       // 7.1) Create a copy, quad copy, of quad and replace any existing
       // blank node identifiers using the canonical identifiers
       // previously issued by canonical issuer.
-      // Note: We optimize with shallow copies here.
-      const q = {...quad};
-      q.subject = this._useCanonicalId({component: q.subject});
-      q.object = this._useCanonicalId({component: q.object});
-      q.graph = this._useCanonicalId({component: q.graph});
+      // Note: We optimize away the copy here.
+      const nQuad = NQuads.serializeQuadComponents(
+        this._componentWithCanonicalId({component: quad.subject}),
+        quad.predicate,
+        this._componentWithCanonicalId({component: quad.object}),
+        this._componentWithCanonicalId({component: quad.graph})
+      );
       // 7.2) Add quad copy to the normalized dataset.
-      normalized.push(NQuads.serializeQuad(q));
+      normalized.push(nQuad);
     }
 
     // sort normalized output
@@ -48242,7 +45308,7 @@ module.exports = class URDNA2015Sync {
 
     // 5) Return the hash that results from passing the sorted, joined nquads
     // through the hash algorithm.
-    const md = new MessageDigest(this.hashAlgorithm);
+    const md = this.createMessageDigest();
     for(const nquad of nquads) {
       md.update(nquad);
     }
@@ -48267,7 +45333,7 @@ module.exports = class URDNA2015Sync {
 
     // 2) Initialize a string input to the value of position.
     // Note: We use a hash object instead.
-    const md = new MessageDigest(this.hashAlgorithm);
+    const md = this.createMessageDigest();
     md.update(position);
 
     // 3) If position is not g, append <, the value of the predicate in quad,
@@ -48286,10 +45352,17 @@ module.exports = class URDNA2015Sync {
 
   // 4.8) Hash N-Degree Quads
   hashNDegreeQuads(id, issuer) {
+    const deepIterations = this.deepIterations.get(id) || 0;
+    if(deepIterations > this.maxDeepIterations) {
+      throw new Error(
+        `Maximum deep iterations (${this.maxDeepIterations}) exceeded.`);
+    }
+    this.deepIterations.set(id, deepIterations + 1);
+
     // 1) Create a hash to related blank nodes map for storing hashes that
     // identify related blank nodes.
     // Note: 2) and 3) handled within `createHashToRelated`
-    const md = new MessageDigest(this.hashAlgorithm);
+    const md = this.createMessageDigest();
     const hashToRelated = this.createHashToRelated(id, issuer);
 
     // 4) Create an empty string, data to hash.
@@ -48519,9 +45592,11 @@ module.exports = class URDNA2015Sync {
     }
   }
 
-  _useCanonicalId({component}) {
+  // canonical ids for 7.1
+  _componentWithCanonicalId({component}) {
     if(component.termType === 'BlankNode' &&
       !component.value.startsWith(this.canonicalIssuer.prefix)) {
+      // create new BlankNode
       return {
         termType: 'BlankNode',
         value: this.canonicalIssuer.getId(component.value)
@@ -48545,18 +45620,19 @@ function _stringHashCompare(a, b) {
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
-/*
- * Copyright (c) 2016-2021 Digital Bazaar, Inc. All rights reserved.
+/*!
+ * Copyright (c) 2016-2022 Digital Bazaar, Inc. All rights reserved.
  */
 
 
+const MessageDigest = __webpack_require__(/*! ./MessageDigest */ "./node_modules/rdf-canonize/lib/MessageDigest-browser.js");
 const URDNA2015 = __webpack_require__(/*! ./URDNA2015 */ "./node_modules/rdf-canonize/lib/URDNA2015.js");
 
 module.exports = class URDNA2012 extends URDNA2015 {
   constructor() {
     super();
     this.name = 'URGNA2012';
-    this.hashAlgorithm = 'sha1';
+    this.createMessageDigest = () => new MessageDigest('sha1');
   }
 
   // helper for modifying component during Hash First Degree Quads
@@ -48646,18 +45722,19 @@ module.exports = class URDNA2012 extends URDNA2015 {
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
-/*
+/*!
  * Copyright (c) 2016-2021 Digital Bazaar, Inc. All rights reserved.
  */
 
 
+const MessageDigest = __webpack_require__(/*! ./MessageDigest */ "./node_modules/rdf-canonize/lib/MessageDigest-browser.js");
 const URDNA2015Sync = __webpack_require__(/*! ./URDNA2015Sync */ "./node_modules/rdf-canonize/lib/URDNA2015Sync.js");
 
 module.exports = class URDNA2012Sync extends URDNA2015Sync {
   constructor() {
     super();
     this.name = 'URGNA2012';
-    this.hashAlgorithm = 'sha1';
+    this.createMessageDigest = () => new MessageDigest('sha1');
   }
 
   // helper for modifying component during Hash First Degree Quads
@@ -48738,7 +45815,7 @@ module.exports = class URDNA2012Sync extends URDNA2015Sync {
 /*!************************************************!*\
   !*** ./node_modules/rdf-canonize/lib/index.js ***!
   \************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 /**
@@ -48746,7 +45823,7 @@ module.exports = class URDNA2012Sync extends URDNA2015Sync {
  * This library works in the browser and node.js.
  *
  * BSD 3-Clause License
- * Copyright (c) 2016-2021 Digital Bazaar, Inc.
+ * Copyright (c) 2016-2022 Digital Bazaar, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -48788,12 +45865,9 @@ try {
   rdfCanonizeNative = __webpack_require__(/*! rdf-canonize-native */ "?2b19");
 } catch(e) {}
 
-const api = {};
-module.exports = api;
-
 // expose helpers
-api.NQuads = __webpack_require__(/*! ./NQuads */ "./node_modules/rdf-canonize/lib/NQuads.js");
-api.IdentifierIssuer = __webpack_require__(/*! ./IdentifierIssuer */ "./node_modules/rdf-canonize/lib/IdentifierIssuer.js");
+exports.NQuads = __webpack_require__(/*! ./NQuads */ "./node_modules/rdf-canonize/lib/NQuads.js");
+exports.IdentifierIssuer = __webpack_require__(/*! ./IdentifierIssuer */ "./node_modules/rdf-canonize/lib/IdentifierIssuer.js");
 
 /**
  * Get or set native API.
@@ -48802,7 +45876,7 @@ api.IdentifierIssuer = __webpack_require__(/*! ./IdentifierIssuer */ "./node_mod
  *
  * @return the currently set native API.
  */
-api._rdfCanonizeNative = function(api) {
+exports._rdfCanonizeNative = function(api) {
   if(api) {
     rdfCanonizeNative = api;
   }
@@ -48812,25 +45886,39 @@ api._rdfCanonizeNative = function(api) {
 /**
  * Asynchronously canonizes an RDF dataset.
  *
- * @param dataset the dataset to canonize.
- * @param options the options to use:
- *          algorithm the canonicalization algorithm to use, `URDNA2015` or
- *            `URGNA2012`.
- *          [useNative] use native implementation (default: false).
+ * @param {Array} dataset - The dataset to canonize.
+ * @param {object} options - The options to use:
+ *   {string} algorithm - The canonicalization algorithm to use, `URDNA2015` or
+ *     `URGNA2012`.
+ *   {Function} [createMessageDigest] - A factory function for creating a
+ *     `MessageDigest` interface that overrides the built-in message digest
+ *     implementation used by the canonize algorithm; note that using a hash
+ *     algorithm (or HMAC algorithm) that differs from the one specified by
+ *     the canonize algorithm will result in different output.
+ *   {boolean} [useNative=false] - Use native implementation.
+ *   {number} [maxDeepIterations=Infinity] - The maximum number of times to run
+ *     deep comparison algorithms (such as the N-Degree Hash Quads algorithm
+ *     used in URDNA2015) before bailing out and throwing an error; this is a
+ *     useful setting for preventing wasted CPU cycles or DoS when canonizing
+ *     meaningless or potentially malicious datasets, a recommended value is
+ *     `1`.
  *
  * @return a Promise that resolves to the canonicalized RDF Dataset.
  */
-api.canonize = async function(dataset, options) {
+exports.canonize = async function(dataset, options) {
   // back-compat with legacy dataset
   if(!Array.isArray(dataset)) {
-    dataset = api.NQuads.legacyDatasetToQuads(dataset);
+    dataset = exports.NQuads.legacyDatasetToQuads(dataset);
   }
 
   if(options.useNative) {
     if(!rdfCanonizeNative) {
       throw new Error('rdf-canonize-native not available');
     }
-    // TODO: convert native algorithm to Promise-based async
+    if(options.createMessageDigest) {
+      throw new Error(
+        '"createMessageDigest" cannot be used with "useNative".');
+    }
     return new Promise((resolve, reject) =>
       rdfCanonizeNative.canonize(dataset, options, (err, canonical) =>
         err ? reject(err) : resolve(canonical)));
@@ -48840,6 +45928,10 @@ api.canonize = async function(dataset, options) {
     return new URDNA2015(options).main(dataset);
   }
   if(options.algorithm === 'URGNA2012') {
+    if(options.createMessageDigest) {
+      throw new Error(
+        '"createMessageDigest" cannot be used with "URGNA2012".');
+    }
     return new URGNA2012(options).main(dataset);
   }
   if(!('algorithm' in options)) {
@@ -48854,30 +45946,49 @@ api.canonize = async function(dataset, options) {
  * only. It synchronously canonizes an RDF dataset and does not work in the
  * browser.
  *
- * @param dataset the dataset to canonize.
- * @param options the options to use:
- *          algorithm the canonicalization algorithm to use, `URDNA2015` or
- *            `URGNA2012`.
- *          [useNative] use native implementation (default: false).
+ * @param {Array} dataset - The dataset to canonize.
+ * @param {object} options - The options to use:
+ *   {string} algorithm - The canonicalization algorithm to use, `URDNA2015` or
+ *     `URGNA2012`.
+ *   {Function} [createMessageDigest] - A factory function for creating a
+ *     `MessageDigest` interface that overrides the built-in message digest
+ *     implementation used by the canonize algorithm; note that using a hash
+ *     algorithm (or HMAC algorithm) that differs from the one specified by
+ *     the canonize algorithm will result in different output.
+ *   {boolean} [useNative=false] - Use native implementation.
+ *   {number} [maxDeepIterations=Infinity] - The maximum number of times to run
+ *     deep comparison algorithms (such as the N-Degree Hash Quads algorithm
+ *     used in URDNA2015) before bailing out and throwing an error; this is a
+ *     useful setting for preventing wasted CPU cycles or DoS when canonizing
+ *     meaningless or potentially malicious datasets, a recommended value is
+ *     `1`.
  *
  * @return the RDF dataset in canonical form.
  */
-api._canonizeSync = function(dataset, options) {
+exports._canonizeSync = function(dataset, options) {
   // back-compat with legacy dataset
   if(!Array.isArray(dataset)) {
-    dataset = api.NQuads.legacyDatasetToQuads(dataset);
+    dataset = exports.NQuads.legacyDatasetToQuads(dataset);
   }
 
   if(options.useNative) {
-    if(rdfCanonizeNative) {
-      return rdfCanonizeNative.canonizeSync(dataset, options);
+    if(!rdfCanonizeNative) {
+      throw new Error('rdf-canonize-native not available');
     }
-    throw new Error('rdf-canonize-native not available');
+    if(options.createMessageDigest) {
+      throw new Error(
+        '"createMessageDigest" cannot be used with "useNative".');
+    }
+    return rdfCanonizeNative.canonizeSync(dataset, options);
   }
   if(options.algorithm === 'URDNA2015') {
     return new URDNA2015Sync(options).main(dataset);
   }
   if(options.algorithm === 'URGNA2012') {
+    if(options.createMessageDigest) {
+      throw new Error(
+        '"createMessageDigest" cannot be used with "URGNA2012".');
+    }
     return new URGNA2012Sync(options).main(dataset);
   }
   if(!('algorithm' in options)) {
@@ -49265,6 +46376,8 @@ var Collection = /*#__PURE__*/function (_Node) {
   }], [{
     key: "toNT",
     value: function toNT(collection) {
+      // return '(' + collection.elements.map(x => x.toNT()).join(' ') + ')'
+      // As lists are not in NT and toNT() must be a reversible function, we kludge it for a list
       return _blank_node__WEBPACK_IMPORTED_MODULE_9__["default"].NTAnonymousNodePrefix + collection.id;
     }
   }]);
@@ -53193,6 +50306,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "isQuad": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isQuad),
 /* harmony export */   "isRDFObject": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isRDFObject),
 /* harmony export */   "isRDFlibObject": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isRDFlibObject),
+/* harmony export */   "isRDFlibPredicate": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isRDFlibPredicate),
+/* harmony export */   "isRDFlibSubject": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isRDFlibSubject),
 /* harmony export */   "isStatement": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isStatement),
 /* harmony export */   "isStore": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isStore),
 /* harmony export */   "isSubject": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isSubject),
@@ -61144,6 +58259,13 @@ var Statement = /*#__PURE__*/function () {
   }, {
     key: "toString",
     value: function toString() {
+      /*
+      return [
+        this.subject.toString(),
+        this.predicate.toString(),
+        this.object.toString(),
+      ].join(' ') + ' .'
+      */
       return this.toNT();
     }
   }]);
@@ -61641,11 +58763,11 @@ var IndexedFormula = /*#__PURE__*/function (_Formula) {
       var objNode = _node__WEBPACK_IMPORTED_MODULE_13__["default"].fromValue(obj);
       why = _node__WEBPACK_IMPORTED_MODULE_13__["default"].fromValue(why);
 
-      if (!(0,_utils_terms__WEBPACK_IMPORTED_MODULE_12__.isSubject)(subj)) {
+      if (!(0,_utils_terms__WEBPACK_IMPORTED_MODULE_12__.isRDFlibSubject)(subj)) {
         throw new Error('Subject is not a subject type');
       }
 
-      if (!(0,_utils_terms__WEBPACK_IMPORTED_MODULE_12__.isPredicate)(pred)) {
+      if (!(0,_utils_terms__WEBPACK_IMPORTED_MODULE_12__.isRDFlibPredicate)(pred)) {
         throw new Error("Predicate ".concat(pred, " is not a predicate type"));
       }
 
@@ -62202,7 +59324,7 @@ var IndexedFormula = /*#__PURE__*/function (_Formula) {
   }, {
     key: "removeMatches",
     value: function removeMatches(subject, predicate, object, graph) {
-      this.removeStatements(this.statementsMatching(subject, predicate, object, graph));
+      this.removeMany(subject, predicate, object, graph);
       return this;
     }
     /**
@@ -63396,8 +60518,7 @@ var UpdateManager = /*#__PURE__*/function () {
         }));
       });
 
-      if (updates.length > 1) {
-        console.log("@@ updateMany to ".concat(updates.length, ": ").concat(uniqueDocs));
+      if (updates.length > 1) {// console.log(`@@ updateMany to ${updates.length}: ${uniqueDocs}`)
       }
 
       return Promise.all(updates);
@@ -63571,7 +60692,10 @@ var UpdateManager = /*#__PURE__*/function () {
 
           this.fire(doc.value, query, function (uri, success, body, response) {
             response.elapsedTimeMs = Date.now() - startTime;
-            console.log('    UpdateManager: Return ' + (success ? 'success ' : 'FAILURE ') + response.status + ' elapsed ' + response.elapsedTimeMs + 'ms');
+            /* console.log('    UpdateManager: Return ' +
+              (success ? 'success ' : 'FAILURE ') + (response as Response).status +
+              ' elapsed ' + (response as any).elapsedTimeMs + 'ms')
+              */
 
             if (success) {
               try {
@@ -64911,6 +62035,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "isQuad": () => (/* binding */ isQuad),
 /* harmony export */   "isRDFObject": () => (/* binding */ isRDFObject),
 /* harmony export */   "isRDFlibObject": () => (/* binding */ isRDFlibObject),
+/* harmony export */   "isRDFlibPredicate": () => (/* binding */ isRDFlibPredicate),
+/* harmony export */   "isRDFlibSubject": () => (/* binding */ isRDFlibSubject),
 /* harmony export */   "isStatement": () => (/* binding */ isStatement),
 /* harmony export */   "isStore": () => (/* binding */ isStore),
 /* harmony export */   "isSubject": () => (/* binding */ isSubject),
@@ -64936,10 +62062,21 @@ function isStore(obj) {
 function isCollection(obj) {
   return isTerm(obj) && obj.termType === _types__WEBPACK_IMPORTED_MODULE_1__.CollectionTermType;
 }
-/** TypeGuard for valid RDFlib Object types, also allows Collections */
+/** TypeGuard for valid RDFlib Object types, also allows Collections, Graphs */
 
 function isRDFlibObject(obj) {
   return obj && Object.prototype.hasOwnProperty.call(obj, 'termType') && (obj.termType === _types__WEBPACK_IMPORTED_MODULE_1__.NamedNodeTermType || obj.termType === _types__WEBPACK_IMPORTED_MODULE_1__.VariableTermType || obj.termType === _types__WEBPACK_IMPORTED_MODULE_1__.BlankNodeTermType || obj.termType === _types__WEBPACK_IMPORTED_MODULE_1__.CollectionTermType || obj.termType === _types__WEBPACK_IMPORTED_MODULE_1__.LiteralTermType || obj.termType === _types__WEBPACK_IMPORTED_MODULE_1__.GraphTermType);
+}
+/** TypeGuard for valid RDFlib Subject types, same as Object as RDFLib symmetrical.
+*/
+
+function isRDFlibSubject(obj) {
+  return obj && Object.prototype.hasOwnProperty.call(obj, 'termType') && (obj.termType === _types__WEBPACK_IMPORTED_MODULE_1__.NamedNodeTermType || obj.termType === _types__WEBPACK_IMPORTED_MODULE_1__.VariableTermType || obj.termType === _types__WEBPACK_IMPORTED_MODULE_1__.BlankNodeTermType || obj.termType === _types__WEBPACK_IMPORTED_MODULE_1__.CollectionTermType || obj.termType === _types__WEBPACK_IMPORTED_MODULE_1__.LiteralTermType || obj.termType === _types__WEBPACK_IMPORTED_MODULE_1__.GraphTermType);
+}
+/** TypeGuard for valid RDF/JS spec Predicate types */
+
+function isRDFlibPredicate(obj) {
+  return isTerm(obj) && (obj.termType === _types__WEBPACK_IMPORTED_MODULE_1__.NamedNodeTermType || obj.termType === _types__WEBPACK_IMPORTED_MODULE_1__.BlankNodeTermType || obj.termType === _types__WEBPACK_IMPORTED_MODULE_1__.VariableTermType);
 }
 /** TypeGuard for RDFLib Variables */
 
@@ -69418,14 +66555,11 @@ try {
 
 function _arrayLikeToArray(arr, len) {
   if (len == null || len > arr.length) len = arr.length;
-
   for (var i = 0, arr2 = new Array(len); i < len; i++) {
     arr2[i] = arr[i];
   }
-
   return arr2;
 }
-
 module.exports = _arrayLikeToArray, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -69439,7 +66573,6 @@ module.exports = _arrayLikeToArray, module.exports.__esModule = true, module.exp
 function _arrayWithHoles(arr) {
   if (Array.isArray(arr)) return arr;
 }
-
 module.exports = _arrayWithHoles, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -69451,11 +66584,9 @@ module.exports = _arrayWithHoles, module.exports.__esModule = true, module.expor
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var arrayLikeToArray = __webpack_require__(/*! ./arrayLikeToArray.js */ "./node_modules/@babel/runtime/helpers/arrayLikeToArray.js");
-
 function _arrayWithoutHoles(arr) {
   if (Array.isArray(arr)) return arrayLikeToArray(arr);
 }
-
 module.exports = _arrayWithoutHoles, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -69470,10 +66601,8 @@ function _assertThisInitialized(self) {
   if (self === void 0) {
     throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
   }
-
   return self;
 }
-
 module.exports = _assertThisInitialized, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -69492,34 +66621,28 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
     reject(error);
     return;
   }
-
   if (info.done) {
     resolve(value);
   } else {
     Promise.resolve(value).then(_next, _throw);
   }
 }
-
 function _asyncToGenerator(fn) {
   return function () {
     var self = this,
-        args = arguments;
+      args = arguments;
     return new Promise(function (resolve, reject) {
       var gen = fn.apply(self, args);
-
       function _next(value) {
         asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
       }
-
       function _throw(err) {
         asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
       }
-
       _next(undefined);
     });
   };
 }
-
 module.exports = _asyncToGenerator, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -69535,7 +66658,6 @@ function _classCallCheck(instance, Constructor) {
     throw new TypeError("Cannot call a class as a function");
   }
 }
-
 module.exports = _classCallCheck, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -69547,9 +66669,7 @@ module.exports = _classCallCheck, module.exports.__esModule = true, module.expor
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var setPrototypeOf = __webpack_require__(/*! ./setPrototypeOf.js */ "./node_modules/@babel/runtime/helpers/setPrototypeOf.js");
-
 var isNativeReflectConstruct = __webpack_require__(/*! ./isNativeReflectConstruct.js */ "./node_modules/@babel/runtime/helpers/isNativeReflectConstruct.js");
-
 function _construct(Parent, args, Class) {
   if (isNativeReflectConstruct()) {
     module.exports = _construct = Reflect.construct.bind(), module.exports.__esModule = true, module.exports["default"] = module.exports;
@@ -69563,10 +66683,8 @@ function _construct(Parent, args, Class) {
       return instance;
     }, module.exports.__esModule = true, module.exports["default"] = module.exports;
   }
-
   return _construct.apply(null, arguments);
 }
-
 module.exports = _construct, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -69586,7 +66704,6 @@ function _defineProperties(target, props) {
     Object.defineProperty(target, descriptor.key, descriptor);
   }
 }
-
 function _createClass(Constructor, protoProps, staticProps) {
   if (protoProps) _defineProperties(Constructor.prototype, protoProps);
   if (staticProps) _defineProperties(Constructor, staticProps);
@@ -69595,7 +66712,6 @@ function _createClass(Constructor, protoProps, staticProps) {
   });
   return Constructor;
 }
-
 module.exports = _createClass, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -69617,10 +66733,8 @@ function _defineProperty(obj, key, value) {
   } else {
     obj[key] = value;
   }
-
   return obj;
 }
-
 module.exports = _defineProperty, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -69637,7 +66751,6 @@ function _getPrototypeOf(o) {
   }, module.exports.__esModule = true, module.exports["default"] = module.exports;
   return _getPrototypeOf(o);
 }
-
 module.exports = _getPrototypeOf, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -69649,12 +66762,10 @@ module.exports = _getPrototypeOf, module.exports.__esModule = true, module.expor
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var setPrototypeOf = __webpack_require__(/*! ./setPrototypeOf.js */ "./node_modules/@babel/runtime/helpers/setPrototypeOf.js");
-
 function _inherits(subClass, superClass) {
   if (typeof superClass !== "function" && superClass !== null) {
     throw new TypeError("Super expression must either be null or a function");
   }
-
   subClass.prototype = Object.create(superClass && superClass.prototype, {
     constructor: {
       value: subClass,
@@ -69667,7 +66778,6 @@ function _inherits(subClass, superClass) {
   });
   if (superClass) setPrototypeOf(subClass, superClass);
 }
-
 module.exports = _inherits, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -69683,7 +66793,6 @@ function _interopRequireDefault(obj) {
     "default": obj
   };
 }
-
 module.exports = _interopRequireDefault, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -69697,7 +66806,6 @@ module.exports = _interopRequireDefault, module.exports.__esModule = true, modul
 function _isNativeFunction(fn) {
   return Function.toString.call(fn).indexOf("[native code]") !== -1;
 }
-
 module.exports = _isNativeFunction, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -69712,7 +66820,6 @@ function _isNativeReflectConstruct() {
   if (typeof Reflect === "undefined" || !Reflect.construct) return false;
   if (Reflect.construct.sham) return false;
   if (typeof Proxy === "function") return true;
-
   try {
     Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
     return true;
@@ -69720,7 +66827,6 @@ function _isNativeReflectConstruct() {
     return false;
   }
 }
-
 module.exports = _isNativeReflectConstruct, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -69734,7 +66840,6 @@ module.exports = _isNativeReflectConstruct, module.exports.__esModule = true, mo
 function _iterableToArray(iter) {
   if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
 }
-
 module.exports = _iterableToArray, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -69747,18 +66852,14 @@ module.exports = _iterableToArray, module.exports.__esModule = true, module.expo
 
 function _iterableToArrayLimit(arr, i) {
   var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
-
   if (_i == null) return;
   var _arr = [];
   var _n = true;
   var _d = false;
-
   var _s, _e;
-
   try {
     for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
       _arr.push(_s.value);
-
       if (i && _arr.length === i) break;
     }
   } catch (err) {
@@ -69771,10 +66872,8 @@ function _iterableToArrayLimit(arr, i) {
       if (_d) throw _e;
     }
   }
-
   return _arr;
 }
-
 module.exports = _iterableToArrayLimit, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -69788,7 +66887,6 @@ module.exports = _iterableToArrayLimit, module.exports.__esModule = true, module
 function _nonIterableRest() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-
 module.exports = _nonIterableRest, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -69802,7 +66900,6 @@ module.exports = _nonIterableRest, module.exports.__esModule = true, module.expo
 function _nonIterableSpread() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-
 module.exports = _nonIterableSpread, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -69814,19 +66911,15 @@ module.exports = _nonIterableSpread, module.exports.__esModule = true, module.ex
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var _typeof = (__webpack_require__(/*! ./typeof.js */ "./node_modules/@babel/runtime/helpers/typeof.js")["default"]);
-
 var assertThisInitialized = __webpack_require__(/*! ./assertThisInitialized.js */ "./node_modules/@babel/runtime/helpers/assertThisInitialized.js");
-
 function _possibleConstructorReturn(self, call) {
   if (call && (_typeof(call) === "object" || typeof call === "function")) {
     return call;
   } else if (call !== void 0) {
     throw new TypeError("Derived constructors may only return object or undefined");
   }
-
   return assertThisInitialized(self);
 }
-
 module.exports = _possibleConstructorReturn, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -69838,22 +66931,21 @@ module.exports = _possibleConstructorReturn, module.exports.__esModule = true, m
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var _typeof = (__webpack_require__(/*! ./typeof.js */ "./node_modules/@babel/runtime/helpers/typeof.js")["default"]);
-
 function _regeneratorRuntime() {
-  "use strict";
-  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
-
+  "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
   module.exports = _regeneratorRuntime = function _regeneratorRuntime() {
     return exports;
   }, module.exports.__esModule = true, module.exports["default"] = module.exports;
   var exports = {},
-      Op = Object.prototype,
-      hasOwn = Op.hasOwnProperty,
-      $Symbol = "function" == typeof Symbol ? Symbol : {},
-      iteratorSymbol = $Symbol.iterator || "@@iterator",
-      asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator",
-      toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
-
+    Op = Object.prototype,
+    hasOwn = Op.hasOwnProperty,
+    defineProperty = Object.defineProperty || function (obj, key, desc) {
+      obj[key] = desc.value;
+    },
+    $Symbol = "function" == typeof Symbol ? Symbol : {},
+    iteratorSymbol = $Symbol.iterator || "@@iterator",
+    asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator",
+    toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
   function define(obj, key, value) {
     return Object.defineProperty(obj, key, {
       value: value,
@@ -69862,7 +66954,6 @@ function _regeneratorRuntime() {
       writable: !0
     }), obj[key];
   }
-
   try {
     define({}, "");
   } catch (err) {
@@ -69870,54 +66961,14 @@ function _regeneratorRuntime() {
       return obj[key] = value;
     };
   }
-
   function wrap(innerFn, outerFn, self, tryLocsList) {
     var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator,
-        generator = Object.create(protoGenerator.prototype),
-        context = new Context(tryLocsList || []);
-    return generator._invoke = function (innerFn, self, context) {
-      var state = "suspendedStart";
-      return function (method, arg) {
-        if ("executing" === state) throw new Error("Generator is already running");
-
-        if ("completed" === state) {
-          if ("throw" === method) throw arg;
-          return doneResult();
-        }
-
-        for (context.method = method, context.arg = arg;;) {
-          var delegate = context.delegate;
-
-          if (delegate) {
-            var delegateResult = maybeInvokeDelegate(delegate, context);
-
-            if (delegateResult) {
-              if (delegateResult === ContinueSentinel) continue;
-              return delegateResult;
-            }
-          }
-
-          if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) {
-            if ("suspendedStart" === state) throw state = "completed", context.arg;
-            context.dispatchException(context.arg);
-          } else "return" === context.method && context.abrupt("return", context.arg);
-          state = "executing";
-          var record = tryCatch(innerFn, self, context);
-
-          if ("normal" === record.type) {
-            if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue;
-            return {
-              value: record.arg,
-              done: context.done
-            };
-          }
-
-          "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg);
-        }
-      };
-    }(innerFn, self, context), generator;
+      generator = Object.create(protoGenerator.prototype),
+      context = new Context(tryLocsList || []);
+    return defineProperty(generator, "_invoke", {
+      value: makeInvokeMethod(innerFn, self, context)
+    }), generator;
   }
-
   function tryCatch(fn, obj, arg) {
     try {
       return {
@@ -69931,25 +66982,19 @@ function _regeneratorRuntime() {
       };
     }
   }
-
   exports.wrap = wrap;
   var ContinueSentinel = {};
-
   function Generator() {}
-
   function GeneratorFunction() {}
-
   function GeneratorFunctionPrototype() {}
-
   var IteratorPrototype = {};
   define(IteratorPrototype, iteratorSymbol, function () {
     return this;
   });
   var getProto = Object.getPrototypeOf,
-      NativeIteratorPrototype = getProto && getProto(getProto(values([])));
+    NativeIteratorPrototype = getProto && getProto(getProto(values([])));
   NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype);
   var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype);
-
   function defineIteratorMethods(prototype) {
     ["next", "throw", "return"].forEach(function (method) {
       define(prototype, method, function (arg) {
@@ -69957,14 +67002,12 @@ function _regeneratorRuntime() {
       });
     });
   }
-
   function AsyncIterator(generator, PromiseImpl) {
     function invoke(method, arg, resolve, reject) {
       var record = tryCatch(generator[method], generator, arg);
-
       if ("throw" !== record.type) {
         var result = record.arg,
-            value = result.value;
+          value = result.value;
         return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) {
           invoke("next", value, resolve, reject);
         }, function (err) {
@@ -69975,92 +67018,116 @@ function _regeneratorRuntime() {
           return invoke("throw", error, resolve, reject);
         });
       }
-
       reject(record.arg);
     }
-
     var previousPromise;
-
-    this._invoke = function (method, arg) {
-      function callInvokeWithMethodAndArg() {
-        return new PromiseImpl(function (resolve, reject) {
-          invoke(method, arg, resolve, reject);
-        });
+    defineProperty(this, "_invoke", {
+      value: function value(method, arg) {
+        function callInvokeWithMethodAndArg() {
+          return new PromiseImpl(function (resolve, reject) {
+            invoke(method, arg, resolve, reject);
+          });
+        }
+        return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
       }
-
-      return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
+    });
+  }
+  function makeInvokeMethod(innerFn, self, context) {
+    var state = "suspendedStart";
+    return function (method, arg) {
+      if ("executing" === state) throw new Error("Generator is already running");
+      if ("completed" === state) {
+        if ("throw" === method) throw arg;
+        return doneResult();
+      }
+      for (context.method = method, context.arg = arg;;) {
+        var delegate = context.delegate;
+        if (delegate) {
+          var delegateResult = maybeInvokeDelegate(delegate, context);
+          if (delegateResult) {
+            if (delegateResult === ContinueSentinel) continue;
+            return delegateResult;
+          }
+        }
+        if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) {
+          if ("suspendedStart" === state) throw state = "completed", context.arg;
+          context.dispatchException(context.arg);
+        } else "return" === context.method && context.abrupt("return", context.arg);
+        state = "executing";
+        var record = tryCatch(innerFn, self, context);
+        if ("normal" === record.type) {
+          if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue;
+          return {
+            value: record.arg,
+            done: context.done
+          };
+        }
+        "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg);
+      }
     };
   }
-
   function maybeInvokeDelegate(delegate, context) {
     var method = delegate.iterator[context.method];
-
     if (undefined === method) {
       if (context.delegate = null, "throw" === context.method) {
         if (delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel;
         context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method");
       }
-
       return ContinueSentinel;
     }
-
     var record = tryCatch(method, delegate.iterator, context.arg);
     if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel;
     var info = record.arg;
     return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel);
   }
-
   function pushTryEntry(locs) {
     var entry = {
       tryLoc: locs[0]
     };
     1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry);
   }
-
   function resetTryEntry(entry) {
     var record = entry.completion || {};
     record.type = "normal", delete record.arg, entry.completion = record;
   }
-
   function Context(tryLocsList) {
     this.tryEntries = [{
       tryLoc: "root"
     }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0);
   }
-
   function values(iterable) {
     if (iterable) {
       var iteratorMethod = iterable[iteratorSymbol];
       if (iteratorMethod) return iteratorMethod.call(iterable);
       if ("function" == typeof iterable.next) return iterable;
-
       if (!isNaN(iterable.length)) {
         var i = -1,
-            next = function next() {
-          for (; ++i < iterable.length;) {
-            if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next;
-          }
-
-          return next.value = undefined, next.done = !0, next;
-        };
-
+          next = function next() {
+            for (; ++i < iterable.length;) {
+              if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next;
+            }
+            return next.value = undefined, next.done = !0, next;
+          };
         return next.next = next;
       }
     }
-
     return {
       next: doneResult
     };
   }
-
   function doneResult() {
     return {
       value: undefined,
       done: !0
     };
   }
-
-  return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) {
+  return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", {
+    value: GeneratorFunctionPrototype,
+    configurable: !0
+  }), defineProperty(GeneratorFunctionPrototype, "constructor", {
+    value: GeneratorFunction,
+    configurable: !0
+  }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) {
     var ctor = "function" == typeof genFun && genFun.constructor;
     return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name));
   }, exports.mark = function (genFun) {
@@ -70081,19 +67148,17 @@ function _regeneratorRuntime() {
     return this;
   }), define(Gp, "toString", function () {
     return "[object Generator]";
-  }), exports.keys = function (object) {
-    var keys = [];
-
+  }), exports.keys = function (val) {
+    var object = Object(val),
+      keys = [];
     for (var key in object) {
       keys.push(key);
     }
-
     return keys.reverse(), function next() {
       for (; keys.length;) {
         var key = keys.pop();
         if (key in object) return next.value = key, next.done = !1, next;
       }
-
       return next.done = !0, next;
     };
   }, exports.values = values, Context.prototype = {
@@ -70112,20 +67177,16 @@ function _regeneratorRuntime() {
     dispatchException: function dispatchException(exception) {
       if (this.done) throw exception;
       var context = this;
-
       function handle(loc, caught) {
         return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught;
       }
-
       for (var i = this.tryEntries.length - 1; i >= 0; --i) {
         var entry = this.tryEntries[i],
-            record = entry.completion;
+          record = entry.completion;
         if ("root" === entry.tryLoc) return handle("end");
-
         if (entry.tryLoc <= this.prev) {
           var hasCatch = hasOwn.call(entry, "catchLoc"),
-              hasFinally = hasOwn.call(entry, "finallyLoc");
-
+            hasFinally = hasOwn.call(entry, "finallyLoc");
           if (hasCatch && hasFinally) {
             if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0);
             if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc);
@@ -70141,13 +67202,11 @@ function _regeneratorRuntime() {
     abrupt: function abrupt(type, arg) {
       for (var i = this.tryEntries.length - 1; i >= 0; --i) {
         var entry = this.tryEntries[i];
-
         if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) {
           var finallyEntry = entry;
           break;
         }
       }
-
       finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null);
       var record = finallyEntry ? finallyEntry.completion : {};
       return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record);
@@ -70165,19 +67224,15 @@ function _regeneratorRuntime() {
     "catch": function _catch(tryLoc) {
       for (var i = this.tryEntries.length - 1; i >= 0; --i) {
         var entry = this.tryEntries[i];
-
         if (entry.tryLoc === tryLoc) {
           var record = entry.completion;
-
           if ("throw" === record.type) {
             var thrown = record.arg;
             resetTryEntry(entry);
           }
-
           return thrown;
         }
       }
-
       throw new Error("illegal catch attempt");
     },
     delegateYield: function delegateYield(iterable, resultName, nextLoc) {
@@ -70189,7 +67244,6 @@ function _regeneratorRuntime() {
     }
   }, exports;
 }
-
 module.exports = _regeneratorRuntime, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -70207,7 +67261,6 @@ function _setPrototypeOf(o, p) {
   }, module.exports.__esModule = true, module.exports["default"] = module.exports;
   return _setPrototypeOf(o, p);
 }
-
 module.exports = _setPrototypeOf, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -70219,17 +67272,12 @@ module.exports = _setPrototypeOf, module.exports.__esModule = true, module.expor
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var arrayWithHoles = __webpack_require__(/*! ./arrayWithHoles.js */ "./node_modules/@babel/runtime/helpers/arrayWithHoles.js");
-
 var iterableToArrayLimit = __webpack_require__(/*! ./iterableToArrayLimit.js */ "./node_modules/@babel/runtime/helpers/iterableToArrayLimit.js");
-
 var unsupportedIterableToArray = __webpack_require__(/*! ./unsupportedIterableToArray.js */ "./node_modules/@babel/runtime/helpers/unsupportedIterableToArray.js");
-
 var nonIterableRest = __webpack_require__(/*! ./nonIterableRest.js */ "./node_modules/@babel/runtime/helpers/nonIterableRest.js");
-
 function _slicedToArray(arr, i) {
   return arrayWithHoles(arr) || iterableToArrayLimit(arr, i) || unsupportedIterableToArray(arr, i) || nonIterableRest();
 }
-
 module.exports = _slicedToArray, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -70244,14 +67292,12 @@ function _taggedTemplateLiteral(strings, raw) {
   if (!raw) {
     raw = strings.slice(0);
   }
-
   return Object.freeze(Object.defineProperties(strings, {
     raw: {
       value: Object.freeze(raw)
     }
   }));
 }
-
 module.exports = _taggedTemplateLiteral, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -70263,17 +67309,12 @@ module.exports = _taggedTemplateLiteral, module.exports.__esModule = true, modul
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var arrayWithoutHoles = __webpack_require__(/*! ./arrayWithoutHoles.js */ "./node_modules/@babel/runtime/helpers/arrayWithoutHoles.js");
-
 var iterableToArray = __webpack_require__(/*! ./iterableToArray.js */ "./node_modules/@babel/runtime/helpers/iterableToArray.js");
-
 var unsupportedIterableToArray = __webpack_require__(/*! ./unsupportedIterableToArray.js */ "./node_modules/@babel/runtime/helpers/unsupportedIterableToArray.js");
-
 var nonIterableSpread = __webpack_require__(/*! ./nonIterableSpread.js */ "./node_modules/@babel/runtime/helpers/nonIterableSpread.js");
-
 function _toConsumableArray(arr) {
   return arrayWithoutHoles(arr) || iterableToArray(arr) || unsupportedIterableToArray(arr) || nonIterableSpread();
 }
-
 module.exports = _toConsumableArray, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -70293,7 +67334,6 @@ function _typeof(obj) {
     return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
   }, module.exports.__esModule = true, module.exports["default"] = module.exports), _typeof(obj);
 }
-
 module.exports = _typeof, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -70305,7 +67345,6 @@ module.exports = _typeof, module.exports.__esModule = true, module.exports["defa
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var arrayLikeToArray = __webpack_require__(/*! ./arrayLikeToArray.js */ "./node_modules/@babel/runtime/helpers/arrayLikeToArray.js");
-
 function _unsupportedIterableToArray(o, minLen) {
   if (!o) return;
   if (typeof o === "string") return arrayLikeToArray(o, minLen);
@@ -70314,7 +67353,6 @@ function _unsupportedIterableToArray(o, minLen) {
   if (n === "Map" || n === "Set") return Array.from(o);
   if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return arrayLikeToArray(o, minLen);
 }
-
 module.exports = _unsupportedIterableToArray, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -70326,33 +67364,23 @@ module.exports = _unsupportedIterableToArray, module.exports.__esModule = true, 
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var getPrototypeOf = __webpack_require__(/*! ./getPrototypeOf.js */ "./node_modules/@babel/runtime/helpers/getPrototypeOf.js");
-
 var setPrototypeOf = __webpack_require__(/*! ./setPrototypeOf.js */ "./node_modules/@babel/runtime/helpers/setPrototypeOf.js");
-
 var isNativeFunction = __webpack_require__(/*! ./isNativeFunction.js */ "./node_modules/@babel/runtime/helpers/isNativeFunction.js");
-
 var construct = __webpack_require__(/*! ./construct.js */ "./node_modules/@babel/runtime/helpers/construct.js");
-
 function _wrapNativeSuper(Class) {
   var _cache = typeof Map === "function" ? new Map() : undefined;
-
   module.exports = _wrapNativeSuper = function _wrapNativeSuper(Class) {
     if (Class === null || !isNativeFunction(Class)) return Class;
-
     if (typeof Class !== "function") {
       throw new TypeError("Super expression must either be null or a function");
     }
-
     if (typeof _cache !== "undefined") {
       if (_cache.has(Class)) return _cache.get(Class);
-
       _cache.set(Class, Wrapper);
     }
-
     function Wrapper() {
       return construct(Class, arguments, getPrototypeOf(this).constructor);
     }
-
     Wrapper.prototype = Object.create(Class.prototype, {
       constructor: {
         value: Wrapper,
@@ -70365,7 +67393,6 @@ function _wrapNativeSuper(Class) {
   }, module.exports.__esModule = true, module.exports["default"] = module.exports;
   return _wrapNativeSuper(Class);
 }
-
 module.exports = _wrapNativeSuper, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -70408,11 +67435,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 function _arrayLikeToArray(arr, len) {
   if (len == null || len > arr.length) len = arr.length;
-
   for (var i = 0, arr2 = new Array(len); i < len; i++) {
     arr2[i] = arr[i];
   }
-
   return arr2;
 }
 
@@ -70452,7 +67477,6 @@ function _assertThisInitialized(self) {
   if (self === void 0) {
     throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
   }
-
   return self;
 }
 
@@ -70477,29 +67501,24 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
     reject(error);
     return;
   }
-
   if (info.done) {
     resolve(value);
   } else {
     Promise.resolve(value).then(_next, _throw);
   }
 }
-
 function _asyncToGenerator(fn) {
   return function () {
     var self = this,
-        args = arguments;
+      args = arguments;
     return new Promise(function (resolve, reject) {
       var gen = fn.apply(self, args);
-
       function _next(value) {
         asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
       }
-
       function _throw(err) {
         asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
       }
-
       _next(undefined);
     });
   };
@@ -70546,7 +67565,6 @@ function _defineProperties(target, props) {
     Object.defineProperty(target, descriptor.key, descriptor);
   }
 }
-
 function _createClass(Constructor, protoProps, staticProps) {
   if (protoProps) _defineProperties(Constructor.prototype, protoProps);
   if (staticProps) _defineProperties(Constructor, staticProps);
@@ -70580,7 +67598,6 @@ function _defineProperty(obj, key, value) {
   } else {
     obj[key] = value;
   }
-
   return obj;
 }
 
@@ -70601,14 +67618,12 @@ function _extends() {
   _extends = Object.assign ? Object.assign.bind() : function (target) {
     for (var i = 1; i < arguments.length; i++) {
       var source = arguments[i];
-
       for (var key in source) {
         if (Object.prototype.hasOwnProperty.call(source, key)) {
           target[key] = source[key];
         }
       }
     }
-
     return target;
   };
   return _extends.apply(this, arguments);
@@ -70653,7 +67668,6 @@ function _inherits(subClass, superClass) {
   if (typeof superClass !== "function" && superClass !== null) {
     throw new TypeError("Super expression must either be null or a function");
   }
-
   subClass.prototype = Object.create(superClass && superClass.prototype, {
     constructor: {
       value: subClass,
@@ -70740,13 +67754,11 @@ function _objectWithoutPropertiesLoose(source, excluded) {
   var target = {};
   var sourceKeys = Object.keys(source);
   var key, i;
-
   for (i = 0; i < sourceKeys.length; i++) {
     key = sourceKeys[i];
     if (excluded.indexOf(key) >= 0) continue;
     target[key] = source[key];
   }
-
   return target;
 }
 
@@ -70773,7 +67785,6 @@ function _possibleConstructorReturn(self, call) {
   } else if (call !== void 0) {
     throw new TypeError("Derived constructors may only return object or undefined");
   }
-
   return (0,_assertThisInitialized_js__WEBPACK_IMPORTED_MODULE_1__["default"])(self);
 }
 
@@ -77252,10 +74263,10 @@ async function flattenedDecrypt(jwe, key, options) {
     }
     let cek;
     try {
-        cek = await (0,_lib_decrypt_key_management_js__WEBPACK_IMPORTED_MODULE_6__["default"])(alg, key, encryptedKey, joseHeader);
+        cek = await (0,_lib_decrypt_key_management_js__WEBPACK_IMPORTED_MODULE_6__["default"])(alg, key, encryptedKey, joseHeader, options);
     }
     catch (err) {
-        if (err instanceof TypeError) {
+        if (err instanceof TypeError || err instanceof _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid || err instanceof _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JOSENotSupported) {
             throw err;
         }
         cek = (0,_lib_cek_js__WEBPACK_IMPORTED_MODULE_8__["default"])(enc);
@@ -78952,18 +75963,12 @@ function parseElement(bytes) {
         length = bytes[position];
         position++;
     }
-    else {
-        let numberOfDigits = bytes[position] & 0x7f;
-        position++;
-        length = 0;
-        for (let i = 0; i < numberOfDigits; i++) {
-            length = length * 256 + bytes[position];
-            position++;
-        }
-    }
-    if (length === 0x80) {
+    else if (length === 0x80) {
         length = 0;
         while (bytes[position + length] !== 0 || bytes[position + length + 1] !== 0) {
+            if (length > bytes.byteLength) {
+                throw new TypeError('invalid indefinite form length');
+            }
             length++;
         }
         const byteLength = position + length + 2;
@@ -78972,6 +75977,15 @@ function parseElement(bytes) {
             contents: bytes.subarray(position, position + length),
             raw: bytes.subarray(0, byteLength),
         };
+    }
+    else {
+        let numberOfDigits = bytes[position] & 0x7f;
+        position++;
+        length = 0;
+        for (let i = 0; i < numberOfDigits; i++) {
+            length = length * 256 + bytes[position];
+            position++;
+        }
     }
     const byteLength = position + length;
     return {
@@ -78999,16 +76013,23 @@ async function importX509(x509, alg, options) {
     if (typeof x509 !== 'string' || x509.indexOf('-----BEGIN CERTIFICATE-----') !== 0) {
         throw new TypeError('"x509" must be X.509 formatted string');
     }
-    const spki = getSPKI(x509);
+    let spki;
+    try {
+        spki = getSPKI(x509);
+    }
+    catch (cause) {
+        throw new TypeError('failed to parse the X.509 certificate', { cause });
+    }
     return (0,_runtime_asn1_js__WEBPACK_IMPORTED_MODULE_1__.fromSPKI)(spki, alg, options);
 }
 async function importPKCS8(pkcs8, alg, options) {
     if (typeof pkcs8 !== 'string' || pkcs8.indexOf('-----BEGIN PRIVATE KEY-----') !== 0) {
-        throw new TypeError('"pkcs8" must be PCKS8 formatted string');
+        throw new TypeError('"pkcs8" must be PKCS8 formatted string');
     }
     return (0,_runtime_asn1_js__WEBPACK_IMPORTED_MODULE_1__.fromPKCS8)(pkcs8, alg, options);
 }
 async function importJWK(jwk, alg, octAsKeyObject) {
+    var _a;
     if (!(0,_lib_is_object_js__WEBPACK_IMPORTED_MODULE_5__["default"])(jwk)) {
         throw new TypeError('JWK must be an object');
     }
@@ -79023,7 +76044,7 @@ async function importJWK(jwk, alg, octAsKeyObject) {
             }
             octAsKeyObject !== null && octAsKeyObject !== void 0 ? octAsKeyObject : (octAsKeyObject = jwk.ext !== true);
             if (octAsKeyObject) {
-                return (0,_runtime_jwk_to_key_js__WEBPACK_IMPORTED_MODULE_2__["default"])({ ...jwk, alg, ext: false });
+                return (0,_runtime_jwk_to_key_js__WEBPACK_IMPORTED_MODULE_2__["default"])({ ...jwk, alg, ext: (_a = jwk.ext) !== null && _a !== void 0 ? _a : false });
             }
             return (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwk.k);
         case 'RSA':
@@ -79227,19 +76248,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _runtime_is_key_like_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../runtime/is_key_like.js */ "./node_modules/jose/dist/browser/runtime/is_key_like.js");
 
 
-const symmetricTypeCheck = (key) => {
+const symmetricTypeCheck = (alg, key) => {
     if (key instanceof Uint8Array)
         return;
     if (!(0,_runtime_is_key_like_js__WEBPACK_IMPORTED_MODULE_1__["default"])(key)) {
-        throw new TypeError((0,_invalid_key_input_js__WEBPACK_IMPORTED_MODULE_0__["default"])(key, ..._runtime_is_key_like_js__WEBPACK_IMPORTED_MODULE_1__.types, 'Uint8Array'));
+        throw new TypeError((0,_invalid_key_input_js__WEBPACK_IMPORTED_MODULE_0__.withAlg)(alg, key, ..._runtime_is_key_like_js__WEBPACK_IMPORTED_MODULE_1__.types, 'Uint8Array'));
     }
     if (key.type !== 'secret') {
         throw new TypeError(`${_runtime_is_key_like_js__WEBPACK_IMPORTED_MODULE_1__.types.join(' or ')} instances for symmetric algorithms must be of type "secret"`);
     }
 };
-const asymmetricTypeCheck = (key, usage) => {
+const asymmetricTypeCheck = (alg, key, usage) => {
     if (!(0,_runtime_is_key_like_js__WEBPACK_IMPORTED_MODULE_1__["default"])(key)) {
-        throw new TypeError((0,_invalid_key_input_js__WEBPACK_IMPORTED_MODULE_0__["default"])(key, ..._runtime_is_key_like_js__WEBPACK_IMPORTED_MODULE_1__.types));
+        throw new TypeError((0,_invalid_key_input_js__WEBPACK_IMPORTED_MODULE_0__.withAlg)(alg, key, ..._runtime_is_key_like_js__WEBPACK_IMPORTED_MODULE_1__.types));
     }
     if (key.type === 'secret') {
         throw new TypeError(`${_runtime_is_key_like_js__WEBPACK_IMPORTED_MODULE_1__.types.join(' or ')} instances for asymmetric algorithms must not be of type "secret"`);
@@ -79263,10 +76284,10 @@ const checkKeyType = (alg, key, usage) => {
         alg.startsWith('PBES2') ||
         /^A\d{3}(?:GCM)?KW$/.test(alg);
     if (symmetric) {
-        symmetricTypeCheck(key);
+        symmetricTypeCheck(alg, key);
     }
     else {
-        asymmetricTypeCheck(key, usage);
+        asymmetricTypeCheck(alg, key, usage);
     }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (checkKeyType);
@@ -79387,6 +76408,12 @@ function checkSigCryptoKey(key, alg, ...usages) {
                 throw unusable('NODE-ED25519');
             break;
         }
+        case 'EdDSA': {
+            if (key.algorithm.name !== 'Ed25519' && key.algorithm.name !== 'Ed448') {
+                throw unusable('Ed25519 or Ed448');
+            }
+            break;
+        }
         case 'ES256':
         case 'ES384':
         case 'ES512': {
@@ -79427,10 +76454,17 @@ function checkEncCryptoKey(key, alg, ...usages) {
                 throw unusable(expected, 'algorithm.length');
             break;
         }
-        case 'ECDH':
-            if (!isAlgorithm(key.algorithm, 'ECDH'))
-                throw unusable('ECDH');
+        case 'ECDH': {
+            switch (key.algorithm.name) {
+                case 'ECDH':
+                case 'X25519':
+                case 'X448':
+                    break;
+                default:
+                    throw unusable('ECDH, X25519, or X448');
+            }
             break;
+        }
         case 'PBES2-HS256+A128KW':
         case 'PBES2-HS384+A192KW':
         case 'PBES2-HS512+A256KW':
@@ -79491,7 +76525,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-async function decryptKeyManagement(alg, key, encryptedKey, joseHeader) {
+async function decryptKeyManagement(alg, key, encryptedKey, joseHeader, options) {
     (0,_check_key_type_js__WEBPACK_IMPORTED_MODULE_8__["default"])(alg, key, 'decrypt');
     switch (alg) {
         case 'dir': {
@@ -79545,6 +76579,9 @@ async function decryptKeyManagement(alg, key, encryptedKey, joseHeader) {
                 throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid('JWE Encrypted Key missing');
             if (typeof joseHeader.p2c !== 'number')
                 throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid(`JOSE Header "p2c" (PBES2 Count) missing or invalid`);
+            const p2cLimit = (options === null || options === void 0 ? void 0 : options.maxPBES2Count) || 10000;
+            if (joseHeader.p2c > p2cLimit)
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid(`JOSE Header "p2c" (PBES2 Count) out is of acceptable bounds`);
             if (typeof joseHeader.p2s !== 'string')
                 throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid(`JOSE Header "p2s" (PBES2 Salt) missing or invalid`);
             return (0,_runtime_pbes2kw_js__WEBPACK_IMPORTED_MODULE_2__.decrypt)(alg, key, encryptedKey, joseHeader.p2c, (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_4__.decode)(joseHeader.p2s));
@@ -79735,10 +76772,10 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   "withAlg": () => (/* binding */ withAlg)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((actual, ...types) => {
-    let msg = 'Key must be ';
+function message(msg, actual, ...types) {
     if (types.length > 2) {
         const last = types.pop();
         msg += `one of type ${types.join(', ')}, or ${last}.`;
@@ -79761,7 +76798,13 @@ __webpack_require__.r(__webpack_exports__);
         }
     }
     return msg;
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((actual, ...types) => {
+    return message('Key must be ', actual, ...types);
 });
+function withAlg(alg, actual, ...types) {
+    return message(`Key for the ${alg} algorithm must be `, actual, ...types);
+}
 
 
 /***/ }),
@@ -80238,8 +77281,14 @@ const getNamedCurve = (keyData) => {
             return 'P-384';
         case findOid(keyData, [0x2b, 0x81, 0x04, 0x00, 0x23]):
             return 'P-521';
-        case (0,_env_js__WEBPACK_IMPORTED_MODULE_0__.isCloudflareWorkers)() && findOid(keyData, [0x2b, 0x65, 0x70]):
+        case findOid(keyData, [0x2b, 0x65, 0x6e]):
+            return 'X25519';
+        case findOid(keyData, [0x2b, 0x65, 0x6f]):
+            return 'X448';
+        case findOid(keyData, [0x2b, 0x65, 0x70]):
             return 'Ed25519';
+        case findOid(keyData, [0x2b, 0x65, 0x71]):
+            return 'Ed448';
         default:
             throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JOSENotSupported('Invalid or unsupported EC Key Curve or OKP Key Sub Type');
     }
@@ -80290,13 +77339,20 @@ const genericImport = async (replace, keyFormat, pem, alg, options) => {
         case 'ECDH-ES':
         case 'ECDH-ES+A128KW':
         case 'ECDH-ES+A192KW':
-        case 'ECDH-ES+A256KW':
-            algorithm = { name: 'ECDH', namedCurve: getNamedCurve(keyData) };
+        case 'ECDH-ES+A256KW': {
+            const namedCurve = getNamedCurve(keyData);
+            algorithm = namedCurve.startsWith('P-') ? { name: 'ECDH', namedCurve } : { name: namedCurve };
             keyUsages = isPublic ? [] : ['deriveBits'];
             break;
-        case (0,_env_js__WEBPACK_IMPORTED_MODULE_0__.isCloudflareWorkers)() && 'EdDSA':
+        }
+        case (0,_env_js__WEBPACK_IMPORTED_MODULE_0__.isCloudflareWorkers)() && 'EdDSA': {
             const namedCurve = getNamedCurve(keyData).toUpperCase();
             algorithm = { name: `NODE-${namedCurve}`, namedCurve: `NODE-${namedCurve}` };
+            keyUsages = isPublic ? ['verify'] : ['sign'];
+            break;
+        }
+        case 'EdDSA':
+            algorithm = { name: getNamedCurve(keyData) };
             keyUsages = isPublic ? ['verify'] : ['sign'];
             break;
         default:
@@ -80405,8 +77461,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
 
 const checkCekLength = (cek, expected) => {
-    if (cek.length << 3 !== expected) {
-        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_0__.JWEInvalid('Invalid Content Encryption Key length');
+    const actual = cek.byteLength << 3;
+    if (actual !== expected) {
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_0__.JWEInvalid(`Invalid Content Encryption Key length. Expected ${expected} bits, got ${actual} bits`);
     }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (checkCekLength);
@@ -80601,10 +77658,21 @@ async function deriveKey(publicKey, privateKey, algorithm, keyLength, apu = new 
     }
     (0,_lib_crypto_key_js__WEBPACK_IMPORTED_MODULE_2__.checkEncCryptoKey)(privateKey, 'ECDH', 'deriveBits');
     const value = (0,_lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_0__.concat)((0,_lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_0__.lengthAndInput)(_lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_0__.encoder.encode(algorithm)), (0,_lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_0__.lengthAndInput)(apu), (0,_lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_0__.lengthAndInput)(apv), (0,_lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_0__.uint32be)(keyLength));
+    let length;
+    if (publicKey.algorithm.name === 'X25519') {
+        length = 256;
+    }
+    else if (publicKey.algorithm.name === 'X448') {
+        length = 448;
+    }
+    else {
+        length =
+            Math.ceil(parseInt(publicKey.algorithm.namedCurve.substr(-3), 10) / 8) << 3;
+    }
     const sharedSecret = new Uint8Array(await _webcrypto_js__WEBPACK_IMPORTED_MODULE_1__["default"].subtle.deriveBits({
-        name: 'ECDH',
+        name: publicKey.algorithm.name,
         public: publicKey,
-    }, privateKey, Math.ceil(parseInt(privateKey.algorithm.namedCurve.slice(-3), 10) / 8) << 3));
+    }, privateKey, length));
     return (0,_lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_0__.concatKdf)(sharedSecret, keyLength, value);
 }
 async function generateEpk(key) {
@@ -80617,7 +77685,9 @@ function ecdhAllowed(key) {
     if (!(0,_webcrypto_js__WEBPACK_IMPORTED_MODULE_1__.isCryptoKey)(key)) {
         throw new TypeError((0,_lib_invalid_key_input_js__WEBPACK_IMPORTED_MODULE_3__["default"])(key, ..._is_key_like_js__WEBPACK_IMPORTED_MODULE_4__.types));
     }
-    return ['P-256', 'P-384', 'P-521'].includes(key.algorithm.namedCurve);
+    return (['P-256', 'P-384', 'P-521'].includes(key.algorithm.namedCurve) ||
+        key.algorithm.name === 'X25519' ||
+        key.algorithm.name === 'X448');
 }
 
 
@@ -80726,7 +77796,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "isCloudflareWorkers": () => (/* binding */ isCloudflareWorkers)
 /* harmony export */ });
 function isCloudflareWorkers() {
-    return typeof WebSocketPair === 'function';
+    return (typeof WebSocketPair !== 'undefined' ||
+        (typeof navigator !== 'undefined' && navigator.userAgent === 'Cloudflare-Workers') ||
+        (typeof EdgeRuntime !== 'undefined' && EdgeRuntime === 'vercel'));
 }
 
 
@@ -80851,7 +77923,7 @@ function getModulusLengthOption(options) {
     return modulusLength;
 }
 async function generateKeyPair(alg, options) {
-    var _a, _b;
+    var _a, _b, _c;
     let algorithm;
     let keyUsages;
     switch (alg) {
@@ -80912,17 +77984,44 @@ async function generateKeyPair(alg, options) {
                     throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JOSENotSupported('Invalid or unsupported crv option provided');
             }
             break;
+        case 'EdDSA':
+            keyUsages = ['sign', 'verify'];
+            const crv = (_a = options === null || options === void 0 ? void 0 : options.crv) !== null && _a !== void 0 ? _a : 'Ed25519';
+            switch (crv) {
+                case 'Ed25519':
+                case 'Ed448':
+                    algorithm = { name: crv };
+                    break;
+                default:
+                    throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JOSENotSupported('Invalid or unsupported crv option provided');
+            }
+            break;
         case 'ECDH-ES':
         case 'ECDH-ES+A128KW':
         case 'ECDH-ES+A192KW':
-        case 'ECDH-ES+A256KW':
-            algorithm = { name: 'ECDH', namedCurve: (_a = options === null || options === void 0 ? void 0 : options.crv) !== null && _a !== void 0 ? _a : 'P-256' };
+        case 'ECDH-ES+A256KW': {
             keyUsages = ['deriveKey', 'deriveBits'];
+            const crv = (_b = options === null || options === void 0 ? void 0 : options.crv) !== null && _b !== void 0 ? _b : 'P-256';
+            switch (crv) {
+                case 'P-256':
+                case 'P-384':
+                case 'P-521': {
+                    algorithm = { name: 'ECDH', namedCurve: crv };
+                    break;
+                }
+                case 'X25519':
+                case 'X448':
+                    algorithm = { name: crv };
+                    break;
+                default:
+                    throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JOSENotSupported('Invalid or unsupported crv option provided, supported values are P-256, P-384, P-521, X25519, and X448');
+            }
             break;
+        }
         default:
             throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JOSENotSupported('Invalid or unsupported JWK "alg" (Algorithm) Parameter value');
     }
-    return (_webcrypto_js__WEBPACK_IMPORTED_MODULE_1__["default"].subtle.generateKey(algorithm, (_b = options === null || options === void 0 ? void 0 : options.extractable) !== null && _b !== void 0 ? _b : false, keyUsages));
+    return (_webcrypto_js__WEBPACK_IMPORTED_MODULE_1__["default"].subtle.generateKey(algorithm, (_c = options === null || options === void 0 ? void 0 : options.extractable) !== null && _c !== void 0 ? _c : false, keyUsages));
 }
 
 
@@ -81112,9 +78211,27 @@ function subtleMapping(jwk) {
                     keyUsages = jwk.d ? ['sign'] : ['verify'];
                     break;
                 default:
-                    throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JOSENotSupported('Invalid or unsupported JWK "crv" (Subtype of Key Pair) Parameter value');
+                    throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JOSENotSupported('Invalid or unsupported JWK "alg" (Algorithm) Parameter value');
             }
             break;
+        case 'OKP': {
+            switch (jwk.alg) {
+                case 'EdDSA':
+                    algorithm = { name: jwk.crv };
+                    keyUsages = jwk.d ? ['sign'] : ['verify'];
+                    break;
+                case 'ECDH-ES':
+                case 'ECDH-ES+A128KW':
+                case 'ECDH-ES+A192KW':
+                case 'ECDH-ES+A256KW':
+                    algorithm = { name: jwk.crv };
+                    keyUsages = jwk.d ? ['deriveBits'] : [];
+                    break;
+                default:
+                    throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JOSENotSupported('Invalid or unsupported JWK "alg" (Algorithm) Parameter value');
+            }
+            break;
+        }
         default:
             throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JOSENotSupported('Invalid or unsupported JWK "kty" (Key Type) Parameter value');
     }
@@ -81133,6 +78250,7 @@ const parse = async (jwk) => {
     }
     const keyData = { ...jwk };
     delete keyData.alg;
+    delete keyData.use;
     return _webcrypto_js__WEBPACK_IMPORTED_MODULE_1__["default"].subtle.importKey('jwk', keyData, ...rest);
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (parse);
@@ -81401,6 +78519,8 @@ function subtleDsa(alg, algorithm) {
         case (0,_env_js__WEBPACK_IMPORTED_MODULE_0__.isCloudflareWorkers)() && 'EdDSA':
             const { namedCurve } = algorithm;
             return { name: namedCurve, namedCurve };
+        case 'EdDSA':
+            return { name: algorithm.name };
         default:
             throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_1__.JOSENotSupported(`alg ${alg} is not supported either by JOSE or your javascript runtime`);
     }
