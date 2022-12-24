@@ -81,11 +81,22 @@ export class DateFolder {
       }
       // debug.log('  previousPeriod level' + level + ' file ' + file)
       const parent = file.dir()
-      await store.fetcher.load(parent)
-      let siblings = store.each(parent, ns.ldp('contains'))
-      siblings = siblings.filter(younger)
-      const folder = await lastNonEmpty(siblings)
-      if (folder) return folder
+      try {
+        await store.fetcher.load(parent)
+        let siblings = store.each(parent, ns.ldp('contains'))
+        siblings = siblings.filter(younger)
+        const folder = await lastNonEmpty(siblings)
+        if (folder) return folder
+      } catch (err) {
+        if (err.response && err.response.status && err.response.status === 404) {
+          debug.log('Error 404 for chat parent file ' + parent)
+          delete store.fetcher.requested[parent]
+        } else {
+          debug.log('*** Error NON 404 for chat parent file ' + parent)
+          // statusTR.appendChild(widgets.errorMessageBlock(dom, err, 'pink'))
+          throw (new Error(`*** ${err.message} for chat folder ${parent}`))
+        }
+      }
 
       if (level === 0) return null // 3:day, 2:month, 1: year  0: no
 
