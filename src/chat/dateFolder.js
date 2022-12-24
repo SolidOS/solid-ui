@@ -90,7 +90,6 @@ export class DateFolder {
       } catch (err) {
         if (err.response && err.response.status && err.response.status === 404) {
           debug.log('Error 404 for chat parent file ' + parent)
-          delete store.fetcher.requested[parent]
         } else {
           debug.log('*** Error NON 404 for chat parent file ' + parent)
           // statusTR.appendChild(widgets.errorMessageBlock(dom, err, 'pink'))
