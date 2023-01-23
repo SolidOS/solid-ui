@@ -10,8 +10,8 @@ export interface Binding {
     location?: Term;
     coordinates?: Term;
 }
-declare type Bindings = Binding[];
-export declare type QueryParameters = {
+type Bindings = Binding[];
+export type QueryParameters = {
     label: string;
     limit?: number;
     logo?: NamedNode;

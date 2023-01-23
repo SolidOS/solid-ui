@@ -1,6 +1,6 @@
 import { NamedNode } from 'rdflib';
 import { PaneDefinition } from 'pane-registry';
-export declare type CreateContext = {
+export type CreateContext = {
     div: HTMLElement;
     dom: HTMLDocument;
     folder?: NamedNode;

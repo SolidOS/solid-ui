@@ -1,5 +1,5 @@
 import { LiveStore, NamedNode } from 'rdflib';
-export declare type FooterOptions = {
+export type FooterOptions = {
     solidProjectUrl?: string;
     solidProjectName?: string;
 };

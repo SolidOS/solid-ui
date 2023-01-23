@@ -1,15 +1,15 @@
 import { IndexedFormula, NamedNode } from 'rdflib';
-export declare type StatusAreaContext = {
+export type StatusAreaContext = {
     statusArea?: HTMLElement;
     div?: HTMLElement;
     dom?: HTMLDocument;
 };
-export declare type ButtonType = 'Primary' | 'Secondary';
-export declare type ButtonWidgetOptions = {
+export type ButtonType = 'Primary' | 'Secondary';
+export type ButtonWidgetOptions = {
     buttonColor?: ButtonType;
     needsBorder?: boolean;
 };
-export declare type RenderAsDivOptions = {
+export type RenderAsDivOptions = {
     image?: HTMLImageElement;
     title?: string;
     deleteFunction?: () => void;
@@ -164,7 +164,7 @@ export declare function refreshTree(root: any): void;
 /**
  * Options argument for [[attachmentList]] function
  */
-export declare type attachmentListOptions = {
+export type attachmentListOptions = {
     doc?: NamedNode;
     modify?: boolean;
     promptIcon?: string;

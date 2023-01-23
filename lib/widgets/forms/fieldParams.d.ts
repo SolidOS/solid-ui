@@ -1,4 +1,4 @@
-export declare type FieldParamsObject = {
+export type FieldParamsObject = {
     size?: number;
     type?: string;
     element?: string;

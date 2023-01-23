@@ -5,7 +5,7 @@ import { NamedNode } from 'rdflib';
 declare class ContainerElement extends HTMLElement {
     asSettings?: boolean;
 }
-declare type TabWidgetOptions = {
+type TabWidgetOptions = {
     backgroundColor?: string;
     dom?: HTMLDocument;
     items?: Array<NamedNode>;

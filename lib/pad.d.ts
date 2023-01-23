@@ -3,7 +3,7 @@
  */
 import { NamedNode, IndexedFormula } from 'rdflib';
 export { renderPartipants, participationObject, manageParticipation, recordParticipation } from './participation';
-declare type notepadOptions = {
+type notepadOptions = {
     statusArea?: HTMLDivElement;
     exists?: boolean;
 };

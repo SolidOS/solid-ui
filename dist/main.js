@@ -214,37 +214,35 @@ var AccessController = /*#__PURE__*/function () {
         var _this6 = this;
         var message, aclGraph, _message;
         return _regenerator["default"].wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                if (!(!this.defaultHolder || !this.defaultACLDoc)) {
-                  _context.next = 4;
-                  break;
-                }
-                message = 'Unable to find defaults to copy';
-                debug.error(message);
-                return _context.abrupt("return", Promise.reject(message));
-              case 4:
-                aclGraph = (0, _acl.adoptACLDefault)(this.targetDoc, this.targetACLDoc, this.defaultHolder, this.defaultACLDoc);
-                aclGraph.statements.forEach(function (st) {
-                  return _this6.store.add(st.subject, st.predicate, st.object, _this6.targetACLDoc);
-                });
-                _context.prev = 6;
-                _context.next = 9;
-                return this.store.fetcher.putBack(this.targetACLDoc);
-              case 9:
-                this.isUsingDefaults = false;
-                return _context.abrupt("return", Promise.resolve());
-              case 13:
-                _context.prev = 13;
-                _context.t0 = _context["catch"](6);
-                _message = " Error writing back access control file! ".concat(_context.t0);
-                debug.error(_message);
-                return _context.abrupt("return", Promise.reject(_message));
-              case 18:
-              case "end":
-                return _context.stop();
-            }
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              if (!(!this.defaultHolder || !this.defaultACLDoc)) {
+                _context.next = 4;
+                break;
+              }
+              message = 'Unable to find defaults to copy';
+              debug.error(message);
+              return _context.abrupt("return", Promise.reject(message));
+            case 4:
+              aclGraph = (0, _acl.adoptACLDefault)(this.targetDoc, this.targetACLDoc, this.defaultHolder, this.defaultACLDoc);
+              aclGraph.statements.forEach(function (st) {
+                return _this6.store.add(st.subject, st.predicate, st.object, _this6.targetACLDoc);
+              });
+              _context.prev = 6;
+              _context.next = 9;
+              return this.store.fetcher.putBack(this.targetACLDoc);
+            case 9:
+              this.isUsingDefaults = false;
+              return _context.abrupt("return", Promise.resolve());
+            case 13:
+              _context.prev = 13;
+              _context.t0 = _context["catch"](6);
+              _message = " Error writing back access control file! ".concat(_context.t0);
+              debug.error(_message);
+              return _context.abrupt("return", Promise.reject(_message));
+            case 18:
+            case "end":
+              return _context.stop();
           }
         }, _callee, this, [[6, 13]]);
       }));
@@ -258,17 +256,15 @@ var AccessController = /*#__PURE__*/function () {
     value: function () {
       var _addDefaults = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2() {
         return _regenerator["default"].wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                this.defaultsCombo = new _accessGroups.AccessGroups(this.targetDoc, this.targetACLDoc, this, this.store, {
-                  defaults: true
-                });
-                this.defaultsDiffer = true;
-              case 2:
-              case "end":
-                return _context2.stop();
-            }
+          while (1) switch (_context2.prev = _context2.next) {
+            case 0:
+              this.defaultsCombo = new _accessGroups.AccessGroups(this.targetDoc, this.targetACLDoc, this, this.store, {
+                defaults: true
+              });
+              this.defaultsDiffer = true;
+            case 2:
+            case "end":
+              return _context2.stop();
           }
         }, _callee2, this);
       }));
@@ -283,39 +279,37 @@ var AccessController = /*#__PURE__*/function () {
       var _removeAcls = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3() {
         var message;
         return _regenerator["default"].wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.prev = 0;
-                _context3.next = 3;
-                return this.store.fetcher["delete"](this.targetACLDoc.uri, {});
-              case 3:
-                this.isUsingDefaults = true;
-                _context3.prev = 4;
-                _context3.next = 7;
-                return (0, _acl.getProspectiveHolder)(this.targetDoc.uri);
-              case 7:
-                this.prospectiveDefaultHolder = _context3.sent;
-                _context3.next = 13;
-                break;
-              case 10:
-                _context3.prev = 10;
-                _context3.t0 = _context3["catch"](4);
-                // No need to show this error in status, but good to warn about it in console
-                debug.warn(_context3.t0);
-              case 13:
-                _context3.next = 20;
-                break;
-              case 15:
-                _context3.prev = 15;
-                _context3.t1 = _context3["catch"](0);
-                message = "Error deleting access control file: ".concat(this.targetACLDoc, ": ").concat(_context3.t1);
-                debug.error(message);
-                return _context3.abrupt("return", Promise.reject(message));
-              case 20:
-              case "end":
-                return _context3.stop();
-            }
+          while (1) switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.prev = 0;
+              _context3.next = 3;
+              return this.store.fetcher["delete"](this.targetACLDoc.uri, {});
+            case 3:
+              this.isUsingDefaults = true;
+              _context3.prev = 4;
+              _context3.next = 7;
+              return (0, _acl.getProspectiveHolder)(this.targetDoc.uri);
+            case 7:
+              this.prospectiveDefaultHolder = _context3.sent;
+              _context3.next = 13;
+              break;
+            case 10:
+              _context3.prev = 10;
+              _context3.t0 = _context3["catch"](4);
+              // No need to show this error in status, but good to warn about it in console
+              debug.warn(_context3.t0);
+            case 13:
+              _context3.next = 20;
+              break;
+            case 15:
+              _context3.prev = 15;
+              _context3.t1 = _context3["catch"](0);
+              message = "Error deleting access control file: ".concat(this.targetACLDoc, ": ").concat(_context3.t1);
+              debug.error(message);
+              return _context3.abrupt("return", Promise.reject(message));
+            case 20:
+            case "end":
+              return _context3.stop();
           }
         }, _callee3, this, [[0, 15], [4, 10]]);
       }));
@@ -330,29 +324,27 @@ var AccessController = /*#__PURE__*/function () {
       var _removeDefaults = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4() {
         var fallbackCombo;
         return _regenerator["default"].wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                fallbackCombo = this.defaultsCombo;
-                _context4.prev = 1;
-                this.defaultsCombo = null;
-                this.defaultsDiffer = false;
-                _context4.next = 6;
-                return this.save();
-              case 6:
-                _context4.next = 14;
-                break;
-              case 8:
-                _context4.prev = 8;
-                _context4.t0 = _context4["catch"](1);
-                this.defaultsCombo = fallbackCombo;
-                this.defaultsDiffer = true;
-                debug.error(_context4.t0);
-                return _context4.abrupt("return", Promise.reject(_context4.t0));
-              case 14:
-              case "end":
-                return _context4.stop();
-            }
+          while (1) switch (_context4.prev = _context4.next) {
+            case 0:
+              fallbackCombo = this.defaultsCombo;
+              _context4.prev = 1;
+              this.defaultsCombo = null;
+              this.defaultsDiffer = false;
+              _context4.next = 6;
+              return this.save();
+            case 6:
+              _context4.next = 14;
+              break;
+            case 8:
+              _context4.prev = 8;
+              _context4.t0 = _context4["catch"](1);
+              this.defaultsCombo = fallbackCombo;
+              this.defaultsDiffer = true;
+              debug.error(_context4.t0);
+              return _context4.abrupt("return", Promise.reject(_context4.t0));
+            case 14:
+            case "end":
+              return _context4.stop();
           }
         }, _callee4, this, [[1, 8]]);
       }));
@@ -604,25 +596,23 @@ var AccessGroups = /*#__PURE__*/function () {
       var _deleteAgent = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(combo, pred, obj) {
         var combos, comboToRemove;
         return _regenerator["default"].wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                combos = this.byCombo[combo] || [];
-                comboToRemove = combos.find(function (_ref3) {
-                  var _ref4 = (0, _slicedToArray2["default"])(_ref3, 2),
-                    comboPred = _ref4[0],
-                    comboObj = _ref4[1];
-                  return comboPred === pred && comboObj === obj;
-                });
-                if (comboToRemove) {
-                  combos.splice(combos.indexOf(comboToRemove), 1);
-                }
-                _context.next = 5;
-                return this.controller.save();
-              case 5:
-              case "end":
-                return _context.stop();
-            }
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              combos = this.byCombo[combo] || [];
+              comboToRemove = combos.find(function (_ref3) {
+                var _ref4 = (0, _slicedToArray2["default"])(_ref3, 2),
+                  comboPred = _ref4[0],
+                  comboObj = _ref4[1];
+                return comboPred === pred && comboObj === obj;
+              });
+              if (comboToRemove) {
+                combos.splice(combos.indexOf(comboToRemove), 1);
+              }
+              _context.next = 5;
+              return this.controller.save();
+            case 5:
+            case "end":
+              return _context.stop();
           }
         }, _callee, this);
       }));
@@ -636,18 +626,16 @@ var AccessGroups = /*#__PURE__*/function () {
     value: function () {
       var _addNewURI = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(uri) {
         return _regenerator["default"].wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return this.handleDroppedUri(uri, kToCombo(1));
-              case 2:
-                _context2.next = 4;
-                return this.controller.save();
-              case 4:
-              case "end":
-                return _context2.stop();
-            }
+          while (1) switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.next = 2;
+              return this.handleDroppedUri(uri, kToCombo(1));
+            case 2:
+              _context2.next = 4;
+              return this.controller.save();
+            case 4:
+            case "end":
+              return _context2.stop();
           }
         }, _callee2, this);
       }));
@@ -662,28 +650,26 @@ var AccessGroups = /*#__PURE__*/function () {
       var _handleDroppedUris = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(uris, combo) {
         var _this5 = this;
         return _regenerator["default"].wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.prev = 0;
-                _context3.next = 3;
-                return Promise.all(uris.map(function (uri) {
-                  return _this5.handleDroppedUri(uri, combo);
-                }));
-              case 3:
-                _context3.next = 5;
-                return this.controller.save();
-              case 5:
-                _context3.next = 10;
-                break;
-              case 7:
-                _context3.prev = 7;
-                _context3.t0 = _context3["catch"](0);
-                return _context3.abrupt("return", Promise.reject(_context3.t0));
-              case 10:
-              case "end":
-                return _context3.stop();
-            }
+          while (1) switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.prev = 0;
+              _context3.next = 3;
+              return Promise.all(uris.map(function (uri) {
+                return _this5.handleDroppedUri(uri, combo);
+              }));
+            case 3:
+              _context3.next = 5;
+              return this.controller.save();
+            case 5:
+              _context3.next = 10;
+              break;
+            case 7:
+              _context3.prev = 7;
+              _context3.t0 = _context3["catch"](0);
+              return _context3.abrupt("return", Promise.reject(_context3.t0));
+            case 10:
+            case "end":
+              return _context3.stop();
           }
         }, _callee3, this, [[0, 7]]);
       }));
@@ -701,44 +687,42 @@ var AccessGroups = /*#__PURE__*/function () {
         return /*#__PURE__*/_regenerator["default"].mark(function _callee4() {
           var agent, thing, _this6$_store, _this6$_store$fetcher, message, error;
           return _regenerator["default"].wrap(function _callee4$(_context4) {
-            while (1) {
-              switch (_context4.prev = _context4.next) {
-                case 0:
-                  agent = findAgent(uri, _this6.store); // eg 'agent', 'origin', agentClass'
-                  thing = (0, _rdflib.sym)(uri);
-                  if (!(!agent && !secondAttempt)) {
-                    _context4.next = 17;
-                    break;
-                  }
-                  debug.log("   Not obvious: looking up dropped thing ".concat(thing));
-                  _context4.prev = 4;
-                  _context4.next = 7;
-                  return (_this6$_store = _this6._store) === null || _this6$_store === void 0 ? void 0 : (_this6$_store$fetcher = _this6$_store.fetcher) === null || _this6$_store$fetcher === void 0 ? void 0 : _this6$_store$fetcher.load(thing.doc());
-                case 7:
-                  _context4.next = 14;
+            while (1) switch (_context4.prev = _context4.next) {
+              case 0:
+                agent = findAgent(uri, _this6.store); // eg 'agent', 'origin', agentClass'
+                thing = (0, _rdflib.sym)(uri);
+                if (!(!agent && !secondAttempt)) {
+                  _context4.next = 17;
                   break;
-                case 9:
-                  _context4.prev = 9;
-                  _context4.t0 = _context4["catch"](4);
-                  message = "Ignore error looking up dropped thing: ".concat(_context4.t0);
-                  debug.error(message);
-                  return _context4.abrupt("return", Promise.reject(new Error(message)));
-                case 14:
-                  return _context4.abrupt("return", _this6.handleDroppedUri(uri, combo, true));
-                case 17:
-                  if (agent) {
-                    _context4.next = 21;
-                    break;
-                  }
-                  error = "   Error: Drop fails to drop appropriate thing! ".concat(uri);
-                  debug.error(error);
-                  return _context4.abrupt("return", Promise.reject(new Error(error)));
-                case 21:
-                  _this6.setACLCombo(combo, uri, agent, _this6.controller.subject);
-                case 22:
-                case "end":
-                  return _context4.stop();
-              }
+                }
+                debug.log("   Not obvious: looking up dropped thing ".concat(thing));
+                _context4.prev = 4;
+                _context4.next = 7;
+                return (_this6$_store = _this6._store) === null || _this6$_store === void 0 ? void 0 : (_this6$_store$fetcher = _this6$_store.fetcher) === null || _this6$_store$fetcher === void 0 ? void 0 : _this6$_store$fetcher.load(thing.doc());
+              case 7:
+                _context4.next = 14;
+                break;
+              case 9:
+                _context4.prev = 9;
+                _context4.t0 = _context4["catch"](4);
+                message = "Ignore error looking up dropped thing: ".concat(_context4.t0);
+                debug.error(message);
+                return _context4.abrupt("return", Promise.reject(new Error(message)));
+              case 14:
+                return _context4.abrupt("return", _this6.handleDroppedUri(uri, combo, true));
+              case 17:
+                if (agent) {
+                  _context4.next = 21;
+                  break;
+                }
+                error = "   Error: Drop fails to drop appropriate thing! ".concat(uri);
+                debug.error(error);
+                return _context4.abrupt("return", Promise.reject(new Error(error)));
+              case 21:
+                _this6.setACLCombo(combo, uri, agent, _this6.controller.subject);
+              case 22:
+              case "end":
+                return _context4.stop();
             }
           }, _callee4, null, [[4, 9]]);
         })();
@@ -1037,61 +1021,57 @@ function loadController(_x, _x2, _x3, _x4, _x5, _x6, _x7, _x8) {
 function _loadController() {
   _loadController = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(doc, kb, subject, noun, context, classes, dom, status) {
     return _regenerator["default"].wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            return _context2.abrupt("return", new Promise(function (resolve, reject) {
-              return (0, _acl.getACLorDefault)(doc, /*#__PURE__*/function () {
-                var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(ok, isDirectACL, targetDoc, targetACLDoc, defaultHolder, defaultACLDoc) {
-                  var targetDirectory, targetIsProtected, prospectiveDefaultHolder, getController;
-                  return _regenerator["default"].wrap(function _callee$(_context) {
-                    while (1) {
-                      switch (_context.prev = _context.next) {
-                        case 0:
-                          getController = function _getController(prospectiveDefaultHolder) {
-                            return new _accessController.AccessController(subject, noun, context, status, classes, targetIsProtected, targetDoc, targetACLDoc, defaultHolder, defaultACLDoc, prospectiveDefaultHolder, kb, dom);
-                          };
-                          if (ok) {
-                            _context.next = 3;
-                            break;
-                          }
-                          return _context.abrupt("return", reject(new Error("Error reading ".concat(isDirectACL ? '' : ' default ', "ACL. status ").concat(targetDoc, ": ").concat(targetACLDoc))));
-                        case 3:
-                          targetDirectory = getDirectory(targetDoc);
-                          targetIsProtected = isStorage(targetDoc, targetACLDoc, kb) || hasProtectedAcl(targetDoc);
-                          if (!(!targetIsProtected && targetDirectory)) {
-                            _context.next = 16;
-                            break;
-                          }
-                          _context.prev = 6;
-                          _context.next = 9;
-                          return (0, _acl.getProspectiveHolder)(targetDirectory);
-                        case 9:
-                          prospectiveDefaultHolder = _context.sent;
-                          return _context.abrupt("return", resolve(getController(prospectiveDefaultHolder)));
-                        case 13:
-                          _context.prev = 13;
-                          _context.t0 = _context["catch"](6);
-                          // No need to show this error in status, but good to warn about it in console
-                          (0, _debug.warn)(_context.t0);
-                        case 16:
-                          return _context.abrupt("return", resolve(getController()));
-                        case 17:
-                        case "end":
-                          return _context.stop();
+      while (1) switch (_context2.prev = _context2.next) {
+        case 0:
+          return _context2.abrupt("return", new Promise(function (resolve, reject) {
+            return (0, _acl.getACLorDefault)(doc, /*#__PURE__*/function () {
+              var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(ok, isDirectACL, targetDoc, targetACLDoc, defaultHolder, defaultACLDoc) {
+                var targetDirectory, targetIsProtected, prospectiveDefaultHolder, getController;
+                return _regenerator["default"].wrap(function _callee$(_context) {
+                  while (1) switch (_context.prev = _context.next) {
+                    case 0:
+                      getController = function _getController(prospectiveDefaultHolder) {
+                        return new _accessController.AccessController(subject, noun, context, status, classes, targetIsProtected, targetDoc, targetACLDoc, defaultHolder, defaultACLDoc, prospectiveDefaultHolder, kb, dom);
+                      };
+                      if (ok) {
+                        _context.next = 3;
+                        break;
                       }
-                    }
-                  }, _callee, null, [[6, 13]]);
-                }));
-                return function (_x9, _x10, _x11, _x12, _x13, _x14) {
-                  return _ref.apply(this, arguments);
-                };
-              }());
-            }));
-          case 1:
-          case "end":
-            return _context2.stop();
-        }
+                      return _context.abrupt("return", reject(new Error("Error reading ".concat(isDirectACL ? '' : ' default ', "ACL. status ").concat(targetDoc, ": ").concat(targetACLDoc))));
+                    case 3:
+                      targetDirectory = getDirectory(targetDoc);
+                      targetIsProtected = isStorage(targetDoc, targetACLDoc, kb) || hasProtectedAcl(targetDoc);
+                      if (!(!targetIsProtected && targetDirectory)) {
+                        _context.next = 16;
+                        break;
+                      }
+                      _context.prev = 6;
+                      _context.next = 9;
+                      return (0, _acl.getProspectiveHolder)(targetDirectory);
+                    case 9:
+                      prospectiveDefaultHolder = _context.sent;
+                      return _context.abrupt("return", resolve(getController(prospectiveDefaultHolder)));
+                    case 13:
+                      _context.prev = 13;
+                      _context.t0 = _context["catch"](6);
+                      // No need to show this error in status, but good to warn about it in console
+                      (0, _debug.warn)(_context.t0);
+                    case 16:
+                      return _context.abrupt("return", resolve(getController()));
+                    case 17:
+                    case "end":
+                      return _context.stop();
+                  }
+                }, _callee, null, [[6, 13]]);
+              }));
+              return function (_x9, _x10, _x11, _x12, _x13, _x14) {
+                return _ref.apply(this, arguments);
+              };
+            }());
+          }));
+        case 1:
+        case "end":
+          return _context2.stop();
       }
     }, _callee2);
   }));
@@ -1631,21 +1611,19 @@ function getProspectiveHolder(_x) {
 function _getProspectiveHolder() {
   _getProspectiveHolder = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(targetDirectory) {
     return _regenerator["default"].wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            return _context.abrupt("return", new Promise(function (resolve, reject) {
-              return getACLorDefault((0, _rdflib.sym)(targetDirectory), function (ok, isDirectACL, targetDoc, targetACLDoc, defaultHolder) {
-                if (ok) {
-                  return resolve(isDirectACL ? targetDoc : defaultHolder);
-                }
-                return reject(new Error("Error loading ".concat(targetDirectory)));
-              });
-            }));
-          case 1:
-          case "end":
-            return _context.stop();
-        }
+      while (1) switch (_context.prev = _context.next) {
+        case 0:
+          return _context.abrupt("return", new Promise(function (resolve, reject) {
+            return getACLorDefault((0, _rdflib.sym)(targetDirectory), function (ok, isDirectACL, targetDoc, targetACLDoc, defaultHolder) {
+              if (ok) {
+                return resolve(isDirectACL ? targetDoc : defaultHolder);
+              }
+              return reject(new Error("Error loading ".concat(targetDirectory)));
+            });
+          }));
+        case 1:
+        case "end":
+          return _context.stop();
       }
     }, _callee);
   }));
@@ -1863,43 +1841,41 @@ var AddAgentButtons = /*#__PURE__*/function () {
         var _this10 = this;
         var trustedApps, trustedOrigins;
         return _regenerator["default"].wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return (0, _login.ensureLoadedProfile)(eventContext);
-              case 2:
-                trustedApps = this.groupList.store.each(eventContext.me, ns.acl('trustedApp')); // @@ TODO fix as
-                trustedOrigins = trustedApps.flatMap(function (app) {
-                  return _this10.groupList.store.each(app, ns.acl('origin'));
-                }); // @@ TODO fix as
-                this.barElement.appendChild(this.groupList.controller.dom.createElement('p')).textContent = "You have ".concat(trustedOrigins.length, " selected web apps.");
-                return _context.abrupt("return", new Promise(function (resolve, reject) {
-                  var appsTable = _this10.barElement.appendChild(_this10.groupList.controller.dom.createElement('table'));
-                  appsTable.classList.add(_this10.groupList.controller.classes.trustedAppAddApplicationsTable);
-                  trustedApps.forEach(function (app) {
-                    var origin = _this10.groupList.store.any(app, ns.acl('origin')); // @@ TODO fix as
-                    if (!origin) {
-                      reject(new Error("Unable to pick app: ".concat(app.value)));
-                    }
-                    var thingTR = widgets.personTR(_this10.groupList.controller.dom, ns.acl('origin'), origin, {});
-                    var innerTable = _this10.groupList.controller.dom.createElement('table');
-                    var innerRow = innerTable.appendChild(_this10.groupList.controller.dom.createElement('tr'));
-                    var innerLeftColumn = innerRow.appendChild(_this10.groupList.controller.dom.createElement('td'));
-                    innerLeftColumn.appendChild(thingTR);
-                    var innerMiddleColumn = innerRow.appendChild(_this10.groupList.controller.dom.createElement('td'));
-                    innerMiddleColumn.textContent = "Give access to ".concat(_this10.groupList.controller.noun, " ").concat(utils.label(_this10.groupList.controller.subject), "?");
-                    var innerRightColumn = innerRow.appendChild(_this10.groupList.controller.dom.createElement('td'));
-                    innerRightColumn.appendChild(widgets.continueButton(_this10.groupList.controller.dom, function () {
-                      return resolve(origin.value);
-                    }));
-                    appsTable.appendChild(innerTable);
-                  });
-                }));
-              case 6:
-              case "end":
-                return _context.stop();
-            }
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return (0, _login.ensureLoadedProfile)(eventContext);
+            case 2:
+              trustedApps = this.groupList.store.each(eventContext.me, ns.acl('trustedApp')); // @@ TODO fix as
+              trustedOrigins = trustedApps.flatMap(function (app) {
+                return _this10.groupList.store.each(app, ns.acl('origin'));
+              }); // @@ TODO fix as
+              this.barElement.appendChild(this.groupList.controller.dom.createElement('p')).textContent = "You have ".concat(trustedOrigins.length, " selected web apps.");
+              return _context.abrupt("return", new Promise(function (resolve, reject) {
+                var appsTable = _this10.barElement.appendChild(_this10.groupList.controller.dom.createElement('table'));
+                appsTable.classList.add(_this10.groupList.controller.classes.trustedAppAddApplicationsTable);
+                trustedApps.forEach(function (app) {
+                  var origin = _this10.groupList.store.any(app, ns.acl('origin')); // @@ TODO fix as
+                  if (!origin) {
+                    reject(new Error("Unable to pick app: ".concat(app.value)));
+                  }
+                  var thingTR = widgets.personTR(_this10.groupList.controller.dom, ns.acl('origin'), origin, {});
+                  var innerTable = _this10.groupList.controller.dom.createElement('table');
+                  var innerRow = innerTable.appendChild(_this10.groupList.controller.dom.createElement('tr'));
+                  var innerLeftColumn = innerRow.appendChild(_this10.groupList.controller.dom.createElement('td'));
+                  innerLeftColumn.appendChild(thingTR);
+                  var innerMiddleColumn = innerRow.appendChild(_this10.groupList.controller.dom.createElement('td'));
+                  innerMiddleColumn.textContent = "Give access to ".concat(_this10.groupList.controller.noun, " ").concat(utils.label(_this10.groupList.controller.subject), "?");
+                  var innerRightColumn = innerRow.appendChild(_this10.groupList.controller.dom.createElement('td'));
+                  innerRightColumn.appendChild(widgets.continueButton(_this10.groupList.controller.dom, function () {
+                    return resolve(origin.value);
+                  }));
+                  appsTable.appendChild(innerTable);
+                });
+              }));
+            case 6:
+            case "end":
+              return _context.stop();
           }
         }, _callee, this);
       }));
@@ -1920,33 +1896,31 @@ var AddAgentButtons = /*#__PURE__*/function () {
       var _addPerson = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(name) {
         var domainNameRegexp;
         return _regenerator["default"].wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                if (name) {
-                  _context2.next = 2;
-                  break;
-                }
-                return _context2.abrupt("return", this.toggleBar());
-              case 2:
-                // user cancelled
-                domainNameRegexp = /^https?:/i;
-                if (name.match(domainNameRegexp)) {
-                  _context2.next = 5;
-                  break;
-                }
-                return _context2.abrupt("return", Promise.reject(new Error('Not a http URI')));
-              case 5:
-                // @@ check it actually is a person and has an owner who agrees they own it
-                debug.log("Adding to ACL person: ".concat(name));
-                _context2.next = 8;
-                return this.groupList.addNewURI(name);
-              case 8:
-                this.toggleBar();
-              case 9:
-              case "end":
-                return _context2.stop();
-            }
+          while (1) switch (_context2.prev = _context2.next) {
+            case 0:
+              if (name) {
+                _context2.next = 2;
+                break;
+              }
+              return _context2.abrupt("return", this.toggleBar());
+            case 2:
+              // user cancelled
+              domainNameRegexp = /^https?:/i;
+              if (name.match(domainNameRegexp)) {
+                _context2.next = 5;
+                break;
+              }
+              return _context2.abrupt("return", Promise.reject(new Error('Not a http URI')));
+            case 5:
+              // @@ check it actually is a person and has an owner who agrees they own it
+              debug.log("Adding to ACL person: ".concat(name));
+              _context2.next = 8;
+              return this.groupList.addNewURI(name);
+            case 8:
+              this.toggleBar();
+            case 9:
+            case "end":
+              return _context2.stop();
           }
         }, _callee2, this);
       }));
@@ -1961,33 +1935,31 @@ var AddAgentButtons = /*#__PURE__*/function () {
       var _addGroup = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(name) {
         var domainNameRegexp;
         return _regenerator["default"].wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                if (name) {
-                  _context3.next = 2;
-                  break;
-                }
-                return _context3.abrupt("return", this.toggleBar());
-              case 2:
-                // user cancelled
-                domainNameRegexp = /^https?:/i;
-                if (name.match(domainNameRegexp)) {
-                  _context3.next = 5;
-                  break;
-                }
-                return _context3.abrupt("return", Promise.reject(new Error('Not a http URI')));
-              case 5:
-                // @@ check it actually is a group and has an owner who agrees they own it
-                debug.log('Adding to ACL group: ' + name);
-                _context3.next = 8;
-                return this.groupList.addNewURI(name);
-              case 8:
-                this.toggleBar();
-              case 9:
-              case "end":
-                return _context3.stop();
-            }
+          while (1) switch (_context3.prev = _context3.next) {
+            case 0:
+              if (name) {
+                _context3.next = 2;
+                break;
+              }
+              return _context3.abrupt("return", this.toggleBar());
+            case 2:
+              // user cancelled
+              domainNameRegexp = /^https?:/i;
+              if (name.match(domainNameRegexp)) {
+                _context3.next = 5;
+                break;
+              }
+              return _context3.abrupt("return", Promise.reject(new Error('Not a http URI')));
+            case 5:
+              // @@ check it actually is a group and has an owner who agrees they own it
+              debug.log('Adding to ACL group: ' + name);
+              _context3.next = 8;
+              return this.groupList.addNewURI(name);
+            case 8:
+              this.toggleBar();
+            case 9:
+            case "end":
+              return _context3.stop();
           }
         }, _callee3, this);
       }));
@@ -2001,17 +1973,15 @@ var AddAgentButtons = /*#__PURE__*/function () {
     value: function () {
       var _addAgent = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(agentUri) {
         return _regenerator["default"].wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                _context4.next = 2;
-                return this.groupList.addNewURI(agentUri);
-              case 2:
-                this.toggleBar();
-              case 3:
-              case "end":
-                return _context4.stop();
-            }
+          while (1) switch (_context4.prev = _context4.next) {
+            case 0:
+              _context4.next = 2;
+              return this.groupList.addNewURI(agentUri);
+            case 2:
+              this.toggleBar();
+            case 3:
+            case "end":
+              return _context4.stop();
           }
         }, _callee4, this);
       }));
@@ -2026,33 +1996,31 @@ var AddAgentButtons = /*#__PURE__*/function () {
       var _addBot = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(name) {
         var domainNameRegexp;
         return _regenerator["default"].wrap(function _callee5$(_context5) {
-          while (1) {
-            switch (_context5.prev = _context5.next) {
-              case 0:
-                if (name) {
-                  _context5.next = 2;
-                  break;
-                }
-                return _context5.abrupt("return", this.toggleBar());
-              case 2:
-                // user cancelled
-                domainNameRegexp = /^https?:/i;
-                if (name.match(domainNameRegexp)) {
-                  _context5.next = 5;
-                  break;
-                }
-                return _context5.abrupt("return", Promise.reject(new Error('Not a http URI')));
-              case 5:
-                // @@ check it actually is a bot and has an owner who agrees they own it
-                debug.log('Adding to ACL bot: ' + name);
-                _context5.next = 8;
-                return this.groupList.addNewURI(name);
-              case 8:
-                this.toggleBar();
-              case 9:
-              case "end":
-                return _context5.stop();
-            }
+          while (1) switch (_context5.prev = _context5.next) {
+            case 0:
+              if (name) {
+                _context5.next = 2;
+                break;
+              }
+              return _context5.abrupt("return", this.toggleBar());
+            case 2:
+              // user cancelled
+              domainNameRegexp = /^https?:/i;
+              if (name.match(domainNameRegexp)) {
+                _context5.next = 5;
+                break;
+              }
+              return _context5.abrupt("return", Promise.reject(new Error('Not a http URI')));
+            case 5:
+              // @@ check it actually is a bot and has an owner who agrees they own it
+              debug.log('Adding to ACL bot: ' + name);
+              _context5.next = 8;
+              return this.groupList.addNewURI(name);
+            case 8:
+              this.toggleBar();
+            case 9:
+            case "end":
+              return _context5.stop();
           }
         }, _callee5, this);
       }));
@@ -2067,31 +2035,29 @@ var AddAgentButtons = /*#__PURE__*/function () {
       var _getOriginFromName = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(name) {
         var domainNameRegexp, origin;
         return _regenerator["default"].wrap(function _callee6$(_context6) {
-          while (1) {
-            switch (_context6.prev = _context6.next) {
-              case 0:
-                if (name) {
-                  _context6.next = 2;
-                  break;
-                }
-                return _context6.abrupt("return", Promise.resolve());
-              case 2:
-                // user cancelled
-                domainNameRegexp = /^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/i; // https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch08s15.html
-                if (name.match(domainNameRegexp)) {
-                  _context6.next = 5;
-                  break;
-                }
-                return _context6.abrupt("return", Promise.reject(new Error('Not a domain name')));
-              case 5:
-                origin = 'https://' + name;
-                debug.log('Adding to ACL origin: ' + origin);
-                this.toggleBar();
-                return _context6.abrupt("return", origin);
-              case 9:
-              case "end":
-                return _context6.stop();
-            }
+          while (1) switch (_context6.prev = _context6.next) {
+            case 0:
+              if (name) {
+                _context6.next = 2;
+                break;
+              }
+              return _context6.abrupt("return", Promise.resolve());
+            case 2:
+              // user cancelled
+              domainNameRegexp = /^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/i; // https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch08s15.html
+              if (name.match(domainNameRegexp)) {
+                _context6.next = 5;
+                break;
+              }
+              return _context6.abrupt("return", Promise.reject(new Error('Not a domain name')));
+            case 5:
+              origin = 'https://' + name;
+              debug.log('Adding to ACL origin: ' + origin);
+              this.toggleBar();
+              return _context6.abrupt("return", origin);
+            case 9:
+            case "end":
+              return _context6.stop();
           }
         }, _callee6, this);
       }));
@@ -2389,59 +2355,57 @@ function _findBookmarkDocument() {
   _findBookmarkDocument = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(userContext) {
     var theClass, fileTail, isPublic, newBookmarkFile;
     return _regenerator["default"].wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            theClass = BOOK('Bookmark');
-            fileTail = 'bookmarks.ttl';
-            isPublic = true;
-            _context.next = 5;
-            return (0, _login.findAppInstances)(userContext, theClass, isPublic);
-          case 5:
-            if (!(userContext.instances && userContext.instances.length > 0)) {
-              _context.next = 10;
-              break;
-            }
-            userContext.bookmarkDocument = userContext.instances[0];
-            if (userContext.instances.length > 1) {
-              alert('More than one bookmark file! ' + userContext.instances);
-            }
-            _context.next = 28;
+      while (1) switch (_context.prev = _context.next) {
+        case 0:
+          theClass = BOOK('Bookmark');
+          fileTail = 'bookmarks.ttl';
+          isPublic = true;
+          _context.next = 5;
+          return (0, _login.findAppInstances)(userContext, theClass, isPublic);
+        case 5:
+          if (!(userContext.instances && userContext.instances.length > 0)) {
+            _context.next = 10;
             break;
-          case 10:
-            if (!userContext.publicProfile) {
-              _context.next = 27;
-              break;
-            }
-            // publicProfile or preferencesFile
-            newBookmarkFile = $rdf.sym(userContext.publicProfile.dir().uri + fileTail);
-            _context.prev = 12;
-            debug.log('Creating new bookmark file ' + newBookmarkFile);
-            _context.next = 16;
-            return createIfNotExists(newBookmarkFile);
-          case 16:
-            _context.next = 22;
+          }
+          userContext.bookmarkDocument = userContext.instances[0];
+          if (userContext.instances.length > 1) {
+            alert('More than one bookmark file! ' + userContext.instances);
+          }
+          _context.next = 28;
+          break;
+        case 10:
+          if (!userContext.publicProfile) {
+            _context.next = 27;
             break;
-          case 18:
-            _context.prev = 18;
-            _context.t0 = _context["catch"](12);
-            alert.error("Can't make fresh bookmark file:" + _context.t0);
-            return _context.abrupt("return", userContext);
-          case 22:
-            _context.next = 24;
-            return (0, _solidLogic.registerInTypeIndex)(newBookmarkFile, userContext.index, theClass);
-          case 24:
-            userContext.bookmarkDocument = newBookmarkFile;
-            _context.next = 28;
-            break;
-          case 27:
-            alert('You seem to have no bookmark file and not even a profile file.');
-          case 28:
-            return _context.abrupt("return", userContext);
-          case 29:
-          case "end":
-            return _context.stop();
-        }
+          }
+          // publicProfile or preferencesFile
+          newBookmarkFile = $rdf.sym(userContext.publicProfile.dir().uri + fileTail);
+          _context.prev = 12;
+          debug.log('Creating new bookmark file ' + newBookmarkFile);
+          _context.next = 16;
+          return createIfNotExists(newBookmarkFile);
+        case 16:
+          _context.next = 22;
+          break;
+        case 18:
+          _context.prev = 18;
+          _context.t0 = _context["catch"](12);
+          alert.error("Can't make fresh bookmark file:" + _context.t0);
+          return _context.abrupt("return", userContext);
+        case 22:
+          _context.next = 24;
+          return (0, _solidLogic.registerInTypeIndex)(newBookmarkFile, userContext.index, theClass);
+        case 24:
+          userContext.bookmarkDocument = newBookmarkFile;
+          _context.next = 28;
+          break;
+        case 27:
+          alert('You seem to have no bookmark file and not even a profile file.');
+        case 28:
+          return _context.abrupt("return", userContext);
+        case 29:
+        case "end":
+          return _context.stop();
       }
     }, _callee, null, [[12, 18]]);
   }));
@@ -2454,52 +2418,50 @@ function _addBookmark() {
   _addBookmark = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(context, target) {
     var title, me, author, bookmarkDoc, bookmark, ins, msg;
     return _regenerator["default"].wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            /* like
-            @prefix terms: <http://purl.org/dc/terms/>.
-            @prefix bookm: <http://www.w3.org/2002/01/bookmark#>.
-            @prefix n0: <http://xmlns.com/foaf/0.1/>.
-            <> terms:references <#0.5534145389246576>.
-            <#0.5534145389246576>
-             a bookm:Bookmark;
-             terms:created "2019-01-26T20:26:44.374Z"^^XML:dateTime;
-             terms:title "Herons";
-             bookm:recalls wiki:Heron;
-             n0:maker c:me.
-            */
-            title = '';
-            me = _solidLogic.authn.currentUser(); // If already logged on
-            if (me) {
-              _context2.next = 4;
-              break;
-            }
-            throw new Error('Must be logged on to add Bookmark');
-          case 4:
-            author = _solidLogic.store.any(target, ns.foaf('maker'));
-            title = label(author) + ': ' + _solidLogic.store.anyValue(target, ns.sioc('content')).slice(0, 80); // @@ add chat title too?
-            bookmarkDoc = context.bookmarkDocument;
-            bookmark = UI.widgets.newThing(bookmarkDoc, title);
-            ins = [$rdf.st(bookmarkDoc, UI.ns.dct('references'), bookmark, bookmarkDoc), $rdf.st(bookmark, UI.ns.rdf('type'), BOOK('Bookmark'), bookmarkDoc), $rdf.st(bookmark, UI.ns.dct('created'), new Date(), bookmarkDoc), $rdf.st(bookmark, BOOK('recalls'), target, bookmarkDoc), $rdf.st(bookmark, UI.ns.foaf('maker'), me, bookmarkDoc), $rdf.st(bookmark, UI.ns.dct('title'), title, bookmarkDoc)];
-            _context2.prev = 9;
-            _context2.next = 12;
-            return updatePromise([], ins);
-          case 12:
-            _context2.next = 19;
+      while (1) switch (_context2.prev = _context2.next) {
+        case 0:
+          /* like
+          @prefix terms: <http://purl.org/dc/terms/>.
+          @prefix bookm: <http://www.w3.org/2002/01/bookmark#>.
+          @prefix n0: <http://xmlns.com/foaf/0.1/>.
+          <> terms:references <#0.5534145389246576>.
+          <#0.5534145389246576>
+           a bookm:Bookmark;
+           terms:created "2019-01-26T20:26:44.374Z"^^XML:dateTime;
+           terms:title "Herons";
+           bookm:recalls wiki:Heron;
+           n0:maker c:me.
+          */
+          title = '';
+          me = _solidLogic.authn.currentUser(); // If already logged on
+          if (me) {
+            _context2.next = 4;
             break;
-          case 14:
-            _context2.prev = 14;
-            _context2.t0 = _context2["catch"](9);
-            msg = 'Making bookmark: ' + _context2.t0;
-            alert.error(msg);
-            return _context2.abrupt("return", null);
-          case 19:
-            return _context2.abrupt("return", bookmark);
-          case 20:
-          case "end":
-            return _context2.stop();
-        }
+          }
+          throw new Error('Must be logged on to add Bookmark');
+        case 4:
+          author = _solidLogic.store.any(target, ns.foaf('maker'));
+          title = label(author) + ': ' + _solidLogic.store.anyValue(target, ns.sioc('content')).slice(0, 80); // @@ add chat title too?
+          bookmarkDoc = context.bookmarkDocument;
+          bookmark = UI.widgets.newThing(bookmarkDoc, title);
+          ins = [$rdf.st(bookmarkDoc, UI.ns.dct('references'), bookmark, bookmarkDoc), $rdf.st(bookmark, UI.ns.rdf('type'), BOOK('Bookmark'), bookmarkDoc), $rdf.st(bookmark, UI.ns.dct('created'), new Date(), bookmarkDoc), $rdf.st(bookmark, BOOK('recalls'), target, bookmarkDoc), $rdf.st(bookmark, UI.ns.foaf('maker'), me, bookmarkDoc), $rdf.st(bookmark, UI.ns.dct('title'), title, bookmarkDoc)];
+          _context2.prev = 9;
+          _context2.next = 12;
+          return updatePromise([], ins);
+        case 12:
+          _context2.next = 19;
+          break;
+        case 14:
+          _context2.prev = 14;
+          _context2.t0 = _context2["catch"](9);
+          msg = 'Making bookmark: ' + _context2.t0;
+          alert.error(msg);
+          return _context2.abrupt("return", null);
+        case 19:
+          return _context2.abrupt("return", bookmark);
+        case 20:
+        case "end":
+          return _context2.stop();
       }
     }, _callee2, null, [[9, 14]]);
   }));
@@ -2512,60 +2474,58 @@ function _toggleBookmark() {
   _toggleBookmark = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(userContext, target, bookmarkButton) {
     var bookmarks, i, bookmark;
     return _regenerator["default"].wrap(function _callee3$(_context3) {
-      while (1) {
-        switch (_context3.prev = _context3.next) {
-          case 0:
-            _context3.next = 2;
-            return _solidLogic.store.fetcher.load(userContext.bookmarkDocument);
-          case 2:
-            bookmarks = _solidLogic.store.each(null, BOOK('recalls'), target, userContext.bookmarkDocument);
-            if (!bookmarks.length) {
-              _context3.next = 24;
-              break;
-            }
-            if (confirm('Delete bookmark on this?' + bookmarks.length)) {
-              _context3.next = 6;
-              break;
-            }
-            return _context3.abrupt("return");
-          case 6:
-            i = 0;
-          case 7:
-            if (!(i < bookmarks.length)) {
-              _context3.next = 22;
-              break;
-            }
-            _context3.prev = 8;
-            _context3.next = 11;
-            return updatePromise(_solidLogic.store.connectedStatements(bookmarks[i]), []);
-          case 11:
-            bookmarkButton.style.backgroundColor = 'white';
-            debug.log('Bookmark deleted: ' + bookmarks[i]);
-            _context3.next = 19;
+      while (1) switch (_context3.prev = _context3.next) {
+        case 0:
+          _context3.next = 2;
+          return _solidLogic.store.fetcher.load(userContext.bookmarkDocument);
+        case 2:
+          bookmarks = _solidLogic.store.each(null, BOOK('recalls'), target, userContext.bookmarkDocument);
+          if (!bookmarks.length) {
+            _context3.next = 24;
             break;
-          case 15:
-            _context3.prev = 15;
-            _context3.t0 = _context3["catch"](8);
-            debug.error('Cant delete bookmark:' + _context3.t0);
-            alert('Cant delete bookmark:' + _context3.t0);
-          case 19:
-            i++;
-            _context3.next = 7;
+          }
+          if (confirm('Delete bookmark on this?' + bookmarks.length)) {
+            _context3.next = 6;
             break;
-          case 22:
-            _context3.next = 29;
+          }
+          return _context3.abrupt("return");
+        case 6:
+          i = 0;
+        case 7:
+          if (!(i < bookmarks.length)) {
+            _context3.next = 22;
             break;
-          case 24:
-            _context3.next = 26;
-            return addBookmark(userContext, target);
-          case 26:
-            bookmark = _context3.sent;
-            bookmarkButton.style.backgroundColor = 'yellow';
-            debug.log('Bookmark added: ' + bookmark);
-          case 29:
-          case "end":
-            return _context3.stop();
-        }
+          }
+          _context3.prev = 8;
+          _context3.next = 11;
+          return updatePromise(_solidLogic.store.connectedStatements(bookmarks[i]), []);
+        case 11:
+          bookmarkButton.style.backgroundColor = 'white';
+          debug.log('Bookmark deleted: ' + bookmarks[i]);
+          _context3.next = 19;
+          break;
+        case 15:
+          _context3.prev = 15;
+          _context3.t0 = _context3["catch"](8);
+          debug.error('Cant delete bookmark:' + _context3.t0);
+          alert('Cant delete bookmark:' + _context3.t0);
+        case 19:
+          i++;
+          _context3.next = 7;
+          break;
+        case 22:
+          _context3.next = 29;
+          break;
+        case 24:
+          _context3.next = 26;
+          return addBookmark(userContext, target);
+        case 26:
+          bookmark = _context3.sent;
+          bookmarkButton.style.backgroundColor = 'yellow';
+          debug.log('Bookmark added: ' + bookmark);
+        case 29:
+        case "end":
+          return _context3.stop();
       }
     }, _callee3, null, [[8, 15]]);
   }));
@@ -2578,50 +2538,46 @@ function _renderBookmarksButton() {
   _renderBookmarksButton = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(userContext, target) {
     var setBookmarkButtonColor, _setBookmarkButtonColor, bookmarkButton;
     return _regenerator["default"].wrap(function _callee5$(_context5) {
-      while (1) {
-        switch (_context5.prev = _context5.next) {
-          case 0:
-            _setBookmarkButtonColor = function _setBookmarkButtonCol2() {
-              _setBookmarkButtonColor = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(bookmarkButton) {
-                var bookmarked;
-                return _regenerator["default"].wrap(function _callee4$(_context4) {
-                  while (1) {
-                    switch (_context4.prev = _context4.next) {
-                      case 0:
-                        _context4.next = 2;
-                        return _solidLogic.store.fetcher.load(userContext.bookmarkDocument);
-                      case 2:
-                        bookmarked = _solidLogic.store.any(null, BOOK('recalls'), bookmarkButton.target, userContext.bookmarkDocument);
-                        bookmarkButton.style = UI.style.buttonStyle;
-                        if (bookmarked) bookmarkButton.style.backgroundColor = 'yellow';
-                      case 5:
-                      case "end":
-                        return _context4.stop();
-                    }
-                  }
-                }, _callee4);
-              }));
-              return _setBookmarkButtonColor.apply(this, arguments);
-            };
-            setBookmarkButtonColor = function _setBookmarkButtonCol(_x9) {
-              return _setBookmarkButtonColor.apply(this, arguments);
-            };
-            if (!userContext.bookmarkDocument) {
-              _context5.next = 8;
-              break;
-            }
-            bookmarkButton = UI.widgets.button(dom, UI.icons.iconBase + BOOKMARK_ICON, label(BOOK('Bookmark')), function () {
-              toggleBookmark(userContext, target, bookmarkButton);
-            });
-            bookmarkButton.target = target;
-            _context5.next = 7;
-            return setBookmarkButtonColor(bookmarkButton);
-          case 7:
-            return _context5.abrupt("return", bookmarkButton);
-          case 8:
-          case "end":
-            return _context5.stop();
-        }
+      while (1) switch (_context5.prev = _context5.next) {
+        case 0:
+          _setBookmarkButtonColor = function _setBookmarkButtonCol2() {
+            _setBookmarkButtonColor = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(bookmarkButton) {
+              var bookmarked;
+              return _regenerator["default"].wrap(function _callee4$(_context4) {
+                while (1) switch (_context4.prev = _context4.next) {
+                  case 0:
+                    _context4.next = 2;
+                    return _solidLogic.store.fetcher.load(userContext.bookmarkDocument);
+                  case 2:
+                    bookmarked = _solidLogic.store.any(null, BOOK('recalls'), bookmarkButton.target, userContext.bookmarkDocument);
+                    bookmarkButton.style = UI.style.buttonStyle;
+                    if (bookmarked) bookmarkButton.style.backgroundColor = 'yellow';
+                  case 5:
+                  case "end":
+                    return _context4.stop();
+                }
+              }, _callee4);
+            }));
+            return _setBookmarkButtonColor.apply(this, arguments);
+          };
+          setBookmarkButtonColor = function _setBookmarkButtonCol(_x9) {
+            return _setBookmarkButtonColor.apply(this, arguments);
+          };
+          if (!userContext.bookmarkDocument) {
+            _context5.next = 8;
+            break;
+          }
+          bookmarkButton = UI.widgets.button(dom, UI.icons.iconBase + BOOKMARK_ICON, label(BOOK('Bookmark')), function () {
+            toggleBookmark(userContext, target, bookmarkButton);
+          });
+          bookmarkButton.target = target;
+          _context5.next = 7;
+          return setBookmarkButtonColor(bookmarkButton);
+        case 7:
+          return _context5.abrupt("return", bookmarkButton);
+        case 8:
+        case "end":
+          return _context5.stop();
       }
     }, _callee5);
   }));
@@ -2697,14 +2653,12 @@ var ChatChannel = /*#__PURE__*/function () {
     value: function () {
       var _createMessage = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(text) {
         return _regenerator["default"].wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                return _context.abrupt("return", this.updateMessage(text));
-              case 1:
-              case "end":
-                return _context.stop();
-            }
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              return _context.abrupt("return", this.updateMessage(text));
+            case 1:
+            case "end":
+              return _context.stop();
           }
         }, _callee, this);
       }));
@@ -2727,50 +2681,48 @@ var ChatChannel = /*#__PURE__*/function () {
         return /*#__PURE__*/_regenerator["default"].mark(function _callee2() {
           var sts, now, timestamp, dateStamp, chatDocument, message, me, msg;
           return _regenerator["default"].wrap(function _callee2$(_context2) {
-            while (1) {
-              switch (_context2.prev = _context2.next) {
-                case 0:
-                  sts = [];
-                  now = new Date();
-                  timestamp = '' + now.getTime();
-                  dateStamp = $rdf.term(now);
-                  chatDocument = oldMsg ? oldMsg.doc() : _this.dateFolder.leafDocumentFromDate(now);
-                  message = _solidLogic.store.sym(chatDocument.uri + '#' + 'Msg' + timestamp); // const content = store.literal(text)
-                  me = _solidLogic.authn.currentUser(); // If already logged on
-                  if (oldMsg) {
-                    // edit message replaces old one
-                    sts.push($rdf.st(mostRecentVersion(oldMsg), ns.dct('isReplacedBy'), message, chatDocument));
-                    if (deleteIt) {
-                      sts.push($rdf.st(message, ns.schema('dateDeleted'), dateStamp, chatDocument));
-                    }
-                  } else {
-                    // link new message to channel
-                    sts.push($rdf.st(_this.channel, ns.wf('message'), message, chatDocument));
+            while (1) switch (_context2.prev = _context2.next) {
+              case 0:
+                sts = [];
+                now = new Date();
+                timestamp = '' + now.getTime();
+                dateStamp = $rdf.term(now);
+                chatDocument = oldMsg ? oldMsg.doc() : _this.dateFolder.leafDocumentFromDate(now);
+                message = _solidLogic.store.sym(chatDocument.uri + '#' + 'Msg' + timestamp); // const content = store.literal(text)
+                me = _solidLogic.authn.currentUser(); // If already logged on
+                if (oldMsg) {
+                  // edit message replaces old one
+                  sts.push($rdf.st(mostRecentVersion(oldMsg), ns.dct('isReplacedBy'), message, chatDocument));
+                  if (deleteIt) {
+                    sts.push($rdf.st(message, ns.schema('dateDeleted'), dateStamp, chatDocument));
                   }
-                  sts.push($rdf.st(message, ns.sioc('content'), _solidLogic.store.literal(text), chatDocument));
-                  sts.push($rdf.st(message, ns.dct('created'), dateStamp, chatDocument));
-                  if (me) {
-                    sts.push($rdf.st(message, ns.foaf('maker'), me, chatDocument));
-                  }
-                  _context2.prev = 11;
-                  _context2.next = 14;
-                  return _solidLogic.store.updater.update([], sts);
-                case 14:
-                  _context2.next = 22;
-                  break;
-                case 16:
-                  _context2.prev = 16;
-                  _context2.t0 = _context2["catch"](11);
-                  msg = 'Error saving chat message: ' + _context2.t0;
-                  debug.warn(msg);
-                  alert(msg);
-                  throw new Error(msg);
-                case 22:
-                  return _context2.abrupt("return", message);
-                case 23:
-                case "end":
-                  return _context2.stop();
-              }
+                } else {
+                  // link new message to channel
+                  sts.push($rdf.st(_this.channel, ns.wf('message'), message, chatDocument));
+                }
+                sts.push($rdf.st(message, ns.sioc('content'), _solidLogic.store.literal(text), chatDocument));
+                sts.push($rdf.st(message, ns.dct('created'), dateStamp, chatDocument));
+                if (me) {
+                  sts.push($rdf.st(message, ns.foaf('maker'), me, chatDocument));
+                }
+                _context2.prev = 11;
+                _context2.next = 14;
+                return _solidLogic.store.updater.update([], sts);
+              case 14:
+                _context2.next = 22;
+                break;
+              case 16:
+                _context2.prev = 16;
+                _context2.t0 = _context2["catch"](11);
+                msg = 'Error saving chat message: ' + _context2.t0;
+                debug.warn(msg);
+                alert(msg);
+                throw new Error(msg);
+              case 22:
+                return _context2.abrupt("return", message);
+              case 23:
+              case "end":
+                return _context2.stop();
             }
           }, _callee2, null, [[11, 16]]);
         })();
@@ -2789,14 +2741,12 @@ var ChatChannel = /*#__PURE__*/function () {
     value: function () {
       var _deleteMessage = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(message) {
         return _regenerator["default"].wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                return _context3.abrupt("return", this.updateMessage('(message deleted)', message, true));
-              case 1:
-              case "end":
-                return _context3.stop();
-            }
+          while (1) switch (_context3.prev = _context3.next) {
+            case 0:
+              return _context3.abrupt("return", this.updateMessage('(message deleted)', message, true));
+            case 1:
+            case "end":
+              return _context3.stop();
           }
         }, _callee3, this);
       }));
@@ -2852,52 +2802,50 @@ function _createIfNotExists2() {
     return /*#__PURE__*/_regenerator["default"].mark(function _callee4() {
       var response;
       return _regenerator["default"].wrap(function _callee4$(_context4) {
-        while (1) {
-          switch (_context4.prev = _context4.next) {
-            case 0:
-              _context4.prev = 0;
-              _context4.next = 3;
-              return _solidLogic.store.fetcher.load(doc);
-            case 3:
-              response = _context4.sent;
-              _context4.next = 26;
+        while (1) switch (_context4.prev = _context4.next) {
+          case 0:
+            _context4.prev = 0;
+            _context4.next = 3;
+            return _solidLogic.store.fetcher.load(doc);
+          case 3:
+            response = _context4.sent;
+            _context4.next = 26;
+            break;
+          case 6:
+            _context4.prev = 6;
+            _context4.t0 = _context4["catch"](0);
+            if (!(_context4.t0.response.status === 404)) {
+              _context4.next = 24;
               break;
-            case 6:
-              _context4.prev = 6;
-              _context4.t0 = _context4["catch"](0);
-              if (!(_context4.t0.response.status === 404)) {
-                _context4.next = 24;
-                break;
-              }
-              debug.log('createIfNotExists: doc does NOT exist, will create... ' + doc);
-              _context4.prev = 10;
-              _context4.next = 13;
-              return _solidLogic.store.fetcher.webOperation('PUT', doc.uri, {
-                data: data,
-                contentType: contentType
-              });
-            case 13:
-              response = _context4.sent;
-              _context4.next = 20;
-              break;
-            case 16:
-              _context4.prev = 16;
-              _context4.t1 = _context4["catch"](10);
-              debug.log('createIfNotExists doc FAILED: ' + doc + ': ' + _context4.t1);
-              throw _context4.t1;
-            case 20:
-              delete _solidLogic.store.fetcher.requested[doc.uri]; // delete cached 404 error
-              // debug.log('createIfNotExists doc created ok ' + doc)
-              return _context4.abrupt("return", response);
-            case 24:
-              debug.log('createIfNotExists doc load error NOT 404:  ' + doc + ': ' + _context4.t0);
-              throw _context4.t0;
-            case 26:
-              return _context4.abrupt("return", response);
-            case 27:
-            case "end":
-              return _context4.stop();
-          }
+            }
+            debug.log('createIfNotExists: doc does NOT exist, will create... ' + doc);
+            _context4.prev = 10;
+            _context4.next = 13;
+            return _solidLogic.store.fetcher.webOperation('PUT', doc.uri, {
+              data: data,
+              contentType: contentType
+            });
+          case 13:
+            response = _context4.sent;
+            _context4.next = 20;
+            break;
+          case 16:
+            _context4.prev = 16;
+            _context4.t1 = _context4["catch"](10);
+            debug.log('createIfNotExists doc FAILED: ' + doc + ': ' + _context4.t1);
+            throw _context4.t1;
+          case 20:
+            delete _solidLogic.store.fetcher.requested[doc.uri]; // delete cached 404 error
+            // debug.log('createIfNotExists doc created ok ' + doc)
+            return _context4.abrupt("return", response);
+          case 24:
+            debug.log('createIfNotExists doc load error NOT 404:  ' + doc + ': ' + _context4.t0);
+            throw _context4.t0;
+          case 26:
+            return _context4.abrupt("return", response);
+          case 27:
+          case "end":
+            return _context4.stop();
         }
       }, _callee4, null, [[0, 6], [10, 16]]);
     })();
@@ -2983,145 +2931,157 @@ var DateFolder = /*#__PURE__*/function () {
       var _loadPrevious = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(date, backwards) {
         var thisDateFolder, previousPeriod, _previousPeriod, folder, found, doc;
         return _regenerator["default"].wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _previousPeriod = function _previousPeriod3() {
-                  _previousPeriod = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(file, level) {
-                    var younger, suitable, lastNonEmpty, _lastNonEmpty, parent, siblings, folder, uncle, cousins, result;
-                    return _regenerator["default"].wrap(function _callee2$(_context2) {
-                      while (1) {
-                        switch (_context2.prev = _context2.next) {
-                          case 0:
-                            _lastNonEmpty = function _lastNonEmpty3() {
-                              _lastNonEmpty = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(siblings) {
-                                var _folder, leafDocument;
-                                return _regenerator["default"].wrap(function _callee$(_context) {
-                                  while (1) {
-                                    switch (_context.prev = _context.next) {
-                                      case 0:
-                                        siblings = siblings.filter(suitable);
-                                        siblings.sort(); // chronological order
-                                        if (!backwards) siblings.reverse();
-                                        if (!(level !== 3)) {
-                                          _context.next = 5;
-                                          break;
-                                        }
-                                        return _context.abrupt("return", siblings.pop());
-                                      case 5:
-                                        if (!siblings.length) {
-                                          _context.next = 14;
-                                          break;
-                                        }
-                                        _folder = siblings.pop();
-                                        leafDocument = _solidLogic.store.sym(_folder.uri + thisDateFolder.leafFileName);
-                                        _context.next = 10;
-                                        return _solidLogic.store.fetcher.load(leafDocument);
-                                      case 10:
-                                        if (!(_solidLogic.store.statementsMatching(null, ns.dct('created'), null, leafDocument).length > 0)) {
-                                          _context.next = 12;
-                                          break;
-                                        }
-                                        return _context.abrupt("return", _folder);
-                                      case 12:
-                                        _context.next = 5;
-                                        break;
-                                      case 14:
-                                        return _context.abrupt("return", null);
-                                      case 15:
-                                      case "end":
-                                        return _context.stop();
-                                    }
+          while (1) switch (_context3.prev = _context3.next) {
+            case 0:
+              _previousPeriod = function _previousPeriod3() {
+                _previousPeriod = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(file, level) {
+                  var younger, suitable, lastNonEmpty, _lastNonEmpty, parent, siblings, _folder, uncle, cousins, result;
+                  return _regenerator["default"].wrap(function _callee2$(_context2) {
+                    while (1) switch (_context2.prev = _context2.next) {
+                      case 0:
+                        _lastNonEmpty = function _lastNonEmpty3() {
+                          _lastNonEmpty = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(siblings) {
+                            var _folder2, leafDocument;
+                            return _regenerator["default"].wrap(function _callee$(_context) {
+                              while (1) switch (_context.prev = _context.next) {
+                                case 0:
+                                  siblings = siblings.filter(suitable);
+                                  siblings.sort(); // chronological order
+                                  if (!backwards) siblings.reverse();
+                                  if (!(level !== 3)) {
+                                    _context.next = 5;
+                                    break;
                                   }
-                                }, _callee);
-                              }));
-                              return _lastNonEmpty.apply(this, arguments);
-                            };
-                            lastNonEmpty = function _lastNonEmpty2(_x5) {
-                              return _lastNonEmpty.apply(this, arguments);
-                            };
-                            suitable = function _suitable(x) {
-                              var tail = x.uri.slice(0, -1).split('/').slice(-1)[0];
-                              if (!'0123456789'.includes(tail[0])) return false; // not numeric
-                              return true;
-                            };
-                            younger = function _younger(x) {
-                              if (backwards ? x.uri >= file.uri : x.uri <= file.uri) return false; // later than we want or same -- looking for different
-                              return true;
-                            };
-                            // debug.log('  previousPeriod level' + level + ' file ' + file)
-                            parent = file.dir();
-                            _context2.next = 7;
-                            return _solidLogic.store.fetcher.load(parent);
-                          case 7:
-                            siblings = _solidLogic.store.each(parent, ns.ldp('contains'));
-                            siblings = siblings.filter(younger);
-                            _context2.next = 11;
-                            return lastNonEmpty(siblings);
-                          case 11:
-                            folder = _context2.sent;
-                            if (!folder) {
-                              _context2.next = 14;
-                              break;
-                            }
-                            return _context2.abrupt("return", folder);
-                          case 14:
-                            if (!(level === 0)) {
-                              _context2.next = 16;
-                              break;
-                            }
-                            return _context2.abrupt("return", null);
-                          case 16:
-                            _context2.next = 18;
-                            return previousPeriod(parent, level - 1);
-                          case 18:
-                            uncle = _context2.sent;
-                            if (uncle) {
-                              _context2.next = 21;
-                              break;
-                            }
-                            return _context2.abrupt("return", null);
-                          case 21:
-                            _context2.next = 23;
-                            return _solidLogic.store.fetcher.load(uncle);
-                          case 23:
-                            cousins = _solidLogic.store.each(uncle, ns.ldp('contains'));
-                            _context2.next = 26;
-                            return lastNonEmpty(cousins);
-                          case 26:
-                            result = _context2.sent;
-                            return _context2.abrupt("return", result);
-                          case 28:
-                          case "end":
-                            return _context2.stop();
+                                  return _context.abrupt("return", siblings.pop());
+                                case 5:
+                                  if (!siblings.length) {
+                                    _context.next = 14;
+                                    break;
+                                  }
+                                  _folder2 = siblings.pop();
+                                  leafDocument = _solidLogic.store.sym(_folder2.uri + thisDateFolder.leafFileName);
+                                  _context.next = 10;
+                                  return _solidLogic.store.fetcher.load(leafDocument);
+                                case 10:
+                                  if (!(_solidLogic.store.statementsMatching(null, ns.dct('created'), null, leafDocument).length > 0)) {
+                                    _context.next = 12;
+                                    break;
+                                  }
+                                  return _context.abrupt("return", _folder2);
+                                case 12:
+                                  _context.next = 5;
+                                  break;
+                                case 14:
+                                  return _context.abrupt("return", null);
+                                case 15:
+                                case "end":
+                                  return _context.stop();
+                              }
+                            }, _callee);
+                          }));
+                          return _lastNonEmpty.apply(this, arguments);
+                        };
+                        lastNonEmpty = function _lastNonEmpty2(_x5) {
+                          return _lastNonEmpty.apply(this, arguments);
+                        };
+                        suitable = function _suitable(x) {
+                          var tail = x.uri.slice(0, -1).split('/').slice(-1)[0];
+                          if (!'0123456789'.includes(tail[0])) return false; // not numeric
+                          return true;
+                        };
+                        younger = function _younger(x) {
+                          if (backwards ? x.uri >= file.uri : x.uri <= file.uri) return false; // later than we want or same -- looking for different
+                          return true;
+                        };
+                        // debug.log('  previousPeriod level' + level + ' file ' + file)
+                        parent = file.dir();
+                        _context2.prev = 5;
+                        _context2.next = 8;
+                        return _solidLogic.store.fetcher.load(parent);
+                      case 8:
+                        siblings = _solidLogic.store.each(parent, ns.ldp('contains'));
+                        siblings = siblings.filter(younger);
+                        _context2.next = 12;
+                        return lastNonEmpty(siblings);
+                      case 12:
+                        _folder = _context2.sent;
+                        if (!_folder) {
+                          _context2.next = 15;
+                          break;
                         }
-                      }
-                    }, _callee2);
-                  }));
-                  return _previousPeriod.apply(this, arguments);
-                };
-                previousPeriod = function _previousPeriod2(_x3, _x4) {
-                  return _previousPeriod.apply(this, arguments);
-                };
-                thisDateFolder = this;
-                // previousPeriod
-                folder = this.leafDocumentFromDate(date).dir();
-                _context3.next = 6;
-                return previousPeriod(folder, 3);
-              case 6:
-                found = _context3.sent;
-                if (!found) {
-                  _context3.next = 10;
-                  break;
-                }
-                doc = _solidLogic.store.sym(found.uri + this.leafFileName);
-                return _context3.abrupt("return", this.dateFromLeafDocument(doc));
-              case 10:
-                return _context3.abrupt("return", null);
-              case 11:
-              case "end":
-                return _context3.stop();
-            }
+                        return _context2.abrupt("return", _folder);
+                      case 15:
+                        _context2.next = 25;
+                        break;
+                      case 17:
+                        _context2.prev = 17;
+                        _context2.t0 = _context2["catch"](5);
+                        if (!(_context2.t0.response && _context2.t0.response.status && _context2.t0.response.status === 404)) {
+                          _context2.next = 23;
+                          break;
+                        }
+                        debug.log('Error 404 for chat parent file ' + parent);
+                        _context2.next = 25;
+                        break;
+                      case 23:
+                        debug.log('*** Error NON 404 for chat parent file ' + parent);
+                        // statusTR.appendChild(widgets.errorMessageBlock(dom, err, 'pink'))
+                        throw new Error("*** ".concat(_context2.t0.message, " for chat folder ").concat(parent));
+                      case 25:
+                        if (!(level === 0)) {
+                          _context2.next = 27;
+                          break;
+                        }
+                        return _context2.abrupt("return", null);
+                      case 27:
+                        _context2.next = 29;
+                        return previousPeriod(parent, level - 1);
+                      case 29:
+                        uncle = _context2.sent;
+                        if (uncle) {
+                          _context2.next = 32;
+                          break;
+                        }
+                        return _context2.abrupt("return", null);
+                      case 32:
+                        _context2.next = 34;
+                        return _solidLogic.store.fetcher.load(uncle);
+                      case 34:
+                        cousins = _solidLogic.store.each(uncle, ns.ldp('contains'));
+                        _context2.next = 37;
+                        return lastNonEmpty(cousins);
+                      case 37:
+                        result = _context2.sent;
+                        return _context2.abrupt("return", result);
+                      case 39:
+                      case "end":
+                        return _context2.stop();
+                    }
+                  }, _callee2, null, [[5, 17]]);
+                }));
+                return _previousPeriod.apply(this, arguments);
+              };
+              previousPeriod = function _previousPeriod2(_x3, _x4) {
+                return _previousPeriod.apply(this, arguments);
+              };
+              thisDateFolder = this;
+              // previousPeriod
+              folder = this.leafDocumentFromDate(date).dir();
+              _context3.next = 6;
+              return previousPeriod(folder, 3);
+            case 6:
+              found = _context3.sent;
+              if (!found) {
+                _context3.next = 10;
+                break;
+              }
+              doc = _solidLogic.store.sym(found.uri + this.leafFileName);
+              return _context3.abrupt("return", this.dateFromLeafDocument(doc));
+            case 10:
+              return _context3.abrupt("return", null);
+            case 11:
+            case "end":
+              return _context3.stop();
           }
         }, _callee3, this);
       }));
@@ -3136,94 +3096,90 @@ var DateFolder = /*#__PURE__*/function () {
       var _firstLeaf = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(backwards) {
         var folderStore, folderFetcher, earliestSubfolder, _earliestSubfolder, y, month, d, leafDocument, leafObjects, msg, sortMe;
         return _regenerator["default"].wrap(function _callee5$(_context5) {
-          while (1) {
-            switch (_context5.prev = _context5.next) {
-              case 0:
-                _earliestSubfolder = function _earliestSubfolder3() {
-                  _earliestSubfolder = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(parent) {
-                    var suitable, kids;
-                    return _regenerator["default"].wrap(function _callee4$(_context4) {
-                      while (1) {
-                        switch (_context4.prev = _context4.next) {
-                          case 0:
-                            suitable = function _suitable2(x) {
-                              var tail = x.uri.slice(0, -1).split('/').slice(-1)[0];
-                              if (!'0123456789'.includes(tail[0])) return false; // not numeric
-                              return true;
-                            };
-                            debug.log('            parent ' + parent);
-                            delete folderFetcher.requested[parent.uri];
-                            // try {
-                            _context4.next = 5;
-                            return folderFetcher.load(parent, {
-                              force: true
-                            });
-                          case 5:
-                            // Force fetch as will have changed
-                            // }catch (err) {
-                            // }
-                            kids = folderStore.each(parent, ns.ldp('contains'));
-                            kids = kids.filter(suitable);
-                            if (!(kids.length === 0)) {
-                              _context4.next = 9;
-                              break;
-                            }
-                            throw new Error(' @@@  No children to         parent2 ' + parent);
-                          case 9:
-                            kids.sort();
-                            if (backwards) kids.reverse();
-                            return _context4.abrupt("return", kids[0]);
-                          case 12:
-                          case "end":
-                            return _context4.stop();
+          while (1) switch (_context5.prev = _context5.next) {
+            case 0:
+              _earliestSubfolder = function _earliestSubfolder3() {
+                _earliestSubfolder = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(parent) {
+                  var suitable, kids;
+                  return _regenerator["default"].wrap(function _callee4$(_context4) {
+                    while (1) switch (_context4.prev = _context4.next) {
+                      case 0:
+                        suitable = function _suitable2(x) {
+                          var tail = x.uri.slice(0, -1).split('/').slice(-1)[0];
+                          if (!'0123456789'.includes(tail[0])) return false; // not numeric
+                          return true;
+                        };
+                        debug.log('            parent ' + parent);
+                        delete folderFetcher.requested[parent.uri];
+                        // try {
+                        _context4.next = 5;
+                        return folderFetcher.load(parent, {
+                          force: true
+                        });
+                      case 5:
+                        // Force fetch as will have changed
+                        // }catch (err) {
+                        // }
+                        kids = folderStore.each(parent, ns.ldp('contains'));
+                        kids = kids.filter(suitable);
+                        if (!(kids.length === 0)) {
+                          _context4.next = 9;
+                          break;
                         }
-                      }
-                    }, _callee4);
-                  }));
-                  return _earliestSubfolder.apply(this, arguments);
-                };
-                earliestSubfolder = function _earliestSubfolder2(_x7) {
-                  return _earliestSubfolder.apply(this, arguments);
-                };
-                // backwards -> last leafObject
-                folderStore = $rdf.graph();
-                folderFetcher = new $rdf.Fetcher(folderStore);
-                _context5.next = 6;
-                return earliestSubfolder(this.root.dir());
-              case 6:
-                y = _context5.sent;
-                _context5.next = 9;
-                return earliestSubfolder(y);
-              case 9:
-                month = _context5.sent;
-                _context5.next = 12;
-                return earliestSubfolder(month);
-              case 12:
-                d = _context5.sent;
-                leafDocument = $rdf.sym(d.uri + 'chat.ttl');
-                _context5.next = 16;
-                return folderFetcher.load(leafDocument);
-              case 16:
-                leafObjects = folderStore.each(this.root, this.membershipProperty, null, leafDocument);
-                if (!(leafObjects.length === 0)) {
-                  _context5.next = 21;
-                  break;
-                }
-                msg = '  INCONSISTENCY -- no chat leafObject in file ' + leafDocument;
-                debug.trace(msg);
-                throw new Error(msg);
-              case 21:
-                sortMe = leafObjects.map(function (leafObject) {
-                  return [folderStore.any(leafObject, ns.dct('created')), leafObject];
-                });
-                sortMe.sort();
-                if (backwards) sortMe.reverse();
-                debug.log((backwards ? 'Latest' : 'Earliest') + ' leafObject is ' + sortMe[0][1]);
-                return _context5.abrupt("return", sortMe[0][1]);
-              case 26:
-              case "end":
-                return _context5.stop();
-            }
+                        throw new Error(' @@@  No children to         parent2 ' + parent);
+                      case 9:
+                        kids.sort();
+                        if (backwards) kids.reverse();
+                        return _context4.abrupt("return", kids[0]);
+                      case 12:
+                      case "end":
+                        return _context4.stop();
+                    }
+                  }, _callee4);
+                }));
+                return _earliestSubfolder.apply(this, arguments);
+              };
+              earliestSubfolder = function _earliestSubfolder2(_x7) {
+                return _earliestSubfolder.apply(this, arguments);
+              };
+              // backwards -> last leafObject
+              folderStore = $rdf.graph();
+              folderFetcher = new $rdf.Fetcher(folderStore);
+              _context5.next = 6;
+              return earliestSubfolder(this.root.dir());
+            case 6:
+              y = _context5.sent;
+              _context5.next = 9;
+              return earliestSubfolder(y);
+            case 9:
+              month = _context5.sent;
+              _context5.next = 12;
+              return earliestSubfolder(month);
+            case 12:
+              d = _context5.sent;
+              leafDocument = $rdf.sym(d.uri + 'chat.ttl');
+              _context5.next = 16;
+              return folderFetcher.load(leafDocument);
+            case 16:
+              leafObjects = folderStore.each(this.root, this.membershipProperty, null, leafDocument);
+              if (!(leafObjects.length === 0)) {
+                _context5.next = 21;
+                break;
+              }
+              msg = '  INCONSISTENCY -- no chat leafObject in file ' + leafDocument;
+              debug.trace(msg);
+              throw new Error(msg);
+            case 21:
+              sortMe = leafObjects.map(function (leafObject) {
+                return [folderStore.any(leafObject, ns.dct('created')), leafObject];
+              });
+              sortMe.sort();
+              if (backwards) sortMe.reverse();
+              debug.log((backwards ? 'Latest' : 'Earliest') + ' leafObject is ' + sortMe[0][1]);
+              return _context5.abrupt("return", sortMe[0][1]);
+            case 26:
+            case "end":
+              return _context5.stop();
           }
         }, _callee5, this);
       }));
@@ -3366,698 +3322,674 @@ function _infiniteMessageArea() {
   _infiniteMessageArea = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee12(dom, wasStore, chatChannel, options) {
     var syncMessages, addMessage, insertPreviousMessages, _insertPreviousMessages, removePreviousMessages, createMessageTable, _createMessageTable, renderMessageTable, addNewChatDocumentIfNewDay, _addNewChatDocumentIfNewDay, appendCurrentMessages, _appendCurrentMessages, loadMoreWhereNeeded, _loadMoreWhereNeeded, loadInitialContent, _loadInitialContent, newestFirst, channelObject, dateFolder, div, statusArea, userContext, liveMessageTable, earliest, latest, lock;
     return _regenerator["default"].wrap(function _callee12$(_context12) {
-      while (1) {
-        switch (_context12.prev = _context12.next) {
-          case 0:
-            _loadInitialContent = function _loadInitialContent3() {
-              _loadInitialContent = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee11() {
-                var yank, fixScroll, live, selectedDocument, now, todayDocument, selectedMessageTable, selectedDate;
-                return _regenerator["default"].wrap(function _callee11$(_context11) {
-                  while (1) {
-                    switch (_context11.prev = _context11.next) {
-                      case 0:
-                        fixScroll = function _fixScroll() {
-                          if (options.selectedElement) {
-                            options.selectedElement.scrollIntoView({
-                              block: 'center'
-                            }); // align tops or bottoms
-                          } else {
-                            if (liveMessageTable.inputRow.scrollIntoView) {
-                              liveMessageTable.inputRow.scrollIntoView(newestFirst); // align tops or bottoms
-                            }
-                          }
-                        };
-                        yank = function _yank() {
-                          selectedMessageTable.selectedElement.scrollIntoView({
-                            block: 'center'
-                          });
-                        };
-                        if (options.selectedMessage) {
-                          selectedDocument = options.selectedMessage.doc();
-                          now = new Date();
-                          todayDocument = dateFolder.leafDocumentFromDate(now);
-                          live = todayDocument.sameTerm(selectedDocument);
+      while (1) switch (_context12.prev = _context12.next) {
+        case 0:
+          _loadInitialContent = function _loadInitialContent3() {
+            _loadInitialContent = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee11() {
+              var yank, fixScroll, live, selectedDocument, now, todayDocument, selectedMessageTable, selectedDate;
+              return _regenerator["default"].wrap(function _callee11$(_context11) {
+                while (1) switch (_context11.prev = _context11.next) {
+                  case 0:
+                    fixScroll = function _fixScroll() {
+                      if (options.selectedElement) {
+                        options.selectedElement.scrollIntoView({
+                          block: 'center'
+                        }); // align tops or bottoms
+                      } else {
+                        if (liveMessageTable.inputRow.scrollIntoView) {
+                          liveMessageTable.inputRow.scrollIntoView(newestFirst); // align tops or bottoms
                         }
-                        if (!(options.selectedMessage && !live)) {
-                          _context11.next = 15;
-                          break;
-                        }
-                        selectedDate = dateFolder.dateFromLeafDocument(selectedDocument);
-                        _context11.next = 7;
-                        return createMessageTable(selectedDate, live);
-                      case 7:
-                        selectedMessageTable = _context11.sent;
-                        div.appendChild(selectedMessageTable);
-                        earliest.messageTable = selectedMessageTable;
-                        latest.messageTable = selectedMessageTable;
-                        yank();
-                        setTimeout(yank, 1000); // @@ kludge - restore position distubed by other cHANGES
-                        _context11.next = 19;
-                        break;
-                      case 15:
-                        _context11.next = 17;
-                        return appendCurrentMessages();
-                      case 17:
-                        earliest.messageTable = liveMessageTable;
-                        latest.messageTable = liveMessageTable;
-                      case 19:
-                        _context11.next = 21;
-                        return loadMoreWhereNeeded(null, fixScroll);
-                      case 21:
-                        div.addEventListener('scroll', loadMoreWhereNeeded);
-                        if (options.solo) {
-                          document.body.addEventListener('scroll', loadMoreWhereNeeded);
-                        }
-                      case 23:
-                      case "end":
-                        return _context11.stop();
+                      }
+                    };
+                    yank = function _yank() {
+                      selectedMessageTable.selectedElement.scrollIntoView({
+                        block: 'center'
+                      });
+                    };
+                    if (options.selectedMessage) {
+                      selectedDocument = options.selectedMessage.doc();
+                      now = new Date();
+                      todayDocument = dateFolder.leafDocumentFromDate(now);
+                      live = todayDocument.sameTerm(selectedDocument);
                     }
-                  }
-                }, _callee11);
-              }));
-              return _loadInitialContent.apply(this, arguments);
-            };
-            loadInitialContent = function _loadInitialContent2() {
-              return _loadInitialContent.apply(this, arguments);
-            };
-            _loadMoreWhereNeeded = function _loadMoreWhereNeeded3() {
-              _loadMoreWhereNeeded = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee10(event, fixScroll) {
-                var freeze, magicZone, done, scrollBottom, scrollTop;
-                return _regenerator["default"].wrap(function _callee10$(_context10) {
-                  while (1) {
-                    switch (_context10.prev = _context10.next) {
-                      case 0:
-                        if (!lock) {
-                          _context10.next = 2;
-                          break;
-                        }
-                        return _context10.abrupt("return");
-                      case 2:
-                        lock = true;
-                        freeze = !fixScroll;
-                        magicZone = 150; // const top = div.scrollTop
-                        // const bottom = div.scrollHeight - top - div.clientHeight
-                      case 5:
-                        if (!(div.scrollTop < magicZone && earliest.messageTable && !earliest.messageTable.initial && earliest.messageTable.extendBackwards)) {
-                          _context10.next = 21;
-                          break;
-                        }
-                        if (!(div.scrollHeight === 0)) {
-                          _context10.next = 10;
-                          break;
-                        }
-                        // console.log('    chat/loadMoreWhereNeeded: trying later...')
-                        setTimeout(loadMoreWhereNeeded, 2000); // couple be less
-                        lock = false;
-                        return _context10.abrupt("return");
-                      case 10:
-                        // console.log('    chat/loadMoreWhereNeeded: Going now')
-                        scrollBottom = div.scrollHeight - div.scrollTop;
-                        debug.log('infinite scroll: adding above: top ' + div.scrollTop);
-                        _context10.next = 14;
-                        return earliest.messageTable.extendBackwards();
-                      case 14:
-                        done = _context10.sent;
-                        if (freeze) {
-                          div.scrollTop = div.scrollHeight - scrollBottom;
-                        }
-                        if (fixScroll) fixScroll();
-                        if (!done) {
-                          _context10.next = 19;
-                          break;
-                        }
-                        return _context10.abrupt("break", 21);
-                      case 19:
-                        _context10.next = 5;
-                        break;
-                      case 21:
-                        if (!(options.selectedMessage &&
-                        // we started in the middle not at the bottom
-                        div.scrollHeight - div.scrollTop - div.clientHeight < magicZone &&
-                        // we are scrolled right to the bottom
-                        latest.messageTable && !latest.messageTable["final"] &&
-                        // there is more data to come
-                        latest.messageTable.extendForwards)) {
-                          _context10.next = 33;
-                          break;
-                        }
-                        scrollTop = div.scrollTop;
-                        debug.log('infinite scroll: adding below: bottom: ' + (div.scrollHeight - div.scrollTop - div.clientHeight));
-                        _context10.next = 26;
-                        return latest.messageTable.extendForwards();
-                      case 26:
-                        done = _context10.sent;
-                        // then add more data on the bottom
-                        if (freeze) {
-                          div.scrollTop = scrollTop; // while adding below keep same things in view
-                        }
+                    if (!(options.selectedMessage && !live)) {
+                      _context11.next = 15;
+                      break;
+                    }
+                    selectedDate = dateFolder.dateFromLeafDocument(selectedDocument);
+                    _context11.next = 7;
+                    return createMessageTable(selectedDate, live);
+                  case 7:
+                    selectedMessageTable = _context11.sent;
+                    div.appendChild(selectedMessageTable);
+                    earliest.messageTable = selectedMessageTable;
+                    latest.messageTable = selectedMessageTable;
+                    yank();
+                    setTimeout(yank, 1000); // @@ kludge - restore position distubed by other cHANGES
+                    _context11.next = 19;
+                    break;
+                  case 15:
+                    _context11.next = 17;
+                    return appendCurrentMessages();
+                  case 17:
+                    earliest.messageTable = liveMessageTable;
+                    latest.messageTable = liveMessageTable;
+                  case 19:
+                    _context11.next = 21;
+                    return loadMoreWhereNeeded(null, fixScroll);
+                  case 21:
+                    div.addEventListener('scroll', loadMoreWhereNeeded);
+                    if (options.solo) {
+                      document.body.addEventListener('scroll', loadMoreWhereNeeded);
+                    }
+                  case 23:
+                  case "end":
+                    return _context11.stop();
+                }
+              }, _callee11);
+            }));
+            return _loadInitialContent.apply(this, arguments);
+          };
+          loadInitialContent = function _loadInitialContent2() {
+            return _loadInitialContent.apply(this, arguments);
+          };
+          _loadMoreWhereNeeded = function _loadMoreWhereNeeded3() {
+            _loadMoreWhereNeeded = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee10(event, fixScroll) {
+              var freeze, magicZone, done, scrollBottom, scrollTop;
+              return _regenerator["default"].wrap(function _callee10$(_context10) {
+                while (1) switch (_context10.prev = _context10.next) {
+                  case 0:
+                    if (!lock) {
+                      _context10.next = 2;
+                      break;
+                    }
+                    return _context10.abrupt("return");
+                  case 2:
+                    lock = true;
+                    freeze = !fixScroll;
+                    magicZone = 150; // const top = div.scrollTop
+                    // const bottom = div.scrollHeight - top - div.clientHeight
+                  case 5:
+                    if (!(div.scrollTop < magicZone && earliest.messageTable && !earliest.messageTable.initial && earliest.messageTable.extendBackwards)) {
+                      _context10.next = 21;
+                      break;
+                    }
+                    if (!(div.scrollHeight === 0)) {
+                      _context10.next = 10;
+                      break;
+                    }
+                    // console.log('    chat/loadMoreWhereNeeded: trying later...')
+                    setTimeout(loadMoreWhereNeeded, 2000); // couple be less
+                    lock = false;
+                    return _context10.abrupt("return");
+                  case 10:
+                    // console.log('    chat/loadMoreWhereNeeded: Going now')
+                    scrollBottom = div.scrollHeight - div.scrollTop;
+                    debug.log('infinite scroll: adding above: top ' + div.scrollTop);
+                    _context10.next = 14;
+                    return earliest.messageTable.extendBackwards();
+                  case 14:
+                    done = _context10.sent;
+                    if (freeze) {
+                      div.scrollTop = div.scrollHeight - scrollBottom;
+                    }
+                    if (fixScroll) fixScroll();
+                    if (!done) {
+                      _context10.next = 19;
+                      break;
+                    }
+                    return _context10.abrupt("break", 21);
+                  case 19:
+                    _context10.next = 5;
+                    break;
+                  case 21:
+                    if (!(options.selectedMessage &&
+                    // we started in the middle not at the bottom
+                    div.scrollHeight - div.scrollTop - div.clientHeight < magicZone &&
+                    // we are scrolled right to the bottom
+                    latest.messageTable && !latest.messageTable["final"] &&
+                    // there is more data to come
+                    latest.messageTable.extendForwards)) {
+                      _context10.next = 33;
+                      break;
+                    }
+                    scrollTop = div.scrollTop;
+                    debug.log('infinite scroll: adding below: bottom: ' + (div.scrollHeight - div.scrollTop - div.clientHeight));
+                    _context10.next = 26;
+                    return latest.messageTable.extendForwards();
+                  case 26:
+                    done = _context10.sent;
+                    // then add more data on the bottom
+                    if (freeze) {
+                      div.scrollTop = scrollTop; // while adding below keep same things in view
+                    }
 
-                        if (fixScroll) fixScroll();
-                        if (!done) {
-                          _context10.next = 31;
-                          break;
-                        }
-                        return _context10.abrupt("break", 33);
-                      case 31:
-                        _context10.next = 21;
-                        break;
-                      case 33:
-                        lock = false;
-                      case 34:
-                      case "end":
-                        return _context10.stop();
+                    if (fixScroll) fixScroll();
+                    if (!done) {
+                      _context10.next = 31;
+                      break;
                     }
-                  }
-                }, _callee10);
-              }));
-              return _loadMoreWhereNeeded.apply(this, arguments);
-            };
-            loadMoreWhereNeeded = function _loadMoreWhereNeeded2(_x10, _x11) {
-              return _loadMoreWhereNeeded.apply(this, arguments);
-            };
-            _appendCurrentMessages = function _appendCurrentMessage2() {
-              _appendCurrentMessages = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee9() {
-                var now, chatDocument, messageTable;
-                return _regenerator["default"].wrap(function _callee9$(_context9) {
-                  while (1) {
-                    switch (_context9.prev = _context9.next) {
-                      case 0:
-                        now = new Date();
-                        chatDocument = dateFolder.leafDocumentFromDate(now); /// ///////////////////////////////////////////////////////////
-                        _context9.next = 4;
-                        return createMessageTable(now, true);
-                      case 4:
-                        messageTable = _context9.sent;
-                        div.appendChild(messageTable);
-                        div.refresh = /*#__PURE__*/(0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee8() {
-                          return _regenerator["default"].wrap(function _callee8$(_context8) {
-                            while (1) {
-                              switch (_context8.prev = _context8.next) {
-                                case 0:
-                                  _context8.next = 2;
-                                  return addNewChatDocumentIfNewDay(new Date());
-                                case 2:
-                                  syncMessages(chatChannel, messageTable); // @@ livemessagetable??
-                                  desktopNotification(chatChannel);
-                                case 4:
-                                case "end":
-                                  return _context8.stop();
-                              }
-                            }
-                          }, _callee8);
-                        })); // The short chat version the live update listening is done in the pane but we do it in the widget @@
-                        _solidLogic.store.updater.addDownstreamChangeListener(chatDocument, div.refresh); // Live update
-                        liveMessageTable = messageTable;
-                        latest.messageTable = liveMessageTable;
-                        return _context9.abrupt("return", messageTable);
-                      case 11:
-                      case "end":
-                        return _context9.stop();
+                    return _context10.abrupt("break", 33);
+                  case 31:
+                    _context10.next = 21;
+                    break;
+                  case 33:
+                    lock = false;
+                  case 34:
+                  case "end":
+                    return _context10.stop();
+                }
+              }, _callee10);
+            }));
+            return _loadMoreWhereNeeded.apply(this, arguments);
+          };
+          loadMoreWhereNeeded = function _loadMoreWhereNeeded2(_x10, _x11) {
+            return _loadMoreWhereNeeded.apply(this, arguments);
+          };
+          _appendCurrentMessages = function _appendCurrentMessage2() {
+            _appendCurrentMessages = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee9() {
+              var now, chatDocument, messageTable;
+              return _regenerator["default"].wrap(function _callee9$(_context9) {
+                while (1) switch (_context9.prev = _context9.next) {
+                  case 0:
+                    now = new Date();
+                    chatDocument = dateFolder.leafDocumentFromDate(now); /// ///////////////////////////////////////////////////////////
+                    _context9.next = 4;
+                    return createMessageTable(now, true);
+                  case 4:
+                    messageTable = _context9.sent;
+                    div.appendChild(messageTable);
+                    div.refresh = /*#__PURE__*/(0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee8() {
+                      return _regenerator["default"].wrap(function _callee8$(_context8) {
+                        while (1) switch (_context8.prev = _context8.next) {
+                          case 0:
+                            _context8.next = 2;
+                            return addNewChatDocumentIfNewDay(new Date());
+                          case 2:
+                            syncMessages(chatChannel, messageTable); // @@ livemessagetable??
+                            desktopNotification(chatChannel);
+                          case 4:
+                          case "end":
+                            return _context8.stop();
+                        }
+                      }, _callee8);
+                    })); // The short chat version the live update listening is done in the pane but we do it in the widget @@
+                    _solidLogic.store.updater.addDownstreamChangeListener(chatDocument, div.refresh); // Live update
+                    liveMessageTable = messageTable;
+                    latest.messageTable = liveMessageTable;
+                    return _context9.abrupt("return", messageTable);
+                  case 11:
+                  case "end":
+                    return _context9.stop();
+                }
+              }, _callee9);
+            }));
+            return _appendCurrentMessages.apply(this, arguments);
+          };
+          appendCurrentMessages = function _appendCurrentMessage() {
+            return _appendCurrentMessages.apply(this, arguments);
+          };
+          _addNewChatDocumentIfNewDay = function _addNewChatDocumentIf2() {
+            _addNewChatDocumentIfNewDay = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7() {
+              var newChatDocument, oldChatDocument, sts;
+              return _regenerator["default"].wrap(function _callee7$(_context7) {
+                while (1) switch (_context7.prev = _context7.next) {
+                  case 0:
+                    // @@ Remove listener from previous table as it is now static
+                    newChatDocument = dateFolder.leafDocumentFromDate(new Date());
+                    if (newChatDocument.sameTerm(latest.messageTable.chatDocument)) {
+                      _context7.next = 7;
+                      break;
                     }
-                  }
-                }, _callee9);
-              }));
-              return _appendCurrentMessages.apply(this, arguments);
-            };
-            appendCurrentMessages = function _appendCurrentMessage() {
-              return _appendCurrentMessages.apply(this, arguments);
-            };
-            _addNewChatDocumentIfNewDay = function _addNewChatDocumentIf2() {
-              _addNewChatDocumentIfNewDay = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7() {
-                var newChatDocument, oldChatDocument, sts;
-                return _regenerator["default"].wrap(function _callee7$(_context7) {
-                  while (1) {
-                    switch (_context7.prev = _context7.next) {
-                      case 0:
-                        // @@ Remove listener from previous table as it is now static
-                        newChatDocument = dateFolder.leafDocumentFromDate(new Date());
-                        if (newChatDocument.sameTerm(latest.messageTable.chatDocument)) {
-                          _context7.next = 7;
-                          break;
-                        }
-                        // It is a new day
-                        if (liveMessageTable.inputRow) {
-                          liveMessageTable.removeChild(liveMessageTable.inputRow);
-                          delete liveMessageTable.inputRow;
-                        }
-                        oldChatDocument = latest.messageTable.chatDocument;
-                        _context7.next = 6;
-                        return appendCurrentMessages();
-                      case 6:
-                        // Adding a link in the document will ping listeners to add the new block too
-                        if (!_solidLogic.store.holds(oldChatDocument, ns.rdfs('seeAlso'), newChatDocument, oldChatDocument)) {
-                          sts = [$rdf.st(oldChatDocument, ns.rdfs('seeAlso'), newChatDocument, oldChatDocument)];
-                          try {
-                            _solidLogic.store.updater.update([], sts);
-                          } catch (err) {
-                            alert('Unable to link old chat file to new one:' + err);
-                          }
-                        }
-                      case 7:
-                      case "end":
-                        return _context7.stop();
+                    // It is a new day
+                    if (liveMessageTable.inputRow) {
+                      liveMessageTable.removeChild(liveMessageTable.inputRow);
+                      delete liveMessageTable.inputRow;
                     }
-                  }
-                }, _callee7);
-              }));
-              return _addNewChatDocumentIfNewDay.apply(this, arguments);
-            };
-            addNewChatDocumentIfNewDay = function _addNewChatDocumentIf() {
-              return _addNewChatDocumentIfNewDay.apply(this, arguments);
-            };
-            renderMessageTable = function _renderMessageTable(date, live) {
-              var scrollBackbutton;
-              var scrollForwardButton;
-
-              /// /////////////////   Scroll down adding more above
-              function extendBackwards() {
-                return _extendBackwards.apply(this, arguments);
-              }
-              function _extendBackwards() {
-                _extendBackwards = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
-                  var done;
-                  return _regenerator["default"].wrap(function _callee$(_context) {
-                    while (1) {
-                      switch (_context.prev = _context.next) {
-                        case 0:
-                          _context.next = 2;
-                          return insertPreviousMessages(true);
-                        case 2:
-                          done = _context.sent;
-                          if (done) {
-                            if (scrollBackbutton) {
-                              scrollBackbutton.firstChild.setAttribute('src', _iconBase.icons.iconBase + 'noun_T-Block_1114655_000000.svg'); // T
-                              scrollBackbutton.disabled = true;
-                            }
-                            messageTable.initial = true;
-                          } else {
-                            messageTable.extendedBack = true;
-                          }
-                          setScrollBackbuttonIcon();
-                          return _context.abrupt("return", done);
-                        case 6:
-                        case "end":
-                          return _context.stop();
+                    oldChatDocument = latest.messageTable.chatDocument;
+                    _context7.next = 6;
+                    return appendCurrentMessages();
+                  case 6:
+                    // Adding a link in the document will ping listeners to add the new block too
+                    if (!_solidLogic.store.holds(oldChatDocument, ns.rdfs('seeAlso'), newChatDocument, oldChatDocument)) {
+                      sts = [$rdf.st(oldChatDocument, ns.rdfs('seeAlso'), newChatDocument, oldChatDocument)];
+                      try {
+                        _solidLogic.store.updater.update([], sts);
+                      } catch (err) {
+                        alert('Unable to link old chat file to new one:' + err);
                       }
                     }
-                  }, _callee);
-                }));
-                return _extendBackwards.apply(this, arguments);
-              }
-              function setScrollBackbuttonIcon() {
-                if (!scrollBackbutton) {
-                  return;
+                  case 7:
+                  case "end":
+                    return _context7.stop();
                 }
-                var sense = messageTable.extendedBack ? !newestFirst : newestFirst;
-                var scrollBackIcon = messageTable.initial ? 'noun_T-Block_1114655_000000.svg' : getScrollbackIcon(sense);
-                scrollBackbutton.firstChild.setAttribute('src', _iconBase.icons.iconBase + scrollBackIcon);
-                function getScrollbackIcon(sense) {
-                  return sense ? 'noun_1369241.svg' : 'noun_1369237.svg';
-                }
-              }
-              function scrollBackbuttonHandler(_x8) {
-                return _scrollBackbuttonHandler.apply(this, arguments);
-              } /// ////////////// Scroll up adding more below
-              function _scrollBackbuttonHandler() {
-                _scrollBackbuttonHandler = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(_event) {
-                  return _regenerator["default"].wrap(function _callee2$(_context2) {
-                    while (1) {
-                      switch (_context2.prev = _context2.next) {
-                        case 0:
-                          if (!messageTable.extendedBack) {
-                            _context2.next = 6;
-                            break;
-                          }
-                          removePreviousMessages(true, messageTable);
-                          messageTable.extendedBack = false;
-                          setScrollBackbuttonIcon();
-                          _context2.next = 8;
-                          break;
-                        case 6:
-                          _context2.next = 8;
-                          return extendBackwards();
-                        case 8:
-                        case "end":
-                          return _context2.stop();
-                      }
-                    }
-                  }, _callee2);
-                }));
-                return _scrollBackbuttonHandler.apply(this, arguments);
-              }
-              function extendForwards() {
-                return _extendForwards.apply(this, arguments);
-              }
-              function _extendForwards() {
-                _extendForwards = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3() {
-                  var done;
-                  return _regenerator["default"].wrap(function _callee3$(_context3) {
-                    while (1) {
-                      switch (_context3.prev = _context3.next) {
-                        case 0:
-                          _context3.next = 2;
-                          return insertPreviousMessages(false);
-                        case 2:
-                          done = _context3.sent;
-                          if (done) {
-                            scrollForwardButton.firstChild.setAttribute('src', _iconBase.icons.iconBase + 'noun_T-Block_1114655_000000.svg');
-                            scrollForwardButton.disabled = true;
-                            messageTable["final"] = true;
-                          } else {
-                            messageTable.extendedForwards = true;
-                          }
-                          setScrollForwardButtonIcon();
-                          return _context3.abrupt("return", done);
-                        case 6:
-                        case "end":
-                          return _context3.stop();
-                      }
-                    }
-                  }, _callee3);
-                }));
-                return _extendForwards.apply(this, arguments);
-              }
-              function setScrollForwardButtonIcon() {
-                var sense = messageTable.extendedForwards ? !newestFirst : newestFirst; // noun_T-Block_1114657_000000.svg
-                var scrollForwardIcon = messageTable["final"] ? 'noun_T-Block_1114657_000000.svg' : getScrollForwardButtonIcon(sense);
-                scrollForwardButton.firstChild.setAttribute('src', _iconBase.icons.iconBase + scrollForwardIcon);
-                function getScrollForwardButtonIcon(sense) {
-                  return !sense ? 'noun_1369241.svg' : 'noun_1369237.svg';
-                }
-              }
-              function scrollForwardButtonHandler(_x9) {
-                return _scrollForwardButtonHandler.apply(this, arguments);
-              } /// ///////////////////////
-              /*
-              options = options || {}
-              options.authorDateOnLeft = true
-              const newestFirst = options.newestFirst === '1' || options.newestFirst === true // hack for now
-              const channelObject = new ChatChannel(chatChannel, options)
-              const dateFolder = channelObject.dateFolder
-               const div = dom.createElement('div')
-              const statusArea = div.appendChild(dom.createElement('div'))
-              const userContext = { dom, statusArea, div: statusArea } // logged on state, pointers to user's stuff
-              */
-              function _scrollForwardButtonHandler() {
-                _scrollForwardButtonHandler = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(_event) {
-                  return _regenerator["default"].wrap(function _callee4$(_context4) {
-                    while (1) {
-                      switch (_context4.prev = _context4.next) {
-                        case 0:
-                          if (!messageTable.extendedForwards) {
-                            _context4.next = 6;
-                            break;
-                          }
-                          removePreviousMessages(false, messageTable);
-                          messageTable.extendedForwards = false;
-                          setScrollForwardButtonIcon();
-                          _context4.next = 9;
-                          break;
-                        case 6:
-                          _context4.next = 8;
-                          return extendForwards();
-                        case 8:
-                          // async
-                          latest.messageTable.scrollIntoView(newestFirst);
-                        case 9:
-                        case "end":
-                          return _context4.stop();
-                      }
-                    }
-                  }, _callee4);
-                }));
-                return _scrollForwardButtonHandler.apply(this, arguments);
-              }
-              var messageTable = dom.createElement('table');
-              messageTable.extendBackwards = extendBackwards; // Make function available to scroll stuff
-              messageTable.extendForwards = extendForwards; // Make function available to scroll stuff
+              }, _callee7);
+            }));
+            return _addNewChatDocumentIfNewDay.apply(this, arguments);
+          };
+          addNewChatDocumentIfNewDay = function _addNewChatDocumentIf() {
+            return _addNewChatDocumentIfNewDay.apply(this, arguments);
+          };
+          renderMessageTable = function _renderMessageTable(date, live) {
+            var scrollBackbutton;
+            var scrollForwardButton;
 
-              messageTable.date = date;
-              var chatDocument = dateFolder.leafDocumentFromDate(date);
-              messageTable.chatDocument = chatDocument;
-              messageTable.fresh = false;
-              messageTable.setAttribute('style', 'width: 100%;'); // fill that div!
-              if (live) {
-                messageTable["final"] = true;
-                liveMessageTable = messageTable;
-                latest.messageTable = messageTable;
-                var tr = (0, _message.renderMessageEditor)(channelObject, messageTable, userContext, options);
-                if (newestFirst) {
-                  messageTable.insertBefore(tr, messageTable.firstChild); // If newestFirst
-                } else {
-                  messageTable.appendChild(tr); // not newestFirst
-                }
-
-                messageTable.inputRow = tr;
-              }
-
-              /// ///// Infinite scroll
-              //
-              // @@ listen for swipe past end event not just button
-              if (options.infinite) {
-                var scrollBackbuttonTR = dom.createElement('tr');
-                var scrollBackbuttonCell = scrollBackbuttonTR.appendChild(dom.createElement('td'));
-                // up traingles: noun_1369237.svg
-                // down triangles: noun_1369241.svg
-                var scrollBackIcon = newestFirst ? 'noun_1369241.svg' : 'noun_1369237.svg'; // down and up arrows respoctively
-                scrollBackbutton = widgets.button(dom, _iconBase.icons.iconBase + scrollBackIcon, 'Previous messages ...');
-                scrollBackbuttonCell.style = 'width:3em; height:3em;';
-                scrollBackbutton.addEventListener('click', scrollBackbuttonHandler, false);
-                messageTable.extendedBack = false;
-                scrollBackbuttonCell.appendChild(scrollBackbutton);
-                setScrollBackbuttonIcon();
-                var dateCell = scrollBackbuttonTR.appendChild(dom.createElement('td'));
-                dateCell.style = 'text-align: center; vertical-align: middle; color: #888; font-style: italic;';
-                dateCell.textContent = widgets.shortDate(date.toISOString(), true); // no time, only date
-
-                // @@@@@@@@@@@ todo move this button to other end of  message cell, o
-                var scrollForwardButtonCell = scrollBackbuttonTR.appendChild(dom.createElement('td'));
-                var scrollForwardIcon = newestFirst ? 'noun_1369241.svg' : 'noun_1369237.svg'; // down and up arrows respoctively
-                scrollForwardButton = widgets.button(dom, _iconBase.icons.iconBase + scrollForwardIcon, 'Later messages ...');
-                scrollForwardButtonCell.appendChild(scrollForwardButton);
-                scrollForwardButtonCell.style = 'width:3em; height:3em;';
-                scrollForwardButton.addEventListener('click', scrollForwardButtonHandler, false);
-                messageTable.extendedForward = false;
-                setScrollForwardButtonIcon();
-                messageTable.extendedForwards = false;
-                if (!newestFirst) {
-                  // opposite end from the entry field
-                  messageTable.insertBefore(scrollBackbuttonTR, messageTable.firstChild); // If not newestFirst
-                } else {
-                  messageTable.appendChild(scrollBackbuttonTR); //  newestFirst
-                }
-              }
-
-              var sts = _solidLogic.store.statementsMatching(null, ns.wf('message'), null, chatDocument);
-              if (!live && sts.length === 0) {
-                // not todays
-                // no need buttomns at the moment
-                // messageTable.style.visibility = 'collapse' // Hide files with no messages
-              }
-              sts.forEach(function (st) {
-                addMessage(st.object, messageTable);
-              });
-              messageTable.fresh = true;
-
-              // loadMessageTable(messageTable, chatDocument)
-              messageTable.fresh = false;
-              return messageTable;
-            };
-            _createMessageTable = function _createMessageTable3() {
-              _createMessageTable = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(date, live) {
-                var chatDocument, messageTable, statusTR;
-                return _regenerator["default"].wrap(function _callee6$(_context6) {
-                  while (1) {
-                    switch (_context6.prev = _context6.next) {
-                      case 0:
-                        debug.log('   createMessageTable for  ' + date);
-                        chatDocument = dateFolder.leafDocumentFromDate(date);
-                        _context6.prev = 2;
-                        _context6.next = 5;
-                        return _solidLogic.store.fetcher.load(chatDocument);
-                      case 5:
-                        _context6.next = 19;
-                        break;
-                      case 7:
-                        _context6.prev = 7;
-                        _context6.t0 = _context6["catch"](2);
-                        messageTable = dom.createElement('table');
-                        statusTR = messageTable.appendChild(dom.createElement('tr')); // ### find status in exception
-                        if (!(_context6.t0.response && _context6.t0.response.status && _context6.t0.response.status === 404)) {
-                          _context6.next = 16;
-                          break;
+            /// /////////////////   Scroll down adding more above
+            function extendBackwards() {
+              return _extendBackwards.apply(this, arguments);
+            }
+            function _extendBackwards() {
+              _extendBackwards = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
+                var done;
+                return _regenerator["default"].wrap(function _callee$(_context) {
+                  while (1) switch (_context.prev = _context.next) {
+                    case 0:
+                      _context.next = 2;
+                      return insertPreviousMessages(true);
+                    case 2:
+                      done = _context.sent;
+                      if (done) {
+                        if (scrollBackbutton) {
+                          scrollBackbutton.firstChild.setAttribute('src', _iconBase.icons.iconBase + 'noun_T-Block_1114655_000000.svg'); // T
+                          scrollBackbutton.disabled = true;
                         }
-                        debug.log('Error 404 for chat file ' + chatDocument);
-                        return _context6.abrupt("return", renderMessageTable(date, live));
-                      case 16:
-                        debug.log('*** Error NON 404 for chat file ' + chatDocument);
-                        statusTR.appendChild(widgets.errorMessageBlock(dom, _context6.t0, 'pink'));
-                      case 18:
-                        return _context6.abrupt("return", statusTR);
-                      case 19:
-                        return _context6.abrupt("return", renderMessageTable(date, live));
-                      case 20:
-                      case "end":
-                        return _context6.stop();
-                    }
+                        messageTable.initial = true;
+                      } else {
+                        messageTable.extendedBack = true;
+                      }
+                      setScrollBackbuttonIcon();
+                      return _context.abrupt("return", done);
+                    case 6:
+                    case "end":
+                      return _context.stop();
                   }
-                }, _callee6, null, [[2, 7]]);
+                }, _callee);
               }));
-              return _createMessageTable.apply(this, arguments);
-            };
-            createMessageTable = function _createMessageTable2(_x6, _x7) {
-              return _createMessageTable.apply(this, arguments);
-            };
-            removePreviousMessages = function _removePreviousMessag(backwards, messageTable) {
-              if (backwards ? newestFirst : !newestFirst) {
-                // it was put on bottom
-                while (messageTable.nextSibling) {
-                  div.removeChild(messageTable.nextSibling);
-                }
+              return _extendBackwards.apply(this, arguments);
+            }
+            function setScrollBackbuttonIcon() {
+              if (!scrollBackbutton) {
+                return;
+              }
+              var sense = messageTable.extendedBack ? !newestFirst : newestFirst;
+              var scrollBackIcon = messageTable.initial ? 'noun_T-Block_1114655_000000.svg' : getScrollbackIcon(sense);
+              scrollBackbutton.firstChild.setAttribute('src', _iconBase.icons.iconBase + scrollBackIcon);
+              function getScrollbackIcon(sense) {
+                return sense ? 'noun_1369241.svg' : 'noun_1369237.svg';
+              }
+            }
+            function scrollBackbuttonHandler(_x8) {
+              return _scrollBackbuttonHandler.apply(this, arguments);
+            } /// ////////////// Scroll up adding more below
+            function _scrollBackbuttonHandler() {
+              _scrollBackbuttonHandler = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(_event) {
+                return _regenerator["default"].wrap(function _callee2$(_context2) {
+                  while (1) switch (_context2.prev = _context2.next) {
+                    case 0:
+                      if (!messageTable.extendedBack) {
+                        _context2.next = 6;
+                        break;
+                      }
+                      removePreviousMessages(true, messageTable);
+                      messageTable.extendedBack = false;
+                      setScrollBackbuttonIcon();
+                      _context2.next = 8;
+                      break;
+                    case 6:
+                      _context2.next = 8;
+                      return extendBackwards();
+                    case 8:
+                    case "end":
+                      return _context2.stop();
+                  }
+                }, _callee2);
+              }));
+              return _scrollBackbuttonHandler.apply(this, arguments);
+            }
+            function extendForwards() {
+              return _extendForwards.apply(this, arguments);
+            }
+            function _extendForwards() {
+              _extendForwards = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3() {
+                var done;
+                return _regenerator["default"].wrap(function _callee3$(_context3) {
+                  while (1) switch (_context3.prev = _context3.next) {
+                    case 0:
+                      _context3.next = 2;
+                      return insertPreviousMessages(false);
+                    case 2:
+                      done = _context3.sent;
+                      if (done) {
+                        scrollForwardButton.firstChild.setAttribute('src', _iconBase.icons.iconBase + 'noun_T-Block_1114655_000000.svg');
+                        scrollForwardButton.disabled = true;
+                        messageTable["final"] = true;
+                      } else {
+                        messageTable.extendedForwards = true;
+                      }
+                      setScrollForwardButtonIcon();
+                      return _context3.abrupt("return", done);
+                    case 6:
+                    case "end":
+                      return _context3.stop();
+                  }
+                }, _callee3);
+              }));
+              return _extendForwards.apply(this, arguments);
+            }
+            function setScrollForwardButtonIcon() {
+              var sense = messageTable.extendedForwards ? !newestFirst : newestFirst; // noun_T-Block_1114657_000000.svg
+              var scrollForwardIcon = messageTable["final"] ? 'noun_T-Block_1114657_000000.svg' : getScrollForwardButtonIcon(sense);
+              scrollForwardButton.firstChild.setAttribute('src', _iconBase.icons.iconBase + scrollForwardIcon);
+              function getScrollForwardButtonIcon(sense) {
+                return !sense ? 'noun_1369241.svg' : 'noun_1369237.svg';
+              }
+            }
+            function scrollForwardButtonHandler(_x9) {
+              return _scrollForwardButtonHandler.apply(this, arguments);
+            } /// ///////////////////////
+            /*
+            options = options || {}
+            options.authorDateOnLeft = true
+            const newestFirst = options.newestFirst === '1' || options.newestFirst === true // hack for now
+            const channelObject = new ChatChannel(chatChannel, options)
+            const dateFolder = channelObject.dateFolder
+             const div = dom.createElement('div')
+            const statusArea = div.appendChild(dom.createElement('div'))
+            const userContext = { dom, statusArea, div: statusArea } // logged on state, pointers to user's stuff
+            */
+            function _scrollForwardButtonHandler() {
+              _scrollForwardButtonHandler = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(_event) {
+                return _regenerator["default"].wrap(function _callee4$(_context4) {
+                  while (1) switch (_context4.prev = _context4.next) {
+                    case 0:
+                      if (!messageTable.extendedForwards) {
+                        _context4.next = 6;
+                        break;
+                      }
+                      removePreviousMessages(false, messageTable);
+                      messageTable.extendedForwards = false;
+                      setScrollForwardButtonIcon();
+                      _context4.next = 9;
+                      break;
+                    case 6:
+                      _context4.next = 8;
+                      return extendForwards();
+                    case 8:
+                      // async
+                      latest.messageTable.scrollIntoView(newestFirst);
+                    case 9:
+                    case "end":
+                      return _context4.stop();
+                  }
+                }, _callee4);
+              }));
+              return _scrollForwardButtonHandler.apply(this, arguments);
+            }
+            var messageTable = dom.createElement('table');
+            messageTable.extendBackwards = extendBackwards; // Make function available to scroll stuff
+            messageTable.extendForwards = extendForwards; // Make function available to scroll stuff
+
+            messageTable.date = date;
+            var chatDocument = dateFolder.leafDocumentFromDate(date);
+            messageTable.chatDocument = chatDocument;
+            messageTable.fresh = false;
+            messageTable.setAttribute('style', 'width: 100%;'); // fill that div!
+            if (live) {
+              messageTable["final"] = true;
+              liveMessageTable = messageTable;
+              latest.messageTable = messageTable;
+              var tr = (0, _message.renderMessageEditor)(channelObject, messageTable, userContext, options);
+              if (newestFirst) {
+                messageTable.insertBefore(tr, messageTable.firstChild); // If newestFirst
               } else {
-                // it was put on top as we scroll back
-                while (messageTable.previousSibling) {
-                  div.removeChild(messageTable.previousSibling);
-                }
+                messageTable.appendChild(tr); // not newestFirst
               }
-              var extr = backwards ? earliest : latest;
-              extr.messageTable = messageTable;
-            };
-            _insertPreviousMessages = function _insertPreviousMessag2() {
-              _insertPreviousMessages = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(backwards) {
-                var extremity, date, live, todayDoc, doc, newMessageTable;
-                return _regenerator["default"].wrap(function _callee5$(_context5) {
-                  while (1) {
-                    switch (_context5.prev = _context5.next) {
-                      case 0:
-                        extremity = backwards ? earliest : latest;
-                        date = extremity.messageTable.date; // day in mssecs
-                        _context5.next = 4;
-                        return dateFolder.loadPrevious(date, backwards);
-                      case 4:
-                        date = _context5.sent;
-                        // backwards
-                        debug.log("insertPreviousMessages: from ".concat(backwards ? 'backwards' : 'forwards', " loadPrevious: ").concat(date));
-                        if (!(!date && !backwards && !liveMessageTable)) {
-                          _context5.next = 9;
-                          break;
-                        }
-                        _context5.next = 9;
-                        return appendCurrentMessages();
-                      case 9:
-                        if (date) {
-                          _context5.next = 11;
-                          break;
-                        }
-                        return _context5.abrupt("return", true);
-                      case 11:
-                        // done
-                        live = false;
-                        if (!backwards) {
-                          todayDoc = dateFolder.leafDocumentFromDate(new Date());
-                          doc = dateFolder.leafDocumentFromDate(date);
-                          live = doc.sameTerm(todayDoc); // Is this todays?
-                        }
-                        _context5.next = 15;
-                        return createMessageTable(date, live);
-                      case 15:
-                        newMessageTable = _context5.sent;
-                        extremity.messageTable = newMessageTable; // move pointer to earliest
-                        if (backwards ? newestFirst : !newestFirst) {
-                          // put on bottom or top
-                          div.appendChild(newMessageTable);
-                        } else {
-                          // put on top as we scroll back
-                          div.insertBefore(newMessageTable, div.firstChild);
-                        }
-                        return _context5.abrupt("return", live);
-                      case 19:
-                      case "end":
-                        return _context5.stop();
+
+              messageTable.inputRow = tr;
+            }
+
+            /// ///// Infinite scroll
+            //
+            // @@ listen for swipe past end event not just button
+            if (options.infinite) {
+              var scrollBackbuttonTR = dom.createElement('tr');
+              var scrollBackbuttonCell = scrollBackbuttonTR.appendChild(dom.createElement('td'));
+              // up traingles: noun_1369237.svg
+              // down triangles: noun_1369241.svg
+              var scrollBackIcon = newestFirst ? 'noun_1369241.svg' : 'noun_1369237.svg'; // down and up arrows respoctively
+              scrollBackbutton = widgets.button(dom, _iconBase.icons.iconBase + scrollBackIcon, 'Previous messages ...');
+              scrollBackbuttonCell.style = 'width:3em; height:3em;';
+              scrollBackbutton.addEventListener('click', scrollBackbuttonHandler, false);
+              messageTable.extendedBack = false;
+              scrollBackbuttonCell.appendChild(scrollBackbutton);
+              setScrollBackbuttonIcon();
+              var dateCell = scrollBackbuttonTR.appendChild(dom.createElement('td'));
+              dateCell.style = 'text-align: center; vertical-align: middle; color: #888; font-style: italic;';
+              dateCell.textContent = widgets.shortDate(date.toISOString(), true); // no time, only date
+
+              // @@@@@@@@@@@ todo move this button to other end of  message cell, o
+              var scrollForwardButtonCell = scrollBackbuttonTR.appendChild(dom.createElement('td'));
+              var scrollForwardIcon = newestFirst ? 'noun_1369241.svg' : 'noun_1369237.svg'; // down and up arrows respoctively
+              scrollForwardButton = widgets.button(dom, _iconBase.icons.iconBase + scrollForwardIcon, 'Later messages ...');
+              scrollForwardButtonCell.appendChild(scrollForwardButton);
+              scrollForwardButtonCell.style = 'width:3em; height:3em;';
+              scrollForwardButton.addEventListener('click', scrollForwardButtonHandler, false);
+              messageTable.extendedForward = false;
+              setScrollForwardButtonIcon();
+              messageTable.extendedForwards = false;
+              if (!newestFirst) {
+                // opposite end from the entry field
+                messageTable.insertBefore(scrollBackbuttonTR, messageTable.firstChild); // If not newestFirst
+              } else {
+                messageTable.appendChild(scrollBackbuttonTR); //  newestFirst
+              }
+            }
+
+            var sts = _solidLogic.store.statementsMatching(null, ns.wf('message'), null, chatDocument);
+            if (!live && sts.length === 0) {
+              // not todays
+              // no need buttomns at the moment
+              // messageTable.style.visibility = 'collapse' // Hide files with no messages
+            }
+            sts.forEach(function (st) {
+              addMessage(st.object, messageTable);
+            });
+            messageTable.fresh = true;
+
+            // loadMessageTable(messageTable, chatDocument)
+            messageTable.fresh = false;
+            return messageTable;
+          };
+          _createMessageTable = function _createMessageTable3() {
+            _createMessageTable = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(date, live) {
+              var chatDocument, messageTable, statusTR;
+              return _regenerator["default"].wrap(function _callee6$(_context6) {
+                while (1) switch (_context6.prev = _context6.next) {
+                  case 0:
+                    debug.log('   createMessageTable for  ' + date);
+                    chatDocument = dateFolder.leafDocumentFromDate(date);
+                    _context6.prev = 2;
+                    _context6.next = 5;
+                    return _solidLogic.store.fetcher.load(chatDocument);
+                  case 5:
+                    _context6.next = 19;
+                    break;
+                  case 7:
+                    _context6.prev = 7;
+                    _context6.t0 = _context6["catch"](2);
+                    messageTable = dom.createElement('table');
+                    statusTR = messageTable.appendChild(dom.createElement('tr')); // ### find status in exception
+                    if (!(_context6.t0.response && _context6.t0.response.status && _context6.t0.response.status === 404)) {
+                      _context6.next = 16;
+                      break;
                     }
-                  }
-                }, _callee5);
-              }));
-              return _insertPreviousMessages.apply(this, arguments);
-            };
-            insertPreviousMessages = function _insertPreviousMessag(_x5) {
-              return _insertPreviousMessages.apply(this, arguments);
-            };
-            addMessage = function _addMessage(message, messageTable) {
-              var latest = (0, _chatLogic.mostRecentVersion)(message);
-              // const content = store.any(latest, ns.sioc('content'))
-              if ((0, _chatLogic.isDeleted)(latest) && !options.showDeletedMessages) {
-                return; // ignore deleted messaged -- @@ could also leave a placeholder
-              }
-
-              insertMessageIntoTable(channelObject, messageTable, message, messageTable.fresh, options, userContext); // fresh from elsewhere
-            };
-            syncMessages = function _syncMessages(about, messageTable) {
-              var displayed = {};
-              var ele, ele2;
-              for (ele = messageTable.firstChild; ele; ele = ele.nextSibling) {
-                if (ele.AJAR_subject) {
-                  displayed[ele.AJAR_subject.uri] = true;
+                    debug.log('Error 404 for chat file ' + chatDocument);
+                    return _context6.abrupt("return", renderMessageTable(date, live));
+                  case 16:
+                    debug.log('*** Error NON 404 for chat file ' + chatDocument);
+                    statusTR.appendChild(widgets.errorMessageBlock(dom, _context6.t0, 'pink'));
+                  case 18:
+                    return _context6.abrupt("return", statusTR);
+                  case 19:
+                    return _context6.abrupt("return", renderMessageTable(date, live));
+                  case 20:
+                  case "end":
+                    return _context6.stop();
                 }
+              }, _callee6, null, [[2, 7]]);
+            }));
+            return _createMessageTable.apply(this, arguments);
+          };
+          createMessageTable = function _createMessageTable2(_x6, _x7) {
+            return _createMessageTable.apply(this, arguments);
+          };
+          removePreviousMessages = function _removePreviousMessag(backwards, messageTable) {
+            if (backwards ? newestFirst : !newestFirst) {
+              // it was put on bottom
+              while (messageTable.nextSibling) {
+                div.removeChild(messageTable.nextSibling);
               }
-              var messages = _solidLogic.store.statementsMatching(about, ns.wf('message'), null, messageTable.chatDocument).map(function (st) {
-                return st.object;
-              });
-              var stored = {};
-              messages.forEach(function (m) {
-                stored[m.uri] = true;
-                if (!displayed[m.uri]) {
-                  addMessage(m, messageTable);
-                }
-              });
-
-              // eslint-disable-next-line space-in-parens
-              for (ele = messageTable.firstChild; ele;) {
-                ele2 = ele.nextSibling;
-                if (ele.AJAR_subject && !stored[ele.AJAR_subject.uri]) {
-                  messageTable.removeChild(ele);
-                }
-                ele = ele2;
+            } else {
+              // it was put on top as we scroll back
+              while (messageTable.previousSibling) {
+                div.removeChild(messageTable.previousSibling);
               }
-              for (ele = messageTable.firstChild; ele; ele = ele.nextSibling) {
-                if (ele.AJAR_subject) {
-                  // Refresh thumbs up etc
-                  widgets.refreshTree(ele); // Things inside may have changed too
+            }
+            var extr = backwards ? earliest : latest;
+            extr.messageTable = messageTable;
+          };
+          _insertPreviousMessages = function _insertPreviousMessag2() {
+            _insertPreviousMessages = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(backwards) {
+              var extremity, date, live, todayDoc, doc, newMessageTable;
+              return _regenerator["default"].wrap(function _callee5$(_context5) {
+                while (1) switch (_context5.prev = _context5.next) {
+                  case 0:
+                    extremity = backwards ? earliest : latest;
+                    date = extremity.messageTable.date; // day in mssecs
+                    _context5.next = 4;
+                    return dateFolder.loadPrevious(date, backwards);
+                  case 4:
+                    date = _context5.sent;
+                    // backwards
+                    debug.log("insertPreviousMessages: from ".concat(backwards ? 'backwards' : 'forwards', " loadPrevious: ").concat(date));
+                    if (!(!date && !backwards && !liveMessageTable)) {
+                      _context5.next = 9;
+                      break;
+                    }
+                    _context5.next = 9;
+                    return appendCurrentMessages();
+                  case 9:
+                    if (date) {
+                      _context5.next = 11;
+                      break;
+                    }
+                    return _context5.abrupt("return", true);
+                  case 11:
+                    // done
+                    live = false;
+                    if (!backwards) {
+                      todayDoc = dateFolder.leafDocumentFromDate(new Date());
+                      doc = dateFolder.leafDocumentFromDate(date);
+                      live = doc.sameTerm(todayDoc); // Is this todays?
+                    }
+                    _context5.next = 15;
+                    return createMessageTable(date, live);
+                  case 15:
+                    newMessageTable = _context5.sent;
+                    extremity.messageTable = newMessageTable; // move pointer to earliest
+                    if (backwards ? newestFirst : !newestFirst) {
+                      // put on bottom or top
+                      div.appendChild(newMessageTable);
+                    } else {
+                      // put on top as we scroll back
+                      div.insertBefore(newMessageTable, div.firstChild);
+                    }
+                    return _context5.abrupt("return", live);
+                  case 19:
+                  case "end":
+                    return _context5.stop();
                 }
+              }, _callee5);
+            }));
+            return _insertPreviousMessages.apply(this, arguments);
+          };
+          insertPreviousMessages = function _insertPreviousMessag(_x5) {
+            return _insertPreviousMessages.apply(this, arguments);
+          };
+          addMessage = function _addMessage(message, messageTable) {
+            var latest = (0, _chatLogic.mostRecentVersion)(message);
+            // const content = store.any(latest, ns.sioc('content'))
+            if ((0, _chatLogic.isDeleted)(latest) && !options.showDeletedMessages) {
+              return; // ignore deleted messaged -- @@ could also leave a placeholder
+            }
+
+            insertMessageIntoTable(channelObject, messageTable, message, messageTable.fresh, options, userContext); // fresh from elsewhere
+          };
+          syncMessages = function _syncMessages(about, messageTable) {
+            var displayed = {};
+            var ele, ele2;
+            for (ele = messageTable.firstChild; ele; ele = ele.nextSibling) {
+              if (ele.AJAR_subject) {
+                displayed[ele.AJAR_subject.uri] = true;
               }
-            };
+            }
+            var messages = _solidLogic.store.statementsMatching(about, ns.wf('message'), null, messageTable.chatDocument).map(function (st) {
+              return st.object;
+            });
+            var stored = {};
+            messages.forEach(function (m) {
+              stored[m.uri] = true;
+              if (!displayed[m.uri]) {
+                addMessage(m, messageTable);
+              }
+            });
 
-            // Body of main function
+            // eslint-disable-next-line space-in-parens
+            for (ele = messageTable.firstChild; ele;) {
+              ele2 = ele.nextSibling;
+              if (ele.AJAR_subject && !stored[ele.AJAR_subject.uri]) {
+                messageTable.removeChild(ele);
+              }
+              ele = ele2;
+            }
+            for (ele = messageTable.firstChild; ele; ele = ele.nextSibling) {
+              if (ele.AJAR_subject) {
+                // Refresh thumbs up etc
+                widgets.refreshTree(ele); // Things inside may have changed too
+              }
+            }
+          };
 
-            options = options || {};
-            options.authorDateOnLeft = false; // @@ make a user optiosn
-            newestFirst = options.newestFirst === '1' || options.newestFirst === true; // hack for now
-            channelObject = new _chatLogic.ChatChannel(chatChannel, options);
-            dateFolder = channelObject.dateFolder;
-            div = dom.createElement('div');
-            channelObject.div = div;
-            statusArea = div.appendChild(dom.createElement('div'));
-            userContext = {
-              dom: dom,
-              statusArea: statusArea,
-              div: statusArea
-            }; // logged on state, pointers to user's stuff
-            // const messageTable = dom.createElement('table') // @@ check does this go in renderMessageTable
-            earliest = {
-              messageTable: null
-            }; // Stuff about each end of the loaded days
-            latest = {
-              messageTable: null
-            };
-            lock = false;
-            _context12.next = 30;
-            return loadInitialContent();
-          case 30:
-            return _context12.abrupt("return", div);
-          case 31:
-          case "end":
-            return _context12.stop();
-        }
+          // Body of main function
+
+          options = options || {};
+          options.authorDateOnLeft = false; // @@ make a user optiosn
+          newestFirst = options.newestFirst === '1' || options.newestFirst === true; // hack for now
+          channelObject = new _chatLogic.ChatChannel(chatChannel, options);
+          dateFolder = channelObject.dateFolder;
+          div = dom.createElement('div');
+          channelObject.div = div;
+          statusArea = div.appendChild(dom.createElement('div'));
+          userContext = {
+            dom: dom,
+            statusArea: statusArea,
+            div: statusArea
+          }; // logged on state, pointers to user's stuff
+          // const messageTable = dom.createElement('table') // @@ check does this go in renderMessageTable
+          earliest = {
+            messageTable: null
+          }; // Stuff about each end of the loaded days
+          latest = {
+            messageTable: null
+          };
+          lock = false;
+          _context12.next = 30;
+          return loadInitialContent();
+        case 30:
+          return _context12.abrupt("return", div);
+        case 31:
+        case "end":
+          return _context12.stop();
       }
     }, _callee12);
   }));
@@ -4107,7 +4039,7 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var dom = window.document;
 var messageBodyStyle = style.messageBodyStyle;
 var label = utils.label;
@@ -4305,15 +4237,13 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
   function _handleFieldInput() {
     _handleFieldInput = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(_event) {
       return _regenerator["default"].wrap(function _callee5$(_context6) {
-        while (1) {
-          switch (_context6.prev = _context6.next) {
-            case 0:
-              _context6.next = 2;
-              return sendMessage(field.value, true);
-            case 2:
-            case "end":
-              return _context6.stop();
-          }
+        while (1) switch (_context6.prev = _context6.next) {
+          case 0:
+            _context6.next = 2;
+            return sendMessage(field.value, true);
+          case 2:
+          case "end":
+            return _context6.stop();
         }
       }, _callee5);
     }));
@@ -4327,64 +4257,62 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
     _sendMessage = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(text, fromMainField) {
       var sendComplete, message, statusArea;
       return _regenerator["default"].wrap(function _callee6$(_context7) {
-        while (1) {
-          switch (_context7.prev = _context7.next) {
-            case 0:
-              sendComplete = function _sendComplete(message, _text2) {
-                // const dateStamp = store.any(message, ns.dct('created'), null, message.doc())
-                // const content = $rdf.literal(text2)
-                (0, _infinite.insertMessageIntoTable)(channelObject, messageTable, message, false, options, userContext); // not green
+        while (1) switch (_context7.prev = _context7.next) {
+          case 0:
+            sendComplete = function _sendComplete(message, _text2) {
+              // const dateStamp = store.any(message, ns.dct('created'), null, message.doc())
+              // const content = $rdf.literal(text2)
+              (0, _infinite.insertMessageIntoTable)(channelObject, messageTable, message, false, options, userContext); // not green
 
-                if (originalMessage) {
-                  // editing another message
-                  var oldRow = messageEditor.originalRow;
-                  // oldRow.style.display = '' // restore read-only version, re-attack
-                  if (oldRow.parentNode) {
-                    oldRow.parentNode.removeChild(oldRow); // No longer needed old version
-                  } else {
-                    debug.warn('No parentNode on old message ' + oldRow.textContent);
-                    oldRow.style.backgroundColor = '#fee';
-                    oldRow.style.visibility = 'hidden'; // @@ FIX THIS AND REMOVE FROM DOM INSTEAD
-                  }
-
-                  messageEditor.parentNode.removeChild(messageEditor); // no longer need editor
+              if (originalMessage) {
+                // editing another message
+                var oldRow = messageEditor.originalRow;
+                // oldRow.style.display = '' // restore read-only version, re-attack
+                if (oldRow.parentNode) {
+                  oldRow.parentNode.removeChild(oldRow); // No longer needed old version
                 } else {
-                  if (fromMainField) {
-                    field.value = ''; // clear from out for reuse
-                    field.setAttribute('style', messageBodyStyle);
-                    field.disabled = false;
-                    field.scrollIntoView(options.newestFirst); // allign bottom (top)
-                    field.focus(); // Start typing next line immediately
-                    field.select();
-                  }
+                  debug.warn('No parentNode on old message ' + oldRow.textContent);
+                  oldRow.style.backgroundColor = '#fee';
+                  oldRow.style.visibility = 'hidden'; // @@ FIX THIS AND REMOVE FROM DOM INSTEAD
                 }
-                // await channelObject.div.refresh() // Add new day if nec  @@ add back
-              };
 
-              // const me = authn.currentUser() // Must be logged on or wuld have got login button
-              if (fromMainField) {
-                field.setAttribute('style', messageBodyStyle + 'color: #bbb;'); // pendingedit
-                field.disabled = true;
+                messageEditor.parentNode.removeChild(messageEditor); // no longer need editor
+              } else {
+                if (fromMainField) {
+                  field.value = ''; // clear from out for reuse
+                  field.setAttribute('style', messageBodyStyle);
+                  field.disabled = false;
+                  field.scrollIntoView(options.newestFirst); // allign bottom (top)
+                  field.focus(); // Start typing next line immediately
+                  field.select();
+                }
               }
-              _context7.prev = 2;
-              _context7.next = 5;
-              return channelObject.updateMessage(text, originalMessage);
-            case 5:
-              message = _context7.sent;
-              _context7.next = 13;
-              break;
-            case 8:
-              _context7.prev = 8;
-              _context7.t0 = _context7["catch"](2);
-              statusArea = userContext.statusArea || messageEditor;
-              statusArea.appendChild(widgets.errorMessageBlock(dom, 'Error writing message: ' + _context7.t0));
-              return _context7.abrupt("return");
-            case 13:
-              sendComplete(message, text);
-            case 14:
-            case "end":
-              return _context7.stop();
-          }
+              // await channelObject.div.refresh() // Add new day if nec  @@ add back
+            };
+
+            // const me = authn.currentUser() // Must be logged on or wuld have got login button
+            if (fromMainField) {
+              field.setAttribute('style', messageBodyStyle + 'color: #bbb;'); // pendingedit
+              field.disabled = true;
+            }
+            _context7.prev = 2;
+            _context7.next = 5;
+            return channelObject.updateMessage(text, originalMessage);
+          case 5:
+            message = _context7.sent;
+            _context7.next = 13;
+            break;
+          case 8:
+            _context7.prev = 8;
+            _context7.t0 = _context7["catch"](2);
+            statusArea = userContext.statusArea || messageEditor;
+            statusArea.appendChild(widgets.errorMessageBlock(dom, 'Error writing message: ' + _context7.t0));
+            return _context7.abrupt("return");
+          case 13:
+            sendComplete(message, text);
+          case 14:
+          case "end":
+            return _context7.stop();
         }
       }, _callee6, null, [[2, 8]]);
     }));
@@ -4395,15 +4323,13 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
     widgets.uploadFiles(_solidLogic.store.fetcher, files, base + 'Files', base + 'Pictures', /*#__PURE__*/function () {
       var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(theFile, destURI) {
         return _regenerator["default"].wrap(function _callee$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return sendMessage(destURI);
-              case 2:
-              case "end":
-                return _context2.stop();
-            }
+          while (1) switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.next = 2;
+              return sendMessage(destURI);
+            case 2:
+            case "end":
+              return _context2.stop();
           }
         }, _callee);
       }));
@@ -4418,38 +4344,36 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
     var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(uris) {
       var _iterator, _step, uri;
       return _regenerator["default"].wrap(function _callee2$(_context3) {
-        while (1) {
-          switch (_context3.prev = _context3.next) {
-            case 0:
-              _iterator = _createForOfIteratorHelper(uris);
-              _context3.prev = 1;
-              _iterator.s();
-            case 3:
-              if ((_step = _iterator.n()).done) {
-                _context3.next = 9;
-                break;
-              }
-              uri = _step.value;
-              _context3.next = 7;
-              return sendMessage(uri);
-            case 7:
-              _context3.next = 3;
+        while (1) switch (_context3.prev = _context3.next) {
+          case 0:
+            _iterator = _createForOfIteratorHelper(uris);
+            _context3.prev = 1;
+            _iterator.s();
+          case 3:
+            if ((_step = _iterator.n()).done) {
+              _context3.next = 9;
               break;
-            case 9:
-              _context3.next = 14;
-              break;
-            case 11:
-              _context3.prev = 11;
-              _context3.t0 = _context3["catch"](1);
-              _iterator.e(_context3.t0);
-            case 14:
-              _context3.prev = 14;
-              _iterator.f();
-              return _context3.finish(14);
-            case 17:
-            case "end":
-              return _context3.stop();
-          }
+            }
+            uri = _step.value;
+            _context3.next = 7;
+            return sendMessage(uri);
+          case 7:
+            _context3.next = 3;
+            break;
+          case 9:
+            _context3.next = 14;
+            break;
+          case 11:
+            _context3.prev = 11;
+            _context3.t0 = _context3["catch"](1);
+            _iterator.e(_context3.t0);
+          case 14:
+            _context3.prev = 14;
+            _iterator.f();
+            return _context3.finish(14);
+          case 17:
+          case "end":
+            return _context3.stop();
         }
       }, _callee2, null, [[1, 11, 14, 17]]);
     }));
@@ -4470,19 +4394,17 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
     function _tookPicture() {
       _tookPicture = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(imageDoc) {
         return _regenerator["default"].wrap(function _callee4$(_context5) {
-          while (1) {
-            switch (_context5.prev = _context5.next) {
-              case 0:
-                if (!imageDoc) {
-                  _context5.next = 3;
-                  break;
-                }
+          while (1) switch (_context5.prev = _context5.next) {
+            case 0:
+              if (!imageDoc) {
                 _context5.next = 3;
-                return sendMessage(imageDoc.uri);
-              case 3:
-              case "end":
-                return _context5.stop();
-            }
+                break;
+              }
+              _context5.next = 3;
+              return sendMessage(imageDoc.uri);
+            case 3:
+            case "end":
+              return _context5.stop();
           }
         }, _callee4);
       }));
@@ -4525,23 +4447,21 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
     field.addEventListener('keydown', /*#__PURE__*/function () {
       var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(e) {
         return _regenerator["default"].wrap(function _callee3$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                if (!(e.code === 'Enter')) {
-                  _context4.next = 4;
-                  break;
-                }
-                if (!(!e.shiftKey && !options.shiftEnterSendsMessage || e.shiftKey && options.shiftEnterSendsMessage)) {
-                  _context4.next = 4;
-                  break;
-                }
+          while (1) switch (_context4.prev = _context4.next) {
+            case 0:
+              if (!(e.code === 'Enter')) {
                 _context4.next = 4;
-                return handleFieldInput(e);
-              case 4:
-              case "end":
-                return _context4.stop();
-            }
+                break;
+              }
+              if (!(!e.shiftKey && !options.shiftEnterSendsMessage || e.shiftKey && options.shiftEnterSendsMessage)) {
+                _context4.next = 4;
+                break;
+              }
+              _context4.next = 4;
+              return handleFieldInput(e);
+            case 4:
+            case "end":
+              return _context4.stop();
           }
         }, _callee3);
       }));
@@ -4746,48 +4666,46 @@ function messageToolbar(message, messageRow, userContext, channelObject) {
     _deleteMessage = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2() {
       var author, msg, area;
       return _regenerator["default"].wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              author = _solidLogic.store.any(message, ns.foaf('maker'));
-              if (me) {
-                _context2.next = 5;
-                break;
-              }
-              alert('You can\'t delete the message, you are not logged in.');
-              _context2.next = 22;
+        while (1) switch (_context2.prev = _context2.next) {
+          case 0:
+            author = _solidLogic.store.any(message, ns.foaf('maker'));
+            if (me) {
+              _context2.next = 5;
               break;
-            case 5:
-              if (!me.sameTerm(author)) {
-                _context2.next = 21;
-                break;
-              }
-              _context2.prev = 6;
-              _context2.next = 9;
-              return channelObject.deleteMessage(message);
-            case 9:
-              _context2.next = 18;
+            }
+            alert('You can\'t delete the message, you are not logged in.');
+            _context2.next = 22;
+            break;
+          case 5:
+            if (!me.sameTerm(author)) {
+              _context2.next = 21;
               break;
-            case 11:
-              _context2.prev = 11;
-              _context2.t0 = _context2["catch"](6);
-              msg = 'Error deleting messaage ' + _context2.t0;
-              debug.warn(msg);
-              alert(msg);
-              area = userContext.statusArea || messageRow.parentNode;
-              area.appendChild(widgets.errorMessageBlock(dom, msg));
-            case 18:
-              messageRow.parentNode.removeChild(messageRow);
-              _context2.next = 22;
-              break;
-            case 21:
-              alert('You can\'t delete the message, you are not logged in as the author, ' + author);
-            case 22:
-              closeToolbar();
-            case 23:
-            case "end":
-              return _context2.stop();
-          }
+            }
+            _context2.prev = 6;
+            _context2.next = 9;
+            return channelObject.deleteMessage(message);
+          case 9:
+            _context2.next = 18;
+            break;
+          case 11:
+            _context2.prev = 11;
+            _context2.t0 = _context2["catch"](6);
+            msg = 'Error deleting messaage ' + _context2.t0;
+            debug.warn(msg);
+            alert(msg);
+            area = userContext.statusArea || messageRow.parentNode;
+            area.appendChild(widgets.errorMessageBlock(dom, msg));
+          case 18:
+            messageRow.parentNode.removeChild(messageRow);
+            _context2.next = 22;
+            break;
+          case 21:
+            alert('You can\'t delete the message, you are not logged in as the author, ' + author);
+          case 22:
+            closeToolbar();
+          case 23:
+          case "end":
+            return _context2.stop();
         }
       }, _callee2, null, [[6, 11]]);
     }));
@@ -4799,17 +4717,15 @@ function messageToolbar(message, messageRow, userContext, channelObject) {
   function _editMessage() {
     _editMessage = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(messageRow) {
       return _regenerator["default"].wrap(function _callee3$(_context3) {
-        while (1) {
-          switch (_context3.prev = _context3.next) {
-            case 0:
-              if (me.value === _solidLogic.store.any(message, ns.foaf('maker')).value) {
-                closeToolbar(); // edit is a one-off action
-                (0, _message.switchToEditor)(messageRow, message, channelObject, userContext);
-              }
-            case 1:
-            case "end":
-              return _context3.stop();
-          }
+        while (1) switch (_context3.prev = _context3.next) {
+          case 0:
+            if (me.value === _solidLogic.store.any(message, ns.foaf('maker')).value) {
+              closeToolbar(); // edit is a one-off action
+              (0, _message.switchToEditor)(messageRow, message, channelObject, userContext);
+            }
+          case 1:
+          case "end":
+            return _context3.stop();
         }
       }, _callee3);
     }));
@@ -4827,15 +4743,13 @@ function messageToolbar(message, messageRow, userContext, channelObject) {
   function _deleteThingThen() {
     _deleteThingThen = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(x) {
       return _regenerator["default"].wrap(function _callee4$(_context4) {
-        while (1) {
-          switch (_context4.prev = _context4.next) {
-            case 0:
-              _context4.next = 2;
-              return _solidLogic.store.updater.update(_solidLogic.store.connectedStatements(x), []);
-            case 2:
-            case "end":
-              return _context4.stop();
-          }
+        while (1) switch (_context4.prev = _context4.next) {
+          case 0:
+            _context4.next = 2;
+            return _solidLogic.store.updater.update(_solidLogic.store.connectedStatements(x), []);
+          case 2:
+          case "end":
+            return _context4.stop();
         }
       }, _callee4);
     }));
@@ -4880,63 +4794,61 @@ function messageToolbar(message, messageRow, userContext, channelObject) {
       var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(_event) {
         var insertMe, dirty, i, a;
         return _regenerator["default"].wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                if (!action) {
-                  _context.next = 7;
-                  break;
-                }
-                _context.next = 3;
-                return deleteThingThen(action);
-              case 3:
-                action = null;
-                setColor();
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              if (!action) {
+                _context.next = 7;
+                break;
+              }
+              _context.next = 3;
+              return deleteThingThen(action);
+            case 3:
+              action = null;
+              setColor();
+              _context.next = 25;
+              break;
+            case 7:
+              // no action
+              action = widgets.newThing(doc);
+              insertMe = [rdf.st(action, ns.schema('agent'), context.me, doc), rdf.st(action, ns.rdf('type'), actionClass, doc), rdf.st(action, ns.schema('target'), target, doc)];
+              _context.next = 11;
+              return _solidLogic.store.updater.update([], insertMe);
+            case 11:
+              setColor();
+              if (!mutuallyExclusive) {
                 _context.next = 25;
                 break;
-              case 7:
-                // no action
-                action = widgets.newThing(doc);
-                insertMe = [rdf.st(action, ns.schema('agent'), context.me, doc), rdf.st(action, ns.rdf('type'), actionClass, doc), rdf.st(action, ns.schema('target'), target, doc)];
-                _context.next = 11;
-                return _solidLogic.store.updater.update([], insertMe);
-              case 11:
-                setColor();
-                if (!mutuallyExclusive) {
-                  _context.next = 25;
-                  break;
-                }
-                // Delete incompative sentiments
-                dirty = false;
-                i = 0;
-              case 15:
-                if (!(i < mutuallyExclusive.length)) {
-                  _context.next = 24;
-                  break;
-                }
-                a = existingAction(mutuallyExclusive[i]);
-                if (!a) {
-                  _context.next = 21;
-                  break;
-                }
-                _context.next = 20;
-                return deleteThingThen(a);
-              case 20:
-                // but how refresh? refreshTree the parent?
-                dirty = true;
-              case 21:
-                i++;
-                _context.next = 15;
+              }
+              // Delete incompative sentiments
+              dirty = false;
+              i = 0;
+            case 15:
+              if (!(i < mutuallyExclusive.length)) {
+                _context.next = 24;
                 break;
-              case 24:
-                if (dirty) {
-                  // widgets.refreshTree(button.parentNode) // requires them all to be immediate siblings
-                  widgets.refreshTree(messageRow); // requires them all to be immediate siblings
-                }
-              case 25:
-              case "end":
-                return _context.stop();
-            }
+              }
+              a = existingAction(mutuallyExclusive[i]);
+              if (!a) {
+                _context.next = 21;
+                break;
+              }
+              _context.next = 20;
+              return deleteThingThen(a);
+            case 20:
+              // but how refresh? refreshTree the parent?
+              dirty = true;
+            case 21:
+              i++;
+              _context.next = 15;
+              break;
+            case 24:
+              if (dirty) {
+                // widgets.refreshTree(button.parentNode) // requires them all to be immediate siblings
+                widgets.refreshTree(messageRow); // requires them all to be immediate siblings
+              }
+            case 25:
+            case "end":
+              return _context.stop();
           }
         }, _callee);
       }));
@@ -5369,28 +5281,26 @@ function _initFooter() {
   _initFooter = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(store, options) {
     var footer, pod, podOwner;
     return _regenerator["default"].wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            footer = document.getElementById('PageFooter');
-            if (footer) {
-              _context2.next = 3;
-              break;
-            }
-            return _context2.abrupt("return");
-          case 3:
-            pod = (0, _headerFooterHelpers.getPod)();
-            _context2.next = 6;
-            return (0, _headerFooterHelpers.getPodOwner)(pod, store);
-          case 6:
-            podOwner = _context2.sent;
-            rebuildFooter(footer, store, pod, podOwner, options)();
-            _solidLogic.authSession.onLogin(rebuildFooter(footer, store, pod, podOwner, options));
-            _solidLogic.authSession.onLogout(rebuildFooter(footer, store, pod, podOwner, options));
-          case 10:
-          case "end":
-            return _context2.stop();
-        }
+      while (1) switch (_context2.prev = _context2.next) {
+        case 0:
+          footer = document.getElementById('PageFooter');
+          if (footer) {
+            _context2.next = 3;
+            break;
+          }
+          return _context2.abrupt("return");
+        case 3:
+          pod = (0, _headerFooterHelpers.getPod)();
+          _context2.next = 6;
+          return (0, _headerFooterHelpers.getPodOwner)(pod, store);
+        case 6:
+          podOwner = _context2.sent;
+          rebuildFooter(footer, store, pod, podOwner, options)();
+          _solidLogic.authSession.onLogin(rebuildFooter(footer, store, pod, podOwner, options));
+          _solidLogic.authSession.onLogout(rebuildFooter(footer, store, pod, podOwner, options));
+        case 10:
+        case "end":
+          return _context2.stop();
       }
     }, _callee2);
   }));
@@ -5400,21 +5310,19 @@ function rebuildFooter(footer, store, pod, podOwner, options) {
   return /*#__PURE__*/(0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
     var user;
     return _regenerator["default"].wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            user = _solidLogic.authn.currentUser();
-            footer.innerHTML = '';
-            _context.t0 = footer;
-            _context.next = 5;
-            return createControllerInfoBlock(store, user, pod, podOwner, options);
-          case 5:
-            _context.t1 = _context.sent;
-            _context.t0.appendChild.call(_context.t0, _context.t1);
-          case 7:
-          case "end":
-            return _context.stop();
-        }
+      while (1) switch (_context.prev = _context.next) {
+        case 0:
+          user = _solidLogic.authn.currentUser();
+          footer.innerHTML = '';
+          _context.t0 = footer;
+          _context.next = 5;
+          return createControllerInfoBlock(store, user, pod, podOwner, options);
+        case 5:
+          _context.t1 = _context.sent;
+          _context.t0.appendChild.call(_context.t0, _context.t1);
+        case 7:
+        case "end":
+          return _context.stop();
       }
     }, _callee);
   }));
@@ -5566,24 +5474,22 @@ function _initHeader() {
   _initHeader = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(store, userMenuList, options) {
     var header, pod;
     return _regenerator["default"].wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            header = document.getElementById('PageHeader');
-            if (header) {
-              _context2.next = 3;
-              break;
-            }
-            return _context2.abrupt("return");
-          case 3:
-            pod = (0, _headerFooterHelpers.getPod)();
-            rebuildHeader(header, store, pod, userMenuList, options)();
-            _solidLogic.authSession.onLogout(rebuildHeader(header, store, pod, userMenuList, options));
-            _solidLogic.authSession.onLogin(rebuildHeader(header, store, pod, userMenuList, options));
-          case 7:
-          case "end":
-            return _context2.stop();
-        }
+      while (1) switch (_context2.prev = _context2.next) {
+        case 0:
+          header = document.getElementById('PageHeader');
+          if (header) {
+            _context2.next = 3;
+            break;
+          }
+          return _context2.abrupt("return");
+        case 3:
+          pod = (0, _headerFooterHelpers.getPod)();
+          rebuildHeader(header, store, pod, userMenuList, options)();
+          _solidLogic.authSession.onLogout(rebuildHeader(header, store, pod, userMenuList, options));
+          _solidLogic.authSession.onLogin(rebuildHeader(header, store, pod, userMenuList, options));
+        case 7:
+        case "end":
+          return _context2.stop();
       }
     }, _callee2);
   }));
@@ -5593,21 +5499,19 @@ function rebuildHeader(header, store, pod, userMenuList, options) {
   return /*#__PURE__*/(0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
     var user;
     return _regenerator["default"].wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            user = _solidLogic.authn.currentUser();
-            header.innerHTML = '';
-            _context.t0 = header;
-            _context.next = 5;
-            return createBanner(store, pod, user, userMenuList, options);
-          case 5:
-            _context.t1 = _context.sent;
-            _context.t0.appendChild.call(_context.t0, _context.t1);
-          case 7:
-          case "end":
-            return _context.stop();
-        }
+      while (1) switch (_context.prev = _context.next) {
+        case 0:
+          user = _solidLogic.authn.currentUser();
+          header.innerHTML = '';
+          _context.t0 = header;
+          _context.next = 5;
+          return createBanner(store, pod, user, userMenuList, options);
+        case 5:
+          _context.t1 = _context.sent;
+          _context.t0.appendChild.call(_context.t0, _context.t1);
+        case 7:
+        case "end":
+          return _context.stop();
       }
     }, _callee);
   }));
@@ -5625,48 +5529,46 @@ function _createBanner() {
   _createBanner = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(store, pod, user, userMenuList, options) {
     var podLink, image, userMenu, banner, leftSideOfHeader, helpMenu;
     return _regenerator["default"].wrap(function _callee3$(_context3) {
-      while (1) {
-        switch (_context3.prev = _context3.next) {
-          case 0:
-            podLink = document.createElement('a');
-            podLink.href = pod.uri;
-            (0, _headerFooterHelpers.addStyleClassToElement)(podLink, ['header-banner__link']);
-            image = document.createElement('img');
-            if (options) {
-              image.src = options.logo ? options.logo : DEFAUL_SOLID_ICON_URL;
-            }
-            (0, _headerFooterHelpers.addStyleClassToElement)(image, ['header-banner__icon']);
-            podLink.appendChild(image);
-            if (!user) {
-              _context3.next = 13;
-              break;
-            }
-            _context3.next = 10;
-            return createUserMenu(store, user, userMenuList);
-          case 10:
-            _context3.t0 = _context3.sent;
-            _context3.next = 14;
+      while (1) switch (_context3.prev = _context3.next) {
+        case 0:
+          podLink = document.createElement('a');
+          podLink.href = pod.uri;
+          (0, _headerFooterHelpers.addStyleClassToElement)(podLink, ['header-banner__link']);
+          image = document.createElement('img');
+          if (options) {
+            image.src = options.logo ? options.logo : DEFAUL_SOLID_ICON_URL;
+          }
+          (0, _headerFooterHelpers.addStyleClassToElement)(image, ['header-banner__icon']);
+          podLink.appendChild(image);
+          if (!user) {
+            _context3.next = 13;
             break;
-          case 13:
-            _context3.t0 = createLoginSignUpButtons();
-          case 14:
-            userMenu = _context3.t0;
-            banner = document.createElement('div');
-            (0, _headerFooterHelpers.addStyleClassToElement)(banner, ['header-banner']);
-            banner.appendChild(podLink);
-            leftSideOfHeader = document.createElement('div');
-            (0, _headerFooterHelpers.addStyleClassToElement)(leftSideOfHeader, ['header-banner__right-menu']);
-            leftSideOfHeader.appendChild(userMenu);
-            if (options && options.helpMenuList) {
-              helpMenu = createHelpMenu(options, options.helpMenuList);
-              leftSideOfHeader.appendChild(helpMenu);
-            }
-            banner.appendChild(leftSideOfHeader);
-            return _context3.abrupt("return", banner);
-          case 24:
-          case "end":
-            return _context3.stop();
-        }
+          }
+          _context3.next = 10;
+          return createUserMenu(store, user, userMenuList);
+        case 10:
+          _context3.t0 = _context3.sent;
+          _context3.next = 14;
+          break;
+        case 13:
+          _context3.t0 = createLoginSignUpButtons();
+        case 14:
+          userMenu = _context3.t0;
+          banner = document.createElement('div');
+          (0, _headerFooterHelpers.addStyleClassToElement)(banner, ['header-banner']);
+          banner.appendChild(podLink);
+          leftSideOfHeader = document.createElement('div');
+          (0, _headerFooterHelpers.addStyleClassToElement)(leftSideOfHeader, ['header-banner__right-menu']);
+          leftSideOfHeader.appendChild(userMenu);
+          if (options && options.helpMenuList) {
+            helpMenu = createHelpMenu(options, options.helpMenuList);
+            leftSideOfHeader.appendChild(helpMenu);
+          }
+          banner.appendChild(leftSideOfHeader);
+          return _context3.abrupt("return", banner);
+        case 24:
+        case "end":
+          return _context3.stop();
       }
     }, _callee3);
   }));
@@ -5762,68 +5664,66 @@ function _createUserMenu() {
   _createUserMenu = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(store, user, userMenuList) {
     var fetcher, loggedInMenuList, loggedInMenu, loggedInMenuTrigger, profileImg, loggedInMenuContainer, throttledMenuToggle, timer;
     return _regenerator["default"].wrap(function _callee4$(_context4) {
-      while (1) {
-        switch (_context4.prev = _context4.next) {
-          case 0:
-            fetcher = store.fetcher;
-            if (!fetcher) {
-              _context4.next = 4;
-              break;
-            }
+      while (1) switch (_context4.prev = _context4.next) {
+        case 0:
+          fetcher = store.fetcher;
+          if (!fetcher) {
             _context4.next = 4;
-            return fetcher.load(user);
-          case 4:
-            loggedInMenuList = document.createElement('ul');
-            (0, _headerFooterHelpers.addStyleClassToElement)(loggedInMenuList, ['header-user-menu__list']);
-            if (userMenuList) {
-              userMenuList.forEach(function (menuItem) {
-                var menuItemType = menuItem.url ? 'url' : 'onclick';
-                if (menuItemType === 'url') {
-                  loggedInMenuList.appendChild(createUserMenuItem(createUserMenuLink(menuItem.label, menuItem.url, menuItem.target)));
-                } else {
-                  loggedInMenuList.appendChild(createUserMenuItem(createUserMenuButton(menuItem.label, menuItem.onclick)));
-                }
-              });
-            }
-            loggedInMenu = document.createElement('nav');
-            (0, _headerFooterHelpers.addStyleClassToElement)(loggedInMenu, ['header-user-menu__navigation-menu']);
-            loggedInMenu.setAttribute('aria-hidden', 'true');
-            loggedInMenu.appendChild(loggedInMenuList);
-            loggedInMenuTrigger = document.createElement('button');
-            (0, _headerFooterHelpers.addStyleClassToElement)(loggedInMenuTrigger, ['header-user-menu__trigger']);
-            loggedInMenuTrigger.type = 'button';
-            profileImg = getProfileImg(store, user);
-            if (typeof profileImg === 'string') {
-              loggedInMenuTrigger.innerHTML = profileImg;
-            } else {
-              loggedInMenuTrigger.appendChild(profileImg);
-            }
-            loggedInMenuContainer = document.createElement('div');
-            (0, _headerFooterHelpers.addStyleClassToElement)(loggedInMenuContainer, ['header-banner__user-menu']);
-            (0, _headerFooterHelpers.addStyleClassToElement)(loggedInMenuContainer, ['header-user-menu']);
-            loggedInMenuContainer.appendChild(loggedInMenuTrigger);
-            loggedInMenuContainer.appendChild(loggedInMenu);
-            throttledMenuToggle = (0, _headerFooterHelpers.throttle)(function (event) {
-              return toggleMenu(event, loggedInMenuTrigger, loggedInMenu);
-            }, 50);
-            loggedInMenuTrigger.addEventListener('click', throttledMenuToggle);
+            break;
+          }
+          _context4.next = 4;
+          return fetcher.load(user);
+        case 4:
+          loggedInMenuList = document.createElement('ul');
+          (0, _headerFooterHelpers.addStyleClassToElement)(loggedInMenuList, ['header-user-menu__list']);
+          if (userMenuList) {
+            userMenuList.forEach(function (menuItem) {
+              var menuItemType = menuItem.url ? 'url' : 'onclick';
+              if (menuItemType === 'url') {
+                loggedInMenuList.appendChild(createUserMenuItem(createUserMenuLink(menuItem.label, menuItem.url, menuItem.target)));
+              } else {
+                loggedInMenuList.appendChild(createUserMenuItem(createUserMenuButton(menuItem.label, menuItem.onclick)));
+              }
+            });
+          }
+          loggedInMenu = document.createElement('nav');
+          (0, _headerFooterHelpers.addStyleClassToElement)(loggedInMenu, ['header-user-menu__navigation-menu']);
+          loggedInMenu.setAttribute('aria-hidden', 'true');
+          loggedInMenu.appendChild(loggedInMenuList);
+          loggedInMenuTrigger = document.createElement('button');
+          (0, _headerFooterHelpers.addStyleClassToElement)(loggedInMenuTrigger, ['header-user-menu__trigger']);
+          loggedInMenuTrigger.type = 'button';
+          profileImg = getProfileImg(store, user);
+          if (typeof profileImg === 'string') {
+            loggedInMenuTrigger.innerHTML = profileImg;
+          } else {
+            loggedInMenuTrigger.appendChild(profileImg);
+          }
+          loggedInMenuContainer = document.createElement('div');
+          (0, _headerFooterHelpers.addStyleClassToElement)(loggedInMenuContainer, ['header-banner__user-menu']);
+          (0, _headerFooterHelpers.addStyleClassToElement)(loggedInMenuContainer, ['header-user-menu']);
+          loggedInMenuContainer.appendChild(loggedInMenuTrigger);
+          loggedInMenuContainer.appendChild(loggedInMenu);
+          throttledMenuToggle = (0, _headerFooterHelpers.throttle)(function (event) {
+            return toggleMenu(event, loggedInMenuTrigger, loggedInMenu);
+          }, 50);
+          loggedInMenuTrigger.addEventListener('click', throttledMenuToggle);
+          timer = setTimeout(function () {
+            return null;
+          }, 0);
+          loggedInMenuContainer.addEventListener('mouseover', function (event) {
+            clearTimeout(timer);
+            throttledMenuToggle(event);
+          });
+          loggedInMenuContainer.addEventListener('mouseout', function (event) {
             timer = setTimeout(function () {
-              return null;
-            }, 0);
-            loggedInMenuContainer.addEventListener('mouseover', function (event) {
-              clearTimeout(timer);
-              throttledMenuToggle(event);
-            });
-            loggedInMenuContainer.addEventListener('mouseout', function (event) {
-              timer = setTimeout(function () {
-                return throttledMenuToggle(event);
-              }, 200);
-            });
-            return _context4.abrupt("return", loggedInMenuContainer);
-          case 27:
-          case "end":
-            return _context4.stop();
-        }
+              return throttledMenuToggle(event);
+            }, 200);
+          });
+          return _context4.abrupt("return", loggedInMenuContainer);
+        case 27:
+        case "end":
+          return _context4.stop();
       }
     }, _callee4);
   }));
@@ -6636,7 +6536,7 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var store = _solidLogic.solidLogicSingleton.store;
 var _solidLogicSingleton$ = _solidLogic.solidLogicSingleton.profile,
   loadPreferences = _solidLogicSingleton$.loadPreferences,
@@ -6704,102 +6604,100 @@ function _ensureLoadedPreferences() {
   _ensureLoadedPreferences = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(context) {
     var statusArea, progressDisplay, complain, preferencesFile, m2;
     return _regenerator["default"].wrap(function _callee4$(_context4) {
-      while (1) {
-        switch (_context4.prev = _context4.next) {
-          case 0:
-            complain = function _complain(message) {
-              message = "ensureLoadedPreferences: ".concat(message);
-              if (statusArea) {
-                // statusArea.innerHTML = ''
-                statusArea.appendChild(widgets.errorMessageBlock(context.dom, message));
-              }
-              debug.log(message);
-              // reject(new Error(message))
-            };
-            if (!context.preferencesFile) {
-              _context4.next = 3;
-              break;
+      while (1) switch (_context4.prev = _context4.next) {
+        case 0:
+          complain = function _complain(message) {
+            message = "ensureLoadedPreferences: ".concat(message);
+            if (statusArea) {
+              // statusArea.innerHTML = ''
+              statusArea.appendChild(widgets.errorMessageBlock(context.dom, message));
             }
-            return _context4.abrupt("return", Promise.resolve(context));
-          case 3:
-            // already done
-            statusArea = context.statusArea || context.div || null;
-            _context4.prev = 4;
-            _context4.next = 7;
-            return ensureLoadedProfile(context);
-          case 7:
-            context = _context4.sent;
-            _context4.next = 10;
-            return loadPreferences(context.me);
-          case 10:
-            preferencesFile = _context4.sent;
-            if (progressDisplay) {
-              progressDisplay.parentNode.removeChild(progressDisplay);
-            }
-            context.preferencesFile = preferencesFile;
-            _context4.next = 51;
+            debug.log(message);
+            // reject(new Error(message))
+          };
+          if (!context.preferencesFile) {
+            _context4.next = 3;
             break;
-          case 15:
-            _context4.prev = 15;
-            _context4.t0 = _context4["catch"](4);
-            if (!(_context4.t0 instanceof _solidLogic.UnauthorizedError)) {
-              _context4.next = 22;
-              break;
-            }
-            m2 = 'Ooops - you are not authenticated (properly logged in) to for me to read your preference file.  Try loggin out and logging in?';
-            (0, _log.alert)(m2);
-            _context4.next = 51;
+          }
+          return _context4.abrupt("return", Promise.resolve(context));
+        case 3:
+          // already done
+          statusArea = context.statusArea || context.div || null;
+          _context4.prev = 4;
+          _context4.next = 7;
+          return ensureLoadedProfile(context);
+        case 7:
+          context = _context4.sent;
+          _context4.next = 10;
+          return loadPreferences(context.me);
+        case 10:
+          preferencesFile = _context4.sent;
+          if (progressDisplay) {
+            progressDisplay.parentNode.removeChild(progressDisplay);
+          }
+          context.preferencesFile = preferencesFile;
+          _context4.next = 51;
+          break;
+        case 15:
+          _context4.prev = 15;
+          _context4.t0 = _context4["catch"](4);
+          if (!(_context4.t0 instanceof _solidLogic.UnauthorizedError)) {
+            _context4.next = 22;
             break;
-          case 22:
-            if (!(_context4.t0 instanceof _solidLogic.CrossOriginForbiddenError)) {
-              _context4.next = 28;
-              break;
-            }
-            m2 = "Unauthorized: Assuming preference file blocked for origin ".concat(window.location.origin);
-            context.preferencesFileError = m2;
-            return _context4.abrupt("return", context);
-          case 28:
-            if (!(_context4.t0 instanceof _solidLogic.SameOriginForbiddenError)) {
-              _context4.next = 34;
-              break;
-            }
-            m2 = 'You are not authorized to read your preference file. This may be because you are using an untrusted web app.';
-            debug.warn(m2);
-            return _context4.abrupt("return", context);
-          case 34:
-            if (!(_context4.t0 instanceof _solidLogic.NotEditableError)) {
-              _context4.next = 40;
-              break;
-            }
-            m2 = 'You are not authorized to edit your preference file. This may be because you are using an untrusted web app.';
-            debug.warn(m2);
-            return _context4.abrupt("return", context);
-          case 40:
-            if (!(_context4.t0 instanceof _solidLogic.WebOperationError)) {
-              _context4.next = 45;
-              break;
-            }
-            m2 = 'You are not authorized to edit your preference file. This may be because you are using an untrusted web app.';
-            debug.warn(m2);
-            _context4.next = 51;
+          }
+          m2 = 'Ooops - you are not authenticated (properly logged in) to for me to read your preference file.  Try loggin out and logging in?';
+          (0, _log.alert)(m2);
+          _context4.next = 51;
+          break;
+        case 22:
+          if (!(_context4.t0 instanceof _solidLogic.CrossOriginForbiddenError)) {
+            _context4.next = 28;
             break;
-          case 45:
-            if (!(_context4.t0 instanceof _solidLogic.FetchError)) {
-              _context4.next = 50;
-              break;
-            }
-            m2 = "Strange: Error ".concat(_context4.t0.status, " trying to read your preference file.").concat(_context4.t0.message);
-            (0, _log.alert)(m2);
-            _context4.next = 51;
+          }
+          m2 = "Unauthorized: Assuming preference file blocked for origin ".concat(window.location.origin);
+          context.preferencesFileError = m2;
+          return _context4.abrupt("return", context);
+        case 28:
+          if (!(_context4.t0 instanceof _solidLogic.SameOriginForbiddenError)) {
+            _context4.next = 34;
             break;
-          case 50:
-            throw new Error("(via loadPrefs) ".concat(_context4.t0));
-          case 51:
-            return _context4.abrupt("return", context);
-          case 52:
-          case "end":
-            return _context4.stop();
-        }
+          }
+          m2 = 'You are not authorized to read your preference file. This may be because you are using an untrusted web app.';
+          debug.warn(m2);
+          return _context4.abrupt("return", context);
+        case 34:
+          if (!(_context4.t0 instanceof _solidLogic.NotEditableError)) {
+            _context4.next = 40;
+            break;
+          }
+          m2 = 'You are not authorized to edit your preference file. This may be because you are using an untrusted web app.';
+          debug.warn(m2);
+          return _context4.abrupt("return", context);
+        case 40:
+          if (!(_context4.t0 instanceof _solidLogic.WebOperationError)) {
+            _context4.next = 45;
+            break;
+          }
+          m2 = 'You are not authorized to edit your preference file. This may be because you are using an untrusted web app.';
+          debug.warn(m2);
+          _context4.next = 51;
+          break;
+        case 45:
+          if (!(_context4.t0 instanceof _solidLogic.FetchError)) {
+            _context4.next = 50;
+            break;
+          }
+          m2 = "Strange: Error ".concat(_context4.t0.status, " trying to read your preference file.").concat(_context4.t0.message);
+          (0, _log.alert)(m2);
+          _context4.next = 51;
+          break;
+        case 50:
+          throw new Error("(via loadPrefs) ".concat(_context4.t0));
+        case 51:
+          return _context4.abrupt("return", context);
+        case 52:
+        case "end":
+          return _context4.stop();
       }
     }, _callee4, null, [[4, 15]]);
   }));
@@ -6817,45 +6715,43 @@ function _ensureLoadedProfile() {
   _ensureLoadedProfile = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(context) {
     var logInContext;
     return _regenerator["default"].wrap(function _callee5$(_context5) {
-      while (1) {
-        switch (_context5.prev = _context5.next) {
-          case 0:
-            if (!context.publicProfile) {
-              _context5.next = 2;
-              break;
-            }
-            return _context5.abrupt("return", context);
-          case 2:
-            _context5.prev = 2;
-            _context5.next = 5;
-            return ensureLoggedIn(context);
-          case 5:
-            logInContext = _context5.sent;
-            if (logInContext.me) {
-              _context5.next = 8;
-              break;
-            }
-            throw new Error('Could not log in');
-          case 8:
-            _context5.next = 10;
-            return loadProfile(logInContext.me);
-          case 10:
-            context.publicProfile = _context5.sent;
-            _context5.next = 17;
+      while (1) switch (_context5.prev = _context5.next) {
+        case 0:
+          if (!context.publicProfile) {
+            _context5.next = 2;
             break;
-          case 13:
-            _context5.prev = 13;
-            _context5.t0 = _context5["catch"](2);
-            if (context.div && context.dom) {
-              context.div.appendChild(widgets.errorMessageBlock(context.dom, _context5.t0.message));
-            }
-            throw new Error("Can't log in: ".concat(_context5.t0));
-          case 17:
-            return _context5.abrupt("return", context);
-          case 18:
-          case "end":
-            return _context5.stop();
-        }
+          }
+          return _context5.abrupt("return", context);
+        case 2:
+          _context5.prev = 2;
+          _context5.next = 5;
+          return ensureLoggedIn(context);
+        case 5:
+          logInContext = _context5.sent;
+          if (logInContext.me) {
+            _context5.next = 8;
+            break;
+          }
+          throw new Error('Could not log in');
+        case 8:
+          _context5.next = 10;
+          return loadProfile(logInContext.me);
+        case 10:
+          context.publicProfile = _context5.sent;
+          _context5.next = 17;
+          break;
+        case 13:
+          _context5.prev = 13;
+          _context5.t0 = _context5["catch"](2);
+          if (context.div && context.dom) {
+            context.div.appendChild(widgets.errorMessageBlock(context.dom, _context5.t0.message));
+          }
+          throw new Error("Can't log in: ".concat(_context5.t0));
+        case 17:
+          return _context5.abrupt("return", context);
+        case 18:
+        case "end":
+          return _context5.stop();
       }
     }, _callee5, null, [[2, 13]]);
   }));
@@ -6868,41 +6764,39 @@ function _findAppInstances() {
   _findAppInstances = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(context, theClass, isPublic) {
     var items;
     return _regenerator["default"].wrap(function _callee6$(_context6) {
-      while (1) {
-        switch (_context6.prev = _context6.next) {
-          case 0:
-            if (!context.me) {
-              _context6.next = 6;
-              break;
-            }
-            _context6.next = 3;
-            return getScopedAppInstances(theClass, context.me);
-          case 3:
-            _context6.t0 = _context6.sent;
-            _context6.next = 7;
+      while (1) switch (_context6.prev = _context6.next) {
+        case 0:
+          if (!context.me) {
+            _context6.next = 6;
             break;
-          case 6:
-            _context6.t0 = [];
-          case 7:
-            items = _context6.t0;
-            if (isPublic === true) {
-              // old API - not recommended!
-              items = items.filter(function (item) {
-                return item.scope.label === 'public';
-              });
-            } else if (isPublic === false) {
-              items = items.filter(function (item) {
-                return item.scope.label === 'private';
-              });
-            }
-            context.instances = items.map(function (item) {
-              return item.instance;
+          }
+          _context6.next = 3;
+          return getScopedAppInstances(theClass, context.me);
+        case 3:
+          _context6.t0 = _context6.sent;
+          _context6.next = 7;
+          break;
+        case 6:
+          _context6.t0 = [];
+        case 7:
+          items = _context6.t0;
+          if (isPublic === true) {
+            // old API - not recommended!
+            items = items.filter(function (item) {
+              return item.scope.label === 'public';
             });
-            return _context6.abrupt("return", context);
-          case 11:
-          case "end":
-            return _context6.stop();
-        }
+          } else if (isPublic === false) {
+            items = items.filter(function (item) {
+              return item.scope.label === 'private';
+            });
+          }
+          context.instances = items.map(function (item) {
+            return item.instance;
+          });
+          return _context6.abrupt("return", context);
+        case 11:
+        case "end":
+          return _context6.stop();
       }
     }, _callee6);
   }));
@@ -6923,80 +6817,78 @@ function _registrationControl() {
   _registrationControl = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7(context, instance, theClass) {
     var registrationStatements, renderScopeCheckbox, dom, box, me, scopes, msg, tbody, form, _iterator, _step, scope, row;
     return _regenerator["default"].wrap(function _callee7$(_context7) {
-      while (1) {
-        switch (_context7.prev = _context7.next) {
-          case 0:
-            renderScopeCheckbox = function _renderScopeCheckbox(scope) {
-              var statements = registrationStatements(scope.index);
-              var name = scopeLabel(context, scope);
-              var label = "".concat(name, " link to this ").concat(context.noun);
-              return widgets.buildCheckboxForm(context.dom, _solidLogic.solidLogicSingleton.store, label, null, statements, form, scope.index);
-            };
-            registrationStatements = function _registrationStatemen(index) {
-              var registrations = getRegistrations(instance, theClass);
-              var reg = registrations.length ? registrations[0] : widgets.newThing(index);
-              return [(0, _rdflib.st)(reg, ns.solid('instance'), instance, index), (0, _rdflib.st)(reg, ns.solid('forClass'), theClass, index)];
-            };
-            /// / body of registrationControl
-            dom = context.dom;
-            if (!(!dom || !context.div)) {
-              _context7.next = 5;
-              break;
-            }
-            throw new Error('registrationControl: need dom and div');
-          case 5:
-            box = dom.createElement('div');
-            context.div.appendChild(box);
-            context.me = _solidLogic.authn.currentUser(); // @@
-            me = context.me;
-            if (me) {
-              _context7.next = 12;
-              break;
-            }
-            box.innerHTML = '<p style="margin:2em;">(Log in to save a link to this)</p>';
-            return _context7.abrupt("return", context);
-          case 12:
-            _context7.prev = 12;
-            _context7.next = 15;
-            return loadAllTypeIndexes(me);
-          case 15:
-            scopes = _context7.sent;
-            _context7.next = 23;
+      while (1) switch (_context7.prev = _context7.next) {
+        case 0:
+          renderScopeCheckbox = function _renderScopeCheckbox(scope) {
+            var statements = registrationStatements(scope.index);
+            var name = scopeLabel(context, scope);
+            var label = "".concat(name, " link to this ").concat(context.noun);
+            return widgets.buildCheckboxForm(context.dom, _solidLogic.solidLogicSingleton.store, label, null, statements, form, scope.index);
+          };
+          registrationStatements = function _registrationStatemen(index) {
+            var registrations = getRegistrations(instance, theClass);
+            var reg = registrations.length ? registrations[0] : widgets.newThing(index);
+            return [(0, _rdflib.st)(reg, ns.solid('instance'), instance, index), (0, _rdflib.st)(reg, ns.solid('forClass'), theClass, index)];
+          };
+          /// / body of registrationControl
+          dom = context.dom;
+          if (!(!dom || !context.div)) {
+            _context7.next = 5;
             break;
-          case 18:
-            _context7.prev = 18;
-            _context7.t0 = _context7["catch"](12);
-            if (context.div && context.preferencesFileError) {
-              msg = '(Lists of stuff not available)';
-              context.div.appendChild(dom.createElement('p')).textContent = msg;
-            } else if (context.div) {
-              msg = "registrationControl: Type indexes not available: ".concat(_context7.t0);
-              context.div.appendChild(widgets.errorMessageBlock(context.dom, _context7.t0));
+          }
+          throw new Error('registrationControl: need dom and div');
+        case 5:
+          box = dom.createElement('div');
+          context.div.appendChild(box);
+          context.me = _solidLogic.authn.currentUser(); // @@
+          me = context.me;
+          if (me) {
+            _context7.next = 12;
+            break;
+          }
+          box.innerHTML = '<p style="margin:2em;">(Log in to save a link to this)</p>';
+          return _context7.abrupt("return", context);
+        case 12:
+          _context7.prev = 12;
+          _context7.next = 15;
+          return loadAllTypeIndexes(me);
+        case 15:
+          scopes = _context7.sent;
+          _context7.next = 23;
+          break;
+        case 18:
+          _context7.prev = 18;
+          _context7.t0 = _context7["catch"](12);
+          if (context.div && context.preferencesFileError) {
+            msg = '(Lists of stuff not available)';
+            context.div.appendChild(dom.createElement('p')).textContent = msg;
+          } else if (context.div) {
+            msg = "registrationControl: Type indexes not available: ".concat(_context7.t0);
+            context.div.appendChild(widgets.errorMessageBlock(context.dom, _context7.t0));
+          }
+          debug.log(msg);
+          return _context7.abrupt("return", context);
+        case 23:
+          box.innerHTML = '<table><tbody></tbody></table>'; // tbody will be inserted anyway
+          box.setAttribute('style', 'font-size: 120%; text-align: right; padding: 1em; border: solid gray 0.05em;');
+          tbody = box.children[0].children[0];
+          form = new _rdflib.BlankNode(); // @@ say for now
+          _iterator = _createForOfIteratorHelper(scopes);
+          try {
+            for (_iterator.s(); !(_step = _iterator.n()).done;) {
+              scope = _step.value;
+              row = tbody.appendChild(dom.createElement('tr'));
+              row.appendChild(renderScopeCheckbox(scope)); // @@ index
             }
-            debug.log(msg);
-            return _context7.abrupt("return", context);
-          case 23:
-            box.innerHTML = '<table><tbody></tbody></table>'; // tbody will be inserted anyway
-            box.setAttribute('style', 'font-size: 120%; text-align: right; padding: 1em; border: solid gray 0.05em;');
-            tbody = box.children[0].children[0];
-            form = new _rdflib.BlankNode(); // @@ say for now
-            _iterator = _createForOfIteratorHelper(scopes);
-            try {
-              for (_iterator.s(); !(_step = _iterator.n()).done;) {
-                scope = _step.value;
-                row = tbody.appendChild(dom.createElement('tr'));
-                row.appendChild(renderScopeCheckbox(scope)); // @@ index
-              }
-            } catch (err) {
-              _iterator.e(err);
-            } finally {
-              _iterator.f();
-            }
-            return _context7.abrupt("return", context);
-          case 30:
-          case "end":
-            return _context7.stop();
-        }
+          } catch (err) {
+            _iterator.e(err);
+          } finally {
+            _iterator.f();
+          }
+          return _context7.abrupt("return", context);
+        case 30:
+        case "end":
+          return _context7.stop();
       }
     }, _callee7, null, [[12, 18]]);
   }));
@@ -7027,62 +6919,64 @@ function registrationList(_x9, _x10) {
 function _registrationList() {
   _registrationList = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee9(context, options) {
     var dom, div, box, scopes, table, tbody, _iterator2, _step2, scope, headingRow, items, _iterator3, _step3, _loop;
-    return _regenerator["default"].wrap(function _callee9$(_context9) {
-      while (1) {
-        switch (_context9.prev = _context9.next) {
-          case 0:
-            dom = context.dom;
-            div = context.div;
-            box = dom.createElement('div');
-            div.appendChild(box);
-            context.me = _solidLogic.authn.currentUser(); // @@
-            if (context.me) {
-              _context9.next = 8;
-              break;
-            }
-            box.innerHTML = '<p style="margin:2em;">(Log in list your stuff)</p>';
-            return _context9.abrupt("return", context);
-          case 8:
-            _context9.next = 10;
-            return loadAllTypeIndexes(context.me);
-          case 10:
-            scopes = _context9.sent;
-            // includes community indexes
+    return _regenerator["default"].wrap(function _callee9$(_context10) {
+      while (1) switch (_context10.prev = _context10.next) {
+        case 0:
+          dom = context.dom;
+          div = context.div;
+          box = dom.createElement('div');
+          div.appendChild(box);
+          context.me = _solidLogic.authn.currentUser(); // @@
+          if (context.me) {
+            _context10.next = 8;
+            break;
+          }
+          box.innerHTML = '<p style="margin:2em;">(Log in list your stuff)</p>';
+          return _context10.abrupt("return", context);
+        case 8:
+          _context10.next = 10;
+          return loadAllTypeIndexes(context.me);
+        case 10:
+          scopes = _context10.sent;
+          // includes community indexes
 
-            // console.log('@@ registrationList ', scopes)
-            box.innerHTML = '<table><tbody></tbody></table>'; // tbody will be inserted anyway
-            box.setAttribute('style', 'font-size: 120%; text-align: right; padding: 1em; border: solid #eee 0.5em;');
-            table = box.firstChild;
-            tbody = table.firstChild;
-            _iterator2 = _createForOfIteratorHelper(scopes);
-            _context9.prev = 16;
-            _iterator2.s();
-          case 18:
-            if ((_step2 = _iterator2.n()).done) {
-              _context9.next = 30;
-              break;
-            }
-            scope = _step2.value;
-            // need some predicate for listing/adding agents
-            headingRow = renderScopeHeadingRow(context, store, scope);
-            tbody.appendChild(headingRow);
-            _context9.next = 24;
-            return getScopedAppsFromIndex(scope, options.type || null);
-          case 24:
-            items = _context9.sent;
-            // any class
-            if (items.length === 0) headingRow.style.display = 'none';
-            // console.log(`registrationList: @@ instance items for class ${options.type || 'undefined' }:`, items)
-            _iterator3 = _createForOfIteratorHelper(items);
-            try {
-              _loop = function _loop() {
-                var item = _step3.value;
-                var row = widgets.personTR(dom, ns.solid('instance'), item.instance, {
-                  deleteFunction: function () {
-                    var _deleteFunction = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee8() {
-                      return _regenerator["default"].wrap(function _callee8$(_context8) {
-                        while (1) {
-                          switch (_context8.prev = _context8.next) {
+          // console.log('@@ registrationList ', scopes)
+          box.innerHTML = '<table><tbody></tbody></table>'; // tbody will be inserted anyway
+          box.setAttribute('style', 'font-size: 120%; text-align: right; padding: 1em; border: solid #eee 0.5em;');
+          table = box.firstChild;
+          tbody = table.firstChild;
+          _iterator2 = _createForOfIteratorHelper(scopes);
+          _context10.prev = 16;
+          _iterator2.s();
+        case 18:
+          if ((_step2 = _iterator2.n()).done) {
+            _context10.next = 44;
+            break;
+          }
+          scope = _step2.value;
+          // need some predicate for listing/adding agents
+          headingRow = renderScopeHeadingRow(context, store, scope);
+          tbody.appendChild(headingRow);
+          _context10.next = 24;
+          return getScopedAppsFromIndex(scope, options.type || null);
+        case 24:
+          items = _context10.sent;
+          // any class
+          if (items.length === 0) headingRow.style.display = 'none';
+          // console.log(`registrationList: @@ instance items for class ${options.type || 'undefined' }:`, items)
+          _iterator3 = _createForOfIteratorHelper(items);
+          _context10.prev = 27;
+          _loop = /*#__PURE__*/_regenerator["default"].mark(function _loop() {
+            var item, row;
+            return _regenerator["default"].wrap(function _loop$(_context9) {
+              while (1) switch (_context9.prev = _context9.next) {
+                case 0:
+                  item = _step3.value;
+                  row = widgets.personTR(dom, ns.solid('instance'), item.instance, {
+                    deleteFunction: function () {
+                      var _deleteFunction = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee8() {
+                        return _regenerator["default"].wrap(function _callee8$(_context8) {
+                          while (1) switch (_context8.prev = _context8.next) {
                             case 0:
                               _context8.next = 2;
                               return deleteTypeIndexRegistration(item);
@@ -7092,48 +6986,64 @@ function _registrationList() {
                             case "end":
                               return _context8.stop();
                           }
-                        }
-                      }, _callee8);
-                    }));
-                    function deleteFunction() {
-                      return _deleteFunction.apply(this, arguments);
-                    }
-                    return deleteFunction;
-                  }()
-                });
-                row.children[0].style.paddingLeft = '3em';
-                tbody.appendChild(row);
-              };
-              for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-                _loop();
+                        }, _callee8);
+                      }));
+                      function deleteFunction() {
+                        return _deleteFunction.apply(this, arguments);
+                      }
+                      return deleteFunction;
+                    }()
+                  });
+                  row.children[0].style.paddingLeft = '3em';
+                  tbody.appendChild(row);
+                case 4:
+                case "end":
+                  return _context9.stop();
               }
-            } catch (err) {
-              _iterator3.e(err);
-            } finally {
-              _iterator3.f();
-            }
-          case 28:
-            _context9.next = 18;
+            }, _loop);
+          });
+          _iterator3.s();
+        case 30:
+          if ((_step3 = _iterator3.n()).done) {
+            _context10.next = 34;
             break;
-          case 30:
-            _context9.next = 35;
-            break;
-          case 32:
-            _context9.prev = 32;
-            _context9.t0 = _context9["catch"](16);
-            _iterator2.e(_context9.t0);
-          case 35:
-            _context9.prev = 35;
-            _iterator2.f();
-            return _context9.finish(35);
-          case 38:
-            return _context9.abrupt("return", context);
-          case 39:
-          case "end":
-            return _context9.stop();
-        }
+          }
+          return _context10.delegateYield(_loop(), "t0", 32);
+        case 32:
+          _context10.next = 30;
+          break;
+        case 34:
+          _context10.next = 39;
+          break;
+        case 36:
+          _context10.prev = 36;
+          _context10.t1 = _context10["catch"](27);
+          _iterator3.e(_context10.t1);
+        case 39:
+          _context10.prev = 39;
+          _iterator3.f();
+          return _context10.finish(39);
+        case 42:
+          _context10.next = 18;
+          break;
+        case 44:
+          _context10.next = 49;
+          break;
+        case 46:
+          _context10.prev = 46;
+          _context10.t2 = _context10["catch"](16);
+          _iterator2.e(_context10.t2);
+        case 49:
+          _context10.prev = 49;
+          _iterator2.f();
+          return _context10.finish(49);
+        case 52:
+          return _context10.abrupt("return", context);
+        case 53:
+        case "end":
+          return _context10.stop();
       }
-    }, _callee9, null, [[16, 32, 35, 38]]);
+    }, _callee9, null, [[16, 46, 49, 52], [27, 36, 39, 42]]);
   }));
   return _registrationList.apply(this, arguments);
 }
@@ -7247,33 +7157,31 @@ function renderSignInPopup(dom) {
     var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(issuerUri) {
       var preLoginRedirectHash;
       return _regenerator["default"].wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              _context.prev = 0;
-              // Save hash
-              preLoginRedirectHash = new URL(window.location.href).hash;
-              if (preLoginRedirectHash) {
-                window.localStorage.setItem('preLoginRedirectHash', preLoginRedirectHash);
-              }
-              window.localStorage.setItem('loginIssuer', issuerUri);
-              // Login
-              _context.next = 6;
-              return _solidLogic.authSession.login({
-                redirectUrl: window.location.href,
-                oidcIssuer: issuerUri
-              });
-            case 6:
-              _context.next = 11;
-              break;
-            case 8:
-              _context.prev = 8;
-              _context.t0 = _context["catch"](0);
-              (0, _log.alert)(_context.t0.message);
-            case 11:
-            case "end":
-              return _context.stop();
-          }
+        while (1) switch (_context.prev = _context.next) {
+          case 0:
+            _context.prev = 0;
+            // Save hash
+            preLoginRedirectHash = new URL(window.location.href).hash;
+            if (preLoginRedirectHash) {
+              window.localStorage.setItem('preLoginRedirectHash', preLoginRedirectHash);
+            }
+            window.localStorage.setItem('loginIssuer', issuerUri);
+            // Login
+            _context.next = 6;
+            return _solidLogic.authSession.login({
+              redirectUrl: window.location.href,
+              oidcIssuer: issuerUri
+            });
+          case 6:
+            _context.next = 11;
+            break;
+          case 8:
+            _context.prev = 8;
+            _context.t0 = _context["catch"](0);
+            (0, _log.alert)(_context.t0.message);
+          case 11:
+          case "end":
+            return _context.stop();
         }
       }, _callee, null, [[0, 8]]);
     }));
@@ -7423,49 +7331,47 @@ function loginStatusBox(dom) {
 _solidLogic.authSession.onLogout( /*#__PURE__*/(0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2() {
   var issuer, wellKnownUri, wellKnownResult, openidConfiguration;
   return _regenerator["default"].wrap(function _callee2$(_context2) {
-    while (1) {
-      switch (_context2.prev = _context2.next) {
-        case 0:
-          issuer = window.localStorage.getItem('loginIssuer');
-          if (!issuer) {
-            _context2.next = 19;
-            break;
-          }
-          _context2.prev = 2;
-          wellKnownUri = new URL(issuer);
-          wellKnownUri.pathname = '/.well-known/openid-configuration';
-          _context2.next = 7;
-          return fetch(wellKnownUri.toString());
-        case 7:
-          wellKnownResult = _context2.sent;
-          if (!(wellKnownResult.status === 200)) {
-            _context2.next = 15;
-            break;
-          }
-          _context2.next = 11;
-          return wellKnownResult.json();
-        case 11:
-          openidConfiguration = _context2.sent;
-          if (!(openidConfiguration && openidConfiguration.end_session_endpoint)) {
-            _context2.next = 15;
-            break;
-          }
-          _context2.next = 15;
-          return fetch(openidConfiguration.end_session_endpoint, {
-            credentials: 'include'
-          });
-        case 15:
+    while (1) switch (_context2.prev = _context2.next) {
+      case 0:
+        issuer = window.localStorage.getItem('loginIssuer');
+        if (!issuer) {
           _context2.next = 19;
           break;
-        case 17:
-          _context2.prev = 17;
-          _context2.t0 = _context2["catch"](2);
-        case 19:
-          window.location.reload();
-        case 20:
-        case "end":
-          return _context2.stop();
-      }
+        }
+        _context2.prev = 2;
+        wellKnownUri = new URL(issuer);
+        wellKnownUri.pathname = '/.well-known/openid-configuration';
+        _context2.next = 7;
+        return fetch(wellKnownUri.toString());
+      case 7:
+        wellKnownResult = _context2.sent;
+        if (!(wellKnownResult.status === 200)) {
+          _context2.next = 15;
+          break;
+        }
+        _context2.next = 11;
+        return wellKnownResult.json();
+      case 11:
+        openidConfiguration = _context2.sent;
+        if (!(openidConfiguration && openidConfiguration.end_session_endpoint)) {
+          _context2.next = 15;
+          break;
+        }
+        _context2.next = 15;
+        return fetch(openidConfiguration.end_session_endpoint, {
+          credentials: 'include'
+        });
+      case 15:
+        _context2.next = 19;
+        break;
+      case 17:
+        _context2.prev = 17;
+        _context2.t0 = _context2["catch"](2);
+      case 19:
+        window.location.reload();
+      case 20:
+      case "end":
+        return _context2.stop();
     }
   }, _callee2, null, [[2, 17]]);
 })));
@@ -7531,35 +7437,33 @@ function selectWorkspace(dom, appDetails, callbackWS) {
       _makeNewWorkspace = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(_event) {
         var row, cell, newBase, newWs, newData;
         return _regenerator["default"].wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                row = table.appendChild(dom.createElement('tr'));
-                cell = row.appendChild(dom.createElement('td'));
-                cell.setAttribute('colspan', '3');
-                cell.style.padding = '0.5em';
-                _context3.t0 = encodeURI;
-                _context3.next = 7;
-                return widgets.askName(dom, _solidLogic.solidLogicSingleton.store, cell, ns.solid('URL'), ns.space('Workspace'), 'Workspace');
-              case 7:
-                _context3.t1 = _context3.sent;
-                newBase = (0, _context3.t0)(_context3.t1);
-                newWs = widgets.newThing(context.preferencesFile);
-                newData = [(0, _rdflib.st)(context.me, ns.space('workspace'), newWs, context.preferencesFile),
-                // eslint-disable-next-line camelcase
-                (0, _rdflib.st)(newWs, ns.space('uriPrefix'), newBase, context.preferencesFile)];
-                if (_solidLogic.solidLogicSingleton.store.updater) {
-                  _context3.next = 13;
-                  break;
-                }
-                throw new Error('store has no updater');
-              case 13:
-                _context3.next = 15;
-                return _solidLogic.solidLogicSingleton.store.updater.update([], newData);
-              case 15:
-              case "end":
-                return _context3.stop();
-            }
+          while (1) switch (_context3.prev = _context3.next) {
+            case 0:
+              row = table.appendChild(dom.createElement('tr'));
+              cell = row.appendChild(dom.createElement('td'));
+              cell.setAttribute('colspan', '3');
+              cell.style.padding = '0.5em';
+              _context3.t0 = encodeURI;
+              _context3.next = 7;
+              return widgets.askName(dom, _solidLogic.solidLogicSingleton.store, cell, ns.solid('URL'), ns.space('Workspace'), 'Workspace');
+            case 7:
+              _context3.t1 = _context3.sent;
+              newBase = (0, _context3.t0)(_context3.t1);
+              newWs = widgets.newThing(context.preferencesFile);
+              newData = [(0, _rdflib.st)(context.me, ns.space('workspace'), newWs, context.preferencesFile),
+              // eslint-disable-next-line camelcase
+              (0, _rdflib.st)(newWs, ns.space('uriPrefix'), newBase, context.preferencesFile)];
+              if (_solidLogic.solidLogicSingleton.store.updater) {
+                _context3.next = 13;
+                break;
+              }
+              throw new Error('store has no updater');
+            case 13:
+              _context3.next = 15;
+              return _solidLogic.solidLogicSingleton.store.updater.update([], newData);
+            case 15:
+            case "end":
+              return _context3.stop();
           }
         }, _callee3);
       }));
@@ -7766,35 +7670,33 @@ function getUserRoles() {
 function _getUserRoles() {
   _getUserRoles = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee10() {
     var _yield$ensureLoadedPr, me, preferencesFile, preferencesFileError;
-    return _regenerator["default"].wrap(function _callee10$(_context10) {
-      while (1) {
-        switch (_context10.prev = _context10.next) {
-          case 0:
-            _context10.prev = 0;
-            _context10.next = 3;
-            return ensureLoadedPreferences({});
-          case 3:
-            _yield$ensureLoadedPr = _context10.sent;
-            me = _yield$ensureLoadedPr.me;
-            preferencesFile = _yield$ensureLoadedPr.preferencesFile;
-            preferencesFileError = _yield$ensureLoadedPr.preferencesFileError;
-            if (!(!preferencesFile || preferencesFileError)) {
-              _context10.next = 9;
-              break;
-            }
-            throw new Error(preferencesFileError);
-          case 9:
-            return _context10.abrupt("return", _solidLogic.solidLogicSingleton.store.each(me, ns.rdf('type'), null, preferencesFile.doc()));
-          case 12:
-            _context10.prev = 12;
-            _context10.t0 = _context10["catch"](0);
-            debug.warn('Unable to fetch your preferences - this was the error: ', _context10.t0);
-          case 15:
-            return _context10.abrupt("return", []);
-          case 16:
-          case "end":
-            return _context10.stop();
-        }
+    return _regenerator["default"].wrap(function _callee10$(_context11) {
+      while (1) switch (_context11.prev = _context11.next) {
+        case 0:
+          _context11.prev = 0;
+          _context11.next = 3;
+          return ensureLoadedPreferences({});
+        case 3:
+          _yield$ensureLoadedPr = _context11.sent;
+          me = _yield$ensureLoadedPr.me;
+          preferencesFile = _yield$ensureLoadedPr.preferencesFile;
+          preferencesFileError = _yield$ensureLoadedPr.preferencesFileError;
+          if (!(!preferencesFile || preferencesFileError)) {
+            _context11.next = 9;
+            break;
+          }
+          throw new Error(preferencesFileError);
+        case 9:
+          return _context11.abrupt("return", _solidLogic.solidLogicSingleton.store.each(me, ns.rdf('type'), null, preferencesFile.doc()));
+        case 12:
+          _context11.prev = 12;
+          _context11.t0 = _context11["catch"](0);
+          debug.warn('Unable to fetch your preferences - this was the error: ', _context11.t0);
+        case 15:
+          return _context11.abrupt("return", []);
+        case 16:
+        case "end":
+          return _context11.stop();
       }
     }, _callee10, null, [[0, 12]]);
   }));
@@ -7806,21 +7708,19 @@ function filterAvailablePanes(_x13) {
 function _filterAvailablePanes() {
   _filterAvailablePanes = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee11(panes) {
     var userRoles;
-    return _regenerator["default"].wrap(function _callee11$(_context11) {
-      while (1) {
-        switch (_context11.prev = _context11.next) {
-          case 0:
-            _context11.next = 2;
-            return getUserRoles();
-          case 2:
-            userRoles = _context11.sent;
-            return _context11.abrupt("return", panes.filter(function (pane) {
-              return isMatchingAudience(pane, userRoles);
-            }));
-          case 4:
-          case "end":
-            return _context11.stop();
-        }
+    return _regenerator["default"].wrap(function _callee11$(_context12) {
+      while (1) switch (_context12.prev = _context12.next) {
+        case 0:
+          _context12.next = 2;
+          return getUserRoles();
+        case 2:
+          userRoles = _context12.sent;
+          return _context12.abrupt("return", panes.filter(function (pane) {
+            return isMatchingAudience(pane, userRoles);
+          }));
+        case 4:
+        case "end":
+          return _context12.stop();
       }
     }, _callee11);
   }));
@@ -8299,16 +8199,14 @@ function cameraButton(dom, store, getImageDoc, doneCallback) {
   function _restoreButton() {
     _restoreButton = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(imageDoc) {
       return _regenerator["default"].wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              div.removeChild(control);
-              div.appendChild(but);
-              doneCallback(imageDoc);
-            case 3:
-            case "end":
-              return _context.stop();
-          }
+        while (1) switch (_context.prev = _context.next) {
+          case 0:
+            div.removeChild(control);
+            div.appendChild(but);
+            doneCallback(imageDoc);
+          case 3:
+          case "end":
+            return _context.stop();
         }
       }, _callee);
     }));
@@ -9570,7 +9468,7 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2["default"])(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2["default"])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2["default"])(this, result); }; }
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 var ParticipationTableElement = /*#__PURE__*/function (_HTMLTableElement) {
@@ -12419,90 +12317,88 @@ function _getPodOwner() {
   _getPodOwner = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(pod, store) {
     var response, containerTurtle, podOwner, guess;
     return _regenerator["default"].wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            _context.prev = 0;
-            if (store.any(pod, null, _.ns.ldp('Container'), pod)) {
-              _context.next = 7;
-              break;
-            }
-            _context.next = 4;
-            return store.fetcher.webOperation('GET', pod.uri, store.fetcher.initFetchOptions(pod.uri, {
-              headers: {
-                accept: 'text/turtle'
-              }
-            }));
-          case 4:
-            response = _context.sent;
-            containerTurtle = response.responseText;
-            (0, _rdflib.parse)(containerTurtle, store, pod.uri, 'text/turtle');
-          case 7:
-            _context.next = 13;
+      while (1) switch (_context.prev = _context.next) {
+        case 0:
+          _context.prev = 0;
+          if (store.any(pod, null, _.ns.ldp('Container'), pod)) {
+            _context.next = 7;
             break;
-          case 9:
-            _context.prev = 9;
-            _context.t0 = _context["catch"](0);
-            console.error('Error loading pod ' + pod + ': ' + _context.t0);
-            return _context.abrupt("return", null);
-          case 13:
-            if (store.holds(pod, _.ns.rdf('type'), _.ns.space('Storage'), pod)) {
-              _context.next = 16;
-              break;
+          }
+          _context.next = 4;
+          return store.fetcher.webOperation('GET', pod.uri, store.fetcher.initFetchOptions(pod.uri, {
+            headers: {
+              accept: 'text/turtle'
             }
-            console.warn('Pod  ' + pod + ' does not declare itself as a space:Storage');
-            return _context.abrupt("return", null);
-          case 16:
-            podOwner = store.any(pod, _.ns.solid('owner'), null, pod) || store.any(null, _.ns.space('storage'), pod, pod);
-            if (!podOwner) {
-              _context.next = 31;
-              break;
-            }
-            _context.prev = 18;
-            _context.next = 21;
-            return store.fetcher.load(podOwner.doc());
-          case 21:
-            _context.next = 27;
+          }));
+        case 4:
+          response = _context.sent;
+          containerTurtle = response.responseText;
+          (0, _rdflib.parse)(containerTurtle, store, pod.uri, 'text/turtle');
+        case 7:
+          _context.next = 13;
+          break;
+        case 9:
+          _context.prev = 9;
+          _context.t0 = _context["catch"](0);
+          console.error('Error loading pod ' + pod + ': ' + _context.t0);
+          return _context.abrupt("return", null);
+        case 13:
+          if (store.holds(pod, _.ns.rdf('type'), _.ns.space('Storage'), pod)) {
+            _context.next = 16;
             break;
-          case 23:
-            _context.prev = 23;
-            _context.t1 = _context["catch"](18);
-            console.warn('Unable to load profile of pod owner ' + podOwner);
-            return _context.abrupt("return", null);
-          case 27:
-            if (!store.holds(podOwner, _.ns.space('storage'), pod, podOwner.doc())) {
-              console.warn("Pod owner ".concat(podOwner, " does NOT list pod ").concat(pod, " as their storage"));
-            }
-            return _context.abrupt("return", podOwner);
-          case 31:
-            // pod owner not declared in pod
-            // @@ TODO: This is given the structure that NSS provides
-            // This is a massive guess.  For old pods which don't have owner link
-            guess = (0, _rdflib.sym)("".concat(pod.uri, "profile/card#me"));
-            _context.prev = 32;
-            _context.next = 35;
-            return store.fetcher.load(guess);
-          case 35:
-            _context.next = 41;
+          }
+          console.warn('Pod  ' + pod + ' does not declare itself as a space:Storage');
+          return _context.abrupt("return", null);
+        case 16:
+          podOwner = store.any(pod, _.ns.solid('owner'), null, pod) || store.any(null, _.ns.space('storage'), pod, pod);
+          if (!podOwner) {
+            _context.next = 31;
             break;
-          case 37:
-            _context.prev = 37;
-            _context.t2 = _context["catch"](32);
-            console.error('Ooops. Guessed wrong pod owner webid {$guess} : can\'t load it.');
-            return _context.abrupt("return", null);
-          case 41:
-            if (!store.holds(guess, _.ns.space('storage'), pod, guess.doc())) {
-              _context.next = 44;
-              break;
-            }
-            console.warn('Using guessed pod owner webid but it links back.');
-            return _context.abrupt("return", guess);
-          case 44:
-            return _context.abrupt("return", null);
-          case 45:
-          case "end":
-            return _context.stop();
-        }
+          }
+          _context.prev = 18;
+          _context.next = 21;
+          return store.fetcher.load(podOwner.doc());
+        case 21:
+          _context.next = 27;
+          break;
+        case 23:
+          _context.prev = 23;
+          _context.t1 = _context["catch"](18);
+          console.warn('Unable to load profile of pod owner ' + podOwner);
+          return _context.abrupt("return", null);
+        case 27:
+          if (!store.holds(podOwner, _.ns.space('storage'), pod, podOwner.doc())) {
+            console.warn("Pod owner ".concat(podOwner, " does NOT list pod ").concat(pod, " as their storage"));
+          }
+          return _context.abrupt("return", podOwner);
+        case 31:
+          // pod owner not declared in pod
+          // @@ TODO: This is given the structure that NSS provides
+          // This is a massive guess.  For old pods which don't have owner link
+          guess = (0, _rdflib.sym)("".concat(pod.uri, "profile/card#me"));
+          _context.prev = 32;
+          _context.next = 35;
+          return store.fetcher.load(guess);
+        case 35:
+          _context.next = 41;
+          break;
+        case 37:
+          _context.prev = 37;
+          _context.t2 = _context["catch"](32);
+          console.error('Ooops. Guessed wrong pod owner webid {$guess} : can\'t load it.');
+          return _context.abrupt("return", null);
+        case 41:
+          if (!store.holds(guess, _.ns.space('storage'), pod, guess.doc())) {
+            _context.next = 44;
+            break;
+          }
+          console.warn('Using guessed pod owner webid but it links back.');
+          return _context.abrupt("return", guess);
+        case 44:
+          return _context.abrupt("return", null);
+        case 45:
+        case "end":
+          return _context.stop();
       }
     }, _callee, null, [[0, 9], [18, 23], [32, 37]]);
   }));
@@ -12811,9 +12707,7 @@ function stackString(e) {
 function emptyNode(node) {
   var nodes = node.childNodes;
   var len = nodes.length;
-  for (var i = len - 1; i >= 0; i--) {
-    node.removeChild(nodes[i]);
-  }
+  for (var i = len - 1; i >= 0; i--) node.removeChild(nodes[i]);
   return node;
 }
 function getTarget(e) {
@@ -12989,9 +12883,7 @@ function shortName(uri) {
     if (canUse(p.slice(0, 4))) return pok;
     if (canUse(p.slice(0, 1))) return pok;
     if (canUse(p.slice(0, 5))) return pok;
-    for (i = 0;; i++) {
-      if (canUse(p.slice(0, 3) + i)) return pok;
-    }
+    for (i = 0;; i++) if (canUse(p.slice(0, 3) + i)) return pok;
   }
 }
 
@@ -13227,13 +13119,13 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2022-12-23T20:58:43Z',
-  commit: '135c44005ce8564cc458c84e6e104fd55d414c09',
+  buildTime: '2023-01-23T16:53:30Z',
+  commit: 'c08b669105cacad66908a5924086049cbbf8bdb8',
   npmInfo: {
     'solid-ui': '2.4.24',
     npm: '8.19.3',
-    node: '14.21.1',
-    v8: '8.4.371.23-node.87',
+    node: '14.21.2',
+    v8: '8.4.371.23-node.88',
     uv: '1.42.0',
     zlib: '1.2.11',
     brotli: '1.0.9',
@@ -13242,10 +13134,10 @@ var versionInfo = {
     nghttp2: '1.42.0',
     napi: '8',
     llhttp: '2.1.6',
-    openssl: '1.1.1q',
+    openssl: '1.1.1s',
     cldr: '40.0',
     icu: '70.1',
-    tz: '2022e',
+    tz: '2022f',
     unicode: '14.0'
   }
 };
@@ -15019,7 +14911,7 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var checkMarkCharacter = "\u2713";
 var cancelCharacter = "\u2715";
 var dashCharacter = '-';
@@ -15080,9 +14972,7 @@ _fieldFunction.field[ns.ui('Form').uri] = _fieldFunction.field[ns.ui('Group').ur
     return box;
   }
   var already2 = {};
-  for (var x in already) {
-    already2[x] = 1;
-  }
+  for (var x in already) already2[x] = 1;
   already2[key] = 1;
   var formDoc = form.doc ? form.doc() : null; // @@ if blank no way to know
   var weight0 = kb.any(form, ui('weight'), null, formDoc); // Say 0-3
@@ -15234,42 +15124,40 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
     _addItem = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6() {
       var object, toBeInserted, msg;
       return _regenerator["default"].wrap(function _callee6$(_context6) {
-        while (1) {
-          switch (_context6.prev = _context6.next) {
-            case 0:
-              object = newThing(dataDoc); // by default just add new nodes
-              if (!ordered) {
-                _context6.next = 8;
-                break;
-              }
-              createListIfNecessary(); // Sets list and unsavedList
-              list.elements.push(object);
-              _context6.next = 6;
-              return saveListThenRefresh();
-            case 6:
-              _context6.next = 20;
+        while (1) switch (_context6.prev = _context6.next) {
+          case 0:
+            object = newThing(dataDoc); // by default just add new nodes
+            if (!ordered) {
+              _context6.next = 8;
               break;
-            case 8:
-              // eslint-disable-next-line multiline-ternary
-              toBeInserted = reverse ? [$rdf.st(object, property, subject, dataDoc)] : [$rdf.st(subject, property, object, dataDoc)];
-              _context6.prev = 9;
-              _context6.next = 12;
-              return kb.updater.update([], toBeInserted);
-            case 12:
-              _context6.next = 19;
-              break;
-            case 14:
-              _context6.prev = 14;
-              _context6.t0 = _context6["catch"](9);
-              msg = 'Error adding to unordered multiple: ' + _context6.t0;
-              box.appendChild((0, _error.errorMessageBlock)(dom, msg));
-              debug.error(msg);
-            case 19:
-              refresh();
-            case 20:
-            case "end":
-              return _context6.stop();
-          }
+            }
+            createListIfNecessary(); // Sets list and unsavedList
+            list.elements.push(object);
+            _context6.next = 6;
+            return saveListThenRefresh();
+          case 6:
+            _context6.next = 20;
+            break;
+          case 8:
+            // eslint-disable-next-line multiline-ternary
+            toBeInserted = reverse ? [$rdf.st(object, property, subject, dataDoc)] : [$rdf.st(subject, property, object, dataDoc)];
+            _context6.prev = 9;
+            _context6.next = 12;
+            return kb.updater.update([], toBeInserted);
+          case 12:
+            _context6.next = 19;
+            break;
+          case 14:
+            _context6.prev = 14;
+            _context6.t0 = _context6["catch"](9);
+            msg = 'Error adding to unordered multiple: ' + _context6.t0;
+            box.appendChild((0, _error.errorMessageBlock)(dom, msg));
+            debug.error(msg);
+          case 19:
+            refresh();
+          case 20:
+          case "end":
+            return _context6.stop();
         }
       }, _callee6, null, [[9, 14]]);
     }));
@@ -15287,52 +15175,50 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
       _deleteThisItem = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3() {
         var i, del;
         return _regenerator["default"].wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                if (!ordered) {
-                  _context3.next = 14;
-                  break;
-                }
-                debug.log('pre delete: ' + debugString(list.elements));
-                i = 0;
-              case 3:
-                if (!(i < list.elements.length)) {
-                  _context3.next = 12;
-                  break;
-                }
-                if (!list.elements[i].sameTerm(object)) {
-                  _context3.next = 9;
-                  break;
-                }
-                list.elements.splice(i, 1);
-                _context3.next = 8;
-                return saveListThenRefresh();
-              case 8:
-                return _context3.abrupt("return");
-              case 9:
-                i++;
-                _context3.next = 3;
+          while (1) switch (_context3.prev = _context3.next) {
+            case 0:
+              if (!ordered) {
+                _context3.next = 14;
                 break;
-              case 12:
-                _context3.next = 15;
+              }
+              debug.log('pre delete: ' + debugString(list.elements));
+              i = 0;
+            case 3:
+              if (!(i < list.elements.length)) {
+                _context3.next = 12;
                 break;
-              case 14:
-                // unordered
-                if (kb.holds(subject, property, object, dataDoc)) {
-                  del = [$rdf.st(subject, property, object, dataDoc)];
-                  kb.updater.update(del, [], function (uri, ok, message) {
-                    if (ok) {
-                      body.removeChild(subField);
-                    } else {
-                      body.appendChild((0, _error.errorMessageBlock)(dom, 'Multiple: delete failed: ' + message));
-                    }
-                  });
-                }
-              case 15:
-              case "end":
-                return _context3.stop();
-            }
+              }
+              if (!list.elements[i].sameTerm(object)) {
+                _context3.next = 9;
+                break;
+              }
+              list.elements.splice(i, 1);
+              _context3.next = 8;
+              return saveListThenRefresh();
+            case 8:
+              return _context3.abrupt("return");
+            case 9:
+              i++;
+              _context3.next = 3;
+              break;
+            case 12:
+              _context3.next = 15;
+              break;
+            case 14:
+              // unordered
+              if (kb.holds(subject, property, object, dataDoc)) {
+                del = [$rdf.st(subject, property, object, dataDoc)];
+                kb.updater.update(del, [], function (uri, ok, message) {
+                  if (ok) {
+                    body.removeChild(subField);
+                  } else {
+                    body.appendChild((0, _error.errorMessageBlock)(dom, 'Multiple: delete failed: ' + message));
+                  }
+                });
+              }
+            case 15:
+            case "end":
+              return _context3.stop();
           }
         }, _callee3);
       }));
@@ -15350,60 +15236,58 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
       _moveThisItem = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(event, upwards) {
         var i;
         return _regenerator["default"].wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                // @@ possibly, allow shift+click to do move to top or bottom?
-                debug.log('pre move: ' + debugString(list.elements));
-                i = 0;
-              case 2:
-                if (!(i < list.elements.length)) {
-                  _context4.next = 8;
-                  break;
-                }
-                if (!list.elements[i].sameTerm(object)) {
-                  _context4.next = 5;
-                  break;
-                }
-                return _context4.abrupt("break", 8);
-              case 5:
-                i++;
-                _context4.next = 2;
+          while (1) switch (_context4.prev = _context4.next) {
+            case 0:
+              // @@ possibly, allow shift+click to do move to top or bottom?
+              debug.log('pre move: ' + debugString(list.elements));
+              i = 0;
+            case 2:
+              if (!(i < list.elements.length)) {
+                _context4.next = 8;
                 break;
-              case 8:
-                if (i === list.elements.length) {
-                  alert('list move: not found element for ' + object);
-                }
-                if (!upwards) {
-                  _context4.next = 16;
-                  break;
-                }
-                if (!(i === 0)) {
-                  _context4.next = 13;
-                  break;
-                }
-                alert('@@ boop - already at top   -temp message'); // @@ make boop sound
-                return _context4.abrupt("return");
-              case 13:
-                list.elements.splice(i - 1, 2, list.elements[i], list.elements[i - 1]);
-                _context4.next = 20;
+              }
+              if (!list.elements[i].sameTerm(object)) {
+                _context4.next = 5;
                 break;
-              case 16:
-                if (!(i === list.elements.length - 1)) {
-                  _context4.next = 19;
-                  break;
-                }
-                alert('@@ boop - already at bottom   -temp message'); // @@ make boop sound
-                return _context4.abrupt("return");
-              case 19:
-                list.elements.splice(i, 2, list.elements[i + 1], list.elements[i]);
-              case 20:
-                _context4.next = 22;
-                return saveListThenRefresh();
-              case 22:
-              case "end":
-                return _context4.stop();
-            }
+              }
+              return _context4.abrupt("break", 8);
+            case 5:
+              i++;
+              _context4.next = 2;
+              break;
+            case 8:
+              if (i === list.elements.length) {
+                alert('list move: not found element for ' + object);
+              }
+              if (!upwards) {
+                _context4.next = 16;
+                break;
+              }
+              if (!(i === 0)) {
+                _context4.next = 13;
+                break;
+              }
+              alert('@@ boop - already at top   -temp message'); // @@ make boop sound
+              return _context4.abrupt("return");
+            case 13:
+              list.elements.splice(i - 1, 2, list.elements[i], list.elements[i - 1]);
+              _context4.next = 20;
+              break;
+            case 16:
+              if (!(i === list.elements.length - 1)) {
+                _context4.next = 19;
+                break;
+              }
+              alert('@@ boop - already at bottom   -temp message'); // @@ make boop sound
+              return _context4.abrupt("return");
+            case 19:
+              list.elements.splice(i, 2, list.elements[i + 1], list.elements[i]);
+            case 20:
+              _context4.next = 22;
+              return saveListThenRefresh();
+            case 22:
+            case "end":
+              return _context4.stop();
           }
         }, _callee4);
       }));
@@ -15434,14 +15318,12 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
         var moveUpButton = buttons.button(dom, _iconBase.icons.iconBase + 'noun_1369237.svg', 'Move Up', /*#__PURE__*/function () {
           var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(event) {
             return _regenerator["default"].wrap(function _callee$(_context) {
-              while (1) {
-                switch (_context.prev = _context.next) {
-                  case 0:
-                    return _context.abrupt("return", moveThisItem(event, true));
-                  case 1:
-                  case "end":
-                    return _context.stop();
-                }
+              while (1) switch (_context.prev = _context.next) {
+                case 0:
+                  return _context.abrupt("return", moveThisItem(event, true));
+                case 1:
+                case "end":
+                  return _context.stop();
               }
             }, _callee);
           }));
@@ -15452,14 +15334,12 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
         var moveDownButton = buttons.button(dom, _iconBase.icons.iconBase + 'noun_1369241.svg', 'Move Down', /*#__PURE__*/function () {
           var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(event) {
             return _regenerator["default"].wrap(function _callee2$(_context2) {
-              while (1) {
-                switch (_context2.prev = _context2.next) {
-                  case 0:
-                    return _context2.abrupt("return", moveThisItem(event, false));
-                  case 1:
-                  case "end":
-                    return _context2.stop();
-                }
+              while (1) switch (_context2.prev = _context2.next) {
+                case 0:
+                  return _context2.abrupt("return", moveThisItem(event, false));
+                case 1:
+                case "end":
+                  return _context2.stop();
               }
             }, _callee2);
           }));
@@ -15547,15 +15427,13 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
     tail.addEventListener('click', /*#__PURE__*/function () {
       var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(_eventNotUsed) {
         return _regenerator["default"].wrap(function _callee5$(_context5) {
-          while (1) {
-            switch (_context5.prev = _context5.next) {
-              case 0:
-                _context5.next = 2;
-                return addItem();
-              case 2:
-              case "end":
-                return _context5.stop();
-            }
+          while (1) switch (_context5.prev = _context5.next) {
+            case 0:
+              _context5.next = 2;
+              return addItem();
+            case 2:
+            case "end":
+              return _context5.stop();
           }
         }, _callee5);
       }));
@@ -15581,29 +15459,27 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
   function _saveListThenRefresh() {
     _saveListThenRefresh = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7() {
       return _regenerator["default"].wrap(function _callee7$(_context7) {
-        while (1) {
-          switch (_context7.prev = _context7.next) {
-            case 0:
-              debug.log('save list: ' + debugString(list.elements)); // 20191214
+        while (1) switch (_context7.prev = _context7.next) {
+          case 0:
+            debug.log('save list: ' + debugString(list.elements)); // 20191214
 
-              createListIfNecessary();
-              _context7.prev = 2;
-              _context7.next = 5;
-              return kb.fetcher.putBack(dataDoc);
-            case 5:
-              _context7.next = 11;
-              break;
-            case 7:
-              _context7.prev = 7;
-              _context7.t0 = _context7["catch"](2);
-              box.appendChild((0, _error.errorMessageBlock)(dom, 'Error trying to put back a list: ' + _context7.t0));
-              return _context7.abrupt("return");
-            case 11:
-              refresh();
-            case 12:
-            case "end":
-              return _context7.stop();
-          }
+            createListIfNecessary();
+            _context7.prev = 2;
+            _context7.next = 5;
+            return kb.fetcher.putBack(dataDoc);
+          case 5:
+            _context7.next = 11;
+            break;
+          case 7:
+            _context7.prev = 7;
+            _context7.t0 = _context7["catch"](2);
+            box.appendChild((0, _error.errorMessageBlock)(dom, 'Error trying to put back a list: ' + _context7.t0));
+            return _context7.abrupt("return");
+          case 11:
+            refresh();
+          case 12:
+          case "end":
+            return _context7.stop();
         }
       }, _callee7, null, [[2, 7]]);
     }));
@@ -15630,34 +15506,32 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
     _asyncStuff = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee8() {
       var extra, j;
       return _regenerator["default"].wrap(function _callee8$(_context8) {
-        while (1) {
-          switch (_context8.prev = _context8.next) {
-            case 0:
-              extra = min - values.length;
-              if (!(extra > 0)) {
-                _context8.next = 12;
-                break;
-              }
-              j = 0;
-            case 3:
-              if (!(j < extra)) {
-                _context8.next = 10;
-                break;
-              }
-              debug.log('Adding extra: min ' + min);
-              _context8.next = 7;
-              return addItem();
-            case 7:
-              j++;
-              _context8.next = 3;
-              break;
-            case 10:
+        while (1) switch (_context8.prev = _context8.next) {
+          case 0:
+            extra = min - values.length;
+            if (!(extra > 0)) {
               _context8.next = 12;
-              return saveListThenRefresh();
-            case 12:
-            case "end":
-              return _context8.stop();
-          }
+              break;
+            }
+            j = 0;
+          case 3:
+            if (!(j < extra)) {
+              _context8.next = 10;
+              break;
+            }
+            debug.log('Adding extra: min ' + min);
+            _context8.next = 7;
+            return addItem();
+          case 7:
+            j++;
+            _context8.next = 3;
+            break;
+          case 10:
+            _context8.next = 12;
+            return saveListThenRefresh();
+          case 12:
+          case "end":
+            return _context8.stop();
         }
       }, _callee8);
     }));
@@ -15845,30 +15719,20 @@ _fieldFunction.field[ns.ui('Choice').uri] = function (dom, container, already, s
     } // Use rdfs
 
     if (uiFrom.sameTerm(ns.rdfs('Class'))) {
-      for (p in buttons.allClassURIs()) {
-        possible.push(kb.sym(p));
-      }
+      for (p in buttons.allClassURIs()) possible.push(kb.sym(p));
       // log.debug("%%% Choice field: possible.length 2 = "+possible.length)
     } else if (uiFrom.sameTerm(ns.rdf('Property'))) {
       possibleProperties = buttons.propertyTriage(kb);
-      for (p in possibleProperties.op) {
-        possible.push(kb.fromNT(p));
-      }
-      for (p in possibleProperties.dp) {
-        possible.push(kb.fromNT(p));
-      }
+      for (p in possibleProperties.op) possible.push(kb.fromNT(p));
+      for (p in possibleProperties.dp) possible.push(kb.fromNT(p));
       opts.disambiguate = true; // This is a big class, and the labels won't be enough.
     } else if (uiFrom.sameTerm(ns.owl('ObjectProperty'))) {
       possibleProperties = buttons.propertyTriage(kb);
-      for (p in possibleProperties.op) {
-        possible.push(kb.fromNT(p));
-      }
+      for (p in possibleProperties.op) possible.push(kb.fromNT(p));
       opts.disambiguate = true;
     } else if (uiFrom.sameTerm(ns.owl('DatatypeProperty'))) {
       possibleProperties = buttons.propertyTriage(kb);
-      for (p in possibleProperties.dp) {
-        possible.push(kb.fromNT(p));
-      }
+      for (p in possibleProperties.dp) possible.push(kb.fromNT(p));
       opts.disambiguate = true;
     }
     return possible;
@@ -17039,7 +16903,7 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var WEBID_NOUN = 'Solid ID';
 var GREEN_PLUS = _iconBase.icons.iconBase + 'noun_34653_green.svg';
 var SEARCH_ICON = _iconBase.icons.iconBase + 'noun_Search_875351.svg';
@@ -17053,243 +16917,231 @@ function _renderAutocompleteControl() {
   _renderAutocompleteControl = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(dom, person, barOptions, acOptions, addOneIdAndRefresh, deleteOne) {
     var autoCompleteDone, _autoCompleteDone, greenButtonHandler, _greenButtonHandler, removeDecorated, displayAutocomplete, _displayAutocomplete, searchButtonHandler, _searchButtonHandler, droppedURIHandler, _droppedURIHandler, acceptButton, cancelButton, deleteButtonContainer, noun, deleteButton, editButton, editing, syncEditingStatus, decoration, decoratedAutocomplete, creationArea, plus;
     return _regenerator["default"].wrap(function _callee6$(_context6) {
-      while (1) {
-        switch (_context6.prev = _context6.next) {
-          case 0:
-            syncEditingStatus = function _syncEditingStatus() {
-              if (editing) {
-                (0, _autocompletePicker.setVisible)(editButton, false);
-                (0, _autocompletePicker.setVisible)(acceptButton, false); // not till got it
-                (0, _autocompletePicker.setVisible)(cancelButton, false);
-              } else {
-                (0, _autocompletePicker.setVisible)(editButton, true);
-                (0, _autocompletePicker.setVisible)(acceptButton, false);
-                (0, _autocompletePicker.setVisible)(cancelButton, false);
-              }
-            };
-            _droppedURIHandler = function _droppedURIHandler3() {
-              _droppedURIHandler = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(uris) {
-                var _iterator, _step, webid;
-                return _regenerator["default"].wrap(function _callee5$(_context5) {
-                  while (1) {
-                    switch (_context5.prev = _context5.next) {
-                      case 0:
-                        _iterator = _createForOfIteratorHelper(uris);
-                        _context5.prev = 1;
-                        _iterator.s();
-                      case 3:
-                        if ((_step = _iterator.n()).done) {
-                          _context5.next = 9;
-                          break;
-                        }
-                        webid = _step.value;
-                        _context5.next = 7;
-                        return addOneIdAndRefresh(person, webid);
-                      case 7:
-                        _context5.next = 3;
-                        break;
-                      case 9:
-                        _context5.next = 14;
-                        break;
-                      case 11:
-                        _context5.prev = 11;
-                        _context5.t0 = _context5["catch"](1);
-                        _iterator.e(_context5.t0);
-                      case 14:
-                        _context5.prev = 14;
-                        _iterator.f();
-                        return _context5.finish(14);
-                      case 17:
-                      case "end":
-                        return _context5.stop();
-                    }
-                  }
-                }, _callee5, null, [[1, 11, 14, 17]]);
-              }));
-              return _droppedURIHandler.apply(this, arguments);
-            };
-            droppedURIHandler = function _droppedURIHandler2(_x11) {
-              return _droppedURIHandler.apply(this, arguments);
-            };
-            _searchButtonHandler = function _searchButtonHandler3() {
-              _searchButtonHandler = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(_event) {
-                return _regenerator["default"].wrap(function _callee4$(_context4) {
-                  while (1) {
-                    switch (_context4.prev = _context4.next) {
-                      case 0:
-                        if (!decoratedAutocomplete) {
-                          _context4.next = 5;
-                          break;
-                        }
-                        creationArea.removeChild(decoratedAutocomplete);
-                        decoratedAutocomplete = undefined;
-                        _context4.next = 7;
-                        break;
-                      case 5:
-                        _context4.next = 7;
-                        return displayAutocomplete();
-                      case 7:
-                      case "end":
-                        return _context4.stop();
-                    }
-                  }
-                }, _callee4);
-              }));
-              return _searchButtonHandler.apply(this, arguments);
-            };
-            searchButtonHandler = function _searchButtonHandler2(_x10) {
-              return _searchButtonHandler.apply(this, arguments);
-            };
-            _displayAutocomplete = function _displayAutocomplete3() {
-              _displayAutocomplete = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3() {
-                return _regenerator["default"].wrap(function _callee3$(_context3) {
-                  while (1) {
-                    switch (_context3.prev = _context3.next) {
-                      case 0:
-                        decoratedAutocomplete = dom.createElement('div');
-                        decoratedAutocomplete.setAttribute('style', 'display: flex; flex-flow: wrap;');
-                        _context3.t0 = decoratedAutocomplete;
-                        _context3.next = 5;
-                        return (0, _autocompletePicker.renderAutoComplete)(dom, acOptions, decoration, autoCompleteDone);
-                      case 5:
-                        _context3.t1 = _context3.sent;
-                        _context3.t0.appendChild.call(_context3.t0, _context3.t1);
-                        // console.log('@@ acceptButton', acceptButton)
-                        decoratedAutocomplete.appendChild(acceptButton);
-                        // console.log('@@ cancelButton', cancelButton)
-
-                        decoratedAutocomplete.appendChild(cancelButton);
-                        // console.log('@@ editButton', editButton)
-
-                        decoratedAutocomplete.appendChild(editButton);
-                        // console.log('@@ deleteButtonContainer', deleteButtonContainer)
-
-                        decoratedAutocomplete.appendChild(deleteButtonContainer);
-                        creationArea.appendChild(decoratedAutocomplete);
-                      case 12:
-                      case "end":
-                        return _context3.stop();
-                    }
-                  }
-                }, _callee3);
-              }));
-              return _displayAutocomplete.apply(this, arguments);
-            };
-            displayAutocomplete = function _displayAutocomplete2() {
-              return _displayAutocomplete.apply(this, arguments);
-            };
-            removeDecorated = function _removeDecorated() {
-              if (decoratedAutocomplete) {
-                creationArea.removeChild(decoratedAutocomplete);
-                decoratedAutocomplete = undefined;
-              }
-            };
-            _greenButtonHandler = function _greenButtonHandler3() {
-              _greenButtonHandler = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(_event) {
-                var webid;
-                return _regenerator["default"].wrap(function _callee2$(_context2) {
-                  while (1) {
-                    switch (_context2.prev = _context2.next) {
-                      case 0:
-                        _context2.next = 2;
-                        return widgets.askName(dom, _solidLogic.store, creationArea, ns.vcard('url'), undefined, WEBID_NOUN);
-                      case 2:
-                        webid = _context2.sent;
-                        if (webid) {
-                          _context2.next = 5;
-                          break;
-                        }
-                        return _context2.abrupt("return");
-                      case 5:
-                        return _context2.abrupt("return", addOneIdAndRefresh(person, webid));
-                      case 6:
-                      case "end":
-                        return _context2.stop();
-                    }
-                  }
-                }, _callee2);
-              }));
-              return _greenButtonHandler.apply(this, arguments);
-            };
-            greenButtonHandler = function _greenButtonHandler2(_x9) {
-              return _greenButtonHandler.apply(this, arguments);
-            };
-            _autoCompleteDone = function _autoCompleteDone3() {
-              _autoCompleteDone = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(object, name) {
-                return _regenerator["default"].wrap(function _callee$(_context) {
-                  while (1) {
-                    switch (_context.prev = _context.next) {
-                      case 0:
-                        if (acOptions.permanent) {
-                          // remember to set this in publicid panel
-                          (0, _autocompletePicker.setVisible)(editButton, true);
-                          (0, _autocompletePicker.setVisible)(acceptButton, false);
-                          (0, _autocompletePicker.setVisible)(cancelButton, false);
-                        } else {
-                          // console.log('temporary - removed decoratiion')
-                          removeDecorated();
-                        }
-                        return _context.abrupt("return", addOneIdAndRefresh(object, name));
-                      case 2:
-                      case "end":
-                        return _context.stop();
-                    }
-                  }
-                }, _callee);
-              }));
-              return _autoCompleteDone.apply(this, arguments);
-            };
-            autoCompleteDone = function _autoCompleteDone2(_x7, _x8) {
-              return _autoCompleteDone.apply(this, arguments);
-            };
-            acceptButton = widgets.continueButton(dom);
-            acceptButton.setAttribute('data-testid', 'accept-button');
-            cancelButton = widgets.cancelButton(dom);
-            cancelButton.setAttribute('data-testid', 'cancel-button');
-            deleteButtonContainer = dom.createElement('div');
-            noun = acOptions.targetClass ? utils.label(acOptions.targetClass) : 'item';
-            deleteButton = widgets.deleteButtonWithCheck(dom, deleteButtonContainer, noun, deleteOne); // need to knock out this UI or caller does that
-            deleteButton.setAttribute('data-testid', 'delete-button');
-            editButton = widgets.button(dom, EDIT_ICON, 'Edit', function (_event) {
-              editing = !editing;
-              syncEditingStatus();
-            });
-            editButton.setAttribute('data-testid', 'edit-button');
-            editing = true;
-            decoration = {
-              acceptButton: acceptButton,
-              cancelButton: cancelButton,
-              editButton: editButton,
-              deleteButton: deleteButton
-            };
-            decoratedAutocomplete = undefined;
-            creationArea = dom.createElement('div');
-            creationArea.style.display = 'flex';
-            creationArea.style.flexDirection = 'row';
-            if (!(acOptions.permanent || acOptions.currentObject)) {
-              _context6.next = 31;
-              break;
+      while (1) switch (_context6.prev = _context6.next) {
+        case 0:
+          syncEditingStatus = function _syncEditingStatus() {
+            if (editing) {
+              (0, _autocompletePicker.setVisible)(editButton, false);
+              (0, _autocompletePicker.setVisible)(acceptButton, false); // not till got it
+              (0, _autocompletePicker.setVisible)(cancelButton, false);
+            } else {
+              (0, _autocompletePicker.setVisible)(editButton, true);
+              (0, _autocompletePicker.setVisible)(acceptButton, false);
+              (0, _autocompletePicker.setVisible)(cancelButton, false);
             }
-            _context6.next = 31;
-            return displayAutocomplete();
-          case 31:
-            if (barOptions.editable) {
-              // creationArea.appendChild(await renderAutoComplete(dom, barOptions, autoCompleteDone)) wait for searchButton
-              creationArea.style.width = '100%';
-              if (barOptions.manualURIEntry) {
-                plus = creationArea.appendChild(widgets.button(dom, GREEN_PLUS, barOptions.idNoun, greenButtonHandler));
-                widgets.makeDropTarget(plus, droppedURIHandler, undefined);
-              }
-              if (barOptions.dbLookup && !acOptions.currentObject && !acOptions.permanent) {
-                creationArea.appendChild(widgets.button(dom, SEARCH_ICON, barOptions.idNoun, searchButtonHandler));
-              }
+          };
+          _droppedURIHandler = function _droppedURIHandler3() {
+            _droppedURIHandler = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(uris) {
+              var _iterator, _step, webid;
+              return _regenerator["default"].wrap(function _callee5$(_context5) {
+                while (1) switch (_context5.prev = _context5.next) {
+                  case 0:
+                    _iterator = _createForOfIteratorHelper(uris);
+                    _context5.prev = 1;
+                    _iterator.s();
+                  case 3:
+                    if ((_step = _iterator.n()).done) {
+                      _context5.next = 9;
+                      break;
+                    }
+                    webid = _step.value;
+                    _context5.next = 7;
+                    return addOneIdAndRefresh(person, webid);
+                  case 7:
+                    _context5.next = 3;
+                    break;
+                  case 9:
+                    _context5.next = 14;
+                    break;
+                  case 11:
+                    _context5.prev = 11;
+                    _context5.t0 = _context5["catch"](1);
+                    _iterator.e(_context5.t0);
+                  case 14:
+                    _context5.prev = 14;
+                    _iterator.f();
+                    return _context5.finish(14);
+                  case 17:
+                  case "end":
+                    return _context5.stop();
+                }
+              }, _callee5, null, [[1, 11, 14, 17]]);
+            }));
+            return _droppedURIHandler.apply(this, arguments);
+          };
+          droppedURIHandler = function _droppedURIHandler2(_x11) {
+            return _droppedURIHandler.apply(this, arguments);
+          };
+          _searchButtonHandler = function _searchButtonHandler3() {
+            _searchButtonHandler = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(_event) {
+              return _regenerator["default"].wrap(function _callee4$(_context4) {
+                while (1) switch (_context4.prev = _context4.next) {
+                  case 0:
+                    if (!decoratedAutocomplete) {
+                      _context4.next = 5;
+                      break;
+                    }
+                    creationArea.removeChild(decoratedAutocomplete);
+                    decoratedAutocomplete = undefined;
+                    _context4.next = 7;
+                    break;
+                  case 5:
+                    _context4.next = 7;
+                    return displayAutocomplete();
+                  case 7:
+                  case "end":
+                    return _context4.stop();
+                }
+              }, _callee4);
+            }));
+            return _searchButtonHandler.apply(this, arguments);
+          };
+          searchButtonHandler = function _searchButtonHandler2(_x10) {
+            return _searchButtonHandler.apply(this, arguments);
+          };
+          _displayAutocomplete = function _displayAutocomplete3() {
+            _displayAutocomplete = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3() {
+              return _regenerator["default"].wrap(function _callee3$(_context3) {
+                while (1) switch (_context3.prev = _context3.next) {
+                  case 0:
+                    decoratedAutocomplete = dom.createElement('div');
+                    decoratedAutocomplete.setAttribute('style', 'display: flex; flex-flow: wrap;');
+                    _context3.t0 = decoratedAutocomplete;
+                    _context3.next = 5;
+                    return (0, _autocompletePicker.renderAutoComplete)(dom, acOptions, decoration, autoCompleteDone);
+                  case 5:
+                    _context3.t1 = _context3.sent;
+                    _context3.t0.appendChild.call(_context3.t0, _context3.t1);
+                    // console.log('@@ acceptButton', acceptButton)
+                    decoratedAutocomplete.appendChild(acceptButton);
+                    // console.log('@@ cancelButton', cancelButton)
+
+                    decoratedAutocomplete.appendChild(cancelButton);
+                    // console.log('@@ editButton', editButton)
+
+                    decoratedAutocomplete.appendChild(editButton);
+                    // console.log('@@ deleteButtonContainer', deleteButtonContainer)
+
+                    decoratedAutocomplete.appendChild(deleteButtonContainer);
+                    creationArea.appendChild(decoratedAutocomplete);
+                  case 12:
+                  case "end":
+                    return _context3.stop();
+                }
+              }, _callee3);
+            }));
+            return _displayAutocomplete.apply(this, arguments);
+          };
+          displayAutocomplete = function _displayAutocomplete2() {
+            return _displayAutocomplete.apply(this, arguments);
+          };
+          removeDecorated = function _removeDecorated() {
+            if (decoratedAutocomplete) {
+              creationArea.removeChild(decoratedAutocomplete);
+              decoratedAutocomplete = undefined;
             }
+          };
+          _greenButtonHandler = function _greenButtonHandler3() {
+            _greenButtonHandler = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(_event) {
+              var webid;
+              return _regenerator["default"].wrap(function _callee2$(_context2) {
+                while (1) switch (_context2.prev = _context2.next) {
+                  case 0:
+                    _context2.next = 2;
+                    return widgets.askName(dom, _solidLogic.store, creationArea, ns.vcard('url'), undefined, WEBID_NOUN);
+                  case 2:
+                    webid = _context2.sent;
+                    if (webid) {
+                      _context2.next = 5;
+                      break;
+                    }
+                    return _context2.abrupt("return");
+                  case 5:
+                    return _context2.abrupt("return", addOneIdAndRefresh(person, webid));
+                  case 6:
+                  case "end":
+                    return _context2.stop();
+                }
+              }, _callee2);
+            }));
+            return _greenButtonHandler.apply(this, arguments);
+          };
+          greenButtonHandler = function _greenButtonHandler2(_x9) {
+            return _greenButtonHandler.apply(this, arguments);
+          };
+          _autoCompleteDone = function _autoCompleteDone3() {
+            _autoCompleteDone = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(object, name) {
+              return _regenerator["default"].wrap(function _callee$(_context) {
+                while (1) switch (_context.prev = _context.next) {
+                  case 0:
+                    if (acOptions.permanent) {
+                      // remember to set this in publicid panel
+                      (0, _autocompletePicker.setVisible)(editButton, true);
+                      (0, _autocompletePicker.setVisible)(acceptButton, false);
+                      (0, _autocompletePicker.setVisible)(cancelButton, false);
+                    } else {
+                      // console.log('temporary - removed decoratiion')
+                      removeDecorated();
+                    }
+                    return _context.abrupt("return", addOneIdAndRefresh(object, name));
+                  case 2:
+                  case "end":
+                    return _context.stop();
+                }
+              }, _callee);
+            }));
+            return _autoCompleteDone.apply(this, arguments);
+          };
+          autoCompleteDone = function _autoCompleteDone2(_x7, _x8) {
+            return _autoCompleteDone.apply(this, arguments);
+          };
+          acceptButton = widgets.continueButton(dom);
+          acceptButton.setAttribute('data-testid', 'accept-button');
+          cancelButton = widgets.cancelButton(dom);
+          cancelButton.setAttribute('data-testid', 'cancel-button');
+          deleteButtonContainer = dom.createElement('div');
+          noun = acOptions.targetClass ? utils.label(acOptions.targetClass) : 'item';
+          deleteButton = widgets.deleteButtonWithCheck(dom, deleteButtonContainer, noun, deleteOne); // need to knock out this UI or caller does that
+          deleteButton.setAttribute('data-testid', 'delete-button');
+          editButton = widgets.button(dom, EDIT_ICON, 'Edit', function (_event) {
+            editing = !editing;
             syncEditingStatus();
-            return _context6.abrupt("return", creationArea);
-          case 34:
-          case "end":
-            return _context6.stop();
-        }
+          });
+          editButton.setAttribute('data-testid', 'edit-button');
+          editing = true;
+          decoration = {
+            acceptButton: acceptButton,
+            cancelButton: cancelButton,
+            editButton: editButton,
+            deleteButton: deleteButton
+          };
+          decoratedAutocomplete = undefined;
+          creationArea = dom.createElement('div');
+          creationArea.style.display = 'flex';
+          creationArea.style.flexDirection = 'row';
+          if (!(acOptions.permanent || acOptions.currentObject)) {
+            _context6.next = 31;
+            break;
+          }
+          _context6.next = 31;
+          return displayAutocomplete();
+        case 31:
+          if (barOptions.editable) {
+            // creationArea.appendChild(await renderAutoComplete(dom, barOptions, autoCompleteDone)) wait for searchButton
+            creationArea.style.width = '100%';
+            if (barOptions.manualURIEntry) {
+              plus = creationArea.appendChild(widgets.button(dom, GREEN_PLUS, barOptions.idNoun, greenButtonHandler));
+              widgets.makeDropTarget(plus, droppedURIHandler, undefined);
+            }
+            if (barOptions.dbLookup && !acOptions.currentObject && !acOptions.permanent) {
+              creationArea.appendChild(widgets.button(dom, SEARCH_ICON, barOptions.idNoun, searchButtonHandler));
+            }
+          }
+          syncEditingStatus();
+          return _context6.abrupt("return", creationArea);
+        case 34:
+        case "end":
+          return _context6.stop();
       }
     }, _callee6);
   }));
@@ -17361,48 +17213,46 @@ function autocompleteField(dom, container, already, subject, form, doc, callback
     _addOneIdAndRefresh = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(result, name) {
       var oldValue, oldName, deletables, insertables, _kb$updater2;
       return _regenerator["default"].wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              if (name) {
-                _context.next = 2;
-                break;
-              }
-              throw new Error('autocompleteField:  No name set.');
-            case 2:
-              oldValue = kb.the(subject, property, null, doc);
-              if (!oldValue) {
-                _context.next = 7;
-                break;
-              }
-              oldName = kb.any(oldValue, labelProperty, null, doc);
-              if (!(oldValue.equals(result) && oldName && oldName.sameTerm(name))) {
-                _context.next = 7;
-                break;
-              }
-              return _context.abrupt("return");
-            case 7:
-              deletables = oldValue ? kb.statementsMatching(subject, property, oldValue, doc).concat(kb.statementsMatching(oldValue, labelProperty, null, doc)) : []; // console.log('autocompleteField Deletables ' + deletables.map(st => st.toNT()))
-              insertables = [(0, _rdflib.st)(subject, property, result, doc), (0, _rdflib.st)(result, labelProperty, name, doc)]; // @@ track the language of the  name too!
-              // console.log(`AC form: ${deletables.length} to delete and ${insertables.length} to insert`)
-              _context.prev = 9;
-              _context.next = 12;
-              return (_kb$updater2 = kb.updater) === null || _kb$updater2 === void 0 ? void 0 : _kb$updater2.updateMany(deletables, insertables);
-            case 12:
-              _context.next = 19;
+        while (1) switch (_context.prev = _context.next) {
+          case 0:
+            if (name) {
+              _context.next = 2;
               break;
-            case 14:
-              _context.prev = 14;
-              _context.t0 = _context["catch"](9);
-              callbackFunction(false, _context.t0);
-              box.appendChild(widgets.errorMessageBlock(dom, 'Autocomplete form data update error:' + _context.t0, null, _context.t0));
-              return _context.abrupt("return");
-            case 19:
-              callbackFunction(true, '');
-            case 20:
-            case "end":
-              return _context.stop();
-          }
+            }
+            throw new Error('autocompleteField:  No name set.');
+          case 2:
+            oldValue = kb.the(subject, property, null, doc);
+            if (!oldValue) {
+              _context.next = 7;
+              break;
+            }
+            oldName = kb.any(oldValue, labelProperty, null, doc);
+            if (!(oldValue.equals(result) && oldName && oldName.sameTerm(name))) {
+              _context.next = 7;
+              break;
+            }
+            return _context.abrupt("return");
+          case 7:
+            deletables = oldValue ? kb.statementsMatching(subject, property, oldValue, doc).concat(kb.statementsMatching(oldValue, labelProperty, null, doc)) : []; // console.log('autocompleteField Deletables ' + deletables.map(st => st.toNT()))
+            insertables = [(0, _rdflib.st)(subject, property, result, doc), (0, _rdflib.st)(result, labelProperty, name, doc)]; // @@ track the language of the  name too!
+            // console.log(`AC form: ${deletables.length} to delete and ${insertables.length} to insert`)
+            _context.prev = 9;
+            _context.next = 12;
+            return (_kb$updater2 = kb.updater) === null || _kb$updater2 === void 0 ? void 0 : _kb$updater2.updateMany(deletables, insertables);
+          case 12:
+            _context.next = 19;
+            break;
+          case 14:
+            _context.prev = 14;
+            _context.t0 = _context["catch"](9);
+            callbackFunction(false, _context.t0);
+            box.appendChild(widgets.errorMessageBlock(dom, 'Autocomplete form data update error:' + _context.t0, null, _context.t0));
+            return _context.abrupt("return");
+          case 19:
+            callbackFunction(true, '');
+          case 20:
+          case "end":
+            return _context.stop();
         }
       }, _callee, null, [[9, 14]]);
     }));
@@ -17415,40 +17265,38 @@ function autocompleteField(dom, container, already, subject, form, doc, callback
     _deleteOne = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(_result, _name) {
       var oldValue, deletables, insertables, _kb$updater3, e2;
       return _regenerator["default"].wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              oldValue = kb.the(subject, property, null, doc);
-              if (oldValue) {
-                _context2.next = 5;
-                break;
-              }
-              callbackFunction(false, 'NO data to elete');
-              box.appendChild(widgets.errorMessageBlock(dom, 'Autocomplete delete: no old data!'));
-              return _context2.abrupt("return");
-            case 5:
-              // const oldName = kb.any(oldValue as any, labelProperty as any, null, doc)
-              deletables = kb.statementsMatching(subject, property, oldValue, doc).concat(kb.statementsMatching(oldValue, labelProperty, null, doc)); // console.log('autocompleteField Deletables ' + deletables.map(st => st.toNT()))
-              insertables = []; // console.log(`AC form delete: ${deletables.length} to delete and ${insertables.length} to insert`)
-              _context2.prev = 7;
-              _context2.next = 10;
-              return (_kb$updater3 = kb.updater) === null || _kb$updater3 === void 0 ? void 0 : _kb$updater3.updateMany(deletables, insertables);
-            case 10:
-              _context2.next = 18;
+        while (1) switch (_context2.prev = _context2.next) {
+          case 0:
+            oldValue = kb.the(subject, property, null, doc);
+            if (oldValue) {
+              _context2.next = 5;
               break;
-            case 12:
-              _context2.prev = 12;
-              _context2.t0 = _context2["catch"](7);
-              e2 = new Error('Autocomplete form data delete error:' + _context2.t0);
-              callbackFunction(false, _context2.t0);
-              box.appendChild(widgets.errorMessageBlock(dom, e2, null, _context2.t0));
-              return _context2.abrupt("return");
-            case 18:
-              callbackFunction(true, ''); // changed
-            case 19:
-            case "end":
-              return _context2.stop();
-          }
+            }
+            callbackFunction(false, 'NO data to elete');
+            box.appendChild(widgets.errorMessageBlock(dom, 'Autocomplete delete: no old data!'));
+            return _context2.abrupt("return");
+          case 5:
+            // const oldName = kb.any(oldValue as any, labelProperty as any, null, doc)
+            deletables = kb.statementsMatching(subject, property, oldValue, doc).concat(kb.statementsMatching(oldValue, labelProperty, null, doc)); // console.log('autocompleteField Deletables ' + deletables.map(st => st.toNT()))
+            insertables = []; // console.log(`AC form delete: ${deletables.length} to delete and ${insertables.length} to insert`)
+            _context2.prev = 7;
+            _context2.next = 10;
+            return (_kb$updater3 = kb.updater) === null || _kb$updater3 === void 0 ? void 0 : _kb$updater3.updateMany(deletables, insertables);
+          case 10:
+            _context2.next = 18;
+            break;
+          case 12:
+            _context2.prev = 12;
+            _context2.t0 = _context2["catch"](7);
+            e2 = new Error('Autocomplete form data delete error:' + _context2.t0);
+            callbackFunction(false, _context2.t0);
+            box.appendChild(widgets.errorMessageBlock(dom, e2, null, _context2.t0));
+            return _context2.abrupt("return");
+          case 18:
+            callbackFunction(true, ''); // changed
+          case 19:
+          case "end":
+            return _context2.stop();
         }
       }, _callee2, null, [[7, 12]]);
     }));
@@ -17601,7 +17449,7 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var AUTOCOMPLETE_THRESHOLD = 4; // don't check until this many characters typed
 var AUTOCOMPLETE_ROWS = 20; // 20?
 var AUTOCOMPLETE_ROWS_STRETCH = 40;
@@ -17632,398 +17480,382 @@ function _renderAutoComplete() {
   _renderAutoComplete = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee8(dom, acOptions, decoration, callback) {
     var complain, finish, gotIt, _gotIt, acceptButtonHandler, _acceptButtonHandler, cancelButtonHandler, _cancelButtonHandler, nameMatch, clearList, inputEventHHandler, _inputEventHHandler, loadBindingsAndFilterByLanguage, _loadBindingsAndFilterByLanguage, filterByName, refreshList, _refreshList, initialize, targetClass, lastBindings, loadedEnough, inputEventHandlerLock, allDisplayed, lastFilter, numberOfRows, div, foundName, foundObject, table, head, cell, searchInput, size, searchInputStyle;
     return _regenerator["default"].wrap(function _callee8$(_context8) {
-      while (1) {
-        switch (_context8.prev = _context8.next) {
-          case 0:
-            initialize = function _initialize() {
-              if (acOptions.currentObject) {
-                // If have existing value then jump into the endgame of the autocomplete
-                searchInput.value = acOptions.currentName ? acOptions.currentName.value : '??? wot no name for ' + acOptions.currentObject;
-                foundName = acOptions.currentName;
-                lastFilter = acOptions.currentName ? acOptions.currentName.value : undefined;
-                foundObject = acOptions.currentObject;
-              } else {
-                searchInput.value = '';
-                lastFilter = undefined;
-                foundObject = undefined;
-              }
-              if (decoration.deleteButton) {
-                setVisible(decoration.deleteButton, !!acOptions.currentObject);
-              }
-              if (decoration.acceptButton) {
-                setVisible(decoration.acceptButton, false); // hide until input complete
-              }
-
-              if (decoration.editButton) {
-                setVisible(decoration.editButton, true);
-              }
-              if (decoration.cancelButton) {
-                setVisible(decoration.cancelButton, false); // only allow cancel when there is something to cancel
-              }
-
-              inputEventHandlerLock = false;
-              clearList();
-            };
-            _refreshList = function _refreshList3() {
-              _refreshList = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7() {
-                var rowForBinding, compareBindingsByName, languagePrefs, filter, slimmed, displayable, _iterator, _step, binding;
-                return _regenerator["default"].wrap(function _callee7$(_context7) {
-                  while (1) {
-                    switch (_context7.prev = _context7.next) {
-                      case 0:
-                        compareBindingsByName = function _compareBindingsByNam(self, other) {
-                          return other.name.value > self.name.value ? 1 : other.name.name < self.name.value ? -1 : 0;
-                        };
-                        rowForBinding = function _rowForBinding(binding) {
-                          var row = dom.createElement('tr');
-                          style.setStyle(row, 'autocompleteRowStyle');
-                          row.setAttribute('style', 'padding: 0.3em;');
-                          row.style.color = allDisplayed ? '#080' : '#088'; // green means 'you should find it here'
-                          row.textContent = binding.name.value;
-                          var object = (0, _publicData.bindingToTerm)(binding.subject);
-                          var nameTerm = (0, _publicData.bindingToTerm)(binding.name);
-                          row.addEventListener('click', /*#__PURE__*/function () {
-                            var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(_event) {
-                              return _regenerator["default"].wrap(function _callee6$(_context6) {
-                                while (1) {
-                                  switch (_context6.prev = _context6.next) {
-                                    case 0:
-                                      debug.log('       click row textContent: ' + row.textContent);
-                                      debug.log('       click name: ' + nameTerm.value);
-                                      if (object && nameTerm) {
-                                        gotIt(object, nameTerm);
-                                      }
-                                    case 3:
-                                    case "end":
-                                      return _context6.stop();
-                                  }
-                                }
-                              }, _callee6);
-                            }));
-                            return function (_x12) {
-                              return _ref.apply(this, arguments);
-                            };
-                          }());
-                          return row;
-                        };
-                        if (!inputEventHandlerLock) {
-                          _context7.next = 5;
-                          break;
-                        }
-                        debug.log("Ignoring \"".concat(searchInput.value, "\" because of lock "));
-                        return _context7.abrupt("return");
-                      case 5:
-                        debug.log("Setting lock at \"".concat(searchInput.value, "\""));
-                        inputEventHandlerLock = true;
-                        _context7.next = 9;
-                        return (0, _language.getPreferredLanguages)();
-                      case 9:
-                        languagePrefs = _context7.sent;
-                        filter = searchInput.value.trim().toLowerCase();
-                        if (!(filter.length < AUTOCOMPLETE_THRESHOLD)) {
-                          _context7.next = 16;
-                          break;
-                        }
-                        // too small
-                        clearList();
-                        // candidatesLoaded = false
-                        numberOfRows = AUTOCOMPLETE_ROWS;
-                        _context7.next = 31;
-                        break;
-                      case 16:
-                        if (!(!allDisplayed || !lastFilter || !filter.startsWith(lastFilter))) {
-                          _context7.next = 21;
-                          break;
-                        }
-                        debug.log("   Querying database at \"".concat(filter, "\" cf last \"").concat(lastFilter, "\"."));
-                        _context7.next = 20;
-                        return loadBindingsAndFilterByLanguage(filter, languagePrefs);
-                      case 20:
-                        lastBindings = _context7.sent;
-                      case 21:
-                        // Trim table as search gets tighter:
-                        slimmed = filterByName(filter, lastBindings);
-                        if (loadedEnough && slimmed.length <= AUTOCOMPLETE_ROWS_STRETCH) {
-                          numberOfRows = slimmed.length; // stretch if it means we get all items
-                        }
-
-                        allDisplayed = loadedEnough && slimmed.length <= numberOfRows;
-                        debug.log(" Filter:\"".concat(filter, "\" lastBindings: ").concat(lastBindings.length, ", slimmed to ").concat(slimmed.length, "; rows: ").concat(numberOfRows, ", Enough? ").concat(loadedEnough, ", All displayed? ").concat(allDisplayed));
-                        displayable = slimmed.slice(0, numberOfRows);
-                        displayable.sort(compareBindingsByName);
-                        clearList();
-                        _iterator = _createForOfIteratorHelper(displayable);
-                        try {
-                          for (_iterator.s(); !(_step = _iterator.n()).done;) {
-                            binding = _step.value;
-                            table.appendChild(rowForBinding(binding));
-                          }
-                        } catch (err) {
-                          _iterator.e(err);
-                        } finally {
-                          _iterator.f();
-                        }
-                        if (slimmed.length === 1) {
-                          gotIt((0, _publicData.bindingToTerm)(slimmed[0].subject), (0, _publicData.bindingToTerm)(slimmed[0].name));
-                        }
-                      case 31:
-                        // else
-                        inputEventHandlerLock = false;
-                      case 32:
-                      case "end":
-                        return _context7.stop();
-                    }
-                  }
-                }, _callee7);
-              }));
-              return _refreshList.apply(this, arguments);
-            };
-            refreshList = function _refreshList2() {
-              return _refreshList.apply(this, arguments);
-            };
-            filterByName = function _filterByName(filter, bindings) {
-              return bindings.filter(function (binding) {
-                return nameMatch(filter, binding.name.value);
-              });
-            };
-            _loadBindingsAndFilterByLanguage = function _loadBindingsAndFilte2() {
-              _loadBindingsAndFilterByLanguage = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(filter, languagePrefs) {
-                var bindings, slimmed;
-                return _regenerator["default"].wrap(function _callee5$(_context5) {
-                  while (1) {
-                    switch (_context5.prev = _context5.next) {
-                      case 0:
-                        _context5.prev = 0;
-                        _context5.next = 3;
-                        return (0, _publicData.queryPublicDataByName)(filter, targetClass, languagePrefs || _language.defaultPreferredLanguages, acOptions.queryParams);
-                      case 3:
-                        bindings = _context5.sent;
-                        _context5.next = 11;
-                        break;
-                      case 6:
-                        _context5.prev = 6;
-                        _context5.t0 = _context5["catch"](0);
-                        complain('Error querying db of organizations: ' + _context5.t0);
-                        inputEventHandlerLock = false;
-                        return _context5.abrupt("return");
-                      case 11:
-                        loadedEnough = bindings.length < _publicData.AUTOCOMPLETE_LIMIT;
-                        if (loadedEnough) {
-                          lastFilter = filter;
-                        } else {
-                          lastFilter = undefined;
-                        }
-                        clearList();
-                        slimmed = (0, _language.filterByLanguage)(bindings, languagePrefs);
-                        return _context5.abrupt("return", slimmed);
-                      case 16:
-                      case "end":
-                        return _context5.stop();
-                    }
-                  }
-                }, _callee5, null, [[0, 6]]);
-              }));
-              return _loadBindingsAndFilterByLanguage.apply(this, arguments);
-            };
-            loadBindingsAndFilterByLanguage = function _loadBindingsAndFilte(_x10, _x11) {
-              return _loadBindingsAndFilterByLanguage.apply(this, arguments);
-            };
-            _inputEventHHandler = function _inputEventHHandler3() {
-              _inputEventHHandler = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(_event) {
-                return _regenerator["default"].wrap(function _callee4$(_context4) {
-                  while (1) {
-                    switch (_context4.prev = _context4.next) {
-                      case 0:
-                        // console.log('@@ AC inputEventHHandler called')
-                        setVisible(decoration.cancelButton, true); // only allow cancel when there is something to cancel
-                        refreshList(); /// @@  debounqce does not work with jest
-                        /*
-                        if (runningTimeout) {
-                          clearTimeout(runningTimeout)
-                        }
-                        runningTimeout = setTimeout(refreshList, AUTOCOMPLETE_DEBOUNCE_MS)
-                        */
-                      case 2:
-                      case "end":
-                        return _context4.stop();
-                    }
-                  }
-                }, _callee4);
-              }));
-              return _inputEventHHandler.apply(this, arguments);
-            };
-            inputEventHHandler = function _inputEventHHandler2(_x9) {
-              return _inputEventHHandler.apply(this, arguments);
-            };
-            clearList = function _clearList() {
-              while (table.children.length > 1) {
-                table.removeChild(table.lastChild);
-              }
-            };
-            nameMatch = function _nameMatch(filter, candidate) {
-              var parts = filter.split(' '); // Each name part must be somewhere
-              for (var j = 0; j < parts.length; j++) {
-                var word = parts[j];
-                if (candidate.toLowerCase().indexOf(word) < 0) return false;
-              }
-              return true;
-            };
-            _cancelButtonHandler = function _cancelButtonHandler3() {
-              _cancelButtonHandler = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(_event) {
-                return _regenerator["default"].wrap(function _callee3$(_context3) {
-                  while (1) {
-                    switch (_context3.prev = _context3.next) {
-                      case 0:
-                        debug.log('Auto complete: Canceled by user! ');
-                        if (acOptions.permanent) {
-                          initialize();
-                        } else {
-                          if (div.parentNode) {
-                            div.parentNode.removeChild(div);
-                          }
-                        }
-                      case 2:
-                      case "end":
-                        return _context3.stop();
-                    }
-                  }
-                }, _callee3);
-              }));
-              return _cancelButtonHandler.apply(this, arguments);
-            };
-            cancelButtonHandler = function _cancelButtonHandler2(_x8) {
-              return _cancelButtonHandler.apply(this, arguments);
-            };
-            _acceptButtonHandler = function _acceptButtonHandler3() {
-              _acceptButtonHandler = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(_event) {
-                return _regenerator["default"].wrap(function _callee2$(_context2) {
-                  while (1) {
-                    switch (_context2.prev = _context2.next) {
-                      case 0:
-                        if (foundName && searchInput.value === foundName.value) {
-                          // still
-                          finish(foundObject, foundName);
-                        }
-                      case 1:
-                      case "end":
-                        return _context2.stop();
-                    }
-                  }
-                }, _callee2);
-              }));
-              return _acceptButtonHandler.apply(this, arguments);
-            };
-            acceptButtonHandler = function _acceptButtonHandler2(_x7) {
-              return _acceptButtonHandler.apply(this, arguments);
-            };
-            _gotIt = function _gotIt3() {
-              _gotIt = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(object, name) {
-                return _regenerator["default"].wrap(function _callee$(_context) {
-                  while (1) {
-                    switch (_context.prev = _context.next) {
-                      case 0:
-                        if (!decoration.acceptButton) {
-                          _context.next = 10;
-                          break;
-                        }
-                        decoration.acceptButton.disbaled = false;
-                        setVisible(decoration.acceptButton, true); // now wait for confirmation
-                        searchInput.value = name.value; // complete it
-                        foundName = name;
-                        foundObject = object;
-                        debug.log('Auto complete: name: ' + name);
-                        debug.log('Auto complete: waiting for accept ' + object);
-                        clearList(); // This may be an option - nice and clean but does not allow change of mind
-                        return _context.abrupt("return");
-                      case 10:
-                        setVisible(decoration.cancelButton, true);
-                        finish(object, name);
-                      case 12:
-                      case "end":
-                        return _context.stop();
-                    }
-                  }
-                }, _callee);
-              }));
-              return _gotIt.apply(this, arguments);
-            };
-            gotIt = function _gotIt2(_x5, _x6) {
-              return _gotIt.apply(this, arguments);
-            };
-            finish = function _finish(object, name) {
-              debug.log('Auto complete: finish! ' + object);
-              if (object.termType === 'Literal' && acOptions.queryParams.objectURIBase) {
-                object = _solidLogic.store.sym(acOptions.queryParams.objectURIBase.value + object.value);
-              }
-              // remove(decoration.cancelButton)
-              // remove(decoration.acceptButton)
-              // remove(div)
-              clearList();
-              callback(object, name);
-            };
-            complain = function _complain(message) {
-              var errorRow = table.appendChild(dom.createElement('tr'));
-              debug.log(message);
-              var err = new Error(message);
-              errorRow.appendChild(widgets.errorMessageBlock(dom, err, 'pink'));
-              // errorMessageBlock will log the stack to the console
-              style.setStyle(errorRow, 'autocompleteRowStyle');
-              errorRow.style.padding = '1em';
-            };
-            // initialiize
-            // const queryParams: QueryParameters = acOptions.queryParams
-            targetClass = acOptions.targetClass;
-            if (targetClass) {
-              _context8.next = 21;
-              break;
+      while (1) switch (_context8.prev = _context8.next) {
+        case 0:
+          initialize = function _initialize() {
+            if (acOptions.currentObject) {
+              // If have existing value then jump into the endgame of the autocomplete
+              searchInput.value = acOptions.currentName ? acOptions.currentName.value : '??? wot no name for ' + acOptions.currentObject;
+              foundName = acOptions.currentName;
+              lastFilter = acOptions.currentName ? acOptions.currentName.value : undefined;
+              foundObject = acOptions.currentObject;
+            } else {
+              searchInput.value = '';
+              lastFilter = undefined;
+              foundObject = undefined;
             }
-            throw new Error('renderAutoComplete: missing targetClass');
-          case 21:
-            // console.log(`renderAutoComplete: targetClass=${targetClass}` )
+            if (decoration.deleteButton) {
+              setVisible(decoration.deleteButton, !!acOptions.currentObject);
+            }
             if (decoration.acceptButton) {
-              decoration.acceptButton.addEventListener('click', acceptButtonHandler, false);
+              setVisible(decoration.acceptButton, false); // hide until input complete
+            }
+
+            if (decoration.editButton) {
+              setVisible(decoration.editButton, true);
             }
             if (decoration.cancelButton) {
-              decoration.cancelButton.addEventListener('click', cancelButtonHandler, false);
+              setVisible(decoration.cancelButton, false); // only allow cancel when there is something to cancel
             }
 
-            // var candidatesLoaded = false
-            loadedEnough = false;
             inputEventHandlerLock = false;
-            allDisplayed = false;
-            lastFilter = undefined;
-            numberOfRows = AUTOCOMPLETE_ROWS; // this gets slimmed down
-            div = dom.createElement('div');
-            foundName = undefined; // once found accepted string must match this
-            foundObject = undefined;
-            table = div.appendChild(dom.createElement('table'));
-            table.setAttribute('data-testid', 'autocomplete-table');
-            table.setAttribute('style', 'max-width: 30em; margin: 0.5em;');
-            head = table.appendChild(dom.createElement('tr'));
-            style.setStyle(head, 'autocompleteRowStyle'); // textInputStyle or
-            cell = head.appendChild(dom.createElement('td'));
-            searchInput = cell.appendChild(dom.createElement('input'));
-            searchInput.setAttribute('type', 'text');
-            initialize();
-            size = acOptions.size || style.textInputSize || 20;
-            searchInput.setAttribute('size', size);
-            searchInput.setAttribute('data-testid', 'autocomplete-input');
-            searchInputStyle = style.textInputStyle ||
-            // searchInputStyle ?
-            'border: 0.1em solid #444; border-radius: 0.5em; width: 100%; font-size: 100%; padding: 0.1em 0.6em'; // @
-            searchInput.setAttribute('style', searchInputStyle);
-            searchInput.addEventListener('keyup', function (event) {
-              if (event.keyCode === 13) {
-                acceptButtonHandler(event);
-              }
-            }, false);
-            searchInput.addEventListener('input', inputEventHHandler);
-            // console.log('@@ renderAutoComplete returns ' + div.innerHTML)
-            return _context8.abrupt("return", div);
-          case 48:
-          case "end":
-            return _context8.stop();
-        }
+            clearList();
+          };
+          _refreshList = function _refreshList3() {
+            _refreshList = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7() {
+              var rowForBinding, compareBindingsByName, languagePrefs, filter, slimmed, displayable, _iterator, _step, binding;
+              return _regenerator["default"].wrap(function _callee7$(_context7) {
+                while (1) switch (_context7.prev = _context7.next) {
+                  case 0:
+                    compareBindingsByName = function _compareBindingsByNam(self, other) {
+                      return other.name.value > self.name.value ? 1 : other.name.name < self.name.value ? -1 : 0;
+                    };
+                    rowForBinding = function _rowForBinding(binding) {
+                      var row = dom.createElement('tr');
+                      style.setStyle(row, 'autocompleteRowStyle');
+                      row.setAttribute('style', 'padding: 0.3em;');
+                      row.style.color = allDisplayed ? '#080' : '#088'; // green means 'you should find it here'
+                      row.textContent = binding.name.value;
+                      var object = (0, _publicData.bindingToTerm)(binding.subject);
+                      var nameTerm = (0, _publicData.bindingToTerm)(binding.name);
+                      row.addEventListener('click', /*#__PURE__*/function () {
+                        var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(_event) {
+                          return _regenerator["default"].wrap(function _callee6$(_context6) {
+                            while (1) switch (_context6.prev = _context6.next) {
+                              case 0:
+                                debug.log('       click row textContent: ' + row.textContent);
+                                debug.log('       click name: ' + nameTerm.value);
+                                if (object && nameTerm) {
+                                  gotIt(object, nameTerm);
+                                }
+                              case 3:
+                              case "end":
+                                return _context6.stop();
+                            }
+                          }, _callee6);
+                        }));
+                        return function (_x12) {
+                          return _ref.apply(this, arguments);
+                        };
+                      }());
+                      return row;
+                    };
+                    if (!inputEventHandlerLock) {
+                      _context7.next = 5;
+                      break;
+                    }
+                    debug.log("Ignoring \"".concat(searchInput.value, "\" because of lock "));
+                    return _context7.abrupt("return");
+                  case 5:
+                    debug.log("Setting lock at \"".concat(searchInput.value, "\""));
+                    inputEventHandlerLock = true;
+                    _context7.next = 9;
+                    return (0, _language.getPreferredLanguages)();
+                  case 9:
+                    languagePrefs = _context7.sent;
+                    filter = searchInput.value.trim().toLowerCase();
+                    if (!(filter.length < AUTOCOMPLETE_THRESHOLD)) {
+                      _context7.next = 16;
+                      break;
+                    }
+                    // too small
+                    clearList();
+                    // candidatesLoaded = false
+                    numberOfRows = AUTOCOMPLETE_ROWS;
+                    _context7.next = 31;
+                    break;
+                  case 16:
+                    if (!(!allDisplayed || !lastFilter || !filter.startsWith(lastFilter))) {
+                      _context7.next = 21;
+                      break;
+                    }
+                    debug.log("   Querying database at \"".concat(filter, "\" cf last \"").concat(lastFilter, "\"."));
+                    _context7.next = 20;
+                    return loadBindingsAndFilterByLanguage(filter, languagePrefs);
+                  case 20:
+                    lastBindings = _context7.sent;
+                  case 21:
+                    // Trim table as search gets tighter:
+                    slimmed = filterByName(filter, lastBindings);
+                    if (loadedEnough && slimmed.length <= AUTOCOMPLETE_ROWS_STRETCH) {
+                      numberOfRows = slimmed.length; // stretch if it means we get all items
+                    }
+
+                    allDisplayed = loadedEnough && slimmed.length <= numberOfRows;
+                    debug.log(" Filter:\"".concat(filter, "\" lastBindings: ").concat(lastBindings.length, ", slimmed to ").concat(slimmed.length, "; rows: ").concat(numberOfRows, ", Enough? ").concat(loadedEnough, ", All displayed? ").concat(allDisplayed));
+                    displayable = slimmed.slice(0, numberOfRows);
+                    displayable.sort(compareBindingsByName);
+                    clearList();
+                    _iterator = _createForOfIteratorHelper(displayable);
+                    try {
+                      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+                        binding = _step.value;
+                        table.appendChild(rowForBinding(binding));
+                      }
+                    } catch (err) {
+                      _iterator.e(err);
+                    } finally {
+                      _iterator.f();
+                    }
+                    if (slimmed.length === 1) {
+                      gotIt((0, _publicData.bindingToTerm)(slimmed[0].subject), (0, _publicData.bindingToTerm)(slimmed[0].name));
+                    }
+                  case 31:
+                    // else
+                    inputEventHandlerLock = false;
+                  case 32:
+                  case "end":
+                    return _context7.stop();
+                }
+              }, _callee7);
+            }));
+            return _refreshList.apply(this, arguments);
+          };
+          refreshList = function _refreshList2() {
+            return _refreshList.apply(this, arguments);
+          };
+          filterByName = function _filterByName(filter, bindings) {
+            return bindings.filter(function (binding) {
+              return nameMatch(filter, binding.name.value);
+            });
+          };
+          _loadBindingsAndFilterByLanguage = function _loadBindingsAndFilte2() {
+            _loadBindingsAndFilterByLanguage = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(filter, languagePrefs) {
+              var bindings, slimmed;
+              return _regenerator["default"].wrap(function _callee5$(_context5) {
+                while (1) switch (_context5.prev = _context5.next) {
+                  case 0:
+                    _context5.prev = 0;
+                    _context5.next = 3;
+                    return (0, _publicData.queryPublicDataByName)(filter, targetClass, languagePrefs || _language.defaultPreferredLanguages, acOptions.queryParams);
+                  case 3:
+                    bindings = _context5.sent;
+                    _context5.next = 11;
+                    break;
+                  case 6:
+                    _context5.prev = 6;
+                    _context5.t0 = _context5["catch"](0);
+                    complain('Error querying db of organizations: ' + _context5.t0);
+                    inputEventHandlerLock = false;
+                    return _context5.abrupt("return");
+                  case 11:
+                    loadedEnough = bindings.length < _publicData.AUTOCOMPLETE_LIMIT;
+                    if (loadedEnough) {
+                      lastFilter = filter;
+                    } else {
+                      lastFilter = undefined;
+                    }
+                    clearList();
+                    slimmed = (0, _language.filterByLanguage)(bindings, languagePrefs);
+                    return _context5.abrupt("return", slimmed);
+                  case 16:
+                  case "end":
+                    return _context5.stop();
+                }
+              }, _callee5, null, [[0, 6]]);
+            }));
+            return _loadBindingsAndFilterByLanguage.apply(this, arguments);
+          };
+          loadBindingsAndFilterByLanguage = function _loadBindingsAndFilte(_x10, _x11) {
+            return _loadBindingsAndFilterByLanguage.apply(this, arguments);
+          };
+          _inputEventHHandler = function _inputEventHHandler3() {
+            _inputEventHHandler = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(_event) {
+              return _regenerator["default"].wrap(function _callee4$(_context4) {
+                while (1) switch (_context4.prev = _context4.next) {
+                  case 0:
+                    // console.log('@@ AC inputEventHHandler called')
+                    setVisible(decoration.cancelButton, true); // only allow cancel when there is something to cancel
+                    refreshList(); /// @@  debounqce does not work with jest
+                    /*
+                    if (runningTimeout) {
+                      clearTimeout(runningTimeout)
+                    }
+                    runningTimeout = setTimeout(refreshList, AUTOCOMPLETE_DEBOUNCE_MS)
+                    */
+                  case 2:
+                  case "end":
+                    return _context4.stop();
+                }
+              }, _callee4);
+            }));
+            return _inputEventHHandler.apply(this, arguments);
+          };
+          inputEventHHandler = function _inputEventHHandler2(_x9) {
+            return _inputEventHHandler.apply(this, arguments);
+          };
+          clearList = function _clearList() {
+            while (table.children.length > 1) {
+              table.removeChild(table.lastChild);
+            }
+          };
+          nameMatch = function _nameMatch(filter, candidate) {
+            var parts = filter.split(' '); // Each name part must be somewhere
+            for (var j = 0; j < parts.length; j++) {
+              var word = parts[j];
+              if (candidate.toLowerCase().indexOf(word) < 0) return false;
+            }
+            return true;
+          };
+          _cancelButtonHandler = function _cancelButtonHandler3() {
+            _cancelButtonHandler = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(_event) {
+              return _regenerator["default"].wrap(function _callee3$(_context3) {
+                while (1) switch (_context3.prev = _context3.next) {
+                  case 0:
+                    debug.log('Auto complete: Canceled by user! ');
+                    if (acOptions.permanent) {
+                      initialize();
+                    } else {
+                      if (div.parentNode) {
+                        div.parentNode.removeChild(div);
+                      }
+                    }
+                  case 2:
+                  case "end":
+                    return _context3.stop();
+                }
+              }, _callee3);
+            }));
+            return _cancelButtonHandler.apply(this, arguments);
+          };
+          cancelButtonHandler = function _cancelButtonHandler2(_x8) {
+            return _cancelButtonHandler.apply(this, arguments);
+          };
+          _acceptButtonHandler = function _acceptButtonHandler3() {
+            _acceptButtonHandler = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(_event) {
+              return _regenerator["default"].wrap(function _callee2$(_context2) {
+                while (1) switch (_context2.prev = _context2.next) {
+                  case 0:
+                    if (foundName && searchInput.value === foundName.value) {
+                      // still
+                      finish(foundObject, foundName);
+                    }
+                  case 1:
+                  case "end":
+                    return _context2.stop();
+                }
+              }, _callee2);
+            }));
+            return _acceptButtonHandler.apply(this, arguments);
+          };
+          acceptButtonHandler = function _acceptButtonHandler2(_x7) {
+            return _acceptButtonHandler.apply(this, arguments);
+          };
+          _gotIt = function _gotIt3() {
+            _gotIt = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(object, name) {
+              return _regenerator["default"].wrap(function _callee$(_context) {
+                while (1) switch (_context.prev = _context.next) {
+                  case 0:
+                    if (!decoration.acceptButton) {
+                      _context.next = 10;
+                      break;
+                    }
+                    decoration.acceptButton.disbaled = false;
+                    setVisible(decoration.acceptButton, true); // now wait for confirmation
+                    searchInput.value = name.value; // complete it
+                    foundName = name;
+                    foundObject = object;
+                    debug.log('Auto complete: name: ' + name);
+                    debug.log('Auto complete: waiting for accept ' + object);
+                    clearList(); // This may be an option - nice and clean but does not allow change of mind
+                    return _context.abrupt("return");
+                  case 10:
+                    setVisible(decoration.cancelButton, true);
+                    finish(object, name);
+                  case 12:
+                  case "end":
+                    return _context.stop();
+                }
+              }, _callee);
+            }));
+            return _gotIt.apply(this, arguments);
+          };
+          gotIt = function _gotIt2(_x5, _x6) {
+            return _gotIt.apply(this, arguments);
+          };
+          finish = function _finish(object, name) {
+            debug.log('Auto complete: finish! ' + object);
+            if (object.termType === 'Literal' && acOptions.queryParams.objectURIBase) {
+              object = _solidLogic.store.sym(acOptions.queryParams.objectURIBase.value + object.value);
+            }
+            // remove(decoration.cancelButton)
+            // remove(decoration.acceptButton)
+            // remove(div)
+            clearList();
+            callback(object, name);
+          };
+          complain = function _complain(message) {
+            var errorRow = table.appendChild(dom.createElement('tr'));
+            debug.log(message);
+            var err = new Error(message);
+            errorRow.appendChild(widgets.errorMessageBlock(dom, err, 'pink'));
+            // errorMessageBlock will log the stack to the console
+            style.setStyle(errorRow, 'autocompleteRowStyle');
+            errorRow.style.padding = '1em';
+          };
+          // initialiize
+          // const queryParams: QueryParameters = acOptions.queryParams
+          targetClass = acOptions.targetClass;
+          if (targetClass) {
+            _context8.next = 21;
+            break;
+          }
+          throw new Error('renderAutoComplete: missing targetClass');
+        case 21:
+          // console.log(`renderAutoComplete: targetClass=${targetClass}` )
+          if (decoration.acceptButton) {
+            decoration.acceptButton.addEventListener('click', acceptButtonHandler, false);
+          }
+          if (decoration.cancelButton) {
+            decoration.cancelButton.addEventListener('click', cancelButtonHandler, false);
+          }
+
+          // var candidatesLoaded = false
+          loadedEnough = false;
+          inputEventHandlerLock = false;
+          allDisplayed = false;
+          lastFilter = undefined;
+          numberOfRows = AUTOCOMPLETE_ROWS; // this gets slimmed down
+          div = dom.createElement('div');
+          foundName = undefined; // once found accepted string must match this
+          foundObject = undefined;
+          table = div.appendChild(dom.createElement('table'));
+          table.setAttribute('data-testid', 'autocomplete-table');
+          table.setAttribute('style', 'max-width: 30em; margin: 0.5em;');
+          head = table.appendChild(dom.createElement('tr'));
+          style.setStyle(head, 'autocompleteRowStyle'); // textInputStyle or
+          cell = head.appendChild(dom.createElement('td'));
+          searchInput = cell.appendChild(dom.createElement('input'));
+          searchInput.setAttribute('type', 'text');
+          initialize();
+          size = acOptions.size || style.textInputSize || 20;
+          searchInput.setAttribute('size', size);
+          searchInput.setAttribute('data-testid', 'autocomplete-input');
+          searchInputStyle = style.textInputStyle ||
+          // searchInputStyle ?
+          'border: 0.1em solid #444; border-radius: 0.5em; width: 100%; font-size: 100%; padding: 0.1em 0.6em'; // @
+          searchInput.setAttribute('style', searchInputStyle);
+          searchInput.addEventListener('keyup', function (event) {
+            if (event.keyCode === 13) {
+              acceptButtonHandler(event);
+            }
+          }, false);
+          searchInput.addEventListener('input', inputEventHHandler);
+          // console.log('@@ renderAutoComplete returns ' + div.innerHTML)
+          return _context8.abrupt("return", div);
+        case 48:
+        case "end":
+          return _context8.stop();
       }
     }, _callee8);
   }));
@@ -18092,47 +17924,45 @@ function _getPreferredLanguagesFor() {
     var _store$fetcher;
     var doc, list, languageCodeArray;
     return _regenerator["default"].wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            doc = person.doc();
-            _context.next = 3;
-            return (_store$fetcher = _solidLogic.store.fetcher) === null || _store$fetcher === void 0 ? void 0 : _store$fetcher.load(doc);
-          case 3:
-            list = _solidLogic.store.any(person, ns.schema('knowsLanguage'), null, doc);
-            if (list) {
-              _context.next = 6;
-              break;
+      while (1) switch (_context.prev = _context.next) {
+        case 0:
+          doc = person.doc();
+          _context.next = 3;
+          return (_store$fetcher = _solidLogic.store.fetcher) === null || _store$fetcher === void 0 ? void 0 : _store$fetcher.load(doc);
+        case 3:
+          list = _solidLogic.store.any(person, ns.schema('knowsLanguage'), null, doc);
+          if (list) {
+            _context.next = 6;
+            break;
+          }
+          return _context.abrupt("return", defaultPreferredLanguages);
+        case 6:
+          languageCodeArray = [];
+          list.elements.forEach(function (item) {
+            // console.log('@@ item ' + item)
+            var lang = _solidLogic.store.any(item, ns.solid('publicId'), null, doc);
+            if (!lang) {
+              console.warn('getPreferredLanguages: No publiID of language.');
+              return;
             }
-            return _context.abrupt("return", defaultPreferredLanguages);
-          case 6:
-            languageCodeArray = [];
-            list.elements.forEach(function (item) {
-              // console.log('@@ item ' + item)
-              var lang = _solidLogic.store.any(item, ns.solid('publicId'), null, doc);
-              if (!lang) {
-                console.warn('getPreferredLanguages: No publiID of language.');
-                return;
-              }
-              if (!lang.value.startsWith(languageCodeURIBase)) {
-                console.error("What should be a language code ".concat(lang.value, " does not start with ").concat(languageCodeURIBase));
-                return;
-              }
-              var code = lang.value.slice(languageCodeURIBase.length);
-              languageCodeArray.push(code);
-            });
-            if (!(languageCodeArray.length > 0)) {
-              _context.next = 11;
-              break;
+            if (!lang.value.startsWith(languageCodeURIBase)) {
+              console.error("What should be a language code ".concat(lang.value, " does not start with ").concat(languageCodeURIBase));
+              return;
             }
-            console.log("     User knows languages with codes: \"".concat(languageCodeArray.join(','), "\""));
-            return _context.abrupt("return", addDefaults(languageCodeArray));
-          case 11:
-            return _context.abrupt("return", null);
-          case 12:
-          case "end":
-            return _context.stop();
-        }
+            var code = lang.value.slice(languageCodeURIBase.length);
+            languageCodeArray.push(code);
+          });
+          if (!(languageCodeArray.length > 0)) {
+            _context.next = 11;
+            break;
+          }
+          console.log("     User knows languages with codes: \"".concat(languageCodeArray.join(','), "\""));
+          return _context.abrupt("return", addDefaults(languageCodeArray));
+        case 11:
+          return _context.abrupt("return", null);
+        case 12:
+        case "end":
+          return _context.stop();
       }
     }, _callee);
   }));
@@ -18149,50 +17979,48 @@ function _getPreferredLanguages() {
   _getPreferredLanguages = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2() {
     var me, solidLanguagePrefs;
     return _regenerator["default"].wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            _context2.next = 2;
-            return _solidLogic.authn.currentUser();
-          case 2:
-            me = _context2.sent;
-            if (!me) {
-              _context2.next = 9;
-              break;
-            }
-            _context2.next = 6;
-            return getPreferredLanguagesFor(me);
-          case 6:
-            solidLanguagePrefs = _context2.sent;
-            if (!solidLanguagePrefs) {
-              _context2.next = 9;
-              break;
-            }
-            return _context2.abrupt("return", solidLanguagePrefs);
-          case 9:
-            if (!(typeof navigator !== 'undefined')) {
-              _context2.next = 14;
-              break;
-            }
-            if (!navigator.languages) {
-              _context2.next = 12;
-              break;
-            }
-            return _context2.abrupt("return", addDefaults(navigator.languages.map(function (longForm) {
-              return longForm.split('-')[0];
-            })));
-          case 12:
-            if (!navigator.language) {
-              _context2.next = 14;
-              break;
-            }
-            return _context2.abrupt("return", addDefaults([navigator.language.split('-')[0]]));
-          case 14:
-            return _context2.abrupt("return", defaultPreferredLanguages);
-          case 15:
-          case "end":
-            return _context2.stop();
-        }
+      while (1) switch (_context2.prev = _context2.next) {
+        case 0:
+          _context2.next = 2;
+          return _solidLogic.authn.currentUser();
+        case 2:
+          me = _context2.sent;
+          if (!me) {
+            _context2.next = 9;
+            break;
+          }
+          _context2.next = 6;
+          return getPreferredLanguagesFor(me);
+        case 6:
+          solidLanguagePrefs = _context2.sent;
+          if (!solidLanguagePrefs) {
+            _context2.next = 9;
+            break;
+          }
+          return _context2.abrupt("return", solidLanguagePrefs);
+        case 9:
+          if (!(typeof navigator !== 'undefined')) {
+            _context2.next = 14;
+            break;
+          }
+          if (!navigator.languages) {
+            _context2.next = 12;
+            break;
+          }
+          return _context2.abrupt("return", addDefaults(navigator.languages.map(function (longForm) {
+            return longForm.split('-')[0];
+          })));
+        case 12:
+          if (!navigator.language) {
+            _context2.next = 14;
+            break;
+          }
+          return _context2.abrupt("return", addDefaults([navigator.language.split('-')[0]]));
+        case 14:
+          return _context2.abrupt("return", defaultPreferredLanguages);
+        case 15:
+        case "end":
+          return _context2.stop();
       }
     }, _callee2);
   }));
@@ -18505,37 +18333,35 @@ function _queryESCODataByName() {
     var _store$fetcher;
     var limit, queryURI, response, text, json;
     return _regenerator["default"].wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            if (queryTarget.searchByNameURI) {
-              _context.next = 2;
-              break;
-            }
-            throw new Error('Missing queryTarget.searchByNameURI on queryESCODataByName');
-          case 2:
-            limit = queryTarget.limit || AUTOCOMPLETE_LIMIT;
-            queryURI = queryTarget.searchByNameURI.replace('$(name)', filter).replace('$(limit)', '' + limit).replace('$(targetClass)', theClass.toNT());
-            debug.log('Querying ESCO data - uri: ' + queryURI);
-            _context.next = 7;
-            return (_store$fetcher = _solidLogic.store.fetcher) === null || _store$fetcher === void 0 ? void 0 : _store$fetcher.webOperation('GET', queryURI, fetcherOptionsJsonPublicData);
-          case 7:
-            response = _context.sent;
-            text = (response === null || response === void 0 ? void 0 : response.responseText) || '';
-            debug.log('    Query result  text' + text.slice(0, 500) + '...');
-            if (!(text.length === 0)) {
-              _context.next = 12;
-              break;
-            }
-            throw new Error('Wot no text back from ESCO query ' + queryURI);
-          case 12:
-            json = JSON.parse(text); // console.log('Whole JSON return object', json)
-            debug.log('    ESCO Query result JSON' + JSON.stringify(json, null, 4).slice(0, 500) + '...');
-            return _context.abrupt("return", ESCOResultToBindings(json));
-          case 15:
-          case "end":
-            return _context.stop();
-        }
+      while (1) switch (_context.prev = _context.next) {
+        case 0:
+          if (queryTarget.searchByNameURI) {
+            _context.next = 2;
+            break;
+          }
+          throw new Error('Missing queryTarget.searchByNameURI on queryESCODataByName');
+        case 2:
+          limit = queryTarget.limit || AUTOCOMPLETE_LIMIT;
+          queryURI = queryTarget.searchByNameURI.replace('$(name)', filter).replace('$(limit)', '' + limit).replace('$(targetClass)', theClass.toNT());
+          debug.log('Querying ESCO data - uri: ' + queryURI);
+          _context.next = 7;
+          return (_store$fetcher = _solidLogic.store.fetcher) === null || _store$fetcher === void 0 ? void 0 : _store$fetcher.webOperation('GET', queryURI, fetcherOptionsJsonPublicData);
+        case 7:
+          response = _context.sent;
+          text = (response === null || response === void 0 ? void 0 : response.responseText) || '';
+          debug.log('    Query result  text' + text.slice(0, 500) + '...');
+          if (!(text.length === 0)) {
+            _context.next = 12;
+            break;
+          }
+          throw new Error('Wot no text back from ESCO query ' + queryURI);
+        case 12:
+          json = JSON.parse(text); // console.log('Whole JSON return object', json)
+          debug.log('    ESCO Query result JSON' + JSON.stringify(json, null, 4).slice(0, 500) + '...');
+          return _context.abrupt("return", ESCOResultToBindings(json));
+        case 15:
+        case "end":
+          return _context.stop();
       }
     }, _callee);
   }));
@@ -18560,94 +18386,92 @@ function _queryPublicDataByName() {
   _queryPublicDataByName = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(filter, theClass, languages, queryTarget) {
     var substituteStrings, languagePrefs, language, sparql, queryURI, response, _store$fetcher2, text, text2, json, bindings;
     return _regenerator["default"].wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            substituteStrings = function _substituteStrings(template) {
-              var limit = queryTarget.limit || AUTOCOMPLETE_LIMIT;
-              var u1 = template.replace('$(name)', filter).replace('$(limit)', '' + limit).replace('$(language)', language);
-              return u1.replace('$(targetClass)', theClass.toNT());
-            };
-            if (theClass) {
-              _context2.next = 3;
-              break;
-            }
-            throw new Error('queryPublicDataByName: No class provided');
-          case 3:
-            _context2.next = 5;
-            return (0, _language.getPreferredLanguages)();
-          case 5:
-            _context2.t0 = _context2.sent;
-            if (_context2.t0) {
-              _context2.next = 8;
-              break;
-            }
-            _context2.t0 = _language.defaultPreferredLanguages;
-          case 8:
-            languagePrefs = _context2.t0;
-            language = languagePrefs[0] || 'en';
-            if (!queryTarget.searchByNameQuery) {
-              _context2.next = 16;
-              break;
-            }
-            sparql = substituteStrings(queryTarget.searchByNameQuery);
-            debug.log('Querying public data - sparql: ' + sparql);
-            return _context2.abrupt("return", queryPublicDataSelect(sparql, queryTarget));
-          case 16:
-            if (!queryTarget.searchByNameURI) {
-              _context2.next = 46;
-              break;
-            }
-            // not sparql - random API
-            queryURI = substituteStrings(queryTarget.searchByNameURI);
-            _context2.prev = 18;
-            _context2.next = 21;
-            return (_store$fetcher2 = _solidLogic.store.fetcher) === null || _store$fetcher2 === void 0 ? void 0 : _store$fetcher2.webOperation('GET', queryURI, fetcherOptionsJsonPublicData);
-          case 21:
-            response = _context2.sent;
-            _context2.next = 27;
+      while (1) switch (_context2.prev = _context2.next) {
+        case 0:
+          substituteStrings = function _substituteStrings(template) {
+            var limit = queryTarget.limit || AUTOCOMPLETE_LIMIT;
+            var u1 = template.replace('$(name)', filter).replace('$(limit)', '' + limit).replace('$(language)', language);
+            return u1.replace('$(targetClass)', theClass.toNT());
+          };
+          if (theClass) {
+            _context2.next = 3;
             break;
-          case 24:
-            _context2.prev = 24;
-            _context2.t1 = _context2["catch"](18);
-            throw new Error("Exception when trying to fetch ".concat(queryURI, " \n ").concat(_context2.t1));
-          case 27:
-            text = response.responseText || ''; // ts
-            if (!(response.status !== 200)) {
-              _context2.next = 30;
-              break;
-            }
-            throw new Error("HTTP error status ".concat(response.status, " trying to fetch ").concat(queryURI, " "));
-          case 30:
-            debug.log('    Query result  text' + text.slice(0, 500) + '...');
-            if (!(text.length === 0)) {
-              _context2.next = 33;
-              break;
-            }
-            throw new Error('queryPublicDataByName: No text back from public data query ' + queryURI);
-          case 33:
-            text2 = fixWikidataJSON(text); // Kludge: strip of interrupting error message
-            json = JSON.parse(text2);
-            debug.log('    API Query result JSON' + JSON.stringify(json, null, 4).slice(0, 500) + '...');
-            if (!json._embedded) {
-              _context2.next = 42;
-              break;
-            }
-            debug.log('      Looks like ESCO');
-            bindings = ESCOResultToBindings(json);
-            return _context2.abrupt("return", bindings);
-          case 42:
-            alert('Code me: unrecognized API return format');
-            throw new Error("*** Need to add code to parse unrecognized API JSON return\n".concat(JSON.stringify(json, null, 4)));
-          case 44:
-            _context2.next = 47;
+          }
+          throw new Error('queryPublicDataByName: No class provided');
+        case 3:
+          _context2.next = 5;
+          return (0, _language.getPreferredLanguages)();
+        case 5:
+          _context2.t0 = _context2.sent;
+          if (_context2.t0) {
+            _context2.next = 8;
             break;
-          case 46:
-            throw new Error('Query source must have either rest API or SPARQL endpoint.');
-          case 47:
-          case "end":
-            return _context2.stop();
-        }
+          }
+          _context2.t0 = _language.defaultPreferredLanguages;
+        case 8:
+          languagePrefs = _context2.t0;
+          language = languagePrefs[0] || 'en';
+          if (!queryTarget.searchByNameQuery) {
+            _context2.next = 16;
+            break;
+          }
+          sparql = substituteStrings(queryTarget.searchByNameQuery);
+          debug.log('Querying public data - sparql: ' + sparql);
+          return _context2.abrupt("return", queryPublicDataSelect(sparql, queryTarget));
+        case 16:
+          if (!queryTarget.searchByNameURI) {
+            _context2.next = 46;
+            break;
+          }
+          // not sparql - random API
+          queryURI = substituteStrings(queryTarget.searchByNameURI);
+          _context2.prev = 18;
+          _context2.next = 21;
+          return (_store$fetcher2 = _solidLogic.store.fetcher) === null || _store$fetcher2 === void 0 ? void 0 : _store$fetcher2.webOperation('GET', queryURI, fetcherOptionsJsonPublicData);
+        case 21:
+          response = _context2.sent;
+          _context2.next = 27;
+          break;
+        case 24:
+          _context2.prev = 24;
+          _context2.t1 = _context2["catch"](18);
+          throw new Error("Exception when trying to fetch ".concat(queryURI, " \n ").concat(_context2.t1));
+        case 27:
+          text = response.responseText || ''; // ts
+          if (!(response.status !== 200)) {
+            _context2.next = 30;
+            break;
+          }
+          throw new Error("HTTP error status ".concat(response.status, " trying to fetch ").concat(queryURI, " "));
+        case 30:
+          debug.log('    Query result  text' + text.slice(0, 500) + '...');
+          if (!(text.length === 0)) {
+            _context2.next = 33;
+            break;
+          }
+          throw new Error('queryPublicDataByName: No text back from public data query ' + queryURI);
+        case 33:
+          text2 = fixWikidataJSON(text); // Kludge: strip of interrupting error message
+          json = JSON.parse(text2);
+          debug.log('    API Query result JSON' + JSON.stringify(json, null, 4).slice(0, 500) + '...');
+          if (!json._embedded) {
+            _context2.next = 42;
+            break;
+          }
+          debug.log('      Looks like ESCO');
+          bindings = ESCOResultToBindings(json);
+          return _context2.abrupt("return", bindings);
+        case 42:
+          alert('Code me: unrecognized API return format');
+          throw new Error("*** Need to add code to parse unrecognized API JSON return\n".concat(JSON.stringify(json, null, 4)));
+        case 44:
+          _context2.next = 47;
+          break;
+        case 46:
+          throw new Error('Query source must have either rest API or SPARQL endpoint.');
+        case 47:
+        case "end":
+          return _context2.stop();
       }
     }, _callee2, null, [[18, 24]]);
   }));
@@ -18663,46 +18487,44 @@ function _queryPublicDataSelect() {
     var _store$fetcher3;
     var myUrlWithParams, queryURI, headers, options, response, text, text2, json, bindings;
     return _regenerator["default"].wrap(function _callee3$(_context3) {
-      while (1) {
-        switch (_context3.prev = _context3.next) {
-          case 0:
-            if (queryTarget.endpoint) {
-              _context3.next = 2;
-              break;
-            }
-            throw new Error('Missing queryTarget.endpoint required for queryPublicDataSelect');
-          case 2:
-            myUrlWithParams = new URL(queryTarget.endpoint);
-            myUrlWithParams.searchParams.append('query', sparql);
-            queryURI = myUrlWithParams.href;
-            debug.log(' queryPublicDataSelect uri: ' + queryURI);
-            headers = new Headers();
-            headers.append('Accept', 'application/json');
-            options = {
-              credentials: 'omit',
-              // CORS - as we know it is public
-              headers: headers
-            };
-            _context3.next = 11;
-            return (_store$fetcher3 = _solidLogic.store.fetcher) === null || _store$fetcher3 === void 0 ? void 0 : _store$fetcher3.webOperation('GET', queryURI, options);
-          case 11:
-            response = _context3.sent;
-            text = (response === null || response === void 0 ? void 0 : response.responseText) || '';
-            if (!(text.length === 0)) {
-              _context3.next = 15;
-              break;
-            }
-            throw new Error('No text back from query ' + queryURI);
-          case 15:
-            text2 = fixWikidataJSON(text);
-            json = JSON.parse(text2);
-            debug.log('    Query result JSON' + JSON.stringify(json, null, 4).slice(0, 100) + '...');
-            bindings = json.results.bindings;
-            return _context3.abrupt("return", bindings);
-          case 20:
-          case "end":
-            return _context3.stop();
-        }
+      while (1) switch (_context3.prev = _context3.next) {
+        case 0:
+          if (queryTarget.endpoint) {
+            _context3.next = 2;
+            break;
+          }
+          throw new Error('Missing queryTarget.endpoint required for queryPublicDataSelect');
+        case 2:
+          myUrlWithParams = new URL(queryTarget.endpoint);
+          myUrlWithParams.searchParams.append('query', sparql);
+          queryURI = myUrlWithParams.href;
+          debug.log(' queryPublicDataSelect uri: ' + queryURI);
+          headers = new Headers();
+          headers.append('Accept', 'application/json');
+          options = {
+            credentials: 'omit',
+            // CORS - as we know it is public
+            headers: headers
+          };
+          _context3.next = 11;
+          return (_store$fetcher3 = _solidLogic.store.fetcher) === null || _store$fetcher3 === void 0 ? void 0 : _store$fetcher3.webOperation('GET', queryURI, options);
+        case 11:
+          response = _context3.sent;
+          text = (response === null || response === void 0 ? void 0 : response.responseText) || '';
+          if (!(text.length === 0)) {
+            _context3.next = 15;
+            break;
+          }
+          throw new Error('No text back from query ' + queryURI);
+        case 15:
+          text2 = fixWikidataJSON(text);
+          json = JSON.parse(text2);
+          debug.log('    Query result JSON' + JSON.stringify(json, null, 4).slice(0, 100) + '...');
+          bindings = json.results.bindings;
+          return _context3.abrupt("return", bindings);
+        case 20:
+        case "end":
+          return _context3.stop();
       }
     }, _callee3);
   }));
@@ -18716,45 +18538,43 @@ function _queryPublicDataConstruct() {
     var _store$fetcher4;
     var myUrlWithParams, queryURI, headers, options, response, text, report;
     return _regenerator["default"].wrap(function _callee4$(_context4) {
-      while (1) {
-        switch (_context4.prev = _context4.next) {
-          case 0:
-            debug.log('queryPublicDataConstruct: sparql:', sparql);
-            if (queryTarget.endpoint) {
-              _context4.next = 3;
-              break;
-            }
-            throw new Error('Missing queryTarget.endpoint required for queryPublicDataConstruct');
-          case 3:
-            myUrlWithParams = new URL(queryTarget.endpoint);
-            myUrlWithParams.searchParams.append('query', sparql);
-            queryURI = myUrlWithParams.href;
-            debug.log(' queryPublicDataConstruct uri: ' + queryURI);
-            headers = new Headers();
-            headers.append('Accept', 'text/turtle');
-            options = {
-              credentials: 'omit',
-              // CORS // @tsc pain
-              headers: headers // ({ Accept: 'text/turtle' } as Headers)
-            };
-            _context4.next = 12;
-            return (_store$fetcher4 = _solidLogic.store.fetcher) === null || _store$fetcher4 === void 0 ? void 0 : _store$fetcher4.webOperation('GET', queryURI, options);
-          case 12:
-            response = _context4.sent;
-            text = (response === null || response === void 0 ? void 0 : response.responseText) || 'No response text?';
-            report = text.length > 500 ? text.slice(0, 200) + ' ... ' + text.slice(-200) : text;
-            debug.log('    queryPublicDataConstruct result text:' + report);
-            if (!(text.length === 0)) {
-              _context4.next = 18;
-              break;
-            }
-            throw new Error('queryPublicDataConstruct: No text back from construct query:' + queryURI);
-          case 18:
-            (0, _rdflib.parse)(text, _solidLogic.store, pubicId.uri, 'text/turtle');
-          case 19:
-          case "end":
-            return _context4.stop();
-        }
+      while (1) switch (_context4.prev = _context4.next) {
+        case 0:
+          debug.log('queryPublicDataConstruct: sparql:', sparql);
+          if (queryTarget.endpoint) {
+            _context4.next = 3;
+            break;
+          }
+          throw new Error('Missing queryTarget.endpoint required for queryPublicDataConstruct');
+        case 3:
+          myUrlWithParams = new URL(queryTarget.endpoint);
+          myUrlWithParams.searchParams.append('query', sparql);
+          queryURI = myUrlWithParams.href;
+          debug.log(' queryPublicDataConstruct uri: ' + queryURI);
+          headers = new Headers();
+          headers.append('Accept', 'text/turtle');
+          options = {
+            credentials: 'omit',
+            // CORS // @tsc pain
+            headers: headers // ({ Accept: 'text/turtle' } as Headers)
+          };
+          _context4.next = 12;
+          return (_store$fetcher4 = _solidLogic.store.fetcher) === null || _store$fetcher4 === void 0 ? void 0 : _store$fetcher4.webOperation('GET', queryURI, options);
+        case 12:
+          response = _context4.sent;
+          text = (response === null || response === void 0 ? void 0 : response.responseText) || 'No response text?';
+          report = text.length > 500 ? text.slice(0, 200) + ' ... ' + text.slice(-200) : text;
+          debug.log('    queryPublicDataConstruct result text:' + report);
+          if (!(text.length === 0)) {
+            _context4.next = 18;
+            break;
+          }
+          throw new Error('queryPublicDataConstruct: No text back from construct query:' + queryURI);
+        case 18:
+          (0, _rdflib.parse)(text, _solidLogic.store, pubicId.uri, 'text/turtle');
+        case 19:
+        case "end":
+          return _context4.stop();
       }
     }, _callee4);
   }));
@@ -18767,36 +18587,34 @@ function _loadPublicDataThing() {
   _loadPublicDataThing = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(kb, subject, publicDataID) {
     var iDToFetch, headers;
     return _regenerator["default"].wrap(function _callee5$(_context5) {
-      while (1) {
-        switch (_context5.prev = _context5.next) {
-          case 0:
-            if (!publicDataID.uri.startsWith('https://dbpedia.org/resource/')) {
-              _context5.next = 4;
-              break;
-            }
-            return _context5.abrupt("return", getDbpediaDetails(kb, subject, publicDataID));
-          case 4:
-            if (!publicDataID.uri.match(/^https?:\/\/www\.wikidata\.org\/entity\/.*/)) {
-              _context5.next = 9;
-              break;
-            }
-            _context5.next = 7;
-            return getWikidataDetails(kb, subject, publicDataID);
-          case 7:
-            _context5.next = 13;
+      while (1) switch (_context5.prev = _context5.next) {
+        case 0:
+          if (!publicDataID.uri.startsWith('https://dbpedia.org/resource/')) {
+            _context5.next = 4;
             break;
-          case 9:
-            iDToFetch = publicDataID.uri.startsWith('http:') ? kb.sym('https:' + publicDataID.uri.slice(5)) : publicDataID;
-            headers = new Headers();
-            headers.append('Accept', 'text/turtle');
-            return _context5.abrupt("return", kb.fetcher.load(iDToFetch, {
-              credentials: 'omit',
-              headers: headers
-            }));
-          case 13:
-          case "end":
-            return _context5.stop();
-        }
+          }
+          return _context5.abrupt("return", getDbpediaDetails(kb, subject, publicDataID));
+        case 4:
+          if (!publicDataID.uri.match(/^https?:\/\/www\.wikidata\.org\/entity\/.*/)) {
+            _context5.next = 9;
+            break;
+          }
+          _context5.next = 7;
+          return getWikidataDetails(kb, subject, publicDataID);
+        case 7:
+          _context5.next = 13;
+          break;
+        case 9:
+          iDToFetch = publicDataID.uri.startsWith('http:') ? kb.sym('https:' + publicDataID.uri.slice(5)) : publicDataID;
+          headers = new Headers();
+          headers.append('Accept', 'text/turtle');
+          return _context5.abrupt("return", kb.fetcher.load(iDToFetch, {
+            credentials: 'omit',
+            headers: headers
+          }));
+        case 13:
+        case "end":
+          return _context5.stop();
       }
     }, _callee5);
   }));
@@ -18809,19 +18627,17 @@ function _getWikidataDetails() {
   _getWikidataDetails = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(kb, solidSubject, publicDataID) {
     var subjRegexp, sparql;
     return _regenerator["default"].wrap(function _callee6$(_context6) {
-      while (1) {
-        switch (_context6.prev = _context6.next) {
-          case 0:
-            subjRegexp = /wd:Q49108/g;
-            sparql = instituteDetailsWikidataQuery.replace(subjRegexp, publicDataID.toNT());
-            _context6.next = 4;
-            return queryPublicDataConstruct(sparql, publicDataID, wikidataParameters);
-          case 4:
-            debug.log('getWikidataDetails: loaded.', publicDataID);
-          case 5:
-          case "end":
-            return _context6.stop();
-        }
+      while (1) switch (_context6.prev = _context6.next) {
+        case 0:
+          subjRegexp = /wd:Q49108/g;
+          sparql = instituteDetailsWikidataQuery.replace(subjRegexp, publicDataID.toNT());
+          _context6.next = 4;
+          return queryPublicDataConstruct(sparql, publicDataID, wikidataParameters);
+        case 4:
+          debug.log('getWikidataDetails: loaded.', publicDataID);
+        case 5:
+        case "end":
+          return _context6.stop();
       }
     }, _callee6);
   }));
@@ -18834,19 +18650,17 @@ function _getWikidataDetailsOld() {
   _getWikidataDetailsOld = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7(kb, solidSubject, publicDataID) {
     var sparql, bindings;
     return _regenerator["default"].wrap(function _callee7$(_context7) {
-      while (1) {
-        switch (_context7.prev = _context7.next) {
-          case 0:
-            sparql = "select distinct *  where {\n  optional { $(subject)  wdt:P31  ?targetClass } # instance of\n  optional { $(subject)  wdt:P154  ?logo }\n  optional { $(subject)  wdt:P158  ?sealImage }\n# optional { $(subject)  wdt:P159  ?headquartersLocation }\n\noptional { $(subject)  wdt:P17  ?country }\noptional { $(subject)  wdt:P18  ?image }\noptional { $(subject)  wdt:P1813  ?shortName }\n\noptional { $(subject)  wdt:P355  ?subsidiary }\n# SERVICE wikibase:label { bd:serviceParam wikibase:language \"fr,en,de,it\" }\n}".replace(subjectRegexp, publicDataID.toNT());
-            _context7.next = 3;
-            return queryPublicDataSelect(sparql, wikidataParameters);
-          case 3:
-            bindings = _context7.sent;
-            loadFromBindings(kb, publicDataID, bindings, publicDataID.doc()); // arg2 was solidSubject
-          case 5:
-          case "end":
-            return _context7.stop();
-        }
+      while (1) switch (_context7.prev = _context7.next) {
+        case 0:
+          sparql = "select distinct *  where {\n  optional { $(subject)  wdt:P31  ?targetClass } # instance of\n  optional { $(subject)  wdt:P154  ?logo }\n  optional { $(subject)  wdt:P158  ?sealImage }\n# optional { $(subject)  wdt:P159  ?headquartersLocation }\n\noptional { $(subject)  wdt:P17  ?country }\noptional { $(subject)  wdt:P18  ?image }\noptional { $(subject)  wdt:P1813  ?shortName }\n\noptional { $(subject)  wdt:P355  ?subsidiary }\n# SERVICE wikibase:label { bd:serviceParam wikibase:language \"fr,en,de,it\" }\n}".replace(subjectRegexp, publicDataID.toNT());
+          _context7.next = 3;
+          return queryPublicDataSelect(sparql, wikidataParameters);
+        case 3:
+          bindings = _context7.sent;
+          loadFromBindings(kb, publicDataID, bindings, publicDataID.doc()); // arg2 was solidSubject
+        case 5:
+        case "end":
+          return _context7.stop();
       }
     }, _callee7);
   }));
@@ -18859,21 +18673,19 @@ function _getWikidataLocation() {
   _getWikidataLocation = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee8(kb, solidSubject, publicDataID) {
     var sparql, bindings;
     return _regenerator["default"].wrap(function _callee8$(_context8) {
-      while (1) {
-        switch (_context8.prev = _context8.next) {
-          case 0:
-            sparql = "select distinct *  where {\n\n  $(subject) wdt:P276 ?location .\n\n  optional { ?location  wdt:P2044  ?elevation }\n  optional { ?location  wdt:P131  ?region }\n  optional { ?location wdt:P625 ?coordinates }\noptional {  ?location  wdt:P17  ?country }\n\n# SERVICE wikibase:label { bd:serviceParam wikibase:language \"fr,en,de,it\" }\n}".replace(subjectRegexp, publicDataID.toNT());
-            debug.log(' location query sparql:' + sparql);
-            _context8.next = 4;
-            return queryPublicDataSelect(sparql, wikidataParameters);
-          case 4:
-            bindings = _context8.sent;
-            debug.log(' location query bindings:', bindings);
-            loadFromBindings(kb, publicDataID, bindings, publicDataID.doc()); // was solidSubject
-          case 7:
-          case "end":
-            return _context8.stop();
-        }
+      while (1) switch (_context8.prev = _context8.next) {
+        case 0:
+          sparql = "select distinct *  where {\n\n  $(subject) wdt:P276 ?location .\n\n  optional { ?location  wdt:P2044  ?elevation }\n  optional { ?location  wdt:P131  ?region }\n  optional { ?location wdt:P625 ?coordinates }\noptional {  ?location  wdt:P17  ?country }\n\n# SERVICE wikibase:label { bd:serviceParam wikibase:language \"fr,en,de,it\" }\n}".replace(subjectRegexp, publicDataID.toNT());
+          debug.log(' location query sparql:' + sparql);
+          _context8.next = 4;
+          return queryPublicDataSelect(sparql, wikidataParameters);
+        case 4:
+          bindings = _context8.sent;
+          debug.log(' location query bindings:', bindings);
+          loadFromBindings(kb, publicDataID, bindings, publicDataID.doc()); // was solidSubject
+        case 7:
+        case "end":
+          return _context8.stop();
       }
     }, _callee8);
   }));
@@ -18886,21 +18698,19 @@ function _getDbpediaDetails() {
   _getDbpediaDetails = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee9(kb, solidSubject, publicDataID) {
     var sparql, bindings;
     return _regenerator["default"].wrap(function _callee9$(_context9) {
-      while (1) {
-        switch (_context9.prev = _context9.next) {
-          case 0:
-            // Note below the string form of the named node with <> works in SPARQL
-            sparql = "select distinct ?city, ?state, ?country, ?homepage, ?logo, ?lat, ?long,  WHERE {\n    OPTIONAL { <".concat(publicDataID, "> <http://dbpedia.org/ontology/city> ?city }\n    OPTIONAL { ").concat(publicDataID, " <http://dbpedia.org/ontology/state> ?state }\n    OPTIONAL { ").concat(publicDataID, " <http://dbpedia.org/ontology/country> ?country }\n    OPTIONAL { ").concat(publicDataID, " foaf:homepage ?homepage }\n    OPTIONAL { ").concat(publicDataID, " foaf:lat ?lat; foaf:long ?long }\n    OPTIONAL { ").concat(publicDataID, " <http://dbpedia.org/ontology/country> ?country }\n   }");
-            _context9.next = 3;
-            return queryPublicDataSelect(sparql, dbpediaParameters);
-          case 3:
-            bindings = _context9.sent;
-            loadFromBindings(kb, publicDataID, bindings, publicDataID.doc());
-            debug.log('Finished getDbpediaDetails.');
-          case 6:
-          case "end":
-            return _context9.stop();
-        }
+      while (1) switch (_context9.prev = _context9.next) {
+        case 0:
+          // Note below the string form of the named node with <> works in SPARQL
+          sparql = "select distinct ?city, ?state, ?country, ?homepage, ?logo, ?lat, ?long,  WHERE {\n    OPTIONAL { <".concat(publicDataID, "> <http://dbpedia.org/ontology/city> ?city }\n    OPTIONAL { ").concat(publicDataID, " <http://dbpedia.org/ontology/state> ?state }\n    OPTIONAL { ").concat(publicDataID, " <http://dbpedia.org/ontology/country> ?country }\n    OPTIONAL { ").concat(publicDataID, " foaf:homepage ?homepage }\n    OPTIONAL { ").concat(publicDataID, " foaf:lat ?lat; foaf:long ?long }\n    OPTIONAL { ").concat(publicDataID, " <http://dbpedia.org/ontology/country> ?country }\n   }");
+          _context9.next = 3;
+          return queryPublicDataSelect(sparql, dbpediaParameters);
+        case 3:
+          bindings = _context9.sent;
+          loadFromBindings(kb, publicDataID, bindings, publicDataID.doc());
+          debug.log('Finished getDbpediaDetails.');
+        case 6:
+        case "end":
+          return _context9.stop();
       }
     }, _callee9);
   }));
@@ -19210,9 +19020,7 @@ function mostSpecificClassURI(x) {
   var ft = kb.findTypeURIs(x);
   var bot = kb.bottomTypeURIs(ft); // most specific
   var bots = [];
-  for (var b in bot) {
-    bots.push(b);
-  }
+  for (var b in bot) bots.push(b);
   // if (bots.length > 1) throw "Didn't expect "+x+" to have multiple bottom types: "+bots
   return bots[0];
 }
@@ -19681,7 +19489,7 @@ var IconicMultiSelect = /*#__PURE__*/function () {
     key: "_clearSelection",
     value: function _clearSelection() {
       var _this2 = this;
-      var _loop = function _loop(i) {
+      var _loop = function _loop() {
         var option = _this2._selectedOptions[i];
         var target = _this2._domElements.options.find(function (el) {
           return el.dataset.value === option.value;
@@ -19691,7 +19499,7 @@ var IconicMultiSelect = /*#__PURE__*/function () {
         _this2._removeOptionFromList(target.dataset.value);
       };
       for (var i = 0; i < this._selectedOptions.length; i++) {
-        _loop(i);
+        _loop();
       }
       this._selectedOptions = [];
       this._handleClearSelectionBtn();
@@ -20020,7 +19828,7 @@ var IconicMultiSelect = /*#__PURE__*/function () {
     value: function _initSelectedList() {
       var _this5 = this;
       var hasItemsSelected = false;
-      var _loop2 = function _loop2(i) {
+      var _loop2 = function _loop2() {
         var option = _this5._options[i];
         if (option.selected) {
           hasItemsSelected = true;
@@ -20034,7 +19842,7 @@ var IconicMultiSelect = /*#__PURE__*/function () {
         }
       };
       for (var i = 0; i < this._options.length; i++) {
-        _loop2(i);
+        _loop2();
       }
       if (hasItemsSelected) {
         this._handleClearSelectionBtn();
@@ -20764,8 +20572,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @inrupt/oidc-client */ "./node_modules/@inrupt/oidc-client/lib/oidc-client.min.js");
 /* harmony import */ var _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _inrupt_solid_client_authn_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-/* harmony import */ var _inrupt_solid_client_authn_core__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_inrupt_solid_client_authn_core__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _inrupt_solid_client_authn_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.mjs");
 
 
 
@@ -21182,6 +20989,7 @@ class ClientAuthentication {
         cleanedUpUrl.searchParams.delete("access_token");
         cleanedUpUrl.searchParams.delete("error");
         cleanedUpUrl.searchParams.delete("error_description");
+        cleanedUpUrl.searchParams.delete("iss");
         window.history.replaceState(null, "", cleanedUpUrl.toString());
     }
 }
@@ -21202,7 +21010,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Session = exports.silentlyAuthenticate = void 0;
 const events_1 = __webpack_require__(/*! events */ "./node_modules/events/events.js");
 const solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-const uuid_1 = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
+const uuid_1 = __webpack_require__(/*! uuid */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/index.js");
 const dependencies_1 = __webpack_require__(/*! ./dependencies */ "./node_modules/@inrupt/solid-client-authn-browser/dist/dependencies.js");
 const constant_1 = __webpack_require__(/*! ./constant */ "./node_modules/@inrupt/solid-client-authn-browser/dist/constant.js");
 async function silentlyAuthenticate(sessionId, clientAuthn, session) {
@@ -21228,7 +21036,7 @@ function isLoggedIn(sessionInfo) {
     return !!(sessionInfo === null || sessionInfo === void 0 ? void 0 : sessionInfo.isLoggedIn);
 }
 class Session extends events_1.EventEmitter {
-    constructor(sessionOptions = {}, sessionId) {
+    constructor(sessionOptions = {}, sessionId = undefined) {
         super();
         this.tokenRequestInProgress = false;
         this.login = async (options) => {
@@ -21238,7 +21046,7 @@ class Session extends events_1.EventEmitter {
                 ...options,
                 tokenType: (_a = options.tokenType) !== null && _a !== void 0 ? _a : "DPoP",
             }, this);
-            return new Promise(() => undefined);
+            return new Promise(() => { });
         };
         this.fetch = async (url, init) => {
             return this.clientAuthentication.fetch(url, init);
@@ -21837,6 +21645,10 @@ class AuthCodeRedirectHandler {
             errorIfNull: true,
         }));
         const { issuerConfig, codeVerifier, redirectUrl: storedRedirectIri, dpop: isDpop, } = await (0, solid_client_authn_core_1.loadOidcContextFromStorage)(storedSessionId, this.storageUtility, this.issuerConfigFetcher);
+        const iss = url.searchParams.get("iss");
+        if (typeof iss === "string" && iss !== issuerConfig.issuer) {
+            throw new Error(`The value of the iss parameter (${iss}) does not match the issuer identifier of the authorization server (${issuerConfig.issuer}). See [rfc9207](https://www.rfc-editor.org/rfc/rfc9207.html#section-2.3-3.1.1)`);
+        }
         if (codeVerifier === undefined) {
             throw new Error(`The code verifier for session ${storedSessionId} is missing from storage.`);
         }
@@ -22108,7 +21920,7 @@ exports["default"] = GeneralLogoutHandler;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SessionInfoManager = exports.clear = exports.getUnauthenticatedSession = void 0;
 const solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-const uuid_1 = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
+const uuid_1 = __webpack_require__(/*! uuid */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/index.js");
 const oidc_client_ext_1 = __webpack_require__(/*! @inrupt/oidc-client-ext */ "./node_modules/@inrupt/oidc-client-ext/dist/index.es.js");
 function getUnauthenticatedSession() {
     return {
@@ -22271,186 +22083,1029 @@ exports.appendToUrlPathname = appendToUrlPathname;
 
 /***/ }),
 
-/***/ "./node_modules/@inrupt/solid-client-authn-core/dist/authenticatedFetch/dpopUtils.js":
-/*!*******************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/dist/authenticatedFetch/dpopUtils.js ***!
-  \*******************************************************************************************/
+/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/index.js":
+/*!**********************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/index.js ***!
+  \**********************************************************************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.generateDpopKeyPair = exports.createDpopHeader = void 0;
-const jose_1 = __webpack_require__(/*! jose */ "./node_modules/jose/dist/browser/index.js");
-const uuid_1 = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
-const constant_1 = __webpack_require__(/*! ../constant */ "./node_modules/@inrupt/solid-client-authn-core/dist/constant.js");
-function normalizeHTU(audience) {
-    const audienceUrl = new URL(audience);
-    return new URL(audienceUrl.pathname, audienceUrl.origin).toString();
-}
-async function createDpopHeader(audience, method, dpopKey) {
-    return new jose_1.SignJWT({
-        htu: normalizeHTU(audience),
-        htm: method.toUpperCase(),
-        jti: (0, uuid_1.v4)(),
-    })
-        .setProtectedHeader({
-        alg: constant_1.PREFERRED_SIGNING_ALG[0],
-        jwk: dpopKey.publicKey,
-        typ: "dpop+jwt",
-    })
-        .setIssuedAt()
-        .sign(dpopKey.privateKey, {});
-}
-exports.createDpopHeader = createDpopHeader;
-async function generateDpopKeyPair() {
-    const { privateKey, publicKey } = await (0, jose_1.generateKeyPair)(constant_1.PREFERRED_SIGNING_ALG[0]);
-    const dpopKeyPair = {
-        privateKey,
-        publicKey: await (0, jose_1.exportJWK)(publicKey),
-    };
-    [dpopKeyPair.publicKey.alg] = constant_1.PREFERRED_SIGNING_ALG;
-    return dpopKeyPair;
-}
-exports.generateDpopKeyPair = generateDpopKeyPair;
-//# sourceMappingURL=dpopUtils.js.map
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+Object.defineProperty(exports, "NIL", ({
+  enumerable: true,
+  get: function get() {
+    return _nil.default;
+  }
+}));
+Object.defineProperty(exports, "parse", ({
+  enumerable: true,
+  get: function get() {
+    return _parse.default;
+  }
+}));
+Object.defineProperty(exports, "stringify", ({
+  enumerable: true,
+  get: function get() {
+    return _stringify.default;
+  }
+}));
+Object.defineProperty(exports, "v1", ({
+  enumerable: true,
+  get: function get() {
+    return _v.default;
+  }
+}));
+Object.defineProperty(exports, "v3", ({
+  enumerable: true,
+  get: function get() {
+    return _v2.default;
+  }
+}));
+Object.defineProperty(exports, "v4", ({
+  enumerable: true,
+  get: function get() {
+    return _v3.default;
+  }
+}));
+Object.defineProperty(exports, "v5", ({
+  enumerable: true,
+  get: function get() {
+    return _v4.default;
+  }
+}));
+Object.defineProperty(exports, "validate", ({
+  enumerable: true,
+  get: function get() {
+    return _validate.default;
+  }
+}));
+Object.defineProperty(exports, "version", ({
+  enumerable: true,
+  get: function get() {
+    return _version.default;
+  }
+}));
+
+var _v = _interopRequireDefault(__webpack_require__(/*! ./v1.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v1.js"));
+
+var _v2 = _interopRequireDefault(__webpack_require__(/*! ./v3.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v3.js"));
+
+var _v3 = _interopRequireDefault(__webpack_require__(/*! ./v4.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v4.js"));
+
+var _v4 = _interopRequireDefault(__webpack_require__(/*! ./v5.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v5.js"));
+
+var _nil = _interopRequireDefault(__webpack_require__(/*! ./nil.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/nil.js"));
+
+var _version = _interopRequireDefault(__webpack_require__(/*! ./version.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/version.js"));
+
+var _validate = _interopRequireDefault(__webpack_require__(/*! ./validate.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/validate.js"));
+
+var _stringify = _interopRequireDefault(__webpack_require__(/*! ./stringify.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/stringify.js"));
+
+var _parse = _interopRequireDefault(__webpack_require__(/*! ./parse.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/parse.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ }),
 
-/***/ "./node_modules/@inrupt/solid-client-authn-core/dist/authenticatedFetch/fetchFactory.js":
-/*!**********************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/dist/authenticatedFetch/fetchFactory.js ***!
-  \**********************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.buildAuthenticatedFetch = exports.DEFAULT_EXPIRATION_TIME_SECONDS = void 0;
-const cross_fetch_1 = __webpack_require__(/*! cross-fetch */ "./node_modules/cross-fetch/dist/browser-ponyfill.js");
-const constant_1 = __webpack_require__(/*! ../constant */ "./node_modules/@inrupt/solid-client-authn-core/dist/constant.js");
-const dpopUtils_1 = __webpack_require__(/*! ./dpopUtils */ "./node_modules/@inrupt/solid-client-authn-core/dist/authenticatedFetch/dpopUtils.js");
-const OidcProviderError_1 = __webpack_require__(/*! ../errors/OidcProviderError */ "./node_modules/@inrupt/solid-client-authn-core/dist/errors/OidcProviderError.js");
-const InvalidResponseError_1 = __webpack_require__(/*! ../errors/InvalidResponseError */ "./node_modules/@inrupt/solid-client-authn-core/dist/errors/InvalidResponseError.js");
-exports.DEFAULT_EXPIRATION_TIME_SECONDS = 600;
-function isExpectedAuthError(statusCode) {
-    return [401, 403].includes(statusCode);
-}
-async function buildDpopFetchOptions(targetUrl, authToken, dpopKey, defaultOptions) {
-    var _a;
-    const headers = new cross_fetch_1.Headers(defaultOptions === null || defaultOptions === void 0 ? void 0 : defaultOptions.headers);
-    headers.set("Authorization", `DPoP ${authToken}`);
-    headers.set("DPoP", await (0, dpopUtils_1.createDpopHeader)(targetUrl, (_a = defaultOptions === null || defaultOptions === void 0 ? void 0 : defaultOptions.method) !== null && _a !== void 0 ? _a : "get", dpopKey));
-    return {
-        ...defaultOptions,
-        headers,
-    };
-}
-async function buildAuthenticatedHeaders(targetUrl, authToken, dpopKey, defaultOptions) {
-    if (dpopKey !== undefined) {
-        return buildDpopFetchOptions(targetUrl, authToken, dpopKey, defaultOptions);
-    }
-    const headers = new cross_fetch_1.Headers(defaultOptions === null || defaultOptions === void 0 ? void 0 : defaultOptions.headers);
-    headers.set("Authorization", `Bearer ${authToken}`);
-    return {
-        ...defaultOptions,
-        headers,
-    };
-}
-async function makeAuthenticatedRequest(unauthFetch, accessToken, url, defaultRequestInit, dpopKey) {
-    return unauthFetch(url, await buildAuthenticatedHeaders(url.toString(), accessToken, dpopKey, defaultRequestInit));
-}
-async function refreshAccessToken(refreshOptions, dpopKey, eventEmitter) {
-    var _a;
-    const tokenSet = await refreshOptions.tokenRefresher.refresh(refreshOptions.sessionId, refreshOptions.refreshToken, dpopKey);
-    eventEmitter === null || eventEmitter === void 0 ? void 0 : eventEmitter.emit(constant_1.EVENTS.SESSION_EXTENDED, (_a = tokenSet.expiresIn) !== null && _a !== void 0 ? _a : exports.DEFAULT_EXPIRATION_TIME_SECONDS);
-    if (typeof tokenSet.refreshToken === "string") {
-        eventEmitter === null || eventEmitter === void 0 ? void 0 : eventEmitter.emit(constant_1.EVENTS.NEW_REFRESH_TOKEN, tokenSet.refreshToken);
-    }
-    return {
-        accessToken: tokenSet.accessToken,
-        refreshToken: tokenSet.refreshToken,
-        expiresIn: tokenSet.expiresIn,
-    };
-}
-const computeRefreshDelay = (expiresIn) => {
-    if (expiresIn !== undefined) {
-        return expiresIn - constant_1.REFRESH_BEFORE_EXPIRATION_SECONDS > 0
-            ?
-                expiresIn - constant_1.REFRESH_BEFORE_EXPIRATION_SECONDS
-            : expiresIn;
-    }
-    return exports.DEFAULT_EXPIRATION_TIME_SECONDS;
-};
-async function buildAuthenticatedFetch(unauthFetch, accessToken, options) {
-    var _a;
-    let currentAccessToken = accessToken;
-    let latestTimeout;
-    const currentRefreshOptions = options === null || options === void 0 ? void 0 : options.refreshOptions;
-    if (currentRefreshOptions !== undefined) {
-        const proactivelyRefreshToken = async () => {
-            var _a, _b, _c, _d;
-            try {
-                const { accessToken: refreshedAccessToken, refreshToken, expiresIn, } = await refreshAccessToken(currentRefreshOptions, options.dpopKey, options.eventEmitter);
-                currentAccessToken = refreshedAccessToken;
-                if (refreshToken !== undefined) {
-                    currentRefreshOptions.refreshToken = refreshToken;
-                }
-                clearTimeout(latestTimeout);
-                latestTimeout = setTimeout(proactivelyRefreshToken, computeRefreshDelay(expiresIn) * 1000);
-                (_a = options.eventEmitter) === null || _a === void 0 ? void 0 : _a.emit(constant_1.EVENTS.TIMEOUT_SET, latestTimeout);
-            }
-            catch (e) {
-                if (e instanceof OidcProviderError_1.OidcProviderError) {
-                    (_b = options === null || options === void 0 ? void 0 : options.eventEmitter) === null || _b === void 0 ? void 0 : _b.emit(constant_1.EVENTS.ERROR, e.error, e.errorDescription);
-                    (_c = options === null || options === void 0 ? void 0 : options.eventEmitter) === null || _c === void 0 ? void 0 : _c.emit(constant_1.EVENTS.SESSION_EXPIRED);
-                }
-                if (e instanceof InvalidResponseError_1.InvalidResponseError &&
-                    e.missingFields.includes("access_token")) {
-                    (_d = options === null || options === void 0 ? void 0 : options.eventEmitter) === null || _d === void 0 ? void 0 : _d.emit(constant_1.EVENTS.SESSION_EXPIRED);
-                }
-            }
-        };
-        latestTimeout = setTimeout(proactivelyRefreshToken, computeRefreshDelay(options.expiresIn) * 1000);
-        (_a = options.eventEmitter) === null || _a === void 0 ? void 0 : _a.emit(constant_1.EVENTS.TIMEOUT_SET, latestTimeout);
-    }
-    else if (options !== undefined && options.eventEmitter !== undefined) {
-        const expirationTimeout = setTimeout(() => {
-            options.eventEmitter.emit(constant_1.EVENTS.SESSION_EXPIRED);
-        }, computeRefreshDelay(options.expiresIn) * 1000);
-        options.eventEmitter.emit(constant_1.EVENTS.TIMEOUT_SET, expirationTimeout);
-    }
-    return async (url, requestInit) => {
-        let response = await makeAuthenticatedRequest(unauthFetch, currentAccessToken, url, requestInit, options === null || options === void 0 ? void 0 : options.dpopKey);
-        const failedButNotExpectedAuthError = !response.ok && !isExpectedAuthError(response.status);
-        if (response.ok || failedButNotExpectedAuthError) {
-            return response;
-        }
-        const hasBeenRedirected = response.url !== url;
-        if (hasBeenRedirected && (options === null || options === void 0 ? void 0 : options.dpopKey) !== undefined) {
-            response = await makeAuthenticatedRequest(unauthFetch, currentAccessToken, response.url, requestInit, options.dpopKey);
-        }
-        return response;
-    };
-}
-exports.buildAuthenticatedFetch = buildAuthenticatedFetch;
-//# sourceMappingURL=fetchFactory.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/dist/constant.js":
-/*!***********************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/dist/constant.js ***!
-  \***********************************************************************/
+/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/md5.js":
+/*!********************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/md5.js ***!
+  \********************************************************************************************************/
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
 
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.DEFAULT_SCOPES = exports.REFRESH_BEFORE_EXPIRATION_SECONDS = exports.EVENTS = exports.PREFERRED_SIGNING_ALG = exports.SOLID_CLIENT_AUTHN_KEY_PREFIX = void 0;
-exports.SOLID_CLIENT_AUTHN_KEY_PREFIX = "solidClientAuthn:";
-exports.PREFERRED_SIGNING_ALG = ["ES256", "RS256"];
-exports.EVENTS = {
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+/*
+ * Browser-compatible JavaScript MD5
+ *
+ * Modification of JavaScript MD5
+ * https://github.com/blueimp/JavaScript-MD5
+ *
+ * Copyright 2011, Sebastian Tschan
+ * https://blueimp.net
+ *
+ * Licensed under the MIT license:
+ * https://opensource.org/licenses/MIT
+ *
+ * Based on
+ * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
+ * Digest Algorithm, as defined in RFC 1321.
+ * Version 2.2 Copyright (C) Paul Johnston 1999 - 2009
+ * Other contributors: Greg Holt, Andrew Kepert, Ydnar, Lostinet
+ * Distributed under the BSD License
+ * See http://pajhome.org.uk/crypt/md5 for more info.
+ */
+function md5(bytes) {
+  if (typeof bytes === 'string') {
+    const msg = unescape(encodeURIComponent(bytes)); // UTF8 escape
+
+    bytes = new Uint8Array(msg.length);
+
+    for (let i = 0; i < msg.length; ++i) {
+      bytes[i] = msg.charCodeAt(i);
+    }
+  }
+
+  return md5ToHexEncodedArray(wordsToMd5(bytesToWords(bytes), bytes.length * 8));
+}
+/*
+ * Convert an array of little-endian words to an array of bytes
+ */
+
+
+function md5ToHexEncodedArray(input) {
+  const output = [];
+  const length32 = input.length * 32;
+  const hexTab = '0123456789abcdef';
+
+  for (let i = 0; i < length32; i += 8) {
+    const x = input[i >> 5] >>> i % 32 & 0xff;
+    const hex = parseInt(hexTab.charAt(x >>> 4 & 0x0f) + hexTab.charAt(x & 0x0f), 16);
+    output.push(hex);
+  }
+
+  return output;
+}
+/**
+ * Calculate output length with padding and bit length
+ */
+
+
+function getOutputLength(inputLength8) {
+  return (inputLength8 + 64 >>> 9 << 4) + 14 + 1;
+}
+/*
+ * Calculate the MD5 of an array of little-endian words, and a bit length.
+ */
+
+
+function wordsToMd5(x, len) {
+  /* append padding */
+  x[len >> 5] |= 0x80 << len % 32;
+  x[getOutputLength(len) - 1] = len;
+  let a = 1732584193;
+  let b = -271733879;
+  let c = -1732584194;
+  let d = 271733878;
+
+  for (let i = 0; i < x.length; i += 16) {
+    const olda = a;
+    const oldb = b;
+    const oldc = c;
+    const oldd = d;
+    a = md5ff(a, b, c, d, x[i], 7, -680876936);
+    d = md5ff(d, a, b, c, x[i + 1], 12, -389564586);
+    c = md5ff(c, d, a, b, x[i + 2], 17, 606105819);
+    b = md5ff(b, c, d, a, x[i + 3], 22, -1044525330);
+    a = md5ff(a, b, c, d, x[i + 4], 7, -176418897);
+    d = md5ff(d, a, b, c, x[i + 5], 12, 1200080426);
+    c = md5ff(c, d, a, b, x[i + 6], 17, -1473231341);
+    b = md5ff(b, c, d, a, x[i + 7], 22, -45705983);
+    a = md5ff(a, b, c, d, x[i + 8], 7, 1770035416);
+    d = md5ff(d, a, b, c, x[i + 9], 12, -1958414417);
+    c = md5ff(c, d, a, b, x[i + 10], 17, -42063);
+    b = md5ff(b, c, d, a, x[i + 11], 22, -1990404162);
+    a = md5ff(a, b, c, d, x[i + 12], 7, 1804603682);
+    d = md5ff(d, a, b, c, x[i + 13], 12, -40341101);
+    c = md5ff(c, d, a, b, x[i + 14], 17, -1502002290);
+    b = md5ff(b, c, d, a, x[i + 15], 22, 1236535329);
+    a = md5gg(a, b, c, d, x[i + 1], 5, -165796510);
+    d = md5gg(d, a, b, c, x[i + 6], 9, -1069501632);
+    c = md5gg(c, d, a, b, x[i + 11], 14, 643717713);
+    b = md5gg(b, c, d, a, x[i], 20, -373897302);
+    a = md5gg(a, b, c, d, x[i + 5], 5, -701558691);
+    d = md5gg(d, a, b, c, x[i + 10], 9, 38016083);
+    c = md5gg(c, d, a, b, x[i + 15], 14, -660478335);
+    b = md5gg(b, c, d, a, x[i + 4], 20, -405537848);
+    a = md5gg(a, b, c, d, x[i + 9], 5, 568446438);
+    d = md5gg(d, a, b, c, x[i + 14], 9, -1019803690);
+    c = md5gg(c, d, a, b, x[i + 3], 14, -187363961);
+    b = md5gg(b, c, d, a, x[i + 8], 20, 1163531501);
+    a = md5gg(a, b, c, d, x[i + 13], 5, -1444681467);
+    d = md5gg(d, a, b, c, x[i + 2], 9, -51403784);
+    c = md5gg(c, d, a, b, x[i + 7], 14, 1735328473);
+    b = md5gg(b, c, d, a, x[i + 12], 20, -1926607734);
+    a = md5hh(a, b, c, d, x[i + 5], 4, -378558);
+    d = md5hh(d, a, b, c, x[i + 8], 11, -2022574463);
+    c = md5hh(c, d, a, b, x[i + 11], 16, 1839030562);
+    b = md5hh(b, c, d, a, x[i + 14], 23, -35309556);
+    a = md5hh(a, b, c, d, x[i + 1], 4, -1530992060);
+    d = md5hh(d, a, b, c, x[i + 4], 11, 1272893353);
+    c = md5hh(c, d, a, b, x[i + 7], 16, -155497632);
+    b = md5hh(b, c, d, a, x[i + 10], 23, -1094730640);
+    a = md5hh(a, b, c, d, x[i + 13], 4, 681279174);
+    d = md5hh(d, a, b, c, x[i], 11, -358537222);
+    c = md5hh(c, d, a, b, x[i + 3], 16, -722521979);
+    b = md5hh(b, c, d, a, x[i + 6], 23, 76029189);
+    a = md5hh(a, b, c, d, x[i + 9], 4, -640364487);
+    d = md5hh(d, a, b, c, x[i + 12], 11, -421815835);
+    c = md5hh(c, d, a, b, x[i + 15], 16, 530742520);
+    b = md5hh(b, c, d, a, x[i + 2], 23, -995338651);
+    a = md5ii(a, b, c, d, x[i], 6, -198630844);
+    d = md5ii(d, a, b, c, x[i + 7], 10, 1126891415);
+    c = md5ii(c, d, a, b, x[i + 14], 15, -1416354905);
+    b = md5ii(b, c, d, a, x[i + 5], 21, -57434055);
+    a = md5ii(a, b, c, d, x[i + 12], 6, 1700485571);
+    d = md5ii(d, a, b, c, x[i + 3], 10, -1894986606);
+    c = md5ii(c, d, a, b, x[i + 10], 15, -1051523);
+    b = md5ii(b, c, d, a, x[i + 1], 21, -2054922799);
+    a = md5ii(a, b, c, d, x[i + 8], 6, 1873313359);
+    d = md5ii(d, a, b, c, x[i + 15], 10, -30611744);
+    c = md5ii(c, d, a, b, x[i + 6], 15, -1560198380);
+    b = md5ii(b, c, d, a, x[i + 13], 21, 1309151649);
+    a = md5ii(a, b, c, d, x[i + 4], 6, -145523070);
+    d = md5ii(d, a, b, c, x[i + 11], 10, -1120210379);
+    c = md5ii(c, d, a, b, x[i + 2], 15, 718787259);
+    b = md5ii(b, c, d, a, x[i + 9], 21, -343485551);
+    a = safeAdd(a, olda);
+    b = safeAdd(b, oldb);
+    c = safeAdd(c, oldc);
+    d = safeAdd(d, oldd);
+  }
+
+  return [a, b, c, d];
+}
+/*
+ * Convert an array bytes to an array of little-endian words
+ * Characters >255 have their high-byte silently ignored.
+ */
+
+
+function bytesToWords(input) {
+  if (input.length === 0) {
+    return [];
+  }
+
+  const length8 = input.length * 8;
+  const output = new Uint32Array(getOutputLength(length8));
+
+  for (let i = 0; i < length8; i += 8) {
+    output[i >> 5] |= (input[i / 8] & 0xff) << i % 32;
+  }
+
+  return output;
+}
+/*
+ * Add integers, wrapping at 2^32. This uses 16-bit operations internally
+ * to work around bugs in some JS interpreters.
+ */
+
+
+function safeAdd(x, y) {
+  const lsw = (x & 0xffff) + (y & 0xffff);
+  const msw = (x >> 16) + (y >> 16) + (lsw >> 16);
+  return msw << 16 | lsw & 0xffff;
+}
+/*
+ * Bitwise rotate a 32-bit number to the left.
+ */
+
+
+function bitRotateLeft(num, cnt) {
+  return num << cnt | num >>> 32 - cnt;
+}
+/*
+ * These functions implement the four basic operations the algorithm uses.
+ */
+
+
+function md5cmn(q, a, b, x, s, t) {
+  return safeAdd(bitRotateLeft(safeAdd(safeAdd(a, q), safeAdd(x, t)), s), b);
+}
+
+function md5ff(a, b, c, d, x, s, t) {
+  return md5cmn(b & c | ~b & d, a, b, x, s, t);
+}
+
+function md5gg(a, b, c, d, x, s, t) {
+  return md5cmn(b & d | c & ~d, a, b, x, s, t);
+}
+
+function md5hh(a, b, c, d, x, s, t) {
+  return md5cmn(b ^ c ^ d, a, b, x, s, t);
+}
+
+function md5ii(a, b, c, d, x, s, t) {
+  return md5cmn(c ^ (b | ~d), a, b, x, s, t);
+}
+
+var _default = md5;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/native.js":
+/*!***********************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/native.js ***!
+  \***********************************************************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+const randomUUID = typeof crypto !== 'undefined' && crypto.randomUUID && crypto.randomUUID.bind(crypto);
+var _default = {
+  randomUUID
+};
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/nil.js":
+/*!********************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/nil.js ***!
+  \********************************************************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _default = '00000000-0000-0000-0000-000000000000';
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/parse.js":
+/*!**********************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/parse.js ***!
+  \**********************************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _validate = _interopRequireDefault(__webpack_require__(/*! ./validate.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/validate.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function parse(uuid) {
+  if (!(0, _validate.default)(uuid)) {
+    throw TypeError('Invalid UUID');
+  }
+
+  let v;
+  const arr = new Uint8Array(16); // Parse ########-....-....-....-............
+
+  arr[0] = (v = parseInt(uuid.slice(0, 8), 16)) >>> 24;
+  arr[1] = v >>> 16 & 0xff;
+  arr[2] = v >>> 8 & 0xff;
+  arr[3] = v & 0xff; // Parse ........-####-....-....-............
+
+  arr[4] = (v = parseInt(uuid.slice(9, 13), 16)) >>> 8;
+  arr[5] = v & 0xff; // Parse ........-....-####-....-............
+
+  arr[6] = (v = parseInt(uuid.slice(14, 18), 16)) >>> 8;
+  arr[7] = v & 0xff; // Parse ........-....-....-####-............
+
+  arr[8] = (v = parseInt(uuid.slice(19, 23), 16)) >>> 8;
+  arr[9] = v & 0xff; // Parse ........-....-....-....-############
+  // (Use "/" to avoid 32-bit truncation when bit-shifting high-order bytes)
+
+  arr[10] = (v = parseInt(uuid.slice(24, 36), 16)) / 0x10000000000 & 0xff;
+  arr[11] = v / 0x100000000 & 0xff;
+  arr[12] = v >>> 24 & 0xff;
+  arr[13] = v >>> 16 & 0xff;
+  arr[14] = v >>> 8 & 0xff;
+  arr[15] = v & 0xff;
+  return arr;
+}
+
+var _default = parse;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/regex.js":
+/*!**********************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/regex.js ***!
+  \**********************************************************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _default = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/rng.js":
+/*!********************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/rng.js ***!
+  \********************************************************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = rng;
+// Unique ID creation requires a high quality random # generator. In the browser we therefore
+// require the crypto API and do not support built-in fallback to lower quality random number
+// generators (like Math.random()).
+let getRandomValues;
+const rnds8 = new Uint8Array(16);
+
+function rng() {
+  // lazy load so that environments that need to polyfill have a chance to do so
+  if (!getRandomValues) {
+    // getRandomValues needs to be invoked in a context where "this" is a Crypto implementation.
+    getRandomValues = typeof crypto !== 'undefined' && crypto.getRandomValues && crypto.getRandomValues.bind(crypto);
+
+    if (!getRandomValues) {
+      throw new Error('crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported');
+    }
+  }
+
+  return getRandomValues(rnds8);
+}
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/sha1.js":
+/*!*********************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/sha1.js ***!
+  \*********************************************************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+// Adapted from Chris Veness' SHA1 code at
+// http://www.movable-type.co.uk/scripts/sha1.html
+function f(s, x, y, z) {
+  switch (s) {
+    case 0:
+      return x & y ^ ~x & z;
+
+    case 1:
+      return x ^ y ^ z;
+
+    case 2:
+      return x & y ^ x & z ^ y & z;
+
+    case 3:
+      return x ^ y ^ z;
+  }
+}
+
+function ROTL(x, n) {
+  return x << n | x >>> 32 - n;
+}
+
+function sha1(bytes) {
+  const K = [0x5a827999, 0x6ed9eba1, 0x8f1bbcdc, 0xca62c1d6];
+  const H = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xc3d2e1f0];
+
+  if (typeof bytes === 'string') {
+    const msg = unescape(encodeURIComponent(bytes)); // UTF8 escape
+
+    bytes = [];
+
+    for (let i = 0; i < msg.length; ++i) {
+      bytes.push(msg.charCodeAt(i));
+    }
+  } else if (!Array.isArray(bytes)) {
+    // Convert Array-like to Array
+    bytes = Array.prototype.slice.call(bytes);
+  }
+
+  bytes.push(0x80);
+  const l = bytes.length / 4 + 2;
+  const N = Math.ceil(l / 16);
+  const M = new Array(N);
+
+  for (let i = 0; i < N; ++i) {
+    const arr = new Uint32Array(16);
+
+    for (let j = 0; j < 16; ++j) {
+      arr[j] = bytes[i * 64 + j * 4] << 24 | bytes[i * 64 + j * 4 + 1] << 16 | bytes[i * 64 + j * 4 + 2] << 8 | bytes[i * 64 + j * 4 + 3];
+    }
+
+    M[i] = arr;
+  }
+
+  M[N - 1][14] = (bytes.length - 1) * 8 / Math.pow(2, 32);
+  M[N - 1][14] = Math.floor(M[N - 1][14]);
+  M[N - 1][15] = (bytes.length - 1) * 8 & 0xffffffff;
+
+  for (let i = 0; i < N; ++i) {
+    const W = new Uint32Array(80);
+
+    for (let t = 0; t < 16; ++t) {
+      W[t] = M[i][t];
+    }
+
+    for (let t = 16; t < 80; ++t) {
+      W[t] = ROTL(W[t - 3] ^ W[t - 8] ^ W[t - 14] ^ W[t - 16], 1);
+    }
+
+    let a = H[0];
+    let b = H[1];
+    let c = H[2];
+    let d = H[3];
+    let e = H[4];
+
+    for (let t = 0; t < 80; ++t) {
+      const s = Math.floor(t / 20);
+      const T = ROTL(a, 5) + f(s, b, c, d) + e + K[s] + W[t] >>> 0;
+      e = d;
+      d = c;
+      c = ROTL(b, 30) >>> 0;
+      b = a;
+      a = T;
+    }
+
+    H[0] = H[0] + a >>> 0;
+    H[1] = H[1] + b >>> 0;
+    H[2] = H[2] + c >>> 0;
+    H[3] = H[3] + d >>> 0;
+    H[4] = H[4] + e >>> 0;
+  }
+
+  return [H[0] >> 24 & 0xff, H[0] >> 16 & 0xff, H[0] >> 8 & 0xff, H[0] & 0xff, H[1] >> 24 & 0xff, H[1] >> 16 & 0xff, H[1] >> 8 & 0xff, H[1] & 0xff, H[2] >> 24 & 0xff, H[2] >> 16 & 0xff, H[2] >> 8 & 0xff, H[2] & 0xff, H[3] >> 24 & 0xff, H[3] >> 16 & 0xff, H[3] >> 8 & 0xff, H[3] & 0xff, H[4] >> 24 & 0xff, H[4] >> 16 & 0xff, H[4] >> 8 & 0xff, H[4] & 0xff];
+}
+
+var _default = sha1;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/stringify.js":
+/*!**************************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/stringify.js ***!
+  \**************************************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+exports.unsafeStringify = unsafeStringify;
+
+var _validate = _interopRequireDefault(__webpack_require__(/*! ./validate.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/validate.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Convert array of 16 byte values to UUID string format of the form:
+ * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+ */
+const byteToHex = [];
+
+for (let i = 0; i < 256; ++i) {
+  byteToHex.push((i + 0x100).toString(16).slice(1));
+}
+
+function unsafeStringify(arr, offset = 0) {
+  // Note: Be careful editing this code!  It's been tuned for performance
+  // and works in ways you may not expect. See https://github.com/uuidjs/uuid/pull/434
+  return (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase();
+}
+
+function stringify(arr, offset = 0) {
+  const uuid = unsafeStringify(arr, offset); // Consistency check for valid UUID.  If this throws, it's likely due to one
+  // of the following:
+  // - One or more input array values don't map to a hex octet (leading to
+  // "undefined" in the uuid)
+  // - Invalid input values for the RFC `version` or `variant` fields
+
+  if (!(0, _validate.default)(uuid)) {
+    throw TypeError('Stringified UUID is invalid');
+  }
+
+  return uuid;
+}
+
+var _default = stringify;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v1.js":
+/*!*******************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v1.js ***!
+  \*******************************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _rng = _interopRequireDefault(__webpack_require__(/*! ./rng.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/rng.js"));
+
+var _stringify = __webpack_require__(/*! ./stringify.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/stringify.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// **`v1()` - Generate time-based UUID**
+//
+// Inspired by https://github.com/LiosK/UUID.js
+// and http://docs.python.org/library/uuid.html
+let _nodeId;
+
+let _clockseq; // Previous uuid creation time
+
+
+let _lastMSecs = 0;
+let _lastNSecs = 0; // See https://github.com/uuidjs/uuid for API details
+
+function v1(options, buf, offset) {
+  let i = buf && offset || 0;
+  const b = buf || new Array(16);
+  options = options || {};
+  let node = options.node || _nodeId;
+  let clockseq = options.clockseq !== undefined ? options.clockseq : _clockseq; // node and clockseq need to be initialized to random values if they're not
+  // specified.  We do this lazily to minimize issues related to insufficient
+  // system entropy.  See #189
+
+  if (node == null || clockseq == null) {
+    const seedBytes = options.random || (options.rng || _rng.default)();
+
+    if (node == null) {
+      // Per 4.5, create and 48-bit node id, (47 random bits + multicast bit = 1)
+      node = _nodeId = [seedBytes[0] | 0x01, seedBytes[1], seedBytes[2], seedBytes[3], seedBytes[4], seedBytes[5]];
+    }
+
+    if (clockseq == null) {
+      // Per 4.2.2, randomize (14 bit) clockseq
+      clockseq = _clockseq = (seedBytes[6] << 8 | seedBytes[7]) & 0x3fff;
+    }
+  } // UUID timestamps are 100 nano-second units since the Gregorian epoch,
+  // (1582-10-15 00:00).  JSNumbers aren't precise enough for this, so
+  // time is handled internally as 'msecs' (integer milliseconds) and 'nsecs'
+  // (100-nanoseconds offset from msecs) since unix epoch, 1970-01-01 00:00.
+
+
+  let msecs = options.msecs !== undefined ? options.msecs : Date.now(); // Per 4.2.1.2, use count of uuid's generated during the current clock
+  // cycle to simulate higher resolution clock
+
+  let nsecs = options.nsecs !== undefined ? options.nsecs : _lastNSecs + 1; // Time since last uuid creation (in msecs)
+
+  const dt = msecs - _lastMSecs + (nsecs - _lastNSecs) / 10000; // Per 4.2.1.2, Bump clockseq on clock regression
+
+  if (dt < 0 && options.clockseq === undefined) {
+    clockseq = clockseq + 1 & 0x3fff;
+  } // Reset nsecs if clock regresses (new clockseq) or we've moved onto a new
+  // time interval
+
+
+  if ((dt < 0 || msecs > _lastMSecs) && options.nsecs === undefined) {
+    nsecs = 0;
+  } // Per 4.2.1.2 Throw error if too many uuids are requested
+
+
+  if (nsecs >= 10000) {
+    throw new Error("uuid.v1(): Can't create more than 10M uuids/sec");
+  }
+
+  _lastMSecs = msecs;
+  _lastNSecs = nsecs;
+  _clockseq = clockseq; // Per 4.1.4 - Convert from unix epoch to Gregorian epoch
+
+  msecs += 12219292800000; // `time_low`
+
+  const tl = ((msecs & 0xfffffff) * 10000 + nsecs) % 0x100000000;
+  b[i++] = tl >>> 24 & 0xff;
+  b[i++] = tl >>> 16 & 0xff;
+  b[i++] = tl >>> 8 & 0xff;
+  b[i++] = tl & 0xff; // `time_mid`
+
+  const tmh = msecs / 0x100000000 * 10000 & 0xfffffff;
+  b[i++] = tmh >>> 8 & 0xff;
+  b[i++] = tmh & 0xff; // `time_high_and_version`
+
+  b[i++] = tmh >>> 24 & 0xf | 0x10; // include version
+
+  b[i++] = tmh >>> 16 & 0xff; // `clock_seq_hi_and_reserved` (Per 4.2.2 - include variant)
+
+  b[i++] = clockseq >>> 8 | 0x80; // `clock_seq_low`
+
+  b[i++] = clockseq & 0xff; // `node`
+
+  for (let n = 0; n < 6; ++n) {
+    b[i + n] = node[n];
+  }
+
+  return buf || (0, _stringify.unsafeStringify)(b);
+}
+
+var _default = v1;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v3.js":
+/*!*******************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v3.js ***!
+  \*******************************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _v = _interopRequireDefault(__webpack_require__(/*! ./v35.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v35.js"));
+
+var _md = _interopRequireDefault(__webpack_require__(/*! ./md5.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/md5.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const v3 = (0, _v.default)('v3', 0x30, _md.default);
+var _default = v3;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v35.js":
+/*!********************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v35.js ***!
+  \********************************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.URL = exports.DNS = void 0;
+exports["default"] = v35;
+
+var _stringify = __webpack_require__(/*! ./stringify.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/stringify.js");
+
+var _parse = _interopRequireDefault(__webpack_require__(/*! ./parse.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/parse.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function stringToBytes(str) {
+  str = unescape(encodeURIComponent(str)); // UTF8 escape
+
+  const bytes = [];
+
+  for (let i = 0; i < str.length; ++i) {
+    bytes.push(str.charCodeAt(i));
+  }
+
+  return bytes;
+}
+
+const DNS = '6ba7b810-9dad-11d1-80b4-00c04fd430c8';
+exports.DNS = DNS;
+const URL = '6ba7b811-9dad-11d1-80b4-00c04fd430c8';
+exports.URL = URL;
+
+function v35(name, version, hashfunc) {
+  function generateUUID(value, namespace, buf, offset) {
+    var _namespace;
+
+    if (typeof value === 'string') {
+      value = stringToBytes(value);
+    }
+
+    if (typeof namespace === 'string') {
+      namespace = (0, _parse.default)(namespace);
+    }
+
+    if (((_namespace = namespace) === null || _namespace === void 0 ? void 0 : _namespace.length) !== 16) {
+      throw TypeError('Namespace must be array-like (16 iterable integer values, 0-255)');
+    } // Compute hash of namespace and value, Per 4.3
+    // Future: Use spread syntax when supported on all platforms, e.g. `bytes =
+    // hashfunc([...namespace, ... value])`
+
+
+    let bytes = new Uint8Array(16 + value.length);
+    bytes.set(namespace);
+    bytes.set(value, namespace.length);
+    bytes = hashfunc(bytes);
+    bytes[6] = bytes[6] & 0x0f | version;
+    bytes[8] = bytes[8] & 0x3f | 0x80;
+
+    if (buf) {
+      offset = offset || 0;
+
+      for (let i = 0; i < 16; ++i) {
+        buf[offset + i] = bytes[i];
+      }
+
+      return buf;
+    }
+
+    return (0, _stringify.unsafeStringify)(bytes);
+  } // Function#name is not settable on some platforms (#270)
+
+
+  try {
+    generateUUID.name = name; // eslint-disable-next-line no-empty
+  } catch (err) {} // For CommonJS default export support
+
+
+  generateUUID.DNS = DNS;
+  generateUUID.URL = URL;
+  return generateUUID;
+}
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v4.js":
+/*!*******************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v4.js ***!
+  \*******************************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _native = _interopRequireDefault(__webpack_require__(/*! ./native.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/native.js"));
+
+var _rng = _interopRequireDefault(__webpack_require__(/*! ./rng.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/rng.js"));
+
+var _stringify = __webpack_require__(/*! ./stringify.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/stringify.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function v4(options, buf, offset) {
+  if (_native.default.randomUUID && !buf && !options) {
+    return _native.default.randomUUID();
+  }
+
+  options = options || {};
+
+  const rnds = options.random || (options.rng || _rng.default)(); // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
+
+
+  rnds[6] = rnds[6] & 0x0f | 0x40;
+  rnds[8] = rnds[8] & 0x3f | 0x80; // Copy bytes to buffer, if provided
+
+  if (buf) {
+    offset = offset || 0;
+
+    for (let i = 0; i < 16; ++i) {
+      buf[offset + i] = rnds[i];
+    }
+
+    return buf;
+  }
+
+  return (0, _stringify.unsafeStringify)(rnds);
+}
+
+var _default = v4;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v5.js":
+/*!*******************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v5.js ***!
+  \*******************************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _v = _interopRequireDefault(__webpack_require__(/*! ./v35.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v35.js"));
+
+var _sha = _interopRequireDefault(__webpack_require__(/*! ./sha1.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/sha1.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const v5 = (0, _v.default)('v5', 0x50, _sha.default);
+var _default = v5;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/validate.js":
+/*!*************************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/validate.js ***!
+  \*************************************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _regex = _interopRequireDefault(__webpack_require__(/*! ./regex.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/regex.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function validate(uuid) {
+  return typeof uuid === 'string' && _regex.default.test(uuid);
+}
+
+var _default = validate;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/version.js":
+/*!************************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/version.js ***!
+  \************************************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _validate = _interopRequireDefault(__webpack_require__(/*! ./validate.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/validate.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function version(uuid) {
+  if (!(0, _validate.default)(uuid)) {
+    throw TypeError('Invalid UUID');
+  }
+
+  return parseInt(uuid.slice(14, 15), 16);
+}
+
+var _default = version;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-core/dist/index.js ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var crossFetch = __webpack_require__(/*! cross-fetch */ "./node_modules/cross-fetch/dist/browser-ponyfill.js");
+var jose = __webpack_require__(/*! jose */ "./node_modules/jose/dist/browser/index.js");
+var uuid = __webpack_require__(/*! uuid */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/index.js");
+
+const SOLID_CLIENT_AUTHN_KEY_PREFIX = "solidClientAuthn:";
+const PREFERRED_SIGNING_ALG = ["ES256", "RS256"];
+const EVENTS = {
     ERROR: "error",
     LOGIN: "login",
     LOGOUT: "logout",
@@ -22460,261 +23115,94 @@ exports.EVENTS = {
     SESSION_RESTORED: "sessionRestore",
     TIMEOUT_SET: "timeoutSet",
 };
-exports.REFRESH_BEFORE_EXPIRATION_SECONDS = 5;
+const REFRESH_BEFORE_EXPIRATION_SECONDS = 5;
 const SCOPE_OPENID = "openid";
 const SCOPE_OFFLINE = "offline_access";
 const SCOPE_WEBID = "webid";
-exports.DEFAULT_SCOPES = [SCOPE_OPENID, SCOPE_OFFLINE, SCOPE_WEBID].join(" ");
-//# sourceMappingURL=constant.js.map
+const DEFAULT_SCOPES = [SCOPE_OPENID, SCOPE_OFFLINE, SCOPE_WEBID].join(" ");
 
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/dist/errors/ConfigurationError.js":
-/*!****************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/dist/errors/ConfigurationError.js ***!
-  \****************************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-class ConfigurationError extends Error {
-    constructor(message) {
-        super(message);
+class AggregateHandler {
+    constructor(handleables) {
+        this.handleables = handleables;
     }
-}
-exports["default"] = ConfigurationError;
-//# sourceMappingURL=ConfigurationError.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/dist/errors/InruptError.js":
-/*!*********************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/dist/errors/InruptError.js ***!
-  \*********************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-class InruptError extends Error {
-    constructor(messageOrIri, messageParams, appendErrorIri = true) {
-        super(typeof messageOrIri === "string"
-            ? InruptError.substituteParams(messageOrIri, messageParams)
-            : InruptError.appendErrorIri(InruptError.lookupErrorIri(messageOrIri, messageParams), messageOrIri, appendErrorIri));
-    }
-    httpResponse(httpErrorResponse, appendHttpDetails = true) {
-        this.message = InruptError.appendHttpResponseDetails(this.message, httpErrorResponse, appendHttpDetails);
-        this.httpErrorResponse = httpErrorResponse;
-        return this;
-    }
-    hasHttpResponse() {
-        return this.httpErrorResponse !== undefined;
-    }
-    getHttpResponse() {
-        return this.httpErrorResponse;
-    }
-    getHttpStatusCode() {
-        if (this.httpErrorResponse === undefined) {
-            throw new InruptError("This InruptError was not provided with a HTTP response - so we can't get its HTTP Status Code.");
-        }
-        return this.httpErrorResponse.status;
-    }
-    getHttpStatusText() {
-        if (this.httpErrorResponse === undefined) {
-            throw new InruptError("This InruptError was not provided with a HTTP response - so we can't get its HTTP Status Text!");
-        }
-        return this.httpErrorResponse.statusText;
-    }
-    static determineIfVocabTerm(value) {
-        if (value.strict !== undefined) {
-            return true;
-        }
-        return false;
-    }
-    static lookupErrorIri(iri, messageParams) {
-        if (InruptError.determineIfVocabTerm(iri)) {
-            const message = messageParams === undefined
-                ? iri.message
-                : iri.messageParams(...messageParams);
-            return message === undefined
-                ? `Looked up error message IRI [${iri.value}], but found no message value.`
-                : message;
-        }
-        return `Error message looked up at: [${iri.value}]${messageParams === undefined
-            ? ""
-            : `, with params [${messageParams.toString()}]`}`;
-    }
-    static appendHttpResponseDetails(message, response, append) {
-        if (append && typeof response !== "undefined") {
-            return `${message} HTTP details: status code [${response.status}], status text [${response.statusText}].`;
-        }
-        return message;
-    }
-    static appendErrorIri(message, iri, append) {
-        return append ? `${message} Error IRI: [${iri.value}].` : message;
-    }
-    static substituteParams(message, params) {
-        let fullMessage = message;
-        if (params !== undefined) {
-            const paramsRequired = message.split("{{").length - 1;
-            if (paramsRequired !== params.length) {
-                throw new Error(`Setting parameters on message [${message}], but it requires [${paramsRequired}] params and we received [${params.length}].`);
-            }
-            for (let i = 0; i < params.length; i += 1) {
-                const marker = `{{${i}}}`;
-                fullMessage = fullMessage.replace(marker, params[i]);
+    async getProperHandler(params) {
+        const canHandleList = await Promise.all(this.handleables.map((handleable) => handleable.canHandle(...params)));
+        for (let i = 0; i < canHandleList.length; i += 1) {
+            if (canHandleList[i]) {
+                return this.handleables[i];
             }
         }
-        return fullMessage;
+        return null;
+    }
+    async canHandle(...params) {
+        return (await this.getProperHandler(params)) !== null;
+    }
+    async handle(...params) {
+        const handler = await this.getProperHandler(params);
+        if (handler) {
+            return handler.handle(...params);
+        }
+        throw new Error(`[${this.constructor.name}] cannot find a suitable handler for: ${params
+            .map((param) => {
+            try {
+                return JSON.stringify(param);
+            }
+            catch (err) {
+                return param.toString();
+            }
+        })
+            .join(", ")}`);
     }
 }
-exports["default"] = InruptError;
-//# sourceMappingURL=InruptError.js.map
 
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/dist/errors/InvalidResponseError.js":
-/*!******************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/dist/errors/InvalidResponseError.js ***!
-  \******************************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.InvalidResponseError = void 0;
-class InvalidResponseError extends Error {
-    constructor(missingFields) {
-        super(`Invalid response from OIDC provider: missing fields ${missingFields}`);
-        this.missingFields = missingFields;
+async function fetchJwks(jwksIri, issuerIri) {
+    const jwksResponse = await crossFetch.fetch(jwksIri);
+    if (jwksResponse.status !== 200) {
+        throw new Error(`Could not fetch JWKS for [${issuerIri}] at [${jwksIri}]: ${jwksResponse.status} ${jwksResponse.statusText}`);
+    }
+    let jwk;
+    try {
+        jwk = (await jwksResponse.json()).keys[0];
+    }
+    catch (e) {
+        throw new Error(`Malformed JWKS for [${issuerIri}] at [${jwksIri}]: ${e.message}`);
+    }
+    return jwk;
+}
+async function getWebidFromTokenPayload(idToken, jwksIri, issuerIri, clientId) {
+    const jwk = await fetchJwks(jwksIri, issuerIri);
+    let payload;
+    try {
+        const { payload: verifiedPayload } = await jose.jwtVerify(idToken, await jose.importJWK(jwk), {
+            issuer: issuerIri,
+            audience: clientId,
+        });
+        payload = verifiedPayload;
+    }
+    catch (e) {
+        throw new Error(`Token verification failed: ${e.stack}`);
+    }
+    if (typeof payload.webid === "string") {
+        return payload.webid;
+    }
+    if (typeof payload.sub !== "string") {
+        throw new Error(`The token ${JSON.stringify(payload)} is invalid: it has no 'webid' claim and no 'sub' claim.`);
+    }
+    try {
+        new URL(payload.sub);
+        return payload.sub;
+    }
+    catch (e) {
+        throw new Error(`The token has no 'webid' claim, and its 'sub' claim of [${payload.sub}] is invalid as a URL - error [${e}].`);
     }
 }
-exports.InvalidResponseError = InvalidResponseError;
-//# sourceMappingURL=InvalidResponseError.js.map
 
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/dist/errors/NotImplementedError.js":
-/*!*****************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/dist/errors/NotImplementedError.js ***!
-  \*****************************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-class NotImplementedError extends Error {
-    constructor(methodName) {
-        super(`[${methodName}] is not implemented`);
-    }
+function isSupportedTokenType(token) {
+    return typeof token === "string" && ["DPoP", "Bearer"].includes(token);
 }
-exports["default"] = NotImplementedError;
-//# sourceMappingURL=NotImplementedError.js.map
 
-/***/ }),
+const USER_SESSION_PREFIX = "solidClientAuthenticationUser";
 
-/***/ "./node_modules/@inrupt/solid-client-authn-core/dist/errors/OidcProviderError.js":
-/*!***************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/dist/errors/OidcProviderError.js ***!
-  \***************************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.OidcProviderError = void 0;
-class OidcProviderError extends Error {
-    constructor(message, error, errorDescription) {
-        super(message);
-        this.error = error;
-        this.errorDescription = errorDescription;
-    }
-}
-exports.OidcProviderError = OidcProviderError;
-//# sourceMappingURL=OidcProviderError.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js":
-/*!********************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/dist/index.js ***!
-  \********************************************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.StorageUtilityGetResponse = exports.StorageUtilityMock = exports.mockStorageUtility = exports.mockStorage = exports.buildAuthenticatedFetch = exports.generateDpopKeyPair = exports.createDpopHeader = exports.OidcProviderError = exports.InvalidResponseError = exports.NotImplementedError = exports.ConfigurationError = exports.InMemoryStorage = exports.getSessionIdFromOauthState = exports.saveSessionInfoToStorage = exports.loadOidcContextFromStorage = exports.StorageUtility = exports.determineSigningAlg = exports.handleRegistration = exports.USER_SESSION_PREFIX = exports.isSupportedTokenType = exports.fetchJwks = exports.getWebidFromTokenPayload = exports.AggregateHandler = void 0;
-__exportStar(__webpack_require__(/*! ./constant */ "./node_modules/@inrupt/solid-client-authn-core/dist/constant.js"), exports);
-var AggregateHandler_1 = __webpack_require__(/*! ./util/handlerPattern/AggregateHandler */ "./node_modules/@inrupt/solid-client-authn-core/dist/util/handlerPattern/AggregateHandler.js");
-Object.defineProperty(exports, "AggregateHandler", ({ enumerable: true, get: function () { return __importDefault(AggregateHandler_1).default; } }));
-var token_1 = __webpack_require__(/*! ./util/token */ "./node_modules/@inrupt/solid-client-authn-core/dist/util/token.js");
-Object.defineProperty(exports, "getWebidFromTokenPayload", ({ enumerable: true, get: function () { return token_1.getWebidFromTokenPayload; } }));
-Object.defineProperty(exports, "fetchJwks", ({ enumerable: true, get: function () { return token_1.fetchJwks; } }));
-var ISessionInfo_1 = __webpack_require__(/*! ./sessionInfo/ISessionInfo */ "./node_modules/@inrupt/solid-client-authn-core/dist/sessionInfo/ISessionInfo.js");
-Object.defineProperty(exports, "isSupportedTokenType", ({ enumerable: true, get: function () { return ISessionInfo_1.isSupportedTokenType; } }));
-var ISessionInfoManager_1 = __webpack_require__(/*! ./sessionInfo/ISessionInfoManager */ "./node_modules/@inrupt/solid-client-authn-core/dist/sessionInfo/ISessionInfoManager.js");
-Object.defineProperty(exports, "USER_SESSION_PREFIX", ({ enumerable: true, get: function () { return ISessionInfoManager_1.USER_SESSION_PREFIX; } }));
-var IClientRegistrar_1 = __webpack_require__(/*! ./login/oidc/IClientRegistrar */ "./node_modules/@inrupt/solid-client-authn-core/dist/login/oidc/IClientRegistrar.js");
-Object.defineProperty(exports, "handleRegistration", ({ enumerable: true, get: function () { return IClientRegistrar_1.handleRegistration; } }));
-Object.defineProperty(exports, "determineSigningAlg", ({ enumerable: true, get: function () { return IClientRegistrar_1.determineSigningAlg; } }));
-var StorageUtility_1 = __webpack_require__(/*! ./storage/StorageUtility */ "./node_modules/@inrupt/solid-client-authn-core/dist/storage/StorageUtility.js");
-Object.defineProperty(exports, "StorageUtility", ({ enumerable: true, get: function () { return __importDefault(StorageUtility_1).default; } }));
-Object.defineProperty(exports, "loadOidcContextFromStorage", ({ enumerable: true, get: function () { return StorageUtility_1.loadOidcContextFromStorage; } }));
-Object.defineProperty(exports, "saveSessionInfoToStorage", ({ enumerable: true, get: function () { return StorageUtility_1.saveSessionInfoToStorage; } }));
-Object.defineProperty(exports, "getSessionIdFromOauthState", ({ enumerable: true, get: function () { return StorageUtility_1.getSessionIdFromOauthState; } }));
-var InMemoryStorage_1 = __webpack_require__(/*! ./storage/InMemoryStorage */ "./node_modules/@inrupt/solid-client-authn-core/dist/storage/InMemoryStorage.js");
-Object.defineProperty(exports, "InMemoryStorage", ({ enumerable: true, get: function () { return __importDefault(InMemoryStorage_1).default; } }));
-var ConfigurationError_1 = __webpack_require__(/*! ./errors/ConfigurationError */ "./node_modules/@inrupt/solid-client-authn-core/dist/errors/ConfigurationError.js");
-Object.defineProperty(exports, "ConfigurationError", ({ enumerable: true, get: function () { return __importDefault(ConfigurationError_1).default; } }));
-var NotImplementedError_1 = __webpack_require__(/*! ./errors/NotImplementedError */ "./node_modules/@inrupt/solid-client-authn-core/dist/errors/NotImplementedError.js");
-Object.defineProperty(exports, "NotImplementedError", ({ enumerable: true, get: function () { return __importDefault(NotImplementedError_1).default; } }));
-var InvalidResponseError_1 = __webpack_require__(/*! ./errors/InvalidResponseError */ "./node_modules/@inrupt/solid-client-authn-core/dist/errors/InvalidResponseError.js");
-Object.defineProperty(exports, "InvalidResponseError", ({ enumerable: true, get: function () { return InvalidResponseError_1.InvalidResponseError; } }));
-var OidcProviderError_1 = __webpack_require__(/*! ./errors/OidcProviderError */ "./node_modules/@inrupt/solid-client-authn-core/dist/errors/OidcProviderError.js");
-Object.defineProperty(exports, "OidcProviderError", ({ enumerable: true, get: function () { return OidcProviderError_1.OidcProviderError; } }));
-var dpopUtils_1 = __webpack_require__(/*! ./authenticatedFetch/dpopUtils */ "./node_modules/@inrupt/solid-client-authn-core/dist/authenticatedFetch/dpopUtils.js");
-Object.defineProperty(exports, "createDpopHeader", ({ enumerable: true, get: function () { return dpopUtils_1.createDpopHeader; } }));
-Object.defineProperty(exports, "generateDpopKeyPair", ({ enumerable: true, get: function () { return dpopUtils_1.generateDpopKeyPair; } }));
-var fetchFactory_1 = __webpack_require__(/*! ./authenticatedFetch/fetchFactory */ "./node_modules/@inrupt/solid-client-authn-core/dist/authenticatedFetch/fetchFactory.js");
-Object.defineProperty(exports, "buildAuthenticatedFetch", ({ enumerable: true, get: function () { return fetchFactory_1.buildAuthenticatedFetch; } }));
-var StorageUtility_2 = __webpack_require__(/*! ./storage/__mocks__/StorageUtility */ "./node_modules/@inrupt/solid-client-authn-core/dist/storage/__mocks__/StorageUtility.js");
-Object.defineProperty(exports, "mockStorage", ({ enumerable: true, get: function () { return StorageUtility_2.mockStorage; } }));
-Object.defineProperty(exports, "mockStorageUtility", ({ enumerable: true, get: function () { return StorageUtility_2.mockStorageUtility; } }));
-Object.defineProperty(exports, "StorageUtilityMock", ({ enumerable: true, get: function () { return StorageUtility_2.StorageUtilityMock; } }));
-Object.defineProperty(exports, "StorageUtilityGetResponse", ({ enumerable: true, get: function () { return StorageUtility_2.StorageUtilityGetResponse; } }));
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/dist/login/oidc/IClientRegistrar.js":
-/*!******************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/dist/login/oidc/IClientRegistrar.js ***!
-  \******************************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.handleRegistration = exports.determineSigningAlg = void 0;
 function isValidUrl(url) {
     try {
         new URL(url);
@@ -22730,7 +23218,6 @@ function determineSigningAlg(supported, preferred) {
         return supported.includes(signingAlg);
     })) !== null && _a !== void 0 ? _a : null);
 }
-exports.determineSigningAlg = determineSigningAlg;
 function determineClientType(options, issuerConfig) {
     if (options.clientId !== undefined && !isValidUrl(options.clientId)) {
         return "static";
@@ -22771,91 +23258,10 @@ async function handleRegistration(options, issuerConfig, storageUtility, clientR
         clientType,
     };
 }
-exports.handleRegistration = handleRegistration;
-//# sourceMappingURL=IClientRegistrar.js.map
 
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/dist/sessionInfo/ISessionInfo.js":
-/*!***************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/dist/sessionInfo/ISessionInfo.js ***!
-  \***************************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.isSupportedTokenType = void 0;
-function isSupportedTokenType(token) {
-    return typeof token === "string" && ["DPoP", "Bearer"].includes(token);
-}
-exports.isSupportedTokenType = isSupportedTokenType;
-//# sourceMappingURL=ISessionInfo.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/dist/sessionInfo/ISessionInfoManager.js":
-/*!**********************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/dist/sessionInfo/ISessionInfoManager.js ***!
-  \**********************************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.USER_SESSION_PREFIX = void 0;
-exports.USER_SESSION_PREFIX = "solidClientAuthenticationUser";
-//# sourceMappingURL=ISessionInfoManager.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/dist/storage/InMemoryStorage.js":
-/*!**************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/dist/storage/InMemoryStorage.js ***!
-  \**************************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-class InMemoryStorage {
-    constructor() {
-        this.map = {};
-    }
-    async get(key) {
-        return this.map[key] || undefined;
-    }
-    async set(key, value) {
-        this.map[key] = value;
-    }
-    async delete(key) {
-        delete this.map[key];
-    }
-}
-exports["default"] = InMemoryStorage;
-//# sourceMappingURL=InMemoryStorage.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/dist/storage/StorageUtility.js":
-/*!*************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/dist/storage/StorageUtility.js ***!
-  \*************************************************************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.saveSessionInfoToStorage = exports.loadOidcContextFromStorage = exports.getSessionIdFromOauthState = void 0;
-const jose_1 = __webpack_require__(/*! jose */ "./node_modules/jose/dist/browser/index.js");
-const InruptError_1 = __importDefault(__webpack_require__(/*! ../errors/InruptError */ "./node_modules/@inrupt/solid-client-authn-core/dist/errors/InruptError.js"));
 async function getSessionIdFromOauthState(storageUtility, oauthState) {
     return storageUtility.getForUser(oauthState, "sessionId");
 }
-exports.getSessionIdFromOauthState = getSessionIdFromOauthState;
 async function loadOidcContextFromStorage(sessionId, storageUtility, configFetcher) {
     try {
         const [issuerIri, codeVerifier, storedRedirectIri, dpop] = await Promise.all([
@@ -22879,7 +23285,6 @@ async function loadOidcContextFromStorage(sessionId, storageUtility, configFetch
         throw new Error(`Failed to retrieve OIDC context from storage associated with session [${sessionId}]: ${e}`);
     }
 }
-exports.loadOidcContextFromStorage = loadOidcContextFromStorage;
 async function saveSessionInfoToStorage(storageUtility, sessionId, webId, isLoggedIn, refreshToken, secure, dpopKey) {
     if (refreshToken !== undefined) {
         await storageUtility.setForUser(sessionId, { refreshToken }, { secure });
@@ -22893,11 +23298,10 @@ async function saveSessionInfoToStorage(storageUtility, sessionId, webId, isLogg
     if (dpopKey !== undefined) {
         await storageUtility.setForUser(sessionId, {
             publicKey: JSON.stringify(dpopKey.publicKey),
-            privateKey: JSON.stringify(await (0, jose_1.exportJWK)(dpopKey.privateKey)),
+            privateKey: JSON.stringify(await jose.exportJWK(dpopKey.privateKey)),
         }, { secure });
     }
 }
-exports.saveSessionInfoToStorage = saveSessionInfoToStorage;
 class StorageUtility {
     constructor(secureStorage, insecureStorage) {
         this.secureStorage = secureStorage;
@@ -22917,7 +23321,7 @@ class StorageUtility {
             return JSON.parse(stored);
         }
         catch (err) {
-            throw new InruptError_1.default(`Data for user [${userId}] in [${secure ? "secure" : "unsecure"}] storage is corrupted - expected valid JSON, but got: ${stored}`);
+            throw new Error(`Data for user [${userId}] in [${secure ? "secure" : "unsecure"}] storage is corrupted - expected valid JSON, but got: ${stored}`);
         }
     }
     async setUserData(userId, data, secure) {
@@ -22928,7 +23332,7 @@ class StorageUtility {
             ? this.secureStorage
             : this.insecureStorage).get(key);
         if (value === undefined && (options === null || options === void 0 ? void 0 : options.errorIfNull)) {
-            throw new InruptError_1.default(`[${key}] is not stored`);
+            throw new Error(`[${key}] is not stored`);
         }
         return value;
     }
@@ -22946,7 +23350,7 @@ class StorageUtility {
         }
         value = userData[key];
         if (value === undefined && (options === null || options === void 0 ? void 0 : options.errorIfNull)) {
-            throw new InruptError_1.default(`Field [${key}] for user [${userId}] is not stored`);
+            throw new Error(`Field [${key}] for user [${userId}] is not stored`);
         }
         return value || undefined;
     }
@@ -22969,33 +23373,187 @@ class StorageUtility {
         await ((options === null || options === void 0 ? void 0 : options.secure) ? this.secureStorage : this.insecureStorage).delete(this.getKey(userId));
     }
 }
-exports["default"] = StorageUtility;
-//# sourceMappingURL=StorageUtility.js.map
 
-/***/ }),
+class InMemoryStorage {
+    constructor() {
+        this.map = {};
+    }
+    async get(key) {
+        return this.map[key] || undefined;
+    }
+    async set(key, value) {
+        this.map[key] = value;
+    }
+    async delete(key) {
+        delete this.map[key];
+    }
+}
 
-/***/ "./node_modules/@inrupt/solid-client-authn-core/dist/storage/__mocks__/StorageUtility.js":
-/*!***********************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/dist/storage/__mocks__/StorageUtility.js ***!
-  \***********************************************************************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+class ConfigurationError extends Error {
+    constructor(message) {
+        super(message);
+    }
+}
 
-"use strict";
+class NotImplementedError extends Error {
+    constructor(methodName) {
+        super(`[${methodName}] is not implemented`);
+    }
+}
 
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+class InvalidResponseError extends Error {
+    constructor(missingFields) {
+        super(`Invalid response from OIDC provider: missing fields ${missingFields}`);
+        this.missingFields = missingFields;
+    }
+}
+
+class OidcProviderError extends Error {
+    constructor(message, error, errorDescription) {
+        super(message);
+        this.error = error;
+        this.errorDescription = errorDescription;
+    }
+}
+
+function normalizeHTU(audience) {
+    const audienceUrl = new URL(audience);
+    return new URL(audienceUrl.pathname, audienceUrl.origin).toString();
+}
+async function createDpopHeader(audience, method, dpopKey) {
+    return new jose.SignJWT({
+        htu: normalizeHTU(audience),
+        htm: method.toUpperCase(),
+        jti: uuid.v4(),
+    })
+        .setProtectedHeader({
+        alg: PREFERRED_SIGNING_ALG[0],
+        jwk: dpopKey.publicKey,
+        typ: "dpop+jwt",
+    })
+        .setIssuedAt()
+        .sign(dpopKey.privateKey, {});
+}
+async function generateDpopKeyPair() {
+    const { privateKey, publicKey } = await jose.generateKeyPair(PREFERRED_SIGNING_ALG[0]);
+    const dpopKeyPair = {
+        privateKey,
+        publicKey: await jose.exportJWK(publicKey),
+    };
+    [dpopKeyPair.publicKey.alg] = PREFERRED_SIGNING_ALG;
+    return dpopKeyPair;
+}
+
+const DEFAULT_EXPIRATION_TIME_SECONDS = 600;
+function isExpectedAuthError(statusCode) {
+    return [401, 403].includes(statusCode);
+}
+async function buildDpopFetchOptions(targetUrl, authToken, dpopKey, defaultOptions) {
+    var _a;
+    const headers = new crossFetch.Headers(defaultOptions === null || defaultOptions === void 0 ? void 0 : defaultOptions.headers);
+    headers.set("Authorization", `DPoP ${authToken}`);
+    headers.set("DPoP", await createDpopHeader(targetUrl, (_a = defaultOptions === null || defaultOptions === void 0 ? void 0 : defaultOptions.method) !== null && _a !== void 0 ? _a : "get", dpopKey));
+    return {
+        ...defaultOptions,
+        headers,
+    };
+}
+async function buildAuthenticatedHeaders(targetUrl, authToken, dpopKey, defaultOptions) {
+    if (dpopKey !== undefined) {
+        return buildDpopFetchOptions(targetUrl, authToken, dpopKey, defaultOptions);
+    }
+    const headers = new crossFetch.Headers(defaultOptions === null || defaultOptions === void 0 ? void 0 : defaultOptions.headers);
+    headers.set("Authorization", `Bearer ${authToken}`);
+    return {
+        ...defaultOptions,
+        headers,
+    };
+}
+async function makeAuthenticatedRequest(unauthFetch, accessToken, url, defaultRequestInit, dpopKey) {
+    return unauthFetch(url, await buildAuthenticatedHeaders(url.toString(), accessToken, dpopKey, defaultRequestInit));
+}
+async function refreshAccessToken(refreshOptions, dpopKey, eventEmitter) {
+    var _a;
+    const tokenSet = await refreshOptions.tokenRefresher.refresh(refreshOptions.sessionId, refreshOptions.refreshToken, dpopKey);
+    eventEmitter === null || eventEmitter === void 0 ? void 0 : eventEmitter.emit(EVENTS.SESSION_EXTENDED, (_a = tokenSet.expiresIn) !== null && _a !== void 0 ? _a : DEFAULT_EXPIRATION_TIME_SECONDS);
+    if (typeof tokenSet.refreshToken === "string") {
+        eventEmitter === null || eventEmitter === void 0 ? void 0 : eventEmitter.emit(EVENTS.NEW_REFRESH_TOKEN, tokenSet.refreshToken);
+    }
+    return {
+        accessToken: tokenSet.accessToken,
+        refreshToken: tokenSet.refreshToken,
+        expiresIn: tokenSet.expiresIn,
+    };
+}
+const computeRefreshDelay = (expiresIn) => {
+    if (expiresIn !== undefined) {
+        return expiresIn - REFRESH_BEFORE_EXPIRATION_SECONDS > 0
+            ?
+                expiresIn - REFRESH_BEFORE_EXPIRATION_SECONDS
+            : expiresIn;
+    }
+    return DEFAULT_EXPIRATION_TIME_SECONDS;
 };
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.mockStorageUtility = exports.mockStorage = exports.StorageUtilityMock = exports.StorageUtilityGetResponse = void 0;
-const StorageUtility_1 = __importDefault(__webpack_require__(/*! ../StorageUtility */ "./node_modules/@inrupt/solid-client-authn-core/dist/storage/StorageUtility.js"));
-exports.StorageUtilityGetResponse = "getResponse";
-exports.StorageUtilityMock = {
-    get: async (key, options) => exports.StorageUtilityGetResponse,
+async function buildAuthenticatedFetch(unauthFetch, accessToken, options) {
+    var _a;
+    let currentAccessToken = accessToken;
+    let latestTimeout;
+    const currentRefreshOptions = options === null || options === void 0 ? void 0 : options.refreshOptions;
+    if (currentRefreshOptions !== undefined) {
+        const proactivelyRefreshToken = async () => {
+            var _a, _b, _c, _d;
+            try {
+                const { accessToken: refreshedAccessToken, refreshToken, expiresIn, } = await refreshAccessToken(currentRefreshOptions, options.dpopKey, options.eventEmitter);
+                currentAccessToken = refreshedAccessToken;
+                if (refreshToken !== undefined) {
+                    currentRefreshOptions.refreshToken = refreshToken;
+                }
+                clearTimeout(latestTimeout);
+                latestTimeout = setTimeout(proactivelyRefreshToken, computeRefreshDelay(expiresIn) * 1000);
+                (_a = options.eventEmitter) === null || _a === void 0 ? void 0 : _a.emit(EVENTS.TIMEOUT_SET, latestTimeout);
+            }
+            catch (e) {
+                if (e instanceof OidcProviderError) {
+                    (_b = options === null || options === void 0 ? void 0 : options.eventEmitter) === null || _b === void 0 ? void 0 : _b.emit(EVENTS.ERROR, e.error, e.errorDescription);
+                    (_c = options === null || options === void 0 ? void 0 : options.eventEmitter) === null || _c === void 0 ? void 0 : _c.emit(EVENTS.SESSION_EXPIRED);
+                }
+                if (e instanceof InvalidResponseError &&
+                    e.missingFields.includes("access_token")) {
+                    (_d = options === null || options === void 0 ? void 0 : options.eventEmitter) === null || _d === void 0 ? void 0 : _d.emit(EVENTS.SESSION_EXPIRED);
+                }
+            }
+        };
+        latestTimeout = setTimeout(proactivelyRefreshToken, computeRefreshDelay(options.expiresIn) * 1000);
+        (_a = options.eventEmitter) === null || _a === void 0 ? void 0 : _a.emit(EVENTS.TIMEOUT_SET, latestTimeout);
+    }
+    else if (options !== undefined && options.eventEmitter !== undefined) {
+        const expirationTimeout = setTimeout(() => {
+            options.eventEmitter.emit(EVENTS.SESSION_EXPIRED);
+        }, computeRefreshDelay(options.expiresIn) * 1000);
+        options.eventEmitter.emit(EVENTS.TIMEOUT_SET, expirationTimeout);
+    }
+    return async (url, requestInit) => {
+        let response = await makeAuthenticatedRequest(unauthFetch, currentAccessToken, url, requestInit, options === null || options === void 0 ? void 0 : options.dpopKey);
+        const failedButNotExpectedAuthError = !response.ok && !isExpectedAuthError(response.status);
+        if (response.ok || failedButNotExpectedAuthError) {
+            return response;
+        }
+        const hasBeenRedirected = response.url !== url;
+        if (hasBeenRedirected && (options === null || options === void 0 ? void 0 : options.dpopKey) !== undefined) {
+            response = await makeAuthenticatedRequest(unauthFetch, currentAccessToken, response.url, requestInit, options.dpopKey);
+        }
+        return response;
+    };
+}
+
+const StorageUtilityGetResponse = "getResponse";
+const StorageUtilityMock = {
+    get: async (key, options) => StorageUtilityGetResponse,
     set: async (key, value) => {
     },
     delete: async (key) => {
     },
-    getForUser: async (userId, key, options) => exports.StorageUtilityGetResponse,
+    getForUser: async (userId, key, options) => StorageUtilityGetResponse,
     setForUser: async (userId, values, options) => {
     },
     deleteForUser: async (userId, key, options) => {
@@ -23023,125 +23581,1231 @@ const mockStorage = (stored) => {
         },
     };
 };
-exports.mockStorage = mockStorage;
 const mockStorageUtility = (stored, isSecure = false) => {
     if (isSecure) {
-        return new StorageUtility_1.default((0, exports.mockStorage)(stored), (0, exports.mockStorage)({}));
+        return new StorageUtility(mockStorage(stored), mockStorage({}));
     }
-    return new StorageUtility_1.default((0, exports.mockStorage)({}), (0, exports.mockStorage)(stored));
+    return new StorageUtility(mockStorage({}), mockStorage(stored));
 };
+
+exports.AggregateHandler = AggregateHandler;
+exports.ConfigurationError = ConfigurationError;
+exports.DEFAULT_SCOPES = DEFAULT_SCOPES;
+exports.EVENTS = EVENTS;
+exports.InMemoryStorage = InMemoryStorage;
+exports.InvalidResponseError = InvalidResponseError;
+exports.NotImplementedError = NotImplementedError;
+exports.OidcProviderError = OidcProviderError;
+exports.PREFERRED_SIGNING_ALG = PREFERRED_SIGNING_ALG;
+exports.REFRESH_BEFORE_EXPIRATION_SECONDS = REFRESH_BEFORE_EXPIRATION_SECONDS;
+exports.SOLID_CLIENT_AUTHN_KEY_PREFIX = SOLID_CLIENT_AUTHN_KEY_PREFIX;
+exports.StorageUtility = StorageUtility;
+exports.StorageUtilityGetResponse = StorageUtilityGetResponse;
+exports.StorageUtilityMock = StorageUtilityMock;
+exports.USER_SESSION_PREFIX = USER_SESSION_PREFIX;
+exports.buildAuthenticatedFetch = buildAuthenticatedFetch;
+exports.createDpopHeader = createDpopHeader;
+exports.determineSigningAlg = determineSigningAlg;
+exports.fetchJwks = fetchJwks;
+exports.generateDpopKeyPair = generateDpopKeyPair;
+exports.getSessionIdFromOauthState = getSessionIdFromOauthState;
+exports.getWebidFromTokenPayload = getWebidFromTokenPayload;
+exports.handleRegistration = handleRegistration;
+exports.isSupportedTokenType = isSupportedTokenType;
+exports.loadOidcContextFromStorage = loadOidcContextFromStorage;
+exports.mockStorage = mockStorage;
 exports.mockStorageUtility = mockStorageUtility;
-//# sourceMappingURL=StorageUtility.js.map
+exports.saveSessionInfoToStorage = saveSessionInfoToStorage;
+
 
 /***/ }),
 
-/***/ "./node_modules/@inrupt/solid-client-authn-core/dist/util/handlerPattern/AggregateHandler.js":
-/*!***************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/dist/util/handlerPattern/AggregateHandler.js ***!
-  \***************************************************************************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const InruptError_1 = __importDefault(__webpack_require__(/*! ../../errors/InruptError */ "./node_modules/@inrupt/solid-client-authn-core/dist/errors/InruptError.js"));
-class AggregateHandler {
-    constructor(handleables) {
-        this.handleables = handleables;
-    }
-    async getProperHandler(params) {
-        const canHandleList = await Promise.all(this.handleables.map((handleable) => handleable.canHandle(...params)));
-        for (let i = 0; i < canHandleList.length; i += 1) {
-            if (canHandleList[i]) {
-                return this.handleables[i];
-            }
-        }
-        return null;
-    }
-    async canHandle(...params) {
-        return (await this.getProperHandler(params)) !== null;
-    }
-    async handle(...params) {
-        const handler = await this.getProperHandler(params);
-        if (handler) {
-            return handler.handle(...params);
-        }
-        throw new InruptError_1.default(`[${this.constructor.name}] cannot find a suitable handler for: ${params
-            .map((param) => {
-            try {
-                return JSON.stringify(param);
-            }
-            catch (err) {
-                return param.toString();
-            }
-        })
-            .join(", ")}`);
-    }
-}
-exports["default"] = AggregateHandler;
-//# sourceMappingURL=AggregateHandler.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/dist/util/token.js":
-/*!*************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/dist/util/token.js ***!
-  \*************************************************************************/
+/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/index.js":
+/*!*******************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/index.js ***!
+  \*******************************************************************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getWebidFromTokenPayload = exports.fetchJwks = void 0;
-const cross_fetch_1 = __webpack_require__(/*! cross-fetch */ "./node_modules/cross-fetch/dist/browser-ponyfill.js");
-const jose_1 = __webpack_require__(/*! jose */ "./node_modules/jose/dist/browser/index.js");
-async function fetchJwks(jwksIri, issuerIri) {
-    const jwksResponse = await (0, cross_fetch_1.fetch)(jwksIri);
-    if (jwksResponse.status !== 200) {
-        throw new Error(`Could not fetch JWKS for [${issuerIri}] at [${jwksIri}]: ${jwksResponse.status} ${jwksResponse.statusText}`);
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+Object.defineProperty(exports, "NIL", ({
+  enumerable: true,
+  get: function get() {
+    return _nil.default;
+  }
+}));
+Object.defineProperty(exports, "parse", ({
+  enumerable: true,
+  get: function get() {
+    return _parse.default;
+  }
+}));
+Object.defineProperty(exports, "stringify", ({
+  enumerable: true,
+  get: function get() {
+    return _stringify.default;
+  }
+}));
+Object.defineProperty(exports, "v1", ({
+  enumerable: true,
+  get: function get() {
+    return _v.default;
+  }
+}));
+Object.defineProperty(exports, "v3", ({
+  enumerable: true,
+  get: function get() {
+    return _v2.default;
+  }
+}));
+Object.defineProperty(exports, "v4", ({
+  enumerable: true,
+  get: function get() {
+    return _v3.default;
+  }
+}));
+Object.defineProperty(exports, "v5", ({
+  enumerable: true,
+  get: function get() {
+    return _v4.default;
+  }
+}));
+Object.defineProperty(exports, "validate", ({
+  enumerable: true,
+  get: function get() {
+    return _validate.default;
+  }
+}));
+Object.defineProperty(exports, "version", ({
+  enumerable: true,
+  get: function get() {
+    return _version.default;
+  }
+}));
+
+var _v = _interopRequireDefault(__webpack_require__(/*! ./v1.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v1.js"));
+
+var _v2 = _interopRequireDefault(__webpack_require__(/*! ./v3.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v3.js"));
+
+var _v3 = _interopRequireDefault(__webpack_require__(/*! ./v4.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v4.js"));
+
+var _v4 = _interopRequireDefault(__webpack_require__(/*! ./v5.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v5.js"));
+
+var _nil = _interopRequireDefault(__webpack_require__(/*! ./nil.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/nil.js"));
+
+var _version = _interopRequireDefault(__webpack_require__(/*! ./version.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/version.js"));
+
+var _validate = _interopRequireDefault(__webpack_require__(/*! ./validate.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/validate.js"));
+
+var _stringify = _interopRequireDefault(__webpack_require__(/*! ./stringify.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/stringify.js"));
+
+var _parse = _interopRequireDefault(__webpack_require__(/*! ./parse.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/parse.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/md5.js":
+/*!*****************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/md5.js ***!
+  \*****************************************************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+/*
+ * Browser-compatible JavaScript MD5
+ *
+ * Modification of JavaScript MD5
+ * https://github.com/blueimp/JavaScript-MD5
+ *
+ * Copyright 2011, Sebastian Tschan
+ * https://blueimp.net
+ *
+ * Licensed under the MIT license:
+ * https://opensource.org/licenses/MIT
+ *
+ * Based on
+ * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
+ * Digest Algorithm, as defined in RFC 1321.
+ * Version 2.2 Copyright (C) Paul Johnston 1999 - 2009
+ * Other contributors: Greg Holt, Andrew Kepert, Ydnar, Lostinet
+ * Distributed under the BSD License
+ * See http://pajhome.org.uk/crypt/md5 for more info.
+ */
+function md5(bytes) {
+  if (typeof bytes === 'string') {
+    const msg = unescape(encodeURIComponent(bytes)); // UTF8 escape
+
+    bytes = new Uint8Array(msg.length);
+
+    for (let i = 0; i < msg.length; ++i) {
+      bytes[i] = msg.charCodeAt(i);
     }
-    let jwk;
-    try {
-        jwk = (await jwksResponse.json()).keys[0];
-    }
-    catch (e) {
-        throw new Error(`Malformed JWKS for [${issuerIri}] at [${jwksIri}]: ${e.message}`);
-    }
-    return jwk;
+  }
+
+  return md5ToHexEncodedArray(wordsToMd5(bytesToWords(bytes), bytes.length * 8));
 }
-exports.fetchJwks = fetchJwks;
-async function getWebidFromTokenPayload(idToken, jwksIri, issuerIri, clientId) {
-    const jwk = await fetchJwks(jwksIri, issuerIri);
-    let payload;
-    try {
-        const { payload: verifiedPayload } = await (0, jose_1.jwtVerify)(idToken, await (0, jose_1.importJWK)(jwk), {
-            issuer: issuerIri,
-            audience: clientId,
-        });
-        payload = verifiedPayload;
-    }
-    catch (e) {
-        throw new Error(`Token verification failed: ${e.stack}`);
-    }
-    if (typeof payload.webid === "string") {
-        return payload.webid;
-    }
-    if (typeof payload.sub !== "string") {
-        throw new Error(`The token ${JSON.stringify(payload)} is invalid: it has no 'webid' claim and no 'sub' claim.`);
-    }
-    try {
-        new URL(payload.sub);
-        return payload.sub;
-    }
-    catch (e) {
-        throw new Error(`The token has no 'webid' claim, and its 'sub' claim of [${payload.sub}] is invalid as a URL - error [${e}].`);
-    }
+/*
+ * Convert an array of little-endian words to an array of bytes
+ */
+
+
+function md5ToHexEncodedArray(input) {
+  const output = [];
+  const length32 = input.length * 32;
+  const hexTab = '0123456789abcdef';
+
+  for (let i = 0; i < length32; i += 8) {
+    const x = input[i >> 5] >>> i % 32 & 0xff;
+    const hex = parseInt(hexTab.charAt(x >>> 4 & 0x0f) + hexTab.charAt(x & 0x0f), 16);
+    output.push(hex);
+  }
+
+  return output;
 }
-exports.getWebidFromTokenPayload = getWebidFromTokenPayload;
-//# sourceMappingURL=token.js.map
+/**
+ * Calculate output length with padding and bit length
+ */
+
+
+function getOutputLength(inputLength8) {
+  return (inputLength8 + 64 >>> 9 << 4) + 14 + 1;
+}
+/*
+ * Calculate the MD5 of an array of little-endian words, and a bit length.
+ */
+
+
+function wordsToMd5(x, len) {
+  /* append padding */
+  x[len >> 5] |= 0x80 << len % 32;
+  x[getOutputLength(len) - 1] = len;
+  let a = 1732584193;
+  let b = -271733879;
+  let c = -1732584194;
+  let d = 271733878;
+
+  for (let i = 0; i < x.length; i += 16) {
+    const olda = a;
+    const oldb = b;
+    const oldc = c;
+    const oldd = d;
+    a = md5ff(a, b, c, d, x[i], 7, -680876936);
+    d = md5ff(d, a, b, c, x[i + 1], 12, -389564586);
+    c = md5ff(c, d, a, b, x[i + 2], 17, 606105819);
+    b = md5ff(b, c, d, a, x[i + 3], 22, -1044525330);
+    a = md5ff(a, b, c, d, x[i + 4], 7, -176418897);
+    d = md5ff(d, a, b, c, x[i + 5], 12, 1200080426);
+    c = md5ff(c, d, a, b, x[i + 6], 17, -1473231341);
+    b = md5ff(b, c, d, a, x[i + 7], 22, -45705983);
+    a = md5ff(a, b, c, d, x[i + 8], 7, 1770035416);
+    d = md5ff(d, a, b, c, x[i + 9], 12, -1958414417);
+    c = md5ff(c, d, a, b, x[i + 10], 17, -42063);
+    b = md5ff(b, c, d, a, x[i + 11], 22, -1990404162);
+    a = md5ff(a, b, c, d, x[i + 12], 7, 1804603682);
+    d = md5ff(d, a, b, c, x[i + 13], 12, -40341101);
+    c = md5ff(c, d, a, b, x[i + 14], 17, -1502002290);
+    b = md5ff(b, c, d, a, x[i + 15], 22, 1236535329);
+    a = md5gg(a, b, c, d, x[i + 1], 5, -165796510);
+    d = md5gg(d, a, b, c, x[i + 6], 9, -1069501632);
+    c = md5gg(c, d, a, b, x[i + 11], 14, 643717713);
+    b = md5gg(b, c, d, a, x[i], 20, -373897302);
+    a = md5gg(a, b, c, d, x[i + 5], 5, -701558691);
+    d = md5gg(d, a, b, c, x[i + 10], 9, 38016083);
+    c = md5gg(c, d, a, b, x[i + 15], 14, -660478335);
+    b = md5gg(b, c, d, a, x[i + 4], 20, -405537848);
+    a = md5gg(a, b, c, d, x[i + 9], 5, 568446438);
+    d = md5gg(d, a, b, c, x[i + 14], 9, -1019803690);
+    c = md5gg(c, d, a, b, x[i + 3], 14, -187363961);
+    b = md5gg(b, c, d, a, x[i + 8], 20, 1163531501);
+    a = md5gg(a, b, c, d, x[i + 13], 5, -1444681467);
+    d = md5gg(d, a, b, c, x[i + 2], 9, -51403784);
+    c = md5gg(c, d, a, b, x[i + 7], 14, 1735328473);
+    b = md5gg(b, c, d, a, x[i + 12], 20, -1926607734);
+    a = md5hh(a, b, c, d, x[i + 5], 4, -378558);
+    d = md5hh(d, a, b, c, x[i + 8], 11, -2022574463);
+    c = md5hh(c, d, a, b, x[i + 11], 16, 1839030562);
+    b = md5hh(b, c, d, a, x[i + 14], 23, -35309556);
+    a = md5hh(a, b, c, d, x[i + 1], 4, -1530992060);
+    d = md5hh(d, a, b, c, x[i + 4], 11, 1272893353);
+    c = md5hh(c, d, a, b, x[i + 7], 16, -155497632);
+    b = md5hh(b, c, d, a, x[i + 10], 23, -1094730640);
+    a = md5hh(a, b, c, d, x[i + 13], 4, 681279174);
+    d = md5hh(d, a, b, c, x[i], 11, -358537222);
+    c = md5hh(c, d, a, b, x[i + 3], 16, -722521979);
+    b = md5hh(b, c, d, a, x[i + 6], 23, 76029189);
+    a = md5hh(a, b, c, d, x[i + 9], 4, -640364487);
+    d = md5hh(d, a, b, c, x[i + 12], 11, -421815835);
+    c = md5hh(c, d, a, b, x[i + 15], 16, 530742520);
+    b = md5hh(b, c, d, a, x[i + 2], 23, -995338651);
+    a = md5ii(a, b, c, d, x[i], 6, -198630844);
+    d = md5ii(d, a, b, c, x[i + 7], 10, 1126891415);
+    c = md5ii(c, d, a, b, x[i + 14], 15, -1416354905);
+    b = md5ii(b, c, d, a, x[i + 5], 21, -57434055);
+    a = md5ii(a, b, c, d, x[i + 12], 6, 1700485571);
+    d = md5ii(d, a, b, c, x[i + 3], 10, -1894986606);
+    c = md5ii(c, d, a, b, x[i + 10], 15, -1051523);
+    b = md5ii(b, c, d, a, x[i + 1], 21, -2054922799);
+    a = md5ii(a, b, c, d, x[i + 8], 6, 1873313359);
+    d = md5ii(d, a, b, c, x[i + 15], 10, -30611744);
+    c = md5ii(c, d, a, b, x[i + 6], 15, -1560198380);
+    b = md5ii(b, c, d, a, x[i + 13], 21, 1309151649);
+    a = md5ii(a, b, c, d, x[i + 4], 6, -145523070);
+    d = md5ii(d, a, b, c, x[i + 11], 10, -1120210379);
+    c = md5ii(c, d, a, b, x[i + 2], 15, 718787259);
+    b = md5ii(b, c, d, a, x[i + 9], 21, -343485551);
+    a = safeAdd(a, olda);
+    b = safeAdd(b, oldb);
+    c = safeAdd(c, oldc);
+    d = safeAdd(d, oldd);
+  }
+
+  return [a, b, c, d];
+}
+/*
+ * Convert an array bytes to an array of little-endian words
+ * Characters >255 have their high-byte silently ignored.
+ */
+
+
+function bytesToWords(input) {
+  if (input.length === 0) {
+    return [];
+  }
+
+  const length8 = input.length * 8;
+  const output = new Uint32Array(getOutputLength(length8));
+
+  for (let i = 0; i < length8; i += 8) {
+    output[i >> 5] |= (input[i / 8] & 0xff) << i % 32;
+  }
+
+  return output;
+}
+/*
+ * Add integers, wrapping at 2^32. This uses 16-bit operations internally
+ * to work around bugs in some JS interpreters.
+ */
+
+
+function safeAdd(x, y) {
+  const lsw = (x & 0xffff) + (y & 0xffff);
+  const msw = (x >> 16) + (y >> 16) + (lsw >> 16);
+  return msw << 16 | lsw & 0xffff;
+}
+/*
+ * Bitwise rotate a 32-bit number to the left.
+ */
+
+
+function bitRotateLeft(num, cnt) {
+  return num << cnt | num >>> 32 - cnt;
+}
+/*
+ * These functions implement the four basic operations the algorithm uses.
+ */
+
+
+function md5cmn(q, a, b, x, s, t) {
+  return safeAdd(bitRotateLeft(safeAdd(safeAdd(a, q), safeAdd(x, t)), s), b);
+}
+
+function md5ff(a, b, c, d, x, s, t) {
+  return md5cmn(b & c | ~b & d, a, b, x, s, t);
+}
+
+function md5gg(a, b, c, d, x, s, t) {
+  return md5cmn(b & d | c & ~d, a, b, x, s, t);
+}
+
+function md5hh(a, b, c, d, x, s, t) {
+  return md5cmn(b ^ c ^ d, a, b, x, s, t);
+}
+
+function md5ii(a, b, c, d, x, s, t) {
+  return md5cmn(c ^ (b | ~d), a, b, x, s, t);
+}
+
+var _default = md5;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/native.js":
+/*!********************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/native.js ***!
+  \********************************************************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+const randomUUID = typeof crypto !== 'undefined' && crypto.randomUUID && crypto.randomUUID.bind(crypto);
+var _default = {
+  randomUUID
+};
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/nil.js":
+/*!*****************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/nil.js ***!
+  \*****************************************************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _default = '00000000-0000-0000-0000-000000000000';
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/parse.js":
+/*!*******************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/parse.js ***!
+  \*******************************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _validate = _interopRequireDefault(__webpack_require__(/*! ./validate.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/validate.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function parse(uuid) {
+  if (!(0, _validate.default)(uuid)) {
+    throw TypeError('Invalid UUID');
+  }
+
+  let v;
+  const arr = new Uint8Array(16); // Parse ########-....-....-....-............
+
+  arr[0] = (v = parseInt(uuid.slice(0, 8), 16)) >>> 24;
+  arr[1] = v >>> 16 & 0xff;
+  arr[2] = v >>> 8 & 0xff;
+  arr[3] = v & 0xff; // Parse ........-####-....-....-............
+
+  arr[4] = (v = parseInt(uuid.slice(9, 13), 16)) >>> 8;
+  arr[5] = v & 0xff; // Parse ........-....-####-....-............
+
+  arr[6] = (v = parseInt(uuid.slice(14, 18), 16)) >>> 8;
+  arr[7] = v & 0xff; // Parse ........-....-....-####-............
+
+  arr[8] = (v = parseInt(uuid.slice(19, 23), 16)) >>> 8;
+  arr[9] = v & 0xff; // Parse ........-....-....-....-############
+  // (Use "/" to avoid 32-bit truncation when bit-shifting high-order bytes)
+
+  arr[10] = (v = parseInt(uuid.slice(24, 36), 16)) / 0x10000000000 & 0xff;
+  arr[11] = v / 0x100000000 & 0xff;
+  arr[12] = v >>> 24 & 0xff;
+  arr[13] = v >>> 16 & 0xff;
+  arr[14] = v >>> 8 & 0xff;
+  arr[15] = v & 0xff;
+  return arr;
+}
+
+var _default = parse;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/regex.js":
+/*!*******************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/regex.js ***!
+  \*******************************************************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _default = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/rng.js":
+/*!*****************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/rng.js ***!
+  \*****************************************************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = rng;
+// Unique ID creation requires a high quality random # generator. In the browser we therefore
+// require the crypto API and do not support built-in fallback to lower quality random number
+// generators (like Math.random()).
+let getRandomValues;
+const rnds8 = new Uint8Array(16);
+
+function rng() {
+  // lazy load so that environments that need to polyfill have a chance to do so
+  if (!getRandomValues) {
+    // getRandomValues needs to be invoked in a context where "this" is a Crypto implementation.
+    getRandomValues = typeof crypto !== 'undefined' && crypto.getRandomValues && crypto.getRandomValues.bind(crypto);
+
+    if (!getRandomValues) {
+      throw new Error('crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported');
+    }
+  }
+
+  return getRandomValues(rnds8);
+}
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/sha1.js":
+/*!******************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/sha1.js ***!
+  \******************************************************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+// Adapted from Chris Veness' SHA1 code at
+// http://www.movable-type.co.uk/scripts/sha1.html
+function f(s, x, y, z) {
+  switch (s) {
+    case 0:
+      return x & y ^ ~x & z;
+
+    case 1:
+      return x ^ y ^ z;
+
+    case 2:
+      return x & y ^ x & z ^ y & z;
+
+    case 3:
+      return x ^ y ^ z;
+  }
+}
+
+function ROTL(x, n) {
+  return x << n | x >>> 32 - n;
+}
+
+function sha1(bytes) {
+  const K = [0x5a827999, 0x6ed9eba1, 0x8f1bbcdc, 0xca62c1d6];
+  const H = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xc3d2e1f0];
+
+  if (typeof bytes === 'string') {
+    const msg = unescape(encodeURIComponent(bytes)); // UTF8 escape
+
+    bytes = [];
+
+    for (let i = 0; i < msg.length; ++i) {
+      bytes.push(msg.charCodeAt(i));
+    }
+  } else if (!Array.isArray(bytes)) {
+    // Convert Array-like to Array
+    bytes = Array.prototype.slice.call(bytes);
+  }
+
+  bytes.push(0x80);
+  const l = bytes.length / 4 + 2;
+  const N = Math.ceil(l / 16);
+  const M = new Array(N);
+
+  for (let i = 0; i < N; ++i) {
+    const arr = new Uint32Array(16);
+
+    for (let j = 0; j < 16; ++j) {
+      arr[j] = bytes[i * 64 + j * 4] << 24 | bytes[i * 64 + j * 4 + 1] << 16 | bytes[i * 64 + j * 4 + 2] << 8 | bytes[i * 64 + j * 4 + 3];
+    }
+
+    M[i] = arr;
+  }
+
+  M[N - 1][14] = (bytes.length - 1) * 8 / Math.pow(2, 32);
+  M[N - 1][14] = Math.floor(M[N - 1][14]);
+  M[N - 1][15] = (bytes.length - 1) * 8 & 0xffffffff;
+
+  for (let i = 0; i < N; ++i) {
+    const W = new Uint32Array(80);
+
+    for (let t = 0; t < 16; ++t) {
+      W[t] = M[i][t];
+    }
+
+    for (let t = 16; t < 80; ++t) {
+      W[t] = ROTL(W[t - 3] ^ W[t - 8] ^ W[t - 14] ^ W[t - 16], 1);
+    }
+
+    let a = H[0];
+    let b = H[1];
+    let c = H[2];
+    let d = H[3];
+    let e = H[4];
+
+    for (let t = 0; t < 80; ++t) {
+      const s = Math.floor(t / 20);
+      const T = ROTL(a, 5) + f(s, b, c, d) + e + K[s] + W[t] >>> 0;
+      e = d;
+      d = c;
+      c = ROTL(b, 30) >>> 0;
+      b = a;
+      a = T;
+    }
+
+    H[0] = H[0] + a >>> 0;
+    H[1] = H[1] + b >>> 0;
+    H[2] = H[2] + c >>> 0;
+    H[3] = H[3] + d >>> 0;
+    H[4] = H[4] + e >>> 0;
+  }
+
+  return [H[0] >> 24 & 0xff, H[0] >> 16 & 0xff, H[0] >> 8 & 0xff, H[0] & 0xff, H[1] >> 24 & 0xff, H[1] >> 16 & 0xff, H[1] >> 8 & 0xff, H[1] & 0xff, H[2] >> 24 & 0xff, H[2] >> 16 & 0xff, H[2] >> 8 & 0xff, H[2] & 0xff, H[3] >> 24 & 0xff, H[3] >> 16 & 0xff, H[3] >> 8 & 0xff, H[3] & 0xff, H[4] >> 24 & 0xff, H[4] >> 16 & 0xff, H[4] >> 8 & 0xff, H[4] & 0xff];
+}
+
+var _default = sha1;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/stringify.js":
+/*!***********************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/stringify.js ***!
+  \***********************************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+exports.unsafeStringify = unsafeStringify;
+
+var _validate = _interopRequireDefault(__webpack_require__(/*! ./validate.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/validate.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Convert array of 16 byte values to UUID string format of the form:
+ * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+ */
+const byteToHex = [];
+
+for (let i = 0; i < 256; ++i) {
+  byteToHex.push((i + 0x100).toString(16).slice(1));
+}
+
+function unsafeStringify(arr, offset = 0) {
+  // Note: Be careful editing this code!  It's been tuned for performance
+  // and works in ways you may not expect. See https://github.com/uuidjs/uuid/pull/434
+  return (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase();
+}
+
+function stringify(arr, offset = 0) {
+  const uuid = unsafeStringify(arr, offset); // Consistency check for valid UUID.  If this throws, it's likely due to one
+  // of the following:
+  // - One or more input array values don't map to a hex octet (leading to
+  // "undefined" in the uuid)
+  // - Invalid input values for the RFC `version` or `variant` fields
+
+  if (!(0, _validate.default)(uuid)) {
+    throw TypeError('Stringified UUID is invalid');
+  }
+
+  return uuid;
+}
+
+var _default = stringify;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v1.js":
+/*!****************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v1.js ***!
+  \****************************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _rng = _interopRequireDefault(__webpack_require__(/*! ./rng.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/rng.js"));
+
+var _stringify = __webpack_require__(/*! ./stringify.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/stringify.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// **`v1()` - Generate time-based UUID**
+//
+// Inspired by https://github.com/LiosK/UUID.js
+// and http://docs.python.org/library/uuid.html
+let _nodeId;
+
+let _clockseq; // Previous uuid creation time
+
+
+let _lastMSecs = 0;
+let _lastNSecs = 0; // See https://github.com/uuidjs/uuid for API details
+
+function v1(options, buf, offset) {
+  let i = buf && offset || 0;
+  const b = buf || new Array(16);
+  options = options || {};
+  let node = options.node || _nodeId;
+  let clockseq = options.clockseq !== undefined ? options.clockseq : _clockseq; // node and clockseq need to be initialized to random values if they're not
+  // specified.  We do this lazily to minimize issues related to insufficient
+  // system entropy.  See #189
+
+  if (node == null || clockseq == null) {
+    const seedBytes = options.random || (options.rng || _rng.default)();
+
+    if (node == null) {
+      // Per 4.5, create and 48-bit node id, (47 random bits + multicast bit = 1)
+      node = _nodeId = [seedBytes[0] | 0x01, seedBytes[1], seedBytes[2], seedBytes[3], seedBytes[4], seedBytes[5]];
+    }
+
+    if (clockseq == null) {
+      // Per 4.2.2, randomize (14 bit) clockseq
+      clockseq = _clockseq = (seedBytes[6] << 8 | seedBytes[7]) & 0x3fff;
+    }
+  } // UUID timestamps are 100 nano-second units since the Gregorian epoch,
+  // (1582-10-15 00:00).  JSNumbers aren't precise enough for this, so
+  // time is handled internally as 'msecs' (integer milliseconds) and 'nsecs'
+  // (100-nanoseconds offset from msecs) since unix epoch, 1970-01-01 00:00.
+
+
+  let msecs = options.msecs !== undefined ? options.msecs : Date.now(); // Per 4.2.1.2, use count of uuid's generated during the current clock
+  // cycle to simulate higher resolution clock
+
+  let nsecs = options.nsecs !== undefined ? options.nsecs : _lastNSecs + 1; // Time since last uuid creation (in msecs)
+
+  const dt = msecs - _lastMSecs + (nsecs - _lastNSecs) / 10000; // Per 4.2.1.2, Bump clockseq on clock regression
+
+  if (dt < 0 && options.clockseq === undefined) {
+    clockseq = clockseq + 1 & 0x3fff;
+  } // Reset nsecs if clock regresses (new clockseq) or we've moved onto a new
+  // time interval
+
+
+  if ((dt < 0 || msecs > _lastMSecs) && options.nsecs === undefined) {
+    nsecs = 0;
+  } // Per 4.2.1.2 Throw error if too many uuids are requested
+
+
+  if (nsecs >= 10000) {
+    throw new Error("uuid.v1(): Can't create more than 10M uuids/sec");
+  }
+
+  _lastMSecs = msecs;
+  _lastNSecs = nsecs;
+  _clockseq = clockseq; // Per 4.1.4 - Convert from unix epoch to Gregorian epoch
+
+  msecs += 12219292800000; // `time_low`
+
+  const tl = ((msecs & 0xfffffff) * 10000 + nsecs) % 0x100000000;
+  b[i++] = tl >>> 24 & 0xff;
+  b[i++] = tl >>> 16 & 0xff;
+  b[i++] = tl >>> 8 & 0xff;
+  b[i++] = tl & 0xff; // `time_mid`
+
+  const tmh = msecs / 0x100000000 * 10000 & 0xfffffff;
+  b[i++] = tmh >>> 8 & 0xff;
+  b[i++] = tmh & 0xff; // `time_high_and_version`
+
+  b[i++] = tmh >>> 24 & 0xf | 0x10; // include version
+
+  b[i++] = tmh >>> 16 & 0xff; // `clock_seq_hi_and_reserved` (Per 4.2.2 - include variant)
+
+  b[i++] = clockseq >>> 8 | 0x80; // `clock_seq_low`
+
+  b[i++] = clockseq & 0xff; // `node`
+
+  for (let n = 0; n < 6; ++n) {
+    b[i + n] = node[n];
+  }
+
+  return buf || (0, _stringify.unsafeStringify)(b);
+}
+
+var _default = v1;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v3.js":
+/*!****************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v3.js ***!
+  \****************************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _v = _interopRequireDefault(__webpack_require__(/*! ./v35.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v35.js"));
+
+var _md = _interopRequireDefault(__webpack_require__(/*! ./md5.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/md5.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const v3 = (0, _v.default)('v3', 0x30, _md.default);
+var _default = v3;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v35.js":
+/*!*****************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v35.js ***!
+  \*****************************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.URL = exports.DNS = void 0;
+exports["default"] = v35;
+
+var _stringify = __webpack_require__(/*! ./stringify.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/stringify.js");
+
+var _parse = _interopRequireDefault(__webpack_require__(/*! ./parse.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/parse.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function stringToBytes(str) {
+  str = unescape(encodeURIComponent(str)); // UTF8 escape
+
+  const bytes = [];
+
+  for (let i = 0; i < str.length; ++i) {
+    bytes.push(str.charCodeAt(i));
+  }
+
+  return bytes;
+}
+
+const DNS = '6ba7b810-9dad-11d1-80b4-00c04fd430c8';
+exports.DNS = DNS;
+const URL = '6ba7b811-9dad-11d1-80b4-00c04fd430c8';
+exports.URL = URL;
+
+function v35(name, version, hashfunc) {
+  function generateUUID(value, namespace, buf, offset) {
+    var _namespace;
+
+    if (typeof value === 'string') {
+      value = stringToBytes(value);
+    }
+
+    if (typeof namespace === 'string') {
+      namespace = (0, _parse.default)(namespace);
+    }
+
+    if (((_namespace = namespace) === null || _namespace === void 0 ? void 0 : _namespace.length) !== 16) {
+      throw TypeError('Namespace must be array-like (16 iterable integer values, 0-255)');
+    } // Compute hash of namespace and value, Per 4.3
+    // Future: Use spread syntax when supported on all platforms, e.g. `bytes =
+    // hashfunc([...namespace, ... value])`
+
+
+    let bytes = new Uint8Array(16 + value.length);
+    bytes.set(namespace);
+    bytes.set(value, namespace.length);
+    bytes = hashfunc(bytes);
+    bytes[6] = bytes[6] & 0x0f | version;
+    bytes[8] = bytes[8] & 0x3f | 0x80;
+
+    if (buf) {
+      offset = offset || 0;
+
+      for (let i = 0; i < 16; ++i) {
+        buf[offset + i] = bytes[i];
+      }
+
+      return buf;
+    }
+
+    return (0, _stringify.unsafeStringify)(bytes);
+  } // Function#name is not settable on some platforms (#270)
+
+
+  try {
+    generateUUID.name = name; // eslint-disable-next-line no-empty
+  } catch (err) {} // For CommonJS default export support
+
+
+  generateUUID.DNS = DNS;
+  generateUUID.URL = URL;
+  return generateUUID;
+}
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v4.js":
+/*!****************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v4.js ***!
+  \****************************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _native = _interopRequireDefault(__webpack_require__(/*! ./native.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/native.js"));
+
+var _rng = _interopRequireDefault(__webpack_require__(/*! ./rng.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/rng.js"));
+
+var _stringify = __webpack_require__(/*! ./stringify.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/stringify.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function v4(options, buf, offset) {
+  if (_native.default.randomUUID && !buf && !options) {
+    return _native.default.randomUUID();
+  }
+
+  options = options || {};
+
+  const rnds = options.random || (options.rng || _rng.default)(); // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
+
+
+  rnds[6] = rnds[6] & 0x0f | 0x40;
+  rnds[8] = rnds[8] & 0x3f | 0x80; // Copy bytes to buffer, if provided
+
+  if (buf) {
+    offset = offset || 0;
+
+    for (let i = 0; i < 16; ++i) {
+      buf[offset + i] = rnds[i];
+    }
+
+    return buf;
+  }
+
+  return (0, _stringify.unsafeStringify)(rnds);
+}
+
+var _default = v4;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v5.js":
+/*!****************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v5.js ***!
+  \****************************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _v = _interopRequireDefault(__webpack_require__(/*! ./v35.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v35.js"));
+
+var _sha = _interopRequireDefault(__webpack_require__(/*! ./sha1.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/sha1.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const v5 = (0, _v.default)('v5', 0x50, _sha.default);
+var _default = v5;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/validate.js":
+/*!**********************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/validate.js ***!
+  \**********************************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _regex = _interopRequireDefault(__webpack_require__(/*! ./regex.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/regex.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function validate(uuid) {
+  return typeof uuid === 'string' && _regex.default.test(uuid);
+}
+
+var _default = validate;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/version.js":
+/*!*********************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/version.js ***!
+  \*********************************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _validate = _interopRequireDefault(__webpack_require__(/*! ./validate.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/validate.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function version(uuid) {
+  if (!(0, _validate.default)(uuid)) {
+    throw TypeError('Invalid UUID');
+  }
+
+  return parseInt(uuid.slice(14, 15), 16);
+}
+
+var _default = version;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/native.js":
+/*!***************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/native.js ***!
+  \***************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+const randomUUID = typeof crypto !== 'undefined' && crypto.randomUUID && crypto.randomUUID.bind(crypto);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  randomUUID
+});
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/regex.js":
+/*!**************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/regex.js ***!
+  \**************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (/^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i);
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/rng.js":
+/*!************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/rng.js ***!
+  \************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ rng)
+/* harmony export */ });
+// Unique ID creation requires a high quality random # generator. In the browser we therefore
+// require the crypto API and do not support built-in fallback to lower quality random number
+// generators (like Math.random()).
+let getRandomValues;
+const rnds8 = new Uint8Array(16);
+function rng() {
+  // lazy load so that environments that need to polyfill have a chance to do so
+  if (!getRandomValues) {
+    // getRandomValues needs to be invoked in a context where "this" is a Crypto implementation.
+    getRandomValues = typeof crypto !== 'undefined' && crypto.getRandomValues && crypto.getRandomValues.bind(crypto);
+
+    if (!getRandomValues) {
+      throw new Error('crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported');
+    }
+  }
+
+  return getRandomValues(rnds8);
+}
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/stringify.js":
+/*!******************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/stringify.js ***!
+  \******************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   "unsafeStringify": () => (/* binding */ unsafeStringify)
+/* harmony export */ });
+/* harmony import */ var _validate_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./validate.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/validate.js");
+
+/**
+ * Convert array of 16 byte values to UUID string format of the form:
+ * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+ */
+
+const byteToHex = [];
+
+for (let i = 0; i < 256; ++i) {
+  byteToHex.push((i + 0x100).toString(16).slice(1));
+}
+
+function unsafeStringify(arr, offset = 0) {
+  // Note: Be careful editing this code!  It's been tuned for performance
+  // and works in ways you may not expect. See https://github.com/uuidjs/uuid/pull/434
+  return (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase();
+}
+
+function stringify(arr, offset = 0) {
+  const uuid = unsafeStringify(arr, offset); // Consistency check for valid UUID.  If this throws, it's likely due to one
+  // of the following:
+  // - One or more input array values don't map to a hex octet (leading to
+  // "undefined" in the uuid)
+  // - Invalid input values for the RFC `version` or `variant` fields
+
+  if (!(0,_validate_js__WEBPACK_IMPORTED_MODULE_0__["default"])(uuid)) {
+    throw TypeError('Stringified UUID is invalid');
+  }
+
+  return uuid;
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (stringify);
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/v4.js":
+/*!***********************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/v4.js ***!
+  \***********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _native_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./native.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/native.js");
+/* harmony import */ var _rng_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./rng.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/rng.js");
+/* harmony import */ var _stringify_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./stringify.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/stringify.js");
+
+
+
+
+function v4(options, buf, offset) {
+  if (_native_js__WEBPACK_IMPORTED_MODULE_0__["default"].randomUUID && !buf && !options) {
+    return _native_js__WEBPACK_IMPORTED_MODULE_0__["default"].randomUUID();
+  }
+
+  options = options || {};
+  const rnds = options.random || (options.rng || _rng_js__WEBPACK_IMPORTED_MODULE_1__["default"])(); // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
+
+  rnds[6] = rnds[6] & 0x0f | 0x40;
+  rnds[8] = rnds[8] & 0x3f | 0x80; // Copy bytes to buffer, if provided
+
+  if (buf) {
+    offset = offset || 0;
+
+    for (let i = 0; i < 16; ++i) {
+      buf[offset + i] = rnds[i];
+    }
+
+    return buf;
+  }
+
+  return (0,_stringify_js__WEBPACK_IMPORTED_MODULE_2__.unsafeStringify)(rnds);
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (v4);
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/validate.js":
+/*!*****************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/validate.js ***!
+  \*****************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _regex_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./regex.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/regex.js");
+
+
+function validate(uuid) {
+  return typeof uuid === 'string' && _regex_js__WEBPACK_IMPORTED_MODULE_0__["default"].test(uuid);
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (validate);
 
 /***/ }),
 
@@ -63336,7 +65000,7 @@ var utils_1 = __webpack_require__(/*! ../util/utils */ "./node_modules/solid-log
 function createInboxLogic(store, profileLogic, utilityLogic, containerLogic, aclLogic) {
     function createInboxFor(peerWebId, nick) {
         return __awaiter(this, void 0, void 0, function () {
-            var myWebId, podRoot, ourInbox, aclDocUrl;
+            var myWebId, podRoot, ourInbox;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, profileLogic.loadMe()];
@@ -63349,16 +65013,15 @@ function createInboxLogic(store, profileLogic, utilityLogic, containerLogic, acl
                         return [4 /*yield*/, containerLogic.createContainer(ourInbox)];
                     case 3:
                         _a.sent();
-                        return [4 /*yield*/, aclLogic.findAclDocUrl(ourInbox)];
-                    case 4:
-                        aclDocUrl = _a.sent();
+                        // const aclDocUrl = await aclLogic.findAclDocUrl(ourInbox);
                         return [4 /*yield*/, utilityLogic.setSinglePeerAccess({
                                 ownerWebId: myWebId.value,
                                 peerWebId: peerWebId,
                                 accessToModes: 'acl:Append',
                                 target: ourInbox
                             })];
-                    case 5:
+                    case 4:
+                        // const aclDocUrl = await aclLogic.findAclDocUrl(ourInbox);
                         _a.sent();
                         return [2 /*return*/, ourInbox];
                 }
@@ -63939,7 +65602,7 @@ function createProfileLogic(store, authn, utilityLogic) {
      */
     function loadPreferences(user) {
         return __awaiter(this, void 0, void 0, function () {
-            var possiblePreferencesFile, preferencesFile, err_2, message, response, err_3, msg;
+            var possiblePreferencesFile, preferencesFile, err_2, message, err_3, msg;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, loadProfile(user)];
@@ -63981,7 +65644,7 @@ function createProfileLogic(store, authn, utilityLogic) {
                         _a.trys.push([5, 7, , 8]);
                         return [4 /*yield*/, store.fetcher.load(preferencesFile)];
                     case 6:
-                        response = _a.sent();
+                        _a.sent();
                         return [3 /*break*/, 8];
                     case 7:
                         err_3 = _a.sent();
@@ -64420,38 +66083,49 @@ function createTypeIndexLogic(store, authn, profileLogic, utilityLogic) {
     }
     function getScopedAppsFromIndex(scope, theClass) {
         return __awaiter(this, void 0, void 0, function () {
-            var index, registrations, relevant, directInstances, instances, instanceContainers, containers, i, cont, contents;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var index, results, registrations, _i, registrations_1, reg, klass, instances, _a, instances_1, instance, containers, _b, containers_1, cont, contents, _c, contents_1, instance;
+            return __generator(this, function (_d) {
+                switch (_d.label) {
                     case 0:
                         index = scope.index;
+                        results = [];
                         registrations = store.statementsMatching(null, ns.solid('instance'), null, index)
                             .concat(store.statementsMatching(null, ns.solid('instanceContainer'), null, index))
                             .map(function (st) { return st.subject; });
-                        relevant = theClass ? registrations.filter(function (reg) { var _a; return (_a = store.any(reg, ns.solid('forClass'), null, index)) === null || _a === void 0 ? void 0 : _a.sameTerm(theClass); })
-                            : registrations;
-                        directInstances = relevant.map(function (reg) { return store.each(reg, ns.solid('instance'), null, index).map(function (one) { return (0, rdflib_1.sym)(one.value); }); }).flat();
-                        instances = (0, utils_1.uniqueNodes)(directInstances);
-                        instanceContainers = relevant.map(function (reg) { return store.each(reg, ns.solid('instanceContainer'), null, index).map(function (one) { return (0, rdflib_1.sym)(one.value); }); }).flat();
-                        containers = (0, utils_1.uniqueNodes)(instanceContainers);
-                        if (containers.length > 0) {
-                            console.log('@@ getScopedAppsFromIndex containers ', containers);
-                        }
-                        i = 0;
-                        _a.label = 1;
+                        _i = 0, registrations_1 = registrations;
+                        _d.label = 1;
                     case 1:
-                        if (!(i < containers.length)) return [3 /*break*/, 4];
-                        cont = containers[i];
-                        return [4 /*yield*/, store.fetcher.load(cont)];
+                        if (!(_i < registrations_1.length)) return [3 /*break*/, 6];
+                        reg = registrations_1[_i];
+                        klass = store.any(reg, ns.solid('forClass'), null, index);
+                        if (!(!theClass || klass.sameTerm(theClass))) return [3 /*break*/, 5];
+                        instances = store.each(reg, ns.solid('instance'), null, index);
+                        for (_a = 0, instances_1 = instances; _a < instances_1.length; _a++) {
+                            instance = instances_1[_a];
+                            results.push({ instance: instance, type: klass, scope: scope });
+                        }
+                        containers = store.each(reg, ns.solid('instanceContainer'), null, index);
+                        _b = 0, containers_1 = containers;
+                        _d.label = 2;
                     case 2:
-                        _a.sent();
-                        contents = store.each(cont, ns.ldp('contains'), null, cont).map(function (one) { return (0, rdflib_1.sym)(one.value); });
-                        instances = instances.concat(contents);
-                        _a.label = 3;
+                        if (!(_b < containers_1.length)) return [3 /*break*/, 5];
+                        cont = containers_1[_b];
+                        return [4 /*yield*/, store.fetcher.load(cont)];
                     case 3:
-                        i++;
+                        _d.sent();
+                        contents = store.each(cont, ns.ldp('contains'), null, cont).map(function (one) { return (0, rdflib_1.sym)(one.value); });
+                        for (_c = 0, contents_1 = contents; _c < contents_1.length; _c++) {
+                            instance = contents_1[_c];
+                            results.push({ instance: (0, rdflib_1.sym)(instance.value), type: klass, scope: scope });
+                        }
+                        _d.label = 4;
+                    case 4:
+                        _b++;
+                        return [3 /*break*/, 2];
+                    case 5:
+                        _i++;
                         return [3 /*break*/, 1];
-                    case 4: return [2 /*return*/, instances.map(function (instance) { return { instance: instance, scope: scope }; })];
+                    case 6: return [2 /*return*/, results];
                 }
             });
         });
@@ -66555,9 +68229,7 @@ try {
 
 function _arrayLikeToArray(arr, len) {
   if (len == null || len > arr.length) len = arr.length;
-  for (var i = 0, arr2 = new Array(len); i < len; i++) {
-    arr2[i] = arr[i];
-  }
+  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
   return arr2;
 }
 module.exports = _arrayLikeToArray, module.exports.__esModule = true, module.exports["default"] = module.exports;
@@ -66693,15 +68365,16 @@ module.exports = _construct, module.exports.__esModule = true, module.exports["d
 /*!************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/createClass.js ***!
   \************************************************************/
-/***/ ((module) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
+var toPropertyKey = __webpack_require__(/*! ./toPropertyKey.js */ "./node_modules/@babel/runtime/helpers/toPropertyKey.js");
 function _defineProperties(target, props) {
   for (var i = 0; i < props.length; i++) {
     var descriptor = props[i];
     descriptor.enumerable = descriptor.enumerable || false;
     descriptor.configurable = true;
     if ("value" in descriptor) descriptor.writable = true;
-    Object.defineProperty(target, descriptor.key, descriptor);
+    Object.defineProperty(target, toPropertyKey(descriptor.key), descriptor);
   }
 }
 function _createClass(Constructor, protoProps, staticProps) {
@@ -66720,9 +68393,11 @@ module.exports = _createClass, module.exports.__esModule = true, module.exports[
 /*!***************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/defineProperty.js ***!
   \***************************************************************/
-/***/ ((module) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
+var toPropertyKey = __webpack_require__(/*! ./toPropertyKey.js */ "./node_modules/@babel/runtime/helpers/toPropertyKey.js");
 function _defineProperty(obj, key, value) {
+  key = toPropertyKey(key);
   if (key in obj) {
     Object.defineProperty(obj, key, {
       value: value,
@@ -66851,28 +68526,31 @@ module.exports = _iterableToArray, module.exports.__esModule = true, module.expo
 /***/ ((module) => {
 
 function _iterableToArrayLimit(arr, i) {
-  var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
-  if (_i == null) return;
-  var _arr = [];
-  var _n = true;
-  var _d = false;
-  var _s, _e;
-  try {
-    for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
-      _arr.push(_s.value);
-      if (i && _arr.length === i) break;
-    }
-  } catch (err) {
-    _d = true;
-    _e = err;
-  } finally {
+  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
+  if (null != _i) {
+    var _s,
+      _e,
+      _x,
+      _r,
+      _arr = [],
+      _n = !0,
+      _d = !1;
     try {
-      if (!_n && _i["return"] != null) _i["return"]();
+      if (_x = (_i = _i.call(arr)).next, 0 === i) {
+        if (Object(_i) !== _i) return;
+        _n = !1;
+      } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0);
+    } catch (err) {
+      _d = !0, _e = err;
     } finally {
-      if (_d) throw _e;
+      try {
+        if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return;
+      } finally {
+        if (_d) throw _e;
+      }
     }
+    return _arr;
   }
-  return _arr;
 }
 module.exports = _iterableToArrayLimit, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
@@ -67067,14 +68745,9 @@ function _regeneratorRuntime() {
     };
   }
   function maybeInvokeDelegate(delegate, context) {
-    var method = delegate.iterator[context.method];
-    if (undefined === method) {
-      if (context.delegate = null, "throw" === context.method) {
-        if (delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel;
-        context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method");
-      }
-      return ContinueSentinel;
-    }
+    var methodName = context.method,
+      method = delegate.iterator[methodName];
+    if (undefined === method) return context.delegate = null, "throw" === methodName && delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method) || "return" !== methodName && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel;
     var record = tryCatch(method, delegate.iterator, context.arg);
     if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel;
     var info = record.arg;
@@ -67103,9 +68776,7 @@ function _regeneratorRuntime() {
       if (!isNaN(iterable.length)) {
         var i = -1,
           next = function next() {
-            for (; ++i < iterable.length;) {
-              if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next;
-            }
+            for (; ++i < iterable.length;) if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next;
             return next.value = undefined, next.done = !0, next;
           };
         return next.next = next;
@@ -67151,9 +68822,7 @@ function _regeneratorRuntime() {
   }), exports.keys = function (val) {
     var object = Object(val),
       keys = [];
-    for (var key in object) {
-      keys.push(key);
-    }
+    for (var key in object) keys.push(key);
     return keys.reverse(), function next() {
       for (; keys.length;) {
         var key = keys.pop();
@@ -67164,9 +68833,7 @@ function _regeneratorRuntime() {
   }, exports.values = values, Context.prototype = {
     constructor: Context,
     reset: function reset(skipTempReset) {
-      if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) {
-        "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined);
-      }
+      if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined);
     },
     stop: function stop() {
       this.done = !0;
@@ -67319,6 +68986,43 @@ module.exports = _toConsumableArray, module.exports.__esModule = true, module.ex
 
 /***/ }),
 
+/***/ "./node_modules/@babel/runtime/helpers/toPrimitive.js":
+/*!************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/toPrimitive.js ***!
+  \************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var _typeof = (__webpack_require__(/*! ./typeof.js */ "./node_modules/@babel/runtime/helpers/typeof.js")["default"]);
+function _toPrimitive(input, hint) {
+  if (_typeof(input) !== "object" || input === null) return input;
+  var prim = input[Symbol.toPrimitive];
+  if (prim !== undefined) {
+    var res = prim.call(input, hint || "default");
+    if (_typeof(res) !== "object") return res;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return (hint === "string" ? String : Number)(input);
+}
+module.exports = _toPrimitive, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime/helpers/toPropertyKey.js":
+/*!**************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/toPropertyKey.js ***!
+  \**************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var _typeof = (__webpack_require__(/*! ./typeof.js */ "./node_modules/@babel/runtime/helpers/typeof.js")["default"]);
+var toPrimitive = __webpack_require__(/*! ./toPrimitive.js */ "./node_modules/@babel/runtime/helpers/toPrimitive.js");
+function _toPropertyKey(arg) {
+  var key = toPrimitive(arg, "string");
+  return _typeof(key) === "symbol" ? key : String(key);
+}
+module.exports = _toPropertyKey, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
 /***/ "./node_modules/@babel/runtime/helpers/typeof.js":
 /*!*******************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/typeof.js ***!
@@ -67435,9 +69139,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 function _arrayLikeToArray(arr, len) {
   if (len == null || len > arr.length) len = arr.length;
-  for (var i = 0, arr2 = new Array(len); i < len; i++) {
-    arr2[i] = arr[i];
-  }
+  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
   return arr2;
 }
 
@@ -67556,13 +69258,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ _createClass)
 /* harmony export */ });
+/* harmony import */ var _toPropertyKey_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./toPropertyKey.js */ "./node_modules/@babel/runtime/helpers/esm/toPropertyKey.js");
+
 function _defineProperties(target, props) {
   for (var i = 0; i < props.length; i++) {
     var descriptor = props[i];
     descriptor.enumerable = descriptor.enumerable || false;
     descriptor.configurable = true;
     if ("value" in descriptor) descriptor.writable = true;
-    Object.defineProperty(target, descriptor.key, descriptor);
+    Object.defineProperty(target, (0,_toPropertyKey_js__WEBPACK_IMPORTED_MODULE_0__["default"])(descriptor.key), descriptor);
   }
 }
 function _createClass(Constructor, protoProps, staticProps) {
@@ -67587,7 +69291,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ _defineProperty)
 /* harmony export */ });
+/* harmony import */ var _toPropertyKey_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./toPropertyKey.js */ "./node_modules/@babel/runtime/helpers/esm/toPropertyKey.js");
+
 function _defineProperty(obj, key, value) {
+  key = (0,_toPropertyKey_js__WEBPACK_IMPORTED_MODULE_0__["default"])(key);
   if (key in obj) {
     Object.defineProperty(obj, key, {
       value: value,
@@ -67836,6 +69543,54 @@ function _toConsumableArray(arr) {
 
 /***/ }),
 
+/***/ "./node_modules/@babel/runtime/helpers/esm/toPrimitive.js":
+/*!****************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/esm/toPrimitive.js ***!
+  \****************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ _toPrimitive)
+/* harmony export */ });
+/* harmony import */ var _typeof_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./typeof.js */ "./node_modules/@babel/runtime/helpers/esm/typeof.js");
+
+function _toPrimitive(input, hint) {
+  if ((0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(input) !== "object" || input === null) return input;
+  var prim = input[Symbol.toPrimitive];
+  if (prim !== undefined) {
+    var res = prim.call(input, hint || "default");
+    if ((0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(res) !== "object") return res;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return (hint === "string" ? String : Number)(input);
+}
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime/helpers/esm/toPropertyKey.js":
+/*!******************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/esm/toPropertyKey.js ***!
+  \******************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ _toPropertyKey)
+/* harmony export */ });
+/* harmony import */ var _typeof_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./typeof.js */ "./node_modules/@babel/runtime/helpers/esm/typeof.js");
+/* harmony import */ var _toPrimitive_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./toPrimitive.js */ "./node_modules/@babel/runtime/helpers/esm/toPrimitive.js");
+
+
+function _toPropertyKey(arg) {
+  var key = (0,_toPrimitive_js__WEBPACK_IMPORTED_MODULE_1__["default"])(arg, "string");
+  return (0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(key) === "symbol" ? key : String(key);
+}
+
+/***/ }),
+
 /***/ "./node_modules/@babel/runtime/helpers/esm/typeof.js":
 /*!***********************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/esm/typeof.js ***!
@@ -67880,6 +69635,541 @@ function _unsupportedIterableToArray(o, minLen) {
   if (n === "Map" || n === "Set") return Array.from(o);
   if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return (0,_arrayLikeToArray_js__WEBPACK_IMPORTED_MODULE_0__["default"])(o, minLen);
 }
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-core/dist/index.mjs":
+/*!*********************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-core/dist/index.mjs ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "AggregateHandler": () => (/* binding */ AggregateHandler),
+/* harmony export */   "ConfigurationError": () => (/* binding */ ConfigurationError),
+/* harmony export */   "DEFAULT_SCOPES": () => (/* binding */ DEFAULT_SCOPES),
+/* harmony export */   "EVENTS": () => (/* binding */ EVENTS),
+/* harmony export */   "InMemoryStorage": () => (/* binding */ InMemoryStorage),
+/* harmony export */   "InvalidResponseError": () => (/* binding */ InvalidResponseError),
+/* harmony export */   "NotImplementedError": () => (/* binding */ NotImplementedError),
+/* harmony export */   "OidcProviderError": () => (/* binding */ OidcProviderError),
+/* harmony export */   "PREFERRED_SIGNING_ALG": () => (/* binding */ PREFERRED_SIGNING_ALG),
+/* harmony export */   "REFRESH_BEFORE_EXPIRATION_SECONDS": () => (/* binding */ REFRESH_BEFORE_EXPIRATION_SECONDS),
+/* harmony export */   "SOLID_CLIENT_AUTHN_KEY_PREFIX": () => (/* binding */ SOLID_CLIENT_AUTHN_KEY_PREFIX),
+/* harmony export */   "StorageUtility": () => (/* binding */ StorageUtility),
+/* harmony export */   "StorageUtilityGetResponse": () => (/* binding */ StorageUtilityGetResponse),
+/* harmony export */   "StorageUtilityMock": () => (/* binding */ StorageUtilityMock),
+/* harmony export */   "USER_SESSION_PREFIX": () => (/* binding */ USER_SESSION_PREFIX),
+/* harmony export */   "buildAuthenticatedFetch": () => (/* binding */ buildAuthenticatedFetch),
+/* harmony export */   "createDpopHeader": () => (/* binding */ createDpopHeader),
+/* harmony export */   "determineSigningAlg": () => (/* binding */ determineSigningAlg),
+/* harmony export */   "fetchJwks": () => (/* binding */ fetchJwks),
+/* harmony export */   "generateDpopKeyPair": () => (/* binding */ generateDpopKeyPair),
+/* harmony export */   "getSessionIdFromOauthState": () => (/* binding */ getSessionIdFromOauthState),
+/* harmony export */   "getWebidFromTokenPayload": () => (/* binding */ getWebidFromTokenPayload),
+/* harmony export */   "handleRegistration": () => (/* binding */ handleRegistration),
+/* harmony export */   "isSupportedTokenType": () => (/* binding */ isSupportedTokenType),
+/* harmony export */   "loadOidcContextFromStorage": () => (/* binding */ loadOidcContextFromStorage),
+/* harmony export */   "mockStorage": () => (/* binding */ mockStorage),
+/* harmony export */   "mockStorageUtility": () => (/* binding */ mockStorageUtility),
+/* harmony export */   "saveSessionInfoToStorage": () => (/* binding */ saveSessionInfoToStorage)
+/* harmony export */ });
+/* harmony import */ var cross_fetch__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! cross-fetch */ "./node_modules/cross-fetch/dist/browser-ponyfill.js");
+/* harmony import */ var jose__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! jose */ "./node_modules/jose/dist/browser/index.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! uuid */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/v4.js");
+
+
+
+
+const SOLID_CLIENT_AUTHN_KEY_PREFIX = "solidClientAuthn:";
+const PREFERRED_SIGNING_ALG = ["ES256", "RS256"];
+const EVENTS = {
+    ERROR: "error",
+    LOGIN: "login",
+    LOGOUT: "logout",
+    NEW_REFRESH_TOKEN: "newRefreshToken",
+    SESSION_EXPIRED: "sessionExpired",
+    SESSION_EXTENDED: "sessionExtended",
+    SESSION_RESTORED: "sessionRestore",
+    TIMEOUT_SET: "timeoutSet",
+};
+const REFRESH_BEFORE_EXPIRATION_SECONDS = 5;
+const SCOPE_OPENID = "openid";
+const SCOPE_OFFLINE = "offline_access";
+const SCOPE_WEBID = "webid";
+const DEFAULT_SCOPES = [SCOPE_OPENID, SCOPE_OFFLINE, SCOPE_WEBID].join(" ");
+
+class AggregateHandler {
+    constructor(handleables) {
+        this.handleables = handleables;
+    }
+    async getProperHandler(params) {
+        const canHandleList = await Promise.all(this.handleables.map((handleable) => handleable.canHandle(...params)));
+        for (let i = 0; i < canHandleList.length; i += 1) {
+            if (canHandleList[i]) {
+                return this.handleables[i];
+            }
+        }
+        return null;
+    }
+    async canHandle(...params) {
+        return (await this.getProperHandler(params)) !== null;
+    }
+    async handle(...params) {
+        const handler = await this.getProperHandler(params);
+        if (handler) {
+            return handler.handle(...params);
+        }
+        throw new Error(`[${this.constructor.name}] cannot find a suitable handler for: ${params
+            .map((param) => {
+            try {
+                return JSON.stringify(param);
+            }
+            catch (err) {
+                return param.toString();
+            }
+        })
+            .join(", ")}`);
+    }
+}
+
+async function fetchJwks(jwksIri, issuerIri) {
+    const jwksResponse = await (0,cross_fetch__WEBPACK_IMPORTED_MODULE_0__.fetch)(jwksIri);
+    if (jwksResponse.status !== 200) {
+        throw new Error(`Could not fetch JWKS for [${issuerIri}] at [${jwksIri}]: ${jwksResponse.status} ${jwksResponse.statusText}`);
+    }
+    let jwk;
+    try {
+        jwk = (await jwksResponse.json()).keys[0];
+    }
+    catch (e) {
+        throw new Error(`Malformed JWKS for [${issuerIri}] at [${jwksIri}]: ${e.message}`);
+    }
+    return jwk;
+}
+async function getWebidFromTokenPayload(idToken, jwksIri, issuerIri, clientId) {
+    const jwk = await fetchJwks(jwksIri, issuerIri);
+    let payload;
+    try {
+        const { payload: verifiedPayload } = await (0,jose__WEBPACK_IMPORTED_MODULE_1__.jwtVerify)(idToken, await (0,jose__WEBPACK_IMPORTED_MODULE_1__.importJWK)(jwk), {
+            issuer: issuerIri,
+            audience: clientId,
+        });
+        payload = verifiedPayload;
+    }
+    catch (e) {
+        throw new Error(`Token verification failed: ${e.stack}`);
+    }
+    if (typeof payload.webid === "string") {
+        return payload.webid;
+    }
+    if (typeof payload.sub !== "string") {
+        throw new Error(`The token ${JSON.stringify(payload)} is invalid: it has no 'webid' claim and no 'sub' claim.`);
+    }
+    try {
+        new URL(payload.sub);
+        return payload.sub;
+    }
+    catch (e) {
+        throw new Error(`The token has no 'webid' claim, and its 'sub' claim of [${payload.sub}] is invalid as a URL - error [${e}].`);
+    }
+}
+
+function isSupportedTokenType(token) {
+    return typeof token === "string" && ["DPoP", "Bearer"].includes(token);
+}
+
+const USER_SESSION_PREFIX = "solidClientAuthenticationUser";
+
+function isValidUrl(url) {
+    try {
+        new URL(url);
+        return true;
+    }
+    catch (_a) {
+        return false;
+    }
+}
+function determineSigningAlg(supported, preferred) {
+    var _a;
+    return ((_a = preferred.find((signingAlg) => {
+        return supported.includes(signingAlg);
+    })) !== null && _a !== void 0 ? _a : null);
+}
+function determineClientType(options, issuerConfig) {
+    if (options.clientId !== undefined && !isValidUrl(options.clientId)) {
+        return "static";
+    }
+    if (issuerConfig.scopesSupported.includes("webid") &&
+        options.clientId !== undefined &&
+        isValidUrl(options.clientId)) {
+        return "solid-oidc";
+    }
+    return "dynamic";
+}
+async function handleRegistration(options, issuerConfig, storageUtility, clientRegistrar) {
+    const clientType = determineClientType(options, issuerConfig);
+    if (clientType === "dynamic") {
+        return clientRegistrar.getClient({
+            sessionId: options.sessionId,
+            clientName: options.clientName,
+            redirectUrl: options.redirectUrl,
+        }, issuerConfig);
+    }
+    await storageUtility.setForUser(options.sessionId, {
+        clientId: options.clientId,
+    });
+    if (options.clientSecret) {
+        await storageUtility.setForUser(options.sessionId, {
+            clientSecret: options.clientSecret,
+        });
+    }
+    if (options.clientName) {
+        await storageUtility.setForUser(options.sessionId, {
+            clientName: options.clientName,
+        });
+    }
+    return {
+        clientId: options.clientId,
+        clientSecret: options.clientSecret,
+        clientName: options.clientName,
+        clientType,
+    };
+}
+
+async function getSessionIdFromOauthState(storageUtility, oauthState) {
+    return storageUtility.getForUser(oauthState, "sessionId");
+}
+async function loadOidcContextFromStorage(sessionId, storageUtility, configFetcher) {
+    try {
+        const [issuerIri, codeVerifier, storedRedirectIri, dpop] = await Promise.all([
+            storageUtility.getForUser(sessionId, "issuer", {
+                errorIfNull: true,
+            }),
+            storageUtility.getForUser(sessionId, "codeVerifier"),
+            storageUtility.getForUser(sessionId, "redirectUrl"),
+            storageUtility.getForUser(sessionId, "dpop", { errorIfNull: true }),
+        ]);
+        await storageUtility.deleteForUser(sessionId, "codeVerifier");
+        const issuerConfig = await configFetcher.fetchConfig(issuerIri);
+        return {
+            codeVerifier,
+            redirectUrl: storedRedirectIri,
+            issuerConfig,
+            dpop: dpop === "true",
+        };
+    }
+    catch (e) {
+        throw new Error(`Failed to retrieve OIDC context from storage associated with session [${sessionId}]: ${e}`);
+    }
+}
+async function saveSessionInfoToStorage(storageUtility, sessionId, webId, isLoggedIn, refreshToken, secure, dpopKey) {
+    if (refreshToken !== undefined) {
+        await storageUtility.setForUser(sessionId, { refreshToken }, { secure });
+    }
+    if (webId !== undefined) {
+        await storageUtility.setForUser(sessionId, { webId }, { secure });
+    }
+    if (isLoggedIn !== undefined) {
+        await storageUtility.setForUser(sessionId, { isLoggedIn }, { secure });
+    }
+    if (dpopKey !== undefined) {
+        await storageUtility.setForUser(sessionId, {
+            publicKey: JSON.stringify(dpopKey.publicKey),
+            privateKey: JSON.stringify(await (0,jose__WEBPACK_IMPORTED_MODULE_1__.exportJWK)(dpopKey.privateKey)),
+        }, { secure });
+    }
+}
+class StorageUtility {
+    constructor(secureStorage, insecureStorage) {
+        this.secureStorage = secureStorage;
+        this.insecureStorage = insecureStorage;
+    }
+    getKey(userId) {
+        return `solidClientAuthenticationUser:${userId}`;
+    }
+    async getUserData(userId, secure) {
+        const stored = await (secure
+            ? this.secureStorage
+            : this.insecureStorage).get(this.getKey(userId));
+        if (stored === undefined) {
+            return {};
+        }
+        try {
+            return JSON.parse(stored);
+        }
+        catch (err) {
+            throw new Error(`Data for user [${userId}] in [${secure ? "secure" : "unsecure"}] storage is corrupted - expected valid JSON, but got: ${stored}`);
+        }
+    }
+    async setUserData(userId, data, secure) {
+        await (secure ? this.secureStorage : this.insecureStorage).set(this.getKey(userId), JSON.stringify(data));
+    }
+    async get(key, options) {
+        const value = await ((options === null || options === void 0 ? void 0 : options.secure)
+            ? this.secureStorage
+            : this.insecureStorage).get(key);
+        if (value === undefined && (options === null || options === void 0 ? void 0 : options.errorIfNull)) {
+            throw new Error(`[${key}] is not stored`);
+        }
+        return value;
+    }
+    async set(key, value, options) {
+        return ((options === null || options === void 0 ? void 0 : options.secure) ? this.secureStorage : this.insecureStorage).set(key, value);
+    }
+    async delete(key, options) {
+        return ((options === null || options === void 0 ? void 0 : options.secure) ? this.secureStorage : this.insecureStorage).delete(key);
+    }
+    async getForUser(userId, key, options) {
+        const userData = await this.getUserData(userId, options === null || options === void 0 ? void 0 : options.secure);
+        let value;
+        if (!userData || !userData[key]) {
+            value = undefined;
+        }
+        value = userData[key];
+        if (value === undefined && (options === null || options === void 0 ? void 0 : options.errorIfNull)) {
+            throw new Error(`Field [${key}] for user [${userId}] is not stored`);
+        }
+        return value || undefined;
+    }
+    async setForUser(userId, values, options) {
+        let userData;
+        try {
+            userData = await this.getUserData(userId, options === null || options === void 0 ? void 0 : options.secure);
+        }
+        catch (_a) {
+            userData = {};
+        }
+        await this.setUserData(userId, { ...userData, ...values }, options === null || options === void 0 ? void 0 : options.secure);
+    }
+    async deleteForUser(userId, key, options) {
+        const userData = await this.getUserData(userId, options === null || options === void 0 ? void 0 : options.secure);
+        delete userData[key];
+        await this.setUserData(userId, userData, options === null || options === void 0 ? void 0 : options.secure);
+    }
+    async deleteAllUserData(userId, options) {
+        await ((options === null || options === void 0 ? void 0 : options.secure) ? this.secureStorage : this.insecureStorage).delete(this.getKey(userId));
+    }
+}
+
+class InMemoryStorage {
+    constructor() {
+        this.map = {};
+    }
+    async get(key) {
+        return this.map[key] || undefined;
+    }
+    async set(key, value) {
+        this.map[key] = value;
+    }
+    async delete(key) {
+        delete this.map[key];
+    }
+}
+
+class ConfigurationError extends Error {
+    constructor(message) {
+        super(message);
+    }
+}
+
+class NotImplementedError extends Error {
+    constructor(methodName) {
+        super(`[${methodName}] is not implemented`);
+    }
+}
+
+class InvalidResponseError extends Error {
+    constructor(missingFields) {
+        super(`Invalid response from OIDC provider: missing fields ${missingFields}`);
+        this.missingFields = missingFields;
+    }
+}
+
+class OidcProviderError extends Error {
+    constructor(message, error, errorDescription) {
+        super(message);
+        this.error = error;
+        this.errorDescription = errorDescription;
+    }
+}
+
+function normalizeHTU(audience) {
+    const audienceUrl = new URL(audience);
+    return new URL(audienceUrl.pathname, audienceUrl.origin).toString();
+}
+async function createDpopHeader(audience, method, dpopKey) {
+    return new jose__WEBPACK_IMPORTED_MODULE_1__.SignJWT({
+        htu: normalizeHTU(audience),
+        htm: method.toUpperCase(),
+        jti: (0,uuid__WEBPACK_IMPORTED_MODULE_2__["default"])(),
+    })
+        .setProtectedHeader({
+        alg: PREFERRED_SIGNING_ALG[0],
+        jwk: dpopKey.publicKey,
+        typ: "dpop+jwt",
+    })
+        .setIssuedAt()
+        .sign(dpopKey.privateKey, {});
+}
+async function generateDpopKeyPair() {
+    const { privateKey, publicKey } = await (0,jose__WEBPACK_IMPORTED_MODULE_1__.generateKeyPair)(PREFERRED_SIGNING_ALG[0]);
+    const dpopKeyPair = {
+        privateKey,
+        publicKey: await (0,jose__WEBPACK_IMPORTED_MODULE_1__.exportJWK)(publicKey),
+    };
+    [dpopKeyPair.publicKey.alg] = PREFERRED_SIGNING_ALG;
+    return dpopKeyPair;
+}
+
+const DEFAULT_EXPIRATION_TIME_SECONDS = 600;
+function isExpectedAuthError(statusCode) {
+    return [401, 403].includes(statusCode);
+}
+async function buildDpopFetchOptions(targetUrl, authToken, dpopKey, defaultOptions) {
+    var _a;
+    const headers = new cross_fetch__WEBPACK_IMPORTED_MODULE_0__.Headers(defaultOptions === null || defaultOptions === void 0 ? void 0 : defaultOptions.headers);
+    headers.set("Authorization", `DPoP ${authToken}`);
+    headers.set("DPoP", await createDpopHeader(targetUrl, (_a = defaultOptions === null || defaultOptions === void 0 ? void 0 : defaultOptions.method) !== null && _a !== void 0 ? _a : "get", dpopKey));
+    return {
+        ...defaultOptions,
+        headers,
+    };
+}
+async function buildAuthenticatedHeaders(targetUrl, authToken, dpopKey, defaultOptions) {
+    if (dpopKey !== undefined) {
+        return buildDpopFetchOptions(targetUrl, authToken, dpopKey, defaultOptions);
+    }
+    const headers = new cross_fetch__WEBPACK_IMPORTED_MODULE_0__.Headers(defaultOptions === null || defaultOptions === void 0 ? void 0 : defaultOptions.headers);
+    headers.set("Authorization", `Bearer ${authToken}`);
+    return {
+        ...defaultOptions,
+        headers,
+    };
+}
+async function makeAuthenticatedRequest(unauthFetch, accessToken, url, defaultRequestInit, dpopKey) {
+    return unauthFetch(url, await buildAuthenticatedHeaders(url.toString(), accessToken, dpopKey, defaultRequestInit));
+}
+async function refreshAccessToken(refreshOptions, dpopKey, eventEmitter) {
+    var _a;
+    const tokenSet = await refreshOptions.tokenRefresher.refresh(refreshOptions.sessionId, refreshOptions.refreshToken, dpopKey);
+    eventEmitter === null || eventEmitter === void 0 ? void 0 : eventEmitter.emit(EVENTS.SESSION_EXTENDED, (_a = tokenSet.expiresIn) !== null && _a !== void 0 ? _a : DEFAULT_EXPIRATION_TIME_SECONDS);
+    if (typeof tokenSet.refreshToken === "string") {
+        eventEmitter === null || eventEmitter === void 0 ? void 0 : eventEmitter.emit(EVENTS.NEW_REFRESH_TOKEN, tokenSet.refreshToken);
+    }
+    return {
+        accessToken: tokenSet.accessToken,
+        refreshToken: tokenSet.refreshToken,
+        expiresIn: tokenSet.expiresIn,
+    };
+}
+const computeRefreshDelay = (expiresIn) => {
+    if (expiresIn !== undefined) {
+        return expiresIn - REFRESH_BEFORE_EXPIRATION_SECONDS > 0
+            ?
+                expiresIn - REFRESH_BEFORE_EXPIRATION_SECONDS
+            : expiresIn;
+    }
+    return DEFAULT_EXPIRATION_TIME_SECONDS;
+};
+async function buildAuthenticatedFetch(unauthFetch, accessToken, options) {
+    var _a;
+    let currentAccessToken = accessToken;
+    let latestTimeout;
+    const currentRefreshOptions = options === null || options === void 0 ? void 0 : options.refreshOptions;
+    if (currentRefreshOptions !== undefined) {
+        const proactivelyRefreshToken = async () => {
+            var _a, _b, _c, _d;
+            try {
+                const { accessToken: refreshedAccessToken, refreshToken, expiresIn, } = await refreshAccessToken(currentRefreshOptions, options.dpopKey, options.eventEmitter);
+                currentAccessToken = refreshedAccessToken;
+                if (refreshToken !== undefined) {
+                    currentRefreshOptions.refreshToken = refreshToken;
+                }
+                clearTimeout(latestTimeout);
+                latestTimeout = setTimeout(proactivelyRefreshToken, computeRefreshDelay(expiresIn) * 1000);
+                (_a = options.eventEmitter) === null || _a === void 0 ? void 0 : _a.emit(EVENTS.TIMEOUT_SET, latestTimeout);
+            }
+            catch (e) {
+                if (e instanceof OidcProviderError) {
+                    (_b = options === null || options === void 0 ? void 0 : options.eventEmitter) === null || _b === void 0 ? void 0 : _b.emit(EVENTS.ERROR, e.error, e.errorDescription);
+                    (_c = options === null || options === void 0 ? void 0 : options.eventEmitter) === null || _c === void 0 ? void 0 : _c.emit(EVENTS.SESSION_EXPIRED);
+                }
+                if (e instanceof InvalidResponseError &&
+                    e.missingFields.includes("access_token")) {
+                    (_d = options === null || options === void 0 ? void 0 : options.eventEmitter) === null || _d === void 0 ? void 0 : _d.emit(EVENTS.SESSION_EXPIRED);
+                }
+            }
+        };
+        latestTimeout = setTimeout(proactivelyRefreshToken, computeRefreshDelay(options.expiresIn) * 1000);
+        (_a = options.eventEmitter) === null || _a === void 0 ? void 0 : _a.emit(EVENTS.TIMEOUT_SET, latestTimeout);
+    }
+    else if (options !== undefined && options.eventEmitter !== undefined) {
+        const expirationTimeout = setTimeout(() => {
+            options.eventEmitter.emit(EVENTS.SESSION_EXPIRED);
+        }, computeRefreshDelay(options.expiresIn) * 1000);
+        options.eventEmitter.emit(EVENTS.TIMEOUT_SET, expirationTimeout);
+    }
+    return async (url, requestInit) => {
+        let response = await makeAuthenticatedRequest(unauthFetch, currentAccessToken, url, requestInit, options === null || options === void 0 ? void 0 : options.dpopKey);
+        const failedButNotExpectedAuthError = !response.ok && !isExpectedAuthError(response.status);
+        if (response.ok || failedButNotExpectedAuthError) {
+            return response;
+        }
+        const hasBeenRedirected = response.url !== url;
+        if (hasBeenRedirected && (options === null || options === void 0 ? void 0 : options.dpopKey) !== undefined) {
+            response = await makeAuthenticatedRequest(unauthFetch, currentAccessToken, response.url, requestInit, options.dpopKey);
+        }
+        return response;
+    };
+}
+
+const StorageUtilityGetResponse = "getResponse";
+const StorageUtilityMock = {
+    get: async (key, options) => StorageUtilityGetResponse,
+    set: async (key, value) => {
+    },
+    delete: async (key) => {
+    },
+    getForUser: async (userId, key, options) => StorageUtilityGetResponse,
+    setForUser: async (userId, values, options) => {
+    },
+    deleteForUser: async (userId, key, options) => {
+    },
+    deleteAllUserData: async (userId, options) => {
+    },
+};
+const mockStorage = (stored) => {
+    const store = stored;
+    return {
+        get: async (key) => {
+            if (store[key] === undefined) {
+                return undefined;
+            }
+            if (typeof store[key] === "string") {
+                return store[key];
+            }
+            return JSON.stringify(store[key]);
+        },
+        set: async (key, value) => {
+            store[key] = value;
+        },
+        delete: async (key) => {
+            delete store[key];
+        },
+    };
+};
+const mockStorageUtility = (stored, isSecure = false) => {
+    if (isSecure) {
+        return new StorageUtility(mockStorage(stored), mockStorage({}));
+    }
+    return new StorageUtility(mockStorage({}), mockStorage(stored));
+};
+
+
+
 
 /***/ }),
 
@@ -76024,7 +78314,7 @@ async function importX509(x509, alg, options) {
 }
 async function importPKCS8(pkcs8, alg, options) {
     if (typeof pkcs8 !== 'string' || pkcs8.indexOf('-----BEGIN PRIVATE KEY-----') !== 0) {
-        throw new TypeError('"pkcs8" must be PKCS8 formatted string');
+        throw new TypeError('"pkcs8" must be PKCS#8 formatted string');
     }
     return (0,_runtime_asn1_js__WEBPACK_IMPORTED_MODULE_1__.fromPKCS8)(pkcs8, alg, options);
 }
@@ -78817,6 +81107,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "JWTInvalid": () => (/* binding */ JWTInvalid)
 /* harmony export */ });
 class JOSEError extends Error {
+    static get code() {
+        return 'ERR_JOSE_GENERIC';
+    }
     constructor(message) {
         var _a;
         super(message);
@@ -78824,30 +81117,27 @@ class JOSEError extends Error {
         this.name = this.constructor.name;
         (_a = Error.captureStackTrace) === null || _a === void 0 ? void 0 : _a.call(Error, this, this.constructor);
     }
-    static get code() {
-        return 'ERR_JOSE_GENERIC';
-    }
 }
 class JWTClaimValidationFailed extends JOSEError {
+    static get code() {
+        return 'ERR_JWT_CLAIM_VALIDATION_FAILED';
+    }
     constructor(message, claim = 'unspecified', reason = 'unspecified') {
         super(message);
         this.code = 'ERR_JWT_CLAIM_VALIDATION_FAILED';
         this.claim = claim;
         this.reason = reason;
     }
-    static get code() {
-        return 'ERR_JWT_CLAIM_VALIDATION_FAILED';
-    }
 }
 class JWTExpired extends JOSEError {
+    static get code() {
+        return 'ERR_JWT_EXPIRED';
+    }
     constructor(message, claim = 'unspecified', reason = 'unspecified') {
         super(message);
         this.code = 'ERR_JWT_EXPIRED';
         this.claim = claim;
         this.reason = reason;
-    }
-    static get code() {
-        return 'ERR_JWT_EXPIRED';
     }
 }
 class JOSEAlgNotAllowed extends JOSEError {

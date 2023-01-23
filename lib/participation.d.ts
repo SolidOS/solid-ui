@@ -1,5 +1,5 @@
 import { NamedNode } from 'rdflib';
-declare type ParticipationOptions = {
+type ParticipationOptions = {
     deleteFunction?: () => {};
     link?: string;
     draggable?: boolean;

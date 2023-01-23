@@ -1,15 +1,15 @@
 import { IndexedFormula, NamedNode } from 'rdflib';
-export declare type MenuItemLink = {
+export type MenuItemLink = {
     label: string;
     url: string;
     target?: string;
 };
-export declare type MenuItemButton = {
+export type MenuItemButton = {
     label: string;
     onclick: () => void;
 };
-export declare type MenuItems = MenuItemLink | MenuItemButton;
-export declare type HeaderOptions = {
+export type MenuItems = MenuItemLink | MenuItemButton;
+export type HeaderOptions = {
     logo?: string;
     helpIcon?: string;
     helpMenuList?: MenuItems[];

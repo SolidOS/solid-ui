@@ -1,4 +1,4 @@
-export declare type MatrixOptions = {
+export type MatrixOptions = {
     cellFunction?: (td: any, x: any, y: any, value: any) => string;
     xDecreasing?: boolean;
     yDecreasing?: boolean;

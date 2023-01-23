@@ -1,5 +1,5 @@
 import { IndexedFormula, LiveStore, NamedNode } from 'rdflib';
-declare type ThrottleOptions = {
+type ThrottleOptions = {
     leading?: boolean;
     throttling?: boolean;
     trailing?: boolean;

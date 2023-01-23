@@ -1,5 +1,5 @@
 import { Node } from 'rdflib';
-export declare type FieldFunction = (dom: HTMLDocument, // the DOM
+export type FieldFunction = (dom: HTMLDocument, // the DOM
 container: HTMLElement | undefined, // if defined, the box will be appended to it
 already: {}, // used to avoid looping in nested forms
 subject: Node, // the thing for which data will be loaded into the form element

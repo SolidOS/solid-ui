@@ -1,12 +1,12 @@
 import { NamedNode, Literal } from 'rdflib';
 import { QueryParameters } from './publicData';
-export declare type AutocompleteDecoration = {
+export type AutocompleteDecoration = {
     acceptButton?: HTMLElement;
     cancelButton: HTMLElement;
     editButton?: HTMLElement;
     deleteButton?: HTMLElement;
 };
-export declare type AutocompleteOptions = {
+export type AutocompleteOptions = {
     targetClass?: NamedNode;
     currentObject?: NamedNode;
     currentName?: Literal;
