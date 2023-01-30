@@ -20,7 +20,7 @@
     "coverage": "jest --coverage --collectCoverageFrom=src/**/*.[jt]s",
     "lint": "eslint \"src/**/*.js\" \"src/**/*.ts\" \"test/**/*.ts\"",
     "lint-fix": "eslint \"src/**/*.js\" \"src/**/*.ts\" \"test/**/*.ts\" --fix",
-    "jest": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "jest": "node --experimental-vm-modules node_modules/jest/bin/jest.js --maxWorkers=50%",
     "test:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --runInBand --watch",
     "test": "npm run build-version && npm run lint && npm run jest -- test/unit/*/* && npm run jest -- test/unit/*.ts",
     "doc": "typedoc --out ./Documentation/api/ ./src/ --excludeInternal",
