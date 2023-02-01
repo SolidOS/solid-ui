@@ -54,6 +54,7 @@
   },
   "homepage": "https://github.com/solidos/solid-ui",
   "dependencies": {
+    "acorn": "^7.4.1",
     "escape-html": "^1.0.3",
     "eslint-plugin-n": "^15.6.1",
     "i": "^0.3.7",
