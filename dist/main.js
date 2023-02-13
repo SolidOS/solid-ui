@@ -13119,26 +13119,28 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2023-02-01T17:35:54Z',
-  commit: '2c72c08ab081c4727898740b46ba8d28777f4e56',
+  buildTime: '2023-02-13T18:33:53Z',
+  commit: '3d3536854bc96f1a76b3da3788eb578207ead433',
   npmInfo: {
     'solid-ui': '2.4.25',
     npm: '8.19.3',
-    node: '14.21.2',
-    v8: '8.4.371.23-node.88',
-    uv: '1.42.0',
+    node: '16.19.0',
+    v8: '9.4.146.26-node.24',
+    uv: '1.43.0',
     zlib: '1.2.11',
     brotli: '1.0.9',
     ares: '1.18.1',
-    modules: '83',
-    nghttp2: '1.42.0',
+    modules: '93',
+    nghttp2: '1.47.0',
     napi: '8',
-    llhttp: '2.1.6',
-    openssl: '1.1.1s',
-    cldr: '40.0',
-    icu: '70.1',
+    llhttp: '6.0.10',
+    openssl: '1.1.1s+quic',
+    cldr: '41.0',
+    icu: '71.1',
     tz: '2022f',
-    unicode: '14.0'
+    unicode: '14.0',
+    ngtcp2: '0.8.1',
+    nghttp3: '0.7.0'
   }
 };
 exports.versionInfo = versionInfo;

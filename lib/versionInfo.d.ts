@@ -19,6 +19,8 @@ export declare const versionInfo: {
         icu: string;
         tz: string;
         unicode: string;
+        ngtcp2: string;
+        nghttp3: string;
     };
 };
 //# sourceMappingURL=versionInfo.d.ts.map
