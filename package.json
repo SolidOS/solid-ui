@@ -64,7 +64,7 @@
     "npm": "^8.19.3",
     "pane-registry": "^2.4.19",
     "rdflib": "^2.2.26",
-    "solid-logic": "file:../solid-logic",
+    "solid-logic": "^3.0.0",
     "solid-namespace": "^0.5.2",
     "uuid": "^8.3.2"
   },
