@@ -105,7 +105,7 @@ export function insertMessageIntoTable (channelObject, messageTable, message, fr
 export async function infiniteMessageArea (dom, wasStore, chatChannel, options) {
   // ///////////////////////////////////////////////////////////////////////
 
-  function syncMessages (about, messageTable) {
+  function syncMessages (chatChannel, messageTable) {
     const displayed = {}
     let ele, ele2
     for (ele = messageTable.firstChild; ele; ele = ele.nextSibling) {
@@ -116,7 +116,7 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
 
     const messages = store
       .statementsMatching(
-        about,
+        chatChannel,
         ns.wf('message'),
         null,
         messageTable.chatDocument
@@ -155,6 +155,21 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
     if (isDeleted(latest) && !options.showDeletedMessages) {
       return // ignore deleted messaged -- @@ could also leave a placeholder
     }
+    if (options.thread) { // only show things in thread
+      const thread = store.any(message, ns.sioc('has_container'), null, message.doc())
+      if (message.sameTerm(options.thread)) {
+        // console.log(' displaying root of thread ' + thread)
+      } else if (thread.sameTerm(options.thread)) {
+        // console.log(' displaying body of thread ' + thread)
+      } else {
+        return // suppress message not in thread
+      }
+    }
+
+    // const replyTo = store.any(message, ns.sioc('reply_of'), null, message.doc())
+    // @@ best thing to do with a reply?  Move to after the thing replied to and shift right?
+    // Sort by originalMessageDate, reply number?
+
     insertMessageIntoTable(channelObject,
       messageTable,
       message,
