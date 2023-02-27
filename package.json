@@ -62,9 +62,9 @@
     "jss-preset-default": "^10.9.2",
     "mime-types": "^2.1.35",
     "npm": "^8.19.3",
-    "pane-registry": "^2.4.18",
-    "rdflib": "^2.2.25",
-    "solid-logic": "^2.1.2",
+    "pane-registry": "^2.4.19-61b1f47c",
+    "rdflib": "^2.2.26-2",
+    "solid-logic": "^3.0.0-c871c8af",
     "solid-namespace": "^0.5.2",
     "uuid": "^8.3.2"
   },
