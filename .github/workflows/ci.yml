@@ -23,10 +23,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-#      - uses: SimenB/github-actions-cpu-cores@v1
-#        id: cpu-cores
+      - uses: SimenB/github-actions-cpu-cores@v1
+        id: cpu-cores
       - run: npm ci
-      - run: npm run test -- --max-workers 2 # ${{ steps.cpu-cores.outputs.count }}
+      - run: npm run test -- --max-workers ${{ steps.cpu-cores.outputs.count }}
       - run: npm run doc
       - run: npm run build
       - name: Save build
