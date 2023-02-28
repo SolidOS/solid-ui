@@ -114,16 +114,7 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
       }
     }
 
-    const messages = store
-      .statementsMatching(
-        chatChannel,
-        ns.wf('message'),
-        null,
-        messageTable.chatDocument
-      )
-      .map(st => {
-        return st.object
-      })
+    const messages = store.each(chatChannel, ns.wf('message'), null, messageTable.chatDocument)
     const stored = {}
     for (const m of messages) {
         stored[m.uri] = true
@@ -404,9 +395,9 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
     /// ///// Infinite scroll
     //
     // @@ listen for swipe past end event not just button
-    if (options.infinite) {
-      const scrollBackbuttonTR = dom.createElement('tr')
-      const scrollBackbuttonCell = scrollBackbuttonTR.appendChild(
+    if (true) { // ws options.infinite but need for non-infinite
+      const titleTR = dom.createElement('tr')
+      const scrollBackbuttonCell = titleTR.appendChild(
         dom.createElement('td')
       )
       // up traingles: noun_1369237.svg
@@ -426,13 +417,13 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
       scrollBackbuttonCell.appendChild(scrollBackbutton)
       setScrollBackbuttonIcon()
       */
-      const dateCell = scrollBackbuttonTR.appendChild(dom.createElement('td'))
+      const dateCell = titleTR.appendChild(dom.createElement('td'))
       dateCell.style =
         'text-align: center; vertical-align: middle; color: #888; font-style: italic;'
       dateCell.textContent = widgets.shortDate(date.toISOString(), true) // no time, only date
 
       // @@@@@@@@@@@ todo move this button to other end of  message cell, o
-      const scrollForwardButtonCell = scrollBackbuttonTR.appendChild(
+      const scrollForwardButtonCell = titleTR.appendChild(
         dom.createElement('td')
       )
       if (options.includeRemoveButton) {
@@ -463,9 +454,9 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
 
       if (!newestFirst) {
         // opposite end from the entry field
-        messageTable.insertBefore(scrollBackbuttonTR, messageTable.firstChild) // If not newestFirst
+        messageTable.insertBefore(titleTR, messageTable.firstChild) // If not newestFirst
       } else {
-        messageTable.appendChild(scrollBackbuttonTR) //  newestFirst
+        messageTable.appendChild(titleTR) //  newestFirst
       }
     }
 

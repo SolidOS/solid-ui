@@ -120,7 +120,16 @@ export function messageToolbar (message, messageRow, userContext, channelObject)
     }
   }
 
-  // alain TODO allow chat owner to fully delete message + sentiments and replacing messages
+  async function replyInThread () {
+    const thread = await channelObject.createThread(message)
+    const options = userContext.chatOptions
+    if (!options) throw new Error('replyInThread: missing options')
+    options.showThread(thread, options)
+    closeToolbar() // a one-off action
+  }
+
+
+  // alain: TODO allow chat owner to fully delete message + sentiments and replacing messages
 
   const div = dom.createElement('div')
   // is message deleted ?
@@ -257,6 +266,13 @@ export function messageToolbar (message, messageRow, userContext, channelObject)
         [ns.schema('AgreeAction')]
       )
     )
+  }
+  // Reply buttton
+
+  if (store.any(message, ns.dct('created'))) { // Looks like a messsage? Bar can be used for other things
+      div.appendChild(widgets.button(dom, icons.iconBase + REPLY_ICON, 'Reply in thread', async () => {
+          await replyInThread()
+      }))
   }
   // X button to remove the tool UI itself
   const cancelButton = div.appendChild(widgets.cancelButton(dom))

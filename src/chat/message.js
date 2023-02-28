@@ -237,7 +237,7 @@ export async function renderMessageRow (channelObject, message, fresh, options, 
       return
     }
     const toolsTR = dom.createElement('tr')
-    const tools = messageToolbar(message, messageRow, userContext, channelObject)
+    const tools = messageToolbar(message, messageRow, { ...userContext, chatOptions: options }, channelObject)
     tools.style =
       'border: 0.05em solid #888; border-radius: 0 0 0.7em 0.7em;  border-top: 0; height:3.5em; background-color: #fff;' // @@ fix
     if (messageRow.nextSibling) {
@@ -325,7 +325,7 @@ export function renderMessageEditor (channelObject, messageTable, userContext, o
 
     let message
     try {
-      message = await channelObject.updateMessage(text, originalMessage)
+      message = await channelObject.updateMessage(text, originalMessage, null, options.thread)
     } catch (err) {
       const statusArea = userContext.statusArea || messageEditor
       statusArea.appendChild(

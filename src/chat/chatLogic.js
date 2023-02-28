@@ -40,7 +40,7 @@ export class ChatChannel {
     as a replacement for an existing one.
     The old one iis left, and the two are linked
   */
-  async updateMessage (text, oldMsg = null, deleteIt) {
+  async updateMessage (text, oldMsg = null, deleteIt, thread = null) {
     const sts = []
     const now = new Date()
     const timestamp = '' + now.getTime()
@@ -68,8 +68,14 @@ export class ChatChannel {
     if (me) {
       sts.push($rdf.st(message, ns.foaf('maker'), me, chatDocument))
     }
+    if (thread) {
+        sts.push($rdf.st(thread, ns.sioc('has_member'), message, chatDocument))
+        if (!thread.doc().sameTerm(message.doc())) {
+            sts.push($rdf.st(thread, ns.sioc('has_member'), message, thread.doc()))
+        }
+    }
     try {
-      await store.updater.update([], sts)
+      await store.updater.updateMany([], sts)
     } catch (err) {
       const msg = 'Error saving chat message: ' + err
       debug.warn(msg)
@@ -86,7 +92,26 @@ export class ChatChannel {
   async deleteMessage (message) {
     return this.updateMessage('(message deleted)', message, true)
   }
+
+  // Create a new thread of replies to the thread root message
+  //  or returns one which already exists
+
+  async createThread (threadRoot) {
+      const already = store.each(threadRoot, ns.sioc('has_reply'), null, threadRoot.doc())
+        .filter(thread => store.holds(thread, ns.rdf('type'), ns.sioc('Thread'), thread.doc()))
+      if (already.length > 0) return already[0]
+
+      const thread = $rdf.sym(threadRoot.uri + '-thread')
+      const insert = [
+          $rdf.st(thread, ns.rdf('type'), ns.sioc('Thread'), thread.doc()),
+          $rdf.st(threadRoot, ns.sioc('has_reply'), thread, thread.doc()),
+      ];
+      await store.updater.update([], insert)
+      return thread
+  }
 } // class ChatChannel
+
+//////////// Utility functons
 
 export async function allVersions (message) {
     let versions = [ message ]
