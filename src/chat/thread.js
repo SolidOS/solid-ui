@@ -36,7 +36,7 @@ export function thread (dom, kb, subject, messageStore, options) {
 
   const div = dom.createElement('div')
   // eslint-disable-next-line prefer-const
-  let messageTable // Shared by initial build and addMessageFromBindings
+  let messageTable
 
   let me
 
@@ -161,68 +161,6 @@ export function thread (dom, kb, subject, messageStore, options) {
 
     return form
   }
-
-  /* const sendMessage = function (oldMsg, options) { // alain
-    // titlefield.setAttribute('class','pendingedit')
-    // titlefield.disabled = true
-    field.setAttribute('class', 'pendingedit')
-    field.disabled = true
-    const sts = []
-    const now = new Date()
-    const timestamp = '' + now.getTime()
-    const dateStamp = $rdf.term(now)
-    // http://www.w3schools.com/jsref/jsref_obj_date.asp
-    const message = store.sym(messageStore.uri + '#' + 'Msg' + timestamp)
-
-    if (options === 'edit' || options === 'delete') {
-      sts.push(
-        new $rdf.Statement(mostRecentVersion(oldMsg), DCT('isReplacedBy'), message, messageStore)
-      )
-    } else {
-      sts.push(
-        new $rdf.Statement(subject, ns.wf('message'), message, messageStore)
-      )
-    }
-    // sts.push(new $rdf.Statement(message, ns.dc('title'), store.literal(titlefield.value), messageStore))
-    const msgBody = options !== 'delete' ? field.value : `message deleted\nby ${nick(me)}`
-    sts.push(
-      new $rdf.Statement(
-        message,
-        ns.sioc('content'),
-        store.literal(msgBody),
-        messageStore
-      )
-    )
-    sts.push(
-      new $rdf.Statement(message, DCT('created'), dateStamp, messageStore)
-    )
-    if (me) {
-      sts.push(
-        new $rdf.Statement(message, ns.foaf('maker'), me, messageStore)
-      )
-    }
-
-    const sendComplete = function (uri, success, body) {
-      if (!success) {
-        form.appendChild(
-          UI.widgets.errorMessageBlock(dom, 'Error writing message: ' + body)
-        )
-      } else {
-        const bindings = {
-          '?msg': message,
-          '?content': store.literal(field.value),
-          '?date': dateStamp,
-          '?creator': me
-        }
-        renderMessage(bindings, false) // not green
-
-        field.value = '' // clear from out for reuse
-        field.setAttribute('class', '')
-        field.disabled = false
-      }
-    }
-    updater.update([], sts, sendComplete)
-  } */
 
   const appendMsg = function (fieldValue, oldMsg = {}, options = '') { // alain
     const sts = []

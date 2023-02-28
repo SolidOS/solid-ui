@@ -7,7 +7,7 @@
 import { insertMessageIntoTable } from './infinite'
 import { messageToolbar, sentimentStripLinked } from './messageTools'
 import { findBookmarkDocument } from './bookmarks'
-import { mostRecentVersion, originalVersion } from './chatLogic'
+import { mostRecentVersion, originalVersion, allVersions } from './chatLogic'
 import * as debug from '../debug'
 import { icons } from '../iconBase'
 import { store, authn } from 'solid-logic'
@@ -106,19 +106,43 @@ export function creatorAndDateHorizontal (td1, creator, date, message) {
 /**
  * Renders a chat message, read-only mode
  */
-export function renderMessageRow (channelObject, message, fresh, options, userContext) {
+export async function renderMessageRow (channelObject, message, fresh, options, userContext) {
   const colorizeByAuthor =
     options.colorizeByAuthor === '1' || options.colorizeByAuthor === true
 
   const creator = store.any(message, ns.foaf('maker'))
   const date = store.any(message, ns.dct('created'))
-  const latestVersion = mostRecentVersion(message)
+  const latestVersion = await mostRecentVersion(message)
   const content = store.any(latestVersion, ns.sioc('content'))
+  // const id = store.any(latestVersion, ns.sioc('id'))
+  // const replies = store.each(latestVersion, ns.sioc('has_reply'))
+  const versions = await allVersions(message)
+  if (versions.length > 1) {
+      console.log('renderMessageRow versions: ', versions.join(',  '))
+  }
+  // be tolerant in accepting replies on any version of a message
+  const replies = versions.map(version => store.each(version, ns.sioc('has_reply'))).flat()
 
-  const originalMessage = originalVersion(message)
+  let thread = null
+  let straightReplies = []
+  for (const reply of replies) {
+      if (store.holds(reply, ns.rdf('type'), ns.sioc('Thread'))) {
+          thread = reply
+          console.log('renderMessageRow: found thread: ' + thread)
+      } else {
+          straightReplies.push(reply)
+      }
+  }
+  if (straightReplies.length > 1) {
+      console.log('renderMessageRow: found normal replies: ', straightReplies)
+  }
+
+  const originalMessage = await originalVersion(message)
   const edited = !message.sameTerm(originalMessage)
-
-  const sortDate = store.the(originalMessage, ns.dct('created'), null, originalMessage.doc()) // In message
+  // @@ load it first  @@   Or display the new data at the old date.
+  // @@@ kludge!
+  const sortDate = store.the(originalMessage, ns.dct('created'), null, originalMessage.doc()) || store.the(message, ns.dct('created'), null, message.doc())
+  // In message
 
   const messageRow = dom.createElement('tr')
   messageRow.AJAR_date = sortDate.value
@@ -153,7 +177,7 @@ export function renderMessageRow (channelObject, message, fresh, options, userCo
       message
     )
   }
-  const text = content.value.trim()
+  const text = content ? content.value.trim() : '??? no content?'
   const isURI = /^https?:\/[^ <>]*$/i.test(text)
   let para = null
   if (isURI) {
@@ -227,13 +251,25 @@ export function renderMessageRow (channelObject, message, fresh, options, userCo
     toolsTR.appendChild(dom.createElement('td')) // right
     toolsTD.appendChild(tools)
   })
+  if (thread  && options.showThread) {
+      console.log('  message has thread ' + thread)
+      td3.appendChild(widgets.button(
+        dom,
+        icons.iconBase + 'noun_1180164.svg', // right arrow .. @@ think of stg better
+        'see thread',
+        _e => {
+            console.log('@@@@ Calling showThread thread ' + thread)
+             options.showThread(thread, options)
+          }
+      ))
+  }
   return messageRow
 }
 
-export function switchToEditor (messageRow, message, channelObject, userContext) {
+export async function switchToEditor (messageRow, message, channelObject, userContext) {
   const messageTable = messageRow.parentNode
   const editRow = renderMessageEditor(channelObject, messageTable, userContext,
-    channelObject.options, mostRecentVersion(message))
+    channelObject.options, await mostRecentVersion(message))
   messageTable.insertBefore(editRow, messageRow)
   editRow.originalRow = messageRow
   messageRow.style.visibility = 'hidden' // Hide the original message. unhide if user cancels edit
@@ -252,10 +288,10 @@ export function renderMessageEditor (channelObject, messageTable, userContext, o
   }
 
   async function sendMessage (text, fromMainField) {
-    function sendComplete (message, _text2) {
+    async function sendComplete (message, _text2) {
       // const dateStamp = store.any(message, ns.dct('created'), null, message.doc())
       // const content = $rdf.literal(text2)
-      insertMessageIntoTable(channelObject, messageTable, message, false, options, userContext) // not green
+      await insertMessageIntoTable(channelObject, messageTable, message, false, options, userContext) // not green
 
       if (originalMessage) { // editing another message
         const oldRow = messageEditor.originalRow
@@ -297,7 +333,7 @@ export function renderMessageEditor (channelObject, messageTable, userContext, o
       )
       return
     }
-    sendComplete(message, text)
+    await sendComplete(message, text)
   } // sendMessage
 
   //    DRAG AND DROP

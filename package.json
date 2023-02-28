@@ -63,7 +63,7 @@
     "mime-types": "^2.1.35",
     "npm": "^8.19.3",
     "pane-registry": "^2.4.13",
-    "rdflib": "^2.2.21",
+    "rdflib": "^2.2.26",
     "solid-logic": "^2.1.2",
     "solid-namespace": "^0.5.2",
     "uuid": "^8.3.2"

@@ -3,7 +3,6 @@
  * @packageDocumentation
  */
 
-/* global alert confirm */
 import * as debug from '../debug'
 import { icons } from '../iconBase'
 import { media } from '../media/index'
@@ -99,7 +98,8 @@ export async function findBookmarkDocument (userContext) {
   if (userContext.instances && userContext.instances.length > 0) {
     userContext.bookmarkDocument = userContext.instances[0]
     if (userContext.instances.length > 1) {
-      alert('More than one bookmark file! ' + userContext.instances)
+      console.warn('More than one bookmark file! ' + userContext.instances) // @@ todo - deal with > 1
+      // Note should pick up community bookmarks as well
     }
   } else {
     if (userContext.publicProfile) {
@@ -111,7 +111,7 @@ export async function findBookmarkDocument (userContext) {
         debug.log('Creating new bookmark file ' + newBookmarkFile)
         await createIfNotExists(newBookmarkFile)
       } catch (e) {
-        alert.error("Can't make fresh bookmark file:" + e)
+        console.warn("Can't make fresh bookmark file:" + e)
         return userContext
       }
       await registerInTypeIndex(
@@ -121,7 +121,7 @@ export async function findBookmarkDocument (userContext) {
       )
       userContext.bookmarkDocument = newBookmarkFile
     } else {
-      alert('You seem to have no bookmark file and not even a profile file.')
+      console.warn('You seem to have no bookmark file and not even a profile file.')
     }
   }
   return userContext
@@ -164,7 +164,7 @@ async function addBookmark (context, target) {
     await updatePromise([], ins) // 20190118A
   } catch (e) {
     const msg = 'Making bookmark: ' + e
-    alert.error(msg)
+    console.warn(msg)
     return null
   }
   return bookmark
@@ -188,7 +188,7 @@ export async function toggleBookmark (userContext, target, bookmarkButton) {
         debug.log('Bookmark deleted: ' + bookmarks[i])
       } catch (e) {
         debug.error('Cant delete bookmark:' + e)
-        alert('Cant delete bookmark:' + e)
+        console.warn('Cant delete bookmark:' + e)
       }
     }
   } else {

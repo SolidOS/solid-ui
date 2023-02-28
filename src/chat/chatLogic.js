@@ -88,19 +88,41 @@ export class ChatChannel {
   }
 } // class ChatChannel
 
-export function originalVersion (message) {
+export async function allVersions (message) {
+    let versions = [ message ]
+    let m = message
+    while (true) { // earlier?
+        const prev = store.any(null, ns.dct('isReplacedBy'), m, m.doc())
+        if (!prev) break
+        await store.fetcher.load(prev)
+        versions.unshift(prev)
+        m = prev
+    }
+    m = message
+    while (true) { // later?
+        const next = store.any(m, ns.dct('isReplacedBy'), null, m.doc())
+        if (!next) break
+        versions.push(next)
+        m = next
+    }
+    return versions
+}
+
+export async function originalVersion (message) {
   let msg = message
   while (msg) {
     message = msg
-    msg = store.any(null, ns.dct('isReplacedBy'), message, message.doc())
+    await store.fetcher.load(message)
+    msg = store.any(null, ns.dct('isReplacedBy'), message, message.doc()) // @@@ may need to load doc
   }
   return message
 }
 
-export function mostRecentVersion (message) {
+export async function mostRecentVersion (message) {
   let msg = message
   while (msg) {
     message = msg
+    await store.fetcher.load(message)
     msg = store.any(message, ns.dct('isReplacedBy'), null, message.doc())
   }
   return message

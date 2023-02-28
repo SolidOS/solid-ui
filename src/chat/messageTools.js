@@ -34,6 +34,7 @@ const PENCIL_ICON = 'noun_253504.svg' // edit a message
 // const SPANNER_ICON = 'noun_344563.svg' -> settings
 const THUMBS_UP_ICON = 'noun_1384132.svg'
 const THUMBS_DOWN_ICON = 'noun_1384135.svg'
+const REPLY_ICON = 'noun-reply-5506924.svg'
 /**
  * Emoji in Unicode
  */
@@ -115,7 +116,7 @@ export function messageToolbar (message, messageRow, userContext, channelObject)
   async function editMessage (messageRow) {
     if (me.value === store.any(message, ns.foaf('maker')).value) {
       closeToolbar() // edit is a one-off action
-      switchToEditor(messageRow, message, channelObject, userContext)
+      await switchToEditor(messageRow, message, channelObject, userContext)
     }
   }
 
