@@ -6320,13 +6320,13 @@ var LogLevel;
 /** @internal */
 exports.LogLevel = LogLevel;
 (function (LogLevel) {
-  LogLevel[LogLevel["Error"] = TERROR] = "Error";
-  LogLevel[LogLevel["Warning"] = TWARN] = "Warning";
-  LogLevel[LogLevel["Message"] = TMESG] = "Message";
-  LogLevel[LogLevel["Success"] = TSUCCESS] = "Success";
-  LogLevel[LogLevel["Info"] = TINFO] = "Info";
-  LogLevel[LogLevel["Debug"] = TDEBUG] = "Debug";
-  LogLevel[LogLevel["All"] = TALL] = "All";
+  LogLevel[LogLevel["Error"] = 1] = "Error";
+  LogLevel[LogLevel["Warning"] = 2] = "Warning";
+  LogLevel[LogLevel["Message"] = 4] = "Message";
+  LogLevel[LogLevel["Success"] = 8] = "Success";
+  LogLevel[LogLevel["Info"] = 16] = "Info";
+  LogLevel[LogLevel["Debug"] = 32] = "Debug";
+  LogLevel[LogLevel["All"] = 63] = "All";
 })(LogLevel || (exports.LogLevel = LogLevel = {}));
 var _level = TERROR + TWARN + TMESG;
 /** @internal */
@@ -13119,12 +13119,12 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2023-02-13T18:33:53Z',
-  commit: '3d3536854bc96f1a76b3da3788eb578207ead433',
+  buildTime: '2023-02-28T16:24:57Z',
+  commit: 'f19ac1bc672bcd96a6cad46a7101d3761036bd19',
   npmInfo: {
     'solid-ui': '2.4.25',
-    npm: '8.19.3',
-    node: '16.19.0',
+    npm: '8.19.4',
+    node: '16.19.1',
     v8: '9.4.146.26-node.24',
     uv: '1.43.0',
     zlib: '1.2.11',
@@ -13134,7 +13134,7 @@ var versionInfo = {
     nghttp2: '1.47.0',
     napi: '8',
     llhttp: '6.0.10',
-    openssl: '1.1.1s+quic',
+    openssl: '1.1.1t+quic',
     cldr: '41.0',
     icu: '71.1',
     tz: '2022f',
@@ -25646,7 +25646,10 @@ class ClientAuthentication {
         this.login = async (options, eventEmitter) => {
             var _a, _b;
             await this.sessionInfoManager.clear(options.sessionId);
-            const redirectUrl = (0, oidc_client_ext_1.removeOidcQueryParam)((_a = options.redirectUrl) !== null && _a !== void 0 ? _a : window.location.href);
+            const redirectUrl = (_a = options.redirectUrl) !== null && _a !== void 0 ? _a : (0, oidc_client_ext_1.removeOidcQueryParam)(window.location.href);
+            if (!(0, solid_client_authn_core_1.isValidRedirectUrl)(redirectUrl)) {
+                throw new Error(`${redirectUrl} is not a valid redirect URL, it is either a malformed IRI or it includes a hash fragment.`);
+            }
             await this.loginHandler.handle({
                 ...options,
                 redirectUrl,
@@ -26117,7 +26120,6 @@ exports["default"] = ClientRegistrar;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WELL_KNOWN_OPENID_CONFIG = void 0;
 const solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-const urlPath_1 = __webpack_require__(/*! ../../util/urlPath */ "./node_modules/@inrupt/solid-client-authn-browser/dist/util/urlPath.js");
 exports.WELL_KNOWN_OPENID_CONFIG = ".well-known/openid-configuration";
 const issuerConfigKeyMap = {
     issuer: {
@@ -26223,7 +26225,7 @@ class IssuerConfigFetcher {
     }
     async fetchConfig(issuer) {
         let issuerConfig;
-        const openIdConfigUrl = (0, urlPath_1.appendToUrlPathname)(issuer, exports.WELL_KNOWN_OPENID_CONFIG);
+        const openIdConfigUrl = new URL(exports.WELL_KNOWN_OPENID_CONFIG, issuer).href;
         const issuerConfigRequestBody = await window.fetch(openIdConfigUrl);
         try {
             issuerConfig = processConfig(await issuerConfigRequestBody.json());
@@ -26771,27 +26773,6 @@ class StorageUtilityBrowser extends solid_client_authn_core_1.StorageUtility {
 }
 exports["default"] = StorageUtilityBrowser;
 //# sourceMappingURL=StorageUtility.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/util/urlPath.js":
-/*!******************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/util/urlPath.js ***!
-  \******************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.appendToUrlPathname = void 0;
-function appendToUrlPathname(url, append) {
-    const parsedUrl = new URL(url);
-    const path = parsedUrl.pathname;
-    parsedUrl.pathname = `${path}${path.endsWith("/") ? "" : "/"}${append.startsWith("/") ? append.substring(1) : append}`;
-    return parsedUrl.toString();
-}
-exports.appendToUrlPathname = appendToUrlPathname;
-//# sourceMappingURL=urlPath.js.map
 
 /***/ }),
 
@@ -27909,6 +27890,16 @@ async function getWebidFromTokenPayload(idToken, jwksIri, issuerIri, clientId) {
     }
 }
 
+function isValidRedirectUrl(redirectUrl) {
+    try {
+        const urlObject = new URL(redirectUrl);
+        return urlObject.hash === "";
+    }
+    catch (e) {
+        return false;
+    }
+}
+
 function isSupportedTokenType(token) {
     return typeof token === "string" && ["DPoP", "Bearer"].includes(token);
 }
@@ -28324,6 +28315,7 @@ exports.getSessionIdFromOauthState = getSessionIdFromOauthState;
 exports.getWebidFromTokenPayload = getWebidFromTokenPayload;
 exports.handleRegistration = handleRegistration;
 exports.isSupportedTokenType = isSupportedTokenType;
+exports.isValidRedirectUrl = isValidRedirectUrl;
 exports.loadOidcContextFromStorage = loadOidcContextFromStorage;
 exports.mockStorage = mockStorage;
 exports.mockStorageUtility = mockStorageUtility;
@@ -45275,7 +45267,7 @@ function () {
 
   return ConditionalRule;
 }();
-var keyRegExp = /@media|@supports\s+/;
+var keyRegExp = /@container|@media|@supports\s+/;
 var pluginConditionalRule = {
   onCreateRule: function onCreateRule(key, styles, options) {
     return keyRegExp.test(key) ? new ConditionalRule(key, styles, options) : null;
@@ -46839,7 +46831,7 @@ var Jss =
 function () {
   function Jss(options) {
     this.id = instanceCounter++;
-    this.version = "10.9.2";
+    this.version = "10.10.0";
     this.plugins = new PluginsRegistry();
     this.options = {
       id: {
@@ -54280,16 +54272,17 @@ var Fetcher = /*#__PURE__*/function () {
       var fetcher = this;
       // @ts-ignore
       if (fetcher.fetchQueue && fetcher.fetchQueue[uri]) {
-        console.log('Internal error - fetchQueue exists ' + uri);
+        // console.log('Internal error - fetchQueue exists ' + uri)
         var promise = fetcher.fetchQueue[uri];
         if (promise['PromiseStatus'] === 'resolved') {
           delete fetcher.fetchQueue[uri];
         } else {
           // pending
           delete fetcher.fetchQueue[uri];
-          console.log('*** Fetcher: pending fetchQueue deleted ' + uri);
+          // console.log('*** Fetcher: pending fetchQueue deleted ' + uri)
         }
       }
+
       if (fetcher.requested[uri] && fetcher.requested[uri] !== 'done' && fetcher.requested[uri] !== 'failed' && fetcher.requested[uri] !== 404) {
         var msg = "Rdflib: fetcher: Destructive operation on <".concat(fetcher.requested[uri], "> file being fetched! ") + uri;
         console.error(msg);
@@ -61241,7 +61234,7 @@ contentType, callback, options) {
         documentString = sz.statementsToNTriples(newSts);
         return executeCallback(null, documentString);
       case _types__WEBPACK_IMPORTED_MODULE_0__.JSONLDContentType:
-        sz.setFlags('si'); // use turtle parameters
+        sz.setFlags('si dr'); // turtle + dr (means no default, no relative prefix)
         documentString = sz.statementsToJsonld(newSts); // convert via turtle
         return executeCallback(null, documentString);
       case _types__WEBPACK_IMPORTED_MODULE_0__.NQuadsContentType:
@@ -61313,7 +61306,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-// import * as jsonld from 'jsonld'
 
 function createSerializer(store) {
   return new Serializer(store);
@@ -61820,7 +61812,7 @@ var Serializer = /*#__PURE__*/function () {
       var termToN3 = termToN3Method.bind(this);
       function prefixDirectivesMethod() {
         var str = '';
-        if (this.defaultNamespace) {
+        if (this.flags.indexOf('d') < 0 && this.defaultNamespace) {
           str += '@prefix : ' + this.explicitURI(this.defaultNamespace) + '.\n';
         }
         for (var ns in this.prefixes) {
@@ -62305,20 +62297,19 @@ var Serializer = /*#__PURE__*/function () {
     key: "statementsToJsonld",
     value: function statementsToJsonld(sts) {
       // ttl2jsonld creates context keys for all ttl prefix
-      // context keys must be full IRI
-      function findId(itemObj) {
+      // context keys must be absolute IRI ttl2jsonld@0.0.8
+      /* function findId (itemObj) {
         if (itemObj['@id']) {
-          var item = itemObj['@id'].split(':');
-          if (keys[item[0]]) itemObj['@id'] = jsonldObj['@context'][item[0]] + item[1];
+          const item = itemObj['@id'].split(':')
+          if (keys[item[0]]) itemObj['@id'] = jsonldObj['@context'][item[0]] + item[1]
         }
-        var itemValues = Object.values(itemObj);
-        for (var i in itemValues) {
-          if (typeof itemValues[i] !== 'string') {
-            // @list contains array
-            findId(itemValues[i]);
+        const itemValues = Object.values(itemObj)
+        for (const i in itemValues) {
+          if (typeof itemValues[i] !== 'string') { // @list contains array
+            findId(itemValues[i])
           }
         }
-      }
+      } */
       var turtleDoc = this.statementsToN3(sts);
       var jsonldObj = _frogcat_ttl2jsonld__WEBPACK_IMPORTED_MODULE_4__.parse(turtleDoc);
       return JSON.stringify(jsonldObj, null, 2);
@@ -66820,15 +66811,13 @@ function createAclLogic(store) {
     var ns = ns_1.ns;
     function findAclDocUrl(url) {
         return __awaiter(this, void 0, void 0, function () {
-            var doc, docNode;
+            var docNode;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        doc = store.sym(url);
-                        return [4 /*yield*/, store.fetcher.load(doc)];
+                    case 0: return [4 /*yield*/, store.fetcher.load(url)];
                     case 1:
                         _a.sent();
-                        docNode = store.any(doc, exports.ACL_LINK);
+                        docNode = store.any(url, exports.ACL_LINK);
                         if (!docNode) {
                             throw new Error("No ACL link discovered for ".concat(url));
                         }
@@ -67636,7 +67625,7 @@ function createInboxLogic(store, profileLogic, utilityLogic, containerLogic, acl
                     case 2: return [4 /*yield*/, profileLogic.getMainInbox(user)];
                     case 3:
                         inbox = _a.sent();
-                        return [4 /*yield*/, containerLogic.getContainerMembers(inbox.value)];
+                        return [4 /*yield*/, containerLogic.getContainerMembers(inbox)];
                     case 4:
                         urls = _a.sent();
                         return [2 /*return*/, urls.filter(function (url) { return !containerLogic.isContainer(url); })];
@@ -68792,19 +68781,21 @@ var rdflib_1 = __webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/inde
 function createContainerLogic(store) {
     function getContainerElements(containerNode) {
         return store
-            .statementsMatching(containerNode, (0, rdflib_1.sym)("http://www.w3.org/ns/ldp#contains"), undefined, containerNode.doc())
+            .statementsMatching(containerNode, (0, rdflib_1.sym)("http://www.w3.org/ns/ldp#contains"), undefined)
             .map(function (st) { return st.object; });
     }
     function isContainer(url) {
-        return url.charAt(url.length - 1) === "/";
+        var nodeToString = url.value;
+        return nodeToString.charAt(nodeToString.length - 1) === "/";
     }
     function createContainer(url) {
         return __awaiter(this, void 0, void 0, function () {
-            var result;
+            var stringToNode, result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (!isContainer(url)) {
+                        stringToNode = (0, rdflib_1.sym)(url);
+                        if (!isContainer(stringToNode)) {
                             throw new Error("Not a container URL ".concat(url));
                         }
                         return [4 /*yield*/, store.fetcher._fetch(url, {
@@ -68828,16 +68819,12 @@ function createContainerLogic(store) {
     }
     function getContainerMembers(containerUrl) {
         return __awaiter(this, void 0, void 0, function () {
-            var containerNode, nodes;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        containerNode = store.sym(containerUrl);
-                        return [4 /*yield*/, store.fetcher.load(containerNode)];
+                    case 0: return [4 /*yield*/, store.fetcher.load(containerUrl)];
                     case 1:
                         _a.sent();
-                        nodes = getContainerElements(containerNode);
-                        return [2 /*return*/, nodes.map(function (node) { return node.value; })];
+                        return [2 /*return*/, getContainerElements(containerUrl)];
                 }
             });
         });
@@ -69023,28 +69010,30 @@ var CustomError_1 = __webpack_require__(/*! ../logic/CustomError */ "./node_modu
 var debug = __importStar(__webpack_require__(/*! ../util/debug */ "./node_modules/solid-logic/lib/util/debug.js"));
 var utils_1 = __webpack_require__(/*! ./utils */ "./node_modules/solid-logic/lib/util/utils.js");
 function createUtilityLogic(store, aclLogic, containerLogic) {
-    function recursiveDelete(url) {
+    function recursiveDelete(containerNode) {
         return __awaiter(this, void 0, void 0, function () {
-            var aclDocUrl, containerMembers, e_1;
+            var aclDocUrl, containerMembers, nodeToStringHere, e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 6, , 7]);
-                        if (!containerLogic.isContainer(url)) return [3 /*break*/, 5];
-                        return [4 /*yield*/, aclLogic.findAclDocUrl(url)];
+                        if (!containerLogic.isContainer(containerNode)) return [3 /*break*/, 5];
+                        return [4 /*yield*/, aclLogic.findAclDocUrl(containerNode)];
                     case 1:
                         aclDocUrl = _a.sent();
                         return [4 /*yield*/, store.fetcher._fetch(aclDocUrl, { method: "DELETE" })];
                     case 2:
                         _a.sent();
-                        return [4 /*yield*/, containerLogic.getContainerMembers(url)];
+                        return [4 /*yield*/, containerLogic.getContainerMembers(containerNode)];
                     case 3:
                         containerMembers = _a.sent();
                         return [4 /*yield*/, Promise.all(containerMembers.map(function (url) { return recursiveDelete(url); }))];
                     case 4:
                         _a.sent();
                         _a.label = 5;
-                    case 5: return [2 /*return*/, store.fetcher._fetch(url, { method: "DELETE" })];
+                    case 5:
+                        nodeToStringHere = containerNode.value;
+                        return [2 /*return*/, store.fetcher._fetch(nodeToStringHere, { method: "DELETE" })];
                     case 6:
                         e_1 = _a.sent();
                         return [3 /*break*/, 7];
@@ -69189,7 +69178,7 @@ function createUtilityLogic(store, aclLogic, containerLogic) {
                                 ''
                             ].join('\n');
                         }
-                        return [4 /*yield*/, aclLogic.findAclDocUrl(options.target)];
+                        return [4 /*yield*/, aclLogic.findAclDocUrl((0, rdflib_1.sym)(options.target))];
                     case 1:
                         aclDocUrl = _a.sent();
                         return [2 /*return*/, store.fetcher._fetch(aclDocUrl, {
@@ -73561,6 +73550,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "getWebidFromTokenPayload": () => (/* binding */ getWebidFromTokenPayload),
 /* harmony export */   "handleRegistration": () => (/* binding */ handleRegistration),
 /* harmony export */   "isSupportedTokenType": () => (/* binding */ isSupportedTokenType),
+/* harmony export */   "isValidRedirectUrl": () => (/* binding */ isValidRedirectUrl),
 /* harmony export */   "loadOidcContextFromStorage": () => (/* binding */ loadOidcContextFromStorage),
 /* harmony export */   "mockStorage": () => (/* binding */ mockStorage),
 /* harmony export */   "mockStorageUtility": () => (/* binding */ mockStorageUtility),
@@ -73664,6 +73654,16 @@ async function getWebidFromTokenPayload(idToken, jwksIri, issuerIri, clientId) {
     }
     catch (e) {
         throw new Error(`The token has no 'webid' claim, and its 'sub' claim of [${payload.sub}] is invalid as a URL - error [${e}].`);
+    }
+}
+
+function isValidRedirectUrl(redirectUrl) {
+    try {
+        const urlObject = new URL(redirectUrl);
+        return urlObject.hash === "";
+    }
+    catch (e) {
+        return false;
     }
 }
 
@@ -74891,7 +74891,7 @@ __webpack_require__.r(__webpack_exports__);
 async function EmbeddedJWK(protectedHeader, token) {
     const joseHeader = {
         ...protectedHeader,
-        ...token.header,
+        ...token === null || token === void 0 ? void 0 : token.header,
     };
     if (!(0,_lib_is_object_js__WEBPACK_IMPORTED_MODULE_1__["default"])(joseHeader.jwk)) {
         throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWSInvalid('"jwk" (JSON Web Key) Header Parameter must be a JSON object');
@@ -75036,7 +75036,7 @@ class LocalJWKSet {
         this._jwks = clone(jwks);
     }
     async getKey(protectedHeader, token) {
-        const { alg, kid } = { ...protectedHeader, ...token.header };
+        const { alg, kid } = { ...protectedHeader, ...token === null || token === void 0 ? void 0 : token.header };
         const kty = getKtyFromAlg(alg);
         const candidates = this._jwks.keys.filter((jwk) => {
             let candidate = kty === jwk.kty;
@@ -75078,21 +75078,39 @@ class LocalJWKSet {
             throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_1__.JWKSNoMatchingKey();
         }
         else if (length !== 1) {
-            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_1__.JWKSMultipleMatchingKeys();
+            const error = new _util_errors_js__WEBPACK_IMPORTED_MODULE_1__.JWKSMultipleMatchingKeys();
+            const { _cached } = this;
+            error[Symbol.asyncIterator] = async function* () {
+                for (const jwk of candidates) {
+                    try {
+                        yield await importWithAlgCache(_cached, jwk, alg);
+                    }
+                    catch (_a) {
+                        continue;
+                    }
+                }
+            };
+            throw error;
         }
-        const cached = this._cached.get(jwk) || this._cached.set(jwk, {}).get(jwk);
-        if (cached[alg] === undefined) {
-            const keyObject = await (0,_key_import_js__WEBPACK_IMPORTED_MODULE_0__.importJWK)({ ...jwk, ext: true }, alg);
-            if (keyObject instanceof Uint8Array || keyObject.type !== 'public') {
-                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_1__.JWKSInvalid('JSON Web Key Set members must be public keys');
-            }
-            cached[alg] = keyObject;
-        }
-        return cached[alg];
+        return importWithAlgCache(this._cached, jwk, alg);
     }
 }
+async function importWithAlgCache(cache, jwk, alg) {
+    const cached = cache.get(jwk) || cache.set(jwk, {}).get(jwk);
+    if (cached[alg] === undefined) {
+        const key = await (0,_key_import_js__WEBPACK_IMPORTED_MODULE_0__.importJWK)({ ...jwk, ext: true }, alg);
+        if (key instanceof Uint8Array || key.type !== 'public') {
+            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_1__.JWKSInvalid('JSON Web Key Set members must be public keys');
+        }
+        cached[alg] = key;
+    }
+    return cached[alg];
+}
 function createLocalJWKSet(jwks) {
-    return LocalJWKSet.prototype.getKey.bind(new LocalJWKSet(jwks));
+    const set = new LocalJWKSet(jwks);
+    return async function (protectedHeader, token) {
+        return set.getKey(protectedHeader, token);
+    };
 }
 
 
@@ -75192,7 +75210,10 @@ class RemoteJWKSet extends _local_js__WEBPACK_IMPORTED_MODULE_3__.LocalJWKSet {
     }
 }
 function createRemoteJWKSet(url, options) {
-    return RemoteJWKSet.prototype.getKey.bind(new RemoteJWKSet(url, options));
+    const set = new RemoteJWKSet(url, options);
+    return async function (protectedHeader, token) {
+        return set.getKey(protectedHeader, token);
+    };
 }
 
 
@@ -76041,83 +76062,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _runtime_asn1_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../runtime/asn1.js */ "./node_modules/jose/dist/browser/runtime/asn1.js");
 /* harmony import */ var _runtime_jwk_to_key_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../runtime/jwk_to_key.js */ "./node_modules/jose/dist/browser/runtime/jwk_to_key.js");
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
-/* harmony import */ var _lib_format_pem_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../lib/format_pem.js */ "./node_modules/jose/dist/browser/lib/format_pem.js");
-/* harmony import */ var _lib_is_object_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../lib/is_object.js */ "./node_modules/jose/dist/browser/lib/is_object.js");
+/* harmony import */ var _lib_is_object_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../lib/is_object.js */ "./node_modules/jose/dist/browser/lib/is_object.js");
 
 
 
 
 
-
-
-function getElement(seq) {
-    let result = [];
-    let next = 0;
-    while (next < seq.length) {
-        let nextPart = parseElement(seq.subarray(next));
-        result.push(nextPart);
-        next += nextPart.byteLength;
-    }
-    return result;
-}
-function parseElement(bytes) {
-    let position = 0;
-    let tag = bytes[0] & 0x1f;
-    position++;
-    if (tag === 0x1f) {
-        tag = 0;
-        while (bytes[position] >= 0x80) {
-            tag = tag * 128 + bytes[position] - 0x80;
-            position++;
-        }
-        tag = tag * 128 + bytes[position] - 0x80;
-        position++;
-    }
-    let length = 0;
-    if (bytes[position] < 0x80) {
-        length = bytes[position];
-        position++;
-    }
-    else if (length === 0x80) {
-        length = 0;
-        while (bytes[position + length] !== 0 || bytes[position + length + 1] !== 0) {
-            if (length > bytes.byteLength) {
-                throw new TypeError('invalid indefinite form length');
-            }
-            length++;
-        }
-        const byteLength = position + length + 2;
-        return {
-            byteLength,
-            contents: bytes.subarray(position, position + length),
-            raw: bytes.subarray(0, byteLength),
-        };
-    }
-    else {
-        let numberOfDigits = bytes[position] & 0x7f;
-        position++;
-        length = 0;
-        for (let i = 0; i < numberOfDigits; i++) {
-            length = length * 256 + bytes[position];
-            position++;
-        }
-    }
-    const byteLength = position + length;
-    return {
-        byteLength,
-        contents: bytes.subarray(position, byteLength),
-        raw: bytes.subarray(0, byteLength),
-    };
-}
-function spkiFromX509(buf) {
-    const tbsCertificate = getElement(getElement(parseElement(buf).contents)[0].contents);
-    return (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.encodeBase64)(tbsCertificate[tbsCertificate[0].raw[0] === 0xa0 ? 6 : 5].raw);
-}
-function getSPKI(x509) {
-    const pem = x509.replace(/(?:-----(?:BEGIN|END) CERTIFICATE-----|\s)/g, '');
-    const raw = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decodeBase64)(pem);
-    return (0,_lib_format_pem_js__WEBPACK_IMPORTED_MODULE_4__["default"])(spkiFromX509(raw), 'PUBLIC KEY');
-}
 async function importSPKI(spki, alg, options) {
     if (typeof spki !== 'string' || spki.indexOf('-----BEGIN PUBLIC KEY-----') !== 0) {
         throw new TypeError('"spki" must be SPKI formatted string');
@@ -76128,14 +76078,7 @@ async function importX509(x509, alg, options) {
     if (typeof x509 !== 'string' || x509.indexOf('-----BEGIN CERTIFICATE-----') !== 0) {
         throw new TypeError('"x509" must be X.509 formatted string');
     }
-    let spki;
-    try {
-        spki = getSPKI(x509);
-    }
-    catch (cause) {
-        throw new TypeError('failed to parse the X.509 certificate', { cause });
-    }
-    return (0,_runtime_asn1_js__WEBPACK_IMPORTED_MODULE_1__.fromSPKI)(spki, alg, options);
+    return (0,_runtime_asn1_js__WEBPACK_IMPORTED_MODULE_1__.fromX509)(x509, alg, options);
 }
 async function importPKCS8(pkcs8, alg, options) {
     if (typeof pkcs8 !== 'string' || pkcs8.indexOf('-----BEGIN PRIVATE KEY-----') !== 0) {
@@ -76145,13 +76088,10 @@ async function importPKCS8(pkcs8, alg, options) {
 }
 async function importJWK(jwk, alg, octAsKeyObject) {
     var _a;
-    if (!(0,_lib_is_object_js__WEBPACK_IMPORTED_MODULE_5__["default"])(jwk)) {
+    if (!(0,_lib_is_object_js__WEBPACK_IMPORTED_MODULE_4__["default"])(jwk)) {
         throw new TypeError('JWK must be an object');
     }
     alg || (alg = jwk.alg);
-    if (typeof alg !== 'string' || !alg) {
-        throw new TypeError('"alg" argument is required when "jwk.alg" is not present');
-    }
     switch (jwk.kty) {
         case 'oct':
             if (typeof jwk.k !== 'string' || !jwk.k) {
@@ -76518,13 +76458,13 @@ function checkSigCryptoKey(key, alg, ...usages) {
                 throw unusable(`SHA-${expected}`, 'algorithm.hash');
             break;
         }
-        case (0,_runtime_env_js__WEBPACK_IMPORTED_MODULE_0__.isCloudflareWorkers)() && 'EdDSA': {
-            if (!isAlgorithm(key.algorithm, 'NODE-ED25519'))
-                throw unusable('NODE-ED25519');
-            break;
-        }
         case 'EdDSA': {
             if (key.algorithm.name !== 'Ed25519' && key.algorithm.name !== 'Ed448') {
+                if ((0,_runtime_env_js__WEBPACK_IMPORTED_MODULE_0__.isCloudflareWorkers)()) {
+                    if (isAlgorithm(key.algorithm, 'NODE-ED25519'))
+                        break;
+                    throw unusable('Ed25519, Ed448, or NODE-ED25519');
+                }
                 throw unusable('Ed25519 or Ed448');
             }
             break;
@@ -77340,6 +77280,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "fromPKCS8": () => (/* binding */ fromPKCS8),
 /* harmony export */   "fromSPKI": () => (/* binding */ fromSPKI),
+/* harmony export */   "fromX509": () => (/* binding */ fromX509),
 /* harmony export */   "toPKCS8": () => (/* binding */ toPKCS8),
 /* harmony export */   "toSPKI": () => (/* binding */ toSPKI)
 /* harmony export */ });
@@ -77409,7 +77350,7 @@ const getNamedCurve = (keyData) => {
     }
 };
 const genericImport = async (replace, keyFormat, pem, alg, options) => {
-    var _a;
+    var _a, _b;
     let algorithm;
     let keyUsages;
     const keyData = new Uint8Array(atob(pem.replace(replace, ''))
@@ -77460,12 +77401,6 @@ const genericImport = async (replace, keyFormat, pem, alg, options) => {
             keyUsages = isPublic ? [] : ['deriveBits'];
             break;
         }
-        case (0,_env_js__WEBPACK_IMPORTED_MODULE_0__.isCloudflareWorkers)() && 'EdDSA': {
-            const namedCurve = getNamedCurve(keyData).toUpperCase();
-            algorithm = { name: `NODE-${namedCurve}`, namedCurve: `NODE-${namedCurve}` };
-            keyUsages = isPublic ? ['verify'] : ['sign'];
-            break;
-        }
         case 'EdDSA':
             algorithm = { name: getNamedCurve(keyData) };
             keyUsages = isPublic ? ['verify'] : ['sign'];
@@ -77473,13 +77408,102 @@ const genericImport = async (replace, keyFormat, pem, alg, options) => {
         default:
             throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JOSENotSupported('Invalid or unsupported "alg" (Algorithm) value');
     }
-    return _webcrypto_js__WEBPACK_IMPORTED_MODULE_1__["default"].subtle.importKey(keyFormat, keyData, algorithm, (_a = options === null || options === void 0 ? void 0 : options.extractable) !== null && _a !== void 0 ? _a : false, keyUsages);
+    try {
+        return await _webcrypto_js__WEBPACK_IMPORTED_MODULE_1__["default"].subtle.importKey(keyFormat, keyData, algorithm, (_a = options === null || options === void 0 ? void 0 : options.extractable) !== null && _a !== void 0 ? _a : false, keyUsages);
+    }
+    catch (err) {
+        if (algorithm.name === 'Ed25519' &&
+            (err === null || err === void 0 ? void 0 : err.name) === 'NotSupportedError' &&
+            (0,_env_js__WEBPACK_IMPORTED_MODULE_0__.isCloudflareWorkers)()) {
+            algorithm = { name: 'NODE-ED25519', namedCurve: 'NODE-ED25519' };
+            return await _webcrypto_js__WEBPACK_IMPORTED_MODULE_1__["default"].subtle.importKey(keyFormat, keyData, algorithm, (_b = options === null || options === void 0 ? void 0 : options.extractable) !== null && _b !== void 0 ? _b : false, keyUsages);
+        }
+        throw err;
+    }
 };
 const fromPKCS8 = (pem, alg, options) => {
     return genericImport(/(?:-----(?:BEGIN|END) PRIVATE KEY-----|\s)/g, 'pkcs8', pem, alg, options);
 };
 const fromSPKI = (pem, alg, options) => {
     return genericImport(/(?:-----(?:BEGIN|END) PUBLIC KEY-----|\s)/g, 'spki', pem, alg, options);
+};
+function getElement(seq) {
+    let result = [];
+    let next = 0;
+    while (next < seq.length) {
+        let nextPart = parseElement(seq.subarray(next));
+        result.push(nextPart);
+        next += nextPart.byteLength;
+    }
+    return result;
+}
+function parseElement(bytes) {
+    let position = 0;
+    let tag = bytes[0] & 0x1f;
+    position++;
+    if (tag === 0x1f) {
+        tag = 0;
+        while (bytes[position] >= 0x80) {
+            tag = tag * 128 + bytes[position] - 0x80;
+            position++;
+        }
+        tag = tag * 128 + bytes[position] - 0x80;
+        position++;
+    }
+    let length = 0;
+    if (bytes[position] < 0x80) {
+        length = bytes[position];
+        position++;
+    }
+    else if (length === 0x80) {
+        length = 0;
+        while (bytes[position + length] !== 0 || bytes[position + length + 1] !== 0) {
+            if (length > bytes.byteLength) {
+                throw new TypeError('invalid indefinite form length');
+            }
+            length++;
+        }
+        const byteLength = position + length + 2;
+        return {
+            byteLength,
+            contents: bytes.subarray(position, position + length),
+            raw: bytes.subarray(0, byteLength),
+        };
+    }
+    else {
+        let numberOfDigits = bytes[position] & 0x7f;
+        position++;
+        length = 0;
+        for (let i = 0; i < numberOfDigits; i++) {
+            length = length * 256 + bytes[position];
+            position++;
+        }
+    }
+    const byteLength = position + length;
+    return {
+        byteLength,
+        contents: bytes.subarray(position, byteLength),
+        raw: bytes.subarray(0, byteLength),
+    };
+}
+function spkiFromX509(buf) {
+    const tbsCertificate = getElement(getElement(parseElement(buf).contents)[0].contents);
+    return (0,_base64url_js__WEBPACK_IMPORTED_MODULE_3__.encodeBase64)(tbsCertificate[tbsCertificate[0].raw[0] === 0xa0 ? 6 : 5].raw);
+}
+function getSPKI(x509) {
+    const pem = x509.replace(/(?:-----(?:BEGIN|END) CERTIFICATE-----|\s)/g, '');
+    const raw = (0,_base64url_js__WEBPACK_IMPORTED_MODULE_3__.decodeBase64)(pem);
+    return (0,_lib_format_pem_js__WEBPACK_IMPORTED_MODULE_4__["default"])(spkiFromX509(raw), 'PUBLIC KEY');
+}
+const fromX509 = (pem, alg, options) => {
+    let spki;
+    try {
+        spki = getSPKI(pem);
+    }
+    catch (cause) {
+        throw new TypeError('failed to parse the X.509 certificate', { cause });
+    }
+    return fromSPKI(spki, alg, options);
 };
 
 
@@ -78038,7 +78062,7 @@ function getModulusLengthOption(options) {
     return modulusLength;
 }
 async function generateKeyPair(alg, options) {
-    var _a, _b, _c;
+    var _a, _b, _c, _d;
     let algorithm;
     let keyUsages;
     switch (alg) {
@@ -78088,17 +78112,6 @@ async function generateKeyPair(alg, options) {
             algorithm = { name: 'ECDSA', namedCurve: 'P-521' };
             keyUsages = ['sign', 'verify'];
             break;
-        case (0,_env_js__WEBPACK_IMPORTED_MODULE_0__.isCloudflareWorkers)() && 'EdDSA':
-            switch (options === null || options === void 0 ? void 0 : options.crv) {
-                case undefined:
-                case 'Ed25519':
-                    algorithm = { name: 'NODE-ED25519', namedCurve: 'NODE-ED25519' };
-                    keyUsages = ['sign', 'verify'];
-                    break;
-                default:
-                    throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JOSENotSupported('Invalid or unsupported crv option provided');
-            }
-            break;
         case 'EdDSA':
             keyUsages = ['sign', 'verify'];
             const crv = (_a = options === null || options === void 0 ? void 0 : options.crv) !== null && _a !== void 0 ? _a : 'Ed25519';
@@ -78136,7 +78149,18 @@ async function generateKeyPair(alg, options) {
         default:
             throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JOSENotSupported('Invalid or unsupported JWK "alg" (Algorithm) Parameter value');
     }
-    return (_webcrypto_js__WEBPACK_IMPORTED_MODULE_1__["default"].subtle.generateKey(algorithm, (_c = options === null || options === void 0 ? void 0 : options.extractable) !== null && _c !== void 0 ? _c : false, keyUsages));
+    try {
+        return (await _webcrypto_js__WEBPACK_IMPORTED_MODULE_1__["default"].subtle.generateKey(algorithm, (_c = options === null || options === void 0 ? void 0 : options.extractable) !== null && _c !== void 0 ? _c : false, keyUsages));
+    }
+    catch (err) {
+        if (algorithm.name === 'Ed25519' &&
+            (err === null || err === void 0 ? void 0 : err.name) === 'NotSupportedError' &&
+            (0,_env_js__WEBPACK_IMPORTED_MODULE_0__.isCloudflareWorkers)()) {
+            algorithm = { name: 'NODE-ED25519', namedCurve: 'NODE-ED25519' };
+            return (await _webcrypto_js__WEBPACK_IMPORTED_MODULE_1__["default"].subtle.generateKey(algorithm, (_d = options === null || options === void 0 ? void 0 : options.extractable) !== null && _d !== void 0 ? _d : false, keyUsages));
+        }
+        throw err;
+    }
 }
 
 
@@ -78316,19 +78340,6 @@ function subtleMapping(jwk) {
             }
             break;
         }
-        case (0,_env_js__WEBPACK_IMPORTED_MODULE_0__.isCloudflareWorkers)() && 'OKP':
-            if (jwk.alg !== 'EdDSA') {
-                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JOSENotSupported('Invalid or unsupported JWK "alg" (Algorithm) Parameter value');
-            }
-            switch (jwk.crv) {
-                case 'Ed25519':
-                    algorithm = { name: 'NODE-ED25519', namedCurve: 'NODE-ED25519' };
-                    keyUsages = jwk.d ? ['sign'] : ['verify'];
-                    break;
-                default:
-                    throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JOSENotSupported('Invalid or unsupported JWK "alg" (Algorithm) Parameter value');
-            }
-            break;
         case 'OKP': {
             switch (jwk.alg) {
                 case 'EdDSA':
@@ -78354,6 +78365,9 @@ function subtleMapping(jwk) {
 }
 const parse = async (jwk) => {
     var _a, _b;
+    if (!jwk.alg) {
+        throw new TypeError('"alg" argument is required when "jwk.alg" is not present');
+    }
     const { algorithm, keyUsages } = subtleMapping(jwk);
     const rest = [
         algorithm,
@@ -78366,7 +78380,18 @@ const parse = async (jwk) => {
     const keyData = { ...jwk };
     delete keyData.alg;
     delete keyData.use;
-    return _webcrypto_js__WEBPACK_IMPORTED_MODULE_1__["default"].subtle.importKey('jwk', keyData, ...rest);
+    try {
+        return await _webcrypto_js__WEBPACK_IMPORTED_MODULE_1__["default"].subtle.importKey('jwk', keyData, ...rest);
+    }
+    catch (err) {
+        if (algorithm.name === 'Ed25519' &&
+            (err === null || err === void 0 ? void 0 : err.name) === 'NotSupportedError' &&
+            (0,_env_js__WEBPACK_IMPORTED_MODULE_0__.isCloudflareWorkers)()) {
+            rest[0] = { name: 'NODE-ED25519', namedCurve: 'NODE-ED25519' };
+            return await _webcrypto_js__WEBPACK_IMPORTED_MODULE_1__["default"].subtle.importKey('jwk', keyData, ...rest);
+        }
+        throw err;
+    }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (parse);
 
@@ -78631,10 +78656,10 @@ function subtleDsa(alg, algorithm) {
         case 'ES384':
         case 'ES512':
             return { hash, name: 'ECDSA', namedCurve: algorithm.namedCurve };
-        case (0,_env_js__WEBPACK_IMPORTED_MODULE_0__.isCloudflareWorkers)() && 'EdDSA':
-            const { namedCurve } = algorithm;
-            return { name: namedCurve, namedCurve };
         case 'EdDSA':
+            if ((0,_env_js__WEBPACK_IMPORTED_MODULE_0__.isCloudflareWorkers)() && algorithm.name === 'NODE-ED25519') {
+                return { name: 'NODE-ED25519', namedCurve: 'NODE-ED25519' };
+            }
             return { name: algorithm.name };
         default:
             throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_1__.JOSENotSupported(`alg ${alg} is not supported either by JOSE or your javascript runtime`);
@@ -79058,6 +79083,7 @@ class JWKSMultipleMatchingKeys extends JOSEError {
         return 'ERR_JWKS_MULTIPLE_MATCHING_KEYS';
     }
 }
+Symbol.asyncIterator;
 class JWKSTimeout extends JOSEError {
     constructor() {
         super(...arguments);
