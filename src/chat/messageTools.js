@@ -47,8 +47,8 @@ emoji[ns.schema('LikeAction')] = '❤️'
 /**
  * Create strip of sentiments expressed
  */
-export function sentimentStrip (target, doc) { // alain seems not used
-  const latest = mostRecentVersion(target)
+export async function sentimentStrip (target, doc) { // alain seems not used
+  const latest = await mostRecentVersion(target)
   const actions = store.holds(latest, ns.schema('dateDeleted').value, null, latest.doc()) ? store.each(null, ns.schema('target'), target, doc) : []
   const sentiments = actions.map(a => store.any(a, ns.rdf('type'), null, doc))
   sentiments.sort()
@@ -61,11 +61,11 @@ export function sentimentStrip (target, doc) { // alain seems not used
  * @param target {NamedNode} - The thing about which they are expressed
  * @param doc {NamedNode} - The document in which they are expressed
  */
-export function sentimentStripLinked (target, doc) {
+export async function sentimentStripLinked (target, doc) {
   const strip = dom.createElement('span')
-  function refresh () {
+  async function refresh () {
     strip.innerHTML = ''
-    const actions = (mostRecentVersion(target).uri !== ns.schema('dateDeleted').uri) ? store.each(null, ns.schema('target'), target, doc) : []
+    const actions = (await mostRecentVersion(target).uri !== ns.schema('dateDeleted').uri) ? store.each(null, ns.schema('target'), target, doc) : []
     const sentiments = actions.map(a => [
       store.any(a, ns.rdf('type'), null, doc),
       store.any(a, ns.schema('agent'), null, doc)
@@ -84,14 +84,15 @@ export function sentimentStripLinked (target, doc) {
       strip.appendChild(res)
     })
   }
-  refresh()
+  refresh().then(console.log('sentimentStripLinked async refreshed'))
   strip.refresh = refresh
   return strip
 }
 /**
  * Creates a message toolbar component
  */
-export function messageToolbar (message, messageRow, userContext, channelObject) {
+export async function messageToolbar (message, messageRow, userContext, channelObject) {
+
   async function deleteMessage () {
     const author = store.any(message, ns.foaf('maker'))
     if (!me) {
@@ -133,7 +134,7 @@ export function messageToolbar (message, messageRow, userContext, channelObject)
 
   const div = dom.createElement('div')
   // is message deleted ?
-  if (mostRecentVersion(message).value === ns.schema('dateDeleted').value) return div
+  if (await mostRecentVersion(message).value === ns.schema('dateDeleted').value) return div
   function closeToolbar () {
     div.parentElement.parentElement.removeChild(div.parentElement) // remive the TR
   }
@@ -241,9 +242,8 @@ export function messageToolbar (message, messageRow, userContext, channelObject)
   // THUMBS_UP_ICON
   // https://schema.org/AgreeAction
   me = authn.currentUser() // If already logged on
-  // debug.log('Actions 3' + mostRecentVersion(message).value + ' ' + ns.schema('dateDeleted').value + ' ' + (mostRecentVersion(message).value !== ns.schema('dateDeleted').value))
 
-  if (me && (mostRecentVersion(message).value !== ns.schema('dateDeleted').value)) {
+  if (me && (await mostRecentVersion(message).value !== ns.schema('dateDeleted').value)) {
     const context1 = { me, dom, div }
     div.appendChild(
       sentimentButton(

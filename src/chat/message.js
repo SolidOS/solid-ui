@@ -214,7 +214,7 @@ export async function renderMessageRow (channelObject, message, fresh, options, 
   }
 
   // Sentiment strip
-  const strip = sentimentStripLinked(message, message.doc())
+  const strip = await sentimentStripLinked(message, message.doc())
   if (strip.children.length) {
     td2.appendChild(dom.createElement('br'))
     td2.appendChild(strip)
@@ -229,7 +229,7 @@ export async function renderMessageRow (channelObject, message, fresh, options, 
     '...'
   )
   td3.appendChild(toolsButton)
-  toolsButton.addEventListener('click', function (_event) {
+  toolsButton.addEventListener('click', async function (_event) {
     if (messageRow.toolTR) {
       // already got a toolbar? Toogle
       messageRow.parentNode.removeChild(messageRow.toolTR)
@@ -237,7 +237,7 @@ export async function renderMessageRow (channelObject, message, fresh, options, 
       return
     }
     const toolsTR = dom.createElement('tr')
-    const tools = messageToolbar(message, messageRow, { ...userContext, chatOptions: options }, channelObject)
+    const tools = await messageToolbar(message, messageRow, { ...userContext, chatOptions: options }, channelObject)
     tools.style =
       'border: 0.05em solid #888; border-radius: 0 0 0.7em 0.7em;  border-top: 0; height:3.5em; background-color: #fff;' // @@ fix
     if (messageRow.nextSibling) {

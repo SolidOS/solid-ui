@@ -52,7 +52,7 @@ export class ChatChannel {
     const me = authn.currentUser() // If already logged on
 
     if (oldMsg) { // edit message replaces old one
-      sts.push($rdf.st(mostRecentVersion(oldMsg), ns.dct('isReplacedBy'), message, chatDocument))
+      sts.push($rdf.st(await mostRecentVersion(oldMsg), ns.dct('isReplacedBy'), message, chatDocument))
       if (deleteIt) {
         sts.push($rdf.st(message, ns.schema('dateDeleted'), dateStamp, chatDocument))
       }
