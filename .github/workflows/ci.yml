@@ -26,4 +26,8 @@ jobs:
       - uses: SimenB/github-actions-cpu-cores@v1
         id: cpu-cores
       - run: npm ci
-      - run: npm run test -- test/unit/[pst]*.test.ts # -- --max-workers ${{ steps.cpu-cores.outputs.count }}
+      - run: npm run build-version
+      - run: npm run lint
+      - run: npm run jest -- test/unit/[cfil]*.test.ts --max-workers ${{ steps.cpu-cores.outputs.count }}
+      - run: npm run jest -- test/unit/[mn]*.test.ts --max-workers ${{ steps.cpu-cores.outputs.count }}
+      - run: npm run jest -- test/unit/[pst]*.test.ts --max-workers ${{ steps.cpu-cores.outputs.count }}
