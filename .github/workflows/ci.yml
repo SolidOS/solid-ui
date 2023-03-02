@@ -29,7 +29,7 @@ jobs:
       - run: npm run build-version
       - run: npm run lint
       - run: npm run jest -- test/unit/[cfil]*.test.ts --max-workers ${{ steps.cpu-cores.outputs.count }}
-      - run: npm run jest -- test/unit/[mn]*.test.ts --max-workers ${{ steps.cpu-cores.outputs.count }}
-      - run: npm run jest -- test/unit/[pst]*.test.ts --max-workers ${{ steps.cpu-cores.outputs.count }}
+      - run: npm run jest -- test/unit/[mnp]*.test.ts --max-workers ${{ steps.cpu-cores.outputs.count }}
+      - run: npm run jest -- test/unit/[st]*.test.ts --max-workers ${{ steps.cpu-cores.outputs.count }}
       - run: npm run jest -- test/unit/[acfh]*/*.test.ts --max-workers ${{ steps.cpu-cores.outputs.count }}
       - run: npm run jest -- test/unit/[jluw]*/*.test.ts --max-workers ${{ steps.cpu-cores.outputs.count }}
