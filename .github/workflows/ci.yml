@@ -39,3 +39,51 @@ jobs:
       - run: npm run jest -- --testPathPattern "/test/unit/widgets/buttons" -w ${{ steps.cpu-cores.outputs.count }}
       - run: npm run jest -- --testPathPattern "/test/unit/widgets/forms" -w ${{ steps.cpu-cores.outputs.count }}
       - run: npm run jest -- --testPathIgnorePatterns "test/unit/widgets/(buttons|forms)" --testPathPattern "/test/unit/widgets" -w ${{ steps.cpu-cores.outputs.count }}
+      - run: npm run build --if-present
+      - name: Save build
+        if: matrix.node-version == '16.x'
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: |
+            .
+            !node_modules
+          retention-days: 1
+
+  npm-publish-build:
+      needs: build
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/download-artifact@v2
+          with:
+            name: build
+        - uses: actions/setup-node@v1
+          with:
+            node-version: 16.x
+        - uses: rlespinasse/github-slug-action@v3.x
+        - name: Append commit hash to package version
+          run: 'sed -i -E "s/(\"version\": *\"[^\"]+)/\1-${GITHUB_SHA_SHORT}/" package.json'
+        - name: Disable pre- and post-publish actions
+          run: 'sed -i -E "s/\"((pre|post)publish)/\"ignore:\1/" package.json'
+        - uses: JS-DevTools/npm-publish@v1
+          with:
+            token: ${{ secrets.NPM_TOKEN }}
+            tag: ${{ env.GITHUB_REF_SLUG }}
+
+  npm-publish-latest:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: build
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 16.x
+      - name: Disable pre- and post-publish actions
+        run: 'sed -i -E "s/\"((pre|post)publish)/\"ignore:\1/" package.json'
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          tag: latest
