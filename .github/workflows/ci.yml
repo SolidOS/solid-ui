@@ -28,14 +28,14 @@ jobs:
       - run: npm ci
       - run: npm run build-version
       - run: npm run lint
-      - run: npm run jest -- test/unit/[cf]*.test.ts --max-workers ${{ steps.cpu-cores.outputs.count }}
-      - run: npm run jest -- test/unit/[il]*.test.ts --max-workers ${{ steps.cpu-cores.outputs.count }}
-      - run: npm run jest -- test/unit/[mnp]*.test.ts --max-workers ${{ steps.cpu-cores.outputs.count }}
-      - run: npm run jest -- test/unit/[st]*.test.ts --max-workers ${{ steps.cpu-cores.outputs.count }}
+      - run: npm run jest -- test/unit/[a-f]*.test.ts --max-workers ${{ steps.cpu-cores.outputs.count }}
+      - run: npm run jest -- test/unit/[g-l]*.test.ts --max-workers ${{ steps.cpu-cores.outputs.count }}
+      - run: npm run jest -- test/unit/[m-p]*.test.ts --max-workers ${{ steps.cpu-cores.outputs.count }}
+      - run: npm run jest -- test/unit/[q-z]*.test.ts --max-workers ${{ steps.cpu-cores.outputs.count }}
       - run: npm run jest -- --testPathPattern "/test/unit/acl" --max-workers ${{ steps.cpu-cores.outputs.count }}
       - run: npm run jest -- --testPathPattern "/test/unit/chat" --max-workers ${{ steps.cpu-cores.outputs.count }}
       - run: npm run jest -- --testPathPattern "/test/unit/(footer|header)" --max-workers ${{ steps.cpu-cores.outputs.count }}
       - run: npm run jest -- --testPathPattern "/test/unit/(helpers|jss|login|utils)" --max-workers ${{ steps.cpu-cores.outputs.count }}
-      #- run: npm run jest -- --testPathPattern "/test/unit/widgets" --max-workers ${{ steps.cpu-cores.outputs.count }}
       - run: npm run jest -- --testPathPattern "/test/unit/widgets/buttons" --max-workers ${{ steps.cpu-cores.outputs.count }}
       - run: npm run jest -- --testPathPattern "/test/unit/widgets/forms" --max-workers ${{ steps.cpu-cores.outputs.count }}
+      - run: npm run jest -- --testPathIgnorePatterns "test/unit/widgets/(buttons|forms)" --testPathPattern "/test/unit/widgets" --max-workers ${{ steps.cpu-cores.outputs.count }}
