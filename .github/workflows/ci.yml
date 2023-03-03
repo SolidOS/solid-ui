@@ -28,14 +28,14 @@ jobs:
       - run: npm ci
       - run: npm run build-version
       - run: npm run lint
-      - run: npm run jest -- test/unit/[a-f]*.test.ts --max-workers ${{ steps.cpu-cores.outputs.count }}
-      - run: npm run jest -- test/unit/[g-l]*.test.ts --max-workers ${{ steps.cpu-cores.outputs.count }}
-      - run: npm run jest -- test/unit/[m-p]*.test.ts --max-workers ${{ steps.cpu-cores.outputs.count }}
-      - run: npm run jest -- test/unit/[q-z]*.test.ts --max-workers ${{ steps.cpu-cores.outputs.count }}
-      - run: npm run jest -- --testPathPattern "/test/unit/acl" --max-workers ${{ steps.cpu-cores.outputs.count }}
-      - run: npm run jest -- --testPathPattern "/test/unit/chat" --max-workers ${{ steps.cpu-cores.outputs.count }}
-      - run: npm run jest -- --testPathPattern "/test/unit/(footer|header)" --max-workers ${{ steps.cpu-cores.outputs.count }}
-      - run: npm run jest -- --testPathPattern "/test/unit/(helpers|jss|login|utils)" --max-workers ${{ steps.cpu-cores.outputs.count }}
-      - run: npm run jest -- --testPathPattern "/test/unit/widgets/buttons" --max-workers ${{ steps.cpu-cores.outputs.count }}
-      - run: npm run jest -- --testPathPattern "/test/unit/widgets/forms" --max-workers ${{ steps.cpu-cores.outputs.count }}
-      - run: npm run jest -- --testPathIgnorePatterns "test/unit/widgets/(buttons|forms)" --testPathPattern "/test/unit/widgets" --max-workers ${{ steps.cpu-cores.outputs.count }}
+      - run: npm run jest -- test/unit/[a-f]*.test.ts #-w ${{ steps.cpu-cores.outputs.count }}
+      - run: npm run jest -- test/unit/[g-l]*.test.ts #-w ${{ steps.cpu-cores.outputs.count }}
+      - run: npm run jest -- test/unit/[m-p]*.test.ts #-w ${{ steps.cpu-cores.outputs.count }}
+      - run: npm run jest -- test/unit/[q-z]*.test.ts #-w ${{ steps.cpu-cores.outputs.count }}
+      - run: npm run jest -- --testPathPattern "/test/unit/acl" #-w ${{ steps.cpu-cores.outputs.count }}
+      - run: npm run jest -- --testPathPattern "/test/unit/chat" #-w ${{ steps.cpu-cores.outputs.count }}
+      - run: npm run jest -- --testPathPattern "/test/unit/(footer|header)" #-w ${{ steps.cpu-cores.outputs.count }}
+      - run: npm run jest -- --testPathPattern "/test/unit/(helpers|jss|login|utils)" #-w ${{ steps.cpu-cores.outputs.count }}
+      - run: npm run jest -- --testPathPattern "/test/unit/widgets/buttons" #-w ${{ steps.cpu-cores.outputs.count }}
+      - run: npm run jest -- --testPathPattern "/test/unit/widgets/forms" #-w ${{ steps.cpu-cores.outputs.count }}
+      - run: npm run jest -- --testPathIgnorePatterns "test/unit/widgets/(buttons|forms)" --testPathPattern "/test/unit/widgets" #-w ${{ steps.cpu-cores.outputs.count }}
