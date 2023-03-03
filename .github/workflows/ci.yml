@@ -32,8 +32,8 @@ jobs:
       - run: npm run jest -- test/unit/[il]*.test.ts --max-workers ${{ steps.cpu-cores.outputs.count }}
       - run: npm run jest -- test/unit/[mnp]*.test.ts --max-workers ${{ steps.cpu-cores.outputs.count }}
       - run: npm run jest -- test/unit/[st]*.test.ts --max-workers ${{ steps.cpu-cores.outputs.count }}
-      - run: npm run jest -- --testPathPattern "/test/unit/chat" --max-workers ${{ steps.cpu-cores.outputs.count }}
       - run: npm run jest -- --testPathPattern "/test/unit/acl" --max-workers ${{ steps.cpu-cores.outputs.count }}
+      - run: npm run jest -- --testPathPattern "/test/unit/chat" --max-workers ${{ steps.cpu-cores.outputs.count }}
       - run: npm run jest -- --testPathPattern "/test/unit/(footer|header)" --max-workers ${{ steps.cpu-cores.outputs.count }}
       - run: npm run jest -- --testPathPattern "/test/unit/(helpers|jss|login|utils)" --max-workers ${{ steps.cpu-cores.outputs.count }}
       #- run: npm run jest -- --testPathPattern "/test/unit/widgets" --max-workers ${{ steps.cpu-cores.outputs.count }}
