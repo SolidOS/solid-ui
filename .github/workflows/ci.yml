@@ -28,7 +28,8 @@ jobs:
       - run: npm ci
       - run: npm run build-version
       - run: npm run lint
-      - run: npm run jest -- test/unit/[cfil]*.test.ts --max-workers ${{ steps.cpu-cores.outputs.count }}
+      - run: npm run jest -- test/unit/[cf]*.test.ts --max-workers ${{ steps.cpu-cores.outputs.count }}
+      - run: npm run jest -- test/unit/[il]*.test.ts --max-workers ${{ steps.cpu-cores.outputs.count }}
       - run: npm run jest -- test/unit/[mnp]*.test.ts --max-workers ${{ steps.cpu-cores.outputs.count }}
       - run: npm run jest -- test/unit/[st]*.test.ts --max-workers ${{ steps.cpu-cores.outputs.count }}
       - run: npm run jest -- --testPathPattern "/test/unit/chat" --max-workers ${{ steps.cpu-cores.outputs.count }}
