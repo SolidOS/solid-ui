@@ -117,10 +117,10 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
     const messages = store.each(chatChannel, ns.wf('message'), null, messageTable.chatDocument)
     const stored = {}
     for (const m of messages) {
-        stored[m.uri] = true
-        if (!displayed[m.uri]) {
-          await addMessage(m, messageTable)
-        }
+      stored[m.uri] = true
+      if (!displayed[m.uri]) {
+        await addMessage(m, messageTable)
+      }
     }
 
     // eslint-disable-next-line space-in-parens
@@ -148,26 +148,26 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
     }
     let thread = store.any(null, ns.sioc('has_member'), message, message.doc())
     const id = store.any(message, ns.sioc('id'), null, message.doc())
-    if (id &&!thread) {
-       thread = store.any(null, ns.sioc('has_member'), id, message.doc())
+    if (id && !thread) {
+      thread = store.any(null, ns.sioc('has_member'), id, message.doc())
     }
 
     if (options.thread) { // only show things in thread
       if (store.holds(message, ns.sioc('has_reply'), options.thread)) { // root of thread
-          console.log(' addMessage: displaying root of thread ' + thread)
-      } else  if (thread && thread.sameTerm(options.thread)) {
-          console.log(' addMessage: Displaying body of thread ' +  + message.uri.slice(-10))
+        debug.log(' addMessage: displaying root of thread ' + thread)
+      } else if (thread && thread.sameTerm(options.thread)) {
+        debug.log(' addMessage: Displaying body of thread ' + message.uri.slice(-10))
       } else {
-          console.log(' addMessage: Suppress non-thread message in thread table ' + message.uri.slice(-10))
-          return // suppress message not in thread
+        debug.log(' addMessage: Suppress non-thread message in thread table ' + message.uri.slice(-10))
+        return // suppress message not in thread
       }
     } else { // Not threads
-        if (thread) {
-            console.log(' addMessage: Suppress thread message in non-thread table ' + message.uri.slice(-10))
-            return // supress thread messages in body
-        } else {
-            console.log(' addMessage: Normal non-thread message in non-thread table ' + message.uri.slice(-10))
-        }
+      if (thread) {
+        debug.log(' addMessage: Suppress thread message in non-thread table ' + message.uri.slice(-10))
+        return // supress thread messages in body
+      } else {
+        debug.log(' addMessage: Normal non-thread message in non-thread table ' + message.uri.slice(-10))
+      }
     }
 
     await insertMessageIntoTable(channelObject,
@@ -328,7 +328,7 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
     }
 
     function setScrollForwardButtonIcon () {
-      if (!scrollForwardButton) return;
+      if (!scrollForwardButton) return
       const sense = messageTable.extendedForwards ? !newestFirst : newestFirst // noun_T-Block_1114657_000000.svg
       const scrollForwardIcon = messageTable.final
         ? 'noun_T-Block_1114657_000000.svg'
@@ -367,9 +367,9 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
     const userContext = { dom, statusArea, div: statusArea } // logged on state, pointers to user's stuff
 
 */
-    console.log('Options for called message Area', options)
+    debug.log('Options for called message Area', options)
     const messageTable = dom.createElement('table')
-    messageTable.style.width = "100%" // fill the pane div
+    messageTable.style.width = '100%' // fill the pane div
     messageTable.extendBackwards = extendBackwards // Make function available to scroll stuff
     messageTable.extendForwards = extendForwards // Make function available to scroll stuff
 
@@ -395,7 +395,8 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
     /// ///// Infinite scroll
     //
     // @@ listen for swipe past end event not just button
-    if (true) { // ws options.infinite but need for non-infinite
+    const test = true
+    if (test) { // ws options.infinite but need for non-infinite
       const titleTR = dom.createElement('tr')
       const scrollBackbuttonCell = titleTR.appendChild(
         dom.createElement('td')
@@ -427,9 +428,9 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
         dom.createElement('td')
       )
       if (options.includeRemoveButton) {
-          scrollForwardButtonCell.appendChild(widgets.cancelButton(dom, _e => {
-              div.parentNode.removeChild(div)
-          }))
+        scrollForwardButtonCell.appendChild(widgets.cancelButton(dom, _e => {
+          div.parentNode.removeChild(div)
+        }))
       }
       /*
       const scrollForwardIcon = newestFirst
@@ -467,7 +468,7 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
       // messageTable.style.visibility = 'collapse' // Hide files with no messages
     }
     for (const st of sts) {
-        await addMessage(st.object, messageTable)
+      await addMessage(st.object, messageTable)
     }
     messageTable.fresh = true
 
@@ -565,12 +566,12 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
       // user's DOM tree, then this scrollTop check won't work -> loop forever
       // https://github.com/solidos/solid-ui/issues/366
       if (div.scrollHeight === 0) {
-        // console.log('    chat/loadMoreWhereNeeded: trying later...')
+        // debug.log('    chat/loadMoreWhereNeeded: trying later...')
         setTimeout(loadMoreWhereNeeded, 2000) // couple be less
         lock = false
         return // abandon now, do later
       }
-      // console.log('    chat/loadMoreWhereNeeded: Going now')
+      // debug.log('    chat/loadMoreWhereNeeded: Going now')
       const scrollBottom = div.scrollHeight - div.scrollTop
       debug.log('infinite scroll: adding above: top ' + div.scrollTop)
       done = await earliest.messageTable.extendBackwards()
