@@ -130,7 +130,7 @@ export function thread (dom, kb, subject, messageStore, options) {
 
       field.addEventListener(
         'keyup',
-        async function (_e) {
+        async function (e) {
           // User preference?
           if (e.keyCode === 13) {
             if (!e.altKey) {

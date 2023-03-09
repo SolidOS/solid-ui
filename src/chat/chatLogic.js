@@ -69,10 +69,10 @@ export class ChatChannel {
       sts.push($rdf.st(message, ns.foaf('maker'), me, chatDocument))
     }
     if (thread) {
-        sts.push($rdf.st(thread, ns.sioc('has_member'), message, chatDocument))
-        if (!thread.doc().sameTerm(message.doc())) {
-            sts.push($rdf.st(thread, ns.sioc('has_member'), message, thread.doc()))
-        }
+      sts.push($rdf.st(thread, ns.sioc('has_member'), message, chatDocument))
+      if (!thread.doc().sameTerm(message.doc())) {
+        sts.push($rdf.st(thread, ns.sioc('has_member'), message, thread.doc()))
+      }
     }
     try {
       await store.updater.updateMany([], sts)
@@ -97,40 +97,40 @@ export class ChatChannel {
   //  or returns one which already exists
 
   async createThread (threadRoot) {
-      const already = store.each(threadRoot, ns.sioc('has_reply'), null, threadRoot.doc())
-        .filter(thread => store.holds(thread, ns.rdf('type'), ns.sioc('Thread'), thread.doc()))
-      if (already.length > 0) return already[0]
+    const already = store.each(threadRoot, ns.sioc('has_reply'), null, threadRoot.doc())
+      .filter(thread => store.holds(thread, ns.rdf('type'), ns.sioc('Thread'), thread.doc()))
+    if (already.length > 0) return already[0]
 
-      const thread = $rdf.sym(threadRoot.uri + '-thread')
-      const insert = [
-          $rdf.st(thread, ns.rdf('type'), ns.sioc('Thread'), thread.doc()),
-          $rdf.st(threadRoot, ns.sioc('has_reply'), thread, thread.doc()),
-      ];
-      await store.updater.update([], insert)
-      return thread
+    const thread = $rdf.sym(threadRoot.uri + '-thread')
+    const insert = [
+      $rdf.st(thread, ns.rdf('type'), ns.sioc('Thread'), thread.doc()),
+      $rdf.st(threadRoot, ns.sioc('has_reply'), thread, thread.doc())
+    ]
+    await store.updater.update([], insert)
+    return thread
   }
 } // class ChatChannel
 
-//////////// Utility functons
+// ////////// Utility functions
 
 export async function allVersions (message) {
-    let versions = [ message ]
-    let m = message
-    while (true) { // earlier?
-        const prev = store.any(null, ns.dct('isReplacedBy'), m, m.doc())
-        if (!prev) break
-        await store.fetcher.load(prev)
-        versions.unshift(prev)
-        m = prev
-    }
-    m = message
-    while (true) { // later?
-        const next = store.any(m, ns.dct('isReplacedBy'), null, m.doc())
-        if (!next) break
-        versions.push(next)
-        m = next
-    }
-    return versions
+  const versions = [message]
+  let m = message
+  while (true) { // earlier?
+    const prev = store.any(null, ns.dct('isReplacedBy'), m, m.doc())
+    if (!prev) break
+    await store.fetcher.load(prev)
+    versions.unshift(prev)
+    m = prev
+  }
+  m = message
+  while (true) { // later?
+    const next = store.any(m, ns.dct('isReplacedBy'), null, m.doc())
+    if (!next) break
+    versions.push(next)
+    m = next
+  }
+  return versions
 }
 
 export async function originalVersion (message) {

@@ -127,7 +127,6 @@ export async function sentimentStripLinked (target, doc) {
  * Creates a message toolbar component
  */
 export async function messageToolbar (message, messageRow, userContext, channelObject) {
-
   async function deleteMessage () {
     const author = store.any(message, ns.foaf('maker'))
     if (!me) {
@@ -163,7 +162,6 @@ export async function messageToolbar (message, messageRow, userContext, channelO
     options.showThread(thread, options)
     closeToolbar() // a one-off action
   }
-
 
   // alain: TODO allow chat owner to fully delete message + sentiments and replacing messages
 
@@ -305,9 +303,9 @@ export async function messageToolbar (message, messageRow, userContext, channelO
   // Reply buttton
 
   if (store.any(message, ns.dct('created'))) { // Looks like a messsage? Bar can be used for other things
-      div.appendChild(widgets.button(dom, icons.iconBase + REPLY_ICON, 'Reply in thread', async () => {
-          await replyInThread()
-      }))
+    div.appendChild(widgets.button(dom, icons.iconBase + REPLY_ICON, 'Reply in thread', async () => {
+      await replyInThread()
+    }))
   }
   // X button to remove the tool UI itself
   const cancelButton = div.appendChild(widgets.cancelButton(dom))

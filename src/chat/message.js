@@ -118,23 +118,23 @@ export async function renderMessageRow (channelObject, message, fresh, options, 
   // const replies = store.each(latestVersion, ns.sioc('has_reply'))
   const versions = await allVersions(message)
   if (versions.length > 1) {
-      console.log('renderMessageRow versions: ', versions.join(',  '))
+    debug.log('renderMessageRow versions: ', versions.join(',  '))
   }
   // be tolerant in accepting replies on any version of a message
   const replies = versions.map(version => store.each(version, ns.sioc('has_reply'))).flat()
 
   let thread = null
-  let straightReplies = []
+  const straightReplies = []
   for (const reply of replies) {
-      if (store.holds(reply, ns.rdf('type'), ns.sioc('Thread'))) {
-          thread = reply
-          console.log('renderMessageRow: found thread: ' + thread)
-      } else {
-          straightReplies.push(reply)
-      }
+    if (store.holds(reply, ns.rdf('type'), ns.sioc('Thread'))) {
+      thread = reply
+      debug.log('renderMessageRow: found thread: ' + thread)
+    } else {
+      straightReplies.push(reply)
+    }
   }
   if (straightReplies.length > 1) {
-      console.log('renderMessageRow: found normal replies: ', straightReplies)
+    debug.log('renderMessageRow: found normal replies: ', straightReplies)
   }
 
   const originalMessage = await originalVersion(message)
@@ -251,17 +251,17 @@ export async function renderMessageRow (channelObject, message, fresh, options, 
     toolsTR.appendChild(dom.createElement('td')) // right
     toolsTD.appendChild(tools)
   })
-  if (thread  && options.showThread) {
-      console.log('  message has thread ' + thread)
-      td3.appendChild(widgets.button(
-        dom,
-        icons.iconBase + 'noun_1180164.svg', // right arrow .. @@ think of stg better
-        'see thread',
-        _e => {
-            console.log('@@@@ Calling showThread thread ' + thread)
-             options.showThread(thread, options)
-          }
-      ))
+  if (thread && options.showThread) {
+    debug.log('  message has thread ' + thread)
+    td3.appendChild(widgets.button(
+      dom,
+      icons.iconBase + 'noun_1180164.svg', // right arrow .. @@ think of stg better
+      'see thread',
+      _e => {
+        debug.log('@@@@ Calling showThread thread ' + thread)
+        options.showThread(thread, options)
+      }
+    ))
   }
   return messageRow
 }
@@ -490,7 +490,7 @@ export function renderMessageEditor (channelObject, messageTable, userContext, o
     turnOnInput()
     Object.assign(context, userContext)
     findBookmarkDocument(context).then(_context => {
-      // console.log('Bookmark file: ' + context.bookmarkDocument)
+      // debug.log('Bookmark file: ' + context.bookmarkDocument)
     })
   })
 
