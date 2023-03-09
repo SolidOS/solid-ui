@@ -180,12 +180,18 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
   }
 
   /* Add a new messageTable at the top/bottom
+
    */
   async function insertPreviousMessages (backwards) {
     const extremity = backwards ? earliest : latest
     let date = extremity.messageTable.date // day in mssecs
 
+    // Are we at the top of a thread?
+    if (backwards && earliest.limit && date <= earliest.limit) {
+        return true // done
+    }
     date = await dateFolder.loadPrevious(date, backwards) // backwards
+
     debug.log(
       `insertPreviousMessages: from ${
         backwards ? 'backwards' : 'forwards'
@@ -297,15 +303,6 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
       }
     }
 
-    async function scrollBackbuttonHandler (_event) {
-      if (messageTable.extendedBack) {
-        removePreviousMessages(true, messageTable)
-        messageTable.extendedBack = false
-        setScrollBackbuttonIcon()
-      } else {
-        await extendBackwards()
-      }
-    }
 
     /// ////////////// Scroll up adding more below
 
@@ -667,6 +664,18 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
   let liveMessageTable
   const earliest = { messageTable: null } // Stuff about each end of the loaded days
   const latest = { messageTable: null }
+
+  if (options.thread) {
+      const thread = options.thread
+      const threadRootMessage = store.any(null, ns.sioc('has_reply'), thread, thread.doc())
+      if (threadRootMessage) {
+          const threadTime = store.any(threadRootMessage, ns.dct('created'), null, threadRootMessage.doc())
+          if (threadTime) {
+              earliest.limit = new Date(threadTime.value)
+              console.log(' inifinite: thread start at ' + earliest.limit)
+          }
+      }
+  }
 
   let lock = false
 
