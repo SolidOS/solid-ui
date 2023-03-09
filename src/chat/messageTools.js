@@ -19,7 +19,7 @@ import * as widgets from '../widgets'
 import { renderBookmarksButton } from './bookmarks'
 import { authn, store } from 'solid-logic'
 
-import { mostRecentVersion } from './chatLogic'
+import { allVersions, mostRecentVersion, isDeleted } from './chatLogic'
 import { switchToEditor } from './message'
 
 const dom = window.document
@@ -38,22 +38,48 @@ const REPLY_ICON = 'noun-reply-5506924.svg'
 /**
  * Emoji in Unicode
  */
-const emoji = {}
-emoji[ns.schema('AgreeAction')] = '👍'
-emoji[ns.schema('DisagreeAction')] = '👎'
-emoji[ns.schema('EndorseAction')] = '⭐️'
-emoji[ns.schema('LikeAction')] = '❤️'
+const emojiMap = {}
+emojiMap[ns.schema('AgreeAction')] = '👍'
+emojiMap[ns.schema('DisagreeAction')] = '👎'
+emojiMap[ns.schema('EndorseAction')] = '⭐️'
+emojiMap[ns.schema('LikeAction')] = '❤️'
+
+export function emojiFromActionClass (action) {
+    return emojiMap[action] || null
+}
+
+export function ActionClassFromEmoji (emoji) {
+    for (a in emojiMap) {
+        if (emojiMap[a] === emoji) {
+            return $rdf.sym(a.slice(1, -1)) // remove < >
+        }
+    }
+    return null
+}
+
+// Allow the qction to give its own emoji as content,
+// or get the emoji from the class lof action.
+export function emojiFromAction (action) {
+    const content =store.any(action, ns.sioc('content'), null, action.doc())
+    if (content) return content
+    const klass =store.any(action, ns.rdf('type'), null, action.doc())
+    if (klass) {
+        const em = emojiFromActionClass(klass);
+        if (em) return em;
+    }
+    return '⬜️'
+}
 
 /**
  * Create strip of sentiments expressed
  */
 export async function sentimentStrip (target, doc) { // alain seems not used
-  const latest = await mostRecentVersion(target)
-  const actions = store.holds(latest, ns.schema('dateDeleted').value, null, latest.doc()) ? store.each(null, ns.schema('target'), target, doc) : []
-  const sentiments = actions.map(a => store.any(a, ns.rdf('type'), null, doc))
-  sentiments.sort()
-  const strings = sentiments.map(x => emoji[x] || '')
-  return dom.createTextNode(strings.join(' '))
+    const versions = await allVersions(target)
+    console.log('sentimentStrip Versions for ' + target, versions)
+    const actions = versions.map(version => store.each(null, ns.schema('target'), version, doc)).flat()
+    console.log('sentimentStrip: Actions for ' + target, actions)
+    const strings = sentiments.map(action => emojiFromAction(action) || '')
+    return dom.createTextNode(strings.join(' '))
 }
 /**
  * Create strip of sentiments expressed, with hyperlinks
@@ -65,14 +91,21 @@ export async function sentimentStripLinked (target, doc) {
   const strip = dom.createElement('span')
   async function refresh () {
     strip.innerHTML = ''
-    const actions = (await mostRecentVersion(target).uri !== ns.schema('dateDeleted').uri) ? store.each(null, ns.schema('target'), target, doc) : []
+    if (isDeleted(target)) return strip
+    const versions = await allVersions(target)
+    console.log('sentimentStripLinked: Versions for ' + target, versions)
+    const actions = versions.map(version => store.each(null, ns.schema('target'), version, doc)).flat()
+    console.log('sentimentStripLinked: Actions for ' + target, actions)
+    if (actions.length == 0) return strip
     const sentiments = actions.map(a => [
       store.any(a, ns.rdf('type'), null, doc),
+      store.any(a, ns.sioc('content'), null, doc),
       store.any(a, ns.schema('agent'), null, doc)
     ])
+    console.log('  Actions sentiments ', sentiments)
     sentiments.sort()
     sentiments.forEach(ss => {
-      const [theClass, agent] = ss
+      const [theClass, content, agent] = ss
       let res
       if (agent) {
         res = dom.createElement('a')
@@ -80,11 +113,13 @@ export async function sentimentStripLinked (target, doc) {
       } else {
         res = dom.createTextNode('')
       }
-      res.textContent = emoji[theClass] || '*'
+      res.textContent = content || emojiMap[theClass] || '⬜️'
       strip.appendChild(res)
     })
+    console.log('  Actions strip ', strip)
+
   }
-  refresh().then(console.log('sentimentStripLinked async refreshed'))
+  refresh().then(console.log('sentimentStripLinked: sentimentStripLinked async refreshed'))
   strip.refresh = refresh
   return strip
 }
