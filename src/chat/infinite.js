@@ -616,16 +616,24 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
       }
     }
 
-    let live, selectedDocument
+    let live, selectedDocument, threadRootDocument
     if (options.selectedMessage) {
-      selectedDocument = options.selectedMessage.doc()
+        selectedDocument = options.selectedMessage.doc()
+    }
+    if (threadRootMessage) {
+        threadRootDocument = threadRootMessage.doc()
+    }
+    const initialDocment = selectedDocument || threadRootDocument
+
+    if (initialDocment) {
       const now = new Date()
       const todayDocument = dateFolder.leafDocumentFromDate(now)
-      live = todayDocument.sameTerm(selectedDocument)
+      live = todayDocument.sameTerm(initialDocment)
     }
+
     let selectedMessageTable
-    if (options.selectedMessage && !live) {
-      const selectedDate = dateFolder.dateFromLeafDocument(selectedDocument)
+    if (initialDocment && !live) {
+      const selectedDate = dateFolder.dateFromLeafDocument(initialDocment)
       selectedMessageTable = await createMessageTable(selectedDate, live)
       div.appendChild(selectedMessageTable)
       earliest.messageTable = selectedMessageTable
@@ -662,12 +670,13 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
   const userContext = { dom, statusArea, div: statusArea } // logged on state, pointers to user's stuff
 
   let liveMessageTable
+  let threadRootMessage
   const earliest = { messageTable: null } // Stuff about each end of the loaded days
   const latest = { messageTable: null }
 
   if (options.thread) {
       const thread = options.thread
-      const threadRootMessage = store.any(null, ns.sioc('has_reply'), thread, thread.doc())
+      threadRootMessage = store.any(null, ns.sioc('has_reply'), thread, thread.doc())
       if (threadRootMessage) {
           const threadTime = store.any(threadRootMessage, ns.dct('created'), null, threadRootMessage.doc())
           if (threadTime) {
