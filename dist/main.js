@@ -7155,7 +7155,7 @@ function renderSignInPopup(dom) {
   issuerPopupBoxTopMenu.appendChild(issuerPopupBoxCloseButton);
   var loginToIssuer = /*#__PURE__*/function () {
     var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(issuerUri) {
-      var preLoginRedirectHash;
+      var preLoginRedirectHash, locationUrl;
       return _regenerator["default"].wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -7167,23 +7167,25 @@ function renderSignInPopup(dom) {
             }
             window.localStorage.setItem('loginIssuer', issuerUri);
             // Login
-            _context.next = 6;
+            locationUrl = new URL(window.location.href);
+            locationUrl.hash = ''; // remove hash part
+            _context.next = 8;
             return _solidLogic.authSession.login({
-              redirectUrl: window.location.href,
+              redirectUrl: locationUrl.href,
               oidcIssuer: issuerUri
             });
-          case 6:
-            _context.next = 11;
-            break;
           case 8:
-            _context.prev = 8;
+            _context.next = 13;
+            break;
+          case 10:
+            _context.prev = 10;
             _context.t0 = _context["catch"](0);
             (0, _log.alert)(_context.t0.message);
-          case 11:
+          case 13:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[0, 8]]);
+      }, _callee, null, [[0, 10]]);
     }));
     return function loginToIssuer(_x11) {
       return _ref.apply(this, arguments);
@@ -13119,8 +13121,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2023-03-03T08:57:16Z',
-  commit: '6a9639ed3ed2cd0a96d3c6cd7446c3147bfd3582',
+  buildTime: '2023-03-17T08:35:44Z',
+  commit: '30b05927136712a9416d84debb90924567d9b790',
   npmInfo: {
     'solid-ui': '2.4.26',
     npm: '8.19.4',

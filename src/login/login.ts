@@ -513,8 +513,10 @@ export function renderSignInPopup (dom: HTMLDocument) {
       }
       window.localStorage.setItem('loginIssuer', issuerUri)
       // Login
+      const locationUrl = new URL(window.location.href)
+      locationUrl.hash = '' // remove hash part
       await authSession.login({
-        redirectUrl: window.location.href,
+        redirectUrl: locationUrl.href,
         oidcIssuer: issuerUri
       })
     } catch (err) {
