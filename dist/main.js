@@ -13121,10 +13121,10 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2023-03-17T08:35:44Z',
-  commit: '30b05927136712a9416d84debb90924567d9b790',
+  buildTime: '2023-03-17T10:43:05Z',
+  commit: '5b3471ff0bc08942d334b9bc9a6992adcb5cdb6b',
   npmInfo: {
-    'solid-ui': '2.4.26',
+    'solid-ui': '2.4.27',
     npm: '8.19.4',
     node: '16.19.1',
     v8: '9.4.146.26-node.24',
@@ -25559,7 +25559,10 @@ function removeOidcQueryParam(redirectUrl) {
     cleanedUrl.searchParams.delete("code");
     cleanedUrl.searchParams.delete("state");
     cleanedUrl.hash = "";
-    return cleanedUrl.toString();
+    if (redirectUrl.includes(`${cleanedUrl.origin}/`)) {
+        return cleanedUrl.href;
+    }
+    return `${cleanedUrl.origin}${cleanedUrl.href.substring(cleanedUrl.origin.length + 1)}`;
 }
 async function clearOidcPersistentStorage() {
     const client = new _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.OidcClient({
@@ -26227,7 +26230,7 @@ class IssuerConfigFetcher {
     }
     async fetchConfig(issuer) {
         let issuerConfig;
-        const openIdConfigUrl = new URL(exports.WELL_KNOWN_OPENID_CONFIG, issuer).href;
+        const openIdConfigUrl = new URL(exports.WELL_KNOWN_OPENID_CONFIG, issuer.endsWith("/") ? issuer : `${issuer}/`).href;
         const issuerConfigRequestBody = await window.fetch(openIdConfigUrl);
         try {
             issuerConfig = processConfig(await issuerConfigRequestBody.json());
@@ -26404,12 +26407,6 @@ class AuthCodeRedirectHandler {
             webId: tokens.webId,
             isLoggedIn: "true",
         }, { secure: true });
-        url.searchParams.delete("code");
-        await this.storageUtility.setForUser(storedSessionId, {
-            redirectUrl: url.toString(),
-        }, {
-            secure: false,
-        });
         const sessionInfo = await this.sessionInfoManager.get(storedSessionId);
         if (!sessionInfo) {
             throw new Error(`Could not retrieve session: [${storedSessionId}].`);
@@ -52251,7 +52248,6 @@ var BlankNode = /*#__PURE__*/function (_Node) {
     function getId(id) {
       if (id) {
         if (typeof id !== 'string') {
-          console.log('Bad blank id:', id);
           throw new Error('Bad id argument to new blank node: ' + id);
         }
         if (id.includes('#')) {
@@ -53878,7 +53874,7 @@ var Fetcher = /*#__PURE__*/function () {
           size: 0,
           timeout: 0
         };
-        console.log('Fetcher: <' + actualProxyURI + '> Non-HTTP fetch exception: ' + error);
+        // console.log('Fetcher: <' + actualProxyURI + '> Non-HTTP fetch exception: ' + error)
         return _this5.handleError(dummyResponse, docuri, options); // possible credentials retry
         // return this.failFetch(options, 'fetch failed: ' + error, 999, dummyResponse) // Fake status code: fetch exception
 
@@ -53939,25 +53935,21 @@ var Fetcher = /*#__PURE__*/function () {
             if (fetchResponse.ok) {
               userCallback(true, 'OK', fetchResponse);
             } else {
-              // console.log('@@@ fetcher.js Should not take this path !!!!!!!!!!!!')
               var oops = 'HTTP error: Status ' + fetchResponse.status + ' (' + fetchResponse.statusText + ')';
               if (fetchResponse.responseText) {
                 oops += ' ' + fetchResponse.responseText; // not in 404, dns error, nock failure
               }
 
-              console.log(oops + ' fetching ' + uri);
               userCallback(false, oops, fetchResponse);
             }
           } else {
             var _oops = '@@ nowOrWhenFetched:  no response object!';
-            console.log(_oops);
             userCallback(false, _oops);
           }
         }
       }, function (err) {
         var message = err.message || err.statusText;
         message = 'Failed to load  <' + uri + '> ' + message;
-        console.log(message);
         if (err.response && err.response.status) {
           message += ' status: ' + err.response.status;
         }
@@ -54196,45 +54188,42 @@ var Fetcher = /*#__PURE__*/function () {
               return fetcher.load(doc);
             case 6:
               response = _context2.sent;
-              _context2.next = 29;
+              _context2.next = 26;
               break;
             case 9:
               _context2.prev = 9;
               _context2.t0 = _context2["catch"](3);
               if (!(_context2.t0.response.status === 404)) {
-                _context2.next = 27;
+                _context2.next = 25;
                 break;
               }
-              console.log('createIfNotExists: doc does NOT exist, will create... ' + doc);
-              _context2.prev = 13;
-              _context2.next = 16;
+              _context2.prev = 12;
+              _context2.next = 15;
               return fetcher.webOperation('PUT', doc.value, {
                 data: data,
                 contentType: contentType
               });
-            case 16:
+            case 15:
               response = _context2.sent;
-              _context2.next = 23;
+              _context2.next = 21;
               break;
-            case 19:
-              _context2.prev = 19;
-              _context2.t1 = _context2["catch"](13);
-              console.log('createIfNotExists doc FAILED: ' + doc + ': ' + _context2.t1);
+            case 18:
+              _context2.prev = 18;
+              _context2.t1 = _context2["catch"](12);
               throw _context2.t1;
-            case 23:
+            case 21:
               delete fetcher.requested[doc.value]; // delete cached 404 error
               // console.log('createIfNotExists doc created ok ' + doc)
               return _context2.abrupt("return", response);
-            case 27:
-              console.log('createIfNotExists doc load error NOT 404:  ' + doc + ': ' + _context2.t0);
+            case 25:
               throw _context2.t0;
-            case 29:
+            case 26:
               return _context2.abrupt("return", response);
-            case 30:
+            case 27:
             case "end":
               return _context2.stop();
           }
-        }, _callee2, this, [[3, 9], [13, 19]]);
+        }, _callee2, this, [[3, 9], [12, 18]]);
       }));
       function createIfNotExists(_x4) {
         return _createIfNotExists.apply(this, arguments);
@@ -54543,7 +54532,8 @@ var Fetcher = /*#__PURE__*/function () {
   }, {
     key: "retryNoCredentials",
     value: function retryNoCredentials(docuri, options) {
-      console.log('Fetcher: CORS: RETRYING with NO CREDENTIALS for ' + options.resource);
+      // console.log('Fetcher: CORS: RETRYING with NO CREDENTIALS for ' + options.resource)
+
       options.retriedWithNoCredentials = true; // protect against being called twice
 
       delete this.requested[docuri]; // forget the original request happened
@@ -54588,7 +54578,7 @@ var Fetcher = /*#__PURE__*/function () {
         // Now attempt retry via proxy
         var proxyUri = Fetcher.crossSiteProxy(docuri);
         if (proxyUri && !options.proxyUsed) {
-          console.log('web: Direct failed so trying proxy ' + proxyUri);
+          // console.log('web: Direct failed so trying proxy ' + proxyUri)
           return this.redirectToProxy(proxyUri, options);
         }
       }
@@ -54661,7 +54651,7 @@ var Fetcher = /*#__PURE__*/function () {
 
       // Check for masked errors (CORS, etc)
       if (response.status === 0) {
-        console.log('Masked error - status 0 for ' + docuri);
+        // console.log('Masked error - status 0 for ' + docuri)
         return this.handleError(response, docuri, options);
       }
       if (response.status >= 400) {
@@ -55548,7 +55538,6 @@ var Formula = /*#__PURE__*/function (_Node) {
       while (todo.length) {
         follow(todo.shift());
       }
-      // console.log('' + result.length + ' statements about ' + subject)
       return result;
     }
 
@@ -55705,10 +55694,10 @@ var Formula = /*#__PURE__*/function (_Node) {
       var statementsCopy = this.statements.map(function (ea) {
         return ea.substitute(bindings);
       });
-      console.log('Formula subs statmnts:' + statementsCopy);
+      // console.log('Formula subs statmnts:' + statementsCopy)
       var y = new Formula();
       y.addAll(statementsCopy);
-      console.log('indexed-form subs formula:' + y);
+      // console.log('indexed-form subs formula:' + y)
       return y;
     }
   }, {
@@ -58520,7 +58509,6 @@ var Node = /*#__PURE__*/function () {
   (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(Node, [{
     key: "substitute",
     value: function substitute(bindings) {
-      console.log('@@@ node substitute' + this);
       return this;
     }
 
@@ -62931,7 +62919,7 @@ var Statement = /*#__PURE__*/function () {
     key: "substitute",
     value: function substitute(bindings) {
       var y = new Statement(this.subject.substitute(bindings), this.predicate.substitute(bindings), this.object.substitute(bindings), (0,_default_graph__WEBPACK_IMPORTED_MODULE_3__.isDefaultGraph)(this.graph) ? this.graph : this.graph.substitute(bindings)); // 2016
-      console.log('@@@ statement substitute:' + y);
+      // console.log('@@@ statement substitute:' + y)
       return y;
     }
 
@@ -67056,7 +67044,7 @@ var SolidAuthnLogic = /** @class */ (function () {
      */
     SolidAuthnLogic.prototype.checkUser = function (setUserCallback) {
         return __awaiter(this, void 0, void 0, function () {
-            var preLoginRedirectHash, postLoginRedirectHash, curUrl, me, webId;
+            var preLoginRedirectHash, redirectUrl, postLoginRedirectHash, curUrl, me, webId;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -67068,20 +67056,16 @@ var SolidAuthnLogic = /** @class */ (function () {
                             if (document.location.toString() !== url)
                                 history.replaceState(null, '', url);
                         });
-                        /**
-                         * Handle a successful authentication redirect
-                         */
+                        redirectUrl = new URL(window.location.href);
+                        redirectUrl.hash = '';
                         return [4 /*yield*/, this.session
                                 .handleIncomingRedirect({
                                 restorePreviousSession: true,
-                                url: window.location.href
+                                url: redirectUrl.href
                             })
                             // Check to see if a hash was stored in local storage
                         ];
                     case 1:
-                        /**
-                         * Handle a successful authentication redirect
-                         */
                         _a.sent();
                         postLoginRedirectHash = window.localStorage.getItem('preLoginRedirectHash');
                         if (postLoginRedirectHash) {
@@ -75181,33 +75165,21 @@ class RemoteJWKSet extends _local_js__WEBPACK_IMPORTED_MODULE_3__.LocalJWKSet {
     }
     async reload() {
         if (this._pendingFetch && (0,_runtime_env_js__WEBPACK_IMPORTED_MODULE_1__.isCloudflareWorkers)()) {
-            return new Promise((resolve) => {
-                const isDone = () => {
-                    if (this._pendingFetch === undefined) {
-                        resolve();
-                    }
-                    else {
-                        setTimeout(isDone, 5);
-                    }
-                };
-                isDone();
-            });
+            this._pendingFetch = undefined;
         }
-        if (!this._pendingFetch) {
-            this._pendingFetch = (0,_runtime_fetch_jwks_js__WEBPACK_IMPORTED_MODULE_0__["default"])(this._url, this._timeoutDuration, this._options)
-                .then((json) => {
-                if (!(0,_local_js__WEBPACK_IMPORTED_MODULE_3__.isJWKSLike)(json)) {
-                    throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWKSInvalid('JSON Web Key Set malformed');
-                }
-                this._jwks = { keys: json.keys };
-                this._jwksTimestamp = Date.now();
-                this._pendingFetch = undefined;
-            })
-                .catch((err) => {
-                this._pendingFetch = undefined;
-                throw err;
-            });
-        }
+        this._pendingFetch || (this._pendingFetch = (0,_runtime_fetch_jwks_js__WEBPACK_IMPORTED_MODULE_0__["default"])(this._url, this._timeoutDuration, this._options)
+            .then((json) => {
+            if (!(0,_local_js__WEBPACK_IMPORTED_MODULE_3__.isJWKSLike)(json)) {
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWKSInvalid('JSON Web Key Set malformed');
+            }
+            this._jwks = { keys: json.keys };
+            this._jwksTimestamp = Date.now();
+            this._pendingFetch = undefined;
+        })
+            .catch((err) => {
+            this._pendingFetch = undefined;
+            throw err;
+        }));
         await this._pendingFetch;
     }
 }
