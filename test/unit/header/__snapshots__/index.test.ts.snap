@@ -2,25 +2,25 @@
 
 exports[`createBanner check customized logo... 1`] = `
 <div
-  class="header-banner-0-1-84"
+  style="header-banner"
 >
   <a
-    class="header-banner__link-0-1-75"
     href="https://test.com"
+    style="header-banner__link"
   >
     <img
-      class="header-banner__icon-0-1-76"
       src="https://solidproject.org/assets/img/solid-emblem.svg"
+      style="header-banner__icon"
     />
   </a>
   <div
-    class="header-banner__right-menu-0-1-85"
+    style="header-banner__right-menu"
   >
     <div
-      class="header-banner__user-menu-0-1-82 header-user-menu-0-1-83"
+      style="header-user-menu"
     >
       <button
-        class="header-user-menu__trigger-0-1-81"
+        style="header-user-menu__trigger"
         type="button"
       >
         
@@ -86,49 +86,49 @@ exports[`createBanner check customized logo... 1`] = `
       </button>
       <nav
         aria-hidden="true"
-        class="header-user-menu__navigation-menu-0-1-80"
+        style="header-user-menu__navigation-menu"
       >
         <ul
-          class="header-user-menu__list-0-1-77"
+          style="header-user-menu__list"
         >
           <li
-            class="header-user-menu__list-item-0-1-79"
+            style="header-user-menu__list-item"
           >
             <a
-              class="header-user-menu__link-0-1-78"
               href="https://reflectechblog.wordpress.com/"
+              style="header-user-menu__link"
             />
           </li>
         </ul>
       </nav>
     </div>
     <div
-      class="header-banner__user-menu-0-1-90 header-user-menu-0-1-91"
+      style="header-user-menu"
     >
       <nav
         aria-hidden="true"
-        class="header-user-menu__navigation-menu-0-1-89"
+        style="header-user-menu__navigation-menu"
       >
         <ul
-          class="header-user-menu__list-0-1-86"
+          style="header-user-menu__list"
         >
           <li
-            class="header-user-menu__list-item-0-1-88"
+            style="header-user-menu__list-item"
           >
             <a
-              class="header-user-menu__link-0-1-87"
               href="https://reflectechblog.wordpress.com/"
+              style="header-user-menu__link"
             />
           </li>
         </ul>
       </nav>
       <button
-        class="header-user-menu__trigger-0-1-92"
+        style="header-user-menu__trigger"
         type="button"
       >
         <img
-          class="header-banner__help-icon-0-1-93"
           src="https://solidos.github.io/solid-ui/src/icons/https://solidos.github.io/solid-ui/src/icons/noun_help.svg"
+          style="header-banner__help-icon"
         />
       </button>
     </div>
@@ -138,25 +138,25 @@ exports[`createBanner check customized logo... 1`] = `
 
 exports[`createBanner creates a link 1`] = `
 <div
-  class="header-banner-0-1-46"
+  style="header-banner"
 >
   <a
-    class="header-banner__link-0-1-37"
     href="https://test.com"
+    style="header-banner__link"
   >
     <img
-      class="header-banner__icon-0-1-38"
       src="https://solidproject.org/assets/img/solid-emblem.svg"
+      style="header-banner__icon"
     />
   </a>
   <div
-    class="header-banner__right-menu-0-1-47"
+    style="header-banner__right-menu"
   >
     <div
-      class="header-banner__user-menu-0-1-44 header-user-menu-0-1-45"
+      style="header-user-menu"
     >
       <button
-        class="header-user-menu__trigger-0-1-43"
+        style="header-user-menu__trigger"
         type="button"
       >
         
@@ -222,49 +222,49 @@ exports[`createBanner creates a link 1`] = `
       </button>
       <nav
         aria-hidden="true"
-        class="header-user-menu__navigation-menu-0-1-42"
+        style="header-user-menu__navigation-menu"
       >
         <ul
-          class="header-user-menu__list-0-1-39"
+          style="header-user-menu__list"
         >
           <li
-            class="header-user-menu__list-item-0-1-41"
+            style="header-user-menu__list-item"
           >
             <a
-              class="header-user-menu__link-0-1-40"
               href="https://reflectechblog.wordpress.com/"
+              style="header-user-menu__link"
             />
           </li>
         </ul>
       </nav>
     </div>
     <div
-      class="header-banner__user-menu-0-1-52 header-user-menu-0-1-53"
+      style="header-user-menu"
     >
       <nav
         aria-hidden="true"
-        class="header-user-menu__navigation-menu-0-1-51"
+        style="header-user-menu__navigation-menu"
       >
         <ul
-          class="header-user-menu__list-0-1-48"
+          style="header-user-menu__list"
         >
           <li
-            class="header-user-menu__list-item-0-1-50"
+            style="header-user-menu__list-item"
           >
             <a
-              class="header-user-menu__link-0-1-49"
               href="https://reflectechblog.wordpress.com/"
+              style="header-user-menu__link"
             />
           </li>
         </ul>
       </nav>
       <button
-        class="header-user-menu__trigger-0-1-54"
+        style="header-user-menu__trigger"
         type="button"
       >
         <img
-          class="header-banner__help-icon-0-1-55"
           src="https://solidos.github.io/solid-ui/src/icons/https://solidos.github.io/solid-ui/src/icons/noun_help.svg"
+          style="header-banner__help-icon"
         />
       </button>
     </div>
@@ -274,23 +274,23 @@ exports[`createBanner creates a link 1`] = `
 
 exports[`createHelpMenu creates a menu.... 1`] = `
 <div
-  class="header-banner__user-menu-0-1-25 header-user-menu-0-1-26"
+  style="header-user-menu"
 >
   <nav
     aria-hidden="true"
-    class="header-user-menu__navigation-menu-0-1-24"
+    style="header-user-menu__navigation-menu"
   >
     <ul
-      class="header-user-menu__list-0-1-23"
+      style="header-user-menu__list"
     />
   </nav>
   <button
-    class="header-user-menu__trigger-0-1-27"
+    style="header-user-menu__trigger"
     type="button"
   >
     <img
-      class="header-banner__help-icon-0-1-28"
       src="https://solidos.github.io/solid-ui/src/icons/https://solidos.github.io/solid-ui/src/icons/noun_help.svg"
+      style="header-banner__help-icon"
     />
   </button>
 </div>
@@ -298,7 +298,7 @@ exports[`createHelpMenu creates a menu.... 1`] = `
 
 exports[`createLoginSignUpButtons creates div 1`] = `
 <div
-  class="header-banner__login-0-1-1"
+  style="header-banner__login"
 >
   <div>
     <div
@@ -322,10 +322,10 @@ exports[`createLoginSignUpButtons creates div 1`] = `
 
 exports[`createUserMenu creates a menu.... 1`] = `
 <div
-  class="header-banner__user-menu-0-1-14 header-user-menu-0-1-15"
+  style="header-user-menu"
 >
   <button
-    class="header-user-menu__trigger-0-1-13"
+    style="header-user-menu__trigger"
     type="button"
   >
     
@@ -391,17 +391,17 @@ exports[`createUserMenu creates a menu.... 1`] = `
   </button>
   <nav
     aria-hidden="true"
-    class="header-user-menu__navigation-menu-0-1-12"
+    style="header-user-menu__navigation-menu"
   >
     <ul
-      class="header-user-menu__list-0-1-9"
+      style="header-user-menu__list"
     >
       <li
-        class="header-user-menu__list-item-0-1-11"
+        style="header-user-menu__list-item"
       >
         <a
-          class="header-user-menu__link-0-1-10"
           href="https://reflectechblog.wordpress.com/"
+          style="header-user-menu__link"
         />
       </li>
     </ul>
@@ -411,13 +411,13 @@ exports[`createUserMenu creates a menu.... 1`] = `
 
 exports[`createUserMenuButton creates a button 1`] = `
 <button
-  class="header-user-menu__button-0-1-3"
+  style="header-user-menu__button"
 />
 `;
 
 exports[`createUserMenuItem creates a link 1`] = `
 <li
-  class="header-user-menu__list-item-0-1-7"
+  style="header-user-menu__list-item"
 >
   <ul />
 </li>
@@ -425,8 +425,8 @@ exports[`createUserMenuItem creates a link 1`] = `
 
 exports[`createUserMenuLink creates a link 1`] = `
 <a
-  class="header-user-menu__link-0-1-5"
   href="http://www.test.com"
+  style="header-user-menu__link"
 />
 `;
 
