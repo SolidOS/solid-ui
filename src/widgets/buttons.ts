@@ -6,7 +6,6 @@ import * as ns from '../ns'
 import * as style from '../style'
 import * as debug from '../debug'
 import { info } from '../log'
-import { getClasses } from '../jss'
 import { uploadFiles, makeDraggable, makeDropTarget } from './dragAndDrop'
 import { store } from 'solid-logic'
 import * as utils from '../utils'
@@ -541,48 +540,6 @@ export function deleteButtonWithCheck (
   return deleteButton // or button div?  caller may change size of image
 }
 
-/**
- * Get the button style, based on options.
- * See https://design.inrupt.com/atomic-core/?cat=Atoms#Buttons
- */
-function getButtonStyle (options: ButtonWidgetOptions = {}) {
-  // default to primary color
-  const color: string = (options.buttonColor === 'Secondary') ? '#01c9ea' : '#7c4dff'
-  let backgroundColor: string = color
-  let fontColor: string = '#ffffff'
-  let borderColor: string = color
-  // default to primary color
-  let hoverBackgroundColor: string = (options.buttonColor === 'Secondary') ? '#37cde6' : '#9f7dff'
-  let hoverFontColor: string = fontColor
-  if (options.needsBorder) {
-    backgroundColor = '#ffffff'
-    fontColor = color
-    borderColor = color
-    hoverBackgroundColor = color
-    hoverFontColor = backgroundColor
-  }
-
-  return {
-    'background-color': `${backgroundColor}`,
-    color: `${fontColor}`,
-    'font-family': 'Raleway, Roboto, sans-serif',
-    'border-radius': '0.25em',
-    'border-color': `${borderColor}`,
-    border: '1px solid',
-    cursor: 'pointer',
-    'font-size': '.8em',
-    'text-decoration': 'none',
-    padding: '0.5em 4em',
-    transition: '0.25s all ease-in-out',
-    outline: 'none',
-    '&:hover': {
-      'background-color': `${hoverBackgroundColor}`,
-      color: `${hoverFontColor}`,
-      transition: '0.25s all ease-in-out'
-    }
-  }
-}
-
 /*  Make a button
  *
  * @param dom - the DOM document object
@@ -606,12 +563,8 @@ export function button (dom: HTMLDocument, iconURI: string | undefined, text: st
     button.setAttribute('style', style.buttonStyle)
   } else {
     button.textContent = text.toLocaleUpperCase()
-    const style = getButtonStyle(options)
-    const { classes } = getClasses(dom.head, {
-      textButton: style
-    })
 
-    button.classList.add(classes.textButton)
+    button.setAttribute('style', style.getButtonStyle(options))
   }
   if (handler) {
     button.addEventListener('click', handler, false)

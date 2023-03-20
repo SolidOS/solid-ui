@@ -285,6 +285,48 @@ export const style = { // styleModule
   }
 }
 
+/**
+ * Get the button style, based on options.
+ * See https://design.inrupt.com/atomic-core/?cat=Atoms#Buttons
+ */
+style.getButtonStyle = function getButtonStyle (options = {}) {
+  // default to primary color
+  const color = (options.buttonColor === 'Secondary') ? '#01c9ea' : '#7c4dff'
+  let backgroundColor = color
+  let fontColor = '#ffffff'
+  let borderColor = color
+  // default to primary color
+  let hoverBackgroundColor = (options.buttonColor === 'Secondary') ? '#37cde6' : '#9f7dff'
+  let hoverFontColor = fontColor
+  if (options.needsBorder) {
+    backgroundColor = '#ffffff'
+    fontColor = color
+    borderColor = color
+    hoverBackgroundColor = color
+    hoverFontColor = backgroundColor
+  }
+
+  return {
+    'background-color': `${backgroundColor}`,
+    color: `${fontColor}`,
+    'font-family': 'Raleway, Roboto, sans-serif',
+    'border-radius': '0.25em',
+    'border-color': `${borderColor}`,
+    border: '1px solid',
+    cursor: 'pointer',
+    'font-size': '.8em',
+    'text-decoration': 'none',
+    padding: '0.5em 4em',
+    transition: '0.25s all ease-in-out',
+    outline: 'none',
+    '&:hover': {
+      'background-color': `${hoverBackgroundColor}`,
+      color: `${hoverFontColor}`,
+      transition: '0.25s all ease-in-out'
+    }
+  }
+}
+
 style.setStyle = function setStyle (ele, styleName) {
   ele.style = style[styleName]
 }

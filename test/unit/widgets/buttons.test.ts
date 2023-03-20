@@ -128,13 +128,6 @@ describe('button', () => {
     const handler = () => {}
     expect(button(domWithHead(), iconURI, text, handler)).toBeTruthy()
   })
-  it('has the style class from JSS', () => {
-    const iconURI = ''
-    const text = 'txt'
-    const handler = () => {}
-    const buttonElt = button(domWithHead(), iconURI, text, handler)
-    expect(buttonElt.classList[0]).toEqual(expect.stringMatching(/^textButton-\d-\d-\d$/))
-  })
   it('calls the callback when you click it', (done) => {
     const iconURI = ''
     const text = 'txt'
