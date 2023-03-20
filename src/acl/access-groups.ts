@@ -12,6 +12,7 @@ import { AccessController } from './access-controller'
 import { AgentMapMap, ComboList, PartialAgentTriple } from './types'
 import { AddAgentButtons } from './add-agent-buttons'
 import * as debug from '../debug'
+import * as style from '../style'
 
 const ACL = ns.acl
 
@@ -73,7 +74,7 @@ export class AccessGroups {
     this.byCombo = ACLbyCombination(this.aclMap)
     this.addAgentButton = new AddAgentButtons(this)
     this.rootElement = this.controller.dom.createElement('div')
-    this.rootElement.classList.add(this.controller.classes.accessGroupList)
+    this.rootElement.setAttribute('style', style.accessGroupList)
   }
 
   public get store () {
@@ -108,7 +109,7 @@ export class AccessGroups {
 
   private renderGroup (comboIndex: number, combo: string): HTMLElement {
     const groupRow = this.controller.dom.createElement('div')
-    groupRow.classList.add(this.controller.classes.accessGroupListItem)
+    groupRow.setAttribute('style', style.accessGroupListItem)
     widgets.makeDropTarget(groupRow, (uris) => this.handleDroppedUris(uris, combo)
       .then(() => this.controller.render())
       .catch(error => this.controller.renderStatus(error)))
@@ -119,13 +120,17 @@ export class AccessGroups {
 
   private renderGroupElements (comboIndex, combo): HTMLElement[] {
     const groupNameColumn = this.controller.dom.createElement('div')
-    groupNameColumn.classList.add(this.controller.classes.group)
-    groupNameColumn.classList.toggle(this.controller.classes[`group-${comboIndex}`], this.controller.isEditable)
+    groupNameColumn.setAttribute('style', style.group)
+    if (this.controller.isEditable) {
+      groupNameColumn.setAttribute('style', `group-${comboIndex}`)
+    }
     groupNameColumn.innerText = COLLOQUIAL[comboIndex] || ktToList(comboIndex)
 
     const groupAgentsColumn = this.controller.dom.createElement('div')
-    groupAgentsColumn.classList.add(this.controller.classes.group)
-    groupAgentsColumn.classList.toggle(this.controller.classes[`group-${comboIndex}`], this.controller.isEditable)
+    groupAgentsColumn.setAttribute('style', style.group)
+    if (this.controller.isEditable) {
+      groupAgentsColumn.setAttribute('style', `group-${comboIndex}`)
+    }
     const groupAgentsTable = groupAgentsColumn.appendChild(this.controller.dom.createElement('table'))
     const combos = this.byCombo[combo] || []
     combos
@@ -133,8 +138,10 @@ export class AccessGroups {
       .forEach(agentElement => groupAgentsTable.appendChild(agentElement))
 
     const groupDescriptionElement = this.controller.dom.createElement('div')
-    groupDescriptionElement.classList.add(this.controller.classes.group)
-    groupDescriptionElement.classList.toggle(this.controller.classes[`group-${comboIndex}`], this.controller.isEditable)
+    groupDescriptionElement.setAttribute('style', style.group)
+    if (this.controller.isEditable) {
+      groupDescriptionElement.setAttribute('style', `group-${comboIndex}`)
+    }
     groupDescriptionElement.innerText = EXPLANATION[comboIndex] || 'Unusual combination'
 
     return [groupNameColumn, groupAgentsColumn, groupDescriptionElement]

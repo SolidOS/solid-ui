@@ -10,6 +10,7 @@ import { DataBrowserContext } from 'pane-registry'
 import { shortNameForFolder } from './acl-control'
 import * as utils from '../utils'
 import * as debug from '../debug'
+import * as style from '../style'
 
 /**
  * Rendered HTML component used in the databrowser's Sharing pane.
@@ -19,7 +20,7 @@ export class AccessController {
   public defaultsCombo: AccessGroups | null
   private readonly isContainer: boolean
   private defaultsDiffer: boolean
-  private readonly rootElement: HTMLElement
+  private readonly rootElement: HTMLDivElement
   private isUsingDefaults: boolean
 
   constructor (
@@ -27,7 +28,6 @@ export class AccessController {
     public noun: string,
     public context: DataBrowserContext,
     private statusElement: HTMLElement,
-    public classes: Record<string, string>,
     public targetIsProtected: boolean,
     private targetDoc: NamedNode,
     private targetACLDoc: NamedNode,
@@ -35,10 +35,10 @@ export class AccessController {
     private defaultACLDoc: NamedNode | null,
     private prospectiveDefaultHolder: NamedNode | undefined,
     public store,
-    public dom
+    public dom: HTMLDocument
   ) {
     this.rootElement = dom.createElement('div')
-    this.rootElement.classList.add(classes.aclGroupContent)
+    this.rootElement.setAttribute('style', style.aclGroupContent)
     this.isContainer = targetDoc.uri.slice(-1) === '/' // Give default for all directories
     if (defaultHolder && defaultACLDoc) {
       this.isUsingDefaults = true
@@ -90,7 +90,7 @@ export class AccessController {
   private renderRemoveAclsController (): HTMLElement {
     const useDefaultButton = this.dom.createElement('button')
     useDefaultButton.innerText = `Remove custom sharing settings for this ${this.noun} -- just use default${this.prospectiveDefaultHolder ? ` for ${utils.label(this.prospectiveDefaultHolder)}` : ''}`
-    useDefaultButton.classList.add(this.classes.bigButton)
+    useDefaultButton.setAttribute('style', style.bigButton)
     useDefaultButton.addEventListener('click', () => this.removeAcls()
       .then(() => this.render())
       .catch(error => this.renderStatus(error)))
@@ -100,7 +100,7 @@ export class AccessController {
   private renderAddAclsController (): HTMLElement {
     const addAclButton = this.dom.createElement('button')
     addAclButton.innerText = `Set specific sharing for this ${this.noun}`
-    addAclButton.classList.add(this.classes.bigButton)
+    addAclButton.setAttribute('style', style.bigButton)
     addAclButton.addEventListener('click', () => this.addAcls()
       .then(() => this.render())
       .catch(error => this.renderStatus(error)))
@@ -109,15 +109,15 @@ export class AccessController {
 
   private renderAddDefaultsController (): HTMLElement {
     const containerElement = this.dom.createElement('div')
-    containerElement.classList.add(this.classes.defaultsController)
+    containerElement.setAttribute('style', style.defaultsController)
 
     const noticeElement = containerElement.appendChild(this.dom.createElement('div'))
     noticeElement.innerText = 'Sharing for things within the folder currently tracks sharing for the folder.'
-    noticeElement.classList.add(this.classes.defaultsControllerNotice)
+    noticeElement.setAttribute('style', style.defaultsControllerNotice)
 
     const button = containerElement.appendChild(this.dom.createElement('button'))
     button.innerText = 'Set the sharing of folder contents separately from the sharing for the folder'
-    button.classList.add(this.classes.bigButton)
+    button.setAttribute('style', style.bigButton)
     button.addEventListener('click', () => this.addDefaults()
       .then(() => this.render()))
     return containerElement
@@ -125,15 +125,15 @@ export class AccessController {
 
   private renderRemoveDefaultsController (): HTMLElement {
     const containerElement = this.dom.createElement('div')
-    containerElement.classList.add(this.classes.defaultsController)
+    containerElement.setAttribute('style', style.defaultsController)
 
     const noticeElement = containerElement.appendChild(this.dom.createElement('div'))
     noticeElement.innerText = 'Access to things within this folder:'
-    noticeElement.classList.add(this.classes.defaultsControllerNotice)
+    noticeElement.setAttribute('style', style.defaultsControllerNotice)
 
     const button = containerElement.appendChild(this.dom.createElement('button'))
     button.innerText = 'Set default for folder contents to just track the sharing for the folder'
-    button.classList.add(this.classes.bigButton)
+    button.setAttribute('style', style.bigButton)
     button.addEventListener('click', () => this.removeDefaults()
       .then(() => this.render())
       .catch(error => this.renderStatus(error)))
@@ -142,11 +142,11 @@ export class AccessController {
 
   public renderTemporaryStatus (message: string): void {
     // @@ TODO Introduce better system for error notification to user https://github.com/solidos/mashlib/issues/87
-    this.statusElement.classList.add(this.classes.aclControlBoxStatusRevealed)
+    this.statusElement.setAttribute('style', style.aclControlBoxStatusRevealed)
     this.statusElement.innerText = message
-    this.statusElement.classList.add(this.classes.temporaryStatusInit)
+    this.statusElement.setAttribute('style', style.temporaryStatusInit)
     setTimeout(() => {
-      this.statusElement.classList.add(this.classes.temporaryStatusEnd)
+      this.statusElement.setAttribute('style', style.temporaryStatusEnd)
     })
     setTimeout(() => {
       this.statusElement.innerText = ''
@@ -155,7 +155,9 @@ export class AccessController {
 
   public renderStatus (message: string): void {
     // @@ TODO Introduce better system for error notification to user https://github.com/solidos/mashlib/issues/87
-    this.statusElement.classList.toggle(this.classes.aclControlBoxStatusRevealed, !!message)
+    if (!message) {
+      this.statusElement.setAttribute('style', style.aclControlBoxStatusRevealed)
+    }
     this.statusElement.innerText = message
   }
 
