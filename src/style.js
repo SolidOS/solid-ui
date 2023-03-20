@@ -122,22 +122,22 @@ export const style = { // styleModule
   group: {
     color: '#888'
   },
-  'group-1': {
+  group1: {
     color: 'green'
   },
-  'group-2': {
+  group2: {
     color: '#cc0'
   },
-  'group-3': {
+  group3: {
     color: 'orange'
   },
-  'group-5': {
+  group5: {
     color: 'red'
   },
-  'group-9': {
+  group9: {
     color: 'blue'
   },
-  'group-13': {
+  group13: {
     color: 'purple'
   },
   trustedAppAddApplicationsTable: {
@@ -160,9 +160,9 @@ export const style = { // styleModule
   },
 
   // header
-  'header-user-menu': {
+  headerUserMenu: {
   },
-  'header-user-menu__link': {
+  headerUserMenuLink: {
     background: 'none',
     border: '0',
     color: 'black',
@@ -181,7 +181,7 @@ export const style = { // styleModule
       textDecoration: 'none'
     }
   },
-  'header-user-menu__trigger': {
+  headerUserMenuTrigger: {
     background: 'none',
     border: '0',
     cursor: 'pointer',
@@ -193,7 +193,7 @@ export const style = { // styleModule
       width: '56px'
     }
   },
-  'header-user-menu__button': {
+  headerUserMenuButton: {
     background: 'none',
     border: '0',
     color: 'black',
@@ -208,12 +208,12 @@ export const style = { // styleModule
       backgroundColor: 'linear-gradient(to right, #7C4DFF 0%, #18A9E6 50%, #01C9EA 100%)'
     }
   },
-  'header-user-menu__list': {
+  headerUserMenuList: {
     listStyle: 'none',
     margin: '0',
     padding: '0'
   },
-  'header-user-menu__navigation-menu': {
+  headerUserMenuNavigationMenu: {
     background: 'white',
     border: 'solid 1px #000000', // the color was defined in mashlib as a SASS variable $divider_color
     borderRight: '0',
@@ -226,13 +226,13 @@ export const style = { // styleModule
       display: 'none'
     }
   },
-  'header-user-menu__list-item': {
+  headerUserMenuListItem: {
     borderBottom: 'solid 1px #000000', // the color was defined in mashlib as a SASS variable $divider_color
     '&:last-child': {
       border: '0'
     }
   },
-  'header-user-menu__photo': {
+  headerUserMenuPhoto: {
     borderRadius: '50%',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
@@ -240,20 +240,20 @@ export const style = { // styleModule
     height: '50px', // $icon-size - $image-margin * 2 image-margin was 5px in mashlib and icon size 60px
     width: '50px'
   },
-  'header-banner': {
+  headerBanner: {
     boxShadow: '0px 1px 4px #000000', // the color was defined in mashlib as a SASS variable $divider_color
     display: 'flex',
     justifyContent: 'space-between',
     padding: '0 1.5em',
     marginBottom: '4px'
   },
-  'header-banner__link': {
+  headerBannerLink: {
     display: 'block'
   },
-  'header-banner__right-menu': {
+  headerBannerRightMenu: {
     display: 'flex'
   },
-  'header-banner__login': {
+  headerBannerLogin: {
     marginLeft: 'auto',
     input: {
       // hacks to override the default style of login and signup button from solid-ui
@@ -261,20 +261,20 @@ export const style = { // styleModule
       padding: '0.5em !important'
     }
   },
-  'header-banner__user-menu': {
+  headerBannerUserMenu: {
     borderLeft: 'solid 1px #000000', // the color was defined in mashlib as a SASS variable $divider_color
     marginLeft: 'auto'
   },
-  'header-banner__help-menu': {
+  headerBannerHelpMenu: {
     borderLeft: 'solid 1px #000000', // the color was defined in mashlib as a SASS variable $divider_color
     marginLeft: 'auto'
   },
-  'header-banner__icon': {
+  headerBannerIcon: {
     backgroundSize: '65px 60px',
     height: '60px !important', // this is the icon size
     width: '65px !important' // may just be 65px round($icon-size * 352 / 322);
   },
-  'header-banner__help-icon': {
+  headerBannerHelpIcon: {
     width: '28px !important'
   },
   // footer
@@ -282,49 +282,25 @@ export const style = { // styleModule
     borderTop: 'solid 1px $divider-color',
     fontSize: '0.9em',
     padding: '0.5em 1.5em'
-  }
-}
+  },
 
-/**
- * Get the button style, based on options.
- * See https://design.inrupt.com/atomic-core/?cat=Atoms#Buttons
- */
-style.getButtonStyle = function getButtonStyle (options = {}) {
-  // default to primary color
-  const color = (options.buttonColor === 'Secondary') ? '#01c9ea' : '#7c4dff'
-  let backgroundColor = color
-  let fontColor = '#ffffff'
-  let borderColor = color
-  // default to primary color
-  let hoverBackgroundColor = (options.buttonColor === 'Secondary') ? '#37cde6' : '#9f7dff'
-  let hoverFontColor = fontColor
-  if (options.needsBorder) {
-    backgroundColor = '#ffffff'
-    fontColor = color
-    borderColor = color
-    hoverBackgroundColor = color
-    hoverFontColor = backgroundColor
-  }
+  // buttons
+  primaryButton: 'background-color: #7c4dff; color: #ffffff; font-family: Raleway, Roboto, sans-serif;border-radius: 0.25em; border-color: #7c4dff; border: 1px solid; cursor: pointer; font-size: .8em;text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none',
 
-  return {
-    'background-color': `${backgroundColor}`,
-    color: `${fontColor}`,
-    'font-family': 'Raleway, Roboto, sans-serif',
-    'border-radius': '0.25em',
-    'border-color': `${borderColor}`,
-    border: '1px solid',
-    cursor: 'pointer',
-    'font-size': '.8em',
-    'text-decoration': 'none',
-    padding: '0.5em 4em',
-    transition: '0.25s all ease-in-out',
-    outline: 'none',
-    '&:hover': {
-      'background-color': `${hoverBackgroundColor}`,
-      color: `${hoverFontColor}`,
-      transition: '0.25s all ease-in-out'
-    }
-  }
+  primaryButtonHover: 'background-color: #9f7dff; color: #ffffff; font-family: Raleway, Roboto, sans-serif;border-radius: 0.25em; border-color: #7c4dff; border: 1px solid; cursor: pointer; font-size: .8em;text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none; transition: 0.25s all ease-in-out',
+
+  primaryButtonNoBorder: 'background-color: #ffffff; color: #7c4dff; font-family: Raleway, Roboto, sans-serif;border-radius: 0.25em; border-color: #7c4dff; border: 1px solid; cursor: pointer; font-size: .8em;text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none',
+
+  primaryButtonNoBorderHover: 'background-color: #7c4dff; color: ##ffffff; font-family: Raleway, Roboto, sans-serif; border-radius: 0.25em; border-color: #7c4dff; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none; transition: 0.25s all ease-in-out',
+
+  secondaryButton: 'background-color: #01c9ea; color: #ffffff; font-family: Raleway, Roboto, sans-serif;border-radius: 0.25em; border-color: #01c9ea; border: 1px solid; cursor: pointer; font-size: .8em;text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none',
+
+  secondaryButtonHover: 'background-color: #37cde6; color: #ffffff; font-family: Raleway, Roboto, sans-serif;border-radius: 0.25em; border-color: #7c4dff; border: 1px solid; cursor: pointer; font-size: .8em;text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none; transition: 0.25s all ease-in-out',
+
+  secondaryButtonNoBorder: 'background-color: #ffffff; color: #01c9ea; font-family: Raleway, Roboto, sans-serif; border-radius: 0.25em; border-color: #01c9ea; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none',
+
+  secondaryButtonNoBorderHover: 'background-color: #01c9ea; color: #ffffff; font-family: Raleway, Roboto, sans-serif; border-radius: 0.25em; border-color: #01c9ea; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none; transition: 0.25s all ease-in-out'
+
 }
 
 style.setStyle = function setStyle (ele, styleName) {

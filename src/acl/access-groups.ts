@@ -122,14 +122,56 @@ export class AccessGroups {
     const groupNameColumn = this.controller.dom.createElement('div')
     groupNameColumn.setAttribute('style', style.group)
     if (this.controller.isEditable) {
-      groupNameColumn.setAttribute('style', `group-${comboIndex}`)
+      switch (comboIndex) {
+        case 1:
+          groupNameColumn.setAttribute('style', style.group1)
+          break
+        case 2:
+          groupNameColumn.setAttribute('style', style.group2)
+          break
+        case 3:
+          groupNameColumn.setAttribute('style', style.group3)
+          break
+        case 5:
+          groupNameColumn.setAttribute('style', style.group5)
+          break
+        case 9:
+          groupNameColumn.setAttribute('style', style.group9)
+          break
+        case 13:
+          groupNameColumn.setAttribute('style', style.group13)
+          break
+        default:
+          groupNameColumn.setAttribute('style', style.group)
+      }
     }
     groupNameColumn.innerText = COLLOQUIAL[comboIndex] || ktToList(comboIndex)
 
     const groupAgentsColumn = this.controller.dom.createElement('div')
     groupAgentsColumn.setAttribute('style', style.group)
     if (this.controller.isEditable) {
-      groupAgentsColumn.setAttribute('style', `group-${comboIndex}`)
+      switch (comboIndex) {
+        case 1:
+          groupAgentsColumn.setAttribute('style', style.group1)
+          break
+        case 2:
+          groupAgentsColumn.setAttribute('style', style.group2)
+          break
+        case 3:
+          groupAgentsColumn.setAttribute('style', style.group3)
+          break
+        case 5:
+          groupAgentsColumn.setAttribute('style', style.group5)
+          break
+        case 9:
+          groupAgentsColumn.setAttribute('style', style.group9)
+          break
+        case 13:
+          groupAgentsColumn.setAttribute('style', style.group13)
+          break
+        default:
+          groupAgentsColumn.setAttribute('style', style.group)
+      }
     }
     const groupAgentsTable = groupAgentsColumn.appendChild(this.controller.dom.createElement('table'))
     const combos = this.byCombo[combo] || []
@@ -140,7 +182,28 @@ export class AccessGroups {
     const groupDescriptionElement = this.controller.dom.createElement('div')
     groupDescriptionElement.setAttribute('style', style.group)
     if (this.controller.isEditable) {
-      groupDescriptionElement.setAttribute('style', `group-${comboIndex}`)
+      switch (comboIndex) {
+        case 1:
+          groupDescriptionElement.setAttribute('style', style.group1)
+          break
+        case 2:
+          groupDescriptionElement.setAttribute('style', style.group2)
+          break
+        case 3:
+          groupDescriptionElement.setAttribute('style', style.group3)
+          break
+        case 5:
+          groupDescriptionElement.setAttribute('style', style.group5)
+          break
+        case 9:
+          groupDescriptionElement.setAttribute('style', style.group9)
+          break
+        case 13:
+          groupDescriptionElement.setAttribute('style', style.group13)
+          break
+        default:
+          groupDescriptionElement.setAttribute('style', style.group)
+      }
     }
     groupDescriptionElement.innerText = EXPLANATION[comboIndex] || 'Unusual combination'
 

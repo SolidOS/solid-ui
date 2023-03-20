@@ -90,7 +90,6 @@ describe('createBanner', () => {
     const menuList = [{ label: 'Testing', url: 'https://reflectechblog.wordpress.com/' }]
     const options = { logo: 'https://solidproject.org/assets/img/solid-emblem.svg', helpMenuList: [{ label: 'Testing', url: 'https://reflectechblog.wordpress.com/' }] }
     expect(await createBanner(store, pod, user, menuList, options)).toMatchSnapshot()
-    // check something else re logo expect(banner.className).toContain('header-banner')
   })
 })
 

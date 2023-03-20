@@ -564,8 +564,52 @@ export function button (dom: HTMLDocument, iconURI: string | undefined, text: st
   } else {
     button.textContent = text.toLocaleUpperCase()
 
-    button.setAttribute('style', style.getButtonStyle(options))
+    button.onmouseover = function () {
+      if (options.buttonColor === 'Secondary') {
+        if (options.needsBorder) {
+          button.setAttribute('style', style.secondaryButtonNoBorderHover)
+        } else {
+          button.setAttribute('style', style.secondaryButtonHover)
+        }
+      } else {
+        if (options.needsBorder) {
+          button.setAttribute('style', style.primaryButtonNoBorderHover)
+        } else {
+          button.setAttribute('style', style.primaryButtonHover)
+        }
+      }
+    }
+    button.onmouseout = function () {
+      if (options.buttonColor === 'Secondary') {
+        if (options.needsBorder) {
+          button.setAttribute('style', style.secondaryButtonNoBorder)
+        } else {
+          button.setAttribute('style', style.secondaryButton)
+        }
+      } else {
+        if (options.needsBorder) {
+          button.setAttribute('style', style.primaryButtonNoBorder)
+        } else {
+          button.setAttribute('style', style.primaryButton)
+        }
+      }
+    }
+
+    if (options.buttonColor === 'Secondary') {
+      if (options.needsBorder) {
+        button.setAttribute('style', style.secondaryButtonNoBorder)
+      } else {
+        button.setAttribute('style', style.secondaryButton)
+      }
+    } else {
+      if (options.needsBorder) {
+        button.setAttribute('style', style.primaryButtonNoBorder)
+      } else {
+        button.setAttribute('style', style.primaryButton)
+      }
+    }
   }
+
   if (handler) {
     button.addEventListener('click', handler, false)
   }
