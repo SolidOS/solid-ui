@@ -783,11 +783,11 @@ field[ns.ui('Choice').uri] = function (
 
   const opts = { form, subForm, disambiguate: false }
 
-  function getSelectorOptions () {
+  function getSelectorOptions (dataSource) {
     let possible = []
     let possibleProperties
     possible = kb.each(undefined, ns.rdf('type'), uiFrom, formDoc)
-    for (const x in findMembersNT(kb, uiFrom, dataDoc)) {
+    for (const x in findMembersNT(kb, uiFrom, dataSource)) {
       possible.push(kb.fromNT(x))
     } // Use rdfs
 
@@ -821,12 +821,15 @@ field[ns.ui('Choice').uri] = function (
   const multiSelect = kb.any(form, ui('multiselect')) // Optional
   if (multiSelect) opts.multiSelect = true
 
+  // options parameters
+  const dataSource = kb.any(form, ui('options'), kb.literal('search-full-store')).length ? null : dataDoc // optional
+
   let selector
   rhs.refresh = function () {
     // from ui:property
     let selectedOptions = kb.each(subject, property, null, dataDoc).map(object => object.value)
     // from ui:from + ui:property
-    let possibleOptions = getSelectorOptions()
+    let possibleOptions = getSelectorOptions(dataSource)
     possibleOptions.push(selectedOptions)
     possibleOptions = sortByLabel(possibleOptions)
 
