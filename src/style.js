@@ -76,123 +76,36 @@ export const style = { // styleModule
   linkDivStyle: 'width:2em; padding:0.5em; height: 4em;',
 
   // ACL
-  aclControlBoxContainer: {
-    margin: '1em'
-  },
-  aclControlBoxHeader: {
-    fontSize: '120%',
-    margin: '0 0 1rem'
-  },
-  aclControlBoxStatus: {
-    display: 'none',
-    margin: '1rem 0'
-  },
-  aclControlBoxStatusRevealed: {
-    display: 'block'
-  },
-  aclGroupContent: {
-    maxWidth: 650
-  },
-  accessGroupList: {
-    display: 'grid',
-    gridTemplateColumns: '1fr',
-    margin: '1em',
-    width: '100%'
-  },
-  accessGroupListItem: {
-    display: 'grid',
-    gridTemplateColumns: '100px auto 30%'
-  },
-  defaultsController: {
-    display: 'flex'
-  },
-  defaultsControllerNotice: {
-    color: '#888',
-    flexGrow: 1,
-    fontSize: '80%'
-  },
-  bigButton: {
-    backgroundColor: 'white',
-    border: '0.1em solid #888',
-    borderRadius: '0.3em',
-    maxWidth: '50%',
-    paddingBottom: '1em',
-    paddingTop: '1em'
-  },
-  group: {
-    color: '#888'
-  },
-  group1: {
-    color: 'green'
-  },
-  group2: {
-    color: '#cc0'
-  },
-  group3: {
-    color: 'orange'
-  },
-  group5: {
-    color: 'red'
-  },
-  group9: {
-    color: 'blue'
-  },
-  group13: {
-    color: 'purple'
-  },
-  trustedAppAddApplicationsTable: {
-    backgroundColor: '#eee'
-  },
-  trustedAppCancelButton: {
-    float: 'right'
-  },
-  trustedAppControllerI: {
-    borderColor: 'orange',
-    borderRadius: '1em',
-    borderWidth: '0.1em'
-  },
-  temporaryStatusInit: {
-    background: 'green'
-  },
-  temporaryStatusEnd: {
-    background: 'transparent',
-    transition: 'background 5s linear'
-  },
+  aclControlBoxContainer: 'margin: 1em',
+  aclControlBoxHeader: 'fontSize: 120%, margin: 0 0 1rem',
+  aclControlBoxStatus: 'display: none, margin: 1rem 0',
+  aclControlBoxStatusRevealed: 'display: block',
+  aclGroupContent: 'maxWidth: 650',
+  accessGroupList: 'display: grid, gridTemplateColumns: 1fr, margin: 1em, width: 100%',
+  accessGroupListItem: 'display: grid, gridTemplateColumns: 100px auto 30%',
+  defaultsController: 'display: flex',
+  defaultsControllerNotice: 'color: #888, flexGrow: 1, fontSize: 80%',
+  bigButton: 'backgroundColor: white, border: 0.1em solid #888, borderRadius: 0.3em, maxWidth: 50%, paddingBottom: 1em, paddingTop: 1em',
+  group: 'color: #888',
+  group1: 'color: green',
+  group2: 'color: #cc0',
+  group3: 'color: orange',
+  group5: 'color: red',
+  group9: 'color: blue',
+  group13: 'color: purple',
+
+  trustedAppAddApplicationsTable: 'backgroundColor: #eee',
+  trustedAppCancelButton: 'float: right',
+  trustedAppControllerI: 'borderColor: orange, borderRadius: 1em, borderWidth: 0.1em',
+  temporaryStatusInit: 'background: green',
+  temporaryStatusEnd: 'background: transparent, transition: background 5s linear',
 
   // header
-  headerUserMenu: {
-  },
-  headerUserMenuLink: {
-    background: 'none',
-    border: '0',
-    color: 'black',
-    cursor: 'pointer',
-    display: 'block',
-    fontFamily: 'Arial',
-    fontSize: '1em',
-    textAlign: 'left',
-    padding: '1em',
-    width: '100%',
-    '&:focus, &:hover': {
-      backgroundColor: 'linear-gradient(to right, #7C4DFF 0%, #18A9E6 50%, #01C9EA 100%)'
-      // backgroundColor: '#eee'
-    },
-    a: {
-      textDecoration: 'none'
-    }
-  },
-  headerUserMenuTrigger: {
-    background: 'none',
-    border: '0',
-    cursor: 'pointer',
-    width: '60px', // defined in mashlib as a SASS variable $icon_size
-    height: '60px', // defined in mashlib as a SASS variable $icon_size
-    img: {
-      borderRadius: '50%',
-      height: '56px', // defined in mashlib as a SASS variable $icon_size - 4px
-      width: '56px'
-    }
-  },
+  headerUserMenuLink: 'background: none, border: 0, color: black, cursor: pointer, display: block, fontFamily: Arial, fontSize: 1em, textAlign: left, padding: 1em,  width: 100%, textDecoration: none',
+  headerUserMenuLinkHover: 'backgroundColor: linear-gradient(to right, #7C4DFF 0%, #18A9E6 50%, #01C9EA 100%)',
+
+  headerUserMenuTrigger: 'background: none, border: 0, cursor: pointer, width: 60px, height: 60px',
+  headerUserMenuTriggerImg: 'borderRadius: 50%, height: 56px, width: 56px, width: 28px !important',
   headerUserMenuButton: {
     background: 'none',
     border: '0',
@@ -275,7 +188,7 @@ export const style = { // styleModule
     width: '65px !important' // may just be 65px round($icon-size * 352 / 322);
   },
   headerBannerHelpIcon: {
-    width: '28px !important'
+    
   },
   // footer
   footer: {

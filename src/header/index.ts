@@ -138,7 +138,7 @@ export function createHelpMenu (options: HeaderOptions, helpMenuItems: MenuItems
 
   const helpMenuIcon = document.createElement('img')
   helpMenuIcon.src = (options && options.helpIcon) ? options.helpIcon : icons.iconBase + DEFAULT_HELP_MENU_ICON
-  helpMenuIcon.setAttribute('style', style.headerBannerHelpIcon)
+  helpMenuIcon.setAttribute('style', style.headerUserMenuTriggerImg)
   helpMenuContainer.appendChild(helpMenuTrigger)
   helpMenuTrigger.appendChild(helpMenuIcon)
 
