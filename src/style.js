@@ -12,7 +12,7 @@ const formFieldNameBoxWidth = '8em' // The fixed amount to get form fields to li
 
 export const style = { // styleModule
 
-  checkboxStyle: 'colour: black; font-size: 100%; padding-left: 0.5 em; padding-right: 0.5 em;',
+  checkboxStyle: 'color: black; font-size: 100%; padding-left: 0.5 em; padding-right: 0.5 em;',
   checkboxInputStyle: 'font-size: 150%; height: 1.2em; width: 1.2em; background-color: #eef; border-radius:0.2em; margin: 0.1em',
 
   fieldLabelStyle: 'color: #3B5998; text-decoration: none;',
@@ -106,96 +106,23 @@ export const style = { // styleModule
 
   headerUserMenuTrigger: 'background: none, border: 0, cursor: pointer, width: 60px, height: 60px',
   headerUserMenuTriggerImg: 'borderRadius: 50%, height: 56px, width: 56px, width: 28px !important',
-  headerUserMenuButton: {
-    background: 'none',
-    border: '0',
-    color: 'black',
-    cursor: 'pointer',
-    display: 'block',
-    fontFamily: 'Arial',
-    fontSize: '1em',
-    textAlign: 'left',
-    padding: '1em',
-    width: '100%',
-    '&:focus, &:hover': {
-      backgroundColor: 'linear-gradient(to right, #7C4DFF 0%, #18A9E6 50%, #01C9EA 100%)'
-    }
-  },
-  headerUserMenuList: {
-    listStyle: 'none',
-    margin: '0',
-    padding: '0'
-  },
-  headerUserMenuNavigationMenu: {
-    background: 'white',
-    border: 'solid 1px #000000', // the color was defined in mashlib as a SASS variable $divider_color
-    borderRight: '0',
-    position: 'absolute',
-    right: '0',
-    top: '60px', // defined in mashlib as a SASS variable $icon_size
-    width: '200px',
-    'z-index': '1',
-    '&[aria-hidden = true]': {
-      display: 'none'
-    }
-  },
-  headerUserMenuListItem: {
-    borderBottom: 'solid 1px #000000', // the color was defined in mashlib as a SASS variable $divider_color
-    '&:last-child': {
-      border: '0'
-    }
-  },
-  headerUserMenuPhoto: {
-    borderRadius: '50%',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
-    height: '50px', // $icon-size - $image-margin * 2 image-margin was 5px in mashlib and icon size 60px
-    width: '50px'
-  },
-  headerBanner: {
-    boxShadow: '0px 1px 4px #000000', // the color was defined in mashlib as a SASS variable $divider_color
-    display: 'flex',
-    justifyContent: 'space-between',
-    padding: '0 1.5em',
-    marginBottom: '4px'
-  },
-  headerBannerLink: {
-    display: 'block'
-  },
-  headerBannerRightMenu: {
-    display: 'flex'
-  },
-  headerBannerLogin: {
-    marginLeft: 'auto',
-    input: {
-      // hacks to override the default style of login and signup button from solid-ui
-      margin: '0.75em 0 0.75em 0.5em !important',
-      padding: '0.5em !important'
-    }
-  },
-  headerBannerUserMenu: {
-    borderLeft: 'solid 1px #000000', // the color was defined in mashlib as a SASS variable $divider_color
-    marginLeft: 'auto'
-  },
-  headerBannerHelpMenu: {
-    borderLeft: 'solid 1px #000000', // the color was defined in mashlib as a SASS variable $divider_color
-    marginLeft: 'auto'
-  },
-  headerBannerIcon: {
-    backgroundSize: '65px 60px',
-    height: '60px !important', // this is the icon size
-    width: '65px !important' // may just be 65px round($icon-size * 352 / 322);
-  },
-  headerBannerHelpIcon: {
-    
-  },
+  headerUserMenuButton: 'background: none, border: 0, color: black, cursor: pointer, display: block, fontFamily: Arial, fontSize: 1em, textAlign: left, padding: 1em, width: 100%',
+  headerUserMenuButtonHover: 'backgroundColor: linear-gradient(to right, #7C4DFF 0%, #18A9E6 50%, #01C9EA 100%)',
+  headerUserMenuList: 'listStyle: none, margin: 0, padding: 0',
+  headerUserMenuNavigationMenu: 'background: white, border: solid 1px #000000, borderRight: 0,position: absolute, right: 0, top: 60px, width: 200px, z-index: 1',
+  headerUserMenuListItem: 'borderBottom: solid 1px #000000',
+  headerUserMenuPhoto: 'borderRadius: 50%, backgroundPosition: center, backgroundRepeat: no-repeat,backgroundSize: cover,height: 50px, width: 50px',
+  headerBanner: 'boxShadow: 0px 1px 4px #000000, display: flex, justifyContent: space-between,padding: 0 1.5em, marginBottom: 4px',
+  headerBannerLink: 'display: block',
+  headerBannerRightMenu: 'display: flex',
+  headerBannerLogin: 'marginLeft: auto',
+  headerBannerLoginInput: 'margin: 0.75em 0 0.75em 0.5em !important, padding: 0.5em !important',
+  headerBannerUserMenu: 'borderLeft: solid 1px #000000, marginLeft: auto',
+  headerBannerHelpMenu: 'borderLeft: solid 1px #000000, marginLeft: auto',
+  headerBannerIcon: 'backgroundSize: 65px 60px, height: 60px !important, width: 65px !important', // may just be 65px round($icon-size * 352 / 322);
+
   // footer
-  footer: {
-    borderTop: 'solid 1px $divider-color',
-    fontSize: '0.9em',
-    padding: '0.5em 1.5em'
-  },
+  footer: 'borderTop: solid 1px $divider-color, fontSize: 0.9em, padding: 0.5em 1.5em',
 
   // buttons
   primaryButton: 'background-color: #7c4dff; color: #ffffff; font-family: Raleway, Roboto, sans-serif;border-radius: 0.25em; border-color: #7c4dff; border: 1px solid; cursor: pointer; font-size: .8em;text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none',
@@ -204,7 +131,7 @@ export const style = { // styleModule
 
   primaryButtonNoBorder: 'background-color: #ffffff; color: #7c4dff; font-family: Raleway, Roboto, sans-serif;border-radius: 0.25em; border-color: #7c4dff; border: 1px solid; cursor: pointer; font-size: .8em;text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none',
 
-  primaryButtonNoBorderHover: 'background-color: #7c4dff; color: ##ffffff; font-family: Raleway, Roboto, sans-serif; border-radius: 0.25em; border-color: #7c4dff; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none; transition: 0.25s all ease-in-out',
+  primaryButtonNoBorderHover: 'background-color: #7c4dff; color: #ffffff; font-family: Raleway, Roboto, sans-serif; border-radius: 0.25em; border-color: #7c4dff; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none; transition: 0.25s all ease-in-out',
 
   secondaryButton: 'background-color: #01c9ea; color: #ffffff; font-family: Raleway, Roboto, sans-serif;border-radius: 0.25em; border-color: #01c9ea; border: 1px solid; cursor: pointer; font-size: .8em;text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none',
 

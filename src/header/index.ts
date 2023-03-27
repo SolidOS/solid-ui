@@ -170,6 +170,12 @@ export function createLoginSignUpButtons () {
 export function createUserMenuButton (label: string, onClick: EventListenerOrEventListenerObject): HTMLElement {
   const button = document.createElement('button')
   button.setAttribute('style', style.headerUserMenuButton)
+  button.onmouseover = function () {
+    button.setAttribute('style', style.headerUserMenuButtonHover)
+  }
+  button.onmouseout = function () {
+    button.setAttribute('style', style.headerUserMenuButton)
+  }
   button.addEventListener('click', onClick)
   button.innerText = label
   return button
@@ -180,6 +186,12 @@ export function createUserMenuButton (label: string, onClick: EventListenerOrEve
 export function createUserMenuLink (label: string, href: string, target?: string): HTMLElement {
   const link = document.createElement('a')
   link.setAttribute('style', style.headerUserMenuLink)
+  link.onmouseover = function () {
+    link.setAttribute('style', style.headerUserMenuLinkHover)
+  }
+  link.onmouseout = function () {
+    link.setAttribute('style', style.headerUserMenuLink)
+  }
   link.href = href
   link.innerText = label
   if (target) link.target = target
