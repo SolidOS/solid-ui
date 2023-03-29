@@ -9,12 +9,13 @@
     "dist"
   ],
   "scripts": {
-    "build": "npm run clean && npm run build-version && npm run build-lib && npm run build-types && npm run build-webpack && npm run build-storybook",
+    "build": "npm run clean && npm run build-version && npm run build-lib && npm run build-types && npm run build-dev && npm run build-dist && npm run build-storybook",
     "build-lib": "babel src -d lib --source-maps --extensions \".ts,.js\"",
     "build-types": "tsc --emitDeclarationOnly",
     "build-version": "sh ./timestamp.sh > src/versionInfo.ts  && eslint \"src/versionInfo.ts\" --fix",
-    "build-webpack": "webpack",
-    "build-form-examples": "npm run build-lib && npm run build-webpack && cp ./dist/*.js ./Documentation/form-examples/",
+    "build-dev": "webpack --progress",
+    "build-dist": "webpack --progress --mode=production",
+    "build-form-examples": "npm run build-lib && npm run build-dev && cp ./dist/*.js ./Documentation/form-examples/",
     "watch": "npm run build-version && babel src --out-dir lib --watch --source-maps --extensions \".ts,.js\"",
     "clean": "rm -rf lib dist ./Documentation/form-examples/main.js",
     "coverage": "jest --coverage --collectCoverageFrom=src/**/*.[jt]s",

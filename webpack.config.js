@@ -1,36 +1,48 @@
+const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
-module.exports = [{
-  mode: 'development',
-  entry: './lib/index.js',
-  plugins: [
-    new HtmlWebpackPlugin() // plugin that creats in /lib the index.html that contains the webpack-bundle.js
-  ],
-  externals: {
-    fs: 'null',
-    'node-fetch': 'fetch',
-    'isomorphic-fetch': 'fetch',
-    xmldom: 'window',
-    'text-encoding': 'TextEncoder',
-    'whatwg-url': 'window',
-    '@trust/webcrypto': 'crypto'
-  },
-  resolve: {
-    fallback: { path: false }
-  },
-  devServer: {
-    static: './dist'
-  },
-  devtool: 'source-map',
-  module: {
-    rules: [{
-      test: /\.sparql$/i,
-      type: 'asset/source'
+// module.exports = [{
+module.exports = (env, args) => {
+  const production = args.mode === 'production';
+  return {
+    // mode: 'development',
+    mode: args.mode || 'development',
+    entry: './lib/index.js',
+    output: {
+      path: path.join(__dirname, '/dist/'),
+      filename: production ? 'solid-ui.min.js' : 'solid-ui.js',
+      library: 'solid-ui',
+      libraryTarget: 'umd'
     },
-    {
-      test: /\.ttl$/i,
-      type: 'asset/source'
+    plugins: [
+      new HtmlWebpackPlugin() // plugin that creats in /lib the index.html that contains the webpack-bundle.js
+    ],
+    externals: {
+      fs: 'null',
+      'node-fetch': 'fetch',
+      'isomorphic-fetch': 'fetch',
+      xmldom: 'window',
+      'text-encoding': 'TextEncoder',
+      'whatwg-url': 'window',
+      '@trust/webcrypto': 'crypto'
+    },
+    resolve: {
+      fallback: { path: false }
+    },
+    devServer: {
+      static: './dist'
+    },
+    devtool: 'source-map',
+    module: {
+      rules: [{
+        test: /\.sparql$/i,
+        type: 'asset/source'
+      },
+      {
+        test: /\.ttl$/i,
+        type: 'asset/source'
+      }
+      ]
     }
-    ]
   }
-}]
+}
