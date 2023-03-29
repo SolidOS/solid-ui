@@ -737,7 +737,7 @@ field[ns.ui('Classifier').uri] = function (
  **     <select id=dropDownSelect>
  **       <option> ....
  **     <subForm>
- **  Alternative implementatons caould be:
+ **  Alternative implementatons could be:
  ** -- pop-up menu (as here)
  ** -- radio buttons
  ** -- auto-complete typing
@@ -821,8 +821,8 @@ field[ns.ui('Choice').uri] = function (
   const multiSelect = kb.any(form, ui('multiselect')) // Optional
   if (multiSelect) opts.multiSelect = true
 
-  // options parameters
-  const dataSource = kb.any(form, ui('options'), kb.literal('search-full-store')).length ? null : dataDoc // optional
+  // by default searches the dataDoc graph or optionally the full store
+  const dataSource = kb.any(form, ui('search-full-store')).length ? null : dataDoc // optional
 
   let selector
   rhs.refresh = function () {
