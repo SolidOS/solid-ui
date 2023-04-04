@@ -13,7 +13,7 @@ import * as ns from '../ns'
 import * as widgets from '../widgets'
 // import * as pad from '../pad'
 // import { DateFolder } from './dateFolder'
-import { ChatChannel, isDeleted, mostRecentVersion } from './chatLogic'
+import { ChatChannel, isDeleted, isReplaced, mostRecentVersion } from './chatLogic'
 import { renderMessageEditor, renderMessageRow } from './message'
 
 // const UI = { authn, icons, ns, media, pad, $rdf, store, style, utils, widgets }
@@ -141,10 +141,13 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
 
   // Called once per original message displayed
   async function addMessage (message, messageTable) {
-    const latest = await mostRecentVersion(message)
+    // const latest = await mostRecentVersion(message)
     // const content = store.any(latest, ns.sioc('content'))
-    if (isDeleted(latest) && !options.showDeletedMessages) {
+    if (isDeleted(message) && !options.showDeletedMessages) {
       return // ignore deleted messaged -- @@ could also leave a placeholder
+    }
+    if (isReplaced(message)) { //
+        return // this is old version
     }
     let thread = store.any(null, ns.sioc('has_member'), message, message.doc())
     const id = store.any(message, ns.sioc('id'), null, message.doc())
@@ -602,7 +605,9 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
 
   async function loadInitialContent () {
     function yank () {
-      selectedMessageTable.selectedElement.scrollIntoView({ block: 'center' })
+        if (selectedMessageTable && selectedMessageTable.selectedElement) {
+            selectedMessageTable.selectedElement.scrollIntoView({ block: 'center' })
+        }
     }
 
     // During initial load ONLY keep scroll to selected thing or bottom

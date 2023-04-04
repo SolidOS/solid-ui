@@ -113,21 +113,26 @@ export class ChatChannel {
 
 // ////////// Utility functions
 
+// Have to not loop forever if fed loops
 export async function allVersions (message) {
   const versions = [message]
+  const done = {}
+  done[message.ur] = true
   let m = message
   while (true) { // earlier?
     const prev = store.any(null, ns.dct('isReplacedBy'), m, m.doc())
-    if (!prev) break
+    if (!prev || done[prev.uri]) break
     await store.fetcher.load(prev)
     versions.unshift(prev)
+    done[prev.uri] = true
     m = prev
   }
   m = message
   while (true) { // later?
     const next = store.any(m, ns.dct('isReplacedBy'), null, m.doc())
-    if (!next) break
+    if (!next || done[next.uri]) break
     versions.push(next)
+    done[next.uri] = true
     m = next
   }
   return versions
@@ -135,17 +140,30 @@ export async function allVersions (message) {
 
 export async function originalVersion (message) {
   let msg = message
+  const done = {}
+  // done[message.ur] = true
   while (msg) {
+      if (done[msg.uri]) {
+          console.error('originalVersion: verion loop' + message)
+          return message
+      }
+      done[msg.uri] = true
     message = msg
     await store.fetcher.load(message)
-    msg = store.any(null, ns.dct('isReplacedBy'), message, message.doc()) // @@@ may need to load doc
+    msg = store.any(null, ns.dct('isReplacedBy'), message, message.doc())
   }
   return message
 }
 
 export async function mostRecentVersion (message) {
   let msg = message
+  const done = {}
   while (msg) {
+      if (done[msg.uri]) {
+          console.error('mostRecentVersion: verion loop' + message)
+          return message
+      }
+    done[msg.uri] = true
     message = msg
     await store.fetcher.load(message)
     msg = store.any(message, ns.dct('isReplacedBy'), null, message.doc())

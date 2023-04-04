@@ -41,6 +41,10 @@ export function recordSharedPreferences (subject, context) {
   return new Promise(function (resolve, reject) {
     const sharedPreferences = kb.any(subject, ns.ui('sharedPreferences'))
     if (!sharedPreferences) {
+      if (!kb.updater.editable(subject.doc())) {
+          console.log(` Cant make shared preferences, may not change ${subject.doc}`)
+          resolve(context)
+      }
       const sp = $rdf.sym(subject.doc().uri + '#SharedPreferences')
       const ins = [
         $rdf.st(subject, ns.ui('sharedPreferences'), sp, subject.doc())
