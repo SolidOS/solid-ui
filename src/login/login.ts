@@ -506,6 +506,8 @@ export function renderSignInPopup (dom: HTMLDocument) {
 
   const loginToIssuer = async (issuerUri: string) => {
     try {
+      // clear authorization metadata from store
+      solidLogicSingleton.store.updater.flagAuthorizationMetadata() as any
       // Save hash
       const preLoginRedirectHash = new URL(window.location.href).hash
       if (preLoginRedirectHash) {
@@ -706,6 +708,9 @@ authSession.onLogout(async () => {
   const issuer = window.localStorage.getItem('loginIssuer')
   if (issuer) {
     try {
+      // clear authorization metadata from store
+      solidLogicSingleton.store.updater.flagAuthorizationMetadata() as any
+
       const wellKnownUri = new URL(issuer)
       wellKnownUri.pathname = '/.well-known/openid-configuration'
       const wellKnownResult = await fetch(wellKnownUri.toString())

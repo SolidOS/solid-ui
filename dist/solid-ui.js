@@ -7170,6 +7170,8 @@ function renderSignInPopup(dom) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
             _context.prev = 0;
+            // clear authorization metadata from store
+            _solidLogic.solidLogicSingleton.store.updater.flagAuthorizationMetadata();
             // Save hash
             preLoginRedirectHash = new URL(window.location.href).hash;
             if (preLoginRedirectHash) {
@@ -7179,23 +7181,23 @@ function renderSignInPopup(dom) {
             // Login
             locationUrl = new URL(window.location.href);
             locationUrl.hash = ''; // remove hash part
-            _context.next = 8;
+            _context.next = 9;
             return _solidLogic.authSession.login({
               redirectUrl: locationUrl.href,
               oidcIssuer: issuerUri
             });
-          case 8:
-            _context.next = 13;
+          case 9:
+            _context.next = 14;
             break;
-          case 10:
-            _context.prev = 10;
+          case 11:
+            _context.prev = 11;
             _context.t0 = _context["catch"](0);
             (0, _log.alert)(_context.t0.message);
-          case 13:
+          case 14:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[0, 10]]);
+      }, _callee, null, [[0, 11]]);
     }));
     return function loginToIssuer(_x11) {
       return _ref.apply(this, arguments);
@@ -7347,45 +7349,47 @@ _solidLogic.authSession.onLogout( /*#__PURE__*/(0, _asyncToGenerator2["default"]
       case 0:
         issuer = window.localStorage.getItem('loginIssuer');
         if (!issuer) {
-          _context2.next = 19;
+          _context2.next = 20;
           break;
         }
         _context2.prev = 2;
+        // clear authorization metadata from store
+        _solidLogic.solidLogicSingleton.store.updater.flagAuthorizationMetadata();
         wellKnownUri = new URL(issuer);
         wellKnownUri.pathname = '/.well-known/openid-configuration';
-        _context2.next = 7;
+        _context2.next = 8;
         return fetch(wellKnownUri.toString());
-      case 7:
+      case 8:
         wellKnownResult = _context2.sent;
         if (!(wellKnownResult.status === 200)) {
-          _context2.next = 15;
+          _context2.next = 16;
           break;
         }
-        _context2.next = 11;
+        _context2.next = 12;
         return wellKnownResult.json();
-      case 11:
+      case 12:
         openidConfiguration = _context2.sent;
         if (!(openidConfiguration && openidConfiguration.end_session_endpoint)) {
-          _context2.next = 15;
+          _context2.next = 16;
           break;
         }
-        _context2.next = 15;
+        _context2.next = 16;
         return fetch(openidConfiguration.end_session_endpoint, {
           credentials: 'include'
         });
-      case 15:
-        _context2.next = 19;
+      case 16:
+        _context2.next = 20;
         break;
-      case 17:
-        _context2.prev = 17;
+      case 18:
+        _context2.prev = 18;
         _context2.t0 = _context2["catch"](2);
-      case 19:
-        window.location.reload();
       case 20:
+        window.location.reload();
+      case 21:
       case "end":
         return _context2.stop();
     }
-  }, _callee2, null, [[2, 17]]);
+  }, _callee2, null, [[2, 18]]);
 })));
 
 /**
@@ -13131,8 +13135,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2023-03-29T17:27:21Z',
-  commit: '29eab3ca2b6210b847ad7eebe94ad9b18bb616e4',
+  buildTime: '2023-04-05T16:11:15Z',
+  commit: '00ab6c9664d4624d74c0fcc5b2655f9109fac1d3',
   npmInfo: {
     'solid-ui': '2.4.27',
     npm: '8.19.4',
@@ -53604,7 +53608,9 @@ var Fetcher = /*#__PURE__*/function () {
     if (!this._fetch) {
       throw new Error('No _fetch function available for Fetcher');
     }
-    this.appNode = this.store.rdfFactory.blankNode();
+    // This is the name of the graph we store all the HTTP metadata in
+    this.appNode = this.store.sym('chrome://TheCurrentSession');
+    // this.appNode = this.store.rdfFactory.blankNode() // Needs to have a URI in tests
     this.store.fetcher = this; // Bi-linked
     this.requested = {};
     this.timeouts = {};
@@ -54436,17 +54442,19 @@ var Fetcher = /*#__PURE__*/function () {
       var _this10 = this;
       var kb = this.store;
       var responseNode = kb.bnode();
-      kb.add(options.req, this.ns.link('response'), responseNode, responseNode);
-      kb.add(responseNode, this.ns.http('status'), kb.rdfFactory.literal(response.status), responseNode);
-      kb.add(responseNode, this.ns.http('statusText'), kb.rdfFactory.literal(response.statusText), responseNode);
+      kb.add(options.req, this.ns.link('response'), responseNode, this.appNode);
+      kb.add(responseNode, this.ns.http('status'), kb.rdfFactory.literal(response.status), this.appNode);
+      kb.add(responseNode, this.ns.http('statusText'), kb.rdfFactory.literal(response.statusText), this.appNode);
 
       // Save the response headers
       response.headers.forEach(function (value, header) {
-        kb.add(responseNode, _this10.ns.httph(header), _this10.store.rdfFactory.literal(value), responseNode);
+        kb.add(responseNode, _this10.ns.httph(header), _this10.store.rdfFactory.literal(value), _this10.appNode);
         if (header === 'content-type') {
-          kb.add(options.resource, _this10.ns.rdf('type'), kb.rdfFactory.namedNode(_utils_js__WEBPACK_IMPORTED_MODULE_11__.mediaTypeClass(value).value), responseNode);
+          kb.add(options.resource, _this10.ns.rdf('type'), kb.rdfFactory.namedNode(_utils_js__WEBPACK_IMPORTED_MODULE_11__.mediaTypeClass(value).value), _this10.appNode // responseNode
+          );
         }
       });
+
       return responseNode;
     }
   }, {
@@ -64245,17 +64253,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ UpdateManager)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/esm/typeof.js");
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
-/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./store */ "./node_modules/rdflib/esm/store.js");
-/* harmony import */ var _uri__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./uri */ "./node_modules/rdflib/esm/uri.js");
-/* harmony import */ var _fetcher__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./fetcher */ "./node_modules/rdflib/esm/fetcher.js");
-/* harmony import */ var _namespace__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./namespace */ "./node_modules/rdflib/esm/namespace.js");
-/* harmony import */ var _serializer__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./serializer */ "./node_modules/rdflib/esm/serializer.js");
-/* harmony import */ var _utils_terms__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./utils/terms */ "./node_modules/rdflib/esm/utils/terms.js");
-/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./utils-js */ "./node_modules/rdflib/esm/utils-js.js");
-/* harmony import */ var _utils_termValue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./utils/termValue */ "./node_modules/rdflib/esm/utils/termValue.js");
+/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js");
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./store */ "./node_modules/rdflib/esm/store.js");
+/* harmony import */ var _uri__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./uri */ "./node_modules/rdflib/esm/uri.js");
+/* harmony import */ var _fetcher__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./fetcher */ "./node_modules/rdflib/esm/fetcher.js");
+/* harmony import */ var _namespace__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./namespace */ "./node_modules/rdflib/esm/namespace.js");
+/* harmony import */ var _serializer__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./serializer */ "./node_modules/rdflib/esm/serializer.js");
+/* harmony import */ var _utils_terms__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./utils/terms */ "./node_modules/rdflib/esm/utils/terms.js");
+/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./utils-js */ "./node_modules/rdflib/esm/utils-js.js");
+/* harmony import */ var _utils_termValue__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./utils/termValue */ "./node_modules/rdflib/esm/utils/termValue.js");
+
+
 
 
 
@@ -64292,35 +64305,35 @@ var UpdateManager = /*#__PURE__*/function () {
    * @param  store - The quadstore to store data and metadata. Created if not passed.
   */
   function UpdateManager(store) {
-    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__["default"])(this, UpdateManager);
-    (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_3__["default"])(this, "store", void 0);
-    (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_3__["default"])(this, "ifps", void 0);
-    (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_3__["default"])(this, "fps", void 0);
-    (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_3__["default"])(this, "patchControl", void 0);
-    (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_3__["default"])(this, "ns", void 0);
-    store = store || new _store__WEBPACK_IMPORTED_MODULE_4__["default"]();
+    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2__["default"])(this, UpdateManager);
+    (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_4__["default"])(this, "store", void 0);
+    (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_4__["default"])(this, "ifps", void 0);
+    (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_4__["default"])(this, "fps", void 0);
+    (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_4__["default"])(this, "patchControl", void 0);
+    (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_4__["default"])(this, "ns", void 0);
+    store = store || new _store__WEBPACK_IMPORTED_MODULE_6__["default"]();
     if (store.updater) {
       throw new Error("You can't have two UpdateManagers for the same store");
     }
     if (!store.fetcher) {
-      store.fetcher = new _fetcher__WEBPACK_IMPORTED_MODULE_5__["default"](store);
+      store.fetcher = new _fetcher__WEBPACK_IMPORTED_MODULE_7__["default"](store);
     }
     this.store = store;
     store.updater = this;
     this.ifps = {};
     this.fps = {};
     this.ns = {};
-    this.ns.link = (0,_namespace__WEBPACK_IMPORTED_MODULE_6__["default"])('http://www.w3.org/2007/ont/link#');
-    this.ns.http = (0,_namespace__WEBPACK_IMPORTED_MODULE_6__["default"])('http://www.w3.org/2007/ont/http#');
-    this.ns.httph = (0,_namespace__WEBPACK_IMPORTED_MODULE_6__["default"])('http://www.w3.org/2007/ont/httph#');
-    this.ns.ldp = (0,_namespace__WEBPACK_IMPORTED_MODULE_6__["default"])('http://www.w3.org/ns/ldp#');
-    this.ns.rdf = (0,_namespace__WEBPACK_IMPORTED_MODULE_6__["default"])('http://www.w3.org/1999/02/22-rdf-syntax-ns#');
-    this.ns.rdfs = (0,_namespace__WEBPACK_IMPORTED_MODULE_6__["default"])('http://www.w3.org/2000/01/rdf-schema#');
-    this.ns.rdf = (0,_namespace__WEBPACK_IMPORTED_MODULE_6__["default"])('http://www.w3.org/1999/02/22-rdf-syntax-ns#');
-    this.ns.owl = (0,_namespace__WEBPACK_IMPORTED_MODULE_6__["default"])('http://www.w3.org/2002/07/owl#');
+    this.ns.link = (0,_namespace__WEBPACK_IMPORTED_MODULE_8__["default"])('http://www.w3.org/2007/ont/link#');
+    this.ns.http = (0,_namespace__WEBPACK_IMPORTED_MODULE_8__["default"])('http://www.w3.org/2007/ont/http#');
+    this.ns.httph = (0,_namespace__WEBPACK_IMPORTED_MODULE_8__["default"])('http://www.w3.org/2007/ont/httph#');
+    this.ns.ldp = (0,_namespace__WEBPACK_IMPORTED_MODULE_8__["default"])('http://www.w3.org/ns/ldp#');
+    this.ns.rdf = (0,_namespace__WEBPACK_IMPORTED_MODULE_8__["default"])('http://www.w3.org/1999/02/22-rdf-syntax-ns#');
+    this.ns.rdfs = (0,_namespace__WEBPACK_IMPORTED_MODULE_8__["default"])('http://www.w3.org/2000/01/rdf-schema#');
+    this.ns.rdf = (0,_namespace__WEBPACK_IMPORTED_MODULE_8__["default"])('http://www.w3.org/1999/02/22-rdf-syntax-ns#');
+    this.ns.owl = (0,_namespace__WEBPACK_IMPORTED_MODULE_8__["default"])('http://www.w3.org/2002/07/owl#');
     this.patchControl = [];
   }
-  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__["default"])(UpdateManager, [{
+  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3__["default"])(UpdateManager, [{
     key: "patchControlFor",
     value: function patchControlFor(doc) {
       if (!this.patchControl[doc.value]) {
@@ -64334,13 +64347,87 @@ var UpdateManager = /*#__PURE__*/function () {
       return uri.slice(0, 4) === 'http';
     }
 
+    /** Remove from the store HTTP authorization metadata
+    * The editble function below relies on copies we have in the store
+    * of the results of previous HTTP transactions. Howver, when
+    * the user logs in, then that data misrepresents what would happen
+    * if the user tried again.
+    */
+  }, {
+    key: "flagAuthorizationMetadata",
+    value: function flagAuthorizationMetadata() {
+      var kb = this.store;
+      var meta = kb.fetcher.appNode;
+      var requests = kb.statementsMatching(undefined, this.ns.link('requestedURI'), undefined, meta).map(function (st) {
+        return st.subject;
+      });
+      var _iterator = _createForOfIteratorHelper(requests),
+        _step;
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var request = _step.value;
+          var _response = kb.any(request, this.ns.link('response'), null, meta);
+          if (_response !== undefined) {
+            // ts
+            this.store.add(_response, this.ns.link('outOfDate'), true, meta); // @@ Boolean is fine - fix types
+          }
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+    }
+
     /**
      * Tests whether a file is editable.
      * If the file has a specific annotation that it is machine written,
      * for safety, it is editable (this doesn't actually check for write access)
      * If the file has wac-allow and accept patch headers, those are respected.
      * and local write access is determined by those headers.
-     * This version only looks at past HTTP requests, does not make new ones.
+     * This async version not only looks at past HTTP requests, it also makes new ones if necessary.
+     *
+     * @returns The method string SPARQL or DAV or
+     *   LOCALFILE or false if known, undefined if not known.
+     */
+  }, {
+    key: "checkEditable",
+    value: function () {
+      var _checkEditable = (0,_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_5___default().mark(function _callee(uri, kb) {
+        var initial, final;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_5___default().wrap(function _callee$(_context) {
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              initial = this.editable(uri, kb);
+              if (!(initial !== undefined)) {
+                _context.next = 3;
+                break;
+              }
+              return _context.abrupt("return", initial);
+            case 3:
+              _context.next = 5;
+              return this.store.fetcher.load(uri);
+            case 5:
+              final = this.editable(uri, kb); // console.log(`Loaded ${uri} just to check editable, result: ${final}.`)
+              return _context.abrupt("return", final);
+            case 7:
+            case "end":
+              return _context.stop();
+          }
+        }, _callee, this);
+      }));
+      function checkEditable(_x, _x2) {
+        return _checkEditable.apply(this, arguments);
+      }
+      return checkEditable;
+    }()
+    /**
+     * Tests whether a file is editable.
+     * If the file has a specific annotation that it is machine written,
+     * for safety, it is editable (this doesn't actually check for write access)
+     * If the file has wac-allow and accept patch headers, those are respected.
+     * and local write access is determined by those headers.
+     * This synchronous version only looks at past HTTP requests, does not make new ones.
      *
      * @returns The method string SPARQL or DAV or
      *   LOCALFILE or false if known, undefined if not known.
@@ -64355,29 +64442,36 @@ var UpdateManager = /*#__PURE__*/function () {
       if (!kb) {
         kb = this.store;
       }
-      uri = (0,_utils_termValue__WEBPACK_IMPORTED_MODULE_7__.termValue)(uri);
+      uri = (0,_utils_termValue__WEBPACK_IMPORTED_MODULE_9__.termValue)(uri);
       if (!this.isHttpUri(uri)) {
-        if (kb.holds(this.store.rdfFactory.namedNode(uri), this.store.rdfFactory.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), this.store.rdfFactory.namedNode('http://www.w3.org/2007/ont/link#MachineEditableDocument'))) {
+        if (this.store.holds(this.store.rdfFactory.namedNode(uri), this.store.rdfFactory.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), this.store.rdfFactory.namedNode('http://www.w3.org/2007/ont/link#MachineEditableDocument'))) {
           return 'LOCALFILE';
         }
       }
       var request;
       var definitive = false;
+      var meta = this.store.fetcher.appNode;
+      // const kb = s
+
       // @ts-ignore passes a string to kb.each, which expects a term. Should this work?
-      var requests = kb.each(undefined, this.ns.link('requestedURI'), (0,_uri__WEBPACK_IMPORTED_MODULE_8__.docpart)(uri));
+      var requests = kb.each(undefined, this.ns.link('requestedURI'), (0,_uri__WEBPACK_IMPORTED_MODULE_10__.docpart)(uri), meta);
       var method;
       for (var r = 0; r < requests.length; r++) {
         request = requests[r];
         if (request !== undefined) {
-          var response = kb.any(request, this.ns.link('response'));
-          if (request !== undefined) {
-            var wacAllow = kb.anyValue(response, this.ns.httph('wac-allow'));
+          var _response2 = kb.any(request, this.ns.link('response'), null, meta);
+          if (_response2 !== undefined) {
+            // ts
+
+            var outOfDate = kb.anyJS(_response2, this.ns.link('outOfDate'), null, meta);
+            if (outOfDate) continue;
+            var wacAllow = kb.anyValue(_response2, this.ns.httph('wac-allow'));
             if (wacAllow) {
-              var _iterator = _createForOfIteratorHelper(wacAllow.split(',')),
-                _step;
+              var _iterator2 = _createForOfIteratorHelper(wacAllow.split(',')),
+                _step2;
               try {
-                for (_iterator.s(); !(_step = _iterator.n()).done;) {
-                  var bit = _step.value;
+                for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+                  var bit = _step2.value;
                   var lr = bit.split('=');
                   if (lr[0].includes('user') && !lr[1].includes('write') && !lr[1].includes('append')) {
                     // console.log('    editable? excluded by WAC-Allow: ', wacAllow)
@@ -64385,12 +64479,12 @@ var UpdateManager = /*#__PURE__*/function () {
                   }
                 }
               } catch (err) {
-                _iterator.e(err);
+                _iterator2.e(err);
               } finally {
-                _iterator.f();
+                _iterator2.f();
               }
             }
-            var acceptPatch = kb.each(response, this.ns.httph('accept-patch'));
+            var acceptPatch = kb.each(_response2, this.ns.httph('accept-patch'));
             if (acceptPatch.length) {
               for (var i = 0; i < acceptPatch.length; i++) {
                 method = acceptPatch[i].value.trim();
@@ -64398,7 +64492,7 @@ var UpdateManager = /*#__PURE__*/function () {
                 if (method.indexOf('application/sparql-update-single-match') >= 0) return 'SPARQL';
               }
             }
-            var authorVia = kb.each(response, this.ns.httph('ms-author-via'));
+            var authorVia = kb.each(_response2, this.ns.httph('ms-author-via'));
             if (authorVia.length) {
               for (var _i = 0; _i < authorVia.length; _i++) {
                 method = authorVia[_i].value.trim();
@@ -64413,7 +64507,7 @@ var UpdateManager = /*#__PURE__*/function () {
             if (!this.isHttpUri(uri)) {
               if (!wacAllow) return false;else return 'LOCALFILE';
             }
-            var status = kb.each(response, this.ns.http('status'));
+            var status = kb.each(_response2, this.ns.http('status'));
             if (status.length) {
               for (var _i2 = 0; _i2 < status.length; _i2++) {
                 // @ts-ignore since statuses should be TFTerms, this should always be false
@@ -64462,7 +64556,7 @@ var UpdateManager = /*#__PURE__*/function () {
     key: "statementBnodes",
     value: function statementBnodes(st) {
       return [st.subject, st.predicate, st.object].filter(function (x) {
-        return (0,_utils_terms__WEBPACK_IMPORTED_MODULE_9__.isBlankNode)(x);
+        return (0,_utils_terms__WEBPACK_IMPORTED_MODULE_11__.isBlankNode)(x);
       });
     }
 
@@ -64857,7 +64951,7 @@ var UpdateManager = /*#__PURE__*/function () {
         // console.log('Server does not support live updates through Updates-Via :-(')
         return false;
       }
-      wssURI = (0,_uri__WEBPACK_IMPORTED_MODULE_8__.join)(wssURI, doc.value);
+      wssURI = (0,_uri__WEBPACK_IMPORTED_MODULE_10__.join)(wssURI, doc.value);
       var validWssURI = wssURI.replace(/^http:/, 'ws:').replace(/^https:/, 'wss:');
       // console.log('Web socket URI ' + wssURI)
 
@@ -64997,8 +65091,8 @@ var UpdateManager = /*#__PURE__*/function () {
 
       try {
         var kb = this.store;
-        var ds = !deletions ? [] : (0,_utils_terms__WEBPACK_IMPORTED_MODULE_9__.isStore)(deletions) ? deletions.statements : deletions instanceof Array ? deletions : [deletions];
-        var is = !insertions ? [] : (0,_utils_terms__WEBPACK_IMPORTED_MODULE_9__.isStore)(insertions) ? insertions.statements : insertions instanceof Array ? insertions : [insertions];
+        var ds = !deletions ? [] : (0,_utils_terms__WEBPACK_IMPORTED_MODULE_11__.isStore)(deletions) ? deletions.statements : deletions instanceof Array ? deletions : [deletions];
+        var is = !insertions ? [] : (0,_utils_terms__WEBPACK_IMPORTED_MODULE_11__.isStore)(insertions) ? insertions.statements : insertions instanceof Array ? insertions : [insertions];
         if (!(ds instanceof Array)) {
           throw new Error('Type Error ' + (0,_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0__["default"])(ds) + ': ' + ds);
         }
@@ -65155,7 +65249,7 @@ var UpdateManager = /*#__PURE__*/function () {
           }
         }
       } catch (e) {
-        callback(undefined, false, 'Exception in update: ' + e + '\n' + _utils_js__WEBPACK_IMPORTED_MODULE_10__.stackString(e));
+        callback(undefined, false, 'Exception in update: ' + e + '\n' + _utils_js__WEBPACK_IMPORTED_MODULE_12__.stackString(e));
       }
     }
   }, {
@@ -65178,7 +65272,7 @@ var UpdateManager = /*#__PURE__*/function () {
       // prepare contents of revised document
       var newSts = kb.statementsMatching(undefined, undefined, undefined, doc).slice(); // copy!
       for (var i = 0; i < ds.length; i++) {
-        _utils_js__WEBPACK_IMPORTED_MODULE_10__.RDFArrayRemove(newSts, ds[i]);
+        _utils_js__WEBPACK_IMPORTED_MODULE_12__.RDFArrayRemove(newSts, ds[i]);
       }
       for (var _i9 = 0; _i9 < is.length; _i9++) {
         newSts.push(is[_i9]);
@@ -65189,7 +65283,7 @@ var UpdateManager = /*#__PURE__*/function () {
       var candidateTarget = kb.the(response, this.ns.httph('content-location'));
       var targetURI;
       if (candidateTarget) {
-        targetURI = (0,_uri__WEBPACK_IMPORTED_MODULE_8__.join)(candidateTarget.value, targetURI);
+        targetURI = (0,_uri__WEBPACK_IMPORTED_MODULE_10__.join)(candidateTarget.value, targetURI);
       }
       options.contentType = contentType;
       options.noMeta = true;
@@ -65230,7 +65324,7 @@ var UpdateManager = /*#__PURE__*/function () {
       var newSts = kb.statementsMatching(undefined, undefined, undefined, doc).slice(); // copy!
 
       for (var i = 0; i < ds.length; i++) {
-        _utils_js__WEBPACK_IMPORTED_MODULE_10__.RDFArrayRemove(newSts, ds[i]);
+        _utils_js__WEBPACK_IMPORTED_MODULE_12__.RDFArrayRemove(newSts, ds[i]);
       }
       for (var _i12 = 0; _i12 < is.length; _i12++) {
         newSts.push(is[_i12]);
@@ -65241,7 +65335,7 @@ var UpdateManager = /*#__PURE__*/function () {
         throw new Error('Rewriting file: No filename extension: ' + doc.value);
       }
       var ext = doc.value.slice(dot + 1);
-      var contentType = _fetcher__WEBPACK_IMPORTED_MODULE_5__["default"].CONTENT_TYPE_BY_EXT[ext];
+      var contentType = _fetcher__WEBPACK_IMPORTED_MODULE_7__["default"].CONTENT_TYPE_BY_EXT[ext];
       if (!contentType) {
         throw new Error('File extension .' + ext + ' not supported for data write');
       }
@@ -65274,7 +65368,7 @@ var UpdateManager = /*#__PURE__*/function () {
       }
 
       // serialize to the appropriate format
-      var sz = (0,_serializer__WEBPACK_IMPORTED_MODULE_11__["default"])(kb);
+      var sz = (0,_serializer__WEBPACK_IMPORTED_MODULE_13__["default"])(kb);
       sz.suggestNamespaces(kb.namespaces);
       sz.setBase(uri);
       switch (contentType) {
