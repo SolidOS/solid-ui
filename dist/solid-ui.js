@@ -13135,17 +13135,17 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2023-04-05T16:11:15Z',
-  commit: '00ab6c9664d4624d74c0fcc5b2655f9109fac1d3',
+  buildTime: '2023-04-06T12:13:32Z',
+  commit: 'f9084b4cf727fd1908e9c9b310c367c4eefa04ab',
   npmInfo: {
     'solid-ui': '2.4.27',
     npm: '8.19.4',
-    node: '16.19.1',
-    v8: '9.4.146.26-node.24',
+    node: '16.20.0',
+    v8: '9.4.146.26-node.26',
     uv: '1.43.0',
     zlib: '1.2.11',
     brotli: '1.0.9',
-    ares: '1.18.1',
+    ares: '1.19.0',
     modules: '93',
     nghttp2: '1.47.0',
     napi: '8',
@@ -15687,7 +15687,7 @@ _fieldFunction.field[ns.ui('Classifier').uri] = function (dom, container, alread
  **     <select id=dropDownSelect>
  **       <option> ....
  **     <subForm>
- **  Alternative implementatons caould be:
+ **  Alternative implementatons could be:
  ** -- pop-up menu (as here)
  ** -- radio buttons
  ** -- auto-complete typing
@@ -15728,11 +15728,11 @@ _fieldFunction.field[ns.ui('Choice').uri] = function (dom, container, already, s
     subForm: subForm,
     disambiguate: false
   };
-  function getSelectorOptions() {
+  function getSelectorOptions(dataSource) {
     var possible = [];
     var possibleProperties;
     possible = kb.each(undefined, ns.rdf('type'), uiFrom, formDoc);
-    for (var x in findMembersNT(kb, uiFrom, dataDoc)) {
+    for (var x in findMembersNT(kb, uiFrom, dataSource)) {
       possible.push(kb.fromNT(x));
     } // Use rdfs
 
@@ -15764,6 +15764,10 @@ _fieldFunction.field[ns.ui('Choice').uri] = function (dom, container, already, s
 
   var multiSelect = kb.any(form, ui('multiselect')); // Optional
   if (multiSelect) opts.multiSelect = true;
+
+  // by default searches the dataDoc graph or optionally the full store
+  var dataSource = kb.any(form, ui('search-full-store')).length ? null : dataDoc; // optional
+
   var selector;
   rhs.refresh = function () {
     // from ui:property
@@ -15771,7 +15775,7 @@ _fieldFunction.field[ns.ui('Choice').uri] = function (dom, container, already, s
       return object.value;
     });
     // from ui:from + ui:property
-    var possibleOptions = getSelectorOptions();
+    var possibleOptions = getSelectorOptions(dataSource);
     possibleOptions.push(selectedOptions);
     possibleOptions = sortByLabel(possibleOptions);
     selector = makeSelectForChoice(dom, rhs, kb, subject, property, possibleOptions, selectedOptions, uiFrom, opts, dataDoc, callbackFunction);
