@@ -147,7 +147,7 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
       return // ignore deleted messaged -- @@ could also leave a placeholder
     }
     if (isReplaced(message)) { //
-        return // this is old version
+      return // this is old version
     }
     let thread = store.any(null, ns.sioc('has_member'), message, message.doc())
     const id = store.any(message, ns.sioc('id'), null, message.doc())
@@ -191,7 +191,7 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
 
     // Are we at the top of a thread?
     if (backwards && earliest.limit && date <= earliest.limit) {
-        return true // done
+      return true // done
     }
     date = await dateFolder.loadPrevious(date, backwards) // backwards
 
@@ -305,7 +305,6 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
         return sense ? 'noun_1369241.svg' : 'noun_1369237.svg'
       }
     }
-
 
     /// ////////////// Scroll up adding more below
 
@@ -605,9 +604,9 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
 
   async function loadInitialContent () {
     function yank () {
-        if (selectedMessageTable && selectedMessageTable.selectedElement) {
-            selectedMessageTable.selectedElement.scrollIntoView({ block: 'center' })
-        }
+      if (selectedMessageTable && selectedMessageTable.selectedElement) {
+        selectedMessageTable.selectedElement.scrollIntoView({ block: 'center' })
+      }
     }
 
     // During initial load ONLY keep scroll to selected thing or bottom
@@ -623,10 +622,10 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
 
     let live, selectedDocument, threadRootDocument
     if (options.selectedMessage) {
-        selectedDocument = options.selectedMessage.doc()
+      selectedDocument = options.selectedMessage.doc()
     }
     if (threadRootMessage) {
-        threadRootDocument = threadRootMessage.doc()
+      threadRootDocument = threadRootMessage.doc()
     }
     const initialDocment = selectedDocument || threadRootDocument
 
@@ -680,15 +679,15 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
   const latest = { messageTable: null }
 
   if (options.thread) {
-      const thread = options.thread
-      threadRootMessage = store.any(null, ns.sioc('has_reply'), thread, thread.doc())
-      if (threadRootMessage) {
-          const threadTime = store.any(threadRootMessage, ns.dct('created'), null, threadRootMessage.doc())
-          if (threadTime) {
-              earliest.limit = new Date(threadTime.value)
-              console.log(' inifinite: thread start at ' + earliest.limit)
-          }
+    const thread = options.thread
+    threadRootMessage = store.any(null, ns.sioc('has_reply'), thread, thread.doc())
+    if (threadRootMessage) {
+      const threadTime = store.any(threadRootMessage, ns.dct('created'), null, threadRootMessage.doc())
+      if (threadTime) {
+        earliest.limit = new Date(threadTime.value)
+        debug.log(' inifinite: thread start at ' + earliest.limit)
       }
+    }
   }
 
   let lock = false

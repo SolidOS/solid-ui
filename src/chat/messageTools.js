@@ -45,41 +45,41 @@ emojiMap[ns.schema('EndorseAction')] = '⭐️'
 emojiMap[ns.schema('LikeAction')] = '❤️'
 
 export function emojiFromActionClass (action) {
-    return emojiMap[action] || null
+  return emojiMap[action] || null
 }
 
 export function ActionClassFromEmoji (emoji) {
-    for (a in emojiMap) {
-        if (emojiMap[a] === emoji) {
-            return $rdf.sym(a.slice(1, -1)) // remove < >
-        }
+  for (const a in emojiMap) {
+    if (emojiMap[a] === emoji) {
+      return rdf.sym(a.slice(1, -1)) // remove < >
     }
-    return null
+  }
+  return null
 }
 
 // Allow the qction to give its own emoji as content,
 // or get the emoji from the class lof action.
 export function emojiFromAction (action) {
-    const content =store.any(action, ns.sioc('content'), null, action.doc())
-    if (content) return content
-    const klass =store.any(action, ns.rdf('type'), null, action.doc())
-    if (klass) {
-        const em = emojiFromActionClass(klass);
-        if (em) return em;
-    }
-    return '⬜️'
+  const content = store.any(action, ns.sioc('content'), null, action.doc())
+  if (content) return content
+  const klass = store.any(action, ns.rdf('type'), null, action.doc())
+  if (klass) {
+    const em = emojiFromActionClass(klass)
+    if (em) return em
+  }
+  return '⬜️'
 }
 
 /**
  * Create strip of sentiments expressed
  */
 export async function sentimentStrip (target, doc) { // alain seems not used
-    const versions = await allVersions(target)
-    console.log('sentimentStrip Versions for ' + target, versions)
-    const actions = versions.map(version => store.each(null, ns.schema('target'), version, doc)).flat()
-    console.log('sentimentStrip: Actions for ' + target, actions)
-    const strings = sentiments.map(action => emojiFromAction(action) || '')
-    return dom.createTextNode(strings.join(' '))
+  const versions = await allVersions(target)
+  debug.log('sentimentStrip Versions for ' + target, versions)
+  const actions = versions.map(version => store.each(null, ns.schema('target'), version, doc)).flat()
+  debug.log('sentimentStrip: Actions for ' + target, actions)
+  const strings = actions.map(action => emojiFromAction(action) || '')
+  return dom.createTextNode(strings.join(' '))
 }
 /**
  * Create strip of sentiments expressed, with hyperlinks
@@ -93,16 +93,16 @@ export async function sentimentStripLinked (target, doc) {
     strip.innerHTML = ''
     if (isDeleted(target)) return strip
     const versions = await allVersions(target)
-    console.log('sentimentStripLinked: Versions for ' + target, versions)
+    debug.log('sentimentStripLinked: Versions for ' + target, versions)
     const actions = versions.map(version => store.each(null, ns.schema('target'), version, doc)).flat()
-    console.log('sentimentStripLinked: Actions for ' + target, actions)
-    if (actions.length == 0) return strip
+    debug.log('sentimentStripLinked: Actions for ' + target, actions)
+    if (actions.length === 0) return strip
     const sentiments = actions.map(a => [
       store.any(a, ns.rdf('type'), null, doc),
       store.any(a, ns.sioc('content'), null, doc),
       store.any(a, ns.schema('agent'), null, doc)
     ])
-    console.log('  Actions sentiments ', sentiments)
+    debug.log('  Actions sentiments ', sentiments)
     sentiments.sort()
     sentiments.forEach(ss => {
       const [theClass, content, agent] = ss
@@ -116,10 +116,9 @@ export async function sentimentStripLinked (target, doc) {
       res.textContent = content || emojiMap[theClass] || '⬜️'
       strip.appendChild(res)
     })
-    console.log('  Actions strip ', strip)
-
+    debug.log('  Actions strip ', strip)
   }
-  refresh().then(console.log('sentimentStripLinked: sentimentStripLinked async refreshed'))
+  refresh().then(debug.log('sentimentStripLinked: sentimentStripLinked async refreshed'))
   strip.refresh = refresh
   return strip
 }

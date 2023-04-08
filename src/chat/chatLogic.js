@@ -143,11 +143,11 @@ export async function originalVersion (message) {
   const done = {}
   // done[message.ur] = true
   while (msg) {
-      if (done[msg.uri]) {
-          console.error('originalVersion: verion loop' + message)
-          return message
-      }
-      done[msg.uri] = true
+    if (done[msg.uri]) {
+      debug.error('originalVersion: verion loop' + message)
+      return message
+    }
+    done[msg.uri] = true
     message = msg
     await store.fetcher.load(message)
     msg = store.any(null, ns.dct('isReplacedBy'), message, message.doc())
@@ -159,10 +159,10 @@ export async function mostRecentVersion (message) {
   let msg = message
   const done = {}
   while (msg) {
-      if (done[msg.uri]) {
-          console.error('mostRecentVersion: verion loop' + message)
-          return message
-      }
+    if (done[msg.uri]) {
+      debug.error('mostRecentVersion: verion loop' + message)
+      return message
+    }
     done[msg.uri] = true
     message = msg
     await store.fetcher.load(message)
