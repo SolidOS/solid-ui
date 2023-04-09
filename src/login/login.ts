@@ -376,13 +376,12 @@ function signInOrSignUpBox (
   options = options || {}
   const signInButtonStyle = options.buttonStyle || getDefaultSignInButtonStyle()
 
-  // @@ TODO Remove the need to cast HTML element to any
   const box: any = dom.createElement('div')
   const magicClassName = 'SolidSignInOrSignUpBox'
   debug.log('widgets.signInOrSignUpBox')
   box.setUserCallback = setUserCallback
-  box.setAttribute('class', magicClassName);
-  (box as any).style = 'display:flex;' // @@ fix all typecasts like this
+  box.setAttribute('class', magicClassName)
+  box.setAttribute('style', 'display:flex;')
 
   // Sign in button with PopUP
   const signInPopUpButton = dom.createElement('input') // multi
@@ -437,7 +436,7 @@ function signInOrSignUpBox (
   box.appendChild(signupButton)
   signupButton.setAttribute('type', 'button')
   signupButton.setAttribute('value', 'Sign Up for Solid')
-  signupButton.setAttribute('style', `${signInButtonStyle}background-color: #efe;`)
+  signupButton.setAttribute('style', `${signInButtonStyle}background-color: #efe;${style.headerBannerLoginInput}`)
 
   signupButton.addEventListener(
     'click',

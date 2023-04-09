@@ -123,13 +123,13 @@ export function createHelpMenu (options: HeaderOptions, helpMenuItems: MenuItems
 
   const helpMenu = document.createElement('nav')
 
-  helpMenu.setAttribute('style', style.headerUserMenuNavigationMenu)
+  helpMenu.setAttribute('style', style.headerUserMenuNavigationMenuNotDisplayed)
   helpMenu.setAttribute('aria-hidden', 'true')
+  helpMenu.setAttribute('id', 'helperNav')
   helpMenu.appendChild(helpMenuList)
 
   const helpMenuContainer = document.createElement('div')
   helpMenuContainer.setAttribute('style', style.headerBannerUserMenu)
-  helpMenuContainer.setAttribute('style', style.headerUserMenu)
   helpMenuContainer.appendChild(helpMenu)
 
   const helpMenuTrigger = document.createElement('button')
@@ -148,9 +148,13 @@ export function createHelpMenu (options: HeaderOptions, helpMenuItems: MenuItems
   helpMenuContainer.addEventListener('mouseover', event => {
     clearTimeout(timer)
     throttledMenuToggle(event)
+    const nav = document.getElementById('helperNav')
+    nav?.setAttribute('style', style.headerUserMenuNavigationMenu)
   })
   helpMenuContainer.addEventListener('mouseout', event => {
     timer = setTimeout(() => throttledMenuToggle(event), 200)
+    const nav = document.getElementById('helperNav')
+    nav?.setAttribute('style', style.headerUserMenuNavigationMenuNotDisplayed)
   })
 
   return helpMenuContainer
@@ -222,8 +226,9 @@ export async function createUserMenu (store: IndexedFormula, user: NamedNode, us
   }
   const loggedInMenu = document.createElement('nav')
 
-  loggedInMenu.setAttribute('style', style.headerUserMenuNavigationMenu)
+  loggedInMenu.setAttribute('style', style.headerUserMenuNavigationMenuNotDisplayed)
   loggedInMenu.setAttribute('aria-hidden', 'true')
+  loggedInMenu.setAttribute('id', 'loggedInNav')
   loggedInMenu.appendChild(loggedInMenuList)
 
   const loggedInMenuTrigger = document.createElement('button')
@@ -237,8 +242,7 @@ export async function createUserMenu (store: IndexedFormula, user: NamedNode, us
   }
 
   const loggedInMenuContainer = document.createElement('div')
-  loggedInMenuContainer.setAttribute('style', style.headerBannerUserMenu)
-  loggedInMenuContainer.setAttribute('style', style.headerUserMenu)
+  loggedInMenuContainer.setAttribute('style', style.headerBannerUserMenuNotDisplayed)
   loggedInMenuContainer.appendChild(loggedInMenuTrigger)
   loggedInMenuContainer.appendChild(loggedInMenu)
 
@@ -248,9 +252,13 @@ export async function createUserMenu (store: IndexedFormula, user: NamedNode, us
   loggedInMenuContainer.addEventListener('mouseover', event => {
     clearTimeout(timer)
     throttledMenuToggle(event)
+    const nav = document.getElementById('loggedInNav')
+    nav?.setAttribute('style', style.headerUserMenuNavigationMenu)
   })
   loggedInMenuContainer.addEventListener('mouseout', event => {
     timer = setTimeout(() => throttledMenuToggle(event), 200)
+    const nav = document.getElementById('loggedInNav')
+    nav?.setAttribute('style', style.headerUserMenuNavigationMenuNotDisplayed)
   })
 
   return loggedInMenuContainer
