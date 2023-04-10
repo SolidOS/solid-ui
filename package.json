@@ -54,6 +54,7 @@
   },
   "homepage": "https://github.com/solidos/solid-ui",
   "dependencies": {
+    "@inrupt/universal-fetch": "^1.0.1",
     "acorn": "^7.4.1",
     "escape-html": "^1.0.3",
     "eslint-plugin-n": "^15.6.1",
@@ -105,7 +106,6 @@
     "eslint-plugin-promise": "^6.1.1",
     "html-webpack-plugin": "^5.5.0",
     "husky": "^7.0.4",
-    "isomorphic-fetch": "^3.0.0",
     "jest": "^27.5.1",
     "jsdom": "^19.0.0",
     "lint-staged": "^12.5.0",
