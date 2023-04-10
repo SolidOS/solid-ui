@@ -99,7 +99,7 @@ export async function findBookmarkDocument (userContext) {
     userContext.bookmarkDocument = userContext.instances[0]
     if (userContext.instances.length > 1) {
       debug.warn('More than one bookmark file! ' + userContext.instances) // @@ todo - deal with > 1
-      // Note should pick up community bookmarks as well
+      // Note: should pick up community bookmarks as well
     }
   } else {
     if (userContext.publicProfile) {
