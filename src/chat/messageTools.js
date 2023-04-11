@@ -57,8 +57,8 @@ export function ActionClassFromEmoji (emoji) {
   return null
 }
 
-// Allow the qction to give its own emoji as content,
-// or get the emoji from the class lof action.
+// Allow the action to give its own emoji as content,
+// or get the emoji from the class of action.
 export function emojiFromAction (action) {
   const content = store.any(action, ns.sioc('content'), null, action.doc())
   if (content) return content
