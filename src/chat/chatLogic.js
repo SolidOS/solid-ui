@@ -94,7 +94,7 @@ export class ChatChannel {
   }
 
   // Create a new thread of replies to the thread root message
-  //  or returns one which already exists
+  //  or return one which already exists
 
   async createThread (threadRoot) {
     const already = store.each(threadRoot, ns.sioc('has_reply'), null, threadRoot.doc())
