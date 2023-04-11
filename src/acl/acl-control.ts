@@ -11,8 +11,7 @@ import { getACLorDefault, getProspectiveHolder } from './acl'
 import { Store, NamedNode } from 'rdflib'
 import { DataBrowserContext } from 'pane-registry'
 import { AccessController } from './access-controller'
-import { getClasses } from '../jss'
-import { styles } from './styles'
+import * as style from '../style'
 import { log, warn } from '../debug'
 
 let global: Window = window
@@ -130,20 +129,19 @@ export function ACLControlBox5 (
 ): HTMLElement {
   const dom = context.dom
   const doc = subject.doc() // The ACL is actually to the doc describing the thing
-  const classes = getClasses(dom.head, styles).classes
 
   const container = dom.createElement('div')
-  container.classList.add(classes.aclControlBoxContainer)
+  container.setAttribute('style', style.aclControlBoxContainer)
 
   const header = container.appendChild(dom.createElement('h1'))
   header.textContent = `Sharing for ${noun} ${utils.label(subject)}`
-  header.classList.add(classes.aclControlBoxHeader)
+  header.setAttribute('style', style.aclControlBoxHeader)
 
   const status = container.appendChild(dom.createElement('div'))
-  status.classList.add(classes.aclControlBoxStatus)
+  status.setAttribute('style', style.aclControlBoxStatus)
 
   try {
-    loadController(doc, kb, subject, noun, context, classes, dom, status)
+    loadController(doc, kb, subject, noun, context, dom, status)
       .then(controller => container.appendChild(controller.render()))
   } catch (error) {
     status.innerText = error
@@ -158,7 +156,6 @@ async function loadController (
   subject: NamedNode,
   noun: string,
   context: DataBrowserContext,
-  classes: Record<string, string>,
   dom: HTMLDocument,
   status: HTMLElement
 ): Promise<AccessController> {
@@ -187,8 +184,8 @@ async function loadController (
     return resolve(getController())
 
     function getController (prospectiveDefaultHolder?: NamedNode) {
-      return new AccessController(subject, noun, context, status, classes, targetIsProtected, targetDoc as NamedNode, targetACLDoc as NamedNode, defaultHolder as NamedNode,
-        defaultACLDoc as NamedNode, prospectiveDefaultHolder, kb, dom)
+      return new AccessController(subject, noun, context, status, targetIsProtected, targetDoc as NamedNode, targetACLDoc as NamedNode, defaultHolder as NamedNode,
+        defaultACLDoc as NamedNode, prospectiveDefaultHolder, kb, dom as HTMLDocument)
     }
   }))
 }

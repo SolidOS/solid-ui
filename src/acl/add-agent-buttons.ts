@@ -11,6 +11,7 @@ import { ensureLoadedProfile } from '../login/login'
 import * as ns from '../ns'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
+import * as style from '../style'
 import { AccessGroups } from './access-groups'
 
 /**
@@ -173,10 +174,10 @@ export class AddAgentButtons {
     const trustedApplications = this.groupList.controller.context.session.paneRegistry.byName('trustedApplications')
     if (trustedApplications) {
       const trustedApplicationsElement = trustedApplications.render(null, this.groupList.controller.context)
-      trustedApplicationsElement.classList.add(this.groupList.controller.classes.trustedAppController)
+      trustedApplicationsElement.setAttribute('style', style.trustedAppController)
 
       const cancelButton = widgets.cancelButton(this.groupList.controller.dom, () => this.renderCleanup())
-      cancelButton.classList.add(this.groupList.controller.classes.trustedAppCancelButton)
+      cancelButton.setAttribute('style', style.trustedAppCancelButton)
       trustedApplicationsElement.insertBefore(cancelButton, trustedApplicationsElement.firstChild)
 
       this.barElement.appendChild(trustedApplicationsElement)
@@ -191,7 +192,7 @@ export class AddAgentButtons {
     this.barElement.appendChild(this.groupList.controller.dom.createElement('p')).textContent = `You have ${trustedOrigins.length} selected web apps.`
     return new Promise((resolve, reject) => {
       const appsTable = this.barElement.appendChild(this.groupList.controller.dom.createElement('table'))
-      appsTable.classList.add(this.groupList.controller.classes.trustedAppAddApplicationsTable)
+      appsTable.setAttribute('style', style.trustedAppAddApplicationsTable)
       trustedApps.forEach(app => {
         const origin = (this.groupList.store as Store).any(app, ns.acl('origin')) // @@ TODO fix as
         if (!origin) {

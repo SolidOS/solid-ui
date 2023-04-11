@@ -1,10 +1,10 @@
 import { silenceDebugMessages } from '../../helpers/setup'
-import * as Styles from '../../../src/acl/styles'
+import * as Style from '../../../src/style'
 
 silenceDebugMessages()
 
-describe('Styles', () => {
+describe('Style', () => {
   it('exists', () => {
-    expect(typeof Styles).toEqual('object')
+    expect(typeof Style).toEqual('object')
   })
 })

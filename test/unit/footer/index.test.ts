@@ -41,14 +41,6 @@ describe('createControllerInfoBlock', () => {
     const user = new NamedNode('https://sharonstrats.inrupt.net/profile/card#me')
     expect(createControllerInfoBlock(store, user, pod, podOwner)).toMatchSnapshot()
   })
-  it('assigns class to footer', async () => {
-    const pod = new NamedNode('https://test.com')
-    const podOwner = new NamedNode('https://test.com')
-    const user = new NamedNode('https://sharonstrats.inrupt.net/profile/card#me')
-    const footer = createControllerInfoBlock(store, user, pod, podOwner)
-    expect(footer.className).toContain('footer-pod-info')
-    expect(footer.className).toContain('footer')
-  })
   it('makes use of options', async () => {
     const pod = new NamedNode('https://test.com')
     const podOwner = new NamedNode('https://test.com')

@@ -3,9 +3,6 @@
  */
 import { IndexedFormula, LiveStore, NamedNode, parse, sym } from 'rdflib'
 import { ns } from '..'
-import { styleMap as headerStyleMap } from '../header/styleMap'
-import { styleMap as footerStyleMap } from '../footer/styleMap'
-import { getClasses } from '../jss'
 
 /* @ts-ignore  no-console */
 type ThrottleOptions = {
@@ -13,27 +10,7 @@ type ThrottleOptions = {
     throttling?: boolean;
     trailing?: boolean;
 }
-/**
- * @internal
- */
-function getStyle (styleClass, type?) {
-  if (type && type === 'footer') {
-    return footerStyleMap[styleClass]
-  } else {
-    return headerStyleMap[styleClass]
-  }
-}
 
-/**
- * @ignore exporting this only for the unit test
- */
-export function addStyleClassToElement (element: any, styleClasses: string[], type?: string) {
-  styleClasses.forEach((styleClass) => {
-    const style = getStyle(styleClass, type)
-    const { classes } = getClasses(document.head, { [styleClass]: style })
-    element.classList.add(classes[styleClass])
-  })
-}
 /**
  * @ignore exporting this only for the unit test
  */
