@@ -7,10 +7,6 @@ type ThrottleOptions = {
 /**
  * @ignore exporting this only for the unit test
  */
-export declare function addStyleClassToElement(element: any, styleClasses: string[], type?: string): void;
-/**
- * @ignore exporting this only for the unit test
- */
 export declare function getPod(): NamedNode;
 /**
  */

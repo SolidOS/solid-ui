@@ -13,7 +13,6 @@ export declare class AccessController {
     noun: string;
     context: DataBrowserContext;
     private statusElement;
-    classes: Record<string, string>;
     targetIsProtected: boolean;
     private targetDoc;
     private targetACLDoc;
@@ -21,14 +20,14 @@ export declare class AccessController {
     private defaultACLDoc;
     private prospectiveDefaultHolder;
     store: any;
-    dom: any;
+    dom: HTMLDocument;
     mainCombo: AccessGroups;
     defaultsCombo: AccessGroups | null;
     private readonly isContainer;
     private defaultsDiffer;
     private readonly rootElement;
     private isUsingDefaults;
-    constructor(subject: NamedNode, noun: string, context: DataBrowserContext, statusElement: HTMLElement, classes: Record<string, string>, targetIsProtected: boolean, targetDoc: NamedNode, targetACLDoc: NamedNode, defaultHolder: NamedNode | null, defaultACLDoc: NamedNode | null, prospectiveDefaultHolder: NamedNode | undefined, store: any, dom: any);
+    constructor(subject: NamedNode, noun: string, context: DataBrowserContext, statusElement: HTMLElement, targetIsProtected: boolean, targetDoc: NamedNode, targetACLDoc: NamedNode, defaultHolder: NamedNode | null, defaultACLDoc: NamedNode | null, prospectiveDefaultHolder: NamedNode | undefined, store: any, dom: HTMLDocument);
     get isEditable(): boolean;
     render(): HTMLElement;
     private renderRemoveAclsController;

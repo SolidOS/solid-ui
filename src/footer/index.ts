@@ -4,7 +4,8 @@
  */
 import { LiveStore, NamedNode } from 'rdflib'
 import { authn, authSession } from 'solid-logic'
-import { addStyleClassToElement, getName, getPod, getPodOwner } from '../utils/headerFooterHelpers'
+import * as style from '../style'
+import { getName, getPod, getPodOwner } from '../utils/headerFooterHelpers'
 
 const DEFAULT_SOLID_PROJECT_URL = 'https://solidproject.org'
 const DEFAULT_SOLID_PROJECT_NAME = 'solidproject.org'
@@ -52,7 +53,7 @@ export function createControllerInfoBlock (store: LiveStore, user: NamedNode | n
     return profileLinkContainer
   }
 
-  addStyleClassToElement(profileLinkContainer, ['footer-pod-info', 'footer'], 'footer')
+  profileLinkContainer.setAttribute('style', style.footer)
 
   const podLinkPre = document.createElement('span')
   podLinkPre.innerText = "You're visiting "

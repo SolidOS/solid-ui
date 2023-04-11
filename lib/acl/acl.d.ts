@@ -7,7 +7,7 @@
 import { AgentMapMap, AgentMapUnion, ComboList } from './types';
 import { Store, NamedNode, LiveStore } from 'rdflib';
 /**
- * Take the "default" ACL and convert it into the equivlent ACL
+ * Take the "default" ACL and convert it into the equivalent ACL
  * which the resource would have had. Return it as a new separate store.
  * The "defaultForNew" predicate is also accepted, as a deprecated
  * synonym for "default".
