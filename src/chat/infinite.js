@@ -253,7 +253,7 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
       const statusTR = messageTable.appendChild(dom.createElement('tr')) // ### find status in exception
       if (err.response && err.response.status && err.response.status === 404) {
         debug.log('Error 404 for chat file ' + chatDocument)
-        return await renderMessageTable(date, live) // no mssage file is fine.. will be craeted later
+        return await renderMessageTable(date, live) // no message file is fine. will be created later
         // statusTR.appendChild(widgets.errorMessageBlock(dom, 'no message file', 'white'))
       } else {
         debug.log('*** Error NON 404 for chat file ' + chatDocument)
