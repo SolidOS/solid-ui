@@ -188,7 +188,7 @@ export async function toggleBookmark (userContext, target, bookmarkButton) {
         debug.log('Bookmark deleted: ' + bookmarks[i])
       } catch (e) {
         debug.error('Cant delete bookmark:' + e)
-        debug.warn('Cant delete bookmark:' + e)
+        debug.warn('Cannot delete bookmark:' + e)
       }
     }
   } else {
