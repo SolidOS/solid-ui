@@ -121,7 +121,7 @@ export async function findBookmarkDocument (userContext) {
       )
       userContext.bookmarkDocument = newBookmarkFile
     } else {
-      debug.warn('You seem to have no bookmark file and not even a profile file.')
+      debug.warn('You seem to have no bookmark file, nor even a profile file!')
     }
   }
   return userContext
