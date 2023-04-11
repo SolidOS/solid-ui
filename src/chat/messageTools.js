@@ -73,7 +73,7 @@ export function emojiFromAction (action) {
 /**
  * Create strip of sentiments expressed
  */
-export async function sentimentStrip (target, doc) { // alain seems not used
+export async function sentimentStrip (target, doc) { // alain: seems not used
   const versions = await allVersions(target)
   debug.log('sentimentStrip Versions for ' + target, versions)
   const actions = versions.map(version => store.each(null, ns.schema('target'), version, doc)).flat()
