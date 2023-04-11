@@ -7,7 +7,6 @@ export function instantiateAccessController (dom: HTMLDocument, store: LiveStore
   const noun = ''
   const context = createDataBrowserContext(dom, store)
   const statusElement = dom.createElement('div')
-  const classes = {}
   const targetIsProtected = false
   const targetDoc = sym('https://test.test#')
   const targetACLDoc = sym('https://test.test#')
@@ -19,7 +18,6 @@ export function instantiateAccessController (dom: HTMLDocument, store: LiveStore
     noun,
     context,
     statusElement,
-    classes,
     targetIsProtected,
     targetDoc,
     targetACLDoc,
