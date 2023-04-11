@@ -21,7 +21,7 @@ import {
 import nock from 'nock'
 import { fetch } from '@inrupt/universal-fetch'
 
-window.fetch = fetch
+globalThis.fetch = fetch
 jest.unmock('rdflib') // we need Fetcher to work (mocked)
 jest.unmock('debug') // while debugging only @@
 
