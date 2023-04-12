@@ -2,6 +2,7 @@ import { toContainGraph } from '../custom-matchers/toContainGraph'
 import { toEqualGraph } from '../custom-matchers/toEqualGraph'
 import { error, log, trace, warn } from '../../src/debug'
 import { TextEncoder, TextDecoder } from 'util'
+import 'isomorphic-fetch'
 global.TextEncoder = TextEncoder
 global.TextDecoder = TextDecoder
 

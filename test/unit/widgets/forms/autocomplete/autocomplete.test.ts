@@ -19,7 +19,6 @@ import {
   waitFor
 } from '@testing-library/dom'
 import nock from 'nock'
-import 'isomorphic-fetch'
 
 jest.unmock('rdflib') // we need Fetcher to work (mocked)
 jest.unmock('debug') // while debugging only @@
