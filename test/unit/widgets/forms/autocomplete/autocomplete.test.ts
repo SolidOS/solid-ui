@@ -19,10 +19,7 @@ import {
   waitFor
 } from '@testing-library/dom'
 import nock from 'nock'
-import { fetch } from '@inrupt/universal-fetch'
-import { clearImmediate } from 'timers'
-
-globalThis.fetch = fetch
+import 'isomorphic-fetch'
 
 jest.unmock('rdflib') // we need Fetcher to work (mocked)
 jest.unmock('debug') // while debugging only @@
