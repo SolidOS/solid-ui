@@ -23,7 +23,7 @@ import { fetch } from '@inrupt/universal-fetch'
 import { clearImmediate } from 'timers'
 
 globalThis.fetch = fetch
-globalThis.clearImmediate = clearImmediate
+
 jest.unmock('rdflib') // we need Fetcher to work (mocked)
 jest.unmock('debug') // while debugging only @@
 
