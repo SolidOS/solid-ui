@@ -43,10 +43,10 @@ import {
   WebOperationError
 } from 'solid-logic'
 import * as debug from '../debug'
+import * as style from '../style'
 import { alert } from '../log'
 import * as ns from '../ns.js'
 import { Signup } from '../signup/signup.js'
-import { buttonStyle, commentStyle, textInputStyle } from '../style'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
 
@@ -376,20 +376,19 @@ function signInOrSignUpBox (
   options = options || {}
   const signInButtonStyle = options.buttonStyle || getDefaultSignInButtonStyle()
 
-  // @@ TODO Remove the need to cast HTML element to any
   const box: any = dom.createElement('div')
   const magicClassName = 'SolidSignInOrSignUpBox'
   debug.log('widgets.signInOrSignUpBox')
   box.setUserCallback = setUserCallback
-  box.setAttribute('class', magicClassName);
-  (box as any).style = 'display:flex;' // @@ fix all typecasts like this
+  box.setAttribute('class', magicClassName)
+  box.setAttribute('style', 'display:flex;')
 
   // Sign in button with PopUP
   const signInPopUpButton = dom.createElement('input') // multi
   box.appendChild(signInPopUpButton)
   signInPopUpButton.setAttribute('type', 'button')
   signInPopUpButton.setAttribute('value', 'Log in')
-  signInPopUpButton.setAttribute('style', `${signInButtonStyle}background-color: #eef;`)
+  signInPopUpButton.setAttribute('style', `${signInButtonStyle}background-color: #eef;${style.headerBannerLoginInput}`)
 
   authSession.onLogin(() => {
     const me = authn.currentUser()
@@ -437,7 +436,7 @@ function signInOrSignUpBox (
   box.appendChild(signupButton)
   signupButton.setAttribute('type', 'button')
   signupButton.setAttribute('value', 'Sign Up for Solid')
-  signupButton.setAttribute('style', `${signInButtonStyle}background-color: #efe;`)
+  signupButton.setAttribute('style', `${signInButtonStyle}background-color: #efe;${style.headerBannerLoginInput}`)
 
   signupButton.addEventListener(
     'click',
@@ -506,6 +505,8 @@ export function renderSignInPopup (dom: HTMLDocument) {
 
   const loginToIssuer = async (issuerUri: string) => {
     try {
+      // clear authorization metadata from store
+      solidLogicSingleton.store.updater.flagAuthorizationMetadata() as any
       // Save hash
       const preLoginRedirectHash = new URL(window.location.href).hash
       if (preLoginRedirectHash) {
@@ -513,8 +514,10 @@ export function renderSignInPopup (dom: HTMLDocument) {
       }
       window.localStorage.setItem('loginIssuer', issuerUri)
       // Login
+      const locationUrl = new URL(window.location.href)
+      locationUrl.hash = '' // remove hash part
       await authSession.login({
-        redirectUrl: window.location.href,
+        redirectUrl: locationUrl.href,
         oidcIssuer: issuerUri
       })
     } catch (err) {
@@ -704,6 +707,9 @@ authSession.onLogout(async () => {
   const issuer = window.localStorage.getItem('loginIssuer')
   if (issuer) {
     try {
+      // clear authorization metadata from store
+      solidLogicSingleton.store.updater.flagAuthorizationMetadata() as any
+
       const wellKnownUri = new URL(issuer)
       wellKnownUri.pathname = '/.well-known/openid-configuration'
       const wellKnownResult = await fetch(wellKnownUri.toString())
@@ -864,15 +870,15 @@ export function selectWorkspace (
     // const hr = box.appendChild(dom.createElement('hr')) // @@
     box.appendChild(dom.createElement('hr')) // @@
 
-    const p = box.appendChild(dom.createElement('p'));
-    (p as any).style = commentStyle
+    const p = box.appendChild(dom.createElement('p'))
+    p.setAttribute('style', style.commentStyle)
     p.textContent = `Where would you like to store the data for the ${noun}?
     Give the URL of the folder where you would like the data stored.
     It can be anywhere in solid world - this URI is just an idea.`
     // @@ TODO Remove the need to cast baseField to any
     const baseField: any = box.appendChild(dom.createElement('input'))
-    baseField.setAttribute('type', 'text');
-    (baseField as any).style = textInputStyle
+    baseField.setAttribute('type', 'text')
+    baseField.setAttribute('style', style.textInputStyle)
     baseField.size = 80 // really a string
     baseField.label = 'base URL'
     baseField.autocomplete = 'on'
@@ -885,8 +891,8 @@ export function selectWorkspace (
 
     box.appendChild(dom.createElement('br')) // @@
 
-    const button = box.appendChild(dom.createElement('button'));
-    (button as any).style = buttonStyle
+    const button = box.appendChild(dom.createElement('button'))
+    button.setAttribute('style', style.buttonStyle)
     button.textContent = `Start new ${noun} at this URI`
     button.addEventListener('click', function (_event) {
       let newBase = baseField.value.replace(' ', '%20') // do not re-encode in general, as % encodings may exist
@@ -906,7 +912,7 @@ export function selectWorkspace (
         ns.space('MasterWorkspace')
       )
     })
-    let col1, col2, col3, tr, ws, style, comment
+    let col1, col2, col3, tr, ws, localStyle, comment
     const cellStyle = 'height: 3em; margin: 1em; padding: 1em white; border-radius: 0.3em;'
     const deselectedStyle = `${cellStyle}border: 0px;`
     // const selectedStyle = cellStyle + 'border: 1px solid black;'
@@ -921,8 +927,8 @@ export function selectWorkspace (
         tr.appendChild(col1)
       }
       col2 = dom.createElement('td')
-      style = solidLogicSingleton.store.anyValue(ws, ns.ui('style'))
-      if (!style) {
+      localStyle = solidLogicSingleton.store.anyValue(ws, ns.ui('style'))
+      if (!localStyle) {
         // Otherwise make up arbitrary colour
         const hash = function (x) {
           return x.split('').reduce(function (a, b) {
@@ -931,9 +937,9 @@ export function selectWorkspace (
           }, 0)
         }
         const bgcolor = `#${((hash(ws.uri) & 0xffffff) | 0xc0c0c0).toString(16)}` // c0c0c0  forces pale
-        style = `color: black ; background-color: ${bgcolor};`
+        localStyle = `color: black ; background-color: ${bgcolor};`
       }
-      col2.setAttribute('style', deselectedStyle + style)
+      col2.setAttribute('style', deselectedStyle + localStyle)
       tr.target = ws.uri
       let label = solidLogicSingleton.store.any(ws, ns.rdfs('label'))
       if (!label) {
@@ -956,7 +962,7 @@ export function selectWorkspace (
         'click',
         function (_event) {
           col3.textContent = comment ? comment.value : ''
-          col3.setAttribute('style', deselectedStyle + style)
+          col3.setAttribute('style', deselectedStyle + localStyle)
           const button = dom.createElement('button')
           button.textContent = 'Continue'
           // button.setAttribute('style', style);

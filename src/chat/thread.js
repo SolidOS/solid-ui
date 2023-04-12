@@ -355,7 +355,7 @@ export function thread (dom, kb, subject, messageStore, options) {
         sureButton.textContent = 'Delete message'
         td3.appendChild(sureButton).addEventListener(
           'click',
-          async function (_event) { // alain test for delete or edit depending on me = maker
+          async function (_event) { // alain: test for delete or edit depending on me = maker
             td3.removeChild(sureButton)
             td3.removeChild(cancelButton)
             // deleteMessage(message) // alain or sendMessage(message, 'delete' or 'edit') //alain

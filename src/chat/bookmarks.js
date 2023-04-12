@@ -99,7 +99,7 @@ export async function findBookmarkDocument (userContext) {
     userContext.bookmarkDocument = userContext.instances[0]
     if (userContext.instances.length > 1) {
       debug.warn('More than one bookmark file! ' + userContext.instances) // @@ todo - deal with > 1
-      // Note should pick up community bookmarks as well
+      // Note: should pick up community bookmarks as well
     }
   } else {
     if (userContext.publicProfile) {
@@ -121,7 +121,7 @@ export async function findBookmarkDocument (userContext) {
       )
       userContext.bookmarkDocument = newBookmarkFile
     } else {
-      debug.warn('You seem to have no bookmark file and not even a profile file.')
+      debug.warn('You seem to have no bookmark file, nor even a profile file!')
     }
   }
   return userContext
@@ -188,7 +188,7 @@ export async function toggleBookmark (userContext, target, bookmarkButton) {
         debug.log('Bookmark deleted: ' + bookmarks[i])
       } catch (e) {
         debug.error('Cant delete bookmark:' + e)
-        debug.warn('Cant delete bookmark:' + e)
+        debug.warn('Cannot delete bookmark:' + e)
       }
     }
   } else {
