@@ -3,12 +3,19 @@
  * This tracks data stored in dated folders and sub-folders
  *
  */
-
 import * as debug from '../debug'
 import { store } from 'solid-logic'
-
 import * as ns from '../ns'
 import * as $rdf from 'rdflib' // pull in first avoid cross-refs
+
+export async function emptyLeaf (leafDocument) {
+  await store.fetcher.load(leafDocument)
+  // files can have seealso links. skip ones with no leafObjects with a date
+  return !(
+    store.statementsMatching(null, ns.dct('created'), null, leafDocument)
+      .length > 0
+  )
+}
 
 /**
  * Track back through the YYYY/MM/DD tree to find the previous/next day
@@ -45,7 +52,6 @@ export class DateFolder {
   }
 
   async loadPrevious (date, backwards) {
-    const thisDateFolder = this
     async function previousPeriod (file, level) {
       function younger (x) {
         if (backwards ? x.uri >= file.uri : x.uri <= file.uri) return false // later than we want or same -- looking for different
@@ -60,24 +66,11 @@ export class DateFolder {
         return true
       }
 
-      async function lastNonEmpty (siblings) {
+      function lastOrFirst (siblings) {
         siblings = siblings.filter(suitable)
         siblings.sort() // chronological order
         if (!backwards) siblings.reverse()
-        if (level !== 3) return siblings.pop() // only length chck final leverl
-        while (siblings.length) {
-          const folder = siblings.pop()
-          const leafDocument = store.sym(folder.uri + thisDateFolder.leafFileName)
-          await store.fetcher.load(leafDocument)
-          // files can have seealso links. skip ones with no leafObjects with a date
-          if (
-            store.statementsMatching(null, ns.dct('created'), null, leafDocument)
-              .length > 0
-          ) {
-            return folder
-          }
-        }
-        return null
+        return siblings.pop() // date folder
       }
       // debug.log('  previousPeriod level' + level + ' file ' + file)
       const parent = file.dir()
@@ -85,8 +78,9 @@ export class DateFolder {
         await store.fetcher.load(parent)
         let siblings = store.each(parent, ns.ldp('contains'))
         siblings = siblings.filter(younger)
-        const folder = await lastNonEmpty(siblings)
+        const folder = lastOrFirst(siblings)
         if (folder) return folder
+        debug.log(' parent no suitable offspring ' + parent)
       } catch (err) {
         if (err.response && err.response.status && err.response.status === 404) {
           debug.log('Error 404 for chat parent file ' + parent)
@@ -96,24 +90,43 @@ export class DateFolder {
           throw (new Error(`*** ${err.message} for chat folder ${parent}`))
         }
       }
-
-      if (level === 0) return null // 3:day, 2:month, 1: year  0: no
+      if (level === 0) {
+        debug.log('loadPrevious:  returning as level is zero')
+        return null // 3:day, 2:month, 1: year  0: no
+      }
 
       const uncle = await previousPeriod(parent, level - 1)
-      if (!uncle) return null // reached first ever
+      if (!uncle) {
+        debug.log('   previousPeriod: nothing left before. ', parent)
+        return null // reached first ever
+      }
       await store.fetcher.load(uncle)
       const cousins = store.each(uncle, ns.ldp('contains'))
-      const result = await lastNonEmpty(cousins)
+      const result = lastOrFirst(cousins)
+      debug.log('   previousPeriod: returning cousins at level ' + level, cousins)
+      debug.log('   previousPeriod: returning result at level ' + level, result)
+
       return result
     } // previousPeriod
 
-    const folder = this.leafDocumentFromDate(date).dir()
-    const found = await previousPeriod(folder, 3)
-    if (found) {
-      const doc = store.sym(found.uri + this.leafFileName)
-      return this.dateFromLeafDocument(doc)
+    let folder = this.leafDocumentFromDate(date).dir()
+    while (true) {
+      const found = await previousPeriod(folder, 3)
+      if (found) {
+        const leafDocument = store.sym(found.uri + this.leafFileName)
+        const nextDate = this.dateFromLeafDocument(leafDocument)
+        if (!await emptyLeaf(leafDocument)) {
+          return nextDate
+        } else {
+          debug.log('  loadPrevious: skipping empty ' + leafDocument)
+          date = nextDate
+          folder = this.leafDocumentFromDate(date).dir()
+          debug.log('    loadPrevious: moved back to ' + folder)
+        }
+      } else {
+        return null // no more left
+      }
     }
-    return null
   } // loadPrevious
 
   async firstLeaf (backwards) {

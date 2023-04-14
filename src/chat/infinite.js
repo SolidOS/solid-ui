@@ -13,7 +13,7 @@ import * as ns from '../ns'
 import * as widgets from '../widgets'
 // import * as pad from '../pad'
 // import { DateFolder } from './dateFolder'
-import { ChatChannel, isDeleted, isReplaced, mostRecentVersion } from './chatLogic'
+import { ChatChannel, isDeleted, isReplaced } from './chatLogic'
 import { renderMessageEditor, renderMessageRow } from './message'
 
 // const UI = { authn, icons, ns, media, pad, $rdf, store, style, utils, widgets }
@@ -193,7 +193,10 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
     if (backwards && earliest.limit && date <= earliest.limit) {
       return true // done
     }
+    debug.log(' insertPreviousMessages:  loadPrevious given date ' + date)
+
     date = await dateFolder.loadPrevious(date, backwards) // backwards
+    debug.log(' insertPreviousMessages:  loadPrevious returns date ' + date)
 
     debug.log(
       `insertPreviousMessages: from ${
