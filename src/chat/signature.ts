@@ -1,9 +1,9 @@
-import {schnorr} from '@noble/curves/secp256k1'
-import {sha256} from '@noble/hashes/sha256'
-import {bytesToHex} from '@noble/hashes/utils'
+import { schnorr } from '@noble/curves/secp256k1'
+import { sha256 } from '@noble/hashes/sha256'
+import { bytesToHex } from '@noble/hashes/utils'
 
 // import {utf8Encoder} from './utils'
-import {getPublicKey} from './keys'
+import { getPublicKey } from './keys'
 
 export const utf8Decoder = new TextDecoder('utf-8')
 export const utf8Encoder = new TextEncoder()
@@ -58,7 +58,7 @@ export type Msg = UnsignedMsg & {
   }
 } */
 
-export function finishMsg(t: MsgTemplate, privateKey: string): Message {
+export function finishMsg (t: MsgTemplate, privateKey: string): Message {
   // to update to chat message triples
   let message = t as Message
   // message.pubkey = getPublicKey(privateKey)
@@ -67,7 +67,7 @@ export function finishMsg(t: MsgTemplate, privateKey: string): Message {
   return message
 }
 
-export function serializeMsg(msg: UnsignedMsg): string {
+export function serializeMsg (msg: UnsignedMsg): string {
   // to update to chat messages triples
   /* if (!validateMsg(msg))
     throw new Error("can't serialize message with wrong or missing properties") */
@@ -82,7 +82,7 @@ export function serializeMsg(msg: UnsignedMsg): string {
   ])
 }
 
-export function getMsgHash(message: UnsignedMsg): string {
+export function getMsgHash (message: UnsignedMsg): string {
   let msgHash = sha256(utf8Encoder.encode(serializeMsg(message)))
   return bytesToHex(msgHash)
 }
@@ -109,15 +109,15 @@ const isRecord = (obj: unknown): obj is Record<string, unknown> => obj instanceo
   return true
 } */
 
-export function verifySignature(message: Message): boolean {
+export function verifySignature (message: Message): boolean {
   return schnorr.verify(
     message.sig,
-    getMsgHash(message),
+    getMsgHash(message)
     // message.pubkey
   )
 }
 
-export function signMsg(message: UnsignedMsg, key: string): string {
+export function signMsg (message: UnsignedMsg, key: string): string {
   return bytesToHex(
     schnorr.sign(getMsgHash(message), key)
   )
