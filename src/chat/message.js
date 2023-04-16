@@ -18,7 +18,7 @@ import * as pad from '../pad'
 import * as style from '../style'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
-import { verifySignature } from '../signature'
+import { getBlankMsg, verifySignature } from '../signature'
 
 const dom = window.document
 const messageBodyStyle = style.messageBodyStyle
@@ -118,14 +118,14 @@ export function renderMessageRow (channelObject, message, fresh, options, userCo
   const signature = store.any(message, $rdf.sym(`${SEC}Proof`))
 
   // verify signature
-  msg= {}
-  msg['id'] = message
-  msg['created'] = created
+  msg= getBlankMsg
+  msg.id = message
+  msg.created = created
   // this is not correct.
   // If the message has been edited/deleted we must verify the latest message and may be the intermediate ones
-  msg['content'] = content
-  msg['maker'] = creator
-  
+  msg.content = content
+  msg.maker = creator
+
   // pubKey could be store in a cache for all makers
   if(!verifySignature(signature, msg, pubKey[creator])) throw new Error()
   const originalMessage = originalVersion(message)

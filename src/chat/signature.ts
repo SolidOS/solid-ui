@@ -49,14 +49,15 @@ export type Msg = UnsignedMsg & {
   sig: string
 }
 
-/* export function getBlankEvent(): EventTemplate {
+export function getBlankMsg(): msgTemplate {
   return {
-    kind: 255,
+    id: '',
+    created: '',
+    dateDeleted: '',
     content: '',
-    tags: [],
-    created_at: 0
+    maker: ''
   }
-} */
+}
 
 export function finishMsg (t: MsgTemplate, privateKey: string): Message {
   // to update to chat message triples
