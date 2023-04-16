@@ -356,7 +356,7 @@ This synchronous version only looks at past HTTP requests, does not make new one
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external"><a id="flagAuthorizationMetadata" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>flag<wbr/>Authorization<wbr/>Metadata</span><a href="#flagAuthorizationMetadata" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-<li class="tsd-signature tsd-anchor-link" id="flagAuthorizationMetadata.flagAuthorizationMetadata-1">flag<wbr/>Authorization<wbr/>Metadata<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#flagAuthorizationMetadata.flagAuthorizationMetadata-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="flagAuthorizationMetadata.flagAuthorizationMetadata-1">flag<wbr/>Authorization<wbr/>Metadata<span class="tsd-signature-symbol">(</span>kb<span class="tsd-signature-symbol">?: </span><a href="rdf.Store.html" class="tsd-signature-type" data-tsd-kind="Class">Store</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><a href="#flagAuthorizationMetadata.flagAuthorizationMetadata-1" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Remove from the store HTTP authorization metadata
 The editble function below relies on copies we have in the store
@@ -364,6 +364,11 @@ of the results of previous HTTP transactions. Howver, when
 the user logs in, then that data misrepresents what would happen
 if the user tried again.</p>
 </div>
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> kb: <a href="rdf.Store.html" class="tsd-signature-type" data-tsd-kind="Class">Store</a></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
 <ul>
 <li>Defined in node_modules/rdflib/lib/update-manager.d.ts:36</li></ul></aside></li></ul></section>
