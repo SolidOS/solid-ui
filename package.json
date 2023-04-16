@@ -61,10 +61,10 @@
     "i": "^0.3.7",
     "mime-types": "^2.1.35",
     "npm": "^8.19.4",
-    "pane-registry": "^2.4.21",
-    "rdflib": "^2.2.31",
-    "solid-logic": "^3.0.2",
-    "solid-namespace": "^0.5.2",
+    "pane-registry": "^2.4.21-d0a0775b",
+    "rdflib": "^2.2.32",
+    "solid-logic": "^3.0.2-4e4bf4eb",
+    "solid-namespace": "^0.5.3",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
@@ -103,6 +103,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "html-webpack-plugin": "^5.5.0",
     "husky": "^7.0.4",
+    "isomorphic-fetch": "^3.0.0",
     "jest": "^27.5.1",
     "jsdom": "^19.0.0",
     "lint-staged": "^12.5.0",
