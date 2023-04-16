@@ -72,14 +72,7 @@ export function serializeMsg (msg: UnsignedMsg): string {
   /* if (!validateMsg(msg))
     throw new Error("can't serialize message with wrong or missing properties") */
 
-  return JSON.stringify([
-    0,
-    msg.pubkey,
-    msg.created_at,
-    msg.kind,
-    msg.tags,
-    msg.content
-  ])
+  return JSON.stringify(msg)
 }
 
 export function getMsgHash (message: UnsignedMsg): string {
@@ -109,11 +102,11 @@ const isRecord = (obj: unknown): obj is Record<string, unknown> => obj instanceo
   return true
 } */
 
-export function verifySignature (message: Message): boolean {
+export function verifySignature (sig, message: Message, pubKey): boolean {
   return schnorr.verify(
-    message.sig,
-    getMsgHash(message)
-    // message.pubkey
+    sig,
+    getMsgHash(message),
+    pubkey
   )
 }
 

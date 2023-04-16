@@ -9,6 +9,10 @@ import { store, authn } from 'solid-logic'
 import * as ns from '../ns'
 import * as $rdf from 'rdflib' // pull in first avoid cross-refs
 import * as utils from '../utils'
+import { signMsg } from '../signature'
+
+const SEC = 'https://w3id.org/security#' // Proof, VerificationMethod
+const CERT = 'http://www.w3.org/ns/auth/cert#' // PrivatKey, PublicKey
 
 /* The Solid logic for a 'LongChat'
 */
@@ -51,10 +55,13 @@ export class ChatChannel {
 
     const me = authn.currentUser() // If already logged on
 
+    const msg = {}
     if (oldMsg) { // edit message replaces old one
       sts.push($rdf.st(mostRecentVersion(oldMsg), ns.dct('isReplacedBy'), message, chatDocument))
+      // do we need to rebuild oldMsg signaturen ?
       if (deleteIt) {
         sts.push($rdf.st(message, ns.schema('dateDeleted'), dateStamp, chatDocument))
+        msg['dateDeleted'] = dateStamp
       }
     } else { // link new message to channel
       sts.push($rdf.st(this.channel, ns.wf('message'), message, chatDocument))
@@ -62,11 +69,17 @@ export class ChatChannel {
     sts.push(
       $rdf.st(message, ns.sioc('content'), store.literal(text), chatDocument)
     )
+    msg['content'] = text
+
     sts.push(
       $rdf.st(message, ns.dct('created'), dateStamp, chatDocument)
     )
+    msg['created'] = dateStamp
     if (me) {
       sts.push($rdf.st(message, ns.foaf('maker'), me, chatDocument))
+      msg['maker'] = me
+      // privateKey the cached private key of me, cache should be deleted after a certain time
+      sts.push($rdf.st(message, $rdf.sym(`${SEC}Proof`), $rdf.sym(signMsg(msg, privateKey[me]), chatDocument)))
     }
     try {
       await store.updater.update([], sts)
