@@ -61,9 +61,9 @@
     "i": "^0.3.7",
     "mime-types": "^2.1.35",
     "npm": "^8.19.4",
-    "pane-registry": "^2.4.21-d0a0775b",
+    "pane-registry": "^2.4.22",
     "rdflib": "^2.2.32",
-    "solid-logic": "^3.0.2-4e4bf4eb",
+    "solid-logic": "^3.0.3",
     "solid-namespace": "^0.5.3",
     "uuid": "^8.3.2"
   },
