@@ -39,7 +39,6 @@ export const CERT = 'http://www.w3.org/ns/auth/cert#' // PrivatKey, PublicKey
 export type MsgTemplate = {
   id: string
   created: string
-  content: string
   dateDeleted: string
   content: string
   maker: string
