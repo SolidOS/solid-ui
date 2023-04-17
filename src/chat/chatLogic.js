@@ -9,10 +9,7 @@ import { store, authn } from 'solid-logic'
 import * as ns from '../ns'
 import * as $rdf from 'rdflib' // pull in first avoid cross-refs
 import * as utils from '../utils'
-import { getBlankMsg, signMsg } from '../signature'
-
-const SEC = 'https://w3id.org/security#' // Proof, VerificationMethod
-const CERT = 'http://www.w3.org/ns/auth/cert#' // PrivatKey, PublicKey
+import { getBlankMsg, signMsg, SEC, CERT } from './signature'
 
 /* The Solid logic for a 'LongChat'
 */

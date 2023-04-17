@@ -18,7 +18,7 @@ import * as pad from '../pad'
 import * as style from '../style'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
-import { getBlankMsg, verifySignature } from '../signature'
+import { getBlankMsg, verifySignature, SEC } from './signature'
 
 const dom = window.document
 const messageBodyStyle = style.messageBodyStyle
