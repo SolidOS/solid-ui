@@ -9,7 +9,8 @@ import { store, authn } from 'solid-logic'
 import * as ns from '../ns'
 import * as $rdf from 'rdflib' // pull in first avoid cross-refs
 import * as utils from '../utils'
-import { getBlankMsg, signMsg, SEC, CERT } from './signature'
+import { getBlankMsg, signMsg, SEC } from './signature'
+import { getPrivateKey } from './keys'
 
 /* The Solid logic for a 'LongChat'
 */
@@ -77,7 +78,8 @@ export class ChatChannel {
       sts.push($rdf.st(message, ns.foaf('maker'), me, chatDocument))
       msg.maker = me
       // privateKey the cached private key of me, cache should be deleted after a certain time
-      sts.push($rdf.st(message, $rdf.sym(`${SEC}Proof`), $rdf.sym(signMsg(msg, privateKey[me]), chatDocument)))
+      const privateKey = await getPrivateKey(me)
+      sts.push($rdf.st(message, $rdf.sym(`${SEC}Proof`), $rdf.sym(signMsg(msg, privateKey), chatDocument)))
     }
     try {
       await store.updater.update([], sts)

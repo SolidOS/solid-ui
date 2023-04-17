@@ -1,4 +1,4 @@
-import { literal, quad, Statement } from 'rdflib';
+/* import { literal, quad, Statement } from 'rdflib';
 // import { PODCHAT, removeHashFromUrl } from './Constants';
 import { authn } from 'solid-logic'
 import * as UI from 'solid-ui'
@@ -33,8 +33,6 @@ function extractObject({ cache }: RdfStore, webid: string, resourceUrl: string, 
 function extractObjectLastValue(rdfStore: RdfStore, webid: string, resourceUrl: string, predicate: PredicateType): string | undefined {
     return extractObject(rdfStore, webid, resourceUrl, predicate).map(q => q.value).pop();
 }
-
-
 
 export const prepareRsaKeyPair = async (profileId: string, rsaPrivateKeyResourceUrl: string): Promise<void> => {
 
@@ -120,7 +118,7 @@ const getPrivateKey = async (rsaPrivateKeyResourceUrl: string): Promise<CryptoKe
   Takes a string containing the PEM encoded key, and returns a Promise
   that will resolve to a CryptoKey representing the private key.
   */
-function importPrivateKey(pem: string) {
+/* function importPrivateKey(pem: string) {
     // base64 decode the string to get the binary data
     const binaryDerString = window.atob(pem);
     // convert from a binary string to an ArrayBuffer
@@ -146,7 +144,7 @@ function importPrivateKey(pem: string) {
   Takes a string containing the PEM encoded key, and returns a Promise
   that will resolve to a CryptoKey representing the public key.
   */
-function importPublicKey(pem: string) {
+/* function importPublicKey(pem: string) {
     // base64 decode the string to get the binary data
     const binaryDerString = window.atob(pem);
     // convert from a binary string to an ArrayBuffer
@@ -182,7 +180,7 @@ function importPublicKey(pem: string) {
     await pubKeySpkiPem(key.publicKey, profileId);
 } */
 
-async function privKeyPkcs8Pem(privKey: CryptoKey, profileId: string, rsaPrivateKeyResourceUrl: string) {
+/* async function privKeyPkcs8Pem(privKey: CryptoKey, profileId: string, rsaPrivateKeyResourceUrl: string) {
     const exported = await window.crypto.subtle.exportKey("pkcs8", privKey);
     const exportedAsString = ab2str(exported);
     const exportedAsBase64 = window.btoa(exportedAsString);
@@ -243,7 +241,7 @@ async function pubKeySpkiPem(pubKey: CryptoKey, profileId: string) {
 /*
   Convert  an ArrayBuffer into a string
   */
-function ab2str(buf: ArrayBuffer) {
+/* function ab2str(buf: ArrayBuffer) {
     return String.fromCharCode.apply(null, new Uint8Array(buf) as unknown as number[]);
 }
 
@@ -254,4 +252,4 @@ function str2ab(str: string) {
         bufView[i] = str.charCodeAt(i);
     }
     return buf;
-}
+} */

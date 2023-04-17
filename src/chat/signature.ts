@@ -3,14 +3,13 @@ import { sha256 } from '@noble/hashes/sha256'
 import { bytesToHex } from '@noble/hashes/utils'
 
 // import {utf8Encoder} from './utils'
-import { getPublicKey } from './keys'
+// import { getPublicKey } from './keys'
 
 export const utf8Decoder = new TextDecoder('utf-8')
 export const utf8Encoder = new TextEncoder()
 
 export const SEC = 'https://w3id.org/security#' // Proof, VerificationMethod
 export const CERT = 'http://www.w3.org/ns/auth/cert#' // PrivatKey, PublicKey
-
 
 /* eslint-disable no-unused-vars */
 /* export enum Kind {
@@ -38,34 +37,38 @@ export const CERT = 'http://www.w3.org/ns/auth/cert#' // PrivatKey, PublicKey
 } */
 
 export type MsgTemplate = {
-  kind: Kind
-  tags: string[][]
+  id: string
+  created: string
   content: string
-  created_at: number
+  dateDeleted: string
+  content: string
+  maker: string
+  sig: string
 }
 
 export type UnsignedMsg = MsgTemplate & {
   pubkey: string
 }
 
-export type Msg = UnsignedMsg & {
+export type Message = UnsignedMsg & {
   id: string
   sig: string
 }
 
-export function getBlankMsg(): msgTemplate {
+export function getBlankMsg (): MsgTemplate {
   return {
     id: '',
     created: '',
     dateDeleted: '',
     content: '',
-    maker: ''
+    maker: '',
+    sig: ''
   }
 }
 
 export function finishMsg (t: MsgTemplate, privateKey: string): Message {
   // to update to chat message triples
-  let message = t as Message
+  const message = t as Message
   // message.pubkey = getPublicKey(privateKey)
   message.id = getMsgHash(message)
   message.sig = signMsg(message, privateKey)
@@ -81,14 +84,14 @@ export function serializeMsg (msg: UnsignedMsg): string {
 }
 
 export function getMsgHash (message: UnsignedMsg): string {
-  let msgHash = sha256(utf8Encoder.encode(serializeMsg(message)))
+  const msgHash = sha256(utf8Encoder.encode(serializeMsg(message)))
   return bytesToHex(msgHash)
 }
 
 const isRecord = (obj: unknown): obj is Record<string, unknown> => obj instanceof Object
 
-/* export function validateMsg<T>(message: T): message is T & UnsignedMsg {
-  if (!isRecord(message)) return false
+export function validateMsg<T> (message: T): message is T & UnsignedMsg {
+  /* if (!isRecord(message)) return false
   if (typeof message.kind !== 'number') return false
   if (typeof message.content !== 'string') return false
   if (typeof message.created_at !== 'number') return false
@@ -102,16 +105,16 @@ const isRecord = (obj: unknown): obj is Record<string, unknown> => obj instanceo
     for (let j = 0; j < tag.length; j++) {
       if (typeof tag[j] === 'object') return false
     }
-  }
+  } */
 
   return true
-} */
+}
 
-export function verifySignature (sig, message: Message, pubKey): boolean {
+export function verifySignature (sig: string, message: Message, pubKey: string): boolean {
   return schnorr.verify(
     sig,
     getMsgHash(message),
-    pubkey
+    pubKey
   )
 }
 
