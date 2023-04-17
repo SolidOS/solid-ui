@@ -39,7 +39,7 @@ function privateKeyExists (webId) {
   return privateKey
 }
 
-export function getPrivateKey (webId) {
+export async function getPrivateKey (webId) {
   const url = new URL(webId)
   const privateKeyUrl = url.hostname + '/profile/privateKey.ttl'
   // find publickey
