@@ -3,18 +3,13 @@ import { toEqualGraph } from '../custom-matchers/toEqualGraph'
 import { error, log, trace, warn } from '../../src/debug'
 import 'isomorphic-fetch'
 import { TextEncoder, TextDecoder } from 'util'
-import crypto from 'crypto' // should have webcrypto.getRandomValues defined
 
-if (typeof global.crypto !== 'object') {
-  global.crypto = crypto
-}
-
-if (typeof global.crypto.getRandomValues !== 'function') {
-  global.crypto.getRandomValues = getRandomValues
-}
-
-function getRandomValues (array) {
-  return crypto.webcrypto.getRandomValues(array)
+// globalThis.crypto = require('crypto').webcrypto // with node >=16
+const nodeCrypto = require('crypto')
+global.crypto = {
+  getRandomValues: function (buffer) {
+    return nodeCrypto.randomFillSync(buffer)
+  }
 }
 
 global.TextEncoder = TextEncoder
