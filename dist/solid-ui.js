@@ -4018,6 +4018,8 @@ var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-l
 var $rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+// should have webcrypto.getRandomValues defined
+
 function generatePrivateKey() {
   return (0, _utils.bytesToHex)(_secp256k.schnorr.utils.randomPrivateKey());
 }
@@ -13174,8 +13176,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2023-04-17T20:13:21Z',
-  commit: '6df03c8539f4006aa3442b0bf5a476b7a2183051',
+  buildTime: '2023-04-18T10:27:08Z',
+  commit: '109c494647e55d98f10d60fe5b5168e8704b3a8a',
   npmInfo: {
     'solid-ui': '2.4.27',
     npm: '8.19.4',

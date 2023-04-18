@@ -4,6 +4,7 @@ import { CERT } from './signature'
 import { store } from 'solid-logic'
 import * as $rdf from 'rdflib'
 import { NamedNode, literal } from 'rdflib'
+import crypto from 'crypto' // should have webcrypto.getRandomValues defined
 
 export function generatePrivateKey (): string {
   return bytesToHex(schnorr.utils.randomPrivateKey())

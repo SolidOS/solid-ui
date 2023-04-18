@@ -3,6 +3,20 @@ import { toEqualGraph } from '../custom-matchers/toEqualGraph'
 import { error, log, trace, warn } from '../../src/debug'
 import 'isomorphic-fetch'
 import { TextEncoder, TextDecoder } from 'util'
+import crypto from 'crypto' // should have webcrypto.getRandomValues defined
+
+if (typeof global.crypto !== 'object') {
+  global.crypto = crypto
+}
+
+if (typeof global.crypto.getRandomValues !== 'function') {
+  global.crypto.getRandomValues = getRandomValues
+}
+
+function getRandomValues (array) {
+  return crypto.webcrypto.getRandomValues(array)
+}
+
 global.TextEncoder = TextEncoder
 global.TextDecoder = TextDecoder
 
