@@ -1,10 +1,10 @@
+import * as debug from '../debug'
 import { schnorr } from '@noble/curves/secp256k1'
 import { bytesToHex } from '@noble/hashes/utils'
 import { CERT } from './signature'
 import { store } from 'solid-logic'
 import * as $rdf from 'rdflib'
 import { NamedNode, literal } from 'rdflib'
-import crypto from 'crypto' // should have webcrypto.getRandomValues defined
 
 export function generatePrivateKey (): string {
   return bytesToHex(schnorr.utils.randomPrivateKey())
@@ -15,11 +15,6 @@ export function generatePublicKey (privateKey: string): string {
 }
 
 export function getPublicKey (webId) {
-  // find publickey
-  /* const url = new URL(webId)
-  url.hash = ''
-  store.fetcher.load(url.href)
-  let publicKey = store.any(store.sym(webId), store.sym(CERT +'publicKey')) */
   const publicKey = publicKeyExists(webId)
   return publicKey?.uri as any
 }
@@ -33,21 +28,43 @@ function publicKeyExists (webId: string): NamedNode {
   return publicKey as NamedNode
 }
 
-function privateKeyExists (webId: string): NamedNode {
+async function privateKeyExists (webId: string) {
   const url = new URL(webId)
   const privateKeyUrl = url.hostname + '/profile/privateKey.ttl'
-  store.fetcher.load(privateKeyUrl)
-  const privateKey = store.any(store.sym(webId), store.sym(CERT + 'privateKey'))
-  return privateKey as NamedNode
+  try {
+    store.fetcher.load(privateKeyUrl)
+    const privateKey = store.any(store.sym(webId), store.sym(CERT + 'privateKey'))
+    return privateKey as NamedNode
+  } catch (err) {
+    if (err?.response?.status === 404) {
+      try {
+        // create privateKey resource
+        const data = ''
+        const contentType = 'text/ttl'
+        const response = await store.fetcher.webOperation('PUT', privateKeyUrl, {
+          data,
+          contentType
+        })
+        // create ACL resource
+      } catch (err) {
+        debug.log('createIfNotExists doc FAILED: ' + privateKeyUrl + ': ' + err)
+        throw err
+      }
+      delete store.fetcher.requested[privateKeyUrl] // delete cached 404 error
+      return undefined
+    }
+    debug.log('createIfNotExists doc FAILED: ' + privateKeyUrl + ': ' + err)
+    throw err
+  }
 }
 
-export async function getPrivateKey (webId) {
+export async function getPrivateKey (webId: string) {
   const url = new URL(webId)
   const privateKeyUrl = url.hostname + '/profile/privateKey.ttl'
   // find publickey
   let publicKey = publicKeyExists(webId)
   // find privateKey
-  let privateKey = privateKeyExists(webId)
+  let privateKey = await privateKeyExists(webId)
   // create key pair
   if (!privateKey || !publicKey) {
     const del: any[] = []
@@ -62,5 +79,5 @@ export async function getPrivateKey (webId) {
     add.push($rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'publicKey'), $rdf.literal(publicKey.uri), $rdf.sym(url.href)))
     await store.updater.updateMany(del, add)
   }
-  return privateKey.uri as any
+  return privateKey.uri as string
 }

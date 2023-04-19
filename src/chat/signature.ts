@@ -1,6 +1,6 @@
 import { schnorr } from '@noble/curves/secp256k1'
-import { sha256 } from '@noble/hashes/sha256'
 import { bytesToHex } from '@noble/hashes/utils'
+import { sha256 } from '@noble/hashes/sha256'
 
 // import {utf8Encoder} from './utils'
 // import { getPublicKey } from './keys'
@@ -82,7 +82,7 @@ export function serializeMsg (msg: UnsignedMsg): string {
   return JSON.stringify(msg)
 }
 
-export function getMsgHash (message: UnsignedMsg): string {
+export function getMsgHash (message: UnsignedMsg) {
   const msgHash = sha256(utf8Encoder.encode(serializeMsg(message)))
   return bytesToHex(msgHash)
 }

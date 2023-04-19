@@ -56,11 +56,18 @@ export class ChatChannel {
     const msg = getBlankMsg
     msg.id = message
     if (oldMsg) { // edit message replaces old one
-      sts.push($rdf.st(mostRecentVersion(oldMsg), ns.dct('isReplacedBy'), message, chatDocument))
-      // do we need to rebuild oldMsg signaturen ?
-      if (deleteIt) {
-        sts.push($rdf.st(message, ns.schema('dateDeleted'), dateStamp, chatDocument))
-        msg.dateDeleted = dateStamp
+      const oldMsgMaker = store.any(oldMsg, ns.foaf('maker')) // may not be needed here, but needed on READ
+      if (oldMsgMaker.uri === me.uri) {
+        sts.push($rdf.st(mostRecentVersion(oldMsg), ns.dct('isReplacedBy'), message, chatDocument))
+        if (deleteIt) { // we need to add a specific signature, else anyone can delete a msg ?
+          sts.push($rdf.st(message, ns.schema('dateDeleted'), dateStamp, chatDocument))
+          msg.dateDeleted = dateStamp
+        }
+      } else {
+        const errMsg = 'Error you cannot delete/edit a message from someone else : \n' + oldMsgMaker.uri
+        debug.warn(errMsg)
+        alert(errMsg)
+        throw new Error(errMsg)
       }
     } else { // link new message to channel
       sts.push($rdf.st(this.channel, ns.wf('message'), message, chatDocument))

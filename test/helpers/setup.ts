@@ -4,6 +4,7 @@ import { error, log, trace, warn } from '../../src/debug'
 import 'isomorphic-fetch'
 import { TextEncoder, TextDecoder } from 'util'
 
+// https://stackoverflow.com/questions/52612122/how-to-use-jest-to-test-functions-using-crypto-or-window-mscrypto
 // globalThis.crypto = require('crypto').webcrypto // with node >=16
 const nodeCrypto = require('crypto')
 global.crypto = {
