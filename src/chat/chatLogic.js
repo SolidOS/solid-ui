@@ -9,8 +9,8 @@ import { store, authn } from 'solid-logic'
 import * as ns from '../ns'
 import * as $rdf from 'rdflib' // pull in first avoid cross-refs
 import * as utils from '../utils'
-import { getBlankMsg, signMsg, SEC } from './signature'
-import { getPrivateKey } from './keys'
+import { getBlankMsg, signMsg, SEC, verifySignature } from './signature'
+import { getPrivateKey, getPublicKey } from './keys'
 
 /* The Solid logic for a 'LongChat'
 */
@@ -53,15 +53,15 @@ export class ChatChannel {
 
     const me = authn.currentUser() // If already logged on
 
-    const msg = getBlankMsg
-    msg.id = message
+    const msg = getBlankMsg()
+    msg.id = message.uri
     if (oldMsg) { // edit message replaces old one
       const oldMsgMaker = store.any(oldMsg, ns.foaf('maker')) // may not be needed here, but needed on READ
       if (oldMsgMaker.uri === me.uri) {
         sts.push($rdf.st(mostRecentVersion(oldMsg), ns.dct('isReplacedBy'), message, chatDocument))
         if (deleteIt) { // we need to add a specific signature, else anyone can delete a msg ?
           sts.push($rdf.st(message, ns.schema('dateDeleted'), dateStamp, chatDocument))
-          msg.dateDeleted = dateStamp
+          // msg.dateDeleted = dateStamp
         }
       } else {
         const errMsg = 'Error you cannot delete/edit a message from someone else : \n' + oldMsgMaker.uri
@@ -80,13 +80,22 @@ export class ChatChannel {
     sts.push(
       $rdf.st(message, ns.dct('created'), dateStamp, chatDocument)
     )
-    msg.created = dateStamp
+    msg.created = dateStamp.value
     if (me) {
       sts.push($rdf.st(message, ns.foaf('maker'), me, chatDocument))
-      msg.maker = me
-      // privateKey the cached private key of me, cache should be deleted after a certain time
-      const privateKey = await getPrivateKey(me)
-      sts.push($rdf.st(message, $rdf.sym(`${SEC}Proof`), $rdf.sym(signMsg(msg, privateKey), chatDocument)))
+      msg.maker = me.uri
+      // privateKey the cached private key of me, cached in store
+      const privateKey = await getPrivateKey(me.uri)
+      // const privateKey0 = 'a11bc5d2eee6cdb3b37f5473a712cad905ccfb13fb2ccdbf1be0a1ac4fdc7d2a'
+      // const pubKey0 = '023a9da707bee1302f66083c9d95673ff969b41607a66f52686fa774d64ceb87'
+      const pubKey = getPublicKey(me.uri)
+
+      const sig = signMsg(msg, privateKey)
+      /* const verify = verifySignature(sig, msg, pubKey) // alain to remove
+      debug.warn('sig ' + sig)
+      debug.warn('verifySign ' + verify)
+      debug.warn(msg) */
+      sts.push($rdf.st(message, $rdf.sym(`${SEC}Proof`), $rdf.lit(sig), chatDocument))
     }
     try {
       await store.updater.update([], sts)

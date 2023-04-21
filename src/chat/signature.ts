@@ -9,7 +9,7 @@ export const utf8Decoder = new TextDecoder('utf-8')
 export const utf8Encoder = new TextEncoder()
 
 export const SEC = 'https://w3id.org/security#' // Proof, VerificationMethod
-export const CERT = 'http://www.w3.org/ns/auth/cert#' // PrivatKey, PublicKey
+export const CERT = 'http://www.w3.org/ns/auth/cert#' // PrivateKey, PublicKey
 
 /* eslint-disable no-unused-vars */
 /* export enum Kind {

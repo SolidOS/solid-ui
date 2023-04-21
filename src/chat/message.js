@@ -19,7 +19,7 @@ import * as style from '../style'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
 import { getBlankMsg, verifySignature, SEC } from './signature'
-import { getPublicKey } from './keys'
+import { getPrivateKey, getPublicKey } from './keys'
 
 const dom = window.document
 const messageBodyStyle = style.messageBodyStyle
@@ -115,21 +115,33 @@ export function renderMessageRow (channelObject, message, fresh, options, userCo
   const creator = store.any(message, ns.foaf('maker'))
   const date = store.any(message, ns.dct('created'))
   const latestVersion = mostRecentVersion(message)
-  const content = store.any(latestVersion, ns.sioc('content'))
-  const signature = store.any(message, $rdf.sym(`${SEC}Proof`))
+  const latestVersionCreator = store.any(latestVersion, ns.foaf('maker'))
+  // use latest content if same owner, else use original
+  const msgId = creator === latestVersionCreator ? latestVersion : message
+  const content = store.any(msgId, ns.sioc('content'))
+  const signature = store.any(msgId, $rdf.sym(`${SEC}Proof`))
+  debug.log('alain ' + signature?.value)
 
   // verify signature
   const msg = getBlankMsg()
-  msg.id = message
-  msg.created = date
-  // this is not correct.
-  // If the message has been edited/deleted we must verify the latest message and may be the intermediate ones
-  msg.content = content
-  msg.maker = creator
+  msg.id = msgId.uri
+  msg.created = store.any(msgId, ns.dct('created')).value
+  msg.content = content.value
+  msg.maker = creator.uri
 
-  // pubKey could be store in a cache for all makers
-  const pubKey = getPublicKey(creator) // alain no
-  if (!verifySignature(signature, msg, pubKey)) throw new Error()
+  try {
+    // pubKey could be store in a cache for all makers
+    const pubKey = getPublicKey(creator.uri)
+    /* const pubKey0 = '023a9da707bee1302f66083c9d95673ff969b41607a66f52686fa774d64ceb87'
+    debug.warn('publicKeys\n' + pubKey0 + '\n' + pubKey)
+    const privKey0 = getPrivateKey(creator.uri) // alain to remove
+    // unsigned messages should be signaled as unsecured
+    debug.warn(msg)
+    debug.warn(signature?.value) */
+    if (signature?.value && !verifySignature(signature.value, msg, pubKey)) throw new Error('invalid signature')
+  } catch (err) {
+    debug.log(err)
+  }
   const originalMessage = originalVersion(message)
   const edited = !message.sameTerm(originalMessage)
 

@@ -16,25 +16,38 @@ export function generatePublicKey (privateKey: string): string {
 
 export function getPublicKey (webId) {
   const publicKey = publicKeyExists(webId)
-  return publicKey?.uri as any
+  return publicKey
 }
 
-function publicKeyExists (webId: string): NamedNode {
+function publicKeyExists (webId: string) {
   // find publickey
   const url = new URL(webId)
   url.hash = ''
+  /* debug.warn('Alain publicKeyExists')
+  debug.warn(webId)
+  debug.warn(url.href) */
   store.fetcher.load(url.href)
-  const publicKey = store.any(store.sym(webId), store.sym(CERT + 'publicKey'))
-  return publicKey as NamedNode
+  const publicKey = store.any(store.sym(webId), store.sym(CERT + 'PublicKey'))
+  return publicKey?.value // as NamedNode
+}
+
+const privKeyUrl = (webId: string) => {
+  const url = new URL(webId)
+  const privateKeyUrl = url.protocol + '//' + url.host + '/profile/privateKey.ttl'
+  return privateKeyUrl
 }
 
 async function privateKeyExists (webId: string) {
-  const url = new URL(webId)
-  const privateKeyUrl = url.hostname + '/profile/privateKey.ttl'
+  /* const url = new URL(webId)
+  const privateKeyUrl = url.protocol + '//' + url.host + '/profile/privateKey.ttl' */
+  const privateKeyUrl = privKeyUrl(webId)
+  /* debug.warn('Alain privateKeyExists')
+  debug.warn(webId)
+  debug.warn(privateKeyUrl) */
   try {
     store.fetcher.load(privateKeyUrl)
-    const privateKey = store.any(store.sym(webId), store.sym(CERT + 'privateKey'))
-    return privateKey as NamedNode
+    const privateKey = store.any(store.sym(webId), store.sym(CERT + 'PrivateKey'))
+    return privateKey?.value // as NamedNode
   } catch (err) {
     if (err?.response?.status === 404) {
       try {
@@ -60,24 +73,38 @@ async function privateKeyExists (webId: string) {
 
 export async function getPrivateKey (webId: string) {
   const url = new URL(webId)
-  const privateKeyUrl = url.hostname + '/profile/privateKey.ttl'
+  url.hash = ''
+  /* const privateKeyUrl = url.protocol + '//' + url.host + '/profile/privateKey.ttl' */
+  const privateKeyUrl = privKeyUrl(webId)
+
   // find publickey
   let publicKey = publicKeyExists(webId)
+  // debug.warn('publicKey ' + publicKey)
   // find privateKey
   let privateKey = await privateKeyExists(webId)
+  // debug.warn('privateKey ' + privateKey)
+  if (privateKey && (publicKey !== generatePublicKey(privateKey as string))) debug.warn('publicKey is not valid')
+
+  // simulate new key pair
+  /* const newPrivateKey = generatePrivateKey()
+  const newPublicKey = generatePublicKey(newPrivateKey)
+  debug.log('newPrivateKey ' + newPrivateKey)
+  debug.log('newPublicKey ' + newPublicKey) */
+
   // create key pair
   if (!privateKey || !publicKey) {
     const del: any[] = []
     const add: any[] = []
-    if (privateKey) del.push($rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'privateKey'), privateKey, $rdf.sym(privateKeyUrl)))
-    if (publicKey) del.push($rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'publicKey'), publicKey, $rdf.sym(url.href)))
+    if (privateKey) del.push($rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'PrivateKey'), $rdf.lit(privateKey), $rdf.sym(privateKeyUrl)))
+    if (publicKey) del.push($rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'PublicKey'), $rdf.lit(publicKey), $rdf.sym(url.href)))
 
-    privateKey = store.sym(generatePrivateKey())
-    publicKey = store.sym(generatePublicKey(privateKey.uri))
-
-    add.push($rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'privateKey'), $rdf.literal(privateKey.uri), $rdf.sym(privateKeyUrl)))
-    add.push($rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'publicKey'), $rdf.literal(publicKey.uri), $rdf.sym(url.href)))
+    privateKey = generatePrivateKey()
+    publicKey = generatePublicKey(privateKey)
+    /* debug.log('newPrivateKey-1 ' + privateKey)
+    debug.log('newPublicKey-1 ' + publicKey) */
+    add.push($rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'PrivateKey'), $rdf.literal(privateKey), $rdf.sym(privateKeyUrl)))
+    add.push($rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'PublicKey'), $rdf.literal(publicKey), $rdf.sym(url.href)))
     await store.updater.updateMany(del, add)
   }
-  return privateKey.uri as string
+  return privateKey as string
 }
