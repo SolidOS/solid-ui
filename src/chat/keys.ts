@@ -19,21 +19,27 @@ export function getPublicKey (webId) {
   return publicKey
 }
 
-function publicKeyExists (webId: string) {
-  // find publickey
+const pubKeyUrl = (webId: string) => {
   const url = new URL(webId)
-  url.hash = ''
+  const publicKeyUrl = url.origin + '/profile/keys/publicKey.ttl'
+  return publicKeyUrl
+}
+
+async function publicKeyExists (webId: string) {
+  // find publickey
+  /* const url = new URL(webId)
+  url.hash = '' */
   /* debug.warn('Alain publicKeyExists')
   debug.warn(webId)
   debug.warn(url.href) */
-  store.fetcher.load(url.href)
+  await store.fetcher.load(pubKeyUrl(webId)) // url.href)
   const publicKey = store.any(store.sym(webId), store.sym(CERT + 'PublicKey'))
   return publicKey?.value // as NamedNode
 }
 
 const privKeyUrl = (webId: string) => {
   const url = new URL(webId)
-  const privateKeyUrl = url.protocol + '//' + url.host + '/profile/privateKey.ttl'
+  const privateKeyUrl = url.origin + '/profile/keys/privateKey.ttl'
   return privateKeyUrl
 }
 
@@ -45,7 +51,7 @@ async function privateKeyExists (webId: string) {
   debug.warn(webId)
   debug.warn(privateKeyUrl) */
   try {
-    store.fetcher.load(privateKeyUrl)
+    await store.fetcher.load(privateKeyUrl)
     const privateKey = store.any(store.sym(webId), store.sym(CERT + 'PrivateKey'))
     return privateKey?.value // as NamedNode
   } catch (err) {
@@ -72,13 +78,14 @@ async function privateKeyExists (webId: string) {
 }
 
 export async function getPrivateKey (webId: string) {
-  const url = new URL(webId)
-  url.hash = ''
+  /* const url = new URL(webId)
+  url.hash = '' */
   /* const privateKeyUrl = url.protocol + '//' + url.host + '/profile/privateKey.ttl' */
+  const publicKeyUrl = pubKeyUrl(webId)
   const privateKeyUrl = privKeyUrl(webId)
 
   // find publickey
-  let publicKey = publicKeyExists(webId)
+  let publicKey = await publicKeyExists(webId)
   // debug.warn('publicKey ' + publicKey)
   // find privateKey
   let privateKey = await privateKeyExists(webId)
@@ -96,14 +103,14 @@ export async function getPrivateKey (webId: string) {
     const del: any[] = []
     const add: any[] = []
     if (privateKey) del.push($rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'PrivateKey'), $rdf.lit(privateKey), $rdf.sym(privateKeyUrl)))
-    if (publicKey) del.push($rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'PublicKey'), $rdf.lit(publicKey), $rdf.sym(url.href)))
+    if (publicKey) del.push($rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'PublicKey'), $rdf.lit(publicKey), $rdf.sym(publicKeyUrl)))
 
     privateKey = generatePrivateKey()
     publicKey = generatePublicKey(privateKey)
     /* debug.log('newPrivateKey-1 ' + privateKey)
     debug.log('newPublicKey-1 ' + publicKey) */
     add.push($rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'PrivateKey'), $rdf.literal(privateKey), $rdf.sym(privateKeyUrl)))
-    add.push($rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'PublicKey'), $rdf.literal(publicKey), $rdf.sym(url.href)))
+    add.push($rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'PublicKey'), $rdf.literal(publicKey), $rdf.sym(publicKeyUrl)))
     await store.updater.updateMany(del, add)
   }
   return privateKey as string

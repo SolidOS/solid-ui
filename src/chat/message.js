@@ -117,7 +117,7 @@ export function renderMessageRow (channelObject, message, fresh, options, userCo
   const latestVersion = mostRecentVersion(message)
   const latestVersionCreator = store.any(latestVersion, ns.foaf('maker'))
   // use latest content if same owner, else use original
-  const msgId = creator === latestVersionCreator ? latestVersion : message
+  const msgId = creator.uri === latestVersionCreator.uri ? latestVersion : message
   const content = store.any(msgId, ns.sioc('content'))
   const signature = store.any(msgId, $rdf.sym(`${SEC}Proof`))
   debug.log('alain ' + signature?.value)
@@ -128,10 +128,21 @@ export function renderMessageRow (channelObject, message, fresh, options, userCo
   msg.created = store.any(msgId, ns.dct('created')).value
   msg.content = content.value
   msg.maker = creator.uri
-
+  try {
+    function publicKey (webId) {
+      let pubKey
+      getPublicKey(webId).then(publicKey => {
+        debug.log('alain publicKey ' + publicKey)
+        pubKey = publicKey
+      })
+      return pubKey
+    }
+    var pubKey = publicKey(creator.uri) // await getPublicKey(creator.uri)
+    debug.log('alain pubKey ' + pubKey)
+    debug.log(creator.uri)
+  } catch (err) { debug.warn(err) }
   try {
     // pubKey could be store in a cache for all makers
-    const pubKey = getPublicKey(creator.uri)
     /* const pubKey0 = '023a9da707bee1302f66083c9d95673ff969b41607a66f52686fa774d64ceb87'
     debug.warn('publicKeys\n' + pubKey0 + '\n' + pubKey)
     const privKey0 = getPrivateKey(creator.uri) // alain to remove
