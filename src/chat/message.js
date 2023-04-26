@@ -128,8 +128,8 @@ export function renderMessageRow (channelObject, message, fresh, options, userCo
   msg.created = store.any(msgId, ns.dct('created')).value
   msg.content = content.value
   msg.maker = creator.uri
-  try {
-    function publicKey (webId) {
+  /* try {
+    async function publicKey (webId) {
       let pubKey
       getPublicKey(webId).then(publicKey => {
         debug.log('alain publicKey ' + publicKey)
@@ -149,10 +149,17 @@ export function renderMessageRow (channelObject, message, fresh, options, userCo
     // unsigned messages should be signaled as unsecured
     debug.warn(msg)
     debug.warn(signature?.value) */
-    if (signature?.value && !verifySignature(signature.value, msg, pubKey)) throw new Error('invalid signature')
+  getPublicKey(creator.uri).then(publicKey => {
+    debug.log('alain publicKey ' + publicKey)
+    debug.log(msg)
+    debug.log(signature?.value)
+    if (signature?.value && !verifySignature(signature.value, msg, publicKey)) debug.warn('invalid signature')
+    // pubKey = publicKey
+  })
+  /* if (signature?.value && !verifySignature(signature.value, msg, pubKey)) throw new Error('invalid signature')
   } catch (err) {
     debug.log(err)
-  }
+  } */
   const originalMessage = originalVersion(message)
   const edited = !message.sameTerm(originalMessage)
 

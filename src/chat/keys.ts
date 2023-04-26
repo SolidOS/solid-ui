@@ -14,8 +14,8 @@ export function generatePublicKey (privateKey: string): string {
   return bytesToHex(schnorr.getPublicKey(privateKey))
 }
 
-export function getPublicKey (webId) {
-  const publicKey = publicKeyExists(webId)
+export async function getPublicKey (webId) {
+  const publicKey = await publicKeyExists(webId)
   return publicKey
 }
 
@@ -49,8 +49,9 @@ export async function getPrivateKey (webId: string) {
 
     privateKey = generatePrivateKey()
     publicKey = generatePublicKey(privateKey)
-    /* debug.log('newPrivateKey-1 ' + privateKey)
-    debug.log('newPublicKey-1 ' + publicKey) */
+    debug.log('new key pair ' + webId)
+    debug.log('newPrivateKey-1 ' + privateKey)
+    debug.log('newPublicKey-1 ' + publicKey)
     add.push($rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'PrivateKey'), $rdf.literal(privateKey), $rdf.sym(privateKeyUrl)))
     add.push($rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'PublicKey'), $rdf.literal(publicKey), $rdf.sym(publicKeyUrl)))
     await store.updater.updateMany(del, add)

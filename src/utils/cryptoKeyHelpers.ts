@@ -15,9 +15,34 @@ export async function publicKeyExists (webId: string) {
   /* debug.warn('Alain publicKeyExists')
   debug.warn(webId)
   debug.warn(url.href) */
-  await store.fetcher.load(pubKeyUrl(webId)) // url.href)
-  const publicKey = store.any(store.sym(webId), store.sym(CERT + 'PublicKey'))
-  return publicKey?.value // as NamedNode
+  const publicKeyUrl = pubKeyUrl(webId)
+  try {
+    await store.fetcher.load(publicKeyUrl) // url.href)
+    const publicKey = store.any(store.sym(webId), store.sym(CERT + 'PublicKey'))
+    debug.log('publicKeyExists ' + webId)
+    debug.log(publicKey?.value)
+    return publicKey?.value // as NamedNode
+  } catch (err) {
+    if (err?.response?.status === 404) {
+      try {
+        // create privateKey resource
+        const data = ''
+        const contentType = 'text/ttl'
+        const response = await store.fetcher.webOperation('PUT', publicKeyUrl, {
+          data,
+          contentType
+        })
+        // create ACL resource
+      } catch (err) {
+        debug.log('createIfNotExists doc FAILED: ' + publicKeyUrl + ': ' + err)
+        throw err
+      }
+      delete store.fetcher.requested[publicKeyUrl] // delete cached 404 error
+      return undefined
+    }
+    debug.log('createIfNotExists doc FAILED: ' + publicKeyUrl + ': ' + err)
+    throw err
+  }
 }
 
 export const privKeyUrl = (webId: string) => {
