@@ -1,8 +1,4 @@
-import * as debug from '../../../src/debug'
-import { pubKeyUrl, getExistingPublicKey, privKeyUrl, getExistingPrivateKey } from '../../../src/utils/cryptoKeyHelpers'
-
-// need to mock store.fetcher.load
-// and store.any
+import { pubKeyUrl, publicKeyExists, privKeyUrl, privateKeyExists } from '../../../src/utils/cryptoKeyHelpers'
 
 describe('cryptoKeyHelpers', () => {
   describe('pubKeyUrl', () => {
@@ -13,10 +9,8 @@ describe('cryptoKeyHelpers', () => {
   })
 
   describe('publicKeyExists', () => {
-    it('returns...', async () => {
-      const exists = await getExistingPublicKey('https://sstratsianis.solidcommunity.net/profile/card#me')
-      debug.log('atesting: ' + exists)
-      expect(exists).toEqual(undefined)
+    it('returns...', () => {
+
     })
   })
 

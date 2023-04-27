@@ -8,49 +8,10 @@ export const pubKeyUrl = (webId: string) => {
   return publicKeyUrl
 }
 
-export const getExistingPublicKey = async (webId: string) => {
-  const publicKeyUrl = pubKeyUrl(webId)
-  try {
-    await store.fetcher.load(publicKeyUrl) // url.href)
-    const publicKey = store.any(store.sym(webId), store.sym(CERT + 'PublicKey'))
-    return publicKey?.value // as NamedNode
-  } catch (err) {
-    throw Error(err)
-  }
-}
-
-export async function getOrCreatePublicKey (webId: string) {
+export async function publicKeyExists (webId: string) {
   // find publickey
-  /* const url = new URL(webId)
-  url.hash = '' */
-  /* debug.warn('Alain publicKeyExists')
-  debug.warn(webId)
-  debug.warn(url.href) */
   const publicKeyUrl = pubKeyUrl(webId)
-  debug.log(publicKeyUrl)
-  try {
-    const publicKey = await getExistingPublicKey(webId)
-  } catch (err) {
-    if (err?.response?.status === 404) {
-      try {
-        // create privateKey resource
-        const data = ''
-        const contentType = 'text/ttl'
-        const response = await store.fetcher.webOperation('PUT', publicKeyUrl, {
-          data,
-          contentType
-        })
-        // create ACL resource
-      } catch (err) {
-        debug.log('createIfNotExists doc FAILED: ' + publicKeyUrl + ': ' + err)
-        throw err
-      }
-      delete store.fetcher.requested[publicKeyUrl] // delete cached 404 error
-      return undefined
-    }
-    debug.log('getExistingPublicKey failed non 404 Error: ' + publicKeyUrl + ': ' + err)
-    throw err
-  }
+  return await keyExists(webId, publicKeyUrl, 'PublicKey')
 }
 
 export const privKeyUrl = (webId: string) => {
@@ -59,45 +20,35 @@ export const privKeyUrl = (webId: string) => {
   return privateKeyUrl
 }
 
-export const getExistingPrivateKey = async (webId: string) => {
+export async function privateKeyExists (webId: string) {
+  // find privateKey
   const privateKeyUrl = privKeyUrl(webId)
-  try {
-    await store.fetcher.load(privateKeyUrl)
-    const privateKey = store.any(store.sym(webId), store.sym(CERT + 'PrivateKey'))
-    return privateKey?.value // as NamedNode
-  } catch (err) {
-    throw Error(err)
-  }
+  return await keyExists(webId, privateKeyUrl, 'PrivateKey')
 }
 
-export async function getOrCreatePrivateKey (webId: string) {
-  /* const url = new URL(webId)
-  const privateKeyUrl = url.protocol + '//' + url.host + '/profile/privateKey.ttl' */
-  const privateKeyUrl = privKeyUrl(webId)
-  /* debug.warn('Alain privateKeyExists')
-  debug.warn(webId)
-  debug.warn(privateKeyUrl) */
+async function keyExists (webId, keyUrl, keyType) {
   try {
-    return await getExistingPrivateKey(webId)
+    await store.fetcher.load(keyUrl) // url.href)
+    const key = store.any(store.sym(webId), store.sym(CERT + keyType))
+    return key?.value // as NamedNode
   } catch (err) {
-    if (err?.response?.status === 404) {
+    if (err?.response?.status === 404) { // If PATCH on some server do not all create intermediate containers
       try {
         // create privateKey resource
         const data = ''
-        const contentType = 'text/ttl'
-        const response = await store.fetcher.webOperation('PUT', privateKeyUrl, {
+        const contentType = 'text/turtle'
+        const response = await store.fetcher.webOperation('PUT', keyUrl, {
           data,
           contentType
         })
-        // create ACL resource
       } catch (err) {
-        debug.log('createIfNotExists doc FAILED: ' + privateKeyUrl + ': ' + err)
+        debug.log('createIfNotExists doc FAILED: ' + keyUrl + ': ' + err)
         throw err
       }
-      delete store.fetcher.requested[privateKeyUrl] // delete cached 404 error
+      delete store.fetcher.requested[keyUrl] // delete cached 404 error
       return undefined
     }
-    debug.log('getExistingPrivateKey failed non 404 Error: ' + privateKeyUrl + ': ' + err)
+    debug.log('createIfNotExists doc FAILED: ' + keyUrl + ': ' + err)
     throw err
   }
 }

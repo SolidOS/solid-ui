@@ -120,7 +120,6 @@ export function renderMessageRow (channelObject, message, fresh, options, userCo
   const msgId = creator.uri === latestVersionCreator.uri ? latestVersion : message
   const content = store.any(msgId, ns.sioc('content'))
   const signature = store.any(msgId, $rdf.sym(`${SEC}Proof`))
-  debug.log('alain ' + signature?.value)
 
   // verify signature
   const msg = getBlankMsg()
@@ -128,38 +127,21 @@ export function renderMessageRow (channelObject, message, fresh, options, userCo
   msg.created = store.any(msgId, ns.dct('created')).value
   msg.content = content.value
   msg.maker = creator.uri
-  /* try {
-    async function publicKey (webId) {
-      let pubKey
-      getPublicKey(webId).then(publicKey => {
-        debug.log('alain publicKey ' + publicKey)
-        pubKey = publicKey
-      })
-      return pubKey
-    }
-    var pubKey = publicKey(creator.uri) // await getPublicKey(creator.uri)
-    debug.log('alain pubKey ' + pubKey)
-    debug.log(creator.uri)
-  } catch (err) { debug.warn(err) }
-  try {
-    // pubKey could be store in a cache for all makers
-    /* const pubKey0 = '023a9da707bee1302f66083c9d95673ff969b41607a66f52686fa774d64ceb87'
-    debug.warn('publicKeys\n' + pubKey0 + '\n' + pubKey)
-    const privKey0 = getPrivateKey(creator.uri) // alain to remove
-    // unsigned messages should be signaled as unsecured
-    debug.warn(msg)
-    debug.warn(signature?.value) */
-  getPublicKey(creator.uri).then(publicKey => {
-    debug.log('alain publicKey ' + publicKey)
-    debug.log(msg)
-    debug.log(signature?.value)
-    if (signature?.value && !verifySignature(signature.value, msg, publicKey)) debug.warn('invalid signature')
-    // pubKey = publicKey
-  })
-  /* if (signature?.value && !verifySignature(signature.value, msg, pubKey)) throw new Error('invalid signature')
-  } catch (err) {
-    debug.log(err)
-  } */
+
+  // unsigned message
+  if (signature?.value) debug.warn(msgId.uri + ' is unsigned') // TODO replace with UI (colored message ?)
+  // get public key and check signature
+  else {
+    getPublicKey(creator.uri).then(publicKey => {
+      if (!publicKey) debug.warn('message is signed but ' + creator.uri + ' is missing publicKey')
+      // check publicKey is valid hex string
+      const regex = /[0-9A-Fa-f]{6}/g
+      if (!publicKey?.match(regex)) debug.warn('invalid publicKey hex string\n' + creator.uri + '\n' + publicKey)
+      // verify signature
+      else if (signature?.value && !verifySignature(signature.value, msg, publicKey)) debug.warn('invalid signature\n' + msg.id)
+    })
+  }
+
   const originalMessage = originalVersion(message)
   const edited = !message.sameTerm(originalMessage)
 
