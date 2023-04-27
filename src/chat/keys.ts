@@ -4,7 +4,7 @@ import { bytesToHex } from '@noble/hashes/utils'
 import { CERT } from './signature'
 import { store } from 'solid-logic'
 import * as $rdf from 'rdflib'
-import { publicKeyExists, pubKeyUrl, privKeyUrl, privateKeyExists } from '../utils/cryptoKeyHelpers'
+import { getOrCreatePublicKey, pubKeyUrl, privKeyUrl, getOrCreatePrivateKey } from '../utils/cryptoKeyHelpers'
 
 export function generatePrivateKey (): string {
   return bytesToHex(schnorr.utils.randomPrivateKey())
@@ -15,7 +15,7 @@ export function generatePublicKey (privateKey: string): string {
 }
 
 export async function getPublicKey (webId) {
-  const publicKey = await publicKeyExists(webId)
+  const publicKey = await getOrCreatePublicKey(webId)
   return publicKey
 }
 
@@ -27,10 +27,10 @@ export async function getPrivateKey (webId: string) {
   const privateKeyUrl = privKeyUrl(webId)
 
   // find publickey
-  let publicKey = await publicKeyExists(webId)
+  let publicKey = await getOrCreatePublicKey(webId)
   // debug.warn('publicKey ' + publicKey)
   // find privateKey
-  let privateKey = await privateKeyExists(webId)
+  let privateKey = await getOrCreatePrivateKey(webId)
   // debug.warn('privateKey ' + privateKey)
   if (privateKey && (publicKey !== generatePublicKey(privateKey as string))) debug.warn('publicKey is not valid')
 
