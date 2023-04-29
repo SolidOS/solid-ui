@@ -116,12 +116,13 @@ export function renderMessageRow (channelObject, message, fresh, options, userCo
   const date = store.any(message, ns.dct('created'))
   const latestVersion = mostRecentVersion(message)
   const latestVersionCreator = store.any(latestVersion, ns.foaf('maker'))
+
   // use latest content if same owner, else use original
   const msgId = creator.uri === latestVersionCreator.uri ? latestVersion : message
   const content = store.any(msgId, ns.sioc('content'))
   const signature = store.any(msgId, $rdf.sym(`${SEC}Proof`))
 
-  // verify signature
+  // set message object
   const msg = getBlankMsg()
   msg.id = msgId.uri
   msg.created = store.any(msgId, ns.dct('created')).value
@@ -129,16 +130,22 @@ export function renderMessageRow (channelObject, message, fresh, options, userCo
   msg.maker = creator.uri
 
   // unsigned message
-  if (signature?.value) debug.warn(msgId.uri + ' is unsigned') // TODO replace with UI (colored message ?)
-  // get public key and check signature
+  if (!signature?.value) debug.warn(msgId.uri + ' is unsigned') // TODO replace with UI (colored message ?)
+
+  // signed message, get public key and check signature
   else {
     getPublicKey(creator.uri).then(publicKey => {
-      if (!publicKey) debug.warn('message is signed but ' + creator.uri + ' is missing publicKey')
-      // check publicKey is valid hex string
+      debug.log(creator.uri + '\n' + msg.created + '\n' + msg.id + '\n' + publicKey)
+      if (!publicKey) {
+        // TODO try to recreate the publicKey
+        // if(me.uri === creator.uri) await getPrivateKey(creator.uri)
+        debug.warn('message is signed but ' + creator.uri + ' is missing publicKey')
+      }
+      // check that publicKey is a valid hex string
       const regex = /[0-9A-Fa-f]{6}/g
       if (!publicKey?.match(regex)) debug.warn('invalid publicKey hex string\n' + creator.uri + '\n' + publicKey)
       // verify signature
-      else if (signature?.value && !verifySignature(signature.value, msg, publicKey)) debug.warn('invalid signature\n' + msg.id)
+      else if (signature?.value && !verifySignature(signature?.value, msg, publicKey)) debug.warn('invalid signature\n' + msg.id)
     })
   }
 

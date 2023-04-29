@@ -37845,20 +37845,30 @@ function getPublicKey(_x) {
 }
 function _getPublicKey() {
   _getPublicKey = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(webId) {
-    var publicKey;
+    var publicKeyDoc, key;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           _context.next = 2;
-          return (0, _cryptoKeyHelpers.publicKeyExists)(webId);
+          return _solidLogic.store.fetcher.load(webId);
         case 2:
-          publicKey = _context.sent;
-          return _context.abrupt("return", publicKey);
-        case 4:
+          publicKeyDoc = (0, _cryptoKeyHelpers.pubKeyUrl)(webId);
+          _context.prev = 3;
+          _context.next = 6;
+          return _solidLogic.store.fetcher.load(publicKeyDoc);
+        case 6:
+          // url.href)
+          key = _solidLogic.store.any(_solidLogic.store.sym(webId), _solidLogic.store.sym(_signature.CERT + 'PublicKey'));
+          return _context.abrupt("return", key === null || key === void 0 ? void 0 : key.value);
+        case 10:
+          _context.prev = 10;
+          _context.t0 = _context["catch"](3);
+          return _context.abrupt("return", undefined);
+        case 13:
         case "end":
           return _context.stop();
       }
-    }, _callee);
+    }, _callee, null, [[3, 10]]);
   }));
   return _getPublicKey.apply(this, arguments);
 }
@@ -37867,59 +37877,173 @@ function getPrivateKey(_x2) {
 }
 function _getPrivateKey() {
   _getPrivateKey = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(webId) {
-    var publicKeyUrl, privateKeyUrl, publicKey, privateKey, del, add;
+    var publicKeyDoc, privateKeyDoc, publicKey, privateKey, validPublicKey, del, add, newPublicKey;
     return _regenerator["default"].wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
-          /* const url = new URL(webId)
-          url.hash = '' */
-          /* const privateKeyUrl = url.protocol + '//' + url.host + '/profile/privateKey.ttl' */
-          publicKeyUrl = (0, _cryptoKeyHelpers.pubKeyUrl)(webId);
-          privateKeyUrl = (0, _cryptoKeyHelpers.privKeyUrl)(webId); // find publickey
-          _context2.next = 4;
+          _context2.next = 2;
+          return _solidLogic.store.fetcher.load(webId);
+        case 2:
+          // find keys url's
+          publicKeyDoc = (0, _cryptoKeyHelpers.pubKeyUrl)(webId);
+          privateKeyDoc = (0, _cryptoKeyHelpers.privKeyUrl)(webId); // find key pair
+          _context2.next = 6;
           return (0, _cryptoKeyHelpers.publicKeyExists)(webId);
-        case 4:
+        case 6:
           publicKey = _context2.sent;
-          _context2.next = 7;
+          _context2.next = 9;
           return (0, _cryptoKeyHelpers.privateKeyExists)(webId);
-        case 7:
+        case 9:
           privateKey = _context2.sent;
-          // debug.warn('privateKey ' + privateKey)
-          if (privateKey && publicKey !== generatePublicKey(privateKey)) debug.warn('publicKey is not valid');
+          // is publicKey valid ?
+          validPublicKey = true;
+          if (privateKey && publicKey !== generatePublicKey(privateKey)) {
+            if (confirm('This is strange the publicKey is not valid for\n' + webId + '\'shall we repair keeping the private key ?')) validPublicKey = false;
+          }
 
-          // simulate new key pair
-          /* const newPrivateKey = generatePrivateKey()
-          const newPublicKey = generatePublicKey(newPrivateKey)
-          debug.log('newPrivateKey ' + newPrivateKey)
-          debug.log('newPublicKey ' + newPublicKey) */
-
-          // create key pair
-          if (!(!privateKey || !publicKey)) {
-            _context2.next = 23;
+          // create key pair or repair publicKey
+          if (!(!privateKey || !publicKey || !validPublicKey)) {
+            _context2.next = 27;
             break;
           }
           del = [];
-          add = [];
-          if (privateKey) del.push($rdf.st($rdf.sym(webId), $rdf.sym(_signature.CERT + 'PrivateKey'), $rdf.lit(privateKey), $rdf.sym(privateKeyUrl)));
-          if (publicKey) del.push($rdf.st($rdf.sym(webId), $rdf.sym(_signature.CERT + 'PublicKey'), $rdf.lit(publicKey), $rdf.sym(publicKeyUrl)));
+          add = []; // if (privateKey) del.push($rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'PrivateKey'), $rdf.lit(privateKey), $rdf.sym(privateKeyDoc)))
+          if (privateKey) {
+            _context2.next = 20;
+            break;
+          }
+          // add = []
           privateKey = generatePrivateKey();
-          publicKey = generatePublicKey(privateKey);
-          debug.log('new key pair ' + webId);
-          debug.log('newPrivateKey-1 ' + privateKey);
-          debug.log('newPublicKey-1 ' + publicKey);
-          add.push($rdf.st($rdf.sym(webId), $rdf.sym(_signature.CERT + 'PrivateKey'), $rdf.literal(privateKey), $rdf.sym(privateKeyUrl)));
-          add.push($rdf.st($rdf.sym(webId), $rdf.sym(_signature.CERT + 'PublicKey'), $rdf.literal(publicKey), $rdf.sym(publicKeyUrl)));
-          _context2.next = 23;
-          return _solidLogic.store.updater.updateMany(del, add);
-        case 23:
+          add = [$rdf.st($rdf.sym(webId), $rdf.sym(_signature.CERT + 'PrivateKey'), $rdf.literal(privateKey), $rdf.sym(privateKeyDoc))];
+          _context2.next = 20;
+          return saveKey(privateKeyDoc, [], add, webId);
+        case 20:
+          if (!(!publicKey || !validPublicKey)) {
+            _context2.next = 27;
+            break;
+          }
+          del = [];
+          // delete invalid public key
+          if (publicKey) {
+            del = [$rdf.st($rdf.sym(webId), $rdf.sym(_signature.CERT + 'PublicKey'), $rdf.lit(publicKey), $rdf.sym(publicKeyDoc))];
+            debug.log(del);
+          }
+          // update new valid key
+          newPublicKey = generatePublicKey(privateKey);
+          add = [$rdf.st($rdf.sym(webId), $rdf.sym(_signature.CERT + 'PublicKey'), $rdf.literal(newPublicKey), $rdf.sym(publicKeyDoc))];
+          _context2.next = 27;
+          return saveKey(publicKeyDoc, del, add);
+        case 27:
           return _context2.abrupt("return", privateKey);
-        case 24:
+        case 28:
         case "end":
           return _context2.stop();
       }
     }, _callee2);
   }));
   return _getPrivateKey.apply(this, arguments);
+}
+function setAcl(_x3) {
+  return _setAcl.apply(this, arguments);
+}
+function _setAcl() {
+  _setAcl = (0, _asyncToGenerator2["default"])(function (keyDoc) {
+    var me = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+    return /*#__PURE__*/_regenerator["default"].mark(function _callee3() {
+      var keyAclDoc, keyAgent, aclBody, aclResponse;
+      return _regenerator["default"].wrap(function _callee3$(_context3) {
+        while (1) switch (_context3.prev = _context3.next) {
+          case 0:
+            _context3.next = 2;
+            return _solidLogic.store.fetcher.load(keyDoc);
+          case 2:
+            // FIXME: check the Why value on this quad:
+            keyAclDoc = _solidLogic.store.any($rdf.sym(keyDoc), $rdf.sym('http://www.iana.org/assignments/link-relations/acl'));
+            if (keyAclDoc) {
+              _context3.next = 5;
+              break;
+            }
+            throw new Error('Key ACL doc not found!');
+          case 5:
+            keyAgent = 'acl:agentClass foaf:agent';
+            if (me !== null && me !== void 0 && me.length) keyAgent = "acl:agent <".concat(me, ">");
+            aclBody = "\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n@prefix acl: <http://www.w3.org/ns/auth/acl#>.\n<#Read>\n    a acl:Authorization;\n    ".concat(keyAgent, ";\n    acl:accessTo <").concat(keyDoc.split('/').pop(), ">;\n    acl:mode acl:Read.\n");
+            _context3.next = 10;
+            return _solidLogic.store.fetcher.webOperation('PUT', keyAclDoc.value, {
+              data: aclBody,
+              contentType: 'text/turtle'
+            });
+          case 10:
+            aclResponse = _context3.sent;
+          case 11:
+          case "end":
+            return _context3.stop();
+        }
+      }, _callee3);
+    })();
+  });
+  return _setAcl.apply(this, arguments);
+}
+function saveKey(_x4, _x5, _x6) {
+  return _saveKey.apply(this, arguments);
+}
+function _saveKey() {
+  _saveKey = (0, _asyncToGenerator2["default"])(function (keyDoc, del, add) {
+    var me = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '';
+    return /*#__PURE__*/_regenerator["default"].mark(function _callee4() {
+      var keyAclDoc, response;
+      return _regenerator["default"].wrap(function _callee4$(_context4) {
+        while (1) switch (_context4.prev = _context4.next) {
+          case 0:
+            _context4.prev = 0;
+            // get keyAcldoc
+            keyAclDoc = _solidLogic.store.any($rdf.sym(keyDoc), $rdf.sym('http://www.iana.org/assignments/link-relations/acl'));
+            if (keyAclDoc) {
+              _context4.next = 4;
+              break;
+            }
+            throw new Error("".concat(keyDoc, " ACL doc not found!"));
+          case 4:
+            _context4.prev = 4;
+            _context4.next = 7;
+            return _solidLogic.store.fetcher.webOperation('DELETE', keyAclDoc.value);
+          case 7:
+            response = _context4.sent;
+            // this may fail if webId is not an owner
+            debug.log('delete ' + keyAclDoc.value + ' ' + response.status); // should test 404 and 2xx
+            _context4.next = 16;
+            break;
+          case 11:
+            _context4.prev = 11;
+            _context4.t0 = _context4["catch"](4);
+            if (!(_context4.t0.response.status !== 404)) {
+              _context4.next = 15;
+              break;
+            }
+            throw new Error(_context4.t0);
+          case 15:
+            debug.log('delete ' + keyAclDoc.value + ' ' + _context4.t0.response.status); // should test 404 and 2xx
+          case 16:
+            _context4.next = 18;
+            return _solidLogic.store.updater.updateMany(del, add);
+          case 18:
+            _context4.next = 20;
+            return setAcl(keyDoc, me);
+          case 20:
+            _context4.next = 25;
+            break;
+          case 22:
+            _context4.prev = 22;
+            _context4.t1 = _context4["catch"](0);
+            throw new Error(_context4.t1);
+          case 25:
+          case "end":
+            return _context4.stop();
+        }
+      }, _callee4, null, [[0, 22], [4, 11]]);
+    })();
+  });
+  return _saveKey.apply(this, arguments);
 }
 //# sourceMappingURL=keys.js.map
 
@@ -38050,50 +38174,38 @@ function renderMessageRow(channelObject, message, fresh, options, userContext) {
   var date = _solidLogic.store.any(message, ns.dct('created'));
   var latestVersion = (0, _chatLogic.mostRecentVersion)(message);
   var latestVersionCreator = _solidLogic.store.any(latestVersion, ns.foaf('maker'));
+
   // use latest content if same owner, else use original
   var msgId = creator.uri === latestVersionCreator.uri ? latestVersion : message;
   var content = _solidLogic.store.any(msgId, ns.sioc('content'));
   var signature = _solidLogic.store.any(msgId, $rdf.sym("".concat(_signature.SEC, "Proof")));
-  debug.log('alain ' + (signature === null || signature === void 0 ? void 0 : signature.value));
 
-  // verify signature
+  // set message object
   var msg = (0, _signature.getBlankMsg)();
   msg.id = msgId.uri;
   msg.created = _solidLogic.store.any(msgId, ns.dct('created')).value;
   msg.content = content.value;
   msg.maker = creator.uri;
-  /* try {
-    async function publicKey (webId) {
-      let pubKey
-      getPublicKey(webId).then(publicKey => {
-        debug.log('alain publicKey ' + publicKey)
-        pubKey = publicKey
-      })
-      return pubKey
-    }
-    var pubKey = publicKey(creator.uri) // await getPublicKey(creator.uri)
-    debug.log('alain pubKey ' + pubKey)
-    debug.log(creator.uri)
-  } catch (err) { debug.warn(err) }
-  try {
-    // pubKey could be store in a cache for all makers
-    /* const pubKey0 = '023a9da707bee1302f66083c9d95673ff969b41607a66f52686fa774d64ceb87'
-    debug.warn('publicKeys\n' + pubKey0 + '\n' + pubKey)
-    const privKey0 = getPrivateKey(creator.uri) // alain to remove
-    // unsigned messages should be signaled as unsecured
-    debug.warn(msg)
-    debug.warn(signature?.value) */
-  (0, _keys.getPublicKey)(creator.uri).then(function (publicKey) {
-    debug.log('alain publicKey ' + publicKey);
-    debug.log(msg);
-    debug.log(signature === null || signature === void 0 ? void 0 : signature.value);
-    if (signature !== null && signature !== void 0 && signature.value && !(0, _signature.verifySignature)(signature.value, msg, publicKey)) debug.warn('invalid signature');
-    // pubKey = publicKey
-  });
-  /* if (signature?.value && !verifySignature(signature.value, msg, pubKey)) throw new Error('invalid signature')
-  } catch (err) {
-    debug.log(err)
-  } */
+
+  // unsigned message
+  if (!(signature !== null && signature !== void 0 && signature.value)) debug.warn(msgId.uri + ' is unsigned'); // TODO replace with UI (colored message ?)
+
+  // signed message, get public key and check signature
+  else {
+    (0, _keys.getPublicKey)(creator.uri).then(function (publicKey) {
+      debug.log(creator.uri + '\n' + msg.created + '\n' + msg.id + '\n' + publicKey);
+      if (!publicKey) {
+        // TODO try to recreate the publicKey
+        // if(me.uri === creator.uri) await getPrivateKey(creator.uri)
+        debug.warn('message is signed but ' + creator.uri + ' is missing publicKey');
+      }
+      // check that publicKey is a valid hex string
+      var regex = /[0-9A-Fa-f]{6}/g;
+      if (!(publicKey !== null && publicKey !== void 0 && publicKey.match(regex))) debug.warn('invalid publicKey hex string\n' + creator.uri + '\n' + publicKey);
+      // verify signature
+      else if (signature !== null && signature !== void 0 && signature.value && !(0, _signature.verifySignature)(signature === null || signature === void 0 ? void 0 : signature.value, msg, publicKey)) debug.warn('invalid signature\n' + msg.id);
+    });
+  }
   var originalMessage = (0, _chatLogic.originalVersion)(message);
   var edited = !message.sameTerm(originalMessage);
   var sortDate = _solidLogic.store.the(originalMessage, ns.dct('created'), null, originalMessage.doc()); // In message
@@ -46221,7 +46333,16 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 var pubKeyUrl = function pubKeyUrl(webId) {
   var url = new URL(webId);
-  var publicKeyUrl = url.origin + '/profile/keys/publicKey.ttl';
+  // find storage in webId
+  var storage = _solidLogic.store.each(_solidLogic.store.sym(webId), _solidLogic.store.sym('http://www.w3.org/ns/pim/space#storage'));
+  debug.log(storage);
+  var pod = storage.length === 1 ? storage : storage.find(function (node) {
+    return url.origin === new URL(node.value).origin;
+  });
+  var podUrl = Array.isArray(pod) ? pod[0] : pod;
+  debug.log(podUrl);
+  if (!(podUrl !== null && podUrl !== void 0 && podUrl.value)) throw Error('No space:storage in ' + webId);
+  var publicKeyUrl = podUrl.value + 'profile/keys/publicKey.ttl';
   return publicKeyUrl;
 };
 exports.pubKeyUrl = pubKeyUrl;
@@ -46230,68 +46351,35 @@ function publicKeyExists(_x) {
 }
 function _publicKeyExists() {
   _publicKeyExists = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(webId) {
-    var publicKeyUrl, publicKey, _err$response, data, contentType, response;
+    var publicKeyUrl;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           // find publickey
-          /* const url = new URL(webId)
-          url.hash = '' */
-          /* debug.warn('Alain publicKeyExists')
-          debug.warn(webId)
-          debug.warn(url.href) */
           publicKeyUrl = pubKeyUrl(webId);
-          _context.prev = 1;
-          _context.next = 4;
-          return _solidLogic.store.fetcher.load(publicKeyUrl);
+          _context.next = 3;
+          return keyExists(webId, publicKeyUrl, 'PublicKey');
+        case 3:
+          return _context.abrupt("return", _context.sent);
         case 4:
-          // url.href)
-          publicKey = _solidLogic.store.any(_solidLogic.store.sym(webId), _solidLogic.store.sym(_signature.CERT + 'PublicKey'));
-          debug.log('publicKeyExists ' + webId);
-          debug.log(publicKey === null || publicKey === void 0 ? void 0 : publicKey.value);
-          return _context.abrupt("return", publicKey === null || publicKey === void 0 ? void 0 : publicKey.value);
-        case 10:
-          _context.prev = 10;
-          _context.t0 = _context["catch"](1);
-          if (!((_context.t0 === null || _context.t0 === void 0 ? void 0 : (_err$response = _context.t0.response) === null || _err$response === void 0 ? void 0 : _err$response.status) === 404)) {
-            _context.next = 27;
-            break;
-          }
-          _context.prev = 13;
-          // create privateKey resource
-          data = '';
-          contentType = 'text/ttl';
-          _context.next = 18;
-          return _solidLogic.store.fetcher.webOperation('PUT', publicKeyUrl, {
-            data: data,
-            contentType: contentType
-          });
-        case 18:
-          response = _context.sent;
-          _context.next = 25;
-          break;
-        case 21:
-          _context.prev = 21;
-          _context.t1 = _context["catch"](13);
-          debug.log('createIfNotExists doc FAILED: ' + publicKeyUrl + ': ' + _context.t1);
-          throw _context.t1;
-        case 25:
-          delete _solidLogic.store.fetcher.requested[publicKeyUrl]; // delete cached 404 error
-          return _context.abrupt("return", undefined);
-        case 27:
-          debug.log('createIfNotExists doc FAILED: ' + publicKeyUrl + ': ' + _context.t0);
-          throw _context.t0;
-        case 29:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[1, 10], [13, 21]]);
+    }, _callee);
   }));
   return _publicKeyExists.apply(this, arguments);
 }
 var privKeyUrl = function privKeyUrl(webId) {
   var url = new URL(webId);
-  var privateKeyUrl = url.origin + '/profile/keys/privateKey.ttl';
+  // find storage in webId
+  var storage = _solidLogic.store.each(_solidLogic.store.sym(webId), _solidLogic.store.sym('http://www.w3.org/ns/pim/space#storage'));
+  debug.log(storage);
+  var pod = storage.length === 1 ? storage : storage.find(function (node) {
+    return url.origin === new URL(node.value).origin;
+  });
+  var podUrl = Array.isArray(pod) ? pod[0] : pod;
+  if (!(podUrl !== null && podUrl !== void 0 && podUrl.value)) throw Error('Expected space:storage in ' + webId);
+  var privateKeyUrl = (podUrl === null || podUrl === void 0 ? void 0 : podUrl.value) + 'profile/keys/privateKey.ttl';
   return privateKeyUrl;
 };
 exports.privKeyUrl = privKeyUrl;
@@ -46300,60 +46388,77 @@ function privateKeyExists(_x2) {
 }
 function _privateKeyExists() {
   _privateKeyExists = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(webId) {
-    var privateKeyUrl, privateKey, _err$response2, data, contentType, response;
+    var privateKeyUrl;
     return _regenerator["default"].wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
-          /* const url = new URL(webId)
-          const privateKeyUrl = url.protocol + '//' + url.host + '/profile/privateKey.ttl' */
+          // find privateKey
           privateKeyUrl = privKeyUrl(webId);
-          /* debug.warn('Alain privateKeyExists')
-          debug.warn(webId)
-          debug.warn(privateKeyUrl) */
-          _context2.prev = 1;
-          _context2.next = 4;
-          return _solidLogic.store.fetcher.load(privateKeyUrl);
+          _context2.next = 3;
+          return keyExists(webId, privateKeyUrl, 'PrivateKey');
+        case 3:
+          return _context2.abrupt("return", _context2.sent);
         case 4:
-          privateKey = _solidLogic.store.any(_solidLogic.store.sym(webId), _solidLogic.store.sym(_signature.CERT + 'PrivateKey'));
-          return _context2.abrupt("return", privateKey === null || privateKey === void 0 ? void 0 : privateKey.value);
-        case 8:
-          _context2.prev = 8;
-          _context2.t0 = _context2["catch"](1);
-          if (!((_context2.t0 === null || _context2.t0 === void 0 ? void 0 : (_err$response2 = _context2.t0.response) === null || _err$response2 === void 0 ? void 0 : _err$response2.status) === 404)) {
-            _context2.next = 25;
-            break;
-          }
-          _context2.prev = 11;
-          // create privateKey resource
-          data = '';
-          contentType = 'text/ttl';
-          _context2.next = 16;
-          return _solidLogic.store.fetcher.webOperation('PUT', privateKeyUrl, {
-            data: data,
-            contentType: contentType
-          });
-        case 16:
-          response = _context2.sent;
-          _context2.next = 23;
-          break;
-        case 19:
-          _context2.prev = 19;
-          _context2.t1 = _context2["catch"](11);
-          debug.log('createIfNotExists doc FAILED: ' + privateKeyUrl + ': ' + _context2.t1);
-          throw _context2.t1;
-        case 23:
-          delete _solidLogic.store.fetcher.requested[privateKeyUrl]; // delete cached 404 error
-          return _context2.abrupt("return", undefined);
-        case 25:
-          debug.log('createIfNotExists doc FAILED: ' + privateKeyUrl + ': ' + _context2.t0);
-          throw _context2.t0;
-        case 27:
         case "end":
           return _context2.stop();
       }
-    }, _callee2, null, [[1, 8], [11, 19]]);
+    }, _callee2);
   }));
   return _privateKeyExists.apply(this, arguments);
+}
+function keyExists(_x3, _x4, _x5) {
+  return _keyExists.apply(this, arguments);
+}
+function _keyExists() {
+  _keyExists = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(webId, keyUrl, keyType) {
+    var key, _err$response, data, contentType, response;
+    return _regenerator["default"].wrap(function _callee3$(_context3) {
+      while (1) switch (_context3.prev = _context3.next) {
+        case 0:
+          _context3.prev = 0;
+          _context3.next = 3;
+          return _solidLogic.store.fetcher.load(keyUrl);
+        case 3:
+          key = _solidLogic.store.any(_solidLogic.store.sym(webId), _solidLogic.store.sym(_signature.CERT + keyType));
+          return _context3.abrupt("return", key === null || key === void 0 ? void 0 : key.value);
+        case 7:
+          _context3.prev = 7;
+          _context3.t0 = _context3["catch"](0);
+          if (!((_context3.t0 === null || _context3.t0 === void 0 ? void 0 : (_err$response = _context3.t0.response) === null || _err$response === void 0 ? void 0 : _err$response.status) === 404)) {
+            _context3.next = 24;
+            break;
+          }
+          _context3.prev = 10;
+          // create privateKey resource
+          data = '';
+          contentType = 'text/turtle';
+          _context3.next = 15;
+          return _solidLogic.store.fetcher.webOperation('PUT', keyUrl, {
+            data: data,
+            contentType: contentType
+          });
+        case 15:
+          response = _context3.sent;
+          _context3.next = 22;
+          break;
+        case 18:
+          _context3.prev = 18;
+          _context3.t1 = _context3["catch"](10);
+          debug.log('createIfNotExists doc FAILED: ' + keyUrl + ': ' + _context3.t1);
+          throw _context3.t1;
+        case 22:
+          delete _solidLogic.store.fetcher.requested[keyUrl]; // delete cached 404 error
+          return _context3.abrupt("return", undefined);
+        case 24:
+          debug.log('createIfNotExists doc FAILED: ' + keyUrl + ': ' + _context3.t0);
+          throw _context3.t0;
+        case 26:
+        case "end":
+          return _context3.stop();
+      }
+    }, _callee3, null, [[0, 7], [10, 18]]);
+  }));
+  return _keyExists.apply(this, arguments);
 }
 //# sourceMappingURL=cryptoKeyHelpers.js.map
 
@@ -47205,8 +47310,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2023-04-26T13:50:42Z',
-  commit: 'cd2500d20c42878464cb05b8e0371bc451d9e740',
+  buildTime: '2023-04-29T22:44:40Z',
+  commit: '96e84cf1bbc5d4adc97c88dca77dfcd22958d9c8',
   npmInfo: {
     'solid-ui': '2.4.27',
     npm: '8.19.4',

@@ -4,7 +4,12 @@ import { store } from 'solid-logic'
 
 export const pubKeyUrl = (webId: string) => {
   const url = new URL(webId)
-  const publicKeyUrl = url.origin + '/profile/keys/publicKey.ttl'
+  // find storage in webId
+  const storage = store.each(store.sym(webId), store.sym('http://www.w3.org/ns/pim/space#storage'))
+  const pod = storage.length === 1 ? storage : storage.find(node => url.origin === new URL(node.value).origin)
+  const podUrl = Array.isArray(pod) ? pod[0] : pod
+  if (!podUrl?.value) throw Error('No space:storage in ' + webId)
+  const publicKeyUrl = podUrl.value + 'profile/keys/publicKey.ttl'
   return publicKeyUrl
 }
 
@@ -16,7 +21,12 @@ export async function publicKeyExists (webId: string) {
 
 export const privKeyUrl = (webId: string) => {
   const url = new URL(webId)
-  const privateKeyUrl = url.origin + '/profile/keys/privateKey.ttl'
+  // find storage in webId
+  const storage = store.each(store.sym(webId), store.sym('http://www.w3.org/ns/pim/space#storage'))
+  const pod = storage.length === 1 ? storage : storage.find(node => url.origin === new URL(node.value).origin)
+  const podUrl = Array.isArray(pod) ? pod[0] : pod
+  if (!podUrl?.value) throw Error('Expected space:storage in ' + webId)
+  const privateKeyUrl = podUrl?.value + 'profile/keys/privateKey.ttl'
   return privateKeyUrl
 }
 
@@ -26,9 +36,11 @@ export async function privateKeyExists (webId: string) {
   return await keyExists(webId, privateKeyUrl, 'PrivateKey')
 }
 
-async function keyExists (webId, keyUrl, keyType) {
+type KeyType = 'PublicKey' | 'PrivateKey'
+
+async function keyExists (webId, keyUrl, keyType: KeyType) {
   try {
-    await store.fetcher.load(keyUrl) // url.href)
+    await store.fetcher.load(keyUrl)
     const key = store.any(store.sym(webId), store.sym(CERT + keyType))
     return key?.value // as NamedNode
   } catch (err) {

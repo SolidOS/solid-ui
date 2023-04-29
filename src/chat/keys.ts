@@ -15,26 +15,28 @@ export function generatePublicKey (privateKey: string): string {
 }
 
 export async function getPublicKey (webId) {
-  const publicKeyUrl = pubKeyUrl(webId)
+  await store.fetcher.load(webId)
+  const publicKeyDoc = pubKeyUrl(webId)
   try {
-    await store.fetcher.load(publicKeyUrl) // url.href)
+    await store.fetcher.load(publicKeyDoc) // url.href)
     const key = store.any(store.sym(webId), store.sym(CERT + 'PublicKey'))
     return key?.value // as NamedNode
   } catch (err) {
     return undefined
   }
-  // this is called in display message and should not try to create a publicKeyUrl
+  // this is called in display message and should not try to create a publicKeyDoc
   // const publicKey = await publicKeyExists(webId)
   // return publicKey
 }
 
 export async function getPrivateKey (webId: string) {
-  // find key url's
-  const publicKeyUrl = pubKeyUrl(webId)
-  const privateKeyUrl = privKeyUrl(webId)
+  await store.fetcher.load(webId)
+  // find keys url's
+  const publicKeyDoc = pubKeyUrl(webId)
+  const privateKeyDoc = privKeyUrl(webId)
 
   // find key pair
-  let publicKey = await publicKeyExists(webId)
+  const publicKey = await publicKeyExists(webId)
   let privateKey = await privateKeyExists(webId)
 
   // is publicKey valid ?
@@ -46,24 +48,27 @@ export async function getPrivateKey (webId: string) {
 
   // create key pair or repair publicKey
   if (!privateKey || !publicKey || !validPublicKey) {
-    const del: any[] = []
-    const add: any[] = []
-    // if (privateKey) del.push($rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'PrivateKey'), $rdf.lit(privateKey), $rdf.sym(privateKeyUrl)))
+    let del: any[] = []
+    let add: any[] = []
+    // if (privateKey) del.push($rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'PrivateKey'), $rdf.lit(privateKey), $rdf.sym(privateKeyDoc)))
 
     if (!privateKey) {
+      // add = []
       privateKey = generatePrivateKey()
-      add.push($rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'PrivateKey'), $rdf.literal(privateKey), $rdf.sym(privateKeyUrl)))
-      // TODO delete privateKeyUrl.acl, it may exist !!!
+      add = [$rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'PrivateKey'), $rdf.literal(privateKey), $rdf.sym(privateKeyDoc))]
+      await saveKey(privateKeyDoc, [], add, webId)
     }
     if (!publicKey || !validPublicKey) {
+      del = []
       // delete invalid public key
       if (publicKey) {
-        del.push($rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'PublicKey'), $rdf.lit(publicKey), $rdf.sym(publicKeyUrl)))
+        del = [$rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'PublicKey'), $rdf.lit(publicKey), $rdf.sym(publicKeyDoc))]
+        debug.log(del)
       }
-      // insert new valid key
-      publicKey = generatePublicKey(privateKey)
-      add.push($rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'PublicKey'), $rdf.literal(publicKey), $rdf.sym(publicKeyUrl)))
-      // TODO delete privateKeyUrl.acl, it may exist !!!
+      // update new valid key
+      const newPublicKey = generatePublicKey(privateKey)
+      add = [$rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'PublicKey'), $rdf.literal(newPublicKey), $rdf.sym(publicKeyDoc))]
+      await saveKey(publicKeyDoc, del, add)
     }
     /* debug.log('new key pair ' + webId)
     debug.log('newPrivateKey-1 ' + privateKey)
@@ -72,8 +77,62 @@ export async function getPrivateKey (webId: string) {
     debug.log(del)
     debug.log('add')
     debug.log(add) */
-    await store.updater.updateMany(del, add)
+    // await store.updater.updateMany(del, add)
     // TODO create READ ACL's
+    // await setAcl() // depends on which key has been updated
   }
   return privateKey as string
+}
+
+async function setAcl (keyDoc, me = '') {
+  // Some servers don't present a Link http response header
+  // if the container doesn't exist yet, so refetch the container
+  // now that it has been created:
+  await store.fetcher.load(keyDoc)
+
+  // FIXME: check the Why value on this quad:
+  const keyAclDoc = store.any($rdf.sym(keyDoc), $rdf.sym('http://www.iana.org/assignments/link-relations/acl'))
+  if (!keyAclDoc) {
+    throw new Error('Key ACL doc not found!')
+  }
+
+  let keyAgent = 'acl:agentClass foaf:agent'
+  if (me?.length) keyAgent = `acl:agent <${me}>`
+  const aclBody = `
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix acl: <http://www.w3.org/ns/auth/acl#>.
+<#Read>
+    a acl:Authorization;
+    ${keyAgent};
+    acl:accessTo <${keyDoc.split('/').pop()}>;
+    acl:mode acl:Read.
+`
+  const aclResponse = await store.fetcher.webOperation('PUT', keyAclDoc.value, {
+    data: aclBody,
+    contentType: 'text/turtle'
+  })
+}
+
+async function saveKey (keyDoc, del, add, me = '') {
+  try {
+    // get keyAcldoc
+    const keyAclDoc = store.any($rdf.sym(keyDoc), $rdf.sym('http://www.iana.org/assignments/link-relations/acl'))
+    if (!keyAclDoc) {
+      throw new Error(`${keyDoc} ACL doc not found!`)
+    }
+    // delete READ only keyAclDoc. This is possible if the webId is an owner
+    try {
+      const response = await store.fetcher.webOperation('DELETE', keyAclDoc.value) // this may fail if webId is not an owner
+      debug.log('delete ' + keyAclDoc.value + ' ' + response.status) // should test 404 and 2xx
+    } catch (err) {
+      if (err.response.status !== 404) { throw new Error(err) }
+      debug.log('delete ' + keyAclDoc.value + ' ' + err.response.status) // should test 404 and 2xx
+    }
+
+    // save key
+    await store.updater.updateMany(del, add) // or a promise store.updater.update ?
+
+    // create READ only ACL
+    await setAcl(keyDoc, me)
+  } catch (err) { throw new Error(err) }
 }
