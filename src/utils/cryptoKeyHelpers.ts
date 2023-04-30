@@ -2,6 +2,18 @@ import * as debug from '../debug'
 import { CERT } from '../chat/signature'
 import { store } from 'solid-logic'
 
+// find podRoot from space:storage for subdomain/suffix podServers
+/* export const podRoot = (webId: string) => {
+  await store.fetcher.load(webId)
+  const url = new URL(webId)
+  // find storage in webId
+  const storage = store.each(store.sym(webId), store.sym('http://www.w3.org/ns/pim/space#storage'))
+  const pod = storage.length === 1 ? storage : storage.find(node => url.origin === new URL(node.value).origin)
+  const podRoot = Array.isArray(pod) ? pod[0] : pod
+  if (!podRoot?.value) throw Error('No space:storage in ' + webId)
+  return podRoot.value
+} */
+
 export const pubKeyUrl = (webId: string) => {
   const url = new URL(webId)
   // find storage in webId
@@ -9,7 +21,7 @@ export const pubKeyUrl = (webId: string) => {
   const pod = storage.length === 1 ? storage : storage.find(node => url.origin === new URL(node.value).origin)
   const podUrl = Array.isArray(pod) ? pod[0] : pod
   if (!podUrl?.value) throw Error('No space:storage in ' + webId)
-  const publicKeyUrl = podUrl.value + 'profile/keys/publicKey.ttl'
+  const publicKeyUrl = podUrl?.value + 'profile/keys/publicKey.ttl'
   return publicKeyUrl
 }
 

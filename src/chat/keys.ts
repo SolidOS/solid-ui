@@ -70,6 +70,8 @@ export async function getPrivateKey (webId: string) {
       add = [$rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'PublicKey'), $rdf.literal(newPublicKey), $rdf.sym(publicKeyDoc))]
       await saveKey(publicKeyDoc, del, add)
     }
+    const keyContainer = privateKeyDoc.substring(0, privateKeyDoc.lastIndexOf('/') + 1)
+    await setAcl(keyContainer, keyContainerAclBody(webId))
     /* debug.log('new key pair ' + webId)
     debug.log('newPrivateKey-1 ' + privateKey)
     debug.log('newPublicKey-1 ' + publicKey) */
@@ -84,7 +86,44 @@ export async function getPrivateKey (webId: string) {
   return privateKey as string
 }
 
-async function setAcl (keyDoc, me = '') {
+const keyContainerAclBody = (me: string) => {
+  const aclBody = `
+@prefix : <#>.
+@prefix acl: <http://www.w3.org/ns/auth/acl#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix key: <./>.
+
+:ReadWrite
+    a acl:Authorization;
+    acl:accessTo key:;
+    acl:agent <${me}>;
+    acl:mode acl:Read, acl:Write.
+:Read
+    a acl:Authorization;
+    acl:accessTo key:;
+    acl:default key:;
+    acl:agentClass foaf:Agent;
+    acl:mode acl:Read.
+`
+  return aclBody
+}
+
+const keyAclBody = (keyDoc, me) => {
+  let keyAgent = 'acl:agentClass foaf:Agent' // publicKey
+  if (me?.length) keyAgent = `acl:agent <${me}>` // privateKey
+  const aclBody = `
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix acl: <http://www.w3.org/ns/auth/acl#>.
+<#Read>
+    a acl:Authorization;
+    ${keyAgent};
+    acl:accessTo <${keyDoc.split('/').pop()}>;
+    acl:mode acl:Read, acl:Control. # NSS issue: missing acl link header with READ only
+`
+  return aclBody
+}
+
+async function setAcl (keyDoc, aclBody) {
   // Some servers don't present a Link http response header
   // if the container doesn't exist yet, so refetch the container
   // now that it has been created:
@@ -96,17 +135,18 @@ async function setAcl (keyDoc, me = '') {
     throw new Error('Key ACL doc not found!')
   }
 
-  let keyAgent = 'acl:agentClass foaf:agent'
-  if (me?.length) keyAgent = `acl:agent <${me}>`
+  /* let keyAgent = `acl:agent <${me}>;\n` // privateKey
+  if (!me?.length) keyAgent = `acl:agent <${me}>;\n` + '    acl:agentClass foaf:Agent' // publicKey NSS issue
   const aclBody = `
 @prefix foaf: <http://xmlns.com/foaf/0.1/>.
 @prefix acl: <http://www.w3.org/ns/auth/acl#>.
 <#Read>
     a acl:Authorization;
+    acl:agent <${me}>;
     ${keyAgent};
     acl:accessTo <${keyDoc.split('/').pop()}>;
-    acl:mode acl:Read.
-`
+    acl:mode acl:Read, acl:Control. # NSS issue: missing acl link header with READ only
+` */
   const aclResponse = await store.fetcher.webOperation('PUT', keyAclDoc.value, {
     data: aclBody,
     contentType: 'text/turtle'
@@ -114,6 +154,10 @@ async function setAcl (keyDoc, me = '') {
 }
 
 async function saveKey (keyDoc, del, add, me = '') {
+  // save key
+  await store.updater.updateMany(del, add) // or a promise store.updater.update ?
+  await store.fetcher.load(keyDoc)
+
   try {
     // get keyAcldoc
     const keyAclDoc = store.any($rdf.sym(keyDoc), $rdf.sym('http://www.iana.org/assignments/link-relations/acl'))
@@ -129,10 +173,8 @@ async function saveKey (keyDoc, del, add, me = '') {
       debug.log('delete ' + keyAclDoc.value + ' ' + err.response.status) // should test 404 and 2xx
     }
 
-    // save key
-    await store.updater.updateMany(del, add) // or a promise store.updater.update ?
-
     // create READ only ACL
-    await setAcl(keyDoc, me)
+    const aclBody = keyAclBody(keyDoc, me)
+    await setAcl(keyDoc, aclBody)
   } catch (err) { throw new Error(err) }
 }

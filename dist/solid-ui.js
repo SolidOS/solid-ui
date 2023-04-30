@@ -37877,7 +37877,7 @@ function getPrivateKey(_x2) {
 }
 function _getPrivateKey() {
   _getPrivateKey = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(webId) {
-    var publicKeyDoc, privateKeyDoc, publicKey, privateKey, validPublicKey, del, add, newPublicKey;
+    var publicKeyDoc, privateKeyDoc, publicKey, privateKey, validPublicKey, del, add, newPublicKey, keyContainer;
     return _regenerator["default"].wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
@@ -37903,7 +37903,7 @@ function _getPrivateKey() {
 
           // create key pair or repair publicKey
           if (!(!privateKey || !publicKey || !validPublicKey)) {
-            _context2.next = 27;
+            _context2.next = 30;
             break;
           }
           del = [];
@@ -37934,8 +37934,12 @@ function _getPrivateKey() {
           _context2.next = 27;
           return saveKey(publicKeyDoc, del, add);
         case 27:
+          keyContainer = privateKeyDoc.substring(0, privateKeyDoc.lastIndexOf('/') + 1);
+          _context2.next = 30;
+          return setAcl(keyContainer, keyContainerAclBody(webId));
+        case 30:
           return _context2.abrupt("return", privateKey);
-        case 28:
+        case 31:
         case "end":
           return _context2.stop();
       }
@@ -37943,104 +37947,113 @@ function _getPrivateKey() {
   }));
   return _getPrivateKey.apply(this, arguments);
 }
-function setAcl(_x3) {
+var keyContainerAclBody = function keyContainerAclBody(me) {
+  var aclBody = "\n@prefix : <#>.\n@prefix acl: <http://www.w3.org/ns/auth/acl#>.\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n@prefix key: <./>.\n\n:ReadWrite\n    a acl:Authorization;\n    acl:accessTo key:;\n    acl:agent <".concat(me, ">;\n    acl:mode acl:Read, acl:Write.\n:Read\n    a acl:Authorization;\n    acl:accessTo key:;\n    acl:default key:;\n    acl:agentClass foaf:Agent;\n    acl:mode acl:Read.\n");
+  return aclBody;
+};
+var keyAclBody = function keyAclBody(keyDoc, me) {
+  var keyAgent = 'acl:agentClass foaf:Agent'; // publicKey
+  if (me !== null && me !== void 0 && me.length) keyAgent = "acl:agent <".concat(me, ">"); // privateKey
+  var aclBody = "\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n@prefix acl: <http://www.w3.org/ns/auth/acl#>.\n<#Read>\n    a acl:Authorization;\n    ".concat(keyAgent, ";\n    acl:accessTo <").concat(keyDoc.split('/').pop(), ">;\n    acl:mode acl:Read, acl:Control. # NSS issue: missing acl link header with READ only\n");
+  return aclBody;
+};
+function setAcl(_x3, _x4) {
   return _setAcl.apply(this, arguments);
 }
 function _setAcl() {
-  _setAcl = (0, _asyncToGenerator2["default"])(function (keyDoc) {
-    var me = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-    return /*#__PURE__*/_regenerator["default"].mark(function _callee3() {
-      var keyAclDoc, keyAgent, aclBody, aclResponse;
-      return _regenerator["default"].wrap(function _callee3$(_context3) {
-        while (1) switch (_context3.prev = _context3.next) {
-          case 0:
-            _context3.next = 2;
-            return _solidLogic.store.fetcher.load(keyDoc);
-          case 2:
-            // FIXME: check the Why value on this quad:
-            keyAclDoc = _solidLogic.store.any($rdf.sym(keyDoc), $rdf.sym('http://www.iana.org/assignments/link-relations/acl'));
-            if (keyAclDoc) {
-              _context3.next = 5;
-              break;
-            }
-            throw new Error('Key ACL doc not found!');
-          case 5:
-            keyAgent = 'acl:agentClass foaf:agent';
-            if (me !== null && me !== void 0 && me.length) keyAgent = "acl:agent <".concat(me, ">");
-            aclBody = "\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n@prefix acl: <http://www.w3.org/ns/auth/acl#>.\n<#Read>\n    a acl:Authorization;\n    ".concat(keyAgent, ";\n    acl:accessTo <").concat(keyDoc.split('/').pop(), ">;\n    acl:mode acl:Read.\n");
-            _context3.next = 10;
-            return _solidLogic.store.fetcher.webOperation('PUT', keyAclDoc.value, {
-              data: aclBody,
-              contentType: 'text/turtle'
-            });
-          case 10:
-            aclResponse = _context3.sent;
-          case 11:
-          case "end":
-            return _context3.stop();
-        }
-      }, _callee3);
-    })();
-  });
+  _setAcl = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(keyDoc, aclBody) {
+    var keyAclDoc, aclResponse;
+    return _regenerator["default"].wrap(function _callee3$(_context3) {
+      while (1) switch (_context3.prev = _context3.next) {
+        case 0:
+          _context3.next = 2;
+          return _solidLogic.store.fetcher.load(keyDoc);
+        case 2:
+          // FIXME: check the Why value on this quad:
+          keyAclDoc = _solidLogic.store.any($rdf.sym(keyDoc), $rdf.sym('http://www.iana.org/assignments/link-relations/acl'));
+          if (keyAclDoc) {
+            _context3.next = 5;
+            break;
+          }
+          throw new Error('Key ACL doc not found!');
+        case 5:
+          _context3.next = 7;
+          return _solidLogic.store.fetcher.webOperation('PUT', keyAclDoc.value, {
+            data: aclBody,
+            contentType: 'text/turtle'
+          });
+        case 7:
+          aclResponse = _context3.sent;
+        case 8:
+        case "end":
+          return _context3.stop();
+      }
+    }, _callee3);
+  }));
   return _setAcl.apply(this, arguments);
 }
-function saveKey(_x4, _x5, _x6) {
+function saveKey(_x5, _x6, _x7) {
   return _saveKey.apply(this, arguments);
 }
 function _saveKey() {
   _saveKey = (0, _asyncToGenerator2["default"])(function (keyDoc, del, add) {
     var me = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '';
     return /*#__PURE__*/_regenerator["default"].mark(function _callee4() {
-      var keyAclDoc, response;
+      var keyAclDoc, response, aclBody;
       return _regenerator["default"].wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
           case 0:
-            _context4.prev = 0;
+            _context4.next = 2;
+            return _solidLogic.store.updater.updateMany(del, add);
+          case 2:
+            _context4.next = 4;
+            return _solidLogic.store.fetcher.load(keyDoc);
+          case 4:
+            _context4.prev = 4;
             // get keyAcldoc
             keyAclDoc = _solidLogic.store.any($rdf.sym(keyDoc), $rdf.sym('http://www.iana.org/assignments/link-relations/acl'));
             if (keyAclDoc) {
-              _context4.next = 4;
+              _context4.next = 8;
               break;
             }
             throw new Error("".concat(keyDoc, " ACL doc not found!"));
-          case 4:
-            _context4.prev = 4;
-            _context4.next = 7;
+          case 8:
+            _context4.prev = 8;
+            _context4.next = 11;
             return _solidLogic.store.fetcher.webOperation('DELETE', keyAclDoc.value);
-          case 7:
+          case 11:
             response = _context4.sent;
             // this may fail if webId is not an owner
             debug.log('delete ' + keyAclDoc.value + ' ' + response.status); // should test 404 and 2xx
-            _context4.next = 16;
+            _context4.next = 20;
             break;
-          case 11:
-            _context4.prev = 11;
-            _context4.t0 = _context4["catch"](4);
+          case 15:
+            _context4.prev = 15;
+            _context4.t0 = _context4["catch"](8);
             if (!(_context4.t0.response.status !== 404)) {
-              _context4.next = 15;
+              _context4.next = 19;
               break;
             }
             throw new Error(_context4.t0);
-          case 15:
+          case 19:
             debug.log('delete ' + keyAclDoc.value + ' ' + _context4.t0.response.status); // should test 404 and 2xx
-          case 16:
-            _context4.next = 18;
-            return _solidLogic.store.updater.updateMany(del, add);
-          case 18:
-            _context4.next = 20;
-            return setAcl(keyDoc, me);
           case 20:
-            _context4.next = 25;
+            // create READ only ACL
+            aclBody = keyAclBody(keyDoc, me);
+            _context4.next = 23;
+            return setAcl(keyDoc, aclBody);
+          case 23:
+            _context4.next = 28;
             break;
-          case 22:
-            _context4.prev = 22;
-            _context4.t1 = _context4["catch"](0);
-            throw new Error(_context4.t1);
           case 25:
+            _context4.prev = 25;
+            _context4.t1 = _context4["catch"](4);
+            throw new Error(_context4.t1);
+          case 28:
           case "end":
             return _context4.stop();
         }
-      }, _callee4, null, [[0, 22], [4, 11]]);
+      }, _callee4, null, [[4, 25], [8, 15]]);
     })();
   });
   return _saveKey.apply(this, arguments);
@@ -46331,18 +46344,28 @@ var _signature = __webpack_require__(/*! ../chat/signature */ "./lib/chat/signat
 var _solidLogic = __webpack_require__(/*! solid-logic */ "../solid-logic/lib/index.js");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+// find podRoot from space:storage for subdomain/suffix podServers
+/* export const podRoot = (webId: string) => {
+  await store.fetcher.load(webId)
+  const url = new URL(webId)
+  // find storage in webId
+  const storage = store.each(store.sym(webId), store.sym('http://www.w3.org/ns/pim/space#storage'))
+  const pod = storage.length === 1 ? storage : storage.find(node => url.origin === new URL(node.value).origin)
+  const podRoot = Array.isArray(pod) ? pod[0] : pod
+  if (!podRoot?.value) throw Error('No space:storage in ' + webId)
+  return podRoot.value
+} */
+
 var pubKeyUrl = function pubKeyUrl(webId) {
   var url = new URL(webId);
   // find storage in webId
   var storage = _solidLogic.store.each(_solidLogic.store.sym(webId), _solidLogic.store.sym('http://www.w3.org/ns/pim/space#storage'));
-  debug.log(storage);
   var pod = storage.length === 1 ? storage : storage.find(function (node) {
     return url.origin === new URL(node.value).origin;
   });
   var podUrl = Array.isArray(pod) ? pod[0] : pod;
-  debug.log(podUrl);
   if (!(podUrl !== null && podUrl !== void 0 && podUrl.value)) throw Error('No space:storage in ' + webId);
-  var publicKeyUrl = podUrl.value + 'profile/keys/publicKey.ttl';
+  var publicKeyUrl = (podUrl === null || podUrl === void 0 ? void 0 : podUrl.value) + 'profile/keys/publicKey.ttl';
   return publicKeyUrl;
 };
 exports.pubKeyUrl = pubKeyUrl;
@@ -46373,7 +46396,6 @@ var privKeyUrl = function privKeyUrl(webId) {
   var url = new URL(webId);
   // find storage in webId
   var storage = _solidLogic.store.each(_solidLogic.store.sym(webId), _solidLogic.store.sym('http://www.w3.org/ns/pim/space#storage'));
-  debug.log(storage);
   var pod = storage.length === 1 ? storage : storage.find(function (node) {
     return url.origin === new URL(node.value).origin;
   });
@@ -47310,8 +47332,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2023-04-29T22:44:40Z',
-  commit: '96e84cf1bbc5d4adc97c88dca77dfcd22958d9c8',
+  buildTime: '2023-04-30T18:20:26Z',
+  commit: '2166356d833035248d9cab576a91a9db267c426f',
   npmInfo: {
     'solid-ui': '2.4.27',
     npm: '8.19.4',
