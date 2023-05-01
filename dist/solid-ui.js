@@ -37875,6 +37875,11 @@ function _getPublicKey() {
 function getPrivateKey(_x2) {
   return _getPrivateKey.apply(this, arguments);
 }
+/**
+ * key container ACL
+ * @param me
+ * @returns aclBody
+ */
 function _getPrivateKey() {
   _getPrivateKey = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(webId) {
     var publicKeyDoc, privateKeyDoc, publicKey, privateKey, validPublicKey, del, add, newPublicKey, keyContainer;
@@ -37948,21 +37953,39 @@ function _getPrivateKey() {
   return _getPrivateKey.apply(this, arguments);
 }
 var keyContainerAclBody = function keyContainerAclBody(me) {
-  var aclBody = "\n@prefix : <#>.\n@prefix acl: <http://www.w3.org/ns/auth/acl#>.\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n@prefix key: <./>.\n\n:ReadWrite\n    a acl:Authorization;\n    acl:accessTo key:;\n    acl:agent <".concat(me, ">;\n    acl:mode acl:Read, acl:Write.\n:Read\n    a acl:Authorization;\n    acl:accessTo key:;\n    acl:default key:;\n    acl:agentClass foaf:Agent;\n    acl:mode acl:Read.\n");
+  var aclBody = "\n@prefix : <#>.\n@prefix acl: <http://www.w3.org/ns/auth/acl#>.\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n@prefix key: <./>.\n\n:ReadWrite\n    a acl:Authorization;\n    acl:accessTo key:;\n    acl:default key:;\n    acl:agent <".concat(me, ">;\n    acl:mode acl:Read, acl:Write.\n");
   return aclBody;
 };
+
+/**
+ * Read only ACL
+ * @param keyDoc
+ * @param me
+ * @returns aclBody
+ */
 var keyAclBody = function keyAclBody(keyDoc, me) {
   var keyAgent = 'acl:agentClass foaf:Agent'; // publicKey
   if (me !== null && me !== void 0 && me.length) keyAgent = "acl:agent <".concat(me, ">"); // privateKey
-  var aclBody = "\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n@prefix acl: <http://www.w3.org/ns/auth/acl#>.\n<#Read>\n    a acl:Authorization;\n    ".concat(keyAgent, ";\n    acl:accessTo <").concat(keyDoc.split('/').pop(), ">;\n    acl:mode acl:Read, acl:Control. # NSS issue: missing acl link header with READ only\n");
+  var aclBody = "\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n@prefix acl: <http://www.w3.org/ns/auth/acl#>.\n<#Read>\n    a acl:Authorization;\n    ".concat(keyAgent, ";\n    acl:accessTo <").concat(keyDoc.split('/').pop(), ">;\n    acl:mode acl:Read.\n");
   return aclBody;
 };
+
+/**
+ * set ACL
+ * @param keyDoc
+ * @param aclBody
+ */
 function setAcl(_x3, _x4) {
   return _setAcl.apply(this, arguments);
 }
+/**
+ * delete acl if keydoc exists
+ * create/edit keyDoc
+ * set keyDoc acl
+ */
 function _setAcl() {
   _setAcl = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(keyDoc, aclBody) {
-    var keyAclDoc, aclResponse;
+    var keyAclDoc, response, aclResponse;
     return _regenerator["default"].wrap(function _callee3$(_context3) {
       while (1) switch (_context3.prev = _context3.next) {
         case 0:
@@ -37970,25 +37993,46 @@ function _setAcl() {
           return _solidLogic.store.fetcher.load(keyDoc);
         case 2:
           // FIXME: check the Why value on this quad:
+          debug.log(_solidLogic.store.statementsMatching($rdf.sym(keyDoc), $rdf.sym('http://www.iana.org/assignments/link-relations/acl')));
           keyAclDoc = _solidLogic.store.any($rdf.sym(keyDoc), $rdf.sym('http://www.iana.org/assignments/link-relations/acl'));
           if (keyAclDoc) {
-            _context3.next = 5;
+            _context3.next = 6;
             break;
           }
           throw new Error('Key ACL doc not found!');
-        case 5:
-          _context3.next = 7;
+        case 6:
+          _context3.prev = 6;
+          _context3.next = 9;
+          return _solidLogic.store.fetcher.webOperation('DELETE', keyAclDoc.value);
+        case 9:
+          response = _context3.sent;
+          // this may fail if webId is not an owner
+          debug.log('delete ' + keyAclDoc.value + ' ' + response.status); // should test 404 and 2xx
+          _context3.next = 18;
+          break;
+        case 13:
+          _context3.prev = 13;
+          _context3.t0 = _context3["catch"](6);
+          if (!(_context3.t0.response.status !== 404)) {
+            _context3.next = 17;
+            break;
+          }
+          throw new Error(_context3.t0);
+        case 17:
+          debug.log('delete ' + keyAclDoc.value + ' ' + _context3.t0.response.status); // should test 404 and 2xx
+        case 18:
+          _context3.next = 20;
           return _solidLogic.store.fetcher.webOperation('PUT', keyAclDoc.value, {
             data: aclBody,
             contentType: 'text/turtle'
           });
-        case 7:
+        case 20:
           aclResponse = _context3.sent;
-        case 8:
+        case 21:
         case "end":
           return _context3.stop();
       }
-    }, _callee3);
+    }, _callee3, null, [[6, 13]]);
   }));
   return _setAcl.apply(this, arguments);
 }
@@ -38004,56 +38048,55 @@ function _saveKey() {
         while (1) switch (_context4.prev = _context4.next) {
           case 0:
             _context4.next = 2;
-            return _solidLogic.store.updater.updateMany(del, add);
-          case 2:
-            _context4.next = 4;
             return _solidLogic.store.fetcher.load(keyDoc);
-          case 4:
-            _context4.prev = 4;
+          case 2:
+            _context4.prev = 2;
             // get keyAcldoc
             keyAclDoc = _solidLogic.store.any($rdf.sym(keyDoc), $rdf.sym('http://www.iana.org/assignments/link-relations/acl'));
-            if (keyAclDoc) {
-              _context4.next = 8;
+            if (!keyAclDoc) {
+              _context4.next = 17;
               break;
             }
-            throw new Error("".concat(keyDoc, " ACL doc not found!"));
-          case 8:
-            _context4.prev = 8;
-            _context4.next = 11;
+            _context4.prev = 5;
+            _context4.next = 8;
             return _solidLogic.store.fetcher.webOperation('DELETE', keyAclDoc.value);
-          case 11:
+          case 8:
             response = _context4.sent;
             // this may fail if webId is not an owner
             debug.log('delete ' + keyAclDoc.value + ' ' + response.status); // should test 404 and 2xx
-            _context4.next = 20;
+            _context4.next = 17;
             break;
-          case 15:
-            _context4.prev = 15;
-            _context4.t0 = _context4["catch"](8);
+          case 12:
+            _context4.prev = 12;
+            _context4.t0 = _context4["catch"](5);
             if (!(_context4.t0.response.status !== 404)) {
-              _context4.next = 19;
+              _context4.next = 16;
               break;
             }
             throw new Error(_context4.t0);
-          case 19:
+          case 16:
             debug.log('delete ' + keyAclDoc.value + ' ' + _context4.t0.response.status); // should test 404 and 2xx
-          case 20:
+          case 17:
+            _context4.next = 19;
+            return _solidLogic.store.updater.updateMany(del, add);
+          case 19:
+            // or a promise store.updater.update ?
             // create READ only ACL
             aclBody = keyAclBody(keyDoc, me);
-            _context4.next = 23;
+            _context4.next = 22;
             return setAcl(keyDoc, aclBody);
-          case 23:
-            _context4.next = 28;
+          case 22:
+            _context4.next = 27;
             break;
-          case 25:
-            _context4.prev = 25;
-            _context4.t1 = _context4["catch"](4);
+          case 24:
+            _context4.prev = 24;
+            _context4.t1 = _context4["catch"](2);
             throw new Error(_context4.t1);
-          case 28:
+          case 27:
           case "end":
             return _context4.stop();
         }
-      }, _callee4, null, [[4, 25], [8, 15]]);
+      }, _callee4, null, [[2, 24], [5, 12]]);
     })();
   });
   return _saveKey.apply(this, arguments);
@@ -47332,8 +47375,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2023-04-30T18:20:26Z',
-  commit: '2166356d833035248d9cab576a91a9db267c426f',
+  buildTime: '2023-05-01T17:58:14Z',
+  commit: 'eed9bea818c9a1a52b4631274b5251b239530355',
   npmInfo: {
     'solid-ui': '2.4.27',
     npm: '8.19.4',

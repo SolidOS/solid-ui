@@ -71,21 +71,16 @@ export async function getPrivateKey (webId: string) {
       await saveKey(publicKeyDoc, del, add)
     }
     const keyContainer = privateKeyDoc.substring(0, privateKeyDoc.lastIndexOf('/') + 1)
-    await setAcl(keyContainer, keyContainerAclBody(webId))
-    /* debug.log('new key pair ' + webId)
-    debug.log('newPrivateKey-1 ' + privateKey)
-    debug.log('newPublicKey-1 ' + publicKey) */
-    /* debug.log('del')
-    debug.log(del)
-    debug.log('add')
-    debug.log(add) */
-    // await store.updater.updateMany(del, add)
-    // TODO create READ ACL's
-    // await setAcl() // depends on which key has been updated
+    await setAcl(keyContainer, keyContainerAclBody(webId)) // includes DELETE and PUT
   }
   return privateKey as string
 }
 
+/**
+ * key container ACL
+ * @param me
+ * @returns aclBody
+ */
 const keyContainerAclBody = (me: string) => {
   const aclBody = `
 @prefix : <#>.
@@ -96,18 +91,19 @@ const keyContainerAclBody = (me: string) => {
 :ReadWrite
     a acl:Authorization;
     acl:accessTo key:;
+    acl:default key:;
     acl:agent <${me}>;
     acl:mode acl:Read, acl:Write.
-:Read
-    a acl:Authorization;
-    acl:accessTo key:;
-    acl:default key:;
-    acl:agentClass foaf:Agent;
-    acl:mode acl:Read.
 `
   return aclBody
 }
 
+/**
+ * Read only ACL
+ * @param keyDoc
+ * @param me
+ * @returns aclBody
+ */
 const keyAclBody = (keyDoc, me) => {
   let keyAgent = 'acl:agentClass foaf:Agent' // publicKey
   if (me?.length) keyAgent = `acl:agent <${me}>` // privateKey
@@ -118,60 +114,67 @@ const keyAclBody = (keyDoc, me) => {
     a acl:Authorization;
     ${keyAgent};
     acl:accessTo <${keyDoc.split('/').pop()}>;
-    acl:mode acl:Read, acl:Control. # NSS issue: missing acl link header with READ only
+    acl:mode acl:Read.
 `
   return aclBody
 }
 
+/**
+ * set ACL
+ * @param keyDoc
+ * @param aclBody
+ */
 async function setAcl (keyDoc, aclBody) {
   // Some servers don't present a Link http response header
-  // if the container doesn't exist yet, so refetch the container
-  // now that it has been created:
+  // if the container doesn't exist yet, so refetch the resource
   await store.fetcher.load(keyDoc)
 
   // FIXME: check the Why value on this quad:
+  debug.log(store.statementsMatching($rdf.sym(keyDoc), $rdf.sym('http://www.iana.org/assignments/link-relations/acl')))
   const keyAclDoc = store.any($rdf.sym(keyDoc), $rdf.sym('http://www.iana.org/assignments/link-relations/acl'))
   if (!keyAclDoc) {
     throw new Error('Key ACL doc not found!')
   }
 
-  /* let keyAgent = `acl:agent <${me}>;\n` // privateKey
-  if (!me?.length) keyAgent = `acl:agent <${me}>;\n` + '    acl:agentClass foaf:Agent' // publicKey NSS issue
-  const aclBody = `
-@prefix foaf: <http://xmlns.com/foaf/0.1/>.
-@prefix acl: <http://www.w3.org/ns/auth/acl#>.
-<#Read>
-    a acl:Authorization;
-    acl:agent <${me}>;
-    ${keyAgent};
-    acl:accessTo <${keyDoc.split('/').pop()}>;
-    acl:mode acl:Read, acl:Control. # NSS issue: missing acl link header with READ only
-` */
+  // delete READ only keyAclDoc. This is possible if the webId is an owner
+  try {
+    const response = await store.fetcher.webOperation('DELETE', keyAclDoc.value) // this may fail if webId is not an owner
+    debug.log('delete ' + keyAclDoc.value + ' ' + response.status) // should test 404 and 2xx
+  } catch (err) {
+    if (err.response.status !== 404) { throw new Error(err) }
+    debug.log('delete ' + keyAclDoc.value + ' ' + err.response.status) // should test 404 and 2xx
+  }
+
   const aclResponse = await store.fetcher.webOperation('PUT', keyAclDoc.value, {
     data: aclBody,
     contentType: 'text/turtle'
   })
 }
 
+/**
+ * delete acl if keydoc exists
+ * create/edit keyDoc
+ * set keyDoc acl
+ */
 async function saveKey (keyDoc, del, add, me = '') {
-  // save key
-  await store.updater.updateMany(del, add) // or a promise store.updater.update ?
   await store.fetcher.load(keyDoc)
-
+  // delete keyAclDoc
   try {
     // get keyAcldoc
     const keyAclDoc = store.any($rdf.sym(keyDoc), $rdf.sym('http://www.iana.org/assignments/link-relations/acl'))
-    if (!keyAclDoc) {
-      throw new Error(`${keyDoc} ACL doc not found!`)
+    if (keyAclDoc) {
+      // delete READ only keyAclDoc. This is possible if the webId is an owner
+      try {
+        const response = await store.fetcher.webOperation('DELETE', keyAclDoc.value) // this may fail if webId is not an owner
+        debug.log('delete ' + keyAclDoc.value + ' ' + response.status) // should test 404 and 2xx
+      } catch (err) {
+        if (err.response.status !== 404) { throw new Error(err) }
+        debug.log('delete ' + keyAclDoc.value + ' ' + err.response.status) // should test 404 and 2xx
+      }
     }
-    // delete READ only keyAclDoc. This is possible if the webId is an owner
-    try {
-      const response = await store.fetcher.webOperation('DELETE', keyAclDoc.value) // this may fail if webId is not an owner
-      debug.log('delete ' + keyAclDoc.value + ' ' + response.status) // should test 404 and 2xx
-    } catch (err) {
-      if (err.response.status !== 404) { throw new Error(err) }
-      debug.log('delete ' + keyAclDoc.value + ' ' + err.response.status) // should test 404 and 2xx
-    }
+
+    // save key
+    await store.updater.updateMany(del, add) // or a promise store.updater.update ?
 
     // create READ only ACL
     const aclBody = keyAclBody(keyDoc, me)
