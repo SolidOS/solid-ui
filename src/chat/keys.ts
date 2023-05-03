@@ -126,7 +126,8 @@ const keyAclBody = (keyDoc, me) => {
  */
 async function setAcl (keyDoc, aclBody) {
   // Some servers don't present a Link http response header
-  // if the container doesn't exist yet, so refetch the resource
+  // if the container doesn't exist yet, refetch the resource
+
   await store.fetcher.load(keyDoc)
 
   // FIXME: check the Why value on this quad:
