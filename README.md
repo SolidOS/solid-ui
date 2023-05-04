@@ -67,7 +67,11 @@ npm run storybook
 If there is no story for the component yet, add a new one to `./src/stories`.
 
 When you want to test the component within a solid-pane, you can use the [development mode of solid-panes](https://github.com/solidos/solid-panes#development).
- 
+
+## Adding Tests
+
+Need to point to Unit test Readme.
+
 ## Further documentation
 
 - [Some code know-how](https://github.com/SolidOS/solidos/wiki/2.-Solid-UI-know-how)
