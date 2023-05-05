@@ -3,6 +3,7 @@ import { schnorr } from '@noble/curves/secp256k1'
 import { bytesToHex } from '@noble/hashes/utils'
 import { CERT } from './signature'
 import { store } from 'solid-logic'
+import { NamedNode } from 'rdflib'
 import * as $rdf from 'rdflib'
 import { publicKeyExists, pubKeyUrl, privKeyUrl, privateKeyExists } from '../utils/cryptoKeyHelpers'
 
@@ -16,10 +17,10 @@ export function generatePublicKey (privateKey: string): string {
 
 export async function getPublicKey (webId) {
   await store.fetcher.load(webId)
-  const publicKeyDoc = pubKeyUrl(webId)
+  const publicKeyDoc = await pubKeyUrl(webId)
   try {
     await store.fetcher.load(publicKeyDoc) // url.href)
-    const key = store.any(store.sym(webId), store.sym(CERT + 'PublicKey'))
+    const key = store.any(webId, store.sym(CERT + 'PublicKey'))
     return key?.value // as NamedNode
   } catch (err) {
     return undefined
@@ -29,11 +30,11 @@ export async function getPublicKey (webId) {
   // return publicKey
 }
 
-export async function getPrivateKey (webId: string) {
+export async function getPrivateKey (webId: NamedNode) {
   await store.fetcher.load(webId)
   // find keys url's
-  const publicKeyDoc = pubKeyUrl(webId)
-  const privateKeyDoc = privKeyUrl(webId)
+  const publicKeyDoc = await pubKeyUrl(webId)
+  const privateKeyDoc = await privKeyUrl(webId)
 
   // find key pair
   const publicKey = await publicKeyExists(webId)
@@ -50,28 +51,28 @@ export async function getPrivateKey (webId: string) {
   if (!privateKey || !publicKey || !validPublicKey) {
     let del: any[] = []
     let add: any[] = []
-    // if (privateKey) del.push($rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'PrivateKey'), $rdf.lit(privateKey), $rdf.sym(privateKeyDoc)))
+    // if (privateKey) del.push($rdf.st(webId, store.sym(CERT + 'PrivateKey'), $rdf.lit(privateKey), store.sym(privateKeyDoc)))
 
     if (!privateKey) {
       // add = []
       privateKey = generatePrivateKey()
-      add = [$rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'PrivateKey'), $rdf.literal(privateKey), $rdf.sym(privateKeyDoc))]
-      await saveKey(privateKeyDoc, [], add, webId)
+      add = [$rdf.st(webId, store.sym(CERT + 'PrivateKey'), $rdf.literal(privateKey), store.sym(privateKeyDoc))]
+      await saveKey(privateKeyDoc, [], add, webId.uri)
     }
     if (!publicKey || !validPublicKey) {
       del = []
       // delete invalid public key
       if (publicKey) {
-        del = [$rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'PublicKey'), $rdf.lit(publicKey), $rdf.sym(publicKeyDoc))]
+        del = [$rdf.st(webId, store.sym(CERT + 'PublicKey'), $rdf.lit(publicKey), store.sym(publicKeyDoc))]
         debug.log(del)
       }
       // update new valid key
       const newPublicKey = generatePublicKey(privateKey)
-      add = [$rdf.st($rdf.sym(webId), $rdf.sym(CERT + 'PublicKey'), $rdf.literal(newPublicKey), $rdf.sym(publicKeyDoc))]
+      add = [$rdf.st(webId, store.sym(CERT + 'PublicKey'), $rdf.literal(newPublicKey), store.sym(publicKeyDoc))]
       await saveKey(publicKeyDoc, del, add)
     }
     const keyContainer = privateKeyDoc.substring(0, privateKeyDoc.lastIndexOf('/') + 1)
-    await setAcl(keyContainer, keyContainerAclBody(webId)) // includes DELETE and PUT
+    await setAcl(keyContainer, keyContainerAclBody(webId.uri)) // includes DELETE and PUT
   }
   return privateKey as string
 }
@@ -130,8 +131,8 @@ async function setAcl (keyDoc, aclBody) {
   await store.fetcher.load(keyDoc)
 
   // FIXME: check the Why value on this quad:
-  debug.log(store.statementsMatching($rdf.sym(keyDoc), $rdf.sym('http://www.iana.org/assignments/link-relations/acl')))
-  const keyAclDoc = store.any($rdf.sym(keyDoc), $rdf.sym('http://www.iana.org/assignments/link-relations/acl'))
+  debug.log(store.statementsMatching(store.sym(keyDoc), store.sym('http://www.iana.org/assignments/link-relations/acl')))
+  const keyAclDoc = store.any(store.sym(keyDoc), store.sym('http://www.iana.org/assignments/link-relations/acl'))
   if (!keyAclDoc) {
     throw new Error('Key ACL doc not found!')
   }
@@ -161,7 +162,7 @@ async function saveKey (keyDoc, del, add, me = '') {
   // delete keyAclDoc
   try {
     // get keyAcldoc
-    const keyAclDoc = store.any($rdf.sym(keyDoc), $rdf.sym('http://www.iana.org/assignments/link-relations/acl'))
+    const keyAclDoc = store.any(store.sym(keyDoc), store.sym('http://www.iana.org/assignments/link-relations/acl'))
     if (keyAclDoc) {
       // delete READ only keyAclDoc. This is possible if the webId is an owner
       try {

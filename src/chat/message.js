@@ -138,7 +138,7 @@ export function renderMessageRow (channelObject, message, fresh, options, userCo
       debug.log(creator.uri + '\n' + msg.created + '\n' + msg.id + '\n' + publicKey)
       if (!publicKey) {
         // TODO try to recreate the publicKey
-        // if(me.uri === creator.uri) await getPrivateKey(creator.uri)
+        // if(me.uri === creator.uri) await getPrivateKey(creator)
         debug.warn('message is signed but ' + creator.uri + ' is missing publicKey')
       }
       // check that publicKey is a valid hex string
