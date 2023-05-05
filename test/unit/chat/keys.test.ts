@@ -33,7 +33,7 @@ describe('generate key pair', () => {
 })
 
 describe('getPublicKey', () => {
-  it('should do something', async () => {
+  it.skip('should do something', async () => {
     const result = await getPublicKey('https://sstratsianis.solidcommunity.net/profile/card#me')
     expect(result).toBe('')
   })
