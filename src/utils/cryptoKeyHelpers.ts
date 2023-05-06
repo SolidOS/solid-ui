@@ -1,59 +1,63 @@
 import * as debug from '../debug'
 import { CERT } from '../chat/signature'
 import { store } from 'solid-logic'
+import * as ns from '../ns'
+import { NamedNode } from 'rdflib'
 
-// find podRoot from space:storage for subdomain/suffix podServers
-/* export const podRoot = (webId: string) => {
-  await store.fetcher.load(webId)
-  const url = new URL(webId)
-  // find storage in webId
-  const storage = store.each(store.sym(webId), store.sym('http://www.w3.org/ns/pim/space#storage'))
-  const pod = storage.length === 1 ? storage : storage.find(node => url.origin === new URL(node.value).origin)
-  const podRoot = Array.isArray(pod) ? pod[0] : pod
-  if (!podRoot?.value) throw Error('No space:storage in ' + webId)
-  return podRoot.value
-} */
-
-export const pubKeyUrl = (webId: string) => {
-  const url = new URL(webId)
-  // find storage in webId
-  const storage = store.each(store.sym(webId), store.sym('http://www.w3.org/ns/pim/space#storage'))
-  const pod = storage.length === 1 ? storage : storage.find(node => url.origin === new URL(node.value).origin)
-  const podUrl = Array.isArray(pod) ? pod[0] : pod
-  if (!podUrl?.value) throw Error('No space:storage in ' + webId)
-  const publicKeyUrl = podUrl?.value + 'profile/keys/publicKey.ttl'
-  return publicKeyUrl
+const getPodRoot = async (webId: NamedNode) => {
+  const webIdURL = new URL(webId.uri)
+  // find storages in webId document
+  await store.fetcher.load(webId.uri)
+  const storages = store.each(webId, ns.space('storage'), null, webId.doc())
+  var podRoot: NamedNode | undefined
+  if (!storages?.length) {
+    // find storage recursively in webId URL
+    let path = webIdURL.pathname
+    while (path.length) {
+      path = path.substring(0, path.lastIndexOf('/'))
+      podRoot = store.sym(webIdURL.origin + path + '/')
+      const res = await store.fetcher.webOperation('HEAD', podRoot.uri)
+      if (res.headers.get('link')?.includes(ns.space('Storage').value)) break
+      if (!path) debug.warn(`Current user storage not found for\n${webId}`)
+    }
+  } else {
+    // give preference to storage in webId root
+    podRoot = storages.find((storage) => webIdURL.origin === new URL(storage.value).origin) as NamedNode
+    if (!podRoot) podRoot = storages[0] as NamedNode
+  }
+  return podRoot?.value
 }
 
-export async function publicKeyExists (webId: string) {
+export const pubKeyUrl = async (webId: NamedNode) => {
+  try {
+    return await getPodRoot(webId) + 'profile/keys/publicKey.ttl'
+  } catch (err) { throw new Error(err) }
+}
+
+export async function publicKeyExists (webId: NamedNode) {
   // find publickey
-  const publicKeyUrl = pubKeyUrl(webId)
+  const publicKeyUrl = await pubKeyUrl(webId)
   return await keyExists(webId, publicKeyUrl, 'PublicKey')
 }
 
-export const privKeyUrl = (webId: string) => {
-  const url = new URL(webId)
-  // find storage in webId
-  const storage = store.each(store.sym(webId), store.sym('http://www.w3.org/ns/pim/space#storage'))
-  const pod = storage.length === 1 ? storage : storage.find(node => url.origin === new URL(node.value).origin)
-  const podUrl = Array.isArray(pod) ? pod[0] : pod
-  if (!podUrl?.value) throw Error('Expected space:storage in ' + webId)
-  const privateKeyUrl = podUrl?.value + 'profile/keys/privateKey.ttl'
-  return privateKeyUrl
+export const privKeyUrl = async (webId: NamedNode) => {
+  try {
+    return await getPodRoot(webId) + 'profile/keys/privateKey.ttl'
+  } catch (err) { throw new Error(err) }
 }
 
-export async function privateKeyExists (webId: string) {
+export async function privateKeyExists (webId: NamedNode) {
   // find privateKey
-  const privateKeyUrl = privKeyUrl(webId)
+  const privateKeyUrl = await privKeyUrl(webId)
   return await keyExists(webId, privateKeyUrl, 'PrivateKey')
 }
 
 type KeyType = 'PublicKey' | 'PrivateKey'
 
-async function keyExists (webId, keyUrl, keyType: KeyType) {
+async function keyExists (webId: NamedNode, keyUrl: string, keyType: KeyType) {
   try {
     await store.fetcher.load(keyUrl)
-    const key = store.any(store.sym(webId), store.sym(CERT + keyType))
+    const key = store.any(webId, store.sym(CERT + keyType))
     return key?.value // as NamedNode
   } catch (err) {
     if (err?.response?.status === 404) { // If PATCH on some server do not all create intermediate containers
