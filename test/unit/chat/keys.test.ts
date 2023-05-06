@@ -1,23 +1,12 @@
 import { error, log, trace, warn } from '../../src/debug'
 import { generatePrivateKey, generatePublicKey, getPublicKey } from '../../../src/chat/keys'
+import Fetcher from 'rdflib/lib/fetcher'
 import { store } from 'solid-logic'
 const PRIV_KEY = 'a11bc5d2eee6cdb3b37f5473a712cad905ccfb13fb2ccdbf1be0a1ac4fdc7d2a'
 const PUB_KEY = '023a9da707bee1302f66083c9d95673ff969b41607a66f52686fa774d64ceb87'
 
-const mockStore = jest.fn().mockImplementation(() => {
-  return {
-    fetcher: {
-      load: jest.fn()
-    }
-  }
-})
-jest.mock('solid-logic', () => {
-  return jest.fn().mockImplementation(() => {
-    return {
-      store: mockStore
-    }
-  })
-})
+// @ts-ignore
+store.fetcher.load = jest.fn().mockImplementation(() => {}) as unknown as Fetcher
 
 describe('generate key pair', () => {
   // console.log('alain')
