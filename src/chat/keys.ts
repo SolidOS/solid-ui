@@ -15,7 +15,7 @@ export function generatePublicKey (privateKey: string): string {
   return bytesToHex(schnorr.getPublicKey(privateKey))
 }
 
-export async function getPublicKey (webId) {
+export async function getPublicKey (webId: NamedNode) {
   await store.fetcher.load(webId)
   const publicKeyDoc = await pubKeyUrl(webId)
   try {
@@ -43,7 +43,7 @@ export async function getPrivateKey (webId: NamedNode) {
   // is publicKey valid ?
   let validPublicKey = true
   if (privateKey && (publicKey !== generatePublicKey(privateKey as string))) {
-    if (confirm('This is strange the publicKey is not valid for\n' + webId +
+    if (confirm('This is strange the publicKey is not valid for\n' + webId?.uri +
      '\'shall we repair keeping the private key ?')) validPublicKey = false
   }
 
@@ -125,7 +125,7 @@ const keyAclBody = (keyDoc, me) => {
  * @param keyDoc
  * @param aclBody
  */
-async function setAcl (keyDoc, aclBody) {
+async function setAcl (keyDoc: string, aclBody: string) {
   // Some servers don't present a Link http response header
   // if the container doesn't exist yet, refetch the resource
 
@@ -158,7 +158,7 @@ async function setAcl (keyDoc, aclBody) {
  * create/edit keyDoc
  * set keyDoc acl
  */
-async function saveKey (keyDoc, del, add, me = '') {
+async function saveKey (keyDoc: string, del, add, me: string = '') {
   await store.fetcher.load(keyDoc)
   // delete keyAclDoc
   try {
