@@ -134,7 +134,7 @@ export function renderMessageRow (channelObject, message, fresh, options, userCo
 
   // signed message, get public key and check signature
   else {
-    getPublicKey(creator.uri).then(publicKey => {
+    getPublicKey(creator).then(publicKey => {
       debug.log(creator.uri + '\n' + msg.created + '\n' + msg.id + '\n' + publicKey)
       if (!publicKey) {
         // TODO try to recreate the publicKey

@@ -88,7 +88,7 @@ export class ChatChannel {
       const privateKey = await getPrivateKey(me) // me.uri)
       // const privateKey0 = 'a11bc5d2eee6cdb3b37f5473a712cad905ccfb13fb2ccdbf1be0a1ac4fdc7d2a'
       // const pubKey0 = '023a9da707bee1302f66083c9d95673ff969b41607a66f52686fa774d64ceb87'
-      const pubKey = getPublicKey(me.uri)
+      const pubKey = getPublicKey(me)
 
       const sig = signMsg(msg, privateKey)
       /* const verify = verifySignature(sig, msg, pubKey) // alain to remove
