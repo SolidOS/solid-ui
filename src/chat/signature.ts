@@ -58,21 +58,21 @@ export function getBlankMsg (): MsgTemplate {
   return {
     id: '',
     created: '',
-    dateDeleted: '',
+    dateDeleted: '', // TODO to remove if not used
     content: '',
     maker: '',
-    sig: ''
+    sig: '' // TODO to remove if not used
   }
 }
 
-export function finishMsg (t: MsgTemplate, privateKey: string): Message {
+/* export function finishMsg (t: MsgTemplate, privateKey: string): Message {
   // to update to chat message triples
   const message = t as Message
   // message.pubkey = getPublicKey(privateKey)
   message.id = getMsgHash(message)
   message.sig = signMsg(message, privateKey)
   return message
-}
+} */
 
 export function serializeMsg (msg: UnsignedMsg): string {
   // to update to chat messages triples
@@ -87,10 +87,10 @@ export function getMsgHash (message: UnsignedMsg) {
   return bytesToHex(msgHash)
 }
 
-const isRecord = (obj: unknown): obj is Record<string, unknown> => obj instanceof Object
+// const isRecord = (obj: unknown): obj is Record<string, unknown> => obj instanceof Object
 
-export function validateMsg<T> (message: T): message is T & UnsignedMsg {
-  /* if (!isRecord(message)) return false
+/* export function validateMsg<T> (message: T): message is T & UnsignedMsg {
+  if (!isRecord(message)) return false
   if (typeof message.kind !== 'number') return false
   if (typeof message.content !== 'string') return false
   if (typeof message.created_at !== 'number') return false
@@ -104,10 +104,10 @@ export function validateMsg<T> (message: T): message is T & UnsignedMsg {
     for (let j = 0; j < tag.length; j++) {
       if (typeof tag[j] === 'object') return false
     }
-  } */
+  }
 
   return true
-}
+} */
 
 export function verifySignature (sig: string, message: Message, pubKey: string): boolean {
   return schnorr.verify(
