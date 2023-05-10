@@ -4,7 +4,7 @@ import { store } from 'solid-logic'
 import * as ns from '../ns'
 import { NamedNode } from 'rdflib'
 
-const getPodRoot = async (webId: NamedNode) => {
+export const getPodRoot = async (webId: NamedNode) => {
   const webIdURL = new URL(webId.uri)
   // find storages in webId document
   await store.fetcher.load(webId.uri)
@@ -34,10 +34,9 @@ export const pubKeyUrl = async (webId: NamedNode) => {
   } catch (err) { throw new Error(err) }
 }
 
-export async function publicKeyExists (webId: NamedNode) {
+export async function getExistingPublicKey (webId: NamedNode, publicKeyUrl: string) {
   // find publickey
-  const publicKeyUrl = await pubKeyUrl(webId)
-  return await keyExists(webId, publicKeyUrl, 'PublicKey')
+  return await getKeyIfExists(webId, publicKeyUrl, 'PublicKey')
 }
 
 export const privKeyUrl = async (webId: NamedNode) => {
@@ -46,15 +45,14 @@ export const privKeyUrl = async (webId: NamedNode) => {
   } catch (err) { throw new Error(err) }
 }
 
-export async function privateKeyExists (webId: NamedNode) {
+export async function getExistingPrivateKey (webId: NamedNode, privateKeyUrl: string) {
   // find privateKey
-  const privateKeyUrl = await privKeyUrl(webId)
-  return await keyExists(webId, privateKeyUrl, 'PrivateKey')
+  return await getKeyIfExists(webId, privateKeyUrl, 'PrivateKey')
 }
 
 type KeyType = 'PublicKey' | 'PrivateKey'
 
-async function keyExists (webId: NamedNode, keyUrl: string, keyType: KeyType) {
+export async function getKeyIfExists (webId: NamedNode, keyUrl: string, keyType: KeyType) {
   try {
     await store.fetcher.load(keyUrl)
     const key = store.any(webId, store.sym(CERT + keyType))

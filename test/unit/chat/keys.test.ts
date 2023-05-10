@@ -22,8 +22,7 @@ describe('generate key pair', () => {
 })
 
 describe('getPublicKey', () => {
-  it.skip('should do something', async () => {
-    const result = await getPublicKey('https://sstratsianis.solidcommunity.net/profile/card#me')
-    expect(result).toBe('')
+  it('should do something', async () => {
+    expect(async () => await getPublicKey('https://noids.solidcommunity.net/profile/card#me')).toThrowError()
   })
 })

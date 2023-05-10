@@ -5,7 +5,7 @@ import { CERT } from './signature'
 import { store } from 'solid-logic'
 import { NamedNode } from 'rdflib'
 import * as $rdf from 'rdflib'
-import { publicKeyExists, pubKeyUrl, privKeyUrl, privateKeyExists } from '../utils/cryptoKeyHelpers'
+import { getExistingPublicKey, pubKeyUrl, privKeyUrl, getExistingPrivateKey } from '../utils/cryptoKeyHelpers'
 
 export function generatePrivateKey (): string {
   return bytesToHex(schnorr.utils.randomPrivateKey())
@@ -37,8 +37,8 @@ export async function getPrivateKey (webId: NamedNode) {
   const privateKeyDoc = await privKeyUrl(webId)
 
   // find key pair
-  const publicKey = await publicKeyExists(webId)
-  let privateKey = await privateKeyExists(webId)
+  const publicKey = await getExistingPublicKey(webId, publicKeyDoc)
+  let privateKey = await getExistingPrivateKey(webId, privateKeyDoc)
 
   // is publicKey valid ?
   let validPublicKey = true
