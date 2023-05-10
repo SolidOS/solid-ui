@@ -18,7 +18,7 @@ export function generatePublicKey (privateKey: string): string {
 
 /**
  * getPublicKey
- * used for displaying messages in chat, therefore does not 
+ * used for displaying messages in chat, therefore does not
  * create a new key if not found
  * @param webId
  * @returns string | undefined
