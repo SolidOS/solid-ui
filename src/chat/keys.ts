@@ -16,6 +16,13 @@ export function generatePublicKey (privateKey: string): string {
   return bytesToHex(schnorr.getPublicKey(privateKey))
 }
 
+/**
+ * getPublicKey
+ * used for displaying messages in chat, therefore does not 
+ * create a new key if not found
+ * @param webId
+ * @returns string | undefined
+ */
 export async function getPublicKey (webId: NamedNode) {
   await store.fetcher.load(webId)
   const publicKeyDoc = await pubKeyUrl(webId)
@@ -26,9 +33,6 @@ export async function getPublicKey (webId: NamedNode) {
   } catch (err) {
     return undefined
   }
-  // this is called in display message and should not try to create a publicKeyDoc
-  // const publicKey = await publicKeyExists(webId)
-  // return publicKey
 }
 
 export async function getPrivateKey (webId: NamedNode) {
