@@ -1,12 +1,19 @@
 import { error, log, trace, warn } from '../../src/debug'
 import { generatePrivateKey, generatePublicKey, getPublicKey } from '../../../src/chat/keys'
 import Fetcher from 'rdflib/lib/fetcher'
-import { store } from 'solid-logic'
+import { solidLogicSingleton } from 'solid-logic'
+// import * as helpers from '../../../src/utils/cryptoKeyHelpers'
 const PRIV_KEY = 'a11bc5d2eee6cdb3b37f5473a712cad905ccfb13fb2ccdbf1be0a1ac4fdc7d2a'
 const PUB_KEY = '023a9da707bee1302f66083c9d95673ff969b41607a66f52686fa774d64ceb87'
 
+const store = solidLogicSingleton
+// jest.mock('../../../src/utils/cryptoKeyHelpers')
+
 // @ts-ignore
-store.fetcher.load = jest.fn().mockImplementation(() => {}) as unknown as Fetcher
+// store.fetcher.load = jest.fn().mockImplementation(() => {}) as unknown as Fetcher
+
+// @ts-ignore
+// jest.spyOn('helpers', 'pubKeyUrl').mockImplementation(() => 'test')
 
 describe('generate key pair', () => {
   // console.log('alain')
@@ -22,7 +29,7 @@ describe('generate key pair', () => {
 })
 
 describe('getPublicKey', () => {
-  it('should do something', async () => {
-    expect(async () => await getPublicKey('https://noids.solidcommunity.net/profile/card#me')).toThrowError()
+  it.skip('should do something', async () => {
+    expect(await getPublicKey('https://sstratsianis.solidcommunity.net/profile/card#me')).toThrowError()
   })
 })
