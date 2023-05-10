@@ -1,8 +1,13 @@
 import { store } from 'solid-logic'
 import Fetcher from 'rdflib/lib/fetcher'
-import { getKeyIfExists, pubKeyUrl, privKeyUrl, getPodRoot, getExistingPublicKey, getExistingPrivateKey } from '../../../src/utils/cryptoKeyHelpers'
+import { getKeyIfExists, pubKeyUrl, privKeyUrl, getPodRoot, getExistingPublicKey, getExistingPrivateKey } from '../../../src/utils/keyHelpers/cryptoKeyHelpers'
 import { NamedNode } from 'rdflib'
 
+/* data */
+const PRIV_KEY = 'a11bc5d2eee6cdb3b37f5473a712cad905ccfb13fb2ccdbf1be0a1ac4fdc7d2a'
+const PUB_KEY = '023a9da707bee1302f66083c9d95673ff969b41607a66f52686fa774d64ceb87'
+
+/* mocks */
 store.fetcher.load = jest.fn().mockImplementation(() => {})
 store.fetcher.webOperation = jest.fn()
 store.each = jest.fn()
@@ -53,8 +58,8 @@ describe('cryptoKeyHelpers', () => {
     store.any.mockReturnValue({ value: 'testing' })
     it('returns a key if it exists', async () => {
       const webId = new NamedNode('https://alice.solid.example/profile/card#me')
-      const result = await getKeyIfExists(webId, 'testing', 'PublicKey')
-      expect(result).toBe('testing')
+      const result = await getKeyIfExists(webId, PUB_KEY, 'PublicKey')
+      expect(result).toBe(PUB_KEY)
     })
     it.skip('does something the key can not be found.. need to ask Alain', async () => {
       const webId = new NamedNode('https://alice.solid.example/profile/card#me')
@@ -63,8 +68,8 @@ describe('cryptoKeyHelpers', () => {
     })
     it.skip('throws an error if the key can not be stored', async () => {
       const webId = new NamedNode('https://alice.solid.example/profile/card#me')
-      const result = await getKeyIfExists(webId, 'testing', 'PublicKey')
-      expect(result).toBe('testing')
+      const result = await getKeyIfExists(webId, PUB_KEY, 'PublicKey')
+      expect(result).toBe(PUB_KEY)
     })
     it.skip('throws an error if key is not found', async () => {
       const webId = new NamedNode('https://alice.solid.example/profile/card#me')
