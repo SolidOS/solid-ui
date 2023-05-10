@@ -70,7 +70,8 @@ When you want to test the component within a solid-pane, you can use the [develo
 
 ## Adding Tests
 
-Need to point to Unit test Readme.
+The following document gives guidance on how to add and perform testing in solid-ui.
+[Testing in solid-ui](https://github.com/SolidOS/solid-ui/blob/18070a02fa8159a2b83d9503ee400f8e046bf1f6/test/unit/README.md)
 
 ## Further documentation
 
