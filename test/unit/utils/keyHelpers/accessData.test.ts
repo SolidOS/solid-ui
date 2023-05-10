@@ -1,6 +1,6 @@
 import { store } from 'solid-logic'
 import Fetcher from 'rdflib/lib/fetcher'
-import { getKeyIfExists, pubKeyUrl, privKeyUrl, getPodRoot, getExistingPublicKey, getExistingPrivateKey } from '../../../src/utils/keyHelpers/cryptoKeyHelpers'
+import { getKeyIfExists, pubKeyUrl, privKeyUrl, getPodRoot, getExistingPublicKey, getExistingPrivateKey } from '../../../../src/utils/keyHelpers/accessData'
 import { NamedNode } from 'rdflib'
 
 /* data */
@@ -55,7 +55,7 @@ describe('cryptoKeyHelpers', () => {
   })
   describe('getKeyIfExists', () => {
     /* @ts-ignore */
-    store.any.mockReturnValue({ value: 'testing' })
+    store.any.mockReturnValue({ value: PUB_KEY })
     it('returns a key if it exists', async () => {
       const webId = new NamedNode('https://alice.solid.example/profile/card#me')
       const result = await getKeyIfExists(webId, PUB_KEY, 'PublicKey')
