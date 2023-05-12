@@ -2249,8 +2249,6 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
  * @packageDocumentation
  */
 
-/* global alert confirm */
-
 // pull in first avoid cross-refs
 
 var UI = {
@@ -2343,7 +2341,8 @@ function _findBookmarkDocument() {
           }
           userContext.bookmarkDocument = userContext.instances[0];
           if (userContext.instances.length > 1) {
-            alert('More than one bookmark file! ' + userContext.instances);
+            debug.warn('More than one bookmark file! ' + userContext.instances); // @@ todo - deal with > 1
+            // Note: should pick up community bookmarks as well
           }
           _context.next = 28;
           break;
@@ -2364,7 +2363,7 @@ function _findBookmarkDocument() {
         case 18:
           _context.prev = 18;
           _context.t0 = _context["catch"](12);
-          alert.error("Can't make fresh bookmark file:" + _context.t0);
+          debug.warn("Can't make fresh bookmark file:" + _context.t0);
           return _context.abrupt("return", userContext);
         case 22:
           _context.next = 24;
@@ -2374,7 +2373,7 @@ function _findBookmarkDocument() {
           _context.next = 28;
           break;
         case 27:
-          alert('You seem to have no bookmark file and not even a profile file.');
+          debug.warn('You seem to have no bookmark file, nor even a profile file!');
         case 28:
           return _context.abrupt("return", userContext);
         case 29:
@@ -2429,7 +2428,7 @@ function _addBookmark() {
           _context2.prev = 14;
           _context2.t0 = _context2["catch"](9);
           msg = 'Making bookmark: ' + _context2.t0;
-          alert.error(msg);
+          debug.warn(msg);
           return _context2.abrupt("return", null);
         case 19:
           return _context2.abrupt("return", bookmark);
@@ -2482,7 +2481,7 @@ function _toggleBookmark() {
           _context3.prev = 15;
           _context3.t0 = _context3["catch"](8);
           debug.error('Cant delete bookmark:' + _context3.t0);
-          alert('Cant delete bookmark:' + _context3.t0);
+          debug.warn('Cannot delete bookmark:' + _context3.t0);
         case 19:
           i++;
           _context3.next = 7;
@@ -2577,6 +2576,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.ChatChannel = void 0;
 exports._createIfNotExists = _createIfNotExists;
+exports.allVersions = allVersions;
 exports.isDeleted = isDeleted;
 exports.isHidden = isHidden;
 exports.isReplaced = isReplaced;
@@ -2652,6 +2652,7 @@ var ChatChannel = /*#__PURE__*/function () {
         var _this = this;
         var oldMsg = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
         var deleteIt = arguments.length > 2 ? arguments[2] : undefined;
+        var thread = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
         return /*#__PURE__*/_regenerator["default"].mark(function _callee2() {
           var sts, now, timestamp, dateStamp, chatDocument, message, me, msg;
           return _regenerator["default"].wrap(function _callee2$(_context2) {
@@ -2664,41 +2665,61 @@ var ChatChannel = /*#__PURE__*/function () {
                 chatDocument = oldMsg ? oldMsg.doc() : _this.dateFolder.leafDocumentFromDate(now);
                 message = _solidLogic.store.sym(chatDocument.uri + '#' + 'Msg' + timestamp); // const content = store.literal(text)
                 me = _solidLogic.authn.currentUser(); // If already logged on
-                if (oldMsg) {
-                  // edit message replaces old one
-                  sts.push($rdf.st(mostRecentVersion(oldMsg), ns.dct('isReplacedBy'), message, chatDocument));
-                  if (deleteIt) {
-                    sts.push($rdf.st(message, ns.schema('dateDeleted'), dateStamp, chatDocument));
-                  }
-                } else {
-                  // link new message to channel
-                  sts.push($rdf.st(_this.channel, ns.wf('message'), message, chatDocument));
+                if (!oldMsg) {
+                  _context2.next = 21;
+                  break;
                 }
+                _context2.t0 = sts;
+                _context2.t1 = $rdf;
+                _context2.next = 12;
+                return mostRecentVersion(oldMsg);
+              case 12:
+                _context2.t2 = _context2.sent;
+                _context2.t3 = ns.dct('isReplacedBy');
+                _context2.t4 = message;
+                _context2.t5 = chatDocument;
+                _context2.t6 = _context2.t1.st.call(_context2.t1, _context2.t2, _context2.t3, _context2.t4, _context2.t5);
+                _context2.t0.push.call(_context2.t0, _context2.t6);
+                if (deleteIt) {
+                  sts.push($rdf.st(message, ns.schema('dateDeleted'), dateStamp, chatDocument));
+                }
+                _context2.next = 22;
+                break;
+              case 21:
+                // link new message to channel
+                sts.push($rdf.st(_this.channel, ns.wf('message'), message, chatDocument));
+              case 22:
                 sts.push($rdf.st(message, ns.sioc('content'), _solidLogic.store.literal(text), chatDocument));
                 sts.push($rdf.st(message, ns.dct('created'), dateStamp, chatDocument));
                 if (me) {
                   sts.push($rdf.st(message, ns.foaf('maker'), me, chatDocument));
                 }
-                _context2.prev = 11;
-                _context2.next = 14;
-                return _solidLogic.store.updater.update([], sts);
-              case 14:
-                _context2.next = 22;
+                if (thread) {
+                  sts.push($rdf.st(thread, ns.sioc('has_member'), message, chatDocument));
+                  if (!thread.doc().sameTerm(message.doc())) {
+                    sts.push($rdf.st(thread, ns.sioc('has_member'), message, thread.doc()));
+                  }
+                }
+                _context2.prev = 26;
+                _context2.next = 29;
+                return _solidLogic.store.updater.updateMany([], sts);
+              case 29:
+                _context2.next = 37;
                 break;
-              case 16:
-                _context2.prev = 16;
-                _context2.t0 = _context2["catch"](11);
-                msg = 'Error saving chat message: ' + _context2.t0;
+              case 31:
+                _context2.prev = 31;
+                _context2.t7 = _context2["catch"](26);
+                msg = 'Error saving chat message: ' + _context2.t7;
                 debug.warn(msg);
                 alert(msg);
                 throw new Error(msg);
-              case 22:
+              case 37:
                 return _context2.abrupt("return", message);
-              case 23:
+              case 38:
               case "end":
                 return _context2.stop();
             }
-          }, _callee2, null, [[11, 16]]);
+          }, _callee2, null, [[26, 31]]);
         })();
       });
       function updateMessage(_x2) {
@@ -2728,26 +2749,187 @@ var ChatChannel = /*#__PURE__*/function () {
         return _deleteMessage.apply(this, arguments);
       }
       return deleteMessage;
+    }() // Create a new thread of replies to the thread root message
+    //  or return one which already exists
+  }, {
+    key: "createThread",
+    value: function () {
+      var _createThread = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(threadRoot) {
+        var already, thread, insert;
+        return _regenerator["default"].wrap(function _callee4$(_context4) {
+          while (1) switch (_context4.prev = _context4.next) {
+            case 0:
+              already = _solidLogic.store.each(threadRoot, ns.sioc('has_reply'), null, threadRoot.doc()).filter(function (thread) {
+                return _solidLogic.store.holds(thread, ns.rdf('type'), ns.sioc('Thread'), thread.doc());
+              });
+              if (!(already.length > 0)) {
+                _context4.next = 3;
+                break;
+              }
+              return _context4.abrupt("return", already[0]);
+            case 3:
+              thread = $rdf.sym(threadRoot.uri + '-thread');
+              insert = [$rdf.st(thread, ns.rdf('type'), ns.sioc('Thread'), thread.doc()), $rdf.st(threadRoot, ns.sioc('has_reply'), thread, thread.doc())];
+              _context4.next = 7;
+              return _solidLogic.store.updater.update([], insert);
+            case 7:
+              return _context4.abrupt("return", thread);
+            case 8:
+            case "end":
+              return _context4.stop();
+          }
+        }, _callee4);
+      }));
+      function createThread(_x4) {
+        return _createThread.apply(this, arguments);
+      }
+      return createThread;
     }()
   }]);
   return ChatChannel;
 }(); // class ChatChannel
+// ////////// Utility functions
+// Have to not loop forever if fed loops
 exports.ChatChannel = ChatChannel;
-function originalVersion(message) {
-  var msg = message;
-  while (msg) {
-    message = msg;
-    msg = _solidLogic.store.any(null, ns.dct('isReplacedBy'), message, message.doc());
-  }
-  return message;
+function allVersions(_x5) {
+  return _allVersions.apply(this, arguments);
 }
-function mostRecentVersion(message) {
-  var msg = message;
-  while (msg) {
-    message = msg;
-    msg = _solidLogic.store.any(message, ns.dct('isReplacedBy'), null, message.doc());
-  }
-  return message;
+function _allVersions() {
+  _allVersions = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(message) {
+    var versions, done, m, prev, next;
+    return _regenerator["default"].wrap(function _callee5$(_context5) {
+      while (1) switch (_context5.prev = _context5.next) {
+        case 0:
+          versions = [message];
+          done = {};
+          done[message.ur] = true;
+          m = message;
+        case 4:
+          if (false) {}
+          // earlier?
+          prev = _solidLogic.store.any(null, ns.dct('isReplacedBy'), m, m.doc());
+          if (!(!prev || done[prev.uri])) {
+            _context5.next = 8;
+            break;
+          }
+          return _context5.abrupt("break", 15);
+        case 8:
+          _context5.next = 10;
+          return _solidLogic.store.fetcher.load(prev);
+        case 10:
+          versions.unshift(prev);
+          done[prev.uri] = true;
+          m = prev;
+          _context5.next = 4;
+          break;
+        case 15:
+          m = message;
+        case 16:
+          if (false) {}
+          // later?
+          next = _solidLogic.store.any(m, ns.dct('isReplacedBy'), null, m.doc());
+          if (!(!next || done[next.uri])) {
+            _context5.next = 20;
+            break;
+          }
+          return _context5.abrupt("break", 25);
+        case 20:
+          versions.push(next);
+          done[next.uri] = true;
+          m = next;
+          _context5.next = 16;
+          break;
+        case 25:
+          return _context5.abrupt("return", versions);
+        case 26:
+        case "end":
+          return _context5.stop();
+      }
+    }, _callee5);
+  }));
+  return _allVersions.apply(this, arguments);
+}
+function originalVersion(_x6) {
+  return _originalVersion.apply(this, arguments);
+}
+function _originalVersion() {
+  _originalVersion = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(message) {
+    var msg, done;
+    return _regenerator["default"].wrap(function _callee6$(_context6) {
+      while (1) switch (_context6.prev = _context6.next) {
+        case 0:
+          msg = message;
+          done = {}; // done[message.ur] = true
+        case 2:
+          if (!msg) {
+            _context6.next = 13;
+            break;
+          }
+          if (!done[msg.uri]) {
+            _context6.next = 6;
+            break;
+          }
+          debug.error('originalVersion: verion loop' + message);
+          return _context6.abrupt("return", message);
+        case 6:
+          done[msg.uri] = true;
+          message = msg;
+          _context6.next = 10;
+          return _solidLogic.store.fetcher.load(message);
+        case 10:
+          msg = _solidLogic.store.any(null, ns.dct('isReplacedBy'), message, message.doc());
+          _context6.next = 2;
+          break;
+        case 13:
+          return _context6.abrupt("return", message);
+        case 14:
+        case "end":
+          return _context6.stop();
+      }
+    }, _callee6);
+  }));
+  return _originalVersion.apply(this, arguments);
+}
+function mostRecentVersion(_x7) {
+  return _mostRecentVersion.apply(this, arguments);
+}
+function _mostRecentVersion() {
+  _mostRecentVersion = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7(message) {
+    var msg, done;
+    return _regenerator["default"].wrap(function _callee7$(_context7) {
+      while (1) switch (_context7.prev = _context7.next) {
+        case 0:
+          msg = message;
+          done = {};
+        case 2:
+          if (!msg) {
+            _context7.next = 13;
+            break;
+          }
+          if (!done[msg.uri]) {
+            _context7.next = 6;
+            break;
+          }
+          debug.error('mostRecentVersion: verion loop' + message);
+          return _context7.abrupt("return", message);
+        case 6:
+          done[msg.uri] = true;
+          message = msg;
+          _context7.next = 10;
+          return _solidLogic.store.fetcher.load(message);
+        case 10:
+          msg = _solidLogic.store.any(message, ns.dct('isReplacedBy'), null, message.doc());
+          _context7.next = 2;
+          break;
+        case 13:
+          return _context7.abrupt("return", message);
+        case 14:
+        case "end":
+          return _context7.stop();
+      }
+    }, _callee7);
+  }));
+  return _mostRecentVersion.apply(this, arguments);
 }
 function isDeleted(message) {
   return _solidLogic.store.holds(message, ns.schema('dateDeleted'), null, message.doc());
@@ -2766,62 +2948,62 @@ function nick(person) {
   if (s) return '' + s.value;
   return '' + utils.label(person);
 }
-function _createIfNotExists(_x4) {
+function _createIfNotExists(_x8) {
   return _createIfNotExists2.apply(this, arguments);
 } // ends
 function _createIfNotExists2() {
   _createIfNotExists2 = (0, _asyncToGenerator2["default"])(function (doc) {
     var contentType = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'text/turtle';
     var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
-    return /*#__PURE__*/_regenerator["default"].mark(function _callee4() {
+    return /*#__PURE__*/_regenerator["default"].mark(function _callee8() {
       var response;
-      return _regenerator["default"].wrap(function _callee4$(_context4) {
-        while (1) switch (_context4.prev = _context4.next) {
+      return _regenerator["default"].wrap(function _callee8$(_context8) {
+        while (1) switch (_context8.prev = _context8.next) {
           case 0:
-            _context4.prev = 0;
-            _context4.next = 3;
+            _context8.prev = 0;
+            _context8.next = 3;
             return _solidLogic.store.fetcher.load(doc);
           case 3:
-            response = _context4.sent;
-            _context4.next = 26;
+            response = _context8.sent;
+            _context8.next = 26;
             break;
           case 6:
-            _context4.prev = 6;
-            _context4.t0 = _context4["catch"](0);
-            if (!(_context4.t0.response.status === 404)) {
-              _context4.next = 24;
+            _context8.prev = 6;
+            _context8.t0 = _context8["catch"](0);
+            if (!(_context8.t0.response.status === 404)) {
+              _context8.next = 24;
               break;
             }
             debug.log('createIfNotExists: doc does NOT exist, will create... ' + doc);
-            _context4.prev = 10;
-            _context4.next = 13;
+            _context8.prev = 10;
+            _context8.next = 13;
             return _solidLogic.store.fetcher.webOperation('PUT', doc.uri, {
               data: data,
               contentType: contentType
             });
           case 13:
-            response = _context4.sent;
-            _context4.next = 20;
+            response = _context8.sent;
+            _context8.next = 20;
             break;
           case 16:
-            _context4.prev = 16;
-            _context4.t1 = _context4["catch"](10);
-            debug.log('createIfNotExists doc FAILED: ' + doc + ': ' + _context4.t1);
-            throw _context4.t1;
+            _context8.prev = 16;
+            _context8.t1 = _context8["catch"](10);
+            debug.log('createIfNotExists doc FAILED: ' + doc + ': ' + _context8.t1);
+            throw _context8.t1;
           case 20:
             delete _solidLogic.store.fetcher.requested[doc.uri]; // delete cached 404 error
             // debug.log('createIfNotExists doc created ok ' + doc)
-            return _context4.abrupt("return", response);
+            return _context8.abrupt("return", response);
           case 24:
-            debug.log('createIfNotExists doc load error NOT 404:  ' + doc + ': ' + _context4.t0);
-            throw _context4.t0;
+            debug.log('createIfNotExists doc load error NOT 404:  ' + doc + ': ' + _context8.t0);
+            throw _context8.t0;
           case 26:
-            return _context4.abrupt("return", response);
+            return _context8.abrupt("return", response);
           case 27:
           case "end":
-            return _context4.stop();
+            return _context8.stop();
         }
-      }, _callee4, null, [[0, 6], [10, 16]]);
+      }, _callee8, null, [[0, 6], [10, 16]]);
     })();
   });
   return _createIfNotExists2.apply(this, arguments);
@@ -2845,10 +3027,11 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.DateFolder = void 0;
+exports.emptyLeaf = emptyLeaf;
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
-var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js"));
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js"));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
@@ -2861,9 +3044,29 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
  *
  */
 // pull in first avoid cross-refs
+function emptyLeaf(_x) {
+  return _emptyLeaf.apply(this, arguments);
+}
 /**
  * Track back through the YYYY/MM/DD tree to find the previous/next day
  */
+function _emptyLeaf() {
+  _emptyLeaf = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(leafDocument) {
+    return _regenerator["default"].wrap(function _callee5$(_context5) {
+      while (1) switch (_context5.prev = _context5.next) {
+        case 0:
+          _context5.next = 2;
+          return _solidLogic.store.fetcher.load(leafDocument);
+        case 2:
+          return _context5.abrupt("return", !(_solidLogic.store.statementsMatching(null, ns.dct('created'), null, leafDocument).length > 0));
+        case 3:
+        case "end":
+          return _context5.stop();
+      }
+    }, _callee5);
+  }));
+  return _emptyLeaf.apply(this, arguments);
+}
 var DateFolder = /*#__PURE__*/function () {
   function DateFolder(rootThing, leafFileName, membershipProperty) {
     (0, _classCallCheck2["default"])(this, DateFolder);
@@ -2902,61 +3105,22 @@ var DateFolder = /*#__PURE__*/function () {
   }, {
     key: "loadPrevious",
     value: function () {
-      var _loadPrevious = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(date, backwards) {
-        var thisDateFolder, previousPeriod, _previousPeriod, folder, found, doc;
-        return _regenerator["default"].wrap(function _callee3$(_context3) {
-          while (1) switch (_context3.prev = _context3.next) {
+      var _loadPrevious = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(date, backwards) {
+        var previousPeriod, _previousPeriod, folder, found, leafDocument, nextDate;
+        return _regenerator["default"].wrap(function _callee2$(_context2) {
+          while (1) switch (_context2.prev = _context2.next) {
             case 0:
               _previousPeriod = function _previousPeriod3() {
-                _previousPeriod = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(file, level) {
-                  var younger, suitable, lastNonEmpty, _lastNonEmpty, parent, siblings, _folder, uncle, cousins, result;
-                  return _regenerator["default"].wrap(function _callee2$(_context2) {
-                    while (1) switch (_context2.prev = _context2.next) {
+                _previousPeriod = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(file, level) {
+                  var younger, suitable, lastOrFirst, parent, siblings, _folder, uncle, cousins, result;
+                  return _regenerator["default"].wrap(function _callee$(_context) {
+                    while (1) switch (_context.prev = _context.next) {
                       case 0:
-                        _lastNonEmpty = function _lastNonEmpty3() {
-                          _lastNonEmpty = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(siblings) {
-                            var _folder2, leafDocument;
-                            return _regenerator["default"].wrap(function _callee$(_context) {
-                              while (1) switch (_context.prev = _context.next) {
-                                case 0:
-                                  siblings = siblings.filter(suitable);
-                                  siblings.sort(); // chronological order
-                                  if (!backwards) siblings.reverse();
-                                  if (!(level !== 3)) {
-                                    _context.next = 5;
-                                    break;
-                                  }
-                                  return _context.abrupt("return", siblings.pop());
-                                case 5:
-                                  if (!siblings.length) {
-                                    _context.next = 14;
-                                    break;
-                                  }
-                                  _folder2 = siblings.pop();
-                                  leafDocument = _solidLogic.store.sym(_folder2.uri + thisDateFolder.leafFileName);
-                                  _context.next = 10;
-                                  return _solidLogic.store.fetcher.load(leafDocument);
-                                case 10:
-                                  if (!(_solidLogic.store.statementsMatching(null, ns.dct('created'), null, leafDocument).length > 0)) {
-                                    _context.next = 12;
-                                    break;
-                                  }
-                                  return _context.abrupt("return", _folder2);
-                                case 12:
-                                  _context.next = 5;
-                                  break;
-                                case 14:
-                                  return _context.abrupt("return", null);
-                                case 15:
-                                case "end":
-                                  return _context.stop();
-                              }
-                            }, _callee);
-                          }));
-                          return _lastNonEmpty.apply(this, arguments);
-                        };
-                        lastNonEmpty = function _lastNonEmpty2(_x5) {
-                          return _lastNonEmpty.apply(this, arguments);
+                        lastOrFirst = function _lastOrFirst(siblings) {
+                          siblings = siblings.filter(suitable);
+                          siblings.sort(); // chronological order
+                          if (!backwards) siblings.reverse();
+                          return siblings.pop(); // date folder
                         };
                         suitable = function _suitable(x) {
                           var tail = x.uri.slice(0, -1).split('/').slice(-1)[0];
@@ -2969,97 +3133,115 @@ var DateFolder = /*#__PURE__*/function () {
                         };
                         // debug.log('  previousPeriod level' + level + ' file ' + file)
                         parent = file.dir();
-                        _context2.prev = 5;
-                        _context2.next = 8;
+                        _context.prev = 4;
+                        _context.next = 7;
                         return _solidLogic.store.fetcher.load(parent);
-                      case 8:
+                      case 7:
                         siblings = _solidLogic.store.each(parent, ns.ldp('contains'));
                         siblings = siblings.filter(younger);
-                        _context2.next = 12;
-                        return lastNonEmpty(siblings);
-                      case 12:
-                        _folder = _context2.sent;
+                        _folder = lastOrFirst(siblings);
                         if (!_folder) {
-                          _context2.next = 15;
+                          _context.next = 12;
                           break;
                         }
-                        return _context2.abrupt("return", _folder);
-                      case 15:
-                        _context2.next = 25;
+                        return _context.abrupt("return", _folder);
+                      case 12:
+                        debug.log(' parent no suitable offspring ' + parent);
+                        _context.next = 23;
                         break;
-                      case 17:
-                        _context2.prev = 17;
-                        _context2.t0 = _context2["catch"](5);
-                        if (!(_context2.t0.response && _context2.t0.response.status && _context2.t0.response.status === 404)) {
-                          _context2.next = 23;
+                      case 15:
+                        _context.prev = 15;
+                        _context.t0 = _context["catch"](4);
+                        if (!(_context.t0.response && _context.t0.response.status && _context.t0.response.status === 404)) {
+                          _context.next = 21;
                           break;
                         }
                         debug.log('Error 404 for chat parent file ' + parent);
-                        _context2.next = 25;
+                        _context.next = 23;
                         break;
-                      case 23:
+                      case 21:
                         debug.log('*** Error NON 404 for chat parent file ' + parent);
                         // statusTR.appendChild(widgets.errorMessageBlock(dom, err, 'pink'))
-                        throw new Error("*** ".concat(_context2.t0.message, " for chat folder ").concat(parent));
-                      case 25:
+                        throw new Error("*** ".concat(_context.t0.message, " for chat folder ").concat(parent));
+                      case 23:
                         if (!(level === 0)) {
-                          _context2.next = 27;
+                          _context.next = 26;
                           break;
                         }
-                        return _context2.abrupt("return", null);
-                      case 27:
-                        _context2.next = 29;
+                        debug.log('loadPrevious:  returning as level is zero');
+                        return _context.abrupt("return", null);
+                      case 26:
+                        _context.next = 28;
                         return previousPeriod(parent, level - 1);
-                      case 29:
-                        uncle = _context2.sent;
+                      case 28:
+                        uncle = _context.sent;
                         if (uncle) {
-                          _context2.next = 32;
+                          _context.next = 32;
                           break;
                         }
-                        return _context2.abrupt("return", null);
+                        debug.log('   previousPeriod: nothing left before. ', parent);
+                        return _context.abrupt("return", null);
                       case 32:
-                        _context2.next = 34;
+                        _context.next = 34;
                         return _solidLogic.store.fetcher.load(uncle);
                       case 34:
                         cousins = _solidLogic.store.each(uncle, ns.ldp('contains'));
-                        _context2.next = 37;
-                        return lastNonEmpty(cousins);
-                      case 37:
-                        result = _context2.sent;
-                        return _context2.abrupt("return", result);
+                        result = lastOrFirst(cousins);
+                        debug.log('   previousPeriod: returning cousins at level ' + level, cousins);
+                        debug.log('   previousPeriod: returning result at level ' + level, result);
+                        return _context.abrupt("return", result);
                       case 39:
                       case "end":
-                        return _context2.stop();
+                        return _context.stop();
                     }
-                  }, _callee2, null, [[5, 17]]);
+                  }, _callee, null, [[4, 15]]);
                 }));
                 return _previousPeriod.apply(this, arguments);
               };
-              previousPeriod = function _previousPeriod2(_x3, _x4) {
+              previousPeriod = function _previousPeriod2(_x4, _x5) {
                 return _previousPeriod.apply(this, arguments);
-              };
-              thisDateFolder = this;
-              // previousPeriod
+              }; // previousPeriod
               folder = this.leafDocumentFromDate(date).dir();
-              _context3.next = 6;
+            case 3:
+              if (false) {}
+              _context2.next = 6;
               return previousPeriod(folder, 3);
             case 6:
-              found = _context3.sent;
+              found = _context2.sent;
               if (!found) {
-                _context3.next = 10;
+                _context2.next = 22;
                 break;
               }
-              doc = _solidLogic.store.sym(found.uri + this.leafFileName);
-              return _context3.abrupt("return", this.dateFromLeafDocument(doc));
-            case 10:
-              return _context3.abrupt("return", null);
-            case 11:
+              leafDocument = _solidLogic.store.sym(found.uri + this.leafFileName);
+              nextDate = this.dateFromLeafDocument(leafDocument);
+              _context2.next = 12;
+              return emptyLeaf(leafDocument);
+            case 12:
+              if (_context2.sent) {
+                _context2.next = 16;
+                break;
+              }
+              return _context2.abrupt("return", nextDate);
+            case 16:
+              debug.log('  loadPrevious: skipping empty ' + leafDocument);
+              date = nextDate;
+              folder = this.leafDocumentFromDate(date).dir();
+              debug.log('    loadPrevious: moved back to ' + folder);
+            case 20:
+              _context2.next = 23;
+              break;
+            case 22:
+              return _context2.abrupt("return", null);
+            case 23:
+              _context2.next = 3;
+              break;
+            case 25:
             case "end":
-              return _context3.stop();
+              return _context2.stop();
           }
-        }, _callee3, this);
+        }, _callee2, this);
       }));
-      function loadPrevious(_x, _x2) {
+      function loadPrevious(_x2, _x3) {
         return _loadPrevious.apply(this, arguments);
       }
       return loadPrevious;
@@ -3067,16 +3249,16 @@ var DateFolder = /*#__PURE__*/function () {
   }, {
     key: "firstLeaf",
     value: function () {
-      var _firstLeaf = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(backwards) {
+      var _firstLeaf = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(backwards) {
         var folderStore, folderFetcher, earliestSubfolder, _earliestSubfolder, y, month, d, leafDocument, leafObjects, msg, sortMe;
-        return _regenerator["default"].wrap(function _callee5$(_context5) {
-          while (1) switch (_context5.prev = _context5.next) {
+        return _regenerator["default"].wrap(function _callee4$(_context4) {
+          while (1) switch (_context4.prev = _context4.next) {
             case 0:
               _earliestSubfolder = function _earliestSubfolder3() {
-                _earliestSubfolder = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(parent) {
+                _earliestSubfolder = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(parent) {
                   var suitable, kids;
-                  return _regenerator["default"].wrap(function _callee4$(_context4) {
-                    while (1) switch (_context4.prev = _context4.next) {
+                  return _regenerator["default"].wrap(function _callee3$(_context3) {
+                    while (1) switch (_context3.prev = _context3.next) {
                       case 0:
                         suitable = function _suitable2(x) {
                           var tail = x.uri.slice(0, -1).split('/').slice(-1)[0];
@@ -3086,7 +3268,7 @@ var DateFolder = /*#__PURE__*/function () {
                         debug.log('            parent ' + parent);
                         delete folderFetcher.requested[parent.uri];
                         // try {
-                        _context4.next = 5;
+                        _context3.next = 5;
                         return folderFetcher.load(parent, {
                           force: true
                         });
@@ -3097,19 +3279,19 @@ var DateFolder = /*#__PURE__*/function () {
                         kids = folderStore.each(parent, ns.ldp('contains'));
                         kids = kids.filter(suitable);
                         if (!(kids.length === 0)) {
-                          _context4.next = 9;
+                          _context3.next = 9;
                           break;
                         }
                         throw new Error(' @@@  No children to         parent2 ' + parent);
                       case 9:
                         kids.sort();
                         if (backwards) kids.reverse();
-                        return _context4.abrupt("return", kids[0]);
+                        return _context3.abrupt("return", kids[0]);
                       case 12:
                       case "end":
-                        return _context4.stop();
+                        return _context3.stop();
                     }
-                  }, _callee4);
+                  }, _callee3);
                 }));
                 return _earliestSubfolder.apply(this, arguments);
               };
@@ -3119,25 +3301,25 @@ var DateFolder = /*#__PURE__*/function () {
               // backwards -> last leafObject
               folderStore = $rdf.graph();
               folderFetcher = new $rdf.Fetcher(folderStore);
-              _context5.next = 6;
+              _context4.next = 6;
               return earliestSubfolder(this.root.dir());
             case 6:
-              y = _context5.sent;
-              _context5.next = 9;
+              y = _context4.sent;
+              _context4.next = 9;
               return earliestSubfolder(y);
             case 9:
-              month = _context5.sent;
-              _context5.next = 12;
+              month = _context4.sent;
+              _context4.next = 12;
               return earliestSubfolder(month);
             case 12:
-              d = _context5.sent;
+              d = _context4.sent;
               leafDocument = $rdf.sym(d.uri + 'chat.ttl');
-              _context5.next = 16;
+              _context4.next = 16;
               return folderFetcher.load(leafDocument);
             case 16:
               leafObjects = folderStore.each(this.root, this.membershipProperty, null, leafDocument);
               if (!(leafObjects.length === 0)) {
-                _context5.next = 21;
+                _context4.next = 21;
                 break;
               }
               msg = '  INCONSISTENCY -- no chat leafObject in file ' + leafDocument;
@@ -3150,12 +3332,12 @@ var DateFolder = /*#__PURE__*/function () {
               sortMe.sort();
               if (backwards) sortMe.reverse();
               debug.log((backwards ? 'Latest' : 'Earliest') + ' leafObject is ' + sortMe[0][1]);
-              return _context5.abrupt("return", sortMe[0][1]);
+              return _context4.abrupt("return", sortMe[0][1]);
             case 26:
             case "end":
-              return _context5.stop();
+              return _context4.stop();
           }
-        }, _callee5, this);
+        }, _callee4, this);
       }));
       function firstLeaf(_x6) {
         return _firstLeaf.apply(this, arguments);
@@ -3199,19 +3381,17 @@ var _chatLogic = __webpack_require__(/*! ./chatLogic */ "./lib/chat/chatLogic.js
 var _message = __webpack_require__(/*! ./message */ "./lib/chat/message.js");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-/**
- * Contains the [[infiniteMessageArea]] class
- * @packageDocumentation
- */
-// import { findBookmarkDocument } from './bookmarks'
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; } /**
+                                                                                                                                                                                     * Contains the [[infiniteMessageArea]] class
+                                                                                                                                                                                     * @packageDocumentation
+                                                                                                                                                                                     */ // import { findBookmarkDocument } from './bookmarks'
 // pull in first avoid cross-refs
-
 // import * as style from '../style'
 // import * as utils from '../utils'
-
 // import * as pad from '../pad'
 // import { DateFolder } from './dateFolder'
-
 // const UI = { authn, icons, ns, media, pad, $rdf, store, style, utils, widgets }
 
 function desktopNotification(str) {
@@ -3239,34 +3419,9 @@ function desktopNotification(str) {
 /**
  * Renders a chat message inside a `messageTable`
  */
-function insertMessageIntoTable(channelObject, messageTable, message, fresh, options, userContext) {
-  var messageRow = (0, _message.renderMessageRow)(channelObject, message, fresh, options, userContext);
-
-  // const message = messageRow.AJAR_subject
-  if (options.selectedMessage && options.selectedMessage.sameTerm(message)) {
-    messageRow.style.backgroundColor = 'yellow';
-    options.selectedElement = messageRow;
-    messageTable.selectedElement = messageRow;
-  }
-  var done = false;
-  for (var ele = messageTable.firstChild;; ele = ele.nextSibling) {
-    if (!ele) {
-      // empty
-      break;
-    }
-    var newestFirst = options.newestfirst === true;
-    var dateString = messageRow.AJAR_date;
-    if (dateString > ele.AJAR_date && newestFirst || dateString < ele.AJAR_date && !newestFirst) {
-      messageTable.insertBefore(messageRow, ele);
-      done = true;
-      break;
-    }
-  }
-  if (!done) {
-    messageTable.appendChild(messageRow);
-  }
+function insertMessageIntoTable(_x, _x2, _x3, _x4, _x5, _x6) {
+  return _insertMessageIntoTable.apply(this, arguments);
 }
-
 /**
  * Common code for a chat (discussion area of messages about something)
  * This version runs over a series of files for different time periods
@@ -3289,20 +3444,70 @@ function insertMessageIntoTable(channelObject, messageTable, message, fresh, opt
  - inlineImageHeightEms: The height (in ems) of images expaned from their URIs in the chat.
 
  */
-function infiniteMessageArea(_x, _x2, _x3, _x4) {
+function _insertMessageIntoTable() {
+  _insertMessageIntoTable = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(channelObject, messageTable, message, fresh, options, userContext) {
+    var messageRow, done, ele, newestFirst, dateString;
+    return _regenerator["default"].wrap(function _callee$(_context) {
+      while (1) switch (_context.prev = _context.next) {
+        case 0:
+          _context.next = 2;
+          return (0, _message.renderMessageRow)(channelObject, message, fresh, options, userContext);
+        case 2:
+          messageRow = _context.sent;
+          // const message = messageRow.AJAR_subject
+          if (options.selectedMessage && options.selectedMessage.sameTerm(message)) {
+            messageRow.style.backgroundColor = 'yellow';
+            options.selectedElement = messageRow;
+            messageTable.selectedElement = messageRow;
+          }
+          done = false;
+          ele = messageTable.firstChild;
+        case 6:
+          if (ele) {
+            _context.next = 8;
+            break;
+          }
+          return _context.abrupt("break", 17);
+        case 8:
+          newestFirst = options.newestfirst === true;
+          dateString = messageRow.AJAR_date;
+          if (!(dateString > ele.AJAR_date && newestFirst || dateString < ele.AJAR_date && !newestFirst)) {
+            _context.next = 14;
+            break;
+          }
+          messageTable.insertBefore(messageRow, ele);
+          done = true;
+          return _context.abrupt("break", 17);
+        case 14:
+          ele = ele.nextSibling;
+          _context.next = 6;
+          break;
+        case 17:
+          if (!done) {
+            messageTable.appendChild(messageRow);
+          }
+        case 18:
+        case "end":
+          return _context.stop();
+      }
+    }, _callee);
+  }));
+  return _insertMessageIntoTable.apply(this, arguments);
+}
+function infiniteMessageArea(_x7, _x8, _x9, _x10) {
   return _infiniteMessageArea.apply(this, arguments);
 }
 function _infiniteMessageArea() {
-  _infiniteMessageArea = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee12(dom, wasStore, chatChannel, options) {
-    var syncMessages, addMessage, insertPreviousMessages, _insertPreviousMessages, removePreviousMessages, createMessageTable, _createMessageTable, renderMessageTable, addNewChatDocumentIfNewDay, _addNewChatDocumentIfNewDay, appendCurrentMessages, _appendCurrentMessages, loadMoreWhereNeeded, _loadMoreWhereNeeded, loadInitialContent, _loadInitialContent, newestFirst, channelObject, dateFolder, div, statusArea, userContext, liveMessageTable, earliest, latest, lock;
-    return _regenerator["default"].wrap(function _callee12$(_context12) {
-      while (1) switch (_context12.prev = _context12.next) {
+  _infiniteMessageArea = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee15(dom, wasStore, chatChannel, options) {
+    var syncMessages, _syncMessages, addMessage, _addMessage, insertPreviousMessages, _insertPreviousMessages, removePreviousMessages, createMessageTable, _createMessageTable, renderMessageTable, _renderMessageTable, addNewChatDocumentIfNewDay, _addNewChatDocumentIfNewDay, appendCurrentMessages, _appendCurrentMessages, loadMoreWhereNeeded, _loadMoreWhereNeeded, loadInitialContent, _loadInitialContent, newestFirst, channelObject, dateFolder, div, statusArea, userContext, liveMessageTable, threadRootMessage, earliest, latest, thread, threadTime, lock;
+    return _regenerator["default"].wrap(function _callee15$(_context15) {
+      while (1) switch (_context15.prev = _context15.next) {
         case 0:
           _loadInitialContent = function _loadInitialContent3() {
-            _loadInitialContent = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee11() {
-              var yank, fixScroll, live, selectedDocument, now, todayDocument, selectedMessageTable, selectedDate;
-              return _regenerator["default"].wrap(function _callee11$(_context11) {
-                while (1) switch (_context11.prev = _context11.next) {
+            _loadInitialContent = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee14() {
+              var yank, fixScroll, live, selectedDocument, threadRootDocument, initialDocment, now, todayDocument, selectedMessageTable, selectedDate;
+              return _regenerator["default"].wrap(function _callee14$(_context14) {
+                while (1) switch (_context14.prev = _context14.next) {
                   case 0:
                     fixScroll = function _fixScroll() {
                       if (options.selectedElement) {
@@ -3316,51 +3521,59 @@ function _infiniteMessageArea() {
                       }
                     };
                     yank = function _yank() {
-                      selectedMessageTable.selectedElement.scrollIntoView({
-                        block: 'center'
-                      });
-                    };
+                      if (selectedMessageTable && selectedMessageTable.selectedElement) {
+                        selectedMessageTable.selectedElement.scrollIntoView({
+                          block: 'center'
+                        });
+                      }
+                    }; // During initial load ONLY keep scroll to selected thing or bottom
                     if (options.selectedMessage) {
                       selectedDocument = options.selectedMessage.doc();
+                    }
+                    if (threadRootMessage) {
+                      threadRootDocument = threadRootMessage.doc();
+                    }
+                    initialDocment = selectedDocument || threadRootDocument;
+                    if (initialDocment) {
                       now = new Date();
                       todayDocument = dateFolder.leafDocumentFromDate(now);
-                      live = todayDocument.sameTerm(selectedDocument);
+                      live = todayDocument.sameTerm(initialDocment);
                     }
-                    if (!(options.selectedMessage && !live)) {
-                      _context11.next = 15;
+                    if (!(initialDocment && !live)) {
+                      _context14.next = 18;
                       break;
                     }
-                    selectedDate = dateFolder.dateFromLeafDocument(selectedDocument);
-                    _context11.next = 7;
+                    selectedDate = dateFolder.dateFromLeafDocument(initialDocment);
+                    _context14.next = 10;
                     return createMessageTable(selectedDate, live);
-                  case 7:
-                    selectedMessageTable = _context11.sent;
+                  case 10:
+                    selectedMessageTable = _context14.sent;
                     div.appendChild(selectedMessageTable);
                     earliest.messageTable = selectedMessageTable;
                     latest.messageTable = selectedMessageTable;
                     yank();
                     setTimeout(yank, 1000); // @@ kludge - restore position distubed by other cHANGES
-                    _context11.next = 19;
+                    _context14.next = 22;
                     break;
-                  case 15:
-                    _context11.next = 17;
+                  case 18:
+                    _context14.next = 20;
                     return appendCurrentMessages();
-                  case 17:
+                  case 20:
                     earliest.messageTable = liveMessageTable;
                     latest.messageTable = liveMessageTable;
-                  case 19:
-                    _context11.next = 21;
+                  case 22:
+                    _context14.next = 24;
                     return loadMoreWhereNeeded(null, fixScroll);
-                  case 21:
+                  case 24:
                     div.addEventListener('scroll', loadMoreWhereNeeded);
                     if (options.solo) {
                       document.body.addEventListener('scroll', loadMoreWhereNeeded);
                     }
-                  case 23:
+                  case 26:
                   case "end":
-                    return _context11.stop();
+                    return _context14.stop();
                 }
-              }, _callee11);
+              }, _callee14);
             }));
             return _loadInitialContent.apply(this, arguments);
           };
@@ -3368,16 +3581,16 @@ function _infiniteMessageArea() {
             return _loadInitialContent.apply(this, arguments);
           };
           _loadMoreWhereNeeded = function _loadMoreWhereNeeded3() {
-            _loadMoreWhereNeeded = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee10(event, fixScroll) {
+            _loadMoreWhereNeeded = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee13(event, fixScroll) {
               var freeze, magicZone, done, scrollBottom, scrollTop;
-              return _regenerator["default"].wrap(function _callee10$(_context10) {
-                while (1) switch (_context10.prev = _context10.next) {
+              return _regenerator["default"].wrap(function _callee13$(_context13) {
+                while (1) switch (_context13.prev = _context13.next) {
                   case 0:
                     if (!lock) {
-                      _context10.next = 2;
+                      _context13.next = 2;
                       break;
                     }
-                    return _context10.abrupt("return");
+                    return _context13.abrupt("return");
                   case 2:
                     lock = true;
                     freeze = !fixScroll;
@@ -3385,36 +3598,36 @@ function _infiniteMessageArea() {
                     // const bottom = div.scrollHeight - top - div.clientHeight
                   case 5:
                     if (!(div.scrollTop < magicZone && earliest.messageTable && !earliest.messageTable.initial && earliest.messageTable.extendBackwards)) {
-                      _context10.next = 21;
+                      _context13.next = 21;
                       break;
                     }
                     if (!(div.scrollHeight === 0)) {
-                      _context10.next = 10;
+                      _context13.next = 10;
                       break;
                     }
-                    // console.log('    chat/loadMoreWhereNeeded: trying later...')
+                    // debug.log('    chat/loadMoreWhereNeeded: trying later...')
                     setTimeout(loadMoreWhereNeeded, 2000); // couple be less
                     lock = false;
-                    return _context10.abrupt("return");
+                    return _context13.abrupt("return");
                   case 10:
-                    // console.log('    chat/loadMoreWhereNeeded: Going now')
+                    // debug.log('    chat/loadMoreWhereNeeded: Going now')
                     scrollBottom = div.scrollHeight - div.scrollTop;
                     debug.log('infinite scroll: adding above: top ' + div.scrollTop);
-                    _context10.next = 14;
+                    _context13.next = 14;
                     return earliest.messageTable.extendBackwards();
                   case 14:
-                    done = _context10.sent;
+                    done = _context13.sent;
                     if (freeze) {
                       div.scrollTop = div.scrollHeight - scrollBottom;
                     }
                     if (fixScroll) fixScroll();
                     if (!done) {
-                      _context10.next = 19;
+                      _context13.next = 19;
                       break;
                     }
-                    return _context10.abrupt("break", 21);
+                    return _context13.abrupt("break", 21);
                   case 19:
-                    _context10.next = 5;
+                    _context13.next = 5;
                     break;
                   case 21:
                     if (!(options.selectedMessage &&
@@ -3424,15 +3637,15 @@ function _infiniteMessageArea() {
                     latest.messageTable && !latest.messageTable["final"] &&
                     // there is more data to come
                     latest.messageTable.extendForwards)) {
-                      _context10.next = 33;
+                      _context13.next = 33;
                       break;
                     }
                     scrollTop = div.scrollTop;
                     debug.log('infinite scroll: adding below: bottom: ' + (div.scrollHeight - div.scrollTop - div.clientHeight));
-                    _context10.next = 26;
+                    _context13.next = 26;
                     return latest.messageTable.extendForwards();
                   case 26:
-                    done = _context10.sent;
+                    done = _context13.sent;
                     // then add more data on the bottom
                     if (freeze) {
                       div.scrollTop = scrollTop; // while adding below keep same things in view
@@ -3440,63 +3653,66 @@ function _infiniteMessageArea() {
 
                     if (fixScroll) fixScroll();
                     if (!done) {
-                      _context10.next = 31;
+                      _context13.next = 31;
                       break;
                     }
-                    return _context10.abrupt("break", 33);
+                    return _context13.abrupt("break", 33);
                   case 31:
-                    _context10.next = 21;
+                    _context13.next = 21;
                     break;
                   case 33:
                     lock = false;
                   case 34:
                   case "end":
-                    return _context10.stop();
+                    return _context13.stop();
                 }
-              }, _callee10);
+              }, _callee13);
             }));
             return _loadMoreWhereNeeded.apply(this, arguments);
           };
-          loadMoreWhereNeeded = function _loadMoreWhereNeeded2(_x10, _x11) {
+          loadMoreWhereNeeded = function _loadMoreWhereNeeded2(_x20, _x21) {
             return _loadMoreWhereNeeded.apply(this, arguments);
           };
           _appendCurrentMessages = function _appendCurrentMessage2() {
-            _appendCurrentMessages = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee9() {
+            _appendCurrentMessages = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee12() {
               var now, chatDocument, messageTable;
-              return _regenerator["default"].wrap(function _callee9$(_context9) {
-                while (1) switch (_context9.prev = _context9.next) {
+              return _regenerator["default"].wrap(function _callee12$(_context12) {
+                while (1) switch (_context12.prev = _context12.next) {
                   case 0:
                     now = new Date();
                     chatDocument = dateFolder.leafDocumentFromDate(now); /// ///////////////////////////////////////////////////////////
-                    _context9.next = 4;
+                    _context12.next = 4;
                     return createMessageTable(now, true);
                   case 4:
-                    messageTable = _context9.sent;
+                    messageTable = _context12.sent;
                     div.appendChild(messageTable);
-                    div.refresh = /*#__PURE__*/(0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee8() {
-                      return _regenerator["default"].wrap(function _callee8$(_context8) {
-                        while (1) switch (_context8.prev = _context8.next) {
+                    div.refresh = /*#__PURE__*/(0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee11() {
+                      return _regenerator["default"].wrap(function _callee11$(_context11) {
+                        while (1) switch (_context11.prev = _context11.next) {
                           case 0:
-                            _context8.next = 2;
+                            _context11.next = 2;
                             return addNewChatDocumentIfNewDay(new Date());
                           case 2:
-                            syncMessages(chatChannel, messageTable); // @@ livemessagetable??
-                            desktopNotification(chatChannel);
+                            _context11.next = 4;
+                            return syncMessages(chatChannel, messageTable);
                           case 4:
+                            // @@ livemessagetable??
+                            desktopNotification(chatChannel);
+                          case 5:
                           case "end":
-                            return _context8.stop();
+                            return _context11.stop();
                         }
-                      }, _callee8);
+                      }, _callee11);
                     })); // The short chat version the live update listening is done in the pane but we do it in the widget @@
                     _solidLogic.store.updater.addDownstreamChangeListener(chatDocument, div.refresh); // Live update
                     liveMessageTable = messageTable;
                     latest.messageTable = liveMessageTable;
-                    return _context9.abrupt("return", messageTable);
+                    return _context12.abrupt("return", messageTable);
                   case 11:
                   case "end":
-                    return _context9.stop();
+                    return _context12.stop();
                 }
-              }, _callee9);
+              }, _callee12);
             }));
             return _appendCurrentMessages.apply(this, arguments);
           };
@@ -3504,15 +3720,15 @@ function _infiniteMessageArea() {
             return _appendCurrentMessages.apply(this, arguments);
           };
           _addNewChatDocumentIfNewDay = function _addNewChatDocumentIf2() {
-            _addNewChatDocumentIfNewDay = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7() {
+            _addNewChatDocumentIfNewDay = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee10() {
               var newChatDocument, oldChatDocument, sts;
-              return _regenerator["default"].wrap(function _callee7$(_context7) {
-                while (1) switch (_context7.prev = _context7.next) {
+              return _regenerator["default"].wrap(function _callee10$(_context10) {
+                while (1) switch (_context10.prev = _context10.next) {
                   case 0:
                     // @@ Remove listener from previous table as it is now static
                     newChatDocument = dateFolder.leafDocumentFromDate(new Date());
                     if (newChatDocument.sameTerm(latest.messageTable.chatDocument)) {
-                      _context7.next = 7;
+                      _context10.next = 7;
                       break;
                     }
                     // It is a new day
@@ -3521,7 +3737,7 @@ function _infiniteMessageArea() {
                       delete liveMessageTable.inputRow;
                     }
                     oldChatDocument = latest.messageTable.chatDocument;
-                    _context7.next = 6;
+                    _context10.next = 6;
                     return appendCurrentMessages();
                   case 6:
                     // Adding a link in the document will ping listeners to add the new block too
@@ -3535,286 +3751,323 @@ function _infiniteMessageArea() {
                     }
                   case 7:
                   case "end":
-                    return _context7.stop();
+                    return _context10.stop();
                 }
-              }, _callee7);
+              }, _callee10);
             }));
             return _addNewChatDocumentIfNewDay.apply(this, arguments);
           };
           addNewChatDocumentIfNewDay = function _addNewChatDocumentIf() {
             return _addNewChatDocumentIfNewDay.apply(this, arguments);
           };
-          renderMessageTable = function _renderMessageTable(date, live) {
-            var scrollBackbutton;
-            var scrollForwardButton;
+          _renderMessageTable = function _renderMessageTable3() {
+            _renderMessageTable = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee9(date, live) {
+              var scrollBackbutton, scrollForwardButton, extendBackwards, _extendBackwards, setScrollBackbuttonIcon, extendForwards, _extendForwards, setScrollForwardButtonIcon, scrollForwardButtonHandler, _scrollForwardButtonHandler, messageTable, chatDocument, tr, test, titleTR, scrollBackbuttonCell, dateCell, scrollForwardButtonCell, sts, _iterator2, _step2, st;
+              return _regenerator["default"].wrap(function _callee9$(_context9) {
+                while (1) switch (_context9.prev = _context9.next) {
+                  case 0:
+                    _scrollForwardButtonHandler = function _scrollForwardButtonH2() {
+                      _scrollForwardButtonHandler = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee8(_event) {
+                        return _regenerator["default"].wrap(function _callee8$(_context8) {
+                          while (1) switch (_context8.prev = _context8.next) {
+                            case 0:
+                              if (!messageTable.extendedForwards) {
+                                _context8.next = 6;
+                                break;
+                              }
+                              removePreviousMessages(false, messageTable);
+                              messageTable.extendedForwards = false;
+                              setScrollForwardButtonIcon();
+                              _context8.next = 9;
+                              break;
+                            case 6:
+                              _context8.next = 8;
+                              return extendForwards();
+                            case 8:
+                              // async
+                              latest.messageTable.scrollIntoView(newestFirst);
+                            case 9:
+                            case "end":
+                              return _context8.stop();
+                          }
+                        }, _callee8);
+                      }));
+                      return _scrollForwardButtonHandler.apply(this, arguments);
+                    };
+                    scrollForwardButtonHandler = function _scrollForwardButtonH(_x22) {
+                      return _scrollForwardButtonHandler.apply(this, arguments);
+                    };
+                    setScrollForwardButtonIcon = function _setScrollForwardButt() {
+                      if (!scrollForwardButton) return;
+                      var sense = messageTable.extendedForwards ? !newestFirst : newestFirst; // noun_T-Block_1114657_000000.svg
+                      var scrollForwardIcon = messageTable["final"] ? 'noun_T-Block_1114657_000000.svg' : getScrollForwardButtonIcon(sense);
+                      scrollForwardButton.firstChild.setAttribute('src', _iconBase.icons.iconBase + scrollForwardIcon);
+                      function getScrollForwardButtonIcon(sense) {
+                        return !sense ? 'noun_1369241.svg' : 'noun_1369237.svg';
+                      }
+                    };
+                    _extendForwards = function _extendForwards3() {
+                      _extendForwards = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7() {
+                        var done;
+                        return _regenerator["default"].wrap(function _callee7$(_context7) {
+                          while (1) switch (_context7.prev = _context7.next) {
+                            case 0:
+                              _context7.next = 2;
+                              return insertPreviousMessages(false);
+                            case 2:
+                              done = _context7.sent;
+                              return _context7.abrupt("return", done);
+                            case 4:
+                            case "end":
+                              return _context7.stop();
+                          }
+                        }, _callee7);
+                      }));
+                      return _extendForwards.apply(this, arguments);
+                    };
+                    extendForwards = function _extendForwards2() {
+                      return _extendForwards.apply(this, arguments);
+                    };
+                    setScrollBackbuttonIcon = function _setScrollBackbuttonI() {
+                      if (!scrollBackbutton) {
+                        return;
+                      }
+                      var sense = messageTable.extendedBack ? !newestFirst : newestFirst;
+                      var scrollBackIcon = messageTable.initial ? 'noun_T-Block_1114655_000000.svg' : getScrollbackIcon(sense);
+                      scrollBackbutton.firstChild.setAttribute('src', _iconBase.icons.iconBase + scrollBackIcon);
+                      function getScrollbackIcon(sense) {
+                        return sense ? 'noun_1369241.svg' : 'noun_1369237.svg';
+                      }
+                    };
+                    _extendBackwards = function _extendBackwards3() {
+                      _extendBackwards = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6() {
+                        var done;
+                        return _regenerator["default"].wrap(function _callee6$(_context6) {
+                          while (1) switch (_context6.prev = _context6.next) {
+                            case 0:
+                              _context6.next = 2;
+                              return insertPreviousMessages(true);
+                            case 2:
+                              done = _context6.sent;
+                              if (done) {
+                                if (scrollBackbutton) {
+                                  scrollBackbutton.firstChild.setAttribute('src', _iconBase.icons.iconBase + 'noun_T-Block_1114655_000000.svg'); // T
+                                  scrollBackbutton.disabled = true;
+                                }
+                                messageTable.initial = true;
+                              } else {
+                                messageTable.extendedBack = true;
+                              }
+                              setScrollBackbuttonIcon();
+                              return _context6.abrupt("return", done);
+                            case 6:
+                            case "end":
+                              return _context6.stop();
+                          }
+                        }, _callee6);
+                      }));
+                      return _extendBackwards.apply(this, arguments);
+                    };
+                    extendBackwards = function _extendBackwards2() {
+                      return _extendBackwards.apply(this, arguments);
+                    };
+                    scrollBackbutton = null; // was let
+                    scrollForwardButton = null; // was let
+                    /// /////////////////   Scroll down adding more above
+                    /// ////////////// Scroll up adding more below
+                    /// ///////////////////////
+                    /*
+                    options = options || {}
+                    options.authorDateOnLeft = true
+                    const newestFirst = options.newestFirst === '1' || options.newestFirst === true // hack for now
+                    const channelObject = new ChatChannel(chatChannel, options)
+                    const dateFolder = channelObject.dateFolder
+                     const div = dom.createElement('div')
+                    const statusArea = div.appendChild(dom.createElement('div'))
+                    const userContext = { dom, statusArea, div: statusArea } // logged on state, pointers to user's stuff
+                    */
+                    debug.log('Options for called message Area', options);
+                    messageTable = dom.createElement('table');
+                    messageTable.style.width = '100%'; // fill the pane div
+                    messageTable.extendBackwards = extendBackwards; // Make function available to scroll stuff
+                    messageTable.extendForwards = extendForwards; // Make function available to scroll stuff
 
-            /// /////////////////   Scroll down adding more above
-            function extendBackwards() {
-              return _extendBackwards.apply(this, arguments);
-            }
-            function _extendBackwards() {
-              _extendBackwards = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
-                var done;
-                return _regenerator["default"].wrap(function _callee$(_context) {
-                  while (1) switch (_context.prev = _context.next) {
-                    case 0:
-                      _context.next = 2;
-                      return insertPreviousMessages(true);
-                    case 2:
-                      done = _context.sent;
-                      if (done) {
-                        if (scrollBackbutton) {
-                          scrollBackbutton.firstChild.setAttribute('src', _iconBase.icons.iconBase + 'noun_T-Block_1114655_000000.svg'); // T
-                          scrollBackbutton.disabled = true;
-                        }
-                        messageTable.initial = true;
+                    messageTable.date = date;
+                    chatDocument = dateFolder.leafDocumentFromDate(date);
+                    messageTable.chatDocument = chatDocument;
+                    messageTable.fresh = false;
+                    messageTable.setAttribute('style', 'width: 100%;'); // fill that div!
+                    if (live) {
+                      messageTable["final"] = true;
+                      liveMessageTable = messageTable;
+                      latest.messageTable = messageTable;
+                      tr = (0, _message.renderMessageEditor)(channelObject, messageTable, userContext, options);
+                      if (newestFirst) {
+                        messageTable.insertBefore(tr, messageTable.firstChild); // If newestFirst
                       } else {
-                        messageTable.extendedBack = true;
+                        messageTable.appendChild(tr); // not newestFirst
                       }
-                      setScrollBackbuttonIcon();
-                      return _context.abrupt("return", done);
-                    case 6:
-                    case "end":
-                      return _context.stop();
-                  }
-                }, _callee);
-              }));
-              return _extendBackwards.apply(this, arguments);
-            }
-            function setScrollBackbuttonIcon() {
-              if (!scrollBackbutton) {
-                return;
-              }
-              var sense = messageTable.extendedBack ? !newestFirst : newestFirst;
-              var scrollBackIcon = messageTable.initial ? 'noun_T-Block_1114655_000000.svg' : getScrollbackIcon(sense);
-              scrollBackbutton.firstChild.setAttribute('src', _iconBase.icons.iconBase + scrollBackIcon);
-              function getScrollbackIcon(sense) {
-                return sense ? 'noun_1369241.svg' : 'noun_1369237.svg';
-              }
-            }
-            function scrollBackbuttonHandler(_x8) {
-              return _scrollBackbuttonHandler.apply(this, arguments);
-            } /// ////////////// Scroll up adding more below
-            function _scrollBackbuttonHandler() {
-              _scrollBackbuttonHandler = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(_event) {
-                return _regenerator["default"].wrap(function _callee2$(_context2) {
-                  while (1) switch (_context2.prev = _context2.next) {
-                    case 0:
-                      if (!messageTable.extendedBack) {
-                        _context2.next = 6;
-                        break;
+
+                      messageTable.inputRow = tr;
+                    }
+
+                    /// ///// Infinite scroll
+                    //
+                    // @@ listen for swipe past end event not just button
+                    test = true;
+                    if (test) {
+                      // ws options.infinite but need for non-infinite
+                      titleTR = dom.createElement('tr');
+                      scrollBackbuttonCell = titleTR.appendChild(dom.createElement('td')); // up traingles: noun_1369237.svg
+                      // down triangles: noun_1369241.svg
+                      /*
+                      const scrollBackIcon = newestFirst
+                        ? 'noun_1369241.svg'
+                        : 'noun_1369237.svg' // down and up arrows respoctively
+                      scrollBackbutton = widgets.button(
+                        dom,
+                        icons.iconBase + scrollBackIcon,
+                        'Previous messages ...'
+                      )
+                      scrollBackbuttonCell.style = 'width:3em; height:3em;'
+                      scrollBackbutton.addEventListener('click', scrollBackbuttonHandler, false)
+                      messageTable.extendedBack = false
+                      scrollBackbuttonCell.appendChild(scrollBackbutton)
+                      setScrollBackbuttonIcon()
+                      */
+                      dateCell = titleTR.appendChild(dom.createElement('td'));
+                      dateCell.style = 'text-align: center; vertical-align: middle; color: #888; font-style: italic;';
+                      dateCell.textContent = widgets.shortDate(date.toISOString(), true); // no time, only date
+
+                      // @@@@@@@@@@@ todo move this button to other end of  message cell, o
+                      scrollForwardButtonCell = titleTR.appendChild(dom.createElement('td'));
+                      if (options.includeRemoveButton) {
+                        scrollForwardButtonCell.appendChild(widgets.cancelButton(dom, function (_e) {
+                          div.parentNode.removeChild(div);
+                        }));
                       }
-                      removePreviousMessages(true, messageTable);
-                      messageTable.extendedBack = false;
-                      setScrollBackbuttonIcon();
-                      _context2.next = 8;
-                      break;
-                    case 6:
-                      _context2.next = 8;
-                      return extendBackwards();
-                    case 8:
-                    case "end":
-                      return _context2.stop();
-                  }
-                }, _callee2);
-              }));
-              return _scrollBackbuttonHandler.apply(this, arguments);
-            }
-            function extendForwards() {
-              return _extendForwards.apply(this, arguments);
-            }
-            function _extendForwards() {
-              _extendForwards = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3() {
-                var done;
-                return _regenerator["default"].wrap(function _callee3$(_context3) {
-                  while (1) switch (_context3.prev = _context3.next) {
-                    case 0:
-                      _context3.next = 2;
-                      return insertPreviousMessages(false);
-                    case 2:
-                      done = _context3.sent;
-                      if (done) {
-                        scrollForwardButton.firstChild.setAttribute('src', _iconBase.icons.iconBase + 'noun_T-Block_1114655_000000.svg');
-                        scrollForwardButton.disabled = true;
-                        messageTable["final"] = true;
-                      } else {
-                        messageTable.extendedForwards = true;
-                      }
-                      setScrollForwardButtonIcon();
-                      return _context3.abrupt("return", done);
-                    case 6:
-                    case "end":
-                      return _context3.stop();
-                  }
-                }, _callee3);
-              }));
-              return _extendForwards.apply(this, arguments);
-            }
-            function setScrollForwardButtonIcon() {
-              var sense = messageTable.extendedForwards ? !newestFirst : newestFirst; // noun_T-Block_1114657_000000.svg
-              var scrollForwardIcon = messageTable["final"] ? 'noun_T-Block_1114657_000000.svg' : getScrollForwardButtonIcon(sense);
-              scrollForwardButton.firstChild.setAttribute('src', _iconBase.icons.iconBase + scrollForwardIcon);
-              function getScrollForwardButtonIcon(sense) {
-                return !sense ? 'noun_1369241.svg' : 'noun_1369237.svg';
-              }
-            }
-            function scrollForwardButtonHandler(_x9) {
-              return _scrollForwardButtonHandler.apply(this, arguments);
-            } /// ///////////////////////
-            /*
-            options = options || {}
-            options.authorDateOnLeft = true
-            const newestFirst = options.newestFirst === '1' || options.newestFirst === true // hack for now
-            const channelObject = new ChatChannel(chatChannel, options)
-            const dateFolder = channelObject.dateFolder
-             const div = dom.createElement('div')
-            const statusArea = div.appendChild(dom.createElement('div'))
-            const userContext = { dom, statusArea, div: statusArea } // logged on state, pointers to user's stuff
-            */
-            function _scrollForwardButtonHandler() {
-              _scrollForwardButtonHandler = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(_event) {
-                return _regenerator["default"].wrap(function _callee4$(_context4) {
-                  while (1) switch (_context4.prev = _context4.next) {
-                    case 0:
-                      if (!messageTable.extendedForwards) {
-                        _context4.next = 6;
-                        break;
-                      }
-                      removePreviousMessages(false, messageTable);
+                      /*
+                      const scrollForwardIcon = newestFirst
+                        ? 'noun_1369241.svg'
+                        : 'noun_1369237.svg' // down and up arrows respoctively
+                      scrollForwardButton = widgets.button(
+                        dom,
+                        icons.iconBase + scrollForwardIcon,
+                        'Later messages ...'
+                      )
+                      scrollForwardButtonCell.appendChild(scrollForwardButton)
+                      scrollForwardButtonCell.style = 'width:3em; height:3em;'
+                      scrollForwardButton.addEventListener(
+                        'click',
+                        scrollForwardButtonHandler,
+                        false
+                      )
+                      messageTable.extendedForward = false
+                      setScrollForwardButtonIcon()
+                      */
                       messageTable.extendedForwards = false;
-                      setScrollForwardButtonIcon();
-                      _context4.next = 9;
+                      if (!newestFirst) {
+                        // opposite end from the entry field
+                        messageTable.insertBefore(titleTR, messageTable.firstChild); // If not newestFirst
+                      } else {
+                        messageTable.appendChild(titleTR); //  newestFirst
+                      }
+                    }
+                    sts = _solidLogic.store.statementsMatching(null, ns.wf('message'), null, chatDocument);
+                    if (!live && sts.length === 0) {
+                      // not todays
+                      // no need buttomns at the moment
+                      // messageTable.style.visibility = 'collapse' // Hide files with no messages
+                    }
+                    _iterator2 = _createForOfIteratorHelper(sts);
+                    _context9.prev = 26;
+                    _iterator2.s();
+                  case 28:
+                    if ((_step2 = _iterator2.n()).done) {
+                      _context9.next = 34;
                       break;
-                    case 6:
-                      _context4.next = 8;
-                      return extendForwards();
-                    case 8:
-                      // async
-                      latest.messageTable.scrollIntoView(newestFirst);
-                    case 9:
-                    case "end":
-                      return _context4.stop();
-                  }
-                }, _callee4);
-              }));
-              return _scrollForwardButtonHandler.apply(this, arguments);
-            }
-            var messageTable = dom.createElement('table');
-            messageTable.extendBackwards = extendBackwards; // Make function available to scroll stuff
-            messageTable.extendForwards = extendForwards; // Make function available to scroll stuff
+                    }
+                    st = _step2.value;
+                    _context9.next = 32;
+                    return addMessage(st.object, messageTable);
+                  case 32:
+                    _context9.next = 28;
+                    break;
+                  case 34:
+                    _context9.next = 39;
+                    break;
+                  case 36:
+                    _context9.prev = 36;
+                    _context9.t0 = _context9["catch"](26);
+                    _iterator2.e(_context9.t0);
+                  case 39:
+                    _context9.prev = 39;
+                    _iterator2.f();
+                    return _context9.finish(39);
+                  case 42:
+                    messageTable.fresh = true;
 
-            messageTable.date = date;
-            var chatDocument = dateFolder.leafDocumentFromDate(date);
-            messageTable.chatDocument = chatDocument;
-            messageTable.fresh = false;
-            messageTable.setAttribute('style', 'width: 100%;'); // fill that div!
-            if (live) {
-              messageTable["final"] = true;
-              liveMessageTable = messageTable;
-              latest.messageTable = messageTable;
-              var tr = (0, _message.renderMessageEditor)(channelObject, messageTable, userContext, options);
-              if (newestFirst) {
-                messageTable.insertBefore(tr, messageTable.firstChild); // If newestFirst
-              } else {
-                messageTable.appendChild(tr); // not newestFirst
-              }
-
-              messageTable.inputRow = tr;
-            }
-
-            /// ///// Infinite scroll
-            //
-            // @@ listen for swipe past end event not just button
-            if (options.infinite) {
-              var scrollBackbuttonTR = dom.createElement('tr');
-              var scrollBackbuttonCell = scrollBackbuttonTR.appendChild(dom.createElement('td'));
-              // up traingles: noun_1369237.svg
-              // down triangles: noun_1369241.svg
-              var scrollBackIcon = newestFirst ? 'noun_1369241.svg' : 'noun_1369237.svg'; // down and up arrows respoctively
-              scrollBackbutton = widgets.button(dom, _iconBase.icons.iconBase + scrollBackIcon, 'Previous messages ...');
-              scrollBackbuttonCell.style = 'width:3em; height:3em;';
-              scrollBackbutton.addEventListener('click', scrollBackbuttonHandler, false);
-              messageTable.extendedBack = false;
-              scrollBackbuttonCell.appendChild(scrollBackbutton);
-              setScrollBackbuttonIcon();
-              var dateCell = scrollBackbuttonTR.appendChild(dom.createElement('td'));
-              dateCell.style = 'text-align: center; vertical-align: middle; color: #888; font-style: italic;';
-              dateCell.textContent = widgets.shortDate(date.toISOString(), true); // no time, only date
-
-              // @@@@@@@@@@@ todo move this button to other end of  message cell, o
-              var scrollForwardButtonCell = scrollBackbuttonTR.appendChild(dom.createElement('td'));
-              var scrollForwardIcon = newestFirst ? 'noun_1369241.svg' : 'noun_1369237.svg'; // down and up arrows respoctively
-              scrollForwardButton = widgets.button(dom, _iconBase.icons.iconBase + scrollForwardIcon, 'Later messages ...');
-              scrollForwardButtonCell.appendChild(scrollForwardButton);
-              scrollForwardButtonCell.style = 'width:3em; height:3em;';
-              scrollForwardButton.addEventListener('click', scrollForwardButtonHandler, false);
-              messageTable.extendedForward = false;
-              setScrollForwardButtonIcon();
-              messageTable.extendedForwards = false;
-              if (!newestFirst) {
-                // opposite end from the entry field
-                messageTable.insertBefore(scrollBackbuttonTR, messageTable.firstChild); // If not newestFirst
-              } else {
-                messageTable.appendChild(scrollBackbuttonTR); //  newestFirst
-              }
-            }
-
-            var sts = _solidLogic.store.statementsMatching(null, ns.wf('message'), null, chatDocument);
-            if (!live && sts.length === 0) {
-              // not todays
-              // no need buttomns at the moment
-              // messageTable.style.visibility = 'collapse' // Hide files with no messages
-            }
-            sts.forEach(function (st) {
-              addMessage(st.object, messageTable);
-            });
-            messageTable.fresh = true;
-
-            // loadMessageTable(messageTable, chatDocument)
-            messageTable.fresh = false;
-            return messageTable;
+                    // loadMessageTable(messageTable, chatDocument)
+                    messageTable.fresh = false;
+                    return _context9.abrupt("return", messageTable);
+                  case 45:
+                  case "end":
+                    return _context9.stop();
+                }
+              }, _callee9, null, [[26, 36, 39, 42]]);
+            }));
+            return _renderMessageTable.apply(this, arguments);
+          };
+          renderMessageTable = function _renderMessageTable2(_x18, _x19) {
+            return _renderMessageTable.apply(this, arguments);
           };
           _createMessageTable = function _createMessageTable3() {
-            _createMessageTable = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(date, live) {
+            _createMessageTable = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(date, live) {
               var chatDocument, messageTable, statusTR;
-              return _regenerator["default"].wrap(function _callee6$(_context6) {
-                while (1) switch (_context6.prev = _context6.next) {
+              return _regenerator["default"].wrap(function _callee5$(_context5) {
+                while (1) switch (_context5.prev = _context5.next) {
                   case 0:
                     debug.log('   createMessageTable for  ' + date);
                     chatDocument = dateFolder.leafDocumentFromDate(date);
-                    _context6.prev = 2;
-                    _context6.next = 5;
+                    _context5.prev = 2;
+                    _context5.next = 5;
                     return _solidLogic.store.fetcher.load(chatDocument);
                   case 5:
-                    _context6.next = 19;
+                    _context5.next = 21;
                     break;
                   case 7:
-                    _context6.prev = 7;
-                    _context6.t0 = _context6["catch"](2);
+                    _context5.prev = 7;
+                    _context5.t0 = _context5["catch"](2);
                     messageTable = dom.createElement('table');
                     statusTR = messageTable.appendChild(dom.createElement('tr')); // ### find status in exception
-                    if (!(_context6.t0.response && _context6.t0.response.status && _context6.t0.response.status === 404)) {
-                      _context6.next = 16;
+                    if (!(_context5.t0.response && _context5.t0.response.status && _context5.t0.response.status === 404)) {
+                      _context5.next = 18;
                       break;
                     }
                     debug.log('Error 404 for chat file ' + chatDocument);
-                    return _context6.abrupt("return", renderMessageTable(date, live));
-                  case 16:
-                    debug.log('*** Error NON 404 for chat file ' + chatDocument);
-                    statusTR.appendChild(widgets.errorMessageBlock(dom, _context6.t0, 'pink'));
+                    _context5.next = 15;
+                    return renderMessageTable(date, live);
+                  case 15:
+                    return _context5.abrupt("return", _context5.sent);
                   case 18:
-                    return _context6.abrupt("return", statusTR);
-                  case 19:
-                    return _context6.abrupt("return", renderMessageTable(date, live));
+                    debug.log('*** Error NON 404 for chat file ' + chatDocument);
+                    statusTR.appendChild(widgets.errorMessageBlock(dom, _context5.t0, 'pink'));
                   case 20:
+                    return _context5.abrupt("return", statusTR);
+                  case 21:
+                    _context5.next = 23;
+                    return renderMessageTable(date, live);
+                  case 23:
+                    return _context5.abrupt("return", _context5.sent);
+                  case 24:
                   case "end":
-                    return _context6.stop();
+                    return _context5.stop();
                 }
-              }, _callee6, null, [[2, 7]]);
+              }, _callee5, null, [[2, 7]]);
             }));
             return _createMessageTable.apply(this, arguments);
           };
-          createMessageTable = function _createMessageTable2(_x6, _x7) {
+          createMessageTable = function _createMessageTable2(_x16, _x17) {
             return _createMessageTable.apply(this, arguments);
           };
           removePreviousMessages = function _removePreviousMessag(backwards, messageTable) {
@@ -3833,32 +4086,41 @@ function _infiniteMessageArea() {
             extr.messageTable = messageTable;
           };
           _insertPreviousMessages = function _insertPreviousMessag2() {
-            _insertPreviousMessages = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(backwards) {
+            _insertPreviousMessages = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(backwards) {
               var extremity, date, live, todayDoc, doc, newMessageTable;
-              return _regenerator["default"].wrap(function _callee5$(_context5) {
-                while (1) switch (_context5.prev = _context5.next) {
+              return _regenerator["default"].wrap(function _callee4$(_context4) {
+                while (1) switch (_context4.prev = _context4.next) {
                   case 0:
                     extremity = backwards ? earliest : latest;
                     date = extremity.messageTable.date; // day in mssecs
-                    _context5.next = 4;
-                    return dateFolder.loadPrevious(date, backwards);
+                    // Are we at the top of a thread?
+                    if (!(backwards && earliest.limit && date <= earliest.limit)) {
+                      _context4.next = 4;
+                      break;
+                    }
+                    return _context4.abrupt("return", true);
                   case 4:
-                    date = _context5.sent;
+                    debug.log(' insertPreviousMessages:  loadPrevious given date ' + date);
+                    _context4.next = 7;
+                    return dateFolder.loadPrevious(date, backwards);
+                  case 7:
+                    date = _context4.sent;
                     // backwards
+                    debug.log(' insertPreviousMessages:  loadPrevious returns date ' + date);
                     debug.log("insertPreviousMessages: from ".concat(backwards ? 'backwards' : 'forwards', " loadPrevious: ").concat(date));
                     if (!(!date && !backwards && !liveMessageTable)) {
-                      _context5.next = 9;
+                      _context4.next = 13;
                       break;
                     }
-                    _context5.next = 9;
+                    _context4.next = 13;
                     return appendCurrentMessages();
-                  case 9:
+                  case 13:
                     if (date) {
-                      _context5.next = 11;
+                      _context4.next = 15;
                       break;
                     }
-                    return _context5.abrupt("return", true);
-                  case 11:
+                    return _context4.abrupt("return", true);
+                  case 15:
                     // done
                     live = false;
                     if (!backwards) {
@@ -3866,10 +4128,10 @@ function _infiniteMessageArea() {
                       doc = dateFolder.leafDocumentFromDate(date);
                       live = doc.sameTerm(todayDoc); // Is this todays?
                     }
-                    _context5.next = 15;
+                    _context4.next = 19;
                     return createMessageTable(date, live);
-                  case 15:
-                    newMessageTable = _context5.sent;
+                  case 19:
+                    newMessageTable = _context4.sent;
                     extremity.messageTable = newMessageTable; // move pointer to earliest
                     if (backwards ? newestFirst : !newestFirst) {
                       // put on bottom or top
@@ -3878,64 +4140,184 @@ function _infiniteMessageArea() {
                       // put on top as we scroll back
                       div.insertBefore(newMessageTable, div.firstChild);
                     }
-                    return _context5.abrupt("return", live);
-                  case 19:
+                    return _context4.abrupt("return", live);
+                  case 23:
                   case "end":
-                    return _context5.stop();
+                    return _context4.stop();
                 }
-              }, _callee5);
+              }, _callee4);
             }));
             return _insertPreviousMessages.apply(this, arguments);
           };
-          insertPreviousMessages = function _insertPreviousMessag(_x5) {
+          insertPreviousMessages = function _insertPreviousMessag(_x15) {
             return _insertPreviousMessages.apply(this, arguments);
           };
-          addMessage = function _addMessage(message, messageTable) {
-            var latest = (0, _chatLogic.mostRecentVersion)(message);
-            // const content = store.any(latest, ns.sioc('content'))
-            if ((0, _chatLogic.isDeleted)(latest) && !options.showDeletedMessages) {
-              return; // ignore deleted messaged -- @@ could also leave a placeholder
-            }
-
-            insertMessageIntoTable(channelObject, messageTable, message, messageTable.fresh, options, userContext); // fresh from elsewhere
+          _addMessage = function _addMessage3() {
+            _addMessage = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(message, messageTable) {
+              var thread, id;
+              return _regenerator["default"].wrap(function _callee3$(_context3) {
+                while (1) switch (_context3.prev = _context3.next) {
+                  case 0:
+                    if (!((0, _chatLogic.isDeleted)(message) && !options.showDeletedMessages)) {
+                      _context3.next = 2;
+                      break;
+                    }
+                    return _context3.abrupt("return");
+                  case 2:
+                    if (!(0, _chatLogic.isReplaced)(message)) {
+                      _context3.next = 4;
+                      break;
+                    }
+                    return _context3.abrupt("return");
+                  case 4:
+                    thread = _solidLogic.store.any(null, ns.sioc('has_member'), message, message.doc());
+                    id = _solidLogic.store.any(message, ns.sioc('id'), null, message.doc());
+                    if (id && !thread) {
+                      thread = _solidLogic.store.any(null, ns.sioc('has_member'), id, message.doc());
+                    }
+                    if (!options.thread) {
+                      _context3.next = 20;
+                      break;
+                    }
+                    if (!_solidLogic.store.holds(message, ns.sioc('has_reply'), options.thread)) {
+                      _context3.next = 12;
+                      break;
+                    }
+                    // root of thread
+                    debug.log(' addMessage: displaying root of thread ' + thread);
+                    _context3.next = 18;
+                    break;
+                  case 12:
+                    if (!(thread && thread.sameTerm(options.thread))) {
+                      _context3.next = 16;
+                      break;
+                    }
+                    debug.log(' addMessage: Displaying body of thread ' + message.uri.slice(-10));
+                    _context3.next = 18;
+                    break;
+                  case 16:
+                    debug.log(' addMessage: Suppress non-thread message in thread table ' + message.uri.slice(-10));
+                    return _context3.abrupt("return");
+                  case 18:
+                    _context3.next = 26;
+                    break;
+                  case 20:
+                    if (!thread) {
+                      _context3.next = 25;
+                      break;
+                    }
+                    debug.log(' addMessage: Suppress thread message in non-thread table ' + message.uri.slice(-10));
+                    return _context3.abrupt("return");
+                  case 25:
+                    debug.log(' addMessage: Normal non-thread message in non-thread table ' + message.uri.slice(-10));
+                  case 26:
+                    _context3.next = 28;
+                    return insertMessageIntoTable(channelObject, messageTable, message, messageTable.fresh, options, userContext);
+                  case 28:
+                  case "end":
+                    return _context3.stop();
+                }
+              }, _callee3);
+            }));
+            return _addMessage.apply(this, arguments);
           };
-          syncMessages = function _syncMessages(about, messageTable) {
-            var displayed = {};
-            var ele, ele2;
-            for (ele = messageTable.firstChild; ele; ele = ele.nextSibling) {
-              if (ele.AJAR_subject) {
-                displayed[ele.AJAR_subject.uri] = true;
-              }
-            }
-            var messages = _solidLogic.store.statementsMatching(about, ns.wf('message'), null, messageTable.chatDocument).map(function (st) {
-              return st.object;
-            });
-            var stored = {};
-            messages.forEach(function (m) {
-              stored[m.uri] = true;
-              if (!displayed[m.uri]) {
-                addMessage(m, messageTable);
-              }
-            });
-
-            // eslint-disable-next-line space-in-parens
-            for (ele = messageTable.firstChild; ele;) {
-              ele2 = ele.nextSibling;
-              if (ele.AJAR_subject && !stored[ele.AJAR_subject.uri]) {
-                messageTable.removeChild(ele);
-              }
-              ele = ele2;
-            }
-            for (ele = messageTable.firstChild; ele; ele = ele.nextSibling) {
-              if (ele.AJAR_subject) {
-                // Refresh thumbs up etc
-                widgets.refreshTree(ele); // Things inside may have changed too
-              }
-            }
+          addMessage = function _addMessage2(_x13, _x14) {
+            return _addMessage.apply(this, arguments);
           };
-
+          _syncMessages = function _syncMessages3() {
+            _syncMessages = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(chatChannel, messageTable) {
+              var displayed, ele, ele2, messages, stored, _iterator, _step, m;
+              return _regenerator["default"].wrap(function _callee2$(_context2) {
+                while (1) switch (_context2.prev = _context2.next) {
+                  case 0:
+                    displayed = {};
+                    for (ele = messageTable.firstChild; ele; ele = ele.nextSibling) {
+                      if (ele.AJAR_subject) {
+                        displayed[ele.AJAR_subject.uri] = true;
+                      }
+                    }
+                    messages = _solidLogic.store.each(chatChannel, ns.wf('message'), null, messageTable.chatDocument);
+                    stored = {};
+                    _iterator = _createForOfIteratorHelper(messages);
+                    _context2.prev = 5;
+                    _iterator.s();
+                  case 7:
+                    if ((_step = _iterator.n()).done) {
+                      _context2.next = 15;
+                      break;
+                    }
+                    m = _step.value;
+                    stored[m.uri] = true;
+                    if (displayed[m.uri]) {
+                      _context2.next = 13;
+                      break;
+                    }
+                    _context2.next = 13;
+                    return addMessage(m, messageTable);
+                  case 13:
+                    _context2.next = 7;
+                    break;
+                  case 15:
+                    _context2.next = 20;
+                    break;
+                  case 17:
+                    _context2.prev = 17;
+                    _context2.t0 = _context2["catch"](5);
+                    _iterator.e(_context2.t0);
+                  case 20:
+                    _context2.prev = 20;
+                    _iterator.f();
+                    return _context2.finish(20);
+                  case 23:
+                    // eslint-disable-next-line space-in-parens
+                    for (ele = messageTable.firstChild; ele;) {
+                      ele2 = ele.nextSibling;
+                      if (ele.AJAR_subject && !stored[ele.AJAR_subject.uri]) {
+                        messageTable.removeChild(ele);
+                      }
+                      ele = ele2;
+                    }
+                    for (ele = messageTable.firstChild; ele; ele = ele.nextSibling) {
+                      if (ele.AJAR_subject) {
+                        // Refresh thumbs up etc
+                        widgets.refreshTree(ele); // Things inside may have changed too
+                      }
+                    }
+                  case 25:
+                  case "end":
+                    return _context2.stop();
+                }
+              }, _callee2, null, [[5, 17, 20, 23]]);
+            }));
+            return _syncMessages.apply(this, arguments);
+          };
+          syncMessages = function _syncMessages2(_x11, _x12) {
+            return _syncMessages.apply(this, arguments);
+          }; // ///////////////////////////////////////////////////////////////////////
+          // syncMessages
+          // Called once per original message displayed
+          /* Add a new messageTable at the top/bottom
+            */
+          /* Remove message tables earlier than this one
+           */
+          /* Load and render message table
+           ** @returns DOM element generates
+           */
+          // renderMessageTable
+          /*
+          function messageCount () {
+            var n = 0
+            const tables = div.children
+            for (let i = 0; i < tables.length; i++) {
+              n += tables[i].children.length - 1
+              // debug.log('    table length:' + tables[i].children.length)
+            }
+            return n
+          }
+          */
+          /* Add the live message block with entry field for today
+           */
           // Body of main function
-
           options = options || {};
           options.authorDateOnLeft = false; // @@ make a user optiosn
           newestFirst = options.newestFirst === '1' || options.newestFirst === true; // hack for now
@@ -3949,23 +4331,33 @@ function _infiniteMessageArea() {
             statusArea: statusArea,
             div: statusArea
           }; // logged on state, pointers to user's stuff
-          // const messageTable = dom.createElement('table') // @@ check does this go in renderMessageTable
           earliest = {
             messageTable: null
           }; // Stuff about each end of the loaded days
           latest = {
             messageTable: null
           };
+          if (options.thread) {
+            thread = options.thread;
+            threadRootMessage = _solidLogic.store.any(null, ns.sioc('has_reply'), thread, thread.doc());
+            if (threadRootMessage) {
+              threadTime = _solidLogic.store.any(threadRootMessage, ns.dct('created'), null, threadRootMessage.doc());
+              if (threadTime) {
+                earliest.limit = new Date(threadTime.value);
+                debug.log(' inifinite: thread start at ' + earliest.limit);
+              }
+            }
+          }
           lock = false;
-          _context12.next = 30;
+          _context15.next = 34;
           return loadInitialContent();
-        case 30:
-          return _context12.abrupt("return", div);
-        case 31:
+        case 34:
+          return _context15.abrupt("return", div);
+        case 35:
         case "end":
-          return _context12.stop();
+          return _context15.stop();
       }
-    }, _callee12);
+    }, _callee15);
   }));
   return _infiniteMessageArea.apply(this, arguments);
 }
@@ -3994,6 +4386,7 @@ exports.renderMessageEditor = renderMessageEditor;
 exports.renderMessageRow = renderMessageRow;
 exports.switchToEditor = switchToEditor;
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js"));
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var _infinite = __webpack_require__(/*! ./infinite */ "./lib/chat/infinite.js");
 var _messageTools = __webpack_require__(/*! ./messageTools */ "./lib/chat/messageTools.js");
@@ -4011,9 +4404,14 @@ var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/u
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; } /**  UI code for individual messages: display them, edit them
+                                                                                                                                                                                     *
+                                                                                                                                                                                     * @packageDocumentation
+                                                                                                                                                                                     */ /* global $rdf */
 var dom = window.document;
 var messageBodyStyle = style.messageBodyStyle;
 var label = utils.label;
@@ -4090,122 +4488,232 @@ function creatorAndDateHorizontal(td1, creator, date, message) {
 /**
  * Renders a chat message, read-only mode
  */
-function renderMessageRow(channelObject, message, fresh, options, userContext) {
-  var colorizeByAuthor = options.colorizeByAuthor === '1' || options.colorizeByAuthor === true;
-  var creator = _solidLogic.store.any(message, ns.foaf('maker'));
-  var date = _solidLogic.store.any(message, ns.dct('created'));
-  var latestVersion = (0, _chatLogic.mostRecentVersion)(message);
-  var content = _solidLogic.store.any(latestVersion, ns.sioc('content'));
-  var originalMessage = (0, _chatLogic.originalVersion)(message);
-  var edited = !message.sameTerm(originalMessage);
-  var sortDate = _solidLogic.store.the(originalMessage, ns.dct('created'), null, originalMessage.doc()); // In message
-
-  var messageRow = dom.createElement('tr');
-  messageRow.AJAR_date = sortDate.value;
-  messageRow.AJAR_subject = message;
-  var td1 = dom.createElement('td');
-  messageRow.appendChild(td1);
-  if (!options.authorDateOnLeft) {
-    var img = dom.createElement('img');
-    img.setAttribute('style', 'max-height: 2.5em; max-width: 2.5em; border-radius: 0.5em; margin: auto;');
-    widgets.setImage(img, creator);
-    td1.appendChild(img);
-  } else {
-    creatorAndDate(td1, creator, widgets.shortDate(sortDate.value), message);
-  }
-  var bothDates = widgets.shortDate(sortDate.value);
-  if (edited) {
-    bothDates += ' ... ' + widgets.shortDate(date.value);
-  }
-
-  // Render the content ot the message itself
-  var td2 = messageRow.appendChild(dom.createElement('td'));
-  if (!options.authorDateOnLeft) {
-    creatorAndDateHorizontal(td2, creator, bothDates,
-    // widgets.shortDate(dateString)
-    message);
-  }
-  var text = content.value.trim();
-  var isURI = /^https?:\/[^ <>]*$/i.test(text);
-  var para = null;
-  if (isURI) {
-    var isImage = /\.(gif|jpg|jpeg|tiff|png|svg)$/i.test(text); // @@ Should use content-type not URI
-    if (isImage && options.expandImagesInline) {
-      var _img = elementForImageURI(text, options);
-      td2.appendChild(_img);
-    } else {
-      // Link but not Image
-      var anc = td2.appendChild(dom.createElement('a'));
-      para = anc.appendChild(dom.createElement('p'));
-      anc.href = text;
-      para.textContent = text;
-      td2.appendChild(anc);
-    }
-  } else {
-    // text
-    para = dom.createElement('p');
-    td2.appendChild(para);
-    para.textContent = text;
-  }
-  if (para) {
-    var bgcolor = colorizeByAuthor ? pad.lightColorHash(creator) : getBgColor(fresh);
-    para.setAttribute('style', messageBodyStyle + 'background-color: ' + bgcolor + ';');
-  }
-  function getBgColor(fresh) {
-    return fresh ? '#e8ffe8' : 'white';
-  }
-
-  // Sentiment strip
-  var strip = (0, _messageTools.sentimentStripLinked)(message, message.doc());
-  if (strip.children.length) {
-    td2.appendChild(dom.createElement('br'));
-    td2.appendChild(strip);
-  }
-
-  // Message tool bar button
-  var td3 = dom.createElement('td');
-  messageRow.appendChild(td3);
-  var toolsButton = widgets.button(dom, _iconBase.icons.iconBase + 'noun_243787.svg', '...');
-  td3.appendChild(toolsButton);
-  toolsButton.addEventListener('click', function (_event) {
-    if (messageRow.toolTR) {
-      // already got a toolbar? Toogle
-      messageRow.parentNode.removeChild(messageRow.toolTR);
-      delete messageRow.toolTR;
-      return;
-    }
-    var toolsTR = dom.createElement('tr');
-    var tools = (0, _messageTools.messageToolbar)(message, messageRow, userContext, channelObject);
-    tools.style = 'border: 0.05em solid #888; border-radius: 0 0 0.7em 0.7em;  border-top: 0; height:3.5em; background-color: #fff;'; // @@ fix
-    if (messageRow.nextSibling) {
-      messageRow.parentElement.insertBefore(toolsTR, messageRow.nextSibling);
-    } else {
-      messageRow.parentElement.appendChild(toolsTR);
-    }
-    messageRow.toolTR = toolsTR;
-    toolsTR.appendChild(dom.createElement('td')); // left
-    var toolsTD = toolsTR.appendChild(dom.createElement('td'));
-    toolsTR.appendChild(dom.createElement('td')); // right
-    toolsTD.appendChild(tools);
-  });
-  return messageRow;
+function renderMessageRow(_x, _x2, _x3, _x4, _x5) {
+  return _renderMessageRow.apply(this, arguments);
 }
-function switchToEditor(messageRow, message, channelObject, userContext) {
-  var messageTable = messageRow.parentNode;
-  var editRow = renderMessageEditor(channelObject, messageTable, userContext, channelObject.options, (0, _chatLogic.mostRecentVersion)(message));
-  messageTable.insertBefore(editRow, messageRow);
-  editRow.originalRow = messageRow;
-  messageRow.style.visibility = 'hidden'; // Hide the original message. unhide if user cancels edit
+function _renderMessageRow() {
+  _renderMessageRow = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee9(channelObject, message, fresh, options, userContext) {
+    var colorizeByAuthor, creator, date, latestVersion, content, versions, replies, thread, straightReplies, _iterator2, _step2, reply, originalMessage, edited, sortDate, messageRow, td1, img, bothDates, td2, text, isURI, para, isImage, _img, anc, bgcolor, getBgColor, strip, td3, toolsButton;
+    return _regenerator["default"].wrap(function _callee9$(_context10) {
+      while (1) switch (_context10.prev = _context10.next) {
+        case 0:
+          getBgColor = function _getBgColor(fresh) {
+            return fresh ? '#e8ffe8' : 'white';
+          };
+          colorizeByAuthor = options.colorizeByAuthor === '1' || options.colorizeByAuthor === true;
+          creator = _solidLogic.store.any(message, ns.foaf('maker'));
+          date = _solidLogic.store.any(message, ns.dct('created'));
+          _context10.next = 6;
+          return (0, _chatLogic.mostRecentVersion)(message);
+        case 6:
+          latestVersion = _context10.sent;
+          content = _solidLogic.store.any(latestVersion, ns.sioc('content')); // const id = store.any(latestVersion, ns.sioc('id'))
+          // const replies = store.each(latestVersion, ns.sioc('has_reply'))
+          _context10.next = 10;
+          return (0, _chatLogic.allVersions)(message);
+        case 10:
+          versions = _context10.sent;
+          if (versions.length > 1) {
+            debug.log('renderMessageRow versions: ', versions.join(',  '));
+          }
+          // be tolerant in accepting replies on any version of a message
+          replies = versions.map(function (version) {
+            return _solidLogic.store.each(version, ns.sioc('has_reply'));
+          }).flat();
+          thread = null;
+          straightReplies = [];
+          _iterator2 = _createForOfIteratorHelper(replies);
+          try {
+            for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+              reply = _step2.value;
+              if (_solidLogic.store.holds(reply, ns.rdf('type'), ns.sioc('Thread'))) {
+                thread = reply;
+                debug.log('renderMessageRow: found thread: ' + thread);
+              } else {
+                straightReplies.push(reply);
+              }
+            }
+          } catch (err) {
+            _iterator2.e(err);
+          } finally {
+            _iterator2.f();
+          }
+          if (straightReplies.length > 1) {
+            debug.log('renderMessageRow: found normal replies: ', straightReplies);
+          }
+          _context10.next = 20;
+          return (0, _chatLogic.originalVersion)(message);
+        case 20:
+          originalMessage = _context10.sent;
+          edited = !message.sameTerm(originalMessage); // @@ load it first  @@   Or display the new data at the old date.
+          // @@@ kludge!
+          sortDate = _solidLogic.store.the(originalMessage, ns.dct('created'), null, originalMessage.doc()) || _solidLogic.store.the(message, ns.dct('created'), null, message.doc()); // In message
+          messageRow = dom.createElement('tr');
+          messageRow.AJAR_date = sortDate.value;
+          messageRow.AJAR_subject = message;
+          td1 = dom.createElement('td');
+          messageRow.appendChild(td1);
+          if (!options.authorDateOnLeft) {
+            img = dom.createElement('img');
+            img.setAttribute('style', 'max-height: 2.5em; max-width: 2.5em; border-radius: 0.5em; margin: auto;');
+            widgets.setImage(img, creator);
+            td1.appendChild(img);
+          } else {
+            creatorAndDate(td1, creator, widgets.shortDate(sortDate.value), message);
+          }
+          bothDates = widgets.shortDate(sortDate.value);
+          if (edited) {
+            bothDates += ' ... ' + widgets.shortDate(date.value);
+          }
+
+          // Render the content ot the message itself
+          td2 = messageRow.appendChild(dom.createElement('td'));
+          if (!options.authorDateOnLeft) {
+            creatorAndDateHorizontal(td2, creator, bothDates,
+            // widgets.shortDate(dateString)
+            message);
+          }
+          text = content ? content.value.trim() : '??? no content?';
+          isURI = /^https?:\/[^ <>]*$/i.test(text);
+          para = null;
+          if (isURI) {
+            isImage = /\.(gif|jpg|jpeg|tiff|png|svg)$/i.test(text); // @@ Should use content-type not URI
+            if (isImage && options.expandImagesInline) {
+              _img = elementForImageURI(text, options);
+              td2.appendChild(_img);
+            } else {
+              // Link but not Image
+              anc = td2.appendChild(dom.createElement('a'));
+              para = anc.appendChild(dom.createElement('p'));
+              anc.href = text;
+              para.textContent = text;
+              td2.appendChild(anc);
+            }
+          } else {
+            // text
+            para = dom.createElement('p');
+            td2.appendChild(para);
+            para.textContent = text;
+          }
+          if (para) {
+            bgcolor = colorizeByAuthor ? pad.lightColorHash(creator) : getBgColor(fresh);
+            para.setAttribute('style', messageBodyStyle + 'background-color: ' + bgcolor + ';');
+          }
+          _context10.next = 40;
+          return (0, _messageTools.sentimentStripLinked)(message, message.doc());
+        case 40:
+          strip = _context10.sent;
+          if (strip.children.length) {
+            td2.appendChild(dom.createElement('br'));
+            td2.appendChild(strip);
+          }
+
+          // Message tool bar button
+          td3 = dom.createElement('td');
+          messageRow.appendChild(td3);
+          toolsButton = widgets.button(dom, _iconBase.icons.iconBase + 'noun_243787.svg', '...');
+          td3.appendChild(toolsButton);
+          toolsButton.addEventListener('click', /*#__PURE__*/function () {
+            var _ref4 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee8(_event) {
+              var toolsTR, tools, toolsTD;
+              return _regenerator["default"].wrap(function _callee8$(_context9) {
+                while (1) switch (_context9.prev = _context9.next) {
+                  case 0:
+                    if (!messageRow.toolTR) {
+                      _context9.next = 4;
+                      break;
+                    }
+                    // already got a toolbar? Toogle
+                    messageRow.parentNode.removeChild(messageRow.toolTR);
+                    delete messageRow.toolTR;
+                    return _context9.abrupt("return");
+                  case 4:
+                    toolsTR = dom.createElement('tr');
+                    _context9.next = 7;
+                    return (0, _messageTools.messageToolbar)(message, messageRow, _objectSpread(_objectSpread({}, userContext), {}, {
+                      chatOptions: options
+                    }), channelObject);
+                  case 7:
+                    tools = _context9.sent;
+                    tools.style = 'border: 0.05em solid #888; border-radius: 0 0 0.7em 0.7em;  border-top: 0; height:3.5em; background-color: #fff;'; // @@ fix
+                    if (messageRow.nextSibling) {
+                      messageRow.parentElement.insertBefore(toolsTR, messageRow.nextSibling);
+                    } else {
+                      messageRow.parentElement.appendChild(toolsTR);
+                    }
+                    messageRow.toolTR = toolsTR;
+                    toolsTR.appendChild(dom.createElement('td')); // left
+                    toolsTD = toolsTR.appendChild(dom.createElement('td'));
+                    toolsTR.appendChild(dom.createElement('td')); // right
+                    toolsTD.appendChild(tools);
+                  case 15:
+                  case "end":
+                    return _context9.stop();
+                }
+              }, _callee8);
+            }));
+            return function (_x20) {
+              return _ref4.apply(this, arguments);
+            };
+          }());
+          if (thread && options.showThread) {
+            debug.log('  message has thread ' + thread);
+            td3.appendChild(widgets.button(dom, _iconBase.icons.iconBase + 'noun_1180164.svg',
+            // right arrow .. @@ think of stg better
+            'see thread', function (_e) {
+              debug.log('@@@@ Calling showThread thread ' + thread);
+              options.showThread(thread, options);
+            }));
+          }
+          return _context10.abrupt("return", messageRow);
+        case 49:
+        case "end":
+          return _context10.stop();
+      }
+    }, _callee9);
+  }));
+  return _renderMessageRow.apply(this, arguments);
+}
+function switchToEditor(_x6, _x7, _x8, _x9) {
+  return _switchToEditor.apply(this, arguments);
 }
 /*       Control for a new message -- or editing an old message ***************
  *
  */
+function _switchToEditor() {
+  _switchToEditor = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee10(messageRow, message, channelObject, userContext) {
+    var messageTable, editRow;
+    return _regenerator["default"].wrap(function _callee10$(_context11) {
+      while (1) switch (_context11.prev = _context11.next) {
+        case 0:
+          messageTable = messageRow.parentNode;
+          _context11.t0 = renderMessageEditor;
+          _context11.t1 = channelObject;
+          _context11.t2 = messageTable;
+          _context11.t3 = userContext;
+          _context11.t4 = channelObject.options;
+          _context11.next = 8;
+          return (0, _chatLogic.mostRecentVersion)(message);
+        case 8:
+          _context11.t5 = _context11.sent;
+          editRow = (0, _context11.t0)(_context11.t1, _context11.t2, _context11.t3, _context11.t4, _context11.t5);
+          messageTable.insertBefore(editRow, messageRow);
+          editRow.originalRow = messageRow;
+          messageRow.style.visibility = 'hidden'; // Hide the original message. unhide if user cancels edit
+        case 13:
+        case "end":
+          return _context11.stop();
+      }
+    }, _callee10);
+  }));
+  return _switchToEditor.apply(this, arguments);
+}
 function renderMessageEditor(channelObject, messageTable, userContext, options, originalMessage) {
   function revertEditing(messageEditor) {
     messageEditor.originalRow.style.visibility = 'visible'; // restore read-only version
     messageEditor.parentNode.removeChild(messageEditor);
   }
-  function handleFieldInput(_x) {
+  function handleFieldInput(_x10) {
     return _handleFieldInput.apply(this, arguments);
   }
   function _handleFieldInput() {
@@ -4223,72 +4731,86 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
     }));
     return _handleFieldInput.apply(this, arguments);
   }
-  function sendMessage(_x2, _x3) {
+  function sendMessage(_x11, _x12) {
     return _sendMessage.apply(this, arguments);
   } // sendMessage
   //    DRAG AND DROP
   function _sendMessage() {
-    _sendMessage = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(text, fromMainField) {
-      var sendComplete, message, statusArea;
-      return _regenerator["default"].wrap(function _callee6$(_context7) {
-        while (1) switch (_context7.prev = _context7.next) {
+    _sendMessage = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7(text, fromMainField) {
+      var sendComplete, _sendComplete, message, statusArea;
+      return _regenerator["default"].wrap(function _callee7$(_context8) {
+        while (1) switch (_context8.prev = _context8.next) {
           case 0:
-            sendComplete = function _sendComplete(message, _text2) {
-              // const dateStamp = store.any(message, ns.dct('created'), null, message.doc())
-              // const content = $rdf.literal(text2)
-              (0, _infinite.insertMessageIntoTable)(channelObject, messageTable, message, false, options, userContext); // not green
+            _sendComplete = function _sendComplete3() {
+              _sendComplete = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(message, _text2) {
+                var oldRow;
+                return _regenerator["default"].wrap(function _callee6$(_context7) {
+                  while (1) switch (_context7.prev = _context7.next) {
+                    case 0:
+                      _context7.next = 2;
+                      return (0, _infinite.insertMessageIntoTable)(channelObject, messageTable, message, false, options, userContext);
+                    case 2:
+                      // not green
 
-              if (originalMessage) {
-                // editing another message
-                var oldRow = messageEditor.originalRow;
-                // oldRow.style.display = '' // restore read-only version, re-attack
-                if (oldRow.parentNode) {
-                  oldRow.parentNode.removeChild(oldRow); // No longer needed old version
-                } else {
-                  debug.warn('No parentNode on old message ' + oldRow.textContent);
-                  oldRow.style.backgroundColor = '#fee';
-                  oldRow.style.visibility = 'hidden'; // @@ FIX THIS AND REMOVE FROM DOM INSTEAD
-                }
+                      if (originalMessage) {
+                        // editing another message
+                        oldRow = messageEditor.originalRow; // oldRow.style.display = '' // restore read-only version, re-attack
+                        if (oldRow.parentNode) {
+                          oldRow.parentNode.removeChild(oldRow); // No longer needed old version
+                        } else {
+                          debug.warn('No parentNode on old message ' + oldRow.textContent);
+                          oldRow.style.backgroundColor = '#fee';
+                          oldRow.style.visibility = 'hidden'; // @@ FIX THIS AND REMOVE FROM DOM INSTEAD
+                        }
 
-                messageEditor.parentNode.removeChild(messageEditor); // no longer need editor
-              } else {
-                if (fromMainField) {
-                  field.value = ''; // clear from out for reuse
-                  field.setAttribute('style', messageBodyStyle);
-                  field.disabled = false;
-                  field.scrollIntoView(options.newestFirst); // allign bottom (top)
-                  field.focus(); // Start typing next line immediately
-                  field.select();
-                }
-              }
-              // await channelObject.div.refresh() // Add new day if nec  @@ add back
+                        messageEditor.parentNode.removeChild(messageEditor); // no longer need editor
+                      } else {
+                        if (fromMainField) {
+                          field.value = ''; // clear from out for reuse
+                          field.setAttribute('style', messageBodyStyle);
+                          field.disabled = false;
+                          field.scrollIntoView(options.newestFirst); // allign bottom (top)
+                          field.focus(); // Start typing next line immediately
+                          field.select();
+                        }
+                      }
+                      // await channelObject.div.refresh() // Add new day if nec  @@ add back
+                    case 3:
+                    case "end":
+                      return _context7.stop();
+                  }
+                }, _callee6);
+              }));
+              return _sendComplete.apply(this, arguments);
             };
-
-            // const me = authn.currentUser() // Must be logged on or wuld have got login button
+            sendComplete = function _sendComplete2(_x18, _x19) {
+              return _sendComplete.apply(this, arguments);
+            }; // const me = authn.currentUser() // Must be logged on or wuld have got login button
             if (fromMainField) {
               field.setAttribute('style', messageBodyStyle + 'color: #bbb;'); // pendingedit
               field.disabled = true;
             }
-            _context7.prev = 2;
-            _context7.next = 5;
-            return channelObject.updateMessage(text, originalMessage);
-          case 5:
-            message = _context7.sent;
-            _context7.next = 13;
+            _context8.prev = 3;
+            _context8.next = 6;
+            return channelObject.updateMessage(text, originalMessage, null, options.thread);
+          case 6:
+            message = _context8.sent;
+            _context8.next = 14;
             break;
-          case 8:
-            _context7.prev = 8;
-            _context7.t0 = _context7["catch"](2);
+          case 9:
+            _context8.prev = 9;
+            _context8.t0 = _context8["catch"](3);
             statusArea = userContext.statusArea || messageEditor;
-            statusArea.appendChild(widgets.errorMessageBlock(dom, 'Error writing message: ' + _context7.t0));
-            return _context7.abrupt("return");
-          case 13:
-            sendComplete(message, text);
+            statusArea.appendChild(widgets.errorMessageBlock(dom, 'Error writing message: ' + _context8.t0));
+            return _context8.abrupt("return");
           case 14:
+            _context8.next = 16;
+            return sendComplete(message, text);
+          case 16:
           case "end":
-            return _context7.stop();
+            return _context8.stop();
         }
-      }, _callee6, null, [[2, 8]]);
+      }, _callee7, null, [[3, 9]]);
     }));
     return _sendMessage.apply(this, arguments);
   }
@@ -4307,7 +4829,7 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
           }
         }, _callee);
       }));
-      return function (_x4, _x5) {
+      return function (_x13, _x14) {
         return _ref.apply(this, arguments);
       };
     }());
@@ -4351,7 +4873,7 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
         }
       }, _callee2, null, [[1, 11, 14, 17]]);
     }));
-    return function droppedURIHandler(_x6) {
+    return function droppedURIHandler(_x15) {
       return _ref2.apply(this, arguments);
     };
   }();
@@ -4362,7 +4884,7 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
       imageDoc = $rdf.sym(chatDocument.dir().uri + 'Image_' + Date.now() + '.png');
       return imageDoc;
     }
-    function tookPicture(_x7) {
+    function tookPicture(_x16) {
       return _tookPicture.apply(this, arguments);
     } // Body of turnOnInput
     function _tookPicture() {
@@ -4439,7 +4961,7 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
           }
         }, _callee3);
       }));
-      return function (_x8) {
+      return function (_x17) {
         return _ref3.apply(this, arguments);
       };
     }(), false);
@@ -4501,7 +5023,7 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
     turnOnInput();
     Object.assign(context, userContext);
     (0, _bookmarks.findBookmarkDocument)(context).then(function (_context) {
-      // console.log('Bookmark file: ' + context.bookmarkDocument)
+      // debug.log('Bookmark file: ' + context.bookmarkDocument)
     });
   });
   return messageEditor;
@@ -4524,12 +5046,15 @@ var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_m
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
+exports.ActionClassFromEmoji = ActionClassFromEmoji;
+exports.emojiFromAction = emojiFromAction;
+exports.emojiFromActionClass = emojiFromActionClass;
 exports.messageToolbar = messageToolbar;
 exports.sentimentStrip = sentimentStrip;
 exports.sentimentStripLinked = sentimentStripLinked;
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
-var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "./node_modules/@babel/runtime/helpers/slicedToArray.js"));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
 var _iconBase = __webpack_require__(/*! ../iconBase */ "./lib/iconBase.js");
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
@@ -4557,7 +5082,6 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 // import * as pad from '../pad'
 // pull in first avoid cross-refs
 // import * as style from '../style'
-
 var dom = window.document;
 
 // THE UNUSED ICONS are here as reminders for possible future functionality
@@ -4570,30 +5094,46 @@ var PENCIL_ICON = 'noun_253504.svg'; // edit a message
 // const SPANNER_ICON = 'noun_344563.svg' -> settings
 var THUMBS_UP_ICON = 'noun_1384132.svg';
 var THUMBS_DOWN_ICON = 'noun_1384135.svg';
+var REPLY_ICON = 'noun-reply-5506924.svg';
 /**
  * Emoji in Unicode
  */
-var emoji = {};
-emoji[ns.schema('AgreeAction')] = '👍';
-emoji[ns.schema('DisagreeAction')] = '👎';
-emoji[ns.schema('EndorseAction')] = '⭐️';
-emoji[ns.schema('LikeAction')] = '❤️';
+var emojiMap = {};
+emojiMap[ns.schema('AgreeAction')] = '👍';
+emojiMap[ns.schema('DisagreeAction')] = '👎';
+emojiMap[ns.schema('EndorseAction')] = '⭐️';
+emojiMap[ns.schema('LikeAction')] = '❤️';
+function emojiFromActionClass(action) {
+  return emojiMap[action] || null;
+}
+function ActionClassFromEmoji(emoji) {
+  for (var a in emojiMap) {
+    if (emojiMap[a] === emoji) {
+      return rdf.sym(a.slice(1, -1)); // remove < >
+    }
+  }
+
+  return null;
+}
+
+// Allow the action to give its own emoji as content,
+// or get the emoji from the class of action.
+function emojiFromAction(action) {
+  var content = _solidLogic.store.any(action, ns.sioc('content'), null, action.doc());
+  if (content) return content;
+  var klass = _solidLogic.store.any(action, ns.rdf('type'), null, action.doc());
+  if (klass) {
+    var em = emojiFromActionClass(klass);
+    if (em) return em;
+  }
+  return '⬜️';
+}
 
 /**
  * Create strip of sentiments expressed
  */
-function sentimentStrip(target, doc) {
-  // alain seems not used
-  var latest = (0, _chatLogic.mostRecentVersion)(target);
-  var actions = _solidLogic.store.holds(latest, ns.schema('dateDeleted').value, null, latest.doc()) ? _solidLogic.store.each(null, ns.schema('target'), target, doc) : [];
-  var sentiments = actions.map(function (a) {
-    return _solidLogic.store.any(a, ns.rdf('type'), null, doc);
-  });
-  sentiments.sort();
-  var strings = sentiments.map(function (x) {
-    return emoji[x] || '';
-  });
-  return dom.createTextNode(strings.join(' '));
+function sentimentStrip(_x, _x2) {
+  return _sentimentStrip.apply(this, arguments);
 }
 /**
  * Create strip of sentiments expressed, with hyperlinks
@@ -4601,276 +5141,444 @@ function sentimentStrip(target, doc) {
  * @param target {NamedNode} - The thing about which they are expressed
  * @param doc {NamedNode} - The document in which they are expressed
  */
-function sentimentStripLinked(target, doc) {
-  var strip = dom.createElement('span');
-  function refresh() {
-    strip.innerHTML = '';
-    var actions = (0, _chatLogic.mostRecentVersion)(target).uri !== ns.schema('dateDeleted').uri ? _solidLogic.store.each(null, ns.schema('target'), target, doc) : [];
-    var sentiments = actions.map(function (a) {
-      return [_solidLogic.store.any(a, ns.rdf('type'), null, doc), _solidLogic.store.any(a, ns.schema('agent'), null, doc)];
-    });
-    sentiments.sort();
-    sentiments.forEach(function (ss) {
-      var _ss = (0, _slicedToArray2["default"])(ss, 2),
-        theClass = _ss[0],
-        agent = _ss[1];
-      var res;
-      if (agent) {
-        res = dom.createElement('a');
-        res.setAttribute('href', agent.uri);
-      } else {
-        res = dom.createTextNode('');
+function _sentimentStrip() {
+  _sentimentStrip = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(target, doc) {
+    var versions, actions, strings;
+    return _regenerator["default"].wrap(function _callee$(_context) {
+      while (1) switch (_context.prev = _context.next) {
+        case 0:
+          _context.next = 2;
+          return (0, _chatLogic.allVersions)(target);
+        case 2:
+          versions = _context.sent;
+          debug.log('sentimentStrip Versions for ' + target, versions);
+          actions = versions.map(function (version) {
+            return _solidLogic.store.each(null, ns.schema('target'), version, doc);
+          }).flat();
+          debug.log('sentimentStrip: Actions for ' + target, actions);
+          strings = actions.map(function (action) {
+            return emojiFromAction(action) || '';
+          });
+          return _context.abrupt("return", dom.createTextNode(strings.join(' ')));
+        case 8:
+        case "end":
+          return _context.stop();
       }
-      res.textContent = emoji[theClass] || '*';
-      strip.appendChild(res);
-    });
-  }
-  refresh();
-  strip.refresh = refresh;
-  return strip;
+    }, _callee);
+  }));
+  return _sentimentStrip.apply(this, arguments);
+}
+function sentimentStripLinked(_x3, _x4) {
+  return _sentimentStripLinked.apply(this, arguments);
 }
 /**
  * Creates a message toolbar component
  */
-function messageToolbar(message, messageRow, userContext, channelObject) {
-  function deleteMessage() {
-    return _deleteMessage.apply(this, arguments);
-  }
-  function _deleteMessage() {
-    _deleteMessage = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2() {
-      var author, msg, area;
-      return _regenerator["default"].wrap(function _callee2$(_context2) {
-        while (1) switch (_context2.prev = _context2.next) {
-          case 0:
-            author = _solidLogic.store.any(message, ns.foaf('maker'));
-            if (me) {
-              _context2.next = 5;
-              break;
+function _sentimentStripLinked() {
+  _sentimentStripLinked = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(target, doc) {
+    var strip, refresh, _refresh;
+    return _regenerator["default"].wrap(function _callee3$(_context3) {
+      while (1) switch (_context3.prev = _context3.next) {
+        case 0:
+          _refresh = function _refresh3() {
+            _refresh = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2() {
+              var versions, actions, sentiments;
+              return _regenerator["default"].wrap(function _callee2$(_context2) {
+                while (1) switch (_context2.prev = _context2.next) {
+                  case 0:
+                    strip.innerHTML = '';
+                    if (!(0, _chatLogic.isDeleted)(target)) {
+                      _context2.next = 3;
+                      break;
+                    }
+                    return _context2.abrupt("return", strip);
+                  case 3:
+                    _context2.next = 5;
+                    return (0, _chatLogic.allVersions)(target);
+                  case 5:
+                    versions = _context2.sent;
+                    debug.log('sentimentStripLinked: Versions for ' + target, versions);
+                    actions = versions.map(function (version) {
+                      return _solidLogic.store.each(null, ns.schema('target'), version, doc);
+                    }).flat();
+                    debug.log('sentimentStripLinked: Actions for ' + target, actions);
+                    if (!(actions.length === 0)) {
+                      _context2.next = 11;
+                      break;
+                    }
+                    return _context2.abrupt("return", strip);
+                  case 11:
+                    sentiments = actions.map(function (a) {
+                      return [_solidLogic.store.any(a, ns.rdf('type'), null, doc), _solidLogic.store.any(a, ns.sioc('content'), null, doc), _solidLogic.store.any(a, ns.schema('agent'), null, doc)];
+                    });
+                    debug.log('  Actions sentiments ', sentiments);
+                    sentiments.sort();
+                    sentiments.forEach(function (ss) {
+                      var _ss = (0, _slicedToArray2["default"])(ss, 3),
+                        theClass = _ss[0],
+                        content = _ss[1],
+                        agent = _ss[2];
+                      var res;
+                      if (agent) {
+                        res = dom.createElement('a');
+                        res.setAttribute('href', agent.uri);
+                      } else {
+                        res = dom.createTextNode('');
+                      }
+                      res.textContent = content || emojiMap[theClass] || '⬜️';
+                      strip.appendChild(res);
+                    });
+                    debug.log('  Actions strip ', strip);
+                  case 16:
+                  case "end":
+                    return _context2.stop();
+                }
+              }, _callee2);
+            }));
+            return _refresh.apply(this, arguments);
+          };
+          refresh = function _refresh2() {
+            return _refresh.apply(this, arguments);
+          };
+          strip = dom.createElement('span');
+          refresh().then(debug.log('sentimentStripLinked: sentimentStripLinked async refreshed'));
+          strip.refresh = refresh;
+          return _context3.abrupt("return", strip);
+        case 6:
+        case "end":
+          return _context3.stop();
+      }
+    }, _callee3);
+  }));
+  return _sentimentStripLinked.apply(this, arguments);
+}
+function messageToolbar(_x5, _x6, _x7, _x8) {
+  return _messageToolbar.apply(this, arguments);
+}
+function _messageToolbar() {
+  _messageToolbar = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee10(message, messageRow, userContext, channelObject) {
+    var deleteMessage, _deleteMessage, editMessage, _editMessage, replyInThread, _replyInThread, div, closeToolbar, deleteThingThen, _deleteThingThen, me, sentimentButton, context1, cancelButton;
+    return _regenerator["default"].wrap(function _callee10$(_context10) {
+      while (1) switch (_context10.prev = _context10.next) {
+        case 0:
+          sentimentButton = function _sentimentButton(context, target, icon, actionClass, doc, mutuallyExclusive) {
+            function setColor() {
+              button.style.backgroundColor = action ? 'yellow' : 'white';
             }
-            alert('You can\'t delete the message, you are not logged in.');
-            _context2.next = 22;
-            break;
-          case 5:
-            if (!me.sameTerm(author)) {
-              _context2.next = 21;
-              break;
+            var button = widgets.button(dom, icon, utils.label(actionClass), /*#__PURE__*/function () {
+              var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(_event) {
+                var insertMe, dirty, i, a;
+                return _regenerator["default"].wrap(function _callee4$(_context4) {
+                  while (1) switch (_context4.prev = _context4.next) {
+                    case 0:
+                      if (!action) {
+                        _context4.next = 7;
+                        break;
+                      }
+                      _context4.next = 3;
+                      return deleteThingThen(action);
+                    case 3:
+                      action = null;
+                      setColor();
+                      _context4.next = 25;
+                      break;
+                    case 7:
+                      // no action
+                      action = widgets.newThing(doc);
+                      insertMe = [rdf.st(action, ns.schema('agent'), context.me, doc), rdf.st(action, ns.rdf('type'), actionClass, doc), rdf.st(action, ns.schema('target'), target, doc)];
+                      _context4.next = 11;
+                      return _solidLogic.store.updater.update([], insertMe);
+                    case 11:
+                      setColor();
+                      if (!mutuallyExclusive) {
+                        _context4.next = 25;
+                        break;
+                      }
+                      // Delete incompative sentiments
+                      dirty = false;
+                      i = 0;
+                    case 15:
+                      if (!(i < mutuallyExclusive.length)) {
+                        _context4.next = 24;
+                        break;
+                      }
+                      a = existingAction(mutuallyExclusive[i]);
+                      if (!a) {
+                        _context4.next = 21;
+                        break;
+                      }
+                      _context4.next = 20;
+                      return deleteThingThen(a);
+                    case 20:
+                      // but how refresh? refreshTree the parent?
+                      dirty = true;
+                    case 21:
+                      i++;
+                      _context4.next = 15;
+                      break;
+                    case 24:
+                      if (dirty) {
+                        // widgets.refreshTree(button.parentNode) // requires them all to be immediate siblings
+                        widgets.refreshTree(messageRow); // requires them all to be immediate siblings
+                      }
+                    case 25:
+                    case "end":
+                      return _context4.stop();
+                  }
+                }, _callee4);
+              }));
+              return function (_x11) {
+                return _ref.apply(this, arguments);
+              };
+            }());
+            function existingAction(actionClass) {
+              var actions = _solidLogic.store.each(null, ns.schema('agent'), context.me, doc).filter(function (x) {
+                return _solidLogic.store.holds(x, ns.rdf('type'), actionClass, doc);
+              }).filter(function (x) {
+                return _solidLogic.store.holds(x, ns.schema('target'), target, doc);
+              });
+              return actions.length ? actions[0] : null;
             }
-            _context2.prev = 6;
-            _context2.next = 9;
-            return channelObject.deleteMessage(message);
-          case 9:
-            _context2.next = 18;
-            break;
-          case 11:
-            _context2.prev = 11;
-            _context2.t0 = _context2["catch"](6);
-            msg = 'Error deleting messaage ' + _context2.t0;
-            debug.warn(msg);
-            alert(msg);
-            area = userContext.statusArea || messageRow.parentNode;
-            area.appendChild(widgets.errorMessageBlock(dom, msg));
-          case 18:
-            messageRow.parentNode.removeChild(messageRow);
-            _context2.next = 22;
-            break;
-          case 21:
-            alert('You can\'t delete the message, you are not logged in as the author, ' + author);
-          case 22:
-            closeToolbar();
-          case 23:
-          case "end":
-            return _context2.stop();
-        }
-      }, _callee2, null, [[6, 11]]);
-    }));
-    return _deleteMessage.apply(this, arguments);
-  }
-  function editMessage(_x) {
-    return _editMessage.apply(this, arguments);
-  } // alain TODO allow chat owner to fully delete message + sentiments and replacing messages
-  function _editMessage() {
-    _editMessage = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(messageRow) {
-      return _regenerator["default"].wrap(function _callee3$(_context3) {
-        while (1) switch (_context3.prev = _context3.next) {
-          case 0:
-            if (me.value === _solidLogic.store.any(message, ns.foaf('maker')).value) {
-              closeToolbar(); // edit is a one-off action
-              (0, _message.switchToEditor)(messageRow, message, channelObject, userContext);
-            }
-          case 1:
-          case "end":
-            return _context3.stop();
-        }
-      }, _callee3);
-    }));
-    return _editMessage.apply(this, arguments);
-  }
-  var div = dom.createElement('div');
-  // is message deleted ?
-  if ((0, _chatLogic.mostRecentVersion)(message).value === ns.schema('dateDeleted').value) return div;
-  function closeToolbar() {
-    div.parentElement.parentElement.removeChild(div.parentElement); // remive the TR
-  }
-  function deleteThingThen(_x2) {
-    return _deleteThingThen.apply(this, arguments);
-  } // Things only the original author can do
-  function _deleteThingThen() {
-    _deleteThingThen = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(x) {
-      return _regenerator["default"].wrap(function _callee4$(_context4) {
-        while (1) switch (_context4.prev = _context4.next) {
-          case 0:
-            _context4.next = 2;
-            return _solidLogic.store.updater.update(_solidLogic.store.connectedStatements(x), []);
-          case 2:
-          case "end":
-            return _context4.stop();
-        }
-      }, _callee4);
-    }));
-    return _deleteThingThen.apply(this, arguments);
-  }
-  var me = _solidLogic.authn.currentUser(); // If already logged on
-  if (me && _solidLogic.store.holds(message, ns.foaf('maker'), me)) {
-    // button to delete the message
-    div.appendChild(widgets.deleteButtonWithCheck(dom, div, 'message', deleteMessage));
-    // button to edit the message
-    div.appendChild(widgets.button(dom, _iconBase.icons.iconBase + PENCIL_ICON, 'edit', function () {
-      return editMessage(messageRow);
-    }));
-  } // if mine
-  // Things anyone can do if they have a bookmark list async
-  /*
-  var bookmarkButton = await bookmarks.renderBookmarksButton(userContext)
-  if (bookmarkButton) {
-   div.appendChild(bookmarkButton)
-  }
-  */
-  // Things anyone can do if they have a bookmark list
-
-  (0, _bookmarks.renderBookmarksButton)(userContext).then(function (bookmarkButton) {
-    if (bookmarkButton) div.appendChild(bookmarkButton);
-  });
-
-  /**   Button to allow user to express a sentiment (like, endorse, etc) about a target
-   *
-   * @param context {Object} - Provide dom and me
-   * @param target {NamedNode} - The thing the user expresses an opnion about
-   * @param icon {uristring} - The icon to be used for the button
-   * @param actionClass {NamedNode} - The RDF class  - typically a subclass of schema:Action
-   * @param doc - {NamedNode} - the Solid document iunto which the data should be written
-   * @param mutuallyExclusive {Array<NamedNode>} - Any RDF classes of sentimentswhich are mutiually exclusive
-   */
-  function sentimentButton(context, target, icon, actionClass, doc, mutuallyExclusive) {
-    function setColor() {
-      button.style.backgroundColor = action ? 'yellow' : 'white';
-    }
-    var button = widgets.button(dom, icon, utils.label(actionClass), /*#__PURE__*/function () {
-      var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(_event) {
-        var insertMe, dirty, i, a;
-        return _regenerator["default"].wrap(function _callee$(_context) {
-          while (1) switch (_context.prev = _context.next) {
-            case 0:
-              if (!action) {
-                _context.next = 7;
-                break;
-              }
-              _context.next = 3;
-              return deleteThingThen(action);
-            case 3:
-              action = null;
+            function refresh() {
+              action = existingAction(actionClass);
               setColor();
-              _context.next = 25;
-              break;
-            case 7:
-              // no action
-              action = widgets.newThing(doc);
-              insertMe = [rdf.st(action, ns.schema('agent'), context.me, doc), rdf.st(action, ns.rdf('type'), actionClass, doc), rdf.st(action, ns.schema('target'), target, doc)];
-              _context.next = 11;
-              return _solidLogic.store.updater.update([], insertMe);
-            case 11:
-              setColor();
-              if (!mutuallyExclusive) {
-                _context.next = 25;
-                break;
-              }
-              // Delete incompative sentiments
-              dirty = false;
-              i = 0;
-            case 15:
-              if (!(i < mutuallyExclusive.length)) {
-                _context.next = 24;
-                break;
-              }
-              a = existingAction(mutuallyExclusive[i]);
-              if (!a) {
-                _context.next = 21;
-                break;
-              }
-              _context.next = 20;
-              return deleteThingThen(a);
-            case 20:
-              // but how refresh? refreshTree the parent?
-              dirty = true;
-            case 21:
-              i++;
-              _context.next = 15;
-              break;
-            case 24:
-              if (dirty) {
-                // widgets.refreshTree(button.parentNode) // requires them all to be immediate siblings
-                widgets.refreshTree(messageRow); // requires them all to be immediate siblings
-              }
-            case 25:
-            case "end":
-              return _context.stop();
+            }
+            var action;
+            button.refresh = refresh; // If the file changes, refresh live
+            refresh();
+            return button;
+          };
+          _deleteThingThen = function _deleteThingThen3() {
+            _deleteThingThen = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee9(x) {
+              return _regenerator["default"].wrap(function _callee9$(_context9) {
+                while (1) switch (_context9.prev = _context9.next) {
+                  case 0:
+                    _context9.next = 2;
+                    return _solidLogic.store.updater.update(_solidLogic.store.connectedStatements(x), []);
+                  case 2:
+                  case "end":
+                    return _context9.stop();
+                }
+              }, _callee9);
+            }));
+            return _deleteThingThen.apply(this, arguments);
+          };
+          deleteThingThen = function _deleteThingThen2(_x10) {
+            return _deleteThingThen.apply(this, arguments);
+          };
+          closeToolbar = function _closeToolbar() {
+            div.parentElement.parentElement.removeChild(div.parentElement); // remive the TR
+          };
+          _replyInThread = function _replyInThread3() {
+            _replyInThread = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee8() {
+              var thread, options;
+              return _regenerator["default"].wrap(function _callee8$(_context8) {
+                while (1) switch (_context8.prev = _context8.next) {
+                  case 0:
+                    _context8.next = 2;
+                    return channelObject.createThread(message);
+                  case 2:
+                    thread = _context8.sent;
+                    options = userContext.chatOptions;
+                    if (options) {
+                      _context8.next = 6;
+                      break;
+                    }
+                    throw new Error('replyInThread: missing options');
+                  case 6:
+                    options.showThread(thread, options);
+                    closeToolbar(); // a one-off action
+                  case 8:
+                  case "end":
+                    return _context8.stop();
+                }
+              }, _callee8);
+            }));
+            return _replyInThread.apply(this, arguments);
+          };
+          replyInThread = function _replyInThread2() {
+            return _replyInThread.apply(this, arguments);
+          };
+          _editMessage = function _editMessage3() {
+            _editMessage = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7(messageRow) {
+              return _regenerator["default"].wrap(function _callee7$(_context7) {
+                while (1) switch (_context7.prev = _context7.next) {
+                  case 0:
+                    if (!(me.value === _solidLogic.store.any(message, ns.foaf('maker')).value)) {
+                      _context7.next = 4;
+                      break;
+                    }
+                    closeToolbar(); // edit is a one-off action
+                    _context7.next = 4;
+                    return (0, _message.switchToEditor)(messageRow, message, channelObject, userContext);
+                  case 4:
+                  case "end":
+                    return _context7.stop();
+                }
+              }, _callee7);
+            }));
+            return _editMessage.apply(this, arguments);
+          };
+          editMessage = function _editMessage2(_x9) {
+            return _editMessage.apply(this, arguments);
+          };
+          _deleteMessage = function _deleteMessage3() {
+            _deleteMessage = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6() {
+              var author, msg, area;
+              return _regenerator["default"].wrap(function _callee6$(_context6) {
+                while (1) switch (_context6.prev = _context6.next) {
+                  case 0:
+                    author = _solidLogic.store.any(message, ns.foaf('maker'));
+                    if (me) {
+                      _context6.next = 5;
+                      break;
+                    }
+                    alert('You can\'t delete the message, you are not logged in.');
+                    _context6.next = 22;
+                    break;
+                  case 5:
+                    if (!me.sameTerm(author)) {
+                      _context6.next = 21;
+                      break;
+                    }
+                    _context6.prev = 6;
+                    _context6.next = 9;
+                    return channelObject.deleteMessage(message);
+                  case 9:
+                    _context6.next = 18;
+                    break;
+                  case 11:
+                    _context6.prev = 11;
+                    _context6.t0 = _context6["catch"](6);
+                    msg = 'Error deleting messaage ' + _context6.t0;
+                    debug.warn(msg);
+                    alert(msg);
+                    area = userContext.statusArea || messageRow.parentNode;
+                    area.appendChild(widgets.errorMessageBlock(dom, msg));
+                  case 18:
+                    messageRow.parentNode.removeChild(messageRow);
+                    _context6.next = 22;
+                    break;
+                  case 21:
+                    alert('You can\'t delete the message, you are not logged in as the author, ' + author);
+                  case 22:
+                    closeToolbar();
+                  case 23:
+                  case "end":
+                    return _context6.stop();
+                }
+              }, _callee6, null, [[6, 11]]);
+            }));
+            return _deleteMessage.apply(this, arguments);
+          };
+          deleteMessage = function _deleteMessage2() {
+            return _deleteMessage.apply(this, arguments);
+          }; // alain: TODO allow chat owner to fully delete message + sentiments and replacing messages
+          div = dom.createElement('div'); // is message deleted ?
+          _context10.next = 13;
+          return (0, _chatLogic.mostRecentVersion)(message).value;
+        case 13:
+          _context10.t0 = _context10.sent;
+          _context10.t1 = ns.schema('dateDeleted').value;
+          if (!(_context10.t0 === _context10.t1)) {
+            _context10.next = 17;
+            break;
           }
-        }, _callee);
-      }));
-      return function (_x3) {
-        return _ref.apply(this, arguments);
-      };
-    }());
-    function existingAction(actionClass) {
-      var actions = _solidLogic.store.each(null, ns.schema('agent'), context.me, doc).filter(function (x) {
-        return _solidLogic.store.holds(x, ns.rdf('type'), actionClass, doc);
-      }).filter(function (x) {
-        return _solidLogic.store.holds(x, ns.schema('target'), target, doc);
-      });
-      return actions.length ? actions[0] : null;
-    }
-    function refresh() {
-      action = existingAction(actionClass);
-      setColor();
-    }
-    var action;
-    button.refresh = refresh; // If the file changes, refresh live
-    refresh();
-    return button;
-  }
+          return _context10.abrupt("return", div);
+        case 17:
+          // Things only the original author can do
+          me = _solidLogic.authn.currentUser(); // If already logged on
+          if (me && _solidLogic.store.holds(message, ns.foaf('maker'), me)) {
+            // button to delete the message
+            div.appendChild(widgets.deleteButtonWithCheck(dom, div, 'message', deleteMessage));
+            // button to edit the message
+            div.appendChild(widgets.button(dom, _iconBase.icons.iconBase + PENCIL_ICON, 'edit', function () {
+              return editMessage(messageRow);
+            }));
+          } // if mine
+          // Things anyone can do if they have a bookmark list async
+          /*
+          var bookmarkButton = await bookmarks.renderBookmarksButton(userContext)
+          if (bookmarkButton) {
+           div.appendChild(bookmarkButton)
+          }
+          */
+          // Things anyone can do if they have a bookmark list
 
-  // THUMBS_UP_ICON
-  // https://schema.org/AgreeAction
-  me = _solidLogic.authn.currentUser(); // If already logged on
-  // debug.log('Actions 3' + mostRecentVersion(message).value + ' ' + ns.schema('dateDeleted').value + ' ' + (mostRecentVersion(message).value !== ns.schema('dateDeleted').value))
+          (0, _bookmarks.renderBookmarksButton)(userContext).then(function (bookmarkButton) {
+            if (bookmarkButton) div.appendChild(bookmarkButton);
+          });
 
-  if (me && (0, _chatLogic.mostRecentVersion)(message).value !== ns.schema('dateDeleted').value) {
-    var context1 = {
-      me: me,
-      dom: dom,
-      div: div
-    };
-    div.appendChild(sentimentButton(context1, message,
-    // @@ TODO use widgets.sentimentButton
-    _iconBase.icons.iconBase + THUMBS_UP_ICON, ns.schema('AgreeAction'), message.doc(), [ns.schema('DisagreeAction')]));
-    // Thumbs down
-    div.appendChild(sentimentButton(context1, message, _iconBase.icons.iconBase + THUMBS_DOWN_ICON, ns.schema('DisagreeAction'), message.doc(), [ns.schema('AgreeAction')]));
-  }
-  // X button to remove the tool UI itself
-  var cancelButton = div.appendChild(widgets.cancelButton(dom));
-  cancelButton.style["float"] = 'right';
-  cancelButton.firstChild.style.opacity = '0.3';
-  cancelButton.addEventListener('click', closeToolbar);
-  return div;
+          /**   Button to allow user to express a sentiment (like, endorse, etc) about a target
+           *
+           * @param context {Object} - Provide dom and me
+           * @param target {NamedNode} - The thing the user expresses an opnion about
+           * @param icon {uristring} - The icon to be used for the button
+           * @param actionClass {NamedNode} - The RDF class  - typically a subclass of schema:Action
+           * @param doc - {NamedNode} - the Solid document iunto which the data should be written
+           * @param mutuallyExclusive {Array<NamedNode>} - Any RDF classes of sentimentswhich are mutiually exclusive
+           */
+
+          // THUMBS_UP_ICON
+          // https://schema.org/AgreeAction
+          me = _solidLogic.authn.currentUser(); // If already logged on
+          _context10.t2 = me;
+          if (!_context10.t2) {
+            _context10.next = 28;
+            break;
+          }
+          _context10.next = 25;
+          return (0, _chatLogic.mostRecentVersion)(message).value;
+        case 25:
+          _context10.t3 = _context10.sent;
+          _context10.t4 = ns.schema('dateDeleted').value;
+          _context10.t2 = _context10.t3 !== _context10.t4;
+        case 28:
+          if (!_context10.t2) {
+            _context10.next = 32;
+            break;
+          }
+          context1 = {
+            me: me,
+            dom: dom,
+            div: div
+          };
+          div.appendChild(sentimentButton(context1, message,
+          // @@ TODO use widgets.sentimentButton
+          _iconBase.icons.iconBase + THUMBS_UP_ICON, ns.schema('AgreeAction'), message.doc(), [ns.schema('DisagreeAction')]));
+          // Thumbs down
+          div.appendChild(sentimentButton(context1, message, _iconBase.icons.iconBase + THUMBS_DOWN_ICON, ns.schema('DisagreeAction'), message.doc(), [ns.schema('AgreeAction')]));
+        case 32:
+          // Reply buttton
+
+          if (_solidLogic.store.any(message, ns.dct('created'))) {
+            // Looks like a messsage? Bar can be used for other things
+            div.appendChild(widgets.button(dom, _iconBase.icons.iconBase + REPLY_ICON, 'Reply in thread', /*#__PURE__*/(0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5() {
+              return _regenerator["default"].wrap(function _callee5$(_context5) {
+                while (1) switch (_context5.prev = _context5.next) {
+                  case 0:
+                    _context5.next = 2;
+                    return replyInThread();
+                  case 2:
+                  case "end":
+                    return _context5.stop();
+                }
+              }, _callee5);
+            }))));
+          }
+          // X button to remove the tool UI itself
+          cancelButton = div.appendChild(widgets.cancelButton(dom));
+          cancelButton.style["float"] = 'right';
+          cancelButton.firstChild.style.opacity = '0.3';
+          cancelButton.addEventListener('click', closeToolbar);
+          return _context10.abrupt("return", div);
+        case 38:
+        case "end":
+          return _context10.stop();
+      }
+    }, _callee10);
+  }));
+  return _messageToolbar.apply(this, arguments);
 }
 //# sourceMappingURL=messageTools.js.map
 
@@ -5411,6 +6119,11 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 */
 var DEFAULT_HELP_MENU_ICON = _index.icons.iconBase + 'noun_help.svg';
 var DEFAUL_SOLID_ICON_URL = 'https://solidproject.org/assets/img/solid-emblem.svg';
+
+/*
+  HeaderOptions allow for customizing the logo and menu list.  If a logo is not provided the default
+  is solid. Menulist will always show a link to logout and to the users profile.
+  */
 /**
  * Initialize header component, the header object returned depends on whether the user is authenticated.
  * @param store the data store
@@ -6084,10 +6797,7 @@ var TDEBUG = 32;
 var TALL = 63;
 
 /** @internal */
-var LogLevel;
-/** @internal */
-exports.LogLevel = LogLevel;
-(function (LogLevel) {
+var LogLevel = /*#__PURE__*/function (LogLevel) {
   LogLevel[LogLevel["Error"] = 1] = "Error";
   LogLevel[LogLevel["Warning"] = 2] = "Warning";
   LogLevel[LogLevel["Message"] = 4] = "Message";
@@ -6095,7 +6805,10 @@ exports.LogLevel = LogLevel;
   LogLevel[LogLevel["Info"] = 16] = "Info";
   LogLevel[LogLevel["Debug"] = 32] = "Debug";
   LogLevel[LogLevel["All"] = 63] = "All";
-})(LogLevel || (exports.LogLevel = LogLevel = {}));
+  return LogLevel;
+}({});
+/** @internal */
+exports.LogLevel = LogLevel;
 var _level = TERROR + TWARN + TMESG;
 /** @internal */
 var _ascending = false;
@@ -6304,7 +7017,30 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; } /* eslint-disable camelcase */ /**
+                                                                                                                                                                                                                    * Signing in, signing up, profile and preferences reloading
+                                                                                                                                                                                                                    * Type index management
+                                                                                                                                                                                                                    *
+                                                                                                                                                                                                                    * Many functions in this module take a context object which
+                                                                                                                                                                                                                    * holds various RDF symbols, add to it, and return a promise of it.
+                                                                                                                                                                                                                    *
+                                                                                                                                                                                                                    * * `me`                RDF symbol for the user's WebID
+                                                                                                                                                                                                                    * * `publicProfile`     The user's public profile, iff loaded
+                                                                                                                                                                                                                    * * `preferencesFile`   The user's personal preference file, iff loaded
+                                                                                                                                                                                                                    * * `index.public`      The user's public type index file
+                                                                                                                                                                                                                    * * `index.private`     The user's private type index file
+                                                                                                                                                                                                                    *
+                                                                                                                                                                                                                    * Not RDF symbols:
+                                                                                                                                                                                                                    * * `noun`            A string in english for the type of thing -- like "address book"
+                                                                                                                                                                                                                    * * `instance`        An array of nodes which are existing instances
+                                                                                                                                                                                                                    * * `containers`      An array of nodes of containers of instances
+                                                                                                                                                                                                                    * * `div`             A DOM element where UI can be displayed
+                                                                                                                                                                                                                    * * `statusArea`      A DOM element (opt) progress stuff can be displayed, or error messages
+                                                                                                                                                                                                                    * *
+                                                                                                                                                                                                                    * * Vocabulary:  "load" loads a file if it exists;
+                                                                                                                                                                                                                    * *  'Ensure" CREATES the file if it does not exist (if it can) and then loads it.
+                                                                                                                                                                                                                    * @packageDocumentation
+                                                                                                                                                                                                                    */ // eslint-disable-next-line camelcase
 var store = _solidLogic.solidLogicSingleton.store;
 var _solidLogicSingleton$ = _solidLogic.solidLogicSingleton.profile,
   loadPreferences = _solidLogicSingleton$.loadPreferences,
@@ -8421,7 +9157,10 @@ var _participation = __webpack_require__(/*! ./participation */ "./lib/participa
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2["default"])(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2["default"])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2["default"])(this, result); }; }
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } } /** **************
+                                                                                                                                                                                                                                                                                                                                           *   Notepad Widget
+                                                                                                                                                                                                                                                                                                                                           */ /** @module pad
+                                                                                                                                                                                                                                                                                                                                               */
 var store = _solidLogic.solidLogicSingleton.store;
 var PAD = (0, _rdflib.Namespace)('http://www.w3.org/ns/pim/pad#');
 /**
@@ -9242,7 +9981,8 @@ function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2["default"])(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2["default"])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2["default"])(this, result); }; }
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } } /* Manage a UI for the particpation of a person in any thing
+                                                                                                                                                                                                                                                                                                                                          */ // import { currentUser } from './authn/authn'
 var ParticipationTableElement = /*#__PURE__*/function (_HTMLTableElement) {
   (0, _inherits2["default"])(ParticipationTableElement, _HTMLTableElement);
   var _super = _createSuper(ParticipationTableElement);
@@ -9502,6 +10242,10 @@ function recordSharedPreferences(subject, context) {
   return new Promise(function (resolve, reject) {
     var sharedPreferences = kb.any(subject, ns.ui('sharedPreferences'));
     if (!sharedPreferences) {
+      if (!kb.updater.editable(subject.doc())) {
+        debug.log(" Cant make shared preferences, may not change ".concat(subject.doc));
+        resolve(context);
+      }
       var sp = $rdf.sym(subject.doc().uri + '#SharedPreferences');
       var ins = [$rdf.st(subject, ns.ui('sharedPreferences'), sp, subject.doc())];
       debug.log('Creating shared preferences ' + sp);
@@ -12101,6 +12845,8 @@ var _ = __webpack_require__(/*! .. */ "./lib/index.js");
     Copied from mashlib/src/global/metadata.ts
  */
 
+/* @ts-ignore  no-console */
+
 /**
  * @ignore exporting this only for the unit test
  */
@@ -12922,8 +13668,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2023-04-16T11:25:54Z',
-  commit: '1ef91399bd3693c0b362f240c37a76b1d87c9adb',
+  buildTime: '2023-04-16T14:58:29Z',
+  commit: 'efb14913e8cdcab31819cda6bc3dcab0f476bfec',
   npmInfo: {
     'solid-ui': '2.4.27',
     npm: '8.19.4',
@@ -13025,9 +13771,7 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
  * UI Widgets such as buttons
  * @packageDocumentation
  */
-
 /* global alert */
-
 var iconBase = _iconBase.icons.iconBase;
 var cancelIconURI = iconBase + 'noun_1180156.svg'; // black X
 var checkIconURI = iconBase + 'noun_1180158.svg'; // green checkmark; Continue
@@ -14710,7 +15454,10 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; } /*       F O R M S
+                                                                                                                                                                                     *
+                                                                                                                                                                                     *      A Vanilla Dom implementation of the form language
+                                                                                                                                                                                     */ /* eslint-disable multiline-ternary */ /* global alert */ // Note default export
 var checkMarkCharacter = "\u2713";
 var cancelCharacter = "\u2715";
 var dashCharacter = '-';
@@ -16706,7 +17453,14 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; } /* The Autocomplete Control with decorations
+                                                                                                                                                                                    
+                                                                                                                                                                                    This control has the buttons which control the state between editing, viewing, searching, accepting
+                                                                                                                                                                                    and so on.  See the state diagram in the documentation.  The AUtocomplete Picker does the main work.
+                                                                                                                                                                                    
+                                                                                                                                                                                    */
+// dbpediaParameters
+
 var WEBID_NOUN = 'Solid ID';
 var GREEN_PLUS = _iconBase.icons.iconBase + 'noun_34653_green.svg';
 var SEARCH_ICON = _iconBase.icons.iconBase + 'noun_Search_875351.svg';
@@ -17252,7 +18006,11 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; } /* Autocomplete Picker: Create and edit data using public data
+                                                                                                                                                                                    **
+                                                                                                                                                                                    ** As the data source is passed as a parameter, all kinds of APIa and query services can be used
+                                                                                                                                                                                    **
+                                                                                                                                                                                    */
 var AUTOCOMPLETE_THRESHOLD = 4; // don't check until this many characters typed
 var AUTOCOMPLETE_ROWS = 20; // 20?
 var AUTOCOMPLETE_ROWS_STRETCH = 40;
@@ -17352,7 +18110,8 @@ function _renderAutoComplete() {
                         };
                       }());
                       return row;
-                    };
+                    }; // console.log('@@ refreshList called')
+                    // rowForBinding
                     if (!inputEventHandlerLock) {
                       _context7.next = 5;
                       break;
@@ -17605,7 +18364,7 @@ function _renderAutoComplete() {
             // errorMessageBlock will log the stack to the console
             style.setStyle(errorRow, 'autocompleteRowStyle');
             errorRow.style.padding = '1em';
-          };
+          }; // refreshList
           // initialiize
           // const queryParams: QueryParameters = acOptions.queryParams
           targetClass = acOptions.targetClass;
@@ -17704,6 +18463,11 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 
 // import * as logic from '../index'
 // import { authn } from '../../../authn/index'
+
+// import { Binding } from '../widgets/forms/autocomplete/publicData'
+// import { nativeNameForLanguageCode, englishNameForLanguageCode } from './nativeNameForLanguageCode'
+
+// const { currentUser } = logic.authn
 
 var languageCodeURIBase = 'https://www.w3.org/ns/iana/language-code/'; /// @@ unsupported on the web (2021)
 exports.languageCodeURIBase = languageCodeURIBase;
@@ -19815,6 +20579,17 @@ var _iconBase = __webpack_require__(/*! ../iconBase */ "./lib/iconBase.js");
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var _templateObject;
+/**
+ *
+ * People Picker Pane
+ *
+ * This pane offers a mechanism for selecting a set of individuals, groups, or
+ * organizations to take some action on.
+ *
+ * Assumptions
+ *   - Assumes that the user has a type index entry for vcard:AddressBook. @@ bad assuption
+ *
+ */
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 var kb = _solidLogic.solidLogicSingleton.store;

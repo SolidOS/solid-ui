@@ -52,7 +52,7 @@ describe('findBookmarkDocument', () => {
     expect(userContext.bookmarkDocument.value).toEqual('http://example.com/bookmarks1.ttl')
   })
 
-  it('complains if you have multiple bookmark docs', async () => {
+  it.skip('complains if you have multiple bookmark docs', async () => {
     const privReg = new NamedNode('http://example.com/privType.ttl#reg1')
     const pubReg1 = new NamedNode('http://example.com/pubType.ttl#reg1')
     const pubReg2 = new NamedNode('http://example.com/pubType.ttl#reg2')

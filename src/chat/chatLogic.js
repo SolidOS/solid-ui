@@ -40,7 +40,7 @@ export class ChatChannel {
     as a replacement for an existing one.
     The old one iis left, and the two are linked
   */
-  async updateMessage (text, oldMsg = null, deleteIt) {
+  async updateMessage (text, oldMsg = null, deleteIt, thread = null) {
     const sts = []
     const now = new Date()
     const timestamp = '' + now.getTime()
@@ -52,7 +52,7 @@ export class ChatChannel {
     const me = authn.currentUser() // If already logged on
 
     if (oldMsg) { // edit message replaces old one
-      sts.push($rdf.st(mostRecentVersion(oldMsg), ns.dct('isReplacedBy'), message, chatDocument))
+      sts.push($rdf.st(await mostRecentVersion(oldMsg), ns.dct('isReplacedBy'), message, chatDocument))
       if (deleteIt) {
         sts.push($rdf.st(message, ns.schema('dateDeleted'), dateStamp, chatDocument))
       }
@@ -68,8 +68,14 @@ export class ChatChannel {
     if (me) {
       sts.push($rdf.st(message, ns.foaf('maker'), me, chatDocument))
     }
+    if (thread) {
+      sts.push($rdf.st(thread, ns.sioc('has_member'), message, chatDocument))
+      if (!thread.doc().sameTerm(message.doc())) {
+        sts.push($rdf.st(thread, ns.sioc('has_member'), message, thread.doc()))
+      }
+    }
     try {
-      await store.updater.update([], sts)
+      await store.updater.updateMany([], sts)
     } catch (err) {
       const msg = 'Error saving chat message: ' + err
       debug.warn(msg)
@@ -86,21 +92,80 @@ export class ChatChannel {
   async deleteMessage (message) {
     return this.updateMessage('(message deleted)', message, true)
   }
+
+  // Create a new thread of replies to the thread root message
+  //  or return one which already exists
+
+  async createThread (threadRoot) {
+    const already = store.each(threadRoot, ns.sioc('has_reply'), null, threadRoot.doc())
+      .filter(thread => store.holds(thread, ns.rdf('type'), ns.sioc('Thread'), thread.doc()))
+    if (already.length > 0) return already[0]
+
+    const thread = $rdf.sym(threadRoot.uri + '-thread')
+    const insert = [
+      $rdf.st(thread, ns.rdf('type'), ns.sioc('Thread'), thread.doc()),
+      $rdf.st(threadRoot, ns.sioc('has_reply'), thread, thread.doc())
+    ]
+    await store.updater.update([], insert)
+    return thread
+  }
 } // class ChatChannel
 
-export function originalVersion (message) {
+// ////////// Utility functions
+
+// Have to not loop forever if fed loops
+export async function allVersions (message) {
+  const versions = [message]
+  const done = {}
+  done[message.ur] = true
+  let m = message
+  while (true) { // earlier?
+    const prev = store.any(null, ns.dct('isReplacedBy'), m, m.doc())
+    if (!prev || done[prev.uri]) break
+    await store.fetcher.load(prev)
+    versions.unshift(prev)
+    done[prev.uri] = true
+    m = prev
+  }
+  m = message
+  while (true) { // later?
+    const next = store.any(m, ns.dct('isReplacedBy'), null, m.doc())
+    if (!next || done[next.uri]) break
+    versions.push(next)
+    done[next.uri] = true
+    m = next
+  }
+  return versions
+}
+
+export async function originalVersion (message) {
   let msg = message
+  const done = {}
+  // done[message.ur] = true
   while (msg) {
+    if (done[msg.uri]) {
+      debug.error('originalVersion: verion loop' + message)
+      return message
+    }
+    done[msg.uri] = true
     message = msg
+    await store.fetcher.load(message)
     msg = store.any(null, ns.dct('isReplacedBy'), message, message.doc())
   }
   return message
 }
 
-export function mostRecentVersion (message) {
+export async function mostRecentVersion (message) {
   let msg = message
+  const done = {}
   while (msg) {
+    if (done[msg.uri]) {
+      debug.error('mostRecentVersion: verion loop' + message)
+      return message
+    }
+    done[msg.uri] = true
     message = msg
+    await store.fetcher.load(message)
     msg = store.any(message, ns.dct('isReplacedBy'), null, message.doc())
   }
   return message

@@ -36,7 +36,7 @@ export function thread (dom, kb, subject, messageStore, options) {
 
   const div = dom.createElement('div')
   // eslint-disable-next-line prefer-const
-  let messageTable // Shared by initial build and addMessageFromBindings
+  let messageTable
 
   let me
 
@@ -87,12 +87,12 @@ export function thread (dom, kb, subject, messageStore, options) {
     form.appendChild(rhs)
     form.AJAR_date = '9999-01-01T00:00:00Z' // ISO format for field sort
 
-    const sendMessage = function () {
+    const sendMessage = async function () {
       // titlefield.setAttribute('class','pendingedit')
       // titlefield.disabled = true
       field.setAttribute('class', 'pendingedit')
       field.disabled = true
-      const { message, dateStamp, sts } = appendMsg(field.value)
+      const { message, dateStamp, sts } = await appendMsg(field.value)
 
       const sendComplete = function (uri, success, body) {
         if (!success) {
@@ -130,12 +130,12 @@ export function thread (dom, kb, subject, messageStore, options) {
 
       field.addEventListener(
         'keyup',
-        function (e) {
+        async function (e) {
           // User preference?
           if (e.keyCode === 13) {
             if (!e.altKey) {
               // Alt-Enter just adds a new line
-              sendMessage()
+              await sendMessage()
             }
           }
         },
@@ -162,11 +162,7 @@ export function thread (dom, kb, subject, messageStore, options) {
     return form
   }
 
-  /* const sendMessage = function (oldMsg, options) { // alain
-    // titlefield.setAttribute('class','pendingedit')
-    // titlefield.disabled = true
-    field.setAttribute('class', 'pendingedit')
-    field.disabled = true
+  const appendMsg = async function (fieldValue, oldMsg = {}, options = '') { // alain
     const sts = []
     const now = new Date()
     const timestamp = '' + now.getTime()
@@ -176,65 +172,7 @@ export function thread (dom, kb, subject, messageStore, options) {
 
     if (options === 'edit' || options === 'delete') {
       sts.push(
-        new $rdf.Statement(mostRecentVersion(oldMsg), DCT('isReplacedBy'), message, messageStore)
-      )
-    } else {
-      sts.push(
-        new $rdf.Statement(subject, ns.wf('message'), message, messageStore)
-      )
-    }
-    // sts.push(new $rdf.Statement(message, ns.dc('title'), store.literal(titlefield.value), messageStore))
-    const msgBody = options !== 'delete' ? field.value : `message deleted\nby ${nick(me)}`
-    sts.push(
-      new $rdf.Statement(
-        message,
-        ns.sioc('content'),
-        store.literal(msgBody),
-        messageStore
-      )
-    )
-    sts.push(
-      new $rdf.Statement(message, DCT('created'), dateStamp, messageStore)
-    )
-    if (me) {
-      sts.push(
-        new $rdf.Statement(message, ns.foaf('maker'), me, messageStore)
-      )
-    }
-
-    const sendComplete = function (uri, success, body) {
-      if (!success) {
-        form.appendChild(
-          UI.widgets.errorMessageBlock(dom, 'Error writing message: ' + body)
-        )
-      } else {
-        const bindings = {
-          '?msg': message,
-          '?content': store.literal(field.value),
-          '?date': dateStamp,
-          '?creator': me
-        }
-        renderMessage(bindings, false) // not green
-
-        field.value = '' // clear from out for reuse
-        field.setAttribute('class', '')
-        field.disabled = false
-      }
-    }
-    updater.update([], sts, sendComplete)
-  } */
-
-  const appendMsg = function (fieldValue, oldMsg = {}, options = '') { // alain
-    const sts = []
-    const now = new Date()
-    const timestamp = '' + now.getTime()
-    const dateStamp = $rdf.term(now)
-    // http://www.w3schools.com/jsref/jsref_obj_date.asp
-    const message = store.sym(messageStore.uri + '#' + 'Msg' + timestamp)
-
-    if (options === 'edit' || options === 'delete') {
-      sts.push(
-        new $rdf.Statement(mostRecentVersion(oldMsg), DCT('isReplacedBy'), message, messageStore)
+        new $rdf.Statement(await mostRecentVersion(oldMsg), DCT('isReplacedBy'), message, messageStore)
       )
     } else {
       sts.push(
@@ -417,12 +355,12 @@ export function thread (dom, kb, subject, messageStore, options) {
         sureButton.textContent = 'Delete message'
         td3.appendChild(sureButton).addEventListener(
           'click',
-          function (_event) { // alain test for delete or edit depending on me = maker
+          async function (_event) { // alain: test for delete or edit depending on me = maker
             td3.removeChild(sureButton)
             td3.removeChild(cancelButton)
             // deleteMessage(message) // alain or sendMessage(message, 'delete' or 'edit') //alain
             if (me.value === store.any(message, ns.foaf('maker')).value) {
-              const { sts } = appendMsg() // alain
+              const { sts } = await appendMsg() // alain
               updater.update([], sts)
             }
           },
