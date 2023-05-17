@@ -37,10 +37,6 @@ describe('getPublicKey', () => {
     jest.spyOn(helpers, 'pubKeyUrl').mockResolvedValue('https://alice.solidcommunity.net/profile/keys/publicKey.ttl')
     /* @ts-ignore */
     store.any.mockRejectedValue()
-    try {
-      await getPublicKey(webId)
-    } catch (err) {
-      expect(err).toBe(undefined)
-    }
+    expect(await getPublicKey(webId)).rejects.toThrowError()
   })
 })
