@@ -10,7 +10,7 @@ The following command will run all the tests.
 `npm run test`
 
 ### One file at a time
-There are a lot of tests in `solid-ui` so you will most likely want to run only the test you are working on at the moment. In order to do that you can use the following command.
+There are a lot of tests in `solid-ui`, so you will most likely want to run only the test you are working on at the moment. You can use the commands like the following to do that:
 `npm test <filetobetested>`
 `npm test test/unit/utils/keyHelpers/accessData.test.ts`
 
