@@ -21,7 +21,7 @@ Run the following command:
 Then you can see the results in `coverage/lcov-report/index.html`. If you are using VSCode you can right click and select to `Open in Browser Preview`. Otherwise, you can type the path in your browswer, for instance `file:///Users/<yourhomedirectory>/2023Development/solid-ui/coverage/lcov-report/index.html` is an example.
 
 ## Tips and Tricks
-The following are some tips and tricks in hopes to make testing easier.
+The following are some tips and tricks to make your testing easier.
 
 ### VSCode Debugging
 There is an extension that can be used to aide in debugging `jest` tests. To find out more about it, you can look at [Jest Runner](https://marketplace.visualstudio.com/items?itemName=firsttris.vscode-jest-runner).
