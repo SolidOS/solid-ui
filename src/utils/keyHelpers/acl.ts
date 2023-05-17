@@ -19,19 +19,15 @@ export async function setAcl (keyDoc: string, aclBody: string) {
     throw new Error('Key ACL doc not found!')
   }
 
-  // delete READ only keyAclDoc. This is possible if the webId is an owner
   try {
-    const response = await store.fetcher.webOperation('DELETE', keyAclDoc.value) // this may fail if webId is not an owner
-    debug.log('delete ' + keyAclDoc.value + ' ' + response.status) // should test 404 and 2xx
+    await store.fetcher.webOperation('PUT', keyAclDoc.value, {
+      data: aclBody,
+      contentType: 'text/turtle'
+    })
   } catch (err) {
-    if (err.response.status !== 404) { throw new Error(err) }
+    if (err?.response?.status !== 404) { throw new Error(err) }
     debug.log('delete ' + keyAclDoc.value + ' ' + err.response.status) // should test 404 and 2xx
   }
-
-  const aclResponse = await store.fetcher.webOperation('PUT', keyAclDoc.value, {
-    data: aclBody,
-    contentType: 'text/turtle'
-  })
 }
 
 /**
