@@ -82,17 +82,33 @@ export async function getPrivateKey (webId: NamedNode) {
   return privateKey as string
 }
 
+const deleteKey = async (keyDoc: string) => {
+  await store.fetcher.load(keyDoc)
+
+  const keyAclDoc = store.any(store.sym(keyDoc), store.sym('http://www.iana.org/assignments/link-relations/acl'))
+  if (keyAclDoc) {
+    // delete READ only keyAclDoc. This is possible if the webId is an owner
+    try {
+      const response = await store.fetcher.webOperation('DELETE', keyAclDoc.value) // this may fail if webId is not an owner
+      debug.log('delete ' + keyAclDoc.value + ' ' + response.status) // should test 404 and 2xx
+    } catch (err) {
+      if (err.response.status !== 404) { throw new Error(err) }
+      debug.log('delete ' + keyAclDoc.value + ' ' + err.response.status) // should test 404 and 2xx
+    }
+  }
+}
+
 /**
  * delete acl if keydoc exists
  * create/edit keyDoc
  * set keyDoc acl
  */
 async function saveKey (keyDoc: string, del, add, me: string = '') {
-  await store.fetcher.load(keyDoc)
+  // await store.fetcher.load(keyDoc) //think we can delete this
   // delete keyAclDoc
-  try {
+  /*  try { //here
     // get keyAcldoc
-    const keyAclDoc = store.any(store.sym(keyDoc), store.sym('http://www.iana.org/assignments/link-relations/acl'))
+   const keyAclDoc = store.any(store.sym(keyDoc), store.sym('http://www.iana.org/assignments/link-relations/acl'))
     if (keyAclDoc) {
       // delete READ only keyAclDoc. This is possible if the webId is an owner
       try {
@@ -103,12 +119,12 @@ async function saveKey (keyDoc: string, del, add, me: string = '') {
         debug.log('delete ' + keyAclDoc.value + ' ' + err.response.status) // should test 404 and 2xx
       }
     }
+  */
+  await deleteKey(keyDoc)
+  // save key
+  await store.updater.updateMany(del, add) // or a promise store.updater.update ?
 
-    // save key
-    await store.updater.updateMany(del, add) // or a promise store.updater.update ?
-
-    // create READ only ACL
-    const aclBody = keyAclBody(keyDoc, me)
-    await setAcl(keyDoc, aclBody)
-  } catch (err) { throw new Error(err) }
+  // create READ only ACL
+  const aclBody = keyAclBody(keyDoc, me)
+  await setAcl(keyDoc, aclBody)
 }
