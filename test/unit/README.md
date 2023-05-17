@@ -27,7 +27,7 @@ The following are some tips and tricks in hopes to make testing easier.
 There is an extension that can be used to aide in debugging jest tests. To find out more about it you can look at [Jest Runner](https://marketplace.visualstudio.com/items?itemName=firsttris.vscode-jest-runner)
 
 ### Mocking
-In solid-ui we do not currently follow a MVC pattern therefore there can be some difficulty in testing. The following are patterns to help with this.
+In `solid-ui`, we do not currently follow a MVC pattern, so testing is not always easy. The following are patterns to help with this.
 #### Store methods
 ##### Load
 In SolidOS we use [rdflib.js](https://github.com/linkeddata/rdflib.js/) to work with LinkedData. The way this works is that you first load the document you need to work with into the store. Once the document is loaded you can then access the data by using additional methods on the store such as `any, each,...`. Since the data that gets returned will need to be mocked, `load` doesn't need to do anything. See below for what you need to put in the top of your file in order to mock the `load` method.  
