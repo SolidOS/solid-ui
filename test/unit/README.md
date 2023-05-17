@@ -24,7 +24,7 @@ Then you can see the results in `coverage/lcov-report/index.html`. If you are us
 The following are some tips and tricks in hopes to make testing easier.
 
 ### VSCode Debugging
-There is an extension that can be used to aide in debugging jest tests. To find out more about it you can look at [Jest Runner](https://marketplace.visualstudio.com/items?itemName=firsttris.vscode-jest-runner)
+There is an extension that can be used to aide in debugging `jest` tests. To find out more about it, you can look at [Jest Runner](https://marketplace.visualstudio.com/items?itemName=firsttris.vscode-jest-runner).
 
 ### Mocking
 In `solid-ui`, we do not currently follow a MVC pattern, so testing is not always easy. The following are patterns to help with this.
