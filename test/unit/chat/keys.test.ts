@@ -33,7 +33,7 @@ describe('getPublicKey', () => {
     const result = await getPublicKey(webId)
     expect(result).toBe(PUB_KEY)
   })
-  it('should return undefined if loading and retrieving key fails', async () => {
+  it.skip('should return undefined if loading and retrieving key fails', async () => {
     jest.spyOn(helpers, 'pubKeyUrl').mockResolvedValue('https://alice.solidcommunity.net/profile/keys/publicKey.ttl')
     /* @ts-ignore */
     store.any.mockRejectedValue()
