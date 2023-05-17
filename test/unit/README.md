@@ -1,7 +1,7 @@
 # Solid-UI Unit Testing
 The purpose of this README is to provide guidance on how to write tests for solid-ui for beginners.
 
-Although we would love to have 100% test coverage, we realize that this is not a commericial product. solid-ui is an open source, volunteer built library that houses UI components that can be used to build Solid applications. We are working to increase test coverage on existing code, any help is much appreciated. If you add a new component to solid-ui, you should write tests to test the main functionality of your component in order for your PR to be merged.
+Although we would love to have 100% test coverage, we realize that this is not a commericial product. `solid-ui` is an open source, volunteer built library that houses UI components that can be used to build Solid applications. We are working to increase test coverage on existing code, and any help is much appreciated. If you add a new component to `solid-ui`, you should write tests to test the main functionality of your component before your PR will be merged.
 
 ## Running Tests
 
