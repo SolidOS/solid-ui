@@ -25,12 +25,12 @@ export const getPodRoot = async (webId: NamedNode) => {
     podRoot = storages.find((storage) => webIdURL.origin === new URL(storage.value).origin) as NamedNode
     if (!podRoot) podRoot = storages[0] as NamedNode
   }
-  return podRoot?.value
+  return podRoot as NamedNode
 }
 
 export const pubKeyUrl = async (webId: NamedNode) => {
   try {
-    return await getPodRoot(webId) + 'profile/keys/publicKey.ttl'
+    return (await getPodRoot(webId)).value + 'profile/keys/publicKey.ttl'
   } catch (err) { throw new Error(err) }
 }
 
@@ -41,7 +41,7 @@ export async function getExistingPublicKey (webId: NamedNode, publicKeyUrl: stri
 
 export const privKeyUrl = async (webId: NamedNode) => {
   try {
-    return await getPodRoot(webId) + 'profile/keys/privateKey.ttl'
+    return (await getPodRoot(webId)).value + 'profile/keys/privateKey.ttl'
   } catch (err) { throw new Error(err) }
 }
 

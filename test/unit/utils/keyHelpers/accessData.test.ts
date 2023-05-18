@@ -50,7 +50,7 @@ describe('cryptoKeyHelpers', () => {
     it('returns...', async () => {
       const webId = new NamedNode('https://alice.solid.example/profile/card#me')
       const result = await getPodRoot(webId)
-      expect(result).toBe('https://alice.solid.example')
+      expect(result.value).toBe('https://alice.solid.example')
     })
   })
   describe('getKeyIfExists', () => {
