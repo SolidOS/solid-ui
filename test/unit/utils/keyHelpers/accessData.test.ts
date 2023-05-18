@@ -38,7 +38,7 @@ describe('cryptoKeyHelpers', () => {
   describe.skip('privKeyUrl', () => {
     it('returns...', () => {
       const result = privKeyUrl(new NamedNode('https://alice.solid.example/profile/card#me'))
-      expect(result).toEqual('https://alice.solid.example/profile/keys/privateKey.ttl')
+      expect(result).toEqual('https://alice.solid.example/settings/keys/privateKey.ttl')
     })
   })
 
