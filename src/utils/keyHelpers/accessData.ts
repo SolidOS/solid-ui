@@ -25,12 +25,12 @@ export const getPodRoot = async (webId: NamedNode) => {
     podRoot = storages.find((storage) => webIdURL.origin === new URL(storage.value).origin) as NamedNode
     if (!podRoot) podRoot = storages[0] as NamedNode
   }
-  return podRoot?.value
+  return podRoot as NamedNode
 }
 
 export const pubKeyUrl = async (webId: NamedNode) => {
   try {
-    return await getPodRoot(webId) + 'profile/keys/publicKey.ttl'
+    return (await getPodRoot(webId)).value + 'profile/keys/publicKey.ttl'
   } catch (err) { throw new Error(err) }
 }
 
@@ -40,8 +40,12 @@ export async function getExistingPublicKey (webId: NamedNode, publicKeyUrl: stri
 }
 
 export const privKeyUrl = async (webId: NamedNode) => {
+  let settings = store.any(webId, ns.space('preferencesFile'), null, webId.doc())?.value
+  settings = settings?.split('/').slice(0, -1).join('/')
   try {
-    return await getPodRoot(webId) + 'profile/keys/privateKey.ttl'
+    const podRoot = await getPodRoot(webId)
+    if (!settings?.startsWith(podRoot.value)) throw new Error(`/settings/ is expected to be in ${podRoot.value}`)
+    return `${settings}/keys/privateKey.ttl`
   } catch (err) { throw new Error(err) }
 }
 

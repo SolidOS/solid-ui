@@ -82,7 +82,7 @@ export async function getPrivateKey (webId: NamedNode) {
   return privateKey as string
 }
 
-const deleteKey = async (keyDoc: string) => {
+const deleteKeyAcl = async (keyDoc: string) => {
   await store.fetcher.load(keyDoc)
 
   const keyAclDoc = store.any(store.sym(keyDoc), store.sym('http://www.iana.org/assignments/link-relations/acl'))
@@ -120,7 +120,7 @@ async function saveKey (keyDoc: string, del, add, me: string = '') {
       }
     }
   */
-  await deleteKey(keyDoc)
+  await deleteKeyAcl(keyDoc)
   // save key
   await store.updater.updateMany(del, add) // or a promise store.updater.update ?
 

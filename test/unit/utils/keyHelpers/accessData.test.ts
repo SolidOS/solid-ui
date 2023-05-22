@@ -38,7 +38,7 @@ describe('cryptoKeyHelpers', () => {
   describe.skip('privKeyUrl', () => {
     it('returns...', () => {
       const result = privKeyUrl(new NamedNode('https://alice.solid.example/profile/card#me'))
-      expect(result).toEqual('https://alice.solid.example/profile/keys/privateKey.ttl')
+      expect(result).toEqual('https://alice.solid.example/settings/keys/privateKey.ttl')
     })
   })
 
@@ -50,7 +50,7 @@ describe('cryptoKeyHelpers', () => {
     it('returns...', async () => {
       const webId = new NamedNode('https://alice.solid.example/profile/card#me')
       const result = await getPodRoot(webId)
-      expect(result).toBe('https://alice.solid.example')
+      expect(result.value).toBe('https://alice.solid.example')
     })
   })
   describe('getKeyIfExists', () => {
