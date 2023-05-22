@@ -135,7 +135,7 @@ export function renderMessageRow (channelObject, message, fresh, options, userCo
   let unsignedMessage = false
   const colorizeByAuthor =
     options.colorizeByAuthor === '1' || options.colorizeByAuthor === true
-  debug.log('HELLOOOOO SI am here using this render')
+    
   const creator = store.any(message, ns.foaf('maker'))
   const date = store.any(message, ns.dct('created'))
   const latestVersion = mostRecentVersion(message)
