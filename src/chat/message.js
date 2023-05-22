@@ -19,7 +19,7 @@ import * as style from '../style'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
 import { getBlankMsg, verifySignature, SEC } from './signature'
-import { getPrivateKey, getPublicKey } from './keys'
+import { getPublicKey } from './keys'
 
 const dom = window.document
 const messageBodyStyle = style.messageBodyStyle
@@ -27,7 +27,11 @@ const messageBodyStyle = style.messageBodyStyle
 const label = utils.label
 
 /**
+ * elementForImageURI
  * HTML component for an image
+ * @param imageUri
+ * @param options { inlineImageHeightEms }
+ * @returns HTMLAnchorElement For Image
  */
 export function elementForImageURI (imageUri, options) {
   const img = dom.createElement('img')
@@ -61,24 +65,30 @@ const anchor = function (text, term) {
   return a
 }
 
-function nick (person) {
+function nickname (person) {
   const s = store.any(person, ns.foaf('nick'))
   if (s) return '' + s.value
   return '' + label(person)
 }
 
 /**
+ * creatorAndDate
  * Displays creator and date for a chat message
  * inside the `td1` element
+ * @param td1
+ * @param creator
+ * @param date
+ * @param message
+ * @returns HTMLAnchorElement For Image
  */
 export function creatorAndDate (td1, creator, date, message) {
-  const nickAnchor = td1.appendChild(anchor(nick(creator), creator))
+  const nickAnchor = td1.appendChild(anchor(nickname(creator), creator))
   if (creator.uri) {
     store.fetcher.nowOrWhenFetched(creator.doc(), undefined, function (
       _ok,
       _body
     ) {
-      nickAnchor.textContent = nick(creator)
+      nickAnchor.textContent = nickname(creator)
     })
   }
   td1.appendChild(dom.createElement('br'))
@@ -86,8 +96,14 @@ export function creatorAndDate (td1, creator, date, message) {
 }
 
 /**
+ * creatorAndDateHorizontal
  * Horizontally displays creator and date for a chat message
  * inside the `td1` element
+ * @param td1
+ * @param creator
+ * @param date
+ * @param message
+ * @returns HTMLAnchorElement For Image
  */
 export function creatorAndDateHorizontal (td1, creator, date, message) {
   const nickAnchor = td1.appendChild(anchor(label(creator), creator))
@@ -96,7 +112,7 @@ export function creatorAndDateHorizontal (td1, creator, date, message) {
       _ok,
       _body
     ) {
-      nickAnchor.textContent = nick(creator)
+      nickAnchor.textContent = nickname(creator)
     })
   }
   const dateBit = td1.appendChild(anchor(date, message))
@@ -106,12 +122,20 @@ export function creatorAndDateHorizontal (td1, creator, date, message) {
 }
 
 /**
+ * renderMessageRow
  * Renders a chat message, read-only mode
+ * @param channelObject
+ * @param message
+ * @param fresh
+ * @param options
+ * @param userContext
+ * @returns Message Row HTML Table Element
  */
 export function renderMessageRow (channelObject, message, fresh, options, userContext) {
+  let unsignedMessage = false
   const colorizeByAuthor =
     options.colorizeByAuthor === '1' || options.colorizeByAuthor === true
-
+  debug.log('HELLOOOOO SI am here using this render')
   const creator = store.any(message, ns.foaf('maker'))
   const date = store.any(message, ns.dct('created'))
   const latestVersion = mostRecentVersion(message)
@@ -130,10 +154,10 @@ export function renderMessageRow (channelObject, message, fresh, options, userCo
   msg.maker = creator.uri
 
   // unsigned message
-  if (!signature?.value) debug.warn(msgId.uri + ' is unsigned') // TODO replace with UI (colored message ?)
-
-  // signed message, get public key and check signature
-  else {
+  if (!signature?.value) {
+    unsignedMessage = true
+    debug.warn(msgId.uri + ' is unsigned') // TODO replace with UI (colored message ?)
+  } else { // signed message, get public key and check signature
     getPublicKey(creator).then(publicKey => {
       debug.log(creator.uri + '\n' + msg.created + '\n' + msg.id + '\n' + publicKey)
       if (!publicKey) {
@@ -155,6 +179,7 @@ export function renderMessageRow (channelObject, message, fresh, options, userCo
   const sortDate = store.the(originalMessage, ns.dct('created'), null, originalMessage.doc()) // In message
 
   const messageRow = dom.createElement('tr')
+  if (unsignedMessage) messageRow.setAttribute('style', 'background-color: red')
   messageRow.AJAR_date = sortDate.value
   messageRow.AJAR_subject = message
 
@@ -262,7 +287,7 @@ export function renderMessageRow (channelObject, message, fresh, options, userCo
     toolsTD.appendChild(tools)
   })
   return messageRow
-}
+} // END OF RENDERMESSAGE
 
 export function switchToEditor (messageRow, message, channelObject, userContext) {
   const messageTable = messageRow.parentNode
