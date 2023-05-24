@@ -62,7 +62,25 @@ export async function getKeyIfExists (webId: NamedNode, keyUrl: string, keyType:
     const key = store.any(webId, store.sym(CERT + keyType))
     return key?.value // as NamedNode
   } catch (err) {
-    debug.log('createIfNotExists doc FAILED: ' + keyUrl + ': ' + err)
-    throw err
+    if (err.response.status === 404) {
+      debug.log(
+        'createIfNotExists: doc does NOT exist, will create... ' + keyUrl
+      )
+      try {
+        await store.fetcher.webOperation('PUT', keyUrl, {
+          data: '',
+          contentType: 'text/turtle'
+        })
+      } catch (err) {
+        debug.log('createIfNotExists doc FAILED: ' + keyUrl + ': ' + err)
+        throw err
+      }
+      delete store.fetcher.requested[keyUrl] // delete cached 404 error
+      // debug.log('createIfNotExists doc created ok ' + doc)
+      return undefined // response
+    } else {
+      debug.log('createIfNotExists doc FAILED: ' + keyUrl + ': ' + err)
+      throw err
+    }
   }
 }
