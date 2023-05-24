@@ -1,4 +1,4 @@
-import { CER, SEC, getMsgHash, serializeMsg, signMsg, verifySignature } from '../../../src/chat/signature'
+import { getMsgHash, serializeMsg, signMsg, verifySignature } from '../../../src/chat/signature'
 import { sha256 } from '@noble/hashes/sha256'
 
 const PRIV_KEY = 'a11bc5d2eee6cdb3b37f5473a712cad905ccfb13fb2ccdbf1be0a1ac4fdc7d2a'

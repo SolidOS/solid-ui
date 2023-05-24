@@ -144,7 +144,7 @@ export function renderMessageRow (channelObject, message, fresh, options, userCo
   // use latest content if same owner, else use original
   const msgId = creator.uri === latestVersionCreator.uri ? latestVersion : message
   const content = store.any(msgId, ns.sioc('content'))
-  const signature = store.any(msgId, $rdf.sym(`${SEC}Proof`))
+  const signature = store.any(msgId, $rdf.sym(`${SEC}proofValue`))
 
   // set message object
   const msg = getBlankMsg()

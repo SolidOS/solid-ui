@@ -95,7 +95,7 @@ export class ChatChannel {
       debug.warn('sig ' + sig)
       debug.warn('verifySign ' + verify)
       debug.warn(msg) */
-      sts.push($rdf.st(message, $rdf.sym(`${SEC}Proof`), $rdf.lit(sig), chatDocument))
+      sts.push($rdf.st(message, $rdf.sym(`${SEC}proofValue`), $rdf.lit(sig), chatDocument))
     }
     try {
       await store.updater.update([], sts)

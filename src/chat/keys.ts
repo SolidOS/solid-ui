@@ -1,7 +1,7 @@
 import * as debug from '../debug'
 import { schnorr } from '@noble/curves/secp256k1'
 import { bytesToHex } from '@noble/hashes/utils'
-import { CERT } from './signature'
+import * as ns from '../ns'
 import { store } from 'solid-logic'
 import { NamedNode } from 'rdflib'
 import * as $rdf from 'rdflib'
@@ -28,7 +28,7 @@ export async function getPublicKey (webId: NamedNode) {
   const publicKeyDoc = await pubKeyUrl(webId)
   try {
     await store.fetcher.load(publicKeyDoc) // url.href)
-    const key = store.any(webId, store.sym(CERT + 'PublicKey'))
+    const key = store.any(webId, ns.solid('publicKey'))
     return key?.value // as NamedNode
   } catch (err) {
     return undefined
@@ -56,24 +56,23 @@ export async function getPrivateKey (webId: NamedNode) {
   if (!privateKey || !publicKey || !validPublicKey) {
     let del: any[] = []
     let add: any[] = []
-    // if (privateKey) del.push($rdf.st(webId, store.sym(CERT + 'PrivateKey'), $rdf.lit(privateKey), store.sym(privateKeyDoc)))
 
     if (!privateKey) {
       // add = []
       privateKey = generatePrivateKey()
-      add = [$rdf.st(webId, store.sym(CERT + 'PrivateKey'), $rdf.literal(privateKey), store.sym(privateKeyDoc))]
+      add = [$rdf.st(webId, ns.solid('privateKey'), $rdf.literal(privateKey), store.sym(privateKeyDoc))]
       await saveKey(privateKeyDoc, [], add, webId.uri)
     }
     if (!publicKey || !validPublicKey) {
       del = []
       // delete invalid public key
       if (publicKey) {
-        del = [$rdf.st(webId, store.sym(CERT + 'PublicKey'), $rdf.lit(publicKey), store.sym(publicKeyDoc))]
+        del = [$rdf.st(webId, ns.solid('publicKey'), $rdf.lit(publicKey), store.sym(publicKeyDoc))]
         debug.log(del)
       }
       // update new valid key
       const newPublicKey = generatePublicKey(privateKey)
-      add = [$rdf.st(webId, store.sym(CERT + 'PublicKey'), $rdf.literal(newPublicKey), store.sym(publicKeyDoc))]
+      add = [$rdf.st(webId, ns.solid('publicKey'), $rdf.literal(newPublicKey), store.sym(publicKeyDoc))]
       await saveKey(publicKeyDoc, del, add)
     }
     const keyContainer = privateKeyDoc.substring(0, privateKeyDoc.lastIndexOf('/') + 1)

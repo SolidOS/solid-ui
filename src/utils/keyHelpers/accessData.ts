@@ -1,5 +1,5 @@
 import * as debug from '../../debug'
-import { CERT } from '../../chat/signature'
+// import { CERT } from '../../chat/signature'
 import { store } from 'solid-logic'
 import * as ns from '../../ns'
 import { NamedNode } from 'rdflib'
@@ -36,7 +36,7 @@ export const pubKeyUrl = async (webId: NamedNode) => {
 
 export async function getExistingPublicKey (webId: NamedNode, publicKeyUrl: string) {
   // find publickey
-  return await getKeyIfExists(webId, publicKeyUrl, 'PublicKey')
+  return await getKeyIfExists(webId, publicKeyUrl, 'publicKey')
 }
 
 export const privKeyUrl = async (webId: NamedNode) => {
@@ -51,15 +51,15 @@ export const privKeyUrl = async (webId: NamedNode) => {
 
 export async function getExistingPrivateKey (webId: NamedNode, privateKeyUrl: string) {
   // find privateKey
-  return await getKeyIfExists(webId, privateKeyUrl, 'PrivateKey')
+  return await getKeyIfExists(webId, privateKeyUrl, 'privateKey')
 }
 
-type KeyType = 'PublicKey' | 'PrivateKey'
+type KeyType = 'publicKey' | 'privateKey'
 
 export async function getKeyIfExists (webId: NamedNode, keyUrl: string, keyType: KeyType) {
   try {
     await store.fetcher.load(keyUrl)
-    const key = store.any(webId, store.sym(CERT + keyType))
+    const key = store.any(webId, ns.solid(keyType)) // store.sym(CERT + keyType))
     return key?.value // as NamedNode
   } catch (err) {
     if (err.response.status === 404) {

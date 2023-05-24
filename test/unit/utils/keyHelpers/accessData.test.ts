@@ -58,18 +58,18 @@ describe('cryptoKeyHelpers', () => {
     store.any.mockReturnValue({ value: PUB_KEY })
     it('returns a key if it exists', async () => {
       const webId = new NamedNode('https://alice.solid.example/profile/card#me')
-      const result = await getKeyIfExists(webId, PUB_KEY, 'PublicKey')
+      const result = await getKeyIfExists(webId, PUB_KEY, 'publicKey')
       expect(result).toBe(PUB_KEY)
     })
     it.skip('throws an error when load fails', async () => {
       // need to check if 'any' can throw an error
       const webId = new NamedNode('https://alice.solid.example/profile/card#me')
-      const result = await getKeyIfExists(webId, 'testing', 'PublicKey')
+      const result = await getKeyIfExists(webId, 'testing', 'publicKey')
       expect(result).toBe('testing')
     })
     it.skip('returns undefined if key not found', async () => {
       const webId = new NamedNode('https://alice.solid.example/profile/card#me')
-      const result = await getKeyIfExists(webId, PUB_KEY, 'PublicKey')
+      const result = await getKeyIfExists(webId, PUB_KEY, 'publicKey')
       expect(result).toBe(PUB_KEY)
     })
   })
