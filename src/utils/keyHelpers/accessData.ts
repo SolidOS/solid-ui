@@ -1,5 +1,4 @@
 import * as debug from '../../debug'
-// import { CERT } from '../../chat/signature'
 import { store } from 'solid-logic'
 import * as ns from '../../ns'
 import { NamedNode } from 'rdflib'

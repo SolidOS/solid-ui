@@ -61,7 +61,6 @@ export class ChatChannel {
         sts.push($rdf.st(mostRecentVersion(oldMsg), ns.dct('isReplacedBy'), message, chatDocument))
         if (deleteIt) { // we need to add a specific signature, else anyone can delete a msg ?
           sts.push($rdf.st(message, ns.schema('dateDeleted'), dateStamp, chatDocument))
-          // msg.dateDeleted = dateStamp
         }
       } else {
         const errMsg = 'Error you cannot delete/edit a message from someone else : \n' + oldMsgMaker.uri
@@ -86,15 +85,8 @@ export class ChatChannel {
       msg.maker = me.uri
       // privateKey the cached private key of me, cached in store
       const privateKey = await getPrivateKey(me) // me.uri)
-      // const privateKey0 = 'a11bc5d2eee6cdb3b37f5473a712cad905ccfb13fb2ccdbf1be0a1ac4fdc7d2a'
 
       const sig = signMsg(msg, privateKey)
-      // const pubKey0 = '023a9da707bee1302f66083c9d95673ff969b41607a66f52686fa774d64ceb87'
-      /* const pubKey = await getPublicKey(me)
-      const verify = verifySignature(sig, msg, pubKey) // alain to remove
-      debug.warn('sig ' + sig)
-      debug.warn('verifySign ' + verify)
-      debug.warn(msg) */
       sts.push($rdf.st(message, $rdf.sym(`${SEC}proofValue`), $rdf.lit(sig), chatDocument))
     }
     try {
@@ -183,7 +175,6 @@ export async function _createIfNotExists (doc, contentType = 'text/turtle', data
       throw err
     }
   }
-  // debug.log('createIfNotExists: doc exists, all good: ' + doc)
   return response
 }
 // ends

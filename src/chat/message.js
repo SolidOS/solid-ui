@@ -312,8 +312,6 @@ export function renderMessageEditor (channelObject, messageTable, userContext, o
 
   async function sendMessage (text, fromMainField) {
     function sendComplete (message, _text2) {
-      // const dateStamp = store.any(message, ns.dct('created'), null, message.doc())
-      // const content = $rdf.literal(text2)
       insertMessageIntoTable(channelObject, messageTable, message, false, options, userContext) // not green
 
       if (originalMessage) { // editing another message

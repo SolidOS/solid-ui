@@ -103,22 +103,6 @@ const deleteKeyAcl = async (keyDoc: string) => {
  * set keyDoc acl
  */
 async function saveKey (keyDoc: string, del, add, me: string = '') {
-  // await store.fetcher.load(keyDoc) //think we can delete this
-  // delete keyAclDoc
-  /*  try { //here
-    // get keyAcldoc
-   const keyAclDoc = store.any(store.sym(keyDoc), store.sym('http://www.iana.org/assignments/link-relations/acl'))
-    if (keyAclDoc) {
-      // delete READ only keyAclDoc. This is possible if the webId is an owner
-      try {
-        const response = await store.fetcher.webOperation('DELETE', keyAclDoc.value) // this may fail if webId is not an owner
-        debug.log('delete ' + keyAclDoc.value + ' ' + response.status) // should test 404 and 2xx
-      } catch (err) {
-        if (err.response.status !== 404) { throw new Error(err) }
-        debug.log('delete ' + keyAclDoc.value + ' ' + err.response.status) // should test 404 and 2xx
-      }
-    }
-  */
   await deleteKeyAcl(keyDoc)
   // save key
   await store.updater.updateMany(del, add) // or a promise store.updater.update ?
