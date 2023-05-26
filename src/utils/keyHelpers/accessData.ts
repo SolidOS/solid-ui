@@ -3,7 +3,7 @@ import { store } from 'solid-logic'
 import * as ns from '../../ns'
 import { NamedNode } from 'rdflib'
 
-export const getPodRoot = async (webId: NamedNode) => {
+/* export const getPodRoot = async (webId: NamedNode) => {
   const webIdURL = new URL(webId.uri)
   // find storages in webId document
   await store.fetcher.load(webId.uri)
@@ -24,13 +24,18 @@ export const getPodRoot = async (webId: NamedNode) => {
     podRoot = storages.find((storage) => webIdURL.origin === new URL(storage.value).origin) as NamedNode
     if (!podRoot) podRoot = storages[0] as NamedNode
   }
+
   return podRoot as NamedNode
-}
+} */
 
 export const pubKeyUrl = async (webId: NamedNode) => {
-  try {
+  let parentSettings = store.any(webId, ns.space('preferencesFile'), null, webId.doc())?.value
+  parentSettings = parentSettings?.split('/').slice(0, -2).join('/')
+  if (!parentSettings) throw new Error(`prefererencesFile is expected to exist in ${webId.doc}`)
+  return `${parentSettings}/profile/keys/publicKey.ttl`
+  /* try {
     return (await getPodRoot(webId)).value + 'profile/keys/publicKey.ttl'
-  } catch (err) { throw new Error(err) }
+  } catch (err) { throw new Error(err) } */
 }
 
 export async function getExistingPublicKey (webId: NamedNode, publicKeyUrl: string) {
@@ -41,11 +46,13 @@ export async function getExistingPublicKey (webId: NamedNode, publicKeyUrl: stri
 export const privKeyUrl = async (webId: NamedNode) => {
   let settings = store.any(webId, ns.space('preferencesFile'), null, webId.doc())?.value
   settings = settings?.split('/').slice(0, -1).join('/')
-  try {
+  if (!settings) throw new Error(`prefererencesFile is expected to exist in ${webId.doc}`)
+  return `${settings}/keys/privateKey.ttl`
+  /* try {
     const podRoot = await getPodRoot(webId)
     if (!settings?.startsWith(podRoot.value)) throw new Error(`/settings/ is expected to be in ${podRoot.value}`)
     return `${settings}/keys/privateKey.ttl`
-  } catch (err) { throw new Error(err) }
+  } catch (err) { throw new Error(err) } */
 }
 
 export async function getExistingPrivateKey (webId: NamedNode, privateKeyUrl: string) {
