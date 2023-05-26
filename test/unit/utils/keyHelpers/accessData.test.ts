@@ -1,6 +1,6 @@
 import { store } from 'solid-logic'
 import Fetcher from 'rdflib/lib/fetcher'
-import { getKeyIfExists, pubKeyUrl, privKeyUrl, getPodRoot, getExistingPublicKey, getExistingPrivateKey } from '../../../../src/utils/keyHelpers/accessData'
+import { getKeyIfExists, pubKeyUrl, privKeyUrl, getExistingPublicKey, getExistingPrivateKey } from '../../../../src/utils/keyHelpers/accessData'
 import { NamedNode } from 'rdflib'
 
 /* data */
@@ -42,17 +42,17 @@ describe('cryptoKeyHelpers', () => {
     })
   })
 
-  describe('getPodRoot', () => {
+  /* describe('getPodRoot', () => {
     /* @ts-ignore */
-    store.fetcher.webOperation.mockImplementationOnce(() => {})
-    /* @ts-ignore */
-    store.each.mockImplementationOnce(() => [{ value: 'https://alice.solid.example' }])
+  // store.fetcher.webOperation.mockImplementationOnce(() => {})
+  /* @ts-ignore */
+  /* store.each.mockImplementationOnce(() => [{ value: 'https://alice.solid.example' }])
     it('returns...', async () => {
       const webId = new NamedNode('https://alice.solid.example/profile/card#me')
       const result = await getPodRoot(webId)
       expect(result.value).toBe('https://alice.solid.example')
     })
-  })
+  }) */
   describe('getKeyIfExists', () => {
     /* @ts-ignore */
     store.any.mockReturnValue({ value: PUB_KEY })

@@ -1,5 +1,4 @@
 import { NamedNode } from 'rdflib';
-export declare const getPodRoot: (webId: NamedNode) => Promise<NamedNode>;
 export declare const pubKeyUrl: (webId: NamedNode) => Promise<string>;
 export declare function getExistingPublicKey(webId: NamedNode, publicKeyUrl: string): Promise<string | undefined>;
 export declare const privKeyUrl: (webId: NamedNode) => Promise<string>;
