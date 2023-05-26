@@ -1,6 +1,6 @@
 {
   "name": "solid-ui",
-  "version": "2.4.27",
+  "version": "2.4.28",
   "description": "UI library for writing Solid read-write-web applications",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -56,6 +56,7 @@
   "homepage": "https://github.com/solidos/solid-ui",
   "dependencies": {
     "16": "^0.0.2",
+    "@noble/curves": "^1.0.0",
     "acorn": "^7.4.1",
     "escape-html": "^1.0.3",
     "eslint-plugin-n": "^15.6.1",
@@ -95,6 +96,7 @@
     "@typescript-eslint/eslint-plugin": "^5.55.0",
     "@typescript-eslint/parser": "^5.55.0",
     "babel-loader": "^8.3.0",
+    "crypto": "^1.0.1",
     "eslint": "^8.36.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-import-resolver-typescript": "^2.7.1",
@@ -102,6 +104,7 @@
     "eslint-plugin-jest": "^26.9.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.1.1",
+    "get-random-values": "^2.1.0",
     "html-webpack-plugin": "^5.5.0",
     "husky": "^7.0.4",
     "isomorphic-fetch": "^3.0.0",

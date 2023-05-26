@@ -9,6 +9,8 @@ import { store, authn } from 'solid-logic'
 import * as ns from '../ns'
 import * as $rdf from 'rdflib' // pull in first avoid cross-refs
 import * as utils from '../utils'
+import { getBlankMsg, signMsg, SEC, verifySignature } from './signature'
+import { getPrivateKey, getPublicKey } from './keys'
 
 /* The Solid logic for a 'LongChat'
 */
@@ -51,10 +53,20 @@ export class ChatChannel {
 
     const me = authn.currentUser() // If already logged on
 
+    const msg = getBlankMsg()
+    msg.id = message.uri
     if (oldMsg) { // edit message replaces old one
-      sts.push($rdf.st(await mostRecentVersion(oldMsg), ns.dct('isReplacedBy'), message, chatDocument))
-      if (deleteIt) {
-        sts.push($rdf.st(message, ns.schema('dateDeleted'), dateStamp, chatDocument))
+      const oldMsgMaker = store.any(oldMsg, ns.foaf('maker')) // may not be needed here, but needed on READ
+      if (oldMsgMaker.uri === me.uri) {
+        sts.push($rdf.st(mostRecentVersion(oldMsg), ns.dct('isReplacedBy'), message, chatDocument))
+        if (deleteIt) { // we need to add a specific signature, else anyone can delete a msg ?
+          sts.push($rdf.st(message, ns.schema('dateDeleted'), dateStamp, chatDocument))
+        }
+      } else {
+        const errMsg = 'Error you cannot delete/edit a message from someone else : \n' + oldMsgMaker.uri
+        debug.warn(errMsg)
+        alert(errMsg)
+        throw new Error(errMsg)
       }
     } else { // link new message to channel
       sts.push($rdf.st(this.channel, ns.wf('message'), message, chatDocument))
@@ -62,11 +74,20 @@ export class ChatChannel {
     sts.push(
       $rdf.st(message, ns.sioc('content'), store.literal(text), chatDocument)
     )
+    msg.content = text
+
     sts.push(
       $rdf.st(message, ns.dct('created'), dateStamp, chatDocument)
     )
+    msg.created = dateStamp.value
     if (me) {
       sts.push($rdf.st(message, ns.foaf('maker'), me, chatDocument))
+      msg.maker = me.uri
+      // privateKey the cached private key of me, cached in store
+      const privateKey = await getPrivateKey(me) // me.uri)
+
+      const sig = signMsg(msg, privateKey)
+      sts.push($rdf.st(message, $rdf.sym(`${SEC}proofValue`), $rdf.lit(sig), chatDocument))
     }
     if (thread) {
       sts.push($rdf.st(thread, ns.sioc('has_member'), message, chatDocument))
@@ -77,10 +98,10 @@ export class ChatChannel {
     try {
       await store.updater.updateMany([], sts)
     } catch (err) {
-      const msg = 'Error saving chat message: ' + err
-      debug.warn(msg)
-      alert(msg)
-      throw new Error(msg)
+      const errMsg = 'Error saving chat message: ' + err
+      debug.warn(errMsg)
+      alert(errMsg)
+      throw new Error(errMsg)
     }
     return message
   }
@@ -219,7 +240,6 @@ export async function _createIfNotExists (doc, contentType = 'text/turtle', data
       throw err
     }
   }
-  // debug.log('createIfNotExists: doc exists, all good: ' + doc)
   return response
 }
 // ends
