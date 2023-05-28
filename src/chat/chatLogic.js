@@ -58,7 +58,13 @@ export class ChatChannel {
     if (oldMsg) { // edit message replaces old one
       const oldMsgMaker = store.any(oldMsg, ns.foaf('maker')) // may not be needed here, but needed on READ
       if (oldMsgMaker.uri === me.uri) {
-        sts.push($rdf.st(mostRecentVersion(oldMsg), ns.dct('isReplacedBy'), message, chatDocument))
+        const oldMsgMostRecentVersion = await mostRecentVersion(oldMsg)
+        sts.push($rdf.st(oldMsgMostRecentVersion, ns.dct('isReplacedBy'), message, chatDocument))
+        // if oldMsg has_reply => add has_reply to message
+        const oldMsgThread = store.any(oldMsgMostRecentVersion, ns.sioc('has_reply'))
+        if (oldMsgThread) {
+          sts.push($rdf.st(message, ns.sioc('has_reply'), oldMsgThread, chatDocument))
+        }
         if (deleteIt) { // we need to add a specific signature, else anyone can delete a msg ?
           sts.push($rdf.st(message, ns.schema('dateDeleted'), dateStamp, chatDocument))
         }
@@ -138,7 +144,7 @@ export class ChatChannel {
 export async function allVersions (message) {
   const versions = [message]
   const done = {}
-  done[message.ur] = true
+  done[message.uri] = true
   let m = message
   while (true) { // earlier?
     const prev = store.any(null, ns.dct('isReplacedBy'), m, m.doc())
@@ -159,10 +165,10 @@ export async function allVersions (message) {
   return versions
 }
 
-export async function originalVersion (message) {
+/* export async function originalVersion (message) {
   let msg = message
   const done = {}
-  // done[message.ur] = true
+  // done[message.uri] = true
   while (msg) {
     if (done[msg.uri]) {
       debug.error('originalVersion: verion loop' + message)
@@ -174,9 +180,18 @@ export async function originalVersion (message) {
     msg = store.any(null, ns.dct('isReplacedBy'), message, message.doc())
   }
   return message
+} */
+export async function originalVersion (message) {
+  let msg = message
+  while (msg) {
+    message = msg
+    await store.fetcher.load(message)
+    msg = store.any(null, ns.dct('isReplacedBy'), message, message.doc())
+  }
+  return message
 }
 
-export async function mostRecentVersion (message) {
+/* export async function mostRecentVersion (message) {
   let msg = message
   const done = {}
   while (msg) {
@@ -185,6 +200,15 @@ export async function mostRecentVersion (message) {
       return message
     }
     done[msg.uri] = true
+    message = msg
+    await store.fetcher.load(message)
+    msg = store.any(message, ns.dct('isReplacedBy'), null, message.doc())
+  }
+  return message
+} */
+export async function mostRecentVersion (message) {
+  let msg = message
+  while (msg) {
     message = msg
     await store.fetcher.load(message)
     msg = store.any(message, ns.dct('isReplacedBy'), null, message.doc())

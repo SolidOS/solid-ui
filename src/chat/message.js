@@ -136,45 +136,26 @@ export async function renderMessageRow (channelObject, message, fresh, options, 
   const colorizeByAuthor =
     options.colorizeByAuthor === '1' || options.colorizeByAuthor === true
 
+  // const id = store.any(latestVersion, ns.sioc('id'))
+  // const replies = store.each(latestVersion, ns.sioc('has_reply'))
+
   const creator = store.any(message, ns.foaf('maker'))
   const date = store.any(message, ns.dct('created'))
-  const latestVersion = mostRecentVersion(message)
+  const latestVersion = await mostRecentVersion(message)
+  debug.log('@@@@ alain mostRecentVersion')
+  debug.log(message)
+  debug.log(latestVersion)
   const latestVersionCreator = store.any(latestVersion, ns.foaf('maker'))
 
   // use latest content if same owner, else use original
-  const msgId = creator.uri === latestVersionCreator.uri ? latestVersion : message
+  // this is may be too strict. Should we find latest valid version if any ?
+  debug.log('@@@@ alain creator')
+  debug.log(creator)
+  debug.log(latestVersionCreator)
+  const msgId = creator.uri === latestVersionCreator?.uri ? latestVersion : message
   const content = store.any(msgId, ns.sioc('content'))
-  const signature = store.any(msgId, $rdf.sym(`${SEC}proofValue`))
 
-  // set message object
-  const msg = getBlankMsg()
-  msg.id = msgId.uri
-  msg.created = store.any(msgId, ns.dct('created')).value
-  msg.content = content.value
-  msg.maker = creator.uri
-
-  // unsigned message
-  if (!signature?.value) {
-    unsignedMessage = true
-    debug.warn(msgId.uri + ' is unsigned') // TODO replace with UI (colored message ?)
-  } else { // signed message, get public key and check signature
-    getPublicKey(creator).then(publicKey => {
-      debug.log(creator.uri + '\n' + msg.created + '\n' + msg.id + '\n' + publicKey)
-      if (!publicKey) {
-        // TODO try to recreate the publicKey
-        // if(me.uri === creator.uri) await getPrivateKey(creator)
-        debug.warn('message is signed but ' + creator.uri + ' is missing publicKey')
-      }
-      // check that publicKey is a valid hex string
-      const regex = /[0-9A-Fa-f]{6}/g
-      if (!publicKey?.match(regex)) debug.warn('invalid publicKey hex string\n' + creator.uri + '\n' + publicKey)
-      // verify signature
-      else if (signature?.value && !verifySignature(signature?.value, msg, publicKey)) debug.warn('invalid signature\n' + msg.id)
-    })
-  }
-  // const id = store.any(latestVersion, ns.sioc('id'))
-  // const replies = store.each(latestVersion, ns.sioc('has_reply'))
-  const versions = await allVersions(message)
+  const versions = await allVersions(msgId)
   if (versions.length > 1) {
     debug.log('renderMessageRow versions: ', versions.join(',  '))
   }
@@ -193,6 +174,38 @@ export async function renderMessageRow (channelObject, message, fresh, options, 
   }
   if (straightReplies.length > 1) {
     debug.log('renderMessageRow: found normal replies: ', straightReplies)
+  }
+  debug.log('@@@@ alain thread')
+  // debug.log(replies)
+  // debug.log(thread)
+  thread = store.any(msgId, ns.sioc('has_reply')) // if (!thread)
+  debug.log(thread)
+  // get signature
+  const signature = store.any(msgId, $rdf.sym(`${SEC}proofValue`))
+
+  // set message object
+  const msg = getBlankMsg()
+  msg.id = msgId.uri
+  msg.created = store.any(msgId, ns.dct('created')).value
+  msg.content = content.value
+  msg.maker = creator.uri
+
+  // verify signature
+  if (!signature?.value) { // unsigned message
+    unsignedMessage = true
+    debug.warn(msgId.uri + ' is unsigned') // TODO replace with UI (colored message ?)
+  } else { // signed message, get public key and check signature
+    getPublicKey(creator).then(publicKey => {
+      debug.log(creator.uri + '\n' + msg.created + '\n' + msg.id + '\n' + publicKey)
+      if (!publicKey) {
+        debug.warn('message is signed but ' + creator.uri + ' is missing publicKey')
+      }
+      // check that publicKey is a valid hex string
+      const regex = /[0-9A-Fa-f]{6}/g
+      if (!publicKey?.match(regex)) debug.warn('invalid publicKey hex string\n' + creator.uri + '\n' + publicKey)
+      // verify signature
+      else if (signature?.value && !verifySignature(signature?.value, msg, publicKey)) debug.warn('invalid signature\n' + msg.id)
+    })
   }
 
   const originalMessage = await originalVersion(message)
