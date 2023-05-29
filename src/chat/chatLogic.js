@@ -180,7 +180,7 @@ export async function originalVersion (message) {
     msg = store.any(null, ns.dct('isReplacedBy'), message, message.doc())
   }
   return message
-} */
+}
 
 export async function mostRecentVersion (message) {
   let msg = message
