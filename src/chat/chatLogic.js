@@ -117,7 +117,7 @@ export class ChatChannel {
 export async function allVersions (message) {
   const versions = [message]
   const done = {}
-  done[message.ur] = true
+  done[message.uri] = true
   let m = message
   while (true) { // earlier?
     const prev = store.any(null, ns.dct('isReplacedBy'), m, m.doc())
@@ -141,7 +141,7 @@ export async function allVersions (message) {
 export async function originalVersion (message) {
   let msg = message
   const done = {}
-  // done[message.ur] = true
+  // done[message.uri] = true
   while (msg) {
     if (done[msg.uri]) {
       debug.error('originalVersion: verion loop' + message)
