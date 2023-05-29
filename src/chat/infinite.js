@@ -146,9 +146,10 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
     if (isDeleted(message) && !options.showDeletedMessages) {
       return // ignore deleted messaged -- @@ could also leave a placeholder
     }
-    if (isReplaced(message)) { //
+
+    /* if (isReplaced(message)) { //
       return // this is old version
-    }
+    } */
     let thread = store.any(null, ns.sioc('has_member'), message, message.doc())
     const id = store.any(message, ns.sioc('id'), null, message.doc())
     if (id && !thread) {
