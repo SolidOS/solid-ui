@@ -253,10 +253,11 @@ export function thread (dom, kb, subject, messageStore, options) {
     let msg = message
     // const listMsg = []
     while (msg) {
+      message = msg
       // listMsg.push(msg)
       msg = store.statementsMatching(message, DCT('isReplacedBy'))
     }
-    return msg
+    return message
   }
 
   const _deleteMessage = async function (message) { // alain: must delete message and all linked with isReplacedBy
