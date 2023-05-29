@@ -165,7 +165,7 @@ export async function allVersions (message) {
   return versions
 }
 
-/* export async function originalVersion (message) {
+export async function originalVersion (message) {
   let msg = message
   const done = {}
   // done[message.uri] = true
@@ -181,17 +181,8 @@ export async function allVersions (message) {
   }
   return message
 } */
-export async function originalVersion (message) {
-  let msg = message
-  while (msg) {
-    message = msg
-    await store.fetcher.load(message)
-    msg = store.any(null, ns.dct('isReplacedBy'), message, message.doc())
-  }
-  return message
-}
 
-/* export async function mostRecentVersion (message) {
+export async function mostRecentVersion (message) {
   let msg = message
   const done = {}
   while (msg) {
@@ -200,15 +191,6 @@ export async function originalVersion (message) {
       return message
     }
     done[msg.uri] = true
-    message = msg
-    await store.fetcher.load(message)
-    msg = store.any(message, ns.dct('isReplacedBy'), null, message.doc())
-  }
-  return message
-} */
-export async function mostRecentVersion (message) {
-  let msg = message
-  while (msg) {
     message = msg
     await store.fetcher.load(message)
     msg = store.any(message, ns.dct('isReplacedBy'), null, message.doc())
