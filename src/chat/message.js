@@ -175,11 +175,11 @@ export async function renderMessageRow (channelObject, message, fresh, options, 
   if (straightReplies.length > 1) {
     debug.log('renderMessageRow: found normal replies: ', straightReplies)
   }
-  debug.log('@@@@ alain thread')
-  // debug.log(replies)
-  // debug.log(thread)
-  thread = store.any(msgId, ns.sioc('has_reply')) // if (!thread)
-  debug.log(thread)
+  debug.log('@@@@ is thread')
+  if (!thread) {
+    // thread = store.any(message, ns.sioc('has_reply'))
+    thread = store.any(null, ns.sioc('has_member'), message)
+  }
   // get signature
   const signature = store.any(msgId, $rdf.sym(`${SEC}proofValue`))
 
