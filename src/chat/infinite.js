@@ -191,6 +191,7 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
 
     // Are we at the top of a thread?
     if (backwards && earliest.limit && date <= earliest.limit) {
+      if (!liveMessageTable) await appendCurrentMessages() // If necessary skip to today and add that
       return true // done
     }
     debug.log(' insertPreviousMessages:  loadPrevious given date ' + date)
