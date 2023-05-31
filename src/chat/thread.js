@@ -94,7 +94,7 @@ export function thread (dom, kb, subject, messageStore, options) {
       field.disabled = true
       const { message, dateStamp, sts } = await appendMsg(field.value)
 
-      const sendComplete = function (uri, success, body) {
+      const sendComplete = async function (uri, success, body) {
         if (!success) {
           form.appendChild(
             UI.widgets.errorMessageBlock(dom, 'Error writing message: ' + body)
@@ -113,7 +113,7 @@ export function thread (dom, kb, subject, messageStore, options) {
           field.disabled = false
         }
       }
-      updater.update([], sts, sendComplete)
+      await updater.updateMany([], sts, sendComplete)
     }
     form.appendChild(dom.createElement('br'))
 
@@ -263,7 +263,7 @@ export function thread (dom, kb, subject, messageStore, options) {
   const _deleteMessage = async function (message) { // alain: must delete message and all linked with isReplacedBy
     // alain: check that me is not the author and ask for confirmation.
     const deletions = await store.connectedStatements(message, messageStore)
-    updater.update(deletions, [], function (uri, ok, body) {
+    await updater.updateMany(deletions, [], function (uri, ok, body) {
       if (!ok) {
         announce.error('Cant delete messages:' + body)
       } else {
@@ -272,17 +272,16 @@ export function thread (dom, kb, subject, messageStore, options) {
     })
   }
 
-  const addMessage = function (message) {
+  const addMessage = async function (message) {
     const bindings = {
       '?msg': message,
       '?creator': store.any(message, ns.foaf('maker')),
       '?date': store.any(message, DCT('created')),
       '?content': store.any(message, ns.sioc('content'))
     }
-    renderMessage(bindings, true) // fresh from elsewhere
-  }
+    await renderMessage(bindings, true) // fresh from elsewhere
 
-  const renderMessage = function (bindings, fresh) {
+  const renderMessage = async function (bindings, fresh) {
     const creator = bindings['?creator']
     const message = bindings['?msg']
     const date = bindings['?date']
@@ -339,7 +338,7 @@ export function thread (dom, kb, subject, messageStore, options) {
     delButton.setAttribute('style', 'color: red;')
     delButton.addEventListener(
       'click',
-      function (_event) {
+      async function (_event) {
         td3.removeChild(delButton) // Ask -- are you sure?
         const cancelButton = dom.createElement('button')
         cancelButton.textContent = 'cancel'
@@ -362,7 +361,7 @@ export function thread (dom, kb, subject, messageStore, options) {
             // deleteMessage(message) // alain or sendMessage(message, 'delete' or 'edit') //alain
             if (me.value === store.any(message, ns.foaf('maker')).value) {
               const { sts } = await appendMsg() // alain
-              updater.update([], sts)
+              await updater.updateMany([], sts) // alain
             }
           },
           false
