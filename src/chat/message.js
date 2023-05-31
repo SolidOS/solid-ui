@@ -183,7 +183,7 @@ export async function renderMessageRow (channelObject, message, fresh, options, 
   // get signature
   const signature = store.any(msgId, $rdf.sym(`${SEC}proofValue`))
 
-  // set message object
+  // set proof message object
   const msg = getBlankMsg()
   msg.id = msgId.uri
   msg.created = store.any(msgId, ns.dct('created')).value
