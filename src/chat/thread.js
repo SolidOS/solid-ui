@@ -280,6 +280,7 @@ export function thread (dom, kb, subject, messageStore, options) {
       '?content': store.any(message, ns.sioc('content'))
     }
     await renderMessage(bindings, true) // fresh from elsewhere
+  }
 
   const renderMessage = async function (bindings, fresh) {
     const creator = bindings['?creator']
