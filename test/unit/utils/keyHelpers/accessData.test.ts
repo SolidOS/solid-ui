@@ -1,5 +1,4 @@
 import { store } from 'solid-logic'
-import Fetcher from 'rdflib/lib/fetcher'
 import { getKeyIfExists, pubKeyUrl, privKeyUrl, getExistingPublicKey, getExistingPrivateKey } from '../../../../src/utils/keyHelpers/accessData'
 import { NamedNode } from 'rdflib'
 
@@ -13,64 +12,37 @@ store.fetcher.webOperation = jest.fn()
 store.each = jest.fn()
 store.any = jest.fn()
 
-describe('cryptoKeyHelpers', () => {
-  describe.skip('pubKeyUrl', () => {
-    // want to check a success and an error
+jest.mock('../../../../src/utils/keyHelpers/otherHelpers', () => {
+  return {
+    getRootIfPreferencesExist: jest.fn().mockImplementationOnce(() => {
+      throw new Error()
+    })
+      .mockImplementationOnce(() => 'https://alice.example.net')
+      .mockImplementationOnce(() => {
+        throw new Error()
+      })
+      .mockImplementationOnce(() => 'https://alice.example.net')
+  }
+})
+
+describe('accessData', () => {
+  const webId = new NamedNode('https://alice.solid.example.net/profile/card#me')
+  describe('pubKeyUrl', () => {
+    it('to return undefined if there is not preference file', () => {
+      expect(pubKeyUrl(webId)).toEqual(undefined)
+    })
     it('returns the url for the public key', () => {
-      const webId = new NamedNode('https://alice.solid.example/profile/card#me')
       const result = pubKeyUrl(webId)
-      expect(result).toEqual('https://alice.solid.example/profile/keys/publicKey.ttl')
+      expect(result).toEqual('https://alice.example.net/profile/keys/publicKey.ttl')
     })
   })
-
-  describe('getExistingPrivateKey', () => {
-    // want to make sure that getKeyIfExists is called with correct parameters
-    it('returns...', () => {
-
+  describe('privKeyUrl', () => {
+    it('to return undefined if there is not preference file', () => {
+      expect(privKeyUrl(webId)).toEqual(undefined)
     })
-  })
-  describe('privateKeyExists', () => {
-    // want to make sure that getKeyIfExists is called with correct parameters
-    it('returns...', () => {
-
-    })
-  })
-  describe.skip('privKeyUrl', () => {
-    it('returns...', () => {
-      const result = privKeyUrl(new NamedNode('https://alice.solid.example/profile/card#me'))
-      expect(result).toEqual('https://alice.solid.example/settings/keys/privateKey.ttl')
-    })
-  })
-
-  /* describe('getPodRoot', () => {
-    /* @ts-ignore */
-  // store.fetcher.webOperation.mockImplementationOnce(() => {})
-  /* @ts-ignore */
-  /* store.each.mockImplementationOnce(() => [{ value: 'https://alice.solid.example' }])
-    it('returns...', async () => {
-      const webId = new NamedNode('https://alice.solid.example/profile/card#me')
-      const result = await getPodRoot(webId)
-      expect(result.value).toBe('https://alice.solid.example')
-    })
-  }) */
-  describe('getKeyIfExists', () => {
-    /* @ts-ignore */
-    store.any.mockReturnValue({ value: PUB_KEY })
-    it('returns a key if it exists', async () => {
-      const webId = new NamedNode('https://alice.solid.example/profile/card#me')
-      const result = await getKeyIfExists(webId, PUB_KEY, 'publicKey')
-      expect(result).toBe(PUB_KEY)
-    })
-    it.skip('throws an error when load fails', async () => {
-      // need to check if 'any' can throw an error
-      const webId = new NamedNode('https://alice.solid.example/profile/card#me')
-      const result = await getKeyIfExists(webId, 'testing', 'publicKey')
-      expect(result).toBe('testing')
-    })
-    it.skip('returns undefined if key not found', async () => {
-      const webId = new NamedNode('https://alice.solid.example/profile/card#me')
-      const result = await getKeyIfExists(webId, PUB_KEY, 'publicKey')
-      expect(result).toBe(PUB_KEY)
+    it('returns the url for the private key', () => {
+      const result = privKeyUrl(webId)
+      expect(result).toEqual('https://alice.example.net/keys/privateKey.ttl')
     })
   })
 })
