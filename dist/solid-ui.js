@@ -6831,104 +6831,93 @@ function ensureLoadedPreferences(_x) {
 // used to be logInLoadProfile
 function _ensureLoadedPreferences() {
   _ensureLoadedPreferences = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(context) {
-    var statusArea, progressDisplay, complain, preferencesFile, m2;
+    var progressDisplay, preferencesFile, m2;
     return _regenerator["default"].wrap(function _callee4$(_context4) {
       while (1) switch (_context4.prev = _context4.next) {
         case 0:
-          complain = function _complain(message) {
-            message = "ensureLoadedPreferences: ".concat(message);
-            if (statusArea) {
-              // statusArea.innerHTML = ''
-              statusArea.appendChild(widgets.errorMessageBlock(context.dom, message));
-            }
-            debug.log(message);
-            // reject(new Error(message))
-          };
           if (!context.preferencesFile) {
-            _context4.next = 3;
+            _context4.next = 2;
             break;
           }
           return _context4.abrupt("return", Promise.resolve(context));
-        case 3:
-          // already done
-          statusArea = context.statusArea || context.div || null;
-          _context4.prev = 4;
-          _context4.next = 7;
+        case 2:
+          _context4.prev = 2;
+          _context4.next = 5;
           return ensureLoadedProfile(context);
-        case 7:
+        case 5:
           context = _context4.sent;
-          _context4.next = 10;
+          _context4.next = 8;
           return loadPreferences(context.me);
-        case 10:
+        case 8:
           preferencesFile = _context4.sent;
           if (progressDisplay) {
             progressDisplay.parentNode.removeChild(progressDisplay);
           }
           context.preferencesFile = preferencesFile;
-          _context4.next = 51;
+          _context4.next = 49;
           break;
-        case 15:
-          _context4.prev = 15;
-          _context4.t0 = _context4["catch"](4);
+        case 13:
+          _context4.prev = 13;
+          _context4.t0 = _context4["catch"](2);
           if (!(_context4.t0 instanceof _solidLogic.UnauthorizedError)) {
-            _context4.next = 22;
+            _context4.next = 20;
             break;
           }
           m2 = 'Ooops - you are not authenticated (properly logged in) to for me to read your preference file.  Try loggin out and logging in?';
           (0, _log.alert)(m2);
-          _context4.next = 51;
+          _context4.next = 49;
           break;
-        case 22:
+        case 20:
           if (!(_context4.t0 instanceof _solidLogic.CrossOriginForbiddenError)) {
-            _context4.next = 28;
+            _context4.next = 26;
             break;
           }
           m2 = "Unauthorized: Assuming preference file blocked for origin ".concat(window.location.origin);
           context.preferencesFileError = m2;
           return _context4.abrupt("return", context);
-        case 28:
+        case 26:
           if (!(_context4.t0 instanceof _solidLogic.SameOriginForbiddenError)) {
-            _context4.next = 34;
+            _context4.next = 32;
             break;
           }
           m2 = 'You are not authorized to read your preference file. This may be because you are using an untrusted web app.';
           debug.warn(m2);
           return _context4.abrupt("return", context);
-        case 34:
+        case 32:
           if (!(_context4.t0 instanceof _solidLogic.NotEditableError)) {
-            _context4.next = 40;
+            _context4.next = 38;
             break;
           }
           m2 = 'You are not authorized to edit your preference file. This may be because you are using an untrusted web app.';
           debug.warn(m2);
           return _context4.abrupt("return", context);
-        case 40:
+        case 38:
           if (!(_context4.t0 instanceof _solidLogic.WebOperationError)) {
-            _context4.next = 45;
+            _context4.next = 43;
             break;
           }
           m2 = 'You are not authorized to edit your preference file. This may be because you are using an untrusted web app.';
           debug.warn(m2);
-          _context4.next = 51;
+          _context4.next = 49;
           break;
-        case 45:
+        case 43:
           if (!(_context4.t0 instanceof _solidLogic.FetchError)) {
-            _context4.next = 50;
+            _context4.next = 48;
             break;
           }
           m2 = "Strange: Error ".concat(_context4.t0.status, " trying to read your preference file.").concat(_context4.t0.message);
           (0, _log.alert)(m2);
-          _context4.next = 51;
+          _context4.next = 49;
           break;
-        case 50:
+        case 48:
           throw new Error("(via loadPrefs) ".concat(_context4.t0));
-        case 51:
+        case 49:
           return _context4.abrupt("return", context);
-        case 52:
+        case 50:
         case "end":
           return _context4.stop();
       }
-    }, _callee4, null, [[4, 15]]);
+    }, _callee4, null, [[2, 13]]);
   }));
   return _ensureLoadedPreferences.apply(this, arguments);
 }
@@ -13686,22 +13675,22 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2023-05-26T10:41:25Z',
-  commit: '1c2b415466be94bd30f6183f1180047f5a94a8bb',
+  buildTime: '2023-07-01T17:57:13Z',
+  commit: '58251370efbbbb63f7c57f60a640dd2db4d944e4',
   npmInfo: {
     'solid-ui': '2.4.28',
     npm: '8.19.4',
-    node: '16.20.0',
+    node: '16.20.1',
     v8: '9.4.146.26-node.26',
     uv: '1.43.0',
     zlib: '1.2.11',
     brotli: '1.0.9',
-    ares: '1.19.0',
+    ares: '1.19.1',
     modules: '93',
     nghttp2: '1.47.0',
     napi: '8',
-    llhttp: '6.0.10',
-    openssl: '1.1.1t+quic',
+    llhttp: '6.0.11',
+    openssl: '1.1.1u+quic',
     cldr: '41.0',
     icu: '71.1',
     tz: '2022f',
