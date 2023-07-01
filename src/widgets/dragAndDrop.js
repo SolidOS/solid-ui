@@ -1,37 +1,32 @@
 /* Drag and drop common functionality
  *
  * It is easy to make something draggable, or to make it a drag target!
- * Just call the functions below.  In a solid world, any part of the UI which
- * represent one thing which has a UR, should be made draggable using makeDraggable
+ * Just call the functions below. In a solid world, any part of the UI which
+ * represent one thing which has a URI, should be made draggable using makeDraggable
  * Any list of things should typically allow you to drag new members of the list
  * onto it.
- * The file upload function uploadFiles is provided as often of someone drags a file from the computer
+ * The file upload function uploadFiles is provided as often as someone drags a file from the computer
  * desktop, you may want to upload it into the pod.
  */
 import * as debug from '../debug'
 import * as mime from 'mime-types'
+import * as style from '../style'
 
 /* global FileReader alert */
 
 export function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
   const dragoverListener = function (e) {
-    e.preventDefault() // Neeed else drop does not work [sic]
+    e.preventDefault() // Need else drop does not work [sic]
     e.dataTransfer.dropEffect = 'copy'
   }
 
   const dragenterListener = function (e) {
     debug.log('dragenter event dropEffect: ' + e.dataTransfer.dropEffect)
-    if (this.style) {
+    if (this.localStyle) {
       //  necessary not sure when
       if (!this.savedStyle) {
-        this.savedStyle = {}
-        this.savedStyle.border = this.style.border
-        this.savedStyle.backgroundColor = this.style.backgroundColor
-        this.savedStyle.borderRadius = this.style.borderRadius
+        this.savedStyle = style.dragEvent
       }
-      this.style.backgroundColor = '#ccc'
-      this.style.border = '0.25em dashed black'
-      this.style.borderRadius = '0.3em'
     }
 
     e.dataTransfer.dropEffect = 'link'
@@ -40,12 +35,9 @@ export function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
   const dragleaveListener = function (e) {
     debug.log('dragleave event dropEffect: ' + e.dataTransfer.dropEffect)
     if (this.savedStyle) {
-      this.style.border = this.savedStyle.border
-      this.style.backgroundColor = this.savedStyle.backgroundColor
-      this.style.borderRadius = this.savedStyle.borderRadius
+      this.localStyle = this.savedStyle
     } else {
-      this.style.backgroundColor = 'white'
-      this.style.border = '0em solid black'
+      this.localStyle = style.dropEvent
     }
   }
 
@@ -100,7 +92,7 @@ export function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
     if (uris) {
       droppedURIHandler(uris)
     }
-    this.style.backgroundColor = 'white' // restore style
+    this.localStyle = style.restoreStyle // restore style
     return false
   } // dropListener
 

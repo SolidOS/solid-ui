@@ -1,15 +1,14 @@
-/// /////////////////////////////////////////////
 //
 //   Media input widget
 //
 //
 // Workflow:
-// The HTML5 functionality (on mobille) is to prompt for either
-// a realtime camera capture , OR a selection from images already ont the device
+// The HTML5 functionality (on mobile) is to prompt for either
+// a realtime camera capture, OR a selection from images already not the device
 // (eg camera roll).
 //
-// The solid alternative is to either take a phtoto
-// or access cemra roll (etc) OR to access solid cloud storage of favorite photo almbums.
+// The solid alternative is to either take a photo
+// or access camera roll (etc) OR to access solid cloud storage of favorite photo albums.
 // (Especially latest taken ones)
 //
 import * as debug from '../debug'
@@ -17,17 +16,13 @@ import * as debug from '../debug'
 /** @module mediaCapture */
 
 import { icons } from '../iconBase'
+import * as style from '../style'
 import * as widgets from '../widgets'
 import { IndexedFormula, NamedNode } from 'rdflib'
 
 const cameraIcon = icons.iconBase + 'noun_Camera_1618446_000000.svg' // Get it from github
 const retakeIcon = icons.iconBase + 'noun_479395.svg' // Get it from github
 
-const canvasWidth = '640'
-const canvasHeight = '480'
-
-const controlStyle = `border-radius: 0.5em; margin: 0.8em; width: ${canvasWidth}; height:${canvasHeight};`
-// const controlStyle = 'border-radius: 0.5em; margin: 0.8em; width: 320; height:240;'
 const contentType = 'image/png'
 
 /** A control to capture a picture using camera
@@ -88,7 +83,7 @@ export function cameraCaptureControl (
     player = main.appendChild(dom.createElement('video'))
     player.setAttribute('controls', '1')
     player.setAttribute('autoplay', '1')
-    player.setAttribute('style', controlStyle)
+    player.setAttribute('style', style.controlStyle)
     if (!navigator.mediaDevices) {
       throw new Error('navigator.mediaDevices not available')
     }
@@ -112,9 +107,9 @@ export function cameraCaptureControl (
   function grabCanvas () {
     // Draw the video frame to the canvas.
     canvas = dom.createElement('canvas')
-    canvas.setAttribute('width', canvasWidth)
-    canvas.setAttribute('height', canvasHeight)
-    canvas.setAttribute('style', controlStyle)
+    canvas.setAttribute('width', style.canvasWidth)
+    canvas.setAttribute('height', style.canvasHeight)
+    canvas.setAttribute('style', style.controlStyle)
     main.appendChild(canvas)
 
     const context = canvas.getContext('2d')
@@ -178,9 +173,9 @@ export function cameraCaptureControl (
  * @param {IndexedForumla} store - The quadstore to store data in
  * @param {fuunction} getImageDoc - returns NN of the image file to be created
  * @param {function<Node>} doneCallback - called with the image taken
- * @returns {DomElement} - A div element with the buton in it
+ * @returns {DomElement} - A div element with the button in it
  *
- * This expacts the buttton to a large control when it is pressed
+ * This expects the button to a large control when it is pressed
  */
 
 export function cameraButton (

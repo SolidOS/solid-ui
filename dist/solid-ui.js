@@ -7804,21 +7804,21 @@ var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
 var _iconBase = __webpack_require__(/*! ../iconBase */ "./lib/iconBase.js");
+var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-/// /////////////////////////////////////////////
 //
 //   Media input widget
 //
 //
 // Workflow:
-// The HTML5 functionality (on mobille) is to prompt for either
-// a realtime camera capture , OR a selection from images already ont the device
+// The HTML5 functionality (on mobile) is to prompt for either
+// a realtime camera capture, OR a selection from images already not the device
 // (eg camera roll).
 //
-// The solid alternative is to either take a phtoto
-// or access cemra roll (etc) OR to access solid cloud storage of favorite photo almbums.
+// The solid alternative is to either take a photo
+// or access camera roll (etc) OR to access solid cloud storage of favorite photo albums.
 // (Especially latest taken ones)
 //
 
@@ -7827,10 +7827,6 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 var cameraIcon = _iconBase.icons.iconBase + 'noun_Camera_1618446_000000.svg'; // Get it from github
 var retakeIcon = _iconBase.icons.iconBase + 'noun_479395.svg'; // Get it from github
 
-var canvasWidth = '640';
-var canvasHeight = '480';
-var controlStyle = "border-radius: 0.5em; margin: 0.8em; width: ".concat(canvasWidth, "; height:").concat(canvasHeight, ";");
-// const controlStyle = 'border-radius: 0.5em; margin: 0.8em; width: 320; height:240;'
 var contentType = 'image/png';
 
 /** A control to capture a picture using camera
@@ -7875,7 +7871,7 @@ function cameraCaptureControl(dom, store, getImageDoc, doneCallback) {
     player = main.appendChild(dom.createElement('video'));
     player.setAttribute('controls', '1');
     player.setAttribute('autoplay', '1');
-    player.setAttribute('style', controlStyle);
+    player.setAttribute('style', style.controlStyle);
     if (!navigator.mediaDevices) {
       throw new Error('navigator.mediaDevices not available');
     }
@@ -7897,9 +7893,9 @@ function cameraCaptureControl(dom, store, getImageDoc, doneCallback) {
   function grabCanvas() {
     // Draw the video frame to the canvas.
     canvas = dom.createElement('canvas');
-    canvas.setAttribute('width', canvasWidth);
-    canvas.setAttribute('height', canvasHeight);
-    canvas.setAttribute('style', controlStyle);
+    canvas.setAttribute('width', style.canvasWidth);
+    canvas.setAttribute('height', style.canvasHeight);
+    canvas.setAttribute('style', style.controlStyle);
     main.appendChild(canvas);
     var context = canvas.getContext('2d');
     context.drawImage(player, 0, 0, canvas.width, canvas.height);
@@ -7956,9 +7952,9 @@ function cameraCaptureControl(dom, store, getImageDoc, doneCallback) {
  * @param {IndexedForumla} store - The quadstore to store data in
  * @param {fuunction} getImageDoc - returns NN of the image file to be created
  * @param {function<Node>} doneCallback - called with the image taken
- * @returns {DomElement} - A div element with the buton in it
+ * @returns {DomElement} - A div element with the button in it
  *
- * This expacts the buttton to a large control when it is pressed
+ * This expects the button to a large control when it is pressed
  */
 
 function cameraButton(dom, store, getImageDoc, doneCallback) {
@@ -8396,10 +8392,10 @@ Object.defineProperty(exports, "recordParticipation", ({
     return _participation.recordParticipation;
   }
 }));
-Object.defineProperty(exports, "renderPartipants", ({
+Object.defineProperty(exports, "renderParticipants", ({
   enumerable: true,
   get: function get() {
-    return _participation.renderPartipants;
+    return _participation.renderParticipants;
   }
 }));
 exports.xmlEncode = xmlEncode;
@@ -8417,6 +8413,7 @@ var _widgets = __webpack_require__(/*! ./widgets */ "./lib/widgets/index.js");
 var _utils = __webpack_require__(/*! ./utils */ "./lib/utils/index.js");
 var _debug = __webpack_require__(/*! ./debug */ "./lib/debug.js");
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
+var style = _interopRequireWildcard(__webpack_require__(/*! ./style */ "./lib/style.js"));
 var _participation = __webpack_require__(/*! ./participation */ "./lib/participation.js");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -8481,7 +8478,7 @@ function lightColorHash(author) {
 /**  notepad
  *
  * @param {HTMLDocument} dom - the web page of the browser
- * @param {NamedNode} padDoc - the document into which the particpation should be shown
+ * @param {NamedNode} padDoc - the document into which the participation should be shown
  * @param {NamedNode} subject - the thing in which participation is happening
  * @param {NamedNode} me - person who is logged into the pod
  * @param {notepadOptions} options - the options that can be passed in consist of statusArea, exists
@@ -8494,7 +8491,7 @@ function notepad(dom, padDoc, subject, me, options) {
   if (me && !me.uri) throw new Error('UI.pad.notepad:  Invalid userid');
   var updater = store.updater;
   var PAD = (0, _rdflib.Namespace)('http://www.w3.org/ns/pim/pad#');
-  table.setAttribute('style', 'padding: 1em; overflow: auto; resize: horizontal; min-width: 40em;');
+  table.setAttribute('style', style.notepadStyle);
   var upstreamStatus = null;
   var downstreamStatus = null;
   if (options.statusArea) {
@@ -8503,10 +8500,10 @@ function notepad(dom, padDoc, subject, me, options) {
     upstreamStatus = tr.appendChild(dom.createElement('td'));
     downstreamStatus = tr.appendChild(dom.createElement('td'));
     if (upstreamStatus) {
-      upstreamStatus.setAttribute('style', 'width:50%');
+      upstreamStatus.setAttribute('style', style.upstreamStatus);
     }
     if (downstreamStatus) {
-      downstreamStatus.setAttribute('style', 'width:50%');
+      downstreamStatus.setAttribute('style', style.downstreamStatus);
     }
   }
   /* @@ TODO want to look into this, it seems upstream should be a boolean and default to false ?
@@ -8529,9 +8526,9 @@ function notepad(dom, padDoc, subject, me, options) {
   var setPartStyle = function setPartStyle(part, colors, pending) {
     var chunk = part.subject;
     colors = colors || '';
-    var baseStyle = 'font-size: 100%; font-family: monospace; width: 100%; border: none; white-space: pre-wrap;';
-    var headingCore = 'font-family: sans-serif; font-weight: bold;  border: none;';
-    var headingStyle = ['font-size: 110%;  padding-top: 0.5em; padding-bottom: 0.5em; width: 100%;', 'font-size: 120%; padding-top: 1em; padding-bottom: 1em; width: 100%;', 'font-size: 150%; padding-top: 1em; padding-bottom: 1em; width: 100%;'];
+    var baseStyle = style.baseStyle;
+    var headingCore = style.headingCore;
+    var headingStyle = style.headingStyle;
     var author = kb.any(chunk, ns.dc('author'));
     if (!colors && author) {
       // Hash the user webid for now -- later allow user selection!
@@ -8543,9 +8540,9 @@ function notepad(dom, padDoc, subject, me, options) {
     // and when the indent is stored as a Number itself, not in an object.
     var indent = kb.any(chunk, PAD('indent'));
     indent = indent ? indent.value : 0;
-    var style = indent >= 0 ? baseStyle + 'text-indent: ' + indent * 3 + 'em;' : headingCore + headingStyle[-1 - indent];
+    var localStyle = indent >= 0 ? baseStyle + 'text-indent: ' + indent * 3 + 'em;' : headingCore + headingStyle[-1 - indent];
     // ? baseStyle + 'padding-left: ' + (indent * 3) + 'em;'
-    part.setAttribute('style', style + colors);
+    part.setAttribute('style', localStyle + colors);
   };
   var removePart = function removePart(part) {
     var chunk = part.subject;
@@ -8625,28 +8622,6 @@ function notepad(dom, padDoc, subject, me, options) {
     });
   };
 
-  // Use this sort of code to split the line when return pressed in the middle @@
-  /*
-  function doGetCaretPosition doGetCaretPosition (oField) {
-    var iCaretPos = 0
-        // IE Support
-    if (document.selection) {
-            // Set focus on the element to avoid IE bug
-      oField.focus()
-            // To get cursor position, get empty selection range
-      var oSel = document.selection.createRange()
-            // Move selection start to 0 position
-      oSel.moveStart('character', -oField.value.length)
-            // The caret position is selection length
-      iCaretPos = oSel.text.length
-        // Firefox suppor
-    } else if (oField.selectionStart || oField.selectionStart === '0') {
-      iCaretPos = oField.selectionStart
-    }
-        // Return results
-    return (iCaretPos)
-  }
-  */
   var addListeners = function addListeners(part, chunk) {
     part.addEventListener('keydown', function (event) {
       if (!updater) {
@@ -8689,7 +8664,7 @@ function notepad(dom, padDoc, subject, me, options) {
                 return;
               case 3: // being deleted already
               case 4:
-                // already deleme state
+                // already deleted state
                 return;
               case undefined:
               case 0:
@@ -8990,8 +8965,6 @@ function notepad(dom, padDoc, subject, me, options) {
       }
       return;
     }
-    // var last = kb.the(undefined, PAD('previous'), subject)
-    // var chunk = first //  = kb.the(subject, PAD('next'));
     var row;
 
     // First see which of the logical chunks have existing physical manifestations
@@ -9053,7 +9026,7 @@ function notepad(dom, padDoc, subject, me, options) {
     (0, _debug.log)('    reloaded OK');
     clearStatus();
     if (!consistencyCheck()) {
-      complain('CONSITENCY CHECK FAILED');
+      complain('CONSISTENCY CHECK FAILED');
     } else {
       refreshTree(table);
     }
@@ -9220,7 +9193,7 @@ Object.defineProperty(exports, "__esModule", ({
 exports.manageParticipation = manageParticipation;
 exports.participationObject = participationObject;
 exports.recordParticipation = recordParticipation;
-exports.renderPartipants = renderPartipants;
+exports.renderParticipants = renderParticipants;
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js"));
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js"));
 var _assertThisInitialized2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/assertThisInitialized */ "./node_modules/@babel/runtime/helpers/assertThisInitialized.js"));
@@ -9235,6 +9208,7 @@ var ns = _interopRequireWildcard(__webpack_require__(/*! ./ns */ "./lib/ns.js"))
 var _widgets = __webpack_require__(/*! ./widgets */ "./lib/widgets/index.js");
 var _utils = __webpack_require__(/*! ./utils */ "./lib/utils/index.js");
 var _pad = __webpack_require__(/*! ./pad */ "./lib/pad.js");
+var style = _interopRequireWildcard(__webpack_require__(/*! ./style */ "./lib/style.js"));
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -9269,9 +9243,9 @@ var store = _solidLogic.solidLogicSingleton.store;
 *  @param {NamedNode} unused2/me - user that is logged into the pod (this argument is no longer used, but left in for backwards compatibility)
 *  @param {ParticipationOptions} options - the options that can be passed in are deleteFunction, link, and draggable these are used by the personTR button
 */
-function renderPartipants(dom, table, unused1, subject, unused2, options) {
-  table.setAttribute('style', 'margin: 0.8em;');
-  var newRowForParticpation = function newRowForParticpation(parp) {
+function renderParticipants(dom, table, unused1, subject, unused2, options) {
+  table.setAttribute('style', style.participantsStyle);
+  var newRowForParticipation = function newRowForParticipation(parp) {
     var person = store.any(parp, ns.wf('participant'));
     var tr;
     if (!person) {
@@ -9281,11 +9255,12 @@ function renderPartipants(dom, table, unused1, subject, unused2, options) {
     }
     var bg = store.anyValue(parp, ns.ui('backgroundColor')) || 'white';
     var block = dom.createElement('div');
-    block.setAttribute('style', 'height: 1.5em; width: 1.5em; margin: 0.3em; border 0.01em solid #888; background-color: ' + bg);
+    block.setAttribute('style', style.participantsBlock);
+    block.style.backgroundColor = bg;
     tr = (0, _widgets.personTR)(dom, null, person, options);
     table.appendChild(tr);
     var td = dom.createElement('td');
-    td.setAttribute('style', 'vertical-align: middle;');
+    td.setAttribute('style', style.personTableTD);
     td.appendChild(block);
     tr.insertBefore(td, tr.firstChild);
     return tr;
@@ -9299,16 +9274,16 @@ function renderPartipants(dom, table, unused1, subject, unused2, options) {
     var participations = parps.map(function (p) {
       return p[1];
     });
-    (0, _utils.syncTableToArray)(table, participations, newRowForParticpation);
+    (0, _utils.syncTableToArray)(table, participations, newRowForParticipation);
   };
   table.refresh = syncTable;
   syncTable();
   return table;
 }
 
-/** Record, or find old, Particpation object
+/** Record, or find old, Participation object
  *
- * A particpaption object is a place to record things specifically about
+ * A participation object is a place to record things specifically about
  * subject and the user, such as preferences, start of membership, etc
  * @param {NamedNode} subject - the thing in which the participation is happening
  * @param {NamedNode} document -  where to record the data
@@ -9343,20 +9318,20 @@ function participationObject(subject, padDoc, me) {
       }
       candidates.sort(); // Pick the earliest
       // @@ Possibly, for extra credit, delete the others, if we have write access
-      debug.warn('Multiple particpation objects, picking earliest, in ' + padDoc);
+      debug.warn('Multiple participation objects, picking earliest, in ' + padDoc);
       resolve(candidates[0][1]);
       // throw new Error('Multiple records of your participation')
     }
 
     if (parps.length) {
       // If I am not already recorded
-      resolve(parps[0]); // returns the particpation object
+      resolve(parps[0]); // returns the participation object
     } else {
       var _participation2 = (0, _widgets.newThing)(padDoc);
       var ins = [(0, _rdflib.st)(subject, ns.wf('participation'), _participation2, padDoc), (0, _rdflib.st)(_participation2, ns.wf('participant'), me, padDoc), (0, _rdflib.st)(_participation2, ns.cal('dtstart'), new Date(), padDoc), (0, _rdflib.st)(_participation2, ns.ui('backgroundColor'), (0, _pad.lightColorHash)(me), padDoc)];
       store.updater.update([], ins, function (uri, ok, errorMessage) {
         if (!ok) {
-          reject(new Error('Error recording your partipation: ' + errorMessage));
+          reject(new Error('Error recording your participation: ' + errorMessage));
         } else {
           resolve(_participation2);
         }
@@ -9369,7 +9344,7 @@ function participationObject(subject, padDoc, me) {
 /** Record my participation and display participants
  *
  * @param {NamedNode} subject - the thing in which participation is happening
- * @param {NamedNode} padDoc - the document into which the particpation should be recorded
+ * @param {NamedNode} padDoc - the document into which the participation should be recorded
  * @param {DOMNode} refreshable - a DOM element whose refresh() is to be called if the change works
  *
  */
@@ -9385,24 +9360,22 @@ function recordParticipation(subject, padDoc, refreshable) {
   }
   if (parps.length) {
     // If I am not already recorded
-    return parps[0]; // returns the particpation object
+    return parps[0]; // returns the participation object
   } else {
     if (!store.updater.editable(padDoc)) {
-      debug.log('Not recording participation, as no write acesss as ' + me + ' to ' + padDoc);
+      debug.log('Not recording participation, as no write access as ' + me + ' to ' + padDoc);
       return null;
     }
     var participation = (0, _widgets.newThing)(padDoc);
     var ins = [(0, _rdflib.st)(subject, ns.wf('participation'), participation, padDoc), (0, _rdflib.st)(participation, ns.wf('participant'), me, padDoc), (0, _rdflib.st)(participation, ns.cal('dtstart'), new Date(), padDoc), (0, _rdflib.st)(participation, ns.ui('backgroundColor'), (0, _pad.lightColorHash)(me), padDoc)];
     store.updater.update([], ins, function (uri, ok, errorMessage) {
       if (!ok) {
-        throw new Error('Error recording your partipation: ' + errorMessage);
+        throw new Error('Error recording your participation: ' + errorMessage);
       }
       if (refreshable && refreshable.refresh) {
         refreshable.refresh();
       }
-      // UI.pad.renderPartipants(dom, table, padDoc, subject, me, options)
     });
-
     return participation;
   }
 }
@@ -9411,7 +9384,7 @@ function recordParticipation(subject, padDoc, refreshable) {
 *
 *   @param {Document} dom  - the web page loaded into the browser
 *   @param {HTMLDivElement} container - the container element where the participants should be displayed
-*   @param {NamedNode} document - the document into which the particpation should be shown
+*   @param {NamedNode} document - the document into which the participation should be shown
 *   @param {NamedNode} subject - the thing in which participation is happening
 *   @param {NamedNode} me - the logged in user
 *   @param {ParticipationOptions} options - the options that can be passed in are deleteFunction, link, and draggable these are used by the personTR button
@@ -9420,12 +9393,12 @@ function recordParticipation(subject, padDoc, refreshable) {
 function manageParticipation(dom, container, padDoc, subject, me, options) {
   var table = dom.createElement('table');
   container.appendChild(table);
-  renderPartipants(dom, table, padDoc, subject, me, options);
+  renderParticipants(dom, table, padDoc, subject, me, options);
   var _participation;
   try {
     _participation = recordParticipation(subject, padDoc, table);
   } catch (e) {
-    container.appendChild((0, _widgets.errorMessageBlock)(dom, 'Error recording your partipation: ' + e)); // Clean up?
+    container.appendChild((0, _widgets.errorMessageBlock)(dom, 'Error recording your participation: ' + e)); // Clean up?
   }
 
   return table;
@@ -9820,6 +9793,9 @@ var formFieldNameBoxWidth = '8em'; // The fixed amount to get form fields to lin
 // The latter we put in when switching awy from using tables.  Getting allignment between
 // fields in different groups though is hard problem.
 
+var mediaModuleCanvasWidth = '640';
+var mediaModuleCanvasHeight = '480';
+var defaultErrorBackgroundColor = '#fee';
 var style = {
   // styleModule
 
@@ -9945,7 +9921,35 @@ var style = {
   secondaryButton: 'background-color: #01c9ea; color: #ffffff; font-family: Raleway, Roboto, sans-serif;border-radius: 0.25em; border-color: #01c9ea; border: 1px solid; cursor: pointer; font-size: .8em;text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none',
   secondaryButtonHover: 'background-color: #37cde6; color: #ffffff; font-family: Raleway, Roboto, sans-serif;border-radius: 0.25em; border-color: #7c4dff; border: 1px solid; cursor: pointer; font-size: .8em;text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none; transition: 0.25s all ease-in-out',
   secondaryButtonNoBorder: 'background-color: #ffffff; color: #01c9ea; font-family: Raleway, Roboto, sans-serif; border-radius: 0.25em; border-color: #01c9ea; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none',
-  secondaryButtonNoBorderHover: 'background-color: #01c9ea; color: #ffffff; font-family: Raleway, Roboto, sans-serif; border-radius: 0.25em; border-color: #01c9ea; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none; transition: 0.25s all ease-in-out'
+  secondaryButtonNoBorderHover: 'background-color: #01c9ea; color: #ffffff; font-family: Raleway, Roboto, sans-serif; border-radius: 0.25em; border-color: #01c9ea; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none; transition: 0.25s all ease-in-out',
+  // media
+  controlStyle: "border-radius: 0.5em; margin: 0.8em; width:".concat(canvasWidth, "; height:").concat(canvasHeight, ";"),
+  // dragAndDrop
+  dragEvent: 'background-color: #ccc; border: 0.25em dashed black; border-radius: 0.3em;',
+  dropEvent: 'background-color: white; border: 0em solid black;',
+  restoreStyle: 'background-color: white;',
+  // errors
+  errorCancelButton: 'width: 2em; height: 2em; align: right;',
+  errorMessageBlock: 'margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; color:black;',
+  // pad
+  notepadStyle: 'padding: 1em; overflow: auto; resize: horizontal; min-width: 40em;',
+  upstreamStatus: 'width:50%',
+  downstreamStatus: 'width:50%',
+  baseStyle: 'font-size: 100%; font-family: monospace; width: 100%; border: none; white-space: pre-wrap;',
+  headingCore: 'font-family: sans-serif; font-weight: bold;  border: none;',
+  headingStyle: ['font-size: 110%;  padding-top: 0.5em; padding-bottom: 0.5em; width: 100%;', 'font-size: 120%; padding-top: 1em; padding-bottom: 1em; width: 100%;', 'font-size: 150%; padding-top: 1em; padding-bottom: 1em; width: 100%;'],
+  // participation
+  participantsStyle: 'margin: 0.8em;',
+  participantsBlock: 'height: 1.5em; width: 1.5em; margin: 0.3em; border 0.01em solid #888;',
+  personTableTD: 'vertical-align: middle;',
+  // tabs
+  tabsDefaultBackgroundColor: '#ddddcc',
+  tabsNavElement: 'margin: 0;',
+  tabsRootElement: 'display: flex; height: 100%; width: 100%;',
+  tabsMainElement: 'margin: 0; width:100%; height: 100%;',
+  tabContainer: 'list-style-type: none; display: flex; height: 100%; width: 100%; margin: 0; padding: 0;',
+  makeNewSlot: 'background: none; border: none; font: inherit; cursor: pointer',
+  ellipsis: 'position: absolute; right: 0; bottom: 0; width: 20%; background: none; color: inherit; border: none; padding: 0; font: inherit; cursor: pointer; outline: inherit;'
 };
 exports.style = style;
 style.setStyle = function setStyle(ele, styleName) {
@@ -11627,6 +11631,7 @@ function renderTableViewPane(doc, options) {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
@@ -11643,7 +11648,10 @@ var _wrapNativeSuper2 = _interopRequireDefault(__webpack_require__(/*! @babel/ru
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js"));
 var _widgets = __webpack_require__(/*! ./widgets */ "./lib/widgets/index.js");
 var _utils = __webpack_require__(/*! ./utils */ "./lib/utils/index.js");
+var style = _interopRequireWildcard(__webpack_require__(/*! ./style */ "./lib/style.js"));
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2["default"])(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2["default"])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2["default"])(this, result); }; }
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 /**
@@ -11830,7 +11838,7 @@ function tabWidget(options) {
   var subject = options.subject;
   var dom = options.dom || document;
   var orientation = parseInt(options.orientation || '0');
-  var backgroundColor = options.backgroundColor || '#ddddcc';
+  var backgroundColor = options.backgroundColor || style.tabsDefaultBackgroundColor;
   var flipped = orientation & 2;
   var vertical = orientation & 1;
   var onClose = options.onClose;
@@ -11841,13 +11849,15 @@ function tabWidget(options) {
   var bodyMainStyle = "flex: 2; width: auto; height: 100%; border: 0.1em; border-style: solid; border-color: ".concat(selectedColor, "; padding: 1em;");
   var rootElement = dom.createElement('div'); // 20200117a
 
-  rootElement.setAttribute('style', 'display: flex; height: 100%; width: 100%; flex-direction: ' + (vertical ? 'row' : 'column') + (flipped ? '-reverse;' : ';'));
+  rootElement.setAttribute('style', style.tabsRootElement);
+  rootElement.style.flexDirection = (vertical ? 'row' : 'column') + (flipped ? '-reverse;' : ';');
   var navElement = rootElement.appendChild(dom.createElement('nav'));
-  navElement.setAttribute('style', 'margin: 0;');
+  navElement.setAttribute('style', style.tabsNavElement);
   var mainElement = rootElement.appendChild(dom.createElement('main'));
-  mainElement.setAttribute('style', 'margin: 0; width:100%; height: 100%;'); // override tabbedtab.css
+  mainElement.setAttribute('style', style.tabsMainElement); // override tabbedtab.css
   var tabContainer = navElement.appendChild(dom.createElement('ul'));
-  tabContainer.setAttribute('style', "\n    list-style-type: none;\n    display: flex;\n    height: 100%;\n    width: 100%;\n    margin: 0;\n    padding: 0;\n    flex-direction: ".concat(vertical ? 'column' : 'row', "\n  "));
+  tabContainer.setAttribute('style', style.tabContainer);
+  tabContainer.style.flexDirection = "".concat(vertical ? 'column' : 'row');
   var tabElement = 'li';
   var bodyContainer = mainElement;
   rootElement.tabContainer = tabContainer;
@@ -11867,7 +11877,7 @@ function tabWidget(options) {
   rootElement.refresh = orderedSync;
   orderedSync();
   if (!options.startEmpty && tabContainer.children.length && options.selectedTab) {
-    var selectedTab0 = Array.from(tabContainer.children) // Version left for compatability with ??
+    var selectedTab0 = Array.from(tabContainer.children) // Version left for compatibility with ??
     .map(function (tab) {
       return tab.firstChild;
     }).find(function (tab) {
@@ -11921,7 +11931,7 @@ function tabWidget(options) {
     ele.setAttribute('style', unselectedStyle);
     ele.subject = item;
     var div = ele.appendChild(dom.createElement('button'));
-    div.setAttribute('style', 'background: none; border: none; font: inherit; cursor: pointer');
+    div.setAttribute('style', style.makeNewSlot);
     div.onclick = function () {
       resetTabStyle();
       resetBodyStyle();
@@ -11938,7 +11948,7 @@ function tabWidget(options) {
     if (options.renderTabSettings && ele.subject) {
       var ellipsis = dom.createElement('button');
       ellipsis.textContent = '...';
-      ellipsis.setAttribute('style', 'position: absolute; right: 0; bottom: 0; width: 20%; background: none; color: inherit; border: none; padding: 0; font: inherit; cursor: pointer; outline: inherit;');
+      ellipsis.setAttribute('style', style.ellipsis);
       ellipsis.onclick = function () {
         resetTabStyle();
         resetBodyStyle();
@@ -12922,8 +12932,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2023-04-16T11:25:54Z',
-  commit: '1ef91399bd3693c0b362f240c37a76b1d87c9adb',
+  buildTime: '2023-07-01T17:41:04Z',
+  commit: '672e55e9fd6634f0d28b6cba39cf63289ba805fe',
   npmInfo: {
     'solid-ui': '2.4.27',
     npm: '8.19.4',
@@ -14362,16 +14372,17 @@ exports.makeDropTarget = makeDropTarget;
 exports.uploadFiles = uploadFiles;
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
 var mime = _interopRequireWildcard(__webpack_require__(/*! mime-types */ "./node_modules/mime-types/index.js"));
+var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 /* Drag and drop common functionality
  *
  * It is easy to make something draggable, or to make it a drag target!
- * Just call the functions below.  In a solid world, any part of the UI which
- * represent one thing which has a UR, should be made draggable using makeDraggable
+ * Just call the functions below. In a solid world, any part of the UI which
+ * represent one thing which has a URI, should be made draggable using makeDraggable
  * Any list of things should typically allow you to drag new members of the list
  * onto it.
- * The file upload function uploadFiles is provided as often of someone drags a file from the computer
+ * The file upload function uploadFiles is provided as often as someone drags a file from the computer
  * desktop, you may want to upload it into the pod.
  */
 
@@ -14379,22 +14390,16 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 
 function makeDropTarget(ele, droppedURIHandler, droppedFileHandler) {
   var dragoverListener = function dragoverListener(e) {
-    e.preventDefault(); // Neeed else drop does not work [sic]
+    e.preventDefault(); // Need else drop does not work [sic]
     e.dataTransfer.dropEffect = 'copy';
   };
   var dragenterListener = function dragenterListener(e) {
     debug.log('dragenter event dropEffect: ' + e.dataTransfer.dropEffect);
-    if (this.style) {
+    if (this.localStyle) {
       //  necessary not sure when
       if (!this.savedStyle) {
-        this.savedStyle = {};
-        this.savedStyle.border = this.style.border;
-        this.savedStyle.backgroundColor = this.style.backgroundColor;
-        this.savedStyle.borderRadius = this.style.borderRadius;
+        this.savedStyle = style.dragEvent;
       }
-      this.style.backgroundColor = '#ccc';
-      this.style.border = '0.25em dashed black';
-      this.style.borderRadius = '0.3em';
     }
     e.dataTransfer.dropEffect = 'link';
     debug.log('dragenter event dropEffect 2: ' + e.dataTransfer.dropEffect);
@@ -14402,12 +14407,9 @@ function makeDropTarget(ele, droppedURIHandler, droppedFileHandler) {
   var dragleaveListener = function dragleaveListener(e) {
     debug.log('dragleave event dropEffect: ' + e.dataTransfer.dropEffect);
     if (this.savedStyle) {
-      this.style.border = this.savedStyle.border;
-      this.style.backgroundColor = this.savedStyle.backgroundColor;
-      this.style.borderRadius = this.savedStyle.borderRadius;
+      this.localStyle = this.savedStyle;
     } else {
-      this.style.backgroundColor = 'white';
-      this.style.border = '0em solid black';
+      this.localStyle = style.dropEvent;
     }
   };
   var dropListener = function dropListener(e) {
@@ -14446,7 +14448,7 @@ function makeDropTarget(ele, droppedURIHandler, droppedFileHandler) {
     if (uris) {
       droppedURIHandler(uris);
     }
-    this.style.backgroundColor = 'white'; // restore style
+    this.localStyle = style.restoreStyle; // restore style
     return false;
   }; // dropListener
 
@@ -14567,11 +14569,15 @@ function uploadFiles(fetcher, files, fileBase, imageBase, successHandler) {
 "use strict";
 
 
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.errorMessageBlock = errorMessageBlock;
 var _widgets = __webpack_require__(/*! ../widgets */ "./lib/widgets/index.js");
+var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 /**
  * Create an error message block
  * @param dom The DOM on which dom.createElement will be called
@@ -14600,8 +14606,9 @@ function errorMessageBlock(dom, err, backgroundColor, err2) {
   }
   div.appendChild((0, _widgets.cancelButton)(dom, function () {
     if (div.parentNode) div.parentNode.removeChild(div);
-  })).style = 'width: 2em; height: 2em; align: right;';
-  div.setAttribute('style', 'margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; background-color: ' + (backgroundColor || '#fee') + '; color:black;');
+  })).style = style.errorCancelButton;
+  div.setAttribute('style', style.errorMessageBlock);
+  div.style.backgroundColor = backgroundColor || style.defaultErrorBackgroundColor;
   return div;
 }
 //# sourceMappingURL=error.js.map

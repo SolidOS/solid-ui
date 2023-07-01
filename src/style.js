@@ -10,6 +10,9 @@ const formFieldNameBoxWidth = '8em' // The fixed amount to get form fields to li
 // The latter we put in when switching awy from using tables.  Getting allignment between
 // fields in different groups though is hard problem.
 
+const mediaModuleCanvasWidth = '640'
+const mediaModuleCanvasHeight = '480'
+
 export const style = { // styleModule
 
   checkboxStyle: 'color: black; font-size: 100%; padding-left: 0.5 em; padding-right: 0.5 em;',
@@ -128,20 +131,52 @@ export const style = { // styleModule
 
   // buttons
   primaryButton: 'background-color: #7c4dff; color: #ffffff; font-family: Raleway, Roboto, sans-serif; border-radius: 0.25em; border-color: #7c4dff; border: 1px solid; cursor: pointer; font-size: .8em;text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none',
-
   primaryButtonHover: 'background-color: #9f7dff; color: #ffffff; font-family: Raleway, Roboto, sans-serif;border-radius: 0.25em; border-color: #7c4dff; border: 1px solid; cursor: pointer; font-size: .8em;text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none; transition: 0.25s all ease-in-out',
-
   primaryButtonNoBorder: 'background-color: #ffffff; color: #7c4dff; font-family: Raleway, Roboto, sans-serif;border-radius: 0.25em; border-color: #7c4dff; border: 1px solid; cursor: pointer; font-size: .8em;text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none',
-
   primaryButtonNoBorderHover: 'background-color: #7c4dff; color: #ffffff; font-family: Raleway, Roboto, sans-serif; border-radius: 0.25em; border-color: #7c4dff; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none; transition: 0.25s all ease-in-out',
-
   secondaryButton: 'background-color: #01c9ea; color: #ffffff; font-family: Raleway, Roboto, sans-serif;border-radius: 0.25em; border-color: #01c9ea; border: 1px solid; cursor: pointer; font-size: .8em;text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none',
-
   secondaryButtonHover: 'background-color: #37cde6; color: #ffffff; font-family: Raleway, Roboto, sans-serif;border-radius: 0.25em; border-color: #7c4dff; border: 1px solid; cursor: pointer; font-size: .8em;text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none; transition: 0.25s all ease-in-out',
-
   secondaryButtonNoBorder: 'background-color: #ffffff; color: #01c9ea; font-family: Raleway, Roboto, sans-serif; border-radius: 0.25em; border-color: #01c9ea; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none',
+  secondaryButtonNoBorderHover: 'background-color: #01c9ea; color: #ffffff; font-family: Raleway, Roboto, sans-serif; border-radius: 0.25em; border-color: #01c9ea; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none; transition: 0.25s all ease-in-out',
 
-  secondaryButtonNoBorderHover: 'background-color: #01c9ea; color: #ffffff; font-family: Raleway, Roboto, sans-serif; border-radius: 0.25em; border-color: #01c9ea; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none; transition: 0.25s all ease-in-out'
+  // media
+  controlStyle: `border-radius: 0.5em; margin: 0.8em; width:${mediaModuleCanvasWidth}; height:${mediaModuleCanvasHeight};`,
+
+  // dragAndDrop
+  dragEvent: 'background-color: #ccc; border: 0.25em dashed black; border-radius: 0.3em;',
+  dropEvent: 'background-color: white; border: 0em solid black;',
+  restoreStyle: 'background-color: white;',
+
+  // errors
+  errorCancelButton: 'width: 2em; height: 2em; align: right;',
+  errorMessageBlock: 'margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; color:black;',
+  defaultErrorBackgroundColor: '#fee',
+
+  // pad
+  notepadStyle: 'padding: 1em; overflow: auto; resize: horizontal; min-width: 40em;',
+  upstreamStatus: 'width:50%',
+  downstreamStatus: 'width:50%',
+  baseStyle: 'font-size: 100%; font-family: monospace; width: 100%; border: none; white-space: pre-wrap;',
+  headingCore: 'font-family: sans-serif; font-weight: bold;  border: none;',
+  headingStyle: [
+    'font-size: 110%;  padding-top: 0.5em; padding-bottom: 0.5em; width: 100%;',
+    'font-size: 120%; padding-top: 1em; padding-bottom: 1em; width: 100%;',
+    'font-size: 150%; padding-top: 1em; padding-bottom: 1em; width: 100%;'
+  ],
+
+  // participation
+  participantsStyle: 'margin: 0.8em;',
+  participantsBlock: 'height: 1.5em; width: 1.5em; margin: 0.3em; border 0.01em solid #888;',
+  personTableTD: 'vertical-align: middle;',
+
+  // tabs
+  tabsDefaultBackgroundColor: '#ddddcc',
+  tabsNavElement: 'margin: 0;',
+  tabsRootElement: 'display: flex; height: 100%; width: 100%;',
+  tabsMainElement: 'margin: 0; width:100%; height: 100%;',
+  tabContainer: 'list-style-type: none; display: flex; height: 100%; width: 100%; margin: 0; padding: 0;',
+  makeNewSlot: 'background: none; border: none; font: inherit; cursor: pointer',
+  ellipsis: 'position: absolute; right: 0; bottom: 0; width: 20%; background: none; color: inherit; border: none; padding: 0; font: inherit; cursor: pointer; outline: inherit;'
 
 }
 

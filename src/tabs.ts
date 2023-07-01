@@ -1,6 +1,7 @@
 import { cancelButton } from './widgets'
 import { label } from './utils'
 import { NamedNode } from 'rdflib'
+import * as style from './style'
 import { store } from 'solid-logic'
 
 /**
@@ -169,7 +170,7 @@ export function tabWidget (options: TabWidgetOptions) {
   const subject = options.subject
   const dom = options.dom || document
   const orientation = parseInt(options.orientation || '0')
-  const backgroundColor = options.backgroundColor || '#ddddcc'
+  const backgroundColor = options.backgroundColor || style.tabsDefaultBackgroundColor
   const flipped = orientation & 2
   const vertical = orientation & 1
   const onClose = options.onClose
@@ -178,32 +179,18 @@ export function tabWidget (options: TabWidgetOptions) {
   const bodyMainStyle = `flex: 2; width: auto; height: 100%; border: 0.1em; border-style: solid; border-color: ${selectedColor}; padding: 1em;`
   const rootElement: TabWidgetElement = dom.createElement('div') // 20200117a
 
-  rootElement.setAttribute(
-    'style',
-    'display: flex; height: 100%; width: 100%; flex-direction: ' +
-      (vertical ? 'row' : 'column') +
-      (flipped ? '-reverse;' : ';')
-  )
+  rootElement.setAttribute('style', style.tabsRootElement)
+  rootElement.style.flexDirection = (vertical ? 'row' : 'column') + (flipped ? '-reverse;' : ';')
 
   const navElement = rootElement.appendChild(dom.createElement('nav'))
-  navElement.setAttribute('style', 'margin: 0;')
+  navElement.setAttribute('style', style.tabsNavElement)
 
   const mainElement = rootElement.appendChild(dom.createElement('main'))
 
-  mainElement.setAttribute('style', 'margin: 0; width:100%; height: 100%;') // override tabbedtab.css
+  mainElement.setAttribute('style', style.tabsMainElement) // override tabbedtab.css
   const tabContainer = navElement.appendChild(dom.createElement('ul'))
-  tabContainer.setAttribute(
-    'style',
-    `
-    list-style-type: none;
-    display: flex;
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    flex-direction: ${vertical ? 'column' : 'row'}
-  `
-  )
+  tabContainer.setAttribute('style', style.tabContainer)
+  tabContainer.style.flexDirection = `${vertical ? 'column' : 'row'}`
 
   const tabElement = 'li'
 
@@ -232,7 +219,7 @@ export function tabWidget (options: TabWidgetOptions) {
   orderedSync()
 
   if (!options.startEmpty && tabContainer.children.length && options.selectedTab) {
-    const selectedTab0 = Array.from(tabContainer.children) // Version left for compatability with ??
+    const selectedTab0 = Array.from(tabContainer.children) // Version left for compatibility with ??
       .map((tab) => tab.firstChild as HTMLElement)
       .find((tab) => tab.dataset.name === options.selectedTab)
 
@@ -288,7 +275,7 @@ export function tabWidget (options: TabWidgetOptions) {
     ele.setAttribute('style', unselectedStyle)
     ele.subject = item
     const div = ele.appendChild(dom.createElement('button'))
-    div.setAttribute('style', 'background: none; border: none; font: inherit; cursor: pointer')
+    div.setAttribute('style', style.makeNewSlot)
 
     div.onclick = function () {
       resetTabStyle()
@@ -307,7 +294,7 @@ export function tabWidget (options: TabWidgetOptions) {
     if (options.renderTabSettings && ele.subject) {
       const ellipsis = dom.createElement('button')
       ellipsis.textContent = '...'
-      ellipsis.setAttribute('style', 'position: absolute; right: 0; bottom: 0; width: 20%; background: none; color: inherit; border: none; padding: 0; font: inherit; cursor: pointer; outline: inherit;')
+      ellipsis.setAttribute('style', style.ellipsis)
 
       ellipsis.onclick = function () {
         resetTabStyle()
