@@ -170,7 +170,6 @@ export const style = { // styleModule
   personTableTD: 'vertical-align: middle;',
 
   // tabs
-  tabsDefaultBackgroundColor: '#ddddcc',
   tabsNavElement: 'margin: 0;',
   tabsRootElement: 'display: flex; height: 100%; width: 100%;',
   tabsMainElement: 'margin: 0; width:100%; height: 100%;',

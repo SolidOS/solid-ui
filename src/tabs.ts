@@ -166,11 +166,13 @@ class TabElement extends HTMLElement {
  *
  * @param options
  */
+const tabsDefaultBackgroundColor = '#ddddcc'
+
 export function tabWidget (options: TabWidgetOptions) {
   const subject = options.subject
   const dom = options.dom || document
   const orientation = parseInt(options.orientation || '0')
-  const backgroundColor = options.backgroundColor || style.tabsDefaultBackgroundColor
+  const backgroundColor = options.backgroundColor || tabsDefaultBackgroundColor
   const flipped = orientation & 2
   const vertical = orientation & 1
   const onClose = options.onClose

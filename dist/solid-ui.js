@@ -10393,7 +10393,6 @@ var style = {
   participantsBlock: 'height: 1.5em; width: 1.5em; margin: 0.3em; border 0.01em solid #888;',
   personTableTD: 'vertical-align: middle;',
   // tabs
-  tabsDefaultBackgroundColor: '#ddddcc',
   tabsNavElement: 'margin: 0;',
   tabsRootElement: 'display: flex; height: 100%; width: 100%;',
   tabsMainElement: 'margin: 0; width:100%; height: 100%;',
@@ -12284,11 +12283,12 @@ var TabElement = /*#__PURE__*/function (_HTMLElement3) {
  *
  * @param options
  */
+var tabsDefaultBackgroundColor = '#ddddcc';
 function tabWidget(options) {
   var subject = options.subject;
   var dom = options.dom || document;
   var orientation = parseInt(options.orientation || '0');
-  var backgroundColor = options.backgroundColor || style.tabsDefaultBackgroundColor;
+  var backgroundColor = options.backgroundColor || tabsDefaultBackgroundColor;
   var flipped = orientation & 2;
   var vertical = orientation & 1;
   var onClose = options.onClose;
@@ -13685,8 +13685,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2023-07-01T17:56:56Z',
-  commit: '6168d1699dcf7f804cf7c2db027a580bea6a06ab',
+  buildTime: '2023-07-01T18:12:46Z',
+  commit: 'e21f60c14dc28ede71cc357a9e23bf9fc3cbafd0',
   npmInfo: {
     'solid-ui': '2.4.28',
     npm: '8.19.4',
