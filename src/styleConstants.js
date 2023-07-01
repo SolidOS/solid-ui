@@ -19,5 +19,9 @@ export default {
   textInputColor: '#000',
   textInputColorPending: '#888',
 
-  defaultErrorBackgroundColor: '#fee'
+  defaultErrorBackgroundColor: '#fee',
+
+  participationDefaultBackground: 'white',
+
+  basicMaxLength: '4096'
 }

@@ -7,7 +7,7 @@ import {
   messageBodyStyle,
   multilineTextInputStyle,
   pendingeditModifier,
-  signInButtonStyle,
+  signInAndUpButtonStyle,
   textInputStyle
 } from '../../src/style'
 
@@ -46,7 +46,7 @@ describe('pendingeditModifier', () => {
 })
 describe('signInButtonStyle', () => {
   it('exists', () => {
-    expect(typeof signInButtonStyle).toEqual('string')
+    expect(typeof signInAndUpButtonStyle).toEqual('string')
   })
 })
 describe('formTextInput', () => {

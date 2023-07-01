@@ -311,12 +311,12 @@ exports[`createLoginSignUpButtons creates div 1`] = `
       style="display:flex;"
     >
       <input
-        style="padding: 1em; border-radius:0.5em; font-size: 100%;background-color: #eef;margin: 0.75em 0 0.75em 0.5em !important; padding: 0.5em !important"
+        style="padding: 1em; border-radius:0.2em; font-size: 100%;margin: 0.75em 0 0.75em 0.5em !important; padding: 0.5em !important;background-color: #eef;"
         type="button"
         value="Log in"
       />
       <input
-        style="padding: 1em; border-radius:0.5em; font-size: 100%;background-color: #efe;margin: 0.75em 0 0.75em 0.5em !important; padding: 0.5em !important"
+        style="padding: 1em; border-radius:0.2em; font-size: 100%;margin: 0.75em 0 0.75em 0.5em !important; padding: 0.5em !important;background-color: #efe;"
         type="button"
         value="Sign Up for Solid"
       />

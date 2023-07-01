@@ -10,6 +10,7 @@ import { syncTableToArray } from './utils'
 import { lightColorHash } from './pad'
 import { log } from './debug'
 import * as style from './style'
+import styleConstants from './styleConstants'
 import { solidLogicSingleton, authn } from 'solid-logic'
 
 type ParticipationOptions = {
@@ -44,7 +45,7 @@ export function renderParticipants (dom: HTMLDocument, table: ParticipationTable
       tr.textContent = '???' // Don't crash - invalid part'n entry
       return tr
     }
-    const bg = store.anyValue(parp, ns.ui('backgroundColor')) || 'white'
+    const bg = store.anyValue(parp, ns.ui('backgroundColor')) || styleConstants.participationDefaultBackground
 
     const block = dom.createElement('div')
     block.setAttribute(

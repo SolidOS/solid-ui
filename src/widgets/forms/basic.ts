@@ -141,7 +141,7 @@ export function basicField (
   field.setAttribute('size', size)
 
   const maxLength = kb.any(form, ns.ui('maxLength'))
-  field.setAttribute('maxLength', maxLength ? '' + maxLength : '4096')
+  field.setAttribute('maxLength', maxLength ? '' + maxLength : styleConstants.basicMaxLength)
 
   doc = doc || fieldStore(subject, property as any, doc)
 

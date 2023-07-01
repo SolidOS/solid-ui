@@ -34,7 +34,10 @@ export const style = { // styleModule
   autocompleteRowStyle: 'border: 0.2em solid straw;',
 
   // Login buttons
-  signInButtonStyle: 'padding: 1em; border-radius:0.2em; font-size: 100%;', // was 0.5em radius
+  signInAndUpButtonStyle: 'padding: 1em; border-radius:0.2em; font-size: 100%;', // was 0.5em radius
+  headerBannerLoginInput: 'margin: 0.75em 0 0.75em 0.5em !important; padding: 0.5em !important;',
+  signUpBackground: 'background-color: #eef;',
+  signInBackground: 'background-color: #efe;',
 
   // Forms
   heading1Style: 'font-size: 180%; font-weight: bold; color: #888888; padding: 0.5em; margin: 0.7em 0.0m;', // originally was brown; now grey
@@ -103,7 +106,6 @@ export const style = { // styleModule
   headerBannerRightMenu: 'display: flex',
   headerBannerLogin: 'margin-left: auto',
   allChildrenVisible: 'display:true',
-  headerBannerLoginInput: 'margin: 0.75em 0 0.75em 0.5em !important; padding: 0.5em !important',
   headerBannerUserMenu: 'border-left: solid 1px #000000; margin-left: auto',
   headerBannerHelpMenu: 'border-left: solid 1px #000000; margin.left: auto',
   headerBannerIcon: 'background-size: 65px 60px !important; height: 60px !important; width: 65px !important', // may just be 65px round($icon-size * 352 / 322);
