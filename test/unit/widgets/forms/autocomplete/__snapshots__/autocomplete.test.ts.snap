@@ -55,7 +55,7 @@ exports[`autocompleteField clicking on row of greenn table then accecpt button s
                 <input
                   data-testid="autocomplete-input"
                   size="60"
-                  style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.4em;"
+                  style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c; border-radius:0.2em; font-size: 100%; margin:0.4em;"
                   type="text"
                 />
               </td>
@@ -146,7 +146,7 @@ exports[`autocompleteField creates a autocomplete field 1`] = `
                 <input
                   data-testid="autocomplete-input"
                   size="60"
-                  style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.4em;"
+                  style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c; border-radius:0.2em; font-size: 100%; margin:0.4em;"
                   type="text"
                 />
               </td>
@@ -215,7 +215,7 @@ exports[`autocompleteField on inpt fetches data (fixing wikidata timeout issue) 
       <input
         data-testid="autocomplete-input"
         size="60"
-        style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.4em;"
+        style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c; border-radius:0.2em; font-size: 100%; margin:0.4em;"
         type="text"
       />
     </td>
@@ -272,7 +272,7 @@ exports[`autocompleteField typing more search term till unique selects the whole
                 <input
                   data-testid="autocomplete-input"
                   size="60"
-                  style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.4em;"
+                  style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c; border-radius:0.2em; font-size: 100%; margin:0.4em;"
                   type="text"
                 />
               </td>

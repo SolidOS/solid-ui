@@ -2,7 +2,7 @@
 
 exports[`createControllerInfoBlock makes use of options 1`] = `
 <div
-  style="border-top: solid 1px $divider-color; font-size: 0.9em; padding: 0.5em 1.5em"
+  style="border-top: solid 1px $divider-color; font-size: 0.9em; padding: 0.5em 1.5em;"
 >
   <span />
   <a
@@ -22,7 +22,7 @@ exports[`createControllerInfoBlock makes use of options 1`] = `
 
 exports[`createControllerInfoBlock runs createControllerInfoBlock 1`] = `
 <div
-  style="border-top: solid 1px $divider-color; font-size: 0.9em; padding: 0.5em 1.5em"
+  style="border-top: solid 1px $divider-color; font-size: 0.9em; padding: 0.5em 1.5em;"
 >
   <span />
   <a
