@@ -1,17 +1,9 @@
 // Common readable consistent stylesheet
 // to avoid using style sheets which are document-global
 // and make programmable style toggling with selection, drag over, etc easier
-
 // These must all end with semicolon so they can be appended to.
 
-const formBorderColor = '#888888' // Mid-grey
-const lowProfileLinkColor = '#3B5998' // Grey-blue, e.g., for field labels linking to ontology
-const formFieldNameBoxWidth = '8em' // The fixed amount to get form fields to line up
-// The latter we put in when switching awy from using tables.  Getting allignment between
-// fields in different groups though is hard problem.
-
-const mediaModuleCanvasWidth = '640'
-const mediaModuleCanvasHeight = '480'
+import styleConstants from './styleConstants'
 
 export const style = { // styleModule
 
@@ -19,13 +11,12 @@ export const style = { // styleModule
   checkboxInputStyle: 'font-size: 150%; height: 1.2em; width: 1.2em; background-color: #eef; border-radius:0.2em; margin: 0.1em',
 
   fieldLabelStyle: 'color: #3B5998; text-decoration: none;',
-  formSelectSTyle:
+  formSelectStyle:
     'background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.4em;',
   textInputStyle:
     'background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.4em;',
   textInputStyleUneditable: // Color difference only
     'background-color: white; padding: 0.5em;  border: .05em solid white;  border-radius:0.2em; font-size: 100%; margin:0.4em;',
-  textInputSize: 20, // Default text input size in characters roughly
   buttonStyle:
       'background-color: #fff; padding: 0.7em;  border: .01em solid white;  border-radius:0.2em; font-size: 100%; margin: 0.3em;', // 'background-color: #eef;
   commentStyle: 'padding: 0.7em;  border: none; font-size: 100%; white-space: pre-wrap;',
@@ -33,11 +24,9 @@ export const style = { // styleModule
   smallButtonStyle: 'margin: 0.2em; width: 1em; height:1em;',
   classIconStyle: 'width: 3em; height: 3em; margin: 0.1em; border-radius: 0.2em; border: 0.1em solid green; padding: 0.2em; background-color: #efe;', // combine with buttonStyle
   confirmPopupStyle: 'padding: 0.7em; border-radius: 0.2em; border: 0.1em solid orange; background-color: white; box-shadow: 0.5em 0.9em #888;',
-  tabBorderRadius: '0.2em',
   messageBodyStyle:
     'white-space: pre-wrap; width: 99%; font-size:100%; border: 0.07em solid #eee; border-radius:0.2em; padding: .3em 0.5em; margin: 0.1em;',
   pendingeditModifier: 'color: #bbb;',
-  highlightColor: '#7C4DFF', // Solid lavendar https://design.inrupt.com/atomic-core/?cat=Core
 
   // Contacts
   personaBarStyle: 'width: 100%; height: 4em; background-color: #eee; vertical-align: middle;',
@@ -53,23 +42,16 @@ export const style = { // styleModule
   heading3Style: 'font-size: 120%; font-weight: bold; color: #888888; padding: 0.3em; margin: 0.7em 0.0em;', // For example, in large forms or before a small form
   heading4Style: 'font-size: 110%; font-weight: bold; color: #888888; padding: 0.2em; margin: 0.7em 0.0em;', // Lowest level used by default in small things
 
-  formBorderColor, // originally was brown; now grey
-  formHeadingColor: '#888888', // originally was brown; now grey
   formHeadingStyle: 'font-size: 110%; font-weight: bold; color: #888888; padding: 0.2em;  margin: 0.7em 0.0em;', // originally was brown; now grey
   formTextInput: 'font-size: 100%; margin: 0.1em; padding: 0.1em;', // originally used this
-  formGroupStyle: [`padding-left: 0em; border: 0.0em solid ${formBorderColor}; border-radius: 0.2em;`, // weight 0
-    `padding-left: 2em; border: 0.05em solid ${formBorderColor}; border-radius: 0.2em;`,
-    `padding-left: 2em; border: 0.1em solid ${formBorderColor}; border-radius: 0.2em;`,
-    `padding-left: 2em; border: 0.2em solid ${formBorderColor}; border-radius: 0.2em;` // @@ pink
+  formGroupStyle: [`padding-left: 0em; border: 0.0em solid ${styleConstants.formBorderColor}; border-radius: 0.2em;`, // weight 0
+    `padding-left: 2em; border: 0.05em solid ${styleConstants.formBorderColor}; border-radius: 0.2em;`,
+    `padding-left: 2em; border: 0.1em solid ${styleConstants.formBorderColor}; border-radius: 0.2em;`,
+    `padding-left: 2em; border: 0.2em solid ${styleConstants.formBorderColor}; border-radius: 0.2em;` // @@ pink
   ],
 
-  formFieldLabelStyle: `'color: ${lowProfileLinkColor}; text-decoration: none;'`,
-  formFieldNameBoxWidth,
-  formFieldNameBoxStyle: `padding: 0.3em; vertical-align: middle; width:${formFieldNameBoxWidth};`,
-  textInputBackgroundColor: '#eef',
-  textInputBackgroundColorUneditable: '#fff',
-  textInputColor: '#000',
-  textInputColorPending: '#888',
+  formFieldLabelStyle: `'color: ${styleConstants.lowProfileLinkColor}; text-decoration: none;'`,
+  formFieldNameBoxStyle: `padding: 0.3em; vertical-align: middle; width:${styleConstants.formFieldNameBoxWidth};`,
   multilineTextInputStyle: 'font-size:100%; white-space: pre-wrap; background-color: #eef;' +
   ' border: 0.07em solid gray; padding: 1em 0.5em; margin: 1em 1em;',
 
@@ -140,7 +122,7 @@ export const style = { // styleModule
   secondaryButtonNoBorderHover: 'background-color: #01c9ea; color: #ffffff; font-family: Raleway, Roboto, sans-serif; border-radius: 0.25em; border-color: #01c9ea; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none; transition: 0.25s all ease-in-out',
 
   // media
-  controlStyle: `border-radius: 0.5em; margin: 0.8em; width:${mediaModuleCanvasWidth}; height:${mediaModuleCanvasHeight};`,
+  controlStyle: `border-radius: 0.5em; margin: 0.8em; width:${styleConstants.mediaModuleCanvasWidth}; height:${styleConstants.mediaModuleCanvasHeight};`,
 
   // dragAndDrop
   dragEvent: 'background-color: #ccc; border: 0.25em dashed black; border-radius: 0.3em;',
@@ -149,8 +131,7 @@ export const style = { // styleModule
 
   // errors
   errorCancelButton: 'width: 2em; height: 2em; align: right;',
-  errorMessageBlock: 'margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; color:black;',
-  defaultErrorBackgroundColor: '#fee',
+  errorMessageBlockStyle: 'margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; color:black;',
 
   // pad
   notepadStyle: 'padding: 1em; overflow: auto; resize: horizontal; min-width: 40em;',
@@ -159,7 +140,7 @@ export const style = { // styleModule
   baseStyle: 'font-size: 100%; font-family: monospace; width: 100%; border: none; white-space: pre-wrap;',
   headingCore: 'font-family: sans-serif; font-weight: bold;  border: none;',
   headingStyle: [
-    'font-size: 110%;  padding-top: 0.5em; padding-bottom: 0.5em; width: 100%;',
+    'font-size: 110%; padding-top: 0.5em; padding-bottom: 0.5em; width: 100%;',
     'font-size: 120%; padding-top: 1em; padding-bottom: 1em; width: 100%;',
     'font-size: 150%; padding-top: 1em; padding-bottom: 1em; width: 100%;'
   ],

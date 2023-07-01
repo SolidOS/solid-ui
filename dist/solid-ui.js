@@ -10222,42 +10222,33 @@ Signup.prototype.signup = function signup(signupUrl) {
 /*!**********************!*\
   !*** ./lib/style.js ***!
   \**********************/
-/***/ ((module, exports) => {
+/***/ ((module, exports, __webpack_require__) => {
 
 "use strict";
 
 
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.style = void 0;
+var _styleConstants = _interopRequireDefault(__webpack_require__(/*! ./styleConstants */ "./lib/styleConstants.js"));
 // Common readable consistent stylesheet
 // to avoid using style sheets which are document-global
 // and make programmable style toggling with selection, drag over, etc easier
-
 // These must all end with semicolon so they can be appended to.
 
-var formBorderColor = '#888888'; // Mid-grey
-var lowProfileLinkColor = '#3B5998'; // Grey-blue, e.g., for field labels linking to ontology
-var formFieldNameBoxWidth = '8em'; // The fixed amount to get form fields to line up
-// The latter we put in when switching awy from using tables.  Getting allignment between
-// fields in different groups though is hard problem.
-
-var mediaModuleCanvasWidth = '640';
-var mediaModuleCanvasHeight = '480';
 var style = {
   // styleModule
 
   checkboxStyle: 'color: black; font-size: 100%; padding-left: 0.5 em; padding-right: 0.5 em;',
   checkboxInputStyle: 'font-size: 150%; height: 1.2em; width: 1.2em; background-color: #eef; border-radius:0.2em; margin: 0.1em',
   fieldLabelStyle: 'color: #3B5998; text-decoration: none;',
-  formSelectSTyle: 'background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.4em;',
+  formSelectStyle: 'background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.4em;',
   textInputStyle: 'background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.4em;',
   textInputStyleUneditable:
   // Color difference only
   'background-color: white; padding: 0.5em;  border: .05em solid white;  border-radius:0.2em; font-size: 100%; margin:0.4em;',
-  textInputSize: 20,
-  // Default text input size in characters roughly
   buttonStyle: 'background-color: #fff; padding: 0.7em;  border: .01em solid white;  border-radius:0.2em; font-size: 100%; margin: 0.3em;',
   // 'background-color: #eef;
   commentStyle: 'padding: 0.7em;  border: none; font-size: 100%; white-space: pre-wrap;',
@@ -10266,12 +10257,8 @@ var style = {
   classIconStyle: 'width: 3em; height: 3em; margin: 0.1em; border-radius: 0.2em; border: 0.1em solid green; padding: 0.2em; background-color: #efe;',
   // combine with buttonStyle
   confirmPopupStyle: 'padding: 0.7em; border-radius: 0.2em; border: 0.1em solid orange; background-color: white; box-shadow: 0.5em 0.9em #888;',
-  tabBorderRadius: '0.2em',
   messageBodyStyle: 'white-space: pre-wrap; width: 99%; font-size:100%; border: 0.07em solid #eee; border-radius:0.2em; padding: .3em 0.5em; margin: 0.1em;',
   pendingeditModifier: 'color: #bbb;',
-  highlightColor: '#7C4DFF',
-  // Solid lavendar https://design.inrupt.com/atomic-core/?cat=Core
-
   // Contacts
   personaBarStyle: 'width: 100%; height: 4em; background-color: #eee; vertical-align: middle;',
   searchInputStyle: 'border: 0.1em solid #444; border-radius: 0.2em; width: 100%; font-size: 100%; padding: 0.1em 0.6em; margin 0.2em;',
@@ -10290,24 +10277,15 @@ var style = {
   heading4Style: 'font-size: 110%; font-weight: bold; color: #888888; padding: 0.2em; margin: 0.7em 0.0em;',
   // Lowest level used by default in small things
 
-  formBorderColor: formBorderColor,
-  // originally was brown; now grey
-  formHeadingColor: '#888888',
-  // originally was brown; now grey
   formHeadingStyle: 'font-size: 110%; font-weight: bold; color: #888888; padding: 0.2em;  margin: 0.7em 0.0em;',
   // originally was brown; now grey
   formTextInput: 'font-size: 100%; margin: 0.1em; padding: 0.1em;',
   // originally used this
-  formGroupStyle: ["padding-left: 0em; border: 0.0em solid ".concat(formBorderColor, "; border-radius: 0.2em;"), // weight 0
-  "padding-left: 2em; border: 0.05em solid ".concat(formBorderColor, "; border-radius: 0.2em;"), "padding-left: 2em; border: 0.1em solid ".concat(formBorderColor, "; border-radius: 0.2em;"), "padding-left: 2em; border: 0.2em solid ".concat(formBorderColor, "; border-radius: 0.2em;") // @@ pink
+  formGroupStyle: ["padding-left: 0em; border: 0.0em solid ".concat(_styleConstants["default"].formBorderColor, "; border-radius: 0.2em;"), // weight 0
+  "padding-left: 2em; border: 0.05em solid ".concat(_styleConstants["default"].formBorderColor, "; border-radius: 0.2em;"), "padding-left: 2em; border: 0.1em solid ".concat(_styleConstants["default"].formBorderColor, "; border-radius: 0.2em;"), "padding-left: 2em; border: 0.2em solid ".concat(_styleConstants["default"].formBorderColor, "; border-radius: 0.2em;") // @@ pink
   ],
-  formFieldLabelStyle: "'color: ".concat(lowProfileLinkColor, "; text-decoration: none;'"),
-  formFieldNameBoxWidth: formFieldNameBoxWidth,
-  formFieldNameBoxStyle: "padding: 0.3em; vertical-align: middle; width:".concat(formFieldNameBoxWidth, ";"),
-  textInputBackgroundColor: '#eef',
-  textInputBackgroundColorUneditable: '#fff',
-  textInputColor: '#000',
-  textInputColorPending: '#888',
+  formFieldLabelStyle: "'color: ".concat(_styleConstants["default"].lowProfileLinkColor, "; text-decoration: none;'"),
+  formFieldNameBoxStyle: "padding: 0.3em; vertical-align: middle; width:".concat(_styleConstants["default"].formFieldNameBoxWidth, ";"),
   multilineTextInputStyle: 'font-size:100%; white-space: pre-wrap; background-color: #eef;' + ' border: 0.07em solid gray; padding: 1em 0.5em; margin: 1em 1em;',
   // Buttons
   renderAsDivStyle: 'display: flex; align-items: center; justify-content: space-between; height: 2.5em; padding: 1em;',
@@ -10372,7 +10350,7 @@ var style = {
   secondaryButtonNoBorder: 'background-color: #ffffff; color: #01c9ea; font-family: Raleway, Roboto, sans-serif; border-radius: 0.25em; border-color: #01c9ea; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none',
   secondaryButtonNoBorderHover: 'background-color: #01c9ea; color: #ffffff; font-family: Raleway, Roboto, sans-serif; border-radius: 0.25em; border-color: #01c9ea; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none; transition: 0.25s all ease-in-out',
   // media
-  controlStyle: "border-radius: 0.5em; margin: 0.8em; width:".concat(mediaModuleCanvasWidth, "; height:").concat(mediaModuleCanvasHeight, ";"),
+  controlStyle: "border-radius: 0.5em; margin: 0.8em; width:".concat(_styleConstants["default"].mediaModuleCanvasWidth, "; height:").concat(_styleConstants["default"].mediaModuleCanvasHeight, ";"),
   // dragAndDrop
   dragEvent: 'background-color: #ccc; border: 0.25em dashed black; border-radius: 0.3em;',
   dropEvent: 'background-color: white; border: 0em solid black;',
@@ -10380,14 +10358,13 @@ var style = {
   // errors
   errorCancelButton: 'width: 2em; height: 2em; align: right;',
   errorMessageBlock: 'margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; color:black;',
-  defaultErrorBackgroundColor: '#fee',
   // pad
   notepadStyle: 'padding: 1em; overflow: auto; resize: horizontal; min-width: 40em;',
   upstreamStatus: 'width:50%',
   downstreamStatus: 'width:50%',
   baseStyle: 'font-size: 100%; font-family: monospace; width: 100%; border: none; white-space: pre-wrap;',
   headingCore: 'font-family: sans-serif; font-weight: bold;  border: none;',
-  headingStyle: ['font-size: 110%;  padding-top: 0.5em; padding-bottom: 0.5em; width: 100%;', 'font-size: 120%; padding-top: 1em; padding-bottom: 1em; width: 100%;', 'font-size: 150%; padding-top: 1em; padding-bottom: 1em; width: 100%;'],
+  headingStyle: ['font-size: 110%; padding-top: 0.5em; padding-bottom: 0.5em; width: 100%;', 'font-size: 120%; padding-top: 1em; padding-bottom: 1em; width: 100%;', 'font-size: 150%; padding-top: 1em; padding-bottom: 1em; width: 100%;'],
   // participation
   participantsStyle: 'margin: 0.8em;',
   participantsBlock: 'height: 1.5em; width: 1.5em; margin: 0.3em; border 0.01em solid #888;',
@@ -10406,6 +10383,50 @@ style.setStyle = function setStyle(ele, styleName) {
 };
 module.exports = style; // @@ No way to do this in ESM
 //# sourceMappingURL=style.js.map
+
+/***/ }),
+
+/***/ "./lib/styleConstants.js":
+/*!*******************************!*\
+  !*** ./lib/styleConstants.js ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _default = {
+  highlightColor: '#7C4DFF',
+  // Solid lavender https://design.inrupt.com/atomic-core/?cat=Core
+
+  formBorderColor: '#888888',
+  // Mid-grey
+  formHeadingColor: '#888888',
+  // originally was brown; now grey
+  lowProfileLinkColor: '#3B5998',
+  // Grey-blue, e.g., for field labels linking to ontology
+  formFieldNameBoxWidth: '8em',
+  // The fixed amount to get form fields to line up
+  // The latter we put in when switching awy from using tables.  Getting alignment between
+  // fields in different groups though is hard problem.
+
+  mediaModuleCanvasWidth: '640',
+  mediaModuleCanvasHeight: '480',
+  textInputSize: 20,
+  // Default text input size in characters roughly
+  tabBorderRadius: '0.2em',
+  textInputBackgroundColor: '#eef',
+  textInputBackgroundColorUneditable: '#fff',
+  textInputColor: '#000',
+  textInputColorPending: '#888',
+  defaultErrorBackgroundColor: '#fee'
+};
+exports["default"] = _default;
+//# sourceMappingURL=styleConstants.js.map
 
 /***/ }),
 
@@ -13685,8 +13706,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = {
-  buildTime: '2023-07-01T18:12:46Z',
-  commit: 'e21f60c14dc28ede71cc357a9e23bf9fc3cbafd0',
+  buildTime: '2023-07-01T18:48:40Z',
+  commit: 'cdaefc011d313e905fbee9c4d8f1c8cfea739122',
   npmInfo: {
     'solid-ui': '2.4.28',
     npm: '8.19.4',
@@ -15329,6 +15350,7 @@ Object.defineProperty(exports, "__esModule", ({
 exports.errorMessageBlock = errorMessageBlock;
 var _widgets = __webpack_require__(/*! ../widgets */ "./lib/widgets/index.js");
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
+var styleConstants = _interopRequireWildcard(__webpack_require__(/*! ../styleConstants */ "./lib/styleConstants.js"));
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 /**
@@ -15361,7 +15383,7 @@ function errorMessageBlock(dom, err, backgroundColor, err2) {
     if (div.parentNode) div.parentNode.removeChild(div);
   })).style = style.errorCancelButton;
   div.setAttribute('style', style.errorMessageBlock);
-  div.style.backgroundColor = backgroundColor || style.defaultErrorBackgroundColor;
+  div.style.backgroundColor = backgroundColor || styleConstants.defaultErrorBackgroundColor;
   return div;
 }
 //# sourceMappingURL=error.js.map
@@ -15458,6 +15480,7 @@ var _error = __webpack_require__(/*! ./error */ "./lib/widgets/error.js");
 var _basic = __webpack_require__(/*! ./forms/basic */ "./lib/widgets/forms/basic.js");
 var _autocompleteField = __webpack_require__(/*! ./forms/autocomplete/autocompleteField */ "./lib/widgets/forms/autocomplete/autocompleteField.js");
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
+var styleConstants = _interopRequireWildcard(__webpack_require__(/*! ../styleConstants */ "./lib/styleConstants.js"));
 var _iconBase = __webpack_require__(/*! ../iconBase */ "./lib/iconBase.js");
 var log = _interopRequireWildcard(__webpack_require__(/*! ../log */ "./lib/log.js"));
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
@@ -16143,7 +16166,7 @@ _fieldFunction.field[ns.ui('MultiLineTextField').uri] = function (dom, container
   box.style.display = 'flex';
   box.style.flexDirection = 'row';
   var left = box.appendChild(dom.createElement('div'));
-  left.style.width = style.formFieldNameBoxWidth;
+  left.style.width = styleConstants.formFieldNameBoxWidth;
   var right = box.appendChild(dom.createElement('div'));
   left.appendChild((0, _basic.fieldLabel)(dom, property, form));
   dataDoc = (0, _basic.fieldStore)(subject, property, dataDoc);
@@ -16570,7 +16593,7 @@ function promptForNew(dom, kb, subject, predicate, theClass, form, dataDoc, call
   }
 
   log.debug('form is ' + form);
-  box.setAttribute('style', "border: 0.05em solid ".concat(style.formBorderColor, "; color: ").concat(style.formBorderColor)); // @@color?
+  box.setAttribute('style', "border: 0.05em solid ".concat(styleConstants.formBorderColor, "; color: ").concat(styleConstants.formBorderColor)); // @@color?
   box.innerHTML = '<h3>New ' + utils.label(theClass) + '</h3>';
   var formFunction = (0, _fieldFunction.fieldFunction)(dom, form);
   var object = newThing(dataDoc);
@@ -16631,12 +16654,12 @@ function makeDescription(dom, kb, subject, predicate, dataDoc, callbackFunction)
     submit.disabled = true;
     submit.setAttribute('style', 'visibility: hidden; float: right;'); // Keep UI clean
     field.disabled = true;
-    field.style.color = style.textInputColorPending; // setAttribute('style', style + 'color: gray;') // pending
+    field.style.color = styleConstants.textInputColorPending;
     var ds = kb.statementsMatching(subject, predicate, null, dataDoc);
     var is = $rdf.st(subject, predicate, field.value, dataDoc);
     kb.updater.update(ds, is, function (uri, ok, body) {
       if (ok) {
-        field.style.color = style.textInputColor;
+        field.style.color = styleConstants.textInputColor;
         field.disabled = false;
       } else {
         group.appendChild((0, _error.errorMessageBlock)(dom, 'Error (while saving change to ' + dataDoc.uri + '): ' + body));
@@ -16665,7 +16688,7 @@ function makeDescription(dom, kb, subject, predicate, dataDoc, callbackFunction)
     field.addEventListener('change', saveChange, true);
   } else {
     field.disabled = true; // @@ change color too
-    field.style.backgroundColor = style.textInputBackgroundColorUneditable;
+    field.style.backgroundColor = styleConstants.textInputBackgroundColorUneditable;
   }
   return group;
 }
@@ -16790,7 +16813,7 @@ function makeSelectForClassifierOptions(dom, kb, subject, predicate, possible, o
     });
   };
   var select = dom.createElement('select');
-  select.setAttribute('style', style.formSelectSTyle);
+  select.setAttribute('style', style.formSelectStyle);
   if (options.multiple) select.setAttribute('multiple', 'true');
   select.currentURI = null;
   select.refresh = function () {
@@ -16933,7 +16956,7 @@ function makeSelectForOptions(dom, kb, subject, predicate, possible, options, da
     });
   };
   var select = dom.createElement('select');
-  select.setAttribute('style', style.formSelectSTyle);
+  select.setAttribute('style', style.formSelectStyle);
   select.currentURI = null;
   select.refresh = function () {
     actual = getActual(); // refresh
@@ -17219,7 +17242,7 @@ function makeSelectForChoice(dom, container, kb, subject, predicate, inputPossib
     select.refresh();
   };
   var select = dom.createElement('select');
-  select.setAttribute('style', style.formSelectSTyle);
+  select.setAttribute('style', style.formSelectStyle);
   select.setAttribute('id', 'formSelect');
   select.currentURI = null;
   for (var uri in optionsFromClassUIfrom) {
@@ -18004,6 +18027,7 @@ var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../../../debug */ "./lib/debug.js"));
 var style = _interopRequireWildcard(__webpack_require__(/*! ../../../style */ "./lib/style.js"));
+var styleConstants = _interopRequireWildcard(__webpack_require__(/*! ../../../styleConstants */ "./lib/styleConstants.js"));
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../../../widgets */ "./lib/widgets/index.js"));
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var _publicData = __webpack_require__(/*! ./publicData */ "./lib/widgets/forms/autocomplete/publicData.js");
@@ -18401,7 +18425,7 @@ function _renderAutoComplete() {
           searchInput = cell.appendChild(dom.createElement('input'));
           searchInput.setAttribute('type', 'text');
           initialize();
-          size = acOptions.size || style.textInputSize || 20;
+          size = acOptions.size || styleConstants.textInputSize || 20;
           searchInput.setAttribute('size', size);
           searchInput.setAttribute('data-testid', 'autocomplete-input');
           searchInputStyle = style.textInputStyle ||
@@ -19304,6 +19328,7 @@ var _rdflib = __webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../../ns */ "./lib/ns.js"));
 var _style = __webpack_require__(/*! ../../style */ "./lib/style.js");
+var styleConstants = _interopRequireWildcard(__webpack_require__(/*! ../../styleConstants */ "./lib/styleConstants.js"));
 var _utils = __webpack_require__(/*! ../../utils */ "./lib/utils/index.js");
 var _error = __webpack_require__(/*! ../error */ "./lib/widgets/error.js");
 var _fieldFunction = __webpack_require__(/*! ./fieldFunction */ "./lib/widgets/forms/fieldFunction.js");
@@ -19319,7 +19344,7 @@ function renderNameValuePair(dom, kb, box, form, label) {
   box.style.display = 'flex';
   box.style.flexDirection = 'row';
   var lhs = box.appendChild(dom.createElement('div'));
-  lhs.style.width = _style.formFieldNameBoxWidth;
+  lhs.style.width = styleConstants.formFieldNameBoxWidth;
   var rhs = box.appendChild(dom.createElement('div'));
   lhs.setAttribute('class', 'formFieldName');
   lhs.setAttribute('style', _style.formFieldNameBoxStyle);
@@ -19424,7 +19449,7 @@ function basicField(dom, container, already, subject, form, doc, callbackFunctio
   field.style = style;
   rhs.appendChild(field);
   field.setAttribute('type', params.type ? params.type : 'text');
-  var size = kb.anyJS(form, ns.ui('size')) || _style.textInputSize || 20;
+  var size = kb.anyJS(form, ns.ui('size')) || styleConstants.textInputSize || 20;
   field.setAttribute('size', size);
   var maxLength = kb.any(form, ns.ui('maxLength'));
   field.setAttribute('maxLength', maxLength ? '' + maxLength : '4096');
@@ -19449,7 +19474,6 @@ function basicField(dom, container, already, subject, form, doc, callbackFunctio
     field.readOnly = true // was: disabled. readOnly is better
     ;
     field.style = _style.textInputStyleUneditable + paramStyle;
-    // backgroundColor = textInputBackgroundColorUneditable
     if (suppressEmptyUneditable && field.value === '') {
       box.style.display = 'none'; // clutter
     }
@@ -19690,10 +19714,10 @@ var fieldParams = (_fieldParams = {}, (0, _defineProperty2["default"])(_fieldPar
   style: _style.formGroupStyle
 }), (0, _defineProperty2["default"])(_fieldParams, ns.ui('Comment').uri, {
   element: 'p',
-  style: _style.commentStyle // was `padding: 0.1em 1.5em; color: ${formHeadingColor}; white-space: pre-wrap;`
+  style: _style.commentStyle
 }), (0, _defineProperty2["default"])(_fieldParams, ns.ui('Heading').uri, {
   element: 'h3',
-  style: _style.formHeadingStyle // was: `font-size: 110%; font-weight: bold; color: ${formHeadingColor}; padding: 0.2em;`
+  style: _style.formHeadingStyle
 }), _fieldParams);
 exports.fieldParams = fieldParams;
 //# sourceMappingURL=fieldParams.js.map

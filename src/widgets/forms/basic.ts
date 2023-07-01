@@ -1,7 +1,8 @@
 import { BlankNode, Literal, NamedNode, Node, st, Store, Variable } from 'rdflib'
 import { solidLogicSingleton } from 'solid-logic'
 import * as ns from '../../ns'
-import { formFieldNameBoxStyle, formFieldNameBoxWidth, textInputSize, textInputStyle, textInputStyleUneditable } from '../../style'
+import { formFieldNameBoxStyle, textInputStyle, textInputStyleUneditable } from '../../style'
+import styleConstants from '../../styleConstants'
 import { label } from '../../utils'
 import { errorMessageBlock } from '../error'
 import { mostSpecificClassURI } from './fieldFunction'
@@ -16,7 +17,7 @@ export function renderNameValuePair (dom: HTMLDocument, kb: Store, box: HTMLElem
   box.style.display = 'flex'
   box.style.flexDirection = 'row'
   const lhs = box.appendChild(dom.createElement('div'))
-  lhs.style.width = formFieldNameBoxWidth
+  lhs.style.width = styleConstants.formFieldNameBoxWidth
   const rhs = box.appendChild(dom.createElement('div'))
 
   lhs.setAttribute('class', 'formFieldName')
@@ -136,7 +137,7 @@ export function basicField (
   rhs.appendChild(field)
   field.setAttribute('type', params.type ? params.type : 'text')
 
-  const size = kb.anyJS(form, ns.ui('size')) || textInputSize || 20
+  const size = kb.anyJS(form, ns.ui('size')) || styleConstants.textInputSize || 20
   field.setAttribute('size', size)
 
   const maxLength = kb.any(form, ns.ui('maxLength'))
@@ -163,7 +164,6 @@ export function basicField (
   if (!kb.updater.editable((doc as NamedNode).uri)) {
     field.readOnly = true // was: disabled. readOnly is better
     ;(field as any).style = textInputStyleUneditable + paramStyle
-    // backgroundColor = textInputBackgroundColorUneditable
     if (suppressEmptyUneditable && field.value === '') {
       box.style.display = 'none' // clutter
     }

@@ -5,6 +5,7 @@
 */
 import * as debug from '../../../debug'
 import * as style from '../../../style'
+import styleConstants from '../../../styleConstants'
 import * as widgets from '../../../widgets'
 import { store } from 'solid-logic'
 import { NamedNode, Literal } from 'rdflib'
@@ -288,7 +289,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
 
   initialize()
 
-  const size = acOptions.size || style.textInputSize || 20
+  const size = acOptions.size || styleConstants.textInputSize || 20
   searchInput.setAttribute('size', size)
   searchInput.setAttribute('data-testid', 'autocomplete-input')
 

@@ -2,10 +2,7 @@ import { silenceDebugMessages } from '../helpers/setup'
 import {
   buttonStyle,
   classIconStyle,
-  formBorderColor,
-  formHeadingColor,
   formTextInput,
-  highlightColor,
   iconStyle,
   messageBodyStyle,
   multilineTextInputStyle,
@@ -47,24 +44,9 @@ describe('pendingeditModifier', () => {
     expect(typeof pendingeditModifier).toEqual('string')
   })
 })
-describe('highlightColor', () => {
-  it('exists', () => {
-    expect(typeof highlightColor).toEqual('string')
-  })
-})
 describe('signInButtonStyle', () => {
   it('exists', () => {
     expect(typeof signInButtonStyle).toEqual('string')
-  })
-})
-describe('formBorderColor', () => {
-  it('exists', () => {
-    expect(typeof formBorderColor).toEqual('string')
-  })
-})
-describe('formHeadingColor', () => {
-  it('exists', () => {
-    expect(typeof formHeadingColor).toEqual('string')
   })
 })
 describe('formTextInput', () => {
