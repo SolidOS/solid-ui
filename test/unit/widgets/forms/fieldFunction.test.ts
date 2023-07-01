@@ -1,29 +1,9 @@
 import { silenceDebugMessages } from '../../../helpers/setup'
-import { namedNode } from 'rdflib'
-import ns from '../../../../src/ns'
-import { solidLogicSingleton } from 'solid-logic'
 
 // console.log('@@ solidLogicSingleton', solidLogicSingleton)
 // @ts-ignore
 import {
-  appendForm,
-  buildCheckboxForm,
-  editFormButton,
-  field,
-  findClosest,
-  formsFor,
-  makeDescription,
-  makeSelectForCategory,
-  makeSelectForNestedCategory,
-  makeSelectForOptions,
-  newButton,
-  newThing,
-  promptForNew,
-  propertiesForClass,
-  sortByLabel,
-  sortBySequence,
-
-  mostSpecificClassURI, fieldFunction
+  mostSpecificClassURI
 } from '../../../../src/widgets/forms'
 
 import { // trying to import this way lead to bizarre  chaos

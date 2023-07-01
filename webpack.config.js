@@ -3,19 +3,19 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 // module.exports = [{
 module.exports = (env, args) => {
-  const production = args.mode === 'production';
+  const production = args.mode === 'production'
   return {
-    // mode: 'development',
     mode: args.mode || 'development',
     entry: './lib/index.js',
     output: {
       path: path.join(__dirname, '/dist/'),
+      publicPath: '',
       filename: production ? 'solid-ui.min.js' : 'solid-ui.js',
       library: 'solid-ui',
       libraryTarget: 'umd'
     },
     plugins: [
-      new HtmlWebpackPlugin() // plugin that creats in /lib the index.html that contains the webpack-bundle.js
+      new HtmlWebpackPlugin() // plugin that creates in /lib the index.html that contains the webpack-bundle.js
     ],
     externals: {
       fs: 'null',
