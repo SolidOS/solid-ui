@@ -1,5 +1,5 @@
 node_modules
-# dist
+dist
 lib
 src/versionInfo.ts
 .idea
