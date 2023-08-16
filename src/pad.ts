@@ -269,7 +269,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
               case 2: // contents need to be sent again
                 part.state = 4 // delete me
                 return
-              case 3: // being deleted already
+              case 3: // already being deleted
               case 4: // already deleted state
                 return
               case undefined:
