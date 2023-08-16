@@ -56,7 +56,7 @@ export function lightColorHash (author?: NamedNode): string {
 /**  notepad
  *
  * @param {HTMLDocument} dom - the web page of the browser
- * @param {NamedNode} padDoc - the document into which the participation should be shown
+ * @param {NamedNode} padDoc - the document in which the participation should be shown
  * @param {NamedNode} subject - the thing in which participation is happening
  * @param {NamedNode} me - person who is logged into the pod
  * @param {notepadOptions} options - the options that can be passed in consist of statusArea, exists
