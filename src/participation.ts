@@ -195,7 +195,7 @@ export function recordParticipation (subject: NamedNode, padDoc: NamedNode, refr
 *   @param {NamedNode} document - the document into which the participation should be shown
 *   @param {NamedNode} subject - the thing in which participation is happening
 *   @param {NamedNode} me - the logged in user
-*   @param {ParticipationOptions} options - the options that can be passed in are deleteFunction, link, and draggable these are used by the personTR button
+*   @param {ParticipationOptions} options - the options that can be passed in are deleteFunction, link, and draggable; these are used by the personTR button
 *
 */
 export function manageParticipation (
