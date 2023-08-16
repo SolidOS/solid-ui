@@ -175,7 +175,7 @@ export function cameraCaptureControl (
  * @param {function<Node>} doneCallback - called with the image taken
  * @returns {DomElement} - A div element with the button in it
  *
- * This expects the button to a large control when it is pressed
+ * This expands the button to a large control when it is pressed
  */
 
 export function cameraButton (
