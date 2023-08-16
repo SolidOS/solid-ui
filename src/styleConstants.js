@@ -5,8 +5,8 @@ export default {
   formHeadingColor: '#888888', // originally was brown; now grey
   lowProfileLinkColor: '#3B5998', // Grey-blue, e.g., for field labels linking to ontology
   formFieldNameBoxWidth: '8em', // The fixed amount to get form fields to line up
-  // The latter we put in when switching awy from using tables.  Getting alignment between
-  // fields in different groups though is hard problem.
+  // We put in the latter when switching away from using tables.  However, getting
+  // alignment between fields in different groups is a hard problem.
 
   mediaModuleCanvasWidth: '640',
   mediaModuleCanvasHeight: '480',
