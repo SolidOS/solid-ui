@@ -4,7 +4,7 @@
 //
 // Workflow:
 // The HTML5 functionality (on mobile) is to prompt for either
-// a realtime camera capture, OR a selection from images already not the device
+// a realtime camera capture, OR a selection from images already on the device
 // (eg camera roll).
 //
 // The solid alternative is to either take a photo
