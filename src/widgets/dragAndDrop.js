@@ -16,7 +16,7 @@ import * as style from '../style'
 
 export function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
   const dragoverListener = function (e) {
-    e.preventDefault() // Need else drop does not work [sic]
+    e.preventDefault() // Need this; otherwise, drop does not work.
     e.dataTransfer.dropEffect = 'copy'
   }
 
