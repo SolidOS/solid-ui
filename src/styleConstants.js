@@ -11,7 +11,7 @@ export default {
   mediaModuleCanvasWidth: '640',
   mediaModuleCanvasHeight: '480',
 
-  textInputSize: 20, // Default text input size in characters roughly
+  textInputSize: 20, // Rough default text input size, in characters
   tabBorderRadius: '0.2em',
 
   textInputBackgroundColor: '#eef',
