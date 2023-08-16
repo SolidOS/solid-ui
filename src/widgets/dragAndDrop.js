@@ -5,8 +5,8 @@
  * represents one thing which has a URI, should be made draggable using makeDraggable.
  * Any list of things should typically allow you to drag new members of the list
  * onto it.
- * The file upload function uploadFiles is provided as often as someone drags a file from the computer
- * desktop, you may want to upload it into the pod.
+ * The file upload function, uploadFiles, is provided as often as someone drags a file from the computer
+ * desktop. You may want to upload it into the pod.
  */
 import * as debug from '../debug'
 import * as mime from 'mime-types'
