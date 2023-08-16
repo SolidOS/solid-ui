@@ -1,7 +1,7 @@
 /* Drag and drop common functionality
  *
  * It is easy to make something draggable, or to make it a drag target!
- * Just call the functions below. In a solid world, any part of the UI which
+ * Just call the functions below. In a Solid world, any part of the UI which
  * represent one thing which has a URI, should be made draggable using makeDraggable
  * Any list of things should typically allow you to drag new members of the list
  * onto it.
