@@ -38,8 +38,8 @@ var _aclControl = __webpack_require__(/*! ./acl-control */ "./lib/acl/acl-contro
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /**
  * Contains the [[AccessController]] class
  * @packageDocumentation
@@ -47,7 +47,7 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 /**
  * Rendered HTML component used in the databrowser's Sharing pane.
  */
-var AccessController = /*#__PURE__*/function () {
+var AccessController = exports.AccessController = /*#__PURE__*/function () {
   function AccessController(subject, noun, context, statusElement, targetIsProtected, targetDoc, targetACLDoc, defaultHolder, defaultACLDoc, prospectiveDefaultHolder, store, dom) {
     (0, _classCallCheck2["default"])(this, AccessController);
     this.subject = subject;
@@ -410,7 +410,6 @@ var AccessController = /*#__PURE__*/function () {
   }]);
   return AccessController;
 }();
-exports.AccessController = AccessController;
 //# sourceMappingURL=access-controller.js.map
 
 /***/ }),
@@ -443,8 +442,8 @@ var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js")
 var _addAgentButtons = __webpack_require__(/*! ./add-agent-buttons */ "./lib/acl/add-agent-buttons.js");
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /**
  * Contains the [[AccessGroups]]
  * and [[AccessGroupsOptions]] classes
@@ -483,7 +482,7 @@ var EXPLANATION = {
  * Renders the table of Owners, Editors, Posters, Submitters, Viewers
  * for https://github.com/solidos/userguide/blob/main/views/sharing/userguide.md
  */
-var AccessGroups = /*#__PURE__*/function () {
+var AccessGroups = exports.AccessGroups = /*#__PURE__*/function () {
   // @@ was LiveStore but does not need to be connected to web
 
   function AccessGroups(doc, aclDoc, controller, store) {
@@ -841,7 +840,6 @@ var AccessGroups = /*#__PURE__*/function () {
   }]);
   return AccessGroups;
 }();
-exports.AccessGroups = AccessGroups;
 function kToCombo(k) {
   var y = ['Read', 'Append', 'Write', 'Control'];
   var combo = [];
@@ -964,8 +962,8 @@ var _acl = __webpack_require__(/*! ./acl */ "./lib/acl/acl.js");
 var _accessController = __webpack_require__(/*! ./access-controller */ "./lib/acl/access-controller.js");
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
 var _debug = __webpack_require__(/*! ../debug */ "./lib/debug.js");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /**
  * Functions for rendering the ACL User Interface.
  * See https://github.com/solidos/userguide/blob/main/views/sharing/userguide.md#view
@@ -1224,8 +1222,8 @@ var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-l
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
 var _rdflib = __webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /**
  * Non-UI functions for access control.
  * See https://github.com/solidos/web-access-control-spec
@@ -1741,8 +1739,8 @@ var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js")
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /**
  * Contains the [[AddAgentButtons]] class
  * @packageDocumentation
@@ -1751,7 +1749,7 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
  * Renders the Sharing pane's "+" button and the menus behind it,
  * see https://github.com/solidos/userguide/blob/main/views/sharing/userguide.md#add
  */
-var AddAgentButtons = /*#__PURE__*/function () {
+var AddAgentButtons = exports.AddAgentButtons = /*#__PURE__*/function () {
   function AddAgentButtons(groupList) {
     (0, _classCallCheck2["default"])(this, AddAgentButtons);
     this.groupList = groupList;
@@ -2156,7 +2154,6 @@ var AddAgentButtons = /*#__PURE__*/function () {
   }]);
   return AddAgentButtons;
 }();
-exports.AddAgentButtons = AddAgentButtons;
 //# sourceMappingURL=add-agent-buttons.js.map
 
 /***/ }),
@@ -2181,7 +2178,7 @@ var _aclControl = __webpack_require__(/*! ./acl-control */ "./lib/acl/acl-contro
  * @packageDocumentation
  */
 
-var acl = {
+var acl = exports.acl = {
   adoptACLDefault: _acl.adoptACLDefault,
   readACL: _acl.readACL,
   sameACL: _acl.sameACL,
@@ -2201,13 +2198,11 @@ var acl = {
   getACLorDefault: _acl.getACLorDefault,
   getACL: _acl.getACL
 };
-exports.acl = acl;
-var aclControl = {
+var aclControl = exports.aclControl = {
   preventBrowserDropEvents: _aclControl.preventBrowserDropEvents,
   shortNameForFolder: _aclControl.shortNameForFolder,
   ACLControlBox5: _aclControl.ACLControlBox5
 };
-exports.aclControl = aclControl;
 //# sourceMappingURL=index.js.map
 
 /***/ }),
@@ -2242,8 +2237,8 @@ var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/u
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var _login = __webpack_require__(/*! ../login/login */ "./lib/login/login.js");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /**
  * Functions related to chat and bookmarks
  * @packageDocumentation
@@ -2595,8 +2590,8 @@ var $rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_mod
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
 var _signature = __webpack_require__(/*! ./signature */ "./lib/chat/signature.js");
 var _keys = __webpack_require__(/*! ./keys */ "./lib/chat/keys.js");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /**
  * Contains the [[ChatChannel]] class and logic for Solid Chat
  * @packageDocumentation
@@ -2612,7 +2607,7 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
  * index.ttl#this and the chats messages are stored in YYYY/MM/DD/chat.ttl
  *
  */
-var ChatChannel = /*#__PURE__*/function () {
+var ChatChannel = exports.ChatChannel = /*#__PURE__*/function () {
   function ChatChannel(channel, options) {
     (0, _classCallCheck2["default"])(this, ChatChannel);
     this.channel = channel;
@@ -2769,7 +2764,6 @@ var ChatChannel = /*#__PURE__*/function () {
   }]);
   return ChatChannel;
 }(); // class ChatChannel
-exports.ChatChannel = ChatChannel;
 function originalVersion(message) {
   var msg = message;
   while (msg) {
@@ -2890,8 +2884,8 @@ var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/d
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
 var $rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /**
  * Contains the [[DateFolder]] class
  * This tracks data stored in dated folders and sub-folders
@@ -2901,7 +2895,7 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 /**
  * Track back through the YYYY/MM/DD tree to find the previous/next day
  */
-var DateFolder = /*#__PURE__*/function () {
+var DateFolder = exports.DateFolder = /*#__PURE__*/function () {
   function DateFolder(rootThing, leafFileName, membershipProperty) {
     (0, _classCallCheck2["default"])(this, DateFolder);
     this.root = rootThing;
@@ -3003,8 +2997,7 @@ var DateFolder = /*#__PURE__*/function () {
                         younger = function _younger(x) {
                           if (backwards ? x.uri >= file.uri : x.uri <= file.uri) return false; // later than we want or same -- looking for different
                           return true;
-                        };
-                        // debug.log('  previousPeriod level' + level + ' file ' + file)
+                        }; // debug.log('  previousPeriod level' + level + ' file ' + file)
                         parent = file.dir();
                         _context2.prev = 5;
                         _context2.next = 8;
@@ -3075,8 +3068,7 @@ var DateFolder = /*#__PURE__*/function () {
               previousPeriod = function _previousPeriod2(_x3, _x4) {
                 return _previousPeriod.apply(this, arguments);
               };
-              thisDateFolder = this;
-              // previousPeriod
+              thisDateFolder = this; // previousPeriod
               folder = this.leafDocumentFromDate(date).dir();
               _context3.next = 6;
               return previousPeriod(folder, 3);
@@ -3202,7 +3194,6 @@ var DateFolder = /*#__PURE__*/function () {
   }]);
   return DateFolder;
 }(); // class
-exports.DateFolder = DateFolder;
 //# sourceMappingURL=dateFolder.js.map
 
 /***/ }),
@@ -3234,8 +3225,8 @@ var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js")
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
 var _chatLogic = __webpack_require__(/*! ./chatLogic */ "./lib/chat/chatLogic.js");
 var _message = __webpack_require__(/*! ./message */ "./lib/chat/message.js");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /**
  * Contains the [[infiniteMessageArea]] class
  * @packageDocumentation
@@ -3356,7 +3347,7 @@ function _infiniteMessageArea() {
                       selectedMessageTable.selectedElement.scrollIntoView({
                         block: 'center'
                       });
-                    };
+                    }; // During initial load ONLY keep scroll to selected thing or bottom
                     if (options.selectedMessage) {
                       selectedDocument = options.selectedMessage.doc();
                       now = new Date();
@@ -3969,8 +3960,30 @@ function _infiniteMessageArea() {
                 widgets.refreshTree(ele); // Things inside may have changed too
               }
             }
-          };
-
+          }; // ///////////////////////////////////////////////////////////////////////
+          // syncMessages
+          // Called once per original message displayed
+          /* Add a new messageTable at the top/bottom
+           */
+          /* Remove message tables earlier than this one
+           */
+          /* Load and render message table
+           ** @returns DOM element generates
+           */
+          // renderMessageTable
+          /*
+          function messageCount () {
+            var n = 0
+            const tables = div.children
+            for (let i = 0; i < tables.length; i++) {
+              n += tables[i].children.length - 1
+              // debug.log('    table length:' + tables[i].children.length)
+            }
+            return n
+          }
+          */
+          /* Add the live message block with entry field for today
+           */
           // Body of main function
 
           options = options || {};
@@ -4038,8 +4051,8 @@ var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-l
 var $rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
 var _accessData = __webpack_require__(/*! ../utils/keyHelpers/accessData */ "./lib/utils/keyHelpers/accessData.js");
 var _acl = __webpack_require__(/*! ../utils/keyHelpers/acl */ "./lib/utils/keyHelpers/acl.js");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 function generatePrivateKey() {
   return (0, _utils.bytesToHex)(_secp256k.schnorr.utils.randomPrivateKey());
 }
@@ -4291,11 +4304,14 @@ var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/u
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
 var _signature = __webpack_require__(/*! ./signature */ "./lib/chat/signature.js");
 var _keys = __webpack_require__(/*! ./keys */ "./lib/chat/keys.js");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; } /**  UI code for individual messages: display them, edit them
+                                                                                                                                                                                     *
+                                                                                                                                                                                     * @packageDocumentation
+                                                                                                                                                                                     */ /* global $rdf */
 var dom = window.document;
 var messageBodyStyle = style.messageBodyStyle;
 var label = utils.label;
@@ -4879,8 +4895,8 @@ var _bookmarks = __webpack_require__(/*! ./bookmarks */ "./lib/chat/bookmarks.js
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var _chatLogic = __webpack_require__(/*! ./chatLogic */ "./lib/chat/chatLogic.js");
 var _message = __webpack_require__(/*! ./message */ "./lib/chat/message.js");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /**
  * Tools for doing things with a message
  * Let us be creative here.  Allow all sorts of things to
@@ -4896,7 +4912,6 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 // import * as pad from '../pad'
 // pull in first avoid cross-refs
 // import * as style from '../style'
-
 var dom = window.document;
 
 // THE UNUSED ICONS are here as reminders for possible future functionality
@@ -5240,11 +5255,9 @@ var _sha = __webpack_require__(/*! @noble/hashes/sha256 */ "./node_modules/@nobl
 // import {utf8Encoder} from './utils'
 // import { getPublicKey } from './keys'
 
-var utf8Decoder = new TextDecoder('utf-8');
-exports.utf8Decoder = utf8Decoder;
-var utf8Encoder = new TextEncoder();
-exports.utf8Encoder = utf8Encoder;
-var SEC = 'https://w3id.org/security#'; // Proof, VerificationMethod
+var utf8Decoder = exports.utf8Decoder = new TextDecoder('utf-8');
+var utf8Encoder = exports.utf8Encoder = new TextEncoder();
+var SEC = exports.SEC = 'https://w3id.org/security#'; // Proof, VerificationMethod
 // export const CERT = 'http://www.w3.org/ns/auth/cert#' // PrivateKey, PublicKey, key
 
 /* eslint-disable no-unused-vars */
@@ -5271,7 +5284,7 @@ var SEC = 'https://w3id.org/security#'; // Proof, VerificationMethod
   ProfileBadge = 30009,
   Article = 30023
 } */
-exports.SEC = SEC;
+
 function getBlankMsg() {
   return {
     id: '',
@@ -5358,8 +5371,8 @@ var _login = __webpack_require__(/*! ../login/login */ "./lib/login/login.js");
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /*   create.js     UI to craete new objects in the solid-app-set world
  **
  */
@@ -5606,10 +5619,9 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.create = void 0;
 var _create = __webpack_require__(/*! ./create */ "./lib/create/create.js");
-var create = {
+var create = exports.create = {
   newThingUI: _create.newThingUI
 };
-exports.create = create;
 //# sourceMappingURL=index.js.map
 
 /***/ }),
@@ -5692,8 +5704,8 @@ var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/r
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
 var _headerFooterHelpers = __webpack_require__(/*! ../utils/headerFooterHelpers */ "./lib/utils/headerFooterHelpers.js");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /*
     This file was copied from mashlib/src/global/footer.ts file. It is modified to
     work in solid-ui by adjusting where imported functions are found.
@@ -5818,8 +5830,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.emptyProfile = void 0;
-var emptyProfile = "\n<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"26\" height=\"26\" viewBox=\"0 0 26 26\" fill=\"none\">\n    <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M13 25C19.6274 25 25 19.6274 25 13C25 6.37258 19.6274 1 13 1C6.37258 1 1 6.37258 1 13C1 19.6274 6.37258 25 13 25Z\" fill=\"#D8D8D8\" stroke=\"#8B8B8B\"/>\n    <mask id=\"mask0\" mask-type=\"alpha\" maskUnits=\"userSpaceOnUse\" x=\"0\" y=\"0\" width=\"26\" height=\"26\">\n        <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M13 25C19.6274 25 25 19.6274 25 13C25 6.37258 19.6274 1 13 1C6.37258 1 1 6.37258 1 13C1 19.6274 6.37258 25 13 25Z\" fill=\"white\" stroke=\"white\"/>\n    </mask>\n    <g mask=\"url(#mask0)\">\n        <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M17.0468 10.4586C17.0468 14.4979 15.4281 16.9214 12.9999 16.9214C10.5718 16.9214 8.95298 14.4979 8.95298 10.4586C8.95298 6.41931 12.9999 6.41931 12.9999 6.41931C12.9999 6.41931 17.0468 6.41931 17.0468 10.4586ZM4.09668 23.3842C6.52483 17.7293 12.9999 17.7293 12.9999 17.7293C12.9999 17.7293 19.475 17.7293 21.9031 23.3842C21.9031 23.3842 17.8481 25 12.9999 25C8.15169 25 4.09668 23.3842 4.09668 23.3842Z\" fill=\"#8B8B8B\"/>\n    </g>\n</svg>";
-exports.emptyProfile = emptyProfile;
+var emptyProfile = exports.emptyProfile = "\n<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"26\" height=\"26\" viewBox=\"0 0 26 26\" fill=\"none\">\n    <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M13 25C19.6274 25 25 19.6274 25 13C25 6.37258 19.6274 1 13 1C6.37258 1 1 6.37258 1 13C1 19.6274 6.37258 25 13 25Z\" fill=\"#D8D8D8\" stroke=\"#8B8B8B\"/>\n    <mask id=\"mask0\" mask-type=\"alpha\" maskUnits=\"userSpaceOnUse\" x=\"0\" y=\"0\" width=\"26\" height=\"26\">\n        <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M13 25C19.6274 25 25 19.6274 25 13C25 6.37258 19.6274 1 13 1C6.37258 1 1 6.37258 1 13C1 19.6274 6.37258 25 13 25Z\" fill=\"white\" stroke=\"white\"/>\n    </mask>\n    <g mask=\"url(#mask0)\">\n        <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M17.0468 10.4586C17.0468 14.4979 15.4281 16.9214 12.9999 16.9214C10.5718 16.9214 8.95298 14.4979 8.95298 10.4586C8.95298 6.41931 12.9999 6.41931 12.9999 6.41931C12.9999 6.41931 17.0468 6.41931 17.0468 10.4586ZM4.09668 23.3842C6.52483 17.7293 12.9999 17.7293 12.9999 17.7293C12.9999 17.7293 19.475 17.7293 21.9031 23.3842C21.9031 23.3842 17.8481 25 12.9999 25C8.15169 25 4.09668 23.3842 4.09668 23.3842Z\" fill=\"#8B8B8B\"/>\n    </g>\n</svg>";
 //# sourceMappingURL=empty-profile.js.map
 
 /***/ }),
@@ -5857,8 +5868,8 @@ var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./l
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
 var _emptyProfile = __webpack_require__(/*! ./empty-profile */ "./lib/header/empty-profile.js");
 var _headerFooterHelpers = __webpack_require__(/*! ../utils/headerFooterHelpers */ "./lib/utils/headerFooterHelpers.js");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /* global EventListenerOrEventListenerObject */
 /*
     This file was copied from mashlib/src/global/header.ts file. It is modified to
@@ -5872,6 +5883,11 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 */
 var DEFAULT_HELP_MENU_ICON = _index.icons.iconBase + 'noun_help.svg';
 var DEFAUL_SOLID_ICON_URL = 'https://solidproject.org/assets/img/solid-emblem.svg';
+
+/*
+  HeaderOptions allow for customizing the logo and menu list.  If a logo is not provided the default
+  is solid. Menulist will always show a link to logout and to the users profile.
+  */
 /**
  * Initialize header component, the header object returned depends on whether the user is authenticated.
  * @param store the data store
@@ -6240,7 +6256,7 @@ var _debug = __webpack_require__(/*! ./debug */ "./lib/debug.js");
 // Do not export. Always us this module to find the icons, as they vary
 var iconsOnGithub = 'https://solidos.github.io/solid-ui/src'; // changed org 2022-05
 
-var icons = module.scriptURI // Firefox extension
+var icons = exports.icons = module.scriptURI // Firefox extension
 ? {
   iconBase: module.scriptURI.slice(0, module.scriptURI.lastIndexOf('/')) + '/icons/',
   originalIconBase: module.scriptURI.slice(0, module.scriptURI.lastIndexOf('/')) + '/originalIcons/'
@@ -6253,14 +6269,11 @@ var icons = module.scriptURI // Firefox extension
   iconBase: iconsOnGithub + '/icons/',
   originalIconBase: iconsOnGithub + '/originalIcons/'
 };
-exports.icons = icons;
 (0, _debug.log)('   icons.iconBase is set to : ' + icons.iconBase);
 
 // allow tests etc  named-import this directly from this module
-var iconBase = icons.iconBase;
-exports.iconBase = iconBase;
-var originalIconBase = icons.originalIconBase;
-exports.originalIconBase = originalIconBase;
+var iconBase = exports.iconBase = icons.iconBase;
+var originalIconBase = exports.originalIconBase = icons.originalIconBase;
 //# sourceMappingURL=iconBase.js.map
 
 /***/ }),
@@ -6444,8 +6457,8 @@ var _footer = __webpack_require__(/*! ./footer */ "./lib/footer/index.js");
 var createTypes = _interopRequireWildcard(__webpack_require__(/*! ./create/types */ "./lib/create/types.js"));
 exports.createTypes = createTypes;
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 // pull in first avoid cross-refs
 // @ts-ignore
 // @ts-ignore
@@ -6457,8 +6470,8 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 // @ts-ignore
 // @ts-ignore
 // @ts-ignore
-var dom = window ? window.document : null; // Idea that UI.dom can be adapted in non-browser environments
-exports.dom = dom;
+var dom = exports.dom = window ? window.document : null; // Idea that UI.dom can be adapted in non-browser environments
+
 if (typeof window !== 'undefined') {
   ;
   window.UI = {
@@ -6545,10 +6558,7 @@ var TDEBUG = 32;
 var TALL = 63;
 
 /** @internal */
-var LogLevel;
-/** @internal */
-exports.LogLevel = LogLevel;
-(function (LogLevel) {
+var LogLevel = exports.LogLevel = /*#__PURE__*/function (LogLevel) {
   LogLevel[LogLevel["Error"] = 1] = "Error";
   LogLevel[LogLevel["Warning"] = 2] = "Warning";
   LogLevel[LogLevel["Message"] = 4] = "Message";
@@ -6556,7 +6566,9 @@ exports.LogLevel = LogLevel;
   LogLevel[LogLevel["Info"] = 16] = "Info";
   LogLevel[LogLevel["Debug"] = 32] = "Debug";
   LogLevel[LogLevel["All"] = 63] = "All";
-})(LogLevel || (exports.LogLevel = LogLevel = {}));
+  return LogLevel;
+}({});
+/** @internal */
 var _level = TERROR + TWARN + TMESG;
 /** @internal */
 var _ascending = false;
@@ -6761,11 +6773,34 @@ var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns.js */ "./lib/ns.j
 var _signup = __webpack_require__(/*! ../signup/signup.js */ "./lib/signup/signup.js");
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; } /* eslint-disable camelcase */ /**
+                                                                                                                                                                                                                    * Signing in, signing up, profile and preferences reloading
+                                                                                                                                                                                                                    * Type index management
+                                                                                                                                                                                                                    *
+                                                                                                                                                                                                                    * Many functions in this module take a context object which
+                                                                                                                                                                                                                    * holds various RDF symbols, add to it, and return a promise of it.
+                                                                                                                                                                                                                    *
+                                                                                                                                                                                                                    * * `me`                RDF symbol for the user's WebID
+                                                                                                                                                                                                                    * * `publicProfile`     The user's public profile, iff loaded
+                                                                                                                                                                                                                    * * `preferencesFile`   The user's personal preference file, iff loaded
+                                                                                                                                                                                                                    * * `index.public`      The user's public type index file
+                                                                                                                                                                                                                    * * `index.private`     The user's private type index file
+                                                                                                                                                                                                                    *
+                                                                                                                                                                                                                    * Not RDF symbols:
+                                                                                                                                                                                                                    * * `noun`            A string in english for the type of thing -- like "address book"
+                                                                                                                                                                                                                    * * `instance`        An array of nodes which are existing instances
+                                                                                                                                                                                                                    * * `containers`      An array of nodes of containers of instances
+                                                                                                                                                                                                                    * * `div`             A DOM element where UI can be displayed
+                                                                                                                                                                                                                    * * `statusArea`      A DOM element (opt) progress stuff can be displayed, or error messages
+                                                                                                                                                                                                                    * *
+                                                                                                                                                                                                                    * * Vocabulary:  "load" loads a file if it exists;
+                                                                                                                                                                                                                    * *  'Ensure" CREATES the file if it does not exist (if it can) and then loads it.
+                                                                                                                                                                                                                    * @packageDocumentation
+                                                                                                                                                                                                                    */ // eslint-disable-next-line camelcase
 var store = _solidLogic.solidLogicSingleton.store;
 var _solidLogicSingleton$ = _solidLogic.solidLogicSingleton.profile,
   loadPreferences = _solidLogicSingleton$.loadPreferences,
@@ -7974,10 +8009,9 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.matrix = void 0;
 var _matrix = __webpack_require__(/*! ./matrix */ "./lib/matrix/matrix.js");
-var matrix = {
+var matrix = exports.matrix = {
   matrixForQuery: _matrix.matrixForQuery
 };
-exports.matrix = matrix;
 //# sourceMappingURL=index.js.map
 
 /***/ }),
@@ -7999,8 +8033,8 @@ exports.matrixForQuery = matrixForQuery;
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
 var $rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 //      Build a 2D matrix of values
 //
 //  dom      AKA document
@@ -8225,11 +8259,10 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.media = void 0;
 var _mediaCapture = __webpack_require__(/*! ./media-capture */ "./lib/media/media-capture.js");
-var media = {
+var media = exports.media = {
   cameraCaptureControl: _mediaCapture.cameraCaptureControl,
   cameraButton: _mediaCapture.cameraButton
 };
-exports.media = media;
 //# sourceMappingURL=index.js.map
 
 /***/ }),
@@ -8255,8 +8288,8 @@ var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/r
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
 var _iconBase = __webpack_require__(/*! ../iconBase */ "./lib/iconBase.js");
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /// /////////////////////////////////////////////
 //
 //   Media input widget
@@ -8468,8 +8501,8 @@ var rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modu
 var style = _interopRequireWildcard(__webpack_require__(/*! ./style */ "./lib/style.js"));
 var utils = _interopRequireWildcard(__webpack_require__(/*! ./utils */ "./lib/utils/index.js"));
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ./widgets */ "./lib/widgets/index.js"));
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 //  Common code for a discussion are a of messages about something
 //
 
@@ -8795,8 +8828,8 @@ var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/inte
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
 var _solidNamespace = _interopRequireDefault(__webpack_require__(/*! solid-namespace */ "./node_modules/solid-namespace/index.js"));
 var $rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 // Namespaces we commonly use and have common prefixes for around Solid
 //
 
@@ -8868,10 +8901,13 @@ var _utils = __webpack_require__(/*! ./utils */ "./lib/utils/index.js");
 var _debug = __webpack_require__(/*! ./debug */ "./lib/debug.js");
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var _participation = __webpack_require__(/*! ./participation */ "./lib/participation.js");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2["default"])(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2["default"])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2["default"])(this, result); }; }
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } } /** **************
+                                                                                                                                                                                                                                                                                                                                           *   Notepad Widget
+                                                                                                                                                                                                                                                                                                                                           */ /** @module pad
+                                                                                                                                                                                                                                                                                                                                               */
 var store = _solidLogic.solidLogicSingleton.store;
 var PAD = (0, _rdflib.Namespace)('http://www.w3.org/ns/pim/pad#');
 /**
@@ -9679,20 +9715,22 @@ var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*!
 var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "./node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
 var _wrapNativeSuper2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/wrapNativeSuper */ "./node_modules/@babel/runtime/helpers/wrapNativeSuper.js"));
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js"));
-var debug = _interopRequireWildcard(__webpack_require__(/*! ./debug */ "./lib/debug.js"));
+var _debug = _interopRequireWildcard(__webpack_require__(/*! ./debug */ "./lib/debug.js"));
+var debug = _debug;
 var _rdflib = __webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js");
 var ns = _interopRequireWildcard(__webpack_require__(/*! ./ns */ "./lib/ns.js"));
 var _widgets = __webpack_require__(/*! ./widgets */ "./lib/widgets/index.js");
 var _utils = __webpack_require__(/*! ./utils */ "./lib/utils/index.js");
 var _pad = __webpack_require__(/*! ./pad */ "./lib/pad.js");
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2["default"])(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2["default"])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2["default"])(this, result); }; }
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } } /* Manage a UI for the particpation of a person in any thing
+                                                                                                                                                                                                                                                                                                                                          */ // import { currentUser } from './authn/authn'
 var ParticipationTableElement = /*#__PURE__*/function (_HTMLTableElement) {
   (0, _inherits2["default"])(ParticipationTableElement, _HTMLTableElement);
   var _super = _createSuper(ParticipationTableElement);
@@ -9742,7 +9780,7 @@ function renderPartipants(dom, table, unused1, subject, unused2, options) {
   };
   var syncTable = function syncTable() {
     var parps = store.each(subject, ns.wf('participation')).map(function (parp) {
-      (0, debug.log)('in participants');
+      (0, _debug.log)('in participants');
       return [store.anyValue(parp, ns.cal('dtstart')) || '9999-12-31', parp];
     });
     parps.sort(); // List in order of joining
@@ -9911,8 +9949,8 @@ var _login = __webpack_require__(/*! ./login/login */ "./lib/login/login.js");
 var ns = _interopRequireWildcard(__webpack_require__(/*! ./ns */ "./lib/ns.js"));
 var participation = _interopRequireWildcard(__webpack_require__(/*! ./participation */ "./lib/participation.js"));
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ./widgets */ "./lib/widgets/index.js"));
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 //                  Solid-UI preferences
 //                  =====================
 //
@@ -9931,8 +9969,7 @@ var kb = _solidLogic.store;
 // @@ Deprocate these functions.  They were used for
 // communication around the tabulator functionality about the user session
 
-var value = [];
-exports.value = value;
+var value = exports.value = [];
 function get(k) {
   return value[k];
 }
@@ -10125,7 +10162,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-var _default = {
+var _default = exports["default"] = {
   // @@ should not use export default
   /**
    * Primary authentication endpoint
@@ -10156,7 +10193,6 @@ var _default = {
    */
   cert: ''
 };
-exports["default"] = _default;
 //# sourceMappingURL=config-default.js.map
 
 /***/ }),
@@ -10270,7 +10306,7 @@ var formFieldNameBoxWidth = '8em'; // The fixed amount to get form fields to lin
 // The latter we put in when switching awy from using tables.  Getting allignment between
 // fields in different groups though is hard problem.
 
-var style = {
+var style = exports.style = {
   // styleModule
 
   checkboxStyle: 'color: black; font-size: 100%; padding-left: 0.5 em; padding-right: 0.5 em;',
@@ -10397,7 +10433,6 @@ var style = {
   secondaryButtonNoBorder: 'background-color: #ffffff; color: #01c9ea; font-family: Raleway, Roboto, sans-serif; border-radius: 0.25em; border-color: #01c9ea; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none',
   secondaryButtonNoBorderHover: 'background-color: #01c9ea; color: #ffffff; font-family: Raleway, Roboto, sans-serif; border-radius: 0.25em; border-color: #01c9ea; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none; transition: 0.25s all ease-in-out'
 };
-exports.style = style;
 style.setStyle = function setStyle(ele, styleName) {
   ele.style = style[styleName];
 };
@@ -10431,7 +10466,7 @@ exports.style = void 0;
  * @version IconicMultiSelect v0.7.0
  * @licence  MIT
  */
-var style = {
+var style = exports.style = {
   multiselect__container: "\n        -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n        background-color: #fff;\n        border-radius: 2px;\n        -webkit-box-shadow: 0 1px 3px 0 #d1d1d2, 0 0 0 1px #d1d1d2;\n                box-shadow: 0 1px 3px 0 #d1d1d2, 0 0 0 1px #d1d1d2;\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        display: -webkit-box;\n        display: -ms-flexbox;\n        display: flex;\n        min-height: 36px;\n        padding: 4px 8px 0 8px;\n        position: relative;\n        width: 354px;\n        margin-bottom: 5px;\n        font-size: 100%\n    ",
   /*
     multiselect__container:after: `
@@ -10470,7 +10505,6 @@ var style = {
   multiselect__selected_multiselect__remove_btn: "\n        cursor: pointer;\n        display: flex;\n        margin-left: 6px;\n    ",
   multiselect__input: "\n        border: none;\n        -ms-flex-preferred-size: 40%;\n            flex-basis: 40%;\n        -webkit-box-flex: 1;\n            -ms-flex-positive: 1;\n                flex-grow: 1;\n        height: 5px;        \n        margin-bottom: 4px;\n        min-width: 40%;\n        outline: none;      \n    "
 };
-exports.style = style;
 style.setStyle = function setStyle(ele, styleName) {
   ele.style = style[styleName];
 };
@@ -10501,8 +10535,8 @@ var ns = _interopRequireWildcard(__webpack_require__(/*! ./ns */ "./lib/ns.js"))
 var rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
 var utils = _interopRequireWildcard(__webpack_require__(/*! ./utils */ "./lib/utils/index.js"));
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ./widgets */ "./lib/widgets/index.js"));
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 // Table Widget: Format an array of RDF statements as an HTML table.
 //
 // This can operate in one of three modes: when the class of object is given
@@ -12114,7 +12148,7 @@ var ContainerElement = /*#__PURE__*/function (_HTMLElement) {
   }
   return (0, _createClass2["default"])(ContainerElement);
 }( /*#__PURE__*/(0, _wrapNativeSuper2["default"])(HTMLElement));
-var TabWidgetElement = /*#__PURE__*/function (_HTMLElement2) {
+var TabWidgetElement = exports.TabWidgetElement = /*#__PURE__*/function (_HTMLElement2) {
   (0, _inherits2["default"])(TabWidgetElement, _HTMLElement2);
   var _super2 = _createSuper(TabWidgetElement);
   function TabWidgetElement() {
@@ -12134,7 +12168,6 @@ var TabWidgetElement = /*#__PURE__*/function (_HTMLElement2) {
 /**
  * @ignore
  */
-exports.TabWidgetElement = TabWidgetElement;
 var TabElement = /*#__PURE__*/function (_HTMLElement3) {
   (0, _inherits2["default"])(TabElement, _HTMLElement3);
   var _super3 = _createSuper(TabElement);
@@ -12551,6 +12584,8 @@ var _ = __webpack_require__(/*! .. */ "./lib/index.js");
     Copied from mashlib/src/global/metadata.ts
  */
 
+/* @ts-ignore  no-console */
+
 /**
  * @ignore exporting this only for the unit test
  */
@@ -12751,8 +12786,8 @@ var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-l
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
 var rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
 var _label = __webpack_require__(/*! ./label */ "./lib/utils/label.js");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 //                  Solid-UI general Utilities
 //                  ==========================
 //
@@ -13267,8 +13302,8 @@ var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/r
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../../debug */ "./lib/debug.js"));
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../../ns */ "./lib/ns.js"));
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /* export const getPodRoot = async (webId: NamedNode) => {
   const webIdURL = new URL(webId.uri)
   // find storages in webId document
@@ -13294,7 +13329,7 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
   return podRoot as NamedNode
 } */
 
-var pubKeyUrl = /*#__PURE__*/function () {
+var pubKeyUrl = exports.pubKeyUrl = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(webId) {
     var _store$any, _parentSettings;
     var parentSettings;
@@ -13320,7 +13355,6 @@ var pubKeyUrl = /*#__PURE__*/function () {
     return _ref.apply(this, arguments);
   };
 }();
-exports.pubKeyUrl = pubKeyUrl;
 function getExistingPublicKey(_x2, _x3) {
   return _getExistingPublicKey.apply(this, arguments);
 }
@@ -13341,7 +13375,7 @@ function _getExistingPublicKey() {
   }));
   return _getExistingPublicKey.apply(this, arguments);
 }
-var privKeyUrl = /*#__PURE__*/function () {
+var privKeyUrl = exports.privKeyUrl = /*#__PURE__*/function () {
   var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(webId) {
     var _store$any2, _settings;
     var settings;
@@ -13367,7 +13401,6 @@ var privKeyUrl = /*#__PURE__*/function () {
     return _ref2.apply(this, arguments);
   };
 }();
-exports.privKeyUrl = privKeyUrl;
 function getExistingPrivateKey(_x5, _x6) {
   return _getExistingPrivateKey.apply(this, arguments);
 }
@@ -13464,8 +13497,8 @@ var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../../debug */ "./lib/debug.js"));
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /**
  * set ACL
  * @param keyDoc
@@ -13524,7 +13557,7 @@ function _setAcl() {
   }));
   return _setAcl.apply(this, arguments);
 }
-var keyContainerAclBody = function keyContainerAclBody(me) {
+var keyContainerAclBody = exports.keyContainerAclBody = function keyContainerAclBody(me) {
   var aclBody = "\n@prefix : <#>.\n@prefix acl: <http://www.w3.org/ns/auth/acl#>.\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n@prefix key: <./>.\n\n:ReadWrite\n    a acl:Authorization;\n    acl:accessTo key:;\n    acl:default key:;\n    acl:agent <".concat(me, ">;\n    acl:mode acl:Read, acl:Write.\n");
   return aclBody;
 };
@@ -13535,14 +13568,12 @@ var keyContainerAclBody = function keyContainerAclBody(me) {
  * @param me
  * @returns aclBody
  */
-exports.keyContainerAclBody = keyContainerAclBody;
-var keyAclBody = function keyAclBody(keyDoc, me) {
+var keyAclBody = exports.keyAclBody = function keyAclBody(keyDoc, me) {
   var keyAgent = 'acl:agentClass foaf:Agent'; // publicKey
   if (me !== null && me !== void 0 && me.length) keyAgent = "acl:agent <".concat(me, ">"); // privateKey
   var aclBody = "\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n@prefix acl: <http://www.w3.org/ns/auth/acl#>.\n<#Read>\n    a acl:Authorization;\n    ".concat(keyAgent, ";\n    acl:accessTo <").concat(keyDoc.split('/').pop(), ">;\n    acl:mode acl:Read.\n");
   return aclBody;
 };
-exports.keyAclBody = keyAclBody;
 //# sourceMappingURL=acl.js.map
 
 /***/ }),
@@ -13565,8 +13596,8 @@ var log = _interopRequireWildcard(__webpack_require__(/*! ../log */ "./lib/log.j
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
 var rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 // pull in first avoid cross-refs
 
 var UI = {
@@ -13674,13 +13705,13 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.versionInfo = void 0;
-var versionInfo = {
-  buildTime: '2023-07-05T09:50:00Z',
-  commit: '6c36e7182fc9724f99aa6766d7eef2a32f100bdb',
+var versionInfo = exports.versionInfo = {
+  buildTime: '2023-11-01T11:18:08Z',
+  commit: 'ee8e69c20cc21d93eb942bc5479e4644d5704964',
   npmInfo: {
-    'solid-ui': '2.4.28',
+    'solid-ui': '2.4.29',
     npm: '8.19.4',
-    node: '16.20.1',
+    node: '16.20.2',
     v8: '9.4.146.26-node.26',
     uv: '1.43.0',
     zlib: '1.2.11',
@@ -13690,7 +13721,7 @@ var versionInfo = {
     nghttp2: '1.47.0',
     napi: '8',
     llhttp: '6.0.11',
-    openssl: '1.1.1u+quic',
+    openssl: '1.1.1v+quic',
     cldr: '41.0',
     icu: '71.1',
     tz: '2022f',
@@ -13699,7 +13730,6 @@ var versionInfo = {
     nghttp3: '0.7.0'
   }
 };
-exports.versionInfo = versionInfo;
 //# sourceMappingURL=versionInfo.js.map
 
 /***/ }),
@@ -13769,8 +13799,8 @@ var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/u
 var _error = __webpack_require__(/*! ./error */ "./lib/widgets/error.js");
 var _widgetHelpers = __webpack_require__(/*! ./widgetHelpers */ "./lib/widgets/widgetHelpers.js");
 var _iconLinks = __webpack_require__(/*! ./buttons/iconLinks */ "./lib/widgets/buttons/iconLinks.js");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /*  Buttons
 */
 
@@ -13778,9 +13808,7 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
  * UI Widgets such as buttons
  * @packageDocumentation
  */
-
 /* global alert */
-
 var iconBase = _iconBase.icons.iconBase;
 var cancelIconURI = iconBase + 'noun_1180156.svg'; // black X
 var checkIconURI = iconBase + 'noun_1180158.svg'; // green checkmark; Continue
@@ -13942,7 +13970,7 @@ function imagesOf(x, kb) {
 /**
  * Best logo or avatar or photo etc to represent someone or some group etc
  */
-var iconForClass = {
+var iconForClass = exports.iconForClass = {
   // Potentially extendable by other apps, panes, etc
   // Relative URIs to the iconBase
   'solid:AppProviderClass': 'noun_144.svg',
@@ -13978,7 +14006,6 @@ var iconForClass = {
 /**
  * Returns the origin of the URI of a NamedNode
  */
-exports.iconForClass = iconForClass;
 function tempSite(x) {
   // use only while one in rdflib fails with origins 2019
   var str = x.uri.split('#')[0];
@@ -14380,8 +14407,8 @@ function askName(dom, kb, container, predicate, theClass, noun) {
  *
  * pred is unused param at the moment
  */
-var personTR = renderAsRow; // The legacy name is used in a lot of places
-exports.personTR = personTR;
+var personTR = exports.personTR = renderAsRow; // The legacy name is used in a lot of places
+
 function renderAsRow(dom, pred, obj, options) {
   var tr = dom.createElement('tr');
   options = options || {};
@@ -14871,12 +14898,12 @@ function selectorPanelRefresh(list, dom, kb, type, predicate, inverse, possible,
 //
 //      Small compact views of things
 //
-var index = {};
+var index = exports.index = {};
 // ///////////////////////////////////////////////////////////////////////////
 // We need these for anything which is a subject of an attachment.
 //
 // These should be moved to type-dependeent UI code. Related panes maybe
-exports.index = index;
+
 function twoLineDefault(dom, x) {
   // Default
   var box = dom.createElement('div');
@@ -15086,13 +15113,12 @@ function linkIcon(dom, subject, iconURI) {
  *
  */
 // eslint-disable-next-line complexity
-var createLinkForURI = function createLinkForURI(dom, linkDiv, obj) {
+var createLinkForURI = exports.createLinkForURI = function createLinkForURI(dom, linkDiv, obj) {
   var iconLink = linkIcon(dom, obj);
   var anchor = linkDiv.appendChild(iconLink);
   anchor.classList.add('HoverControlHide');
   linkDiv.appendChild(dom.createElement('br'));
 };
-exports.createLinkForURI = createLinkForURI;
 //# sourceMappingURL=iconLinks.js.map
 
 /***/ }),
@@ -15115,8 +15141,8 @@ exports.makeDropTarget = makeDropTarget;
 exports.uploadFiles = uploadFiles;
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
 var mime = _interopRequireWildcard(__webpack_require__(/*! mime-types */ "./node_modules/mime-types/index.js"));
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /* Drag and drop common functionality
  *
  * It is easy to make something draggable, or to make it a drag target!
@@ -15459,11 +15485,14 @@ var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-l
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
 var _multiSelect = __webpack_require__(/*! ./multiSelect */ "./lib/widgets/multiSelect.js");
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; } /*       F O R M S
+                                                                                                                                                                                     *
+                                                                                                                                                                                     *      A Vanilla Dom implementation of the form language
+                                                                                                                                                                                     */ /* eslint-disable multiline-ternary */ /* global alert */ // Note default export
 var checkMarkCharacter = "\u2713";
 var cancelCharacter = "\u2715";
 var dashCharacter = '-';
@@ -17455,11 +17484,18 @@ var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-l
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../../../widgets */ "./lib/widgets/index.js"));
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../../../utils */ "./lib/utils/index.js"));
 var _autocompletePicker = __webpack_require__(/*! ./autocompletePicker */ "./lib/widgets/forms/autocomplete/autocompletePicker.js");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; } /* The Autocomplete Control with decorations
+                                                                                                                                                                                    
+                                                                                                                                                                                    This control has the buttons which control the state between editing, viewing, searching, accepting
+                                                                                                                                                                                    and so on.  See the state diagram in the documentation.  The AUtocomplete Picker does the main work.
+                                                                                                                                                                                    
+                                                                                                                                                                                    */
+// dbpediaParameters
+
 var WEBID_NOUN = 'Solid ID';
 var GREEN_PLUS = _iconBase.icons.iconBase + 'noun_34653_green.svg';
 var SEARCH_ICON = _iconBase.icons.iconBase + 'noun_Search_875351.svg';
@@ -17730,8 +17766,8 @@ var widgets = _interopRequireWildcard(__webpack_require__(/*! ../../../widgets *
 var style = _interopRequireWildcard(__webpack_require__(/*! ../../../style */ "./lib/style.js"));
 var _autocompleteBar = __webpack_require__(/*! ./autocompleteBar */ "./lib/widgets/forms/autocomplete/autocompleteBar.js");
 var _rdflib = __webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /* Form field for doing autocompleete
  */
 
@@ -18001,11 +18037,15 @@ var widgets = _interopRequireWildcard(__webpack_require__(/*! ../../../widgets *
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var _publicData = __webpack_require__(/*! ./publicData */ "./lib/widgets/forms/autocomplete/publicData.js");
 var _language = __webpack_require__(/*! ./language */ "./lib/widgets/forms/autocomplete/language.js");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; } /* Autocomplete Picker: Create and edit data using public data
+                                                                                                                                                                                    **
+                                                                                                                                                                                    ** As the data source is passed as a parameter, all kinds of APIa and query services can be used
+                                                                                                                                                                                    **
+                                                                                                                                                                                    */
 var AUTOCOMPLETE_THRESHOLD = 4; // don't check until this many characters typed
 var AUTOCOMPLETE_ROWS = 20; // 20?
 var AUTOCOMPLETE_ROWS_STRETCH = 40;
@@ -18105,7 +18145,8 @@ function _renderAutoComplete() {
                         };
                       }());
                       return row;
-                    };
+                    }; // console.log('@@ refreshList called')
+                    // rowForBinding
                     if (!inputEventHandlerLock) {
                       _context7.next = 5;
                       break;
@@ -18358,7 +18399,7 @@ function _renderAutoComplete() {
             // errorMessageBlock will log the stack to the console
             style.setStyle(errorRow, 'autocompleteRowStyle');
             errorRow.style.padding = '1em';
-          };
+          }; // refreshList
           // initialiize
           // const queryParams: QueryParameters = acOptions.queryParams
           targetClass = acOptions.targetClass;
@@ -18446,8 +18487,8 @@ var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/r
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../../../debug */ "./lib/debug.js"));
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../../../ns */ "./lib/ns.js"));
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /* Logic to access public data stores
 *
 * including filtering resut by natural language etc
@@ -18458,10 +18499,14 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 // import * as logic from '../index'
 // import { authn } from '../../../authn/index'
 
-var languageCodeURIBase = 'https://www.w3.org/ns/iana/language-code/'; /// @@ unsupported on the web (2021)
-exports.languageCodeURIBase = languageCodeURIBase;
-var defaultPreferredLanguages = ['en', 'fr', 'de', 'it', 'ar'];
-exports.defaultPreferredLanguages = defaultPreferredLanguages;
+// import { Binding } from '../widgets/forms/autocomplete/publicData'
+// import { nativeNameForLanguageCode, englishNameForLanguageCode } from './nativeNameForLanguageCode'
+
+// const { currentUser } = logic.authn
+
+var languageCodeURIBase = exports.languageCodeURIBase = 'https://www.w3.org/ns/iana/language-code/'; /// @@ unsupported on the web (2021)
+
+var defaultPreferredLanguages = exports.defaultPreferredLanguages = ['en', 'fr', 'de', 'it', 'ar'];
 function addDefaults(array) {
   if (!array) array = [];
   return array.concat(defaultPreferredLanguages.filter(function (code) {
@@ -18654,8 +18699,8 @@ var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-l
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../../../debug */ "./lib/debug.js"));
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../../../ns */ "./lib/ns.js"));
 var _language = __webpack_require__(/*! ./language */ "./lib/widgets/forms/autocomplete/language.js");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /* Logic to access public data stores
 *
 * including filtering resut by natural language etc
@@ -18663,13 +18708,13 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 */
 /* eslint-disable no-console */
 
-var AUTOCOMPLETE_LIMIT = 200; // How many to get from server
+var AUTOCOMPLETE_LIMIT = exports.AUTOCOMPLETE_LIMIT = 200; // How many to get from server
 // With 3000 we could exceed the wikidata timeout
-exports.AUTOCOMPLETE_LIMIT = AUTOCOMPLETE_LIMIT;
+
 var subjectRegexp = /\$\(subject\)/g;
 // Schema.org seems to suggest NGOs are non-profit and Corporaions are for-profit
 // but doesn't have explicit classes
-var wikidataClasses = {
+var wikidataClasses = exports.wikidataClasses = {
   Corporation: 'http://www.wikidata.org/entity/Q6881511',
   // Enterprise is for-profit
   EducationalOrganization: 'http://www.wikidata.org/entity/Q178706',
@@ -18688,18 +18733,15 @@ var wikidataClasses = {
   ResearchOrganization: 'http://www.wikidata.org/entity/Q31855',
   SportsOrganization: 'http://www.wikidata.org/entity/Q4438121'
 };
-exports.wikidataClasses = wikidataClasses;
-var instituteDetailsWikidataQuery = "prefix vcard: <http://www.w3.org/2006/vcard/ns#>\nCONSTRUCT\n{  wd:Q49108 vcard:fn ?itemLabel.\nwd:Q49108 rdf:type ?klass. ?klass rdfs:label ?klassLabel; rdfs:comment ?klassDescription .\nwd:Q49108 schema:logo ?logo;\n   schema:image ?image;\n   schema:logo  ?sealImage;\n   schema:subOrganization  ?subsidiary .\n      ?subsidiary rdfs:label ?subsidiaryLabel .\n ?supersidiary schema:subOrganization wd:Q49108 .\n      ?supersidiary rdfs:label ?supersidiaryLabel .\n  wd:Q49108 schema:location ?location .\n     ?location  schema:elevation  ?elevation .\n     ?location  wdt:P131  ?region .  ?region rdfs:label ?regionLabel .\n     ?location wdt:P625 ?coordinates .\n     ?location  schema:country  ?country . ?country rdfs:label ?countryLabel .\n}\nWHERE\n{  optional {wd:Q49108 rdfs:label ?itemLabel} .\n  optional {wd:Q49108 wdt:P154 ?logo .}\n  optional {wd:Q49108 wdt:P31 ?klass .}\n  optional {wd:Q49108 wdt:P158  ?sealImage .}\n  optional {wd:Q49108 wdt:P18 ?image .}\n\n  optional { wd:Q49108       wdt:P355 ?subsidiary . }\n  optional { ?supersidiary   wdt:P355 wd:Q49108. }\n\n  optional { wd:Q49108 wdt:P276 ?location .\n\n    optional { ?location  schema:eleveation  ?elevation }\n    optional { ?location  wdt:P131  ?region }\n    optional { ?location wdt:P625 ?coordinates }\n    optional {  ?location  wdt:P17  ?country }\n  }\n  SERVICE wikibase:label { bd:serviceParam wikibase:language \"fr,en,de,it\". }\n}";
-exports.instituteDetailsWikidataQuery = instituteDetailsWikidataQuery;
-var fetcherOptionsJsonPublicData = {
+var instituteDetailsWikidataQuery = exports.instituteDetailsWikidataQuery = "prefix vcard: <http://www.w3.org/2006/vcard/ns#>\nCONSTRUCT\n{  wd:Q49108 vcard:fn ?itemLabel.\nwd:Q49108 rdf:type ?klass. ?klass rdfs:label ?klassLabel; rdfs:comment ?klassDescription .\nwd:Q49108 schema:logo ?logo;\n   schema:image ?image;\n   schema:logo  ?sealImage;\n   schema:subOrganization  ?subsidiary .\n      ?subsidiary rdfs:label ?subsidiaryLabel .\n ?supersidiary schema:subOrganization wd:Q49108 .\n      ?supersidiary rdfs:label ?supersidiaryLabel .\n  wd:Q49108 schema:location ?location .\n     ?location  schema:elevation  ?elevation .\n     ?location  wdt:P131  ?region .  ?region rdfs:label ?regionLabel .\n     ?location wdt:P625 ?coordinates .\n     ?location  schema:country  ?country . ?country rdfs:label ?countryLabel .\n}\nWHERE\n{  optional {wd:Q49108 rdfs:label ?itemLabel} .\n  optional {wd:Q49108 wdt:P154 ?logo .}\n  optional {wd:Q49108 wdt:P31 ?klass .}\n  optional {wd:Q49108 wdt:P158  ?sealImage .}\n  optional {wd:Q49108 wdt:P18 ?image .}\n\n  optional { wd:Q49108       wdt:P355 ?subsidiary . }\n  optional { ?supersidiary   wdt:P355 wd:Q49108. }\n\n  optional { wd:Q49108 wdt:P276 ?location .\n\n    optional { ?location  schema:eleveation  ?elevation }\n    optional { ?location  wdt:P131  ?region }\n    optional { ?location wdt:P625 ?coordinates }\n    optional {  ?location  wdt:P17  ?country }\n  }\n  SERVICE wikibase:label { bd:serviceParam wikibase:language \"fr,en,de,it\". }\n}";
+var fetcherOptionsJsonPublicData = exports.fetcherOptionsJsonPublicData = {
   credentials: 'omit',
   // try to avoid CORS problems. Data is public so no auth
   headers: new Headers({
     Accept: 'application/json'
   })
 };
-exports.fetcherOptionsJsonPublicData = fetcherOptionsJsonPublicData;
-var escoParameters = {
+var escoParameters = exports.escoParameters = {
   label: 'ESCO',
   logo: _solidLogic.store.sym('https://ec.europa.eu/esco/portal/static_resource2/images/logo/logo_en.gif'),
   searchByNameURI: 'https://ec.europa.eu/esco/api/search?language=$(language)&type=occupation&text=$(name)'
@@ -18707,19 +18749,17 @@ var escoParameters = {
   // returnFormat: 'ESCO',
   // targetClass: {}
 };
-exports.escoParameters = escoParameters;
-var dbpediaParameters = {
+
+var dbpediaParameters = exports.dbpediaParameters = {
   label: 'DBPedia',
   logo: _solidLogic.store.sym('https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/DBpediaLogo.svg/263px-DBpediaLogo.svg.png'),
   searchByNameQuery: "select distinct ?subject, ?name where {\n    ?subject a $(targetClass); rdfs:label ?name\n    FILTER regex(?name, \"$(name)\", \"i\")\n  } LIMIT $(limit)",
   endpoint: 'https://dbpedia.org/sparql/'
 };
-exports.dbpediaParameters = dbpediaParameters;
-var dbPediaTypeMap = {
+var dbPediaTypeMap = exports.dbPediaTypeMap = {
   AcademicInsitution: 'http://umbel.org/umbel/rc/EducationalOrganization'
 };
-exports.dbPediaTypeMap = dbPediaTypeMap;
-var wikidataOutgoingClassMap = {
+var wikidataOutgoingClassMap = exports.wikidataOutgoingClassMap = {
   AcademicInsitution: 'http://www.wikidata.org/entity/Q4671277',
   Enterprise: 'http://www.wikidata.org/entity/Q6881511',
   Business: 'http://www.wikidata.org/entity/Q4830453',
@@ -18727,8 +18767,7 @@ var wikidataOutgoingClassMap = {
   CharitableOrganization: 'http://www.wikidata.org/entity/Q708676',
   Insitute: 'http://www.wikidata.org/entity/Q1664720'
 };
-exports.wikidataOutgoingClassMap = wikidataOutgoingClassMap;
-var wikidataParameters = {
+var wikidataParameters = exports.wikidataParameters = {
   label: 'WikiData',
   limit: 3000,
   // Need a high one as very many items, and many languages
@@ -18739,8 +18778,7 @@ var wikidataParameters = {
 
   insitituteDetailsQuery: "CONSTRUCT\n{  wd:Q49108 schema:name ?itemLabel;\n             schema:logo ?logo;\n              schema:logo  ?sealImage;\n             schema:subOrganization  ?subsidiary .\n                 ?subsidiary schema:name ?subsidiaryLabel .\n}\nWHERE\n{\n   wd:Q49108 # rdfs:label ?itemLabel ;\n             wdt:P154 ?logo;\n              wdt:P158  ?sealImage ;\n             wdt:P355  ?subsidiary .\n          #  ?subsidiary rdfs:label ?subsidiaryLabel .\n\n  SERVICE wikibase:label { bd:serviceParam wikibase:language \"[AUTO_LANGUAGE], fr\". }\n}"
 };
-exports.wikidataParameters = wikidataParameters;
-var wikidataIncomingClassMap = {
+var wikidataIncomingClassMap = exports.wikidataIncomingClassMap = {
   'http://www.wikidata.org/entity/Q15936437': ns.schema('CollegeOrUniversity'),
   // research university
   'http://www.wikidata.org/entity/Q1664720': ns.schema('EducationalOrganization'),
@@ -18757,8 +18795,8 @@ var wikidataIncomingClassMap = {
   // geographic location
   'http://www.wikidata.org/entity/Q167037': ns.schema('Corporation') // Corporation
 };
-exports.wikidataIncomingClassMap = wikidataIncomingClassMap;
-var variableNameToPredicateMap = {
+
+var variableNameToPredicateMap = exports.variableNameToPredicateMap = {
   // allow other mappings to be added in theory hence var
   // wikidata:
   targetClass: ns.rdf('type'),
@@ -18775,7 +18813,6 @@ var variableNameToPredicateMap = {
   lat: ns.schema('latitude'),
   "long": ns.schema('longitude')
 };
-exports.variableNameToPredicateMap = variableNameToPredicateMap;
 function bindingToTerm(item) {
   var typ = item.type.toLowerCase();
   if (typ === 'uri' || typ === 'iri') {
@@ -19301,8 +19338,8 @@ var _utils = __webpack_require__(/*! ../../utils */ "./lib/utils/index.js");
 var _error = __webpack_require__(/*! ../error */ "./lib/widgets/error.js");
 var _fieldFunction = __webpack_require__(/*! ./fieldFunction */ "./lib/widgets/forms/fieldFunction.js");
 var _fieldParams = __webpack_require__(/*! ./fieldParams */ "./lib/widgets/forms/fieldParams.js");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 var store = _solidLogic.solidLogicSingleton.store;
 
 /*  Style and create a name, value pair
@@ -19560,7 +19597,7 @@ var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-l
 var _log = __webpack_require__(/*! ../../log */ "./lib/log.js");
 var _error = __webpack_require__(/*! ../error */ "./lib/widgets/error.js");
 var store = _solidLogic.solidLogicSingleton.store;
-var field = {}; // Form field functions by URI of field type.
+var field = exports.field = {}; // Form field functions by URI of field type.
 
 /**
  * Which class of field is this? Relies on http://www.w3.org/2000/01/rdf-schema#subClassOf and
@@ -19570,7 +19607,6 @@ var field = {}; // Form field functions by URI of field type.
  * @param x a form field, e.g. `namedNode('https://timbl.com/timbl/Public/Test/Forms/individualForm.ttl#fullNameField')`
  * @returns the URI of the most specific known class, e.g. `http://www.w3.org/ns/ui#SingleLineTextField`
  */
-exports.field = field;
 function mostSpecificClassURI(x) {
   var kb = store;
   var ft = kb.findTypeURIs(x);
@@ -19623,15 +19659,15 @@ var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/run
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../../ns */ "./lib/ns.js"));
 var _style = __webpack_require__(/*! ../../style */ "./lib/style.js");
 var _fieldParams;
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /**
  * The fieldParams object defines various constants
  * for use in various form fields. Depending on the
  * field in questions, different values may be read
  * from here.
  */
-var fieldParams = (_fieldParams = {}, (0, _defineProperty2["default"])(_fieldParams, ns.ui('ColorField').uri, {
+var fieldParams = exports.fieldParams = (_fieldParams = {}, (0, _defineProperty2["default"])(_fieldParams, ns.ui('ColorField').uri, {
   size: 9,
   type: 'color',
   style: 'height: 3em;',
@@ -19688,7 +19724,6 @@ var fieldParams = (_fieldParams = {}, (0, _defineProperty2["default"])(_fieldPar
   element: 'h3',
   style: _style.formHeadingStyle // was: `font-size: 110%; font-weight: bold; color: ${formHeadingColor}; padding: 0.2em;`
 }), _fieldParams);
-exports.fieldParams = fieldParams;
 //# sourceMappingURL=fieldParams.js.map
 
 /***/ }),
@@ -19711,8 +19746,8 @@ var ns = _interopRequireWildcard(__webpack_require__(/*! ../../ns */ "./lib/ns.j
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var _fieldParams = __webpack_require__(/*! ./fieldParams */ "./lib/widgets/forms/fieldParams.js");
 var _fieldFunction = __webpack_require__(/*! ./fieldFunction */ "./lib/widgets/forms/fieldFunction.js");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 var STYLE_URI_PREFIX = 'https://www.w3.org/ns/css#';
 
 /* eslint-disable no-console */
@@ -19863,8 +19898,8 @@ Object.keys(_autocompletePicker).forEach(function (key) {
 });
 var _publicData = _interopRequireWildcard(__webpack_require__(/*! ./forms/autocomplete/publicData */ "./lib/widgets/forms/autocomplete/publicData.js"));
 exports.publicData = _publicData;
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 //# sourceMappingURL=index.js.map
 
 /***/ }),
@@ -19889,8 +19924,8 @@ var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/run
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js"));
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js"));
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style_multiSelect */ "./lib/style_multiSelect.js"));
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /*
  * IconicMultiSelect v0.7.0
  * Licence:  MIT
@@ -19901,7 +19936,7 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
  * @version IconicMultiSelect v0.7.0
  * @licence  MIT
  */
-var IconicMultiSelect = /*#__PURE__*/function () {
+var IconicMultiSelect = exports.IconicMultiSelect = /*#__PURE__*/function () {
   /**
    * Iconic Multiselect constructor.
    * @param { Object[] } data - Array of objects.
@@ -20535,7 +20570,6 @@ var IconicMultiSelect = /*#__PURE__*/function () {
   }]);
   return IconicMultiSelect;
 }();
-exports.IconicMultiSelect = IconicMultiSelect;
 //# sourceMappingURL=multiSelect.js.map
 
 /***/ }),
@@ -20568,10 +20602,21 @@ var _iconBase = __webpack_require__(/*! ../iconBase */ "./lib/iconBase.js");
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var _templateObject;
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+/**
+ *
+ * People Picker Pane
+ *
+ * This pane offers a mechanism for selecting a set of individuals, groups, or
+ * organizations to take some action on.
+ *
+ * Assumptions
+ *   - Assumes that the user has a type index entry for vcard:AddressBook. @@ bad assuption
+ *
+ */
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 var kb = _solidLogic.solidLogicSingleton.store;
-var PeoplePicker = /*#__PURE__*/function () {
+var PeoplePicker = exports.PeoplePicker = /*#__PURE__*/function () {
   function PeoplePicker(element, typeIndex, groupPickedCb, options) {
     (0, _classCallCheck2["default"])(this, PeoplePicker);
     // @@ can't expect typeindex to be passed
@@ -20705,8 +20750,7 @@ var PeoplePicker = /*#__PURE__*/function () {
   }]);
   return PeoplePicker;
 }();
-exports.PeoplePicker = PeoplePicker;
-var GroupPicker = /*#__PURE__*/function () {
+var GroupPicker = exports.GroupPicker = /*#__PURE__*/function () {
   function GroupPicker(element, book, onSelectGroup) {
     (0, _classCallCheck2["default"])(this, GroupPicker);
     this.element = element;
@@ -20762,8 +20806,7 @@ var GroupPicker = /*#__PURE__*/function () {
   }]);
   return GroupPicker;
 }();
-exports.GroupPicker = GroupPicker;
-var Group = /*#__PURE__*/function () {
+var Group = exports.Group = /*#__PURE__*/function () {
   function Group(element, group) {
     (0, _classCallCheck2["default"])(this, Group);
     this.element = element;
@@ -20783,8 +20826,7 @@ var Group = /*#__PURE__*/function () {
   }]);
   return Group;
 }();
-exports.Group = Group;
-var GroupBuilder = /*#__PURE__*/function () {
+var GroupBuilder = exports.GroupBuilder = /*#__PURE__*/function () {
   function GroupBuilder(element, book, group, doneBuildingCb, groupChangedCb) {
     (0, _classCallCheck2["default"])(this, GroupBuilder);
     this.element = element;
@@ -20933,8 +20975,7 @@ var GroupBuilder = /*#__PURE__*/function () {
 }(); // @ignore exporting this only for the unit test
 // @@ TODO maybe I should move this down at end, but for
 // now I will leave it where it was
-exports.GroupBuilder = GroupBuilder;
-var Person = /*#__PURE__*/function () {
+var Person = exports.Person = /*#__PURE__*/function () {
   function Person(element, webIdNode, handleRemove) {
     (0, _classCallCheck2["default"])(this, Person);
     this.webIdNode = webIdNode;
@@ -20980,7 +21021,6 @@ var Person = /*#__PURE__*/function () {
   }]);
   return Person;
 }();
-exports.Person = Person;
 function getWithDefault(subject, predicate, defaultValue) {
   var object = kb.any(subject, predicate);
   return object ? object.value : defaultValue;
@@ -21047,7 +21087,7 @@ var _style = __webpack_require__(/*! ../style */ "./lib/style.js");
  * @internal exporting this only for unit tests
  */
 // eslint-disable-next-line complexity
-var wrapDivInATR = function wrapDivInATR(dom, div, obj) {
+var wrapDivInATR = exports.wrapDivInATR = function wrapDivInATR(dom, div, obj) {
   var tr = dom.createElement('tr');
   var td = tr.appendChild(dom.createElement('td'));
   td.appendChild(div);
@@ -21068,8 +21108,7 @@ var wrapDivInATR = function wrapDivInATR(dom, div, obj) {
  * @internal exporting this only for unit tests
  */
 // eslint-disable-next-line complexity
-exports.wrapDivInATR = wrapDivInATR;
-var addClickListenerToElement = function addClickListenerToElement(div, onClickFunction) {
+var addClickListenerToElement = exports.addClickListenerToElement = function addClickListenerToElement(div, onClickFunction) {
   div.addEventListener('click', onClickFunction);
 };
 
@@ -21088,14 +21127,12 @@ var addClickListenerToElement = function addClickListenerToElement(div, onClickF
  * @internal exporting this only for unit tests
  */
 // eslint-disable-next-line complexity
-exports.addClickListenerToElement = addClickListenerToElement;
-var createImageDiv = function createImageDiv(dom, div, image) {
+var createImageDiv = exports.createImageDiv = function createImageDiv(dom, div, image) {
   var imageDiv = div.appendChild(dom.createElement('div'));
   imageDiv.setAttribute('style', _style.imageDivStyle);
   imageDiv.appendChild(image);
   image.setAttribute('draggable', 'false'); // Stop the image being dragged instead - just the TR
 };
-exports.createImageDiv = createImageDiv;
 //# sourceMappingURL=widgetHelpers.js.map
 
 /***/ }),
@@ -25819,22 +25856,22 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "CordovaIFrameNavigator": () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.CordovaIFrameNavigator),
-/* harmony export */   "CordovaPopupNavigator": () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.CordovaPopupNavigator),
-/* harmony export */   "InMemoryWebStorage": () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.InMemoryWebStorage),
-/* harmony export */   "Log": () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.Log),
-/* harmony export */   "OidcClient": () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.OidcClient),
-/* harmony export */   "SessionMonitor": () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.SessionMonitor),
-/* harmony export */   "User": () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.User),
-/* harmony export */   "UserManager": () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.UserManager),
-/* harmony export */   "Version": () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.Version),
-/* harmony export */   "WebStorageStateStore": () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.WebStorageStateStore),
-/* harmony export */   "clearOidcPersistentStorage": () => (/* binding */ clearOidcPersistentStorage),
-/* harmony export */   "getBearerToken": () => (/* binding */ getBearerToken),
-/* harmony export */   "getDpopToken": () => (/* binding */ getDpopToken),
-/* harmony export */   "refresh": () => (/* binding */ refresh),
-/* harmony export */   "registerClient": () => (/* binding */ registerClient),
-/* harmony export */   "removeOidcQueryParam": () => (/* binding */ removeOidcQueryParam)
+/* harmony export */   CordovaIFrameNavigator: () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.CordovaIFrameNavigator),
+/* harmony export */   CordovaPopupNavigator: () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.CordovaPopupNavigator),
+/* harmony export */   InMemoryWebStorage: () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.InMemoryWebStorage),
+/* harmony export */   Log: () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.Log),
+/* harmony export */   OidcClient: () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.OidcClient),
+/* harmony export */   SessionMonitor: () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.SessionMonitor),
+/* harmony export */   User: () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.User),
+/* harmony export */   UserManager: () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.UserManager),
+/* harmony export */   Version: () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.Version),
+/* harmony export */   WebStorageStateStore: () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.WebStorageStateStore),
+/* harmony export */   clearOidcPersistentStorage: () => (/* binding */ clearOidcPersistentStorage),
+/* harmony export */   getBearerToken: () => (/* binding */ getBearerToken),
+/* harmony export */   getDpopToken: () => (/* binding */ getDpopToken),
+/* harmony export */   refresh: () => (/* binding */ refresh),
+/* harmony export */   registerClient: () => (/* binding */ registerClient),
+/* harmony export */   removeOidcQueryParam: () => (/* binding */ removeOidcQueryParam)
 /* harmony export */ });
 /* harmony import */ var _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @inrupt/oidc-client */ "./node_modules/@inrupt/oidc-client/lib/oidc-client.min.js");
 /* harmony import */ var _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__);
@@ -25845,17 +25882,47 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function processErrorResponse(responseBody, options) {
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+function processErrorResponse(
+// The type is any here because the object is parsed from a JSON response
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+responseBody, options) {
     var _a, _b, _c, _d;
+    // The following errors are defined by the spec, and allow providing some context.
+    // See https://tools.ietf.org/html/rfc7591#section-3.2.2 for more information
     if (responseBody.error === "invalid_redirect_uri") {
         throw new Error(`Dynamic client registration failed: the provided redirect uri [${(_a = options.redirectUrl) === null || _a === void 0 ? void 0 : _a.toString()}] is invalid - ${(_b = responseBody.error_description) !== null && _b !== void 0 ? _b : ""}`);
     }
     if (responseBody.error === "invalid_client_metadata") {
         throw new Error(`Dynamic client registration failed: the provided client metadata ${JSON.stringify(options)} is invalid - ${(_c = responseBody.error_description) !== null && _c !== void 0 ? _c : ""}`);
     }
+    // We currently don't support software statements, so no related error should happen.
+    // If an error outside of the spec happens, no additional context can be provided
     throw new Error(`Dynamic client registration failed: ${responseBody.error} - ${(_d = responseBody.error_description) !== null && _d !== void 0 ? _d : ""}`);
 }
-function validateRegistrationResponse(responseBody, options) {
+function validateRegistrationResponse(
+// The type is any here because the object is parsed from a JSON response
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+responseBody, options) {
     if (responseBody.client_id === undefined) {
         throw new Error(`Dynamic client registration failed: no client_id has been found on ${JSON.stringify(responseBody)}`);
     }
@@ -25877,6 +25944,7 @@ async function registerClient(options, issuerConfig) {
     }
     const signingAlg = (0,_inrupt_solid_client_authn_core__WEBPACK_IMPORTED_MODULE_1__.determineSigningAlg)(issuerConfig.idTokenSigningAlgValuesSupported, _inrupt_solid_client_authn_core__WEBPACK_IMPORTED_MODULE_1__.PREFERRED_SIGNING_ALG);
     const config = {
+        /* eslint-disable camelcase */
         client_name: options.clientName,
         application_type: "web",
         redirect_uris: [(_a = options.redirectUrl) === null || _a === void 0 ? void 0 : _a.toString()],
@@ -25884,6 +25952,7 @@ async function registerClient(options, issuerConfig) {
         token_endpoint_auth_method: "client_secret_basic",
         id_token_signed_response_alg: signingAlg,
         grant_types: ["authorization_code", "refresh_token"],
+        /* eslint-enable camelcase */
     };
     const headers = {
         "Content-Type": "application/json",
@@ -25909,6 +25978,28 @@ async function registerClient(options, issuerConfig) {
     throw new Error(`Dynamic client registration failed: the server returned ${registerResponse.status} ${registerResponse.statusText} - ${await registerResponse.text()}`);
 }
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+// Identifiers in camelcase are mandated by the OAuth spec.
+/* eslint-disable camelcase */
 function hasError(value) {
     return value.error !== undefined && typeof value.error === "string";
 }
@@ -25964,6 +26055,15 @@ function validateTokenEndpointResponse(tokenResponse, dpop) {
     if (!hasExpiresIn(tokenResponse)) {
         throw new _inrupt_solid_client_authn_core__WEBPACK_IMPORTED_MODULE_1__.InvalidResponseError(["expires_in"]);
     }
+    // TODO: Due to a bug in both the ESS ID broker AND NSS (what were the odds), a DPoP token is returned
+    // with a token_type 'Bearer'. To work around this, this test is currently disabled.
+    // https://github.com/solid/oidc-op/issues/26
+    // Fixed, but unreleased for the ESS (current version: inrupt-oidc-server-0.5.2)
+    // if (dpop && tokenResponse.token_type.toLowerCase() !== "dpop") {
+    //   throw new Error(
+    //     `Invalid token endpoint response: requested a [DPoP] token, but got a 'token_type' value of [${tokenResponse.token_type}].`
+    //   );
+    // }
     if (!dpop && tokenResponse.token_type.toLowerCase() !== "bearer") {
         throw new Error(`Invalid token endpoint response: requested a [Bearer] token, but got a 'token_type' value of [${tokenResponse.token_type}].`);
     }
@@ -25979,15 +26079,18 @@ async function getTokens(issuer, client, data, dpop) {
         dpopKey = await (0,_inrupt_solid_client_authn_core__WEBPACK_IMPORTED_MODULE_1__.generateDpopKeyPair)();
         headers.DPoP = await (0,_inrupt_solid_client_authn_core__WEBPACK_IMPORTED_MODULE_1__.createDpopHeader)(issuer.tokenEndpoint, "POST", dpopKey);
     }
+    // TODO: Find out where this is specified.
     if (client.clientSecret) {
         headers.Authorization = `Basic ${btoa(`${client.clientId}:${client.clientSecret}`)}`;
     }
     const requestBody = {
+        /* eslint-disable camelcase */
         grant_type: data.grantType,
         redirect_uri: data.redirectUrl,
         code: data.code,
         code_verifier: data.codeVerifier,
         client_id: client.clientId,
+        /* eslint-enable camelcase */
     };
     const tokenRequestInit = {
         method: "POST",
@@ -26009,11 +26112,36 @@ async function getTokens(issuer, client, data, dpop) {
         expiresIn: tokenResponse.expires_in,
     };
 }
+/**
+ * This function exchanges an authorization code for a bearer token.
+ * Note that it is based on oidc-client-js, and assumes that the same client has
+ * been used to issue the initial redirect.
+ * @param redirectUrl The URL to which the user has been redirected
+ */
 async function getBearerToken(redirectUrl) {
     let signinResponse;
     try {
         const client = new _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.OidcClient({
+            // TODO: We should look at the various interfaces being used for storage,
+            //  i.e. between oidc-client-js (WebStorageStoreState), localStorage
+            //  (which has an interface Storage), and our own proprietary interface
+            //  IStorage - i.e. we should really just be using the browser Web Storage
+            //  API, e.g. "stateStore: window.localStorage,".
+            // We are instantiating a new instance here, so the only value we need to
+            // explicitly provide is the response mode (default otherwise will look
+            // for a hash '#' fragment!).
+            // eslint-disable-next-line camelcase
             response_mode: "query",
+            // The userinfo endpoint on NSS fails, so disable this for now
+            // Note that in Solid, information should be retrieved from the
+            // profile referenced by the WebId.
+            // TODO: Note that this is heavy-handed, and that this userinfo check
+            //  verifies that the `sub` claim in the id token you get along with the
+            //  access token matches the sub claim associated with the access token at
+            //  the userinfo endpoint.
+            // That is a useful check, and in the future it should be only disabled
+            // against NSS, and not in general.
+            // Issue tracker: https://github.com/solid/node-solid-server/issues/1490
             loadUserInfo: false,
         });
         signinResponse = await client.processSigninResponse(redirectUrl);
@@ -26034,6 +26162,13 @@ async function getBearerToken(redirectUrl) {
             accessToken: signinResponse.access_token,
             idToken: signinResponse.id_token,
             webId,
+            // Although not a field in the TypeScript response interface, the refresh
+            // token (which can optionally come back with the access token (if, as per
+            // the OAuth2 spec, we requested one using the scope of 'offline_access')
+            // will be included in the signin response object.
+            // eslint-disable-next-line camelcase
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             refreshToken: signinResponse.refresh_token,
         };
     }
@@ -26045,8 +26180,31 @@ async function getDpopToken(issuer, client, data) {
     return getTokens(issuer, client, data, true);
 }
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 const isValidUrl = (url) => {
     try {
+        // Here, the URL constructor is just called to parse the given string and
+        // verify if it is a well-formed IRI.
+        // eslint-disable-next-line no-new
         new URL(url);
         return true;
     }
@@ -26054,6 +26212,8 @@ const isValidUrl = (url) => {
         return false;
     }
 };
+// Identifiers in snake_case are mandated by the OAuth spec.
+/* eslint-disable camelcase */
 async function refresh(refreshToken, issuer, client, dpopKey) {
     if (client.clientId === undefined) {
         throw new Error("No client ID available when trying to refresh the access token.");
@@ -26072,10 +26232,15 @@ async function refresh(refreshToken, issuer, client, dpopKey) {
     let authHeader = {};
     if (client.clientSecret !== undefined) {
         authHeader = {
+            // We assume that client_secret_basic is the client authentication method.
+            // TODO: Get the authentication method from the IClient configuration object.
             Authorization: `Basic ${btoa(`${client.clientId}:${client.clientSecret}`)}`,
         };
     }
     else if (isValidUrl(client.clientId)) {
+        // If the client ID is an URL, and there is no client secret, the client
+        // has a Solid-OIDC Client Identifier, and it should be present in the
+        // request body.
         requestBody.client_id = client.clientId;
     }
     const rawResponse = await (0,_inrupt_universal_fetch__WEBPACK_IMPORTED_MODULE_2__.fetch)(issuer.tokenEndpoint, {
@@ -26092,6 +26257,7 @@ async function refresh(refreshToken, issuer, client, dpopKey) {
         response = await rawResponse.json();
     }
     catch (e) {
+        // The response is left out of the error on purpose not to leak any sensitive information.
         throw new Error(`The token endpoint of issuer ${issuer.issuer} returned a malformed response.`);
     }
     const validatedResponse = validateTokenEndpointResponse(response, dpopKey !== undefined);
@@ -26108,18 +26274,65 @@ async function refresh(refreshToken, issuer, client, dpopKey) {
     };
 }
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * Removes OIDC-specific query parameters from a given URL (state, code...), and
+ * sanitizes the URL (e.g. removes the hash fragment).
+ * @param redirectUrl The URL to clean up.
+ * @returns A copy of the URL, without OIDC-specific query params.
+ */
 function removeOidcQueryParam(redirectUrl) {
     const cleanedUrl = new URL(redirectUrl);
     cleanedUrl.searchParams.delete("code");
     cleanedUrl.searchParams.delete("state");
+    // As per https://tools.ietf.org/html/rfc6749#section-3.1.2, the redirect URL
+    // must not include a hash fragment.
     cleanedUrl.hash = "";
-    if (redirectUrl.includes(`${cleanedUrl.origin}/`)) {
+    // Do not normalize the trailing slash, and respect the original redirect URL.
+    if (
+    // The trailing slash is present in the original redirect URL
+    redirectUrl.includes(`${cleanedUrl.origin}/`)) {
         return cleanedUrl.href;
     }
-    return `${cleanedUrl.origin}${cleanedUrl.href.substring(cleanedUrl.origin.length + 1)}`;
+    // Calling cleanedUrl.href appends a trailing slash to the origin, which may
+    // create a redirect URL mismatch if it wasn't originally present.
+    return `${cleanedUrl.origin}${cleanedUrl.href.substring(
+    // Adds 1 to the origin length to remove the trailing slash
+    cleanedUrl.origin.length + 1)}`;
 }
+/**
+ * Clears any OIDC-related data lingering in the local storage.
+ */
 async function clearOidcPersistentStorage() {
     const client = new _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.OidcClient({
+        // TODO: We should look at the various interfaces being used for storage,
+        //  i.e. between oidc-client-js (WebStorageStoreState), localStorage
+        //  (which has an interface Storage), and our own proprietary interface
+        //  IStorage - i.e. we should really just be using the browser Web Storage
+        //  API, e.g. "stateStore: window.localStorage,".
+        // We are instantiating a new instance here, so the only value we need to
+        // explicitly provide is the response mode (default otherwise will look
+        // for a hash '#' fragment!).
+        // eslint-disable-next-line camelcase
         response_mode: "query",
     });
     await client.clearStaleState(new _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.WebStorageStateStore({}));
@@ -26183,51 +26396,113 @@ e.read=function(t,e,r,n,i){var o,s,a=8*i-n-1,u=(1<<a)-1,c=u>>1,h=-7,l=r?i-1:0,f=
 
 /***/ }),
 
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/ClientAuthentication.js":
-/*!**************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/ClientAuthentication.js ***!
-  \**************************************************************************************/
+/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/index.js":
+/*!***********************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/index.js ***!
+  \***********************************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-const universal_fetch_1 = __webpack_require__(/*! @inrupt/universal-fetch */ "./node_modules/@inrupt/universal-fetch/dist/index-browser.js");
-const oidc_client_ext_1 = __webpack_require__(/*! @inrupt/oidc-client-ext */ "./node_modules/@inrupt/oidc-client-ext/dist/index.es.js");
-const globalFetch = (request, init) => (0, universal_fetch_1.fetch)(request, init);
-class ClientAuthentication {
-    constructor(loginHandler, redirectHandler, logoutHandler, sessionInfoManager, issuerConfigFetcher) {
-        this.loginHandler = loginHandler;
-        this.redirectHandler = redirectHandler;
-        this.logoutHandler = logoutHandler;
-        this.sessionInfoManager = sessionInfoManager;
-        this.issuerConfigFetcher = issuerConfigFetcher;
+
+var solidClientAuthnCore = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
+var uuid = __webpack_require__(/*! uuid */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/index.js");
+var EventEmitter = __webpack_require__(/*! events */ "./node_modules/events/events.js");
+var oidcClientExt = __webpack_require__(/*! @inrupt/oidc-client-ext */ "./node_modules/@inrupt/oidc-client-ext/dist/index.es.js");
+var universalFetch = __webpack_require__(/*! @inrupt/universal-fetch */ "./node_modules/@inrupt/universal-fetch/dist/index-browser.js");
+
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * This class in a no-value-added extension of StorageUtility from the core module.
+ * The reason it has to be declared is for TSyringe to find the decorators in the
+ * same modules as where the dependency container is declared (in this case,
+ * the browser module, with the dependancy container in dependencies.ts).
+ * @hidden
+ */
+class StorageUtilityBrowser extends solidClientAuthnCore.StorageUtility {
+    constructor(secureStorage, insecureStorage) {
+        super(secureStorage, insecureStorage);
+    }
+}
+
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ */
+class ClientAuthentication extends solidClientAuthnCore.ClientAuthentication {
+    constructor() {
+        super(...arguments);
+        // Define these functions as properties so that they don't get accidentally re-bound.
+        // Isn't Javascript fun?
         this.login = async (options, eventEmitter) => {
             var _a, _b;
+            // In order to get a clean start, make sure that the session is logged out
+            // on login.
+            // But we may want to preserve our client application info, particularly if
+            // we used Dynamic Client Registration to register (since we don't
+            // necessarily want the user to have to register this app each time they
+            // login).
             await this.sessionInfoManager.clear(options.sessionId);
-            const redirectUrl = (_a = options.redirectUrl) !== null && _a !== void 0 ? _a : (0, oidc_client_ext_1.removeOidcQueryParam)(window.location.href);
-            if (!(0, solid_client_authn_core_1.isValidRedirectUrl)(redirectUrl)) {
-                throw new Error(`${redirectUrl} is not a valid redirect URL, it is either a malformed IRI or it includes a hash fragment.`);
+            // In the case of the user hitting the 'back' button in their browser, they
+            // could return to a previous redirect URL that contains OIDC params that
+            // are now longer valid. To be safe, strip relevant params now.
+            // If the user is providing a redirect IRI, it should not be modified, so
+            // normalization only applies if we default to the current location (which is
+            // a bad practice and should be discouraged).
+            const redirectUrl = (_a = options.redirectUrl) !== null && _a !== void 0 ? _a : oidcClientExt.removeOidcQueryParam(window.location.href);
+            if (!solidClientAuthnCore.isValidRedirectUrl(redirectUrl)) {
+                throw new Error(`${redirectUrl} is not a valid redirect URL, it is either a malformed IRI, includes a hash fragment, or reserved query parameters ('code' or 'state').`);
             }
             await this.loginHandler.handle({
                 ...options,
                 redirectUrl,
+                // If no clientName is provided, the clientId may be used instead.
                 clientName: (_b = options.clientName) !== null && _b !== void 0 ? _b : options.clientId,
                 eventEmitter,
             });
         };
-        this.fetch = globalFetch;
-        this.logout = async (sessionId) => {
-            await this.logoutHandler.handle(sessionId);
-            this.fetch = globalFetch;
-        };
-        this.getSessionInfo = async (sessionId) => {
-            return this.sessionInfoManager.get(sessionId);
-        };
-        this.getAllSessionInfo = async () => {
-            return this.sessionInfoManager.getAll();
-        };
+        // Collects session information from storage, and returns them. Returns null
+        // if the expected information cannot be found.
+        // Note that the ID token is not stored, which means the session information
+        // cannot be validated at this point.
         this.validateCurrentSession = async (currentSessionId) => {
             const sessionInfo = await this.sessionInfoManager.get(currentSessionId);
             if (sessionInfo === undefined ||
@@ -26240,8 +26515,14 @@ class ClientAuthentication {
         this.handleIncomingRedirect = async (url, eventEmitter) => {
             try {
                 const redirectInfo = await this.redirectHandler.handle(url, eventEmitter);
+                // The `FallbackRedirectHandler` directly returns the global `fetch` for
+                // his value, so we should ensure it's bound to `window` rather than to
+                // ClientAuthentication, to avoid the following error:
+                // > 'fetch' called on an object that does not implement interface Window.
                 this.fetch = redirectInfo.fetch.bind(window);
-                this.cleanUrlAfterRedirect(url);
+                this.boundLogout = redirectInfo.getLogoutUrl;
+                // Strip the oauth params:
+                await this.cleanUrlAfterRedirect(url);
                 return {
                     isLoggedIn: redirectInfo.isLoggedIn,
                     webId: redirectInfo.webId,
@@ -26250,447 +26531,212 @@ class ClientAuthentication {
                 };
             }
             catch (err) {
-                this.cleanUrlAfterRedirect(url);
-                eventEmitter.emit(solid_client_authn_core_1.EVENTS.ERROR, "redirect", err);
+                // Strip the oauth params:
+                await this.cleanUrlAfterRedirect(url);
+                // FIXME: EVENTS.ERROR should be errorCode, errorDescription
+                //
+                // I'm not sure if "redirect" is a good error code, and in theory `err`
+                // maybe an Error object and not a string; Maybe we want to just hardcode
+                // a description instead?
+                eventEmitter.emit(solidClientAuthnCore.EVENTS.ERROR, "redirect", err);
                 return undefined;
             }
         };
     }
-    cleanUrlAfterRedirect(url) {
+    async cleanUrlAfterRedirect(url) {
         const cleanedUpUrl = new URL(url);
         cleanedUpUrl.searchParams.delete("state");
+        // For auth code flow
         cleanedUpUrl.searchParams.delete("code");
+        // For implicit flow
         cleanedUpUrl.searchParams.delete("id_token");
         cleanedUpUrl.searchParams.delete("access_token");
+        // For login error
         cleanedUpUrl.searchParams.delete("error");
         cleanedUpUrl.searchParams.delete("error_description");
         cleanedUpUrl.searchParams.delete("iss");
+        // Remove OAuth-specific query params (since the login flow finishes with
+        // the browser being redirected back with OAuth2 query params (e.g. for
+        // 'code' and 'state'), and so if the user simply refreshes this page our
+        // authentication library will be called again with what are now invalid
+        // query parameters!).
         window.history.replaceState(null, "", cleanedUpUrl.toString());
-    }
-}
-exports["default"] = ClientAuthentication;
-//# sourceMappingURL=ClientAuthentication.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/Session.js":
-/*!*************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/Session.js ***!
-  \*************************************************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Session = exports.silentlyAuthenticate = void 0;
-const solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-const uuid_1 = __webpack_require__(/*! uuid */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/index.js");
-const events_1 = __importDefault(__webpack_require__(/*! events */ "./node_modules/events/events.js"));
-const dependencies_1 = __webpack_require__(/*! ./dependencies */ "./node_modules/@inrupt/solid-client-authn-browser/dist/dependencies.js");
-const constant_1 = __webpack_require__(/*! ./constant */ "./node_modules/@inrupt/solid-client-authn-browser/dist/constant.js");
-async function silentlyAuthenticate(sessionId, clientAuthn, session) {
-    var _a;
-    const storedSessionInfo = await clientAuthn.validateCurrentSession(sessionId);
-    if (storedSessionInfo !== null) {
-        window.localStorage.setItem(constant_1.KEY_CURRENT_URL, window.location.href);
-        await clientAuthn.login({
-            sessionId,
-            prompt: "none",
-            oidcIssuer: storedSessionInfo.issuer,
-            redirectUrl: storedSessionInfo.redirectUrl,
-            clientId: storedSessionInfo.clientAppId,
-            clientSecret: storedSessionInfo.clientAppSecret,
-            tokenType: (_a = storedSessionInfo.tokenType) !== null && _a !== void 0 ? _a : "DPoP",
-        }, session.events);
-        return true;
-    }
-    return false;
-}
-exports.silentlyAuthenticate = silentlyAuthenticate;
-function isLoggedIn(sessionInfo) {
-    return !!(sessionInfo === null || sessionInfo === void 0 ? void 0 : sessionInfo.isLoggedIn);
-}
-class Session extends events_1.default {
-    constructor(sessionOptions = {}, sessionId = undefined) {
-        super();
-        this.tokenRequestInProgress = false;
-        this.login = async (options) => {
-            var _a;
-            await this.clientAuthentication.login({
-                sessionId: this.info.sessionId,
-                ...options,
-                tokenType: (_a = options.tokenType) !== null && _a !== void 0 ? _a : "DPoP",
-            }, this.events);
-            return new Promise(() => { });
-        };
-        this.fetch = async (url, init) => {
-            return this.clientAuthentication.fetch(url, init);
-        };
-        this.internalLogout = async (emitSignal) => {
-            window.localStorage.removeItem(constant_1.KEY_CURRENT_SESSION);
-            await this.clientAuthentication.logout(this.info.sessionId);
-            this.info.isLoggedIn = false;
-            if (emitSignal) {
-                this.events.emit(solid_client_authn_core_1.EVENTS.LOGOUT);
-            }
-        };
-        this.logout = async () => this.internalLogout(true);
-        this.handleIncomingRedirect = async (inputOptions = {}) => {
-            var _a;
-            if (this.info.isLoggedIn) {
-                return this.info;
-            }
-            if (this.tokenRequestInProgress) {
-                return undefined;
-            }
-            const options = typeof inputOptions === "string" ? { url: inputOptions } : inputOptions;
-            const url = (_a = options.url) !== null && _a !== void 0 ? _a : window.location.href;
-            this.tokenRequestInProgress = true;
-            const sessionInfo = await this.clientAuthentication.handleIncomingRedirect(url, this.events);
-            if (isLoggedIn(sessionInfo)) {
-                this.setSessionInfo(sessionInfo);
-                const currentUrl = window.localStorage.getItem(constant_1.KEY_CURRENT_URL);
-                if (currentUrl === null) {
-                    this.events.emit(solid_client_authn_core_1.EVENTS.LOGIN);
-                }
-                else {
-                    window.localStorage.removeItem(constant_1.KEY_CURRENT_URL);
-                    this.events.emit(solid_client_authn_core_1.EVENTS.SESSION_RESTORED, currentUrl);
-                }
-            }
-            else if (options.restorePreviousSession === true) {
-                const storedSessionId = window.localStorage.getItem(constant_1.KEY_CURRENT_SESSION);
-                if (storedSessionId !== null) {
-                    const attemptedSilentAuthentication = await silentlyAuthenticate(storedSessionId, this.clientAuthentication, this);
-                    if (attemptedSilentAuthentication) {
-                        return new Promise(() => { });
-                    }
-                }
-            }
-            this.tokenRequestInProgress = false;
-            return sessionInfo;
-        };
-        this.events = new Proxy(this, (0, solid_client_authn_core_1.buildProxyHandler)(Session.prototype, "events only implements ISessionEventListener"));
-        if (sessionOptions.clientAuthentication) {
-            this.clientAuthentication = sessionOptions.clientAuthentication;
-        }
-        else if (sessionOptions.secureStorage && sessionOptions.insecureStorage) {
-            this.clientAuthentication = (0, dependencies_1.getClientAuthenticationWithDependencies)({
-                secureStorage: sessionOptions.secureStorage,
-                insecureStorage: sessionOptions.insecureStorage,
+        while (window.location.href !== cleanedUpUrl.href) {
+            // Poll the current URL every ms. Active polling is required because
+            // window.history.replaceState is asynchronous, but the associated
+            // 'popstate' event which should be listened to is only sent on active
+            // navigation, which we will not have here.
+            // See https://developer.mozilla.org/en-US/docs/Web/API/Window/popstate_event#when_popstate_is_sent
+            // eslint-disable-next-line no-await-in-loop
+            await new Promise((resolve) => {
+                setTimeout(() => resolve(), 1);
             });
         }
-        else {
-            this.clientAuthentication = (0, dependencies_1.getClientAuthenticationWithDependencies)({});
-        }
-        if (sessionOptions.sessionInfo) {
-            this.info = {
-                sessionId: sessionOptions.sessionInfo.sessionId,
-                isLoggedIn: false,
-                webId: sessionOptions.sessionInfo.webId,
-            };
-        }
-        else {
-            this.info = {
-                sessionId: sessionId !== null && sessionId !== void 0 ? sessionId : (0, uuid_1.v4)(),
-                isLoggedIn: false,
-            };
-        }
-        this.events.on(solid_client_authn_core_1.EVENTS.LOGIN, () => window.localStorage.setItem(constant_1.KEY_CURRENT_SESSION, this.info.sessionId));
-        this.events.on(solid_client_authn_core_1.EVENTS.SESSION_EXPIRED, () => this.internalLogout(false));
-        this.events.on(solid_client_authn_core_1.EVENTS.ERROR, () => this.internalLogout(false));
-    }
-    onLogin(callback) {
-        this.events.on(solid_client_authn_core_1.EVENTS.LOGIN, callback);
-    }
-    onLogout(callback) {
-        this.events.on(solid_client_authn_core_1.EVENTS.LOGOUT, callback);
-    }
-    onError(callback) {
-        this.events.on(solid_client_authn_core_1.EVENTS.ERROR, callback);
-    }
-    onSessionRestore(callback) {
-        this.events.on(solid_client_authn_core_1.EVENTS.SESSION_RESTORED, callback);
-    }
-    onSessionExpiration(callback) {
-        this.events.on(solid_client_authn_core_1.EVENTS.SESSION_EXPIRED, callback);
-    }
-    setSessionInfo(sessionInfo) {
-        this.info.isLoggedIn = sessionInfo.isLoggedIn;
-        this.info.webId = sessionInfo.webId;
-        this.info.sessionId = sessionInfo.sessionId;
-        this.info.expirationDate = sessionInfo.expirationDate;
-        this.events.on(solid_client_authn_core_1.EVENTS.SESSION_EXTENDED, (expiresIn) => {
-            this.info.expirationDate = Date.now() + expiresIn * 1000;
-        });
     }
 }
-exports.Session = Session;
-//# sourceMappingURL=Session.js.map
 
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/constant.js":
-/*!**************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/constant.js ***!
-  \**************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.KEY_CURRENT_URL = exports.KEY_CURRENT_SESSION = void 0;
-const solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-exports.KEY_CURRENT_SESSION = `${solid_client_authn_core_1.SOLID_CLIENT_AUTHN_KEY_PREFIX}currentSession`;
-exports.KEY_CURRENT_URL = `${solid_client_authn_core_1.SOLID_CLIENT_AUTHN_KEY_PREFIX}currentUrl`;
-//# sourceMappingURL=constant.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/defaultSession.js":
-/*!********************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/defaultSession.js ***!
-  \********************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.events = exports.onSessionRestore = exports.onLogout = exports.onLogin = exports.handleIncomingRedirect = exports.logout = exports.login = exports.fetch = exports.getDefaultSession = void 0;
-const Session_1 = __webpack_require__(/*! ./Session */ "./node_modules/@inrupt/solid-client-authn-browser/dist/Session.js");
-let defaultSession;
-function getDefaultSession() {
-    if (typeof defaultSession === "undefined") {
-        defaultSession = new Session_1.Session();
-    }
-    return defaultSession;
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+function hasIssuer(options) {
+    return typeof options.oidcIssuer === "string";
 }
-exports.getDefaultSession = getDefaultSession;
-const fetch = (...args) => {
-    const session = getDefaultSession();
-    return session.fetch(...args);
-};
-exports.fetch = fetch;
-const login = (...args) => {
-    const session = getDefaultSession();
-    return session.login(...args);
-};
-exports.login = login;
-const logout = (...args) => {
-    const session = getDefaultSession();
-    return session.logout(...args);
-};
-exports.logout = logout;
-const handleIncomingRedirect = (...args) => {
-    const session = getDefaultSession();
-    return session.handleIncomingRedirect(...args);
-};
-exports.handleIncomingRedirect = handleIncomingRedirect;
-const onLogin = (...args) => {
-    const session = getDefaultSession();
-    return session.onLogin(...args);
-};
-exports.onLogin = onLogin;
-const onLogout = (...args) => {
-    const session = getDefaultSession();
-    return session.onLogout(...args);
-};
-exports.onLogout = onLogout;
-const onSessionRestore = (...args) => {
-    const session = getDefaultSession();
-    return session.onSessionRestore(...args);
-};
-exports.onSessionRestore = onSessionRestore;
-const events = () => {
-    return getDefaultSession().events;
-};
-exports.events = events;
-//# sourceMappingURL=defaultSession.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/dependencies.js":
-/*!******************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/dependencies.js ***!
-  \******************************************************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getClientAuthenticationWithDependencies = void 0;
-const solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-const StorageUtility_1 = __importDefault(__webpack_require__(/*! ./storage/StorageUtility */ "./node_modules/@inrupt/solid-client-authn-browser/dist/storage/StorageUtility.js"));
-const ClientAuthentication_1 = __importDefault(__webpack_require__(/*! ./ClientAuthentication */ "./node_modules/@inrupt/solid-client-authn-browser/dist/ClientAuthentication.js"));
-const OidcLoginHandler_1 = __importDefault(__webpack_require__(/*! ./login/oidc/OidcLoginHandler */ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/OidcLoginHandler.js"));
-const AuthorizationCodeWithPkceOidcHandler_1 = __importDefault(__webpack_require__(/*! ./login/oidc/oidcHandlers/AuthorizationCodeWithPkceOidcHandler */ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/oidcHandlers/AuthorizationCodeWithPkceOidcHandler.js"));
-const IssuerConfigFetcher_1 = __importDefault(__webpack_require__(/*! ./login/oidc/IssuerConfigFetcher */ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/IssuerConfigFetcher.js"));
-const FallbackRedirectHandler_1 = __webpack_require__(/*! ./login/oidc/incomingRedirectHandler/FallbackRedirectHandler */ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/incomingRedirectHandler/FallbackRedirectHandler.js");
-const GeneralLogoutHandler_1 = __importDefault(__webpack_require__(/*! ./logout/GeneralLogoutHandler */ "./node_modules/@inrupt/solid-client-authn-browser/dist/logout/GeneralLogoutHandler.js"));
-const SessionInfoManager_1 = __webpack_require__(/*! ./sessionInfo/SessionInfoManager */ "./node_modules/@inrupt/solid-client-authn-browser/dist/sessionInfo/SessionInfoManager.js");
-const AuthCodeRedirectHandler_1 = __webpack_require__(/*! ./login/oidc/incomingRedirectHandler/AuthCodeRedirectHandler */ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/incomingRedirectHandler/AuthCodeRedirectHandler.js");
-const AggregateRedirectHandler_1 = __importDefault(__webpack_require__(/*! ./login/oidc/AggregateRedirectHandler */ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/AggregateRedirectHandler.js"));
-const BrowserStorage_1 = __importDefault(__webpack_require__(/*! ./storage/BrowserStorage */ "./node_modules/@inrupt/solid-client-authn-browser/dist/storage/BrowserStorage.js"));
-const Redirector_1 = __importDefault(__webpack_require__(/*! ./login/oidc/Redirector */ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/Redirector.js"));
-const ClientRegistrar_1 = __importDefault(__webpack_require__(/*! ./login/oidc/ClientRegistrar */ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/ClientRegistrar.js"));
-const ErrorOidcHandler_1 = __webpack_require__(/*! ./login/oidc/incomingRedirectHandler/ErrorOidcHandler */ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/incomingRedirectHandler/ErrorOidcHandler.js");
-const TokenRefresher_1 = __importDefault(__webpack_require__(/*! ./login/oidc/refresh/TokenRefresher */ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/refresh/TokenRefresher.js"));
-function getClientAuthenticationWithDependencies(dependencies) {
-    const inMemoryStorage = new solid_client_authn_core_1.InMemoryStorage();
-    const secureStorage = dependencies.secureStorage || inMemoryStorage;
-    const insecureStorage = dependencies.insecureStorage || new BrowserStorage_1.default();
-    const storageUtility = new StorageUtility_1.default(secureStorage, insecureStorage);
-    const issuerConfigFetcher = new IssuerConfigFetcher_1.default(storageUtility);
-    const clientRegistrar = new ClientRegistrar_1.default(storageUtility);
-    const sessionInfoManager = new SessionInfoManager_1.SessionInfoManager(storageUtility);
-    const tokenRefresher = new TokenRefresher_1.default(storageUtility, issuerConfigFetcher, clientRegistrar);
-    const loginHandler = new OidcLoginHandler_1.default(storageUtility, new AuthorizationCodeWithPkceOidcHandler_1.default(storageUtility, new Redirector_1.default()), issuerConfigFetcher, clientRegistrar);
-    const redirectHandler = new AggregateRedirectHandler_1.default([
-        new ErrorOidcHandler_1.ErrorOidcHandler(),
-        new AuthCodeRedirectHandler_1.AuthCodeRedirectHandler(storageUtility, sessionInfoManager, issuerConfigFetcher, clientRegistrar, tokenRefresher),
-        new FallbackRedirectHandler_1.FallbackRedirectHandler(),
-    ]);
-    return new ClientAuthentication_1.default(loginHandler, redirectHandler, new GeneralLogoutHandler_1.default(sessionInfoManager), sessionInfoManager, issuerConfigFetcher);
+function hasRedirectUrl(options) {
+    return typeof options.redirectUrl === "string";
 }
-exports.getClientAuthenticationWithDependencies = getClientAuthenticationWithDependencies;
-//# sourceMappingURL=dependencies.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/index.js":
-/*!***********************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/index.js ***!
-  \***********************************************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.EVENTS = exports.InMemoryStorage = exports.ConfigurationError = exports.NotImplementedError = exports.getClientAuthenticationWithDependencies = exports.Session = void 0;
-var Session_1 = __webpack_require__(/*! ./Session */ "./node_modules/@inrupt/solid-client-authn-browser/dist/Session.js");
-Object.defineProperty(exports, "Session", ({ enumerable: true, get: function () { return Session_1.Session; } }));
-var dependencies_1 = __webpack_require__(/*! ./dependencies */ "./node_modules/@inrupt/solid-client-authn-browser/dist/dependencies.js");
-Object.defineProperty(exports, "getClientAuthenticationWithDependencies", ({ enumerable: true, get: function () { return dependencies_1.getClientAuthenticationWithDependencies; } }));
-__exportStar(__webpack_require__(/*! ./defaultSession */ "./node_modules/@inrupt/solid-client-authn-browser/dist/defaultSession.js"), exports);
-var solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-Object.defineProperty(exports, "NotImplementedError", ({ enumerable: true, get: function () { return solid_client_authn_core_1.NotImplementedError; } }));
-Object.defineProperty(exports, "ConfigurationError", ({ enumerable: true, get: function () { return solid_client_authn_core_1.ConfigurationError; } }));
-Object.defineProperty(exports, "InMemoryStorage", ({ enumerable: true, get: function () { return solid_client_authn_core_1.InMemoryStorage; } }));
-Object.defineProperty(exports, "EVENTS", ({ enumerable: true, get: function () { return solid_client_authn_core_1.EVENTS; } }));
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/AggregateRedirectHandler.js":
-/*!*****************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/AggregateRedirectHandler.js ***!
-  \*****************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-class AggregateRedirectHandler extends solid_client_authn_core_1.AggregateHandler {
-    constructor(redirectHandlers) {
-        super(redirectHandlers);
-    }
-}
-exports["default"] = AggregateRedirectHandler;
-//# sourceMappingURL=AggregateRedirectHandler.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/ClientRegistrar.js":
-/*!********************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/ClientRegistrar.js ***!
-  \********************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const oidc_client_ext_1 = __webpack_require__(/*! @inrupt/oidc-client-ext */ "./node_modules/@inrupt/oidc-client-ext/dist/index.es.js");
-class ClientRegistrar {
-    constructor(storageUtility) {
+/**
+ * @hidden
+ */
+class OidcLoginHandler {
+    constructor(storageUtility, oidcHandler, issuerConfigFetcher, clientRegistrar) {
         this.storageUtility = storageUtility;
+        this.oidcHandler = oidcHandler;
+        this.issuerConfigFetcher = issuerConfigFetcher;
+        this.clientRegistrar = clientRegistrar;
+        this.storageUtility = storageUtility;
+        this.oidcHandler = oidcHandler;
+        this.issuerConfigFetcher = issuerConfigFetcher;
+        this.clientRegistrar = clientRegistrar;
     }
-    async getClient(options, issuerConfig) {
-        const [storedClientId, storedClientSecret,] = await Promise.all([
-            this.storageUtility.getForUser(options.sessionId, "clientId", {
-                secure: false,
-            }),
-            this.storageUtility.getForUser(options.sessionId, "clientSecret", {
-                secure: false,
-            }),
-        ]);
-        if (storedClientId) {
-            return {
-                clientId: storedClientId,
-                clientSecret: storedClientSecret,
-                clientType: "dynamic",
-            };
+    async canHandle(options) {
+        return hasIssuer(options) && hasRedirectUrl(options);
+    }
+    async handle(options) {
+        if (!hasIssuer(options)) {
+            throw new solidClientAuthnCore.ConfigurationError(`OidcLoginHandler requires an OIDC issuer: missing property 'oidcIssuer' in ${JSON.stringify(options)}`);
         }
-        try {
-            const registeredClient = await (0, oidc_client_ext_1.registerClient)(options, issuerConfig);
-            const infoToSave = {
-                clientId: registeredClient.clientId,
-            };
-            if (registeredClient.clientSecret) {
-                infoToSave.clientSecret = registeredClient.clientSecret;
-            }
-            if (registeredClient.idTokenSignedResponseAlg) {
-                infoToSave.idTokenSignedResponseAlg =
-                    registeredClient.idTokenSignedResponseAlg;
-            }
-            await this.storageUtility.setForUser(options.sessionId, infoToSave, {
-                secure: false,
-            });
-            return registeredClient;
+        if (!hasRedirectUrl(options)) {
+            throw new solidClientAuthnCore.ConfigurationError(`OidcLoginHandler requires a redirect URL: missing property 'redirectUrl' in ${JSON.stringify(options)}`);
         }
-        catch (error) {
-            throw new Error(`Client registration failed: [${error}]`);
-        }
+        // Fetch issuer config.
+        const issuerConfig = await this.issuerConfigFetcher.fetchConfig(options.oidcIssuer);
+        const clientRegistration = await solidClientAuthnCore.handleRegistration(options, issuerConfig, this.storageUtility, this.clientRegistrar);
+        // Construct OIDC Options
+        const OidcOptions = {
+            // Note that here, the issuer is not the one from the received options, but
+            // from the issuer's config. This enforces the canonical URL is used and stored,
+            // which is also the one present in the ID token, so storing a technically
+            // valid, but different issuer URL (e.g. using a trailing slash or not) now
+            // could prevent from validating the ID token later.
+            issuer: issuerConfig.issuer,
+            // TODO: differentiate if DPoP should be true
+            dpop: options.tokenType.toLowerCase() === "dpop",
+            ...options,
+            issuerConfiguration: issuerConfig,
+            client: clientRegistration,
+        };
+        // Call proper OIDC Handler
+        return this.oidcHandler.handle(OidcOptions);
     }
 }
-exports["default"] = ClientRegistrar;
-//# sourceMappingURL=ClientRegistrar.js.map
 
-/***/ }),
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ * Authorization code flow spec: https://openid.net/specs/openid-connect-core-1_0.html#CodeFlowAuth
+ * PKCE: https://tools.ietf.org/html/rfc7636
+ */
+class AuthorizationCodeWithPkceOidcHandler extends solidClientAuthnCore.AuthorizationCodeWithPkceOidcHandlerBase {
+    async handle(oidcLoginOptions) {
+        var _a;
+        /* eslint-disable camelcase */
+        const oidcOptions = {
+            authority: oidcLoginOptions.issuer.toString(),
+            client_id: oidcLoginOptions.client.clientId,
+            client_secret: oidcLoginOptions.client.clientSecret,
+            redirect_uri: oidcLoginOptions.redirectUrl.toString(),
+            post_logout_redirect_uri: oidcLoginOptions.redirectUrl.toString(),
+            response_type: "code",
+            scope: solidClientAuthnCore.DEFAULT_SCOPES,
+            filterProtocolClaims: true,
+            // The userinfo endpoint on NSS fails, so disable this for now
+            // Note that in Solid, information should be retrieved from the
+            // profile referenced by the WebId.
+            loadUserInfo: false,
+            code_verifier: true,
+            prompt: (_a = oidcLoginOptions.prompt) !== null && _a !== void 0 ? _a : "consent",
+        };
+        /* eslint-enable camelcase */
+        const oidcClientLibrary = new oidcClientExt.OidcClient(oidcOptions);
+        try {
+            const signingRequest = await oidcClientLibrary.createSigninRequest();
+            // Make sure to await the promise before returning so that the error is caught.
+            return await this.handleRedirect({
+                oidcLoginOptions,
+                // eslint-disable-next-line no-underscore-dangle
+                state: signingRequest.state._id,
+                // eslint-disable-next-line no-underscore-dangle
+                codeVerifier: signingRequest.state._code_verifier,
+                targetUrl: signingRequest.url.toString(),
+            });
+        }
+        catch (err) {
+            // eslint-disable-next-line no-console
+            console.error(err);
+        }
+        // The login is only completed AFTER redirect, so nothing to return here.
+        return undefined;
+    }
+}
 
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/IssuerConfigFetcher.js":
-/*!************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/IssuerConfigFetcher.js ***!
-  \************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.WELL_KNOWN_OPENID_CONFIG = void 0;
-const solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-const universal_fetch_1 = __webpack_require__(/*! @inrupt/universal-fetch */ "./node_modules/@inrupt/universal-fetch/dist/index-browser.js");
-exports.WELL_KNOWN_OPENID_CONFIG = ".well-known/openid-configuration";
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+const WELL_KNOWN_OPENID_CONFIG = ".well-known/openid-configuration";
+/* eslint-disable camelcase */
 const issuerConfigKeyMap = {
     issuer: {
         toKey: "issuer",
@@ -26714,6 +26760,10 @@ const issuerConfigKeyMap = {
     },
     registration_endpoint: {
         toKey: "registrationEndpoint",
+        convertToUrl: true,
+    },
+    end_session_endpoint: {
+        toKey: "endSessionEndpoint",
         convertToUrl: true,
     },
     scopes_supported: { toKey: "scopesSupported" },
@@ -26774,10 +26824,15 @@ const issuerConfigKeyMap = {
         convertToUrl: true,
     },
 };
+/* eslint-enable camelcase */
 function processConfig(config) {
     const parsedConfig = {};
     Object.keys(config).forEach((key) => {
         if (issuerConfigKeyMap[key]) {
+            // TODO: PMcB55: Validate URL if "issuerConfigKeyMap[key].convertToUrl"
+            //  if (issuerConfigKeyMap[key].convertToUrl) {
+            //   validateUrl(config[key]);
+            //  }
             parsedConfig[issuerConfigKeyMap[key].toKey] = config[key];
         }
     });
@@ -26786,124 +26841,225 @@ function processConfig(config) {
     }
     return parsedConfig;
 }
+/**
+ * @hidden
+ */
 class IssuerConfigFetcher {
     constructor(storageUtility) {
         this.storageUtility = storageUtility;
+        this.storageUtility = storageUtility;
     }
+    // This method needs no state (so can be static), and can be exposed to allow
+    // callers to know where this implementation puts state it needs.
     static getLocalStorageKey(issuer) {
         return `issuerConfig:${issuer}`;
     }
     async fetchConfig(issuer) {
         let issuerConfig;
-        const openIdConfigUrl = new URL(exports.WELL_KNOWN_OPENID_CONFIG, issuer.endsWith("/") ? issuer : `${issuer}/`).href;
-        const issuerConfigRequestBody = await (0, universal_fetch_1.fetch)(openIdConfigUrl);
+        const openIdConfigUrl = new URL(WELL_KNOWN_OPENID_CONFIG, 
+        // Make sure to append a slash at issuer URL, so that the .well-known URL
+        // includes the full issuer path. See https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderConfig.
+        issuer.endsWith("/") ? issuer : `${issuer}/`).href;
+        const issuerConfigRequestBody = await universalFetch.fetch.call(globalThis, openIdConfigUrl);
+        // Check the validity of the fetched config
         try {
             issuerConfig = processConfig(await issuerConfigRequestBody.json());
         }
         catch (err) {
-            throw new solid_client_authn_core_1.ConfigurationError(`[${issuer.toString()}] has an invalid configuration: ${err.message}`);
+            throw new solidClientAuthnCore.ConfigurationError(`[${issuer.toString()}] has an invalid configuration: ${err.message}`);
         }
+        // Update store with fetched config
         await this.storageUtility.set(IssuerConfigFetcher.getLocalStorageKey(issuer), JSON.stringify(issuerConfig));
         return issuerConfig;
     }
 }
-exports["default"] = IssuerConfigFetcher;
-//# sourceMappingURL=IssuerConfigFetcher.js.map
 
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/OidcLoginHandler.js":
-/*!*********************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/OidcLoginHandler.js ***!
-  \*********************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-function hasIssuer(options) {
-    return typeof options.oidcIssuer === "string";
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @param sessionId
+ * @param storage
+ * @hidden
+ */
+async function clear(sessionId, storage) {
+    await solidClientAuthnCore.clear(sessionId, storage);
+    await oidcClientExt.clearOidcPersistentStorage();
 }
-function hasRedirectUrl(options) {
-    return typeof options.redirectUrl === "string";
-}
-class OidcLoginHandler {
-    constructor(storageUtility, oidcHandler, issuerConfigFetcher, clientRegistrar) {
-        this.storageUtility = storageUtility;
-        this.oidcHandler = oidcHandler;
-        this.issuerConfigFetcher = issuerConfigFetcher;
-        this.clientRegistrar = clientRegistrar;
-    }
-    async canHandle(options) {
-        return hasIssuer(options) && hasRedirectUrl(options);
-    }
-    async handle(options) {
-        if (!hasIssuer(options)) {
-            throw new solid_client_authn_core_1.ConfigurationError(`OidcLoginHandler requires an OIDC issuer: missing property 'oidcIssuer' in ${JSON.stringify(options)}`);
+/**
+ * @hidden
+ */
+class SessionInfoManager extends solidClientAuthnCore.SessionInfoManagerBase {
+    async get(sessionId) {
+        const [isLoggedIn, webId, clientId, clientSecret, redirectUrl, refreshToken, issuer, tokenType,] = await Promise.all([
+            this.storageUtility.getForUser(sessionId, "isLoggedIn", {
+                secure: true,
+            }),
+            this.storageUtility.getForUser(sessionId, "webId", {
+                secure: true,
+            }),
+            this.storageUtility.getForUser(sessionId, "clientId", {
+                secure: false,
+            }),
+            this.storageUtility.getForUser(sessionId, "clientSecret", {
+                secure: false,
+            }),
+            this.storageUtility.getForUser(sessionId, "redirectUrl", {
+                secure: false,
+            }),
+            this.storageUtility.getForUser(sessionId, "refreshToken", {
+                secure: true,
+            }),
+            this.storageUtility.getForUser(sessionId, "issuer", {
+                secure: false,
+            }),
+            this.storageUtility.getForUser(sessionId, "tokenType", {
+                secure: false,
+            }),
+        ]);
+        if (typeof redirectUrl === "string" && !solidClientAuthnCore.isValidRedirectUrl(redirectUrl)) {
+            // This resolves the issue for people experiencing https://github.com/inrupt/solid-client-authn-js/issues/2891.
+            // An invalid redirect URL is present in the storage, and the session should
+            // be cleared to get a fresh start. This will require the user to log back in.
+            await Promise.all([
+                this.storageUtility.deleteAllUserData(sessionId, { secure: false }),
+                this.storageUtility.deleteAllUserData(sessionId, { secure: true }),
+            ]);
+            return undefined;
         }
-        if (!hasRedirectUrl(options)) {
-            throw new solid_client_authn_core_1.ConfigurationError(`OidcLoginHandler requires a redirect URL: missing property 'redirectUrl' in ${JSON.stringify(options)}`);
+        if (tokenType !== undefined && !solidClientAuthnCore.isSupportedTokenType(tokenType)) {
+            throw new Error(`Tokens of type [${tokenType}] are not supported.`);
         }
-        const issuerConfig = await this.issuerConfigFetcher.fetchConfig(options.oidcIssuer);
-        const clientRegistration = await (0, solid_client_authn_core_1.handleRegistration)(options, issuerConfig, this.storageUtility, this.clientRegistrar);
-        const OidcOptions = {
-            issuer: issuerConfig.issuer,
-            dpop: options.tokenType.toLowerCase() === "dpop",
-            ...options,
-            issuerConfiguration: issuerConfig,
-            client: clientRegistration,
+        if (clientId === undefined &&
+            isLoggedIn === undefined &&
+            webId === undefined &&
+            refreshToken === undefined) {
+            return undefined;
+        }
+        return {
+            sessionId,
+            webId,
+            isLoggedIn: isLoggedIn === "true",
+            redirectUrl,
+            refreshToken,
+            issuer,
+            clientAppId: clientId,
+            clientAppSecret: clientSecret,
+            // Default the token type to DPoP if unspecified.
+            tokenType: tokenType !== null && tokenType !== void 0 ? tokenType : "DPoP",
         };
-        return this.oidcHandler.handle(OidcOptions);
+    }
+    /**
+     * This function removes all session-related information from storage.
+     * @param sessionId the session identifier
+     * @param storage the storage where session info is stored
+     * @hidden
+     */
+    async clear(sessionId) {
+        return clear(sessionId, this.storageUtility);
     }
 }
-exports["default"] = OidcLoginHandler;
-//# sourceMappingURL=OidcLoginHandler.js.map
 
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/Redirector.js":
-/*!***************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/Redirector.js ***!
-  \***************************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-class Redirector {
-    redirect(redirectUrl, options) {
-        if (options && options.handleRedirect) {
-            options.handleRedirect(redirectUrl);
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * This class handles redirect IRIs without any query params, and returns an unauthenticated
+ * session. It serves as a fallback so that consuming libraries don't have to test
+ * for the query params themselves, and can always try to use them as a redirect IRI.
+ * @hidden
+ */
+class FallbackRedirectHandler {
+    async canHandle(redirectUrl) {
+        try {
+            // The next URL object is built for validating it.
+            // eslint-disable-next-line no-new
+            new URL(redirectUrl);
+            return true;
         }
-        else if (options && options.redirectByReplacingState) {
-            window.history.replaceState({}, "", redirectUrl);
-        }
-        else {
-            window.location.href = redirectUrl;
+        catch (e) {
+            throw new Error(`[${redirectUrl}] is not a valid URL, and cannot be used as a redirect URL: ${e}`);
         }
     }
+    async handle(
+    // The argument is ignored, but must be present to implement the interface
+    _redirectUrl) {
+        return solidClientAuthnCore.getUnauthenticatedSession();
+    }
 }
-exports["default"] = Redirector;
-//# sourceMappingURL=Redirector.js.map
 
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/incomingRedirectHandler/AuthCodeRedirectHandler.js":
-/*!****************************************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/incomingRedirectHandler/AuthCodeRedirectHandler.js ***!
-  \****************************************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.AuthCodeRedirectHandler = void 0;
-const universal_fetch_1 = __webpack_require__(/*! @inrupt/universal-fetch */ "./node_modules/@inrupt/universal-fetch/dist/index-browser.js");
-const solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-const oidc_client_ext_1 = __webpack_require__(/*! @inrupt/oidc-client-ext */ "./node_modules/@inrupt/oidc-client-ext/dist/index.es.js");
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ * @packageDocumentation
+ */
+// FIXME: The following doesn't work in the browser, it results in all the fetches
+// being unauthenticated. This should be looked into when migrating to universal-fetch.
+// import { fetch } from "cross-fetch";
+const globalFetch = (...args) => universalFetch.fetch.call(globalThis, ...args);
+/**
+ * @hidden
+ */
 class AuthCodeRedirectHandler {
     constructor(storageUtility, sessionInfoManager, issuerConfigFetcher, clientRegistrar, tokerRefresher) {
+        this.storageUtility = storageUtility;
+        this.sessionInfoManager = sessionInfoManager;
+        this.issuerConfigFetcher = issuerConfigFetcher;
+        this.clientRegistrar = clientRegistrar;
+        this.tokerRefresher = tokerRefresher;
         this.storageUtility = storageUtility;
         this.sessionInfoManager = sessionInfoManager;
         this.issuerConfigFetcher = issuerConfigFetcher;
@@ -26929,7 +27085,7 @@ class AuthCodeRedirectHandler {
         const storedSessionId = (await this.storageUtility.getForUser(oauthState, "sessionId", {
             errorIfNull: true,
         }));
-        const { issuerConfig, codeVerifier, redirectUrl: storedRedirectIri, dpop: isDpop, } = await (0, solid_client_authn_core_1.loadOidcContextFromStorage)(storedSessionId, this.storageUtility, this.issuerConfigFetcher);
+        const { issuerConfig, codeVerifier, redirectUrl: storedRedirectIri, dpop: isDpop, } = await solidClientAuthnCore.loadOidcContextFromStorage(storedSessionId, this.storageUtility, this.issuerConfigFetcher);
         const iss = url.searchParams.get("iss");
         if (typeof iss === "string" && iss !== issuerConfig.issuer) {
             throw new Error(`The value of the iss parameter (${iss}) does not match the issuer identifier of the authorization server (${issuerConfig.issuer}). See [rfc9207](https://www.rfc-editor.org/rfc/rfc9207.html#section-2.3-3.1.1)`);
@@ -26944,16 +27100,21 @@ class AuthCodeRedirectHandler {
         let tokens;
         const tokenCreatedAt = Date.now();
         if (isDpop) {
-            tokens = await (0, oidc_client_ext_1.getDpopToken)(issuerConfig, client, {
+            tokens = await oidcClientExt.getDpopToken(issuerConfig, client, {
                 grantType: "authorization_code",
+                // We rely on our 'canHandle' function checking that the OAuth 'code'
+                // parameter is present in our query string.
                 code: url.searchParams.get("code"),
                 codeVerifier,
                 redirectUrl: storedRedirectIri,
             });
+            // Delete oidc-client-specific session information from storage. This is
+            // done automatically when retrieving a bearer token, but since the DPoP
+            // binding uses our custom code, this needs to be done manually.
             window.localStorage.removeItem(`oidc.${oauthState}`);
         }
         else {
-            tokens = await (0, oidc_client_ext_1.getBearerToken)(url.toString());
+            tokens = await oidcClientExt.getBearerToken(url.toString());
         }
         let refreshOptions;
         if (tokens.refreshToken !== undefined) {
@@ -26963,7 +27124,7 @@ class AuthCodeRedirectHandler {
                 tokenRefresher: this.tokerRefresher,
             };
         }
-        const authFetch = await (0, solid_client_authn_core_1.buildAuthenticatedFetch)(universal_fetch_1.fetch, tokens.accessToken, {
+        const authFetch = await solidClientAuthnCore.buildAuthenticatedFetch(globalFetch, tokens.accessToken, {
             dpopKey: tokens.dpopKey,
             refreshOptions,
             eventEmitter,
@@ -26979,330 +27140,69 @@ class AuthCodeRedirectHandler {
         }
         return Object.assign(sessionInfo, {
             fetch: authFetch,
+            getLogoutUrl: solidClientAuthnCore.maybeBuildRpInitiatedLogout({
+                idTokenHint: tokens.idToken,
+                endSessionEndpoint: issuerConfig.endSessionEndpoint,
+            }),
             expirationDate: typeof tokens.expiresIn === "number"
                 ? tokenCreatedAt + tokens.expiresIn * 1000
-                : null,
+                : undefined,
         });
     }
 }
-exports.AuthCodeRedirectHandler = AuthCodeRedirectHandler;
-//# sourceMappingURL=AuthCodeRedirectHandler.js.map
 
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/incomingRedirectHandler/ErrorOidcHandler.js":
-/*!*********************************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/incomingRedirectHandler/ErrorOidcHandler.js ***!
-  \*********************************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.ErrorOidcHandler = void 0;
-const solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-const SessionInfoManager_1 = __webpack_require__(/*! ../../../sessionInfo/SessionInfoManager */ "./node_modules/@inrupt/solid-client-authn-browser/dist/sessionInfo/SessionInfoManager.js");
-class ErrorOidcHandler {
-    async canHandle(redirectUrl) {
-        try {
-            return new URL(redirectUrl).searchParams.has("error");
-        }
-        catch (e) {
-            throw new Error(`[${redirectUrl}] is not a valid URL, and cannot be used as a redirect URL: ${e}`);
-        }
-    }
-    async handle(redirectUrl, eventEmitter) {
-        if (eventEmitter !== undefined) {
-            const url = new URL(redirectUrl);
-            const errorUrl = url.searchParams.get("error");
-            const errorDescriptionUrl = url.searchParams.get("error_description");
-            eventEmitter.emit(solid_client_authn_core_1.EVENTS.ERROR, errorUrl, errorDescriptionUrl);
-        }
-        return (0, SessionInfoManager_1.getUnauthenticatedSession)();
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ */
+class AggregateRedirectHandler extends solidClientAuthnCore.AggregateHandler {
+    constructor(redirectHandlers) {
+        super(redirectHandlers);
     }
 }
-exports.ErrorOidcHandler = ErrorOidcHandler;
-//# sourceMappingURL=ErrorOidcHandler.js.map
 
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/incomingRedirectHandler/FallbackRedirectHandler.js":
-/*!****************************************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/incomingRedirectHandler/FallbackRedirectHandler.js ***!
-  \****************************************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.FallbackRedirectHandler = void 0;
-const SessionInfoManager_1 = __webpack_require__(/*! ../../../sessionInfo/SessionInfoManager */ "./node_modules/@inrupt/solid-client-authn-browser/dist/sessionInfo/SessionInfoManager.js");
-class FallbackRedirectHandler {
-    async canHandle(redirectUrl) {
-        try {
-            new URL(redirectUrl);
-            return true;
-        }
-        catch (e) {
-            throw new Error(`[${redirectUrl}] is not a valid URL, and cannot be used as a redirect URL: ${e}`);
-        }
-    }
-    async handle(_redirectUrl) {
-        return (0, SessionInfoManager_1.getUnauthenticatedSession)();
-    }
-}
-exports.FallbackRedirectHandler = FallbackRedirectHandler;
-//# sourceMappingURL=FallbackRedirectHandler.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/oidcHandlers/AuthorizationCodeWithPkceOidcHandler.js":
-/*!******************************************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/oidcHandlers/AuthorizationCodeWithPkceOidcHandler.js ***!
-  \******************************************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-const oidc_client_ext_1 = __webpack_require__(/*! @inrupt/oidc-client-ext */ "./node_modules/@inrupt/oidc-client-ext/dist/index.es.js");
-class AuthorizationCodeWithPkceOidcHandler {
-    constructor(storageUtility, redirector) {
-        this.storageUtility = storageUtility;
-        this.redirector = redirector;
-    }
-    async canHandle(oidcLoginOptions) {
-        return !!(oidcLoginOptions.issuerConfiguration.grantTypesSupported &&
-            oidcLoginOptions.issuerConfiguration.grantTypesSupported.indexOf("authorization_code") > -1);
-    }
-    async handle(oidcLoginOptions) {
-        var _a;
-        const oidcOptions = {
-            authority: oidcLoginOptions.issuer.toString(),
-            client_id: oidcLoginOptions.client.clientId,
-            client_secret: oidcLoginOptions.client.clientSecret,
-            redirect_uri: oidcLoginOptions.redirectUrl.toString(),
-            post_logout_redirect_uri: oidcLoginOptions.redirectUrl.toString(),
-            response_type: "code",
-            scope: solid_client_authn_core_1.DEFAULT_SCOPES,
-            filterProtocolClaims: true,
-            loadUserInfo: false,
-            code_verifier: true,
-            prompt: (_a = oidcLoginOptions.prompt) !== null && _a !== void 0 ? _a : "consent",
-        };
-        const oidcClientLibrary = new oidc_client_ext_1.OidcClient(oidcOptions);
-        const { redirector } = this;
-        const storage = this.storageUtility;
-        try {
-            const signingRequest = await oidcClientLibrary.createSigninRequest();
-            await Promise.all([
-                storage.setForUser(signingRequest.state._id, {
-                    sessionId: oidcLoginOptions.sessionId,
-                }),
-                storage.setForUser(oidcLoginOptions.sessionId, {
-                    codeVerifier: signingRequest.state._code_verifier,
-                    issuer: oidcLoginOptions.issuer.toString(),
-                    redirectUrl: oidcLoginOptions.redirectUrl,
-                    dpop: oidcLoginOptions.dpop ? "true" : "false",
-                }),
-            ]);
-            redirector.redirect(signingRequest.url.toString(), {
-                handleRedirect: oidcLoginOptions.handleRedirect,
-            });
-        }
-        catch (err) {
-            console.error(err);
-        }
-        return undefined;
-    }
-}
-exports["default"] = AuthorizationCodeWithPkceOidcHandler;
-//# sourceMappingURL=AuthorizationCodeWithPkceOidcHandler.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/refresh/TokenRefresher.js":
-/*!***************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/refresh/TokenRefresher.js ***!
-  \***************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-const oidc_client_ext_1 = __webpack_require__(/*! @inrupt/oidc-client-ext */ "./node_modules/@inrupt/oidc-client-ext/dist/index.es.js");
-class TokenRefresher {
-    constructor(storageUtility, issuerConfigFetcher, clientRegistrar) {
-        this.storageUtility = storageUtility;
-        this.issuerConfigFetcher = issuerConfigFetcher;
-        this.clientRegistrar = clientRegistrar;
-    }
-    async refresh(sessionId, refreshToken, dpopKey, eventEmitter) {
-        const oidcContext = await (0, solid_client_authn_core_1.loadOidcContextFromStorage)(sessionId, this.storageUtility, this.issuerConfigFetcher);
-        const clientInfo = await this.clientRegistrar.getClient({ sessionId }, oidcContext.issuerConfig);
-        if (refreshToken === undefined) {
-            throw new Error(`Session [${sessionId}] has no refresh token to allow it to refresh its access token.`);
-        }
-        if (oidcContext.dpop && dpopKey === undefined) {
-            throw new Error(`For session [${sessionId}], the key bound to the DPoP access token must be provided to refresh said access token.`);
-        }
-        const tokenSet = await (0, oidc_client_ext_1.refresh)(refreshToken, oidcContext.issuerConfig, clientInfo, dpopKey);
-        if (tokenSet.refreshToken !== undefined) {
-            eventEmitter === null || eventEmitter === void 0 ? void 0 : eventEmitter.emit(solid_client_authn_core_1.EVENTS.NEW_REFRESH_TOKEN, tokenSet.refreshToken);
-            await this.storageUtility.setForUser(sessionId, {
-                refreshToken: tokenSet.refreshToken,
-            });
-        }
-        return tokenSet;
-    }
-}
-exports["default"] = TokenRefresher;
-//# sourceMappingURL=TokenRefresher.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/logout/GeneralLogoutHandler.js":
-/*!*********************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/logout/GeneralLogoutHandler.js ***!
-  \*********************************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-class GeneralLogoutHandler {
-    constructor(sessionInfoManager) {
-        this.sessionInfoManager = sessionInfoManager;
-    }
-    async canHandle() {
-        return true;
-    }
-    async handle(userId) {
-        await this.sessionInfoManager.clear(userId);
-    }
-}
-exports["default"] = GeneralLogoutHandler;
-//# sourceMappingURL=GeneralLogoutHandler.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/sessionInfo/SessionInfoManager.js":
-/*!************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/sessionInfo/SessionInfoManager.js ***!
-  \************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.SessionInfoManager = exports.clear = exports.getUnauthenticatedSession = void 0;
-const solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-const uuid_1 = __webpack_require__(/*! uuid */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/index.js");
-const oidc_client_ext_1 = __webpack_require__(/*! @inrupt/oidc-client-ext */ "./node_modules/@inrupt/oidc-client-ext/dist/index.es.js");
-const universal_fetch_1 = __webpack_require__(/*! @inrupt/universal-fetch */ "./node_modules/@inrupt/universal-fetch/dist/index-browser.js");
-function getUnauthenticatedSession() {
-    return {
-        isLoggedIn: false,
-        sessionId: (0, uuid_1.v4)(),
-        fetch: universal_fetch_1.fetch,
-    };
-}
-exports.getUnauthenticatedSession = getUnauthenticatedSession;
-async function clear(sessionId, storage) {
-    await Promise.all([
-        storage.deleteAllUserData(sessionId, { secure: false }),
-        storage.deleteAllUserData(sessionId, { secure: true }),
-        storage.delete("clientKey", { secure: false }),
-    ]);
-    await (0, oidc_client_ext_1.clearOidcPersistentStorage)();
-}
-exports.clear = clear;
-class SessionInfoManager {
-    constructor(storageUtility) {
-        this.storageUtility = storageUtility;
-    }
-    update(_sessionId, _options) {
-        throw new Error("Not Implemented");
-    }
-    async get(sessionId) {
-        var _a;
-        const isLoggedIn = await this.storageUtility.getForUser(sessionId, "isLoggedIn", {
-            secure: true,
-        });
-        const webId = await this.storageUtility.getForUser(sessionId, "webId", {
-            secure: true,
-        });
-        const clientId = await this.storageUtility.getForUser(sessionId, "clientId", {
-            secure: false,
-        });
-        const clientSecret = await this.storageUtility.getForUser(sessionId, "clientSecret", {
-            secure: false,
-        });
-        const redirectUrl = await this.storageUtility.getForUser(sessionId, "redirectUrl", {
-            secure: false,
-        });
-        const refreshToken = await this.storageUtility.getForUser(sessionId, "refreshToken", {
-            secure: true,
-        });
-        const issuer = await this.storageUtility.getForUser(sessionId, "issuer", {
-            secure: false,
-        });
-        const tokenType = (_a = (await this.storageUtility.getForUser(sessionId, "tokenType", {
-            secure: false,
-        }))) !== null && _a !== void 0 ? _a : "DPoP";
-        if (!(0, solid_client_authn_core_1.isSupportedTokenType)(tokenType)) {
-            throw new Error(`Tokens of type [${tokenType}] are not supported.`);
-        }
-        if (clientId === undefined &&
-            isLoggedIn === undefined &&
-            webId === undefined &&
-            refreshToken === undefined) {
-            return undefined;
-        }
-        return {
-            sessionId,
-            webId,
-            isLoggedIn: isLoggedIn === "true",
-            redirectUrl,
-            refreshToken,
-            issuer,
-            clientAppId: clientId,
-            clientAppSecret: clientSecret,
-            tokenType,
-        };
-    }
-    async getAll() {
-        throw new Error("Not implemented");
-    }
-    async clear(sessionId) {
-        return clear(sessionId, this.storageUtility);
-    }
-    async register(_sessionId) {
-        throw new Error("Not implemented");
-    }
-    async getRegisteredSessionIdAll() {
-        throw new Error("Not implemented");
-    }
-    async clearAll() {
-        throw new Error("Not implemented");
-    }
-}
-exports.SessionInfoManager = SessionInfoManager;
-//# sourceMappingURL=SessionInfoManager.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/storage/BrowserStorage.js":
-/*!****************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/storage/BrowserStorage.js ***!
-  \****************************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ */
 class BrowserStorage {
     get storage() {
         return window.localStorage;
@@ -27317,28 +27217,765 @@ class BrowserStorage {
         this.storage.removeItem(key);
     }
 }
-exports["default"] = BrowserStorage;
-//# sourceMappingURL=BrowserStorage.js.map
 
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/storage/StorageUtility.js":
-/*!****************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/storage/StorageUtility.js ***!
-  \****************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-class StorageUtilityBrowser extends solid_client_authn_core_1.StorageUtility {
-    constructor(secureStorage, insecureStorage) {
-        super(secureStorage, insecureStorage);
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ */
+class Redirector {
+    redirect(redirectUrl, options) {
+        if (options && options.handleRedirect) {
+            options.handleRedirect(redirectUrl);
+        }
+        else if (options && options.redirectByReplacingState) {
+            window.history.replaceState({}, "", redirectUrl);
+        }
+        else {
+            window.location.href = redirectUrl;
+        }
     }
 }
-exports["default"] = StorageUtilityBrowser;
-//# sourceMappingURL=StorageUtility.js.map
+
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ */
+class ClientRegistrar {
+    constructor(storageUtility) {
+        this.storageUtility = storageUtility;
+        this.storageUtility = storageUtility;
+    }
+    async getClient(options, issuerConfig) {
+        // If client secret and/or client id are stored in storage, use those.
+        const [storedClientId, storedClientSecret,
+        // storedClientName,
+        ] = await Promise.all([
+            this.storageUtility.getForUser(options.sessionId, "clientId", {
+                secure: false,
+            }),
+            this.storageUtility.getForUser(options.sessionId, "clientSecret", {
+                secure: false,
+            }),
+            // this.storageUtility.getForUser(options.sessionId, "clientName", {
+            //   // FIXME: figure out how to persist secure storage at reload
+            //   secure: false,
+            // }),
+        ]);
+        if (storedClientId) {
+            return {
+                clientId: storedClientId,
+                clientSecret: storedClientSecret,
+                clientType: "dynamic",
+            };
+        }
+        try {
+            const registeredClient = await oidcClientExt.registerClient(options, issuerConfig);
+            // Save info
+            const infoToSave = {
+                clientId: registeredClient.clientId,
+            };
+            if (registeredClient.clientSecret) {
+                infoToSave.clientSecret = registeredClient.clientSecret;
+            }
+            if (registeredClient.idTokenSignedResponseAlg) {
+                infoToSave.idTokenSignedResponseAlg =
+                    registeredClient.idTokenSignedResponseAlg;
+            }
+            await this.storageUtility.setForUser(options.sessionId, infoToSave, {
+                // FIXME: figure out how to persist secure storage at reload
+                // Otherwise, the client info cannot be retrieved from storage, and
+                // the lib tries to re-register the client on each fetch
+                secure: false,
+            });
+            return registeredClient;
+        }
+        catch (error) {
+            throw new Error(`Client registration failed: [${error}]`);
+        }
+    }
+}
+
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * This class handles redirect IRIs without any query params, and returns an unauthenticated
+ * session. It serves as a fallback so that consuming libraries don't have to test
+ * for the query params themselves, and can always try to use them as a redirect IRI.
+ * @hidden
+ */
+class ErrorOidcHandler {
+    async canHandle(redirectUrl) {
+        try {
+            // eslint-disable-next-line no-new
+            return new URL(redirectUrl).searchParams.has("error");
+        }
+        catch (e) {
+            throw new Error(`[${redirectUrl}] is not a valid URL, and cannot be used as a redirect URL: ${e}`);
+        }
+    }
+    async handle(redirectUrl, eventEmitter) {
+        if (eventEmitter !== undefined) {
+            const url = new URL(redirectUrl);
+            const errorUrl = url.searchParams.get("error");
+            const errorDescriptionUrl = url.searchParams.get("error_description");
+            eventEmitter.emit(solidClientAuthnCore.EVENTS.ERROR, errorUrl, errorDescriptionUrl);
+        }
+        return solidClientAuthnCore.getUnauthenticatedSession();
+    }
+}
+
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+// Some identifiers are not in camelcase on purpose, as they are named using the
+// official names from the OIDC/OAuth2 specifications.
+/* eslint-disable camelcase */
+/**
+ * @hidden
+ */
+class TokenRefresher {
+    constructor(storageUtility, issuerConfigFetcher, clientRegistrar) {
+        this.storageUtility = storageUtility;
+        this.issuerConfigFetcher = issuerConfigFetcher;
+        this.clientRegistrar = clientRegistrar;
+        this.storageUtility = storageUtility;
+        this.issuerConfigFetcher = issuerConfigFetcher;
+        this.clientRegistrar = clientRegistrar;
+    }
+    async refresh(sessionId, refreshToken, dpopKey, eventEmitter) {
+        const oidcContext = await solidClientAuthnCore.loadOidcContextFromStorage(sessionId, this.storageUtility, this.issuerConfigFetcher);
+        // This should also retrieve the client from storage
+        const clientInfo = await this.clientRegistrar.getClient({ sessionId }, oidcContext.issuerConfig);
+        if (refreshToken === undefined) {
+            // TODO: in a next PR, look up storage for a refresh token
+            throw new Error(`Session [${sessionId}] has no refresh token to allow it to refresh its access token.`);
+        }
+        if (oidcContext.dpop && dpopKey === undefined) {
+            throw new Error(`For session [${sessionId}], the key bound to the DPoP access token must be provided to refresh said access token.`);
+        }
+        const tokenSet = await oidcClientExt.refresh(refreshToken, oidcContext.issuerConfig, clientInfo, dpopKey);
+        if (tokenSet.refreshToken !== undefined) {
+            eventEmitter === null || eventEmitter === void 0 ? void 0 : eventEmitter.emit(solidClientAuthnCore.EVENTS.NEW_REFRESH_TOKEN, tokenSet.refreshToken);
+            await this.storageUtility.setForUser(sessionId, {
+                refreshToken: tokenSet.refreshToken,
+            });
+        }
+        return tokenSet;
+    }
+}
+
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ *
+ * @param dependencies
+ * @deprecated This function will be removed from the external API in an upcoming release.
+ */
+function getClientAuthenticationWithDependencies(dependencies) {
+    const inMemoryStorage = new solidClientAuthnCore.InMemoryStorage();
+    const secureStorage = dependencies.secureStorage || inMemoryStorage;
+    const insecureStorage = dependencies.insecureStorage || new BrowserStorage();
+    const storageUtility = new StorageUtilityBrowser(secureStorage, insecureStorage);
+    const issuerConfigFetcher = new IssuerConfigFetcher(storageUtility);
+    const clientRegistrar = new ClientRegistrar(storageUtility);
+    const sessionInfoManager = new SessionInfoManager(storageUtility);
+    const tokenRefresher = new TokenRefresher(storageUtility, issuerConfigFetcher, clientRegistrar);
+    const redirector = new Redirector();
+    // make new handler for redirect and login
+    const loginHandler = new OidcLoginHandler(storageUtility, new AuthorizationCodeWithPkceOidcHandler(storageUtility, redirector), issuerConfigFetcher, clientRegistrar);
+    const redirectHandler = new AggregateRedirectHandler([
+        new ErrorOidcHandler(),
+        new AuthCodeRedirectHandler(storageUtility, sessionInfoManager, issuerConfigFetcher, clientRegistrar, tokenRefresher),
+        // This catch-all class will always be able to handle the
+        // redirect IRI, so it must be registered last.
+        new FallbackRedirectHandler(),
+    ]);
+    return new ClientAuthentication(loginHandler, redirectHandler, new solidClientAuthnCore.IWaterfallLogoutHandler(sessionInfoManager, redirector), sessionInfoManager, issuerConfigFetcher);
+}
+
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+const KEY_CURRENT_SESSION = `${solidClientAuthnCore.SOLID_CLIENT_AUTHN_KEY_PREFIX}currentSession`;
+const KEY_CURRENT_URL = `${solidClientAuthnCore.SOLID_CLIENT_AUTHN_KEY_PREFIX}currentUrl`;
+
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+async function silentlyAuthenticate(sessionId, clientAuthn, session) {
+    var _a;
+    const storedSessionInfo = await clientAuthn.validateCurrentSession(sessionId);
+    if (storedSessionInfo !== null) {
+        // It can be really useful to save the user's current browser location,
+        // so that we can restore it after completing the silent authentication
+        // on incoming redirect. This way, the user is eventually redirected back
+        // to the page they were on and not to the app's redirect page.
+        window.localStorage.setItem(KEY_CURRENT_URL, window.location.href);
+        await clientAuthn.login({
+            sessionId,
+            prompt: "none",
+            oidcIssuer: storedSessionInfo.issuer,
+            redirectUrl: storedSessionInfo.redirectUrl,
+            clientId: storedSessionInfo.clientAppId,
+            clientSecret: storedSessionInfo.clientAppSecret,
+            tokenType: (_a = storedSessionInfo.tokenType) !== null && _a !== void 0 ? _a : "DPoP",
+        }, session.events);
+        return true;
+    }
+    return false;
+}
+function isLoggedIn(sessionInfo) {
+    return !!(sessionInfo === null || sessionInfo === void 0 ? void 0 : sessionInfo.isLoggedIn);
+}
+/**
+ * A {@link Session} object represents a user's session on an application. The session holds state, as it stores information enabling acces to private resources after login for instance.
+ */
+class Session extends EventEmitter {
+    /**
+     * Session object constructor. Typically called as follows:
+     *
+     * ```typescript
+     * const session = new Session();
+     * ```
+     *
+     * See also [getDefaultSession](https://docs.inrupt.com/developer-tools/api/javascript/solid-client-authn-browser/functions.html#getdefaultsession).
+     *
+     * @param sessionOptions The options enabling the correct instantiation of
+     * the session. Either both storages or clientAuthentication are required. For
+     * more information, see {@link ISessionOptions}.
+     * @param sessionId A string uniquely identifying the session.
+     *
+     */
+    constructor(sessionOptions = {}, sessionId = undefined) {
+        super();
+        this.tokenRequestInProgress = false;
+        /**
+         * Triggers the login process. Note that this method will redirect the user away from your app.
+         *
+         * @param options Parameter to customize the login behaviour. In particular, two options are mandatory: `options.oidcIssuer`, the user's identity provider, and `options.redirectUrl`, the URL to which the user will be redirected after logging in their identity provider.
+         * @returns This method should redirect the user away from the app: it does not return anything. The login process is completed by {@linkcode handleIncomingRedirect}.
+         */
+        // Define these functions as properties so that they don't get accidentally re-bound.
+        // Isn't Javascript fun?
+        this.login = async (options) => {
+            var _a;
+            await this.clientAuthentication.login({
+                sessionId: this.info.sessionId,
+                ...options,
+                // Defaults the token type to DPoP
+                tokenType: (_a = options.tokenType) !== null && _a !== void 0 ? _a : "DPoP",
+            }, this.events);
+            // `login` redirects the user away from the app,
+            // so unless it throws an error, there is no code that should run afterwards
+            // (since there is no "after" in the lifetime of the script).
+            // Hence, this Promise never resolves:
+            return new Promise(() => { });
+        };
+        /**
+         * Fetches data using available login information. If the user is not logged in, this will behave as a regular `fetch`. The signature of this method is identical to the [canonical `fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
+         *
+         * @param url The URL from which data should be fetched.
+         * @param init Optional parameters customizing the request, by specifying an HTTP method, headers, a body, etc. Follows the [WHATWG Fetch Standard](https://fetch.spec.whatwg.org/).
+         */
+        this.fetch = (url, init) => this.clientAuthentication.fetch(url, init);
+        /**
+         * An internal logout function, to control whether or not the logout signal
+         * should be sent, i.e. if the logout was user-initiated or is the result of
+         * an external event.
+         *
+         * @hidden
+         */
+        this.internalLogout = async (emitSignal, options) => {
+            // Clearing this value means that silent refresh will no longer be attempted.
+            // In particular, in the case of a silent authentication error it prevents
+            // from getting stuck in an authentication retries loop.
+            window.localStorage.removeItem(KEY_CURRENT_SESSION);
+            await this.clientAuthentication.logout(this.info.sessionId, options);
+            this.info.isLoggedIn = false;
+            if (emitSignal) {
+                this.events.emit(solidClientAuthnCore.EVENTS.LOGOUT);
+            }
+        };
+        /**
+         * Logs the user out of the application.
+         *
+         * There are 2 types of logout supported by this library,
+         * `app` logout and `idp` logout.
+         *
+         * App logout will log the user out within the application
+         * by clearing any session data from the browser. It does
+         * not log the user out of their Solid identity provider,
+         * and should not redirect the user away.
+         * App logout can be performed as follows:
+         * ```typescript
+         * await session.logout({ logoutType: 'app' });
+         * ```
+         *
+         * IDP logout will log the user out of their Solid identity provider,
+         * and will redirect the user away from the application to do so. In order
+         * for users to be redirected back to `postLogoutUrl` you MUST include the
+         * `postLogoutUrl` value in the `post_logout_redirect_uris` field in the
+         * [Client ID Document](https://docs.inrupt.com/ess/latest/security/authentication/#client-identifier-client-id).
+         * IDP logout can be performed as follows:
+         * ```typescript
+         * await session.logout({
+         *  logoutType: 'idp',
+         *  // An optional URL to redirect to after logout has completed;
+         *  // this MUST match a logout URL listed in the Client ID Document
+         *  // of the application that is logged in.
+         *  // If the application is logged in with a Client ID that is not
+         *  // a URI dereferencing to a Client ID Document then users will
+         *  // not be redirected back to the `postLogoutUrl` after logout.
+         *  postLogoutUrl: 'https://example.com/logout',
+         *  // An optional value to be included in the query parameters
+         *  // when the IDP provider redirects the user to the postLogoutRedirectUrl.
+         *  state: "my-state"
+         * });
+         * ```
+         */
+        this.logout = async (options) => this.internalLogout(true, options);
+        /**
+         * Completes the login process by processing the information provided by the
+         * Solid identity provider through redirect.
+         *
+         * @param options See {@see IHandleIncomingRedirectOptions}.
+         */
+        this.handleIncomingRedirect = async (inputOptions = {}) => {
+            var _a;
+            if (this.info.isLoggedIn) {
+                return this.info;
+            }
+            if (this.tokenRequestInProgress) {
+                return undefined;
+            }
+            const options = typeof inputOptions === "string" ? { url: inputOptions } : inputOptions;
+            const url = (_a = options.url) !== null && _a !== void 0 ? _a : window.location.href;
+            this.tokenRequestInProgress = true;
+            const sessionInfo = await this.clientAuthentication.handleIncomingRedirect(url, this.events);
+            if (isLoggedIn(sessionInfo)) {
+                this.setSessionInfo(sessionInfo);
+                const currentUrl = window.localStorage.getItem(KEY_CURRENT_URL);
+                if (currentUrl === null) {
+                    // The login event can only be triggered **after** the user has been
+                    // redirected from the IdP with access and ID tokens.
+                    this.events.emit(solidClientAuthnCore.EVENTS.LOGIN);
+                }
+                else {
+                    // If an URL is stored in local storage, we are being logged in after a
+                    // silent authentication, so remove our currently stored URL location
+                    // to clean up our state now that we are completing the re-login process.
+                    window.localStorage.removeItem(KEY_CURRENT_URL);
+                    this.events.emit(solidClientAuthnCore.EVENTS.SESSION_RESTORED, currentUrl);
+                }
+            }
+            else if (options.restorePreviousSession === true) {
+                // Silent authentication happens after a refresh, which means there are no
+                // OAuth params in the current location IRI. It can only succeed if a session
+                // was previously logged in, in which case its ID will be present with a known
+                // identifier in local storage.
+                // Check if we have a locally stored session ID...
+                const storedSessionId = window.localStorage.getItem(KEY_CURRENT_SESSION);
+                // ...if not, then there is no ID token, and so silent authentication cannot happen, but
+                // if we do have a stored session ID, attempt to re-authenticate now silently.
+                if (storedSessionId !== null) {
+                    const attemptedSilentAuthentication = await silentlyAuthenticate(storedSessionId, this.clientAuthentication, this);
+                    // At this point, we know that the main window will imminently be redirected.
+                    // However, this redirect is asynchronous and there is no way to halt execution
+                    // until it happens precisely. That's why the current Promise simply does not
+                    // resolve.
+                    if (attemptedSilentAuthentication) {
+                        return new Promise(() => { });
+                    }
+                }
+            }
+            this.tokenRequestInProgress = false;
+            return sessionInfo;
+        };
+        // Until Session no longer implements EventEmitter, this.events is just a proxy
+        // to this (with some interface filtering). When we make the breaking change,
+        // this.events will be a regular EventEmitter (implementing ISessionEventEmitter):
+        // this.events = new EventEmitter();
+        this.events = new Proxy(this, solidClientAuthnCore.buildProxyHandler(Session.prototype, "events only implements ISessionEventListener"));
+        if (sessionOptions.clientAuthentication) {
+            this.clientAuthentication = sessionOptions.clientAuthentication;
+        }
+        else if (sessionOptions.secureStorage && sessionOptions.insecureStorage) {
+            this.clientAuthentication = getClientAuthenticationWithDependencies({
+                secureStorage: sessionOptions.secureStorage,
+                insecureStorage: sessionOptions.insecureStorage,
+            });
+        }
+        else {
+            this.clientAuthentication = getClientAuthenticationWithDependencies({});
+        }
+        if (sessionOptions.sessionInfo) {
+            this.info = {
+                sessionId: sessionOptions.sessionInfo.sessionId,
+                isLoggedIn: false,
+                webId: sessionOptions.sessionInfo.webId,
+            };
+        }
+        else {
+            this.info = {
+                sessionId: sessionId !== null && sessionId !== void 0 ? sessionId : uuid.v4(),
+                isLoggedIn: false,
+            };
+        }
+        // When a session is logged in, we want to track its ID in local storage to
+        // enable silent refresh. The current session ID specifically stored in 'localStorage'
+        // (as opposed to using our storage abstraction layer) because it is only
+        // used in a browser-specific mechanism.
+        this.events.on(solidClientAuthnCore.EVENTS.LOGIN, () => window.localStorage.setItem(KEY_CURRENT_SESSION, this.info.sessionId));
+        this.events.on(solidClientAuthnCore.EVENTS.SESSION_EXPIRED, () => this.internalLogout(false));
+        this.events.on(solidClientAuthnCore.EVENTS.ERROR, () => this.internalLogout(false));
+    }
+    /**
+     * Register a callback function to be called when a user completes login.
+     *
+     * The callback is called when {@link handleIncomingRedirect} completes successfully.
+     *
+     * @param callback The function called when a user completes login.
+     * @deprecated Prefer session.events.on(EVENTS.LOGIN, callback)
+     */
+    onLogin(callback) {
+        this.events.on(solidClientAuthnCore.EVENTS.LOGIN, callback);
+    }
+    /**
+     * Register a callback function to be called when a user logs out:
+     *
+     * @param callback The function called when a user completes logout.
+     * @deprecated Prefer session.events.on(EVENTS.LOGOUT, callback)
+     */
+    onLogout(callback) {
+        this.events.on(solidClientAuthnCore.EVENTS.LOGOUT, callback);
+    }
+    /**
+     * Register a callback function to be called when a user logs out:
+     *
+     * @param callback The function called when an error occurs.
+     * @since 1.11.0
+     * @deprecated Prefer session.events.on(EVENTS.ERROR, callback)
+     */
+    onError(callback) {
+        this.events.on(solidClientAuthnCore.EVENTS.ERROR, callback);
+    }
+    /**
+     * Register a callback function to be called when a session is restored.
+     *
+     * Note: the callback will be called with the saved value of the 'current URL'
+     * at the time the session was restored.
+     *
+     * @param callback The function called when a user's already logged-in session is restored, e.g., after a silent authentication is completed after a page refresh.
+     * @deprecated Prefer session.events.on(EVENTS.SESSION_RESTORED, callback)
+     */
+    onSessionRestore(callback) {
+        this.events.on(solidClientAuthnCore.EVENTS.SESSION_RESTORED, callback);
+    }
+    /**
+     * Register a callback that runs when the session expires and can no longer
+     * make authenticated requests, but following a user logout.
+     * @param callback The function that runs on session expiration.
+     * @since 1.11.0
+     * @deprecated Prefer session.events.on(EVENTS.SESSION_EXPIRED, callback)
+     */
+    onSessionExpiration(callback) {
+        this.events.on(solidClientAuthnCore.EVENTS.SESSION_EXPIRED, callback);
+    }
+    setSessionInfo(sessionInfo) {
+        this.info.isLoggedIn = sessionInfo.isLoggedIn;
+        this.info.webId = sessionInfo.webId;
+        this.info.sessionId = sessionInfo.sessionId;
+        this.info.expirationDate = sessionInfo.expirationDate;
+        this.events.on(solidClientAuthnCore.EVENTS.SESSION_EXTENDED, (expiresIn) => {
+            this.info.expirationDate = Date.now() + expiresIn * 1000;
+        });
+    }
+}
+
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+let defaultSession;
+/**
+ * Obtain the {@link Session} used when not explicitly instantiating one yourself.
+ *
+ * When using the top-level exports {@link fetch}, {@link login}, {@link logout},
+ * {@link handleIncomingRedirect}, {@link onLogin} and {@link onLogout}, these apply to an
+ * implicitly-instantiated {@link Session}.
+ * This function returns a reference to that Session in order to obtain e.g. the current user's
+ * WebID.
+ * @since 1.3.0
+ */
+function getDefaultSession() {
+    if (typeof defaultSession === "undefined") {
+        defaultSession = new Session();
+    }
+    return defaultSession;
+}
+/**
+ * This function's signature is equal to `window.fetch`, but if the current user is authenticated
+ * (see [[login]] and [[handleIncomingRedirect]]), requests made using it will include that user's
+ * credentials. If not, this will behave just like the regular `window.fetch`.
+ *
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch}
+ * @since 1.3.0
+ */
+/* eslint-disable-next-line no-shadow */
+const fetch = (...args) => {
+    const session = getDefaultSession();
+    return session.fetch(...args);
+};
+/**
+ * Triggers the login process. Note that this method will redirect the user away from your app.
+ *
+ * @param options Parameter to customize the login behaviour. In particular, two options are mandatory: `options.oidcIssuer`, the user's identity provider, and `options.redirectUrl`, the URL to which the user will be redirected after logging in their identity provider.
+ * @returns This method should redirect the user away from the app: it does not return anything. The login process is completed by [[handleIncomingRedirect]].
+ * @since 1.3.0
+ */
+const login = (...args) => {
+    const session = getDefaultSession();
+    return session.login(...args);
+};
+/**
+ * Logs the user out of the application.
+ *
+ * By default this does not log the user out of their Solid identity provider.
+ * In order to do so, you must set the logoutType to `idp`. For usage details
+ * see {@link Session.logout}.
+ *
+ * @since 1.3.0
+ */
+const logout = (...args) => {
+    const session = getDefaultSession();
+    return session.logout(...args);
+};
+/**
+ * Completes the login process by processing the information provided by the Solid identity provider through redirect.
+ *
+ * @param url The URL of the page handling the redirect, including the query parameters — these contain the information to process the login.
+ * @since 1.3.0
+ */
+const handleIncomingRedirect = (...args) => {
+    const session = getDefaultSession();
+    return session.handleIncomingRedirect(...args);
+};
+/**
+ * Register a callback function to be called when a user completes login.
+ *
+ * The callback is called when {@link handleIncomingRedirect} completes successfully.
+ * @since 1.3.0
+ *
+ * @param callback The function called when a user completes login.
+ * @deprecated Prefer events.on(EVENTS.LOGIN, callback)
+
+ */
+const onLogin = (...args) => {
+    const session = getDefaultSession();
+    return session.onLogin(...args);
+};
+/**
+ * Register a callback function to be called when a user logs out:
+ *
+ * @param callback The function called when a user completes logout.
+ * @since 1.3.0
+ * @deprecated Prefer events.on(EVENTS.LOGOUT, callback)
+ *
+ */
+const onLogout = (...args) => {
+    const session = getDefaultSession();
+    return session.onLogout(...args);
+};
+/**
+ * Register a callback function to be called when a session is restored:
+ *
+ * @param callback The function called when a session is restored.
+ * @since 1.3.0
+ * @deprecated Prefer events.on(EVENTS.SESSION_RESTORED, callback)
+ */
+const onSessionRestore = (...args) => {
+    const session = getDefaultSession();
+    return session.onSessionRestore(...args);
+};
+/**
+ * {@link SessionEventEmitter} instance to subscribe to events by the default session.
+ *
+ * @since 1.14.0
+ */
+const events = () => {
+    return getDefaultSession().events;
+};
+
+Object.defineProperty(exports, "ConfigurationError", ({
+  enumerable: true,
+  get: function () { return solidClientAuthnCore.ConfigurationError; }
+}));
+Object.defineProperty(exports, "EVENTS", ({
+  enumerable: true,
+  get: function () { return solidClientAuthnCore.EVENTS; }
+}));
+Object.defineProperty(exports, "InMemoryStorage", ({
+  enumerable: true,
+  get: function () { return solidClientAuthnCore.InMemoryStorage; }
+}));
+Object.defineProperty(exports, "NotImplementedError", ({
+  enumerable: true,
+  get: function () { return solidClientAuthnCore.NotImplementedError; }
+}));
+exports.Session = Session;
+exports.events = events;
+exports.fetch = fetch;
+exports.getClientAuthenticationWithDependencies = getClientAuthenticationWithDependencies;
+exports.getDefaultSession = getDefaultSession;
+exports.handleIncomingRedirect = handleIncomingRedirect;
+exports.login = login;
+exports.logout = logout;
+exports.onLogin = onLogin;
+exports.onLogout = onLogout;
+exports.onSessionRestore = onSessionRestore;
+//# sourceMappingURL=index.js.map
+
 
 /***/ }),
 
@@ -27957,7 +28594,7 @@ for (let i = 0; i < 256; ++i) {
 function unsafeStringify(arr, offset = 0) {
   // Note: Be careful editing this code!  It's been tuned for performance
   // and works in ways you may not expect. See https://github.com/uuidjs/uuid/pull/434
-  return (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase();
+  return byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]];
 }
 
 function stringify(arr, offset = 0) {
@@ -28363,9 +29000,38 @@ var universalFetch = __webpack_require__(/*! @inrupt/universal-fetch */ "./node_
 var jose = __webpack_require__(/*! jose */ "./node_modules/jose/dist/browser/index.js");
 var uuid = __webpack_require__(/*! uuid */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/index.js");
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * Intended to be used by dependent packages as a common prefix for keys into
+ * storage mechanisms (so as to group all keys related to Solid Client Authn
+ * within those storage mechanisms, e.g., window.localStorage).
+ */
 const SOLID_CLIENT_AUTHN_KEY_PREFIX = "solidClientAuthn:";
+/**
+ * Ordered list of signature algorithms, from most preferred to least preferred.
+ */
 const PREFERRED_SIGNING_ALG = ["ES256", "RS256"];
 const EVENTS = {
+    // Note that an `error` events MUST be listened to: https://nodejs.org/dist/latest-v16.x/docs/api/events.html#error-events.
     ERROR: "error",
     LOGIN: "login",
     LOGOUT: "logout",
@@ -28375,14 +29041,52 @@ const EVENTS = {
     SESSION_RESTORED: "sessionRestore",
     TIMEOUT_SET: "timeoutSet",
 };
+/**
+ * We want to refresh a token 5 seconds before it expires.
+ */
 const REFRESH_BEFORE_EXPIRATION_SECONDS = 5;
+// The openid scope requests an OIDC ID token token to be returned.
 const SCOPE_OPENID = "openid";
+// The offline_access scope requests a refresh token to be returned.
 const SCOPE_OFFLINE = "offline_access";
+// The webid scope is required as per https://solid.github.io/solid-oidc/#webid-scope
 const SCOPE_WEBID = "webid";
+// The scopes are expected as a space-separated list.
 const DEFAULT_SCOPES = [SCOPE_OPENID, SCOPE_OFFLINE, SCOPE_WEBID].join(" ");
 
-const buildProxyHandler = (toExclude, errorMessage) => ({
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * Temporary internal builder for safe proxying.
+ */
+const buildProxyHandler = (
+// The class to be excluded needs to be injected, because it is defined in a
+// dependency.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+toExclude, errorMessage) => ({
+    // This proxy is only a temporary measure until Session no longer extends
+    // SessionEventEmitter, and the proxying is no longer necessary.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     get(target, prop, receiver) {
+        // Reject any calls to the proxy that isn't specific to the EventEmitter API
         if (!Object.getOwnPropertyNames(events.EventEmitter).includes(prop) &&
             Object.getOwnPropertyNames(toExclude).includes(prop)) {
             throw new Error(`${errorMessage}: [${prop}] is not supported`);
@@ -28391,11 +29095,59 @@ const buildProxyHandler = (toExclude, errorMessage) => ({
     },
 });
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ */
 class AggregateHandler {
     constructor(handleables) {
         this.handleables = handleables;
+        this.handleables = handleables;
     }
+    /**
+     * Helper function that will asynchronously determine the proper handler to use. If multiple
+     * handlers can handle, it will choose the first one in the list
+     * @param params Paramerters to feed to the handler
+     */
     async getProperHandler(params) {
+        // TODO : This function doesn't currently operate as described. Tests need to be written
+        // return new Promise<IHandleable<P, R> | null>((resolve, reject) => {
+        //  const resolvedValues: Array<boolean | null> = Array(this.handleables.length).map(() => null)
+        //   let numberResolved = 0
+        //   this.handleables.forEach(async (handleable: IHandleable<P, R>, index: number) => {
+        //     resolvedValues[index] = await handleable.canHandle(...params)
+        //     numberResolved++
+        //     let curResolvedValueIndex = 0
+        //     while (
+        //       resolvedValues[curResolvedValueIndex] !== null ||
+        //       resolvedValues[curResolvedValueIndex] !== undefined
+        //     ) {
+        //       if (resolvedValues[curResolvedValueIndex]) {
+        //         resolve(this.handleables[curResolvedValueIndex])
+        //       }
+        //       curResolvedValueIndex++
+        //     }
+        //   })
+        // })
         const canHandleList = await Promise.all(this.handleables.map((handleable) => handleable.canHandle(...params)));
         for (let i = 0; i < canHandleList.length; i += 1) {
             if (canHandleList[i]) {
@@ -28418,6 +29170,7 @@ class AggregateHandler {
                 return JSON.stringify(param);
             }
             catch (err) {
+                /* eslint-disable  @typescript-eslint/no-explicit-any */
                 return param.toString();
             }
         })
@@ -28425,11 +29178,37 @@ class AggregateHandler {
     }
 }
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+// eslint-disable-next-line no-shadow
 async function fetchJwks(jwksIri, issuerIri) {
-    const jwksResponse = await universalFetch.fetch(jwksIri);
+    // FIXME: the following line works, but the underlying network calls don't seem
+    // to be mocked properly by our test code. It would be nicer to replace calls to this
+    // function by the following line and to fix the mocks.
+    // const jwks = createRemoteJWKSet(new URL(jwksIri));
+    const jwksResponse = await universalFetch.fetch.call(globalThis, jwksIri);
     if (jwksResponse.status !== 200) {
         throw new Error(`Could not fetch JWKS for [${issuerIri}] at [${jwksIri}]: ${jwksResponse.status} ${jwksResponse.statusText}`);
     }
+    // The JWKS should only contain the current key for the issuer.
     let jwk;
     try {
         jwk = (await jwksResponse.json()).keys[0];
@@ -28439,6 +29218,15 @@ async function fetchJwks(jwksIri, issuerIri) {
     }
     return jwk;
 }
+/**
+ * Extract a WebID from an ID token payload based on https://github.com/solid/webid-oidc-spec.
+ * Note that this does not yet implement the user endpoint lookup, and only checks
+ * for `webid` or IRI-like `sub` claims.
+ *
+ * @param idToken the payload of the ID token from which the WebID can be extracted.
+ * @returns a WebID extracted from the ID token.
+ * @internal
+ */
 async function getWebidFromTokenPayload(idToken, jwksIri, issuerIri, clientId) {
     const jwk = await fetchJwks(jwksIri, issuerIri);
     let payload;
@@ -28459,6 +29247,10 @@ async function getWebidFromTokenPayload(idToken, jwksIri, issuerIri, clientId) {
         throw new Error(`The token ${JSON.stringify(payload)} is invalid: it has no 'webid' claim and no 'sub' claim.`);
     }
     try {
+        // This parses the 'sub' claim to check if it is a well-formed IRI.
+        // However, the normalized value isn't returned to make sure the WebID is returned
+        // as specified by the Identity Provider.
+        // eslint-disable-next-line no-new
         new URL(payload.sub);
         return payload.sub;
     }
@@ -28467,24 +29259,376 @@ async function getWebidFromTokenPayload(idToken, jwksIri, issuerIri, clientId) {
     }
 }
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 function isValidRedirectUrl(redirectUrl) {
+    // If the redirect URL is not a valid URL, an error will be thrown.
     try {
         const urlObject = new URL(redirectUrl);
-        return urlObject.hash === "";
+        const noReservedQuery = !urlObject.searchParams.has("code") &&
+            !urlObject.searchParams.has("state");
+        // As per https://tools.ietf.org/html/rfc6749#section-3.1.2, the redirect URL
+        // must not include a hash fragment.
+        const noHash = urlObject.hash === "";
+        return noReservedQuery && noHash;
     }
     catch (e) {
         return false;
     }
 }
 
+/**
+ * @hidden
+ * @packageDocumentation
+ */
+/**
+ * @hidden
+ * Authorization code flow spec: https://openid.net/specs/openid-connect-core-1_0.html#CodeFlowAuth
+ * PKCE: https://tools.ietf.org/html/rfc7636
+ */
+class AuthorizationCodeWithPkceOidcHandlerBase {
+    constructor(storageUtility, redirector) {
+        this.storageUtility = storageUtility;
+        this.redirector = redirector;
+        this.storageUtility = storageUtility;
+        this.redirector = redirector;
+    }
+    async canHandle(oidcLoginOptions) {
+        return !!(oidcLoginOptions.issuerConfiguration.grantTypesSupported &&
+            oidcLoginOptions.issuerConfiguration.grantTypesSupported.indexOf("authorization_code") > -1);
+    }
+    async handleRedirect({ oidcLoginOptions, state, codeVerifier, targetUrl, }) {
+        await Promise.all([
+            // We use the OAuth 'state' value (which should be crypto-random) as
+            // the key in our storage to store our actual SessionID. We do this
+            // 'cos we'll need to lookup our session information again when the
+            // browser is redirected back to us (i.e. the OAuth client
+            // application) from the Authorization Server.
+            // We don't want to use our session ID as the OAuth 'state' value, as
+            // that session ID can be any developer-specified value, and therefore
+            // may not be appropriate (since the OAuth 'state' value should really
+            // be an unguessable crypto-random value).
+            // eslint-disable-next-line no-underscore-dangle
+            this.storageUtility.setForUser(state, {
+                sessionId: oidcLoginOptions.sessionId,
+            }),
+            // Store our login-process state using the session ID as the key.
+            // Strictly speaking, this indirection from our OAuth state value to
+            // our session ID is unnecessary, but it provides a slightly cleaner
+            // separation of concerns.
+            this.storageUtility.setForUser(oidcLoginOptions.sessionId, {
+                // eslint-disable-next-line no-underscore-dangle
+                codeVerifier,
+                issuer: oidcLoginOptions.issuer.toString(),
+                // The redirect URL is read after redirect, so it must be stored now.
+                redirectUrl: oidcLoginOptions.redirectUrl,
+                dpop: oidcLoginOptions.dpop ? "true" : "false",
+            }),
+        ]);
+        this.redirector.redirect(targetUrl, {
+            handleRedirect: oidcLoginOptions.handleRedirect,
+        });
+        return undefined;
+    }
+}
+
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ */
+class GeneralLogoutHandler {
+    constructor(sessionInfoManager) {
+        this.sessionInfoManager = sessionInfoManager;
+        this.sessionInfoManager = sessionInfoManager;
+    }
+    async canHandle() {
+        return true;
+    }
+    async handle(userId) {
+        await this.sessionInfoManager.clear(userId);
+    }
+}
+
+class IRpLogoutHandler {
+    constructor(redirector) {
+        this.redirector = redirector;
+        this.redirector = redirector;
+    }
+    async canHandle(userId, options) {
+        return (options === null || options === void 0 ? void 0 : options.logoutType) === "idp";
+    }
+    async handle(userId, options) {
+        if ((options === null || options === void 0 ? void 0 : options.logoutType) !== "idp") {
+            throw new Error("Attempting to call idp logout handler to perform app logout");
+        }
+        if (options.toLogoutUrl === undefined) {
+            throw new Error("Cannot perform IDP logout. Did you log in using the OIDC authentication flow?");
+        }
+        this.redirector.redirect(options.toLogoutUrl(options), {
+            handleRedirect: options.handleRedirect,
+        });
+    }
+}
+
+class IWaterfallLogoutHandler {
+    constructor(sessionInfoManager, redirector) {
+        this.handlers = [
+            new GeneralLogoutHandler(sessionInfoManager),
+            new IRpLogoutHandler(redirector),
+        ];
+    }
+    async canHandle() {
+        return true;
+    }
+    async handle(userId, options) {
+        for (const handler of this.handlers) {
+            /* eslint-disable no-await-in-loop */
+            if (await handler.canHandle(userId, options))
+                await handler.handle(userId, options);
+            /* eslint-enable no-await-in-loop */
+        }
+    }
+}
+
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ * @packageDocumentation
+ */
+function getUnauthenticatedSession() {
+    return {
+        isLoggedIn: false,
+        sessionId: uuid.v4(),
+        fetch: (...args) => universalFetch.fetch.call(globalThis, ...args),
+    };
+}
+/**
+ * @param sessionId
+ * @param storage
+ * @hidden
+ */
+async function clear(sessionId, storage) {
+    await Promise.all([
+        storage.deleteAllUserData(sessionId, { secure: false }),
+        storage.deleteAllUserData(sessionId, { secure: true }),
+    ]);
+}
+/**
+ * @hidden
+ */
+class SessionInfoManagerBase {
+    constructor(storageUtility) {
+        this.storageUtility = storageUtility;
+        this.storageUtility = storageUtility;
+    }
+    update(_sessionId, _options) {
+        throw new Error("Not Implemented");
+    }
+    get(_) {
+        throw new Error("Not implemented");
+    }
+    // eslint-disable-next-line class-methods-use-this
+    async getAll() {
+        throw new Error("Not implemented");
+    }
+    /**
+     * This function removes all session-related information from storage.
+     * @param sessionId the session identifier
+     * @param storage the storage where session info is stored
+     * @hidden
+     */
+    async clear(sessionId) {
+        return clear(sessionId, this.storageUtility);
+    }
+    /**
+     * Registers a new session, so that its ID can be retrieved.
+     * @param sessionId
+     */
+    async register(_sessionId) {
+        throw new Error("Not implemented");
+    }
+    /**
+     * Returns all the registered session IDs. Differs from getAll, which also
+     * returns additional session information.
+     */
+    async getRegisteredSessionIdAll() {
+        throw new Error("Not implemented");
+    }
+    /**
+     * Deletes all information about all sessions, including their registrations.
+     */
+    async clearAll() {
+        throw new Error("Not implemented");
+    }
+}
+
+/**
+ * This function is designed to isomorphically capture the behavior in oidc-client-js and node-oidc-provider
+ * - https://github.com/IdentityModel/oidc-client-js/blob/edec8f59897bdeedcb0b4167586d49626203c2c1/src/OidcClient.js#L138
+ * - https://github.com/panva/node-openid-client/blob/35758419489ff751a71f5b66f5020087a63e1e88/lib/client.js#L284
+ *
+ * @param options IEndSessionOptions
+ * @returns The URL to redirect to in order to perform RP Initiated Logout
+ * @hidden
+ */
+function getEndSessionUrl({ endSessionEndpoint, idTokenHint, postLogoutRedirectUri, state, }) {
+    const url = new URL(endSessionEndpoint);
+    if (idTokenHint !== undefined)
+        url.searchParams.append("id_token_hint", idTokenHint);
+    if (postLogoutRedirectUri !== undefined) {
+        url.searchParams.append("post_logout_redirect_uri", postLogoutRedirectUri);
+        if (state !== undefined)
+            url.searchParams.append("state", state);
+    }
+    return url.toString();
+}
+/**
+ * @param options.endSessionEndpoint The end_session_endpoint advertised by the server
+ * @param options.idTokenHint The idToken supplied by the server after logging in
+ * Redirects the window to the location required to perform RP initiated logout
+ *
+ * @hidden
+ */
+function maybeBuildRpInitiatedLogout({ endSessionEndpoint, idTokenHint, }) {
+    if (endSessionEndpoint === undefined)
+        return undefined;
+    return function logout({ state, postLogoutUrl }) {
+        return getEndSessionUrl({
+            endSessionEndpoint,
+            idTokenHint,
+            state,
+            postLogoutRedirectUri: postLogoutUrl,
+        });
+    };
+}
+
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 function isSupportedTokenType(token) {
     return typeof token === "string" && ["DPoP", "Bearer"].includes(token);
 }
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 const USER_SESSION_PREFIX = "solidClientAuthenticationUser";
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 function isValidUrl(url) {
     try {
+        // Here, the URL constructor is just called to parse the given string and
+        // verify if it is a well-formed IRI.
+        // eslint-disable-next-line no-new
         new URL(url);
         return true;
     }
@@ -28507,6 +29651,10 @@ function determineClientType(options, issuerConfig) {
         isValidUrl(options.clientId)) {
         return "solid-oidc";
     }
+    // If no client_id is provided, the client must go through Dynamic Client Registration.
+    // If a client_id is provided and it looks like a URI, yet the Identity Provider
+    // does *not* support Solid-OIDC, then we also perform DCR (and discard the
+    // provided client_id).
     return "dynamic";
 }
 async function handleRegistration(options, issuerConfig, storageUtility, clientRegistrar) {
@@ -28518,7 +29666,13 @@ async function handleRegistration(options, issuerConfig, storageUtility, clientR
             redirectUrl: options.redirectUrl,
         }, issuerConfig);
     }
+    // If a client_id was provided, and the Identity Provider is Solid-OIDC compliant,
+    // or it is not compliant but the client_id isn't an IRI (we assume it has already
+    // been registered with the IdP), then the client registration information needs
+    // to be stored so that it can be retrieved later after redirect.
     await storageUtility.setForUser(options.sessionId, {
+        // If the client is either static or solid-oidc compliant, its client ID cannot be undefined.
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         clientId: options.clientId,
     });
     if (options.clientSecret) {
@@ -28532,6 +29686,7 @@ async function handleRegistration(options, issuerConfig, storageUtility, clientR
         });
     }
     return {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         clientId: options.clientId,
         clientSecret: options.clientSecret,
         clientName: options.clientName,
@@ -28539,9 +29694,116 @@ async function handleRegistration(options, issuerConfig, storageUtility, clientR
     };
 }
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ * @packageDocumentation
+ */
+// By only referring to `window` at runtime, apps that do server-side rendering
+// won't run into errors when rendering code that instantiates a
+// ClientAuthentication:
+const globalFetch = (request, init) => universalFetch.fetch.call(globalThis, request, init);
+/**
+ * @hidden
+ */
+class ClientAuthentication {
+    constructor(loginHandler, redirectHandler, logoutHandler, sessionInfoManager, issuerConfigFetcher) {
+        this.loginHandler = loginHandler;
+        this.redirectHandler = redirectHandler;
+        this.logoutHandler = logoutHandler;
+        this.sessionInfoManager = sessionInfoManager;
+        this.issuerConfigFetcher = issuerConfigFetcher;
+        // By default, our fetch() resolves to the environment fetch() function.
+        this.fetch = globalFetch;
+        this.logout = async (sessionId, options) => {
+            // When doing IDP logout this will redirect away from the current page, so we should not expect
+            // code after this condition to be run if it is true.
+            // We also need to make sure that any other cleanup that we want to do for
+            // our session takes place before this condition is run
+            await this.logoutHandler.handle(sessionId, (options === null || options === void 0 ? void 0 : options.logoutType) === "idp"
+                ? {
+                    ...options,
+                    toLogoutUrl: this.boundLogout,
+                }
+                : options);
+            // Restore our fetch() function back to the environment fetch(), effectively
+            // leaving us with un-authenticated fetches from now on.
+            this.fetch = globalFetch;
+            // Delete the bound logout function, so that it can't be called after this.
+            delete this.boundLogout;
+        };
+        this.getSessionInfo = async (sessionId) => {
+            // TODO complete
+            return this.sessionInfoManager.get(sessionId);
+        };
+        this.getAllSessionInfo = async () => {
+            return this.sessionInfoManager.getAll();
+        };
+        this.loginHandler = loginHandler;
+        this.redirectHandler = redirectHandler;
+        this.logoutHandler = logoutHandler;
+        this.sessionInfoManager = sessionInfoManager;
+        this.issuerConfigFetcher = issuerConfigFetcher;
+    }
+}
+
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ * @packageDocumentation
+ */
+/**
+ * A helper class that will validate items taken from local storage
+ */
 async function getSessionIdFromOauthState(storageUtility, oauthState) {
     return storageUtility.getForUser(oauthState, "sessionId");
 }
+/**
+ * Based on the provided state, this looks up contextual information stored
+ * before redirecting the user to the OIDC issuer.
+ * @param sessionId The state (~ correlation ID) of the OIDC request
+ * @param storageUtility
+ * @param configFetcher
+ * @returns Information stored about the client issuing the request
+ */
 async function loadOidcContextFromStorage(sessionId, storageUtility, configFetcher) {
     try {
         const [issuerIri, codeVerifier, storedRedirectIri, dpop] = await Promise.all([
@@ -28552,7 +29814,9 @@ async function loadOidcContextFromStorage(sessionId, storageUtility, configFetch
             storageUtility.getForUser(sessionId, "redirectUrl"),
             storageUtility.getForUser(sessionId, "dpop", { errorIfNull: true }),
         ]);
+        // Clear the code verifier, which is one-time use.
         await storageUtility.deleteForUser(sessionId, "codeVerifier");
+        // Unlike openid-client, this looks up the configuration from storage
         const issuerConfig = await configFetcher.fetchConfig(issuerIri);
         return {
             codeVerifier,
@@ -28565,7 +29829,21 @@ async function loadOidcContextFromStorage(sessionId, storageUtility, configFetch
         throw new Error(`Failed to retrieve OIDC context from storage associated with session [${sessionId}]: ${e}`);
     }
 }
+/**
+ * Stores information about the session in the provided storage. Note that not
+ * all storage are equally secure, and it is strongly advised not to store either
+ * the refresh token or the DPoP key in the browser's local storage.
+ *
+ * @param storageUtility
+ * @param sessionId
+ * @param webId
+ * @param isLoggedIn
+ * @param refreshToken
+ * @param secure
+ * @param dpopKey
+ */
 async function saveSessionInfoToStorage(storageUtility, sessionId, webId, isLoggedIn, refreshToken, secure, dpopKey) {
+    // TODO: Investigate why this does not work with a Promise.all
     if (refreshToken !== undefined) {
         await storageUtility.setForUser(sessionId, { refreshToken }, { secure });
     }
@@ -28582,8 +29860,14 @@ async function saveSessionInfoToStorage(storageUtility, sessionId, webId, isLogg
         }, { secure });
     }
 }
+// TOTEST: this does not handle all possible bad inputs for example what if it's not proper JSON
+/**
+ * @hidden
+ */
 class StorageUtility {
     constructor(secureStorage, insecureStorage) {
+        this.secureStorage = secureStorage;
+        this.insecureStorage = insecureStorage;
         this.secureStorage = secureStorage;
         this.insecureStorage = insecureStorage;
     }
@@ -28640,6 +29924,7 @@ class StorageUtility {
             userData = await this.getUserData(userId, options === null || options === void 0 ? void 0 : options.secure);
         }
         catch (_a) {
+            // if reading the user data throws, the data is corrupted, and we want to write over it
             userData = {};
         }
         await this.setUserData(userId, { ...userData, ...values }, options === null || options === void 0 ? void 0 : options.secure);
@@ -28654,6 +29939,29 @@ class StorageUtility {
     }
 }
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ */
 class InMemoryStorage {
     constructor() {
         this.map = {};
@@ -28669,26 +29977,157 @@ class InMemoryStorage {
     }
 }
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ * @packageDocumentation
+ */
+/**
+ * Error to be triggered when a poor configuration is received
+ */
+// NOTE: There's a bug with istanbul and typescript that prevents full branch coverages
+// https://github.com/gotwarlost/istanbul/issues/690
+// The workaround is to put istanbul ignore on the constructor
+/**
+ * @hidden
+ */
 class ConfigurationError extends Error {
+    /* istanbul ignore next */
     constructor(message) {
         super(message);
     }
 }
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ * @packageDocumentation
+ */
+/**
+ * Error to be triggered if a method is not implemented
+ * @hidden
+ */
 class NotImplementedError extends Error {
+    /* istanbul ignore next */
     constructor(methodName) {
         super(`[${methodName}] is not implemented`);
     }
 }
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ * @packageDocumentation
+ */
+/**
+ * Error to be triggered when receiving a response missing mandatory elements
+ */
+// NOTE: There's a bug with istanbul and typescript that prevents full branch coverages
+// https://github.com/gotwarlost/istanbul/issues/690
+// The workaround is to put istanbul ignore on the constructor
+/**
+ * @hidden
+ */
 class InvalidResponseError extends Error {
+    /* istanbul ignore next */
     constructor(missingFields) {
         super(`Invalid response from OIDC provider: missing fields ${missingFields}`);
         this.missingFields = missingFields;
     }
 }
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ * @packageDocumentation
+ */
+/**
+ * Error to be triggered when receiving a response missing mandatory elements
+ */
+// NOTE: There's a bug with istanbul and typescript that prevents full branch coverages
+// https://github.com/gotwarlost/istanbul/issues/690
+// The workaround is to put istanbul ignore on the constructor
+/**
+ * @hidden
+ */
 class OidcProviderError extends Error {
+    /* istanbul ignore next */
     constructor(message, error, errorDescription) {
         super(message);
         this.error = error;
@@ -28696,10 +30135,46 @@ class OidcProviderError extends Error {
     }
 }
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * Normalizes a URL in order to generate the DPoP token based on a consistent scheme.
+ *
+ * @param audience The URL to normalize.
+ * @returns The normalized URL as a string.
+ * @hidden
+ */
 function normalizeHTU(audience) {
     const audienceUrl = new URL(audience);
     return new URL(audienceUrl.pathname, audienceUrl.origin).toString();
 }
+/**
+ * Creates a DPoP header according to https://tools.ietf.org/html/draft-fett-oauth-dpop-04,
+ * based on the target URL and method, using the provided key.
+ *
+ * @param audience Target URL.
+ * @param method HTTP method allowed.
+ * @param key Key used to sign the token.
+ * @returns A JWT that can be used as a DPoP Authorization header.
+ */
 async function createDpopHeader(audience, method, dpopKey) {
     return new jose.SignJWT({
         htu: normalizeHTU(audience),
@@ -28720,17 +30195,46 @@ async function generateDpopKeyPair() {
         privateKey,
         publicKey: await jose.exportJWK(publicKey),
     };
+    // The alg property isn't set by exportJWK, so set it manually.
     [dpopKeyPair.publicKey.alg] = PREFERRED_SIGNING_ALG;
     return dpopKeyPair;
 }
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * If expires_in isn't specified for the access token, we assume its lifetime is
+ * 10 minutes.
+ */
 const DEFAULT_EXPIRATION_TIME_SECONDS = 600;
 function isExpectedAuthError(statusCode) {
+    // As per https://tools.ietf.org/html/rfc7235#section-3.1 and https://tools.ietf.org/html/rfc7235#section-3.1,
+    // a response failing because the provided credentials aren't accepted by the
+    // server can get a 401 or a 403 response.
     return [401, 403].includes(statusCode);
 }
 async function buildDpopFetchOptions(targetUrl, authToken, dpopKey, defaultOptions) {
     var _a;
     const headers = new universalFetch.Headers(defaultOptions === null || defaultOptions === void 0 ? void 0 : defaultOptions.headers);
+    // Any pre-existing Authorization header should be overriden.
     headers.set("Authorization", `DPoP ${authToken}`);
     headers.set("DPoP", await createDpopHeader(targetUrl, (_a = defaultOptions === null || defaultOptions === void 0 ? void 0 : defaultOptions.method) !== null && _a !== void 0 ? _a : "get", dpopKey));
     return {
@@ -28743,6 +30247,7 @@ async function buildAuthenticatedHeaders(targetUrl, authToken, dpopKey, defaultO
         return buildDpopFetchOptions(targetUrl, authToken, dpopKey, defaultOptions);
     }
     const headers = new universalFetch.Headers(defaultOptions === null || defaultOptions === void 0 ? void 0 : defaultOptions.headers);
+    // Any pre-existing Authorization header should be overriden.
     headers.set("Authorization", `Bearer ${authToken}`);
     return {
         ...defaultOptions,
@@ -28765,80 +30270,167 @@ async function refreshAccessToken(refreshOptions, dpopKey, eventEmitter) {
         expiresIn: tokenSet.expiresIn,
     };
 }
+/**
+ *
+ * @param expiresIn Delay until the access token expires.
+ * @returns a delay until the access token should be refreshed.
+ */
 const computeRefreshDelay = (expiresIn) => {
     if (expiresIn !== undefined) {
         return expiresIn - REFRESH_BEFORE_EXPIRATION_SECONDS > 0
-            ?
+            ? // We want to refresh the token 5 seconds before they actually expire.
                 expiresIn - REFRESH_BEFORE_EXPIRATION_SECONDS
             : expiresIn;
     }
     return DEFAULT_EXPIRATION_TIME_SECONDS;
 };
+/**
+ * @param unauthFetch a regular fetch function, compliant with the WHATWG spec.
+ * @param authToken an access token, either a Bearer token or a DPoP one.
+ * @param options The option object may contain two objects: the DPoP key token
+ * is bound to if applicable, and options to customise token renewal behaviour.
+ *
+ * @returns A fetch function that adds an appropriate Authorization header with
+ * the provided token, and adds a DPoP header if applicable.
+ */
 async function buildAuthenticatedFetch(unauthFetch, accessToken, options) {
     var _a;
     let currentAccessToken = accessToken;
     let latestTimeout;
     const currentRefreshOptions = options === null || options === void 0 ? void 0 : options.refreshOptions;
+    // Setup the refresh timeout outside of the authenticated fetch, so that
+    // an idle app will not get logged out if it doesn't issue a fetch before
+    // the first expiration date.
     if (currentRefreshOptions !== undefined) {
         const proactivelyRefreshToken = async () => {
             var _a, _b, _c, _d;
             try {
-                const { accessToken: refreshedAccessToken, refreshToken, expiresIn, } = await refreshAccessToken(currentRefreshOptions, options.dpopKey, options.eventEmitter);
+                const { accessToken: refreshedAccessToken, refreshToken, expiresIn, } = await refreshAccessToken(currentRefreshOptions, 
+                // If currentRefreshOptions is defined, options is necessarily defined too.
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                options.dpopKey, 
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                options.eventEmitter);
+                // Update the tokens in the closure if appropriate.
                 currentAccessToken = refreshedAccessToken;
                 if (refreshToken !== undefined) {
                     currentRefreshOptions.refreshToken = refreshToken;
                 }
+                // Each time the access token is refreshed, we must plan fo the next
+                // refresh iteration.
                 clearTimeout(latestTimeout);
                 latestTimeout = setTimeout(proactivelyRefreshToken, computeRefreshDelay(expiresIn) * 1000);
+                // If currentRefreshOptions is defined, options is necessarily defined too.
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 (_a = options.eventEmitter) === null || _a === void 0 ? void 0 : _a.emit(EVENTS.TIMEOUT_SET, latestTimeout);
             }
             catch (e) {
+                // It is possible that an underlying library throws an error on refresh flow failure.
+                // If we used a log framework, the error could be logged at the `debug` level,
+                // but otherwise the failure of the refresh flow should not blow up in the user's
+                // face, so we just swallow the error.
                 if (e instanceof OidcProviderError) {
+                    // The OIDC provider refused to refresh the access token and returned an error instead.
+                    /* istanbul ignore next 100% coverage would require testing that nothing
+                        happens here if the emitter is undefined, which is more cumbersome
+                        than what it's worth. */
                     (_b = options === null || options === void 0 ? void 0 : options.eventEmitter) === null || _b === void 0 ? void 0 : _b.emit(EVENTS.ERROR, e.error, e.errorDescription);
+                    /* istanbul ignore next 100% coverage would require testing that nothing
+                      happens here if the emitter is undefined, which is more cumbersome
+                      than what it's worth. */
                     (_c = options === null || options === void 0 ? void 0 : options.eventEmitter) === null || _c === void 0 ? void 0 : _c.emit(EVENTS.SESSION_EXPIRED);
                 }
                 if (e instanceof InvalidResponseError &&
                     e.missingFields.includes("access_token")) {
+                    // In this case, the OIDC provider returned a non-standard response, but
+                    // did not specify that it was an error. We cannot refresh nonetheless.
+                    /* istanbul ignore next 100% coverage would require testing that nothing
+                      happens here if the emitter is undefined, which is more cumbersome
+                      than what it's worth. */
                     (_d = options === null || options === void 0 ? void 0 : options.eventEmitter) === null || _d === void 0 ? void 0 : _d.emit(EVENTS.SESSION_EXPIRED);
                 }
             }
         };
-        latestTimeout = setTimeout(proactivelyRefreshToken, computeRefreshDelay(options.expiresIn) * 1000);
+        latestTimeout = setTimeout(proactivelyRefreshToken, 
+        // If currentRefreshOptions is defined, options is necessarily defined too.
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        computeRefreshDelay(options.expiresIn) * 1000);
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         (_a = options.eventEmitter) === null || _a === void 0 ? void 0 : _a.emit(EVENTS.TIMEOUT_SET, latestTimeout);
     }
     else if (options !== undefined && options.eventEmitter !== undefined) {
+        // If no refresh options are provided, the session expires when the access token does.
         const expirationTimeout = setTimeout(() => {
+            // The event emitter is always defined in our code, and it would be tedious
+            // to test for conditions when it is not.
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             options.eventEmitter.emit(EVENTS.SESSION_EXPIRED);
         }, computeRefreshDelay(options.expiresIn) * 1000);
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         options.eventEmitter.emit(EVENTS.TIMEOUT_SET, expirationTimeout);
     }
     return async (url, requestInit) => {
         let response = await makeAuthenticatedRequest(unauthFetch, currentAccessToken, url, requestInit, options === null || options === void 0 ? void 0 : options.dpopKey);
         const failedButNotExpectedAuthError = !response.ok && !isExpectedAuthError(response.status);
         if (response.ok || failedButNotExpectedAuthError) {
+            // If there hasn't been a redirection, or if there has been a non-auth related
+            // issue, it should be handled at the application level
             return response;
         }
         const hasBeenRedirected = response.url !== url;
         if (hasBeenRedirected && (options === null || options === void 0 ? void 0 : options.dpopKey) !== undefined) {
-            response = await makeAuthenticatedRequest(unauthFetch, currentAccessToken, response.url, requestInit, options.dpopKey);
+            // If the request failed for auth reasons, and has been redirected, we should
+            // replay it generating a DPoP header for the rediration target IRI. This
+            // doesn't apply to Bearer tokens, as the Bearer tokens aren't specific
+            // to a given resource and method, while the DPoP header (associated to a
+            // DPoP token) is.
+            response = await makeAuthenticatedRequest(unauthFetch, currentAccessToken, 
+            // Replace the original target IRI (`url`) by the redirection target
+            response.url, requestInit, options.dpopKey);
         }
         return response;
     };
 }
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 const StorageUtilityGetResponse = "getResponse";
 const StorageUtilityMock = {
+    /* eslint-disable @typescript-eslint/no-unused-vars */
     get: async (key, options) => StorageUtilityGetResponse,
     set: async (key, value) => {
+        /* do nothing */
     },
     delete: async (key) => {
+        /* do nothing */
     },
     getForUser: async (userId, key, options) => StorageUtilityGetResponse,
     setForUser: async (userId, values, options) => {
+        /* do nothing */
     },
     deleteForUser: async (userId, key, options) => {
+        /* do nothing */
     },
     deleteAllUserData: async (userId, options) => {
+        /* do nothing */
     },
 };
 const mockStorage = (stored) => {
@@ -28869,9 +30461,14 @@ const mockStorageUtility = (stored, isSecure = false) => {
 };
 
 exports.AggregateHandler = AggregateHandler;
+exports.AuthorizationCodeWithPkceOidcHandlerBase = AuthorizationCodeWithPkceOidcHandlerBase;
+exports.ClientAuthentication = ClientAuthentication;
 exports.ConfigurationError = ConfigurationError;
 exports.DEFAULT_SCOPES = DEFAULT_SCOPES;
 exports.EVENTS = EVENTS;
+exports.GeneralLogoutHandler = GeneralLogoutHandler;
+exports.IRpLogoutHandler = IRpLogoutHandler;
+exports.IWaterfallLogoutHandler = IWaterfallLogoutHandler;
 exports.InMemoryStorage = InMemoryStorage;
 exports.InvalidResponseError = InvalidResponseError;
 exports.NotImplementedError = NotImplementedError;
@@ -28879,25 +30476,31 @@ exports.OidcProviderError = OidcProviderError;
 exports.PREFERRED_SIGNING_ALG = PREFERRED_SIGNING_ALG;
 exports.REFRESH_BEFORE_EXPIRATION_SECONDS = REFRESH_BEFORE_EXPIRATION_SECONDS;
 exports.SOLID_CLIENT_AUTHN_KEY_PREFIX = SOLID_CLIENT_AUTHN_KEY_PREFIX;
+exports.SessionInfoManagerBase = SessionInfoManagerBase;
 exports.StorageUtility = StorageUtility;
 exports.StorageUtilityGetResponse = StorageUtilityGetResponse;
 exports.StorageUtilityMock = StorageUtilityMock;
 exports.USER_SESSION_PREFIX = USER_SESSION_PREFIX;
 exports.buildAuthenticatedFetch = buildAuthenticatedFetch;
 exports.buildProxyHandler = buildProxyHandler;
+exports.clear = clear;
 exports.createDpopHeader = createDpopHeader;
 exports.determineSigningAlg = determineSigningAlg;
 exports.fetchJwks = fetchJwks;
 exports.generateDpopKeyPair = generateDpopKeyPair;
+exports.getEndSessionUrl = getEndSessionUrl;
 exports.getSessionIdFromOauthState = getSessionIdFromOauthState;
+exports.getUnauthenticatedSession = getUnauthenticatedSession;
 exports.getWebidFromTokenPayload = getWebidFromTokenPayload;
 exports.handleRegistration = handleRegistration;
 exports.isSupportedTokenType = isSupportedTokenType;
 exports.isValidRedirectUrl = isValidRedirectUrl;
 exports.loadOidcContextFromStorage = loadOidcContextFromStorage;
+exports.maybeBuildRpInitiatedLogout = maybeBuildRpInitiatedLogout;
 exports.mockStorage = mockStorage;
 exports.mockStorageUtility = mockStorageUtility;
 exports.saveSessionInfoToStorage = saveSessionInfoToStorage;
+//# sourceMappingURL=index.js.map
 
 
 /***/ }),
@@ -29517,7 +31120,7 @@ for (let i = 0; i < 256; ++i) {
 function unsafeStringify(arr, offset = 0) {
   // Note: Be careful editing this code!  It's been tuned for performance
   // and works in ways you may not expect. See https://github.com/uuidjs/uuid/pull/434
-  return (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase();
+  return byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]];
 }
 
 function stringify(arr, offset = 0) {
@@ -29984,7 +31587,7 @@ function rng() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
-/* harmony export */   "unsafeStringify": () => (/* binding */ unsafeStringify)
+/* harmony export */   unsafeStringify: () => (/* binding */ unsafeStringify)
 /* harmony export */ });
 /* harmony import */ var _validate_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./validate.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/validate.js");
 
@@ -30002,7 +31605,7 @@ for (let i = 0; i < 256; ++i) {
 function unsafeStringify(arr, offset = 0) {
   // Note: Be careful editing this code!  It's been tuned for performance
   // and works in ways you may not expect. See https://github.com/uuidjs/uuid/pull/434
-  return (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase();
+  return byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]];
 }
 
 function stringify(arr, offset = 0) {
@@ -30366,12 +31969,12 @@ function isNum(item) {
         throw new Error('number expected');
 }
 // Produces a uniformly random byte string using a cryptographic hash function H that outputs b bits
-// https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-11#section-5.4.1
+// https://www.rfc-editor.org/rfc/rfc9380#section-5.3.1
 function expand_message_xmd(msg, DST, lenInBytes, H) {
     isBytes(msg);
     isBytes(DST);
     isNum(lenInBytes);
-    // https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-16#section-5.3.3
+    // https://www.rfc-editor.org/rfc/rfc9380#section-5.3.3
     if (DST.length > 255)
         DST = H((0, utils_js_1.concatBytes)((0, utils_js_1.utf8ToBytes)('H2C-OVERSIZE-DST-'), DST));
     const { outputLen: b_in_bytes, blockLen: r_in_bytes } = H;
@@ -30392,11 +31995,16 @@ function expand_message_xmd(msg, DST, lenInBytes, H) {
     return pseudo_random_bytes.slice(0, lenInBytes);
 }
 exports.expand_message_xmd = expand_message_xmd;
+// Produces a uniformly random byte string using an extendable-output function (XOF) H.
+// 1. The collision resistance of H MUST be at least k bits.
+// 2. H MUST be an XOF that has been proved indifferentiable from
+//    a random oracle under a reasonable cryptographic assumption.
+// https://www.rfc-editor.org/rfc/rfc9380#section-5.3.2
 function expand_message_xof(msg, DST, lenInBytes, k, H) {
     isBytes(msg);
     isBytes(DST);
     isNum(lenInBytes);
-    // https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-16#section-5.3.3
+    // https://www.rfc-editor.org/rfc/rfc9380#section-5.3.3
     // DST = H('H2C-OVERSIZE-DST-' || a_very_long_DST, Math.ceil((lenInBytes * k) / 8));
     if (DST.length > 255) {
         const dkLen = Math.ceil((2 * k) / 8);
@@ -30415,7 +32023,7 @@ function expand_message_xof(msg, DST, lenInBytes, k, H) {
 exports.expand_message_xof = expand_message_xof;
 /**
  * Hashes arbitrary-length byte strings to a list of one or more elements of a finite field F
- * https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-11#section-5.3
+ * https://www.rfc-editor.org/rfc/rfc9380#section-5.2
  * @param msg a byte string containing the message to hash
  * @param count the number of elements of F to output
  * @param options `{DST: string, p: bigint, m: number, k: number, expand: 'xmd' | 'xof', hash: H}`, see above
@@ -30423,7 +32031,7 @@ exports.expand_message_xof = expand_message_xof;
  */
 function hash_to_field(msg, count, options) {
     (0, utils_js_1.validateObject)(options, {
-        DST: 'string',
+        DST: 'stringOrUint8Array',
         p: 'bigint',
         m: 'isSafeInteger',
         k: 'isSafeInteger',
@@ -30478,8 +32086,8 @@ function createHasher(Point, mapToCurve, def) {
     if (typeof mapToCurve !== 'function')
         throw new Error('mapToCurve() must be defined');
     return {
-        // Encodes byte string to elliptic curve
-        // https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-16#section-3
+        // Encodes byte string to elliptic curve.
+        // hash_to_curve from https://www.rfc-editor.org/rfc/rfc9380#section-3
         hashToCurve(msg, options) {
             const u = hash_to_field(msg, 2, { ...def, DST: def.DST, ...options });
             const u0 = Point.fromAffine(mapToCurve(u[0]));
@@ -30488,7 +32096,8 @@ function createHasher(Point, mapToCurve, def) {
             P.assertValidity();
             return P;
         },
-        // https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-16#section-3
+        // Encodes byte string to elliptic curve.
+        // encode_to_curve from https://www.rfc-editor.org/rfc/rfc9380#section-3
         encodeToCurve(msg, options) {
             const u = hash_to_field(msg, 1, { ...def, DST: def.encodeDST, ...options });
             const P = Point.fromAffine(mapToCurve(u[0])).clearCofactor();
@@ -30511,7 +32120,7 @@ exports.createHasher = createHasher;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.hashToPrivateScalar = exports.FpSqrtEven = exports.FpSqrtOdd = exports.Field = exports.nLength = exports.FpIsSquare = exports.FpDiv = exports.FpInvertBatch = exports.FpPow = exports.validateField = exports.isNegativeLE = exports.FpSqrt = exports.tonelliShanks = exports.invert = exports.pow2 = exports.pow = exports.mod = void 0;
+exports.mapHashToField = exports.getMinHashLength = exports.getFieldBytesLength = exports.hashToPrivateScalar = exports.FpSqrtEven = exports.FpSqrtOdd = exports.Field = exports.nLength = exports.FpIsSquare = exports.FpDiv = exports.FpInvertBatch = exports.FpPow = exports.validateField = exports.isNegativeLE = exports.FpSqrt = exports.tonelliShanks = exports.invert = exports.pow2 = exports.pow = exports.mod = void 0;
 /*! noble-curves - MIT License (c) 2022 Paul Miller (paulmillr.com) */
 // Utilities for modular arithmetics and finite fields
 const utils_js_1 = __webpack_require__(/*! ./utils.js */ "./node_modules/@noble/curves/abstract/utils.js");
@@ -30528,10 +32137,10 @@ function mod(a, b) {
 }
 exports.mod = mod;
 /**
- * Efficiently exponentiate num to power and do modular division.
+ * Efficiently raise num to power and do modular division.
  * Unsafe in some contexts: uses ladder, so can expose bigint bits.
  * @example
- * powMod(2n, 6n, 11n) // 64n % 11n == 9n
+ * pow(2n, 6n, 11n) // 64n % 11n == 9n
  */
 // TODO: use field version && remove
 function pow(num, power, modulo) {
@@ -30564,7 +32173,7 @@ function invert(number, modulo) {
     if (number === _0n || modulo <= _0n) {
         throw new Error(`invert: expected positive integers, got n=${number} mod=${modulo}`);
     }
-    // Eucledian GCD https://brilliant.org/wiki/extended-euclidean-algorithm/
+    // Euclidean GCD https://brilliant.org/wiki/extended-euclidean-algorithm/
     // Fermat's little theorem "CT-like" version inv(n) = n^(m-2) mod m is 30x slower.
     let a = mod(number, modulo);
     let b = modulo;
@@ -30585,9 +32194,14 @@ function invert(number, modulo) {
     return mod(x, modulo);
 }
 exports.invert = invert;
-// Tonelli-Shanks algorithm
-// Paper 1: https://eprint.iacr.org/2012/685.pdf (page 12)
-// Paper 2: Square Roots from 1; 24, 51, 10 to Dan Shanks
+/**
+ * Tonelli-Shanks square root search algorithm.
+ * 1. https://eprint.iacr.org/2012/685.pdf (page 12)
+ * 2. Square Roots from 1; 24, 51, 10 to Dan Shanks
+ * Will start an infinite loop if field order P is not prime.
+ * @param P field order
+ * @returns function that takes field Fp (created from P) and number n
+ */
 function tonelliShanks(P) {
     // Legendre constant: used to calculate Legendre symbol (a | p),
     // which denotes the value of a^((p-1)/2) (mod p).
@@ -30728,6 +32342,10 @@ function validateField(field) {
 }
 exports.validateField = validateField;
 // Generic field functions
+/**
+ * Same as `pow` but for Fp: non-constant-time.
+ * Unsafe in some contexts: uses ladder, so can expose bigint bits.
+ */
 function FpPow(f, num, power) {
     // Should have same speed as pow for bigints
     // TODO: benchmark!
@@ -30748,7 +32366,10 @@ function FpPow(f, num, power) {
     return p;
 }
 exports.FpPow = FpPow;
-// 0 is non-invertible: non-batched version will throw on 0
+/**
+ * Efficiently invert an array of Field elements.
+ * `inv(0)` will return `undefined` here: make sure to throw an error.
+ */
 function FpInvertBatch(f, nums) {
     const tmp = new Array(nums.length);
     // Walk from first to last, multiply them by each other MOD p
@@ -30792,12 +32413,12 @@ function nLength(n, nBitLength) {
 }
 exports.nLength = nLength;
 /**
- * Initializes a galois field over prime. Non-primes are not supported for now.
- * Do not init in loop: slow. Very fragile: always run a benchmark on change.
- * Major performance gains:
- * a) non-normalized operations like mulN instead of mul
- * b) `Object.freeze`
- * c) Same object shape: never add or remove keys
+ * Initializes a finite field over prime. **Non-primes are not supported.**
+ * Do not init in loop: slow. Very fragile: always run a benchmark on a change.
+ * Major performance optimizations:
+ * * a) denormalized operations like mulN instead of mul
+ * * b) same object shape: never add or remove keys
+ * * c) Object.freeze
  * @param ORDER prime positive bigint
  * @param bitLen how many bits the field consumes
  * @param isLE (def: false) if encoding / decoding should be in little-endian
@@ -30805,7 +32426,7 @@ exports.nLength = nLength;
  */
 function Field(ORDER, bitLen, isLE = false, redef = {}) {
     if (ORDER <= _0n)
-        throw new Error(`Expected Fp ORDER > 0, got ${ORDER}`);
+        throw new Error(`Expected Field ORDER > 0, got ${ORDER}`);
     const { nBitLength: BITS, nByteLength: BYTES } = nLength(ORDER, bitLen);
     if (BYTES > 2048)
         throw new Error('Field lengths over 2048 bytes are not supported');
@@ -30869,13 +32490,10 @@ function FpSqrtEven(Fp, elm) {
 }
 exports.FpSqrtEven = FpSqrtEven;
 /**
- * FIPS 186 B.4.1-compliant "constant-time" private key generation utility.
- * Can take (n+8) or more bytes of uniform input e.g. from CSPRNG or KDF
- * and convert them into private scalar, with the modulo bias being neglible.
- * Needs at least 40 bytes of input for 32-byte private key.
- * https://research.kudelskisecurity.com/2020/07/28/the-definitive-guide-to-modulo-bias-and-how-to-avoid-it/
- * @param hash hash output from SHA3 or a similar function
- * @returns valid private scalar
+ * "Constant-time" private key generation utility.
+ * Same as mapKeyToField, but accepts less bytes (40 instead of 48 for 32-byte field).
+ * Which makes it slightly more biased, less secure.
+ * @deprecated use mapKeyToField instead
  */
 function hashToPrivateScalar(hash, groupOrder, isLE = false) {
     hash = (0, utils_js_1.ensureBytes)('privateHash', hash);
@@ -30887,6 +32505,57 @@ function hashToPrivateScalar(hash, groupOrder, isLE = false) {
     return mod(num, groupOrder - _1n) + _1n;
 }
 exports.hashToPrivateScalar = hashToPrivateScalar;
+/**
+ * Returns total number of bytes consumed by the field element.
+ * For example, 32 bytes for usual 256-bit weierstrass curve.
+ * @param fieldOrder number of field elements, usually CURVE.n
+ * @returns byte length of field
+ */
+function getFieldBytesLength(fieldOrder) {
+    if (typeof fieldOrder !== 'bigint')
+        throw new Error('field order must be bigint');
+    const bitLength = fieldOrder.toString(2).length;
+    return Math.ceil(bitLength / 8);
+}
+exports.getFieldBytesLength = getFieldBytesLength;
+/**
+ * Returns minimal amount of bytes that can be safely reduced
+ * by field order.
+ * Should be 2^-128 for 128-bit curve such as P256.
+ * @param fieldOrder number of field elements, usually CURVE.n
+ * @returns byte length of target hash
+ */
+function getMinHashLength(fieldOrder) {
+    const length = getFieldBytesLength(fieldOrder);
+    return length + Math.ceil(length / 2);
+}
+exports.getMinHashLength = getMinHashLength;
+/**
+ * "Constant-time" private key generation utility.
+ * Can take (n + n/2) or more bytes of uniform input e.g. from CSPRNG or KDF
+ * and convert them into private scalar, with the modulo bias being negligible.
+ * Needs at least 48 bytes of input for 32-byte private key.
+ * https://research.kudelskisecurity.com/2020/07/28/the-definitive-guide-to-modulo-bias-and-how-to-avoid-it/
+ * FIPS 186-5, A.2 https://csrc.nist.gov/publications/detail/fips/186/5/final
+ * RFC 9380, https://www.rfc-editor.org/rfc/rfc9380#section-5
+ * @param hash hash output from SHA3 or a similar function
+ * @param groupOrder size of subgroup - (e.g. secp256k1.CURVE.n)
+ * @param isLE interpret hash bytes as LE num
+ * @returns valid private scalar
+ */
+function mapHashToField(key, fieldOrder, isLE = false) {
+    const len = key.length;
+    const fieldLen = getFieldBytesLength(fieldOrder);
+    const minLen = getMinHashLength(fieldOrder);
+    // No small numbers: need to understand bias story. No huge numbers: easier to detect JS timings.
+    if (len < 16 || len < minLen || len > 1024)
+        throw new Error(`expected ${minLen}-1024 bytes of input, got ${len}`);
+    const num = isLE ? (0, utils_js_1.bytesToNumberBE)(key) : (0, utils_js_1.bytesToNumberLE)(key);
+    // `mod(x, 11)` can sometimes produce 0. `mod(x, 10) + 1` is the same, but no 0
+    const reduced = mod(num, fieldOrder - _1n) + _1n;
+    return isLE ? (0, utils_js_1.numberToBytesLE)(reduced, fieldLen) : (0, utils_js_1.numberToBytesBE)(reduced, fieldLen);
+}
+exports.mapHashToField = mapHashToField;
 //# sourceMappingURL=modular.js.map
 
 /***/ }),
@@ -30902,11 +32571,18 @@ exports.hashToPrivateScalar = hashToPrivateScalar;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.validateObject = exports.createHmacDrbg = exports.bitMask = exports.bitSet = exports.bitGet = exports.bitLen = exports.utf8ToBytes = exports.equalBytes = exports.concatBytes = exports.ensureBytes = exports.numberToVarBytesBE = exports.numberToBytesLE = exports.numberToBytesBE = exports.bytesToNumberLE = exports.bytesToNumberBE = exports.hexToBytes = exports.hexToNumber = exports.numberToHexUnpadded = exports.bytesToHex = void 0;
 /*! noble-curves - MIT License (c) 2022 Paul Miller (paulmillr.com) */
+// 100 lines of code in the file are duplicated from noble-hashes (utils).
+// This is OK: `abstract` directory does not use noble-hashes.
+// User may opt-in into using different hashing library. This way, noble-hashes
+// won't be included into their bundle.
 const _0n = BigInt(0);
 const _1n = BigInt(1);
 const _2n = BigInt(2);
 const u8a = (a) => a instanceof Uint8Array;
-const hexes = Array.from({ length: 256 }, (v, i) => i.toString(16).padStart(2, '0'));
+const hexes = /* @__PURE__ */ Array.from({ length: 256 }, (_, i) => i.toString(16).padStart(2, '0'));
+/**
+ * @example bytesToHex(Uint8Array.from([0xca, 0xfe, 0x01, 0x23])) // 'cafe0123'
+ */
 function bytesToHex(bytes) {
     if (!u8a(bytes))
         throw new Error('Uint8Array expected');
@@ -30930,25 +32606,28 @@ function hexToNumber(hex) {
     return BigInt(hex === '' ? '0' : `0x${hex}`);
 }
 exports.hexToNumber = hexToNumber;
-// Caching slows it down 2-3x
+/**
+ * @example hexToBytes('cafe0123') // Uint8Array.from([0xca, 0xfe, 0x01, 0x23])
+ */
 function hexToBytes(hex) {
     if (typeof hex !== 'string')
         throw new Error('hex string expected, got ' + typeof hex);
-    if (hex.length % 2)
-        throw new Error('hex string is invalid: unpadded ' + hex.length);
-    const array = new Uint8Array(hex.length / 2);
+    const len = hex.length;
+    if (len % 2)
+        throw new Error('padded hex string expected, got unpadded hex of length ' + len);
+    const array = new Uint8Array(len / 2);
     for (let i = 0; i < array.length; i++) {
         const j = i * 2;
         const hexByte = hex.slice(j, j + 2);
         const byte = Number.parseInt(hexByte, 16);
         if (Number.isNaN(byte) || byte < 0)
-            throw new Error('invalid byte sequence');
+            throw new Error('Invalid byte sequence');
         array[i] = byte;
     }
     return array;
 }
 exports.hexToBytes = hexToBytes;
-// Big Endian
+// BE: Big Endian, LE: Little Endian
 function bytesToNumberBE(bytes) {
     return hexToNumber(bytesToHex(bytes));
 }
@@ -30959,13 +32638,28 @@ function bytesToNumberLE(bytes) {
     return hexToNumber(bytesToHex(Uint8Array.from(bytes).reverse()));
 }
 exports.bytesToNumberLE = bytesToNumberLE;
-const numberToBytesBE = (n, len) => hexToBytes(n.toString(16).padStart(len * 2, '0'));
+function numberToBytesBE(n, len) {
+    return hexToBytes(n.toString(16).padStart(len * 2, '0'));
+}
 exports.numberToBytesBE = numberToBytesBE;
-const numberToBytesLE = (n, len) => (0, exports.numberToBytesBE)(n, len).reverse();
+function numberToBytesLE(n, len) {
+    return numberToBytesBE(n, len).reverse();
+}
 exports.numberToBytesLE = numberToBytesLE;
-// Returns variable number bytes (minimal bigint encoding?)
-const numberToVarBytesBE = (n) => hexToBytes(numberToHexUnpadded(n));
+// Unpadded, rarely used
+function numberToVarBytesBE(n) {
+    return hexToBytes(numberToHexUnpadded(n));
+}
 exports.numberToVarBytesBE = numberToVarBytesBE;
+/**
+ * Takes hex string or Uint8Array, converts to Uint8Array.
+ * Validates output length.
+ * Will throw error for other types.
+ * @param title descriptive title for an error e.g. 'private key'
+ * @param hex hex string or Uint8Array
+ * @param expectedLength optional, will compare to result array's length
+ * @returns
+ */
 function ensureBytes(title, hex, expectedLength) {
     let res;
     if (typeof hex === 'string') {
@@ -30990,11 +32684,13 @@ function ensureBytes(title, hex, expectedLength) {
     return res;
 }
 exports.ensureBytes = ensureBytes;
-// Copies several Uint8Arrays into one.
-function concatBytes(...arrs) {
-    const r = new Uint8Array(arrs.reduce((sum, a) => sum + a.length, 0));
+/**
+ * Copies several Uint8Arrays into one.
+ */
+function concatBytes(...arrays) {
+    const r = new Uint8Array(arrays.reduce((sum, a) => sum + a.length, 0));
     let pad = 0; // walk through each item, ensure they have proper type
-    arrs.forEach((a) => {
+    arrays.forEach((a) => {
         if (!u8a(a))
             throw new Error('Uint8Array expected');
         r.set(a, pad);
@@ -31013,15 +32709,20 @@ function equalBytes(b1, b2) {
     return true;
 }
 exports.equalBytes = equalBytes;
+/**
+ * @example utf8ToBytes('abc') // new Uint8Array([97, 98, 99])
+ */
 function utf8ToBytes(str) {
-    if (typeof str !== 'string') {
+    if (typeof str !== 'string')
         throw new Error(`utf8ToBytes expected string, got ${typeof str}`);
-    }
-    return new TextEncoder().encode(str);
+    return new Uint8Array(new TextEncoder().encode(str)); // https://bugzil.la/1681809
 }
 exports.utf8ToBytes = utf8ToBytes;
 // Bit operations
-// Amount of bits inside bigint (Same as n.toString(2).length)
+/**
+ * Calculates amount of bits in a bigint.
+ * Same as `n.toString(2).length`
+ */
 function bitLen(n) {
     let len;
     for (len = 0; n > _0n; n >>= _1n, len += 1)
@@ -31029,15 +32730,26 @@ function bitLen(n) {
     return len;
 }
 exports.bitLen = bitLen;
-// Gets single bit at position. NOTE: first bit position is 0 (same as arrays)
-// Same as !!+Array.from(n.toString(2)).reverse()[pos]
-const bitGet = (n, pos) => (n >> BigInt(pos)) & _1n;
+/**
+ * Gets single bit at position.
+ * NOTE: first bit position is 0 (same as arrays)
+ * Same as `!!+Array.from(n.toString(2)).reverse()[pos]`
+ */
+function bitGet(n, pos) {
+    return (n >> BigInt(pos)) & _1n;
+}
 exports.bitGet = bitGet;
-// Sets single bit at position
-const bitSet = (n, pos, value) => n | ((value ? _1n : _0n) << BigInt(pos));
+/**
+ * Sets single bit at position.
+ */
+const bitSet = (n, pos, value) => {
+    return n | ((value ? _1n : _0n) << BigInt(pos));
+};
 exports.bitSet = bitSet;
-// Return mask for N bits (Same as BigInt(`0b${Array(i).fill('1').join('')}`))
-// Not using ** operator with bigints for old engines.
+/**
+ * Calculate mask for N bits. Not using ** operator with bigints because of old engines.
+ * Same as BigInt(`0b${Array(i).fill('1').join('')}`)
+ */
 const bitMask = (n) => (_2n << BigInt(n - 1)) - _1n;
 exports.bitMask = bitMask;
 // DRBG
@@ -31108,6 +32820,7 @@ const validatorFns = {
     function: (val) => typeof val === 'function',
     boolean: (val) => typeof val === 'boolean',
     string: (val) => typeof val === 'string',
+    stringOrUint8Array: (val) => typeof val === 'string' || val instanceof Uint8Array,
     isSafeInteger: (val) => Number.isSafeInteger(val),
     array: (val) => Array.isArray(val),
     field: (val, object) => object.Fp.isValid(val),
@@ -31255,7 +32968,7 @@ function weierstrassPoints(opts) {
     const CURVE = validatePointOpts(opts);
     const { Fp } = CURVE; // All curves has same field / group length as for now, but they can differ
     const toBytes = CURVE.toBytes ||
-        ((c, point, isCompressed) => {
+        ((_c, point, _isCompressed) => {
             const a = point.toAffine();
             return ut.concatBytes(Uint8Array.from([0x04]), Fp.toBytes(a.x), Fp.toBytes(a.y));
         });
@@ -31391,9 +33104,11 @@ function weierstrassPoints(opts) {
         }
         // A point on curve is valid if it conforms to equation.
         assertValidity() {
-            // Zero is valid point too!
             if (this.is0()) {
-                if (CURVE.allowInfinityPoint)
+                // (0, 1, 0) aka ZERO is invalid in most contexts.
+                // In BLS, ZERO can be serialized, so we allow it.
+                // (0, 0, 0) is wrong representation of ZERO and is always invalid.
+                if (CURVE.allowInfinityPoint && !Fp.is0(this.py))
                     return;
                 throw new Error('bad point: ZERO');
             }
@@ -31706,7 +33421,7 @@ function weierstrass(curveDef) {
     }
     const { ProjectivePoint: Point, normPrivateKeyToScalar, weierstrassEquation, isWithinCurveOrder, } = weierstrassPoints({
         ...CURVE,
-        toBytes(c, point, isCompressed) {
+        toBytes(_c, point, isCompressed) {
             const a = point.toAffine();
             const x = Fp.toBytes(a.x);
             const cat = ut.concatBytes;
@@ -31840,13 +33555,12 @@ function weierstrass(curveDef) {
         },
         normPrivateKeyToScalar: normPrivateKeyToScalar,
         /**
-         * Produces cryptographically secure private key from random of size (nBitLength+64)
-         * as per FIPS 186 B.4.1 with modulo bias being neglible.
+         * Produces cryptographically secure private key from random of size
+         * (groupLen + ceil(groupLen / 2)) with modulo bias being negligible.
          */
         randomPrivateKey: () => {
-            const rand = CURVE.randomBytes(Fp.BYTES + 8);
-            const num = mod.hashToPrivateScalar(rand, CURVE_ORDER);
-            return ut.numberToBytesBE(num, CURVE.nByteLength);
+            const length = mod.getMinHashLength(CURVE.n);
+            return mod.mapHashToField(CURVE.randomBytes(length), CURVE.n);
         },
         /**
          * Creates precompute table for an arbitrary EC point. Makes point "cached".
@@ -31958,7 +33672,7 @@ function weierstrass(curveDef) {
         if (ent != null) {
             // K = HMAC_K(V || 0x00 || int2octets(x) || bits2octets(h1) || k')
             const e = ent === true ? randomBytes(Fp.BYTES) : ent; // generate random bytes OR pass as-is
-            seedArgs.push((0, utils_js_1.ensureBytes)('extraEntropy', e, Fp.BYTES)); // check for being of size BYTES
+            seedArgs.push((0, utils_js_1.ensureBytes)('extraEntropy', e)); // check for being bytes
         }
         const seed = ut.concatBytes(...seedArgs); // Step D of RFC6979 3.2
         const m = h1int; // NOTE: no need to call bits2int second time here, it is inside truncateHash!
@@ -31992,18 +33706,22 @@ function weierstrass(curveDef) {
     const defaultSigOpts = { lowS: CURVE.lowS, prehash: false };
     const defaultVerOpts = { lowS: CURVE.lowS, prehash: false };
     /**
-     * Signs message hash (not message: you need to hash it by yourself).
+     * Signs message hash with a private key.
      * ```
      * sign(m, d, k) where
      *   (x, y) = G × k
      *   r = x mod n
      *   s = (m + dr)/k mod n
      * ```
-     * @param opts `lowS, extraEntropy, prehash`
+     * @param msgHash NOT message. msg needs to be hashed to `msgHash`, or use `prehash`.
+     * @param privKey private key
+     * @param opts lowS for non-malleable sigs. extraEntropy for mixing randomness into k. prehash will hash first arg.
+     * @returns signature with recovery param
      */
     function sign(msgHash, privKey, opts = defaultSigOpts) {
         const { seed, k2sig } = prepSig(msgHash, privKey, opts); // Steps A, D of RFC6979 3.2.
-        const drbg = ut.createHmacDrbg(CURVE.hash.outputLen, CURVE.nByteLength, CURVE.hmac);
+        const C = CURVE;
+        const drbg = ut.createHmacDrbg(C.hash.outputLen, C.nByteLength, C.hmac);
         return drbg(seed, k2sig); // Steps B, C, D, E, F, G
     }
     // Enable precomputes. Slows down first publicKey computation by 20ms.
@@ -32085,10 +33803,15 @@ function weierstrass(curveDef) {
     };
 }
 exports.weierstrass = weierstrass;
-// Implementation of the Shallue and van de Woestijne method for any Weierstrass curve
-// TODO: check if there is a way to merge this with uvRatio in Edwards && move to modular?
-// b = True and y = sqrt(u / v) if (u / v) is square in F, and
-// b = False and y = sqrt(Z * (u / v)) otherwise.
+/**
+ * Implementation of the Shallue and van de Woestijne method for any weierstrass curve.
+ * TODO: check if there is a way to merge this with uvRatio in Edwards; move to modular.
+ * b = True and y = sqrt(u / v) if (u / v) is square in F, and
+ * b = False and y = sqrt(Z * (u / v)) otherwise.
+ * @param Fp
+ * @param Z
+ * @returns
+ */
 function SWUFpSqrtRatio(Fp, Z) {
     // Generic implementation
     const q = Fp.ORDER;
@@ -32096,10 +33819,14 @@ function SWUFpSqrtRatio(Fp, Z) {
     for (let o = q - _1n; o % _2n === _0n; o /= _2n)
         l += _1n;
     const c1 = l; // 1. c1, the largest integer such that 2^c1 divides q - 1.
-    const c2 = (q - _1n) / _2n ** c1; // 2. c2 = (q - 1) / (2^c1)        # Integer arithmetic
+    // We need 2n ** c1 and 2n ** (c1-1). We can't use **; but we can use <<.
+    // 2n ** c1 == 2n << (c1-1)
+    const _2n_pow_c1_1 = _2n << (c1 - _1n - _1n);
+    const _2n_pow_c1 = _2n_pow_c1_1 * _2n;
+    const c2 = (q - _1n) / _2n_pow_c1; // 2. c2 = (q - 1) / (2^c1)  # Integer arithmetic
     const c3 = (c2 - _1n) / _2n; // 3. c3 = (c2 - 1) / 2            # Integer arithmetic
-    const c4 = _2n ** c1 - _1n; // 4. c4 = 2^c1 - 1                # Integer arithmetic
-    const c5 = _2n ** (c1 - _1n); // 5. c5 = 2^(c1 - 1)              # Integer arithmetic
+    const c4 = _2n_pow_c1 - _1n; // 4. c4 = 2^c1 - 1                # Integer arithmetic
+    const c5 = _2n_pow_c1_1; // 5. c5 = 2^(c1 - 1)                  # Integer arithmetic
     const c6 = Fp.pow(Z, c2); // 6. c6 = Z^c2
     const c7 = Fp.pow(Z, (c2 + _1n) / _2n); // 7. c7 = Z^((c2 + 1) / 2)
     let sqrtRatio = (u, v) => {
@@ -32121,7 +33848,8 @@ function SWUFpSqrtRatio(Fp, Z) {
         tv4 = Fp.cmov(tv5, tv4, isQR); // 16. tv4 = CMOV(tv5, tv4, isQR)
         // 17. for i in (c1, c1 - 1, ..., 2):
         for (let i = c1; i > _1n; i--) {
-            let tv5 = _2n ** (i - _2n); // 18.    tv5 = i - 2;    19.    tv5 = 2^tv5
+            let tv5 = i - _2n; // 18.    tv5 = i - 2
+            tv5 = _2n << (tv5 - _1n); // 19.    tv5 = 2^tv5
             let tvv5 = Fp.pow(tv4, tv5); // 20.    tv5 = tv4^tv5
             const e1 = Fp.eql(tvv5, Fp.ONE); // 21.    e1 = tv5 == 1
             tv2 = Fp.mul(tv3, tv1); // 22.    tv2 = tv3 * tv1
@@ -32154,7 +33882,10 @@ function SWUFpSqrtRatio(Fp, Z) {
     return sqrtRatio;
 }
 exports.SWUFpSqrtRatio = SWUFpSqrtRatio;
-// From draft-irtf-cfrg-hash-to-curve-16
+/**
+ * Simplified Shallue-van de Woestijne-Ulas Method
+ * https://www.rfc-editor.org/rfc/rfc9380#section-6.6.2
+ */
 function mapToCurveSimpleSWU(Fp, opts) {
     mod.validateField(Fp);
     if (!Fp.isValid(opts.A) || !Fp.isValid(opts.B) || !Fp.isValid(opts.Z))
@@ -32208,7 +33939,6 @@ exports.mapToCurveSimpleSWU = mapToCurveSimpleSWU;
 
 "use strict";
 
-var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.encodeToCurve = exports.hashToCurve = exports.schnorr = exports.secp256k1 = void 0;
 /*! noble-curves - MIT License (c) 2022 Paul Miller (paulmillr.com) */
@@ -32217,7 +33947,7 @@ const utils_1 = __webpack_require__(/*! @noble/hashes/utils */ "./node_modules/@
 const modular_js_1 = __webpack_require__(/*! ./abstract/modular.js */ "./node_modules/@noble/curves/abstract/modular.js");
 const weierstrass_js_1 = __webpack_require__(/*! ./abstract/weierstrass.js */ "./node_modules/@noble/curves/abstract/weierstrass.js");
 const utils_js_1 = __webpack_require__(/*! ./abstract/utils.js */ "./node_modules/@noble/curves/abstract/utils.js");
-const htf = __webpack_require__(/*! ./abstract/hash-to-curve.js */ "./node_modules/@noble/curves/abstract/hash-to-curve.js");
+const hash_to_curve_js_1 = __webpack_require__(/*! ./abstract/hash-to-curve.js */ "./node_modules/@noble/curves/abstract/hash-to-curve.js");
 const _shortw_utils_js_1 = __webpack_require__(/*! ./_shortw_utils.js */ "./node_modules/@noble/curves/_shortw_utils.js");
 const secp256k1P = BigInt('0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc2f');
 const secp256k1N = BigInt('0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141');
@@ -32402,7 +34132,7 @@ function schnorrVerify(signature, message, publicKey) {
         return false;
     }
 }
-exports.schnorr = {
+exports.schnorr = (() => ({
     getPublicKey: schnorrGetPublicKey,
     sign: schnorrSign,
     verify: schnorrVerify,
@@ -32415,8 +34145,8 @@ exports.schnorr = {
         taggedHash,
         mod: modular_js_1.mod,
     },
-};
-const isoMap = htf.isogenyMap(Fp, [
+}))();
+const isoMap = /* @__PURE__ */ (() => (0, hash_to_curve_js_1.isogenyMap)(Fp, [
     // xNum
     [
         '0x8e38e38e38e38e38e38e38e38e38e38e38e38e38e38e38e38e38e38daaaaa8c7',
@@ -32444,13 +34174,13 @@ const isoMap = htf.isogenyMap(Fp, [
         '0x6484aa716545ca2cf3a70c3fa8fe337e0a3d21162f0d6299a7bf8192bfd2a76f',
         '0x0000000000000000000000000000000000000000000000000000000000000001', // LAST 1
     ],
-].map((i) => i.map((j) => BigInt(j))));
-const mapSWU = (0, weierstrass_js_1.mapToCurveSimpleSWU)(Fp, {
+].map((i) => i.map((j) => BigInt(j)))))();
+const mapSWU = /* @__PURE__ */ (() => (0, weierstrass_js_1.mapToCurveSimpleSWU)(Fp, {
     A: BigInt('0x3f8731abdd661adca08a5558f0f5d272e953d363cb6f0e5d405447c01a444533'),
     B: BigInt('1771'),
     Z: Fp.create(BigInt('-11')),
-});
-_a = htf.createHasher(exports.secp256k1.ProjectivePoint, (scalars) => {
+}))();
+const htf = /* @__PURE__ */ (() => (0, hash_to_curve_js_1.createHasher)(exports.secp256k1.ProjectivePoint, (scalars) => {
     const { x, y } = mapSWU(Fp.create(scalars[0]));
     return isoMap(x, y);
 }, {
@@ -32461,7 +34191,9 @@ _a = htf.createHasher(exports.secp256k1.ProjectivePoint, (scalars) => {
     k: 128,
     expand: 'xmd',
     hash: sha256_1.sha256,
-}), exports.hashToCurve = _a.hashToCurve, exports.encodeToCurve = _a.encodeToCurve;
+}))();
+exports.hashToCurve = (() => htf.hashToCurve)();
+exports.encodeToCurve = (() => htf.encodeToCurve)();
 //# sourceMappingURL=secp256k1.js.map
 
 /***/ }),
@@ -32488,9 +34220,9 @@ function bool(b) {
 exports.bool = bool;
 function bytes(b, ...lengths) {
     if (!(b instanceof Uint8Array))
-        throw new TypeError('Expected Uint8Array');
+        throw new Error('Expected Uint8Array');
     if (lengths.length > 0 && !lengths.includes(b.length))
-        throw new TypeError(`Expected Uint8Array of length ${lengths}, not of length=${b.length}`);
+        throw new Error(`Expected Uint8Array of length ${lengths}, not of length=${b.length}`);
 }
 exports.bytes = bytes;
 function hash(hash) {
@@ -32515,14 +34247,7 @@ function output(out, instance) {
     }
 }
 exports.output = output;
-const assert = {
-    number,
-    bool,
-    bytes,
-    hash,
-    exists,
-    output,
-};
+const assert = { number, bool, bytes, hash, exists, output };
 exports["default"] = assert;
 //# sourceMappingURL=_assert.js.map
 
@@ -32569,7 +34294,7 @@ class SHA2 extends utils_js_1.Hash {
         this.view = (0, utils_js_1.createView)(this.buffer);
     }
     update(data) {
-        _assert_js_1.default.exists(this);
+        (0, _assert_js_1.exists)(this);
         const { view, buffer, blockLen } = this;
         data = (0, utils_js_1.toBytes)(data);
         const len = data.length;
@@ -32595,8 +34320,8 @@ class SHA2 extends utils_js_1.Hash {
         return this;
     }
     digestInto(out) {
-        _assert_js_1.default.exists(this);
-        _assert_js_1.default.output(out, this);
+        (0, _assert_js_1.exists)(this);
+        (0, _assert_js_1.output)(out, this);
         this.finished = true;
         // Padding
         // We can avoid allocation of buffer for padding completely if it
@@ -32680,7 +34405,7 @@ exports.crypto = typeof globalThis === 'object' && 'crypto' in globalThis ? glob
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.hmac = void 0;
+exports.hmac = exports.HMAC = void 0;
 const _assert_js_1 = __webpack_require__(/*! ./_assert.js */ "./node_modules/@noble/hashes/_assert.js");
 const utils_js_1 = __webpack_require__(/*! ./utils.js */ "./node_modules/@noble/hashes/utils.js");
 // HMAC (RFC 2104)
@@ -32689,11 +34414,11 @@ class HMAC extends utils_js_1.Hash {
         super();
         this.finished = false;
         this.destroyed = false;
-        _assert_js_1.default.hash(hash);
+        (0, _assert_js_1.hash)(hash);
         const key = (0, utils_js_1.toBytes)(_key);
         this.iHash = hash.create();
         if (typeof this.iHash.update !== 'function')
-            throw new TypeError('Expected instance of class which extends utils.Hash');
+            throw new Error('Expected instance of class which extends utils.Hash');
         this.blockLen = this.iHash.blockLen;
         this.outputLen = this.iHash.outputLen;
         const blockLen = this.blockLen;
@@ -32712,13 +34437,13 @@ class HMAC extends utils_js_1.Hash {
         pad.fill(0);
     }
     update(buf) {
-        _assert_js_1.default.exists(this);
+        (0, _assert_js_1.exists)(this);
         this.iHash.update(buf);
         return this;
     }
     digestInto(out) {
-        _assert_js_1.default.exists(this);
-        _assert_js_1.default.bytes(out, this.outputLen);
+        (0, _assert_js_1.exists)(this);
+        (0, _assert_js_1.bytes)(out, this.outputLen);
         this.finished = true;
         this.iHash.digestInto(out);
         this.oHash.update(out);
@@ -32749,6 +34474,7 @@ class HMAC extends utils_js_1.Hash {
         this.iHash.destroy();
     }
 }
+exports.HMAC = HMAC;
 /**
  * HMAC: RFC2104 message authentication code.
  * @param hash - function that would be used e.g. sha256
@@ -32774,6 +34500,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.sha224 = exports.sha256 = void 0;
 const _sha2_js_1 = __webpack_require__(/*! ./_sha2.js */ "./node_modules/@noble/hashes/_sha2.js");
 const utils_js_1 = __webpack_require__(/*! ./utils.js */ "./node_modules/@noble/hashes/utils.js");
+// SHA2-256 need to try 2^128 hashes to execute birthday attack.
+// BTC network is doing 2^67 hashes/sec as per early 2023.
 // Choice: a ? b : c
 const Chi = (a, b, c) => (a & b) ^ (~a & c);
 // Majority function, true if any two inpust is true
@@ -32781,7 +34509,7 @@ const Maj = (a, b, c) => (a & b) ^ (a & c) ^ (b & c);
 // Round constants:
 // first 32 bits of the fractional parts of the cube roots of the first 64 primes 2..311)
 // prettier-ignore
-const SHA256_K = new Uint32Array([
+const SHA256_K = /* @__PURE__ */ new Uint32Array([
     0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
     0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
     0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
@@ -32793,12 +34521,12 @@ const SHA256_K = new Uint32Array([
 ]);
 // Initial state (first 32 bits of the fractional parts of the square roots of the first 8 primes 2..19):
 // prettier-ignore
-const IV = new Uint32Array([
+const IV = /* @__PURE__ */ new Uint32Array([
     0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
 ]);
 // Temporary buffer, not used to store anything between runs
 // Named this way because it matches specification.
-const SHA256_W = new Uint32Array(64);
+const SHA256_W = /* @__PURE__ */ new Uint32Array(64);
 class SHA256 extends _sha2_js_1.SHA2 {
     constructor() {
         super(64, 32, 8, false);
@@ -32909,13 +34637,15 @@ exports.sha224 = (0, utils_js_1.wrapConstructor)(() => new SHA224());
 
 /*! noble-hashes - MIT License (c) 2022 Paul Miller (paulmillr.com) */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.randomBytes = exports.wrapConstructorWithOpts = exports.wrapConstructor = exports.checkOpts = exports.Hash = exports.concatBytes = exports.toBytes = exports.utf8ToBytes = exports.asyncLoop = exports.nextTick = exports.hexToBytes = exports.bytesToHex = exports.isLE = exports.rotr = exports.createView = exports.u32 = exports.u8 = void 0;
-// We use `globalThis.crypto`, but node.js versions earlier than v19 don't
-// declare it in global scope. For node.js, package.json#exports field mapping
-// rewrites import from `crypto` to `cryptoNode`, which imports native module.
+exports.randomBytes = exports.wrapXOFConstructorWithOpts = exports.wrapConstructorWithOpts = exports.wrapConstructor = exports.checkOpts = exports.Hash = exports.concatBytes = exports.toBytes = exports.utf8ToBytes = exports.asyncLoop = exports.nextTick = exports.hexToBytes = exports.bytesToHex = exports.isLE = exports.rotr = exports.createView = exports.u32 = exports.u8 = void 0;
+// We use WebCrypto aka globalThis.crypto, which exists in browsers and node.js 16+.
+// node.js versions earlier than v19 don't declare it in global scope.
+// For node.js, package.json#exports field mapping rewrites import
+// from `crypto` to `cryptoNode`, which imports native module.
 // Makes the utils un-importable in browsers without a bundler.
 // Once node.js 18 is deprecated, we can just drop the import.
 const crypto_1 = __webpack_require__(/*! @noble/hashes/crypto */ "./node_modules/@noble/hashes/crypto.js");
+const u8a = (a) => a instanceof Uint8Array;
 // Cast array to different type
 const u8 = (arr) => new Uint8Array(arr.buffer, arr.byteOffset, arr.byteLength);
 exports.u8 = u8;
@@ -32932,31 +34662,31 @@ exports.rotr = rotr;
 exports.isLE = new Uint8Array(new Uint32Array([0x11223344]).buffer)[0] === 0x44;
 if (!exports.isLE)
     throw new Error('Non little-endian hardware is not supported');
-const hexes = Array.from({ length: 256 }, (v, i) => i.toString(16).padStart(2, '0'));
+const hexes = /* @__PURE__ */ Array.from({ length: 256 }, (_, i) => i.toString(16).padStart(2, '0'));
 /**
- * @example bytesToHex(Uint8Array.from([0xde, 0xad, 0xbe, 0xef])) // 'deadbeef'
+ * @example bytesToHex(Uint8Array.from([0xca, 0xfe, 0x01, 0x23])) // 'cafe0123'
  */
-function bytesToHex(uint8a) {
-    // pre-caching improves the speed 6x
-    if (!(uint8a instanceof Uint8Array))
+function bytesToHex(bytes) {
+    if (!u8a(bytes))
         throw new Error('Uint8Array expected');
+    // pre-caching improves the speed 6x
     let hex = '';
-    for (let i = 0; i < uint8a.length; i++) {
-        hex += hexes[uint8a[i]];
+    for (let i = 0; i < bytes.length; i++) {
+        hex += hexes[bytes[i]];
     }
     return hex;
 }
 exports.bytesToHex = bytesToHex;
 /**
- * @example hexToBytes('deadbeef') // Uint8Array.from([0xde, 0xad, 0xbe, 0xef])
+ * @example hexToBytes('cafe0123') // Uint8Array.from([0xca, 0xfe, 0x01, 0x23])
  */
 function hexToBytes(hex) {
-    if (typeof hex !== 'string') {
-        throw new TypeError('hexToBytes: expected string, got ' + typeof hex);
-    }
-    if (hex.length % 2)
-        throw new Error('hexToBytes: received invalid unpadded hex');
-    const array = new Uint8Array(hex.length / 2);
+    if (typeof hex !== 'string')
+        throw new Error('hex string expected, got ' + typeof hex);
+    const len = hex.length;
+    if (len % 2)
+        throw new Error('padded hex string expected, got unpadded hex of length ' + len);
+    const array = new Uint8Array(len / 2);
     for (let i = 0; i < array.length; i++) {
         const j = i * 2;
         const hexByte = hex.slice(j, j + 2);
@@ -32987,38 +34717,41 @@ async function asyncLoop(iters, tick, cb) {
     }
 }
 exports.asyncLoop = asyncLoop;
+/**
+ * @example utf8ToBytes('abc') // new Uint8Array([97, 98, 99])
+ */
 function utf8ToBytes(str) {
-    if (typeof str !== 'string') {
-        throw new TypeError(`utf8ToBytes expected string, got ${typeof str}`);
-    }
-    return new TextEncoder().encode(str);
+    if (typeof str !== 'string')
+        throw new Error(`utf8ToBytes expected string, got ${typeof str}`);
+    return new Uint8Array(new TextEncoder().encode(str)); // https://bugzil.la/1681809
 }
 exports.utf8ToBytes = utf8ToBytes;
+/**
+ * Normalizes (non-hex) string or Uint8Array to Uint8Array.
+ * Warning: when Uint8Array is passed, it would NOT get copied.
+ * Keep in mind for future mutable operations.
+ */
 function toBytes(data) {
     if (typeof data === 'string')
         data = utf8ToBytes(data);
-    if (!(data instanceof Uint8Array))
-        throw new TypeError(`Expected input type is Uint8Array (got ${typeof data})`);
+    if (!u8a(data))
+        throw new Error(`expected Uint8Array, got ${typeof data}`);
     return data;
 }
 exports.toBytes = toBytes;
 /**
- * Concats Uint8Array-s into one; like `Buffer.concat([buf1, buf2])`
- * @example concatBytes(buf1, buf2)
+ * Copies several Uint8Arrays into one.
  */
 function concatBytes(...arrays) {
-    if (!arrays.every((a) => a instanceof Uint8Array))
-        throw new Error('Uint8Array list expected');
-    if (arrays.length === 1)
-        return arrays[0];
-    const length = arrays.reduce((a, arr) => a + arr.length, 0);
-    const result = new Uint8Array(length);
-    for (let i = 0, pad = 0; i < arrays.length; i++) {
-        const arr = arrays[i];
-        result.set(arr, pad);
-        pad += arr.length;
-    }
-    return result;
+    const r = new Uint8Array(arrays.reduce((sum, a) => sum + a.length, 0));
+    let pad = 0; // walk through each item, ensure they have proper type
+    arrays.forEach((a) => {
+        if (!u8a(a))
+            throw new Error('Uint8Array expected');
+        r.set(a, pad);
+        pad += a.length;
+    });
+    return r;
 }
 exports.concatBytes = concatBytes;
 // For runtime check if class implements interface
@@ -33029,21 +34762,20 @@ class Hash {
     }
 }
 exports.Hash = Hash;
-// Check if object doens't have custom constructor (like Uint8Array/Array)
-const isPlainObject = (obj) => Object.prototype.toString.call(obj) === '[object Object]' && obj.constructor === Object;
+const toStr = {}.toString;
 function checkOpts(defaults, opts) {
-    if (opts !== undefined && (typeof opts !== 'object' || !isPlainObject(opts)))
-        throw new TypeError('Options should be object or undefined');
+    if (opts !== undefined && toStr.call(opts) !== '[object Object]')
+        throw new Error('Options should be object or undefined');
     const merged = Object.assign(defaults, opts);
     return merged;
 }
 exports.checkOpts = checkOpts;
-function wrapConstructor(hashConstructor) {
-    const hashC = (message) => hashConstructor().update(toBytes(message)).digest();
-    const tmp = hashConstructor();
+function wrapConstructor(hashCons) {
+    const hashC = (msg) => hashCons().update(toBytes(msg)).digest();
+    const tmp = hashCons();
     hashC.outputLen = tmp.outputLen;
     hashC.blockLen = tmp.blockLen;
-    hashC.create = () => hashConstructor();
+    hashC.create = () => hashCons();
     return hashC;
 }
 exports.wrapConstructor = wrapConstructor;
@@ -33056,8 +34788,17 @@ function wrapConstructorWithOpts(hashCons) {
     return hashC;
 }
 exports.wrapConstructorWithOpts = wrapConstructorWithOpts;
+function wrapXOFConstructorWithOpts(hashCons) {
+    const hashC = (msg, opts) => hashCons(opts).update(toBytes(msg)).digest();
+    const tmp = hashCons({});
+    hashC.outputLen = tmp.outputLen;
+    hashC.blockLen = tmp.blockLen;
+    hashC.create = (opts) => hashCons(opts);
+    return hashC;
+}
+exports.wrapXOFConstructorWithOpts = wrapXOFConstructorWithOpts;
 /**
- * Secure PRNG. Uses `globalThis.crypto` or node.js crypto module.
+ * Secure PRNG. Uses `crypto.getRandomValues`, which defers to OS.
  */
 function randomBytes(bytesLength = 32) {
     if (crypto_1.crypto && typeof crypto_1.crypto.getRandomValues === 'function') {
@@ -37865,19 +39606,19 @@ const RDF  = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "BlankNode": () => (/* binding */ BlankNode),
-/* harmony export */   "DefaultGraph": () => (/* binding */ DefaultGraph),
-/* harmony export */   "Literal": () => (/* binding */ Literal),
-/* harmony export */   "NamedNode": () => (/* binding */ NamedNode),
-/* harmony export */   "Quad": () => (/* binding */ Quad),
-/* harmony export */   "Term": () => (/* binding */ Term),
-/* harmony export */   "Triple": () => (/* binding */ Quad),
-/* harmony export */   "Variable": () => (/* binding */ Variable),
+/* harmony export */   BlankNode: () => (/* binding */ BlankNode),
+/* harmony export */   DefaultGraph: () => (/* binding */ DefaultGraph),
+/* harmony export */   Literal: () => (/* binding */ Literal),
+/* harmony export */   NamedNode: () => (/* binding */ NamedNode),
+/* harmony export */   Quad: () => (/* binding */ Quad),
+/* harmony export */   Term: () => (/* binding */ Term),
+/* harmony export */   Triple: () => (/* binding */ Quad),
+/* harmony export */   Variable: () => (/* binding */ Variable),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
-/* harmony export */   "escapeQuotes": () => (/* binding */ escapeQuotes),
-/* harmony export */   "termFromId": () => (/* binding */ termFromId),
-/* harmony export */   "termToId": () => (/* binding */ termToId),
-/* harmony export */   "unescapeQuotes": () => (/* binding */ unescapeQuotes)
+/* harmony export */   escapeQuotes: () => (/* binding */ escapeQuotes),
+/* harmony export */   termFromId: () => (/* binding */ termFromId),
+/* harmony export */   termToId: () => (/* binding */ termToId),
+/* harmony export */   unescapeQuotes: () => (/* binding */ unescapeQuotes)
 /* harmony export */ });
 /* harmony import */ var _IRIs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./IRIs */ "./node_modules/n3/src/IRIs.js");
 /* harmony import */ var _N3Util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./N3Util */ "./node_modules/n3/src/N3Util.js");
@@ -39877,14 +41618,14 @@ initDataFactory(N3Parser.prototype, _N3DataFactory__WEBPACK_IMPORTED_MODULE_2__[
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "inDefaultGraph": () => (/* binding */ inDefaultGraph),
-/* harmony export */   "isBlankNode": () => (/* binding */ isBlankNode),
-/* harmony export */   "isDefaultGraph": () => (/* binding */ isDefaultGraph),
-/* harmony export */   "isLiteral": () => (/* binding */ isLiteral),
-/* harmony export */   "isNamedNode": () => (/* binding */ isNamedNode),
-/* harmony export */   "isVariable": () => (/* binding */ isVariable),
-/* harmony export */   "prefix": () => (/* binding */ prefix),
-/* harmony export */   "prefixes": () => (/* binding */ prefixes)
+/* harmony export */   inDefaultGraph: () => (/* binding */ inDefaultGraph),
+/* harmony export */   isBlankNode: () => (/* binding */ isBlankNode),
+/* harmony export */   isDefaultGraph: () => (/* binding */ isDefaultGraph),
+/* harmony export */   isLiteral: () => (/* binding */ isLiteral),
+/* harmony export */   isNamedNode: () => (/* binding */ isNamedNode),
+/* harmony export */   isVariable: () => (/* binding */ isVariable),
+/* harmony export */   prefix: () => (/* binding */ prefix),
+/* harmony export */   prefixes: () => (/* binding */ prefixes)
 /* harmony export */ });
 /* harmony import */ var _N3DataFactory__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./N3DataFactory */ "./node_modules/n3/src/N3DataFactory.js");
 // **N3Util** provides N3 utility functions.
@@ -40333,7 +42074,7 @@ var ClassOrder = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Collection),
-/* harmony export */   "fromValue": () => (/* binding */ fromValue)
+/* harmony export */   fromValue: () => (/* binding */ fromValue)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
@@ -40513,7 +42254,7 @@ var Collection = /*#__PURE__*/function (_Node) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ DefaultGraph),
-/* harmony export */   "isDefaultGraph": () => (/* binding */ isDefaultGraph)
+/* harmony export */   isDefaultGraph: () => (/* binding */ isDefaultGraph)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
@@ -40637,7 +42378,7 @@ var Empty = /*#__PURE__*/function (_Node) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
-/* harmony export */   "defaultGraphURI": () => (/* reexport safe */ _utils_default_graph_uri__WEBPACK_IMPORTED_MODULE_1__.defaultGraphURI)
+/* harmony export */   defaultGraphURI: () => (/* reexport safe */ _utils_default_graph_uri__WEBPACK_IMPORTED_MODULE_1__.defaultGraphURI)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
 /* harmony import */ var _blank_node__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../blank-node */ "./node_modules/rdflib/esm/blank-node.js");
@@ -40896,7 +42637,7 @@ var ExtendedTermFactory = _objectSpread(_objectSpread({}, _canonical_data_factor
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Feature": () => (/* binding */ Feature)
+/* harmony export */   Feature: () => (/* binding */ Feature)
 /* harmony export */ });
 /** A set of features that may be supported by a Data Factory */
 
@@ -43916,71 +45657,71 @@ var Formula = /*#__PURE__*/function (_Node) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "BlankNode": () => (/* reexport safe */ _blank_node__WEBPACK_IMPORTED_MODULE_10__["default"]),
-/* harmony export */   "Collection": () => (/* reexport safe */ _collection__WEBPACK_IMPORTED_MODULE_12__["default"]),
-/* harmony export */   "ConnectedStore": () => (/* binding */ ConnectedStore),
-/* harmony export */   "DataFactory": () => (/* reexport safe */ _factories_rdflib_data_factory__WEBPACK_IMPORTED_MODULE_7__["default"]),
-/* harmony export */   "Empty": () => (/* reexport safe */ _empty__WEBPACK_IMPORTED_MODULE_13__["default"]),
-/* harmony export */   "Fetcher": () => (/* reexport safe */ _fetcher__WEBPACK_IMPORTED_MODULE_14__["default"]),
-/* harmony export */   "Formula": () => (/* reexport safe */ _formula__WEBPACK_IMPORTED_MODULE_8__["default"]),
-/* harmony export */   "IndexedFormula": () => (/* reexport safe */ _store__WEBPACK_IMPORTED_MODULE_15__["default"]),
-/* harmony export */   "Literal": () => (/* reexport safe */ _literal__WEBPACK_IMPORTED_MODULE_17__["default"]),
-/* harmony export */   "LiveStore": () => (/* binding */ LiveStore),
-/* harmony export */   "N3Parser": () => (/* reexport safe */ _n3parser__WEBPACK_IMPORTED_MODULE_19__["default"]),
-/* harmony export */   "NamedNode": () => (/* reexport safe */ _named_node__WEBPACK_IMPORTED_MODULE_20__["default"]),
-/* harmony export */   "Namespace": () => (/* reexport safe */ _namespace__WEBPACK_IMPORTED_MODULE_21__["default"]),
-/* harmony export */   "NextId": () => (/* binding */ NextId),
-/* harmony export */   "Node": () => (/* reexport safe */ _node__WEBPACK_IMPORTED_MODULE_9__["default"]),
-/* harmony export */   "Query": () => (/* reexport safe */ _query__WEBPACK_IMPORTED_MODULE_23__.Query),
-/* harmony export */   "RDFParser": () => (/* reexport safe */ _rdfxmlparser__WEBPACK_IMPORTED_MODULE_26__["default"]),
-/* harmony export */   "RDFaProcessor": () => (/* reexport safe */ _rdfaparser__WEBPACK_IMPORTED_MODULE_25__["default"]),
-/* harmony export */   "SPARQLToQuery": () => (/* reexport safe */ _sparql_to_query__WEBPACK_IMPORTED_MODULE_29__["default"]),
-/* harmony export */   "Serializer": () => (/* reexport safe */ _serializer__WEBPACK_IMPORTED_MODULE_28__["default"]),
-/* harmony export */   "Statement": () => (/* reexport safe */ _statement__WEBPACK_IMPORTED_MODULE_31__["default"]),
-/* harmony export */   "Store": () => (/* reexport safe */ _store__WEBPACK_IMPORTED_MODULE_15__["default"]),
-/* harmony export */   "UpdateManager": () => (/* reexport safe */ _update_manager__WEBPACK_IMPORTED_MODULE_32__["default"]),
-/* harmony export */   "UpdatesSocket": () => (/* reexport safe */ _updates_via__WEBPACK_IMPORTED_MODULE_33__.UpdatesSocket),
-/* harmony export */   "UpdatesVia": () => (/* reexport safe */ _updates_via__WEBPACK_IMPORTED_MODULE_33__.UpdatesVia),
-/* harmony export */   "Util": () => (/* reexport module object */ _utils_js__WEBPACK_IMPORTED_MODULE_35__),
-/* harmony export */   "Variable": () => (/* reexport safe */ _variable__WEBPACK_IMPORTED_MODULE_36__["default"]),
-/* harmony export */   "blankNode": () => (/* binding */ blankNode),
-/* harmony export */   "defaultGraph": () => (/* binding */ defaultGraph),
-/* harmony export */   "fetcher": () => (/* binding */ fetcher),
-/* harmony export */   "fromNT": () => (/* binding */ fromNT),
-/* harmony export */   "graph": () => (/* binding */ graph),
-/* harmony export */   "isBlankNode": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isBlankNode),
-/* harmony export */   "isCollection": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isCollection),
-/* harmony export */   "isGraph": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isGraph),
-/* harmony export */   "isLiteral": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isLiteral),
-/* harmony export */   "isNamedNode": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isNamedNode),
-/* harmony export */   "isPredicate": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isPredicate),
-/* harmony export */   "isQuad": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isQuad),
-/* harmony export */   "isRDFObject": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isRDFObject),
-/* harmony export */   "isRDFlibObject": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isRDFlibObject),
-/* harmony export */   "isRDFlibPredicate": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isRDFlibPredicate),
-/* harmony export */   "isRDFlibSubject": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isRDFlibSubject),
-/* harmony export */   "isStatement": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isStatement),
-/* harmony export */   "isStore": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isStore),
-/* harmony export */   "isSubject": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isSubject),
-/* harmony export */   "isTerm": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isTerm),
-/* harmony export */   "isVariable": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isVariable),
-/* harmony export */   "jsonParser": () => (/* reexport safe */ _jsonparser__WEBPACK_IMPORTED_MODULE_16__["default"]),
-/* harmony export */   "lit": () => (/* binding */ lit),
-/* harmony export */   "literal": () => (/* binding */ literal),
-/* harmony export */   "log": () => (/* reexport safe */ _log__WEBPACK_IMPORTED_MODULE_18__["default"]),
-/* harmony export */   "namedNode": () => (/* binding */ namedNode),
-/* harmony export */   "parse": () => (/* reexport safe */ _parse__WEBPACK_IMPORTED_MODULE_22__["default"]),
-/* harmony export */   "quad": () => (/* binding */ quad),
-/* harmony export */   "queryToSPARQL": () => (/* reexport safe */ _query_to_sparql__WEBPACK_IMPORTED_MODULE_24__["default"]),
-/* harmony export */   "serialize": () => (/* reexport safe */ _serialize__WEBPACK_IMPORTED_MODULE_27__["default"]),
-/* harmony export */   "sparqlUpdateParser": () => (/* reexport safe */ _patch_parser__WEBPACK_IMPORTED_MODULE_30__["default"]),
-/* harmony export */   "st": () => (/* binding */ st),
-/* harmony export */   "sym": () => (/* binding */ namedNode),
-/* harmony export */   "term": () => (/* binding */ term),
-/* harmony export */   "termValue": () => (/* reexport safe */ _utils_termValue__WEBPACK_IMPORTED_MODULE_37__.termValue),
-/* harmony export */   "triple": () => (/* binding */ triple),
-/* harmony export */   "uri": () => (/* reexport module object */ _uri__WEBPACK_IMPORTED_MODULE_34__),
-/* harmony export */   "variable": () => (/* binding */ variable)
+/* harmony export */   BlankNode: () => (/* reexport safe */ _blank_node__WEBPACK_IMPORTED_MODULE_10__["default"]),
+/* harmony export */   Collection: () => (/* reexport safe */ _collection__WEBPACK_IMPORTED_MODULE_12__["default"]),
+/* harmony export */   ConnectedStore: () => (/* binding */ ConnectedStore),
+/* harmony export */   DataFactory: () => (/* reexport safe */ _factories_rdflib_data_factory__WEBPACK_IMPORTED_MODULE_7__["default"]),
+/* harmony export */   Empty: () => (/* reexport safe */ _empty__WEBPACK_IMPORTED_MODULE_13__["default"]),
+/* harmony export */   Fetcher: () => (/* reexport safe */ _fetcher__WEBPACK_IMPORTED_MODULE_14__["default"]),
+/* harmony export */   Formula: () => (/* reexport safe */ _formula__WEBPACK_IMPORTED_MODULE_8__["default"]),
+/* harmony export */   IndexedFormula: () => (/* reexport safe */ _store__WEBPACK_IMPORTED_MODULE_15__["default"]),
+/* harmony export */   Literal: () => (/* reexport safe */ _literal__WEBPACK_IMPORTED_MODULE_17__["default"]),
+/* harmony export */   LiveStore: () => (/* binding */ LiveStore),
+/* harmony export */   N3Parser: () => (/* reexport safe */ _n3parser__WEBPACK_IMPORTED_MODULE_19__["default"]),
+/* harmony export */   NamedNode: () => (/* reexport safe */ _named_node__WEBPACK_IMPORTED_MODULE_20__["default"]),
+/* harmony export */   Namespace: () => (/* reexport safe */ _namespace__WEBPACK_IMPORTED_MODULE_21__["default"]),
+/* harmony export */   NextId: () => (/* binding */ NextId),
+/* harmony export */   Node: () => (/* reexport safe */ _node__WEBPACK_IMPORTED_MODULE_9__["default"]),
+/* harmony export */   Query: () => (/* reexport safe */ _query__WEBPACK_IMPORTED_MODULE_23__.Query),
+/* harmony export */   RDFParser: () => (/* reexport safe */ _rdfxmlparser__WEBPACK_IMPORTED_MODULE_26__["default"]),
+/* harmony export */   RDFaProcessor: () => (/* reexport safe */ _rdfaparser__WEBPACK_IMPORTED_MODULE_25__["default"]),
+/* harmony export */   SPARQLToQuery: () => (/* reexport safe */ _sparql_to_query__WEBPACK_IMPORTED_MODULE_29__["default"]),
+/* harmony export */   Serializer: () => (/* reexport safe */ _serializer__WEBPACK_IMPORTED_MODULE_28__["default"]),
+/* harmony export */   Statement: () => (/* reexport safe */ _statement__WEBPACK_IMPORTED_MODULE_31__["default"]),
+/* harmony export */   Store: () => (/* reexport safe */ _store__WEBPACK_IMPORTED_MODULE_15__["default"]),
+/* harmony export */   UpdateManager: () => (/* reexport safe */ _update_manager__WEBPACK_IMPORTED_MODULE_32__["default"]),
+/* harmony export */   UpdatesSocket: () => (/* reexport safe */ _updates_via__WEBPACK_IMPORTED_MODULE_33__.UpdatesSocket),
+/* harmony export */   UpdatesVia: () => (/* reexport safe */ _updates_via__WEBPACK_IMPORTED_MODULE_33__.UpdatesVia),
+/* harmony export */   Util: () => (/* reexport module object */ _utils_js__WEBPACK_IMPORTED_MODULE_35__),
+/* harmony export */   Variable: () => (/* reexport safe */ _variable__WEBPACK_IMPORTED_MODULE_36__["default"]),
+/* harmony export */   blankNode: () => (/* binding */ blankNode),
+/* harmony export */   defaultGraph: () => (/* binding */ defaultGraph),
+/* harmony export */   fetcher: () => (/* binding */ fetcher),
+/* harmony export */   fromNT: () => (/* binding */ fromNT),
+/* harmony export */   graph: () => (/* binding */ graph),
+/* harmony export */   isBlankNode: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isBlankNode),
+/* harmony export */   isCollection: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isCollection),
+/* harmony export */   isGraph: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isGraph),
+/* harmony export */   isLiteral: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isLiteral),
+/* harmony export */   isNamedNode: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isNamedNode),
+/* harmony export */   isPredicate: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isPredicate),
+/* harmony export */   isQuad: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isQuad),
+/* harmony export */   isRDFObject: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isRDFObject),
+/* harmony export */   isRDFlibObject: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isRDFlibObject),
+/* harmony export */   isRDFlibPredicate: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isRDFlibPredicate),
+/* harmony export */   isRDFlibSubject: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isRDFlibSubject),
+/* harmony export */   isStatement: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isStatement),
+/* harmony export */   isStore: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isStore),
+/* harmony export */   isSubject: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isSubject),
+/* harmony export */   isTerm: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isTerm),
+/* harmony export */   isVariable: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isVariable),
+/* harmony export */   jsonParser: () => (/* reexport safe */ _jsonparser__WEBPACK_IMPORTED_MODULE_16__["default"]),
+/* harmony export */   lit: () => (/* binding */ lit),
+/* harmony export */   literal: () => (/* binding */ literal),
+/* harmony export */   log: () => (/* reexport safe */ _log__WEBPACK_IMPORTED_MODULE_18__["default"]),
+/* harmony export */   namedNode: () => (/* binding */ namedNode),
+/* harmony export */   parse: () => (/* reexport safe */ _parse__WEBPACK_IMPORTED_MODULE_22__["default"]),
+/* harmony export */   quad: () => (/* binding */ quad),
+/* harmony export */   queryToSPARQL: () => (/* reexport safe */ _query_to_sparql__WEBPACK_IMPORTED_MODULE_24__["default"]),
+/* harmony export */   serialize: () => (/* reexport safe */ _serialize__WEBPACK_IMPORTED_MODULE_27__["default"]),
+/* harmony export */   sparqlUpdateParser: () => (/* reexport safe */ _patch_parser__WEBPACK_IMPORTED_MODULE_30__["default"]),
+/* harmony export */   st: () => (/* binding */ st),
+/* harmony export */   sym: () => (/* binding */ namedNode),
+/* harmony export */   term: () => (/* binding */ term),
+/* harmony export */   termValue: () => (/* reexport safe */ _utils_termValue__WEBPACK_IMPORTED_MODULE_37__.termValue),
+/* harmony export */   triple: () => (/* binding */ triple),
+/* harmony export */   uri: () => (/* reexport module object */ _uri__WEBPACK_IMPORTED_MODULE_34__),
+/* harmony export */   variable: () => (/* binding */ variable)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
@@ -44127,7 +45868,7 @@ var LiveStore = /*#__PURE__*/function (_ConnectedStore) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ jsonldParser),
-/* harmony export */   "jsonldObjectToTerm": () => (/* binding */ jsonldObjectToTerm)
+/* harmony export */   jsonldObjectToTerm: () => (/* binding */ jsonldObjectToTerm)
 /* harmony export */ });
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils */ "./node_modules/rdflib/esm/utils.js");
 
@@ -44339,9 +46080,9 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "convertFirstRestNil": () => (/* binding */ convertFirstRestNil),
-/* harmony export */   "substituteInDoc": () => (/* binding */ substituteInDoc),
-/* harmony export */   "substituteNillsInDoc": () => (/* binding */ substituteNillsInDoc)
+/* harmony export */   convertFirstRestNil: () => (/* binding */ convertFirstRestNil),
+/* harmony export */   substituteInDoc: () => (/* binding */ substituteInDoc),
+/* harmony export */   substituteNillsInDoc: () => (/* binding */ substituteNillsInDoc)
 /* harmony export */ });
 /* harmony import */ var _collection__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./collection */ "./node_modules/rdflib/esm/collection.js");
 /* harmony import */ var _statement__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./statement */ "./node_modules/rdflib/esm/statement.js");
@@ -44769,7 +46510,7 @@ var log = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "SinkParser": () => (/* binding */ SinkParser),
+/* harmony export */   SinkParser: () => (/* binding */ SinkParser),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
@@ -47071,8 +48812,8 @@ function queryToSPARQL(query) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Query": () => (/* binding */ Query),
-/* harmony export */   "indexedFormulaQuery": () => (/* binding */ indexedFormulaQuery)
+/* harmony export */   Query: () => (/* binding */ Query),
+/* harmony export */   indexedFormulaQuery: () => (/* binding */ indexedFormulaQuery)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
@@ -47631,7 +49372,7 @@ function indexedFormulaQuery(myQuery, callback, fetcher, onDone) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ RDFaProcessor),
-/* harmony export */   "parseRDFaDOM": () => (/* binding */ parseRDFaDOM)
+/* harmony export */   parseRDFaDOM: () => (/* binding */ parseRDFaDOM)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
@@ -49319,7 +51060,7 @@ contentType, callback, options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Serializer": () => (/* binding */ Serializer),
+/* harmony export */   Serializer: () => (/* binding */ Serializer),
 /* harmony export */   "default": () => (/* binding */ createSerializer)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
@@ -51027,7 +52768,7 @@ var Statement = /*#__PURE__*/function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ IndexedFormula),
-/* harmony export */   "defaultGraphURI": () => (/* reexport safe */ _factories_canonical_data_factory__WEBPACK_IMPORTED_MODULE_7__.defaultGraphURI)
+/* harmony export */   defaultGraphURI: () => (/* reexport safe */ _factories_canonical_data_factory__WEBPACK_IMPORTED_MODULE_7__.defaultGraphURI)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
@@ -52228,27 +53969,27 @@ IndexedFormula.handleRDFType = handleRDFType;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "BlankNodeTermType": () => (/* binding */ BlankNodeTermType),
-/* harmony export */   "CollectionTermType": () => (/* binding */ CollectionTermType),
-/* harmony export */   "DefaultGraphTermType": () => (/* binding */ DefaultGraphTermType),
-/* harmony export */   "EmptyTermType": () => (/* binding */ EmptyTermType),
-/* harmony export */   "GraphTermType": () => (/* binding */ GraphTermType),
-/* harmony export */   "HTMLContentType": () => (/* binding */ HTMLContentType),
-/* harmony export */   "JSONLDContentType": () => (/* binding */ JSONLDContentType),
-/* harmony export */   "LiteralTermType": () => (/* binding */ LiteralTermType),
-/* harmony export */   "N3ContentType": () => (/* binding */ N3ContentType),
-/* harmony export */   "N3LegacyContentType": () => (/* binding */ N3LegacyContentType),
-/* harmony export */   "NQuadsAltContentType": () => (/* binding */ NQuadsAltContentType),
-/* harmony export */   "NQuadsContentType": () => (/* binding */ NQuadsContentType),
-/* harmony export */   "NTriplesContentType": () => (/* binding */ NTriplesContentType),
-/* harmony export */   "NamedNodeTermType": () => (/* binding */ NamedNodeTermType),
-/* harmony export */   "RDFXMLContentType": () => (/* binding */ RDFXMLContentType),
-/* harmony export */   "SPARQLUpdateContentType": () => (/* binding */ SPARQLUpdateContentType),
-/* harmony export */   "SPARQLUpdateSingleMatchContentType": () => (/* binding */ SPARQLUpdateSingleMatchContentType),
-/* harmony export */   "TurtleContentType": () => (/* binding */ TurtleContentType),
-/* harmony export */   "TurtleLegacyContentType": () => (/* binding */ TurtleLegacyContentType),
-/* harmony export */   "VariableTermType": () => (/* binding */ VariableTermType),
-/* harmony export */   "XHTMLContentType": () => (/* binding */ XHTMLContentType)
+/* harmony export */   BlankNodeTermType: () => (/* binding */ BlankNodeTermType),
+/* harmony export */   CollectionTermType: () => (/* binding */ CollectionTermType),
+/* harmony export */   DefaultGraphTermType: () => (/* binding */ DefaultGraphTermType),
+/* harmony export */   EmptyTermType: () => (/* binding */ EmptyTermType),
+/* harmony export */   GraphTermType: () => (/* binding */ GraphTermType),
+/* harmony export */   HTMLContentType: () => (/* binding */ HTMLContentType),
+/* harmony export */   JSONLDContentType: () => (/* binding */ JSONLDContentType),
+/* harmony export */   LiteralTermType: () => (/* binding */ LiteralTermType),
+/* harmony export */   N3ContentType: () => (/* binding */ N3ContentType),
+/* harmony export */   N3LegacyContentType: () => (/* binding */ N3LegacyContentType),
+/* harmony export */   NQuadsAltContentType: () => (/* binding */ NQuadsAltContentType),
+/* harmony export */   NQuadsContentType: () => (/* binding */ NQuadsContentType),
+/* harmony export */   NTriplesContentType: () => (/* binding */ NTriplesContentType),
+/* harmony export */   NamedNodeTermType: () => (/* binding */ NamedNodeTermType),
+/* harmony export */   RDFXMLContentType: () => (/* binding */ RDFXMLContentType),
+/* harmony export */   SPARQLUpdateContentType: () => (/* binding */ SPARQLUpdateContentType),
+/* harmony export */   SPARQLUpdateSingleMatchContentType: () => (/* binding */ SPARQLUpdateSingleMatchContentType),
+/* harmony export */   TurtleContentType: () => (/* binding */ TurtleContentType),
+/* harmony export */   TurtleLegacyContentType: () => (/* binding */ TurtleLegacyContentType),
+/* harmony export */   VariableTermType: () => (/* binding */ VariableTermType),
+/* harmony export */   XHTMLContentType: () => (/* binding */ XHTMLContentType)
 /* harmony export */ });
 var NamedNodeTermType = "NamedNode";
 var BlankNodeTermType = "BlankNode";
@@ -53552,8 +55293,8 @@ var UpdateManager = /*#__PURE__*/function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "UpdatesSocket": () => (/* binding */ UpdatesSocket),
-/* harmony export */   "UpdatesVia": () => (/* binding */ UpdatesVia)
+/* harmony export */   UpdatesSocket: () => (/* binding */ UpdatesSocket),
+/* harmony export */   UpdatesVia: () => (/* binding */ UpdatesVia)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
@@ -53740,12 +55481,12 @@ var UpdatesVia = /*#__PURE__*/function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "docpart": () => (/* binding */ docpart),
-/* harmony export */   "document": () => (/* binding */ document),
-/* harmony export */   "hostpart": () => (/* binding */ hostpart),
-/* harmony export */   "join": () => (/* binding */ join),
-/* harmony export */   "protocol": () => (/* binding */ protocol),
-/* harmony export */   "refTo": () => (/* binding */ refTo)
+/* harmony export */   docpart: () => (/* binding */ docpart),
+/* harmony export */   document: () => (/* binding */ document),
+/* harmony export */   hostpart: () => (/* binding */ hostpart),
+/* harmony export */   join: () => (/* binding */ join),
+/* harmony export */   protocol: () => (/* binding */ protocol),
+/* harmony export */   refTo: () => (/* binding */ refTo)
 /* harmony export */ });
 /* harmony import */ var _named_node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./named-node */ "./node_modules/rdflib/esm/named-node.js");
 /*
@@ -53961,23 +55702,23 @@ function refTo(base, uri) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "DOMParserFactory": () => (/* binding */ DOMParserFactory),
-/* harmony export */   "RDFArrayRemove": () => (/* binding */ RDFArrayRemove),
-/* harmony export */   "callbackify": () => (/* binding */ callbackify),
-/* harmony export */   "domToString": () => (/* binding */ domToString),
-/* harmony export */   "dtstamp": () => (/* binding */ dtstamp),
-/* harmony export */   "dumpNode": () => (/* binding */ dumpNode),
-/* harmony export */   "heavyCompare": () => (/* binding */ heavyCompare),
-/* harmony export */   "heavyCompareSPO": () => (/* binding */ heavyCompareSPO),
-/* harmony export */   "linkRelationProperty": () => (/* binding */ linkRelationProperty),
-/* harmony export */   "log": () => (/* reexport safe */ _log__WEBPACK_IMPORTED_MODULE_0__["default"]),
-/* harmony export */   "mediaTypeClass": () => (/* binding */ mediaTypeClass),
-/* harmony export */   "output": () => (/* binding */ output),
-/* harmony export */   "parseXML": () => (/* binding */ parseXML),
-/* harmony export */   "stackString": () => (/* binding */ stackString),
-/* harmony export */   "string": () => (/* binding */ string),
-/* harmony export */   "string_startswith": () => (/* binding */ string_startswith),
-/* harmony export */   "uri": () => (/* reexport module object */ _uri__WEBPACK_IMPORTED_MODULE_1__)
+/* harmony export */   DOMParserFactory: () => (/* binding */ DOMParserFactory),
+/* harmony export */   RDFArrayRemove: () => (/* binding */ RDFArrayRemove),
+/* harmony export */   callbackify: () => (/* binding */ callbackify),
+/* harmony export */   domToString: () => (/* binding */ domToString),
+/* harmony export */   dtstamp: () => (/* binding */ dtstamp),
+/* harmony export */   dumpNode: () => (/* binding */ dumpNode),
+/* harmony export */   heavyCompare: () => (/* binding */ heavyCompare),
+/* harmony export */   heavyCompareSPO: () => (/* binding */ heavyCompareSPO),
+/* harmony export */   linkRelationProperty: () => (/* binding */ linkRelationProperty),
+/* harmony export */   log: () => (/* reexport safe */ _log__WEBPACK_IMPORTED_MODULE_0__["default"]),
+/* harmony export */   mediaTypeClass: () => (/* binding */ mediaTypeClass),
+/* harmony export */   output: () => (/* binding */ output),
+/* harmony export */   parseXML: () => (/* binding */ parseXML),
+/* harmony export */   stackString: () => (/* binding */ stackString),
+/* harmony export */   string: () => (/* binding */ string),
+/* harmony export */   string_startswith: () => (/* binding */ string_startswith),
+/* harmony export */   uri: () => (/* reexport module object */ _uri__WEBPACK_IMPORTED_MODULE_1__)
 /* harmony export */ });
 /* harmony import */ var _log__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./log */ "./node_modules/rdflib/esm/log.js");
 /* harmony import */ var _uri__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./uri */ "./node_modules/rdflib/esm/uri.js");
@@ -54303,10 +56044,10 @@ function stackString(e) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "AJAR_handleNewTerm": () => (/* binding */ AJAR_handleNewTerm),
-/* harmony export */   "ArrayIndexOf": () => (/* binding */ ArrayIndexOf),
-/* harmony export */   "appliedFactoryMethods": () => (/* binding */ appliedFactoryMethods),
-/* harmony export */   "arrayToStatements": () => (/* binding */ arrayToStatements)
+/* harmony export */   AJAR_handleNewTerm: () => (/* binding */ AJAR_handleNewTerm),
+/* harmony export */   ArrayIndexOf: () => (/* binding */ ArrayIndexOf),
+/* harmony export */   appliedFactoryMethods: () => (/* binding */ appliedFactoryMethods),
+/* harmony export */   arrayToStatements: () => (/* binding */ arrayToStatements)
 /* harmony export */ });
 /* harmony import */ var _log__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./log */ "./node_modules/rdflib/esm/log.js");
 /* harmony import */ var _uri__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./uri */ "./node_modules/rdflib/esm/uri.js");
@@ -54414,8 +56155,8 @@ function ArrayIndexOf(arr, item) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "defaultGraphNode": () => (/* binding */ defaultGraphNode),
-/* harmony export */   "defaultGraphURI": () => (/* binding */ defaultGraphURI)
+/* harmony export */   defaultGraphNode: () => (/* binding */ defaultGraphNode),
+/* harmony export */   defaultGraphURI: () => (/* binding */ defaultGraphURI)
 /* harmony export */ });
 /* harmony import */ var _named_node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../named-node */ "./node_modules/rdflib/esm/named-node.js");
 // Prevents circular dependencies between data-factory-internal and statement
@@ -54435,7 +56176,7 @@ var defaultGraphNode = new _named_node__WEBPACK_IMPORTED_MODULE_0__["default"](d
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "termValue": () => (/* binding */ termValue)
+/* harmony export */   termValue: () => (/* binding */ termValue)
 /* harmony export */ });
 /** Retrieve the value of a term, or self if already a string. */
 function termValue(node) {
@@ -54456,22 +56197,22 @@ function termValue(node) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "isBlankNode": () => (/* binding */ isBlankNode),
-/* harmony export */   "isCollection": () => (/* binding */ isCollection),
-/* harmony export */   "isGraph": () => (/* binding */ isGraph),
-/* harmony export */   "isLiteral": () => (/* binding */ isLiteral),
-/* harmony export */   "isNamedNode": () => (/* binding */ isNamedNode),
-/* harmony export */   "isPredicate": () => (/* binding */ isPredicate),
-/* harmony export */   "isQuad": () => (/* binding */ isQuad),
-/* harmony export */   "isRDFObject": () => (/* binding */ isRDFObject),
-/* harmony export */   "isRDFlibObject": () => (/* binding */ isRDFlibObject),
-/* harmony export */   "isRDFlibPredicate": () => (/* binding */ isRDFlibPredicate),
-/* harmony export */   "isRDFlibSubject": () => (/* binding */ isRDFlibSubject),
-/* harmony export */   "isStatement": () => (/* binding */ isStatement),
-/* harmony export */   "isStore": () => (/* binding */ isStore),
-/* harmony export */   "isSubject": () => (/* binding */ isSubject),
-/* harmony export */   "isTerm": () => (/* binding */ isTerm),
-/* harmony export */   "isVariable": () => (/* binding */ isVariable)
+/* harmony export */   isBlankNode: () => (/* binding */ isBlankNode),
+/* harmony export */   isCollection: () => (/* binding */ isCollection),
+/* harmony export */   isGraph: () => (/* binding */ isGraph),
+/* harmony export */   isLiteral: () => (/* binding */ isLiteral),
+/* harmony export */   isNamedNode: () => (/* binding */ isNamedNode),
+/* harmony export */   isPredicate: () => (/* binding */ isPredicate),
+/* harmony export */   isQuad: () => (/* binding */ isQuad),
+/* harmony export */   isRDFObject: () => (/* binding */ isRDFObject),
+/* harmony export */   isRDFlibObject: () => (/* binding */ isRDFlibObject),
+/* harmony export */   isRDFlibPredicate: () => (/* binding */ isRDFlibPredicate),
+/* harmony export */   isRDFlibSubject: () => (/* binding */ isRDFlibSubject),
+/* harmony export */   isStatement: () => (/* binding */ isStatement),
+/* harmony export */   isStore: () => (/* binding */ isStore),
+/* harmony export */   isSubject: () => (/* binding */ isSubject),
+/* harmony export */   isTerm: () => (/* binding */ isTerm),
+/* harmony export */   isVariable: () => (/* binding */ isVariable)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/esm/typeof.js");
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../types */ "./node_modules/rdflib/esm/types.js");
@@ -54698,7 +56439,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "createXSD": () => (/* binding */ createXSD),
+/* harmony export */   createXSD: () => (/* binding */ createXSD),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _factories_canonical_data_factory__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./factories/canonical-data-factory */ "./node_modules/rdflib/esm/factories/canonical-data-factory.js");
@@ -58635,15 +60376,15 @@ module.exports = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "NIL": () => (/* reexport safe */ _nil_js__WEBPACK_IMPORTED_MODULE_4__["default"]),
-/* harmony export */   "parse": () => (/* reexport safe */ _parse_js__WEBPACK_IMPORTED_MODULE_8__["default"]),
-/* harmony export */   "stringify": () => (/* reexport safe */ _stringify_js__WEBPACK_IMPORTED_MODULE_7__["default"]),
-/* harmony export */   "v1": () => (/* reexport safe */ _v1_js__WEBPACK_IMPORTED_MODULE_0__["default"]),
-/* harmony export */   "v3": () => (/* reexport safe */ _v3_js__WEBPACK_IMPORTED_MODULE_1__["default"]),
-/* harmony export */   "v4": () => (/* reexport safe */ _v4_js__WEBPACK_IMPORTED_MODULE_2__["default"]),
-/* harmony export */   "v5": () => (/* reexport safe */ _v5_js__WEBPACK_IMPORTED_MODULE_3__["default"]),
-/* harmony export */   "validate": () => (/* reexport safe */ _validate_js__WEBPACK_IMPORTED_MODULE_6__["default"]),
-/* harmony export */   "version": () => (/* reexport safe */ _version_js__WEBPACK_IMPORTED_MODULE_5__["default"])
+/* harmony export */   NIL: () => (/* reexport safe */ _nil_js__WEBPACK_IMPORTED_MODULE_4__["default"]),
+/* harmony export */   parse: () => (/* reexport safe */ _parse_js__WEBPACK_IMPORTED_MODULE_8__["default"]),
+/* harmony export */   stringify: () => (/* reexport safe */ _stringify_js__WEBPACK_IMPORTED_MODULE_7__["default"]),
+/* harmony export */   v1: () => (/* reexport safe */ _v1_js__WEBPACK_IMPORTED_MODULE_0__["default"]),
+/* harmony export */   v3: () => (/* reexport safe */ _v3_js__WEBPACK_IMPORTED_MODULE_1__["default"]),
+/* harmony export */   v4: () => (/* reexport safe */ _v4_js__WEBPACK_IMPORTED_MODULE_2__["default"]),
+/* harmony export */   v5: () => (/* reexport safe */ _v5_js__WEBPACK_IMPORTED_MODULE_3__["default"]),
+/* harmony export */   validate: () => (/* reexport safe */ _validate_js__WEBPACK_IMPORTED_MODULE_6__["default"]),
+/* harmony export */   version: () => (/* reexport safe */ _version_js__WEBPACK_IMPORTED_MODULE_5__["default"])
 /* harmony export */ });
 /* harmony import */ var _v1_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./v1.js */ "./node_modules/uuid/dist/esm-browser/v1.js");
 /* harmony import */ var _v3_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./v3.js */ "./node_modules/uuid/dist/esm-browser/v3.js");
@@ -59303,8 +61044,8 @@ var v3 = (0,_v35_js__WEBPACK_IMPORTED_MODULE_0__["default"])('v3', 0x30, _md5_js
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "DNS": () => (/* binding */ DNS),
-/* harmony export */   "URL": () => (/* binding */ URL),
+/* harmony export */   DNS: () => (/* binding */ DNS),
+/* harmony export */   URL: () => (/* binding */ URL),
 /* harmony export */   "default": () => (/* export default binding */ __WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _stringify_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./stringify.js */ "./node_modules/uuid/dist/esm-browser/stringify.js");
@@ -59752,7 +61493,11 @@ module.exports = _interopRequireDefault, module.exports.__esModule = true, modul
 /***/ ((module) => {
 
 function _isNativeFunction(fn) {
-  return Function.toString.call(fn).indexOf("[native code]") !== -1;
+  try {
+    return Function.toString.call(fn).indexOf("[native code]") !== -1;
+  } catch (e) {
+    return typeof fn === "function";
+  }
 }
 module.exports = _isNativeFunction, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
@@ -59798,31 +61543,31 @@ module.exports = _iterableToArray, module.exports.__esModule = true, module.expo
   \*********************************************************************/
 /***/ ((module) => {
 
-function _iterableToArrayLimit(arr, i) {
-  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
-  if (null != _i) {
-    var _s,
-      _e,
-      _x,
-      _r,
-      _arr = [],
-      _n = !0,
-      _d = !1;
+function _iterableToArrayLimit(r, l) {
+  var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+  if (null != t) {
+    var e,
+      n,
+      i,
+      u,
+      a = [],
+      f = !0,
+      o = !1;
     try {
-      if (_x = (_i = _i.call(arr)).next, 0 === i) {
-        if (Object(_i) !== _i) return;
-        _n = !1;
-      } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0);
-    } catch (err) {
-      _d = !0, _e = err;
+      if (i = (t = t.call(r)).next, 0 === l) {
+        if (Object(t) !== t) return;
+        f = !1;
+      } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0);
+    } catch (r) {
+      o = !0, n = r;
     } finally {
       try {
-        if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return;
+        if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return;
       } finally {
-        if (_d) throw _e;
+        if (o) throw n;
       }
     }
-    return _arr;
+    return a;
   }
 }
 module.exports = _iterableToArrayLimit, module.exports.__esModule = true, module.exports["default"] = module.exports;
@@ -59885,304 +61630,304 @@ var _typeof = (__webpack_require__(/*! ./typeof.js */ "./node_modules/@babel/run
 function _regeneratorRuntime() {
   "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
   module.exports = _regeneratorRuntime = function _regeneratorRuntime() {
-    return exports;
+    return e;
   }, module.exports.__esModule = true, module.exports["default"] = module.exports;
-  var exports = {},
-    Op = Object.prototype,
-    hasOwn = Op.hasOwnProperty,
-    defineProperty = Object.defineProperty || function (obj, key, desc) {
-      obj[key] = desc.value;
+  var t,
+    e = {},
+    r = Object.prototype,
+    n = r.hasOwnProperty,
+    o = Object.defineProperty || function (t, e, r) {
+      t[e] = r.value;
     },
-    $Symbol = "function" == typeof Symbol ? Symbol : {},
-    iteratorSymbol = $Symbol.iterator || "@@iterator",
-    asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator",
-    toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
-  function define(obj, key, value) {
-    return Object.defineProperty(obj, key, {
-      value: value,
+    i = "function" == typeof Symbol ? Symbol : {},
+    a = i.iterator || "@@iterator",
+    c = i.asyncIterator || "@@asyncIterator",
+    u = i.toStringTag || "@@toStringTag";
+  function define(t, e, r) {
+    return Object.defineProperty(t, e, {
+      value: r,
       enumerable: !0,
       configurable: !0,
       writable: !0
-    }), obj[key];
+    }), t[e];
   }
   try {
     define({}, "");
-  } catch (err) {
-    define = function define(obj, key, value) {
-      return obj[key] = value;
+  } catch (t) {
+    define = function define(t, e, r) {
+      return t[e] = r;
     };
   }
-  function wrap(innerFn, outerFn, self, tryLocsList) {
-    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator,
-      generator = Object.create(protoGenerator.prototype),
-      context = new Context(tryLocsList || []);
-    return defineProperty(generator, "_invoke", {
-      value: makeInvokeMethod(innerFn, self, context)
-    }), generator;
+  function wrap(t, e, r, n) {
+    var i = e && e.prototype instanceof Generator ? e : Generator,
+      a = Object.create(i.prototype),
+      c = new Context(n || []);
+    return o(a, "_invoke", {
+      value: makeInvokeMethod(t, r, c)
+    }), a;
   }
-  function tryCatch(fn, obj, arg) {
+  function tryCatch(t, e, r) {
     try {
       return {
         type: "normal",
-        arg: fn.call(obj, arg)
+        arg: t.call(e, r)
       };
-    } catch (err) {
+    } catch (t) {
       return {
         type: "throw",
-        arg: err
+        arg: t
       };
     }
   }
-  exports.wrap = wrap;
-  var ContinueSentinel = {};
+  e.wrap = wrap;
+  var h = "suspendedStart",
+    l = "suspendedYield",
+    f = "executing",
+    s = "completed",
+    y = {};
   function Generator() {}
   function GeneratorFunction() {}
   function GeneratorFunctionPrototype() {}
-  var IteratorPrototype = {};
-  define(IteratorPrototype, iteratorSymbol, function () {
+  var p = {};
+  define(p, a, function () {
     return this;
   });
-  var getProto = Object.getPrototypeOf,
-    NativeIteratorPrototype = getProto && getProto(getProto(values([])));
-  NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype);
-  var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype);
-  function defineIteratorMethods(prototype) {
-    ["next", "throw", "return"].forEach(function (method) {
-      define(prototype, method, function (arg) {
-        return this._invoke(method, arg);
+  var d = Object.getPrototypeOf,
+    v = d && d(d(values([])));
+  v && v !== r && n.call(v, a) && (p = v);
+  var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p);
+  function defineIteratorMethods(t) {
+    ["next", "throw", "return"].forEach(function (e) {
+      define(t, e, function (t) {
+        return this._invoke(e, t);
       });
     });
   }
-  function AsyncIterator(generator, PromiseImpl) {
-    function invoke(method, arg, resolve, reject) {
-      var record = tryCatch(generator[method], generator, arg);
-      if ("throw" !== record.type) {
-        var result = record.arg,
-          value = result.value;
-        return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) {
-          invoke("next", value, resolve, reject);
-        }, function (err) {
-          invoke("throw", err, resolve, reject);
-        }) : PromiseImpl.resolve(value).then(function (unwrapped) {
-          result.value = unwrapped, resolve(result);
-        }, function (error) {
-          return invoke("throw", error, resolve, reject);
+  function AsyncIterator(t, e) {
+    function invoke(r, o, i, a) {
+      var c = tryCatch(t[r], t, o);
+      if ("throw" !== c.type) {
+        var u = c.arg,
+          h = u.value;
+        return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) {
+          invoke("next", t, i, a);
+        }, function (t) {
+          invoke("throw", t, i, a);
+        }) : e.resolve(h).then(function (t) {
+          u.value = t, i(u);
+        }, function (t) {
+          return invoke("throw", t, i, a);
         });
       }
-      reject(record.arg);
+      a(c.arg);
     }
-    var previousPromise;
-    defineProperty(this, "_invoke", {
-      value: function value(method, arg) {
+    var r;
+    o(this, "_invoke", {
+      value: function value(t, n) {
         function callInvokeWithMethodAndArg() {
-          return new PromiseImpl(function (resolve, reject) {
-            invoke(method, arg, resolve, reject);
+          return new e(function (e, r) {
+            invoke(t, n, e, r);
           });
         }
-        return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
+        return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
       }
     });
   }
-  function makeInvokeMethod(innerFn, self, context) {
-    var state = "suspendedStart";
-    return function (method, arg) {
-      if ("executing" === state) throw new Error("Generator is already running");
-      if ("completed" === state) {
-        if ("throw" === method) throw arg;
-        return doneResult();
+  function makeInvokeMethod(e, r, n) {
+    var o = h;
+    return function (i, a) {
+      if (o === f) throw new Error("Generator is already running");
+      if (o === s) {
+        if ("throw" === i) throw a;
+        return {
+          value: t,
+          done: !0
+        };
       }
-      for (context.method = method, context.arg = arg;;) {
-        var delegate = context.delegate;
-        if (delegate) {
-          var delegateResult = maybeInvokeDelegate(delegate, context);
-          if (delegateResult) {
-            if (delegateResult === ContinueSentinel) continue;
-            return delegateResult;
+      for (n.method = i, n.arg = a;;) {
+        var c = n.delegate;
+        if (c) {
+          var u = maybeInvokeDelegate(c, n);
+          if (u) {
+            if (u === y) continue;
+            return u;
           }
         }
-        if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) {
-          if ("suspendedStart" === state) throw state = "completed", context.arg;
-          context.dispatchException(context.arg);
-        } else "return" === context.method && context.abrupt("return", context.arg);
-        state = "executing";
-        var record = tryCatch(innerFn, self, context);
-        if ("normal" === record.type) {
-          if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue;
+        if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) {
+          if (o === h) throw o = s, n.arg;
+          n.dispatchException(n.arg);
+        } else "return" === n.method && n.abrupt("return", n.arg);
+        o = f;
+        var p = tryCatch(e, r, n);
+        if ("normal" === p.type) {
+          if (o = n.done ? s : l, p.arg === y) continue;
           return {
-            value: record.arg,
-            done: context.done
+            value: p.arg,
+            done: n.done
           };
         }
-        "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg);
+        "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg);
       }
     };
   }
-  function maybeInvokeDelegate(delegate, context) {
-    var methodName = context.method,
-      method = delegate.iterator[methodName];
-    if (undefined === method) return context.delegate = null, "throw" === methodName && delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method) || "return" !== methodName && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel;
-    var record = tryCatch(method, delegate.iterator, context.arg);
-    if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel;
-    var info = record.arg;
-    return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel);
+  function maybeInvokeDelegate(e, r) {
+    var n = r.method,
+      o = e.iterator[n];
+    if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y;
+    var i = tryCatch(o, e.iterator, r.arg);
+    if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y;
+    var a = i.arg;
+    return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y);
   }
-  function pushTryEntry(locs) {
-    var entry = {
-      tryLoc: locs[0]
+  function pushTryEntry(t) {
+    var e = {
+      tryLoc: t[0]
     };
-    1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry);
+    1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e);
   }
-  function resetTryEntry(entry) {
-    var record = entry.completion || {};
-    record.type = "normal", delete record.arg, entry.completion = record;
+  function resetTryEntry(t) {
+    var e = t.completion || {};
+    e.type = "normal", delete e.arg, t.completion = e;
   }
-  function Context(tryLocsList) {
+  function Context(t) {
     this.tryEntries = [{
       tryLoc: "root"
-    }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0);
+    }], t.forEach(pushTryEntry, this), this.reset(!0);
   }
-  function values(iterable) {
-    if (iterable) {
-      var iteratorMethod = iterable[iteratorSymbol];
-      if (iteratorMethod) return iteratorMethod.call(iterable);
-      if ("function" == typeof iterable.next) return iterable;
-      if (!isNaN(iterable.length)) {
-        var i = -1,
-          next = function next() {
-            for (; ++i < iterable.length;) if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next;
-            return next.value = undefined, next.done = !0, next;
+  function values(e) {
+    if (e || "" === e) {
+      var r = e[a];
+      if (r) return r.call(e);
+      if ("function" == typeof e.next) return e;
+      if (!isNaN(e.length)) {
+        var o = -1,
+          i = function next() {
+            for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next;
+            return next.value = t, next.done = !0, next;
           };
-        return next.next = next;
+        return i.next = i;
       }
     }
-    return {
-      next: doneResult
-    };
+    throw new TypeError(_typeof(e) + " is not iterable");
   }
-  function doneResult() {
-    return {
-      value: undefined,
-      done: !0
-    };
-  }
-  return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", {
+  return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", {
     value: GeneratorFunctionPrototype,
     configurable: !0
-  }), defineProperty(GeneratorFunctionPrototype, "constructor", {
+  }), o(GeneratorFunctionPrototype, "constructor", {
     value: GeneratorFunction,
     configurable: !0
-  }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) {
-    var ctor = "function" == typeof genFun && genFun.constructor;
-    return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name));
-  }, exports.mark = function (genFun) {
-    return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun;
-  }, exports.awrap = function (arg) {
+  }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) {
+    var e = "function" == typeof t && t.constructor;
+    return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name));
+  }, e.mark = function (t) {
+    return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t;
+  }, e.awrap = function (t) {
     return {
-      __await: arg
+      __await: t
     };
-  }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () {
+  }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () {
     return this;
-  }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) {
-    void 0 === PromiseImpl && (PromiseImpl = Promise);
-    var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl);
-    return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) {
-      return result.done ? result.value : iter.next();
+  }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) {
+    void 0 === i && (i = Promise);
+    var a = new AsyncIterator(wrap(t, r, n, o), i);
+    return e.isGeneratorFunction(r) ? a : a.next().then(function (t) {
+      return t.done ? t.value : a.next();
     });
-  }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () {
+  }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () {
     return this;
-  }), define(Gp, "toString", function () {
+  }), define(g, "toString", function () {
     return "[object Generator]";
-  }), exports.keys = function (val) {
-    var object = Object(val),
-      keys = [];
-    for (var key in object) keys.push(key);
-    return keys.reverse(), function next() {
-      for (; keys.length;) {
-        var key = keys.pop();
-        if (key in object) return next.value = key, next.done = !1, next;
+  }), e.keys = function (t) {
+    var e = Object(t),
+      r = [];
+    for (var n in e) r.push(n);
+    return r.reverse(), function next() {
+      for (; r.length;) {
+        var t = r.pop();
+        if (t in e) return next.value = t, next.done = !1, next;
       }
       return next.done = !0, next;
     };
-  }, exports.values = values, Context.prototype = {
+  }, e.values = values, Context.prototype = {
     constructor: Context,
-    reset: function reset(skipTempReset) {
-      if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined);
+    reset: function reset(e) {
+      if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t);
     },
     stop: function stop() {
       this.done = !0;
-      var rootRecord = this.tryEntries[0].completion;
-      if ("throw" === rootRecord.type) throw rootRecord.arg;
+      var t = this.tryEntries[0].completion;
+      if ("throw" === t.type) throw t.arg;
       return this.rval;
     },
-    dispatchException: function dispatchException(exception) {
-      if (this.done) throw exception;
-      var context = this;
-      function handle(loc, caught) {
-        return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught;
+    dispatchException: function dispatchException(e) {
+      if (this.done) throw e;
+      var r = this;
+      function handle(n, o) {
+        return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o;
       }
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i],
-          record = entry.completion;
-        if ("root" === entry.tryLoc) return handle("end");
-        if (entry.tryLoc <= this.prev) {
-          var hasCatch = hasOwn.call(entry, "catchLoc"),
-            hasFinally = hasOwn.call(entry, "finallyLoc");
-          if (hasCatch && hasFinally) {
-            if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0);
-            if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc);
-          } else if (hasCatch) {
-            if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0);
+      for (var o = this.tryEntries.length - 1; o >= 0; --o) {
+        var i = this.tryEntries[o],
+          a = i.completion;
+        if ("root" === i.tryLoc) return handle("end");
+        if (i.tryLoc <= this.prev) {
+          var c = n.call(i, "catchLoc"),
+            u = n.call(i, "finallyLoc");
+          if (c && u) {
+            if (this.prev < i.catchLoc) return handle(i.catchLoc, !0);
+            if (this.prev < i.finallyLoc) return handle(i.finallyLoc);
+          } else if (c) {
+            if (this.prev < i.catchLoc) return handle(i.catchLoc, !0);
           } else {
-            if (!hasFinally) throw new Error("try statement without catch or finally");
-            if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc);
+            if (!u) throw new Error("try statement without catch or finally");
+            if (this.prev < i.finallyLoc) return handle(i.finallyLoc);
           }
         }
       }
     },
-    abrupt: function abrupt(type, arg) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) {
-          var finallyEntry = entry;
+    abrupt: function abrupt(t, e) {
+      for (var r = this.tryEntries.length - 1; r >= 0; --r) {
+        var o = this.tryEntries[r];
+        if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) {
+          var i = o;
           break;
         }
       }
-      finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null);
-      var record = finallyEntry ? finallyEntry.completion : {};
-      return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record);
+      i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null);
+      var a = i ? i.completion : {};
+      return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a);
     },
-    complete: function complete(record, afterLoc) {
-      if ("throw" === record.type) throw record.arg;
-      return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel;
+    complete: function complete(t, e) {
+      if ("throw" === t.type) throw t.arg;
+      return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y;
     },
-    finish: function finish(finallyLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel;
+    finish: function finish(t) {
+      for (var e = this.tryEntries.length - 1; e >= 0; --e) {
+        var r = this.tryEntries[e];
+        if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y;
       }
     },
-    "catch": function _catch(tryLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.tryLoc === tryLoc) {
-          var record = entry.completion;
-          if ("throw" === record.type) {
-            var thrown = record.arg;
-            resetTryEntry(entry);
+    "catch": function _catch(t) {
+      for (var e = this.tryEntries.length - 1; e >= 0; --e) {
+        var r = this.tryEntries[e];
+        if (r.tryLoc === t) {
+          var n = r.completion;
+          if ("throw" === n.type) {
+            var o = n.arg;
+            resetTryEntry(r);
           }
-          return thrown;
+          return o;
         }
       }
       throw new Error("illegal catch attempt");
     },
-    delegateYield: function delegateYield(iterable, resultName, nextLoc) {
+    delegateYield: function delegateYield(e, r, n) {
       return this.delegate = {
-        iterator: values(iterable),
-        resultName: resultName,
-        nextLoc: nextLoc
-      }, "next" === this.method && (this.arg = undefined), ContinueSentinel;
+        iterator: values(e),
+        resultName: r,
+        nextLoc: n
+      }, "next" === this.method && (this.arg = t), y;
     }
-  }, exports;
+  }, e;
 }
 module.exports = _regeneratorRuntime, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
@@ -60302,14 +62047,14 @@ module.exports = _toPropertyKey, module.exports.__esModule = true, module.export
   \*******************************************************/
 /***/ ((module) => {
 
-function _typeof(obj) {
+function _typeof(o) {
   "@babel/helpers - typeof";
 
-  return (module.exports = _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
-    return typeof obj;
-  } : function (obj) {
-    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-  }, module.exports.__esModule = true, module.exports["default"] = module.exports), _typeof(obj);
+  return (module.exports = _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
+    return typeof o;
+  } : function (o) {
+    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
+  }, module.exports.__esModule = true, module.exports["default"] = module.exports), _typeof(o);
 }
 module.exports = _typeof, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
@@ -60703,14 +62448,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ _typeof)
 /* harmony export */ });
-function _typeof(obj) {
+function _typeof(o) {
   "@babel/helpers - typeof";
 
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
-    return typeof obj;
-  } : function (obj) {
-    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-  }, _typeof(obj);
+  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
+    return typeof o;
+  } : function (o) {
+    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
+  }, _typeof(o);
 }
 
 /***/ }),
@@ -60724,36 +62469,46 @@ function _typeof(obj) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "AggregateHandler": () => (/* binding */ AggregateHandler),
-/* harmony export */   "ConfigurationError": () => (/* binding */ ConfigurationError),
-/* harmony export */   "DEFAULT_SCOPES": () => (/* binding */ DEFAULT_SCOPES),
-/* harmony export */   "EVENTS": () => (/* binding */ EVENTS),
-/* harmony export */   "InMemoryStorage": () => (/* binding */ InMemoryStorage),
-/* harmony export */   "InvalidResponseError": () => (/* binding */ InvalidResponseError),
-/* harmony export */   "NotImplementedError": () => (/* binding */ NotImplementedError),
-/* harmony export */   "OidcProviderError": () => (/* binding */ OidcProviderError),
-/* harmony export */   "PREFERRED_SIGNING_ALG": () => (/* binding */ PREFERRED_SIGNING_ALG),
-/* harmony export */   "REFRESH_BEFORE_EXPIRATION_SECONDS": () => (/* binding */ REFRESH_BEFORE_EXPIRATION_SECONDS),
-/* harmony export */   "SOLID_CLIENT_AUTHN_KEY_PREFIX": () => (/* binding */ SOLID_CLIENT_AUTHN_KEY_PREFIX),
-/* harmony export */   "StorageUtility": () => (/* binding */ StorageUtility),
-/* harmony export */   "StorageUtilityGetResponse": () => (/* binding */ StorageUtilityGetResponse),
-/* harmony export */   "StorageUtilityMock": () => (/* binding */ StorageUtilityMock),
-/* harmony export */   "USER_SESSION_PREFIX": () => (/* binding */ USER_SESSION_PREFIX),
-/* harmony export */   "buildAuthenticatedFetch": () => (/* binding */ buildAuthenticatedFetch),
-/* harmony export */   "buildProxyHandler": () => (/* binding */ buildProxyHandler),
-/* harmony export */   "createDpopHeader": () => (/* binding */ createDpopHeader),
-/* harmony export */   "determineSigningAlg": () => (/* binding */ determineSigningAlg),
-/* harmony export */   "fetchJwks": () => (/* binding */ fetchJwks),
-/* harmony export */   "generateDpopKeyPair": () => (/* binding */ generateDpopKeyPair),
-/* harmony export */   "getSessionIdFromOauthState": () => (/* binding */ getSessionIdFromOauthState),
-/* harmony export */   "getWebidFromTokenPayload": () => (/* binding */ getWebidFromTokenPayload),
-/* harmony export */   "handleRegistration": () => (/* binding */ handleRegistration),
-/* harmony export */   "isSupportedTokenType": () => (/* binding */ isSupportedTokenType),
-/* harmony export */   "isValidRedirectUrl": () => (/* binding */ isValidRedirectUrl),
-/* harmony export */   "loadOidcContextFromStorage": () => (/* binding */ loadOidcContextFromStorage),
-/* harmony export */   "mockStorage": () => (/* binding */ mockStorage),
-/* harmony export */   "mockStorageUtility": () => (/* binding */ mockStorageUtility),
-/* harmony export */   "saveSessionInfoToStorage": () => (/* binding */ saveSessionInfoToStorage)
+/* harmony export */   AggregateHandler: () => (/* binding */ AggregateHandler),
+/* harmony export */   AuthorizationCodeWithPkceOidcHandlerBase: () => (/* binding */ AuthorizationCodeWithPkceOidcHandlerBase),
+/* harmony export */   ClientAuthentication: () => (/* binding */ ClientAuthentication),
+/* harmony export */   ConfigurationError: () => (/* binding */ ConfigurationError),
+/* harmony export */   DEFAULT_SCOPES: () => (/* binding */ DEFAULT_SCOPES),
+/* harmony export */   EVENTS: () => (/* binding */ EVENTS),
+/* harmony export */   GeneralLogoutHandler: () => (/* binding */ GeneralLogoutHandler),
+/* harmony export */   IRpLogoutHandler: () => (/* binding */ IRpLogoutHandler),
+/* harmony export */   IWaterfallLogoutHandler: () => (/* binding */ IWaterfallLogoutHandler),
+/* harmony export */   InMemoryStorage: () => (/* binding */ InMemoryStorage),
+/* harmony export */   InvalidResponseError: () => (/* binding */ InvalidResponseError),
+/* harmony export */   NotImplementedError: () => (/* binding */ NotImplementedError),
+/* harmony export */   OidcProviderError: () => (/* binding */ OidcProviderError),
+/* harmony export */   PREFERRED_SIGNING_ALG: () => (/* binding */ PREFERRED_SIGNING_ALG),
+/* harmony export */   REFRESH_BEFORE_EXPIRATION_SECONDS: () => (/* binding */ REFRESH_BEFORE_EXPIRATION_SECONDS),
+/* harmony export */   SOLID_CLIENT_AUTHN_KEY_PREFIX: () => (/* binding */ SOLID_CLIENT_AUTHN_KEY_PREFIX),
+/* harmony export */   SessionInfoManagerBase: () => (/* binding */ SessionInfoManagerBase),
+/* harmony export */   StorageUtility: () => (/* binding */ StorageUtility),
+/* harmony export */   StorageUtilityGetResponse: () => (/* binding */ StorageUtilityGetResponse),
+/* harmony export */   StorageUtilityMock: () => (/* binding */ StorageUtilityMock),
+/* harmony export */   USER_SESSION_PREFIX: () => (/* binding */ USER_SESSION_PREFIX),
+/* harmony export */   buildAuthenticatedFetch: () => (/* binding */ buildAuthenticatedFetch),
+/* harmony export */   buildProxyHandler: () => (/* binding */ buildProxyHandler),
+/* harmony export */   clear: () => (/* binding */ clear),
+/* harmony export */   createDpopHeader: () => (/* binding */ createDpopHeader),
+/* harmony export */   determineSigningAlg: () => (/* binding */ determineSigningAlg),
+/* harmony export */   fetchJwks: () => (/* binding */ fetchJwks),
+/* harmony export */   generateDpopKeyPair: () => (/* binding */ generateDpopKeyPair),
+/* harmony export */   getEndSessionUrl: () => (/* binding */ getEndSessionUrl),
+/* harmony export */   getSessionIdFromOauthState: () => (/* binding */ getSessionIdFromOauthState),
+/* harmony export */   getUnauthenticatedSession: () => (/* binding */ getUnauthenticatedSession),
+/* harmony export */   getWebidFromTokenPayload: () => (/* binding */ getWebidFromTokenPayload),
+/* harmony export */   handleRegistration: () => (/* binding */ handleRegistration),
+/* harmony export */   isSupportedTokenType: () => (/* binding */ isSupportedTokenType),
+/* harmony export */   isValidRedirectUrl: () => (/* binding */ isValidRedirectUrl),
+/* harmony export */   loadOidcContextFromStorage: () => (/* binding */ loadOidcContextFromStorage),
+/* harmony export */   maybeBuildRpInitiatedLogout: () => (/* binding */ maybeBuildRpInitiatedLogout),
+/* harmony export */   mockStorage: () => (/* binding */ mockStorage),
+/* harmony export */   mockStorageUtility: () => (/* binding */ mockStorageUtility),
+/* harmony export */   saveSessionInfoToStorage: () => (/* binding */ saveSessionInfoToStorage)
 /* harmony export */ });
 /* harmony import */ var events__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! events */ "./node_modules/events/events.js");
 /* harmony import */ var _inrupt_universal_fetch__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @inrupt/universal-fetch */ "./node_modules/@inrupt/universal-fetch/dist/index-browser.mjs");
@@ -60764,9 +62519,38 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * Intended to be used by dependent packages as a common prefix for keys into
+ * storage mechanisms (so as to group all keys related to Solid Client Authn
+ * within those storage mechanisms, e.g., window.localStorage).
+ */
 const SOLID_CLIENT_AUTHN_KEY_PREFIX = "solidClientAuthn:";
+/**
+ * Ordered list of signature algorithms, from most preferred to least preferred.
+ */
 const PREFERRED_SIGNING_ALG = ["ES256", "RS256"];
 const EVENTS = {
+    // Note that an `error` events MUST be listened to: https://nodejs.org/dist/latest-v16.x/docs/api/events.html#error-events.
     ERROR: "error",
     LOGIN: "login",
     LOGOUT: "logout",
@@ -60776,14 +62560,52 @@ const EVENTS = {
     SESSION_RESTORED: "sessionRestore",
     TIMEOUT_SET: "timeoutSet",
 };
+/**
+ * We want to refresh a token 5 seconds before it expires.
+ */
 const REFRESH_BEFORE_EXPIRATION_SECONDS = 5;
+// The openid scope requests an OIDC ID token token to be returned.
 const SCOPE_OPENID = "openid";
+// The offline_access scope requests a refresh token to be returned.
 const SCOPE_OFFLINE = "offline_access";
+// The webid scope is required as per https://solid.github.io/solid-oidc/#webid-scope
 const SCOPE_WEBID = "webid";
+// The scopes are expected as a space-separated list.
 const DEFAULT_SCOPES = [SCOPE_OPENID, SCOPE_OFFLINE, SCOPE_WEBID].join(" ");
 
-const buildProxyHandler = (toExclude, errorMessage) => ({
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * Temporary internal builder for safe proxying.
+ */
+const buildProxyHandler = (
+// The class to be excluded needs to be injected, because it is defined in a
+// dependency.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+toExclude, errorMessage) => ({
+    // This proxy is only a temporary measure until Session no longer extends
+    // SessionEventEmitter, and the proxying is no longer necessary.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     get(target, prop, receiver) {
+        // Reject any calls to the proxy that isn't specific to the EventEmitter API
         if (!Object.getOwnPropertyNames(events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter).includes(prop) &&
             Object.getOwnPropertyNames(toExclude).includes(prop)) {
             throw new Error(`${errorMessage}: [${prop}] is not supported`);
@@ -60792,11 +62614,59 @@ const buildProxyHandler = (toExclude, errorMessage) => ({
     },
 });
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ */
 class AggregateHandler {
     constructor(handleables) {
         this.handleables = handleables;
+        this.handleables = handleables;
     }
+    /**
+     * Helper function that will asynchronously determine the proper handler to use. If multiple
+     * handlers can handle, it will choose the first one in the list
+     * @param params Paramerters to feed to the handler
+     */
     async getProperHandler(params) {
+        // TODO : This function doesn't currently operate as described. Tests need to be written
+        // return new Promise<IHandleable<P, R> | null>((resolve, reject) => {
+        //  const resolvedValues: Array<boolean | null> = Array(this.handleables.length).map(() => null)
+        //   let numberResolved = 0
+        //   this.handleables.forEach(async (handleable: IHandleable<P, R>, index: number) => {
+        //     resolvedValues[index] = await handleable.canHandle(...params)
+        //     numberResolved++
+        //     let curResolvedValueIndex = 0
+        //     while (
+        //       resolvedValues[curResolvedValueIndex] !== null ||
+        //       resolvedValues[curResolvedValueIndex] !== undefined
+        //     ) {
+        //       if (resolvedValues[curResolvedValueIndex]) {
+        //         resolve(this.handleables[curResolvedValueIndex])
+        //       }
+        //       curResolvedValueIndex++
+        //     }
+        //   })
+        // })
         const canHandleList = await Promise.all(this.handleables.map((handleable) => handleable.canHandle(...params)));
         for (let i = 0; i < canHandleList.length; i += 1) {
             if (canHandleList[i]) {
@@ -60819,6 +62689,7 @@ class AggregateHandler {
                 return JSON.stringify(param);
             }
             catch (err) {
+                /* eslint-disable  @typescript-eslint/no-explicit-any */
                 return param.toString();
             }
         })
@@ -60826,11 +62697,37 @@ class AggregateHandler {
     }
 }
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+// eslint-disable-next-line no-shadow
 async function fetchJwks(jwksIri, issuerIri) {
-    const jwksResponse = await (0,_inrupt_universal_fetch__WEBPACK_IMPORTED_MODULE_2__.fetch)(jwksIri);
+    // FIXME: the following line works, but the underlying network calls don't seem
+    // to be mocked properly by our test code. It would be nicer to replace calls to this
+    // function by the following line and to fix the mocks.
+    // const jwks = createRemoteJWKSet(new URL(jwksIri));
+    const jwksResponse = await _inrupt_universal_fetch__WEBPACK_IMPORTED_MODULE_2__.fetch.call(globalThis, jwksIri);
     if (jwksResponse.status !== 200) {
         throw new Error(`Could not fetch JWKS for [${issuerIri}] at [${jwksIri}]: ${jwksResponse.status} ${jwksResponse.statusText}`);
     }
+    // The JWKS should only contain the current key for the issuer.
     let jwk;
     try {
         jwk = (await jwksResponse.json()).keys[0];
@@ -60840,6 +62737,15 @@ async function fetchJwks(jwksIri, issuerIri) {
     }
     return jwk;
 }
+/**
+ * Extract a WebID from an ID token payload based on https://github.com/solid/webid-oidc-spec.
+ * Note that this does not yet implement the user endpoint lookup, and only checks
+ * for `webid` or IRI-like `sub` claims.
+ *
+ * @param idToken the payload of the ID token from which the WebID can be extracted.
+ * @returns a WebID extracted from the ID token.
+ * @internal
+ */
 async function getWebidFromTokenPayload(idToken, jwksIri, issuerIri, clientId) {
     const jwk = await fetchJwks(jwksIri, issuerIri);
     let payload;
@@ -60860,6 +62766,10 @@ async function getWebidFromTokenPayload(idToken, jwksIri, issuerIri, clientId) {
         throw new Error(`The token ${JSON.stringify(payload)} is invalid: it has no 'webid' claim and no 'sub' claim.`);
     }
     try {
+        // This parses the 'sub' claim to check if it is a well-formed IRI.
+        // However, the normalized value isn't returned to make sure the WebID is returned
+        // as specified by the Identity Provider.
+        // eslint-disable-next-line no-new
         new URL(payload.sub);
         return payload.sub;
     }
@@ -60868,24 +62778,376 @@ async function getWebidFromTokenPayload(idToken, jwksIri, issuerIri, clientId) {
     }
 }
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 function isValidRedirectUrl(redirectUrl) {
+    // If the redirect URL is not a valid URL, an error will be thrown.
     try {
         const urlObject = new URL(redirectUrl);
-        return urlObject.hash === "";
+        const noReservedQuery = !urlObject.searchParams.has("code") &&
+            !urlObject.searchParams.has("state");
+        // As per https://tools.ietf.org/html/rfc6749#section-3.1.2, the redirect URL
+        // must not include a hash fragment.
+        const noHash = urlObject.hash === "";
+        return noReservedQuery && noHash;
     }
     catch (e) {
         return false;
     }
 }
 
+/**
+ * @hidden
+ * @packageDocumentation
+ */
+/**
+ * @hidden
+ * Authorization code flow spec: https://openid.net/specs/openid-connect-core-1_0.html#CodeFlowAuth
+ * PKCE: https://tools.ietf.org/html/rfc7636
+ */
+class AuthorizationCodeWithPkceOidcHandlerBase {
+    constructor(storageUtility, redirector) {
+        this.storageUtility = storageUtility;
+        this.redirector = redirector;
+        this.storageUtility = storageUtility;
+        this.redirector = redirector;
+    }
+    async canHandle(oidcLoginOptions) {
+        return !!(oidcLoginOptions.issuerConfiguration.grantTypesSupported &&
+            oidcLoginOptions.issuerConfiguration.grantTypesSupported.indexOf("authorization_code") > -1);
+    }
+    async handleRedirect({ oidcLoginOptions, state, codeVerifier, targetUrl, }) {
+        await Promise.all([
+            // We use the OAuth 'state' value (which should be crypto-random) as
+            // the key in our storage to store our actual SessionID. We do this
+            // 'cos we'll need to lookup our session information again when the
+            // browser is redirected back to us (i.e. the OAuth client
+            // application) from the Authorization Server.
+            // We don't want to use our session ID as the OAuth 'state' value, as
+            // that session ID can be any developer-specified value, and therefore
+            // may not be appropriate (since the OAuth 'state' value should really
+            // be an unguessable crypto-random value).
+            // eslint-disable-next-line no-underscore-dangle
+            this.storageUtility.setForUser(state, {
+                sessionId: oidcLoginOptions.sessionId,
+            }),
+            // Store our login-process state using the session ID as the key.
+            // Strictly speaking, this indirection from our OAuth state value to
+            // our session ID is unnecessary, but it provides a slightly cleaner
+            // separation of concerns.
+            this.storageUtility.setForUser(oidcLoginOptions.sessionId, {
+                // eslint-disable-next-line no-underscore-dangle
+                codeVerifier,
+                issuer: oidcLoginOptions.issuer.toString(),
+                // The redirect URL is read after redirect, so it must be stored now.
+                redirectUrl: oidcLoginOptions.redirectUrl,
+                dpop: oidcLoginOptions.dpop ? "true" : "false",
+            }),
+        ]);
+        this.redirector.redirect(targetUrl, {
+            handleRedirect: oidcLoginOptions.handleRedirect,
+        });
+        return undefined;
+    }
+}
+
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ */
+class GeneralLogoutHandler {
+    constructor(sessionInfoManager) {
+        this.sessionInfoManager = sessionInfoManager;
+        this.sessionInfoManager = sessionInfoManager;
+    }
+    async canHandle() {
+        return true;
+    }
+    async handle(userId) {
+        await this.sessionInfoManager.clear(userId);
+    }
+}
+
+class IRpLogoutHandler {
+    constructor(redirector) {
+        this.redirector = redirector;
+        this.redirector = redirector;
+    }
+    async canHandle(userId, options) {
+        return (options === null || options === void 0 ? void 0 : options.logoutType) === "idp";
+    }
+    async handle(userId, options) {
+        if ((options === null || options === void 0 ? void 0 : options.logoutType) !== "idp") {
+            throw new Error("Attempting to call idp logout handler to perform app logout");
+        }
+        if (options.toLogoutUrl === undefined) {
+            throw new Error("Cannot perform IDP logout. Did you log in using the OIDC authentication flow?");
+        }
+        this.redirector.redirect(options.toLogoutUrl(options), {
+            handleRedirect: options.handleRedirect,
+        });
+    }
+}
+
+class IWaterfallLogoutHandler {
+    constructor(sessionInfoManager, redirector) {
+        this.handlers = [
+            new GeneralLogoutHandler(sessionInfoManager),
+            new IRpLogoutHandler(redirector),
+        ];
+    }
+    async canHandle() {
+        return true;
+    }
+    async handle(userId, options) {
+        for (const handler of this.handlers) {
+            /* eslint-disable no-await-in-loop */
+            if (await handler.canHandle(userId, options))
+                await handler.handle(userId, options);
+            /* eslint-enable no-await-in-loop */
+        }
+    }
+}
+
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ * @packageDocumentation
+ */
+function getUnauthenticatedSession() {
+    return {
+        isLoggedIn: false,
+        sessionId: (0,uuid__WEBPACK_IMPORTED_MODULE_3__["default"])(),
+        fetch: (...args) => _inrupt_universal_fetch__WEBPACK_IMPORTED_MODULE_2__.fetch.call(globalThis, ...args),
+    };
+}
+/**
+ * @param sessionId
+ * @param storage
+ * @hidden
+ */
+async function clear(sessionId, storage) {
+    await Promise.all([
+        storage.deleteAllUserData(sessionId, { secure: false }),
+        storage.deleteAllUserData(sessionId, { secure: true }),
+    ]);
+}
+/**
+ * @hidden
+ */
+class SessionInfoManagerBase {
+    constructor(storageUtility) {
+        this.storageUtility = storageUtility;
+        this.storageUtility = storageUtility;
+    }
+    update(_sessionId, _options) {
+        throw new Error("Not Implemented");
+    }
+    get(_) {
+        throw new Error("Not implemented");
+    }
+    // eslint-disable-next-line class-methods-use-this
+    async getAll() {
+        throw new Error("Not implemented");
+    }
+    /**
+     * This function removes all session-related information from storage.
+     * @param sessionId the session identifier
+     * @param storage the storage where session info is stored
+     * @hidden
+     */
+    async clear(sessionId) {
+        return clear(sessionId, this.storageUtility);
+    }
+    /**
+     * Registers a new session, so that its ID can be retrieved.
+     * @param sessionId
+     */
+    async register(_sessionId) {
+        throw new Error("Not implemented");
+    }
+    /**
+     * Returns all the registered session IDs. Differs from getAll, which also
+     * returns additional session information.
+     */
+    async getRegisteredSessionIdAll() {
+        throw new Error("Not implemented");
+    }
+    /**
+     * Deletes all information about all sessions, including their registrations.
+     */
+    async clearAll() {
+        throw new Error("Not implemented");
+    }
+}
+
+/**
+ * This function is designed to isomorphically capture the behavior in oidc-client-js and node-oidc-provider
+ * - https://github.com/IdentityModel/oidc-client-js/blob/edec8f59897bdeedcb0b4167586d49626203c2c1/src/OidcClient.js#L138
+ * - https://github.com/panva/node-openid-client/blob/35758419489ff751a71f5b66f5020087a63e1e88/lib/client.js#L284
+ *
+ * @param options IEndSessionOptions
+ * @returns The URL to redirect to in order to perform RP Initiated Logout
+ * @hidden
+ */
+function getEndSessionUrl({ endSessionEndpoint, idTokenHint, postLogoutRedirectUri, state, }) {
+    const url = new URL(endSessionEndpoint);
+    if (idTokenHint !== undefined)
+        url.searchParams.append("id_token_hint", idTokenHint);
+    if (postLogoutRedirectUri !== undefined) {
+        url.searchParams.append("post_logout_redirect_uri", postLogoutRedirectUri);
+        if (state !== undefined)
+            url.searchParams.append("state", state);
+    }
+    return url.toString();
+}
+/**
+ * @param options.endSessionEndpoint The end_session_endpoint advertised by the server
+ * @param options.idTokenHint The idToken supplied by the server after logging in
+ * Redirects the window to the location required to perform RP initiated logout
+ *
+ * @hidden
+ */
+function maybeBuildRpInitiatedLogout({ endSessionEndpoint, idTokenHint, }) {
+    if (endSessionEndpoint === undefined)
+        return undefined;
+    return function logout({ state, postLogoutUrl }) {
+        return getEndSessionUrl({
+            endSessionEndpoint,
+            idTokenHint,
+            state,
+            postLogoutRedirectUri: postLogoutUrl,
+        });
+    };
+}
+
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 function isSupportedTokenType(token) {
     return typeof token === "string" && ["DPoP", "Bearer"].includes(token);
 }
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 const USER_SESSION_PREFIX = "solidClientAuthenticationUser";
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 function isValidUrl(url) {
     try {
+        // Here, the URL constructor is just called to parse the given string and
+        // verify if it is a well-formed IRI.
+        // eslint-disable-next-line no-new
         new URL(url);
         return true;
     }
@@ -60908,6 +63170,10 @@ function determineClientType(options, issuerConfig) {
         isValidUrl(options.clientId)) {
         return "solid-oidc";
     }
+    // If no client_id is provided, the client must go through Dynamic Client Registration.
+    // If a client_id is provided and it looks like a URI, yet the Identity Provider
+    // does *not* support Solid-OIDC, then we also perform DCR (and discard the
+    // provided client_id).
     return "dynamic";
 }
 async function handleRegistration(options, issuerConfig, storageUtility, clientRegistrar) {
@@ -60919,7 +63185,13 @@ async function handleRegistration(options, issuerConfig, storageUtility, clientR
             redirectUrl: options.redirectUrl,
         }, issuerConfig);
     }
+    // If a client_id was provided, and the Identity Provider is Solid-OIDC compliant,
+    // or it is not compliant but the client_id isn't an IRI (we assume it has already
+    // been registered with the IdP), then the client registration information needs
+    // to be stored so that it can be retrieved later after redirect.
     await storageUtility.setForUser(options.sessionId, {
+        // If the client is either static or solid-oidc compliant, its client ID cannot be undefined.
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         clientId: options.clientId,
     });
     if (options.clientSecret) {
@@ -60933,6 +63205,7 @@ async function handleRegistration(options, issuerConfig, storageUtility, clientR
         });
     }
     return {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         clientId: options.clientId,
         clientSecret: options.clientSecret,
         clientName: options.clientName,
@@ -60940,9 +63213,116 @@ async function handleRegistration(options, issuerConfig, storageUtility, clientR
     };
 }
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ * @packageDocumentation
+ */
+// By only referring to `window` at runtime, apps that do server-side rendering
+// won't run into errors when rendering code that instantiates a
+// ClientAuthentication:
+const globalFetch = (request, init) => _inrupt_universal_fetch__WEBPACK_IMPORTED_MODULE_2__.fetch.call(globalThis, request, init);
+/**
+ * @hidden
+ */
+class ClientAuthentication {
+    constructor(loginHandler, redirectHandler, logoutHandler, sessionInfoManager, issuerConfigFetcher) {
+        this.loginHandler = loginHandler;
+        this.redirectHandler = redirectHandler;
+        this.logoutHandler = logoutHandler;
+        this.sessionInfoManager = sessionInfoManager;
+        this.issuerConfigFetcher = issuerConfigFetcher;
+        // By default, our fetch() resolves to the environment fetch() function.
+        this.fetch = globalFetch;
+        this.logout = async (sessionId, options) => {
+            // When doing IDP logout this will redirect away from the current page, so we should not expect
+            // code after this condition to be run if it is true.
+            // We also need to make sure that any other cleanup that we want to do for
+            // our session takes place before this condition is run
+            await this.logoutHandler.handle(sessionId, (options === null || options === void 0 ? void 0 : options.logoutType) === "idp"
+                ? {
+                    ...options,
+                    toLogoutUrl: this.boundLogout,
+                }
+                : options);
+            // Restore our fetch() function back to the environment fetch(), effectively
+            // leaving us with un-authenticated fetches from now on.
+            this.fetch = globalFetch;
+            // Delete the bound logout function, so that it can't be called after this.
+            delete this.boundLogout;
+        };
+        this.getSessionInfo = async (sessionId) => {
+            // TODO complete
+            return this.sessionInfoManager.get(sessionId);
+        };
+        this.getAllSessionInfo = async () => {
+            return this.sessionInfoManager.getAll();
+        };
+        this.loginHandler = loginHandler;
+        this.redirectHandler = redirectHandler;
+        this.logoutHandler = logoutHandler;
+        this.sessionInfoManager = sessionInfoManager;
+        this.issuerConfigFetcher = issuerConfigFetcher;
+    }
+}
+
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ * @packageDocumentation
+ */
+/**
+ * A helper class that will validate items taken from local storage
+ */
 async function getSessionIdFromOauthState(storageUtility, oauthState) {
     return storageUtility.getForUser(oauthState, "sessionId");
 }
+/**
+ * Based on the provided state, this looks up contextual information stored
+ * before redirecting the user to the OIDC issuer.
+ * @param sessionId The state (~ correlation ID) of the OIDC request
+ * @param storageUtility
+ * @param configFetcher
+ * @returns Information stored about the client issuing the request
+ */
 async function loadOidcContextFromStorage(sessionId, storageUtility, configFetcher) {
     try {
         const [issuerIri, codeVerifier, storedRedirectIri, dpop] = await Promise.all([
@@ -60953,7 +63333,9 @@ async function loadOidcContextFromStorage(sessionId, storageUtility, configFetch
             storageUtility.getForUser(sessionId, "redirectUrl"),
             storageUtility.getForUser(sessionId, "dpop", { errorIfNull: true }),
         ]);
+        // Clear the code verifier, which is one-time use.
         await storageUtility.deleteForUser(sessionId, "codeVerifier");
+        // Unlike openid-client, this looks up the configuration from storage
         const issuerConfig = await configFetcher.fetchConfig(issuerIri);
         return {
             codeVerifier,
@@ -60966,7 +63348,21 @@ async function loadOidcContextFromStorage(sessionId, storageUtility, configFetch
         throw new Error(`Failed to retrieve OIDC context from storage associated with session [${sessionId}]: ${e}`);
     }
 }
+/**
+ * Stores information about the session in the provided storage. Note that not
+ * all storage are equally secure, and it is strongly advised not to store either
+ * the refresh token or the DPoP key in the browser's local storage.
+ *
+ * @param storageUtility
+ * @param sessionId
+ * @param webId
+ * @param isLoggedIn
+ * @param refreshToken
+ * @param secure
+ * @param dpopKey
+ */
 async function saveSessionInfoToStorage(storageUtility, sessionId, webId, isLoggedIn, refreshToken, secure, dpopKey) {
+    // TODO: Investigate why this does not work with a Promise.all
     if (refreshToken !== undefined) {
         await storageUtility.setForUser(sessionId, { refreshToken }, { secure });
     }
@@ -60983,8 +63379,14 @@ async function saveSessionInfoToStorage(storageUtility, sessionId, webId, isLogg
         }, { secure });
     }
 }
+// TOTEST: this does not handle all possible bad inputs for example what if it's not proper JSON
+/**
+ * @hidden
+ */
 class StorageUtility {
     constructor(secureStorage, insecureStorage) {
+        this.secureStorage = secureStorage;
+        this.insecureStorage = insecureStorage;
         this.secureStorage = secureStorage;
         this.insecureStorage = insecureStorage;
     }
@@ -61041,6 +63443,7 @@ class StorageUtility {
             userData = await this.getUserData(userId, options === null || options === void 0 ? void 0 : options.secure);
         }
         catch (_a) {
+            // if reading the user data throws, the data is corrupted, and we want to write over it
             userData = {};
         }
         await this.setUserData(userId, { ...userData, ...values }, options === null || options === void 0 ? void 0 : options.secure);
@@ -61055,6 +63458,29 @@ class StorageUtility {
     }
 }
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ */
 class InMemoryStorage {
     constructor() {
         this.map = {};
@@ -61070,26 +63496,157 @@ class InMemoryStorage {
     }
 }
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ * @packageDocumentation
+ */
+/**
+ * Error to be triggered when a poor configuration is received
+ */
+// NOTE: There's a bug with istanbul and typescript that prevents full branch coverages
+// https://github.com/gotwarlost/istanbul/issues/690
+// The workaround is to put istanbul ignore on the constructor
+/**
+ * @hidden
+ */
 class ConfigurationError extends Error {
+    /* istanbul ignore next */
     constructor(message) {
         super(message);
     }
 }
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ * @packageDocumentation
+ */
+/**
+ * Error to be triggered if a method is not implemented
+ * @hidden
+ */
 class NotImplementedError extends Error {
+    /* istanbul ignore next */
     constructor(methodName) {
         super(`[${methodName}] is not implemented`);
     }
 }
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ * @packageDocumentation
+ */
+/**
+ * Error to be triggered when receiving a response missing mandatory elements
+ */
+// NOTE: There's a bug with istanbul and typescript that prevents full branch coverages
+// https://github.com/gotwarlost/istanbul/issues/690
+// The workaround is to put istanbul ignore on the constructor
+/**
+ * @hidden
+ */
 class InvalidResponseError extends Error {
+    /* istanbul ignore next */
     constructor(missingFields) {
         super(`Invalid response from OIDC provider: missing fields ${missingFields}`);
         this.missingFields = missingFields;
     }
 }
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ * @packageDocumentation
+ */
+/**
+ * Error to be triggered when receiving a response missing mandatory elements
+ */
+// NOTE: There's a bug with istanbul and typescript that prevents full branch coverages
+// https://github.com/gotwarlost/istanbul/issues/690
+// The workaround is to put istanbul ignore on the constructor
+/**
+ * @hidden
+ */
 class OidcProviderError extends Error {
+    /* istanbul ignore next */
     constructor(message, error, errorDescription) {
         super(message);
         this.error = error;
@@ -61097,10 +63654,46 @@ class OidcProviderError extends Error {
     }
 }
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * Normalizes a URL in order to generate the DPoP token based on a consistent scheme.
+ *
+ * @param audience The URL to normalize.
+ * @returns The normalized URL as a string.
+ * @hidden
+ */
 function normalizeHTU(audience) {
     const audienceUrl = new URL(audience);
     return new URL(audienceUrl.pathname, audienceUrl.origin).toString();
 }
+/**
+ * Creates a DPoP header according to https://tools.ietf.org/html/draft-fett-oauth-dpop-04,
+ * based on the target URL and method, using the provided key.
+ *
+ * @param audience Target URL.
+ * @param method HTTP method allowed.
+ * @param key Key used to sign the token.
+ * @returns A JWT that can be used as a DPoP Authorization header.
+ */
 async function createDpopHeader(audience, method, dpopKey) {
     return new jose__WEBPACK_IMPORTED_MODULE_1__.SignJWT({
         htu: normalizeHTU(audience),
@@ -61121,17 +63714,46 @@ async function generateDpopKeyPair() {
         privateKey,
         publicKey: await (0,jose__WEBPACK_IMPORTED_MODULE_1__.exportJWK)(publicKey),
     };
+    // The alg property isn't set by exportJWK, so set it manually.
     [dpopKeyPair.publicKey.alg] = PREFERRED_SIGNING_ALG;
     return dpopKeyPair;
 }
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * If expires_in isn't specified for the access token, we assume its lifetime is
+ * 10 minutes.
+ */
 const DEFAULT_EXPIRATION_TIME_SECONDS = 600;
 function isExpectedAuthError(statusCode) {
+    // As per https://tools.ietf.org/html/rfc7235#section-3.1 and https://tools.ietf.org/html/rfc7235#section-3.1,
+    // a response failing because the provided credentials aren't accepted by the
+    // server can get a 401 or a 403 response.
     return [401, 403].includes(statusCode);
 }
 async function buildDpopFetchOptions(targetUrl, authToken, dpopKey, defaultOptions) {
     var _a;
     const headers = new _inrupt_universal_fetch__WEBPACK_IMPORTED_MODULE_2__.Headers(defaultOptions === null || defaultOptions === void 0 ? void 0 : defaultOptions.headers);
+    // Any pre-existing Authorization header should be overriden.
     headers.set("Authorization", `DPoP ${authToken}`);
     headers.set("DPoP", await createDpopHeader(targetUrl, (_a = defaultOptions === null || defaultOptions === void 0 ? void 0 : defaultOptions.method) !== null && _a !== void 0 ? _a : "get", dpopKey));
     return {
@@ -61144,6 +63766,7 @@ async function buildAuthenticatedHeaders(targetUrl, authToken, dpopKey, defaultO
         return buildDpopFetchOptions(targetUrl, authToken, dpopKey, defaultOptions);
     }
     const headers = new _inrupt_universal_fetch__WEBPACK_IMPORTED_MODULE_2__.Headers(defaultOptions === null || defaultOptions === void 0 ? void 0 : defaultOptions.headers);
+    // Any pre-existing Authorization header should be overriden.
     headers.set("Authorization", `Bearer ${authToken}`);
     return {
         ...defaultOptions,
@@ -61166,80 +63789,167 @@ async function refreshAccessToken(refreshOptions, dpopKey, eventEmitter) {
         expiresIn: tokenSet.expiresIn,
     };
 }
+/**
+ *
+ * @param expiresIn Delay until the access token expires.
+ * @returns a delay until the access token should be refreshed.
+ */
 const computeRefreshDelay = (expiresIn) => {
     if (expiresIn !== undefined) {
         return expiresIn - REFRESH_BEFORE_EXPIRATION_SECONDS > 0
-            ?
+            ? // We want to refresh the token 5 seconds before they actually expire.
                 expiresIn - REFRESH_BEFORE_EXPIRATION_SECONDS
             : expiresIn;
     }
     return DEFAULT_EXPIRATION_TIME_SECONDS;
 };
+/**
+ * @param unauthFetch a regular fetch function, compliant with the WHATWG spec.
+ * @param authToken an access token, either a Bearer token or a DPoP one.
+ * @param options The option object may contain two objects: the DPoP key token
+ * is bound to if applicable, and options to customise token renewal behaviour.
+ *
+ * @returns A fetch function that adds an appropriate Authorization header with
+ * the provided token, and adds a DPoP header if applicable.
+ */
 async function buildAuthenticatedFetch(unauthFetch, accessToken, options) {
     var _a;
     let currentAccessToken = accessToken;
     let latestTimeout;
     const currentRefreshOptions = options === null || options === void 0 ? void 0 : options.refreshOptions;
+    // Setup the refresh timeout outside of the authenticated fetch, so that
+    // an idle app will not get logged out if it doesn't issue a fetch before
+    // the first expiration date.
     if (currentRefreshOptions !== undefined) {
         const proactivelyRefreshToken = async () => {
             var _a, _b, _c, _d;
             try {
-                const { accessToken: refreshedAccessToken, refreshToken, expiresIn, } = await refreshAccessToken(currentRefreshOptions, options.dpopKey, options.eventEmitter);
+                const { accessToken: refreshedAccessToken, refreshToken, expiresIn, } = await refreshAccessToken(currentRefreshOptions, 
+                // If currentRefreshOptions is defined, options is necessarily defined too.
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                options.dpopKey, 
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                options.eventEmitter);
+                // Update the tokens in the closure if appropriate.
                 currentAccessToken = refreshedAccessToken;
                 if (refreshToken !== undefined) {
                     currentRefreshOptions.refreshToken = refreshToken;
                 }
+                // Each time the access token is refreshed, we must plan fo the next
+                // refresh iteration.
                 clearTimeout(latestTimeout);
                 latestTimeout = setTimeout(proactivelyRefreshToken, computeRefreshDelay(expiresIn) * 1000);
+                // If currentRefreshOptions is defined, options is necessarily defined too.
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 (_a = options.eventEmitter) === null || _a === void 0 ? void 0 : _a.emit(EVENTS.TIMEOUT_SET, latestTimeout);
             }
             catch (e) {
+                // It is possible that an underlying library throws an error on refresh flow failure.
+                // If we used a log framework, the error could be logged at the `debug` level,
+                // but otherwise the failure of the refresh flow should not blow up in the user's
+                // face, so we just swallow the error.
                 if (e instanceof OidcProviderError) {
+                    // The OIDC provider refused to refresh the access token and returned an error instead.
+                    /* istanbul ignore next 100% coverage would require testing that nothing
+                        happens here if the emitter is undefined, which is more cumbersome
+                        than what it's worth. */
                     (_b = options === null || options === void 0 ? void 0 : options.eventEmitter) === null || _b === void 0 ? void 0 : _b.emit(EVENTS.ERROR, e.error, e.errorDescription);
+                    /* istanbul ignore next 100% coverage would require testing that nothing
+                      happens here if the emitter is undefined, which is more cumbersome
+                      than what it's worth. */
                     (_c = options === null || options === void 0 ? void 0 : options.eventEmitter) === null || _c === void 0 ? void 0 : _c.emit(EVENTS.SESSION_EXPIRED);
                 }
                 if (e instanceof InvalidResponseError &&
                     e.missingFields.includes("access_token")) {
+                    // In this case, the OIDC provider returned a non-standard response, but
+                    // did not specify that it was an error. We cannot refresh nonetheless.
+                    /* istanbul ignore next 100% coverage would require testing that nothing
+                      happens here if the emitter is undefined, which is more cumbersome
+                      than what it's worth. */
                     (_d = options === null || options === void 0 ? void 0 : options.eventEmitter) === null || _d === void 0 ? void 0 : _d.emit(EVENTS.SESSION_EXPIRED);
                 }
             }
         };
-        latestTimeout = setTimeout(proactivelyRefreshToken, computeRefreshDelay(options.expiresIn) * 1000);
+        latestTimeout = setTimeout(proactivelyRefreshToken, 
+        // If currentRefreshOptions is defined, options is necessarily defined too.
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        computeRefreshDelay(options.expiresIn) * 1000);
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         (_a = options.eventEmitter) === null || _a === void 0 ? void 0 : _a.emit(EVENTS.TIMEOUT_SET, latestTimeout);
     }
     else if (options !== undefined && options.eventEmitter !== undefined) {
+        // If no refresh options are provided, the session expires when the access token does.
         const expirationTimeout = setTimeout(() => {
+            // The event emitter is always defined in our code, and it would be tedious
+            // to test for conditions when it is not.
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             options.eventEmitter.emit(EVENTS.SESSION_EXPIRED);
         }, computeRefreshDelay(options.expiresIn) * 1000);
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         options.eventEmitter.emit(EVENTS.TIMEOUT_SET, expirationTimeout);
     }
     return async (url, requestInit) => {
         let response = await makeAuthenticatedRequest(unauthFetch, currentAccessToken, url, requestInit, options === null || options === void 0 ? void 0 : options.dpopKey);
         const failedButNotExpectedAuthError = !response.ok && !isExpectedAuthError(response.status);
         if (response.ok || failedButNotExpectedAuthError) {
+            // If there hasn't been a redirection, or if there has been a non-auth related
+            // issue, it should be handled at the application level
             return response;
         }
         const hasBeenRedirected = response.url !== url;
         if (hasBeenRedirected && (options === null || options === void 0 ? void 0 : options.dpopKey) !== undefined) {
-            response = await makeAuthenticatedRequest(unauthFetch, currentAccessToken, response.url, requestInit, options.dpopKey);
+            // If the request failed for auth reasons, and has been redirected, we should
+            // replay it generating a DPoP header for the rediration target IRI. This
+            // doesn't apply to Bearer tokens, as the Bearer tokens aren't specific
+            // to a given resource and method, while the DPoP header (associated to a
+            // DPoP token) is.
+            response = await makeAuthenticatedRequest(unauthFetch, currentAccessToken, 
+            // Replace the original target IRI (`url`) by the redirection target
+            response.url, requestInit, options.dpopKey);
         }
         return response;
     };
 }
 
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 const StorageUtilityGetResponse = "getResponse";
 const StorageUtilityMock = {
+    /* eslint-disable @typescript-eslint/no-unused-vars */
     get: async (key, options) => StorageUtilityGetResponse,
     set: async (key, value) => {
+        /* do nothing */
     },
     delete: async (key) => {
+        /* do nothing */
     },
     getForUser: async (userId, key, options) => StorageUtilityGetResponse,
     setForUser: async (userId, values, options) => {
+        /* do nothing */
     },
     deleteForUser: async (userId, key, options) => {
+        /* do nothing */
     },
     deleteAllUserData: async (userId, options) => {
+        /* do nothing */
     },
 };
 const mockStorage = (stored) => {
@@ -61270,6 +63980,7 @@ const mockStorageUtility = (stored, isSecure = false) => {
 };
 
 
+//# sourceMappingURL=index.mjs.map
 
 
 /***/ }),
@@ -61283,11 +63994,11 @@ const mockStorageUtility = (stored, isSecure = false) => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Headers": () => (/* binding */ Headers),
-/* harmony export */   "Request": () => (/* binding */ Request),
-/* harmony export */   "Response": () => (/* binding */ Response),
+/* harmony export */   Headers: () => (/* binding */ Headers),
+/* harmony export */   Request: () => (/* binding */ Request),
+/* harmony export */   Response: () => (/* binding */ Response),
 /* harmony export */   "default": () => (/* binding */ indexBrowser),
-/* harmony export */   "fetch": () => (/* binding */ fetch)
+/* harmony export */   fetch: () => (/* binding */ fetch)
 /* harmony export */ });
 var indexBrowser = globalThis.fetch;
 const { fetch, Response, Request, Headers } = globalThis;
@@ -61306,41 +64017,42 @@ const { fetch, Response, Request, Headers } = globalThis;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "CompactEncrypt": () => (/* reexport safe */ _jwe_compact_encrypt_js__WEBPACK_IMPORTED_MODULE_9__.CompactEncrypt),
-/* harmony export */   "CompactSign": () => (/* reexport safe */ _jws_compact_sign_js__WEBPACK_IMPORTED_MODULE_11__.CompactSign),
-/* harmony export */   "EmbeddedJWK": () => (/* reexport safe */ _jwk_embedded_js__WEBPACK_IMPORTED_MODULE_17__.EmbeddedJWK),
-/* harmony export */   "EncryptJWT": () => (/* reexport safe */ _jwt_encrypt_js__WEBPACK_IMPORTED_MODULE_15__.EncryptJWT),
-/* harmony export */   "FlattenedEncrypt": () => (/* reexport safe */ _jwe_flattened_encrypt_js__WEBPACK_IMPORTED_MODULE_10__.FlattenedEncrypt),
-/* harmony export */   "FlattenedSign": () => (/* reexport safe */ _jws_flattened_sign_js__WEBPACK_IMPORTED_MODULE_12__.FlattenedSign),
-/* harmony export */   "GeneralEncrypt": () => (/* reexport safe */ _jwe_general_encrypt_js__WEBPACK_IMPORTED_MODULE_3__.GeneralEncrypt),
-/* harmony export */   "GeneralSign": () => (/* reexport safe */ _jws_general_sign_js__WEBPACK_IMPORTED_MODULE_13__.GeneralSign),
-/* harmony export */   "SignJWT": () => (/* reexport safe */ _jwt_sign_js__WEBPACK_IMPORTED_MODULE_14__.SignJWT),
-/* harmony export */   "UnsecuredJWT": () => (/* reexport safe */ _jwt_unsecured_js__WEBPACK_IMPORTED_MODULE_20__.UnsecuredJWT),
-/* harmony export */   "base64url": () => (/* reexport module object */ _util_base64url_js__WEBPACK_IMPORTED_MODULE_28__),
-/* harmony export */   "calculateJwkThumbprint": () => (/* reexport safe */ _jwk_thumbprint_js__WEBPACK_IMPORTED_MODULE_16__.calculateJwkThumbprint),
-/* harmony export */   "calculateJwkThumbprintUri": () => (/* reexport safe */ _jwk_thumbprint_js__WEBPACK_IMPORTED_MODULE_16__.calculateJwkThumbprintUri),
-/* harmony export */   "compactDecrypt": () => (/* reexport safe */ _jwe_compact_decrypt_js__WEBPACK_IMPORTED_MODULE_0__.compactDecrypt),
-/* harmony export */   "compactVerify": () => (/* reexport safe */ _jws_compact_verify_js__WEBPACK_IMPORTED_MODULE_4__.compactVerify),
-/* harmony export */   "createLocalJWKSet": () => (/* reexport safe */ _jwks_local_js__WEBPACK_IMPORTED_MODULE_18__.createLocalJWKSet),
-/* harmony export */   "createRemoteJWKSet": () => (/* reexport safe */ _jwks_remote_js__WEBPACK_IMPORTED_MODULE_19__.createRemoteJWKSet),
-/* harmony export */   "decodeJwt": () => (/* reexport safe */ _util_decode_jwt_js__WEBPACK_IMPORTED_MODULE_24__.decodeJwt),
-/* harmony export */   "decodeProtectedHeader": () => (/* reexport safe */ _util_decode_protected_header_js__WEBPACK_IMPORTED_MODULE_23__.decodeProtectedHeader),
-/* harmony export */   "errors": () => (/* reexport module object */ _util_errors_js__WEBPACK_IMPORTED_MODULE_25__),
-/* harmony export */   "exportJWK": () => (/* reexport safe */ _key_export_js__WEBPACK_IMPORTED_MODULE_21__.exportJWK),
-/* harmony export */   "exportPKCS8": () => (/* reexport safe */ _key_export_js__WEBPACK_IMPORTED_MODULE_21__.exportPKCS8),
-/* harmony export */   "exportSPKI": () => (/* reexport safe */ _key_export_js__WEBPACK_IMPORTED_MODULE_21__.exportSPKI),
-/* harmony export */   "flattenedDecrypt": () => (/* reexport safe */ _jwe_flattened_decrypt_js__WEBPACK_IMPORTED_MODULE_1__.flattenedDecrypt),
-/* harmony export */   "flattenedVerify": () => (/* reexport safe */ _jws_flattened_verify_js__WEBPACK_IMPORTED_MODULE_5__.flattenedVerify),
-/* harmony export */   "generalDecrypt": () => (/* reexport safe */ _jwe_general_decrypt_js__WEBPACK_IMPORTED_MODULE_2__.generalDecrypt),
-/* harmony export */   "generalVerify": () => (/* reexport safe */ _jws_general_verify_js__WEBPACK_IMPORTED_MODULE_6__.generalVerify),
-/* harmony export */   "generateKeyPair": () => (/* reexport safe */ _key_generate_key_pair_js__WEBPACK_IMPORTED_MODULE_26__.generateKeyPair),
-/* harmony export */   "generateSecret": () => (/* reexport safe */ _key_generate_secret_js__WEBPACK_IMPORTED_MODULE_27__.generateSecret),
-/* harmony export */   "importJWK": () => (/* reexport safe */ _key_import_js__WEBPACK_IMPORTED_MODULE_22__.importJWK),
-/* harmony export */   "importPKCS8": () => (/* reexport safe */ _key_import_js__WEBPACK_IMPORTED_MODULE_22__.importPKCS8),
-/* harmony export */   "importSPKI": () => (/* reexport safe */ _key_import_js__WEBPACK_IMPORTED_MODULE_22__.importSPKI),
-/* harmony export */   "importX509": () => (/* reexport safe */ _key_import_js__WEBPACK_IMPORTED_MODULE_22__.importX509),
-/* harmony export */   "jwtDecrypt": () => (/* reexport safe */ _jwt_decrypt_js__WEBPACK_IMPORTED_MODULE_8__.jwtDecrypt),
-/* harmony export */   "jwtVerify": () => (/* reexport safe */ _jwt_verify_js__WEBPACK_IMPORTED_MODULE_7__.jwtVerify)
+/* harmony export */   CompactEncrypt: () => (/* reexport safe */ _jwe_compact_encrypt_js__WEBPACK_IMPORTED_MODULE_9__.CompactEncrypt),
+/* harmony export */   CompactSign: () => (/* reexport safe */ _jws_compact_sign_js__WEBPACK_IMPORTED_MODULE_11__.CompactSign),
+/* harmony export */   EmbeddedJWK: () => (/* reexport safe */ _jwk_embedded_js__WEBPACK_IMPORTED_MODULE_17__.EmbeddedJWK),
+/* harmony export */   EncryptJWT: () => (/* reexport safe */ _jwt_encrypt_js__WEBPACK_IMPORTED_MODULE_15__.EncryptJWT),
+/* harmony export */   FlattenedEncrypt: () => (/* reexport safe */ _jwe_flattened_encrypt_js__WEBPACK_IMPORTED_MODULE_10__.FlattenedEncrypt),
+/* harmony export */   FlattenedSign: () => (/* reexport safe */ _jws_flattened_sign_js__WEBPACK_IMPORTED_MODULE_12__.FlattenedSign),
+/* harmony export */   GeneralEncrypt: () => (/* reexport safe */ _jwe_general_encrypt_js__WEBPACK_IMPORTED_MODULE_3__.GeneralEncrypt),
+/* harmony export */   GeneralSign: () => (/* reexport safe */ _jws_general_sign_js__WEBPACK_IMPORTED_MODULE_13__.GeneralSign),
+/* harmony export */   SignJWT: () => (/* reexport safe */ _jwt_sign_js__WEBPACK_IMPORTED_MODULE_14__.SignJWT),
+/* harmony export */   UnsecuredJWT: () => (/* reexport safe */ _jwt_unsecured_js__WEBPACK_IMPORTED_MODULE_20__.UnsecuredJWT),
+/* harmony export */   base64url: () => (/* reexport module object */ _util_base64url_js__WEBPACK_IMPORTED_MODULE_28__),
+/* harmony export */   calculateJwkThumbprint: () => (/* reexport safe */ _jwk_thumbprint_js__WEBPACK_IMPORTED_MODULE_16__.calculateJwkThumbprint),
+/* harmony export */   calculateJwkThumbprintUri: () => (/* reexport safe */ _jwk_thumbprint_js__WEBPACK_IMPORTED_MODULE_16__.calculateJwkThumbprintUri),
+/* harmony export */   compactDecrypt: () => (/* reexport safe */ _jwe_compact_decrypt_js__WEBPACK_IMPORTED_MODULE_0__.compactDecrypt),
+/* harmony export */   compactVerify: () => (/* reexport safe */ _jws_compact_verify_js__WEBPACK_IMPORTED_MODULE_4__.compactVerify),
+/* harmony export */   createLocalJWKSet: () => (/* reexport safe */ _jwks_local_js__WEBPACK_IMPORTED_MODULE_18__.createLocalJWKSet),
+/* harmony export */   createRemoteJWKSet: () => (/* reexport safe */ _jwks_remote_js__WEBPACK_IMPORTED_MODULE_19__.createRemoteJWKSet),
+/* harmony export */   cryptoRuntime: () => (/* reexport safe */ _util_runtime_js__WEBPACK_IMPORTED_MODULE_29__["default"]),
+/* harmony export */   decodeJwt: () => (/* reexport safe */ _util_decode_jwt_js__WEBPACK_IMPORTED_MODULE_24__.decodeJwt),
+/* harmony export */   decodeProtectedHeader: () => (/* reexport safe */ _util_decode_protected_header_js__WEBPACK_IMPORTED_MODULE_23__.decodeProtectedHeader),
+/* harmony export */   errors: () => (/* reexport module object */ _util_errors_js__WEBPACK_IMPORTED_MODULE_25__),
+/* harmony export */   exportJWK: () => (/* reexport safe */ _key_export_js__WEBPACK_IMPORTED_MODULE_21__.exportJWK),
+/* harmony export */   exportPKCS8: () => (/* reexport safe */ _key_export_js__WEBPACK_IMPORTED_MODULE_21__.exportPKCS8),
+/* harmony export */   exportSPKI: () => (/* reexport safe */ _key_export_js__WEBPACK_IMPORTED_MODULE_21__.exportSPKI),
+/* harmony export */   flattenedDecrypt: () => (/* reexport safe */ _jwe_flattened_decrypt_js__WEBPACK_IMPORTED_MODULE_1__.flattenedDecrypt),
+/* harmony export */   flattenedVerify: () => (/* reexport safe */ _jws_flattened_verify_js__WEBPACK_IMPORTED_MODULE_5__.flattenedVerify),
+/* harmony export */   generalDecrypt: () => (/* reexport safe */ _jwe_general_decrypt_js__WEBPACK_IMPORTED_MODULE_2__.generalDecrypt),
+/* harmony export */   generalVerify: () => (/* reexport safe */ _jws_general_verify_js__WEBPACK_IMPORTED_MODULE_6__.generalVerify),
+/* harmony export */   generateKeyPair: () => (/* reexport safe */ _key_generate_key_pair_js__WEBPACK_IMPORTED_MODULE_26__.generateKeyPair),
+/* harmony export */   generateSecret: () => (/* reexport safe */ _key_generate_secret_js__WEBPACK_IMPORTED_MODULE_27__.generateSecret),
+/* harmony export */   importJWK: () => (/* reexport safe */ _key_import_js__WEBPACK_IMPORTED_MODULE_22__.importJWK),
+/* harmony export */   importPKCS8: () => (/* reexport safe */ _key_import_js__WEBPACK_IMPORTED_MODULE_22__.importPKCS8),
+/* harmony export */   importSPKI: () => (/* reexport safe */ _key_import_js__WEBPACK_IMPORTED_MODULE_22__.importSPKI),
+/* harmony export */   importX509: () => (/* reexport safe */ _key_import_js__WEBPACK_IMPORTED_MODULE_22__.importX509),
+/* harmony export */   jwtDecrypt: () => (/* reexport safe */ _jwt_decrypt_js__WEBPACK_IMPORTED_MODULE_8__.jwtDecrypt),
+/* harmony export */   jwtVerify: () => (/* reexport safe */ _jwt_verify_js__WEBPACK_IMPORTED_MODULE_7__.jwtVerify)
 /* harmony export */ });
 /* harmony import */ var _jwe_compact_decrypt_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./jwe/compact/decrypt.js */ "./node_modules/jose/dist/browser/jwe/compact/decrypt.js");
 /* harmony import */ var _jwe_flattened_decrypt_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./jwe/flattened/decrypt.js */ "./node_modules/jose/dist/browser/jwe/flattened/decrypt.js");
@@ -61371,6 +64083,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _key_generate_key_pair_js__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./key/generate_key_pair.js */ "./node_modules/jose/dist/browser/key/generate_key_pair.js");
 /* harmony import */ var _key_generate_secret_js__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./key/generate_secret.js */ "./node_modules/jose/dist/browser/key/generate_secret.js");
 /* harmony import */ var _util_base64url_js__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./util/base64url.js */ "./node_modules/jose/dist/browser/util/base64url.js");
+/* harmony import */ var _util_runtime_js__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./util/runtime.js */ "./node_modules/jose/dist/browser/util/runtime.js");
+
 
 
 
@@ -61415,7 +64129,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "compactDecrypt": () => (/* binding */ compactDecrypt)
+/* harmony export */   compactDecrypt: () => (/* binding */ compactDecrypt)
 /* harmony export */ });
 /* harmony import */ var _flattened_decrypt_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../flattened/decrypt.js */ "./node_modules/jose/dist/browser/jwe/flattened/decrypt.js");
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
@@ -61460,7 +64174,7 @@ async function compactDecrypt(jwe, key, options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "CompactEncrypt": () => (/* binding */ CompactEncrypt)
+/* harmony export */   CompactEncrypt: () => (/* binding */ CompactEncrypt)
 /* harmony export */ });
 /* harmony import */ var _flattened_encrypt_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../flattened/encrypt.js */ "./node_modules/jose/dist/browser/jwe/flattened/encrypt.js");
 
@@ -61502,7 +64216,7 @@ class CompactEncrypt {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "flattenedDecrypt": () => (/* binding */ flattenedDecrypt)
+/* harmony export */   flattenedDecrypt: () => (/* binding */ flattenedDecrypt)
 /* harmony export */ });
 /* harmony import */ var _runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../runtime/base64url.js */ "./node_modules/jose/dist/browser/runtime/base64url.js");
 /* harmony import */ var _runtime_decrypt_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../runtime/decrypt.js */ "./node_modules/jose/dist/browser/runtime/decrypt.js");
@@ -61603,7 +64317,12 @@ async function flattenedDecrypt(jwe, key, options) {
     }
     let encryptedKey;
     if (jwe.encrypted_key !== undefined) {
-        encryptedKey = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwe.encrypted_key);
+        try {
+            encryptedKey = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwe.encrypted_key);
+        }
+        catch (_c) {
+            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid('Failed to base64url decode the encrypted_key');
+        }
     }
     let resolvedKey = false;
     if (typeof key === 'function') {
@@ -61620,8 +64339,20 @@ async function flattenedDecrypt(jwe, key, options) {
         }
         cek = (0,_lib_cek_js__WEBPACK_IMPORTED_MODULE_8__["default"])(enc);
     }
-    const iv = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwe.iv);
-    const tag = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwe.tag);
+    let iv;
+    let tag;
+    try {
+        iv = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwe.iv);
+    }
+    catch (_d) {
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid('Failed to base64url decode the iv');
+    }
+    try {
+        tag = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwe.tag);
+    }
+    catch (_e) {
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid('Failed to base64url decode the tag');
+    }
     const protectedHeader = _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_7__.encoder.encode((_a = jwe.protected) !== null && _a !== void 0 ? _a : '');
     let additionalData;
     if (jwe.aad !== undefined) {
@@ -61630,7 +64361,14 @@ async function flattenedDecrypt(jwe, key, options) {
     else {
         additionalData = protectedHeader;
     }
-    let plaintext = await (0,_runtime_decrypt_js__WEBPACK_IMPORTED_MODULE_1__["default"])(enc, cek, (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwe.ciphertext), iv, tag, additionalData);
+    let ciphertext;
+    try {
+        ciphertext = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwe.ciphertext);
+    }
+    catch (_f) {
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid('Failed to base64url decode the ciphertext');
+    }
+    let plaintext = await (0,_runtime_decrypt_js__WEBPACK_IMPORTED_MODULE_1__["default"])(enc, cek, ciphertext, iv, tag, additionalData);
     if (joseHeader.zip === 'DEF') {
         plaintext = await ((options === null || options === void 0 ? void 0 : options.inflateRaw) || _runtime_zlib_js__WEBPACK_IMPORTED_MODULE_2__.inflate)(plaintext);
     }
@@ -61639,7 +64377,12 @@ async function flattenedDecrypt(jwe, key, options) {
         result.protectedHeader = parsedProt;
     }
     if (jwe.aad !== undefined) {
-        result.additionalAuthenticatedData = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwe.aad);
+        try {
+            result.additionalAuthenticatedData = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwe.aad);
+        }
+        catch (_g) {
+            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid('Failed to base64url decode the aad');
+        }
     }
     if (jwe.unprotected !== undefined) {
         result.sharedUnprotectedHeader = jwe.unprotected;
@@ -61665,8 +64408,8 @@ async function flattenedDecrypt(jwe, key, options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "FlattenedEncrypt": () => (/* binding */ FlattenedEncrypt),
-/* harmony export */   "unprotected": () => (/* binding */ unprotected)
+/* harmony export */   FlattenedEncrypt: () => (/* binding */ FlattenedEncrypt),
+/* harmony export */   unprotected: () => (/* binding */ unprotected)
 /* harmony export */ });
 /* harmony import */ var _runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../runtime/base64url.js */ "./node_modules/jose/dist/browser/runtime/base64url.js");
 /* harmony import */ var _runtime_encrypt_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../runtime/encrypt.js */ "./node_modules/jose/dist/browser/runtime/encrypt.js");
@@ -61865,7 +64608,7 @@ class FlattenedEncrypt {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "generalDecrypt": () => (/* binding */ generalDecrypt)
+/* harmony export */   generalDecrypt: () => (/* binding */ generalDecrypt)
 /* harmony export */ });
 /* harmony import */ var _flattened_decrypt_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../flattened/decrypt.js */ "./node_modules/jose/dist/browser/jwe/flattened/decrypt.js");
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
@@ -61914,7 +64657,7 @@ async function generalDecrypt(jwe, key, options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "GeneralEncrypt": () => (/* binding */ GeneralEncrypt)
+/* harmony export */   GeneralEncrypt: () => (/* binding */ GeneralEncrypt)
 /* harmony export */ });
 /* harmony import */ var _flattened_encrypt_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../flattened/encrypt.js */ "./node_modules/jose/dist/browser/jwe/flattened/encrypt.js");
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
@@ -62114,7 +64857,7 @@ class GeneralEncrypt {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "EmbeddedJWK": () => (/* binding */ EmbeddedJWK)
+/* harmony export */   EmbeddedJWK: () => (/* binding */ EmbeddedJWK)
 /* harmony export */ });
 /* harmony import */ var _key_import_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../key/import.js */ "./node_modules/jose/dist/browser/key/import.js");
 /* harmony import */ var _lib_is_object_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lib/is_object.js */ "./node_modules/jose/dist/browser/lib/is_object.js");
@@ -62149,8 +64892,8 @@ async function EmbeddedJWK(protectedHeader, token) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "calculateJwkThumbprint": () => (/* binding */ calculateJwkThumbprint),
-/* harmony export */   "calculateJwkThumbprintUri": () => (/* binding */ calculateJwkThumbprintUri)
+/* harmony export */   calculateJwkThumbprint: () => (/* binding */ calculateJwkThumbprint),
+/* harmony export */   calculateJwkThumbprintUri: () => (/* binding */ calculateJwkThumbprintUri)
 /* harmony export */ });
 /* harmony import */ var _runtime_digest_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../runtime/digest.js */ "./node_modules/jose/dist/browser/runtime/digest.js");
 /* harmony import */ var _runtime_base64url_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../runtime/base64url.js */ "./node_modules/jose/dist/browser/runtime/base64url.js");
@@ -62223,9 +64966,9 @@ async function calculateJwkThumbprintUri(jwk, digestAlgorithm) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "LocalJWKSet": () => (/* binding */ LocalJWKSet),
-/* harmony export */   "createLocalJWKSet": () => (/* binding */ createLocalJWKSet),
-/* harmony export */   "isJWKSLike": () => (/* binding */ isJWKSLike)
+/* harmony export */   LocalJWKSet: () => (/* binding */ LocalJWKSet),
+/* harmony export */   createLocalJWKSet: () => (/* binding */ createLocalJWKSet),
+/* harmony export */   isJWKSLike: () => (/* binding */ isJWKSLike)
 /* harmony export */ });
 /* harmony import */ var _key_import_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../key/import.js */ "./node_modules/jose/dist/browser/key/import.js");
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
@@ -62359,7 +65102,7 @@ function createLocalJWKSet(jwks) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "createRemoteJWKSet": () => (/* binding */ createRemoteJWKSet)
+/* harmony export */   createRemoteJWKSet: () => (/* binding */ createRemoteJWKSet)
 /* harmony export */ });
 /* harmony import */ var _runtime_fetch_jwks_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../runtime/fetch_jwks.js */ "./node_modules/jose/dist/browser/runtime/fetch_jwks.js");
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
@@ -62453,7 +65196,7 @@ function createRemoteJWKSet(url, options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "CompactSign": () => (/* binding */ CompactSign)
+/* harmony export */   CompactSign: () => (/* binding */ CompactSign)
 /* harmony export */ });
 /* harmony import */ var _flattened_sign_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../flattened/sign.js */ "./node_modules/jose/dist/browser/jws/flattened/sign.js");
 
@@ -62486,7 +65229,7 @@ class CompactSign {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "compactVerify": () => (/* binding */ compactVerify)
+/* harmony export */   compactVerify: () => (/* binding */ compactVerify)
 /* harmony export */ });
 /* harmony import */ var _flattened_verify_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../flattened/verify.js */ "./node_modules/jose/dist/browser/jws/flattened/verify.js");
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
@@ -62525,7 +65268,7 @@ async function compactVerify(jws, key, options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "FlattenedSign": () => (/* binding */ FlattenedSign)
+/* harmony export */   FlattenedSign: () => (/* binding */ FlattenedSign)
 /* harmony export */ });
 /* harmony import */ var _runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../runtime/base64url.js */ "./node_modules/jose/dist/browser/runtime/base64url.js");
 /* harmony import */ var _runtime_sign_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../runtime/sign.js */ "./node_modules/jose/dist/browser/runtime/sign.js");
@@ -62628,7 +65371,7 @@ class FlattenedSign {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "flattenedVerify": () => (/* binding */ flattenedVerify)
+/* harmony export */   flattenedVerify: () => (/* binding */ flattenedVerify)
 /* harmony export */ });
 /* harmony import */ var _runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../runtime/base64url.js */ "./node_modules/jose/dist/browser/runtime/base64url.js");
 /* harmony import */ var _runtime_verify_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../runtime/verify.js */ "./node_modules/jose/dist/browser/runtime/verify.js");
@@ -62716,14 +65459,25 @@ async function flattenedVerify(jws, key, options) {
     }
     (0,_lib_check_key_type_js__WEBPACK_IMPORTED_MODULE_6__["default"])(alg, key, 'verify');
     const data = (0,_lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_3__.concat)(_lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_3__.encoder.encode((_a = jws.protected) !== null && _a !== void 0 ? _a : ''), _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_3__.encoder.encode('.'), typeof jws.payload === 'string' ? _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_3__.encoder.encode(jws.payload) : jws.payload);
-    const signature = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jws.signature);
+    let signature;
+    try {
+        signature = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jws.signature);
+    }
+    catch (_c) {
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWSInvalid('Failed to base64url decode the signature');
+    }
     const verified = await (0,_runtime_verify_js__WEBPACK_IMPORTED_MODULE_1__["default"])(alg, key, signature, data);
     if (!verified) {
         throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWSSignatureVerificationFailed();
     }
     let payload;
     if (b64) {
-        payload = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jws.payload);
+        try {
+            payload = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jws.payload);
+        }
+        catch (_d) {
+            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWSInvalid('Failed to base64url decode the payload');
+        }
     }
     else if (typeof jws.payload === 'string') {
         payload = _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_3__.encoder.encode(jws.payload);
@@ -62756,7 +65510,7 @@ async function flattenedVerify(jws, key, options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "GeneralSign": () => (/* binding */ GeneralSign)
+/* harmony export */   GeneralSign: () => (/* binding */ GeneralSign)
 /* harmony export */ });
 /* harmony import */ var _flattened_sign_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../flattened/sign.js */ "./node_modules/jose/dist/browser/jws/flattened/sign.js");
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
@@ -62840,7 +65594,7 @@ class GeneralSign {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "generalVerify": () => (/* binding */ generalVerify)
+/* harmony export */   generalVerify: () => (/* binding */ generalVerify)
 /* harmony export */ });
 /* harmony import */ var _flattened_verify_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../flattened/verify.js */ "./node_modules/jose/dist/browser/jws/flattened/verify.js");
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
@@ -62882,7 +65636,7 @@ async function generalVerify(jws, key, options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "jwtDecrypt": () => (/* binding */ jwtDecrypt)
+/* harmony export */   jwtDecrypt: () => (/* binding */ jwtDecrypt)
 /* harmony export */ });
 /* harmony import */ var _jwe_compact_decrypt_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../jwe/compact/decrypt.js */ "./node_modules/jose/dist/browser/jwe/compact/decrypt.js");
 /* harmony import */ var _lib_jwt_claims_set_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lib/jwt_claims_set.js */ "./node_modules/jose/dist/browser/lib/jwt_claims_set.js");
@@ -62923,7 +65677,7 @@ async function jwtDecrypt(jwt, key, options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "EncryptJWT": () => (/* binding */ EncryptJWT)
+/* harmony export */   EncryptJWT: () => (/* binding */ EncryptJWT)
 /* harmony export */ });
 /* harmony import */ var _jwe_compact_encrypt_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../jwe/compact/encrypt.js */ "./node_modules/jose/dist/browser/jwe/compact/encrypt.js");
 /* harmony import */ var _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lib/buffer_utils.js */ "./node_modules/jose/dist/browser/lib/buffer_utils.js");
@@ -63009,7 +65763,7 @@ class EncryptJWT extends _produce_js__WEBPACK_IMPORTED_MODULE_2__.ProduceJWT {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "ProduceJWT": () => (/* binding */ ProduceJWT)
+/* harmony export */   ProduceJWT: () => (/* binding */ ProduceJWT)
 /* harmony export */ });
 /* harmony import */ var _lib_epoch_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../lib/epoch.js */ "./node_modules/jose/dist/browser/lib/epoch.js");
 /* harmony import */ var _lib_is_object_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lib/is_object.js */ "./node_modules/jose/dist/browser/lib/is_object.js");
@@ -63081,7 +65835,7 @@ class ProduceJWT {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "SignJWT": () => (/* binding */ SignJWT)
+/* harmony export */   SignJWT: () => (/* binding */ SignJWT)
 /* harmony export */ });
 /* harmony import */ var _jws_compact_sign_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../jws/compact/sign.js */ "./node_modules/jose/dist/browser/jws/compact/sign.js");
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
@@ -63121,7 +65875,7 @@ class SignJWT extends _produce_js__WEBPACK_IMPORTED_MODULE_3__.ProduceJWT {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "UnsecuredJWT": () => (/* binding */ UnsecuredJWT)
+/* harmony export */   UnsecuredJWT: () => (/* binding */ UnsecuredJWT)
 /* harmony export */ });
 /* harmony import */ var _runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../runtime/base64url.js */ "./node_modules/jose/dist/browser/runtime/base64url.js");
 /* harmony import */ var _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lib/buffer_utils.js */ "./node_modules/jose/dist/browser/lib/buffer_utils.js");
@@ -63173,7 +65927,7 @@ class UnsecuredJWT extends _produce_js__WEBPACK_IMPORTED_MODULE_4__.ProduceJWT {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "jwtVerify": () => (/* binding */ jwtVerify)
+/* harmony export */   jwtVerify: () => (/* binding */ jwtVerify)
 /* harmony export */ });
 /* harmony import */ var _jws_compact_verify_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../jws/compact/verify.js */ "./node_modules/jose/dist/browser/jws/compact/verify.js");
 /* harmony import */ var _lib_jwt_claims_set_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lib/jwt_claims_set.js */ "./node_modules/jose/dist/browser/lib/jwt_claims_set.js");
@@ -63207,9 +65961,9 @@ async function jwtVerify(jwt, key, options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "exportJWK": () => (/* binding */ exportJWK),
-/* harmony export */   "exportPKCS8": () => (/* binding */ exportPKCS8),
-/* harmony export */   "exportSPKI": () => (/* binding */ exportSPKI)
+/* harmony export */   exportJWK: () => (/* binding */ exportJWK),
+/* harmony export */   exportPKCS8: () => (/* binding */ exportPKCS8),
+/* harmony export */   exportSPKI: () => (/* binding */ exportSPKI)
 /* harmony export */ });
 /* harmony import */ var _runtime_asn1_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../runtime/asn1.js */ "./node_modules/jose/dist/browser/runtime/asn1.js");
 /* harmony import */ var _runtime_key_to_jwk_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../runtime/key_to_jwk.js */ "./node_modules/jose/dist/browser/runtime/key_to_jwk.js");
@@ -63238,7 +65992,7 @@ async function exportJWK(key) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "generateKeyPair": () => (/* binding */ generateKeyPair)
+/* harmony export */   generateKeyPair: () => (/* binding */ generateKeyPair)
 /* harmony export */ });
 /* harmony import */ var _runtime_generate_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../runtime/generate.js */ "./node_modules/jose/dist/browser/runtime/generate.js");
 
@@ -63258,7 +66012,7 @@ async function generateKeyPair(alg, options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "generateSecret": () => (/* binding */ generateSecret)
+/* harmony export */   generateSecret: () => (/* binding */ generateSecret)
 /* harmony export */ });
 /* harmony import */ var _runtime_generate_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../runtime/generate.js */ "./node_modules/jose/dist/browser/runtime/generate.js");
 
@@ -63278,10 +66032,10 @@ async function generateSecret(alg, options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "importJWK": () => (/* binding */ importJWK),
-/* harmony export */   "importPKCS8": () => (/* binding */ importPKCS8),
-/* harmony export */   "importSPKI": () => (/* binding */ importSPKI),
-/* harmony export */   "importX509": () => (/* binding */ importX509)
+/* harmony export */   importJWK: () => (/* binding */ importJWK),
+/* harmony export */   importPKCS8: () => (/* binding */ importPKCS8),
+/* harmony export */   importSPKI: () => (/* binding */ importSPKI),
+/* harmony export */   importX509: () => (/* binding */ importX509)
 /* harmony export */ });
 /* harmony import */ var _runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../runtime/base64url.js */ "./node_modules/jose/dist/browser/runtime/base64url.js");
 /* harmony import */ var _runtime_asn1_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../runtime/asn1.js */ "./node_modules/jose/dist/browser/runtime/asn1.js");
@@ -63351,8 +66105,8 @@ async function importJWK(jwk, alg, octAsKeyObject) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "unwrap": () => (/* binding */ unwrap),
-/* harmony export */   "wrap": () => (/* binding */ wrap)
+/* harmony export */   unwrap: () => (/* binding */ unwrap),
+/* harmony export */   wrap: () => (/* binding */ wrap)
 /* harmony export */ });
 /* harmony import */ var _runtime_encrypt_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../runtime/encrypt.js */ "./node_modules/jose/dist/browser/runtime/encrypt.js");
 /* harmony import */ var _runtime_decrypt_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../runtime/decrypt.js */ "./node_modules/jose/dist/browser/runtime/decrypt.js");
@@ -63385,14 +66139,14 @@ async function unwrap(alg, key, encryptedKey, iv, tag) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "concat": () => (/* binding */ concat),
-/* harmony export */   "concatKdf": () => (/* binding */ concatKdf),
-/* harmony export */   "decoder": () => (/* binding */ decoder),
-/* harmony export */   "encoder": () => (/* binding */ encoder),
-/* harmony export */   "lengthAndInput": () => (/* binding */ lengthAndInput),
-/* harmony export */   "p2s": () => (/* binding */ p2s),
-/* harmony export */   "uint32be": () => (/* binding */ uint32be),
-/* harmony export */   "uint64be": () => (/* binding */ uint64be)
+/* harmony export */   concat: () => (/* binding */ concat),
+/* harmony export */   concatKdf: () => (/* binding */ concatKdf),
+/* harmony export */   decoder: () => (/* binding */ decoder),
+/* harmony export */   encoder: () => (/* binding */ encoder),
+/* harmony export */   lengthAndInput: () => (/* binding */ lengthAndInput),
+/* harmony export */   p2s: () => (/* binding */ p2s),
+/* harmony export */   uint32be: () => (/* binding */ uint32be),
+/* harmony export */   uint64be: () => (/* binding */ uint64be)
 /* harmony export */ });
 /* harmony import */ var _runtime_digest_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../runtime/digest.js */ "./node_modules/jose/dist/browser/runtime/digest.js");
 
@@ -63459,7 +66213,7 @@ async function concatKdf(secret, bits, value) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "bitLength": () => (/* binding */ bitLength),
+/* harmony export */   bitLength: () => (/* binding */ bitLength),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
@@ -63606,8 +66360,8 @@ function checkP2s(p2s) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "checkEncCryptoKey": () => (/* binding */ checkEncCryptoKey),
-/* harmony export */   "checkSigCryptoKey": () => (/* binding */ checkSigCryptoKey)
+/* harmony export */   checkEncCryptoKey: () => (/* binding */ checkEncCryptoKey),
+/* harmony export */   checkSigCryptoKey: () => (/* binding */ checkSigCryptoKey)
 /* harmony export */ });
 function unusable(name, prop = 'algorithm.name') {
     return new TypeError(`CryptoKey does not support this operation, its ${prop} must be ${name}`);
@@ -63822,12 +66576,22 @@ async function decryptKeyManagement(alg, key, encryptedKey, joseHeader, options)
             if (joseHeader.apu !== undefined) {
                 if (typeof joseHeader.apu !== 'string')
                     throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid(`JOSE Header "apu" (Agreement PartyUInfo) invalid`);
-                partyUInfo = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_4__.decode)(joseHeader.apu);
+                try {
+                    partyUInfo = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_4__.decode)(joseHeader.apu);
+                }
+                catch (_a) {
+                    throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid('Failed to base64url decode the apu');
+                }
             }
             if (joseHeader.apv !== undefined) {
                 if (typeof joseHeader.apv !== 'string')
                     throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid(`JOSE Header "apv" (Agreement PartyVInfo) invalid`);
-                partyVInfo = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_4__.decode)(joseHeader.apv);
+                try {
+                    partyVInfo = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_4__.decode)(joseHeader.apv);
+                }
+                catch (_b) {
+                    throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid('Failed to base64url decode the apv');
+                }
             }
             const sharedSecret = await _runtime_ecdhes_js__WEBPACK_IMPORTED_MODULE_1__.deriveKey(epk, key, alg === 'ECDH-ES' ? joseHeader.enc : alg, alg === 'ECDH-ES' ? (0,_lib_cek_js__WEBPACK_IMPORTED_MODULE_6__.bitLength)(joseHeader.enc) : parseInt(alg.slice(-5, -2), 10), partyUInfo, partyVInfo);
             if (alg === 'ECDH-ES')
@@ -63857,7 +66621,14 @@ async function decryptKeyManagement(alg, key, encryptedKey, joseHeader, options)
                 throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid(`JOSE Header "p2c" (PBES2 Count) out is of acceptable bounds`);
             if (typeof joseHeader.p2s !== 'string')
                 throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid(`JOSE Header "p2s" (PBES2 Salt) missing or invalid`);
-            return (0,_runtime_pbes2kw_js__WEBPACK_IMPORTED_MODULE_2__.decrypt)(alg, key, encryptedKey, joseHeader.p2c, (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_4__.decode)(joseHeader.p2s));
+            let p2s;
+            try {
+                p2s = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_4__.decode)(joseHeader.p2s);
+            }
+            catch (_c) {
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid('Failed to base64url decode the p2s');
+            }
+            return (0,_runtime_pbes2kw_js__WEBPACK_IMPORTED_MODULE_2__.decrypt)(alg, key, encryptedKey, joseHeader.p2c, p2s);
         }
         case 'A128KW':
         case 'A192KW':
@@ -63875,8 +66646,20 @@ async function decryptKeyManagement(alg, key, encryptedKey, joseHeader, options)
                 throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid(`JOSE Header "iv" (Initialization Vector) missing or invalid`);
             if (typeof joseHeader.tag !== 'string')
                 throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid(`JOSE Header "tag" (Authentication Tag) missing or invalid`);
-            const iv = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_4__.decode)(joseHeader.iv);
-            const tag = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_4__.decode)(joseHeader.tag);
+            let iv;
+            try {
+                iv = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_4__.decode)(joseHeader.iv);
+            }
+            catch (_d) {
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid('Failed to base64url decode the iv');
+            }
+            let tag;
+            try {
+                tag = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_4__.decode)(joseHeader.tag);
+            }
+            catch (_e) {
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid('Failed to base64url decode the tag');
+            }
             return (0,_aesgcmkw_js__WEBPACK_IMPORTED_MODULE_10__.unwrap)(alg, key, encryptedKey, iv, tag);
         }
         default: {
@@ -64046,7 +66829,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
-/* harmony export */   "withAlg": () => (/* binding */ withAlg)
+/* harmony export */   withAlg: () => (/* binding */ withAlg)
 /* harmony export */ });
 function message(msg, actual, ...types) {
     if (types.length > 2) {
@@ -64159,7 +66942,7 @@ function isObject(input) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "bitLength": () => (/* binding */ bitLength),
+/* harmony export */   bitLength: () => (/* binding */ bitLength),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
@@ -64454,8 +67237,8 @@ function validateCrit(Err, recognizedDefault, recognizedOption, protectedHeader,
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "unwrap": () => (/* binding */ unwrap),
-/* harmony export */   "wrap": () => (/* binding */ wrap)
+/* harmony export */   unwrap: () => (/* binding */ unwrap),
+/* harmony export */   wrap: () => (/* binding */ wrap)
 /* harmony export */ });
 /* harmony import */ var _bogus_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bogus.js */ "./node_modules/jose/dist/browser/runtime/bogus.js");
 /* harmony import */ var _webcrypto_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./webcrypto.js */ "./node_modules/jose/dist/browser/runtime/webcrypto.js");
@@ -64507,11 +67290,11 @@ const unwrap = async (alg, key, encryptedKey) => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "fromPKCS8": () => (/* binding */ fromPKCS8),
-/* harmony export */   "fromSPKI": () => (/* binding */ fromSPKI),
-/* harmony export */   "fromX509": () => (/* binding */ fromX509),
-/* harmony export */   "toPKCS8": () => (/* binding */ toPKCS8),
-/* harmony export */   "toSPKI": () => (/* binding */ toSPKI)
+/* harmony export */   fromPKCS8: () => (/* binding */ fromPKCS8),
+/* harmony export */   fromSPKI: () => (/* binding */ fromSPKI),
+/* harmony export */   fromX509: () => (/* binding */ fromX509),
+/* harmony export */   toPKCS8: () => (/* binding */ toPKCS8),
+/* harmony export */   toSPKI: () => (/* binding */ toSPKI)
 /* harmony export */ });
 /* harmony import */ var _webcrypto_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./webcrypto.js */ "./node_modules/jose/dist/browser/runtime/webcrypto.js");
 /* harmony import */ var _lib_invalid_key_input_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lib/invalid_key_input.js */ "./node_modules/jose/dist/browser/lib/invalid_key_input.js");
@@ -64717,7 +67500,7 @@ const fromX509 = (pem, alg, options) => {
         spki = getSPKI(pem);
     }
     catch (cause) {
-        throw new TypeError('failed to parse the X.509 certificate', { cause });
+        throw new TypeError('Failed to parse the X.509 certificate', { cause });
     }
     return fromSPKI(spki, alg, options);
 };
@@ -64734,10 +67517,10 @@ const fromX509 = (pem, alg, options) => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "decode": () => (/* binding */ decode),
-/* harmony export */   "decodeBase64": () => (/* binding */ decodeBase64),
-/* harmony export */   "encode": () => (/* binding */ encode),
-/* harmony export */   "encodeBase64": () => (/* binding */ encodeBase64)
+/* harmony export */   decode: () => (/* binding */ decode),
+/* harmony export */   decodeBase64: () => (/* binding */ decodeBase64),
+/* harmony export */   encode: () => (/* binding */ encode),
+/* harmony export */   encodeBase64: () => (/* binding */ encodeBase64)
 /* harmony export */ });
 /* harmony import */ var _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../lib/buffer_utils.js */ "./node_modules/jose/dist/browser/lib/buffer_utils.js");
 
@@ -64989,9 +67772,9 @@ const digest = async (algorithm, data) => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "deriveKey": () => (/* binding */ deriveKey),
-/* harmony export */   "ecdhAllowed": () => (/* binding */ ecdhAllowed),
-/* harmony export */   "generateEpk": () => (/* binding */ generateEpk)
+/* harmony export */   deriveKey: () => (/* binding */ deriveKey),
+/* harmony export */   ecdhAllowed: () => (/* binding */ ecdhAllowed),
+/* harmony export */   generateEpk: () => (/* binding */ generateEpk)
 /* harmony export */ });
 /* harmony import */ var _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../lib/buffer_utils.js */ "./node_modules/jose/dist/browser/lib/buffer_utils.js");
 /* harmony import */ var _webcrypto_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./webcrypto.js */ "./node_modules/jose/dist/browser/runtime/webcrypto.js");
@@ -65198,8 +67981,8 @@ const fetchJwks = async (url, timeout, options) => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "generateKeyPair": () => (/* binding */ generateKeyPair),
-/* harmony export */   "generateSecret": () => (/* binding */ generateSecret)
+/* harmony export */   generateKeyPair: () => (/* binding */ generateKeyPair),
+/* harmony export */   generateSecret: () => (/* binding */ generateSecret)
 /* harmony export */ });
 /* harmony import */ var _webcrypto_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./webcrypto.js */ "./node_modules/jose/dist/browser/runtime/webcrypto.js");
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
@@ -65395,7 +68178,7 @@ function getCryptoKey(alg, key, usage) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
-/* harmony export */   "types": () => (/* binding */ types)
+/* harmony export */   types: () => (/* binding */ types)
 /* harmony export */ });
 /* harmony import */ var _webcrypto_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./webcrypto.js */ "./node_modules/jose/dist/browser/runtime/webcrypto.js");
 
@@ -65617,8 +68400,8 @@ const keyToJWK = async (key) => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "decrypt": () => (/* binding */ decrypt),
-/* harmony export */   "encrypt": () => (/* binding */ encrypt)
+/* harmony export */   decrypt: () => (/* binding */ decrypt),
+/* harmony export */   encrypt: () => (/* binding */ encrypt)
 /* harmony export */ });
 /* harmony import */ var _random_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./random.js */ "./node_modules/jose/dist/browser/runtime/random.js");
 /* harmony import */ var _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lib/buffer_utils.js */ "./node_modules/jose/dist/browser/lib/buffer_utils.js");
@@ -65711,8 +68494,8 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "decrypt": () => (/* binding */ decrypt),
-/* harmony export */   "encrypt": () => (/* binding */ encrypt)
+/* harmony export */   decrypt: () => (/* binding */ decrypt),
+/* harmony export */   encrypt: () => (/* binding */ encrypt)
 /* harmony export */ });
 /* harmony import */ var _subtle_rsaes_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./subtle_rsaes.js */ "./node_modules/jose/dist/browser/runtime/subtle_rsaes.js");
 /* harmony import */ var _bogus_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./bogus.js */ "./node_modules/jose/dist/browser/runtime/bogus.js");
@@ -65758,6 +68541,22 @@ const decrypt = async (alg, key, encryptedKey) => {
     }
     throw new TypeError('RSA-OAEP key "usages" must include "decrypt" or "unwrapKey" for this operation');
 };
+
+
+/***/ }),
+
+/***/ "./node_modules/jose/dist/browser/runtime/runtime.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/jose/dist/browser/runtime/runtime.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ('WebCryptoAPI');
 
 
 /***/ }),
@@ -65941,7 +68740,7 @@ const verify = async (alg, key, signature, data) => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
-/* harmony export */   "isCryptoKey": () => (/* binding */ isCryptoKey)
+/* harmony export */   isCryptoKey: () => (/* binding */ isCryptoKey)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (crypto);
 const isCryptoKey = (key) => key instanceof CryptoKey;
@@ -65958,8 +68757,8 @@ const isCryptoKey = (key) => key instanceof CryptoKey;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "deflate": () => (/* binding */ deflate),
-/* harmony export */   "inflate": () => (/* binding */ inflate)
+/* harmony export */   deflate: () => (/* binding */ deflate),
+/* harmony export */   inflate: () => (/* binding */ inflate)
 /* harmony export */ });
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
 
@@ -65982,8 +68781,8 @@ const deflate = async () => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "decode": () => (/* binding */ decode),
-/* harmony export */   "encode": () => (/* binding */ encode)
+/* harmony export */   decode: () => (/* binding */ decode),
+/* harmony export */   encode: () => (/* binding */ encode)
 /* harmony export */ });
 /* harmony import */ var _runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../runtime/base64url.js */ "./node_modules/jose/dist/browser/runtime/base64url.js");
 
@@ -66002,7 +68801,7 @@ const decode = _runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "decodeJwt": () => (/* binding */ decodeJwt)
+/* harmony export */   decodeJwt: () => (/* binding */ decodeJwt)
 /* harmony export */ });
 /* harmony import */ var _base64url_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./base64url.js */ "./node_modules/jose/dist/browser/util/base64url.js");
 /* harmony import */ var _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lib/buffer_utils.js */ "./node_modules/jose/dist/browser/lib/buffer_utils.js");
@@ -66027,7 +68826,7 @@ function decodeJwt(jwt) {
         decoded = (0,_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(payload);
     }
     catch (_a) {
-        throw new _errors_js__WEBPACK_IMPORTED_MODULE_3__.JWTInvalid('Failed to parse the base64url encoded payload');
+        throw new _errors_js__WEBPACK_IMPORTED_MODULE_3__.JWTInvalid('Failed to base64url decode the payload');
     }
     let result;
     try {
@@ -66053,7 +68852,7 @@ function decodeJwt(jwt) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "decodeProtectedHeader": () => (/* binding */ decodeProtectedHeader)
+/* harmony export */   decodeProtectedHeader: () => (/* binding */ decodeProtectedHeader)
 /* harmony export */ });
 /* harmony import */ var _base64url_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./base64url.js */ "./node_modules/jose/dist/browser/util/base64url.js");
 /* harmony import */ var _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lib/buffer_utils.js */ "./node_modules/jose/dist/browser/lib/buffer_utils.js");
@@ -66105,21 +68904,21 @@ function decodeProtectedHeader(token) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "JOSEAlgNotAllowed": () => (/* binding */ JOSEAlgNotAllowed),
-/* harmony export */   "JOSEError": () => (/* binding */ JOSEError),
-/* harmony export */   "JOSENotSupported": () => (/* binding */ JOSENotSupported),
-/* harmony export */   "JWEDecryptionFailed": () => (/* binding */ JWEDecryptionFailed),
-/* harmony export */   "JWEInvalid": () => (/* binding */ JWEInvalid),
-/* harmony export */   "JWKInvalid": () => (/* binding */ JWKInvalid),
-/* harmony export */   "JWKSInvalid": () => (/* binding */ JWKSInvalid),
-/* harmony export */   "JWKSMultipleMatchingKeys": () => (/* binding */ JWKSMultipleMatchingKeys),
-/* harmony export */   "JWKSNoMatchingKey": () => (/* binding */ JWKSNoMatchingKey),
-/* harmony export */   "JWKSTimeout": () => (/* binding */ JWKSTimeout),
-/* harmony export */   "JWSInvalid": () => (/* binding */ JWSInvalid),
-/* harmony export */   "JWSSignatureVerificationFailed": () => (/* binding */ JWSSignatureVerificationFailed),
-/* harmony export */   "JWTClaimValidationFailed": () => (/* binding */ JWTClaimValidationFailed),
-/* harmony export */   "JWTExpired": () => (/* binding */ JWTExpired),
-/* harmony export */   "JWTInvalid": () => (/* binding */ JWTInvalid)
+/* harmony export */   JOSEAlgNotAllowed: () => (/* binding */ JOSEAlgNotAllowed),
+/* harmony export */   JOSEError: () => (/* binding */ JOSEError),
+/* harmony export */   JOSENotSupported: () => (/* binding */ JOSENotSupported),
+/* harmony export */   JWEDecryptionFailed: () => (/* binding */ JWEDecryptionFailed),
+/* harmony export */   JWEInvalid: () => (/* binding */ JWEInvalid),
+/* harmony export */   JWKInvalid: () => (/* binding */ JWKInvalid),
+/* harmony export */   JWKSInvalid: () => (/* binding */ JWKSInvalid),
+/* harmony export */   JWKSMultipleMatchingKeys: () => (/* binding */ JWKSMultipleMatchingKeys),
+/* harmony export */   JWKSNoMatchingKey: () => (/* binding */ JWKSNoMatchingKey),
+/* harmony export */   JWKSTimeout: () => (/* binding */ JWKSTimeout),
+/* harmony export */   JWSInvalid: () => (/* binding */ JWSInvalid),
+/* harmony export */   JWSSignatureVerificationFailed: () => (/* binding */ JWSSignatureVerificationFailed),
+/* harmony export */   JWTClaimValidationFailed: () => (/* binding */ JWTClaimValidationFailed),
+/* harmony export */   JWTExpired: () => (/* binding */ JWTExpired),
+/* harmony export */   JWTInvalid: () => (/* binding */ JWTInvalid)
 /* harmony export */ });
 class JOSEError extends Error {
     static get code() {
@@ -66269,6 +69068,24 @@ class JWSSignatureVerificationFailed extends JOSEError {
         return 'ERR_JWS_SIGNATURE_VERIFICATION_FAILED';
     }
 }
+
+
+/***/ }),
+
+/***/ "./node_modules/jose/dist/browser/util/runtime.js":
+/*!********************************************************!*\
+  !*** ./node_modules/jose/dist/browser/util/runtime.js ***!
+  \********************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _runtime_runtime_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../runtime/runtime.js */ "./node_modules/jose/dist/browser/runtime/runtime.js");
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_runtime_runtime_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 
 /***/ }),
@@ -66450,6 +69267,7 @@ module.exports = JSON.parse('{"application/1d-interleaved-parityfec":{"source":"
 /******/ 					script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 				}
 /******/ 				script.setAttribute("data-webpack", dataWebpackPrefix + key);
+/******/ 		
 /******/ 				script.src = url;
 /******/ 			}
 /******/ 			inProgress[url] = [done];
@@ -66540,7 +69358,7 @@ module.exports = JSON.parse('{"application/1d-interleaved-parityfec":{"source":"
 /******/ 								}
 /******/ 							};
 /******/ 							__webpack_require__.l(url, loadingEnded, "chunk-" + chunkId, chunkId);
-/******/ 						} else installedChunks[chunkId] = 0;
+/******/ 						}
 /******/ 					}
 /******/ 				}
 /******/ 		};

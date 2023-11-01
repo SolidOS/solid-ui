@@ -1,11 +1,11 @@
 export const versionInfo = {
-  buildTime: '2023-07-05T09:50:00Z',
-  commit: '6c36e7182fc9724f99aa6766d7eef2a32f100bdb',
+  buildTime: '2023-11-01T11:18:08Z',
+  commit: 'ee8e69c20cc21d93eb942bc5479e4644d5704964',
   npmInfo:
 {
-  'solid-ui': '2.4.28',
+  'solid-ui': '2.4.29',
   npm: '8.19.4',
-  node: '16.20.1',
+  node: '16.20.2',
   v8: '9.4.146.26-node.26',
   uv: '1.43.0',
   zlib: '1.2.11',
@@ -15,7 +15,7 @@ export const versionInfo = {
   nghttp2: '1.47.0',
   napi: '8',
   llhttp: '6.0.11',
-  openssl: '1.1.1u+quic',
+  openssl: '1.1.1v+quic',
   cldr: '41.0',
   icu: '71.1',
   tz: '2022f',
