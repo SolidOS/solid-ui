@@ -11,9 +11,9 @@ export declare function cameraCaptureControl(dom: HTMLDocument, store: IndexedFo
  * @param {IndexedForumla} store - The quadstore to store data in
  * @param {fuunction} getImageDoc - returns NN of the image file to be created
  * @param {function<Node>} doneCallback - called with the image taken
- * @returns {DomElement} - A div element with the buton in it
+ * @returns {DomElement} - A div element with the button in it
  *
- * This expacts the buttton to a large control when it is pressed
+ * This expands the button to a large control when it is pressed
  */
 export declare function cameraButton(dom: HTMLDocument, store: IndexedFormula, getImageDoc: () => NamedNode, doneCallback: (imageDoc: any) => Promise<void>): HTMLElement;
 //# sourceMappingURL=media-capture.d.ts.map

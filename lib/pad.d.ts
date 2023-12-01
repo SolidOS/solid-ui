@@ -2,7 +2,7 @@
  *   Notepad Widget
  */
 import { NamedNode, IndexedFormula } from 'rdflib';
-export { renderPartipants, participationObject, manageParticipation, recordParticipation } from './participation';
+export { renderParticipants, participationObject, manageParticipation, recordParticipation } from './participation';
 type notepadOptions = {
     statusArea?: HTMLDivElement;
     exists?: boolean;
@@ -16,7 +16,7 @@ export declare function lightColorHash(author?: NamedNode): string;
 /**  notepad
  *
  * @param {HTMLDocument} dom - the web page of the browser
- * @param {NamedNode} padDoc - the document into which the particpation should be shown
+ * @param {NamedNode} padDoc - the document in which the participation should be shown
  * @param {NamedNode} subject - the thing in which participation is happening
  * @param {NamedNode} me - person who is logged into the pod
  * @param {notepadOptions} options - the options that can be passed in consist of statusArea, exists

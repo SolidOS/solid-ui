@@ -15,6 +15,7 @@ import { errorMessageBlock } from './error'
 import { basicField, fieldLabel, fieldStore, renderNameValuePair } from './forms/basic'
 import { autocompleteField } from './forms/autocomplete/autocompleteField'
 import * as style from '../style'
+import styleConstants from '../styleConstants'
 
 import { icons } from '../iconBase'
 import * as log from '../log'
@@ -580,7 +581,7 @@ field[ns.ui('MultiLineTextField').uri] = function (
   box.style.display = 'flex'
   box.style.flexDirection = 'row'
   const left = box.appendChild(dom.createElement('div'))
-  left.style.width = style.formFieldNameBoxWidth
+  left.style.width = styleConstants.formFieldNameBoxWidth
   const right = box.appendChild(dom.createElement('div'))
 
   left.appendChild(fieldLabel(dom, property, form))
@@ -1211,7 +1212,7 @@ export function promptForNew (
     form = lists[0] // Pick any one
   }
   log.debug('form is ' + form)
-  box.setAttribute('style', `border: 0.05em solid ${style.formBorderColor}; color: ${style.formBorderColor}`) // @@color?
+  box.setAttribute('style', `border: 0.05em solid ${styleConstants.formBorderColor}; color: ${styleConstants.formBorderColor}`) // @@color?
   box.innerHTML = '<h3>New ' + utils.label(theClass) + '</h3>'
 
   const formFunction = fieldFunction(dom, form)
@@ -1282,12 +1283,12 @@ export function makeDescription (
     submit.disabled = true
     submit.setAttribute('style', 'visibility: hidden; float: right;') // Keep UI clean
     field.disabled = true
-    field.style.color = style.textInputColorPending // setAttribute('style', style + 'color: gray;') // pending
+    field.style.color = styleConstants.textInputColorPending
     const ds = kb.statementsMatching(subject, predicate, null, dataDoc)
     const is = $rdf.st(subject, predicate, field.value, dataDoc)
     kb.updater.update(ds, is, function (uri, ok, body) {
       if (ok) {
-        field.style.color = style.textInputColor
+        field.style.color = styleConstants.textInputColor
         field.disabled = false
       } else {
         group.appendChild(
@@ -1327,7 +1328,7 @@ export function makeDescription (
     field.addEventListener('change', saveChange, true)
   } else {
     field.disabled = true // @@ change color too
-    field.style.backgroundColor = style.textInputBackgroundColorUneditable
+    field.style.backgroundColor = styleConstants.textInputBackgroundColorUneditable
   }
   return group
 }
@@ -1480,7 +1481,7 @@ export function makeSelectForClassifierOptions (
   }
 
   const select = dom.createElement('select')
-  select.setAttribute('style', style.formSelectSTyle)
+  select.setAttribute('style', style.formSelectStyle)
   if (options.multiple) select.setAttribute('multiple', 'true')
   select.currentURI = null
 
@@ -1645,7 +1646,7 @@ export function makeSelectForOptions (
   }
 
   const select = dom.createElement('select')
-  select.setAttribute('style', style.formSelectSTyle)
+  select.setAttribute('style', style.formSelectStyle)
   select.currentURI = null
 
   select.refresh = function () {
@@ -2048,7 +2049,7 @@ export function makeSelectForChoice (
   }
 
   const select = dom.createElement('select')
-  select.setAttribute('style', style.formSelectSTyle)
+  select.setAttribute('style', style.formSelectStyle)
   select.setAttribute('id', 'formSelect')
   select.currentURI = null
 

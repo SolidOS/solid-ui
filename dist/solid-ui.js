@@ -7156,6 +7156,15 @@ function renderScopeHeadingRow(context, store, scope) {
 function registrationList(_x9, _x10) {
   return _registrationList.apply(this, arguments);
 } // registrationList
+/**
+ * Bootstrapping identity
+ * (Called by `loginStatusBox()`)
+ *
+ * @param dom
+ * @param setUserCallback
+ *
+ * @returns
+ */
 function _registrationList() {
   _registrationList = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee9(context, options) {
     var dom, div, box, scopes, table, tbody, _iterator2, _step2, scope, headingRow, items, _iterator3, _step3, _loop;
@@ -7287,23 +7296,10 @@ function _registrationList() {
   }));
   return _registrationList.apply(this, arguments);
 }
-function getDefaultSignInButtonStyle() {
-  return 'padding: 1em; border-radius:0.5em; font-size: 100%;';
-}
-
-/**
- * Bootstrapping identity
- * (Called by `loginStatusBox()`)
- *
- * @param dom
- * @param setUserCallback
- *
- * @returns
- */
 function signInOrSignUpBox(dom, setUserCallback) {
   var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
   options = options || {};
-  var signInButtonStyle = options.buttonStyle || getDefaultSignInButtonStyle();
+  var signInButtonStyle = options.buttonStyle || style.signInAndUpButtonStyle;
   var box = dom.createElement('div');
   var magicClassName = 'SolidSignInOrSignUpBox';
   debug.log('widgets.signInOrSignUpBox');
@@ -7316,7 +7312,7 @@ function signInOrSignUpBox(dom, setUserCallback) {
   box.appendChild(signInPopUpButton);
   signInPopUpButton.setAttribute('type', 'button');
   signInPopUpButton.setAttribute('value', 'Log in');
-  signInPopUpButton.setAttribute('style', "".concat(signInButtonStyle, "background-color: #eef;").concat(style.headerBannerLoginInput));
+  signInPopUpButton.setAttribute('style', "".concat(signInButtonStyle).concat(style.headerBannerLoginInput) + style.signUpBackground);
   _solidLogic.authSession.onLogin(function () {
     var me = _solidLogic.authn.currentUser();
     // const sessionInfo = authSession.info
@@ -7357,7 +7353,7 @@ function signInOrSignUpBox(dom, setUserCallback) {
   box.appendChild(signupButton);
   signupButton.setAttribute('type', 'button');
   signupButton.setAttribute('value', 'Sign Up for Solid');
-  signupButton.setAttribute('style', "".concat(signInButtonStyle, "background-color: #efe;").concat(style.headerBannerLoginInput));
+  signupButton.setAttribute('style', "".concat(signInButtonStyle).concat(style.headerBannerLoginInput) + style.signInBackground);
   signupButton.addEventListener('click', function (_event) {
     var signupMgr = new _signup.Signup();
     signupMgr.signup().then(function (uri) {
@@ -7525,7 +7521,7 @@ function loginStatusBox(dom) {
     });
   }
   function logoutButton(me, options) {
-    var signInButtonStyle = options.buttonStyle || getDefaultSignInButtonStyle();
+    var signInButtonStyle = options.buttonStyle || style.signInAndUpButtonStyle;
     var logoutLabel = 'WebID logout';
     if (me) {
       var nick = _solidLogic.solidLogicSingleton.store.any(me, ns.foaf('nick')) || _solidLogic.solidLogicSingleton.store.any(me, ns.foaf('name'));
@@ -7537,7 +7533,7 @@ function loginStatusBox(dom) {
     // signOutButton.className = 'WebIDCancelButton'
     signOutButton.setAttribute('type', 'button');
     signOutButton.setAttribute('value', logoutLabel);
-    signOutButton.setAttribute('style', "".concat(signInButtonStyle, "background-color: #eee;"));
+    signOutButton.setAttribute('style', "".concat(signInButtonStyle));
     signOutButton.addEventListener('click', logoutButtonHandler, false);
     return signOutButton;
   }
@@ -8272,21 +8268,21 @@ var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
 var _iconBase = __webpack_require__(/*! ../iconBase */ "./lib/iconBase.js");
+var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
 function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
-/// /////////////////////////////////////////////
 //
 //   Media input widget
 //
 //
 // Workflow:
-// The HTML5 functionality (on mobille) is to prompt for either
-// a realtime camera capture , OR a selection from images already ont the device
+// The HTML5 functionality (on mobile) is to prompt for either
+// a realtime camera capture, OR a selection from images already on the device
 // (eg camera roll).
 //
-// The solid alternative is to either take a phtoto
-// or access cemra roll (etc) OR to access solid cloud storage of favorite photo almbums.
+// The solid alternative is to either take a photo
+// or access camera roll (etc) OR to access solid cloud storage of favorite photo albums.
 // (Especially latest taken ones)
 //
 
@@ -8295,10 +8291,6 @@ function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; 
 var cameraIcon = _iconBase.icons.iconBase + 'noun_Camera_1618446_000000.svg'; // Get it from github
 var retakeIcon = _iconBase.icons.iconBase + 'noun_479395.svg'; // Get it from github
 
-var canvasWidth = '640';
-var canvasHeight = '480';
-var controlStyle = "border-radius: 0.5em; margin: 0.8em; width: ".concat(canvasWidth, "; height:").concat(canvasHeight, ";");
-// const controlStyle = 'border-radius: 0.5em; margin: 0.8em; width: 320; height:240;'
 var contentType = 'image/png';
 
 /** A control to capture a picture using camera
@@ -8343,7 +8335,7 @@ function cameraCaptureControl(dom, store, getImageDoc, doneCallback) {
     player = main.appendChild(dom.createElement('video'));
     player.setAttribute('controls', '1');
     player.setAttribute('autoplay', '1');
-    player.setAttribute('style', controlStyle);
+    player.setAttribute('style', style.controlStyle);
     if (!navigator.mediaDevices) {
       throw new Error('navigator.mediaDevices not available');
     }
@@ -8364,9 +8356,9 @@ function cameraCaptureControl(dom, store, getImageDoc, doneCallback) {
   function grabCanvas() {
     // Draw the video frame to the canvas.
     canvas = dom.createElement('canvas');
-    canvas.setAttribute('width', canvasWidth);
-    canvas.setAttribute('height', canvasHeight);
-    canvas.setAttribute('style', controlStyle);
+    canvas.setAttribute('width', style.canvasWidth);
+    canvas.setAttribute('height', style.canvasHeight);
+    canvas.setAttribute('style', style.controlStyle);
     main.appendChild(canvas);
     var context = canvas.getContext('2d');
     context.drawImage(player, 0, 0, canvas.width, canvas.height);
@@ -8421,9 +8413,9 @@ function cameraCaptureControl(dom, store, getImageDoc, doneCallback) {
  * @param {IndexedForumla} store - The quadstore to store data in
  * @param {fuunction} getImageDoc - returns NN of the image file to be created
  * @param {function<Node>} doneCallback - called with the image taken
- * @returns {DomElement} - A div element with the buton in it
+ * @returns {DomElement} - A div element with the button in it
  *
- * This expacts the buttton to a large control when it is pressed
+ * This expands the button to a large control when it is pressed
  */
 
 function cameraButton(dom, store, getImageDoc, doneCallback) {
@@ -8857,10 +8849,10 @@ Object.defineProperty(exports, "recordParticipation", ({
     return _participation.recordParticipation;
   }
 }));
-Object.defineProperty(exports, "renderPartipants", ({
+Object.defineProperty(exports, "renderParticipants", ({
   enumerable: true,
   get: function get() {
-    return _participation.renderPartipants;
+    return _participation.renderParticipants;
   }
 }));
 exports.xmlEncode = xmlEncode;
@@ -8878,6 +8870,7 @@ var _widgets = __webpack_require__(/*! ./widgets */ "./lib/widgets/index.js");
 var _utils = __webpack_require__(/*! ./utils */ "./lib/utils/index.js");
 var _debug = __webpack_require__(/*! ./debug */ "./lib/debug.js");
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
+var style = _interopRequireWildcard(__webpack_require__(/*! ./style */ "./lib/style.js"));
 var _participation = __webpack_require__(/*! ./participation */ "./lib/participation.js");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
 function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
@@ -8945,7 +8938,7 @@ function lightColorHash(author) {
 /**  notepad
  *
  * @param {HTMLDocument} dom - the web page of the browser
- * @param {NamedNode} padDoc - the document into which the particpation should be shown
+ * @param {NamedNode} padDoc - the document in which the participation should be shown
  * @param {NamedNode} subject - the thing in which participation is happening
  * @param {NamedNode} me - person who is logged into the pod
  * @param {notepadOptions} options - the options that can be passed in consist of statusArea, exists
@@ -8958,7 +8951,7 @@ function notepad(dom, padDoc, subject, me, options) {
   if (me && !me.uri) throw new Error('UI.pad.notepad:  Invalid userid');
   var updater = store.updater;
   var PAD = (0, _rdflib.Namespace)('http://www.w3.org/ns/pim/pad#');
-  table.setAttribute('style', 'padding: 1em; overflow: auto; resize: horizontal; min-width: 40em;');
+  table.setAttribute('style', style.notepadStyle);
   var upstreamStatus = null;
   var downstreamStatus = null;
   if (options.statusArea) {
@@ -8967,10 +8960,10 @@ function notepad(dom, padDoc, subject, me, options) {
     upstreamStatus = tr.appendChild(dom.createElement('td'));
     downstreamStatus = tr.appendChild(dom.createElement('td'));
     if (upstreamStatus) {
-      upstreamStatus.setAttribute('style', 'width:50%');
+      upstreamStatus.setAttribute('style', style.upstreamStatus);
     }
     if (downstreamStatus) {
-      downstreamStatus.setAttribute('style', 'width:50%');
+      downstreamStatus.setAttribute('style', style.downstreamStatus);
     }
   }
   /* @@ TODO want to look into this, it seems upstream should be a boolean and default to false ?
@@ -8993,9 +8986,9 @@ function notepad(dom, padDoc, subject, me, options) {
   var setPartStyle = function setPartStyle(part, colors, pending) {
     var chunk = part.subject;
     colors = colors || '';
-    var baseStyle = 'font-size: 100%; font-family: monospace; width: 100%; border: none; white-space: pre-wrap;';
-    var headingCore = 'font-family: sans-serif; font-weight: bold;  border: none;';
-    var headingStyle = ['font-size: 110%;  padding-top: 0.5em; padding-bottom: 0.5em; width: 100%;', 'font-size: 120%; padding-top: 1em; padding-bottom: 1em; width: 100%;', 'font-size: 150%; padding-top: 1em; padding-bottom: 1em; width: 100%;'];
+    var baseStyle = style.baseStyle;
+    var headingCore = style.headingCore;
+    var headingStyle = style.headingStyle;
     var author = kb.any(chunk, ns.dc('author'));
     if (!colors && author) {
       // Hash the user webid for now -- later allow user selection!
@@ -9007,9 +9000,9 @@ function notepad(dom, padDoc, subject, me, options) {
     // and when the indent is stored as a Number itself, not in an object.
     var indent = kb.any(chunk, PAD('indent'));
     indent = indent ? indent.value : 0;
-    var style = indent >= 0 ? baseStyle + 'text-indent: ' + indent * 3 + 'em;' : headingCore + headingStyle[-1 - indent];
+    var localStyle = indent >= 0 ? baseStyle + 'text-indent: ' + indent * 3 + 'em;' : headingCore + headingStyle[-1 - indent];
     // ? baseStyle + 'padding-left: ' + (indent * 3) + 'em;'
-    part.setAttribute('style', style + colors);
+    part.setAttribute('style', localStyle + colors);
   };
   var removePart = function removePart(part) {
     var chunk = part.subject;
@@ -9088,29 +9081,6 @@ function notepad(dom, padDoc, subject, me, options) {
       }
     });
   };
-
-  // Use this sort of code to split the line when return pressed in the middle @@
-  /*
-  function doGetCaretPosition doGetCaretPosition (oField) {
-    var iCaretPos = 0
-        // IE Support
-    if (document.selection) {
-            // Set focus on the element to avoid IE bug
-      oField.focus()
-            // To get cursor position, get empty selection range
-      var oSel = document.selection.createRange()
-            // Move selection start to 0 position
-      oSel.moveStart('character', -oField.value.length)
-            // The caret position is selection length
-      iCaretPos = oSel.text.length
-        // Firefox suppor
-    } else if (oField.selectionStart || oField.selectionStart === '0') {
-      iCaretPos = oField.selectionStart
-    }
-        // Return results
-    return (iCaretPos)
-  }
-  */
   var addListeners = function addListeners(part, chunk) {
     part.addEventListener('keydown', function (event) {
       if (!updater) {
@@ -9151,9 +9121,9 @@ function notepad(dom, padDoc, subject, me, options) {
                 // contents need to be sent again
                 part.state = 4; // delete me
                 return;
-              case 3: // being deleted already
+              case 3: // already being deleted
               case 4:
-                // already deleme state
+                // already deleted state
                 return;
               case undefined:
               case 0:
@@ -9453,8 +9423,6 @@ function notepad(dom, padDoc, subject, me, options) {
       }
       return;
     }
-    // var last = kb.the(undefined, PAD('previous'), subject)
-    // var chunk = first //  = kb.the(subject, PAD('next'));
     var row;
 
     // First see which of the logical chunks have existing physical manifestations
@@ -9516,7 +9484,7 @@ function notepad(dom, padDoc, subject, me, options) {
     (0, _debug.log)('    reloaded OK');
     clearStatus();
     if (!consistencyCheck()) {
-      complain('CONSITENCY CHECK FAILED');
+      complain('CONSISTENCY CHECK FAILED');
     } else {
       refreshTree(table);
     }
@@ -9681,7 +9649,7 @@ Object.defineProperty(exports, "__esModule", ({
 exports.manageParticipation = manageParticipation;
 exports.participationObject = participationObject;
 exports.recordParticipation = recordParticipation;
-exports.renderPartipants = renderPartipants;
+exports.renderParticipants = renderParticipants;
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js"));
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js"));
 var _assertThisInitialized2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/assertThisInitialized */ "./node_modules/@babel/runtime/helpers/assertThisInitialized.js"));
@@ -9697,6 +9665,8 @@ var ns = _interopRequireWildcard(__webpack_require__(/*! ./ns */ "./lib/ns.js"))
 var _widgets = __webpack_require__(/*! ./widgets */ "./lib/widgets/index.js");
 var _utils = __webpack_require__(/*! ./utils */ "./lib/utils/index.js");
 var _pad = __webpack_require__(/*! ./pad */ "./lib/pad.js");
+var style = _interopRequireWildcard(__webpack_require__(/*! ./style */ "./lib/style.js"));
+var _styleConstants = _interopRequireDefault(__webpack_require__(/*! ./styleConstants */ "./lib/styleConstants.js"));
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
 function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
@@ -9704,7 +9674,7 @@ function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2["default"])(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2["default"])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2["default"])(this, result); }; }
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } } /* Manage a UI for the particpation of a person in any thing
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } } /* Manage a UI for the participation of a person in any thing
 */ // import { currentUser } from './authn/authn'
 var ParticipationTableElement = /*#__PURE__*/function (_HTMLTableElement) {
   (0, _inherits2["default"])(ParticipationTableElement, _HTMLTableElement);
@@ -9730,11 +9700,11 @@ var store = _solidLogic.solidLogicSingleton.store;
 *  @param {NamedNode} unused1/document - the document to render (this argument is no longer used, but left in for backwards compatibility)
 *  @param {NamedNode} subject - the thing in which the participation is happening
 *  @param {NamedNode} unused2/me - user that is logged into the pod (this argument is no longer used, but left in for backwards compatibility)
-*  @param {ParticipationOptions} options - the options that can be passed in are deleteFunction, link, and draggable these are used by the personTR button
+*  @param {ParticipationOptions} options - the options that can be passed in are deleteFunction, link, and draggable; these are used by the personTR button
 */
-function renderPartipants(dom, table, unused1, subject, unused2, options) {
-  table.setAttribute('style', 'margin: 0.8em;');
-  var newRowForParticpation = function newRowForParticpation(parp) {
+function renderParticipants(dom, table, unused1, subject, unused2, options) {
+  table.setAttribute('style', style.participantsStyle);
+  var newRowForParticipation = function newRowForParticipation(parp) {
     var person = store.any(parp, ns.wf('participant'));
     var tr;
     if (!person) {
@@ -9742,13 +9712,14 @@ function renderPartipants(dom, table, unused1, subject, unused2, options) {
       tr.textContent = '???'; // Don't crash - invalid part'n entry
       return tr;
     }
-    var bg = store.anyValue(parp, ns.ui('backgroundColor')) || 'white';
+    var bg = store.anyValue(parp, ns.ui('backgroundColor')) || _styleConstants["default"].participationDefaultBackground;
     var block = dom.createElement('div');
-    block.setAttribute('style', 'height: 1.5em; width: 1.5em; margin: 0.3em; border 0.01em solid #888; background-color: ' + bg);
+    block.setAttribute('style', style.participantsBlock);
+    block.style.backgroundColor = bg;
     tr = (0, _widgets.personTR)(dom, null, person, options);
     table.appendChild(tr);
     var td = dom.createElement('td');
-    td.setAttribute('style', 'vertical-align: middle;');
+    td.setAttribute('style', style.personTableTD);
     td.appendChild(block);
     tr.insertBefore(td, tr.firstChild);
     return tr;
@@ -9762,16 +9733,16 @@ function renderPartipants(dom, table, unused1, subject, unused2, options) {
     var participations = parps.map(function (p) {
       return p[1];
     });
-    (0, _utils.syncTableToArray)(table, participations, newRowForParticpation);
+    (0, _utils.syncTableToArray)(table, participations, newRowForParticipation);
   };
   table.refresh = syncTable;
   syncTable();
   return table;
 }
 
-/** Record, or find old, Particpation object
+/** Record, or find old, Participation object
  *
- * A particpaption object is a place to record things specifically about
+ * A participation object is a place to record things specifically about
  * subject and the user, such as preferences, start of membership, etc
  * @param {NamedNode} subject - the thing in which the participation is happening
  * @param {NamedNode} document -  where to record the data
@@ -9806,19 +9777,19 @@ function participationObject(subject, padDoc, me) {
       }
       candidates.sort(); // Pick the earliest
       // @@ Possibly, for extra credit, delete the others, if we have write access
-      debug.warn('Multiple particpation objects, picking earliest, in ' + padDoc);
+      debug.warn('Multiple participation objects, picking earliest, in ' + padDoc);
       resolve(candidates[0][1]);
       // throw new Error('Multiple records of your participation')
     }
     if (parps.length) {
       // If I am not already recorded
-      resolve(parps[0]); // returns the particpation object
+      resolve(parps[0]); // returns the participation object
     } else {
       var _participation2 = (0, _widgets.newThing)(padDoc);
       var ins = [(0, _rdflib.st)(subject, ns.wf('participation'), _participation2, padDoc), (0, _rdflib.st)(_participation2, ns.wf('participant'), me, padDoc), (0, _rdflib.st)(_participation2, ns.cal('dtstart'), new Date(), padDoc), (0, _rdflib.st)(_participation2, ns.ui('backgroundColor'), (0, _pad.lightColorHash)(me), padDoc)];
       store.updater.update([], ins, function (uri, ok, errorMessage) {
         if (!ok) {
-          reject(new Error('Error recording your partipation: ' + errorMessage));
+          reject(new Error('Error recording your participation: ' + errorMessage));
         } else {
           resolve(_participation2);
         }
@@ -9831,7 +9802,7 @@ function participationObject(subject, padDoc, me) {
 /** Record my participation and display participants
  *
  * @param {NamedNode} subject - the thing in which participation is happening
- * @param {NamedNode} padDoc - the document into which the particpation should be recorded
+ * @param {NamedNode} padDoc - the document into which the participation should be recorded
  * @param {DOMNode} refreshable - a DOM element whose refresh() is to be called if the change works
  *
  */
@@ -9847,22 +9818,21 @@ function recordParticipation(subject, padDoc, refreshable) {
   }
   if (parps.length) {
     // If I am not already recorded
-    return parps[0]; // returns the particpation object
+    return parps[0]; // returns the participation object
   } else {
     if (!store.updater.editable(padDoc)) {
-      debug.log('Not recording participation, as no write acesss as ' + me + ' to ' + padDoc);
+      debug.log('Not recording participation, as no write access as ' + me + ' to ' + padDoc);
       return null;
     }
     var participation = (0, _widgets.newThing)(padDoc);
     var ins = [(0, _rdflib.st)(subject, ns.wf('participation'), participation, padDoc), (0, _rdflib.st)(participation, ns.wf('participant'), me, padDoc), (0, _rdflib.st)(participation, ns.cal('dtstart'), new Date(), padDoc), (0, _rdflib.st)(participation, ns.ui('backgroundColor'), (0, _pad.lightColorHash)(me), padDoc)];
     store.updater.update([], ins, function (uri, ok, errorMessage) {
       if (!ok) {
-        throw new Error('Error recording your partipation: ' + errorMessage);
+        throw new Error('Error recording your participation: ' + errorMessage);
       }
       if (refreshable && refreshable.refresh) {
         refreshable.refresh();
       }
-      // UI.pad.renderPartipants(dom, table, padDoc, subject, me, options)
     });
     return participation;
   }
@@ -9872,21 +9842,21 @@ function recordParticipation(subject, padDoc, refreshable) {
 *
 *   @param {Document} dom  - the web page loaded into the browser
 *   @param {HTMLDivElement} container - the container element where the participants should be displayed
-*   @param {NamedNode} document - the document into which the particpation should be shown
+*   @param {NamedNode} document - the document into which the participation should be shown
 *   @param {NamedNode} subject - the thing in which participation is happening
 *   @param {NamedNode} me - the logged in user
-*   @param {ParticipationOptions} options - the options that can be passed in are deleteFunction, link, and draggable these are used by the personTR button
+*   @param {ParticipationOptions} options - the options that can be passed in are deleteFunction, link, and draggable; these are used by the personTR button
 *
 */
 function manageParticipation(dom, container, padDoc, subject, me, options) {
   var table = dom.createElement('table');
   container.appendChild(table);
-  renderPartipants(dom, table, padDoc, subject, me, options);
+  renderParticipants(dom, table, padDoc, subject, me, options);
   var _participation;
   try {
     _participation = recordParticipation(subject, padDoc, table);
   } catch (e) {
-    container.appendChild((0, _widgets.errorMessageBlock)(dom, 'Error recording your partipation: ' + e)); // Clean up?
+    container.appendChild((0, _widgets.errorMessageBlock)(dom, 'Error recording your participation: ' + e)); // Clean up?
   }
   return table;
 }
@@ -10257,41 +10227,34 @@ Signup.prototype.signup = function signup(signupUrl) {
 /*!**********************!*\
   !*** ./lib/style.js ***!
   \**********************/
-/***/ ((module, exports) => {
+/***/ ((module, exports, __webpack_require__) => {
 
 "use strict";
 
 
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.style = void 0;
+var _styleConstants = _interopRequireDefault(__webpack_require__(/*! ./styleConstants */ "./lib/styleConstants.js"));
 // Common readable consistent stylesheet
 // to avoid using style sheets which are document-global
 // and make programmable style toggling with selection, drag over, etc easier
-
 // These must all end with semicolon so they can be appended to.
-
-var formBorderColor = '#888888'; // Mid-grey
-var lowProfileLinkColor = '#3B5998'; // Grey-blue, e.g., for field labels linking to ontology
-var formFieldNameBoxWidth = '8em'; // The fixed amount to get form fields to line up
-// The latter we put in when switching awy from using tables.  Getting allignment between
-// fields in different groups though is hard problem.
 
 var style = exports.style = {
   // styleModule
 
   checkboxStyle: 'color: black; font-size: 100%; padding-left: 0.5 em; padding-right: 0.5 em;',
-  checkboxInputStyle: 'font-size: 150%; height: 1.2em; width: 1.2em; background-color: #eef; border-radius:0.2em; margin: 0.1em',
+  checkboxInputStyle: 'font-size: 150%; height: 1.2em; width: 1.2em; background-color: #eef; border-radius:0.2em; margin: 0.1em;',
   fieldLabelStyle: 'color: #3B5998; text-decoration: none;',
-  formSelectSTyle: 'background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.4em;',
-  textInputStyle: 'background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.4em;',
+  formSelectStyle: 'background-color: #eef; padding: 0.5em;  border: .05em solid #88c; border-radius:0.2em; font-size: 100%; margin:0.4em;',
+  textInputStyle: 'background-color: #eef; padding: 0.5em;  border: .05em solid #88c; border-radius:0.2em; font-size: 100%; margin:0.4em;',
   textInputStyleUneditable:
   // Color difference only
-  'background-color: white; padding: 0.5em;  border: .05em solid white;  border-radius:0.2em; font-size: 100%; margin:0.4em;',
-  textInputSize: 20,
-  // Default text input size in characters roughly
-  buttonStyle: 'background-color: #fff; padding: 0.7em;  border: .01em solid white;  border-radius:0.2em; font-size: 100%; margin: 0.3em;',
+  'background-color: white; padding: 0.5em;  border: .05em solid white; border-radius:0.2em; font-size: 100%; margin:0.4em;',
+  buttonStyle: 'background-color: #fff; padding: 0.7em;  border: .01em solid white; border-radius:0.2em; font-size: 100%; margin: 0.3em;',
   // 'background-color: #eef;
   commentStyle: 'padding: 0.7em;  border: none; font-size: 100%; white-space: pre-wrap;',
   iconStyle: 'width: 3em; height: 3em; margin: 0.1em; border-radius: 1em;',
@@ -10299,20 +10262,18 @@ var style = exports.style = {
   classIconStyle: 'width: 3em; height: 3em; margin: 0.1em; border-radius: 0.2em; border: 0.1em solid green; padding: 0.2em; background-color: #efe;',
   // combine with buttonStyle
   confirmPopupStyle: 'padding: 0.7em; border-radius: 0.2em; border: 0.1em solid orange; background-color: white; box-shadow: 0.5em 0.9em #888;',
-  tabBorderRadius: '0.2em',
   messageBodyStyle: 'white-space: pre-wrap; width: 99%; font-size:100%; border: 0.07em solid #eee; border-radius:0.2em; padding: .3em 0.5em; margin: 0.1em;',
   pendingeditModifier: 'color: #bbb;',
-  highlightColor: '#7C4DFF',
-  // Solid lavendar https://design.inrupt.com/atomic-core/?cat=Core
-
   // Contacts
   personaBarStyle: 'width: 100%; height: 4em; background-color: #eee; vertical-align: middle;',
   searchInputStyle: 'border: 0.1em solid #444; border-radius: 0.2em; width: 100%; font-size: 100%; padding: 0.1em 0.6em; margin 0.2em;',
   autocompleteRowStyle: 'border: 0.2em solid straw;',
   // Login buttons
-  signInButtonStyle: 'padding: 1em; border-radius:0.2em; font-size: 100%;',
+  signInAndUpButtonStyle: 'padding: 1em; border-radius:0.2em; font-size: 100%;',
   // was 0.5em radius
-
+  headerBannerLoginInput: 'margin: 0.75em 0 0.75em 0.5em !important; padding: 0.5em !important;',
+  signUpBackground: 'background-color: #eef;',
+  signInBackground: 'background-color: #efe;',
   // Forms
   heading1Style: 'font-size: 180%; font-weight: bold; color: #888888; padding: 0.5em; margin: 0.7em 0.0m;',
   // originally was brown; now grey
@@ -10323,93 +10284,155 @@ var style = exports.style = {
   heading4Style: 'font-size: 110%; font-weight: bold; color: #888888; padding: 0.2em; margin: 0.7em 0.0em;',
   // Lowest level used by default in small things
 
-  formBorderColor: formBorderColor,
-  // originally was brown; now grey
-  formHeadingColor: '#888888',
-  // originally was brown; now grey
   formHeadingStyle: 'font-size: 110%; font-weight: bold; color: #888888; padding: 0.2em;  margin: 0.7em 0.0em;',
   // originally was brown; now grey
   formTextInput: 'font-size: 100%; margin: 0.1em; padding: 0.1em;',
   // originally used this
-  formGroupStyle: ["padding-left: 0em; border: 0.0em solid ".concat(formBorderColor, "; border-radius: 0.2em;"), // weight 0
-  "padding-left: 2em; border: 0.05em solid ".concat(formBorderColor, "; border-radius: 0.2em;"), "padding-left: 2em; border: 0.1em solid ".concat(formBorderColor, "; border-radius: 0.2em;"), "padding-left: 2em; border: 0.2em solid ".concat(formBorderColor, "; border-radius: 0.2em;") // @@ pink
+  formGroupStyle: ["padding-left: 0em; border: 0.0em solid ".concat(_styleConstants["default"].formBorderColor, "; border-radius: 0.2em;"), // weight 0
+  "padding-left: 2em; border: 0.05em solid ".concat(_styleConstants["default"].formBorderColor, "; border-radius: 0.2em;"), "padding-left: 2em; border: 0.1em solid ".concat(_styleConstants["default"].formBorderColor, "; border-radius: 0.2em;"), "padding-left: 2em; border: 0.2em solid ".concat(_styleConstants["default"].formBorderColor, "; border-radius: 0.2em;") // @@ pink
   ],
-  formFieldLabelStyle: "'color: ".concat(lowProfileLinkColor, "; text-decoration: none;'"),
-  formFieldNameBoxWidth: formFieldNameBoxWidth,
-  formFieldNameBoxStyle: "padding: 0.3em; vertical-align: middle; width:".concat(formFieldNameBoxWidth, ";"),
-  textInputBackgroundColor: '#eef',
-  textInputBackgroundColorUneditable: '#fff',
-  textInputColor: '#000',
-  textInputColorPending: '#888',
+  formFieldLabelStyle: "color: ".concat(_styleConstants["default"].lowProfileLinkColor, "; text-decoration: none;"),
+  formFieldNameBoxStyle: "padding: 0.3em; vertical-align: middle; width:".concat(_styleConstants["default"].formFieldNameBoxWidth, ";"),
   multilineTextInputStyle: 'font-size:100%; white-space: pre-wrap; background-color: #eef;' + ' border: 0.07em solid gray; padding: 1em 0.5em; margin: 1em 1em;',
   // Buttons
   renderAsDivStyle: 'display: flex; align-items: center; justify-content: space-between; height: 2.5em; padding: 1em;',
   imageDivStyle: 'width:2.5em; padding:0.5em; height: 2.5em;',
   linkDivStyle: 'width:2em; padding:0.5em; height: 4em;',
   // ACL
-  aclControlBoxContainer: 'margin: 1em',
-  aclControlBoxHeader: 'font-size: 120%; margin: 0 0 1rem',
-  aclControlBoxStatus: 'display: none; margin: 1rem 0',
-  aclControlBoxStatusRevealed: 'display: block',
-  aclGroupContent: 'maxWidth: 650',
-  accessGroupList: 'display: grid; grid-template-columns: 1fr; margin: 1em; width: 100%',
-  accessGroupListItem: 'display: grid; grid-template-columns: 100px auto 30%',
-  defaultsController: 'display: flex',
-  defaultsControllerNotice: 'color: #888; flexGrow: 1; fontSize: 80%',
-  bigButton: 'background-color: white; border: 0.1em solid #888; border-radius: 0.3em; max-width: 50%; padding-bottom: 1em; padding-top: 1em',
-  group: 'color: #888',
-  group1: 'color: green',
-  group2: 'color: #cc0',
-  group3: 'color: orange',
-  group5: 'color: red',
-  group9: 'color: blue',
-  group13: 'color: purple',
-  trustedAppAddApplicationsTable: 'background-color: #eee',
-  trustedAppCancelButton: 'float: right',
-  trustedAppControllerI: 'border-color: orange; borderRadius: 1em; borderWidth: 0.1em',
-  temporaryStatusInit: 'background: green',
-  temporaryStatusEnd: 'background: transparent; transition: background 5s linear',
+  aclControlBoxContainer: 'margin: 1em;',
+  aclControlBoxHeader: 'font-size: 120%; margin: 0 0 1rem;',
+  aclControlBoxStatus: 'display: none; margin: 1rem 0;',
+  aclControlBoxStatusRevealed: 'display: block;',
+  aclGroupContent: 'maxWidth: 650;',
+  accessGroupList: 'display: grid; grid-template-columns: 1fr; margin: 1em; width: 100%;',
+  accessGroupListItem: 'display: grid; grid-template-columns: 100px auto 30%;',
+  defaultsController: 'display: flex;',
+  defaultsControllerNotice: 'color: #888; flexGrow: 1; fontSize: 80%;',
+  bigButton: 'background-color: white; border: 0.1em solid #888; border-radius: 0.3em; max-width: 50%; padding-bottom: 1em; padding-top: 1em;',
+  group: 'color: #888;',
+  group1: 'color: green;',
+  group2: 'color: #cc0;',
+  group3: 'color: orange;',
+  group5: 'color: red;',
+  group9: 'color: blue;',
+  group13: 'color: purple;',
+  trustedAppAddApplicationsTable: 'background-color: #eee;',
+  trustedAppCancelButton: 'float: right;',
+  trustedAppControllerI: 'border-color: orange; border-radius: 1em; border-width: 0.1em;',
+  temporaryStatusInit: 'background: green;',
+  temporaryStatusEnd: 'background: transparent; transition: background 5s linear;',
   // header
-  headerUserMenuLink: 'background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em;  width: 100%; text-decoration: none',
-  headerUserMenuLinkHover: 'background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em;  width: 100%; text-decoration: none; background-image: linear-gradient(to right, #7C4DFF 0%, #18A9E6 50%, #01C9EA 100%)',
-  headerUserMenuTrigger: 'background: none; border: 0; cursor: pointer; width: 60px; height: 60px',
-  headerUserMenuTriggerImg: 'border-radius: 50%; height: 56px; width: 28px !important',
-  headerUserMenuButton: 'background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em; width: 100%',
-  headerUserMenuButtonHover: 'background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em; width: 100%; background-image: linear-gradient(to right, #7C4DFF 0%, #18A9E6 50%, #01C9EA 100%)',
-  headerUserMenuList: 'list-style: none; margin: 0; padding: 0',
-  headerUserMenuListDisplay: 'list-style: none; margin: 0; padding: 0; display:true',
-  headerUserMenuNavigationMenu: 'background: white; border: solid 1px #000000; border-right: 0; position: absolute; right: 0; top: 60px; width: 200px; z-index: 1; display: true',
-  headerUserMenuNavigationMenuNotDisplayed: 'background: white; border: solid 1px #000000; border-right: 0; position: absolute; right: 0; top: 60px; width: 200px; z-index: 1; display: none',
-  headerUserMenuListItem: 'border-bottom: solid 1px #000000',
-  headerUserMenuPhoto: 'border-radius: 50%; background-position: center; background-repeat: no-repeat; background-size: cover; height: 50px; width: 50px',
-  headerBanner: 'box-shadow: 0px 1px 4px #000000; display: flex; justify-content: space-between; padding: 0 1.5em; margin-bottom: 4px',
-  headerBannerLink: 'display: block',
-  headerBannerRightMenu: 'display: flex',
-  headerBannerLogin: 'margin-left: auto',
-  allChildrenVisible: 'display:true',
-  headerBannerLoginInput: 'margin: 0.75em 0 0.75em 0.5em !important; padding: 0.5em !important',
-  headerBannerUserMenu: 'border-left: solid 1px #000000; margin-left: auto',
-  headerBannerHelpMenu: 'border-left: solid 1px #000000; margin.left: auto',
-  headerBannerIcon: 'background-size: 65px 60px !important; height: 60px !important; width: 65px !important',
+  headerUserMenuLink: 'background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em;  width: 100%; text-decoration: none;',
+  headerUserMenuLinkHover: 'background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em;  width: 100%; text-decoration: none; background-image: linear-gradient(to right, #7C4DFF 0%, #18A9E6 50%, #01C9EA 100%);',
+  headerUserMenuTrigger: 'background: none; border: 0; cursor: pointer; width: 60px; height: 60px;',
+  headerUserMenuTriggerImg: 'border-radius: 50%; height: 56px; width: 28px !important;',
+  headerUserMenuButton: 'background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em; width: 100%;',
+  headerUserMenuButtonHover: 'background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em; width: 100%; background-image: linear-gradient(to right, #7C4DFF 0%, #18A9E6 50%, #01C9EA 100%);',
+  headerUserMenuList: 'list-style: none; margin: 0; padding: 0;',
+  headerUserMenuListDisplay: 'list-style: none; margin: 0; padding: 0; display:true;',
+  headerUserMenuNavigationMenu: 'background: white; border: solid 1px #000000; border-right: 0; position: absolute; right: 0; top: 60px; width: 200px; z-index: 1; display: true;',
+  headerUserMenuNavigationMenuNotDisplayed: 'background: white; border: solid 1px #000000; border-right: 0; position: absolute; right: 0; top: 60px; width: 200px; z-index: 1; display: none;',
+  headerUserMenuListItem: 'border-bottom: solid 1px #000000;',
+  headerUserMenuPhoto: 'border-radius: 50%; background-position: center; background-repeat: no-repeat; background-size: cover; height: 50px; width: 50px;',
+  headerBanner: 'box-shadow: 0px 1px 4px #000000; display: flex; justify-content: space-between; padding: 0 1.5em; margin-bottom: 4px;',
+  headerBannerLink: 'display: block;',
+  headerBannerRightMenu: 'display: flex;',
+  headerBannerLogin: 'margin-left: auto;',
+  allChildrenVisible: 'display:true;',
+  headerBannerUserMenu: 'border-left: solid 1px #000000; margin-left: auto;',
+  headerBannerHelpMenu: 'border-left: solid 1px #000000; margin-left: auto;',
+  headerBannerIcon: 'background-size: 65px 60px !important; height: 60px !important; width: 65px !important;',
   // may just be 65px round($icon-size * 352 / 322);
 
   // footer
-  footer: 'border-top: solid 1px $divider-color; font-size: 0.9em; padding: 0.5em 1.5em',
+  footer: 'border-top: solid 1px $divider-color; font-size: 0.9em; padding: 0.5em 1.5em;',
   // buttons
-  primaryButton: 'background-color: #7c4dff; color: #ffffff; font-family: Raleway, Roboto, sans-serif; border-radius: 0.25em; border-color: #7c4dff; border: 1px solid; cursor: pointer; font-size: .8em;text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none',
-  primaryButtonHover: 'background-color: #9f7dff; color: #ffffff; font-family: Raleway, Roboto, sans-serif;border-radius: 0.25em; border-color: #7c4dff; border: 1px solid; cursor: pointer; font-size: .8em;text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none; transition: 0.25s all ease-in-out',
-  primaryButtonNoBorder: 'background-color: #ffffff; color: #7c4dff; font-family: Raleway, Roboto, sans-serif;border-radius: 0.25em; border-color: #7c4dff; border: 1px solid; cursor: pointer; font-size: .8em;text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none',
-  primaryButtonNoBorderHover: 'background-color: #7c4dff; color: #ffffff; font-family: Raleway, Roboto, sans-serif; border-radius: 0.25em; border-color: #7c4dff; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none; transition: 0.25s all ease-in-out',
-  secondaryButton: 'background-color: #01c9ea; color: #ffffff; font-family: Raleway, Roboto, sans-serif;border-radius: 0.25em; border-color: #01c9ea; border: 1px solid; cursor: pointer; font-size: .8em;text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none',
-  secondaryButtonHover: 'background-color: #37cde6; color: #ffffff; font-family: Raleway, Roboto, sans-serif;border-radius: 0.25em; border-color: #7c4dff; border: 1px solid; cursor: pointer; font-size: .8em;text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none; transition: 0.25s all ease-in-out',
-  secondaryButtonNoBorder: 'background-color: #ffffff; color: #01c9ea; font-family: Raleway, Roboto, sans-serif; border-radius: 0.25em; border-color: #01c9ea; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none',
-  secondaryButtonNoBorderHover: 'background-color: #01c9ea; color: #ffffff; font-family: Raleway, Roboto, sans-serif; border-radius: 0.25em; border-color: #01c9ea; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none; transition: 0.25s all ease-in-out'
+  primaryButton: 'background-color: #7c4dff; color: #ffffff; font-family: Raleway, Roboto, sans-serif; border-radius: 0.25em; border-color: #7c4dff; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none;',
+  primaryButtonHover: 'background-color: #9f7dff; color: #ffffff; font-family: Raleway, Roboto, sans-serif;border-radius: 0.25em; border-color: #7c4dff; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none; transition: 0.25s all ease-in-out;',
+  primaryButtonNoBorder: 'background-color: #ffffff; color: #7c4dff; font-family: Raleway, Roboto, sans-serif;border-radius: 0.25em; border-color: #7c4dff; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none;',
+  primaryButtonNoBorderHover: 'background-color: #7c4dff; color: #ffffff; font-family: Raleway, Roboto, sans-serif; border-radius: 0.25em; border-color: #7c4dff; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none; transition: 0.25s all ease-in-out;',
+  secondaryButton: 'background-color: #01c9ea; color: #ffffff; font-family: Raleway, Roboto, sans-serif;border-radius: 0.25em; border-color: #01c9ea; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none;',
+  secondaryButtonHover: 'background-color: #37cde6; color: #ffffff; font-family: Raleway, Roboto, sans-serif;border-radius: 0.25em; border-color: #7c4dff; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none; transition: 0.25s all ease-in-out;',
+  secondaryButtonNoBorder: 'background-color: #ffffff; color: #01c9ea; font-family: Raleway, Roboto, sans-serif; border-radius: 0.25em; border-color: #01c9ea; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none;',
+  secondaryButtonNoBorderHover: 'background-color: #01c9ea; color: #ffffff; font-family: Raleway, Roboto, sans-serif; border-radius: 0.25em; border-color: #01c9ea; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none; transition: 0.25s all ease-in-out;',
+  // media
+  controlStyle: "border-radius: 0.5em; margin: 0.8em; width:".concat(_styleConstants["default"].mediaModuleCanvasWidth, "; height:").concat(_styleConstants["default"].mediaModuleCanvasHeight, ";"),
+  // dragAndDrop
+  dragEvent: 'background-color: #ccc; border: 0.25em dashed black; border-radius: 0.3em;',
+  dropEvent: 'background-color: white; border: 0em solid black;',
+  restoreStyle: 'background-color: white;',
+  // errors
+  errorCancelButton: 'width: 2em; height: 2em; align: right;',
+  errorMessageBlockStyle: 'margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; color:black;',
+  // pad
+  notepadStyle: 'padding: 1em; overflow: auto; resize: horizontal; min-width: 40em;',
+  upstreamStatus: 'width: 50%;',
+  downstreamStatus: 'width: 50%;',
+  baseStyle: 'font-size: 100%; font-family: monospace; width: 100%; border: none; white-space: pre-wrap;',
+  headingCore: 'font-family: sans-serif; font-weight: bold;  border: none;',
+  headingStyle: ['font-size: 110%; padding-top: 0.5em; padding-bottom: 0.5em; width: 100%;', 'font-size: 120%; padding-top: 1em; padding-bottom: 1em; width: 100%;', 'font-size: 150%; padding-top: 1em; padding-bottom: 1em; width: 100%;'],
+  // participation
+  participantsStyle: 'margin: 0.8em;',
+  participantsBlock: 'height: 1.5em; width: 1.5em; margin: 0.3em; border 0.01em solid #888;',
+  personTableTD: 'vertical-align: middle;',
+  // tabs
+  tabsNavElement: 'margin: 0;',
+  tabsRootElement: 'display: flex; height: 100%; width: 100%;',
+  tabsMainElement: 'margin: 0; width:100%; height: 100%;',
+  tabContainer: 'list-style-type: none; display: flex; height: 100%; width: 100%; margin: 0; padding: 0;',
+  makeNewSlot: 'background: none; border: none; font: inherit; cursor: pointer;',
+  ellipsis: 'position: absolute; right: 0; bottom: 0; width: 20%; background: none; color: inherit; border: none; padding: 0; font: inherit; cursor: pointer; outline: inherit;'
 };
 style.setStyle = function setStyle(ele, styleName) {
   ele.style = style[styleName];
 };
 module.exports = style; // @@ No way to do this in ESM
 //# sourceMappingURL=style.js.map
+
+/***/ }),
+
+/***/ "./lib/styleConstants.js":
+/*!*******************************!*\
+  !*** ./lib/styleConstants.js ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _default = exports["default"] = {
+  highlightColor: '#7C4DFF',
+  // Solid lavender https://design.inrupt.com/atomic-core/?cat=Core
+
+  formBorderColor: '#888888',
+  // Mid-grey
+  formHeadingColor: '#888888',
+  // originally was brown; now grey
+  lowProfileLinkColor: '#3B5998',
+  // Grey-blue, e.g., for field labels linking to ontology
+  formFieldNameBoxWidth: '8em',
+  // The fixed amount to get form fields to line up
+  // We put in the latter when switching away from using tables.  However, getting
+  // alignment between fields in different groups is a hard problem.
+
+  mediaModuleCanvasWidth: '640',
+  mediaModuleCanvasHeight: '480',
+  textInputSize: 20,
+  // Rough default text input size, in characters
+  tabBorderRadius: '0.2em',
+  textInputBackgroundColor: '#eef',
+  textInputBackgroundColorUneditable: '#fff',
+  textInputColor: '#000',
+  textInputColorPending: '#888',
+  defaultErrorBackgroundColor: '#fee',
+  participationDefaultBackground: 'white',
+  basicMaxLength: '4096'
+};
+//# sourceMappingURL=styleConstants.js.map
 
 /***/ }),
 
@@ -12079,6 +12102,7 @@ function renderTableViewPane(doc, options) {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
@@ -12095,7 +12119,10 @@ var _wrapNativeSuper2 = _interopRequireDefault(__webpack_require__(/*! @babel/ru
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js"));
 var _widgets = __webpack_require__(/*! ./widgets */ "./lib/widgets/index.js");
 var _utils = __webpack_require__(/*! ./utils */ "./lib/utils/index.js");
+var style = _interopRequireWildcard(__webpack_require__(/*! ./style */ "./lib/style.js"));
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2["default"])(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2["default"])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2["default"])(this, result); }; }
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 /**
@@ -12277,11 +12304,12 @@ var TabElement = /*#__PURE__*/function (_HTMLElement3) {
  *
  * @param options
  */
+var tabsDefaultBackgroundColor = '#ddddcc';
 function tabWidget(options) {
   var subject = options.subject;
   var dom = options.dom || document;
   var orientation = parseInt(options.orientation || '0');
-  var backgroundColor = options.backgroundColor || '#ddddcc';
+  var backgroundColor = options.backgroundColor || tabsDefaultBackgroundColor;
   var flipped = orientation & 2;
   var vertical = orientation & 1;
   var onClose = options.onClose;
@@ -12292,13 +12320,15 @@ function tabWidget(options) {
   var bodyMainStyle = "flex: 2; width: auto; height: 100%; border: 0.1em; border-style: solid; border-color: ".concat(selectedColor, "; padding: 1em;");
   var rootElement = dom.createElement('div'); // 20200117a
 
-  rootElement.setAttribute('style', 'display: flex; height: 100%; width: 100%; flex-direction: ' + (vertical ? 'row' : 'column') + (flipped ? '-reverse;' : ';'));
+  rootElement.setAttribute('style', style.tabsRootElement);
+  rootElement.style.flexDirection = (vertical ? 'row' : 'column') + (flipped ? '-reverse;' : ';');
   var navElement = rootElement.appendChild(dom.createElement('nav'));
-  navElement.setAttribute('style', 'margin: 0;');
+  navElement.setAttribute('style', style.tabsNavElement);
   var mainElement = rootElement.appendChild(dom.createElement('main'));
-  mainElement.setAttribute('style', 'margin: 0; width:100%; height: 100%;'); // override tabbedtab.css
+  mainElement.setAttribute('style', style.tabsMainElement); // override tabbedtab.css
   var tabContainer = navElement.appendChild(dom.createElement('ul'));
-  tabContainer.setAttribute('style', "\n    list-style-type: none;\n    display: flex;\n    height: 100%;\n    width: 100%;\n    margin: 0;\n    padding: 0;\n    flex-direction: ".concat(vertical ? 'column' : 'row', "\n  "));
+  tabContainer.setAttribute('style', style.tabContainer);
+  tabContainer.style.flexDirection = "".concat(vertical ? 'column' : 'row');
   var tabElement = 'li';
   var bodyContainer = mainElement;
   rootElement.tabContainer = tabContainer;
@@ -12318,7 +12348,7 @@ function tabWidget(options) {
   rootElement.refresh = orderedSync;
   orderedSync();
   if (!options.startEmpty && tabContainer.children.length && options.selectedTab) {
-    var selectedTab0 = Array.from(tabContainer.children) // Version left for compatability with ??
+    var selectedTab0 = Array.from(tabContainer.children) // Version left for compatibility with ??
     .map(function (tab) {
       return tab.firstChild;
     }).find(function (tab) {
@@ -12371,7 +12401,7 @@ function tabWidget(options) {
     ele.setAttribute('style', unselectedStyle);
     ele.subject = item;
     var div = ele.appendChild(dom.createElement('button'));
-    div.setAttribute('style', 'background: none; border: none; font: inherit; cursor: pointer');
+    div.setAttribute('style', style.makeNewSlot);
     div.onclick = function () {
       resetTabStyle();
       resetBodyStyle();
@@ -12388,7 +12418,7 @@ function tabWidget(options) {
     if (options.renderTabSettings && ele.subject) {
       var ellipsis = dom.createElement('button');
       ellipsis.textContent = '...';
-      ellipsis.setAttribute('style', 'position: absolute; right: 0; bottom: 0; width: 20%; background: none; color: inherit; border: none; padding: 0; font: inherit; cursor: pointer; outline: inherit;');
+      ellipsis.setAttribute('style', style.ellipsis);
       ellipsis.onclick = function () {
         resetTabStyle();
         resetBodyStyle();
@@ -13665,8 +13695,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = exports.versionInfo = {
-  buildTime: '2023-11-30T16:45:27Z',
-  commit: '28954ea400b5ebbd9627fdf986cadccae104a51f',
+  buildTime: '2023-12-01T19:53:58Z',
+  commit: '878273708d800d65e33b0aec1568577c3df7e32b',
   npmInfo: {
     'solid-ui': '2.4.30',
     npm: '8.19.4',
@@ -15092,39 +15122,34 @@ exports.makeDropTarget = makeDropTarget;
 exports.uploadFiles = uploadFiles;
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
 var mime = _interopRequireWildcard(__webpack_require__(/*! mime-types */ "./node_modules/mime-types/index.js"));
+var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
 function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /* Drag and drop common functionality
  *
  * It is easy to make something draggable, or to make it a drag target!
- * Just call the functions below.  In a solid world, any part of the UI which
- * represent one thing which has a UR, should be made draggable using makeDraggable
+ * Just call the functions below. In a Solid world, any part of the UI which
+ * represents one thing which has a URI, should be made draggable using makeDraggable.
  * Any list of things should typically allow you to drag new members of the list
  * onto it.
- * The file upload function uploadFiles is provided as often of someone drags a file from the computer
- * desktop, you may want to upload it into the pod.
+ * The file upload function, uploadFiles, is provided as often as someone drags a file from the computer
+ * desktop. You may want to upload it into the pod.
  */
 
 /* global FileReader alert */
 
 function makeDropTarget(ele, droppedURIHandler, droppedFileHandler) {
   var dragoverListener = function dragoverListener(e) {
-    e.preventDefault(); // Neeed else drop does not work [sic]
+    e.preventDefault(); // Need this; otherwise, drop does not work.
     e.dataTransfer.dropEffect = 'copy';
   };
   var dragenterListener = function dragenterListener(e) {
     debug.log('dragenter event dropEffect: ' + e.dataTransfer.dropEffect);
-    if (this.style) {
+    if (this.localStyle) {
       //  necessary not sure when
       if (!this.savedStyle) {
-        this.savedStyle = {};
-        this.savedStyle.border = this.style.border;
-        this.savedStyle.backgroundColor = this.style.backgroundColor;
-        this.savedStyle.borderRadius = this.style.borderRadius;
+        this.savedStyle = style.dragEvent;
       }
-      this.style.backgroundColor = '#ccc';
-      this.style.border = '0.25em dashed black';
-      this.style.borderRadius = '0.3em';
     }
     e.dataTransfer.dropEffect = 'link';
     debug.log('dragenter event dropEffect 2: ' + e.dataTransfer.dropEffect);
@@ -15132,12 +15157,9 @@ function makeDropTarget(ele, droppedURIHandler, droppedFileHandler) {
   var dragleaveListener = function dragleaveListener(e) {
     debug.log('dragleave event dropEffect: ' + e.dataTransfer.dropEffect);
     if (this.savedStyle) {
-      this.style.border = this.savedStyle.border;
-      this.style.backgroundColor = this.savedStyle.backgroundColor;
-      this.style.borderRadius = this.savedStyle.borderRadius;
+      this.localStyle = this.savedStyle;
     } else {
-      this.style.backgroundColor = 'white';
-      this.style.border = '0em solid black';
+      this.localStyle = style.dropEvent;
     }
   };
   var dropListener = function dropListener(e) {
@@ -15176,7 +15198,7 @@ function makeDropTarget(ele, droppedURIHandler, droppedFileHandler) {
     if (uris) {
       droppedURIHandler(uris);
     }
-    this.style.backgroundColor = 'white'; // restore style
+    this.localStyle = style.restoreStyle; // restore style
     return false;
   }; // dropListener
 
@@ -15296,11 +15318,17 @@ function uploadFiles(fetcher, files, fileBase, imageBase, successHandler) {
 "use strict";
 
 
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.errorMessageBlock = errorMessageBlock;
 var _widgets = __webpack_require__(/*! ../widgets */ "./lib/widgets/index.js");
+var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
+var _styleConstants = _interopRequireDefault(__webpack_require__(/*! ../styleConstants */ "./lib/styleConstants.js"));
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /**
  * Create an error message block
  * @param dom The DOM on which dom.createElement will be called
@@ -15329,8 +15357,9 @@ function errorMessageBlock(dom, err, backgroundColor, err2) {
   }
   div.appendChild((0, _widgets.cancelButton)(dom, function () {
     if (div.parentNode) div.parentNode.removeChild(div);
-  })).style = 'width: 2em; height: 2em; align: right;';
-  div.setAttribute('style', 'margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; background-color: ' + (backgroundColor || '#fee') + '; color:black;');
+  })).style = style.errorCancelButton;
+  div.setAttribute('style', style.errorMessageBlockStyle);
+  div.style.backgroundColor = backgroundColor || _styleConstants["default"].defaultErrorBackgroundColor;
   return div;
 }
 //# sourceMappingURL=error.js.map
@@ -15427,6 +15456,7 @@ var _error = __webpack_require__(/*! ./error */ "./lib/widgets/error.js");
 var _basic = __webpack_require__(/*! ./forms/basic */ "./lib/widgets/forms/basic.js");
 var _autocompleteField = __webpack_require__(/*! ./forms/autocomplete/autocompleteField */ "./lib/widgets/forms/autocomplete/autocompleteField.js");
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
+var _styleConstants = _interopRequireDefault(__webpack_require__(/*! ../styleConstants */ "./lib/styleConstants.js"));
 var _iconBase = __webpack_require__(/*! ../iconBase */ "./lib/iconBase.js");
 var log = _interopRequireWildcard(__webpack_require__(/*! ../log */ "./lib/log.js"));
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
@@ -16113,7 +16143,7 @@ _fieldFunction.field[ns.ui('MultiLineTextField').uri] = function (dom, container
   box.style.display = 'flex';
   box.style.flexDirection = 'row';
   var left = box.appendChild(dom.createElement('div'));
-  left.style.width = style.formFieldNameBoxWidth;
+  left.style.width = _styleConstants["default"].formFieldNameBoxWidth;
   var right = box.appendChild(dom.createElement('div'));
   left.appendChild((0, _basic.fieldLabel)(dom, property, form));
   dataDoc = (0, _basic.fieldStore)(subject, property, dataDoc);
@@ -16538,7 +16568,7 @@ function promptForNew(dom, kb, subject, predicate, theClass, form, dataDoc, call
     form = lists[0]; // Pick any one
   }
   log.debug('form is ' + form);
-  box.setAttribute('style', "border: 0.05em solid ".concat(style.formBorderColor, "; color: ").concat(style.formBorderColor)); // @@color?
+  box.setAttribute('style', "border: 0.05em solid ".concat(_styleConstants["default"].formBorderColor, "; color: ").concat(_styleConstants["default"].formBorderColor)); // @@color?
   box.innerHTML = '<h3>New ' + utils.label(theClass) + '</h3>';
   var formFunction = (0, _fieldFunction.fieldFunction)(dom, form);
   var object = newThing(dataDoc);
@@ -16597,12 +16627,12 @@ function makeDescription(dom, kb, subject, predicate, dataDoc, callbackFunction)
     submit.disabled = true;
     submit.setAttribute('style', 'visibility: hidden; float: right;'); // Keep UI clean
     field.disabled = true;
-    field.style.color = style.textInputColorPending; // setAttribute('style', style + 'color: gray;') // pending
+    field.style.color = _styleConstants["default"].textInputColorPending;
     var ds = kb.statementsMatching(subject, predicate, null, dataDoc);
     var is = $rdf.st(subject, predicate, field.value, dataDoc);
     kb.updater.update(ds, is, function (uri, ok, body) {
       if (ok) {
-        field.style.color = style.textInputColor;
+        field.style.color = _styleConstants["default"].textInputColor;
         field.disabled = false;
       } else {
         group.appendChild((0, _error.errorMessageBlock)(dom, 'Error (while saving change to ' + dataDoc.uri + '): ' + body));
@@ -16631,7 +16661,7 @@ function makeDescription(dom, kb, subject, predicate, dataDoc, callbackFunction)
     field.addEventListener('change', saveChange, true);
   } else {
     field.disabled = true; // @@ change color too
-    field.style.backgroundColor = style.textInputBackgroundColorUneditable;
+    field.style.backgroundColor = _styleConstants["default"].textInputBackgroundColorUneditable;
   }
   return group;
 }
@@ -16755,7 +16785,7 @@ function makeSelectForClassifierOptions(dom, kb, subject, predicate, possible, o
     });
   };
   var select = dom.createElement('select');
-  select.setAttribute('style', style.formSelectSTyle);
+  select.setAttribute('style', style.formSelectStyle);
   if (options.multiple) select.setAttribute('multiple', 'true');
   select.currentURI = null;
   select.refresh = function () {
@@ -16895,7 +16925,7 @@ function makeSelectForOptions(dom, kb, subject, predicate, possible, options, da
     });
   };
   var select = dom.createElement('select');
-  select.setAttribute('style', style.formSelectSTyle);
+  select.setAttribute('style', style.formSelectStyle);
   select.currentURI = null;
   select.refresh = function () {
     actual = getActual(); // refresh
@@ -17175,7 +17205,7 @@ function makeSelectForChoice(dom, container, kb, subject, predicate, inputPossib
     select.refresh();
   };
   var select = dom.createElement('select');
-  select.setAttribute('style', style.formSelectSTyle);
+  select.setAttribute('style', style.formSelectStyle);
   select.setAttribute('id', 'formSelect');
   select.currentURI = null;
   for (var uri in optionsFromClassUIfrom) {
@@ -17963,6 +17993,7 @@ var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../../../debug */ "./lib/debug.js"));
 var style = _interopRequireWildcard(__webpack_require__(/*! ../../../style */ "./lib/style.js"));
+var _styleConstants = _interopRequireDefault(__webpack_require__(/*! ../../../styleConstants */ "./lib/styleConstants.js"));
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../../../widgets */ "./lib/widgets/index.js"));
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var _publicData = __webpack_require__(/*! ./publicData */ "./lib/widgets/forms/autocomplete/publicData.js");
@@ -18362,7 +18393,7 @@ function _renderAutoComplete() {
           searchInput = cell.appendChild(dom.createElement('input'));
           searchInput.setAttribute('type', 'text');
           initialize();
-          size = acOptions.size || style.textInputSize || 20;
+          size = acOptions.size || _styleConstants["default"].textInputSize || 20;
           searchInput.setAttribute('size', size);
           searchInput.setAttribute('data-testid', 'autocomplete-input');
           searchInputStyle = style.textInputStyle ||
@@ -19246,6 +19277,7 @@ function _getDbpediaDetails() {
 "use strict";
 
 
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
 Object.defineProperty(exports, "__esModule", ({
   value: true
@@ -19258,6 +19290,7 @@ var _rdflib = __webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../../ns */ "./lib/ns.js"));
 var _style = __webpack_require__(/*! ../../style */ "./lib/style.js");
+var _styleConstants = _interopRequireDefault(__webpack_require__(/*! ../../styleConstants */ "./lib/styleConstants.js"));
 var _utils = __webpack_require__(/*! ../../utils */ "./lib/utils/index.js");
 var _error = __webpack_require__(/*! ../error */ "./lib/widgets/error.js");
 var _fieldFunction = __webpack_require__(/*! ./fieldFunction */ "./lib/widgets/forms/fieldFunction.js");
@@ -19273,7 +19306,7 @@ function renderNameValuePair(dom, kb, box, form, label) {
   box.style.display = 'flex';
   box.style.flexDirection = 'row';
   var lhs = box.appendChild(dom.createElement('div'));
-  lhs.style.width = _style.formFieldNameBoxWidth;
+  lhs.style.width = _styleConstants["default"].formFieldNameBoxWidth;
   var rhs = box.appendChild(dom.createElement('div'));
   lhs.setAttribute('class', 'formFieldName');
   lhs.setAttribute('style', _style.formFieldNameBoxStyle);
@@ -19378,10 +19411,10 @@ function basicField(dom, container, already, subject, form, doc, callbackFunctio
   field.style = style;
   rhs.appendChild(field);
   field.setAttribute('type', params.type ? params.type : 'text');
-  var size = kb.anyJS(form, ns.ui('size')) || _style.textInputSize || 20;
+  var size = kb.anyJS(form, ns.ui('size')) || _styleConstants["default"].textInputSize || 20;
   field.setAttribute('size', size);
   var maxLength = kb.any(form, ns.ui('maxLength'));
-  field.setAttribute('maxLength', maxLength ? '' + maxLength : '4096');
+  field.setAttribute('maxLength', maxLength ? '' + maxLength : _styleConstants["default"].basicMaxLength);
   doc = doc || fieldStore(subject, property, doc);
   var obj = kb.any(subject, property, undefined, doc);
   if (!obj) {
@@ -19403,7 +19436,6 @@ function basicField(dom, container, already, subject, form, doc, callbackFunctio
     field.readOnly = true // was: disabled. readOnly is better
     ;
     field.style = _style.textInputStyleUneditable + paramStyle;
-    // backgroundColor = textInputBackgroundColorUneditable
     if (suppressEmptyUneditable && field.value === '') {
       box.style.display = 'none'; // clutter
     }
@@ -19642,10 +19674,10 @@ var fieldParams = exports.fieldParams = (_fieldParams = {}, (0, _defineProperty2
   style: _style.formGroupStyle
 }), ns.ui('Comment').uri, {
   element: 'p',
-  style: _style.commentStyle // was `padding: 0.1em 1.5em; color: ${formHeadingColor}; white-space: pre-wrap;`
+  style: _style.commentStyle
 }), ns.ui('Heading').uri, {
   element: 'h3',
-  style: _style.formHeadingStyle // was: `font-size: 110%; font-weight: bold; color: ${formHeadingColor}; padding: 0.2em;`
+  style: _style.formHeadingStyle
 }));
 //# sourceMappingURL=fieldParams.js.map
 
