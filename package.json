@@ -1,6 +1,6 @@
 {
   "name": "solid-ui",
-  "version": "2.4.30",
+  "version": "2.4.31",
   "description": "UI library for writing Solid read-write-web applications",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -62,9 +62,9 @@
     "i": "^0.3.7",
     "mime-types": "^2.1.35",
     "npm": "^8.19.4",
-    "pane-registry": "^2.4.24",
+    "pane-registry": "^2.4.25",
     "rdflib": "^2.2.33",
-    "solid-logic": "^3.0.5",
+    "solid-logic": "^3.0.6",
     "solid-namespace": "^0.5.3",
     "uuid": "^8.3.2"
   },
@@ -90,7 +90,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
     "@types/jsdom": "^16.2.15",
-    "@types/node": "^18.18.14",
+    "@types/node": "^18.19.1",
     "@types/react": "^17.0.71",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",

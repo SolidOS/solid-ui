@@ -13695,10 +13695,10 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = exports.versionInfo = {
-  buildTime: '2023-12-01T20:09:02Z',
-  commit: 'f0d40afb1abf8bdab96062dae296f3a4e9f7a856',
+  buildTime: '2023-12-01T20:22:18Z',
+  commit: 'f40cba957f0cdc0d34ddace42069ce1ae87744af',
   npmInfo: {
-    'solid-ui': '2.4.30',
+    'solid-ui': '2.4.31',
     npm: '8.19.4',
     node: '16.20.2',
     v8: '9.4.146.26-node.26',
@@ -26348,51 +26348,113 @@ e.read=function(t,e,r,n,i){var o,s,a=8*i-n-1,u=(1<<a)-1,c=u>>1,h=-7,l=r?i-1:0,f=
 
 /***/ }),
 
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/ClientAuthentication.js":
-/*!**************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/ClientAuthentication.js ***!
-  \**************************************************************************************/
+/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/index.js":
+/*!***********************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/index.js ***!
+  \***********************************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-const universal_fetch_1 = __webpack_require__(/*! @inrupt/universal-fetch */ "./node_modules/@inrupt/universal-fetch/dist/index-browser.js");
-const oidc_client_ext_1 = __webpack_require__(/*! @inrupt/oidc-client-ext */ "./node_modules/@inrupt/oidc-client-ext/dist/index.es.js");
-const globalFetch = (request, init) => (0, universal_fetch_1.fetch)(request, init);
-class ClientAuthentication {
-    constructor(loginHandler, redirectHandler, logoutHandler, sessionInfoManager, issuerConfigFetcher) {
-        this.loginHandler = loginHandler;
-        this.redirectHandler = redirectHandler;
-        this.logoutHandler = logoutHandler;
-        this.sessionInfoManager = sessionInfoManager;
-        this.issuerConfigFetcher = issuerConfigFetcher;
+
+var solidClientAuthnCore = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
+var uuid = __webpack_require__(/*! uuid */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/index.js");
+var EventEmitter = __webpack_require__(/*! events */ "./node_modules/events/events.js");
+var oidcClientExt = __webpack_require__(/*! @inrupt/oidc-client-ext */ "./node_modules/@inrupt/oidc-client-ext/dist/index.es.js");
+var universalFetch = __webpack_require__(/*! @inrupt/universal-fetch */ "./node_modules/@inrupt/universal-fetch/dist/index-browser.js");
+
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * This class in a no-value-added extension of StorageUtility from the core module.
+ * The reason it has to be declared is for TSyringe to find the decorators in the
+ * same modules as where the dependency container is declared (in this case,
+ * the browser module, with the dependancy container in dependencies.ts).
+ * @hidden
+ */
+class StorageUtilityBrowser extends solidClientAuthnCore.StorageUtility {
+    constructor(secureStorage, insecureStorage) {
+        super(secureStorage, insecureStorage);
+    }
+}
+
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ */
+class ClientAuthentication extends solidClientAuthnCore.ClientAuthentication {
+    constructor() {
+        super(...arguments);
+        // Define these functions as properties so that they don't get accidentally re-bound.
+        // Isn't Javascript fun?
         this.login = async (options, eventEmitter) => {
             var _a, _b;
+            // In order to get a clean start, make sure that the session is logged out
+            // on login.
+            // But we may want to preserve our client application info, particularly if
+            // we used Dynamic Client Registration to register (since we don't
+            // necessarily want the user to have to register this app each time they
+            // login).
             await this.sessionInfoManager.clear(options.sessionId);
-            const redirectUrl = (_a = options.redirectUrl) !== null && _a !== void 0 ? _a : (0, oidc_client_ext_1.removeOidcQueryParam)(window.location.href);
-            if (!(0, solid_client_authn_core_1.isValidRedirectUrl)(redirectUrl)) {
-                throw new Error(`${redirectUrl} is not a valid redirect URL, it is either a malformed IRI or it includes a hash fragment.`);
+            // In the case of the user hitting the 'back' button in their browser, they
+            // could return to a previous redirect URL that contains OIDC params that
+            // are now longer valid. To be safe, strip relevant params now.
+            // If the user is providing a redirect IRI, it should not be modified, so
+            // normalization only applies if we default to the current location (which is
+            // a bad practice and should be discouraged).
+            const redirectUrl = (_a = options.redirectUrl) !== null && _a !== void 0 ? _a : oidcClientExt.normalizeCallbackUrl(window.location.href);
+            if (!solidClientAuthnCore.isValidRedirectUrl(redirectUrl)) {
+                throw new Error(`${redirectUrl} is not a valid redirect URL, it is either a malformed IRI, includes a hash fragment, or reserved query parameters ('code' or 'state').`);
             }
             await this.loginHandler.handle({
                 ...options,
                 redirectUrl,
+                // If no clientName is provided, the clientId may be used instead.
                 clientName: (_b = options.clientName) !== null && _b !== void 0 ? _b : options.clientId,
                 eventEmitter,
             });
         };
-        this.fetch = globalFetch;
-        this.logout = async (sessionId) => {
-            await this.logoutHandler.handle(sessionId);
-            this.fetch = globalFetch;
-        };
-        this.getSessionInfo = async (sessionId) => {
-            return this.sessionInfoManager.get(sessionId);
-        };
-        this.getAllSessionInfo = async () => {
-            return this.sessionInfoManager.getAll();
-        };
+        // Collects session information from storage, and returns them. Returns null
+        // if the expected information cannot be found.
+        // Note that the ID token is not stored, which means the session information
+        // cannot be validated at this point.
         this.validateCurrentSession = async (currentSessionId) => {
             const sessionInfo = await this.sessionInfoManager.get(currentSessionId);
             if (sessionInfo === undefined ||
@@ -26405,8 +26467,14 @@ class ClientAuthentication {
         this.handleIncomingRedirect = async (url, eventEmitter) => {
             try {
                 const redirectInfo = await this.redirectHandler.handle(url, eventEmitter);
+                // The `FallbackRedirectHandler` directly returns the global `fetch` for
+                // his value, so we should ensure it's bound to `window` rather than to
+                // ClientAuthentication, to avoid the following error:
+                // > 'fetch' called on an object that does not implement interface Window.
                 this.fetch = redirectInfo.fetch.bind(window);
-                this.cleanUrlAfterRedirect(url);
+                this.boundLogout = redirectInfo.getLogoutUrl;
+                // Strip the oauth params:
+                await this.cleanUrlAfterRedirect(url);
                 return {
                     isLoggedIn: redirectInfo.isLoggedIn,
                     webId: redirectInfo.webId,
@@ -26415,447 +26483,202 @@ class ClientAuthentication {
                 };
             }
             catch (err) {
-                this.cleanUrlAfterRedirect(url);
-                eventEmitter.emit(solid_client_authn_core_1.EVENTS.ERROR, "redirect", err);
+                // Strip the oauth params:
+                await this.cleanUrlAfterRedirect(url);
+                // FIXME: EVENTS.ERROR should be errorCode, errorDescription
+                //
+                // I'm not sure if "redirect" is a good error code, and in theory `err`
+                // maybe an Error object and not a string; Maybe we want to just hardcode
+                // a description instead?
+                eventEmitter.emit(solidClientAuthnCore.EVENTS.ERROR, "redirect", err);
                 return undefined;
             }
         };
     }
-    cleanUrlAfterRedirect(url) {
-        const cleanedUpUrl = new URL(url);
-        cleanedUpUrl.searchParams.delete("state");
-        cleanedUpUrl.searchParams.delete("code");
-        cleanedUpUrl.searchParams.delete("id_token");
-        cleanedUpUrl.searchParams.delete("access_token");
-        cleanedUpUrl.searchParams.delete("error");
-        cleanedUpUrl.searchParams.delete("error_description");
-        cleanedUpUrl.searchParams.delete("iss");
-        window.history.replaceState(null, "", cleanedUpUrl.toString());
-    }
-}
-exports["default"] = ClientAuthentication;
-//# sourceMappingURL=ClientAuthentication.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/Session.js":
-/*!*************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/Session.js ***!
-  \*************************************************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Session = exports.silentlyAuthenticate = void 0;
-const solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-const uuid_1 = __webpack_require__(/*! uuid */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/index.js");
-const events_1 = __importDefault(__webpack_require__(/*! events */ "./node_modules/events/events.js"));
-const dependencies_1 = __webpack_require__(/*! ./dependencies */ "./node_modules/@inrupt/solid-client-authn-browser/dist/dependencies.js");
-const constant_1 = __webpack_require__(/*! ./constant */ "./node_modules/@inrupt/solid-client-authn-browser/dist/constant.js");
-async function silentlyAuthenticate(sessionId, clientAuthn, session) {
-    var _a;
-    const storedSessionInfo = await clientAuthn.validateCurrentSession(sessionId);
-    if (storedSessionInfo !== null) {
-        window.localStorage.setItem(constant_1.KEY_CURRENT_URL, window.location.href);
-        await clientAuthn.login({
-            sessionId,
-            prompt: "none",
-            oidcIssuer: storedSessionInfo.issuer,
-            redirectUrl: storedSessionInfo.redirectUrl,
-            clientId: storedSessionInfo.clientAppId,
-            clientSecret: storedSessionInfo.clientAppSecret,
-            tokenType: (_a = storedSessionInfo.tokenType) !== null && _a !== void 0 ? _a : "DPoP",
-        }, session.events);
-        return true;
-    }
-    return false;
-}
-exports.silentlyAuthenticate = silentlyAuthenticate;
-function isLoggedIn(sessionInfo) {
-    return !!(sessionInfo === null || sessionInfo === void 0 ? void 0 : sessionInfo.isLoggedIn);
-}
-class Session extends events_1.default {
-    constructor(sessionOptions = {}, sessionId = undefined) {
-        super();
-        this.tokenRequestInProgress = false;
-        this.login = async (options) => {
-            var _a;
-            await this.clientAuthentication.login({
-                sessionId: this.info.sessionId,
-                ...options,
-                tokenType: (_a = options.tokenType) !== null && _a !== void 0 ? _a : "DPoP",
-            }, this.events);
-            return new Promise(() => { });
-        };
-        this.fetch = async (url, init) => {
-            return this.clientAuthentication.fetch(url, init);
-        };
-        this.internalLogout = async (emitSignal) => {
-            window.localStorage.removeItem(constant_1.KEY_CURRENT_SESSION);
-            await this.clientAuthentication.logout(this.info.sessionId);
-            this.info.isLoggedIn = false;
-            if (emitSignal) {
-                this.events.emit(solid_client_authn_core_1.EVENTS.LOGOUT);
-            }
-        };
-        this.logout = async () => this.internalLogout(true);
-        this.handleIncomingRedirect = async (inputOptions = {}) => {
-            var _a;
-            if (this.info.isLoggedIn) {
-                return this.info;
-            }
-            if (this.tokenRequestInProgress) {
-                return undefined;
-            }
-            const options = typeof inputOptions === "string" ? { url: inputOptions } : inputOptions;
-            const url = (_a = options.url) !== null && _a !== void 0 ? _a : window.location.href;
-            this.tokenRequestInProgress = true;
-            const sessionInfo = await this.clientAuthentication.handleIncomingRedirect(url, this.events);
-            if (isLoggedIn(sessionInfo)) {
-                this.setSessionInfo(sessionInfo);
-                const currentUrl = window.localStorage.getItem(constant_1.KEY_CURRENT_URL);
-                if (currentUrl === null) {
-                    this.events.emit(solid_client_authn_core_1.EVENTS.LOGIN);
-                }
-                else {
-                    window.localStorage.removeItem(constant_1.KEY_CURRENT_URL);
-                    this.events.emit(solid_client_authn_core_1.EVENTS.SESSION_RESTORED, currentUrl);
-                }
-            }
-            else if (options.restorePreviousSession === true) {
-                const storedSessionId = window.localStorage.getItem(constant_1.KEY_CURRENT_SESSION);
-                if (storedSessionId !== null) {
-                    const attemptedSilentAuthentication = await silentlyAuthenticate(storedSessionId, this.clientAuthentication, this);
-                    if (attemptedSilentAuthentication) {
-                        return new Promise(() => { });
-                    }
-                }
-            }
-            this.tokenRequestInProgress = false;
-            return sessionInfo;
-        };
-        this.events = new Proxy(this, (0, solid_client_authn_core_1.buildProxyHandler)(Session.prototype, "events only implements ISessionEventListener"));
-        if (sessionOptions.clientAuthentication) {
-            this.clientAuthentication = sessionOptions.clientAuthentication;
-        }
-        else if (sessionOptions.secureStorage && sessionOptions.insecureStorage) {
-            this.clientAuthentication = (0, dependencies_1.getClientAuthenticationWithDependencies)({
-                secureStorage: sessionOptions.secureStorage,
-                insecureStorage: sessionOptions.insecureStorage,
+    async cleanUrlAfterRedirect(url) {
+        const cleanedUpUrl = solidClientAuthnCore.removeOpenIdParams(url).href;
+        // Remove OAuth-specific query params (since the login flow finishes with
+        // the browser being redirected back with OAuth2 query params (e.g. for
+        // 'code' and 'state'), and so if the user simply refreshes this page our
+        // authentication library will be called again with what are now invalid
+        // query parameters!).
+        window.history.replaceState(null, "", cleanedUpUrl);
+        while (window.location.href !== cleanedUpUrl) {
+            // Poll the current URL every ms. Active polling is required because
+            // window.history.replaceState is asynchronous, but the associated
+            // 'popstate' event which should be listened to is only sent on active
+            // navigation, which we will not have here.
+            // See https://developer.mozilla.org/en-US/docs/Web/API/Window/popstate_event#when_popstate_is_sent
+            // eslint-disable-next-line no-await-in-loop
+            await new Promise((resolve) => {
+                setTimeout(() => resolve(), 1);
             });
         }
-        else {
-            this.clientAuthentication = (0, dependencies_1.getClientAuthenticationWithDependencies)({});
-        }
-        if (sessionOptions.sessionInfo) {
-            this.info = {
-                sessionId: sessionOptions.sessionInfo.sessionId,
-                isLoggedIn: false,
-                webId: sessionOptions.sessionInfo.webId,
-            };
-        }
-        else {
-            this.info = {
-                sessionId: sessionId !== null && sessionId !== void 0 ? sessionId : (0, uuid_1.v4)(),
-                isLoggedIn: false,
-            };
-        }
-        this.events.on(solid_client_authn_core_1.EVENTS.LOGIN, () => window.localStorage.setItem(constant_1.KEY_CURRENT_SESSION, this.info.sessionId));
-        this.events.on(solid_client_authn_core_1.EVENTS.SESSION_EXPIRED, () => this.internalLogout(false));
-        this.events.on(solid_client_authn_core_1.EVENTS.ERROR, () => this.internalLogout(false));
-    }
-    onLogin(callback) {
-        this.events.on(solid_client_authn_core_1.EVENTS.LOGIN, callback);
-    }
-    onLogout(callback) {
-        this.events.on(solid_client_authn_core_1.EVENTS.LOGOUT, callback);
-    }
-    onError(callback) {
-        this.events.on(solid_client_authn_core_1.EVENTS.ERROR, callback);
-    }
-    onSessionRestore(callback) {
-        this.events.on(solid_client_authn_core_1.EVENTS.SESSION_RESTORED, callback);
-    }
-    onSessionExpiration(callback) {
-        this.events.on(solid_client_authn_core_1.EVENTS.SESSION_EXPIRED, callback);
-    }
-    setSessionInfo(sessionInfo) {
-        this.info.isLoggedIn = sessionInfo.isLoggedIn;
-        this.info.webId = sessionInfo.webId;
-        this.info.sessionId = sessionInfo.sessionId;
-        this.info.expirationDate = sessionInfo.expirationDate;
-        this.events.on(solid_client_authn_core_1.EVENTS.SESSION_EXTENDED, (expiresIn) => {
-            this.info.expirationDate = Date.now() + expiresIn * 1000;
-        });
     }
 }
-exports.Session = Session;
-//# sourceMappingURL=Session.js.map
 
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/constant.js":
-/*!**************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/constant.js ***!
-  \**************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.KEY_CURRENT_URL = exports.KEY_CURRENT_SESSION = void 0;
-const solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-exports.KEY_CURRENT_SESSION = `${solid_client_authn_core_1.SOLID_CLIENT_AUTHN_KEY_PREFIX}currentSession`;
-exports.KEY_CURRENT_URL = `${solid_client_authn_core_1.SOLID_CLIENT_AUTHN_KEY_PREFIX}currentUrl`;
-//# sourceMappingURL=constant.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/defaultSession.js":
-/*!********************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/defaultSession.js ***!
-  \********************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.events = exports.onSessionRestore = exports.onLogout = exports.onLogin = exports.handleIncomingRedirect = exports.logout = exports.login = exports.fetch = exports.getDefaultSession = void 0;
-const Session_1 = __webpack_require__(/*! ./Session */ "./node_modules/@inrupt/solid-client-authn-browser/dist/Session.js");
-let defaultSession;
-function getDefaultSession() {
-    if (typeof defaultSession === "undefined") {
-        defaultSession = new Session_1.Session();
-    }
-    return defaultSession;
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+function hasIssuer(options) {
+    return typeof options.oidcIssuer === "string";
 }
-exports.getDefaultSession = getDefaultSession;
-const fetch = (...args) => {
-    const session = getDefaultSession();
-    return session.fetch(...args);
-};
-exports.fetch = fetch;
-const login = (...args) => {
-    const session = getDefaultSession();
-    return session.login(...args);
-};
-exports.login = login;
-const logout = (...args) => {
-    const session = getDefaultSession();
-    return session.logout(...args);
-};
-exports.logout = logout;
-const handleIncomingRedirect = (...args) => {
-    const session = getDefaultSession();
-    return session.handleIncomingRedirect(...args);
-};
-exports.handleIncomingRedirect = handleIncomingRedirect;
-const onLogin = (...args) => {
-    const session = getDefaultSession();
-    return session.onLogin(...args);
-};
-exports.onLogin = onLogin;
-const onLogout = (...args) => {
-    const session = getDefaultSession();
-    return session.onLogout(...args);
-};
-exports.onLogout = onLogout;
-const onSessionRestore = (...args) => {
-    const session = getDefaultSession();
-    return session.onSessionRestore(...args);
-};
-exports.onSessionRestore = onSessionRestore;
-const events = () => {
-    return getDefaultSession().events;
-};
-exports.events = events;
-//# sourceMappingURL=defaultSession.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/dependencies.js":
-/*!******************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/dependencies.js ***!
-  \******************************************************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getClientAuthenticationWithDependencies = void 0;
-const solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-const StorageUtility_1 = __importDefault(__webpack_require__(/*! ./storage/StorageUtility */ "./node_modules/@inrupt/solid-client-authn-browser/dist/storage/StorageUtility.js"));
-const ClientAuthentication_1 = __importDefault(__webpack_require__(/*! ./ClientAuthentication */ "./node_modules/@inrupt/solid-client-authn-browser/dist/ClientAuthentication.js"));
-const OidcLoginHandler_1 = __importDefault(__webpack_require__(/*! ./login/oidc/OidcLoginHandler */ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/OidcLoginHandler.js"));
-const AuthorizationCodeWithPkceOidcHandler_1 = __importDefault(__webpack_require__(/*! ./login/oidc/oidcHandlers/AuthorizationCodeWithPkceOidcHandler */ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/oidcHandlers/AuthorizationCodeWithPkceOidcHandler.js"));
-const IssuerConfigFetcher_1 = __importDefault(__webpack_require__(/*! ./login/oidc/IssuerConfigFetcher */ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/IssuerConfigFetcher.js"));
-const FallbackRedirectHandler_1 = __webpack_require__(/*! ./login/oidc/incomingRedirectHandler/FallbackRedirectHandler */ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/incomingRedirectHandler/FallbackRedirectHandler.js");
-const GeneralLogoutHandler_1 = __importDefault(__webpack_require__(/*! ./logout/GeneralLogoutHandler */ "./node_modules/@inrupt/solid-client-authn-browser/dist/logout/GeneralLogoutHandler.js"));
-const SessionInfoManager_1 = __webpack_require__(/*! ./sessionInfo/SessionInfoManager */ "./node_modules/@inrupt/solid-client-authn-browser/dist/sessionInfo/SessionInfoManager.js");
-const AuthCodeRedirectHandler_1 = __webpack_require__(/*! ./login/oidc/incomingRedirectHandler/AuthCodeRedirectHandler */ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/incomingRedirectHandler/AuthCodeRedirectHandler.js");
-const AggregateRedirectHandler_1 = __importDefault(__webpack_require__(/*! ./login/oidc/AggregateRedirectHandler */ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/AggregateRedirectHandler.js"));
-const BrowserStorage_1 = __importDefault(__webpack_require__(/*! ./storage/BrowserStorage */ "./node_modules/@inrupt/solid-client-authn-browser/dist/storage/BrowserStorage.js"));
-const Redirector_1 = __importDefault(__webpack_require__(/*! ./login/oidc/Redirector */ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/Redirector.js"));
-const ClientRegistrar_1 = __importDefault(__webpack_require__(/*! ./login/oidc/ClientRegistrar */ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/ClientRegistrar.js"));
-const ErrorOidcHandler_1 = __webpack_require__(/*! ./login/oidc/incomingRedirectHandler/ErrorOidcHandler */ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/incomingRedirectHandler/ErrorOidcHandler.js");
-const TokenRefresher_1 = __importDefault(__webpack_require__(/*! ./login/oidc/refresh/TokenRefresher */ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/refresh/TokenRefresher.js"));
-function getClientAuthenticationWithDependencies(dependencies) {
-    const inMemoryStorage = new solid_client_authn_core_1.InMemoryStorage();
-    const secureStorage = dependencies.secureStorage || inMemoryStorage;
-    const insecureStorage = dependencies.insecureStorage || new BrowserStorage_1.default();
-    const storageUtility = new StorageUtility_1.default(secureStorage, insecureStorage);
-    const issuerConfigFetcher = new IssuerConfigFetcher_1.default(storageUtility);
-    const clientRegistrar = new ClientRegistrar_1.default(storageUtility);
-    const sessionInfoManager = new SessionInfoManager_1.SessionInfoManager(storageUtility);
-    const tokenRefresher = new TokenRefresher_1.default(storageUtility, issuerConfigFetcher, clientRegistrar);
-    const loginHandler = new OidcLoginHandler_1.default(storageUtility, new AuthorizationCodeWithPkceOidcHandler_1.default(storageUtility, new Redirector_1.default()), issuerConfigFetcher, clientRegistrar);
-    const redirectHandler = new AggregateRedirectHandler_1.default([
-        new ErrorOidcHandler_1.ErrorOidcHandler(),
-        new AuthCodeRedirectHandler_1.AuthCodeRedirectHandler(storageUtility, sessionInfoManager, issuerConfigFetcher, clientRegistrar, tokenRefresher),
-        new FallbackRedirectHandler_1.FallbackRedirectHandler(),
-    ]);
-    return new ClientAuthentication_1.default(loginHandler, redirectHandler, new GeneralLogoutHandler_1.default(sessionInfoManager), sessionInfoManager, issuerConfigFetcher);
+function hasRedirectUrl(options) {
+    return typeof options.redirectUrl === "string";
 }
-exports.getClientAuthenticationWithDependencies = getClientAuthenticationWithDependencies;
-//# sourceMappingURL=dependencies.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/index.js":
-/*!***********************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/index.js ***!
-  \***********************************************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.EVENTS = exports.InMemoryStorage = exports.ConfigurationError = exports.NotImplementedError = exports.getClientAuthenticationWithDependencies = exports.Session = void 0;
-var Session_1 = __webpack_require__(/*! ./Session */ "./node_modules/@inrupt/solid-client-authn-browser/dist/Session.js");
-Object.defineProperty(exports, "Session", ({ enumerable: true, get: function () { return Session_1.Session; } }));
-var dependencies_1 = __webpack_require__(/*! ./dependencies */ "./node_modules/@inrupt/solid-client-authn-browser/dist/dependencies.js");
-Object.defineProperty(exports, "getClientAuthenticationWithDependencies", ({ enumerable: true, get: function () { return dependencies_1.getClientAuthenticationWithDependencies; } }));
-__exportStar(__webpack_require__(/*! ./defaultSession */ "./node_modules/@inrupt/solid-client-authn-browser/dist/defaultSession.js"), exports);
-var solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-Object.defineProperty(exports, "NotImplementedError", ({ enumerable: true, get: function () { return solid_client_authn_core_1.NotImplementedError; } }));
-Object.defineProperty(exports, "ConfigurationError", ({ enumerable: true, get: function () { return solid_client_authn_core_1.ConfigurationError; } }));
-Object.defineProperty(exports, "InMemoryStorage", ({ enumerable: true, get: function () { return solid_client_authn_core_1.InMemoryStorage; } }));
-Object.defineProperty(exports, "EVENTS", ({ enumerable: true, get: function () { return solid_client_authn_core_1.EVENTS; } }));
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/AggregateRedirectHandler.js":
-/*!*****************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/AggregateRedirectHandler.js ***!
-  \*****************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-class AggregateRedirectHandler extends solid_client_authn_core_1.AggregateHandler {
-    constructor(redirectHandlers) {
-        super(redirectHandlers);
-    }
-}
-exports["default"] = AggregateRedirectHandler;
-//# sourceMappingURL=AggregateRedirectHandler.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/ClientRegistrar.js":
-/*!********************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/ClientRegistrar.js ***!
-  \********************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const oidc_client_ext_1 = __webpack_require__(/*! @inrupt/oidc-client-ext */ "./node_modules/@inrupt/oidc-client-ext/dist/index.es.js");
-class ClientRegistrar {
-    constructor(storageUtility) {
+/**
+ * @hidden
+ */
+class OidcLoginHandler {
+    constructor(storageUtility, oidcHandler, issuerConfigFetcher, clientRegistrar) {
         this.storageUtility = storageUtility;
+        this.oidcHandler = oidcHandler;
+        this.issuerConfigFetcher = issuerConfigFetcher;
+        this.clientRegistrar = clientRegistrar;
+        this.storageUtility = storageUtility;
+        this.oidcHandler = oidcHandler;
+        this.issuerConfigFetcher = issuerConfigFetcher;
+        this.clientRegistrar = clientRegistrar;
     }
-    async getClient(options, issuerConfig) {
-        const [storedClientId, storedClientSecret,] = await Promise.all([
-            this.storageUtility.getForUser(options.sessionId, "clientId", {
-                secure: false,
-            }),
-            this.storageUtility.getForUser(options.sessionId, "clientSecret", {
-                secure: false,
-            }),
-        ]);
-        if (storedClientId) {
-            return {
-                clientId: storedClientId,
-                clientSecret: storedClientSecret,
-                clientType: "dynamic",
-            };
+    async canHandle(options) {
+        return hasIssuer(options) && hasRedirectUrl(options);
+    }
+    async handle(options) {
+        if (!hasIssuer(options)) {
+            throw new solidClientAuthnCore.ConfigurationError(`OidcLoginHandler requires an OIDC issuer: missing property 'oidcIssuer' in ${JSON.stringify(options)}`);
         }
-        try {
-            const registeredClient = await (0, oidc_client_ext_1.registerClient)(options, issuerConfig);
-            const infoToSave = {
-                clientId: registeredClient.clientId,
-            };
-            if (registeredClient.clientSecret) {
-                infoToSave.clientSecret = registeredClient.clientSecret;
-            }
-            if (registeredClient.idTokenSignedResponseAlg) {
-                infoToSave.idTokenSignedResponseAlg =
-                    registeredClient.idTokenSignedResponseAlg;
-            }
-            await this.storageUtility.setForUser(options.sessionId, infoToSave, {
-                secure: false,
-            });
-            return registeredClient;
+        if (!hasRedirectUrl(options)) {
+            throw new solidClientAuthnCore.ConfigurationError(`OidcLoginHandler requires a redirect URL: missing property 'redirectUrl' in ${JSON.stringify(options)}`);
         }
-        catch (error) {
-            throw new Error(`Client registration failed: [${error}]`);
-        }
+        // Fetch issuer config.
+        const issuerConfig = await this.issuerConfigFetcher.fetchConfig(options.oidcIssuer);
+        const clientRegistration = await solidClientAuthnCore.handleRegistration(options, issuerConfig, this.storageUtility, this.clientRegistrar);
+        // Construct OIDC Options
+        const OidcOptions = {
+            // Note that here, the issuer is not the one from the received options, but
+            // from the issuer's config. This enforces the canonical URL is used and stored,
+            // which is also the one present in the ID token, so storing a technically
+            // valid, but different issuer URL (e.g. using a trailing slash or not) now
+            // could prevent from validating the ID token later.
+            issuer: issuerConfig.issuer,
+            // TODO: differentiate if DPoP should be true
+            dpop: options.tokenType.toLowerCase() === "dpop",
+            ...options,
+            issuerConfiguration: issuerConfig,
+            client: clientRegistration,
+        };
+        // Call proper OIDC Handler
+        return this.oidcHandler.handle(OidcOptions);
     }
 }
-exports["default"] = ClientRegistrar;
-//# sourceMappingURL=ClientRegistrar.js.map
 
-/***/ }),
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ * Authorization code flow spec: https://openid.net/specs/openid-connect-core-1_0.html#CodeFlowAuth
+ * PKCE: https://tools.ietf.org/html/rfc7636
+ */
+class AuthorizationCodeWithPkceOidcHandler extends solidClientAuthnCore.AuthorizationCodeWithPkceOidcHandlerBase {
+    async handle(oidcLoginOptions) {
+        var _a;
+        /* eslint-disable camelcase */
+        const oidcOptions = {
+            authority: oidcLoginOptions.issuer.toString(),
+            client_id: oidcLoginOptions.client.clientId,
+            client_secret: oidcLoginOptions.client.clientSecret,
+            redirect_uri: oidcLoginOptions.redirectUrl.toString(),
+            post_logout_redirect_uri: oidcLoginOptions.redirectUrl.toString(),
+            response_type: "code",
+            scope: solidClientAuthnCore.DEFAULT_SCOPES,
+            filterProtocolClaims: true,
+            // The userinfo endpoint on NSS fails, so disable this for now
+            // Note that in Solid, information should be retrieved from the
+            // profile referenced by the WebId.
+            loadUserInfo: false,
+            code_verifier: true,
+            prompt: (_a = oidcLoginOptions.prompt) !== null && _a !== void 0 ? _a : "consent",
+        };
+        /* eslint-enable camelcase */
+        const oidcClientLibrary = new oidcClientExt.OidcClient(oidcOptions);
+        try {
+            const signingRequest = await oidcClientLibrary.createSigninRequest();
+            // Make sure to await the promise before returning so that the error is caught.
+            return await this.handleRedirect({
+                oidcLoginOptions,
+                // eslint-disable-next-line no-underscore-dangle
+                state: signingRequest.state._id,
+                // eslint-disable-next-line no-underscore-dangle
+                codeVerifier: signingRequest.state._code_verifier,
+                targetUrl: signingRequest.url.toString(),
+            });
+        }
+        catch (err) {
+            // eslint-disable-next-line no-console
+            console.error(err);
+        }
+        // The login is only completed AFTER redirect, so nothing to return here.
+        return undefined;
+    }
+}
 
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/IssuerConfigFetcher.js":
-/*!************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/IssuerConfigFetcher.js ***!
-  \************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.WELL_KNOWN_OPENID_CONFIG = void 0;
-const solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-const universal_fetch_1 = __webpack_require__(/*! @inrupt/universal-fetch */ "./node_modules/@inrupt/universal-fetch/dist/index-browser.js");
-exports.WELL_KNOWN_OPENID_CONFIG = ".well-known/openid-configuration";
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+const WELL_KNOWN_OPENID_CONFIG = ".well-known/openid-configuration";
+/* eslint-disable camelcase */
 const issuerConfigKeyMap = {
     issuer: {
         toKey: "issuer",
@@ -26879,6 +26702,10 @@ const issuerConfigKeyMap = {
     },
     registration_endpoint: {
         toKey: "registrationEndpoint",
+        convertToUrl: true,
+    },
+    end_session_endpoint: {
+        toKey: "endSessionEndpoint",
         convertToUrl: true,
     },
     scopes_supported: { toKey: "scopesSupported" },
@@ -26939,10 +26766,15 @@ const issuerConfigKeyMap = {
         convertToUrl: true,
     },
 };
+/* eslint-enable camelcase */
 function processConfig(config) {
     const parsedConfig = {};
     Object.keys(config).forEach((key) => {
         if (issuerConfigKeyMap[key]) {
+            // TODO: PMcB55: Validate URL if "issuerConfigKeyMap[key].convertToUrl"
+            //  if (issuerConfigKeyMap[key].convertToUrl) {
+            //   validateUrl(config[key]);
+            //  }
             parsedConfig[issuerConfigKeyMap[key].toKey] = config[key];
         }
     });
@@ -26951,124 +26783,225 @@ function processConfig(config) {
     }
     return parsedConfig;
 }
+/**
+ * @hidden
+ */
 class IssuerConfigFetcher {
     constructor(storageUtility) {
         this.storageUtility = storageUtility;
+        this.storageUtility = storageUtility;
     }
+    // This method needs no state (so can be static), and can be exposed to allow
+    // callers to know where this implementation puts state it needs.
     static getLocalStorageKey(issuer) {
         return `issuerConfig:${issuer}`;
     }
     async fetchConfig(issuer) {
         let issuerConfig;
-        const openIdConfigUrl = new URL(exports.WELL_KNOWN_OPENID_CONFIG, issuer.endsWith("/") ? issuer : `${issuer}/`).href;
-        const issuerConfigRequestBody = await (0, universal_fetch_1.fetch)(openIdConfigUrl);
+        const openIdConfigUrl = new URL(WELL_KNOWN_OPENID_CONFIG, 
+        // Make sure to append a slash at issuer URL, so that the .well-known URL
+        // includes the full issuer path. See https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderConfig.
+        issuer.endsWith("/") ? issuer : `${issuer}/`).href;
+        const issuerConfigRequestBody = await universalFetch.fetch.call(globalThis, openIdConfigUrl);
+        // Check the validity of the fetched config
         try {
             issuerConfig = processConfig(await issuerConfigRequestBody.json());
         }
         catch (err) {
-            throw new solid_client_authn_core_1.ConfigurationError(`[${issuer.toString()}] has an invalid configuration: ${err.message}`);
+            throw new solidClientAuthnCore.ConfigurationError(`[${issuer.toString()}] has an invalid configuration: ${err.message}`);
         }
+        // Update store with fetched config
         await this.storageUtility.set(IssuerConfigFetcher.getLocalStorageKey(issuer), JSON.stringify(issuerConfig));
         return issuerConfig;
     }
 }
-exports["default"] = IssuerConfigFetcher;
-//# sourceMappingURL=IssuerConfigFetcher.js.map
 
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/OidcLoginHandler.js":
-/*!*********************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/OidcLoginHandler.js ***!
-  \*********************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-function hasIssuer(options) {
-    return typeof options.oidcIssuer === "string";
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @param sessionId
+ * @param storage
+ * @hidden
+ */
+async function clear(sessionId, storage) {
+    await solidClientAuthnCore.clear(sessionId, storage);
+    await oidcClientExt.clearOidcPersistentStorage();
 }
-function hasRedirectUrl(options) {
-    return typeof options.redirectUrl === "string";
-}
-class OidcLoginHandler {
-    constructor(storageUtility, oidcHandler, issuerConfigFetcher, clientRegistrar) {
-        this.storageUtility = storageUtility;
-        this.oidcHandler = oidcHandler;
-        this.issuerConfigFetcher = issuerConfigFetcher;
-        this.clientRegistrar = clientRegistrar;
-    }
-    async canHandle(options) {
-        return hasIssuer(options) && hasRedirectUrl(options);
-    }
-    async handle(options) {
-        if (!hasIssuer(options)) {
-            throw new solid_client_authn_core_1.ConfigurationError(`OidcLoginHandler requires an OIDC issuer: missing property 'oidcIssuer' in ${JSON.stringify(options)}`);
+/**
+ * @hidden
+ */
+class SessionInfoManager extends solidClientAuthnCore.SessionInfoManagerBase {
+    async get(sessionId) {
+        const [isLoggedIn, webId, clientId, clientSecret, redirectUrl, refreshToken, issuer, tokenType,] = await Promise.all([
+            this.storageUtility.getForUser(sessionId, "isLoggedIn", {
+                secure: true,
+            }),
+            this.storageUtility.getForUser(sessionId, "webId", {
+                secure: true,
+            }),
+            this.storageUtility.getForUser(sessionId, "clientId", {
+                secure: false,
+            }),
+            this.storageUtility.getForUser(sessionId, "clientSecret", {
+                secure: false,
+            }),
+            this.storageUtility.getForUser(sessionId, "redirectUrl", {
+                secure: false,
+            }),
+            this.storageUtility.getForUser(sessionId, "refreshToken", {
+                secure: true,
+            }),
+            this.storageUtility.getForUser(sessionId, "issuer", {
+                secure: false,
+            }),
+            this.storageUtility.getForUser(sessionId, "tokenType", {
+                secure: false,
+            }),
+        ]);
+        if (typeof redirectUrl === "string" && !solidClientAuthnCore.isValidRedirectUrl(redirectUrl)) {
+            // This resolves the issue for people experiencing https://github.com/inrupt/solid-client-authn-js/issues/2891.
+            // An invalid redirect URL is present in the storage, and the session should
+            // be cleared to get a fresh start. This will require the user to log back in.
+            await Promise.all([
+                this.storageUtility.deleteAllUserData(sessionId, { secure: false }),
+                this.storageUtility.deleteAllUserData(sessionId, { secure: true }),
+            ]);
+            return undefined;
         }
-        if (!hasRedirectUrl(options)) {
-            throw new solid_client_authn_core_1.ConfigurationError(`OidcLoginHandler requires a redirect URL: missing property 'redirectUrl' in ${JSON.stringify(options)}`);
+        if (tokenType !== undefined && !solidClientAuthnCore.isSupportedTokenType(tokenType)) {
+            throw new Error(`Tokens of type [${tokenType}] are not supported.`);
         }
-        const issuerConfig = await this.issuerConfigFetcher.fetchConfig(options.oidcIssuer);
-        const clientRegistration = await (0, solid_client_authn_core_1.handleRegistration)(options, issuerConfig, this.storageUtility, this.clientRegistrar);
-        const OidcOptions = {
-            issuer: issuerConfig.issuer,
-            dpop: options.tokenType.toLowerCase() === "dpop",
-            ...options,
-            issuerConfiguration: issuerConfig,
-            client: clientRegistration,
+        if (clientId === undefined &&
+            isLoggedIn === undefined &&
+            webId === undefined &&
+            refreshToken === undefined) {
+            return undefined;
+        }
+        return {
+            sessionId,
+            webId,
+            isLoggedIn: isLoggedIn === "true",
+            redirectUrl,
+            refreshToken,
+            issuer,
+            clientAppId: clientId,
+            clientAppSecret: clientSecret,
+            // Default the token type to DPoP if unspecified.
+            tokenType: tokenType !== null && tokenType !== void 0 ? tokenType : "DPoP",
         };
-        return this.oidcHandler.handle(OidcOptions);
+    }
+    /**
+     * This function removes all session-related information from storage.
+     * @param sessionId the session identifier
+     * @param storage the storage where session info is stored
+     * @hidden
+     */
+    async clear(sessionId) {
+        return clear(sessionId, this.storageUtility);
     }
 }
-exports["default"] = OidcLoginHandler;
-//# sourceMappingURL=OidcLoginHandler.js.map
 
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/Redirector.js":
-/*!***************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/Redirector.js ***!
-  \***************************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-class Redirector {
-    redirect(redirectUrl, options) {
-        if (options && options.handleRedirect) {
-            options.handleRedirect(redirectUrl);
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * This class handles redirect IRIs without any query params, and returns an unauthenticated
+ * session. It serves as a fallback so that consuming libraries don't have to test
+ * for the query params themselves, and can always try to use them as a redirect IRI.
+ * @hidden
+ */
+class FallbackRedirectHandler {
+    async canHandle(redirectUrl) {
+        try {
+            // The next URL object is built for validating it.
+            // eslint-disable-next-line no-new
+            new URL(redirectUrl);
+            return true;
         }
-        else if (options && options.redirectByReplacingState) {
-            window.history.replaceState({}, "", redirectUrl);
-        }
-        else {
-            window.location.href = redirectUrl;
+        catch (e) {
+            throw new Error(`[${redirectUrl}] is not a valid URL, and cannot be used as a redirect URL: ${e}`);
         }
     }
+    async handle(
+    // The argument is ignored, but must be present to implement the interface
+    _redirectUrl) {
+        return solidClientAuthnCore.getUnauthenticatedSession();
+    }
 }
-exports["default"] = Redirector;
-//# sourceMappingURL=Redirector.js.map
 
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/incomingRedirectHandler/AuthCodeRedirectHandler.js":
-/*!****************************************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/incomingRedirectHandler/AuthCodeRedirectHandler.js ***!
-  \****************************************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.AuthCodeRedirectHandler = void 0;
-const universal_fetch_1 = __webpack_require__(/*! @inrupt/universal-fetch */ "./node_modules/@inrupt/universal-fetch/dist/index-browser.js");
-const solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-const oidc_client_ext_1 = __webpack_require__(/*! @inrupt/oidc-client-ext */ "./node_modules/@inrupt/oidc-client-ext/dist/index.es.js");
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ * @packageDocumentation
+ */
+// FIXME: The following doesn't work in the browser, it results in all the fetches
+// being unauthenticated. This should be looked into when migrating to universal-fetch.
+// import { fetch } from "cross-fetch";
+const globalFetch = (...args) => universalFetch.fetch.call(globalThis, ...args);
+/**
+ * @hidden
+ */
 class AuthCodeRedirectHandler {
     constructor(storageUtility, sessionInfoManager, issuerConfigFetcher, clientRegistrar, tokerRefresher) {
+        this.storageUtility = storageUtility;
+        this.sessionInfoManager = sessionInfoManager;
+        this.issuerConfigFetcher = issuerConfigFetcher;
+        this.clientRegistrar = clientRegistrar;
+        this.tokerRefresher = tokerRefresher;
         this.storageUtility = storageUtility;
         this.sessionInfoManager = sessionInfoManager;
         this.issuerConfigFetcher = issuerConfigFetcher;
@@ -27094,7 +27027,7 @@ class AuthCodeRedirectHandler {
         const storedSessionId = (await this.storageUtility.getForUser(oauthState, "sessionId", {
             errorIfNull: true,
         }));
-        const { issuerConfig, codeVerifier, redirectUrl: storedRedirectIri, dpop: isDpop, } = await (0, solid_client_authn_core_1.loadOidcContextFromStorage)(storedSessionId, this.storageUtility, this.issuerConfigFetcher);
+        const { issuerConfig, codeVerifier, redirectUrl: storedRedirectIri, dpop: isDpop, } = await solidClientAuthnCore.loadOidcContextFromStorage(storedSessionId, this.storageUtility, this.issuerConfigFetcher);
         const iss = url.searchParams.get("iss");
         if (typeof iss === "string" && iss !== issuerConfig.issuer) {
             throw new Error(`The value of the iss parameter (${iss}) does not match the issuer identifier of the authorization server (${issuerConfig.issuer}). See [rfc9207](https://www.rfc-editor.org/rfc/rfc9207.html#section-2.3-3.1.1)`);
@@ -27109,16 +27042,21 @@ class AuthCodeRedirectHandler {
         let tokens;
         const tokenCreatedAt = Date.now();
         if (isDpop) {
-            tokens = await (0, oidc_client_ext_1.getDpopToken)(issuerConfig, client, {
+            tokens = await oidcClientExt.getDpopToken(issuerConfig, client, {
                 grantType: "authorization_code",
+                // We rely on our 'canHandle' function checking that the OAuth 'code'
+                // parameter is present in our query string.
                 code: url.searchParams.get("code"),
                 codeVerifier,
                 redirectUrl: storedRedirectIri,
             });
+            // Delete oidc-client-specific session information from storage. This is
+            // done automatically when retrieving a bearer token, but since the DPoP
+            // binding uses our custom code, this needs to be done manually.
             window.localStorage.removeItem(`oidc.${oauthState}`);
         }
         else {
-            tokens = await (0, oidc_client_ext_1.getBearerToken)(url.toString());
+            tokens = await oidcClientExt.getBearerToken(url.toString());
         }
         let refreshOptions;
         if (tokens.refreshToken !== undefined) {
@@ -27128,7 +27066,7 @@ class AuthCodeRedirectHandler {
                 tokenRefresher: this.tokerRefresher,
             };
         }
-        const authFetch = await (0, solid_client_authn_core_1.buildAuthenticatedFetch)(universal_fetch_1.fetch, tokens.accessToken, {
+        const authFetch = await solidClientAuthnCore.buildAuthenticatedFetch(globalFetch, tokens.accessToken, {
             dpopKey: tokens.dpopKey,
             refreshOptions,
             eventEmitter,
@@ -27144,330 +27082,69 @@ class AuthCodeRedirectHandler {
         }
         return Object.assign(sessionInfo, {
             fetch: authFetch,
+            getLogoutUrl: solidClientAuthnCore.maybeBuildRpInitiatedLogout({
+                idTokenHint: tokens.idToken,
+                endSessionEndpoint: issuerConfig.endSessionEndpoint,
+            }),
             expirationDate: typeof tokens.expiresIn === "number"
                 ? tokenCreatedAt + tokens.expiresIn * 1000
-                : null,
+                : undefined,
         });
     }
 }
-exports.AuthCodeRedirectHandler = AuthCodeRedirectHandler;
-//# sourceMappingURL=AuthCodeRedirectHandler.js.map
 
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/incomingRedirectHandler/ErrorOidcHandler.js":
-/*!*********************************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/incomingRedirectHandler/ErrorOidcHandler.js ***!
-  \*********************************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.ErrorOidcHandler = void 0;
-const solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-const SessionInfoManager_1 = __webpack_require__(/*! ../../../sessionInfo/SessionInfoManager */ "./node_modules/@inrupt/solid-client-authn-browser/dist/sessionInfo/SessionInfoManager.js");
-class ErrorOidcHandler {
-    async canHandle(redirectUrl) {
-        try {
-            return new URL(redirectUrl).searchParams.has("error");
-        }
-        catch (e) {
-            throw new Error(`[${redirectUrl}] is not a valid URL, and cannot be used as a redirect URL: ${e}`);
-        }
-    }
-    async handle(redirectUrl, eventEmitter) {
-        if (eventEmitter !== undefined) {
-            const url = new URL(redirectUrl);
-            const errorUrl = url.searchParams.get("error");
-            const errorDescriptionUrl = url.searchParams.get("error_description");
-            eventEmitter.emit(solid_client_authn_core_1.EVENTS.ERROR, errorUrl, errorDescriptionUrl);
-        }
-        return (0, SessionInfoManager_1.getUnauthenticatedSession)();
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ */
+class AggregateRedirectHandler extends solidClientAuthnCore.AggregateHandler {
+    constructor(redirectHandlers) {
+        super(redirectHandlers);
     }
 }
-exports.ErrorOidcHandler = ErrorOidcHandler;
-//# sourceMappingURL=ErrorOidcHandler.js.map
 
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/incomingRedirectHandler/FallbackRedirectHandler.js":
-/*!****************************************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/incomingRedirectHandler/FallbackRedirectHandler.js ***!
-  \****************************************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.FallbackRedirectHandler = void 0;
-const SessionInfoManager_1 = __webpack_require__(/*! ../../../sessionInfo/SessionInfoManager */ "./node_modules/@inrupt/solid-client-authn-browser/dist/sessionInfo/SessionInfoManager.js");
-class FallbackRedirectHandler {
-    async canHandle(redirectUrl) {
-        try {
-            new URL(redirectUrl);
-            return true;
-        }
-        catch (e) {
-            throw new Error(`[${redirectUrl}] is not a valid URL, and cannot be used as a redirect URL: ${e}`);
-        }
-    }
-    async handle(_redirectUrl) {
-        return (0, SessionInfoManager_1.getUnauthenticatedSession)();
-    }
-}
-exports.FallbackRedirectHandler = FallbackRedirectHandler;
-//# sourceMappingURL=FallbackRedirectHandler.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/oidcHandlers/AuthorizationCodeWithPkceOidcHandler.js":
-/*!******************************************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/oidcHandlers/AuthorizationCodeWithPkceOidcHandler.js ***!
-  \******************************************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-const oidc_client_ext_1 = __webpack_require__(/*! @inrupt/oidc-client-ext */ "./node_modules/@inrupt/oidc-client-ext/dist/index.es.js");
-class AuthorizationCodeWithPkceOidcHandler {
-    constructor(storageUtility, redirector) {
-        this.storageUtility = storageUtility;
-        this.redirector = redirector;
-    }
-    async canHandle(oidcLoginOptions) {
-        return !!(oidcLoginOptions.issuerConfiguration.grantTypesSupported &&
-            oidcLoginOptions.issuerConfiguration.grantTypesSupported.indexOf("authorization_code") > -1);
-    }
-    async handle(oidcLoginOptions) {
-        var _a;
-        const oidcOptions = {
-            authority: oidcLoginOptions.issuer.toString(),
-            client_id: oidcLoginOptions.client.clientId,
-            client_secret: oidcLoginOptions.client.clientSecret,
-            redirect_uri: oidcLoginOptions.redirectUrl.toString(),
-            post_logout_redirect_uri: oidcLoginOptions.redirectUrl.toString(),
-            response_type: "code",
-            scope: solid_client_authn_core_1.DEFAULT_SCOPES,
-            filterProtocolClaims: true,
-            loadUserInfo: false,
-            code_verifier: true,
-            prompt: (_a = oidcLoginOptions.prompt) !== null && _a !== void 0 ? _a : "consent",
-        };
-        const oidcClientLibrary = new oidc_client_ext_1.OidcClient(oidcOptions);
-        const { redirector } = this;
-        const storage = this.storageUtility;
-        try {
-            const signingRequest = await oidcClientLibrary.createSigninRequest();
-            await Promise.all([
-                storage.setForUser(signingRequest.state._id, {
-                    sessionId: oidcLoginOptions.sessionId,
-                }),
-                storage.setForUser(oidcLoginOptions.sessionId, {
-                    codeVerifier: signingRequest.state._code_verifier,
-                    issuer: oidcLoginOptions.issuer.toString(),
-                    redirectUrl: oidcLoginOptions.redirectUrl,
-                    dpop: oidcLoginOptions.dpop ? "true" : "false",
-                }),
-            ]);
-            redirector.redirect(signingRequest.url.toString(), {
-                handleRedirect: oidcLoginOptions.handleRedirect,
-            });
-        }
-        catch (err) {
-            console.error(err);
-        }
-        return undefined;
-    }
-}
-exports["default"] = AuthorizationCodeWithPkceOidcHandler;
-//# sourceMappingURL=AuthorizationCodeWithPkceOidcHandler.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/refresh/TokenRefresher.js":
-/*!***************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/login/oidc/refresh/TokenRefresher.js ***!
-  \***************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-const oidc_client_ext_1 = __webpack_require__(/*! @inrupt/oidc-client-ext */ "./node_modules/@inrupt/oidc-client-ext/dist/index.es.js");
-class TokenRefresher {
-    constructor(storageUtility, issuerConfigFetcher, clientRegistrar) {
-        this.storageUtility = storageUtility;
-        this.issuerConfigFetcher = issuerConfigFetcher;
-        this.clientRegistrar = clientRegistrar;
-    }
-    async refresh(sessionId, refreshToken, dpopKey, eventEmitter) {
-        const oidcContext = await (0, solid_client_authn_core_1.loadOidcContextFromStorage)(sessionId, this.storageUtility, this.issuerConfigFetcher);
-        const clientInfo = await this.clientRegistrar.getClient({ sessionId }, oidcContext.issuerConfig);
-        if (refreshToken === undefined) {
-            throw new Error(`Session [${sessionId}] has no refresh token to allow it to refresh its access token.`);
-        }
-        if (oidcContext.dpop && dpopKey === undefined) {
-            throw new Error(`For session [${sessionId}], the key bound to the DPoP access token must be provided to refresh said access token.`);
-        }
-        const tokenSet = await (0, oidc_client_ext_1.refresh)(refreshToken, oidcContext.issuerConfig, clientInfo, dpopKey);
-        if (tokenSet.refreshToken !== undefined) {
-            eventEmitter === null || eventEmitter === void 0 ? void 0 : eventEmitter.emit(solid_client_authn_core_1.EVENTS.NEW_REFRESH_TOKEN, tokenSet.refreshToken);
-            await this.storageUtility.setForUser(sessionId, {
-                refreshToken: tokenSet.refreshToken,
-            });
-        }
-        return tokenSet;
-    }
-}
-exports["default"] = TokenRefresher;
-//# sourceMappingURL=TokenRefresher.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/logout/GeneralLogoutHandler.js":
-/*!*********************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/logout/GeneralLogoutHandler.js ***!
-  \*********************************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-class GeneralLogoutHandler {
-    constructor(sessionInfoManager) {
-        this.sessionInfoManager = sessionInfoManager;
-    }
-    async canHandle() {
-        return true;
-    }
-    async handle(userId) {
-        await this.sessionInfoManager.clear(userId);
-    }
-}
-exports["default"] = GeneralLogoutHandler;
-//# sourceMappingURL=GeneralLogoutHandler.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/sessionInfo/SessionInfoManager.js":
-/*!************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/sessionInfo/SessionInfoManager.js ***!
-  \************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.SessionInfoManager = exports.clear = exports.getUnauthenticatedSession = void 0;
-const solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-const uuid_1 = __webpack_require__(/*! uuid */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/index.js");
-const oidc_client_ext_1 = __webpack_require__(/*! @inrupt/oidc-client-ext */ "./node_modules/@inrupt/oidc-client-ext/dist/index.es.js");
-const universal_fetch_1 = __webpack_require__(/*! @inrupt/universal-fetch */ "./node_modules/@inrupt/universal-fetch/dist/index-browser.js");
-function getUnauthenticatedSession() {
-    return {
-        isLoggedIn: false,
-        sessionId: (0, uuid_1.v4)(),
-        fetch: universal_fetch_1.fetch,
-    };
-}
-exports.getUnauthenticatedSession = getUnauthenticatedSession;
-async function clear(sessionId, storage) {
-    await Promise.all([
-        storage.deleteAllUserData(sessionId, { secure: false }),
-        storage.deleteAllUserData(sessionId, { secure: true }),
-        storage.delete("clientKey", { secure: false }),
-    ]);
-    await (0, oidc_client_ext_1.clearOidcPersistentStorage)();
-}
-exports.clear = clear;
-class SessionInfoManager {
-    constructor(storageUtility) {
-        this.storageUtility = storageUtility;
-    }
-    update(_sessionId, _options) {
-        throw new Error("Not Implemented");
-    }
-    async get(sessionId) {
-        var _a;
-        const isLoggedIn = await this.storageUtility.getForUser(sessionId, "isLoggedIn", {
-            secure: true,
-        });
-        const webId = await this.storageUtility.getForUser(sessionId, "webId", {
-            secure: true,
-        });
-        const clientId = await this.storageUtility.getForUser(sessionId, "clientId", {
-            secure: false,
-        });
-        const clientSecret = await this.storageUtility.getForUser(sessionId, "clientSecret", {
-            secure: false,
-        });
-        const redirectUrl = await this.storageUtility.getForUser(sessionId, "redirectUrl", {
-            secure: false,
-        });
-        const refreshToken = await this.storageUtility.getForUser(sessionId, "refreshToken", {
-            secure: true,
-        });
-        const issuer = await this.storageUtility.getForUser(sessionId, "issuer", {
-            secure: false,
-        });
-        const tokenType = (_a = (await this.storageUtility.getForUser(sessionId, "tokenType", {
-            secure: false,
-        }))) !== null && _a !== void 0 ? _a : "DPoP";
-        if (!(0, solid_client_authn_core_1.isSupportedTokenType)(tokenType)) {
-            throw new Error(`Tokens of type [${tokenType}] are not supported.`);
-        }
-        if (clientId === undefined &&
-            isLoggedIn === undefined &&
-            webId === undefined &&
-            refreshToken === undefined) {
-            return undefined;
-        }
-        return {
-            sessionId,
-            webId,
-            isLoggedIn: isLoggedIn === "true",
-            redirectUrl,
-            refreshToken,
-            issuer,
-            clientAppId: clientId,
-            clientAppSecret: clientSecret,
-            tokenType,
-        };
-    }
-    async getAll() {
-        throw new Error("Not implemented");
-    }
-    async clear(sessionId) {
-        return clear(sessionId, this.storageUtility);
-    }
-    async register(_sessionId) {
-        throw new Error("Not implemented");
-    }
-    async getRegisteredSessionIdAll() {
-        throw new Error("Not implemented");
-    }
-    async clearAll() {
-        throw new Error("Not implemented");
-    }
-}
-exports.SessionInfoManager = SessionInfoManager;
-//# sourceMappingURL=SessionInfoManager.js.map
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/storage/BrowserStorage.js":
-/*!****************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/storage/BrowserStorage.js ***!
-  \****************************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ */
 class BrowserStorage {
     get storage() {
         return window.localStorage;
@@ -27482,28 +27159,765 @@ class BrowserStorage {
         this.storage.removeItem(key);
     }
 }
-exports["default"] = BrowserStorage;
-//# sourceMappingURL=BrowserStorage.js.map
 
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/dist/storage/StorageUtility.js":
-/*!****************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/dist/storage/StorageUtility.js ***!
-  \****************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const solid_client_authn_core_1 = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-class StorageUtilityBrowser extends solid_client_authn_core_1.StorageUtility {
-    constructor(secureStorage, insecureStorage) {
-        super(secureStorage, insecureStorage);
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ */
+class Redirector {
+    redirect(redirectUrl, options) {
+        if (options && options.handleRedirect) {
+            options.handleRedirect(redirectUrl);
+        }
+        else if (options && options.redirectByReplacingState) {
+            window.history.replaceState({}, "", redirectUrl);
+        }
+        else {
+            window.location.href = redirectUrl;
+        }
     }
 }
-exports["default"] = StorageUtilityBrowser;
-//# sourceMappingURL=StorageUtility.js.map
+
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * @hidden
+ */
+class ClientRegistrar {
+    constructor(storageUtility) {
+        this.storageUtility = storageUtility;
+        this.storageUtility = storageUtility;
+    }
+    async getClient(options, issuerConfig) {
+        // If client secret and/or client id are stored in storage, use those.
+        const [storedClientId, storedClientSecret,
+        // storedClientName,
+        ] = await Promise.all([
+            this.storageUtility.getForUser(options.sessionId, "clientId", {
+                secure: false,
+            }),
+            this.storageUtility.getForUser(options.sessionId, "clientSecret", {
+                secure: false,
+            }),
+            // this.storageUtility.getForUser(options.sessionId, "clientName", {
+            //   // FIXME: figure out how to persist secure storage at reload
+            //   secure: false,
+            // }),
+        ]);
+        if (storedClientId) {
+            return {
+                clientId: storedClientId,
+                clientSecret: storedClientSecret,
+                clientType: "dynamic",
+            };
+        }
+        try {
+            const registeredClient = await oidcClientExt.registerClient(options, issuerConfig);
+            // Save info
+            const infoToSave = {
+                clientId: registeredClient.clientId,
+            };
+            if (registeredClient.clientSecret) {
+                infoToSave.clientSecret = registeredClient.clientSecret;
+            }
+            if (registeredClient.idTokenSignedResponseAlg) {
+                infoToSave.idTokenSignedResponseAlg =
+                    registeredClient.idTokenSignedResponseAlg;
+            }
+            await this.storageUtility.setForUser(options.sessionId, infoToSave, {
+                // FIXME: figure out how to persist secure storage at reload
+                // Otherwise, the client info cannot be retrieved from storage, and
+                // the lib tries to re-register the client on each fetch
+                secure: false,
+            });
+            return registeredClient;
+        }
+        catch (error) {
+            throw new Error(`Client registration failed: [${error}]`);
+        }
+    }
+}
+
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * This class handles redirect IRIs without any query params, and returns an unauthenticated
+ * session. It serves as a fallback so that consuming libraries don't have to test
+ * for the query params themselves, and can always try to use them as a redirect IRI.
+ * @hidden
+ */
+class ErrorOidcHandler {
+    async canHandle(redirectUrl) {
+        try {
+            // eslint-disable-next-line no-new
+            return new URL(redirectUrl).searchParams.has("error");
+        }
+        catch (e) {
+            throw new Error(`[${redirectUrl}] is not a valid URL, and cannot be used as a redirect URL: ${e}`);
+        }
+    }
+    async handle(redirectUrl, eventEmitter) {
+        if (eventEmitter !== undefined) {
+            const url = new URL(redirectUrl);
+            const errorUrl = url.searchParams.get("error");
+            const errorDescriptionUrl = url.searchParams.get("error_description");
+            eventEmitter.emit(solidClientAuthnCore.EVENTS.ERROR, errorUrl, errorDescriptionUrl);
+        }
+        return solidClientAuthnCore.getUnauthenticatedSession();
+    }
+}
+
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+// Some identifiers are not in camelcase on purpose, as they are named using the
+// official names from the OIDC/OAuth2 specifications.
+/* eslint-disable camelcase */
+/**
+ * @hidden
+ */
+class TokenRefresher {
+    constructor(storageUtility, issuerConfigFetcher, clientRegistrar) {
+        this.storageUtility = storageUtility;
+        this.issuerConfigFetcher = issuerConfigFetcher;
+        this.clientRegistrar = clientRegistrar;
+        this.storageUtility = storageUtility;
+        this.issuerConfigFetcher = issuerConfigFetcher;
+        this.clientRegistrar = clientRegistrar;
+    }
+    async refresh(sessionId, refreshToken, dpopKey, eventEmitter) {
+        const oidcContext = await solidClientAuthnCore.loadOidcContextFromStorage(sessionId, this.storageUtility, this.issuerConfigFetcher);
+        // This should also retrieve the client from storage
+        const clientInfo = await this.clientRegistrar.getClient({ sessionId }, oidcContext.issuerConfig);
+        if (refreshToken === undefined) {
+            // TODO: in a next PR, look up storage for a refresh token
+            throw new Error(`Session [${sessionId}] has no refresh token to allow it to refresh its access token.`);
+        }
+        if (oidcContext.dpop && dpopKey === undefined) {
+            throw new Error(`For session [${sessionId}], the key bound to the DPoP access token must be provided to refresh said access token.`);
+        }
+        const tokenSet = await oidcClientExt.refresh(refreshToken, oidcContext.issuerConfig, clientInfo, dpopKey);
+        if (tokenSet.refreshToken !== undefined) {
+            eventEmitter === null || eventEmitter === void 0 ? void 0 : eventEmitter.emit(solidClientAuthnCore.EVENTS.NEW_REFRESH_TOKEN, tokenSet.refreshToken);
+            await this.storageUtility.setForUser(sessionId, {
+                refreshToken: tokenSet.refreshToken,
+            });
+        }
+        return tokenSet;
+    }
+}
+
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ *
+ * @param dependencies
+ * @deprecated This function will be removed from the external API in an upcoming release.
+ */
+function getClientAuthenticationWithDependencies(dependencies) {
+    const inMemoryStorage = new solidClientAuthnCore.InMemoryStorage();
+    const secureStorage = dependencies.secureStorage || inMemoryStorage;
+    const insecureStorage = dependencies.insecureStorage || new BrowserStorage();
+    const storageUtility = new StorageUtilityBrowser(secureStorage, insecureStorage);
+    const issuerConfigFetcher = new IssuerConfigFetcher(storageUtility);
+    const clientRegistrar = new ClientRegistrar(storageUtility);
+    const sessionInfoManager = new SessionInfoManager(storageUtility);
+    const tokenRefresher = new TokenRefresher(storageUtility, issuerConfigFetcher, clientRegistrar);
+    const redirector = new Redirector();
+    // make new handler for redirect and login
+    const loginHandler = new OidcLoginHandler(storageUtility, new AuthorizationCodeWithPkceOidcHandler(storageUtility, redirector), issuerConfigFetcher, clientRegistrar);
+    const redirectHandler = new AggregateRedirectHandler([
+        new ErrorOidcHandler(),
+        new AuthCodeRedirectHandler(storageUtility, sessionInfoManager, issuerConfigFetcher, clientRegistrar, tokenRefresher),
+        // This catch-all class will always be able to handle the
+        // redirect IRI, so it must be registered last.
+        new FallbackRedirectHandler(),
+    ]);
+    return new ClientAuthentication(loginHandler, redirectHandler, new solidClientAuthnCore.IWaterfallLogoutHandler(sessionInfoManager, redirector), sessionInfoManager, issuerConfigFetcher);
+}
+
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+const KEY_CURRENT_SESSION = `${solidClientAuthnCore.SOLID_CLIENT_AUTHN_KEY_PREFIX}currentSession`;
+const KEY_CURRENT_URL = `${solidClientAuthnCore.SOLID_CLIENT_AUTHN_KEY_PREFIX}currentUrl`;
+
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+async function silentlyAuthenticate(sessionId, clientAuthn, session) {
+    var _a;
+    const storedSessionInfo = await clientAuthn.validateCurrentSession(sessionId);
+    if (storedSessionInfo !== null) {
+        // It can be really useful to save the user's current browser location,
+        // so that we can restore it after completing the silent authentication
+        // on incoming redirect. This way, the user is eventually redirected back
+        // to the page they were on and not to the app's redirect page.
+        window.localStorage.setItem(KEY_CURRENT_URL, window.location.href);
+        await clientAuthn.login({
+            sessionId,
+            prompt: "none",
+            oidcIssuer: storedSessionInfo.issuer,
+            redirectUrl: storedSessionInfo.redirectUrl,
+            clientId: storedSessionInfo.clientAppId,
+            clientSecret: storedSessionInfo.clientAppSecret,
+            tokenType: (_a = storedSessionInfo.tokenType) !== null && _a !== void 0 ? _a : "DPoP",
+        }, session.events);
+        return true;
+    }
+    return false;
+}
+function isLoggedIn(sessionInfo) {
+    return !!(sessionInfo === null || sessionInfo === void 0 ? void 0 : sessionInfo.isLoggedIn);
+}
+/**
+ * A {@link Session} object represents a user's session on an application. The session holds state, as it stores information enabling acces to private resources after login for instance.
+ */
+class Session extends EventEmitter {
+    /**
+     * Session object constructor. Typically called as follows:
+     *
+     * ```typescript
+     * const session = new Session();
+     * ```
+     *
+     * See also [getDefaultSession](https://docs.inrupt.com/developer-tools/api/javascript/solid-client-authn-browser/functions.html#getdefaultsession).
+     *
+     * @param sessionOptions The options enabling the correct instantiation of
+     * the session. Either both storages or clientAuthentication are required. For
+     * more information, see {@link ISessionOptions}.
+     * @param sessionId A string uniquely identifying the session.
+     *
+     */
+    constructor(sessionOptions = {}, sessionId = undefined) {
+        super();
+        this.tokenRequestInProgress = false;
+        /**
+         * Triggers the login process. Note that this method will redirect the user away from your app.
+         *
+         * @param options Parameter to customize the login behaviour. In particular, two options are mandatory: `options.oidcIssuer`, the user's identity provider, and `options.redirectUrl`, the URL to which the user will be redirected after logging in their identity provider.
+         * @returns This method should redirect the user away from the app: it does not return anything. The login process is completed by {@linkcode handleIncomingRedirect}.
+         */
+        // Define these functions as properties so that they don't get accidentally re-bound.
+        // Isn't Javascript fun?
+        this.login = async (options) => {
+            var _a;
+            await this.clientAuthentication.login({
+                sessionId: this.info.sessionId,
+                ...options,
+                // Defaults the token type to DPoP
+                tokenType: (_a = options.tokenType) !== null && _a !== void 0 ? _a : "DPoP",
+            }, this.events);
+            // `login` redirects the user away from the app,
+            // so unless it throws an error, there is no code that should run afterwards
+            // (since there is no "after" in the lifetime of the script).
+            // Hence, this Promise never resolves:
+            return new Promise(() => { });
+        };
+        /**
+         * Fetches data using available login information. If the user is not logged in, this will behave as a regular `fetch`. The signature of this method is identical to the [canonical `fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
+         *
+         * @param url The URL from which data should be fetched.
+         * @param init Optional parameters customizing the request, by specifying an HTTP method, headers, a body, etc. Follows the [WHATWG Fetch Standard](https://fetch.spec.whatwg.org/).
+         */
+        this.fetch = (url, init) => this.clientAuthentication.fetch(url, init);
+        /**
+         * An internal logout function, to control whether or not the logout signal
+         * should be sent, i.e. if the logout was user-initiated or is the result of
+         * an external event.
+         *
+         * @hidden
+         */
+        this.internalLogout = async (emitSignal, options) => {
+            // Clearing this value means that silent refresh will no longer be attempted.
+            // In particular, in the case of a silent authentication error it prevents
+            // from getting stuck in an authentication retries loop.
+            window.localStorage.removeItem(KEY_CURRENT_SESSION);
+            await this.clientAuthentication.logout(this.info.sessionId, options);
+            this.info.isLoggedIn = false;
+            if (emitSignal) {
+                this.events.emit(solidClientAuthnCore.EVENTS.LOGOUT);
+            }
+        };
+        /**
+         * Logs the user out of the application.
+         *
+         * There are 2 types of logout supported by this library,
+         * `app` logout and `idp` logout.
+         *
+         * App logout will log the user out within the application
+         * by clearing any session data from the browser. It does
+         * not log the user out of their Solid identity provider,
+         * and should not redirect the user away.
+         * App logout can be performed as follows:
+         * ```typescript
+         * await session.logout({ logoutType: 'app' });
+         * ```
+         *
+         * IDP logout will log the user out of their Solid identity provider,
+         * and will redirect the user away from the application to do so. In order
+         * for users to be redirected back to `postLogoutUrl` you MUST include the
+         * `postLogoutUrl` value in the `post_logout_redirect_uris` field in the
+         * [Client ID Document](https://docs.inrupt.com/ess/latest/security/authentication/#client-identifier-client-id).
+         * IDP logout can be performed as follows:
+         * ```typescript
+         * await session.logout({
+         *  logoutType: 'idp',
+         *  // An optional URL to redirect to after logout has completed;
+         *  // this MUST match a logout URL listed in the Client ID Document
+         *  // of the application that is logged in.
+         *  // If the application is logged in with a Client ID that is not
+         *  // a URI dereferencing to a Client ID Document then users will
+         *  // not be redirected back to the `postLogoutUrl` after logout.
+         *  postLogoutUrl: 'https://example.com/logout',
+         *  // An optional value to be included in the query parameters
+         *  // when the IDP provider redirects the user to the postLogoutRedirectUrl.
+         *  state: "my-state"
+         * });
+         * ```
+         */
+        this.logout = async (options) => this.internalLogout(true, options);
+        /**
+         * Completes the login process by processing the information provided by the
+         * Solid identity provider through redirect.
+         *
+         * @param options See {@see IHandleIncomingRedirectOptions}.
+         */
+        this.handleIncomingRedirect = async (inputOptions = {}) => {
+            var _a;
+            if (this.info.isLoggedIn) {
+                return this.info;
+            }
+            if (this.tokenRequestInProgress) {
+                return undefined;
+            }
+            const options = typeof inputOptions === "string" ? { url: inputOptions } : inputOptions;
+            const url = (_a = options.url) !== null && _a !== void 0 ? _a : window.location.href;
+            this.tokenRequestInProgress = true;
+            const sessionInfo = await this.clientAuthentication.handleIncomingRedirect(url, this.events);
+            if (isLoggedIn(sessionInfo)) {
+                this.setSessionInfo(sessionInfo);
+                const currentUrl = window.localStorage.getItem(KEY_CURRENT_URL);
+                if (currentUrl === null) {
+                    // The login event can only be triggered **after** the user has been
+                    // redirected from the IdP with access and ID tokens.
+                    this.events.emit(solidClientAuthnCore.EVENTS.LOGIN);
+                }
+                else {
+                    // If an URL is stored in local storage, we are being logged in after a
+                    // silent authentication, so remove our currently stored URL location
+                    // to clean up our state now that we are completing the re-login process.
+                    window.localStorage.removeItem(KEY_CURRENT_URL);
+                    this.events.emit(solidClientAuthnCore.EVENTS.SESSION_RESTORED, currentUrl);
+                }
+            }
+            else if (options.restorePreviousSession === true) {
+                // Silent authentication happens after a refresh, which means there are no
+                // OAuth params in the current location IRI. It can only succeed if a session
+                // was previously logged in, in which case its ID will be present with a known
+                // identifier in local storage.
+                // Check if we have a locally stored session ID...
+                const storedSessionId = window.localStorage.getItem(KEY_CURRENT_SESSION);
+                // ...if not, then there is no ID token, and so silent authentication cannot happen, but
+                // if we do have a stored session ID, attempt to re-authenticate now silently.
+                if (storedSessionId !== null) {
+                    const attemptedSilentAuthentication = await silentlyAuthenticate(storedSessionId, this.clientAuthentication, this);
+                    // At this point, we know that the main window will imminently be redirected.
+                    // However, this redirect is asynchronous and there is no way to halt execution
+                    // until it happens precisely. That's why the current Promise simply does not
+                    // resolve.
+                    if (attemptedSilentAuthentication) {
+                        return new Promise(() => { });
+                    }
+                }
+            }
+            this.tokenRequestInProgress = false;
+            return sessionInfo;
+        };
+        // Until Session no longer implements EventEmitter, this.events is just a proxy
+        // to this (with some interface filtering). When we make the breaking change,
+        // this.events will be a regular EventEmitter (implementing ISessionEventEmitter):
+        // this.events = new EventEmitter();
+        this.events = new Proxy(this, solidClientAuthnCore.buildProxyHandler(Session.prototype, "events only implements ISessionEventListener"));
+        if (sessionOptions.clientAuthentication) {
+            this.clientAuthentication = sessionOptions.clientAuthentication;
+        }
+        else if (sessionOptions.secureStorage && sessionOptions.insecureStorage) {
+            this.clientAuthentication = getClientAuthenticationWithDependencies({
+                secureStorage: sessionOptions.secureStorage,
+                insecureStorage: sessionOptions.insecureStorage,
+            });
+        }
+        else {
+            this.clientAuthentication = getClientAuthenticationWithDependencies({});
+        }
+        if (sessionOptions.sessionInfo) {
+            this.info = {
+                sessionId: sessionOptions.sessionInfo.sessionId,
+                isLoggedIn: false,
+                webId: sessionOptions.sessionInfo.webId,
+            };
+        }
+        else {
+            this.info = {
+                sessionId: sessionId !== null && sessionId !== void 0 ? sessionId : uuid.v4(),
+                isLoggedIn: false,
+            };
+        }
+        // When a session is logged in, we want to track its ID in local storage to
+        // enable silent refresh. The current session ID specifically stored in 'localStorage'
+        // (as opposed to using our storage abstraction layer) because it is only
+        // used in a browser-specific mechanism.
+        this.events.on(solidClientAuthnCore.EVENTS.LOGIN, () => window.localStorage.setItem(KEY_CURRENT_SESSION, this.info.sessionId));
+        this.events.on(solidClientAuthnCore.EVENTS.SESSION_EXPIRED, () => this.internalLogout(false));
+        this.events.on(solidClientAuthnCore.EVENTS.ERROR, () => this.internalLogout(false));
+    }
+    /**
+     * Register a callback function to be called when a user completes login.
+     *
+     * The callback is called when {@link handleIncomingRedirect} completes successfully.
+     *
+     * @param callback The function called when a user completes login.
+     * @deprecated Prefer session.events.on(EVENTS.LOGIN, callback)
+     */
+    onLogin(callback) {
+        this.events.on(solidClientAuthnCore.EVENTS.LOGIN, callback);
+    }
+    /**
+     * Register a callback function to be called when a user logs out:
+     *
+     * @param callback The function called when a user completes logout.
+     * @deprecated Prefer session.events.on(EVENTS.LOGOUT, callback)
+     */
+    onLogout(callback) {
+        this.events.on(solidClientAuthnCore.EVENTS.LOGOUT, callback);
+    }
+    /**
+     * Register a callback function to be called when a user logs out:
+     *
+     * @param callback The function called when an error occurs.
+     * @since 1.11.0
+     * @deprecated Prefer session.events.on(EVENTS.ERROR, callback)
+     */
+    onError(callback) {
+        this.events.on(solidClientAuthnCore.EVENTS.ERROR, callback);
+    }
+    /**
+     * Register a callback function to be called when a session is restored.
+     *
+     * Note: the callback will be called with the saved value of the 'current URL'
+     * at the time the session was restored.
+     *
+     * @param callback The function called when a user's already logged-in session is restored, e.g., after a silent authentication is completed after a page refresh.
+     * @deprecated Prefer session.events.on(EVENTS.SESSION_RESTORED, callback)
+     */
+    onSessionRestore(callback) {
+        this.events.on(solidClientAuthnCore.EVENTS.SESSION_RESTORED, callback);
+    }
+    /**
+     * Register a callback that runs when the session expires and can no longer
+     * make authenticated requests, but following a user logout.
+     * @param callback The function that runs on session expiration.
+     * @since 1.11.0
+     * @deprecated Prefer session.events.on(EVENTS.SESSION_EXPIRED, callback)
+     */
+    onSessionExpiration(callback) {
+        this.events.on(solidClientAuthnCore.EVENTS.SESSION_EXPIRED, callback);
+    }
+    setSessionInfo(sessionInfo) {
+        this.info.isLoggedIn = sessionInfo.isLoggedIn;
+        this.info.webId = sessionInfo.webId;
+        this.info.sessionId = sessionInfo.sessionId;
+        this.info.expirationDate = sessionInfo.expirationDate;
+        this.events.on(solidClientAuthnCore.EVENTS.SESSION_EXTENDED, (expiresIn) => {
+            this.info.expirationDate = Date.now() + expiresIn * 1000;
+        });
+    }
+}
+
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+let defaultSession;
+/**
+ * Obtain the {@link Session} used when not explicitly instantiating one yourself.
+ *
+ * When using the top-level exports {@link fetch}, {@link login}, {@link logout},
+ * {@link handleIncomingRedirect}, {@link onLogin} and {@link onLogout}, these apply to an
+ * implicitly-instantiated {@link Session}.
+ * This function returns a reference to that Session in order to obtain e.g. the current user's
+ * WebID.
+ * @since 1.3.0
+ */
+function getDefaultSession() {
+    if (typeof defaultSession === "undefined") {
+        defaultSession = new Session();
+    }
+    return defaultSession;
+}
+/**
+ * This function's signature is equal to `window.fetch`, but if the current user is authenticated
+ * (see [[login]] and [[handleIncomingRedirect]]), requests made using it will include that user's
+ * credentials. If not, this will behave just like the regular `window.fetch`.
+ *
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch}
+ * @since 1.3.0
+ */
+/* eslint-disable-next-line no-shadow */
+const fetch = (...args) => {
+    const session = getDefaultSession();
+    return session.fetch(...args);
+};
+/**
+ * Triggers the login process. Note that this method will redirect the user away from your app.
+ *
+ * @param options Parameter to customize the login behaviour. In particular, two options are mandatory: `options.oidcIssuer`, the user's identity provider, and `options.redirectUrl`, the URL to which the user will be redirected after logging in their identity provider.
+ * @returns This method should redirect the user away from the app: it does not return anything. The login process is completed by [[handleIncomingRedirect]].
+ * @since 1.3.0
+ */
+const login = (...args) => {
+    const session = getDefaultSession();
+    return session.login(...args);
+};
+/**
+ * Logs the user out of the application.
+ *
+ * By default this does not log the user out of their Solid identity provider.
+ * In order to do so, you must set the logoutType to `idp`. For usage details
+ * see {@link Session.logout}.
+ *
+ * @since 1.3.0
+ */
+const logout = (...args) => {
+    const session = getDefaultSession();
+    return session.logout(...args);
+};
+/**
+ * Completes the login process by processing the information provided by the Solid identity provider through redirect.
+ *
+ * @param url The URL of the page handling the redirect, including the query parameters — these contain the information to process the login.
+ * @since 1.3.0
+ */
+const handleIncomingRedirect = (...args) => {
+    const session = getDefaultSession();
+    return session.handleIncomingRedirect(...args);
+};
+/**
+ * Register a callback function to be called when a user completes login.
+ *
+ * The callback is called when {@link handleIncomingRedirect} completes successfully.
+ * @since 1.3.0
+ *
+ * @param callback The function called when a user completes login.
+ * @deprecated Prefer events.on(EVENTS.LOGIN, callback)
+
+ */
+const onLogin = (...args) => {
+    const session = getDefaultSession();
+    return session.onLogin(...args);
+};
+/**
+ * Register a callback function to be called when a user logs out:
+ *
+ * @param callback The function called when a user completes logout.
+ * @since 1.3.0
+ * @deprecated Prefer events.on(EVENTS.LOGOUT, callback)
+ *
+ */
+const onLogout = (...args) => {
+    const session = getDefaultSession();
+    return session.onLogout(...args);
+};
+/**
+ * Register a callback function to be called when a session is restored:
+ *
+ * @param callback The function called when a session is restored.
+ * @since 1.3.0
+ * @deprecated Prefer events.on(EVENTS.SESSION_RESTORED, callback)
+ */
+const onSessionRestore = (...args) => {
+    const session = getDefaultSession();
+    return session.onSessionRestore(...args);
+};
+/**
+ * {@link SessionEventEmitter} instance to subscribe to events by the default session.
+ *
+ * @since 1.14.0
+ */
+const events = () => {
+    return getDefaultSession().events;
+};
+
+Object.defineProperty(exports, "ConfigurationError", ({
+  enumerable: true,
+  get: function () { return solidClientAuthnCore.ConfigurationError; }
+}));
+Object.defineProperty(exports, "EVENTS", ({
+  enumerable: true,
+  get: function () { return solidClientAuthnCore.EVENTS; }
+}));
+Object.defineProperty(exports, "InMemoryStorage", ({
+  enumerable: true,
+  get: function () { return solidClientAuthnCore.InMemoryStorage; }
+}));
+Object.defineProperty(exports, "NotImplementedError", ({
+  enumerable: true,
+  get: function () { return solidClientAuthnCore.NotImplementedError; }
+}));
+exports.Session = Session;
+exports.events = events;
+exports.fetch = fetch;
+exports.getClientAuthenticationWithDependencies = getClientAuthenticationWithDependencies;
+exports.getDefaultSession = getDefaultSession;
+exports.handleIncomingRedirect = handleIncomingRedirect;
+exports.login = login;
+exports.logout = logout;
+exports.onLogin = onLogin;
+exports.onLogout = onLogout;
+exports.onSessionRestore = onSessionRestore;
+//# sourceMappingURL=index.js.map
+
 
 /***/ }),
 
