@@ -886,7 +886,6 @@ function findAgent(uri, kb) {
       obj: (0, _rdflib.sym)(uri.slice(0, -1))
     }; // Fix a URI where the drag and drop system has added a spurious slash
   }
-
   if (ns.vcard('WebID').uri in types) return {
     pred: 'agent',
     obj: obj
@@ -897,7 +896,6 @@ function findAgent(uri, kb) {
       obj: obj
     }; // @@ note vcard membership not RDFs
   }
-
   if (obj.sameTerm(ns.foaf('Agent')) || obj.sameTerm(ns.acl('AuthenticatedAgent')) ||
   // AuthenticatedAgent
   obj.sameTerm(ns.rdf('Resource')) || obj.sameTerm(ns.owl('Thing'))) {
@@ -3474,7 +3472,6 @@ function _infiniteMessageArea() {
                     if (freeze) {
                       div.scrollTop = scrollTop; // while adding below keep same things in view
                     }
-
                     if (fixScroll) fixScroll();
                     if (!done) {
                       _context10.next = 31;
@@ -4261,6 +4258,14 @@ function _saveKey() {
 
 "use strict";
 
+  // console.log('kicking off async operation')
+  ensureLoadedPreferences(context) // kick off async operation
+  .then(displayOptions)["catch"](function (err) {
+    // console.log("err from async op")
+    box.appendChild(widgets.errorMessageBlock(context.dom, err));
+  });
+  return box; // return the box element, while login proceeds
+} // selectWorkspace
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
@@ -6263,7 +6268,21 @@ var originalIconBase = icons.originalIconBase;
 exports.originalIconBase = originalIconBase;
 //# sourceMappingURL=iconBase.js.map
 
-/***/ }),
+  // Ensure that the display matches the current state of the
+  // @@ TODO really need to refactor this so that we don't need to cast types
+  var sync = function sync() {
+    // var first = kb.the(subject, PAD('next'))
+    if (kb.each(subject, PAD('next')).length !== 1) {
+      var msg = 'Pad: Inconsistent data - NEXT pointers: ' + kb.each(subject, PAD('next')).length;
+      (0, _debug.log)(msg);
+      if (options.statusArea) {
+        options.statusArea.textContent += msg;
+      }
+      return;
+    }
+    // var last = kb.the(undefined, PAD('previous'), subject)
+    // var chunk = first //  = kb.the(subject, PAD('next'));
+    var row;
 
 /***/ "./lib/index.js":
 /*!**********************!*\
@@ -6299,6 +6318,33 @@ If you would like to know more about the solid Solid project, please see
 https://github.com/solidos/solid
 */
 
+    // Remove any deleted lines
+    for (var _i = table.children.length - 1; _i >= 0; _i--) {
+      row = table.children[_i];
+      if (!manif[row.firstChild.subject.uri]) {
+        table.removeChild(row);
+      }
+    }
+    // Insert any new lines and update old ones
+    row = table.firstChild; // might be null
+    for (var _chunk = kb.the(subject, PAD('next')); !_chunk.sameTerm(subject); _chunk = kb.the(_chunk, PAD('next'))) {
+      var text = kb.any(_chunk, ns.sioc('content')).value;
+      // superstitious -- don't mess with unchanged input fields
+      // which may be selected by the user
+      if (row && manif[_chunk.uri]) {
+        var part = row.firstChild;
+        if (text !== part.value) {
+          part.value = text;
+        }
+        setPartStyle(part);
+        part.state = 0; // Clear the state machine
+        delete part.lastSent; // DEBUG ONLY
+        row = row.nextSibling;
+      } else {
+        newPartAfter(row, _chunk, true); // actually before
+      }
+    }
+  };
 
 /**
  * Provides a Solid client helper object (which exposes various static modules).
@@ -8170,7 +8216,7 @@ function matrixForQuery(dom, query, vx, vy, vvalue, options, whenDone) {
             row.removeChild(_cell);
           }
         }
-      }
+      }, false);
     }
     var newcolumns = [];
     for (var _j2 = 0; _j2 < columns.length; _j2++) {
@@ -8372,6 +8418,8 @@ function cameraCaptureControl(dom, store, getImageDoc, doneCallback) {
         return track.stop();
       });
     }
+    throw new Error("getColumnForVariable: no column for variable ".concat(variableNT));
+    // return null
   }
   function saveBlob(blob, destination) {
     var contentType = blob.type;
@@ -8440,7 +8488,8 @@ function cameraButton(dom, store, getImageDoc, doneCallback) {
 }
 //# sourceMappingURL=media-capture.js.map
 
-/***/ }),
+  // Find the column for a given predicate, creating a new column object
+  // if necessary.
 
 /***/ "./lib/messageArea.js":
 /*!****************************!*\
@@ -8450,6 +8499,7 @@ function cameraButton(dom, store, getImageDoc, doneCallback) {
 
 "use strict";
 
+  // Discover types and subjects for search.
 
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
 Object.defineProperty(exports, "__esModule", ({
@@ -8786,6 +8836,7 @@ function messageArea(dom, kb, subject, messageStore, options) {
 
 "use strict";
 
+    // Remove all rows from the table:
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
@@ -10741,6 +10792,8 @@ function renderTableViewPane(doc, options) {
     if (!queryType) {
       queryType = kb.variable('_any');
     }
+    return best;
+  }
 
     // _row a type
     query.pat.add(rowVar, UI.ns.rdf('type'), queryType);
@@ -11213,6 +11266,10 @@ function renderTableViewPane(doc, options) {
       var type = types[typeUrl];
       identifyColumnsForType(type, subjectList);
     }
+    return result;
+  };
+}
+//# sourceMappingURL=headerFooterHelpers.js.map
 
     // TODO: Special type that captures all rows.
     // Combine columns from all types
@@ -11861,6 +11918,14 @@ function renderTableViewPane(doc, options) {
       ++subjectIdCounter;
       return result;
     }
+    p = p.slice(0, i);
+    if (p.length < 6 && canUse(p)) return pok; // exact i sbest
+    if (canUse(p.slice(0, 3))) return pok;
+    if (canUse(p.slice(0, 2))) return pok;
+    if (canUse(p.slice(0, 4))) return pok;
+    if (canUse(p.slice(0, 1))) return pok;
+    if (canUse(p.slice(0, 5))) return pok;
+    for (i = 0;; i++) if (canUse(p.slice(0, 3) + i)) return pok;
   }
 
   // Run a query and populate the table.
@@ -12061,6 +12126,8 @@ function renderTableViewPane(doc, options) {
         best = type;
         bestCount = type.useCount;
       }
+    } else {
+      return term.uri + '!?'; // strange should have a nice part
     }
     return best;
   }
@@ -17086,6 +17153,11 @@ function buildCheckboxForm(dom, kb, lab, del, ins, form, dataDoc, tristate) {
       if (!x.why) {
         x.why = dataDoc; // be back-compaitible  with old code
       }
+    }, _callee8);
+  }));
+  return _renderAutoComplete.apply(this, arguments);
+}
+//# sourceMappingURL=autocompletePicker.js.map
 
       return [x]; // one statements
     }
@@ -19643,6 +19715,17 @@ function fieldFunction(dom, fieldInQuestion) {
 
 "use strict";
 
+    function literalEscape(s) {
+      return s
+        .replace(/\\/g, '\\\\')
+        .replace(/"/g,  '\\"')
+        .replace(/\0/g, '\\0')
+        .replace(/\t/g, '\\t')
+        .replace(/\n/g, '\\n')
+        .replace(/\r/g, '\\r')
+        .replace(/[\x00-\x0F]/g,          function(ch) { return '\\x0' + hex(ch); })
+        .replace(/[\x10-\x1F\x7F-\x9F]/g, function(ch) { return '\\x'  + hex(ch); });
+    }
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
@@ -24091,6 +24174,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       } else {
         s0 = s1;
       }
+      s0 = s1;
 
       return s0;
     }
@@ -28568,6 +28652,343 @@ async function handleRegistration(options, issuerConfig, storageUtility, clientR
         clientName: options.clientName,
         clientType,
     };
+};
+const mockStorageUtility = (stored, isSecure = false) => {
+    if (isSecure) {
+        return new StorageUtility(mockStorage(stored), mockStorage({}));
+    }
+    return new StorageUtility(mockStorage({}), mockStorage(stored));
+};
+
+exports.AggregateHandler = AggregateHandler;
+exports.AuthorizationCodeWithPkceOidcHandlerBase = AuthorizationCodeWithPkceOidcHandlerBase;
+exports.ClientAuthentication = ClientAuthentication;
+exports.ConfigurationError = ConfigurationError;
+exports.DEFAULT_SCOPES = DEFAULT_SCOPES;
+exports.EVENTS = EVENTS;
+exports.GeneralLogoutHandler = GeneralLogoutHandler;
+exports.IRpLogoutHandler = IRpLogoutHandler;
+exports.IWaterfallLogoutHandler = IWaterfallLogoutHandler;
+exports.InMemoryStorage = InMemoryStorage;
+exports.InvalidResponseError = InvalidResponseError;
+exports.NotImplementedError = NotImplementedError;
+exports.OidcProviderError = OidcProviderError;
+exports.PREFERRED_SIGNING_ALG = PREFERRED_SIGNING_ALG;
+exports.REFRESH_BEFORE_EXPIRATION_SECONDS = REFRESH_BEFORE_EXPIRATION_SECONDS;
+exports.SOLID_CLIENT_AUTHN_KEY_PREFIX = SOLID_CLIENT_AUTHN_KEY_PREFIX;
+exports.SessionInfoManagerBase = SessionInfoManagerBase;
+exports.StorageUtility = StorageUtility;
+exports.StorageUtilityGetResponse = StorageUtilityGetResponse;
+exports.StorageUtilityMock = StorageUtilityMock;
+exports.USER_SESSION_PREFIX = USER_SESSION_PREFIX;
+exports.buildAuthenticatedFetch = buildAuthenticatedFetch;
+exports.buildProxyHandler = buildProxyHandler;
+exports.clear = clear;
+exports.createDpopHeader = createDpopHeader;
+exports.determineSigningAlg = determineSigningAlg;
+exports.fetchJwks = fetchJwks;
+exports.generateDpopKeyPair = generateDpopKeyPair;
+exports.getEndSessionUrl = getEndSessionUrl;
+exports.getSessionIdFromOauthState = getSessionIdFromOauthState;
+exports.getUnauthenticatedSession = getUnauthenticatedSession;
+exports.getWebidFromTokenPayload = getWebidFromTokenPayload;
+exports.handleRegistration = handleRegistration;
+exports.isSupportedTokenType = isSupportedTokenType;
+exports.isValidRedirectUrl = isValidRedirectUrl;
+exports.loadOidcContextFromStorage = loadOidcContextFromStorage;
+exports.maybeBuildRpInitiatedLogout = maybeBuildRpInitiatedLogout;
+exports.mockStorage = mockStorage;
+exports.mockStorageUtility = mockStorageUtility;
+exports.removeOpenIdParams = removeOpenIdParams;
+exports.saveSessionInfoToStorage = saveSessionInfoToStorage;
+//# sourceMappingURL=index.js.map
+
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/index.js":
+/*!*******************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/index.js ***!
+  \*******************************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+Object.defineProperty(exports, "NIL", ({
+  enumerable: true,
+  get: function get() {
+    return _nil.default;
+  }
+}));
+Object.defineProperty(exports, "parse", ({
+  enumerable: true,
+  get: function get() {
+    return _parse.default;
+  }
+}));
+Object.defineProperty(exports, "stringify", ({
+  enumerable: true,
+  get: function get() {
+    return _stringify.default;
+  }
+}));
+Object.defineProperty(exports, "v1", ({
+  enumerable: true,
+  get: function get() {
+    return _v.default;
+  }
+}));
+Object.defineProperty(exports, "v3", ({
+  enumerable: true,
+  get: function get() {
+    return _v2.default;
+  }
+}));
+Object.defineProperty(exports, "v4", ({
+  enumerable: true,
+  get: function get() {
+    return _v3.default;
+  }
+}));
+Object.defineProperty(exports, "v5", ({
+  enumerable: true,
+  get: function get() {
+    return _v4.default;
+  }
+}));
+Object.defineProperty(exports, "validate", ({
+  enumerable: true,
+  get: function get() {
+    return _validate.default;
+  }
+}));
+Object.defineProperty(exports, "version", ({
+  enumerable: true,
+  get: function get() {
+    return _version.default;
+  }
+}));
+
+var _v = _interopRequireDefault(__webpack_require__(/*! ./v1.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v1.js"));
+
+var _v2 = _interopRequireDefault(__webpack_require__(/*! ./v3.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v3.js"));
+
+var _v3 = _interopRequireDefault(__webpack_require__(/*! ./v4.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v4.js"));
+
+var _v4 = _interopRequireDefault(__webpack_require__(/*! ./v5.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v5.js"));
+
+var _nil = _interopRequireDefault(__webpack_require__(/*! ./nil.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/nil.js"));
+
+var _version = _interopRequireDefault(__webpack_require__(/*! ./version.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/version.js"));
+
+var _validate = _interopRequireDefault(__webpack_require__(/*! ./validate.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/validate.js"));
+
+var _stringify = _interopRequireDefault(__webpack_require__(/*! ./stringify.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/stringify.js"));
+
+var _parse = _interopRequireDefault(__webpack_require__(/*! ./parse.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/parse.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/md5.js":
+/*!*****************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/md5.js ***!
+  \*****************************************************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+/*
+ * Browser-compatible JavaScript MD5
+ *
+ * Modification of JavaScript MD5
+ * https://github.com/blueimp/JavaScript-MD5
+ *
+ * Copyright 2011, Sebastian Tschan
+ * https://blueimp.net
+ *
+ * Licensed under the MIT license:
+ * https://opensource.org/licenses/MIT
+ *
+ * Based on
+ * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
+ * Digest Algorithm, as defined in RFC 1321.
+ * Version 2.2 Copyright (C) Paul Johnston 1999 - 2009
+ * Other contributors: Greg Holt, Andrew Kepert, Ydnar, Lostinet
+ * Distributed under the BSD License
+ * See http://pajhome.org.uk/crypt/md5 for more info.
+ */
+function md5(bytes) {
+  if (typeof bytes === 'string') {
+    const msg = unescape(encodeURIComponent(bytes)); // UTF8 escape
+
+    bytes = new Uint8Array(msg.length);
+
+    for (let i = 0; i < msg.length; ++i) {
+      bytes[i] = msg.charCodeAt(i);
+    }
+  }
+
+  return md5ToHexEncodedArray(wordsToMd5(bytesToWords(bytes), bytes.length * 8));
+}
+/*
+ * Convert an array of little-endian words to an array of bytes
+ */
+
+
+function md5ToHexEncodedArray(input) {
+  const output = [];
+  const length32 = input.length * 32;
+  const hexTab = '0123456789abcdef';
+
+  for (let i = 0; i < length32; i += 8) {
+    const x = input[i >> 5] >>> i % 32 & 0xff;
+    const hex = parseInt(hexTab.charAt(x >>> 4 & 0x0f) + hexTab.charAt(x & 0x0f), 16);
+    output.push(hex);
+  }
+
+  return output;
+}
+/**
+ * Calculate output length with padding and bit length
+ */
+
+
+function getOutputLength(inputLength8) {
+  return (inputLength8 + 64 >>> 9 << 4) + 14 + 1;
+}
+/*
+ * Calculate the MD5 of an array of little-endian words, and a bit length.
+ */
+
+
+function wordsToMd5(x, len) {
+  /* append padding */
+  x[len >> 5] |= 0x80 << len % 32;
+  x[getOutputLength(len) - 1] = len;
+  let a = 1732584193;
+  let b = -271733879;
+  let c = -1732584194;
+  let d = 271733878;
+
+  for (let i = 0; i < x.length; i += 16) {
+    const olda = a;
+    const oldb = b;
+    const oldc = c;
+    const oldd = d;
+    a = md5ff(a, b, c, d, x[i], 7, -680876936);
+    d = md5ff(d, a, b, c, x[i + 1], 12, -389564586);
+    c = md5ff(c, d, a, b, x[i + 2], 17, 606105819);
+    b = md5ff(b, c, d, a, x[i + 3], 22, -1044525330);
+    a = md5ff(a, b, c, d, x[i + 4], 7, -176418897);
+    d = md5ff(d, a, b, c, x[i + 5], 12, 1200080426);
+    c = md5ff(c, d, a, b, x[i + 6], 17, -1473231341);
+    b = md5ff(b, c, d, a, x[i + 7], 22, -45705983);
+    a = md5ff(a, b, c, d, x[i + 8], 7, 1770035416);
+    d = md5ff(d, a, b, c, x[i + 9], 12, -1958414417);
+    c = md5ff(c, d, a, b, x[i + 10], 17, -42063);
+    b = md5ff(b, c, d, a, x[i + 11], 22, -1990404162);
+    a = md5ff(a, b, c, d, x[i + 12], 7, 1804603682);
+    d = md5ff(d, a, b, c, x[i + 13], 12, -40341101);
+    c = md5ff(c, d, a, b, x[i + 14], 17, -1502002290);
+    b = md5ff(b, c, d, a, x[i + 15], 22, 1236535329);
+    a = md5gg(a, b, c, d, x[i + 1], 5, -165796510);
+    d = md5gg(d, a, b, c, x[i + 6], 9, -1069501632);
+    c = md5gg(c, d, a, b, x[i + 11], 14, 643717713);
+    b = md5gg(b, c, d, a, x[i], 20, -373897302);
+    a = md5gg(a, b, c, d, x[i + 5], 5, -701558691);
+    d = md5gg(d, a, b, c, x[i + 10], 9, 38016083);
+    c = md5gg(c, d, a, b, x[i + 15], 14, -660478335);
+    b = md5gg(b, c, d, a, x[i + 4], 20, -405537848);
+    a = md5gg(a, b, c, d, x[i + 9], 5, 568446438);
+    d = md5gg(d, a, b, c, x[i + 14], 9, -1019803690);
+    c = md5gg(c, d, a, b, x[i + 3], 14, -187363961);
+    b = md5gg(b, c, d, a, x[i + 8], 20, 1163531501);
+    a = md5gg(a, b, c, d, x[i + 13], 5, -1444681467);
+    d = md5gg(d, a, b, c, x[i + 2], 9, -51403784);
+    c = md5gg(c, d, a, b, x[i + 7], 14, 1735328473);
+    b = md5gg(b, c, d, a, x[i + 12], 20, -1926607734);
+    a = md5hh(a, b, c, d, x[i + 5], 4, -378558);
+    d = md5hh(d, a, b, c, x[i + 8], 11, -2022574463);
+    c = md5hh(c, d, a, b, x[i + 11], 16, 1839030562);
+    b = md5hh(b, c, d, a, x[i + 14], 23, -35309556);
+    a = md5hh(a, b, c, d, x[i + 1], 4, -1530992060);
+    d = md5hh(d, a, b, c, x[i + 4], 11, 1272893353);
+    c = md5hh(c, d, a, b, x[i + 7], 16, -155497632);
+    b = md5hh(b, c, d, a, x[i + 10], 23, -1094730640);
+    a = md5hh(a, b, c, d, x[i + 13], 4, 681279174);
+    d = md5hh(d, a, b, c, x[i], 11, -358537222);
+    c = md5hh(c, d, a, b, x[i + 3], 16, -722521979);
+    b = md5hh(b, c, d, a, x[i + 6], 23, 76029189);
+    a = md5hh(a, b, c, d, x[i + 9], 4, -640364487);
+    d = md5hh(d, a, b, c, x[i + 12], 11, -421815835);
+    c = md5hh(c, d, a, b, x[i + 15], 16, 530742520);
+    b = md5hh(b, c, d, a, x[i + 2], 23, -995338651);
+    a = md5ii(a, b, c, d, x[i], 6, -198630844);
+    d = md5ii(d, a, b, c, x[i + 7], 10, 1126891415);
+    c = md5ii(c, d, a, b, x[i + 14], 15, -1416354905);
+    b = md5ii(b, c, d, a, x[i + 5], 21, -57434055);
+    a = md5ii(a, b, c, d, x[i + 12], 6, 1700485571);
+    d = md5ii(d, a, b, c, x[i + 3], 10, -1894986606);
+    c = md5ii(c, d, a, b, x[i + 10], 15, -1051523);
+    b = md5ii(b, c, d, a, x[i + 1], 21, -2054922799);
+    a = md5ii(a, b, c, d, x[i + 8], 6, 1873313359);
+    d = md5ii(d, a, b, c, x[i + 15], 10, -30611744);
+    c = md5ii(c, d, a, b, x[i + 6], 15, -1560198380);
+    b = md5ii(b, c, d, a, x[i + 13], 21, 1309151649);
+    a = md5ii(a, b, c, d, x[i + 4], 6, -145523070);
+    d = md5ii(d, a, b, c, x[i + 11], 10, -1120210379);
+    c = md5ii(c, d, a, b, x[i + 2], 15, 718787259);
+    b = md5ii(b, c, d, a, x[i + 9], 21, -343485551);
+    a = safeAdd(a, olda);
+    b = safeAdd(b, oldb);
+    c = safeAdd(c, oldc);
+    d = safeAdd(d, oldd);
+  }
+
+  return [a, b, c, d];
+}
+/*
+ * Convert an array bytes to an array of little-endian words
+ * Characters >255 have their high-byte silently ignored.
+ */
+
+
+function bytesToWords(input) {
+  if (input.length === 0) {
+    return [];
+  }
+
+  const length8 = input.length * 8;
+  const output = new Uint32Array(getOutputLength(length8));
+
+  for (let i = 0; i < length8; i += 8) {
+    output[i >> 5] |= (input[i / 8] & 0xff) << i % 32;
+  }
+
+  return output;
+}
+/*
+ * Add integers, wrapping at 2^32. This uses 16-bit operations internally
+ * to work around bugs in some JS interpreters.
+ */
+
+
+function safeAdd(x, y) {
+  const lsw = (x & 0xffff) + (y & 0xffff);
+  const msw = (x >> 16) + (y >> 16) + (lsw >> 16);
+  return msw << 16 | lsw & 0xffff;
 }
 
 async function getSessionIdFromOauthState(storageUtility, oauthState) {
@@ -29523,6 +29944,12 @@ exports["default"] = _default;
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   unsafeStringify: () => (/* binding */ unsafeStringify)
+/* harmony export */ });
+/* harmony import */ var _validate_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./validate.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/validate.js");
 
 
 Object.defineProperty(exports, "__esModule", ({
@@ -29694,6 +30121,13 @@ exports["default"] = _default;
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _native_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./native.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/native.js");
+/* harmony import */ var _rng_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./rng.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/rng.js");
+/* harmony import */ var _stringify_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./stringify.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/stringify.js");
 
 
 Object.defineProperty(exports, "__esModule", ({
@@ -29711,7 +30145,6 @@ const v3 = (0, _v.default)('v3', 0x30, _md.default);
 var _default = v3;
 exports["default"] = _default;
 
-/***/ }),
 
 /***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v35.js":
 /*!*****************************************************************************************************!*\
@@ -29719,7 +30152,10 @@ exports["default"] = _default;
   \*****************************************************************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
+function v4(options, buf, offset) {
+  if (_native_js__WEBPACK_IMPORTED_MODULE_0__["default"].randomUUID && !buf && !options) {
+    return _native_js__WEBPACK_IMPORTED_MODULE_0__["default"].randomUUID();
+  }
 
 
 Object.defineProperty(exports, "__esModule", ({
@@ -29810,6 +30246,11 @@ function v35(name, version, hashfunc) {
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _regex_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./regex.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/regex.js");
 
 
 Object.defineProperty(exports, "__esModule", ({
@@ -33723,6 +34164,42 @@ function copy(src,dest){
 		}
 	}
 }
+NamedNodeMap.prototype = {
+	length:0,
+	item:NodeList.prototype.item,
+	getNamedItem: function(key) {
+//		if(key.indexOf(':')>0 || key == 'xmlns'){
+//			return null;
+//		}
+		//console.log()
+		var i = this.length;
+		while(i--){
+			var attr = this[i];
+			//console.log(attr.nodeName,key)
+			if(attr.nodeName == key){
+				return attr;
+			}
+		}
+	},
+	setNamedItem: function(attr) {
+		var el = attr.ownerElement;
+		if(el && el!=this._ownerElement){
+			throw new DOMException(INUSE_ATTRIBUTE_ERR);
+		}
+		var oldAttr = this.getNamedItem(attr.nodeName);
+		_addNamedNode(this._ownerElement,this,attr,oldAttr);
+		return oldAttr;
+	},
+	/* returns Node */
+	setNamedItemNS: function(attr) {// raises: WRONG_DOCUMENT_ERR,NO_MODIFICATION_ALLOWED_ERR,INUSE_ATTRIBUTE_ERR
+		var el = attr.ownerElement, oldAttr;
+		if(el && el!=this._ownerElement){
+			throw new DOMException(INUSE_ATTRIBUTE_ERR);
+		}
+		oldAttr = this.getNamedItemNS(attr.namespaceURI,attr.localName);
+		_addNamedNode(this._ownerElement,this,attr,oldAttr);
+		return oldAttr;
+	},
 
 /**
 ^\w+\.prototype\.([_\w]+)\s*=\s*((?:.*\{\s*?[\r\n][\s\S]*?^})|\S.*?(?=[;\r\n]));?
@@ -36439,6 +36916,8 @@ ElementAttributes.prototype = {
 //	getType:function(uri,localName){}
 //	getType:function(i){},
 }
+ParseError.prototype = new Error();
+ParseError.prototype.name = ParseError.name
 
 
 
@@ -37588,6 +38067,15 @@ function once(emitter, name) {
     }
   });
 }
+module.exports = EventEmitter;
+module.exports.once = once;
+
+// Backwards-compat with node 0.10.x
+EventEmitter.EventEmitter = EventEmitter;
+
+EventEmitter.prototype._events = undefined;
+EventEmitter.prototype._eventsCount = 0;
+EventEmitter.prototype._maxListeners = undefined;
 
 function addErrorHandlerIfEventEmitter(emitter, handler, flags) {
   if (typeof emitter.on === 'function') {
@@ -37616,7 +38104,7 @@ function eventTargetAgnosticAddListener(emitter, name, listener, flags) {
   } else {
     throw new TypeError('The "emitter" argument must be of type EventEmitter. Received type ' + typeof emitter);
   }
-}
+});
 
 
 /***/ }),
@@ -37840,7 +38328,8 @@ function populateMaps (extensions, types) {
 }
 
 
-/***/ }),
+      return this;
+    };
 
 /***/ "./node_modules/n3/src/IRIs.js":
 /*!*************************************!*\
@@ -37884,6 +38373,9 @@ const RDF  = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
   },
 });
 
+  var evlistener = events[type];
+  if (evlistener === undefined)
+    return [];
 
 /***/ }),
 
@@ -37915,6 +38407,20 @@ __webpack_require__.r(__webpack_exports__);
 // N3.js implementations of the RDF/JS core data types
 // See https://github.com/rdfjs/representation-task-force/blob/master/interface-spec.md
 
+/***/ }),
+
+/***/ "./node_modules/mime-db/index.js":
+/*!***************************************!*\
+  !*** ./node_modules/mime-db/index.js ***!
+  \***************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+/*!
+ * mime-db
+ * Copyright(c) 2014 Jonathan Ong
+ * Copyright(c) 2015-2022 Douglas Christopher Wilson
+ * MIT Licensed
+ */
 
 
 const { rdf, xsd } = _IRIs__WEBPACK_IMPORTED_MODULE_0__["default"];
@@ -38295,7 +38801,9 @@ function quad(subject, predicate, object, graph) {
 }
 
 
-/***/ }),
+  get object() {
+    return this._object;
+  }
 
 /***/ "./node_modules/n3/src/N3Lexer.js":
 /*!****************************************!*\
@@ -38313,6 +38821,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var queue_microtask__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(queue_microtask__WEBPACK_IMPORTED_MODULE_0__);
 // **N3Lexer** tokenizes N3 documents.
 
+  // ### Returns whether this object represents the same quad as the other
+  equals(other) {
+    return !!other && this._subject.equals(other.subject)     &&
+                      this._predicate.equals(other.predicate) &&
+                      this._object.equals(other.object)       &&
+                      this._graph.equals(other.graph);
+  }
+}
 
 
 const { xsd } = _IRIs__WEBPACK_IMPORTED_MODULE_1__["default"];
@@ -39920,6 +40436,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _N3DataFactory__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./N3DataFactory */ "./node_modules/n3/src/N3DataFactory.js");
 // **N3Util** provides N3 utility functions.
 
+  // ### `_readPrefixIRI` reads the IRI of a prefix declaration
+  _readPrefixIRI(token) {
+    if (token.type !== 'IRI')
+      return this._error(`Expected IRI to follow prefix "${this._prefix}:"`, token);
+    const prefixNode = this._readEntity(token);
+    this._prefixes[this._prefix] = prefixNode.value;
+    this._prefixCallback(this._prefix, prefixNode);
+    return this._readDeclarationPunctuation;
+  }
 
 
 // Tests whether the given term represents an IRI
@@ -39986,7 +40511,23 @@ function prefixes(defaultPrefixes, factory) {
 }
 
 
-/***/ }),
+  // ### `_readForwardPath` reads a '!' path
+  _readForwardPath(token) {
+    let subject, predicate;
+    const object = this._blankNode();
+    // The next token is the predicate
+    if ((predicate = this._readEntity(token)) === undefined)
+      return;
+    // If we were reading a subject, replace the subject by the path's object
+    if (this._predicate === null)
+      subject = this._subject, this._subject = object;
+    // If we were reading an object, replace the subject by the path's object
+    else
+      subject = this._object,  this._object  = object;
+    // Emit the path's current quad and read its next section
+    this._emit(subject, predicate, object, this._graph);
+    return this._readPath;
+  }
 
 /***/ "./node_modules/querystring/decode.js":
 /*!********************************************!*\
@@ -40016,6 +40557,25 @@ function prefixes(defaultPrefixes, factory) {
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+  // ### `_readRDFStarTail` reads the end of a nested RDF* triple
+  _readRDFStarTail(token) {
+    if (token.type !== '>>')
+      return this._error(`Expected >> but got ${token.type}`, token);
+    // Read the quad and restore the previous context
+    const quad = this._quad(this._subject, this._predicate, this._object,
+      this._graph || this.DEFAULTGRAPH);
+    this._restoreContext('<<', token);
+    // If the triple was the subject, continue by reading the predicate.
+    if (this._subject === null) {
+      this._subject = quad;
+      return this._readPredicate;
+    }
+    // If the triple was the object, read context end.
+    else {
+      this._object = quad;
+      return this._getContextEndReader();
+    }
+  }
 
 
 // If obj.hasOwnProperty has been overridden, then calling
@@ -40161,13 +40721,29 @@ module.exports = function(obj, sep, eq, name) {
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   inDefaultGraph: () => (/* binding */ inDefaultGraph),
+/* harmony export */   isBlankNode: () => (/* binding */ isBlankNode),
+/* harmony export */   isDefaultGraph: () => (/* binding */ isDefaultGraph),
+/* harmony export */   isLiteral: () => (/* binding */ isLiteral),
+/* harmony export */   isNamedNode: () => (/* binding */ isNamedNode),
+/* harmony export */   isVariable: () => (/* binding */ isVariable),
+/* harmony export */   prefix: () => (/* binding */ prefix),
+/* harmony export */   prefixes: () => (/* binding */ prefixes)
+/* harmony export */ });
+/* harmony import */ var _N3DataFactory__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./N3DataFactory */ "./node_modules/n3/src/N3DataFactory.js");
+// **N3Util** provides N3 utility functions.
 
 
 exports.decode = exports.parse = __webpack_require__(/*! ./decode */ "./node_modules/querystring/decode.js");
 exports.encode = exports.stringify = __webpack_require__(/*! ./encode */ "./node_modules/querystring/encode.js");
 
 
-/***/ }),
+// Tests whether the given term represents an IRI
+function isNamedNode(term) {
+  return !!term && term.termType === 'NamedNode';
+}
 
 /***/ "./node_modules/queue-microtask/index.js":
 /*!***********************************************!*\
@@ -41345,6 +41921,10 @@ var XMLHandler = /*#__PURE__*/function (_Handler3) {
           var _xhtmlHandler = new XHTMLHandler(this.response, dom);
           return _xhtmlHandler.parse(fetcher, responseText, options);
         }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
       }
 
       // At this point we should check the namespace document (cache it!) and
@@ -42131,6 +42711,7 @@ var Fetcher = /*#__PURE__*/function () {
       } else {
         kb.add(originalUri, predicate, obj, why);
       }
+      return undefined;
     }
   }, {
     key: "parseLinkHeader",
@@ -42164,6 +42745,13 @@ var Fetcher = /*#__PURE__*/function () {
           this.linkData(originalUri, rel, href, reqNode);
         }
       }
+      var now = new Date();
+      var timeNow = '[' + now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds() + '] ';
+      kb.add(req, this.ns.rdfs('label'), kb.rdfFactory.literal(timeNow + ' Request for ' + docuri), this.appNode);
+      // We store the docuri as a string, not as a node,
+      // see https://github.com/linkeddata/rdflib.js/pull/427#pullrequestreview-447910061
+      kb.add(req, this.ns.link('requestedURI'), kb.rdfFactory.literal(docuri), this.appNode);
+      kb.add(req, this.ns.link('status'), kb.collection(), this.appNode);
     }
   }, {
     key: "doneFetch",
@@ -42904,6 +43492,7 @@ var Fetcher = /*#__PURE__*/function () {
       } else {
         this.fetchCallbacks[uri].push(callback);
       }
+      return uri;
     }
   }, {
     key: "acceptString",
@@ -43044,7 +43633,6 @@ var Fetcher = /*#__PURE__*/function () {
 Fetcher.HANDLERS = defaultHandlers;
 Fetcher.CONTENT_TYPE_BY_EXT = CONTENT_TYPE_BY_EXT;
 
-/***/ }),
 
 /***/ "./node_modules/rdflib/esm/formula.js":
 /*!********************************************!*\
@@ -43558,6 +44146,11 @@ var Formula = /*#__PURE__*/function (_Node) {
             range = ref1[l];
             types[range.toNT()] = st;
           }
+          return true;
+        } else if ((0,_utils_terms__WEBPACK_IMPORTED_MODULE_16__.isStatement)(s)) {
+          return this.holds(s.subject, s.predicate, s.object, s.graph);
+        } else if (s.statements) {
+          return this.holds(s.statements);
         }
       }
       ref2 = this.statementsMatching(void 0, void 0, subject);
@@ -43701,6 +44294,9 @@ var Formula = /*#__PURE__*/function (_Node) {
         } else if (s.statements) {
           return this.holds(s.statements);
         }
+        if (!n) {
+          tops[k] = v;
+        }
       }
       var st = this.anyStatementMatching(s, p, o, g);
       return st != null;
@@ -43736,6 +44332,7 @@ var Formula = /*#__PURE__*/function (_Node) {
         context.addAll(statements);
         return node;
       }
+      return tops;
     }
 
     /**
@@ -44075,7 +44672,7 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 
 
-
+/***/ }),
 
 
 
@@ -44146,7 +44743,6 @@ var LiveStore = /*#__PURE__*/function (_ConnectedStore) {
   return (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_0__["default"])(LiveStore);
 }(ConnectedStore);
 
-/***/ }),
 
 /***/ "./node_modules/rdflib/esm/jsonldparser.js":
 /*!*************************************************!*\
@@ -46420,6 +47016,15 @@ var NamedNode = /*#__PURE__*/function (_Node) {
     }
     return _this;
   }
+  function bindingsDebug(nbs) {
+    var str = 'Bindings: ';
+    var i;
+    var n = nbs.length;
+    for (i = 0; i < n; i++) {
+      str += bindingDebug(nbs[i][0]) + ';\n\t';
+    }
+    return str;
+  } // bindingsDebug
 
   /**
    * Returns an $rdf node for the containing directory, ending in slash.
@@ -46856,6 +47461,7 @@ function parse(str, kb, base) {
     } else {
       return;
     }
+    return c;
   }
   function executeErrorCallback(e) {
     if (
@@ -47091,7 +47697,10 @@ function queryToSPARQL(query) {
   return getSPARQL(query);
 }
 
-/***/ }),
+    var item;
+    var i;
+    var n = pattern.length;
+    // log.debug(level + "Match "+n+" left, bs so far:"+bindingDebug(bindingsSoFar))
 
 /***/ "./node_modules/rdflib/esm/query.js":
 /*!******************************************!*\
@@ -47135,6 +47744,22 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+  var constraintsSatisfied = function constraintsSatisfied(bindings, constraints) {
+    var res = true;
+    var x;
+    var test;
+    for (x in bindings) {
+      if (bindings.hasOwnProperty(x)) {
+        if (constraints[x]) {
+          test = constraints[x].test;
+          if (test && !test(bindings[x])) {
+            res = false;
+          }
+        }
+      }
+    }
+    return res;
+  };
 
 
 /**
@@ -47693,6 +48318,58 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+        base = node.baseURI;
+        node = node.documentElement;
+        if (!node.baseURI) {
+          node.baseURI = base;
+        }
+        this.setContext(node);
+      } else if (node.parentNode.nodeType === Node.DOCUMENT_NODE) {
+        this.setContext(node);
+      }
+      var queue = [];
+      // Fix for Firefox that includes the hash in the base URI
+      var removeHash = function removeHash(baseURI) {
+        // Fix for undefined baseURI property
+        if (!baseURI && options && options.baseURI) {
+          return options.baseURI;
+        }
+        var hash = baseURI.indexOf('#');
+        if (hash >= 0) {
+          baseURI = baseURI.substring(0, hash);
+        }
+        if (options && options.baseURIMap) {
+          baseURI = options.baseURIMap(baseURI);
+        }
+        return baseURI;
+      };
+      queue.push({
+        current: node,
+        context: this.push(null, removeHash(node.baseURI))
+      });
+      while (queue.length > 0) {
+        var item = queue.shift();
+        if (item.parent) {
+          // Sequence Step 14: list triple generation
+          if (item.context.parent && item.context.parent.listMapping === item.listMapping) {
+            // Skip a child context with exactly the same mapping
+            continue;
+          }
+          // console.log("Generating lists for "+item.subject+", tag "+item.parent.localName)
+          for (var _predicate in item.listMapping) {
+            var list = item.listMapping[_predicate];
+            if (list.length === 0) {
+              this.addTriple(item.parent, item.subject, _predicate, {
+                type: RDFaProcessor.objectURI,
+                value: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'
+              });
+              continue;
+            }
+            var bnodes = [];
+            for (var _i = 0; _i < list.length; _i++) {
+              bnodes.push(this.newBlankNode());
+              // this.newSubject(item.parent,bnodes[i])
+            }
 
 if (typeof Node === 'undefined') {
   //  @@@@@@ Global. Interface to xmldom.
@@ -50664,6 +51341,9 @@ function SPARQLToQuery(SPARQL, testMode, kb) {
         _log__WEBPACK_IMPORTED_MODULE_0__["default"].warn('Incorrect SPARQL variable in SELECT: ' + input[x]);
       }
     }
+    token2 = replaceKeywords(token2);
+    _log__WEBPACK_IMPORTED_MODULE_0__["default"].info('SPARQL Tokens: ' + token2);
+    return token2;
   }
   function getPrefixDeclarations(input) {
     var prefInd = arrayIndicesOf('PREFIX', input);
@@ -52358,6 +53038,31 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+      var openWebsocket = function openWebsocket() {
+        // From https://github.com/solid/solid-spec#live-updates
+        var socket;
+        if (typeof WebSocket !== 'undefined') {
+          socket = new WebSocket(validWssURI);
+        } else if (typeof window !== 'undefined' && window.WebSocket) {
+          socket = window.WebSocket(validWssURI);
+        } else {
+          // console.log('Live update disabled, as WebSocket not supported by platform :-(')
+          return;
+        }
+        socket.onopen = function () {
+          // console.log('    websocket open')
+          retryTimeout = 1500; // reset timeout to fast on success
+          this.send('sub ' + doc.value);
+          if (retries) {
+            // console.log('Web socket has been down, better check for any news.')
+            updater.requestDownstreamAction(doc, theHandler);
+          }
+        };
+        var control = self.patchControlFor(doc);
+        control.upstreamCount = 0;
+        socket.onerror = function onerror(err) {
+          // console.log('Error on Websocket:', err)
+        };
 
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -53791,6 +54496,16 @@ __webpack_require__.r(__webpack_exports__);
  */
 var alert = alert || console.log;
 
+/**
+ * Defines a simple debugging function
+ * @method output
+ * @param o {String}
+ */
+function output(o) {
+  var k = document.createElement('div');
+  k.textContent = o;
+  document.body.appendChild(k);
+}
 
 /**
  * Gets the document part of an URI
@@ -53827,6 +54542,29 @@ function hostpart(u) {
   }
 }
 
+/***/ }),
+
+/***/ "./node_modules/rdflib/esm/utils.js":
+/*!******************************************!*\
+  !*** ./node_modules/rdflib/esm/utils.js ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   AJAR_handleNewTerm: () => (/* binding */ AJAR_handleNewTerm),
+/* harmony export */   ArrayIndexOf: () => (/* binding */ ArrayIndexOf),
+/* harmony export */   appliedFactoryMethods: () => (/* binding */ appliedFactoryMethods),
+/* harmony export */   arrayToStatements: () => (/* binding */ arrayToStatements)
+/* harmony export */ });
+/* harmony import */ var _log__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./log */ "./node_modules/rdflib/esm/log.js");
+/* harmony import */ var _uri__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./uri */ "./node_modules/rdflib/esm/uri.js");
+/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils-js */ "./node_modules/rdflib/esm/utils-js.js");
+
+
+
+/** RDF/JS spec Typeguards */
 /**
  * Joins an URI with a base
  * @param given - The relative part
@@ -57885,7 +58623,9 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*! https://mths.be/punycode v1.3.2 by @mathia
 }(this));
 
 
-/***/ }),
+				if (currentValue < n && ++delta > maxInt) {
+					error('overflow');
+				}
 
 /***/ "./node_modules/url/url.js":
 /*!*********************************!*\
@@ -58190,6 +58930,7 @@ Url.prototype.parse = function(url, parseQueryString, slashesDenoteHost) {
       // you call it with a domain that already is ASCII-only.
       this.hostname = punycode.toASCII(this.hostname);
     }
+  }
 
     var p = this.port ? ':' + this.port : '';
     var h = this.hostname || '';
@@ -58666,15 +59407,15 @@ module.exports = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "NIL": () => (/* reexport safe */ _nil_js__WEBPACK_IMPORTED_MODULE_4__["default"]),
-/* harmony export */   "parse": () => (/* reexport safe */ _parse_js__WEBPACK_IMPORTED_MODULE_8__["default"]),
-/* harmony export */   "stringify": () => (/* reexport safe */ _stringify_js__WEBPACK_IMPORTED_MODULE_7__["default"]),
-/* harmony export */   "v1": () => (/* reexport safe */ _v1_js__WEBPACK_IMPORTED_MODULE_0__["default"]),
-/* harmony export */   "v3": () => (/* reexport safe */ _v3_js__WEBPACK_IMPORTED_MODULE_1__["default"]),
-/* harmony export */   "v4": () => (/* reexport safe */ _v4_js__WEBPACK_IMPORTED_MODULE_2__["default"]),
-/* harmony export */   "v5": () => (/* reexport safe */ _v5_js__WEBPACK_IMPORTED_MODULE_3__["default"]),
-/* harmony export */   "validate": () => (/* reexport safe */ _validate_js__WEBPACK_IMPORTED_MODULE_6__["default"]),
-/* harmony export */   "version": () => (/* reexport safe */ _version_js__WEBPACK_IMPORTED_MODULE_5__["default"])
+/* harmony export */   NIL: () => (/* reexport safe */ _nil_js__WEBPACK_IMPORTED_MODULE_4__["default"]),
+/* harmony export */   parse: () => (/* reexport safe */ _parse_js__WEBPACK_IMPORTED_MODULE_8__["default"]),
+/* harmony export */   stringify: () => (/* reexport safe */ _stringify_js__WEBPACK_IMPORTED_MODULE_7__["default"]),
+/* harmony export */   v1: () => (/* reexport safe */ _v1_js__WEBPACK_IMPORTED_MODULE_0__["default"]),
+/* harmony export */   v3: () => (/* reexport safe */ _v3_js__WEBPACK_IMPORTED_MODULE_1__["default"]),
+/* harmony export */   v4: () => (/* reexport safe */ _v4_js__WEBPACK_IMPORTED_MODULE_2__["default"]),
+/* harmony export */   v5: () => (/* reexport safe */ _v5_js__WEBPACK_IMPORTED_MODULE_3__["default"]),
+/* harmony export */   validate: () => (/* reexport safe */ _validate_js__WEBPACK_IMPORTED_MODULE_6__["default"]),
+/* harmony export */   version: () => (/* reexport safe */ _version_js__WEBPACK_IMPORTED_MODULE_5__["default"])
 /* harmony export */ });
 /* harmony import */ var _v1_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./v1.js */ "./node_modules/uuid/dist/esm-browser/v1.js");
 /* harmony import */ var _v3_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./v3.js */ "./node_modules/uuid/dist/esm-browser/v3.js");
@@ -59334,8 +60075,8 @@ var v3 = (0,_v35_js__WEBPACK_IMPORTED_MODULE_0__["default"])('v3', 0x30, _md5_js
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "DNS": () => (/* binding */ DNS),
-/* harmony export */   "URL": () => (/* binding */ URL),
+/* harmony export */   DNS: () => (/* binding */ DNS),
+/* harmony export */   URL: () => (/* binding */ URL),
 /* harmony export */   "default": () => (/* export default binding */ __WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _stringify_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./stringify.js */ "./node_modules/uuid/dist/esm-browser/stringify.js");
@@ -59783,7 +60524,11 @@ module.exports = _interopRequireDefault, module.exports.__esModule = true, modul
 /***/ ((module) => {
 
 function _isNativeFunction(fn) {
-  return Function.toString.call(fn).indexOf("[native code]") !== -1;
+  try {
+    return Function.toString.call(fn).indexOf("[native code]") !== -1;
+  } catch (e) {
+    return typeof fn === "function";
+  }
 }
 module.exports = _isNativeFunction, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
@@ -59829,31 +60574,31 @@ module.exports = _iterableToArray, module.exports.__esModule = true, module.expo
   \*********************************************************************/
 /***/ ((module) => {
 
-function _iterableToArrayLimit(arr, i) {
-  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
-  if (null != _i) {
-    var _s,
-      _e,
-      _x,
-      _r,
-      _arr = [],
-      _n = !0,
-      _d = !1;
+function _iterableToArrayLimit(r, l) {
+  var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+  if (null != t) {
+    var e,
+      n,
+      i,
+      u,
+      a = [],
+      f = !0,
+      o = !1;
     try {
-      if (_x = (_i = _i.call(arr)).next, 0 === i) {
-        if (Object(_i) !== _i) return;
-        _n = !1;
-      } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0);
-    } catch (err) {
-      _d = !0, _e = err;
+      if (i = (t = t.call(r)).next, 0 === l) {
+        if (Object(t) !== t) return;
+        f = !1;
+      } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0);
+    } catch (r) {
+      o = !0, n = r;
     } finally {
       try {
-        if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return;
+        if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return;
       } finally {
-        if (_d) throw _e;
+        if (o) throw n;
       }
     }
-    return _arr;
+    return a;
   }
 }
 module.exports = _iterableToArrayLimit, module.exports.__esModule = true, module.exports["default"] = module.exports;
@@ -59916,304 +60661,304 @@ var _typeof = (__webpack_require__(/*! ./typeof.js */ "./node_modules/@babel/run
 function _regeneratorRuntime() {
   "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
   module.exports = _regeneratorRuntime = function _regeneratorRuntime() {
-    return exports;
+    return e;
   }, module.exports.__esModule = true, module.exports["default"] = module.exports;
-  var exports = {},
-    Op = Object.prototype,
-    hasOwn = Op.hasOwnProperty,
-    defineProperty = Object.defineProperty || function (obj, key, desc) {
-      obj[key] = desc.value;
+  var t,
+    e = {},
+    r = Object.prototype,
+    n = r.hasOwnProperty,
+    o = Object.defineProperty || function (t, e, r) {
+      t[e] = r.value;
     },
-    $Symbol = "function" == typeof Symbol ? Symbol : {},
-    iteratorSymbol = $Symbol.iterator || "@@iterator",
-    asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator",
-    toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
-  function define(obj, key, value) {
-    return Object.defineProperty(obj, key, {
-      value: value,
+    i = "function" == typeof Symbol ? Symbol : {},
+    a = i.iterator || "@@iterator",
+    c = i.asyncIterator || "@@asyncIterator",
+    u = i.toStringTag || "@@toStringTag";
+  function define(t, e, r) {
+    return Object.defineProperty(t, e, {
+      value: r,
       enumerable: !0,
       configurable: !0,
       writable: !0
-    }), obj[key];
+    }), t[e];
   }
   try {
     define({}, "");
-  } catch (err) {
-    define = function define(obj, key, value) {
-      return obj[key] = value;
+  } catch (t) {
+    define = function define(t, e, r) {
+      return t[e] = r;
     };
   }
-  function wrap(innerFn, outerFn, self, tryLocsList) {
-    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator,
-      generator = Object.create(protoGenerator.prototype),
-      context = new Context(tryLocsList || []);
-    return defineProperty(generator, "_invoke", {
-      value: makeInvokeMethod(innerFn, self, context)
-    }), generator;
+  function wrap(t, e, r, n) {
+    var i = e && e.prototype instanceof Generator ? e : Generator,
+      a = Object.create(i.prototype),
+      c = new Context(n || []);
+    return o(a, "_invoke", {
+      value: makeInvokeMethod(t, r, c)
+    }), a;
   }
-  function tryCatch(fn, obj, arg) {
+  function tryCatch(t, e, r) {
     try {
       return {
         type: "normal",
-        arg: fn.call(obj, arg)
+        arg: t.call(e, r)
       };
-    } catch (err) {
+    } catch (t) {
       return {
         type: "throw",
-        arg: err
+        arg: t
       };
     }
   }
-  exports.wrap = wrap;
-  var ContinueSentinel = {};
+  e.wrap = wrap;
+  var h = "suspendedStart",
+    l = "suspendedYield",
+    f = "executing",
+    s = "completed",
+    y = {};
   function Generator() {}
   function GeneratorFunction() {}
   function GeneratorFunctionPrototype() {}
-  var IteratorPrototype = {};
-  define(IteratorPrototype, iteratorSymbol, function () {
+  var p = {};
+  define(p, a, function () {
     return this;
   });
-  var getProto = Object.getPrototypeOf,
-    NativeIteratorPrototype = getProto && getProto(getProto(values([])));
-  NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype);
-  var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype);
-  function defineIteratorMethods(prototype) {
-    ["next", "throw", "return"].forEach(function (method) {
-      define(prototype, method, function (arg) {
-        return this._invoke(method, arg);
+  var d = Object.getPrototypeOf,
+    v = d && d(d(values([])));
+  v && v !== r && n.call(v, a) && (p = v);
+  var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p);
+  function defineIteratorMethods(t) {
+    ["next", "throw", "return"].forEach(function (e) {
+      define(t, e, function (t) {
+        return this._invoke(e, t);
       });
     });
   }
-  function AsyncIterator(generator, PromiseImpl) {
-    function invoke(method, arg, resolve, reject) {
-      var record = tryCatch(generator[method], generator, arg);
-      if ("throw" !== record.type) {
-        var result = record.arg,
-          value = result.value;
-        return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) {
-          invoke("next", value, resolve, reject);
-        }, function (err) {
-          invoke("throw", err, resolve, reject);
-        }) : PromiseImpl.resolve(value).then(function (unwrapped) {
-          result.value = unwrapped, resolve(result);
-        }, function (error) {
-          return invoke("throw", error, resolve, reject);
+  function AsyncIterator(t, e) {
+    function invoke(r, o, i, a) {
+      var c = tryCatch(t[r], t, o);
+      if ("throw" !== c.type) {
+        var u = c.arg,
+          h = u.value;
+        return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) {
+          invoke("next", t, i, a);
+        }, function (t) {
+          invoke("throw", t, i, a);
+        }) : e.resolve(h).then(function (t) {
+          u.value = t, i(u);
+        }, function (t) {
+          return invoke("throw", t, i, a);
         });
       }
-      reject(record.arg);
+      a(c.arg);
     }
-    var previousPromise;
-    defineProperty(this, "_invoke", {
-      value: function value(method, arg) {
+    var r;
+    o(this, "_invoke", {
+      value: function value(t, n) {
         function callInvokeWithMethodAndArg() {
-          return new PromiseImpl(function (resolve, reject) {
-            invoke(method, arg, resolve, reject);
+          return new e(function (e, r) {
+            invoke(t, n, e, r);
           });
         }
-        return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
+        return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
       }
     });
   }
-  function makeInvokeMethod(innerFn, self, context) {
-    var state = "suspendedStart";
-    return function (method, arg) {
-      if ("executing" === state) throw new Error("Generator is already running");
-      if ("completed" === state) {
-        if ("throw" === method) throw arg;
-        return doneResult();
+  function makeInvokeMethod(e, r, n) {
+    var o = h;
+    return function (i, a) {
+      if (o === f) throw new Error("Generator is already running");
+      if (o === s) {
+        if ("throw" === i) throw a;
+        return {
+          value: t,
+          done: !0
+        };
       }
-      for (context.method = method, context.arg = arg;;) {
-        var delegate = context.delegate;
-        if (delegate) {
-          var delegateResult = maybeInvokeDelegate(delegate, context);
-          if (delegateResult) {
-            if (delegateResult === ContinueSentinel) continue;
-            return delegateResult;
+      for (n.method = i, n.arg = a;;) {
+        var c = n.delegate;
+        if (c) {
+          var u = maybeInvokeDelegate(c, n);
+          if (u) {
+            if (u === y) continue;
+            return u;
           }
         }
-        if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) {
-          if ("suspendedStart" === state) throw state = "completed", context.arg;
-          context.dispatchException(context.arg);
-        } else "return" === context.method && context.abrupt("return", context.arg);
-        state = "executing";
-        var record = tryCatch(innerFn, self, context);
-        if ("normal" === record.type) {
-          if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue;
+        if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) {
+          if (o === h) throw o = s, n.arg;
+          n.dispatchException(n.arg);
+        } else "return" === n.method && n.abrupt("return", n.arg);
+        o = f;
+        var p = tryCatch(e, r, n);
+        if ("normal" === p.type) {
+          if (o = n.done ? s : l, p.arg === y) continue;
           return {
-            value: record.arg,
-            done: context.done
+            value: p.arg,
+            done: n.done
           };
         }
-        "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg);
+        "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg);
       }
     };
   }
-  function maybeInvokeDelegate(delegate, context) {
-    var methodName = context.method,
-      method = delegate.iterator[methodName];
-    if (undefined === method) return context.delegate = null, "throw" === methodName && delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method) || "return" !== methodName && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel;
-    var record = tryCatch(method, delegate.iterator, context.arg);
-    if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel;
-    var info = record.arg;
-    return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel);
+  function maybeInvokeDelegate(e, r) {
+    var n = r.method,
+      o = e.iterator[n];
+    if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y;
+    var i = tryCatch(o, e.iterator, r.arg);
+    if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y;
+    var a = i.arg;
+    return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y);
   }
-  function pushTryEntry(locs) {
-    var entry = {
-      tryLoc: locs[0]
+  function pushTryEntry(t) {
+    var e = {
+      tryLoc: t[0]
     };
-    1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry);
+    1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e);
   }
-  function resetTryEntry(entry) {
-    var record = entry.completion || {};
-    record.type = "normal", delete record.arg, entry.completion = record;
+  function resetTryEntry(t) {
+    var e = t.completion || {};
+    e.type = "normal", delete e.arg, t.completion = e;
   }
-  function Context(tryLocsList) {
+  function Context(t) {
     this.tryEntries = [{
       tryLoc: "root"
-    }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0);
+    }], t.forEach(pushTryEntry, this), this.reset(!0);
   }
-  function values(iterable) {
-    if (iterable) {
-      var iteratorMethod = iterable[iteratorSymbol];
-      if (iteratorMethod) return iteratorMethod.call(iterable);
-      if ("function" == typeof iterable.next) return iterable;
-      if (!isNaN(iterable.length)) {
-        var i = -1,
-          next = function next() {
-            for (; ++i < iterable.length;) if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next;
-            return next.value = undefined, next.done = !0, next;
+  function values(e) {
+    if (e || "" === e) {
+      var r = e[a];
+      if (r) return r.call(e);
+      if ("function" == typeof e.next) return e;
+      if (!isNaN(e.length)) {
+        var o = -1,
+          i = function next() {
+            for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next;
+            return next.value = t, next.done = !0, next;
           };
-        return next.next = next;
+        return i.next = i;
       }
     }
-    return {
-      next: doneResult
-    };
+    throw new TypeError(_typeof(e) + " is not iterable");
   }
-  function doneResult() {
-    return {
-      value: undefined,
-      done: !0
-    };
-  }
-  return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", {
+  return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", {
     value: GeneratorFunctionPrototype,
     configurable: !0
-  }), defineProperty(GeneratorFunctionPrototype, "constructor", {
+  }), o(GeneratorFunctionPrototype, "constructor", {
     value: GeneratorFunction,
     configurable: !0
-  }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) {
-    var ctor = "function" == typeof genFun && genFun.constructor;
-    return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name));
-  }, exports.mark = function (genFun) {
-    return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun;
-  }, exports.awrap = function (arg) {
+  }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) {
+    var e = "function" == typeof t && t.constructor;
+    return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name));
+  }, e.mark = function (t) {
+    return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t;
+  }, e.awrap = function (t) {
     return {
-      __await: arg
+      __await: t
     };
-  }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () {
+  }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () {
     return this;
-  }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) {
-    void 0 === PromiseImpl && (PromiseImpl = Promise);
-    var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl);
-    return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) {
-      return result.done ? result.value : iter.next();
+  }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) {
+    void 0 === i && (i = Promise);
+    var a = new AsyncIterator(wrap(t, r, n, o), i);
+    return e.isGeneratorFunction(r) ? a : a.next().then(function (t) {
+      return t.done ? t.value : a.next();
     });
-  }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () {
+  }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () {
     return this;
-  }), define(Gp, "toString", function () {
+  }), define(g, "toString", function () {
     return "[object Generator]";
-  }), exports.keys = function (val) {
-    var object = Object(val),
-      keys = [];
-    for (var key in object) keys.push(key);
-    return keys.reverse(), function next() {
-      for (; keys.length;) {
-        var key = keys.pop();
-        if (key in object) return next.value = key, next.done = !1, next;
+  }), e.keys = function (t) {
+    var e = Object(t),
+      r = [];
+    for (var n in e) r.push(n);
+    return r.reverse(), function next() {
+      for (; r.length;) {
+        var t = r.pop();
+        if (t in e) return next.value = t, next.done = !1, next;
       }
       return next.done = !0, next;
     };
-  }, exports.values = values, Context.prototype = {
+  }, e.values = values, Context.prototype = {
     constructor: Context,
-    reset: function reset(skipTempReset) {
-      if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined);
+    reset: function reset(e) {
+      if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t);
     },
     stop: function stop() {
       this.done = !0;
-      var rootRecord = this.tryEntries[0].completion;
-      if ("throw" === rootRecord.type) throw rootRecord.arg;
+      var t = this.tryEntries[0].completion;
+      if ("throw" === t.type) throw t.arg;
       return this.rval;
     },
-    dispatchException: function dispatchException(exception) {
-      if (this.done) throw exception;
-      var context = this;
-      function handle(loc, caught) {
-        return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught;
+    dispatchException: function dispatchException(e) {
+      if (this.done) throw e;
+      var r = this;
+      function handle(n, o) {
+        return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o;
       }
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i],
-          record = entry.completion;
-        if ("root" === entry.tryLoc) return handle("end");
-        if (entry.tryLoc <= this.prev) {
-          var hasCatch = hasOwn.call(entry, "catchLoc"),
-            hasFinally = hasOwn.call(entry, "finallyLoc");
-          if (hasCatch && hasFinally) {
-            if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0);
-            if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc);
-          } else if (hasCatch) {
-            if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0);
+      for (var o = this.tryEntries.length - 1; o >= 0; --o) {
+        var i = this.tryEntries[o],
+          a = i.completion;
+        if ("root" === i.tryLoc) return handle("end");
+        if (i.tryLoc <= this.prev) {
+          var c = n.call(i, "catchLoc"),
+            u = n.call(i, "finallyLoc");
+          if (c && u) {
+            if (this.prev < i.catchLoc) return handle(i.catchLoc, !0);
+            if (this.prev < i.finallyLoc) return handle(i.finallyLoc);
+          } else if (c) {
+            if (this.prev < i.catchLoc) return handle(i.catchLoc, !0);
           } else {
-            if (!hasFinally) throw new Error("try statement without catch or finally");
-            if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc);
+            if (!u) throw new Error("try statement without catch or finally");
+            if (this.prev < i.finallyLoc) return handle(i.finallyLoc);
           }
         }
       }
     },
-    abrupt: function abrupt(type, arg) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) {
-          var finallyEntry = entry;
+    abrupt: function abrupt(t, e) {
+      for (var r = this.tryEntries.length - 1; r >= 0; --r) {
+        var o = this.tryEntries[r];
+        if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) {
+          var i = o;
           break;
         }
       }
-      finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null);
-      var record = finallyEntry ? finallyEntry.completion : {};
-      return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record);
+      i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null);
+      var a = i ? i.completion : {};
+      return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a);
     },
-    complete: function complete(record, afterLoc) {
-      if ("throw" === record.type) throw record.arg;
-      return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel;
+    complete: function complete(t, e) {
+      if ("throw" === t.type) throw t.arg;
+      return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y;
     },
-    finish: function finish(finallyLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel;
+    finish: function finish(t) {
+      for (var e = this.tryEntries.length - 1; e >= 0; --e) {
+        var r = this.tryEntries[e];
+        if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y;
       }
     },
-    "catch": function _catch(tryLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.tryLoc === tryLoc) {
-          var record = entry.completion;
-          if ("throw" === record.type) {
-            var thrown = record.arg;
-            resetTryEntry(entry);
+    "catch": function _catch(t) {
+      for (var e = this.tryEntries.length - 1; e >= 0; --e) {
+        var r = this.tryEntries[e];
+        if (r.tryLoc === t) {
+          var n = r.completion;
+          if ("throw" === n.type) {
+            var o = n.arg;
+            resetTryEntry(r);
           }
-          return thrown;
+          return o;
         }
       }
       throw new Error("illegal catch attempt");
     },
-    delegateYield: function delegateYield(iterable, resultName, nextLoc) {
+    delegateYield: function delegateYield(e, r, n) {
       return this.delegate = {
-        iterator: values(iterable),
-        resultName: resultName,
-        nextLoc: nextLoc
-      }, "next" === this.method && (this.arg = undefined), ContinueSentinel;
+        iterator: values(e),
+        resultName: r,
+        nextLoc: n
+      }, "next" === this.method && (this.arg = t), y;
     }
-  }, exports;
+  }, e;
 }
 module.exports = _regeneratorRuntime, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
@@ -60333,14 +61078,14 @@ module.exports = _toPropertyKey, module.exports.__esModule = true, module.export
   \*******************************************************/
 /***/ ((module) => {
 
-function _typeof(obj) {
+function _typeof(o) {
   "@babel/helpers - typeof";
 
-  return (module.exports = _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
-    return typeof obj;
-  } : function (obj) {
-    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-  }, module.exports.__esModule = true, module.exports["default"] = module.exports), _typeof(obj);
+  return (module.exports = _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
+    return typeof o;
+  } : function (o) {
+    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
+  }, module.exports.__esModule = true, module.exports["default"] = module.exports), _typeof(o);
 }
 module.exports = _typeof, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
@@ -60619,11 +61364,6 @@ function _inherits(subClass, superClass) {
       writable: true,
       configurable: true
     }
-  });
-  Object.defineProperty(subClass, "prototype", {
-    writable: false
-  });
-  if (superClass) (0,_setPrototypeOf_js__WEBPACK_IMPORTED_MODULE_0__["default"])(subClass, superClass);
 }
 
 /***/ }),
@@ -60716,12 +61456,265 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _toPrimitive_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./toPrimitive.js */ "./node_modules/@babel/runtime/helpers/esm/toPrimitive.js");
 
 
-function _toPropertyKey(arg) {
-  var key = (0,_toPrimitive_js__WEBPACK_IMPORTED_MODULE_1__["default"])(arg, "string");
-  return (0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(key) === "symbol" ? key : String(key);
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+/**
+ * If expires_in isn't specified for the access token, we assume its lifetime is
+ * 10 minutes.
+ */
+const DEFAULT_EXPIRATION_TIME_SECONDS = 600;
+function isExpectedAuthError(statusCode) {
+    // As per https://tools.ietf.org/html/rfc7235#section-3.1 and https://tools.ietf.org/html/rfc7235#section-3.1,
+    // a response failing because the provided credentials aren't accepted by the
+    // server can get a 401 or a 403 response.
+    return [401, 403].includes(statusCode);
+}
+async function buildDpopFetchOptions(targetUrl, authToken, dpopKey, defaultOptions) {
+    var _a;
+    const headers = new _inrupt_universal_fetch__WEBPACK_IMPORTED_MODULE_2__.Headers(defaultOptions === null || defaultOptions === void 0 ? void 0 : defaultOptions.headers);
+    // Any pre-existing Authorization header should be overriden.
+    headers.set("Authorization", `DPoP ${authToken}`);
+    headers.set("DPoP", await createDpopHeader(targetUrl, (_a = defaultOptions === null || defaultOptions === void 0 ? void 0 : defaultOptions.method) !== null && _a !== void 0 ? _a : "get", dpopKey));
+    return {
+        ...defaultOptions,
+        headers,
+    };
+}
+async function buildAuthenticatedHeaders(targetUrl, authToken, dpopKey, defaultOptions) {
+    if (dpopKey !== undefined) {
+        return buildDpopFetchOptions(targetUrl, authToken, dpopKey, defaultOptions);
+    }
+    const headers = new _inrupt_universal_fetch__WEBPACK_IMPORTED_MODULE_2__.Headers(defaultOptions === null || defaultOptions === void 0 ? void 0 : defaultOptions.headers);
+    // Any pre-existing Authorization header should be overriden.
+    headers.set("Authorization", `Bearer ${authToken}`);
+    return {
+        ...defaultOptions,
+        headers,
+    };
+}
+async function makeAuthenticatedRequest(unauthFetch, accessToken, url, defaultRequestInit, dpopKey) {
+    return unauthFetch(url, await buildAuthenticatedHeaders(url.toString(), accessToken, dpopKey, defaultRequestInit));
+}
+async function refreshAccessToken(refreshOptions, dpopKey, eventEmitter) {
+    var _a;
+    const tokenSet = await refreshOptions.tokenRefresher.refresh(refreshOptions.sessionId, refreshOptions.refreshToken, dpopKey);
+    eventEmitter === null || eventEmitter === void 0 ? void 0 : eventEmitter.emit(EVENTS.SESSION_EXTENDED, (_a = tokenSet.expiresIn) !== null && _a !== void 0 ? _a : DEFAULT_EXPIRATION_TIME_SECONDS);
+    if (typeof tokenSet.refreshToken === "string") {
+        eventEmitter === null || eventEmitter === void 0 ? void 0 : eventEmitter.emit(EVENTS.NEW_REFRESH_TOKEN, tokenSet.refreshToken);
+    }
+    return {
+        accessToken: tokenSet.accessToken,
+        refreshToken: tokenSet.refreshToken,
+        expiresIn: tokenSet.expiresIn,
+    };
+}
+/**
+ *
+ * @param expiresIn Delay until the access token expires.
+ * @returns a delay until the access token should be refreshed.
+ */
+const computeRefreshDelay = (expiresIn) => {
+    if (expiresIn !== undefined) {
+        return expiresIn - REFRESH_BEFORE_EXPIRATION_SECONDS > 0
+            ? // We want to refresh the token 5 seconds before they actually expire.
+                expiresIn - REFRESH_BEFORE_EXPIRATION_SECONDS
+            : expiresIn;
+    }
+    return DEFAULT_EXPIRATION_TIME_SECONDS;
+};
+/**
+ * @param unauthFetch a regular fetch function, compliant with the WHATWG spec.
+ * @param authToken an access token, either a Bearer token or a DPoP one.
+ * @param options The option object may contain two objects: the DPoP key token
+ * is bound to if applicable, and options to customise token renewal behaviour.
+ *
+ * @returns A fetch function that adds an appropriate Authorization header with
+ * the provided token, and adds a DPoP header if applicable.
+ */
+async function buildAuthenticatedFetch(unauthFetch, accessToken, options) {
+    var _a;
+    let currentAccessToken = accessToken;
+    let latestTimeout;
+    const currentRefreshOptions = options === null || options === void 0 ? void 0 : options.refreshOptions;
+    // Setup the refresh timeout outside of the authenticated fetch, so that
+    // an idle app will not get logged out if it doesn't issue a fetch before
+    // the first expiration date.
+    if (currentRefreshOptions !== undefined) {
+        const proactivelyRefreshToken = async () => {
+            var _a, _b, _c, _d;
+            try {
+                const { accessToken: refreshedAccessToken, refreshToken, expiresIn, } = await refreshAccessToken(currentRefreshOptions, 
+                // If currentRefreshOptions is defined, options is necessarily defined too.
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                options.dpopKey, 
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                options.eventEmitter);
+                // Update the tokens in the closure if appropriate.
+                currentAccessToken = refreshedAccessToken;
+                if (refreshToken !== undefined) {
+                    currentRefreshOptions.refreshToken = refreshToken;
+                }
+                // Each time the access token is refreshed, we must plan fo the next
+                // refresh iteration.
+                clearTimeout(latestTimeout);
+                latestTimeout = setTimeout(proactivelyRefreshToken, computeRefreshDelay(expiresIn) * 1000);
+                // If currentRefreshOptions is defined, options is necessarily defined too.
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                (_a = options.eventEmitter) === null || _a === void 0 ? void 0 : _a.emit(EVENTS.TIMEOUT_SET, latestTimeout);
+            }
+            catch (e) {
+                // It is possible that an underlying library throws an error on refresh flow failure.
+                // If we used a log framework, the error could be logged at the `debug` level,
+                // but otherwise the failure of the refresh flow should not blow up in the user's
+                // face, so we just swallow the error.
+                if (e instanceof OidcProviderError) {
+                    // The OIDC provider refused to refresh the access token and returned an error instead.
+                    /* istanbul ignore next 100% coverage would require testing that nothing
+                        happens here if the emitter is undefined, which is more cumbersome
+                        than what it's worth. */
+                    (_b = options === null || options === void 0 ? void 0 : options.eventEmitter) === null || _b === void 0 ? void 0 : _b.emit(EVENTS.ERROR, e.error, e.errorDescription);
+                    /* istanbul ignore next 100% coverage would require testing that nothing
+                      happens here if the emitter is undefined, which is more cumbersome
+                      than what it's worth. */
+                    (_c = options === null || options === void 0 ? void 0 : options.eventEmitter) === null || _c === void 0 ? void 0 : _c.emit(EVENTS.SESSION_EXPIRED);
+                }
+                if (e instanceof InvalidResponseError &&
+                    e.missingFields.includes("access_token")) {
+                    // In this case, the OIDC provider returned a non-standard response, but
+                    // did not specify that it was an error. We cannot refresh nonetheless.
+                    /* istanbul ignore next 100% coverage would require testing that nothing
+                      happens here if the emitter is undefined, which is more cumbersome
+                      than what it's worth. */
+                    (_d = options === null || options === void 0 ? void 0 : options.eventEmitter) === null || _d === void 0 ? void 0 : _d.emit(EVENTS.SESSION_EXPIRED);
+                }
+            }
+        };
+        latestTimeout = setTimeout(proactivelyRefreshToken, 
+        // If currentRefreshOptions is defined, options is necessarily defined too.
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        computeRefreshDelay(options.expiresIn) * 1000);
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        (_a = options.eventEmitter) === null || _a === void 0 ? void 0 : _a.emit(EVENTS.TIMEOUT_SET, latestTimeout);
+    }
+    else if (options !== undefined && options.eventEmitter !== undefined) {
+        // If no refresh options are provided, the session expires when the access token does.
+        const expirationTimeout = setTimeout(() => {
+            // The event emitter is always defined in our code, and it would be tedious
+            // to test for conditions when it is not.
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            options.eventEmitter.emit(EVENTS.SESSION_EXPIRED);
+        }, computeRefreshDelay(options.expiresIn) * 1000);
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        options.eventEmitter.emit(EVENTS.TIMEOUT_SET, expirationTimeout);
+    }
+    return async (url, requestInit) => {
+        let response = await makeAuthenticatedRequest(unauthFetch, currentAccessToken, url, requestInit, options === null || options === void 0 ? void 0 : options.dpopKey);
+        const failedButNotExpectedAuthError = !response.ok && !isExpectedAuthError(response.status);
+        if (response.ok || failedButNotExpectedAuthError) {
+            // If there hasn't been a redirection, or if there has been a non-auth related
+            // issue, it should be handled at the application level
+            return response;
+        }
+        const hasBeenRedirected = response.url !== url;
+        if (hasBeenRedirected && (options === null || options === void 0 ? void 0 : options.dpopKey) !== undefined) {
+            // If the request failed for auth reasons, and has been redirected, we should
+            // replay it generating a DPoP header for the rediration target IRI. This
+            // doesn't apply to Bearer tokens, as the Bearer tokens aren't specific
+            // to a given resource and method, while the DPoP header (associated to a
+            // DPoP token) is.
+            response = await makeAuthenticatedRequest(unauthFetch, currentAccessToken, 
+            // Replace the original target IRI (`url`) by the redirection target
+            response.url, requestInit, options.dpopKey);
+        }
+        return response;
+    };
 }
 
-/***/ }),
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+const StorageUtilityGetResponse = "getResponse";
+const StorageUtilityMock = {
+    /* eslint-disable @typescript-eslint/no-unused-vars */
+    get: async (key, options) => StorageUtilityGetResponse,
+    set: async (key, value) => {
+        /* do nothing */
+    },
+    delete: async (key) => {
+        /* do nothing */
+    },
+    getForUser: async (userId, key, options) => StorageUtilityGetResponse,
+    setForUser: async (userId, values, options) => {
+        /* do nothing */
+    },
+    deleteForUser: async (userId, key, options) => {
+        /* do nothing */
+    },
+    deleteAllUserData: async (userId, options) => {
+        /* do nothing */
+    },
+};
+const mockStorage = (stored) => {
+    const store = stored;
+    return {
+        get: async (key) => {
+            if (store[key] === undefined) {
+                return undefined;
+            }
+            if (typeof store[key] === "string") {
+                return store[key];
+            }
+            return JSON.stringify(store[key]);
+        },
+        set: async (key, value) => {
+            store[key] = value;
+        },
+        delete: async (key) => {
+            delete store[key];
+        },
+    };
+};
+const mockStorageUtility = (stored, isSecure = false) => {
+    if (isSecure) {
+        return new StorageUtility(mockStorage(stored), mockStorage({}));
+    }
+    return new StorageUtility(mockStorage({}), mockStorage(stored));
+};
 
 /***/ "./node_modules/@babel/runtime/helpers/esm/typeof.js":
 /*!***********************************************************!*\
@@ -60729,20 +61722,8 @@ function _toPropertyKey(arg) {
   \***********************************************************/
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ _typeof)
-/* harmony export */ });
-function _typeof(obj) {
-  "@babel/helpers - typeof";
+//# sourceMappingURL=index.mjs.map
 
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
-    return typeof obj;
-  } : function (obj) {
-    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-  }, _typeof(obj);
-}
 
 /***/ }),
 
@@ -60755,36 +61736,11 @@ function _typeof(obj) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "AggregateHandler": () => (/* binding */ AggregateHandler),
-/* harmony export */   "ConfigurationError": () => (/* binding */ ConfigurationError),
-/* harmony export */   "DEFAULT_SCOPES": () => (/* binding */ DEFAULT_SCOPES),
-/* harmony export */   "EVENTS": () => (/* binding */ EVENTS),
-/* harmony export */   "InMemoryStorage": () => (/* binding */ InMemoryStorage),
-/* harmony export */   "InvalidResponseError": () => (/* binding */ InvalidResponseError),
-/* harmony export */   "NotImplementedError": () => (/* binding */ NotImplementedError),
-/* harmony export */   "OidcProviderError": () => (/* binding */ OidcProviderError),
-/* harmony export */   "PREFERRED_SIGNING_ALG": () => (/* binding */ PREFERRED_SIGNING_ALG),
-/* harmony export */   "REFRESH_BEFORE_EXPIRATION_SECONDS": () => (/* binding */ REFRESH_BEFORE_EXPIRATION_SECONDS),
-/* harmony export */   "SOLID_CLIENT_AUTHN_KEY_PREFIX": () => (/* binding */ SOLID_CLIENT_AUTHN_KEY_PREFIX),
-/* harmony export */   "StorageUtility": () => (/* binding */ StorageUtility),
-/* harmony export */   "StorageUtilityGetResponse": () => (/* binding */ StorageUtilityGetResponse),
-/* harmony export */   "StorageUtilityMock": () => (/* binding */ StorageUtilityMock),
-/* harmony export */   "USER_SESSION_PREFIX": () => (/* binding */ USER_SESSION_PREFIX),
-/* harmony export */   "buildAuthenticatedFetch": () => (/* binding */ buildAuthenticatedFetch),
-/* harmony export */   "buildProxyHandler": () => (/* binding */ buildProxyHandler),
-/* harmony export */   "createDpopHeader": () => (/* binding */ createDpopHeader),
-/* harmony export */   "determineSigningAlg": () => (/* binding */ determineSigningAlg),
-/* harmony export */   "fetchJwks": () => (/* binding */ fetchJwks),
-/* harmony export */   "generateDpopKeyPair": () => (/* binding */ generateDpopKeyPair),
-/* harmony export */   "getSessionIdFromOauthState": () => (/* binding */ getSessionIdFromOauthState),
-/* harmony export */   "getWebidFromTokenPayload": () => (/* binding */ getWebidFromTokenPayload),
-/* harmony export */   "handleRegistration": () => (/* binding */ handleRegistration),
-/* harmony export */   "isSupportedTokenType": () => (/* binding */ isSupportedTokenType),
-/* harmony export */   "isValidRedirectUrl": () => (/* binding */ isValidRedirectUrl),
-/* harmony export */   "loadOidcContextFromStorage": () => (/* binding */ loadOidcContextFromStorage),
-/* harmony export */   "mockStorage": () => (/* binding */ mockStorage),
-/* harmony export */   "mockStorageUtility": () => (/* binding */ mockStorageUtility),
-/* harmony export */   "saveSessionInfoToStorage": () => (/* binding */ saveSessionInfoToStorage)
+/* harmony export */   Headers: () => (/* binding */ Headers),
+/* harmony export */   Request: () => (/* binding */ Request),
+/* harmony export */   Response: () => (/* binding */ Response),
+/* harmony export */   "default": () => (/* binding */ indexBrowser),
+/* harmony export */   fetch: () => (/* binding */ fetch)
 /* harmony export */ });
 /* harmony import */ var events__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! events */ "./node_modules/events/events.js");
 /* harmony import */ var _inrupt_universal_fetch__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @inrupt/universal-fetch */ "./node_modules/@inrupt/universal-fetch/dist/index-browser.mjs");
@@ -61337,41 +62293,42 @@ const { fetch, Response, Request, Headers } = globalThis;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "CompactEncrypt": () => (/* reexport safe */ _jwe_compact_encrypt_js__WEBPACK_IMPORTED_MODULE_9__.CompactEncrypt),
-/* harmony export */   "CompactSign": () => (/* reexport safe */ _jws_compact_sign_js__WEBPACK_IMPORTED_MODULE_11__.CompactSign),
-/* harmony export */   "EmbeddedJWK": () => (/* reexport safe */ _jwk_embedded_js__WEBPACK_IMPORTED_MODULE_17__.EmbeddedJWK),
-/* harmony export */   "EncryptJWT": () => (/* reexport safe */ _jwt_encrypt_js__WEBPACK_IMPORTED_MODULE_15__.EncryptJWT),
-/* harmony export */   "FlattenedEncrypt": () => (/* reexport safe */ _jwe_flattened_encrypt_js__WEBPACK_IMPORTED_MODULE_10__.FlattenedEncrypt),
-/* harmony export */   "FlattenedSign": () => (/* reexport safe */ _jws_flattened_sign_js__WEBPACK_IMPORTED_MODULE_12__.FlattenedSign),
-/* harmony export */   "GeneralEncrypt": () => (/* reexport safe */ _jwe_general_encrypt_js__WEBPACK_IMPORTED_MODULE_3__.GeneralEncrypt),
-/* harmony export */   "GeneralSign": () => (/* reexport safe */ _jws_general_sign_js__WEBPACK_IMPORTED_MODULE_13__.GeneralSign),
-/* harmony export */   "SignJWT": () => (/* reexport safe */ _jwt_sign_js__WEBPACK_IMPORTED_MODULE_14__.SignJWT),
-/* harmony export */   "UnsecuredJWT": () => (/* reexport safe */ _jwt_unsecured_js__WEBPACK_IMPORTED_MODULE_20__.UnsecuredJWT),
-/* harmony export */   "base64url": () => (/* reexport module object */ _util_base64url_js__WEBPACK_IMPORTED_MODULE_28__),
-/* harmony export */   "calculateJwkThumbprint": () => (/* reexport safe */ _jwk_thumbprint_js__WEBPACK_IMPORTED_MODULE_16__.calculateJwkThumbprint),
-/* harmony export */   "calculateJwkThumbprintUri": () => (/* reexport safe */ _jwk_thumbprint_js__WEBPACK_IMPORTED_MODULE_16__.calculateJwkThumbprintUri),
-/* harmony export */   "compactDecrypt": () => (/* reexport safe */ _jwe_compact_decrypt_js__WEBPACK_IMPORTED_MODULE_0__.compactDecrypt),
-/* harmony export */   "compactVerify": () => (/* reexport safe */ _jws_compact_verify_js__WEBPACK_IMPORTED_MODULE_4__.compactVerify),
-/* harmony export */   "createLocalJWKSet": () => (/* reexport safe */ _jwks_local_js__WEBPACK_IMPORTED_MODULE_18__.createLocalJWKSet),
-/* harmony export */   "createRemoteJWKSet": () => (/* reexport safe */ _jwks_remote_js__WEBPACK_IMPORTED_MODULE_19__.createRemoteJWKSet),
-/* harmony export */   "decodeJwt": () => (/* reexport safe */ _util_decode_jwt_js__WEBPACK_IMPORTED_MODULE_24__.decodeJwt),
-/* harmony export */   "decodeProtectedHeader": () => (/* reexport safe */ _util_decode_protected_header_js__WEBPACK_IMPORTED_MODULE_23__.decodeProtectedHeader),
-/* harmony export */   "errors": () => (/* reexport module object */ _util_errors_js__WEBPACK_IMPORTED_MODULE_25__),
-/* harmony export */   "exportJWK": () => (/* reexport safe */ _key_export_js__WEBPACK_IMPORTED_MODULE_21__.exportJWK),
-/* harmony export */   "exportPKCS8": () => (/* reexport safe */ _key_export_js__WEBPACK_IMPORTED_MODULE_21__.exportPKCS8),
-/* harmony export */   "exportSPKI": () => (/* reexport safe */ _key_export_js__WEBPACK_IMPORTED_MODULE_21__.exportSPKI),
-/* harmony export */   "flattenedDecrypt": () => (/* reexport safe */ _jwe_flattened_decrypt_js__WEBPACK_IMPORTED_MODULE_1__.flattenedDecrypt),
-/* harmony export */   "flattenedVerify": () => (/* reexport safe */ _jws_flattened_verify_js__WEBPACK_IMPORTED_MODULE_5__.flattenedVerify),
-/* harmony export */   "generalDecrypt": () => (/* reexport safe */ _jwe_general_decrypt_js__WEBPACK_IMPORTED_MODULE_2__.generalDecrypt),
-/* harmony export */   "generalVerify": () => (/* reexport safe */ _jws_general_verify_js__WEBPACK_IMPORTED_MODULE_6__.generalVerify),
-/* harmony export */   "generateKeyPair": () => (/* reexport safe */ _key_generate_key_pair_js__WEBPACK_IMPORTED_MODULE_26__.generateKeyPair),
-/* harmony export */   "generateSecret": () => (/* reexport safe */ _key_generate_secret_js__WEBPACK_IMPORTED_MODULE_27__.generateSecret),
-/* harmony export */   "importJWK": () => (/* reexport safe */ _key_import_js__WEBPACK_IMPORTED_MODULE_22__.importJWK),
-/* harmony export */   "importPKCS8": () => (/* reexport safe */ _key_import_js__WEBPACK_IMPORTED_MODULE_22__.importPKCS8),
-/* harmony export */   "importSPKI": () => (/* reexport safe */ _key_import_js__WEBPACK_IMPORTED_MODULE_22__.importSPKI),
-/* harmony export */   "importX509": () => (/* reexport safe */ _key_import_js__WEBPACK_IMPORTED_MODULE_22__.importX509),
-/* harmony export */   "jwtDecrypt": () => (/* reexport safe */ _jwt_decrypt_js__WEBPACK_IMPORTED_MODULE_8__.jwtDecrypt),
-/* harmony export */   "jwtVerify": () => (/* reexport safe */ _jwt_verify_js__WEBPACK_IMPORTED_MODULE_7__.jwtVerify)
+/* harmony export */   CompactEncrypt: () => (/* reexport safe */ _jwe_compact_encrypt_js__WEBPACK_IMPORTED_MODULE_9__.CompactEncrypt),
+/* harmony export */   CompactSign: () => (/* reexport safe */ _jws_compact_sign_js__WEBPACK_IMPORTED_MODULE_11__.CompactSign),
+/* harmony export */   EmbeddedJWK: () => (/* reexport safe */ _jwk_embedded_js__WEBPACK_IMPORTED_MODULE_17__.EmbeddedJWK),
+/* harmony export */   EncryptJWT: () => (/* reexport safe */ _jwt_encrypt_js__WEBPACK_IMPORTED_MODULE_15__.EncryptJWT),
+/* harmony export */   FlattenedEncrypt: () => (/* reexport safe */ _jwe_flattened_encrypt_js__WEBPACK_IMPORTED_MODULE_10__.FlattenedEncrypt),
+/* harmony export */   FlattenedSign: () => (/* reexport safe */ _jws_flattened_sign_js__WEBPACK_IMPORTED_MODULE_12__.FlattenedSign),
+/* harmony export */   GeneralEncrypt: () => (/* reexport safe */ _jwe_general_encrypt_js__WEBPACK_IMPORTED_MODULE_3__.GeneralEncrypt),
+/* harmony export */   GeneralSign: () => (/* reexport safe */ _jws_general_sign_js__WEBPACK_IMPORTED_MODULE_13__.GeneralSign),
+/* harmony export */   SignJWT: () => (/* reexport safe */ _jwt_sign_js__WEBPACK_IMPORTED_MODULE_14__.SignJWT),
+/* harmony export */   UnsecuredJWT: () => (/* reexport safe */ _jwt_unsecured_js__WEBPACK_IMPORTED_MODULE_20__.UnsecuredJWT),
+/* harmony export */   base64url: () => (/* reexport module object */ _util_base64url_js__WEBPACK_IMPORTED_MODULE_28__),
+/* harmony export */   calculateJwkThumbprint: () => (/* reexport safe */ _jwk_thumbprint_js__WEBPACK_IMPORTED_MODULE_16__.calculateJwkThumbprint),
+/* harmony export */   calculateJwkThumbprintUri: () => (/* reexport safe */ _jwk_thumbprint_js__WEBPACK_IMPORTED_MODULE_16__.calculateJwkThumbprintUri),
+/* harmony export */   compactDecrypt: () => (/* reexport safe */ _jwe_compact_decrypt_js__WEBPACK_IMPORTED_MODULE_0__.compactDecrypt),
+/* harmony export */   compactVerify: () => (/* reexport safe */ _jws_compact_verify_js__WEBPACK_IMPORTED_MODULE_4__.compactVerify),
+/* harmony export */   createLocalJWKSet: () => (/* reexport safe */ _jwks_local_js__WEBPACK_IMPORTED_MODULE_18__.createLocalJWKSet),
+/* harmony export */   createRemoteJWKSet: () => (/* reexport safe */ _jwks_remote_js__WEBPACK_IMPORTED_MODULE_19__.createRemoteJWKSet),
+/* harmony export */   cryptoRuntime: () => (/* reexport safe */ _util_runtime_js__WEBPACK_IMPORTED_MODULE_29__["default"]),
+/* harmony export */   decodeJwt: () => (/* reexport safe */ _util_decode_jwt_js__WEBPACK_IMPORTED_MODULE_24__.decodeJwt),
+/* harmony export */   decodeProtectedHeader: () => (/* reexport safe */ _util_decode_protected_header_js__WEBPACK_IMPORTED_MODULE_23__.decodeProtectedHeader),
+/* harmony export */   errors: () => (/* reexport module object */ _util_errors_js__WEBPACK_IMPORTED_MODULE_25__),
+/* harmony export */   exportJWK: () => (/* reexport safe */ _key_export_js__WEBPACK_IMPORTED_MODULE_21__.exportJWK),
+/* harmony export */   exportPKCS8: () => (/* reexport safe */ _key_export_js__WEBPACK_IMPORTED_MODULE_21__.exportPKCS8),
+/* harmony export */   exportSPKI: () => (/* reexport safe */ _key_export_js__WEBPACK_IMPORTED_MODULE_21__.exportSPKI),
+/* harmony export */   flattenedDecrypt: () => (/* reexport safe */ _jwe_flattened_decrypt_js__WEBPACK_IMPORTED_MODULE_1__.flattenedDecrypt),
+/* harmony export */   flattenedVerify: () => (/* reexport safe */ _jws_flattened_verify_js__WEBPACK_IMPORTED_MODULE_5__.flattenedVerify),
+/* harmony export */   generalDecrypt: () => (/* reexport safe */ _jwe_general_decrypt_js__WEBPACK_IMPORTED_MODULE_2__.generalDecrypt),
+/* harmony export */   generalVerify: () => (/* reexport safe */ _jws_general_verify_js__WEBPACK_IMPORTED_MODULE_6__.generalVerify),
+/* harmony export */   generateKeyPair: () => (/* reexport safe */ _key_generate_key_pair_js__WEBPACK_IMPORTED_MODULE_26__.generateKeyPair),
+/* harmony export */   generateSecret: () => (/* reexport safe */ _key_generate_secret_js__WEBPACK_IMPORTED_MODULE_27__.generateSecret),
+/* harmony export */   importJWK: () => (/* reexport safe */ _key_import_js__WEBPACK_IMPORTED_MODULE_22__.importJWK),
+/* harmony export */   importPKCS8: () => (/* reexport safe */ _key_import_js__WEBPACK_IMPORTED_MODULE_22__.importPKCS8),
+/* harmony export */   importSPKI: () => (/* reexport safe */ _key_import_js__WEBPACK_IMPORTED_MODULE_22__.importSPKI),
+/* harmony export */   importX509: () => (/* reexport safe */ _key_import_js__WEBPACK_IMPORTED_MODULE_22__.importX509),
+/* harmony export */   jwtDecrypt: () => (/* reexport safe */ _jwt_decrypt_js__WEBPACK_IMPORTED_MODULE_8__.jwtDecrypt),
+/* harmony export */   jwtVerify: () => (/* reexport safe */ _jwt_verify_js__WEBPACK_IMPORTED_MODULE_7__.jwtVerify)
 /* harmony export */ });
 /* harmony import */ var _jwe_compact_decrypt_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./jwe/compact/decrypt.js */ "./node_modules/jose/dist/browser/jwe/compact/decrypt.js");
 /* harmony import */ var _jwe_flattened_decrypt_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./jwe/flattened/decrypt.js */ "./node_modules/jose/dist/browser/jwe/flattened/decrypt.js");
@@ -61446,7 +62403,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "compactDecrypt": () => (/* binding */ compactDecrypt)
+/* harmony export */   compactDecrypt: () => (/* binding */ compactDecrypt)
 /* harmony export */ });
 /* harmony import */ var _flattened_decrypt_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../flattened/decrypt.js */ "./node_modules/jose/dist/browser/jwe/flattened/decrypt.js");
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
@@ -61491,7 +62448,7 @@ async function compactDecrypt(jwe, key, options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "CompactEncrypt": () => (/* binding */ CompactEncrypt)
+/* harmony export */   CompactEncrypt: () => (/* binding */ CompactEncrypt)
 /* harmony export */ });
 /* harmony import */ var _flattened_encrypt_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../flattened/encrypt.js */ "./node_modules/jose/dist/browser/jwe/flattened/encrypt.js");
 
@@ -61533,7 +62490,7 @@ class CompactEncrypt {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "flattenedDecrypt": () => (/* binding */ flattenedDecrypt)
+/* harmony export */   flattenedDecrypt: () => (/* binding */ flattenedDecrypt)
 /* harmony export */ });
 /* harmony import */ var _runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../runtime/base64url.js */ "./node_modules/jose/dist/browser/runtime/base64url.js");
 /* harmony import */ var _runtime_decrypt_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../runtime/decrypt.js */ "./node_modules/jose/dist/browser/runtime/decrypt.js");
@@ -61634,7 +62591,12 @@ async function flattenedDecrypt(jwe, key, options) {
     }
     let encryptedKey;
     if (jwe.encrypted_key !== undefined) {
-        encryptedKey = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwe.encrypted_key);
+        try {
+            encryptedKey = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwe.encrypted_key);
+        }
+        catch (_c) {
+            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid('Failed to base64url decode the encrypted_key');
+        }
     }
     let resolvedKey = false;
     if (typeof key === 'function') {
@@ -61651,8 +62613,20 @@ async function flattenedDecrypt(jwe, key, options) {
         }
         cek = (0,_lib_cek_js__WEBPACK_IMPORTED_MODULE_8__["default"])(enc);
     }
-    const iv = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwe.iv);
-    const tag = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwe.tag);
+    let iv;
+    let tag;
+    try {
+        iv = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwe.iv);
+    }
+    catch (_d) {
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid('Failed to base64url decode the iv');
+    }
+    try {
+        tag = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwe.tag);
+    }
+    catch (_e) {
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid('Failed to base64url decode the tag');
+    }
     const protectedHeader = _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_7__.encoder.encode((_a = jwe.protected) !== null && _a !== void 0 ? _a : '');
     let additionalData;
     if (jwe.aad !== undefined) {
@@ -61661,7 +62635,14 @@ async function flattenedDecrypt(jwe, key, options) {
     else {
         additionalData = protectedHeader;
     }
-    let plaintext = await (0,_runtime_decrypt_js__WEBPACK_IMPORTED_MODULE_1__["default"])(enc, cek, (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwe.ciphertext), iv, tag, additionalData);
+    let ciphertext;
+    try {
+        ciphertext = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwe.ciphertext);
+    }
+    catch (_f) {
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid('Failed to base64url decode the ciphertext');
+    }
+    let plaintext = await (0,_runtime_decrypt_js__WEBPACK_IMPORTED_MODULE_1__["default"])(enc, cek, ciphertext, iv, tag, additionalData);
     if (joseHeader.zip === 'DEF') {
         plaintext = await ((options === null || options === void 0 ? void 0 : options.inflateRaw) || _runtime_zlib_js__WEBPACK_IMPORTED_MODULE_2__.inflate)(plaintext);
     }
@@ -61670,7 +62651,12 @@ async function flattenedDecrypt(jwe, key, options) {
         result.protectedHeader = parsedProt;
     }
     if (jwe.aad !== undefined) {
-        result.additionalAuthenticatedData = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwe.aad);
+        try {
+            result.additionalAuthenticatedData = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwe.aad);
+        }
+        catch (_g) {
+            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid('Failed to base64url decode the aad');
+        }
     }
     if (jwe.unprotected !== undefined) {
         result.sharedUnprotectedHeader = jwe.unprotected;
@@ -61696,8 +62682,8 @@ async function flattenedDecrypt(jwe, key, options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "FlattenedEncrypt": () => (/* binding */ FlattenedEncrypt),
-/* harmony export */   "unprotected": () => (/* binding */ unprotected)
+/* harmony export */   FlattenedEncrypt: () => (/* binding */ FlattenedEncrypt),
+/* harmony export */   unprotected: () => (/* binding */ unprotected)
 /* harmony export */ });
 /* harmony import */ var _runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../runtime/base64url.js */ "./node_modules/jose/dist/browser/runtime/base64url.js");
 /* harmony import */ var _runtime_encrypt_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../runtime/encrypt.js */ "./node_modules/jose/dist/browser/runtime/encrypt.js");
@@ -61896,7 +62882,7 @@ class FlattenedEncrypt {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "generalDecrypt": () => (/* binding */ generalDecrypt)
+/* harmony export */   generalDecrypt: () => (/* binding */ generalDecrypt)
 /* harmony export */ });
 /* harmony import */ var _flattened_decrypt_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../flattened/decrypt.js */ "./node_modules/jose/dist/browser/jwe/flattened/decrypt.js");
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
@@ -61945,7 +62931,7 @@ async function generalDecrypt(jwe, key, options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "GeneralEncrypt": () => (/* binding */ GeneralEncrypt)
+/* harmony export */   GeneralEncrypt: () => (/* binding */ GeneralEncrypt)
 /* harmony export */ });
 /* harmony import */ var _flattened_encrypt_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../flattened/encrypt.js */ "./node_modules/jose/dist/browser/jwe/flattened/encrypt.js");
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
@@ -62145,7 +63131,7 @@ class GeneralEncrypt {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "EmbeddedJWK": () => (/* binding */ EmbeddedJWK)
+/* harmony export */   EmbeddedJWK: () => (/* binding */ EmbeddedJWK)
 /* harmony export */ });
 /* harmony import */ var _key_import_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../key/import.js */ "./node_modules/jose/dist/browser/key/import.js");
 /* harmony import */ var _lib_is_object_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lib/is_object.js */ "./node_modules/jose/dist/browser/lib/is_object.js");
@@ -62180,8 +63166,8 @@ async function EmbeddedJWK(protectedHeader, token) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "calculateJwkThumbprint": () => (/* binding */ calculateJwkThumbprint),
-/* harmony export */   "calculateJwkThumbprintUri": () => (/* binding */ calculateJwkThumbprintUri)
+/* harmony export */   calculateJwkThumbprint: () => (/* binding */ calculateJwkThumbprint),
+/* harmony export */   calculateJwkThumbprintUri: () => (/* binding */ calculateJwkThumbprintUri)
 /* harmony export */ });
 /* harmony import */ var _runtime_digest_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../runtime/digest.js */ "./node_modules/jose/dist/browser/runtime/digest.js");
 /* harmony import */ var _runtime_base64url_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../runtime/base64url.js */ "./node_modules/jose/dist/browser/runtime/base64url.js");
@@ -62254,9 +63240,9 @@ async function calculateJwkThumbprintUri(jwk, digestAlgorithm) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "LocalJWKSet": () => (/* binding */ LocalJWKSet),
-/* harmony export */   "createLocalJWKSet": () => (/* binding */ createLocalJWKSet),
-/* harmony export */   "isJWKSLike": () => (/* binding */ isJWKSLike)
+/* harmony export */   LocalJWKSet: () => (/* binding */ LocalJWKSet),
+/* harmony export */   createLocalJWKSet: () => (/* binding */ createLocalJWKSet),
+/* harmony export */   isJWKSLike: () => (/* binding */ isJWKSLike)
 /* harmony export */ });
 /* harmony import */ var _key_import_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../key/import.js */ "./node_modules/jose/dist/browser/key/import.js");
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
@@ -62390,7 +63376,7 @@ function createLocalJWKSet(jwks) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "createRemoteJWKSet": () => (/* binding */ createRemoteJWKSet)
+/* harmony export */   createRemoteJWKSet: () => (/* binding */ createRemoteJWKSet)
 /* harmony export */ });
 /* harmony import */ var _runtime_fetch_jwks_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../runtime/fetch_jwks.js */ "./node_modules/jose/dist/browser/runtime/fetch_jwks.js");
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
@@ -62484,7 +63470,7 @@ function createRemoteJWKSet(url, options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "CompactSign": () => (/* binding */ CompactSign)
+/* harmony export */   CompactSign: () => (/* binding */ CompactSign)
 /* harmony export */ });
 /* harmony import */ var _flattened_sign_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../flattened/sign.js */ "./node_modules/jose/dist/browser/jws/flattened/sign.js");
 
@@ -62517,7 +63503,7 @@ class CompactSign {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "compactVerify": () => (/* binding */ compactVerify)
+/* harmony export */   compactVerify: () => (/* binding */ compactVerify)
 /* harmony export */ });
 /* harmony import */ var _flattened_verify_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../flattened/verify.js */ "./node_modules/jose/dist/browser/jws/flattened/verify.js");
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
@@ -62556,7 +63542,7 @@ async function compactVerify(jws, key, options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "FlattenedSign": () => (/* binding */ FlattenedSign)
+/* harmony export */   FlattenedSign: () => (/* binding */ FlattenedSign)
 /* harmony export */ });
 /* harmony import */ var _runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../runtime/base64url.js */ "./node_modules/jose/dist/browser/runtime/base64url.js");
 /* harmony import */ var _runtime_sign_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../runtime/sign.js */ "./node_modules/jose/dist/browser/runtime/sign.js");
@@ -62659,7 +63645,7 @@ class FlattenedSign {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "flattenedVerify": () => (/* binding */ flattenedVerify)
+/* harmony export */   flattenedVerify: () => (/* binding */ flattenedVerify)
 /* harmony export */ });
 /* harmony import */ var _runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../runtime/base64url.js */ "./node_modules/jose/dist/browser/runtime/base64url.js");
 /* harmony import */ var _runtime_verify_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../runtime/verify.js */ "./node_modules/jose/dist/browser/runtime/verify.js");
@@ -62747,14 +63733,25 @@ async function flattenedVerify(jws, key, options) {
     }
     (0,_lib_check_key_type_js__WEBPACK_IMPORTED_MODULE_6__["default"])(alg, key, 'verify');
     const data = (0,_lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_3__.concat)(_lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_3__.encoder.encode((_a = jws.protected) !== null && _a !== void 0 ? _a : ''), _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_3__.encoder.encode('.'), typeof jws.payload === 'string' ? _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_3__.encoder.encode(jws.payload) : jws.payload);
-    const signature = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jws.signature);
+    let signature;
+    try {
+        signature = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jws.signature);
+    }
+    catch (_c) {
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWSInvalid('Failed to base64url decode the signature');
+    }
     const verified = await (0,_runtime_verify_js__WEBPACK_IMPORTED_MODULE_1__["default"])(alg, key, signature, data);
     if (!verified) {
         throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWSSignatureVerificationFailed();
     }
     let payload;
     if (b64) {
-        payload = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jws.payload);
+        try {
+            payload = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jws.payload);
+        }
+        catch (_d) {
+            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWSInvalid('Failed to base64url decode the payload');
+        }
     }
     else if (typeof jws.payload === 'string') {
         payload = _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_3__.encoder.encode(jws.payload);
@@ -62787,7 +63784,7 @@ async function flattenedVerify(jws, key, options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "GeneralSign": () => (/* binding */ GeneralSign)
+/* harmony export */   GeneralSign: () => (/* binding */ GeneralSign)
 /* harmony export */ });
 /* harmony import */ var _flattened_sign_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../flattened/sign.js */ "./node_modules/jose/dist/browser/jws/flattened/sign.js");
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
@@ -62871,7 +63868,7 @@ class GeneralSign {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "generalVerify": () => (/* binding */ generalVerify)
+/* harmony export */   generalVerify: () => (/* binding */ generalVerify)
 /* harmony export */ });
 /* harmony import */ var _flattened_verify_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../flattened/verify.js */ "./node_modules/jose/dist/browser/jws/flattened/verify.js");
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
@@ -62913,7 +63910,7 @@ async function generalVerify(jws, key, options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "jwtDecrypt": () => (/* binding */ jwtDecrypt)
+/* harmony export */   jwtDecrypt: () => (/* binding */ jwtDecrypt)
 /* harmony export */ });
 /* harmony import */ var _jwe_compact_decrypt_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../jwe/compact/decrypt.js */ "./node_modules/jose/dist/browser/jwe/compact/decrypt.js");
 /* harmony import */ var _lib_jwt_claims_set_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lib/jwt_claims_set.js */ "./node_modules/jose/dist/browser/lib/jwt_claims_set.js");
@@ -62954,7 +63951,7 @@ async function jwtDecrypt(jwt, key, options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "EncryptJWT": () => (/* binding */ EncryptJWT)
+/* harmony export */   EncryptJWT: () => (/* binding */ EncryptJWT)
 /* harmony export */ });
 /* harmony import */ var _jwe_compact_encrypt_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../jwe/compact/encrypt.js */ "./node_modules/jose/dist/browser/jwe/compact/encrypt.js");
 /* harmony import */ var _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lib/buffer_utils.js */ "./node_modules/jose/dist/browser/lib/buffer_utils.js");
@@ -63040,7 +64037,7 @@ class EncryptJWT extends _produce_js__WEBPACK_IMPORTED_MODULE_2__.ProduceJWT {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "ProduceJWT": () => (/* binding */ ProduceJWT)
+/* harmony export */   ProduceJWT: () => (/* binding */ ProduceJWT)
 /* harmony export */ });
 /* harmony import */ var _lib_epoch_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../lib/epoch.js */ "./node_modules/jose/dist/browser/lib/epoch.js");
 /* harmony import */ var _lib_is_object_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lib/is_object.js */ "./node_modules/jose/dist/browser/lib/is_object.js");
@@ -63112,7 +64109,7 @@ class ProduceJWT {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "SignJWT": () => (/* binding */ SignJWT)
+/* harmony export */   SignJWT: () => (/* binding */ SignJWT)
 /* harmony export */ });
 /* harmony import */ var _jws_compact_sign_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../jws/compact/sign.js */ "./node_modules/jose/dist/browser/jws/compact/sign.js");
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
@@ -63152,7 +64149,7 @@ class SignJWT extends _produce_js__WEBPACK_IMPORTED_MODULE_3__.ProduceJWT {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "UnsecuredJWT": () => (/* binding */ UnsecuredJWT)
+/* harmony export */   UnsecuredJWT: () => (/* binding */ UnsecuredJWT)
 /* harmony export */ });
 /* harmony import */ var _runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../runtime/base64url.js */ "./node_modules/jose/dist/browser/runtime/base64url.js");
 /* harmony import */ var _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lib/buffer_utils.js */ "./node_modules/jose/dist/browser/lib/buffer_utils.js");
@@ -63204,7 +64201,7 @@ class UnsecuredJWT extends _produce_js__WEBPACK_IMPORTED_MODULE_4__.ProduceJWT {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "jwtVerify": () => (/* binding */ jwtVerify)
+/* harmony export */   jwtVerify: () => (/* binding */ jwtVerify)
 /* harmony export */ });
 /* harmony import */ var _jws_compact_verify_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../jws/compact/verify.js */ "./node_modules/jose/dist/browser/jws/compact/verify.js");
 /* harmony import */ var _lib_jwt_claims_set_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lib/jwt_claims_set.js */ "./node_modules/jose/dist/browser/lib/jwt_claims_set.js");
@@ -63238,9 +64235,9 @@ async function jwtVerify(jwt, key, options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "exportJWK": () => (/* binding */ exportJWK),
-/* harmony export */   "exportPKCS8": () => (/* binding */ exportPKCS8),
-/* harmony export */   "exportSPKI": () => (/* binding */ exportSPKI)
+/* harmony export */   exportJWK: () => (/* binding */ exportJWK),
+/* harmony export */   exportPKCS8: () => (/* binding */ exportPKCS8),
+/* harmony export */   exportSPKI: () => (/* binding */ exportSPKI)
 /* harmony export */ });
 /* harmony import */ var _runtime_asn1_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../runtime/asn1.js */ "./node_modules/jose/dist/browser/runtime/asn1.js");
 /* harmony import */ var _runtime_key_to_jwk_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../runtime/key_to_jwk.js */ "./node_modules/jose/dist/browser/runtime/key_to_jwk.js");
@@ -63269,7 +64266,7 @@ async function exportJWK(key) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "generateKeyPair": () => (/* binding */ generateKeyPair)
+/* harmony export */   generateKeyPair: () => (/* binding */ generateKeyPair)
 /* harmony export */ });
 /* harmony import */ var _runtime_generate_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../runtime/generate.js */ "./node_modules/jose/dist/browser/runtime/generate.js");
 
@@ -63289,7 +64286,7 @@ async function generateKeyPair(alg, options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "generateSecret": () => (/* binding */ generateSecret)
+/* harmony export */   generateSecret: () => (/* binding */ generateSecret)
 /* harmony export */ });
 /* harmony import */ var _runtime_generate_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../runtime/generate.js */ "./node_modules/jose/dist/browser/runtime/generate.js");
 
@@ -63309,10 +64306,10 @@ async function generateSecret(alg, options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "importJWK": () => (/* binding */ importJWK),
-/* harmony export */   "importPKCS8": () => (/* binding */ importPKCS8),
-/* harmony export */   "importSPKI": () => (/* binding */ importSPKI),
-/* harmony export */   "importX509": () => (/* binding */ importX509)
+/* harmony export */   importJWK: () => (/* binding */ importJWK),
+/* harmony export */   importPKCS8: () => (/* binding */ importPKCS8),
+/* harmony export */   importSPKI: () => (/* binding */ importSPKI),
+/* harmony export */   importX509: () => (/* binding */ importX509)
 /* harmony export */ });
 /* harmony import */ var _runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../runtime/base64url.js */ "./node_modules/jose/dist/browser/runtime/base64url.js");
 /* harmony import */ var _runtime_asn1_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../runtime/asn1.js */ "./node_modules/jose/dist/browser/runtime/asn1.js");
@@ -63382,8 +64379,8 @@ async function importJWK(jwk, alg, octAsKeyObject) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "unwrap": () => (/* binding */ unwrap),
-/* harmony export */   "wrap": () => (/* binding */ wrap)
+/* harmony export */   unwrap: () => (/* binding */ unwrap),
+/* harmony export */   wrap: () => (/* binding */ wrap)
 /* harmony export */ });
 /* harmony import */ var _runtime_encrypt_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../runtime/encrypt.js */ "./node_modules/jose/dist/browser/runtime/encrypt.js");
 /* harmony import */ var _runtime_decrypt_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../runtime/decrypt.js */ "./node_modules/jose/dist/browser/runtime/decrypt.js");
@@ -63416,14 +64413,14 @@ async function unwrap(alg, key, encryptedKey, iv, tag) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "concat": () => (/* binding */ concat),
-/* harmony export */   "concatKdf": () => (/* binding */ concatKdf),
-/* harmony export */   "decoder": () => (/* binding */ decoder),
-/* harmony export */   "encoder": () => (/* binding */ encoder),
-/* harmony export */   "lengthAndInput": () => (/* binding */ lengthAndInput),
-/* harmony export */   "p2s": () => (/* binding */ p2s),
-/* harmony export */   "uint32be": () => (/* binding */ uint32be),
-/* harmony export */   "uint64be": () => (/* binding */ uint64be)
+/* harmony export */   concat: () => (/* binding */ concat),
+/* harmony export */   concatKdf: () => (/* binding */ concatKdf),
+/* harmony export */   decoder: () => (/* binding */ decoder),
+/* harmony export */   encoder: () => (/* binding */ encoder),
+/* harmony export */   lengthAndInput: () => (/* binding */ lengthAndInput),
+/* harmony export */   p2s: () => (/* binding */ p2s),
+/* harmony export */   uint32be: () => (/* binding */ uint32be),
+/* harmony export */   uint64be: () => (/* binding */ uint64be)
 /* harmony export */ });
 /* harmony import */ var _runtime_digest_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../runtime/digest.js */ "./node_modules/jose/dist/browser/runtime/digest.js");
 
@@ -63490,7 +64487,7 @@ async function concatKdf(secret, bits, value) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "bitLength": () => (/* binding */ bitLength),
+/* harmony export */   bitLength: () => (/* binding */ bitLength),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
@@ -63637,8 +64634,8 @@ function checkP2s(p2s) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "checkEncCryptoKey": () => (/* binding */ checkEncCryptoKey),
-/* harmony export */   "checkSigCryptoKey": () => (/* binding */ checkSigCryptoKey)
+/* harmony export */   checkEncCryptoKey: () => (/* binding */ checkEncCryptoKey),
+/* harmony export */   checkSigCryptoKey: () => (/* binding */ checkSigCryptoKey)
 /* harmony export */ });
 function unusable(name, prop = 'algorithm.name') {
     return new TypeError(`CryptoKey does not support this operation, its ${prop} must be ${name}`);
@@ -63853,12 +64850,22 @@ async function decryptKeyManagement(alg, key, encryptedKey, joseHeader, options)
             if (joseHeader.apu !== undefined) {
                 if (typeof joseHeader.apu !== 'string')
                     throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid(`JOSE Header "apu" (Agreement PartyUInfo) invalid`);
-                partyUInfo = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_4__.decode)(joseHeader.apu);
+                try {
+                    partyUInfo = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_4__.decode)(joseHeader.apu);
+                }
+                catch (_a) {
+                    throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid('Failed to base64url decode the apu');
+                }
             }
             if (joseHeader.apv !== undefined) {
                 if (typeof joseHeader.apv !== 'string')
                     throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid(`JOSE Header "apv" (Agreement PartyVInfo) invalid`);
-                partyVInfo = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_4__.decode)(joseHeader.apv);
+                try {
+                    partyVInfo = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_4__.decode)(joseHeader.apv);
+                }
+                catch (_b) {
+                    throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid('Failed to base64url decode the apv');
+                }
             }
             const sharedSecret = await _runtime_ecdhes_js__WEBPACK_IMPORTED_MODULE_1__.deriveKey(epk, key, alg === 'ECDH-ES' ? joseHeader.enc : alg, alg === 'ECDH-ES' ? (0,_lib_cek_js__WEBPACK_IMPORTED_MODULE_6__.bitLength)(joseHeader.enc) : parseInt(alg.slice(-5, -2), 10), partyUInfo, partyVInfo);
             if (alg === 'ECDH-ES')
@@ -63888,7 +64895,14 @@ async function decryptKeyManagement(alg, key, encryptedKey, joseHeader, options)
                 throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid(`JOSE Header "p2c" (PBES2 Count) out is of acceptable bounds`);
             if (typeof joseHeader.p2s !== 'string')
                 throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid(`JOSE Header "p2s" (PBES2 Salt) missing or invalid`);
-            return (0,_runtime_pbes2kw_js__WEBPACK_IMPORTED_MODULE_2__.decrypt)(alg, key, encryptedKey, joseHeader.p2c, (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_4__.decode)(joseHeader.p2s));
+            let p2s;
+            try {
+                p2s = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_4__.decode)(joseHeader.p2s);
+            }
+            catch (_c) {
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid('Failed to base64url decode the p2s');
+            }
+            return (0,_runtime_pbes2kw_js__WEBPACK_IMPORTED_MODULE_2__.decrypt)(alg, key, encryptedKey, joseHeader.p2c, p2s);
         }
         case 'A128KW':
         case 'A192KW':
@@ -63906,8 +64920,20 @@ async function decryptKeyManagement(alg, key, encryptedKey, joseHeader, options)
                 throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid(`JOSE Header "iv" (Initialization Vector) missing or invalid`);
             if (typeof joseHeader.tag !== 'string')
                 throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid(`JOSE Header "tag" (Authentication Tag) missing or invalid`);
-            const iv = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_4__.decode)(joseHeader.iv);
-            const tag = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_4__.decode)(joseHeader.tag);
+            let iv;
+            try {
+                iv = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_4__.decode)(joseHeader.iv);
+            }
+            catch (_d) {
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid('Failed to base64url decode the iv');
+            }
+            let tag;
+            try {
+                tag = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_4__.decode)(joseHeader.tag);
+            }
+            catch (_e) {
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid('Failed to base64url decode the tag');
+            }
             return (0,_aesgcmkw_js__WEBPACK_IMPORTED_MODULE_10__.unwrap)(alg, key, encryptedKey, iv, tag);
         }
         default: {
@@ -64077,7 +65103,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
-/* harmony export */   "withAlg": () => (/* binding */ withAlg)
+/* harmony export */   withAlg: () => (/* binding */ withAlg)
 /* harmony export */ });
 function message(msg, actual, ...types) {
     if (types.length > 2) {
@@ -64190,7 +65216,7 @@ function isObject(input) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "bitLength": () => (/* binding */ bitLength),
+/* harmony export */   bitLength: () => (/* binding */ bitLength),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
@@ -64485,8 +65511,8 @@ function validateCrit(Err, recognizedDefault, recognizedOption, protectedHeader,
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "unwrap": () => (/* binding */ unwrap),
-/* harmony export */   "wrap": () => (/* binding */ wrap)
+/* harmony export */   unwrap: () => (/* binding */ unwrap),
+/* harmony export */   wrap: () => (/* binding */ wrap)
 /* harmony export */ });
 /* harmony import */ var _bogus_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bogus.js */ "./node_modules/jose/dist/browser/runtime/bogus.js");
 /* harmony import */ var _webcrypto_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./webcrypto.js */ "./node_modules/jose/dist/browser/runtime/webcrypto.js");
@@ -64538,11 +65564,11 @@ const unwrap = async (alg, key, encryptedKey) => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "fromPKCS8": () => (/* binding */ fromPKCS8),
-/* harmony export */   "fromSPKI": () => (/* binding */ fromSPKI),
-/* harmony export */   "fromX509": () => (/* binding */ fromX509),
-/* harmony export */   "toPKCS8": () => (/* binding */ toPKCS8),
-/* harmony export */   "toSPKI": () => (/* binding */ toSPKI)
+/* harmony export */   fromPKCS8: () => (/* binding */ fromPKCS8),
+/* harmony export */   fromSPKI: () => (/* binding */ fromSPKI),
+/* harmony export */   fromX509: () => (/* binding */ fromX509),
+/* harmony export */   toPKCS8: () => (/* binding */ toPKCS8),
+/* harmony export */   toSPKI: () => (/* binding */ toSPKI)
 /* harmony export */ });
 /* harmony import */ var _webcrypto_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./webcrypto.js */ "./node_modules/jose/dist/browser/runtime/webcrypto.js");
 /* harmony import */ var _lib_invalid_key_input_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lib/invalid_key_input.js */ "./node_modules/jose/dist/browser/lib/invalid_key_input.js");
@@ -64748,7 +65774,7 @@ const fromX509 = (pem, alg, options) => {
         spki = getSPKI(pem);
     }
     catch (cause) {
-        throw new TypeError('failed to parse the X.509 certificate', { cause });
+        throw new TypeError('Failed to parse the X.509 certificate', { cause });
     }
     return fromSPKI(spki, alg, options);
 };
@@ -64765,10 +65791,10 @@ const fromX509 = (pem, alg, options) => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "decode": () => (/* binding */ decode),
-/* harmony export */   "decodeBase64": () => (/* binding */ decodeBase64),
-/* harmony export */   "encode": () => (/* binding */ encode),
-/* harmony export */   "encodeBase64": () => (/* binding */ encodeBase64)
+/* harmony export */   decode: () => (/* binding */ decode),
+/* harmony export */   decodeBase64: () => (/* binding */ decodeBase64),
+/* harmony export */   encode: () => (/* binding */ encode),
+/* harmony export */   encodeBase64: () => (/* binding */ encodeBase64)
 /* harmony export */ });
 /* harmony import */ var _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../lib/buffer_utils.js */ "./node_modules/jose/dist/browser/lib/buffer_utils.js");
 
@@ -65020,9 +66046,9 @@ const digest = async (algorithm, data) => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "deriveKey": () => (/* binding */ deriveKey),
-/* harmony export */   "ecdhAllowed": () => (/* binding */ ecdhAllowed),
-/* harmony export */   "generateEpk": () => (/* binding */ generateEpk)
+/* harmony export */   deriveKey: () => (/* binding */ deriveKey),
+/* harmony export */   ecdhAllowed: () => (/* binding */ ecdhAllowed),
+/* harmony export */   generateEpk: () => (/* binding */ generateEpk)
 /* harmony export */ });
 /* harmony import */ var _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../lib/buffer_utils.js */ "./node_modules/jose/dist/browser/lib/buffer_utils.js");
 /* harmony import */ var _webcrypto_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./webcrypto.js */ "./node_modules/jose/dist/browser/runtime/webcrypto.js");
@@ -65229,8 +66255,8 @@ const fetchJwks = async (url, timeout, options) => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "generateKeyPair": () => (/* binding */ generateKeyPair),
-/* harmony export */   "generateSecret": () => (/* binding */ generateSecret)
+/* harmony export */   generateKeyPair: () => (/* binding */ generateKeyPair),
+/* harmony export */   generateSecret: () => (/* binding */ generateSecret)
 /* harmony export */ });
 /* harmony import */ var _webcrypto_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./webcrypto.js */ "./node_modules/jose/dist/browser/runtime/webcrypto.js");
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
@@ -65426,7 +66452,7 @@ function getCryptoKey(alg, key, usage) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
-/* harmony export */   "types": () => (/* binding */ types)
+/* harmony export */   types: () => (/* binding */ types)
 /* harmony export */ });
 /* harmony import */ var _webcrypto_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./webcrypto.js */ "./node_modules/jose/dist/browser/runtime/webcrypto.js");
 
@@ -65648,8 +66674,8 @@ const keyToJWK = async (key) => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "decrypt": () => (/* binding */ decrypt),
-/* harmony export */   "encrypt": () => (/* binding */ encrypt)
+/* harmony export */   decrypt: () => (/* binding */ decrypt),
+/* harmony export */   encrypt: () => (/* binding */ encrypt)
 /* harmony export */ });
 /* harmony import */ var _random_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./random.js */ "./node_modules/jose/dist/browser/runtime/random.js");
 /* harmony import */ var _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lib/buffer_utils.js */ "./node_modules/jose/dist/browser/lib/buffer_utils.js");
@@ -65742,8 +66768,8 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "decrypt": () => (/* binding */ decrypt),
-/* harmony export */   "encrypt": () => (/* binding */ encrypt)
+/* harmony export */   decrypt: () => (/* binding */ decrypt),
+/* harmony export */   encrypt: () => (/* binding */ encrypt)
 /* harmony export */ });
 /* harmony import */ var _subtle_rsaes_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./subtle_rsaes.js */ "./node_modules/jose/dist/browser/runtime/subtle_rsaes.js");
 /* harmony import */ var _bogus_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./bogus.js */ "./node_modules/jose/dist/browser/runtime/bogus.js");
@@ -65972,7 +66998,7 @@ const verify = async (alg, key, signature, data) => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
-/* harmony export */   "isCryptoKey": () => (/* binding */ isCryptoKey)
+/* harmony export */   isCryptoKey: () => (/* binding */ isCryptoKey)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (crypto);
 const isCryptoKey = (key) => key instanceof CryptoKey;
@@ -65989,8 +67015,8 @@ const isCryptoKey = (key) => key instanceof CryptoKey;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "deflate": () => (/* binding */ deflate),
-/* harmony export */   "inflate": () => (/* binding */ inflate)
+/* harmony export */   deflate: () => (/* binding */ deflate),
+/* harmony export */   inflate: () => (/* binding */ inflate)
 /* harmony export */ });
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
 
@@ -66013,8 +67039,8 @@ const deflate = async () => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "decode": () => (/* binding */ decode),
-/* harmony export */   "encode": () => (/* binding */ encode)
+/* harmony export */   decode: () => (/* binding */ decode),
+/* harmony export */   encode: () => (/* binding */ encode)
 /* harmony export */ });
 /* harmony import */ var _runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../runtime/base64url.js */ "./node_modules/jose/dist/browser/runtime/base64url.js");
 
@@ -66033,7 +67059,7 @@ const decode = _runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "decodeJwt": () => (/* binding */ decodeJwt)
+/* harmony export */   decodeJwt: () => (/* binding */ decodeJwt)
 /* harmony export */ });
 /* harmony import */ var _base64url_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./base64url.js */ "./node_modules/jose/dist/browser/util/base64url.js");
 /* harmony import */ var _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lib/buffer_utils.js */ "./node_modules/jose/dist/browser/lib/buffer_utils.js");
@@ -66058,7 +67084,7 @@ function decodeJwt(jwt) {
         decoded = (0,_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(payload);
     }
     catch (_a) {
-        throw new _errors_js__WEBPACK_IMPORTED_MODULE_3__.JWTInvalid('Failed to parse the base64url encoded payload');
+        throw new _errors_js__WEBPACK_IMPORTED_MODULE_3__.JWTInvalid('Failed to base64url decode the payload');
     }
     let result;
     try {
@@ -66084,7 +67110,7 @@ function decodeJwt(jwt) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "decodeProtectedHeader": () => (/* binding */ decodeProtectedHeader)
+/* harmony export */   decodeProtectedHeader: () => (/* binding */ decodeProtectedHeader)
 /* harmony export */ });
 /* harmony import */ var _base64url_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./base64url.js */ "./node_modules/jose/dist/browser/util/base64url.js");
 /* harmony import */ var _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lib/buffer_utils.js */ "./node_modules/jose/dist/browser/lib/buffer_utils.js");
@@ -66136,21 +67162,21 @@ function decodeProtectedHeader(token) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "JOSEAlgNotAllowed": () => (/* binding */ JOSEAlgNotAllowed),
-/* harmony export */   "JOSEError": () => (/* binding */ JOSEError),
-/* harmony export */   "JOSENotSupported": () => (/* binding */ JOSENotSupported),
-/* harmony export */   "JWEDecryptionFailed": () => (/* binding */ JWEDecryptionFailed),
-/* harmony export */   "JWEInvalid": () => (/* binding */ JWEInvalid),
-/* harmony export */   "JWKInvalid": () => (/* binding */ JWKInvalid),
-/* harmony export */   "JWKSInvalid": () => (/* binding */ JWKSInvalid),
-/* harmony export */   "JWKSMultipleMatchingKeys": () => (/* binding */ JWKSMultipleMatchingKeys),
-/* harmony export */   "JWKSNoMatchingKey": () => (/* binding */ JWKSNoMatchingKey),
-/* harmony export */   "JWKSTimeout": () => (/* binding */ JWKSTimeout),
-/* harmony export */   "JWSInvalid": () => (/* binding */ JWSInvalid),
-/* harmony export */   "JWSSignatureVerificationFailed": () => (/* binding */ JWSSignatureVerificationFailed),
-/* harmony export */   "JWTClaimValidationFailed": () => (/* binding */ JWTClaimValidationFailed),
-/* harmony export */   "JWTExpired": () => (/* binding */ JWTExpired),
-/* harmony export */   "JWTInvalid": () => (/* binding */ JWTInvalid)
+/* harmony export */   JOSEAlgNotAllowed: () => (/* binding */ JOSEAlgNotAllowed),
+/* harmony export */   JOSEError: () => (/* binding */ JOSEError),
+/* harmony export */   JOSENotSupported: () => (/* binding */ JOSENotSupported),
+/* harmony export */   JWEDecryptionFailed: () => (/* binding */ JWEDecryptionFailed),
+/* harmony export */   JWEInvalid: () => (/* binding */ JWEInvalid),
+/* harmony export */   JWKInvalid: () => (/* binding */ JWKInvalid),
+/* harmony export */   JWKSInvalid: () => (/* binding */ JWKSInvalid),
+/* harmony export */   JWKSMultipleMatchingKeys: () => (/* binding */ JWKSMultipleMatchingKeys),
+/* harmony export */   JWKSNoMatchingKey: () => (/* binding */ JWKSNoMatchingKey),
+/* harmony export */   JWKSTimeout: () => (/* binding */ JWKSTimeout),
+/* harmony export */   JWSInvalid: () => (/* binding */ JWSInvalid),
+/* harmony export */   JWSSignatureVerificationFailed: () => (/* binding */ JWSSignatureVerificationFailed),
+/* harmony export */   JWTClaimValidationFailed: () => (/* binding */ JWTClaimValidationFailed),
+/* harmony export */   JWTExpired: () => (/* binding */ JWTExpired),
+/* harmony export */   JWTInvalid: () => (/* binding */ JWTInvalid)
 /* harmony export */ });
 class JOSEError extends Error {
     static get code() {
@@ -66300,6 +67326,24 @@ class JWSSignatureVerificationFailed extends JOSEError {
         return 'ERR_JWS_SIGNATURE_VERIFICATION_FAILED';
     }
 }
+
+
+/***/ }),
+
+/***/ "./node_modules/jose/dist/browser/util/runtime.js":
+/*!********************************************************!*\
+  !*** ./node_modules/jose/dist/browser/util/runtime.js ***!
+  \********************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _runtime_runtime_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../runtime/runtime.js */ "./node_modules/jose/dist/browser/runtime/runtime.js");
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_runtime_runtime_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 
 /***/ }),
@@ -66481,6 +67525,7 @@ module.exports = JSON.parse('{"application/1d-interleaved-parityfec":{"source":"
 /******/ 					script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 				}
 /******/ 				script.setAttribute("data-webpack", dataWebpackPrefix + key);
+/******/ 		
 /******/ 				script.src = url;
 /******/ 			}
 /******/ 			inProgress[url] = [done];
@@ -66571,7 +67616,7 @@ module.exports = JSON.parse('{"application/1d-interleaved-parityfec":{"source":"
 /******/ 								}
 /******/ 							};
 /******/ 							__webpack_require__.l(url, loadingEnded, "chunk-" + chunkId, chunkId);
-/******/ 						} else installedChunks[chunkId] = 0;
+/******/ 						}
 /******/ 					}
 /******/ 				}
 /******/ 		};
