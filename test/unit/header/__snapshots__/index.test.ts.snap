@@ -2,25 +2,25 @@
 
 exports[`createBanner check customized logo... 1`] = `
 <div
-  style="box-shadow: 0px 1px 4px #000000; display: flex; justify-content: space-between; padding: 0 1.5em; margin-bottom: 4px"
+  style="box-shadow: 0px 1px 4px #000000; display: flex; justify-content: space-between; padding: 0 1.5em; margin-bottom: 4px;"
 >
   <a
     href="https://test.com"
-    style="display: block"
+    style="display: block;"
   >
     <img
       src="https://solidproject.org/assets/img/solid-emblem.svg"
-      style="background-size: 65px 60px !important; height: 60px !important; width: 65px !important"
+      style="background-size: 65px 60px !important; height: 60px !important; width: 65px !important;"
     />
   </a>
   <div
-    style="display: flex"
+    style="display: flex;"
   >
     <div
       style="undefined"
     >
       <button
-        style="background: none; border: 0; cursor: pointer; width: 60px; height: 60px"
+        style="background: none; border: 0; cursor: pointer; width: 60px; height: 60px;"
         type="button"
       >
         
@@ -87,50 +87,50 @@ exports[`createBanner check customized logo... 1`] = `
       <nav
         aria-hidden="true"
         id="loggedInNav"
-        style="background: white; border: solid 1px #000000; border-right: 0; position: absolute; right: 0; top: 60px; width: 200px; z-index: 1; display: none"
+        style="background: white; border: solid 1px #000000; border-right: 0; position: absolute; right: 0; top: 60px; width: 200px; z-index: 1; display: none;"
       >
         <ul
-          style="list-style: none; margin: 0; padding: 0"
+          style="list-style: none; margin: 0; padding: 0;"
         >
           <li
-            style="border-bottom: solid 1px #000000"
+            style="border-bottom: solid 1px #000000;"
           >
             <a
               href="https://reflectechblog.wordpress.com/"
-              style="background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em;  width: 100%; text-decoration: none"
+              style="background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em;  width: 100%; text-decoration: none;"
             />
           </li>
         </ul>
       </nav>
     </div>
     <div
-      style="border-left: solid 1px #000000; margin-left: auto"
+      style="border-left: solid 1px #000000; margin-left: auto;"
     >
       <nav
         aria-hidden="true"
         id="helperNav"
-        style="background: white; border: solid 1px #000000; border-right: 0; position: absolute; right: 0; top: 60px; width: 200px; z-index: 1; display: none"
+        style="background: white; border: solid 1px #000000; border-right: 0; position: absolute; right: 0; top: 60px; width: 200px; z-index: 1; display: none;"
       >
         <ul
-          style="list-style: none; margin: 0; padding: 0"
+          style="list-style: none; margin: 0; padding: 0;"
         >
           <li
-            style="border-bottom: solid 1px #000000"
+            style="border-bottom: solid 1px #000000;"
           >
             <a
               href="https://reflectechblog.wordpress.com/"
-              style="background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em;  width: 100%; text-decoration: none"
+              style="background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em;  width: 100%; text-decoration: none;"
             />
           </li>
         </ul>
       </nav>
       <button
-        style="background: none; border: 0; cursor: pointer; width: 60px; height: 60px"
+        style="background: none; border: 0; cursor: pointer; width: 60px; height: 60px;"
         type="button"
       >
         <img
           src="https://solidos.github.io/solid-ui/src/icons/https://solidos.github.io/solid-ui/src/icons/noun_help.svg"
-          style="border-radius: 50%; height: 56px; width: 28px !important"
+          style="border-radius: 50%; height: 56px; width: 28px !important;"
         />
       </button>
     </div>
@@ -140,25 +140,25 @@ exports[`createBanner check customized logo... 1`] = `
 
 exports[`createBanner creates a link 1`] = `
 <div
-  style="box-shadow: 0px 1px 4px #000000; display: flex; justify-content: space-between; padding: 0 1.5em; margin-bottom: 4px"
+  style="box-shadow: 0px 1px 4px #000000; display: flex; justify-content: space-between; padding: 0 1.5em; margin-bottom: 4px;"
 >
   <a
     href="https://test.com"
-    style="display: block"
+    style="display: block;"
   >
     <img
       src="https://solidproject.org/assets/img/solid-emblem.svg"
-      style="background-size: 65px 60px !important; height: 60px !important; width: 65px !important"
+      style="background-size: 65px 60px !important; height: 60px !important; width: 65px !important;"
     />
   </a>
   <div
-    style="display: flex"
+    style="display: flex;"
   >
     <div
       style="undefined"
     >
       <button
-        style="background: none; border: 0; cursor: pointer; width: 60px; height: 60px"
+        style="background: none; border: 0; cursor: pointer; width: 60px; height: 60px;"
         type="button"
       >
         
@@ -225,50 +225,50 @@ exports[`createBanner creates a link 1`] = `
       <nav
         aria-hidden="true"
         id="loggedInNav"
-        style="background: white; border: solid 1px #000000; border-right: 0; position: absolute; right: 0; top: 60px; width: 200px; z-index: 1; display: none"
+        style="background: white; border: solid 1px #000000; border-right: 0; position: absolute; right: 0; top: 60px; width: 200px; z-index: 1; display: none;"
       >
         <ul
-          style="list-style: none; margin: 0; padding: 0"
+          style="list-style: none; margin: 0; padding: 0;"
         >
           <li
-            style="border-bottom: solid 1px #000000"
+            style="border-bottom: solid 1px #000000;"
           >
             <a
               href="https://reflectechblog.wordpress.com/"
-              style="background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em;  width: 100%; text-decoration: none"
+              style="background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em;  width: 100%; text-decoration: none;"
             />
           </li>
         </ul>
       </nav>
     </div>
     <div
-      style="border-left: solid 1px #000000; margin-left: auto"
+      style="border-left: solid 1px #000000; margin-left: auto;"
     >
       <nav
         aria-hidden="true"
         id="helperNav"
-        style="background: white; border: solid 1px #000000; border-right: 0; position: absolute; right: 0; top: 60px; width: 200px; z-index: 1; display: none"
+        style="background: white; border: solid 1px #000000; border-right: 0; position: absolute; right: 0; top: 60px; width: 200px; z-index: 1; display: none;"
       >
         <ul
-          style="list-style: none; margin: 0; padding: 0"
+          style="list-style: none; margin: 0; padding: 0;"
         >
           <li
-            style="border-bottom: solid 1px #000000"
+            style="border-bottom: solid 1px #000000;"
           >
             <a
               href="https://reflectechblog.wordpress.com/"
-              style="background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em;  width: 100%; text-decoration: none"
+              style="background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em;  width: 100%; text-decoration: none;"
             />
           </li>
         </ul>
       </nav>
       <button
-        style="background: none; border: 0; cursor: pointer; width: 60px; height: 60px"
+        style="background: none; border: 0; cursor: pointer; width: 60px; height: 60px;"
         type="button"
       >
         <img
           src="https://solidos.github.io/solid-ui/src/icons/https://solidos.github.io/solid-ui/src/icons/noun_help.svg"
-          style="border-radius: 50%; height: 56px; width: 28px !important"
+          style="border-radius: 50%; height: 56px; width: 28px !important;"
         />
       </button>
     </div>
@@ -278,24 +278,24 @@ exports[`createBanner creates a link 1`] = `
 
 exports[`createHelpMenu creates a menu.... 1`] = `
 <div
-  style="border-left: solid 1px #000000; margin-left: auto"
+  style="border-left: solid 1px #000000; margin-left: auto;"
 >
   <nav
     aria-hidden="true"
     id="helperNav"
-    style="background: white; border: solid 1px #000000; border-right: 0; position: absolute; right: 0; top: 60px; width: 200px; z-index: 1; display: none"
+    style="background: white; border: solid 1px #000000; border-right: 0; position: absolute; right: 0; top: 60px; width: 200px; z-index: 1; display: none;"
   >
     <ul
-      style="list-style: none; margin: 0; padding: 0"
+      style="list-style: none; margin: 0; padding: 0;"
     />
   </nav>
   <button
-    style="background: none; border: 0; cursor: pointer; width: 60px; height: 60px"
+    style="background: none; border: 0; cursor: pointer; width: 60px; height: 60px;"
     type="button"
   >
     <img
       src="https://solidos.github.io/solid-ui/src/icons/https://solidos.github.io/solid-ui/src/icons/noun_help.svg"
-      style="border-radius: 50%; height: 56px; width: 28px !important"
+      style="border-radius: 50%; height: 56px; width: 28px !important;"
     />
   </button>
 </div>
@@ -303,7 +303,7 @@ exports[`createHelpMenu creates a menu.... 1`] = `
 
 exports[`createLoginSignUpButtons creates div 1`] = `
 <div
-  style="margin-left: auto"
+  style="margin-left: auto;"
 >
   <div>
     <div
@@ -311,12 +311,12 @@ exports[`createLoginSignUpButtons creates div 1`] = `
       style="display:flex;"
     >
       <input
-        style="padding: 1em; border-radius:0.5em; font-size: 100%;background-color: #eef;margin: 0.75em 0 0.75em 0.5em !important; padding: 0.5em !important"
+        style="padding: 1em; border-radius:0.2em; font-size: 100%;margin: 0.75em 0 0.75em 0.5em !important; padding: 0.5em !important;background-color: #eef;"
         type="button"
         value="Log in"
       />
       <input
-        style="padding: 1em; border-radius:0.5em; font-size: 100%;background-color: #efe;margin: 0.75em 0 0.75em 0.5em !important; padding: 0.5em !important"
+        style="padding: 1em; border-radius:0.2em; font-size: 100%;margin: 0.75em 0 0.75em 0.5em !important; padding: 0.5em !important;background-color: #efe;"
         type="button"
         value="Sign Up for Solid"
       />
@@ -330,7 +330,7 @@ exports[`createUserMenu creates a menu.... 1`] = `
   style="undefined"
 >
   <button
-    style="background: none; border: 0; cursor: pointer; width: 60px; height: 60px"
+    style="background: none; border: 0; cursor: pointer; width: 60px; height: 60px;"
     type="button"
   >
     
@@ -397,17 +397,17 @@ exports[`createUserMenu creates a menu.... 1`] = `
   <nav
     aria-hidden="true"
     id="loggedInNav"
-    style="background: white; border: solid 1px #000000; border-right: 0; position: absolute; right: 0; top: 60px; width: 200px; z-index: 1; display: none"
+    style="background: white; border: solid 1px #000000; border-right: 0; position: absolute; right: 0; top: 60px; width: 200px; z-index: 1; display: none;"
   >
     <ul
-      style="list-style: none; margin: 0; padding: 0"
+      style="list-style: none; margin: 0; padding: 0;"
     >
       <li
-        style="border-bottom: solid 1px #000000"
+        style="border-bottom: solid 1px #000000;"
       >
         <a
           href="https://reflectechblog.wordpress.com/"
-          style="background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em;  width: 100%; text-decoration: none"
+          style="background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em;  width: 100%; text-decoration: none;"
         />
       </li>
     </ul>
@@ -417,13 +417,13 @@ exports[`createUserMenu creates a menu.... 1`] = `
 
 exports[`createUserMenuButton creates a button 1`] = `
 <button
-  style="background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em; width: 100%"
+  style="background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em; width: 100%;"
 />
 `;
 
 exports[`createUserMenuItem creates a link 1`] = `
 <li
-  style="border-bottom: solid 1px #000000"
+  style="border-bottom: solid 1px #000000;"
 >
   <ul />
 </li>
@@ -432,7 +432,7 @@ exports[`createUserMenuItem creates a link 1`] = `
 exports[`createUserMenuLink creates a link 1`] = `
 <a
   href="http://www.test.com"
-  style="background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em;  width: 100%; text-decoration: none"
+  style="background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em;  width: 100%; text-decoration: none;"
 />
 `;
 

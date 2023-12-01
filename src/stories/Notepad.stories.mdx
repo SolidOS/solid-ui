@@ -93,7 +93,7 @@ Creates the table with the list of participants that have contributed to the giv
         const subject = kb.sym('https://test.test#')
         const options = {} // what to put in options
         //options are used in the button personTR there are the following properties can be defined deleteFunction, link, draggable
-        const tableOfParticipants = UI.pad.renderPartipants(document, table, pad, subject, new UI.rdf.NamedNode('https://sharonstrats.inrupt.net/profile/card#me'), options)
+        const tableOfParticipants = UI.pad.renderParticipants(document, table, pad, subject, new UI.rdf.NamedNode('https://sharonstrats.inrupt.net/profile/card#me'), options)
         div.appendChild(tableOfParticipants)
       })
       return div

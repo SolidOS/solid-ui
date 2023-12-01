@@ -12,6 +12,8 @@
  */
 /* eslint-disable no-console */
 import { cancelButton } from '../widgets'
+import * as style from '../style'
+import styleConstants from '../styleConstants'
 
 export function errorMessageBlock (dom: HTMLDocument, err: string | Error, backgroundColor?: string, err2?: Error): HTMLDivElement {
   const div = dom.createElement('div')
@@ -28,13 +30,9 @@ export function errorMessageBlock (dom: HTMLDocument, err: string | Error, backg
   }
 
   div.appendChild(cancelButton(dom, () => { if (div.parentNode) div.parentNode.removeChild(div) }))
-    .style = 'width: 2em; height: 2em; align: right;'
+    .style = style.errorCancelButton
 
-  div.setAttribute(
-    'style',
-    'margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; background-color: ' +
-      (backgroundColor || '#fee') +
-      '; color:black;'
-  )
+  div.setAttribute('style', style.errorMessageBlockStyle)
+  div.style.backgroundColor = (backgroundColor || styleConstants.defaultErrorBackgroundColor)
   return div
 }

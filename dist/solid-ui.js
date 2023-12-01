@@ -38,8 +38,8 @@ var _aclControl = __webpack_require__(/*! ./acl-control */ "./lib/acl/acl-contro
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 /**
  * Contains the [[AccessController]] class
  * @packageDocumentation
@@ -47,7 +47,7 @@ function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; 
 /**
  * Rendered HTML component used in the databrowser's Sharing pane.
  */
-var AccessController = exports.AccessController = /*#__PURE__*/function () {
+var AccessController = /*#__PURE__*/function () {
   function AccessController(subject, noun, context, statusElement, targetIsProtected, targetDoc, targetACLDoc, defaultHolder, defaultACLDoc, prospectiveDefaultHolder, store, dom) {
     (0, _classCallCheck2["default"])(this, AccessController);
     this.subject = subject;
@@ -410,6 +410,7 @@ var AccessController = exports.AccessController = /*#__PURE__*/function () {
   }]);
   return AccessController;
 }();
+exports.AccessController = AccessController;
 //# sourceMappingURL=access-controller.js.map
 
 /***/ }),
@@ -442,8 +443,8 @@ var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js")
 var _addAgentButtons = __webpack_require__(/*! ./add-agent-buttons */ "./lib/acl/add-agent-buttons.js");
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 /**
  * Contains the [[AccessGroups]]
  * and [[AccessGroupsOptions]] classes
@@ -482,7 +483,7 @@ var EXPLANATION = {
  * Renders the table of Owners, Editors, Posters, Submitters, Viewers
  * for https://github.com/solidos/userguide/blob/main/views/sharing/userguide.md
  */
-var AccessGroups = exports.AccessGroups = /*#__PURE__*/function () {
+var AccessGroups = /*#__PURE__*/function () {
   // @@ was LiveStore but does not need to be connected to web
 
   function AccessGroups(doc, aclDoc, controller, store) {
@@ -840,6 +841,7 @@ var AccessGroups = exports.AccessGroups = /*#__PURE__*/function () {
   }]);
   return AccessGroups;
 }();
+exports.AccessGroups = AccessGroups;
 function kToCombo(k) {
   var y = ['Read', 'Append', 'Write', 'Control'];
   var combo = [];
@@ -960,8 +962,8 @@ var _acl = __webpack_require__(/*! ./acl */ "./lib/acl/acl.js");
 var _accessController = __webpack_require__(/*! ./access-controller */ "./lib/acl/access-controller.js");
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
 var _debug = __webpack_require__(/*! ../debug */ "./lib/debug.js");
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 /**
  * Functions for rendering the ACL User Interface.
  * See https://github.com/solidos/userguide/blob/main/views/sharing/userguide.md#view
@@ -1220,8 +1222,8 @@ var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-l
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
 var _rdflib = __webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js");
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 /**
  * Non-UI functions for access control.
  * See https://github.com/solidos/web-access-control-spec
@@ -1283,6 +1285,7 @@ function readACL(doc, aclDoc) {
       });
     });
   });
+
   return ac;
   function getDefaultsFallback(kb, ns) {
     return kb.each(undefined, ns.acl('default'), doc).concat(kb.each(undefined, ns.acl('defaultForNew'), doc));
@@ -1620,6 +1623,7 @@ function getACLorDefault(doc, callbackFunction) {
         if (!defaults.length) {
           return tryParent(uri); // Keep searching
         }
+
         var defaultHolder = kb.sym(uri);
         return callbackFunction(true, false, doc, aclDoc, defaultHolder, defaultACLDoc);
       });
@@ -1735,8 +1739,8 @@ var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js")
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 /**
  * Contains the [[AddAgentButtons]] class
  * @packageDocumentation
@@ -1745,7 +1749,7 @@ function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; 
  * Renders the Sharing pane's "+" button and the menus behind it,
  * see https://github.com/solidos/userguide/blob/main/views/sharing/userguide.md#add
  */
-var AddAgentButtons = exports.AddAgentButtons = /*#__PURE__*/function () {
+var AddAgentButtons = /*#__PURE__*/function () {
   function AddAgentButtons(groupList) {
     (0, _classCallCheck2["default"])(this, AddAgentButtons);
     this.groupList = groupList;
@@ -2150,6 +2154,7 @@ var AddAgentButtons = exports.AddAgentButtons = /*#__PURE__*/function () {
   }]);
   return AddAgentButtons;
 }();
+exports.AddAgentButtons = AddAgentButtons;
 //# sourceMappingURL=add-agent-buttons.js.map
 
 /***/ }),
@@ -2174,7 +2179,7 @@ var _aclControl = __webpack_require__(/*! ./acl-control */ "./lib/acl/acl-contro
  * @packageDocumentation
  */
 
-var acl = exports.acl = {
+var acl = {
   adoptACLDefault: _acl.adoptACLDefault,
   readACL: _acl.readACL,
   sameACL: _acl.sameACL,
@@ -2194,11 +2199,13 @@ var acl = exports.acl = {
   getACLorDefault: _acl.getACLorDefault,
   getACL: _acl.getACL
 };
-var aclControl = exports.aclControl = {
+exports.acl = acl;
+var aclControl = {
   preventBrowserDropEvents: _aclControl.preventBrowserDropEvents,
   shortNameForFolder: _aclControl.shortNameForFolder,
   ACLControlBox5: _aclControl.ACLControlBox5
 };
+exports.aclControl = aclControl;
 //# sourceMappingURL=index.js.map
 
 /***/ }),
@@ -2233,8 +2240,8 @@ var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/u
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var _login = __webpack_require__(/*! ../login/login */ "./lib/login/login.js");
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 /**
  * Functions related to chat and bookmarks
  * @packageDocumentation
@@ -2586,8 +2593,8 @@ var $rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_mod
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
 var _signature = __webpack_require__(/*! ./signature */ "./lib/chat/signature.js");
 var _keys = __webpack_require__(/*! ./keys */ "./lib/chat/keys.js");
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 /**
  * Contains the [[ChatChannel]] class and logic for Solid Chat
  * @packageDocumentation
@@ -2603,7 +2610,7 @@ function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; 
  * index.ttl#this and the chats messages are stored in YYYY/MM/DD/chat.ttl
  *
  */
-var ChatChannel = exports.ChatChannel = /*#__PURE__*/function () {
+var ChatChannel = /*#__PURE__*/function () {
   function ChatChannel(channel, options) {
     (0, _classCallCheck2["default"])(this, ChatChannel);
     this.channel = channel;
@@ -2617,7 +2624,7 @@ var ChatChannel = exports.ChatChannel = /*#__PURE__*/function () {
   */
   (0, _createClass2["default"])(ChatChannel, [{
     key: "createMessage",
-    value: (function () {
+    value: function () {
       var _createMessage = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(text) {
         return _regenerator["default"].wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
@@ -2638,10 +2645,9 @@ var ChatChannel = exports.ChatChannel = /*#__PURE__*/function () {
       as a replacement for an existing one.
       The old one iis left, and the two are linked
     */
-    )
   }, {
     key: "updateMessage",
-    value: (function () {
+    value: function () {
       var _updateMessage = (0, _asyncToGenerator2["default"])(function (text) {
         var _this = this;
         var oldMsg = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
@@ -2739,10 +2745,9 @@ var ChatChannel = exports.ChatChannel = /*#__PURE__*/function () {
     * Wee add a new version of the message,m witha deletion flag (deletion date)
     * so that the deletion can be revoked by adding another non-deleted update
     */
-    )
   }, {
     key: "deleteMessage",
-    value: (function () {
+    value: function () {
       var _deleteMessage = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(message) {
         return _regenerator["default"].wrap(function _callee3$(_context3) {
           while (1) switch (_context3.prev = _context3.next) {
@@ -2758,10 +2763,11 @@ var ChatChannel = exports.ChatChannel = /*#__PURE__*/function () {
         return _deleteMessage.apply(this, arguments);
       }
       return deleteMessage;
-    }())
+    }()
   }]);
   return ChatChannel;
 }(); // class ChatChannel
+exports.ChatChannel = ChatChannel;
 function originalVersion(message) {
   var msg = message;
   while (msg) {
@@ -2882,8 +2888,8 @@ var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/d
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
 var $rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 /**
  * Contains the [[DateFolder]] class
  * This tracks data stored in dated folders and sub-folders
@@ -2893,7 +2899,7 @@ function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; 
 /**
  * Track back through the YYYY/MM/DD tree to find the previous/next day
  */
-var DateFolder = exports.DateFolder = /*#__PURE__*/function () {
+var DateFolder = /*#__PURE__*/function () {
   function DateFolder(rootThing, leafFileName, membershipProperty) {
     (0, _classCallCheck2["default"])(this, DateFolder);
     this.root = rootThing;
@@ -2995,7 +3001,8 @@ var DateFolder = exports.DateFolder = /*#__PURE__*/function () {
                         younger = function _younger(x) {
                           if (backwards ? x.uri >= file.uri : x.uri <= file.uri) return false; // later than we want or same -- looking for different
                           return true;
-                        }; // debug.log('  previousPeriod level' + level + ' file ' + file)
+                        };
+                        // debug.log('  previousPeriod level' + level + ' file ' + file)
                         parent = file.dir();
                         _context2.prev = 5;
                         _context2.next = 8;
@@ -3066,7 +3073,8 @@ var DateFolder = exports.DateFolder = /*#__PURE__*/function () {
               previousPeriod = function _previousPeriod2(_x3, _x4) {
                 return _previousPeriod.apply(this, arguments);
               };
-              thisDateFolder = this; // previousPeriod
+              thisDateFolder = this;
+              // previousPeriod
               folder = this.leafDocumentFromDate(date).dir();
               _context3.next = 6;
               return previousPeriod(folder, 3);
@@ -3192,6 +3200,7 @@ var DateFolder = exports.DateFolder = /*#__PURE__*/function () {
   }]);
   return DateFolder;
 }(); // class
+exports.DateFolder = DateFolder;
 //# sourceMappingURL=dateFolder.js.map
 
 /***/ }),
@@ -3223,8 +3232,8 @@ var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js")
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
 var _chatLogic = __webpack_require__(/*! ./chatLogic */ "./lib/chat/chatLogic.js");
 var _message = __webpack_require__(/*! ./message */ "./lib/chat/message.js");
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 /**
  * Contains the [[infiniteMessageArea]] class
  * @packageDocumentation
@@ -3345,7 +3354,7 @@ function _infiniteMessageArea() {
                       selectedMessageTable.selectedElement.scrollIntoView({
                         block: 'center'
                       });
-                    }; // During initial load ONLY keep scroll to selected thing or bottom
+                    };
                     if (options.selectedMessage) {
                       selectedDocument = options.selectedMessage.doc();
                       now = new Date();
@@ -3743,6 +3752,7 @@ function _infiniteMessageArea() {
               } else {
                 messageTable.appendChild(tr); // not newestFirst
               }
+
               messageTable.inputRow = tr;
             }
 
@@ -3782,6 +3792,7 @@ function _infiniteMessageArea() {
                 messageTable.appendChild(scrollBackbuttonTR); //  newestFirst
               }
             }
+
             var sts = _solidLogic.store.statementsMatching(null, ns.wf('message'), null, chatDocument);
             if (!live && sts.length === 0) {
               // not todays
@@ -3919,6 +3930,7 @@ function _infiniteMessageArea() {
             if ((0, _chatLogic.isDeleted)(latest) && !options.showDeletedMessages) {
               return; // ignore deleted messaged -- @@ could also leave a placeholder
             }
+
             insertMessageIntoTable(channelObject, messageTable, message, messageTable.fresh, options, userContext); // fresh from elsewhere
           };
           syncMessages = function _syncMessages(about, messageTable) {
@@ -3954,31 +3966,10 @@ function _infiniteMessageArea() {
                 widgets.refreshTree(ele); // Things inside may have changed too
               }
             }
-          }; // ///////////////////////////////////////////////////////////////////////
-          // syncMessages
-          // Called once per original message displayed
-          /* Add a new messageTable at the top/bottom
-           */
-          /* Remove message tables earlier than this one
-           */
-          /* Load and render message table
-           ** @returns DOM element generates
-           */
-          // renderMessageTable
-          /*
-          function messageCount () {
-            var n = 0
-            const tables = div.children
-            for (let i = 0; i < tables.length; i++) {
-              n += tables[i].children.length - 1
-              // debug.log('    table length:' + tables[i].children.length)
-            }
-            return n
-          }
-          */
-          /* Add the live message block with entry field for today
-           */
+          };
+
           // Body of main function
+
           options = options || {};
           options.authorDateOnLeft = false; // @@ make a user optiosn
           newestFirst = options.newestFirst === '1' || options.newestFirst === true; // hack for now
@@ -4044,8 +4035,8 @@ var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-l
 var $rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
 var _accessData = __webpack_require__(/*! ../utils/keyHelpers/accessData */ "./lib/utils/keyHelpers/accessData.js");
 var _acl = __webpack_require__(/*! ../utils/keyHelpers/acl */ "./lib/utils/keyHelpers/acl.js");
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function generatePrivateKey() {
   return (0, _utils.bytesToHex)(_secp256k.schnorr.utils.randomPrivateKey());
 }
@@ -4267,6 +4258,14 @@ function _saveKey() {
 
 "use strict";
 
+  // console.log('kicking off async operation')
+  ensureLoadedPreferences(context) // kick off async operation
+  .then(displayOptions)["catch"](function (err) {
+    // console.log("err from async op")
+    box.appendChild(widgets.errorMessageBlock(context.dom, err));
+  });
+  return box; // return the box element, while login proceeds
+} // selectWorkspace
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
@@ -4297,14 +4296,11 @@ var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/u
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
 var _signature = __webpack_require__(/*! ./signature */ "./lib/chat/signature.js");
 var _keys = __webpack_require__(/*! ./keys */ "./lib/chat/keys.js");
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; } /**  UI code for individual messages: display them, edit them
- *
- * @packageDocumentation
- */ /* global $rdf */
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var dom = window.document;
 var messageBodyStyle = style.messageBodyStyle;
 var label = utils.label;
@@ -4340,6 +4336,7 @@ var anchor = function anchor(text, term) {
     a.addEventListener('click', widgets.openHrefInOutlineMode, true);
     a.setAttribute('style', 'color: #3B5998; text-decoration: none; '); // font-weight: bold
   }
+
   a.textContent = text;
   return a;
 };
@@ -4596,6 +4593,7 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
                   oldRow.style.backgroundColor = '#fee';
                   oldRow.style.visibility = 'hidden'; // @@ FIX THIS AND REMOVE FROM DOM INSTEAD
                 }
+
                 messageEditor.parentNode.removeChild(messageEditor); // no longer need editor
               } else {
                 if (fromMainField) {
@@ -4609,6 +4607,7 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
               }
               // await channelObject.div.refresh() // Add new day if nec  @@ add back
             };
+
             // const me = authn.currentUser() // Must be logged on or wuld have got login button
             if (fromMainField) {
               field.setAttribute('style', messageBodyStyle + 'color: #bbb;'); // pendingedit
@@ -4825,6 +4824,7 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
     sortDate = '9999-01-01T00:00:00Z'; // ISO format for field sort
     // text = ''
   }
+
   var messageEditor = dom.createElement('tr');
   var lhs = dom.createElement('td');
   var middle = dom.createElement('td');
@@ -4884,8 +4884,8 @@ var _bookmarks = __webpack_require__(/*! ./bookmarks */ "./lib/chat/bookmarks.js
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var _chatLogic = __webpack_require__(/*! ./chatLogic */ "./lib/chat/chatLogic.js");
 var _message = __webpack_require__(/*! ./message */ "./lib/chat/message.js");
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 /**
  * Tools for doing things with a message
  * Let us be creative here.  Allow all sorts of things to
@@ -5245,9 +5245,11 @@ var _sha = __webpack_require__(/*! @noble/hashes/sha256 */ "./node_modules/@nobl
 // import {utf8Encoder} from './utils'
 // import { getPublicKey } from './keys'
 
-var utf8Decoder = exports.utf8Decoder = new TextDecoder('utf-8');
-var utf8Encoder = exports.utf8Encoder = new TextEncoder();
-var SEC = exports.SEC = 'https://w3id.org/security#'; // Proof, VerificationMethod
+var utf8Decoder = new TextDecoder('utf-8');
+exports.utf8Decoder = utf8Decoder;
+var utf8Encoder = new TextEncoder();
+exports.utf8Encoder = utf8Encoder;
+var SEC = 'https://w3id.org/security#'; // Proof, VerificationMethod
 // export const CERT = 'http://www.w3.org/ns/auth/cert#' // PrivateKey, PublicKey, key
 
 /* eslint-disable no-unused-vars */
@@ -5274,7 +5276,7 @@ var SEC = exports.SEC = 'https://w3id.org/security#'; // Proof, VerificationMeth
   ProfileBadge = 30009,
   Article = 30023
 } */
-
+exports.SEC = SEC;
 function getBlankMsg() {
   return {
     id: '',
@@ -5361,8 +5363,8 @@ var _login = __webpack_require__(/*! ../login/login */ "./lib/login/login.js");
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 /*   create.js     UI to craete new objects in the solid-app-set world
  **
  */
@@ -5405,6 +5407,7 @@ function newThingUI(createContext, dataBrowserContext, thePanes) {
       iconArray[i].setAttribute('style', st); // eg 'background-color: #ccc;'
     }
   }
+
   function selectTool(icon) {
     styleTheIcons('display: none;'); // 'background-color: #ccc;'
     icon.setAttribute('style', iconStyle + 'background-color: yellow;');
@@ -5459,6 +5462,7 @@ function newThingUI(createContext, dataBrowserContext, thePanes) {
               // selectUI.parentNode.removeChild(selectUI) // Clean up
               // selectUIParent.removeChild(selectUI) // Clean up
             }
+
             selectNewTool(); // toggle star to plain and menu vanish again
           })["catch"](function (err) {
             complain(err);
@@ -5607,9 +5611,10 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.create = void 0;
 var _create = __webpack_require__(/*! ./create */ "./lib/create/create.js");
-var create = exports.create = {
+var create = {
   newThingUI: _create.newThingUI
 };
+exports.create = create;
 //# sourceMappingURL=index.js.map
 
 /***/ }),
@@ -5692,8 +5697,8 @@ var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/r
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
 var _headerFooterHelpers = __webpack_require__(/*! ../utils/headerFooterHelpers */ "./lib/utils/headerFooterHelpers.js");
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 /*
     This file was copied from mashlib/src/global/footer.ts file. It is modified to
     work in solid-ui by adjusting where imported functions are found.
@@ -5818,7 +5823,8 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.emptyProfile = void 0;
-var emptyProfile = exports.emptyProfile = "\n<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"26\" height=\"26\" viewBox=\"0 0 26 26\" fill=\"none\">\n    <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M13 25C19.6274 25 25 19.6274 25 13C25 6.37258 19.6274 1 13 1C6.37258 1 1 6.37258 1 13C1 19.6274 6.37258 25 13 25Z\" fill=\"#D8D8D8\" stroke=\"#8B8B8B\"/>\n    <mask id=\"mask0\" mask-type=\"alpha\" maskUnits=\"userSpaceOnUse\" x=\"0\" y=\"0\" width=\"26\" height=\"26\">\n        <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M13 25C19.6274 25 25 19.6274 25 13C25 6.37258 19.6274 1 13 1C6.37258 1 1 6.37258 1 13C1 19.6274 6.37258 25 13 25Z\" fill=\"white\" stroke=\"white\"/>\n    </mask>\n    <g mask=\"url(#mask0)\">\n        <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M17.0468 10.4586C17.0468 14.4979 15.4281 16.9214 12.9999 16.9214C10.5718 16.9214 8.95298 14.4979 8.95298 10.4586C8.95298 6.41931 12.9999 6.41931 12.9999 6.41931C12.9999 6.41931 17.0468 6.41931 17.0468 10.4586ZM4.09668 23.3842C6.52483 17.7293 12.9999 17.7293 12.9999 17.7293C12.9999 17.7293 19.475 17.7293 21.9031 23.3842C21.9031 23.3842 17.8481 25 12.9999 25C8.15169 25 4.09668 23.3842 4.09668 23.3842Z\" fill=\"#8B8B8B\"/>\n    </g>\n</svg>";
+var emptyProfile = "\n<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"26\" height=\"26\" viewBox=\"0 0 26 26\" fill=\"none\">\n    <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M13 25C19.6274 25 25 19.6274 25 13C25 6.37258 19.6274 1 13 1C6.37258 1 1 6.37258 1 13C1 19.6274 6.37258 25 13 25Z\" fill=\"#D8D8D8\" stroke=\"#8B8B8B\"/>\n    <mask id=\"mask0\" mask-type=\"alpha\" maskUnits=\"userSpaceOnUse\" x=\"0\" y=\"0\" width=\"26\" height=\"26\">\n        <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M13 25C19.6274 25 25 19.6274 25 13C25 6.37258 19.6274 1 13 1C6.37258 1 1 6.37258 1 13C1 19.6274 6.37258 25 13 25Z\" fill=\"white\" stroke=\"white\"/>\n    </mask>\n    <g mask=\"url(#mask0)\">\n        <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M17.0468 10.4586C17.0468 14.4979 15.4281 16.9214 12.9999 16.9214C10.5718 16.9214 8.95298 14.4979 8.95298 10.4586C8.95298 6.41931 12.9999 6.41931 12.9999 6.41931C12.9999 6.41931 17.0468 6.41931 17.0468 10.4586ZM4.09668 23.3842C6.52483 17.7293 12.9999 17.7293 12.9999 17.7293C12.9999 17.7293 19.475 17.7293 21.9031 23.3842C21.9031 23.3842 17.8481 25 12.9999 25C8.15169 25 4.09668 23.3842 4.09668 23.3842Z\" fill=\"#8B8B8B\"/>\n    </g>\n</svg>";
+exports.emptyProfile = emptyProfile;
 //# sourceMappingURL=empty-profile.js.map
 
 /***/ }),
@@ -5856,8 +5862,8 @@ var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./l
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
 var _emptyProfile = __webpack_require__(/*! ./empty-profile */ "./lib/header/empty-profile.js");
 var _headerFooterHelpers = __webpack_require__(/*! ../utils/headerFooterHelpers */ "./lib/utils/headerFooterHelpers.js");
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 /* global EventListenerOrEventListenerObject */
 /*
     This file was copied from mashlib/src/global/header.ts file. It is modified to
@@ -5871,11 +5877,6 @@ function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; 
 */
 var DEFAULT_HELP_MENU_ICON = _index.icons.iconBase + 'noun_help.svg';
 var DEFAUL_SOLID_ICON_URL = 'https://solidproject.org/assets/img/solid-emblem.svg';
-
-/*
-  HeaderOptions allow for customizing the logo and menu list.  If a logo is not provided the default
-  is solid. Menulist will always show a link to logout and to the users profile.
-  */
 /**
  * Initialize header component, the header object returned depends on whether the user is authenticated.
  * @param store the data store
@@ -6244,7 +6245,7 @@ var _debug = __webpack_require__(/*! ./debug */ "./lib/debug.js");
 // Do not export. Always us this module to find the icons, as they vary
 var iconsOnGithub = 'https://solidos.github.io/solid-ui/src'; // changed org 2022-05
 
-var icons = exports.icons = module.scriptURI // Firefox extension
+var icons = module.scriptURI // Firefox extension
 ? {
   iconBase: module.scriptURI.slice(0, module.scriptURI.lastIndexOf('/')) + '/icons/',
   originalIconBase: module.scriptURI.slice(0, module.scriptURI.lastIndexOf('/')) + '/originalIcons/'
@@ -6257,14 +6258,31 @@ var icons = exports.icons = module.scriptURI // Firefox extension
   iconBase: iconsOnGithub + '/icons/',
   originalIconBase: iconsOnGithub + '/originalIcons/'
 };
+exports.icons = icons;
 (0, _debug.log)('   icons.iconBase is set to : ' + icons.iconBase);
 
 // allow tests etc  named-import this directly from this module
-var iconBase = exports.iconBase = icons.iconBase;
-var originalIconBase = exports.originalIconBase = icons.originalIconBase;
+var iconBase = icons.iconBase;
+exports.iconBase = iconBase;
+var originalIconBase = icons.originalIconBase;
+exports.originalIconBase = originalIconBase;
 //# sourceMappingURL=iconBase.js.map
 
-/***/ }),
+  // Ensure that the display matches the current state of the
+  // @@ TODO really need to refactor this so that we don't need to cast types
+  var sync = function sync() {
+    // var first = kb.the(subject, PAD('next'))
+    if (kb.each(subject, PAD('next')).length !== 1) {
+      var msg = 'Pad: Inconsistent data - NEXT pointers: ' + kb.each(subject, PAD('next')).length;
+      (0, _debug.log)(msg);
+      if (options.statusArea) {
+        options.statusArea.textContent += msg;
+      }
+      return;
+    }
+    // var last = kb.the(undefined, PAD('previous'), subject)
+    // var chunk = first //  = kb.the(subject, PAD('next'));
+    var row;
 
 /***/ "./lib/index.js":
 /*!**********************!*\
@@ -6300,6 +6318,33 @@ If you would like to know more about the solid Solid project, please see
 https://github.com/solidos/solid
 */
 
+    // Remove any deleted lines
+    for (var _i = table.children.length - 1; _i >= 0; _i--) {
+      row = table.children[_i];
+      if (!manif[row.firstChild.subject.uri]) {
+        table.removeChild(row);
+      }
+    }
+    // Insert any new lines and update old ones
+    row = table.firstChild; // might be null
+    for (var _chunk = kb.the(subject, PAD('next')); !_chunk.sameTerm(subject); _chunk = kb.the(_chunk, PAD('next'))) {
+      var text = kb.any(_chunk, ns.sioc('content')).value;
+      // superstitious -- don't mess with unchanged input fields
+      // which may be selected by the user
+      if (row && manif[_chunk.uri]) {
+        var part = row.firstChild;
+        if (text !== part.value) {
+          part.value = text;
+        }
+        setPartStyle(part);
+        part.state = 0; // Clear the state machine
+        delete part.lastSent; // DEBUG ONLY
+        row = row.nextSibling;
+      } else {
+        newPartAfter(row, _chunk, true); // actually before
+      }
+    }
+  };
 
 /**
  * Provides a Solid client helper object (which exposes various static modules).
@@ -6445,8 +6490,8 @@ var _footer = __webpack_require__(/*! ./footer */ "./lib/footer/index.js");
 var createTypes = _interopRequireWildcard(__webpack_require__(/*! ./create/types */ "./lib/create/types.js"));
 exports.createTypes = createTypes;
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 // pull in first avoid cross-refs
 // @ts-ignore
 // @ts-ignore
@@ -6458,8 +6503,8 @@ function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; 
 // @ts-ignore
 // @ts-ignore
 // @ts-ignore
-var dom = exports.dom = window ? window.document : null; // Idea that UI.dom can be adapted in non-browser environments
-
+var dom = window ? window.document : null; // Idea that UI.dom can be adapted in non-browser environments
+exports.dom = dom;
 if (typeof window !== 'undefined') {
   ;
   window.UI = {
@@ -6546,7 +6591,10 @@ var TDEBUG = 32;
 var TALL = 63;
 
 /** @internal */
-var LogLevel = exports.LogLevel = /*#__PURE__*/function (LogLevel) {
+var LogLevel;
+/** @internal */
+exports.LogLevel = LogLevel;
+(function (LogLevel) {
   LogLevel[LogLevel["Error"] = 1] = "Error";
   LogLevel[LogLevel["Warning"] = 2] = "Warning";
   LogLevel[LogLevel["Message"] = 4] = "Message";
@@ -6554,9 +6602,7 @@ var LogLevel = exports.LogLevel = /*#__PURE__*/function (LogLevel) {
   LogLevel[LogLevel["Info"] = 16] = "Info";
   LogLevel[LogLevel["Debug"] = 32] = "Debug";
   LogLevel[LogLevel["All"] = 63] = "All";
-  return LogLevel;
-}({});
-/** @internal */
+})(LogLevel || (exports.LogLevel = LogLevel = {}));
 var _level = TERROR + TWARN + TMESG;
 /** @internal */
 var _ascending = false;
@@ -6761,34 +6807,11 @@ var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns.js */ "./lib/ns.j
 var _signup = __webpack_require__(/*! ../signup/signup.js */ "./lib/signup/signup.js");
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; } /* eslint-disable camelcase */ /**
- * Signing in, signing up, profile and preferences reloading
- * Type index management
- *
- * Many functions in this module take a context object which
- * holds various RDF symbols, add to it, and return a promise of it.
- *
- * * `me`                RDF symbol for the user's WebID
- * * `publicProfile`     The user's public profile, iff loaded
- * * `preferencesFile`   The user's personal preference file, iff loaded
- * * `index.public`      The user's public type index file
- * * `index.private`     The user's private type index file
- *
- * Not RDF symbols:
- * * `noun`            A string in english for the type of thing -- like "address book"
- * * `instance`        An array of nodes which are existing instances
- * * `containers`      An array of nodes of containers of instances
- * * `div`             A DOM element where UI can be displayed
- * * `statusArea`      A DOM element (opt) progress stuff can be displayed, or error messages
- * *
- * * Vocabulary:  "load" loads a file if it exists;
- * *  'Ensure" CREATES the file if it does not exist (if it can) and then loads it.
- * @packageDocumentation
- */ // eslint-disable-next-line camelcase
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var store = _solidLogic.solidLogicSingleton.store;
 var _solidLogicSingleton$ = _solidLogic.solidLogicSingleton.profile,
   loadPreferences = _solidLogicSingleton$.loadPreferences,
@@ -6826,6 +6849,7 @@ function ensureLoggedIn(context) {
         _solidLogic.authn.saveUser(webIdUri, context);
         resolve(context); // always pass growing context
       });
+
       context.div.appendChild(box);
     });
   });
@@ -7996,9 +8020,10 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.matrix = void 0;
 var _matrix = __webpack_require__(/*! ./matrix */ "./lib/matrix/matrix.js");
-var matrix = exports.matrix = {
+var matrix = {
   matrixForQuery: _matrix.matrixForQuery
 };
+exports.matrix = matrix;
 //# sourceMappingURL=index.js.map
 
 /***/ }),
@@ -8020,8 +8045,8 @@ exports.matrixForQuery = matrixForQuery;
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
 var $rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 //      Build a 2D matrix of values
 //
 //  dom      AKA document
@@ -8094,8 +8119,10 @@ function matrixForQuery(dom, query, vx, vy, vvalue, options, whenDone) {
         return matrix.insertBefore(tr, ele); // return the tr
       }
     }
+
     return matrix.appendChild(tr); // return the tr
   };
+
   var columnNumberFor = function columnNumberFor(x1) {
     var xNT = x1.toNT(); // xNT is a NT string
     var col = null;
@@ -8189,7 +8216,7 @@ function matrixForQuery(dom, query, vx, vy, vvalue, options, whenDone) {
             row.removeChild(_cell);
           }
         }
-      }
+      }, false);
     }
     var newcolumns = [];
     for (var _j2 = 0; _j2 < columns.length; _j2++) {
@@ -8244,10 +8271,11 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.media = void 0;
 var _mediaCapture = __webpack_require__(/*! ./media-capture */ "./lib/media/media-capture.js");
-var media = exports.media = {
+var media = {
   cameraCaptureControl: _mediaCapture.cameraCaptureControl,
   cameraButton: _mediaCapture.cameraButton
 };
+exports.media = media;
 //# sourceMappingURL=index.js.map
 
 /***/ }),
@@ -8272,21 +8300,21 @@ var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
 var _iconBase = __webpack_require__(/*! ../iconBase */ "./lib/iconBase.js");
+var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
-/// /////////////////////////////////////////////
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 //
 //   Media input widget
 //
 //
 // Workflow:
-// The HTML5 functionality (on mobille) is to prompt for either
-// a realtime camera capture , OR a selection from images already ont the device
+// The HTML5 functionality (on mobile) is to prompt for either
+// a realtime camera capture, OR a selection from images already not the device
 // (eg camera roll).
 //
-// The solid alternative is to either take a phtoto
-// or access cemra roll (etc) OR to access solid cloud storage of favorite photo almbums.
+// The solid alternative is to either take a photo
+// or access camera roll (etc) OR to access solid cloud storage of favorite photo albums.
 // (Especially latest taken ones)
 //
 
@@ -8295,10 +8323,6 @@ function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; 
 var cameraIcon = _iconBase.icons.iconBase + 'noun_Camera_1618446_000000.svg'; // Get it from github
 var retakeIcon = _iconBase.icons.iconBase + 'noun_479395.svg'; // Get it from github
 
-var canvasWidth = '640';
-var canvasHeight = '480';
-var controlStyle = "border-radius: 0.5em; margin: 0.8em; width: ".concat(canvasWidth, "; height:").concat(canvasHeight, ";");
-// const controlStyle = 'border-radius: 0.5em; margin: 0.8em; width: 320; height:240;'
 var contentType = 'image/png';
 
 /** A control to capture a picture using camera
@@ -8343,7 +8367,7 @@ function cameraCaptureControl(dom, store, getImageDoc, doneCallback) {
     player = main.appendChild(dom.createElement('video'));
     player.setAttribute('controls', '1');
     player.setAttribute('autoplay', '1');
-    player.setAttribute('style', controlStyle);
+    player.setAttribute('style', style.controlStyle);
     if (!navigator.mediaDevices) {
       throw new Error('navigator.mediaDevices not available');
     }
@@ -8361,12 +8385,13 @@ function cameraCaptureControl(dom, store, getImageDoc, doneCallback) {
     main.removeChild(canvas);
     displayPlayer(); // Make new one as old one is stuck black
   }
+
   function grabCanvas() {
     // Draw the video frame to the canvas.
     canvas = dom.createElement('canvas');
-    canvas.setAttribute('width', canvasWidth);
-    canvas.setAttribute('height', canvasHeight);
-    canvas.setAttribute('style', controlStyle);
+    canvas.setAttribute('width', style.canvasWidth);
+    canvas.setAttribute('height', style.canvasHeight);
+    canvas.setAttribute('style', style.controlStyle);
     main.appendChild(canvas);
     var context = canvas.getContext('2d');
     context.drawImage(player, 0, 0, canvas.width, canvas.height);
@@ -8380,17 +8405,21 @@ function cameraCaptureControl(dom, store, getImageDoc, doneCallback) {
       // alert(msg)
     }, contentType); // toBlob
   }
+
   function reviewImage() {
     sendButton.style.visibility = 'visible';
     retakeButton.style.visibility = 'visible';
     shutterButton.style.visibility = 'collapse'; // Hide for now
   }
+
   function stopVideo() {
     if (player && player.srcObject) {
       player.srcObject.getVideoTracks().forEach(function (track) {
         return track.stop();
       });
     }
+    throw new Error("getColumnForVariable: no column for variable ".concat(variableNT));
+    // return null
   }
   function saveBlob(blob, destination) {
     var contentType = blob.type;
@@ -8421,9 +8450,9 @@ function cameraCaptureControl(dom, store, getImageDoc, doneCallback) {
  * @param {IndexedForumla} store - The quadstore to store data in
  * @param {fuunction} getImageDoc - returns NN of the image file to be created
  * @param {function<Node>} doneCallback - called with the image taken
- * @returns {DomElement} - A div element with the buton in it
+ * @returns {DomElement} - A div element with the button in it
  *
- * This expacts the buttton to a large control when it is pressed
+ * This expects the button to a large control when it is pressed
  */
 
 function cameraButton(dom, store, getImageDoc, doneCallback) {
@@ -8459,7 +8488,8 @@ function cameraButton(dom, store, getImageDoc, doneCallback) {
 }
 //# sourceMappingURL=media-capture.js.map
 
-/***/ }),
+  // Find the column for a given predicate, creating a new column object
+  // if necessary.
 
 /***/ "./lib/messageArea.js":
 /*!****************************!*\
@@ -8469,6 +8499,7 @@ function cameraButton(dom, store, getImageDoc, doneCallback) {
 
 "use strict";
 
+  // Discover types and subjects for search.
 
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
 Object.defineProperty(exports, "__esModule", ({
@@ -8483,8 +8514,8 @@ var rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modu
 var style = _interopRequireWildcard(__webpack_require__(/*! ./style */ "./lib/style.js"));
 var utils = _interopRequireWildcard(__webpack_require__(/*! ./utils */ "./lib/utils/index.js"));
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ./widgets */ "./lib/widgets/index.js"));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 //  Common code for a discussion are a of messages about something
 //
 
@@ -8522,6 +8553,7 @@ function messageArea(dom, kb, subject, messageStore, options) {
       a.addEventListener('click', UI.widgets.openHrefInOutlineMode, true);
       a.setAttribute('style', 'color: #3B5998; text-decoration: none; '); // font-weight: bold
     }
+
     a.textContent = text;
     return a;
   };
@@ -8690,6 +8722,7 @@ function messageArea(dom, kb, subject, messageStore, options) {
     };
     renderMessage(bindings, true); // fresh from elsewhere
   };
+
   var renderMessage = function renderMessage(bindings, fresh) {
     var creator = bindings['?creator'];
     var message = bindings['?msg'];
@@ -8763,6 +8796,7 @@ function messageArea(dom, kb, subject, messageStore, options) {
   } else {
     messageTable.appendChild(tr); // not newestFirst
   }
+
   var query;
   // Do this with a live query to pull in messages from web
   if (options.query) {
@@ -8782,6 +8816,7 @@ function messageArea(dom, kb, subject, messageStore, options) {
   function doneQuery() {
     messageTable.fresh = true; // any new are fresh and so will be greenish
   }
+
   kb.query(query, renderMessage, undefined, doneQuery);
   div.refresh = function () {
     syncMessages(subject, messageTable);
@@ -8801,13 +8836,14 @@ function messageArea(dom, kb, subject, messageStore, options) {
 
 "use strict";
 
+    // Remove all rows from the table:
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
 var _solidNamespace = _interopRequireDefault(__webpack_require__(/*! solid-namespace */ "./node_modules/solid-namespace/index.js"));
 var $rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 // Namespaces we commonly use and have common prefixes for around Solid
 //
 
@@ -8857,10 +8893,10 @@ Object.defineProperty(exports, "recordParticipation", ({
     return _participation.recordParticipation;
   }
 }));
-Object.defineProperty(exports, "renderPartipants", ({
+Object.defineProperty(exports, "renderParticipants", ({
   enumerable: true,
   get: function get() {
-    return _participation.renderPartipants;
+    return _participation.renderParticipants;
   }
 }));
 exports.xmlEncode = xmlEncode;
@@ -8878,14 +8914,12 @@ var _widgets = __webpack_require__(/*! ./widgets */ "./lib/widgets/index.js");
 var _utils = __webpack_require__(/*! ./utils */ "./lib/utils/index.js");
 var _debug = __webpack_require__(/*! ./debug */ "./lib/debug.js");
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
+var style = _interopRequireWildcard(__webpack_require__(/*! ./style */ "./lib/style.js"));
 var _participation = __webpack_require__(/*! ./participation */ "./lib/participation.js");
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2["default"])(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2["default"])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2["default"])(this, result); }; }
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } } /** **************
- *   Notepad Widget
- */ /** @module pad
- */
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 var store = _solidLogic.solidLogicSingleton.store;
 var PAD = (0, _rdflib.Namespace)('http://www.w3.org/ns/pim/pad#');
 /**
@@ -8945,7 +8979,7 @@ function lightColorHash(author) {
 /**  notepad
  *
  * @param {HTMLDocument} dom - the web page of the browser
- * @param {NamedNode} padDoc - the document into which the particpation should be shown
+ * @param {NamedNode} padDoc - the document into which the participation should be shown
  * @param {NamedNode} subject - the thing in which participation is happening
  * @param {NamedNode} me - person who is logged into the pod
  * @param {notepadOptions} options - the options that can be passed in consist of statusArea, exists
@@ -8958,7 +8992,7 @@ function notepad(dom, padDoc, subject, me, options) {
   if (me && !me.uri) throw new Error('UI.pad.notepad:  Invalid userid');
   var updater = store.updater;
   var PAD = (0, _rdflib.Namespace)('http://www.w3.org/ns/pim/pad#');
-  table.setAttribute('style', 'padding: 1em; overflow: auto; resize: horizontal; min-width: 40em;');
+  table.setAttribute('style', style.notepadStyle);
   var upstreamStatus = null;
   var downstreamStatus = null;
   if (options.statusArea) {
@@ -8967,10 +9001,10 @@ function notepad(dom, padDoc, subject, me, options) {
     upstreamStatus = tr.appendChild(dom.createElement('td'));
     downstreamStatus = tr.appendChild(dom.createElement('td'));
     if (upstreamStatus) {
-      upstreamStatus.setAttribute('style', 'width:50%');
+      upstreamStatus.setAttribute('style', style.upstreamStatus);
     }
     if (downstreamStatus) {
-      downstreamStatus.setAttribute('style', 'width:50%');
+      downstreamStatus.setAttribute('style', style.downstreamStatus);
     }
   }
   /* @@ TODO want to look into this, it seems upstream should be a boolean and default to false ?
@@ -8993,9 +9027,9 @@ function notepad(dom, padDoc, subject, me, options) {
   var setPartStyle = function setPartStyle(part, colors, pending) {
     var chunk = part.subject;
     colors = colors || '';
-    var baseStyle = 'font-size: 100%; font-family: monospace; width: 100%; border: none; white-space: pre-wrap;';
-    var headingCore = 'font-family: sans-serif; font-weight: bold;  border: none;';
-    var headingStyle = ['font-size: 110%;  padding-top: 0.5em; padding-bottom: 0.5em; width: 100%;', 'font-size: 120%; padding-top: 1em; padding-bottom: 1em; width: 100%;', 'font-size: 150%; padding-top: 1em; padding-bottom: 1em; width: 100%;'];
+    var baseStyle = style.baseStyle;
+    var headingCore = style.headingCore;
+    var headingStyle = style.headingStyle;
     var author = kb.any(chunk, ns.dc('author'));
     if (!colors && author) {
       // Hash the user webid for now -- later allow user selection!
@@ -9007,9 +9041,9 @@ function notepad(dom, padDoc, subject, me, options) {
     // and when the indent is stored as a Number itself, not in an object.
     var indent = kb.any(chunk, PAD('indent'));
     indent = indent ? indent.value : 0;
-    var style = indent >= 0 ? baseStyle + 'text-indent: ' + indent * 3 + 'em;' : headingCore + headingStyle[-1 - indent];
+    var localStyle = indent >= 0 ? baseStyle + 'text-indent: ' + indent * 3 + 'em;' : headingCore + headingStyle[-1 - indent];
     // ? baseStyle + 'padding-left: ' + (indent * 3) + 'em;'
-    part.setAttribute('style', style + colors);
+    part.setAttribute('style', localStyle + colors);
   };
   var removePart = function removePart(part) {
     var chunk = part.subject;
@@ -9089,28 +9123,6 @@ function notepad(dom, padDoc, subject, me, options) {
     });
   };
 
-  // Use this sort of code to split the line when return pressed in the middle @@
-  /*
-  function doGetCaretPosition doGetCaretPosition (oField) {
-    var iCaretPos = 0
-        // IE Support
-    if (document.selection) {
-            // Set focus on the element to avoid IE bug
-      oField.focus()
-            // To get cursor position, get empty selection range
-      var oSel = document.selection.createRange()
-            // Move selection start to 0 position
-      oSel.moveStart('character', -oField.value.length)
-            // The caret position is selection length
-      iCaretPos = oSel.text.length
-        // Firefox suppor
-    } else if (oField.selectionStart || oField.selectionStart === '0') {
-      iCaretPos = oField.selectionStart
-    }
-        // Return results
-    return (iCaretPos)
-  }
-  */
   var addListeners = function addListeners(part, chunk) {
     part.addEventListener('keydown', function (event) {
       if (!updater) {
@@ -9153,7 +9165,7 @@ function notepad(dom, padDoc, subject, me, options) {
                 return;
               case 3: // being deleted already
               case 4:
-                // already deleme state
+                // already deleted state
                 return;
               case undefined:
               case 0:
@@ -9268,6 +9280,7 @@ function notepad(dom, padDoc, subject, me, options) {
         }
       });
     };
+
     part.addEventListener('input', function inputChangeListener(_event) {
       // debug.log("input changed "+part.value);
       setPartStyle(part, undefined, true); // grey out - not synced
@@ -9453,8 +9466,6 @@ function notepad(dom, padDoc, subject, me, options) {
       }
       return;
     }
-    // var last = kb.the(undefined, PAD('previous'), subject)
-    // var chunk = first //  = kb.the(subject, PAD('next'));
     var row;
 
     // First see which of the logical chunks have existing physical manifestations
@@ -9516,7 +9527,7 @@ function notepad(dom, padDoc, subject, me, options) {
     (0, _debug.log)('    reloaded OK');
     clearStatus();
     if (!consistencyCheck()) {
-      complain('CONSITENCY CHECK FAILED');
+      complain('CONSISTENCY CHECK FAILED');
     } else {
       refreshTree(table);
     }
@@ -9526,6 +9537,7 @@ function notepad(dom, padDoc, subject, me, options) {
       (0, _debug.log)('   Already reloading - stop');
       return; // once only needed
     }
+
     reloading = true;
     var retryTimeout = 1000; // ms
     var tryReload = function tryReload() {
@@ -9582,6 +9594,7 @@ function notepad(dom, padDoc, subject, me, options) {
       }
     });
   }
+
   return table;
 }
 
@@ -9681,7 +9694,7 @@ Object.defineProperty(exports, "__esModule", ({
 exports.manageParticipation = manageParticipation;
 exports.participationObject = participationObject;
 exports.recordParticipation = recordParticipation;
-exports.renderPartipants = renderPartipants;
+exports.renderParticipants = renderParticipants;
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js"));
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js"));
 var _assertThisInitialized2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/assertThisInitialized */ "./node_modules/@babel/runtime/helpers/assertThisInitialized.js"));
@@ -9690,22 +9703,21 @@ var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*!
 var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "./node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
 var _wrapNativeSuper2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/wrapNativeSuper */ "./node_modules/@babel/runtime/helpers/wrapNativeSuper.js"));
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js"));
-var _debug = _interopRequireWildcard(__webpack_require__(/*! ./debug */ "./lib/debug.js"));
-var debug = _debug;
+var debug = _interopRequireWildcard(__webpack_require__(/*! ./debug */ "./lib/debug.js"));
 var _rdflib = __webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js");
 var ns = _interopRequireWildcard(__webpack_require__(/*! ./ns */ "./lib/ns.js"));
 var _widgets = __webpack_require__(/*! ./widgets */ "./lib/widgets/index.js");
 var _utils = __webpack_require__(/*! ./utils */ "./lib/utils/index.js");
 var _pad = __webpack_require__(/*! ./pad */ "./lib/pad.js");
+var style = _interopRequireWildcard(__webpack_require__(/*! ./style */ "./lib/style.js"));
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2["default"])(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2["default"])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2["default"])(this, result); }; }
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } } /* Manage a UI for the particpation of a person in any thing
-*/ // import { currentUser } from './authn/authn'
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 var ParticipationTableElement = /*#__PURE__*/function (_HTMLTableElement) {
   (0, _inherits2["default"])(ParticipationTableElement, _HTMLTableElement);
   var _super = _createSuper(ParticipationTableElement);
@@ -9732,9 +9744,9 @@ var store = _solidLogic.solidLogicSingleton.store;
 *  @param {NamedNode} unused2/me - user that is logged into the pod (this argument is no longer used, but left in for backwards compatibility)
 *  @param {ParticipationOptions} options - the options that can be passed in are deleteFunction, link, and draggable these are used by the personTR button
 */
-function renderPartipants(dom, table, unused1, subject, unused2, options) {
-  table.setAttribute('style', 'margin: 0.8em;');
-  var newRowForParticpation = function newRowForParticpation(parp) {
+function renderParticipants(dom, table, unused1, subject, unused2, options) {
+  table.setAttribute('style', style.participantsStyle);
+  var newRowForParticipation = function newRowForParticipation(parp) {
     var person = store.any(parp, ns.wf('participant'));
     var tr;
     if (!person) {
@@ -9744,34 +9756,35 @@ function renderPartipants(dom, table, unused1, subject, unused2, options) {
     }
     var bg = store.anyValue(parp, ns.ui('backgroundColor')) || 'white';
     var block = dom.createElement('div');
-    block.setAttribute('style', 'height: 1.5em; width: 1.5em; margin: 0.3em; border 0.01em solid #888; background-color: ' + bg);
+    block.setAttribute('style', style.participantsBlock);
+    block.style.backgroundColor = bg;
     tr = (0, _widgets.personTR)(dom, null, person, options);
     table.appendChild(tr);
     var td = dom.createElement('td');
-    td.setAttribute('style', 'vertical-align: middle;');
+    td.setAttribute('style', style.personTableTD);
     td.appendChild(block);
     tr.insertBefore(td, tr.firstChild);
     return tr;
   };
   var syncTable = function syncTable() {
     var parps = store.each(subject, ns.wf('participation')).map(function (parp) {
-      (0, _debug.log)('in participants');
+      (0, debug.log)('in participants');
       return [store.anyValue(parp, ns.cal('dtstart')) || '9999-12-31', parp];
     });
     parps.sort(); // List in order of joining
     var participations = parps.map(function (p) {
       return p[1];
     });
-    (0, _utils.syncTableToArray)(table, participations, newRowForParticpation);
+    (0, _utils.syncTableToArray)(table, participations, newRowForParticipation);
   };
   table.refresh = syncTable;
   syncTable();
   return table;
 }
 
-/** Record, or find old, Particpation object
+/** Record, or find old, Participation object
  *
- * A particpaption object is a place to record things specifically about
+ * A participation object is a place to record things specifically about
  * subject and the user, such as preferences, start of membership, etc
  * @param {NamedNode} subject - the thing in which the participation is happening
  * @param {NamedNode} document -  where to record the data
@@ -9806,19 +9819,20 @@ function participationObject(subject, padDoc, me) {
       }
       candidates.sort(); // Pick the earliest
       // @@ Possibly, for extra credit, delete the others, if we have write access
-      debug.warn('Multiple particpation objects, picking earliest, in ' + padDoc);
+      debug.warn('Multiple participation objects, picking earliest, in ' + padDoc);
       resolve(candidates[0][1]);
       // throw new Error('Multiple records of your participation')
     }
+
     if (parps.length) {
       // If I am not already recorded
-      resolve(parps[0]); // returns the particpation object
+      resolve(parps[0]); // returns the participation object
     } else {
       var _participation2 = (0, _widgets.newThing)(padDoc);
       var ins = [(0, _rdflib.st)(subject, ns.wf('participation'), _participation2, padDoc), (0, _rdflib.st)(_participation2, ns.wf('participant'), me, padDoc), (0, _rdflib.st)(_participation2, ns.cal('dtstart'), new Date(), padDoc), (0, _rdflib.st)(_participation2, ns.ui('backgroundColor'), (0, _pad.lightColorHash)(me), padDoc)];
       store.updater.update([], ins, function (uri, ok, errorMessage) {
         if (!ok) {
-          reject(new Error('Error recording your partipation: ' + errorMessage));
+          reject(new Error('Error recording your participation: ' + errorMessage));
         } else {
           resolve(_participation2);
         }
@@ -9831,7 +9845,7 @@ function participationObject(subject, padDoc, me) {
 /** Record my participation and display participants
  *
  * @param {NamedNode} subject - the thing in which participation is happening
- * @param {NamedNode} padDoc - the document into which the particpation should be recorded
+ * @param {NamedNode} padDoc - the document into which the participation should be recorded
  * @param {DOMNode} refreshable - a DOM element whose refresh() is to be called if the change works
  *
  */
@@ -9847,22 +9861,21 @@ function recordParticipation(subject, padDoc, refreshable) {
   }
   if (parps.length) {
     // If I am not already recorded
-    return parps[0]; // returns the particpation object
+    return parps[0]; // returns the participation object
   } else {
     if (!store.updater.editable(padDoc)) {
-      debug.log('Not recording participation, as no write acesss as ' + me + ' to ' + padDoc);
+      debug.log('Not recording participation, as no write access as ' + me + ' to ' + padDoc);
       return null;
     }
     var participation = (0, _widgets.newThing)(padDoc);
     var ins = [(0, _rdflib.st)(subject, ns.wf('participation'), participation, padDoc), (0, _rdflib.st)(participation, ns.wf('participant'), me, padDoc), (0, _rdflib.st)(participation, ns.cal('dtstart'), new Date(), padDoc), (0, _rdflib.st)(participation, ns.ui('backgroundColor'), (0, _pad.lightColorHash)(me), padDoc)];
     store.updater.update([], ins, function (uri, ok, errorMessage) {
       if (!ok) {
-        throw new Error('Error recording your partipation: ' + errorMessage);
+        throw new Error('Error recording your participation: ' + errorMessage);
       }
       if (refreshable && refreshable.refresh) {
         refreshable.refresh();
       }
-      // UI.pad.renderPartipants(dom, table, padDoc, subject, me, options)
     });
     return participation;
   }
@@ -9872,7 +9885,7 @@ function recordParticipation(subject, padDoc, refreshable) {
 *
 *   @param {Document} dom  - the web page loaded into the browser
 *   @param {HTMLDivElement} container - the container element where the participants should be displayed
-*   @param {NamedNode} document - the document into which the particpation should be shown
+*   @param {NamedNode} document - the document into which the participation should be shown
 *   @param {NamedNode} subject - the thing in which participation is happening
 *   @param {NamedNode} me - the logged in user
 *   @param {ParticipationOptions} options - the options that can be passed in are deleteFunction, link, and draggable these are used by the personTR button
@@ -9881,13 +9894,14 @@ function recordParticipation(subject, padDoc, refreshable) {
 function manageParticipation(dom, container, padDoc, subject, me, options) {
   var table = dom.createElement('table');
   container.appendChild(table);
-  renderPartipants(dom, table, padDoc, subject, me, options);
+  renderParticipants(dom, table, padDoc, subject, me, options);
   var _participation;
   try {
     _participation = recordParticipation(subject, padDoc, table);
   } catch (e) {
-    container.appendChild((0, _widgets.errorMessageBlock)(dom, 'Error recording your partipation: ' + e)); // Clean up?
+    container.appendChild((0, _widgets.errorMessageBlock)(dom, 'Error recording your participation: ' + e)); // Clean up?
   }
+
   return table;
 }
 //# sourceMappingURL=participation.js.map
@@ -9921,8 +9935,8 @@ var _login = __webpack_require__(/*! ./login/login */ "./lib/login/login.js");
 var ns = _interopRequireWildcard(__webpack_require__(/*! ./ns */ "./lib/ns.js"));
 var participation = _interopRequireWildcard(__webpack_require__(/*! ./participation */ "./lib/participation.js"));
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ./widgets */ "./lib/widgets/index.js"));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 //                  Solid-UI preferences
 //                  =====================
 //
@@ -9941,7 +9955,8 @@ var kb = _solidLogic.store;
 // @@ Deprocate these functions.  They were used for
 // communication around the tabulator functionality about the user session
 
-var value = exports.value = [];
+var value = [];
+exports.value = value;
 function get(k) {
   return value[k];
 }
@@ -10134,7 +10149,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-var _default = exports["default"] = {
+var _default = {
   // @@ should not use export default
   /**
    * Primary authentication endpoint
@@ -10165,6 +10180,7 @@ var _default = exports["default"] = {
    */
   cert: ''
 };
+exports["default"] = _default;
 //# sourceMappingURL=config-default.js.map
 
 /***/ }),
@@ -10257,40 +10273,33 @@ Signup.prototype.signup = function signup(signupUrl) {
 /*!**********************!*\
   !*** ./lib/style.js ***!
   \**********************/
-/***/ ((module, exports) => {
+/***/ ((module, exports, __webpack_require__) => {
 
 "use strict";
 
 
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.style = void 0;
+var _styleConstants = _interopRequireDefault(__webpack_require__(/*! ./styleConstants */ "./lib/styleConstants.js"));
 // Common readable consistent stylesheet
 // to avoid using style sheets which are document-global
 // and make programmable style toggling with selection, drag over, etc easier
-
 // These must all end with semicolon so they can be appended to.
 
-var formBorderColor = '#888888'; // Mid-grey
-var lowProfileLinkColor = '#3B5998'; // Grey-blue, e.g., for field labels linking to ontology
-var formFieldNameBoxWidth = '8em'; // The fixed amount to get form fields to line up
-// The latter we put in when switching awy from using tables.  Getting allignment between
-// fields in different groups though is hard problem.
-
-var style = exports.style = {
+var style = {
   // styleModule
 
   checkboxStyle: 'color: black; font-size: 100%; padding-left: 0.5 em; padding-right: 0.5 em;',
   checkboxInputStyle: 'font-size: 150%; height: 1.2em; width: 1.2em; background-color: #eef; border-radius:0.2em; margin: 0.1em',
   fieldLabelStyle: 'color: #3B5998; text-decoration: none;',
-  formSelectSTyle: 'background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.4em;',
+  formSelectStyle: 'background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.4em;',
   textInputStyle: 'background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.4em;',
   textInputStyleUneditable:
   // Color difference only
   'background-color: white; padding: 0.5em;  border: .05em solid white;  border-radius:0.2em; font-size: 100%; margin:0.4em;',
-  textInputSize: 20,
-  // Default text input size in characters roughly
   buttonStyle: 'background-color: #fff; padding: 0.7em;  border: .01em solid white;  border-radius:0.2em; font-size: 100%; margin: 0.3em;',
   // 'background-color: #eef;
   commentStyle: 'padding: 0.7em;  border: none; font-size: 100%; white-space: pre-wrap;',
@@ -10299,12 +10308,8 @@ var style = exports.style = {
   classIconStyle: 'width: 3em; height: 3em; margin: 0.1em; border-radius: 0.2em; border: 0.1em solid green; padding: 0.2em; background-color: #efe;',
   // combine with buttonStyle
   confirmPopupStyle: 'padding: 0.7em; border-radius: 0.2em; border: 0.1em solid orange; background-color: white; box-shadow: 0.5em 0.9em #888;',
-  tabBorderRadius: '0.2em',
   messageBodyStyle: 'white-space: pre-wrap; width: 99%; font-size:100%; border: 0.07em solid #eee; border-radius:0.2em; padding: .3em 0.5em; margin: 0.1em;',
   pendingeditModifier: 'color: #bbb;',
-  highlightColor: '#7C4DFF',
-  // Solid lavendar https://design.inrupt.com/atomic-core/?cat=Core
-
   // Contacts
   personaBarStyle: 'width: 100%; height: 4em; background-color: #eee; vertical-align: middle;',
   searchInputStyle: 'border: 0.1em solid #444; border-radius: 0.2em; width: 100%; font-size: 100%; padding: 0.1em 0.6em; margin 0.2em;',
@@ -10323,24 +10328,15 @@ var style = exports.style = {
   heading4Style: 'font-size: 110%; font-weight: bold; color: #888888; padding: 0.2em; margin: 0.7em 0.0em;',
   // Lowest level used by default in small things
 
-  formBorderColor: formBorderColor,
-  // originally was brown; now grey
-  formHeadingColor: '#888888',
-  // originally was brown; now grey
   formHeadingStyle: 'font-size: 110%; font-weight: bold; color: #888888; padding: 0.2em;  margin: 0.7em 0.0em;',
   // originally was brown; now grey
   formTextInput: 'font-size: 100%; margin: 0.1em; padding: 0.1em;',
   // originally used this
-  formGroupStyle: ["padding-left: 0em; border: 0.0em solid ".concat(formBorderColor, "; border-radius: 0.2em;"), // weight 0
-  "padding-left: 2em; border: 0.05em solid ".concat(formBorderColor, "; border-radius: 0.2em;"), "padding-left: 2em; border: 0.1em solid ".concat(formBorderColor, "; border-radius: 0.2em;"), "padding-left: 2em; border: 0.2em solid ".concat(formBorderColor, "; border-radius: 0.2em;") // @@ pink
+  formGroupStyle: ["padding-left: 0em; border: 0.0em solid ".concat(_styleConstants["default"].formBorderColor, "; border-radius: 0.2em;"), // weight 0
+  "padding-left: 2em; border: 0.05em solid ".concat(_styleConstants["default"].formBorderColor, "; border-radius: 0.2em;"), "padding-left: 2em; border: 0.1em solid ".concat(_styleConstants["default"].formBorderColor, "; border-radius: 0.2em;"), "padding-left: 2em; border: 0.2em solid ".concat(_styleConstants["default"].formBorderColor, "; border-radius: 0.2em;") // @@ pink
   ],
-  formFieldLabelStyle: "'color: ".concat(lowProfileLinkColor, "; text-decoration: none;'"),
-  formFieldNameBoxWidth: formFieldNameBoxWidth,
-  formFieldNameBoxStyle: "padding: 0.3em; vertical-align: middle; width:".concat(formFieldNameBoxWidth, ";"),
-  textInputBackgroundColor: '#eef',
-  textInputBackgroundColorUneditable: '#fff',
-  textInputColor: '#000',
-  textInputColorPending: '#888',
+  formFieldLabelStyle: "'color: ".concat(_styleConstants["default"].lowProfileLinkColor, "; text-decoration: none;'"),
+  formFieldNameBoxStyle: "padding: 0.3em; vertical-align: middle; width:".concat(_styleConstants["default"].formFieldNameBoxWidth, ";"),
   multilineTextInputStyle: 'font-size:100%; white-space: pre-wrap; background-color: #eef;' + ' border: 0.07em solid gray; padding: 1em 0.5em; margin: 1em 1em;',
   // Buttons
   renderAsDivStyle: 'display: flex; align-items: center; justify-content: space-between; height: 2.5em; padding: 1em;',
@@ -10403,13 +10399,85 @@ var style = exports.style = {
   secondaryButton: 'background-color: #01c9ea; color: #ffffff; font-family: Raleway, Roboto, sans-serif;border-radius: 0.25em; border-color: #01c9ea; border: 1px solid; cursor: pointer; font-size: .8em;text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none',
   secondaryButtonHover: 'background-color: #37cde6; color: #ffffff; font-family: Raleway, Roboto, sans-serif;border-radius: 0.25em; border-color: #7c4dff; border: 1px solid; cursor: pointer; font-size: .8em;text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none; transition: 0.25s all ease-in-out',
   secondaryButtonNoBorder: 'background-color: #ffffff; color: #01c9ea; font-family: Raleway, Roboto, sans-serif; border-radius: 0.25em; border-color: #01c9ea; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none',
-  secondaryButtonNoBorderHover: 'background-color: #01c9ea; color: #ffffff; font-family: Raleway, Roboto, sans-serif; border-radius: 0.25em; border-color: #01c9ea; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none; transition: 0.25s all ease-in-out'
+  secondaryButtonNoBorderHover: 'background-color: #01c9ea; color: #ffffff; font-family: Raleway, Roboto, sans-serif; border-radius: 0.25em; border-color: #01c9ea; border: 1px solid; cursor: pointer; font-size: .8em; text-decoration: none; padding: 0.5em 4em; transition: 0.25s all ease-in-out; outline: none; transition: 0.25s all ease-in-out',
+  // media
+  controlStyle: "border-radius: 0.5em; margin: 0.8em; width:".concat(_styleConstants["default"].mediaModuleCanvasWidth, "; height:").concat(_styleConstants["default"].mediaModuleCanvasHeight, ";"),
+  // dragAndDrop
+  dragEvent: 'background-color: #ccc; border: 0.25em dashed black; border-radius: 0.3em;',
+  dropEvent: 'background-color: white; border: 0em solid black;',
+  restoreStyle: 'background-color: white;',
+  // errors
+  errorCancelButton: 'width: 2em; height: 2em; align: right;',
+  errorMessageBlock: 'margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; color:black;',
+  // pad
+  notepadStyle: 'padding: 1em; overflow: auto; resize: horizontal; min-width: 40em;',
+  upstreamStatus: 'width:50%',
+  downstreamStatus: 'width:50%',
+  baseStyle: 'font-size: 100%; font-family: monospace; width: 100%; border: none; white-space: pre-wrap;',
+  headingCore: 'font-family: sans-serif; font-weight: bold;  border: none;',
+  headingStyle: ['font-size: 110%; padding-top: 0.5em; padding-bottom: 0.5em; width: 100%;', 'font-size: 120%; padding-top: 1em; padding-bottom: 1em; width: 100%;', 'font-size: 150%; padding-top: 1em; padding-bottom: 1em; width: 100%;'],
+  // participation
+  participantsStyle: 'margin: 0.8em;',
+  participantsBlock: 'height: 1.5em; width: 1.5em; margin: 0.3em; border 0.01em solid #888;',
+  personTableTD: 'vertical-align: middle;',
+  // tabs
+  tabsNavElement: 'margin: 0;',
+  tabsRootElement: 'display: flex; height: 100%; width: 100%;',
+  tabsMainElement: 'margin: 0; width:100%; height: 100%;',
+  tabContainer: 'list-style-type: none; display: flex; height: 100%; width: 100%; margin: 0; padding: 0;',
+  makeNewSlot: 'background: none; border: none; font: inherit; cursor: pointer',
+  ellipsis: 'position: absolute; right: 0; bottom: 0; width: 20%; background: none; color: inherit; border: none; padding: 0; font: inherit; cursor: pointer; outline: inherit;'
 };
+exports.style = style;
 style.setStyle = function setStyle(ele, styleName) {
   ele.style = style[styleName];
 };
 module.exports = style; // @@ No way to do this in ESM
 //# sourceMappingURL=style.js.map
+
+/***/ }),
+
+/***/ "./lib/styleConstants.js":
+/*!*******************************!*\
+  !*** ./lib/styleConstants.js ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _default = {
+  highlightColor: '#7C4DFF',
+  // Solid lavender https://design.inrupt.com/atomic-core/?cat=Core
+
+  formBorderColor: '#888888',
+  // Mid-grey
+  formHeadingColor: '#888888',
+  // originally was brown; now grey
+  lowProfileLinkColor: '#3B5998',
+  // Grey-blue, e.g., for field labels linking to ontology
+  formFieldNameBoxWidth: '8em',
+  // The fixed amount to get form fields to line up
+  // The latter we put in when switching awy from using tables.  Getting alignment between
+  // fields in different groups though is hard problem.
+
+  mediaModuleCanvasWidth: '640',
+  mediaModuleCanvasHeight: '480',
+  textInputSize: 20,
+  // Default text input size in characters roughly
+  tabBorderRadius: '0.2em',
+  textInputBackgroundColor: '#eef',
+  textInputBackgroundColorUneditable: '#fff',
+  textInputColor: '#000',
+  textInputColorPending: '#888',
+  defaultErrorBackgroundColor: '#fee'
+};
+exports["default"] = _default;
+//# sourceMappingURL=styleConstants.js.map
 
 /***/ }),
 
@@ -10438,7 +10506,7 @@ exports.style = void 0;
  * @version IconicMultiSelect v0.7.0
  * @licence  MIT
  */
-var style = exports.style = {
+var style = {
   multiselect__container: "\n        -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n        background-color: #fff;\n        border-radius: 2px;\n        -webkit-box-shadow: 0 1px 3px 0 #d1d1d2, 0 0 0 1px #d1d1d2;\n                box-shadow: 0 1px 3px 0 #d1d1d2, 0 0 0 1px #d1d1d2;\n        -webkit-box-sizing: border-box;\n                box-sizing: border-box;\n        display: -webkit-box;\n        display: -ms-flexbox;\n        display: flex;\n        min-height: 36px;\n        padding: 4px 8px 0 8px;\n        position: relative;\n        width: 354px;\n        margin-bottom: 5px;\n        font-size: 100%\n    ",
   /*
     multiselect__container:after: `
@@ -10477,6 +10545,7 @@ var style = exports.style = {
   multiselect__selected_multiselect__remove_btn: "\n        cursor: pointer;\n        display: flex;\n        margin-left: 6px;\n    ",
   multiselect__input: "\n        border: none;\n        -ms-flex-preferred-size: 40%;\n            flex-basis: 40%;\n        -webkit-box-flex: 1;\n            -ms-flex-positive: 1;\n                flex-grow: 1;\n        height: 5px;        \n        margin-bottom: 4px;\n        min-width: 40%;\n        outline: none;      \n    "
 };
+exports.style = style;
 style.setStyle = function setStyle(ele, styleName) {
   ele.style = style[styleName];
 };
@@ -10507,8 +10576,8 @@ var ns = _interopRequireWildcard(__webpack_require__(/*! ./ns */ "./lib/ns.js"))
 var rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
 var utils = _interopRequireWildcard(__webpack_require__(/*! ./utils */ "./lib/utils/index.js"));
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ./widgets */ "./lib/widgets/index.js"));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 // Table Widget: Format an array of RDF statements as an HTML table.
 //
 // This can operate in one of three modes: when the class of object is given
@@ -10723,6 +10792,8 @@ function renderTableViewPane(doc, options) {
     if (!queryType) {
       queryType = kb.variable('_any');
     }
+    return best;
+  }
 
     // _row a type
     query.pat.add(rowVar, UI.ns.rdf('type'), queryType);
@@ -10923,6 +10994,7 @@ function renderTableViewPane(doc, options) {
         if (this.predicate.sameTerm(ns.rdf('type')) && this.superClass) {
           return utils.label(this.superClass, true); // do initial cap
         }
+
         return utils.label(this.predicate);
       } else if (this.variable) {
         return this.variable.toString();
@@ -11194,6 +11266,10 @@ function renderTableViewPane(doc, options) {
       var type = types[typeUrl];
       identifyColumnsForType(type, subjectList);
     }
+    return result;
+  };
+}
+//# sourceMappingURL=headerFooterHelpers.js.map
 
     // TODO: Special type that captures all rows.
     // Combine columns from all types
@@ -11757,6 +11833,7 @@ function renderTableViewPane(doc, options) {
           }
         }
       }
+
       tr.appendChild(td);
     }
 
@@ -11841,6 +11918,14 @@ function renderTableViewPane(doc, options) {
       ++subjectIdCounter;
       return result;
     }
+    p = p.slice(0, i);
+    if (p.length < 6 && canUse(p)) return pok; // exact i sbest
+    if (canUse(p.slice(0, 3))) return pok;
+    if (canUse(p.slice(0, 2))) return pok;
+    if (canUse(p.slice(0, 4))) return pok;
+    if (canUse(p.slice(0, 1))) return pok;
+    if (canUse(p.slice(0, 5))) return pok;
+    for (i = 0;; i++) if (canUse(p.slice(0, 3) + i)) return pok;
   }
 
   // Run a query and populate the table.
@@ -11863,6 +11948,7 @@ function renderTableViewPane(doc, options) {
       // oldStyle = rows[i]._htmlRow.getAttribute('style') || ''
       // rows[i]._htmlRow.style.background = '#ffe'; //setAttribute('style', ' background-color: #ffe;')// yellow
     }
+
     var onResult = function onResult(values) {
       if (!query.running) {
         return;
@@ -11932,6 +12018,7 @@ function renderTableViewPane(doc, options) {
       }
       if (options.onDone) options.onDone(resultDiv); // return div makes testing easier
     };
+
     kb.query(query, onResult, undefined, onDone);
   }
 
@@ -12039,6 +12126,8 @@ function renderTableViewPane(doc, options) {
         best = type;
         bestCount = type.useCount;
       }
+    } else {
+      return term.uri + '!?'; // strange should have a nice part
     }
     return best;
   }
@@ -12079,6 +12168,7 @@ function renderTableViewPane(doc, options) {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
@@ -12095,7 +12185,10 @@ var _wrapNativeSuper2 = _interopRequireDefault(__webpack_require__(/*! @babel/ru
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js"));
 var _widgets = __webpack_require__(/*! ./widgets */ "./lib/widgets/index.js");
 var _utils = __webpack_require__(/*! ./utils */ "./lib/utils/index.js");
+var style = _interopRequireWildcard(__webpack_require__(/*! ./style */ "./lib/style.js"));
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2["default"])(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2["default"])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2["default"])(this, result); }; }
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 /**
@@ -12116,7 +12209,7 @@ var ContainerElement = /*#__PURE__*/function (_HTMLElement) {
   }
   return (0, _createClass2["default"])(ContainerElement);
 }( /*#__PURE__*/(0, _wrapNativeSuper2["default"])(HTMLElement));
-var TabWidgetElement = exports.TabWidgetElement = /*#__PURE__*/function (_HTMLElement2) {
+var TabWidgetElement = /*#__PURE__*/function (_HTMLElement2) {
   (0, _inherits2["default"])(TabWidgetElement, _HTMLElement2);
   var _super2 = _createSuper(TabWidgetElement);
   function TabWidgetElement() {
@@ -12136,6 +12229,7 @@ var TabWidgetElement = exports.TabWidgetElement = /*#__PURE__*/function (_HTMLEl
 /**
  * @ignore
  */
+exports.TabWidgetElement = TabWidgetElement;
 var TabElement = /*#__PURE__*/function (_HTMLElement3) {
   (0, _inherits2["default"])(TabElement, _HTMLElement3);
   var _super3 = _createSuper(TabElement);
@@ -12277,11 +12371,12 @@ var TabElement = /*#__PURE__*/function (_HTMLElement3) {
  *
  * @param options
  */
+var tabsDefaultBackgroundColor = '#ddddcc';
 function tabWidget(options) {
   var subject = options.subject;
   var dom = options.dom || document;
   var orientation = parseInt(options.orientation || '0');
-  var backgroundColor = options.backgroundColor || '#ddddcc';
+  var backgroundColor = options.backgroundColor || tabsDefaultBackgroundColor;
   var flipped = orientation & 2;
   var vertical = orientation & 1;
   var onClose = options.onClose;
@@ -12292,13 +12387,15 @@ function tabWidget(options) {
   var bodyMainStyle = "flex: 2; width: auto; height: 100%; border: 0.1em; border-style: solid; border-color: ".concat(selectedColor, "; padding: 1em;");
   var rootElement = dom.createElement('div'); // 20200117a
 
-  rootElement.setAttribute('style', 'display: flex; height: 100%; width: 100%; flex-direction: ' + (vertical ? 'row' : 'column') + (flipped ? '-reverse;' : ';'));
+  rootElement.setAttribute('style', style.tabsRootElement);
+  rootElement.style.flexDirection = (vertical ? 'row' : 'column') + (flipped ? '-reverse;' : ';');
   var navElement = rootElement.appendChild(dom.createElement('nav'));
-  navElement.setAttribute('style', 'margin: 0;');
+  navElement.setAttribute('style', style.tabsNavElement);
   var mainElement = rootElement.appendChild(dom.createElement('main'));
-  mainElement.setAttribute('style', 'margin: 0; width:100%; height: 100%;'); // override tabbedtab.css
+  mainElement.setAttribute('style', style.tabsMainElement); // override tabbedtab.css
   var tabContainer = navElement.appendChild(dom.createElement('ul'));
-  tabContainer.setAttribute('style', "\n    list-style-type: none;\n    display: flex;\n    height: 100%;\n    width: 100%;\n    margin: 0;\n    padding: 0;\n    flex-direction: ".concat(vertical ? 'column' : 'row', "\n  "));
+  tabContainer.setAttribute('style', style.tabContainer);
+  tabContainer.style.flexDirection = "".concat(vertical ? 'column' : 'row');
   var tabElement = 'li';
   var bodyContainer = mainElement;
   rootElement.tabContainer = tabContainer;
@@ -12318,7 +12415,7 @@ function tabWidget(options) {
   rootElement.refresh = orderedSync;
   orderedSync();
   if (!options.startEmpty && tabContainer.children.length && options.selectedTab) {
-    var selectedTab0 = Array.from(tabContainer.children) // Version left for compatability with ??
+    var selectedTab0 = Array.from(tabContainer.children) // Version left for compatibility with ??
     .map(function (tab) {
       return tab.firstChild;
     }).find(function (tab) {
@@ -12341,6 +12438,7 @@ function tabWidget(options) {
   } else if (!options.startEmpty) {
     tabContainer.children[0].firstChild.click(); // Open first tab
   }
+
   return rootElement;
   function addCancelButton(tabContainer) {
     if (tabContainer.dataset.onCloseSet) {
@@ -12371,7 +12469,7 @@ function tabWidget(options) {
     ele.setAttribute('style', unselectedStyle);
     ele.subject = item;
     var div = ele.appendChild(dom.createElement('button'));
-    div.setAttribute('style', 'background: none; border: none; font: inherit; cursor: pointer');
+    div.setAttribute('style', style.makeNewSlot);
     div.onclick = function () {
       resetTabStyle();
       resetBodyStyle();
@@ -12388,7 +12486,7 @@ function tabWidget(options) {
     if (options.renderTabSettings && ele.subject) {
       var ellipsis = dom.createElement('button');
       ellipsis.textContent = '...';
-      ellipsis.setAttribute('style', 'position: absolute; right: 0; bottom: 0; width: 20%; background: none; color: inherit; border: none; padding: 0; font: inherit; cursor: pointer; outline: inherit;');
+      ellipsis.setAttribute('style', style.ellipsis);
       ellipsis.onclick = function () {
         resetTabStyle();
         resetBodyStyle();
@@ -12436,6 +12534,7 @@ function tabWidget(options) {
     if (!differ && items.length === tabContainer.children.length) {
       return; // The two just match in order: a case to optimize for
     }
+
     for (right = tabContainer.children.length - 1; right >= 0; right--) {
       slot = tabContainer.children[right];
       j = right - tabContainer.children.length + items.length;
@@ -12549,8 +12648,6 @@ var _ = __webpack_require__(/*! .. */ "./lib/index.js");
 /*
     Copied from mashlib/src/global/metadata.ts
  */
-
-/* @ts-ignore  no-console */
 
 /**
  * @ignore exporting this only for the unit test
@@ -12752,8 +12849,8 @@ var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-l
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
 var rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
 var _label = __webpack_require__(/*! ./label */ "./lib/utils/label.js");
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 //                  Solid-UI general Utilities
 //                  ==========================
 //
@@ -12821,6 +12918,7 @@ function hashColor(who) {
   };
   return '#' + (hash(who) & 0xffffff | 0xc0c0c0).toString(16); // c0c0c0 or 808080 forces pale
 }
+
 function genUuid() {
   // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -12895,6 +12993,7 @@ function syncTableToArrayReOrdered(table, things, createNewRow) {
     var row = table.children[i];
     elementMap[row.subject.toNT()] = row; // More sophisticaed would be to have a bag of duplicates
   }
+
   for (var g = 0; g < things.length; g++) {
     var thing = things[g];
     if (g >= table.children.length) {
@@ -12998,6 +13097,7 @@ function getAbout(kb, target) {
       //            if (level.tagName=='TR') return undefined//this is to prevent literals passing through
     }
   }
+
   UI.log.debug('getAbout: No about found');
   return undefined;
 }
@@ -13105,6 +13205,7 @@ function shortName(uri) {
   for (var _ns in this.prefixes) {
     namespaces[this.prefixes[_ns]] = _ns; // reverse index
   }
+
   var pok;
   var canUse = function canUse(pp) {
     // if (!__Serializer.prototype.validPrefix.test(pp)) return false; // bad format
@@ -13154,9 +13255,11 @@ function ontologyLabel(term) {
       return term.uri + '?!'; // strange should have # or /
     }
   }
+
   for (var _ns2 in UI.ns) {
     namespaces[UI.ns[_ns2]] = _ns2; // reverse index
   }
+
   try {
     return namespaces[s];
   } catch (e) {}
@@ -13175,6 +13278,7 @@ function ontologyLabel(term) {
     }
   }
 }
+
 function labelWithOntology(x, initialCap) {
   var t = _solidLogic.store.findTypeURIs(x);
   if (t[UI.ns.rdf('Predicate').uri] || t[UI.ns.rdfs('Class').uri]) {
@@ -13261,8 +13365,8 @@ var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/r
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../../debug */ "./lib/debug.js"));
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../../ns */ "./lib/ns.js"));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 /* export const getPodRoot = async (webId: NamedNode) => {
   const webIdURL = new URL(webId.uri)
   // find storages in webId document
@@ -13288,7 +13392,7 @@ function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; 
   return podRoot as NamedNode
 } */
 
-var pubKeyUrl = exports.pubKeyUrl = /*#__PURE__*/function () {
+var pubKeyUrl = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(webId) {
     var _store$any, _parentSettings;
     var parentSettings;
@@ -13314,6 +13418,7 @@ var pubKeyUrl = exports.pubKeyUrl = /*#__PURE__*/function () {
     return _ref.apply(this, arguments);
   };
 }();
+exports.pubKeyUrl = pubKeyUrl;
 function getExistingPublicKey(_x2, _x3) {
   return _getExistingPublicKey.apply(this, arguments);
 }
@@ -13334,7 +13439,7 @@ function _getExistingPublicKey() {
   }));
   return _getExistingPublicKey.apply(this, arguments);
 }
-var privKeyUrl = exports.privKeyUrl = /*#__PURE__*/function () {
+var privKeyUrl = /*#__PURE__*/function () {
   var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(webId) {
     var _store$any2, _settings;
     var settings;
@@ -13360,6 +13465,7 @@ var privKeyUrl = exports.privKeyUrl = /*#__PURE__*/function () {
     return _ref2.apply(this, arguments);
   };
 }();
+exports.privKeyUrl = privKeyUrl;
 function getExistingPrivateKey(_x5, _x6) {
   return _getExistingPrivateKey.apply(this, arguments);
 }
@@ -13456,8 +13562,8 @@ var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../../debug */ "./lib/debug.js"));
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 /**
  * set ACL
  * @param keyDoc
@@ -13516,7 +13622,7 @@ function _setAcl() {
   }));
   return _setAcl.apply(this, arguments);
 }
-var keyContainerAclBody = exports.keyContainerAclBody = function keyContainerAclBody(me) {
+var keyContainerAclBody = function keyContainerAclBody(me) {
   var aclBody = "\n@prefix : <#>.\n@prefix acl: <http://www.w3.org/ns/auth/acl#>.\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n@prefix key: <./>.\n\n:ReadWrite\n    a acl:Authorization;\n    acl:accessTo key:;\n    acl:default key:;\n    acl:agent <".concat(me, ">;\n    acl:mode acl:Read, acl:Write.\n");
   return aclBody;
 };
@@ -13527,12 +13633,14 @@ var keyContainerAclBody = exports.keyContainerAclBody = function keyContainerAcl
  * @param me
  * @returns aclBody
  */
-var keyAclBody = exports.keyAclBody = function keyAclBody(keyDoc, me) {
+exports.keyContainerAclBody = keyContainerAclBody;
+var keyAclBody = function keyAclBody(keyDoc, me) {
   var keyAgent = 'acl:agentClass foaf:Agent'; // publicKey
   if (me !== null && me !== void 0 && me.length) keyAgent = "acl:agent <".concat(me, ">"); // privateKey
   var aclBody = "\n@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n@prefix acl: <http://www.w3.org/ns/auth/acl#>.\n<#Read>\n    a acl:Authorization;\n    ".concat(keyAgent, ";\n    acl:accessTo <").concat(keyDoc.split('/').pop(), ">;\n    acl:mode acl:Read.\n");
   return aclBody;
 };
+exports.keyAclBody = keyAclBody;
 //# sourceMappingURL=acl.js.map
 
 /***/ }),
@@ -13555,8 +13663,8 @@ var log = _interopRequireWildcard(__webpack_require__(/*! ../log */ "./lib/log.j
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
 var rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 // pull in first avoid cross-refs
 
 var UI = {
@@ -13664,31 +13772,32 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.versionInfo = void 0;
-var versionInfo = exports.versionInfo = {
-  buildTime: '2023-11-30T16:41:31Z',
-  commit: 'ee8e69c20cc21d93eb942bc5479e4644d5704964',
+var versionInfo = {
+  buildTime: '2023-07-01T18:48:40Z',
+  commit: 'cdaefc011d313e905fbee9c4d8f1c8cfea739122',
   npmInfo: {
-    'solid-ui': '2.4.29',
+    'solid-ui': '2.4.28',
     npm: '8.19.4',
-    node: '16.19.1',
-    v8: '9.4.146.26-node.24',
+    node: '16.14.0',
+    v8: '9.4.146.24-node.20',
     uv: '1.43.0',
     zlib: '1.2.11',
     brotli: '1.0.9',
     ares: '1.18.1',
     modules: '93',
-    nghttp2: '1.47.0',
+    nghttp2: '1.45.1',
     napi: '8',
-    llhttp: '6.0.10',
-    openssl: '1.1.1t+quic',
-    cldr: '41.0',
-    icu: '71.1',
-    tz: '2022f',
+    llhttp: '6.0.4',
+    openssl: '1.1.1m+quic',
+    cldr: '40.0',
+    icu: '70.1',
+    tz: '2021a3',
     unicode: '14.0',
-    ngtcp2: '0.8.1',
-    nghttp3: '0.7.0'
+    ngtcp2: '0.1.0-DEV',
+    nghttp3: '0.1.0-DEV'
   }
 };
+exports.versionInfo = versionInfo;
 //# sourceMappingURL=versionInfo.js.map
 
 /***/ }),
@@ -13758,8 +13867,8 @@ var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/u
 var _error = __webpack_require__(/*! ./error */ "./lib/widgets/error.js");
 var _widgetHelpers = __webpack_require__(/*! ./widgetHelpers */ "./lib/widgets/widgetHelpers.js");
 var _iconLinks = __webpack_require__(/*! ./buttons/iconLinks */ "./lib/widgets/buttons/iconLinks.js");
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 /*  Buttons
 */
 
@@ -13931,7 +14040,7 @@ function imagesOf(x, kb) {
 /**
  * Best logo or avatar or photo etc to represent someone or some group etc
  */
-var iconForClass = exports.iconForClass = {
+var iconForClass = {
   // Potentially extendable by other apps, panes, etc
   // Relative URIs to the iconBase
   'solid:AppProviderClass': 'noun_144.svg',
@@ -13967,6 +14076,7 @@ var iconForClass = exports.iconForClass = {
 /**
  * Returns the origin of the URI of a NamedNode
  */
+exports.iconForClass = iconForClass;
 function tempSite(x) {
   // use only while one in rdflib fails with origins 2019
   var str = x.uri.split('#')[0];
@@ -13997,6 +14107,7 @@ function findImageFromURI(x) {
       // message: is apple bug-- should be mid:
       return iconDir + 'noun_480183.svg'; // envelope  noun_567486
     }
+
     if (x.uri.startsWith('mailto:')) {
       return iconDir + 'noun_567486.svg'; // mailbox - an email desitination
     }
@@ -14007,6 +14118,7 @@ function findImageFromURI(x) {
       // todo: pick up a possible favicon for the web page itself from a link
       // was: return iconDir + 'noun_681601.svg' // document - under solid assumptions
     }
+
     return null;
   }
   return iconDir + 'noun_10636_grey.svg'; // Grey Circle -  some thing
@@ -14035,6 +14147,7 @@ function findImage(thing) {
   if (thing.sameTerm(ns.foaf('Agent')) || thing.sameTerm(ns.rdf('Resource'))) {
     return iconDir + 'noun_98053.svg'; // Globe
   }
+
   var image = kb.any(thing, ns.sioc('avatar')) || kb.any(thing, ns.foaf('img')) || kb.any(thing, ns.vcard('logo')) || kb.any(thing, ns.vcard('hasPhoto')) || kb.any(thing, ns.vcard('photo')) || kb.any(thing, ns.foaf('depiction'));
   return image ? image.uri : null;
 }
@@ -14075,6 +14188,7 @@ function trySetImage(element, thing, iconForClassMap) {
       return false; // maybe we can do better
     }
   }
+
   element.setAttribute('src', iconBase + 'noun_10636_grey.svg'); // Grey Circle -  some thing
   return false; // we can do better
 }
@@ -14117,6 +14231,7 @@ function faviconOrDefault(dom, x) {
   };
   image.setAttribute('src', iconBase + (isOrigin(x) ? 'noun_15177.svg' : 'noun_681601.svg') // App symbol vs document
   );
+
   if (x.uri && x.uri.startsWith('https:') && x.uri.indexOf('#') < 0) {
     var res = dom.createElement('object'); // favico with a fallback of a default image if no favicon
     res.setAttribute('data', tempSite(x) + 'favicon.ico');
@@ -14296,6 +14411,7 @@ function cancelButton(dom, handler) {
     // sigh for tsc
     b.firstChild.style.opacity = '0.3'; // Black X is too harsh: current language is grey X
   }
+
   return b;
 }
 
@@ -14362,8 +14478,8 @@ function askName(dom, kb, container, predicate, theClass, noun) {
  *
  * pred is unused param at the moment
  */
-var personTR = exports.personTR = renderAsRow; // The legacy name is used in a lot of places
-
+var personTR = renderAsRow; // The legacy name is used in a lot of places
+exports.personTR = personTR;
 function renderAsRow(dom, pred, obj, options) {
   var tr = dom.createElement('tr');
   options = options || {};
@@ -14383,6 +14499,7 @@ function renderAsRow(dom, pred, obj, options) {
   } else {
     setName(td2, obj); // This is async
   }
+
   if (options.deleteFunction) {
     deleteButtonWithCheck(dom, td3, options.noun || 'one', options.deleteFunction);
   }
@@ -14571,6 +14688,7 @@ function attachmentList(dom, subject, div) {
   var attachmentTable = attachmentRight.appendChild(dom.createElement('table'));
   attachmentTable.appendChild(dom.createElement('tr')) // attachmentTableTop
   ;
+
   attachmentOuter.refresh = refresh; // Participate in downstream changes
   // ;(attachmentTable as any).refresh = refresh   <- outer should be best?
 
@@ -14591,6 +14709,7 @@ function attachmentList(dom, subject, div) {
       // buttonDiv.children[1].style =  buttonStyle
     }
   }
+
   return attachmentOuter;
 }
 
@@ -14850,12 +14969,12 @@ function selectorPanelRefresh(list, dom, kb, type, predicate, inverse, possible,
 //
 //      Small compact views of things
 //
-var index = exports.index = {};
+var index = {};
 // ///////////////////////////////////////////////////////////////////////////
 // We need these for anything which is a subject of an attachment.
 //
 // These should be moved to type-dependeent UI code. Related panes maybe
-
+exports.index = index;
 function twoLineDefault(dom, x) {
   // Default
   var box = dom.createElement('div');
@@ -14893,6 +15012,7 @@ function twoLineTransaction(dom, x) {
     if (!y) failed += '@@ No value for ' + p + '! ';
     return y ? utils.escapeForXML(y.value) : '?'; // @@@@
   };
+
   var box = dom.createElement('table');
   box.innerHTML = "\n      <tr>\n      <td colspan=\"2\"> ".concat(enc('payee'), "</td>\n      < /tr>\n      < tr >\n      <td>").concat(enc('date').slice(0, 10), "</td>\n      <td style = \"text-align: right;\">").concat(enc('amount'), "</td>\n      </tr>");
   if (failed) {
@@ -15064,12 +15184,13 @@ function linkIcon(dom, subject, iconURI) {
  *
  */
 // eslint-disable-next-line complexity
-var createLinkForURI = exports.createLinkForURI = function createLinkForURI(dom, linkDiv, obj) {
+var createLinkForURI = function createLinkForURI(dom, linkDiv, obj) {
   var iconLink = linkIcon(dom, obj);
   var anchor = linkDiv.appendChild(iconLink);
   anchor.classList.add('HoverControlHide');
   linkDiv.appendChild(dom.createElement('br'));
 };
+exports.createLinkForURI = createLinkForURI;
 //# sourceMappingURL=iconLinks.js.map
 
 /***/ }),
@@ -15092,16 +15213,17 @@ exports.makeDropTarget = makeDropTarget;
 exports.uploadFiles = uploadFiles;
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
 var mime = _interopRequireWildcard(__webpack_require__(/*! mime-types */ "./node_modules/mime-types/index.js"));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 /* Drag and drop common functionality
  *
  * It is easy to make something draggable, or to make it a drag target!
- * Just call the functions below.  In a solid world, any part of the UI which
- * represent one thing which has a UR, should be made draggable using makeDraggable
+ * Just call the functions below. In a solid world, any part of the UI which
+ * represent one thing which has a URI, should be made draggable using makeDraggable
  * Any list of things should typically allow you to drag new members of the list
  * onto it.
- * The file upload function uploadFiles is provided as often of someone drags a file from the computer
+ * The file upload function uploadFiles is provided as often as someone drags a file from the computer
  * desktop, you may want to upload it into the pod.
  */
 
@@ -15109,22 +15231,16 @@ function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; 
 
 function makeDropTarget(ele, droppedURIHandler, droppedFileHandler) {
   var dragoverListener = function dragoverListener(e) {
-    e.preventDefault(); // Neeed else drop does not work [sic]
+    e.preventDefault(); // Need else drop does not work [sic]
     e.dataTransfer.dropEffect = 'copy';
   };
   var dragenterListener = function dragenterListener(e) {
     debug.log('dragenter event dropEffect: ' + e.dataTransfer.dropEffect);
-    if (this.style) {
+    if (this.localStyle) {
       //  necessary not sure when
       if (!this.savedStyle) {
-        this.savedStyle = {};
-        this.savedStyle.border = this.style.border;
-        this.savedStyle.backgroundColor = this.style.backgroundColor;
-        this.savedStyle.borderRadius = this.style.borderRadius;
+        this.savedStyle = style.dragEvent;
       }
-      this.style.backgroundColor = '#ccc';
-      this.style.border = '0.25em dashed black';
-      this.style.borderRadius = '0.3em';
     }
     e.dataTransfer.dropEffect = 'link';
     debug.log('dragenter event dropEffect 2: ' + e.dataTransfer.dropEffect);
@@ -15132,12 +15248,9 @@ function makeDropTarget(ele, droppedURIHandler, droppedFileHandler) {
   var dragleaveListener = function dragleaveListener(e) {
     debug.log('dragleave event dropEffect: ' + e.dataTransfer.dropEffect);
     if (this.savedStyle) {
-      this.style.border = this.savedStyle.border;
-      this.style.backgroundColor = this.savedStyle.backgroundColor;
-      this.style.borderRadius = this.savedStyle.borderRadius;
+      this.localStyle = this.savedStyle;
     } else {
-      this.style.backgroundColor = 'white';
-      this.style.border = '0em solid black';
+      this.localStyle = style.dropEvent;
     }
   };
   var dropListener = function dropListener(e) {
@@ -15176,7 +15289,7 @@ function makeDropTarget(ele, droppedURIHandler, droppedFileHandler) {
     if (uris) {
       droppedURIHandler(uris);
     }
-    this.style.backgroundColor = 'white'; // restore style
+    this.localStyle = style.restoreStyle; // restore style
     return false;
   }; // dropListener
 
@@ -15264,6 +15377,7 @@ function uploadFiles(fetcher, files, fileBase, imageBase, successHandler) {
             // console.log('MIME TYPE MISMATCH: ' + mime.lookup(theFile.name) + ': adding extension: ' + suffix)
           }
         }
+
         var folderName = theFile.type.startsWith('image/') ? imageBase || fileBase : fileBase;
         var destURI = folderName + (folderName.endsWith('/') ? '' : '/') + encodeURIComponent(theFile.name) + suffix;
         fetcher.webOperation('PUT', destURI, {
@@ -15296,11 +15410,16 @@ function uploadFiles(fetcher, files, fileBase, imageBase, successHandler) {
 "use strict";
 
 
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.errorMessageBlock = errorMessageBlock;
 var _widgets = __webpack_require__(/*! ../widgets */ "./lib/widgets/index.js");
+var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
+var styleConstants = _interopRequireWildcard(__webpack_require__(/*! ../styleConstants */ "./lib/styleConstants.js"));
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 /**
  * Create an error message block
  * @param dom The DOM on which dom.createElement will be called
@@ -15329,8 +15448,9 @@ function errorMessageBlock(dom, err, backgroundColor, err2) {
   }
   div.appendChild((0, _widgets.cancelButton)(dom, function () {
     if (div.parentNode) div.parentNode.removeChild(div);
-  })).style = 'width: 2em; height: 2em; align: right;';
-  div.setAttribute('style', 'margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; background-color: ' + (backgroundColor || '#fee') + '; color:black;');
+  })).style = style.errorCancelButton;
+  div.setAttribute('style', style.errorMessageBlock);
+  div.style.backgroundColor = backgroundColor || styleConstants.defaultErrorBackgroundColor;
   return div;
 }
 //# sourceMappingURL=error.js.map
@@ -15427,6 +15547,7 @@ var _error = __webpack_require__(/*! ./error */ "./lib/widgets/error.js");
 var _basic = __webpack_require__(/*! ./forms/basic */ "./lib/widgets/forms/basic.js");
 var _autocompleteField = __webpack_require__(/*! ./forms/autocomplete/autocompleteField */ "./lib/widgets/forms/autocomplete/autocompleteField.js");
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
+var styleConstants = _interopRequireWildcard(__webpack_require__(/*! ../styleConstants */ "./lib/styleConstants.js"));
 var _iconBase = __webpack_require__(/*! ../iconBase */ "./lib/iconBase.js");
 var log = _interopRequireWildcard(__webpack_require__(/*! ../log */ "./lib/log.js"));
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
@@ -15435,14 +15556,11 @@ var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-l
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
 var _multiSelect = __webpack_require__(/*! ./multiSelect */ "./lib/widgets/multiSelect.js");
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; } /*       F O R M S
- *
- *      A Vanilla Dom implementation of the form language
- */ /* eslint-disable multiline-ternary */ /* global alert */ // Note default export
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var checkMarkCharacter = "\u2713";
 var cancelCharacter = "\u2715";
 var dashCharacter = '-';
@@ -15484,6 +15602,7 @@ function refreshOpionsSubfieldinGroup(dom, already, subject, dataDoc, callbackFu
     }
   }
 }
+
 _fieldFunction.field[ns.ui('Form').uri] = _fieldFunction.field[ns.ui('Group').uri] = function (dom, container, already, subject, form, dataDoc, callbackFunction) {
   var box = dom.createElement('div');
   var ui = ns.ui;
@@ -16024,6 +16143,7 @@ _fieldFunction.field[ns.ui('Multiple').uri] = function (dom, container, already,
       vals = reverse ? kb.each(null, property, subject, dataDoc) : kb.each(subject, property, null, dataDoc);
       vals.sort(); // achieve consistency on each refresh
     }
+
     utils.syncTableToArrayReOrdered(body, vals, renderItem);
   }
   body.refresh = refresh; // Allow live update
@@ -16113,7 +16233,7 @@ _fieldFunction.field[ns.ui('MultiLineTextField').uri] = function (dom, container
   box.style.display = 'flex';
   box.style.flexDirection = 'row';
   var left = box.appendChild(dom.createElement('div'));
-  left.style.width = style.formFieldNameBoxWidth;
+  left.style.width = styleConstants.formFieldNameBoxWidth;
   var right = box.appendChild(dom.createElement('div'));
   left.appendChild((0, _basic.fieldLabel)(dom, property, form));
   dataDoc = (0, _basic.fieldStore)(subject, property, dataDoc);
@@ -16272,6 +16392,7 @@ _fieldFunction.field[ns.ui('Choice').uri] = function (dom, container, already, s
   if (kb.any(form, ui('canMintNew'))) {
     opts.mint = '* Create new *'; // @@ could be better
   }
+
   var multiSelect = kb.any(form, ui('multiselect')); // Optional
   if (multiSelect) opts.multiSelect = true;
 
@@ -16537,8 +16658,9 @@ function promptForNew(dom, kb, subject, predicate, theClass, form, dataDoc, call
     log.debug('lists[0] is ' + lists[0]);
     form = lists[0]; // Pick any one
   }
+
   log.debug('form is ' + form);
-  box.setAttribute('style', "border: 0.05em solid ".concat(style.formBorderColor, "; color: ").concat(style.formBorderColor)); // @@color?
+  box.setAttribute('style', "border: 0.05em solid ".concat(styleConstants.formBorderColor, "; color: ").concat(styleConstants.formBorderColor)); // @@color?
   box.innerHTML = '<h3>New ' + utils.label(theClass) + '</h3>';
   var formFunction = (0, _fieldFunction.fieldFunction)(dom, form);
   var object = newThing(dataDoc);
@@ -16586,6 +16708,7 @@ function makeDescription(dom, kb, subject, predicate, dataDoc, callbackFunction)
     // field.value = utils.label(predicate); // Was"enter a description here" @@ possibly: add prompt which disappears
     field.select(); // Select it ready for user input -- doesn't work
   }
+
   group.refresh = function () {
     var v = kb.any(subject, predicate, null, dataDoc);
     if (v && v.value !== field.value) {
@@ -16593,16 +16716,17 @@ function makeDescription(dom, kb, subject, predicate, dataDoc, callbackFunction)
       // @@ this is the place to color the field from the user who chanaged it
     }
   };
+
   function saveChange(_e) {
     submit.disabled = true;
     submit.setAttribute('style', 'visibility: hidden; float: right;'); // Keep UI clean
     field.disabled = true;
-    field.style.color = style.textInputColorPending; // setAttribute('style', style + 'color: gray;') // pending
+    field.style.color = styleConstants.textInputColorPending;
     var ds = kb.statementsMatching(subject, predicate, null, dataDoc);
     var is = $rdf.st(subject, predicate, field.value, dataDoc);
     kb.updater.update(ds, is, function (uri, ok, body) {
       if (ok) {
-        field.style.color = style.textInputColor;
+        field.style.color = styleConstants.textInputColor;
         field.disabled = false;
       } else {
         group.appendChild((0, _error.errorMessageBlock)(dom, 'Error (while saving change to ' + dataDoc.uri + '): ' + body));
@@ -16631,7 +16755,7 @@ function makeDescription(dom, kb, subject, predicate, dataDoc, callbackFunction)
     field.addEventListener('change', saveChange, true);
   } else {
     field.disabled = true; // @@ change color too
-    field.style.backgroundColor = style.textInputBackgroundColorUneditable;
+    field.style.backgroundColor = styleConstants.textInputBackgroundColorUneditable;
   }
   return group;
 }
@@ -16699,6 +16823,7 @@ function makeSelectForClassifierOptions(dom, kb, subject, predicate, possible, o
               }); // @@ if ok, need some form of refresh of the select for the new thing
             }
           });
+
           select.parentNode.appendChild(thisForm);
           newObject = thisForm.AJAR_subject;
         } else {
@@ -16755,7 +16880,7 @@ function makeSelectForClassifierOptions(dom, kb, subject, predicate, possible, o
     });
   };
   var select = dom.createElement('select');
-  select.setAttribute('style', style.formSelectSTyle);
+  select.setAttribute('style', style.formSelectStyle);
   if (options.multiple) select.setAttribute('multiple', 'true');
   select.currentURI = null;
   select.refresh = function () {
@@ -16768,6 +16893,7 @@ function makeSelectForClassifierOptions(dom, kb, subject, predicate, possible, o
     }
     select.disabled = false; // unlocked any conflict we had got into
   };
+
   for (var uri in uris) {
     var c = kb.sym(uri);
     var option = dom.createElement('option');
@@ -16776,6 +16902,7 @@ function makeSelectForClassifierOptions(dom, kb, subject, predicate, possible, o
     } else {
       option.appendChild(dom.createTextNode(utils.label(c, true))); // Init.
     }
+
     var backgroundColor = kb.any(c, kb.sym('http://www.w3.org/ns/ui#backgroundColor'));
     if (backgroundColor) {
       option.setAttribute('style', 'background-color: ' + backgroundColor.value + '; ');
@@ -16786,6 +16913,7 @@ function makeSelectForClassifierOptions(dom, kb, subject, predicate, possible, o
       select.currentURI = uri;
       // dump("Already in class: "+ uri+"\n")
     }
+
     select.appendChild(option);
   }
   if (editable && options.mint) {
@@ -16895,7 +17023,7 @@ function makeSelectForOptions(dom, kb, subject, predicate, possible, options, da
     });
   };
   var select = dom.createElement('select');
-  select.setAttribute('style', style.formSelectSTyle);
+  select.setAttribute('style', style.formSelectStyle);
   select.currentURI = null;
   select.refresh = function () {
     actual = getActual(); // refresh
@@ -16907,6 +17035,7 @@ function makeSelectForOptions(dom, kb, subject, predicate, possible, options, da
     }
     select.disabled = false; // unlocked any conflict we had got into
   };
+
   for (var uri in uris) {
     var c = kb.sym(uri);
     var option = dom.createElement('option');
@@ -16915,6 +17044,7 @@ function makeSelectForOptions(dom, kb, subject, predicate, possible, options, da
     } else {
       option.appendChild(dom.createTextNode(utils.label(c, true))); // Init.
     }
+
     var backgroundColor = kb.any(c, kb.sym('http://www.w3.org/ns/ui#backgroundColor'));
     if (backgroundColor) {
       option.setAttribute('style', 'background-color: ' + backgroundColor.value + '; ');
@@ -16925,6 +17055,7 @@ function makeSelectForOptions(dom, kb, subject, predicate, possible, options, da
       select.currentURI = uri;
       // dump("Already in class: "+ uri+"\n")
     }
+
     select.appendChild(option);
   }
   if (!select.currentURI) {
@@ -17022,8 +17153,15 @@ function buildCheckboxForm(dom, kb, lab, del, ins, form, dataDoc, tristate) {
       if (!x.why) {
         x.why = dataDoc; // be back-compaitible  with old code
       }
+    }, _callee8);
+  }));
+  return _renderAutoComplete.apply(this, arguments);
+}
+//# sourceMappingURL=autocompletePicker.js.map
+
       return [x]; // one statements
     }
+
     if (x instanceof Array) return x;
     throw new Error('buildCheckboxForm: bad param ' + x);
   }
@@ -17089,6 +17227,7 @@ function buildCheckboxForm(dom, kb, lab, del, ins, form, dataDoc, tristate) {
       }
     });
   };
+
   input.addEventListener('click', boxHandler, false);
   return box;
 }
@@ -17175,7 +17314,7 @@ function makeSelectForChoice(dom, container, kb, subject, predicate, inputPossib
     select.refresh();
   };
   var select = dom.createElement('select');
-  select.setAttribute('style', style.formSelectSTyle);
+  select.setAttribute('style', style.formSelectStyle);
   select.setAttribute('id', 'formSelect');
   select.currentURI = null;
   for (var uri in optionsFromClassUIfrom) {
@@ -17202,11 +17341,13 @@ function makeSelectForChoice(dom, container, kb, subject, predicate, inputPossib
         is.push($rdf.st(subject, predicate, t, dataDoc));
         // console.log("----value added " + t)
       }
+
       if (uiFrom && !kb.holds(t, ns.rdf('type'), kb.sym(uiFrom), dataDoc)) {
         is.push($rdf.st(t, ns.rdf('type'), kb.sym(uiFrom), dataDoc));
         // console.log("----added type to value " + uiFrom)
       }
     };
+
     var existingValues = kb.each(subject, predicate, null, dataDoc).map(function (object) {
       return object.value;
     });
@@ -17259,6 +17400,7 @@ function makeSelectForChoice(dom, container, kb, subject, predicate, inputPossib
               }); // @@ if ok, need some form of refresh of the select for the new thing
             }
           });
+
           select.parentNode.appendChild(thisForm);
           newObject = thisForm.AJAR_subject;
         } else {
@@ -17415,18 +17557,11 @@ var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-l
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../../../widgets */ "./lib/widgets/index.js"));
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../../../utils */ "./lib/utils/index.js"));
 var _autocompletePicker = __webpack_require__(/*! ./autocompletePicker */ "./lib/widgets/forms/autocomplete/autocompletePicker.js");
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; } /* The Autocomplete Control with decorations
-
-This control has the buttons which control the state between editing, viewing, searching, accepting
-and so on.  See the state diagram in the documentation.  The AUtocomplete Picker does the main work.
-
-*/
-// dbpediaParameters
-
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var WEBID_NOUN = 'Solid ID';
 var GREEN_PLUS = _iconBase.icons.iconBase + 'noun_34653_green.svg';
 var SEARCH_ICON = _iconBase.icons.iconBase + 'noun_Search_875351.svg';
@@ -17697,8 +17832,8 @@ var widgets = _interopRequireWildcard(__webpack_require__(/*! ../../../widgets *
 var style = _interopRequireWildcard(__webpack_require__(/*! ../../../style */ "./lib/style.js"));
 var _autocompleteBar = __webpack_require__(/*! ./autocompleteBar */ "./lib/widgets/forms/autocomplete/autocompleteBar.js");
 var _rdflib = __webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js");
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 /* Form field for doing autocompleete
  */
 
@@ -17935,6 +18070,7 @@ function autocompleteField(dom, container, already, subject, form, doc, callback
   }, function (err) {
     rhs.appendChild(widgets.errorMessageBlock(dom, "Error rendering autocomplete ".concat(form, ": ").concat(err), '#fee', err)); //
   });
+
   return box;
 }
 
@@ -17963,19 +18099,16 @@ var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../../../debug */ "./lib/debug.js"));
 var style = _interopRequireWildcard(__webpack_require__(/*! ../../../style */ "./lib/style.js"));
+var styleConstants = _interopRequireWildcard(__webpack_require__(/*! ../../../styleConstants */ "./lib/styleConstants.js"));
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../../../widgets */ "./lib/widgets/index.js"));
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var _publicData = __webpack_require__(/*! ./publicData */ "./lib/widgets/forms/autocomplete/publicData.js");
 var _language = __webpack_require__(/*! ./language */ "./lib/widgets/forms/autocomplete/language.js");
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; } /* Autocomplete Picker: Create and edit data using public data
-**
-** As the data source is passed as a parameter, all kinds of APIa and query services can be used
-**
-*/
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var AUTOCOMPLETE_THRESHOLD = 4; // don't check until this many characters typed
 var AUTOCOMPLETE_ROWS = 20; // 20?
 var AUTOCOMPLETE_ROWS_STRETCH = 40;
@@ -18026,12 +18159,14 @@ function _renderAutoComplete() {
             if (decoration.acceptButton) {
               setVisible(decoration.acceptButton, false); // hide until input complete
             }
+
             if (decoration.editButton) {
               setVisible(decoration.editButton, true);
             }
             if (decoration.cancelButton) {
               setVisible(decoration.cancelButton, false); // only allow cancel when there is something to cancel
             }
+
             inputEventHandlerLock = false;
             clearList();
           };
@@ -18073,8 +18208,7 @@ function _renderAutoComplete() {
                         };
                       }());
                       return row;
-                    }; // console.log('@@ refreshList called')
-                    // rowForBinding
+                    };
                     if (!inputEventHandlerLock) {
                       _context7.next = 5;
                       break;
@@ -18115,6 +18249,7 @@ function _renderAutoComplete() {
                     if (loadedEnough && slimmed.length <= AUTOCOMPLETE_ROWS_STRETCH) {
                       numberOfRows = slimmed.length; // stretch if it means we get all items
                     }
+
                     allDisplayed = loadedEnough && slimmed.length <= numberOfRows;
                     debug.log(" Filter:\"".concat(filter, "\" lastBindings: ").concat(lastBindings.length, ", slimmed to ").concat(slimmed.length, "; rows: ").concat(numberOfRows, ", Enough? ").concat(loadedEnough, ", All displayed? ").concat(allDisplayed));
                     displayable = slimmed.slice(0, numberOfRows);
@@ -18326,7 +18461,7 @@ function _renderAutoComplete() {
             // errorMessageBlock will log the stack to the console
             style.setStyle(errorRow, 'autocompleteRowStyle');
             errorRow.style.padding = '1em';
-          }; // refreshList
+          };
           // initialiize
           // const queryParams: QueryParameters = acOptions.queryParams
           targetClass = acOptions.targetClass;
@@ -18362,7 +18497,7 @@ function _renderAutoComplete() {
           searchInput = cell.appendChild(dom.createElement('input'));
           searchInput.setAttribute('type', 'text');
           initialize();
-          size = acOptions.size || style.textInputSize || 20;
+          size = acOptions.size || styleConstants.textInputSize || 20;
           searchInput.setAttribute('size', size);
           searchInput.setAttribute('data-testid', 'autocomplete-input');
           searchInputStyle = style.textInputStyle ||
@@ -18414,8 +18549,8 @@ var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/r
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../../../debug */ "./lib/debug.js"));
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../../../ns */ "./lib/ns.js"));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 /* Logic to access public data stores
 *
 * including filtering resut by natural language etc
@@ -18426,14 +18561,10 @@ function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; 
 // import * as logic from '../index'
 // import { authn } from '../../../authn/index'
 
-// import { Binding } from '../widgets/forms/autocomplete/publicData'
-// import { nativeNameForLanguageCode, englishNameForLanguageCode } from './nativeNameForLanguageCode'
-
-// const { currentUser } = logic.authn
-
-var languageCodeURIBase = exports.languageCodeURIBase = 'https://www.w3.org/ns/iana/language-code/'; /// @@ unsupported on the web (2021)
-
-var defaultPreferredLanguages = exports.defaultPreferredLanguages = ['en', 'fr', 'de', 'it', 'ar'];
+var languageCodeURIBase = 'https://www.w3.org/ns/iana/language-code/'; /// @@ unsupported on the web (2021)
+exports.languageCodeURIBase = languageCodeURIBase;
+var defaultPreferredLanguages = ['en', 'fr', 'de', 'it', 'ar'];
+exports.defaultPreferredLanguages = defaultPreferredLanguages;
 function addDefaults(array) {
   if (!array) array = [];
   return array.concat(defaultPreferredLanguages.filter(function (code) {
@@ -18626,8 +18757,8 @@ var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-l
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../../../debug */ "./lib/debug.js"));
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../../../ns */ "./lib/ns.js"));
 var _language = __webpack_require__(/*! ./language */ "./lib/widgets/forms/autocomplete/language.js");
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 /* Logic to access public data stores
 *
 * including filtering resut by natural language etc
@@ -18635,13 +18766,13 @@ function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; 
 */
 /* eslint-disable no-console */
 
-var AUTOCOMPLETE_LIMIT = exports.AUTOCOMPLETE_LIMIT = 200; // How many to get from server
+var AUTOCOMPLETE_LIMIT = 200; // How many to get from server
 // With 3000 we could exceed the wikidata timeout
-
+exports.AUTOCOMPLETE_LIMIT = AUTOCOMPLETE_LIMIT;
 var subjectRegexp = /\$\(subject\)/g;
 // Schema.org seems to suggest NGOs are non-profit and Corporaions are for-profit
 // but doesn't have explicit classes
-var wikidataClasses = exports.wikidataClasses = {
+var wikidataClasses = {
   Corporation: 'http://www.wikidata.org/entity/Q6881511',
   // Enterprise is for-profit
   EducationalOrganization: 'http://www.wikidata.org/entity/Q178706',
@@ -18660,15 +18791,18 @@ var wikidataClasses = exports.wikidataClasses = {
   ResearchOrganization: 'http://www.wikidata.org/entity/Q31855',
   SportsOrganization: 'http://www.wikidata.org/entity/Q4438121'
 };
-var instituteDetailsWikidataQuery = exports.instituteDetailsWikidataQuery = "prefix vcard: <http://www.w3.org/2006/vcard/ns#>\nCONSTRUCT\n{  wd:Q49108 vcard:fn ?itemLabel.\nwd:Q49108 rdf:type ?klass. ?klass rdfs:label ?klassLabel; rdfs:comment ?klassDescription .\nwd:Q49108 schema:logo ?logo;\n   schema:image ?image;\n   schema:logo  ?sealImage;\n   schema:subOrganization  ?subsidiary .\n      ?subsidiary rdfs:label ?subsidiaryLabel .\n ?supersidiary schema:subOrganization wd:Q49108 .\n      ?supersidiary rdfs:label ?supersidiaryLabel .\n  wd:Q49108 schema:location ?location .\n     ?location  schema:elevation  ?elevation .\n     ?location  wdt:P131  ?region .  ?region rdfs:label ?regionLabel .\n     ?location wdt:P625 ?coordinates .\n     ?location  schema:country  ?country . ?country rdfs:label ?countryLabel .\n}\nWHERE\n{  optional {wd:Q49108 rdfs:label ?itemLabel} .\n  optional {wd:Q49108 wdt:P154 ?logo .}\n  optional {wd:Q49108 wdt:P31 ?klass .}\n  optional {wd:Q49108 wdt:P158  ?sealImage .}\n  optional {wd:Q49108 wdt:P18 ?image .}\n\n  optional { wd:Q49108       wdt:P355 ?subsidiary . }\n  optional { ?supersidiary   wdt:P355 wd:Q49108. }\n\n  optional { wd:Q49108 wdt:P276 ?location .\n\n    optional { ?location  schema:eleveation  ?elevation }\n    optional { ?location  wdt:P131  ?region }\n    optional { ?location wdt:P625 ?coordinates }\n    optional {  ?location  wdt:P17  ?country }\n  }\n  SERVICE wikibase:label { bd:serviceParam wikibase:language \"fr,en,de,it\". }\n}";
-var fetcherOptionsJsonPublicData = exports.fetcherOptionsJsonPublicData = {
+exports.wikidataClasses = wikidataClasses;
+var instituteDetailsWikidataQuery = "prefix vcard: <http://www.w3.org/2006/vcard/ns#>\nCONSTRUCT\n{  wd:Q49108 vcard:fn ?itemLabel.\nwd:Q49108 rdf:type ?klass. ?klass rdfs:label ?klassLabel; rdfs:comment ?klassDescription .\nwd:Q49108 schema:logo ?logo;\n   schema:image ?image;\n   schema:logo  ?sealImage;\n   schema:subOrganization  ?subsidiary .\n      ?subsidiary rdfs:label ?subsidiaryLabel .\n ?supersidiary schema:subOrganization wd:Q49108 .\n      ?supersidiary rdfs:label ?supersidiaryLabel .\n  wd:Q49108 schema:location ?location .\n     ?location  schema:elevation  ?elevation .\n     ?location  wdt:P131  ?region .  ?region rdfs:label ?regionLabel .\n     ?location wdt:P625 ?coordinates .\n     ?location  schema:country  ?country . ?country rdfs:label ?countryLabel .\n}\nWHERE\n{  optional {wd:Q49108 rdfs:label ?itemLabel} .\n  optional {wd:Q49108 wdt:P154 ?logo .}\n  optional {wd:Q49108 wdt:P31 ?klass .}\n  optional {wd:Q49108 wdt:P158  ?sealImage .}\n  optional {wd:Q49108 wdt:P18 ?image .}\n\n  optional { wd:Q49108       wdt:P355 ?subsidiary . }\n  optional { ?supersidiary   wdt:P355 wd:Q49108. }\n\n  optional { wd:Q49108 wdt:P276 ?location .\n\n    optional { ?location  schema:eleveation  ?elevation }\n    optional { ?location  wdt:P131  ?region }\n    optional { ?location wdt:P625 ?coordinates }\n    optional {  ?location  wdt:P17  ?country }\n  }\n  SERVICE wikibase:label { bd:serviceParam wikibase:language \"fr,en,de,it\". }\n}";
+exports.instituteDetailsWikidataQuery = instituteDetailsWikidataQuery;
+var fetcherOptionsJsonPublicData = {
   credentials: 'omit',
   // try to avoid CORS problems. Data is public so no auth
   headers: new Headers({
     Accept: 'application/json'
   })
 };
-var escoParameters = exports.escoParameters = {
+exports.fetcherOptionsJsonPublicData = fetcherOptionsJsonPublicData;
+var escoParameters = {
   label: 'ESCO',
   logo: _solidLogic.store.sym('https://ec.europa.eu/esco/portal/static_resource2/images/logo/logo_en.gif'),
   searchByNameURI: 'https://ec.europa.eu/esco/api/search?language=$(language)&type=occupation&text=$(name)'
@@ -18676,16 +18810,19 @@ var escoParameters = exports.escoParameters = {
   // returnFormat: 'ESCO',
   // targetClass: {}
 };
-var dbpediaParameters = exports.dbpediaParameters = {
+exports.escoParameters = escoParameters;
+var dbpediaParameters = {
   label: 'DBPedia',
   logo: _solidLogic.store.sym('https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/DBpediaLogo.svg/263px-DBpediaLogo.svg.png'),
   searchByNameQuery: "select distinct ?subject, ?name where {\n    ?subject a $(targetClass); rdfs:label ?name\n    FILTER regex(?name, \"$(name)\", \"i\")\n  } LIMIT $(limit)",
   endpoint: 'https://dbpedia.org/sparql/'
 };
-var dbPediaTypeMap = exports.dbPediaTypeMap = {
+exports.dbpediaParameters = dbpediaParameters;
+var dbPediaTypeMap = {
   AcademicInsitution: 'http://umbel.org/umbel/rc/EducationalOrganization'
 };
-var wikidataOutgoingClassMap = exports.wikidataOutgoingClassMap = {
+exports.dbPediaTypeMap = dbPediaTypeMap;
+var wikidataOutgoingClassMap = {
   AcademicInsitution: 'http://www.wikidata.org/entity/Q4671277',
   Enterprise: 'http://www.wikidata.org/entity/Q6881511',
   Business: 'http://www.wikidata.org/entity/Q4830453',
@@ -18693,7 +18830,8 @@ var wikidataOutgoingClassMap = exports.wikidataOutgoingClassMap = {
   CharitableOrganization: 'http://www.wikidata.org/entity/Q708676',
   Insitute: 'http://www.wikidata.org/entity/Q1664720'
 };
-var wikidataParameters = exports.wikidataParameters = {
+exports.wikidataOutgoingClassMap = wikidataOutgoingClassMap;
+var wikidataParameters = {
   label: 'WikiData',
   limit: 3000,
   // Need a high one as very many items, and many languages
@@ -18704,7 +18842,8 @@ var wikidataParameters = exports.wikidataParameters = {
 
   insitituteDetailsQuery: "CONSTRUCT\n{  wd:Q49108 schema:name ?itemLabel;\n             schema:logo ?logo;\n              schema:logo  ?sealImage;\n             schema:subOrganization  ?subsidiary .\n                 ?subsidiary schema:name ?subsidiaryLabel .\n}\nWHERE\n{\n   wd:Q49108 # rdfs:label ?itemLabel ;\n             wdt:P154 ?logo;\n              wdt:P158  ?sealImage ;\n             wdt:P355  ?subsidiary .\n          #  ?subsidiary rdfs:label ?subsidiaryLabel .\n\n  SERVICE wikibase:label { bd:serviceParam wikibase:language \"[AUTO_LANGUAGE], fr\". }\n}"
 };
-var wikidataIncomingClassMap = exports.wikidataIncomingClassMap = {
+exports.wikidataParameters = wikidataParameters;
+var wikidataIncomingClassMap = {
   'http://www.wikidata.org/entity/Q15936437': ns.schema('CollegeOrUniversity'),
   // research university
   'http://www.wikidata.org/entity/Q1664720': ns.schema('EducationalOrganization'),
@@ -18721,7 +18860,8 @@ var wikidataIncomingClassMap = exports.wikidataIncomingClassMap = {
   // geographic location
   'http://www.wikidata.org/entity/Q167037': ns.schema('Corporation') // Corporation
 };
-var variableNameToPredicateMap = exports.variableNameToPredicateMap = {
+exports.wikidataIncomingClassMap = wikidataIncomingClassMap;
+var variableNameToPredicateMap = {
   // allow other mappings to be added in theory hence var
   // wikidata:
   targetClass: ns.rdf('type'),
@@ -18738,6 +18878,7 @@ var variableNameToPredicateMap = exports.variableNameToPredicateMap = {
   lat: ns.schema('latitude'),
   "long": ns.schema('longitude')
 };
+exports.variableNameToPredicateMap = variableNameToPredicateMap;
 function bindingToTerm(item) {
   var typ = item.type.toLowerCase();
   if (typ === 'uri' || typ === 'iri') {
@@ -18831,6 +18972,7 @@ function ESCOResultToBindings(json) {
       }
     }; // simulate SPARQL bindings
   });
+
   return bindings;
 }
 
@@ -19258,12 +19400,13 @@ var _rdflib = __webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../../ns */ "./lib/ns.js"));
 var _style = __webpack_require__(/*! ../../style */ "./lib/style.js");
+var styleConstants = _interopRequireWildcard(__webpack_require__(/*! ../../styleConstants */ "./lib/styleConstants.js"));
 var _utils = __webpack_require__(/*! ../../utils */ "./lib/utils/index.js");
 var _error = __webpack_require__(/*! ../error */ "./lib/widgets/error.js");
 var _fieldFunction = __webpack_require__(/*! ./fieldFunction */ "./lib/widgets/forms/fieldFunction.js");
 var _fieldParams = __webpack_require__(/*! ./fieldParams */ "./lib/widgets/forms/fieldParams.js");
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 var store = _solidLogic.solidLogicSingleton.store;
 
 /*  Style and create a name, value pair
@@ -19273,7 +19416,7 @@ function renderNameValuePair(dom, kb, box, form, label) {
   box.style.display = 'flex';
   box.style.flexDirection = 'row';
   var lhs = box.appendChild(dom.createElement('div'));
-  lhs.style.width = _style.formFieldNameBoxWidth;
+  lhs.style.width = styleConstants.formFieldNameBoxWidth;
   var rhs = box.appendChild(dom.createElement('div'));
   lhs.setAttribute('class', 'formFieldName');
   lhs.setAttribute('style', _style.formFieldNameBoxStyle);
@@ -19378,7 +19521,7 @@ function basicField(dom, container, already, subject, form, doc, callbackFunctio
   field.style = style;
   rhs.appendChild(field);
   field.setAttribute('type', params.type ? params.type : 'text');
-  var size = kb.anyJS(form, ns.ui('size')) || _style.textInputSize || 20;
+  var size = kb.anyJS(form, ns.ui('size')) || styleConstants.textInputSize || 20;
   field.setAttribute('size', size);
   var maxLength = kb.any(form, ns.ui('maxLength'));
   field.setAttribute('maxLength', maxLength ? '' + maxLength : '4096');
@@ -19403,10 +19546,10 @@ function basicField(dom, container, already, subject, form, doc, callbackFunctio
     field.readOnly = true // was: disabled. readOnly is better
     ;
     field.style = _style.textInputStyleUneditable + paramStyle;
-    // backgroundColor = textInputBackgroundColorUneditable
     if (suppressEmptyUneditable && field.value === '') {
       box.style.display = 'none'; // clutter
     }
+
     return box;
   }
 
@@ -19520,7 +19663,7 @@ var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-l
 var _log = __webpack_require__(/*! ../../log */ "./lib/log.js");
 var _error = __webpack_require__(/*! ../error */ "./lib/widgets/error.js");
 var store = _solidLogic.solidLogicSingleton.store;
-var field = exports.field = {}; // Form field functions by URI of field type.
+var field = {}; // Form field functions by URI of field type.
 
 /**
  * Which class of field is this? Relies on http://www.w3.org/2000/01/rdf-schema#subClassOf and
@@ -19530,6 +19673,7 @@ var field = exports.field = {}; // Form field functions by URI of field type.
  * @param x a form field, e.g. `namedNode('https://timbl.com/timbl/Public/Test/Forms/individualForm.ttl#fullNameField')`
  * @returns the URI of the most specific known class, e.g. `http://www.w3.org/ns/ui#SingleLineTextField`
  */
+exports.field = field;
 function mostSpecificClassURI(x) {
   var kb = store;
   var ft = kb.findTypeURIs(x);
@@ -19571,6 +19715,17 @@ function fieldFunction(dom, fieldInQuestion) {
 
 "use strict";
 
+    function literalEscape(s) {
+      return s
+        .replace(/\\/g, '\\\\')
+        .replace(/"/g,  '\\"')
+        .replace(/\0/g, '\\0')
+        .replace(/\t/g, '\\t')
+        .replace(/\n/g, '\\n')
+        .replace(/\r/g, '\\r')
+        .replace(/[\x00-\x0F]/g,          function(ch) { return '\\x0' + hex(ch); })
+        .replace(/[\x10-\x1F\x7F-\x9F]/g, function(ch) { return '\\x'  + hex(ch); });
+    }
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
@@ -19582,71 +19737,72 @@ var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/run
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../../ns */ "./lib/ns.js"));
 var _style = __webpack_require__(/*! ../../style */ "./lib/style.js");
 var _fieldParams;
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 /**
  * The fieldParams object defines various constants
  * for use in various form fields. Depending on the
  * field in questions, different values may be read
  * from here.
  */
-var fieldParams = exports.fieldParams = (_fieldParams = {}, (0, _defineProperty2["default"])((0, _defineProperty2["default"])((0, _defineProperty2["default"])((0, _defineProperty2["default"])((0, _defineProperty2["default"])((0, _defineProperty2["default"])((0, _defineProperty2["default"])((0, _defineProperty2["default"])((0, _defineProperty2["default"])((0, _defineProperty2["default"])(_fieldParams, ns.ui('ColorField').uri, {
+var fieldParams = (_fieldParams = {}, (0, _defineProperty2["default"])(_fieldParams, ns.ui('ColorField').uri, {
   size: 9,
   type: 'color',
   style: 'height: 3em;',
   // around 1.5em is padding
   dt: 'color',
   pattern: /^\s*#[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]([0-9a-f][0-9a-f])?\s*$/
-}), ns.ui('DateField').uri, {
+}), (0, _defineProperty2["default"])(_fieldParams, ns.ui('DateField').uri, {
   size: 20,
   type: 'date',
   dt: 'date',
   pattern: /^\s*[0-9][0-9][0-9][0-9](-[0-1]?[0-9]-[0-3]?[0-9])?Z?\s*$/
-}), ns.ui('DateTimeField').uri, {
+}), (0, _defineProperty2["default"])(_fieldParams, ns.ui('DateTimeField').uri, {
   size: 20,
   type: 'datetime-local',
   // See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime
   dt: 'dateTime',
   pattern: /^\s*[0-9][0-9][0-9][0-9](-[0-1]?[0-9]-[0-3]?[0-9])?(T[0-2][0-9]:[0-5][0-9](:[0-5][0-9])?)?Z?\s*$/
-}), ns.ui('TimeField').uri, {
+}), (0, _defineProperty2["default"])(_fieldParams, ns.ui('TimeField').uri, {
   size: 10,
   type: 'time',
   dt: 'time',
   pattern: /^\s*([0-2]?[0-9]:[0-5][0-9](:[0-5][0-9])?)\s*$/
-}), ns.ui('IntegerField').uri, {
+}), (0, _defineProperty2["default"])(_fieldParams, ns.ui('IntegerField').uri, {
   size: 12,
   style: 'text-align: right;',
   dt: 'integer',
   pattern: /^\s*-?[0-9]+\s*$/
-}), ns.ui('DecimalField').uri, {
+}), (0, _defineProperty2["default"])(_fieldParams, ns.ui('DecimalField').uri, {
   size: 12,
   style: 'text-align: right;',
   dt: 'decimal',
   pattern: /^\s*-?[0-9]*(\.[0-9]*)?\s*$/
-}), ns.ui('FloatField').uri, {
+}), (0, _defineProperty2["default"])(_fieldParams, ns.ui('FloatField').uri, {
   size: 12,
   style: 'text-align: right;',
   dt: 'float',
   pattern: /^\s*-?[0-9]*(\.[0-9]*)?((e|E)-?[0-9]*)?\s*$/
-}), ns.ui('SingleLineTextField').uri, {}), ns.ui('NamedNodeURIField').uri, {
+}), (0, _defineProperty2["default"])(_fieldParams, ns.ui('SingleLineTextField').uri, {}), (0, _defineProperty2["default"])(_fieldParams, ns.ui('NamedNodeURIField').uri, {
   namedNode: true
-}), ns.ui('TextField').uri, {}), (0, _defineProperty2["default"])((0, _defineProperty2["default"])((0, _defineProperty2["default"])((0, _defineProperty2["default"])((0, _defineProperty2["default"])(_fieldParams, ns.ui('PhoneField').uri, {
+}), (0, _defineProperty2["default"])(_fieldParams, ns.ui('TextField').uri, {}), (0, _defineProperty2["default"])(_fieldParams, ns.ui('PhoneField').uri, {
   size: 20,
   uriPrefix: 'tel:',
   pattern: /^\+?[\d-]+[\d]*$/
-}), ns.ui('EmailField').uri, {
+}), (0, _defineProperty2["default"])(_fieldParams, ns.ui('EmailField').uri, {
   size: 30,
   uriPrefix: 'mailto:',
   pattern: /^\s*.*@.*\..*\s*$/ // @@ Get the right regexp here
-}), ns.ui('Group').uri, {
+}), (0, _defineProperty2["default"])(_fieldParams, ns.ui('Group').uri, {
   style: _style.formGroupStyle
-}), ns.ui('Comment').uri, {
+}), (0, _defineProperty2["default"])(_fieldParams, ns.ui('Comment').uri, {
   element: 'p',
-  style: _style.commentStyle // was `padding: 0.1em 1.5em; color: ${formHeadingColor}; white-space: pre-wrap;`
-}), ns.ui('Heading').uri, {
+  style: _style.commentStyle
+}), (0, _defineProperty2["default"])(_fieldParams, ns.ui('Heading').uri, {
   element: 'h3',
-  style: _style.formHeadingStyle // was: `font-size: 110%; font-weight: bold; color: ${formHeadingColor}; padding: 0.2em;`
-}));
+  style: _style.formHeadingStyle
+}), _fieldParams);
+exports.fieldParams = fieldParams;
 //# sourceMappingURL=fieldParams.js.map
 
 /***/ }),
@@ -19669,8 +19825,8 @@ var ns = _interopRequireWildcard(__webpack_require__(/*! ../../ns */ "./lib/ns.j
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var _fieldParams = __webpack_require__(/*! ./fieldParams */ "./lib/widgets/forms/fieldParams.js");
 var _fieldFunction = __webpack_require__(/*! ./fieldFunction */ "./lib/widgets/forms/fieldFunction.js");
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 var STYLE_URI_PREFIX = 'https://www.w3.org/ns/css#';
 
 /* eslint-disable no-console */
@@ -19821,8 +19977,8 @@ Object.keys(_autocompletePicker).forEach(function (key) {
 });
 var _publicData = _interopRequireWildcard(__webpack_require__(/*! ./forms/autocomplete/publicData */ "./lib/widgets/forms/autocomplete/publicData.js"));
 exports.publicData = _publicData;
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 //# sourceMappingURL=index.js.map
 
 /***/ }),
@@ -19847,8 +20003,8 @@ var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/run
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js"));
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js"));
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style_multiSelect */ "./lib/style_multiSelect.js"));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 /*
  * IconicMultiSelect v0.7.0
  * Licence:  MIT
@@ -19859,7 +20015,7 @@ function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; 
  * @version IconicMultiSelect v0.7.0
  * @licence  MIT
  */
-var IconicMultiSelect = exports.IconicMultiSelect = /*#__PURE__*/function () {
+var IconicMultiSelect = /*#__PURE__*/function () {
   /**
    * Iconic Multiselect constructor.
    * @param { Object[] } data - Array of objects.
@@ -20493,6 +20649,7 @@ var IconicMultiSelect = exports.IconicMultiSelect = /*#__PURE__*/function () {
   }]);
   return IconicMultiSelect;
 }();
+exports.IconicMultiSelect = IconicMultiSelect;
 //# sourceMappingURL=multiSelect.js.map
 
 /***/ }),
@@ -20525,21 +20682,10 @@ var _iconBase = __webpack_require__(/*! ../iconBase */ "./lib/iconBase.js");
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var _templateObject;
-/**
- *
- * People Picker Pane
- *
- * This pane offers a mechanism for selecting a set of individuals, groups, or
- * organizations to take some action on.
- *
- * Assumptions
- *   - Assumes that the user has a type index entry for vcard:AddressBook. @@ bad assuption
- *
- */
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 var kb = _solidLogic.solidLogicSingleton.store;
-var PeoplePicker = exports.PeoplePicker = /*#__PURE__*/function () {
+var PeoplePicker = /*#__PURE__*/function () {
   function PeoplePicker(element, typeIndex, groupPickedCb, options) {
     (0, _classCallCheck2["default"])(this, PeoplePicker);
     // @@ can't expect typeindex to be passed
@@ -20673,7 +20819,8 @@ var PeoplePicker = exports.PeoplePicker = /*#__PURE__*/function () {
   }]);
   return PeoplePicker;
 }();
-var GroupPicker = exports.GroupPicker = /*#__PURE__*/function () {
+exports.PeoplePicker = PeoplePicker;
+var GroupPicker = /*#__PURE__*/function () {
   function GroupPicker(element, book, onSelectGroup) {
     (0, _classCallCheck2["default"])(this, GroupPicker);
     this.element = element;
@@ -20729,7 +20876,8 @@ var GroupPicker = exports.GroupPicker = /*#__PURE__*/function () {
   }]);
   return GroupPicker;
 }();
-var Group = exports.Group = /*#__PURE__*/function () {
+exports.GroupPicker = GroupPicker;
+var Group = /*#__PURE__*/function () {
   function Group(element, group) {
     (0, _classCallCheck2["default"])(this, Group);
     this.element = element;
@@ -20749,7 +20897,8 @@ var Group = exports.Group = /*#__PURE__*/function () {
   }]);
   return Group;
 }();
-var GroupBuilder = exports.GroupBuilder = /*#__PURE__*/function () {
+exports.Group = Group;
+var GroupBuilder = /*#__PURE__*/function () {
   function GroupBuilder(element, book, group, doneBuildingCb, groupChangedCb) {
     (0, _classCallCheck2["default"])(this, GroupBuilder);
     this.element = element;
@@ -20898,7 +21047,8 @@ var GroupBuilder = exports.GroupBuilder = /*#__PURE__*/function () {
 }(); // @ignore exporting this only for the unit test
 // @@ TODO maybe I should move this down at end, but for
 // now I will leave it where it was
-var Person = exports.Person = /*#__PURE__*/function () {
+exports.GroupBuilder = GroupBuilder;
+var Person = /*#__PURE__*/function () {
   function Person(element, webIdNode, handleRemove) {
     (0, _classCallCheck2["default"])(this, Person);
     this.webIdNode = webIdNode;
@@ -20944,6 +21094,7 @@ var Person = exports.Person = /*#__PURE__*/function () {
   }]);
   return Person;
 }();
+exports.Person = Person;
 function getWithDefault(subject, predicate, defaultValue) {
   var object = kb.any(subject, predicate);
   return object ? object.value : defaultValue;
@@ -20969,6 +21120,7 @@ function patch(url, _ref3) {
   //     }
   //   })
 }
+
 function indexes(book) {
   return {
     // bookIndex: book,
@@ -21009,7 +21161,7 @@ var _style = __webpack_require__(/*! ../style */ "./lib/style.js");
  * @internal exporting this only for unit tests
  */
 // eslint-disable-next-line complexity
-var wrapDivInATR = exports.wrapDivInATR = function wrapDivInATR(dom, div, obj) {
+var wrapDivInATR = function wrapDivInATR(dom, div, obj) {
   var tr = dom.createElement('tr');
   var td = tr.appendChild(dom.createElement('td'));
   td.appendChild(div);
@@ -21030,7 +21182,8 @@ var wrapDivInATR = exports.wrapDivInATR = function wrapDivInATR(dom, div, obj) {
  * @internal exporting this only for unit tests
  */
 // eslint-disable-next-line complexity
-var addClickListenerToElement = exports.addClickListenerToElement = function addClickListenerToElement(div, onClickFunction) {
+exports.wrapDivInATR = wrapDivInATR;
+var addClickListenerToElement = function addClickListenerToElement(div, onClickFunction) {
   div.addEventListener('click', onClickFunction);
 };
 
@@ -21049,12 +21202,14 @@ var addClickListenerToElement = exports.addClickListenerToElement = function add
  * @internal exporting this only for unit tests
  */
 // eslint-disable-next-line complexity
-var createImageDiv = exports.createImageDiv = function createImageDiv(dom, div, image) {
+exports.addClickListenerToElement = addClickListenerToElement;
+var createImageDiv = function createImageDiv(dom, div, image) {
   var imageDiv = div.appendChild(dom.createElement('div'));
   imageDiv.setAttribute('style', _style.imageDivStyle);
   imageDiv.appendChild(image);
   image.setAttribute('draggable', 'false'); // Stop the image being dragged instead - just the TR
 };
+exports.createImageDiv = createImageDiv;
 //# sourceMappingURL=widgetHelpers.js.map
 
 /***/ }),
@@ -24019,6 +24174,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       } else {
         s0 = s1;
       }
+      s0 = s1;
 
       return s0;
     }
@@ -25778,22 +25934,22 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   CordovaIFrameNavigator: () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.CordovaIFrameNavigator),
-/* harmony export */   CordovaPopupNavigator: () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.CordovaPopupNavigator),
-/* harmony export */   InMemoryWebStorage: () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.InMemoryWebStorage),
-/* harmony export */   Log: () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.Log),
-/* harmony export */   OidcClient: () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.OidcClient),
-/* harmony export */   SessionMonitor: () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.SessionMonitor),
-/* harmony export */   User: () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.User),
-/* harmony export */   UserManager: () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.UserManager),
-/* harmony export */   Version: () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.Version),
-/* harmony export */   WebStorageStateStore: () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.WebStorageStateStore),
-/* harmony export */   clearOidcPersistentStorage: () => (/* binding */ clearOidcPersistentStorage),
-/* harmony export */   getBearerToken: () => (/* binding */ getBearerToken),
-/* harmony export */   getDpopToken: () => (/* binding */ getDpopToken),
-/* harmony export */   normalizeCallbackUrl: () => (/* binding */ normalizeCallbackUrl),
-/* harmony export */   refresh: () => (/* binding */ refresh),
-/* harmony export */   registerClient: () => (/* binding */ registerClient)
+/* harmony export */   "CordovaIFrameNavigator": () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.CordovaIFrameNavigator),
+/* harmony export */   "CordovaPopupNavigator": () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.CordovaPopupNavigator),
+/* harmony export */   "InMemoryWebStorage": () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.InMemoryWebStorage),
+/* harmony export */   "Log": () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.Log),
+/* harmony export */   "OidcClient": () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.OidcClient),
+/* harmony export */   "SessionMonitor": () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.SessionMonitor),
+/* harmony export */   "User": () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.User),
+/* harmony export */   "UserManager": () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.UserManager),
+/* harmony export */   "Version": () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.Version),
+/* harmony export */   "WebStorageStateStore": () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.WebStorageStateStore),
+/* harmony export */   "clearOidcPersistentStorage": () => (/* binding */ clearOidcPersistentStorage),
+/* harmony export */   "getBearerToken": () => (/* binding */ getBearerToken),
+/* harmony export */   "getDpopToken": () => (/* binding */ getDpopToken),
+/* harmony export */   "refresh": () => (/* binding */ refresh),
+/* harmony export */   "registerClient": () => (/* binding */ registerClient),
+/* harmony export */   "removeOidcQueryParam": () => (/* binding */ removeOidcQueryParam)
 /* harmony export */ });
 /* harmony import */ var _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @inrupt/oidc-client */ "./node_modules/@inrupt/oidc-client/lib/oidc-client.min.js");
 /* harmony import */ var _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__);
@@ -25804,47 +25960,17 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-function processErrorResponse(
-// The type is any here because the object is parsed from a JSON response
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-responseBody, options) {
+function processErrorResponse(responseBody, options) {
     var _a, _b, _c, _d;
-    // The following errors are defined by the spec, and allow providing some context.
-    // See https://tools.ietf.org/html/rfc7591#section-3.2.2 for more information
     if (responseBody.error === "invalid_redirect_uri") {
         throw new Error(`Dynamic client registration failed: the provided redirect uri [${(_a = options.redirectUrl) === null || _a === void 0 ? void 0 : _a.toString()}] is invalid - ${(_b = responseBody.error_description) !== null && _b !== void 0 ? _b : ""}`);
     }
     if (responseBody.error === "invalid_client_metadata") {
         throw new Error(`Dynamic client registration failed: the provided client metadata ${JSON.stringify(options)} is invalid - ${(_c = responseBody.error_description) !== null && _c !== void 0 ? _c : ""}`);
     }
-    // We currently don't support software statements, so no related error should happen.
-    // If an error outside of the spec happens, no additional context can be provided
     throw new Error(`Dynamic client registration failed: ${responseBody.error} - ${(_d = responseBody.error_description) !== null && _d !== void 0 ? _d : ""}`);
 }
-function validateRegistrationResponse(
-// The type is any here because the object is parsed from a JSON response
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-responseBody, options) {
+function validateRegistrationResponse(responseBody, options) {
     if (responseBody.client_id === undefined) {
         throw new Error(`Dynamic client registration failed: no client_id has been found on ${JSON.stringify(responseBody)}`);
     }
@@ -25866,7 +25992,6 @@ async function registerClient(options, issuerConfig) {
     }
     const signingAlg = (0,_inrupt_solid_client_authn_core__WEBPACK_IMPORTED_MODULE_1__.determineSigningAlg)(issuerConfig.idTokenSigningAlgValuesSupported, _inrupt_solid_client_authn_core__WEBPACK_IMPORTED_MODULE_1__.PREFERRED_SIGNING_ALG);
     const config = {
-        /* eslint-disable camelcase */
         client_name: options.clientName,
         application_type: "web",
         redirect_uris: [(_a = options.redirectUrl) === null || _a === void 0 ? void 0 : _a.toString()],
@@ -25874,7 +25999,6 @@ async function registerClient(options, issuerConfig) {
         token_endpoint_auth_method: "client_secret_basic",
         id_token_signed_response_alg: signingAlg,
         grant_types: ["authorization_code", "refresh_token"],
-        /* eslint-enable camelcase */
     };
     const headers = {
         "Content-Type": "application/json",
@@ -25900,28 +26024,6 @@ async function registerClient(options, issuerConfig) {
     throw new Error(`Dynamic client registration failed: the server returned ${registerResponse.status} ${registerResponse.statusText} - ${await registerResponse.text()}`);
 }
 
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-// Identifiers in camelcase are mandated by the OAuth spec.
-/* eslint-disable camelcase */
 function hasError(value) {
     return value.error !== undefined && typeof value.error === "string";
 }
@@ -25977,15 +26079,6 @@ function validateTokenEndpointResponse(tokenResponse, dpop) {
     if (!hasExpiresIn(tokenResponse)) {
         throw new _inrupt_solid_client_authn_core__WEBPACK_IMPORTED_MODULE_1__.InvalidResponseError(["expires_in"]);
     }
-    // TODO: Due to a bug in both the ESS ID broker AND NSS (what were the odds), a DPoP token is returned
-    // with a token_type 'Bearer'. To work around this, this test is currently disabled.
-    // https://github.com/solid/oidc-op/issues/26
-    // Fixed, but unreleased for the ESS (current version: inrupt-oidc-server-0.5.2)
-    // if (dpop && tokenResponse.token_type.toLowerCase() !== "dpop") {
-    //   throw new Error(
-    //     `Invalid token endpoint response: requested a [DPoP] token, but got a 'token_type' value of [${tokenResponse.token_type}].`
-    //   );
-    // }
     if (!dpop && tokenResponse.token_type.toLowerCase() !== "bearer") {
         throw new Error(`Invalid token endpoint response: requested a [Bearer] token, but got a 'token_type' value of [${tokenResponse.token_type}].`);
     }
@@ -26001,18 +26094,15 @@ async function getTokens(issuer, client, data, dpop) {
         dpopKey = await (0,_inrupt_solid_client_authn_core__WEBPACK_IMPORTED_MODULE_1__.generateDpopKeyPair)();
         headers.DPoP = await (0,_inrupt_solid_client_authn_core__WEBPACK_IMPORTED_MODULE_1__.createDpopHeader)(issuer.tokenEndpoint, "POST", dpopKey);
     }
-    // TODO: Find out where this is specified.
     if (client.clientSecret) {
         headers.Authorization = `Basic ${btoa(`${client.clientId}:${client.clientSecret}`)}`;
     }
     const requestBody = {
-        /* eslint-disable camelcase */
         grant_type: data.grantType,
         redirect_uri: data.redirectUrl,
         code: data.code,
         code_verifier: data.codeVerifier,
         client_id: client.clientId,
-        /* eslint-enable camelcase */
     };
     const tokenRequestInit = {
         method: "POST",
@@ -26034,36 +26124,11 @@ async function getTokens(issuer, client, data, dpop) {
         expiresIn: tokenResponse.expires_in,
     };
 }
-/**
- * This function exchanges an authorization code for a bearer token.
- * Note that it is based on oidc-client-js, and assumes that the same client has
- * been used to issue the initial redirect.
- * @param redirectUrl The URL to which the user has been redirected
- */
 async function getBearerToken(redirectUrl) {
     let signinResponse;
     try {
         const client = new _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.OidcClient({
-            // TODO: We should look at the various interfaces being used for storage,
-            //  i.e. between oidc-client-js (WebStorageStoreState), localStorage
-            //  (which has an interface Storage), and our own proprietary interface
-            //  IStorage - i.e. we should really just be using the browser Web Storage
-            //  API, e.g. "stateStore: window.localStorage,".
-            // We are instantiating a new instance here, so the only value we need to
-            // explicitly provide is the response mode (default otherwise will look
-            // for a hash '#' fragment!).
-            // eslint-disable-next-line camelcase
             response_mode: "query",
-            // The userinfo endpoint on NSS fails, so disable this for now
-            // Note that in Solid, information should be retrieved from the
-            // profile referenced by the WebId.
-            // TODO: Note that this is heavy-handed, and that this userinfo check
-            //  verifies that the `sub` claim in the id token you get along with the
-            //  access token matches the sub claim associated with the access token at
-            //  the userinfo endpoint.
-            // That is a useful check, and in the future it should be only disabled
-            // against NSS, and not in general.
-            // Issue tracker: https://github.com/solid/node-solid-server/issues/1490
             loadUserInfo: false,
         });
         signinResponse = await client.processSigninResponse(redirectUrl);
@@ -26084,13 +26149,6 @@ async function getBearerToken(redirectUrl) {
             accessToken: signinResponse.access_token,
             idToken: signinResponse.id_token,
             webId,
-            // Although not a field in the TypeScript response interface, the refresh
-            // token (which can optionally come back with the access token (if, as per
-            // the OAuth2 spec, we requested one using the scope of 'offline_access')
-            // will be included in the signin response object.
-            // eslint-disable-next-line camelcase
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
             refreshToken: signinResponse.refresh_token,
         };
     }
@@ -26102,31 +26160,8 @@ async function getDpopToken(issuer, client, data) {
     return getTokens(issuer, client, data, true);
 }
 
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
 const isValidUrl = (url) => {
     try {
-        // Here, the URL constructor is just called to parse the given string and
-        // verify if it is a well-formed IRI.
-        // eslint-disable-next-line no-new
         new URL(url);
         return true;
     }
@@ -26134,8 +26169,6 @@ const isValidUrl = (url) => {
         return false;
     }
 };
-// Identifiers in snake_case are mandated by the OAuth spec.
-/* eslint-disable camelcase */
 async function refresh(refreshToken, issuer, client, dpopKey) {
     if (client.clientId === undefined) {
         throw new Error("No client ID available when trying to refresh the access token.");
@@ -26154,15 +26187,10 @@ async function refresh(refreshToken, issuer, client, dpopKey) {
     let authHeader = {};
     if (client.clientSecret !== undefined) {
         authHeader = {
-            // We assume that client_secret_basic is the client authentication method.
-            // TODO: Get the authentication method from the IClient configuration object.
             Authorization: `Basic ${btoa(`${client.clientId}:${client.clientSecret}`)}`,
         };
     }
     else if (isValidUrl(client.clientId)) {
-        // If the client ID is an URL, and there is no client secret, the client
-        // has a Solid-OIDC Client Identifier, and it should be present in the
-        // request body.
         requestBody.client_id = client.clientId;
     }
     const rawResponse = await (0,_inrupt_universal_fetch__WEBPACK_IMPORTED_MODULE_2__.fetch)(issuer.tokenEndpoint, {
@@ -26179,7 +26207,6 @@ async function refresh(refreshToken, issuer, client, dpopKey) {
         response = await rawResponse.json();
     }
     catch (e) {
-        // The response is left out of the error on purpose not to leak any sensitive information.
         throw new Error(`The token endpoint of issuer ${issuer.issuer} returned a malformed response.`);
     }
     const validatedResponse = validateTokenEndpointResponse(response, dpopKey !== undefined);
@@ -26196,63 +26223,18 @@ async function refresh(refreshToken, issuer, client, dpopKey) {
     };
 }
 
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-/**
- * Removes OIDC-specific query parameters from a given URL (state, code...), and
- * sanitizes the URL (e.g. removes the hash fragment).
- * @param redirectUrl The URL to clean up.
- * @returns A copy of the URL, without OIDC-specific query params.
- */
-function normalizeCallbackUrl(redirectUrl) {
-    const cleanedUrl = (0,_inrupt_solid_client_authn_core__WEBPACK_IMPORTED_MODULE_1__.removeOpenIdParams)(redirectUrl);
-    // As per https://tools.ietf.org/html/rfc6749#section-3.1.2, the redirect URL
-    // must not include a hash fragment.
+function removeOidcQueryParam(redirectUrl) {
+    const cleanedUrl = new URL(redirectUrl);
+    cleanedUrl.searchParams.delete("code");
+    cleanedUrl.searchParams.delete("state");
     cleanedUrl.hash = "";
-    // Do not normalize the trailing slash, and respect the original redirect URL.
-    if (
-    // The trailing slash is present in the original redirect URL
-    redirectUrl.includes(`${cleanedUrl.origin}/`)) {
+    if (redirectUrl.includes(`${cleanedUrl.origin}/`)) {
         return cleanedUrl.href;
     }
-    // Calling cleanedUrl.href appends a trailing slash to the origin, which may
-    // create a redirect URL mismatch if it wasn't originally present.
-    return `${cleanedUrl.origin}${cleanedUrl.href.substring(
-    // Adds 1 to the origin length to remove the trailing slash
-    cleanedUrl.origin.length + 1)}`;
+    return `${cleanedUrl.origin}${cleanedUrl.href.substring(cleanedUrl.origin.length + 1)}`;
 }
-/**
- * Clears any OIDC-related data lingering in the local storage.
- */
 async function clearOidcPersistentStorage() {
     const client = new _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.OidcClient({
-        // TODO: We should look at the various interfaces being used for storage,
-        //  i.e. between oidc-client-js (WebStorageStoreState), localStorage
-        //  (which has an interface Storage), and our own proprietary interface
-        //  IStorage - i.e. we should really just be using the browser Web Storage
-        //  API, e.g. "stateStore: window.localStorage,".
-        // We are instantiating a new instance here, so the only value we need to
-        // explicitly provide is the response mode (default otherwise will look
-        // for a hash '#' fragment!).
-        // eslint-disable-next-line camelcase
         response_mode: "query",
     });
     await client.clearStaleState(new _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.WebStorageStateStore({}));
@@ -28090,7 +28072,7 @@ for (let i = 0; i < 256; ++i) {
 function unsafeStringify(arr, offset = 0) {
   // Note: Be careful editing this code!  It's been tuned for performance
   // and works in ways you may not expect. See https://github.com/uuidjs/uuid/pull/434
-  return byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]];
+  return (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase();
 }
 
 function stringify(arr, offset = 0) {
@@ -28496,38 +28478,9 @@ var universalFetch = __webpack_require__(/*! @inrupt/universal-fetch */ "./node_
 var jose = __webpack_require__(/*! jose */ "./node_modules/jose/dist/browser/index.js");
 var uuid = __webpack_require__(/*! uuid */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/index.js");
 
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-/**
- * Intended to be used by dependent packages as a common prefix for keys into
- * storage mechanisms (so as to group all keys related to Solid Client Authn
- * within those storage mechanisms, e.g., window.localStorage).
- */
 const SOLID_CLIENT_AUTHN_KEY_PREFIX = "solidClientAuthn:";
-/**
- * Ordered list of signature algorithms, from most preferred to least preferred.
- */
 const PREFERRED_SIGNING_ALG = ["ES256", "RS256"];
 const EVENTS = {
-    // Note that an `error` events MUST be listened to: https://nodejs.org/dist/latest-v16.x/docs/api/events.html#error-events.
     ERROR: "error",
     LOGIN: "login",
     LOGOUT: "logout",
@@ -28537,52 +28490,14 @@ const EVENTS = {
     SESSION_RESTORED: "sessionRestore",
     TIMEOUT_SET: "timeoutSet",
 };
-/**
- * We want to refresh a token 5 seconds before it expires.
- */
 const REFRESH_BEFORE_EXPIRATION_SECONDS = 5;
-// The openid scope requests an OIDC ID token token to be returned.
 const SCOPE_OPENID = "openid";
-// The offline_access scope requests a refresh token to be returned.
 const SCOPE_OFFLINE = "offline_access";
-// The webid scope is required as per https://solid.github.io/solid-oidc/#webid-scope
 const SCOPE_WEBID = "webid";
-// The scopes are expected as a space-separated list.
 const DEFAULT_SCOPES = [SCOPE_OPENID, SCOPE_OFFLINE, SCOPE_WEBID].join(" ");
 
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-/**
- * Temporary internal builder for safe proxying.
- */
-const buildProxyHandler = (
-// The class to be excluded needs to be injected, because it is defined in a
-// dependency.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-toExclude, errorMessage) => ({
-    // This proxy is only a temporary measure until Session no longer extends
-    // SessionEventEmitter, and the proxying is no longer necessary.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+const buildProxyHandler = (toExclude, errorMessage) => ({
     get(target, prop, receiver) {
-        // Reject any calls to the proxy that isn't specific to the EventEmitter API
         if (!Object.getOwnPropertyNames(events.EventEmitter).includes(prop) &&
             Object.getOwnPropertyNames(toExclude).includes(prop)) {
             throw new Error(`${errorMessage}: [${prop}] is not supported`);
@@ -28591,59 +28506,11 @@ toExclude, errorMessage) => ({
     },
 });
 
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-/**
- * @hidden
- */
 class AggregateHandler {
     constructor(handleables) {
         this.handleables = handleables;
-        this.handleables = handleables;
     }
-    /**
-     * Helper function that will asynchronously determine the proper handler to use. If multiple
-     * handlers can handle, it will choose the first one in the list
-     * @param params Paramerters to feed to the handler
-     */
     async getProperHandler(params) {
-        // TODO : This function doesn't currently operate as described. Tests need to be written
-        // return new Promise<IHandleable<P, R> | null>((resolve, reject) => {
-        //  const resolvedValues: Array<boolean | null> = Array(this.handleables.length).map(() => null)
-        //   let numberResolved = 0
-        //   this.handleables.forEach(async (handleable: IHandleable<P, R>, index: number) => {
-        //     resolvedValues[index] = await handleable.canHandle(...params)
-        //     numberResolved++
-        //     let curResolvedValueIndex = 0
-        //     while (
-        //       resolvedValues[curResolvedValueIndex] !== null ||
-        //       resolvedValues[curResolvedValueIndex] !== undefined
-        //     ) {
-        //       if (resolvedValues[curResolvedValueIndex]) {
-        //         resolve(this.handleables[curResolvedValueIndex])
-        //       }
-        //       curResolvedValueIndex++
-        //     }
-        //   })
-        // })
         const canHandleList = await Promise.all(this.handleables.map((handleable) => handleable.canHandle(...params)));
         for (let i = 0; i < canHandleList.length; i += 1) {
             if (canHandleList[i]) {
@@ -28666,7 +28533,6 @@ class AggregateHandler {
                 return JSON.stringify(param);
             }
             catch (err) {
-                /* eslint-disable  @typescript-eslint/no-explicit-any */
                 return param.toString();
             }
         })
@@ -28674,37 +28540,11 @@ class AggregateHandler {
     }
 }
 
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-// eslint-disable-next-line no-shadow
 async function fetchJwks(jwksIri, issuerIri) {
-    // FIXME: the following line works, but the underlying network calls don't seem
-    // to be mocked properly by our test code. It would be nicer to replace calls to this
-    // function by the following line and to fix the mocks.
-    // const jwks = createRemoteJWKSet(new URL(jwksIri));
-    const jwksResponse = await universalFetch.fetch.call(globalThis, jwksIri);
+    const jwksResponse = await universalFetch.fetch(jwksIri);
     if (jwksResponse.status !== 200) {
         throw new Error(`Could not fetch JWKS for [${issuerIri}] at [${jwksIri}]: ${jwksResponse.status} ${jwksResponse.statusText}`);
     }
-    // The JWKS should only contain the current key for the issuer.
     let jwk;
     try {
         jwk = (await jwksResponse.json()).keys[0];
@@ -28714,15 +28554,6 @@ async function fetchJwks(jwksIri, issuerIri) {
     }
     return jwk;
 }
-/**
- * Extract a WebID from an ID token payload based on https://github.com/solid/webid-oidc-spec.
- * Note that this does not yet implement the user endpoint lookup, and only checks
- * for `webid` or IRI-like `sub` claims.
- *
- * @param idToken the payload of the ID token from which the WebID can be extracted.
- * @returns a WebID extracted from the ID token.
- * @internal
- */
 async function getWebidFromTokenPayload(idToken, jwksIri, issuerIri, clientId) {
     const jwk = await fetchJwks(jwksIri, issuerIri);
     let payload;
@@ -28743,10 +28574,6 @@ async function getWebidFromTokenPayload(idToken, jwksIri, issuerIri, clientId) {
         throw new Error(`The token ${JSON.stringify(payload)} is invalid: it has no 'webid' claim and no 'sub' claim.`);
     }
     try {
-        // This parses the 'sub' claim to check if it is a well-formed IRI.
-        // However, the normalized value isn't returned to make sure the WebID is returned
-        // as specified by the Identity Provider.
-        // eslint-disable-next-line no-new
         new URL(payload.sub);
         return payload.sub;
     }
@@ -28755,388 +28582,24 @@ async function getWebidFromTokenPayload(idToken, jwksIri, issuerIri, clientId) {
     }
 }
 
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
 function isValidRedirectUrl(redirectUrl) {
-    // If the redirect URL is not a valid URL, an error will be thrown.
     try {
         const urlObject = new URL(redirectUrl);
-        const noReservedQuery = !urlObject.searchParams.has("code") &&
-            !urlObject.searchParams.has("state");
-        // As per https://tools.ietf.org/html/rfc6749#section-3.1.2, the redirect URL
-        // must not include a hash fragment.
-        const noHash = urlObject.hash === "";
-        return noReservedQuery && noHash;
+        return urlObject.hash === "";
     }
     catch (e) {
         return false;
     }
 }
-function removeOpenIdParams(redirectUrl) {
-    const cleanedUpUrl = new URL(redirectUrl);
-    // For auth code flow
-    cleanedUpUrl.searchParams.delete("state");
-    cleanedUpUrl.searchParams.delete("code");
-    // For login error
-    cleanedUpUrl.searchParams.delete("error");
-    cleanedUpUrl.searchParams.delete("error_description");
-    // For RFC9207
-    cleanedUpUrl.searchParams.delete("iss");
-    return cleanedUpUrl;
-}
 
-/**
- * @hidden
- * @packageDocumentation
- */
-/**
- * @hidden
- * Authorization code flow spec: https://openid.net/specs/openid-connect-core-1_0.html#CodeFlowAuth
- * PKCE: https://tools.ietf.org/html/rfc7636
- */
-class AuthorizationCodeWithPkceOidcHandlerBase {
-    constructor(storageUtility, redirector) {
-        this.storageUtility = storageUtility;
-        this.redirector = redirector;
-        this.storageUtility = storageUtility;
-        this.redirector = redirector;
-    }
-    async canHandle(oidcLoginOptions) {
-        return !!(oidcLoginOptions.issuerConfiguration.grantTypesSupported &&
-            oidcLoginOptions.issuerConfiguration.grantTypesSupported.indexOf("authorization_code") > -1);
-    }
-    async handleRedirect({ oidcLoginOptions, state, codeVerifier, targetUrl, }) {
-        await Promise.all([
-            // We use the OAuth 'state' value (which should be crypto-random) as
-            // the key in our storage to store our actual SessionID. We do this
-            // 'cos we'll need to lookup our session information again when the
-            // browser is redirected back to us (i.e. the OAuth client
-            // application) from the Authorization Server.
-            // We don't want to use our session ID as the OAuth 'state' value, as
-            // that session ID can be any developer-specified value, and therefore
-            // may not be appropriate (since the OAuth 'state' value should really
-            // be an unguessable crypto-random value).
-            // eslint-disable-next-line no-underscore-dangle
-            this.storageUtility.setForUser(state, {
-                sessionId: oidcLoginOptions.sessionId,
-            }),
-            // Store our login-process state using the session ID as the key.
-            // Strictly speaking, this indirection from our OAuth state value to
-            // our session ID is unnecessary, but it provides a slightly cleaner
-            // separation of concerns.
-            this.storageUtility.setForUser(oidcLoginOptions.sessionId, {
-                // eslint-disable-next-line no-underscore-dangle
-                codeVerifier,
-                issuer: oidcLoginOptions.issuer.toString(),
-                // The redirect URL is read after redirect, so it must be stored now.
-                redirectUrl: oidcLoginOptions.redirectUrl,
-                dpop: oidcLoginOptions.dpop ? "true" : "false",
-            }),
-        ]);
-        this.redirector.redirect(targetUrl, {
-            handleRedirect: oidcLoginOptions.handleRedirect,
-        });
-        return undefined;
-    }
-}
-
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-/**
- * @hidden
- */
-class GeneralLogoutHandler {
-    constructor(sessionInfoManager) {
-        this.sessionInfoManager = sessionInfoManager;
-        this.sessionInfoManager = sessionInfoManager;
-    }
-    async canHandle() {
-        return true;
-    }
-    async handle(userId) {
-        await this.sessionInfoManager.clear(userId);
-    }
-}
-
-class IRpLogoutHandler {
-    constructor(redirector) {
-        this.redirector = redirector;
-        this.redirector = redirector;
-    }
-    async canHandle(userId, options) {
-        return (options === null || options === void 0 ? void 0 : options.logoutType) === "idp";
-    }
-    async handle(userId, options) {
-        if ((options === null || options === void 0 ? void 0 : options.logoutType) !== "idp") {
-            throw new Error("Attempting to call idp logout handler to perform app logout");
-        }
-        if (options.toLogoutUrl === undefined) {
-            throw new Error("Cannot perform IDP logout. Did you log in using the OIDC authentication flow?");
-        }
-        this.redirector.redirect(options.toLogoutUrl(options), {
-            handleRedirect: options.handleRedirect,
-        });
-    }
-}
-
-class IWaterfallLogoutHandler {
-    constructor(sessionInfoManager, redirector) {
-        this.handlers = [
-            new GeneralLogoutHandler(sessionInfoManager),
-            new IRpLogoutHandler(redirector),
-        ];
-    }
-    async canHandle() {
-        return true;
-    }
-    async handle(userId, options) {
-        for (const handler of this.handlers) {
-            /* eslint-disable no-await-in-loop */
-            if (await handler.canHandle(userId, options))
-                await handler.handle(userId, options);
-            /* eslint-enable no-await-in-loop */
-        }
-    }
-}
-
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-/**
- * @hidden
- * @packageDocumentation
- */
-function getUnauthenticatedSession() {
-    return {
-        isLoggedIn: false,
-        sessionId: uuid.v4(),
-        fetch: (...args) => universalFetch.fetch.call(globalThis, ...args),
-    };
-}
-/**
- * @param sessionId
- * @param storage
- * @hidden
- */
-async function clear(sessionId, storage) {
-    await Promise.all([
-        storage.deleteAllUserData(sessionId, { secure: false }),
-        storage.deleteAllUserData(sessionId, { secure: true }),
-    ]);
-}
-/**
- * @hidden
- */
-class SessionInfoManagerBase {
-    constructor(storageUtility) {
-        this.storageUtility = storageUtility;
-        this.storageUtility = storageUtility;
-    }
-    update(_sessionId, _options) {
-        throw new Error("Not Implemented");
-    }
-    get(_) {
-        throw new Error("Not implemented");
-    }
-    // eslint-disable-next-line class-methods-use-this
-    async getAll() {
-        throw new Error("Not implemented");
-    }
-    /**
-     * This function removes all session-related information from storage.
-     * @param sessionId the session identifier
-     * @param storage the storage where session info is stored
-     * @hidden
-     */
-    async clear(sessionId) {
-        return clear(sessionId, this.storageUtility);
-    }
-    /**
-     * Registers a new session, so that its ID can be retrieved.
-     * @param sessionId
-     */
-    async register(_sessionId) {
-        throw new Error("Not implemented");
-    }
-    /**
-     * Returns all the registered session IDs. Differs from getAll, which also
-     * returns additional session information.
-     */
-    async getRegisteredSessionIdAll() {
-        throw new Error("Not implemented");
-    }
-    /**
-     * Deletes all information about all sessions, including their registrations.
-     */
-    async clearAll() {
-        throw new Error("Not implemented");
-    }
-}
-
-/**
- * This function is designed to isomorphically capture the behavior in oidc-client-js and node-oidc-provider
- * - https://github.com/IdentityModel/oidc-client-js/blob/edec8f59897bdeedcb0b4167586d49626203c2c1/src/OidcClient.js#L138
- * - https://github.com/panva/node-openid-client/blob/35758419489ff751a71f5b66f5020087a63e1e88/lib/client.js#L284
- *
- * @param options IEndSessionOptions
- * @returns The URL to redirect to in order to perform RP Initiated Logout
- * @hidden
- */
-function getEndSessionUrl({ endSessionEndpoint, idTokenHint, postLogoutRedirectUri, state, }) {
-    const url = new URL(endSessionEndpoint);
-    if (idTokenHint !== undefined)
-        url.searchParams.append("id_token_hint", idTokenHint);
-    if (postLogoutRedirectUri !== undefined) {
-        url.searchParams.append("post_logout_redirect_uri", postLogoutRedirectUri);
-        if (state !== undefined)
-            url.searchParams.append("state", state);
-    }
-    return url.toString();
-}
-/**
- * @param options.endSessionEndpoint The end_session_endpoint advertised by the server
- * @param options.idTokenHint The idToken supplied by the server after logging in
- * Redirects the window to the location required to perform RP initiated logout
- *
- * @hidden
- */
-function maybeBuildRpInitiatedLogout({ endSessionEndpoint, idTokenHint, }) {
-    if (endSessionEndpoint === undefined)
-        return undefined;
-    return function logout({ state, postLogoutUrl }) {
-        return getEndSessionUrl({
-            endSessionEndpoint,
-            idTokenHint,
-            state,
-            postLogoutRedirectUri: postLogoutUrl,
-        });
-    };
-}
-
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
 function isSupportedTokenType(token) {
     return typeof token === "string" && ["DPoP", "Bearer"].includes(token);
 }
 
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
 const USER_SESSION_PREFIX = "solidClientAuthenticationUser";
 
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
 function isValidUrl(url) {
     try {
-        // Here, the URL constructor is just called to parse the given string and
-        // verify if it is a well-formed IRI.
-        // eslint-disable-next-line no-new
         new URL(url);
         return true;
     }
@@ -29159,10 +28622,6 @@ function determineClientType(options, issuerConfig) {
         isValidUrl(options.clientId)) {
         return "solid-oidc";
     }
-    // If no client_id is provided, the client must go through Dynamic Client Registration.
-    // If a client_id is provided and it looks like a URI, yet the Identity Provider
-    // does *not* support Solid-OIDC, then we also perform DCR (and discard the
-    // provided client_id).
     return "dynamic";
 }
 async function handleRegistration(options, issuerConfig, storageUtility, clientRegistrar) {
@@ -29174,13 +28633,7 @@ async function handleRegistration(options, issuerConfig, storageUtility, clientR
             redirectUrl: options.redirectUrl,
         }, issuerConfig);
     }
-    // If a client_id was provided, and the Identity Provider is Solid-OIDC compliant,
-    // or it is not compliant but the client_id isn't an IRI (we assume it has already
-    // been registered with the IdP), then the client registration information needs
-    // to be stored so that it can be retrieved later after redirect.
     await storageUtility.setForUser(options.sessionId, {
-        // If the client is either static or solid-oidc compliant, its client ID cannot be undefined.
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         clientId: options.clientId,
     });
     if (options.clientSecret) {
@@ -29194,124 +28647,353 @@ async function handleRegistration(options, issuerConfig, storageUtility, clientR
         });
     }
     return {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         clientId: options.clientId,
         clientSecret: options.clientSecret,
         clientName: options.clientName,
         clientType,
     };
-}
-
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-/**
- * @hidden
- * @packageDocumentation
- */
-// By only referring to `window` at runtime, apps that do server-side rendering
-// won't run into errors when rendering code that instantiates a
-// ClientAuthentication:
-const globalFetch = (request, init) => universalFetch.fetch.call(globalThis, request, init);
-/**
- * @hidden
- */
-class ClientAuthentication {
-    constructor(loginHandler, redirectHandler, logoutHandler, sessionInfoManager, issuerConfigFetcher) {
-        this.loginHandler = loginHandler;
-        this.redirectHandler = redirectHandler;
-        this.logoutHandler = logoutHandler;
-        this.sessionInfoManager = sessionInfoManager;
-        this.issuerConfigFetcher = issuerConfigFetcher;
-        // By default, our fetch() resolves to the environment fetch() function.
-        this.fetch = globalFetch;
-        this.logout = async (sessionId, options) => {
-            // When doing IDP logout this will redirect away from the current page, so we should not expect
-            // code after this condition to be run if it is true.
-            // We also need to make sure that any other cleanup that we want to do for
-            // our session takes place before this condition is run
-            await this.logoutHandler.handle(sessionId, (options === null || options === void 0 ? void 0 : options.logoutType) === "idp"
-                ? {
-                    ...options,
-                    toLogoutUrl: this.boundLogout,
-                }
-                : options);
-            // Restore our fetch() function back to the environment fetch(), effectively
-            // leaving us with un-authenticated fetches from now on.
-            this.fetch = globalFetch;
-            // Delete the bound logout function, so that it can't be called after this.
-            delete this.boundLogout;
-        };
-        this.getSessionInfo = async (sessionId) => {
-            // TODO complete
-            return this.sessionInfoManager.get(sessionId);
-        };
-        this.getAllSessionInfo = async () => {
-            return this.sessionInfoManager.getAll();
-        };
-        this.loginHandler = loginHandler;
-        this.redirectHandler = redirectHandler;
-        this.logoutHandler = logoutHandler;
-        this.sessionInfoManager = sessionInfoManager;
-        this.issuerConfigFetcher = issuerConfigFetcher;
+};
+const mockStorageUtility = (stored, isSecure = false) => {
+    if (isSecure) {
+        return new StorageUtility(mockStorage(stored), mockStorage({}));
     }
+    return new StorageUtility(mockStorage({}), mockStorage(stored));
+};
+
+exports.AggregateHandler = AggregateHandler;
+exports.AuthorizationCodeWithPkceOidcHandlerBase = AuthorizationCodeWithPkceOidcHandlerBase;
+exports.ClientAuthentication = ClientAuthentication;
+exports.ConfigurationError = ConfigurationError;
+exports.DEFAULT_SCOPES = DEFAULT_SCOPES;
+exports.EVENTS = EVENTS;
+exports.GeneralLogoutHandler = GeneralLogoutHandler;
+exports.IRpLogoutHandler = IRpLogoutHandler;
+exports.IWaterfallLogoutHandler = IWaterfallLogoutHandler;
+exports.InMemoryStorage = InMemoryStorage;
+exports.InvalidResponseError = InvalidResponseError;
+exports.NotImplementedError = NotImplementedError;
+exports.OidcProviderError = OidcProviderError;
+exports.PREFERRED_SIGNING_ALG = PREFERRED_SIGNING_ALG;
+exports.REFRESH_BEFORE_EXPIRATION_SECONDS = REFRESH_BEFORE_EXPIRATION_SECONDS;
+exports.SOLID_CLIENT_AUTHN_KEY_PREFIX = SOLID_CLIENT_AUTHN_KEY_PREFIX;
+exports.SessionInfoManagerBase = SessionInfoManagerBase;
+exports.StorageUtility = StorageUtility;
+exports.StorageUtilityGetResponse = StorageUtilityGetResponse;
+exports.StorageUtilityMock = StorageUtilityMock;
+exports.USER_SESSION_PREFIX = USER_SESSION_PREFIX;
+exports.buildAuthenticatedFetch = buildAuthenticatedFetch;
+exports.buildProxyHandler = buildProxyHandler;
+exports.clear = clear;
+exports.createDpopHeader = createDpopHeader;
+exports.determineSigningAlg = determineSigningAlg;
+exports.fetchJwks = fetchJwks;
+exports.generateDpopKeyPair = generateDpopKeyPair;
+exports.getEndSessionUrl = getEndSessionUrl;
+exports.getSessionIdFromOauthState = getSessionIdFromOauthState;
+exports.getUnauthenticatedSession = getUnauthenticatedSession;
+exports.getWebidFromTokenPayload = getWebidFromTokenPayload;
+exports.handleRegistration = handleRegistration;
+exports.isSupportedTokenType = isSupportedTokenType;
+exports.isValidRedirectUrl = isValidRedirectUrl;
+exports.loadOidcContextFromStorage = loadOidcContextFromStorage;
+exports.maybeBuildRpInitiatedLogout = maybeBuildRpInitiatedLogout;
+exports.mockStorage = mockStorage;
+exports.mockStorageUtility = mockStorageUtility;
+exports.removeOpenIdParams = removeOpenIdParams;
+exports.saveSessionInfoToStorage = saveSessionInfoToStorage;
+//# sourceMappingURL=index.js.map
+
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/index.js":
+/*!*******************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/index.js ***!
+  \*******************************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+Object.defineProperty(exports, "NIL", ({
+  enumerable: true,
+  get: function get() {
+    return _nil.default;
+  }
+}));
+Object.defineProperty(exports, "parse", ({
+  enumerable: true,
+  get: function get() {
+    return _parse.default;
+  }
+}));
+Object.defineProperty(exports, "stringify", ({
+  enumerable: true,
+  get: function get() {
+    return _stringify.default;
+  }
+}));
+Object.defineProperty(exports, "v1", ({
+  enumerable: true,
+  get: function get() {
+    return _v.default;
+  }
+}));
+Object.defineProperty(exports, "v3", ({
+  enumerable: true,
+  get: function get() {
+    return _v2.default;
+  }
+}));
+Object.defineProperty(exports, "v4", ({
+  enumerable: true,
+  get: function get() {
+    return _v3.default;
+  }
+}));
+Object.defineProperty(exports, "v5", ({
+  enumerable: true,
+  get: function get() {
+    return _v4.default;
+  }
+}));
+Object.defineProperty(exports, "validate", ({
+  enumerable: true,
+  get: function get() {
+    return _validate.default;
+  }
+}));
+Object.defineProperty(exports, "version", ({
+  enumerable: true,
+  get: function get() {
+    return _version.default;
+  }
+}));
+
+var _v = _interopRequireDefault(__webpack_require__(/*! ./v1.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v1.js"));
+
+var _v2 = _interopRequireDefault(__webpack_require__(/*! ./v3.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v3.js"));
+
+var _v3 = _interopRequireDefault(__webpack_require__(/*! ./v4.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v4.js"));
+
+var _v4 = _interopRequireDefault(__webpack_require__(/*! ./v5.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v5.js"));
+
+var _nil = _interopRequireDefault(__webpack_require__(/*! ./nil.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/nil.js"));
+
+var _version = _interopRequireDefault(__webpack_require__(/*! ./version.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/version.js"));
+
+var _validate = _interopRequireDefault(__webpack_require__(/*! ./validate.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/validate.js"));
+
+var _stringify = _interopRequireDefault(__webpack_require__(/*! ./stringify.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/stringify.js"));
+
+var _parse = _interopRequireDefault(__webpack_require__(/*! ./parse.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/parse.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/md5.js":
+/*!*****************************************************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/md5.js ***!
+  \*****************************************************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+/*
+ * Browser-compatible JavaScript MD5
+ *
+ * Modification of JavaScript MD5
+ * https://github.com/blueimp/JavaScript-MD5
+ *
+ * Copyright 2011, Sebastian Tschan
+ * https://blueimp.net
+ *
+ * Licensed under the MIT license:
+ * https://opensource.org/licenses/MIT
+ *
+ * Based on
+ * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
+ * Digest Algorithm, as defined in RFC 1321.
+ * Version 2.2 Copyright (C) Paul Johnston 1999 - 2009
+ * Other contributors: Greg Holt, Andrew Kepert, Ydnar, Lostinet
+ * Distributed under the BSD License
+ * See http://pajhome.org.uk/crypt/md5 for more info.
+ */
+function md5(bytes) {
+  if (typeof bytes === 'string') {
+    const msg = unescape(encodeURIComponent(bytes)); // UTF8 escape
+
+    bytes = new Uint8Array(msg.length);
+
+    for (let i = 0; i < msg.length; ++i) {
+      bytes[i] = msg.charCodeAt(i);
+    }
+  }
+
+  return md5ToHexEncodedArray(wordsToMd5(bytesToWords(bytes), bytes.length * 8));
+}
+/*
+ * Convert an array of little-endian words to an array of bytes
+ */
+
+
+function md5ToHexEncodedArray(input) {
+  const output = [];
+  const length32 = input.length * 32;
+  const hexTab = '0123456789abcdef';
+
+  for (let i = 0; i < length32; i += 8) {
+    const x = input[i >> 5] >>> i % 32 & 0xff;
+    const hex = parseInt(hexTab.charAt(x >>> 4 & 0x0f) + hexTab.charAt(x & 0x0f), 16);
+    output.push(hex);
+  }
+
+  return output;
+}
+/**
+ * Calculate output length with padding and bit length
+ */
+
+
+function getOutputLength(inputLength8) {
+  return (inputLength8 + 64 >>> 9 << 4) + 14 + 1;
+}
+/*
+ * Calculate the MD5 of an array of little-endian words, and a bit length.
+ */
+
+
+function wordsToMd5(x, len) {
+  /* append padding */
+  x[len >> 5] |= 0x80 << len % 32;
+  x[getOutputLength(len) - 1] = len;
+  let a = 1732584193;
+  let b = -271733879;
+  let c = -1732584194;
+  let d = 271733878;
+
+  for (let i = 0; i < x.length; i += 16) {
+    const olda = a;
+    const oldb = b;
+    const oldc = c;
+    const oldd = d;
+    a = md5ff(a, b, c, d, x[i], 7, -680876936);
+    d = md5ff(d, a, b, c, x[i + 1], 12, -389564586);
+    c = md5ff(c, d, a, b, x[i + 2], 17, 606105819);
+    b = md5ff(b, c, d, a, x[i + 3], 22, -1044525330);
+    a = md5ff(a, b, c, d, x[i + 4], 7, -176418897);
+    d = md5ff(d, a, b, c, x[i + 5], 12, 1200080426);
+    c = md5ff(c, d, a, b, x[i + 6], 17, -1473231341);
+    b = md5ff(b, c, d, a, x[i + 7], 22, -45705983);
+    a = md5ff(a, b, c, d, x[i + 8], 7, 1770035416);
+    d = md5ff(d, a, b, c, x[i + 9], 12, -1958414417);
+    c = md5ff(c, d, a, b, x[i + 10], 17, -42063);
+    b = md5ff(b, c, d, a, x[i + 11], 22, -1990404162);
+    a = md5ff(a, b, c, d, x[i + 12], 7, 1804603682);
+    d = md5ff(d, a, b, c, x[i + 13], 12, -40341101);
+    c = md5ff(c, d, a, b, x[i + 14], 17, -1502002290);
+    b = md5ff(b, c, d, a, x[i + 15], 22, 1236535329);
+    a = md5gg(a, b, c, d, x[i + 1], 5, -165796510);
+    d = md5gg(d, a, b, c, x[i + 6], 9, -1069501632);
+    c = md5gg(c, d, a, b, x[i + 11], 14, 643717713);
+    b = md5gg(b, c, d, a, x[i], 20, -373897302);
+    a = md5gg(a, b, c, d, x[i + 5], 5, -701558691);
+    d = md5gg(d, a, b, c, x[i + 10], 9, 38016083);
+    c = md5gg(c, d, a, b, x[i + 15], 14, -660478335);
+    b = md5gg(b, c, d, a, x[i + 4], 20, -405537848);
+    a = md5gg(a, b, c, d, x[i + 9], 5, 568446438);
+    d = md5gg(d, a, b, c, x[i + 14], 9, -1019803690);
+    c = md5gg(c, d, a, b, x[i + 3], 14, -187363961);
+    b = md5gg(b, c, d, a, x[i + 8], 20, 1163531501);
+    a = md5gg(a, b, c, d, x[i + 13], 5, -1444681467);
+    d = md5gg(d, a, b, c, x[i + 2], 9, -51403784);
+    c = md5gg(c, d, a, b, x[i + 7], 14, 1735328473);
+    b = md5gg(b, c, d, a, x[i + 12], 20, -1926607734);
+    a = md5hh(a, b, c, d, x[i + 5], 4, -378558);
+    d = md5hh(d, a, b, c, x[i + 8], 11, -2022574463);
+    c = md5hh(c, d, a, b, x[i + 11], 16, 1839030562);
+    b = md5hh(b, c, d, a, x[i + 14], 23, -35309556);
+    a = md5hh(a, b, c, d, x[i + 1], 4, -1530992060);
+    d = md5hh(d, a, b, c, x[i + 4], 11, 1272893353);
+    c = md5hh(c, d, a, b, x[i + 7], 16, -155497632);
+    b = md5hh(b, c, d, a, x[i + 10], 23, -1094730640);
+    a = md5hh(a, b, c, d, x[i + 13], 4, 681279174);
+    d = md5hh(d, a, b, c, x[i], 11, -358537222);
+    c = md5hh(c, d, a, b, x[i + 3], 16, -722521979);
+    b = md5hh(b, c, d, a, x[i + 6], 23, 76029189);
+    a = md5hh(a, b, c, d, x[i + 9], 4, -640364487);
+    d = md5hh(d, a, b, c, x[i + 12], 11, -421815835);
+    c = md5hh(c, d, a, b, x[i + 15], 16, 530742520);
+    b = md5hh(b, c, d, a, x[i + 2], 23, -995338651);
+    a = md5ii(a, b, c, d, x[i], 6, -198630844);
+    d = md5ii(d, a, b, c, x[i + 7], 10, 1126891415);
+    c = md5ii(c, d, a, b, x[i + 14], 15, -1416354905);
+    b = md5ii(b, c, d, a, x[i + 5], 21, -57434055);
+    a = md5ii(a, b, c, d, x[i + 12], 6, 1700485571);
+    d = md5ii(d, a, b, c, x[i + 3], 10, -1894986606);
+    c = md5ii(c, d, a, b, x[i + 10], 15, -1051523);
+    b = md5ii(b, c, d, a, x[i + 1], 21, -2054922799);
+    a = md5ii(a, b, c, d, x[i + 8], 6, 1873313359);
+    d = md5ii(d, a, b, c, x[i + 15], 10, -30611744);
+    c = md5ii(c, d, a, b, x[i + 6], 15, -1560198380);
+    b = md5ii(b, c, d, a, x[i + 13], 21, 1309151649);
+    a = md5ii(a, b, c, d, x[i + 4], 6, -145523070);
+    d = md5ii(d, a, b, c, x[i + 11], 10, -1120210379);
+    c = md5ii(c, d, a, b, x[i + 2], 15, 718787259);
+    b = md5ii(b, c, d, a, x[i + 9], 21, -343485551);
+    a = safeAdd(a, olda);
+    b = safeAdd(b, oldb);
+    c = safeAdd(c, oldc);
+    d = safeAdd(d, oldd);
+  }
+
+  return [a, b, c, d];
+}
+/*
+ * Convert an array bytes to an array of little-endian words
+ * Characters >255 have their high-byte silently ignored.
+ */
+
+
+function bytesToWords(input) {
+  if (input.length === 0) {
+    return [];
+  }
+
+  const length8 = input.length * 8;
+  const output = new Uint32Array(getOutputLength(length8));
+
+  for (let i = 0; i < length8; i += 8) {
+    output[i >> 5] |= (input[i / 8] & 0xff) << i % 32;
+  }
+
+  return output;
+}
+/*
+ * Add integers, wrapping at 2^32. This uses 16-bit operations internally
+ * to work around bugs in some JS interpreters.
+ */
+
+
+function safeAdd(x, y) {
+  const lsw = (x & 0xffff) + (y & 0xffff);
+  const msw = (x >> 16) + (y >> 16) + (lsw >> 16);
+  return msw << 16 | lsw & 0xffff;
 }
 
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-/**
- * @hidden
- * @packageDocumentation
- */
-/**
- * A helper class that will validate items taken from local storage
- */
 async function getSessionIdFromOauthState(storageUtility, oauthState) {
     return storageUtility.getForUser(oauthState, "sessionId");
 }
-/**
- * Based on the provided state, this looks up contextual information stored
- * before redirecting the user to the OIDC issuer.
- * @param sessionId The state (~ correlation ID) of the OIDC request
- * @param storageUtility
- * @param configFetcher
- * @returns Information stored about the client issuing the request
- */
 async function loadOidcContextFromStorage(sessionId, storageUtility, configFetcher) {
     try {
         const [issuerIri, codeVerifier, storedRedirectIri, dpop] = await Promise.all([
@@ -29322,9 +29004,7 @@ async function loadOidcContextFromStorage(sessionId, storageUtility, configFetch
             storageUtility.getForUser(sessionId, "redirectUrl"),
             storageUtility.getForUser(sessionId, "dpop", { errorIfNull: true }),
         ]);
-        // Clear the code verifier, which is one-time use.
         await storageUtility.deleteForUser(sessionId, "codeVerifier");
-        // Unlike openid-client, this looks up the configuration from storage
         const issuerConfig = await configFetcher.fetchConfig(issuerIri);
         return {
             codeVerifier,
@@ -29337,21 +29017,7 @@ async function loadOidcContextFromStorage(sessionId, storageUtility, configFetch
         throw new Error(`Failed to retrieve OIDC context from storage associated with session [${sessionId}]: ${e}`);
     }
 }
-/**
- * Stores information about the session in the provided storage. Note that not
- * all storage are equally secure, and it is strongly advised not to store either
- * the refresh token or the DPoP key in the browser's local storage.
- *
- * @param storageUtility
- * @param sessionId
- * @param webId
- * @param isLoggedIn
- * @param refreshToken
- * @param secure
- * @param dpopKey
- */
 async function saveSessionInfoToStorage(storageUtility, sessionId, webId, isLoggedIn, refreshToken, secure, dpopKey) {
-    // TODO: Investigate why this does not work with a Promise.all
     if (refreshToken !== undefined) {
         await storageUtility.setForUser(sessionId, { refreshToken }, { secure });
     }
@@ -29368,14 +29034,8 @@ async function saveSessionInfoToStorage(storageUtility, sessionId, webId, isLogg
         }, { secure });
     }
 }
-// TOTEST: this does not handle all possible bad inputs for example what if it's not proper JSON
-/**
- * @hidden
- */
 class StorageUtility {
     constructor(secureStorage, insecureStorage) {
-        this.secureStorage = secureStorage;
-        this.insecureStorage = insecureStorage;
         this.secureStorage = secureStorage;
         this.insecureStorage = insecureStorage;
     }
@@ -29432,7 +29092,6 @@ class StorageUtility {
             userData = await this.getUserData(userId, options === null || options === void 0 ? void 0 : options.secure);
         }
         catch (_a) {
-            // if reading the user data throws, the data is corrupted, and we want to write over it
             userData = {};
         }
         await this.setUserData(userId, { ...userData, ...values }, options === null || options === void 0 ? void 0 : options.secure);
@@ -29447,29 +29106,6 @@ class StorageUtility {
     }
 }
 
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-/**
- * @hidden
- */
 class InMemoryStorage {
     constructor() {
         this.map = {};
@@ -29485,157 +29121,26 @@ class InMemoryStorage {
     }
 }
 
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-/**
- * @hidden
- * @packageDocumentation
- */
-/**
- * Error to be triggered when a poor configuration is received
- */
-// NOTE: There's a bug with istanbul and typescript that prevents full branch coverages
-// https://github.com/gotwarlost/istanbul/issues/690
-// The workaround is to put istanbul ignore on the constructor
-/**
- * @hidden
- */
 class ConfigurationError extends Error {
-    /* istanbul ignore next */
     constructor(message) {
         super(message);
     }
 }
 
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-/**
- * @hidden
- * @packageDocumentation
- */
-/**
- * Error to be triggered if a method is not implemented
- * @hidden
- */
 class NotImplementedError extends Error {
-    /* istanbul ignore next */
     constructor(methodName) {
         super(`[${methodName}] is not implemented`);
     }
 }
 
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-/**
- * @hidden
- * @packageDocumentation
- */
-/**
- * Error to be triggered when receiving a response missing mandatory elements
- */
-// NOTE: There's a bug with istanbul and typescript that prevents full branch coverages
-// https://github.com/gotwarlost/istanbul/issues/690
-// The workaround is to put istanbul ignore on the constructor
-/**
- * @hidden
- */
 class InvalidResponseError extends Error {
-    /* istanbul ignore next */
     constructor(missingFields) {
         super(`Invalid response from OIDC provider: missing fields ${missingFields}`);
         this.missingFields = missingFields;
     }
 }
 
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-/**
- * @hidden
- * @packageDocumentation
- */
-/**
- * Error to be triggered when receiving a response missing mandatory elements
- */
-// NOTE: There's a bug with istanbul and typescript that prevents full branch coverages
-// https://github.com/gotwarlost/istanbul/issues/690
-// The workaround is to put istanbul ignore on the constructor
-/**
- * @hidden
- */
 class OidcProviderError extends Error {
-    /* istanbul ignore next */
     constructor(message, error, errorDescription) {
         super(message);
         this.error = error;
@@ -29643,46 +29148,10 @@ class OidcProviderError extends Error {
     }
 }
 
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-/**
- * Normalizes a URL in order to generate the DPoP token based on a consistent scheme.
- *
- * @param audience The URL to normalize.
- * @returns The normalized URL as a string.
- * @hidden
- */
 function normalizeHTU(audience) {
     const audienceUrl = new URL(audience);
     return new URL(audienceUrl.pathname, audienceUrl.origin).toString();
 }
-/**
- * Creates a DPoP header according to https://tools.ietf.org/html/draft-fett-oauth-dpop-04,
- * based on the target URL and method, using the provided key.
- *
- * @param audience Target URL.
- * @param method HTTP method allowed.
- * @param key Key used to sign the token.
- * @returns A JWT that can be used as a DPoP Authorization header.
- */
 async function createDpopHeader(audience, method, dpopKey) {
     return new jose.SignJWT({
         htu: normalizeHTU(audience),
@@ -29703,46 +29172,17 @@ async function generateDpopKeyPair() {
         privateKey,
         publicKey: await jose.exportJWK(publicKey),
     };
-    // The alg property isn't set by exportJWK, so set it manually.
     [dpopKeyPair.publicKey.alg] = PREFERRED_SIGNING_ALG;
     return dpopKeyPair;
 }
 
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-/**
- * If expires_in isn't specified for the access token, we assume its lifetime is
- * 10 minutes.
- */
 const DEFAULT_EXPIRATION_TIME_SECONDS = 600;
 function isExpectedAuthError(statusCode) {
-    // As per https://tools.ietf.org/html/rfc7235#section-3.1 and https://tools.ietf.org/html/rfc7235#section-3.1,
-    // a response failing because the provided credentials aren't accepted by the
-    // server can get a 401 or a 403 response.
     return [401, 403].includes(statusCode);
 }
 async function buildDpopFetchOptions(targetUrl, authToken, dpopKey, defaultOptions) {
     var _a;
     const headers = new universalFetch.Headers(defaultOptions === null || defaultOptions === void 0 ? void 0 : defaultOptions.headers);
-    // Any pre-existing Authorization header should be overriden.
     headers.set("Authorization", `DPoP ${authToken}`);
     headers.set("DPoP", await createDpopHeader(targetUrl, (_a = defaultOptions === null || defaultOptions === void 0 ? void 0 : defaultOptions.method) !== null && _a !== void 0 ? _a : "get", dpopKey));
     return {
@@ -29755,7 +29195,6 @@ async function buildAuthenticatedHeaders(targetUrl, authToken, dpopKey, defaultO
         return buildDpopFetchOptions(targetUrl, authToken, dpopKey, defaultOptions);
     }
     const headers = new universalFetch.Headers(defaultOptions === null || defaultOptions === void 0 ? void 0 : defaultOptions.headers);
-    // Any pre-existing Authorization header should be overriden.
     headers.set("Authorization", `Bearer ${authToken}`);
     return {
         ...defaultOptions,
@@ -29778,167 +29217,80 @@ async function refreshAccessToken(refreshOptions, dpopKey, eventEmitter) {
         expiresIn: tokenSet.expiresIn,
     };
 }
-/**
- *
- * @param expiresIn Delay until the access token expires.
- * @returns a delay until the access token should be refreshed.
- */
 const computeRefreshDelay = (expiresIn) => {
     if (expiresIn !== undefined) {
         return expiresIn - REFRESH_BEFORE_EXPIRATION_SECONDS > 0
-            ? // We want to refresh the token 5 seconds before they actually expire.
+            ?
                 expiresIn - REFRESH_BEFORE_EXPIRATION_SECONDS
             : expiresIn;
     }
     return DEFAULT_EXPIRATION_TIME_SECONDS;
 };
-/**
- * @param unauthFetch a regular fetch function, compliant with the WHATWG spec.
- * @param authToken an access token, either a Bearer token or a DPoP one.
- * @param options The option object may contain two objects: the DPoP key token
- * is bound to if applicable, and options to customise token renewal behaviour.
- *
- * @returns A fetch function that adds an appropriate Authorization header with
- * the provided token, and adds a DPoP header if applicable.
- */
 async function buildAuthenticatedFetch(unauthFetch, accessToken, options) {
     var _a;
     let currentAccessToken = accessToken;
     let latestTimeout;
     const currentRefreshOptions = options === null || options === void 0 ? void 0 : options.refreshOptions;
-    // Setup the refresh timeout outside of the authenticated fetch, so that
-    // an idle app will not get logged out if it doesn't issue a fetch before
-    // the first expiration date.
     if (currentRefreshOptions !== undefined) {
         const proactivelyRefreshToken = async () => {
             var _a, _b, _c, _d;
             try {
-                const { accessToken: refreshedAccessToken, refreshToken, expiresIn, } = await refreshAccessToken(currentRefreshOptions, 
-                // If currentRefreshOptions is defined, options is necessarily defined too.
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                options.dpopKey, 
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                options.eventEmitter);
-                // Update the tokens in the closure if appropriate.
+                const { accessToken: refreshedAccessToken, refreshToken, expiresIn, } = await refreshAccessToken(currentRefreshOptions, options.dpopKey, options.eventEmitter);
                 currentAccessToken = refreshedAccessToken;
                 if (refreshToken !== undefined) {
                     currentRefreshOptions.refreshToken = refreshToken;
                 }
-                // Each time the access token is refreshed, we must plan fo the next
-                // refresh iteration.
                 clearTimeout(latestTimeout);
                 latestTimeout = setTimeout(proactivelyRefreshToken, computeRefreshDelay(expiresIn) * 1000);
-                // If currentRefreshOptions is defined, options is necessarily defined too.
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 (_a = options.eventEmitter) === null || _a === void 0 ? void 0 : _a.emit(EVENTS.TIMEOUT_SET, latestTimeout);
             }
             catch (e) {
-                // It is possible that an underlying library throws an error on refresh flow failure.
-                // If we used a log framework, the error could be logged at the `debug` level,
-                // but otherwise the failure of the refresh flow should not blow up in the user's
-                // face, so we just swallow the error.
                 if (e instanceof OidcProviderError) {
-                    // The OIDC provider refused to refresh the access token and returned an error instead.
-                    /* istanbul ignore next 100% coverage would require testing that nothing
-                        happens here if the emitter is undefined, which is more cumbersome
-                        than what it's worth. */
                     (_b = options === null || options === void 0 ? void 0 : options.eventEmitter) === null || _b === void 0 ? void 0 : _b.emit(EVENTS.ERROR, e.error, e.errorDescription);
-                    /* istanbul ignore next 100% coverage would require testing that nothing
-                      happens here if the emitter is undefined, which is more cumbersome
-                      than what it's worth. */
                     (_c = options === null || options === void 0 ? void 0 : options.eventEmitter) === null || _c === void 0 ? void 0 : _c.emit(EVENTS.SESSION_EXPIRED);
                 }
                 if (e instanceof InvalidResponseError &&
                     e.missingFields.includes("access_token")) {
-                    // In this case, the OIDC provider returned a non-standard response, but
-                    // did not specify that it was an error. We cannot refresh nonetheless.
-                    /* istanbul ignore next 100% coverage would require testing that nothing
-                      happens here if the emitter is undefined, which is more cumbersome
-                      than what it's worth. */
                     (_d = options === null || options === void 0 ? void 0 : options.eventEmitter) === null || _d === void 0 ? void 0 : _d.emit(EVENTS.SESSION_EXPIRED);
                 }
             }
         };
-        latestTimeout = setTimeout(proactivelyRefreshToken, 
-        // If currentRefreshOptions is defined, options is necessarily defined too.
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        computeRefreshDelay(options.expiresIn) * 1000);
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        latestTimeout = setTimeout(proactivelyRefreshToken, computeRefreshDelay(options.expiresIn) * 1000);
         (_a = options.eventEmitter) === null || _a === void 0 ? void 0 : _a.emit(EVENTS.TIMEOUT_SET, latestTimeout);
     }
     else if (options !== undefined && options.eventEmitter !== undefined) {
-        // If no refresh options are provided, the session expires when the access token does.
         const expirationTimeout = setTimeout(() => {
-            // The event emitter is always defined in our code, and it would be tedious
-            // to test for conditions when it is not.
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             options.eventEmitter.emit(EVENTS.SESSION_EXPIRED);
         }, computeRefreshDelay(options.expiresIn) * 1000);
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         options.eventEmitter.emit(EVENTS.TIMEOUT_SET, expirationTimeout);
     }
     return async (url, requestInit) => {
         let response = await makeAuthenticatedRequest(unauthFetch, currentAccessToken, url, requestInit, options === null || options === void 0 ? void 0 : options.dpopKey);
         const failedButNotExpectedAuthError = !response.ok && !isExpectedAuthError(response.status);
         if (response.ok || failedButNotExpectedAuthError) {
-            // If there hasn't been a redirection, or if there has been a non-auth related
-            // issue, it should be handled at the application level
             return response;
         }
         const hasBeenRedirected = response.url !== url;
         if (hasBeenRedirected && (options === null || options === void 0 ? void 0 : options.dpopKey) !== undefined) {
-            // If the request failed for auth reasons, and has been redirected, we should
-            // replay it generating a DPoP header for the rediration target IRI. This
-            // doesn't apply to Bearer tokens, as the Bearer tokens aren't specific
-            // to a given resource and method, while the DPoP header (associated to a
-            // DPoP token) is.
-            response = await makeAuthenticatedRequest(unauthFetch, currentAccessToken, 
-            // Replace the original target IRI (`url`) by the redirection target
-            response.url, requestInit, options.dpopKey);
+            response = await makeAuthenticatedRequest(unauthFetch, currentAccessToken, response.url, requestInit, options.dpopKey);
         }
         return response;
     };
 }
 
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
 const StorageUtilityGetResponse = "getResponse";
 const StorageUtilityMock = {
-    /* eslint-disable @typescript-eslint/no-unused-vars */
     get: async (key, options) => StorageUtilityGetResponse,
     set: async (key, value) => {
-        /* do nothing */
     },
     delete: async (key) => {
-        /* do nothing */
     },
     getForUser: async (userId, key, options) => StorageUtilityGetResponse,
     setForUser: async (userId, values, options) => {
-        /* do nothing */
     },
     deleteForUser: async (userId, key, options) => {
-        /* do nothing */
     },
     deleteAllUserData: async (userId, options) => {
-        /* do nothing */
     },
 };
 const mockStorage = (stored) => {
@@ -29969,14 +29321,9 @@ const mockStorageUtility = (stored, isSecure = false) => {
 };
 
 exports.AggregateHandler = AggregateHandler;
-exports.AuthorizationCodeWithPkceOidcHandlerBase = AuthorizationCodeWithPkceOidcHandlerBase;
-exports.ClientAuthentication = ClientAuthentication;
 exports.ConfigurationError = ConfigurationError;
 exports.DEFAULT_SCOPES = DEFAULT_SCOPES;
 exports.EVENTS = EVENTS;
-exports.GeneralLogoutHandler = GeneralLogoutHandler;
-exports.IRpLogoutHandler = IRpLogoutHandler;
-exports.IWaterfallLogoutHandler = IWaterfallLogoutHandler;
 exports.InMemoryStorage = InMemoryStorage;
 exports.InvalidResponseError = InvalidResponseError;
 exports.NotImplementedError = NotImplementedError;
@@ -29984,32 +29331,25 @@ exports.OidcProviderError = OidcProviderError;
 exports.PREFERRED_SIGNING_ALG = PREFERRED_SIGNING_ALG;
 exports.REFRESH_BEFORE_EXPIRATION_SECONDS = REFRESH_BEFORE_EXPIRATION_SECONDS;
 exports.SOLID_CLIENT_AUTHN_KEY_PREFIX = SOLID_CLIENT_AUTHN_KEY_PREFIX;
-exports.SessionInfoManagerBase = SessionInfoManagerBase;
 exports.StorageUtility = StorageUtility;
 exports.StorageUtilityGetResponse = StorageUtilityGetResponse;
 exports.StorageUtilityMock = StorageUtilityMock;
 exports.USER_SESSION_PREFIX = USER_SESSION_PREFIX;
 exports.buildAuthenticatedFetch = buildAuthenticatedFetch;
 exports.buildProxyHandler = buildProxyHandler;
-exports.clear = clear;
 exports.createDpopHeader = createDpopHeader;
 exports.determineSigningAlg = determineSigningAlg;
 exports.fetchJwks = fetchJwks;
 exports.generateDpopKeyPair = generateDpopKeyPair;
-exports.getEndSessionUrl = getEndSessionUrl;
 exports.getSessionIdFromOauthState = getSessionIdFromOauthState;
-exports.getUnauthenticatedSession = getUnauthenticatedSession;
 exports.getWebidFromTokenPayload = getWebidFromTokenPayload;
 exports.handleRegistration = handleRegistration;
 exports.isSupportedTokenType = isSupportedTokenType;
 exports.isValidRedirectUrl = isValidRedirectUrl;
 exports.loadOidcContextFromStorage = loadOidcContextFromStorage;
-exports.maybeBuildRpInitiatedLogout = maybeBuildRpInitiatedLogout;
 exports.mockStorage = mockStorage;
 exports.mockStorageUtility = mockStorageUtility;
-exports.removeOpenIdParams = removeOpenIdParams;
 exports.saveSessionInfoToStorage = saveSessionInfoToStorage;
-//# sourceMappingURL=index.js.map
 
 
 /***/ }),
@@ -30604,6 +29944,12 @@ exports["default"] = _default;
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   unsafeStringify: () => (/* binding */ unsafeStringify)
+/* harmony export */ });
+/* harmony import */ var _validate_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./validate.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/validate.js");
 
 
 Object.defineProperty(exports, "__esModule", ({
@@ -30629,7 +29975,7 @@ for (let i = 0; i < 256; ++i) {
 function unsafeStringify(arr, offset = 0) {
   // Note: Be careful editing this code!  It's been tuned for performance
   // and works in ways you may not expect. See https://github.com/uuidjs/uuid/pull/434
-  return byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]];
+  return (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase();
 }
 
 function stringify(arr, offset = 0) {
@@ -30775,6 +30121,13 @@ exports["default"] = _default;
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _native_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./native.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/native.js");
+/* harmony import */ var _rng_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./rng.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/rng.js");
+/* harmony import */ var _stringify_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./stringify.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/stringify.js");
 
 
 Object.defineProperty(exports, "__esModule", ({
@@ -30792,7 +30145,6 @@ const v3 = (0, _v.default)('v3', 0x30, _md.default);
 var _default = v3;
 exports["default"] = _default;
 
-/***/ }),
 
 /***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v35.js":
 /*!*****************************************************************************************************!*\
@@ -30800,7 +30152,10 @@ exports["default"] = _default;
   \*****************************************************************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
+function v4(options, buf, offset) {
+  if (_native_js__WEBPACK_IMPORTED_MODULE_0__["default"].randomUUID && !buf && !options) {
+    return _native_js__WEBPACK_IMPORTED_MODULE_0__["default"].randomUUID();
+  }
 
 
 Object.defineProperty(exports, "__esModule", ({
@@ -30891,6 +30246,11 @@ function v35(name, version, hashfunc) {
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _regex_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./regex.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/regex.js");
 
 
 Object.defineProperty(exports, "__esModule", ({
@@ -31096,7 +30456,7 @@ function rng() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
-/* harmony export */   unsafeStringify: () => (/* binding */ unsafeStringify)
+/* harmony export */   "unsafeStringify": () => (/* binding */ unsafeStringify)
 /* harmony export */ });
 /* harmony import */ var _validate_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./validate.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/validate.js");
 
@@ -31114,7 +30474,7 @@ for (let i = 0; i < 256; ++i) {
 function unsafeStringify(arr, offset = 0) {
   // Note: Be careful editing this code!  It's been tuned for performance
   // and works in ways you may not expect. See https://github.com/uuidjs/uuid/pull/434
-  return byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]];
+  return (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase();
 }
 
 function stringify(arr, offset = 0) {
@@ -31478,12 +30838,12 @@ function isNum(item) {
         throw new Error('number expected');
 }
 // Produces a uniformly random byte string using a cryptographic hash function H that outputs b bits
-// https://www.rfc-editor.org/rfc/rfc9380#section-5.3.1
+// https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-11#section-5.4.1
 function expand_message_xmd(msg, DST, lenInBytes, H) {
     isBytes(msg);
     isBytes(DST);
     isNum(lenInBytes);
-    // https://www.rfc-editor.org/rfc/rfc9380#section-5.3.3
+    // https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-16#section-5.3.3
     if (DST.length > 255)
         DST = H((0, utils_js_1.concatBytes)((0, utils_js_1.utf8ToBytes)('H2C-OVERSIZE-DST-'), DST));
     const { outputLen: b_in_bytes, blockLen: r_in_bytes } = H;
@@ -31504,16 +30864,11 @@ function expand_message_xmd(msg, DST, lenInBytes, H) {
     return pseudo_random_bytes.slice(0, lenInBytes);
 }
 exports.expand_message_xmd = expand_message_xmd;
-// Produces a uniformly random byte string using an extendable-output function (XOF) H.
-// 1. The collision resistance of H MUST be at least k bits.
-// 2. H MUST be an XOF that has been proved indifferentiable from
-//    a random oracle under a reasonable cryptographic assumption.
-// https://www.rfc-editor.org/rfc/rfc9380#section-5.3.2
 function expand_message_xof(msg, DST, lenInBytes, k, H) {
     isBytes(msg);
     isBytes(DST);
     isNum(lenInBytes);
-    // https://www.rfc-editor.org/rfc/rfc9380#section-5.3.3
+    // https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-16#section-5.3.3
     // DST = H('H2C-OVERSIZE-DST-' || a_very_long_DST, Math.ceil((lenInBytes * k) / 8));
     if (DST.length > 255) {
         const dkLen = Math.ceil((2 * k) / 8);
@@ -31532,7 +30887,7 @@ function expand_message_xof(msg, DST, lenInBytes, k, H) {
 exports.expand_message_xof = expand_message_xof;
 /**
  * Hashes arbitrary-length byte strings to a list of one or more elements of a finite field F
- * https://www.rfc-editor.org/rfc/rfc9380#section-5.2
+ * https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-11#section-5.3
  * @param msg a byte string containing the message to hash
  * @param count the number of elements of F to output
  * @param options `{DST: string, p: bigint, m: number, k: number, expand: 'xmd' | 'xof', hash: H}`, see above
@@ -31540,7 +30895,7 @@ exports.expand_message_xof = expand_message_xof;
  */
 function hash_to_field(msg, count, options) {
     (0, utils_js_1.validateObject)(options, {
-        DST: 'stringOrUint8Array',
+        DST: 'string',
         p: 'bigint',
         m: 'isSafeInteger',
         k: 'isSafeInteger',
@@ -31595,8 +30950,8 @@ function createHasher(Point, mapToCurve, def) {
     if (typeof mapToCurve !== 'function')
         throw new Error('mapToCurve() must be defined');
     return {
-        // Encodes byte string to elliptic curve.
-        // hash_to_curve from https://www.rfc-editor.org/rfc/rfc9380#section-3
+        // Encodes byte string to elliptic curve
+        // https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-16#section-3
         hashToCurve(msg, options) {
             const u = hash_to_field(msg, 2, { ...def, DST: def.DST, ...options });
             const u0 = Point.fromAffine(mapToCurve(u[0]));
@@ -31605,8 +30960,7 @@ function createHasher(Point, mapToCurve, def) {
             P.assertValidity();
             return P;
         },
-        // Encodes byte string to elliptic curve.
-        // encode_to_curve from https://www.rfc-editor.org/rfc/rfc9380#section-3
+        // https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-16#section-3
         encodeToCurve(msg, options) {
             const u = hash_to_field(msg, 1, { ...def, DST: def.encodeDST, ...options });
             const P = Point.fromAffine(mapToCurve(u[0])).clearCofactor();
@@ -31629,7 +30983,7 @@ exports.createHasher = createHasher;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.mapHashToField = exports.getMinHashLength = exports.getFieldBytesLength = exports.hashToPrivateScalar = exports.FpSqrtEven = exports.FpSqrtOdd = exports.Field = exports.nLength = exports.FpIsSquare = exports.FpDiv = exports.FpInvertBatch = exports.FpPow = exports.validateField = exports.isNegativeLE = exports.FpSqrt = exports.tonelliShanks = exports.invert = exports.pow2 = exports.pow = exports.mod = void 0;
+exports.hashToPrivateScalar = exports.FpSqrtEven = exports.FpSqrtOdd = exports.Field = exports.nLength = exports.FpIsSquare = exports.FpDiv = exports.FpInvertBatch = exports.FpPow = exports.validateField = exports.isNegativeLE = exports.FpSqrt = exports.tonelliShanks = exports.invert = exports.pow2 = exports.pow = exports.mod = void 0;
 /*! noble-curves - MIT License (c) 2022 Paul Miller (paulmillr.com) */
 // Utilities for modular arithmetics and finite fields
 const utils_js_1 = __webpack_require__(/*! ./utils.js */ "./node_modules/@noble/curves/abstract/utils.js");
@@ -31646,10 +31000,10 @@ function mod(a, b) {
 }
 exports.mod = mod;
 /**
- * Efficiently raise num to power and do modular division.
+ * Efficiently exponentiate num to power and do modular division.
  * Unsafe in some contexts: uses ladder, so can expose bigint bits.
  * @example
- * pow(2n, 6n, 11n) // 64n % 11n == 9n
+ * powMod(2n, 6n, 11n) // 64n % 11n == 9n
  */
 // TODO: use field version && remove
 function pow(num, power, modulo) {
@@ -31682,7 +31036,7 @@ function invert(number, modulo) {
     if (number === _0n || modulo <= _0n) {
         throw new Error(`invert: expected positive integers, got n=${number} mod=${modulo}`);
     }
-    // Euclidean GCD https://brilliant.org/wiki/extended-euclidean-algorithm/
+    // Eucledian GCD https://brilliant.org/wiki/extended-euclidean-algorithm/
     // Fermat's little theorem "CT-like" version inv(n) = n^(m-2) mod m is 30x slower.
     let a = mod(number, modulo);
     let b = modulo;
@@ -31703,14 +31057,9 @@ function invert(number, modulo) {
     return mod(x, modulo);
 }
 exports.invert = invert;
-/**
- * Tonelli-Shanks square root search algorithm.
- * 1. https://eprint.iacr.org/2012/685.pdf (page 12)
- * 2. Square Roots from 1; 24, 51, 10 to Dan Shanks
- * Will start an infinite loop if field order P is not prime.
- * @param P field order
- * @returns function that takes field Fp (created from P) and number n
- */
+// Tonelli-Shanks algorithm
+// Paper 1: https://eprint.iacr.org/2012/685.pdf (page 12)
+// Paper 2: Square Roots from 1; 24, 51, 10 to Dan Shanks
 function tonelliShanks(P) {
     // Legendre constant: used to calculate Legendre symbol (a | p),
     // which denotes the value of a^((p-1)/2) (mod p).
@@ -31851,10 +31200,6 @@ function validateField(field) {
 }
 exports.validateField = validateField;
 // Generic field functions
-/**
- * Same as `pow` but for Fp: non-constant-time.
- * Unsafe in some contexts: uses ladder, so can expose bigint bits.
- */
 function FpPow(f, num, power) {
     // Should have same speed as pow for bigints
     // TODO: benchmark!
@@ -31875,10 +31220,7 @@ function FpPow(f, num, power) {
     return p;
 }
 exports.FpPow = FpPow;
-/**
- * Efficiently invert an array of Field elements.
- * `inv(0)` will return `undefined` here: make sure to throw an error.
- */
+// 0 is non-invertible: non-batched version will throw on 0
 function FpInvertBatch(f, nums) {
     const tmp = new Array(nums.length);
     // Walk from first to last, multiply them by each other MOD p
@@ -31922,12 +31264,12 @@ function nLength(n, nBitLength) {
 }
 exports.nLength = nLength;
 /**
- * Initializes a finite field over prime. **Non-primes are not supported.**
- * Do not init in loop: slow. Very fragile: always run a benchmark on a change.
- * Major performance optimizations:
- * * a) denormalized operations like mulN instead of mul
- * * b) same object shape: never add or remove keys
- * * c) Object.freeze
+ * Initializes a galois field over prime. Non-primes are not supported for now.
+ * Do not init in loop: slow. Very fragile: always run a benchmark on change.
+ * Major performance gains:
+ * a) non-normalized operations like mulN instead of mul
+ * b) `Object.freeze`
+ * c) Same object shape: never add or remove keys
  * @param ORDER prime positive bigint
  * @param bitLen how many bits the field consumes
  * @param isLE (def: false) if encoding / decoding should be in little-endian
@@ -31935,7 +31277,7 @@ exports.nLength = nLength;
  */
 function Field(ORDER, bitLen, isLE = false, redef = {}) {
     if (ORDER <= _0n)
-        throw new Error(`Expected Field ORDER > 0, got ${ORDER}`);
+        throw new Error(`Expected Fp ORDER > 0, got ${ORDER}`);
     const { nBitLength: BITS, nByteLength: BYTES } = nLength(ORDER, bitLen);
     if (BYTES > 2048)
         throw new Error('Field lengths over 2048 bytes are not supported');
@@ -31999,10 +31341,13 @@ function FpSqrtEven(Fp, elm) {
 }
 exports.FpSqrtEven = FpSqrtEven;
 /**
- * "Constant-time" private key generation utility.
- * Same as mapKeyToField, but accepts less bytes (40 instead of 48 for 32-byte field).
- * Which makes it slightly more biased, less secure.
- * @deprecated use mapKeyToField instead
+ * FIPS 186 B.4.1-compliant "constant-time" private key generation utility.
+ * Can take (n+8) or more bytes of uniform input e.g. from CSPRNG or KDF
+ * and convert them into private scalar, with the modulo bias being neglible.
+ * Needs at least 40 bytes of input for 32-byte private key.
+ * https://research.kudelskisecurity.com/2020/07/28/the-definitive-guide-to-modulo-bias-and-how-to-avoid-it/
+ * @param hash hash output from SHA3 or a similar function
+ * @returns valid private scalar
  */
 function hashToPrivateScalar(hash, groupOrder, isLE = false) {
     hash = (0, utils_js_1.ensureBytes)('privateHash', hash);
@@ -32014,57 +31359,6 @@ function hashToPrivateScalar(hash, groupOrder, isLE = false) {
     return mod(num, groupOrder - _1n) + _1n;
 }
 exports.hashToPrivateScalar = hashToPrivateScalar;
-/**
- * Returns total number of bytes consumed by the field element.
- * For example, 32 bytes for usual 256-bit weierstrass curve.
- * @param fieldOrder number of field elements, usually CURVE.n
- * @returns byte length of field
- */
-function getFieldBytesLength(fieldOrder) {
-    if (typeof fieldOrder !== 'bigint')
-        throw new Error('field order must be bigint');
-    const bitLength = fieldOrder.toString(2).length;
-    return Math.ceil(bitLength / 8);
-}
-exports.getFieldBytesLength = getFieldBytesLength;
-/**
- * Returns minimal amount of bytes that can be safely reduced
- * by field order.
- * Should be 2^-128 for 128-bit curve such as P256.
- * @param fieldOrder number of field elements, usually CURVE.n
- * @returns byte length of target hash
- */
-function getMinHashLength(fieldOrder) {
-    const length = getFieldBytesLength(fieldOrder);
-    return length + Math.ceil(length / 2);
-}
-exports.getMinHashLength = getMinHashLength;
-/**
- * "Constant-time" private key generation utility.
- * Can take (n + n/2) or more bytes of uniform input e.g. from CSPRNG or KDF
- * and convert them into private scalar, with the modulo bias being negligible.
- * Needs at least 48 bytes of input for 32-byte private key.
- * https://research.kudelskisecurity.com/2020/07/28/the-definitive-guide-to-modulo-bias-and-how-to-avoid-it/
- * FIPS 186-5, A.2 https://csrc.nist.gov/publications/detail/fips/186/5/final
- * RFC 9380, https://www.rfc-editor.org/rfc/rfc9380#section-5
- * @param hash hash output from SHA3 or a similar function
- * @param groupOrder size of subgroup - (e.g. secp256k1.CURVE.n)
- * @param isLE interpret hash bytes as LE num
- * @returns valid private scalar
- */
-function mapHashToField(key, fieldOrder, isLE = false) {
-    const len = key.length;
-    const fieldLen = getFieldBytesLength(fieldOrder);
-    const minLen = getMinHashLength(fieldOrder);
-    // No small numbers: need to understand bias story. No huge numbers: easier to detect JS timings.
-    if (len < 16 || len < minLen || len > 1024)
-        throw new Error(`expected ${minLen}-1024 bytes of input, got ${len}`);
-    const num = isLE ? (0, utils_js_1.bytesToNumberBE)(key) : (0, utils_js_1.bytesToNumberLE)(key);
-    // `mod(x, 11)` can sometimes produce 0. `mod(x, 10) + 1` is the same, but no 0
-    const reduced = mod(num, fieldOrder - _1n) + _1n;
-    return isLE ? (0, utils_js_1.numberToBytesLE)(reduced, fieldLen) : (0, utils_js_1.numberToBytesBE)(reduced, fieldLen);
-}
-exports.mapHashToField = mapHashToField;
 //# sourceMappingURL=modular.js.map
 
 /***/ }),
@@ -32080,18 +31374,11 @@ exports.mapHashToField = mapHashToField;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.validateObject = exports.createHmacDrbg = exports.bitMask = exports.bitSet = exports.bitGet = exports.bitLen = exports.utf8ToBytes = exports.equalBytes = exports.concatBytes = exports.ensureBytes = exports.numberToVarBytesBE = exports.numberToBytesLE = exports.numberToBytesBE = exports.bytesToNumberLE = exports.bytesToNumberBE = exports.hexToBytes = exports.hexToNumber = exports.numberToHexUnpadded = exports.bytesToHex = void 0;
 /*! noble-curves - MIT License (c) 2022 Paul Miller (paulmillr.com) */
-// 100 lines of code in the file are duplicated from noble-hashes (utils).
-// This is OK: `abstract` directory does not use noble-hashes.
-// User may opt-in into using different hashing library. This way, noble-hashes
-// won't be included into their bundle.
 const _0n = BigInt(0);
 const _1n = BigInt(1);
 const _2n = BigInt(2);
 const u8a = (a) => a instanceof Uint8Array;
-const hexes = /* @__PURE__ */ Array.from({ length: 256 }, (_, i) => i.toString(16).padStart(2, '0'));
-/**
- * @example bytesToHex(Uint8Array.from([0xca, 0xfe, 0x01, 0x23])) // 'cafe0123'
- */
+const hexes = Array.from({ length: 256 }, (v, i) => i.toString(16).padStart(2, '0'));
 function bytesToHex(bytes) {
     if (!u8a(bytes))
         throw new Error('Uint8Array expected');
@@ -32115,28 +31402,25 @@ function hexToNumber(hex) {
     return BigInt(hex === '' ? '0' : `0x${hex}`);
 }
 exports.hexToNumber = hexToNumber;
-/**
- * @example hexToBytes('cafe0123') // Uint8Array.from([0xca, 0xfe, 0x01, 0x23])
- */
+// Caching slows it down 2-3x
 function hexToBytes(hex) {
     if (typeof hex !== 'string')
         throw new Error('hex string expected, got ' + typeof hex);
-    const len = hex.length;
-    if (len % 2)
-        throw new Error('padded hex string expected, got unpadded hex of length ' + len);
-    const array = new Uint8Array(len / 2);
+    if (hex.length % 2)
+        throw new Error('hex string is invalid: unpadded ' + hex.length);
+    const array = new Uint8Array(hex.length / 2);
     for (let i = 0; i < array.length; i++) {
         const j = i * 2;
         const hexByte = hex.slice(j, j + 2);
         const byte = Number.parseInt(hexByte, 16);
         if (Number.isNaN(byte) || byte < 0)
-            throw new Error('Invalid byte sequence');
+            throw new Error('invalid byte sequence');
         array[i] = byte;
     }
     return array;
 }
 exports.hexToBytes = hexToBytes;
-// BE: Big Endian, LE: Little Endian
+// Big Endian
 function bytesToNumberBE(bytes) {
     return hexToNumber(bytesToHex(bytes));
 }
@@ -32147,28 +31431,13 @@ function bytesToNumberLE(bytes) {
     return hexToNumber(bytesToHex(Uint8Array.from(bytes).reverse()));
 }
 exports.bytesToNumberLE = bytesToNumberLE;
-function numberToBytesBE(n, len) {
-    return hexToBytes(n.toString(16).padStart(len * 2, '0'));
-}
+const numberToBytesBE = (n, len) => hexToBytes(n.toString(16).padStart(len * 2, '0'));
 exports.numberToBytesBE = numberToBytesBE;
-function numberToBytesLE(n, len) {
-    return numberToBytesBE(n, len).reverse();
-}
+const numberToBytesLE = (n, len) => (0, exports.numberToBytesBE)(n, len).reverse();
 exports.numberToBytesLE = numberToBytesLE;
-// Unpadded, rarely used
-function numberToVarBytesBE(n) {
-    return hexToBytes(numberToHexUnpadded(n));
-}
+// Returns variable number bytes (minimal bigint encoding?)
+const numberToVarBytesBE = (n) => hexToBytes(numberToHexUnpadded(n));
 exports.numberToVarBytesBE = numberToVarBytesBE;
-/**
- * Takes hex string or Uint8Array, converts to Uint8Array.
- * Validates output length.
- * Will throw error for other types.
- * @param title descriptive title for an error e.g. 'private key'
- * @param hex hex string or Uint8Array
- * @param expectedLength optional, will compare to result array's length
- * @returns
- */
 function ensureBytes(title, hex, expectedLength) {
     let res;
     if (typeof hex === 'string') {
@@ -32193,13 +31462,11 @@ function ensureBytes(title, hex, expectedLength) {
     return res;
 }
 exports.ensureBytes = ensureBytes;
-/**
- * Copies several Uint8Arrays into one.
- */
-function concatBytes(...arrays) {
-    const r = new Uint8Array(arrays.reduce((sum, a) => sum + a.length, 0));
+// Copies several Uint8Arrays into one.
+function concatBytes(...arrs) {
+    const r = new Uint8Array(arrs.reduce((sum, a) => sum + a.length, 0));
     let pad = 0; // walk through each item, ensure they have proper type
-    arrays.forEach((a) => {
+    arrs.forEach((a) => {
         if (!u8a(a))
             throw new Error('Uint8Array expected');
         r.set(a, pad);
@@ -32218,20 +31485,15 @@ function equalBytes(b1, b2) {
     return true;
 }
 exports.equalBytes = equalBytes;
-/**
- * @example utf8ToBytes('abc') // new Uint8Array([97, 98, 99])
- */
 function utf8ToBytes(str) {
-    if (typeof str !== 'string')
+    if (typeof str !== 'string') {
         throw new Error(`utf8ToBytes expected string, got ${typeof str}`);
-    return new Uint8Array(new TextEncoder().encode(str)); // https://bugzil.la/1681809
+    }
+    return new TextEncoder().encode(str);
 }
 exports.utf8ToBytes = utf8ToBytes;
 // Bit operations
-/**
- * Calculates amount of bits in a bigint.
- * Same as `n.toString(2).length`
- */
+// Amount of bits inside bigint (Same as n.toString(2).length)
 function bitLen(n) {
     let len;
     for (len = 0; n > _0n; n >>= _1n, len += 1)
@@ -32239,26 +31501,15 @@ function bitLen(n) {
     return len;
 }
 exports.bitLen = bitLen;
-/**
- * Gets single bit at position.
- * NOTE: first bit position is 0 (same as arrays)
- * Same as `!!+Array.from(n.toString(2)).reverse()[pos]`
- */
-function bitGet(n, pos) {
-    return (n >> BigInt(pos)) & _1n;
-}
+// Gets single bit at position. NOTE: first bit position is 0 (same as arrays)
+// Same as !!+Array.from(n.toString(2)).reverse()[pos]
+const bitGet = (n, pos) => (n >> BigInt(pos)) & _1n;
 exports.bitGet = bitGet;
-/**
- * Sets single bit at position.
- */
-const bitSet = (n, pos, value) => {
-    return n | ((value ? _1n : _0n) << BigInt(pos));
-};
+// Sets single bit at position
+const bitSet = (n, pos, value) => n | ((value ? _1n : _0n) << BigInt(pos));
 exports.bitSet = bitSet;
-/**
- * Calculate mask for N bits. Not using ** operator with bigints because of old engines.
- * Same as BigInt(`0b${Array(i).fill('1').join('')}`)
- */
+// Return mask for N bits (Same as BigInt(`0b${Array(i).fill('1').join('')}`))
+// Not using ** operator with bigints for old engines.
 const bitMask = (n) => (_2n << BigInt(n - 1)) - _1n;
 exports.bitMask = bitMask;
 // DRBG
@@ -32329,7 +31580,6 @@ const validatorFns = {
     function: (val) => typeof val === 'function',
     boolean: (val) => typeof val === 'boolean',
     string: (val) => typeof val === 'string',
-    stringOrUint8Array: (val) => typeof val === 'string' || val instanceof Uint8Array,
     isSafeInteger: (val) => Number.isSafeInteger(val),
     array: (val) => Array.isArray(val),
     field: (val, object) => object.Fp.isValid(val),
@@ -32477,7 +31727,7 @@ function weierstrassPoints(opts) {
     const CURVE = validatePointOpts(opts);
     const { Fp } = CURVE; // All curves has same field / group length as for now, but they can differ
     const toBytes = CURVE.toBytes ||
-        ((_c, point, _isCompressed) => {
+        ((c, point, isCompressed) => {
             const a = point.toAffine();
             return ut.concatBytes(Uint8Array.from([0x04]), Fp.toBytes(a.x), Fp.toBytes(a.y));
         });
@@ -32613,11 +31863,9 @@ function weierstrassPoints(opts) {
         }
         // A point on curve is valid if it conforms to equation.
         assertValidity() {
+            // Zero is valid point too!
             if (this.is0()) {
-                // (0, 1, 0) aka ZERO is invalid in most contexts.
-                // In BLS, ZERO can be serialized, so we allow it.
-                // (0, 0, 0) is wrong representation of ZERO and is always invalid.
-                if (CURVE.allowInfinityPoint && !Fp.is0(this.py))
+                if (CURVE.allowInfinityPoint)
                     return;
                 throw new Error('bad point: ZERO');
             }
@@ -32930,7 +32178,7 @@ function weierstrass(curveDef) {
     }
     const { ProjectivePoint: Point, normPrivateKeyToScalar, weierstrassEquation, isWithinCurveOrder, } = weierstrassPoints({
         ...CURVE,
-        toBytes(_c, point, isCompressed) {
+        toBytes(c, point, isCompressed) {
             const a = point.toAffine();
             const x = Fp.toBytes(a.x);
             const cat = ut.concatBytes;
@@ -33064,12 +32312,13 @@ function weierstrass(curveDef) {
         },
         normPrivateKeyToScalar: normPrivateKeyToScalar,
         /**
-         * Produces cryptographically secure private key from random of size
-         * (groupLen + ceil(groupLen / 2)) with modulo bias being negligible.
+         * Produces cryptographically secure private key from random of size (nBitLength+64)
+         * as per FIPS 186 B.4.1 with modulo bias being neglible.
          */
         randomPrivateKey: () => {
-            const length = mod.getMinHashLength(CURVE.n);
-            return mod.mapHashToField(CURVE.randomBytes(length), CURVE.n);
+            const rand = CURVE.randomBytes(Fp.BYTES + 8);
+            const num = mod.hashToPrivateScalar(rand, CURVE_ORDER);
+            return ut.numberToBytesBE(num, CURVE.nByteLength);
         },
         /**
          * Creates precompute table for an arbitrary EC point. Makes point "cached".
@@ -33181,7 +32430,7 @@ function weierstrass(curveDef) {
         if (ent != null) {
             // K = HMAC_K(V || 0x00 || int2octets(x) || bits2octets(h1) || k')
             const e = ent === true ? randomBytes(Fp.BYTES) : ent; // generate random bytes OR pass as-is
-            seedArgs.push((0, utils_js_1.ensureBytes)('extraEntropy', e)); // check for being bytes
+            seedArgs.push((0, utils_js_1.ensureBytes)('extraEntropy', e, Fp.BYTES)); // check for being of size BYTES
         }
         const seed = ut.concatBytes(...seedArgs); // Step D of RFC6979 3.2
         const m = h1int; // NOTE: no need to call bits2int second time here, it is inside truncateHash!
@@ -33215,22 +32464,18 @@ function weierstrass(curveDef) {
     const defaultSigOpts = { lowS: CURVE.lowS, prehash: false };
     const defaultVerOpts = { lowS: CURVE.lowS, prehash: false };
     /**
-     * Signs message hash with a private key.
+     * Signs message hash (not message: you need to hash it by yourself).
      * ```
      * sign(m, d, k) where
      *   (x, y) = G × k
      *   r = x mod n
      *   s = (m + dr)/k mod n
      * ```
-     * @param msgHash NOT message. msg needs to be hashed to `msgHash`, or use `prehash`.
-     * @param privKey private key
-     * @param opts lowS for non-malleable sigs. extraEntropy for mixing randomness into k. prehash will hash first arg.
-     * @returns signature with recovery param
+     * @param opts `lowS, extraEntropy, prehash`
      */
     function sign(msgHash, privKey, opts = defaultSigOpts) {
         const { seed, k2sig } = prepSig(msgHash, privKey, opts); // Steps A, D of RFC6979 3.2.
-        const C = CURVE;
-        const drbg = ut.createHmacDrbg(C.hash.outputLen, C.nByteLength, C.hmac);
+        const drbg = ut.createHmacDrbg(CURVE.hash.outputLen, CURVE.nByteLength, CURVE.hmac);
         return drbg(seed, k2sig); // Steps B, C, D, E, F, G
     }
     // Enable precomputes. Slows down first publicKey computation by 20ms.
@@ -33312,15 +32557,10 @@ function weierstrass(curveDef) {
     };
 }
 exports.weierstrass = weierstrass;
-/**
- * Implementation of the Shallue and van de Woestijne method for any weierstrass curve.
- * TODO: check if there is a way to merge this with uvRatio in Edwards; move to modular.
- * b = True and y = sqrt(u / v) if (u / v) is square in F, and
- * b = False and y = sqrt(Z * (u / v)) otherwise.
- * @param Fp
- * @param Z
- * @returns
- */
+// Implementation of the Shallue and van de Woestijne method for any Weierstrass curve
+// TODO: check if there is a way to merge this with uvRatio in Edwards && move to modular?
+// b = True and y = sqrt(u / v) if (u / v) is square in F, and
+// b = False and y = sqrt(Z * (u / v)) otherwise.
 function SWUFpSqrtRatio(Fp, Z) {
     // Generic implementation
     const q = Fp.ORDER;
@@ -33328,14 +32568,10 @@ function SWUFpSqrtRatio(Fp, Z) {
     for (let o = q - _1n; o % _2n === _0n; o /= _2n)
         l += _1n;
     const c1 = l; // 1. c1, the largest integer such that 2^c1 divides q - 1.
-    // We need 2n ** c1 and 2n ** (c1-1). We can't use **; but we can use <<.
-    // 2n ** c1 == 2n << (c1-1)
-    const _2n_pow_c1_1 = _2n << (c1 - _1n - _1n);
-    const _2n_pow_c1 = _2n_pow_c1_1 * _2n;
-    const c2 = (q - _1n) / _2n_pow_c1; // 2. c2 = (q - 1) / (2^c1)  # Integer arithmetic
+    const c2 = (q - _1n) / _2n ** c1; // 2. c2 = (q - 1) / (2^c1)        # Integer arithmetic
     const c3 = (c2 - _1n) / _2n; // 3. c3 = (c2 - 1) / 2            # Integer arithmetic
-    const c4 = _2n_pow_c1 - _1n; // 4. c4 = 2^c1 - 1                # Integer arithmetic
-    const c5 = _2n_pow_c1_1; // 5. c5 = 2^(c1 - 1)                  # Integer arithmetic
+    const c4 = _2n ** c1 - _1n; // 4. c4 = 2^c1 - 1                # Integer arithmetic
+    const c5 = _2n ** (c1 - _1n); // 5. c5 = 2^(c1 - 1)              # Integer arithmetic
     const c6 = Fp.pow(Z, c2); // 6. c6 = Z^c2
     const c7 = Fp.pow(Z, (c2 + _1n) / _2n); // 7. c7 = Z^((c2 + 1) / 2)
     let sqrtRatio = (u, v) => {
@@ -33357,8 +32593,7 @@ function SWUFpSqrtRatio(Fp, Z) {
         tv4 = Fp.cmov(tv5, tv4, isQR); // 16. tv4 = CMOV(tv5, tv4, isQR)
         // 17. for i in (c1, c1 - 1, ..., 2):
         for (let i = c1; i > _1n; i--) {
-            let tv5 = i - _2n; // 18.    tv5 = i - 2
-            tv5 = _2n << (tv5 - _1n); // 19.    tv5 = 2^tv5
+            let tv5 = _2n ** (i - _2n); // 18.    tv5 = i - 2;    19.    tv5 = 2^tv5
             let tvv5 = Fp.pow(tv4, tv5); // 20.    tv5 = tv4^tv5
             const e1 = Fp.eql(tvv5, Fp.ONE); // 21.    e1 = tv5 == 1
             tv2 = Fp.mul(tv3, tv1); // 22.    tv2 = tv3 * tv1
@@ -33391,10 +32626,7 @@ function SWUFpSqrtRatio(Fp, Z) {
     return sqrtRatio;
 }
 exports.SWUFpSqrtRatio = SWUFpSqrtRatio;
-/**
- * Simplified Shallue-van de Woestijne-Ulas Method
- * https://www.rfc-editor.org/rfc/rfc9380#section-6.6.2
- */
+// From draft-irtf-cfrg-hash-to-curve-16
 function mapToCurveSimpleSWU(Fp, opts) {
     mod.validateField(Fp);
     if (!Fp.isValid(opts.A) || !Fp.isValid(opts.B) || !Fp.isValid(opts.Z))
@@ -33448,6 +32680,7 @@ exports.mapToCurveSimpleSWU = mapToCurveSimpleSWU;
 
 "use strict";
 
+var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.encodeToCurve = exports.hashToCurve = exports.schnorr = exports.secp256k1 = void 0;
 /*! noble-curves - MIT License (c) 2022 Paul Miller (paulmillr.com) */
@@ -33456,7 +32689,7 @@ const utils_1 = __webpack_require__(/*! @noble/hashes/utils */ "./node_modules/@
 const modular_js_1 = __webpack_require__(/*! ./abstract/modular.js */ "./node_modules/@noble/curves/abstract/modular.js");
 const weierstrass_js_1 = __webpack_require__(/*! ./abstract/weierstrass.js */ "./node_modules/@noble/curves/abstract/weierstrass.js");
 const utils_js_1 = __webpack_require__(/*! ./abstract/utils.js */ "./node_modules/@noble/curves/abstract/utils.js");
-const hash_to_curve_js_1 = __webpack_require__(/*! ./abstract/hash-to-curve.js */ "./node_modules/@noble/curves/abstract/hash-to-curve.js");
+const htf = __webpack_require__(/*! ./abstract/hash-to-curve.js */ "./node_modules/@noble/curves/abstract/hash-to-curve.js");
 const _shortw_utils_js_1 = __webpack_require__(/*! ./_shortw_utils.js */ "./node_modules/@noble/curves/_shortw_utils.js");
 const secp256k1P = BigInt('0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc2f');
 const secp256k1N = BigInt('0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141');
@@ -33641,7 +32874,7 @@ function schnorrVerify(signature, message, publicKey) {
         return false;
     }
 }
-exports.schnorr = (() => ({
+exports.schnorr = {
     getPublicKey: schnorrGetPublicKey,
     sign: schnorrSign,
     verify: schnorrVerify,
@@ -33654,8 +32887,8 @@ exports.schnorr = (() => ({
         taggedHash,
         mod: modular_js_1.mod,
     },
-}))();
-const isoMap = /* @__PURE__ */ (() => (0, hash_to_curve_js_1.isogenyMap)(Fp, [
+};
+const isoMap = htf.isogenyMap(Fp, [
     // xNum
     [
         '0x8e38e38e38e38e38e38e38e38e38e38e38e38e38e38e38e38e38e38daaaaa8c7',
@@ -33683,13 +32916,13 @@ const isoMap = /* @__PURE__ */ (() => (0, hash_to_curve_js_1.isogenyMap)(Fp, [
         '0x6484aa716545ca2cf3a70c3fa8fe337e0a3d21162f0d6299a7bf8192bfd2a76f',
         '0x0000000000000000000000000000000000000000000000000000000000000001', // LAST 1
     ],
-].map((i) => i.map((j) => BigInt(j)))))();
-const mapSWU = /* @__PURE__ */ (() => (0, weierstrass_js_1.mapToCurveSimpleSWU)(Fp, {
+].map((i) => i.map((j) => BigInt(j))));
+const mapSWU = (0, weierstrass_js_1.mapToCurveSimpleSWU)(Fp, {
     A: BigInt('0x3f8731abdd661adca08a5558f0f5d272e953d363cb6f0e5d405447c01a444533'),
     B: BigInt('1771'),
     Z: Fp.create(BigInt('-11')),
-}))();
-const htf = /* @__PURE__ */ (() => (0, hash_to_curve_js_1.createHasher)(exports.secp256k1.ProjectivePoint, (scalars) => {
+});
+_a = htf.createHasher(exports.secp256k1.ProjectivePoint, (scalars) => {
     const { x, y } = mapSWU(Fp.create(scalars[0]));
     return isoMap(x, y);
 }, {
@@ -33700,9 +32933,7 @@ const htf = /* @__PURE__ */ (() => (0, hash_to_curve_js_1.createHasher)(exports.
     k: 128,
     expand: 'xmd',
     hash: sha256_1.sha256,
-}))();
-exports.hashToCurve = (() => htf.hashToCurve)();
-exports.encodeToCurve = (() => htf.encodeToCurve)();
+}), exports.hashToCurve = _a.hashToCurve, exports.encodeToCurve = _a.encodeToCurve;
 //# sourceMappingURL=secp256k1.js.map
 
 /***/ }),
@@ -33729,9 +32960,9 @@ function bool(b) {
 exports.bool = bool;
 function bytes(b, ...lengths) {
     if (!(b instanceof Uint8Array))
-        throw new Error('Expected Uint8Array');
+        throw new TypeError('Expected Uint8Array');
     if (lengths.length > 0 && !lengths.includes(b.length))
-        throw new Error(`Expected Uint8Array of length ${lengths}, not of length=${b.length}`);
+        throw new TypeError(`Expected Uint8Array of length ${lengths}, not of length=${b.length}`);
 }
 exports.bytes = bytes;
 function hash(hash) {
@@ -33756,7 +32987,14 @@ function output(out, instance) {
     }
 }
 exports.output = output;
-const assert = { number, bool, bytes, hash, exists, output };
+const assert = {
+    number,
+    bool,
+    bytes,
+    hash,
+    exists,
+    output,
+};
 exports["default"] = assert;
 //# sourceMappingURL=_assert.js.map
 
@@ -33803,7 +33041,7 @@ class SHA2 extends utils_js_1.Hash {
         this.view = (0, utils_js_1.createView)(this.buffer);
     }
     update(data) {
-        (0, _assert_js_1.exists)(this);
+        _assert_js_1.default.exists(this);
         const { view, buffer, blockLen } = this;
         data = (0, utils_js_1.toBytes)(data);
         const len = data.length;
@@ -33829,8 +33067,8 @@ class SHA2 extends utils_js_1.Hash {
         return this;
     }
     digestInto(out) {
-        (0, _assert_js_1.exists)(this);
-        (0, _assert_js_1.output)(out, this);
+        _assert_js_1.default.exists(this);
+        _assert_js_1.default.output(out, this);
         this.finished = true;
         // Padding
         // We can avoid allocation of buffer for padding completely if it
@@ -33914,7 +33152,7 @@ exports.crypto = typeof globalThis === 'object' && 'crypto' in globalThis ? glob
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.hmac = exports.HMAC = void 0;
+exports.hmac = void 0;
 const _assert_js_1 = __webpack_require__(/*! ./_assert.js */ "./node_modules/@noble/hashes/_assert.js");
 const utils_js_1 = __webpack_require__(/*! ./utils.js */ "./node_modules/@noble/hashes/utils.js");
 // HMAC (RFC 2104)
@@ -33923,11 +33161,11 @@ class HMAC extends utils_js_1.Hash {
         super();
         this.finished = false;
         this.destroyed = false;
-        (0, _assert_js_1.hash)(hash);
+        _assert_js_1.default.hash(hash);
         const key = (0, utils_js_1.toBytes)(_key);
         this.iHash = hash.create();
         if (typeof this.iHash.update !== 'function')
-            throw new Error('Expected instance of class which extends utils.Hash');
+            throw new TypeError('Expected instance of class which extends utils.Hash');
         this.blockLen = this.iHash.blockLen;
         this.outputLen = this.iHash.outputLen;
         const blockLen = this.blockLen;
@@ -33946,13 +33184,13 @@ class HMAC extends utils_js_1.Hash {
         pad.fill(0);
     }
     update(buf) {
-        (0, _assert_js_1.exists)(this);
+        _assert_js_1.default.exists(this);
         this.iHash.update(buf);
         return this;
     }
     digestInto(out) {
-        (0, _assert_js_1.exists)(this);
-        (0, _assert_js_1.bytes)(out, this.outputLen);
+        _assert_js_1.default.exists(this);
+        _assert_js_1.default.bytes(out, this.outputLen);
         this.finished = true;
         this.iHash.digestInto(out);
         this.oHash.update(out);
@@ -33983,7 +33221,6 @@ class HMAC extends utils_js_1.Hash {
         this.iHash.destroy();
     }
 }
-exports.HMAC = HMAC;
 /**
  * HMAC: RFC2104 message authentication code.
  * @param hash - function that would be used e.g. sha256
@@ -34009,8 +33246,6 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.sha224 = exports.sha256 = void 0;
 const _sha2_js_1 = __webpack_require__(/*! ./_sha2.js */ "./node_modules/@noble/hashes/_sha2.js");
 const utils_js_1 = __webpack_require__(/*! ./utils.js */ "./node_modules/@noble/hashes/utils.js");
-// SHA2-256 need to try 2^128 hashes to execute birthday attack.
-// BTC network is doing 2^67 hashes/sec as per early 2023.
 // Choice: a ? b : c
 const Chi = (a, b, c) => (a & b) ^ (~a & c);
 // Majority function, true if any two inpust is true
@@ -34018,7 +33253,7 @@ const Maj = (a, b, c) => (a & b) ^ (a & c) ^ (b & c);
 // Round constants:
 // first 32 bits of the fractional parts of the cube roots of the first 64 primes 2..311)
 // prettier-ignore
-const SHA256_K = /* @__PURE__ */ new Uint32Array([
+const SHA256_K = new Uint32Array([
     0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
     0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
     0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
@@ -34030,12 +33265,12 @@ const SHA256_K = /* @__PURE__ */ new Uint32Array([
 ]);
 // Initial state (first 32 bits of the fractional parts of the square roots of the first 8 primes 2..19):
 // prettier-ignore
-const IV = /* @__PURE__ */ new Uint32Array([
+const IV = new Uint32Array([
     0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
 ]);
 // Temporary buffer, not used to store anything between runs
 // Named this way because it matches specification.
-const SHA256_W = /* @__PURE__ */ new Uint32Array(64);
+const SHA256_W = new Uint32Array(64);
 class SHA256 extends _sha2_js_1.SHA2 {
     constructor() {
         super(64, 32, 8, false);
@@ -34146,15 +33381,13 @@ exports.sha224 = (0, utils_js_1.wrapConstructor)(() => new SHA224());
 
 /*! noble-hashes - MIT License (c) 2022 Paul Miller (paulmillr.com) */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.randomBytes = exports.wrapXOFConstructorWithOpts = exports.wrapConstructorWithOpts = exports.wrapConstructor = exports.checkOpts = exports.Hash = exports.concatBytes = exports.toBytes = exports.utf8ToBytes = exports.asyncLoop = exports.nextTick = exports.hexToBytes = exports.bytesToHex = exports.isLE = exports.rotr = exports.createView = exports.u32 = exports.u8 = void 0;
-// We use WebCrypto aka globalThis.crypto, which exists in browsers and node.js 16+.
-// node.js versions earlier than v19 don't declare it in global scope.
-// For node.js, package.json#exports field mapping rewrites import
-// from `crypto` to `cryptoNode`, which imports native module.
+exports.randomBytes = exports.wrapConstructorWithOpts = exports.wrapConstructor = exports.checkOpts = exports.Hash = exports.concatBytes = exports.toBytes = exports.utf8ToBytes = exports.asyncLoop = exports.nextTick = exports.hexToBytes = exports.bytesToHex = exports.isLE = exports.rotr = exports.createView = exports.u32 = exports.u8 = void 0;
+// We use `globalThis.crypto`, but node.js versions earlier than v19 don't
+// declare it in global scope. For node.js, package.json#exports field mapping
+// rewrites import from `crypto` to `cryptoNode`, which imports native module.
 // Makes the utils un-importable in browsers without a bundler.
 // Once node.js 18 is deprecated, we can just drop the import.
 const crypto_1 = __webpack_require__(/*! @noble/hashes/crypto */ "./node_modules/@noble/hashes/crypto.js");
-const u8a = (a) => a instanceof Uint8Array;
 // Cast array to different type
 const u8 = (arr) => new Uint8Array(arr.buffer, arr.byteOffset, arr.byteLength);
 exports.u8 = u8;
@@ -34171,31 +33404,31 @@ exports.rotr = rotr;
 exports.isLE = new Uint8Array(new Uint32Array([0x11223344]).buffer)[0] === 0x44;
 if (!exports.isLE)
     throw new Error('Non little-endian hardware is not supported');
-const hexes = /* @__PURE__ */ Array.from({ length: 256 }, (_, i) => i.toString(16).padStart(2, '0'));
+const hexes = Array.from({ length: 256 }, (v, i) => i.toString(16).padStart(2, '0'));
 /**
- * @example bytesToHex(Uint8Array.from([0xca, 0xfe, 0x01, 0x23])) // 'cafe0123'
+ * @example bytesToHex(Uint8Array.from([0xde, 0xad, 0xbe, 0xef])) // 'deadbeef'
  */
-function bytesToHex(bytes) {
-    if (!u8a(bytes))
-        throw new Error('Uint8Array expected');
+function bytesToHex(uint8a) {
     // pre-caching improves the speed 6x
+    if (!(uint8a instanceof Uint8Array))
+        throw new Error('Uint8Array expected');
     let hex = '';
-    for (let i = 0; i < bytes.length; i++) {
-        hex += hexes[bytes[i]];
+    for (let i = 0; i < uint8a.length; i++) {
+        hex += hexes[uint8a[i]];
     }
     return hex;
 }
 exports.bytesToHex = bytesToHex;
 /**
- * @example hexToBytes('cafe0123') // Uint8Array.from([0xca, 0xfe, 0x01, 0x23])
+ * @example hexToBytes('deadbeef') // Uint8Array.from([0xde, 0xad, 0xbe, 0xef])
  */
 function hexToBytes(hex) {
-    if (typeof hex !== 'string')
-        throw new Error('hex string expected, got ' + typeof hex);
-    const len = hex.length;
-    if (len % 2)
-        throw new Error('padded hex string expected, got unpadded hex of length ' + len);
-    const array = new Uint8Array(len / 2);
+    if (typeof hex !== 'string') {
+        throw new TypeError('hexToBytes: expected string, got ' + typeof hex);
+    }
+    if (hex.length % 2)
+        throw new Error('hexToBytes: received invalid unpadded hex');
+    const array = new Uint8Array(hex.length / 2);
     for (let i = 0; i < array.length; i++) {
         const j = i * 2;
         const hexByte = hex.slice(j, j + 2);
@@ -34226,41 +33459,38 @@ async function asyncLoop(iters, tick, cb) {
     }
 }
 exports.asyncLoop = asyncLoop;
-/**
- * @example utf8ToBytes('abc') // new Uint8Array([97, 98, 99])
- */
 function utf8ToBytes(str) {
-    if (typeof str !== 'string')
-        throw new Error(`utf8ToBytes expected string, got ${typeof str}`);
-    return new Uint8Array(new TextEncoder().encode(str)); // https://bugzil.la/1681809
+    if (typeof str !== 'string') {
+        throw new TypeError(`utf8ToBytes expected string, got ${typeof str}`);
+    }
+    return new TextEncoder().encode(str);
 }
 exports.utf8ToBytes = utf8ToBytes;
-/**
- * Normalizes (non-hex) string or Uint8Array to Uint8Array.
- * Warning: when Uint8Array is passed, it would NOT get copied.
- * Keep in mind for future mutable operations.
- */
 function toBytes(data) {
     if (typeof data === 'string')
         data = utf8ToBytes(data);
-    if (!u8a(data))
-        throw new Error(`expected Uint8Array, got ${typeof data}`);
+    if (!(data instanceof Uint8Array))
+        throw new TypeError(`Expected input type is Uint8Array (got ${typeof data})`);
     return data;
 }
 exports.toBytes = toBytes;
 /**
- * Copies several Uint8Arrays into one.
+ * Concats Uint8Array-s into one; like `Buffer.concat([buf1, buf2])`
+ * @example concatBytes(buf1, buf2)
  */
 function concatBytes(...arrays) {
-    const r = new Uint8Array(arrays.reduce((sum, a) => sum + a.length, 0));
-    let pad = 0; // walk through each item, ensure they have proper type
-    arrays.forEach((a) => {
-        if (!u8a(a))
-            throw new Error('Uint8Array expected');
-        r.set(a, pad);
-        pad += a.length;
-    });
-    return r;
+    if (!arrays.every((a) => a instanceof Uint8Array))
+        throw new Error('Uint8Array list expected');
+    if (arrays.length === 1)
+        return arrays[0];
+    const length = arrays.reduce((a, arr) => a + arr.length, 0);
+    const result = new Uint8Array(length);
+    for (let i = 0, pad = 0; i < arrays.length; i++) {
+        const arr = arrays[i];
+        result.set(arr, pad);
+        pad += arr.length;
+    }
+    return result;
 }
 exports.concatBytes = concatBytes;
 // For runtime check if class implements interface
@@ -34271,20 +33501,21 @@ class Hash {
     }
 }
 exports.Hash = Hash;
-const toStr = {}.toString;
+// Check if object doens't have custom constructor (like Uint8Array/Array)
+const isPlainObject = (obj) => Object.prototype.toString.call(obj) === '[object Object]' && obj.constructor === Object;
 function checkOpts(defaults, opts) {
-    if (opts !== undefined && toStr.call(opts) !== '[object Object]')
-        throw new Error('Options should be object or undefined');
+    if (opts !== undefined && (typeof opts !== 'object' || !isPlainObject(opts)))
+        throw new TypeError('Options should be object or undefined');
     const merged = Object.assign(defaults, opts);
     return merged;
 }
 exports.checkOpts = checkOpts;
-function wrapConstructor(hashCons) {
-    const hashC = (msg) => hashCons().update(toBytes(msg)).digest();
-    const tmp = hashCons();
+function wrapConstructor(hashConstructor) {
+    const hashC = (message) => hashConstructor().update(toBytes(message)).digest();
+    const tmp = hashConstructor();
     hashC.outputLen = tmp.outputLen;
     hashC.blockLen = tmp.blockLen;
-    hashC.create = () => hashCons();
+    hashC.create = () => hashConstructor();
     return hashC;
 }
 exports.wrapConstructor = wrapConstructor;
@@ -34297,17 +33528,8 @@ function wrapConstructorWithOpts(hashCons) {
     return hashC;
 }
 exports.wrapConstructorWithOpts = wrapConstructorWithOpts;
-function wrapXOFConstructorWithOpts(hashCons) {
-    const hashC = (msg, opts) => hashCons(opts).update(toBytes(msg)).digest();
-    const tmp = hashCons({});
-    hashC.outputLen = tmp.outputLen;
-    hashC.blockLen = tmp.blockLen;
-    hashC.create = (opts) => hashCons(opts);
-    return hashC;
-}
-exports.wrapXOFConstructorWithOpts = wrapXOFConstructorWithOpts;
 /**
- * Secure PRNG. Uses `crypto.getRandomValues`, which defers to OS.
+ * Secure PRNG. Uses `globalThis.crypto` or node.js crypto module.
  */
 function randomBytes(bytesLength = 32) {
     if (crypto_1.crypto && typeof crypto_1.crypto.getRandomValues === 'function') {
@@ -34942,6 +34164,42 @@ function copy(src,dest){
 		}
 	}
 }
+NamedNodeMap.prototype = {
+	length:0,
+	item:NodeList.prototype.item,
+	getNamedItem: function(key) {
+//		if(key.indexOf(':')>0 || key == 'xmlns'){
+//			return null;
+//		}
+		//console.log()
+		var i = this.length;
+		while(i--){
+			var attr = this[i];
+			//console.log(attr.nodeName,key)
+			if(attr.nodeName == key){
+				return attr;
+			}
+		}
+	},
+	setNamedItem: function(attr) {
+		var el = attr.ownerElement;
+		if(el && el!=this._ownerElement){
+			throw new DOMException(INUSE_ATTRIBUTE_ERR);
+		}
+		var oldAttr = this.getNamedItem(attr.nodeName);
+		_addNamedNode(this._ownerElement,this,attr,oldAttr);
+		return oldAttr;
+	},
+	/* returns Node */
+	setNamedItemNS: function(attr) {// raises: WRONG_DOCUMENT_ERR,NO_MODIFICATION_ALLOWED_ERR,INUSE_ATTRIBUTE_ERR
+		var el = attr.ownerElement, oldAttr;
+		if(el && el!=this._ownerElement){
+			throw new DOMException(INUSE_ATTRIBUTE_ERR);
+		}
+		oldAttr = this.getNamedItemNS(attr.namespaceURI,attr.localName);
+		_addNamedNode(this._ownerElement,this,attr,oldAttr);
+		return oldAttr;
+	},
 
 /**
 ^\w+\.prototype\.([_\w]+)\s*=\s*((?:.*\{\s*?[\r\n][\s\S]*?^})|\S.*?(?=[;\r\n]));?
@@ -35043,7 +34301,7 @@ NodeList.prototype = {
 	 * 	The node at the indexth position in the NodeList, or null if that is not a valid index.
 	 */
 	item: function(index) {
-		return index >= 0 && index < this.length ? this[index] : null;
+		return this[index] || null;
 	},
 	toString:function(isHTML,nodeFilter){
 		for(var buf = [], i = 0;i<this.length;i++){
@@ -35076,23 +34334,17 @@ function LiveNodeList(node,refresh){
 }
 function _updateLiveList(list){
 	var inc = list._node._inc || list._node.ownerDocument._inc;
-	if (list._inc !== inc) {
+	if(list._inc != inc){
 		var ls = list._refresh(list._node);
+		//console.log(ls.length)
 		__set__(list,'length',ls.length);
-		if (!list.$$length || ls.length < list.$$length) {
-			for (var i = ls.length; i in list; i++) {
-				if (Object.prototype.hasOwnProperty.call(list, i)) {
-					delete list[i];
-				}
-			}
-		}
 		copy(ls,list);
 		list._inc = inc;
 	}
 }
 LiveNodeList.prototype.item = function(i){
 	_updateLiveList(this);
-	return this[i] || null;
+	return this[i];
 }
 
 _extends(LiveNodeList,NodeList);
@@ -36041,8 +35293,8 @@ Document.prototype = {
 	createProcessingInstruction :	function(target,data){
 		var node = new ProcessingInstruction();
 		node.ownerDocument = this;
-		node.tagName = node.nodeName = node.target = target;
-		node.nodeValue = node.data = data;
+		node.tagName = node.target = target;
+		node.nodeValue= node.data = data;
 		return node;
 	},
 	createAttribute :	function(name){
@@ -36722,9 +35974,6 @@ try{
   \*****************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
-
-
 var freeze = (__webpack_require__(/*! ./conventions */ "./node_modules/@xmldom/xmldom/lib/conventions.js").freeze);
 
 /**
@@ -36734,2161 +35983,270 @@ var freeze = (__webpack_require__(/*! ./conventions */ "./node_modules/@xmldom/x
  * @see https://www.w3.org/TR/2008/REC-xml-20081126/#sec-predefined-ent W3C XML 1.0
  * @see https://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references#Predefined_entities_in_XML Wikipedia
  */
-exports.XML_ENTITIES = freeze({
-	amp: '&',
-	apos: "'",
-	gt: '>',
-	lt: '<',
-	quot: '"',
-});
+exports.XML_ENTITIES = freeze({amp:'&', apos:"'", gt:'>', lt:'<', quot:'"'})
 
 /**
- * A map of all entities that are detected in an HTML document.
+ * A map of currently 241 entities that are detected in an HTML document.
  * They contain all entries from `XML_ENTITIES`.
  *
  * @see XML_ENTITIES
  * @see DOMParser.parseFromString
  * @see DOMImplementation.prototype.createHTMLDocument
  * @see https://html.spec.whatwg.org/#named-character-references WHATWG HTML(5) Spec
- * @see https://html.spec.whatwg.org/entities.json JSON
  * @see https://www.w3.org/TR/xml-entity-names/ W3C XML Entity Names
  * @see https://www.w3.org/TR/html4/sgml/entities.html W3C HTML4/SGML
  * @see https://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references#Character_entity_references_in_HTML Wikipedia (HTML)
  * @see https://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references#Entities_representing_special_characters_in_XHTML Wikpedia (XHTML)
  */
 exports.HTML_ENTITIES = freeze({
-	Aacute: '\u00C1',
-	aacute: '\u00E1',
-	Abreve: '\u0102',
-	abreve: '\u0103',
-	ac: '\u223E',
-	acd: '\u223F',
-	acE: '\u223E\u0333',
-	Acirc: '\u00C2',
-	acirc: '\u00E2',
-	acute: '\u00B4',
-	Acy: '\u0410',
-	acy: '\u0430',
-	AElig: '\u00C6',
-	aelig: '\u00E6',
-	af: '\u2061',
-	Afr: '\uD835\uDD04',
-	afr: '\uD835\uDD1E',
-	Agrave: '\u00C0',
-	agrave: '\u00E0',
-	alefsym: '\u2135',
-	aleph: '\u2135',
-	Alpha: '\u0391',
-	alpha: '\u03B1',
-	Amacr: '\u0100',
-	amacr: '\u0101',
-	amalg: '\u2A3F',
-	AMP: '\u0026',
-	amp: '\u0026',
-	And: '\u2A53',
-	and: '\u2227',
-	andand: '\u2A55',
-	andd: '\u2A5C',
-	andslope: '\u2A58',
-	andv: '\u2A5A',
-	ang: '\u2220',
-	ange: '\u29A4',
-	angle: '\u2220',
-	angmsd: '\u2221',
-	angmsdaa: '\u29A8',
-	angmsdab: '\u29A9',
-	angmsdac: '\u29AA',
-	angmsdad: '\u29AB',
-	angmsdae: '\u29AC',
-	angmsdaf: '\u29AD',
-	angmsdag: '\u29AE',
-	angmsdah: '\u29AF',
-	angrt: '\u221F',
-	angrtvb: '\u22BE',
-	angrtvbd: '\u299D',
-	angsph: '\u2222',
-	angst: '\u00C5',
-	angzarr: '\u237C',
-	Aogon: '\u0104',
-	aogon: '\u0105',
-	Aopf: '\uD835\uDD38',
-	aopf: '\uD835\uDD52',
-	ap: '\u2248',
-	apacir: '\u2A6F',
-	apE: '\u2A70',
-	ape: '\u224A',
-	apid: '\u224B',
-	apos: '\u0027',
-	ApplyFunction: '\u2061',
-	approx: '\u2248',
-	approxeq: '\u224A',
-	Aring: '\u00C5',
-	aring: '\u00E5',
-	Ascr: '\uD835\uDC9C',
-	ascr: '\uD835\uDCB6',
-	Assign: '\u2254',
-	ast: '\u002A',
-	asymp: '\u2248',
-	asympeq: '\u224D',
-	Atilde: '\u00C3',
-	atilde: '\u00E3',
-	Auml: '\u00C4',
-	auml: '\u00E4',
-	awconint: '\u2233',
-	awint: '\u2A11',
-	backcong: '\u224C',
-	backepsilon: '\u03F6',
-	backprime: '\u2035',
-	backsim: '\u223D',
-	backsimeq: '\u22CD',
-	Backslash: '\u2216',
-	Barv: '\u2AE7',
-	barvee: '\u22BD',
-	Barwed: '\u2306',
-	barwed: '\u2305',
-	barwedge: '\u2305',
-	bbrk: '\u23B5',
-	bbrktbrk: '\u23B6',
-	bcong: '\u224C',
-	Bcy: '\u0411',
-	bcy: '\u0431',
-	bdquo: '\u201E',
-	becaus: '\u2235',
-	Because: '\u2235',
-	because: '\u2235',
-	bemptyv: '\u29B0',
-	bepsi: '\u03F6',
-	bernou: '\u212C',
-	Bernoullis: '\u212C',
-	Beta: '\u0392',
-	beta: '\u03B2',
-	beth: '\u2136',
-	between: '\u226C',
-	Bfr: '\uD835\uDD05',
-	bfr: '\uD835\uDD1F',
-	bigcap: '\u22C2',
-	bigcirc: '\u25EF',
-	bigcup: '\u22C3',
-	bigodot: '\u2A00',
-	bigoplus: '\u2A01',
-	bigotimes: '\u2A02',
-	bigsqcup: '\u2A06',
-	bigstar: '\u2605',
-	bigtriangledown: '\u25BD',
-	bigtriangleup: '\u25B3',
-	biguplus: '\u2A04',
-	bigvee: '\u22C1',
-	bigwedge: '\u22C0',
-	bkarow: '\u290D',
-	blacklozenge: '\u29EB',
-	blacksquare: '\u25AA',
-	blacktriangle: '\u25B4',
-	blacktriangledown: '\u25BE',
-	blacktriangleleft: '\u25C2',
-	blacktriangleright: '\u25B8',
-	blank: '\u2423',
-	blk12: '\u2592',
-	blk14: '\u2591',
-	blk34: '\u2593',
-	block: '\u2588',
-	bne: '\u003D\u20E5',
-	bnequiv: '\u2261\u20E5',
-	bNot: '\u2AED',
-	bnot: '\u2310',
-	Bopf: '\uD835\uDD39',
-	bopf: '\uD835\uDD53',
-	bot: '\u22A5',
-	bottom: '\u22A5',
-	bowtie: '\u22C8',
-	boxbox: '\u29C9',
-	boxDL: '\u2557',
-	boxDl: '\u2556',
-	boxdL: '\u2555',
-	boxdl: '\u2510',
-	boxDR: '\u2554',
-	boxDr: '\u2553',
-	boxdR: '\u2552',
-	boxdr: '\u250C',
-	boxH: '\u2550',
-	boxh: '\u2500',
-	boxHD: '\u2566',
-	boxHd: '\u2564',
-	boxhD: '\u2565',
-	boxhd: '\u252C',
-	boxHU: '\u2569',
-	boxHu: '\u2567',
-	boxhU: '\u2568',
-	boxhu: '\u2534',
-	boxminus: '\u229F',
-	boxplus: '\u229E',
-	boxtimes: '\u22A0',
-	boxUL: '\u255D',
-	boxUl: '\u255C',
-	boxuL: '\u255B',
-	boxul: '\u2518',
-	boxUR: '\u255A',
-	boxUr: '\u2559',
-	boxuR: '\u2558',
-	boxur: '\u2514',
-	boxV: '\u2551',
-	boxv: '\u2502',
-	boxVH: '\u256C',
-	boxVh: '\u256B',
-	boxvH: '\u256A',
-	boxvh: '\u253C',
-	boxVL: '\u2563',
-	boxVl: '\u2562',
-	boxvL: '\u2561',
-	boxvl: '\u2524',
-	boxVR: '\u2560',
-	boxVr: '\u255F',
-	boxvR: '\u255E',
-	boxvr: '\u251C',
-	bprime: '\u2035',
-	Breve: '\u02D8',
-	breve: '\u02D8',
-	brvbar: '\u00A6',
-	Bscr: '\u212C',
-	bscr: '\uD835\uDCB7',
-	bsemi: '\u204F',
-	bsim: '\u223D',
-	bsime: '\u22CD',
-	bsol: '\u005C',
-	bsolb: '\u29C5',
-	bsolhsub: '\u27C8',
-	bull: '\u2022',
-	bullet: '\u2022',
-	bump: '\u224E',
-	bumpE: '\u2AAE',
-	bumpe: '\u224F',
-	Bumpeq: '\u224E',
-	bumpeq: '\u224F',
-	Cacute: '\u0106',
-	cacute: '\u0107',
-	Cap: '\u22D2',
-	cap: '\u2229',
-	capand: '\u2A44',
-	capbrcup: '\u2A49',
-	capcap: '\u2A4B',
-	capcup: '\u2A47',
-	capdot: '\u2A40',
-	CapitalDifferentialD: '\u2145',
-	caps: '\u2229\uFE00',
-	caret: '\u2041',
-	caron: '\u02C7',
-	Cayleys: '\u212D',
-	ccaps: '\u2A4D',
-	Ccaron: '\u010C',
-	ccaron: '\u010D',
-	Ccedil: '\u00C7',
-	ccedil: '\u00E7',
-	Ccirc: '\u0108',
-	ccirc: '\u0109',
-	Cconint: '\u2230',
-	ccups: '\u2A4C',
-	ccupssm: '\u2A50',
-	Cdot: '\u010A',
-	cdot: '\u010B',
-	cedil: '\u00B8',
-	Cedilla: '\u00B8',
-	cemptyv: '\u29B2',
-	cent: '\u00A2',
-	CenterDot: '\u00B7',
-	centerdot: '\u00B7',
-	Cfr: '\u212D',
-	cfr: '\uD835\uDD20',
-	CHcy: '\u0427',
-	chcy: '\u0447',
-	check: '\u2713',
-	checkmark: '\u2713',
-	Chi: '\u03A7',
-	chi: '\u03C7',
-	cir: '\u25CB',
-	circ: '\u02C6',
-	circeq: '\u2257',
-	circlearrowleft: '\u21BA',
-	circlearrowright: '\u21BB',
-	circledast: '\u229B',
-	circledcirc: '\u229A',
-	circleddash: '\u229D',
-	CircleDot: '\u2299',
-	circledR: '\u00AE',
-	circledS: '\u24C8',
-	CircleMinus: '\u2296',
-	CirclePlus: '\u2295',
-	CircleTimes: '\u2297',
-	cirE: '\u29C3',
-	cire: '\u2257',
-	cirfnint: '\u2A10',
-	cirmid: '\u2AEF',
-	cirscir: '\u29C2',
-	ClockwiseContourIntegral: '\u2232',
-	CloseCurlyDoubleQuote: '\u201D',
-	CloseCurlyQuote: '\u2019',
-	clubs: '\u2663',
-	clubsuit: '\u2663',
-	Colon: '\u2237',
-	colon: '\u003A',
-	Colone: '\u2A74',
-	colone: '\u2254',
-	coloneq: '\u2254',
-	comma: '\u002C',
-	commat: '\u0040',
-	comp: '\u2201',
-	compfn: '\u2218',
-	complement: '\u2201',
-	complexes: '\u2102',
-	cong: '\u2245',
-	congdot: '\u2A6D',
-	Congruent: '\u2261',
-	Conint: '\u222F',
-	conint: '\u222E',
-	ContourIntegral: '\u222E',
-	Copf: '\u2102',
-	copf: '\uD835\uDD54',
-	coprod: '\u2210',
-	Coproduct: '\u2210',
-	COPY: '\u00A9',
-	copy: '\u00A9',
-	copysr: '\u2117',
-	CounterClockwiseContourIntegral: '\u2233',
-	crarr: '\u21B5',
-	Cross: '\u2A2F',
-	cross: '\u2717',
-	Cscr: '\uD835\uDC9E',
-	cscr: '\uD835\uDCB8',
-	csub: '\u2ACF',
-	csube: '\u2AD1',
-	csup: '\u2AD0',
-	csupe: '\u2AD2',
-	ctdot: '\u22EF',
-	cudarrl: '\u2938',
-	cudarrr: '\u2935',
-	cuepr: '\u22DE',
-	cuesc: '\u22DF',
-	cularr: '\u21B6',
-	cularrp: '\u293D',
-	Cup: '\u22D3',
-	cup: '\u222A',
-	cupbrcap: '\u2A48',
-	CupCap: '\u224D',
-	cupcap: '\u2A46',
-	cupcup: '\u2A4A',
-	cupdot: '\u228D',
-	cupor: '\u2A45',
-	cups: '\u222A\uFE00',
-	curarr: '\u21B7',
-	curarrm: '\u293C',
-	curlyeqprec: '\u22DE',
-	curlyeqsucc: '\u22DF',
-	curlyvee: '\u22CE',
-	curlywedge: '\u22CF',
-	curren: '\u00A4',
-	curvearrowleft: '\u21B6',
-	curvearrowright: '\u21B7',
-	cuvee: '\u22CE',
-	cuwed: '\u22CF',
-	cwconint: '\u2232',
-	cwint: '\u2231',
-	cylcty: '\u232D',
-	Dagger: '\u2021',
-	dagger: '\u2020',
-	daleth: '\u2138',
-	Darr: '\u21A1',
-	dArr: '\u21D3',
-	darr: '\u2193',
-	dash: '\u2010',
-	Dashv: '\u2AE4',
-	dashv: '\u22A3',
-	dbkarow: '\u290F',
-	dblac: '\u02DD',
-	Dcaron: '\u010E',
-	dcaron: '\u010F',
-	Dcy: '\u0414',
-	dcy: '\u0434',
-	DD: '\u2145',
-	dd: '\u2146',
-	ddagger: '\u2021',
-	ddarr: '\u21CA',
-	DDotrahd: '\u2911',
-	ddotseq: '\u2A77',
-	deg: '\u00B0',
-	Del: '\u2207',
-	Delta: '\u0394',
-	delta: '\u03B4',
-	demptyv: '\u29B1',
-	dfisht: '\u297F',
-	Dfr: '\uD835\uDD07',
-	dfr: '\uD835\uDD21',
-	dHar: '\u2965',
-	dharl: '\u21C3',
-	dharr: '\u21C2',
-	DiacriticalAcute: '\u00B4',
-	DiacriticalDot: '\u02D9',
-	DiacriticalDoubleAcute: '\u02DD',
-	DiacriticalGrave: '\u0060',
-	DiacriticalTilde: '\u02DC',
-	diam: '\u22C4',
-	Diamond: '\u22C4',
-	diamond: '\u22C4',
-	diamondsuit: '\u2666',
-	diams: '\u2666',
-	die: '\u00A8',
-	DifferentialD: '\u2146',
-	digamma: '\u03DD',
-	disin: '\u22F2',
-	div: '\u00F7',
-	divide: '\u00F7',
-	divideontimes: '\u22C7',
-	divonx: '\u22C7',
-	DJcy: '\u0402',
-	djcy: '\u0452',
-	dlcorn: '\u231E',
-	dlcrop: '\u230D',
-	dollar: '\u0024',
-	Dopf: '\uD835\uDD3B',
-	dopf: '\uD835\uDD55',
-	Dot: '\u00A8',
-	dot: '\u02D9',
-	DotDot: '\u20DC',
-	doteq: '\u2250',
-	doteqdot: '\u2251',
-	DotEqual: '\u2250',
-	dotminus: '\u2238',
-	dotplus: '\u2214',
-	dotsquare: '\u22A1',
-	doublebarwedge: '\u2306',
-	DoubleContourIntegral: '\u222F',
-	DoubleDot: '\u00A8',
-	DoubleDownArrow: '\u21D3',
-	DoubleLeftArrow: '\u21D0',
-	DoubleLeftRightArrow: '\u21D4',
-	DoubleLeftTee: '\u2AE4',
-	DoubleLongLeftArrow: '\u27F8',
-	DoubleLongLeftRightArrow: '\u27FA',
-	DoubleLongRightArrow: '\u27F9',
-	DoubleRightArrow: '\u21D2',
-	DoubleRightTee: '\u22A8',
-	DoubleUpArrow: '\u21D1',
-	DoubleUpDownArrow: '\u21D5',
-	DoubleVerticalBar: '\u2225',
-	DownArrow: '\u2193',
-	Downarrow: '\u21D3',
-	downarrow: '\u2193',
-	DownArrowBar: '\u2913',
-	DownArrowUpArrow: '\u21F5',
-	DownBreve: '\u0311',
-	downdownarrows: '\u21CA',
-	downharpoonleft: '\u21C3',
-	downharpoonright: '\u21C2',
-	DownLeftRightVector: '\u2950',
-	DownLeftTeeVector: '\u295E',
-	DownLeftVector: '\u21BD',
-	DownLeftVectorBar: '\u2956',
-	DownRightTeeVector: '\u295F',
-	DownRightVector: '\u21C1',
-	DownRightVectorBar: '\u2957',
-	DownTee: '\u22A4',
-	DownTeeArrow: '\u21A7',
-	drbkarow: '\u2910',
-	drcorn: '\u231F',
-	drcrop: '\u230C',
-	Dscr: '\uD835\uDC9F',
-	dscr: '\uD835\uDCB9',
-	DScy: '\u0405',
-	dscy: '\u0455',
-	dsol: '\u29F6',
-	Dstrok: '\u0110',
-	dstrok: '\u0111',
-	dtdot: '\u22F1',
-	dtri: '\u25BF',
-	dtrif: '\u25BE',
-	duarr: '\u21F5',
-	duhar: '\u296F',
-	dwangle: '\u29A6',
-	DZcy: '\u040F',
-	dzcy: '\u045F',
-	dzigrarr: '\u27FF',
-	Eacute: '\u00C9',
-	eacute: '\u00E9',
-	easter: '\u2A6E',
-	Ecaron: '\u011A',
-	ecaron: '\u011B',
-	ecir: '\u2256',
-	Ecirc: '\u00CA',
-	ecirc: '\u00EA',
-	ecolon: '\u2255',
-	Ecy: '\u042D',
-	ecy: '\u044D',
-	eDDot: '\u2A77',
-	Edot: '\u0116',
-	eDot: '\u2251',
-	edot: '\u0117',
-	ee: '\u2147',
-	efDot: '\u2252',
-	Efr: '\uD835\uDD08',
-	efr: '\uD835\uDD22',
-	eg: '\u2A9A',
-	Egrave: '\u00C8',
-	egrave: '\u00E8',
-	egs: '\u2A96',
-	egsdot: '\u2A98',
-	el: '\u2A99',
-	Element: '\u2208',
-	elinters: '\u23E7',
-	ell: '\u2113',
-	els: '\u2A95',
-	elsdot: '\u2A97',
-	Emacr: '\u0112',
-	emacr: '\u0113',
-	empty: '\u2205',
-	emptyset: '\u2205',
-	EmptySmallSquare: '\u25FB',
-	emptyv: '\u2205',
-	EmptyVerySmallSquare: '\u25AB',
-	emsp: '\u2003',
-	emsp13: '\u2004',
-	emsp14: '\u2005',
-	ENG: '\u014A',
-	eng: '\u014B',
-	ensp: '\u2002',
-	Eogon: '\u0118',
-	eogon: '\u0119',
-	Eopf: '\uD835\uDD3C',
-	eopf: '\uD835\uDD56',
-	epar: '\u22D5',
-	eparsl: '\u29E3',
-	eplus: '\u2A71',
-	epsi: '\u03B5',
-	Epsilon: '\u0395',
-	epsilon: '\u03B5',
-	epsiv: '\u03F5',
-	eqcirc: '\u2256',
-	eqcolon: '\u2255',
-	eqsim: '\u2242',
-	eqslantgtr: '\u2A96',
-	eqslantless: '\u2A95',
-	Equal: '\u2A75',
-	equals: '\u003D',
-	EqualTilde: '\u2242',
-	equest: '\u225F',
-	Equilibrium: '\u21CC',
-	equiv: '\u2261',
-	equivDD: '\u2A78',
-	eqvparsl: '\u29E5',
-	erarr: '\u2971',
-	erDot: '\u2253',
-	Escr: '\u2130',
-	escr: '\u212F',
-	esdot: '\u2250',
-	Esim: '\u2A73',
-	esim: '\u2242',
-	Eta: '\u0397',
-	eta: '\u03B7',
-	ETH: '\u00D0',
-	eth: '\u00F0',
-	Euml: '\u00CB',
-	euml: '\u00EB',
-	euro: '\u20AC',
-	excl: '\u0021',
-	exist: '\u2203',
-	Exists: '\u2203',
-	expectation: '\u2130',
-	ExponentialE: '\u2147',
-	exponentiale: '\u2147',
-	fallingdotseq: '\u2252',
-	Fcy: '\u0424',
-	fcy: '\u0444',
-	female: '\u2640',
-	ffilig: '\uFB03',
-	fflig: '\uFB00',
-	ffllig: '\uFB04',
-	Ffr: '\uD835\uDD09',
-	ffr: '\uD835\uDD23',
-	filig: '\uFB01',
-	FilledSmallSquare: '\u25FC',
-	FilledVerySmallSquare: '\u25AA',
-	fjlig: '\u0066\u006A',
-	flat: '\u266D',
-	fllig: '\uFB02',
-	fltns: '\u25B1',
-	fnof: '\u0192',
-	Fopf: '\uD835\uDD3D',
-	fopf: '\uD835\uDD57',
-	ForAll: '\u2200',
-	forall: '\u2200',
-	fork: '\u22D4',
-	forkv: '\u2AD9',
-	Fouriertrf: '\u2131',
-	fpartint: '\u2A0D',
-	frac12: '\u00BD',
-	frac13: '\u2153',
-	frac14: '\u00BC',
-	frac15: '\u2155',
-	frac16: '\u2159',
-	frac18: '\u215B',
-	frac23: '\u2154',
-	frac25: '\u2156',
-	frac34: '\u00BE',
-	frac35: '\u2157',
-	frac38: '\u215C',
-	frac45: '\u2158',
-	frac56: '\u215A',
-	frac58: '\u215D',
-	frac78: '\u215E',
-	frasl: '\u2044',
-	frown: '\u2322',
-	Fscr: '\u2131',
-	fscr: '\uD835\uDCBB',
-	gacute: '\u01F5',
-	Gamma: '\u0393',
-	gamma: '\u03B3',
-	Gammad: '\u03DC',
-	gammad: '\u03DD',
-	gap: '\u2A86',
-	Gbreve: '\u011E',
-	gbreve: '\u011F',
-	Gcedil: '\u0122',
-	Gcirc: '\u011C',
-	gcirc: '\u011D',
-	Gcy: '\u0413',
-	gcy: '\u0433',
-	Gdot: '\u0120',
-	gdot: '\u0121',
-	gE: '\u2267',
-	ge: '\u2265',
-	gEl: '\u2A8C',
-	gel: '\u22DB',
-	geq: '\u2265',
-	geqq: '\u2267',
-	geqslant: '\u2A7E',
-	ges: '\u2A7E',
-	gescc: '\u2AA9',
-	gesdot: '\u2A80',
-	gesdoto: '\u2A82',
-	gesdotol: '\u2A84',
-	gesl: '\u22DB\uFE00',
-	gesles: '\u2A94',
-	Gfr: '\uD835\uDD0A',
-	gfr: '\uD835\uDD24',
-	Gg: '\u22D9',
-	gg: '\u226B',
-	ggg: '\u22D9',
-	gimel: '\u2137',
-	GJcy: '\u0403',
-	gjcy: '\u0453',
-	gl: '\u2277',
-	gla: '\u2AA5',
-	glE: '\u2A92',
-	glj: '\u2AA4',
-	gnap: '\u2A8A',
-	gnapprox: '\u2A8A',
-	gnE: '\u2269',
-	gne: '\u2A88',
-	gneq: '\u2A88',
-	gneqq: '\u2269',
-	gnsim: '\u22E7',
-	Gopf: '\uD835\uDD3E',
-	gopf: '\uD835\uDD58',
-	grave: '\u0060',
-	GreaterEqual: '\u2265',
-	GreaterEqualLess: '\u22DB',
-	GreaterFullEqual: '\u2267',
-	GreaterGreater: '\u2AA2',
-	GreaterLess: '\u2277',
-	GreaterSlantEqual: '\u2A7E',
-	GreaterTilde: '\u2273',
-	Gscr: '\uD835\uDCA2',
-	gscr: '\u210A',
-	gsim: '\u2273',
-	gsime: '\u2A8E',
-	gsiml: '\u2A90',
-	Gt: '\u226B',
-	GT: '\u003E',
-	gt: '\u003E',
-	gtcc: '\u2AA7',
-	gtcir: '\u2A7A',
-	gtdot: '\u22D7',
-	gtlPar: '\u2995',
-	gtquest: '\u2A7C',
-	gtrapprox: '\u2A86',
-	gtrarr: '\u2978',
-	gtrdot: '\u22D7',
-	gtreqless: '\u22DB',
-	gtreqqless: '\u2A8C',
-	gtrless: '\u2277',
-	gtrsim: '\u2273',
-	gvertneqq: '\u2269\uFE00',
-	gvnE: '\u2269\uFE00',
-	Hacek: '\u02C7',
-	hairsp: '\u200A',
-	half: '\u00BD',
-	hamilt: '\u210B',
-	HARDcy: '\u042A',
-	hardcy: '\u044A',
-	hArr: '\u21D4',
-	harr: '\u2194',
-	harrcir: '\u2948',
-	harrw: '\u21AD',
-	Hat: '\u005E',
-	hbar: '\u210F',
-	Hcirc: '\u0124',
-	hcirc: '\u0125',
-	hearts: '\u2665',
-	heartsuit: '\u2665',
-	hellip: '\u2026',
-	hercon: '\u22B9',
-	Hfr: '\u210C',
-	hfr: '\uD835\uDD25',
-	HilbertSpace: '\u210B',
-	hksearow: '\u2925',
-	hkswarow: '\u2926',
-	hoarr: '\u21FF',
-	homtht: '\u223B',
-	hookleftarrow: '\u21A9',
-	hookrightarrow: '\u21AA',
-	Hopf: '\u210D',
-	hopf: '\uD835\uDD59',
-	horbar: '\u2015',
-	HorizontalLine: '\u2500',
-	Hscr: '\u210B',
-	hscr: '\uD835\uDCBD',
-	hslash: '\u210F',
-	Hstrok: '\u0126',
-	hstrok: '\u0127',
-	HumpDownHump: '\u224E',
-	HumpEqual: '\u224F',
-	hybull: '\u2043',
-	hyphen: '\u2010',
-	Iacute: '\u00CD',
-	iacute: '\u00ED',
-	ic: '\u2063',
-	Icirc: '\u00CE',
-	icirc: '\u00EE',
-	Icy: '\u0418',
-	icy: '\u0438',
-	Idot: '\u0130',
-	IEcy: '\u0415',
-	iecy: '\u0435',
-	iexcl: '\u00A1',
-	iff: '\u21D4',
-	Ifr: '\u2111',
-	ifr: '\uD835\uDD26',
-	Igrave: '\u00CC',
-	igrave: '\u00EC',
-	ii: '\u2148',
-	iiiint: '\u2A0C',
-	iiint: '\u222D',
-	iinfin: '\u29DC',
-	iiota: '\u2129',
-	IJlig: '\u0132',
-	ijlig: '\u0133',
-	Im: '\u2111',
-	Imacr: '\u012A',
-	imacr: '\u012B',
-	image: '\u2111',
-	ImaginaryI: '\u2148',
-	imagline: '\u2110',
-	imagpart: '\u2111',
-	imath: '\u0131',
-	imof: '\u22B7',
-	imped: '\u01B5',
-	Implies: '\u21D2',
-	in: '\u2208',
-	incare: '\u2105',
-	infin: '\u221E',
-	infintie: '\u29DD',
-	inodot: '\u0131',
-	Int: '\u222C',
-	int: '\u222B',
-	intcal: '\u22BA',
-	integers: '\u2124',
-	Integral: '\u222B',
-	intercal: '\u22BA',
-	Intersection: '\u22C2',
-	intlarhk: '\u2A17',
-	intprod: '\u2A3C',
-	InvisibleComma: '\u2063',
-	InvisibleTimes: '\u2062',
-	IOcy: '\u0401',
-	iocy: '\u0451',
-	Iogon: '\u012E',
-	iogon: '\u012F',
-	Iopf: '\uD835\uDD40',
-	iopf: '\uD835\uDD5A',
-	Iota: '\u0399',
-	iota: '\u03B9',
-	iprod: '\u2A3C',
-	iquest: '\u00BF',
-	Iscr: '\u2110',
-	iscr: '\uD835\uDCBE',
-	isin: '\u2208',
-	isindot: '\u22F5',
-	isinE: '\u22F9',
-	isins: '\u22F4',
-	isinsv: '\u22F3',
-	isinv: '\u2208',
-	it: '\u2062',
-	Itilde: '\u0128',
-	itilde: '\u0129',
-	Iukcy: '\u0406',
-	iukcy: '\u0456',
-	Iuml: '\u00CF',
-	iuml: '\u00EF',
-	Jcirc: '\u0134',
-	jcirc: '\u0135',
-	Jcy: '\u0419',
-	jcy: '\u0439',
-	Jfr: '\uD835\uDD0D',
-	jfr: '\uD835\uDD27',
-	jmath: '\u0237',
-	Jopf: '\uD835\uDD41',
-	jopf: '\uD835\uDD5B',
-	Jscr: '\uD835\uDCA5',
-	jscr: '\uD835\uDCBF',
-	Jsercy: '\u0408',
-	jsercy: '\u0458',
-	Jukcy: '\u0404',
-	jukcy: '\u0454',
-	Kappa: '\u039A',
-	kappa: '\u03BA',
-	kappav: '\u03F0',
-	Kcedil: '\u0136',
-	kcedil: '\u0137',
-	Kcy: '\u041A',
-	kcy: '\u043A',
-	Kfr: '\uD835\uDD0E',
-	kfr: '\uD835\uDD28',
-	kgreen: '\u0138',
-	KHcy: '\u0425',
-	khcy: '\u0445',
-	KJcy: '\u040C',
-	kjcy: '\u045C',
-	Kopf: '\uD835\uDD42',
-	kopf: '\uD835\uDD5C',
-	Kscr: '\uD835\uDCA6',
-	kscr: '\uD835\uDCC0',
-	lAarr: '\u21DA',
-	Lacute: '\u0139',
-	lacute: '\u013A',
-	laemptyv: '\u29B4',
-	lagran: '\u2112',
-	Lambda: '\u039B',
-	lambda: '\u03BB',
-	Lang: '\u27EA',
-	lang: '\u27E8',
-	langd: '\u2991',
-	langle: '\u27E8',
-	lap: '\u2A85',
-	Laplacetrf: '\u2112',
-	laquo: '\u00AB',
-	Larr: '\u219E',
-	lArr: '\u21D0',
-	larr: '\u2190',
-	larrb: '\u21E4',
-	larrbfs: '\u291F',
-	larrfs: '\u291D',
-	larrhk: '\u21A9',
-	larrlp: '\u21AB',
-	larrpl: '\u2939',
-	larrsim: '\u2973',
-	larrtl: '\u21A2',
-	lat: '\u2AAB',
-	lAtail: '\u291B',
-	latail: '\u2919',
-	late: '\u2AAD',
-	lates: '\u2AAD\uFE00',
-	lBarr: '\u290E',
-	lbarr: '\u290C',
-	lbbrk: '\u2772',
-	lbrace: '\u007B',
-	lbrack: '\u005B',
-	lbrke: '\u298B',
-	lbrksld: '\u298F',
-	lbrkslu: '\u298D',
-	Lcaron: '\u013D',
-	lcaron: '\u013E',
-	Lcedil: '\u013B',
-	lcedil: '\u013C',
-	lceil: '\u2308',
-	lcub: '\u007B',
-	Lcy: '\u041B',
-	lcy: '\u043B',
-	ldca: '\u2936',
-	ldquo: '\u201C',
-	ldquor: '\u201E',
-	ldrdhar: '\u2967',
-	ldrushar: '\u294B',
-	ldsh: '\u21B2',
-	lE: '\u2266',
-	le: '\u2264',
-	LeftAngleBracket: '\u27E8',
-	LeftArrow: '\u2190',
-	Leftarrow: '\u21D0',
-	leftarrow: '\u2190',
-	LeftArrowBar: '\u21E4',
-	LeftArrowRightArrow: '\u21C6',
-	leftarrowtail: '\u21A2',
-	LeftCeiling: '\u2308',
-	LeftDoubleBracket: '\u27E6',
-	LeftDownTeeVector: '\u2961',
-	LeftDownVector: '\u21C3',
-	LeftDownVectorBar: '\u2959',
-	LeftFloor: '\u230A',
-	leftharpoondown: '\u21BD',
-	leftharpoonup: '\u21BC',
-	leftleftarrows: '\u21C7',
-	LeftRightArrow: '\u2194',
-	Leftrightarrow: '\u21D4',
-	leftrightarrow: '\u2194',
-	leftrightarrows: '\u21C6',
-	leftrightharpoons: '\u21CB',
-	leftrightsquigarrow: '\u21AD',
-	LeftRightVector: '\u294E',
-	LeftTee: '\u22A3',
-	LeftTeeArrow: '\u21A4',
-	LeftTeeVector: '\u295A',
-	leftthreetimes: '\u22CB',
-	LeftTriangle: '\u22B2',
-	LeftTriangleBar: '\u29CF',
-	LeftTriangleEqual: '\u22B4',
-	LeftUpDownVector: '\u2951',
-	LeftUpTeeVector: '\u2960',
-	LeftUpVector: '\u21BF',
-	LeftUpVectorBar: '\u2958',
-	LeftVector: '\u21BC',
-	LeftVectorBar: '\u2952',
-	lEg: '\u2A8B',
-	leg: '\u22DA',
-	leq: '\u2264',
-	leqq: '\u2266',
-	leqslant: '\u2A7D',
-	les: '\u2A7D',
-	lescc: '\u2AA8',
-	lesdot: '\u2A7F',
-	lesdoto: '\u2A81',
-	lesdotor: '\u2A83',
-	lesg: '\u22DA\uFE00',
-	lesges: '\u2A93',
-	lessapprox: '\u2A85',
-	lessdot: '\u22D6',
-	lesseqgtr: '\u22DA',
-	lesseqqgtr: '\u2A8B',
-	LessEqualGreater: '\u22DA',
-	LessFullEqual: '\u2266',
-	LessGreater: '\u2276',
-	lessgtr: '\u2276',
-	LessLess: '\u2AA1',
-	lesssim: '\u2272',
-	LessSlantEqual: '\u2A7D',
-	LessTilde: '\u2272',
-	lfisht: '\u297C',
-	lfloor: '\u230A',
-	Lfr: '\uD835\uDD0F',
-	lfr: '\uD835\uDD29',
-	lg: '\u2276',
-	lgE: '\u2A91',
-	lHar: '\u2962',
-	lhard: '\u21BD',
-	lharu: '\u21BC',
-	lharul: '\u296A',
-	lhblk: '\u2584',
-	LJcy: '\u0409',
-	ljcy: '\u0459',
-	Ll: '\u22D8',
-	ll: '\u226A',
-	llarr: '\u21C7',
-	llcorner: '\u231E',
-	Lleftarrow: '\u21DA',
-	llhard: '\u296B',
-	lltri: '\u25FA',
-	Lmidot: '\u013F',
-	lmidot: '\u0140',
-	lmoust: '\u23B0',
-	lmoustache: '\u23B0',
-	lnap: '\u2A89',
-	lnapprox: '\u2A89',
-	lnE: '\u2268',
-	lne: '\u2A87',
-	lneq: '\u2A87',
-	lneqq: '\u2268',
-	lnsim: '\u22E6',
-	loang: '\u27EC',
-	loarr: '\u21FD',
-	lobrk: '\u27E6',
-	LongLeftArrow: '\u27F5',
-	Longleftarrow: '\u27F8',
-	longleftarrow: '\u27F5',
-	LongLeftRightArrow: '\u27F7',
-	Longleftrightarrow: '\u27FA',
-	longleftrightarrow: '\u27F7',
-	longmapsto: '\u27FC',
-	LongRightArrow: '\u27F6',
-	Longrightarrow: '\u27F9',
-	longrightarrow: '\u27F6',
-	looparrowleft: '\u21AB',
-	looparrowright: '\u21AC',
-	lopar: '\u2985',
-	Lopf: '\uD835\uDD43',
-	lopf: '\uD835\uDD5D',
-	loplus: '\u2A2D',
-	lotimes: '\u2A34',
-	lowast: '\u2217',
-	lowbar: '\u005F',
-	LowerLeftArrow: '\u2199',
-	LowerRightArrow: '\u2198',
-	loz: '\u25CA',
-	lozenge: '\u25CA',
-	lozf: '\u29EB',
-	lpar: '\u0028',
-	lparlt: '\u2993',
-	lrarr: '\u21C6',
-	lrcorner: '\u231F',
-	lrhar: '\u21CB',
-	lrhard: '\u296D',
-	lrm: '\u200E',
-	lrtri: '\u22BF',
-	lsaquo: '\u2039',
-	Lscr: '\u2112',
-	lscr: '\uD835\uDCC1',
-	Lsh: '\u21B0',
-	lsh: '\u21B0',
-	lsim: '\u2272',
-	lsime: '\u2A8D',
-	lsimg: '\u2A8F',
-	lsqb: '\u005B',
-	lsquo: '\u2018',
-	lsquor: '\u201A',
-	Lstrok: '\u0141',
-	lstrok: '\u0142',
-	Lt: '\u226A',
-	LT: '\u003C',
-	lt: '\u003C',
-	ltcc: '\u2AA6',
-	ltcir: '\u2A79',
-	ltdot: '\u22D6',
-	lthree: '\u22CB',
-	ltimes: '\u22C9',
-	ltlarr: '\u2976',
-	ltquest: '\u2A7B',
-	ltri: '\u25C3',
-	ltrie: '\u22B4',
-	ltrif: '\u25C2',
-	ltrPar: '\u2996',
-	lurdshar: '\u294A',
-	luruhar: '\u2966',
-	lvertneqq: '\u2268\uFE00',
-	lvnE: '\u2268\uFE00',
-	macr: '\u00AF',
-	male: '\u2642',
-	malt: '\u2720',
-	maltese: '\u2720',
-	Map: '\u2905',
-	map: '\u21A6',
-	mapsto: '\u21A6',
-	mapstodown: '\u21A7',
-	mapstoleft: '\u21A4',
-	mapstoup: '\u21A5',
-	marker: '\u25AE',
-	mcomma: '\u2A29',
-	Mcy: '\u041C',
-	mcy: '\u043C',
-	mdash: '\u2014',
-	mDDot: '\u223A',
-	measuredangle: '\u2221',
-	MediumSpace: '\u205F',
-	Mellintrf: '\u2133',
-	Mfr: '\uD835\uDD10',
-	mfr: '\uD835\uDD2A',
-	mho: '\u2127',
-	micro: '\u00B5',
-	mid: '\u2223',
-	midast: '\u002A',
-	midcir: '\u2AF0',
-	middot: '\u00B7',
-	minus: '\u2212',
-	minusb: '\u229F',
-	minusd: '\u2238',
-	minusdu: '\u2A2A',
-	MinusPlus: '\u2213',
-	mlcp: '\u2ADB',
-	mldr: '\u2026',
-	mnplus: '\u2213',
-	models: '\u22A7',
-	Mopf: '\uD835\uDD44',
-	mopf: '\uD835\uDD5E',
-	mp: '\u2213',
-	Mscr: '\u2133',
-	mscr: '\uD835\uDCC2',
-	mstpos: '\u223E',
-	Mu: '\u039C',
-	mu: '\u03BC',
-	multimap: '\u22B8',
-	mumap: '\u22B8',
-	nabla: '\u2207',
-	Nacute: '\u0143',
-	nacute: '\u0144',
-	nang: '\u2220\u20D2',
-	nap: '\u2249',
-	napE: '\u2A70\u0338',
-	napid: '\u224B\u0338',
-	napos: '\u0149',
-	napprox: '\u2249',
-	natur: '\u266E',
-	natural: '\u266E',
-	naturals: '\u2115',
-	nbsp: '\u00A0',
-	nbump: '\u224E\u0338',
-	nbumpe: '\u224F\u0338',
-	ncap: '\u2A43',
-	Ncaron: '\u0147',
-	ncaron: '\u0148',
-	Ncedil: '\u0145',
-	ncedil: '\u0146',
-	ncong: '\u2247',
-	ncongdot: '\u2A6D\u0338',
-	ncup: '\u2A42',
-	Ncy: '\u041D',
-	ncy: '\u043D',
-	ndash: '\u2013',
-	ne: '\u2260',
-	nearhk: '\u2924',
-	neArr: '\u21D7',
-	nearr: '\u2197',
-	nearrow: '\u2197',
-	nedot: '\u2250\u0338',
-	NegativeMediumSpace: '\u200B',
-	NegativeThickSpace: '\u200B',
-	NegativeThinSpace: '\u200B',
-	NegativeVeryThinSpace: '\u200B',
-	nequiv: '\u2262',
-	nesear: '\u2928',
-	nesim: '\u2242\u0338',
-	NestedGreaterGreater: '\u226B',
-	NestedLessLess: '\u226A',
-	NewLine: '\u000A',
-	nexist: '\u2204',
-	nexists: '\u2204',
-	Nfr: '\uD835\uDD11',
-	nfr: '\uD835\uDD2B',
-	ngE: '\u2267\u0338',
-	nge: '\u2271',
-	ngeq: '\u2271',
-	ngeqq: '\u2267\u0338',
-	ngeqslant: '\u2A7E\u0338',
-	nges: '\u2A7E\u0338',
-	nGg: '\u22D9\u0338',
-	ngsim: '\u2275',
-	nGt: '\u226B\u20D2',
-	ngt: '\u226F',
-	ngtr: '\u226F',
-	nGtv: '\u226B\u0338',
-	nhArr: '\u21CE',
-	nharr: '\u21AE',
-	nhpar: '\u2AF2',
-	ni: '\u220B',
-	nis: '\u22FC',
-	nisd: '\u22FA',
-	niv: '\u220B',
-	NJcy: '\u040A',
-	njcy: '\u045A',
-	nlArr: '\u21CD',
-	nlarr: '\u219A',
-	nldr: '\u2025',
-	nlE: '\u2266\u0338',
-	nle: '\u2270',
-	nLeftarrow: '\u21CD',
-	nleftarrow: '\u219A',
-	nLeftrightarrow: '\u21CE',
-	nleftrightarrow: '\u21AE',
-	nleq: '\u2270',
-	nleqq: '\u2266\u0338',
-	nleqslant: '\u2A7D\u0338',
-	nles: '\u2A7D\u0338',
-	nless: '\u226E',
-	nLl: '\u22D8\u0338',
-	nlsim: '\u2274',
-	nLt: '\u226A\u20D2',
-	nlt: '\u226E',
-	nltri: '\u22EA',
-	nltrie: '\u22EC',
-	nLtv: '\u226A\u0338',
-	nmid: '\u2224',
-	NoBreak: '\u2060',
-	NonBreakingSpace: '\u00A0',
-	Nopf: '\u2115',
-	nopf: '\uD835\uDD5F',
-	Not: '\u2AEC',
-	not: '\u00AC',
-	NotCongruent: '\u2262',
-	NotCupCap: '\u226D',
-	NotDoubleVerticalBar: '\u2226',
-	NotElement: '\u2209',
-	NotEqual: '\u2260',
-	NotEqualTilde: '\u2242\u0338',
-	NotExists: '\u2204',
-	NotGreater: '\u226F',
-	NotGreaterEqual: '\u2271',
-	NotGreaterFullEqual: '\u2267\u0338',
-	NotGreaterGreater: '\u226B\u0338',
-	NotGreaterLess: '\u2279',
-	NotGreaterSlantEqual: '\u2A7E\u0338',
-	NotGreaterTilde: '\u2275',
-	NotHumpDownHump: '\u224E\u0338',
-	NotHumpEqual: '\u224F\u0338',
-	notin: '\u2209',
-	notindot: '\u22F5\u0338',
-	notinE: '\u22F9\u0338',
-	notinva: '\u2209',
-	notinvb: '\u22F7',
-	notinvc: '\u22F6',
-	NotLeftTriangle: '\u22EA',
-	NotLeftTriangleBar: '\u29CF\u0338',
-	NotLeftTriangleEqual: '\u22EC',
-	NotLess: '\u226E',
-	NotLessEqual: '\u2270',
-	NotLessGreater: '\u2278',
-	NotLessLess: '\u226A\u0338',
-	NotLessSlantEqual: '\u2A7D\u0338',
-	NotLessTilde: '\u2274',
-	NotNestedGreaterGreater: '\u2AA2\u0338',
-	NotNestedLessLess: '\u2AA1\u0338',
-	notni: '\u220C',
-	notniva: '\u220C',
-	notnivb: '\u22FE',
-	notnivc: '\u22FD',
-	NotPrecedes: '\u2280',
-	NotPrecedesEqual: '\u2AAF\u0338',
-	NotPrecedesSlantEqual: '\u22E0',
-	NotReverseElement: '\u220C',
-	NotRightTriangle: '\u22EB',
-	NotRightTriangleBar: '\u29D0\u0338',
-	NotRightTriangleEqual: '\u22ED',
-	NotSquareSubset: '\u228F\u0338',
-	NotSquareSubsetEqual: '\u22E2',
-	NotSquareSuperset: '\u2290\u0338',
-	NotSquareSupersetEqual: '\u22E3',
-	NotSubset: '\u2282\u20D2',
-	NotSubsetEqual: '\u2288',
-	NotSucceeds: '\u2281',
-	NotSucceedsEqual: '\u2AB0\u0338',
-	NotSucceedsSlantEqual: '\u22E1',
-	NotSucceedsTilde: '\u227F\u0338',
-	NotSuperset: '\u2283\u20D2',
-	NotSupersetEqual: '\u2289',
-	NotTilde: '\u2241',
-	NotTildeEqual: '\u2244',
-	NotTildeFullEqual: '\u2247',
-	NotTildeTilde: '\u2249',
-	NotVerticalBar: '\u2224',
-	npar: '\u2226',
-	nparallel: '\u2226',
-	nparsl: '\u2AFD\u20E5',
-	npart: '\u2202\u0338',
-	npolint: '\u2A14',
-	npr: '\u2280',
-	nprcue: '\u22E0',
-	npre: '\u2AAF\u0338',
-	nprec: '\u2280',
-	npreceq: '\u2AAF\u0338',
-	nrArr: '\u21CF',
-	nrarr: '\u219B',
-	nrarrc: '\u2933\u0338',
-	nrarrw: '\u219D\u0338',
-	nRightarrow: '\u21CF',
-	nrightarrow: '\u219B',
-	nrtri: '\u22EB',
-	nrtrie: '\u22ED',
-	nsc: '\u2281',
-	nsccue: '\u22E1',
-	nsce: '\u2AB0\u0338',
-	Nscr: '\uD835\uDCA9',
-	nscr: '\uD835\uDCC3',
-	nshortmid: '\u2224',
-	nshortparallel: '\u2226',
-	nsim: '\u2241',
-	nsime: '\u2244',
-	nsimeq: '\u2244',
-	nsmid: '\u2224',
-	nspar: '\u2226',
-	nsqsube: '\u22E2',
-	nsqsupe: '\u22E3',
-	nsub: '\u2284',
-	nsubE: '\u2AC5\u0338',
-	nsube: '\u2288',
-	nsubset: '\u2282\u20D2',
-	nsubseteq: '\u2288',
-	nsubseteqq: '\u2AC5\u0338',
-	nsucc: '\u2281',
-	nsucceq: '\u2AB0\u0338',
-	nsup: '\u2285',
-	nsupE: '\u2AC6\u0338',
-	nsupe: '\u2289',
-	nsupset: '\u2283\u20D2',
-	nsupseteq: '\u2289',
-	nsupseteqq: '\u2AC6\u0338',
-	ntgl: '\u2279',
-	Ntilde: '\u00D1',
-	ntilde: '\u00F1',
-	ntlg: '\u2278',
-	ntriangleleft: '\u22EA',
-	ntrianglelefteq: '\u22EC',
-	ntriangleright: '\u22EB',
-	ntrianglerighteq: '\u22ED',
-	Nu: '\u039D',
-	nu: '\u03BD',
-	num: '\u0023',
-	numero: '\u2116',
-	numsp: '\u2007',
-	nvap: '\u224D\u20D2',
-	nVDash: '\u22AF',
-	nVdash: '\u22AE',
-	nvDash: '\u22AD',
-	nvdash: '\u22AC',
-	nvge: '\u2265\u20D2',
-	nvgt: '\u003E\u20D2',
-	nvHarr: '\u2904',
-	nvinfin: '\u29DE',
-	nvlArr: '\u2902',
-	nvle: '\u2264\u20D2',
-	nvlt: '\u003C\u20D2',
-	nvltrie: '\u22B4\u20D2',
-	nvrArr: '\u2903',
-	nvrtrie: '\u22B5\u20D2',
-	nvsim: '\u223C\u20D2',
-	nwarhk: '\u2923',
-	nwArr: '\u21D6',
-	nwarr: '\u2196',
-	nwarrow: '\u2196',
-	nwnear: '\u2927',
-	Oacute: '\u00D3',
-	oacute: '\u00F3',
-	oast: '\u229B',
-	ocir: '\u229A',
-	Ocirc: '\u00D4',
-	ocirc: '\u00F4',
-	Ocy: '\u041E',
-	ocy: '\u043E',
-	odash: '\u229D',
-	Odblac: '\u0150',
-	odblac: '\u0151',
-	odiv: '\u2A38',
-	odot: '\u2299',
-	odsold: '\u29BC',
-	OElig: '\u0152',
-	oelig: '\u0153',
-	ofcir: '\u29BF',
-	Ofr: '\uD835\uDD12',
-	ofr: '\uD835\uDD2C',
-	ogon: '\u02DB',
-	Ograve: '\u00D2',
-	ograve: '\u00F2',
-	ogt: '\u29C1',
-	ohbar: '\u29B5',
-	ohm: '\u03A9',
-	oint: '\u222E',
-	olarr: '\u21BA',
-	olcir: '\u29BE',
-	olcross: '\u29BB',
-	oline: '\u203E',
-	olt: '\u29C0',
-	Omacr: '\u014C',
-	omacr: '\u014D',
-	Omega: '\u03A9',
-	omega: '\u03C9',
-	Omicron: '\u039F',
-	omicron: '\u03BF',
-	omid: '\u29B6',
-	ominus: '\u2296',
-	Oopf: '\uD835\uDD46',
-	oopf: '\uD835\uDD60',
-	opar: '\u29B7',
-	OpenCurlyDoubleQuote: '\u201C',
-	OpenCurlyQuote: '\u2018',
-	operp: '\u29B9',
-	oplus: '\u2295',
-	Or: '\u2A54',
-	or: '\u2228',
-	orarr: '\u21BB',
-	ord: '\u2A5D',
-	order: '\u2134',
-	orderof: '\u2134',
-	ordf: '\u00AA',
-	ordm: '\u00BA',
-	origof: '\u22B6',
-	oror: '\u2A56',
-	orslope: '\u2A57',
-	orv: '\u2A5B',
-	oS: '\u24C8',
-	Oscr: '\uD835\uDCAA',
-	oscr: '\u2134',
-	Oslash: '\u00D8',
-	oslash: '\u00F8',
-	osol: '\u2298',
-	Otilde: '\u00D5',
-	otilde: '\u00F5',
-	Otimes: '\u2A37',
-	otimes: '\u2297',
-	otimesas: '\u2A36',
-	Ouml: '\u00D6',
-	ouml: '\u00F6',
-	ovbar: '\u233D',
-	OverBar: '\u203E',
-	OverBrace: '\u23DE',
-	OverBracket: '\u23B4',
-	OverParenthesis: '\u23DC',
-	par: '\u2225',
-	para: '\u00B6',
-	parallel: '\u2225',
-	parsim: '\u2AF3',
-	parsl: '\u2AFD',
-	part: '\u2202',
-	PartialD: '\u2202',
-	Pcy: '\u041F',
-	pcy: '\u043F',
-	percnt: '\u0025',
-	period: '\u002E',
-	permil: '\u2030',
-	perp: '\u22A5',
-	pertenk: '\u2031',
-	Pfr: '\uD835\uDD13',
-	pfr: '\uD835\uDD2D',
-	Phi: '\u03A6',
-	phi: '\u03C6',
-	phiv: '\u03D5',
-	phmmat: '\u2133',
-	phone: '\u260E',
-	Pi: '\u03A0',
-	pi: '\u03C0',
-	pitchfork: '\u22D4',
-	piv: '\u03D6',
-	planck: '\u210F',
-	planckh: '\u210E',
-	plankv: '\u210F',
-	plus: '\u002B',
-	plusacir: '\u2A23',
-	plusb: '\u229E',
-	pluscir: '\u2A22',
-	plusdo: '\u2214',
-	plusdu: '\u2A25',
-	pluse: '\u2A72',
-	PlusMinus: '\u00B1',
-	plusmn: '\u00B1',
-	plussim: '\u2A26',
-	plustwo: '\u2A27',
-	pm: '\u00B1',
-	Poincareplane: '\u210C',
-	pointint: '\u2A15',
-	Popf: '\u2119',
-	popf: '\uD835\uDD61',
-	pound: '\u00A3',
-	Pr: '\u2ABB',
-	pr: '\u227A',
-	prap: '\u2AB7',
-	prcue: '\u227C',
-	prE: '\u2AB3',
-	pre: '\u2AAF',
-	prec: '\u227A',
-	precapprox: '\u2AB7',
-	preccurlyeq: '\u227C',
-	Precedes: '\u227A',
-	PrecedesEqual: '\u2AAF',
-	PrecedesSlantEqual: '\u227C',
-	PrecedesTilde: '\u227E',
-	preceq: '\u2AAF',
-	precnapprox: '\u2AB9',
-	precneqq: '\u2AB5',
-	precnsim: '\u22E8',
-	precsim: '\u227E',
-	Prime: '\u2033',
-	prime: '\u2032',
-	primes: '\u2119',
-	prnap: '\u2AB9',
-	prnE: '\u2AB5',
-	prnsim: '\u22E8',
-	prod: '\u220F',
-	Product: '\u220F',
-	profalar: '\u232E',
-	profline: '\u2312',
-	profsurf: '\u2313',
-	prop: '\u221D',
-	Proportion: '\u2237',
-	Proportional: '\u221D',
-	propto: '\u221D',
-	prsim: '\u227E',
-	prurel: '\u22B0',
-	Pscr: '\uD835\uDCAB',
-	pscr: '\uD835\uDCC5',
-	Psi: '\u03A8',
-	psi: '\u03C8',
-	puncsp: '\u2008',
-	Qfr: '\uD835\uDD14',
-	qfr: '\uD835\uDD2E',
-	qint: '\u2A0C',
-	Qopf: '\u211A',
-	qopf: '\uD835\uDD62',
-	qprime: '\u2057',
-	Qscr: '\uD835\uDCAC',
-	qscr: '\uD835\uDCC6',
-	quaternions: '\u210D',
-	quatint: '\u2A16',
-	quest: '\u003F',
-	questeq: '\u225F',
-	QUOT: '\u0022',
-	quot: '\u0022',
-	rAarr: '\u21DB',
-	race: '\u223D\u0331',
-	Racute: '\u0154',
-	racute: '\u0155',
-	radic: '\u221A',
-	raemptyv: '\u29B3',
-	Rang: '\u27EB',
-	rang: '\u27E9',
-	rangd: '\u2992',
-	range: '\u29A5',
-	rangle: '\u27E9',
-	raquo: '\u00BB',
-	Rarr: '\u21A0',
-	rArr: '\u21D2',
-	rarr: '\u2192',
-	rarrap: '\u2975',
-	rarrb: '\u21E5',
-	rarrbfs: '\u2920',
-	rarrc: '\u2933',
-	rarrfs: '\u291E',
-	rarrhk: '\u21AA',
-	rarrlp: '\u21AC',
-	rarrpl: '\u2945',
-	rarrsim: '\u2974',
-	Rarrtl: '\u2916',
-	rarrtl: '\u21A3',
-	rarrw: '\u219D',
-	rAtail: '\u291C',
-	ratail: '\u291A',
-	ratio: '\u2236',
-	rationals: '\u211A',
-	RBarr: '\u2910',
-	rBarr: '\u290F',
-	rbarr: '\u290D',
-	rbbrk: '\u2773',
-	rbrace: '\u007D',
-	rbrack: '\u005D',
-	rbrke: '\u298C',
-	rbrksld: '\u298E',
-	rbrkslu: '\u2990',
-	Rcaron: '\u0158',
-	rcaron: '\u0159',
-	Rcedil: '\u0156',
-	rcedil: '\u0157',
-	rceil: '\u2309',
-	rcub: '\u007D',
-	Rcy: '\u0420',
-	rcy: '\u0440',
-	rdca: '\u2937',
-	rdldhar: '\u2969',
-	rdquo: '\u201D',
-	rdquor: '\u201D',
-	rdsh: '\u21B3',
-	Re: '\u211C',
-	real: '\u211C',
-	realine: '\u211B',
-	realpart: '\u211C',
-	reals: '\u211D',
-	rect: '\u25AD',
-	REG: '\u00AE',
-	reg: '\u00AE',
-	ReverseElement: '\u220B',
-	ReverseEquilibrium: '\u21CB',
-	ReverseUpEquilibrium: '\u296F',
-	rfisht: '\u297D',
-	rfloor: '\u230B',
-	Rfr: '\u211C',
-	rfr: '\uD835\uDD2F',
-	rHar: '\u2964',
-	rhard: '\u21C1',
-	rharu: '\u21C0',
-	rharul: '\u296C',
-	Rho: '\u03A1',
-	rho: '\u03C1',
-	rhov: '\u03F1',
-	RightAngleBracket: '\u27E9',
-	RightArrow: '\u2192',
-	Rightarrow: '\u21D2',
-	rightarrow: '\u2192',
-	RightArrowBar: '\u21E5',
-	RightArrowLeftArrow: '\u21C4',
-	rightarrowtail: '\u21A3',
-	RightCeiling: '\u2309',
-	RightDoubleBracket: '\u27E7',
-	RightDownTeeVector: '\u295D',
-	RightDownVector: '\u21C2',
-	RightDownVectorBar: '\u2955',
-	RightFloor: '\u230B',
-	rightharpoondown: '\u21C1',
-	rightharpoonup: '\u21C0',
-	rightleftarrows: '\u21C4',
-	rightleftharpoons: '\u21CC',
-	rightrightarrows: '\u21C9',
-	rightsquigarrow: '\u219D',
-	RightTee: '\u22A2',
-	RightTeeArrow: '\u21A6',
-	RightTeeVector: '\u295B',
-	rightthreetimes: '\u22CC',
-	RightTriangle: '\u22B3',
-	RightTriangleBar: '\u29D0',
-	RightTriangleEqual: '\u22B5',
-	RightUpDownVector: '\u294F',
-	RightUpTeeVector: '\u295C',
-	RightUpVector: '\u21BE',
-	RightUpVectorBar: '\u2954',
-	RightVector: '\u21C0',
-	RightVectorBar: '\u2953',
-	ring: '\u02DA',
-	risingdotseq: '\u2253',
-	rlarr: '\u21C4',
-	rlhar: '\u21CC',
-	rlm: '\u200F',
-	rmoust: '\u23B1',
-	rmoustache: '\u23B1',
-	rnmid: '\u2AEE',
-	roang: '\u27ED',
-	roarr: '\u21FE',
-	robrk: '\u27E7',
-	ropar: '\u2986',
-	Ropf: '\u211D',
-	ropf: '\uD835\uDD63',
-	roplus: '\u2A2E',
-	rotimes: '\u2A35',
-	RoundImplies: '\u2970',
-	rpar: '\u0029',
-	rpargt: '\u2994',
-	rppolint: '\u2A12',
-	rrarr: '\u21C9',
-	Rrightarrow: '\u21DB',
-	rsaquo: '\u203A',
-	Rscr: '\u211B',
-	rscr: '\uD835\uDCC7',
-	Rsh: '\u21B1',
-	rsh: '\u21B1',
-	rsqb: '\u005D',
-	rsquo: '\u2019',
-	rsquor: '\u2019',
-	rthree: '\u22CC',
-	rtimes: '\u22CA',
-	rtri: '\u25B9',
-	rtrie: '\u22B5',
-	rtrif: '\u25B8',
-	rtriltri: '\u29CE',
-	RuleDelayed: '\u29F4',
-	ruluhar: '\u2968',
-	rx: '\u211E',
-	Sacute: '\u015A',
-	sacute: '\u015B',
-	sbquo: '\u201A',
-	Sc: '\u2ABC',
-	sc: '\u227B',
-	scap: '\u2AB8',
-	Scaron: '\u0160',
-	scaron: '\u0161',
-	sccue: '\u227D',
-	scE: '\u2AB4',
-	sce: '\u2AB0',
-	Scedil: '\u015E',
-	scedil: '\u015F',
-	Scirc: '\u015C',
-	scirc: '\u015D',
-	scnap: '\u2ABA',
-	scnE: '\u2AB6',
-	scnsim: '\u22E9',
-	scpolint: '\u2A13',
-	scsim: '\u227F',
-	Scy: '\u0421',
-	scy: '\u0441',
-	sdot: '\u22C5',
-	sdotb: '\u22A1',
-	sdote: '\u2A66',
-	searhk: '\u2925',
-	seArr: '\u21D8',
-	searr: '\u2198',
-	searrow: '\u2198',
-	sect: '\u00A7',
-	semi: '\u003B',
-	seswar: '\u2929',
-	setminus: '\u2216',
-	setmn: '\u2216',
-	sext: '\u2736',
-	Sfr: '\uD835\uDD16',
-	sfr: '\uD835\uDD30',
-	sfrown: '\u2322',
-	sharp: '\u266F',
-	SHCHcy: '\u0429',
-	shchcy: '\u0449',
-	SHcy: '\u0428',
-	shcy: '\u0448',
-	ShortDownArrow: '\u2193',
-	ShortLeftArrow: '\u2190',
-	shortmid: '\u2223',
-	shortparallel: '\u2225',
-	ShortRightArrow: '\u2192',
-	ShortUpArrow: '\u2191',
-	shy: '\u00AD',
-	Sigma: '\u03A3',
-	sigma: '\u03C3',
-	sigmaf: '\u03C2',
-	sigmav: '\u03C2',
-	sim: '\u223C',
-	simdot: '\u2A6A',
-	sime: '\u2243',
-	simeq: '\u2243',
-	simg: '\u2A9E',
-	simgE: '\u2AA0',
-	siml: '\u2A9D',
-	simlE: '\u2A9F',
-	simne: '\u2246',
-	simplus: '\u2A24',
-	simrarr: '\u2972',
-	slarr: '\u2190',
-	SmallCircle: '\u2218',
-	smallsetminus: '\u2216',
-	smashp: '\u2A33',
-	smeparsl: '\u29E4',
-	smid: '\u2223',
-	smile: '\u2323',
-	smt: '\u2AAA',
-	smte: '\u2AAC',
-	smtes: '\u2AAC\uFE00',
-	SOFTcy: '\u042C',
-	softcy: '\u044C',
-	sol: '\u002F',
-	solb: '\u29C4',
-	solbar: '\u233F',
-	Sopf: '\uD835\uDD4A',
-	sopf: '\uD835\uDD64',
-	spades: '\u2660',
-	spadesuit: '\u2660',
-	spar: '\u2225',
-	sqcap: '\u2293',
-	sqcaps: '\u2293\uFE00',
-	sqcup: '\u2294',
-	sqcups: '\u2294\uFE00',
-	Sqrt: '\u221A',
-	sqsub: '\u228F',
-	sqsube: '\u2291',
-	sqsubset: '\u228F',
-	sqsubseteq: '\u2291',
-	sqsup: '\u2290',
-	sqsupe: '\u2292',
-	sqsupset: '\u2290',
-	sqsupseteq: '\u2292',
-	squ: '\u25A1',
-	Square: '\u25A1',
-	square: '\u25A1',
-	SquareIntersection: '\u2293',
-	SquareSubset: '\u228F',
-	SquareSubsetEqual: '\u2291',
-	SquareSuperset: '\u2290',
-	SquareSupersetEqual: '\u2292',
-	SquareUnion: '\u2294',
-	squarf: '\u25AA',
-	squf: '\u25AA',
-	srarr: '\u2192',
-	Sscr: '\uD835\uDCAE',
-	sscr: '\uD835\uDCC8',
-	ssetmn: '\u2216',
-	ssmile: '\u2323',
-	sstarf: '\u22C6',
-	Star: '\u22C6',
-	star: '\u2606',
-	starf: '\u2605',
-	straightepsilon: '\u03F5',
-	straightphi: '\u03D5',
-	strns: '\u00AF',
-	Sub: '\u22D0',
-	sub: '\u2282',
-	subdot: '\u2ABD',
-	subE: '\u2AC5',
-	sube: '\u2286',
-	subedot: '\u2AC3',
-	submult: '\u2AC1',
-	subnE: '\u2ACB',
-	subne: '\u228A',
-	subplus: '\u2ABF',
-	subrarr: '\u2979',
-	Subset: '\u22D0',
-	subset: '\u2282',
-	subseteq: '\u2286',
-	subseteqq: '\u2AC5',
-	SubsetEqual: '\u2286',
-	subsetneq: '\u228A',
-	subsetneqq: '\u2ACB',
-	subsim: '\u2AC7',
-	subsub: '\u2AD5',
-	subsup: '\u2AD3',
-	succ: '\u227B',
-	succapprox: '\u2AB8',
-	succcurlyeq: '\u227D',
-	Succeeds: '\u227B',
-	SucceedsEqual: '\u2AB0',
-	SucceedsSlantEqual: '\u227D',
-	SucceedsTilde: '\u227F',
-	succeq: '\u2AB0',
-	succnapprox: '\u2ABA',
-	succneqq: '\u2AB6',
-	succnsim: '\u22E9',
-	succsim: '\u227F',
-	SuchThat: '\u220B',
-	Sum: '\u2211',
-	sum: '\u2211',
-	sung: '\u266A',
-	Sup: '\u22D1',
-	sup: '\u2283',
-	sup1: '\u00B9',
-	sup2: '\u00B2',
-	sup3: '\u00B3',
-	supdot: '\u2ABE',
-	supdsub: '\u2AD8',
-	supE: '\u2AC6',
-	supe: '\u2287',
-	supedot: '\u2AC4',
-	Superset: '\u2283',
-	SupersetEqual: '\u2287',
-	suphsol: '\u27C9',
-	suphsub: '\u2AD7',
-	suplarr: '\u297B',
-	supmult: '\u2AC2',
-	supnE: '\u2ACC',
-	supne: '\u228B',
-	supplus: '\u2AC0',
-	Supset: '\u22D1',
-	supset: '\u2283',
-	supseteq: '\u2287',
-	supseteqq: '\u2AC6',
-	supsetneq: '\u228B',
-	supsetneqq: '\u2ACC',
-	supsim: '\u2AC8',
-	supsub: '\u2AD4',
-	supsup: '\u2AD6',
-	swarhk: '\u2926',
-	swArr: '\u21D9',
-	swarr: '\u2199',
-	swarrow: '\u2199',
-	swnwar: '\u292A',
-	szlig: '\u00DF',
-	Tab: '\u0009',
-	target: '\u2316',
-	Tau: '\u03A4',
-	tau: '\u03C4',
-	tbrk: '\u23B4',
-	Tcaron: '\u0164',
-	tcaron: '\u0165',
-	Tcedil: '\u0162',
-	tcedil: '\u0163',
-	Tcy: '\u0422',
-	tcy: '\u0442',
-	tdot: '\u20DB',
-	telrec: '\u2315',
-	Tfr: '\uD835\uDD17',
-	tfr: '\uD835\uDD31',
-	there4: '\u2234',
-	Therefore: '\u2234',
-	therefore: '\u2234',
-	Theta: '\u0398',
-	theta: '\u03B8',
-	thetasym: '\u03D1',
-	thetav: '\u03D1',
-	thickapprox: '\u2248',
-	thicksim: '\u223C',
-	ThickSpace: '\u205F\u200A',
-	thinsp: '\u2009',
-	ThinSpace: '\u2009',
-	thkap: '\u2248',
-	thksim: '\u223C',
-	THORN: '\u00DE',
-	thorn: '\u00FE',
-	Tilde: '\u223C',
-	tilde: '\u02DC',
-	TildeEqual: '\u2243',
-	TildeFullEqual: '\u2245',
-	TildeTilde: '\u2248',
-	times: '\u00D7',
-	timesb: '\u22A0',
-	timesbar: '\u2A31',
-	timesd: '\u2A30',
-	tint: '\u222D',
-	toea: '\u2928',
-	top: '\u22A4',
-	topbot: '\u2336',
-	topcir: '\u2AF1',
-	Topf: '\uD835\uDD4B',
-	topf: '\uD835\uDD65',
-	topfork: '\u2ADA',
-	tosa: '\u2929',
-	tprime: '\u2034',
-	TRADE: '\u2122',
-	trade: '\u2122',
-	triangle: '\u25B5',
-	triangledown: '\u25BF',
-	triangleleft: '\u25C3',
-	trianglelefteq: '\u22B4',
-	triangleq: '\u225C',
-	triangleright: '\u25B9',
-	trianglerighteq: '\u22B5',
-	tridot: '\u25EC',
-	trie: '\u225C',
-	triminus: '\u2A3A',
-	TripleDot: '\u20DB',
-	triplus: '\u2A39',
-	trisb: '\u29CD',
-	tritime: '\u2A3B',
-	trpezium: '\u23E2',
-	Tscr: '\uD835\uDCAF',
-	tscr: '\uD835\uDCC9',
-	TScy: '\u0426',
-	tscy: '\u0446',
-	TSHcy: '\u040B',
-	tshcy: '\u045B',
-	Tstrok: '\u0166',
-	tstrok: '\u0167',
-	twixt: '\u226C',
-	twoheadleftarrow: '\u219E',
-	twoheadrightarrow: '\u21A0',
-	Uacute: '\u00DA',
-	uacute: '\u00FA',
-	Uarr: '\u219F',
-	uArr: '\u21D1',
-	uarr: '\u2191',
-	Uarrocir: '\u2949',
-	Ubrcy: '\u040E',
-	ubrcy: '\u045E',
-	Ubreve: '\u016C',
-	ubreve: '\u016D',
-	Ucirc: '\u00DB',
-	ucirc: '\u00FB',
-	Ucy: '\u0423',
-	ucy: '\u0443',
-	udarr: '\u21C5',
-	Udblac: '\u0170',
-	udblac: '\u0171',
-	udhar: '\u296E',
-	ufisht: '\u297E',
-	Ufr: '\uD835\uDD18',
-	ufr: '\uD835\uDD32',
-	Ugrave: '\u00D9',
-	ugrave: '\u00F9',
-	uHar: '\u2963',
-	uharl: '\u21BF',
-	uharr: '\u21BE',
-	uhblk: '\u2580',
-	ulcorn: '\u231C',
-	ulcorner: '\u231C',
-	ulcrop: '\u230F',
-	ultri: '\u25F8',
-	Umacr: '\u016A',
-	umacr: '\u016B',
-	uml: '\u00A8',
-	UnderBar: '\u005F',
-	UnderBrace: '\u23DF',
-	UnderBracket: '\u23B5',
-	UnderParenthesis: '\u23DD',
-	Union: '\u22C3',
-	UnionPlus: '\u228E',
-	Uogon: '\u0172',
-	uogon: '\u0173',
-	Uopf: '\uD835\uDD4C',
-	uopf: '\uD835\uDD66',
-	UpArrow: '\u2191',
-	Uparrow: '\u21D1',
-	uparrow: '\u2191',
-	UpArrowBar: '\u2912',
-	UpArrowDownArrow: '\u21C5',
-	UpDownArrow: '\u2195',
-	Updownarrow: '\u21D5',
-	updownarrow: '\u2195',
-	UpEquilibrium: '\u296E',
-	upharpoonleft: '\u21BF',
-	upharpoonright: '\u21BE',
-	uplus: '\u228E',
-	UpperLeftArrow: '\u2196',
-	UpperRightArrow: '\u2197',
-	Upsi: '\u03D2',
-	upsi: '\u03C5',
-	upsih: '\u03D2',
-	Upsilon: '\u03A5',
-	upsilon: '\u03C5',
-	UpTee: '\u22A5',
-	UpTeeArrow: '\u21A5',
-	upuparrows: '\u21C8',
-	urcorn: '\u231D',
-	urcorner: '\u231D',
-	urcrop: '\u230E',
-	Uring: '\u016E',
-	uring: '\u016F',
-	urtri: '\u25F9',
-	Uscr: '\uD835\uDCB0',
-	uscr: '\uD835\uDCCA',
-	utdot: '\u22F0',
-	Utilde: '\u0168',
-	utilde: '\u0169',
-	utri: '\u25B5',
-	utrif: '\u25B4',
-	uuarr: '\u21C8',
-	Uuml: '\u00DC',
-	uuml: '\u00FC',
-	uwangle: '\u29A7',
-	vangrt: '\u299C',
-	varepsilon: '\u03F5',
-	varkappa: '\u03F0',
-	varnothing: '\u2205',
-	varphi: '\u03D5',
-	varpi: '\u03D6',
-	varpropto: '\u221D',
-	vArr: '\u21D5',
-	varr: '\u2195',
-	varrho: '\u03F1',
-	varsigma: '\u03C2',
-	varsubsetneq: '\u228A\uFE00',
-	varsubsetneqq: '\u2ACB\uFE00',
-	varsupsetneq: '\u228B\uFE00',
-	varsupsetneqq: '\u2ACC\uFE00',
-	vartheta: '\u03D1',
-	vartriangleleft: '\u22B2',
-	vartriangleright: '\u22B3',
-	Vbar: '\u2AEB',
-	vBar: '\u2AE8',
-	vBarv: '\u2AE9',
-	Vcy: '\u0412',
-	vcy: '\u0432',
-	VDash: '\u22AB',
-	Vdash: '\u22A9',
-	vDash: '\u22A8',
-	vdash: '\u22A2',
-	Vdashl: '\u2AE6',
-	Vee: '\u22C1',
-	vee: '\u2228',
-	veebar: '\u22BB',
-	veeeq: '\u225A',
-	vellip: '\u22EE',
-	Verbar: '\u2016',
-	verbar: '\u007C',
-	Vert: '\u2016',
-	vert: '\u007C',
-	VerticalBar: '\u2223',
-	VerticalLine: '\u007C',
-	VerticalSeparator: '\u2758',
-	VerticalTilde: '\u2240',
-	VeryThinSpace: '\u200A',
-	Vfr: '\uD835\uDD19',
-	vfr: '\uD835\uDD33',
-	vltri: '\u22B2',
-	vnsub: '\u2282\u20D2',
-	vnsup: '\u2283\u20D2',
-	Vopf: '\uD835\uDD4D',
-	vopf: '\uD835\uDD67',
-	vprop: '\u221D',
-	vrtri: '\u22B3',
-	Vscr: '\uD835\uDCB1',
-	vscr: '\uD835\uDCCB',
-	vsubnE: '\u2ACB\uFE00',
-	vsubne: '\u228A\uFE00',
-	vsupnE: '\u2ACC\uFE00',
-	vsupne: '\u228B\uFE00',
-	Vvdash: '\u22AA',
-	vzigzag: '\u299A',
-	Wcirc: '\u0174',
-	wcirc: '\u0175',
-	wedbar: '\u2A5F',
-	Wedge: '\u22C0',
-	wedge: '\u2227',
-	wedgeq: '\u2259',
-	weierp: '\u2118',
-	Wfr: '\uD835\uDD1A',
-	wfr: '\uD835\uDD34',
-	Wopf: '\uD835\uDD4E',
-	wopf: '\uD835\uDD68',
-	wp: '\u2118',
-	wr: '\u2240',
-	wreath: '\u2240',
-	Wscr: '\uD835\uDCB2',
-	wscr: '\uD835\uDCCC',
-	xcap: '\u22C2',
-	xcirc: '\u25EF',
-	xcup: '\u22C3',
-	xdtri: '\u25BD',
-	Xfr: '\uD835\uDD1B',
-	xfr: '\uD835\uDD35',
-	xhArr: '\u27FA',
-	xharr: '\u27F7',
-	Xi: '\u039E',
-	xi: '\u03BE',
-	xlArr: '\u27F8',
-	xlarr: '\u27F5',
-	xmap: '\u27FC',
-	xnis: '\u22FB',
-	xodot: '\u2A00',
-	Xopf: '\uD835\uDD4F',
-	xopf: '\uD835\uDD69',
-	xoplus: '\u2A01',
-	xotime: '\u2A02',
-	xrArr: '\u27F9',
-	xrarr: '\u27F6',
-	Xscr: '\uD835\uDCB3',
-	xscr: '\uD835\uDCCD',
-	xsqcup: '\u2A06',
-	xuplus: '\u2A04',
-	xutri: '\u25B3',
-	xvee: '\u22C1',
-	xwedge: '\u22C0',
-	Yacute: '\u00DD',
-	yacute: '\u00FD',
-	YAcy: '\u042F',
-	yacy: '\u044F',
-	Ycirc: '\u0176',
-	ycirc: '\u0177',
-	Ycy: '\u042B',
-	ycy: '\u044B',
-	yen: '\u00A5',
-	Yfr: '\uD835\uDD1C',
-	yfr: '\uD835\uDD36',
-	YIcy: '\u0407',
-	yicy: '\u0457',
-	Yopf: '\uD835\uDD50',
-	yopf: '\uD835\uDD6A',
-	Yscr: '\uD835\uDCB4',
-	yscr: '\uD835\uDCCE',
-	YUcy: '\u042E',
-	yucy: '\u044E',
-	Yuml: '\u0178',
-	yuml: '\u00FF',
-	Zacute: '\u0179',
-	zacute: '\u017A',
-	Zcaron: '\u017D',
-	zcaron: '\u017E',
-	Zcy: '\u0417',
-	zcy: '\u0437',
-	Zdot: '\u017B',
-	zdot: '\u017C',
-	zeetrf: '\u2128',
-	ZeroWidthSpace: '\u200B',
-	Zeta: '\u0396',
-	zeta: '\u03B6',
-	Zfr: '\u2128',
-	zfr: '\uD835\uDD37',
-	ZHcy: '\u0416',
-	zhcy: '\u0436',
-	zigrarr: '\u21DD',
-	Zopf: '\u2124',
-	zopf: '\uD835\uDD6B',
-	Zscr: '\uD835\uDCB5',
-	zscr: '\uD835\uDCCF',
-	zwj: '\u200D',
-	zwnj: '\u200C',
+       lt: '<',
+       gt: '>',
+       amp: '&',
+       quot: '"',
+       apos: "'",
+       Agrave: "À",
+       Aacute: "Á",
+       Acirc: "Â",
+       Atilde: "Ã",
+       Auml: "Ä",
+       Aring: "Å",
+       AElig: "Æ",
+       Ccedil: "Ç",
+       Egrave: "È",
+       Eacute: "É",
+       Ecirc: "Ê",
+       Euml: "Ë",
+       Igrave: "Ì",
+       Iacute: "Í",
+       Icirc: "Î",
+       Iuml: "Ï",
+       ETH: "Ð",
+       Ntilde: "Ñ",
+       Ograve: "Ò",
+       Oacute: "Ó",
+       Ocirc: "Ô",
+       Otilde: "Õ",
+       Ouml: "Ö",
+       Oslash: "Ø",
+       Ugrave: "Ù",
+       Uacute: "Ú",
+       Ucirc: "Û",
+       Uuml: "Ü",
+       Yacute: "Ý",
+       THORN: "Þ",
+       szlig: "ß",
+       agrave: "à",
+       aacute: "á",
+       acirc: "â",
+       atilde: "ã",
+       auml: "ä",
+       aring: "å",
+       aelig: "æ",
+       ccedil: "ç",
+       egrave: "è",
+       eacute: "é",
+       ecirc: "ê",
+       euml: "ë",
+       igrave: "ì",
+       iacute: "í",
+       icirc: "î",
+       iuml: "ï",
+       eth: "ð",
+       ntilde: "ñ",
+       ograve: "ò",
+       oacute: "ó",
+       ocirc: "ô",
+       otilde: "õ",
+       ouml: "ö",
+       oslash: "ø",
+       ugrave: "ù",
+       uacute: "ú",
+       ucirc: "û",
+       uuml: "ü",
+       yacute: "ý",
+       thorn: "þ",
+       yuml: "ÿ",
+       nbsp: "\u00a0",
+       iexcl: "¡",
+       cent: "¢",
+       pound: "£",
+       curren: "¤",
+       yen: "¥",
+       brvbar: "¦",
+       sect: "§",
+       uml: "¨",
+       copy: "©",
+       ordf: "ª",
+       laquo: "«",
+       not: "¬",
+       shy: "­­",
+       reg: "®",
+       macr: "¯",
+       deg: "°",
+       plusmn: "±",
+       sup2: "²",
+       sup3: "³",
+       acute: "´",
+       micro: "µ",
+       para: "¶",
+       middot: "·",
+       cedil: "¸",
+       sup1: "¹",
+       ordm: "º",
+       raquo: "»",
+       frac14: "¼",
+       frac12: "½",
+       frac34: "¾",
+       iquest: "¿",
+       times: "×",
+       divide: "÷",
+       forall: "∀",
+       part: "∂",
+       exist: "∃",
+       empty: "∅",
+       nabla: "∇",
+       isin: "∈",
+       notin: "∉",
+       ni: "∋",
+       prod: "∏",
+       sum: "∑",
+       minus: "−",
+       lowast: "∗",
+       radic: "√",
+       prop: "∝",
+       infin: "∞",
+       ang: "∠",
+       and: "∧",
+       or: "∨",
+       cap: "∩",
+       cup: "∪",
+       'int': "∫",
+       there4: "∴",
+       sim: "∼",
+       cong: "≅",
+       asymp: "≈",
+       ne: "≠",
+       equiv: "≡",
+       le: "≤",
+       ge: "≥",
+       sub: "⊂",
+       sup: "⊃",
+       nsub: "⊄",
+       sube: "⊆",
+       supe: "⊇",
+       oplus: "⊕",
+       otimes: "⊗",
+       perp: "⊥",
+       sdot: "⋅",
+       Alpha: "Α",
+       Beta: "Β",
+       Gamma: "Γ",
+       Delta: "Δ",
+       Epsilon: "Ε",
+       Zeta: "Ζ",
+       Eta: "Η",
+       Theta: "Θ",
+       Iota: "Ι",
+       Kappa: "Κ",
+       Lambda: "Λ",
+       Mu: "Μ",
+       Nu: "Ν",
+       Xi: "Ξ",
+       Omicron: "Ο",
+       Pi: "Π",
+       Rho: "Ρ",
+       Sigma: "Σ",
+       Tau: "Τ",
+       Upsilon: "Υ",
+       Phi: "Φ",
+       Chi: "Χ",
+       Psi: "Ψ",
+       Omega: "Ω",
+       alpha: "α",
+       beta: "β",
+       gamma: "γ",
+       delta: "δ",
+       epsilon: "ε",
+       zeta: "ζ",
+       eta: "η",
+       theta: "θ",
+       iota: "ι",
+       kappa: "κ",
+       lambda: "λ",
+       mu: "μ",
+       nu: "ν",
+       xi: "ξ",
+       omicron: "ο",
+       pi: "π",
+       rho: "ρ",
+       sigmaf: "ς",
+       sigma: "σ",
+       tau: "τ",
+       upsilon: "υ",
+       phi: "φ",
+       chi: "χ",
+       psi: "ψ",
+       omega: "ω",
+       thetasym: "ϑ",
+       upsih: "ϒ",
+       piv: "ϖ",
+       OElig: "Œ",
+       oelig: "œ",
+       Scaron: "Š",
+       scaron: "š",
+       Yuml: "Ÿ",
+       fnof: "ƒ",
+       circ: "ˆ",
+       tilde: "˜",
+       ensp: " ",
+       emsp: " ",
+       thinsp: " ",
+       zwnj: "‌",
+       zwj: "‍",
+       lrm: "‎",
+       rlm: "‏",
+       ndash: "–",
+       mdash: "—",
+       lsquo: "‘",
+       rsquo: "’",
+       sbquo: "‚",
+       ldquo: "“",
+       rdquo: "”",
+       bdquo: "„",
+       dagger: "†",
+       Dagger: "‡",
+       bull: "•",
+       hellip: "…",
+       permil: "‰",
+       prime: "′",
+       Prime: "″",
+       lsaquo: "‹",
+       rsaquo: "›",
+       oline: "‾",
+       euro: "€",
+       trade: "™",
+       larr: "←",
+       uarr: "↑",
+       rarr: "→",
+       darr: "↓",
+       harr: "↔",
+       crarr: "↵",
+       lceil: "⌈",
+       rceil: "⌉",
+       lfloor: "⌊",
+       rfloor: "⌋",
+       loz: "◊",
+       spades: "♠",
+       clubs: "♣",
+       hearts: "♥",
+       diams: "♦"
 });
 
 /**
  * @deprecated use `HTML_ENTITIES` instead
  * @see HTML_ENTITIES
  */
-exports.entityMap = exports.HTML_ENTITIES;
+exports.entityMap = exports.HTML_ENTITIES
 
 
 /***/ }),
@@ -39558,6 +36916,8 @@ ElementAttributes.prototype = {
 //	getType:function(uri,localName){}
 //	getType:function(i){},
 }
+ParseError.prototype = new Error();
+ParseError.prototype.name = ParseError.name
 
 
 
@@ -40707,6 +38067,15 @@ function once(emitter, name) {
     }
   });
 }
+module.exports = EventEmitter;
+module.exports.once = once;
+
+// Backwards-compat with node 0.10.x
+EventEmitter.EventEmitter = EventEmitter;
+
+EventEmitter.prototype._events = undefined;
+EventEmitter.prototype._eventsCount = 0;
+EventEmitter.prototype._maxListeners = undefined;
 
 function addErrorHandlerIfEventEmitter(emitter, handler, flags) {
   if (typeof emitter.on === 'function') {
@@ -40735,7 +38104,7 @@ function eventTargetAgnosticAddListener(emitter, name, listener, flags) {
   } else {
     throw new TypeError('The "emitter" argument must be of type EventEmitter. Received type ' + typeof emitter);
   }
-}
+});
 
 
 /***/ }),
@@ -40959,7 +38328,8 @@ function populateMaps (extensions, types) {
 }
 
 
-/***/ }),
+      return this;
+    };
 
 /***/ "./node_modules/n3/src/IRIs.js":
 /*!*************************************!*\
@@ -41003,6 +38373,9 @@ const RDF  = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
   },
 });
 
+  var evlistener = events[type];
+  if (evlistener === undefined)
+    return [];
 
 /***/ }),
 
@@ -41015,25 +38388,39 @@ const RDF  = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   BlankNode: () => (/* binding */ BlankNode),
-/* harmony export */   DefaultGraph: () => (/* binding */ DefaultGraph),
-/* harmony export */   Literal: () => (/* binding */ Literal),
-/* harmony export */   NamedNode: () => (/* binding */ NamedNode),
-/* harmony export */   Quad: () => (/* binding */ Quad),
-/* harmony export */   Term: () => (/* binding */ Term),
-/* harmony export */   Triple: () => (/* binding */ Quad),
-/* harmony export */   Variable: () => (/* binding */ Variable),
+/* harmony export */   "BlankNode": () => (/* binding */ BlankNode),
+/* harmony export */   "DefaultGraph": () => (/* binding */ DefaultGraph),
+/* harmony export */   "Literal": () => (/* binding */ Literal),
+/* harmony export */   "NamedNode": () => (/* binding */ NamedNode),
+/* harmony export */   "Quad": () => (/* binding */ Quad),
+/* harmony export */   "Term": () => (/* binding */ Term),
+/* harmony export */   "Triple": () => (/* binding */ Quad),
+/* harmony export */   "Variable": () => (/* binding */ Variable),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
-/* harmony export */   escapeQuotes: () => (/* binding */ escapeQuotes),
-/* harmony export */   termFromId: () => (/* binding */ termFromId),
-/* harmony export */   termToId: () => (/* binding */ termToId),
-/* harmony export */   unescapeQuotes: () => (/* binding */ unescapeQuotes)
+/* harmony export */   "escapeQuotes": () => (/* binding */ escapeQuotes),
+/* harmony export */   "termFromId": () => (/* binding */ termFromId),
+/* harmony export */   "termToId": () => (/* binding */ termToId),
+/* harmony export */   "unescapeQuotes": () => (/* binding */ unescapeQuotes)
 /* harmony export */ });
 /* harmony import */ var _IRIs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./IRIs */ "./node_modules/n3/src/IRIs.js");
 /* harmony import */ var _N3Util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./N3Util */ "./node_modules/n3/src/N3Util.js");
 // N3.js implementations of the RDF/JS core data types
 // See https://github.com/rdfjs/representation-task-force/blob/master/interface-spec.md
 
+/***/ }),
+
+/***/ "./node_modules/mime-db/index.js":
+/*!***************************************!*\
+  !*** ./node_modules/mime-db/index.js ***!
+  \***************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+/*!
+ * mime-db
+ * Copyright(c) 2014 Jonathan Ong
+ * Copyright(c) 2015-2022 Douglas Christopher Wilson
+ * MIT Licensed
+ */
 
 
 const { rdf, xsd } = _IRIs__WEBPACK_IMPORTED_MODULE_0__["default"];
@@ -41043,6 +38430,7 @@ let DEFAULTGRAPH;
 let _blankNodeCounter = 0;
 
 const escapedLiteral = /^"(.*".*)(?="[^"]*$)/;
+const quadId = /^<<("(?:""|[^"])*"[^ ]*|[^ ]+) ("(?:""|[^"])*"[^ ]*|[^ ]+) ("(?:""|[^"])*"[^ ]*|[^ ]+) ?("(?:""|[^"])*"[^ ]*|[^ ]+)?>>$/;
 
 // ## DataFactory singleton
 const DataFactory = {
@@ -41220,12 +38608,9 @@ class DefaultGraph extends Term {
 // ## DefaultGraph singleton
 DEFAULTGRAPH = new DefaultGraph();
 
+
 // ### Constructs a term from the given internal string ID
-// The third 'nested' parameter of this function is to aid
-// with recursion over nested terms. It should not be used
-// by consumers of this library.
-// See https://github.com/rdfjs/N3.js/pull/311#discussion_r1061042725
-function termFromId(id, factory, nested) {
+function termFromId(id, factory) {
   factory = factory || DataFactory;
 
   // Falsy value or empty string indicate the default graph
@@ -41250,28 +38635,21 @@ function termFromId(id, factory, nested) {
     return factory.literal(id.substr(1, endPos - 1),
             id[endPos + 1] === '@' ? id.substr(endPos + 2)
                                    : factory.namedNode(id.substr(endPos + 3)));
-  case '[':
-    id = JSON.parse(id);
-    break;
+  case '<':
+    const components = quadId.exec(id);
+    return factory.quad(
+      termFromId(unescapeQuotes(components[1]), factory),
+      termFromId(unescapeQuotes(components[2]), factory),
+      termFromId(unescapeQuotes(components[3]), factory),
+      components[4] && termFromId(unescapeQuotes(components[4]), factory)
+    );
   default:
-    if (!nested || !Array.isArray(id)) {
-      return factory.namedNode(id);
-    }
+    return factory.namedNode(id);
   }
-  return factory.quad(
-    termFromId(id[0], factory, true),
-    termFromId(id[1], factory, true),
-    termFromId(id[2], factory, true),
-    id[3] && termFromId(id[3], factory, true)
-  );
 }
 
 // ### Constructs an internal string ID from the given term or ID string
-// The third 'nested' parameter of this function is to aid
-// with recursion over nested terms. It should not be used
-// by consumers of this library.
-// See https://github.com/rdfjs/N3.js/pull/311#discussion_r1061042725
-function termToId(term, nested) {
+function termToId(term) {
   if (typeof term === 'string')
     return term;
   if (term instanceof Term && term.termType !== 'Quad')
@@ -41289,15 +38667,17 @@ function termToId(term, nested) {
     term.language ? `@${term.language}` :
       (term.datatype && term.datatype.value !== xsd.string ? `^^${term.datatype.value}` : '')}`;
   case 'Quad':
-    const res = [
-      termToId(term.subject, true),
-      termToId(term.predicate, true),
-      termToId(term.object, true),
-    ];
-    if (!(0,_N3Util__WEBPACK_IMPORTED_MODULE_1__.isDefaultGraph)(term.graph)) {
-      res.push(termToId(term.graph, true));
-    }
-    return nested ? res : JSON.stringify(res);
+    // To identify RDF* quad components, we escape quotes by doubling them.
+    // This avoids the overhead of backslash parsing of Turtle-like syntaxes.
+    return `<<${
+        escapeQuotes(termToId(term.subject))
+      } ${
+        escapeQuotes(termToId(term.predicate))
+      } ${
+        escapeQuotes(termToId(term.object))
+      }${
+        ((0,_N3Util__WEBPACK_IMPORTED_MODULE_1__.isDefaultGraph)(term.graph)) ? '' : ` ${termToId(term.graph)}`
+      }>>`;
   default: throw new Error(`Unexpected termType: ${term.termType}`);
   }
 }
@@ -41421,7 +38801,9 @@ function quad(subject, predicate, object, graph) {
 }
 
 
-/***/ }),
+  get object() {
+    return this._object;
+  }
 
 /***/ "./node_modules/n3/src/N3Lexer.js":
 /*!****************************************!*\
@@ -41439,6 +38821,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var queue_microtask__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(queue_microtask__WEBPACK_IMPORTED_MODULE_0__);
 // **N3Lexer** tokenizes N3 documents.
 
+  // ### Returns whether this object represents the same quad as the other
+  equals(other) {
+    return !!other && this._subject.equals(other.subject)     &&
+                      this._predicate.equals(other.predicate) &&
+                      this._object.equals(other.object)       &&
+                      this._graph.equals(other.graph);
+  }
+}
 
 
 const { xsd } = _IRIs__WEBPACK_IMPORTED_MODULE_1__["default"];
@@ -41739,27 +39129,12 @@ class N3Lexer {
       case ']':
       case '(':
       case ')':
+      case '{':
       case '}':
         if (!this._lineMode) {
           matchLength = 1;
           type = firstChar;
         }
-        break;
-      case '{':
-        // We need at least 2 tokens lookahead to distinguish "{|" and "{ "
-        if (!this._lineMode && input.length >= 2) {
-          // Try to find a quoted triple annotation start
-          if (input[1] === '|')
-            type = '{|', matchLength = 2;
-          else
-            type = firstChar, matchLength = 1;
-        }
-        break;
-      case '|':
-        // We need 2 tokens lookahead to parse "|}"
-        // Try to find a quoted triple annotation end
-        if (input.length >= 2 && input[1] === '}')
-          type = '|}', matchLength = 2;
         break;
 
       default:
@@ -42592,22 +39967,6 @@ class N3Parser {
     case ',':
       next = this._readObject;
       break;
-    // {| means that the current triple is annotated with predicate-object pairs.
-    case '{|':
-      if (!this._supportsRDFStar)
-        return this._error('Unexpected RDF* syntax', token);
-      // Continue using the last triple as quoted triple subject for the predicate-object pairs.
-      const predicate = this._predicate, object = this._object;
-      this._subject = this._quad(subject, predicate, object, this.DEFAULTGRAPH);
-      next = this._readPredicate;
-      break;
-    // |} means that the current quoted triple in annotation syntax is finalized.
-    case '|}':
-      if (this._subject.termType !== 'Quad')
-        return this._error('Unexpected asserted triple closing', token);
-      this._subject = null;
-      next = this._readPunctuation;
-      break;
     default:
       // An entity means this is a quad (only allowed if not already inside a graph)
       if (this._supportsQuads && this._graph === null && (graph = this._readEntity(token)) !== undefined) {
@@ -43065,18 +40424,27 @@ initDataFactory(N3Parser.prototype, _N3DataFactory__WEBPACK_IMPORTED_MODULE_2__[
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   inDefaultGraph: () => (/* binding */ inDefaultGraph),
-/* harmony export */   isBlankNode: () => (/* binding */ isBlankNode),
-/* harmony export */   isDefaultGraph: () => (/* binding */ isDefaultGraph),
-/* harmony export */   isLiteral: () => (/* binding */ isLiteral),
-/* harmony export */   isNamedNode: () => (/* binding */ isNamedNode),
-/* harmony export */   isVariable: () => (/* binding */ isVariable),
-/* harmony export */   prefix: () => (/* binding */ prefix),
-/* harmony export */   prefixes: () => (/* binding */ prefixes)
+/* harmony export */   "inDefaultGraph": () => (/* binding */ inDefaultGraph),
+/* harmony export */   "isBlankNode": () => (/* binding */ isBlankNode),
+/* harmony export */   "isDefaultGraph": () => (/* binding */ isDefaultGraph),
+/* harmony export */   "isLiteral": () => (/* binding */ isLiteral),
+/* harmony export */   "isNamedNode": () => (/* binding */ isNamedNode),
+/* harmony export */   "isVariable": () => (/* binding */ isVariable),
+/* harmony export */   "prefix": () => (/* binding */ prefix),
+/* harmony export */   "prefixes": () => (/* binding */ prefixes)
 /* harmony export */ });
 /* harmony import */ var _N3DataFactory__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./N3DataFactory */ "./node_modules/n3/src/N3DataFactory.js");
 // **N3Util** provides N3 utility functions.
 
+  // ### `_readPrefixIRI` reads the IRI of a prefix declaration
+  _readPrefixIRI(token) {
+    if (token.type !== 'IRI')
+      return this._error(`Expected IRI to follow prefix "${this._prefix}:"`, token);
+    const prefixNode = this._readEntity(token);
+    this._prefixes[this._prefix] = prefixNode.value;
+    this._prefixCallback(this._prefix, prefixNode);
+    return this._readDeclarationPunctuation;
+  }
 
 
 // Tests whether the given term represents an IRI
@@ -43143,7 +40511,23 @@ function prefixes(defaultPrefixes, factory) {
 }
 
 
-/***/ }),
+  // ### `_readForwardPath` reads a '!' path
+  _readForwardPath(token) {
+    let subject, predicate;
+    const object = this._blankNode();
+    // The next token is the predicate
+    if ((predicate = this._readEntity(token)) === undefined)
+      return;
+    // If we were reading a subject, replace the subject by the path's object
+    if (this._predicate === null)
+      subject = this._subject, this._subject = object;
+    // If we were reading an object, replace the subject by the path's object
+    else
+      subject = this._object,  this._object  = object;
+    // Emit the path's current quad and read its next section
+    this._emit(subject, predicate, object, this._graph);
+    return this._readPath;
+  }
 
 /***/ "./node_modules/querystring/decode.js":
 /*!********************************************!*\
@@ -43173,6 +40557,25 @@ function prefixes(defaultPrefixes, factory) {
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+  // ### `_readRDFStarTail` reads the end of a nested RDF* triple
+  _readRDFStarTail(token) {
+    if (token.type !== '>>')
+      return this._error(`Expected >> but got ${token.type}`, token);
+    // Read the quad and restore the previous context
+    const quad = this._quad(this._subject, this._predicate, this._object,
+      this._graph || this.DEFAULTGRAPH);
+    this._restoreContext('<<', token);
+    // If the triple was the subject, continue by reading the predicate.
+    if (this._subject === null) {
+      this._subject = quad;
+      return this._readPredicate;
+    }
+    // If the triple was the object, read context end.
+    else {
+      this._object = quad;
+      return this._getContextEndReader();
+    }
+  }
 
 
 // If obj.hasOwnProperty has been overridden, then calling
@@ -43318,13 +40721,29 @@ module.exports = function(obj, sep, eq, name) {
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   inDefaultGraph: () => (/* binding */ inDefaultGraph),
+/* harmony export */   isBlankNode: () => (/* binding */ isBlankNode),
+/* harmony export */   isDefaultGraph: () => (/* binding */ isDefaultGraph),
+/* harmony export */   isLiteral: () => (/* binding */ isLiteral),
+/* harmony export */   isNamedNode: () => (/* binding */ isNamedNode),
+/* harmony export */   isVariable: () => (/* binding */ isVariable),
+/* harmony export */   prefix: () => (/* binding */ prefix),
+/* harmony export */   prefixes: () => (/* binding */ prefixes)
+/* harmony export */ });
+/* harmony import */ var _N3DataFactory__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./N3DataFactory */ "./node_modules/n3/src/N3DataFactory.js");
+// **N3Util** provides N3 utility functions.
 
 
 exports.decode = exports.parse = __webpack_require__(/*! ./decode */ "./node_modules/querystring/decode.js");
 exports.encode = exports.stringify = __webpack_require__(/*! ./encode */ "./node_modules/querystring/encode.js");
 
 
-/***/ }),
+// Tests whether the given term represents an IRI
+function isNamedNode(term) {
+  return !!term && term.termType === 'NamedNode';
+}
 
 /***/ "./node_modules/queue-microtask/index.js":
 /*!***********************************************!*\
@@ -43521,7 +40940,7 @@ var ClassOrder = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Collection),
-/* harmony export */   fromValue: () => (/* binding */ fromValue)
+/* harmony export */   "fromValue": () => (/* binding */ fromValue)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
@@ -43701,7 +41120,7 @@ var Collection = /*#__PURE__*/function (_Node) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ DefaultGraph),
-/* harmony export */   isDefaultGraph: () => (/* binding */ isDefaultGraph)
+/* harmony export */   "isDefaultGraph": () => (/* binding */ isDefaultGraph)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
@@ -43825,7 +41244,7 @@ var Empty = /*#__PURE__*/function (_Node) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
-/* harmony export */   defaultGraphURI: () => (/* reexport safe */ _utils_default_graph_uri__WEBPACK_IMPORTED_MODULE_1__.defaultGraphURI)
+/* harmony export */   "defaultGraphURI": () => (/* reexport safe */ _utils_default_graph_uri__WEBPACK_IMPORTED_MODULE_1__.defaultGraphURI)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
 /* harmony import */ var _blank_node__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../blank-node */ "./node_modules/rdflib/esm/blank-node.js");
@@ -44084,7 +41503,7 @@ var ExtendedTermFactory = _objectSpread(_objectSpread({}, _canonical_data_factor
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   Feature: () => (/* binding */ Feature)
+/* harmony export */   "Feature": () => (/* binding */ Feature)
 /* harmony export */ });
 /** A set of features that may be supported by a Data Factory */
 
@@ -44502,6 +41921,10 @@ var XMLHandler = /*#__PURE__*/function (_Handler3) {
           var _xhtmlHandler = new XHTMLHandler(this.response, dom);
           return _xhtmlHandler.parse(fetcher, responseText, options);
         }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
       }
 
       // At this point we should check the namespace document (cache it!) and
@@ -45288,6 +42711,7 @@ var Fetcher = /*#__PURE__*/function () {
       } else {
         kb.add(originalUri, predicate, obj, why);
       }
+      return undefined;
     }
   }, {
     key: "parseLinkHeader",
@@ -45321,6 +42745,13 @@ var Fetcher = /*#__PURE__*/function () {
           this.linkData(originalUri, rel, href, reqNode);
         }
       }
+      var now = new Date();
+      var timeNow = '[' + now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds() + '] ';
+      kb.add(req, this.ns.rdfs('label'), kb.rdfFactory.literal(timeNow + ' Request for ' + docuri), this.appNode);
+      // We store the docuri as a string, not as a node,
+      // see https://github.com/linkeddata/rdflib.js/pull/427#pullrequestreview-447910061
+      kb.add(req, this.ns.link('requestedURI'), kb.rdfFactory.literal(docuri), this.appNode);
+      kb.add(req, this.ns.link('status'), kb.collection(), this.appNode);
     }
   }, {
     key: "doneFetch",
@@ -46061,6 +43492,7 @@ var Fetcher = /*#__PURE__*/function () {
       } else {
         this.fetchCallbacks[uri].push(callback);
       }
+      return uri;
     }
   }, {
     key: "acceptString",
@@ -46201,7 +43633,6 @@ var Fetcher = /*#__PURE__*/function () {
 Fetcher.HANDLERS = defaultHandlers;
 Fetcher.CONTENT_TYPE_BY_EXT = CONTENT_TYPE_BY_EXT;
 
-/***/ }),
 
 /***/ "./node_modules/rdflib/esm/formula.js":
 /*!********************************************!*\
@@ -46715,6 +44146,11 @@ var Formula = /*#__PURE__*/function (_Node) {
             range = ref1[l];
             types[range.toNT()] = st;
           }
+          return true;
+        } else if ((0,_utils_terms__WEBPACK_IMPORTED_MODULE_16__.isStatement)(s)) {
+          return this.holds(s.subject, s.predicate, s.object, s.graph);
+        } else if (s.statements) {
+          return this.holds(s.statements);
         }
       }
       ref2 = this.statementsMatching(void 0, void 0, subject);
@@ -46858,6 +44294,9 @@ var Formula = /*#__PURE__*/function (_Node) {
         } else if (s.statements) {
           return this.holds(s.statements);
         }
+        if (!n) {
+          tops[k] = v;
+        }
       }
       var st = this.anyStatementMatching(s, p, o, g);
       return st != null;
@@ -46893,6 +44332,7 @@ var Formula = /*#__PURE__*/function (_Node) {
         context.addAll(statements);
         return node;
       }
+      return tops;
     }
 
     /**
@@ -47104,71 +44544,71 @@ var Formula = /*#__PURE__*/function (_Node) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   BlankNode: () => (/* reexport safe */ _blank_node__WEBPACK_IMPORTED_MODULE_10__["default"]),
-/* harmony export */   Collection: () => (/* reexport safe */ _collection__WEBPACK_IMPORTED_MODULE_12__["default"]),
-/* harmony export */   ConnectedStore: () => (/* binding */ ConnectedStore),
-/* harmony export */   DataFactory: () => (/* reexport safe */ _factories_rdflib_data_factory__WEBPACK_IMPORTED_MODULE_7__["default"]),
-/* harmony export */   Empty: () => (/* reexport safe */ _empty__WEBPACK_IMPORTED_MODULE_13__["default"]),
-/* harmony export */   Fetcher: () => (/* reexport safe */ _fetcher__WEBPACK_IMPORTED_MODULE_14__["default"]),
-/* harmony export */   Formula: () => (/* reexport safe */ _formula__WEBPACK_IMPORTED_MODULE_8__["default"]),
-/* harmony export */   IndexedFormula: () => (/* reexport safe */ _store__WEBPACK_IMPORTED_MODULE_15__["default"]),
-/* harmony export */   Literal: () => (/* reexport safe */ _literal__WEBPACK_IMPORTED_MODULE_17__["default"]),
-/* harmony export */   LiveStore: () => (/* binding */ LiveStore),
-/* harmony export */   N3Parser: () => (/* reexport safe */ _n3parser__WEBPACK_IMPORTED_MODULE_19__["default"]),
-/* harmony export */   NamedNode: () => (/* reexport safe */ _named_node__WEBPACK_IMPORTED_MODULE_20__["default"]),
-/* harmony export */   Namespace: () => (/* reexport safe */ _namespace__WEBPACK_IMPORTED_MODULE_21__["default"]),
-/* harmony export */   NextId: () => (/* binding */ NextId),
-/* harmony export */   Node: () => (/* reexport safe */ _node__WEBPACK_IMPORTED_MODULE_9__["default"]),
-/* harmony export */   Query: () => (/* reexport safe */ _query__WEBPACK_IMPORTED_MODULE_23__.Query),
-/* harmony export */   RDFParser: () => (/* reexport safe */ _rdfxmlparser__WEBPACK_IMPORTED_MODULE_26__["default"]),
-/* harmony export */   RDFaProcessor: () => (/* reexport safe */ _rdfaparser__WEBPACK_IMPORTED_MODULE_25__["default"]),
-/* harmony export */   SPARQLToQuery: () => (/* reexport safe */ _sparql_to_query__WEBPACK_IMPORTED_MODULE_29__["default"]),
-/* harmony export */   Serializer: () => (/* reexport safe */ _serializer__WEBPACK_IMPORTED_MODULE_28__["default"]),
-/* harmony export */   Statement: () => (/* reexport safe */ _statement__WEBPACK_IMPORTED_MODULE_31__["default"]),
-/* harmony export */   Store: () => (/* reexport safe */ _store__WEBPACK_IMPORTED_MODULE_15__["default"]),
-/* harmony export */   UpdateManager: () => (/* reexport safe */ _update_manager__WEBPACK_IMPORTED_MODULE_32__["default"]),
-/* harmony export */   UpdatesSocket: () => (/* reexport safe */ _updates_via__WEBPACK_IMPORTED_MODULE_33__.UpdatesSocket),
-/* harmony export */   UpdatesVia: () => (/* reexport safe */ _updates_via__WEBPACK_IMPORTED_MODULE_33__.UpdatesVia),
-/* harmony export */   Util: () => (/* reexport module object */ _utils_js__WEBPACK_IMPORTED_MODULE_35__),
-/* harmony export */   Variable: () => (/* reexport safe */ _variable__WEBPACK_IMPORTED_MODULE_36__["default"]),
-/* harmony export */   blankNode: () => (/* binding */ blankNode),
-/* harmony export */   defaultGraph: () => (/* binding */ defaultGraph),
-/* harmony export */   fetcher: () => (/* binding */ fetcher),
-/* harmony export */   fromNT: () => (/* binding */ fromNT),
-/* harmony export */   graph: () => (/* binding */ graph),
-/* harmony export */   isBlankNode: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isBlankNode),
-/* harmony export */   isCollection: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isCollection),
-/* harmony export */   isGraph: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isGraph),
-/* harmony export */   isLiteral: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isLiteral),
-/* harmony export */   isNamedNode: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isNamedNode),
-/* harmony export */   isPredicate: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isPredicate),
-/* harmony export */   isQuad: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isQuad),
-/* harmony export */   isRDFObject: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isRDFObject),
-/* harmony export */   isRDFlibObject: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isRDFlibObject),
-/* harmony export */   isRDFlibPredicate: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isRDFlibPredicate),
-/* harmony export */   isRDFlibSubject: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isRDFlibSubject),
-/* harmony export */   isStatement: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isStatement),
-/* harmony export */   isStore: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isStore),
-/* harmony export */   isSubject: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isSubject),
-/* harmony export */   isTerm: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isTerm),
-/* harmony export */   isVariable: () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isVariable),
-/* harmony export */   jsonParser: () => (/* reexport safe */ _jsonparser__WEBPACK_IMPORTED_MODULE_16__["default"]),
-/* harmony export */   lit: () => (/* binding */ lit),
-/* harmony export */   literal: () => (/* binding */ literal),
-/* harmony export */   log: () => (/* reexport safe */ _log__WEBPACK_IMPORTED_MODULE_18__["default"]),
-/* harmony export */   namedNode: () => (/* binding */ namedNode),
-/* harmony export */   parse: () => (/* reexport safe */ _parse__WEBPACK_IMPORTED_MODULE_22__["default"]),
-/* harmony export */   quad: () => (/* binding */ quad),
-/* harmony export */   queryToSPARQL: () => (/* reexport safe */ _query_to_sparql__WEBPACK_IMPORTED_MODULE_24__["default"]),
-/* harmony export */   serialize: () => (/* reexport safe */ _serialize__WEBPACK_IMPORTED_MODULE_27__["default"]),
-/* harmony export */   sparqlUpdateParser: () => (/* reexport safe */ _patch_parser__WEBPACK_IMPORTED_MODULE_30__["default"]),
-/* harmony export */   st: () => (/* binding */ st),
-/* harmony export */   sym: () => (/* binding */ namedNode),
-/* harmony export */   term: () => (/* binding */ term),
-/* harmony export */   termValue: () => (/* reexport safe */ _utils_termValue__WEBPACK_IMPORTED_MODULE_37__.termValue),
-/* harmony export */   triple: () => (/* binding */ triple),
-/* harmony export */   uri: () => (/* reexport module object */ _uri__WEBPACK_IMPORTED_MODULE_34__),
-/* harmony export */   variable: () => (/* binding */ variable)
+/* harmony export */   "BlankNode": () => (/* reexport safe */ _blank_node__WEBPACK_IMPORTED_MODULE_10__["default"]),
+/* harmony export */   "Collection": () => (/* reexport safe */ _collection__WEBPACK_IMPORTED_MODULE_12__["default"]),
+/* harmony export */   "ConnectedStore": () => (/* binding */ ConnectedStore),
+/* harmony export */   "DataFactory": () => (/* reexport safe */ _factories_rdflib_data_factory__WEBPACK_IMPORTED_MODULE_7__["default"]),
+/* harmony export */   "Empty": () => (/* reexport safe */ _empty__WEBPACK_IMPORTED_MODULE_13__["default"]),
+/* harmony export */   "Fetcher": () => (/* reexport safe */ _fetcher__WEBPACK_IMPORTED_MODULE_14__["default"]),
+/* harmony export */   "Formula": () => (/* reexport safe */ _formula__WEBPACK_IMPORTED_MODULE_8__["default"]),
+/* harmony export */   "IndexedFormula": () => (/* reexport safe */ _store__WEBPACK_IMPORTED_MODULE_15__["default"]),
+/* harmony export */   "Literal": () => (/* reexport safe */ _literal__WEBPACK_IMPORTED_MODULE_17__["default"]),
+/* harmony export */   "LiveStore": () => (/* binding */ LiveStore),
+/* harmony export */   "N3Parser": () => (/* reexport safe */ _n3parser__WEBPACK_IMPORTED_MODULE_19__["default"]),
+/* harmony export */   "NamedNode": () => (/* reexport safe */ _named_node__WEBPACK_IMPORTED_MODULE_20__["default"]),
+/* harmony export */   "Namespace": () => (/* reexport safe */ _namespace__WEBPACK_IMPORTED_MODULE_21__["default"]),
+/* harmony export */   "NextId": () => (/* binding */ NextId),
+/* harmony export */   "Node": () => (/* reexport safe */ _node__WEBPACK_IMPORTED_MODULE_9__["default"]),
+/* harmony export */   "Query": () => (/* reexport safe */ _query__WEBPACK_IMPORTED_MODULE_23__.Query),
+/* harmony export */   "RDFParser": () => (/* reexport safe */ _rdfxmlparser__WEBPACK_IMPORTED_MODULE_26__["default"]),
+/* harmony export */   "RDFaProcessor": () => (/* reexport safe */ _rdfaparser__WEBPACK_IMPORTED_MODULE_25__["default"]),
+/* harmony export */   "SPARQLToQuery": () => (/* reexport safe */ _sparql_to_query__WEBPACK_IMPORTED_MODULE_29__["default"]),
+/* harmony export */   "Serializer": () => (/* reexport safe */ _serializer__WEBPACK_IMPORTED_MODULE_28__["default"]),
+/* harmony export */   "Statement": () => (/* reexport safe */ _statement__WEBPACK_IMPORTED_MODULE_31__["default"]),
+/* harmony export */   "Store": () => (/* reexport safe */ _store__WEBPACK_IMPORTED_MODULE_15__["default"]),
+/* harmony export */   "UpdateManager": () => (/* reexport safe */ _update_manager__WEBPACK_IMPORTED_MODULE_32__["default"]),
+/* harmony export */   "UpdatesSocket": () => (/* reexport safe */ _updates_via__WEBPACK_IMPORTED_MODULE_33__.UpdatesSocket),
+/* harmony export */   "UpdatesVia": () => (/* reexport safe */ _updates_via__WEBPACK_IMPORTED_MODULE_33__.UpdatesVia),
+/* harmony export */   "Util": () => (/* reexport module object */ _utils_js__WEBPACK_IMPORTED_MODULE_35__),
+/* harmony export */   "Variable": () => (/* reexport safe */ _variable__WEBPACK_IMPORTED_MODULE_36__["default"]),
+/* harmony export */   "blankNode": () => (/* binding */ blankNode),
+/* harmony export */   "defaultGraph": () => (/* binding */ defaultGraph),
+/* harmony export */   "fetcher": () => (/* binding */ fetcher),
+/* harmony export */   "fromNT": () => (/* binding */ fromNT),
+/* harmony export */   "graph": () => (/* binding */ graph),
+/* harmony export */   "isBlankNode": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isBlankNode),
+/* harmony export */   "isCollection": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isCollection),
+/* harmony export */   "isGraph": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isGraph),
+/* harmony export */   "isLiteral": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isLiteral),
+/* harmony export */   "isNamedNode": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isNamedNode),
+/* harmony export */   "isPredicate": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isPredicate),
+/* harmony export */   "isQuad": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isQuad),
+/* harmony export */   "isRDFObject": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isRDFObject),
+/* harmony export */   "isRDFlibObject": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isRDFlibObject),
+/* harmony export */   "isRDFlibPredicate": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isRDFlibPredicate),
+/* harmony export */   "isRDFlibSubject": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isRDFlibSubject),
+/* harmony export */   "isStatement": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isStatement),
+/* harmony export */   "isStore": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isStore),
+/* harmony export */   "isSubject": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isSubject),
+/* harmony export */   "isTerm": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isTerm),
+/* harmony export */   "isVariable": () => (/* reexport safe */ _utils_terms__WEBPACK_IMPORTED_MODULE_11__.isVariable),
+/* harmony export */   "jsonParser": () => (/* reexport safe */ _jsonparser__WEBPACK_IMPORTED_MODULE_16__["default"]),
+/* harmony export */   "lit": () => (/* binding */ lit),
+/* harmony export */   "literal": () => (/* binding */ literal),
+/* harmony export */   "log": () => (/* reexport safe */ _log__WEBPACK_IMPORTED_MODULE_18__["default"]),
+/* harmony export */   "namedNode": () => (/* binding */ namedNode),
+/* harmony export */   "parse": () => (/* reexport safe */ _parse__WEBPACK_IMPORTED_MODULE_22__["default"]),
+/* harmony export */   "quad": () => (/* binding */ quad),
+/* harmony export */   "queryToSPARQL": () => (/* reexport safe */ _query_to_sparql__WEBPACK_IMPORTED_MODULE_24__["default"]),
+/* harmony export */   "serialize": () => (/* reexport safe */ _serialize__WEBPACK_IMPORTED_MODULE_27__["default"]),
+/* harmony export */   "sparqlUpdateParser": () => (/* reexport safe */ _patch_parser__WEBPACK_IMPORTED_MODULE_30__["default"]),
+/* harmony export */   "st": () => (/* binding */ st),
+/* harmony export */   "sym": () => (/* binding */ namedNode),
+/* harmony export */   "term": () => (/* binding */ term),
+/* harmony export */   "termValue": () => (/* reexport safe */ _utils_termValue__WEBPACK_IMPORTED_MODULE_37__.termValue),
+/* harmony export */   "triple": () => (/* binding */ triple),
+/* harmony export */   "uri": () => (/* reexport module object */ _uri__WEBPACK_IMPORTED_MODULE_34__),
+/* harmony export */   "variable": () => (/* binding */ variable)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
@@ -47232,7 +44672,7 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 
 
-
+/***/ }),
 
 
 
@@ -47303,7 +44743,6 @@ var LiveStore = /*#__PURE__*/function (_ConnectedStore) {
   return (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_0__["default"])(LiveStore);
 }(ConnectedStore);
 
-/***/ }),
 
 /***/ "./node_modules/rdflib/esm/jsonldparser.js":
 /*!*************************************************!*\
@@ -47315,7 +44754,7 @@ var LiveStore = /*#__PURE__*/function (_ConnectedStore) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ jsonldParser),
-/* harmony export */   jsonldObjectToTerm: () => (/* binding */ jsonldObjectToTerm)
+/* harmony export */   "jsonldObjectToTerm": () => (/* binding */ jsonldObjectToTerm)
 /* harmony export */ });
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils */ "./node_modules/rdflib/esm/utils.js");
 
@@ -47527,9 +44966,9 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   convertFirstRestNil: () => (/* binding */ convertFirstRestNil),
-/* harmony export */   substituteInDoc: () => (/* binding */ substituteInDoc),
-/* harmony export */   substituteNillsInDoc: () => (/* binding */ substituteNillsInDoc)
+/* harmony export */   "convertFirstRestNil": () => (/* binding */ convertFirstRestNil),
+/* harmony export */   "substituteInDoc": () => (/* binding */ substituteInDoc),
+/* harmony export */   "substituteNillsInDoc": () => (/* binding */ substituteNillsInDoc)
 /* harmony export */ });
 /* harmony import */ var _collection__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./collection */ "./node_modules/rdflib/esm/collection.js");
 /* harmony import */ var _statement__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./statement */ "./node_modules/rdflib/esm/statement.js");
@@ -47957,7 +45396,7 @@ var log = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   SinkParser: () => (/* binding */ SinkParser),
+/* harmony export */   "SinkParser": () => (/* binding */ SinkParser),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
@@ -49577,6 +47016,15 @@ var NamedNode = /*#__PURE__*/function (_Node) {
     }
     return _this;
   }
+  function bindingsDebug(nbs) {
+    var str = 'Bindings: ';
+    var i;
+    var n = nbs.length;
+    for (i = 0; i < n; i++) {
+      str += bindingDebug(nbs[i][0]) + ';\n\t';
+    }
+    return str;
+  } // bindingsDebug
 
   /**
    * Returns an $rdf node for the containing directory, ending in slash.
@@ -50013,6 +47461,7 @@ function parse(str, kb, base) {
     } else {
       return;
     }
+    return c;
   }
   function executeErrorCallback(e) {
     if (
@@ -50248,7 +47697,10 @@ function queryToSPARQL(query) {
   return getSPARQL(query);
 }
 
-/***/ }),
+    var item;
+    var i;
+    var n = pattern.length;
+    // log.debug(level + "Match "+n+" left, bs so far:"+bindingDebug(bindingsSoFar))
 
 /***/ "./node_modules/rdflib/esm/query.js":
 /*!******************************************!*\
@@ -50259,8 +47711,8 @@ function queryToSPARQL(query) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   Query: () => (/* binding */ Query),
-/* harmony export */   indexedFormulaQuery: () => (/* binding */ indexedFormulaQuery)
+/* harmony export */   "Query": () => (/* binding */ Query),
+/* harmony export */   "indexedFormulaQuery": () => (/* binding */ indexedFormulaQuery)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
@@ -50292,6 +47744,22 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+  var constraintsSatisfied = function constraintsSatisfied(bindings, constraints) {
+    var res = true;
+    var x;
+    var test;
+    for (x in bindings) {
+      if (bindings.hasOwnProperty(x)) {
+        if (constraints[x]) {
+          test = constraints[x].test;
+          if (test && !test(bindings[x])) {
+            res = false;
+          }
+        }
+      }
+    }
+    return res;
+  };
 
 
 /**
@@ -50819,7 +48287,7 @@ function indexedFormulaQuery(myQuery, callback, fetcher, onDone) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ RDFaProcessor),
-/* harmony export */   parseRDFaDOM: () => (/* binding */ parseRDFaDOM)
+/* harmony export */   "parseRDFaDOM": () => (/* binding */ parseRDFaDOM)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
@@ -50850,6 +48318,58 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+        base = node.baseURI;
+        node = node.documentElement;
+        if (!node.baseURI) {
+          node.baseURI = base;
+        }
+        this.setContext(node);
+      } else if (node.parentNode.nodeType === Node.DOCUMENT_NODE) {
+        this.setContext(node);
+      }
+      var queue = [];
+      // Fix for Firefox that includes the hash in the base URI
+      var removeHash = function removeHash(baseURI) {
+        // Fix for undefined baseURI property
+        if (!baseURI && options && options.baseURI) {
+          return options.baseURI;
+        }
+        var hash = baseURI.indexOf('#');
+        if (hash >= 0) {
+          baseURI = baseURI.substring(0, hash);
+        }
+        if (options && options.baseURIMap) {
+          baseURI = options.baseURIMap(baseURI);
+        }
+        return baseURI;
+      };
+      queue.push({
+        current: node,
+        context: this.push(null, removeHash(node.baseURI))
+      });
+      while (queue.length > 0) {
+        var item = queue.shift();
+        if (item.parent) {
+          // Sequence Step 14: list triple generation
+          if (item.context.parent && item.context.parent.listMapping === item.listMapping) {
+            // Skip a child context with exactly the same mapping
+            continue;
+          }
+          // console.log("Generating lists for "+item.subject+", tag "+item.parent.localName)
+          for (var _predicate in item.listMapping) {
+            var list = item.listMapping[_predicate];
+            if (list.length === 0) {
+              this.addTriple(item.parent, item.subject, _predicate, {
+                type: RDFaProcessor.objectURI,
+                value: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'
+              });
+              continue;
+            }
+            var bnodes = [];
+            for (var _i = 0; _i < list.length; _i++) {
+              bnodes.push(this.newBlankNode());
+              // this.newSubject(item.parent,bnodes[i])
+            }
 
 if (typeof Node === 'undefined') {
   //  @@@@@@ Global. Interface to xmldom.
@@ -52507,7 +50027,7 @@ contentType, callback, options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   Serializer: () => (/* binding */ Serializer),
+/* harmony export */   "Serializer": () => (/* binding */ Serializer),
 /* harmony export */   "default": () => (/* binding */ createSerializer)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
@@ -52806,7 +50326,7 @@ var Serializer = /*#__PURE__*/function () {
         // Unicode encoding NTriples style
         uri = backslashUify(uri);
       } else {
-        uri = hexify(decodeURI(uri));
+        uri = hexify(uri);
       }
       return '<' + uri + '>';
     }
@@ -53821,6 +51341,9 @@ function SPARQLToQuery(SPARQL, testMode, kb) {
         _log__WEBPACK_IMPORTED_MODULE_0__["default"].warn('Incorrect SPARQL variable in SELECT: ' + input[x]);
       }
     }
+    token2 = replaceKeywords(token2);
+    _log__WEBPACK_IMPORTED_MODULE_0__["default"].info('SPARQL Tokens: ' + token2);
+    return token2;
   }
   function getPrefixDeclarations(input) {
     var prefInd = arrayIndicesOf('PREFIX', input);
@@ -54215,7 +51738,7 @@ var Statement = /*#__PURE__*/function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ IndexedFormula),
-/* harmony export */   defaultGraphURI: () => (/* reexport safe */ _factories_canonical_data_factory__WEBPACK_IMPORTED_MODULE_7__.defaultGraphURI)
+/* harmony export */   "defaultGraphURI": () => (/* reexport safe */ _factories_canonical_data_factory__WEBPACK_IMPORTED_MODULE_7__.defaultGraphURI)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
@@ -55416,27 +52939,27 @@ IndexedFormula.handleRDFType = handleRDFType;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   BlankNodeTermType: () => (/* binding */ BlankNodeTermType),
-/* harmony export */   CollectionTermType: () => (/* binding */ CollectionTermType),
-/* harmony export */   DefaultGraphTermType: () => (/* binding */ DefaultGraphTermType),
-/* harmony export */   EmptyTermType: () => (/* binding */ EmptyTermType),
-/* harmony export */   GraphTermType: () => (/* binding */ GraphTermType),
-/* harmony export */   HTMLContentType: () => (/* binding */ HTMLContentType),
-/* harmony export */   JSONLDContentType: () => (/* binding */ JSONLDContentType),
-/* harmony export */   LiteralTermType: () => (/* binding */ LiteralTermType),
-/* harmony export */   N3ContentType: () => (/* binding */ N3ContentType),
-/* harmony export */   N3LegacyContentType: () => (/* binding */ N3LegacyContentType),
-/* harmony export */   NQuadsAltContentType: () => (/* binding */ NQuadsAltContentType),
-/* harmony export */   NQuadsContentType: () => (/* binding */ NQuadsContentType),
-/* harmony export */   NTriplesContentType: () => (/* binding */ NTriplesContentType),
-/* harmony export */   NamedNodeTermType: () => (/* binding */ NamedNodeTermType),
-/* harmony export */   RDFXMLContentType: () => (/* binding */ RDFXMLContentType),
-/* harmony export */   SPARQLUpdateContentType: () => (/* binding */ SPARQLUpdateContentType),
-/* harmony export */   SPARQLUpdateSingleMatchContentType: () => (/* binding */ SPARQLUpdateSingleMatchContentType),
-/* harmony export */   TurtleContentType: () => (/* binding */ TurtleContentType),
-/* harmony export */   TurtleLegacyContentType: () => (/* binding */ TurtleLegacyContentType),
-/* harmony export */   VariableTermType: () => (/* binding */ VariableTermType),
-/* harmony export */   XHTMLContentType: () => (/* binding */ XHTMLContentType)
+/* harmony export */   "BlankNodeTermType": () => (/* binding */ BlankNodeTermType),
+/* harmony export */   "CollectionTermType": () => (/* binding */ CollectionTermType),
+/* harmony export */   "DefaultGraphTermType": () => (/* binding */ DefaultGraphTermType),
+/* harmony export */   "EmptyTermType": () => (/* binding */ EmptyTermType),
+/* harmony export */   "GraphTermType": () => (/* binding */ GraphTermType),
+/* harmony export */   "HTMLContentType": () => (/* binding */ HTMLContentType),
+/* harmony export */   "JSONLDContentType": () => (/* binding */ JSONLDContentType),
+/* harmony export */   "LiteralTermType": () => (/* binding */ LiteralTermType),
+/* harmony export */   "N3ContentType": () => (/* binding */ N3ContentType),
+/* harmony export */   "N3LegacyContentType": () => (/* binding */ N3LegacyContentType),
+/* harmony export */   "NQuadsAltContentType": () => (/* binding */ NQuadsAltContentType),
+/* harmony export */   "NQuadsContentType": () => (/* binding */ NQuadsContentType),
+/* harmony export */   "NTriplesContentType": () => (/* binding */ NTriplesContentType),
+/* harmony export */   "NamedNodeTermType": () => (/* binding */ NamedNodeTermType),
+/* harmony export */   "RDFXMLContentType": () => (/* binding */ RDFXMLContentType),
+/* harmony export */   "SPARQLUpdateContentType": () => (/* binding */ SPARQLUpdateContentType),
+/* harmony export */   "SPARQLUpdateSingleMatchContentType": () => (/* binding */ SPARQLUpdateSingleMatchContentType),
+/* harmony export */   "TurtleContentType": () => (/* binding */ TurtleContentType),
+/* harmony export */   "TurtleLegacyContentType": () => (/* binding */ TurtleLegacyContentType),
+/* harmony export */   "VariableTermType": () => (/* binding */ VariableTermType),
+/* harmony export */   "XHTMLContentType": () => (/* binding */ XHTMLContentType)
 /* harmony export */ });
 var NamedNodeTermType = "NamedNode";
 var BlankNodeTermType = "BlankNode";
@@ -55515,15 +53038,40 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+      var openWebsocket = function openWebsocket() {
+        // From https://github.com/solid/solid-spec#live-updates
+        var socket;
+        if (typeof WebSocket !== 'undefined') {
+          socket = new WebSocket(validWssURI);
+        } else if (typeof window !== 'undefined' && window.WebSocket) {
+          socket = window.WebSocket(validWssURI);
+        } else {
+          // console.log('Live update disabled, as WebSocket not supported by platform :-(')
+          return;
+        }
+        socket.onopen = function () {
+          // console.log('    websocket open')
+          retryTimeout = 1500; // reset timeout to fast on success
+          this.send('sub ' + doc.value);
+          if (retries) {
+            // console.log('Web socket has been down, better check for any news.')
+            updater.requestDownstreamAction(doc, theHandler);
+          }
+        };
+        var control = self.patchControlFor(doc);
+        control.upstreamCount = 0;
+        socket.onerror = function onerror(err) {
+          // console.log('Error on Websocket:', err)
+        };
 
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 /* @file Update Manager Class
 **
-** 2007-07-15 original SPARQL Update module by Joe Presbrey <presbrey@mit.edu>
+** 2007-07-15 originall sparl update module by Joe Presbrey <presbrey@mit.edu>
 ** 2010-08-08 TimBL folded in Kenny's WEBDAV
-** 2010-12-07 TimBL added local file write code
+** 2010-12-07 TimBL addred local file write code
 */
 
 
@@ -55589,8 +53137,8 @@ var UpdateManager = /*#__PURE__*/function () {
     }
 
     /** Remove from the store HTTP authorization metadata
-    * The editable function below relies on copies we have in the store
-    * of the results of previous HTTP transactions. However, when
+    * The editble function below relies on copies we have in the store
+    * of the results of previous HTTP transactions. Howver, when
     * the user logs in, then that data misrepresents what would happen
     * if the user tried again.
     */
@@ -55631,7 +53179,7 @@ var UpdateManager = /*#__PURE__*/function () {
      * and local write access is determined by those headers.
      * This async version not only looks at past HTTP requests, it also makes new ones if necessary.
      *
-     * @returns The method string N3PATCH or SPARQL or DAV or
+     * @returns The method string SPARQL or DAV or
      *   LOCALFILE or false if known, undefined if not known.
      */
   }, {
@@ -55743,7 +53291,6 @@ var UpdateManager = /*#__PURE__*/function () {
             if (acceptPatch.length) {
               for (var i = 0; i < acceptPatch.length; i++) {
                 method = acceptPatch[i].value.trim();
-                if (method.indexOf('text/n3') >= 0) return 'N3PATCH';
                 if (method.indexOf('application/sparql-update') >= 0) return 'SPARQL';
                 if (method.indexOf('application/sparql-update-single-match') >= 0) return 'SPARQL';
               }
@@ -55791,8 +53338,7 @@ var UpdateManager = /*#__PURE__*/function () {
   }, {
     key: "anonymize",
     value: function anonymize(obj) {
-      var anonymized = obj.toNT().substr(0, 2) === '_:' && this.mentioned(obj) ? '?' + obj.toNT().substr(2) : obj.toNT();
-      return anonymized;
+      return obj.toNT().substr(0, 2) === '_:' && this.mentioned(obj) ? '?' + obj.toNT().substr(2) : obj.toNT();
     }
   }, {
     key: "anonymizeNT",
@@ -55990,7 +53536,7 @@ var UpdateManager = /*#__PURE__*/function () {
         // console.log('UpdateManager: sending update to <' + uri + '>')
 
         options.noMeta = true;
-        options.contentType = options.contentType || 'application/sparql-update';
+        options.contentType = 'application/sparql-update';
         options.body = query;
         return _this.store.fetcher.webOperation('PATCH', uri, options);
       }).then(function (response) {
@@ -56008,7 +53554,7 @@ var UpdateManager = /*#__PURE__*/function () {
       });
     }
 
-    // ARE THESE THREE FUNCTIONS USED? DEPRECATE?
+    // ARE THESE THEE FUNCTIONS USED? DEPROCATE?
 
     /** return a statemnet updating function
      *
@@ -56318,93 +53864,7 @@ var UpdateManager = /*#__PURE__*/function () {
     }
 
     /**
-     * @private
-     * 
-     * This helper function constructs SPARQL Update query from resolved arguments.
-     * 
-     * @param ds: deletions array.
-     * @param is: insertions array.
-     * @param bnodes_context: Additional context to uniquely identify any blank nodes.
-     */
-  }, {
-    key: "constructSparqlUpdateQuery",
-    value: function constructSparqlUpdateQuery(ds, is, bnodes_context) {
-      var whereClause = this.contextWhere(bnodes_context);
-      var query = '';
-      if (whereClause.length) {
-        // Is there a WHERE clause?
-        if (ds.length) {
-          query += 'DELETE { ';
-          for (var i = 0; i < ds.length; i++) {
-            query += this.anonymizeNT(ds[i]) + '\n';
-          }
-          query += ' }\n';
-        }
-        if (is.length) {
-          query += 'INSERT { ';
-          for (var _i5 = 0; _i5 < is.length; _i5++) {
-            query += this.anonymizeNT(is[_i5]) + '\n';
-          }
-          query += ' }\n';
-        }
-        query += whereClause;
-      } else {
-        // no where clause
-        if (ds.length) {
-          query += 'DELETE DATA { ';
-          for (var _i6 = 0; _i6 < ds.length; _i6++) {
-            query += this.anonymizeNT(ds[_i6]) + '\n';
-          }
-          query += ' } \n';
-        }
-        if (is.length) {
-          if (ds.length) query += ' ; ';
-          query += 'INSERT DATA { ';
-          for (var _i7 = 0; _i7 < is.length; _i7++) {
-            query += this.nTriples(is[_i7]) + '\n';
-          }
-          query += ' }\n';
-        }
-      }
-      return query;
-    }
-
-    /**
-     * @private
-     * 
-     * This helper function constructs n3-patch query from resolved arguments.
-     * 
-     * @param ds: deletions array.
-     * @param is: insertions array.
-     * @param bnodes_context: Additional context to uniquely identify any blanknodes.
-     */
-  }, {
-    key: "constructN3PatchQuery",
-    value: function constructN3PatchQuery(ds, is, bnodes_context) {
-      var _this3 = this;
-      var query = "\n@prefix solid: <http://www.w3.org/ns/solid/terms#>.\n@prefix ex: <http://www.example.org/terms#>.\n\n_:patch\n";
-      // If bnode context is non trivial, express it as ?conditions formula.
-      if (bnodes_context && bnodes_context.length > 0) {
-        query += "\n      solid:where {\n        ".concat(bnodes_context.map(function (x) {
-          return _this3.anonymizeNT(x);
-        }).join('\n        '), "\n      };");
-      }
-      if (ds.length > 0) {
-        query += "\n      solid:deletes {\n        ".concat(ds.map(function (x) {
-          return _this3.anonymizeNT(x);
-        }).join('\n        '), "\n      };");
-      }
-      if (is.length > 0) {
-        query += "\n      solid:inserts {\n        ".concat(is.map(function (x) {
-          return _this3.anonymizeNT(x);
-        }).join('\n        '), "\n      };");
-      }
-      query += "   a solid:InsertDeletePatch .\n";
-      return query;
-    }
-
-    /**
-     * This high-level function updates the local store if the web is changed successfully.
+     * This high-level function updates the local store iff the web is changed successfully.
      * Deletions, insertions may be undefined or single statements or lists or formulae (may contain bnodes which can be indirectly identified by a where clause).
      * The `why` property of each statement must be the same and give the web document to be updated.
      * @param deletions - Statement or statements to be deleted.
@@ -56416,7 +53876,7 @@ var UpdateManager = /*#__PURE__*/function () {
   }, {
     key: "update",
     value: function update(deletions, insertions, callback, secondTry) {
-      var _this4 = this;
+      var _this3 = this;
       var options = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
       if (!callback) {
         var thisUpdater = this;
@@ -56484,31 +53944,64 @@ var UpdateManager = /*#__PURE__*/function () {
         if (protocol === undefined) {
           // Not enough metadata
           if (secondTry) {
-            throw new Error('Update: Loaded ' + doc + "but still can't figure out what editing protocol it supports.");
+            throw new Error('Update: Loaded ' + doc + "but stil can't figure out what editing protcol it supports.");
           }
           // console.log(`Update: have not loaded ${doc} before: loading now...`);
           this.store.fetcher.load(doc).then(function (response) {
-            _this4.update(deletions, insertions, callback, true, options);
+            _this3.update(deletions, insertions, callback, true, options);
           }, function (err) {
             if (err.response.status === 404) {
               // nonexistent files are fine
-              _this4.update(deletions, insertions, callback, true, options);
+              _this3.update(deletions, insertions, callback, true, options);
             } else {
               throw new Error("Update: Can't get updatability status ".concat(doc, " before patching: ").concat(err));
             }
           });
           return;
-        } else if (protocol.indexOf('SPARQL') >= 0 || protocol.indexOf('N3PATCH') >= 0) {
-          var isSparql = protocol.indexOf('SPARQL') >= 0;
+        } else if (protocol.indexOf('SPARQL') >= 0) {
           var bnodes = [];
           // change ReadOnly type to Mutable type
 
           if (ds.length) bnodes = this.statementArrayBnodes(ds);
           if (is.length) bnodes = bnodes.concat(this.statementArrayBnodes(is));
           var context = this.bnodeContext(bnodes, doc);
-          var query = isSparql ? this.constructSparqlUpdateQuery(ds, is, context) : this.constructN3PatchQuery(ds, is, context);
-          options.contentType = isSparql ? 'application/sparql-update' : 'text/n3';
-
+          var whereClause = this.contextWhere(context);
+          var query = '';
+          if (whereClause.length) {
+            // Is there a WHERE clause?
+            if (ds.length) {
+              query += 'DELETE { ';
+              for (var i = 0; i < ds.length; i++) {
+                query += this.anonymizeNT(ds[i]) + '\n';
+              }
+              query += ' }\n';
+            }
+            if (is.length) {
+              query += 'INSERT { ';
+              for (var _i5 = 0; _i5 < is.length; _i5++) {
+                query += this.anonymizeNT(is[_i5]) + '\n';
+              }
+              query += ' }\n';
+            }
+            query += whereClause;
+          } else {
+            // no where clause
+            if (ds.length) {
+              query += 'DELETE DATA { ';
+              for (var _i6 = 0; _i6 < ds.length; _i6++) {
+                query += this.anonymizeNT(ds[_i6]) + '\n';
+              }
+              query += ' } \n';
+            }
+            if (is.length) {
+              if (ds.length) query += ' ; ';
+              query += 'INSERT DATA { ';
+              for (var _i7 = 0; _i7 < is.length; _i7++) {
+                query += this.nTriples(is[_i7]) + '\n';
+              }
+              query += ' }\n';
+            }
+          }
           // Track pending upstream patches until they have finished their callbackFunction
           control.pendingUpstream = control.pendingUpstream ? control.pendingUpstream + 1 : 1;
           if ('upstreamCount' in control) {
@@ -56529,8 +54022,8 @@ var UpdateManager = /*#__PURE__*/function () {
                 success = false;
                 body = 'Remote Ok BUT error deleting ' + ds.length + ' from store!!! ' + e;
               } // Add in any case -- help recover from weirdness??
-              for (var i = 0; i < is.length; i++) {
-                kb.add(is[i].subject, is[i].predicate, is[i].object, doc);
+              for (var _i8 = 0; _i8 < is.length; _i8++) {
+                kb.add(is[_i8].subject, is[_i8].predicate, is[_i8].object, doc);
               }
             }
             callback(uri, success, body, response);
@@ -56584,8 +54077,8 @@ var UpdateManager = /*#__PURE__*/function () {
       for (var i = 0; i < ds.length; i++) {
         _utils_js__WEBPACK_IMPORTED_MODULE_12__.RDFArrayRemove(newSts, ds[i]);
       }
-      for (var _i8 = 0; _i8 < is.length; _i8++) {
-        newSts.push(is[_i8]);
+      for (var _i9 = 0; _i9 < is.length; _i9++) {
+        newSts.push(is[_i9]);
       }
       var documentString = this.serialize(doc.value, newSts, contentType);
 
@@ -56602,11 +54095,11 @@ var UpdateManager = /*#__PURE__*/function () {
         if (!response.ok) {
           throw new Error(response.error);
         }
-        for (var _i9 = 0; _i9 < ds.length; _i9++) {
-          kb.remove(ds[_i9]);
+        for (var _i10 = 0; _i10 < ds.length; _i10++) {
+          kb.remove(ds[_i10]);
         }
-        for (var _i10 = 0; _i10 < is.length; _i10++) {
-          kb.add(is[_i10].subject, is[_i10].predicate, is[_i10].object, doc);
+        for (var _i11 = 0; _i11 < is.length; _i11++) {
+          kb.add(is[_i11].subject, is[_i11].predicate, is[_i11].object, doc);
         }
         callbackFunction(doc.value, response.ok, response.responseText, response);
       }).catch(function (err) {
@@ -56636,8 +54129,8 @@ var UpdateManager = /*#__PURE__*/function () {
       for (var i = 0; i < ds.length; i++) {
         _utils_js__WEBPACK_IMPORTED_MODULE_12__.RDFArrayRemove(newSts, ds[i]);
       }
-      for (var _i11 = 0; _i11 < is.length; _i11++) {
-        newSts.push(is[_i11]);
+      for (var _i12 = 0; _i12 < is.length; _i12++) {
+        newSts.push(is[_i12]);
       }
       // serialize to the appropriate format
       var dot = doc.value.lastIndexOf('.');
@@ -56653,11 +54146,11 @@ var UpdateManager = /*#__PURE__*/function () {
       options.contentType = contentType;
       kb.fetcher.webOperation('PUT', doc.value, options).then(function (response) {
         if (!response.ok) return callbackFunction(doc.value, false, response.error);
-        for (var _i12 = 0; _i12 < ds.length; _i12++) {
-          kb.remove(ds[_i12]);
+        for (var _i13 = 0; _i13 < ds.length; _i13++) {
+          kb.remove(ds[_i13]);
         }
-        for (var _i13 = 0; _i13 < is.length; _i13++) {
-          kb.add(is[_i13].subject, is[_i13].predicate, is[_i13].object, doc);
+        for (var _i14 = 0; _i14 < is.length; _i14++) {
+          kb.add(is[_i14].subject, is[_i14].predicate, is[_i14].object, doc);
         }
         callbackFunction(doc.value, true, ''); // success!
       });
@@ -56705,11 +54198,11 @@ var UpdateManager = /*#__PURE__*/function () {
   }, {
     key: "put",
     value: function put(doc, data, contentType, callback) {
-      var _this5 = this;
+      var _this4 = this;
       var kb = this.store;
       var documentString;
       return Promise.resolve().then(function () {
-        documentString = _this5.serialize(doc.value, data, contentType);
+        documentString = _this4.serialize(doc.value, data, contentType);
         return kb.fetcher.webOperation('PUT', doc.value, {
           contentType: contentType,
           body: documentString
@@ -56795,8 +54288,8 @@ var UpdateManager = /*#__PURE__*/function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   UpdatesSocket: () => (/* binding */ UpdatesSocket),
-/* harmony export */   UpdatesVia: () => (/* binding */ UpdatesVia)
+/* harmony export */   "UpdatesSocket": () => (/* binding */ UpdatesSocket),
+/* harmony export */   "UpdatesVia": () => (/* binding */ UpdatesVia)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
@@ -56983,12 +54476,12 @@ var UpdatesVia = /*#__PURE__*/function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   docpart: () => (/* binding */ docpart),
-/* harmony export */   document: () => (/* binding */ document),
-/* harmony export */   hostpart: () => (/* binding */ hostpart),
-/* harmony export */   join: () => (/* binding */ join),
-/* harmony export */   protocol: () => (/* binding */ protocol),
-/* harmony export */   refTo: () => (/* binding */ refTo)
+/* harmony export */   "docpart": () => (/* binding */ docpart),
+/* harmony export */   "document": () => (/* binding */ document),
+/* harmony export */   "hostpart": () => (/* binding */ hostpart),
+/* harmony export */   "join": () => (/* binding */ join),
+/* harmony export */   "protocol": () => (/* binding */ protocol),
+/* harmony export */   "refTo": () => (/* binding */ refTo)
 /* harmony export */ });
 /* harmony import */ var _named_node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./named-node */ "./node_modules/rdflib/esm/named-node.js");
 /*
@@ -57003,6 +54496,16 @@ __webpack_require__.r(__webpack_exports__);
  */
 var alert = alert || console.log;
 
+/**
+ * Defines a simple debugging function
+ * @method output
+ * @param o {String}
+ */
+function output(o) {
+  var k = document.createElement('div');
+  k.textContent = o;
+  document.body.appendChild(k);
+}
 
 /**
  * Gets the document part of an URI
@@ -57039,6 +54542,29 @@ function hostpart(u) {
   }
 }
 
+/***/ }),
+
+/***/ "./node_modules/rdflib/esm/utils.js":
+/*!******************************************!*\
+  !*** ./node_modules/rdflib/esm/utils.js ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   AJAR_handleNewTerm: () => (/* binding */ AJAR_handleNewTerm),
+/* harmony export */   ArrayIndexOf: () => (/* binding */ ArrayIndexOf),
+/* harmony export */   appliedFactoryMethods: () => (/* binding */ appliedFactoryMethods),
+/* harmony export */   arrayToStatements: () => (/* binding */ arrayToStatements)
+/* harmony export */ });
+/* harmony import */ var _log__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./log */ "./node_modules/rdflib/esm/log.js");
+/* harmony import */ var _uri__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./uri */ "./node_modules/rdflib/esm/uri.js");
+/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils-js */ "./node_modules/rdflib/esm/utils-js.js");
+
+
+
+/** RDF/JS spec Typeguards */
 /**
  * Joins an URI with a base
  * @param given - The relative part
@@ -57204,23 +54730,23 @@ function refTo(base, uri) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   DOMParserFactory: () => (/* binding */ DOMParserFactory),
-/* harmony export */   RDFArrayRemove: () => (/* binding */ RDFArrayRemove),
-/* harmony export */   callbackify: () => (/* binding */ callbackify),
-/* harmony export */   domToString: () => (/* binding */ domToString),
-/* harmony export */   dtstamp: () => (/* binding */ dtstamp),
-/* harmony export */   dumpNode: () => (/* binding */ dumpNode),
-/* harmony export */   heavyCompare: () => (/* binding */ heavyCompare),
-/* harmony export */   heavyCompareSPO: () => (/* binding */ heavyCompareSPO),
-/* harmony export */   linkRelationProperty: () => (/* binding */ linkRelationProperty),
-/* harmony export */   log: () => (/* reexport safe */ _log__WEBPACK_IMPORTED_MODULE_0__["default"]),
-/* harmony export */   mediaTypeClass: () => (/* binding */ mediaTypeClass),
-/* harmony export */   output: () => (/* binding */ output),
-/* harmony export */   parseXML: () => (/* binding */ parseXML),
-/* harmony export */   stackString: () => (/* binding */ stackString),
-/* harmony export */   string: () => (/* binding */ string),
-/* harmony export */   string_startswith: () => (/* binding */ string_startswith),
-/* harmony export */   uri: () => (/* reexport module object */ _uri__WEBPACK_IMPORTED_MODULE_1__)
+/* harmony export */   "DOMParserFactory": () => (/* binding */ DOMParserFactory),
+/* harmony export */   "RDFArrayRemove": () => (/* binding */ RDFArrayRemove),
+/* harmony export */   "callbackify": () => (/* binding */ callbackify),
+/* harmony export */   "domToString": () => (/* binding */ domToString),
+/* harmony export */   "dtstamp": () => (/* binding */ dtstamp),
+/* harmony export */   "dumpNode": () => (/* binding */ dumpNode),
+/* harmony export */   "heavyCompare": () => (/* binding */ heavyCompare),
+/* harmony export */   "heavyCompareSPO": () => (/* binding */ heavyCompareSPO),
+/* harmony export */   "linkRelationProperty": () => (/* binding */ linkRelationProperty),
+/* harmony export */   "log": () => (/* reexport safe */ _log__WEBPACK_IMPORTED_MODULE_0__["default"]),
+/* harmony export */   "mediaTypeClass": () => (/* binding */ mediaTypeClass),
+/* harmony export */   "output": () => (/* binding */ output),
+/* harmony export */   "parseXML": () => (/* binding */ parseXML),
+/* harmony export */   "stackString": () => (/* binding */ stackString),
+/* harmony export */   "string": () => (/* binding */ string),
+/* harmony export */   "string_startswith": () => (/* binding */ string_startswith),
+/* harmony export */   "uri": () => (/* reexport module object */ _uri__WEBPACK_IMPORTED_MODULE_1__)
 /* harmony export */ });
 /* harmony import */ var _log__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./log */ "./node_modules/rdflib/esm/log.js");
 /* harmony import */ var _uri__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./uri */ "./node_modules/rdflib/esm/uri.js");
@@ -57546,10 +55072,10 @@ function stackString(e) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   AJAR_handleNewTerm: () => (/* binding */ AJAR_handleNewTerm),
-/* harmony export */   ArrayIndexOf: () => (/* binding */ ArrayIndexOf),
-/* harmony export */   appliedFactoryMethods: () => (/* binding */ appliedFactoryMethods),
-/* harmony export */   arrayToStatements: () => (/* binding */ arrayToStatements)
+/* harmony export */   "AJAR_handleNewTerm": () => (/* binding */ AJAR_handleNewTerm),
+/* harmony export */   "ArrayIndexOf": () => (/* binding */ ArrayIndexOf),
+/* harmony export */   "appliedFactoryMethods": () => (/* binding */ appliedFactoryMethods),
+/* harmony export */   "arrayToStatements": () => (/* binding */ arrayToStatements)
 /* harmony export */ });
 /* harmony import */ var _log__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./log */ "./node_modules/rdflib/esm/log.js");
 /* harmony import */ var _uri__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./uri */ "./node_modules/rdflib/esm/uri.js");
@@ -57657,8 +55183,8 @@ function ArrayIndexOf(arr, item) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   defaultGraphNode: () => (/* binding */ defaultGraphNode),
-/* harmony export */   defaultGraphURI: () => (/* binding */ defaultGraphURI)
+/* harmony export */   "defaultGraphNode": () => (/* binding */ defaultGraphNode),
+/* harmony export */   "defaultGraphURI": () => (/* binding */ defaultGraphURI)
 /* harmony export */ });
 /* harmony import */ var _named_node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../named-node */ "./node_modules/rdflib/esm/named-node.js");
 // Prevents circular dependencies between data-factory-internal and statement
@@ -57678,7 +55204,7 @@ var defaultGraphNode = new _named_node__WEBPACK_IMPORTED_MODULE_0__["default"](d
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   termValue: () => (/* binding */ termValue)
+/* harmony export */   "termValue": () => (/* binding */ termValue)
 /* harmony export */ });
 /** Retrieve the value of a term, or self if already a string. */
 function termValue(node) {
@@ -57699,22 +55225,22 @@ function termValue(node) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   isBlankNode: () => (/* binding */ isBlankNode),
-/* harmony export */   isCollection: () => (/* binding */ isCollection),
-/* harmony export */   isGraph: () => (/* binding */ isGraph),
-/* harmony export */   isLiteral: () => (/* binding */ isLiteral),
-/* harmony export */   isNamedNode: () => (/* binding */ isNamedNode),
-/* harmony export */   isPredicate: () => (/* binding */ isPredicate),
-/* harmony export */   isQuad: () => (/* binding */ isQuad),
-/* harmony export */   isRDFObject: () => (/* binding */ isRDFObject),
-/* harmony export */   isRDFlibObject: () => (/* binding */ isRDFlibObject),
-/* harmony export */   isRDFlibPredicate: () => (/* binding */ isRDFlibPredicate),
-/* harmony export */   isRDFlibSubject: () => (/* binding */ isRDFlibSubject),
-/* harmony export */   isStatement: () => (/* binding */ isStatement),
-/* harmony export */   isStore: () => (/* binding */ isStore),
-/* harmony export */   isSubject: () => (/* binding */ isSubject),
-/* harmony export */   isTerm: () => (/* binding */ isTerm),
-/* harmony export */   isVariable: () => (/* binding */ isVariable)
+/* harmony export */   "isBlankNode": () => (/* binding */ isBlankNode),
+/* harmony export */   "isCollection": () => (/* binding */ isCollection),
+/* harmony export */   "isGraph": () => (/* binding */ isGraph),
+/* harmony export */   "isLiteral": () => (/* binding */ isLiteral),
+/* harmony export */   "isNamedNode": () => (/* binding */ isNamedNode),
+/* harmony export */   "isPredicate": () => (/* binding */ isPredicate),
+/* harmony export */   "isQuad": () => (/* binding */ isQuad),
+/* harmony export */   "isRDFObject": () => (/* binding */ isRDFObject),
+/* harmony export */   "isRDFlibObject": () => (/* binding */ isRDFlibObject),
+/* harmony export */   "isRDFlibPredicate": () => (/* binding */ isRDFlibPredicate),
+/* harmony export */   "isRDFlibSubject": () => (/* binding */ isRDFlibSubject),
+/* harmony export */   "isStatement": () => (/* binding */ isStatement),
+/* harmony export */   "isStore": () => (/* binding */ isStore),
+/* harmony export */   "isSubject": () => (/* binding */ isSubject),
+/* harmony export */   "isTerm": () => (/* binding */ isTerm),
+/* harmony export */   "isVariable": () => (/* binding */ isVariable)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/esm/typeof.js");
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../types */ "./node_modules/rdflib/esm/types.js");
@@ -57941,7 +55467,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   createXSD: () => (/* binding */ createXSD),
+/* harmony export */   "createXSD": () => (/* binding */ createXSD),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _factories_canonical_data_factory__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./factories/canonical-data-factory */ "./node_modules/rdflib/esm/factories/canonical-data-factory.js");
@@ -61097,7 +58623,9 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*! https://mths.be/punycode v1.3.2 by @mathia
 }(this));
 
 
-/***/ }),
+				if (currentValue < n && ++delta > maxInt) {
+					error('overflow');
+				}
 
 /***/ "./node_modules/url/url.js":
 /*!*********************************!*\
@@ -61402,6 +58930,7 @@ Url.prototype.parse = function(url, parseQueryString, slashesDenoteHost) {
       // you call it with a domain that already is ASCII-only.
       this.hostname = punycode.toASCII(this.hostname);
     }
+  }
 
     var p = this.port ? ':' + this.port : '';
     var h = this.hostname || '';
@@ -63835,11 +61364,6 @@ function _inherits(subClass, superClass) {
       writable: true,
       configurable: true
     }
-  });
-  Object.defineProperty(subClass, "prototype", {
-    writable: false
-  });
-  if (superClass) (0,_setPrototypeOf_js__WEBPACK_IMPORTED_MODULE_0__["default"])(subClass, superClass);
 }
 
 /***/ }),
@@ -63931,1308 +61455,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _typeof_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./typeof.js */ "./node_modules/@babel/runtime/helpers/esm/typeof.js");
 /* harmony import */ var _toPrimitive_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./toPrimitive.js */ "./node_modules/@babel/runtime/helpers/esm/toPrimitive.js");
 
-
-function _toPropertyKey(arg) {
-  var key = (0,_toPrimitive_js__WEBPACK_IMPORTED_MODULE_1__["default"])(arg, "string");
-  return (0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(key) === "symbol" ? key : String(key);
-}
-
-/***/ }),
-
-/***/ "./node_modules/@babel/runtime/helpers/esm/typeof.js":
-/*!***********************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/esm/typeof.js ***!
-  \***********************************************************/
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ _typeof)
-/* harmony export */ });
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, _typeof(o);
-}
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/dist/index.mjs":
-/*!*********************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/dist/index.mjs ***!
-  \*********************************************************************/
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   AggregateHandler: () => (/* binding */ AggregateHandler),
-/* harmony export */   AuthorizationCodeWithPkceOidcHandlerBase: () => (/* binding */ AuthorizationCodeWithPkceOidcHandlerBase),
-/* harmony export */   ClientAuthentication: () => (/* binding */ ClientAuthentication),
-/* harmony export */   ConfigurationError: () => (/* binding */ ConfigurationError),
-/* harmony export */   DEFAULT_SCOPES: () => (/* binding */ DEFAULT_SCOPES),
-/* harmony export */   EVENTS: () => (/* binding */ EVENTS),
-/* harmony export */   GeneralLogoutHandler: () => (/* binding */ GeneralLogoutHandler),
-/* harmony export */   IRpLogoutHandler: () => (/* binding */ IRpLogoutHandler),
-/* harmony export */   IWaterfallLogoutHandler: () => (/* binding */ IWaterfallLogoutHandler),
-/* harmony export */   InMemoryStorage: () => (/* binding */ InMemoryStorage),
-/* harmony export */   InvalidResponseError: () => (/* binding */ InvalidResponseError),
-/* harmony export */   NotImplementedError: () => (/* binding */ NotImplementedError),
-/* harmony export */   OidcProviderError: () => (/* binding */ OidcProviderError),
-/* harmony export */   PREFERRED_SIGNING_ALG: () => (/* binding */ PREFERRED_SIGNING_ALG),
-/* harmony export */   REFRESH_BEFORE_EXPIRATION_SECONDS: () => (/* binding */ REFRESH_BEFORE_EXPIRATION_SECONDS),
-/* harmony export */   SOLID_CLIENT_AUTHN_KEY_PREFIX: () => (/* binding */ SOLID_CLIENT_AUTHN_KEY_PREFIX),
-/* harmony export */   SessionInfoManagerBase: () => (/* binding */ SessionInfoManagerBase),
-/* harmony export */   StorageUtility: () => (/* binding */ StorageUtility),
-/* harmony export */   StorageUtilityGetResponse: () => (/* binding */ StorageUtilityGetResponse),
-/* harmony export */   StorageUtilityMock: () => (/* binding */ StorageUtilityMock),
-/* harmony export */   USER_SESSION_PREFIX: () => (/* binding */ USER_SESSION_PREFIX),
-/* harmony export */   buildAuthenticatedFetch: () => (/* binding */ buildAuthenticatedFetch),
-/* harmony export */   buildProxyHandler: () => (/* binding */ buildProxyHandler),
-/* harmony export */   clear: () => (/* binding */ clear),
-/* harmony export */   createDpopHeader: () => (/* binding */ createDpopHeader),
-/* harmony export */   determineSigningAlg: () => (/* binding */ determineSigningAlg),
-/* harmony export */   fetchJwks: () => (/* binding */ fetchJwks),
-/* harmony export */   generateDpopKeyPair: () => (/* binding */ generateDpopKeyPair),
-/* harmony export */   getEndSessionUrl: () => (/* binding */ getEndSessionUrl),
-/* harmony export */   getSessionIdFromOauthState: () => (/* binding */ getSessionIdFromOauthState),
-/* harmony export */   getUnauthenticatedSession: () => (/* binding */ getUnauthenticatedSession),
-/* harmony export */   getWebidFromTokenPayload: () => (/* binding */ getWebidFromTokenPayload),
-/* harmony export */   handleRegistration: () => (/* binding */ handleRegistration),
-/* harmony export */   isSupportedTokenType: () => (/* binding */ isSupportedTokenType),
-/* harmony export */   isValidRedirectUrl: () => (/* binding */ isValidRedirectUrl),
-/* harmony export */   loadOidcContextFromStorage: () => (/* binding */ loadOidcContextFromStorage),
-/* harmony export */   maybeBuildRpInitiatedLogout: () => (/* binding */ maybeBuildRpInitiatedLogout),
-/* harmony export */   mockStorage: () => (/* binding */ mockStorage),
-/* harmony export */   mockStorageUtility: () => (/* binding */ mockStorageUtility),
-/* harmony export */   removeOpenIdParams: () => (/* binding */ removeOpenIdParams),
-/* harmony export */   saveSessionInfoToStorage: () => (/* binding */ saveSessionInfoToStorage)
-/* harmony export */ });
-/* harmony import */ var events__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! events */ "./node_modules/events/events.js");
-/* harmony import */ var _inrupt_universal_fetch__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @inrupt/universal-fetch */ "./node_modules/@inrupt/universal-fetch/dist/index-browser.mjs");
-/* harmony import */ var jose__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! jose */ "./node_modules/jose/dist/browser/index.js");
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! uuid */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/v4.js");
-
-
-
-
-
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-/**
- * Intended to be used by dependent packages as a common prefix for keys into
- * storage mechanisms (so as to group all keys related to Solid Client Authn
- * within those storage mechanisms, e.g., window.localStorage).
- */
-const SOLID_CLIENT_AUTHN_KEY_PREFIX = "solidClientAuthn:";
-/**
- * Ordered list of signature algorithms, from most preferred to least preferred.
- */
-const PREFERRED_SIGNING_ALG = ["ES256", "RS256"];
-const EVENTS = {
-    // Note that an `error` events MUST be listened to: https://nodejs.org/dist/latest-v16.x/docs/api/events.html#error-events.
-    ERROR: "error",
-    LOGIN: "login",
-    LOGOUT: "logout",
-    NEW_REFRESH_TOKEN: "newRefreshToken",
-    SESSION_EXPIRED: "sessionExpired",
-    SESSION_EXTENDED: "sessionExtended",
-    SESSION_RESTORED: "sessionRestore",
-    TIMEOUT_SET: "timeoutSet",
-};
-/**
- * We want to refresh a token 5 seconds before it expires.
- */
-const REFRESH_BEFORE_EXPIRATION_SECONDS = 5;
-// The openid scope requests an OIDC ID token token to be returned.
-const SCOPE_OPENID = "openid";
-// The offline_access scope requests a refresh token to be returned.
-const SCOPE_OFFLINE = "offline_access";
-// The webid scope is required as per https://solid.github.io/solid-oidc/#webid-scope
-const SCOPE_WEBID = "webid";
-// The scopes are expected as a space-separated list.
-const DEFAULT_SCOPES = [SCOPE_OPENID, SCOPE_OFFLINE, SCOPE_WEBID].join(" ");
-
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-/**
- * Temporary internal builder for safe proxying.
- */
-const buildProxyHandler = (
-// The class to be excluded needs to be injected, because it is defined in a
-// dependency.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-toExclude, errorMessage) => ({
-    // This proxy is only a temporary measure until Session no longer extends
-    // SessionEventEmitter, and the proxying is no longer necessary.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    get(target, prop, receiver) {
-        // Reject any calls to the proxy that isn't specific to the EventEmitter API
-        if (!Object.getOwnPropertyNames(events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter).includes(prop) &&
-            Object.getOwnPropertyNames(toExclude).includes(prop)) {
-            throw new Error(`${errorMessage}: [${prop}] is not supported`);
-        }
-        return Reflect.get(target, prop, receiver);
-    },
-});
-
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-/**
- * @hidden
- */
-class AggregateHandler {
-    constructor(handleables) {
-        this.handleables = handleables;
-        this.handleables = handleables;
-    }
-    /**
-     * Helper function that will asynchronously determine the proper handler to use. If multiple
-     * handlers can handle, it will choose the first one in the list
-     * @param params Paramerters to feed to the handler
-     */
-    async getProperHandler(params) {
-        // TODO : This function doesn't currently operate as described. Tests need to be written
-        // return new Promise<IHandleable<P, R> | null>((resolve, reject) => {
-        //  const resolvedValues: Array<boolean | null> = Array(this.handleables.length).map(() => null)
-        //   let numberResolved = 0
-        //   this.handleables.forEach(async (handleable: IHandleable<P, R>, index: number) => {
-        //     resolvedValues[index] = await handleable.canHandle(...params)
-        //     numberResolved++
-        //     let curResolvedValueIndex = 0
-        //     while (
-        //       resolvedValues[curResolvedValueIndex] !== null ||
-        //       resolvedValues[curResolvedValueIndex] !== undefined
-        //     ) {
-        //       if (resolvedValues[curResolvedValueIndex]) {
-        //         resolve(this.handleables[curResolvedValueIndex])
-        //       }
-        //       curResolvedValueIndex++
-        //     }
-        //   })
-        // })
-        const canHandleList = await Promise.all(this.handleables.map((handleable) => handleable.canHandle(...params)));
-        for (let i = 0; i < canHandleList.length; i += 1) {
-            if (canHandleList[i]) {
-                return this.handleables[i];
-            }
-        }
-        return null;
-    }
-    async canHandle(...params) {
-        return (await this.getProperHandler(params)) !== null;
-    }
-    async handle(...params) {
-        const handler = await this.getProperHandler(params);
-        if (handler) {
-            return handler.handle(...params);
-        }
-        throw new Error(`[${this.constructor.name}] cannot find a suitable handler for: ${params
-            .map((param) => {
-            try {
-                return JSON.stringify(param);
-            }
-            catch (err) {
-                /* eslint-disable  @typescript-eslint/no-explicit-any */
-                return param.toString();
-            }
-        })
-            .join(", ")}`);
-    }
-}
-
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-// eslint-disable-next-line no-shadow
-async function fetchJwks(jwksIri, issuerIri) {
-    // FIXME: the following line works, but the underlying network calls don't seem
-    // to be mocked properly by our test code. It would be nicer to replace calls to this
-    // function by the following line and to fix the mocks.
-    // const jwks = createRemoteJWKSet(new URL(jwksIri));
-    const jwksResponse = await _inrupt_universal_fetch__WEBPACK_IMPORTED_MODULE_2__.fetch.call(globalThis, jwksIri);
-    if (jwksResponse.status !== 200) {
-        throw new Error(`Could not fetch JWKS for [${issuerIri}] at [${jwksIri}]: ${jwksResponse.status} ${jwksResponse.statusText}`);
-    }
-    // The JWKS should only contain the current key for the issuer.
-    let jwk;
-    try {
-        jwk = (await jwksResponse.json()).keys[0];
-    }
-    catch (e) {
-        throw new Error(`Malformed JWKS for [${issuerIri}] at [${jwksIri}]: ${e.message}`);
-    }
-    return jwk;
-}
-/**
- * Extract a WebID from an ID token payload based on https://github.com/solid/webid-oidc-spec.
- * Note that this does not yet implement the user endpoint lookup, and only checks
- * for `webid` or IRI-like `sub` claims.
- *
- * @param idToken the payload of the ID token from which the WebID can be extracted.
- * @returns a WebID extracted from the ID token.
- * @internal
- */
-async function getWebidFromTokenPayload(idToken, jwksIri, issuerIri, clientId) {
-    const jwk = await fetchJwks(jwksIri, issuerIri);
-    let payload;
-    try {
-        const { payload: verifiedPayload } = await (0,jose__WEBPACK_IMPORTED_MODULE_1__.jwtVerify)(idToken, await (0,jose__WEBPACK_IMPORTED_MODULE_1__.importJWK)(jwk), {
-            issuer: issuerIri,
-            audience: clientId,
-        });
-        payload = verifiedPayload;
-    }
-    catch (e) {
-        throw new Error(`Token verification failed: ${e.stack}`);
-    }
-    if (typeof payload.webid === "string") {
-        return payload.webid;
-    }
-    if (typeof payload.sub !== "string") {
-        throw new Error(`The token ${JSON.stringify(payload)} is invalid: it has no 'webid' claim and no 'sub' claim.`);
-    }
-    try {
-        // This parses the 'sub' claim to check if it is a well-formed IRI.
-        // However, the normalized value isn't returned to make sure the WebID is returned
-        // as specified by the Identity Provider.
-        // eslint-disable-next-line no-new
-        new URL(payload.sub);
-        return payload.sub;
-    }
-    catch (e) {
-        throw new Error(`The token has no 'webid' claim, and its 'sub' claim of [${payload.sub}] is invalid as a URL - error [${e}].`);
-    }
-}
-
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-function isValidRedirectUrl(redirectUrl) {
-    // If the redirect URL is not a valid URL, an error will be thrown.
-    try {
-        const urlObject = new URL(redirectUrl);
-        const noReservedQuery = !urlObject.searchParams.has("code") &&
-            !urlObject.searchParams.has("state");
-        // As per https://tools.ietf.org/html/rfc6749#section-3.1.2, the redirect URL
-        // must not include a hash fragment.
-        const noHash = urlObject.hash === "";
-        return noReservedQuery && noHash;
-    }
-    catch (e) {
-        return false;
-    }
-}
-function removeOpenIdParams(redirectUrl) {
-    const cleanedUpUrl = new URL(redirectUrl);
-    // For auth code flow
-    cleanedUpUrl.searchParams.delete("state");
-    cleanedUpUrl.searchParams.delete("code");
-    // For login error
-    cleanedUpUrl.searchParams.delete("error");
-    cleanedUpUrl.searchParams.delete("error_description");
-    // For RFC9207
-    cleanedUpUrl.searchParams.delete("iss");
-    return cleanedUpUrl;
-}
-
-/**
- * @hidden
- * @packageDocumentation
- */
-/**
- * @hidden
- * Authorization code flow spec: https://openid.net/specs/openid-connect-core-1_0.html#CodeFlowAuth
- * PKCE: https://tools.ietf.org/html/rfc7636
- */
-class AuthorizationCodeWithPkceOidcHandlerBase {
-    constructor(storageUtility, redirector) {
-        this.storageUtility = storageUtility;
-        this.redirector = redirector;
-        this.storageUtility = storageUtility;
-        this.redirector = redirector;
-    }
-    async canHandle(oidcLoginOptions) {
-        return !!(oidcLoginOptions.issuerConfiguration.grantTypesSupported &&
-            oidcLoginOptions.issuerConfiguration.grantTypesSupported.indexOf("authorization_code") > -1);
-    }
-    async handleRedirect({ oidcLoginOptions, state, codeVerifier, targetUrl, }) {
-        await Promise.all([
-            // We use the OAuth 'state' value (which should be crypto-random) as
-            // the key in our storage to store our actual SessionID. We do this
-            // 'cos we'll need to lookup our session information again when the
-            // browser is redirected back to us (i.e. the OAuth client
-            // application) from the Authorization Server.
-            // We don't want to use our session ID as the OAuth 'state' value, as
-            // that session ID can be any developer-specified value, and therefore
-            // may not be appropriate (since the OAuth 'state' value should really
-            // be an unguessable crypto-random value).
-            // eslint-disable-next-line no-underscore-dangle
-            this.storageUtility.setForUser(state, {
-                sessionId: oidcLoginOptions.sessionId,
-            }),
-            // Store our login-process state using the session ID as the key.
-            // Strictly speaking, this indirection from our OAuth state value to
-            // our session ID is unnecessary, but it provides a slightly cleaner
-            // separation of concerns.
-            this.storageUtility.setForUser(oidcLoginOptions.sessionId, {
-                // eslint-disable-next-line no-underscore-dangle
-                codeVerifier,
-                issuer: oidcLoginOptions.issuer.toString(),
-                // The redirect URL is read after redirect, so it must be stored now.
-                redirectUrl: oidcLoginOptions.redirectUrl,
-                dpop: oidcLoginOptions.dpop ? "true" : "false",
-            }),
-        ]);
-        this.redirector.redirect(targetUrl, {
-            handleRedirect: oidcLoginOptions.handleRedirect,
-        });
-        return undefined;
-    }
-}
-
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-/**
- * @hidden
- */
-class GeneralLogoutHandler {
-    constructor(sessionInfoManager) {
-        this.sessionInfoManager = sessionInfoManager;
-        this.sessionInfoManager = sessionInfoManager;
-    }
-    async canHandle() {
-        return true;
-    }
-    async handle(userId) {
-        await this.sessionInfoManager.clear(userId);
-    }
-}
-
-class IRpLogoutHandler {
-    constructor(redirector) {
-        this.redirector = redirector;
-        this.redirector = redirector;
-    }
-    async canHandle(userId, options) {
-        return (options === null || options === void 0 ? void 0 : options.logoutType) === "idp";
-    }
-    async handle(userId, options) {
-        if ((options === null || options === void 0 ? void 0 : options.logoutType) !== "idp") {
-            throw new Error("Attempting to call idp logout handler to perform app logout");
-        }
-        if (options.toLogoutUrl === undefined) {
-            throw new Error("Cannot perform IDP logout. Did you log in using the OIDC authentication flow?");
-        }
-        this.redirector.redirect(options.toLogoutUrl(options), {
-            handleRedirect: options.handleRedirect,
-        });
-    }
-}
-
-class IWaterfallLogoutHandler {
-    constructor(sessionInfoManager, redirector) {
-        this.handlers = [
-            new GeneralLogoutHandler(sessionInfoManager),
-            new IRpLogoutHandler(redirector),
-        ];
-    }
-    async canHandle() {
-        return true;
-    }
-    async handle(userId, options) {
-        for (const handler of this.handlers) {
-            /* eslint-disable no-await-in-loop */
-            if (await handler.canHandle(userId, options))
-                await handler.handle(userId, options);
-            /* eslint-enable no-await-in-loop */
-        }
-    }
-}
-
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-/**
- * @hidden
- * @packageDocumentation
- */
-function getUnauthenticatedSession() {
-    return {
-        isLoggedIn: false,
-        sessionId: (0,uuid__WEBPACK_IMPORTED_MODULE_3__["default"])(),
-        fetch: (...args) => _inrupt_universal_fetch__WEBPACK_IMPORTED_MODULE_2__.fetch.call(globalThis, ...args),
-    };
-}
-/**
- * @param sessionId
- * @param storage
- * @hidden
- */
-async function clear(sessionId, storage) {
-    await Promise.all([
-        storage.deleteAllUserData(sessionId, { secure: false }),
-        storage.deleteAllUserData(sessionId, { secure: true }),
-    ]);
-}
-/**
- * @hidden
- */
-class SessionInfoManagerBase {
-    constructor(storageUtility) {
-        this.storageUtility = storageUtility;
-        this.storageUtility = storageUtility;
-    }
-    update(_sessionId, _options) {
-        throw new Error("Not Implemented");
-    }
-    get(_) {
-        throw new Error("Not implemented");
-    }
-    // eslint-disable-next-line class-methods-use-this
-    async getAll() {
-        throw new Error("Not implemented");
-    }
-    /**
-     * This function removes all session-related information from storage.
-     * @param sessionId the session identifier
-     * @param storage the storage where session info is stored
-     * @hidden
-     */
-    async clear(sessionId) {
-        return clear(sessionId, this.storageUtility);
-    }
-    /**
-     * Registers a new session, so that its ID can be retrieved.
-     * @param sessionId
-     */
-    async register(_sessionId) {
-        throw new Error("Not implemented");
-    }
-    /**
-     * Returns all the registered session IDs. Differs from getAll, which also
-     * returns additional session information.
-     */
-    async getRegisteredSessionIdAll() {
-        throw new Error("Not implemented");
-    }
-    /**
-     * Deletes all information about all sessions, including their registrations.
-     */
-    async clearAll() {
-        throw new Error("Not implemented");
-    }
-}
-
-/**
- * This function is designed to isomorphically capture the behavior in oidc-client-js and node-oidc-provider
- * - https://github.com/IdentityModel/oidc-client-js/blob/edec8f59897bdeedcb0b4167586d49626203c2c1/src/OidcClient.js#L138
- * - https://github.com/panva/node-openid-client/blob/35758419489ff751a71f5b66f5020087a63e1e88/lib/client.js#L284
- *
- * @param options IEndSessionOptions
- * @returns The URL to redirect to in order to perform RP Initiated Logout
- * @hidden
- */
-function getEndSessionUrl({ endSessionEndpoint, idTokenHint, postLogoutRedirectUri, state, }) {
-    const url = new URL(endSessionEndpoint);
-    if (idTokenHint !== undefined)
-        url.searchParams.append("id_token_hint", idTokenHint);
-    if (postLogoutRedirectUri !== undefined) {
-        url.searchParams.append("post_logout_redirect_uri", postLogoutRedirectUri);
-        if (state !== undefined)
-            url.searchParams.append("state", state);
-    }
-    return url.toString();
-}
-/**
- * @param options.endSessionEndpoint The end_session_endpoint advertised by the server
- * @param options.idTokenHint The idToken supplied by the server after logging in
- * Redirects the window to the location required to perform RP initiated logout
- *
- * @hidden
- */
-function maybeBuildRpInitiatedLogout({ endSessionEndpoint, idTokenHint, }) {
-    if (endSessionEndpoint === undefined)
-        return undefined;
-    return function logout({ state, postLogoutUrl }) {
-        return getEndSessionUrl({
-            endSessionEndpoint,
-            idTokenHint,
-            state,
-            postLogoutRedirectUri: postLogoutUrl,
-        });
-    };
-}
-
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-function isSupportedTokenType(token) {
-    return typeof token === "string" && ["DPoP", "Bearer"].includes(token);
-}
-
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-const USER_SESSION_PREFIX = "solidClientAuthenticationUser";
-
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-function isValidUrl(url) {
-    try {
-        // Here, the URL constructor is just called to parse the given string and
-        // verify if it is a well-formed IRI.
-        // eslint-disable-next-line no-new
-        new URL(url);
-        return true;
-    }
-    catch (_a) {
-        return false;
-    }
-}
-function determineSigningAlg(supported, preferred) {
-    var _a;
-    return ((_a = preferred.find((signingAlg) => {
-        return supported.includes(signingAlg);
-    })) !== null && _a !== void 0 ? _a : null);
-}
-function determineClientType(options, issuerConfig) {
-    if (options.clientId !== undefined && !isValidUrl(options.clientId)) {
-        return "static";
-    }
-    if (issuerConfig.scopesSupported.includes("webid") &&
-        options.clientId !== undefined &&
-        isValidUrl(options.clientId)) {
-        return "solid-oidc";
-    }
-    // If no client_id is provided, the client must go through Dynamic Client Registration.
-    // If a client_id is provided and it looks like a URI, yet the Identity Provider
-    // does *not* support Solid-OIDC, then we also perform DCR (and discard the
-    // provided client_id).
-    return "dynamic";
-}
-async function handleRegistration(options, issuerConfig, storageUtility, clientRegistrar) {
-    const clientType = determineClientType(options, issuerConfig);
-    if (clientType === "dynamic") {
-        return clientRegistrar.getClient({
-            sessionId: options.sessionId,
-            clientName: options.clientName,
-            redirectUrl: options.redirectUrl,
-        }, issuerConfig);
-    }
-    // If a client_id was provided, and the Identity Provider is Solid-OIDC compliant,
-    // or it is not compliant but the client_id isn't an IRI (we assume it has already
-    // been registered with the IdP), then the client registration information needs
-    // to be stored so that it can be retrieved later after redirect.
-    await storageUtility.setForUser(options.sessionId, {
-        // If the client is either static or solid-oidc compliant, its client ID cannot be undefined.
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        clientId: options.clientId,
-    });
-    if (options.clientSecret) {
-        await storageUtility.setForUser(options.sessionId, {
-            clientSecret: options.clientSecret,
-        });
-    }
-    if (options.clientName) {
-        await storageUtility.setForUser(options.sessionId, {
-            clientName: options.clientName,
-        });
-    }
-    return {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        clientId: options.clientId,
-        clientSecret: options.clientSecret,
-        clientName: options.clientName,
-        clientType,
-    };
-}
-
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-/**
- * @hidden
- * @packageDocumentation
- */
-// By only referring to `window` at runtime, apps that do server-side rendering
-// won't run into errors when rendering code that instantiates a
-// ClientAuthentication:
-const globalFetch = (request, init) => _inrupt_universal_fetch__WEBPACK_IMPORTED_MODULE_2__.fetch.call(globalThis, request, init);
-/**
- * @hidden
- */
-class ClientAuthentication {
-    constructor(loginHandler, redirectHandler, logoutHandler, sessionInfoManager, issuerConfigFetcher) {
-        this.loginHandler = loginHandler;
-        this.redirectHandler = redirectHandler;
-        this.logoutHandler = logoutHandler;
-        this.sessionInfoManager = sessionInfoManager;
-        this.issuerConfigFetcher = issuerConfigFetcher;
-        // By default, our fetch() resolves to the environment fetch() function.
-        this.fetch = globalFetch;
-        this.logout = async (sessionId, options) => {
-            // When doing IDP logout this will redirect away from the current page, so we should not expect
-            // code after this condition to be run if it is true.
-            // We also need to make sure that any other cleanup that we want to do for
-            // our session takes place before this condition is run
-            await this.logoutHandler.handle(sessionId, (options === null || options === void 0 ? void 0 : options.logoutType) === "idp"
-                ? {
-                    ...options,
-                    toLogoutUrl: this.boundLogout,
-                }
-                : options);
-            // Restore our fetch() function back to the environment fetch(), effectively
-            // leaving us with un-authenticated fetches from now on.
-            this.fetch = globalFetch;
-            // Delete the bound logout function, so that it can't be called after this.
-            delete this.boundLogout;
-        };
-        this.getSessionInfo = async (sessionId) => {
-            // TODO complete
-            return this.sessionInfoManager.get(sessionId);
-        };
-        this.getAllSessionInfo = async () => {
-            return this.sessionInfoManager.getAll();
-        };
-        this.loginHandler = loginHandler;
-        this.redirectHandler = redirectHandler;
-        this.logoutHandler = logoutHandler;
-        this.sessionInfoManager = sessionInfoManager;
-        this.issuerConfigFetcher = issuerConfigFetcher;
-    }
-}
-
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-/**
- * @hidden
- * @packageDocumentation
- */
-/**
- * A helper class that will validate items taken from local storage
- */
-async function getSessionIdFromOauthState(storageUtility, oauthState) {
-    return storageUtility.getForUser(oauthState, "sessionId");
-}
-/**
- * Based on the provided state, this looks up contextual information stored
- * before redirecting the user to the OIDC issuer.
- * @param sessionId The state (~ correlation ID) of the OIDC request
- * @param storageUtility
- * @param configFetcher
- * @returns Information stored about the client issuing the request
- */
-async function loadOidcContextFromStorage(sessionId, storageUtility, configFetcher) {
-    try {
-        const [issuerIri, codeVerifier, storedRedirectIri, dpop] = await Promise.all([
-            storageUtility.getForUser(sessionId, "issuer", {
-                errorIfNull: true,
-            }),
-            storageUtility.getForUser(sessionId, "codeVerifier"),
-            storageUtility.getForUser(sessionId, "redirectUrl"),
-            storageUtility.getForUser(sessionId, "dpop", { errorIfNull: true }),
-        ]);
-        // Clear the code verifier, which is one-time use.
-        await storageUtility.deleteForUser(sessionId, "codeVerifier");
-        // Unlike openid-client, this looks up the configuration from storage
-        const issuerConfig = await configFetcher.fetchConfig(issuerIri);
-        return {
-            codeVerifier,
-            redirectUrl: storedRedirectIri,
-            issuerConfig,
-            dpop: dpop === "true",
-        };
-    }
-    catch (e) {
-        throw new Error(`Failed to retrieve OIDC context from storage associated with session [${sessionId}]: ${e}`);
-    }
-}
-/**
- * Stores information about the session in the provided storage. Note that not
- * all storage are equally secure, and it is strongly advised not to store either
- * the refresh token or the DPoP key in the browser's local storage.
- *
- * @param storageUtility
- * @param sessionId
- * @param webId
- * @param isLoggedIn
- * @param refreshToken
- * @param secure
- * @param dpopKey
- */
-async function saveSessionInfoToStorage(storageUtility, sessionId, webId, isLoggedIn, refreshToken, secure, dpopKey) {
-    // TODO: Investigate why this does not work with a Promise.all
-    if (refreshToken !== undefined) {
-        await storageUtility.setForUser(sessionId, { refreshToken }, { secure });
-    }
-    if (webId !== undefined) {
-        await storageUtility.setForUser(sessionId, { webId }, { secure });
-    }
-    if (isLoggedIn !== undefined) {
-        await storageUtility.setForUser(sessionId, { isLoggedIn }, { secure });
-    }
-    if (dpopKey !== undefined) {
-        await storageUtility.setForUser(sessionId, {
-            publicKey: JSON.stringify(dpopKey.publicKey),
-            privateKey: JSON.stringify(await (0,jose__WEBPACK_IMPORTED_MODULE_1__.exportJWK)(dpopKey.privateKey)),
-        }, { secure });
-    }
-}
-// TOTEST: this does not handle all possible bad inputs for example what if it's not proper JSON
-/**
- * @hidden
- */
-class StorageUtility {
-    constructor(secureStorage, insecureStorage) {
-        this.secureStorage = secureStorage;
-        this.insecureStorage = insecureStorage;
-        this.secureStorage = secureStorage;
-        this.insecureStorage = insecureStorage;
-    }
-    getKey(userId) {
-        return `solidClientAuthenticationUser:${userId}`;
-    }
-    async getUserData(userId, secure) {
-        const stored = await (secure
-            ? this.secureStorage
-            : this.insecureStorage).get(this.getKey(userId));
-        if (stored === undefined) {
-            return {};
-        }
-        try {
-            return JSON.parse(stored);
-        }
-        catch (err) {
-            throw new Error(`Data for user [${userId}] in [${secure ? "secure" : "unsecure"}] storage is corrupted - expected valid JSON, but got: ${stored}`);
-        }
-    }
-    async setUserData(userId, data, secure) {
-        await (secure ? this.secureStorage : this.insecureStorage).set(this.getKey(userId), JSON.stringify(data));
-    }
-    async get(key, options) {
-        const value = await ((options === null || options === void 0 ? void 0 : options.secure)
-            ? this.secureStorage
-            : this.insecureStorage).get(key);
-        if (value === undefined && (options === null || options === void 0 ? void 0 : options.errorIfNull)) {
-            throw new Error(`[${key}] is not stored`);
-        }
-        return value;
-    }
-    async set(key, value, options) {
-        return ((options === null || options === void 0 ? void 0 : options.secure) ? this.secureStorage : this.insecureStorage).set(key, value);
-    }
-    async delete(key, options) {
-        return ((options === null || options === void 0 ? void 0 : options.secure) ? this.secureStorage : this.insecureStorage).delete(key);
-    }
-    async getForUser(userId, key, options) {
-        const userData = await this.getUserData(userId, options === null || options === void 0 ? void 0 : options.secure);
-        let value;
-        if (!userData || !userData[key]) {
-            value = undefined;
-        }
-        value = userData[key];
-        if (value === undefined && (options === null || options === void 0 ? void 0 : options.errorIfNull)) {
-            throw new Error(`Field [${key}] for user [${userId}] is not stored`);
-        }
-        return value || undefined;
-    }
-    async setForUser(userId, values, options) {
-        let userData;
-        try {
-            userData = await this.getUserData(userId, options === null || options === void 0 ? void 0 : options.secure);
-        }
-        catch (_a) {
-            // if reading the user data throws, the data is corrupted, and we want to write over it
-            userData = {};
-        }
-        await this.setUserData(userId, { ...userData, ...values }, options === null || options === void 0 ? void 0 : options.secure);
-    }
-    async deleteForUser(userId, key, options) {
-        const userData = await this.getUserData(userId, options === null || options === void 0 ? void 0 : options.secure);
-        delete userData[key];
-        await this.setUserData(userId, userData, options === null || options === void 0 ? void 0 : options.secure);
-    }
-    async deleteAllUserData(userId, options) {
-        await ((options === null || options === void 0 ? void 0 : options.secure) ? this.secureStorage : this.insecureStorage).delete(this.getKey(userId));
-    }
-}
-
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-/**
- * @hidden
- */
-class InMemoryStorage {
-    constructor() {
-        this.map = {};
-    }
-    async get(key) {
-        return this.map[key] || undefined;
-    }
-    async set(key, value) {
-        this.map[key] = value;
-    }
-    async delete(key) {
-        delete this.map[key];
-    }
-}
-
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-/**
- * @hidden
- * @packageDocumentation
- */
-/**
- * Error to be triggered when a poor configuration is received
- */
-// NOTE: There's a bug with istanbul and typescript that prevents full branch coverages
-// https://github.com/gotwarlost/istanbul/issues/690
-// The workaround is to put istanbul ignore on the constructor
-/**
- * @hidden
- */
-class ConfigurationError extends Error {
-    /* istanbul ignore next */
-    constructor(message) {
-        super(message);
-    }
-}
-
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-/**
- * @hidden
- * @packageDocumentation
- */
-/**
- * Error to be triggered if a method is not implemented
- * @hidden
- */
-class NotImplementedError extends Error {
-    /* istanbul ignore next */
-    constructor(methodName) {
-        super(`[${methodName}] is not implemented`);
-    }
-}
-
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-/**
- * @hidden
- * @packageDocumentation
- */
-/**
- * Error to be triggered when receiving a response missing mandatory elements
- */
-// NOTE: There's a bug with istanbul and typescript that prevents full branch coverages
-// https://github.com/gotwarlost/istanbul/issues/690
-// The workaround is to put istanbul ignore on the constructor
-/**
- * @hidden
- */
-class InvalidResponseError extends Error {
-    /* istanbul ignore next */
-    constructor(missingFields) {
-        super(`Invalid response from OIDC provider: missing fields ${missingFields}`);
-        this.missingFields = missingFields;
-    }
-}
-
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-/**
- * @hidden
- * @packageDocumentation
- */
-/**
- * Error to be triggered when receiving a response missing mandatory elements
- */
-// NOTE: There's a bug with istanbul and typescript that prevents full branch coverages
-// https://github.com/gotwarlost/istanbul/issues/690
-// The workaround is to put istanbul ignore on the constructor
-/**
- * @hidden
- */
-class OidcProviderError extends Error {
-    /* istanbul ignore next */
-    constructor(message, error, errorDescription) {
-        super(message);
-        this.error = error;
-        this.errorDescription = errorDescription;
-    }
-}
-
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-/**
- * Normalizes a URL in order to generate the DPoP token based on a consistent scheme.
- *
- * @param audience The URL to normalize.
- * @returns The normalized URL as a string.
- * @hidden
- */
-function normalizeHTU(audience) {
-    const audienceUrl = new URL(audience);
-    return new URL(audienceUrl.pathname, audienceUrl.origin).toString();
-}
-/**
- * Creates a DPoP header according to https://tools.ietf.org/html/draft-fett-oauth-dpop-04,
- * based on the target URL and method, using the provided key.
- *
- * @param audience Target URL.
- * @param method HTTP method allowed.
- * @param key Key used to sign the token.
- * @returns A JWT that can be used as a DPoP Authorization header.
- */
-async function createDpopHeader(audience, method, dpopKey) {
-    return new jose__WEBPACK_IMPORTED_MODULE_1__.SignJWT({
-        htu: normalizeHTU(audience),
-        htm: method.toUpperCase(),
-        jti: (0,uuid__WEBPACK_IMPORTED_MODULE_3__["default"])(),
-    })
-        .setProtectedHeader({
-        alg: PREFERRED_SIGNING_ALG[0],
-        jwk: dpopKey.publicKey,
-        typ: "dpop+jwt",
-    })
-        .setIssuedAt()
-        .sign(dpopKey.privateKey, {});
-}
-async function generateDpopKeyPair() {
-    const { privateKey, publicKey } = await (0,jose__WEBPACK_IMPORTED_MODULE_1__.generateKeyPair)(PREFERRED_SIGNING_ALG[0]);
-    const dpopKeyPair = {
-        privateKey,
-        publicKey: await (0,jose__WEBPACK_IMPORTED_MODULE_1__.exportJWK)(publicKey),
-    };
-    // The alg property isn't set by exportJWK, so set it manually.
-    [dpopKeyPair.publicKey.alg] = PREFERRED_SIGNING_ALG;
-    return dpopKeyPair;
-}
 
 //
 // Copyright Inrupt Inc.
@@ -65494,8 +61716,547 @@ const mockStorageUtility = (stored, isSecure = false) => {
     return new StorageUtility(mockStorage({}), mockStorage(stored));
 };
 
+/***/ "./node_modules/@babel/runtime/helpers/esm/typeof.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/esm/typeof.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
 
 //# sourceMappingURL=index.mjs.map
+
+
+/***/ }),
+
+/***/ "./node_modules/@inrupt/solid-client-authn-core/dist/index.mjs":
+/*!*********************************************************************!*\
+  !*** ./node_modules/@inrupt/solid-client-authn-core/dist/index.mjs ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Headers: () => (/* binding */ Headers),
+/* harmony export */   Request: () => (/* binding */ Request),
+/* harmony export */   Response: () => (/* binding */ Response),
+/* harmony export */   "default": () => (/* binding */ indexBrowser),
+/* harmony export */   fetch: () => (/* binding */ fetch)
+/* harmony export */ });
+/* harmony import */ var events__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! events */ "./node_modules/events/events.js");
+/* harmony import */ var _inrupt_universal_fetch__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @inrupt/universal-fetch */ "./node_modules/@inrupt/universal-fetch/dist/index-browser.mjs");
+/* harmony import */ var jose__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! jose */ "./node_modules/jose/dist/browser/index.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! uuid */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/v4.js");
+
+
+
+
+
+const SOLID_CLIENT_AUTHN_KEY_PREFIX = "solidClientAuthn:";
+const PREFERRED_SIGNING_ALG = ["ES256", "RS256"];
+const EVENTS = {
+    ERROR: "error",
+    LOGIN: "login",
+    LOGOUT: "logout",
+    NEW_REFRESH_TOKEN: "newRefreshToken",
+    SESSION_EXPIRED: "sessionExpired",
+    SESSION_EXTENDED: "sessionExtended",
+    SESSION_RESTORED: "sessionRestore",
+    TIMEOUT_SET: "timeoutSet",
+};
+const REFRESH_BEFORE_EXPIRATION_SECONDS = 5;
+const SCOPE_OPENID = "openid";
+const SCOPE_OFFLINE = "offline_access";
+const SCOPE_WEBID = "webid";
+const DEFAULT_SCOPES = [SCOPE_OPENID, SCOPE_OFFLINE, SCOPE_WEBID].join(" ");
+
+const buildProxyHandler = (toExclude, errorMessage) => ({
+    get(target, prop, receiver) {
+        if (!Object.getOwnPropertyNames(events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter).includes(prop) &&
+            Object.getOwnPropertyNames(toExclude).includes(prop)) {
+            throw new Error(`${errorMessage}: [${prop}] is not supported`);
+        }
+        return Reflect.get(target, prop, receiver);
+    },
+});
+
+class AggregateHandler {
+    constructor(handleables) {
+        this.handleables = handleables;
+    }
+    async getProperHandler(params) {
+        const canHandleList = await Promise.all(this.handleables.map((handleable) => handleable.canHandle(...params)));
+        for (let i = 0; i < canHandleList.length; i += 1) {
+            if (canHandleList[i]) {
+                return this.handleables[i];
+            }
+        }
+        return null;
+    }
+    async canHandle(...params) {
+        return (await this.getProperHandler(params)) !== null;
+    }
+    async handle(...params) {
+        const handler = await this.getProperHandler(params);
+        if (handler) {
+            return handler.handle(...params);
+        }
+        throw new Error(`[${this.constructor.name}] cannot find a suitable handler for: ${params
+            .map((param) => {
+            try {
+                return JSON.stringify(param);
+            }
+            catch (err) {
+                return param.toString();
+            }
+        })
+            .join(", ")}`);
+    }
+}
+
+async function fetchJwks(jwksIri, issuerIri) {
+    const jwksResponse = await (0,_inrupt_universal_fetch__WEBPACK_IMPORTED_MODULE_2__.fetch)(jwksIri);
+    if (jwksResponse.status !== 200) {
+        throw new Error(`Could not fetch JWKS for [${issuerIri}] at [${jwksIri}]: ${jwksResponse.status} ${jwksResponse.statusText}`);
+    }
+    let jwk;
+    try {
+        jwk = (await jwksResponse.json()).keys[0];
+    }
+    catch (e) {
+        throw new Error(`Malformed JWKS for [${issuerIri}] at [${jwksIri}]: ${e.message}`);
+    }
+    return jwk;
+}
+async function getWebidFromTokenPayload(idToken, jwksIri, issuerIri, clientId) {
+    const jwk = await fetchJwks(jwksIri, issuerIri);
+    let payload;
+    try {
+        const { payload: verifiedPayload } = await (0,jose__WEBPACK_IMPORTED_MODULE_1__.jwtVerify)(idToken, await (0,jose__WEBPACK_IMPORTED_MODULE_1__.importJWK)(jwk), {
+            issuer: issuerIri,
+            audience: clientId,
+        });
+        payload = verifiedPayload;
+    }
+    catch (e) {
+        throw new Error(`Token verification failed: ${e.stack}`);
+    }
+    if (typeof payload.webid === "string") {
+        return payload.webid;
+    }
+    if (typeof payload.sub !== "string") {
+        throw new Error(`The token ${JSON.stringify(payload)} is invalid: it has no 'webid' claim and no 'sub' claim.`);
+    }
+    try {
+        new URL(payload.sub);
+        return payload.sub;
+    }
+    catch (e) {
+        throw new Error(`The token has no 'webid' claim, and its 'sub' claim of [${payload.sub}] is invalid as a URL - error [${e}].`);
+    }
+}
+
+function isValidRedirectUrl(redirectUrl) {
+    try {
+        const urlObject = new URL(redirectUrl);
+        return urlObject.hash === "";
+    }
+    catch (e) {
+        return false;
+    }
+}
+
+function isSupportedTokenType(token) {
+    return typeof token === "string" && ["DPoP", "Bearer"].includes(token);
+}
+
+const USER_SESSION_PREFIX = "solidClientAuthenticationUser";
+
+function isValidUrl(url) {
+    try {
+        new URL(url);
+        return true;
+    }
+    catch (_a) {
+        return false;
+    }
+}
+function determineSigningAlg(supported, preferred) {
+    var _a;
+    return ((_a = preferred.find((signingAlg) => {
+        return supported.includes(signingAlg);
+    })) !== null && _a !== void 0 ? _a : null);
+}
+function determineClientType(options, issuerConfig) {
+    if (options.clientId !== undefined && !isValidUrl(options.clientId)) {
+        return "static";
+    }
+    if (issuerConfig.scopesSupported.includes("webid") &&
+        options.clientId !== undefined &&
+        isValidUrl(options.clientId)) {
+        return "solid-oidc";
+    }
+    return "dynamic";
+}
+async function handleRegistration(options, issuerConfig, storageUtility, clientRegistrar) {
+    const clientType = determineClientType(options, issuerConfig);
+    if (clientType === "dynamic") {
+        return clientRegistrar.getClient({
+            sessionId: options.sessionId,
+            clientName: options.clientName,
+            redirectUrl: options.redirectUrl,
+        }, issuerConfig);
+    }
+    await storageUtility.setForUser(options.sessionId, {
+        clientId: options.clientId,
+    });
+    if (options.clientSecret) {
+        await storageUtility.setForUser(options.sessionId, {
+            clientSecret: options.clientSecret,
+        });
+    }
+    if (options.clientName) {
+        await storageUtility.setForUser(options.sessionId, {
+            clientName: options.clientName,
+        });
+    }
+    return {
+        clientId: options.clientId,
+        clientSecret: options.clientSecret,
+        clientName: options.clientName,
+        clientType,
+    };
+}
+
+async function getSessionIdFromOauthState(storageUtility, oauthState) {
+    return storageUtility.getForUser(oauthState, "sessionId");
+}
+async function loadOidcContextFromStorage(sessionId, storageUtility, configFetcher) {
+    try {
+        const [issuerIri, codeVerifier, storedRedirectIri, dpop] = await Promise.all([
+            storageUtility.getForUser(sessionId, "issuer", {
+                errorIfNull: true,
+            }),
+            storageUtility.getForUser(sessionId, "codeVerifier"),
+            storageUtility.getForUser(sessionId, "redirectUrl"),
+            storageUtility.getForUser(sessionId, "dpop", { errorIfNull: true }),
+        ]);
+        await storageUtility.deleteForUser(sessionId, "codeVerifier");
+        const issuerConfig = await configFetcher.fetchConfig(issuerIri);
+        return {
+            codeVerifier,
+            redirectUrl: storedRedirectIri,
+            issuerConfig,
+            dpop: dpop === "true",
+        };
+    }
+    catch (e) {
+        throw new Error(`Failed to retrieve OIDC context from storage associated with session [${sessionId}]: ${e}`);
+    }
+}
+async function saveSessionInfoToStorage(storageUtility, sessionId, webId, isLoggedIn, refreshToken, secure, dpopKey) {
+    if (refreshToken !== undefined) {
+        await storageUtility.setForUser(sessionId, { refreshToken }, { secure });
+    }
+    if (webId !== undefined) {
+        await storageUtility.setForUser(sessionId, { webId }, { secure });
+    }
+    if (isLoggedIn !== undefined) {
+        await storageUtility.setForUser(sessionId, { isLoggedIn }, { secure });
+    }
+    if (dpopKey !== undefined) {
+        await storageUtility.setForUser(sessionId, {
+            publicKey: JSON.stringify(dpopKey.publicKey),
+            privateKey: JSON.stringify(await (0,jose__WEBPACK_IMPORTED_MODULE_1__.exportJWK)(dpopKey.privateKey)),
+        }, { secure });
+    }
+}
+class StorageUtility {
+    constructor(secureStorage, insecureStorage) {
+        this.secureStorage = secureStorage;
+        this.insecureStorage = insecureStorage;
+    }
+    getKey(userId) {
+        return `solidClientAuthenticationUser:${userId}`;
+    }
+    async getUserData(userId, secure) {
+        const stored = await (secure
+            ? this.secureStorage
+            : this.insecureStorage).get(this.getKey(userId));
+        if (stored === undefined) {
+            return {};
+        }
+        try {
+            return JSON.parse(stored);
+        }
+        catch (err) {
+            throw new Error(`Data for user [${userId}] in [${secure ? "secure" : "unsecure"}] storage is corrupted - expected valid JSON, but got: ${stored}`);
+        }
+    }
+    async setUserData(userId, data, secure) {
+        await (secure ? this.secureStorage : this.insecureStorage).set(this.getKey(userId), JSON.stringify(data));
+    }
+    async get(key, options) {
+        const value = await ((options === null || options === void 0 ? void 0 : options.secure)
+            ? this.secureStorage
+            : this.insecureStorage).get(key);
+        if (value === undefined && (options === null || options === void 0 ? void 0 : options.errorIfNull)) {
+            throw new Error(`[${key}] is not stored`);
+        }
+        return value;
+    }
+    async set(key, value, options) {
+        return ((options === null || options === void 0 ? void 0 : options.secure) ? this.secureStorage : this.insecureStorage).set(key, value);
+    }
+    async delete(key, options) {
+        return ((options === null || options === void 0 ? void 0 : options.secure) ? this.secureStorage : this.insecureStorage).delete(key);
+    }
+    async getForUser(userId, key, options) {
+        const userData = await this.getUserData(userId, options === null || options === void 0 ? void 0 : options.secure);
+        let value;
+        if (!userData || !userData[key]) {
+            value = undefined;
+        }
+        value = userData[key];
+        if (value === undefined && (options === null || options === void 0 ? void 0 : options.errorIfNull)) {
+            throw new Error(`Field [${key}] for user [${userId}] is not stored`);
+        }
+        return value || undefined;
+    }
+    async setForUser(userId, values, options) {
+        let userData;
+        try {
+            userData = await this.getUserData(userId, options === null || options === void 0 ? void 0 : options.secure);
+        }
+        catch (_a) {
+            userData = {};
+        }
+        await this.setUserData(userId, { ...userData, ...values }, options === null || options === void 0 ? void 0 : options.secure);
+    }
+    async deleteForUser(userId, key, options) {
+        const userData = await this.getUserData(userId, options === null || options === void 0 ? void 0 : options.secure);
+        delete userData[key];
+        await this.setUserData(userId, userData, options === null || options === void 0 ? void 0 : options.secure);
+    }
+    async deleteAllUserData(userId, options) {
+        await ((options === null || options === void 0 ? void 0 : options.secure) ? this.secureStorage : this.insecureStorage).delete(this.getKey(userId));
+    }
+}
+
+class InMemoryStorage {
+    constructor() {
+        this.map = {};
+    }
+    async get(key) {
+        return this.map[key] || undefined;
+    }
+    async set(key, value) {
+        this.map[key] = value;
+    }
+    async delete(key) {
+        delete this.map[key];
+    }
+}
+
+class ConfigurationError extends Error {
+    constructor(message) {
+        super(message);
+    }
+}
+
+class NotImplementedError extends Error {
+    constructor(methodName) {
+        super(`[${methodName}] is not implemented`);
+    }
+}
+
+class InvalidResponseError extends Error {
+    constructor(missingFields) {
+        super(`Invalid response from OIDC provider: missing fields ${missingFields}`);
+        this.missingFields = missingFields;
+    }
+}
+
+class OidcProviderError extends Error {
+    constructor(message, error, errorDescription) {
+        super(message);
+        this.error = error;
+        this.errorDescription = errorDescription;
+    }
+}
+
+function normalizeHTU(audience) {
+    const audienceUrl = new URL(audience);
+    return new URL(audienceUrl.pathname, audienceUrl.origin).toString();
+}
+async function createDpopHeader(audience, method, dpopKey) {
+    return new jose__WEBPACK_IMPORTED_MODULE_1__.SignJWT({
+        htu: normalizeHTU(audience),
+        htm: method.toUpperCase(),
+        jti: (0,uuid__WEBPACK_IMPORTED_MODULE_3__["default"])(),
+    })
+        .setProtectedHeader({
+        alg: PREFERRED_SIGNING_ALG[0],
+        jwk: dpopKey.publicKey,
+        typ: "dpop+jwt",
+    })
+        .setIssuedAt()
+        .sign(dpopKey.privateKey, {});
+}
+async function generateDpopKeyPair() {
+    const { privateKey, publicKey } = await (0,jose__WEBPACK_IMPORTED_MODULE_1__.generateKeyPair)(PREFERRED_SIGNING_ALG[0]);
+    const dpopKeyPair = {
+        privateKey,
+        publicKey: await (0,jose__WEBPACK_IMPORTED_MODULE_1__.exportJWK)(publicKey),
+    };
+    [dpopKeyPair.publicKey.alg] = PREFERRED_SIGNING_ALG;
+    return dpopKeyPair;
+}
+
+const DEFAULT_EXPIRATION_TIME_SECONDS = 600;
+function isExpectedAuthError(statusCode) {
+    return [401, 403].includes(statusCode);
+}
+async function buildDpopFetchOptions(targetUrl, authToken, dpopKey, defaultOptions) {
+    var _a;
+    const headers = new _inrupt_universal_fetch__WEBPACK_IMPORTED_MODULE_2__.Headers(defaultOptions === null || defaultOptions === void 0 ? void 0 : defaultOptions.headers);
+    headers.set("Authorization", `DPoP ${authToken}`);
+    headers.set("DPoP", await createDpopHeader(targetUrl, (_a = defaultOptions === null || defaultOptions === void 0 ? void 0 : defaultOptions.method) !== null && _a !== void 0 ? _a : "get", dpopKey));
+    return {
+        ...defaultOptions,
+        headers,
+    };
+}
+async function buildAuthenticatedHeaders(targetUrl, authToken, dpopKey, defaultOptions) {
+    if (dpopKey !== undefined) {
+        return buildDpopFetchOptions(targetUrl, authToken, dpopKey, defaultOptions);
+    }
+    const headers = new _inrupt_universal_fetch__WEBPACK_IMPORTED_MODULE_2__.Headers(defaultOptions === null || defaultOptions === void 0 ? void 0 : defaultOptions.headers);
+    headers.set("Authorization", `Bearer ${authToken}`);
+    return {
+        ...defaultOptions,
+        headers,
+    };
+}
+async function makeAuthenticatedRequest(unauthFetch, accessToken, url, defaultRequestInit, dpopKey) {
+    return unauthFetch(url, await buildAuthenticatedHeaders(url.toString(), accessToken, dpopKey, defaultRequestInit));
+}
+async function refreshAccessToken(refreshOptions, dpopKey, eventEmitter) {
+    var _a;
+    const tokenSet = await refreshOptions.tokenRefresher.refresh(refreshOptions.sessionId, refreshOptions.refreshToken, dpopKey);
+    eventEmitter === null || eventEmitter === void 0 ? void 0 : eventEmitter.emit(EVENTS.SESSION_EXTENDED, (_a = tokenSet.expiresIn) !== null && _a !== void 0 ? _a : DEFAULT_EXPIRATION_TIME_SECONDS);
+    if (typeof tokenSet.refreshToken === "string") {
+        eventEmitter === null || eventEmitter === void 0 ? void 0 : eventEmitter.emit(EVENTS.NEW_REFRESH_TOKEN, tokenSet.refreshToken);
+    }
+    return {
+        accessToken: tokenSet.accessToken,
+        refreshToken: tokenSet.refreshToken,
+        expiresIn: tokenSet.expiresIn,
+    };
+}
+const computeRefreshDelay = (expiresIn) => {
+    if (expiresIn !== undefined) {
+        return expiresIn - REFRESH_BEFORE_EXPIRATION_SECONDS > 0
+            ?
+                expiresIn - REFRESH_BEFORE_EXPIRATION_SECONDS
+            : expiresIn;
+    }
+    return DEFAULT_EXPIRATION_TIME_SECONDS;
+};
+async function buildAuthenticatedFetch(unauthFetch, accessToken, options) {
+    var _a;
+    let currentAccessToken = accessToken;
+    let latestTimeout;
+    const currentRefreshOptions = options === null || options === void 0 ? void 0 : options.refreshOptions;
+    if (currentRefreshOptions !== undefined) {
+        const proactivelyRefreshToken = async () => {
+            var _a, _b, _c, _d;
+            try {
+                const { accessToken: refreshedAccessToken, refreshToken, expiresIn, } = await refreshAccessToken(currentRefreshOptions, options.dpopKey, options.eventEmitter);
+                currentAccessToken = refreshedAccessToken;
+                if (refreshToken !== undefined) {
+                    currentRefreshOptions.refreshToken = refreshToken;
+                }
+                clearTimeout(latestTimeout);
+                latestTimeout = setTimeout(proactivelyRefreshToken, computeRefreshDelay(expiresIn) * 1000);
+                (_a = options.eventEmitter) === null || _a === void 0 ? void 0 : _a.emit(EVENTS.TIMEOUT_SET, latestTimeout);
+            }
+            catch (e) {
+                if (e instanceof OidcProviderError) {
+                    (_b = options === null || options === void 0 ? void 0 : options.eventEmitter) === null || _b === void 0 ? void 0 : _b.emit(EVENTS.ERROR, e.error, e.errorDescription);
+                    (_c = options === null || options === void 0 ? void 0 : options.eventEmitter) === null || _c === void 0 ? void 0 : _c.emit(EVENTS.SESSION_EXPIRED);
+                }
+                if (e instanceof InvalidResponseError &&
+                    e.missingFields.includes("access_token")) {
+                    (_d = options === null || options === void 0 ? void 0 : options.eventEmitter) === null || _d === void 0 ? void 0 : _d.emit(EVENTS.SESSION_EXPIRED);
+                }
+            }
+        };
+        latestTimeout = setTimeout(proactivelyRefreshToken, computeRefreshDelay(options.expiresIn) * 1000);
+        (_a = options.eventEmitter) === null || _a === void 0 ? void 0 : _a.emit(EVENTS.TIMEOUT_SET, latestTimeout);
+    }
+    else if (options !== undefined && options.eventEmitter !== undefined) {
+        const expirationTimeout = setTimeout(() => {
+            options.eventEmitter.emit(EVENTS.SESSION_EXPIRED);
+        }, computeRefreshDelay(options.expiresIn) * 1000);
+        options.eventEmitter.emit(EVENTS.TIMEOUT_SET, expirationTimeout);
+    }
+    return async (url, requestInit) => {
+        let response = await makeAuthenticatedRequest(unauthFetch, currentAccessToken, url, requestInit, options === null || options === void 0 ? void 0 : options.dpopKey);
+        const failedButNotExpectedAuthError = !response.ok && !isExpectedAuthError(response.status);
+        if (response.ok || failedButNotExpectedAuthError) {
+            return response;
+        }
+        const hasBeenRedirected = response.url !== url;
+        if (hasBeenRedirected && (options === null || options === void 0 ? void 0 : options.dpopKey) !== undefined) {
+            response = await makeAuthenticatedRequest(unauthFetch, currentAccessToken, response.url, requestInit, options.dpopKey);
+        }
+        return response;
+    };
+}
+
+const StorageUtilityGetResponse = "getResponse";
+const StorageUtilityMock = {
+    get: async (key, options) => StorageUtilityGetResponse,
+    set: async (key, value) => {
+    },
+    delete: async (key) => {
+    },
+    getForUser: async (userId, key, options) => StorageUtilityGetResponse,
+    setForUser: async (userId, values, options) => {
+    },
+    deleteForUser: async (userId, key, options) => {
+    },
+    deleteAllUserData: async (userId, options) => {
+    },
+};
+const mockStorage = (stored) => {
+    const store = stored;
+    return {
+        get: async (key) => {
+            if (store[key] === undefined) {
+                return undefined;
+            }
+            if (typeof store[key] === "string") {
+                return store[key];
+            }
+            return JSON.stringify(store[key]);
+        },
+        set: async (key, value) => {
+            store[key] = value;
+        },
+        delete: async (key) => {
+            delete store[key];
+        },
+    };
+};
+const mockStorageUtility = (stored, isSecure = false) => {
+    if (isSecure) {
+        return new StorageUtility(mockStorage(stored), mockStorage({}));
+    }
+    return new StorageUtility(mockStorage({}), mockStorage(stored));
+};
+
+
 
 
 /***/ }),
@@ -65509,11 +62270,11 @@ const mockStorageUtility = (stored, isSecure = false) => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   Headers: () => (/* binding */ Headers),
-/* harmony export */   Request: () => (/* binding */ Request),
-/* harmony export */   Response: () => (/* binding */ Response),
+/* harmony export */   "Headers": () => (/* binding */ Headers),
+/* harmony export */   "Request": () => (/* binding */ Request),
+/* harmony export */   "Response": () => (/* binding */ Response),
 /* harmony export */   "default": () => (/* binding */ indexBrowser),
-/* harmony export */   fetch: () => (/* binding */ fetch)
+/* harmony export */   "fetch": () => (/* binding */ fetch)
 /* harmony export */ });
 var indexBrowser = globalThis.fetch;
 const { fetch, Response, Request, Headers } = globalThis;
@@ -65598,8 +62359,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _key_generate_key_pair_js__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./key/generate_key_pair.js */ "./node_modules/jose/dist/browser/key/generate_key_pair.js");
 /* harmony import */ var _key_generate_secret_js__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./key/generate_secret.js */ "./node_modules/jose/dist/browser/key/generate_secret.js");
 /* harmony import */ var _util_base64url_js__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./util/base64url.js */ "./node_modules/jose/dist/browser/util/base64url.js");
-/* harmony import */ var _util_runtime_js__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./util/runtime.js */ "./node_modules/jose/dist/browser/util/runtime.js");
-
 
 
 
@@ -70056,22 +66815,6 @@ const decrypt = async (alg, key, encryptedKey) => {
     }
     throw new TypeError('RSA-OAEP key "usages" must include "decrypt" or "unwrapKey" for this operation');
 };
-
-
-/***/ }),
-
-/***/ "./node_modules/jose/dist/browser/runtime/runtime.js":
-/*!***********************************************************!*\
-  !*** ./node_modules/jose/dist/browser/runtime/runtime.js ***!
-  \***********************************************************/
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ('WebCryptoAPI');
 
 
 /***/ }),

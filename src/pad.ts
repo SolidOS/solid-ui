@@ -10,7 +10,8 @@ import { newThing, errorMessageBlock } from './widgets'
 import { beep } from './utils'
 import { log } from './debug'
 import { solidLogicSingleton } from 'solid-logic'
-export { renderPartipants, participationObject, manageParticipation, recordParticipation } from './participation'
+import * as style from './style'
+export { renderParticipants, participationObject, manageParticipation, recordParticipation } from './participation'
 
 const store = solidLogicSingleton.store
 
@@ -55,7 +56,7 @@ export function lightColorHash (author?: NamedNode): string {
 /**  notepad
  *
  * @param {HTMLDocument} dom - the web page of the browser
- * @param {NamedNode} padDoc - the document into which the particpation should be shown
+ * @param {NamedNode} padDoc - the document in which the participation should be shown
  * @param {NamedNode} subject - the thing in which participation is happening
  * @param {NamedNode} me - person who is logged into the pod
  * @param {notepadOptions} options - the options that can be passed in consist of statusArea, exists
@@ -72,10 +73,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
 
   const PAD = Namespace('http://www.w3.org/ns/pim/pad#')
 
-  table.setAttribute(
-    'style',
-    'padding: 1em; overflow: auto; resize: horizontal; min-width: 40em;'
-  )
+  table.setAttribute('style', style.notepadStyle)
 
   let upstreamStatus: HTMLElement | null = null
   let downstreamStatus: HTMLElement | null = null
@@ -87,10 +85,10 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
     downstreamStatus = tr.appendChild(dom.createElement('td'))
 
     if (upstreamStatus) {
-      upstreamStatus.setAttribute('style', 'width:50%')
+      upstreamStatus.setAttribute('style', style.upstreamStatus)
     }
     if (downstreamStatus) {
-      downstreamStatus.setAttribute('style', 'width:50%')
+      downstreamStatus.setAttribute('style', style.downstreamStatus)
     }
   }
   /* @@ TODO want to look into this, it seems upstream should be a boolean and default to false ?
@@ -112,15 +110,9 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
   const setPartStyle = function (part: NotepadPart, colors?: string, pending?: any) {
     const chunk = part.subject
     colors = colors || ''
-    const baseStyle =
-      'font-size: 100%; font-family: monospace; width: 100%; border: none; white-space: pre-wrap;'
-    const headingCore =
-      'font-family: sans-serif; font-weight: bold;  border: none;'
-    const headingStyle = [
-      'font-size: 110%;  padding-top: 0.5em; padding-bottom: 0.5em; width: 100%;',
-      'font-size: 120%; padding-top: 1em; padding-bottom: 1em; width: 100%;',
-      'font-size: 150%; padding-top: 1em; padding-bottom: 1em; width: 100%;'
-    ]
+    const baseStyle = style.baseStyle
+    const headingCore = style.headingCore
+    const headingStyle = style.headingStyle
 
     const author = kb.any(chunk as any, ns.dc('author'))
     if (!colors && author) {
@@ -139,12 +131,12 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
     let indent: any = kb.any(chunk as any, PAD('indent'))
 
     indent = indent ? indent.value : 0
-    const style =
+    const localStyle =
       indent >= 0
         ? baseStyle + 'text-indent: ' + indent * 3 + 'em;'
         : headingCore + headingStyle[-1 - indent]
     // ? baseStyle + 'padding-left: ' + (indent * 3) + 'em;'
-    part.setAttribute('style', style + colors)
+    part.setAttribute('style', localStyle + colors)
   }
 
   const removePart = function (part: NotepadPart) {
@@ -236,28 +228,6 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
     })
   }
 
-  // Use this sort of code to split the line when return pressed in the middle @@
-  /*
-  function doGetCaretPosition doGetCaretPosition (oField) {
-    var iCaretPos = 0
-        // IE Support
-    if (document.selection) {
-            // Set focus on the element to avoid IE bug
-      oField.focus()
-            // To get cursor position, get empty selection range
-      var oSel = document.selection.createRange()
-            // Move selection start to 0 position
-      oSel.moveStart('character', -oField.value.length)
-            // The caret position is selection length
-      iCaretPos = oSel.text.length
-        // Firefox suppor
-    } else if (oField.selectionStart || oField.selectionStart === '0') {
-      iCaretPos = oField.selectionStart
-    }
-        // Return results
-    return (iCaretPos)
-  }
-  */
   const addListeners = function (part: any, chunk: any) {
     part.addEventListener('keydown', function (event) {
       if (!updater) {
@@ -299,8 +269,8 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
               case 2: // contents need to be sent again
                 part.state = 4 // delete me
                 return
-              case 3: // being deleted already
-              case 4: // already deleme state
+              case 3: // already being deleted
+              case 4: // already deleted state
                 return
               case undefined:
               case 0:
@@ -644,8 +614,6 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
       }
       return
     }
-    // var last = kb.the(undefined, PAD('previous'), subject)
-    // var chunk = first //  = kb.the(subject, PAD('next'));
     let row
 
     // First see which of the logical chunks have existing physical manifestations
@@ -717,7 +685,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
     log('    reloaded OK')
     clearStatus()
     if (!consistencyCheck()) {
-      complain('CONSITENCY CHECK FAILED')
+      complain('CONSISTENCY CHECK FAILED')
     } else {
       refreshTree(table)
     }

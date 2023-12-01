@@ -354,10 +354,6 @@ export async function registrationList (context: AuthenticationContext, options:
   return context
 } // registrationList
 
-function getDefaultSignInButtonStyle (): string {
-  return 'padding: 1em; border-radius:0.5em; font-size: 100%;'
-}
-
 /**
  * Bootstrapping identity
  * (Called by `loginStatusBox()`)
@@ -375,7 +371,7 @@ function signInOrSignUpBox (
   } = {}
 ): HTMLElement {
   options = options || {}
-  const signInButtonStyle = options.buttonStyle || getDefaultSignInButtonStyle()
+  const signInButtonStyle = options.buttonStyle || style.signInAndUpButtonStyle
 
   const box: any = dom.createElement('div')
   const magicClassName = 'SolidSignInOrSignUpBox'
@@ -389,7 +385,7 @@ function signInOrSignUpBox (
   box.appendChild(signInPopUpButton)
   signInPopUpButton.setAttribute('type', 'button')
   signInPopUpButton.setAttribute('value', 'Log in')
-  signInPopUpButton.setAttribute('style', `${signInButtonStyle}background-color: #eef;${style.headerBannerLoginInput}`)
+  signInPopUpButton.setAttribute('style', `${signInButtonStyle}${style.headerBannerLoginInput}` + style.signUpBackground)
 
   authSession.onLogin(() => {
     const me = authn.currentUser()
@@ -437,7 +433,7 @@ function signInOrSignUpBox (
   box.appendChild(signupButton)
   signupButton.setAttribute('type', 'button')
   signupButton.setAttribute('value', 'Sign Up for Solid')
-  signupButton.setAttribute('style', `${signInButtonStyle}background-color: #efe;${style.headerBannerLoginInput}`)
+  signupButton.setAttribute('style', `${signInButtonStyle}${style.headerBannerLoginInput}` + style.signInBackground)
 
   signupButton.addEventListener(
     'click',
@@ -653,7 +649,7 @@ export function loginStatusBox (
   }
 
   function logoutButton (me, options) {
-    const signInButtonStyle = options.buttonStyle || getDefaultSignInButtonStyle()
+    const signInButtonStyle = options.buttonStyle || style.signInAndUpButtonStyle
     let logoutLabel = 'WebID logout'
     if (me) {
       const nick =
@@ -667,7 +663,7 @@ export function loginStatusBox (
     // signOutButton.className = 'WebIDCancelButton'
     signOutButton.setAttribute('type', 'button')
     signOutButton.setAttribute('value', logoutLabel)
-    signOutButton.setAttribute('style', `${signInButtonStyle}background-color: #eee;`)
+    signOutButton.setAttribute('style', `${signInButtonStyle}`)
     signOutButton.addEventListener('click', logoutButtonHandler, false)
     return signOutButton
   }
