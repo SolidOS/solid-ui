@@ -111,9 +111,10 @@ export async function ensureLoadedPreferences (
 ): Promise<AuthenticationContext> {
   if (context.preferencesFile) return Promise.resolve(context) // already done
 
-  const statusArea = context.statusArea || context.div || null
+  // const statusArea = context.statusArea || context.div || null
   let progressDisplay
-  function complain (message) {
+  /* COMPLAIN FUNCTION NOT USED/TAKING IT OUT FOR NOW
+    function complain (message) {
     message = `ensureLoadedPreferences: ${message}`
     if (statusArea) {
       // statusArea.innerHTML = ''
@@ -121,7 +122,7 @@ export async function ensureLoadedPreferences (
     }
     debug.log(message)
     // reject(new Error(message))
-  }
+  } */
   try {
     context = await ensureLoadedProfile(context)
 
