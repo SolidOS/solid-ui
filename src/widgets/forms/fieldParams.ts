@@ -106,10 +106,10 @@ export const fieldParams: { [ fieldUri: string ]: FieldParamsObject } = {
    */
   [ns.ui('Comment').uri]: {
     element: 'p',
-    style: commentStyle // was `padding: 0.1em 1.5em; color: ${formHeadingColor}; white-space: pre-wrap;`
+    style: commentStyle
   },
   [ns.ui('Heading').uri]: {
     element: 'h3',
-    style: formHeadingStyle // was: `font-size: 110%; font-weight: bold; color: ${formHeadingColor}; padding: 0.2em;`
+    style: formHeadingStyle
   }
 }

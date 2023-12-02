@@ -6,13 +6,13 @@ exports[`manageParticipation runs 1`] = `
 />
 `;
 
-exports[`renderPartipants returns without crashing when a person is not returned 1`] = `
+exports[`renderParticipants returns without crashing when a person is not returned 1`] = `
 <table
   style="margin: 0.8em;"
 />
 `;
 
-exports[`renderPartipants runs 1`] = `
+exports[`renderParticipants runs 1`] = `
 <table
   style="margin: 0.8em;"
 />
