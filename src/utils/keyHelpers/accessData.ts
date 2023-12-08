@@ -3,11 +3,20 @@ import { store } from 'solid-logic'
 import * as ns from '../../ns'
 import { NamedNode } from 'rdflib'
 
+async fetchStoragesFromDoc(doc) => {
+  await store.fetcher.load(doc.uri)
+  return store.each(webId, ns.space('storage'), null, doc.doc())
+}
+
 /* export const getPodRoot = async (webId: NamedNode) => {
   const webIdURL = new URL(webId.uri)
   // find storages in webId document
-  await store.fetcher.load(webId.uri)
-  const storages = store.each(webId, ns.space('storage'), null, webId.doc())
+  let storages = await fetchStoragesFromDoc(webId)
+  const settingsDocs = store.each(webId, ns.space('settings'), null, webId.doc())
+  for (let i=0; i < settingsDocs.length; i++) {
+    storages = storages.concat(await fetchStoragesFromDoc(settingsDocs[i]));
+  }
+
   var podRoot: NamedNode | undefined
   if (!storages?.length) {
     // find storage recursively in webId URL
