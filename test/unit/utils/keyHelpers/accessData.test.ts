@@ -42,7 +42,7 @@ describe('accessData', () => {
     })
     it('returns the url for the private key', () => {
       const result = privKeyUrl(webId)
-      expect(result).toEqual('https://alice.example.net/keys/privateKey.ttl')
+      expect(result).toEqual('https://alice.example.net/settings/keys/privateKey.ttl')
     })
   })
 })

@@ -19,7 +19,7 @@ export const privKeyUrl = (webId: NamedNode) => {
   let url
   try {
     const root = getRootIfPreferencesExist(webId)
-    url = `${root}/keys/privateKey.ttl`
+    url = `${root}/settings/keys/privateKey.ttl`
   } catch (err) {
     debug.error(err)
   }

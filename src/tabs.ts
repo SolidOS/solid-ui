@@ -182,7 +182,7 @@ export function tabWidget (options: TabWidgetOptions) {
   const rootElement: TabWidgetElement = dom.createElement('div') // 20200117a
 
   rootElement.setAttribute('style', style.tabsRootElement)
-  rootElement.style.flexDirection = (vertical ? 'row' : 'column') + (flipped ? '-reverse;' : ';')
+  rootElement.style.flexDirection = (vertical ? 'row' : 'column') + (flipped ? '-reverse' : '')
 
   const navElement = rootElement.appendChild(dom.createElement('nav'))
   navElement.setAttribute('style', style.tabsNavElement)
