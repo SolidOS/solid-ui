@@ -142,16 +142,10 @@ export async function renderMessageRow (channelObject, message, fresh, options, 
   const creator = store.any(message, ns.foaf('maker'))
   const date = store.any(message, ns.dct('created'))
   const latestVersion = await mostRecentVersion(message)
-  debug.log('@@@@ alain mostRecentVersion')
-  debug.log(message)
-  debug.log(latestVersion)
   const latestVersionCreator = store.any(latestVersion, ns.foaf('maker'))
 
   // use latest content if same owner, else use original
   // this is may be too strict. Should we find latest valid version if any ?
-  debug.log('@@@@ alain creator')
-  debug.log(creator)
-  debug.log(latestVersionCreator)
   const msgId = creator.uri === latestVersionCreator?.uri ? latestVersion : message
   const content = store.any(msgId, ns.sioc('content'))
 
@@ -175,11 +169,12 @@ export async function renderMessageRow (channelObject, message, fresh, options, 
   if (straightReplies.length > 1) {
     debug.log('renderMessageRow: found normal replies: ', straightReplies)
   }
-  debug.log('@@@@ is thread')
   if (!thread) {
     // thread = store.any(message, ns.sioc('has_reply'))
     thread = store.any(null, ns.sioc('has_member'), message)
   }
+  // debug.log('@@@@ is thread' + thread)
+
   // get signature
   const signature = store.any(msgId, $rdf.sym(`${SEC}proofValue`))
 
@@ -196,7 +191,7 @@ export async function renderMessageRow (channelObject, message, fresh, options, 
     debug.warn(msgId.uri + ' is unsigned') // TODO replace with UI (colored message ?)
   } else { // signed message, get public key and check signature
     getPublicKey(creator).then(publicKey => {
-      debug.log(creator.uri + '\n' + msg.created + '\n' + msg.id + '\n' + publicKey)
+      // debug.log(creator.uri + '\n' + msg.created + '\n' + msg.id + '\n' + publicKey)
       if (!publicKey) {
         debug.warn('message is signed but ' + creator.uri + ' is missing publicKey')
       }
@@ -324,13 +319,13 @@ export async function renderMessageRow (channelObject, message, fresh, options, 
     toolsTD.appendChild(tools)
   })
   if (thread && options.showThread) {
-    debug.log('  message has thread ' + thread)
+    // debug.log('  message has thread ' + thread)
     td3.appendChild(widgets.button(
       dom,
       icons.iconBase + 'noun_1180164.svg', // right arrow .. @@ think of stg better
       'see thread',
       _e => {
-        debug.log('@@@@ Calling showThread thread ' + thread)
+        // debug.log('@@@@ Calling showThread thread ' + thread)
         options.showThread(thread, options)
       }
     ))

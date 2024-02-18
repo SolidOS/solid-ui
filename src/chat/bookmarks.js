@@ -24,53 +24,6 @@ const BOOKMARK_ICON = 'noun_45961.svg'
 const label = utils.label
 const dom = window.document || null
 
-/** Create a resource if it really does not exist
- *  Be absolutely sure something does not exist before creating a new empty file
- * as otherwise existing could  be deleted.
- * @param doc {NamedNode} - The resource
- */
-function createIfNotExists (doc) {
-  return new Promise(function (resolve, reject) {
-    store.fetcher.load(doc).then(
-      response => {
-        debug.log('createIfNotExists doc exists, all good ' + doc)
-        // store.fetcher.webOperation('HEAD', doc.uri).then(response => {
-        resolve(response)
-      },
-      err => {
-        if (err.response.status === 404) {
-          debug.log(
-            'createIfNotExists doc does NOT exist, will create... ' + doc
-          )
-
-          store.fetcher
-            .webOperation('PUT', doc.uri, {
-              data: '',
-              contentType: 'text/turtle'
-            })
-            .then(
-              response => {
-                // fetcher.requested[doc.uri] = 'done' // do not need to read ??  but no headers
-                delete store.fetcher.requested[doc.uri] // delete cached 404 error
-                debug.log('createIfNotExists doc created ok ' + doc)
-                resolve(response)
-              },
-              err => {
-                debug.log('createIfNotExists doc FAILED: ' + doc + ': ' + err)
-                reject(err)
-              }
-            )
-        } else {
-          debug.log(
-            'createIfNotExists doc load error NOT 404:  ' + doc + ': ' + err
-          )
-          reject(err)
-        }
-      }
-    )
-  })
-}
-
 // @@@@ use the one in rdflib.js when it is avaiable and delete this
 function updatePromise (del, ins) {
   return new Promise(function (resolve, reject) {
@@ -109,7 +62,7 @@ export async function findBookmarkDocument (userContext) {
       )
       try {
         debug.log('Creating new bookmark file ' + newBookmarkFile)
-        await createIfNotExists(newBookmarkFile)
+        await store.fetcher.createIfNotExists(newBookmarkFile)
       } catch (e) {
         debug.warn("Can't make fresh bookmark file:" + e)
         return userContext

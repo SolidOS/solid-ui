@@ -101,6 +101,7 @@ export class ChatChannel {
         sts.push($rdf.st(thread, ns.sioc('has_member'), message, thread.doc()))
       }
     }
+
     try {
       await store.updater.updateMany([], sts)
     } catch (err) {
@@ -216,36 +217,5 @@ export function nick (person) {
   const s = store.any(person, ns.foaf('nick'))
   if (s) return '' + s.value
   return '' + utils.label(person)
-}
-
-export async function _createIfNotExists (doc, contentType = 'text/turtle', data = '') {
-  let response
-  try {
-    response = await store.fetcher.load(doc)
-  } catch (err) {
-    if (err.response.status === 404) {
-      debug.log(
-        'createIfNotExists: doc does NOT exist, will create... ' + doc
-      )
-      try {
-        response = await store.fetcher.webOperation('PUT', doc.uri, {
-          data,
-          contentType
-        })
-      } catch (err) {
-        debug.log('createIfNotExists doc FAILED: ' + doc + ': ' + err)
-        throw err
-      }
-      delete store.fetcher.requested[doc.uri] // delete cached 404 error
-      // debug.log('createIfNotExists doc created ok ' + doc)
-      return response
-    } else {
-      debug.log(
-        'createIfNotExists doc load error NOT 404:  ' + doc + ': ' + err
-      )
-      throw err
-    }
-  }
-  return response
 }
 // ends

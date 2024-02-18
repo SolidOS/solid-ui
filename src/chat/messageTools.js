@@ -75,9 +75,9 @@ export function emojiFromAction (action) {
  */
 export async function sentimentStrip (target, doc) { // alain: seems not used
   const versions = await allVersions(target)
-  debug.log('sentimentStrip Versions for ' + target, versions)
+  // debug.log('sentimentStrip Versions for ' + target, versions)
   const actions = versions.map(version => store.each(null, ns.schema('target'), version, doc)).flat()
-  debug.log('sentimentStrip: Actions for ' + target, actions)
+  // debug.log('sentimentStrip: Actions for ' + target, actions)
   const strings = actions.map(action => emojiFromAction(action) || '')
   return dom.createTextNode(strings.join(' '))
 }
@@ -93,16 +93,16 @@ export async function sentimentStripLinked (target, doc) {
     strip.innerHTML = ''
     if (isDeleted(target)) return strip
     const versions = await allVersions(target)
-    debug.log('sentimentStripLinked: Versions for ' + target, versions)
+    // debug.log('sentimentStripLinked: Versions for ' + target, versions)
     const actions = versions.map(version => store.each(null, ns.schema('target'), version, doc)).flat()
-    debug.log('sentimentStripLinked: Actions for ' + target, actions)
+    // debug.log('sentimentStripLinked: Actions for ' + target, actions)
     if (actions.length === 0) return strip
     const sentiments = actions.map(a => [
       store.any(a, ns.rdf('type'), null, doc),
       store.any(a, ns.sioc('content'), null, doc),
       store.any(a, ns.schema('agent'), null, doc)
     ])
-    debug.log('  Actions sentiments ', sentiments)
+    // debug.log('  Actions sentiments ', sentiments)
     sentiments.sort()
     sentiments.forEach(ss => {
       const [theClass, content, agent] = ss
@@ -116,7 +116,7 @@ export async function sentimentStripLinked (target, doc) {
       res.textContent = content || emojiMap[theClass] || '⬜️'
       strip.appendChild(res)
     })
-    debug.log('  Actions strip ', strip)
+    // debug.log('  Actions strip ', strip)
   }
   refresh().then(debug.log('sentimentStripLinked: sentimentStripLinked async refreshed'))
   strip.refresh = refresh
