@@ -19,7 +19,7 @@ import * as widgets from '../widgets'
 import { renderBookmarksButton } from './bookmarks'
 import { authn, store } from 'solid-logic'
 
-import { mostRecentVersion } from './chatLogic'
+import { allVersions, mostRecentVersion, isDeleted } from './chatLogic'
 import { switchToEditor } from './message'
 
 const dom = window.document
@@ -34,24 +34,51 @@ const PENCIL_ICON = 'noun_253504.svg' // edit a message
 // const SPANNER_ICON = 'noun_344563.svg' -> settings
 const THUMBS_UP_ICON = 'noun_1384132.svg'
 const THUMBS_DOWN_ICON = 'noun_1384135.svg'
+const REPLY_ICON = 'noun-reply-5506924.svg'
 /**
  * Emoji in Unicode
  */
-const emoji = {}
-emoji[ns.schema('AgreeAction')] = '👍'
-emoji[ns.schema('DisagreeAction')] = '👎'
-emoji[ns.schema('EndorseAction')] = '⭐️'
-emoji[ns.schema('LikeAction')] = '❤️'
+const emojiMap = {}
+emojiMap[ns.schema('AgreeAction')] = '👍'
+emojiMap[ns.schema('DisagreeAction')] = '👎'
+emojiMap[ns.schema('EndorseAction')] = '⭐️'
+emojiMap[ns.schema('LikeAction')] = '❤️'
+
+export function emojiFromActionClass (action) {
+  return emojiMap[action] || null
+}
+
+export function ActionClassFromEmoji (emoji) {
+  for (const a in emojiMap) {
+    if (emojiMap[a] === emoji) {
+      return rdf.sym(a.slice(1, -1)) // remove < >
+    }
+  }
+  return null
+}
+
+// Allow the action to give its own emoji as content,
+// or get the emoji from the class of action.
+export function emojiFromAction (action) {
+  const content = store.any(action, ns.sioc('content'), null, action.doc())
+  if (content) return content
+  const klass = store.any(action, ns.rdf('type'), null, action.doc())
+  if (klass) {
+    const em = emojiFromActionClass(klass)
+    if (em) return em
+  }
+  return '⬜️'
+}
 
 /**
  * Create strip of sentiments expressed
  */
-export function sentimentStrip (target, doc) { // alain seems not used
-  const latest = mostRecentVersion(target)
-  const actions = store.holds(latest, ns.schema('dateDeleted').value, null, latest.doc()) ? store.each(null, ns.schema('target'), target, doc) : []
-  const sentiments = actions.map(a => store.any(a, ns.rdf('type'), null, doc))
-  sentiments.sort()
-  const strings = sentiments.map(x => emoji[x] || '')
+export async function sentimentStrip (target, doc) { // alain: seems not used
+  const versions = await allVersions(target)
+  // debug.log('sentimentStrip Versions for ' + target, versions)
+  const actions = versions.map(version => store.each(null, ns.schema('target'), version, doc)).flat()
+  // debug.log('sentimentStrip: Actions for ' + target, actions)
+  const strings = actions.map(action => emojiFromAction(action) || '')
   return dom.createTextNode(strings.join(' '))
 }
 /**
@@ -60,18 +87,25 @@ export function sentimentStrip (target, doc) { // alain seems not used
  * @param target {NamedNode} - The thing about which they are expressed
  * @param doc {NamedNode} - The document in which they are expressed
  */
-export function sentimentStripLinked (target, doc) {
+export async function sentimentStripLinked (target, doc) {
   const strip = dom.createElement('span')
-  function refresh () {
+  async function refresh () {
     strip.innerHTML = ''
-    const actions = (mostRecentVersion(target).uri !== ns.schema('dateDeleted').uri) ? store.each(null, ns.schema('target'), target, doc) : []
+    if (isDeleted(target)) return strip
+    const versions = await allVersions(target)
+    // debug.log('sentimentStripLinked: Versions for ' + target, versions)
+    const actions = versions.map(version => store.each(null, ns.schema('target'), version, doc)).flat()
+    // debug.log('sentimentStripLinked: Actions for ' + target, actions)
+    if (actions.length === 0) return strip
     const sentiments = actions.map(a => [
       store.any(a, ns.rdf('type'), null, doc),
+      store.any(a, ns.sioc('content'), null, doc),
       store.any(a, ns.schema('agent'), null, doc)
     ])
+    // debug.log('  Actions sentiments ', sentiments)
     sentiments.sort()
     sentiments.forEach(ss => {
-      const [theClass, agent] = ss
+      const [theClass, content, agent] = ss
       let res
       if (agent) {
         res = dom.createElement('a')
@@ -79,18 +113,19 @@ export function sentimentStripLinked (target, doc) {
       } else {
         res = dom.createTextNode('')
       }
-      res.textContent = emoji[theClass] || '*'
+      res.textContent = content || emojiMap[theClass] || '⬜️'
       strip.appendChild(res)
     })
+    // debug.log('  Actions strip ', strip)
   }
-  refresh()
+  refresh().then(debug.log('sentimentStripLinked: sentimentStripLinked async refreshed'))
   strip.refresh = refresh
   return strip
 }
 /**
  * Creates a message toolbar component
  */
-export function messageToolbar (message, messageRow, userContext, channelObject) {
+export async function messageToolbar (message, messageRow, userContext, channelObject) {
   async function deleteMessage () {
     const author = store.any(message, ns.foaf('maker'))
     if (!me) {
@@ -115,15 +150,23 @@ export function messageToolbar (message, messageRow, userContext, channelObject)
   async function editMessage (messageRow) {
     if (me.value === store.any(message, ns.foaf('maker')).value) {
       closeToolbar() // edit is a one-off action
-      switchToEditor(messageRow, message, channelObject, userContext)
+      await switchToEditor(messageRow, message, channelObject, userContext)
     }
   }
 
-  // alain TODO allow chat owner to fully delete message + sentiments and replacing messages
+  async function replyInThread () {
+    const thread = await channelObject.createThread(message)
+    const options = userContext.chatOptions
+    if (!options) throw new Error('replyInThread: missing options')
+    options.showThread(thread, options)
+    closeToolbar() // a one-off action
+  }
+
+  // alain: TODO allow chat owner to fully delete message + sentiments and replacing messages
 
   const div = dom.createElement('div')
   // is message deleted ?
-  if (mostRecentVersion(message).value === ns.schema('dateDeleted').value) return div
+  if (await mostRecentVersion(message).value === ns.schema('dateDeleted').value) return div
   function closeToolbar () {
     div.parentElement.parentElement.removeChild(div.parentElement) // remive the TR
   }
@@ -231,9 +274,8 @@ export function messageToolbar (message, messageRow, userContext, channelObject)
   // THUMBS_UP_ICON
   // https://schema.org/AgreeAction
   me = authn.currentUser() // If already logged on
-  // debug.log('Actions 3' + mostRecentVersion(message).value + ' ' + ns.schema('dateDeleted').value + ' ' + (mostRecentVersion(message).value !== ns.schema('dateDeleted').value))
 
-  if (me && (mostRecentVersion(message).value !== ns.schema('dateDeleted').value)) {
+  if (me && (await mostRecentVersion(message).value !== ns.schema('dateDeleted').value)) {
     const context1 = { me, dom, div }
     div.appendChild(
       sentimentButton(
@@ -256,6 +298,13 @@ export function messageToolbar (message, messageRow, userContext, channelObject)
         [ns.schema('AgreeAction')]
       )
     )
+  }
+  // Reply buttton
+
+  if (store.any(message, ns.dct('created'))) { // Looks like a messsage? Bar can be used for other things
+    div.appendChild(widgets.button(dom, icons.iconBase + REPLY_ICON, 'Reply in thread', async () => {
+      await replyInThread()
+    }))
   }
   // X button to remove the tool UI itself
   const cancelButton = div.appendChild(widgets.cancelButton(dom))

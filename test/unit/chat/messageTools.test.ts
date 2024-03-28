@@ -15,8 +15,8 @@ describe('sentimentStrip', () => {
   it('exists', () => {
     expect(sentimentStrip).toBeInstanceOf(Function)
   })
-  it('runs', () => {
-    expect(sentimentStrip(message1)).toBeInstanceOf(Text)
+  it('runs', async () => {
+    expect(await sentimentStrip(message1)).toBeInstanceOf(Text)
   })
 })
 
@@ -24,8 +24,8 @@ describe('sentimentStripLinked', () => {
   it('exists', () => {
     expect(sentimentStripLinked).toBeInstanceOf(Function)
   })
-  it('runs', () => {
-    expect(sentimentStripLinked(message1, message1.doc())).toBeInstanceOf(HTMLSpanElement)
+  it('runs', async () => {
+    expect(await sentimentStripLinked(message1, message1.doc())).toBeInstanceOf(HTMLSpanElement)
   })
 })
 
@@ -33,7 +33,7 @@ describe('messageToolbar', () => {
   it('exists', () => {
     expect(messageToolbar).toBeInstanceOf(Function)
   })
-  it('runs', () => {
-    expect(messageToolbar(message1, document.createElement('tr'), {})).toBeInstanceOf(HTMLDivElement)
+  it('runs', async () => {
+    expect(await messageToolbar(message1, document.createElement('tr'), {})).toBeInstanceOf(HTMLDivElement)
   })
 })

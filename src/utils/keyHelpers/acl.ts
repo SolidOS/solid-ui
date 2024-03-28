@@ -13,7 +13,7 @@ export async function setAcl (keyDoc: string, aclBody: string) {
   await store.fetcher.load(keyDoc)
 
   // FIXME: check the Why value on this quad:
-  debug.log(store.statementsMatching(store.sym(keyDoc), store.sym('http://www.iana.org/assignments/link-relations/acl')))
+  // debug.log(store.statementsMatching(store.sym(keyDoc), store.sym('http://www.iana.org/assignments/link-relations/acl')))
   const keyAclDoc = store.any(store.sym(keyDoc), store.sym('http://www.iana.org/assignments/link-relations/acl'))
   if (!keyAclDoc) {
     throw new Error('Key ACL doc not found!')

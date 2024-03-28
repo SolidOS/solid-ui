@@ -42,7 +42,7 @@ export class ChatChannel {
     as a replacement for an existing one.
     The old one iis left, and the two are linked
   */
-  async updateMessage (text, oldMsg = null, deleteIt) {
+  async updateMessage (text, oldMsg = null, deleteIt, thread = null) {
     const sts = []
     const now = new Date()
     const timestamp = '' + now.getTime()
@@ -58,7 +58,13 @@ export class ChatChannel {
     if (oldMsg) { // edit message replaces old one
       const oldMsgMaker = store.any(oldMsg, ns.foaf('maker')) // may not be needed here, but needed on READ
       if (oldMsgMaker.uri === me.uri) {
-        sts.push($rdf.st(mostRecentVersion(oldMsg), ns.dct('isReplacedBy'), message, chatDocument))
+        const oldMsgMostRecentVersion = await mostRecentVersion(oldMsg)
+        sts.push($rdf.st(oldMsgMostRecentVersion, ns.dct('isReplacedBy'), message, chatDocument))
+        // if oldMsg has_reply => add has_reply to message
+        const oldMsgThread = store.any(oldMsgMostRecentVersion, ns.sioc('has_reply'))
+        if (oldMsgThread) {
+          sts.push($rdf.st(message, ns.sioc('has_reply'), oldMsgThread, chatDocument))
+        }
         if (deleteIt) { // we need to add a specific signature, else anyone can delete a msg ?
           sts.push($rdf.st(message, ns.schema('dateDeleted'), dateStamp, chatDocument))
         }
@@ -89,8 +95,15 @@ export class ChatChannel {
       const sig = signMsg(msg, privateKey)
       sts.push($rdf.st(message, $rdf.sym(`${SEC}proofValue`), $rdf.lit(sig), chatDocument))
     }
+    if (thread) {
+      sts.push($rdf.st(thread, ns.sioc('has_member'), message, chatDocument))
+      if (!thread.doc().sameTerm(message.doc())) {
+        sts.push($rdf.st(thread, ns.sioc('has_member'), message, thread.doc()))
+      }
+    }
+
     try {
-      await store.updater.update([], sts)
+      await store.updater.updateMany([], sts)
     } catch (err) {
       const errMsg = 'Error saving chat message: ' + err
       debug.warn(errMsg)
@@ -107,21 +120,80 @@ export class ChatChannel {
   async deleteMessage (message) {
     return this.updateMessage('(message deleted)', message, true)
   }
+
+  // Create a new thread of replies to the thread root message
+  //  or return one which already exists
+
+  async createThread (threadRoot) {
+    const already = store.each(threadRoot, ns.sioc('has_reply'), null, threadRoot.doc())
+      .filter(thread => store.holds(thread, ns.rdf('type'), ns.sioc('Thread'), thread.doc()))
+    if (already.length > 0) return already[0]
+
+    const thread = $rdf.sym(threadRoot.uri + '-thread')
+    const insert = [
+      $rdf.st(thread, ns.rdf('type'), ns.sioc('Thread'), thread.doc()),
+      $rdf.st(threadRoot, ns.sioc('has_reply'), thread, thread.doc())
+    ]
+    await store.updater.update([], insert)
+    return thread
+  }
 } // class ChatChannel
 
-export function originalVersion (message) {
+// ////////// Utility functions
+
+// Have to not loop forever if fed loops
+export async function allVersions (message) {
+  const versions = [message]
+  const done = {}
+  done[message.uri] = true
+  let m = message
+  while (true) { // earlier?
+    const prev = store.any(null, ns.dct('isReplacedBy'), m, m.doc())
+    if (!prev || done[prev.uri]) break
+    await store.fetcher.load(prev)
+    versions.unshift(prev)
+    done[prev.uri] = true
+    m = prev
+  }
+  m = message
+  while (true) { // later?
+    const next = store.any(m, ns.dct('isReplacedBy'), null, m.doc())
+    if (!next || done[next.uri]) break
+    versions.push(next)
+    done[next.uri] = true
+    m = next
+  }
+  return versions
+}
+
+export async function originalVersion (message) {
   let msg = message
+  const done = {}
+  // done[message.uri] = true
   while (msg) {
+    if (done[msg.uri]) {
+      debug.error('originalVersion: verion loop' + message)
+      return message
+    }
+    done[msg.uri] = true
     message = msg
+    await store.fetcher.load(message)
     msg = store.any(null, ns.dct('isReplacedBy'), message, message.doc())
   }
   return message
 }
 
-export function mostRecentVersion (message) {
+export async function mostRecentVersion (message) {
   let msg = message
+  const done = {}
   while (msg) {
+    if (done[msg.uri]) {
+      debug.error('mostRecentVersion: verion loop' + message)
+      return message
+    }
+    done[msg.uri] = true
     message = msg
+    await store.fetcher.load(message)
     msg = store.any(message, ns.dct('isReplacedBy'), null, message.doc())
   }
   return message
@@ -145,36 +217,5 @@ export function nick (person) {
   const s = store.any(person, ns.foaf('nick'))
   if (s) return '' + s.value
   return '' + utils.label(person)
-}
-
-export async function _createIfNotExists (doc, contentType = 'text/turtle', data = '') {
-  let response
-  try {
-    response = await store.fetcher.load(doc)
-  } catch (err) {
-    if (err.response.status === 404) {
-      debug.log(
-        'createIfNotExists: doc does NOT exist, will create... ' + doc
-      )
-      try {
-        response = await store.fetcher.webOperation('PUT', doc.uri, {
-          data,
-          contentType
-        })
-      } catch (err) {
-        debug.log('createIfNotExists doc FAILED: ' + doc + ': ' + err)
-        throw err
-      }
-      delete store.fetcher.requested[doc.uri] // delete cached 404 error
-      // debug.log('createIfNotExists doc created ok ' + doc)
-      return response
-    } else {
-      debug.log(
-        'createIfNotExists doc load error NOT 404:  ' + doc + ': ' + err
-      )
-      throw err
-    }
-  }
-  return response
 }
 // ends

@@ -13,7 +13,7 @@ import * as ns from '../ns'
 import * as widgets from '../widgets'
 // import * as pad from '../pad'
 // import { DateFolder } from './dateFolder'
-import { ChatChannel, isDeleted, mostRecentVersion } from './chatLogic'
+import { ChatChannel, isDeleted, isReplaced } from './chatLogic'
 import { renderMessageEditor, renderMessageRow } from './message'
 
 // const UI = { authn, icons, ns, media, pad, $rdf, store, style, utils, widgets }
@@ -43,8 +43,8 @@ export function desktopNotification (str) {
 /**
  * Renders a chat message inside a `messageTable`
  */
-export function insertMessageIntoTable (channelObject, messageTable, message, fresh, options, userContext) {
-  const messageRow = renderMessageRow(channelObject,
+export async function insertMessageIntoTable (channelObject, messageTable, message, fresh, options, userContext) {
+  const messageRow = await renderMessageRow(channelObject,
     message,
     fresh,
     options,
@@ -105,7 +105,7 @@ export function insertMessageIntoTable (channelObject, messageTable, message, fr
 export async function infiniteMessageArea (dom, wasStore, chatChannel, options) {
   // ///////////////////////////////////////////////////////////////////////
 
-  function syncMessages (about, messageTable) {
+  async function syncMessages (chatChannel, messageTable) {
     const displayed = {}
     let ele, ele2
     for (ele = messageTable.firstChild; ele; ele = ele.nextSibling) {
@@ -113,24 +113,15 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
         displayed[ele.AJAR_subject.uri] = true
       }
     }
+    const messages = store.each(chatChannel, ns.wf('message'), null, messageTable.chatDocument)
 
-    const messages = store
-      .statementsMatching(
-        about,
-        ns.wf('message'),
-        null,
-        messageTable.chatDocument
-      )
-      .map(st => {
-        return st.object
-      })
     const stored = {}
-    messages.forEach(function (m) {
+    for (const m of messages) {
       stored[m.uri] = true
       if (!displayed[m.uri]) {
-        addMessage(m, messageTable)
+        await addMessage(m, messageTable)
       }
-    })
+    }
 
     // eslint-disable-next-line space-in-parens
     for (ele = messageTable.firstChild; ele;) {
@@ -149,33 +140,74 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
   } // syncMessages
 
   // Called once per original message displayed
-  function addMessage (message, messageTable) {
-    const latest = mostRecentVersion(message)
+  async function addMessage (message, messageTable) {
+    // const latest = await mostRecentVersion(message)
     // const content = store.any(latest, ns.sioc('content'))
-    if (isDeleted(latest) && !options.showDeletedMessages) {
+    if (isDeleted(message) && !options.showDeletedMessages) {
       return // ignore deleted messaged -- @@ could also leave a placeholder
     }
-    insertMessageIntoTable(channelObject,
-      messageTable,
-      message,
-      messageTable.fresh,
-      options,
-      userContext
-    ) // fresh from elsewhere
+    /* if (isReplaced(message)) { //
+      return // this is old version
+    } */
+    let thread = store.any(null, ns.sioc('has_member'), message, message.doc())
+    const id = store.any(message, ns.sioc('id'), null, message.doc())
+    if (id && !thread) {
+      thread = store.any(null, ns.sioc('has_member'), id, message.doc())
+    }
+
+    if (options.thread) { // only show things in thread
+      if (store.holds(message, ns.sioc('has_reply'), options.thread)) { // root of thread
+        // debug.log(' addMessage: displaying root of thread ' + thread)
+      } else if (thread && thread.sameTerm(options.thread)) {
+        // debug.log(' addMessage: Displaying body of thread ' + message.uri.slice(-10))
+      } else {
+        // debug.log(' addMessage: Suppress non-thread message in thread table ' + message.uri.slice(-10))
+        return // suppress message not in thread
+      }
+    } else { // Not threads
+      if (thread) {
+        // debug.log(' addMessage: Suppress thread message in non-thread table ' + message.uri.slice(-10))
+        return // supress thread messages in body
+      } else {
+        // debug.log(' addMessage: Normal non-thread message in non-thread table ' + message.uri.slice(-10))
+      }
+    }
+    if (!messageTable.fresh) { // if messageTable has been updated with insertMessageIntoTable() don't do it again
+      // debug.log('@@@ infinite insertMessageIntoTable ' + message) // alain
+      // debug.log('fresh ' + messageTable.fresh)
+      // debug.log(messageTable)
+      await insertMessageIntoTable(channelObject,
+        messageTable,
+        message,
+        messageTable.fresh,
+        options,
+        userContext
+      ) // fresh from elsewhere
+    }
   }
 
   /* Add a new messageTable at the top/bottom
+
    */
   async function insertPreviousMessages (backwards) {
     const extremity = backwards ? earliest : latest
     let date = extremity.messageTable.date // day in mssecs
 
+    // Are we at the top of a thread?
+    if (backwards && earliest.limit && date <= earliest.limit) {
+      if (!liveMessageTable) await appendCurrentMessages() // If necessary skip to today and add that
+      return true // done
+    }
+    // debug.log(' insertPreviousMessages:  loadPrevious given date ' + date)
+
     date = await dateFolder.loadPrevious(date, backwards) // backwards
-    debug.log(
+    // debug.log(' insertPreviousMessages:  loadPrevious returns date ' + date)
+
+    /* debug.log(
       `insertPreviousMessages: from ${
         backwards ? 'backwards' : 'forwards'
       } loadPrevious: ${date}`
-    )
+    ) */
     if (!date && !backwards && !liveMessageTable) {
       await appendCurrentMessages() // If necessary skip to today and add that
     }
@@ -220,16 +252,16 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
    ** @returns DOM element generates
    */
   async function createMessageTable (date, live) {
-    debug.log('   createMessageTable for  ' + date)
+    // debug.log('   createMessageTable for  ' + date)
     const chatDocument = dateFolder.leafDocumentFromDate(date)
     try {
-      await store.fetcher.load(chatDocument)
+      await store.fetcher.createIfNotExists(chatDocument)
     } catch (err) {
       const messageTable = dom.createElement('table')
       const statusTR = messageTable.appendChild(dom.createElement('tr')) // ### find status in exception
       if (err.response && err.response.status && err.response.status === 404) {
-        debug.log('Error 404 for chat file ' + chatDocument)
-        return renderMessageTable(date, live) // no mssage file is fine.. will be craeted later
+        // debug.log('Error 404 for chat file ' + chatDocument)
+        return await renderMessageTable(date, live) // no message file is fine. will be created later
         // statusTR.appendChild(widgets.errorMessageBlock(dom, 'no message file', 'white'))
       } else {
         debug.log('*** Error NON 404 for chat file ' + chatDocument)
@@ -237,12 +269,12 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
       }
       return statusTR
     }
-    return renderMessageTable(date, live)
+    return await renderMessageTable(date, live)
   }
 
-  function renderMessageTable (date, live) {
-    let scrollBackbutton
-    let scrollForwardButton
+  async function renderMessageTable (date, live) {
+    const scrollBackbutton = null // was let
+    const scrollForwardButton = null // was let
 
     /// /////////////////   Scroll down adding more above
 
@@ -282,20 +314,11 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
       }
     }
 
-    async function scrollBackbuttonHandler (_event) {
-      if (messageTable.extendedBack) {
-        removePreviousMessages(true, messageTable)
-        messageTable.extendedBack = false
-        setScrollBackbuttonIcon()
-      } else {
-        await extendBackwards()
-      }
-    }
-
     /// ////////////// Scroll up adding more below
 
     async function extendForwards () {
       const done = await insertPreviousMessages(false)
+      /*
       if (done) {
         scrollForwardButton.firstChild.setAttribute(
           'src',
@@ -307,10 +330,12 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
         messageTable.extendedForwards = true
       }
       setScrollForwardButtonIcon()
+      */
       return done
     }
 
     function setScrollForwardButtonIcon () {
+      if (!scrollForwardButton) return
       const sense = messageTable.extendedForwards ? !newestFirst : newestFirst // noun_T-Block_1114657_000000.svg
       const scrollForwardIcon = messageTable.final
         ? 'noun_T-Block_1114657_000000.svg'
@@ -349,8 +374,9 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
     const userContext = { dom, statusArea, div: statusArea } // logged on state, pointers to user's stuff
 
 */
+    // debug.log('Options for called message Area', options)
     const messageTable = dom.createElement('table')
-
+    messageTable.style.width = '100%' // fill the pane div
     messageTable.extendBackwards = extendBackwards // Make function available to scroll stuff
     messageTable.extendForwards = extendForwards // Make function available to scroll stuff
 
@@ -376,13 +402,15 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
     /// ///// Infinite scroll
     //
     // @@ listen for swipe past end event not just button
-    if (options.infinite) {
-      const scrollBackbuttonTR = dom.createElement('tr')
-      const scrollBackbuttonCell = scrollBackbuttonTR.appendChild(
+    const test = true
+    if (test) { // ws options.infinite but need for non-infinite
+      const titleTR = dom.createElement('tr')
+      const scrollBackbuttonCell = titleTR.appendChild(
         dom.createElement('td')
       )
       // up traingles: noun_1369237.svg
       // down triangles: noun_1369241.svg
+      /*
       const scrollBackIcon = newestFirst
         ? 'noun_1369241.svg'
         : 'noun_1369237.svg' // down and up arrows respoctively
@@ -396,16 +424,22 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
       messageTable.extendedBack = false
       scrollBackbuttonCell.appendChild(scrollBackbutton)
       setScrollBackbuttonIcon()
-
-      const dateCell = scrollBackbuttonTR.appendChild(dom.createElement('td'))
+      */
+      const dateCell = titleTR.appendChild(dom.createElement('td'))
       dateCell.style =
         'text-align: center; vertical-align: middle; color: #888; font-style: italic;'
       dateCell.textContent = widgets.shortDate(date.toISOString(), true) // no time, only date
 
       // @@@@@@@@@@@ todo move this button to other end of  message cell, o
-      const scrollForwardButtonCell = scrollBackbuttonTR.appendChild(
+      const scrollForwardButtonCell = titleTR.appendChild(
         dom.createElement('td')
       )
+      if (options.includeRemoveButton) {
+        scrollForwardButtonCell.appendChild(widgets.cancelButton(dom, _e => {
+          div.parentNode.removeChild(div)
+        }))
+      }
+      /*
       const scrollForwardIcon = newestFirst
         ? 'noun_1369241.svg'
         : 'noun_1369237.svg' // down and up arrows respoctively
@@ -423,14 +457,14 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
       )
       messageTable.extendedForward = false
       setScrollForwardButtonIcon()
-
+      */
       messageTable.extendedForwards = false
 
       if (!newestFirst) {
         // opposite end from the entry field
-        messageTable.insertBefore(scrollBackbuttonTR, messageTable.firstChild) // If not newestFirst
+        messageTable.insertBefore(titleTR, messageTable.firstChild) // If not newestFirst
       } else {
-        messageTable.appendChild(scrollBackbuttonTR) //  newestFirst
+        messageTable.appendChild(titleTR) //  newestFirst
       }
     }
 
@@ -440,13 +474,10 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
       // no need buttomns at the moment
       // messageTable.style.visibility = 'collapse' // Hide files with no messages
     }
-    sts.forEach(st => {
-      addMessage(st.object, messageTable)
-    })
-    messageTable.fresh = true
-
-    // loadMessageTable(messageTable, chatDocument)
-    messageTable.fresh = false
+    for (const st of sts) {
+      await addMessage(st.object, messageTable)
+    }
+    messageTable.fresh = true // message table updated with insertMessageIntoTable()
     return messageTable
   } // renderMessageTable
 
@@ -511,7 +542,7 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
     div.refresh = async function () {
       // only the last messageTable is live
       await addNewChatDocumentIfNewDay(new Date())
-      syncMessages(chatChannel, messageTable) // @@ livemessagetable??
+      await syncMessages(chatChannel, messageTable) // @@ livemessagetable??
       desktopNotification(chatChannel)
     } // The short chat version the live update listening is done in the pane but we do it in the widget @@
     store.updater.addDownstreamChangeListener(chatDocument, div.refresh) // Live update
@@ -539,14 +570,14 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
       // user's DOM tree, then this scrollTop check won't work -> loop forever
       // https://github.com/solidos/solid-ui/issues/366
       if (div.scrollHeight === 0) {
-        // console.log('    chat/loadMoreWhereNeeded: trying later...')
+        // debug.log('    chat/loadMoreWhereNeeded: trying later...')
         setTimeout(loadMoreWhereNeeded, 2000) // couple be less
         lock = false
         return // abandon now, do later
       }
-      // console.log('    chat/loadMoreWhereNeeded: Going now')
+      // debug.log('    chat/loadMoreWhereNeeded: Going now')
       const scrollBottom = div.scrollHeight - div.scrollTop
-      debug.log('infinite scroll: adding above: top ' + div.scrollTop)
+      // debug.log('infinite scroll: adding above: top ' + div.scrollTop)
       done = await earliest.messageTable.extendBackwards()
       if (freeze) {
         div.scrollTop = div.scrollHeight - scrollBottom
@@ -562,10 +593,10 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
       latest.messageTable.extendForwards
     ) {
       const scrollTop = div.scrollTop
-      debug.log(
+      /* debug.log(
         'infinite scroll: adding below: bottom: ' +
         (div.scrollHeight - div.scrollTop - div.clientHeight)
-      )
+      ) */
       done = await latest.messageTable.extendForwards() // then add more data on the bottom
       if (freeze) {
         div.scrollTop = scrollTop // while adding below keep same things in view
@@ -578,7 +609,9 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
 
   async function loadInitialContent () {
     function yank () {
-      selectedMessageTable.selectedElement.scrollIntoView({ block: 'center' })
+      if (selectedMessageTable && selectedMessageTable.selectedElement) {
+        selectedMessageTable.selectedElement.scrollIntoView({ block: 'center' })
+      }
     }
 
     // During initial load ONLY keep scroll to selected thing or bottom
@@ -592,16 +625,24 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
       }
     }
 
-    let live, selectedDocument
+    let live, selectedDocument, threadRootDocument
     if (options.selectedMessage) {
       selectedDocument = options.selectedMessage.doc()
+    }
+    if (threadRootMessage) {
+      threadRootDocument = threadRootMessage.doc()
+    }
+    const initialDocment = selectedDocument || threadRootDocument
+
+    if (initialDocment) {
       const now = new Date()
       const todayDocument = dateFolder.leafDocumentFromDate(now)
-      live = todayDocument.sameTerm(selectedDocument)
+      live = todayDocument.sameTerm(initialDocment)
     }
+
     let selectedMessageTable
-    if (options.selectedMessage && !live) {
-      const selectedDate = dateFolder.dateFromLeafDocument(selectedDocument)
+    if (initialDocment && !live) {
+      const selectedDate = dateFolder.dateFromLeafDocument(initialDocment)
       selectedMessageTable = await createMessageTable(selectedDate, live)
       div.appendChild(selectedMessageTable)
       earliest.messageTable = selectedMessageTable
@@ -637,11 +678,22 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
   const statusArea = div.appendChild(dom.createElement('div'))
   const userContext = { dom, statusArea, div: statusArea } // logged on state, pointers to user's stuff
 
-  // const messageTable = dom.createElement('table') // @@ check does this go in renderMessageTable
-
   let liveMessageTable
+  let threadRootMessage
   const earliest = { messageTable: null } // Stuff about each end of the loaded days
   const latest = { messageTable: null }
+
+  if (options.thread) {
+    const thread = options.thread
+    threadRootMessage = store.any(null, ns.sioc('has_reply'), thread, thread.doc())
+    if (threadRootMessage) {
+      const threadTime = store.any(threadRootMessage, ns.dct('created'), null, threadRootMessage.doc())
+      if (threadTime) {
+        earliest.limit = new Date(threadTime.value)
+        // debug.log(' infinite: thread start at ' + earliest.limit)
+      }
+    }
+  }
 
   let lock = false
 

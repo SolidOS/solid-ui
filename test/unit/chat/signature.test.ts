@@ -10,9 +10,7 @@ describe('signature', () => {
     const res = serializeMsg(msg)
     expect(res).toEqual(JSON.stringify(msg))
   })
-  it.skip('sign and verifySignature', () => {
-    // worked with jest@25
-    // this is a jest issue : TypeError: Expected input type is Uint8Array (got object)
+  it('sign and verifySignature', () => {
     const msg = { id: 'test' }
     const sign = signMsg(msg, PRIV_KEY)
     const verify = verifySignature(sign, msg, PUB_KEY)
