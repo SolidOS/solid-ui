@@ -62,8 +62,8 @@
     "i": "^0.3.7",
     "mime-types": "^2.1.35",
     "npm": "^8.19.4",
-    "pane-registry": "^2.4.6-beta3",
-    "solid-logic": "^3.0.7-beta3",
+    "pane-registry": "^2.4.26",
+    "solid-logic": "^3.0.7",
     "solid-namespace": "^0.5.3",
     "uuid": "^8.3.2"
   },
