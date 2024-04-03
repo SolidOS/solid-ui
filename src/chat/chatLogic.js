@@ -9,8 +9,8 @@ import { store, authn } from 'solid-logic'
 import * as ns from '../ns'
 import * as $rdf from 'rdflib' // pull in first avoid cross-refs
 import * as utils from '../utils'
-import { getBlankMsg, signMsg, SEC, verifySignature } from './signature'
-import { getPrivateKey, getPublicKey } from './keys'
+import { getBlankMsg, signMsg, SEC} from './signature'
+import { getPrivateKey} from './keys'
 
 /* The Solid logic for a 'LongChat'
 */
