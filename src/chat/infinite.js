@@ -13,7 +13,7 @@ import * as ns from '../ns'
 import * as widgets from '../widgets'
 // import * as pad from '../pad'
 // import { DateFolder } from './dateFolder'
-import { ChatChannel, isDeleted, isReplaced } from './chatLogic'
+import { ChatChannel, isDeleted } from './chatLogic'
 import { renderMessageEditor, renderMessageRow } from './message'
 
 // const UI = { authn, icons, ns, media, pad, $rdf, store, style, utils, widgets }
